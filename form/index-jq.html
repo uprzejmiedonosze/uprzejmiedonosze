@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<title>Uprzejmie donoszę</title>
+		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<style>
+			label{
+				margin-top: 1em!important;
+			}
+		</style>
+	</head>
+	<body class="index">
+		<div data-role="page" class="container-fluid" data-theme="a">
+			<div data-role="header">
+				<h1>Uprzejmie Donoszę</h1>
+			</div>
+			<div data-role="main" class="ui-content">
+				<form>
+					<div>
+						<label for="pic1">Zrób zdjęcie prezentujące kontekst zgłoszenia</label>
+						<input type="file" accept="image/*" capture="camera" id="pic1" aria-describedby="pic1Help"/>
+
+						<label for="address">Podaj miejsce zgłoszenia</label>
+						<input type="text" id="address" placeholder="Miejsce zgłoszenia">
+
+						<label for="plateid">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
+						<input type="text" id="plateid" placeholder="Numer rejestracyjny">
+
+						<select id="category">
+							<option>Zastawienie chodnika (mniej niż 1.5m)</option>
+							<option>Mniej niż 15 m od przystanku</option>
+							<option>Mniej niż 10m od skrzyżowania</option>
+							<option>Mniej niż 10m od przejścia dla pieszych</option>
+							<option>Parkowanie na trawniku/wparku</option>
+							<option>Parkowanie za barierkami</option>
+							<option>Parkowanie z dala od krawędzi jezdni</option>
+							<option>Niszczenie chodnika</option>
+							<option>Inne</option>
+						</select>
+
+						<label for="name">Pamiętaj, że nie możesz dokonać anonimowego zgłoszenia</label>
+						<input type="text" id="name" placeholder="Twoje imię i nazwisko">
+
+						<label for="email">Podaj swój email</label>
+						<input type="email" class="form-control form-control-danger" id="email" placeholder="Twój email">
+
+						<label for="msisdn">Podaj swój numer kontaktowy</label>
+						<input type="tel" id="msisdn" placeholder="Twój numer telefonu">
+
+						<label for="date">Formularz umożliwia wyłącznie wprowadzenie aktualnego czasu</label>
+						<input type="datetime-local" class="form-control-static" id="date" placeholder="Data i czas zgłoszenia">
+
+						<button type="submit" data-icon="action">Submit</button>
+					</div> <!-- ui-field-contain -->
+				</form>
+			</div> <!-- main -->
+		</div> <! -- page -->
+		<script>
+if (window.File && window.FileReader && window.FormData) {
+	var $inputField = $('#pic1');
+
+	$inputField.on('change', function (e) {
+		var file = e.target.files[0];
+
+		if (file) {
+			if (/^image\//i.test(file.type)) {
+				readFile(file);
+			} else {
+				alert('Not a valid image!');
+			}
+		}
+	});
+} else {
+	alert("File upload is not supported!");
+}
+
+function readFile(file) {
+	var reader = new FileReader();
+
+	reader.onloadend = function () {
+		processFile(reader.result, file.type);
+	}
+
+	reader.onerror = function () {
+		alert('There was an error reading the file!');
+	}
+
+	reader.readAsDataURL(file);
+}
+function processFile(dataURL, fileType) {
+	var maxWidth = 800;
+	var maxHeight = 800;
+
+	var image = new Image();
+	image.src = dataURL;
+
+	image.onload = function () {
+		var width = image.width;
+		var height = image.height;
+		var shouldResize = (width > maxWidth) || (height > maxHeight);
+
+		if (!shouldResize) {
+			sendFile(dataURL);
+			return;
+		}
+
+		var newWidth;
+		var newHeight;
+
+		if (width > height) {
+			newHeight = height * (maxWidth / width);
+			newWidth = maxWidth;
+		} else {
+			newWidth = width * (maxHeight / height);
+			newHeight = maxHeight;
+		}
+
+		var canvas = document.createElement('canvas');
+
+		canvas.width = newWidth;
+		canvas.height = newHeight;
+
+		var context = canvas.getContext('2d');
+
+		context.drawImage(this, 0, 0, newWidth, newHeight);
+
+		dataURL = canvas.toDataURL(fileType);
+
+		sendFile(dataURL);
+	};
+
+	image.onerror = function () {
+		alert('There was an error processing your file!');
+	};
+}
+
+function sendFile(fileData) {
+	var formData = new FormData();
+
+	formData.append('imageData', fileData);
+
+	$.post('url', {
+		data: formData,
+		contentType: false,
+		processData: false,
+		success: function (data) {
+			if (data.success) {
+				alert('Your file was successfully uploaded!');
+			} else {
+				alert('There was an error uploading your file!');
+			}
+		},
+		error: function (data) {
+			alert('There was an error uploading your file!');
+		}
+	});
+}
+		</script>
+	</body>
+</html>
