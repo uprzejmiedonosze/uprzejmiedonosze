@@ -30,25 +30,25 @@ $(document).on('pageinit pageshow', function() {
 });
 
 function validateForm(){
-	var ret = check($('#plateid'), 6);
-	ret = check($('#address'), 10) && ret;
+	var ret = check($('#plateid'), 6, false);
+	ret = check($('#address'), 10, false) && ret;
 	ret = check($('#pic2'), 0, true) && ret;
 	ret = check($('#pic1'), 0, true) && ret;;
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
 	return ret;
-	function check(item, length, grandma = false){
-		if(item.val().trim().length <= length){
-			if(grandma){
-				item.parent().parent().addClass('error');
-			}else{
-				item.addClass('error');
-			}
-			return false;
+}
+function check(item, length, grandma){
+	if(item.val().trim().length <= length){
+		if(grandma){
+			item.parent().parent().addClass('error');
 		}else{
-			return true;
+			item.addClass('error');
 		}
+		return false;
+	}else{
+		return true;
 	}
 }
 
@@ -64,9 +64,7 @@ function getAddress(){
 		};
 
 		navigator.geolocation.getCurrentPosition(function(position) {
-			var latitude = position.coords.latitude;
-			var longitude = position.coords.longitude;
-			var latlng = latitude + ',' + longitude;
+			var latlng = position.coords.latitude + ',' + position.coords.longitude;
 
 			$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
 				+ latlng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
@@ -115,15 +113,11 @@ function readFile(file, id) {
 	reader.readAsDataURL(file);
 }
 function processFile(dataURL, fileType, id) {
-	var maxWidth = 1200;
-	var maxHeight = 1200;
-
-	var image = new Image();
+	var maxWidth = 1200, maxHeight = 1200, image = new Image();
 	image.src = dataURL;
 
 	image.onload = function () {
-		var width = image.width;
-		var height = image.height;
+		var width = image.width, height = image.height;
 		var shouldResize = (width > maxWidth) || (height > maxHeight);
 
 		if (!shouldResize) {
@@ -131,8 +125,7 @@ function processFile(dataURL, fileType, id) {
 			return;
 		}
 
-		var newWidth;
-		var newHeight;
+		var newWidth, newHeight;
 
 		if (width > height) {
 			newHeight = height * (maxWidth / width);

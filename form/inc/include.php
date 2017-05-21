@@ -45,11 +45,21 @@ function genHeader($title = "Uprzejmie Donoszę"){
 		<meta property="og:locale" content="pl_PL" />
 		<meta property="og:type" content="website" />
 
+	</head>
+HTML;
+}
+
+function getFooter(){
+	echo <<<HTML
+			<div data-role="footer">
+				<h4>&copy; Szymon Nieradka</h4>
+			</div>
+		</div> <! -- page -->
+		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<link rel="stylesheet" href="css/style-min.css">
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-		<script src="js/script.js"></script>
-		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-		<link rel="stylesheet" href="css/style.css">
+		<script src="js/script-min.js"></script>
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -58,7 +68,8 @@ function genHeader($title = "Uprzejmie Donoszę"){
 			ga('create', 'UA-99241725-1', 'auto');
 			ga('send', 'pageview');
 		</script>
-	</head>
+	</body>
+</html>
 HTML;
 }
 
