@@ -1,0 +1,83 @@
+<? 
+require_once('inc/include.php');
+genHeader();
+?>
+	<body class="index new-notification">
+		<div data-role="page" class="container-fluid" data-theme="a">
+			<div data-role="header" data-position="fixed" data-tap-toggle="false" data-hide-during-focus="false">
+				<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-mini ui-corner-all ui-icon-carat-l ui-btn-icon-notext" data-role="button" role="button">Back</a>
+				<h1>Nowe zgłoszenie</h1>
+				<a id="form-submit" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Zgłoś</a>
+			</div>
+			<div data-role="main" class="ui-content">
+				<form action="/potwierdz.html" id="form" method="post" data-ajax="false">
+					<div>
+						<div class="ui-grid-a ui-responsive" id="pics">
+							<div class="ui-block-a">
+								<div class="image-upload">
+									<label for="pic1">
+										Zrób zdjęcie prezentujące kontekst zgłoszenia<br>
+										<img id="imgpic1" src="img/camera.png"/>
+									</label>
+									<input type="file" accept="image/*" capture="camera" id="pic1" title="Zdjęcie 1"/>
+								</div>
+							</div>
+							<div class="ui-block-b">
+								<div class="image-upload">
+									<label for="pic2">
+										Zrób zdjęcie na którym widoczna jest tablica rejestracyjna<br>
+										<img id="imgpic2" src="img/camera.png"/><br/>
+										<img id="imgpic2Plate" src=""/>
+									</label>
+									<input type="file" accept="image/*" capture="camera" id="pic2" title="Zdjęcie 1"/>
+								</div>
+							</div>
+						</div>
+						<label for="address">Podaj miejsce zgłoszenia</label>
+
+						<div class="combo">
+							<input type="text" id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true">
+							<a id="geo" href="#" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
+						</div>
+
+						<input type="hidden" id="latlng"  name="latlng"  value=""/>
+						<input type="hidden" id="pic1Url" name="pic1Url" value=""/>
+						<input type="hidden" id="pic2Url" name="pic2Url" value=""/>
+						<input type="hidden" id="pic1Thumb" name="pic1Thumb" value=""/>
+						<input type="hidden" id="pic2Thumb" name="pic2Thumb" value=""/>
+
+						<label for="plateid">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
+						<input class=“required” type="text" id="plateid" name="plateid" placeholder="Numer rejestracyjny">
+
+						<label for="category">Podaj rodzaj naruszenia</label>
+
+						<div class="ui-grid-b ui-responsive" id="category">
+							<?PHP $i = 0; foreach($categories as $catId => $catName) { ?>
+							<div class="ui-block-<? echo($categoriesMatrix[$i % 3]); ?>">
+								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 0)?' checked="checked" ': '';?>>
+								<label for="<?=$catId ?>">
+									<img src="img/<?=$catId ?>.jpg">
+									<p><?=$catName ?></p>
+								</label>
+							</div>
+							<?PHP $i++; } ?>
+						</div>
+
+						<ul class="sender" data-role="listview" data-divider-theme="a">
+							<li data-role="list-divider">Twoje dane</li>
+							<li>Jan Kowalski</li>
+							<li>jan@kowalski.pl</li>
+							<li>757 575 757</li>
+						</ul>
+						<input value="jan@kowalski.pl" type="hidden" id="email" name="email" placeholder="Twój email">
+						<input value="Jan Kowalski" type="hidden" id="name" name="name" placeholder="Twoje imię i nazwisko">
+						<input value="757 575 757" type="hidden" id="msisdn" name="msisdn" placeholder="Twój numer telefonu">
+					</div> <!-- ui-field-contain -->
+				</form>
+			</div> <!-- main -->
+			<div data-role="footer">
+				<h4>&copy; Szymon Nieradka</h4>
+			</div>
+		</div> <! -- page -->
+	</body>
+</html>

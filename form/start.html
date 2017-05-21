@@ -1,0 +1,31 @@
+<? 
+require_once('inc/include.php');
+genHeader();
+?>
+<body class="index">
+	<div data-role="page" class="container-fluid" data-theme="a">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+			<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-mini ui-corner-all ui-icon-carat-l ui-btn-icon-notext" data-role="button" role="button">Back</a>
+			<h1>Uprzejmie Donoszę</h1>
+			<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-mini ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r">Dalej</a>
+		</div>
+		<div data-role="main" class="ui-content">
+			<p>Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać je bezpośrednio Straży Miejskiej.</p>
+			<p>Ma jednak kilka ograniczeń których musisz być świadomy(a):</p>
+			<div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-role="collapsible">
+				<h4>Regulamin</h4>
+				<p>Wszystkie zgłoszenia w Uprzejmie Donoszą muszą być podpisane. Nie dopuszczamy anonimów.</p>
+				<p>Pamiętaj też, że zgłoszenie wykroczenia do Straży Miejskiej to ostateczność. Jeśli masz możliwość porozmawiania z kierowcą który naruszył przepisy to zrób to. Część z nich robi to ze zwykłej niewiedzy.</p>
+				<p>Jak zostało to napisane we wstępie, aplikacja służy do zgłaszania naruszeń parkowania, które są istotne z punktu widzenia pieszych. Zastawienie bramy wjazdowej (jakkolwiek karygodne) nie jest takim zgłoszeniem. Postaraj się wybrać prawidłową kategorię zgłoszenia i wybieraj opcję “Inne” w ostateczności.</p>
+				<p>Wypełnij dokładnie wszystkie pola. Zwróć uwagę, czy adres który pobraliśmy z GPS został prawidłowo przetłumaczony na ulicę i numer domu.</p>
+				<p>Musisz mieć świadomość, że Straż Miejska może kontaktować się z Tobą w celu złożenia dodatkowych wyjaśnień lub oświadczeń (ale nie jest to wbrew pozorom konieczne w każdym przypadku).</p>
+				<p>Informujemy Cię także, że zbieramy anonimowe dane statystyczne z przekazywanych nam zgłoszeń (data i godzina, miejsca, rodzaj zgłoszenia).</p>
+			</div>
+			<p>Używając <?=$host ?> wyrażasz zgodę na powyższy regulamin.</p>
+		</div> <!-- main -->
+		<div data-role="footer">
+			<h4>&copy; Szymon Nieradka</h4>
+		</div>
+	</div> <! -- page -->
+</body>
+</html>

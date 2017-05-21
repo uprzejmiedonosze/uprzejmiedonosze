@@ -1,0 +1,87 @@
+<?php
+require_once(__DIR__ . '/autoload.php');
+
+$api_instance = new Swagger\Client\Api\DefaultApi();
+$image_bytes = explode( ',', $_POST['image_data'])[1]; 
+//$image_bytes = base64_encode(file_get_contents('testy/960x960/ZPL44338.jpg'));
+$id = $_POST['id'];
+$secret_key = "sk_aa0b80a70b2ae2268b36734a"; 
+$country = "eu"; 
+$recognize_vehicle = 0; 
+$state = ""; 
+$return_image = 0; 
+$topn = 1; 
+$prewarp = ""; 
+
+if($id = 'pic2'){
+	try {
+		$result = $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
+	} catch (Exception $e) {
+		echo 'Exception when calling DefaultApi->recognizeBytes: ', $e->getMessage(), PHP_EOL;
+	}
+}
+
+$prefix = "cdn/" . uniqid();
+$fileName = "$prefix.jpg";
+$ifp = fopen($fileName, 'wb'); 
+fwrite($ifp, base64_decode($image_bytes));
+fclose($ifp); 
+
+$thumbName = "$prefix-t.jpg";
+imagejpeg(resize_image($fileName, 350, 350, false), $thumbName);
+
+if(isset($result) && isset($result["results"][0]["coordinates"])){
+	$coordinates = $result["results"][0]["coordinates"];
+	$xes = Array();
+	$yes = Array();
+	foreach($coordinates as $ley => $ojb){
+		$xes[] = $ojb->getX();
+		$yes[] = $ojb->getY();
+	}
+	$im = imagecreatefromjpeg($fileName);
+	$plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
+	if ($plateImage!== FALSE) {
+		imagejpeg($plateImage, "$prefix-p.jpg");
+	}
+	$output = Array(
+		"imageUrl" => $fileName,
+		"thumbUrl" => $thumbName,
+		"plate" => $result["results"][0]["plate"],
+		"plateImage" => "$prefix-p.jpg"
+	);
+}else{
+	$output = Array(
+		"imageUrl" => $fileName,
+		"thumbUrl" => $thumbName,
+	);
+}
+
+echo json_encode($output);
+
+function resize_image($file, $w, $h, $crop=FALSE) {
+	list($width, $height) = getimagesize($file);
+	$r = $width / $height;
+	if ($crop) {
+		if ($width > $height) {
+			$width = ceil($width-($width*abs($r-$w/$h)));
+		} else {
+			$height = ceil($height-($height*abs($r-$w/$h)));
+		}
+		$newwidth = $w;
+		$newheight = $h;
+	} else {
+		if ($w/$h > $r) {
+			$newwidth = $h*$r;
+			$newheight = $h;
+		} else {
+			$newheight = $w/$r;
+			$newwidth = $w;
+		}
+	}
+	$src = imagecreatefromjpeg($file);
+	$dst = imagecreatetruecolor($newwidth, $newheight);
+	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
+	return $dst;
+}
+

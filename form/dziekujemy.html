@@ -1,0 +1,138 @@
+<? 
+require_once('inc/include.php');
+require_once('Mail.php');
+require_once('Mail/mime.php');
+
+genHeader();
+
+$applicationId = $_POST['applicationId'];
+$applicationFile = "app/$applicationId.json";
+
+$post = json_decode(file_get_contents($applicationFile));
+$address = $post->address;
+$latlng = $post->latlng;
+$pic1Url = $post->pic1Url;
+$pic2Url = $post->pic2Url;
+$pic1Thumb = $post->pic1Thumb;
+$pic2Thumb = $post->pic2Thumb;
+$plateid = strtoupper($post->plateid);
+$category = $post->category;
+$name = $post->name;
+$email = $post->email;
+$msisdn = $post->msisdn;
+$date = date("Y-m-d H:i");
+
+$from = "Uprzejmie Donosze <ud@nieradka.net>";
+$to = "<szymon@nieradka.net>";
+$subject = "Zgłoszenie $applicationId";
+
+$emailTemplate = <<<HTML
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	</head>
+	<body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+		<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$applicationId</b>
+		<div>
+			<div>
+				<div style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+					<br><font color="#444444">Data:</font>
+					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$date</b>
+
+					<br><font color="#444444" >Adres:</font>
+					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$address</b>
+					<a href="https://www.google.com/maps/@$latlng,18z">(mapa)</a>
+
+					<br><font color="#444444">Nr rej.:</font>
+					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$plateid</b>
+					<font color="#444444">(3 zgłoszone naruszenia w 2017, 12 łącznie)</font><br>
+
+					<font color="#444444">Rodzaj:</font>
+					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$categories[$category] ($category)</b><br >
+
+					<font color="#444444">Opis:</font>
+					<span class="Apple-tab-span" style="white-space:pre">	</span>(nie podano)<br><br>
+				</div>
+				<div>
+					<br><font color="#444444">Dane zgłaszającego:</font>
+					<div><font color="#444444"><br></font>
+						<span class="Apple-tab-span" style="white-space:pre">	</span>$name&nbsp;
+						<span style="color: rgb(68, 68, 68);">(2 zgłoszenia w 2017, 27 łącznie)</span><br>
+						<span class="Apple-tab-span" style="white-space:pre">	</span>$msisdn<br>
+						<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">$email</a>
+						<br><br><span style="color: rgb(68, 68, 68);" >Zdjęcie(a):</span><br><br>
+<? if(isset($pic1Url)) { ?>
+						<a style="border: 1px solid #009C7F;" href="https://$host/$pic1Url"><img src="cid:pic1"></a>
+<? } 
+if(isset($pic2Url)){ ?>
+						<a style="border: 1px solid #009C7F;" href="https://$host/$pic2Url"><img src="cid:pic2"></a><br>
+<? } ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+HTML;
+
+
+$headers = array(
+	'From' => $from,
+	'To' => $to,
+	'Content-Type' => 'text/html; charset=UTF-8',
+	'MIME-Version' => 1,
+	'Subject' => $subject
+);
+
+$mimeParams = array(
+	"text_encoding" => "7bit",
+	"text_charset" => "UTF-8",
+	"html_charset" => "UTF-8",
+	"head_charset" => "UTF-8"
+);
+$mime =  new Mail_mime(array('eol' => "\n"));
+
+$mime = new Mail_mime("\n");
+$mime->setHTMLBody($emailTemplate);
+$mime->setTXTBody(strip_tags($emailTemplate));
+$mime->addHTMLImage($pic1Thumb, "image/jpeg", "", true, "pic1");
+$mime->addHTMLImage($pic2Thumb, "image/jpeg", "", true, "pic2");
+
+$body = $mime->getMessageBody($mimeParams);
+$headers = $mime->headers($headers);
+
+$smtp = Mail::factory('smtp', array(
+	'host' => 'ssl://smtp.gmail.com',
+	'port' => '465',
+	'auth' => true,
+	'username' => 'ud@nieradka.net',
+	'password' => '95c112ef6964b209e633ed778da414bc'
+));
+
+$mail = $smtp->send($to, $headers, $body);
+
+if (PEAR::isError($mail)) {
+	echo('<p>' . $mail->getMessage() . '</p>');
+} else {
+	echo('<p>Dziękujemy za zgłoszenie!</p>');
+}
+?>
+<body class="index">
+	<div data-role="page" class="container-fluid" data-theme="a">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+			<h1>Dziękujemy</h1>
+		</div>
+		<div data-role="main" class="ui-content">
+			<p>Twoje zgłoszenie zostało właśnie wysłane do Straży Miejskiej. Historię swoim zgłoszeń możesz zawsze zobaczyć w swojej skrzynce mailowej.</p>
+			<p>Obecna wersja aplikacji nie umożliwia przeglądania historii zgłoszeń ani ich statusów.</p>
+			<p>Jeśli chcesz poznań status swojego zgłoszenia skontaktuj się ze Strażą Miejską pod adresem <a href="mailto:sm@xxx.pl">sm@sm.pl</a> lub zadzwoń na nr <a href="tel:9119656">91 19656</a>.</p>
+			<p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a href="mailto:ud@uprzejmiedonosze.net">ud@uprzejmiedonosze.net</a>.</p>
+			<!--<?var_dump($post)?></pre-->
+			<a href="nowe-zgloszenie.html" class="cta ui-btn ui-btn-b" data-icon="action">Jeszcze raz!</a>
+		</div> <!-- main -->
+		<div data-role="footer">
+			<h4>&copy; Szymon Nieradka</h4>
+		</div>
+	</div> <! -- page -->
+</body>
+</html>
