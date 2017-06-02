@@ -51,9 +51,9 @@ genHeader();
 
 						<label for="category">Podaj rodzaj naruszenia</label>
 
-						<div class="ui-grid-b ui-responsive" id="category">
+						<div class="ui-grid-a ui-responsive" id="category">
 							<?PHP $i = 0; foreach($categories as $catId => $catName) { ?>
-							<div class="ui-block-<? echo($categoriesMatrix[$i % 3]); ?>">
+							<div class="ui-block-<? echo($categoriesMatrix[$i % 2]); ?>">
 								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 0)?' checked="checked" ': '';?>>
 								<label for="<?=$catId ?>">
 									<img src="img/<?=$catId ?>.jpg">

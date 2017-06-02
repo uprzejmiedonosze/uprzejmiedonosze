@@ -15,9 +15,10 @@ $categories = Array(
 	0 => "Inne"
 );
 
-$categoriesMatrix = Array( 'a', 'b', 'c' );
+$categoriesMatrix = Array( 'a', 'b');
 
 function genHeader($title = "Uprzejmie Donoszę"){
+	$host = $GLOBALS['host'];
 	echo <<<HTML
 <!DOCTYPE html>
 <html lang="pl">
@@ -37,11 +38,13 @@ function genHeader($title = "Uprzejmie Donoszę"){
 		<link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png" />
 		<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png" />
 		<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180x180.png" />
+		<link rel="manifest" href="/manifest.json">
 		
+		<meta name="theme-color" content="#009C7F">
 		<meta property="og:image" content="https://$host/img/uprzejmiedonosze.png"/>
 		<meta property="og:title" content="$title"/>
 		<meta property="og:description" content="Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej."/>
-		<meta property="og:url" content="https://$host.net"/>
+		<meta property="og:url" content="https://$host"/>
 		<meta property="og:locale" content="pl_PL" />
 		<meta property="og:type" content="website" />
 
@@ -67,6 +70,13 @@ function getFooter(){
 			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 			ga('create', 'UA-99241725-1', 'auto');
 			ga('send', 'pageview');
+		</script>
+		<script>
+			if('serviceWorker' in navigator) {
+				navigator.serviceWorker
+					.register('/sw.js')
+					.then(function() { console.log("Service Worker Registered"); });
+			}
 		</script>
 	</body>
 </html>

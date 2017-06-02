@@ -1,5 +1,5 @@
 DIRS=css lib img js inc
-FILES=*.html *.php favicon.ico robots.txt
+FILES=*.html *.php favicon.ico robots.txt manifest.json sw.js
 HOST=nieradka.net
 RSYNC=rsync
 
