@@ -61,12 +61,8 @@ $emailTemplate = <<<HTML
 						<span class="Apple-tab-span" style="white-space:pre">	</span>$msisdn<br>
 						<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">$email</a>
 						<br><br><span style="color: rgb(68, 68, 68);" >Zdjęcie(a):</span><br><br>
-<? if(isset($pic1Url)) { ?>
 						<a style="border: 1px solid #009C7F;" href="https://$host/$pic1Url"><img class="lazyload" data-src="cid:pic1"></a>
-<? } 
-if(isset($pic2Url)){ ?>
 						<a style="border: 1px solid #009C7F;" href="https://$host/$pic2Url"><img class="lazyload" data-src="cid:pic2"></a><br>
-<? } ?>
 					</div>
 				</div>
 			</div>
