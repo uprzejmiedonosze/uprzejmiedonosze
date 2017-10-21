@@ -33,7 +33,9 @@ function validateForm(){
 	var ret = check($('#plateid'), 6, false);
 	ret = check($('#address'), 10, false) && ret;
 	ret = check($('#pic2'), 0, true) && ret;
-	ret = check($('#pic1'), 0, true) && ret;;
+	ret = check($('#pic1'), 0, true) && ret;
+	ret = check($('#name'), 5, false) && ret;
+	ret = check($('#email'), 5, false) && ret;
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
