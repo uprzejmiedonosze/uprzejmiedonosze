@@ -38,7 +38,7 @@ genHeader();
 						<label for="address">Podaj miejsce zgłoszenia</label>
 
 						<div class="combo">
-							<input type="text" id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true">
+							<input type="text" maxlength="50" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true">
 							<a id="geo" href="#" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
 						</div>
 
@@ -52,9 +52,9 @@ genHeader();
 						<input class=“required” type="text" id="plateid" name="plateid" placeholder="Numer rejestracyjny">
 
 						<label for="name" class="section">Twoje dane</label>
-						<input type="text" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">
-						<input type="text" id="email" name="email" placeholder="Twój email" data-inline="true">
-						<input type="text" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
+						<input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">
+						<input type="email" required maxlength="30" id="email" name="email" placeholder="Twój email" data-inline="true">
+						<input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
 
 						<label for="category" class="section">Podaj rodzaj naruszenia</label>
 
