@@ -12,6 +12,8 @@ genHeader();
 			<div data-role="main" class="ui-content">
 				<form action="/potwierdz.html" id="form" method="post" data-ajax="false">
 					<div>
+
+						<label class="section">Dane zgłoszenia</label>
 						<div class="ui-grid-a ui-responsive" id="pics">
 							<div class="ui-block-a">
 								<div class="image-upload">
@@ -49,7 +51,12 @@ genHeader();
 						<label for="plateid">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
 						<input class=“required” type="text" id="plateid" name="plateid" placeholder="Numer rejestracyjny">
 
-						<label for="category">Podaj rodzaj naruszenia</label>
+						<label for="name" class="section">Twoje dane</label>
+						<input type="text" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">
+						<input type="text" id="email" name="email" placeholder="Twój email" data-inline="true">
+						<input type="text" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
+
+						<label for="category" class="section">Podaj rodzaj naruszenia</label>
 
 						<div class="ui-grid-a ui-responsive" id="category">
 							<?PHP $i = 0; foreach($categories as $catId => $catName) { ?>
@@ -63,15 +70,6 @@ genHeader();
 							<?PHP $i++; } ?>
 						</div>
 
-						<ul class="sender" data-role="listview" data-divider-theme="a">
-							<li data-role="list-divider">Twoje dane</li>
-							<li>Podaj swoje dane kontaktowe</li>
-							<li>
-								<input type="text" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">
-								<input type="text" id="email" name="email" placeholder="Twój email" data-inline="true">
-								<input type="text" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
-							</li>
-						</ul>
 					</div> <!-- ui-field-contain -->
 				</form>
 			</div> <!-- main -->
