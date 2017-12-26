@@ -1,6 +1,6 @@
 {
-	"name": "Przeparkuj.to",
-	"short_name": "Przeparkuj.to",
+	"name": "Uprzejmie Donoszę",
+	"short_name": "UD",
 	"icons": [
 		{"sizes": "57x57",   "src": "img/apple-touch-icon-57x57.png"},
 		{"sizes": "72x72",   "src": "img/apple-touch-icon-72x72.png"},
