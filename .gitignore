@@ -2,4 +2,4 @@
 **/*.aux
 **/*.log
 **/*.out
-form/tex/app
+form/tex/app/*
