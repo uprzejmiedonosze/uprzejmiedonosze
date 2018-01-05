@@ -33,12 +33,16 @@ JS_MINIFIED = $(JS_FILES:.js=-min.js)
 
 # target: minify - Minifies CSS and JS.
 minify: minify-css minify-js
+
+copify: copify-css copify-js
 		
 # target: minify-css - Minifies CSS.
 minify-css: $(CSS_FILES) $(CSS_MINIFIED)
+copify-css:  $(CSS_FILES) $(CSS_COPIED)
 
 # target: minify-js - Minifies JS.
 minify-js: $(JS_FILES) $(JS_MINIFIED)
+copify-js: $(JS_FILES) $(JS_COPIED)
 
 %-min.css: %.css
 	@echo '==> Minifying $<'
