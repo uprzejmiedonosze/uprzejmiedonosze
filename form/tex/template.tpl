@@ -22,8 +22,6 @@
 \newcommand{\inic}[1]{\dropping[0mm]{3}{#1\hspace{.5mm}}}
 
 \frenchspacing
-%\pagestyle{fancy}
-%\fancyhf{}% czyszczê paginy
 
 \usepackage[TS1,OT1,T1]{fontenc}
 \usepackage[polish]{babel}
@@ -35,8 +33,8 @@
 	\hspace{1cm}\n{} \\
 	\hspace{1cm}$user_address \\
 	\hspace{1cm}Nr. dowodu: $user_personalId\\
-	\hspace{1cm}Tel $user_phone \\
-	\hspace{1cm}Email:$user_email 
+	$user_phone
+	$user_email 
 }
 
 \begin{document}
@@ -48,8 +46,9 @@ Warszawa}}
 \opening{{\large{Zgłoszenie wykroczenia \textit{$app_number}}}}
 
 	W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
-	samochodu $app_brand nr rejestracyjny $app_plateId $app_category
-	pod adresem $app_address. Sytuacja jest widoczna na załączonych zdjęciach.
+	samochodu $app_brand nr rejestracyjny $app_plateId pod adresem $app_address.
+	$app_category
+	Sytuacja jest widoczna na załączonych zdjęciach.
 
 	Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
 	pozostawał pojazd pozostawał na tym miejscu.
@@ -57,7 +56,8 @@ Warszawa}}
 	Dane adresowe oraz kontaktowe zgłaszającego:
 	\closing{\from{}}
 
-	\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{$pic1Url}
-	\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{$pic2Url}
+	$pic1Url
+	$pic2Url
+
 \end{letter}
 \end{document}
