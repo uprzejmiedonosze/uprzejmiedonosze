@@ -1,6 +1,9 @@
-<? 
+<?PHP
 require_once('inc/include.php');
 genHeader();
+
+$applicationId = uniqid();
+
 ?>
 	<body class="index new-notification">
 		<div data-role="page" class="container-fluid" data-theme="a">
@@ -11,8 +14,8 @@ genHeader();
 			</div>
 			<div data-role="main" class="ui-content">
 				<form action="/potwierdz.html" id="form" method="post" data-ajax="false">
+					<input type="hidden" name="applicationId" id="applicationId" value="<?=$applicationId?>"/>
 					<div>
-
 						<label class="section">Dane zgłoszenia</label>
 						<div class="ui-grid-a ui-responsive" id="pics">
 							<div class="ui-block-a">
@@ -21,7 +24,7 @@ genHeader();
 										Zrób zdjęcie prezentujące kontekst zgłoszenia<br>
 										<img id="contextImage-img" src="img/camera.png"/>
 									</label>
-									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie 1"/>
+									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst"/>
 								</div>
 							</div>
 							<div class="ui-block-b">
@@ -29,9 +32,9 @@ genHeader();
 									<label for="carImage">
 										Zrób zdjęcie na którym widoczna jest tablica rejestracyjna<br>
 										<img id="carImage-img" src="img/camera.png"/><br/>
-										<img id="plateImage-img" src=""/>
+										<img id="plateImage" src=""/>
 									</label>
-									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie 1"/>
+									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne"/>
 								</div>
 							</div>
 						</div>
@@ -42,7 +45,7 @@ genHeader();
 							<a id="geo" href="#" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
 						</div>
 
-						<input type="hidden" id="latlng"  name="latlng"  value=""/>
+						<input type="hidden" id="latlng"  name="latlng" value=""/>
 
 						<label for="plateid">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
 						<input class=“required” type="text" id="plateid" name="plateid" placeholder="Numer rejestracyjny">
