@@ -1,7 +1,5 @@
 $(document).on('pageinit pageshow', function() {
 	if($("#address").length){
-		//$("a#geo").on('touchstart click', getAddress);
-		//getAddress();
 		$('#address').on('change', function(){
 			$('#address').removeClass('error');
 		});
@@ -18,6 +16,7 @@ $(document).on('pageinit pageshow', function() {
 				checkFile(e.target.files[0], this.id);
 			});
 		}
+		$('#plateImage').hide();
 	}
 	if($('#form-submit').length){
 		$('#form-submit').click(function(){
@@ -53,17 +52,24 @@ function check(item, length, grandma){
 	}
 }
 
-function getAddress(latlng){
+function setAddress(latlng){
 	$('a#geo').buttonMarkup({ icon: "clock" });
-	$('#address').val("Pobieram adres...");
+	$('#address').val("");
+	$('#address').attr("placeholder","(pobieram adres ze zdjęcia...)");
 
 	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
 		+ latlng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
 			if(data.results){
 				$('#address').val(data.results[0].formatted_address.replace(', Polska', ''));
-				$('a#geo').buttonMarkup({ icon: "refresh" });
+				$('a#geo').buttonMarkup({ icon: "check" });
 				$('#latlng').val(latlng);
+			}else{
+				$('a#geo').buttonMarkup({ icon: "alert" });
+				$('#latlng').val("");
 			}
+		}).fail(function() {
+			$('a#geo').buttonMarkup({ icon: "alert" });
+			$('#latlng').val("");		
 		});
 }
 
@@ -71,7 +77,8 @@ function checkFile(file, id){
 	$('#' + id).parent().parent().removeClass('error');
 	$('img#' + id + '-img').attr("src", 'img/loading.gif');
 	if(id == 'carImage'){
-		$('#plateImage-img').attr("src", "");
+		$('#plateImage').attr("src", "");
+		$('#plateImage').hide();
 	}
 	if (file) {
 		if (/^image\//i.test(file.type)) {
@@ -143,7 +150,8 @@ function sendFile(fileData, id) {
 	var formData = new FormData();
 
 	formData.append('image_data', fileData);
-	formData.append('id', id);
+	formData.append('pictureType', id);
+	formData.append('applicationId', $('#applicationId').val());
 
 	$.ajax({
 		type: 'POST',
@@ -162,14 +170,15 @@ function sendFile(fileData, id) {
 				$('img#' + id + '-img').attr("src", json.contextImage.thumb);
 				$('#' + id).textinput('disable');
 			}
-			if(json.address.lng){ 
-				getAddress(json.address.lat + ',' + json.address.lng);
+			if(json.address){ 
+				setAddress(json.address.lat + ',' + json.address.lng);
 			}
 			if(id == 'carImage' && json.carInfo.plateId) {
 				$('#plateid').val(json.carInfo.plateId);
 			} 
 			if(id == 'carImage' && json.carInfo.plateImage){
-				$('#imgpic2Plate').attr("src", json.carInfo.plateImage);
+				$('#plateImage').attr("src", json.carInfo.plateImage);
+				$('#plateImage').show();
 			}
 		},
 		error: function (data) {
