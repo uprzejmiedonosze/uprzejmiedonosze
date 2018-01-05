@@ -1,34 +1,19 @@
 <?php
 require_once(__DIR__ . '/autoload.php');
 
-$api_instance = new Swagger\Client\Api\DefaultApi();
 $image_bytes = explode( ',', $_POST['image_data'])[1]; 
 //$image_bytes = base64_encode(file_get_contents('testy/960x960/ZPL44338.jpg'));
+
 $id = $_POST['id'];
-$secret_key = "sk_aa0b80a70b2ae2268b36734a"; 
-$country = "eu"; 
-$recognize_vehicle = 0; 
-$state = ""; 
-$return_image = 0; 
-$topn = 1; 
-$prewarp = ""; 
+//$id = 'pic';
 
-if($id = 'pic2'){
-	try {
-		$result = $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
-	} catch (Exception $e) {
-		echo 'Exception when calling DefaultApi->recognizeBytes: ', $e->getMessage(), PHP_EOL;
-	}
+$prefix = save_file($image_bytes);
+
+if($id == 'carImage'){ // car picture
+	$result = get_car_info($image_bytes);
+}else{ // context picture
+	$geo = get_image_location(make_filename($prefix));
 }
-
-$prefix = "cdn/" . uniqid();
-$fileName = "$prefix.jpg";
-$ifp = fopen($fileName, 'wb'); 
-fwrite($ifp, base64_decode($image_bytes));
-fclose($ifp); 
-
-$thumbName = "$prefix-t.jpg";
-imagejpeg(resize_image($fileName, 350, 350, false), $thumbName);
 
 if(isset($result) && isset($result["results"][0]["coordinates"])){
 	$coordinates = $result["results"][0]["coordinates"];
@@ -38,25 +23,105 @@ if(isset($result) && isset($result["results"][0]["coordinates"])){
 		$xes[] = $ojb->getX();
 		$yes[] = $ojb->getY();
 	}
-	$im = imagecreatefromjpeg($fileName);
+	$im = imagecreatefromjpeg(make_filename($prefix));
 	$plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
-	if ($plateImage!== FALSE) {
-		imagejpeg($plateImage, "$prefix-p.jpg");
+	if ($plateImage !== FALSE) {
+		imagejpeg($plateImage, make_filename($prefix, ',p'));
 	}
 	$output = Array(
-		"imageUrl" => $fileName,
-		"thumbUrl" => $thumbName,
-		"plate" => $result["results"][0]["plate"],
-		"plateImage" => "$prefix-p.jpg"
+		"carInfo" => Array(
+			"plateId" => $result["results"][0]["plate"],
+			"brand" => "",
+			"plateImage" => make_filename($prefix, ',p'),
+		),
+		"carImage" => Array(
+			"url" => make_filename($prefix),
+			"thumb" => make_filename($prefix, ',t')
+		)
 	);
 }else{
 	$output = Array(
-		"imageUrl" => $fileName,
-		"thumbUrl" => $thumbName,
-	);
+		"address" => $geo,
+		"contextImage" => Array(
+			"url" => make_filename($prefix),
+			"thumb" => make_filename($prefix, ',t')
+			)
+		);
 }
 
 echo json_encode($output);
+
+function get_image_location($image){
+    $exif = exif_read_data($image, 0, true);
+    if($exif && isset($exif['GPS'])){
+        $GPSLatitudeRef = $exif['GPS']['GPSLatitudeRef'];
+        $GPSLatitude    = $exif['GPS']['GPSLatitude'];
+        $GPSLongitudeRef= $exif['GPS']['GPSLongitudeRef'];
+        $GPSLongitude   = $exif['GPS']['GPSLongitude'];
+        
+        $lat_degrees = count($GPSLatitude) > 0 ? gps2Num($GPSLatitude[0]) : 0;
+        $lat_minutes = count($GPSLatitude) > 1 ? gps2Num($GPSLatitude[1]) : 0;
+        $lat_seconds = count($GPSLatitude) > 2 ? gps2Num($GPSLatitude[2]) : 0;
+        
+        $lon_degrees = count($GPSLongitude) > 0 ? gps2Num($GPSLongitude[0]) : 0;
+        $lon_minutes = count($GPSLongitude) > 1 ? gps2Num($GPSLongitude[1]) : 0;
+        $lon_seconds = count($GPSLongitude) > 2 ? gps2Num($GPSLongitude[2]) : 0;
+        
+        $lat_direction = ($GPSLatitudeRef == 'W' or $GPSLatitudeRef == 'S') ? -1 : 1;
+        $lon_direction = ($GPSLongitudeRef == 'W' or $GPSLongitudeRef == 'S') ? -1 : 1;
+        
+        $latitude = $lat_direction * ($lat_degrees + ($lat_minutes / 60) + ($lat_seconds / (60*60)));
+        $longitude = $lon_direction * ($lon_degrees + ($lon_minutes / 60) + ($lon_seconds / (60*60)));
+
+        return array('lat'=>$latitude, 'lng'=>$longitude);
+    }else{
+        return false;
+    }
+}
+
+function gps2Num($coordPart){
+    $parts = explode('/', $coordPart);
+    if(count($parts) <= 0)
+    return 0;
+    if(count($parts) == 1)
+    return $parts[0];
+    return floatval($parts[0]) / floatval($parts[1]);
+}
+
+
+function save_file($image_bytes){
+	$prefix = "cdn/" . uniqid();
+
+	$ifp = fopen(make_filename($prefix), 'wb'); 
+	fwrite($ifp, base64_decode($image_bytes));
+	fclose($ifp); 
+	
+	imagejpeg(resize_image(make_filename($prefix), 350, 350, false), make_filename($prefix, ',t'));
+
+	return $prefix;
+}
+
+function make_filename($prefix, $suffix = ''){
+	return "$prefix$suffix.jpg";
+}
+
+function get_car_info($image_bytes){
+	$api_instance = new Swagger\Client\Api\DefaultApi();
+	$secret_key = "sk_aa0b80a70b2ae2268b36734a"; 
+	$country = "eu"; 
+	$recognize_vehicle = 1;
+	$state = ""; 
+	$return_image = 0; 
+	$topn = 1; 
+	$prewarp = ""; 
+
+	try {
+		return $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
+	} catch (Exception $e) {
+		echo 'Exception when calling DefaultApi->recognizeBytes: ', $e->getMessage(), PHP_EOL;
+		return null;
+	}
+}
 
 function resize_image($file, $w, $h, $crop=FALSE) {
 	list($width, $height) = getimagesize($file);

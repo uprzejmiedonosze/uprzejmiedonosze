@@ -17,21 +17,21 @@ genHeader();
 						<div class="ui-grid-a ui-responsive" id="pics">
 							<div class="ui-block-a">
 								<div class="image-upload">
-									<label for="pic1">
+									<label for="contextImage">
 										Zrób zdjęcie prezentujące kontekst zgłoszenia<br>
-										<img id="imgpic1" src="img/camera.png"/>
+										<img id="contextImage-img" src="img/camera.png"/>
 									</label>
-									<input type="file" accept="image/jpeg" id="pic1" title="Zdjęcie 1"/>
+									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie 1"/>
 								</div>
 							</div>
 							<div class="ui-block-b">
 								<div class="image-upload">
-									<label for="pic2">
+									<label for="carImage">
 										Zrób zdjęcie na którym widoczna jest tablica rejestracyjna<br>
-										<img id="imgpic2" src="img/camera.png"/><br/>
-										<img id="imgpic2Plate" src=""/>
+										<img id="carImage-img" src="img/camera.png"/><br/>
+										<img id="plateImage-img" src=""/>
 									</label>
-									<input type="file" accept="image/jpeg" id="pic2" title="Zdjęcie 1"/>
+									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie 1"/>
 								</div>
 							</div>
 						</div>
@@ -43,10 +43,6 @@ genHeader();
 						</div>
 
 						<input type="hidden" id="latlng"  name="latlng"  value=""/>
-						<input type="hidden" id="pic1Url" name="pic1Url" value=""/>
-						<input type="hidden" id="pic2Url" name="pic2Url" value=""/>
-						<input type="hidden" id="pic1Thumb" name="pic1Thumb" value=""/>
-						<input type="hidden" id="pic2Thumb" name="pic2Thumb" value=""/>
 
 						<label for="plateid">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
 						<input class=“required” type="text" id="plateid" name="plateid" placeholder="Numer rejestracyjny">

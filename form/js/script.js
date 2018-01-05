@@ -1,7 +1,7 @@
 $(document).on('pageinit pageshow', function() {
 	if($("#address").length){
-		$("a#geo").on('touchstart click', getAddress);
-		getAddress();
+		//$("a#geo").on('touchstart click', getAddress);
+		//getAddress();
 		$('#address').on('change', function(){
 			$('#address').removeClass('error');
 		});
@@ -9,15 +9,14 @@ $(document).on('pageinit pageshow', function() {
 			$('#plateid').removeClass('error');
 		});
 	}
-	if($('#pic1').length){
+	if($('#contextImage').length){
 		if (window.File && window.FileReader && window.FormData) {
-			$(document).on('change', "#pic1", function (e) {
+			$(document).on('change', "#contextImage", function (e) {
 				checkFile(e.target.files[0], this.id);
 			});
-			$(document).on('change', "#pic2", function (e) {
+			$(document).on('change', "#carImage", function (e) {
 				checkFile(e.target.files[0], this.id);
 			});
-		} else {
 		}
 	}
 	if($('#form-submit').length){
@@ -32,8 +31,8 @@ $(document).on('pageinit pageshow', function() {
 function validateForm(){
 	var ret = check($('#plateid'), 6, false);
 	ret = check($('#address'), 10, false) && ret;
-	ret = check($('#pic2'), 0, true) && ret;
-	ret = check($('#pic1'), 0, true) && ret;
+	ret = check($('#carImage'), 0, true) && ret;
+	ret = check($('#contextImage'), 0, true) && ret;
 	ret = check($('#name'), 5, false) && ret;
 	ret = check($('#email'), 5, false) && ret;
 	if(!ret){
@@ -54,48 +53,32 @@ function check(item, length, grandma){
 	}
 }
 
-function getAddress(){
+function getAddress(latlng){
 	$('a#geo').buttonMarkup({ icon: "clock" });
 	$('#address').val("Pobieram adres...");
-	if ("geolocation" in navigator) {
 
-		var geoOptions = {
-			enableHighAccuracy: true, 
-			maximumAge        : 30000, 
-			timeout           : 27000
-		};
-
-		navigator.geolocation.getCurrentPosition(function(position) {
-			var latlng = position.coords.latitude + ',' + position.coords.longitude;
-
-			$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
-				+ latlng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
-					$('#address').val(data.results[0].formatted_address.replace(', Polska', ''));
-					$('a#geo').buttonMarkup({ icon: "refresh" });
-					$('#latlng').val(latlng);
-				});
-
-		}, function(error){
-			$('a#geo').buttonMarkup({ icon: "alert" });
-			$('#address').val("");
-		}, geoOptions);
-	} else {
-		$('a#geo').buttonMarkup({ icon: "alert" });
-	}
+	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
+		+ latlng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
+			if(data.results){
+				$('#address').val(data.results[0].formatted_address.replace(', Polska', ''));
+				$('a#geo').buttonMarkup({ icon: "refresh" });
+				$('#latlng').val(latlng);
+			}
+		});
 }
 
 function checkFile(file, id){
 	$('#' + id).parent().parent().removeClass('error');
-	$('img#img' + id).attr("src", 'img/loading.gif');
-	if(id == 'pic2'){
-		$('#imgpic2Plate').attr("src", "");
+	$('img#' + id + '-img').attr("src", 'img/loading.gif');
+	if(id == 'carImage'){
+		$('#plateImage-img').attr("src", "");
 	}
 	if (file) {
 		if (/^image\//i.test(file.type)) {
 			readFile(file, id);
 		} else {
-			$('img#img' + id).attr("src", 'img/camera.png');
 			$('#' + id).textinput('enable');
+			$('img#' + id + '-img').attr("src", 'img/camera.png');
 		}
 	}
 }
@@ -108,8 +91,8 @@ function readFile(file, id) {
 	}
 
 	reader.onerror = function () {
-		$('img#img' + id).attr("src", 'img/camera.png');
 		$('#' + id).textinput('enable');
+		$('img#' + id + '-img').attr("src", 'img/camera.png');
 	}
 
 	reader.readAsDataURL(file);
@@ -151,7 +134,7 @@ function processFile(dataURL, fileType, id) {
 	};
 
 	image.onerror = function () {
-		$('img#img' + id).attr("src", 'img/camera.png');
+		$('img#' + id + '-img').attr("src", 'img/camera.png');
 		$('#' + id).textinput('enable');
 	};
 }
@@ -170,24 +153,27 @@ function sendFile(fileData, id) {
 		processData: false,
 		success: function (data) {
 			json = $.parseJSON(data);
-			if(json.thumbUrl) {
-				$('img#img' + id).attr("src", json.thumbUrl);
+
+			if(json.carImage) {
+				$('img#' + id + '-img').attr("src", json.carImage.thumb);
 				$('#' + id).textinput('disable');
-				$('#' + id + 'Url').val(json.imageUrl);
-				$('#' + id + 'Thumb').val(json.thumbUrl);
-			} else {
 			}
-			if(id == 'pic2' && json.plate) {
-				$('#plateid').val(json.plate);
-			} else {
+			if(json.contextImage) {
+				$('img#' + id + '-img').attr("src", json.contextImage.thumb);
+				$('#' + id).textinput('disable');
 			}
-			if(id == 'pic2' && json.plateImage){
-				$('#imgpic2Plate').attr("src", json.plateImage);
-			}else{
+			if(json.address.lng){ 
+				getAddress(json.address.lat + ',' + json.address.lng);
+			}
+			if(id == 'carImage' && json.carInfo.plateId) {
+				$('#plateid').val(json.carInfo.plateId);
+			} 
+			if(id == 'carImage' && json.carInfo.plateImage){
+				$('#imgpic2Plate').attr("src", json.carInfo.plateImage);
 			}
 		},
 		error: function (data) {
-			$('img#img' + id).attr("src", 'img/camera.png');
+			$('img#' + id + '-img').attr("src", 'img/camera.png');
 			$('#' + id).textinput('enable');
 		}
 	});
