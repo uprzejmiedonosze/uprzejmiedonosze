@@ -3,10 +3,16 @@ require_once('inc/include.php');
 date_default_timezone_set('Europe/Warsaw');
 genHeader();
 $post = $_POST;
-$applicationId = uniqid();
+$applicationId = $post["applicationId"];
 $applicationFile = "app/$applicationId.json";
 
-file_put_contents($applicationFile, json_encode($post));
+$application = Array();
+
+if(file_exists($applicationFile)){
+	$application = json_decode(file_get_contents($applicationFile));
+}else{
+	file_put_contents($applicationFile, json_encode($application, JSON_PRETTY_PRINT));
+}
 
 $address = $post["address"];
 $latlng = $post["latlng"];
@@ -15,7 +21,31 @@ $category = $post["category"];
 $name = $post["name"];
 $email = $post["email"];
 $msisdn = $post["msisdn"];
-$date = date("Y-m-d H:i");
+
+$app_date = date_format(new DateTime($application->date), 'Y-m-d');
+$app_hour = date_format(new DateTime($application->date), 'H:i');
+$app_brand = $application->carInfo->brand;
+$carImage = $application->carImage->thumb;
+$contextImage = $application->contextImage->thumb;
+
+$json = Array(
+	"category" => $category,
+	"address" => Array(
+		"street" => $address,
+		"city" => "Warszawa",
+		"voivodeship" => "Mazowieckie",
+		"latlng" => $latlng
+	),
+	"carInfo" => Array(
+		"plateId" => $plateid
+	),
+	"userComment" => "Stoi codziennie"
+);
+
+$application = (array) array_merge((array)$application, (array)$json);
+
+file_put_contents($applicationFile, json_encode($application));
+
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
@@ -24,31 +54,36 @@ $date = date("Y-m-d H:i");
 			<h1>Potwierdź dane</h1>
 			<a onclick="$('#form').submit();"                   class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Potwierdź!</a>
 		</div>
+		  
 		<div data-role="main" class="ui-content">
 			<h1>Jeszcze chwila!</h1>
 			<p>Wysyłając zgłoszenie wyrażasz gotowość do poświadczenia faktu bycia
 			świadkiem wykroczenia które zgłaszasz oraz wyrażasz gotowość
 			potwierdzenia tego w Straży Miejskiej.</p>
 			<br>
-			<ul data-role="listview" data-divider-theme="a">
-				<li data-role="list-divider">Zgłoszenie z dnia <?=$date?></li>
-				<li>Adres: <?=$address ?></li>
-				<li>Nr rej: <?=$plateid ?></li>
-				<li>Kategoria: <?=$categories[$category] ?></li>
-				<li data-role="list-divider">Twoje dane</li>
-				<li><?=$name ?></li>
-				<li><?=$email ?></li>
-				<li><?=$msisdn ?></li>
-				<li data-role="list-divider">Zdjęcia</li>
-			</ul>
-			<br/>
-			<br/>
-			<div id="#pics" class="ui-grid-a ui-responsive">
-				<div class="ui-block-a">
-					<img class="lazyload" data-src="<?=$pic1Thumb?>"> 
-				</div>
-				<div class="ui-block-b">
-					<img class="lazyload" data-src="<?=$pic2Thumb?>">
+
+			<div class="ui-body ui-body-a ui-corner-all">
+		
+				<h3>Zgłoszenie wykroczenia <?=$applicationId?></h3>
+				<p>W dniu <?=$app_date ?> roku o godzinie <?=$app_hour ?> byłem świadkiem pozostawienia
+					samochodu <?=$app_brand ?> nr rejestracyjny <?=$plateid ?> pod adresem <?=$address ?>.
+					<?=$categories_txt[$category] ?> Sytuacja jest widoczna na załączonych zdjęciach.</p>
+				<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
+					pozostawał pojazd pozostawał na tym miejscu.</p>
+				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
+					<?=$name ?><br />
+					Email: <?=$email ?><br />
+					Tel: <?=$msisdn ?>
+				</p>
+				<h3>Zdjęcia</h3>
+				<br/>
+				<div id="#pics" class="ui-grid-a ui-responsive">
+					<div class="ui-block-a">
+						<img class="lazyload" data-src="<?=$contextImage?>"> 
+					</div>
+					<div class="ui-block-b">
+						<img class="lazyload" data-src="<?=$carImage?>">
+					</div>
 				</div>
 			</div>
 			<form action="/dziekujemy.html" id="form" method="post" data-ajax="true">

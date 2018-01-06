@@ -15,6 +15,19 @@ $categories = Array(
 	0 => "Inne"
 );
 
+$categories_txt = Array (
+    4  => "Pojazd zastawiał chodnik (mniej niż 1.5m).",
+	2  => "Pojazd znajdował się mniej niż 15 m od przystanku.",
+    3  => "Pojazd znajdował się mniej niż 10m od skrzyżowania.",
+    9  => "Pojazd blokował ścieżkę rowerową",
+    5  => "Pojazd znajdował się mniej niż 10m od przejścia dla pieszych.",
+    6  => "Pojazd był zaparkowany na trawniku/w parku.",
+    10 => "Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
+    8  => "Pojazd był zaparkowany z dala od krawędzi jezdni.",
+    7  => "Pojazd niszczył chodnik",
+    0  => ""
+);
+
 $categoriesMatrix = Array( 'a', 'b');
 
 function genHeader($title = "Uprzejmie Donoszę"){

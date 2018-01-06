@@ -2,15 +2,14 @@
 require_once(__DIR__ . '/autoload.php');
 date_default_timezone_set('Europe/Warsaw');
 
-//$image_bytes = explode( ',', $_POST['image_data'])[1]; 
-$image_bytes = base64_encode(file_get_contents('testy/960x960/ZPL44338.jpg'));
-//$pictureType = $_POST['pictureType'];
-$pictureType = 'carImage';
-//$applicationId = $_POST['applicationId'];
-$applicationId = '123';
+//$image_bytes = base64_encode(file_get_contents('testy/960x960/ZPL44338.jpg'));
+$image_bytes = explode( ',', $_POST['image_data'])[1]; 
+//$pictureType = 'carImage';
+$pictureType = $_POST['pictureType'];
+//$applicationId = '123';
+$applicationId = $_POST['applicationId'];
 
-$applicationFile = "tex/app/$applicationId.json";
-
+$applicationFile = "app/$applicationId.json";
 $application = Array();
 
 if(file_exists($applicationFile)){
@@ -23,36 +22,41 @@ $prefix = save_file($image_bytes);
 
 if($pictureType == 'carImage'){ // car picture
 	$result = get_car_info($image_bytes);
+	if(isset($result) && $result["results"][0]["plate"]){
+		$coordinates = $result["results"][0]["coordinates"];
+		$xes = Array();
+		$yes = Array();
+		foreach($coordinates as $ley => $ojb){
+			$xes[] = $ojb->getX();
+			$yes[] = $ojb->getY();
+		}
+		$im = imagecreatefromjpeg(make_filename($prefix));
+		$plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
+		if ($plateImage !== FALSE) {
+		
+			imagejpeg($plateImage, make_filename($prefix, ',p'));
+		}
+		$output = Array(
+			"carInfo" => Array(
+				"plateId" => $result["results"][0]["plate"],
+				"brand" => $result["results"][0]["vehicle"]['make'][0]['name'],
+				"plateImage" => make_filename($prefix, ',p'),
+			),
+			"carImage" => Array(
+				"url" => make_filename($prefix),
+				"thumb" => make_filename($prefix, ',t')
+			)
+		);
+	}else{
+		$output = Array(
+			"carImage" => Array(
+				"url" => make_filename($prefix),
+				"thumb" => make_filename($prefix, ',t')
+			)
+		);
+	}
 }else{ // context picture
 	$geo = get_image_location(make_filename($prefix));
-}
-
-if(isset($result) && isset($result["results"][0]["coordinates"])){
-	$coordinates = $result["results"][0]["coordinates"];
-	$xes = Array();
-	$yes = Array();
-	foreach($coordinates as $ley => $ojb){
-		$xes[] = $ojb->getX();
-		$yes[] = $ojb->getY();
-	}
-	$im = imagecreatefromjpeg(make_filename($prefix));
-	$plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
-	if ($plateImage !== FALSE) {
-	
-		imagejpeg($plateImage, make_filename($prefix, ',p'));
-	}
-	$output = Array(
-		"carInfo" => Array(
-			"plateId" => $result["results"][0]["plate"],
-			"brand" => $result["results"][0]["vehicle"]['make'][0]['name'],
-			"plateImage" => make_filename($prefix, ',p'),
-		),
-		"carImage" => Array(
-			"url" => make_filename($prefix),
-			"thumb" => make_filename($prefix, ',t')
-		)
-	);
-}else{
 	$output = Array(
 		"address" => $geo,
 		"contextImage" => Array(
@@ -62,11 +66,13 @@ if(isset($result) && isset($result["results"][0]["coordinates"])){
 		);
 }
 
+
+
 //print_r($application);
 $application = (array) array_merge((array)$application, (array)$output);
 $application['id'] = $applicationId;
 $application['status'] = 'draft';
-$application['date'] = date("Y-m-d H:i");
+$application['date'] = gmDate("Y-m-d\TH:i:s\Z");
 
 file_put_contents($applicationFile, json_encode($application, JSON_PRETTY_PRINT));
 
