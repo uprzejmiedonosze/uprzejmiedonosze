@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from pprint import pprint
 import argparse
 import json
 import os
@@ -37,7 +36,7 @@ def main():
 
     if data['pic2Url']:
         data['pic2Url'] = "\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{" + (data['pic2Url']) + "}"
-    
+
     data['name_name'] = data['name']
     data['user_address'] = '!!! REPLACE !!!'
     data['user_personalId'] = '!!! REPLACE !!!'
@@ -55,7 +54,7 @@ def main():
     src = Template(filein.read())
     tex = src.substitute(data)
 
-    with open(texfile,'w') as f:
+    with open(texfile, 'w') as f:
         f.write(tex)
 
     #proc = subprocess.Popen(['pdflatex', texfile])
@@ -66,7 +65,7 @@ def main():
 
 
     retcode = proc.returncode
-    if not retcode == 0:
+    if retcode != 0:
         raise ValueError('Error {} executing command: {}'.format(retcode, ' '.join(cmd)))
 
     os.unlink(texfile)
