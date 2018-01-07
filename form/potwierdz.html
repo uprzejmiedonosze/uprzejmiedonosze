@@ -16,6 +16,10 @@ if(file_exists($applicationFile)){
 
 $address = $post["address"];
 $latlng = $post["latlng"];
+$voivodeship = $post["voivodeship"];
+$country = $post["country"];
+$city = $post["city"];
+
 $plateid = strtoupper($post["plateid"]);
 $category = $post["category"];
 $name = $post["name"];
@@ -32,8 +36,8 @@ $json = Array(
 	"category" => $category,
 	"address" => Array(
 		"street" => $address,
-		"city" => "Warszawa",
-		"voivodeship" => "Mazowieckie",
+		"city" => $city,
+		"voivodeship" => $voivodeship,
 		"latlng" => $latlng
 	),
 	"carInfo" => Array(

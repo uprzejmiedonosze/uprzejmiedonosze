@@ -60,12 +60,24 @@ function setAddress(latlng){
 	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
 		+ latlng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
 			if(data.results){
-				$('#address').val(data.results[0].formatted_address.replace(', Polska', ''));
-				$('a#geo').buttonMarkup({ icon: "check" });
+				formatted_address = data.results[0].formatted_address.replace(', Polska', '');
+				voivodeship = data.results[0].address_components.filter(function(e){ return e.types.indexOf('administrative_area_level_1') == 0; })[0].long_name.replace('Województwo ', '');
+				country = data.results[0].address_components.filter(function(e){ return e.types.indexOf('country') == 0; })[0].long_name;
+				city = data.results[0].address_components.filter(function(e){ return e.types.indexOf('locality') == 0; })[0].long_name;
+				$('#address').val(formatted_address);
+				$('#voivodeship').val(voivodeship);
+				$('#country').val(country);
+				$('#city').val(city);
 				$('#latlng').val(latlng);
+
+				$('a#geo').buttonMarkup({ icon: "check" });
 			}else{
-				$('a#geo').buttonMarkup({ icon: "alert" });
+				$('#voivodeship').val("");
+				$('#country').val("");
+				$('#city').val("");
 				$('#latlng').val("");
+
+				$('a#geo').buttonMarkup({ icon: "alert" });
 			}
 		}).fail(function() {
 			$('a#geo').buttonMarkup({ icon: "alert" });
