@@ -117,7 +117,7 @@ function gps2Num($coordPart){
 
 
 function save_file($image_bytes){
-	$prefix = "cdn/" . uniqid();
+	$prefix = "cdn/" . guidv4();
 
 	$ifp = fopen(make_filename($prefix), 'wb'); 
 	fwrite($ifp, base64_decode($image_bytes));

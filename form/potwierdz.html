@@ -33,6 +33,11 @@ $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 
 $json = Array(
+	"user" => Array(
+		"name" => $name,
+		"email" => $email,
+		"msisdn" => $msisdn
+	),
 	"category" => $category,
 	"address" => Array(
 		"street" => $address,
@@ -43,7 +48,8 @@ $json = Array(
 	"carInfo" => Array(
 		"plateId" => $plateid
 	),
-	"userComment" => "Stoi codziennie"
+	"userComment" => "Stoi codziennie",
+	"status" => "confirmed"
 );
 
 $application = (array) array_merge((array)$application, (array)$json);

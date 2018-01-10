@@ -8,22 +8,20 @@ genHeader();
 $applicationId = $_POST['applicationId'];
 $applicationFile = "app/$applicationId.json";
 
-$post = json_decode(file_get_contents($applicationFile));
-$address = $post->address;
-$latlng = $post->latlng;
-$pic1Url = $post->pic1Url;
-$pic2Url = $post->pic2Url;
-$pic1Thumb = $post->pic1Thumb;
-$pic2Thumb = $post->pic2Thumb;
-$plateid = strtoupper($post->plateid);
-$category = $post->category;
-$name = $post->name;
-$email = $post->email;
-$msisdn = $post->msisdn;
-$date = date("Y-m-d H:i");
+$application = json_decode(file_get_contents($applicationFile));
+
+$app_date = date_format(new DateTime($application->date), 'Y-m-d');
+$app_hour = date_format(new DateTime($application->date), 'H:i');
+$app_brand = $application->carInfo->brand;
+$carImage = $application->carImage->thumb;
+$contextImage = $application->contextImage->thumb;
+$category = $categories_txt[$xapplication->category];
+$name = $application->user->name;
+$msisdn = $application->user->msisdn;
+$email = $application->user->email;
 
 $from = "Uprzejmie Donosze <ud@nieradka.net>";
-$to = "<szymon@nieradka.net>";
+$to = "<$email>";
 $subject = "Zgłoszenie $applicationId";
 
 $emailTemplate = <<<HTML
@@ -33,26 +31,18 @@ $emailTemplate = <<<HTML
 	</head>
 	<body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
 		<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$applicationId</b>
+
+		W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
+		samochodu $app_brand nr rejestracyjny $app_plateId pod adresem $app_address.
+		$category
+		Sytuacja jest widoczna na załączonych zdjęciach.
+
+		Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
+		pozostawał pojazd pozostawał na tym miejscu.
+
+		Dane adresowe oraz kontaktowe zgłaszającego:
 		<div>
 			<div>
-				<div style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
-					<br><font color="#444444">Data:</font>
-					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$date</b>
-
-					<br><font color="#444444" >Adres:</font>
-					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$address</b>
-					<a href="https://www.google.com/maps/@$latlng,18z">(mapa)</a>
-
-					<br><font color="#444444">Nr rej.:</font>
-					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$plateid</b>
-					<font color="#444444">(3 zgłoszone naruszenia w 2017, 12 łącznie)</font><br>
-
-					<font color="#444444">Rodzaj:</font>
-					<span class="Apple-tab-span" style="white-space:pre">	</span><b>$categories[$category] ($category)</b><br >
-
-					<font color="#444444">Opis:</font>
-					<span class="Apple-tab-span" style="white-space:pre">	</span>(nie podano)<br><br>
-				</div>
 				<div>
 					<br><font color="#444444">Dane zgłaszającego:</font>
 					<div><font color="#444444"><br></font>
@@ -61,8 +51,8 @@ $emailTemplate = <<<HTML
 						<span class="Apple-tab-span" style="white-space:pre">	</span>$msisdn<br>
 						<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">$email</a>
 						<br><br><span style="color: rgb(68, 68, 68);" >Zdjęcie(a):</span><br><br>
-						<a style="border: 1px solid #009C7F;" href="https://$host/$pic1Url"><img class="lazyload" data-src="cid:pic1"></a>
-						<a style="border: 1px solid #009C7F;" href="https://$host/$pic2Url"><img class="lazyload" data-src="cid:pic2"></a><br>
+						<a style="border: 1px solid #009C7F;" href="https://$host/$carImage"><img class="lazyload" data-src="cid:carImage"></a>
+						<a style="border: 1px solid #009C7F;" href="https://$host/$contexImage"><img class="lazyload" data-src="cid:contexImage"></a><br>
 					</div>
 				</div>
 			</div>
@@ -75,6 +65,7 @@ HTML;
 $headers = array(
 	'From' => $from,
 	'To' => $to,
+	'Bcc' => "<szymon@nieradka.net>",
 	'Content-Type' => 'text/html; charset=UTF-8',
 	'MIME-Version' => 1,
 	'Subject' => $subject
@@ -91,8 +82,8 @@ $mime =  new Mail_mime(array('eol' => "\n"));
 $mime = new Mail_mime("\n");
 $mime->setHTMLBody($emailTemplate);
 $mime->setTXTBody(strip_tags($emailTemplate));
-$mime->addHTMLImage($pic1Thumb, "image/jpeg", "", true, "pic1");
-$mime->addHTMLImage($pic2Thumb, "image/jpeg", "", true, "pic2");
+$mime->addHTMLImage($pic1Thumb, "image/jpeg", "", true, "carImage");
+$mime->addHTMLImage($pic2Thumb, "image/jpeg", "", true, "contexImage");
 
 $body = $mime->getMessageBody($mimeParams);
 $headers = $mime->headers($headers);
