@@ -21,16 +21,13 @@ function saveUserApplication($email, $applicationId){
 	$user = json_decode($users->get($email), true);
 	if(isset($user)){
 		$user['applications'][$applicationId] = $applicationId;
-		echo "\n\nUD/" . $user['number'] . '/' . sizeof($user['applications']) . "\n\n";
 	}else{
-		$user['applications'] = Array($applicationId => '');
+		$user['applications'] = Array($applicationId => $applicationId);
 		$user['number'] = count($users) + 1;
 	}
 	$users->set($email, json_encode($user));
 	return $user;
 }
-
-
 
 $host = $_SERVER['SERVER_NAME'];
 

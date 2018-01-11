@@ -71,7 +71,7 @@ $emailTemplate = <<<HTML
 						<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">$email</a>
 						<br><br><span style="color: rgb(68, 68, 68);" >Zdjęcie(a):</span><br><br>
 						<a style="border: 1px solid #009C7F;" href="https://$host/$carImage"><img class="lazyload" data-src="cid:carImage"></a>
-						<a style="border: 1px solid #009C7F;" href="https://$host/$contexImage"><img class="lazyload" data-src="cid:contexImage"></a><br>
+						<a style="border: 1px solid #009C7F;" href="https://$host/$contextImage"><img class="lazyload" data-src="cid:contextImage"></a><br>
 					</div>
 				</div>
 			</div>
@@ -101,8 +101,8 @@ $mime =  new Mail_mime(array('eol' => "\n"));
 $mime = new Mail_mime("\n");
 $mime->setHTMLBody($emailTemplate);
 $mime->setTXTBody(strip_tags($emailTemplate));
-$mime->addHTMLImage($pic1Thumb, "image/jpeg", "", true, "carImage");
-$mime->addHTMLImage($pic2Thumb, "image/jpeg", "", true, "contexImage");
+$mime->addHTMLImage($carImage, "image/jpeg", "", true, "carImage");
+$mime->addHTMLImage($contextImage, "image/jpeg", "", true, "contextImage");
 
 $body = $mime->getMessageBody($mimeParams);
 $headers = $mime->headers($headers);
