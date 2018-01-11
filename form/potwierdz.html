@@ -1,18 +1,14 @@
 <? 
-require_once('inc/include.php');
 date_default_timezone_set('Europe/Warsaw');
+
+require_once(__DIR__ . '/autoload.php');
+require_once(__DIR__ . '/inc/include.php');
+
 genHeader();
 $post = $_POST;
 $applicationId = $post["applicationId"];
-$applicationFile = "app/$applicationId.json";
 
-$application = Array();
-
-if(file_exists($applicationFile)){
-	$application = json_decode(file_get_contents($applicationFile));
-}else{
-	file_put_contents($applicationFile, json_encode($application, JSON_PRETTY_PRINT));
-}
+$application = getApplication($applicationId);
 
 $address = $post["address"];
 $latlng = $post["latlng"];
@@ -20,15 +16,15 @@ $voivodeship = $post["voivodeship"];
 $country = $post["country"];
 $city = $post["city"];
 
-$plateid = strtoupper($post["plateid"]);
+$plateid = strtoupper(trim($post["plateid"]));
 $category = $post["category"];
-$name = $post["name"];
-$email = $post["email"];
-$msisdn = $post["msisdn"];
+$name = ucwords(strtolower(trim($post["name"])));
+$email = strtolower(trim($post["email"]));
+$msisdn = trim($post["msisdn"]);
 
 $app_date = date_format(new DateTime($application->date), 'Y-m-d');
 $app_hour = date_format(new DateTime($application->date), 'H:i');
-$app_brand = $application->carInfo->brand;
+$app_brand = ucwords(strtolower(trim($application->carInfo->brand)));
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 
@@ -49,12 +45,12 @@ $json = Array(
 		"plateId" => $plateid
 	),
 	"userComment" => "Stoi codziennie",
-	"status" => "confirmed"
+	"status" => "ready"
 );
 
 $application = (array) array_merge((array)$application, (array)$json);
 
-file_put_contents($applicationFile, json_encode($application));
+setApplication($applicationId, $application);
 
 ?>
 <body class="index">
@@ -74,9 +70,9 @@ file_put_contents($applicationFile, json_encode($application));
 
 			<div class="ui-body ui-body-a ui-corner-all">
 		
-				<h3>Zgłoszenie wykroczenia <?=$applicationId?></h3>
-				<p>W dniu <?=$app_date ?> roku o godzinie <?=$app_hour ?> byłem świadkiem pozostawienia
-					samochodu <?=$app_brand ?> nr rejestracyjny <?=$plateid ?> pod adresem <?=$address ?>.
+				<h3>Zgłoszenie wykroczenia</h3>
+				<p>W dniu <b><?=$app_date ?></b> roku o godzinie <b><?=$app_hour ?></b> byłem/am świadkiem pozostawienia
+					samochodu <b><?=$app_brand ?></b> nr rejestracyjny <b><?=$plateid ?></b> pod adresem <b><?=$address ?></b>.
 					<?=$categories_txt[$category] ?> Sytuacja jest widoczna na załączonych zdjęciach.</p>
 				<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
 					pozostawał pojazd pozostawał na tym miejscu.</p>

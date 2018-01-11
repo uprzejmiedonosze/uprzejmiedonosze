@@ -12,12 +12,12 @@ CATEGORIES = {
     4  : u"Pojazd zastawiał chodnik (mniej niż 1.5m).",
     2  : u"Pojazd znajdował się mniej niż 15 m od przystanku.",
     3  : u"Pojazd znajdował się mniej niż 10m od skrzyżowania.",
-    9  : u"Pojazd blokował ścieżkę rowerową",
+    9  : u"Pojazd blokował ścieżkę rowerową.",
     5  : u"Pojazd znajdował się mniej niż 10m od przejścia dla pieszych.",
     6  : u"Pojazd był zaparkowany na trawniku/w parku.",
     10 : u"Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
     8  : u"Pojazd był zaparkowany z dala od krawędzi jezdni.",
-    7  : u"Pojazd niszczył chodnik",
+    7  : u"Pojazd niszczył chodnik.",
     0  : u""
 }
 

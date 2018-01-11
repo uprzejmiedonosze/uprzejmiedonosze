@@ -1,5 +1,37 @@
 <?PHP
 
+require(__DIR__ . '/../vendor/autoload.php');
+
+$nsql  = new NoSQLite\NoSQLite('db/store.sqlite');
+$apps  = $nsql->getStore('applications');
+$users = $nsql->getStore('users');
+
+function getApplication($applicationId){
+	global $nsql, $apps;
+	return json_decode($apps->get($applicationId));
+}
+
+function setApplication($applicationId, $application){
+	global $nsql, $apps;
+	return $apps->set($applicationId, json_encode($application));
+}
+
+function saveUserApplication($email, $applicationId){
+	global $nsql, $users;
+	$user = json_decode($users->get($email), true);
+	if(isset($user)){
+		$user['applications'][$applicationId] = $applicationId;
+		echo "\n\nUD/" . $user['number'] . '/' . sizeof($user['applications']) . "\n\n";
+	}else{
+		$user['applications'] = Array($applicationId => '');
+		$user['number'] = count($users) + 1;
+	}
+	$users->set($email, json_encode($user));
+	return $user;
+}
+
+
+
 $host = $_SERVER['SERVER_NAME'];
 
 $categories = Array(
@@ -19,12 +51,12 @@ $categories_txt = Array (
     4  => "Pojazd zastawiał chodnik (mniej niż 1.5m).",
 	2  => "Pojazd znajdował się mniej niż 15 m od przystanku.",
     3  => "Pojazd znajdował się mniej niż 10m od skrzyżowania.",
-    9  => "Pojazd blokował ścieżkę rowerową",
+    9  => "Pojazd blokował ścieżkę rowerową.",
     5  => "Pojazd znajdował się mniej niż 10m od przejścia dla pieszych.",
     6  => "Pojazd był zaparkowany na trawniku/w parku.",
     10 => "Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
     8  => "Pojazd był zaparkowany z dala od krawędzi jezdni.",
-    7  => "Pojazd niszczył chodnik",
+    7  => "Pojazd niszczył chodnik.",
     0  => ""
 );
 

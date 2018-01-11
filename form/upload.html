@@ -1,6 +1,8 @@
 <?php
-require_once(__DIR__ . '/autoload.php');
 date_default_timezone_set('Europe/Warsaw');
+
+require_once(__DIR__ . '/autoload.php');
+require_once(__DIR__ . '/inc/include.php');
 
 //$image_bytes = base64_encode(file_get_contents('testy/960x960/ZPL44338.jpg'));
 $image_bytes = explode( ',', $_POST['image_data'])[1]; 
@@ -9,14 +11,7 @@ $pictureType = $_POST['pictureType'];
 //$applicationId = '123';
 $applicationId = $_POST['applicationId'];
 
-$applicationFile = "app/$applicationId.json";
-$application = Array();
-
-if(file_exists($applicationFile)){
-	$application = json_decode(file_get_contents($applicationFile));
-}else{
-	file_put_contents($applicationFile, json_encode($application, JSON_PRETTY_PRINT));
-}
+$application = getApplication($applicationId);
 
 $prefix = save_file($image_bytes);
 
@@ -74,7 +69,7 @@ $application['id'] = $applicationId;
 $application['status'] = 'draft';
 $application['date'] = gmDate("Y-m-d\TH:i:s\Z");
 
-file_put_contents($applicationFile, json_encode($application, JSON_PRETTY_PRINT));
+setApplication($applicationId, $application);
 
 echo json_encode($output);
 

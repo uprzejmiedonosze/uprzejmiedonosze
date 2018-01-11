@@ -1,28 +1,45 @@
 <? 
-require_once('inc/include.php');
+date_default_timezone_set('Europe/Warsaw');
+
+require_once(__DIR__ . '/autoload.php');
+require_once(__DIR__ . '/inc/include.php');
+
 require_once('Mail.php');
 require_once('Mail/mime.php');
 
 genHeader();
 
 $applicationId = $_POST['applicationId'];
-$applicationFile = "app/$applicationId.json";
 
-$application = json_decode(file_get_contents($applicationFile));
+$application = getApplication($applicationId);
 
 $app_date = date_format(new DateTime($application->date), 'Y-m-d');
 $app_hour = date_format(new DateTime($application->date), 'H:i');
 $app_brand = $application->carInfo->brand;
+$app_plateId = $application->carInfo->plateId;
+$app_address = $application->address->street;
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
-$category = $categories_txt[$xapplication->category];
+$category = $categories_txt[$application->category];
 $name = $application->user->name;
 $msisdn = $application->user->msisdn;
 $email = $application->user->email;
 
+$user = saveUserApplication($email, $applicationId);
+$appNumber = 'UD/' . $user['number'] . '/' . sizeof($user['applications']);
+
 $from = "Uprzejmie Donosze <ud@nieradka.net>";
 $to = "<$email>";
-$subject = "Zgłoszenie $applicationId";
+$subject = "Zgłoszenie $appNumber";
+
+
+$json = Array(
+	"status" => "confirmed",
+	"number" => $appNumber
+);
+
+$application = (array) array_merge((array)$application, (array)$json);
+setApplication($applicationId, $application);
 
 $emailTemplate = <<<HTML
 <html>
@@ -30,24 +47,26 @@ $emailTemplate = <<<HTML
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	</head>
 	<body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
-		<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$applicationId</b>
+		<p>
+			<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$appNumber</b>
+		</p>
 
-		W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
+		<p>W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
 		samochodu $app_brand nr rejestracyjny $app_plateId pod adresem $app_address.
 		$category
-		Sytuacja jest widoczna na załączonych zdjęciach.
+		Sytuacja jest widoczna na załączonych zdjęciach.</p>
 
-		Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
-		pozostawał pojazd pozostawał na tym miejscu.
+		<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
+		pozostawał pojazd pozostawał na tym miejscu.</p>
 
-		Dane adresowe oraz kontaktowe zgłaszającego:
+		<p>Dane adresowe oraz kontaktowe zgłaszającego:</p>
 		<div>
 			<div>
 				<div>
 					<br><font color="#444444">Dane zgłaszającego:</font>
 					<div><font color="#444444"><br></font>
 						<span class="Apple-tab-span" style="white-space:pre">	</span>$name&nbsp;
-						<span style="color: rgb(68, 68, 68);">(2 zgłoszenia w 2017, 27 łącznie)</span><br>
+						<span style="color: rgb(68, 68, 68);"></span><br>
 						<span class="Apple-tab-span" style="white-space:pre">	</span>$msisdn<br>
 						<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">$email</a>
 						<br><br><span style="color: rgb(68, 68, 68);" >Zdjęcie(a):</span><br><br>
@@ -112,7 +131,7 @@ if (PEAR::isError($mail)) {
 			<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r">Jeszcze raz</a>
 		</div>
 		<div data-role="main" class="ui-content">
-			<p>Twoje zgłoszenie zostało właśnie wysłane do Straży Miejskiej.
+			<p>Twoje zgłoszenie zostało właśnie wysłane do Straży Miejskiej.
 			Historię swoim zgłoszeń możesz zawsze zobaczyć w swojej skrzynce
 			mailowej.</p>
 			<p>Obecna wersja aplikacji nie umożliwia przeglądania historii
