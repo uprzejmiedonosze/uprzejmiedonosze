@@ -1,4 +1,4 @@
-DIRS=css lib img js inc
+DIRS=css lib img js inc vendor
 FILES=*.html *.php favicon.ico robots.txt manifest.json sw.js
 HOST=nieradka.net
 RSYNC=rsync

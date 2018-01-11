@@ -1,0 +1,51 @@
+[
+    {
+        "name": "mthenw/nosqlite",
+        "version": "v0.3.0",
+        "version_normalized": "0.3.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mthenw/nosqlite.php.git",
+            "reference": "38dc77d64c232bd793c63dcd405e1f8d9a9c5ee6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mthenw/nosqlite.php/zipball/38dc77d64c232bd793c63dcd405e1f8d9a9c5ee6",
+            "reference": "38dc77d64c232bd793c63dcd405e1f8d9a9c5ee6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*@stable",
+            "squizlabs/php_codesniffer": "1.4.*@stable"
+        },
+        "time": "2013-09-26T19:14:41+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "NoSQLite": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Maciej Winnicki",
+                "email": "maciej.winnicki@gmail.com",
+                "homepage": "http://maciejwinnicki.pl/"
+            }
+        ],
+        "description": "Simple key => value store based on SQLite3",
+        "homepage": "https://github.com/mthenw/nosqlite.php",
+        "keywords": [
+            "database",
+            "persistence",
+            "sqlite3"
+        ]
+    }
+]
