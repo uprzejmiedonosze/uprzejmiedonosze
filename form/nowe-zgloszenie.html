@@ -39,7 +39,6 @@ $applicationId = guidv4();
 							</div>
 						</div>
 						<label for="address">Podaj miejsce zgłoszenia</label>
-
 						<div class="combo">
 							<input type="text" maxlength="50" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true">
 							<a id="geo" href="#" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
@@ -52,6 +51,9 @@ $applicationId = guidv4();
 
 						<label for="plateid">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
 						<input class=“required” type="text" id="plateid" name="plateid" placeholder="Numer rejestracyjny">
+
+						<label for="comment">Dodaj (opcjonalny) komentarz</label>
+						<textarea type="text" id="comment" name="comment" placeholder="Np. szczegóły dotyczące lokalizacji">
 
 						<label for="name" class="section">Twoje dane</label>
 						<input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">

@@ -15,15 +15,15 @@ $application = getApplication($applicationId);
 
 $app_date = date_format(new DateTime($application->date), 'Y-m-d');
 $app_hour = date_format(new DateTime($application->date), 'H:i');
-$app_brand = $application->carInfo->brand;
 $app_plateId = $application->carInfo->plateId;
-$app_address = $application->address->street;
+$app_address = $application->address->address;
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 $category = $categories_txt[$application->category];
 $name = $application->user->name;
 $msisdn = $application->user->msisdn;
 $email = $application->user->email;
+$comment = $application->comment;
 
 $user = saveUserApplication($email, $applicationId);
 $appNumber = 'UD/' . $user['number'] . '/' . sizeof($user['applications']);
@@ -46,34 +46,29 @@ $emailTemplate = <<<HTML
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	</head>
-	<body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;">
+	<body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; line-break: after-white-space;	">
 		<p>
 			<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$appNumber</b>
 		</p>
 
 		<p>W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
-		samochodu $app_brand nr rejestracyjny $app_plateId pod adresem $app_address.
+		samochodu o nr rejestracyjnym $app_plateId pod adresem $app_address.
 		$category
 		Sytuacja jest widoczna na załączonych zdjęciach.</p>
 
 		<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
 		pozostawał pojazd pozostawał na tym miejscu.</p>
+		<p>$comment</p>
 
 		<p>Dane adresowe oraz kontaktowe zgłaszającego:</p>
 		<div>
 			<div>
-				<div>
-					<br><font color="#444444">Dane zgłaszającego:</font>
-					<div><font color="#444444"><br></font>
-						<span class="Apple-tab-span" style="white-space:pre">	</span>$name&nbsp;
-						<span style="color: rgb(68, 68, 68);"></span><br>
-						<span class="Apple-tab-span" style="white-space:pre">	</span>$msisdn<br>
-						<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">$email</a>
-						<br><br><span style="color: rgb(68, 68, 68);" >Zdjęcie(a):</span><br><br>
-						<a style="border: 1px solid #009C7F;" href="https://$host/$carImage"><img class="lazyload" data-src="cid:carImage"></a>
-						<a style="border: 1px solid #009C7F;" href="https://$host/$contextImage"><img class="lazyload" data-src="cid:contextImage"></a><br>
-					</div>
-				</div>
+				<span class="Apple-tab-span" style="white-space:pre">	</span>$name<br>
+				<span class="Apple-tab-span" style="white-space:pre">	</span>$msisdn<br>
+				<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">$email</a><br>
+				<br><span style="color: rgb(68, 68, 68);" >Zdjęcia:</span><br><br>
+				<a style="border: 1px solid #009C7F;" href="https://$host/$carImage"><img data-src="cid:carImage"></a>
+				<a style="border: 1px solid #009C7F;" href="https://$host/$contextImage"><img data-src="cid:contextImage"></a><br>
 			</div>
 		</div>
 	</body>

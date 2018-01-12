@@ -28,7 +28,6 @@ if($pictureType == 'carImage'){ // car picture
 		$im = imagecreatefromjpeg(make_filename($prefix));
 		$plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
 		if ($plateImage !== FALSE) {
-		
 			imagejpeg($plateImage, make_filename($prefix, ',p'));
 		}
 		$output = Array(
@@ -95,7 +94,7 @@ function get_image_location($image){
         $latitude = $lat_direction * ($lat_degrees + ($lat_minutes / 60) + ($lat_seconds / (60*60)));
         $longitude = $lon_direction * ($lon_degrees + ($lon_minutes / 60) + ($lon_seconds / (60*60)));
 
-        return array('lat'=>$latitude, 'lng'=>$longitude);
+        return Array("latlng" => "$latitude,$longitude");
     }else{
         return false;
     }
