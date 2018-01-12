@@ -46,7 +46,7 @@ Warszawa}}
 \opening{{\large{Zgłoszenie wykroczenia \textit{$app_number}}}}
 
 	W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
-	samochodu $app_brand nr rejestracyjny $app_plateId pod adresem $app_address.
+	samochodu o nr rejestracyjnym $app_plateId pod adresem $app_address.
 	$app_category
 	Sytuacja jest widoczna na załączonych zdjęciach.
 
@@ -56,8 +56,8 @@ Warszawa}}
 	Dane adresowe oraz kontaktowe zgłaszającego:
 	\closing{\from{}}
 
-	$pic1Url
-	$pic2Url
+	$contextImage
+	$carImage
 
 \end{letter}
 \end{document}
