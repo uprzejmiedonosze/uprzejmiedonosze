@@ -6,7 +6,7 @@ import os
 import subprocess
 from string import Template
 
-APP_DIR = 'cdn/'
+CDN_DIR = 'cdn/'
 
 CATEGORIES = {
     4  : u"Pojazd zastawiał chodnik (mniej niż 1.5m).",
@@ -24,12 +24,12 @@ CATEGORIES = {
 
 def main():
     parser = argparse.ArgumentParser()
-    #parser.add_argument("applicationId", help="ID of the application")
-    #args = parser.parse_args()
+    parser.add_argument("applicationId", help="ID of the application")
+    args = parser.parse_args()
 
-    applicationId = 'c1433ba5-ab61-4924-a88c-a210962f2505' #args.applicationId
-    texfile = applicationId + '.tex'
-    data = get_application(applicationId)
+    application_id = args.applicationId
+    texfile = application_id + '.tex'
+    data = get_application(application_id)
 
     if data['contextImage']:
         data['contextImage'] = "\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{" + (data['contextImage']['url']) + "}"
@@ -42,13 +42,13 @@ def main():
     data['user_personalId'] = '!!! REPLACE !!!'
     data['user_phone'] = '\\hspace{1cm}Tel: ' + (data['user']['msisdn']) + '\\\\'
     data['user_email'] = '\\hspace{1cm}Email: ' + (data['user']['email'])
-    data['app_number'] = 'UD/1/2' #data['number'] TODO
+    data['app_number'] = data['number']
     data['app_date'] = data['date']
     data['app_hour'] = data['date']
 
     data['app_plateId'] = data['carInfo']['plateId']
     data['app_category'] = CATEGORIES[int(data['category'])]
-    data['app_address'] = data['address']['street'] # TODO
+    data['app_address'] = data['address']['address']
 
     filein = open('tex/template.tpl', encoding='utf-8')
     src = Template(filein.read())
@@ -57,25 +57,28 @@ def main():
     with open(texfile, 'w') as f:
         f.write(tex)
 
-    cmd = ['pdflatex', '-interaction', 'nonstopmode', texfile]
+    cmd = ['/Library/TeX/texbin/pdflatex', '-interaction', 'nonstopmode', texfile]
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, cwd='.')
     proc.communicate(timeout=5)
 
     retcode = proc.returncode
+    unlink_files(application_id)
+    os.rename(application_id + '.pdf', CDN_DIR + application_id + '.pdf')
     if retcode != 0:
         raise ValueError('Error {} executing command: {}'.format(retcode, ' '.join(cmd)))
 
-    os.unlink(texfile)
-    os.unlink(applicationId + '.out')
-    os.unlink(applicationId + '.aux')
-    os.unlink(applicationId + '.log')
-
-def get_application(applicationId):
+def get_application(application_id):
     import sqlite3
     connection = sqlite3.connect('db/store.sqlite')
     cursor = connection.cursor()
-    cursor.execute("select * from applications where key = '{0}';".format(applicationId))
+    cursor.execute("select * from applications where key = '{0}';".format(application_id))
     return json.loads(cursor.fetchone()[1])
+
+def unlink_files(application_id):
+    os.unlink(application_id + '.tex')
+    os.unlink(application_id + '.out')
+    os.unlink(application_id + '.aux')
+    os.unlink(application_id + '.log')
 
 if __name__ == '__main__':
     main()
