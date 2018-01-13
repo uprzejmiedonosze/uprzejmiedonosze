@@ -29,6 +29,16 @@ function saveUserApplication($email, $applicationId){
 	return $user;
 }
 
+function getUserApplications($email){
+	global $nsql, $apps, $users;
+	$apps = Array();
+	$user = json_decode($users->get($email), true);
+	foreach($user['applications'] as $key => $value){
+		$apps[$key] = $value;
+	}
+	return $apps;
+}
+
 $host = $_SERVER['SERVER_NAME'];
 
 $categories = Array(
