@@ -43,12 +43,13 @@ I Oddział Terenowy \\
 ul. Sołtyka 8/10 \\
 Warszawa}}
 
-\opening{{\large{Zgłoszenie wykroczenia \textit{$app_number}}}}
+\opening{{\Large{Zgłoszenie wykroczenia {$app_number}}}}
 
 	W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
 	samochodu o nr rejestracyjnym $app_plateId pod adresem $app_address.
-	$app_category
-	Sytuacja jest widoczna na załączonych zdjęciach.
+	$app_category Sytuacja jest widoczna na załączonych zdjęciach.
+
+	$userComment
 
 	Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
 	pozostawał pojazd pozostawał na tym miejscu.
