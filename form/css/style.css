@@ -45,7 +45,7 @@ label.section:first-of-type {
 	margin-bottom: 1em;
 }
 
-.ui-input-text input#plateid{
+.ui-input-text input#plateId{
 	text-transform: uppercase;
 }
 ::-webkit-input-placeholder { /* WebKit browsers */

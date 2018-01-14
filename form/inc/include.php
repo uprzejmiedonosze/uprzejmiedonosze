@@ -31,12 +31,12 @@ function saveUserApplication($email, $applicationId){
 
 function getUserApplications($email){
 	global $nsql, $apps, $users;
-	$apps = Array();
+	$applications = Array();
 	$user = json_decode($users->get($email), true);
 	foreach($user['applications'] as $key => $value){
-		$apps[$key] = $value;
+		$applications[$key] = $value;
 	}
-	return $apps;
+	return $applications;
 }
 
 $host = $_SERVER['SERVER_NAME'];
@@ -125,15 +125,17 @@ function getFooter(){
 				<h4>&copy; Szymon Nieradka</h4>
 			</div>
 		</div> <! -- page -->
-		<script src="js/script-min.js"></script>
+		<script src="js/script.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/4.0.0-rc1/lazysizes.min.js"></script>
 		<script>
+			/*
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 			ga('create', 'UA-99241725-1', 'auto');
 			ga('send', 'pageview');
+			*/
 		</script>
 		<script>
 			if('serviceWorker' in navigator) {

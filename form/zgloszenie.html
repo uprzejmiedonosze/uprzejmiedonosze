@@ -3,44 +3,46 @@ date_default_timezone_set('Europe/Warsaw');
 
 require_once(__DIR__ . '/autoload.php');
 require_once(__DIR__ . '/inc/include.php');
-
 genHeader();
 $applicationId = $_GET["id"];
 $application = getApplication($applicationId);
 $app_date = date_format(new DateTime($application->date), 'Y-m-d');
 $app_hour = date_format(new DateTime($application->date), 'H:i');
-
+$category = $categories_txt[$application->category];
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-        <a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-edit ui-btn-icon-notext" data-role="button" role="button">Back</a>
+        <a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-carat-l ui-btn-icon-notext" data-role="button" role="button">Back</a>
 			<h1>Zgłoszenie <?=$application->number ?></h1>
 		<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">Zgłoś</a>
-		</div>		  
+		</div>
 		<div data-role="main" class="ui-content">
+<?
+echo <<<HTML
 			<div class="ui-body ui-body-a ui-corner-all">
-				<h3>Zgłoszenie wykroczenia <?=$application->number ?></h3>
-				<p>W dniu <b><?=$app_date ?></b> roku o godzinie <b><?=$app_hour ?></b> byłem/am świadkiem pozostawienia
-					samochodu o nr rejestracyjnym <b><?=$application->carInfo->plateid ?></b> pod adresem <b><?=$application->address->address ?></b>.
-					<?=$categories_txt[$application->category] ?> Sytuacja jest widoczna na załączonych zdjęciach.</p>
+				<h3>Zgłoszenie wykroczenia $application->number</h3>
+				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> byłem/am świadkiem pozostawienia
+					samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b> pod adresem <b>{$application->address->address}</b>.
+					$category Sytuacja jest widoczna na załączonych zdjęciach.</p>
 				<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
 					pozostawał pojazd pozostawał na tym miejscu.</p>
-				<p><?=$application->comment ?></p>
+				<p>$application->userComment</p>
 				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
-					<?=$application->user->name ?><br />
-					<?=$application->user->email ?><br />
-					<?=$application->user->msisdn ?>
+					{$application->user->name}<br />
+					{$application->user->email}<br />
+					{$application->user->msisdn}
 				</p>
-				<h3>Zdjęcia</h3>
 				<div id="#pics" class="ui-grid-a ui-responsive">
 					<div class="ui-block-a">
-						<img class="lazyload" data-src="<?=$application->contextImage->url?>"> 
+						<img class="lazyload" data-src="{$application->contextImage->thumb}"> 
 					</div>
 					<div class="ui-block-b">
-						<img class="lazyload" data-src="<?=$application->carImage->url?>">
+						<img class="lazyload" data-src="{$application->carImage->thumb}">
 					</div>
 				</div>
 			</div>
+HTML;
+?>
 		</div> <!-- main -->
 <? getFooter() ?>

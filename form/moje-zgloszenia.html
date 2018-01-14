@@ -1,0 +1,20 @@
+<? 
+date_default_timezone_set('Europe/Warsaw');
+
+require_once(__DIR__ . '/autoload.php');
+require_once(__DIR__ . '/inc/include.php');
+
+genHeader();
+
+?>
+<body class="index">
+	<div data-role="page" class="container-fluid" data-theme="a">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-edit ui-btn-icon-notext" data-role="button" role="button">Back</a>
+			<h1>Moje Zgłoszenia</h1>
+		<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">Zgłoś</a>
+		</div>		  
+		<div data-role="main" class="ui-content">
+			<? require_once(__DIR__ . '/inc/applications.php'); ?>
+		</div> <!-- main -->
+<? getFooter() ?>

@@ -1,10 +1,10 @@
-$(document).on('pageinit pageshow', function() {
+$(document).on('pageshow', function() {
 	if($("#address").length){
 		$('#address').on('change', function(){
 			$('#address').removeClass('error');
 		});
-		$('#plateid').on('change', function(){
-			$('#plateid').removeClass('error');
+		$('#plateId').on('change', function(){
+			$('#plateId').removeClass('error');
 		});
 	}
 	if($('#contextImage').length){
@@ -28,7 +28,7 @@ $(document).on('pageinit pageshow', function() {
 });
 
 function validateForm(){
-	var ret = check($('#plateid'), 6, false);
+	var ret = check($('#plateId'), 6, false);
 	ret = check($('#address'), 10, false) && ret;
 	ret = check($('#carImage'), 0, true) && ret;
 	ret = check($('#contextImage'), 0, true) && ret;
@@ -86,6 +86,22 @@ function setAddress(latlng){
 }
 
 function checkFile(file, id){
+
+	if(id == "contextImage"){
+		EXIF.getData(file, function() {
+
+			var lat = EXIF.getTag(this, "GPSLatitude");
+			var lon = EXIF.getTag(this, "GPSLongitude");
+			var latRef = EXIF.getTag(this, "GPSLatitudeRef") || "N";  
+			var lonRef = EXIF.getTag(this, "GPSLongitudeRef") || "W";  
+
+			lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
+			lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
+
+			setAddress(lat + "," + lon);
+		});
+	}
+
 	$('#' + id).parent().parent().removeClass('error');
 	$('img#' + id + '-img').attr("src", 'img/loading.gif');
 	if(id == 'carImage'){
@@ -182,16 +198,18 @@ function sendFile(fileData, id) {
 				$('img#' + id + '-img').attr("src", json.contextImage.thumb);
 				$('#' + id).textinput('disable');
 			}
-			if(json.address){ 
-				setAddress(json.address.lat + ',' + json.address.lng);
-			}
-			if(id == 'carImage' && json.carInfo.plateId) {
-				$('#plateid').val(json.carInfo.plateId);
+			//if(json.address && json.address.length > 0){ 
+			//	setAddress(json.address.latlng);
+			//}
+			if(id == 'carImage' && json.carInfo){
+				if(json.carInfo.plateId) {
+					$('#plateId').val(json.carInfo.plateId);
+				}
+				if(json.carInfo.plateImage){
+					$('#plateImage').attr("src", json.carInfo.plateImage);
+					$('#plateImage').show();
+				}
 			} 
-			if(id == 'carImage' && json.carInfo.plateImage){
-				$('#plateImage').attr("src", json.carInfo.plateImage);
-				$('#plateImage').show();
-			}
 		},
 		error: function (data) {
 			$('img#' + id + '-img').attr("src", 'img/camera.png');
