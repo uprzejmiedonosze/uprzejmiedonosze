@@ -3,3 +3,4 @@ testy
 tools
 **/*-min.js
 **/*-min.css
+node_modules/*
