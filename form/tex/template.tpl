@@ -1,20 +1,17 @@
 % vi:syntax=tex
 \documentclass[a4paper, 10pt]{letter}
 
-% generowanie PDF, kolory, grafika...
 \usepackage[pdftex,colorlinks=true,urlcolor=black,linkcolor=black]{hyperref}
 \usepackage[pdftex,usenames]{color}
 \usepackage[pdftex]{graphicx}
 \graphicspath{ {/Users/szn/Sites/uprzejmiedonosze.net/form/tex/} }
 
-% zmiany domy¶lnego wygl±du dokumentu
 \addtolength{\hoffset}{-2cm}
 \addtolength{\textwidth}{4cm}
 \addtolength{\voffset}{-1cm}
 \addtolength{\textheight}{2cm}
 %\setlength{\headwidth}{\textwidth}
 
-% domy¶lne czcionki
 \renewcommand\familydefault{\sfdefault}
 %\renewcommand\sfdefault{phv}
 
@@ -37,6 +34,8 @@
 	$user_email 
 }
 
+\date{$app_date}
+
 \begin{document}
 \begin{letter}{\large{Referat Oskarżycieli Publicznych \\
 I Oddział Terenowy \\
@@ -45,20 +44,19 @@ Warszawa}}
 
 \opening{{\Large{Zgłoszenie wykroczenia {$app_number}}}}
 
-	W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
+	W dniu $app_date roku o godzinie $app_hour byłam/em świadkiem pozostawienia
 	samochodu o nr rejestracyjnym $app_plateId pod adresem $app_address.
-	$app_category Sytuacja jest widoczna na załączonych zdjęciach.
-
-	$userComment
+	$app_category Sytuacja jest widoczna na załączonych zdjęciach. $userComment
 
 	Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
 	pozostawał pojazd pozostawał na tym miejscu.
 
 	Dane adresowe oraz kontaktowe zgłaszającego:
 	\closing{\from{}}
-
 	$contextImage
 	$carImage
+
+	$plateImage
 
 \end{letter}
 \end{document}

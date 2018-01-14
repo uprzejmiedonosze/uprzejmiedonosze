@@ -49,11 +49,11 @@ $applicationId = guidv4();
 						<input type="hidden" id="voivodeship" name="voivodeship" value=""/>
 						<input type="hidden" id="country" name="country" value=""/>
 
-						<label for="plateid">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
-						<input class=“required” type="text" id="plateid" name="plateid" placeholder="Numer rejestracyjny">
+						<label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
+						<input class=“required” type="text" id="plateId" name="plateId" placeholder="Numer rejestracyjny">
 
 						<label for="comment">Dodaj (opcjonalny) komentarz</label>
-						<textarea type="text" id="comment" name="comment" placeholder="Np. szczegóły dotyczące lokalizacji">
+						<textarea type="text" id="comment" name="comment" placeholder="Np. szczegóły dotyczące lokalizacji"></textarea>
 
 						<label for="name" class="section">Twoje dane</label>
 						<input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">
@@ -63,7 +63,7 @@ $applicationId = guidv4();
 						<label for="category" class="section">Podaj rodzaj naruszenia</label>
 
 						<div class="ui-grid-a ui-responsive" id="category">
-							<?PHP $i = 0; foreach($categories as $catId => $catName) { ?>
+							<? $i = 0; foreach($categories as $catId => $catName) { ?>
 							<div class="ui-block-<? echo($categoriesMatrix[$i % 2]); ?>">
 								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 0)?' checked="checked" ': '';?>>
 								<label for="<?=$catId ?>">
@@ -71,10 +71,11 @@ $applicationId = guidv4();
 									<p><?=$catName ?></p>
 								</label>
 							</div>
-							<?PHP $i++; } ?>
+							<? $i++; } ?>
 						</div>
 
 					</div> <!-- ui-field-contain -->
 				</form>
 			</div> <!-- main -->
+			<script src="js/exif-min.js"></script>
 <? getFooter() ?>
