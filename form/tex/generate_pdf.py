@@ -6,6 +6,8 @@ import os
 import subprocess
 from string import Template
 
+from dateutil import parser
+
 CDN_DIR = 'cdn/'
 
 CATEGORIES = {
@@ -23,9 +25,9 @@ CATEGORIES = {
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("applicationId", help="ID of the application")
-    args = parser.parse_args()
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument("applicationId", help="ID of the application")
+    args = argparser.parse_args()
 
     application_id = args.applicationId
     texfile = application_id + '.tex'
@@ -37,14 +39,19 @@ def main():
     if data['carImage']:
         data['carImage'] = "\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{" + (data['carImage']['url']) + "}"
 
+    if data['carInfo']:
+        data['plateImage'] = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" + (data['carInfo']['plateImage']) + "}"
+
     data['name_name'] = data['user']['name']
     data['user_address'] = '!!! REPLACE !!!'
     data['user_personalId'] = '!!! REPLACE !!!'
     data['user_phone'] = '\\hspace{1cm}Tel: ' + (data['user']['msisdn']) + '\\\\'
     data['user_email'] = '\\hspace{1cm}Email: ' + (data['user']['email'])
     data['app_number'] = data['number']
-    data['app_date'] = data['date']
-    data['app_hour'] = data['date']
+    date = parser.parse(data['date'])
+    data['app_date'] = date.strftime('%d.%m.%Y')
+    data['app_hour'] = date.strftime('%H:%M')
+    data['city'] = data['address']['city']
 
     data['app_plateId'] = data['carInfo']['plateId']
     data['app_category'] = CATEGORIES[int(data['category'])]
