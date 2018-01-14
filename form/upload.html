@@ -5,8 +5,9 @@ require_once(__DIR__ . '/autoload.php');
 require_once(__DIR__ . '/inc/include.php');
 
 //$image_bytes = base64_encode(file_get_contents('testy/960x960/ZPL44338.jpg'));
+//$image_bytes = base64_encode(file_get_contents('testy/oneplus5t.jpg'));
 $image_bytes = explode( ',', $_POST['image_data'])[1]; 
-//$pictureType = 'carImage';
+//$pictureType = 'contextImage';
 $pictureType = $_POST['pictureType'];
 //$applicationId = '123';
 $applicationId = $_POST['applicationId'];
@@ -50,9 +51,8 @@ if($pictureType == 'carImage'){ // car picture
 		);
 	}
 }else{ // context picture
-	$geo = get_image_location(make_filename($prefix));
 	$output = Array(
-		"address" => $geo,
+		"date" => get_image_date(make_filename($prefix)),
 		"contextImage" => Array(
 			"url" => make_filename($prefix),
 			"thumb" => make_filename($prefix, ',t')
@@ -60,44 +60,23 @@ if($pictureType == 'carImage'){ // car picture
 		);
 }
 
-
-
-//print_r($application);
 $application = (array) array_merge((array)$application, (array)$output);
 $application['id'] = $applicationId;
 $application['status'] = 'draft';
-$application['date'] = gmDate("Y-m-d\TH:i:s\Z");
 
 setApplication($applicationId, $application);
 
 echo json_encode($output);
 
-function get_image_location($image){
-    $exif = exif_read_data($image, 0, true);
-    if($exif && isset($exif['GPS'])){
-        $GPSLatitudeRef = $exif['GPS']['GPSLatitudeRef'];
-        $GPSLatitude    = $exif['GPS']['GPSLatitude'];
-        $GPSLongitudeRef= $exif['GPS']['GPSLongitudeRef'];
-        $GPSLongitude   = $exif['GPS']['GPSLongitude'];
-        
-        $lat_degrees = count($GPSLatitude) > 0 ? gps2Num($GPSLatitude[0]) : 0;
-        $lat_minutes = count($GPSLatitude) > 1 ? gps2Num($GPSLatitude[1]) : 0;
-        $lat_seconds = count($GPSLatitude) > 2 ? gps2Num($GPSLatitude[2]) : 0;
-        
-        $lon_degrees = count($GPSLongitude) > 0 ? gps2Num($GPSLongitude[0]) : 0;
-        $lon_minutes = count($GPSLongitude) > 1 ? gps2Num($GPSLongitude[1]) : 0;
-        $lon_seconds = count($GPSLongitude) > 2 ? gps2Num($GPSLongitude[2]) : 0;
-        
-        $lat_direction = ($GPSLatitudeRef == 'W' or $GPSLatitudeRef == 'S') ? -1 : 1;
-        $lon_direction = ($GPSLongitudeRef == 'W' or $GPSLongitudeRef == 'S') ? -1 : 1;
-        
-        $latitude = $lat_direction * ($lat_degrees + ($lat_minutes / 60) + ($lat_seconds / (60*60)));
-        $longitude = $lon_direction * ($lon_degrees + ($lon_minutes / 60) + ($lon_seconds / (60*60)));
+function get_image_date($image){
+	$exif = exif_read_data($image, 0, true);
 
-        return Array("latlng" => "$latitude,$longitude");
-    }else{
-        return false;
-    }
+	$date = date("Y-m-d\TH:i:s");
+
+	if($exif && isset($exif['EXIF'])){
+		$date = date_format(date_create($exif['EXIF']['DateTimeOriginal']), 'Y-m-d\TH:i:s'); // @TODO poprawić na prawidłowy format
+	}
+	return $date;
 }
 
 function gps2Num($coordPart){
