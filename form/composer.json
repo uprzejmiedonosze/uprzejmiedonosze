@@ -1,5 +1,6 @@
 {
     "require": {
-        "mthenw/nosqlite": "^0.3.0"
+        "mthenw/nosqlite": "^0.3.0",
+        "kreait/firebase-php": "^1.2"
     }
 }
