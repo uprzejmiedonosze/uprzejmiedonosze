@@ -2,7 +2,7 @@
 
 require(__DIR__ . '/../vendor/autoload.php');
 
-$nsql  = new NoSQLite\NoSQLite('db/store.sqlite');
+$nsql  = new NoSQLite\NoSQLite(__DIR__ . '/../db/store.sqlite');
 $apps  = $nsql->getStore('applications');
 $users = $nsql->getStore('users');
 
@@ -125,7 +125,7 @@ function getFooter(){
 				<h4>&copy; Szymon Nieradka</h4>
 			</div>
 		</div> <! -- page -->
-		<script src="js/script.js"></script>
+		<script src="js/script-min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/4.0.0-rc1/lazysizes.min.js"></script>
 		<script>
 			/*

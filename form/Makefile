@@ -8,19 +8,26 @@ PUBLIC=$(EXPORT)/public
 
 .PHONY: init
 
-staging: init minify copy
-	$(RSYNC) --verbose -r $(EXPORT) $(HOST):/var/www/staging.uprzejmiedonosze.net
+# target: staging - Copy files to staging server
+staging: init minify export
+	@echo "==> Copying files and dirs for $@"
+	@$(RSYNC) --human-readable --recursive $(EXPORT)/* $(HOST):/var/www/staging.uprzejmiedonosze.net
 
+# target: prod - Copy files to prod server
 prod: init minify
-	$(RSYNC) --verbose -r $(DIRS) $(FILES) $(HOST):/var/www/uprzejmiedonosze.net
+	@echo "==> Copying files and dirs for $@"
+	@$(RSYNC) --stats --human-readable --progress --recursive $(DIRS) $(FILES) $(HOST):/var/www/uprzejmiedonosze.net
 
 init:
-	mkdir --parents $(PUBLIC)/js
-	mkdir --parents $(PUBLIC)/css
+	@echo "==> Creating dirs"
+	@mkdir --parents $(PUBLIC)/js
+	@mkdir --parents $(PUBLIC)/css
 
+# target: export - Exports files for deployment
 export: init
-	cp -r $(FILES) img $(PUBLIC)/
-	cp -r lib inc vendor *.php $(EXPORT)/
+	@echo "==> Exporting"
+	@cp -r $(FILES) img $(PUBLIC)/
+	@cp -r lib inc vendor *.php $(EXPORT)/
 
 # Patterns matching CSS files that should be minified. Files with a -min.css
 # suffix will be ignored.
@@ -38,7 +45,7 @@ JS_FILES = $(filter-out %-min.js,$(wildcard \
 YUI_COMPRESSOR = java -jar tools/yuicompressor-2.4.8.jar
 
 # Flags to pass to the YUI Compressor for both CSS and JS.
-YUI_COMPRESSOR_FLAGS = --charset utf-8 --verbose
+YUI_COMPRESSOR_FLAGS = --charset utf-8 --line-break 72
 
 CSS_MINIFIED = $(CSS_FILES:.css=-min.css)
 JS_MINIFIED = $(JS_FILES:.js=-min.js)
@@ -48,25 +55,22 @@ minify: minify-css minify-js
 		
 # target: minify-css - Minifies CSS.
 minify-css: $(CSS_FILES) $(CSS_MINIFIED) init
-	mv $(CSS_MINIFIED) $(PUBLIC)/css
 
 # target: minify-js - Minifies JS.
 minify-js: $(JS_FILES) $(JS_MINIFIED) init
-	mv $(JS_MINIFIED) $(PUBLIC)/js
 
 %-min.css: %.css
 	@echo '==> Minifying $<'
-	$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< >$@
-	@echo
+	@$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< >$(PUBLIC)/$@
 
 %-min.js: %.js
 	@echo '==> Minifying $<'
-	$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type js $< >$@
-	@echo
+	@$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type js $< >$(PUBLIC)/$@
 
 # target: clean - Removes minified CSS and JS files.
 clean:
-	rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
+	@echo "==> Cleaning"
+	@rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
 
 # target: help - Displays help.
 help:
