@@ -6,3 +6,4 @@ tools
 node_modules/*
 db/*
 vendor/*
+vendor/**
