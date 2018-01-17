@@ -1,14 +1,26 @@
 DIRS=css lib img js inc vendor
-FILES=*.html *.php favicon.ico robots.txt manifest.json sw.js
+DIRS2=lib img inc vendor api
+FILES=*.html favicon.ico robots.txt manifest.json sw.js
 HOST=nieradka.net
 RSYNC=rsync
+EXPORT=export
+PUBLIC=$(EXPORT)/public
 
-staging: clean minify
-	$(RSYNC) --verbose -r $(DIRS) $(FILES) $(HOST):/var/www/staging.uprzejmiedonosze.net
+.PHONY: init
 
-prod: clean minify
+staging: init minify copy
+	$(RSYNC) --verbose -r $(EXPORT) $(HOST):/var/www/staging.uprzejmiedonosze.net
+
+prod: init minify
 	$(RSYNC) --verbose -r $(DIRS) $(FILES) $(HOST):/var/www/uprzejmiedonosze.net
 
+init:
+	mkdir --parents $(PUBLIC)/js
+	mkdir --parents $(PUBLIC)/css
+
+export: init
+	cp -r $(FILES) img $(PUBLIC)/
+	cp -r lib inc vendor *.php $(EXPORT)/
 
 # Patterns matching CSS files that should be minified. Files with a -min.css
 # suffix will be ignored.
@@ -33,16 +45,14 @@ JS_MINIFIED = $(JS_FILES:.js=-min.js)
 
 # target: minify - Minifies CSS and JS.
 minify: minify-css minify-js
-
-copify: copify-css copify-js
 		
 # target: minify-css - Minifies CSS.
-minify-css: $(CSS_FILES) $(CSS_MINIFIED)
-copify-css:  $(CSS_FILES) $(CSS_COPIED)
+minify-css: $(CSS_FILES) $(CSS_MINIFIED) init
+	mv $(CSS_MINIFIED) $(PUBLIC)/css
 
 # target: minify-js - Minifies JS.
-minify-js: $(JS_FILES) $(JS_MINIFIED)
-copify-js: $(JS_FILES) $(JS_COPIED)
+minify-js: $(JS_FILES) $(JS_MINIFIED) init
+	mv $(JS_MINIFIED) $(PUBLIC)/js
 
 %-min.css: %.css
 	@echo '==> Minifying $<'
@@ -56,7 +66,7 @@ copify-js: $(JS_FILES) $(JS_COPIED)
 
 # target: clean - Removes minified CSS and JS files.
 clean:
-	rm -f $(CSS_MINIFIED) $(JS_MINIFIED)
+	rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
 
 # target: help - Displays help.
 help:

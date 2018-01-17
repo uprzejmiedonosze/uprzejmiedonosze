@@ -1,9 +1,10 @@
 cdn
 testy
 tools
-**/*-min.js
-**/*-min.css
+js/*-min.js
+css/*-min.css
 node_modules/*
 db/*
 vendor/*
 vendor/**
+export/**
