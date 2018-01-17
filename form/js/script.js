@@ -3,6 +3,8 @@ $(document).on('pageshow', function() {
 		$('#address').on('change', function(){
 			$('#address').removeClass('error');
 		});
+	}
+	if($('#plateId').length){
 		$('#plateId').on('change', function(){
 			$('#plateId').removeClass('error');
 		});
@@ -25,8 +27,41 @@ $(document).on('pageshow', function() {
 			}
 		});
 	}
+	if($('#geocomplete').length){
+		$('#geocomplete').click(function(){
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(function(position) {
+				  setAddress(position.coords.latitude, position.coords.longitude, false);
+				});
+			  }
+		});
+	}
 });
 
+var placeSearch, autocomplete;
+var componentForm = {
+  street_number: 'short_name',
+  route: 'long_name',
+  locality: 'long_name',
+  administrative_area_level_1: 'short_name',
+  country: 'long_name',
+  postal_code: 'short_name'
+};
+
+function initAutocomplete() {
+	autocomplete = new google.maps.places.Autocomplete(
+		/** @type {!HTMLInputElement} */(document.getElementById('address')),
+		{types: ['geocode']});
+
+	autocomplete.addListener('place_changed', fillInAddress);
+}
+
+function fillInAddress() {
+	var place = autocomplete.getPlace();
+
+	setAddress(place.geometry.location.lat(), place.geometry.location.lng(), false);
+}
+  
 function validateForm(){
 	var ret = check($('#plateId'), 6, false);
 	ret = check($('#address'), 10, false) && ret;
@@ -52,33 +87,37 @@ function check(item, length, grandma){
 	}
 }
 
-function setAddress(latlng){
+function setAddress(lat, lng, fromPicture){
 	$('a#geo').buttonMarkup({ icon: "clock" });
 	$('#address').val("");
-	$('#address').attr("placeholder","(pobieram adres ze zdjęcia...)");
+	if(fromPicture){
+		$('#address').attr("placeholder","(pobieram adres ze zdjęcia...)");
+	}else{
+		$('#address').attr("placeholder","(weryfikuję address...)");
+	}
+	$('#administrative_area_level_1').val("");
+	$('#country').val("");
+	$('#locality').val("");
+	$('#latlng').val("");
 
 	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
-		+ latlng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
+		+ lat + "," + lng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
 			if(data.results){
 				formatted_address = data.results[0].formatted_address.replace(', Polska', '');
 				voivodeship = data.results[0].address_components.filter(function(e){ return e.types.indexOf('administrative_area_level_1') == 0; })[0].long_name.replace('Województwo ', '');
 				country = data.results[0].address_components.filter(function(e){ return e.types.indexOf('country') == 0; })[0].long_name;
 				city = data.results[0].address_components.filter(function(e){ return e.types.indexOf('locality') == 0; })[0].long_name;
 				$('#address').val(formatted_address);
-				$('#voivodeship').val(voivodeship);
+				$('#administrative_area_level_1').val(voivodeship);
 				$('#country').val(country);
-				$('#city').val(city);
-				$('#latlng').val(latlng);
+				$('#locality').val(city);
+				$('#latlng').val(lat + "," + lng);
 
 				$('a#geo').buttonMarkup({ icon: "check" });
 			}else{
-				$('#voivodeship').val("");
-				$('#country').val("");
-				$('#city').val("");
-				$('#latlng').val("");
-
-				$('a#geo').buttonMarkup({ icon: "alert" });
+				$('a#geo').buttonMarkup({ icon: "location" });
 			}
+			$('#address').attr("placeholder","Miejsce zgłoszenia");
 		}).fail(function() {
 			$('a#geo').buttonMarkup({ icon: "alert" });
 			$('#latlng').val("");		
@@ -86,19 +125,18 @@ function setAddress(latlng){
 }
 
 function checkFile(file, id){
-
 	if(id == "contextImage"){
 		EXIF.getData(file, function() {
 
 			var lat = EXIF.getTag(this, "GPSLatitude");
 			var lon = EXIF.getTag(this, "GPSLongitude");
 			var latRef = EXIF.getTag(this, "GPSLatitudeRef") || "N";  
-			var lonRef = EXIF.getTag(this, "GPSLongitudeRef") || "W";  
-
-			lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
-			lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
-
-			setAddress(lat + "," + lon);
+			var lonRef = EXIF.getTag(this, "GPSLongitudeRef") || "W";
+			if(lat){
+				lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
+				lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
+				setAddress(lat, lon, true);
+			}
 		});
 	}
 
@@ -198,9 +236,6 @@ function sendFile(fileData, id) {
 				$('img#' + id + '-img').attr("src", json.contextImage.thumb);
 				$('#' + id).textinput('disable');
 			}
-			//if(json.address && json.address.length > 0){ 
-			//	setAddress(json.address.latlng);
-			//}
 			if(id == 'carImage' && json.carInfo){
 				if(json.carInfo.plateId) {
 					$('#plateId').val(json.carInfo.plateId);
