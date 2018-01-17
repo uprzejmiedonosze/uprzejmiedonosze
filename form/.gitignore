@@ -5,3 +5,4 @@ tools
 **/*-min.css
 node_modules/*
 db/*
+vendor/*
