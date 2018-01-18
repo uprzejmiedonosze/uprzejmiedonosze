@@ -117,7 +117,7 @@ HTML;
 		<meta property="og:type" content="website" />
 
 		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-		<link rel="stylesheet" href="css/style-min.css">
+		<link rel="stylesheet" href="css/style.css">
 
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
@@ -149,7 +149,7 @@ function getFooter(){
 				<h4>&copy; Szymon Nieradka</h4>
 			</div>
 		</div> <! -- page -->
-		<script src="js/script-min.js"></script>
+		<script src="js/script.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/4.0.0-rc1/lazysizes.min.js"></script>
 		<script>
 			/*
@@ -163,9 +163,7 @@ function getFooter(){
 		</script>
 		<script>
 			if('serviceWorker' in navigator) {
-				navigator.serviceWorker
-					.register('/sw.js')
-					.then(function() { console.log("Service Worker Registered"); });
+				navigator.serviceWorker.register('/js/sw.js');
 			}
 		</script>
 	</body>

@@ -17,20 +17,20 @@ self.addEventListener('install', function(e) {
 				'/img/robtodobrze-radni-s.jpg',
 				'/img/przyklad-1.jpg',
 				'/img/przyklad-2.jpg',
-				'/css/style-min.css',
-				'js/script-min.js'
+				'/css/style.css',
+				'/js/script.js'
 			]);
 		})
 	);
 });
 
-self.addEventListener('activate',  event => {
+self.addEventListener('activate',  function(event) {
   event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', function(event) {
   event.respondWith(
-    caches.match(event.request, {ignoreSearch:true}).then(response => {
+    caches.match(event.request).then(function(response) {
       return response || fetch(event.request);
     })
   );
