@@ -1,77 +1,85 @@
-DIRS=css lib img js inc vendor
-DIRS2=lib img inc vendor api
-FILES=*.html favicon.ico robots.txt manifest.json sw.js
-HOST=nieradka.net
-RSYNC=rsync
-EXPORT=export
-PUBLIC=$(EXPORT)/public
-
-.PHONY: init
-
-# target: staging - Copy files to staging server
-staging: init minify export
-	@echo "==> Copying files and dirs for $@"
-	@$(RSYNC) --human-readable --recursive $(EXPORT)/* $(HOST):/var/www/staging.uprzejmiedonosze.net
-
-# target: prod - Copy files to prod server
-prod: init minify
-	@echo "==> Copying files and dirs for $@"
-	@$(RSYNC) --stats --human-readable --progress --recursive $(DIRS) $(FILES) $(HOST):/var/www/uprzejmiedonosze.net
-
-init:
-	@echo "==> Creating dirs"
-	@mkdir --parents $(PUBLIC)/js
-	@mkdir --parents $(PUBLIC)/css
-
-# target: export - Exports files for deployment
-export: init
-	@echo "==> Exporting"
-	@cp -r $(FILES) img $(PUBLIC)/
-	@cp -r lib inc vendor *.php $(EXPORT)/
-
-# Patterns matching CSS files that should be minified. Files with a -min.css
-# suffix will be ignored.
-CSS_FILES = $(filter-out %-min.css,$(wildcard \
-	css/*.css \
-))
-
-# Patterns matching JS files that should be minified. Files with a -min.js
-# suffix will be ignored.
-JS_FILES = $(filter-out %-min.js,$(wildcard \
-	js/*.js \
-))
-
-# Command to run to execute the YUI Compressor.
+# tools
 YUI_COMPRESSOR = java -jar tools/yuicompressor-2.4.8.jar
-
-# Flags to pass to the YUI Compressor for both CSS and JS.
 YUI_COMPRESSOR_FLAGS = --charset utf-8 --line-break 72
+RSYNC = rsync
+RSYNC_FLAGS = --human-readable --recursive
+HOSTING=nieradka.net
 
+# dirs and files 
+EXPORT = export
+PUBLIC = $(EXPORT)/public
+DIRS = $(PUBLIC)/js $(PUBLIC)/css $(EXPORT)/inc
+
+CSS_FILES = $(filter-out %-min.css,$(wildcard css/*.css))
 CSS_MINIFIED = $(CSS_FILES:.css=-min.css)
+
+JS_FILES = $(filter-out %-min.js,$(wildcard js/*.js))
 JS_MINIFIED = $(JS_FILES:.js=-min.js)
 
+HTML_FILES = $(filter-out export/public/%.html,$(wildcard *.html))
+HTML_PROCESSED = $(HTML_FILES:%.html=export/public/%.html)
+
+PHP_FILES = $(filter-out export/inc/%.php,$(wildcard inc/*.php))
+PHP_PROCESSED = $(PHP_FILES:inc/%.php=export/inc/%.php)
+
+OTHER_FILES = favicon.ico robots.txt manifest.json sw.js
+
+HOST := staging.uprzejmiedonosze.net
+
+# target: staging - Copy files to staging server
+staging: HOST := staging.uprzejmiedonosze.net
+staging: init export; @echo "==> Copying files and dirs for $@"
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
+
+# target: prod - Copy files to prod server
+#prod: HOST := uprzejmiedonosze.net
+#prod: init export; @echo "==> Copying files and dirs for $@"
+#	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
+
+init: $(DIRS); @echo "==> Creating dirs"
+
+$(PUBLIC)/js:
+	@mkdir --parents $@
+$(PUBLIC)/css:
+	@mkdir --parents $@
+$(EXPORT)/inc:
+	@mkdir --parents $@
+
+# target: export - Exports files for deployment
+export: init minify; @echo "==> Exporting"
+	@cp -r $(OTHER_FILES) img $(PUBLIC)/
+	@cp -r lib vendor *.php $(EXPORT)/
+
 # target: minify - Minifies CSS and JS.
-minify: minify-css minify-js
-		
+minify: minify-css minify-js process-html process-php
+
 # target: minify-css - Minifies CSS.
-minify-css: $(CSS_FILES) $(CSS_MINIFIED) init
+minify-css: init $(CSS_FILES) $(CSS_MINIFIED)
 
 # target: minify-js - Minifies JS.
-minify-js: $(JS_FILES) $(JS_MINIFIED) init
+minify-js: init $(JS_FILES) $(JS_MINIFIED)
 
-%-min.css: %.css
-	@echo '==> Minifying $<'
+# target: process-html - Preprocessing HTML.
+process-html: init $(HTML_FILES) $(HTML_PROCESSED)
+
+# target: process-php - Preprocessing PHP.
+process-php: init $(PHP_FILES) $(PHP_PROCESSED)
+
+%-min.css: %.css; @echo '==> Minifying $<'
 	@$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< >$(PUBLIC)/$@
 
-%-min.js: %.js
-	@echo '==> Minifying $<'
+%-min.js: %.js; @echo '==> Minifying $<'
 	@$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type js $< >$(PUBLIC)/$@
 
+export/public/%.html: %.html; @echo '==> Preprocessing $<'
+	@sed 's/%HOST%/$(HOST)/g' $< > $@
+
+export/inc/%.php: inc/%.php; @echo '==> Preprocessing $< » $@'
+	@sed 's/%HOST%/$(HOST)/g' $< > $@
+
 # target: clean - Removes minified CSS and JS files.
-clean:
-	@echo "==> Cleaning"
+clean:; @echo "==> Cleaning"
 	@rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
 
 # target: help - Displays help.
-help:
-	@egrep "^# target:" Makefile
+help:; @egrep "^# target:" Makefile

@@ -39,8 +39,6 @@ function getUserApplications($email){
 	return $applications;
 }
 
-$host = $_SERVER['SERVER_NAME'];
-
 $categories = Array(
 	4  => "Zastawienie chodnika (mniej niż 1.5m)",
 	2  => "Mniej niż 15 m od przystanku",
@@ -79,9 +77,16 @@ function guidv4()
 
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 }
+ 
+function genHeader($title = "Uprzejmie Donoszę", $auth = false){
+	$authcode = "";
+	if($auth){
+		$authcode = <<<HTML
+<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+		<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+HTML;
+	}
 
-function genHeader($title = "Uprzejmie Donoszę"){
-	$host = $GLOBALS['host'];
 	echo <<<HTML
 <!DOCTYPE html>
 <html lang="pl">
@@ -104,15 +109,34 @@ function genHeader($title = "Uprzejmie Donoszę"){
 		<link rel="manifest" href="/manifest.json">
 		
 		<meta name="theme-color" content="#009C7F">
-		<meta property="og:image" content="https://$host/img/uprzejmiedonosze.png"/>
+		<meta property="og:image" content="https://%HOST%/img/uprzejmiedonosze.png"/>
 		<meta property="og:title" content="$title"/>
 		<meta property="og:description" content="Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej."/>
-		<meta property="og:url" content="https://$host"/>
+		<meta property="og:url" content="https://%HOST%"/>
 		<meta property="og:locale" content="pl_PL" />
 		<meta property="og:type" content="website" />
 
 		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 		<link rel="stylesheet" href="css/style-min.css">
+
+		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
+		<!--script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-storage.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script-->
+		<script>
+		// Initialize Firebase
+		var config = {
+			apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
+			authDomain: "uprzejmiedonosze-1494607701827.firebaseapp.com",
+			databaseURL: "https://uprzejmiedonosze-1494607701827.firebaseio.com",
+			projectId: "uprzejmiedonosze-1494607701827",
+			storageBucket: "uprzejmiedonosze-1494607701827.appspot.com",
+			messagingSenderId: "509860799944"
+		};
+		firebase.initializeApp(config);
+		</script>
+		$authcode
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 	</head>

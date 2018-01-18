@@ -6,9 +6,9 @@ genHeader();
 
 $signInSuccessUrl = $_GET['signInSuccessUrl'];
 if(isset($$signInSuccessUrl)){
-    $signInSuccessUrl = "https://$host/$signInSuccessUrl";
+    $signInSuccessUrl = "https://%HOST%/$signInSuccessUrl";
 }else{
-    $signInSuccessUrl = 'https://$host/start.html';
+    $signInSuccessUrl = 'https://%HOST%/start.html';
 }
 ?>
 <body class="index">
