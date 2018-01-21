@@ -1,6 +1,6 @@
 {
-    "require": {
-        "mthenw/nosqlite": "^0.3.0",
-        "kreait/firebase-php": "^1.2"
-    }
+	"require": {
+		"mthenw/nosqlite": "^0.3.0",
+		"kreait/firebase-php": "^3.0"
+	}
 }
