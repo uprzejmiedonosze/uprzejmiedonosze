@@ -41,7 +41,7 @@ prod: $(DIRS) export; @echo "==> Copying files and dirs for $@"
 # target: export - Exports files for deployment
 export: $(DIRS) minify; @echo "==> Exporting"
 	@cp -r $(OTHER_FILES) img $(PUBLIC)/
-	@cp -r lib vendor *.php $(EXPORT)/
+	@cp -r lib vendor *.php uprzejmiedonosze-1494607701827*.json $(EXPORT)/
 
 # target: minify - Minifies CSS and JS.
 minify: minify-css minify-js process-html process-php
