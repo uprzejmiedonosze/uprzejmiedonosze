@@ -4,12 +4,16 @@ require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 genHeader();
 
-$signInSuccessUrl = $_GET['signInSuccessUrl'];
-if(isset($$signInSuccessUrl)){
-    $signInSuccessUrl = "https://%HOST%/$signInSuccessUrl";
-}else{
-    $signInSuccessUrl = 'https://%HOST%/start.html';
+if(isset($_GET['logout'])){
+    unset($_SESSION['token']);
+    logger('unsetting token');
 }
+$signInSuccessUrl = '/login-ok.html';
+if(isset($_GET['next'])){
+    $signInSuccessUrl .= '?next=' . $_GET['next'];
+}
+
+logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
@@ -26,16 +30,46 @@ if(isset($$signInSuccessUrl)){
         <script src="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth__pl.js"></script>
         <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth.css" />
         <script type="text/javascript">
-            // FirebaseUI config.
-            var uiConfig = {
-                signInSuccessUrl: '<?=$signInSuccessUrl?>',
-                signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-                tosUrl: 'https://staging.uprzejmiedonosze.net/start.html' // Terms of service url.
+
+            initApp = function() {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        $('#firebaseui-auth-container').append(
+                            '<a href="#" id="logout" class="ui-btn ui-corner-all ui-btn-inline try">Wyloguj się</a>'
+                        );
+                        $('#logout').click(logout);
+                    } else {
+                        login();
+                    }
+                }, function(error) {
+                    console.log(error);
+                    login();
+                });
             };
 
-            // Initialize the FirebaseUI Widget using Firebase.
-            var ui = new firebaseui.auth.AuthUI(firebase.auth());
-            // The start method will wait until the DOM is loaded.
-            ui.start('#firebaseui-auth-container', uiConfig);
+            window.addEventListener('load', function() {
+                initApp()
+            });
+
+
+            function login(){
+                // FirebaseUI config.
+                var uiConfig = {
+                    signInSuccessUrl: "https://%HOST%<?=$signInSuccessUrl?>",
+                    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                                    firebase.auth.FacebookAuthProvider.PROVIDER_ID],
+                    tosUrl: 'https://staging.uprzejmiedonosze.net/start.html' // Terms of service url.
+                };
+
+                // Initialize the FirebaseUI Widget using Firebase.
+                var ui = new firebaseui.auth.AuthUI(firebase.auth());
+                // The start method will wait until the DOM is loaded.
+                ui.start('#firebaseui-auth-container', uiConfig);
+
+            }
+            function logout(){
+                firebase.auth().signOut();
+                window.location.replace('/login.html?logout');
+            }
         </script>
 <? getFooter() ?>

@@ -1,6 +1,10 @@
 <?PHP
+session_start();
 
 require(__DIR__ . '/../vendor/autoload.php');
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\Exception\Auth\InvalidIdToken;
 
 $nsql  = new NoSQLite\NoSQLite(__DIR__ . '/../db/store.sqlite');
 $apps  = $nsql->getStore('applications');
@@ -27,6 +31,12 @@ function saveUserApplication($email, $applicationId){
 	}
 	$users->set($email, json_encode($user));
 	return $user;
+}
+
+function logger($msg){
+	if('%HOST%' == 'staging.uprzejmiedonosze.net'){
+		error_log("$msg\n", 3, "/tmp/staging.uprzejmiedonosze.net.log");
+	}
 }
 
 function getUserApplications($email){
@@ -77,10 +87,52 @@ function guidv4()
 
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
 }
+
+function verifyToken($token){
+	logger('verifyToken:');
+	if(isset($token)){
+		logger('verifyToken: $token is set');
+		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../uprzejmiedonosze-1494607701827-firebase-adminsdk-5ut9d-80e0eb39c6.json');
+		$firebase = (new Factory)->withServiceAccount($serviceAccount)->create();
+		try {
+			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
+			logger('verifyToken: token verified');
+			//print($verifiedIdToken->getClaim('email'));
+			//print($verifiedIdToken->getClaim('name'));
+			//print($verifiedIdToken->getClaim('picture'));
+			//print($verifiedIdToken->getClaim('user_id'));
+			$_SESSION['token'] = $token;
+			logger('verifyToken: token added to session. RETURN TRUE');
+			return true;
+		} catch (InvalidIdToken $e) {
+			logger('verifyToken: InvalidIdToken. Location: /login.html');
+			header("Location: /login.html");
+			die();
+		} 
+	}else{
+		logger('verifyToken: $token NOT set. RETURN FALSE');
+		return false;
+	}
+}
+
+/*
+*** /var/log/nginx//error.log ***
+genHeader:
+genHeader: auth == true
+genHeader: verifyToken($_SESSION[token]) verified
+genHeader:
+*/
  
 function genHeader($title = "Uprzejmie Donoszę", $auth = false){
 	$authcode = "";
 	if($auth){
+		logger('genHeader: auth == true');
+		if(!(isset($_SESSION['token']) && verifyToken($_SESSION['token']))){
+			logger('genHeader: verifyToken($_SESSION[token]) NOT verified');
+			header("Location: /login.html?next=" . $_SERVER['REQUEST_URI']);
+			die();
+		}
+
 		$authcode = <<<HTML
 <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
 		<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
@@ -121,8 +173,8 @@ HTML;
 
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
-		<!--script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-storage.js"></script>
+		<!--script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script-->
 		<script>
 		// Initialize Firebase

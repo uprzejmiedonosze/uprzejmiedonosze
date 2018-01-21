@@ -48,17 +48,21 @@ var componentForm = {
   postal_code: 'short_name'
 };
 
-function initAutocomplete() {
+function initAutocompleteOnRegister() {
+	initAutocomplete(false);
+}
+
+function initAutocomplete(trigger_change = true) {
 	autocomplete = new google.maps.places.Autocomplete(
 		/** @type {!HTMLInputElement} */(document.getElementById('address')),
 		{types: ['geocode']});
-
-	autocomplete.addListener('place_changed', fillInAddress);
+	if(trigger_change){
+		autocomplete.addListener('place_changed', fillInAddress);
+	}
 }
 
 function fillInAddress() {
 	var place = autocomplete.getPlace();
-
 	setAddress(place.geometry.location.lat(), place.geometry.location.lng(), false);
 }
   
@@ -158,6 +162,10 @@ function checkFile(file, id){
 
 function readFile(file, id) {
 	var reader = new FileReader();
+
+	var storageRef = firebase.storage().ref();
+	var mountainsRef = storageRef.child('images/mountains.jpg');
+	mountainsRef.put(file);
 
 	reader.onloadend = function () {
 		processFile(reader.result, file.type, id);

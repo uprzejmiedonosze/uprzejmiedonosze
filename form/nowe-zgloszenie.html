@@ -1,6 +1,6 @@
 <?PHP
 require_once(__DIR__ . '/../inc/include.php');
-genHeader();
+genHeader("Uprzejmie Donoszę – nowe zgłoszenie", true);
 
 $applicationId = guidv4();
 
@@ -40,10 +40,9 @@ $applicationId = guidv4();
 						</div>
 						<label for="address">Podaj miejsce zgłoszenia <a href="#" id="geocomplete">(pobierz adres)</a></label>
 						<div class="combo">
-							<input type="text" maxlength="50" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true">
+							<input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true">
 							<a id="geo" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
 						</div>
-
 
 						<input type="hidden" id="street_number" name="street_number"/>
 						<input type="hidden" id="route" name="street_name"/>
@@ -57,11 +56,6 @@ $applicationId = guidv4();
 
 						<label for="comment">Dodaj (opcjonalny) komentarz</label>
 						<textarea type="text" id="comment" name="comment" placeholder="Np. szczegóły dotyczące lokalizacji"></textarea>
-
-						<label for="name" class="section">Twoje dane</label>
-						<input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">
-						<input type="email" required maxlength="30" id="email" name="email" placeholder="Twój email" data-inline="true">
-						<input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
 
 						<label for="category" class="section">Podaj rodzaj naruszenia</label>
 

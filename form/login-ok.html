@@ -1,0 +1,60 @@
+<? 
+date_default_timezone_set('Europe/Warsaw');
+require_once(__DIR__ . '/../autoload.php');
+require_once(__DIR__ . '/../inc/include.php');
+
+$signInSuccessUrl = 'start.html';
+if(isset($_GET['next'])){
+    $signInSuccessUrl = $_GET['next'];
+}
+
+if(isset($_GET['pa']) && verifyToken($_GET['pa'])){
+    header("Location: https://%HOST%/" . $signInSuccessUrl);
+    die();
+}else{
+?>
+<body class="index">
+	<div data-role="page" class="container-fluid" data-theme="a">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+			<h1>Login sukces</h1>
+        </div>
+    <? genHeader(); ?>
+    <script src="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth__pl.js"></script>
+        <script type="text/javascript">
+        function logout(){
+            firebase.auth().signOut();
+            window.location.replace('/login.html');
+        }
+        initApp = function() {
+            firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                user.getIdToken().then(function(accessToken) {
+                    window.location.replace('/login-ok.html?pa=' + accessToken + '&next=' + '<?= $signInSuccessUrl ?>');
+                });
+            } else {
+                window.location.replace('/login.html');
+            }
+            }, function(error) {
+                console.log(error);
+                window.location.replace('/login.html');
+            });
+        };
+
+        window.addEventListener('load', function() {
+            initApp()
+        });
+        </script>
+<? getFooter(); 
+}
+
+
+//    TODO
+//
+//    po login zrobić przekierowanie na success.html, a tam:
+//    – wrzucić token do sesji
+//    – jeśli to pierwszy raz, to przekierować na register
+//    – jeśli to kolejny raz to przekierować na następną stronę lub /start
+//
+//    walidować token z sesji w kadej stronie wymagąjcej autoryzacji
+//    – jak się nie uda, to na login
+//    - jak się uda, to OK
