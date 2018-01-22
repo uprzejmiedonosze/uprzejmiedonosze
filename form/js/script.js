@@ -161,11 +161,9 @@ function checkFile(file, id){
 }
 
 function readFile(file, id) {
-	var reader = new FileReader();
+	sendFileToFirebase(file, id);
 
-	var storageRef = firebase.storage().ref();
-	var mountainsRef = storageRef.child('images/mountains.jpg');
-	mountainsRef.put(file);
+	var reader = new FileReader();
 
 	reader.onloadend = function () {
 		processFile(reader.result, file.type, id);
@@ -218,6 +216,12 @@ function processFile(dataURL, fileType, id) {
 		$('img#' + id + '-img').attr("src", 'img/camera.png');
 		$('#' + id).textinput('enable');
 	};
+}
+
+function sendFileToFirebase(file, id){
+	applicationId = $('#applicationId').val();
+	fileName = 'images/' + applicationId + '-' + id +'.jpg'
+	firebase.storage().ref().child(fileName).put(file);
 }
 
 function sendFile(fileData, id) {
