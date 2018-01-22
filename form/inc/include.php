@@ -106,8 +106,7 @@ function verifyToken($token){
 			return true;
 		} catch (InvalidIdToken $e) {
 			logger('verifyToken: InvalidIdToken. Location: /login.html');
-			header("Location: /login.html");
-			die();
+			redirect("login.html");
 		} 
 	}else{
 		logger('verifyToken: $token NOT set. RETURN FALSE');
@@ -115,22 +114,21 @@ function verifyToken($token){
 	}
 }
 
-/*
-*** /var/log/nginx//error.log ***
-genHeader:
-genHeader: auth == true
-genHeader: verifyToken($_SESSION[token]) verified
-genHeader:
-*/
- 
+function redirect($destPath){
+	//sleep(2);
+	logger(" ==> redirecting to $destPath");
+	header("X-Redirect: https://%HOST%/$destPath");
+	header("Location: https://%HOST%/$destPath");
+	die();
+}
+
 function genHeader($title = "Uprzejmie Donoszę", $auth = false){
 	$authcode = "";
 	if($auth){
 		logger('genHeader: auth == true');
 		if(!(isset($_SESSION['token']) && verifyToken($_SESSION['token']))){
 			logger('genHeader: verifyToken($_SESSION[token]) NOT verified');
-			header("Location: /login.html?next=" . $_SERVER['REQUEST_URI']);
-			die();
+			redirect("login.html?next=" . $_SERVER['REQUEST_URI']);
 		}
 
 		$authcode = <<<HTML
@@ -171,6 +169,9 @@ HTML;
 		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 		<link rel="stylesheet" href="css/style.css">
 
+		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
 		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-storage.js"></script>
@@ -189,8 +190,6 @@ HTML;
 		firebase.initializeApp(config);
 		</script>
 		$authcode
-		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 	</head>
 HTML;
 }

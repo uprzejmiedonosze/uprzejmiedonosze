@@ -7,16 +7,18 @@ genHeader();
 if(isset($_GET['logout'])){
     unset($_SESSION['token']);
     logger('unsetting token');
+    redirect("login.html");
 }
 $signInSuccessUrl = '/login-ok.html';
 if(isset($_GET['next'])){
     $signInSuccessUrl .= '?next=' . $_GET['next'];
+    //redirect("login.html");
 }
 
 logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
 ?>
 <body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
+	<div id="loginPage" data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
         <a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-carat-l ui-btn-icon-notext" data-role="button" role="button">Back</a>
 			<h1>Login</h1>
@@ -30,8 +32,16 @@ logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
         <script src="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth__pl.js"></script>
         <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth.css" />
         <script type="text/javascript">
+            $( document ).bind( "pagecontainerload", function( e, triggerData ) {
+                var redirect = triggerData.xhr.getResponseHeader( "X-Redirect" );
+                if ( redirect ) {
+                    $( e.target ).pagecontainer( "load", redirect, triggerData.options );
+                    e.preventDefault();
+                }
+            });
 
-            initApp = function() {
+            $(document).on("pageshow", "#loginPage", function () { 
+                console.log('pageshow triggered');
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
                         $('#firebaseui-auth-container').append(
@@ -45,12 +55,7 @@ logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
                     console.log(error);
                     login();
                 });
-            };
-
-            window.addEventListener('load', function() {
-                initApp()
             });
-
 
             function login(){
                 // FirebaseUI config.
