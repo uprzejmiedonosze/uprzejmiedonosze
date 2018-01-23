@@ -22,7 +22,7 @@ HTML_PROCESSED       = $(HTML_FILES:%.html=export/public/%.html)
 PHP_FILES            = $(wildcard inc/*.php)
 PHP_PROCESSED        = $(PHP_FILES:inc/%.php=export/inc/%.php)
 
-OTHER_FILES          = favicon.ico robots.txt manifest.json
+OTHER_FILES          = favicon.ico robots.txt manifest.json api
 
 STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
