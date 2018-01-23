@@ -159,7 +159,6 @@ function checkFile(file, id){
 }
 
 function readFile(file, id) {
-	//sendFileToFirebase(file, id);
 
 	var reader = new FileReader();
 
@@ -183,7 +182,8 @@ function processFile(dataURL, fileType, id) {
 		var shouldResize = (width > maxWidth) || (height > maxHeight);
 
 		if (!shouldResize) {
-			sendFile(dataURL, id);
+			//sendFile(dataURL, id);
+			sendFileToFirebase(dataURL, id);
 			return;
 		}
 
@@ -207,7 +207,8 @@ function processFile(dataURL, fileType, id) {
 		context.drawImage(this, 0, 0, newWidth, newHeight);
 
 		dataURL = canvas.toDataURL(fileType);
-		sendFile(dataURL, id);
+		//sendFile(dataURL, id);
+		sendFileToFirebase(dataURL, id);
 	};
 
 	image.onerror = function () {
@@ -216,10 +217,19 @@ function processFile(dataURL, fileType, id) {
 	};
 }
 
-function sendFileToFirebase(file, id){
+function sendFileToFirebase(data, id){
 	applicationId = $('#applicationId').val();
-	fileName = 'images/' + applicationId + '-' + id +'.jpg'
-	firebase.storage().ref().child(fileName).put(file);
+	fileName = 'images/' + applicationId + '-' + id +'.jpg';
+	file = firebase.storage().ref().child(fileName);
+	file.putString(data, 'data_url', {contentType: 'image/jpg'}).then(function(snapshot) {
+		file.getDownloadURL().then(function(url) {
+			$('img#' + id + '-img').attr("src", url);
+			$('#' + id).textinput('disable');
+		}).catch(function(error) {
+			$('img#' + id + '-img').attr("src", 'img/camera.png');
+			$('#' + id).textinput('enable');	
+		});
+	});
 }
 
 function sendFile(fileData, id) {
