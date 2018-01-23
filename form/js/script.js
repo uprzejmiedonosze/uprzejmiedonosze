@@ -71,8 +71,6 @@ function validateForm(){
 	ret = check($('#address'), 10, false) && ret;
 	ret = check($('#carImage'), 0, true) && ret;
 	ret = check($('#contextImage'), 0, true) && ret;
-	ret = check($('#name'), 5, false) && ret;
-	ret = check($('#email'), 5, false) && ret;
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
@@ -161,7 +159,7 @@ function checkFile(file, id){
 }
 
 function readFile(file, id) {
-	sendFileToFirebase(file, id);
+	//sendFileToFirebase(file, id);
 
 	var reader = new FileReader();
 

@@ -18,14 +18,14 @@ $city = $post["city"];
 
 $plateId = strtoupper(trim($post["plateId"]));
 $category = $post["category"];
-$name = ucwords(strtolower(trim($post["name"])));
-$email = strtolower(trim($post["email"]));
-$msisdn = trim($post["msisdn"]);
+$name = $_SESSION['user_name'];
+$email = $_SESSION['user_email'];
+$msisdn = ''; // @TODO (after register)
 $comment = strtoupper(trim($post["comment"]));
 
 $app_date = date_format(new DateTime($application->date), 'Y-m-d');
 $app_hour = date_format(new DateTime($application->date), 'H:i');
-$app_brand = ucwords(strtolower(trim($application->carInfo->brand)));
+//$app_brand = ucwords(strtolower(trim($application->carInfo->brand)));
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 
@@ -43,8 +43,7 @@ $json = Array(
 		"latlng" => $latlng
 	),
 	"carInfo" => Array(
-		"plateId" => $plateId,
-		"brand" => $app_brand
+		"plateId" => $plateId
 	),
 	"userComment" => $comment,
 	"status" => "ready"
