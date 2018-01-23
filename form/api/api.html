@@ -1,0 +1,74 @@
+<?PHP
+date_default_timezone_set('Europe/Warsaw');
+header("Content-Type: application/json; charset=UTF-8");
+require(__DIR__ . '/../../inc/include.php');
+
+if (is_ajax()) {
+    if (isset($_POST["action"]) && !empty($_POST["action"])) {
+        $action = $_POST["action"];
+        logger("api.html:main action set: $action");
+        switch($action) {
+            case "getUserApplications": _getUserApplications(); break;
+            case "verifyToken": _verifyToken(); break;
+            default: _raiseError('Invalid action specified', 400);
+        }
+    }else{
+        _raiseError('No action specified', 400);
+    }
+}else{
+    _raiseError('No AJAX request', 403);
+}
+  
+function is_ajax() {
+    logger('api.html:is_ajax');
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}
+
+function _getUserApplications(){
+    $applicationIds = getUserApplications('szymon@nieradka.net');
+    $applications = Array();
+    foreach($applicationIds as $id){
+        $application = getApplication($id);
+        $app_date = date_format(new DateTime($application->date), 'Y-m-d');
+        $app_hour = date_format(new DateTime($application->date), 'H:i');
+        $applications[$id] = $application;
+        $applications[$id]->app_date = $app_date;
+        $applications[$id]->app_hour = $app_hour;
+        $applications[$id]->category_txt = $categories_txt[$application->category];
+    }
+    echo json_encode($applications);
+}
+
+function _verifyToken(){
+    logger('api.html:_verifyToken');
+    if(isset($_POST['pa']) && !empty($_POST['pa'])){
+        logger('api.html:_verifyToken pa passed');
+        if(verifyToken($_POST['pa'])){
+            logger('api.html:_verifyToken pa verified');
+            echo json_encode(Array(
+                'user_email' => $_SESSION['user_email'],
+                'user_name' => $_SESSION['user_name'],
+                'user_picture' => $_SESSION['user_picture'],
+                'user_id' => $_SESSION['user_id']    
+            ));
+        }else{
+            logger('api.html:_verifyToken Token not verified');
+            _raiseError("Token not verified", 401);
+        }
+    }else{
+        logger('api.html:_verifyToken Token not specified');
+        _raiseError("Token not specified", 400);
+    }
+}
+
+function _raiseError($msg, $status){
+    logger("api.html:_raiseError $msg");
+    $error = Array(
+        "code" => $status,
+        "message" => $msg
+    );
+    http_response_code($status);
+    echo json_encode($error);
+    die();
+}
+?>
