@@ -44,10 +44,7 @@ logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
                 console.log('pageshow triggered');
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
-                        $('#firebaseui-auth-container').append(
-                            '<a href="#" id="logout" class="ui-btn ui-corner-all ui-btn-inline try">Wyloguj się</a>'
-                        );
-                        $('#logout').click(logout);
+                        window.location.replace('<?=$signInSuccessUrl;?>');
                     } else {
                         login();
                     }
