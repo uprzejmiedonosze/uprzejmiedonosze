@@ -97,16 +97,16 @@ function verifyToken($token){
 		try {
 			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
 			logger('verifyToken: token verified');
-			//print($verifiedIdToken->getClaim('email'));
-			//print($verifiedIdToken->getClaim('name'));
-			//print($verifiedIdToken->getClaim('picture'));
-			//print($verifiedIdToken->getClaim('user_id'));
+			$_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
+			$_SESSION['user_name'] = $verifiedIdToken->getClaim('name');
+			$_SESSION['user_picture'] = $verifiedIdToken->getClaim('picture');
+			$_SESSION['user_id'] = $verifiedIdToken->getClaim('user_id');
 			$_SESSION['token'] = $token;
 			logger('verifyToken: token added to session. RETURN TRUE');
 			return true;
 		} catch (InvalidIdToken $e) {
-			logger('verifyToken: InvalidIdToken. Location: /login.html');
-			redirect("login.html");
+			logger('verifyToken: $token NOT set. RETURN FALSE');
+			return false;
 		} 
 	}else{
 		logger('verifyToken: $token NOT set. RETURN FALSE');
