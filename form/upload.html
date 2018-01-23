@@ -18,7 +18,7 @@ $prefix = save_file($image_bytes);
 
 if($pictureType == 'carImage'){ // car picture
 	$result = get_car_info($image_bytes);
-	if(isset($result) && $result["results"][0]["plate"]){
+	if(isset($result) && count($result["results"]) && $result["results"][0]["plate"]){
 		$coordinates = $result["results"][0]["coordinates"];
 		$xes = Array();
 		$yes = Array();
@@ -73,7 +73,7 @@ function get_image_date($image){
 
 	$date = date("Y-m-d\TH:i:s");
 
-	if($exif && isset($exif['EXIF'])){
+	if($exif && isset($exif['EXIF']) && isset($exif['EXIF']['DateTimeOriginal'])){
 		$date = date_format(date_create($exif['EXIF']['DateTimeOriginal']), 'Y-m-d\TH:i:s'); // @TODO poprawić na prawidłowy format
 	}
 	return $date;
