@@ -4,6 +4,8 @@ tools
 js/*-min.js
 css/*-min.css
 node_modules/*
+functions/node_modules/*
+TODO
 db/*
 vendor/*
 vendor/**
