@@ -5,6 +5,7 @@ js/*-min.js
 css/*-min.css
 node_modules/*
 functions/node_modules/*
+functions-samples/*
 TODO
 db/*
 vendor/*

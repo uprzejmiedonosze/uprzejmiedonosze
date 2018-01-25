@@ -128,18 +128,7 @@ function setAddress(lat, lng, fromPicture){
 
 function checkFile(file, id){
 	if(id == "contextImage"){
-		EXIF.getData(file, function() {
-
-			var lat = EXIF.getTag(this, "GPSLatitude");
-			var lon = EXIF.getTag(this, "GPSLongitude");
-			var latRef = EXIF.getTag(this, "GPSLatitudeRef") || "N";  
-			var lonRef = EXIF.getTag(this, "GPSLongitudeRef") || "W";
-			if(lat){
-				lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
-				lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
-				setAddress(lat, lon, true);
-			}
-		});
+		readGeoDataFromImage(file);
 	}
 
 	$('#' + id).parent().parent().removeClass('error');
@@ -152,27 +141,23 @@ function checkFile(file, id){
 		if (/^image\//i.test(file.type)) {
 			readFile(file, id);
 		} else {
-			$('#' + id).textinput('enable');
-			$('img#' + id + '-img').attr("src", 'img/camera.png');
+			imageError(id);
 		}
 	}
 }
 
 function readFile(file, id) {
-
 	var reader = new FileReader();
 
 	reader.onloadend = function () {
 		processFile(reader.result, file.type, id);
 	}
-
 	reader.onerror = function () {
-		$('#' + id).textinput('enable');
-		$('img#' + id + '-img').attr("src", 'img/camera.png');
+		imageError(id);
 	}
-
 	reader.readAsDataURL(file);
 }
+
 function processFile(dataURL, fileType, id) {
 	var maxWidth = 1200, maxHeight = 1200, image = new Image();
 	image.src = dataURL;
@@ -182,8 +167,8 @@ function processFile(dataURL, fileType, id) {
 		var shouldResize = (width > maxWidth) || (height > maxHeight);
 
 		if (!shouldResize) {
-			//sendFile(dataURL, id);
-			sendFileToFirebase(dataURL, id);
+			sendFile(dataURL, id);
+			//sendFileToFirebase(dataURL, id);
 			return;
 		}
 
@@ -207,28 +192,62 @@ function processFile(dataURL, fileType, id) {
 		context.drawImage(this, 0, 0, newWidth, newHeight);
 
 		dataURL = canvas.toDataURL(fileType);
-		//sendFile(dataURL, id);
-		sendFileToFirebase(dataURL, id);
+		sendFile(dataURL, id);
+		//sendFileToFirebase(dataURL, id);
 	};
 
 	image.onerror = function () {
-		$('img#' + id + '-img').attr("src", 'img/camera.png');
-		$('#' + id).textinput('enable');
+		imageError(id);
 	};
 }
 
-function sendFileToFirebase(data, id){
-	applicationId = $('#applicationId').val();
-	fileName = 'images/' + applicationId + '-' + id +'.jpg';
-	file = firebase.storage().ref().child(fileName);
-	file.putString(data, 'data_url', {contentType: 'image/jpg'}).then(function(snapshot) {
-		file.getDownloadURL().then(function(url) {
-			$('img#' + id + '-img').attr("src", url);
-			$('#' + id).textinput('disable');
-		}).catch(function(error) {
-			$('img#' + id + '-img').attr("src", 'img/camera.png');
-			$('#' + id).textinput('enable');	
-		});
+function imageError(id){
+	$('img#' + id + '-img').attr("src", 'img/camera.png');
+	$('#' + id).textinput('enable');
+}
+
+//function sendFileToFirebase(data, id){
+//	applicationId = $('#applicationId').val();
+//	imageName = 'images/' + applicationId + '-' + id +'.jpg';
+//	image = firebase.storage().ref().child(imageName);
+//	image.putString(data, 'data_url', {contentType: 'image/jpg'}).then(function(snapshot) {
+//		image.getDownloadURL().then(function(url) {
+//			$('img#' + id + '-img').attr("src", url);
+//			$('#' + id).textinput('disable');
+//
+//			if(id == 'carImage'){
+//				readPlateFromImage(url);
+//			}
+//
+//		}).catch(function(error) {
+//			imageError(id);
+//		});
+//	});
+//}
+
+function readPlateFromImage(url){
+	$.ajax({
+		type: 'POST',
+		url: 'https://us-central1-uprzejmiedonosze-1494607701827.cloudfunctions.net/readPlate',
+		data: { url: url },
+		success: function (data) {
+			$('#plateId').val(data.plate);
+		}
+	});
+}
+
+function readGeoDataFromImage(file){
+	EXIF.getData(file, function() {
+
+		var lat = EXIF.getTag(this, "GPSLatitude");
+		var lon = EXIF.getTag(this, "GPSLongitude");
+		var latRef = EXIF.getTag(this, "GPSLatitudeRef") || "N";  
+		var lonRef = EXIF.getTag(this, "GPSLongitudeRef") || "W";
+		if(lat){
+			lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
+			lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
+			setAddress(lat, lon, true);
+		}
 	});
 }
 
@@ -267,8 +286,7 @@ function sendFile(fileData, id) {
 			} 
 		},
 		error: function (data) {
-			$('img#' + id + '-img').attr("src", 'img/camera.png');
-			$('#' + id).textinput('enable');
+			imageError(id);
 		}
 	});
 }

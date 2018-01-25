@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "exif-js": "^2.3.0"
+    "cors": "^2.8.4",
+    "exif-js": "^2.3.0",
+    "openalpr_api": "^2.0.1"
   }
 }
