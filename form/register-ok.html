@@ -1,0 +1,24 @@
+<? 
+date_default_timezone_set('Europe/Warsaw');
+require_once(__DIR__ . '/../autoload.php');
+require_once(__DIR__ . '/../inc/include.php');
+
+checkIfLogged();
+
+$signInSuccessUrl = 'start.html';
+if(isset($_GET['next'])){
+    $signInSuccessUrl = $_GET['next'];
+}
+
+$post = $_POST;
+$name = trim($post["name"]);
+$msisdn = trim($post["msisdn"]);
+$address = trim($post["address"]);
+
+if(updateUserData($name, $msisdn, $address)){
+    redirect("$next");
+}else{
+    redirect("register.html?next=$next");
+}
+
+?>

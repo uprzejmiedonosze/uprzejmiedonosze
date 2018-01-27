@@ -4,6 +4,16 @@ $(document).on('pageshow', function() {
 			$('#address').removeClass('error');
 		});
 	}
+	if($("#msisdn").length){
+		$('#msisdn').on('change', function(){
+			$('#msisdn').removeClass('error');
+		});
+	}
+	if($("#name").length){
+		$('#name').on('change', function(){
+			$('#name').removeClass('error');
+		});
+	}
 	if($('#plateId').length){
 		$('#plateId').on('change', function(){
 			$('#plateId').removeClass('error');
@@ -26,6 +36,13 @@ $(document).on('pageshow', function() {
 				$('#form').submit();
 			}
 		});
+	}
+	if($('#register-submit').length){
+		$('#register-submit').click(function(){
+			if(validateRegisterForm()){
+				$('#register-form').submit();
+			}
+		});		
 	}
 	if($('#geocomplete').length){
 		$('#geocomplete').click(function(){
@@ -76,6 +93,16 @@ function validateForm(){
 	}
 	return ret;
 }
+function validateRegisterForm(){
+	var ret = check($('#name'), 6, false);
+	ret = check($('#address'), 10, false) && ret;
+	ret = check($('#msisdn'), 8, false) && ret;
+	if(!ret){
+		$(window).scrollTop($('.error').offset().top - 100);
+	}
+	return ret;
+}
+
 function check(item, length, grandma){
 	if(item.val().trim().length <= length){
 		if(grandma){

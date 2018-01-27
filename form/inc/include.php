@@ -33,6 +33,36 @@ function saveUserApplication($email, $applicationId){
 	return $user;
 }
 
+function isRegistered($email){
+	logger("isRegistered: START");
+	global $nsql, $users;
+	$user = json_decode($users->get($email), true);
+	if(isset($user)){
+		logger("isRegistered: user set");
+		if(isset($user['data'])){
+			logger("isRegistered: user has data");
+			return isset($user['data']['name']) && isset($user['data']['address']);
+		}else{
+			logger("isRegistered: has no data");
+			return false;
+		}
+	}else{
+		logger("isRegistered: user not set");
+		return false;
+	}
+}
+
+function updateUserData($name, $msisdn, $address){
+	global $nsql, $users;
+	$email = $_SESSION['user_email'];
+	$user = json_decode($users->get($email), true);
+	$user['data']['name'] = $name;
+	$user['data']['msisdn'] = $msisdn;
+	$user['data']['address'] = $address;
+	$users->set($email, json_encode($user));
+	return true;
+}
+
 function logger($msg){
 	if('%HOST%' == 'staging.uprzejmiedonosze.net'){
 		error_log("$msg\n", 3, "/tmp/staging.uprzejmiedonosze.net.log");
@@ -122,13 +152,23 @@ function redirect($destPath){
 	die();
 }
 
-function genHeader($title = "Uprzejmie Donoszę", $auth = false){
+function checkIfLogged(){
+	if(!(isset($_SESSION['token']) && verifyToken($_SESSION['token']))){
+		logger('  checkIfLogged: verifyToken($_SESSION[token]) NOT verified');
+		redirect("login.html?next=" . $_SERVER['REQUEST_URI']);
+	}
+}
+
+function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = false){
+	logger("genHeader: START");
 	$authcode = "";
 	if($auth){
-		logger('genHeader: auth == true');
-		if(!(isset($_SESSION['token']) && verifyToken($_SESSION['token']))){
-			logger('genHeader: verifyToken($_SESSION[token]) NOT verified');
-			redirect("login.html?next=" . $_SERVER['REQUEST_URI']);
+		logger('  genHeader: auth == true');
+		checkIfLogged();
+
+		if(!$register && !isRegistered($_SESSION['user_email'])){
+			logger("  genHeader: registration");
+			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
 		}
 
 		$authcode = <<<HTML

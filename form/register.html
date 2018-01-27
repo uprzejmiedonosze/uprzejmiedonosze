@@ -2,20 +2,26 @@
 date_default_timezone_set('Europe/Warsaw');
 require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
-genHeader("Uprzejmie Donoszę – zarejestruj się", true);
+genHeader("Uprzejmie Donoszę – zarejestruj się", true, true);
+
+$signInSuccessUrl = 'start.html';
+if(isset($_GET['next'])){
+    $signInSuccessUrl = $_GET['next'];
+}
+
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-        <a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-carat-l ui-btn-icon-notext" data-role="button" role="button">Back</a>
-			<h1>Zarejestruj się</h1>
-		<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">Zgłoś</a>
+        
+            <h1>Zarejestruj się</h1>
+        <a id="register-submit" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Potwierdź</a>
 		</div>
 		<div data-role="main" class="ui-content">
-            <form action="/moje-konto.html" id="form" method="post" data-ajax="false">
+            <form action="/register-ok.html?next=<?=$signInSuccessUrl?>" id="register-form" method="post" data-ajax="false">
                 <label for="name" class="section">Twoje dane</label>
-                    <input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true">
-                    <input type="email" required maxlength="30" id="email" name="email" placeholder="Twój email" data-inline="true">
+                    <input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true" value="<?=$_SESSION['user_name']?>">
+                    <input disabled type="email" required maxlength="30" id="email" name="email" placeholder="Twój email" data-inline="true" value="<?=$_SESSION['user_email']?>">
                     <input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
                 </label>
                 <label for="address">Podaj adres kontaktowy</label>
