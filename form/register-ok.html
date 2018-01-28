@@ -16,9 +16,9 @@ $msisdn = trim($post["msisdn"]);
 $address = trim($post["address"]);
 
 if(updateUserData($name, $msisdn, $address)){
-    redirect("$next");
+    redirect("$signInSuccessUrl");
 }else{
-    redirect("register.html?next=$next");
+    redirect("register.html?next=$signInSuccessUrl");
 }
 
 ?>
