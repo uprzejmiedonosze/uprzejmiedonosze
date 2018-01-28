@@ -69,7 +69,11 @@ setApplication($applicationId, $application);
 echo json_encode($output);
 
 function get_image_date($image){
-	$exif = exif_read_data($image, 0, true);
+	try{
+		$exif = @exif_read_data($image, 0, true);
+	}catch(Exception $e){
+		$exif = false;
+	}
 
 	$date = date("Y-m-d\TH:i:s");
 
