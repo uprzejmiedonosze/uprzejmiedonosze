@@ -12,9 +12,11 @@ DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(EXPORT)/inc
 
 CSS_FILES            = $(wildcard css/*.css)
 CSS_MINIFIED         = $(CSS_FILES:%.css=export/public/%.css)
+CSS_HASH             := $(shell cat $(CSS_FILES) | md5 | cut -b 1-8)
 
 JS_FILES             = $(wildcard js/*.js)
 JS_MINIFIED          = $(JS_FILES:%.js=export/public/%.js)
+JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
 
 HTML_FILES           = $(wildcard *.html)
 HTML_PROCESSED       = $(HTML_FILES:%.html=export/public/%.html)
@@ -22,7 +24,10 @@ HTML_PROCESSED       = $(HTML_FILES:%.html=export/public/%.html)
 PHP_FILES            = $(wildcard inc/*.php)
 PHP_PROCESSED        = $(PHP_FILES:inc/%.php=export/inc/%.php)
 
-OTHER_FILES          = favicon.ico robots.txt manifest.json api
+MANIFEST             = manifest.json
+MANIFEST_PROCESSED   = $(PUBLIC)/manifest.json
+
+OTHER_FILES          = favicon.ico robots.txt api
 
 STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
@@ -35,8 +40,8 @@ staging: $(DIRS) export; @echo "==> Copying files and dirs for $@"
 
 # target: prod - Copy files to prod server
 prod: HOST := $(PROD_HOST)
-prod: $(DIRS) export; @echo "==> Copying files and dirs for $@"
-	#@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
+prod: clean $(DIRS) export; @echo "==> Copying files and dirs for $@"
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 
 # target: export - Exports files for deployment
 export: $(DIRS) minify; @echo "==> Exporting"
@@ -58,6 +63,9 @@ process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
 # target: process-php - Preprocessing PHP.
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 
+# target: process-manifest - Preprocessing manifest.json
+process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
+
 export/public/css/%.css: css/%.css; @echo '==> Minifying $<'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
@@ -71,12 +79,23 @@ export/public/js/%.js: js/%.js; @echo '==> Minifying $<'
 	else \
 		cp $< $@ ; \
 	fi;
+	@sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@ 
+	@sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@ 
+
 
 export/public/%.html: %.html; @echo '==> Preprocessing $<'
-	@sed 's/%HOST%/$(HOST)/g' $< > $@
+	@sed 's/%HOST%/$(HOST)/g' $< | \
+	sed 's/%JS_HASH%/$(JS_HASH)/g' | \
+	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@ 
 
 export/inc/%.php: inc/%.php; @echo '==> Preprocessing $<'
-	@sed 's/%HOST%/$(HOST)/g' $< > $@
+	@sed 's/%HOST%/$(HOST)/g' $< | \
+	sed 's/%JS_HASH%/$(JS_HASH)/g' | \
+	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@ 
+
+$(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
+	@sed 's/%JS_HASH%/$(JS_HASH)/g' | \
+	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
 	@mkdir --parents $@
