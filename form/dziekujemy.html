@@ -20,6 +20,7 @@ $address = $application->address->address;
 $name = $application->user->name;
 $msisdn = $application->user->msisdn;
 $email = $application->user->email;
+$userAddress = $application->user->address;
 $comment = $application->userComment;
 
 $carImage = $application->carImage->thumb;
@@ -65,6 +66,7 @@ $emailTemplate = <<<HTML
 			<div>
 				<span class="Apple-tab-span" style="white-space:pre">	</span>{$name}<br>
 				<span class="Apple-tab-span" style="white-space:pre">	</span>{$msisdn}<br>
+				<span class="Apple-tab-span" style="white-space:pre">	</span>{$userAddress}<br>
 				<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">{$email}</a><br>
 				<br><span style="color: rgb(68, 68, 68);" >Zdjęcia:</span><br><br>
 				<a style="border: 1px solid #009C7F;" href="https://%HOST%/$carImage"><img data-src="cid:carImage"></a>
