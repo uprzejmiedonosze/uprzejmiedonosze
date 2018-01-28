@@ -58,8 +58,7 @@ logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
                 // FirebaseUI config.
                 var uiConfig = {
                     signInSuccessUrl: "https://%HOST%<?=$signInSuccessUrl?>",
-                    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                                    firebase.auth.FacebookAuthProvider.PROVIDER_ID],
+                    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
                     tosUrl: 'https://staging.uprzejmiedonosze.net/start.html' // Terms of service url.
                 };
 
