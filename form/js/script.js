@@ -69,7 +69,11 @@ function initAutocompleteOnRegister() {
 	initAutocomplete(false);
 }
 
-function initAutocomplete(trigger_change = true) {
+function initAutocompleteOnNewApplication(){
+	initAutocomplete(true);
+}
+
+function initAutocomplete(trigger_change) {
 	autocomplete = new google.maps.places.Autocomplete(
 		/** @type {!HTMLInputElement} */(document.getElementById('address')),
 		{types: ['geocode']});
