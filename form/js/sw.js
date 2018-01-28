@@ -17,9 +17,10 @@ self.addEventListener('install', function(e) {
 				'/img/robtodobrze-radni-s.jpg',
 				'/img/przyklad-1.jpg',
 				'/img/przyklad-2.jpg',
-				'/css/style.css',
-				'/js/script.js'
-			]);
+				'/css/style.css?v=%CSS_HASH%',
+				'/js/script.js?v=%JS_HASH%',
+				'/js/exif.js?v=%JS_HASH%'
+			], { mode: 'same-origin', redirect: 'manual' });
 		})
 	);
 });
