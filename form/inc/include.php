@@ -27,6 +27,8 @@ function saveUserApplication($email, $applicationId){
 		$user['applications'][$applicationId] = $applicationId;
 	}else{
 		$user['applications'] = Array($applicationId => $applicationId);
+	}
+	if(!isset($user['number'])){
 		$user['number'] = count($users) + 1;
 	}
 	$users->set($email, json_encode($user));
@@ -34,20 +36,15 @@ function saveUserApplication($email, $applicationId){
 }
 
 function isRegistered($email){
-	logger("isRegistered: START");
 	global $nsql, $users;
 	$user = json_decode($users->get($email), true);
 	if(isset($user)){
-		logger("isRegistered: user set");
 		if(isset($user['data'])){
-			logger("isRegistered: user has data");
 			return isset($user['data']['name']) && isset($user['data']['address']);
 		}else{
-			logger("isRegistered: has no data");
 			return false;
 		}
 	}else{
-		logger("isRegistered: user not set");
 		return false;
 	}
 }
@@ -56,16 +53,24 @@ function updateUserData($name, $msisdn, $address){
 	global $nsql, $users;
 	$email = $_SESSION['user_email'];
 	$user = json_decode($users->get($email), true);
-	$user['data']['name'] = $name;
-	$user['data']['msisdn'] = $msisdn;
-	$user['data']['address'] = $address;
+	$user['data'] = Array(
+		"name" => $name,
+		"msisdn" => $msisdn,
+		"address" => $address,
+		"email" => $email
+	);
 	$users->set($email, json_encode($user));
 	return true;
 }
 
+function getCurrentUser(){
+	global $nsql, $users;
+	return json_decode($users->get($_SESSION['user_email']), true);
+}
+
 function logger($msg){
 	if('%HOST%' == 'staging.uprzejmiedonosze.net'){
-		error_log("$msg\n", 3, "/tmp/staging.uprzejmiedonosze.net.log");
+		error_log("%HOST%: $msg\n", 3, "/tmp/staging.uprzejmiedonosze.net.log");
 	}
 }
 
@@ -119,34 +124,27 @@ function guidv4()
 }
 
 function verifyToken($token){
-	logger('verifyToken:');
 	if(isset($token)){
-		logger('verifyToken: $token is set');
 		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../uprzejmiedonosze-1494607701827-firebase-adminsdk-5ut9d-80e0eb39c6.json');
 		$firebase = (new Factory)->withServiceAccount($serviceAccount)->create();
 		try {
 			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
-			logger('verifyToken: token verified');
 			$_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
 			$_SESSION['user_name'] = $verifiedIdToken->getClaim('name');
 			$_SESSION['user_picture'] = $verifiedIdToken->getClaim('picture');
 			$_SESSION['user_id'] = $verifiedIdToken->getClaim('user_id');
 			$_SESSION['token'] = $token;
-			logger('verifyToken: token added to session. RETURN TRUE');
 			return true;
 		} catch (InvalidIdToken $e) {
-			logger('verifyToken: $token NOT set. RETURN FALSE');
 			return false;
 		} 
 	}else{
-		logger('verifyToken: $token NOT set. RETURN FALSE');
+
 		return false;
 	}
 }
 
 function redirect($destPath){
-	//sleep(2);
-	logger(" ==> redirecting to $destPath");
 	header("X-Redirect: https://%HOST%/$destPath");
 	header("Location: https://%HOST%/$destPath");
 	die();
@@ -154,20 +152,21 @@ function redirect($destPath){
 
 function checkIfLogged(){
 	if(!(isset($_SESSION['token']) && verifyToken($_SESSION['token']))){
-		logger('  checkIfLogged: verifyToken($_SESSION[token]) NOT verified');
 		redirect("login.html?next=" . $_SERVER['REQUEST_URI']);
 	}
 }
 
+function capitalizeSentence($input){
+	return trim(preg_replace_callback('/([.!?])\s*(\w)/', function ($matches) {
+		return strtoupper($matches[1] . ' ' . $matches[2]); }
+		, ucfirst(strtolower($input))));
+}
+
 function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = false){
-	logger("genHeader: START");
 	$authcode = "";
 	if($auth){
-		logger('  genHeader: auth == true');
 		checkIfLogged();
-
 		if(!$register && !isRegistered($_SESSION['user_email'])){
-			logger("  genHeader: registration");
 			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
 		}
 
@@ -207,7 +206,7 @@ HTML;
 		<meta property="og:type" content="website" />
 
 		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="css/style.css?v=%CSS_HASH%">
 
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -234,14 +233,21 @@ HTML;
 HTML;
 }
 
-function getFooter(){
+function getFooter($mapsInitFunc = false){
+
+	$maps = "";
+	if($mapsInitFunc){
+		$maps = "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&libraries=places&callback=$mapsInitFunc&language=pl\" async defer></script>";
+	}
+
 	echo <<<HTML
 			<div data-role="footer">
 				<h4>&copy; Szymon Nieradka</h4>
 			</div>
 		</div> <! -- page -->
-		<script src="js/script.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/4.0.0-rc1/lazysizes.min.js"></script>
+		<script src="js/script.js?v=%JS_HASH%"></script>
+		<script src="js/lazysizes.min.js"></script>
+		$maps
 		<script>
 			/*
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -254,7 +260,7 @@ function getFooter(){
 		</script>
 		<script>
 			if('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('/js/sw.js');
+				navigator.serviceWorker.register('/js/sw.js?v=%JS_HASH%');
 			}
 		</script>
 	</body>
