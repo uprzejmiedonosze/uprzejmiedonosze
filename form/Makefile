@@ -33,38 +33,39 @@ STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
 HOST                 = $(STAGING_HOST)
 
-# target: staging - Copy files to staging server
+.DEFAULT_GOAL := help
+
+.PHONY: help
+help: ## help - Displays help.
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
+
 staging: HOST := $(STAGING_HOST)
-staging: $(DIRS) export; @echo "==> Copying files and dirs for $@"
+staging: $(DIRS) export ## Copy files to staging server
+	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 
-# target: prod - Copy files to prod server
 prod: HOST := $(PROD_HOST)
-prod: clean $(DIRS) export; @echo "==> Copying files and dirs for $@"
+prod: clean $(DIRS) export ## Copy files to prod server
+	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 
-# target: export - Exports files for deployment
-export: $(DIRS) minify; @echo "==> Exporting"
+export: $(DIRS) minify ## Exports files for deployment
+	@echo "==> Exporting"
 	@cp -r $(OTHER_FILES) img $(PUBLIC)/
 	@cp -r lib vendor *.php uprzejmiedonosze-1494607701827*.json $(EXPORT)/
 
-# target: minify - Minifies CSS and JS.
-minify: minify-css minify-js process-html process-php process-manifest
+clean: ## Removes minified CSS and JS files.
+	@echo "==> Cleaning"
+	@rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
 
-# target: minify-css - Minifies CSS.
-minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
+minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS.
+minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED) ## Minifies CSS.
+minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED) ## Minifies JS.
+process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED) ## Preprocessing HTML.
+process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED) ## Preprocessing PHP.
+process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED) ## Preprocessing manifest.json
 
-# target: minify-js - Minifies JS.
-minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED)
-
-# target: process-html - Preprocessing HTML.
-process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
-
-# target: process-php - Preprocessing PHP.
-process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
-
-# target: process-manifest - Preprocessing manifest.json
-process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
+# Generics
 
 export/public/css/%.css: css/%.css; @echo '==> Minifying $<'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
@@ -93,14 +94,7 @@ $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
 $(EXPORT)/%: ; @echo "==> Creating $@"
 	@mkdir --parents $@
 
-# target: clean - Removes minified CSS and JS files.
-clean:; @echo "==> Cleaning"
-	@rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
-
-# target: help - Displays help.
-help:; @egrep "^# target:" Makefile
-
-# UTILS
+# Utils
 
 define replace
 @sed 's/%HOST%/$(HOST)/g' $< > $@
