@@ -49,7 +49,7 @@ export: $(DIRS) minify; @echo "==> Exporting"
 	@cp -r lib vendor *.php uprzejmiedonosze-1494607701827*.json $(EXPORT)/
 
 # target: minify - Minifies CSS and JS.
-minify: minify-css minify-js process-html process-php
+minify: minify-css minify-js process-html process-php process-manifest
 
 # target: minify-css - Minifies CSS.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
@@ -94,7 +94,7 @@ export/inc/%.php: inc/%.php; @echo '==> Preprocessing $<'
 	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@ 
 
 $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
-	@sed 's/%JS_HASH%/$(JS_HASH)/g' | \
+	@sed 's/%JS_HASH%/$(JS_HASH)/g' $< | \
 	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
