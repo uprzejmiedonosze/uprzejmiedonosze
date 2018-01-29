@@ -79,23 +79,16 @@ export/public/js/%.js: js/%.js; @echo '==> Minifying $<'
 	else \
 		cp $< $@ ; \
 	fi;
-	@sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@ 
-	@sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@ 
-
+	$(replace-inline)
 
 export/public/%.html: %.html; @echo '==> Preprocessing $<'
-	@sed 's/%HOST%/$(HOST)/g' $< | \
-	sed 's/%JS_HASH%/$(JS_HASH)/g' | \
-	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@ 
+	$(replace)
 
 export/inc/%.php: inc/%.php; @echo '==> Preprocessing $<'
-	@sed 's/%HOST%/$(HOST)/g' $< | \
-	sed 's/%JS_HASH%/$(JS_HASH)/g' | \
-	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@ 
+	$(replace)
 
 $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
-	@sed 's/%JS_HASH%/$(JS_HASH)/g' $< | \
-	sed 's/%CSS_HASH%/$(CSS_HASH)/g' > $@
+	$(replace)
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
 	@mkdir --parents $@
@@ -106,3 +99,15 @@ clean:; @echo "==> Cleaning"
 
 # target: help - Displays help.
 help:; @egrep "^# target:" Makefile
+
+# UTILS
+
+define replace
+@sed 's/%HOST%/$(HOST)/g' $< > $@
+$(replace-inline)
+endef
+
+define replace-inline
+@sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@ 
+@sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@ 
+endef
