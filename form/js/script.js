@@ -100,7 +100,6 @@ function validateForm(){
 function validateRegisterForm(){
 	var ret = check($('#name'), 6, false);
 	ret = check($('#address'), 10, false) && ret;
-	ret = check($('#msisdn'), 8, false) && ret;
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
