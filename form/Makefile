@@ -36,34 +36,34 @@ HOST                 = $(STAGING_HOST)
 .DEFAULT_GOAL := help
 
 .PHONY: help
-help: ## help - Displays help.
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
+help: ## Displays this help.
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
 staging: HOST := $(STAGING_HOST)
-staging: $(DIRS) export ## Copy files to staging server
+staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 
 prod: HOST := $(PROD_HOST)
-prod: clean $(DIRS) export ## Copy files to prod server
+prod: clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 
-export: $(DIRS) minify ## Exports files for deployment
+export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@cp -r $(OTHER_FILES) img $(PUBLIC)/
 	@cp -r lib vendor *.php uprzejmiedonosze-1494607701827*.json $(EXPORT)/
 
+minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS, processing PHP, HTML and manifest.json files.
+minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
+minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED)
+process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
+process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
+process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
+
 clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
 	@rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
-
-minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS.
-minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED) ## Minifies CSS.
-minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED) ## Minifies JS.
-process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED) ## Preprocessing HTML.
-process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED) ## Preprocessing PHP.
-process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED) ## Preprocessing manifest.json
 
 # Generics
 
