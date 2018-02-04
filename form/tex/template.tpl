@@ -29,7 +29,6 @@
 \newcommand{\from}{%
 	\hspace{1cm}\n{} \\
 	\hspace{1cm}$user_address \\
-	\hspace{1cm}Nr. dowodu: $user_personalId\\
 	$user_phone
 	$user_email 
 }
@@ -37,10 +36,11 @@
 \date{$app_date}
 
 \begin{document}
-\begin{letter}{\large{Referat Oskarżycieli Publicznych \\
-I Oddział Terenowy \\
-ul. Sołtyka 8/10 \\
-Warszawa}}
+\begin{letter}{\large{
+Referat Oskarżycieli Publicznych \\
+Straż Miejska m.st. Warszawy \\
+ul. Młynarska 43/45 \\
+01-170 Warszawa}}
 
 \opening{{\Large{Zgłoszenie wykroczenia {$app_number}}}}
 
