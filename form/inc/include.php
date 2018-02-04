@@ -49,6 +49,11 @@ function isRegistered($email){
 	}
 }
 
+function isAdmin(){
+	$user = getCurrentUser();
+	return $user['data']['email'] == 'szymon@nieradka.net';
+}
+
 function updateUserData($name, $msisdn, $address){
 	global $nsql, $users;
 	$email = $_SESSION['user_email'];
@@ -84,6 +89,14 @@ function getUserApplications($email){
 	return $applications;
 }
 
+function getUsers(){
+	if(!isAdmin()){
+		return false;
+	}
+	global $nsql, $apps, $users;
+	return $users->getAll();
+}
+
 $categories = Array(
 	4  => "Zastawienie chodnika (mniej niż 1.5m)",
 	2  => "Mniej niż 15 m od przystanku",
@@ -91,9 +104,10 @@ $categories = Array(
 	9  => "Blokowanie ścieżki rowerowej	",
 	5  => "Mniej niż 10m od przejścia dla pieszych",
 	6  => "Parkowanie na trawniku/w parku",
-	//10 => "Parkowanie za barierkami",
-	//8  => "Parkowanie z dala od krawędzi jezdni",
-	//7  => "Niszczenie chodnika",
+	10 => "Parkowanie za barierkami",
+	8  => "Parkowanie z dala od krawędzi jezdni",
+	7  => "Parkowanie w na chodniku / niszczenie chodnika",
+	1  => "Parkowanie na chodniku w miejscu niedozwolonym",
 	0 => "Inne"
 );
 
@@ -106,7 +120,8 @@ $categories_txt = Array (
     6  => "Pojazd był zaparkowany na trawniku/w parku.",
     10 => "Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
     8  => "Pojazd był zaparkowany z dala od krawędzi jezdni.",
-    7  => "Pojazd niszczył chodnik.",
+	7  => "Pojazd niszczył chodnik.",
+	1  => "Pojazd był zaparkowany na chodniku w miejscu niedozwolonym.",
     0  => ""
 );
 
