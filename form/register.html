@@ -17,17 +17,16 @@ if(isset($_GET['next'])){
             <h1>Zarejestruj się</h1>
         <a id="register-submit" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Potwierdź</a>
 		</div>
+
 		<div data-role="main" class="ui-content">
+            <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres email oraz adres korespondencyjny. Jest to minimalny
+            zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
             <form action="/register-ok.html?next=<?=$signInSuccessUrl?>" id="register-form" method="post" data-ajax="false">
                 <label for="name" class="section">Twoje dane</label>
-                    <input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true" value="<?=$_SESSION['user_name']?>">
-                    <input disabled type="email" required maxlength="30" id="email" name="email" placeholder="Twój email" data-inline="true" value="<?=$_SESSION['user_email']?>">
-                    <input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
-                </label>
-                <label for="address">Podaj adres kontaktowy</label>
-                    <input type="text" maxlength="70" required id="address" name="address" placeholder="Adres kontaktowy" data-inline="true">
-                </label>
-                </label>
+                <input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true" value="<?=$_SESSION['user_name']?>">
+                <input disabled type="email" required maxlength="30" id="email" name="email" placeholder="Twój email" data-inline="true" value="<?=$_SESSION['user_email']?>">
+                <input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true">
+                <input type="text" maxlength="70" required id="address" name="address" placeholder="Adres kontaktowy" data-inline="true">
             </form>
         </div> <!-- main -->
 <? getFooter('initAutocompleteOnRegister') ?>
