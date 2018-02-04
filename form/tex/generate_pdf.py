@@ -8,7 +8,7 @@ from string import Template
 
 from dateutil import parser
 
-CDN_DIR = 'cdn/'
+CDN_DIR = 'tex/cdn/'
 
 CATEGORIES = {
     4  : u"Pojazd zastawiał chodnik (mniej niż 1.5m).",
@@ -20,9 +20,9 @@ CATEGORIES = {
     10 : u"Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
     8  : u"Pojazd był zaparkowany z dala od krawędzi jezdni.",
     7  : u"Pojazd niszczył chodnik.",
+    1  : u"Pojazd był zaparkowany na chodniku w miejscu niedozwolonym.",
     0  : u""
 }
-
 
 def main():
     argparser = argparse.ArgumentParser()
@@ -40,11 +40,13 @@ def main():
         data['carImage'] = "\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{" + (data['carImage']['url']) + "}"
 
     if data['carInfo']:
-        data['plateImage'] = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" + (data['carInfo']['plateImage']) + "}"
+        if 'plateImage' in data['carInfo']:
+            data['plateImage'] = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" + (data['carInfo']['plateImage']) + "}"
+        else:
+            data['plateImage'] = ''
 
     data['name_name'] = data['user']['name']
-    data['user_address'] = '!!! REPLACE !!!'
-    data['user_personalId'] = '!!! REPLACE !!!'
+    data['user_address'] = data['user']['address']
     data['user_phone'] = '\\hspace{1cm}Tel: ' + (data['user']['msisdn']) + '\\\\'
     data['user_email'] = '\\hspace{1cm}Email: ' + (data['user']['email'])
     data['app_number'] = data['number']
@@ -57,7 +59,7 @@ def main():
     data['app_category'] = CATEGORIES[int(data['category'])]
     data['app_address'] = data['address']['address']
 
-    filein = open('tex/template.tpl', encoding='utf-8')
+    filein = open('template.tpl', encoding='utf-8')
     src = Template(filein.read())
     tex = src.substitute(data)
 
