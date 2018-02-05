@@ -281,4 +281,23 @@ function getFooter($mapsInitFunc = false){
 HTML;
 }
 
+// templates
+
+function menuNewApplication($text = 'Nowe zgłoszenie'){
+	echo '<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r" data-ajax="false">' . $text . '</a>';
+}
+
+function menuStart($text = 'Zgłoś'){
+	echo '<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">' . $text . '</a>';
+}
+
+function menuMain($text = 'Strona główna'){
+	echo '<a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-home ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
+}
+
+function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
+	echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
+}
+
 ?>
+

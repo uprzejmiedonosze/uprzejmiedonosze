@@ -5,9 +5,9 @@ genHeader("Uprzejmie Donoszę – start", true);
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-			<a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-home ui-btn-icon-notext" data-role="button" role="button">Back</a>
+			<? menuMain('Back'); ?>
 			<h1>Uprzejmie Donoszę</h1>
-			<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r" data-ajax="false">Dalej</a>
+			<? menuNewApplication('Dalej'); ?>
 		</div>
 		<div data-role="main" class="ui-content">
 			<p>Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach,
