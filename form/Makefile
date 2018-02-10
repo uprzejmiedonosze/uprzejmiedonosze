@@ -52,7 +52,7 @@ prod: clean $(DIRS) export ## Copy files to prod server.
 export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@cp -r $(OTHER_FILES) img $(PUBLIC)/
-	@cp -r lib vendor *.php uprzejmiedonosze-1494607701827*.json $(EXPORT)/
+	@cp -r lib vendor *.php *uprzejmiedonosze.net-firebase-adminsdk.json $(EXPORT)/
 
 minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS, processing PHP, HTML and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
@@ -93,6 +93,14 @@ $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
 	@mkdir --parents $@
+
+# Firebase
+
+deploy-firebase-staging: ## Deploy Firebase functions for staging env.
+	@firebase -P uprzejmiedonosze-1494607701827 deploy --only functions
+
+deploy-firebase-prod: ## Deploy Firebase functions for prod env.
+	@firebase -P uprzejmie-donosze deploy --only functions
 
 # Utils
 
