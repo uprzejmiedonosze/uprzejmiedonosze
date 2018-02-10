@@ -140,7 +140,7 @@ function guidv4()
 
 function verifyToken($token){
 	if(isset($token)){
-		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../uprzejmiedonosze-1494607701827-firebase-adminsdk-5ut9d-80e0eb39c6.json');
+		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../%HOST%-firebase-adminsdk.json');
 		$firebase = (new Factory)->withServiceAccount($serviceAccount)->create();
 		try {
 			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
@@ -184,12 +184,13 @@ function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = fal
 		if(!$register && !isRegistered($_SESSION['user_email'])){
 			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
 		}
-
 		$authcode = <<<HTML
-<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
-		<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+			<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+			<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
 HTML;
 	}
+
+	$firebaseConfig = getFirebaseConfig();
 
 	echo <<<HTML
 <!DOCTYPE html>
@@ -226,26 +227,43 @@ HTML;
 		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-app.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-auth.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-storage.js"></script>
-		<!--script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-database.js"></script>
-		<script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script-->
-		<script>
-		// Initialize Firebase
-		var config = {
-			apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
-			authDomain: "uprzejmiedonosze-1494607701827.firebaseapp.com",
-			databaseURL: "https://uprzejmiedonosze-1494607701827.firebaseio.com",
-			projectId: "uprzejmiedonosze-1494607701827",
-			storageBucket: "uprzejmiedonosze-1494607701827.appspot.com",
-			messagingSenderId: "509860799944"
-		};
-		firebase.initializeApp(config);
-		</script>
+		<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+		$firebaseConfig
 		$authcode
 	</head>
 HTML;
+}
+
+function getFirebaseConfig(){
+	if('%HOST%' == 'uprzejmiedonosze.net'){
+		return <<<HTML
+		<script>
+			var config = {
+				apiKey: "AIzaSyBNd3ApHoXl7Ks0rpvkjO5spouSaBnGuaA",
+				authDomain: "uprzejmie-donosze.firebaseapp.com",
+				databaseURL: "https://uprzejmie-donosze.firebaseio.com",
+				projectId: "uprzejmie-donosze",
+				storageBucket: "uprzejmie-donosze.appspot.com",
+				messagingSenderId: "823788795198"
+			};
+			firebase.initializeApp(config);
+		</script>
+HTML;
+	}else{
+		return <<<HTML
+		<script>
+			var config = {
+				apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
+				authDomain: "uprzejmiedonosze-1494607701827.firebaseapp.com",
+				databaseURL: "https://uprzejmiedonosze-1494607701827.firebaseio.com",
+				projectId: "uprzejmiedonosze-1494607701827",
+				storageBucket: "uprzejmiedonosze-1494607701827.appspot.com",
+				messagingSenderId: "509860799944"
+			};
+			firebase.initializeApp(config);
+		</script>
+HTML;
+	}
 }
 
 function getFooter($mapsInitFunc = false){
