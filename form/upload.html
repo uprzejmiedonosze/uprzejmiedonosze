@@ -83,16 +83,6 @@ function get_image_date($image){
 	return $date;
 }
 
-function gps2Num($coordPart){
-    $parts = explode('/', $coordPart);
-    if(count($parts) <= 0)
-    return 0;
-    if(count($parts) == 1)
-    return $parts[0];
-    return floatval($parts[0]) / floatval($parts[1]);
-}
-
-
 function save_file($image_bytes){
 	$prefix = "cdn/" . guidv4();
 
