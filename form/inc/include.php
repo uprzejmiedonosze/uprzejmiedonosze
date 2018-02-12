@@ -74,9 +74,9 @@ function getCurrentUser(){
 }
 
 function logger($msg){
-	if('%HOST%' == 'staging.uprzejmiedonosze.net'){
-		error_log("%HOST%: $msg\n", 3, "/tmp/staging.uprzejmiedonosze.net.log");
-	}
+	//if('%HOST%' == 'staging.uprzejmiedonosze.net'){
+		error_log("%HOST%: $msg\n", 3, "/tmp/%HOST%.log");
+	//}
 }
 
 function getUserApplications($email){
