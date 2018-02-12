@@ -8,7 +8,7 @@ HOSTING              = nieradka.net
 # dirs and files 
 EXPORT               = export
 PUBLIC               = $(EXPORT)/public
-DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(EXPORT)/inc
+DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc
 
 CSS_FILES            = $(wildcard css/*.css)
 CSS_MINIFIED         = $(CSS_FILES:%.css=export/public/%.css)
@@ -18,7 +18,7 @@ JS_FILES             = $(wildcard js/*.js)
 JS_MINIFIED          = $(JS_FILES:%.js=export/public/%.js)
 JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
 
-HTML_FILES           = $(wildcard *.html)
+HTML_FILES           = $(wildcard *.html api/*.html)
 HTML_PROCESSED       = $(HTML_FILES:%.html=export/public/%.html)
 
 PHP_FILES            = $(wildcard inc/*.php)
@@ -27,7 +27,7 @@ PHP_PROCESSED        = $(PHP_FILES:inc/%.php=export/inc/%.php)
 MANIFEST             = manifest.json
 MANIFEST_PROCESSED   = $(PUBLIC)/manifest.json
 
-OTHER_FILES          = favicon.ico robots.txt api
+OTHER_FILES          = favicon.ico robots.txt img
 
 STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
@@ -51,7 +51,8 @@ prod: clean $(DIRS) export ## Copy files to prod server.
 
 export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
-	@cp -r $(OTHER_FILES) img $(PUBLIC)/
+	@cp -r $(OTHER_FILES) $(PUBLIC)/
+	@cp api/*twig $(PUBLIC)/api/
 	@cp -r lib vendor *.php *uprzejmiedonosze.net-firebase-adminsdk.json $(EXPORT)/
 
 minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS, processing PHP, HTML and manifest.json files.
