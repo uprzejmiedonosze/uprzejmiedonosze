@@ -1,3 +1,18 @@
 {
-    "python.pythonPath": "/usr/local/opt/python3/bin/python3.6"
+    "folders": [
+        {
+            "path": "export",
+            "name": " Exported files"
+        }
+    ],
+    "python.pythonPath": "/usr/local/opt/python3/bin/python3.6",
+    "search.exclude": {
+        "**/export": true,
+        "**/firebase_public": true,
+        "**/testy": true,
+        "**/lib": true,
+        "**/vendor": true,
+        "**/functions-samples": true,
+        "**/tools": true
+    }
 }
