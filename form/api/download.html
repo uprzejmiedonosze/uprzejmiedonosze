@@ -58,8 +58,6 @@ function generate_pdf($application, $outp_file) {
     escapeshellarg($tex_f));
 	chdir(sys_get_temp_dir());
 	exec($cmd, $output, $ret);
-	logger($cmd);
-	
 
     @unlink($tex_f);
 	@unlink($aux_f);
@@ -80,13 +78,11 @@ function flatten_application($application){
 	global $ROOT, $categories_txt;
 
 	$includegraphics = '\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
-
 	$contextImage = $includegraphics . $ROOT . "/" . $application->contextImage->url . "}";
-	logger($contextImage);
 	$carImage = $includegraphics . $ROOT . "/" . $application->carImage->url . "}";
 
 	$plateImage = "";
-	//"\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{{$application->carInfo->plateImage}}";
+	@$plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . $ROOT . "/" . $application->carInfo->plateImage . "}";
 
 	$data = Array(
 		'app' => Array(
