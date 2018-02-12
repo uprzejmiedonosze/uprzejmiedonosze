@@ -7,7 +7,8 @@ if(!isset($_GET['appId'])){
     die();
 }
 
-$application = getApplication($_GET['appId']);
+$applicationId = $_GET['appId'];
+$application = getApplication($applicationId);
 
 if(!isset($application)){
     http_response_code(404);
@@ -15,10 +16,9 @@ if(!isset($application)){
 }
 
 $pdf = __DIR__ . "/../cdn/$applicationId.pdf";
-$filename = 'UD_zgloszenie_' . str_replace('/', '-', $application->number) . '.pdf';
+$filename = 'Zgloszenie_' . str_replace('/', '-', $application->number) . '.pdf';
 
 if(!file_exists($pdf)){
-    logger('generating');
     generate_pdf($application, $pdf);
 }
 
@@ -33,7 +33,7 @@ readfile($pdf);
  */
 function generate_pdf($application, $outp_file) {
 
-    $template_file = __DIR__ . '/../../tex/template.tpl';
+	$template_file = __DIR__ . '/template.tex.twig';
 
 	if(!file_exists($template_file)) {
 		throw new Exception("Could not open template");
@@ -42,39 +42,68 @@ function generate_pdf($application, $outp_file) {
 		throw new Exception("Failed to create temporary file");
 	}
 
-	$tex_f = $f . ".tex";
-	$aux_f = $f . ".aux";
-	$log_f = $f . ".log";
-	$pdf_f = $f . ".pdf";
+	$tex_f = "$f.tex";
+	$aux_f = "$f.aux";
+	$log_f = "$f.log";
+	$pdf_f = "$f.pdf";
 
-	// Perform substitution of variables
+	$loader = new Twig_Loader_Filesystem(__DIR__ . '/');
+	$twig = new Twig_Environment($loader);
+
 	ob_start();
-	include($template_file);
-    file_put_contents($tex_f, ob_get_clean());
+	echo $twig->render('template.tex.twig', flatten_application($application));
+	file_put_contents($tex_f, ob_get_clean());
 
-    // Run xelatex (Used because of native unicode and TTF font support)
-	$cmd = sprintf("pdflaex -interaction nonstopmode -halt-on-error %s",
+	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
     escapeshellarg($tex_f));
-    chdir(sys_get_temp_dir());
-    exec($cmd, $foo, $ret);
+	chdir(sys_get_temp_dir());
+	exec($cmd, $output, $ret);
+	logger($cmd);
+	
 
     @unlink($tex_f);
 	@unlink($aux_f);
 	@unlink($log_f);
 
-	// Test here
 	if(!file_exists($pdf_f)) {
 		@unlink($f);
 		throw new Exception("Output was not generated and latex returned: $ret.");
 	}
     
-    // Send through output
-	$fp = fopen($pdf_f, 'rb');
-	header('Content-Type: application/pdf');
-	header('Content-Disposition: attachment; filename="' . $outp_file . '"' );
-	header('Content-Length: ' . filesize($pdf_f));
-	fpassthru($fp);
-    @unlink($f);
+	$destFile = "/var/www/%HOST%/public/cdn/{$application->id}.pdf";
+	rename($pdf_f, $destFile);
+	@unlink($f);
+}
+
+function flatten_application($application){
+
+	$contextImage = '';//"\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{../cdn/{$application->contextImage->url}}";
+
+	$carImage = '';//"\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{../cdn/{$application->carImage->url}}";
+
+	$plateImage = "";
+	//"\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{{$application->carInfo->plateImage}}";
+
+	$data = Array(
+		'app' => Array(
+			'contextImage' => $contextImage,
+			'carImage' => $carImage,
+			'plateImage' => $plateImage,
+			'name_name' => $application->user->name,
+			'date' => date_format(new DateTime($application->date), 'Y-m-d'),
+			'hour' => date_format(new DateTime($application->date), 'H:i'),
+			'plateId' => $application->carInfo->plateId,
+			'user_address' => $application->user->address,
+			'category' => 'REPLACE',
+			'address' => $application->address->address,
+			'user_phone' => "\\hspace{1cm}Tel: {$application->user->msisdn}\\\\",
+    		'user_email' => "\\hspace{1cm}Email: {$application->user->email}",
+			'number' => $application->number,
+			'city' => $application->address->city
+		)
+	);
+
+	return $data;
 }
 
 ?>
