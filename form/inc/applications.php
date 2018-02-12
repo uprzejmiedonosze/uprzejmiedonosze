@@ -29,6 +29,7 @@
                     </div>
 
                 <a href="/zgloszenie.html?id=$id">szczegóły</a>
+                <a href="/api/download.html?appId=$id" target="_blank" data-ajax="false">pdf</a>
             </p>
         </div>       
 HTML;
