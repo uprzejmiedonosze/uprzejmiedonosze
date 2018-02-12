@@ -27,6 +27,7 @@ $app_date = date_format(new DateTime($application->date), 'Y-m-d');
 $app_hour = date_format(new DateTime($application->date), 'H:i');
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
+@$plateImage = $application->carInfo->plateImage;
 
 $json = Array(
 	"user" => Array(
@@ -43,7 +44,8 @@ $json = Array(
 		"latlng" => $latlng
 	),
 	"carInfo" => Array(
-		"plateId" => $plateId
+		"plateId" => $plateId,
+		"plateImage" => $plateImage
 	),
 	"userComment" => $comment,
 	"status" => "ready"
