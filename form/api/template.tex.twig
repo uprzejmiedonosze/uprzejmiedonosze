@@ -4,56 +4,38 @@
 \usepackage[pdftex,colorlinks=true,urlcolor=black,linkcolor=black]{hyperref}
 \usepackage[pdftex,usenames]{color}
 \usepackage[pdftex]{graphicx}
-\graphicspath{ {/Users/szn/Sites/uprzejmiedonosze.net/form/tex/} }
+\usepackage[TS1,OT1,T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
 
 \addtolength{\hoffset}{-2cm}
 \addtolength{\textwidth}{4cm}
 \addtolength{\voffset}{-1cm}
 \addtolength{\textheight}{2cm}
-
 \renewcommand\familydefault{\sfdefault}
-
 \setlength{\columnseprule}{0.4pt}
-
 \frenchspacing
 
-\usepackage[TS1,OT1,T1]{fontenc}
-\usepackage[polish]{babel}
-\usepackage[utf8]{inputenc}
-
 \newcommand{\n}{ {{ app.name_name }} }
-
-\newcommand{\from}{
-	\hspace{1cm}\n{} \\
-	\hspace{1cm}{{ app.user_address }} \\
-	{{ app.user_phone }}
-	{{ app.user_email }}
-}
-
-\date{ {{ app.date }} } 
+\date{ Dnia {{ app.date }} } 
+\address{\n{}\\{{ app.user_address }}\\{{ app.user_email }}\\{{ app.user_phone }} }
 
 \begin{document}
-\begin{letter}{\large{
-Referat Oskarżycieli Publicznych \\
-Straż Miejska m.st. Warszawy \\
-ul. Młynarska 43/45 \\
-01-170 Warszawa}}
+\begin{letter}{ {\large Referat Oskarżycieli Publicznych \\ Straż Miejska m.st. Warszawy \\ ul. Młynarska 43/45 \\ 01-170 Warszawa} }
 
-\opening{\Large{Zgłoszenie wykroczenia {{ app.number}} } }
-
+\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number}} } } }
 	W dniu {{ app.date }} roku o godzinie {{ app.hour }} byłam/em świadkiem pozostawienia
-	samochodu o nr rejestracyjnym {{ app.plateId }} pod adresem {{ app.address }}.
+	samochodu o nr rejestracyjnym\texttt{ {{ app.plateId }} }pod adresem {{ app.address }}.
 	{{ app.category }} Sytuacja jest widoczna na załączonych zdjęciach. {{ app.userComment }}
 
 	Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
 	pozostawał pojazd pozostawał na tym miejscu.
 
-	Dane adresowe oraz kontaktowe zgłaszającego:
-	\closing{\from{}}
+	\closing{\textit{Z poważaniem,\\\n{} } }
+
 	{{ app.contextImage }}
 	{{ app.carImage }}
 
 	{{ app.plateImage }}
-
 \end{letter}
 \end{document}
