@@ -278,7 +278,16 @@ function readGeoDataFromImage(file){
 			lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
 			setAddress(lat, lon, true);
 		}
+
+		const dateTime = EXIF.getTag(this, "DateTimeOriginal");
+		if(dateTime){
+			setDateTime(dateTime);
+		}
 	});
+}
+
+function setDateTime(dateTime){
+	$('#datetime').val(dateTime);
 }
 
 function sendFile(fileData, id) {

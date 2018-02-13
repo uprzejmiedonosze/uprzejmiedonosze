@@ -23,13 +23,20 @@ $user = getCurrentUser()['data'];
 
 $comment = capitalizeSentence($post["comment"]);
 
-$app_date = date_format(new DateTime($application->date), 'Y-m-d');
-$app_hour = date_format(new DateTime($application->date), 'H:i');
+$date = date_format(new DateTime($post['datetime']), 'Y-m-d\TH:i:s');
+
+$app_date = date_format(new DateTime($date), 'Y-m-d');
+$app_hour = date_format(new DateTime($date), 'H:i');
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 @$plateImage = $application->carInfo->plateImage;
 
+logger("potwierdz.html -> _main -> date={$application->date}");
+logger("potwierdz.html -> _main -> app_date={$app_date}");
+logger("potwierdz.html -> _main -> app_hour={$app_hour}");
+
 $json = Array(
+	"date" => $date,
 	"user" => Array(
 		"name" => $user['name'],
 		"email" => $user['email'],

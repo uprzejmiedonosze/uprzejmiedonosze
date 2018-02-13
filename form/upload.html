@@ -52,7 +52,7 @@ if($pictureType == 'carImage'){ // car picture
 	}
 }else{ // context picture
 	$output = Array(
-		"date" => get_image_date(make_filename($prefix)),
+		"date" => date("Y-m-d\TH:i:s"),
 		"contextImage" => Array(
 			"url" => make_filename($prefix),
 			"thumb" => make_filename($prefix, ',t')
@@ -67,21 +67,6 @@ $application['status'] = 'draft';
 setApplication($applicationId, $application);
 
 echo json_encode($output);
-
-function get_image_date($image){
-	try{
-		$exif = @exif_read_data($image, 0, true);
-	}catch(Exception $e){
-		$exif = false;
-	}
-
-	$date = date("Y-m-d\TH:i:s");
-
-	if($exif && isset($exif['EXIF']) && isset($exif['EXIF']['DateTimeOriginal'])){
-		$date = date_format(date_create($exif['EXIF']['DateTimeOriginal']), 'Y-m-d\TH:i:s'); // @TODO poprawić na prawidłowy format
-	}
-	return $date;
-}
 
 function save_file($image_bytes){
 	$prefix = "cdn/" . guidv4();
