@@ -134,7 +134,7 @@ function setAddress(lat, lng, fromPicture){
 
 	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
 		+ lat + "," + lng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
-			if(data.results){
+			if(data.results.length){
 				formatted_address = data.results[0].formatted_address.replace(', Polska', '');
 				voivodeship = data.results[0].address_components.filter(function(e){ return e.types.indexOf('administrative_area_level_1') == 0; })[0].long_name.replace('Województwo ', '');
 				country = data.results[0].address_components.filter(function(e){ return e.types.indexOf('country') == 0; })[0].long_name;
@@ -148,18 +148,16 @@ function setAddress(lat, lng, fromPicture){
 				$('a#geo').buttonMarkup({ icon: "check" });
 			}else{
 				$('a#geo').buttonMarkup({ icon: "location" });
-			}
-			if(fromPicture){
-				$('#address').attr("placeholder","Miejsce zgłoszenia");
-			}else{
-				$('#address').attr("placeholder","Adres kontaktowy");
-			}
-		
-			
+			}		
 		}).fail(function() {
 			$('a#geo').buttonMarkup({ icon: "alert" });
 			$('#latlng').val("");		
 		});
+	if(fromPicture){
+		$('#address').attr("placeholder","Miejsce zgłoszenia");
+	}else{
+		$('#address').attr("placeholder","Adres kontaktowy");
+	}
 }
 
 function checkFile(file, id){
