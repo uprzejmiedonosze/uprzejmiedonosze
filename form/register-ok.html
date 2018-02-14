@@ -13,7 +13,7 @@ if(isset($_GET['next'])){
 $post = $_POST;
 $name = trim($post["name"]);
 $msisdn = trim($post["msisdn"]);
-$address = trim($post["address"]);
+$address = str_replace(', Polska', '', trim($post["address"]));
 
 if(updateUserData($name, $msisdn, $address)){
     redirect("$signInSuccessUrl");
