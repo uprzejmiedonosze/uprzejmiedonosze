@@ -149,7 +149,13 @@ function setAddress(lat, lng, fromPicture){
 			}else{
 				$('a#geo').buttonMarkup({ icon: "location" });
 			}
-			$('#address').attr("placeholder","Miejsce zgłoszenia");
+			if(fromPicture){
+				$('#address').attr("placeholder","Miejsce zgłoszenia");
+			}else{
+				$('#address').attr("placeholder","Adres kontaktowy");
+			}
+		
+			
 		}).fail(function() {
 			$('a#geo').buttonMarkup({ icon: "alert" });
 			$('#latlng').val("");		
