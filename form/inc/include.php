@@ -83,6 +83,9 @@ function getUserApplications($email){
 	global $nsql, $apps, $users;
 	$applications = Array();
 	$user = json_decode($users->get($email), true);
+	if(!isset($user['applications'])){
+		return $applications;
+	}
 	foreach($user['applications'] as $key => $value){
 		$applications[$key] = $value;
 	}
