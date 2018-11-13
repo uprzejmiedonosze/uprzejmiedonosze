@@ -3,7 +3,7 @@
 </form>
 <div data-role="collapsibleset" data-filter="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
     <?
-        $applications = getUserApplications($_SESSION['user_email']);
+        $applications = array_reverse(getUserApplications($_SESSION['user_email']), true);
         foreach($applications as $id){
             $application = getApplication($id);
             $app_date = date_format(new DateTime($application->date), 'Y-m-d');
