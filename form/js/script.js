@@ -125,7 +125,7 @@ function setAddress(lat, lng, fromPicture){
 	if(fromPicture){
 		$('#address').attr("placeholder","(pobieram adres ze zdjęcia...)");
 	}else{
-		$('#address').attr("placeholder","(weryfikuję address...)");
+		$('#address').attr("placeholder","(weryfikuję adres...)");
 	}
 	$('#administrative_area_level_1').val("");
 	$('#country').val("");
@@ -133,7 +133,7 @@ function setAddress(lat, lng, fromPicture){
 	$('#latlng').val("");
 
 	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
-		+ lat + "," + lng + "&key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&language=pl&result_type=street_address", function(data){
+		+ lat + "," + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function(data){
 			if(data.results.length){
 				formatted_address = data.results[0].formatted_address.replace(', Polska', '');
 				voivodeship = data.results[0].address_components.filter(function(e){ return e.types.indexOf('administrative_area_level_1') == 0; })[0].long_name.replace('Województwo ', '');
