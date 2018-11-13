@@ -128,6 +128,12 @@ $categories_txt = Array (
     0  => ""
 );
 
+$sm_addresses = Array (
+	'szczecin' => 'Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
+	'warszawa' => 'Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
+	'warsaw' => 'Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa'
+);
+
 $categoriesMatrix = Array( 'a', 'b');
 
 function guidv4()
@@ -291,11 +297,6 @@ function getFooter($mapsInitFunc = false){
 			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 			ga('create', 'UA-99241725-1', 'auto');
 			ga('send', 'pageview');
-		</script>
-		<script>
-			if('serviceWorker' in navigator) {
-				navigator.serviceWorker.register('/js/sw.js?v=%JS_HASH%');
-			}
 		</script>
 	</body>
 </html>

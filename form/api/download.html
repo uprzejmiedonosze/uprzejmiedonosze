@@ -55,11 +55,11 @@ function generate_pdf($application, $outp_file) {
 	file_put_contents($tex_f, ob_get_clean());
 
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
-    escapeshellarg($tex_f));
+   escapeshellarg($tex_f));
 	chdir(sys_get_temp_dir());
 	exec($cmd, $output, $ret);
 
-    @unlink($tex_f);
+   @unlink($tex_f);
 	@unlink($aux_f);
 	@unlink($log_f);
 	@unlink($out_f);
@@ -74,8 +74,28 @@ function generate_pdf($application, $outp_file) {
 	@unlink($f);
 }
 
+function guess_sm_address($application){
+	global $sm_addresses;
+
+	$sm = '(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)';
+	$city = trim(strtolower($application->address->city));
+
+	if(array_key_exists($city, $sm_addresses)){
+		$sm = $sm_addresses[strtolower($application->address->city)];
+	}else{
+		$address = trim(strtolower($application->address->address));
+		foreach($sm_addresses as $c => $a){
+			if (strpos($address, $c) !== false){
+				$sm = $a;
+				break;
+			}
+		}
+	}
+	return $sm;
+}
+
 function flatten_application($application){
-	global $ROOT, $categories_txt;
+	global $ROOT, $categories_txt, $sm_addresses;
 
 	$includegraphics = '\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
 	$contextImage = $includegraphics . $ROOT . "/" . $application->contextImage->url . "}";
@@ -83,6 +103,8 @@ function flatten_application($application){
 
 	$plateImage = "";
 	@$plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . $ROOT . "/" . $application->carInfo->plateImage . "}";
+
+	$sm = guess_sm_address($application);
 
 	$data = Array(
 		'app' => Array(
@@ -99,7 +121,8 @@ function flatten_application($application){
 			'user_phone' => "Tel: {$application->user->msisdn}",
     		'user_email' => "Email: {$application->user->email}",
 			'number' => $application->number,
-			'city' => $application->address->city
+			'city' => $application->address->city,
+			'sm' => $sm
 		)
 	);
 
