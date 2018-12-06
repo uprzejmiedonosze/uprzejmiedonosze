@@ -94,6 +94,17 @@ function guess_sm_address($application){
 	return $sm;
 }
 
+function guess_sex($application){
+	$names = preg_split('/\s+/', strtolower($application->user->name));
+	if(count($names) < 1){
+		return "byłam/em";
+	}
+	if($names[0] == 'kuba' || substr($names[0], -1) != 'a'){
+		return "byłem";
+	}
+	return "byłam";
+}
+
 function flatten_application($application){
 	global $ROOT, $categories_txt, $sm_addresses;
 
@@ -105,6 +116,7 @@ function flatten_application($application){
 	@$plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . $ROOT . "/" . $application->carInfo->plateImage . "}";
 
 	$sm = guess_sm_address($application);
+	$sex = guess_sex($application);
 
 	$data = Array(
 		'app' => Array(
@@ -112,6 +124,7 @@ function flatten_application($application){
 			'carImage' => $carImage,
 			'plateImage' => $plateImage,
 			'name_name' => $application->user->name,
+			'sex' => $sex,
 			'date' => date_format(new DateTime($application->date), 'Y-m-d'),
 			'hour' => date_format(new DateTime($application->date), 'H:i'),
 			'plateId' => $application->carInfo->plateId,
