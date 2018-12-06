@@ -109,8 +109,8 @@ function flatten_application($application){
 	global $ROOT, $categories_txt, $sm_addresses;
 
 	$includegraphics = '\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
-	$contextImage = $includegraphics . $ROOT . "/" . $application->contextImage->url . "}";
-	$carImage = $includegraphics . $ROOT . "/" . $application->carImage->url . "}";
+	$contextImage = $includegraphics . $ROOT . "/" . $application->contextImage->thumb . "}";
+	$carImage = $includegraphics . $ROOT . "/" . $application->carImage->thumb . "}";
 
 	$plateImage = "";
 	@$plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . $ROOT . "/" . $application->carInfo->plateImage . "}";
