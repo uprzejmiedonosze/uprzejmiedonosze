@@ -21,10 +21,14 @@
                     <p>{$application->userComment}</p>
                     <div id="#pics" class="ui-grid-a ui-responsive">
                         <div class="ui-block-a">
-                            <img class="lazyload" data-src="{$application->contextImage->thumb}"> 
+                            <a href="/zgloszenie.html?id=$id">
+                                <img class="lazyload" data-src="{$application->contextImage->thumb}"> 
+                            </a>
                         </div>
                         <div class="ui-block-b">
-                            <img class="lazyload" data-src="{$application->carImage->thumb}">
+                            <a href="/zgloszenie.html?id=$id">
+                                <img class="lazyload" data-src="{$application->carImage->thumb}">
+                            </a>
                         </div>
                     </div>
 
