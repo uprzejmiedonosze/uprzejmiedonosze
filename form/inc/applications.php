@@ -13,7 +13,7 @@
        
        <div data-role="collapsible" data-filtertext="{$application->address->address} $application->number
             $application->date {$application->carInfo->plateId} {$application->userComment} $category">
-            <h3>$application->number z dnia $app_date ({$application->address->address})</h3>
+            <h3>$application->number ($app_date) {$application->address->address}</h3>
             <p data-role="listview" data-filtertext="Animals Cats" data-inset="false">
                     <p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> byłem/am świadkiem pozostawienia
                         samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b> pod adresem <b>{$application->address->address}</b>.
