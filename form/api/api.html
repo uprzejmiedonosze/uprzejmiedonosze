@@ -10,6 +10,7 @@ if (is_ajax()) {
         switch($action) {
             case "getUserApplications": _getUserApplications(); break;
             case "verifyToken": _verifyToken(); break;
+            case "archive": _archive($_POST["id"]); break;
             default: _raiseError('Invalid action specified', 400);
         }
     }else{
@@ -59,6 +60,12 @@ function _verifyToken(){
         logger('api.html:_verifyToken Token not specified');
         _raiseError("Token not specified", 400);
     }
+}
+
+function _archive($id){
+    $app = getApplication($id);
+    $app->status = 'archived';
+    setApplication($id, $app);
 }
 
 function _raiseError($msg, $status){

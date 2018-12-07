@@ -10,9 +10,12 @@
             $app_hour = date_format(new DateTime($application->date), 'H:i');
             $category = $categories_txt[$application->category];
             $sex = guess_sex($application);
+            if($application->status == 'archived'){
+                continue;
+            }
             echo <<<HTML
        
-       <div data-role="collapsible" data-filtertext="{$application->address->address} $application->number
+       <div id="$id" data-role="collapsible" data-filtertext="{$application->address->address} $application->number
             $application->date {$application->carInfo->plateId} {$application->userComment} $category">
             <h3>$application->number ($app_date) {$application->address->address}</h3>
             <p data-role="listview" data-filtertext="Animals Cats" data-inset="false">
@@ -35,6 +38,7 @@
 
                 <a href="/zgloszenie.html?id=$id">szczegóły</a>
                 <a href="/api/download.html?appId=$id" target="_blank" data-ajax="false">pdf</a>
+                <a href="#" onclick="archive('$id')">archiwizuj</a>
             </p>
         </div>       
 HTML;
@@ -42,3 +46,12 @@ HTML;
         }
     ?>
 </div>
+<script>
+function archive(appId){
+    $.post('/api/api.html', 
+        {action: 'archive', id: appId},
+        function (data) {
+            $('#' + appId).hide();
+        });
+}
+</script>
