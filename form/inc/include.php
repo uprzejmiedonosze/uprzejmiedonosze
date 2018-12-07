@@ -26,7 +26,8 @@ function countApplicationsPerPlate($plateId){
 	return sizeof(
 		array_filter( $apps->getAll(), function($v) use ($plateId){
 			return strpos($v, 'plateId":"' . $plateId) !== FALSE
-				&& strpos($v, 'status":"confirmed') !== FALSE;
+				&& ( strpos($v, 'status":"confirmed') !== FALSE 
+					 || strpos($v, 'status":"archived') !== FALSE);
 			}
 		)
 	);
@@ -186,10 +187,21 @@ function redirect($destPath){
 	die();
 }
 
+function isLoggedIn(){
+	return isset($_SESSION['token']) && verifyToken($_SESSION['token']);
+}
+
 function checkIfLogged(){
-	if(!(isset($_SESSION['token']) && verifyToken($_SESSION['token']))){
+	if(!isLoggedIn()){
 		redirect("login.html?next=" . $_SERVER['REQUEST_URI']);
 	}
+}
+
+function hasApps(){
+	if(!isLoggedIn()){
+		return false;
+	}
+	return count(getUserApplications(getCurrentUser()['data']['email'])) > 0;
 }
 
 function capitalizeSentence($input){
