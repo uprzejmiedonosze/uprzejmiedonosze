@@ -92,7 +92,7 @@ function logger($msg){
 	//}
 }
 
-function getUserApplications($email){
+function getUserApplications($email){ 
 	global $nsql, $apps, $users;
 	$applications = Array();
 	$user = json_decode($users->get($email), true);
@@ -102,7 +102,7 @@ function getUserApplications($email){
 	foreach($user['applications'] as $key => $value){
 		$applications[$key] = $value;
 	}
-	return $applications;
+	return array_reverse($applications, true);
 }
 
 function getUsers(){
