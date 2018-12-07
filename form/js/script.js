@@ -316,7 +316,7 @@ function sendFile(fileData, id) {
 			}
 			if(json.contextImage) {
 				$('img#' + id + '-img').attr("src", json.contextImage.thumb);
-				$('#' + id).textinput('disable');
+				$('#' + id).textinput('disable'); 
 			}
 			if(id == 'carImage' && json.carInfo){
 				if(json.carInfo.plateId) {
@@ -325,6 +325,9 @@ function sendFile(fileData, id) {
 				if(json.carInfo.plateImage){
 					$('#plateImage').attr("src", json.carInfo.plateImage);
 					$('#plateImage').show();
+				}
+				if(json.carInfo.recydywa && json.carInfo.recydywa > 0){
+					$('#recydywa').text("Recydywa: " + json.carInfo.recydywa + "");
 				}
 			} 
 		},

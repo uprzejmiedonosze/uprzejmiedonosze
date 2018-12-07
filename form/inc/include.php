@@ -20,6 +20,18 @@ function setApplication($applicationId, $application){
 	return $apps->set($applicationId, json_encode($application));
 }
 
+function countApplicationsPerPlate($plateId){
+	global $nsql, $apps;
+	logger("countApplicationsPerPlate $plateId");
+	return sizeof(
+		array_filter( $apps->getAll(), function($v) use ($plateId){
+			return strpos($v, 'plateId":"' . $plateId) !== FALSE
+				&& strpos($v, 'status":"confirmed') !== FALSE;
+			}
+		)
+	);
+}
+
 function saveUserApplication($email, $applicationId){
 	global $nsql, $users;
 	$user = json_decode($users->get($email), true);

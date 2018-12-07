@@ -31,11 +31,13 @@ if($pictureType == 'carImage'){ // car picture
 		if ($plateImage !== FALSE) {
 			imagejpeg($plateImage, make_filename($prefix, ',p'));
 		}
+		$recydywa = (int)countApplicationsPerPlate($result["results"][0]["plate"]);
 		$output = Array(
 			"carInfo" => Array(
 				"plateId" => $result["results"][0]["plate"],
 				"brand" => $result["results"][0]["vehicle"]['make'][0]['name'],
 				"plateImage" => make_filename($prefix, ',p'),
+				"recydywa" => $recydywa
 			),
 			"carImage" => Array(
 				"url" => make_filename($prefix),
