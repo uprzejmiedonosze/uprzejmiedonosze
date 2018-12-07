@@ -94,17 +94,6 @@ function guess_sm_address($application){
 	return $sm;
 }
 
-function guess_sex($application){
-	$names = preg_split('/\s+/', strtolower($application->user->name));
-	if(count($names) < 1){
-		return "byłam/em";
-	}
-	if($names[0] == 'kuba' || substr($names[0], -1) != 'a'){
-		return "byłem";
-	}
-	return "byłam";
-}
-
 function flatten_application($application){
 	global $ROOT, $categories_txt, $sm_addresses;
 

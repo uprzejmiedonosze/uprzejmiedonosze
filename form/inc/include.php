@@ -204,6 +204,17 @@ function hasApps(){
 	return count(getUserApplications(getCurrentUser()['data']['email'])) > 0;
 }
 
+function guess_sex($application){
+	$names = preg_split('/\s+/', strtolower($application->user->name));
+	if(count($names) < 1){
+		return "byłam/em";
+	}
+	if($names[0] == 'kuba' || substr($names[0], -1) != 'a'){
+		return "byłem";
+	}
+	return "byłam";
+}
+
 function capitalizeSentence($input){
 	return trim(preg_replace_callback('/([.!?])\s*(\w)/', function ($matches) {
 		return strtoupper($matches[1] . ' ' . $matches[2]); }

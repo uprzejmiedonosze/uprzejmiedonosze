@@ -9,6 +9,7 @@ $application = getApplication($applicationId);
 $app_date = date_format(new DateTime($application->date), 'Y-m-d');
 $app_hour = date_format(new DateTime($application->date), 'H:i');
 $category = $categories_txt[$application->category];
+$sex = guess_sex($application);
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
@@ -22,10 +23,10 @@ $category = $categories_txt[$application->category];
 echo <<<HTML
 			<div class="ui-body ui-body-a ui-corner-all">
 				<h3>Zgłoszenie wykroczenia $application->number</h3>
-				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> byłem/am świadkiem pozostawienia
+				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $sex świadkiem pozostawienia
 					samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b> pod adresem <b>{$application->address->address}</b>.
 					$category Sytuacja jest widoczna na załączonych zdjęciach.</p>
-				<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
+				<p>Nie $sex świadkiem samego momentu parkowania oraz nie wiem jak długo
 					pozostawał pojazd pozostawał na tym miejscu.</p>
 				<p>$application->userComment</p>
 				<p>Dokument ze zgłoszeniem dostępny jest pod adresem
