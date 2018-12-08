@@ -61,6 +61,7 @@ $json = Array(
 $application = (array) array_merge((array)$application, (array)$json);
 
 setApplication($applicationId, $application);
+$sex = guess_sex($application);
 
 ?>
 <body class="index">
@@ -82,10 +83,10 @@ setApplication($applicationId, $application);
 echo <<<HTML
 			<div class="ui-body ui-body-a ui-corner-all">
 				<h3>Zgłoszenie wykroczenia</h3>
-				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> byłem/am świadkiem pozostawienia
+				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $sex świadkiem pozostawienia
 					samochodu o nr rejestracyjnym <b>$plateId</b> pod adresem <b>$address</b>.
 					{$categories_txt[$category]} Sytuacja jest widoczna na załączonych zdjęciach.</p>
-				<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
+				<p>Nie $sex świadkiem samego momentu parkowania oraz nie wiem jak długo
 					pozostawał pojazd pozostawał na tym miejscu.</p>
 				<p>$comment</p>
 				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />

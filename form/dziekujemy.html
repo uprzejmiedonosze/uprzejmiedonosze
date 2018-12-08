@@ -41,6 +41,7 @@ $json = Array(
 
 $application = (array) array_merge((array)$application, (array)$json);
 setApplication($applicationId, $application);
+$sex = guess_sex($application);
 
 $emailTemplate = <<<HTML
 <html>
@@ -52,12 +53,12 @@ $emailTemplate = <<<HTML
 			<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$appNumber</b>
 		</p>
 
-		<p>W dniu $app_date roku o godzinie $app_hour byłem świadkiem pozostawienia
+		<p>W dniu $app_date roku o godzinie $app_hour $sex świadkiem pozostawienia
 		samochodu o nr rejestracyjnym $plateId pod adresem $address.
 		$category
 		Sytuacja jest widoczna na załączonych zdjęciach.</p>
 
-		<p>Nie byłem świadkiem samego momentu parkowania oraz nie wiem jak długo
+		<p>Nie $sex świadkiem samego momentu parkowania oraz nie wiem jak długo
 		pozostawał pojazd pozostawał na tym miejscu.</p>
 		<p>$comment</p>
 
