@@ -203,9 +203,8 @@ function hasApps(){
 	}
 	return count(getUserApplications(getCurrentUser()['data']['email'])) > 0;
 }
-
-function guess_sex($application){
-	$names = preg_split('/\s+/', strtolower($application->user->name));
+function guess_sex_by_name($name){
+	$names = preg_split('/\s+/', $name);
 	if(count($names) < 1){
 		return "byłam/em";
 	}
@@ -213,6 +212,10 @@ function guess_sex($application){
 		return "byłem";
 	}
 	return "byłam";
+}
+
+function guess_sex($application){
+	return guess_sex_by_name(strtolower($application->user->name));
 }
 
 function capitalizeSentence($input){

@@ -59,9 +59,9 @@ $json = Array(
 );
 
 $application = (array) array_merge((array)$application, (array)$json);
+$sex = guess_sex_by_name($user['name']);
 
 setApplication($applicationId, $application);
-$sex = guess_sex($application);
 
 ?>
 <body class="index">
