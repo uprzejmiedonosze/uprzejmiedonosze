@@ -356,5 +356,49 @@ function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
 	echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
 }
 
+function printApplication($application, $archive = false){
+	
+	$app_date = date_format(new DateTime($application->date), 'Y-m-d');
+	$app_hour = date_format(new DateTime($application->date), 'H:i');
+	$category = $categories_txt[$application->category];
+	$sex = guess_sex($application);
+
+	echo <<<HTML
+       
+	<div id="$application->id" data-role="collapsible" data-filtertext="{$application->address->address} $application->number
+		 $application->date {$application->carInfo->plateId} {$application->userComment} $category">
+		 <h3>$application->number ($app_date) {$application->address->address}</h3>
+		 <p data-role="listview" data-filtertext="Animals Cats" data-inset="false">
+				 <p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $sex świadkiem pozostawienia
+					 samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b> pod adresem <b>{$application->address->address}</b>.
+					 $category Sytuacja jest widoczna na załączonych zdjęciach.</p>
+				 <p>{$application->userComment}</p>
+				 <div id="#pics" class="ui-grid-a ui-responsive">
+					 <div class="ui-block-a">
+						 <a href="/zgloszenie.html?id=$application->id">
+							 <img class="lazyload" data-src="{$application->contextImage->thumb}"> 
+						 </a>
+					 </div>
+					 <div class="ui-block-b">
+						 <a href="/zgloszenie.html?id=$application->id">
+							 <img class="lazyload" data-src="{$application->carImage->thumb}">
+						 </a>
+					 </div>
+				 </div>
+
+			 <a href="/zgloszenie.html?id=$application->id">szczegóły</a>
+			 <a href="/api/download.html?appId=$application->id" target="_blank" data-ajax="false">pdf</a>
+HTML;
+if($archive){
+echo <<<HTML
+			 <a href="#" onclick="archive('$application->id')">archiwizuj</a>
+HTML;
+}
+echo <<<HTML
+		 </p>
+	 </div>       
+HTML;
+}
+
 ?>
 
