@@ -357,7 +357,8 @@ function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
 }
 
 function printApplication($application){
-	
+	global $categories_txt;
+
 	$app_date = date_format(new DateTime($application->date), 'Y-m-d');
 	$app_hour = date_format(new DateTime($application->date), 'H:i');
 	$category = $categories_txt[$application->category];
