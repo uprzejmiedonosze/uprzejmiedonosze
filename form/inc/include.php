@@ -356,16 +356,18 @@ function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
 	echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
 }
 
-function printApplication($application, $archive = false){
+function printApplication($application){
 	
 	$app_date = date_format(new DateTime($application->date), 'Y-m-d');
 	$app_hour = date_format(new DateTime($application->date), 'H:i');
 	$category = $categories_txt[$application->category];
-	$sex = guess_sex($application);
+	$sex      = guess_sex($application);
+	$status   = $application->status;
+	$statusClass = ($status == 'archived')? 'archived': 'active';
 
 	echo <<<HTML
        
-	<div id="$application->id" data-role="collapsible" data-filtertext="{$application->address->address} $application->number
+	<div id="$application->id" class="application $statusClass" data-role="collapsible" data-filtertext="{$application->address->address} $application->number
 		 $application->date {$application->carInfo->plateId} {$application->userComment} $category">
 		 <h3>$application->number ($app_date) {$application->address->address}</h3>
 		 <p data-role="listview" data-filtertext="Animals Cats" data-inset="false">
@@ -388,13 +390,7 @@ function printApplication($application, $archive = false){
 
 			 <a href="/zgloszenie.html?id=$application->id">szczegóły</a>
 			 <a href="/api/download.html?appId=$application->id" target="_blank" data-ajax="false">pdf</a>
-HTML;
-if($archive){
-echo <<<HTML
-			 <a href="#" onclick="archive('$application->id')">archiwizuj</a>
-HTML;
-}
-echo <<<HTML
+			 <a href="#" onclick="archive('$application->id')" class="archiveLink">archiwizuj</a>
 		 </p>
 	 </div>       
 HTML;

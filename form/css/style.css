@@ -183,3 +183,12 @@ label a {
 	font-size: 70%;
 	text-transform: uppercase;
 }
+
+div.archivedApps div.application h3 a {
+	font-size: 14px !important;
+	font-weight: 400;
+}
+
+div.archivedApps div.application a.archiveLink{
+	display: none;
+}

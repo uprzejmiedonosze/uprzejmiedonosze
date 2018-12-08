@@ -66,6 +66,7 @@ function _archive($id){
     $app = getApplication($id);
     $app->status = 'archived';
     setApplication($id, $app);
+    echo json_encode(Array("status" => "OK"));
 }
 
 function _raiseError($msg, $status){
