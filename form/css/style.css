@@ -184,11 +184,11 @@ label a {
 	text-transform: uppercase;
 }
 
-div.archivedApps div.application h3 a {
+div.application.archived h3 a {
 	font-size: 14px !important;
 	font-weight: 400;
 }
 
-div.archivedApps div.application a.archiveLink{
+div.application.archived a.archiveLink{
 	display: none;
 }

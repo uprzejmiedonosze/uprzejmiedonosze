@@ -2,7 +2,7 @@
     <input data-type="search" id="searchForCollapsibleSet">
 </form>
 <div data-role="collapsibleset" data-filter="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
-<div class="activeApps">
+<div class="activeApps" />
     <?
         $applications = getUserApplications($_SESSION['user_email']);
         $archived = [];
@@ -15,19 +15,19 @@
             printApplication($application);
         }
         echo '</div>';
-        echo '<h3 class="ui-bar ui-bar-a ui-corner-all">Archiwum</h3>';
-        echo '<div class="archivedApps">';
+        echo '<h3 class="archivedApps ui-bar ui-bar-a ui-corner-all">Archiwum</h3>';
         foreach($archived as $application){
             printApplication($application);
         }
-        echo '</div>';
     ?>
-</div>
+
 <script>
 function archive(appId){
     $.post('/api/api.html', 
         {action: 'archive', id: appId}).done(function() {
-            $('#' + appId).appendTo('.archivedApps');
+            $('.archivedApps').after($('#' + appId));
+            $('#' + appId).removeClass('active');
+            $('#' + appId).addClass('archived');
         });
 }
 </script>
