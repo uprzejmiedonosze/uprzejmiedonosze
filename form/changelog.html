@@ -1,0 +1,97 @@
+<? 
+require_once(__DIR__ . '/../inc/include.php');
+genHeader();
+?>
+<body class="index">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+		</div>
+	<div data-role="page" class="container-fluid" data-theme="a">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+			<? menuMain(); ?>
+			<h1>Uprzejmie Donoszę</h1>
+			<? menuStart(); ?>
+		</div>
+		<div data-role="main" class="ui-content">
+			<h2>Changelog</h2>
+
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Poniedziałek, 10 grudnia, 2018</h3>
+                <ol>
+                    <li>UD nie wysyła maili do autora zgłoszenia (ani do SM).
+                        Zgłaszający powinien pobrać dokument(y) ze strony swoich zgłoszeń
+                        i wysłać je samodzielnie.</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Niedziela, 9 grudnia, 2018</h3>
+                <ol>
+                    <li>[fixed] Filtrowanie zgłoszeń na liście "Moje zgłoszenia" znowu działa</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Sobota, 8 grudnia, 2018</h3>
+                <ol>
+                    <li>Uprzejmie Donoszę pozwala archiwizować zgłoszenia. Na liście "Moje zgłoszenia",
+                    poszczególne wnioski mają dodatkową opcję <i>"archiwizuj"</i>, która przenosi
+                    wniosek do drugiej listy archiwalnych zgłoszeń. Pozwala to wygodnie oznaczać
+                    wnioski, które np. zostały już przekazane do SM.</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Piątel, 7 grudnia, 2018</h3>
+                <ol>
+                    <li>Uprzejmie Donoszę dokonuje detekcji płci (na podstawie imienia). Dzięki temu
+                    w generowamych wnioskach zamiast <i>byłem(am) świadkiem</i> jest prawidłowa
+                    forma gramatyczna.</li>
+                    <li>Dodatkowy przycisk <i>"Moje zgłoszenia"</i> na stronie nowego zgłoszenia</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Czwartek, 6 grudnia, 2018</h3>
+                <ol>
+                    <li>Nowa funkcja: recydywa. Po zeskanowaniu numeru rejestracyjnego widzimy informację ile
+                    wniosków zostało już zarejestrowane na ten numer.</li>
+                    <li>Zdjęcia na liście zgłoszeń ("moje zgłoszenia") linkują do szczegółów zgłoszenia.
+                    Nie trzeba celować w link <i>"szczegóły"</i></li>
+                    <li>Zdjęcia we wniosku PDF linkują do szczegółów zgłoszenia (oczywiście nie po wydrukowaniu...)</li>
+                    <li>Zdjęcia na stronie szczegółów zgłoszenia kierują do zdjęcia o większej rozdzielczości.</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Środa, 5 grudnia, 2018</h3>
+                <ol>
+                    <li>Zgłoszenia PDF generowane są z użyciem małych wersji zdjęć. Redukuje to średnią wielkość
+                    pliku PDF z ~500kb to ~70kb. Oczywiście kosztem jakości zdjęć (ale są one nadal akceptowalne).</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Wtorek, 13 listopada, 2018</h3>
+                <ol>
+                    <li>[fixed] Aktualizacja API Google Maps po zmianach Google.</li>
+                    <li>Zgłoszenia na liście zgłoszeń prezentowane są od najnowszego do najstarszego.</li>
+                    <li>Wsparcie dla wielu straży miejskich. Obecnie wprowadzone są adresy SM
+                    dla Warszawy i Szczecina.</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Poniedziałek, 12 lutego, 2018</h3>
+                <ol>
+                    <li>Wsparcie dla automatycznego rozpoznawania numeru rejestracyjnego na podstawi zdjęcia.</li>
+                    <li>Nowy format zgłoszeń generowanych do postaci PDF</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Wtorek, 30 stycznia, 2018</h3>
+                <ol>
+                    <li>Numer telefonu nie jest już wymagany przy rejestracji.</li>
+                </ol>
+            </div>
+            <div class="ui-body ui-body-a ui-corner-all">
+                <h3>Poniedziałek, 22 stycznia, 2018</h3>
+                <ol>
+                    <li>Możliwość zakładania kont i logowania się za pomocą Google Auth.</li>
+                </ol>
+            </div>
+
+		</div> <!-- main -->
+<? getFooter() ?>
