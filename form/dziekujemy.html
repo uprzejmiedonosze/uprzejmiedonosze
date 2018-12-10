@@ -112,16 +112,17 @@ $smtp = Mail::factory('smtp', array(
 	'port' => '465',
 	'auth' => true,
 	'username' => 'ud@nieradka.net',
-	'password' => '95c112ef6964b209e633ed778da414bc'
+	'password' => '6NbnF%Zn'
 ));
 
+/*
 $mail = $smtp->send($to, $headers, $body);
-
 if (PEAR::isError($mail)) {
 	echo('<p>' . $mail->getMessage() . '</p>');
+
 } else {
 	echo('<p>Dziękujemy za zgłoszenie!</p>');
-}
+}*/
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
@@ -131,12 +132,8 @@ if (PEAR::isError($mail)) {
 			<? menuNewApplication('Jeszcze raz') ?>
 		</div>
 		<div data-role="main" class="ui-content">
-			<p>Twoje zgłoszenie zostało właśnie wysłane do Straży Miejskiej.
-			Historię swoim zgłoszeń możesz zawsze zobaczyć w swojej skrzynce
-			mailowej.</p>
-			<p>Jeśli chcesz poznań status swojego zgłoszenia skontaktuj się ze
-			Strażą Miejską pod adresem <a href="mailto:komenda@strazmiejska.waw.pl">komenda@strazmiejska.waw.pl</a> lub
-			zadzwoń na nr <a href="tel:225986800">22 598 68 00</a>.</p>
+			<p>Twoje zgłoszenie zostało zarejestrowane.
+			Historię swoich zgłoszeń możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 			<p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
 				href="mailto:ud@uprzejmiedonosze.net">ud@uprzejmiedonosze.net</a>.</p>
 			
