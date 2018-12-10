@@ -115,21 +115,21 @@ function getUsers(){
 
 $categories = Array(
 	4  => "Zastawienie chodnika (mniej niż 1.5m)",
-	2  => "Mniej niż 15 m od przystanku",
+	2  => "Mniej niż 15m od przystanku",
 	3  => "Mniej niż 10m od skrzyżowania",
 	9  => "Blokowanie ścieżki rowerowej	",
 	5  => "Mniej niż 10m od przejścia dla pieszych",
 	6  => "Parkowanie na trawniku/w parku",
 	10 => "Parkowanie za barierkami",
 	8  => "Parkowanie z dala od krawędzi jezdni",
-	7  => "Parkowanie w na chodniku / niszczenie chodnika",
-	1  => "Parkowanie na chodniku w miejscu niedozwolonym",
+	//7  => "Parkowanie w na chodniku / niszczenie chodnika",
+	1  => "Parkowanie na niezgodne z oznaczeniem",
 	0 => "Inne"
 );
 
 $categories_txt = Array (
     4  => "Pojazd zastawiał chodnik (mniej niż 1.5m).",
-	2  => "Pojazd znajdował się mniej niż 15 m od przystanku.",
+	2  => "Pojazd znajdował się mniej niż 15m od przystanku.",
     3  => "Pojazd znajdował się mniej niż 10m od skrzyżowania.",
     9  => "Pojazd blokował ścieżkę rowerową.",
     5  => "Pojazd znajdował się mniej niż 10m od przejścia dla pieszych.",
@@ -137,7 +137,7 @@ $categories_txt = Array (
     10 => "Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
     8  => "Pojazd był zaparkowany z dala od krawędzi jezdni.",
 	7  => "Pojazd niszczył chodnik.",
-	1  => "Pojazd był zaparkowany na chodniku w miejscu niedozwolonym.",
+	1  => "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.",
     0  => ""
 );
 
