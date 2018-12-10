@@ -35,7 +35,7 @@ HOST                 = $(STAGING_HOST)
 
 .DEFAULT_GOAL := help
 
-.PHONY: help
+.PHONY: help clean
 help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
@@ -48,6 +48,7 @@ prod: HOST := $(PROD_HOST)
 prod: clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
+	@make clean
 
 export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
