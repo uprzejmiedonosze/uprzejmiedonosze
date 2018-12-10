@@ -74,9 +74,10 @@ input[type="radio"]{
 	display: none;
 }
 
-.image-upload img{
+.image-upload img, .photo-thumbs{
 	max-height: 350px;
 	max-width: 350px;
+	border-radius: 0.8em;
 }
 
 #category {
@@ -168,9 +169,6 @@ div.error img{
 	background-color: rgba(255, 0, 0, 0.3);
 }
 
-#pics img{
-	border-radius: 0.8em;
-}
 a[rel~="external"]{
 	background-position: center right;
 	background-repeat: no-repeat;

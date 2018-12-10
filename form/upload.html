@@ -77,7 +77,7 @@ function save_file($image_bytes){
 	fwrite($ifp, base64_decode($image_bytes));
 	fclose($ifp); 
 	
-	imagejpeg(resize_image(make_filename($prefix), 350, 350, false), make_filename($prefix, ',t'));
+	imagejpeg(resize_image(make_filename($prefix), 600, 600, false), make_filename($prefix, ',t'));
 
 	return $prefix;
 }

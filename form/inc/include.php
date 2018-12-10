@@ -382,12 +382,12 @@ function printApplication($application){
 				 <div id="#pics" class="ui-grid-a ui-responsive">
 					 <div class="ui-block-a">
 						 <a href="/zgloszenie.html?id=$application->id">
-							 <img class="lazyload" data-src="{$application->contextImage->thumb}"> 
+							 <img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
 						 </a>
 					 </div>
 					 <div class="ui-block-b">
 						 <a href="/zgloszenie.html?id=$application->id">
-							 <img class="lazyload" data-src="{$application->carImage->thumb}">
+							 <img class="lazyload photo-thumbs" data-src="{$application->carImage->thumb}">
 						 </a>
 					 </div>
 				 </div>
