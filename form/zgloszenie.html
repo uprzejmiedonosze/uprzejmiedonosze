@@ -19,7 +19,12 @@ $wykonalam = $sex['wykonalam'];
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
         <? menuBack(); ?>
 			<h1>Zgłoszenie <?=$application->number ?></h1>
-		<? menuStart(); ?>
+			<?PHP
+			if(hasApps()) {
+				menuApplications();
+			} else { 
+				menuStart();
+			} ?>
 		</div>
 		<div data-role="main" class="ui-content">
 <?
