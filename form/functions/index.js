@@ -7,6 +7,7 @@ admin.initializeApp(functions.config().firebase);
 const gcs = require('@google-cloud/storage')();
 const path = require('path');
 const sharp = require('sharp');
+const formidable = require('formidable');
 
 const THUMB_MAX_WIDTH = 350;
 const THUMB_MAX_HEIGHT = 350;
@@ -67,7 +68,7 @@ exports.generateThumbnail = functions.storage.object().onChange(event => {
   });
 });
 
-exports.readPlate = functions.https.onRequest((req, res) => {
+exports.uploadPlateImage = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     var OpenalprApi = require('openalpr_api');
     url = req.body.url;
@@ -104,12 +105,15 @@ exports.readPlate = functions.https.onRequest((req, res) => {
     api.recognizeUrl(url, secretKey, country, opts, callback);
   });
 });
+
+function saveImageWithThumb(){
+
+}
 
 exports.upload = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     var OpenalprApi = require('openalpr_api');
     url = req.body.url;
-    console.log(url);
 
     var api = new OpenalprApi.DefaultApi()
     var secretKey = "sk_aa0b80a70b2ae2268b36734a";
@@ -143,3 +147,40 @@ exports.upload = functions.https.onRequest((req, res) => {
   });
 });
 
+
+
+exports.uploadFile = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    var form = new formidable.IncomingForm();
+
+    form.parse(req, function (err, fields, files) {
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+
+      applicationId = fields.applicationId;
+      imageBytes = files.imageBytes;
+  
+      var metadata = {
+        contentType: 'image/jpeg',
+      };
+
+      const bucket = gcs.bucket(`test_images`);
+      var file = bucket.file(`${applicationId}.jpg`)
+
+      //imageBuffer = new Buffer(imageBytes, 'base64');
+
+      file.save(imageBytes, {
+        metadata: metadata,
+        public: true,
+        validation: 'md5'
+      }, function(err) {  
+        if (err) { 
+            //return res.status(500).send(err);
+        }
+        //return res.status(200).send('Uploaded');
+      });
+    });
+  });
+});
