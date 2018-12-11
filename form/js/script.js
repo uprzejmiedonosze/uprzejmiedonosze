@@ -75,7 +75,7 @@ function initAutocompleteOnNewApplication(){
 
 function initAutocomplete(trigger_change) {
 	autocomplete = new google.maps.places.Autocomplete(
-		/** @type {!HTMLInputElement} */(document.getElementById('address')),
+		(document.getElementById('address')),
 		{types: ['geocode']});
 	if(trigger_change){
 		autocomplete.addListener('place_changed', fillInAddress);

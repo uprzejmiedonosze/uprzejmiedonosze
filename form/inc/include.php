@@ -8,6 +8,8 @@ require(__DIR__ . '/../vendor/autoload.php');
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Exception\Auth\InvalidIdToken;
+use Kreait\Firebase\Exception\Auth\IssuedInTheFuture;
+use Kreait\Firebase\Exception\Auth\ExpiredToken;
 
 $nsql  = new NoSQLite\NoSQLite(__DIR__ . '/../db/store.sqlite');
 $apps  = $nsql->getStore('applications');
@@ -139,7 +141,7 @@ $categories_txt = Array (
     6  => "Pojazd był zaparkowany na trawniku/w parku.",
     10 => "Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
     8  => "Pojazd był zaparkowany z dala od krawędzi jezdni.",
-	7  => "Pojazd niszczył chodnik.",
+	7  => "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.", // (only for history)
 	1  => "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.",
     0  => ""
 );
@@ -164,26 +166,30 @@ function guidv4()
 }
 
 function verifyToken($token){
-	logger("verifiToken " . substr($token, 0, 30));
+	logger("verifiToken");
 	if(isset($token)){
-		logger("isLoggedIn token set");
+		logger("verifiToken token set: " . substr($token, 0, 30));
 		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../%HOST%-firebase-adminsdk.json');
 		$firebase = (new Factory)->withServiceAccount($serviceAccount)->create();
 		try {
-			logger("isLoggedIn token verified");
 			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
 			$_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
 			$_SESSION['user_name'] = $verifiedIdToken->getClaim('name');
 			$_SESSION['user_picture'] = $verifiedIdToken->getClaim('picture');
 			$_SESSION['user_id'] = $verifiedIdToken->getClaim('user_id');
 			$_SESSION['token'] = $token;
+			logger("isLoggedIn token verified");
 			return true;
+		} catch (IssuedInTheFuture $e) {
+			logger("isLoggedIn IssuedInTheFuture – false " . $e->getMessage());
+		} catch (ExpiredToken $e) {
+			logger("isLoggedIn ExpiredToken – false " . $e->getMessage());
 		} catch (InvalidIdToken $e) {
-			logger("isLoggedIn InvalidIdToken");
-			return false;
-		} 
+			logger("isLoggedIn InvalidIdToken – false " . $e->getMessage());
+		}
+		return false;
 	}else{
-		logger("isLoggedIn token not set");
+		logger("isLoggedIn token is not set — false");
 		return false;
 	}
 }
@@ -196,7 +202,7 @@ function redirect($destPath){
 }
 
 function isLoggedIn(){
-	logger("isLoggedIn " . substr($_SESSION['token'], 0, 30));
+	logger("isLoggedIn");
 	return isset($_SESSION['token']) && verifyToken($_SESSION['token']);
 }
 
@@ -339,7 +345,7 @@ function getFooter($mapsInitFunc = false){
 
 	$maps = "";
 	if($mapsInitFunc){
-		$maps = "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyAsVCGVrc7Zph5Ka3Gh2SGUqDrwCd8C3DU&libraries=places&callback=$mapsInitFunc&language=pl\" async defer></script>";
+		$maps = "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback=$mapsInitFunc&language=pl\" async defer></script>";
 	}
 
 	echo <<<HTML
@@ -379,6 +385,10 @@ function menuMain($text = 'Strona główna'){
 
 function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
 	echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
+}
+
+function menuApplications($text = 'Zgłoszenia'){
+	echo '<a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bullets">' . $text . '</a>';
 }
 
 function printApplication($application){
