@@ -24,7 +24,6 @@ genHeader(); ?>
                                 pa: accessToken
                             },
                             function(data){
-                                console.log(data);
                                 window.location.replace('<?=$signInSuccessUrl;?>');
                             }).fail(function(){
                                 window.location.replace('/login.html');

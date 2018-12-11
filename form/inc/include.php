@@ -1,4 +1,7 @@
 <?PHP
+$timeout = 60 * 60 * 24 * 365;
+ini_set("session.gc_maxlifetime", $timeout);
+ini_set("session.cookie_lifetime", $timeout);
 session_start();
 
 require(__DIR__ . '/../vendor/autoload.php');
@@ -87,9 +90,9 @@ function getCurrentUser(){
 }
 
 function logger($msg){
-	//if('%HOST%' == 'staging.uprzejmiedonosze.net'){
+	if('%HOST%' == 'staging.uprzejmiedonosze.net'){
 		error_log("%HOST%: $msg\n", 3, "/tmp/%HOST%.log");
-	//}
+	}
 }
 
 function getUserApplications($email){ 
@@ -161,10 +164,13 @@ function guidv4()
 }
 
 function verifyToken($token){
+	logger("verifiToken " . substr($token, 0, 30));
 	if(isset($token)){
+		logger("isLoggedIn token set");
 		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../%HOST%-firebase-adminsdk.json');
 		$firebase = (new Factory)->withServiceAccount($serviceAccount)->create();
 		try {
+			logger("isLoggedIn token verified");
 			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
 			$_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
 			$_SESSION['user_name'] = $verifiedIdToken->getClaim('name');
@@ -173,25 +179,29 @@ function verifyToken($token){
 			$_SESSION['token'] = $token;
 			return true;
 		} catch (InvalidIdToken $e) {
+			logger("isLoggedIn InvalidIdToken");
 			return false;
 		} 
 	}else{
-
+		logger("isLoggedIn token not set");
 		return false;
 	}
 }
 
 function redirect($destPath){
+	logger("redirect to " . $destPath);
 	header("X-Redirect: https://%HOST%/$destPath");
 	header("Location: https://%HOST%/$destPath");
 	die();
 }
 
 function isLoggedIn(){
+	logger("isLoggedIn " . substr($_SESSION['token'], 0, 30));
 	return isset($_SESSION['token']) && verifyToken($_SESSION['token']);
 }
 
 function checkIfLogged(){
+	logger("checkIfLogged");
 	if(!isLoggedIn()){
 		redirect("login.html?next=" . $_SERVER['REQUEST_URI']);
 	}
