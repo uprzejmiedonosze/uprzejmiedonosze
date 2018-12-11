@@ -216,12 +216,24 @@ function hasApps(){
 function guess_sex_by_name($name){
 	$names = preg_split('/\s+/', $name);
 	if(count($names) < 1){
-		return "byłam/em";
+		return [
+			"bylam" => "byłam/em",
+			"swiadoma" => "świadoma/y",
+			"wykonalam" => "wykonałam/em"
+		];
 	}
 	if($names[0] == 'kuba' || substr($names[0], -1) != 'a'){
-		return "byłem";
+		return [
+			"bylam" => "byłem",
+			"swiadoma" => "świadomy",
+			"wykonalam" => "wykonałem"
+		];
 	}
-	return "byłam";
+	return [
+		"bylam" => "byłam",
+		"swiadoma" => "świadoma",
+		"wykonalam" => "wykonałam"
+	];
 }
 
 function guess_sex($application){
@@ -376,6 +388,9 @@ function printApplication($application){
 	$app_hour = date_format(new DateTime($application->date), 'H:i');
 	$category = $categories_txt[$application->category];
 	$sex      = guess_sex($application);
+	$bylam    = $sex['bylam'];
+	$swiadoma = $sex['swiadoma'];
+	$wykonalam = $sex['wykonalam'];
 	$status   = $application->status;
 	$statusClass = ($status == 'archived')? 'archived': 'active';
 
@@ -385,28 +400,29 @@ function printApplication($application){
 		 $application->date {$application->carInfo->plateId} {$application->userComment} $category">
 		 <h3>$application->number ($app_date) {$application->address->address}</h3>
 		 <p data-role="listview" data-filtertext="Animals Cats" data-inset="false">
-				 <p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $sex świadkiem pozostawienia
-					 samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b> pod adresem <b>{$application->address->address}</b>.
-					 $category Sytuacja jest widoczna na załączonych zdjęciach.</p>
-				 <p>{$application->userComment}</p>
-				 <div id="#pics" class="ui-grid-a ui-responsive">
-					 <div class="ui-block-a">
-						 <a href="/zgloszenie.html?id=$application->id">
-							 <img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
-						 </a>
-					 </div>
-					 <div class="ui-block-b">
-						 <a href="/zgloszenie.html?id=$application->id">
-							 <img class="lazyload photo-thumbs" data-src="{$application->carImage->thumb}">
-						 </a>
-					 </div>
-				 </div>
-
-			 <a href="/zgloszenie.html?id=$application->id">szczegóły</a>
-			 <a href="/api/download.html?appId=$application->id" target="_blank" data-ajax="false">pdf</a>
-			 <a href="#" onclick="archive('$application->id')" class="archiveLink">archiwizuj</a>
-		 </p>
-	 </div>       
+				<p>W dniu <b>$app_date</b> roku o godzinie
+					<b>$app_hour</b> $bylam świadkiem pozostawienia
+					samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b>
+					pod adresem <b>{$application->address->address}</b>.
+					$category</p>
+				<p>{$application->userComment}</p>
+				<div id="#pics" class="ui-grid-a ui-responsive">
+					<div class="ui-block-a">
+						<a href="/zgloszenie.html?id=$application->id">
+							<img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
+						</a>
+					</div>
+					<div class="ui-block-b">
+						<a href="/zgloszenie.html?id=$application->id">
+							<img class="lazyload photo-thumbs" data-src="{$application->carImage->thumb}">
+						</a>
+					</div>
+				</div>
+			<a href="/zgloszenie.html?id=$application->id">szczegóły</a>
+			<a href="/api/download.html?appId=$application->id" target="_blank" data-ajax="false">pdf</a>
+			<a href="#" onclick="archive('$application->id')" class="archiveLink">archiwizuj</a>
+		</p>
+	</div>       
 HTML;
 }
 

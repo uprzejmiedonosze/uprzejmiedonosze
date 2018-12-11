@@ -41,6 +41,9 @@ $json = Array(
 
 $application = (array) array_merge((array)$application, (array)$json);
 $sex = guess_sex_by_name($name);
+$bylam = $sex['bylam'];
+$swiadoma = $sex['swiadoma'];
+$wykonalam = $sex['wykonalam'];
 setApplication($applicationId, $application);
 
 $emailTemplate = <<<HTML
@@ -53,14 +56,20 @@ $emailTemplate = <<<HTML
 			<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$appNumber</b>
 		</p>
 
-		<p>W dniu $app_date roku o godzinie $app_hour $sex świadkiem pozostawienia
+		<p>W dniu $app_date roku o godzinie $app_hour $bylam świadkiem pozostawienia
 		samochodu o nr rejestracyjnym $plateId pod adresem $address.
 		$category
-		Sytuacja jest widoczna na załączonych zdjęciach.</p>
+		Sytuacja jest widoczna na załączonych zdjęciach. Zdjęcia $wykonalam
+		samodzielnie.</p>
 
-		<p>Nie $sex świadkiem samego momentu parkowania oraz nie wiem jak długo
+		<p>Nie $bylam świadkiem samego momentu parkowania, oraz nie wiem jak długo
 		pozostawał pojazd pozostawał na tym miejscu.</p>
 		<p>$comment</p>
+
+		<p>Jestem $swiadoma odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
+
+		<p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania.</p>
+
 
 		<p>Dokument ze zgłoszeniem dostępny jest pod adresem <a href="https://%HOST%/api/download.html?appId=$applicationId">$appNumber.pdf</a>.</p>
 

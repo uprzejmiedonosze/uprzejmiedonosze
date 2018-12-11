@@ -59,8 +59,10 @@ $json = Array(
 );
 
 $application = (array) array_merge((array)$application, (array)$json);
-$sex = guess_sex_by_name($user['name']);
-
+$sex      = guess_sex_by_name($user['name']);
+$bylam    = $sex['bylam'];
+$swiadoma = $sex['swiadoma'];
+$wykonalam = $sex['wykonalam'];
 setApplication($applicationId, $application);
 
 ?>
@@ -83,12 +85,16 @@ setApplication($applicationId, $application);
 echo <<<HTML
 			<div class="ui-body ui-body-a ui-corner-all">
 				<h3>Zgłoszenie wykroczenia</h3>
-				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $sex świadkiem pozostawienia
+				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $bylam świadkiem pozostawienia
 					samochodu o nr rejestracyjnym <b>$plateId</b> pod adresem <b>$address</b>.
-					{$categories_txt[$category]} Sytuacja jest widoczna na załączonych zdjęciach.</p>
-				<p>Nie $sex świadkiem samego momentu parkowania oraz nie wiem jak długo
+					{$categories_txt[$category]} Zdjęcia $wykonalam samodzielnie.</p>
+				<p>Nie $bylam świadkiem samego momentu parkowania, oraz nie wiem jak długo
 					pozostawał pojazd pozostawał na tym miejscu.</p>
 				<p>$comment</p>
+				<p>Jestem $swiadoma odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
+				 	oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
+				<p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
+					mojego miejsca zamieszkania.</p>
 				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
 					{$user['name']}<br />
 					{$user['email']}<br />
