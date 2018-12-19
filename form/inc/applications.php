@@ -22,12 +22,22 @@
     ?>
 
 <script>
-function archive(appId){
+function action(action, appId){
     $.post('/api/api.html', 
-        {action: 'archive', id: appId}).done(function() {
-            $('.archivedApps').after($('#' + appId));
-            $('#' + appId).removeClass('active');
-            $('#' + appId).addClass('archived');
+        {action: action, id: appId}).done(function() {
+            if(action == 'archived'){ // przenieś jeśli do archiwum
+                $('.archivedApps').after($('#' + appId));
+            }else{ // przenieś, jeśli wcześniej było w archiwum
+                if($('#' + appId).hasClass('status-archived')){
+                    $('.activeApps').after($('#' + appId));
+                }
+            }
+            $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-ignored status-confirmed-fined status-archived');    
+            $('#' + appId).addClass('status-' + action);
+
+            $('#' + appId + ' a.ui-state-disabled').removeClass('ui-state-disabled');
+            $('#' + appId + ' a.' + 'status-' + action).addClass('ui-state-disabled');
+
         });
 }
 </script>

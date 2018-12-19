@@ -10,7 +10,12 @@ if (is_ajax()) {
         switch($action) {
             case "getUserApplications": _getUserApplications(); break;
             case "verifyToken": _verifyToken(); break;
-            case "archive": _archive($_POST["id"]); break;
+            case "archived":
+            case "confirmed":
+            case "confirmed-waiting":
+            case "confirmed-ignored":
+            case "confirmed-fined":
+                _action($action, $_POST["id"]); break;
             default: _raiseError('Invalid action specified', 400);
         }
     }else{
@@ -62,9 +67,9 @@ function _verifyToken(){
     }
 }
 
-function _archive($id){
+function _action($action, $id){
     $app = getApplication($id);
-    $app->status = 'archived';
+    $app->status = $action;
     setApplication($id, $app);
     echo json_encode(Array("status" => "OK"));
 }

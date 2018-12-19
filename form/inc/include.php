@@ -15,6 +15,8 @@ $nsql  = new NoSQLite\NoSQLite(__DIR__ . '/../db/store.sqlite');
 $apps  = $nsql->getStore('applications');
 $users = $nsql->getStore('users');
 
+require_once(__DIR__ . '/config.php');
+
 function getApplication($applicationId){
 	global $nsql, $apps;
 	return json_decode($apps->get($applicationId));
@@ -117,42 +119,6 @@ function getUsers(){
 	global $nsql, $apps, $users;
 	return $users->getAll();
 }
-
-$categories = Array(
-	4  => "Zastawienie chodnika (mniej niż 1.5m)",
-	2  => "Mniej niż 15m od przystanku",
-	3  => "Mniej niż 10m od skrzyżowania",
-	9  => "Blokowanie ścieżki rowerowej	",
-	5  => "Mniej niż 10m od przejścia dla pieszych",
-	6  => "Parkowanie na trawniku/w parku",
-	10 => "Parkowanie za barierkami",
-	8  => "Parkowanie z dala od krawędzi jezdni",
-	//7  => "Parkowanie w na chodniku / niszczenie chodnika",
-	1  => "Parkowanie na niezgodne z oznaczeniem",
-	0 => "Inne"
-);
-
-$categories_txt = Array (
-    4  => "Pojazd zastawiał chodnik (mniej niż 1.5m).",
-	2  => "Pojazd znajdował się mniej niż 15m od przystanku.",
-    3  => "Pojazd znajdował się mniej niż 10m od skrzyżowania.",
-    9  => "Pojazd blokował ścieżkę rowerową.",
-    5  => "Pojazd znajdował się mniej niż 10m od przejścia dla pieszych.",
-    6  => "Pojazd był zaparkowany na trawniku/w parku.",
-    10 => "Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
-    8  => "Pojazd był zaparkowany z dala od krawędzi jezdni.",
-	7  => "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.", // (only for history)
-	1  => "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.",
-    0  => ""
-);
-
-$sm_addresses = Array (
-	'szczecin' => 'Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
-	'warszawa' => 'Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-	'warsaw' => 'Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa'
-);
-
-$categoriesMatrix = Array( 'a', 'b');
 
 function guidv4()
 {
@@ -392,7 +358,7 @@ function menuApplications($text = 'Zgłoszenia'){
 }
 
 function printApplication($application){
-	global $categories_txt;
+	global $categories_txt, $statuses;
 
 	$app_date = date_format(new DateTime($application->date), 'Y-m-d');
 	$app_hour = date_format(new DateTime($application->date), 'H:i');
@@ -401,53 +367,68 @@ function printApplication($application){
 	$bylam    = $sex['bylam'];
 	$swiadoma = $sex['swiadoma'];
 	$wykonalam = $sex['wykonalam'];
+	
 	$status   = $application->status;
-	$statusClass = ($status == 'archived')? 'archived': 'active';
-	switch($status) {
-		case 'archived': $statusIcon = 'cloud'; break;
-		case 'waiting': $statusIcon = 'clock'; break;
-		case 'ignored': $statusIcon = 'delete'; break;
-		case 'fine': $statusIcon = 'check'; break;
-		case 'new':
-		default: $statusIcon = 'carat-u';
-	}
-
-	/*
-	new/none:   carat-u
-	waiting:    / mail
-	ignored:    
-	mandat:     / heart
-	archived:   
-	*/
+	$statusClass = $statuses[$status][3];
+	$statusIcon  = $statuses[$status][2];
+	logger("current status id $id $status");
+	$buttons = getOptionsForApplication($application->id, $status);
 
 	echo <<<HTML
        
-	<div id="$application->id" class="application $statusClass" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-d" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
+	<div id="$application->id" class="application $statusClass status-$status" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-d" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
 		 <h3>$application->number ($app_date) {$application->address->address}</h3>
 		 <p data-role="listview" data-inset="false">
-				<p>W dniu <b>$app_date</b> roku o godzinie
-					<b>$app_hour</b> $bylam świadkiem pozostawienia
-					samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b>
-					pod adresem <b>{$application->address->address}</b>.
-					$category</p>
-				<p>{$application->userComment}</p>
-				<div id="#pics" class="ui-grid-a ui-responsive">
-					<div class="ui-block-a">
-						<a href="/zgloszenie.html?id=$application->id">
-							<img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
-						</a>
-					</div>
-					<div class="ui-block-b">
-						<a href="/zgloszenie.html?id=$application->id">
-							<img class="lazyload photo-thumbs" data-src="{$application->carImage->thumb}">
-						</a>
-					</div>
+			<p>W dniu <b>$app_date</b> roku o godzinie
+				<b>$app_hour</b> $bylam świadkiem pozostawienia
+				samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b>
+				pod adresem <b>{$application->address->address}</b>.
+				$category</p>
+			<p>{$application->userComment}</p>
+			<div id="#pics" class="ui-grid-a ui-responsive">
+				<div class="ui-block-a">
+					<a href="/zgloszenie.html?id=$application->id">
+						<img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
+					</a>
 				</div>
-			<a href="/zgloszenie.html?id=$application->id">szczegóły</a>
-			<a href="/api/download.html?appId=$application->id" target="_blank" data-ajax="false">pdf</a>
-			<a href="#" onclick="archive('$application->id')" class="archiveLink">archiwizuj</a>
+				<div class="ui-block-b">
+					<a href="/zgloszenie.html?id=$application->id">
+						<img class="lazyload photo-thumbs" data-src="{$application->carImage->thumb}">
+					</a>
+				</div>
+			</div>
+			$buttons
 		</p>
 	</div>       
+HTML;
+}
+
+function getOptionsForApplication($id, $status){
+	global $statuses;
+	$commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
+
+	$statusActions = '';
+	foreach($statuses as $key => $val){
+		if(!isset($val[3])){ // class is empty, this is a draft or ready
+			continue;
+		}
+		$txt = $val[1];
+		$icon = 'ui-icon-' . $val[2];
+		$disabled = ($key == $status)?'ui-state-disabled':'';
+		$statusActions .= <<<HTML
+			<a href="#" onclick="action('$key', '$id')" class="$commonClasses $disabled $icon status-$key">$txt</a>
+HTML;
+	}
+
+	return <<<HTML
+	<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="actions">
+	    $statusActions
+	</div>
+	<div data-role="controlgroup" data-type="horizontal" data-mini="true">
+	   	<a href="/zgloszenie.html?id=$id"class="$commonClasses ui-nodisc-icon ui-icon-eye">szczegóły</a>
+	    <a href="/api/download.html?appId=$id" target="_blank" data-ajax="false" class="$commonClasses ui-nodisc-icon ui-icon-mail">PDF</a>
+	</div>
+
 HTML;
 }
 
