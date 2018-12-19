@@ -409,11 +409,11 @@ function printApplication($application){
 		case 'ignored': $statusIcon = 'delete'; break;
 		case 'fine': $statusIcon = 'check'; break;
 		case 'new':
-		default: $statusIcon = 'carat-d';
+		default: $statusIcon = 'carat-u';
 	}
 
 	/*
-	new/none:   carat-d
+	new/none:   carat-u
 	waiting:    / mail
 	ignored:    
 	mandat:     / heart
@@ -422,7 +422,7 @@ function printApplication($application){
 
 	echo <<<HTML
        
-	<div id="$application->id" class="application $statusClass" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-u" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
+	<div id="$application->id" class="application $statusClass" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-d" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
 		 <h3>$application->number ($app_date) {$application->address->address}</h3>
 		 <p data-role="listview" data-inset="false">
 				<p>W dniu <b>$app_date</b> roku o godzinie
