@@ -403,13 +403,28 @@ function printApplication($application){
 	$wykonalam = $sex['wykonalam'];
 	$status   = $application->status;
 	$statusClass = ($status == 'archived')? 'archived': 'active';
+	switch($status) {
+		case 'archived': $statusIcon = 'cloud'; break;
+		case 'waiting': $statusIcon = 'clock'; break;
+		case 'ignored': $statusIcon = 'delete'; break;
+		case 'fine': $statusIcon = 'check'; break;
+		case 'new':
+		default: $statusIcon = 'carat-d';
+	}
+
+	/*
+	new/none:   carat-d
+	waiting:    / mail
+	ignored:    
+	mandat:     / heart
+	archived:   
+	*/
 
 	echo <<<HTML
        
-	<div id="$application->id" class="application $statusClass" data-role="collapsible" data-filtertext="{$application->address->address} $application->number
-		 $application->date {$application->carInfo->plateId} {$application->userComment} $category">
+	<div id="$application->id" class="application $statusClass" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-u" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
 		 <h3>$application->number ($app_date) {$application->address->address}</h3>
-		 <p data-role="listview" data-filtertext="Animals Cats" data-inset="false">
+		 <p data-role="listview" data-inset="false">
 				<p>W dniu <b>$app_date</b> roku o godzinie
 					<b>$app_hour</b> $bylam świadkiem pozostawienia
 					samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b>

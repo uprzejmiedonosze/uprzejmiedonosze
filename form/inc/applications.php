@@ -1,7 +1,7 @@
 <form>
     <input data-type="search" id="searchForCollapsibleSet">
 </form>
-<div data-role="collapsibleset" data-filter="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
+<div data-role="collapsibleset" data-filter="true" data-mini="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
 <div class="activeApps" />
     <?
         $applications = getUserApplications($_SESSION['user_email']);
