@@ -10,24 +10,24 @@ EXPORT               = export
 PUBLIC               = $(EXPORT)/public
 DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc
 
-CSS_FILES            = $(wildcard css/*.css)
-CSS_MINIFIED         = $(CSS_FILES:%.css=export/public/%.css)
+CSS_FILES            = $(wildcard src/css/*.css)
+CSS_MINIFIED         = $(CSS_FILES:src/%.css=export/public/%.css)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5 | cut -b 1-8)
 
-JS_FILES             = $(wildcard js/*.js)
-JS_MINIFIED          = $(JS_FILES:%.js=export/public/%.js)
+JS_FILES             = $(wildcard src/js/*.js)
+JS_MINIFIED          = $(JS_FILES:src/%.js=export/public/%.js)
 JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
 
-HTML_FILES           = $(wildcard *.html api/*.html)
-HTML_PROCESSED       = $(HTML_FILES:%.html=export/public/%.html)
+HTML_FILES           = $(wildcard src/*.html src/api/*.html)
+HTML_PROCESSED       = $(HTML_FILES:src/%.html=export/public/%.html)
 
 PHP_FILES            = $(wildcard inc/*.php)
 PHP_PROCESSED        = $(PHP_FILES:inc/%.php=export/inc/%.php)
 
-MANIFEST             = manifest.json
+MANIFEST             = src/manifest.json
 MANIFEST_PROCESSED   = $(PUBLIC)/manifest.json
 
-OTHER_FILES          = favicon.ico robots.txt img
+OTHER_FILES          = src/favicon.ico src/robots.txt src/img
 
 STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
@@ -53,8 +53,8 @@ prod: clean $(DIRS) export ## Copy files to prod server.
 export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	@cp api/*twig $(PUBLIC)/api/
-	@cp -r lib vendor *.php *uprzejmiedonosze.net-firebase-adminsdk.json $(EXPORT)/
+	@cp src/api/*twig $(PUBLIC)/api/
+	@cp -r lib vendor src/*.php src/*uprzejmiedonosze.net-firebase-adminsdk.json $(EXPORT)/
 
 minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS, processing PHP, HTML and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
@@ -65,18 +65,18 @@ process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 
 clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
-	@rm -rf $(CSS_MINIFIED) $(JS_MINIFIED) $(EXPORT)
+	@rm -rf $(EXPORT)
 
 # Generics
 
-export/public/css/%.css: css/%.css; @echo '==> Minifying $<'
+export/public/css/%.css: src/css/%.css; @echo '==> Minifying $<'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
 	else \
 		cp $< $@ ; \
 	fi;
 
-export/public/js/%.js: js/%.js; @echo '==> Minifying $<'
+export/public/js/%.js: src/js/%.js; @echo '==> Minifying $<'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type js $< > $@ ; \
 	else \
@@ -84,7 +84,7 @@ export/public/js/%.js: js/%.js; @echo '==> Minifying $<'
 	fi;
 	$(replace-inline)
 
-export/public/%.html: %.html; @echo '==> Preprocessing $<'
+export/public/%.html: src/%.html; @echo '==> Preprocessing $<'
 	$(replace)
 
 export/inc/%.php: inc/%.php; @echo '==> Preprocessing $<'
