@@ -194,33 +194,33 @@ div.application.status-archived h3 a {
 
 div.application.status-draft h3 .ui-btn-icon-left:after,
 div.application a.status-draft:after {
-	background-color: rgba(116, 99, 99, 0.3);
+	background-color: #7463634d;
 }
 div.application.status-ready h3 .ui-btn-icon-left:after,
 div.application a.status-ready:after {
-	background-color: rgba(0,0,0,.3);
+	background-color: #0000004d;
 }
 div.application.status-confirmed h3 .ui-btn-icon-left:after,
 div.application a.status-confirmed:after {
-	background-color: rgba(233,194,0,0.3);
+	background-color: #81c78499;
 }
 div.application.status-confirmed-waiting h3 .ui-btn-icon-left:after,
 div.application a.status-confirmed-waiting:after {
-	background-color: rgba(51,136,204,.3);
+	background-color: #3388cc99;
 }
 div.application.status-confirmed-sm h3 .ui-btn-icon-left:after,
 div.application a.status-confirmed-sm:after {
-	background-color: rgba(0,150,136,.3);
+	background-color: #ffc10799;
 }
 div.application.status-confirmed-fined h3 a.ui-btn-icon-left:after,
 div.application a.status-confirmed-fined:after {
-	background-color: rgba(0,156,127,.3);
+	background-color: #8bc34aee; /*#009d7e99;*/
 }
 div.application.status-confirmed-ignored h3 .ui-btn-icon-left:after,
 div.application a.status-confirmed-ignored:after {
-	background-color: rgba(221,44,0,.3);
+	background-color: #dd2c00cc;
 }
 div.application.status-archived h3 .ui-btn-icon-left:after,
 div.application a.status-archived:after {
-	background-color: rgba(0,0,0,.3);
+	background-color: #0000004C;
 }
