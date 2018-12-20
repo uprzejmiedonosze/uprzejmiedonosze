@@ -208,6 +208,10 @@ div.application.status-confirmed-waiting h3 .ui-btn-icon-left:after,
 div.application a.status-confirmed-waiting:after {
 	background-color: rgba(51,136,204,.3);
 }
+div.application.status-confirmed-sm h3 .ui-btn-icon-left:after,
+div.application a.status-confirmed-sm:after {
+	background-color: rgba(0,150,136,.3);
+}
 div.application.status-confirmed-fined h3 a.ui-btn-icon-left:after,
 div.application a.status-confirmed-fined:after {
 	background-color: rgba(0,156,127,.3);
