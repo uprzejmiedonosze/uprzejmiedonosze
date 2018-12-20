@@ -371,7 +371,6 @@ function printApplication($application){
 	$status   = $application->status;
 	$statusClass = $statuses[$status][3];
 	$statusIcon  = $statuses[$status][2];
-	logger("current status id $id $status");
 	$buttons = getOptionsForApplication($application->id, $status);
 
 	echo <<<HTML
