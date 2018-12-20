@@ -21,8 +21,8 @@ JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
 HTML_FILES           = $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       = $(HTML_FILES:src/%.html=export/public/%.html)
 
-PHP_FILES            = $(wildcard inc/*.php)
-PHP_PROCESSED        = $(PHP_FILES:inc/%.php=export/inc/%.php)
+PHP_FILES            = $(wildcard src/inc/*.php)
+PHP_PROCESSED        = $(PHP_FILES:src/inc/%.php=export/inc/%.php)
 
 MANIFEST             = src/manifest.json
 MANIFEST_PROCESSED   = $(PUBLIC)/manifest.json
@@ -87,7 +87,7 @@ export/public/js/%.js: src/js/%.js; @echo '==> Minifying $<'
 export/public/%.html: src/%.html; @echo '==> Preprocessing $<'
 	$(replace)
 
-export/inc/%.php: inc/%.php; @echo '==> Preprocessing $<'
+export/inc/%.php: src/inc/%.php; @echo '==> Preprocessing $<'
 	$(replace)
 
 $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
