@@ -297,19 +297,18 @@ function setDateTime(dateTime){
 function sendFile(fileData, id) {
 	var formData = new FormData();
 
+	formData.append('action', 'upload');
 	formData.append('image_data', fileData);
 	formData.append('pictureType', id);
 	formData.append('applicationId', $('#applicationId').val());
 
 	$.ajax({
 		type: 'POST',
-		url: '/upload.html',
+		url: '/api/api.html',
 		data: formData,
 		contentType: false,
 		processData: false,
-		success: function (data) {
-			json = $.parseJSON(data);
-
+		success: function (json) {
 			if(json.carImage) {
 				$('img#' + id + '-img').attr("src", json.carImage.thumb);
 				$('#' + id).textinput('disable');

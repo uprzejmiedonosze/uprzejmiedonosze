@@ -1,7 +1,8 @@
 <?PHP
 date_default_timezone_set('Europe/Warsaw');
 header("Content-Type: application/json; charset=UTF-8");
-require(__DIR__ . '/../../inc/include.php');
+require_once(__DIR__ . '/../../inc/include.php');
+require_once(__DIR__ . '/../../autoload.php');
 
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
@@ -17,13 +18,15 @@ if (is_ajax()) {
             case "confirmed-ignored":
             case "confirmed-fined":
                 _action($action, $_POST["id"]); break;
-            default: _raiseError('Invalid action specified', 400);
+            case "upload":
+                _upload(); break;
+            default: raiseError('Invalid action specified', 400);
         }
     }else{
-        _raiseError('No action specified', 400);
+        raiseError('No action specified', 400);
     }
 }else{
-    _raiseError('No AJAX request', 403);
+    raiseError('No AJAX request', 403);
 }
   
 function is_ajax() {
@@ -60,11 +63,11 @@ function _verifyToken(){
             ));
         }else{
             logger('api.html:_verifyToken Token not verified');
-            _raiseError("Token not verified", 401);
+            raiseError("Token not verified", 401);
         }
     }else{
         logger('api.html:_verifyToken Token not specified');
-        _raiseError("Token not specified", 400);
+        raiseError("Token not specified", 400);
     }
 }
 
@@ -75,14 +78,177 @@ function _action($action, $id){
     echo json_encode(Array("status" => "OK"));
 }
 
-function _raiseError($msg, $status){
-    logger("api.html:_raiseError $msg");
-    $error = Array(
-        "code" => $status,
-        "message" => $msg
-    );
-    http_response_code($status);
-    echo json_encode($error);
-    die();
+function _upload(){
+    global $_POST;
+    $image_bytes = explode( ',', $_POST['image_data'])[1]; 
+    $pictureType = $_POST['pictureType'];
+    $applicationId = $_POST['applicationId'];
+
+    $application = getApplication($applicationId);
+    $prefix = save_img_and_thumb($image_bytes);
+
+    if($pictureType == 'carImage'){
+        $result = get_car_info($image_bytes);
+        if(isset($result) && count($result["results"]) && $result["results"][0]["plate"]){
+            $coordinates = $result["results"][0]["coordinates"];
+            $xes = Array();
+            $yes = Array();
+            foreach($coordinates as $ley => $ojb){
+                $xes[] = $ojb->getX();
+                $yes[] = $ojb->getY();
+            }
+
+            $im = imagecreatefromjpeg(make_image_filename($prefix));
+            $plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
+            if ($plateImage !== FALSE) {
+                imagejpeg($plateImage, make_image_filename($prefix, ',p'));
+            }
+
+            $recydywa = (int)countApplicationsPerPlate($result["results"][0]["plate"]);
+
+            $output = Array(
+                "carInfo" => Array(
+                    "plateId" => $result["results"][0]["plate"],
+                    "brand" => $result["results"][0]["vehicle"]['make'][0]['name'],
+                    "plateImage" => make_image_url($prefix, ',p'),
+                    "recydywa" => $recydywa
+                ),
+                "carImage" => Array(
+                    "url" => make_image_url($prefix),
+                    "thumb" => make_image_url($prefix, ',t')
+                )
+            );
+        }else{
+            $output = Array(
+                "carImage" => Array(
+                    "url" => make_image_url($prefix),
+                    "thumb" => make_image_url($prefix, ',t')
+                )
+            );
+        }
+    }else if($pictureType == 'contextImage'){
+        $output = Array(
+            "date" => date("Y-m-d\TH:i:s"),
+            "contextImage" => Array(
+                "url" => make_image_url($prefix),
+                "thumb" => make_image_url($prefix, ',t')
+                )
+            );    
+    }else{
+        raiseError("Uknown picture type: " . $pictureType, 400);
+    }
+
+    $application = (array) array_merge((array)$application, (array)$output);
+    $application['id'] = $applicationId;
+    $application['status'] = 'draft';
+
+    setApplication($applicationId, $application);
+
+    echo json_encode($output);
+}
+
+/**
+ * https://staging.uprzejmiedonosze.net/cdn/6cab0aa0-3317-478d-97a3-31d278db5861,t.jpg
+ * https://%HOST%/cdn/$HASH$THUMB.jpg » __DIR__/../cdn/$HASH$THUMB.jpg
+ * https://%HOST%/$prefix$type.jpg » __DIR__/../$prefix$type.jpg
+ */
+
+/**
+ * Saves byte_stream to `__DIR__/../$prefix.jpg`
+ * and it's thumb to    `__DIR__/../$prefix,t.jpg`.
+ * 
+ * Returns:
+ *   $prefix
+*/
+function save_img_and_thumb($image_bytes){
+    $prefix = "cdn/" . guidv4();
+    
+    $filename  = make_image_filename($prefix);
+    $thumbname = make_image_filename($prefix, ',t');
+
+    $ifp = @fopen(make_image_filename($prefix), 'wb');
+    if($ifp === false){
+        raiseError("Can't open $filename for write", 500);
+    }
+    
+	if(fwrite($ifp, base64_decode($image_bytes)) === false){
+        raiseError("Can't write to $filename", 500);
+    }
+	fclose($ifp);
+	
+	if(!imagejpeg(resize_image($filename, 600, 600, false), $thumbname)){
+        logger("Wasn't able to write $filename as thumb to $thumbname.");
+    }
+
+	return $prefix;
+}
+
+/**
+ * Generates fill filename from given $prefix and $suffix.
+ */
+function make_image_filename($prefix, $suffix = ''){
+	return __DIR__ . "/../$prefix$suffix.jpg";
+}
+
+function make_image_url($prefix, $suffix = ''){
+    return "$prefix$suffix.jpg";
+}
+
+/**
+ * Get's car info from image.
+ * 
+ * Returns:
+ *  object
+ *  null on error
+ */
+function get_car_info($image_bytes){
+	$api_instance = new Swagger\Client\Api\DefaultApi();
+	$secret_key = "sk_aa0b80a70b2ae2268b36734a"; 
+	$country = "eu"; 
+	$recognize_vehicle = 1;
+	$state = ""; 
+	$return_image = 0; 
+	$topn = 1; 
+	$prewarp = ""; 
+
+	try {
+		return $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
+	} catch (Exception $e) {
+		logger('Exception when calling DefaultApi->recognizeBytes: ', $e->getMessage());
+		return null;
+	}
+}
+
+/**
+ * Resizes given .jpg file data_stream.
+ * 
+ * Returns:
+ *   destination image link resource
+ */
+function resize_image($file, $w, $h, $crop=FALSE) {
+	list($width, $height) = getimagesize($file);
+	$r = $width / $height;
+	if ($crop) {
+		if ($width > $height) {
+			$width = ceil($width-($width*abs($r-$w/$h)));
+		} else {
+			$height = ceil($height-($height*abs($r-$w/$h)));
+		}
+		$newwidth = $w;
+		$newheight = $h;
+	} else {
+		if ($w/$h > $r) {
+			$newwidth = $h*$r;
+			$newheight = $h;
+		} else {
+			$newheight = $w/$r;
+			$newwidth = $w;
+		}
+	}
+	$src = imagecreatefromjpeg($file);
+	$dst = imagecreatetruecolor($newwidth, $newheight);
+	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+
+	return $dst;
 }
 ?>
