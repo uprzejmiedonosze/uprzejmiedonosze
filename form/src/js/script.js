@@ -48,7 +48,7 @@ $(document).on('pageshow', function() {
 		$('#geocomplete').click(function(){
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function(position) {
-				  setAddress(position.coords.latitude, position.coords.longitude, false);
+				  setAddress(position.coords.latitude + ',' + position.coords.longitude, false);
 				});
 			  }
 		});
@@ -84,7 +84,7 @@ function initAutocomplete(trigger_change) {
 
 function fillInAddress() {
 	var place = autocomplete.getPlace();
-	setAddress(place.geometry.location.lat(), place.geometry.location.lng(), false);
+	setAddress(place.geometry.location.lat() + ',' + place.geometry.location.lng(), false);
 }
   
 function validateForm(){
@@ -119,7 +119,7 @@ function check(item, length, grandma){
 	}
 }
 
-function setAddress(lat, lng, fromPicture){
+function setAddress(latlng, fromPicture){
 	$('a#geo').buttonMarkup({ icon: "clock" });
 	$('#address').val("");
 	if(fromPicture){
@@ -133,7 +133,7 @@ function setAddress(lat, lng, fromPicture){
 	$('#latlng').val("");
 
 	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
-		+ lat + "," + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function(data){
+		+ latlng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function(data){
 			if(data.results.length){
 				formatted_address = data.results[0].formatted_address.replace(', Polska', '');
 				voivodeship = data.results[0].address_components.filter(function(e){ return e.types.indexOf('administrative_area_level_1') == 0; })[0].long_name.replace('Województwo ', '');
@@ -143,7 +143,7 @@ function setAddress(lat, lng, fromPicture){
 				$('#administrative_area_level_1').val(voivodeship);
 				$('#country').val(country);
 				$('#locality').val(city);
-				$('#latlng').val(lat + "," + lng);
+				$('#latlng').val(latlng);
 
 				$('a#geo').buttonMarkup({ icon: "check" });
 			}else{
@@ -153,11 +153,7 @@ function setAddress(lat, lng, fromPicture){
 			$('a#geo').buttonMarkup({ icon: "alert" });
 			$('#latlng').val("");		
 		});
-	if(fromPicture){
-		$('#address').attr("placeholder","Miejsce zgłoszenia");
-	}else{
-		$('#address').attr("placeholder","Adres kontaktowy");
-	}
+	$('#address').attr("placeholder","Miejsce zgłoszenia");
 }
 
 function checkFile(file, id){
@@ -259,16 +255,16 @@ function imageError(id){
 //	});
 //}
 
-function readPlateFromImage(url){
-	$.ajax({
-		type: 'POST',
-		url: 'https://us-central1-uprzejmiedonosze-1494607701827.cloudfunctions.net/readPlate',
-		data: { url: url },
-		success: function (data) {
-			$('#plateId').val(data.plate);
-		}
-	});
-}
+//function readPlateFromImage(url){
+//	$.ajax({
+//		type: 'POST',
+//		url: 'https://us-central1-uprzejmiedonosze-1494607701827.cloudfunctions.net/readPlate',
+//		data: { url: url },
+//		success: function (data) {
+//			$('#plateId').val(data.plate);
+//		}
+//	});
+//}
 
 function readGeoDataFromImage(file){
 	EXIF.getData(file, function() {
@@ -280,7 +276,7 @@ function readGeoDataFromImage(file){
 		if(lat){
 			lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
 			lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
-			setAddress(lat, lon, true);
+			setAddress(lat + ',' + lon, true);
 		}
 
 		const dateTime = EXIF.getTag(this, "DateTimeOriginal");
@@ -328,7 +324,14 @@ function sendFile(fileData, id) {
 				if(json.carInfo.recydywa && json.carInfo.recydywa > 0){
 					$('#recydywa').text("Recydywa: " + json.carInfo.recydywa + "");
 				}
-			} 
+			}
+			// trying if backend returns geo data
+			if(id == 'contextImage' && json.address){
+				// checking if the address hasn't been set yet
+				if($('#latlng').val() === ""){
+					setAddress(json.address.latlng, true);
+				}
+			}
 		},
 		error: function (data) {
 			imageError(id);
