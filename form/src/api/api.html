@@ -272,10 +272,12 @@ function resize_image($file, $w, $h, $crop=FALSE) {
  */
 function read_gps_location($file){
     if (is_file($file)) {
-        $info = exif_read_data($file);
+        $info = @exif_read_data($file);
         if (isset($info['GPSLatitude']) && isset($info['GPSLongitude']) &&
             isset($info['GPSLatitudeRef']) && isset($info['GPSLongitudeRef']) &&
             in_array($info['GPSLatitudeRef'], array('E','W','N','S')) && in_array($info['GPSLongitudeRef'], array('E','W','N','S'))) {
+            
+            logger("read_gps_location: gps data set");
 
             $GPSLatitudeRef  = strtolower(trim($info['GPSLatitudeRef']));
             $GPSLongitudeRef = strtolower(trim($info['GPSLongitudeRef']));
@@ -303,7 +305,6 @@ function read_gps_location($file){
             $GPSLongitudeRef == 'w' ? $lon *= -1 : '';
 
             return "$lat,$lon";
-            );
         }           
     }
     return false;
