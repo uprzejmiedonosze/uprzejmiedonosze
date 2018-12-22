@@ -43,7 +43,7 @@ echo <<<HTML
 				<p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
 					mojego miejsca zamieszkania.</p>
 				<p>Dokument ze zgłoszeniem dostępny jest pod adresem
-				<a href="/api/download.html?appId={$applicationId}" target="_blank" data-ajax="false">{$application->number}.pdf</a>.</p>
+				<a href="{$applicationId}.pdf" target="_blank" data-ajax="false">{$application->number}.pdf</a>.</p>
 				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
 					{$application->user->name}<br />
 					{$application->user->email}<br />

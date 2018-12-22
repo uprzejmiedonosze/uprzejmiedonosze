@@ -20,9 +20,9 @@ if(!isset($application)){
 $pdf = "$ROOT/cdn/$applicationId.pdf";
 $filename = 'Zgloszenie_' . str_replace('/', '-', $application->number) . '.pdf';
 
-if(!file_exists($pdf)){
+//if(!file_exists($pdf)){
     generate_pdf($application, $pdf);
-}
+//}
 
 header('Content-Type: application/pdf');
 header("Content-Transfer-Encoding: Binary");
@@ -55,11 +55,11 @@ function generate_pdf($application, $outp_file) {
 	file_put_contents($tex_f, ob_get_clean());
 
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
-   escapeshellarg($tex_f));
+   	escapeshellarg($tex_f));
 	chdir(sys_get_temp_dir());
 	exec($cmd, $output, $ret);
 
-   @unlink($tex_f);
+   	@unlink($tex_f);
 	@unlink($aux_f);
 	@unlink($log_f);
 	@unlink($out_f);
@@ -96,10 +96,10 @@ function guess_sm_address($application){
 
 function flatten_application($application){
 	global $ROOT, $categories_txt, $sm_addresses;
-
-	$includegraphics = '\\href{https://%HOST%/zgloszenie.html?id=' 
+	
+	$includegraphics = '\\href{https://%HOST%/ud-' 
 		. $application->id
-		. '}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
+		. '.html}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
 	$contextImage = $includegraphics . $ROOT . "/" . $application->contextImage->thumb . "}}";
 	$carImage = $includegraphics . $ROOT . "/" . $application->carImage->thumb . "}}";
 
