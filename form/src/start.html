@@ -1,6 +1,7 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 genHeader("Uprzejmie Donoszę – start", true);
+$sex = guess_sex_current_user();
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
@@ -11,9 +12,9 @@ genHeader("Uprzejmie Donoszę – start", true);
 		</div>
 		<div data-role="main" class="ui-content">
 			<p>Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach,
-			które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona
-			w wygodny sposób wykonać zgłoszenie i przekazać je bezpośrednio Straży Miejskiej.</p>
-			<p>Ma jednak kilka ograniczeń których musisz być świadomy(a):</p>
+			które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia
+			wygodne wygenerowanie zgłoszenia gotowego do przekazania do Straży Miejskiej.</p>
+			<p>Ma jednak kilka ograniczeń, których musisz być <?= $sex['swiadoma'] ?></p>
 			<div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u" data-role="collapsible">
 				<h4>Regulamin</h4>
 				<p>Wszystkie zgłoszenia w Uprzejmie Donoszę muszą być zgłoszone pod twoim
@@ -36,6 +37,24 @@ genHeader("Uprzejmie Donoszę – start", true);
 				przekazywanych nam zgłoszeń (data i godzina, miejsca, rodzaj
 				zgłoszenia).</p>
 			</div>
+			
+			<?PHP if(isIOS()): ?>
+			<div class="ui-corner-all custom-corners">
+				<div class="ui-bar ui-bar-a">
+					<h3>Uwaga dla użytkowników iOS</h3>
+				</div>
+				<div class="ui-body ui-body-a">
+					<p>Przeglądarki w systemie iOS (iPhone/iPad/iPod) nie przekazują
+					danych geolokacyjnych zawartych w zdjęciu wysyłanym do Uprzejmie
+					Donoszę. Oznacza to, że w trakcie dokonywania zgłoszenia jego adres 
+					nie zostanie automatycznie pobrany z lokalizacji zapisanej w zdjęciu
+					(a to bardzo wygodne).</p>
+					<p>Można obejść ten problem. Zdjęcia rób na swoim iPhone, wgraj je 
+					potem na komputer (OSX/Win/Linux) i dokonuj zgłoszeń już z laptopa/komputera 
+					stacjonarnego. Wszystko będzie działać jak należy.</p>
+				</div>
+			</div>
 			<p>Używając %HOST% wyrażasz zgodę na powyższy regulamin.</p>
+			<p><?PHP endif;?></p>
 		</div> <!-- main -->
 <? getFooter() ?>
