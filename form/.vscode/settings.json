@@ -14,5 +14,6 @@
         "**/vendor": true,
         "**/functions-samples": true,
         "**/tools": true
-    }
+    },
+    "git.ignoreLimitWarning": true
 }
