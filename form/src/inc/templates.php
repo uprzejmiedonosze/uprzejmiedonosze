@@ -98,7 +98,7 @@ function getFooter($mapsInitFunc = false){
 
 	echo <<<HTML
 			<div data-role="footer">
-				<h4>&copy; Szymon Nieradka</h4>
+				<h4>&copy; Uprzejmie Donoszę</h4>
 			</div>
 		</div> <! -- page -->
 		<script src="js/script.js?v=%JS_HASH%"></script>
