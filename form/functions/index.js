@@ -9,8 +9,8 @@ const path = require('path');
 const sharp = require('sharp');
 const formidable = require('formidable');
 
-const THUMB_MAX_WIDTH = 350;
-const THUMB_MAX_HEIGHT = 350;
+const THUMB_MAX_WIDTH = 600;
+const THUMB_MAX_HEIGHT = 600;
 
 exports.generateThumbnail = functions.storage.object().onChange(event => {
   const object = event.data; 
@@ -147,13 +147,11 @@ exports.upload = functions.https.onRequest((req, res) => {
   });
 });
 
-
-
 exports.uploadFile = functions.https.onRequest((req, res) => {
   cors(req, res, () => {
     var form = new formidable.IncomingForm();
 
-    form.parse(req, function (err, fields, files) {
+    form.parse(req, (err, fields, files) => {
       if (err) {
         console.error(err);
         return res.status(500).send(err);
@@ -175,12 +173,18 @@ exports.uploadFile = functions.https.onRequest((req, res) => {
         metadata: metadata,
         public: true,
         validation: 'md5'
-      }, function(err) {  
+      }, (err) => {  
         if (err) { 
-            //return res.status(500).send(err);
+            return res.status(500).send(err);
         }
-        //return res.status(200).send('Uploaded');
+        return res.status(200).send('Uploaded');
       });
     });
+  });
+});
+
+exports.getApplication = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    return res.status(200).send('done');
   });
 });
