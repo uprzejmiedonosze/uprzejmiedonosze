@@ -12,21 +12,25 @@ $user = getCurrentUser();
 
 ?>
 <body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-        <h1>Zarejestruj się</h1>
-        <a id="register-submit" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Potwierdź</a>
-		</div>
+    <div data-role="page" class="container-fluid" data-theme="a">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <h1>Zarejestruj się</h1>
+            <a id="register-submit" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Potwierdź</a>
+        </div>
 
-		<div data-role="main" class="ui-content">
-            <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres email oraz adres korespondencyjny. Jest to minimalny
-            zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
+        <div data-role="main" class="ui-content">
+            <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres email oraz adres korespondencyjny.
+                Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
             <form action="/register-ok.html?next=<?=$signInSuccessUrl?>" id="register-form" method="post" data-ajax="false">
                 <label for="name" class="section">Twoje dane</label>
-                <input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko" data-inline="true" value="<?=$user['data']['name']?>">
-                <input disabled type="email" required maxlength="30" id="email" name="email" placeholder="Twój email" data-inline="true" value="<?=$user['data']['email']?>">
-                <input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)" data-inline="true" value="<?=$user['data']['msisdn']?>">
-                <input type="text" maxlength="70" required id="address" name="address" placeholder="Adres kontaktowy" data-inline="true" value="<?=$user['data']['address']?>">
+                <input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko"
+                    data-inline="true" value="<?=$user['data']['name']?>">
+                <input disabled type="email" required maxlength="30" id="email" name="email" placeholder="Twój email"
+                    data-inline="true" value="<?=$user['data']['email']?>">
+                <input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)"
+                    data-inline="true" value="<?=$user['data']['msisdn']?>">
+                <input type="text" maxlength="70" required id="address" name="address" placeholder="Adres korespondencyjny"
+                    data-inline="true" value="<?=$user['data']['address']?>">
             </form>
         </div> <!-- main -->
 <? getFooter('initAutocompleteOnRegister') ?>
