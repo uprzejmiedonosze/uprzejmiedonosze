@@ -109,6 +109,8 @@ function flatten_application($application){
 	$sm = guess_sm_address($application);
 	$sex = guess_sex($application);
 
+	$msisdn = (trim($application->user->msisdn) === "")?"": "Tel: {$application->user->msisdn}";
+
 	$data = Array(
 		'app' => Array(
 			'contextImage' => $contextImage,
