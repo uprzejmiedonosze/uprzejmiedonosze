@@ -224,3 +224,17 @@ div.application.status-archived h3 .ui-btn-icon-left:after,
 div.application a.status-archived:after {
 	background-color: #0000004C;
 }
+
+.przepisy .ui-block-a {
+	float: left;
+	width: 25%;
+	padding: 1em;
+	max-width: 160px;
+}
+.przepisy .ui-block-a img {
+	max-width: 100%;
+}
+.przepisy .ui-block-b {
+	float: left;
+	width: 75%;
+}
