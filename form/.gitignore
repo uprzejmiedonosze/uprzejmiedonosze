@@ -11,3 +11,4 @@ db/*
 vendor/*
 vendor/**
 export/**
+.branch-env

@@ -33,6 +33,10 @@ STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
 HOST                 = $(STAGING_HOST)
 
+BRANCH_ENV           = .branch-env
+GIT_BRANCH           = $(shell git rev-parse --abbrev-ref HEAD)
+LAST_RUN             = $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
+
 .DEFAULT_GOAL := help
 
 .PHONY: help clean
@@ -52,6 +56,8 @@ prod: clean $(DIRS) export ## Copy files to prod server.
 
 export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
+	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
+	-@test "$(LAST_RUN)" != "clean" -a "$(LAST_RUN)" != "$(GIT_BRANCH)|$(HOST)" && echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." && exit 1
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp src/api/*twig $(PUBLIC)/api/
 	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json $(EXPORT)/
@@ -66,6 +72,7 @@ process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
 	@rm -rf $(EXPORT)
+	@rm -f $(BRANCH_ENV)
 
 # Generics
 
