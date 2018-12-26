@@ -4,6 +4,11 @@ date_default_timezone_set('Europe/Warsaw');
 require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 
+if(!isAdmin()){
+	http_response_code(404);
+	die();
+}
+
 genHeader("Uprzejmie Donoszę – Wszystkie zgłoszenia", true);
 
 ?>
