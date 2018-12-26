@@ -45,7 +45,7 @@ HTML;
 		<meta property="og:image" content="https://%HOST%/img/uprzejmiedonosze.png"/>
 		<meta property="og:title" content="$title"/>
 		<meta property="og:description" content="Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej."/>
-		<meta property="og:url" content="https://$uri"/>
+		<meta property="og:url" content="$uri"/>
 		<meta property="og:locale" content="pl_PL" />
 		<meta property="og:type" content="website" />
 
