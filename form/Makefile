@@ -54,7 +54,7 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp src/api/*twig $(PUBLIC)/api/
-	@cp -r lib vendor src/*.php src/*uprzejmiedonosze.net-firebase-adminsdk.json $(EXPORT)/
+	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json $(EXPORT)/
 
 minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS, processing PHP, HTML and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
