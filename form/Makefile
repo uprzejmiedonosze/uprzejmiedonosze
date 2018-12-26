@@ -56,8 +56,8 @@ prod: clean $(DIRS) export ## Copy files to prod server.
 
 export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
+	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" || ( echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." && exit 1 )
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
-	-@test "$(LAST_RUN)" != "clean" -a "$(LAST_RUN)" != "$(GIT_BRANCH)|$(HOST)" && echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." && exit 1
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp src/api/*twig $(PUBLIC)/api/
 	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json $(EXPORT)/
