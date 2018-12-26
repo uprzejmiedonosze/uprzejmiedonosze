@@ -147,7 +147,7 @@ function menuApplications($text = 'Zgłoszenia'){
 	echo '<a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bullets">' . $text . '</a>';
 }
 
-function printApplication($application){
+function printApplication($application, $printActions = true){
 	global $categories_txt, $statuses;
 	$commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
 	
@@ -162,7 +162,7 @@ function printApplication($application){
 	$status   = $application->status;
 	$statusClass = $statuses[$status][3];
 	$statusIcon  = $statuses[$status][2];
-	$buttons = getOptionsForApplication($application->id, $status);
+	$buttons = ($printActions)? getOptionsForApplication($application->id, $status): "";
 
 	echo <<<HTML
        
