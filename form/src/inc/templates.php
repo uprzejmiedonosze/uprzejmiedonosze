@@ -1,6 +1,8 @@
 <?PHP 
 
-function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = false){
+function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = false,
+	$image = 'img/uprzejmiedonosze.png',
+	$description = 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.'){
 	$authcode = "";
 	if($auth){
 		checkIfLogged();
@@ -15,9 +17,9 @@ HTML;
 
 	$firebaseConfig = getFirebaseConfig();
 	if($auth){
-		$uri = "https://%HOST%" . $_SERVER['REQUEST_URI'];
-	}else{
 		$uri = "https://%HOST%";
+	}else{
+		$uri = "https://%HOST%" . $_SERVER['REQUEST_URI'];
 	}
 
 	echo <<<HTML
@@ -42,9 +44,9 @@ HTML;
 		<link rel="manifest" href="/manifest.json">
 		
 		<meta name="theme-color" content="#009C7F">
-		<meta property="og:image" content="https://%HOST%/img/uprzejmiedonosze.png"/>
+		<meta property="og:image" content="https://%HOST%/$image"/>
 		<meta property="og:title" content="$title"/>
-		<meta property="og:description" content="Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej."/>
+		<meta property="og:description" content="$description"/>
 		<meta property="og:url" content="$uri"/>
 		<meta property="og:locale" content="pl_PL" />
 		<meta property="og:type" content="website" />
@@ -52,10 +54,10 @@ HTML;
 		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 		<link rel="stylesheet" href="css/style.css?v=%CSS_HASH%">
 
-		<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-		<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+		<script src="https://www.gstatic.com/firebasejs//5.7.0/firebase.js"></script>
 		$firebaseConfig
 		$authcode
 	</head>
