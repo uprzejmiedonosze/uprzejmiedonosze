@@ -10,8 +10,8 @@ function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = fal
 			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
 		}
 		$authcode = <<<HTML
-			<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
-			<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+			<script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+			<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
 HTML;
 	}
 
@@ -57,7 +57,8 @@ HTML;
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
-		<script src="https://www.gstatic.com/firebasejs//5.7.0/firebase.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-auth.js"></script>
 		$firebaseConfig
 		$authcode
 	</head>
