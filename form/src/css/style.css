@@ -177,7 +177,7 @@ a[rel~="external"]{
 }
 
 label a {
-	font-weight: 200 !important;
+	font-weight: 400 !important;
 	font-size: 70%;
 	text-transform: uppercase;
 }

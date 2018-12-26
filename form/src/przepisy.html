@@ -5,6 +5,13 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 <body class="index">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 		</div>
+<? if(isset($_GET['dialog'])): ?>
+	<div data-role="page" class="container-fluid" data-theme="a" data-dialog="true">
+		<div data-role="header" data-position="fixed" data-tap-toggle="false">
+			<h1>Przepisy [work in progress]</h1>
+			<? menuBack(); ?>
+		</div>
+<? else: ?>
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<? menuMain(); ?>
@@ -16,6 +23,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 				menuStart();
 			} ?>
 		</div>
+<? endif; ?>
 		<div data-role="main" class="ui-content przepisy">
 			<h2>Można, czy nie można?</h2>
 			<p>Poza najczęstszym <i>"ja tylko na chwilę"</i>, wiele razy spotkasz się
@@ -24,6 +32,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 				korzystając z Uprzejmie Donoszę musisz znać podstawowe regulacje prawne
 				organizujące parkowanie pojazdów w Polsce.
 			</p>
+		
 			<div class="ui-corner-all custom-corners">
 				<div class="ui-bar ui-bar-a">
 					<h3>Znaki drogowe</h3>
@@ -49,11 +58,6 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/t30i.gif" />
 						</div>
 						<div class="ui-block-b">
-							<p>W miastach, w zdecydowanej większości przypadków miejsca do parkowania
-								są wyznaczone znakami (poziomymi i/lub pionowymi). W takiej sytuacji
-								wszelkie dyskusje n/t <i>mitycznego 1.5m</i> czy sposobu umiejscowienia
-								samochodu na chodniku są krótkie. Po prostu wolno parkować wyłącznie
-								w sposób wskazany znakami.</p>
 							<p>Znak D-18 (parking) najczęściej występuje w połączeniu z tabliczką T-30,
 								która precyzyjnie pokazuje jak należy ustawić pojazd względem krawędzi
 								jezdni.</p>
@@ -90,11 +94,12 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/b36.png" />
 						</div>
 						<div class="ui-block-b">
-							opis
+							(w trakcie uzupełniania)
 						</div>
 					</div>
 				</div>
 			</div>
+		
 			<div class="ui-corner-all custom-corners">
 				<div class="ui-bar ui-bar-a">
 					<h3>Zasady ogólne</h3>
@@ -116,6 +121,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 					<p>Co jednak jeśli nie ma znaków? Niestety w Polsce parkowanie na chodniku jest, dozwolone
 						(o czym wiedzą wszyscy), ale obwarowane licznymi (sensownymi) ograniczeniami.
 					</p>
+		
 					<h4>SUVy</h4>
 					<p>Zacznijmy od najmniej znanego ograniczenia. Na chodniku (wszystko jedno czy są
 						na nim wyznaczone miejsca znakami poziomymi lub pinowymi, czy nie) mogą parkować
@@ -156,6 +162,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/2.jpg" />
 						</div>
 						<div class="ui-block-b">
+							<p>(w trakcie uzupełniania)</p>
 						</div>
 					</div>
 		
@@ -165,6 +172,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/3.jpg" />
 						</div>
 						<div class="ui-block-b">
+							<p>(w trakcie uzupełniania)</p>
 						</div>
 					</div>
 		
@@ -174,6 +182,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/9.jpg" />
 						</div>
 						<div class="ui-block-b">
+							<p>(w trakcie uzupełniania)</p>
 						</div>
 					</div>
 		
@@ -183,6 +192,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/5.jpg" />
 						</div>
 						<div class="ui-block-b">
+							<p>(w trakcie uzupełniania)</p>
 						</div>
 					</div>
 		
@@ -192,6 +202,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/6.jpg" />
 						</div>
 						<div class="ui-block-b">
+							<p>(w trakcie uzupełniania)</p>
 						</div>
 					</div>
 		
@@ -201,6 +212,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<img src="/img/10.jpg" />
 						</div>
 						<div class="ui-block-b">
+							<p>(w trakcie uzupełniania)</p>
 						</div>
 					</div>
 		
@@ -218,13 +230,16 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 						</div>
 					</div>
 				</div>
-				<div class="ui-corner-all custom-corners">
-					<div class="ui-bar ui-bar-a">
-						<h3>Podstawa prawna</h3>
-					</div>
-					<div class="ui-body ui-body-a">
-						<h3>Kodeks drogowy</h3>
-						<p>Wyciąg z Prawa o ruchu drogowym, dział II (ruch drogowy), rozdział 5 (porządek i bezpieczeństwo ruchu na drogach:</a>
+			</div>
+		
+			<div class="ui-corner-all custom-corners">
+				<div class="ui-bar ui-bar-a">
+					<h3>Podstawa prawna</h3>
+				</div>
+		
+				<div class="ui-body ui-body-a">
+					<h3>Kodeks drogowy</h3>
+					<p>Wyciąg z Prawa o ruchu drogowym, dział II (ruch drogowy), rozdział 5 (porządek i bezpieczeństwo ruchu na drogach:</a>
 						<h4>Art. 46.</h4>
 						<ol>
 							<li>Zatrzymanie i postój pojazdu są dozwolone tylko w miejscu i w warunkach, w których jest on z dostatecznej
@@ -232,7 +247,8 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 								utrudnienia.</li>
 							<li>Kierujący pojazdem, zatrzymując pojazd na jezdni, jest obowiązany ustawić go jak najbliżej jej krawędzi oraz
 								równolegle do niej.</li>
-							<li>W czasie postoju na drodze poza obszarem zabudowanym pojazd powinien znajdować się, jeżeli to tylko możliwe, poza
+							<li>W czasie postoju na drodze poza obszarem zabudowanym pojazd powinien znajdować się, jeżeli to tylko możliwe,
+								poza
 								jezdnią.</li>
 							<li>Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.</li>
 							<li>(pominięty)</li>
@@ -243,7 +259,8 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 								dopuszczalnej masie całkowitej nie przekraczającej 2,5 t, pod warunkiem, że:</li>
 							<ol>
 								<li>na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju,</li>
-								<li>szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5 m,</li>
+								<li>szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5
+									m,</li>
 								<li>pojazd umieszczony przednią osią na chodniku nie tamuje ruchu pojazdów na jezdni.</li>
 							</ol>
 							<li>Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na chodniku przy
@@ -253,7 +270,8 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 						</ol>
 						<h4>Art. 48.</h4>
 						<ol>
-							<li>Pojazd może być usunięty z drogi na koszt właściciela, jeżeli pozostawiono go w miejscu, gdzie jest to zabronione
+							<li>Pojazd może być usunięty z drogi na koszt właściciela, jeżeli pozostawiono go w miejscu, gdzie jest to
+								zabronione
 								i utrudnia ruch lub zagraża jego bezpieczeństwu.</li>
 							<li>Pojazd może być unieruchomiony na koszt właściciela przez zastosowanie urządzenia technicznego do blokady kół,
 								jeżeli pozostawiono go w miejscu, gdzie jest to zabronione, lecz nie utrudnia ruchu lub nie zagraża jego
@@ -278,24 +296,31 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 								<li>na pasie między jezdniami,</li>
 								<li>w odległości mniejszej niż 15 m od słupka lub tablicy oznaczającej przystanek, a na przystanku z zatoką - na
 									całej jej długości,</li>
-								<li>w odległości mniejszej niż 15 m od punktów krańcowych wysepki, jeżeli jezdnia z prawej jej strony ma tylko jeden
+								<li>w odległości mniejszej niż 15 m od punktów krańcowych wysepki, jeżeli jezdnia z prawej jej strony ma tylko
+									jeden
 									pas ruchu,</li>
 								<li>na drodze (ścieżce) dla rowerów.</li>
 							</ol>
 							<li>Zabrania się postoju:</li>
 							<ol>
-								<li>w miejscu utrudniającym wjazd lub wyjazd, w szczególności do i z bramy, garażu, parkingu lub wnęki postojowej,</li>
+								<li>w miejscu utrudniającym wjazd lub wyjazd, w szczególności do i z bramy, garażu, parkingu lub wnęki
+									postojowej,</li>
 								<li>w miejscu utrudniającym dostęp do innego prawidłowo zaparkowanego pojazdu lub wyjazd tego pojazdu,</li>
 								<li>przed i za przejazdem kolejowym, po obu stronach drogi, na odcinku od przejazdu kolejowego do słupka
 									wskaźnikowego z jedną kreską,</li>
 								<li>w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu,</li>
-								<li>na obszarze zabudowanym, pojazdu lub zespołu pojazdów o dopuszczalnej masie całkowitej przekraczającej 16 t lub
+								<li>na obszarze zabudowanym, pojazdu lub zespołu pojazdów o dopuszczalnej masie całkowitej przekraczającej 16 t
+									lub
 									o długości przekraczającej 12 m, poza wyznaczonymi w tym celu parkingami.</li>
 							</ol>
 							<li>(pominięty)</li>
 							<li>(pominięty)</li>
 						</ol>
-					</div>
 				</div>
-			</div> <!-- main -->
-<? getFooter() ?>
+			</div>
+		</div> <!-- main -->
+<?
+if(!isset($_GET['dialog'])){
+	getFooter();
+}
+?>
