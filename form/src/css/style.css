@@ -156,7 +156,7 @@ sup {
 .ui-content .ui-listview, .ui-panel-inner>.ui-listview{
 	margin: 0em;
 }
-p > a {
+p > a, li > a {
 	text-decoration: none;
 	color: #009C7F!important;
 	font-weight: normal!important;
