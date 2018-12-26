@@ -3,85 +3,85 @@ require_once(__DIR__ . '/../inc/include.php');
 genHeader();
 ?>
 <body class="index">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-		</div>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false"></div>
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<h1>Uprzejmie Donoszę</h1>
 			<?PHP
-			if(hasApps()) {
-				menuApplications();
-			} else { 
-				menuStart();
-			} ?>
+			if(hasApps()) { menuApplications(); }
+			else { menuStart();}
+			?>
 		</div>
 		<div data-role="main" class="ui-content">
 			<h2>O co chodzi?</h2>
 			<p>Każdy z nas chce swobodnie i bezpiecznie poruszać się po
-			mieście. Niestety nie zawsze jest to możliwe. Zbyt
-			często jako piesi zmuszeni jesteśmy do przeciskania się, chodzenia
-			gęsiego, omijania, wkraczania na jednię zza zaparkowanych pojazdów, a
-			nawet ustępowania jeżdżącym po chodnikach samochodom.</p>
+				mieście. Niestety nie zawsze jest to możliwe. Zbyt
+				często jako piesi zmuszeni jesteśmy do przeciskania się, chodzenia
+				gęsiego, omijania, wkraczania na jednię zza zaparkowanych pojazdów, a
+				nawet ustępowania jeżdżącym po chodnikach samochodom.</p>
 			<p>Próbowałaś/eś dzwonić do Straży Miejskiej w swoim mieście? Wiemy
-			jak to działa. Pracownicy SM odwiedzają miejsce zgłoszenia średnio po
-			dziewięciu godzinach i <i>"nie stwierdzają naruszenia"</i> (dane na
-			podstawie badania <a rel="external"
-				href="https://web.facebook.com/miastojestnasze">Miasto jest
-				nasze</a>). Dokładnie taką samą skuteczność mają aplikacje miejskie
-			w rodzaju warszawskiej <a rel="external" href="https://warszawa19115.pl/">19115</a> czy 
-			szczecińskiej aplikacji <a rel="external" href="https://alertszczecin.pl/alert2a">Alert
-				Szczecin</a>.</p>
-			
+				jak to działa. Pracownicy SM odwiedzają miejsce zgłoszenia średnio po
+				dziewięciu godzinach i <i>"nie stwierdzają naruszenia"</i> (dane na
+				podstawie badania <a rel="external" href="https://web.facebook.com/miastojestnasze">Miasto jest
+					nasze</a>). Dokładnie taką samą skuteczność mają aplikacje miejskie
+				w rodzaju warszawskiej <a rel="external" href="https://warszawa19115.pl/">19115</a> czy
+				szczecińskiej aplikacji <a rel="external" href="https://alertszczecin.pl/alert2a">Alert
+					Szczecin</a>.</p>
+		
 			<a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
-
+		
 			<h3>Czy to wina Straży Miejskiej?</h3>
 			<p>Najwygodniej jest tak stwierdzić, tylko niewiele to daje. SM to
-			najczęściej słabo dotowana służba, z dużymi brakami kadrowymi.
-			Pracownicy SM są przeciążeni bardzo niewdzięczną pracą. Zwróć
-			uwagę, że dobrego słowa o nich nie powie ani osoba zgłaszająca
-			naruszenia, ani ukarany.</p>
+				najczęściej słabo dotowana służba, z dużymi brakami kadrowymi.
+				Pracownicy SM są przeciążeni bardzo niewdzięczną pracą. Zwróć
+				uwagę, że dobrego słowa o nich nie powie ani osoba zgłaszająca
+				naruszenia, ani ukarany.</p>
 			<h3>Czy coś można z tym zrobić?</h3>
-			<p>Na początek trochę historii. W 2015 w Szczecinie z inicjatywy samozwańczego 
-			<a rel="external" href="https://web.facebook.com/rzecznikpieszych">Rzecznika Pieszych w Szczecinie</a>
-			i kawiarni <a rel="external" href="https://web.facebook.com/stojaki.szczecin">Stojaki</a>, powstała akcja
-			Rób to dobrze. Była to społeczna akcja mandatowa.</p>
-
-			<p>Dowiedz się więcej czytając historię Rób to Dobrze.</p>
+			<p>Na początek trochę historii. W 2015 w Szczecinie z inicjatywy samozwańczego
+				<a rel="external" href="https://web.facebook.com/rzecznikpieszych">Rzecznika Pieszych w Szczecinie</a>
+				i kawiarni <a rel="external" href="https://web.facebook.com/stojaki.szczecin">Stojaki</a>, powstała akcja
+				Rób to dobrze. Była to społeczna akcja mandatowa.</p>
+			<p>Dowiedz się więcej czytając historię <a href="robtodobrze.html">Rób to Dobrze</a>.</p>
 			<fieldset class="ui-grid-b">
 				<div class="ui-block-a"><a href="robtodobrze.html"><img data-src="img/robtodobrze-s.jpg" class="lazyload one-third" /></a></div>
 				<div class="ui-block-b"><a href="robtodobrze.html"><img data-src="img/sm-tvn24-s.jpg" class="lazyload one-third" /></a></div>
 				<div class="ui-block-c"><a href="robtodobrze.html"><img data-src="img/robtodobrze-radni-s.jpg" class="lazyload one-third" /></a></div>
 			</fieldset>
 			<p>Ta akcja wiele nas nauczyła. Przede wszystkim dowiedzieliśmy się, że takie działania
-			trafiają do niewielu. A na pewno nie trafiają do osób nagminnie łamiących przepisy.
-			Ale dowiedzieliśmy się także, że możliwe jest skutecznie zgłoszenie mandatu,
-			wyłącznie na podstawie zdjęcia przekazanego przez mieszkańca miasta. Kluczowa
-			dla Straży Miejskiej jest jakość tych zgłoszeń.</p>
+				trafiają do niewielu. A na pewno nie trafiają do osób nagminnie łamiących przepisy.
+				Ale dowiedzieliśmy się także, że możliwe jest skutecznie zgłoszenie mandatu,
+				wyłącznie na podstawie zdjęcia przekazanego przez mieszkańca miasta. Kluczowa
+				dla Straży Miejskiej jest jakość tych zgłoszeń.</p>
+		
 			<h3>Czym ma być Uprzejmie Donoszę?</h3>
 			<p>Uprzejmie Donoszę ma być ogólnopolskim rozwiązaniem, pomagającym mieszkańcom
-			w nierównej walce z recydywistami parkowania.</p>
+				w nierównej walce z recydywistami parkowania.</p>
 			<p>W założeniu wystarczy zrobić dwa zdjęcia, sprawdzić automatycznie pobrany adres
-			i numer rejestracyjny oraz określić rodzaj naruszenia. Tylko tyle. Straż Miejska
-			nie musi odwiedzać tego miejsca żeby stwierdzić to naruszenie naocznie. Dowód
-			ze zdjęcia wraz twoim oświadczeniem jest wystarczający.</p>
+				i numer rejestracyjny oraz określić rodzaj naruszenia. Tylko tyle. Straż Miejska
+				nie musi odwiedzać tego miejsca żeby stwierdzić to naruszenie naocznie. Dowód
+				ze zdjęcia wraz twoim oświadczeniem jest wystarczający.</p>
 			<p>Zobacz, jak proste to może być:</p>
 			<fieldset class="ui-grid-a">
 				<div class="ui-block-a"><img data-src="img/przyklad-1.jpg" class="lazyload one-third" /></div>
 				<div class="ui-block-b"><img data-src="img/przyklad-2.jpg" class="lazyload one-third" /></div>
 			</fieldset>
+		
 			<h3>Co jeśli kierowca nie przyjmie mandatu?</h3>
-			<p>Wtedy sprawa trafia do sądu a Ty jesteś wezwany na świadka. Sąd dysponuje zdaniem kierowcy 
-			kontra twojemu zdaniu wraz z materiałem dowodowym (czyli zrobionymi przez Ciebie zdjęciami).</p>
+			<p>Wtedy sprawa trafia do sądu a Ty jesteś wezwany na świadka. Sąd dysponuje zdaniem kierowcy
+				kontra twojemu zdaniu wraz z materiałem dowodowym (czyli zrobionymi przez Ciebie zdjęciami).</p>
 			<p>OK, nie jest to przyjemne. Ale w założeniu nie jest to aplikacja dla szeryfów, którzy
-			w piętnaście minut wyślą anonimowo pięćdziesiąt zgłoszeń. Używanie tego rozwiązania
-			będzie wiązało się z opisanymi powyżej obowiązkami.</p>
+				w piętnaście minut wyślą anonimowo pięćdziesiąt zgłoszeń. Używanie tego rozwiązania
+				będzie wiązało się z opisanymi powyżej obowiązkami.</p>
+		
 			<h3>Czy to już działa</h3>
 			<p>Nie. jeszcze nie. Na razie jest tylko wersja demo.</p>
 			<p>Mimo tego Uprzejmie Donoszę może być bardzo przydatne w generowaniu zgłoszeń do Straży
-			Miejskiej. Sam proces kreowania gotowego zgłoszenia w formie pliku PDF na podstawie dwóch
-			zdjęć działa i jest całkiem nieźle przetestowany.<p>
+				Miejskiej. Sam proces kreowania gotowego zgłoszenia w formie pliku PDF na podstawie dwóch
+				zdjęć działa i jest całkiem nieźle przetestowany.</p>
+		
 			<h3>OK, chciał(a)bym pomóc</h3>
 			<p>Super! Przeczytaj więcej o <a href="projekt.html">stanie projektu i jak można pomóc</a>.</p>
+		
 			<h3>Historia zmian</h3>
 			<p>Zobacz o <a href="changelog.html">historię zmian</a>.</p>
 		</div> <!-- main -->
