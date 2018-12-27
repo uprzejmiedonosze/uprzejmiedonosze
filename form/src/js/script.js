@@ -223,7 +223,6 @@ function processFile(dataURL, fileType, id) {
 
 		dataURL = canvas.toDataURL(fileType);
 		sendFile(dataURL, id);
-		//sendFileToFirebase(dataURL, id);
 	};
 
 	image.onerror = function () {
@@ -235,36 +234,6 @@ function imageError(id){
 	$('img#' + id + '-img').attr("src", 'img/camera.png');
 	$('#' + id).textinput('enable');
 }
-
-//function sendFileToFirebase(data, id){
-//	applicationId = $('#applicationId').val();
-//	imageName = 'images/' + applicationId + '-' + id +'.jpg';
-//	image = firebase.storage().ref().child(imageName);
-//	image.putString(data, 'data_url', {contentType: 'image/jpg'}).then(function(snapshot) {
-//		image.getDownloadURL().then(function(url) {
-//			$('img#' + id + '-img').attr("src", url);
-//			$('#' + id).textinput('disable');
-//
-//			if(id == 'carImage'){
-//				readPlateFromImage(url);
-//			}
-//
-//		}).catch(function(error) {
-//			imageError(id);
-//		});
-//	});
-//}
-
-//function readPlateFromImage(url){
-//	$.ajax({
-//		type: 'POST',
-//		url: 'https://us-central1-uprzejmiedonosze-1494607701827.cloudfunctions.net/readPlate',
-//		data: { url: url },
-//		success: function (data) {
-//			$('#plateId').val(data.plate);
-//		}
-//	});
-//}
 
 function readGeoDataFromImage(file){
 	EXIF.getData(file, function() {
