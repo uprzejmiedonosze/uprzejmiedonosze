@@ -51,6 +51,7 @@ staging: $(DIRS) export ## Copy files to staging server.
 prod: HOST := $(PROD_HOST)
 prod: clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
+	@git tag -a `date +%Y-%m-%d_%H.%M.%S`
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 	@make clean
 
