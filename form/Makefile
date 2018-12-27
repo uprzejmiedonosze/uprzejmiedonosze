@@ -36,6 +36,7 @@ HOST                 = $(STAGING_HOST)
 BRANCH_ENV           = .branch-env
 GIT_BRANCH           = $(shell git rev-parse --abbrev-ref HEAD)
 LAST_RUN             = $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
+TAG_NAME             = $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
 
 .DEFAULT_GOAL := help
 
@@ -51,7 +52,8 @@ staging: $(DIRS) export ## Copy files to staging server.
 prod: HOST := $(PROD_HOST)
 prod: clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
-	@git tag -a prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`
+	@git tag -a $(TAG_NAME)
+	@git push origin $(TAG_NAME)
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 	@make clean
 
