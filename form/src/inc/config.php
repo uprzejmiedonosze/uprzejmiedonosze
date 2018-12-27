@@ -1,9 +1,9 @@
 <?PHP 
 
 $categories = Array(
-	7  => ["Niezastosowanie się do znaków poziomych",
-		"Pojazd był zaparkowany w sposób niezgodny z oznaczeniem poziomym.",
-		"Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi. Jeśli na danym obszarze, miejsca do parkowania są wyznaczone za pomocą znaków poziomych, to kierowców obowiązują właśnie te znaki. Nie ma żadnego znaczenia, czy na chodniku zostało 1,5m albo czyczy do przejścia dla pieszych pozostało 8 czy 10 metrów."],
+	7  => ["Niezastosowanie się do znaków",
+		"Pojazd był zaparkowany w sposób niezgodny z oznaczeniem poziomym lub pionowym.",
+		"Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi. Jeśli na danym obszarze, miejsca do parkowania są wyznaczone za pomocą znaków poziomych lub pionowych, to kierowców obowiązują właśnie te znaki. Nie ma żadnego znaczenia, czy na chodniku zostało 1,5m albo czyczy do przejścia dla pieszych pozostało 8 czy 10 metrów."],
 	9  => ["Blokowanie ścieżki rowerowej",
 		"Pojazd blokował drogę dla rowerów.",
 		"Zabrania się zatrzymania pojazdu na drodze (ścieżce) dla rowerów."],
