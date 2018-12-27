@@ -43,7 +43,7 @@ $(document).on('pageshow', function() {
 
 	}
 
-	if($("body.register").length){
+	if($("#register-submit").length){
 		$('#name').on('change', function(){
 			$('#name').removeClass('error');
 		});
