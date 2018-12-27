@@ -74,28 +74,8 @@ function generate_pdf($application, $outp_file) {
 	@unlink($f);
 }
 
-function guess_sm_address($application){
-	global $sm_addresses;
-
-	$sm = '(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)';
-	$city = trim(strtolower($application->address->city));
-
-	if(array_key_exists($city, $sm_addresses)){
-		$sm = $sm_addresses[strtolower($application->address->city)];
-	}else{
-		$address = trim(strtolower($application->address->address));
-		foreach($sm_addresses as $c => $a){
-			if (strpos($address, $c) !== false){
-				$sm = $a;
-				break;
-			}
-		}
-	}
-	return $sm;
-}
-
 function flatten_application($application){
-	global $ROOT, $categories, $sm_addresses;
+	global $ROOT, $categories;
 	
 	$includegraphics = '\\href{https://%HOST%/ud-' 
 		. $application->id
@@ -130,7 +110,7 @@ function flatten_application($application){
     		'user_email' => "Email: {$application->user->email}",
 			'number' => $application->number,
 			'city' => $application->address->city,
-			'sm' => $sm
+			'sm' => $sm[0]
 		)
 	);
 

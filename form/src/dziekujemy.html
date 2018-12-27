@@ -132,6 +132,10 @@ if (PEAR::isError($mail)) {
 } else {
 	echo('<p>Dziękujemy za zgłoszenie!</p>');
 }*/
+
+$sm = guess_sm_address($application);
+$sm_email = ($sm[1])?"Najprościej jest wysłać całą paczkę zgłoszeń na adres " . $sm[1]:
+	"Dla twojego miasta nie mamy jeszcze zapisanego adresu SM. Skontaktuj proszę się z nami.";
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
@@ -141,10 +145,14 @@ if (PEAR::isError($mail)) {
 			<? menuNewApplication('Jeszcze raz') ?>
 		</div>
 		<div data-role="main" class="ui-content">
-			<p>Twoje zgłoszenie zostało zarejestrowane.
-			Historię swoich zgłoszeń możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
+			<p>Twoje zgłoszenie zostało zarejestrowane pod numerem <a href="/ud-<?=$applicationId?>.html"><?=$appNumber?></a>.
+			Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
+			<p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz wygenerować ich kilka/kikanaście, i w dokodnym
+			dla siebie cyklu wysłać je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
+			<p>Jak wysyłać zgłoszenia? <?=$sm_email?> Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
+			już liście zgłoszeń.</p>
 			<p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
-				href="mailto:ud@uprzejmiedonosze.net">ud@uprzejmiedonosze.net</a>.</p>
+				href="mailto:szymon@nieradka.net">szymon@nieradka.net</a>.</p>
 			
 			<a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
 		</div> <!-- main -->
