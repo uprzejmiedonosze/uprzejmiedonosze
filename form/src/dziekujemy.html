@@ -46,93 +46,6 @@ $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];
 setApplication($applicationId, $application);
 
-$emailTemplate = <<<HTML
-<html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	</head>
-	<body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; line-break: after-white-space;	">
-		<p>
-			<font color="#444444">Zgłoszenie:</font>&nbsp;<b>$appNumber</b>
-		</p>
-
-		<p>W dniu $app_date roku o godzinie $app_hour $bylam świadkiem pozostawienia
-		samochodu o nr rejestracyjnym $plateId pod adresem $address.
-		$category
-		Sytuacja jest widoczna na załączonych zdjęciach. Zdjęcia $wykonalam
-		samodzielnie.</p>
-
-		<p>Nie $bylam świadkiem samego momentu parkowania, oraz nie wiem jak długo
-		pozostawał pojazd pozostawał na tym miejscu.</p>
-		<p>$comment</p>
-
-		<p>Jestem $swiadoma odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
-
-		<p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania.</p>
-
-
-		<p>Dokument ze zgłoszeniem dostępny jest pod adresem <a href="https://%HOST%/$applicationId.pdf">$appNumber.pdf</a>.</p>
-
-		<p>Dane adresowe oraz kontaktowe zgłaszającego:</p>
-		<div>
-			<div>
-				<span class="Apple-tab-span" style="white-space:pre">	</span>{$name}<br>
-				<span class="Apple-tab-span" style="white-space:pre">	</span>{$msisdn}<br>
-				<span class="Apple-tab-span" style="white-space:pre">	</span>{$userAddress}<br>
-				<span class="Apple-tab-span" style="white-space:pre">	</span><a href="mailto:$email">{$email}</a><br>
-				<br><span style="color: rgb(68, 68, 68);" >Zdjęcia:</span><br><br>
-				<a style="border: 1px solid #009C7F;" href="https://%HOST%/$carImage"><img data-src="cid:carImage"></a>
-				<a style="border: 1px solid #009C7F;" href="https://%HOST%/$contextImage"><img data-src="cid:contextImage"></a><br>
-			</div>
-		</div>
-	</body>
-</html>
-HTML;
-
-
-$headers = array(
-	'From' => $from,
-	'To' => $to,
-	'Bcc' => "<szymon@nieradka.net>",
-	'Content-Type' => 'text/html; charset=UTF-8',
-	'MIME-Version' => 1,
-	'Subject' => $subject
-);
-
-$mimeParams = array(
-	"text_encoding" => "7bit",
-	"text_charset" => "UTF-8",
-	"html_charset" => "UTF-8",
-	"head_charset" => "UTF-8"
-);
-$mime =  new Mail_mime(array('eol' => "\n"));
-
-$mime = new Mail_mime("\n");
-$mime->setHTMLBody($emailTemplate);
-$mime->setTXTBody(strip_tags($emailTemplate));
-$mime->addHTMLImage($carImage, "image/jpeg", "", true, "carImage");
-$mime->addHTMLImage($contextImage, "image/jpeg", "", true, "contextImage");
-
-$body = $mime->getMessageBody($mimeParams);
-$headers = $mime->headers($headers);
-
-$smtp = Mail::factory('smtp', array(
-	'host' => 'ssl://smtp.gmail.com',
-	'port' => '465',
-	'auth' => true,
-	'username' => 'ud@nieradka.net',
-	'password' => '6NbnF%Zn'
-));
-
-/*
-$mail = $smtp->send($to, $headers, $body);
-if (PEAR::isError($mail)) {
-	echo('<p>' . $mail->getMessage() . '</p>');
-
-} else {
-	echo('<p>Dziękujemy za zgłoszenie!</p>');
-}*/
-
 $sm = guess_sm_address($application);
 $sm_email = ($sm[1])?"Najprościej jest wysłać całą paczkę zgłoszeń na adres " . $sm[1]:
 	"Dla twojego miasta nie mamy jeszcze zapisanego adresu SM. Skontaktuj proszę się z nami.";
@@ -145,7 +58,7 @@ $sm_email = ($sm[1])?"Najprościej jest wysłać całą paczkę zgłoszeń na ad
 			<? menuNewApplication('Jeszcze raz') ?>
 		</div>
 		<div data-role="main" class="ui-content">
-			<p>Twoje zgłoszenie zostało zarejestrowane pod numerem <a href="/ud-<?=$applicationId?>.html"><?=$appNumber?></a>.
+			<p>Twoje zgłoszenie zostało zarejestrowane pod numerem <a rel="external" target="_none" href="/ud-<?=$applicationId?>.html"><?=$appNumber?></a>.
 			Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 			<p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz wygenerować ich kilka/kikanaście, i w dokodnym
 			dla siebie cyklu wysłać je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
