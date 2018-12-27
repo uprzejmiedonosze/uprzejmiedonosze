@@ -95,7 +95,7 @@ function guess_sm_address($application){
 }
 
 function flatten_application($application){
-	global $ROOT, $categories_txt, $sm_addresses;
+	global $ROOT, $categories, $sm_addresses;
 	
 	$includegraphics = '\\href{https://%HOST%/ud-' 
 		. $application->id
@@ -124,7 +124,7 @@ function flatten_application($application){
 			'hour' => date_format(new DateTime($application->date), 'H:i'),
 			'plateId' => $application->carInfo->plateId,
 			'user_address' => $application->user->address,
-			'category' => $categories_txt[$application->category],
+			'category' => $categories[$application->category][1],
 			'address' => $application->address->address,
 			'user_phone' => "Tel: {$application->user->msisdn}",
     		'user_email' => "Email: {$application->user->email}",

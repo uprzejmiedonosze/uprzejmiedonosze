@@ -69,7 +69,7 @@ $applicationId = guidv4();
 								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 0)?' checked="checked" ': '';?>>
 								<label for="<?=$catId ?>">
 									<img src="img/<?=$catId ?>.jpg">
-									<p><?=$catName ?></p>
+									<p><?=$catName[0] ?></p>
 								</label>
 							</div>
 							<? $i++; } ?>
