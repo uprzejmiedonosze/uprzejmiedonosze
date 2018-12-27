@@ -3,8 +3,8 @@ require_once(__DIR__ . '/../inc/include.php');
 genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 ?>
 <body class="index">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-		</div>
+	<div data-role="header" data-position="fixed" data-tap-toggle="false">
+	</div>
 <? if(isset($_GET['dialog'])): ?>
 	<div data-role="page" class="container-fluid" data-theme="a" data-dialog="true">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
@@ -33,74 +33,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 				organizujące parkowanie pojazdów w Polsce.
 			</p>
 		
-			<div class="ui-corner-all custom-corners">
-				<div class="ui-bar ui-bar-a">
-					<h3>Znaki drogowe</h3>
-				</div>
-				<div class="ui-body ui-body-a">
-					<h4>Znaki informacyjne</h4>
-					<p>W miastach, w zdecydowanej większości przypadków miejsca do parkowania
-						są wyznaczone znakami (poziomymi i/lub pionowymi). W takiej sytuacji
-						wszelkie dyskusje n/t <i>mitycznego 1.5m</i> czy sposobu umiejscowienia
-						samochodu na chodniku są krótkie. Po prostu wolno parkować wyłącznie
-						w sposób wskazany znakami.</p>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/d18.png" />
-							<img src="/img/t30a.gif" />
-							<img src="/img/t30b.gif" />
-							<img src="/img/t30c.gif" />
-							<img src="/img/t30d.gif" />
-							<img src="/img/t30e.gif" />
-							<img src="/img/t30f.gif" />
-							<img src="/img/t30g.gif" />
-							<img src="/img/t30h.gif" />
-							<img src="/img/t30i.gif" />
-						</div>
-						<div class="ui-block-b">
-							<p>Znak D-18 (parking) najczęściej występuje w połączeniu z tabliczką T-30,
-								która precyzyjnie pokazuje jak należy ustawić pojazd względem krawędzi
-								jezdni.</p>
-							<p>Co więcej, najczęściej dodatkowo na samej jezdni lub chodniku namalowane
-								są dodatkowe znaki poziome. Dzięki nim nie trzeba po zaparkowaniu iść
-								na spacer na początek ulicy, żeby sprawdzić, czy stoimy poprawnie.</p>
-							<p>Zwróć uwagę, że wszystkie tabliczki T-30 łączą pewne cechy:
-								<ul>
-									<li>Po pierwsze, samochód zawsze styka się, lub stoi bezpośrednio nad
-										krawędzią jezdni. Oznacza to, że jeśli widzisz samochód zaparkowany
-										w głębi chodnika (np. przy ścianie budynku), to jest on z pewnością
-										nieprawidłowo zaparkowany.</li>
-									<li>Po drugie, na każdej z tych tabliczek jest tylko jeden pojazd. W
-										żadnym przypadku nie widać dwóch stojących w obok siebie. Dlatego
-										jeśli widzisz samochody zaparkowane obok siebie, równolegle do jezdni
-										(np. jeden na ulicy, drugi na chodniku), to jeden z nich z pewnością
-										stoi nieprawidłowo.
-									</li>
-									<li>Po trzecie, samochód stoi albo równolegle do jezdni, albo przodem
-										w kierunku chodnika. Jeśli widzisz samochód parkujący tyłem (rurą
-										wydechową w kierunku pieszych), to kierowca właśnie popełnia wykroczenie.
-									</li>
-								</ul>
-							</p>
-							<p>Powyższa obserwacja wynika z prostego faktu – parkując na chodniku możesz
-								niego wjechać (przodem) i się zatrzymać. Kluczenie po chodniku żeby dojechać 
-								do ściany, omijanie innych samochodów czy wjeżdżanie na niego tyłem jest zabronione.
-							</p>
-						</div>
-					</div>
-					<h4>Znaki zakazu</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/b36.png" />
-						</div>
-						<div class="ui-block-b">
-							(w trakcie uzupełniania)
-						</div>
-					</div>
-				</div>
-			</div>
-		
-			<div class="ui-corner-all custom-corners">
+			<div class="ui-corner-all custom-corners"> <!-- zasady ogólne -->
 				<div class="ui-bar ui-bar-a">
 					<h3>Zasady ogólne</h3>
 				</div>
@@ -230,94 +163,140 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> <!-- zasady ogólne -->
+					
+			<div class="ui-corner-all custom-corners"> <!-- znaki drogowe-->
+				<div class="ui-bar ui-bar-a">
+					<h3>Znaki drogowe</h3>
+				</div>
+				<div class="ui-body ui-body-a">
+					<h4>Znaki informacyjne</h4>
+					<p>W miastach, w zdecydowanej większości przypadków miejsca do parkowania
+						są wyznaczone znakami (poziomymi i/lub pionowymi). W takiej sytuacji
+						wszelkie dyskusje n/t <i>mitycznego 1.5m</i> czy sposobu umiejscowienia
+						samochodu na chodniku są krótkie. Po prostu wolno parkować wyłącznie
+						w sposób wskazany znakami.</p>
+					<div class="ui-grid-a ui-responsive">
+						<div class="ui-block-a">
+							<img src="/img/d18.png" />
+							<img src="/img/t30a.gif" />
+							<img src="/img/t30b.gif" />
+							<img src="/img/t30c.gif" />
+							<img src="/img/t30d.gif" />
+							<img src="/img/t30e.gif" />
+							<img src="/img/t30f.gif" />
+							<img src="/img/t30g.gif" />
+							<img src="/img/t30h.gif" />
+							<img src="/img/t30i.gif" />
+						</div>
+						<div class="ui-block-b">
+							<p>Znak D-18 (parking) najczęściej występuje w połączeniu z tabliczką T-30,
+								która precyzyjnie pokazuje jak należy ustawić pojazd względem krawędzi
+								jezdni.</p>
+							<p>Co więcej, najczęściej dodatkowo na samej jezdni lub chodniku namalowane
+								są dodatkowe znaki poziome. Dzięki nim nie trzeba po zaparkowaniu iść
+								na spacer na początek ulicy, żeby sprawdzić, czy stoimy poprawnie.</p>
+							<p>Zwróć uwagę, że wszystkie tabliczki T-30 łączą pewne cechy:
+								<ul>
+									<li>Po pierwsze, samochód zawsze styka się, lub stoi bezpośrednio nad
+										krawędzią jezdni. Oznacza to, że jeśli widzisz samochód zaparkowany
+										w głębi chodnika (np. przy ścianie budynku), to jest on z pewnością
+										nieprawidłowo zaparkowany.</li>
+									<li>Po drugie, na każdej z tych tabliczek jest tylko jeden pojazd. W
+										żadnym przypadku nie widać dwóch stojących w obok siebie. Dlatego
+										jeśli widzisz samochody zaparkowane obok siebie, równolegle do jezdni
+										(np. jeden na ulicy, drugi na chodniku), to jeden z nich z pewnością
+										stoi nieprawidłowo.
+									</li>
+									<li>Po trzecie, samochód stoi albo równolegle do jezdni, albo przodem
+										w kierunku chodnika. Jeśli widzisz samochód parkujący tyłem (rurą
+										wydechową w kierunku pieszych), to kierowca właśnie popełnia wykroczenie.
+									</li>
+								</ul>
+							</p>
+							<p>Powyższa obserwacja wynika z prostego faktu – parkując na chodniku możesz
+								niego wjechać (przodem) i się zatrzymać. Kluczenie po chodniku żeby dojechać 
+								do ściany, omijanie innych samochodów czy wjeżdżanie na niego tyłem jest zabronione.
+							</p>
+						</div>
+					</div>
+					<h4>Znaki zakazu</h4>
+					<div class="ui-grid-a ui-responsive">
+						<div class="ui-block-a">
+							<img src="/img/b36.png" />
+						</div>
+						<div class="ui-block-b">
+							(w trakcie uzupełniania)
+						</div>
+					</div>
+				</div> <!--  -->
+			</div> <!-- znaki drogowe -->
+
 		
-			<div class="ui-corner-all custom-corners">
+			<div class="ui-corner-all custom-corners"> <!-- podstawa prawna -->
 				<div class="ui-bar ui-bar-a">
 					<h3>Podstawa prawna</h3>
 				</div>
-		
+			
 				<div class="ui-body ui-body-a">
 					<h3>Kodeks drogowy</h3>
-					<p>Wyciąg z Prawa o ruchu drogowym, dział II (ruch drogowy), rozdział 5 (porządek i bezpieczeństwo ruchu na drogach:</a>
-						<h4>Art. 46.</h4>
-						<ol>
-							<li>Zatrzymanie i postój pojazdu są dozwolone tylko w miejscu i w warunkach, w których jest on z dostatecznej
-								odległości widoczny dla innych kierujących i nie powoduje zagrożenia bezpieczeństwa ruchu drogowego lub jego
-								utrudnienia.</li>
-							<li>Kierujący pojazdem, zatrzymując pojazd na jezdni, jest obowiązany ustawić go jak najbliżej jej krawędzi oraz
-								równolegle do niej.</li>
-							<li>W czasie postoju na drodze poza obszarem zabudowanym pojazd powinien znajdować się, jeżeli to tylko możliwe,
-								poza
-								jezdnią.</li>
-							<li>Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.</li>
-							<li>(pominięty)</li>
-						</ol>
-						<h4>Art. 47.</h4>
-						<ol>
-							<li>Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku lub przedniej osi pojazdu samochodowego o
-								dopuszczalnej masie całkowitej nie przekraczającej 2,5 t, pod warunkiem, że:</li>
+					<p>Wyciąg z Prawa o ruchu drogowym, dział II (ruch drogowy), rozdział 5 (porządek i bezpieczeństwo ruchu na drogach:</p>
+					<h4>Art. 46.</h4>
+					<ol>
+						<li>Zatrzymanie i postój pojazdu są dozwolone tylko w miejscu i w warunkach, w których jest on z dostatecznej odległości widoczny dla innych kierujących i nie powoduje zagrożenia bezpieczeństwa ruchu drogowego lub jego utrudnienia.</li>
+						<li>Kierujący pojazdem, zatrzymując pojazd na jezdni, jest obowiązany ustawić go jak najbliżej jej krawędzi oraz równolegle do niej.</li>
+						<li>W czasie postoju na drodze poza obszarem zabudowanym pojazd powinien znajdować się, jeżeli to tylko możliwe, poza jezdnią.</li>
+						<li>Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.</li>
+						<li>(pominięty)</li>
+					</ol>
+					<h4>Art. 47.</h4>
+					<ol>
+						<li>Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t, pod warunkiem, że:
 							<ol>
 								<li>na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju,</li>
-								<li>szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5
-									m,</li>
+								<li>szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m,</li>
 								<li>pojazd umieszczony przednią osią na chodniku nie tamuje ruchu pojazdów na jezdni.</li>
 							</ol>
-							<li>Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na chodniku przy
-								krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie
-								całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na chodniku tylko w miejscu wyznaczonym
-								odpowiednimi znakami drogowymi.</li>
-						</ol>
-						<h4>Art. 48.</h4>
-						<ol>
-							<li>Pojazd może być usunięty z drogi na koszt właściciela, jeżeli pozostawiono go w miejscu, gdzie jest to
-								zabronione
-								i utrudnia ruch lub zagraża jego bezpieczeństwu.</li>
-							<li>Pojazd może być unieruchomiony na koszt właściciela przez zastosowanie urządzenia technicznego do blokady kół,
-								jeżeli pozostawiono go w miejscu, gdzie jest to zabronione, lecz nie utrudnia ruchu lub nie zagraża jego
-								bezpieczeństwu.</li>
-						</ol>
-						<h4>Art. 49.</h4>
-						<ol>
-							<li>Zabrania się zatrzymania pojazdu:</li>
+						</li>
+						<li>Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na chodniku tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.</li>
+					</ol>
+					<h4>Art. 48.</h4>
+					<ol>
+						<li>Pojazd może być usunięty z drogi na koszt właściciela, jeżeli pozostawiono go w miejscu, gdzie jest to
+							zabronione i utrudnia ruch lub zagraża jego bezpieczeństwu.</li>
+						<li>Pojazd może być unieruchomiony na koszt właściciela przez zastosowanie urządzenia technicznego do blokady kół, jeżeli pozostawiono go w miejscu, gdzie jest to zabronione, lecz nie utrudnia ruchu lub nie zagraża jego bezpieczeństwu.</li>
+					</ol>
+					<h4>Art. 49.</h4>
+					<ol>
+						<li>Zabrania się zatrzymania pojazdu:
 							<ol>
-								<li>na przejeździe kolejowym, na przejeździe tramwajowym, na skrzyżowaniu oraz w odległości mniejszej niż 10 m od
-									przejazdu lub skrzyżowania,</li>
-								<li>na przejściu dla pieszych, na przejeździe dla rowerzystów oraz w odległości mniejszej niż 10 m przed tym
-									przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym
-									przejściem lub przejazdem,</li>
+								<li>na przejeździe kolejowym, na przejeździe tramwajowym, na skrzyżowaniu oraz w odległości mniejszej niż 10 m od przejazdu lub skrzyżowania,</li>
+								<li>na przejściu dla pieszych, na przejeździe dla rowerzystów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem,</li>
 								<li>(pominięty),</li>
-								<li>na jezdni wzdłuż linii ciągłej oraz w pobliżu jej punktów krańcowych, jeżeli zmusiłoby to innych kierujących
-									pojazdami wielośladowymi do najeżdżania na tę linię,</li>
-								<li>na jezdni obok linii przerywanej wyznaczającej krawędź jezdni oraz na jezdni i na poboczu obok linii ciągłej
-									wyznaczającej krawędź jezdni,</li>
+								<li>na jezdni wzdłuż linii ciągłej oraz w pobliżu jej punktów krańcowych, jeżeli zmusiłoby to innych kierujących pojazdami wielośladowymi do najeżdżania na tę linię,</li>
+								<li>na jezdni obok linii przerywanej wyznaczającej krawędź jezdni oraz na jezdni i na poboczu obok linii ciągłej wyznaczającej krawędź jezdni,</li>
 								<li>(pominięty),</li>
 								<li>(pominięty),</li>
 								<li>na pasie między jezdniami,</li>
-								<li>w odległości mniejszej niż 15 m od słupka lub tablicy oznaczającej przystanek, a na przystanku z zatoką - na
-									całej jej długości,</li>
-								<li>w odległości mniejszej niż 15 m od punktów krańcowych wysepki, jeżeli jezdnia z prawej jej strony ma tylko
-									jeden
-									pas ruchu,</li>
+								<li>w odległości mniejszej niż 15 m od słupka lub tablicy oznaczającej przystanek, a na przystanku z zatoką - na całej jej długości,</li>
+								<li>w odległości mniejszej niż 15 m od punktów krańcowych wysepki, jeżeli jezdnia z prawej jej strony ma tylko jeden pas ruchu,</li>
 								<li>na drodze (ścieżce) dla rowerów.</li>
 							</ol>
-							<li>Zabrania się postoju:</li>
-							<ol>
-								<li>w miejscu utrudniającym wjazd lub wyjazd, w szczególności do i z bramy, garażu, parkingu lub wnęki
-									postojowej,</li>
-								<li>w miejscu utrudniającym dostęp do innego prawidłowo zaparkowanego pojazdu lub wyjazd tego pojazdu,</li>
-								<li>przed i za przejazdem kolejowym, po obu stronach drogi, na odcinku od przejazdu kolejowego do słupka
-									wskaźnikowego z jedną kreską,</li>
-								<li>w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu,</li>
-								<li>na obszarze zabudowanym, pojazdu lub zespołu pojazdów o dopuszczalnej masie całkowitej przekraczającej 16 t
-									lub
-									o długości przekraczającej 12 m, poza wyznaczonymi w tym celu parkingami.</li>
-							</ol>
-							<li>(pominięty)</li>
-							<li>(pominięty)</li>
+						</li>
+						<li>Zabrania się postoju:</li>
+						<ol>
+							<li>w miejscu utrudniającym wjazd lub wyjazd, w szczególności do i z bramy, garażu, parkingu lub wnęki
+								postojowej,</li>
+							<li>w miejscu utrudniającym dostęp do innego prawidłowo zaparkowanego pojazdu lub wyjazd tego pojazdu,</li>
+							<li>przed i za przejazdem kolejowym, po obu stronach drogi, na odcinku od przejazdu kolejowego do słupka wskaźnikowego z jedną kreską,</li>
+							<li>w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu,</li>
+							<li>na obszarze zabudowanym, pojazdu lub zespołu pojazdów o dopuszczalnej masie całkowitej przekraczającej 16 t lub o długości przekraczającej 12 m, poza wyznaczonymi w tym celu parkingami.</li>
 						</ol>
+						<li>(pominięty)</li>
+						<li>(pominięty)</li>
+					</ol>
 				</div>
-			</div>
+			</div> <!-- podstawa prawna -->
 		</div> <!-- main -->
 <?
 if(!isset($_GET['dialog'])){
