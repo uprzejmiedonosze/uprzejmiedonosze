@@ -13,6 +13,10 @@ $(document).on('pageshow', function() {
 			$('#plateId').removeClass('error');
 		});
 
+		$('#comment').on('change', function(){
+			$('#comment').removeClass('error');
+		});
+
 		if (window.File && window.FileReader && window.FormData) {
 			$(document).on('change', "#contextImage", function (e) {
 				checkFile(e.target.files[0], this.id);

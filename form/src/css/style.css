@@ -162,8 +162,8 @@ p > a, li > a {
 	font-weight: normal!important;
 }
 
-input.error{
-	border: 1px solid red;
+input.error, textarea.error{
+	border: 1px solid red !important;
 }
 div.error img{
 	background-color: rgba(255, 0, 0, 0.3);
