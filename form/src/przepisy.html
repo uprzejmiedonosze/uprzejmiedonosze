@@ -60,7 +60,12 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 						ma już znaczenia.
 					</p>
 
-					<? foreach($categories as $catId => $catName): ?>
+					<?
+						foreach($categories as $catId => $catName):
+							if(!isset($catName[0])){
+								continue;
+							}
+					?>
 
 					<h4><?=$catName[0]?></h4>
 					<div class="ui-grid-a ui-responsive">

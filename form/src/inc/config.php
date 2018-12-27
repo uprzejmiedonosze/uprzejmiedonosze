@@ -28,7 +28,7 @@ $categories = Array(
 	5  => ["Mniej niż 10m od przejścia dla pieszych",
 		"Pojazd znajdował się mniej niż 10m od przejścia dla pieszych.",
 		"Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerzystów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem."],
-	// 1  => ["Parkowanie na niezgodne z oznaczeniem", "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.", ""],
+	1  => [null, "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.", null],
 	0 => ["<i>Pozostałe przypadki (koniecznie dodaj komentarz powyżej)</i>",
 		"",
 		"Wyobraźnia kierowców nie zna granic. Jeśli wybierzesz tę katogorię, koniecznie opisz szczegóły w komentarzu do zgłoszenia."]

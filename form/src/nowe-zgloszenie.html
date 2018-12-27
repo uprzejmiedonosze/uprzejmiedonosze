@@ -64,7 +64,14 @@ $applicationId = guidv4();
 						<label for="category" class="section">Podaj rodzaj naruszenia</label>
 
 						<div class="ui-grid-a ui-responsive" id="category">
-							<? $i = 0; foreach($categories as $catId => $catName) { ?>
+							<? 
+								$i = 0;
+								foreach($categories as $catId => $catName):
+									if(!isset($catName[0])){
+										continue;
+									}
+
+							?>
 							<div class="ui-block-<? echo($categoriesMatrix[$i % 2]); ?>" title="<?=$catName[2]?>">
 								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 7)?' checked="checked" ': '';?>>
 								<label for="<?=$catId ?>">
@@ -72,7 +79,10 @@ $applicationId = guidv4();
 									<p><?=$catName[0];?></p>
 								</label>
 							</div>
-							<? $i++; } ?>
+							<?
+								$i++;
+								endforeach;
+							?>
 							<p>Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
 						</div>
 						
