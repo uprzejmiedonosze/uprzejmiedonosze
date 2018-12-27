@@ -29,7 +29,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 			<p>Poza najczęstszym <i>"ja tylko na chwilę"</i>, wiele razy spotkasz się
 				z argumentmi w rodzaju <i>"przecież zostawiłem 1.5m"</i>, <i>"tutaj można"</i>
 				czy <i>"mam zezwolenie"</i>. Rozmawiając z kierowcami, dzwoniąc na SM oraz
-				korzystając z Uprzejmie Donoszę musisz znać podstawowe regulacje prawne
+				korzystając z Uprzejmie Donoszę, musisz znać podstawowe regulacje prawne
 				organizujące parkowanie pojazdów w Polsce.
 			</p>
 		
@@ -38,25 +38,43 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 					<h3>Zasady ogólne</h3>
 				</div>
 				<div class="ui-body ui-body-a">
-					<p>W centrach miast (a już z pewnością w strefie płatnego parkowania), miasta są gęsto
+					<p>Centra miast (a już z pewnością w strefie płatnego parkowania), są gęsto
 						pokryte znakami informującymi w jaki sposób należy (lub nie należy) parkować.
-						W zdecydowanej większości przypadków nieprawidłowo zaparkowany pojazd nie stosuje
-						się właśnie do tych znaków, a opisane poniżej zasady ogólne łamie przy okazji.</p>
+						W zdecydowanej większości przypadków, nieprawidłowo zaparkowany pojazd nie stosuje
+						się właśnie do tych znaków, a opisane poniżej zasady ogólne łamie przy okazji.
 					</p>
 					<p>Na przykład przed przejściem dla pieszych znajduje się znak B-36 (zakaz postoju
 						i parkowania) oraz dodatkowo wyraźnie widać, że wyznaczone wcześniej miejsca
 						postojowe gwałtownie się kończą. Co więcej, bardzo często obszar przed pasami
 						jest zamalowany pasami (na których potem wyrastają czerwone wysepki i w ostatnim
-						akcie desperacji służb miejskich słupki). Kierowca parkując w takim miejscu
+						akcie desperacji służb miejskich słupki). Kierowca, parkując w takim miejscu,
 						nie przestrzega w pierwszej kolejności zdrowego rozsądku, w następnej znaków
 						pionowych, potem poziomych a na końcu zasad ogólnych.
 					</p>
-					<p>Co jednak jeśli nie ma znaków? Niestety w Polsce parkowanie na chodniku jest, dozwolone
-						(o czym wiedzą wszyscy), ale obwarowane licznymi (sensownymi) ograniczeniami.
+					<p>W Uprzejmie Donoszę zachęcamy jednak na powoływanie się na zasady ogólne. Wymagają
+						one mniej dokumentacji fotograficznej. Jeśli zgłosisz "niezastosowanie się do znaków",
+						to do zgłoszenia należałoby załączyć zdjęcie konkretnego znaku drogowego. A przecież
+						taki znak jest wzmocnieniem zasad ogólnych (zgodnie z przykładem opisanym powyżej).
+						Inaczej mówiąc, zdjęcie samochodu stojącego metr od pasów na zamalowanym obszarze,
+						jest dowodem wystarczającym. To, że dwa metry wcześniej był znak zakazu B-36 nie
+						ma już znaczenia.
 					</p>
-		
+
+					<? foreach($categories as $catId => $catName): ?>
+
+					<h4><?=$catName[0]?></h4>
+					<div class="ui-grid-a ui-responsive">
+						<div class="ui-block-a">
+							<img src="/img/<?=$catId?>.jpg" />
+						</div>
+						<div class="ui-block-b">
+							<p><?=$catName[2]?></p>
+						</div>
+					</div>
+					<? endforeach; ?>
+
 					<h4>SUVy</h4>
-					<p>Zacznijmy od najmniej znanego ograniczenia. Na chodniku (wszystko jedno czy są
+					<p>Na koniec najmniej znane ogranicze. Na chodniku (wszystko jedno czy są
 						na nim wyznaczone miejsca znakami poziomymi lub pinowymi, czy nie) mogą parkować
 						wyłącznie pojazdy o dopuszczalnej masie całkowitej nie przekraczającej 2,5 tony.
 						Dokładnie tak. To, że pojazd można prowadzić posiadając prawo jazdy kategorii A
@@ -73,98 +91,9 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 						List za
 						<a rel="external" href="https://czasopismo.legeartis.org/2017/06/parkowanie-samochodu-dmc-25t-chodnik.html">Parkowanie
 							dużego SUV-a na chodniku</a></p>
-		
-					<h4>Mityczne 1.5m</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/4.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>Jeśli spełnione zostały opisane powyżej zasady (mamy pojazd poniżej 2.5t DMC, nie ma znaków
-								poziomych lub pionowych wskazujących sposób parkowania, lub go zabraniający), to dopuszczalne
-								jest parkowanie gdy, szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd
-								nie utrudni im ruchu, ale nie mniejsza niż 1,5 m (co oznacza, że na wąskim chodniku wcale
-								nie można parkować wcale).
-							</p>
-						</div>
-					</div>
-		
-					<h4>Przystanek</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/2.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>(w trakcie uzupełniania)</p>
-						</div>
-					</div>
-		
-					<h4>Skrzyżowanie</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/3.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>(w trakcie uzupełniania)</p>
-						</div>
-					</div>
-		
-					<h4>Parkowanie na drodze dla rowerów</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/9.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>(w trakcie uzupełniania)</p>
-						</div>
-					</div>
-		
-					<h4>Parkowanie przed przejściem dla pieszych</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/5.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>(w trakcie uzupełniania)</p>
-						</div>
-					</div>
-		
-					<h4>Parkowanie na drodze na trawniku/w parku</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/6.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>(w trakcie uzupełniania)</p>
-						</div>
-					</div>
-		
-					<h4>Parkowanie za barierkami</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/10.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>(w trakcie uzupełniania)</p>
-						</div>
-					</div>
-		
-					<h4>Krawędź jezdni</h4>
-					<div class="ui-grid-a ui-responsive">
-						<div class="ui-block-a">
-							<img src="/img/8.jpg" />
-						</div>
-						<div class="ui-block-b">
-							<p>Zgodnie z tym co zostało już napisane powyżej, parkując pojazd nie możesz wjeżdżać wgłąb chodnika.
-								Z automatu oznacza to, że samochody stojące zdala od krawędzi jezdni (np. zbyt głęboko na chodniku
-								albo po prostu są "przytulone" do ściany budynku) stoją nieprawidłowo. Także te, zaparkowane
-								tyłem (kierowca wjechał na chodnik celując w niego rurą wydechową).
-							</p>
-						</div>
-					</div>
 				</div>
 			</div> <!-- zasady ogólne -->
-					
+
 			<div class="ui-corner-all custom-corners"> <!-- znaki drogowe-->
 				<div class="ui-bar ui-bar-a">
 					<h3>Znaki drogowe</h3>
