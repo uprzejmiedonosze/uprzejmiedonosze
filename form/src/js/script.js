@@ -1,25 +1,18 @@
 $(document).on('pageshow', function() {
-	if($("#address").length){
+	if($("body.new-application").length){
+
 		$('#address').on('change', function(){
 			$('#address').removeClass('error');
 		});
-	}
-	if($("#msisdn").length){
+
 		$('#msisdn').on('change', function(){
 			$('#msisdn').removeClass('error');
 		});
-	}
-	if($("#name").length){
-		$('#name').on('change', function(){
-			$('#name').removeClass('error');
-		});
-	}
-	if($('#plateId').length){
+
 		$('#plateId').on('change', function(){
 			$('#plateId').removeClass('error');
 		});
-	}
-	if($('#contextImage').length){
+
 		if (window.File && window.FileReader && window.FormData) {
 			$(document).on('change', "#contextImage", function (e) {
 				checkFile(e.target.files[0], this.id);
@@ -29,22 +22,13 @@ $(document).on('pageshow', function() {
 			});
 		}
 		$('#plateImage').hide();
-	}
-	if($('#form-submit').length){
+
 		$('#form-submit').click(function(){
 			if(validateForm()){
 				$('#form').submit();
 			}
 		});
-	}
-	if($('#register-submit').length){
-		$('#register-submit').click(function(){
-			if(validateRegisterForm()){
-				$('#register-form').submit();
-			}
-		});		
-	}
-	if($('#geocomplete').length){
+
 		$('#geocomplete').click(function(){
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function(position) {
@@ -52,7 +36,20 @@ $(document).on('pageshow', function() {
 				});
 			  }
 		});
+
 	}
+
+	if($("body.register").length){
+		$('#name').on('change', function(){
+			$('#name').removeClass('error');
+		});
+
+		$('#register-submit').click(function(){
+			if(validateRegisterForm()){
+				$('#register-form').submit();
+			}
+		});		
+	}	
 });
 
 var placeSearch, autocomplete;
