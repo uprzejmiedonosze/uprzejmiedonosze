@@ -39,6 +39,10 @@ $json = Array(
 	"number" => $appNumber
 );
 
+$sm = guess_sm_address($application);
+$sm_email = ($sm[1])?"W tym wypadku jest to <strong>" . $sm[1] . "</strong>.":
+	"Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.";
+
 $application = (array) array_merge((array)$application, (array)$json);
 $sex = guess_sex_by_name($name);
 $bylam = $sex['bylam'];
@@ -46,9 +50,6 @@ $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];
 setApplication($applicationId, $application);
 
-$sm = guess_sm_address($application);
-$sm_email = ($sm[1])?"Najprościej jest wysłać całą paczkę zgłoszeń na adres " . $sm[1]:
-	"Dla twojego miasta nie mamy jeszcze zapisanego adresu SM. Skontaktuj proszę się z nami.";
 ?>
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
@@ -62,7 +63,7 @@ $sm_email = ($sm[1])?"Najprościej jest wysłać całą paczkę zgłoszeń na ad
 			Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 			<p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz wygenerować ich kilka/kikanaście, i w dokodnym
 			dla siebie cyklu wysłać je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
-			<p>Jak wysyłać zgłoszenia? <?=$sm_email?> Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
+			<p>Jak wysyłać zgłoszenia? Najprościej jest wysłać całą paczkę zgłoszeń na adres SM w twoim mieście. <?=$sm_email?> Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
 			już liście zgłoszeń.</p>
 			<p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
 				href="mailto:szymon@nieradka.net">szymon@nieradka.net</a>.</p>
