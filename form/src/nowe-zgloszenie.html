@@ -66,7 +66,7 @@ $applicationId = guidv4();
 						<div class="ui-grid-a ui-responsive" id="category">
 							<? $i = 0; foreach($categories as $catId => $catName) { ?>
 							<div class="ui-block-<? echo($categoriesMatrix[$i % 2]); ?>" title="<?=$catName[2]?>">
-								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 0)?' checked="checked" ': '';?>>
+								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 7)?' checked="checked" ': '';?>>
 								<label for="<?=$catId ?>">
 									<img src="img/<?=$catId ?>.jpg">
 									<p><?=$catName[0];?></p>
