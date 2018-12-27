@@ -92,6 +92,9 @@ function validateForm(){
 	ret = check($('#address'), 10, false) && ret;
 	ret = check($('#carImage'), 0, true) && ret;
 	ret = check($('#contextImage'), 0, true) && ret;
+	if($('#0').is(':checked')){ // if category == 0 then comment is mandatory
+		ret = check($('#comment'), 10, false) && ret;
+	}
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
