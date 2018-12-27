@@ -41,7 +41,7 @@ $json = Array(
 
 $sm = guess_sm_address($application);
 $sm_email = ($sm[1])?"W tym wypadku jest to <strong>" . $sm[1] . "</strong>.":
-	"Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.";
+	"<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
 
 $application = (array) array_merge((array)$application, (array)$json);
 $sex = guess_sex_by_name($name);
