@@ -228,7 +228,6 @@ div.application a.status-archived:after {
 .przepisy .ui-block-a {
 	float: left;
 	width: 25%;
-	padding-top: 1em;
 	padding-right: 2%;
 	max-width: 160px;
 }
@@ -240,6 +239,11 @@ div.application a.status-archived:after {
 	width: 73%;
 }
 
-.przepisy .ui-block-b ol, .przepisy .ui-block-b ul  {
+.przepisy .ui-block-b p {
+	margin-top: 0;
+}
+
+.przepisy ol,
+.przepisy ul {
 	padding-inline-start: 20px;
 }
