@@ -2,7 +2,32 @@
 require_once(__DIR__ . '/../inc/include.php');
 genHeader("Uprzejmie Donoszę – nowe zgłoszenie", true);
 
-$applicationId = guidv4();
+if(isset($_SESSION['newAppId'])){ // edit mode
+	$applicationId = $_SESSION['newAppId'];
+	$application = getApplication($applicationId);
+	$edit = true;
+	echo "<!--\n";
+	print_r($application);
+	echo "-->\n";
+}else{ // new application mode
+	$applicationId = guidv4();
+	$_SESSION['newAppId'] = $applicationId;
+	$edit = false;
+}
+
+$contextImage = ($edit)? $application->contextImage->thumb: 'img/camera.png';
+$carImage     = ($edit)? $application->carImage->thumb: 'img/camera.png';
+
+$address      = ($edit)? $application->address->address: '';
+$latlng       = ($edit)? $application->address->latlng: '';
+$voivodeship  = ($edit)? $application->address->voivodeship: '';
+$city         = ($edit)? $application->address->city: '';
+
+$plateId      = ($edit)? $application->carInfo->plateId: '';
+$category     = ($edit)? $application->category: 7;
+@$comment     = ($edit)? $application->userComment: '';
+
+$date         = ($edit)? $application->date: '';
 
 ?>
 	<body class="index new-application">
@@ -22,44 +47,45 @@ $applicationId = guidv4();
 								<div class="image-upload">
 									<label for="contextImage">
 										Zrób zdjęcie prezentujące kontekst zgłoszenia<br>
-										<img class="photo-thumbs" id="contextImage-img" src="img/camera.png"/>
+										<img class="photo-thumbs" id="contextImage-img" src="<?=$contextImage;?>"/>
 									</label>
-									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst"/>
+									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst" value="<?=($edit)? $application->contextImage->url: '';?>" />
 								</div>
 							</div>
 							<div class="ui-block-b">
 								<div class="image-upload">
 									<label for="carImage">
 										Zrób zdjęcie na którym widoczna jest tablica rejestracyjna<br>
-										<img class="photo-thumbs" id="carImage-img" src="img/camera.png"/><br/>
+										<img class="photo-thumbs" id="carImage-img" src="<?=$carImage?>"/><br/>
 										<img id="plateImage" src=""/><br/>
 										<span id="recydywa"></span>
 									</label>
-									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne"/>
+									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne" value="<?=($edit)?$application->carImage->url: '';?>" />
 								</div>
 							</div>
 						</div>
 
-						<input type="hidden" id="datetime" name="datetime"/>
+						<input type="hidden" id="datetime" name="datetime" value="<?=$date?>" />
 
 						<label for="address">Podaj miejsce zgłoszenia <a href="#" id="geocomplete">(pobierz adres)</a></label>
 						<div class="combo">
-							<input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true">
+							<input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true" value="<?=$address?>">
 							<a id="geo" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
 						</div>
 
-						<input type="hidden" id="street_number" name="street_number"/>
-						<input type="hidden" id="route" name="street_name"/>
-						<input type="hidden" id="locality" name="city"/>
-						<input type="hidden" id="administrative_area_level_1" name="voivodeship">
-						<input type="hidden" id="country" name="country"/>
-						<input type="hidden" id="latlng" name="latlng" value=""/>
+						<input type="hidden" id="street_number" name="street_number" />
+						<input type="hidden" id="route" name="street_name" />
+						<input type="hidden" id="locality" name="city" value="<?=$city?>" />
+						<input type="hidden" id="administrative_area_level_1" name="voivodeship" value="<?=$voivodeship?>" />
+						<input type="hidden" id="country" name="country" />
+						<input type="hidden" id="latlng" name="latlng" value="<?=$latlng?>" />
 
 						<label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
-						<input class=“required” type="text" id="plateId" name="plateId" placeholder="Numer rejestracyjny">
+						<input class="required" type="text" id="plateId" name="plateId" placeholder="Numer rejestracyjny" value="<?=$plateId?>" />
 
 						<label for="comment">Dodaj komentarz (wymagany dla kategorii "pozostałe")</label>
-						<textarea type="text" id="comment" name="comment" placeholder="Np. szczegóły dotyczące lokalizacji"></textarea>
+						<textarea type="text" id="comment" name="comment"
+							placeholder="Np. szczegóły dotyczące lokalizacji"><?=$comment?></textarea>
 
 						<label for="category" class="section">Podaj rodzaj naruszenia</label>
 
@@ -73,7 +99,7 @@ $applicationId = guidv4();
 
 							?>
 							<div class="ui-block-<? echo($categoriesMatrix[$i % 2]); ?>" title="<?=$catName[2]?>">
-								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == 7)?' checked="checked" ': '';?>>
+								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == $category)?' checked="checked" ': '';?>>
 								<label for="<?=$catId ?>">
 									<img src="img/<?=$catId ?>.jpg">
 									<p><?=$catName[0];?></p>

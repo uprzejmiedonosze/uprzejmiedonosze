@@ -18,18 +18,16 @@ $city = $post["city"];
 
 $plateId = strtoupper(trim($post["plateId"]));
 $category = $post["category"];
-
-$user = getCurrentUser()['data'];
-
 $comment = capitalizeSentence($post["comment"]);
 
 $date = date_format(new DateTime($post['datetime']), 'Y-m-d\TH:i:s');
-
 $app_date = date_format(new DateTime($date), 'Y-m-d');
 $app_hour = date_format(new DateTime($date), 'H:i');
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 @$plateImage = $application->carInfo->plateImage;
+
+$user = getCurrentUser()['data'];
 
 logger("potwierdz.html -> _main -> date={$application->date}");
 logger("potwierdz.html -> _main -> app_date={$app_date}");
@@ -69,7 +67,7 @@ setApplication($applicationId, $application);
 <body class="index">
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-			<? menuBack('Back', 'ui-icon-edit'); ?>
+			<? menuBack('Back', 'ui-icon-edit'); ?> 
 			<h1>Potwierdź dane</h1>
 			<a onclick="$('#form').submit();" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Potwierdź!</a>
 		</div>

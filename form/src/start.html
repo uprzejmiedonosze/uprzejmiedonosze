@@ -1,5 +1,6 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
+unset($_SESSION['newAppId']); // cleaning old edits
 genHeader("Uprzejmie Donoszę – start", true);
 $sex = guess_sex_current_user();
 ?>
