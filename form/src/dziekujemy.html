@@ -1,15 +1,15 @@
 <?PHP
-date_default_timezone_set('Europe/Warsaw');
-
 require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 
-require_once('Mail.php');
-require_once('Mail/mime.php');
+if(!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])){
+	redirect('start.html');
+}
 
 genHeader("Uprzejmie Donoszę – dziękujemy", true);
 
 $applicationId = $_POST['applicationId'];
+unset($_SESSION['newAppId']); 
 
 $application = getApplication($applicationId);
 
