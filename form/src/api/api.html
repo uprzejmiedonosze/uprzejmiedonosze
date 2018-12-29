@@ -7,7 +7,7 @@ require_once(__DIR__ . '/../../autoload.php');
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
-        logger("api.html:main action set: $action");
+        logger("api.html:_ action=$action");
         switch($action) {
             case "getUserApplications": _getUserApplications(); break;
             case "verifyToken": _verifyToken(); break;
@@ -30,7 +30,6 @@ if (is_ajax()) {
 }
   
 function is_ajax() {
-    logger('api.html:is_ajax');
     return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
 
