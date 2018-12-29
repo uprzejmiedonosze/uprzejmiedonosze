@@ -111,7 +111,9 @@ function validateRegisterForm(){
 }
 
 function check(item, length, grandma){
-	const val = (item.val().trim().length == 0)? item.attr('value').trim().length: item.val().trim().length;
+	const val = (item.val().trim().length == 0)?
+					((item.attr('value'))? item.attr('value').trim().length: 0):
+					item.val().trim().length;
 	if(val <= length){
 		if(grandma){
 			item.parent().parent().addClass('error');
