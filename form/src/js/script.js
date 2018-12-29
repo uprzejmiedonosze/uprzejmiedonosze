@@ -289,10 +289,13 @@ function sendFile(fileData, id) {
 			if(id == 'carImage' && json.carInfo){
 				if(json.carInfo.plateId) {
 					$('#plateId').val(json.carInfo.plateId);
+					$('#plateId').removeClass('error');
 				}
 				if(json.carInfo.plateImage){
 					$('#plateImage').attr("src", json.carInfo.plateImage);
 					$('#plateImage').show();
+				}else{
+					$('#plateImage').hide();
 				}
 				if(json.carInfo.recydywa && json.carInfo.recydywa > 0){
 					$('#recydywa').text("Recydywa: " + json.carInfo.recydywa + "");
