@@ -36,10 +36,15 @@ class UDTestStatic(unittest.TestCase):
         rtd.is_new_matches()
         rtd.click_main()
     
-    def test_06_new(self):
+    def test_06_start(self):
+        start = pages.Start(self.driver)
+        start.is_title_matches("Start")
+
+    def test_07_new(self):
         new = pages.New(self.driver)
-        new.is_title_matches("Start")
+        new.is_title_matches("Nowe")
 
     @classmethod
     def tearDownClass(cls):
+        pass
         cls.driver.quit()
