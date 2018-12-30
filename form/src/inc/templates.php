@@ -177,7 +177,7 @@ function printApplication($application, $printActions = true){
 			<p>{$application->userComment}</p>
 			<div data-role="controlgroup" data-type="horizontal" data-mini="true">
 				<a href="/ud-{$application->id}.html" class="$commonClasses ui-nodisc-icon ui-icon-eye">szczegóły</a>
-				<a href="{$application->id}.pdf" target="_blank" data-ajax="false" class="$commonClasses ui-nodisc-icon ui-icon-mail">PDF</a>
+				<a href="{$application->id}.pdf" download="{$application->number}" data-ajax="false" class="$commonClasses ui-nodisc-icon ui-icon-mail">PDF</a>
 			</div>
 			<div id="#pics" class="ui-grid-a ui-responsive">
 				<div class="ui-block-a">
