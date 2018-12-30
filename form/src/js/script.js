@@ -76,8 +76,12 @@ function initAutocompleteOnNewApplication(){
 
 function initAutocomplete(trigger_change) {
 	autocomplete = new google.maps.places.Autocomplete(
-		(document.getElementById('address')),
-		{types: ['geocode']});
+		document.getElementById('address'),
+		{
+			types: ['address'],
+			componentRestrictions: {country: 'pl'}
+		}
+	);
 	if(trigger_change){
 		autocomplete.addListener('place_changed', fillInAddress);
 	}
