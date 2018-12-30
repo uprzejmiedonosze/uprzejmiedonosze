@@ -29,10 +29,6 @@ $contextImage = $application->contextImage->thumb;
 
 $user = getCurrentUser()['data'];
 
-logger("potwierdz.html -> _main -> date={$application->date}");
-logger("potwierdz.html -> _main -> app_date={$app_date}");
-logger("potwierdz.html -> _main -> app_hour={$app_hour}");
-
 $json = Array(
 	"date" => $date,
 	"user" => Array(
