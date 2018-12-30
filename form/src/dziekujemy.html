@@ -3,7 +3,7 @@ require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 
 if(!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])){
-	redirect('start.html');
+	redirect('moje-zgloszenia.html');
 }
 
 genHeader("Uprzejmie Donoszę – dziękujemy", true);
