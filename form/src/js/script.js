@@ -2,7 +2,8 @@ $(document).on('pageshow', function() {
 	if($("body.new-application").length){
 
 		$('#address').on('change', function(){
-			$('#address').removeClass('error');
+			//$('#address').removeClass('error');
+			$('a#geo').buttonMarkup({ icon: "alert" });
 		});
 
 		$('#msisdn').on('change', function(){
