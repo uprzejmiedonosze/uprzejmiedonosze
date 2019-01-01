@@ -108,7 +108,7 @@ function getFooter($mapsInitFunc = false){
 			<div data-role="footer">
 				<h4>&copy; Uprzejmie Donoszę</h4>
 			</div>
-		</div> <! -- page -->
+		</div> <!-- page -->
 		<script src="js/script.js?v=%JS_HASH%"></script>
 		<script src="js/lazysizes.min.js"></script>
 		$maps
