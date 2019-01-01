@@ -65,19 +65,25 @@ label.section:first-of-type {
 	border: none;
 }
 
-input[type="file"]{
-}
-input[type="radio"]{
-}
-
 .image-upload input{
 	display: none;
 }
 
-.image-upload img, .photo-thumbs{
+#pics img {
 	max-height: 350px;
 	max-width: 350px;
 	border-radius: 0.8em;
+	width: 95%;
+}
+
+#pics .image-upload {
+	width: 95%;
+}
+
+img#plateImage {
+	max-width: 150px;
+	max-height: 50px;
+	border-radius: 0.2em;
 }
 
 #category {

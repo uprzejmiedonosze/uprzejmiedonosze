@@ -179,7 +179,7 @@ function printApplication($application, $printActions = true){
 				<a href="/ud-{$application->id}.html" class="$commonClasses ui-nodisc-icon ui-icon-eye">szczegóły</a>
 				<a href="{$application->id}.pdf" download="{$application->number}" data-ajax="false" class="$commonClasses ui-nodisc-icon ui-icon-mail">PDF</a>
 			</div>
-			<div id="#pics" class="ui-grid-a ui-responsive">
+			<div id="pics" class="ui-grid-a ui-responsive">
 				<div class="ui-block-a">
 					<a href="/ud-{$application->id}.html">
 						<img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
