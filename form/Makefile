@@ -40,7 +40,7 @@ TAG_NAME             = $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`
 
 .DEFAULT_GOAL := help
 
-.PHONY: help clean
+.PHONY: help clean log-from-last-prod
 help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
@@ -128,3 +128,13 @@ define replace-inline
 @sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@ 
 @sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@ 
 endef
+
+# GIT
+
+log-from-last-prod: ## Show list of commit messages from last prod release till now
+	@git log --color --pretty=format:"%cn %ci %s" HEAD...`git show-ref --tags | grep tags/prod_ | sort -n | head -n 1 | cut -d" " -f 1`
+
+diff-from-last-prod: ## Show list of commit messages from last prod release till now
+	@git diff --color --pretty=format:"%cn %ci %s" HEAD...`git show-ref --tags | grep tags/prod_ | sort -n | head -n 1 | cut -d" " -f 1`
+
+
