@@ -158,12 +158,15 @@ function setAddress(latlng, fromPicture){
 				$('#latlng').val(latlng);
 
 				$('a#geo').buttonMarkup({ icon: "check" });
+				$('#address').removeClass('error');
 			}else{
+				$('#address').addClass('error');
 				$('a#geo').buttonMarkup({ icon: "location" });
 			}		
 		}).fail(function() {
 			$('a#geo').buttonMarkup({ icon: "alert" });
-			$('#latlng').val("");		
+			$('#latlng').val("");
+			$('#address').addClass('error');
 		});
 	$('#address').attr("placeholder","Miejsce zgłoszenia");
 }
