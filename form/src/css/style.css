@@ -251,3 +251,8 @@ div.application a.status-archived:after {
 div.przepisy p i {
 	color: #666;
 }
+
+div.przepisy.dialog .ui-body {
+	background-color: transparent;
+	padding: .4em 0em;
+}

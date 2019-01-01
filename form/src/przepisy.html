@@ -11,6 +11,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 			<h1>Przepisy</h1>
 			<? menuBack(); ?>
 		</div>
+		<div data-role="main" class="ui-content przepisy dialog">
 <? else: ?>
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
@@ -23,8 +24,8 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 				menuStart();
 			} ?>
 		</div>
-<? endif; ?>
 		<div data-role="main" class="ui-content przepisy">
+<? endif; ?>
 			<h2>Można, czy nie można?</h2>
 			<p>Poza najczęstszym <i>"ja tylko na chwilę"</i>, wiele razy spotkasz się
 				z argumentmi w rodzaju <i>"przecież zostawiłem 1.5m"</i>, <i>"tutaj można"</i>
@@ -66,7 +67,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 					<h4><?=$catName[0]?></h4>
 					<div class="ui-grid-a ui-responsive przepisy">
 						<div class="ui-block-a">
-							<img src="/img/<?=$catId?>.jpg" />
+							<img src="/img/<?=$catId?>.jpg" alt="<?=$catName[0]?>"/>
 						</div>
 						<div class="ui-block-b">
 							<?=$catName[2]?>
@@ -108,16 +109,16 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 						w sposób wskazany znakami.</p>
 					<div class="ui-grid-a ui-responsive">
 						<div class="ui-block-a">
-							<img src="/img/d18.png" />
-							<img src="/img/t30a.gif" />
-							<img src="/img/t30b.gif" />
-							<img src="/img/t30c.gif" />
-							<img src="/img/t30d.gif" />
-							<img src="/img/t30e.gif" />
-							<img src="/img/t30f.gif" />
-							<img src="/img/t30g.gif" />
-							<img src="/img/t30h.gif" />
-							<img src="/img/t30i.gif" />
+							<img src="/img/d18.png"  alt="Znak D-18 (parking)"/>
+							<img src="/img/t30a.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30b.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30c.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30d.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30e.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30f.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30g.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30h.gif" alt="Tabliczka T-30 dla znaku D-18"/>
+							<img src="/img/t30i.gif" alt="Tabliczka T-30 dla znaku D-18"/>
 						</div>
 						<div class="ui-block-b">
 							<p>Znak D-18 (parking) najczęściej występuje w połączeniu z tabliczką T-30,
@@ -126,24 +127,23 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 							<p>Co więcej, najczęściej dodatkowo na samej jezdni lub chodniku namalowane
 								są dodatkowe znaki poziome. Dzięki nim nie trzeba po zaparkowaniu iść
 								na spacer na początek ulicy, żeby sprawdzić, czy stoimy poprawnie.</p>
-							<p>Zwróć uwagę, że wszystkie tabliczki T-30 łączą pewne cechy:
-								<ul>
-									<li>Po pierwsze, samochód zawsze styka się, lub stoi bezpośrednio nad
-										krawędzią jezdni. Oznacza to, że jeśli widzisz samochód zaparkowany
-										w głębi chodnika (np. przy ścianie budynku), to jest on z pewnością
-										nieprawidłowo zaparkowany.</li>
-									<li>Po drugie, na każdej z tych tabliczek jest tylko jeden pojazd. W
-										żadnym przypadku nie widać dwóch stojących w obok siebie. Dlatego
-										jeśli widzisz samochody zaparkowane obok siebie, równolegle do jezdni
-										(np. jeden na ulicy, drugi na chodniku), to jeden z nich z pewnością
-										stoi nieprawidłowo.
-									</li>
-									<li>Po trzecie, samochód stoi albo równolegle do jezdni, albo przodem
-										w kierunku chodnika. Jeśli widzisz samochód parkujący tyłem (rurą
-										wydechową w kierunku pieszych), to kierowca właśnie popełnia wykroczenie.
-									</li>
-								</ul>
-							</p>
+							<p>Zwróć uwagę, że wszystkie tabliczki T-30 łączą pewne cechy:</p>
+							<ul>
+								<li>Po pierwsze, samochód zawsze styka się, lub stoi bezpośrednio nad
+									krawędzią jezdni. Oznacza to, że jeśli widzisz samochód zaparkowany
+									w głębi chodnika (np. przy ścianie budynku), to jest on z pewnością
+									nieprawidłowo zaparkowany.</li>
+								<li>Po drugie, na każdej z tych tabliczek jest tylko jeden pojazd. W
+									żadnym przypadku nie widać dwóch stojących w obok siebie. Dlatego
+									jeśli widzisz samochody zaparkowane obok siebie, równolegle do jezdni
+									(np. jeden na ulicy, drugi na chodniku), to jeden z nich z pewnością
+									stoi nieprawidłowo.
+								</li>
+								<li>Po trzecie, samochód stoi albo równolegle do jezdni, albo przodem
+									w kierunku chodnika. Jeśli widzisz samochód parkujący tyłem (rurą
+									wydechową w kierunku pieszych), to kierowca właśnie popełnia wykroczenie.
+								</li>
+							</ul>
 							<p>Powyższa obserwacja wynika z prostego faktu – parkując na chodniku możesz
 								niego wjechać (przodem) i się zatrzymać. Kluczenie po chodniku żeby dojechać 
 								do ściany, omijanie innych samochodów czy wjeżdżanie na niego tyłem jest zabronione.
@@ -153,7 +153,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 					<h4>Znaki zakazu</h4>
 					<div class="ui-grid-a ui-responsive">
 						<div class="ui-block-a">
-							<img src="/img/b36.png" />
+							<img src="/img/b36.png" alt="Znak B-36 zakaz zatrzymania lub postoju"/>
 						</div>
 						<div class="ui-block-b">
 							<p>Znak B-36 (zakaz zatrzymania lub postoju) nie powinien pozostawiać wątpliwości. Trudno o 
@@ -218,15 +218,15 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 								<li>na drodze (ścieżce) dla rowerów.</li>
 							</ol>
 						</li>
-						<li>Zabrania się postoju:</li>
-						<ol>
-							<li>w miejscu utrudniającym wjazd lub wyjazd, w szczególności do i z bramy, garażu, parkingu lub wnęki
-								postojowej,</li>
-							<li>w miejscu utrudniającym dostęp do innego prawidłowo zaparkowanego pojazdu lub wyjazd tego pojazdu,</li>
-							<li>przed i za przejazdem kolejowym, po obu stronach drogi, na odcinku od przejazdu kolejowego do słupka wskaźnikowego z jedną kreską,</li>
-							<li>w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu,</li>
-							<li>na obszarze zabudowanym, pojazdu lub zespołu pojazdów o dopuszczalnej masie całkowitej przekraczającej 16 t lub o długości przekraczającej 12 m, poza wyznaczonymi w tym celu parkingami.</li>
-						</ol>
+						<li>Zabrania się postoju:
+							<ol>
+								<li>w miejscu utrudniającym wjazd lub wyjazd, w szczególności do i z bramy, garażu, parkingu lub wnęki postojowej,</li>
+								<li>w miejscu utrudniającym dostęp do innego prawidłowo zaparkowanego pojazdu lub wyjazd tego pojazdu,</li>
+								<li>przed i za przejazdem kolejowym, po obu stronach drogi, na odcinku od przejazdu kolejowego do 	słupka wskaźnikowego z jedną kreską,</li>
+								<li>w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu,</li>
+								<li>na obszarze zabudowanym, pojazdu lub zespołu pojazdów o dopuszczalnej masie całkowitej 	przekraczającej 16 t lub o długości przekraczającej 12 m, poza wyznaczonymi w tym celu 	parkingami.</li>
+							</ol>
+						</li>
 						<li>(pominięty)</li>
 						<li>(pominięty)</li>
 					</ol>
