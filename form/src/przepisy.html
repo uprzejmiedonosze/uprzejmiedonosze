@@ -35,7 +35,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 		
 			<div class="ui-corner-all custom-corners"> <!-- zasady ogólne -->
 				<div class="ui-bar ui-bar-a">
-					<h3>Zasady ogólne</h3>
+					<h3>Wybierz prawidłową kategorię</h3>
 				</div>
 				<div class="ui-body ui-body-a">
 					<p>Centra miast (a już z pewnością strefy płatnego parkowania), są gęsto
@@ -54,7 +54,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
  					<p>Jeśli na twoim zdjęciu wyraźnie widać niezastosowanie się do znaków (poziomych 
 					lub pionowych), a sam znak także jest na nim widoczny (np. zakaz parkowania i postoju,
 					albo zamalowana pasami przestrzeń pod samochodem), wybierz pierszą kategorię z listy 
-					poniżej.</p>
+					poniżej. Dopiero później szukaj odpowiedniej kategorii dla swojego zgłoszenia.</p>
 
 					<?
 						foreach($categories as $catId => $catName):
@@ -64,12 +64,12 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 					?>
 
 					<h4><?=$catName[0]?></h4>
-					<div class="ui-grid-a ui-responsive">
+					<div class="ui-grid-a ui-responsive przepisy">
 						<div class="ui-block-a">
 							<img src="/img/<?=$catId?>.jpg" />
 						</div>
 						<div class="ui-block-b">
-							<p><?=$catName[2]?></p>
+							<?=$catName[2]?>
 						</div>
 					</div>
 					<? endforeach; ?>

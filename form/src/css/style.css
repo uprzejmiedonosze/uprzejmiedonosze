@@ -247,3 +247,7 @@ div.application a.status-archived:after {
 .przepisy ul {
 	padding-inline-start: 20px;
 }
+
+div.przepisy p i {
+	color: #666;
+}
