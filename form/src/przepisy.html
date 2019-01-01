@@ -236,5 +236,11 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 <?
 if(!isset($_GET['dialog'])){
 	getFooter();
+}else{
+	echo <<<HTML
+	</div> <!-- page -->
+	</body>
+</html>
+HTML;
 }
 ?>
