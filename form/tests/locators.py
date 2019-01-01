@@ -17,6 +17,18 @@ class Locators(object):
 
     START_RULES = (By.ID,    "rules")
 
+    NEW_SUBMIT  = (By.ID,    "form-submit")
+    NEW_ADDRESS = (By.ID,    "address")
+    NEW_PLATEID = (By.ID,    "plateId")
+    NEW_COMMENT = (By.ID,    "comment")
+    NEW_IMAGE1  = (By.CSS_SELECTOR, "div.ui-block-a > div.image-upload")
+    NEW_IMAGE2  = (By.CSS_SELECTOR, "div.ui-block-b > div.image-upload")
+    NEW_IIMAGE1 = (By.ID,    "contextImage")
+    NEW_IIMAGE2 = (By.ID,    "carImage")
+    NEW_CAT0    = (By.ID,    "0")
+
+    CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
+
 class SearchResultsPageLocators(object):
     """A class for search results locators. All search results locators should come here"""
     pass
