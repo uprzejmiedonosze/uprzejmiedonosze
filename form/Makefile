@@ -135,6 +135,6 @@ log-from-last-prod: ## Show list of commit messages from last prod release till 
 	@git log --color --pretty=format:"%cn %ci %s" HEAD...`git show-ref --tags | grep tags/prod_ | sort -n | head -n 1 | cut -d" " -f 1`
 
 diff-from-last-prod: ## Show list of commit messages from last prod release till now
-	@git diff `git show-ref --tags | grep tags/prod_ | sort -n | head -n 1 | cut -d" " -f 1`
+	@git diff --histogram --color-words `git show-ref --tags | grep tags/prod_ | sort -n | head -n 1 | cut -d" " -f 1`
 
 
