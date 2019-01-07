@@ -97,7 +97,7 @@ HTML;
 	}
 }
 
-function getFooter($mapsInitFunc = false){
+function getFooter($mapsInitFunc = false, $txt = '&copy; Uprzejmie Donoszę'){
 
 	$maps = "";
 	if($mapsInitFunc){
@@ -106,7 +106,7 @@ function getFooter($mapsInitFunc = false){
 
 	echo <<<HTML
 			<div data-role="footer">
-				<h4>&copy; Uprzejmie Donoszę</h4>
+				<h4>$txt</h4>
 			</div>
 		</div> <!-- page -->
 		<script src="js/script.js?v=%JS_HASH%"></script>
