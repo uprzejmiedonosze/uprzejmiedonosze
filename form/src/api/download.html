@@ -102,6 +102,7 @@ function flatten_application($application){
 			'date' => date_format(new DateTime($application->date), 'Y-m-d'),
 			'hour' => date_format(new DateTime($application->date), 'H:i'),
 			'plateId' => $application->carInfo->plateId,
+			'userComment' => $application->userComment,
 			'user_address' => $application->user->address,
 			'category' => $categories[$application->category][1],
 			'address' => $application->address->address,
