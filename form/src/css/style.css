@@ -259,11 +259,25 @@ div.application a.status-archived:after {
 	padding-inline-start: 20px;
 }
 
-div.przepisy p i {
+div.przepisy-kategorie p i {
 	color: #666;
 }
 
 div.przepisy.dialog .ui-body {
 	background-color: transparent;
 	padding: .4em 0em;
+}
+
+div.przepisy img.sign {
+	float: right;
+	max-width: 20%;
+	-max-width: 160px;
+	padding-left: 1em;
+	padding-bottom: 0.2em;
+	clear: right;
+}
+
+div.przepisy h4, 
+div.przepisy h5,  {
+	clear: both;
 }
