@@ -1,14 +1,19 @@
 import unittest
 from selenium import webdriver
 import pages
+import time
+import os
 
 class UDTestStatic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        options = webdriver.FirefoxOptions()
+        options.add_argument("-p selenium")
+        profile = webdriver.FirefoxProfile('./selenium.ff-profile')
         cls.driver = webdriver.Firefox()
         cls.driver.implicitly_wait(2)
-        cls.drive.set_window_size(700, 900)
+        cls.driver.set_window_size(700, 900)
         cls.driver.get('http://staging.uprzejmiedonosze.net')
 
     def test_01_ssl(self):
@@ -54,5 +59,6 @@ class UDTestStatic(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        time.sleep(50)
         cls.driver.quit()
         pass
