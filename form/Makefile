@@ -11,12 +11,12 @@ PUBLIC               = $(EXPORT)/public
 DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc
 
 CSS_FILES            = $(wildcard src/css/*.css)
-CSS_MINIFIED         = $(CSS_FILES:src/%.css=export/public/%.css)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5 | cut -b 1-8)
+CSS_MINIFIED         = $(CSS_FILES:src/%.css=export/public/%-$(CSS_HASH).css)
 
 JS_FILES             = $(wildcard src/js/*.js)
-JS_MINIFIED          = $(JS_FILES:src/%.js=export/public/%.js)
 JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
+JS_MINIFIED          = $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
 
 HTML_FILES           = $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       = $(HTML_FILES:src/%.html=export/public/%.html)
@@ -78,15 +78,14 @@ clean: ## Removes minified CSS and JS files.
 	@rm -f $(BRANCH_ENV)
 
 # Generics
-
-export/public/css/%.css: src/css/%.css; @echo '==> Minifying $<'
+export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
 	else \
 		cp $< $@ ; \
 	fi;
 
-export/public/js/%.js: src/js/%.js; @echo '==> Minifying $<'
+export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type js $< > $@ ; \
 	else \

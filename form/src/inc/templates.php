@@ -52,7 +52,7 @@ HTML;
 		<meta property="og:type" content="website" />
 
 		<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-		<link rel="stylesheet" href="css/style.css?v=%CSS_HASH%">
+		<link rel="stylesheet" href="css/style-%CSS_HASH%.css">
 
 		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 		<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
@@ -109,8 +109,8 @@ function getFooter($mapsInitFunc = false, $txt = '&copy; Uprzejmie Donoszę'){
 				<h4>$txt</h4>
 			</div>
 		</div> <!-- page -->
-		<script src="js/script.js?v=%JS_HASH%"></script>
-		<script src="js/lazysizes.min.js"></script>
+		<script src="js/script-%JS_HASH%.js"></script>
+		<script src="js/lazysizes.min-%JS_HASH%.js"></script>
 		$maps
 		<script>
 			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
