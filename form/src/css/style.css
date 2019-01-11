@@ -271,13 +271,11 @@ div.przepisy.dialog .ui-body {
 div.przepisy img.sign {
 	float: right;
 	max-width: 20%;
-	-max-width: 160px;
 	padding-left: 1em;
 	padding-bottom: 0.2em;
 	clear: right;
 }
 
-div.przepisy h4, 
-div.przepisy h5,  {
+div.przepisy h4 {
 	clear: both;
 }
