@@ -94,9 +94,11 @@ export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	$(replace-inline)
 
 export/public/%.html: src/%.html; @echo '==> Preprocessing $<'
+	$(lint)
 	$(replace)
 
 export/inc/%.php: src/inc/%.php; @echo '==> Preprocessing $<'
+	$(lint)
 	$(replace)
 
 $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
@@ -126,6 +128,10 @@ endef
 define replace-inline
 @sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@ 
 @sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@ 
+endef
+
+define lint
+@! php -l $< | grep -v "No syntax errors detected"
 endef
 
 # GIT
