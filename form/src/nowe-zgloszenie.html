@@ -4,11 +4,8 @@ genHeader("Uprzejmie Donoszę – nowe zgłoszenie", true);
 
 if(isset($_SESSION['newAppId'])){ // edit mode
 	$applicationId = $_SESSION['newAppId'];
-	$application = getApplication($applicationId);
+	$application = getApplication($applicationId, true);
 	$edit = isset($application) && $application->status == 'ready'; // page refresh probably (edit mode, but application is empty)
-	echo "<!--\n";
-	print_r($application);
-	echo "-->\n";
 }else{ // new application mode
 	$applicationId = guidv4();
 	$_SESSION['newAppId'] = $applicationId;

@@ -83,7 +83,7 @@ function _upload(){
     $pictureType = $_POST['pictureType'];
     $applicationId = $_POST['applicationId'];
 
-    $application = getApplication($applicationId);
+    $application = getApplication($applicationId, true);
     $prefix = save_img_and_thumb($image_bytes);
 
     if($pictureType == 'carImage'){
