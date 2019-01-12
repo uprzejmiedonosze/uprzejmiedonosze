@@ -9,9 +9,9 @@ class UDTestStatic(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         options = webdriver.FirefoxOptions()
-        options.add_argument("-p selenium")
-        profile = webdriver.FirefoxProfile('./selenium.ff-profile')
-        cls.driver = webdriver.Firefox()
+        options.add_argument("-P selenium")
+        options.add_argument("-marionette")
+        cls.driver = webdriver.Firefox(options=options, service_args=["--port", "2828"])
         cls.driver.implicitly_wait(2)
         cls.driver.set_window_size(700, 900)
         cls.driver.get('http://staging.uprzejmiedonosze.net')
@@ -19,28 +19,28 @@ class UDTestStatic(unittest.TestCase):
     def test_01_ssl(self):
         assert "https://" in self.driver.current_url
 
-    #def test_02_main_page(self):
-    #    main_page = pages.MainPage(self.driver)
-    #    main_page.is_title_matches("Uprzejmie")
-    #    main_page.is_new_matches()
-    #
-    #def test_03_changelog(self):
-    #    changelog = pages.Changelog(self.driver)
-    #    changelog.is_title_matches("historia"),
-    #    changelog.is_new_matches()
-    #    changelog.click_main()
-    #
-    #def test_04_project(self):
-    #    project = pages.Project(self.driver)
-    #    project.is_title_matches("projekcie")
-    #    project.is_new_matches()
-    #    project.click_main()
-#
-    #def test_05_rtd(self):
-    #    rtd = pages.RTD(self.driver)
-    #    rtd.is_title_matches("to dobrze")
-    #    rtd.is_new_matches()
-    #    rtd.click_main()
+    def test_02_main_page(self):
+        main_page = pages.MainPage(self.driver)
+        main_page.is_title_matches("Uprzejmie")
+        main_page.is_new_matches()
+    
+    def test_03_changelog(self):
+        changelog = pages.Changelog(self.driver)
+        changelog.is_title_matches("historia"),
+        changelog.is_new_matches()
+        changelog.click_main()
+    
+    def test_04_project(self):
+        project = pages.Project(self.driver)
+        project.is_title_matches("projekcie")
+        project.is_new_matches()
+        project.click_main()
+
+    def test_05_rtd(self):
+        rtd = pages.RTD(self.driver)
+        rtd.is_title_matches("to dobrze")
+        rtd.is_new_matches()
+        rtd.click_main()
     
     def test_06_start(self):
         start = pages.Start(self.driver)
