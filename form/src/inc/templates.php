@@ -1,8 +1,12 @@
-<?PHP 
+<?PHP
 
 function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = false,
 	$image = 'img/uprzejmiedonosze.png',
 	$description = 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.'){
+
+	global $headerSent;
+	$headerSent = true;
+	
 	$authcode = "";
 	if($auth){
 		checkIfLogged();
