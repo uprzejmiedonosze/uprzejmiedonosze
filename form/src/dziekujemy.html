@@ -6,7 +6,7 @@ if(!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])){
 	redirect('moje-zgloszenia.html');
 }
 
-genHeader("Uprzejmie Donoszę – dziękujemy", true);
+genHeader("Uprzejmie Donoszę – dziękujemy", true);
 
 $applicationId = $_POST['applicationId'];
 unset($_SESSION['newAppId']); 
@@ -41,7 +41,7 @@ $json = Array(
 
 $sm = guess_sm_address($application);
 $sm_email = ($sm[1])?"W tym wypadku jest to <strong>" . $sm[1] . "</strong>.":
-	"<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
+	"<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
 
 $application = (array) array_merge((array)$application, (array)$json);
 $sex = guess_sex_by_name($name);

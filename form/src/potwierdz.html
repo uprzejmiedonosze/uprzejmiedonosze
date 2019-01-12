@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 
-genHeader("Uprzejmie Donoszę – potwierdź", true);
+genHeader("Uprzejmie Donoszę – potwierdź", true);
 $post = $_POST;
 $applicationId = $post["applicationId"];
 
@@ -65,7 +65,7 @@ setApplication($applicationId, $application);
 			<h1>Potwierdź dane</h1>
 			<a onclick="$('#form').submit();" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Potwierdź!</a>
 		</div>
-		  
+		  
 		<div data-role="main" class="ui-content">
 			<h1>Jeszcze chwila!</h1>
 			<p>Sprawdź dane przed utworzeniem zgłoszenia. Nie obawiaj się – na tym etapie nic jeszcze nie zostanie wysłane do SM.</p>

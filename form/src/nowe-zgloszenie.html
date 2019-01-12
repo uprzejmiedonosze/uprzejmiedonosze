@@ -1,6 +1,6 @@
 <?PHP
 require_once(__DIR__ . '/../inc/include.php');
-genHeader("Uprzejmie Donoszę – nowe zgłoszenie", true);
+genHeader("Uprzejmie Donoszę – nowe zgłoszenie", true);
 
 if(isset($_SESSION['newAppId'])){ // edit mode
 	$applicationId = $_SESSION['newAppId'];
@@ -109,7 +109,7 @@ $date         = ($edit)? $application->date: '';
 								$i++;
 								endforeach;
 							?>
-							<p>Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
+							<p>Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
 						</div>
 						
 

@@ -216,7 +216,7 @@ HTML;
 
 	return <<<HTML
 	<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="actions">
-	    $statusActions
+	    $statusActions
 	</div>
 HTML;
 }
