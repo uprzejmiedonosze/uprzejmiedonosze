@@ -106,7 +106,7 @@ function flatten_application($application){
 			'user_address' => $application->user->address,
 			'category' => $categories[$application->category][1],
 			'address' => $application->address->address,
-			'user_phone' => "Tel: {$application->user->msisdn}",
+			'user_phone' => $msisdn,
     		'user_email' => "Email: {$application->user->email}",
 			'number' => $application->number,
 			'city' => $application->address->city,
