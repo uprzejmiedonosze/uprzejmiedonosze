@@ -4,7 +4,7 @@
 <div data-role="collapsibleset" data-filter="true" data-mini="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
 <div class="activeApps"></div>
     <?
-        $applications = getUserApplications($_SESSION['user_email']);
+        $applications = getUserApplications();
         $archived = [];
         foreach($applications as $id){
             $application = getApplication($id);

@@ -10,7 +10,7 @@ function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = fal
 	$authcode = "";
 	if($auth){
 		checkIfLogged();
-		if(!$register && !isRegistered($_SESSION['user_email'])){
+		if(!$register && !isRegistered()){
 			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
 		}
 		$authcode = <<<HTML
