@@ -27,7 +27,7 @@ PHP_PROCESSED        = $(PHP_FILES:src/inc/%.php=export/inc/%.php)
 MANIFEST             = src/manifest.json
 MANIFEST_PROCESSED   = $(PUBLIC)/manifest.json
 
-OTHER_FILES          = src/favicon.ico src/robots.txt src/img
+OTHER_FILES          = src/favicon.ico src/robots.txt src/img src/sitemap.xml
 
 STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net

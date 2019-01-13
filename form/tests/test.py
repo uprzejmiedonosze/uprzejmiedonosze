@@ -9,9 +9,9 @@ class UDTestStatic(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         options = webdriver.FirefoxOptions()
-        options.add_argument("-P selenium")
-        options.add_argument("-marionette")
-        cls.driver = webdriver.Firefox(options=options, service_args=["--port", "2828"])
+        #options.add_argument("-P selenium")
+        #options.add_argument("-marionette")
+        cls.driver = webdriver.Firefox()#options=options, service_args=["--port", "2828"])
         cls.driver.implicitly_wait(2)
         cls.driver.set_window_size(700, 900)
         cls.driver.get('http://staging.uprzejmiedonosze.net')

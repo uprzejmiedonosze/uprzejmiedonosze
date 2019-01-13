@@ -1,0 +1,8 @@
+User-agent: Googlebot
+Disallow: /login.html
+Disallow: /register.html
+
+User-agent: *
+Allow: /
+
+Sitemap: https://uprzejmiedonosze.net/sitemap.xml
