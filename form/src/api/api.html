@@ -58,7 +58,7 @@ function _verifyToken(){
                 'user_email' => $_SESSION['user_email'],
                 'user_name' => $_SESSION['user_name'],
                 'user_picture' => $_SESSION['user_picture'],
-                'user_id' => $_SESSION['user_id']    
+                'user_id' => $_SESSION['user_id']
             ));
         }else{
             logger('api.html:_verifyToken Token not verified');
