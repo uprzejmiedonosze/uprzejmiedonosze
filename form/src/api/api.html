@@ -34,7 +34,7 @@ function is_ajax() {
 
 function _getUserApplications(){
     global $categories;
-    $applicationIds = getUserApplications('szymon@nieradka.net');
+    $applicationIds = getUserApplications();
     $applications = Array();
     foreach($applicationIds as $id){
         $application = getApplication($id);
@@ -83,11 +83,7 @@ function _upload(){
     $pictureType = $_POST['pictureType'];
     $applicationId = $_POST['applicationId'];
 
-    try{
-        $application = getApplication($applicationId);
-    }catch(Exception $e){
-        $application = Array();
-    }
+    $application = getApplication($applicationId, true);
     $prefix = save_img_and_thumb($image_bytes);
 
     if($pictureType == 'carImage'){
