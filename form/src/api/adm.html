@@ -1,0 +1,95 @@
+<?PHP
+header("Content-Type: application/json; charset=UTF-8");
+require_once(__DIR__ . '/../../inc/include.php');
+require_once(__DIR__ . '/../../autoload.php');
+
+if(!isAdmin()){
+    logger("User " . getCurrentUserEmail() . " tried to delete account " . $email, true);
+    raiseError('Admin only area', 403);
+}
+
+if (isset($_GET["action"]) && !empty($_GET["action"])) {
+    $action = $_GET["action"];
+    logger("adm.html:_ action=$action", true);
+    switch($action) {
+        case "admin-remove-user":
+            _removeUser($_GET['email']); break;
+        default: raiseError('Invalid action specified', 400);
+    }
+}else{
+    raiseError('No action specified', 400);
+}
+
+function _removeUser($email){
+    global $nsql, $apps, $users;
+
+    if(!isset($email)){
+        raiseError('No email provided', 403);
+    }
+
+    try{
+        $user = getUser($email);
+    }catch(Exception $e){
+        raiseError("Trying to remove nonesiting user: $email", 400);
+    }
+
+    $stmt = $nsql->db->prepare("select "
+        . "json_extract(applications.value, '$.id'), "
+        . "json_extract(applications.value, '$.status'), "
+        . "json_extract(applications.value, '$.carImage.url'), "
+        . "json_extract(applications.value, '$.carImage.thumb'), "
+        . "json_extract(applications.value, '$.contextImage.url'), "
+        . "json_extract(applications.value, '$.contextImage.thumb'), "
+        . "json_extract(applications.value, '$.carInfo.plateImage') "
+        . "from applications, json_tree(applications.value, '$.user.email') "
+        . "where json_tree.value = '$email';");
+
+    //$stmt->bindParam(':email', $email, \PDO::PARAM_STR);
+    $stmt->execute();
+
+    $output = Array();
+    $output['files'] = Array();
+    $output['apps'] = Array();
+    $output['user'] = $user['data'];
+
+    while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+        $row[2] && array_push($output['files'], $row[2]);
+        $row[3] && array_push($output['files'], $row[3]);
+        $row[4] && array_push($output['files'], $row[4]);
+        $row[5] && array_push($output['files'], $row[5]);
+        $row[6] && array_push($output['files'], $row[6]);
+        @array_push($output['apps'], $row[0]);
+    }
+
+    // removing all files
+    foreach($output['files'] as $file){
+        if($file){
+            unlink(__DIR__ . '/../' . $file);
+        }
+    }
+
+    // removing apps
+    foreach($output['apps'] as $appid){
+        $apps->delete($appid);
+    }
+
+    // adding empty user under a different key
+    $time = date_format(new DateTime(), 'Y-m-d H:i:s');
+    $user['data'] = (array) array_merge( (array)$user['data'], 
+        Array(
+            "name" => 'DELETED',
+            "msisdn" => 'DELETED',
+            "address" => 'DELETED',
+            "email" => md5($email . $time),
+            "deleted" => $time
+        )
+    );
+    $user['applications'] = Array();
+    $users->set(md5($email), json_encode($user));
+
+    // removing user
+    $users->delete($email);
+
+    echo json_encode($output, JSON_PRETTY_PRINT);
+}
+?>
