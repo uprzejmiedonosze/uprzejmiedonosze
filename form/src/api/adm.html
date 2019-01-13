@@ -64,13 +64,14 @@ function _removeUser($email){
     // removing all files
     foreach($output['files'] as $file){
         if($file){
-            unlink(__DIR__ . '/../' . $file);
+            unlink(__DIR__ . "/../$file");
         }
     }
 
-    // removing apps
+    // removing apps and PDFs
     foreach($output['apps'] as $appid){
         $apps->delete($appid);
+        @unlink(__DIR__ . "/../$appid.pdf");
     }
 
     // adding empty user under a different key
@@ -80,12 +81,12 @@ function _removeUser($email){
             "name" => 'DELETED',
             "msisdn" => 'DELETED',
             "address" => 'DELETED',
-            "email" => md5($email . $time),
+            "email" => md5($email),
             "deleted" => $time
         )
     );
     $user['applications'] = Array();
-    $users->set(md5($email), json_encode($user));
+    $users->set(md5($email . $time), json_encode($user));
 
     // removing user
     $users->delete($email);
