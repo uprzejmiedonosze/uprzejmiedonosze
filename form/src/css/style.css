@@ -123,7 +123,15 @@ img#plateImage {
 }
 #category label p {
 	padding: 0 1em;
-	min-width: 200px;
+	width: 100%;
+}
+
+@media (max-width: 40em) {
+	#category.ui-responsive>.ui-block-a,
+	#category.ui-responsive>.ui-block-b {
+        width: 100%;
+        float: none;
+    }
 }
 
 .combo input {
