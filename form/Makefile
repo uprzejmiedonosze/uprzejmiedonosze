@@ -93,11 +93,11 @@ export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	fi;
 	$(replace-inline)
 
-export/public/%.html: src/%.html; @echo '==> Preprocessing $<'
+export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
 	$(lint)
 	$(replace)
 
-export/inc/%.php: src/inc/%.php; @echo '==> Preprocessing $<'
+export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
 	$(lint)
 	$(replace)
 
