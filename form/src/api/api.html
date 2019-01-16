@@ -193,7 +193,7 @@ function save_img_and_thumb($image_bytes){
 	fclose($ifp);
 	
 	if(!imagejpeg(resize_image($filename, 600, 600, false), $thumbname)){
-        logger("Wasn't able to write $filename as thumb to $thumbname.");
+        logger("Wasn't able to write $filename as thumb to $thumbname.", true);
     }
 
 	return $prefix;
@@ -230,7 +230,7 @@ function get_car_info($image_bytes){
 	try {
 		return $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
 	} catch (Exception $e) {
-		logger('Exception when calling DefaultApi->recognizeBytes: ', $e->getMessage());
+		logger('Exception when calling DefaultApi->recognizeBytes: ' . $e->getMessage(), true);
 		return null;
 	}
 }
