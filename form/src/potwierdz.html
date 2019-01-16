@@ -29,12 +29,7 @@ $user = getCurrentUser()['data'];
 
 $json = Array(
 	"date" => $date,
-	"user" => Array(
-		"name" => $user['name'],
-		"email" => $user['email'],
-		"msisdn" => $user['msisdn'],
-		"address" => $user['address']
-	),
+	"user" => $user,
 	"category" => $category,
 	"address" => Array(
 		"address" => $address,

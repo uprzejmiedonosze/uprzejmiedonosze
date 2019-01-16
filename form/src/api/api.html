@@ -90,6 +90,8 @@ function _upload(){
     }
     $prefix = save_img_and_thumb($image_bytes);
 
+    $user = getCurrentUser()['data'];
+
     if($pictureType == 'carImage'){
         $result = get_car_info($image_bytes);
         if(isset($result) && count($result["results"]) && $result["results"][0]["plate"]){
@@ -119,14 +121,16 @@ function _upload(){
                 "carImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')
-                )
+                ),
+                "user" => $user
             );
         }else{
             $output = Array(
                 "carImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')
-                )
+                ),
+                "user" => $user
             );
         }
     }else if($pictureType == 'contextImage'){
@@ -139,7 +143,8 @@ function _upload(){
                 ),
                 "address" => Array(
                     "latlng" => "$geo"
-                )
+                ),
+                "user" => $user
             );
         }else{
             $output = Array(
@@ -147,7 +152,8 @@ function _upload(){
                 "contextImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')
-                )
+                ),
+                "user" => $user
             );
         }
     }else{
