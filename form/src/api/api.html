@@ -74,6 +74,15 @@ function _action($action, $id){
     echo json_encode(Array("status" => "OK"));
 }
 
+/**
+ * Compares 'plate results' and sorts it by confidence.
+ */
+function cmp($a, $b){
+    if($a['confidence'] > $b['confidence']) return -1;
+    if($a['confidence'] < $b['confidence']) return 1;
+    return 0;
+}
+
 function _upload(){
     global $_POST;
     $image_bytes = explode( ',', $_POST['image_data'])[1]; 
@@ -94,9 +103,15 @@ function _upload(){
     $prefix = save_img_and_thumb($image_bytes);
 
     if($pictureType == 'carImage'){
-        $result = get_car_info($image_bytes);
-        if(isset($result) && count($result["results"]) && $result["results"][0]["plate"]){
-            $coordinates = $result["results"][0]["coordinates"];
+        $car_info = get_car_info($image_bytes);
+
+        if(isset($car_info) && count($car_info["results"])){
+            $result = (Array)$car_info['results'];
+            usort($result, "cmp");
+
+            $result = $result[0];
+
+            $coordinates = $result["coordinates"];
             $xes = Array();
             $yes = Array();
             foreach($coordinates as $ley => $ojb){
@@ -110,12 +125,12 @@ function _upload(){
                 imagejpeg($plateImage, make_image_filename($prefix, ',p'));
             }
 
-            $recydywa = (int)countApplicationsPerPlate($result["results"][0]["plate"]);
+            $recydywa = (int)countApplicationsPerPlate($result["plate"]);
 
             $output = Array(
                 "carInfo" => Array(
-                    "plateId" => $result["results"][0]["plate"],
-                    "brand" => $result["results"][0]["vehicle"]['make'][0]['name'],
+                    "plateId" => $result["plate"],
+                    "brand" => $result["vehicle"]['make'][0]['name'],
                     "plateImage" => make_image_url($prefix, ',p'),
                     "recydywa" => $recydywa
                 ),
