@@ -291,12 +291,12 @@ function sendFile(fileData, id) {
 		success: function (data) {
             json = JSON.parse(data);
 			if(json.carImage) {
-				$('img#' + id + '-img').attr("src", json.carImage.thumb);
-				$('#' + id).textinput('disable');
+				$('img#carImage-img').attr("src", json.carImage.thumb);
+				$('#carImage').textinput('disable');
 			}
 			if(json.contextImage) {
-				$('img#' + id + '-img').attr("src", json.contextImage.thumb);
-				$('#' + id).textinput('disable'); 
+				$('img#contextImage-img').attr("src", json.contextImage.thumb);
+				$('#contextImage').textinput('disable'); 
 			}
 			if(id == 'carImage' && json.carInfo){
 				if(json.carInfo.plateId) {
