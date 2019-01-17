@@ -40,7 +40,7 @@ $categories = Array(
 		"Wyobraźnia kierowców nie zna granic. Jeśli wybierzesz tę katogorię, koniecznie opisz szczegóły w komentarzu do zgłoszenia."]
 );
 
-$sm_addresses = Array (
+const SM_ADDRESSES = Array (
 	'szczecin' => ['Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
 		'sm@um.szczecin.pl'],
 	'warszawa' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
