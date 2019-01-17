@@ -16,6 +16,7 @@ $city = $post["city"];
 
 $plateId = strtoupper(trim($post["plateId"]));
 $category = $post["category"];
+$category_txt = CATEGORIES[$category][1];
 $comment = capitalizeSentence($post["comment"]);
 
 $date = date_format(new DateTime($post['datetime']), 'Y-m-d\TH:i:s');
@@ -72,7 +73,7 @@ echo <<<HTML
 				<h3>Zgłoszenie wykroczenia</h3>
 				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $bylam świadkiem pozostawienia
 					samochodu o nr rejestracyjnym <b>$plateId</b> pod adresem <b>$address</b>.
-					{CATEGORIES[$category][1]} Zdjęcia $wykonalam samodzielnie.</p>
+					{$category_txt} Zdjęcia $wykonalam samodzielnie.</p>
 				<p>Nie $bylam świadkiem samego momentu parkowania, oraz nie wiem jak długo
 					pozostawał pojazd pozostawał na tym miejscu.</p>
 				<p>$comment</p>
