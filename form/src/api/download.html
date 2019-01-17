@@ -1,7 +1,7 @@
 <?PHP
 require(__DIR__ . '/../../inc/include.php');
 
-$ROOT = __DIR__ . "/..";
+const ROOT = __DIR__ . "/..";
 
 if(!isset($_GET['appId'])){
     http_response_code(400);
@@ -16,7 +16,7 @@ if(!isset($application)){
     die();
 }
 
-$pdf = "$ROOT/cdn/$applicationId.pdf";
+$pdf = ROOT . "/cdn/$applicationId.pdf";
 $filename = 'Zgloszenie_' . str_replace('/', '-', $application->number) . '.pdf';
 
 //if(!file_exists($pdf)){
@@ -29,8 +29,6 @@ header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
 function generate_pdf($application, $outp_file) {
-	global $ROOT;
-
 	$template_file = __DIR__ . '/template.tex.twig';
 
 	if(!file_exists($template_file)) {
@@ -68,22 +66,21 @@ function generate_pdf($application, $outp_file) {
 		throw new Exception("Output was not generated and latex returned: $ret.");
 	}
     
-	$destFile = "$ROOT/cdn/{$application->id}.pdf";
+	$destFile = ROOT . "/cdn/{$application->id}.pdf";
 	rename($pdf_f, $destFile);
 	@unlink($f);
 }
 
 function flatten_application($application){
-	global $ROOT;
 	
 	$includegraphics = '\\href{https://%HOST%/ud-' 
 		. $application->id
 		. '.html}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
-	$contextImage = $includegraphics . $ROOT . "/" . $application->contextImage->thumb . "}}";
-	$carImage = $includegraphics . $ROOT . "/" . $application->carImage->thumb . "}}";
+	$contextImage = $includegraphics . ROOT . "/" . $application->contextImage->thumb . "}}";
+	$carImage = $includegraphics . ROOT . "/" . $application->carImage->thumb . "}}";
 
 	$plateImage = "";
-	@$plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . $ROOT . "/" . $application->carInfo->plateImage . "}";
+	@$plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $application->carInfo->plateImage . "}";
 
 	$sm = guess_sm_address($application);
 	$sex = guess_sex($application);
