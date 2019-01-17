@@ -70,7 +70,6 @@ label.section:first-of-type {
 }
 
 #pics img {
-	max-height: 350px;
 	max-width: 350px;
 	border-radius: 0.8em;
 	width: 100%;
