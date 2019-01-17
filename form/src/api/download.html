@@ -74,7 +74,7 @@ function generate_pdf($application, $outp_file) {
 }
 
 function flatten_application($application){
-	global $ROOT, $categories;
+	global $ROOT;
 	
 	$includegraphics = '\\href{https://%HOST%/ud-' 
 		. $application->id
@@ -104,7 +104,7 @@ function flatten_application($application){
 			'plateId' => $application->carInfo->plateId,
 			'userComment' => $application->userComment,
 			'user_address' => $application->user->address,
-			'category' => $categories[$application->category][1],
+			'category' => CATEGORIES[$application->category][1],
 			'address' => $application->address->address,
 			'user_phone' => $msisdn,
     		'user_email' => "Email: {$application->user->email}",

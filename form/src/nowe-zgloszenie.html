@@ -93,13 +93,13 @@ $date         = ($edit)? $application->date: '';
 						<div class="ui-grid-a ui-responsive" id="category">
 							<? 
 								$i = 0;
-								foreach($categories as $catId => $catName):
+								foreach(CATEGORIES as $catId => $catName):
 									if(!isset($catName[0])){
 										continue;
 									}
 
 							?>
-							<div class="ui-block-<? echo($categoriesMatrix[$i % 2]); ?>" title="<?=strip_tags($catName[2])?>">
+							<div class="ui-block-<? echo(CATEGORIES_MATRIX[$i % 2]); ?>" title="<?=strip_tags($catName[2])?>">
 								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == $category)?' checked="checked" ': '';?>>
 								<label for="<?=$catId ?>">
 									<img src="img/<?=$catId ?>.jpg">

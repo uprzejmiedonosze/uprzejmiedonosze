@@ -1,6 +1,6 @@
 <?PHP 
 
-$categories = Array(
+const CATEGORIES = Array(
 	7  => ["Niezastosowanie się do znaków",
 		"Pojazd był zaparkowany w sposób niezgodny z oznaczeniem poziomym lub pionowym.",
 		"<p>Jeśli na danym obszarze, miejsca do parkowania są wyznaczone za pomocą znaków poziomych lub pionowych, to kierowców obowiązują właśnie te znaki. Nie ma żadnego znaczenia, czy na chodniku zostało 1,5m albo czyczy do przejścia dla pieszych pozostało 8 czy 10 metrów.</p> <p><i>(PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.)</i></p>"],
@@ -49,9 +49,9 @@ const SM_ADDRESSES = Array (
 		'ot1@strazmiejska.waw.pl']
 );
 
-$categoriesMatrix = Array( 'a', 'b');
+const CATEGORIES_MATRIX = Array( 'a', 'b');
 
-$statuses = Array (
+const STATUSES = Array (
     // KEY                  0 desc               1 action             2 icon     3 class     4 color (not used)
     'draft'             => ['Draft',             'Dalej',             'edit',    null,       ''],
     'ready'             => ['Gotowe',            'Potwierdź',         'shop',    null,       ''],

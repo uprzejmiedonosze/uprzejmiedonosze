@@ -33,7 +33,6 @@ function is_ajax() {
 }
 
 function _getUserApplications(){
-    global $categories;
     $applicationIds = getUserApplications();
     $applications = Array();
     foreach($applicationIds as $id){
@@ -43,7 +42,7 @@ function _getUserApplications(){
         $applications[$id] = $application;
         $applications[$id]->app_date = $app_date;
         $applications[$id]->app_hour = $app_hour;
-        $applications[$id]->category_txt = $categories[$application->category][1];
+        $applications[$id]->category_txt = CATEGORIES[$application->category][1];
     }
     echo json_encode($applications);
 }

@@ -58,7 +58,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 					poniżej. Dopiero później szukaj odpowiedniej kategorii dla swojego zgłoszenia.</p>
 
 					<?
-						foreach($categories as $catId => $catName):
+						foreach(CATEGORIES as $catId => $catName):
 							if(!isset($catName[0])){
 								continue;
 							}
