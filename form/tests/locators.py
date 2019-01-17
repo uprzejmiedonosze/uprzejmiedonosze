@@ -25,7 +25,7 @@ class Locators(object):
     NEW_IMAGE2  = (By.CSS_SELECTOR, "div.ui-block-b > div.image-upload")
     NEW_IIMAGE1 = (By.ID,    "contextImage")
     NEW_IIMAGE2 = (By.ID,    "carImage")
-    NEW_CAT0    = (By.ID,    "0")
+    NEW_CAT0    = (By.XPATH, "//label[@for='0']")
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 

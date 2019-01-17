@@ -8,12 +8,12 @@ class UDTestStatic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        options = webdriver.FirefoxOptions()
-        #options.add_argument("-P selenium")
-        #options.add_argument("-marionette")
-        cls.driver = webdriver.Firefox()#options=options, service_args=["--port", "2828"])
+        profile = webdriver.FirefoxProfile('/Users/szn/Sites/uprzejmiedonosze.net/form/tests/selenium.ff-profile')
+        cls.driver = webdriver.Firefox(firefox_profile=profile,
+            firefox_binary='/Applications/Firefox.app/Contents/MacOS/firefox-bin')
+
         cls.driver.implicitly_wait(2)
-        cls.driver.set_window_size(700, 900)
+        cls.driver.set_window_size(500, 900)
         cls.driver.get('http://staging.uprzejmiedonosze.net')
 
     def test_01_ssl(self):
@@ -44,14 +44,14 @@ class UDTestStatic(unittest.TestCase):
     
     def test_06_start(self):
         start = pages.Start(self.driver)
-        start.is_title_matches("Start")
+        start.is_title_matches("tart")
 
     def test_07_new(self):
         new = pages.New(self.driver)
         new.is_title_matches("Nowe")
         new.is_validation_empty_working()
         new.is_other_comment_validation_working()
-        new.test_contex_image()
+        new.test_context_image()
         new.test_car_image()
         new.review()
         new.update()
@@ -59,6 +59,4 @@ class UDTestStatic(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        time.sleep(50)
         cls.driver.quit()
-        pass

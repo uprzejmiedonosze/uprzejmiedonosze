@@ -5,7 +5,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import time
 import os
+import sys
 import configparser
+import logging
+
+logger = logging.getLogger(__name__)
+logger.level = logging.DEBUG
+logger.addHandler(logging.StreamHandler(sys.stdout))
 
 class Config(object):
     config = configparser.ConfigParser()
@@ -35,14 +41,14 @@ class BasePage(object):
         assert len(new) > 0, "nie mogę znaleźć przycisku nowego zgłoszenia"
     
     def is_title_matches(self, title):
-        assert title in self.driver.title, "tytuł nie pasuje (jest {} zamiast {})".format(self.driver.title, title)
+        assert title in self.driver.title, "tytuł nie pasuje (jest '{}' zamiast '{}')".format(self.driver.title, title)
     
     def click_main(self):
         self.driver.find_element(*Locators.MAIN).click()
         time.sleep(2)
     
     def login(self):
-        assert "zaloguj" in self.driver.title, "Próba logowania na stronie innej niz Zaloguj się (jest {})".format(self.driver.title)
+        assert "aloguj" in self.driver.title, "Próba logowania na stronie innej niz Zaloguj się (jest {})".format(self.driver.title)
 
         wait = WebDriverWait(self.driver, 10)
         wait.until(EC.visibility_of_element_located(Locators.LOGIN_BTN)).click()
@@ -57,7 +63,7 @@ class BasePage(object):
 
         self.driver.find_element(*Locators.LOGIN_FIN).click()
         wait = WebDriverWait(self.driver, 10)
-        wait.until(EC.title_contains('Start'))
+        wait.until(EC.title_contains('tart')) # [sS]tart
 
 class MainPage(BasePage):
     def __init__(self, driver):
@@ -79,18 +85,20 @@ class RTD(BasePage):
 class Start(BasePage):
     def __init__(self, driver):
         BasePage.__init__(self, driver, Locators.START)
-        if not "Start" in self.driver.title:
+        time.sleep(5)
+        if not "tart" in self.driver.title: #[sS]tart
             self.login()
 
 class New(BasePage):
     def __init__(self, driver):
         BasePage.__init__(self, driver, Locators.NEW)
-        if not "Nowe" in self.driver.title:
+        time.sleep(5)
+        if not "owe " in self.driver.title: #[nN]owe
             self.login()
     
     def is_validation_empty_working(self):
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
-
+        time.sleep(2)
         assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
         assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
         assert "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class')
@@ -102,9 +110,13 @@ class New(BasePage):
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
         assert "error" in self.driver.find_element(*Locators.NEW_COMMENT).get_attribute('class')
     
-    def test_contex_image(self):
+    def test_context_image(self):
+        self.driver.execute_script("$('.image-upload input').css('display', 'block');")
+        time.sleep(1)
         self.driver.find_element(*Locators.NEW_IIMAGE1).send_keys(os.getcwd() + self.cfg.app['contextImage'])
-        time.sleep(2)
+
+        wait = WebDriverWait(self.driver, 20)
+        wait.until(EC.text_to_be_present_in_element_value(Locators.NEW_ADDRESS, self.cfg.app['address']))
         
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class')
         assert not "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
@@ -113,7 +125,9 @@ class New(BasePage):
 
     def test_car_image(self):
         self.driver.find_element(*Locators.NEW_IIMAGE2).send_keys(os.getcwd() + self.cfg.app['carImage'])
-        time.sleep(20)
+        
+        wait = WebDriverWait(self.driver, 30)
+        wait.until(EC.text_to_be_present_in_element_value(Locators.NEW_PLATEID, self.cfg.app['plateId']))
         
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
         assert not "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
@@ -124,7 +138,7 @@ class New(BasePage):
         self.driver.find_element(*Locators.NEW_COMMENT).clear()
         self.driver.find_element(*Locators.NEW_COMMENT).send_keys(self.cfg.app['comment'])
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
-        time.sleep(2)
+        WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
 
         text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
 
@@ -136,10 +150,11 @@ class New(BasePage):
         assert self.cfg.account['email'] in text
         
         self.driver.execute_script("window.history.go(-1)")
+        WebDriverWait(self.driver, 10).until(EC.title_contains('owe '))
     
     def update(self):
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
-        time.sleep(2)
+        WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
     
     def commit(self):
         text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
