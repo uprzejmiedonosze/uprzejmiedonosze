@@ -288,7 +288,8 @@ function sendFile(fileData, id) {
 		data: formData,
 		contentType: false,
 		processData: false,
-		success: function (json) {
+		success: function (data) {
+            json = JSON.parse(data);
 			if(json.carImage) {
 				$('img#' + id + '-img').attr("src", json.carImage.thumb);
 				$('#' + id).textinput('disable');

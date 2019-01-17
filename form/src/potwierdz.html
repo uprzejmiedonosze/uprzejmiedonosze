@@ -45,12 +45,12 @@ $json = Array(
 	"status" => "ready"
 );
 
-$application = (array) array_merge((array)$application, (array)$json);
+updateApplication($applicationId, (array)$json);
+
 $sex      = guess_sex_by_name($user['name']);
 $bylam    = $sex['bylam'];
 $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];
-setApplication($applicationId, $application);
 
 ?>
 <body class="index">

@@ -71,9 +71,7 @@ function _verifyToken(){
 }
 
 function _action($action, $id){
-    $app = getApplication($id);
-    $app->status = $action;
-    setApplication($id, $app);
+    updateApplication($id, Array('status' => $action));
     echo json_encode(Array("status" => "OK"));
 }
 
@@ -83,14 +81,18 @@ function _upload(){
     $pictureType = $_POST['pictureType'];
     $applicationId = $_POST['applicationId'];
 
+    $user = getCurrentUser()['data'];
+
     try{
         $application = getApplication($applicationId);
     }catch(Exception $e){
-        $application = Array();
+        setApplication($applicationId, Array(
+            'id' => $applicationId,
+            'status' => 'draft',
+            'user' => $user
+        ));
     }
     $prefix = save_img_and_thumb($image_bytes);
-
-    $user = getCurrentUser()['data'];
 
     if($pictureType == 'carImage'){
         $result = get_car_info($image_bytes);
@@ -121,16 +123,14 @@ function _upload(){
                 "carImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')
-                ),
-                "user" => $user
+                )
             );
         }else{
             $output = Array(
                 "carImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')
-                ),
-                "user" => $user
+                )
             );
         }
     }else if($pictureType == 'contextImage'){
@@ -143,8 +143,7 @@ function _upload(){
                 ),
                 "address" => Array(
                     "latlng" => "$geo"
-                ),
-                "user" => $user
+                )
             );
         }else{
             $output = Array(
@@ -152,21 +151,16 @@ function _upload(){
                 "contextImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')
-                ),
-                "user" => $user
+                )
             );
         }
     }else{
         raiseError("Uknown picture type: " . $pictureType, 400);
     }
 
-    $application = (array) array_merge((array)$application, (array)$output);
-    $application['id'] = $applicationId;
-    $application['status'] = 'draft';
+    $application = updateApplication($applicationId, (array) $output);
 
-    setApplication($applicationId, $application);
-
-    echo json_encode($output);
+    echo json_encode($application);
 }
 
 /**

@@ -1,73 +1,59 @@
 <?PHP
-require_once(__DIR__ . '/../autoload.php');
-require_once(__DIR__ . '/../inc/include.php');
+require_once __DIR__ . '/../autoload.php';
+require_once __DIR__ . '/../inc/include.php';
 
-if(!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])){
-	redirect('moje-zgloszenia.html');
+if (!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])) {
+    redirect('moje-zgloszenia.html');
 }
 
 genHeader("Uprzejmie Donoszę – dziękujemy", true);
 
 $applicationId = $_POST['applicationId'];
-unset($_SESSION['newAppId']); 
+unset($_SESSION['newAppId']);
 
 $application = getApplication($applicationId);
 
-$app_date = date_format(new DateTime($application->date), 'Y-m-d');
-$app_hour = date_format(new DateTime($application->date), 'H:i');
-$plateId = $application->carInfo->plateId;
-$address = $application->address->address;
-$name = $application->user->name;
-$msisdn = $application->user->msisdn;
-$email = $application->user->email;
-$userAddress = $application->user->address;
-$comment = $application->userComment;
-
-$carImage = $application->carImage->thumb;
-$contextImage = $application->contextImage->thumb;
-$category = $categories[$application->category][1];
-
 $user = saveUserApplication($application->user->email, $applicationId);
 $appNumber = 'UD/' . $user['number'] . '/' . sizeof($user['applications']);
+
+$json = array(
+    "status" => "confirmed",
+    "number" => $appNumber,
+);
+
+updateApplication($applicationId, (array) $json);
+
+$sm = guess_sm_address($application)[1];
+$sm_email = ($sm) ? "W tym wypadku jest to <strong>$sm</strong>." :
+"<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
+
+$sex = guess_sex_by_name($application->user->name);
+$bylam = $sex['bylam'];
+$swiadoma = $sex['swiadoma'];
+$wykonalam = $sex['wykonalam'];
 
 $from = "Uprzejmie Donosze <ud@nieradka.net>";
 $to = "<{$application->user->email}>";
 $subject = "Zgłoszenie $appNumber";
 
-$json = Array(
-	"status" => "confirmed",
-	"number" => $appNumber
-);
-
-$sm = guess_sm_address($application);
-$sm_email = ($sm[1])?"W tym wypadku jest to <strong>" . $sm[1] . "</strong>.":
-	"<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
-
-$application = (array) array_merge((array)$application, (array)$json);
-$sex = guess_sex_by_name($name);
-$bylam = $sex['bylam'];
-$swiadoma = $sex['swiadoma'];
-$wykonalam = $sex['wykonalam'];
-setApplication($applicationId, $application);
-
 ?>
 <body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-			<? menuMain(); ?>
-			<h1>Dziękujemy</h1>
-			<? menuNewApplication('Jeszcze raz') ?>
-		</div>
-		<div data-role="main" class="ui-content">
-			<p>Twoje zgłoszenie zostało zarejestrowane pod numerem <a href="/ud-<?=$applicationId?>.html"><?=$appNumber?></a>.
-			Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
-			<p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz wygenerować ich kilka/kikanaście, i w dokodnym
-			dla siebie cyklu wysłać je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
-			<p>Jak wysyłać zgłoszenia? Najprościej jest wysłać całą paczkę zgłoszeń na adres SM w twoim mieście. <?=$sm_email?> Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
-			już liście zgłoszeń.</p>
-			<p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
-				href="mailto:szymon@nieradka.net">szymon@nieradka.net</a>.</p>
-			
-			<a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
-		</div> <!-- main -->
-<?PHP getFooter() ?>
+    <div data-role="page" class="container-fluid" data-theme="a">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <? menuMain(); ?>
+            <h1>Dziękujemy</h1>
+            <? menuNewApplication('Jeszcze raz') ?>
+        </div>
+        <div data-role="main" class="ui-content">
+            <p>Twoje zgłoszenie zostało zarejestrowane pod numerem <a href="/ud-<?php echo $applicationId?>.html"><?php echo $appNumber?></a>.
+            Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
+            <p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz wygenerować ich kilka/kikanaście, i w dokodnym
+            dla siebie cyklu wysłać je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
+            <p>Jak wysyłać zgłoszenia? Najprościej jest wysłać całą paczkę zgłoszeń na adres SM w twoim mieście. <?php echo $sm_email?> Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
+            już liście zgłoszeń.</p>
+            <p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
+                href="mailto:szymon@nieradka.net">szymon@nieradka.net</a>.</p>
+
+            <a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
+        </div> <!-- main -->
+<?PHP getFooter()?>
