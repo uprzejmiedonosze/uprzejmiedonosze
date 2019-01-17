@@ -1,7 +1,10 @@
 {
-	"require": {
-		"mthenw/nosqlite": "^0.3.0",
-		"kreait/firebase-php": "^3.0",
-		"twig/twig": "^2.0"
-	}
+    "require": {
+        "mthenw/nosqlite": "^0.3.0",
+        "kreait/firebase-php": "^3.0",
+        "twig/twig": "^2.0"
+    },
+    "require-dev": {
+        "phpmd/phpmd": "@stable"
+    }
 }
