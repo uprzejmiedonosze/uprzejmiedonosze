@@ -68,7 +68,7 @@ $date         = ($edit)? $application->date: '';
 
 						<input type="hidden" id="datetime" name="datetime" value="<?=$date?>" />
 
-						<label for="address">Podaj miejsce zgłoszenia <a href="#" id="geocomplete">(pobierz adres)</a></label>
+						<label for="address">Podaj miejsce zgłoszenia <i id="addressHint"></i></label>
 						<div class="combo">
 							<input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true" value="<?=$address?>">
 							<a id="geo" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>

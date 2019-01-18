@@ -33,15 +33,6 @@ $(document).on('pageshow', function() {
 				$('#form').submit();
 			}
 		});
-
-		$('#geocomplete').click(function(){
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(function(position) {
-				  setAddress(position.coords.latitude + ',' + position.coords.longitude, false);
-				});
-			  }
-		});
-
 	}
 
 	if($("#register-submit").length){
@@ -95,7 +86,7 @@ function fillInAddress() {
   
 function validateForm(){
 	var ret = check($('#plateId'), 6, false);
-	ret = check($('#address'), 10, false) && ret;
+	ret = checkAddress($('#address')) && ret;
 	ret = check($('#carImage'), 0, true) && ret;
 	ret = check($('#contextImage'), 0, true) && ret;
 	if($('#0').is(':checked')){ // if category == 0 then comment is mandatory
@@ -106,6 +97,21 @@ function validateForm(){
 	}
 	return ret;
 }
+
+function checkAddress(){
+    var ret = $('#address').val().trim().length > 10;
+    ret = ($('#locality').val().trim().length > 2) && ret;
+    ret = ($('#latlng').val().trim().length > 5) && ret;
+
+    !ret && $('#address').addClass('error');
+    
+    if(!ret && $('#address').val().trim().length > 0){
+        $('#addressHint').text('(zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy)');
+    }
+
+    return ret;
+}
+
 function validateRegisterForm(){
 	var ret = check($('#name'), 6, false);
 	ret = check($('#address'), 10, false) && ret;
