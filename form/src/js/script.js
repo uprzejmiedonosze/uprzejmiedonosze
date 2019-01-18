@@ -106,7 +106,7 @@ function checkAddress(){
     !ret && $('#address').addClass('error');
     
     if(!ret && $('#address').val().trim().length > 0){
-        $('#addressHint').text('(zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy)');
+        $('#addressHint').text('(Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej)');
     }
 
     return ret;
