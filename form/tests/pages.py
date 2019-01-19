@@ -165,3 +165,11 @@ class New(BasePage):
         assert self.cfg.app['time'] in text
         assert self.cfg.app['comment'] in text
         assert self.cfg.account['email'] in text
+    
+    def fin(self):
+        self.driver.execute_script("$('#form').submit()")
+        time.sleep(1)
+        text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
+        assert "UD/" in text
+        assert "sm@um.szczecin.pl" in text
+        

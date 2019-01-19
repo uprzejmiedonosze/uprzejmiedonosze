@@ -56,6 +56,7 @@ class UDTestStatic(unittest.TestCase):
         new.review()
         new.update()
         new.commit()
+        new.fin()
 
     @classmethod
     def tearDownClass(cls):
