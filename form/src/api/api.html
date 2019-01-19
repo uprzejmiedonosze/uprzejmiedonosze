@@ -130,7 +130,7 @@ function _upload(){
             $output = Array(
                 "carInfo" => Array(
                     "plateId" => $result["plate"],
-                    "brand" => $result["vehicle"]['make'][0]['name'],
+                    "brand" => @$result["vehicle"]['make'][0]['name'],
                     "plateImage" => make_image_url($prefix, ',p'),
                     "recydywa" => $recydywa
                 ),
