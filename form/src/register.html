@@ -9,8 +9,12 @@ if(isset($_GET['next'])){
 }
 try{
     $user = getCurrentUser();
+    $email = $user['data']['email'];
+    $name = $user['data']['name'];
 }catch(Exception $e){
     $user = null;
+    $email = $_SESSION['user_email'];
+    $name = $_SESSION['user_name'];
 }
 
 ?>
@@ -26,13 +30,17 @@ try{
                 Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
             <form action="/register-ok.html?next=<?=$signInSuccessUrl?>" id="register-form" method="post" data-ajax="false">
                 <label for="name" class="section">Twoje dane</label>
-                <input type="text" required maxlength="30" id="name" name="name" placeholder="Twoje imię i nazwisko"
-                    data-inline="true" value="<?=$user['data']['name']?>">
-                <input disabled type="email" required maxlength="30" id="email" name="email" placeholder="Twój email"
-                    data-inline="true" value="<?=$user['data']['email']?>">
-                <input type="tel" maxlength="11" id="msisdn" name="msisdn" placeholder="Twój numer telefonu (opcjonalnie)"
+                <input type="text" required maxlength="30" id="name" name="name"
+                    placeholder="Twoje imię i nazwisko"
+                    data-inline="true" value="<?=$name?>">
+                <input disabled type="email" required maxlength="30" id="email" name="email"
+                    placeholder="Twój email"
+                    data-inline="true" value="<?=$email?>">
+                <input type="tel" maxlength="11" id="msisdn" name="msisdn"
+                    placeholder="Twój numer telefonu (opcjonalnie)"
                     data-inline="true" value="<?=$user['data']['msisdn']?>">
-                <input type="text" maxlength="70" required id="address" name="address" placeholder="Adres korespondencyjny"
+                <input type="text" maxlength="70" required id="address" name="address"
+                    placeholder="Adres korespondencyjny"
                     data-inline="true" value="<?=$user['data']['address']?>">
             </form>
         </div> <!-- main -->
