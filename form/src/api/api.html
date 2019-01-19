@@ -19,6 +19,10 @@ if (is_ajax()) {
                 _action($action, $_POST["id"]); break;
             case "upload":
                 _upload(); break;
+            case "_notify-new":
+                _notifyNew($_POST['id']); break;
+            case "_notify-register":
+                _notifyRegister($_SESSION['user_name']); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -326,4 +330,34 @@ function read_gps_location($file){
     }
     return false;
 }
+
+
+
+/**
+ * Pushes slack notification about new application.
+ */
+function _notifyNew($appId){
+    $application = getApplication($appId);
+
+    _sendSlackMessage("Nowe zgłoszenie `{$application->number}`"
+        . " od *{$application->user->name}*"
+        . " ({$application->address->city}):\n"
+        . "https://%HOST%/ud-{$application->id}.html");
+}
+
+/**
+ * Pushes slack notification about new registration.
+ */
+function _notifyRegister($name){
+    _sendSlackMessage("Nowa rejestracja *{$name}*.");
+}
+
+/** 
+ * Sends message to #updates slack channel at uprzejmiedonosze.slack.com
+ */
+function _sendSlackMessage($msg){
+    $client = new Maknz\Slack\Client('https://hooks.slack.com/services/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');
+    $client->send($msg);
+}
+
 ?>

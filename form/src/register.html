@@ -43,5 +43,11 @@ try{
                     placeholder="Adres korespondencyjny"
                     data-inline="true" value="<?=$user['data']['address']?>">
             </form>
-        </div> <!-- main -->
-<? getFooter('initAutocompleteOnRegister') ?>
+        </div> <!-- main -->        
+<? if(!$user): ?>
+        <script>
+        $.post("https://staging.uprzejmiedonosze.net/api/api.html",
+            {action: '_notify-register'});
+        </script>
+<? endif; ?>
+<? getFooter('initAutocompleteOnRegister'); ?>
