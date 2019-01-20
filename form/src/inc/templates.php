@@ -159,8 +159,6 @@ function printApplication($application, $printActions = true){
 	$category = CATEGORIES[$application->category][1];
 	$sex      = guess_sex($application);
 	$bylam    = $sex['bylam'];
-	$swiadoma = $sex['swiadoma'];
-	$wykonalam = $sex['wykonalam'];
 	
 	$status   = $application->status;
 	$statusClass = STATUSES[$status][3];
