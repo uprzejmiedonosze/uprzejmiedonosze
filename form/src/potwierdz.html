@@ -20,8 +20,9 @@ $category_txt = CATEGORIES[$category][1];
 $comment = capitalizeSentence($post["comment"]);
 
 $date = date_format(new DateTime($post['datetime']), DT_FORMAT);
-$app_date = date_format(new DateTime($date), 'Y-m-d');
-$app_hour = date_format(new DateTime($date), 'H:i');
+$app_date = (new DateTime($date))->format('Y-m-d');
+$app_hour = (new DateTime($date))->format('H:i');
+
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 @$plateImage = $application->carInfo->plateImage;

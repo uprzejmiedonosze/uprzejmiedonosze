@@ -154,8 +154,8 @@ function menuApplications($text = 'Zgłoszenia'){
 function printApplication($application, $printActions = true){
 	$commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
 	
-	$app_date = date_format(new DateTime($application->date), 'Y-m-d');
-	$app_hour = date_format(new DateTime($application->date), 'H:i');
+	$app_date = (new DateTime($application->date))->format('Y-m-d');
+	$app_hour = (new DateTime($application->date))->format('H:i');
 	$category = CATEGORIES[$application->category][1];
 	$sex      = guess_sex($application);
 	$bylam    = $sex['bylam'];

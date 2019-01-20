@@ -4,8 +4,8 @@ require_once(__DIR__ . '/../inc/include.php');
 
 $applicationId = $_GET["id"];
 $application = getApplication($applicationId);
-$app_date = date_format(new DateTime($application->date), 'Y-m-d');
-$app_hour = date_format(new DateTime($application->date), 'H:i');
+$app_date = (new DateTime($application->date))->format('Y-m-d');
+$app_hour = (new DateTime($application->date))->format('H:i');
 $category = CATEGORIES[$application->category][1];
 $sex      = guess_sex($application);
 $bylam    = $sex['bylam'];

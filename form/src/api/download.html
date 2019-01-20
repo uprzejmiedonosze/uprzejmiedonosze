@@ -96,8 +96,8 @@ function flatten_application($application){
 			'bylam' => $sex['bylam'],
 			'swiadoma' => $sex['swiadoma'],
 			'wykonalam' => $sex['wykonalam'],
-			'date' => date_format(new DateTime($application->date), 'Y-m-d'),
-			'hour' => date_format(new DateTime($application->date), 'H:i'),
+			'date' => (new DateTime($application->date))->format('Y-m-d'),
+			'hour' => (new DateTime($application->date))->format('H:i'),
 			'plateId' => $application->carInfo->plateId,
 			'userComment' => $application->userComment,
 			'user_address' => $application->user->address,
@@ -109,7 +109,7 @@ function flatten_application($application){
 			'city' => $application->address->city,
 			'sm' => $sm[0]
 		)
-	);
+    );
 
 	return $data;
 }

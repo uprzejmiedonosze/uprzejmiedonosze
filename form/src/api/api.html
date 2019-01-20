@@ -41,8 +41,8 @@ function _getUserApplications(){
     $applications = Array();
     foreach($applicationIds as $id){
         $application = getApplication($id);
-        $app_date = date_format(new DateTime($application->date), 'Y-m-d');
-        $app_hour = date_format(new DateTime($application->date), 'H:i');
+        $app_date = (new DateTime($application->date))->format('Y-m-d');
+        $app_hour = (new DateTime($application->date))->format('H:i');
         $applications[$id] = $application;
         $applications[$id]->app_date = $app_date;
         $applications[$id]->app_hour = $app_hour;
