@@ -28,7 +28,7 @@ header("Content-Transfer-Encoding: Binary");
 header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
-function generate_pdf($application, $outp_file) {
+function generate_pdf($application, $destFile) {
 	$template_file = __DIR__ . '/template.tex.twig';
 
 	if(!file_exists($template_file)) {
@@ -54,7 +54,8 @@ function generate_pdf($application, $outp_file) {
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
    	escapeshellarg($tex_f));
 	chdir(sys_get_temp_dir());
-	exec($cmd, $output, $ret);
+    exec($cmd, $output, $ret);
+    unset($output);
 
    	@unlink($tex_f);
 	@unlink($aux_f);
@@ -66,7 +67,6 @@ function generate_pdf($application, $outp_file) {
 		throw new Exception("Output was not generated and latex returned: $ret.");
 	}
     
-	$destFile = ROOT . "/cdn/{$application->id}.pdf";
 	rename($pdf_f, $destFile);
 	@unlink($f);
 }
