@@ -167,7 +167,7 @@ function printApplication($application, $printActions = true){
 	$statusIcon  = STATUSES[$status][2];
 	$buttons = ($printActions)? getOptionsForApplication($application->id, $status): "";
 
-	echo <<<HTML
+	echo @<<<HTML
        
 	<div id="$application->id" class="application $statusClass status-$status" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-d" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
 		 <h3>$application->number ($app_date) {$application->address->address}</h3>
