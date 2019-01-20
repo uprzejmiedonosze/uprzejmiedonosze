@@ -1,5 +1,7 @@
 <?PHP 
 
+const DT_FORMAT = 'Y-m-d\TH:i:s';
+
 const CATEGORIES = Array(
 	7  => ["Niezastosowanie się do znaków",
 		"Pojazd był zaparkowany w sposób niezgodny z oznaczeniem poziomym lub pionowym.",

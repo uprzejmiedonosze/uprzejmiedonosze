@@ -75,16 +75,16 @@ function _removeUser($email){
     }
 
     // adding empty user under a different key
-    $time = date_format(new DateTime(), 'Y-m-d H:i:s');
+    $time = date(DT_FORMAT);
     $user['data'] = (array) array_merge( (array)$user['data'], 
         Array(
             "name" => 'DELETED',
             "msisdn" => 'DELETED',
             "address" => 'DELETED',
-            "email" => md5($email),
-            "deleted" => $time
+            "email" => md5($email)
         )
     );
+    $user['deleted'] = $time;
     $user['applications'] = Array();
     $users->set(md5($email . $time), json_encode($user));
 

@@ -154,7 +154,7 @@ function _upload(){
     }else if($pictureType == 'contextImage'){
         if($geo = read_gps_location(make_image_filename($prefix))){
             $output = Array(
-                "date" => date("Y-m-d\TH:i:s"),
+                "date" => date(DT_FORMAT),
                 "contextImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')
@@ -165,7 +165,7 @@ function _upload(){
             );
         }else{
             $output = Array(
-                "date" => date("Y-m-d\TH:i:s"),
+                "date" => date(DT_FORMAT),
                 "contextImage" => Array(
                     "url" => make_image_url($prefix),
                     "thumb" => make_image_url($prefix, ',t')

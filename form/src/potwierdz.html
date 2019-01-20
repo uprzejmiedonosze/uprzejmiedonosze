@@ -19,7 +19,7 @@ $category = $post["category"];
 $category_txt = CATEGORIES[$category][1];
 $comment = capitalizeSentence($post["comment"]);
 
-$date = date_format(new DateTime($post['datetime']), 'Y-m-d\TH:i:s');
+$date = date_format(new DateTime($post['datetime']), DT_FORMAT);
 $app_date = date_format(new DateTime($date), 'Y-m-d');
 $app_hour = date_format(new DateTime($date), 'H:i');
 $carImage = $application->carImage->thumb;
