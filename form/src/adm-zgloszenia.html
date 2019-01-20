@@ -22,23 +22,28 @@ genHeader("Uprzejmie Donoszę – Wszystkie zgłoszenia", true);
     <input data-type="search" id="searchForCollapsibleSet">
 </form>
 
+<? foreach (getUsers() as $email => $user): ?>
+
+<h3 class="ui-bar ui-bar-a ui-corner-all"><? echo "{$user->data->name} ({$user->data->email})" ?></h3>
+
 <?
-	foreach (getUsers() as $email => $user){
+    echo "<p>";
+    if(!empty($user->added)) echo("Założony: {$user->added} ");
+    if(!empty($user->deleted)) echo("Usunięty: {$user->deleted} ");
+    echo "</p>";
 ?>
 
-<h3 class="ui-bar ui-bar-a ui-corner-all"><?=$email?></h3>
-
 <div data-role="collapsibleset" data-filter="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
-    <?
-        $applications = getUserApplications($email);
-        foreach($applications as $id){
-            $application = getApplication($id);
-            printApplication($application, false);
-		}
-	}
-    ?>
+<?
+    $applications = getUserApplications($email);
+    foreach($applications as $id){
+        $application = getApplication($id);
+        printApplication($application, false);
+    }
+?>
 </div>
 
+<? endforeach; // (getUsers() as $email => $user): ?>
 
 		</div> <!-- main -->
 	</div>
