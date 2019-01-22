@@ -79,8 +79,13 @@ function flatten_application($application){
 	$contextImage = $includegraphics . ROOT . "/" . $application->contextImage->thumb . "}}";
 	$carImage = $includegraphics . ROOT . "/" . $application->carImage->thumb . "}}";
 
-	$plateImage = "";
-	@$plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $application->carInfo->plateImage . "}";
+    $plateImage = "";
+    if(!empty($application->carInfo->plateId)){
+        if(isset($application->carInfo->plateIdFromImage) 
+           && $application->carInfo->plateIdFromImage == $application->carInfo->plateId){
+            $plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $application->carInfo->plateImage . "}";
+        }
+    }
 
 	$sm = guess_sm_address($application);
 	$sex = guess_sex($application);
