@@ -46,7 +46,7 @@ try{
         </div> <!-- main -->        
 <? if(!$user): ?>
         <script>
-        $.post("https://staging.uprzejmiedonosze.net/api/api.html",
+        $.post("https://%HOST%/api/api.html",
             {action: '_notify-register'});
         </script>
 <? endif; ?>

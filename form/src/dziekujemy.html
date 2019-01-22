@@ -57,7 +57,7 @@ $subject = "Zgłoszenie $appNumber";
             <a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
         </div> <!-- main -->
         <script>
-            $.post("https://staging.uprzejmiedonosze.net/api/api.html",
+            $.post("https://%HOST%/api/api.html",
                 {action: '_notify-new', id: '<?=$applicationId;?>'
                 });
         </script>
