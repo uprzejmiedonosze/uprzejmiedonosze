@@ -356,6 +356,7 @@ function _notifyRegister($name){
  * Sends message to #updates slack channel at uprzejmiedonosze.slack.com
  */
 function _sendSlackMessage($msg){
+    logger($msg, true);
     $client = new Maknz\Slack\Client('https://hooks.slack.com/services/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');
     $client->send($msg);
 }
