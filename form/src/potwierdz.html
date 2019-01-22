@@ -25,29 +25,22 @@ $app_hour = (new DateTime($date))->format('H:i');
 
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
-@$plateImage = $application->carInfo->plateImage;
 
 $user = getCurrentUser()['data'];
 
-$json = Array(
-	"date" => $date,
-	"user" => $user,
-	"category" => $category,
-	"address" => Array(
-		"address" => $address,
-		"city" => $city,
-		"voivodeship" => $voivodeship,
-		"latlng" => $latlng
-	),
-	"carInfo" => Array(
-		"plateId" => $plateId,
-		"plateImage" => $plateImage
-	),
-	"userComment" => $comment,
-	"status" => "ready"
-);
+$application->date = $date;
+$application->user = $user;
+$application->category = $category;
+if(!isset($application->address)) $application->address = new stdClass();
+$application->address->address = $address;
+$application->address->city = $city;
+$application->address->voivodeship = $voivodeship;
+$application->address->latlng = $latlng;
+$application->carInfo->plateId = $plateId;
+$application->userComment = $comment;
+$application->status = "ready";
 
-updateApplication($applicationId, (array)$json);
+setApplication($application);
 
 $sex      = guess_sex_by_name($user['name']);
 $bylam    = $sex['bylam'];

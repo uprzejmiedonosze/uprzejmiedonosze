@@ -16,12 +16,10 @@ $application = getApplication($applicationId);
 $user = saveUserApplication($application->user->email, $applicationId);
 $appNumber = 'UD/' . $user['number'] . '/' . sizeof($user['applications']);
 
-$json = array(
-    "status" => "confirmed",
-    "number" => $appNumber,
-);
+$application->status = "confirmed";
+$application->number = $appNumber;
 
-updateApplication($applicationId, (array) $json);
+setApplication($application);
 
 $sm = guess_sm_address($application)[1];
 $sm_email = ($sm) ? "W tym wypadku jest to <strong>$sm</strong>." :
