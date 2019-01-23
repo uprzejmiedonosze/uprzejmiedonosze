@@ -29,6 +29,8 @@ class Locators(object):
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 
+    THANK_YOU   = (By.CSS_SELECTOR, "div.ui-content")
+
 class SearchResultsPageLocators(object):
     """A class for search results locators. All search results locators should come here"""
     pass

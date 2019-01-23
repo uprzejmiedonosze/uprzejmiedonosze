@@ -169,7 +169,7 @@ class New(BasePage):
     def fin(self):
         self.driver.execute_script("$('#form').submit()")
         time.sleep(1)
-        text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
+        text = self.driver.find_element(*Locators.THANK_YOU)[1].text
         assert "UD/" in text
         assert "sm@um.szczecin.pl" in text
         
