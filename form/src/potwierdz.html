@@ -26,7 +26,7 @@ $app_hour = (new DateTime($date))->format('H:i');
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 
-$user = getCurrentUser()['data'];
+$user = getUserData();
 
 $application->date = $date;
 $application->user = $user;
@@ -36,13 +36,14 @@ $application->address->address = $address;
 $application->address->city = $city;
 $application->address->voivodeship = $voivodeship;
 $application->address->latlng = $latlng;
+if(!isset($application->carInfo)) $application->carInfo = new stdClass();
 $application->carInfo->plateId = $plateId;
 $application->userComment = $comment;
 $application->status = "ready";
 
 setApplication($application);
 
-$sex      = guess_sex_by_name($user['name']);
+$sex      = guess_sex_by_name($user->name);
 $bylam    = $sex['bylam'];
 $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];
@@ -76,10 +77,10 @@ echo <<<HTML
 				<p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
 					mojego miejsca zamieszkania.</p>
 				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
-					{$user['name']}<br />
-					{$user['email']}<br />
-					{$user['address']}<br />
-					{$user['msisdn']}
+					{$user->name}<br />
+					{$user->email}<br />
+					{$user->address}<br />
+					{$user->msisdn}
 				</p>
 				<div id="pics" class="ui-grid-a ui-responsive">
 					<div class="ui-block-a">

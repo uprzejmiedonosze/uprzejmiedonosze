@@ -92,7 +92,7 @@ function _upload(){
     $pictureType = $_POST['pictureType'];
     $applicationId = $_POST['applicationId'];
 
-    $user = getCurrentUser()['data'];
+    $user = getUserData();
 
     try{
         $application = getApplication($applicationId);

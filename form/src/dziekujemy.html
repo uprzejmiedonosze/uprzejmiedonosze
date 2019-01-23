@@ -14,7 +14,7 @@ unset($_SESSION['newAppId']);
 $application = getApplication($applicationId);
 
 $user = saveUserApplication($application->user->email, $applicationId);
-$appNumber = 'UD/' . $user['number'] . '/' . sizeof($user['applications']);
+$appNumber = 'UD/' . $user->number . '/' . sizeof($user->applications);
 
 $application->status = "confirmed";
 $application->number = $appNumber;

@@ -50,7 +50,7 @@ function _removeUser($email){
     $output = Array();
     $output['files'] = Array();
     $output['apps'] = Array();
-    $output['user'] = $user['data'];
+    $output['user'] = $user->data;
 
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
         $row[2] && array_push($output['files'], $row[2]);
@@ -76,16 +76,13 @@ function _removeUser($email){
 
     // adding empty user under a different key
     $time = date(DT_FORMAT);
-    $user['data'] = (array) array_merge( (array)$user['data'], 
-        Array(
-            "name" => 'DELETED',
-            "msisdn" => 'DELETED',
-            "address" => 'DELETED',
-            "email" => md5($email)
-        )
-    );
-    $user['deleted'] = $time;
-    $user['applications'] = Array();
+    $user->data->name = 'DELETED';
+    $user->data->msisdn = 'DELETED';
+    $user->data->address = 'DELETED';
+    $user->data->email = md5($email);
+
+    $user->deleted = $time;
+    $user->applications = Array();
     $users->set(md5($email . $time), json_encode($user));
 
     // removing user

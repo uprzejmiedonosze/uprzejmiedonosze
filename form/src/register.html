@@ -8,9 +8,9 @@ if(isset($_GET['next'])){
     $signInSuccessUrl = $_GET['next'];
 }
 try{
-    $user = getCurrentUser();
-    $email = $user['data']['email'];
-    $name = $user['data']['name'];
+    $user = getUserData();
+    $email = $user->email;
+    $name = $user->name;
 }catch(Exception $e){
     $user = null;
     $email = $_SESSION['user_email'];
@@ -38,10 +38,10 @@ try{
                     data-inline="true" value="<?=$email?>">
                 <input type="tel" maxlength="11" id="msisdn" name="msisdn"
                     placeholder="Twój numer telefonu (opcjonalnie)"
-                    data-inline="true" value="<?=$user['data']['msisdn']?>">
+                    data-inline="true" value="<?=@$user->msisdn?>">
                 <input type="text" maxlength="70" required id="address" name="address"
                     placeholder="Adres korespondencyjny"
-                    data-inline="true" value="<?=$user['data']['address']?>">
+                    data-inline="true" value="<?=@$user->address?>">
             </form>
         </div> <!-- main -->        
 <? if(!$user): ?>
