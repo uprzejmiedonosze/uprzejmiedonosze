@@ -4,13 +4,14 @@ function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = fal
 	$image = 'img/uprzejmiedonosze.png',
 	$description = 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.'){
 
-	global $headerSent;
+	global $headerSent, $storage;
 	$headerSent = true;
 	
 	$authcode = "";
 	if($auth){
-		checkIfLogged();
-		if(!$register && !isRegistered()){
+        $storage->checkIfLogged();
+		
+		if(!$register && !$storage->getCurrentUser()->isRegistered()){
 			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
 		}
 		$authcode = <<<HTML

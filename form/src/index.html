@@ -8,7 +8,7 @@ genHeader();
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<h1>Uprzejmie Donoszę</h1>
 			<?PHP
-			if(hasApps()) { menuApplications(); }
+			if($storage->isLoggedIn() && $storage->getCurrentUser()->hasApps()) { menuApplications(); }
 			else { menuStart();}
 			?>
 		</div>

@@ -9,7 +9,7 @@ if(!isset($_GET['appId'])){
 }
 
 $applicationId = $_GET['appId'];
-$application = getApplication($applicationId);
+$application = $storage->getApplication($applicationId);
 
 if(!isset($application)){
     http_response_code(404);

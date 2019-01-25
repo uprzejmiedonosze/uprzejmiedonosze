@@ -8,7 +8,7 @@ if(isset($_GET['next'])){
     $signInSuccessUrl = $_GET['next'];
 }
 try{
-    $user = getUserData();
+    $user = $storage->getCurrentUser()->data;
     $email = $user->email;
     $name = $user->name;
 }catch(Exception $e){

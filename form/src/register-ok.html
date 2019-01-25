@@ -2,7 +2,7 @@
 require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 
-checkIfLogged();
+$storage->checkIfLogged();
 
 $signInSuccessUrl = 'start.html';
 if(isset($_GET['next'])){
@@ -14,7 +14,7 @@ $name = trim($post["name"]);
 $msisdn = trim($post["msisdn"]);
 $address = str_replace(', Polska', '', trim($post["address"]));
 
-if(updateUserData($name, $msisdn, $address)){
+if($this->getCurrentUser()->updateUserData($name, $msisdn, $address)){
     redirect("$signInSuccessUrl");
 }else{
     redirect("register.html?next=$signInSuccessUrl");

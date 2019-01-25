@@ -6,7 +6,7 @@ genHeader("Uprzejmie Donoszę – potwierdź", true);
 $post = $_POST;
 $applicationId = $post["applicationId"];
 
-$application = getApplication($applicationId);
+$application = $storage->getApplication($applicationId);
 
 $address = $post["address"];
 $latlng = $post["latlng"];
@@ -26,7 +26,7 @@ $app_hour = (new DateTime($date))->format('H:i');
 $carImage = $application->carImage->thumb;
 $contextImage = $application->contextImage->thumb;
 
-$user = getUserData();
+$user = $storage->getCurrentUser()->data;
 
 $application->date = $date;
 $application->user = $user;
@@ -41,7 +41,7 @@ $application->carInfo->plateId = $plateId;
 $application->userComment = $comment;
 $application->status = "ready";
 
-setApplication($application);
+$storage->saveApplication($application);
 
 $sex      = guess_sex_by_name($user->name);
 $bylam    = $sex['bylam'];
