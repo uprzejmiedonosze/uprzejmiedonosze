@@ -38,7 +38,7 @@ genHeader("Uprzejmie Donoszę – Wszystkie zgłoszenia", true);
     $applications = getUserApplications($email);
     foreach($applications as $id){
         $application = getApplication($id);
-        printApplication($application, false);
+        $application->print();
     }
 ?>
 </div>

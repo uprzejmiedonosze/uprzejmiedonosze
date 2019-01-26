@@ -13,11 +13,11 @@
                 array_push($archived, $application);
                 continue;
             }
-            printApplication($application);
+            $application->print(true);
         }
         echo '<h3 class="archivedApps ui-bar ui-bar-a ui-corner-all">Archiwum</h3>';
         foreach($archived as $application){
-            printApplication($application);
+            $application->print(true);
         }
         echo '</div>';
     ?>
