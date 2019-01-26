@@ -56,7 +56,7 @@ logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
                 var uiConfig = {
                     signInSuccessUrl: "https://%HOST%<?=$signInSuccessUrl?>",
                     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-                    tosUrl: 'https://staging.uprzejmiedonosze.net/start.html' // Terms of service url.
+                    tosUrl: 'https://%HOST%/start.html' // Terms of service url.
                 };
 
                 // Initialize the FirebaseUI Widget using Firebase.
