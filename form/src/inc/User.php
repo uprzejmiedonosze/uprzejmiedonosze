@@ -1,6 +1,6 @@
 <?PHP
 
-require_once(__DIR__ . '/Utils.php');
+require_once(__DIR__ . '/utils.php');
 require_once(__DIR__ . '/JSONObject.php');
 
 /**
@@ -46,7 +46,7 @@ class User extends JSONObject{
      * Returns an array of application ids of this user.
      */
     public function getApplicationIds(){
-        return $this->applications;
+        return array_reverse($this->applications);
     }
 
     /**
@@ -67,12 +67,13 @@ class User extends JSONObject{
      * Updates current user's data.
      */
     function updateUserData($name, $msisdn, $address){
-    	if(isset($this->added)){
+        if(isset($this->added)){
             $this->updated = date(DT_FORMAT);
         }
-    	$this->data->name = $name;
-    	$this->data->msisdn = $msisdn;
-    	$this->data->address = $address;
+        $this->data->name = $name;
+        $this->data->msisdn = $msisdn;
+        $this->data->address = $address;
+        return true;
     }
 
     /**
