@@ -43,7 +43,7 @@ try{
                     data-inline="true" value="<?=@$user->address?>">
             </form>
         </div> <!-- main -->        
-<? if(!$user): ?>
+<? if(!$user && '%HOST%' !== 'staging.uprzejmiedonosze.net'): ?>
         <script>
         $.post("https://%HOST%/api/api.html",
             {action: '_notify-register'});
