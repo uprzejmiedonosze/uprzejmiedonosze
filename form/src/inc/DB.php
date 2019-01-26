@@ -16,12 +16,17 @@ class DB extends NoSQLite{
         parent::__construct($store);
         $this->apps  = $this->getStore('applications');
         $this->users = $this->getStore('users');
-        
-        $this->getCurrentUser();
+        try{
+            $this->getCurrentUser();
+        }catch(Exception $e){
+            // register mode, user looged in but not registered
+        }
     }
 
     /**
      * Returns currently logged in user or null.
+     * 
+     * May throw an exception if user is logged in but not registered.
      */
     public function getCurrentUser(){
         if(!isLoggedIn()){

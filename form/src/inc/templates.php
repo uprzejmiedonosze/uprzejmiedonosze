@@ -10,18 +10,8 @@ function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = fal
     $authcode = "";
     if ($auth) {
         checkIfLogged();
+        !$register && checkIfRegistered(); // dont redirect if already rendering register page
 
-        if (!$register) { // on register page dont redirect
-            try {
-                // redirect if not yet registered
-                if (!$storage->getCurrentUser()->isRegistered()) {
-                    redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
-                }
-            } catch (Exception $e) {
-                // or not yet save to db
-                redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
-            }
-        }
         $authcode = <<<HTML
             <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
             <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
