@@ -9,7 +9,7 @@ function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = fal
 	
 	$authcode = "";
 	if($auth){
-        $storage->checkIfLogged();
+        checkIfLogged();
 		
 		if(!$register && !$storage->getCurrentUser()->isRegistered()){
 			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
@@ -150,76 +150,6 @@ function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
 
 function menuApplications($text = 'Zgłoszenia'){
 	echo '<a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bullets">' . $text . '</a>';
-}
-
-function printApplication($application, $printActions = true){
-	$commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
-	
-	$app_date = (new DateTime($application->date))->format('Y-m-d');
-	$app_hour = (new DateTime($application->date))->format('H:i');
-	$category = CATEGORIES[$application->category][1];
-	$sex      = guess_sex($application);
-	$bylam    = $sex['bylam'];
-	
-	$status   = $application->status;
-	$statusClass = STATUSES[$status][3];
-	$statusIcon  = STATUSES[$status][2];
-	$buttons = ($printActions)? getOptionsForApplication($application->id, $status): "";
-
-	echo @<<<HTML
-       
-	<div id="$application->id" class="application $statusClass status-$status" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-d" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
-		 <h3>$application->number ($app_date) {$application->address->address}</h3>
-		 <p data-role="listview" data-inset="false">
-			<p>W dniu <b>$app_date</b> roku o godzinie
-				<b>$app_hour</b> $bylam świadkiem pozostawienia
-				samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b>
-				pod adresem <b>{$application->address->address}</b>.
-				$category</p>
-			<p>{$application->userComment}</p>
-			<div data-role="controlgroup" data-type="horizontal" data-mini="true">
-				<a href="/ud-{$application->id}.html" class="$commonClasses ui-nodisc-icon ui-icon-eye">szczegóły</a>
-				<a href="{$application->id}.pdf" download="{$application->number}" data-ajax="false" class="$commonClasses ui-nodisc-icon ui-icon-mail">PDF</a>
-			</div>
-			<div id="pics" class="ui-grid-a ui-responsive">
-				<div class="ui-block-a">
-					<a href="/ud-{$application->id}.html">
-						<img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
-					</a>
-				</div>
-				<div class="ui-block-b">
-					<a href="/ud-{$application->id}.html">
-						<img class="lazyload photo-thumbs" data-src="{$application->carImage->thumb}">
-					</a>
-				</div>
-			</div>
-			$buttons
-		</p>
-	</div>       
-HTML;
-}
-
-function getOptionsForApplication($id, $status){
-	$commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
-
-	$statusActions = '';
-	foreach(STATUSES as $key => $val){
-		if(!isset($val[3])){ // class is empty, this is a draft or ready
-			continue;
-		}
-		$txt = $val[1];
-		$icon = 'ui-icon-' . $val[2];
-		$disabled = ($key == $status)?'ui-state-disabled':'';
-		$statusActions .= <<<HTML
-			<a href="#" onclick="action('$key', '$id')" class="$commonClasses $disabled $icon status-$key">$txt</a>
-HTML;
-	}
-
-	return <<<HTML
-	<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="actions">
-	    $statusActions
-	</div>
-HTML;
 }
 
 ?>
