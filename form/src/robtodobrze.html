@@ -8,9 +8,9 @@ genHeader("Uprzejmie Donoszę – Rób to dobrze");
 			<? menuMain(); ?>
 			<h1>Rób to dobrze</h1>
 			<?PHP
-			if($storage->getCurrentUser() && $storage->getCurrentUser()->hasApps()) { menuApplications(); }
-            else { menuStart();}
-            ?>
+			if(isLoggedIn() && $storage->getCurrentUser()->hasApps()) menuApplications();
+			else menuStart();
+			?>
 		</div>
 		<div data-role="main" class="ui-content">
 			<h2>Rób to dobrze</h2>

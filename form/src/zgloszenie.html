@@ -20,16 +20,13 @@ genHeader("Uprzejmie Donoszę – zgłoszenie {$application->number} z dnia $app
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 		<? 
-			if($storage->isLoggedIn()){
-				menuBack();
-			}else{
-				menuMain();
-			}
+			if(isLoggedIn()) menuBack();
+			else menuMain();
 		?>
 			<h1>Zgłoszenie <?=$application->number ?></h1>
 			<?PHP
-            if($storage->getCurrentUser() && $storage->getCurrentUser()->hasApps()) { menuApplications(); }
-            else { menuStart();}
+			if(isLoggedIn() && $storage->getCurrentUser()->hasApps()) menuApplications();
+			else menuStart();
 			?>
 		</div>
 		<div data-role="main" class="ui-content">
