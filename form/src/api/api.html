@@ -1,6 +1,7 @@
 <?PHP
 header("Content-Type: application/json; charset=UTF-8");
 require_once(__DIR__ . '/../../inc/include.php');
+require(__DIR__ . '/../../autoload.php');
 
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
@@ -108,6 +109,10 @@ function _upload(){
         $application->carImage->thumb = make_image_url($prefix, ',t');
 
         if(isset($car_info) && count($car_info["results"])){
+            logger('ALPR (cost: ' . $car_info['credit_cost'] . ', this month: ' . 
+                $car_info['credits_monthly_used'] . ', out of: ' .
+                $car_info['credits_monthly_total'], true);
+
             $result = (Array)$car_info['results'];
             usort($result, "cmp");
 
@@ -142,12 +147,10 @@ function _upload(){
         $application->contextImage->url = make_image_url($prefix);
         $application->contextImage->thumb = make_image_url($prefix, ',t');
         
-        /*if($geo = read_gps_location(make_image_filename($prefix))){
-            if(!isset($application->address)){
-                $application->address = new stdClass();
-            }
-            $application->address->latlng = $geo;
-        }*/
+        if($geo = read_gps_location(make_image_filename($prefix))){
+            !$application->address && $application->address = new stdClass();
+            $application->address->latlngFromImage = $geo;
+        }
     }else{
         raiseError("Uknown picture type: " . $pictureType, 400);
     }
