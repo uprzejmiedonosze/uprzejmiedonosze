@@ -22,7 +22,7 @@ genHeader("Uprzejmie Donoszę – Wszystkie zgłoszenia", true);
     <input data-type="search" id="searchForCollapsibleSet">
 </form>
 
-<? foreach (getUsers() as $email => $user): ?>
+<? foreach ($storage->getUsers() as $email => $user): ?>
 
 <h3 class="ui-bar ui-bar-a ui-corner-all"><? echo "{$user->data->name} ({$user->data->email})" ?></h3>
 
@@ -35,9 +35,9 @@ genHeader("Uprzejmie Donoszę – Wszystkie zgłoszenia", true);
 
 <div data-role="collapsibleset" data-filter="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
 <?
-    $applications = getUserApplications($email);
+    $applications = $user->getApplicationIds();
     foreach($applications as $id){
-        $application = getApplication($id);
+        $application = $storage->getApplication($id);
         $application->print();
     }
 ?>
