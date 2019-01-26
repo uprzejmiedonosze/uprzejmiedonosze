@@ -7,7 +7,7 @@ if(isset($_GET['next'])){
     $signInSuccessUrl = $_GET['next'];
 }
 try{ 
-    $user = $storage->getCurrentUser()->data;
+    $user = $storage->getCurrentUser();
     $email = $user->email;
     $name = $user->name;
 }catch(Exception $e){
@@ -37,10 +37,10 @@ try{
                     data-inline="true" value="<?=$email?>">
                 <input type="tel" maxlength="11" id="msisdn" name="msisdn"
                     placeholder="Twój numer telefonu (opcjonalnie)"
-                    data-inline="true" value="<?=@$user->msisdn?>">
+                    data-inline="true" value="<?=@$user->data->msisdn?>">
                 <input type="text" maxlength="70" required id="address" name="address"
                     placeholder="Adres korespondencyjny"
-                    data-inline="true" value="<?=@$user->address?>">
+                    data-inline="true" value="<?=@$user->data->address?>">
             </form>
         </div> <!-- main -->        
 <? if(!$user && '%HOST%' !== 'staging.uprzejmiedonosze.net'): ?>

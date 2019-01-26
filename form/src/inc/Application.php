@@ -56,8 +56,8 @@ class Application extends JSONObject{
             }
         }
     
-        $sm = guess_sm_address($this);
-        $sex = guess_sex($this);
+        $sm = $this->guessSMData();
+        $sex = $this->guessUserSex();
     
         $msisdn = (trim($this->user->msisdn) === "")?"": "Tel: {$this->user->msisdn}";
     
@@ -88,6 +88,31 @@ class Application extends JSONObject{
         return $data;
     }
 
+    /**
+     * Zwraca najlepiej pasująca dla adresu zgłoszenia SM w postaci tablicy:
+     * [adres w formacie latex, email]
+     */
+    public function guessSMData(){
+
+    	$city = trim(strtolower($this->address->city));
+
+    	if(array_key_exists($city, SM_ADDRESSES)){
+    		return SM_ADDRESSES[$city];
+    	}
+
+    	$address = trim(strtolower($this->address->address));
+    	foreach(SM_ADDRESSES as $c => $a){
+    		if (strpos($address, $c) !== false){
+    			return $a;
+    		}
+    	}
+    	return ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null];
+    }
+
+    public function guessUserSex(){
+        return guess_sex_by_name($this->user->name);
+    }
+
     /** 
      * Print application as HTML.
      */
@@ -97,7 +122,7 @@ class Application extends JSONObject{
         $app_date = $this->getDate();
         $app_hour = $this->getTime();
         $category = CATEGORIES[$this->category][1];
-        $sex      = guess_sex($this);
+        $sex      = $this->guessUserSex();
         $bylam    = $sex['bylam'];
         
         $status   = $this->status;

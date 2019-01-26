@@ -81,7 +81,11 @@ class User extends JSONObject{
      */
     function hasApps(){
         return count($this->applications) > 0;
-    }    
+    }
+
+    function guessSex(){
+        return guess_sex_by_name($this->data->name);
+    }
 }
 
 ?>

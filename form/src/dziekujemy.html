@@ -22,11 +22,11 @@ $application->number = $appNumber;
 $storage->saveApplication($application);
 $storage->saveUser($user);
 
-$sm = guess_sm_address($application)[1];
+$sm = $application->guessSMData()[1];
 $sm_email = ($sm) ? "W tym wypadku jest to <strong>$sm</strong>." :
 "<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
 
-$sex = guess_sex_by_name($application->user->name);
+$sex = $application->guessUserSex();
 $bylam = $sex['bylam'];
 $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];
