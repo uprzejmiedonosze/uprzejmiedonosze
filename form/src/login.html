@@ -7,7 +7,7 @@ if(isset($_GET['logout'])){
     logger('unsetting token');
     redirect("login.html");
 }
-$signInSuccessUrl = '/login-ok.html';
+$signInSuccessUrl = 'login-ok.html';
 if(isset($_GET['next'])){
     $signInSuccessUrl .= '?next=' . $_GET['next'];
     //redirect("login.html");

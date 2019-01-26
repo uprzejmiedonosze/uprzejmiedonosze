@@ -51,7 +51,7 @@ if(isset($_SESSION['newAppId'])){ // edit mode
 										Zrób zdjęcie prezentujące kontekst zgłoszenia<br>
 										<img class="photo-thumbs" id="contextImage-img" src="<?=$contextImage;?>"/>
 									</label>
-									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst" value="<?=$contextImage;?>" />
+									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst" value="<?=@$application->contextImage->url;?>" />
 								</div>
 							</div>
 							<div class="ui-block-b">
@@ -62,7 +62,7 @@ if(isset($_SESSION['newAppId'])){ // edit mode
 										<img id="plateImage" src=""/><br/>
 										<span id="recydywa"></span>
 									</label>
-									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne" value="<?=$carImage?>" />
+									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne" value="<?=@$application->carImage->url; ?>" />
 								</div>
 							</div>
 						</div>
