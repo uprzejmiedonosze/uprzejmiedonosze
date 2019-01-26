@@ -1,7 +1,6 @@
 <?PHP
 header("Content-Type: application/json; charset=UTF-8");
 require_once(__DIR__ . '/../../inc/include.php');
-require_once(__DIR__ . '/../../autoload.php');
 
 if(!$storage->getCurrentUser()->isAdmin()){
     logger("User " . getCurrentUserEmail() . " tried to delete account " . $email, true);

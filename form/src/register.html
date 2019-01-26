@@ -1,5 +1,4 @@
 <? 
-require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 genHeader("Uprzejmie Donoszę – zarejestruj się", true, true);
 
@@ -7,7 +6,7 @@ $signInSuccessUrl = 'start.html';
 if(isset($_GET['next'])){
     $signInSuccessUrl = $_GET['next'];
 }
-try{
+try{ 
     $user = $storage->getCurrentUser()->data;
     $email = $user->email;
     $name = $user->name;
