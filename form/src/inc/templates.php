@@ -1,33 +1,41 @@
 <?PHP
 
 function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = false,
-	$image = 'img/uprzejmiedonosze.png',
-	$description = 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.'){
+    $image = 'img/uprzejmiedonosze.png',
+    $description = 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.') {
 
-	global $headerSent, $storage;
-	$headerSent = true;
-	
-	$authcode = "";
-	if($auth){
+    global $headerSent, $storage;
+    $headerSent = true;
+
+    $authcode = "";
+    if ($auth) {
         checkIfLogged();
-		
-		if(!$register && !$storage->getCurrentUser()->isRegistered()){
-			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
-		}
-		$authcode = <<<HTML
-			<script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
-			<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+
+        if (!$register) { // on register page dont redirect
+            try {
+                // redirect if not yet registered
+                if (!$storage->getCurrentUser()->isRegistered()) {
+                    redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
+                }
+            } catch (Exception $e) {
+                // or not yet save to db
+                redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
+            }
+        }
+        $authcode = <<<HTML
+            <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+            <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
 HTML;
-	}
+    }
 
-	$firebaseConfig = getFirebaseConfig();
-	if($auth){
-		$uri = "https://%HOST%";
-	}else{
-		$uri = "https://%HOST%" . $_SERVER['REQUEST_URI'];
-	}
+    $firebaseConfig = getFirebaseConfig();
+    if($auth){
+        $uri = "https://%HOST%";
+    }else{
+        $uri = "https://%HOST%" . $_SERVER['REQUEST_URI'];
+    }
 
-	echo <<<HTML
+    echo <<<HTML
 <!DOCTYPE html>
 <html lang="pl">
 	<head>
@@ -47,7 +55,7 @@ HTML;
 		<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png" />
 		<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180x180.png" />
 		<link rel="manifest" href="/manifest.json">
-		
+
 		<meta name="theme-color" content="#009C7F">
 		<meta property="og:image" content="https://%HOST%/$image"/>
 		<meta property="og:title" content="$title"/>
@@ -71,8 +79,8 @@ HTML;
 }
 
 function getFirebaseConfig(){
-	if('%HOST%' == 'uprzejmiedonosze.net'){
-		return <<<HTML
+    if('%HOST%' == 'uprzejmiedonosze.net'){
+        return <<<HTML
 		<script>
 			var config = {
 				apiKey: "AIzaSyBNd3ApHoXl7Ks0rpvkjO5spouSaBnGuaA",
@@ -85,8 +93,8 @@ function getFirebaseConfig(){
 			firebase.initializeApp(config);
 		</script>
 HTML;
-	}else{
-		return <<<HTML
+    }else{
+        return <<<HTML
 		<script>
 			var config = {
 				apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
@@ -99,17 +107,17 @@ HTML;
 			firebase.initializeApp(config);
 		</script>
 HTML;
-	}
+    }
 }
 
 function getFooter($mapsInitFunc = false, $txt = '&copy; Uprzejmie Donoszę'){
 
-	$maps = "";
-	if($mapsInitFunc){
-		$maps = "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback=$mapsInitFunc&language=pl\" async defer></script>";
-	}
+    $maps = "";
+    if($mapsInitFunc){
+        $maps = "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback=$mapsInitFunc&language=pl\" async defer></script>";
+    }
 
-	echo <<<HTML
+    echo <<<HTML
 			<div data-role="footer">
 				<h4>$txt</h4>
 			</div>
@@ -133,23 +141,30 @@ HTML;
 // templates
 
 function menuNewApplication($text = 'Nowe zgłoszenie'){
-	echo '<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r" data-ajax="false">' . $text . '</a>';
+    echo '<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r" data-ajax="false">' . $text . '</a>';
 }
 
 function menuStart($text = 'Zgłoś'){
-	echo '<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">' . $text . '</a>';
+    echo '<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">' . $text . '</a>';
 }
 
 function menuMain($text = 'Strona główna'){
-	echo '<a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-home ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
+    echo '<a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-home ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
 }
 
 function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
-	echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
+    echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
 }
 
 function menuApplications($text = 'Zgłoszenia'){
-	echo '<a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bullets">' . $text . '</a>';
+    echo '<a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bullets">' . $text . '</a>';
 }
 
-?>
+function menuStartOrApplications(){
+    global $storage;
+    if (isLoggedIn() && $storage->getCurrentUser()->hasApps()) {
+        menuApplications();
+        return;
+    }
+    menuStart();
+}
