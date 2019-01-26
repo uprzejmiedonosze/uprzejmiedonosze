@@ -3,7 +3,7 @@ header("Content-Type: application/json; charset=UTF-8");
 require_once(__DIR__ . '/../../inc/include.php');
 require_once(__DIR__ . '/../../autoload.php');
 
-if(!isAdmin()){
+if(!$storage->getCurrentUser()->isAdmin()){
     logger("User " . getCurrentUserEmail() . " tried to delete account " . $email, true);
     raiseError('Admin only area', 403);
 }
@@ -21,19 +21,21 @@ if (isset($_GET["action"]) && !empty($_GET["action"])) {
 }
 
 function _removeUser($email){
-    global $nsql, $apps, $users;
+    global $storage;
 
     if(!isset($email)){
         raiseError('No email provided', 403);
     }
 
+    $email = SQLite3::escapeString($email);
+
     try{
-        $user = getUser($email);
+        $user = $storage->getUser($email);
     }catch(Exception $e){
         raiseError("Trying to remove nonesiting user: $email", 400);
     }
 
-    $stmt = $nsql->db->prepare("select "
+    $stmt = $storage->execute("select "
         . "json_extract(applications.value, '$.id'), "
         . "json_extract(applications.value, '$.status'), "
         . "json_extract(applications.value, '$.carImage.url'), "
@@ -43,9 +45,6 @@ function _removeUser($email){
         . "json_extract(applications.value, '$.carInfo.plateImage') "
         . "from applications, json_tree(applications.value, '$.user.email') "
         . "where json_tree.value = '$email';");
-
-    //$stmt->bindParam(':email', $email, \PDO::PARAM_STR);
-    $stmt->execute();
 
     $output = Array();
     $output['files'] = Array();
@@ -69,9 +68,9 @@ function _removeUser($email){
     }
 
     // removing apps and PDFs
-    foreach($output['apps'] as $appid){
-        $apps->delete($appid);
-        @unlink(__DIR__ . "/../$appid.pdf");
+    foreach($output['apps'] as $appId){
+        $storage->removeApplication($appId);
+        @unlink(__DIR__ . "/../$appId.pdf");
     }
 
     // adding empty user under a different key
@@ -79,14 +78,15 @@ function _removeUser($email){
     $user->data->name = 'DELETED';
     $user->data->msisdn = 'DELETED';
     $user->data->address = 'DELETED';
-    $user->data->email = md5($email);
+    $user->data->email = md5($email . $time);
+    $user->data->emailMD5 = md5($email);
 
     $user->deleted = $time;
     $user->applications = Array();
-    $users->set(md5($email . $time), json_encode($user));
+    $storage->saveUser($user);
 
-    // removing user
-    $users->delete($email);
+    // removing old user
+    $storage->removeUser($email);
 
     echo json_encode($output, JSON_PRETTY_PRINT);
 }
