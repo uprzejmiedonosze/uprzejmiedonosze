@@ -57,17 +57,6 @@ class DB extends NoSQLite{
         return count($this->users);
     }
 
-    public function getUsers(){
-        if(!$this->getCurrentUser()->isAdmin()){
-            throw new Exception('Dostęp zabroniony.');
-        }
-        $ret = Array();
-        foreach($this->users->getAll() as $email => $json){
-            $ret[$email] = new User($json);
-        }
-        return $ret;
-    }
-
     public function getApplication($appId){
         $json = $this->apps->get($appId);
         if(!$json){
@@ -91,6 +80,42 @@ class DB extends NoSQLite{
             . "and json_extract(value, '$.carInfo.plateId') = '$plateId';";
         
         return (int) $this->db->query($sql)->fetchColumn();
+    }
+
+    // ADMIN aream
+
+    public function getUsers(){
+        if(!$this->getCurrentUser()->isAdmin()){
+            throw new Exception('Dostęp zabroniony.');
+        }
+        $ret = Array();
+        foreach($this->users->getAll() as $email => $json){
+            $ret[$email] = new User($json);
+        }
+        return $ret;
+    }
+
+    public function removeApplication($appId){
+        if(!$this->getCurrentUser()->isAdmin()){
+            throw new Exception('Dostęp zabroniony.');
+        }
+        $this->apps->delete($appId);
+    }
+
+    public function removeUser($email){
+        if(!$this->getCurrentUser()->isAdmin()){
+            throw new Exception('Dostęp zabroniony.');
+        }
+        $this->users->delete($email);
+    }
+
+    public function execute($sql){
+        if(!$this->getCurrentUser()->isAdmin()){
+            throw new Exception('Dostęp zabroniony.');
+        }
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt;
     }
 
 }
