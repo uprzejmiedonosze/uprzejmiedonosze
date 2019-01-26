@@ -1,4 +1,8 @@
 <?PHP 
+$timeout = 60 * 60 * 24 * 365;
+ini_set("session.gc_maxlifetime", $timeout);
+ini_set("session.cookie_lifetime", $timeout);
+date_default_timezone_set('Europe/Warsaw');
 
 const DT_FORMAT = 'Y-m-d\TH:i:s';
 
