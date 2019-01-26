@@ -9,10 +9,7 @@ genHeader("Uprzejmie Donoszę – o projekcie");
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<? menuMain(); ?>
 			<h1>O projekcie</h1>
-			<?PHP
-			if(isLoggedIn() && $storage->getCurrentUser()->hasApps()) menuApplications();
-			else menuStart();
-			?>
+			<? menuStartOrApplications()?>
 		</div>
 		<div data-role="main" class="ui-content">
 			<h2>Projekt Uprzejmie Donoszę</h2>
