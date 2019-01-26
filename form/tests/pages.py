@@ -153,6 +153,7 @@ class New(BasePage):
         WebDriverWait(self.driver, 10).until(EC.title_contains('owe '))
     
     def update(self):
+        time.sleep(2)
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
         WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
     
