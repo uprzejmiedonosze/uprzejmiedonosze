@@ -37,6 +37,60 @@ class Application extends JSONObject{
         return (new DateTime($this->date))->format('H:i');
     }
 
+    /**
+     * Export application as a onedimensional array.
+     */
+    public function flatten(){
+	
+        $includegraphics = '\\href{https://%HOST%/ud-' 
+            . $this->id
+            . '.html}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
+        $contextImage = $includegraphics . ROOT . "/" . $this->contextImage->thumb . "}}";
+        $carImage = $includegraphics . ROOT . "/" . $this->carImage->thumb . "}}";
+    
+        $plateImage = "";
+        if(!empty($this->carInfo->plateId)){
+            if(isset($this->carInfo->plateIdFromImage) 
+               && $this->carInfo->plateIdFromImage == $this->carInfo->plateId){
+                $plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $this->carInfo->plateImage . "}";
+            }
+        }
+    
+        $sm = guess_sm_address($this);
+        $sex = guess_sex($this);
+    
+        $msisdn = (trim($this->user->msisdn) === "")?"": "Tel: {$this->user->msisdn}";
+    
+        $data = Array(
+            'app' => Array(
+                'contextImage' => $contextImage,
+                'carImage' => $carImage,
+                'plateImage' => $plateImage,
+                'name_name' => $application->user->name,
+                'bylam' => $sex['bylam'],
+                'swiadoma' => $sex['swiadoma'],
+                'wykonalam' => $sex['wykonalam'],
+                'date' => $this->getDate(),
+                'hour' => $this->getTime(),
+                'plateId' => $application->carInfo->plateId,
+                'userComment' => $application->userComment,
+                'user_address' => $application->user->address,
+                'category' => CATEGORIES[$application->category][1],
+                'address' => $application->address->address,
+                'user_phone' => $msisdn,
+                'user_email' => "Email: {$application->user->email}",
+                'number' => $application->number,
+                'city' => $application->address->city,
+                'sm' => $sm[0]
+            )
+        );
+    
+        return $data;
+    }
+
+    /** 
+     * Print application as HTML.
+     */
     public function print($printActions = null){
         $commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
         
@@ -106,7 +160,6 @@ HTML;
         </div>
 HTML;
     }
-    
 
 }
 

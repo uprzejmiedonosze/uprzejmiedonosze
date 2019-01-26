@@ -48,7 +48,7 @@ function generate_pdf($application, $destFile) {
 	$twig = new Twig_Environment($loader);
 
 	ob_start();
-	echo $twig->render('template.tex.twig', flatten_application($application));
+	echo $twig->render('template.tex.twig', $application->flatten());
 	file_put_contents($tex_f, ob_get_clean());
 
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
@@ -71,52 +71,6 @@ function generate_pdf($application, $destFile) {
 	@unlink($f);
 }
 
-function flatten_application($application){
-	
-	$includegraphics = '\\href{https://%HOST%/ud-' 
-		. $application->id
-		. '.html}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
-	$contextImage = $includegraphics . ROOT . "/" . $application->contextImage->thumb . "}}";
-	$carImage = $includegraphics . ROOT . "/" . $application->carImage->thumb . "}}";
 
-    $plateImage = "";
-    if(!empty($application->carInfo->plateId)){
-        if(isset($application->carInfo->plateIdFromImage) 
-           && $application->carInfo->plateIdFromImage == $application->carInfo->plateId){
-            $plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $application->carInfo->plateImage . "}";
-        }
-    }
-
-	$sm = guess_sm_address($application);
-	$sex = guess_sex($application);
-
-	$msisdn = (trim($application->user->msisdn) === "")?"": "Tel: {$application->user->msisdn}";
-
-	$data = Array(
-		'app' => Array(
-			'contextImage' => $contextImage,
-			'carImage' => $carImage,
-			'plateImage' => $plateImage,
-			'name_name' => $application->user->name,
-			'bylam' => $sex['bylam'],
-			'swiadoma' => $sex['swiadoma'],
-			'wykonalam' => $sex['wykonalam'],
-			'date' => (new DateTime($application->date))->format('Y-m-d'),
-			'hour' => (new DateTime($application->date))->format('H:i'),
-			'plateId' => $application->carInfo->plateId,
-			'userComment' => $application->userComment,
-			'user_address' => $application->user->address,
-			'category' => CATEGORIES[$application->category][1],
-			'address' => $application->address->address,
-			'user_phone' => $msisdn,
-    		'user_email' => "Email: {$application->user->email}",
-			'number' => $application->number,
-			'city' => $application->address->city,
-			'sm' => $sm[0]
-		)
-    );
-
-	return $data;
-}
 
 ?>
