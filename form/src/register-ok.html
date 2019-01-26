@@ -13,11 +13,15 @@ $name = trim($post["name"]);
 $msisdn = trim($post["msisdn"]);
 $address = str_replace(', Polska', '', trim($post["address"]));
 
-if($storage->getCurrentUser()->updateUserData($name, $msisdn, $address)){
-    $storage->saveUser($storage->getCurrentUser());
-    redirect("$signInSuccessUrl");
-}else{
-    redirect("register.html?next=$signInSuccessUrl");
+try{
+    $user = $storage->getCurrentUser();
+}catch(Exception $e){ // creation mode
+    $user = new User();
 }
+
+$user->updateUserData($name, $msisdn, $address);
+$storage->saveUser($user);
+
+redirect($signInSuccessUrl);
 
 ?>
