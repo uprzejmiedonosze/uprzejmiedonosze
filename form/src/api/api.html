@@ -22,6 +22,8 @@ if (is_ajax()) {
                 _notifyNew($_POST['id']); break;
             case "_notify-register":
                 _notifyRegister($_SESSION['user_name']); break;
+            case "_notify-error":
+                _notifyError($_POST['msg']); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -313,6 +315,11 @@ function _notifyNew($appId){
  */
 function _notifyRegister($name){
     _sendSlackMessage("Nowa rejestracja *{$name}*.");
+}
+
+function _notifyError($msg){
+    $msg = str_replace("||", "\n", $msg);
+    _sendSlackMessage($msg);
 }
 
 /** 
