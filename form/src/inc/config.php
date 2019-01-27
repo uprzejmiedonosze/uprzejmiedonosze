@@ -14,7 +14,7 @@ const CATEGORIES = Array(
 		"Pojazd był zaparkowany z dala od krawędzi jezdni.",
 		"<p>Pojazd może wjechać na chodnik wyłącznie przodem, i musi stać przy krawędzi jezdni. Jakiekolwiek ustawienie pojazdu, które wskazywałoby na to, że kierowca jechał chodnikiem aby znaleźć się w tym miejscu jest naruszeniem przepisów.</p> <p><i>(PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2 (szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m), zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru.)</i></p>"],
 	10 => ["Parkowanie za barierkami",
-		"Pojazd znajdował poza za barierkami ograniczającymi parkowanie.",
+		"Pojazd znajdował poza barierami ograniczającymi parkowanie.",
 		"<p>Przypadek specyficzny dla 'parkowania z dala od krawędzi jezdni', ale bardzo czytelny. Stojąc za słupkami (których celem jest ograniczenie parkowania) pojazd z pewnością nie znajduje się przy krawędzi jezdni. Oczywiście ograniczenie za które wjechał pojazd wcale nie musi być barierką czy rzędem słupków. Dla trawnika, żywopłotu czy płotka działają te same zasady. </p> <p><i>(PoRD Art. 47. 2. cytowany powyżej.)</i></p>"],
 	4  => ["Zastawienie chodnika (mniej niż 1.5m)",
 		"Pojazd zastawiał chodnik (mniej niż 1.5m).",
