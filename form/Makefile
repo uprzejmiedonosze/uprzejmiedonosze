@@ -2,7 +2,7 @@
 YUI_COMPRESSOR       = java -jar tools/yuicompressor-2.4.8.jar
 YUI_COMPRESSOR_FLAGS = --charset utf-8 --line-break 72
 RSYNC                = rsync
-RSYNC_FLAGS          = --human-readable --recursive --exclude 'vendor/bin/jp.php'
+RSYNC_FLAGS          = --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
 HOSTING              = nieradka.net
 
 # dirs and files 
