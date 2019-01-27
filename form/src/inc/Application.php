@@ -118,6 +118,8 @@ class Application extends JSONObject{
         $statusIcon  = STATUSES[$status][2];
         $buttons = ($printActions)? $this->getActionButtons(): "";
     
+        $plateImage = ($this->shouldIncludePlateImage())? '<img id="plateImage" src="' . $this->carInfo->plateImage . '"/>': '';
+    
         echo @<<<HTML
            
         <div id="$this->id" class="application $statusClass status-$status" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-d" data-role="collapsible" data-filtertext="{$this->address->address} $this->number $this->date {$this->carInfo->plateId} {$this->userComment} $category">

@@ -11,6 +11,8 @@ $bylam    = $sex['bylam'];
 $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];
 
+$plateImage = ($application->shouldIncludePlateImage())? '<img id="plateImage" src="' . $application->carInfo->plateImage . '"/>': '';
+
 genHeader("Uprzejmie Donoszę – zgłoszenie {$application->number} z dnia $app_date",
 	false, false, $application->contextImage->thumb,
 	"Samochód o nr rejestracyjnym {$application->carInfo->plateId} pod adresem {$application->address->address}. $category");
