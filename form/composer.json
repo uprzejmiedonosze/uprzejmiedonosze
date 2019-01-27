@@ -1,6 +1,5 @@
 {
     "require": {
-        "mthenw/nosqlite": "^0.3.0",
         "kreait/firebase-php": "^3.0",
         "twig/twig": "^2.0",
         "maknz/slack": "^1.7"
