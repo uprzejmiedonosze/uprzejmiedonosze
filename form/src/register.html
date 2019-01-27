@@ -8,8 +8,8 @@ if(isset($_GET['next'])){
 }
 try{ 
     $user = $storage->getCurrentUser();
-    $email = $user->email;
-    $name = $user->name;
+    $email = $user->data->email;
+    $name = $user->data->name;
 }catch(Exception $e){
     $user = null;
     $email = $_SESSION['user_email'];
