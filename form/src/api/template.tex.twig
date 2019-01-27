@@ -21,31 +21,31 @@
 \setlength{\columnseprule}{0.4pt}
 \frenchspacing
 
-\newcommand{\n}{ {{ app.name_name }} }
-\date{ Dnia {{ app.date }} } 
-\address{\n{}\\{{ app.user_address }}\\{{ app.user_email }}\\{{ app.user_phone }} }
+\newcommand{\n}{ {{ user.name }} }
+\date{ Dnia {{ tex.date }} } 
+\address{\n{}\\{{ user.address }}\\{{ user.email }}\\{{ user.msisdn }} }
 
 \begin{document}
-\begin{letter}{ {\large {{ app.sm }} } }
+\begin{letter}{ {\large {{ tex.sm }} } }
 
-\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number}} } } }
-	W dniu {{ app.date }} roku o godzinie {{ app.hour }} {{ app.bylam }} świadkiem pozostawienia
-	samochodu o nr rejestracyjnym\texttt{ {{ app.plateId }} }pod adresem {{ app.address }}.
-	{{ app.category }} Sytuacja jest widoczna na załączonych zdjęciach. Zdjęcia {{ app.wykonalam }}
-	samodzielnie. {{ app.userComment }}
+\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ number }} } } }
+	W dniu {{ tex.date }} roku o godzinie {{ tex.hour }} {{ tex.sex.bylam }} świadkiem pozostawienia
+	samochodu o nr rejestracyjnym\texttt{ {{ carInfo.plateId }} }pod adresem {{ address.address }}.
+	{{ tex.category }} Sytuacja jest widoczna na załączonych zdjęciach. Zdjęcia {{ tex.sex.wykonalam }}
+	samodzielnie. {{ userComment }}
 
-	Nie {{ app.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
-	pozostawał pojazd pozostawał na tym miejscu.
+	Nie {{ tex.sex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
+	pojazd pozostawał na tym miejscu.
 
-	Jestem {{ app.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.
+	Jestem {{ tex.sex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.
 
 	Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania.
 
 	\closing{\textit{Z poważaniem,\\\n{} } }
 
-	{{ app.carImage }}
-	{{ app.contextImage }}
+	{{ tex.carImage }}
+	{{ tex.contextImage }}
 
-	{{ app.plateImage }}
+	{{ tex.plateImage }}
 \end{letter}
 \end{document}

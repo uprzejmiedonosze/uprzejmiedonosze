@@ -20,7 +20,6 @@ class Application extends JSONObject{
         $this->added = date(DT_FORMAT);
         $this->user = $storage->getCurrentUser()->data;
         $this->status = 'draft';
-        
     }
 
     /**
@@ -41,51 +40,36 @@ class Application extends JSONObject{
      * Export application as a onedimensional array.
      */
     public function flatten(){
-	
-        $includegraphics = '\\href{https://%HOST%/ud-' 
-            . $this->id
-            . '.html}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
-        $contextImage = $includegraphics . ROOT . "/" . $this->contextImage->thumb . "}}";
-        $carImage = $includegraphics . ROOT . "/" . $this->carImage->thumb . "}}";
+
+        $app = clone $this;
+        $app->tex = new stdClass();
     
-        $plateImage = "";
-        if(!empty($this->carInfo->plateId)){
-            if(isset($this->carInfo->plateIdFromImage) 
-               && $this->carInfo->plateIdFromImage == $this->carInfo->plateId){
-                $plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $this->carInfo->plateImage . "}";
+        $includegraphics = '\\href{https://%HOST%/ud-' 
+            . $app->id
+            . '.html}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
+        
+        $app->tex->contextImage = $includegraphics . ROOT . "/" . $app->contextImage->thumb . "}}";
+        $app->tex->carImage = $includegraphics . ROOT . "/" . $app->carImage->thumb . "}}";
+    
+        $app->tex->plateImage = "";
+        if(!empty($app->carInfo->plateId)){
+            if(isset($app->carInfo->plateIdFromImage) 
+               && $app->carInfo->plateIdFromImage == $app->carInfo->plateId){
+                $app->tex->plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $app->carInfo->plateImage . "}";
             }
         }
     
-        $sm = $this->guessSMData();
-        $sex = $this->guessUserSex();
+        $app->tex->sm = $app->guessSMData()[0];
+        $app->tex->sex = $app->guessUserSex();
     
-        $msisdn = (trim($this->user->msisdn) === "")?"": "Tel: {$this->user->msisdn}";
+        $app->tex->msisdn = (trim($app->user->msisdn) === "")?"": "Tel: {$app->user->msisdn}";
+
+        $app->tex->date = $app->getDate();
+        $app->tex->hour = $app->getTime();
+        $app->tex->category = CATEGORIES[$this->category][1];
+        $app->tex->email = "Email: {$this->user->email}";
     
-        $data = Array(
-            'app' => Array(
-                'contextImage' => $contextImage,
-                'carImage' => $carImage,
-                'plateImage' => $plateImage,
-                'name_name' => $this->user->name,
-                'bylam' => $sex['bylam'],
-                'swiadoma' => $sex['swiadoma'],
-                'wykonalam' => $sex['wykonalam'],
-                'date' => $this->getDate(),
-                'hour' => $this->getTime(),
-                'plateId' => $this->carInfo->plateId,
-                'userComment' => $this->userComment,
-                'user_address' => $this->user->address,
-                'category' => CATEGORIES[$this->category][1],
-                'address' => $this->address->address,
-                'user_phone' => $msisdn,
-                'user_email' => "Email: {$this->user->email}",
-                'number' => $this->number,
-                'city' => $this->address->city,
-                'sm' => $sm[0]
-            )
-        );
-    
-        return $data;
+        return (array) $app;
     }
 
     /**
