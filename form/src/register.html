@@ -1,5 +1,4 @@
 <? 
-require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 genHeader("Uprzejmie Donoszę – zarejestruj się", true, true);
 
@@ -7,10 +6,10 @@ $signInSuccessUrl = 'start.html';
 if(isset($_GET['next'])){
     $signInSuccessUrl = $_GET['next'];
 }
-try{
-    $user = getUserData();
-    $email = $user->email;
-    $name = $user->name;
+try{ 
+    $user = $storage->getCurrentUser();
+    $email = $user->data->email;
+    $name = $user->data->name;
 }catch(Exception $e){
     $user = null;
     $email = $_SESSION['user_email'];
@@ -38,13 +37,13 @@ try{
                     data-inline="true" value="<?=$email?>">
                 <input type="tel" maxlength="11" id="msisdn" name="msisdn"
                     placeholder="Twój numer telefonu (opcjonalnie)"
-                    data-inline="true" value="<?=@$user->msisdn?>">
+                    data-inline="true" value="<?=@$user->data->msisdn?>">
                 <input type="text" maxlength="70" required id="address" name="address"
                     placeholder="Adres korespondencyjny"
-                    data-inline="true" value="<?=@$user->address?>">
+                    data-inline="true" value="<?=@$user->data->address?>">
             </form>
         </div> <!-- main -->        
-<? if(!$user): ?>
+<? if(!$user && '%HOST%' !== 'staging.uprzejmiedonosze.net'): ?>
         <script>
         $.post("https://%HOST%/api/api.html",
             {action: '_notify-register'});

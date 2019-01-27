@@ -9,12 +9,7 @@ genHeader("Uprzejmie Donoszę – historia zmian");
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<? menuMain(); ?>
 			<h1>Historia zmian</h1>
-			<?PHP
-			if(hasApps()) {
-				menuApplications();
-			} else { 
-				menuStart();
-			} ?>
+            <? menuStartOrApplications(); ?>
 		</div>
 		<div data-role="main" class="ui-content">
 			<h2>Changelog</h2>

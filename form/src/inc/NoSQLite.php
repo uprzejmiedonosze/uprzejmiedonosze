@@ -1,8 +1,6 @@
 <?php
 
-namespace NoSQLite;
-
-use NoSQLite\Store;
+require(__DIR__ . '/Store.php');
 
 /**
  * Simple key => value store based on SQLite3

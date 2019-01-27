@@ -1,14 +1,13 @@
 <?PHP
 header("Content-Type: application/json; charset=UTF-8");
 require_once(__DIR__ . '/../../inc/include.php');
-require_once(__DIR__ . '/../../autoload.php');
+require(__DIR__ . '/../../autoload.php');
 
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
         logger("api.html:_ action=$action");
         switch($action) {
-            case "getUserApplications": _getUserApplications(); break;
             case "verifyToken": _verifyToken(); break;
             case "archived":
             case "confirmed":
@@ -36,21 +35,6 @@ function is_ajax() {
     return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
 
-function _getUserApplications(){
-    $applicationIds = getUserApplications();
-    $applications = Array();
-    foreach($applicationIds as $id){
-        $application = getApplication($id);
-        $app_date = (new DateTime($application->date))->format('Y-m-d');
-        $app_hour = (new DateTime($application->date))->format('H:i');
-        $applications[$id] = $application;
-        $applications[$id]->app_date = $app_date;
-        $applications[$id]->app_hour = $app_hour;
-        $applications[$id]->category_txt = CATEGORIES[$application->category][1];
-    }
-    echo json_encode($applications);
-}
-
 function _verifyToken(){
     if(isset($_POST['pa']) && !empty($_POST['pa'])){
         if(verifyToken($_POST['pa'])){
@@ -70,10 +54,11 @@ function _verifyToken(){
     }
 }
 
-function _action($action, $id){
-    $application = getApplication($id);
+function _action($action, $appId){
+    global $storage;
+    $application = $storage->getApplication($appId);
     $application->status = $action;
-    setApplication($application);
+    $storage->saveApplication($application);
     echo json_encode(Array("status" => "OK"));
 }
 
@@ -87,22 +72,16 @@ function cmp($a, $b){
 }
 
 function _upload(){
-    global $_POST;
+    global $_POST, $storage;
     $image_bytes = explode( ',', $_POST['image_data'])[1]; 
     $pictureType = $_POST['pictureType'];
     $applicationId = $_POST['applicationId'];
 
-    $user = getUserData();
-
     try{
-        $application = getApplication($applicationId);
+        $application = $storage->getApplication($applicationId);
     }catch(Exception $e){
-        $application = (object)[
-            'id' => $applicationId,
-            'status' => 'draft',
-            'user' => $user
-        ];
-        setApplication($application);
+        $application = new Application();
+        $storage->saveApplication($application);
     }
     $prefix = save_img_and_thumb($image_bytes);
 
@@ -114,6 +93,10 @@ function _upload(){
         $application->carImage->thumb = make_image_url($prefix, ',t');
 
         if(isset($car_info) && count($car_info["results"])){
+            logger('ALPR (cost: ' . $car_info['credit_cost'] . ', this month: ' . 
+                $car_info['credits_monthly_used'] . ', out of: ' .
+                $car_info['credits_monthly_total'], true);
+
             $result = (Array)$car_info['results'];
             usort($result, "cmp");
 
@@ -133,7 +116,7 @@ function _upload(){
                 imagejpeg($plateImage, make_image_filename($prefix, ',p'));
             }
 
-            $recydywa = (int)countApplicationsPerPlate($result["plate"]);
+            $recydywa = $storage->countApplicationsPerPlate($result["plate"]);
 
             $application->carInfo = new stdClass();
             $application->carInfo->plateId = strtoupper($result["plate"]);
@@ -147,18 +130,16 @@ function _upload(){
         $application->contextImage = new stdClass();
         $application->contextImage->url = make_image_url($prefix);
         $application->contextImage->thumb = make_image_url($prefix, ',t');
-
-        /*if($geo = read_gps_location(make_image_filename($prefix))){
-            if(!isset($application->address)){
-                $application->address = new stdClass();
-            }
-            $application->address->latlng = $geo;
-        }*/
+        
+        if($geo = read_gps_location(make_image_filename($prefix))){
+            !$application->address && $application->address = new stdClass();
+            $application->address->latlngFromImage = $geo;
+        }
     }else{
         raiseError("Uknown picture type: " . $pictureType, 400);
     }
 
-    setApplication($application);
+    $storage->saveApplication($application);
 
     echo json_encode($application);
 }

@@ -17,12 +17,7 @@ genHeader("Uprzejmie Donoszę – przepisy związane z parkowaniem");
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 			<? menuMain(); ?>
 			<h1>Przepisy</h1>
-			<?PHP
-			if(hasApps()) {
-				menuApplications();
-			} else { 
-				menuStart();
-			} ?>
+			<? menuStartOrApplications(); ?>
 		</div>
 		<div data-role="main" class="ui-content przepisy">
 <? endif; ?>

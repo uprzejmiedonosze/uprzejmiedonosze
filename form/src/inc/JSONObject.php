@@ -1,0 +1,31 @@
+<?PHP
+
+/** 
+ * Super class JSONObject able to recursively create new objects from JSON.
+ */
+class JSONObject {
+
+    /**
+     * Create empty object, or initiate it from JSON. 
+     */
+    public function __construct($json = null) {
+        if($json){
+            $this->set(json_decode($json, true));
+        }
+    }
+
+    /**
+     * Initiate the object based on provided data.
+     */
+    public function set($data) {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $sub = new JSONObject;
+                $sub->set($value);
+                $value = $sub;
+            }
+            $this->{$key} = $value;
+        }
+    }
+}
+?>

@@ -1,5 +1,4 @@
 <? 
-require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 genHeader("Uprzejmie Donoszę – zaloguj się");
 
@@ -8,7 +7,7 @@ if(isset($_GET['logout'])){
     logger('unsetting token');
     redirect("login.html");
 }
-$signInSuccessUrl = '/login-ok.html';
+$signInSuccessUrl = 'login-ok.html';
 if(isset($_GET['next'])){
     $signInSuccessUrl .= '?next=' . $_GET['next'];
     //redirect("login.html");
@@ -57,7 +56,7 @@ logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
                 var uiConfig = {
                     signInSuccessUrl: "https://%HOST%<?=$signInSuccessUrl?>",
                     signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-                    tosUrl: 'https://staging.uprzejmiedonosze.net/start.html' // Terms of service url.
+                    tosUrl: 'https://%HOST%/start.html' // Terms of service url.
                 };
 
                 // Initialize the FirebaseUI Widget using Firebase.

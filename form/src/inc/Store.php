@@ -1,9 +1,7 @@
 <?php
 
-namespace NoSQLite;
-
-use PDO;
-use PDOStatement;
+#use PDO;
+#use PDOStatement;
 
 class Store implements \Iterator, \Countable
 {

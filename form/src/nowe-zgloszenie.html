@@ -3,32 +3,33 @@ require_once(__DIR__ . '/../inc/include.php');
 genHeader("Uprzejmie Donoszę – nowe zgłoszenie", true);
 
 if(isset($_SESSION['newAppId'])){ // edit mode
-	$applicationId = $_SESSION['newAppId'];
-	try{
-        $application = getApplication($applicationId);
-    }catch(Exception $e){
-        $application = null;
-    }
-	$edit = isset($application) && $application->status == 'ready'; // page refresh probably (edit mode, but application is empty)
+    $applicationId = $_SESSION['newAppId'];
+    $application = $storage->getApplication($applicationId);
+    $edit = true;
 }else{ // new application mode
-	$applicationId = guidv4();
-	$_SESSION['newAppId'] = $applicationId;
+    $application = new Application();
+    $storage->saveApplication($application);
+	$applicationId = $application->id;
+	$_SESSION['newAppId'] = $application->id;
 	$edit = false;
 }
 
-$contextImage = ($edit)? $application->contextImage->thumb: 'img/camera.png';
-$carImage     = ($edit)? $application->carImage->thumb: 'img/camera.png';
+@$contextImage = $application->contextImage->thumb;
+!$contextImage && $contextImage = 'img/camera.png';
 
-$address      = ($edit)? $application->address->address: '';
-$latlng       = ($edit)? $application->address->latlng: '';
-$voivodeship  = ($edit)? $application->address->voivodeship: '';
-$city         = ($edit)? $application->address->city: '';
+@$carImage     = $application->carImage->thumb;
+!$carImage     && $carImage = 'img/camera.png';
 
-$plateId      = ($edit)? $application->carInfo->plateId: '';
-$category     = ($edit)? $application->category: 7;
-@$comment     = ($edit)? $application->userComment: '';
+@$category     = $application->category;
+!$category     && $category = 7;
 
-$date         = ($edit)? $application->date: '';
+@$address      = $application->address->address;
+@$latlng       = $application->address->latlng;
+@$voivodeship  = $application->address->voivodeship;
+@$city         = $application->address->city;
+@$plateId      = $application->carInfo->plateId;
+@$comment      = $application->userComment;
+@$date         = $application->date;
 
 ?>
 	<body class="index new-application">
@@ -50,7 +51,7 @@ $date         = ($edit)? $application->date: '';
 										Zrób zdjęcie prezentujące kontekst zgłoszenia<br>
 										<img class="photo-thumbs" id="contextImage-img" src="<?=$contextImage;?>"/>
 									</label>
-									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst" value="<?=($edit)? $application->contextImage->url: '';?>" />
+									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst" value="<?=@$application->contextImage->url;?>" />
 								</div>
 							</div>
 							<div class="ui-block-b">
@@ -61,7 +62,7 @@ $date         = ($edit)? $application->date: '';
 										<img id="plateImage" src=""/><br/>
 										<span id="recydywa"></span>
 									</label>
-									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne" value="<?=($edit)?$application->carImage->url: '';?>" />
+									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne" value="<?=@$application->carImage->url; ?>" />
 								</div>
 							</div>
 						</div>

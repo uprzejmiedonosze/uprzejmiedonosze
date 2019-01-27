@@ -257,7 +257,7 @@ function imageError(id){
 }
 
 function readGeoDataFromImage(file){
-	EXIF.getData(file, function() {
+	const geoResult = EXIF.getData(file, function() {
 
 		var lat = EXIF.getTag(this, "GPSLatitude");
 		var lon = EXIF.getTag(this, "GPSLongitude");
@@ -265,15 +265,31 @@ function readGeoDataFromImage(file){
 		var lonRef = EXIF.getTag(this, "GPSLongitudeRef") || "W";
 		if(lat){
 			lat = (lat[0] + lat[1]/60 + lat[2]/3600) * (latRef == "N" ? 1 : -1);  
-			lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
+            lon = (lon[0] + lon[1]/60 + lon[2]/3600) * (lonRef == "W" ? -1 : 1); 
+            hasGeo = true;
 			setAddress(lat + ',' + lon, true);
-		}
+		}else{
+            noGeoDataInImage();
+        }
 
 		const dateTime = EXIF.getTag(this, "DateTimeOriginal");
 		if(dateTime){
-			setDateTime(dateTime);
+            setDateTime(dateTime);
 		}
-	});
+    });
+    if(!geoResult){
+        noGeoDataInImage();
+    }
+}
+
+function noGeoDataInImage(){
+    if(/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream){
+        $('#addressHint').text('(Uprzejmie Donoszę na iOS nie jest w stanie wyciągnąć adresu z twoich zdjęć)');    
+    }else{
+        $('#addressHint').html('(Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.)');
+    }
+    
+    
 }
 
 function setDateTime(dateTime){

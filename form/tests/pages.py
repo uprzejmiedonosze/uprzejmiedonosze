@@ -48,7 +48,7 @@ class BasePage(object):
         time.sleep(2)
     
     def login(self):
-        assert "aloguj" in self.driver.title, "Próba logowania na stronie innej niz Zaloguj się (jest {})".format(self.driver.title)
+        assert "zaloguj" in self.driver.title.lower(), "Próba logowania na stronie innej niz Zaloguj się (jest {})".format(self.driver.title)
 
         wait = WebDriverWait(self.driver, 10)
         wait.until(EC.visibility_of_element_located(Locators.LOGIN_BTN)).click()
@@ -85,15 +85,15 @@ class RTD(BasePage):
 class Start(BasePage):
     def __init__(self, driver):
         BasePage.__init__(self, driver, Locators.START)
-        time.sleep(5)
-        if not "tart" in self.driver.title: #[sS]tart
+        if not "start" in self.driver.title.lower():
             self.login()
 
 class New(BasePage):
     def __init__(self, driver):
-        BasePage.__init__(self, driver, Locators.NEW)
-        time.sleep(5)
-        if not "owe " in self.driver.title: #[nN]owe
+        BasePage.__init__(self, driver, Locators.START)
+        self.driver.find_element(*Locators.NEW).click()
+        time.sleep(2)
+        if not "nowe " in self.driver.title.lower():
             self.login()
     
     def is_validation_empty_working(self):
@@ -110,9 +110,12 @@ class New(BasePage):
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
         assert "error" in self.driver.find_element(*Locators.NEW_COMMENT).get_attribute('class')
     
-    def test_context_image(self):
+    def display_image_inputs(self):
         self.driver.execute_script("$('.image-upload input').css('display', 'block');")
         time.sleep(1)
+    
+    def test_context_image(self):
+        self.display_image_inputs()
         self.driver.find_element(*Locators.NEW_IIMAGE1).send_keys(os.getcwd() + self.cfg.app['contextImage'])
 
         wait = WebDriverWait(self.driver, 20)
@@ -124,15 +127,34 @@ class New(BasePage):
         assert self.cfg.app['address'] in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute("value")
 
     def test_car_image(self):
+        self.display_image_inputs()
         self.driver.find_element(*Locators.NEW_IIMAGE2).send_keys(os.getcwd() + self.cfg.app['carImage'])
         
-        wait = WebDriverWait(self.driver, 30)
+        wait = WebDriverWait(self.driver, 20)
         wait.until(EC.text_to_be_present_in_element_value(Locators.NEW_PLATEID, self.cfg.app['plateId']))
         
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
         assert not "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
 
         assert self.cfg.app['plateId'] in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute("value")
+    
+    def test_invalid_image(self):
+        self.display_image_inputs()
+        self.driver.find_element(*Locators.NEW_IIMAGE1).send_keys(os.getcwd() + self.cfg.app['invalidImage'])
+        self.driver.find_element(*Locators.NEW_IIMAGE2).send_keys(os.getcwd() + self.cfg.app['invalidImage'])
+        
+        time.sleep(5)
+
+        assert "Twoje zdjęcie nie ma znaczników geolokacji" in self.driver.find_element(*Locators.NEW_ADD_HINT).text
+        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class')
+        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
+    
+    def test_invalid_image_submit(self):
+        self.driver.find_element(*Locators.NEW_SUBMIT).click()
+
+        assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
+        assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
+
     
     def review(self):
         self.driver.find_element(*Locators.NEW_COMMENT).clear()
@@ -153,6 +175,7 @@ class New(BasePage):
         WebDriverWait(self.driver, 10).until(EC.title_contains('owe '))
     
     def update(self):
+        time.sleep(2)
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
         WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
     
@@ -169,7 +192,7 @@ class New(BasePage):
     def fin(self):
         self.driver.execute_script("$('#form').submit()")
         time.sleep(1)
-        text = self.driver.find_element(*Locators.THANK_YOU)[1].text
+        text = self.driver.find_elements(*Locators.THANK_YOU)[1].text
         assert "UD/" in text
         assert "sm@um.szczecin.pl" in text
         

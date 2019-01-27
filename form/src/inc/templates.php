@@ -1,32 +1,31 @@
 <?PHP
 
 function genHeader($title = "Uprzejmie Donoszę", $auth = false, $register = false,
-	$image = 'img/uprzejmiedonosze.png',
-	$description = 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.'){
+    $image = 'img/uprzejmiedonosze.png',
+    $description = 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.') {
 
-	global $headerSent;
-	$headerSent = true;
-	
-	$authcode = "";
-	if($auth){
-		checkIfLogged();
-		if(!$register && !isRegistered()){
-			redirect("register.html?next=" . $_SERVER['REQUEST_URI']);
-		}
-		$authcode = <<<HTML
-			<script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
-			<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+    global $headerSent, $storage;
+    $headerSent = true;
+
+    $authcode = "";
+    if ($auth) {
+        checkIfLogged();
+        !$register && checkIfRegistered(); // dont redirect if already rendering register page
+
+        $authcode = <<<HTML
+            <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+            <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
 HTML;
-	}
+    }
 
-	$firebaseConfig = getFirebaseConfig();
-	if($auth){
-		$uri = "https://%HOST%";
-	}else{
-		$uri = "https://%HOST%" . $_SERVER['REQUEST_URI'];
-	}
+    $firebaseConfig = getFirebaseConfig();
+    if($auth){
+        $uri = "https://%HOST%";
+    }else{
+        $uri = "https://%HOST%" . $_SERVER['REQUEST_URI'];
+    }
 
-	echo <<<HTML
+    echo <<<HTML
 <!DOCTYPE html>
 <html lang="pl">
 	<head>
@@ -46,7 +45,7 @@ HTML;
 		<link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png" />
 		<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180x180.png" />
 		<link rel="manifest" href="/manifest.json">
-		
+
 		<meta name="theme-color" content="#009C7F">
 		<meta property="og:image" content="https://%HOST%/$image"/>
 		<meta property="og:title" content="$title"/>
@@ -70,8 +69,8 @@ HTML;
 }
 
 function getFirebaseConfig(){
-	if('%HOST%' == 'uprzejmiedonosze.net'){
-		return <<<HTML
+    if('%HOST%' == 'uprzejmiedonosze.net'){
+        return <<<HTML
 		<script>
 			var config = {
 				apiKey: "AIzaSyBNd3ApHoXl7Ks0rpvkjO5spouSaBnGuaA",
@@ -84,8 +83,8 @@ function getFirebaseConfig(){
 			firebase.initializeApp(config);
 		</script>
 HTML;
-	}else{
-		return <<<HTML
+    }else{
+        return <<<HTML
 		<script>
 			var config = {
 				apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
@@ -98,17 +97,17 @@ HTML;
 			firebase.initializeApp(config);
 		</script>
 HTML;
-	}
+    }
 }
 
 function getFooter($mapsInitFunc = false, $txt = '&copy; Uprzejmie Donoszę'){
 
-	$maps = "";
-	if($mapsInitFunc){
-		$maps = "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback=$mapsInitFunc&language=pl\" async defer></script>";
-	}
+    $maps = "";
+    if($mapsInitFunc){
+        $maps = "<script src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback=$mapsInitFunc&language=pl\" async defer></script>";
+    }
 
-	echo <<<HTML
+    echo <<<HTML
 			<div data-role="footer">
 				<h4>$txt</h4>
 			</div>
@@ -132,93 +131,30 @@ HTML;
 // templates
 
 function menuNewApplication($text = 'Nowe zgłoszenie'){
-	echo '<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r" data-ajax="false">' . $text . '</a>';
+    echo '<a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-carat-r" data-ajax="false">' . $text . '</a>';
 }
 
 function menuStart($text = 'Zgłoś'){
-	echo '<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">' . $text . '</a>';
+    echo '<a href="start.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-plus">' . $text . '</a>';
 }
 
 function menuMain($text = 'Strona główna'){
-	echo '<a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-home ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
+    echo '<a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-icon-home ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
 }
 
 function menuBack($text = 'Back', $icon = 'ui-icon-carat-l'){
-	echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
+    echo '<a href="javascript:history.back()" data-rel="back" class="ui-btn-left  ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ' . $icon . ' ui-btn-icon-notext" data-role="button" role="button">' . $text . '</a>';
 }
 
 function menuApplications($text = 'Zgłoszenia'){
-	echo '<a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bullets">' . $text . '</a>';
+    echo '<a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-bullets">' . $text . '</a>';
 }
 
-function printApplication($application, $printActions = true){
-	$commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
-	
-	$app_date = (new DateTime($application->date))->format('Y-m-d');
-	$app_hour = (new DateTime($application->date))->format('H:i');
-	$category = CATEGORIES[$application->category][1];
-	$sex      = guess_sex($application);
-	$bylam    = $sex['bylam'];
-	
-	$status   = $application->status;
-	$statusClass = STATUSES[$status][3];
-	$statusIcon  = STATUSES[$status][2];
-	$buttons = ($printActions)? getOptionsForApplication($application->id, $status): "";
-
-	echo @<<<HTML
-       
-	<div id="$application->id" class="application $statusClass status-$status" data-collapsed-icon="$statusIcon" data-expanded-icon="carat-d" data-role="collapsible" data-filtertext="{$application->address->address} $application->number $application->date {$application->carInfo->plateId} {$application->userComment} $category">
-		 <h3>$application->number ($app_date) {$application->address->address}</h3>
-		 <p data-role="listview" data-inset="false">
-			<p>W dniu <b>$app_date</b> roku o godzinie
-				<b>$app_hour</b> $bylam świadkiem pozostawienia
-				samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b>
-				pod adresem <b>{$application->address->address}</b>.
-				$category</p>
-			<p>{$application->userComment}</p>
-			<div data-role="controlgroup" data-type="horizontal" data-mini="true">
-				<a href="/ud-{$application->id}.html" class="$commonClasses ui-nodisc-icon ui-icon-eye">szczegóły</a>
-				<a href="{$application->id}.pdf" download="{$application->number}" data-ajax="false" class="$commonClasses ui-nodisc-icon ui-icon-mail">PDF</a>
-			</div>
-			<div id="pics" class="ui-grid-a ui-responsive">
-				<div class="ui-block-a">
-					<a href="/ud-{$application->id}.html">
-						<img class="lazyload photo-thumbs" data-src="{$application->contextImage->thumb}"> 
-					</a>
-				</div>
-				<div class="ui-block-b">
-					<a href="/ud-{$application->id}.html">
-						<img class="lazyload photo-thumbs" data-src="{$application->carImage->thumb}">
-					</a>
-				</div>
-			</div>
-			$buttons
-		</p>
-	</div>       
-HTML;
+function menuStartOrApplications(){
+    global $storage;
+    if (isLoggedIn() && $storage->getCurrentUser()->hasApps()) {
+        menuApplications();
+        return;
+    }
+    menuStart();
 }
-
-function getOptionsForApplication($id, $status){
-	$commonClasses = 'ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon';
-
-	$statusActions = '';
-	foreach(STATUSES as $key => $val){
-		if(!isset($val[3])){ // class is empty, this is a draft or ready
-			continue;
-		}
-		$txt = $val[1];
-		$icon = 'ui-icon-' . $val[2];
-		$disabled = ($key == $status)?'ui-state-disabled':'';
-		$statusActions .= <<<HTML
-			<a href="#" onclick="action('$key', '$id')" class="$commonClasses $disabled $icon status-$key">$txt</a>
-HTML;
-	}
-
-	return <<<HTML
-	<div data-role="controlgroup" data-type="horizontal" data-mini="true" class="actions">
-	    $statusActions
-	</div>
-HTML;
-}
-
-?>

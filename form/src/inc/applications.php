@@ -4,19 +4,20 @@
 <div data-role="collapsibleset" data-filter="true" data-mini="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
 <div class="activeApps"></div>
     <?
-        $applications = getUserApplications();
+        $user = $storage->getCurrentUser();
+        $applications = $user->getApplicationIds();
         $archived = [];
         foreach($applications as $id){
-            $application = getApplication($id);
+            $application = $storage->getApplication($id);
             if($application->status == 'archived'){
                 array_push($archived, $application);
                 continue;
             }
-            printApplication($application);
+            $application->print(true);
         }
         echo '<h3 class="archivedApps ui-bar ui-bar-a ui-corner-all">Archiwum</h3>';
         foreach($archived as $application){
-            printApplication($application);
+            $application->print(true);
         }
         echo '</div>';
     ?>

@@ -1,5 +1,4 @@
 <?PHP
-require_once __DIR__ . '/../autoload.php';
 require_once __DIR__ . '/../inc/include.php';
 
 if (!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])) {
@@ -11,21 +10,23 @@ genHeader("Uprzejmie Donoszę – dziękujemy", true);
 $applicationId = $_POST['applicationId'];
 unset($_SESSION['newAppId']);
 
-$application = getApplication($applicationId);
+$application = $storage->getApplication($applicationId);
+$user = $storage->getCurrentUser();
 
-$user = saveUserApplication($application->user->email, $applicationId);
+$user->addApplication($application);
 $appNumber = 'UD/' . $user->number . '/' . sizeof($user->applications);
 
 $application->status = "confirmed";
 $application->number = $appNumber;
 
-setApplication($application);
+$storage->saveApplication($application);
+$storage->saveUser($user);
 
-$sm = guess_sm_address($application)[1];
+$sm = $application->guessSMData()[1];
 $sm_email = ($sm) ? "W tym wypadku jest to <strong>$sm</strong>." :
 "<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
 
-$sex = guess_sex_by_name($application->user->name);
+$sex = $application->guessUserSex();
 $bylam = $sex['bylam'];
 $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];

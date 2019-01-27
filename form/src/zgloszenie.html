@@ -1,13 +1,12 @@
 <? 
-require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 
 $applicationId = $_GET["id"];
-$application = getApplication($applicationId);
-$app_date = (new DateTime($application->date))->format('Y-m-d');
-$app_hour = (new DateTime($application->date))->format('H:i');
+$application = $storage->getApplication($applicationId);
+$app_date = $application->getDate();
+$app_hour = $application->getTime();
 $category = CATEGORIES[$application->category][1];
-$sex      = guess_sex($application);
+$sex      = $application->guessUserSex();
 $bylam    = $sex['bylam'];
 $swiadoma = $sex['swiadoma'];
 $wykonalam = $sex['wykonalam'];
@@ -20,21 +19,11 @@ genHeader("Uprzejmie Donoszę – zgłoszenie {$application->number} z dnia $app
 	<div data-role="page" class="container-fluid" data-theme="a">
 		<div data-role="header" data-position="fixed" data-tap-toggle="false">
 		<? 
-			if(isLoggedIn()){
-				menuBack();
-			}else{
-				menuMain();
-			}
+			if(isLoggedIn()) menuBack();
+			else menuMain();
 		?>
 			<h1>Zgłoszenie <?=$application->number ?></h1>
-			<?PHP
-			if(isLoggedIn()){
-				if(hasApps()) {
-					menuApplications();
-				} else { 
-					menuStart();
-				}
-			}?>
+			<? menuStartOrApplications(); ?>
 		</div>
 		<div data-role="main" class="ui-content">
 <?

@@ -12,52 +12,69 @@ class UDTestStatic(unittest.TestCase):
         cls.driver = webdriver.Firefox(firefox_profile=profile,
             firefox_binary='/Applications/Firefox.app/Contents/MacOS/firefox-bin')
 
-        cls.driver.implicitly_wait(2)
-        cls.driver.set_window_size(500, 900)
-        cls.driver.get('http://staging.uprzejmiedonosze.net')
+        cls.driver.implicitly_wait(1)
+        cls.driver.set_window_size(800, 900)
 
-    def test_01_ssl(self):
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.quit()
+
+    def setUp(self):
+        self.driver.get('http://staging.uprzejmiedonosze.net')
+        time.sleep(1)
+
+    def test_ssl(self):
         assert "https://" in self.driver.current_url
 
-    def test_02_main_page(self):
+    def test_main_page(self):
         main_page = pages.MainPage(self.driver)
         main_page.is_title_matches("Uprzejmie")
         main_page.is_new_matches()
     
-    def test_03_changelog(self):
+    def test_changelog(self):
         changelog = pages.Changelog(self.driver)
         changelog.is_title_matches("historia"),
         changelog.is_new_matches()
-        changelog.click_main()
     
-    def test_04_project(self):
+    def test_project(self):
         project = pages.Project(self.driver)
         project.is_title_matches("projekcie")
         project.is_new_matches()
-        project.click_main()
 
-    def test_05_rtd(self):
+    def test_rtd(self):
         rtd = pages.RTD(self.driver)
         rtd.is_title_matches("to dobrze")
         rtd.is_new_matches()
-        rtd.click_main()
     
-    def test_06_start(self):
+    def test_start(self):
         start = pages.Start(self.driver)
         start.is_title_matches("tart")
 
-    def test_07_new(self):
+    def test_new_empty(self):
         new = pages.New(self.driver)
         new.is_title_matches("Nowe")
         new.is_validation_empty_working()
+    
+    def test_new_category_other(self):
+        new = pages.New(self.driver)
+        new.is_title_matches("Nowe")
         new.is_other_comment_validation_working()
+
+    def test_new_images(self):
+        new = pages.New(self.driver)
+        new.test_context_image()
+        new.test_car_image()
+
+    def test_review(self):
+        new = pages.New(self.driver)
         new.test_context_image()
         new.test_car_image()
         new.review()
         new.update()
         new.commit()
         new.fin()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit()
+    
+    def test_invalid_image(self):
+        new = pages.New(self.driver)
+        new.test_invalid_image()
+        new.test_invalid_image_submit()

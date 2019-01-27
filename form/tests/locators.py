@@ -26,6 +26,7 @@ class Locators(object):
     NEW_IIMAGE1 = (By.ID,    "contextImage")
     NEW_IIMAGE2 = (By.ID,    "carImage")
     NEW_CAT0    = (By.XPATH, "//label[@for='0']")
+    NEW_ADD_HINT= (By.ID,    "addressHint")
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 
