@@ -37,39 +37,40 @@ class Application extends JSONObject{
     }
 
     /**
+     * Defines if a plate image should be included in the application.
+     * True if plate image is present, and user didn't change plateId
+     * value in the application.
+     */
+    public function shouldIncludePlateImage(){
+        if(!$this->carInfo->plateId){
+            return false;
+        }
+        if(isset($this->carInfo->plateIdFromImage) 
+            && $this->carInfo->plateIdFromImage == $this->carInfo->plateId){
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Export application as a onedimensional array.
      */
     public function flatten(){
-
         $app = clone $this;
         $app->tex = new stdClass();
     
-        $includegraphics = '\\href{https://%HOST%/ud-' 
-            . $app->id
-            . '.html}{\\includegraphics[width=0.5\\textwidth,height=0.5\\textwidth,clip=true,keepaspectratio=true]{';
-        
-        $app->tex->contextImage = $includegraphics . ROOT . "/" . $app->contextImage->thumb . "}}";
-        $app->tex->carImage = $includegraphics . ROOT . "/" . $app->carImage->thumb . "}}";
-    
-        $app->tex->plateImage = "";
-        if(!empty($app->carInfo->plateId)){
-            if(isset($app->carInfo->plateIdFromImage) 
-               && $app->carInfo->plateIdFromImage == $app->carInfo->plateId){
-                $app->tex->plateImage = "\\includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{" . ROOT . "/" . $app->carInfo->plateImage . "}";
-            }
-        }
+        $app->tex->appUrl = 'https://%HOST%/ud-' . $app->id . '.html';
+        $app->tex->root = __DIR__ . '/../';
+
+        $app->tex->shouldIncludePlateImage = $this->shouldIncludePlateImage();
     
         $app->tex->sm = $app->guessSMData()[0];
         $app->tex->sex = $app->guessUserSex();
     
         $app->tex->msisdn = (trim($app->user->msisdn) === "")?"": "Tel: {$app->user->msisdn}";
-
-        $app->tex->date = $app->getDate();
-        $app->tex->hour = $app->getTime();
         $app->tex->category = CATEGORIES[$this->category][1];
-        $app->tex->email = "Email: {$this->user->email}";
     
-        return (array) $app;
+        return (array)$app;
     }
 
     /**
