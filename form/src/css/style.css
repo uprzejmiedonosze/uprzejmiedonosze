@@ -226,7 +226,9 @@ div.application a.status-confirmed:after {
 	background-color: #81c78499;
 }
 div.application.status-confirmed-waiting h3 .ui-btn-icon-left:after,
-div.application a.status-confirmed-waiting:after {
+div.application a.status-confirmed-waiting:after,
+div.application.status-confirmed-waitingE h3 .ui-btn-icon-left:after,
+div.application a.status-confirmed-waitingE:after {
 	background-color: #3388cc99;
 }
 div.application.status-confirmed-sm h3 .ui-btn-icon-left:after,

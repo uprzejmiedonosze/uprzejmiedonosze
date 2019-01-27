@@ -33,7 +33,7 @@ function action(action, appId){
                     $('.activeApps').after($('#' + appId));
                 }
             }
-            $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-sm status-confirmed-ignored status-confirmed-fined status-archived');    
+            $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-waitingE status-confirmed-sm status-confirmed-ignored status-confirmed-fined status-archived');    
             $('#' + appId).addClass('status-' + action);
 
             $('#' + appId + ' a.ui-state-disabled').removeClass('ui-state-disabled');
