@@ -15,10 +15,10 @@ if(isset($_SESSION['newAppId'])){ // edit mode
 }
 
 @$contextImage = $application->contextImage->thumb;
-!$contextImage && $contextImage = 'img/camera.png';
+!$contextImage && $contextImage = 'img/cameraContext.png';
 
 @$carImage     = $application->carImage->thumb;
-!$carImage     && $carImage = 'img/camera.png';
+!$carImage     && $carImage = 'img/cameraPlate.png';
 
 @$category     = $application->category;
 !$category     && $category = 7;
@@ -48,7 +48,7 @@ if(isset($_SESSION['newAppId'])){ // edit mode
 							<div class="ui-block-a">
 								<div class="image-upload">
 									<label for="contextImage">
-										Zrób zdjęcie prezentujące kontekst zgłoszenia<br>
+										Zrób zdjęcie prezentujące kontekst zgłoszenia
 										<img class="photo-thumbs" id="contextImage-img" src="<?=$contextImage;?>"/>
 									</label>
 									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst" value="<?=@$application->contextImage->url;?>" />
@@ -57,9 +57,9 @@ if(isset($_SESSION['newAppId'])){ // edit mode
 							<div class="ui-block-b">
 								<div class="image-upload">
 									<label for="carImage">
-										Zrób zdjęcie na którym widoczna jest tablica rejestracyjna<br>
-										<img class="photo-thumbs" id="carImage-img" src="<?=$carImage?>"/><br/>
-										<img id="plateImage" src=""/><br/>
+										Zrób zdjęcie na którym widoczna jest tablica rejestracyjna
+										<img class="photo-thumbs" id="carImage-img" src="<?=$carImage?>"/>
+										<img id="plateImage" src=""/>
 										<span id="recydywa"></span>
 									</label>
 									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne" value="<?=@$application->carImage->url; ?>" />

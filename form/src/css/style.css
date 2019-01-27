@@ -72,14 +72,17 @@ label.section:first-of-type {
 #pics img {
 	max-width: 350px;
 	border-radius: 0.8em;
-	width: 100%;
+    width: 100%;
+    padding-top: 0.3em;
+    display: block;
 }
 
 #pics .image-upload {
 	width: 95%;
 }
 
-#pics img[src='img/camera.png'],
+#pics img[src='img/cameraContext.png'],
+#pics img[src='img/cameraPlate.png'],
 #pics img[src='img/loading.gif'] {
 	width: auto;
 }

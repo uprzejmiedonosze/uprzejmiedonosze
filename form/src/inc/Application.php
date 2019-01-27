@@ -117,7 +117,7 @@ class Application extends JSONObject{
         $statusClass = STATUSES[$status][3];
         $statusIcon  = STATUSES[$status][2];
         $buttons = ($printActions)? $this->getActionButtons(): "";
-    
+
         $plateImage = ($this->shouldIncludePlateImage())? '<img id="plateImage" src="' . $this->carInfo->plateImage . '"/>': '';
     
         echo @<<<HTML
@@ -145,6 +145,7 @@ class Application extends JSONObject{
                         <a href="/ud-{$this->id}.html">
                             <img class="lazyload photo-thumbs" data-src="{$this->carImage->thumb}">
                         </a>
+                        $plateImage
                     </div>
                 </div>
                 $buttons

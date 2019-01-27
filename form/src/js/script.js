@@ -252,7 +252,7 @@ function processFile(dataURL, fileType, id) {
 }
 
 function imageError(id){
-	$('img#' + id + '-img').attr("src", 'img/camera.png');
+	$('img#' + id + '-img').attr("src", 'img/cameraContext.png');
 	$('#' + id).textinput('enable');
 }
 
