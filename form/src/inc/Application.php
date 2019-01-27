@@ -59,10 +59,13 @@ class Application extends JSONObject{
         $app = clone $this;
         $app->tex = new stdClass();
     
-        $app->tex->appUrl = 'https://%HOST%/ud-' . $app->id . '.html';
-        $app->tex->root = __DIR__ . '/../';
+        $app->tex->appUrl = '{https://%HOST%/ud-' . $app->id . '.html}';
+        $app->tex->root = __DIR__ . '/../public/';
+        $app->tex->contextImage = '{' . $app->tex->root . $app->contextImage->thumb . '}';
+        $app->tex->carImage = '{' . $app->tex->root . $app->carImage->thumb . '}';
 
         $app->tex->shouldIncludePlateImage = $this->shouldIncludePlateImage();
+        $app->tex->plateImage = '{' . $app->tex->root . $app->carInfo->plateImage . '}';
     
         $app->tex->sm = $app->guessSMData()[0];
         $app->tex->sex = $app->guessUserSex();

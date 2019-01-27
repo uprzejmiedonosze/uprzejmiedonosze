@@ -46,13 +46,13 @@
 
     \closing{\textit{Z poważaniem,\\\n{} } }
 
-    \href{ {{ tex.appUrl }} }
-        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{ {{ tex.root }}{{ contextImage.thumb }} }}
-    \href{ {{ tex.appUrl }} }
-        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{ {{ tex.root }}{{ carImage.thumb }} }}
+    \href{{ tex.appUrl }}
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ tex.carImage }} }
+    \href{{ tex.appUrl }}
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ tex.contextImage }} }
 
     {% if tex.shouldIncludePlateImage %}
-    \includegraphics[width=0.2\\textwidth,height=0.2\\textwidth,clip=true,keepaspectratio=true]{ {{ tex.root }}{{ carInfo.plateImage }} }
+    \includegraphics[width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ tex.plateImage }}
     {% endif %}
 
 \end{letter}
