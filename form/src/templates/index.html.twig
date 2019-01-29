@@ -59,23 +59,28 @@
         </script>
     </head>
     <body class="index">
-        <div data-role="header" data-position="fixed" data-tap-toggle="false">
-            <h1>Uprzejmie Donoszę</h1>
-            <a href="start.html" class="ui-btn-right ui-alt-icon
-                ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
-                ui-btn-icon-left ui-icon-plus">Zgłoś</a>
-        </div> <!-- header -->
         <div data-role="page" class="container-fluid" data-theme="a">
+            {% block header %}
+            <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                <h1>Uprzejmie Donoszę</h1>
+                <a href="start.html" class="ui-btn-right ui-alt-icon
+                    ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
+                    ui-btn-icon-left ui-icon-plus">Zgłoś</a>
+            </div> <!-- header -->
+            {% endblock %}
             <div data-role="main" class="ui-content">
+            {% block main %}
+            {% endblock %}
             </div> <!-- main -->
+            {% block jsIncludes %}
             <div data-role="footer">
                 <h4>&copy; Uprzejmie Donoszę</h4>
-            </div>
+            </div> <!-- footer -->
+            {% endblock %}
         </div> <!-- page -->
-
-        <script src="js/script-aa4c01d1.js"></script>
-        <script src="js/lazysizes.min-aa4c01d1.js"></script>
-
+        {% block jsIncludes %}
+        <script src="js/script-%JS_HASH%.js"></script>
+        <script src="js/lazysizes.min-%JS_HASH%.js"></script>
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -84,5 +89,6 @@
             ga('create', 'UA-99241725-1', 'auto');
             ga('send', 'pageview');
         </script>
+        {% endblock %}
     </body>
 </html>

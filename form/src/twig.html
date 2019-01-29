@@ -1,10 +1,8 @@
 <?PHP
-
 require_once(__DIR__ . '/../inc/include.php');
 
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 $twig = new Twig_Environment($loader);
 
-ob_start();
-echo $twig->render('template.tex.twig', [ 'body' => [ 'title' => 'uprzejmie donoszę'] ]);
+echo $twig->render('index.html.twig', [ 'body' => [ 'title' => 'uprzejmie donoszę'] ]);
 ?>
