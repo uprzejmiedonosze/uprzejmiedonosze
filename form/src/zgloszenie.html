@@ -63,9 +63,12 @@ echo <<<HTML
                         </a>
                         $plateImage
 					</div>
-				</div>
-			</div>
+                </div>
 HTML;
+if(isLoggedIn() && getCurrentUserEmail() == $application->user->email){
+    $application->printStatusesHistory();
+}
+echo "</div>";
 ?>
 		</div> <!-- main -->
 <? getFooter() ?>
