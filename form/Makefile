@@ -21,7 +21,7 @@ JS_MINIFIED          = $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
 HTML_FILES           = $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       = $(HTML_FILES:src/%.html=export/public/%.html)
 
-TWIG_FILES           = $(wildcard src/templates/*.html.twig)
+TWIG_FILES           = $(wildcard src/templates/*.twig)
 TWIG_PROCESSED       = $(TWIG_FILES:src/templates/%=export/templates/%)
 
 PHP_FILES            = $(wildcard src/inc/*.php)
@@ -65,7 +65,6 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" || ( echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." && exit 1 )
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	@cp src/api/*twig $(PUBLIC)/api/
 	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json $(EXPORT)/
 
 minify: minify-css minify-js process-html process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
