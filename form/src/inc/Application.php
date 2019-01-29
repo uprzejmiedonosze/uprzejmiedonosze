@@ -13,6 +13,7 @@ class Application extends JSONObject{
     public function __construct($json = null) {
         if($json){
             parent::__construct($json);
+            @$this->statusHistory = (array)$this->statusHistory;
             return;
         }
         global $storage;
@@ -34,6 +35,19 @@ class Application extends JSONObject{
      */
     public function getTime(){
         return (new DateTime($this->date))->format('H:i');
+    }
+
+    /**
+     * Set status (and store statuses history changes)
+     */
+    public function setStatus($status){
+        if(!isset($this->statusHistory)){
+            $this->statusHistory = [];
+        }
+        $this->statusHistory[date(DT_FORMAT)] = new JSONObject();
+        $this->statusHistory[date(DT_FORMAT)]->old = $this->status;
+        $this->statusHistory[date(DT_FORMAT)]->new = $status;
+        $this->status = $status;
     }
 
     /**
@@ -175,6 +189,21 @@ HTML;
             $statusActions
         </div>
 HTML;
+    }
+
+    public function printStatusesHistory(){
+        if(!isset($this->statusHistory) || sizeof($this->statusHistory) == 0) return "";
+        
+        echo '<div id="statusHistory"><h4>Historia zmian statusów</h4>';
+        echo '<ul data-role="listview">';
+        foreach(array_reverse($this->statusHistory) as $date => $status):
+            $date = (new DateTime($date))->format('Y-m-d H:i');
+            $old = strtolower(STATUSES[$status->old][1]);
+            $new = strtolower(STATUSES[$status->new][1]);
+            echo "<li><b>$date</b> zmiana z <b>$old</b> na <b>$new</b></li>";
+        endforeach;
+        echo '</ul></div>';
+
     }
 
 }

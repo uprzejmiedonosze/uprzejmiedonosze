@@ -16,7 +16,7 @@ $user = $storage->getCurrentUser();
 $user->addApplication($application);
 $appNumber = 'UD/' . $user->number . '/' . sizeof($user->applications);
 
-$application->status = "confirmed";
+$application->setStatus("confirmed");
 $application->number = $appNumber;
 
 $storage->saveApplication($application);
