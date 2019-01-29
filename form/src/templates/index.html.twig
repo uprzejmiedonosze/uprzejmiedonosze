@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1,
+            maximum-scale=1, user-scalable=no, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <title>Uprzejmie Donoszę</title>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="57x57"
+            href="img/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="72x72"
+            href="img/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76"
+            href="img/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114"
+            href="img/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120"
+            href="img/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="144x144"
+            href="img/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="152x152"
+            href="img/apple-touch-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180"
+            href="img/apple-touch-icon-180x180.png" />
+        <link rel="manifest" href="/manifest.json">
+
+        <meta name="theme-color" content="#009C7F">
+        <meta property="og:image"
+            content="https://{{ head.host }}{{ head.image }}" />
+        <meta property="og:title" content="{{ head.title }}" />
+        <meta property="og:description"
+            content="{{ head.description}}" />
+        <meta property="og:url" content="{{ head.uri }}" />
+        <meta property="og:locale" content="pl_PL" />
+        <meta property="og:type" content="website" />
+
+        <link rel="stylesheet"
+            href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+        <link rel="stylesheet" href="css/style-%CSS_HASH%.css">
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script
+            src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-auth.js"></script>
+        <script>
+            var config = {
+                apiKey: "AIzaSyBNd3ApHoXl7Ks0rpvkjO5spouSaBnGuaA",
+                authDomain: "uprzejmie-donosze.firebaseapp.com",
+                databaseURL: "https://uprzejmie-donosze.firebaseio.com",
+                projectId: "uprzejmie-donosze",
+                storageBucket: "uprzejmie-donosze.appspot.com",
+                messagingSenderId: "823788795198"
+            };
+            firebase.initializeApp(config);
+        </script>
+    </head>
+    <body class="index">
+        <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <h1>Uprzejmie Donoszę</h1>
+            <a href="start.html" class="ui-btn-right ui-alt-icon
+                ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
+                ui-btn-icon-left ui-icon-plus">Zgłoś</a>
+        </div> <!-- header -->
+        <div data-role="page" class="container-fluid" data-theme="a">
+            <div data-role="main" class="ui-content">
+            </div> <!-- main -->
+            <div data-role="footer">
+                <h4>&copy; Uprzejmie Donoszę</h4>
+            </div>
+        </div> <!-- page -->
+
+        <script src="js/script-aa4c01d1.js"></script>
+        <script src="js/lazysizes.min-aa4c01d1.js"></script>
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-99241725-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>

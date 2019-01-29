@@ -8,7 +8,7 @@ HOSTING              = nieradka.net
 # dirs and files 
 EXPORT               = export
 PUBLIC               = $(EXPORT)/public
-DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc
+DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc $(EXPORT)/templates
 
 CSS_FILES            = $(wildcard src/css/*.css)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5 | cut -b 1-8)
@@ -20,6 +20,9 @@ JS_MINIFIED          = $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
 
 HTML_FILES           = $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       = $(HTML_FILES:src/%.html=export/public/%.html)
+
+TWIG_FILES           = $(wildcard src/templates/*.html.twig)
+TWIG_PROCESSED       = $(TWIG_FILES:src/templates/%=export/templates/%)
 
 PHP_FILES            = $(wildcard src/inc/*.php)
 PHP_PROCESSED        = $(PHP_FILES:src/inc/%.php=export/inc/%.php)
@@ -65,11 +68,12 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@cp src/api/*twig $(PUBLIC)/api/
 	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json $(EXPORT)/
 
-minify: minify-css minify-js process-html process-php process-manifest ## Minifies CSS and JS, processing PHP, HTML and manifest.json files.
+minify: minify-css minify-js process-html process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
 minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED)
 process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
+process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 
 clean: ## Removes minified CSS and JS files.
@@ -99,6 +103,10 @@ export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '==> Preprocess
 
 export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
 	$(lint)
+	$(replace)
+
+export/templates/%: src/templates/% $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
+	$(lint-twig)
 	$(replace)
 
 $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
@@ -132,6 +140,10 @@ endef
 
 define lint
 @! php -l $< | grep -v "No syntax errors detected"
+endef
+
+define lint-twig
+@! ~/.composer/vendor/bin/twig-lint lint $<
 endef
 
 # GIT
