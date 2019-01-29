@@ -6,7 +6,7 @@
             maximum-scale=1, user-scalable=no, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <title>Uprzejmie Donoszę</title>
+        <title>{{ title }}{{ title ? ' | ' }}Uprzejmie Donoszę</title>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
         <link rel="apple-touch-icon" sizes="57x57"
@@ -29,11 +29,11 @@
 
         <meta name="theme-color" content="#009C7F">
         <meta property="og:image"
-            content="https://{{ head.host }}{{ head.image }}" />
-        <meta property="og:title" content="{{ head.title }}" />
+            content="https://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
+        <meta property="og:title" content="{{ title }}{{ title ? ' | ' }}Uprzejmie Donoszę" />
         <meta property="og:description"
-            content="{{ head.description}}" />
-        <meta property="og:url" content="{{ head.uri }}" />
+            content="{{ head.description ?? 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.' }}" />
+        <meta property="og:url" content="https://%HOST%{{ auth ? '' : head.uri }}" />
         <meta property="og:locale" content="pl_PL" />
         <meta property="og:type" content="website" />
 
@@ -57,28 +57,33 @@
             };
             firebase.initializeApp(config);
         </script>
+    {% if auth %}
+        <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+        <link type="text/css" rel="stylesheet"
+            href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+    {% endif %}
+
     </head>
     <body class="index">
         <div data-role="page" class="container-fluid" data-theme="a">
-            {% block header %}
+        {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 <h1>Uprzejmie Donoszę</h1>
                 <a href="start.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
                     ui-btn-icon-left ui-icon-plus">Zgłoś</a>
             </div> <!-- header -->
-            {% endblock %}
+        {% endblock %}
             <div data-role="main" class="ui-content">
-            {% block main %}
-            {% endblock %}
+        {% block main %}{% endblock %}
             </div> <!-- main -->
-            {% block jsIncludes %}
+        {% block footer %}
             <div data-role="footer">
                 <h4>&copy; Uprzejmie Donoszę</h4>
             </div> <!-- footer -->
-            {% endblock %}
+        {% endblock %}
         </div> <!-- page -->
-        {% block jsIncludes %}
+    {% block jsIncludes %}
         <script src="js/script-%JS_HASH%.js"></script>
         <script src="js/lazysizes.min-%JS_HASH%.js"></script>
         <script>
@@ -89,6 +94,6 @@
             ga('create', 'UA-99241725-1', 'auto');
             ga('send', 'pageview');
         </script>
-        {% endblock %}
+    {% endblock %}
     </body>
 </html>

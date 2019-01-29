@@ -4,5 +4,5 @@ require_once(__DIR__ . '/../inc/include.php');
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 $twig = new Twig_Environment($loader);
 
-echo $twig->render('index.html.twig', [ 'body' => [ 'title' => 'uprzejmie donoszę'] ]);
+echo $twig->render('index.html.twig', [ 'head' => [ 'uri' => $_SERVER['REQUEST_URI']] ]);
 ?>
