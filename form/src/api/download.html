@@ -29,11 +29,6 @@ header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
 function generate_pdf($application, $destFile) {
-	$template_file = __DIR__ . '/template.tex.twig';
-
-	if(!file_exists($template_file)) {
-		throw new Exception("Could not open template");
-	}
 	if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
 		throw new Exception("Failed to create temporary file");
 	}
@@ -44,7 +39,7 @@ function generate_pdf($application, $destFile) {
 	$log_f = "$f.log";
 	$pdf_f = "$f.pdf";
 
-	$loader = new Twig_Loader_Filesystem(__DIR__ . '/');
+    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 	$twig = new Twig_Environment($loader);
 
 	ob_start();
