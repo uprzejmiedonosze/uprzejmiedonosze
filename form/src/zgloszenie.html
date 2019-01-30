@@ -3,72 +3,24 @@ require_once(__DIR__ . '/../inc/include.php');
 
 $applicationId = $_GET["id"];
 $application = $storage->getApplication($applicationId);
-$app_date = $application->getDate();
-$app_hour = $application->getTime();
-$category = CATEGORIES[$application->category][1];
-$sex      = $application->guessUserSex();
-$bylam    = $sex['bylam'];
-$swiadoma = $sex['swiadoma'];
-$wykonalam = $sex['wykonalam'];
 
-$plateImage = ($application->shouldIncludePlateImage())? '<img id="plateImage" src="' . $application->carInfo->plateImage . '"/>': '';
-
-genHeader("Uprzejmie Donoszę – zgłoszenie {$application->number} z dnia $app_date",
-	false, false, $application->contextImage->thumb,
-	"Samochód o nr rejestracyjnym {$application->carInfo->plateId} pod adresem {$application->address->address}. $category");
+generate('zgloszenie.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
+            'shortTitle' => "Zgłoszenie {$application->number}",
+            'uri' => $_SERVER['REQUEST_URI'],
+            'image' => $application->contextImage->thumb,
+            'description' => "Samochód o nr rejestracyjnym {$application->carInfo->plateId} " .
+                "pod adresem {$application->address->address}. {$application->getCategory()[1]}"
+        ],
+        'config' =>
+        [
+            'auth' => false,
+            'fullApplication' => true
+        ],
+        'app' => $application
+    ]
+);
 ?>
-<body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-		<? 
-			if(isLoggedIn()) menuBack();
-			else menuMain();
-		?>
-			<h1>Zgłoszenie <?=$application->number ?></h1>
-			<? menuStartOrApplications(); ?>
-		</div>
-		<div data-role="main" class="ui-content">
-<?
-echo <<<HTML
-			<div class="ui-body ui-body-a ui-corner-all">
-				<h3>Zgłoszenie wykroczenia $application->number</h3>
-				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $bylam świadkiem pozostawienia
-					samochodu o nr rejestracyjnym <b>{$application->carInfo->plateId}</b> pod adresem <b>{$application->address->address}</b>.
-					$category Zdjęcia $wykonalam samodzielnie.</p>
-
-				<p>Nie $bylam świadkiem samego momentu parkowania, oraz nie wiem jak długo
-					pozostawał pojazd pozostawał na tym miejscu.</p>
-				<p>$application->userComment</p>
-				<p>Jestem $swiadoma odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
-				 	oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
-				<p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
-					mojego miejsca zamieszkania.</p>
-				<p>Dokument ze zgłoszeniem dostępny jest pod adresem
-				<a href="{$applicationId}.pdf" download="{$application->number}" data-ajax="false">{$application->number}.pdf</a>.</p>
-				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
-					{$application->user->name}<br />
-					{$application->user->email}<br />
-					{$application->user->address}<br />
-					{$application->user->msisdn}
-				</p>
-				<div id="pics" class="ui-grid-a ui-responsive">
-					<div class="ui-block-a">
-						<a rel="external" target="_blank" href="{$application->contextImage->url}">
-							<img class="photo-thumbs" src="{$application->contextImage->thumb}"> 
-						</a>
-					</div>
-					<div class="ui-block-b">
-						<a rel="external" target="_blank" href="{$application->carImage->url}">
-							<img class="photo-thumbs" src="{$application->carImage->thumb}">
-                        </a>
-                        $plateImage
-					</div>
-                </div>
-HTML;
-if(isLoggedIn() && getCurrentUserEmail() == $application->user->email){
-    $application->printStatusesHistory();
-}
-echo "</div>";
-?>
-		</div> <!-- main -->
-<? getFooter() ?>

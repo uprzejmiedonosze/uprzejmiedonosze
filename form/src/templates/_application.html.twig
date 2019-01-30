@@ -3,18 +3,20 @@
     <h3>Zgłoszenie wykroczenia {{ app.number }}</h3>
 
     <p>W dniu <b>{{ app.getDate }}</b> roku o godzinie <b>{{ app.getTime }}</b>
-        {{ app.tex.sex.bylam }} świadkiem pozostawienia
+        {{ app.guessUserSex.bylam }} świadkiem pozostawienia
         samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
         pod adresem <b>{{ app.address.address}}</b>.
-        {{ app.tex.category }}
-        Zdjęcia {{ app.tex.sex.wykonalam }} samodzielnie.</p>
+        {{ app.getCategory[1] }}
+        Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.</p>
 
-    <p>Nie {{ app.tex.sex.bylam }} świadkiem samego momentu parkowania,
+    <p>Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania,
         oraz nie wiem jak długo pozostawał pojazd pozostawał na tym miejscu.</p>
 
-    <p> {{ app.userComment }}</p>
+    {% if app.userComment %}
+    <p>{{ app.userComment }}</p>
+    {% endif %}
 
-    <p>Jestem {{ app.tex.sex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3
+    <p>Jestem {{ app.guessUserSex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3
         Kodeksu karnego oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
 
     <p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
@@ -43,4 +45,18 @@
             {% endif %}
         </div>
     </div>
+    {% if app.isCurrentUserOwner and app.statusHistory|length > 0 %}
+    <div id="statusHistory">
+        <h4>Historia zmian statusów</h4>
+        <ul data-role="listview">
+        {% for date,status in app.statusHistory  %}
+            <li>
+                <b>{{ date|format('Y-m-d') }}</b>
+                zmiana na <b>{{ status.new }}</b>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
 </div> <!-- ui-body ui-body-a ui-corner-all -->
