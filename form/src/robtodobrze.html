@@ -1,49 +1,17 @@
-<? 
+<?PHP
 require_once(__DIR__ . '/../inc/include.php');
-genHeader("Uprzejmie Donoszę – Rób to dobrze");
+
+generate('robtodobrze.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Rób to dobrze",
+            'shortTitle' => "Rób to dobrze",
+            'uri' => $_SERVER['REQUEST_URI']
+        ],
+        'config' =>
+        [
+            'auth' => false
+        ]
+    ]);
 ?>
-<body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-			<? menuMain(); ?>
-			<h1>Rób to dobrze</h1>
-			<? menuStartOrApplications(); ?>
-		</div>
-		<div data-role="main" class="ui-content">
-			<h2>Rób to dobrze</h2>
-			<p>W 2015 w Szczecinie z inicjatywy samozwańczego 
-			<a rel="external" href="https://web.facebook.com/rzecznikpieszych">Rzecznika Pieszych w Szczecinie</a>
-			i kawiarni <a rel="external" href="https://web.facebook.com/stojaki.szczecin">Stojaki</a> powstała akcja
-			Rób to dobrze.</p>
-			<p>Była to społeczna akcja, w ramach której wręczyliśmy kilkaset
-			<i>"mandatów społecznych"</i> (pobierz <a target="_blank" href="img/rtd-mandat-cmyk-print.pdf">mandat w wersji do druku</a>) osobom parkującym w sposób zagrażający
-			bezpieczeństwu i komfortowi pieszych w Szczecinie.  </p>
-			<p>Ta akcja nauczyła nas kilku rzeczy rzeczy:</p>
-			<h3>To nie działa</h3>
-			<p>Owszem – te mandaty trafiają do 5%. Takich
-			którzy naprawdę zaparkowali w ten sposób przez przypadek.
-				<img class="rwd lazyload" src="img/robtodobrze-s.jpg" data-src="img/robtodobrze.jpg">
-			</p>
-			<h3>Media to lubią</h3>
-			<p>Ale co ciekawe sprawa okazała się bardzo medialna. Zainteresowały
-			się nią media ogólnokrajowe.  Mieliśmy szereg wywiadów od TVN, przez
-			TVP po stacje radiowe i gazety. Efekt marketingowy i nagłośnienie sprawy okazały
-			się większe niż skuteczność akcji.  <img class="rwd lazyload"
-			src="img/sm-tvn24-s.jpg" data-src="img/sm-tvn24.jpg"> </p>
-			<h3>Politycy to lubią</h3>
-			<p>Okazało się też, że ten temat był interesujący dla polityków samorządowych.
-				<img class="rwd lazyload" src="img/robtodobrze-radni-s.jpg" data-src="img/robtodobrze-radni.jpg">
-			</p>
-			<h3>Ze Strażą Miejską można rozmawiać</h3>
-			<p>Ale co najważniejsze, okazało się, że dużo lepszą strategią od
-			<i>narzekania</i> na służby miejskie, jest próba rozmawiania z nimi.
-			Straż miejska (OK, lekko przyciśnięta kamerami) okazała gotowość do
-			współpracy. Co najważniejsze, udało się wypracować pomysł na
-			zgłaszanie mandatów za pośrednictwem samego zdjęcia. Zapytaliśmy SM w
-			Szczecinie jak powinno wyglądać prawidłowo wypełnione zgłoszenie, które
-			umożliwi im wystawienie mandatu <b>bez konieczności wizytacji na miejscu
-				zdarzenia</b>.</p>
-			<p>W ten sposób powstała idea <b>Uprzejmie Donoszę</b>.</p>
-			<a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
-		</div> <!-- main -->
-<? getFooter() ?>
