@@ -1,8 +1,22 @@
 <?PHP
 require_once(__DIR__ . '/../inc/include.php');
 
+$applicationId = $_GET["id"];
+$application = $storage->getApplication($applicationId)->flatten();
+
 $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
 $twig = new Twig_Environment($loader);
 
-echo $twig->render('index.html.twig', [ 'head' => [ 'uri' => $_SERVER['REQUEST_URI']] ]);
+echo $twig->render('zgloszenie.html.twig',
+    [
+        'head' =>
+        [
+            'uri' => $_SERVER['REQUEST_URI'],
+            'image' => $application->contextImage->thumb,
+            'description' => "Samochód o nr rejestracyjnym {$application->carInfo->plateId} " .
+                "pod adresem {$application->address->address}. {$application->tex->category}"
+        ],
+        'app' => $application,
+        'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}"
+    ]);
 ?>

@@ -1,0 +1,8 @@
+{% set auth = false %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+{% set fullApplication = true %}
+{{ include('_application.html.twig') }}
+{% endblock %}
