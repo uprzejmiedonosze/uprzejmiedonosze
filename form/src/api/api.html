@@ -303,7 +303,8 @@ function read_gps_location($file){
  * Pushes slack notification about new application.
  */
 function _notifyNew($appId){
-    $application = getApplication($appId);
+    global $storage;
+    $application = $storage->getApplication($appId);
 
     _sendSlackMessage("Nowe zgłoszenie `{$application->number}`"
         . " od *{$application->user->name}*"
