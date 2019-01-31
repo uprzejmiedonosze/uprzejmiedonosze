@@ -33,7 +33,7 @@
         <meta property="og:title" content="{{ head.title }}{{ head.title ? ' | ' }}Uprzejmie Donoszę" />
         <meta property="og:description"
             content="{{ head.description ?? 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.' }}" />
-        <meta property="og:url" content="https://%HOST%{{ auth ? '' : head.uri }}" />
+        <meta property="og:url" content="https://%HOST%{{ config.auth ? '' : general.uri }}" />
         <meta property="og:locale" content="pl_PL" />
         <meta property="og:type" content="website" />
 
@@ -57,7 +57,7 @@
             };
             firebase.initializeApp(config);
         </script>
-    {% if auth %}
+    {% if config.auth %}
         <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
         <link type="text/css" rel="stylesheet"
             href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />

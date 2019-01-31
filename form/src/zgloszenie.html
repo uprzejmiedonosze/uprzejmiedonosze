@@ -10,14 +10,12 @@ generate('zgloszenie.html.twig',
         [
             'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
             'shortTitle' => "Zgłoszenie {$application->number}",
-            'uri' => $_SERVER['REQUEST_URI'],
             'image' => $application->contextImage->thumb,
             'description' => "Samochód o nr rejestracyjnym {$application->carInfo->plateId} " .
                 "pod adresem {$application->address->address}. {$application->getCategory()[1]}"
         ],
         'config' =>
         [
-            'auth' => false,
             'fullApplication' => true
         ],
         'app' => $application
