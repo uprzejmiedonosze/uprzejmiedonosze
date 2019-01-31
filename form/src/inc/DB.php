@@ -63,6 +63,9 @@ class DB extends NoSQLite{
     }
 
     public function getApplication($appId){
+        if(!$appId){
+            throw new Exception("Próba pobrania zgłoszenia bez podania numeru.");
+        }
         $json = $this->apps->get($appId);
         if(!$json){
             throw new Exception("Próba pobrania nieistniejącego zgłoszenia $appId.");
