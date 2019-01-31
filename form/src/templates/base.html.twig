@@ -65,7 +65,7 @@
 
     </head>
     <body class="index">
-        <div data-role="page" class="container-fluid" data-theme="a">
+        <div data-role="page" class="container-fluid" data-theme="a" {% if head.dialog %}data-dialog="true"{% endif %}>
         {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 {% if leftButton == 'menuBack' %}
@@ -105,7 +105,7 @@
                 {% endif %}
             </div> <!-- header -->
         {% endblock %}
-            <div data-role="main" class="ui-content">
+            <div data-role="main" class="ui-content {{ head.mainClass ?? '' }} {% if head.dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
             </div> <!-- main -->
         {% block footer %}

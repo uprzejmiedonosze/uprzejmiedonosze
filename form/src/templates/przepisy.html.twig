@@ -1,4 +1,4 @@
-{% if config.dialog %}
+{% if head.dialog %}
     {% set leftButton = 'menuBack' %}
     {% set rightButton = '' %}
 {% else %}
@@ -8,8 +8,6 @@
 
 {% extends "base.html.twig" %}
 {% block main %}
-
-		<div data-role="main" class="ui-content przepisy">
 
 <h2>Można, czy nie można?</h2>
 
@@ -42,23 +40,19 @@
         albo zamalowana pasami przestrzeń pod samochodem), wybierz pierszą kategorię z listy 
         poniżej. Dopiero później szukaj odpowiedniej kategorii dla swojego zgłoszenia.</p>
 
-        <?
-            foreach(CATEGORIES as $catId => $catName):
-                if(!isset($catName[0])){
-                    continue;
-                }
-        ?>
-
-        <h4><?=$catName[0]?></h4>
-        <div class="ui-grid-a ui-responsive przepisy-kategorie">
-            <div class="ui-block-a">
-                <img src="/img/<?=$catId?>.jpg" alt="<?=$catName[0]?>"/>
+        {% for catId,catName in categories %}
+        {% if catName[0] and catId != 0 %}
+            <h4>{{ catName[0] }}</h4>
+            <div class="ui-grid-a ui-responsive przepisy-kategorie">
+                <div class="ui-block-a">
+                    <img src="/img/{{ catId }}.jpg" alt="{{ catName[0] }}"/>
+                </div>
+                <div class="ui-block-b">
+                    {{ catName[2]|raw}}
+                </div>
             </div>
-            <div class="ui-block-b">
-                <?=$catName[2]?>
-            </div>
-        </div>
-        <? endforeach; ?>
+        {% endif %}
+        {% endfor %}
     </div>
 </div> <!-- zasady ogólne -->
 
@@ -253,6 +247,6 @@
 </div> <!-- podstawa prawna -->
 {% endblock %}
 
-{% if config.dialog %}
+{% if head.dialog %}
     {% block footer %}{% endblock %}
 {% endif %}

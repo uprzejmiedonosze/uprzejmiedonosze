@@ -49,7 +49,7 @@
     <div id="statusHistory">
         <h4>Historia zmian statusów</h4>
         <ul data-role="listview">
-        {% for date,status in app.statusHistory  %}
+        {% for date,status in app.statusHistory %}
             <li>
                 <b>{{ date|format('Y-m-d') }}</b>
                 zmiana na <b>{{ status.new }}</b>
