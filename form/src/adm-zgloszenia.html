@@ -23,7 +23,7 @@ genHeader("Uprzejmie Donoszę – Wszystkie zgłoszenia", true);
 
 <? foreach ($storage->getUsers() as $email => $user): ?>
 
-<h3 class="ui-bar ui-bar-a ui-corner-all"><? echo "{$user->data->name} ({$user->data->email})" ?></h3>
+<h3 class="ui-bar ui-bar-a ui-corner-all"><? echo "{$user->number} {$user->data->name} ({$user->data->email})" ?></h3>
 
 <?
     echo "<p>";
