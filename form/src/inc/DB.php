@@ -53,7 +53,7 @@ class DB extends NoSQLite{
 
     public function saveUser($user){
         if(!isset($user->number)){
-            $user->number = $this->countUsers() + 1;
+            $user->number = $this->countUsers() + 2;
         }
         $this->users->set($user->data->email, json_encode($user));
     }
