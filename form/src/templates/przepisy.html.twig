@@ -1,0 +1,258 @@
+{% if config.dialog %}
+    {% set leftButton = 'menuBack' %}
+    {% set rightButton = '' %}
+{% else %}
+    {% set leftButton = 'menuMain' %}
+    {% set rightButton = general.hasApps ? 'menuApplications': 'menuStart' %}
+{% endif %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+		<div data-role="main" class="ui-content przepisy">
+
+<h2>Można, czy nie można?</h2>
+
+<p>Poza najczęstszym <i>"ja tylko na chwilę"</i>, wiele razy spotkasz się
+    z argumentmi w rodzaju <i>"przecież zostawiłem 1.5m"</i>, <i>"tutaj można"</i>
+    czy <i>"mam zezwolenie"</i>. Rozmawiając z kierowcami, dzwoniąc na SM oraz
+    korzystając z Uprzejmie Donoszę, musisz znać podstawowe regulacje prawne
+    organizujące parkowanie pojazdów w Polsce.</p>
+
+<div class="ui-corner-all custom-corners"> <!-- zasady ogólne -->
+    <div class="ui-bar ui-bar-a">
+        <h3>Wybierz prawidłową kategorię</h3>
+    </div>
+    <div class="ui-body ui-body-a">
+        <p>Centra miast (a już z pewnością strefy płatnego parkowania), są gęsto
+            pokryte znakami informującymi w jaki sposób należy (lub nie należy) parkować.
+            W zdecydowanej większości przypadków, nieprawidłowo zaparkowany pojazd nie stosuje
+            się właśnie do tych znaków, a opisane poniżej zasady ogólne łamie przy okazji.
+        </p>
+        <p>Na przykład przed przejściem dla pieszych znajduje się znak B-36 (zakaz postoju
+            i parkowania) oraz dodatkowo wyraźnie widać, że wyznaczone wcześniej miejsca
+            postojowe gwałtownie się kończą. Co więcej, bardzo często obszar przed pasami
+            jest zamalowany pasami (na których potem wyrastają czerwone wysepki i w ostatnim
+            akcie desperacji służb miejskich słupki). Kierowca, parkując w takim miejscu,
+            nie przestrzega w pierwszej kolejności zdrowego rozsądku, w następnej znaków
+            pionowych, potem poziomych a na końcu zasad ogólnych.
+        </p>
+        <p>Jeśli na twoim zdjęciu wyraźnie widać niezastosowanie się do znaków (poziomych 
+        lub pionowych), a sam znak także jest na nim widoczny (np. zakaz parkowania i postoju,
+        albo zamalowana pasami przestrzeń pod samochodem), wybierz pierszą kategorię z listy 
+        poniżej. Dopiero później szukaj odpowiedniej kategorii dla swojego zgłoszenia.</p>
+
+        <?
+            foreach(CATEGORIES as $catId => $catName):
+                if(!isset($catName[0])){
+                    continue;
+                }
+        ?>
+
+        <h4><?=$catName[0]?></h4>
+        <div class="ui-grid-a ui-responsive przepisy-kategorie">
+            <div class="ui-block-a">
+                <img src="/img/<?=$catId?>.jpg" alt="<?=$catName[0]?>"/>
+            </div>
+            <div class="ui-block-b">
+                <?=$catName[2]?>
+            </div>
+        </div>
+        <? endforeach; ?>
+    </div>
+</div> <!-- zasady ogólne -->
+
+<div class="ui-corner-all custom-corners"> <!-- znaki drogowe-->
+    <div class="ui-bar ui-bar-a">
+        <h3>Znaki drogowe</h3>
+    </div>
+    <div class="ui-body ui-body-a">
+        <h4>Znaki informacyjne</h4>
+        <p>W miastach, w zdecydowanej większości przypadków miejsca do parkowania
+            są wyznaczone znakami (poziomymi i/lub pionowymi). W takiej sytuacji
+            wszelkie dyskusje n/t <i>mitycznego 1.5m</i> czy sposobu umiejscowienia
+            samochodu na chodniku są krótkie. Po prostu wolno parkować wyłącznie
+            w sposób wskazany znakami.</p>
+
+        <h4>Znak D-18 – parking</h4>
+        <p><img src="/img/d18.png" alt="Znak D-18 (parking)" class="sign" />Znak D-18 (parking) najczęściej
+            występuje w połączeniu z tabliczką T-30, która precyzyjnie pokazuje jak należy ustawić pojazd
+            względem krawędzi jezdni.</p>
+        <p>Co więcej, najczęściej dodatkowo na samej jezdni lub chodniku namalowane
+            są dodatkowe znaki poziome. Dzięki nim nie trzeba po zaparkowaniu iść
+            na spacer na początek ulicy, żeby sprawdzić, czy stoimy poprawnie.
+            <img src="/img/t30a.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30b.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30c.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30d.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30e.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30f.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30g.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30h.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+            <img src="/img/t30i.gif" alt="Tabliczka T-30 dla znaku D-18" class="sign"/>
+        </p>
+        <p>Zwróć uwagę, że wszystkie tabliczki T-30 łączą pewne cechy:</p>
+        <ul>
+            <li>Po pierwsze, samochód zawsze styka się, lub stoi bezpośrednio nad
+                krawędzią jezdni. Oznacza to, że jeśli widzisz samochód zaparkowany
+                w głębi chodnika (np. przy ścianie budynku), to jest on z pewnością
+                nieprawidłowo zaparkowany.</li>
+            <li>Po drugie, na każdej z tych tabliczek jest tylko jeden pojazd. W
+                żadnym przypadku nie widać dwóch stojących w obok siebie. Dlatego
+                jeśli widzisz samochody zaparkowane obok siebie, równolegle do jezdni
+                (np. jeden na ulicy, drugi na chodniku), to jeden z nich z pewnością
+                stoi nieprawidłowo.
+            </li>
+            <li>Po trzecie, samochód stoi albo równolegle do jezdni, albo przodem
+                w kierunku chodnika. Jeśli widzisz samochód parkujący tyłem (rurą
+                wydechową w kierunku pieszych), to kierowca właśnie popełnia wykroczenie.
+            </li>
+        </ul>
+        <p>Powyższa obserwacja wynika z prostego faktu – parkując na chodniku możesz
+            niego wjechać (przodem) i się zatrzymać. Kluczenie po chodniku żeby dojechać 
+            do ściany, omijanie innych samochodów czy wjeżdżanie na niego tyłem jest zabronione.
+        </p>
+
+        <h4>Znak D-46 – droga wewnętrzna</h4>
+        <p><img src="/img/d46.png" alt="Znak D-46 (droga wewnętrzna)" class="sign" />
+        Droga wewnętrzna (nawet jeśli jest ogólnodostępna) nie jest drogą publiczną. Oznacza to
+        między innymi, że... nie obowiązują na niej ogólne przepisy ruchu drogowego. Zasady 
+        obowiązujące na tej drodze ustala jej właściciel (np. stawiając znaki). Na takiej 
+        drodze kierujący może prowadzić bez zapiętych pasów, bez prawa jazdy czy włączonych świateł.
+        </p>
+        <p>Powyższe nie oznacza jednak, że kierowca może nie stosować się do znaków albo
+            stwarzać zagrożenie. Na przykład opisany poniżej znak B-36 (zakaz zatrzymania i postoju)
+            nadal obowiązuje.
+        </p>
+        <h4>Znak D-52 – strefa ruchu</h4>
+        <p><img src="/img/d52.png" alt="Znak D-52 (droga wewnętrzna)" class="sign" />
+        Strefa ruchu jest odpowiedzią na samowolę kierowców (i innych uczestników ruchu)
+        na drogach wewnętrznych. Właściciel terenu zamiast drogi wewnętrznej może wyznaczyć
+        strefę ruchu. Różnica jest znacząca – w strefie ruchu obowiązują wszystkie przepisy
+        ruchu drogowego.</p>
+
+        <h4>Znak D-40 – strefa zamieszkania</h4>
+        <p><img src="/img/d40.png" alt="Znak D-40 (strefa zamieszkania)" class="sign" />
+        W strefie zamieszkania poza ogólnymi przepisami ruchu drogowego, obowiązują dodatkowe reguły,
+        z których dla nas najbardziej interesująca jest jedna: obowiązuje zakaz parkowania
+        poza miejscami do tego wyznaczonymi. Nie ma znaczenia pozostawione 1,5m, odległość od 
+        pasów czy skrzyżowania.
+        </p>
+
+        <h4>Znaki zakazu</h4>
+
+        <h4>Znak B-36 – zakaz zatrzymania lub postoju</h4>
+        <p>
+            <img src="/img/b36.png" alt="Znak B-36 zakaz zatrzymania lub postoju" class="sign"/>
+            Znak B-36 (zakaz zatrzymania lub postoju) nie powinien pozostawiać wątpliwości. Trudno o 
+            bardziej czytelną wskazówkę. Niestety często jest on intepretowany jako <i>jeśli zmieszczę się na 
+            chodniku i zostawię 1,5m, to będzie OK</i>. Nie jest to prawda (sprawdź na przykład na stronach
+            <a rel="external"   href="https://www.prawodrogowe.pl/informacje/ekspert-wyjasnia/parkowanie-w-calosci-na-chodniku">Pawa  Drogowego</a>).</p>
+        <p>Wyjątkiem jest sytuacja, w której pod znakiem znajduje się tabliczka informująca
+            "nie dotyczychodnika".</p>
+    </div> <!--  -->
+</div> <!-- znaki drogowe -->
+
+<div class="ui-corner-all custom-corners"> <!-- podstawa prawna -->
+    <div class="ui-bar ui-bar-a">
+        <h3>Podstawa prawna</h3>
+    </div>
+
+    <div class="ui-body ui-body-a">
+        <h3>Kodeks drogowy</h3>
+        <p>Wyciąg z Prawa o ruchu drogowym, dział II (ruch drogowy), rozdział 5
+        (porządek i bezpieczeństwo ruchu na drogach:</p>
+        <h4>Art. 46.</h4>
+        <ol>
+            <li>Zatrzymanie i postój pojazdu są dozwolone tylko w miejscu i w warunkach,
+            w których jest on z dostatecznej odległości widoczny dla innych kierujących
+            i nie powoduje zagrożenia bezpieczeństwa ruchu drogowego lub jego utrudnienia.</li>
+            <li>Kierujący pojazdem, zatrzymując pojazd na jezdni, jest obowiązany
+            ustawić go jak najbliżej jej krawędzi oraz równolegle do niej.</li>
+            <li>W czasie postoju na drodze poza obszarem zabudowanym pojazd powinien
+            znajdować się, jeżeli to tylko możliwe, poza jezdnią.</li>
+            <li>Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub
+            postoju wskazany znakami drogowymi.</li>
+            <li>(pominięty)</li>
+        </ol>
+        <h4>Art. 47.</h4>
+        <ol>
+            <li>Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku
+            lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej
+            nie przekraczającej 2,5 t, pod warunkiem, że:
+                <ol>
+                    <li>na danym odcinku jezdni nie obowiązuje zakaz zatrzymania
+                    lub postoju,</li>
+                    <li>szerokość chodnika pozostawionego dla pieszych jest taka, że
+                    nie utrudni im ruchu i jest nie mniejsza niż 1,5m,</li>
+                    <li>pojazd umieszczony przednią osią na chodniku nie tamuje ruchu
+                    pojazdów na jezdni.</li>
+                </ol>
+            </li>
+            <li>Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2,
+            zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu
+            osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej
+            masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony
+            na chodniku tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.</li>
+        </ol>
+        <h4>Art. 48.</h4>
+        <ol>
+            <li>Pojazd może być usunięty z drogi na koszt właściciela, jeżeli
+            pozostawiono go w miejscu, gdzie jest to
+            zabronione i utrudnia ruch lub zagraża jego bezpieczeństwu.</li>
+            <li>Pojazd może być unieruchomiony na koszt właściciela przez zastosowanie
+            urządzenia technicznego do blokady kół, jeżeli pozostawiono go w miejscu,
+            gdzie jest to zabronione, lecz nie utrudnia ruchu lub nie zagraża jego
+            bezpieczeństwu.</li>
+        </ol>
+        <h4>Art. 49.</h4>
+        <ol>
+            <li>Zabrania się zatrzymania pojazdu:
+                <ol>
+                    <li>na przejeździe kolejowym, na przejeździe tramwajowym, na
+                    skrzyżowaniu oraz w odległości mniejszej niż 10 m od przejazdu
+                    lub skrzyżowania,</li>
+                    <li>na przejściu dla pieszych, na przejeździe dla rowerzystów
+                    oraz w odległości mniejszej niż 10 m przed tym przejściem lub
+                    przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz
+                    ten obowiązuje także za tym przejściem lub przejazdem,</li>
+                    <li>(pominięty),</li>
+                    <li>na jezdni wzdłuż linii ciągłej oraz w pobliżu jej punktów krańcowych,
+                    jeżeli zmusiłoby to innych kierujących pojazdami wielośladowymi do
+                    najeżdżania na tę linię,</li>
+                    <li>na jezdni obok linii przerywanej wyznaczającej krawędź jezdni oraz
+                    na jezdni i na poboczu obok linii ciągłej wyznaczającej krawędź jezdni,</li>
+                    <li>(pominięty),</li>
+                    <li>(pominięty),</li>
+                    <li>na pasie między jezdniami,</li>
+                    <li>w odległości mniejszej niż 15 m od słupka lub tablicy oznaczającej
+                    przystanek, a na przystanku z zatoką - na całej jej długości,</li>
+                    <li>w odległości mniejszej niż 15 m od punktów krańcowych wysepki,
+                    jeżeli jezdnia z prawej jej strony ma tylko jeden pas ruchu,</li>
+                    <li>na drodze (ścieżce) dla rowerów.</li>
+                </ol>
+            </li>
+            <li>Zabrania się postoju:
+                <ol>
+                    <li>w miejscu utrudniającym wjazd lub wyjazd, w szczególności do i z bramy,
+                    garażu, parkingu lub wnęki postojowej,</li>
+                    <li>w miejscu utrudniającym dostęp do innego prawidłowo zaparkowanego
+                    pojazdu lub wyjazd tego pojazdu,</li>
+                    <li>przed i za przejazdem kolejowym, po obu stronach drogi, na odcinku
+                    od przejazdu kolejowego do słupka wskaźnikowego z jedną kreską,</li>
+                    <li>w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu,</li>
+                    <li>na obszarze zabudowanym, pojazdu lub zespołu pojazdów o dopuszczalnej
+                    masie całkowitej przekraczającej 16 t lub o długości przekraczającej 12 m,
+                    poza wyznaczonymi w tym celu parkingami.</li>
+                </ol>
+            </li>
+            <li>(pominięty)</li>
+            <li>(pominięty)</li>
+        </ol>
+    </div>
+</div> <!-- podstawa prawna -->
+{% endblock %}
+
+{% if config.dialog %}
+    {% block footer %}{% endblock %}
+{% endif %}
