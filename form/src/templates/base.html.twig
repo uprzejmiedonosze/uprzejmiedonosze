@@ -86,6 +86,11 @@
                 {% if rightButton == 'menuStart' %}
                 <a href="start.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
+
+    {% if head.mapsInitFunc %}
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback={{ head.mapsInitFunc }}&language=pl" async defer></script>
+    {% endif %}
+
                     ui-btn-icon-left {{ leftButtonIcon ?? 'ui-icon-plus' }}">
                     {{ rightButtonText ?? 'Zgłoś' }}</a>
                 {% endif %}
