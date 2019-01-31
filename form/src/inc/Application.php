@@ -87,7 +87,7 @@ class Application extends JSONObject{
         $app->tex->msisdn = (trim($app->user->msisdn) === "")?"": "Tel: {$app->user->msisdn}";
         $app->tex->category = CATEGORIES[$this->category][1];
     
-        return (array)$app;
+        return $app;
     }
 
     /**
@@ -113,6 +113,15 @@ class Application extends JSONObject{
 
     public function guessUserSex(){
         return guess_sex_by_name($this->user->name);
+    }
+
+    public function getCategory(){
+        return CATEGORIES[$this->category];
+    }
+
+    public function isCurrentUserOwner(){
+        if(!isLoggedIn()) return false;
+        return getCurrentUserEmail() == $this->user->email;
     }
 
     /** 
