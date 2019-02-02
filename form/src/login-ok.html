@@ -4,44 +4,18 @@ if(session_id() !== ""){
 }
 require_once(__DIR__ . '/../inc/include.php');
 
-$signInSuccessUrl = 'moje-zgloszenia.html';
-if(isset($_GET['next'])){
-    $signInSuccessUrl = $_GET['next'];
-}
-logger("login-ok.html: signInSuccessUrl == $signInSuccessUrl");
+generate('login-ok.html.twig',
+[
+    'head' =>
+    [
+        'title' => "trwa logowanie",
+        'shortTitle' => "trwa logowanie"
+    ],
+    'config' =>
+    [
+        'signInSuccessUrl' => $_GET['next']
+    ]
+]
+);
 
-genHeader(); ?>
-
-<body class="index">
-    <script src="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth__pl.js"></script>
-    <script type="text/javascript">
-        function initApp() {
-            firebase.auth().onAuthStateChanged(function(user) {
-                if (user) {
-                    user.getIdToken().then(function(accessToken) {
-                        $.post('api/api.html',
-                            {
-                                action: 'verifyToken',
-                                pa: accessToken
-                            },
-                            function(data){
-                                window.location.replace('<?=$signInSuccessUrl;?>');
-                            }).fail(function(){
-                                window.location.replace('/login.html');
-                            });
-                        });
-                } else {
-                    window.location.replace('/login.html');
-                }
-            }, function(error) {
-                console.log(error);
-                window.location.replace('/login.html');
-            });
-        };
-
-        window.addEventListener('load', function() {
-            initApp()
-        });
-    </script>
-
-<? getFooter(false, 'trwa logowanie'); ?>
+?>
