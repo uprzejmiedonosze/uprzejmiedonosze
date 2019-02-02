@@ -21,24 +21,31 @@
 \setlength{\columnseprule}{0.4pt}
 \frenchspacing
 
-\newcommand{\n}{ {{ user.name }} }
-\date{ Dnia {{ date|date("Y-m-d") }} } 
-\address{\n{}\\{{ user.address }}\\Email: {{ user.email }}\\{% if user.msisdn %}Tel: {% endif %}{{ user.msisdn }} }
+\newcommand{\n}{ {{ app.user.name }} }
+\date{ Dnia {{ app.getDate }} } 
+\address{\n{}\\{{ app.user.address }}\\Email: {{ app.user.email }}\\{% if app.user.msisdn %}Tel: {% endif %}{{ app.user.msisdn }} }
 
 \begin{document}
-\begin{letter}{ {\large {{ tex.sm }} } } 
+\begin{letter}{ {\large {{ app.guessSMData[0] }} } } 
 
-\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ number }} } } }
-	W dniu {{ date|date("Y-m-d") }} roku o godzinie {{ date|date("H:i") }} {{ tex.sex.bylam }}
-    świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ carInfo.plateId }} }pod adresem
-    {{ address.address }}.
-    {{ tex.category }} Sytuacja jest widoczna na załączonych zdjęciach.
-    Zdjęcia {{ tex.sex.wykonalam }} samodzielnie. {{ userComment }}
+{% set appUrl = '{https://%HOST%/ud-' ~ app.id  ~ '.html}' %}
 
-    Nie {{ tex.sex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
+{% set contextImage = '{' ~ root ~ app.contextImage.thumb ~ '}';
+{% set carImage     = '{' ~ root ~ app.carImage.thumb     ~ '}';
+{% set plateImage   = '{' ~ root ~ app.carInfo.plateImage ~ '}';
+
+
+\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} } } }
+	W dniu {{ app.getDate }} roku o godzinie {{ app.getTime }} {{ app.guessUserSex.bylam }}
+    świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
+    {{ app.address.address }}.
+    {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.
+    Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.userComment }}
+
+    Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
     pojazd pozostawał na tym miejscu.
 
-    Jestem {{ tex.sex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
+    Jestem {{ app.guessUserSex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
     oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.
 
     Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca
@@ -46,13 +53,13 @@
 
     \closing{\textit{Z poważaniem,\\\n{} } }
 
-    \href{{ tex.appUrl }}
-        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ tex.carImage }} }
-    \href{{ tex.appUrl }}
-        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ tex.contextImage }} }
+    \href{{ appUrl }}
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ carImage }} }
+    \href{{ appUrl }}
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ contextImage }} }
 
-    {% if tex.shouldIncludePlateImage %}
-    \includegraphics[width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ tex.plateImage }}
+    {% if app.shouldIncludePlateImage %}
+    \includegraphics[width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
     {% endif %}
 
 \end{letter}

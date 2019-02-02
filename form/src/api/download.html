@@ -43,7 +43,12 @@ function generate_pdf($application, $destFile) {
 	$twig = new Twig_Environment($loader);
 
 	ob_start();
-	echo $twig->render('template.tex.twig', $application->flatten());
+    echo $twig->render('template.tex.twig',
+    [
+        'app' => $application,
+        'root' => __DIR__ . '/../public/'
+    ]
+    );
 	file_put_contents($tex_f, ob_get_clean());
 
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
