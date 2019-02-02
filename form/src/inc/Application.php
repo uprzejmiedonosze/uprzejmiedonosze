@@ -119,6 +119,11 @@ class Application extends JSONObject{
         return CATEGORIES[$this->category];
     }
 
+    public function getStatus(){
+        return STATUSES[$this->status];
+    }
+
+
     public function isCurrentUserOwner(){
         if(!isLoggedIn()) return false;
         return getCurrentUserEmail() == $this->user->email;

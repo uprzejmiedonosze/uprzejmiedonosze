@@ -1,26 +1,39 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-genHeader("Uprzejmie Donoszę – moje zgłoszenia", true);
+checkIfLogged();
 
+$user = $storage->getCurrentUser();
+$applications = $user->getApplicationIds();
+
+$active = [];
+$archived = [];
+
+foreach($applications as $id){
+    $application = $storage->getApplication($id);
+    if($application->status == 'archived'){
+        array_push($archived, $application);
+    }else{
+        array_push($active, $application);
+    }
+}
+
+generate('moje-zgloszenia.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Moje zgłoszenia",
+            'shortTitle' => "Moje zgłoszenia"
+        ],
+        'config' =>
+        [
+            'auth' => true,
+            'appDetails' => false,
+            'appActionButtons' => true
+        ],
+        'active' => $active,
+        'archived' => $archived,
+        'statuses' => STATUSES
+    ]
+);
 ?>
-<body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-        <? menuMain(); ?>
-			<h1>Moje Zgłoszenia</h1>
-		<? menuStart(); ?>
-		</div>
-		<div data-role="main" class="ui-content">
-			<h2>Przeglądaj swoje zgłoszenia</h2>
-			<p>Poniżej możesz przeglądać swoje zgłoszenia. Pod poszczególnymi zgłoszeniami masz
-			dostępne opcje umożliwiające przeglądanie szczegółów oraz pobranie wersji do druku (przydatna
-			przy hurtowym zgłaszaniu spraw do SM).</p>
-			<p>Możesz też przenieść wybrane zgłoszenia do archiwum (np. po wysłaniu tych zgłoszeń do SM).
-			Nadal będziesz miał(a) do nich nieograniczony dostęp.<p>
-			<p>Jeśli twoje dane w zgłoszeniu nie są już aktualne, popraw je na
-				<a href="register.html">stronie rejestracji</a> i wygeneruj ponownie zgłoszenie.</p>
-			<? require_once(__DIR__ . '/../inc/applications.php'); ?>
-		</div> <!-- main -->
-	</div>
-<? getFooter() ?>
