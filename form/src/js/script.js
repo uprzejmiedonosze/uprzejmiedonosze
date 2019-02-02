@@ -1,5 +1,5 @@
 $(document).on('pageshow', function() {
-	if($("body.new-application").length){
+	if($(".new-application").length){
 
 		$('#address').on('change', function(){
 			//$('#address').removeClass('error');
