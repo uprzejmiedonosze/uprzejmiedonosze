@@ -33,7 +33,7 @@ class UDTestStatic(unittest.TestCase):
     
     def test_changelog(self):
         changelog = pages.Changelog(self.driver)
-        changelog.is_title_matches("historia"),
+        changelog.is_title_matches("istoria"),
         changelog.is_new_matches()
     
     def test_project(self):
@@ -52,12 +52,12 @@ class UDTestStatic(unittest.TestCase):
 
     def test_new_empty(self):
         new = pages.New(self.driver)
-        new.is_title_matches("Nowe")
+        new.is_title_matches("owe")
         new.is_validation_empty_working()
     
     def test_new_category_other(self):
         new = pages.New(self.driver)
-        new.is_title_matches("Nowe")
+        new.is_title_matches("owe")
         new.is_other_comment_validation_working()
 
     def test_new_images(self):
