@@ -5,12 +5,6 @@ if(isset($_GET['logout'])){
     unset($_SESSION['token']);
     redirect("index.html");
 }
-$signInSuccessUrl = 'login-ok.html';
-if(isset($_GET['next'])){
-    $signInSuccessUrl .= '?next=' . $_GET['next'];
-}
-
-logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
 
 generate('login.html.twig',
 [
