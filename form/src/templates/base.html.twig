@@ -36,19 +36,9 @@
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
         <script
             src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-auth.js"></script>
-        <script>
-            var config = {
-                apiKey: "AIzaSyBNd3ApHoXl7Ks0rpvkjO5spouSaBnGuaA",
-                authDomain: "uprzejmie-donosze.firebaseapp.com",
-                databaseURL: "https://uprzejmie-donosze.firebaseio.com",
-                projectId: "uprzejmie-donosze",
-                storageBucket: "uprzejmie-donosze.appspot.com",
-                messagingSenderId: "823788795198"
-            };
-            firebase.initializeApp(config);
-        </script>
+        
+    {{ include('_firebase.html.twig') }}
+    
     {% if config.auth %}
         <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
         <link type="text/css" rel="stylesheet"

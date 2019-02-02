@@ -1,0 +1,24 @@
+<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-auth.js"></script>
+<script>
+{% if constant('%HOST%') is constant('staging.uprzejmiedonosze.net') %}
+    var config = {
+        apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
+        authDomain: "uprzejmiedonosze-1494607701827.firebaseapp.com",
+        databaseURL: "https://uprzejmiedonosze-1494607701827.firebaseio.com",
+        projectId: "uprzejmiedonosze-1494607701827",
+        storageBucket: "uprzejmiedonosze-1494607701827.appspot.com",
+        messagingSenderId: "509860799944"
+    };
+{% else %}
+    var config = {
+        apiKey: "AIzaSyBNd3ApHoXl7Ks0rpvkjO5spouSaBnGuaA",
+        authDomain: "uprzejmie-donosze.firebaseapp.com",
+        databaseURL: "https://uprzejmie-donosze.firebaseio.com",
+        projectId: "uprzejmie-donosze",
+        storageBucket: "uprzejmie-donosze.appspot.com",
+        messagingSenderId: "823788795198"
+    };
+{% endif %}
+    firebase.initializeApp(config);
+</script>
