@@ -65,6 +65,12 @@ class BasePage(object):
         wait = WebDriverWait(self.driver, 10)
         wait.until(EC.title_contains('tart')) # [sS]tart
 
+    def get_content(self):
+        content = self.driver.find_elements(*Locators.CONTENT)
+        if(len(content) == 1):
+            return content[0].text
+        return content[1].text
+
 class MainPage(BasePage):
     def __init__(self, driver):
         BasePage.__init__(self, driver, None)
@@ -192,7 +198,27 @@ class New(BasePage):
     def fin(self):
         self.driver.execute_script("$('#form').submit()")
         time.sleep(1)
-        text = self.driver.find_elements(*Locators.THANK_YOU)[1].text
+        text = self.get_content()
         assert "UD/" in text
         assert "sm@um.szczecin.pl" in text
-        
+
+class MyApps(BasePage):
+    def __init__(self, driver):
+        BasePage.__init__(self, driver, Locators.START)
+        self.driver.find_element(*Locators.BTN_LEFT).click() # going back to main page
+        time.sleep(2)
+        self.driver.find_element(*Locators.MYAPPS).click()
+        time.sleep(2)
+    
+    def check_first(self):
+        self.driver.find_element(*Locators.MYAPPS_EXPAND).click()
+        self.driver.find_element(*Locators.MYAPPS_FIRST).click()
+        time.sleep(2)
+        text = self.get_content()
+        assert self.cfg.app['plateId'] in text
+        assert self.cfg.app['address'] in text
+        assert self.cfg.app['date'] in text
+        assert self.cfg.app['time'] in text
+        assert self.cfg.app['comment'] in text
+        assert self.cfg.account['email'] in text
+        self.driver.find_element(*Locators.BTN_LEFT).click()
