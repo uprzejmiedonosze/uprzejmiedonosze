@@ -17,6 +17,7 @@ class Application extends JSONObject{
             return;
         }
         global $storage;
+        $this->date = date(DT_FORMAT);
         $this->id = guidv4();
         $this->added = date(DT_FORMAT);
         $this->user = $storage->getCurrentUser()->data;
