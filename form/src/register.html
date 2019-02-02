@@ -1,10 +1,6 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-$signInSuccessUrl = 'start.html';
-if(isset($_GET['next'])){
-    $signInSuccessUrl = $_GET['next'];
-}
 try{ 
     $user = $storage->getCurrentUser();
     $email = $user->data->email;
@@ -29,7 +25,7 @@ generate('register.html.twig',
             'register' => true,
             'email' => $email,
             'name' => $name,
-            'signInSuccessUrl' => $signInSuccessUrl
+            'signInSuccessUrl' => $_GET['next']
         ],
         'user' => $user
     ]
