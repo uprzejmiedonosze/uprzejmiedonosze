@@ -39,11 +39,16 @@ function generate_pdf($application, $destFile) {
 	$log_f = "$f.log";
 	$pdf_f = "$f.pdf";
 
-    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
-	$twig = new Twig_Environment($loader);
-
+    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../../templates');   
+    $twig = new Twig_Environment($loader,
+    [
+        'debug' => false,
+        'cache' => new Twig_Cache_Filesystem('/tmp/twig', Twig_Cache_Filesystem::FORCE_BYTECODE_INVALIDATION),
+        'strict_variables' => true,
+        'auto_reload' => true
+    ]);
 	ob_start();
-    echo $twig->render('template.tex.twig',
+    echo $twig->render('pdf.tex.twig',
     [
         'app' => $application,
         'root' => __DIR__ . '/../public/'
