@@ -47,14 +47,10 @@ function generate_pdf($application, $destFile) {
         'strict_variables' => true,
         'auto_reload' => true
     ]);
-	ob_start();
-    echo $twig->render('pdf.tex.twig',
-    [
+
+	file_put_contents($tex_f, $twig->render('pdf.tex.twig', [
         'app' => $application,
-        'root' => __DIR__ . '/../public/'
-    ]
-    );
-	file_put_contents($tex_f, ob_get_clean());
+        'root' => realpath(__DIR__ . '/..')]));
 
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
    	escapeshellarg($tex_f));
