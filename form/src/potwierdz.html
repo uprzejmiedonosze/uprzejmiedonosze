@@ -1,99 +1,39 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-genHeader("Uprzejmie Donoszę – potwierdź", true);
 $post = $_POST;
-$applicationId = $post["applicationId"];
 
+$applicationId = $post["applicationId"];
 $application = $storage->getApplication($applicationId);
 
-$address = $post["address"];
-$latlng = $post["latlng"];
-$voivodeship = $post["voivodeship"];
-$country = $post["country"];
-$city = $post["city"];
-
-$plateId = strtoupper(trim($post["plateId"]));
-$category = $post["category"];
-$category_txt = CATEGORIES[$category][1];
-$comment = capitalizeSentence($post["comment"]);
-
-$date = date_format(new DateTime($post['datetime']), DT_FORMAT);
-$app_date = (new DateTime($date))->format('Y-m-d');
-$app_hour = (new DateTime($date))->format('H:i');
-
-$carImage = $application->carImage->thumb;
-$contextImage = $application->contextImage->thumb;
-
-$user = $storage->getCurrentUser();
-
-$application->date = $date;
-$application->user = $user->data;
-$application->category = $category;
+$application->date = date_format(new DateTime($post['datetime']), DT_FORMAT);
+$application->category = intval($post["category"]);
 if(!isset($application->address)) $application->address = new stdClass();
-$application->address->address = $address;
-$application->address->city = $city;
-$application->address->voivodeship = $voivodeship;
-$application->address->latlng = $latlng;
+$application->address->address = $post["address"];
+$application->address->city = $post["city"];
+$application->address->voivodeship = $post["voivodeship"];
+$application->address->latlng = $post["latlng"];
 if(!isset($application->carInfo)) $application->carInfo = new stdClass();
-$application->carInfo->plateId = $plateId;
-$application->userComment = $comment;
+$application->carInfo->plateId = strtoupper(trim($post["plateId"]));
+$application->userComment = capitalizeSentence($post["comment"]);
 $application->setStatus("ready");
 
 $storage->saveApplication($application);
 
-$sex      = $user->guessSex();
-$bylam    = $sex['bylam'];
-$swiadoma = $sex['swiadoma'];
-$wykonalam = $sex['wykonalam'];
+generate('potwierdz.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Potwierdź",
+            'shortTitle' => "Potwierdź"
+        ],
+        'config' =>
+        [
+            'auth' => true,
+            'appDetails' => true
+        ],
+        'app' => $application
+    ]
+);
 
 ?>
-<body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-			<? menuBack('Back', 'ui-icon-edit'); ?> 
-			<h1>Potwierdź dane</h1>
-			<a onclick="$('#form').submit();" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-check">Potwierdź!</a>
-		</div>
-		  
-		<div data-role="main" class="ui-content">
-			<h1>Jeszcze chwila!</h1>
-			<p>Sprawdź dane przed utworzeniem zgłoszenia. Nie obawiaj się – na tym etapie nic jeszcze nie zostanie wysłane do SM.</p>
-			<br>
-
-<?
-echo <<<HTML
-			<div class="ui-body ui-body-a ui-corner-all">
-				<h3>Zgłoszenie wykroczenia</h3>
-				<p>W dniu <b>$app_date</b> roku o godzinie <b>$app_hour</b> $bylam świadkiem pozostawienia
-					samochodu o nr rejestracyjnym <b>$plateId</b> pod adresem <b>$address</b>.
-					{$category_txt} Zdjęcia $wykonalam samodzielnie.</p>
-				<p>Nie $bylam świadkiem samego momentu parkowania, oraz nie wiem jak długo
-					pozostawał pojazd pozostawał na tym miejscu.</p>
-				<p>$comment</p>
-				<p>Jestem $swiadoma odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
-				 	oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
-				<p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
-					mojego miejsca zamieszkania.</p>
-				<p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
-					{$user->data->name}<br />
-					{$user->data->email}<br />
-					{$user->data->address}<br />
-					{$user->data->msisdn}
-				</p>
-				<div id="pics" class="ui-grid-a ui-responsive">
-					<div class="ui-block-a">
-						<img class="photo-thumbs" src="{$contextImage}"> 
-					</div>
-					<div class="ui-block-b">
-						<img class="photo-thumbs" src="{$carImage}">
-					</div>
-				</div>
-			</div>
-HTML;
-?>
-			<form action="/dziekujemy.html" id="form" method="post" data-ajax="true">
-				<input type="hidden" id="applicationId" name="applicationId" value="<?=$applicationId ?>"/>
-			</form>
-		</div> <!-- main -->
-<? getFooter() ?>
