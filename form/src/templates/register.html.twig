@@ -26,7 +26,7 @@
         data-inline="true" value="{{ user.data.address }}">
 </form>
 
-{% if not (user or (constant('%HOST%') is constant('staging.uprzejmiedonosze.net')) ) %}
+{% if not (user or ('%HOST%' == 'staging.uprzejmiedonosze.net') ) %}
     <script>
         $.post("https://%HOST%/api/api.html", {
             action: '_notify-register'

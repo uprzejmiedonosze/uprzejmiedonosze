@@ -4,11 +4,6 @@
 {% set rightButton = 'menuNewApplication' %}
 {% set rightButtonText = 'Jeszcze raz' %}
 
-<a onclick="$('#form').submit();"
-    class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
-    ui-btn-inline ui-btn-icon-left ui-icon-check">Potwierdź!</a>
-{% endblock %}
-
 {% extends "base.html.twig" %}
 
 {% block main %}
@@ -38,7 +33,7 @@
 
 <a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
 
-{% if not (constant('%HOST%') is constant('staging.uprzejmiedonosze.net')) %}
+{% if not ('%HOST%' == 'staging.uprzejmiedonosze.net') %}
     <script>
         $.post("https://%HOST%/api/api.html",
             {action: '_notify-new', id: '{{ app.id }}'

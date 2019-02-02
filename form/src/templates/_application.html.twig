@@ -1,7 +1,7 @@
 {% if config.appDetails %}
 <div class="ui-body ui-body-a ui-corner-all">
 
-    <h3>Zgłoszenie wykroczenia {{ app.number }}</h3>
+    <h3>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h3>
 
     <p>W dniu <b>{{ app.getDate }}</b> roku o godzinie <b>{{ app.getTime }}</b>
         {{ app.guessUserSex.bylam }} świadkiem pozostawienia
@@ -23,8 +23,11 @@
     <p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
         mojego miejsca zamieszkania.</p>
 
+    {% if app.status not in ['draft', 'ready'] %}
     <p>Dokument ze zgłoszeniem dostępny jest pod adresem
-        <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.</p>
+        <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
+    </p>
+    {% endif %}
     <p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
         {{ app.user.name }}<br />
         {{ app.user.email }}<br />
@@ -47,7 +50,7 @@
         </div>
     </div>
 
-{% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.appDetails %}
+{% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.appDetails and statuses is defined %}
     <div id="statusHistory">
         <h4>Historia zmian statusów</h4>
         <ul data-role="listview">

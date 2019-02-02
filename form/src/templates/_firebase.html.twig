@@ -1,7 +1,7 @@
 <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.7.1/firebase-auth.js"></script>
 <script>
-{% if constant('%HOST%') is constant('staging.uprzejmiedonosze.net') %}
+{% if '%HOST%' == 'staging.uprzejmiedonosze.net' %}
     var config = {
         apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
         authDomain: "uprzejmiedonosze-1494607701827.firebaseapp.com",

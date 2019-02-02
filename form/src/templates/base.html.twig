@@ -6,7 +6,7 @@
             maximum-scale=1, user-scalable=no, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <title>{{ head.title }}{{ head.title ? ' | ' }}Uprzejmie Donoszę</title>
+        <title>{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę</title>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
         <link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-57x57.png" />
@@ -22,10 +22,10 @@
         <meta name="theme-color" content="#009C7F">
         <meta property="og:image"
             content="https://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
-        <meta property="og:title" content="{{ head.title }}{{ head.title ? ' | ' }}Uprzejmie Donoszę" />
+        <meta property="og:title" content="{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę" />
         <meta property="og:description"
             content="{{ head.description ?? 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.' }}" />
-        <meta property="og:url" content="https://%HOST%{{ config.auth ? '' : general.uri }}" />
+        <meta property="og:url" content="https://%HOST%{% if config is not defined %}{{ general.uri }}{% endif %}" />
         <meta property="og:locale" content="pl_PL" />
         <meta property="og:type" content="website" />
 
@@ -39,7 +39,7 @@
         
     {{ include('_firebase.html.twig') }}
     
-    {% if config.auth %}
+    {% if config.auth is defined and config.auth %}
         <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
         <link type="text/css" rel="stylesheet"
             href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
@@ -47,17 +47,17 @@
 
     </head>
     <body class="index">
-        <div data-role="page" class="container-fluid" data-theme="a" {% if head.dialog %}data-dialog="true"{% endif %}>
+        <div data-role="page" class="container-fluid" data-theme="a" {% if head.dialog is defined and head.dialog %}data-dialog="true"{% endif %}>
         {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
-                {% if leftButton == 'menuBack' %}
+                {% if leftButton is defined and leftButton == 'menuBack' %}
                 <a href="javascript:history.back()" data-rel="back" class="ui-btn-left
                     ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-icon-notext
                     {{ leftButtonIcon ?? 'ui-icon-carat-l' }}"
                     data-role="button" role="button">{{ leftButtonText ?? 'Back' }}</a>
                 {% endif %}
 
-                {% if leftButton == 'menuMain' %}
+                {% if leftButton is defined and leftButton == 'menuMain' %}
                     <a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon
                     ui-btn ui-corner-all {{ leftButtonIcon ?? 'ui-icon-home' }} ui-btn-icon-notext"
                     data-role="button" role="button">{{ leftButtonText ?? 'Strona główna' }}</a>
@@ -65,21 +65,21 @@
 
                 <h1>{{ head.shortTitle ?? 'Uprzejmie Donoszę' }}</h1>
 
-                {% if rightButton == 'menuStart' %}
+                {% if rightButton is defined and rightButton == 'menuStart' %}
                 <a href="start.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
                     ui-btn-icon-left {{ leftButtonIcon ?? 'ui-icon-plus' }}">
                     {{ rightButtonText ?? 'Zgłoś' }}</a>
                 {% endif %}
 
-                {% if rightButton == 'menuApplications' %}
+                {% if rightButton is defined and rightButton == 'menuApplications' %}
                 <a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
                     {{ leftButtonIcon ?? 'ui-icon-bullets' }}">
                     {{ rightButtonText ?? 'Zgłoszenia' }}</a>
                 {% endif %}
 
-                {% if rightButton == 'menuNewApplication' %}
+                {% if rightButton is defined and rightButton == 'menuNewApplication' %}
                 <a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
                     {{ leftButtonIcon ?? 'ui-icon-carat-r' }}"
@@ -90,7 +90,7 @@
                 {% endblock %}
             </div> <!-- header -->
         {% endblock %}
-            <div data-role="main" class="ui-content {{ head.mainClass ?? '' }} {% if head.dialog %}dialog{% endif %}">
+            <div data-role="main" class="ui-content {{ head.mainClass ?? '' }} {% if head.dialog is defined and head.dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
             </div> <!-- main -->
         {% block footer %}
@@ -103,7 +103,7 @@
         <script src="js/script-%JS_HASH%.js"></script>
         <script src="js/lazysizes.min-%JS_HASH%.js"></script>
 
-    {% if head.mapsInitFunc %}
+    {% if head.mapsInitFunc is defined %}
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback={{ head.mapsInitFunc }}&language=pl" async defer></script>
     {% endif %}
 

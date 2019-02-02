@@ -8,8 +8,8 @@
     </form>
     {% for email,user in storage.getUsers %}
         <h3 class="ui-bar ui-bar-a ui-corner-all">{{ user.number }} {{ user.data.name }} ({{ user.data.email }})</h3>
-        <p> Założony: {{ user.added }}
-            Usunięty: {{ user.deleted }}</p>
+        <p> Założony: {{ user.added ?? '' }}
+            Usunięty: {{ user.deleted ?? '' }}</p>
 
         <div data-role="collapsibleset" data-filter="true" data-inset="true"
             id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">

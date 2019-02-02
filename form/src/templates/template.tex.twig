@@ -30,10 +30,9 @@
 
 {% set appUrl = '{https://%HOST%/ud-' ~ app.id  ~ '.html}' %}
 
-{% set contextImage = '{' ~ root ~ app.contextImage.thumb ~ '}';
-{% set carImage     = '{' ~ root ~ app.carImage.thumb     ~ '}';
-{% set plateImage   = '{' ~ root ~ app.carInfo.plateImage ~ '}';
-
+{% set contextImage = '{' ~ root ~ app.contextImage.thumb ~ '}' %}
+{% set carImage     = '{' ~ root ~ app.carImage.thumb     ~ '}' %}
+{% set plateImage   = '{' ~ root ~ app.carInfo.plateImage ~ '}' %}
 
 \opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} } } }
 	W dniu {{ app.getDate }} roku o godzinie {{ app.getTime }} {{ app.guessUserSex.bylam }}

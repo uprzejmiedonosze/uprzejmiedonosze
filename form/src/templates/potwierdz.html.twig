@@ -17,6 +17,6 @@ etapie nic jeszcze nie zostanie wysłane do SM.</p>
 {% include('_application.html.twig') %}
 
 <form action="/dziekujemy.html" id="form" method="post" data-ajax="true">
-    <input type="hidden" id="applicationId" name="applicationId" value="{% app.id %}"/>
+    <input type="hidden" id="applicationId" name="applicationId" value="{{ app.id }}"/>
 </form>
 {% endblock %}

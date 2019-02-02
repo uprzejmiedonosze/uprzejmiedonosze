@@ -22,7 +22,7 @@
                     </label>
                     <input type="file" accept="image/jpeg" id="contextImage"
                         title="Zdjęcie przedstawiające kontekst"
-                        value="{{ app.contextImage.url }}" />
+                        value="{{ app.contextImage.url ?? '' }}" />
                 </div>
             </div>
             <div class="ui-block-b">
@@ -36,7 +36,7 @@
                     </label>
                     <input type="file" accept="image/jpeg" id="carImage"
                         title="Zdjęcie przedstawiające samochód tablice rejestracyjne"
-                        value="{{ app.carImage.url }}" />
+                        value="{{ app.carImage.url ?? '' }}" />
                 </div>
             </div>
         </div>
@@ -45,23 +45,23 @@
 
         <label for="address">Podaj miejsce zgłoszenia <i id="addressHint"></i></label>
         <div class="combo">
-            <input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true" value="{{ app.address.address }}">
+            <input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true" value="{{ app.address.address ?? '' }}">
             <a id="geo" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
         </div>
 
         <input type="hidden" id="street_number" name="street_number" />
         <input type="hidden" id="route" name="street_name" />
-        <input type="hidden" id="locality" name="city" value="{{ app.address.city }}" />
-        <input type="hidden" id="administrative_area_level_1" name="voivodeship" value="{{ app.address.voivodeship }}" />
+        <input type="hidden" id="locality" name="city" value="{{ app.address.city ?? '' }}" />
+        <input type="hidden" id="administrative_area_level_1" name="voivodeship" value="{{ app.address.voivodeship ?? '' }}" />
         <input type="hidden" id="country" name="country" />
-        <input type="hidden" id="latlng" name="latlng" value="{{ app.address.latlng }}" />
+        <input type="hidden" id="latlng" name="latlng" value="{{ app.address.latlng ?? '' }}" />
 
         <label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
-        <input class="required" type="text" id="plateId" name="plateId" placeholder="Numer rejestracyjny" value="{{ app.carInfo.plateId }}" />
+        <input class="required" type="text" id="plateId" name="plateId" placeholder="Numer rejestracyjny" value="{{ app.carInfo.plateId ?? '' }}" />
 
         <label for="comment">Dodaj komentarz (wymagany dla kategorii "pozostałe")</label>
         <textarea type="text" id="comment" name="comment"
-            placeholder="Np. szczegóły dotyczące lokalizacji">{{ app.comment }}</textarea>
+            placeholder="Np. szczegóły dotyczące lokalizacji">{{ app.userComment ?? '' }}</textarea>
 
         <label for="category" class="section">Podaj rodzaj naruszenia</label>
 
