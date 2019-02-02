@@ -1,73 +1,29 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
-genHeader("Uprzejmie Donoszę – zaloguj się");
 
 if(isset($_GET['logout'])){
     unset($_SESSION['token']);
-    logger('unsetting token');
-    redirect("login.html");
+    redirect("index.html");
 }
 $signInSuccessUrl = 'login-ok.html';
 if(isset($_GET['next'])){
     $signInSuccessUrl .= '?next=' . $_GET['next'];
-    //redirect("login.html");
 }
 
 logger('login.html: $signInSuccessUrl == ' . $signInSuccessUrl);
+
+generate('login.html.twig',
+[
+    'head' =>
+    [
+        'title' => "Zaloguj się",
+        'shortTitle' => "Zaloguj się"
+    ],
+    'config' =>
+    [
+        'signInSuccessUrl' => $_GET['next']
+    ]
+]
+);
+
 ?>
-<body class="index">
-	<div id="loginPage" data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-        <? menuMain(); ?>
-		<h1>Zaloguj się</h1>
-		</div>
-		<div data-role="main" class="ui-content">
-			<div class="ui-body ui-body-a ui-corner-all">
-                <div id="firebaseui-auth-container"></div>
-			</div>
-        </div> <!-- main -->
-        <script src="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth__pl.js"></script>
-        <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth.css" />
-        <script type="text/javascript">
-            $( document ).bind( "pagecontainerload", function( e, triggerData ) {
-                var redirect = triggerData.xhr.getResponseHeader( "X-Redirect" );
-                if ( redirect ) {
-                    $( e.target ).pagecontainer( "load", redirect, triggerData.options );
-                    e.preventDefault();
-                }
-            });
-
-            $(document).on("pageshow", "#loginPage", function () { 
-                console.log('pageshow triggered');
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user) {
-                        window.location.replace('<?=$signInSuccessUrl;?>');
-                    } else {
-                        login();
-                    }
-                }, function(error) {
-                    console.log(error);
-                    login();
-                });
-            });
-
-            function login(){
-                // FirebaseUI config.
-                var uiConfig = {
-                    signInSuccessUrl: "https://%HOST%<?=$signInSuccessUrl?>",
-                    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-                    tosUrl: 'https://%HOST%/start.html' // Terms of service url.
-                };
-
-                // Initialize the FirebaseUI Widget using Firebase.
-                var ui = new firebaseui.auth.AuthUI(firebase.auth());
-                // The start method will wait until the DOM is loaded.
-                ui.start('#firebaseui-auth-container', uiConfig);
-
-            }
-            function logout(){
-                firebase.auth().signOut();
-                window.location.replace('/login.html?logout');
-            }
-        </script>
-<? getFooter() ?>
