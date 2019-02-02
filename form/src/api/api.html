@@ -306,7 +306,7 @@ function _notifyNew($appId){
     global $storage;
     $application = $storage->getApplication($appId);
 
-    _sendSlackMessage("Nowe zgłoszenie `{$application->number}`"
+    _sendSlackUpdate("Nowe zgłoszenie `{$application->number}`"
         . " od *{$application->user->name}*"
         . " ({$application->address->city}):\n"
         . "https://%HOST%/ud-{$application->id}.html");
@@ -316,20 +316,29 @@ function _notifyNew($appId){
  * Pushes slack notification about new registration.
  */
 function _notifyRegister($name){
-    _sendSlackMessage("Nowa rejestracja *{$name}*.");
+    _sendSlackUpdate("Nowa rejestracja *{$name}*.");
 }
 
 function _notifyError($msg){
     $msg = str_replace("||", "\n", $msg);
-    _sendSlackMessage($msg);
+    _sendSlackError($msg);
 }
 
 /** 
  * Sends message to #updates slack channel at uprzejmiedonosze.slack.com
  */
-function _sendSlackMessage($msg){
+function _sendSlackUpdate($msg){
     logger($msg, true);
     $client = new Maknz\Slack\Client('https://hooks.slack.com/services/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');
+    $client->send($msg);
+}
+
+/** 
+ * Sends message to #errors slack channel at uprzejmiedonosze.slack.com
+ */
+function _sendSlackError($msg){
+    logger($msg, true);
+    $client = new Maknz\Slack\Client('https://hooks.slack.com/services/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');
     $client->send($msg);
 }
 
