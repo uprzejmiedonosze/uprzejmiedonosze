@@ -21,6 +21,7 @@ class Application extends JSONObject{
         $this->added = date(DT_FORMAT);
         $this->user = $storage->getCurrentUser()->data;
         $this->status = 'draft';
+        $this->category = 7;
     }
 
     /**
