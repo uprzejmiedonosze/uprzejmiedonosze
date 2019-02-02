@@ -1,0 +1,89 @@
+{% set leftButton = 'menuBack' %}
+
+{% block rightButtonCustom %}
+<a id="form-submit"
+    class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Zgłoś</a>
+{% endblock %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<form action="/potwierdz.html" id="form" method="post" data-ajax="false">
+    <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
+    <div>
+        <label class="section">Dane zgłoszenia</label>
+        <div class="ui-grid-a ui-responsive" id="pics">
+            <div class="ui-block-a">
+                <div class="image-upload">
+                    <label for="contextImage">
+                        Zrób zdjęcie prezentujące kontekst zgłoszenia
+                        <img class="photo-thumbs" id="contextImage-img"
+                            src="{{ app.contextImage.thumb ?? 'img/cameraContext.png' }}"/>
+                    </label>
+                    <input type="file" accept="image/jpeg" id="contextImage"
+                        title="Zdjęcie przedstawiające kontekst"
+                        value="{{ app.contextImage.url }}" />
+                </div>
+            </div>
+            <div class="ui-block-b">
+                <div class="image-upload">
+                    <label for="carImage">
+                        Zrób zdjęcie na którym widoczna jest tablica rejestracyjna
+                        <img class="photo-thumbs" id="carImage-img"
+                            src="{{ app.carImage.thumb ?? 'img/cameraPlate.png' }}"/>
+                        <img id="plateImage" src=""/>
+                        <span id="recydywa"></span>
+                    </label>
+                    <input type="file" accept="image/jpeg" id="carImage"
+                        title="Zdjęcie przedstawiające samochód tablice rejestracyjne"
+                        value="{{ app.carImage.url }}" />
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
+
+        <label for="address">Podaj miejsce zgłoszenia <i id="addressHint"></i></label>
+        <div class="combo">
+            <input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true" value="{{ app.address.address }}">
+            <a id="geo" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
+        </div>
+
+        <input type="hidden" id="street_number" name="street_number" />
+        <input type="hidden" id="route" name="street_name" />
+        <input type="hidden" id="locality" name="city" value="{{ app.address.city }}" />
+        <input type="hidden" id="administrative_area_level_1" name="voivodeship" value="{{ app.address.voivodeship }}" />
+        <input type="hidden" id="country" name="country" />
+        <input type="hidden" id="latlng" name="latlng" value="{{ app.address.latlng }}" />
+
+        <label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
+        <input class="required" type="text" id="plateId" name="plateId" placeholder="Numer rejestracyjny" value="{{ app.carInfo.plateId }}" />
+
+        <label for="comment">Dodaj komentarz (wymagany dla kategorii "pozostałe")</label>
+        <textarea type="text" id="comment" name="comment"
+            placeholder="Np. szczegóły dotyczące lokalizacji">{{ app.comment }}</textarea>
+
+        <label for="category" class="section">Podaj rodzaj naruszenia</label>
+
+        <div class="ui-grid-a ui-responsive" id="category">
+        {% set i = 0 %}
+        {% for catId,catName in categories %}
+        {% if catName[0] %}
+            <div class="ui-block-{{ categoriesMatrix[i % 2] }}" title="{{ catName[2]|striptags }}">
+                <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
+                    name="category" value="{{ catId }}" id="{{ catId }}">
+                <label for="{{ catId }}">
+                    <img src="img/{{ catId }}.jpg">
+                    <p>{{ catName[0]|raw }}</p>
+                </label>
+            </div>
+        {% set i = i + 1 %}
+        {% endif %}
+        {% endfor %}
+            <p>Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
+        </div>
+    </div> <!-- ui-field-contain -->
+</form>
+<script src="js/exif-%JS_HASH%.js"></script>
+
+{% endblock %}
