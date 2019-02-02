@@ -16,9 +16,10 @@ generate('zgloszenie.html.twig',
         ],
         'config' =>
         [
-            'fullApplication' => true
+            'appDetails' => true
         ],
-        'app' => $application
+        'app' => $application,
+        'statuses' => STATUSES
     ]
 );
 ?>
