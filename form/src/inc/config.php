@@ -47,12 +47,13 @@ const CATEGORIES = Array(
 );
 
 const SM_ADDRESSES = Array (
-	'szczecin' => ['Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
-		'sm@um.szczecin.pl'],
-	'warszawa' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-		'ot1@strazmiejska.waw.pl'],
-	'warsaw' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-		'ot1@strazmiejska.waw.pl']
+    'szczecin' => ['Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
+        'sm@um.szczecin.pl'],
+    'warszawa' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
+        'ot1@strazmiejska.waw.pl'],
+    'warsaw' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
+        'ot1@strazmiejska.waw.pl'],
+    '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null]
 );
 
 const CATEGORIES_MATRIX = Array( 'a', 'b');
@@ -68,6 +69,24 @@ const STATUSES = Array (
     'confirmed-ignored' => ['Zignorowane',       'Zignorowane',       'delete',  'active',   ''],
     'confirmed-fined'   => ['Wystawiony mandat', 'Wystawiony mandat', 'check',   'active',   ''],
     'archived'          => ['W archiwum',        'Archiwizuj',        'cloud',   'archived', '']
+);
+
+const SEXSTRINGS = Array (
+    '?' => [
+        "bylam" => "byłam/em",
+        "swiadoma" => "świadoma/y",
+        "wykonalam" => "wykonałam/em"
+    ],
+    'm' => [
+        "bylam" => "byłem",
+        "swiadoma" => "świadomy",
+        "wykonalam" => "wykonałem"
+    ],
+    'f' => [
+        "bylam" => "byłam",
+        "swiadoma" => "świadoma",
+        "wykonalam" => "wykonałam"
+    ]
 );
 
 ?>

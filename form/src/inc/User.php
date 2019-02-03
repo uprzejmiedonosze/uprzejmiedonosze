@@ -71,6 +71,7 @@ class User extends JSONObject{
             $this->updated = date(DT_FORMAT);
         }
         $this->data->name = $name;
+        $this->data->sex = guess_sex_by_name($this->data->name);
         $this->data->msisdn = $msisdn;
         $this->data->address = $address;
         return true;
@@ -83,8 +84,14 @@ class User extends JSONObject{
         return count($this->applications) > 0;
     }
 
+    /**
+     * Returns (lazyloaded) sex-strings for this user.
+     */
     function guessSex(){
-        return guess_sex_by_name($this->data->name);
+        if(!isset($this->data->sex)){
+            $this->data->sex = guess_sex_by_name($this->data->name);
+        }
+        return SEXSTRINGS[$this->data->sex];
     }
 }
 

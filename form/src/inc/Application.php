@@ -21,6 +21,7 @@ class Application extends JSONObject{
         $this->id = guidv4();
         $this->added = date(DT_FORMAT);
         $this->user = $storage->getCurrentUser()->data;
+        $this->user->sex = guess_sex_by_name($this->user->name);
         $this->status = 'draft';
         $this->category = 7;
     }
@@ -91,11 +92,15 @@ class Application extends JSONObject{
                 return SM_ADDRESSES[$this->smCity];
             }
         }
-        return ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null];
+        $this->smCity = '_nieznane';
+        return SM_ADDRESSES[$this->smCity];
     }
 
     public function guessUserSex(){
-        return guess_sex_by_name($this->user->name);
+        if(!isset($this->user->sex)){
+            $this->user->sex = guess_sex_by_name($this->user->name);
+        }
+        return SEXSTRINGS[$this->user->sex];
     }
 
     public function getCategory(){
