@@ -113,7 +113,7 @@ function checkAddress(){
 
 function validateRegisterForm(){
 	var ret = check($('#name'), 6, false);
-	ret = check($('#lokalizacja'), 10, false) && ret;
+	ret = check($('#address'), 10, false) && ret;
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
