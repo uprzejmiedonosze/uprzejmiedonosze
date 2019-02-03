@@ -29,11 +29,6 @@ header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
 function generate_pdf($application, $destFile) {
-	$template_file = __DIR__ . '/template.tex.twig';
-
-	if(!file_exists($template_file)) {
-		throw new Exception("Could not open template");
-	}
 	if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
 		throw new Exception("Failed to create temporary file");
 	}
@@ -44,12 +39,18 @@ function generate_pdf($application, $destFile) {
 	$log_f = "$f.log";
 	$pdf_f = "$f.pdf";
 
-	$loader = new Twig_Loader_Filesystem(__DIR__ . '/');
-	$twig = new Twig_Environment($loader);
+    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../../templates');   
+    $twig = new Twig_Environment($loader,
+    [
+        'debug' => false,
+        'cache' => new Twig_Cache_Filesystem('/tmp/twig', Twig_Cache_Filesystem::FORCE_BYTECODE_INVALIDATION),
+        'strict_variables' => true,
+        'auto_reload' => true
+    ]);
 
-	ob_start();
-	echo $twig->render('template.tex.twig', $application->flatten());
-	file_put_contents($tex_f, ob_get_clean());
+	file_put_contents($tex_f, $twig->render('pdf.tex.twig', [
+        'app' => $application,
+        'root' => realpath(__DIR__ . '/..')]));
 
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
    	escapeshellarg($tex_f));

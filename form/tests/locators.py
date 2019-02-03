@@ -8,6 +8,11 @@ class Locators(object):
     RTD         = (By.XPATH, "//a[@href='robtodobrze.html']")
     START       = (By.XPATH, "//a[@href='start.html']")
     NEW         = (By.XPATH, "//a[@href='nowe-zgloszenie.html']")
+    MYAPPS      = (By.XPATH, "//a[@href='moje-zgloszenia.html']")
+
+    CONTENT     = (By.CSS_SELECTOR, "div.ui-content")
+    
+    BTN_LEFT    = (By.CSS_SELECTOR, "a.ui-btn-left")
 
     LOGIN_BTN   = (By.XPATH, "//button[contains(@class, 'firebaseui-idp-button')]")
     LOGIN_EMAIL = (By.XPATH, "//input[@id='identifierId']")
@@ -27,10 +32,15 @@ class Locators(object):
     NEW_IIMAGE2 = (By.ID,    "carImage")
     NEW_CAT0    = (By.XPATH, "//label[@for='0']")
     NEW_ADD_HINT= (By.ID,    "addressHint")
+    NEW_PLATEIMG= (By.ID,    "plateImage")
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 
-    THANK_YOU   = (By.CSS_SELECTOR, "div.ui-content")
+    MYAPPS_FIRST= (By.CSS_SELECTOR, "div.application")
+    MYAPPS_EXPAND= (By.CSS_SELECTOR, "div.application a")
+    MYAPPS_FIRSTL= (By.XPATH, "//a[contains(@href, 'ud-')]")
+
+    APP_PDF_LINK= (By.XPATH, "//a[contains(@href, '.pdf')]")
 
 class SearchResultsPageLocators(object):
     """A class for search results locators. All search results locators should come here"""

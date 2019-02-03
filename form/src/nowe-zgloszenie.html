@@ -1,122 +1,33 @@
 <?PHP
 require_once(__DIR__ . '/../inc/include.php');
-genHeader("Uprzejmie Donoszę – nowe zgłoszenie", true);
+
+checkIfLogged();
 
 if(isset($_SESSION['newAppId'])){ // edit mode
-    $applicationId = $_SESSION['newAppId'];
-    $application = $storage->getApplication($applicationId);
-    $edit = true;
+    $application = $storage->getApplication($_SESSION['newAppId']);
 }else{ // new application mode
     $application = new Application();
     $storage->saveApplication($application);
-	$applicationId = $application->id;
 	$_SESSION['newAppId'] = $application->id;
-	$edit = false;
 }
 
-@$contextImage = $application->contextImage->thumb;
-!$contextImage && $contextImage = 'img/cameraContext.png';
-
-@$carImage     = $application->carImage->thumb;
-!$carImage     && $carImage = 'img/cameraPlate.png';
-
-@$category     = $application->category;
-!$category     && $category = 7;
-
-@$address      = $application->address->address;
-@$latlng       = $application->address->latlng;
-@$voivodeship  = $application->address->voivodeship;
-@$city         = $application->address->city;
-@$plateId      = $application->carInfo->plateId;
-@$comment      = $application->userComment;
-@$date         = $application->date;
+generate('nowe-zgloszenie.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Nowe zgłoszenie",
+            'shortTitle' => "Nowe zgłoszenie",
+            'mainClass' => 'new-application',
+            'mapsInitFunc' => 'initAutocompleteOnNewApplication'
+        ],
+        'config' =>
+        [
+            'auth' => true,
+        ],
+        'categories' => CATEGORIES,
+        'categoriesMatrix' => CATEGORIES_MATRIX,
+        'app' => $application
+    ]
+);
 
 ?>
-	<body class="index new-application">
-		<div data-role="page" class="container-fluid" data-theme="a">
-			<div data-role="header" data-position="fixed" data-tap-toggle="false" data-hide-during-focus="false">
-				<? menuBack(); ?>
-				<h1>Nowe zgłoszenie</h1>
-				<a id="form-submit" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Zgłoś</a>
-			</div>
-			<div data-role="main" class="ui-content">
-				<form action="/potwierdz.html" id="form" method="post" data-ajax="false">
-					<input type="hidden" name="applicationId" id="applicationId" value="<?=$applicationId ?>"/>
-					<div>
-						<label class="section">Dane zgłoszenia</label>
-						<div class="ui-grid-a ui-responsive" id="pics">
-							<div class="ui-block-a">
-								<div class="image-upload">
-									<label for="contextImage">
-										Zrób zdjęcie prezentujące kontekst zgłoszenia
-										<img class="photo-thumbs" id="contextImage-img" src="<?=$contextImage;?>"/>
-									</label>
-									<input type="file" accept="image/jpeg" id="contextImage" title="Zdjęcie przedstawiające kontekst" value="<?=@$application->contextImage->url;?>" />
-								</div>
-							</div>
-							<div class="ui-block-b">
-								<div class="image-upload">
-									<label for="carImage">
-										Zrób zdjęcie na którym widoczna jest tablica rejestracyjna
-										<img class="photo-thumbs" id="carImage-img" src="<?=$carImage?>"/>
-										<img id="plateImage" src=""/>
-										<span id="recydywa"></span>
-									</label>
-									<input type="file" accept="image/jpeg" id="carImage" title="Zdjęcie przedstawiające samochód tablice rejestracyjne" value="<?=@$application->carImage->url; ?>" />
-								</div>
-							</div>
-						</div>
-
-						<input type="hidden" id="datetime" name="datetime" value="<?=$date?>" />
-
-						<label for="address">Podaj miejsce zgłoszenia <i id="addressHint"></i></label>
-						<div class="combo">
-							<input type="text" maxlength="70" required id="address" name="address" placeholder="Miejsce zgłoszenia" data-inline="true" value="<?=$address?>">
-							<a id="geo" data-role="button" data-icon="location" data-iconpos="notext" data-mini="true" data-inline="true" data-corners="true" data-shadow="false" data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
-						</div>
-
-						<input type="hidden" id="street_number" name="street_number" />
-						<input type="hidden" id="route" name="street_name" />
-						<input type="hidden" id="locality" name="city" value="<?=$city?>" />
-						<input type="hidden" id="administrative_area_level_1" name="voivodeship" value="<?=$voivodeship?>" />
-						<input type="hidden" id="country" name="country" />
-						<input type="hidden" id="latlng" name="latlng" value="<?=$latlng?>" />
-
-						<label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
-						<input class="required" type="text" id="plateId" name="plateId" placeholder="Numer rejestracyjny" value="<?=$plateId?>" />
-
-						<label for="comment">Dodaj komentarz (wymagany dla kategorii "pozostałe")</label>
-						<textarea type="text" id="comment" name="comment"
-							placeholder="Np. szczegóły dotyczące lokalizacji"><?=$comment?></textarea>
-
-						<label for="category" class="section">Podaj rodzaj naruszenia</label>
-
-						<div class="ui-grid-a ui-responsive" id="category">
-							<? 
-								$i = 0;
-								foreach(CATEGORIES as $catId => $catName):
-									if(!isset($catName[0])){
-										continue;
-									}
-
-							?>
-							<div class="ui-block-<? echo(CATEGORIES_MATRIX[$i % 2]); ?>" title="<?=strip_tags($catName[2])?>">
-								<input type="radio" name="category" value="<?=$catId ?>" id="<?=$catId ?>" <? echo ($catId == $category)?' checked="checked" ': '';?>>
-								<label for="<?=$catId ?>">
-									<img src="img/<?=$catId ?>.jpg">
-									<p><?=$catName[0];?></p>
-								</label>
-							</div>
-							<?
-								$i++;
-								endforeach;
-							?>
-							<p>Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
-						</div>
-						
-
-					</div> <!-- ui-field-contain -->
-				</form>
-			</div> <!-- main -->
-			<script src="js/exif-%JS_HASH%.js"></script>
-<? getFooter('initAutocompleteOnNewApplication') ?>

@@ -1,49 +1,29 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
+checkIfLogged();
+
 if(!$storage->getCurrentUser()->isAdmin()){
 	http_response_code(404);
 	die();
 }
 
-genHeader("Uprzejmie Donoszę – Wszystkie zgłoszenia", true);
+generate('adm-zgloszenia.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Wszystkie zgłoszenia",
+            'shortTitle' => "Wszystkie zgłoszenia"
+        ],
+        'config' =>
+        [
+            'auth' => true,
+            'appDetails' => false,
+            'appActionButtons' => false
+        ],
+        'storage' => $storage,
+        'statuses' => STATUSES
+    ]
+);
 
 ?>
-<body class="index">
-	<div data-role="page" class="container-fluid" data-theme="a">
-		<div data-role="header" data-position="fixed" data-tap-toggle="false">
-        <? menuMain(); ?>
-			<h1>Wszystkie zgłoszenia</h1>
-		<? menuStart(); ?>
-		</div>		  
-		<div data-role="main" class="ui-content">
-<form>
-    <input data-type="search" id="searchForCollapsibleSet">
-</form>
-
-<? foreach ($storage->getUsers() as $email => $user): ?>
-
-<h3 class="ui-bar ui-bar-a ui-corner-all"><? echo "{$user->number} {$user->data->name} ({$user->data->email})" ?></h3>
-
-<?
-    echo "<p>";
-    if(!empty($user->added)) echo("Założony: {$user->added} ");
-    if(!empty($user->deleted)) echo("Usunięty: {$user->deleted} ");
-    echo "</p>";
-?>
-
-<div data-role="collapsibleset" data-filter="true" data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
-<?
-    $applications = $user->getApplicationIds();
-    foreach($applications as $id){
-        $application = $storage->getApplication($id);
-        $application->print();
-    }
-?>
-</div>
-
-<? endforeach; // (getUsers() as $email => $user): ?>
-
-		</div> <!-- main -->
-	</div>
-<? getFooter() ?>

@@ -1,0 +1,7 @@
+{% set leftButton = general.isLoggedIn ? 'menuBack': 'menuMain' %}
+{% set rightButton = general.hasApps ? 'menuApplications' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+{{ include('_application.html.twig') }}
+{% endblock %}

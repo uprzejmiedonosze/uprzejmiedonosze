@@ -5,8 +5,6 @@ if (!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])) {
     redirect('moje-zgloszenia.html');
 }
 
-genHeader("Uprzejmie Donoszę – dziękujemy", true);
-
 $applicationId = $_POST['applicationId'];
 unset($_SESSION['newAppId']);
 
@@ -14,52 +12,25 @@ $application = $storage->getApplication($applicationId);
 $user = $storage->getCurrentUser();
 
 $user->addApplication($application);
-$appNumber = 'UD/' . $user->number . '/' . sizeof($user->applications);
-
 $application->setStatus("confirmed");
-$application->number = $appNumber;
+$application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
 
 $storage->saveApplication($application);
 $storage->saveUser($user);
 
-$sm = $application->guessSMData()[1];
-$sm_email = ($sm) ? "W tym wypadku jest to <strong>$sm</strong>." :
-"<strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>";
-
-$sex = $application->guessUserSex();
-$bylam = $sex['bylam'];
-$swiadoma = $sex['swiadoma'];
-$wykonalam = $sex['wykonalam'];
-
-$from = "Uprzejmie Donosze <ud@nieradka.net>";
-$to = "<{$application->user->email}>";
-$subject = "Zgłoszenie $appNumber";
+generate('dziekujemy.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Dziękujemy",
+            'shortTitle' => "Dziękujemy"
+        ],
+        'config' =>
+        [
+            'auth' => true
+        ],
+        'app' => $application
+    ]
+);
 
 ?>
-<body class="index">
-    <div data-role="page" class="container-fluid" data-theme="a">
-        <div data-role="header" data-position="fixed" data-tap-toggle="false">
-            <? menuMain(); ?>
-            <h1>Dziękujemy</h1>
-            <? menuNewApplication('Jeszcze raz') ?>
-        </div>
-        <div data-role="main" class="ui-content">
-            <p>Twoje zgłoszenie zostało zarejestrowane pod numerem <a href="/ud-<?php echo $applicationId?>.html"><?php echo $appNumber?></a>.
-            Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
-            <p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz wygenerować ich kilka/kikanaście, i w dogodnym
-            dla siebie cyklu wysłać je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
-            <p>Jak wysyłać zgłoszenia? Najprościej jest wysłać całą paczkę zgłoszeń na adres SM w twoim mieście. <?php echo $sm_email?> Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
-            już liście zgłoszeń.</p>
-            <p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
-                href="mailto:szymon@nieradka.net">szymon@nieradka.net</a>.</p>
-
-            <a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
-        </div> <!-- main -->
-        <? if('%HOST%' !== 'staging.uprzejmiedonosze.net'):?>
-        <script>
-            $.post("https://%HOST%/api/api.html",
-                {action: '_notify-new', id: '<?=$applicationId;?>'
-                });
-        </script>
-        <? endif; ?>
-<?PHP getFooter()?>

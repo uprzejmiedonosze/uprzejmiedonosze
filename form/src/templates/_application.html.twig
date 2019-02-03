@@ -1,0 +1,128 @@
+{% if config.appDetails %}
+<div class="ui-body ui-body-a ui-corner-all">
+
+    <h3>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h3>
+
+    <p>W dniu <b>{{ app.getDate }}</b> roku o godzinie <b>{{ app.getTime }}</b>
+        {{ app.guessUserSex.bylam }} świadkiem pozostawienia
+        samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
+        pod adresem <b>{{ app.address.address}}</b>.
+        {{ app.getCategory[1] }}
+        Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.</p>
+
+    <p>Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania,
+        oraz nie wiem jak długo pozostawał pojazd pozostawał na tym miejscu.</p>
+
+    {% if app.userComment %}
+    <p>{{ app.userComment }}</p>
+    {% endif %}
+
+    <p>Jestem {{ app.guessUserSex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3
+        Kodeksu karnego oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
+
+    <p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
+        mojego miejsca zamieszkania.</p>
+
+    {% if app.status not in ['draft', 'ready'] %}
+    <p>Dokument ze zgłoszeniem dostępny jest pod adresem
+        <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
+    </p>
+    {% endif %}
+    <p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
+        {{ app.user.name }}<br />
+        {{ app.user.email }}<br />
+        {{ app.user.address }}<br />
+        {{ app.user.msisdn }}
+    </p>
+    <div id="pics" class="ui-grid-a ui-responsive">
+        <div class="ui-block-a">
+            <a rel="external" target="_blank" href="{{ app.contextImage.url }}">
+            <img class="photo-thumbs" src="{{ app.contextImage.thumb }}"> 
+            </a>
+        </div>
+        <div class="ui-block-b">
+            <a rel="external" target="_blank" href="{{ app.carImage.url }}">
+                <img class="photo-thumbs" src="{{ app.carImage.thumb}}">
+            </a>
+            {% if app.shouldIncludePlateImage %}
+            <img id="plateImage" src="{{ app.carInfo.plateImage }}"/>
+            {% endif %}
+        </div>
+{% if app.address.latlng is defined %}
+        <div class="ui-block-a">
+            <img class="static-map-preview" src="https://maps.googleapis.com/maps/api/staticmap?center={{ app.address.latlng }}&zoom=17&size=350x350&maptype=roadmap&markers=color:red%7Clabel:o%7C{{ app.address.latlng }}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8">
+        </div>
+{% endif %}
+    </div>
+
+{% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.appDetails and statuses is defined %}
+    <div id="statusHistory">
+        <h4>Historia zmian statusów</h4>
+        <ul data-role="listview">
+        {% for date,status in app.statusHistory %}
+            <li>
+                <b>{{ date|date('Y-m-d H:i') }}</b>
+                zmiana na <b>{{ statuses[status.new][0] }}</b>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+</div> <!-- ui-body ui-body-a ui-corner-all -->
+
+{% else %} {# if config.appDetails #}
+
+<div id="{{ app.id }}"
+    class="application {{ app.getStatus[3] }} status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus[2] }}"
+    data-expanded-icon="carat-d" data-role="collapsible"
+    data-filtertext="{{ app.address.address }} {{ app.number }} {{ app.date }} {{ app.carInfo.plateId }} {{ app.userComment }} {{ app.getCategory[1] }}">
+
+    <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}}</h3>
+    <p data-role="listview" data-inset="false">
+        <p>W dniu <b>{{ app.getDate }}</b> roku o godzinie <b>{{ app.getTime }}</b>
+            {{ app.guessUserSex.bylam }} świadkiem pozostawienia
+            samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
+            pod adresem <b>{{ app.address.address}}</b>.
+            {{ app.getCategory[1] }}
+            Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.</p>
+
+        {% if app.userComment %}
+        <p>{{ app.userComment }}</p>
+        {% endif %}
+
+        <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+            <a href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
+            <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false" class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon ui-nodisc-icon ui-icon-mail">PDF</a>
+        </div>
+        <div id="pics" class="ui-grid-a ui-responsive">
+            <div class="ui-block-a">
+                <a href="/ud-{{ app.id }}.html">
+                <img class="photo-thumbs" src="{{ app.contextImage.thumb }}"> 
+                </a>
+            </div>
+            <div class="ui-block-b">
+                <a href="/ud-{{ app.id }}.html">
+                    <img class="photo-thumbs" src="{{ app.carImage.thumb}}">
+                </a>
+            </div>
+        </div>
+
+{% if config.appActionButtons %}
+        <div data-role="controlgroup" data-type="horizontal" data-mini="true" class="actions">
+        
+        {% for key,val in statuses %}
+            {% if val[3] %} {# class is empty, this is a draft or ready #}
+                <a href="#" onclick="action('{{ key }}', '{{ app.id }}')"
+                    class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon
+                    {% if key == app.status %}ui-state-disabled{% endif %}
+                    ui-icon-{{ val[2] }}
+                    status-{{ key }}">{{ val[1] }}</a>
+            {% endif %}
+        {% endfor %}
+        </div>
+{% endif %}
+
+    </p> <!-- data-role="listview" data-inset="false" -->
+</div>
+{% endif %} {# if config.appDetails #}

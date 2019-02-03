@@ -1,0 +1,44 @@
+{% set leftButton = 'menuMain' %}
+{% set leftButtonIcon = 'ui-icon-edit' %}
+
+{% set rightButton = 'menuNewApplication' %}
+{% set rightButtonText = 'Jeszcze raz' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+<p>Twoje zgłoszenie zostało zarejestrowane pod numerem
+    <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>.
+    Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na
+    <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
+
+<p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz
+    wygenerować ich kilka/kikanaście, i w dogodnym dla siebie cyklu wysłać
+    je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
+
+<p>Jak wysyłać zgłoszenia? Najprościej jest wysłać całą paczkę zgłoszeń
+    na adres SM w twoim mieście. 
+{% set sm = app.guessSMData[1] %}
+{% if sm %}
+    W tym wypadku jest to <strong>{{ sm }}</strong>.
+{% else %}
+    <strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>
+{% endif %}
+    Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
+    już liście zgłoszeń.</p>
+
+<p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
+    href="mailto:szymon@nieradka.net">szymon@nieradka.net</a>.</p>
+
+<a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
+
+{% if not ('%HOST%' == 'staging.uprzejmiedonosze.net') %}
+    <script>
+        $.post("https://%HOST%/api/api.html",
+            {action: '_notify-new', id: '{{ app.id }}'
+            });
+    </script>
+{% endif %}
+
+{% endblock %}

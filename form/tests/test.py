@@ -33,7 +33,7 @@ class UDTestStatic(unittest.TestCase):
     
     def test_changelog(self):
         changelog = pages.Changelog(self.driver)
-        changelog.is_title_matches("historia"),
+        changelog.is_title_matches("istoria"),
         changelog.is_new_matches()
     
     def test_project(self):
@@ -52,12 +52,12 @@ class UDTestStatic(unittest.TestCase):
 
     def test_new_empty(self):
         new = pages.New(self.driver)
-        new.is_title_matches("Nowe")
+        new.is_title_matches("owe")
         new.is_validation_empty_working()
     
     def test_new_category_other(self):
         new = pages.New(self.driver)
-        new.is_title_matches("Nowe")
+        new.is_title_matches("owe")
         new.is_other_comment_validation_working()
 
     def test_new_images(self):
@@ -73,8 +73,35 @@ class UDTestStatic(unittest.TestCase):
         new.update()
         new.commit()
         new.fin()
-    
+        
     def test_invalid_image(self):
         new = pages.New(self.driver)
         new.test_invalid_image()
         new.test_invalid_image_submit()
+
+    def test_app_page(self):
+        new = pages.New(self.driver)
+        new.test_context_image()
+        new.test_car_image()
+        new.update()
+        new.commit(has_comment=False)
+        new.fin()
+        new.app_page()
+
+    def test_pdf(self):
+        new = pages.New(self.driver)
+        new.test_context_image()
+        new.test_car_image()
+        new.update()
+        new.commit(has_comment=False)
+        new.fin()
+        url = new.app_page()
+        new.check_pdf(url)
+
+    def test_check_list(self):
+        myApps = pages.MyApps(self.driver)
+        myApps.check_list()
+
+    def test_my_apps(self):
+        myApps = pages.MyApps(self.driver)
+        myApps.check_first(False)

@@ -1,0 +1,52 @@
+{% set leftButton = 'menuMain' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+<div class="ui-body ui-body-a ui-corner-all">
+    <div id="firebaseui-auth-container"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth__pl.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/2.5.1/firebase-ui-auth.css" />
+<script type="text/javascript">
+    $( document ).bind( "pagecontainerload", function( e, triggerData ) {
+        var redirect = triggerData.xhr.getResponseHeader( "X-Redirect" );
+        if ( redirect ) {
+            $( e.target ).pagecontainer( "load", redirect, triggerData.options );
+            e.preventDefault();
+        }
+    });
+
+    $(document).on("pageshow", function () { 
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                window.location.replace('/login-ok.html{% if config.signInSuccessUrl %}?next={{ config.signInSuccessUrl }}{% endif %}');
+            } else {
+                login();
+            }
+        }, function(error) {
+            login();
+        });
+    });
+
+    function login(){
+        // FirebaseUI config.
+        var uiConfig = {
+            signInSuccessUrl: "https://%HOST%/login-ok.html{% if config.signInSuccessUrl %}?next={{ config.signInSuccessUrl }}{% endif %}",
+            signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+            tosUrl: 'https://%HOST%/start.html' // Terms of service url.
+        };
+
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+
+    }
+    function logout(){
+        firebase.auth().signOut();
+        window.location.replace('/login.html?logout');
+    }
+</script>
+{% endblock %}

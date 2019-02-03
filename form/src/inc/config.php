@@ -60,11 +60,11 @@ const CATEGORIES_MATRIX = Array( 'a', 'b');
 const STATUSES = Array (
     // KEY                  0 desc               1 action             2 icon     3 class     4 color (not used)
     'draft'             => ['Draft',             'Dalej',             'edit',    null,       ''],
-    'ready'             => ['Gotowe',            'Potwierdź',         'shop',    null,       ''],
-    'confirmed'         => ['Nowe',              'Nowe',              'carat-u', 'active',   ''],
-    'confirmed-waiting' => ['Oczekuje',          'Wysłane (mail)',    'mail',   'active',   ''],
-    'confirmed-waitingE'=> ['Oczekuje',          'Wysłane (epuap)',   'clock',   'active',   ''],
-	'confirmed-sm'      => ['Po wizycie',        'Po wizycie w SM',   'user',    'active',   ''],
+    'ready'             => ['Edycja',            'Potwierdź',         'shop',    null,       ''],
+    'confirmed'         => ['Gotowe',            'Nowe',              'carat-u', 'active',   ''],
+    'confirmed-waiting' => ['Wysłane (email)',   'Wysłane (mail)',    'mail',    'active',   ''],
+    'confirmed-waitingE'=> ['Wysłane (epuap)',   'Wysłane (epuap)',   'clock',   'active',   ''],
+	'confirmed-sm'      => ['Po wizycie w SM',   'Po wizycie w SM',   'user',    'active',   ''],
     'confirmed-ignored' => ['Zignorowane',       'Zignorowane',       'delete',  'active',   ''],
     'confirmed-fined'   => ['Wystawiony mandat', 'Wystawiony mandat', 'check',   'active',   ''],
     'archived'          => ['W archiwum',        'Archiwizuj',        'cloud',   'archived', '']
