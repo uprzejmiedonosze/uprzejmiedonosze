@@ -20,7 +20,8 @@ class User extends JSONObject{
 
         $this->added = date(DT_FORMAT);
         $this->data = new stdClass();
-        $this->data->email = getCurrentUserEmail();
+        $this->data->email = $_SESSION['user_email'];
+        $this->data->name  = $_SESSION['user_name'];
         $this->applications = Array();
     }
 

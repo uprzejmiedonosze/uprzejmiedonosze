@@ -14,17 +14,17 @@
     <label for="name" class="section">Twoje dane</label>
     <input type="text" required maxlength="30" id="name" name="name"
         placeholder="Twoje imię i nazwisko"
-        data-inline="true" value="{{ config.name }}">
+        data-inline="true" value="{{ user.data.name }}">
     <input disabled type="email" required maxlength="30" id="email" name="email"
         placeholder="Twój email"
-        data-inline="true" value="{{ config.email }}">
+        data-inline="true" value="{{ user.data.email }}">
     <input type="tel" maxlength="11" id="msisdn" name="msisdn"
         placeholder="Twój numer telefonu (opcjonalnie)"
-        data-inline="true" value="{{ user.data.msisdn }}">
+        data-inline="true" value="{{ user.data.msisdn ?? '' }}">
     <input type="text" maxlength="70" required id="address" name="address"
         placeholder="Adres korespondencyjny"
         autocomplete="off"
-        data-inline="true" value="{{ user.data.address }}">
+        data-inline="true" value="{{ user.data.address ?? '' }}">
 </form>
 
 {% if not (user or ('%HOST%' == 'staging.uprzejmiedonosze.net') ) %}

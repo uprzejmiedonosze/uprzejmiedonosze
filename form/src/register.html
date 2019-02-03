@@ -3,12 +3,9 @@ require_once(__DIR__ . '/../inc/include.php');
 
 try{ 
     $user = $storage->getCurrentUser();
-    $email = $user->data->email;
-    $name = $user->data->name;
 }catch(Exception $e){
-    $user = null;
-    $email = $_SESSION['user_email'];
-    $name = $_SESSION['user_name'];
+    $user = new User();
+    $storage->saveUser($user);
 }
 
 generate('register.html.twig', 
@@ -23,8 +20,6 @@ generate('register.html.twig',
         [
             'auth' => true,
             'register' => true,
-            'email' => $email,
-            'name' => $name,
             'signInSuccessUrl' => $_GET['next']
         ],
         'user' => $user
