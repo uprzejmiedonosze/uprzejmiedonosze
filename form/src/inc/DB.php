@@ -33,7 +33,11 @@ class DB extends NoSQLite{
             return $this->loggedUser = null;
         }
         if(!isset($this->loggedUser)){
-            $this->loggedUser = $this->getUser(getCurrentUserEmail());
+            try{
+                $this->loggedUser = $this->getUser(getCurrentUserEmail());
+            }catch(Exception $e){
+                $this->loggedUser = new User();
+            }
         }
         return $this->loggedUser;
     }

@@ -20,7 +20,7 @@ generate('register.html.twig',
         [
             'auth' => true,
             'register' => true,
-            'signInSuccessUrl' => $_GET['next']
+            'signInSuccessUrl' => isset($_GET['next'])? $_GET['next']: '/start.html'
         ],
         'user' => $user
     ]
