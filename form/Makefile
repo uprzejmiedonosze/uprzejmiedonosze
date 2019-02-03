@@ -22,6 +22,7 @@ HTML_FILES           = $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       = $(HTML_FILES:src/%.html=export/public/%.html)
 
 TWIG_FILES           = $(wildcard src/templates/*.twig)
+TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5 | cut -b 1-8)
 TWIG_PROCESSED       = $(TWIG_FILES:src/templates/%=export/templates/%)
 
 PHP_FILES            = $(wildcard src/inc/*.php)
@@ -135,6 +136,7 @@ endef
 define replace-inline
 @sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@ 
 @sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@ 
+@sed -i '' 's/%TWIG_HASH%/$(TWIG_HASH)/g' $@ 
 endef
 
 define lint
