@@ -63,7 +63,7 @@
         <label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
         <input class="required" type="text" id="plateId" name="plateId"
             placeholder="Numer rejestracyjny" value="{{ app.carInfo.plateId ?? '' }}"
-            autocomplete="off" />
+            autocomplete="off" style="text-transform:uppercase" />
 
         <label for="comment">Dodaj komentarz (wymagany dla kategorii "pozostałe")</label>
         <textarea type="text" id="comment" name="comment"
