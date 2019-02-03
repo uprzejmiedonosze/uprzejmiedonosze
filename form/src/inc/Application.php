@@ -73,19 +73,25 @@ class Application extends JSONObject{
      * [adres w formacie latex, email]
      */
     public function guessSMData(){
-    	$city = trim(strtolower($this->address->city));
+        if(isset($this->smCity)){
+            return SM_ADDRESSES[$this->smCity];
+        }
 
-    	if(array_key_exists($city, SM_ADDRESSES)){
-    		return SM_ADDRESSES[$city];
-    	}
+        $city = trim(strtolower($this->address->city));
 
-    	$address = trim(strtolower($this->address->address));
-    	foreach(SM_ADDRESSES as $c => $a){
-    		if (strpos($address, $c) !== false){
-    			return $a;
-    		}
-    	}
-    	return ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null];
+        if(array_key_exists($city, SM_ADDRESSES)){
+            $this->smCity = $city;
+            return SM_ADDRESSES[$this->smCity];
+        }
+
+        $address = trim(strtolower($this->address->address));
+        foreach(SM_ADDRESSES as $c => $a){
+            if (strpos($address, $c) !== false){
+                $this->smCity = $c;
+                return SM_ADDRESSES[$this->smCity];
+            }
+        }
+        return ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null];
     }
 
     public function guessUserSex(){
