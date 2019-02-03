@@ -141,6 +141,7 @@ class New(BasePage):
         
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
         assert not "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
+        assert self.driver.find_element(*Locators.NEW_PLATEIMG).is_displayed()
 
         assert self.cfg.app['plateId'] in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute("value")
     
@@ -154,13 +155,13 @@ class New(BasePage):
         assert "Twoje zdjęcie nie ma znaczników geolokacji" in self.driver.find_element(*Locators.NEW_ADD_HINT).text
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class')
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
+        assert not self.driver.find_element(*Locators.NEW_PLATEIMG).is_displayed()
     
     def test_invalid_image_submit(self):
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
 
         assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
         assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
-
     
     def review(self):
         self.driver.find_element(*Locators.NEW_COMMENT).clear()
@@ -185,14 +186,15 @@ class New(BasePage):
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
         WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
     
-    def commit(self):
+    def commit(self, has_comment = True):
         text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
 
         assert self.cfg.app['plateId'] in text
         assert self.cfg.app['address'] in text
         assert self.cfg.app['date'] in text
         assert self.cfg.app['time'] in text
-        assert self.cfg.app['comment'] in text
+        if(has_comment):
+            assert self.cfg.app['comment'] in text
         assert self.cfg.account['email'] in text
     
     def fin(self):
@@ -201,6 +203,35 @@ class New(BasePage):
         text = self.get_content()
         assert "UD/" in text
         assert "sm@um.szczecin.pl" in text
+    
+    def app_page(self):
+        self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # first link with /ud-
+        time.sleep(2)
+        text = self.get_content()
+        assert self.cfg.app['plateId'] in text
+        assert self.cfg.app['address'] in text
+        assert self.cfg.app['date'] in text
+        assert self.cfg.app['time'] in text
+        #assert self.cfg.app['comment'] in text
+        assert self.cfg.account['email'] in text
+
+        return self.driver.find_element(*Locators.APP_PDF_LINK).get_attribute('href')
+    
+    def check_pdf(self, url):
+        import urllib.request
+        urllib.request.urlretrieve(url, '/tmp/f.pdf')
+        import PyPDF2
+        pdf_file = open('/tmp/f.pdf', 'rb')
+        read_pdf = PyPDF2.PdfFileReader(pdf_file)
+        assert read_pdf.getNumPages() == 1
+        page = read_pdf.getPage(0)
+        page_content = page.extractText()
+
+        assert self.cfg.app['plateId'] in page_content
+        assert self.cfg.app['address'].replace(' ', '') in page_content
+        assert self.cfg.app['date'] in page_content
+        assert self.cfg.app['time'] in page_content
+        assert self.cfg.account['email'] in page_content
 
 class MyApps(BasePage):
     def __init__(self, driver):
@@ -210,15 +241,26 @@ class MyApps(BasePage):
         self.driver.find_element(*Locators.MYAPPS).click()
         time.sleep(2)
     
-    def check_first(self):
-        self.driver.find_element(*Locators.MYAPPS_EXPAND).click()
-        self.driver.find_element(*Locators.MYAPPS_FIRST).click()
+    def check_list(self):
+        self.driver.find_element(*Locators.MYAPPS_EXPAND).click() # expand first item
+        first = self.driver.find_element(*Locators.MYAPPS_FIRST)
+        assert self.cfg.app['plateId'] in first.text
+        assert self.cfg.app['address'] in first.text
+        assert self.cfg.app['date'] in first.text
+        assert self.cfg.app['time'] in first.text
+
+    def check_first(self, has_comment = True):
+        self.driver.find_element(*Locators.MYAPPS_EXPAND).click() # expand first item
+        self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # and click very first link
         time.sleep(2)
         text = self.get_content()
         assert self.cfg.app['plateId'] in text
         assert self.cfg.app['address'] in text
         assert self.cfg.app['date'] in text
         assert self.cfg.app['time'] in text
-        assert self.cfg.app['comment'] in text
+        if(has_comment):
+            assert self.cfg.app['comment'] in text
         assert self.cfg.account['email'] in text
+        assert 'Zgłoszenie wykroczenia UD/' in text
+        assert 'Jestem świadomy odpowiedzialności karnej' in text
         self.driver.find_element(*Locators.BTN_LEFT).click()

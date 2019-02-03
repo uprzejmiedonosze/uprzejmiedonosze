@@ -32,11 +32,15 @@ class Locators(object):
     NEW_IIMAGE2 = (By.ID,    "carImage")
     NEW_CAT0    = (By.XPATH, "//label[@for='0']")
     NEW_ADD_HINT= (By.ID,    "addressHint")
+    NEW_PLATEIMG= (By.ID,    "plateImage")
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 
+    MYAPPS_FIRST= (By.CSS_SELECTOR, "div.application")
     MYAPPS_EXPAND= (By.CSS_SELECTOR, "div.application a")
-    MYAPPS_FIRST= (By.XPATH, "//a[contains(@href, 'ud-')]")
+    MYAPPS_FIRSTL= (By.XPATH, "//a[contains(@href, 'ud-')]")
+
+    APP_PDF_LINK= (By.XPATH, "//a[contains(@href, '.pdf')]")
 
 class SearchResultsPageLocators(object):
     """A class for search results locators. All search results locators should come here"""

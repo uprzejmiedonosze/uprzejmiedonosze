@@ -73,21 +73,35 @@ class UDTestStatic(unittest.TestCase):
         new.update()
         new.commit()
         new.fin()
-    
-    def test_pdf(self):
-        new = pages.New(self.driver)
-        new.test_context_image()
-        new.test_car_image()
-        new.review()
-        id = new.fin()
-        new.verify_pdf(id)
-    
+        
     def test_invalid_image(self):
         new = pages.New(self.driver)
         new.test_invalid_image()
         new.test_invalid_image_submit()
-    
+
+    def test_app_page(self):
+        new = pages.New(self.driver)
+        new.test_context_image()
+        new.test_car_image()
+        new.update()
+        new.commit(has_comment=False)
+        new.fin()
+        new.app_page()
+
+    def test_pdf(self):
+        new = pages.New(self.driver)
+        new.test_context_image()
+        new.test_car_image()
+        new.update()
+        new.commit(has_comment=False)
+        new.fin()
+        url = new.app_page()
+        new.check_pdf(url)
+
+    def test_check_list(self):
+        myApps = pages.MyApps(self.driver)
+        myApps.check_list()
+
     def test_my_apps(self):
         myApps = pages.MyApps(self.driver)
-        myApps.check_first()
-        
+        myApps.check_first(False)
