@@ -152,7 +152,7 @@ function setAddress(latlng, fromPicture){
 	$.get("https://maps.googleapis.com/maps/api/geocode/json?latlng=" 
 		+ latlng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function(data){
 			if(data.results.length){
-				formatted_address = data.results[0].formatted_address.replace(', Polska', '');
+				formatted_address = data.results[0].formatted_address.replace(', Polska', '').replace(/\d\d-\d\d\d\s/, '');
 				voivodeship = data.results[0].address_components.filter(function(e){ return e.types.indexOf('administrative_area_level_1') == 0; })[0].long_name.replace('Województwo ', '');
 				country = data.results[0].address_components.filter(function(e){ return e.types.indexOf('country') == 0; })[0].long_name;
 				city = data.results[0].address_components.filter(function(e){ return e.types.indexOf('locality') == 0; })[0].long_name;
