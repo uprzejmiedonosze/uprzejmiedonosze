@@ -1,8 +1,7 @@
 $(document).on('pageshow', function() {
 	if($(".new-application").length){
 
-		$('#address').on('change', function(){
-			//$('#address').removeClass('error');
+		$('#lokalizacja').on('change', function(){
 			$('a#geo').buttonMarkup({ icon: "alert" });
 		});
 
@@ -68,7 +67,7 @@ function initAutocompleteOnNewApplication(){
 
 function initAutocomplete(trigger_change) {
 	autocomplete = new google.maps.places.Autocomplete(
-		document.getElementById('address'),
+		document.getElementById('lokalizacja'),
 		{
 			types: ['address'],
 			componentRestrictions: {country: 'pl'}
@@ -86,7 +85,7 @@ function fillInAddress() {
   
 function validateForm(){
 	var ret = check($('#plateId'), 6, false);
-	ret = checkAddress($('#address')) && ret;
+	ret = checkAddress($('#lokalizacja')) && ret;
 	ret = check($('#carImage'), 0, true) && ret;
 	ret = check($('#contextImage'), 0, true) && ret;
 	if($('#0').is(':checked')){ // if category == 0 then comment is mandatory
@@ -99,13 +98,13 @@ function validateForm(){
 }
 
 function checkAddress(){
-    var ret = $('#address').val().trim().length > 10;
+    var ret = $('#lokalizacja').val().trim().length > 10;
     ret = ($('#locality').val().trim().length > 2) && ret;
     ret = ($('#latlng').val().trim().length > 5) && ret;
 
-    !ret && $('#address').addClass('error');
+    !ret && $('#lokalizacja').addClass('error');
     
-    if(!ret && $('#address').val().trim().length > 0){
+    if(!ret && $('#lokalizacja').val().trim().length > 0){
         $('#addressHint').text('(Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej)');
     }
 
@@ -114,7 +113,7 @@ function checkAddress(){
 
 function validateRegisterForm(){
 	var ret = check($('#name'), 6, false);
-	ret = check($('#address'), 10, false) && ret;
+	ret = check($('#lokalizacja'), 10, false) && ret;
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
@@ -139,11 +138,11 @@ function check(item, length, grandma){
 
 function setAddress(latlng, fromPicture){
 	$('a#geo').buttonMarkup({ icon: "clock" });
-	$('#address').val("");
+	$('#lokalizacja').val("");
 	if(fromPicture){
-		$('#address').attr("placeholder","(pobieram adres ze zdjęcia...)");
+		$('#lokalizacja').attr("placeholder","(pobieram adres ze zdjęcia...)");
 	}else{
-		$('#address').attr("placeholder","(weryfikuję adres...)");
+		$('#lokalizacja').attr("placeholder","(weryfikuję adres...)");
 	}
 	$('#administrative_area_level_1').val("");
 	$('#country').val("");
@@ -157,24 +156,24 @@ function setAddress(latlng, fromPicture){
 				voivodeship = data.results[0].address_components.filter(function(e){ return e.types.indexOf('administrative_area_level_1') == 0; })[0].long_name.replace('Województwo ', '');
 				country = data.results[0].address_components.filter(function(e){ return e.types.indexOf('country') == 0; })[0].long_name;
 				city = data.results[0].address_components.filter(function(e){ return e.types.indexOf('locality') == 0; })[0].long_name;
-				$('#address').val(formatted_address);
+				$('#lokalizacja').val(formatted_address);
 				$('#administrative_area_level_1').val(voivodeship);
 				$('#country').val(country);
 				$('#locality').val(city);
 				$('#latlng').val(latlng);
 
 				$('a#geo').buttonMarkup({ icon: "check" });
-				$('#address').removeClass('error');
+				$('#lokalizacja').removeClass('error');
 			}else{
-				$('#address').addClass('error');
+				$('#lokalizacja').addClass('error');
 				$('a#geo').buttonMarkup({ icon: "location" });
 			}		
 		}).fail(function() {
 			$('a#geo').buttonMarkup({ icon: "alert" });
 			$('#latlng').val("");
-			$('#address').addClass('error');
+			$('#lokalizacja').addClass('error');
 		});
-	$('#address').attr("placeholder","Miejsce zgłoszenia");
+	$('#lokalizacja').attr("placeholder","Miejsce zgłoszenia");
 }
 
 function checkFile(file, id){
@@ -288,8 +287,6 @@ function noGeoDataInImage(){
     }else{
         $('#addressHint').html('(Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.)');
     }
-    
-    
 }
 
 function setDateTime(dateTime){

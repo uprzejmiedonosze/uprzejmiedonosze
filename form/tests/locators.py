@@ -23,7 +23,7 @@ class Locators(object):
     START_RULES = (By.ID,    "rules")
 
     NEW_SUBMIT  = (By.ID,    "form-submit")
-    NEW_ADDRESS = (By.ID,    "address")
+    NEW_ADDRESS = (By.ID,    "lokalizacja")
     NEW_PLATEID = (By.ID,    "plateId")
     NEW_COMMENT = (By.ID,    "comment")
     NEW_IMAGE1  = (By.CSS_SELECTOR, "div.ui-block-a > div.image-upload")

@@ -43,11 +43,12 @@
 
         <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
 
-        <label for="address">Podaj miejsce zgłoszenia <i id="addressHint"></i></label>
+        <label for="lokalizacja">Podaj miejsce zgłoszenia <i id="addressHint"></i></label>
         <div class="combo">
-            <input type="text" maxlength="70" required id="address" name="address"
+            <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
                 placeholder="Miejsce zgłoszenia" data-inline="true"
-                value="{{ app.address.address ?? '' }}" autocomplete="off" />
+                autocomplete="I told you I wanted this off, Google. But you would not listen."
+                value="{{ app.address.address ?? '' }}" />
             <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
                 data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
                 data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
