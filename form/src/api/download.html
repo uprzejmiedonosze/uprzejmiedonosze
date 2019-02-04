@@ -13,6 +13,10 @@ $application = $storage->getApplication($applicationId);
 
 $smDocs = isset($_GET['smDocs']);
 
+if($smDocs){
+    checkIfLogged();
+}
+
 if(!isset($application)){
     http_response_code(404);
     die();
@@ -36,15 +40,15 @@ header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
 function generate_pdf($application, $destFile, $smDocs) {
-	if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
-		throw new Exception("Failed to create temporary file");
-	}
+    if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
+        throw new Exception("Failed to create temporary file");
+    }
 
-	$tex_f = "$f.tex";
-	$aux_f = "$f.aux";
-	$out_f = "$f.out";
-	$log_f = "$f.log";
-	$pdf_f = "$f.pdf";
+    $tex_f = "$f.tex";
+    $aux_f = "$f.aux";
+    $out_f = "$f.out";
+    $log_f = "$f.log";
+    $pdf_f = "$f.pdf";
 
     $loader = new Twig_Loader_Filesystem(__DIR__ . '/../../templates');   
     $twig = new Twig_Environment($loader,
@@ -62,31 +66,31 @@ function generate_pdf($application, $destFile, $smDocs) {
         'root' => realpath(__DIR__ . '/..')
     ];
 
-    if($smDocs && isLoggedIn()){
+    if($smDocs){
         global $storage;
         $params['user'] = $storage->getCurrentUser(); 
     }
 
-	file_put_contents($tex_f, $twig->render($texFile, $params));
+    file_put_contents($tex_f, $twig->render($texFile, $params));
 
-	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
+    $cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
    	escapeshellarg($tex_f));
-	chdir(sys_get_temp_dir());
+    chdir(sys_get_temp_dir());
     exec($cmd, $output, $ret);
     unset($output);
 
    	@unlink($tex_f);
-	@unlink($aux_f);
-	@unlink($log_f);
-	@unlink($out_f);
+    @unlink($aux_f);
+    @unlink($log_f);
+    @unlink($out_f);
 
-	if(!file_exists($pdf_f)) {
-		@unlink($f);
-		throw new Exception("Output was not generated and latex returned: $ret.");
-	}
+    if(!file_exists($pdf_f)) {
+        @unlink($f);
+        throw new Exception("Output was not generated and latex returned: $ret.");
+    }
     
-	rename($pdf_f, $destFile);
-	@unlink($f);
+    rename($pdf_f, $destFile);
+    @unlink($f);
 }
 
 

@@ -7,47 +7,28 @@
 {% endblock %}
 
 {% block main %}
-\
-\vspace{1cm}
-\begin{center}
-    {\LARGE Załącznik } 
-
-    {\LARGE do protokołu przesłuchania świadka }
-
-    (na wniosek o nie zamieszczania danych w protokole)
-\end{center}
-\vspace{1cm}
-
-\begin{description} 
-    \item[Dnia:] \dottedLine{2}
-    \item[Dotyczy przesłuchania świadka:] {\it {{ app.user.name }} }
-    \item[Miejsce zamieszkania świadka:] {\it {{ app.user.address }} }
-    \item[Dane ustalono na podstawie:] dokumentu tożsamości \dottedLine{2}
-\end{description}
-
-\vspace{1.7cm}
-
-\begin{center}
-    \begin{tabular}{ c c c }
-        \dottedLine{5} & \hspace{2cm} & \dottedLine{5} \\
-        {\it podpis przesłuchującego } & & {\it podpis świadka } \\
-    \end{tabular}
-\end{center}
-
-\clearpage
-
 \begin{flushright}
     Nr sprawy: \dottedLine{5}
 \end{flushright}
 
 \begin{center}
     {\LARGE PROTOKÓŁ } 
-
-    {\LARGE PRZESŁUCHANIA ŚWIADKA }
+    
+    {\LARGE przesłuchania świadka }
 \end{center}
 \vspace{1cm}
 
-Szczecin, dnia \dottedLine{2} o godzinie \dottedLine{1} działając na podstawie
+{% spaceless %}
+    {% if app.guessSMData[2] %}
+        {{ app.guessSMData[2] }}
+    {% else %}
+        {% if app.address.city is not empty %}
+            {{ app.address.city }}
+        {% else %}
+            \dottedLine{3}
+        {% endif %}
+    {% endif %}
+{% endspaceless %}, dnia \dottedLine{2} o godzinie \dottedLine{1} działając na podstawie
 art. 54§3, 56§2 Kodeksu postępowania w~sprawach o wykroczenia,
 
 strażnik miejski \dottedLine{5}
@@ -57,7 +38,8 @@ przesłuchał(a) w charakterze świadka:
 \begin{description} 
     \item[Imię i nazwisko:] {\it {{ app.user.name }} }
     \item[Miejsce zamieszkania:] {\it {{ app.user.address }} }
-    \item[Dane ustalono na podstawie:] {{ user.data.idtype ?? 'dokumentu tożsamości' }} {{ user.data.idnumber ?? '\dottedLine{2}' }} 
+    \item[Dane ustalono na podstawie:]
+        {{ user.data.idtype ?? 'dokumentu tożsamości' }} {{ user.data.idnumber ?? '\\dottedLine{2}' }} 
 \end{description}
 
 \vspace{0.5cm}
@@ -91,10 +73,10 @@ pracy pokrzywdzonych i świadków uczestniczących  w czynności.
 
 {\it
 	W dniu {{ app.getDate }} roku o godzinie {{ app.getTime }} {{ app.guessUserSex.bylam }}
-    świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
-    {{ app.address.address }}.
-    {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach załączonych do zgłoszenia.
-    Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.userComment }}
+    świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }
+    pod adresem {{ app.address.address }}. {{ app.getCategory[1] }} Sytuacja jest widoczna
+    na załączonych zdjęciach załączonych do zgłoszenia. Zdjęcia {{ app.guessUserSex.wykonalam }}
+    samodzielnie. {{ app.userComment }}
 
     Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
     pojazd pozostawał na tym miejscu.
@@ -116,6 +98,35 @@ pracy pokrzywdzonych i świadków uczestniczących  w czynności.
                        & \hspace{2cm} & protokół \dottedLine{5} \\
                        & \hspace{2cm} & jako zgodny z moim zeznaniem podpisuję \\
                        &              & \\
+        \dottedLine{5} & \hspace{2cm} & \dottedLine{5} \\
+        {\it podpis przesłuchującego } & & {\it podpis świadka } \\
+    \end{tabular}
+\end{center}
+
+\clearpage
+\
+\vspace{1cm}
+\begin{center}
+    {\LARGE ZAŁĄCZNIK } 
+
+    {\LARGE do protokołu przesłuchania świadka }
+
+    (na wniosek o nie zamieszczania danych w protokole)
+\end{center}
+\vspace{1cm}
+
+\begin{description} 
+    \item[Dnia:] \dottedLine{2}
+    \item[Dotyczy przesłuchania świadka:] {\it {{ app.user.name }} }
+    \item[Miejsce zamieszkania świadka:] {\it {{ app.user.address }} }
+    \item[Dane ustalono na podstawie:]
+        {{ user.data.idtype ?? 'dokumentu tożsamości' }} {{ user.data.idnumber ?? '\\dottedLine{2}' }} 
+\end{description}
+
+\vspace{1.7cm}
+
+\begin{center}
+    \begin{tabular}{ c c c }
         \dottedLine{5} & \hspace{2cm} & \dottedLine{5} \\
         {\it podpis przesłuchującego } & & {\it podpis świadka } \\
     \end{tabular}

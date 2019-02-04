@@ -45,15 +45,15 @@ const CATEGORIES = Array(
 		"",
 		"Wyobraźnia kierowców nie zna granic. Jeśli wybierzesz tę katogorię, koniecznie opisz szczegóły w komentarzu do zgłoszenia."]
 );
-
+// key | [0] SM address in tex; [1] email address; [2] city in tex
 const SM_ADDRESSES = Array (
     'szczecin' => ['Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
-        'sm@um.szczecin.pl'],
+        'sm@um.szczecin.pl', 'Szczecin'],
     'warszawa' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-        'ot1@strazmiejska.waw.pl'],
+        'ot1@strazmiejska.waw.pl', 'Warszawa'],
     'warsaw' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-        'ot1@strazmiejska.waw.pl'],
-    '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null]
+        'ot1@strazmiejska.waw.pl', 'Warszawa'],
+    '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null, null]
 );
 
 const CATEGORIES_MATRIX = Array( 'a', 'b');
