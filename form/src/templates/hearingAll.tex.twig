@@ -9,7 +9,10 @@
 {% endblock %}
 
 {% block main %}
-    {% include('_hearing.tex.twig') %}
+    {% for app in app %}
+        {% include('_hearing.tex.twig') %}
+        \clearpage
+        {% include('_attachment.tex.twig') %}
     \clearpage
-    {% include('_attachment.tex.twig') %}
+{% endfor %}
 {% endblock %}
