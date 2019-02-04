@@ -82,6 +82,9 @@ function generate_pdf($application, $destFile, $type) {
         global $storage;
         $params['user'] = $storage->getCurrentUser(); 
     }
+    if(isset($_GET['tomorrow'])){
+        $params['date'] = (new DateTime('tomorrow'))->format('d.m.Y');
+    }
 
     file_put_contents($tex_f, $twig->render($texFile, $params));
 
