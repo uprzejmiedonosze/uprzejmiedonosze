@@ -48,7 +48,7 @@ function generate_pdf($application, $destFile) {
         'auto_reload' => true
     ]);
 
-	file_put_contents($tex_f, $twig->render('pdf.tex.twig', [
+	file_put_contents($tex_f, $twig->render('application.tex.twig', [
         'app' => $application,
         'root' => realpath(__DIR__ . '/..')]));
 
