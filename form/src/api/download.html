@@ -11,16 +11,23 @@ if(!isset($_GET['appId'])){
 $applicationId = $_GET['appId'];
 $application = $storage->getApplication($applicationId);
 
+$smDocs = isset($_GET['smDocs']);
+
 if(!isset($application)){
     http_response_code(404);
     die();
 }
 
-$pdf = ROOT . "/cdn/$applicationId.pdf";
-$filename = 'Zgloszenie_' . str_replace('/', '-', $application->number) . '.pdf';
+if($smDocs){
+    $pdf = ROOT . "/cdn/$applicationId,sm.pdf";
+    $filename = $application->getSMPDFFilename();
+}else{
+    $pdf = ROOT . "/cdn/$applicationId.pdf";
+    $filename = $application->getAppPDFFilename();
+}
 
 //if(!file_exists($pdf)){
-    generate_pdf($application, $pdf);
+    generate_pdf($application, $pdf, $smDocs);
 //}
 
 header('Content-Type: application/pdf');
@@ -28,7 +35,7 @@ header("Content-Transfer-Encoding: Binary");
 header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
-function generate_pdf($application, $destFile) {
+function generate_pdf($application, $destFile, $smDocs) {
 	if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
 		throw new Exception("Failed to create temporary file");
 	}
@@ -48,9 +55,19 @@ function generate_pdf($application, $destFile) {
         'auto_reload' => true
     ]);
 
-	file_put_contents($tex_f, $twig->render('application.tex.twig', [
+    $texFile = ($smDocs)? 'przesluchanie.tex.twig': 'application.tex.twig';
+
+    $params = [
         'app' => $application,
-        'root' => realpath(__DIR__ . '/..')]));
+        'root' => realpath(__DIR__ . '/..')
+    ];
+
+    if($smDocs && isLoggedIn()){
+        global $storage;
+        $params['user'] = $storage->getCurrentUser(); 
+    }
+
+	file_put_contents($tex_f, $twig->render($texFile, $params));
 
 	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
    	escapeshellarg($tex_f));

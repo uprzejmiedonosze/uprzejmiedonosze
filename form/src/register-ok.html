@@ -11,6 +11,8 @@ if(isset($_GET['next'])){
 $post = $_POST;
 $name = trim($post["name"]);
 $msisdn = trim($post["msisdn"]);
+$idnumber = strtoupper(trim($post["idnumber"]));
+
 $address = str_replace(', Polska', '', trim($post["address"]));
 
 try{
@@ -19,7 +21,7 @@ try{
     $user = new User();
 }
 
-$user->updateUserData($name, $msisdn, $address);
+$user->updateUserData($name, $msisdn, $address, $idnumber);
 $storage->saveUser($user);
 
 redirect($signInSuccessUrl);

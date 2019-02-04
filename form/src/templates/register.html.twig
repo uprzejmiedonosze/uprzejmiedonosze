@@ -21,6 +21,10 @@
     <input type="tel" maxlength="11" id="msisdn" name="msisdn"
         placeholder="Twój numer telefonu (opcjonalnie)"
         data-inline="true" value="{{ user.data.msisdn ?? '' }}">
+    <input type="text" maxlength="11" id="idnumber" name="idnumber"
+        placeholder="Twój numer dowodu osobistego (opcjonalnie)"
+        style="text-transform:uppercase"
+        data-inline="true" value="{{ user.data.idnumber ?? '' }}">
     <input type="text" maxlength="70" required id="address" name="address"
         placeholder="Adres korespondencyjny"
         autocomplete="off"
