@@ -23,8 +23,6 @@ if (is_ajax()) {
                 _notifyNew($_POST['id']); break;
             case "_notify-register":
                 _notifyRegister($_SESSION['user_name']); break;
-            case "_notify-error":
-                _notifyError($_POST['msg']); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -317,29 +315,6 @@ function _notifyNew($appId){
  */
 function _notifyRegister($name){
     _sendSlackUpdate("Nowa rejestracja *{$name}*.");
-}
-
-function _notifyError($msg){
-    $msg = str_replace("||", "\n", $msg);
-    _sendSlackError($msg);
-}
-
-/** 
- * Sends message to #updates slack channel at uprzejmiedonosze.slack.com
- */
-function _sendSlackUpdate($msg){
-    logger($msg, true);
-    $client = new Maknz\Slack\Client('https://hooks.slack.com/services/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');
-    $client->send($msg);
-}
-
-/** 
- * Sends message to #errors slack channel at uprzejmiedonosze.slack.com
- */
-function _sendSlackError($msg){
-    logger($msg, true);
-    $client = new Maknz\Slack\Client('https://hooks.slack.com/services/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');
-    $client->send($msg);
 }
 
 ?>
