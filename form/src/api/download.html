@@ -3,35 +3,42 @@ require(__DIR__ . '/../../inc/include.php');
 
 const ROOT = __DIR__ . "/..";
 
-if(!isset($_GET['appId'])){
-    http_response_code(400);
-    die();
+$type = 'application';                               // download application PDF for specific application
+if(isset($_GET['hearing'])) $type = 'hearing';       // download hearing PDF for SM for specific application
+if(isset($_GET['hearingAll'])) $type = 'hearingAll'; // download hearing PDFs for SM for all open applications
+
+if($type == 'application' || $type == 'hearing'){    // specific ID is needed
+    if(!isset($_GET['appId'])){
+        http_response_code(400);
+        die();
+    }
+    $applicationId = $_GET['appId'];
+    $application = $storage->getApplication($applicationId);
+    if(!isset($application)){
+        http_response_code(404);
+        die();
+    }
+}else{
+    $application = $storage->getAllApplicationsByStatus('confirmed');
 }
 
-$applicationId = $_GET['appId'];
-$application = $storage->getApplication($applicationId);
-
-$smDocs = isset($_GET['smDocs']);
-
-if($smDocs){
+if($type == 'hearing' || $type == 'hearingAll'){ // only applicationPDF is allowed if not logged in
     checkIfLogged();
 }
 
-if(!isset($application)){
-    http_response_code(404);
-    die();
-}
-
-if($smDocs){
+if($type == 'hearing'){
     $pdf = ROOT . "/cdn/$applicationId,sm.pdf";
     $filename = $application->getSMPDFFilename();
-}else{
+}else if($type == 'application'){
     $pdf = ROOT . "/cdn/$applicationId.pdf";
     $filename = $application->getAppPDFFilename();
+}else{ // hearingAll
+    $pdf = '/tmp/' . uniqid(rand(), true) . '.pdf';
+    $filename = 'Dokumenty-SM-' . date('Y-m-d') . '.pdf';
 }
 
 //if(!file_exists($pdf)){
-    generate_pdf($application, $pdf, $smDocs);
+    generate_pdf($application, $pdf, $type);
 //}
 
 header('Content-Type: application/pdf');
@@ -39,7 +46,7 @@ header("Content-Transfer-Encoding: Binary");
 header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
-function generate_pdf($application, $destFile, $smDocs) {
+function generate_pdf($application, $destFile, $type) {
     if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
         throw new Exception("Failed to create temporary file");
     }
@@ -59,14 +66,19 @@ function generate_pdf($application, $destFile, $smDocs) {
         'auto_reload' => true
     ]);
 
-    $texFile = ($smDocs)? 'przesluchanie.tex.twig': 'application.tex.twig';
+    $texFile = 'application.tex.twig';
+    if($type == 'hearing'){
+        $texFile = 'hearing.tex.twig.tex.twig';
+    }else if($type == 'hearingAll'){
+        $texFile = 'hearingAll.tex.twig';
+    }
 
     $params = [
         'app' => $application,
         'root' => realpath(__DIR__ . '/..')
     ];
 
-    if($smDocs){
+    if($type == 'hearing' || $type == 'hearingAll'){
         global $storage;
         $params['user'] = $storage->getCurrentUser(); 
     }

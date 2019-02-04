@@ -94,7 +94,41 @@ class DB extends NoSQLite{
         return (int) $this->db->query($sql)->fetchColumn();
     }
 
-    // ADMIN aream
+    /**
+     * Returns application stats (count per status) for current user.
+     */
+    public function countApplicationsStatuses(){
+        $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
+
+        $sql = "select json_extract(value, '$.status') as status, count(*) as cnt from applications "
+            . "where json_extract(value, '$.user.email') = '$email' "
+            . "group by json_extract(value, '$.status')";
+        
+        $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
+        return $ret;
+    }
+
+    /**
+     * Returns all applications for current user by status.
+     */
+    public function getAllApplicationsByStatus($status){
+        $sql = "select key, value from applications "
+            . "where json_extract(value, '$.user.email') = :email "
+            . " and json_extract(value, '$.status') = :status";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $this->getCurrentUser()->data->email);
+        $stmt->bindValue(':status', $status);
+        $stmt->execute();
+
+        $apps = Array();
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $apps[$row[0]] = new Application($row[1]);
+        }
+        return $apps;
+    }
+
+    // ADMIN area
 
     public function getUsers(){
         if(!$this->getCurrentUser()->isAdmin()){
