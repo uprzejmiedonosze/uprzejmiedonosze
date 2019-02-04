@@ -58,16 +58,16 @@ var componentForm = {
 };
 
 function initAutocompleteOnRegister() {
-	initAutocomplete(false);
+	initAutocomplete(false, 'address');
 }
 
 function initAutocompleteOnNewApplication(){
-	initAutocomplete(true);
+	initAutocomplete(true, 'lokalizacja');
 }
 
-function initAutocomplete(trigger_change) {
+function initAutocomplete(trigger_change, inputId) {
 	autocomplete = new google.maps.places.Autocomplete(
-		document.getElementById('lokalizacja'),
+		document.getElementById(inputId),
 		{
 			types: ['address'],
 			componentRestrictions: {country: 'pl'}
