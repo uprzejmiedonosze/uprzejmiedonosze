@@ -97,23 +97,27 @@ function validateForm(){
 	return ret;
 }
 
-function checkAddress(){
-    var ret = $('#lokalizacja').val().trim().length > 10;
-    ret = ($('#locality').val().trim().length > 2) && ret;
-    ret = ($('#latlng').val().trim().length > 5) && ret;
+function checkAddress(where){
+    var ret = where.val().trim().length > 10;
 
-    !ret && $('#lokalizacja').addClass('error');
-    
-    if(!ret && $('#lokalizacja').val().trim().length > 0){
-        $('#addressHint').text('(Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej)');
+    // checking this only on new-application page (not on registration where adddress field name differs)
+    if(where.selector == '#lokalizacja'){
+        ret = ($('#locality').val().trim().length > 2) && ret;
+        ret = ($('#latlng').val().trim().length > 5) && ret;
+        
+        if(!ret && where.val().trim().length > 0){
+            $('#addressHint').text('(Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej)');
+        }
     }
+
+    !ret && where.addClass('error');
 
     return ret;
 }
 
 function validateRegisterForm(){
 	var ret = check($('#name'), 6, false);
-	ret = check($('#address'), 10, false) && ret;
+	ret = checkAddress($('#address')) && ret;
 	if(!ret){
 		$(window).scrollTop($('.error').offset().top - 100);
 	}
