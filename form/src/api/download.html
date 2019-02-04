@@ -19,7 +19,9 @@ if($type == 'application' || $type == 'hearing'){    // specific ID is needed
         die();
     }
 }else{
-    $application = $storage->getAllApplicationsByStatus('confirmed');
+    $appsEmail = $storage->getAllApplicationsByStatus('confirmed-waiting');
+    $appsEpuap = $storage->getAllApplicationsByStatus('confirmed-waitingE');
+    $application = array_merge($appsEmail, $appsEpuap);
 }
 
 if($type == 'hearing' || $type == 'hearingAll'){ // only applicationPDF is allowed if not logged in
@@ -68,7 +70,7 @@ function generate_pdf($application, $destFile, $type) {
 
     $texFile = 'application.tex.twig';
     if($type == 'hearing'){
-        $texFile = 'hearing.tex.twig.tex.twig';
+        $texFile = 'hearing.tex.twig';
     }else if($type == 'hearingAll'){
         $texFile = 'hearingAll.tex.twig';
     }
