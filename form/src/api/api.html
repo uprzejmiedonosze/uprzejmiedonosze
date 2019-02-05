@@ -19,10 +19,6 @@ if (is_ajax()) {
                 _action($action, $_POST["id"]); break;
             case "upload":
                 _upload(); break;
-            case "_notify-new":
-                _notifyNew($_POST['id']); break;
-            case "_notify-register":
-                _notifyRegister($_SESSION['user_name']); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -293,28 +289,6 @@ function read_gps_location($file){
         }           
     }
     return false;
-}
-
-
-
-/**
- * Pushes slack notification about new application.
- */
-function _notifyNew($appId){
-    global $storage;
-    $application = $storage->getApplication($appId);
-
-    _sendSlackUpdate("Nowe zgłoszenie `{$application->number}`"
-        . " od *{$application->user->name}*"
-        . " ({$application->address->city}):\n"
-        . "https://%HOST%/ud-{$application->id}.html");
-}
-
-/**
- * Pushes slack notification about new registration.
- */
-function _notifyRegister($name){
-    _sendSlackUpdate("Nowa rejestracja *{$name}*.");
 }
 
 ?>

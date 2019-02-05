@@ -33,12 +33,4 @@
 
 <a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
 
-{% if not ('%HOST%' == 'staging.uprzejmiedonosze.net') %}
-    <script>
-        $.post("https://%HOST%/api/api.html",
-            {action: '_notify-new', id: '{{ app.id }}'
-            });
-    </script>
-{% endif %}
-
 {% endblock %}

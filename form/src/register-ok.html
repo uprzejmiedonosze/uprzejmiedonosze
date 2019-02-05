@@ -24,6 +24,8 @@ try{
 $user->updateUserData($name, $msisdn, $address, $idnumber);
 $storage->saveUser($user);
 
+_sendSlackUpdate("Nowa rejestracja *{$name}*.");
+
 redirect($signInSuccessUrl);
 
 ?>

@@ -31,12 +31,4 @@
         data-inline="true" value="{{ user.data.address ?? '' }}">
 </form>
 
-{% if not (user or ('%HOST%' == 'staging.uprzejmiedonosze.net') ) %}
-    <script>
-        $.post("https://%HOST%/api/api.html", {
-            action: '_notify-register'
-        });
-    </script>
-{% endif %}
-
 {% endblock %}
