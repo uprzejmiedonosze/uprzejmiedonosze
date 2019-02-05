@@ -67,9 +67,7 @@ class BasePage(object):
 
     def get_content(self):
         content = self.driver.find_elements(*Locators.CONTENT)
-        if(len(content) == 1):
-            return content[0].text
-        return content[1].text
+        return content[len(content) - 1].text
 
 class MainPage(BasePage):
     def __init__(self, driver):
