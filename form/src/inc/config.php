@@ -53,6 +53,10 @@ const SM_ADDRESSES = Array (
         'ot1@strazmiejska.waw.pl'],
     'warsaw' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
         'ot1@strazmiejska.waw.pl'],
+    'wroclaw' => ['Straż Miejska Wrocławia \\\\ ul. Gwarna 5/7 \\\\ 50-001 Wrocław',
+        'straz@strazmiejska.wroclaw.pl'],
+    'wrocław' => ['Straż Miejska Wrocławia \\\\ ul. Gwarna 5/7 \\\\ 50-001 Wrocław',
+        'straz@strazmiejska.wroclaw.pl'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null]
 );
 
