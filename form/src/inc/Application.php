@@ -83,25 +83,27 @@ class Application extends JSONObject{
      */
     public function guessSMData(){
         if(isset($this->smCity)){
-            return SM_ADDRESSES[$this->smCity];
+            if($this->smCity !== '_nieznane'){
+                return SM_ADDRESSES[$this->smCity];
+            }
         }
 
-        $city = trim(strtolower($this->address->city));
+        $city = trim(mb_strtolower($this->address->city, 'UTF-8'));
 
         if(array_key_exists($city, SM_ADDRESSES)){
             $this->smCity = $city;
+            logger('guessSMData2: ' . $this->smCity);
             return SM_ADDRESSES[$this->smCity];
         }
 
-        $address = trim(strtolower($this->address->address));
+        $address = trim(mb_strtolower($this->address->address, 'UTF-8'));
         foreach(SM_ADDRESSES as $c => $a){
             if (strpos($address, $c) !== false){
                 $this->smCity = $c;
                 return SM_ADDRESSES[$this->smCity];
             }
         }
-        $this->smCity = '_nieznane';
-        return SM_ADDRESSES[$this->smCity];
+        return SM_ADDRESSES['_nieznane'];
     }
 
     public function guessUserSex(){
