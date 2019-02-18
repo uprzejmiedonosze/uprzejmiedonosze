@@ -14,7 +14,7 @@
 		{"sizes": "512x512", "src": "img/splash.png"}
 	],
 	"theme_color": "#009C7F",
-	"start_url": "/start.html",
+	"start_url": "/moje-zgloszenia.html",
 	"display": "standalone",
 	"orientation": "portrait",
 	"scope": "/",
