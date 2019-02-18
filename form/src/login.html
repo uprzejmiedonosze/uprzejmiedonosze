@@ -6,6 +6,8 @@ if(isset($_GET['logout'])){
     redirect("index.html");
 }
 
+@$next = $_GET['next'];
+
 generate('login.html.twig',
 [
     'head' =>
@@ -15,7 +17,7 @@ generate('login.html.twig',
     ],
     'config' =>
     [
-        'signInSuccessUrl' => $_GET['next']
+        'signInSuccessUrl' => $next
     ]
 ]
 );
