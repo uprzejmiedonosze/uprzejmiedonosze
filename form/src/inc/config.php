@@ -71,9 +71,9 @@ const SM_ADDRESSES = Array (
         'ogolnomiejski@strazmiejska.lodz.pl', 'Łódź'],
     'lodz' => ['Komenda Straży Miejskiej w Łodzi \\\\ ul. Kilińskiego 81 \\\\ 90-119 Łódź',
         'ogolnomiejski@strazmiejska.lodz.pl', 'Łódź'],
-    'gdańsk' => ['Straż Miejska w Gdańsku \\\\ ul. Elbląska 54/60 \\\\ 80 – 724 Gdańsk',
+    'gdańsk' => ['Straż Miejska w Gdańsku \\\\ ul. Elbląska 54/60 \\\\ 80–724 Gdańsk',
         'strazmiejska@sm.gda.pl', 'Gdańsk'],
-    'gdansk' => ['Straż Miejska w Gdańsku \\\\ ul. Elbląska 54/60 \\\\ 80 – 724 Gdańsk',
+    'gdansk' => ['Straż Miejska w Gdańsku \\\\ ul. Elbląska 54/60 \\\\ 80–724 Gdańsk',
         'strazmiejska@sm.gda.pl', 'Gdańsk'],
     'poznań' => ['Straż Miejska Miasta Poznania \\\\ ul. Głogowska 26 \\\\ 60-734 Poznań',
         'sm@um.poznan.pl', 'Poznań'],
@@ -85,7 +85,10 @@ const SM_ADDRESSES = Array (
         'sm@um.torun.pl', 'Toruń'],
     'bydgoszcz' => ['Straż Miejska w Bydgoszczy \\\\ ul. Leśna 12 \\\\ 85-676 Bydgoszcz',
         'sekretariat@strazmiejska.bydgoszcz.pl', 'Bydgoszcz'],
-    '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)', null, null]
+    'katowice' => ['Straż Miejska w Katowicach \\\\ ul. Żelazna 18 \\\\ 40-851 Katowice',
+        'interwencje@katowice.eu', 'Katowice'],
+    '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
+        null, null]
 );
 
 const CATEGORIES_MATRIX = Array( 'a', 'b');
