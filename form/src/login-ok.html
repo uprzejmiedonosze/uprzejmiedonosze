@@ -4,6 +4,8 @@ if(session_id() !== ""){
 }
 require_once(__DIR__ . '/../inc/include.php');
 
+@$next = $_GET['next'];
+
 generate('login-ok.html.twig',
 [
     'head' =>
@@ -13,7 +15,7 @@ generate('login-ok.html.twig',
     ],
     'config' =>
     [
-        'signInSuccessUrl' => $_GET['next']
+        'signInSuccessUrl' => $next
     ]
 ]
 );
