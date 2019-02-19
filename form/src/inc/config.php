@@ -87,6 +87,10 @@ const SM_ADDRESSES = Array (
         'sekretariat@strazmiejska.bydgoszcz.pl'],
     'katowice' => ['Straż Miejska w Katowicach \\\\ ul. Żelazna 18 \\\\ 40-851 Katowice',
         'interwencje@katowice.eu'],
+    'gorowo ilaweckie' => ['UM Górowo Iławeckie \\\\ pl. Ratuszowy 18 \\\\ 11-220 Górowo Iławeckie',
+        'umgorowo@gorowoilaweckie.pl'],
+    'górowo iławeckie' => ['UM Górowo Iławeckie \\\\ pl. Ratuszowy 18 \\\\ 11-220 Górowo Iławeckie',
+        'umgorowo@gorowoilaweckie.pl'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null]
 );
