@@ -223,6 +223,10 @@ function readGeoDataFromImage(file) {
     loadImage.parseMetaData(
         file,
         function (data) {
+            if(!data.exif || data.exif.getText("GPSLatitude") === 'undefined'){
+                noGeoDataInImage();
+                return;
+            }
             var lat = data.exif.getText("GPSLatitude").split(',');
             var lon = data.exif.getText("GPSLongitude").split(',');
             var latRef = data.exif.getText("GPSLatitudeRef") || "N";
