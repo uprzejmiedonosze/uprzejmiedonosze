@@ -204,7 +204,7 @@ function readFile(file, id) {
     loadImage(
         file,
         function (img) {
-            sendFile(img.toDataURL('image/jpeg', 1.0), id);
+            sendFile(img.toDataURL('image/jpeg', 0.9), id);
         }, {
             maxWidth: 1200,
             maxHeight: 1200,
