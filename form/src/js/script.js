@@ -223,6 +223,11 @@ function readGeoDataFromImage(file) {
     loadImage.parseMetaData(
         file,
         function (data) {
+            const dateTime = data.exif.getText("DateTimeOriginal");
+            if (dateTime) {
+                setDateTime(dateTime);
+            }
+
             if(!data.exif || data.exif.getText("GPSLatitude") === 'undefined'){
                 noGeoDataInImage();
                 return;
@@ -234,15 +239,9 @@ function readGeoDataFromImage(file) {
             if (lat) {
                 lat = (parseFloat(lat[0]) + parseFloat(lat[1]) / 60 + parseFloat(lat[2]) / 3600) * (latRef == "N" ? 1 : -1);
                 lon = (parseFloat(lon[0]) + parseFloat(lon[1]) / 60 + parseFloat(lon[2]) / 3600) * (lonRef == "W" ? -1 : 1);
-                hasGeo = true;
                 setAddress(lat + ',' + lon, true);
             } else {
                 noGeoDataInImage();
-            }
-
-            const dateTime = data.exif.getText("DateTimeOriginal");
-            if (dateTime) {
-                setDateTime(dateTime);
             }
         }
     );
