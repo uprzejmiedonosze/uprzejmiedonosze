@@ -29,7 +29,8 @@ generate('dziekujemy.html.twig',
         [
             'auth' => true
         ],
-        'app' => $application
+        'app' => $application,
+        'appsCount' => sizeof($user->applications)
     ]
 );
 

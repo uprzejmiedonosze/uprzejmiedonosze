@@ -1,13 +1,15 @@
 {% set leftButton = 'menuMain' %}
-{% set leftButtonIcon = 'ui-icon-edit' %}
 
 {% set rightButton = 'menuNewApplication' %}
 {% set rightButtonText = 'Jeszcze raz' %}
+{% set rightButtonIcon = 'ui-icon-plus' %}
 
 {% extends "base.html.twig" %}
 
 {% block main %}
-
+{% if appsCount == 1 %}
+<h2>To twoje pierwsze zgłoszenie, przeczytaj to uważnie</h2>
+{% endif %}
 <p>Twoje zgłoszenie zostało zarejestrowane pod numerem
     <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>.
     Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na
