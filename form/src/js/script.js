@@ -224,7 +224,7 @@ function readGeoDataFromImage(file) {
         file,
         function (data) {
             const dateTime = data.exif.getText("DateTimeOriginal");
-            if (dateTime) {
+            if (dateTime && dateTime !== 'undefined') {
                 setDateTime(dateTime);
             }
 
