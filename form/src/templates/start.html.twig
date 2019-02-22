@@ -5,6 +5,25 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
+{% if not config.isIOS %}
+<div class="ui-corner-all custom-corners">
+    <div class="ui-bar ui-bar-a">
+        <h3>Uwaga dla użytkowników iOS</h3>
+    </div>
+    <div class="ui-body ui-body-a">
+        <p>Przeglądarki w systemie iOS (iPhone/iPad/iPod) nie przekazują
+        <b>danych geolokacyjnych</b> ani <b>daty wykonania</b> zawartych w zdjęciu wysyłanym do Uprzejmie
+        Donoszę. Oznacza to, że w trakcie dokonywania zgłoszenia jego adres 
+        nie zostanie automatycznie pobrany z lokalizacji zapisanej w zdjęciu
+        (a to bardzo wygodne). Podobnie będzie z datą. <b>Uprzejmie Donoszę użyje
+        domyślnie daty generowania zgłoszenia, a nie daty wykonania zdjęcia</b>.</p>
+        <p><b>Można obejść ten problem</b>. Zdjęcia rób na swoim iPhone, wgraj je 
+        potem na komputer i dokonuj zgłoszeń już z laptopa/komputera 
+        stacjonarnego. Wszystko będzie działać jak należy.</p>
+    </div>
+</div>
+{% endif %}
+
 <p>Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach,
 które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia
 wygodne wygenerowanie zgłoszenia gotowego do przekazania do Straży Miejskiej.</p>
@@ -33,23 +52,6 @@ wygodne wygenerowanie zgłoszenia gotowego do przekazania do Straży Miejskiej.
     zgłoszenia).</p>
 </div>
 
-{% if config.isIOS %}
-<div class="ui-corner-all custom-corners">
-    <div class="ui-bar ui-bar-a">
-        <h3>Uwaga dla użytkowników iOS</h3>
-    </div>
-    <div class="ui-body ui-body-a">
-        <p>Przeglądarki w systemie iOS (iPhone/iPad/iPod) nie przekazują
-        danych geolokacyjnych zawartych w zdjęciu wysyłanym do Uprzejmie
-        Donoszę. Oznacza to, że w trakcie dokonywania zgłoszenia jego adres 
-        nie zostanie automatycznie pobrany z lokalizacji zapisanej w zdjęciu
-        (a to bardzo wygodne).</p>
-        <p>Można obejść ten problem. Zdjęcia rób na swoim iPhone, wgraj je 
-        potem na komputer (OSX/Win/Linux) i dokonuj zgłoszeń już z laptopa/komputera 
-        stacjonarnego. Wszystko będzie działać jak należy.</p>
-    </div>
-</div>
-{% endif %}
 <p>Używając %HOST% wyrażasz zgodę na powyższy regulamin.</p>
 
 {% endblock %}
