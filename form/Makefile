@@ -1,6 +1,7 @@
 # tools
 YUI_COMPRESSOR       = java -jar tools/yuicompressor-2.4.8.jar
 YUI_COMPRESSOR_FLAGS = --charset utf-8 --line-break 72
+BABEL                = babel-minify
 RSYNC                = rsync
 RSYNC_FLAGS          = --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
 HOSTING              = nieradka.net
@@ -92,7 +93,7 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
-		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type js $< > $@ ; \
+		$(BABEL) $< > $@ ; \
 	else \
 		cp $< $@ ; \
 	fi;
