@@ -146,7 +146,7 @@ define lint
 endef
 
 define lint-twig
-@~/.composer/vendor/bin/twig-lint lint $<
+@~/.composer/vendor/bin/twig-lint lint --quiet $<
 endef
 
 # GIT
