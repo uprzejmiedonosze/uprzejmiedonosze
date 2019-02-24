@@ -22,8 +22,11 @@
     czy szczecińskiej aplikacji
     <a rel="external" href="https://alertszczecin.pl/alert2a">Alert Szczecin</a>.
 </p>
-
+{% if general.hasApps %}
+<a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Nowe zgłoszenie</a>
+{% else %}
 <a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
+{% endif %}
 
 <h3>Czy to wina Straży Miejskiej?</h3>
 
