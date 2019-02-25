@@ -43,7 +43,7 @@
 
         <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
 
-        <label for="lokalizacja">Podaj miejsce zgłoszenia <i id="addressHint"></i></label>
+        <label for="lokalizacja">Podaj miejsce zgłoszenia <span class="hint" id="addressHint"></span></label>
         <div class="combo">
             <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
                 placeholder="Miejsce zgłoszenia" data-inline="true"
@@ -61,7 +61,7 @@
         <input type="hidden" id="country" name="country" />
         <input type="hidden" id="latlng" name="latlng" value="{{ app.address.latlng ?? '' }}" />
 
-        <label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia</label>
+        <label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia <span class="hint" id="plateHint"></span></label>
         <input class="required" type="text" id="plateId" name="plateId"
             placeholder="Numer rejestracyjny" value="{{ app.carInfo.plateId ?? '' }}"
             autocomplete="off" style="text-transform:uppercase" />
