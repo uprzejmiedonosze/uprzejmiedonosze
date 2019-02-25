@@ -168,9 +168,11 @@ function setAddress(latlng, fromPicture) {
 
                 $('a#geo').buttonMarkup({ icon: "check" });
                 $('#lokalizacja').removeClass('error');
+                $('#addressHint').text('(Sprawdź adres, który został automatycznie pobrany ze zdjęcia)');
             } else {
                 $('#lokalizacja').addClass('error');
                 $('a#geo').buttonMarkup({ icon: "location" });
+                $('#addressHint').text('');
             }
         }).fail(function () {
             $('a#geo').buttonMarkup({ icon: "alert" });
@@ -223,9 +225,11 @@ function readGeoDataFromImage(file) {
     loadImage.parseMetaData(
         file,
         function (data) {
-            const dateTime = data.exif.getText("DateTimeOriginal");
-            if (dateTime && dateTime !== 'undefined') {
-                setDateTime(dateTime);
+            if(data.exif){
+                const dateTime = data.exif.getText("DateTimeOriginal");
+                if (dateTime && dateTime !== 'undefined') {
+                    setDateTime(dateTime);
+                }
             }
 
             if(!data.exif || data.exif.getText("GPSLatitude") === 'undefined'){
@@ -285,6 +289,7 @@ function sendFile(fileData, id) {
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
                     $('#plateId').val(json.carInfo.plateId);
+                    $('#plateHint').text('(Sprawdź odczytany numer rejestracyjny jest prawidłowy)');
                     $('#plateId').removeClass('error');
                 }
                 if (json.carInfo.plateImage) {
@@ -292,6 +297,7 @@ function sendFile(fileData, id) {
                     $('#plateImage').show();
                 } else {
                     $('#plateImage').hide();
+                    $('#plateHint').text('');
                 }
                 if (json.carInfo.recydywa && json.carInfo.recydywa > 0) {
                     $('#recydywa').text("Recydywa: " + json.carInfo.recydywa + "");

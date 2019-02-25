@@ -39,6 +39,11 @@ label.section:first-of-type {
 	margin-top: 0em;
 	margin-bottom: 2em;
 }
+
+label span.hint {
+    color: #009C7F;
+}
+
 .ui-input-text input, .ui-input-search input {
 	border: 1px solid #009C7F;
 	color: #009C7F;
