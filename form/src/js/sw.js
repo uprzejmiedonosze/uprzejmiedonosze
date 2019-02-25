@@ -1,6 +1,8 @@
-const LATEST_CACHE_ID = 'v1';
+const LATEST_CACHE_ID = 'v2';
 
+/*
 self.addEventListener('install', function (evt) {
+    console.log("ServiceWorker installed");
     evt.waitUntil(precache());
 });
 
@@ -21,7 +23,7 @@ self.addEventListener('activate', function (event) {
 });
 
 self.addEventListener('fetch', function (evt) {
-    evt.respondWith(fromNetwork(evt.request, 400).catch(function () {
+    evt.respondWith(fromNetwork(evt.request, 100).catch(function () {
         return fromCache(evt.request);
     }));
 });
@@ -37,35 +39,6 @@ function precache() {
             '/robtodobrze.html',
             '/changelog.html',
             '/przepisy.html',
-
-            '/img/apple-touch-icon.png',
-            '/img/b36.png',
-            '/img/d18.png',
-            '/img/d40.png',
-            '/img/d46.png',
-            '/img/d52.png',
-            '/img/przyklad-1.jpg',
-            '/img/przyklad-2.jpg',
-            '/img/przyklad-3.jpg',
-            '/img/przyklad-4.jpg',
-            '/img/robtodobrze-radni-s.jpg',
-            '/img/robtodobrze-radni.jpg',
-            '/img/robtodobrze-s.jpg',
-            '/img/robtodobrze.jpg',
-            '/img/rtd-mandat-cmyk-print.pdf',
-            '/img/sm-tvn24-s.jpg',
-            '/img/sm-tvn24.jpg',
-            '/img/splash.png',
-            '/img/t30a.gif',
-            '/img/t30b.gif',
-            '/img/t30c.gif',
-            '/img/t30d.gif',
-            '/img/t30e.gif',
-            '/img/t30f.gif',
-            '/img/t30g.gif',
-            '/img/t30h.gif',
-            '/img/t30i.gif',
-            '/img/uprzejmiedonosze.png',
 
             '/css/style-%CSS_HASH%.css',
 
@@ -83,6 +56,7 @@ function precache() {
 function fromNetwork(request, timeout) {
     return new Promise(function (fulfill, reject) {
         var timeoutId = setTimeout(reject, timeout);
+        console.log(request);
         fetch(request).then(function (response) {
             clearTimeout(timeoutId);
             fulfill(response);
@@ -93,7 +67,9 @@ function fromNetwork(request, timeout) {
 function fromCache(request) {
     return caches.open(LATEST_CACHE_ID).then(function (cache) {
         return cache.match(request).then(function (matching) {
+            console.log(matching);
             return matching || Promise.reject('no-match');
         });
     });
 }
+*/
