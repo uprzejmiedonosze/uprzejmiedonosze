@@ -168,8 +168,8 @@ function save_img_and_thumb($image_bytes){
 	if(fwrite($ifp, base64_decode($image_bytes)) === false){
         raiseError("Can't write to $filename", 500);
     }
-	fclose($ifp);
-	
+    fclose($ifp);
+
 	if(!imagejpeg(resize_image($filename, 600, 600, false), $thumbname)){
         logger("Wasn't able to write $filename as thumb to $thumbname.", true);
     }

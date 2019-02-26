@@ -28,6 +28,7 @@
         <meta property="og:url" content="https://%HOST%{% if config is not defined %}{{ general.uri }}{% endif %}" />
         <meta property="og:locale" content="pl_PL" />
         <meta property="og:type" content="website" />
+        <meta property="fb:app_id" content="1299217686854263" />
 
         <link rel="stylesheet"
             href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
@@ -68,21 +69,21 @@
                 {% if rightButton is defined and rightButton == 'menuStart' %}
                 <a href="start.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
-                    ui-btn-icon-left {{ leftButtonIcon ?? 'ui-icon-plus' }}">
+                    ui-btn-icon-left {{ rightButtonIcon ?? 'ui-icon-plus' }}">
                     {{ rightButtonText ?? 'Zgłoś' }}</a>
                 {% endif %}
 
                 {% if rightButton is defined and rightButton == 'menuApplications' %}
                 <a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
-                    {{ leftButtonIcon ?? 'ui-icon-bullets' }}">
+                    {{ rightButtonIcon ?? 'ui-icon-bullets' }}">
                     {{ rightButtonText ?? 'Zgłoszenia' }}</a>
                 {% endif %}
 
                 {% if rightButton is defined and rightButton == 'menuNewApplication' %}
                 <a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
-                    {{ leftButtonIcon ?? 'ui-icon-carat-r' }}"
+                    {{ rightButtonIcon ?? 'ui-icon-carat-r' }}"
                     data-ajax="false">{{ rightButtonText ?? 'Nowe zgłoszenie' }}</a>
                 {% endif %}
 
@@ -95,18 +96,16 @@
             </div> <!-- main -->
         {% block footer %}
             <div data-role="footer">
-                <h4>&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
+                <h4 title="%VERSION%">&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
             </div> <!-- footer -->
         {% endblock %}
         </div> <!-- page -->
     {% block jsIncludes %}
-        <script src="js/script-%JS_HASH%.js"></script>
         <script src="js/lazysizes.min-%JS_HASH%.js"></script>
 
     {% if head.mapsInitFunc is defined %}
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback={{ head.mapsInitFunc }}&language=pl" async defer></script>
     {% endif %}
-
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

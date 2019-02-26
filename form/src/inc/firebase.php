@@ -9,7 +9,11 @@ use Kreait\Firebase\Exception\Auth\IssuedInTheFuture;
 use Kreait\Firebase\Exception\Auth\ExpiredToken;
 
 function isLoggedIn(){
-    return isset($_SESSION['token']) && verifyToken($_SESSION['token']);
+    return isset($_SESSION['token'])
+        && isset($_SESSION['user_email'])
+        && isset($_SESSION['user_name'])
+        && stripos($_SESSION['user_email'], '@') !== false
+        && mb_strlen($_SESSION['user_name']) > 0;
 }
 
 function verifyToken($token){

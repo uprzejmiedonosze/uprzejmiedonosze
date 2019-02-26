@@ -1,6 +1,7 @@
 # tools
 YUI_COMPRESSOR       = java -jar tools/yuicompressor-2.4.8.jar
 YUI_COMPRESSOR_FLAGS = --charset utf-8 --line-break 72
+BABEL                = babel-minify
 RSYNC                = rsync
 RSYNC_FLAGS          = --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
 HOSTING              = nieradka.net
@@ -66,6 +67,7 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" || ( echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." && exit 1 )
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
+	@mv $(PUBLIC)/js/sw-$(JS_HASH).js $(PUBLIC)/sw.js # sw worker without hash and in root
 	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json $(EXPORT)/
 
 minify: minify-css minify-js process-html process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
@@ -91,7 +93,7 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
-		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type js $< > $@ ; \
+		$(BABEL) $< > $@ ; \
 	else \
 		cp $< $@ ; \
 	fi;
@@ -134,9 +136,10 @@ $(replace-inline)
 endef
 
 define replace-inline
-@sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@ 
-@sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@ 
-@sed -i '' 's/%TWIG_HASH%/$(TWIG_HASH)/g' $@ 
+@sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@
+@sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@
+@sed -i '' 's/%TWIG_HASH%/$(TWIG_HASH)/g' $@
+@sed -i '' 's/%VERSION%/$(TAG_NAME)/g' $@
 endef
 
 define lint

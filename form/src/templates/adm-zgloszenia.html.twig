@@ -8,8 +8,10 @@
     </form>
     {% for email,user in storage.getUsers %}
         <h3 class="ui-bar ui-bar-a ui-corner-all">{{ user.number }} {{ user.data.name }} ({{ user.data.email }})</h3>
-        <p> Założony: {{ user.added ?? '' }}
-            Usunięty: {{ user.deleted ?? '' }}</p>
+        <p> {% if user.added is defined %}Założony: {{ user.added|date('Y-m-d') }}{% endif %}
+            {% if user.updated is defined %}Zaktualizowany: {{ user.updated|date('Y-m-d') }}{% endif %}
+            {% if user.deleted is defined %}Usunięty: {{ user.deleted|date('Y-m-d') }}{% endif %}
+        </p>
 
         <div data-role="collapsibleset" data-filter="true" data-inset="true"
             id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">

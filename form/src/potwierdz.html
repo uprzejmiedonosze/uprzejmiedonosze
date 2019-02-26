@@ -3,6 +3,10 @@ require_once(__DIR__ . '/../inc/include.php');
 
 $post = $_POST;
 
+if(!isset($post['applicationId'])){
+    redirect("nowe-zgloszenie.html");
+}
+
 $applicationId = $post["applicationId"];
 $application = $storage->getApplication($applicationId);
 

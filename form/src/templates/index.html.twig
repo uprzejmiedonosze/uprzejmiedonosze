@@ -22,8 +22,11 @@
     czy szczecińskiej aplikacji
     <a rel="external" href="https://alertszczecin.pl/alert2a">Alert Szczecin</a>.
 </p>
-
+{% if general.hasApps %}
+<a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Nowe zgłoszenie</a>
+{% else %}
 <a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
+{% endif %}
 
 <h3>Czy to wina Straży Miejskiej?</h3>
 
@@ -154,7 +157,13 @@
 <h3>Czy mogę jakoś pomóc w projekcie?</h3>
 
 <p>Pewnie! Przeczytaj więcej o <a href="projekt.html">stanie projektu i jak
-        można pomóc</a>.</p>
+    można pomóc</a>.</p>
+
+<h3>Kontakt</h3>
+
+<p>Brakuje danych straży miejskiej w twoim mieście? Masz uwagi do rozwiązania?
+    Zajrzyj na stronę
+    <a rel="external" href="http://fb.me/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a>.
 
 <h3>Historia zmian</h3>
 

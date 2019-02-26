@@ -1,23 +1,26 @@
 {% set leftButton = 'menuMain' %}
-{% set leftButtonIcon = 'ui-icon-edit' %}
 
 {% set rightButton = 'menuNewApplication' %}
 {% set rightButtonText = 'Jeszcze raz' %}
+{% set rightButtonIcon = 'ui-icon-plus' %}
 
 {% extends "base.html.twig" %}
 
 {% block main %}
-
+{% if appsCount == 1 %}
+<h2>To twoje pierwsze zgłoszenie, przeczytaj to uważnie</h2>
+{% endif %}
 <p>Twoje zgłoszenie zostało zarejestrowane pod numerem
     <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>.
     Wszystkie swoje zgłoszennia możesz zawsze zobaczyć na
     <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 
-<p>Co dalej? Nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz
-    wygenerować ich kilka/kikanaście, i w dogodnym dla siebie cyklu wysłać
-    je do Straży Miejskiej. Autor robi to mniej więcej raz na miesiąc.</p>
+<p>Co dalej? <b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
+    Na szczęście nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz
+    wygenerować ich kilka/kilkanaście, i wysłać je dogodnym dla siebie cyklu.
+    Na przykład raz na miesiąc.</p>
 
-<p>Jak wysyłać zgłoszenia? Najprościej jest wysłać całą paczkę zgłoszeń
+<p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
     na adres SM w twoim mieście. 
 {% set sm = app.guessSMData[1] %}
 {% if sm %}
