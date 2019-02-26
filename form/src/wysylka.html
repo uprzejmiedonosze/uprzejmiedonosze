@@ -1,0 +1,32 @@
+<? 
+require_once(__DIR__ . '/../inc/include.php');
+
+checkIfLogged();
+
+$user = $storage->getCurrentUser();
+$apps = array_reverse($storage->getAllApplicationsByStatus('confirmed'));
+
+$cities = array();
+foreach($apps as $app){
+    $cities[$app->guessSMData()[2]] = $app->guessSMData();
+}
+
+generate('wysylka.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Paczka dokumentów do SM",
+            'shortTitle' => "Paczka dokumentów do SM"
+        ],
+        'config' =>
+        [
+            'auth' => true,
+            'appDetails' => false,
+            'appActionButtons' => false
+        ],
+        'apps' => $apps,
+        'cities' => $cities,
+        'statuses' => STATUSES
+    ]
+);
+?>

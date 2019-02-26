@@ -1,0 +1,42 @@
+{% block commands %}
+    \renewcommand{\n}{ {{ app.user.name }} }
+    \date{ Dnia {{ app.getDate }} } 
+    \address{\n{}\\{{ app.user.address }}\\Email: {{ app.user.email }}\\{% if app.user.msisdn %}Tel: {% endif %}{{ app.user.msisdn }} }
+{% endblock %}
+
+\begin{letter}{ {\large {{ app.guessSMData[0] }} } } 
+
+{% set appUrl = '{https://%HOST%/ud-' ~ app.id  ~ '.html}' %}
+
+{% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
+{% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb     ~ '}' %}
+
+\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} } } }
+	W dniu {{ app.getDate }} roku o godzinie {{ app.getTime }} {{ app.guessUserSex.bylam }}
+    świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
+    {{ app.address.address }}.
+    {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.
+    Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.userComment }}
+
+    Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
+    pojazd pozostawał na tym miejscu.
+
+    Jestem {{ app.guessUserSex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
+    oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.
+
+    Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca
+    zamieszkania.
+
+    \closing{\textit{Z poważaniem,\\\n{} } }
+
+    \href{{ appUrl }}
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ carImage }} }
+    \href{{ appUrl }}
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ contextImage }} }
+
+    {% if app.shouldIncludePlateImage %}
+    {% set plateImage   = '{' ~ root ~ '/' ~ app.carInfo.plateImage ~ '}' %}
+    \includegraphics[width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
+    {% endif %}
+
+\end{letter}

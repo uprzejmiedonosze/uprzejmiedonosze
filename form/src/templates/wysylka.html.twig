@@ -1,0 +1,37 @@
+{% set leftButton = 'menuBack' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>Pobierz paczkę zgłoszeń do wysyłki do SM</h2>
+<p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.
+
+{% if apps|length == 0 %}
+    W tej chwili nie masz ani jednego zgłoszenia o statusie "Nowe", które pozwoliłoby
+    wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
+    wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
+{% else %}
+    Paczka ta zostanie przygotowana dla zgłoszeń w statusie "Nowe".
+    Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
+    wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw
+    prawidłowo statusy.</p>
+{% if cities|length > 1 %}
+    <p><b>Poniższa lista zawiera dane z kilku miast!</b> Super, że wykonujesz zgłoszenia
+    w kilku miastach, ale niestety Uprzejmie Donoszę nie jest jeszcze na tyle inteligentne,
+    żeby podzielić zgłoszenia na osobne paczki. Przycisk umożliwiający pobranie paczki zgłoszeń
+    jest dostępny tylko wtedy, gdy wszystkie zgłoszenia poniżej pochodzą z jednego miasta.
+    </p>
+{% else %}
+    <p>
+        <a href="sm-all-data.pdf?readyApps" download="true" data-ajax="false"
+            class="ui-btn ui-corner-all ui-btn-inline try">paczka {{ apps|length }} zgloszeń</a>
+    </p>
+{% endif %}
+
+    <div data-role="collapsibleset" data-mini="true" data-inset="true">
+        {% for app in apps %}
+            {% include('_application.html.twig') %}
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}
