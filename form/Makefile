@@ -116,17 +116,6 @@ $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
 $(EXPORT)/%: ; @echo "==> Creating $@"
 	@mkdir --parents $@
 
-# Firebase
-
-deploy-firebase-staging: ## Deploy Firebase functions for staging env.
-	@firebase -P uprzejmiedonosze-1494607701827 deploy --only functions
-
-deploy-firebase-prod: ## Deploy Firebase functions for prod env.
-	@firebase -P uprzejmie-donosze deploy --only functions
-
-serve-firebase: ## serve Firebase functions locally
-	@firebase serve --only functions
-
 # Utils
 
 define replace
