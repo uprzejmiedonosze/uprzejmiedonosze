@@ -95,6 +95,13 @@ class User extends JSONObject{
         }
         return SEXSTRINGS[$this->data->sex];
     }
+
+    /**
+     * Returns user name in a 'filename' safe format.
+     */
+    public function getSanitizedName(){
+        return mb_ereg_replace("([^\w\d])", '-', $this->data->name);
+    }
 }
 
 ?>
