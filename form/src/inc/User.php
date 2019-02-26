@@ -67,14 +67,14 @@ class User extends JSONObject{
     /**
      * Updates current user's data.
      */
-    function updateUserData($name, $msisdn, $address, $idnumber){
+    function updateUserData($name, $msisdn, $address){ // , $idnumber){
         if(isset($this->added)){
             $this->updated = date(DT_FORMAT);
         }
         $this->data->name = $name;
         $this->data->sex = guess_sex_by_name($this->data->name);
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
-        if(isset($idnumber)) $this->data->idnumber = $idnumber;
+        //if(isset($idnumber)) $this->data->idnumber = $idnumber;
         $this->data->address = $address;
         return true;
     }
