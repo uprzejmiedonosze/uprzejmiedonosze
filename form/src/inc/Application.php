@@ -92,7 +92,6 @@ class Application extends JSONObject{
 
         if(array_key_exists($city, SM_ADDRESSES)){
             $this->smCity = $city;
-            logger('guessSMData2: ' . $this->smCity);
             return SM_ADDRESSES[$this->smCity];
         }
 
