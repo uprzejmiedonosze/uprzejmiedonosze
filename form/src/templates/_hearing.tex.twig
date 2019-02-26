@@ -1,0 +1,96 @@
+\rfoot{\footnotesize {\it \textcolor{gray!50}{(numer zgłoszenia świadka {{ app.number }})} } }
+\begin{flushright}
+    Nr sprawy: \dottedLine{5}
+\end{flushright}
+
+\begin{center}
+    {\LARGE PROTOKÓŁ } 
+    
+    {\LARGE przesłuchania świadka }
+\end{center}
+\vspace{1cm}
+
+{% spaceless %}
+    {% if app.guessSMData[2] %}
+        {{ app.guessSMData[2] }}
+    {% else %}
+        {% if app.address.city is not empty %}
+            {{ app.address.city }}
+        {% else %}
+            \dottedLine{3}
+        {% endif %}
+    {% endif %}
+{% endspaceless %}, dnia {{ date ?? '\\dottedLine{2}' }} o godzinie \dottedLine{1} działając na podstawie
+art. 54§3, 56§2 Kodeksu postępowania w~sprawach o wykroczenia,
+
+strażnik miejski \dottedLine{5}
+
+przesłuchał(a) w charakterze świadka:
+
+\begin{description} 
+    \item[Imię i nazwisko:] {\it {{ app.user.name }} }
+    \item[Miejsce zamieszkania:] {\it {{ app.user.address }} }
+    \item[Dane ustalono na podstawie:]
+        {{ user.data.idtype ?? 'dokumentu tożsamości' }} {{ user.data.idnumber ?? '\\dottedLine{2}' }} 
+\end{description}
+
+\vspace{0.5cm}
+
+\textbf{Przed złożeniem zeznania świadek został pouczony: }
+
+\textbf{Art. 233§1 Kodeksu karnego. } Kto, składając zeznanie mające służyć za
+dowód w postępowaniu sądowym lub w innym postępowaniu prowadzonym na podstawie
+ustawy, zeznaje nieprawdę lub zataja prawdę, podlega karze pozbawienia wolności
+od 6 miesięcy do lat 8. 
+
+\textbf{Art. 182§1. Kpk. } Osoba najbliższa dla oskarżonego może odmówić zeznań.
+
+\textbf{Art. 183§1. Kpk. } Świadek może uchylić się od odpowiedzi na pytanie,
+jeżeli udzielenie odpowiedzi mogłoby narazić jego lub osobę dla niego najbliższą
+na odpowiedzialność za przestępstwo lub przestępstwo skarbowe.
+
+\textbf{Art. 37§13. Kodeksu postępowania w sprawach o wykroczenia } w związku
+z art. 148a Kodeksu postępowania karnego na wniosek pokrzywdzonego lub świadka
+w protokole nie zamieszcza się danych dotyczących miejsca zamieszkania i miejsca
+pracy pokrzywdzonych i świadków uczestniczących  w czynności.
+
+\vspace{0.5cm}
+
+\begin{flushright}
+    \dottedLine{5} \\
+    {\it podpis świadka }
+\end{flushright}
+
+{\bf Po czym świadek zeznał co następuje:}
+
+{\it
+	W dniu {{ app.getDate }} roku o godzinie {{ app.getTime }} {{ app.guessUserSex.bylam }}
+    świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }
+    pod adresem {{ app.address.address }}. {{ app.getCategory[1] }} Sytuacja jest widoczna
+    na zdjęciach załączonych do zgłoszenia. Zdjęcia {{ app.guessUserSex.wykonalam }}
+    samodzielnie. {{ app.userComment }}
+
+    Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
+    pojazd pozostawał na tym miejscu.
+
+    Proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca
+    zamieszkania.
+}
+
+{\bf Uwagi i uzupełnienia:}
+
+\dottedLine{15}
+
+\dottedLine{15}
+
+\dottedLine{15}
+
+\begin{center}
+    \begin{tabular}{ l c r }
+                       & \hspace{2cm} & protokół \dottedLine{5} \\
+                       & \hspace{2cm} & jako zgodny z moim zeznaniem podpisuję \\
+                       &              & \\
+        \dottedLine{5} & \hspace{2cm} & \dottedLine{5} \\
+        {\it podpis przesłuchującego } & & {\it podpis świadka } \\
+    \end{tabular}
+\end{center}

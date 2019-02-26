@@ -53,6 +53,14 @@ class Application extends JSONObject{
         $this->status = $status;
     }
 
+    public function getAppPDFFilename(){
+        return 'Zgloszenie_' . str_replace('/', '-', $this->number) . '.pdf';
+    }
+
+    public function getSMPDFFilename(){
+        return 'Zgloszenie_' . str_replace('/', '-', $this->number) . '-SM.pdf';
+    }
+
     /**
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId

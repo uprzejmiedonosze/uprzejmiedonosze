@@ -1,0 +1,26 @@
+\vspace{1cm}
+\begin{center}
+    {\LARGE ZAŁĄCZNIK } 
+
+    {\LARGE do protokołu przesłuchania świadka }
+
+    (na wniosek o nie zamieszczania danych w protokole)
+\end{center}
+\vspace{1cm}
+
+\begin{description} 
+    \item[Dnia:] {{ date ?? '\\dottedLine{2}' }}
+    \item[Dotyczy przesłuchania świadka:] {\it {{ app.user.name }} }
+    \item[Miejsce zamieszkania świadka:] {\it {{ app.user.address }} }
+    \item[Dane ustalono na podstawie:]
+        {{ user.data.idtype ?? 'dokumentu tożsamości' }} {{ user.data.idnumber ?? '\\dottedLine{2}' }} 
+\end{description}
+
+\vspace{1.7cm}
+
+\begin{center}
+    \begin{tabular}{ c c c }
+        \dottedLine{5} & \hspace{2cm} & \dottedLine{5} \\
+        {\it podpis przesłuchującego } & & {\it podpis świadka } \\
+    \end{tabular}
+\end{center}

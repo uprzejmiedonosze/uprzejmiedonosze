@@ -3,24 +3,44 @@ require(__DIR__ . '/../../inc/include.php');
 
 const ROOT = __DIR__ . "/..";
 
-if(!isset($_GET['appId'])){
-    http_response_code(400);
-    die();
+$type = 'application';                               // download application PDF for specific application
+if(isset($_GET['hearing'])) $type = 'hearing';       // download hearing PDF for SM for specific application
+if(isset($_GET['hearingAll'])) $type = 'hearingAll'; // download hearing PDFs for SM for all open applications
+
+if($type == 'application' || $type == 'hearing'){    // specific ID is needed
+    if(!isset($_GET['appId'])){
+        http_response_code(400);
+        die();
+    }
+    $applicationId = $_GET['appId'];
+    $application = $storage->getApplication($applicationId);
+    if(!isset($application)){
+        http_response_code(404);
+        die();
+    }
+}else{
+    $appsEmail = $storage->getAllApplicationsByStatus('confirmed-waiting');
+    $appsEpuap = $storage->getAllApplicationsByStatus('confirmed-waitingE');
+    $application = array_merge($appsEmail, $appsEpuap);
 }
 
-$applicationId = $_GET['appId'];
-$application = $storage->getApplication($applicationId);
-
-if(!isset($application)){
-    http_response_code(404);
-    die();
+if($type == 'hearing' || $type == 'hearingAll'){ // only applicationPDF is allowed if not logged in
+    checkIfLogged();
 }
 
-$pdf = ROOT . "/cdn/$applicationId.pdf";
-$filename = 'Zgloszenie_' . str_replace('/', '-', $application->number) . '.pdf';
+if($type == 'hearing'){
+    $pdf = ROOT . "/cdn/$applicationId,sm.pdf";
+    $filename = $application->getSMPDFFilename();
+}else if($type == 'application'){
+    $pdf = ROOT . "/cdn/$applicationId.pdf";
+    $filename = $application->getAppPDFFilename();
+}else{ // hearingAll
+    $pdf = '/tmp/' . uniqid(rand(), true) . '.pdf';
+    $filename = 'Dokumenty-SM-' . date('Y-m-d') . '.pdf';
+}
 
 //if(!file_exists($pdf)){
-    generate_pdf($application, $pdf);
+    generate_pdf($application, $pdf, $type);
 //}
 
 header('Content-Type: application/pdf');
@@ -28,16 +48,16 @@ header("Content-Transfer-Encoding: Binary");
 header("Content-disposition: attachment; filename=$filename");
 readfile($pdf);
 
-function generate_pdf($application, $destFile) {
-	if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
-		throw new Exception("Failed to create temporary file");
-	}
+function generate_pdf($application, $destFile, $type) {
+    if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
+        throw new Exception("Failed to create temporary file");
+    }
 
-	$tex_f = "$f.tex";
-	$aux_f = "$f.aux";
-	$out_f = "$f.out";
-	$log_f = "$f.log";
-	$pdf_f = "$f.pdf";
+    $tex_f = "$f.tex";
+    $aux_f = "$f.aux";
+    $out_f = "$f.out";
+    $log_f = "$f.log";
+    $pdf_f = "$f.pdf";
 
     $loader = new Twig_Loader_Filesystem(__DIR__ . '/../../templates');   
     $twig = new Twig_Environment($loader,
@@ -48,28 +68,46 @@ function generate_pdf($application, $destFile) {
         'auto_reload' => true
     ]);
 
-	file_put_contents($tex_f, $twig->render('pdf.tex.twig', [
-        'app' => $application,
-        'root' => realpath(__DIR__ . '/..')]));
+    $texFile = 'application.tex.twig';
+    if($type == 'hearing'){
+        $texFile = 'hearing.tex.twig';
+    }else if($type == 'hearingAll'){
+        $texFile = 'hearingAll.tex.twig';
+    }
 
-	$cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
+    $params = [
+        'app' => $application,
+        'root' => realpath(__DIR__ . '/..')
+    ];
+
+    if($type == 'hearing' || $type == 'hearingAll'){
+        global $storage;
+        $params['user'] = $storage->getCurrentUser(); 
+    }
+    if(isset($_GET['tomorrow'])){
+        $params['date'] = (new DateTime('tomorrow'))->format('d.m.Y');
+    }
+
+    file_put_contents($tex_f, $twig->render($texFile, $params));
+
+    $cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
    	escapeshellarg($tex_f));
-	chdir(sys_get_temp_dir());
+    chdir(sys_get_temp_dir());
     exec($cmd, $output, $ret);
     unset($output);
 
    	@unlink($tex_f);
-	@unlink($aux_f);
-	@unlink($log_f);
-	@unlink($out_f);
+    @unlink($aux_f);
+    @unlink($log_f);
+    @unlink($out_f);
 
-	if(!file_exists($pdf_f)) {
-		@unlink($f);
-		throw new Exception("Output was not generated and latex returned: $ret.");
-	}
+    if(!file_exists($pdf_f)) {
+        @unlink($f);
+        throw new Exception("Output was not generated and latex returned: $ret.");
+    }
     
-	rename($pdf_f, $destFile);
-	@unlink($f);
+    rename($pdf_f, $destFile);
+    @unlink($f);
 }
 
 

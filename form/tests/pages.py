@@ -66,10 +66,14 @@ class BasePage(object):
         wait.until(EC.title_contains('tart')) # [sS]tart
 
     def get_content(self):
-        content = self.driver.find_elements(*Locators.CONTENT)
-        if(len(content) == 1):
-            return content[0].text
-        return content[1].text
+        time.sleep(5)
+        for tries in range(0, 3):
+            content = self.driver.find_elements(*Locators.CONTENT)
+            text = content[len(content) - 1].text
+            if len(text) > 0:
+                break
+            time.sleep(tries + 1)
+        return text
 
 class MainPage(BasePage):
     def __init__(self, driver):
@@ -199,14 +203,12 @@ class New(BasePage):
     
     def fin(self):
         self.driver.execute_script("$('#form').submit()")
-        time.sleep(1)
         text = self.get_content()
         assert "UD/" in text
         assert "sm@um.szczecin.pl" in text
     
     def app_page(self):
         self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # first link with /ud-
-        time.sleep(2)
         text = self.get_content()
         assert self.cfg.app['plateId'] in text
         assert self.cfg.app['address'] in text
@@ -252,7 +254,6 @@ class MyApps(BasePage):
     def check_first(self, has_comment = True):
         self.driver.find_element(*Locators.MYAPPS_EXPAND).click() # expand first item
         self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # and click very first link
-        time.sleep(2)
         text = self.get_content()
         assert self.cfg.app['plateId'] in text
         assert self.cfg.app['address'] in text
