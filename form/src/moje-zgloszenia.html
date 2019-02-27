@@ -18,6 +18,8 @@ foreach($applications as $id){
     }
 }
 
+$stats = $storage->countApplicationsStatuses();
+
 generate('moje-zgloszenia.html.twig', 
     [
         'head' =>
@@ -33,6 +35,7 @@ generate('moje-zgloszenia.html.twig',
         ],
         'active' => $active,
         'archived' => $archived,
+        'stats' => $stats,
         'statuses' => STATUSES
     ]
 );
