@@ -1,0 +1,147 @@
+{% if head.dialog %}
+    {% set leftButton = 'menuBack' %}
+{% else %}
+    {% set leftButton = 'menuMain' %}
+{% endif %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>Polityka prywatności serwisu Uprzejmie Donoszę</h2>
+
+<h3>Postanowienia Ogólne</h3>
+<ol>
+    <li>Niniejsza Polityka Prywatności określa zasady przetwarzania i ochrony danych
+    osobowych przekazanych przez Użytkowników w związku z korzystaniem z serwisu
+    Uprzejmie Donoszę dostępnego pod adresem %HOST%.</li>
+    <li>Administratorem danych jest Szymon Nieradka (szymon@uprzejmiedonosze.net).</li>
+    <li>Ochrona danych odbywa się zgodnie z wymogami powszechnie obowiązujących
+    przepisów prawa.</li>
+    <li>W ochronie danych osobowych stosowane są procedury oraz zabezpieczenia
+    techniczne, które mają zapobiec udostępnieniu danych osobom nieupoważnionym.</li>
+    <li>Każda Użytkownik serwisu, którego dane dotyczą ma prawo dostępu do danych,
+    sprostowania ich, usunięcia, prawo sprzeciwu oraz prawo wniesienia skargi do organu
+    nadzorczego.</li>
+    <li>Kontakt z osobą nadzorującą przetwarzanie danych osobowych jest możliwy
+    drogą elektroniczną pod adresem e-mail: szymon@uprzejmiedonosze.net</li>
+    <li>Administrator ma prawo udostępniać dane osobowe Użytkownika oraz innych jego
+    danych podmiotom upoważnionym na podstawie właściwych przepisów prawa
+    (np. organom ścigania).</li>
+    <li>Usunięcie danych osobowych może nastąpić na skutek cofnięcia zgody
+    bądź wniesienia prawnie dopuszczalnego sprzeciwu na przetwarzanie danych
+    osobowych na adres kontaktowy wskazany powyżej.</li>
+    <li>Proces usuwania danych osobowych Użytkownika w przypadku części przetwarzanych
+    informacji sprowadza się do ich anonimizacji poprzez zamazanie ich
+    losowym ciągiem znaków.</li>
+
+<h3>Dane gromadzone i przetwarzane przez serwis</h3>
+    <li>Dane związane z kontem Użytkownika wypełniane samodzielnie przez
+    Użytkownika:</li>
+    <ul>
+        <li>Imię i nazwisko Użytkownika – uzupełniane przez Użytkownika w procesie
+        rejestracji, domyślnie uzupełnione danymi pobranymi z konta Google,
+        z możliwością zmiany przez Użytkownika, wykorzystywane w późniejszym
+        procesie wypełnienia Zgłoszenia jako dane identyfikujące zgłaszającego.</li>
+        <li>Adres email – pobierany z konta Google, bez możliwości wprowadzenia
+        zmian przez Użytkownika, wykorzystywany w późniejszym procesie
+        wypełnienia Zgłoszenia jako dane kontaktowe zgłaszającego.</li>
+        <li>Adres kontaktowy – uzupełniany przez Użytkownika w procesie rejestracji, 
+        wykorzystywany w późniejszym procesie wypełnienia Zgłoszenia jako dane
+        kontaktowe zgłaszającego.</li>
+        <li>Opcjonalny numer telefonu – uzupełniany przez Użytkownika w procesie
+        rejestracji, wykorzystywany w późniejszym procesie wypełnienia Zgłoszenia
+        jako dane kontaktowe zgłaszającego.</li>
+    </ul>
+
+    <li>Dane związane z kontem Użytkownika wypełniane automatycznie przez
+    serwis:</li>
+    <ul>
+        <li>Płeć Użytkownika – generowana automatycznie na podstawie imienia,
+        wykorzystywana w celu zastosowanie prawidłowej formy gramatycznej w 
+        serwisie, oraz w pliku zgłoszenia.</li>
+        <li>Data założenia konta – zapisywana automatycznie w trakcie zakładania
+        konta, wykorzystywana w celach diagnostycznych.</li>
+        <li>Data edycji konta – zapisywana automatycznie w trakcie edycji
+        konta, wykorzystywana w celach diagnostycznych.</li>
+        <li>Data usunięcia konta – zapisywana automatycznie w trakcie procesu
+        anonimizacji konta oraz usuwania wszystkich danych oraz plików związanych
+        z kontem użytkownika, wykorzystywana w celach diagnostycznych.</li>
+        <li>Identyfikator użytkownika – generowany automatycznie jako numer kolejny
+        Użytkownika, wykorzystywany w procesie generowania numeru zgłoszenia</li>
+    </ul>
+
+    <li>Dane związane z tworzeniem zgłoszenia, wypełniane samodzielnie przez
+    Użytkownika:</li>
+    <ul>
+        <li>Kategoria – wybrana przez Użytkownika, wykorzystywana w 
+        celu automatycznego generowania odpowiedniego opisu zgłoszenia.</li>
+        <li>Zdjęcia z kontekstem – wgrywane przez Użytkownika, wykorzystywane
+        jako główny dowód popełnienia wykroczenia opisanego w zgłoszeniu.</li>
+        <li>Zdjęcia z tablicą rejestracyjną – wgrywane przez Użytkownika,
+        wykorzystywane jako precyzyjna identyfikacja pojazdu w zgłoszeniu.</li>
+        <li>Numer rejestracyjny – pobierany automatycznie ze "zdjęcia z tablicą
+        rejestracyjną", z możliwością zmiany tej wartości przez Użytkownika,
+        wykorzystywana w części opisowej zgłoszenia.</li>
+        <li>Miejsce zgłoszenia – pobierany automatycznie ze "zdjęcia z tablicą
+        rejestracyjną", z możliwością zmiany tej wartości przez Użytkownika,
+        wykorzystywany w celu identyfikacji miejsca popełnienia wykroczenia
+        opisanego w zgłoszeniu. Dodatkowo gromadzone są: miasto, województwo
+        oraz dane geolokalizacyjne, wszystkie wykorzystywane w celach statystycznych
+        oraz diagnostycznych.</li>
+        <li>Komentarz – opcjonalnie wypełniany przez Użytkownika, wykorzystywany
+        w celu doprecyzowania zgłoszenia.</li>
+        <li>Status – ustawiany przez Użytkownika, pozwalający mu na oznaczanie
+        postępów procesowania poszczególnych zgłoszeń.</li>
+    </ul>
+
+    <li>Dane związane z tworzeniem zgłoszenia, wypełniane automatycznie przez
+    serwis:</li>
+    <ul>
+        <li>Dane zgłaszającego, jako kopia aktualnych danych związanych z kontem
+        Użytkownika w momencie generowania wniosku: Imię i nazwisko, adres
+        email, numer telefonu (jeśli został podany), adres kontaktowy oraz płeć.</li>
+        <li>Data utworzenia zgłoszenia – zapisywana automatycznie w trakcie tworzenia
+        zgłoszenia, wykorzystywana w celach diagnostycznych.</li>
+        <li>Data zgłoszenia – pobierana automatycznie z pierwszego zdjęcia załączonego
+        do zgłoszenia, wykorzystywana w zgłoszeniu jako oficjalna data oraz godzina 
+        w której Użytkownik był świadkiem rejestrowanego wykroczenia.</li>
+        <li>Numer rejestracyjny – kopia automatycznie pobranego ze zdjęcia
+        numeru rejestracyjnego, wykorzystywany w celu określenia, czy do danego 
+        zgłoszenia należy załączyć zdjęcie tablicy rejestracyjnej.</li>
+        <li>Zdjęcie samej tablicy rejestracyjnej – wycinane automatycznie ze 
+        zdjęcia przekazanego przez Użytkownika, wykorzystywane w podglądzie zgłoszenia
+        oraz na dokumencie PDF zgłoszenia.</li>
+        <li>Marka pojazdu – pobierana automatycznie ze zdjęcia przekazanego przez
+        Użytkownika, gromadzona w celach statystycznych.</li>
+        <li>Miasto identyfikujące odpowiednią komórkę Straży Miejskiej – generowane
+        automatycznie z adresu zgłoszenia, wykorzystywane w celu dobrania odpowiedniej
+        komórki Straży Miejskiej do umieszczenia w nagłówku zgłoszenia PDF.</li>
+        <li>Historia zmian statusów – gromadzona automatycznie w celach
+        diagnostycznych.</li>
+    </ul>
+
+<h3>Pliki cookies</h3>
+    <li>Serwis Uprzejmie Donoszę używa plików cookies. Są to niewielkie pliki tekstowe,
+    wysyłane przez serwer i przechowywane przez przeglądarkę www Użytkownika.</li>
+    <li>Uprzejmie Donoszę wykorzystuje następujące pliki cookies:</li>
+    <ol>
+        <li>niezbędny plik cookie, umożliwiające korzystanie z usług dostępnych
+        w ramach serwisu, przechowujący identyfikator sesji;</li>
+        <li>plik cookie Google Analytics, umożliwiający wiązanie wielu wizyt
+        Użytkownika</li>
+    </ol>
+    <li>Użytkownik w każdej chwili ma możliwość wyłączenia lub przywrócenia opcji
+    gromadzenia cookies poprzez zmianę ustawień w przeglądarce internetowej. Instrukcja
+    zarządzania plikami cookies jest dostępna na stronie <a rel="external"
+    href="http://www.allaboutcookies.org/manage-cookies">allaboutcookies.org</a></li>
+
+<h3>Google Analytics</h3>
+    <li>Gromadzone informacje dotyczą adresu IP, typu wykorzystywanej przeglądarki,
+    języka, rodzaju systemu operacyjnego, informacji o czasie i dacie oraz
+    lokalizacji.</li>
+    <li>Zebrane dane służą do monitorowania i sprawdzenia, w jaki sposób Użytkownicy
+    korzystają z serwisu, aby usprawniać jego funkcjonowanie. Monitorowania informacji
+    o żytkownikach dokonujemy korzystając z narzędzia Google Analytics, które rejestruje
+    zachowanie użytkownika na stronie.</li>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+<?
+require_once(__DIR__ . '/../inc/include.php');
+
+generate('polityka-prywatnosci.html.twig', 
+[
+    'head' =>
+    [
+        'title' => "Polityka prywatności Uprzejmie Donoszę",
+        'shortTitle' => "Polityka prywatności",
+        'description' => "Polityka prywatności Uprzejmie Donoszę",
+        'dialog' => isset($_GET['dialog']),
+        'mainClass' => 'polityka'
+    ]
+]
+);
+?>
