@@ -7,11 +7,11 @@
 <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.
 
 {% if apps|length == 0 %}
-    W tej chwili nie masz ani jednego zgłoszenia o statusie "Nowe", które pozwoliłoby
+    W tej chwili nie masz ani jednego zgłoszenia o statusie <i>Nowe</i>, które pozwoliłoby
     wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
     wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
 {% else %}
-    Paczka ta zostanie przygotowana dla zgłoszeń w statusie "Nowe".
+    Paczka ta zostanie przygotowana dla zgłoszeń w statusie <i>Nowe</i>.
     Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
     wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw
     prawidłowo statusy.</p>
@@ -24,18 +24,28 @@
 {% else %}
 
     {% if apps|length == 1 %}
-        {% set zgloszen = 'znajduje%20si%C4%99%20jedno%20zg%C5%82oszeenie' %}
+        {% set zgloszen = 'znajduje się jedno zgłoszenie' %}
     {% elseif apps|length < 5 %}
-        {% set zgloszen = 'znajduj%C4%85%20si%C4%99%20' ~ apps|length ~ '%20zg%C5%82oszenia' %}
+        {% set zgloszen = 'znajdują się ' ~ apps|length ~ ' zgłoszenia' %}
     {% else %}
-        {% set zgloszen = 'znajduje%20si%C4%99%20' ~ apps|length ~ '%20zg%C5%82osze%C5%84' %}
+        {% set zgloszen = 'znajduje się ' ~ apps|length ~ ' zgłoszeń' %}
     {% endif %}
+
+{% set emailBody = 'Dzień dobry,
+
+W załączeniu ' ~ zgloszen ~ ' nieprawidłowego parkowania. Wszystkie przypadki albo  wpływały na bezpieczeństwo pieszych, albo wiązały się z niszczeniem mienia.
+
+Pozdrawiam,
+
+' ~ user.data.name %}
+
+{% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
+
     <p>
         <a href="sm-all-data.pdf?readyApps" download="true" data-ajax="false"
             class="ui-btn ui-corner-all ui-btn-inline try">Pobierz paczkę {{ apps|length }} zgloszeń</a>
-        <a href="mailto:{{ cities | first[1] }}?subject=Zg%C5%82oszenie%20wykrocze%C5%84%20zwi%C4%85zanych%20z%20parkowaniem&body=Dzie%C5%84%20dobry%2C%0A%0AW%20za%C5%82%C4%85czeniu%20{{ zgloszen }}%20nieprawid%C5%82owego%20parkowania.%20Wszystkie%20przypadki%20albo%20%20wp%C5%82ywa%C5%82y%20na%20bezpiecze%C5%84stwo%20pieszych%2C%20albo%20wi%C4%85za%C5%82y%20si%C4%99%20z%20niszczeniem%20mienia.%0A%0APozdrawiam%2C%0A%0A{{ user.data.name | url_encode(true) }}"
-            download="true" data-ajax="false"
-            class="ui-btn ui-corner-all ui-btn-inline try">Wyślij email do SM {{ cities | first[2] }}</a>
+        <a href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
+            data-ajax="false" class="ui-btn ui-corner-all ui-btn-inline try">Przygotuj email do SM {{ cities | first[2] }}</a>
     </p>
 {% endif %}
 
