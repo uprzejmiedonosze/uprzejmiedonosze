@@ -29,13 +29,16 @@
     </p>
     {% endif %}
     <p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
-        {{ app.user.name }}<br />
+        <b>{{ app.user.name }}</b>
     {% if config.isAppOwnerOrAdmin %}
+        <sup>(nieaktualne dane? popraw je na <a href="register.html">stronie rejestracji</a>
+        i wygeneruj ponownie zgłoszenie)</sup>
+        <br />
         {{ app.user.email }}<br />
         {{ app.user.address }}<br />
-        {{ app.user.msisdn }}
+        {{ app.user.msisdn }}<br />
     {% else %}
-        (dane ukryte)
+        <br />(dane ukryte)
     {% endif %}
     </p>
     <div id="pics" class="ui-grid-a ui-responsive">
