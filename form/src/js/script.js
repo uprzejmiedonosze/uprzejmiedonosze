@@ -47,7 +47,7 @@ $(document).on('pageshow', function () {
     }
 });
 
-var placeSearch, autocomplete;
+var autocomplete;
 var componentForm = {
     street_number: 'short_name',
     route: 'long_name',
@@ -183,18 +183,16 @@ function setAddress(latlng, fromPicture) {
 }
 
 function checkFile(file, id) {
-    if (id == "contextImage") {
-        readGeoDataFromImage(file);
-    }
-
-    $('#' + id).parent().parent().removeClass('error');
-    $('img#' + id + '-img').attr("src", 'img/loading.gif');
-    if (id == 'carImage') {
-        $('#plateImage').attr("src", "");
-        $('#plateImage').hide();
-    }
     if (file) {
         if (/^image\//i.test(file.type)) {
+            $('#' + id).parent().parent().removeClass('error');
+            $('img#' + id + '-img').attr("src", 'img/loading.gif');
+        
+            if (id == 'carImage') {
+                readGeoDataFromImage(file);
+                $('#plateImage').attr("src", "");
+                $('#plateImage').hide();
+            }
             readFile(file, id);
         } else {
             imageError(id);
@@ -301,13 +299,6 @@ function sendFile(fileData, id) {
                 }
                 if (json.carInfo.recydywa && json.carInfo.recydywa > 0) {
                     $('#recydywa').text("Recydywa: " + json.carInfo.recydywa + "");
-                }
-            }
-            // trying if backend returns geo data
-            if (id == 'contextImage' && json.address) {
-                // checking if the address hasn't been set yet
-                if ($('#latlng').val() === "") {
-                    setAddress(json.address.latlng, true);
                 }
             }
         },
