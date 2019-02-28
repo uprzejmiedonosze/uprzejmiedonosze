@@ -23,16 +23,18 @@
     <p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
         mojego miejsca zamieszkania.</p>
 
-    {% if app.status not in ['draft', 'ready'] and config.isAppOwnerOrAdmin %}
+    {% if app.status not in ['draft', 'ready'] and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
     <p>Dokument ze zgłoszeniem dostępny jest pod adresem
         <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
     </p>
     {% endif %}
     <p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
         <b>{{ app.user.name }}</b>
-    {% if config.isAppOwnerOrAdmin %}
+    {% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+        {% if config.hideRegisterHint is not defined %}
         <sup>(nieaktualne dane? popraw je na <a href="register.html">stronie rejestracji</a>
         i wygeneruj ponownie zgłoszenie)</sup>
+        {% endif %}
         <br />
         {{ app.user.email }}<br />
         {{ app.user.address }}<br />

@@ -35,7 +35,9 @@ generate('potwierdz.html.twig',
         'config' =>
         [
             'auth' => true,
-            'appDetails' => true
+            'appDetails' => true,
+            'isAppOwnerOrAdmin' => true,
+            'hideRegisterHint' => true
         ],
         'app' => $application
     ]
