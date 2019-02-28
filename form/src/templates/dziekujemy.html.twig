@@ -16,23 +16,23 @@
     <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 
 <p>Co dalej? <b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
-    Na szczęście nie musisz wysyłać każdego zgłoszenia pojedynczo. Możesz
-    wygenerować ich kilka/kilkanaście, i wysłać je dogodnym dla siebie cyklu.
-    Na przykład raz na miesiąc.</p>
+    Na szczęście nie musisz wysyłać każdego zgłoszenia osobno. Możesz
+    wygenerować ich kilka/kilkanaście, i wysłać je dogodnym dla siebie cyklu.</p>
 
-<p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
-    na adres SM w twoim mieście. 
 {% set sm = app.guessSMData[1] %}
 {% if sm %}
-    W tym wypadku jest to <strong>{{ sm }}</strong>.
+    <p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
+        na adres SM w twoim mieście. Służy do tego strona <a href="wysylka.html">wysyłka</a>.
+    </p>
+    <p>Jeśli masz pytania do nas, skontaktuj się pod adresem
+        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
+    </p>
 {% else %}
-    <strong>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM. Skontaktuj proszę się z nami.</strong>
+    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
+        Skontaktuj proszę się z nami pod adresem
+        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
+    </p>
 {% endif %}
-    Statusy swoich zgłoszeń będziesz mógł samodzielnie ustawiać na wspomnianej
-    już liście zgłoszeń.</p>
-
-<p>Jeśli masz pytania do nas, skontaktuj się pod adresem <a
-    href="mailto:szymon@nieradka.net">szymon@nieradka.net</a>.</p>
 
 <a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
 
