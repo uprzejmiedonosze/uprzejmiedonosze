@@ -127,11 +127,6 @@ function _upload(){
         $application->contextImage = new stdClass();
         $application->contextImage->url = make_image_url($prefix);
         $application->contextImage->thumb = make_image_url($prefix, ',t');
-        
-        if($geo = read_gps_location(make_image_filename($prefix))){
-            !$application->address && $application->address = new stdClass();
-            $application->address->latlngFromImage = $geo;
-        }
     }else{
         raiseError("Uknown picture type: " . $pictureType, 400);
     }
@@ -244,51 +239,6 @@ function resize_image($file, $w, $h, $crop=FALSE) {
 	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
 	return $dst;
-}
-
-/**
- * Returns an array of latitude and longitude from the Image file
- * @param image $file
- * @return multitype:number |boolean
- */
-function read_gps_location($file){
-    if (is_file($file)) {
-        $info = @exif_read_data($file);
-        if (isset($info['GPSLatitude']) && isset($info['GPSLongitude']) &&
-            isset($info['GPSLatitudeRef']) && isset($info['GPSLongitudeRef']) &&
-            in_array($info['GPSLatitudeRef'], array('E','W','N','S')) && in_array($info['GPSLongitudeRef'], array('E','W','N','S'))) {
-            
-            logger("read_gps_location: gps data set");
-
-            $GPSLatitudeRef  = strtolower(trim($info['GPSLatitudeRef']));
-            $GPSLongitudeRef = strtolower(trim($info['GPSLongitudeRef']));
-
-            $lat_degrees_a = explode('/',$info['GPSLatitude'][0]);
-            $lat_minutes_a = explode('/',$info['GPSLatitude'][1]);
-            $lat_seconds_a = explode('/',$info['GPSLatitude'][2]);
-            $lon_degrees_a = explode('/',$info['GPSLongitude'][0]);
-            $lon_minutes_a = explode('/',$info['GPSLongitude'][1]);
-            $lon_seconds_a = explode('/',$info['GPSLongitude'][2]);
-
-            $lat_degrees = $lat_degrees_a[0] / $lat_degrees_a[1];
-            $lat_minutes = $lat_minutes_a[0] / $lat_minutes_a[1];
-            $lat_seconds = $lat_seconds_a[0] / $lat_seconds_a[1];
-            $lon_degrees = $lon_degrees_a[0] / $lon_degrees_a[1];
-            $lon_minutes = $lon_minutes_a[0] / $lon_minutes_a[1];
-            $lon_seconds = $lon_seconds_a[0] / $lon_seconds_a[1];
-
-            $lat = (float) $lat_degrees+((($lat_minutes*60)+($lat_seconds))/3600);
-            $lon = (float) $lon_degrees+((($lon_minutes*60)+($lon_seconds))/3600);
-
-            //If the latitude is South, make it negative. 
-            //If the longitude is west, make it negative
-            $GPSLatitudeRef  == 's' ? $lat *= -1 : '';
-            $GPSLongitudeRef == 'w' ? $lon *= -1 : '';
-
-            return "$lat,$lon";
-        }           
-    }
-    return false;
 }
 
 ?>
