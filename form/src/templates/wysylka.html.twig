@@ -44,7 +44,7 @@ Pozdrawiam,
     <p>Najpierw pobierz paczkę zgłoszeń, następnie wygeneruj wiadomość do SM, załącznik pobrany
     wcześniej plik i wyślij za pomocą swojego klienta pocztowego:<p>
     <p>
-        <a href="sm-all-data.pdf?readyApps" download="true" data-ajax="false"
+        <a href="all-active-apps.pdf?readyApps" download="true" data-ajax="false"
             class="ui-btn ui-corner-all ui-btn-inline try">Pobierz paczkę {{ apps|length }} zgloszeń</a>
         <a href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
             data-ajax="false" class="ui-btn ui-corner-all ui-btn-inline try">Przygotuj email do SM {{ cities | first[2] }}</a>
