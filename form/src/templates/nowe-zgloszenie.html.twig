@@ -67,9 +67,8 @@
                     autocomplete="off" style="text-transform:uppercase" />
             </div>
             <div class="ui-block-b">
-                {% if app.shouldIncludePlateImage %}
-                <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"/>
-                {% endif %}
+                <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
+                    {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
                 <span id="recydywa"></span>
             </div>
         </div>
