@@ -65,6 +65,14 @@
         <input class="required" type="text" id="plateId" name="plateId"
             placeholder="Numer rejestracyjny" value="{{ app.carInfo.plateId ?? '' }}"
             autocomplete="off" style="text-transform:uppercase" />
+            </div>
+            <div class="ui-block-b">
+                {% if app.shouldIncludePlateImage %}
+                <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"/>
+                {% endif %}
+                <span id="recydywa"></span>
+            </div>
+        </div>
 
         <label for="comment">Dodaj komentarz (wymagany dla kategorii "pozostałe")</label>
         <textarea type="text" id="comment" name="comment"
