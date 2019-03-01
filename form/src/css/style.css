@@ -22,8 +22,8 @@ img.half{
 	margin: 1em;
 }
 
-label {
-	-margin-top: 2em!important;
+.new-application label {
+    margin-bottom: 0;
 }
 label.section{
 	padding: .5em 1.143em;
@@ -40,8 +40,16 @@ label.section:first-of-type {
 	margin-bottom: 2em;
 }
 
-label span.hint {
+div.ui-grid-a div.ui-block-a {
+    padding-right: 0.5em;
+}
+div.ui-grid-a div.ui-block-b {
+    padding-left: 0.5em;
+}
+
+label.hint {
     color: #009C7F;
+    clear: both;
 }
 
 .ui-input-text input, .ui-input-search input {

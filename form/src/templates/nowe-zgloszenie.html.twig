@@ -11,12 +11,12 @@
 <form action="/potwierdz.html" id="form" method="post" data-ajax="false">
     <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
     <div>
-        <label class="section">Dane zgłoszenia</label>
+        <!--label class="section">Dane zgłoszenia</label-->
         <div class="ui-grid-a ui-responsive" id="pics">
             <div class="ui-block-a">
                 <div class="image-upload">
                     <label for="contextImage">
-                        Zrób zdjęcie prezentujące kontekst zgłoszenia
+                        Wgraj zdjęcie z widocznym wykroczeniem
                         <img class="photo-thumbs" id="contextImage-img"
                             src="{{ app.contextImage.thumb ?? 'img/cameraContext.png' }}"/>
                     </label>
@@ -28,14 +28,12 @@
             <div class="ui-block-b">
                 <div class="image-upload">
                     <label for="carImage">
-                        Zrób zdjęcie na którym widoczna jest tablica rejestracyjna
+                        Wgraj zdjęcie z widoczną tablicą rejestracyjną
                         <img class="photo-thumbs" id="carImage-img"
                             src="{{ app.carImage.thumb ?? 'img/cameraPlate.png' }}"/>
-                        <img id="plateImage" src=""/>
-                        <span id="recydywa"></span>
                     </label>
                     <input type="file" accept="image/jpeg" id="carImage"
-                        title="Zdjęcie przedstawiające samochód tablice rejestracyjne"
+                        title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                         value="{{ app.carImage.url ?? '' }}" />
                 </div>
             </div>
@@ -43,10 +41,10 @@
 
         <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
 
-        <label for="lokalizacja">Podaj miejsce zgłoszenia <span class="hint" id="addressHint"></span></label>
+        <label for="lokalizacja" id="addressHint">Podaj miejsce zgłoszenia</label>
         <div class="combo">
             <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                placeholder="Miejsce zgłoszenia" data-inline="true"
+                placeholder="(zacznij wpisywać adres)" data-inline="true"
                 autocomplete="I told you I wanted this off, Google. But you would not listen."
                 value="{{ app.address.address ?? '' }}" />
             <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
@@ -61,10 +59,12 @@
         <input type="hidden" id="country" name="country" />
         <input type="hidden" id="latlng" name="latlng" value="{{ app.address.latlng ?? '' }}" />
 
-        <label for="plateId">Podaj numer rejestracyjny pojazdu który dokonał naruszenia <span class="hint" id="plateHint"></span></label>
-        <input class="required" type="text" id="plateId" name="plateId"
-            placeholder="Numer rejestracyjny" value="{{ app.carInfo.plateId ?? '' }}"
-            autocomplete="off" style="text-transform:uppercase" />
+        <label for="plateId" id="plateHint">Podaj numer rejestracyjny</label>
+        <div class="ui-grid-a ui-responsive">
+            <div class="ui-block-a">
+                <input class="required" type="text" id="plateId" name="plateId"
+                    placeholder="(numer rejestracyjny bez spacji)" value="{{ app.carInfo.plateId ?? '' }}"
+                    autocomplete="off" style="text-transform:uppercase" />
             </div>
             <div class="ui-block-b">
                 {% if app.shouldIncludePlateImage %}
@@ -74,11 +74,11 @@
             </div>
         </div>
 
-        <label for="comment">Dodaj komentarz (wymagany dla kategorii "pozostałe")</label>
+        <label for="comment">Podaj komentarz</label>
         <textarea type="text" id="comment" name="comment"
-            placeholder="Np. szczegóły dotyczące lokalizacji">{{ app.userComment ?? '' }}</textarea>
+            placeholder="(opcjonalny komentarz, np. szczegóły dotyczące lokalizacji)">{{ app.userComment ?? '' }}</textarea>
 
-        <label for="category" class="section">Podaj rodzaj naruszenia</label>
+        <label for="category">Podaj rodzaj naruszenia</label>
 
         <div class="ui-grid-a ui-responsive" id="category">
         {% set i = 0 %}

@@ -25,7 +25,7 @@ $(document).on('pageshow', function () {
                 checkFile(e.target.files[0], this.id);
             });
         }
-        $('#plateImage').hide();
+        //$('#plateImage').hide();
 
         $('#form-submit').click(function () {
             if (validateForm()) {
@@ -106,7 +106,8 @@ function checkAddress(where) {
         ret = ($('#latlng').val().trim().length > 5) && ret;
 
         if (!ret && where.val().trim().length > 0) {
-            $('#addressHint').text('(Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej)');
+            $('#addressHint').text('Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
+            $('#addressHint').addClass('hint');
         }
     }
 
@@ -168,18 +169,25 @@ function setAddress(latlng, fromPicture) {
 
                 $('a#geo').buttonMarkup({ icon: "check" });
                 $('#lokalizacja').removeClass('error');
-                $('#addressHint').text('(Sprawdź adres, który został automatycznie pobrany ze zdjęcia)');
+                if (fromPicture) {
+                    $('#addressHint').text('Sprawdź automatycznie pobrany adres');
+                    $('#addressHint').addClass('hint');
+                }else{
+                    $('#addressHint').text('Zweryfikuj pobrany adres');
+                    $('#addressHint').addClass('hint');
+                }
             } else {
                 $('#lokalizacja').addClass('error');
                 $('a#geo').buttonMarkup({ icon: "location" });
-                $('#addressHint').text('');
+                $('#addressHint').text('(zacznij wpisywać adres)');
+                $('#addressHint').removeClass('hint');
             }
         }).fail(function () {
             $('a#geo').buttonMarkup({ icon: "alert" });
             $('#latlng').val("");
             $('#lokalizacja').addClass('error');
         });
-    $('#lokalizacja').attr("placeholder", "Miejsce zgłoszenia");
+    $('#lokalizacja').attr("placeholder", "(zacznij wpisywać adres)");
 }
 
 function checkFile(file, id) {
@@ -251,10 +259,11 @@ function readGeoDataFromImage(file) {
 
 function noGeoDataInImage() {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-        $('#addressHint').text('(Uprzejmie Donoszę na iOS nie jest w stanie wyciągnąć adresu z twoich zdjęć)');
+        $('#addressHint').text('Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć');
     } else {
-        $('#addressHint').html('(Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.)');
+        $('#addressHint').html('Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.');
     }
+    $('#addressHint').addClass('hint');
 }
 
 function setDateTime(dateTime) {
@@ -287,7 +296,8 @@ function sendFile(fileData, id) {
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
                     $('#plateId').val(json.carInfo.plateId);
-                    $('#plateHint').text('(Sprawdź odczytany numer rejestracyjny jest prawidłowy)');
+                    $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny');
+                    $('#plateHint').addClass('hint');
                     $('#plateId').removeClass('error');
                 }
                 if (json.carInfo.plateImage) {
@@ -295,7 +305,6 @@ function sendFile(fileData, id) {
                     $('#plateImage').show();
                 } else {
                     $('#plateImage').hide();
-                    $('#plateHint').text('');
                 }
                 if (json.carInfo.recydywa && json.carInfo.recydywa > 0) {
                     $('#recydywa').text("Recydywa: " + json.carInfo.recydywa + "");
