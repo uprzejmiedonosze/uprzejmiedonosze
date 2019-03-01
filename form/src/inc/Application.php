@@ -67,6 +67,9 @@ class Application extends JSONObject{
      * value in the application.
      */
     public function shouldIncludePlateImage(){
+        if(!isset($this->carInfo)){
+            return false;
+        }
         if(!$this->carInfo->plateId){
             return false;
         }
