@@ -192,7 +192,9 @@ function make_image_url($prefix, $suffix = ''){
  */
 function get_car_info($image_bytes){
 	$api_instance = new Swagger\Client\Api\DefaultApi();
-	$secret_key = "sk_aa0b80a70b2ae2268b36734a"; 
+    $secret_key = ('%HOST%' == 'staging.uprzejmiedonosze.net')?
+        "sk_0bcc0e58dab1ea40c4389d70": // staging API key
+        "sk_aa0b80a70b2ae2268b36734a"; // prod API key
 	$country = "eu"; 
 	$recognize_vehicle = 1;
 	$state = ""; 
