@@ -11,6 +11,9 @@ $(document).on('pageshow', function () {
 
         $('#plateId').on('change', function () {
             $('#plateId').removeClass('error');
+            $('#plateImage').hide();
+            $('#recydywa').hide();
+            $('#brand').hide();
         });
 
         $('#comment').on('change', function () {
