@@ -310,8 +310,12 @@ function sendFile(fileData, id) {
                     $('#plateImage').hide();
                 }
                 if (json.carInfo.recydywa && json.carInfo.recydywa > 0) {
-                    $('#recydywa').text("Recydywa: " + json.carInfo.recydywa + "");
+                    $('#recydywa').text("(recydywa: " + json.carInfo.recydywa + ")");
                 }
+                if (json.carInfo.brand) {
+                    $('#brand').text("Marka: " + json.carInfo.brand);
+                }
+
             }
         },
         error: function (data) {
