@@ -24,6 +24,7 @@ img.half{
 
 .new-application label {
     margin-bottom: 0;
+    margin-top: 1em;
 }
 label.section{
 	padding: .5em 1.143em;
@@ -112,9 +113,6 @@ img#plateImage {
 	text-align: center;
 }
 
-#category label{
-	display: block;
-}
 #category img{
 	width: 100px;
 	height: 100px;
@@ -123,6 +121,7 @@ img#plateImage {
 }
 
 #category label{
+    display: block;
 	font-weight: normal;
 	border: none;
 	--moz-columns: 2 120px;
