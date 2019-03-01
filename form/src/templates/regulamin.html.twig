@@ -1,0 +1,39 @@
+{% if head.dialog %}
+    {% set leftButton = 'menuBack' %}
+{% else %}
+    {% set leftButton = 'menuMain' %}
+{% endif %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>Regulamin serwisu Uprzejmie Donoszę</h2>
+
+<ol>
+    <li>Rejestrując sie w Uprzejmie Donoszę musisz podać swoje prawdziwe
+    dane osobowe oraz kontaktowe. Uprzejmie Donoszę nie dopuszcza tworzenia
+    anonimowych kont użytkowników ani zgłoszeń.</li>
+    <li>Korzystaj z Uprzejmie Donoszę jako z ostatecznego narzędznia. W pierwszej
+    kolejności spróbuj skontaktować się z kierowcą, który naruszył przepisy. 
+    Część z nich robi to ze zwykłej niewiedzy.</li>
+    <li>Uprzemie Donoszę służy do zgłaszania naruszeń parkowania, które są istotne
+    z punktu widzenia pieszych i rowerzystów. Zastawienie bramy wjazdowej
+    (jakkolwiek karygodne) nie jest takim zgłoszeniem. Postaraj się wybrać prawidłową
+    kategorię zgłoszenia i wybieraj opcję “Inne” w ostateczności.</li>
+    <li>Pamiętaj, że każde zgłoszenie stworzone i wysłane do Straży Miejskiej
+    wymaga pracy ludzkiej w celu ukarania sprawcy. Koncentruj się w pierwszej kolejności
+    na przypadkach karygodnych, recydywistach, pojazdach stwarzających zagrożenie
+    i niszczących infrastrukturę.</li>
+    <li>Wypełnij dokładnie wszystkie wymagane w procesie zgłaszania wniosku pola.
+    Zwróć uwagę, czy adres który został pobrany ze zdjęcia został prawidłowo
+    przetłumaczony na ulicę i numer domu. Zweryfikuj także czy automatycznie
+    pobrany numer rejestracyjny jest prawidłowy i należy do auta sprawcy wykroczenia.</li>
+    <li>Musisz mieć świadomość, że Straż Miejska może kontaktować się z
+    Tobą, w celu złożenia dodatkowych wyjaśnień.</li>
+    <li>Informujemy Cię także, że zbieramy anonimowe dane statystyczne z
+    przekazywanych nam zgłoszeń (data i godzina, miejsca, rodzaj
+    zgłoszenia). Szczegółowy opis sposobu gromadzenia i przetwarzania danych
+    znajduje się w <a href="polityka-prywatnosci.html">polityce prywatności</a>.</li>
+</ol>
+
+{% endblock %}

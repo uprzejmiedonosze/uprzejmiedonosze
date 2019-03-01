@@ -1,0 +1,16 @@
+<?
+require_once(__DIR__ . '/../inc/include.php');
+
+generate('regulamin.html.twig', 
+[
+    'head' =>
+    [
+        'title' => "Regulamin Uprzejmie Donoszę",
+        'shortTitle' => "Regulamin",
+        'description' => "Regulamin Uprzejmie Donoszę",
+        'dialog' => isset($_GET['dialog']),
+        'mainClass' => 'regulamin'
+    ]
+]
+);
+?>
