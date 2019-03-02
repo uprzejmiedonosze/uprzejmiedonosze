@@ -128,25 +128,26 @@ class New(BasePage):
         self.display_image_inputs()
         self.driver.find_element(*Locators.NEW_IIMAGE1).send_keys(os.getcwd() + self.cfg.app['contextImage'])
 
-        wait = WebDriverWait(self.driver, 20)
-        wait.until(EC.text_to_be_present_in_element_value(Locators.NEW_ADDRESS, self.cfg.app['address']))
-        
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class')
-        assert not "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
-
-        assert self.cfg.app['address'] in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute("value")
 
     def test_car_image(self):
         self.display_image_inputs()
         self.driver.find_element(*Locators.NEW_IIMAGE2).send_keys(os.getcwd() + self.cfg.app['carImage'])
-        
+
+        wait = WebDriverWait(self.driver, 20)
+        wait.until(EC.text_to_be_present_in_element_value(Locators.NEW_ADDRESS, self.cfg.app['address']))
+
         wait = WebDriverWait(self.driver, 20)
         wait.until(EC.text_to_be_present_in_element_value(Locators.NEW_PLATEID, self.cfg.app['plateId']))
-        
+
         assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
         assert not "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
+        assert not "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
+
+        time.sleep(1)
         assert self.driver.find_element(*Locators.NEW_PLATEIMG).is_displayed()
 
+        assert self.cfg.app['address'] in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute("value")
         assert self.cfg.app['plateId'] in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute("value")
     
     def test_invalid_image(self):
@@ -205,8 +206,7 @@ class New(BasePage):
         self.driver.execute_script("$('#form').submit()")
         text = self.get_content()
         assert "UD/" in text
-        assert "sm@um.szczecin.pl" in text
-    
+
     def app_page(self):
         self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # first link with /ud-
         text = self.get_content()
@@ -237,11 +237,7 @@ class New(BasePage):
 
 class MyApps(BasePage):
     def __init__(self, driver):
-        BasePage.__init__(self, driver, Locators.START)
-        self.driver.find_element(*Locators.BTN_LEFT).click() # going back to main page
-        time.sleep(2)
-        self.driver.find_element(*Locators.MYAPPS).click()
-        time.sleep(2)
+        BasePage.__init__(self, driver, Locators.MYAPPS)
     
     def check_list(self):
         self.driver.find_element(*Locators.MYAPPS_EXPAND).click() # expand first item
