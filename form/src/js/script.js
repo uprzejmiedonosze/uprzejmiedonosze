@@ -299,7 +299,12 @@ function sendFile(fileData, id) {
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
                     $('#plateId').val(json.carInfo.plateId);
-                    $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny');
+                    if (json.carInfo.brand) {
+                        $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny pojazdu '
+                            + json.carInfo.brand);
+                    }else{
+                        $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny');
+                    }
                     $('#plateHint').addClass('hint');
                     $('#plateId').removeClass('error');
                 }
@@ -311,9 +316,6 @@ function sendFile(fileData, id) {
                 }
                 if (json.carInfo.recydywa && json.carInfo.recydywa > 0) {
                     $('#recydywa').text("(recydywa: " + json.carInfo.recydywa + ")");
-                }
-                if (json.carInfo.brand) {
-                    $('#brand').text("Marka: " + json.carInfo.brand);
                 }
 
             }

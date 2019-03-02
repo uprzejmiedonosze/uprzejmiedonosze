@@ -118,7 +118,7 @@ function _upload(){
             $application->carInfo = new stdClass();
             $application->carInfo->plateId = strtoupper($result["plate"]);
             $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
-            $application->carInfo->brand = $result["vehicle"]['make'][0]['name'];
+            $application->carInfo->brand = ucfirst($result["vehicle"]['make'][0]['name']);
             $application->carInfo->plateImage = make_image_url($prefix, ',p');
             $application->carInfo->recydywa = $recydywa;
         }
