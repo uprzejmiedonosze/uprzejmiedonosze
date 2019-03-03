@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 $(document).on('pageshow', function () {
     if ($(".new-application").length) {
 
@@ -28,7 +29,6 @@ $(document).on('pageshow', function () {
                 checkFile(e.target.files[0], this.id);
             });
         }
-        //$('#plateImage').hide();
 
         $('#form-submit').click(function () {
             if (validateForm()) {
@@ -51,19 +51,13 @@ $(document).on('pageshow', function () {
 });
 
 var autocomplete;
-var componentForm = {
-    street_number: 'short_name',
-    route: 'long_name',
-    locality: 'long_name',
-    administrative_area_level_1: 'short_name',
-    country: 'long_name',
-    postal_code: 'short_name'
-};
 
+// eslint-disable-next-line no-unused-vars
 function initAutocompleteOnRegister() {
     initAutocomplete(false, 'address');
 }
 
+// eslint-disable-next-line no-unused-vars
 function initAutocompleteOnNewApplication() {
     initAutocomplete(true, 'lokalizacja');
 }
@@ -198,7 +192,7 @@ function checkFile(file, id) {
         if (/^image\//i.test(file.type)) {
             $('#' + id).parent().parent().removeClass('error');
             $('img#' + id + '-img').attr("src", 'img/loading.gif');
-        
+
             if (id == 'carImage') {
                 readGeoDataFromImage(file);
                 $('#plateImage').attr("src", "");
@@ -320,6 +314,7 @@ function sendFile(fileData, id) {
 
             }
         },
+        // eslint-disable-next-line no-unused-vars
         error: function (data) {
             imageError(id);
         }
