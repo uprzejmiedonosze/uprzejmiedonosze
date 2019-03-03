@@ -15,5 +15,6 @@
         "**/functions-samples": true,
         "**/tools": true
     },
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "eslint.options": { "extends": "jquery" }
 }

@@ -3,7 +3,7 @@ module.exports = {
         "browser": true,
         "es6": true
     },
-    "extends": "eslint:recommended",
+    "extends": "jquery",
     "parserOptions": {
         "ecmaVersion": 2018
     },
