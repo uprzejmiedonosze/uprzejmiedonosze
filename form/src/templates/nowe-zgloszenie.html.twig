@@ -11,14 +11,13 @@
 <form action="/potwierdz.html" id="form" method="post" data-ajax="false">
     <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
     <div>
-        <!--label class="section">Dane zgłoszenia</label-->
         <div class="ui-grid-a ui-responsive" id="pics">
             <div class="ui-block-a">
                 <div class="image-upload contextImageSection">
                     <label for="contextImage">
                         Wgraj zdjęcie z widocznym wykroczeniem
                         <div class="loader"></div>
-                        <img class="photo-thumbs" src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
+                        <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                     </label>
                     <input type="file" accept="image/jpeg" id="contextImage"
                         title="Zdjęcie przedstawiające kontekst"
@@ -30,7 +29,7 @@
                     <label for="carImage">
                         Wgraj zdjęcie z widoczną tablicą rejestracyjną
                         <div class="loader"></div>
-                        <img class="photo-thumbs" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
+                        <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                     </label>
                     <input type="file" accept="image/jpeg" id="carImage"
                         title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
