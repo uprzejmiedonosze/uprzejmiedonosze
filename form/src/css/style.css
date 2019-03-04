@@ -26,6 +26,26 @@ img.half{
     margin-bottom: 0;
     margin-top: 1em;
 }
+
+.new-application #pics label {
+    border-radius: 0.8em;
+    background: #eee;
+    position: relative;
+    overflow: hidden;
+    max-width: 400px;
+    height: 200px;
+    width: 100%;
+    padding: 0.4em;
+}
+
+.new-application .ui-block-a, .new-application .ui-block-b {
+    max-width: 400px;
+}
+
+.new-application .ui-block-a div, .new-application .ui-block-b div{
+    width: 95%;
+}
+
 label.section{
 	padding: .5em 1.143em;
 	font-size: 14px;
@@ -39,13 +59,6 @@ label.section{
 label.section:first-of-type {
 	margin-top: 0em;
 	margin-bottom: 2em;
-}
-
-div.ui-grid-a div.ui-block-a {
-    padding-right: 0.5em;
-}
-div.ui-grid-a div.ui-block-b {
-    padding-left: 0.5em;
 }
 
 label.hint {
@@ -84,11 +97,18 @@ label.hint {
 }
 
 #pics img {
-	max-width: 350px;
 	border-radius: 0.8em;
     width: 100%;
     padding-top: 0.3em;
     display: block;
+    height: auto;
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #pics .image-upload {
@@ -99,6 +119,34 @@ label.hint {
 #pics img[src='img/cameraPlate.png'],
 #pics img[src='img/loading.gif'] {
 	width: auto;
+}
+
+div.loader{
+    margin: 30px auto;
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #009C7F; /* Blue */
+    border-radius: 50%;
+    width: 50px !important;
+    height: 50px;
+    animation: spin 2s linear infinite;
+    display: none;
+}
+
+.contextImageSection img, .carImageSection img{
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 110px;
+}
+.contextImageSection img {
+    background-image: url('/img/cameraContext.png');
+}
+.carImageSection img {
+    background-image: url('/img/cameraPlate.png');
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 img#plateImage {

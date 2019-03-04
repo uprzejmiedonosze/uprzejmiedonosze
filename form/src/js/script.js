@@ -190,8 +190,9 @@ function setAddress(latlng, fromPicture) {
 function checkFile(file, id) {
     if (file) {
         if (/^image\//i.test(file.type)) {
-            $('#' + id).parent().parent().removeClass('error');
-            $('img#' + id + '-img').attr("src", 'img/loading.gif');
+            $('.' + id + 'Section').removeClass('error');
+            $('.' + id + 'Section img').hide();
+            $('.' + id + 'Section .loader').show();
 
             if (id == 'carImage') {
                 readGeoDataFromImage(file);
@@ -220,8 +221,9 @@ function readFile(file, id) {
 }
 
 function imageError(id) {
-    $('img#' + id + '-img').attr("src", 'img/cameraContext.png');
-    $('#' + id).textinput('enable');
+    $('.' + id + 'Section img').show();
+    $('.' + id + 'Section').parent().addClass('error');
+    $('.' + id + 'Section input').textinput('enable');
 }
 
 function readGeoDataFromImage(file) {
@@ -282,13 +284,12 @@ function sendFile(fileData, id) {
         contentType: false,
         processData: false,
         success: function (json) {
-            if (json.carImage) {
-                $('img#carImage-img').attr("src", json.carImage.thumb);
-                $('#carImage').textinput('disable');
-            }
-            if (json.contextImage) {
-                $('img#contextImage-img').attr("src", json.contextImage.thumb);
-                $('#contextImage').textinput('disable');
+            if (json.carImage || json.contextImage){
+                $('.' + id + 'Section input').textinput('disable');
+                $('.' + id + 'Section .loader').hide();
+                $('.' + id + 'Section img').css('height', '100%');
+                $('.' + id + 'Section img').attr("src", json[id].thumb);
+                $('.' + id + 'Section img').show();
             }
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
