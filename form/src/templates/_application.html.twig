@@ -13,9 +13,9 @@
     <p>Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania,
         oraz nie wiem jak długo pojazd pozostawał na tym miejscu.</p>
 
-    {% if app.userComment %}
+{% if app.userComment %}
     <p>{{ app.userComment }}</p>
-    {% endif %}
+{% endif %}
 
     <p>Jestem {{ app.guessUserSex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3
         Kodeksu karnego oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.</p>
@@ -23,25 +23,26 @@
     <p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
         mojego miejsca zamieszkania.</p>
 
-    {% if app.status not in ['draft', 'ready'] and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+{% if app.status not in ['draft', 'ready'] and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
     <p>Dokument ze zgłoszeniem dostępny jest pod adresem
         <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
     </p>
-    {% endif %}
+{% endif %}
+
     <p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
         <b>{{ app.user.name }}</b>
-    {% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
-        {% if config.hideRegisterHint is not defined %}
+{% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+    {% if config.hideRegisterHint is not defined %}
         <sup>(nieaktualne dane? popraw je na <a href="register.html">stronie rejestracji</a>
         i wygeneruj ponownie zgłoszenie)</sup>
-        {% endif %}
+    {% endif %}
         <br />
         {{ app.user.email }}<br />
         {{ app.user.address }}<br />
         {{ app.user.msisdn }}<br />
-    {% else %}
+{% else %}
         <br />(dane ukryte)
-    {% endif %}
+{% endif %}
     </p>
     <div id="pics" class="ui-grid-a ui-responsive">
         <div class="ui-block-a">
@@ -80,7 +81,7 @@
     </div>
 {% endif %}
 
-</div> <!-- ui-body ui-body-a ui-corner-all -->
+</div>
 
 {% else %} {# if config.appDetails #}
 
@@ -95,12 +96,11 @@
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
             samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
             pod adresem <b>{{ app.address.address}}</b>.
-            {{ app.getCategory[1] }}
-            Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.</p>
+            {{ app.getCategory[1] }}</p>
 
-        {% if app.userComment %}
-        <p>{{ app.userComment }}</p>
-        {% endif %}
+{% if app.userComment %}
+    <p>{{ app.userComment }}</p>
+{% endif %}
 
 {% if config.appActionButtons %}
         <div data-role="controlgroup" data-type="horizontal" data-mini="true">
@@ -109,11 +109,6 @@
             <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
                 -ui-nodisc-icon ui-nodisc-icon ui-icon-mail">PDF</a>
-    {% if general.isAdmin %}
-            <a href="{{ app.id }}.pdf?hearing" download="{{ app.number }}" data-ajax="false"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
-                -ui-nodisc-icon ui-nodisc-icon ui-icon-user">Wypełniony dokument przesłuchania ;)</a>
-    {% endif %}
         </div>
 {% endif %}
         <div id="pics" class="ui-grid-a ui-responsive">
