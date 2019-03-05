@@ -293,6 +293,7 @@ img#plateImage {
 
 img.static-map-preview {
     border-radius: 0.2em;
+    width: 95%;
 }
 
 /* #endregion zgloszenie */
