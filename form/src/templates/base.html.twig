@@ -7,16 +7,16 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <title>{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę</title>
-        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-        <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-57x57.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon-180x180.png" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/img/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/img/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/img/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/img/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/img/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/img/apple-touch-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon-180x180.png" />
         <link rel="manifest" href="/manifest.json">
 
         <meta name="theme-color" content="#009C7F">
@@ -32,7 +32,7 @@
 
         <link rel="stylesheet"
             href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-        <link rel="stylesheet" href="css/style-%CSS_HASH%.css">
+        <link rel="stylesheet" href="/css/style-%CSS_HASH%.css">
 
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
         <script
@@ -101,7 +101,7 @@
         {% endblock %}
         </div> <!-- page -->
     {% block jsIncludes %}
-        <script src="js/lazysizes.min-%JS_HASH%.js"></script>
+        <script src="/js/lazysizes.min-%JS_HASH%.js"></script>
 
     {% if head.mapsInitFunc is defined %}
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback={{ head.mapsInitFunc }}&language=pl" async defer></script>
