@@ -407,3 +407,11 @@ div.przepisy h4 {
 }
 
 /* #endregion przepisy */
+
+/* #region epuap */
+
+.epuap .ui-grid-a img {
+    width: 100%;
+}
+
+/* #endregion epuap */
