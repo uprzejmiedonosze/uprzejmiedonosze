@@ -16,6 +16,7 @@ class DB extends NoSQLite{
         parent::__construct($store);
         $this->apps  = $this->getStore('applications');
         $this->users = $this->getStore('users');
+        $this->recydywa = $this->getStore('recydywa');
         try{
             $this->getCurrentUser();
         }catch(Exception $e){
@@ -164,6 +165,29 @@ class DB extends NoSQLite{
         return $stmt;
     }
 
+    /**
+     * Returns the amount of applications per specified $plate.
+     * If there is no value in DB initializes it counting active
+     * apps in the 'applications' store (lazy load).
+     */
+    public function getRecydywa($plate){
+        $recydywa = $this->recydywa->get($plate);
+        if(!$recydywa){
+            $recydywa = $this->countApplicationsPerPlate($plate);
+            if($recydywa > 0){
+                $this->recydywa->set($plate, strval($recydywa));
+            }
+        }
+        return intval($recydywa);
+    }
+
+    /**
+     * Increases recydywa count by 1.
+     */
+    public function updateRecydywa($plate){
+        $recydywa = $this->countApplicationsPerPlate($plate);
+        $this->recydywa->set($plate, strval($recydywa));
+    }
 }
 
 ?>

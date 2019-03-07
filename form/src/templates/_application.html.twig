@@ -1,4 +1,5 @@
 {% if config.appDetails %}
+{################################### full version ###################################}
 <div class="ui-body ui-body-a ui-corner-all">
 
     <h3>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h3>
@@ -6,6 +7,7 @@
     <p>W dniu <b>{{ app.getDate }}</b> roku o godzinie <b>{{ app.getTime }}</b>
         {{ app.guessUserSex.bylam }} świadkiem pozostawienia
         samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
+        {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
         pod adresem <b>{{ app.address.address}}</b>.
         {{ app.getCategory[1] }}
         Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.</p>
@@ -84,17 +86,19 @@
 </div>
 
 {% else %} {# if config.appDetails #}
+{################################### short version ###################################}
 
 <div id="{{ app.id }}"
     class="application {{ app.getStatus[3] }} status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus[2] }}"
     data-expanded-icon="carat-d" data-role="collapsible"
-    data-filtertext="{{ app.address.address }} {{ app.number }} {{ app.date }} {{ app.carInfo.plateId }} {{ app.userComment }} {{ app.getCategory[1] }}">
+    data-filtertext="{{ app.address.address }} {{ app.number }} {{ app.date }} {{ app.carInfo.plateId }} {{ app.userComment }} {{ app.getCategory[1] }} {% if app.getRecydywa > 1 %}recydywa{% endif %}">
 
     <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}}</h3>
     <p data-role="listview" data-inset="false">
         <p>W dniu <b>{{ app.getDate }}</b> roku o godzinie <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
             samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
+            {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
             pod adresem <b>{{ app.address.address}}</b>.
             {{ app.getCategory[1] }}</p>
 
