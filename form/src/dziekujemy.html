@@ -17,6 +17,7 @@ $application->number = 'UD/' . $user->number . '/' . sizeof($user->applications)
 
 $storage->saveApplication($application);
 $storage->saveUser($user);
+$storage->updateRecydywa($application->carInfo->plateId);
 
 generate('dziekujemy.html.twig', 
     [

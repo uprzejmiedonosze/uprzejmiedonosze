@@ -184,9 +184,8 @@ class DB extends NoSQLite{
     /**
      * Increases recydywa count by 1.
      */
-    public function incRecydywa($plate){
-        $recydywa = getRecydywa($plate);
-        $recydywa++;
+    public function updateRecydywa($plate){
+        $recydywa = $this->countApplicationsPerPlate($plate);
         $this->recydywa->set($plate, strval($recydywa));
     }
 }
