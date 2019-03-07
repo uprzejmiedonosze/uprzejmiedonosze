@@ -114,7 +114,7 @@
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
                 -ui-nodisc-icon ui-nodisc-icon ui-icon-mail">PDF</a>
             <select name="select-status" id="select-status-{{ app.id }}"
-                data-collapsed-icon="{{ app.getStatus[2] }}"
+                class="status-{{ app.status }}"
                 onChange="_action('{{ app.id }}');">
             {% for key,val in statuses %}
                 {% if val[3] %} {# class is empty, this is a draft or ready #}
