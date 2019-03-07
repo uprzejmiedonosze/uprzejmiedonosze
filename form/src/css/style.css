@@ -140,6 +140,10 @@ div.error img{
     text-transform: uppercase;
 }
 
+.new-application .edit-warning {
+    background-color: #e9c200;
+}
+
 .new-application #pics label {
     border-radius: 0.8em;
     background: #eee;
