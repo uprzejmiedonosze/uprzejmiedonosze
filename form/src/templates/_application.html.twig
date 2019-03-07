@@ -101,20 +101,25 @@
         {% endif %}
 
 {% if config.appActionButtons %}
-        <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+        <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
             <a href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left
                 ui-btn-inline ui-alt-icon -ui-nodisc-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
             <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
                 -ui-nodisc-icon ui-nodisc-icon ui-icon-mail">PDF</a>
-    {% if general.isAdmin %}
-            <a href="{{ app.id }}.pdf?hearing" download="{{ app.number }}" data-ajax="false"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
-                -ui-nodisc-icon ui-nodisc-icon ui-icon-user">Wypełniony dokument przesłuchania ;)</a>
-    {% endif %}
-        </div>
+            <select name="select-status" id="select-status-{{ app.id }}"
+                data-collapsed-icon="{{ app.getStatus[2] }}"
+                onChange="_action('{{ app.id }}');">
+            {% for key,val in statuses %}
+                {% if val[3] %} {# class is empty, this is a draft or ready #}
+                    <option value="{{ key }}"
+                        {% if key == app.status %}selected="selected"{% endif %}>{{ val[1] }}</option>
+                {% endif %}
+            {% endfor %}
+            </select>
+        </fieldset></form>
 {% endif %}
-        <div id="pics" class="ui-grid-a ui-responsive">
+        <div class="ui-grid-a ui-responsive">
             <div class="ui-block-a">
                 <a href="/ud-{{ app.id }}.html">
                 <img class="photo-thumbs lazyload" data-src="{{ app.contextImage.thumb }}"> 
@@ -126,22 +131,6 @@
                 </a>
             </div>
         </div>
-
-{% if config.appActionButtons %}
-        <div data-role="controlgroup" data-type="horizontal" data-mini="true" class="actions">
-        
-        {% for key,val in statuses %}
-            {% if val[3] %} {# class is empty, this is a draft or ready #}
-                <a href="#" onclick="action('{{ key }}', '{{ app.id }}')"
-                    class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon -ui-nodisc-icon
-                    {% if key == app.status %}ui-state-disabled{% endif %}
-                    ui-icon-{{ val[2] }}
-                    status-{{ key }}">{{ val[1] }}</a>
-            {% endif %}
-        {% endfor %}
-        </div>
-{% endif %}
-
     </p> <!-- data-role="listview" data-inset="false" -->
 </div>
 {% endif %} {# if config.appDetails #}
