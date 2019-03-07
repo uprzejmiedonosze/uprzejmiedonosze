@@ -50,9 +50,9 @@ const SM_ADDRESSES = Array (
     'szczecin' => ['Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
         'sm@um.szczecin.pl', 'Szczecin'],
     'warszawa' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-        'ot1@strazmiejska.waw.pl', 'Warszawa'],
+        'csk@strazmiejska.waw.pl', 'Warszawa'],
     'warsaw' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-        'ot1@strazmiejska.waw.pl', 'Warszawa'],
+        'csk@strazmiejska.waw.pl', 'Warszawa'],
     'wroclaw' => ['Straż Miejska Wrocławia \\\\ ul. Gwarna 5/7 \\\\ 50-001 Wrocław',
         'straz@strazmiejska.wroclaw.pl', 'Wrocław'],
     'wrocław' => ['Straż Miejska Wrocławia \\\\ ul. Gwarna 5/7 \\\\ 50-001 Wrocław',
@@ -91,6 +91,8 @@ const SM_ADDRESSES = Array (
         'umgorowo@gorowoilaweckie.pl', 'Górowo Iławeckie'],
     'górowo iławeckie' => ['UM Górowo Iławeckie \\\\ pl. Ratuszowy 18 \\\\ 11-220 Górowo Iławeckie',
         'umgorowo@gorowoilaweckie.pl', 'Górowo Iławeckie'],
+    'tczew' => ['Straż Miejska w Tczewie \\\\ Plac Marszałka Piłsudskiego 1 \\\\ 83-110 Tczew',
+        'straz@um.tczew.pl', 'Tczew'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );

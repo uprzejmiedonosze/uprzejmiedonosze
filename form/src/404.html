@@ -1,6 +1,8 @@
 <?
 require_once(__DIR__ . '/../inc/include.php');
 
+_sendSlackError('Ktoś wpadł na 404 (' . $_SERVER['REQUEST_URI'] . ')');
+
 generate('404.html.twig', 
 [
     'head' =>

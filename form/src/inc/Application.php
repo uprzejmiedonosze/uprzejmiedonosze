@@ -128,6 +128,14 @@ class Application extends JSONObject{
         return getCurrentUserEmail() == $this->user->email;
     }
 
+    public function getRecydywa(){
+        global $storage;
+        if(isset($this->carInfo) && isset($this->carInfo->plateId)){
+            return $storage->getRecydywa($this->carInfo->plateId);
+        }
+        return 0;
+    }
+
 }
 
 ?>

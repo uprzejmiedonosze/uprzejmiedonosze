@@ -113,7 +113,7 @@ function _upload(){
                 imagejpeg($plateImage, make_image_filename($prefix, ',p'));
             }
 
-            $recydywa = $storage->countApplicationsPerPlate($result["plate"]);
+            $recydywa = $storage->getRecydywa($result["plate"]);
 
             $application->carInfo = new stdClass();
             $application->carInfo->plateId = strtoupper($result["plate"]);
