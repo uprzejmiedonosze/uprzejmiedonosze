@@ -108,11 +108,6 @@
 
 {% if config.appActionButtons %}
         <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <a href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left
-                ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
-            <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
-                ui-nodisc-icon ui-icon-mail">PDF</a>
             <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
             <select name="select-status" id="select-status-{{ app.id }}"
                 class="status-{{ app.status }}"
@@ -138,6 +133,15 @@
                 </a>
             </div>
         </div>
+{% if config.appActionButtons %}
+        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+            <a href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left
+                ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
+            <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
+                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
+                ui-nodisc-icon ui-icon-mail">PDF</a>
+        </fieldset>
+{% endif %}
     </p> <!-- data-role="listview" data-inset="false" -->
 </div>
 {% endif %} {# if config.appDetails #}
