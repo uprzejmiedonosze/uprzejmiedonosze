@@ -123,6 +123,13 @@ class New(BasePage):
     def display_image_inputs(self):
         self.driver.execute_script("$('.image-upload input').css('display', 'block');")
         time.sleep(1)
+
+    def reload_on_edit(self):
+        try:
+            self.driver.find_element(*Locators.NEW_CLEANUP).click()
+            time.sleep(1)
+        except NoSuchElementException:
+            pass
     
     def test_context_image(self):
         self.display_image_inputs()
