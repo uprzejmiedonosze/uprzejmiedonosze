@@ -52,21 +52,25 @@ class UDTestStatic(unittest.TestCase):
 
     def test_new_empty(self):
         new = pages.New(self.driver)
+        new.reload_on_edit()
         new.is_title_matches("owe")
         new.is_validation_empty_working()
     
     def test_new_category_other(self):
         new = pages.New(self.driver)
+        new.reload_on_edit()
         new.is_title_matches("owe")
         new.is_other_comment_validation_working()
 
     def test_new_images(self):
         new = pages.New(self.driver)
+        new.reload_on_edit()
         new.test_context_image()
         new.test_car_image()
 
     def test_review(self):
         new = pages.New(self.driver)
+        new.reload_on_edit()
         new.test_context_image()
         new.test_car_image()
         new.review()
@@ -76,11 +80,13 @@ class UDTestStatic(unittest.TestCase):
         
     def test_invalid_image(self):
         new = pages.New(self.driver)
+        new.reload_on_edit()
         new.test_invalid_image()
         new.test_invalid_image_submit()
 
     def test_app_page(self):
         new = pages.New(self.driver)
+        new.reload_on_edit()
         new.test_context_image()
         new.test_car_image()
         new.update()
@@ -90,6 +96,7 @@ class UDTestStatic(unittest.TestCase):
 
     def test_pdf(self):
         new = pages.New(self.driver)
+        new.reload_on_edit()
         new.test_context_image()
         new.test_car_image()
         new.update()

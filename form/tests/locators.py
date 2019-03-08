@@ -33,6 +33,7 @@ class Locators(object):
     NEW_CAT0    = (By.XPATH, "//label[@for='0']")
     NEW_ADD_HINT= (By.ID,    "addressHint")
     NEW_PLATEIMG= (By.ID,    "plateImage")
+    NEW_CLEANUP = (By.CSS_SELECTOR, "a.cleanup")
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 

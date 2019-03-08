@@ -11,6 +11,17 @@
 <form action="/potwierdz.html" id="form" method="post" data-ajax="false">
     <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
     <div>
+        {% if config.edit %}
+        <div class="ui-corner-all custom-corners">
+            <div class="ui-bar ui-bar-a edit-warning">
+                <h3>Edycja zgłoszenia</h3>
+            </div>
+            <div class="ui-body ui-body-a">
+                <p>Edytujesz zgłoszenie powstałe {{ app.added|date('Y-m-d H:i') }}.
+                Jeśli chcesz zacząć od nowe, kliknij <a data-ajax="false" class="cleanup" href="?cleanup">tutaj</a>.</p>
+            </div>
+        </div>
+        {% endif %}
         <div class="ui-grid-a ui-responsive" id="pics">
             <div class="ui-block-a">
                 <div class="image-upload contextImageSection">
