@@ -173,20 +173,18 @@ class DB extends NoSQLite{
     public function getRecydywa($plate){
         $recydywa = $this->recydywa->get($plate);
         if(!$recydywa){
-            $recydywa = $this->countApplicationsPerPlate($plate);
-            if($recydywa > 0){
-                $this->recydywa->set($plate, strval($recydywa));
-            }
+            $recydywa = $this->updateRecydywa($plate);
         }
         return intval($recydywa);
     }
 
     /**
-     * Increases recydywa count by 1.
+     * Recalculates recydywa.
      */
     public function updateRecydywa($plate){
         $recydywa = $this->countApplicationsPerPlate($plate);
         $this->recydywa->set($plate, strval($recydywa));
+        return $recydywa;
     }
 }
 
