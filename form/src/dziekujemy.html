@@ -35,9 +35,6 @@ generate('dziekujemy.html.twig',
     ]
 );
 
-_sendSlackUpdate("Nowe zgłoszenie `{$application->number}`"
-    . " od *{$application->user->name}*"
-    . " ({$application->address->city}): "
-    . "https://%HOST%/ud-{$application->id}.html");
+_sendSlackOnNewApp($application);
 
 ?>
