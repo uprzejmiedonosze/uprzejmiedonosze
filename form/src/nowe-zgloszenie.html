@@ -8,9 +8,15 @@ if(isset($_GET['cleanup'])){
 }
 
 if(isset($_SESSION['newAppId'])){ // edit mode
-    $application = $storage->getApplication($_SESSION['newAppId']);
-    $edit = isset($application->carImage) || isset($application->contextImage);
-}else{ // new application mode
+    try{
+        $application = $storage->getApplication($_SESSION['newAppId']);
+        $edit = isset($application->carImage) || isset($application->contextImage);
+    }catch(Exception $e){
+        unset($application);
+    }
+}
+
+if(!isset($application)){ // new application mode
     $application = new Application();
     $storage->saveApplication($application);
     $_SESSION['newAppId'] = $application->id;
