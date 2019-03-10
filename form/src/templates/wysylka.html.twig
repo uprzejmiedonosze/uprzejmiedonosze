@@ -51,7 +51,8 @@ Pozdrawiam,
             <a id="send" data-ajax="false"
                 href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-                i wyślij email do SM {{ cities | first[2] }};
+                i wyślij email do SM {{ cities | first[2] }},
+                lub <a id="sendE" href="epuap.html" target="_blank">wyślij</a> całość za EPUAP;
         </li>
         <li class="ui-disabled">Po wysłaniu wiadomości, możesz
             <a id="email" href="moje-zgloszenia.html?changeMail" data-ajax="false"
@@ -62,15 +63,13 @@ Pozdrawiam,
     </ol>
 
     <script>
-        $('#download, #send').on('click', function(){
-            if(this.id == 'download'){
-                $(this).parent().addClass('ui-disabled');
-                $('#send').parent().removeClass('ui-disabled');
-            }
-            if(this.id == 'send'){
-                $(this).parent().addClass('ui-disabled');
-                $('#email, #epuap').parent().removeClass('ui-disabled');
-            }
+        $('#download').on('click', function(){
+            $(this).parent().addClass('ui-disabled');
+            $('#send').parent().removeClass('ui-disabled');
+        });
+        $('#send, #sendE').on('click', function(){
+            $(this).parent().addClass('ui-disabled');
+            $('#email, #epuap').parent().removeClass('ui-disabled');
         });
     </script>
 
