@@ -71,6 +71,15 @@ p > a, li > a {
     font-weight: normal!important;
 }
 
+#mainMenu > div.ui-panel-inner {
+    padding: 0;
+}
+
+#mainMenu .menuStats {
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+
 a[rel~="external"] {
     background-position: center right;
     background-repeat: no-repeat;

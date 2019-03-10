@@ -51,6 +51,12 @@
         <div data-role="page" class="container-fluid" data-theme="a" {% if head.dialog is defined and head.dialog %}data-dialog="true"{% endif %}>
         {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                {% if leftButton is defined and leftButton == 'menu' %}
+                <a href="#mainMenu"
+                    class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext
+                        ui-btn-inline ui-alt-icon ui-nodisc-icon">Menu</a>
+                {% endif %}
+
                 {% if leftButton is defined and leftButton == 'menuBack' %}
                 <a href="javascript:history.back()" data-rel="back" class="ui-btn-left
                     ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-icon-notext
@@ -98,6 +104,9 @@
             <div data-role="footer">
                 <h4 title="%VERSION%">&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
             </div> <!-- footer -->
+        {% endblock %}
+        {% block menu %}
+            {% include('_menu.html.twig') %}
         {% endblock %}
         </div> <!-- page -->
     {% block jsIncludes %}

@@ -1,0 +1,43 @@
+<div data-role="panel" data-position-fixed="true" data-position="left" 
+    data-display="overlay" data-theme="a" id="mainMenu">
+
+    <ul data-role="listview">
+        <li data-icon="delete"><a href="#" data-rel="close">Zamknij menu</a></li>
+        <li></li>
+
+    {% if general.isLoggedIn %}
+        <li data-icon="plus"><a class="try" href="/start.html">Nowe zgłoszenie</a></li>
+        <li></li>
+
+        <li data-icon="bullets"><a href="/moje-zgloszenia.html">Moje zgłoszenia
+            <span class="ui-li-count">{{ general.stats.active }}</span></a></li>
+
+        {% for name,st in general.stats.nice %}
+            <li class="menuStats">{{ name }}<span class="ui-li-count">{{ st ?? 0 }}</span></li> 
+        {% endfor %}
+
+        {% if general.stats.confirmed is defined and general.stats.confirmed[0] > 1 %}
+            <li data-icon="mail"><a href="/wysylka.html">Wysyłka</a></li>
+        {% endif %}
+        <li></li>
+    {% else %}
+        <li data-icon="plus"><a class="try" href="/start.html">Spróbuj</a></li>
+        <li></li>
+    {% endif %}
+
+        <li data-role="list-divider">Informacje</li>
+        <li data-icon="home"><a href="/">Strona główna</a></li>
+        <li><a href="/epuap.html">EPUAP</a></li>
+        <li data-icon="info"><a href="/przepisy.html">Przepisy</a></li>
+        <li><a href="/regulamin.html">Regulamin</a></li>
+
+        <li></li>
+        {% if general.isLoggedIn %}
+        <li data-role="list-divider">{{ general.userName }}</li>
+        <li data-icon="user"><a href="/register.html">Edycja konta</a></li>
+        <li data-icon="power"><a href="/login.html?logout">Wyloguj się</a></li>
+        {% endif %}
+    </ul>
+
+
+</div><!-- /panel -->
