@@ -268,3 +268,12 @@ class MyApps(BasePage):
         assert 'Zgłoszenie wykroczenia UD/' in text
         assert 'Jestem świadomy odpowiedzialności karnej' in text
         self.driver.find_element(*Locators.BTN_LEFT).click()
+
+class Wysylka(BasePage):
+    def __init__(self, driver):
+        BasePage.__init__(self, driver, Locators.MYAPPS)
+
+        self.driver.find_element(*Locators.NEW).click()
+        time.sleep(2)
+        if not "nowe " in self.driver.title.lower():
+            self.login()
