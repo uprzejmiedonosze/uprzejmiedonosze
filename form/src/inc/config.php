@@ -93,6 +93,10 @@ const SM_ADDRESSES = Array (
         'umgorowo@gorowoilaweckie.pl', 'Górowo Iławeckie'],
     'tczew' => ['Straż Miejska w Tczewie \\\\ Plac Marszałka Piłsudskiego 1 \\\\ 83-110 Tczew',
         'straz@um.tczew.pl', 'Tczew'],
+    'chełm' => ['Straż Miejska Chełm \\\\ Obłońska 20 \\\\ 22-100 Chełm',
+        'straz.miejska@umchelm.pl', 'Chełm'],
+    'chelm' => ['Straż Miejska Chełm \\\\ Obłońska 20 \\\\ 22-100 Chełm',
+        'straz.miejska@umchelm.pl', 'Chełm'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
