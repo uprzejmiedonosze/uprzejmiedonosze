@@ -53,7 +53,7 @@
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 {% if leftButton is defined and leftButton == 'menu' %}
                 <a href="#mainMenu"
-                    class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-icon-notext
+                    class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-left ui-btn-icon-left
                         ui-btn-inline ui-alt-icon ui-nodisc-icon">Menu</a>
                 {% endif %}
 
@@ -64,12 +64,6 @@
                     data-role="button" role="button">{{ leftButtonText ?? 'Back' }}</a>
                 {% endif %}
 
-                {% if leftButton is defined and leftButton == 'menuMain' %}
-                    <a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon
-                    ui-btn ui-corner-all {{ leftButtonIcon ?? 'ui-icon-home' }} ui-btn-icon-notext"
-                    data-role="button" role="button">{{ leftButtonText ?? 'Strona główna' }}</a>
-                {% endif %}
-
                 <h1>{{ head.shortTitle ?? 'Uprzejmie Donoszę' }}</h1>
 
                 {% if rightButton is defined and rightButton == 'menuStart' %}
@@ -77,13 +71,6 @@
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
                     ui-btn-icon-left {{ rightButtonIcon ?? 'ui-icon-plus' }}">
                     {{ rightButtonText ?? 'Zgłoś' }}</a>
-                {% endif %}
-
-                {% if rightButton is defined and rightButton == 'menuApplications' %}
-                <a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon
-                    ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
-                    {{ rightButtonIcon ?? 'ui-icon-bullets' }}">
-                    {{ rightButtonText ?? 'Zgłoszenia' }}</a>
                 {% endif %}
 
                 {% if rightButton is defined and rightButton == 'menuNewApplication' %}
