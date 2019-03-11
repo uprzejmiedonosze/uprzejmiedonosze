@@ -135,7 +135,6 @@ class DB extends NoSQLite{
         $fined       = $stats['confirmed-fined'][0];
 
         $stats['nice'] = [];
-        $stats['confirmed-fined'][0];
         $stats['nice']['— nowe'] = $confirmed;
         $stats['nice']['— wysłane'] = $waiting + $waitingE;
         $stats['nice']['— potwierdzone'] = $sm;
