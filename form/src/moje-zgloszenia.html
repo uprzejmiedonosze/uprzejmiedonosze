@@ -35,8 +35,6 @@ foreach($applications as $id){
     }
 }
 
-$stats = $storage->countApplicationsStatuses();
-
 generate('moje-zgloszenia.html.twig', 
     [
         'head' =>
@@ -48,11 +46,11 @@ generate('moje-zgloszenia.html.twig',
         [
             'auth' => true,
             'appDetails' => false,
-            'appActionButtons' => true
+            'appActionButtons' => true,
+            'menu' => 'moje-zgloszenia'
         ],
         'active' => $active,
         'archived' => $archived,
-        'stats' => $stats,
         'countChanged' => $countChanged
     ]
 );
