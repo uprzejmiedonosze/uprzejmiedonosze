@@ -75,9 +75,16 @@ p > a, li > a {
     padding: 0;
 }
 
-#mainMenu .menuStats {
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
+#mainMenu li.close a{
+    background-color: #009C7F;
+    color: #fff!important;
+    text-decoration: none!important;
+    border-color: #009C7F;
+}
+#mainMenu a.ui-btn-active, #mainMenu a.active {
+    background-color: white!important;
+    text-shadow: none!important;
+    border-color: rgb(221, 221, 221);
 }
 
 a[rel~="external"] {
