@@ -120,7 +120,7 @@ class DB extends NoSQLite{
      */
     public function getUserStats($useCache = true){
 
-        $stats = $this->stats->get(getCurrentUserEmail());
+        $stats = $this->stats->get("%HOST%-stats-" . getCurrentUserEmail());
         if($useCache && $stats){
             return $stats;
         }
@@ -143,7 +143,7 @@ class DB extends NoSQLite{
 
         $stats['active'] = $confirmed + $waiting + $waitingE + $sm + $ignored + $fined;
 
-        $this->stats->set(getCurrentUserEmail(), $stats);
+        $this->stats->set("%HOST%-stats-" . getCurrentUserEmail(), $stats);
         return $stats;
     }
 
