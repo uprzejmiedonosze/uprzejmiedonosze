@@ -80,16 +80,22 @@ p > a, li > a {
     color: #fff!important;
     text-decoration: none!important;
     border-color: #009C7F;
+    text-shadow: none;
 }
-a.ui-btn-active, #mainMenu a.active {
-    background-color: white!important;
+.ui-btn-active, #mainMenu a.active {
+    background-color: #009C7F!important;
     text-shadow: none!important;
-    border-color: rgb(221, 221, 221);
-    color: #009C7F;
+    color: white!important;
+    border-color: #009C7F!important;
+    box-shadow: none!important;
 }
 
 .filter a {
     color: #999!important;
+}
+
+.filter a,
+.subpage a {
     padding-top: 0.3em;
     padding-bottom: 0.3em;
     padding-left: 2em;
