@@ -4,18 +4,18 @@ require_once(__DIR__ . '/../inc/include.php');
 checkIfLogged();
 
 $user = $storage->getCurrentUser();
-$applications = $user->getApplicationIds();
-
-$active = [];
-$archived = [];
+$appIds = $user->getApplicationIds();
 
 $changeMail = isset($_GET['changeMail']);
 $changeEpuap = (!$changeMail) && isset($_GET['changeEpuap']);
 
 $countChanged = 0;
 
-foreach($applications as $id){
+$applications = [];
+
+foreach($appIds as $id){
     $application = $storage->getApplication($id);
+    array_push($applications, $application);
     if($changeMail || $changeEpuap){
         if($application->status == 'confirmed'){
             if($changeMail){
@@ -27,11 +27,6 @@ foreach($applications as $id){
             $storage->saveApplication($application);
             $countChanged++;
         }
-    }
-    if($application->status == 'archived'){
-        array_push($archived, $application);
-    }else{
-        array_push($active, $application);
     }
 }
 
@@ -49,8 +44,7 @@ generate('moje-zgloszenia.html.twig',
             'appActionButtons' => true,
             'menu' => 'moje-zgloszenia'
         ],
-        'active' => $active,
-        'archived' => $archived,
+        'applications' => $applications,
         'countChanged' => $countChanged
     ]
 );
