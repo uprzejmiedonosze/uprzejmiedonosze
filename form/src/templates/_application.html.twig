@@ -89,7 +89,8 @@
 {################################### short version ###################################}
 
 <div id="{{ app.id }}"
-    class="application {{ app.getStatus[3] }} status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus[2] }}"
+    class="application {{ app.getStatus[3] }} status-all status-{{ app.getStatus[3] }}
+        status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus[2] }}"
     data-expanded-icon="carat-d" data-role="collapsible"
     data-filtertext="{{ app.address.address }} {{ app.number }} {{ app.date }} {{ app.carInfo.plateId }} {{ app.userComment }} {{ app.getCategory[1] }} {% if app.getRecydywa > 1 %}recydywa{% endif %}">
 

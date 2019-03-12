@@ -67,7 +67,7 @@ html body .ui-group-theme-a .ui-header {
 
 p > a, li > a {
     text-decoration: none;
-    color: #009C7F!important;
+    color: #009C7F; /* !important; */
     font-weight: normal!important;
 }
 
@@ -81,10 +81,23 @@ p > a, li > a {
     text-decoration: none!important;
     border-color: #009C7F;
 }
-#mainMenu a.ui-btn-active, #mainMenu a.active {
+a.ui-btn-active, #mainMenu a.active {
     background-color: white!important;
     text-shadow: none!important;
     border-color: rgb(221, 221, 221);
+    color: #009C7F;
+}
+
+.filter a {
+    color: #999!important;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    padding-left: 2em;
+    border: 0;
+}
+
+.filter a.active {
+    color: #009C7F!important;
 }
 
 a[rel~="external"] {
@@ -322,6 +335,10 @@ img.static-map-preview {
 
 div.application.status-archived h3 a {
     font-weight: 400;
+}
+
+div.application.status-archived {
+    display: none;
 }
 
 @media only screen and (min-width: 768px) {
