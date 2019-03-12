@@ -2,7 +2,7 @@
     data-display="overlay" data-theme="a" id="mainMenu">
 
     <ul data-role="listview" data-inset="false">
-        <li data-icon="carat-l" class="close"><a href="#" data-rel="close">&nbsp;</a></li>
+        <li data-icon="carat-l" class="close"><a href="#" data-rel="close">{{ general.userName ?? '' }}</a></li>
     {% if general.isLoggedIn %}
         <li data-icon="plus">
             <a class="try"
@@ -26,45 +26,43 @@
             <a {% if config.menu == 'wysylka' %}class="active"{% endif %}
                 href="/wysylka.html">Do wysłania
             <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a></li>
-        <li></li>
     {% else %}
         <li data-icon="plus"><a class="try" href="/start.html">Spróbuj</a></li>
-        <li></li>
     {% endif %}
 
-        <li data-role="list-divider">Informacje</li>
+        <li data-role="list-divider"></li>
         <li data-icon="home">
             <a {% if config.menu == 'index' %}class="active"{% endif %}
                 href="/">Strona główna</a></li>
-        <li data-icon="false">
+        <li class="subpage" data-icon="false">
             <a {% if config.menu == 'przepisy' %}class="active"{% endif %}
-                href="/przepisy.html">Przepisy</a></li>
-        <li data-icon="false">
+                href="/przepisy.html">– przepisy</a></li>
+        <li class="subpage" data-icon="false">
             <a {% if config.menu == 'regulamin' %}class="active"{% endif %}
-                href="/regulamin.html">Regulamin</a></li>
-        <li data-icon="false">
+                href="/regulamin.html">– regulamin</a></li>
+        <li class="subpage" data-icon="false">
             <a {% if config.menu == 'epuap' %}class="active"{% endif %}
-                href="/epuap.html">EPUAP</a></li>
-        <li data-icon="false">
+                href="/epuap.html">– epuap</a></li>
+        <li class="subpage" data-icon="false">
             <a {% if config.menu == 'changelog' %}class="active"{% endif %}
-                href="/changelog.html">Historia zmian</a></li>
-        <li data-icon="false">
+                href="/changelog.html">– historia zmian</a></li>
+        <li class="subpage" data-icon="false">
             <a {% if config.menu == 'projekt' %}class="active"{% endif %}
-                href="/projekt.html">O projekcie</a></li>
+                href="/projekt.html">– o projekcie</a></li>
         <li data-icon="comment">
-            <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Profil na FB</a></li>
-        <li></li>
-
+            <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a></li>
+        
+        <li data-role="list-divider"></li>
         {% if general.isLoggedIn %}
-        <li data-role="list-divider">{{ general.userName }}</li>
         <li data-icon="user">
             <a {% if config.menu == 'register' %}class="active"{% endif %}
                 href="/register.html">Edycja konta</a></li>
-        <li data-icon="power"><a href="/login.html?logout">Wyloguj się</a></li>
+        <li data-icon="false" class="subpage">
+            <a href="/login.html?logout">– wyloguj się</a></li>
         {% else %}
-        <li data-role="list-divider">Konto</li>
         <li data-icon="user"><a href="/start.html">Zaloguj/zarejestruj się</a></li>
         {% endif %}
+
     </ul>
 
 </div><!-- /panel -->
