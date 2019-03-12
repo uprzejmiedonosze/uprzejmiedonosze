@@ -32,5 +32,13 @@
 </form>
 
 <script src="js/script-%JS_HASH%.js"></script>
+<script>
+$(document).ajaxComplete(function(e, xhr, settings){
+    target = e.target.baseURI.replace(/.*uprzejmiedonosze.net./, '');
+    if(!target.startsWith('register.html')){
+        window.location.replace('register.html?next=' + target);
+    }
+});
+</script>
 
 {% endblock %}
