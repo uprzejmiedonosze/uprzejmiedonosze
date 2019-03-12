@@ -121,7 +121,7 @@ class DB extends NoSQLite{
     public function getUserStats($useCache = true){
 
         $stats = $this->stats->get(getCurrentUserEmail());
-        if($useCache && $stats ){
+        if($useCache && $stats){
             return $stats;
         }
 

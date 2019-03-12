@@ -25,6 +25,8 @@ $application->setStatus("ready");
 
 $storage->saveApplication($application);
 
+$storage->getUserStats(false); // update cache
+
 generate('potwierdz.html.twig', 
     [
         'head' =>
