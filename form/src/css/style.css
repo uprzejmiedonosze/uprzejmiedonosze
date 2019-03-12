@@ -71,6 +71,22 @@ p > a, li > a {
     font-weight: normal!important;
 }
 
+#mainMenu > div.ui-panel-inner {
+    padding: 0;
+}
+
+#mainMenu li.close a{
+    background-color: #009C7F;
+    color: #fff!important;
+    text-decoration: none!important;
+    border-color: #009C7F;
+}
+#mainMenu a.ui-btn-active, #mainMenu a.active {
+    background-color: white!important;
+    text-shadow: none!important;
+    border-color: rgb(221, 221, 221);
+}
+
 a[rel~="external"] {
     background-position: center right;
     background-repeat: no-repeat;

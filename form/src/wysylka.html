@@ -22,12 +22,12 @@ generate('wysylka.html.twig',
         [
             'auth' => true,
             'appDetails' => false,
-            'appActionButtons' => false
+            'appActionButtons' => false,
+            'menu' => 'wysylka'
         ],
         'apps' => $apps,
         'cities' => $cities,
-        'user' => $storage->getCurrentUser(),
-        'statuses' => STATUSES
+        'user' => $storage->getCurrentUser()
     ]
 );
 ?>

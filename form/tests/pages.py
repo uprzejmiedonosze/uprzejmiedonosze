@@ -267,7 +267,7 @@ class MyApps(BasePage):
         assert self.cfg.account['email'] in text
         assert 'Zgłoszenie wykroczenia UD/' in text
         assert 'Jestem świadomy odpowiedzialności karnej' in text
-        self.driver.find_element(*Locators.BTN_LEFT).click()
+        #self.driver.find_element(*Locators.BTN_LEFT).click()
 
 class Wysylka(BasePage):
     def __init__(self, driver):

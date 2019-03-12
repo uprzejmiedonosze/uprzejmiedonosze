@@ -6,6 +6,8 @@ require(__DIR__ . '/Application.php');
 class DB extends NoSQLite{
     private $users;
     private $apps;
+    private $recydywa;
+    private $stats;
 
     private $loggedUser;
 
@@ -17,6 +19,10 @@ class DB extends NoSQLite{
         $this->apps  = $this->getStore('applications');
         $this->users = $this->getStore('users');
         $this->recydywa = $this->getStore('recydywa');
+        
+        $this->stats = new Memcache;
+        $this->stats->connect('localhost', 11211);
+
         try{
             $this->getCurrentUser();
         }catch(Exception $e){
@@ -107,6 +113,38 @@ class DB extends NoSQLite{
         
         $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
         return $ret;
+    }
+
+    /**
+     * Calculates stats for current user;
+     */
+    public function getUserStats($useCache = true){
+
+        $stats = $this->stats->get(getCurrentUserEmail());
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $stats = $this->countApplicationsStatuses();
+        
+        @$confirmed   = $stats['confirmed'][0];
+        @$waiting     = $stats['confirmed-waiting'][0];
+        @$waitingE    = $stats['confirmed-waitingE'][0];
+        @$sm          = $stats['confirmed-sm'][0];
+        @$ignored     = $stats['confirmed-ignored'][0];
+        @$fined       = $stats['confirmed-fined'][0];
+
+        $stats['nice'] = [];
+        $stats['nice']['— nowe'] = $confirmed;
+        $stats['nice']['— wysłane'] = $waiting + $waitingE;
+        $stats['nice']['— potwierdzone'] = $sm;
+        $stats['nice']['— zignorowane'] = $ignored;
+        $stats['nice']['— mandat'] = $fined;
+
+        $stats['active'] = $confirmed + $waiting + $waitingE + $sm + $ignored + $fined;
+
+        $this->stats->set(getCurrentUserEmail(), $stats);
+        return $stats;
     }
 
     /**

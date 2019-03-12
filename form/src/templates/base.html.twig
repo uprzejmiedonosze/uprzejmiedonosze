@@ -51,17 +51,17 @@
         <div data-role="page" class="container-fluid" data-theme="a" {% if head.dialog is defined and head.dialog %}data-dialog="true"{% endif %}>
         {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
+                {% if leftButton is defined and leftButton == 'menu' %}
+                <a href="#mainMenu"
+                    class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-left ui-btn-icon-left
+                        ui-btn-inline ui-alt-icon ui-nodisc-icon">Menu</a>
+                {% endif %}
+
                 {% if leftButton is defined and leftButton == 'menuBack' %}
                 <a href="javascript:history.back()" data-rel="back" class="ui-btn-left
                     ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all ui-btn-icon-notext
                     {{ leftButtonIcon ?? 'ui-icon-carat-l' }}"
                     data-role="button" role="button">{{ leftButtonText ?? 'Back' }}</a>
-                {% endif %}
-
-                {% if leftButton is defined and leftButton == 'menuMain' %}
-                    <a href="/" class="ui-btn-left  ui-alt-icon ui-nodisc-icon
-                    ui-btn ui-corner-all {{ leftButtonIcon ?? 'ui-icon-home' }} ui-btn-icon-notext"
-                    data-role="button" role="button">{{ leftButtonText ?? 'Strona główna' }}</a>
                 {% endif %}
 
                 <h1>{{ head.shortTitle ?? 'Uprzejmie Donoszę' }}</h1>
@@ -71,13 +71,6 @@
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
                     ui-btn-icon-left {{ rightButtonIcon ?? 'ui-icon-plus' }}">
                     {{ rightButtonText ?? 'Zgłoś' }}</a>
-                {% endif %}
-
-                {% if rightButton is defined and rightButton == 'menuApplications' %}
-                <a href="moje-zgloszenia.html" class="ui-btn-right ui-alt-icon
-                    ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
-                    {{ rightButtonIcon ?? 'ui-icon-bullets' }}">
-                    {{ rightButtonText ?? 'Zgłoszenia' }}</a>
                 {% endif %}
 
                 {% if rightButton is defined and rightButton == 'menuNewApplication' %}
@@ -98,6 +91,9 @@
             <div data-role="footer">
                 <h4 title="%VERSION%">&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
             </div> <!-- footer -->
+        {% endblock %}
+        {% block menu %}
+            {% include('_menu.html.twig') %}
         {% endblock %}
         </div> <!-- page -->
     {% block jsIncludes %}

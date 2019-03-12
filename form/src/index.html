@@ -1,6 +1,10 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-generate('index.html.twig', []);
+generate('index.html.twig', [
+    'config' => [
+        'menu' => 'index'
+    ]
+]);
 
 ?>

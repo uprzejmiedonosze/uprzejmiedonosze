@@ -2,8 +2,8 @@
     {% set leftButton = 'menuBack' %}
     {% set rightButton = '' %}
 {% else %}
-    {% set leftButton = 'menuMain' %}
-    {% set rightButton = general.hasApps ? 'menuApplications': 'menuStart' %}
+    {% set leftButton = 'menu' %}
+    {% set rightButton = 'menuStart' %}
 {% endif %}
 
 {% extends "base.html.twig" %}

@@ -1,0 +1,60 @@
+<div data-role="panel" data-position-fixed="true" data-position="left" 
+    data-display="overlay" data-theme="a" id="mainMenu">
+
+    <ul data-role="listview" data-inset="false">
+        <li data-icon="carat-l" class="close"><a href="#" data-rel="close">&nbsp;</a></li>
+    {% if general.isLoggedIn %}
+        <li data-icon="plus">
+            <a class="try"
+                {% if config.menu == 'start' %}class="active ui-disabled"{% endif %}
+                href="/start.html">Nowe zgłoszenie</a></li>
+        <li data-icon="bullets">
+            <a {% if config.menu == 'moje-zgloszenia' %}class="active ui-disabled"{% endif %}
+                href="/moje-zgloszenia.html">Moje zgłoszenia
+            <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span></a></li>
+        <li data-icon="mail">
+            <a {% if config.menu == 'wysylka' %}class="active ui-disabled"{% endif %}
+                href="/wysylka.html">Do wysłania
+            <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a></li>
+        <li></li>
+    {% else %}
+        <li data-icon="plus"><a class="try" href="/start.html">Spróbuj</a></li>
+        <li></li>
+    {% endif %}
+
+        <li data-role="list-divider">Informacje</li>
+        <li data-icon="home">
+            <a {% if config.menu == 'index' %}class="active ui-disabled"{% endif %}
+                href="/">Strona główna</a></li>
+        <li data-icon="false">
+            <a {% if config.menu == 'przepisy' %}class="active ui-disabled"{% endif %}
+                href="/przepisy.html">Przepisy</a></li>
+        <li data-icon="false">
+            <a {% if config.menu == 'regulamin' %}class="active ui-disabled"{% endif %}
+                href="/regulamin.html">Regulamin</a></li>
+        <li data-icon="false">
+            <a {% if config.menu == 'epuap' %}class="active ui-disabled"{% endif %}
+                href="/epuap.html">EPUAP</a></li>
+        <li data-icon="false">
+            <a {% if config.menu == 'changelog' %}class="active ui-disabled"{% endif %}
+                href="/changelog.html">Historia zmian</a></li>
+        <li data-icon="false">
+            <a {% if config.menu == 'projekt' %}class="active ui-disabled"{% endif %}
+                href="/projekt.html">O projekcie</a></li>
+        <li data-icon="comment">
+            <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Profil na FB</a></li>
+        <li></li>
+
+        {% if general.isLoggedIn %}
+        <li data-role="list-divider">{{ general.userName }}</li>
+        <li data-icon="user">
+            <a {% if config.menu == 'register' %}class="active ui-disabled"{% endif %}
+                href="/register.html">Edycja konta</a></li>
+        <li data-icon="power"><a href="/login.html?logout">Wyloguj się</a></li>
+        {% else %}
+        <li data-role="list-divider">Konto</li>
+        <li data-icon="user"><a href="/start.html">Zaloguj/zarejestruj się</a></li>
+        {% endif %}
+    </ul>
+
+</div><!-- /panel -->
