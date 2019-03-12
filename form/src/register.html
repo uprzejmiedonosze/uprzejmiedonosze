@@ -21,7 +21,8 @@ generate('register.html.twig',
             'auth' => true,
             'register' => true,
             'signInSuccessUrl' => isset($_GET['next'])? $_GET['next']: 'start.html',
-            'menu' => 'register'
+            'menu' => 'register',
+            'isRegistered' => $user->isRegistered()
         ],
         'user' => $user
     ]

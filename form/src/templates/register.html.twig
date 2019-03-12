@@ -32,6 +32,7 @@
 </form>
 
 <script src="js/script-%JS_HASH%.js"></script>
+{% if config.isRegistered == false %}
 <script>
 $(document).ajaxComplete(function(e, xhr, settings){
     target = e.target.baseURI.replace(/.*uprzejmiedonosze.net./, '');
@@ -40,5 +41,5 @@ $(document).ajaxComplete(function(e, xhr, settings){
     }
 });
 </script>
-
+{% endif %}
 {% endblock %}
