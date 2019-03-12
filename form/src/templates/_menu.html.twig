@@ -11,11 +11,11 @@
         <li data-icon="bullets">
             <a {% if config.menu == 'moje-zgloszenia' %}class="active ui-disabled"{% endif %}
                 href="/moje-zgloszenia.html">Moje zgłoszenia
-            <span class="ui-li-count">{{ general.stats.active }}</span></a></li>
+            <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span></a></li>
         <li data-icon="mail">
             <a {% if config.menu == 'wysylka' %}class="active ui-disabled"{% endif %}
                 href="/wysylka.html">Do wysłania
-            <span class="ui-li-count">{{ general.stats.confirmed[0] }}</span></a></li>
+            <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a></li>
         <li></li>
     {% else %}
         <li data-icon="plus"><a class="try" href="/start.html">Spróbuj</a></li>

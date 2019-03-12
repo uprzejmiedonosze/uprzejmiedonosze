@@ -127,12 +127,12 @@ class DB extends NoSQLite{
 
         $stats = $this->countApplicationsStatuses();
         
-        $confirmed   = $stats['confirmed'][0];
-        $waiting     = $stats['confirmed-waiting'][0];
-        $waitingE    = $stats['confirmed-waitingE'][0];
-        $sm          = $stats['confirmed-sm'][0];
-        $ignored     = $stats['confirmed-ignored'][0];
-        $fined       = $stats['confirmed-fined'][0];
+        @$confirmed   = $stats['confirmed'][0];
+        @$waiting     = $stats['confirmed-waiting'][0];
+        @$waitingE    = $stats['confirmed-waitingE'][0];
+        @$sm          = $stats['confirmed-sm'][0];
+        @$ignored     = $stats['confirmed-ignored'][0];
+        @$fined       = $stats['confirmed-fined'][0];
 
         $stats['nice'] = [];
         $stats['nice']['— nowe'] = $confirmed;
