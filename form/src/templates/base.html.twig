@@ -25,7 +25,7 @@
         <meta property="og:title" content="{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę" />
         <meta property="og:description"
             content="{{ head.description ?? 'Uprzejmie Donoszę pozwala na przekazywanie zgłoszeń o sytuacjach które wpływają na komfort i bezpieczeństwo pieszych. Umożliwia ona w wygodny sposób wykonać zgłoszenie i przekazać jest bezpośrednio Straży Miejskiej.' }}" />
-        <meta property="og:url" content="https://%HOST%{% if config is not defined %}{{ general.uri }}{% endif %}" />
+        <meta property="og:url" content="https://%HOST%{% if config.auth is not defined %}{{ general.uri }}{% endif %}" />
         <meta property="og:locale" content="pl_PL" />
         <meta property="og:type" content="website" />
         <meta property="fb:app_id" content="1299217686854263" />
