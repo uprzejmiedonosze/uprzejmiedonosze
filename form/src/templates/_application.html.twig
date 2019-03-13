@@ -34,7 +34,7 @@
     <p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
         <b>{{ app.user.name }}</b>
 {% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
-    {% if config.hideRegisterHint is not defined %}
+    {% if config.confirmationScreen is not defined %}
         <sup>(nieaktualne dane? popraw je na <a href="register.html">stronie rejestracji</a>
         i wygeneruj ponownie zgłoszenie)</sup>
     {% endif %}
@@ -69,7 +69,7 @@
 {% endif %}
     </div>
 
-{% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.appDetails and statuses is defined %}
+{% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.confirmationScreen is not defined %}
     <div id="statusHistory">
         <h4>Historia zmian statusów</h4>
         <ul data-role="listview">
