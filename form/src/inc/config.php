@@ -97,6 +97,8 @@ const SM_ADDRESSES = Array (
         'straz.miejska@umchelm.pl', 'Chełm'],
     'chelm' => ['Straż Miejska Chełm \\\\ Obłońska 20 \\\\ 22-100 Chełm',
         'straz.miejska@umchelm.pl', 'Chełm'],
+    'gryfino' => ['Straż Miejska Gryfino \\\\ 1 Maja 16 \\\\ 74-100 Gryfino',
+        'strazmiejska@gryfino.pl', 'Gryfino'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
