@@ -234,6 +234,9 @@ function readGeoDataFromImage(file) {
                 const dateTime = data.exif.getText("DateTimeOriginal");
                 if (dateTime && dateTime !== 'undefined') {
                     setDateTime(dateTime);
+                    $('#dtFromPicture').val(1);
+                }else{
+                    $('#dtFromPicture').val(0);
                 }
             }
 

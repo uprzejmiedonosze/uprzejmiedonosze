@@ -11,6 +11,7 @@ $applicationId = $post["applicationId"];
 $application = $storage->getApplication($applicationId);
 
 $application->date = date_format(new DateTime($post['datetime']), DT_FORMAT);
+$application->dtFromPicture = (boolean) $post['dtFromPicture'];
 $application->category = intval($post["category"]);
 if(!isset($application->address)) $application->address = new stdClass();
 $application->address->address = $post["lokalizacja"];
