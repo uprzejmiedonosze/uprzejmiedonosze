@@ -9,7 +9,7 @@ const DT_FORMAT = 'Y-m-d\TH:i:s';
 const CATEGORIES = Array(
 	7  => ["Niezastosowanie się do znaków",
 		"Pojazd był zaparkowany w sposób niezgodny z oznaczeniem poziomym lub pionowym.",
-		"<p>Jeśli na danym obszarze, miejsca do parkowania są wyznaczone za pomocą znaków poziomych lub pionowych, to kierowców obowiązują właśnie te znaki. Nie ma żadnego znaczenia, czy na chodniku zostało 1,5m albo czyczy do przejścia dla pieszych pozostało 8 czy 10 metrów.</p> <p><i>(PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.)</i></p>"],
+		"<p>Jeśli na danym obszarze, miejsca do parkowania są wyznaczone za pomocą znaków poziomych lub pionowych, to kierowców obowiązują właśnie te znaki. Nie ma żadnego znaczenia, czy na chodniku zostało 1,5m albo czy do przejścia dla pieszych pozostało 8 czy 10 metrów.</p> <p><i>(PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.)</i></p>"],
 	8  => ["Parkowanie z dala od krawędzi jezdni",
 		"Pojazd był zaparkowany z dala od krawędzi jezdni.",
 		"<p>Pojazd może wjechać na chodnik wyłącznie przodem, i musi stać przy krawędzi jezdni. Jakiekolwiek ustawienie pojazdu, które wskazywałoby na to, że kierowca jechał chodnikiem aby znaleźć się w tym miejscu jest naruszeniem przepisów.</p> <p><i>(PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2 (szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m), zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru.)</i></p>"],
@@ -99,6 +99,8 @@ const SM_ADDRESSES = Array (
         'straz.miejska@umchelm.pl', 'Chełm'],
     'gryfino' => ['Straż Miejska Gryfino \\\\ 1 Maja 16 \\\\ 74-100 Gryfino',
         'strazmiejska@gryfino.pl', 'Gryfino'],
+    'ząbki' => ['Straż Miejska w Ząbkach \\\\ Wojska Polskiego 10 \\\\ 05-091 Ząbki',
+        'strazmiejska@zabki.pl', 'Ząbki'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
