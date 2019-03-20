@@ -111,15 +111,18 @@ class UDTestStatic(unittest.TestCase):
         new.test_context_image()
         new.test_car_image()
         new.check_default_statements() # both true
-        new.review()
 
+        new.confirm()
         new.test_expose_statement(True)
         new.test_witness_statement(True)
-        new.update()
 
-        new.set_witness_statement(False)
-        new.set_expose_statement(False)
-        new.review()
+        new.back('owe ')
+
+        #new.driver.execute_script("scroll(0, 1500)")
+        new.flip_witness_statement()
+        new.flip_expose_statement()
+
+        new.confirm()
         new.test_expose_statement(False)
         new.test_witness_statement(False)
 

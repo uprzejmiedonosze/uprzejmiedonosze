@@ -35,7 +35,9 @@ class Locators(object):
     NEW_PLATEIMG= (By.ID,    "plateImage")
     NEW_CLEANUP = (By.CSS_SELECTOR, "a.cleanup")
     NEW_EXPOSE  = (By.ID,    "exposeData")
+    NEW_EXPOSED = (By.XPATH, '//input[@id="exposeData"]/..')
     NEW_WITNESS = (By.ID,    "witness")
+    NEW_WITNESSD= (By.XPATH, '//input[@id="witness"]/..')
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 

@@ -74,6 +74,11 @@ class BasePage(object):
                 break
             time.sleep(tries + 1)
         return text
+    
+    def back(self, wait_for_title = None):
+        self.driver.execute_script("window.history.go(-1)")
+        if wait_for_title:
+            WebDriverWait(self.driver, 10).until(EC.title_contains(wait_for_title))
 
 class MainPage(BasePage):
     def __init__(self, driver):
@@ -107,7 +112,7 @@ class New(BasePage):
             self.login()
     
     def is_validation_empty_working(self):
-        self.driver.find_element(*Locators.NEW_SUBMIT).click()
+        self.confirm(False)
         time.sleep(2)
         assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
         assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
@@ -117,7 +122,7 @@ class New(BasePage):
     def is_other_comment_validation_working(self):
         self.driver.find_element(*Locators.NEW_CAT0).click()
 
-        self.driver.find_element(*Locators.NEW_SUBMIT).click()
+        self.confirm(False)
         assert "error" in self.driver.find_element(*Locators.NEW_COMMENT).get_attribute('class')
     
     def display_image_inputs(self):
@@ -170,16 +175,20 @@ class New(BasePage):
         assert not self.driver.find_element(*Locators.NEW_PLATEIMG).is_displayed()
     
     def test_invalid_image_submit(self):
-        self.driver.find_element(*Locators.NEW_SUBMIT).click()
+        self.confirm(False)
 
         assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
         assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
     
+    def confirm(self, shouldPass = True):
+        self.driver.find_element(*Locators.NEW_SUBMIT).click()
+        if shouldPass:
+            WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
+
     def review(self):
         self.driver.find_element(*Locators.NEW_COMMENT).clear()
         self.driver.find_element(*Locators.NEW_COMMENT).send_keys(self.cfg.app['comment'])
-        self.driver.find_element(*Locators.NEW_SUBMIT).click()
-        WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
+        self.confirm(True)
 
         text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
 
@@ -190,13 +199,11 @@ class New(BasePage):
         assert self.cfg.app['comment'] in text
         assert self.cfg.account['email'] in text
         
-        self.driver.execute_script("window.history.go(-1)")
-        WebDriverWait(self.driver, 10).until(EC.title_contains('owe '))
+        self.back('owe ')
     
     def update(self):
         time.sleep(2)
-        self.driver.find_element(*Locators.NEW_SUBMIT).click()
-        WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
+        self.confirm()
     
     def commit(self, has_comment = True):
         text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
@@ -247,21 +254,21 @@ class New(BasePage):
         assert self.driver.find_element(*Locators.NEW_EXPOSE).get_attribute('value')
         assert self.driver.find_element(*Locators.NEW_WITNESS).get_attribute('value')
 
-    def set_expose_statement(self, value):
-        self.driver.find_element(*Locators.NEW_EXPOSE).send_keys(value)
+    def flip_expose_statement(self):
+        self.driver.find_element(*Locators.NEW_EXPOSED).click()
 
-    def set_wintness_statement(self, value):
-        self.driver.find_element(*Locators.NEW_WITNESS).send_keys(value)
+    def flip_witness_statement(self):
+        self.driver.find_element(*Locators.NEW_WITNESSD).click()
 
     def test_expose_statement(self, value):
-        page_content = self.get_content
+        page_content = self.get_content()
         if value:
             assert 'Nie byłem świadkiem samego momentu parkowania' in page_content
         else:
             assert not 'Nie byłem świadkiem samego momentu parkowania' in page_content
     
     def test_witness_statement(self, value):
-        page_content = self.get_content
+        page_content = self.get_content()
         if value:
             assert 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
         else:
