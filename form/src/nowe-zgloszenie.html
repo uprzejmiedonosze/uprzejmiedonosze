@@ -5,6 +5,7 @@ checkIfLogged();
 
 if(isset($_GET['cleanup'])){
     unset($_SESSION['newAppId']);
+    redirect("nowe-zgloszenie.html");
 }
 
 if(isset($_SESSION['newAppId'])){ // edit mode
