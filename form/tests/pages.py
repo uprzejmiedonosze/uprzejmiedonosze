@@ -66,7 +66,7 @@ class BasePage(object):
         wait.until(EC.title_contains('tart')) # [sS]tart
 
     def get_content(self):
-        time.sleep(5)
+        time.sleep(3)
         for tries in range(0, 3):
             content = self.driver.find_elements(*Locators.CONTENT)
             text = content[len(content) - 1].text
@@ -241,6 +241,31 @@ class New(BasePage):
         assert self.cfg.app['date'] in page_content
         assert self.cfg.app['time'] in page_content
         assert self.cfg.account['email'] in page_content
+    
+    def check_default_statements(self):
+        # statemens should on ON by default
+        assert self.driver.find_element(*Locators.NEW_EXPOSE).get_attribute('value')
+        assert self.driver.find_element(*Locators.NEW_WITNESS).get_attribute('value')
+
+    def set_expose_statement(self, value):
+        self.driver.find_element(*Locators.NEW_EXPOSE).send_keys(value)
+
+    def set_wintness_statement(self, value):
+        self.driver.find_element(*Locators.NEW_WITNESS).send_keys(value)
+
+    def test_expose_statement(self, value):
+        page_content = self.get_content
+        if value:
+            assert 'Nie byłem świadkiem samego momentu parkowania' in page_content
+        else:
+            assert not 'Nie byłem świadkiem samego momentu parkowania' in page_content
+    
+    def test_witness_statement(self, value):
+        page_content = self.get_content
+        if value:
+            assert 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
+        else:
+            assert not 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
 
 class MyApps(BasePage):
     def __init__(self, driver):

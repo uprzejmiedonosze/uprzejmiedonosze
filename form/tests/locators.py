@@ -34,6 +34,8 @@ class Locators(object):
     NEW_ADD_HINT= (By.ID,    "addressHint")
     NEW_PLATEIMG= (By.ID,    "plateImage")
     NEW_CLEANUP = (By.CSS_SELECTOR, "a.cleanup")
+    NEW_EXPOSE  = (By.ID,    "exposeData")
+    NEW_WITNESS = (By.ID,    "witness")
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 

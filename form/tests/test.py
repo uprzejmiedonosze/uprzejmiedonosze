@@ -104,6 +104,24 @@ class UDTestStatic(unittest.TestCase):
         new.fin()
         url = new.app_page()
         new.check_pdf(url)
+    
+    def test_statements(self):
+        new = pages.New(self.driver)
+        new.reload_on_edit()
+        new.test_context_image()
+        new.test_car_image()
+        new.check_default_statements() # both true
+        new.review()
+
+        new.test_expose_statement(True)
+        new.test_witness_statement(True)
+        new.update()
+
+        new.set_witness_statement(False)
+        new.set_expose_statement(False)
+        new.review()
+        new.test_expose_statement(False)
+        new.test_witness_statement(False)
 
     def test_check_list(self):
         myApps = pages.MyApps(self.driver)
