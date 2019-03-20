@@ -27,7 +27,10 @@ class Application extends JSONObject{
         $this->initStatements();
     }
 
-    private function initStatements(){
+    public function initStatements(){
+        if(isset($this->statements)){
+            return;
+        }
         $this->statements = new JSONObject();
         $this->statements->witness = false;
         $this->statements->exposeData = false;
