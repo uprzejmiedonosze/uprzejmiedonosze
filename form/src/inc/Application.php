@@ -24,6 +24,13 @@ class Application extends JSONObject{
         $this->user->sex = guess_sex_by_name($this->user->name);
         $this->status = 'draft';
         $this->category = 7;
+        $this->initStatements();
+    }
+
+    private function initStatements(){
+        $this->statements = new JSONObject();
+        $this->statements->witness = false;
+        $this->statements->exposeData = false;
     }
 
     /**
