@@ -101,6 +101,10 @@ const SM_ADDRESSES = Array (
         'strazmiejska@gryfino.pl', 'Gryfino'],
     'ząbki' => ['Straż Miejska w Ząbkach \\\\ Wojska Polskiego 10 \\\\ 05-091 Ząbki',
         'strazmiejska@zabki.pl', 'Ząbki'],
+    'bartoszyce' => ['Straż Miejska w Bartoszycach \\\\ ul. Bohaterów Monte Cassino 1 \\\\ 11-200 Bartoszyce',
+        'urzad.miasta@bartoszyce.pl', 'Bartoszyce'],
+    'lidzbark warmiński' => ['Straż Miejska w Lidzbarku Warmińskim \\\\ Aleksandra Świętochowskiego 14 \\\\ 11-100 Lidzbark Warmiński',
+        'um@lidzbarkwarminski.pl', 'Lidzbark Warmiński'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
