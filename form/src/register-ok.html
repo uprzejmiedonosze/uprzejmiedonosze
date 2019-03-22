@@ -12,6 +12,7 @@ $post = $_POST;
 $name = trim($post["name"]);
 $msisdn = trim($post["msisdn"]);
 //$idnumber = strtoupper(trim($post["idnumber"]));
+$exposeData = !(boolean)$post['exposeData'];
 
 $address = str_replace(', Polska', '', trim($post["address"]));
 
@@ -21,7 +22,7 @@ try{
     $user = new User();
 }
 
-$user->updateUserData($name, $msisdn, $address); //, $idnumber);
+$user->updateUserData($name, $msisdn, $address, $exposeData); //, $idnumber);
 $storage->saveUser($user);
 
 _sendSlackOnRegister($user);
