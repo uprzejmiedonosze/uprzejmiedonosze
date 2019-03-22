@@ -113,17 +113,12 @@ class UDTestStatic(unittest.TestCase):
         new.check_default_statements() # both true
 
         new.confirm()
-        new.test_expose_statement(True)
         new.test_witness_statement(True)
 
         new.back('owe ')
-
-        #new.driver.execute_script("scroll(0, 1500)")
         new.flip_witness_statement()
-        new.flip_expose_statement()
 
         new.confirm()
-        new.test_expose_statement(False)
         new.test_witness_statement(False)
 
     def test_check_list(self):

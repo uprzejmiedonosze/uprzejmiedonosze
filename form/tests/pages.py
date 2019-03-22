@@ -251,11 +251,7 @@ class New(BasePage):
     
     def check_default_statements(self):
         # statemens should on ON by default
-        assert self.driver.find_element(*Locators.NEW_EXPOSE).get_attribute('value')
         assert self.driver.find_element(*Locators.NEW_WITNESS).get_attribute('value')
-
-    def flip_expose_statement(self):
-        self.driver.find_element(*Locators.NEW_EXPOSED).click()
 
     def flip_witness_statement(self):
         self.driver.find_element(*Locators.NEW_WITNESSD).click()
