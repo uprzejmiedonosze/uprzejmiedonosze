@@ -1,0 +1,15 @@
+{% macro faq(city, sm) %}
+    <div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"
+    data-collapsed="true" data-role="collapsible">
+    <h3 id="{{ sm }}">{{ city }}</h3>
+{% endmacro %}
+
+{% macro q(id) %}
+    <h4>
+    {% if id == 1 %}Czy SM wzywa na świadka do zgłoszeń przesłanych drogą elektroniczną?{% endif %}
+    {% if id == 2 %}Czy SM wysyła potwierdzenia przyjęcia zgłoszenia?{% endif %}
+    {% if id == 3 %}W jaki sposób pytać o status swoich zgłoszeń?{% endif %}
+    {% if id == 4 %}Czy dla SM ma znaczenie, czy zgłoszenia są dostarczane za pomocą EPUAP
+    czy emailem?{% endif %}
+    </h4>
+{% endmacro %}
