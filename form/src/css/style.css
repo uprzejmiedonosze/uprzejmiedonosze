@@ -311,7 +311,7 @@ div.error img{
     max-width: 400px;
 }
 
-.ui-block-a:not(.statements) div, .ui-block-b:not(.statements) div {
+.ui-block-a div, .ui-block-b div {
     width: 95%;
 }
 
