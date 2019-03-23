@@ -121,7 +121,7 @@ const STATUSES = Array (
 	'confirmed-sm'      => ['Potwierdzone w SM', 'Potwierdzone w SM', 'user',    'active',   ''],
     'confirmed-ignored' => ['Zignorowane',       'Zignorowane',       'delete',  'active',   ''],
     'confirmed-fined'   => ['Wystawiony mandat', 'Wystawiony mandat', 'check',   'active',   ''],
-    'archived'          => ['W archiwum',        'Do archiwim',       'cloud',   'archived', '']
+    'archived'          => ['W archiwum',        'Do archiwum',       'cloud',   'archived', '']
 );
 
 const SEXSTRINGS = Array (
