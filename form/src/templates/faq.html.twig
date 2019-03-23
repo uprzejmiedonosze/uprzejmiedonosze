@@ -1,0 +1,107 @@
+{% if head.dialog %}
+    {% set leftButton = 'menuBack' %}
+    {% set rightButton = '' %}
+{% else %}
+    {% set leftButton = 'menu' %}
+    {% set rightButton = 'menuStart' %}
+{% endif %}
+
+{% import "_macros.html.twig" as macros %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>Najczęściej zadawane pytania</h2>
+<p>Straż Miejska w różnych miastach działa na podstawie tych samych przepisów, ale
+interpretuje je różnie. Widoczne jest to szczególnie mocno w domyślnym podejściu do zgłoszenia
+przysłanego mailem.</p>
+<p>W części miast wysyłany jest na miejsce patrol (po co?), w innych dostaje się
+automatycznie wezwanie na przesłuchanie, w jeszcze innych SM potwierdza zgłoszenie 
+i przetwarza je już samodzielnie.<p>
+<p>Strona ta w założeniu ma być źródłem informacji o specyfice poszczególnych
+Straży Miejskich, wraz ze wskazówkami "jak rozmawiać ze swoim komendantem".</p>
+<p>Jeśli widzisz jakieś nieprawidłowości, brakuje twojego miasta,
+lub twoje doświadczenia są inne niż opisane poniżej,
+napisz do nas <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">na FB</a>.</p>
+
+{{ macros.faq('Warszawa', 'warszawa') }}
+    {{ macros.q(1) }}
+    <p>Osoby składające zawiadomienie o wykroczeniu będą wzywane na świadka dopiero
+    w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub
+    zebrany materiał dowodowy będzie budził wątpliwości.</p>
+    <p>Powyższa procedura dotyczy wszystkich oddziałów terenowych SM.</p>
+
+    {{ macros.q(2) }}
+    <p>Tak.</p>
+
+    {{ macros.q(3) }}
+    <p>O statusie zgłoszenia można zasięgnąć informacji podając numer sprawy,
+    a w przypadkach gdy nie został Pan powiadomiony o podjęciu czynności
+    podając np. numer rejestracyjny pojazdu.</p>
+
+    {{ macros.q(4) }}
+    <p>Nie ma znaczenia.</p>
+</div>
+
+{{ macros.faq('Szczecin', 'szczecin') }}
+    {{ macros.q(1) }}
+    <p>Niestety tak. SM wzywa automatycznie do wszystkich zgłoszeń.</p>
+
+    {{ macros.q(2) }}
+    <p>Tak, wysyłając wezwanie na przesłuchanie świadka i podając numer sprawy
+    (choć nie sposób powiązać tego numeru sprawy ze swoim zgłoszeniem).</p>
+
+    {{ macros.q(3) }}
+    <p>(niestety) Najprościej jest pytać o to w trakcie wizyty w SM.</p>
+
+    {{ macros.q(4) }}
+    <p>Nie ma znaczenia. SM i tak i tak drukuje całość i wzywa na przesłuchanie.</p>
+</div>
+
+{{ macros.faq('Gdańsk', 'gdansk') }}
+    {{ macros.q(1) }}
+    <p>Osoby składające zawiadomienie o wykroczeniu będą wzywane na świadka dopiero
+    w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub
+    zebrany materiał dowodowy będzie budził wątpliwości.</p>
+    <p>Specyfiką SM w Gdańsku jest konieczność podawania marki pojazdu w zgłoszeniu.
+    Nie wynika to z żadnych przepisów, i mam nadzieję, że ten wymóg proceduralny
+    zostanie zniesiony. Jednak jeśli chcesz obniżyć prawdopodobieństwo wezwania
+    na przesłuchanie, to możesz umieścić model pojazdu w komentarzu.</p>
+
+    {{ macros.q(3) }}
+    <p>Z przekazanych na informacji wynika, że o statusie będą informować
+    (sic) listem poleconym.</p>
+
+    {{ macros.q(4) }}
+    <p>Preferowaną metodą jest kontakt mailowy.</p>
+</div>
+
+{{ macros.faq('Gdynia', 'gdynia') }}
+    {{ macros.q(1) }}
+    <p>SM w Gdyni domyślnie nie wzywa na świadka.</p>
+
+    {{ macros.q(2) }}
+    <p>Różnie. Na część zgłoszeń użytkownicy otrzymują potwierdzenia z nadanym numerem
+    sprawy. Ale niestety nie działa to w 100%.</p>
+
+    {{ macros.q(4) }}
+    <p>Nie ma to znaczenia.</p>
+</div>
+
+{{ macros.faq('Łódź', 'lodz') }}
+    <p>Informacje pozyskane na przykładzie Oddziały Dzielnicowego Łódź - Bałuty.
+    Prodecury SM różnią się znacznie między miastami, ale wewnątrz jednego
+    ośrodka zazwyczaj są spójne. Przyjmujemy na tym etapie, że jest to stanowisko
+    SM Łódź.</p>
+
+    {{ macros.q(1) }}
+    <p>Wg informacji pozyskanych w SM, w przypadku braku naocznego potwierdzenia
+    wykroczenia przez strażników, <i>konieczne jest złożenie oświadczenie ustnie
+    lub przesłanie go na piśmie</i>.</p>
+    <p>Zawiadomienie takie można złożyć w siedzibie SM przy ul. Mokrej 10 w Łodzi.</p>
+
+    {{ macros.q(2) }}
+    <p>Tak. Zostało to empirycznie potwierdzone.</p>
+</div>
+
+{% endblock %}

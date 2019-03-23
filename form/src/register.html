@@ -1,6 +1,8 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
+checkIfLogged();
+
 try{ 
     $user = $storage->getCurrentUser();
 }catch(Exception $e){
