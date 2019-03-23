@@ -259,16 +259,16 @@ class New(BasePage):
     def test_expose_statement(self, value):
         page_content = self.get_content()
         if value:
-            assert 'Nie byłem świadkiem samego momentu parkowania' in page_content
+            assert 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
         else:
-            assert not 'Nie byłem świadkiem samego momentu parkowania' in page_content
+            assert not 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
     
     def test_witness_statement(self, value):
         page_content = self.get_content()
         if value:
-            assert 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
+            assert 'Nie byłem świadkiem samego momentu parkowania' in page_content
         else:
-            assert not 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
+            assert not 'Nie byłem świadkiem samego momentu parkowania' in page_content
 
 class MyApps(BasePage):
     def __init__(self, driver):
