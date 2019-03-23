@@ -13,19 +13,19 @@
 <form action="/register-ok.html?next={{ config.signInSuccessUrl ?? 'start.html' }}" id="register-form" method="post" data-ajax="false">
     <label for="name">Podaj imię i nazwisko, które posłuży SM do identyfikacji autora zgłoszenia</label>
     <input type="text" required maxlength="30" id="name" name="name"
-        placeholder="Twoje imię i nazwisko"
+        placeholder="(twoje imię i nazwisko)"
         data-inline="true" value="{{ user.data.name }}">
     <label for="email">Email został pobrany automatycznie w trakcie logowania</label>
     <input disabled type="email" required maxlength="30" id="email" name="email"
-        placeholder="Twój email"
+        placeholder="(twój email)"
         data-inline="true" value="{{ user.data.email }}">
     <label for="name">Podaj (opcjonalnie) numer kontaktowy</label>
     <input type="tel" maxlength="11" id="msisdn" name="msisdn"
-        placeholder="Twój numer telefonu (opcjonalnie)"
+        placeholder="(twój numer telefonu [opcjonalnie])"
         data-inline="true" value="{{ user.data.msisdn ?? '' }}">
     <label for="name">Podaj adres zamieszkania (wymagany)</label>
     <input type="text" maxlength="70" required id="address" name="address"
-        placeholder="Adres korespondencyjny"
+        placeholder="(twój adres korespondencyjny [wymagany])"
         autocomplete="off"
         data-inline="true" value="{{ user.data.address ?? '' }}">
     <label for="exposeData">Chcę dołączać do zgłoszenia prośbę o niezamieszczanie
