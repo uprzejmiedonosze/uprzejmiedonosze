@@ -101,6 +101,10 @@ const SM_ADDRESSES = Array (
         'strazmiejska@gryfino.pl', 'Gryfino'],
     'ząbki' => ['Straż Miejska w Ząbkach \\\\ Wojska Polskiego 10 \\\\ 05-091 Ząbki',
         'strazmiejska@zabki.pl', 'Ząbki'],
+    'bartoszyce' => ['Straż Miejska w Bartoszycach \\\\ ul. Bohaterów Monte Cassino 1 \\\\ 11-200 Bartoszyce',
+        'urzad.miasta@bartoszyce.pl', 'Bartoszyce'],
+    'lidzbark warmiński' => ['Straż Miejska w Lidzbarku Warmińskim \\\\ Aleksandra Świętochowskiego 14 \\\\ 11-100 Lidzbark Warmiński',
+        'um@lidzbarkwarminski.pl', 'Lidzbark Warmiński'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
@@ -117,7 +121,7 @@ const STATUSES = Array (
 	'confirmed-sm'      => ['Potwierdzone w SM', 'Potwierdzone w SM', 'user',    'active',   ''],
     'confirmed-ignored' => ['Zignorowane',       'Zignorowane',       'delete',  'active',   ''],
     'confirmed-fined'   => ['Wystawiony mandat', 'Wystawiony mandat', 'check',   'active',   ''],
-    'archived'          => ['W archiwum',        'Do archiwim',       'cloud',   'archived', '']
+    'archived'          => ['W archiwum',        'Do archiwum',       'cloud',   'archived', '']
 );
 
 const SEXSTRINGS = Array (
