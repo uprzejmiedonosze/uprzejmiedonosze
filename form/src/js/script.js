@@ -35,6 +35,16 @@ $(document).on('pageshow', function () {
                 $('#form').submit();
             }
         });
+
+        $('#witness').change(function () {
+            if($('#witness').prop("checked")){
+                $('#witnessY').show();
+                $('#witnessN').hide();
+            }else{
+                $('#witnessY').hide();
+                $('#witnessN').show();
+            }
+        });
     }
 
     if ($("#register-submit").length) {
