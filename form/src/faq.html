@@ -1,0 +1,19 @@
+<? 
+require_once(__DIR__ . '/../inc/include.php');
+
+generate('faq.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Najczęściej zadawane pytania",
+            'shortTitle' => "FAQ",
+            'description' => "Najczęście zadawane pytania w podziale na miasta",
+            'dialog' => isset($_GET['dialog']),
+            'mainClass' => 'faq'
+        ],
+        'config' => [
+            'menu' => 'faq'
+        ]
+    ]
+);
+?>
