@@ -71,6 +71,12 @@ export: $(DIRS) minify ## Exports files for deployment.
 check-branch:
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" || ( echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." && exit 1 )
 
+check-git-clean:
+	@test "$(shell git st | grep 'nothing to commit' | wc -l)" = 1 || ( echo "There are uncommitted changes." && exit 1 )
+
+check-branch-master:
+	@test "$(shell git st | grep 'up to date' | grep 'origin/master' | wc -l)" = 1 || ( echo "Not on branch master." && exit 1 )
+
 minify: check-branch minify-css minify-js process-html process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
 minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED)
