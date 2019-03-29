@@ -105,6 +105,8 @@ const SM_ADDRESSES = Array (
         'urzad.miasta@bartoszyce.pl', 'Bartoszyce'],
     'lidzbark warmiński' => ['Straż Miejska w Lidzbarku Warmińskim \\\\ Aleksandra Świętochowskiego 14 \\\\ 11-100 Lidzbark Warmiński',
         'um@lidzbarkwarminski.pl', 'Lidzbark Warmiński'],
+    'zielona góra' => ['Straż Miejska Zielona Góra \\\\ ul. Bohaterów Westerplatte 23 \\\\ 65-078 Zielona Góra',
+        'dyzurny@um.zielona-gora.pl', 'Zielona Góra'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
