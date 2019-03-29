@@ -107,6 +107,8 @@ const SM_ADDRESSES = Array (
         'um@lidzbarkwarminski.pl', 'Lidzbark Warmiński'],
     'zielona góra' => ['Straż Miejska Zielona Góra \\\\ ul. Bohaterów Westerplatte 23 \\\\ 65-078 Zielona Góra',
         'dyzurny@um.zielona-gora.pl', 'Zielona Góra'],
+    'olsztyn' => ['Straż Miejska w Olsztynie \\\\ al. J. Piłsudskiego 11/17 \\\\ 10-959 Olsztyn',
+        'sm@strazmiejska.olsztyn.pl', 'Olsztyn'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
