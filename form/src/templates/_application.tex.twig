@@ -16,7 +16,7 @@
     świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
     {{ app.address.address }}.
     {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.
-    Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.userComment }}
+    Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
 
 {% if app.statements is not defined or not app.statements.witness %}
     Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo

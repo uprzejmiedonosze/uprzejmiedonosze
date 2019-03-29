@@ -145,6 +145,30 @@ class Application extends JSONObject{
         return 0;
     }
 
+    public function getLatexSafeComment(){
+        // Remove HTML entities
+        $string = preg_replace('/&[a-zA-Z]+;/iu', '', $this->userComment);
+
+        // Remaining special characters (cannot be placed with the others,
+        // as then the html entity replace would fail).
+        $string = str_replace("\\", " ", $string);
+        $string = str_replace("#", "\\#", $string);
+        $string = str_replace("$", "\\$", $string);
+        $string = str_replace("&", "\\&", $string);
+        $string = str_replace("%", "\\%", $string);
+        $string = str_replace("{", "\\{", $string);
+        $string = str_replace("}", "\\}", $string);
+        $string = str_replace("_", "\\_", $string);
+        $string = str_replace('"', "''", $string);
+        $string = str_replace("^", "\\^{}", $string);
+        $string = str_replace("°", "\$^{\\circ}\$", $string);
+        $string = str_replace(">", "\\textgreater ", $string);
+        $string = str_replace("<", "\\textless ", $string);
+        $string = str_replace("~", "\\textasciitilde ", $string);
+
+        return $string;
+    }
+
 }
 
 ?>
