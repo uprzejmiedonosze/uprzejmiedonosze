@@ -110,7 +110,7 @@ const SM_ADDRESSES = Array (
     'olsztyn' => ['Straż Miejska w Olsztynie \\\\ al. J. Piłsudskiego 11/17 \\\\ 10-959 Olsztyn',
         'sm@strazmiejska.olsztyn.pl', 'Olsztyn'],
     'świdnica' => ['Straż Miejska w Świdnicy \\\\ ul. Dworcowa 2-4-6-8 \\\\ 58-100 Świdnica',
-        'strazmiejska@sm.swidnica.pl', 'Świdnica']
+        'strazmiejska@sm.swidnica.pl', 'Świdnica'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
