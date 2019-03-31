@@ -111,6 +111,8 @@ const SM_ADDRESSES = Array (
         'sm@strazmiejska.olsztyn.pl', 'Olsztyn'],
     'świdnica' => ['Straż Miejska w Świdnicy \\\\ ul. Dworcowa 2-4-6-8 \\\\ 58-100 Świdnica',
         'strazmiejska@sm.swidnica.pl', 'Świdnica'],
+    'karlino' => ['Straż Miejska Karlino \\\\ ul. Szymanowskiego 17A \\\\ 78-230 Karlino',
+        'sm@karlino.pl', 'Karlino'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
