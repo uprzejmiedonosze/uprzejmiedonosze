@@ -91,7 +91,7 @@ function fillInAddress() {
 }
 
 function validateForm() {
-    var ret = check($('#plateId'), 6, false);
+    var ret = check($('#plateId'), 4, false);
     ret = checkAddress($('#lokalizacja')) && ret;
     ret = check($('#carImage'), 0, true) && ret;
     ret = check($('#contextImage'), 0, true) && ret;
