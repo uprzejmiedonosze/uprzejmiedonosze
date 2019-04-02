@@ -91,7 +91,7 @@ function fillInAddress() {
 }
 
 function validateForm() {
-    var ret = check($('#plateId'), 4, false);
+    var ret = check($('#plateId'), 3, false);
     ret = checkAddress($('#lokalizacja')) && ret;
     ret = check($('#carImage'), 0, true) && ret;
     ret = check($('#contextImage'), 0, true) && ret;
@@ -136,7 +136,7 @@ function check(item, minLength, grandma) {
     const len = (item.val().trim().length == 0) ?
         ((item.attr('value')) ? item.attr('value').trim().length : 0) :
         item.val().trim().length;
-    if (len < minLength) {
+    if (len <= minLength) {
         if (grandma) {
             item.parent().parent().addClass('error');
         } else {
