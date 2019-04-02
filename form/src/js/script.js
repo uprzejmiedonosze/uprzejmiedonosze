@@ -132,11 +132,11 @@ function validateRegisterForm() {
     return ret;
 }
 
-function check(item, length, grandma) {
-    const val = (item.val().trim().length == 0) ?
+function check(item, minLength, grandma) {
+    const len = (item.val().trim().length == 0) ?
         ((item.attr('value')) ? item.attr('value').trim().length : 0) :
         item.val().trim().length;
-    if (val <= length) {
+    if (len < minLength) {
         if (grandma) {
             item.parent().parent().addClass('error');
         } else {
