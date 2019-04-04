@@ -21,7 +21,8 @@ class User extends JSONObject{
         $this->added = date(DT_FORMAT);
         $this->data = new stdClass();
         $this->data->email = $_SESSION['user_email'];
-        $this->data->name  = $_SESSION['user_name'];
+        $this->data->name  = capitalizeName($_SESSION['user_name']);
+        $this->data->exposeData = false;
         $this->applications = Array();
     }
 
@@ -67,7 +68,7 @@ class User extends JSONObject{
     /**
      * Updates current user's data.
      */
-    function updateUserData($name, $msisdn, $address){ // , $idnumber){
+    function updateUserData($name, $msisdn, $address, $exposeData){ // , $idnumber){
         if(isset($this->added)){
             $this->updated = date(DT_FORMAT);
         }
@@ -76,6 +77,7 @@ class User extends JSONObject{
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         //if(isset($idnumber)) $this->data->idnumber = $idnumber;
         $this->data->address = $address;
+        $this->data->exposeData = $exposeData;
         return true;
     }
 
@@ -101,6 +103,16 @@ class User extends JSONObject{
      */
     public function getSanitizedName(){
         return mb_ereg_replace("([^\w\d])", '-', $this->data->name);
+    }
+
+    /**
+     * Returns data.exposeData or false as default.
+     */
+    public function canExposeData(){
+        if(isset($this->data->exposeData)){
+            return $this->data->exposeData;
+        }
+        return false;
     }
 }
 

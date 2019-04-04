@@ -35,6 +35,16 @@ $(document).on('pageshow', function () {
                 $('#form').submit();
             }
         });
+
+        $('#witness').change(function () {
+            if($('#witness').prop("checked")){
+                $('#witnessY').show();
+                $('#witnessN').hide();
+            }else{
+                $('#witnessY').hide();
+                $('#witnessN').show();
+            }
+        });
     }
 
     if ($("#register-submit").length) {
@@ -81,7 +91,7 @@ function fillInAddress() {
 }
 
 function validateForm() {
-    var ret = check($('#plateId'), 6, false);
+    var ret = check($('#plateId'), 3, false);
     ret = checkAddress($('#lokalizacja')) && ret;
     ret = check($('#carImage'), 0, true) && ret;
     ret = check($('#contextImage'), 0, true) && ret;
@@ -122,11 +132,11 @@ function validateRegisterForm() {
     return ret;
 }
 
-function check(item, length, grandma) {
-    const val = (item.val().trim().length == 0) ?
+function check(item, minLength, grandma) {
+    const len = (item.val().trim().length == 0) ?
         ((item.attr('value')) ? item.attr('value').trim().length : 0) :
         item.val().trim().length;
-    if (val <= length) {
+    if (len <= minLength) {
         if (grandma) {
             item.parent().parent().addClass('error');
         } else {

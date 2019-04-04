@@ -55,7 +55,7 @@ staging: $(DIRS) export ## Copy files to staging server.
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
 
 prod: HOST := $(PROD_HOST)
-prod: clean $(DIRS) export ## Copy files to prod server.
+prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
 	@git tag -a $(TAG_NAME) -m "release na produkcji"
 	@git push origin --quiet $(TAG_NAME)
@@ -68,8 +68,16 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json $(EXPORT)/
 
-check-branch:
-	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" || ( echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." && exit 1 )
+check-branch: ## Detects environment and active branch changes
+	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \
+		|| ( echo "Branch or env change detected. Was [$(LAST_RUN)] now is [$(GIT_BRANCH)|$(HOST)]. Clean-up first." \
+		&& exit 1 )
+
+check-git-clean: ## Checks if GIT repository has uncommited changes
+	@test "$(shell git status | grep 'nothing to commit' | wc -l)" = 1 || ( echo "There are uncommitted changes." && exit 1 )
+
+check-branch-master: ## Checks if GIT is on branch master
+	@test "$(shell git status | grep 'origin/master' | wc -l)" = 1 || ( echo "Not on branch master." && exit 1 )
 
 minify: check-branch minify-css minify-js process-html process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)

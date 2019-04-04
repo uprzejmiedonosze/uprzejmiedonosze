@@ -16,5 +16,25 @@
         "**/tools": true
     },
     "git.ignoreLimitWarning": true,
-    "eslint.options": { "extends": "jquery" }
+    "eslint.options": {
+        "extends": "jquery"
+    },
+    "spellright.language": [
+        "pl"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext",
+        "arduino-output",
+        "twig"
+    ],
+    "spellright.parserByClass": {
+        "arduino-output": {
+            "parser": "plain"
+        },
+        "twig": {
+            "parser": "xml"
+        }
+    }
 }
