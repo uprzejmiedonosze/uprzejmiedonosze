@@ -1,0 +1,107 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+<h2>Statystyki</h2>
+<p>Czyli strona o podtytule "nie jesteś sam".</p>
+
+<h3>Nowe zgłoszenia</h3>
+<p>Nowe zgłoszenia w ostatnich trzydziestu dniach. Decyduje data stworzenia zgłoszenia,
+    a nie data wykroczenia.</p>
+<div id="statsAppsByDay" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+
+<h3>Statystyki zgłoszeń dla miast</h3>
+<div id="statsAppsByCity" style="min-width: 250px; height: 300px; margin: 0 auto"></div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    Highcharts.setOptions({
+        lang: {
+            months: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec',
+                'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+            weekdays: ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek',
+                'Piątek', 'Sobota'],
+            shortMonths: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie',
+                'Wrz', 'Paź', 'Lis', 'Gru']
+        },
+        title: {
+            text: null
+        },
+        legend: {
+           enabled: false
+        },
+        credits: {
+            enabled: false
+        }
+    });
+
+    Highcharts.chart('statsAppsByDay', {
+        data: {
+            csvURL: window.location.origin + '/api/csv.html?file=statsAppsByDay',
+            firstRowAsNames: false
+        },
+        chart: {
+            type: 'spline',
+            backgroundColor: 'transparent'
+        },
+        xAxis: {
+            tickInterval: 7 * 24 * 3600 * 1000, // one week
+            tickWidth: 0,
+            gridLineWidth: 1,
+        },
+        series: [{
+            name: 'Ilość zgłoszeń',
+            lineWidth: 5,
+            color: '#009C7F'
+        }],
+        yAxis: [{ // left y axis
+            title: {
+                text: null
+            },
+            labels: {
+                align: 'left',
+                x: 3,
+                y: 16
+            },
+            showFirstLabel: false
+        }],
+        tooltip: {
+            shared: true,
+            crosshairs: true
+        }
+    });
+
+    Highcharts.chart('statsAppsByCity', {
+        data: {
+            csvURL: window.location.origin + '/api/csv.html?file=statsAppsByCity',
+            firstRowAsNames: false
+        },
+        chart: {
+            type: 'column',
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            backgroundColor: 'transparent'
+        },
+        series: [{
+            name: 'Ilość zgłoszeń',
+            color: '#009C7F'
+        }],
+        yAxis: [{ // left y axis
+            title: {
+                text: null
+            }
+        }]
+    });
+});
+</script>
+
+{% endblock %}

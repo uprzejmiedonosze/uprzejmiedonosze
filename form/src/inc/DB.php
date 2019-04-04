@@ -224,6 +224,50 @@ class DB extends NoSQLite{
         $this->recydywa->set($plate, strval($recydywa));
         return $recydywa;
     }
+
+    /**
+     * Returns number of new applications (by creation date)
+     * during 30 days. 
+     */
+    public function getStatsAppsByDay($useCache = true){
+
+        $stats = $this->stats->get("%HOST%-getStatsAppsByDay");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = "select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day', "
+            . "count(*) as cnt from applications "
+            . "where json_extract(applications.value, '$.status') not in ('draft', 'ready') "
+            . "group by substr(json_extract(applications.value, '$.added'), 1, 10) "
+            . "order by 1 desc limit 30";
+
+        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $this->stats->set("%HOST%-getStatsAppsByDay", $stats, 0, 600);
+        return $stats;
+    }
+
+    /**
+     * Returns number of applications per city.
+     */
+    public function getStatsAppsByCity($useCache = true){
+        $stats = $this->stats->get("%HOST%-getStatsAppsByCity");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = "select json_extract(applications.value, '$.address.city') as city, "
+            . "count(*) as cnt "
+            . "from applications "
+            . "where json_extract(applications.value, '$.status') not in ('draft', 'ready') "
+            . "group by json_extract(applications.value, '$.address.city') "
+            . "order by 2 desc, 1 limit 10 ";
+
+        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $this->stats->set("%HOST%-getStatsAppsByCity", $stats, 0, 600);
+        return $stats;
+    }
+
 }
 
 ?>
