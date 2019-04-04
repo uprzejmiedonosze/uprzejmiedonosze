@@ -1,0 +1,39 @@
+<?PHP
+header("Content-Type: text/csv; charset=UTF-8");
+require_once(__DIR__ . '/../../inc/include.php');
+require(__DIR__ . '/../../autoload.php');
+
+if (isset($_GET["file"]) && !empty($_GET["file"])) {
+    $file = $_GET["file"];
+    switch($file) {
+        case "statsAppsByDay":
+            _getStatsAppsByDay(); break;
+        case "statsAppsByCity":
+            _getStatsAppsByCity(); break;
+        default: raiseError('Invalid file specified', 400);
+    }
+}else{
+    raiseError('No file specified', 400);
+}
+
+function _getStatsAppsByDay(){
+    GLOBAL $storage;
+    $statsAppsByDay = $storage->getStatsAppsByDay(false);
+    echo outputCSV($statsAppsByDay);
+}
+
+function _getStatsAppsByCity(){
+    GLOBAL $storage;
+    $statsAppsByCity = $storage->getStatsAppsByCity(false);
+    echo outputCSV($statsAppsByCity);
+}
+
+function outputCSV($data) {
+    $outputBuffer = fopen("php://output", 'w');
+    foreach($data as $val) {
+        fputcsv($outputBuffer, $val);
+    }
+    fclose($outputBuffer);
+}
+
+?>
