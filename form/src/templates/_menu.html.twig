@@ -27,7 +27,7 @@
                 href="/wysylka.html">Do wysłania
             <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a></li>
     {% else %}
-        <li data-icon="plus"><a class="try" href="/start.html">Spróbuj</a></li>
+        <li data-icon="plus"><a class="try" href="/start.html">Spróbuj!</a></li>
     {% endif %}
 
         <li data-role="list-divider"></li>
@@ -46,6 +46,9 @@
         <li class="subpage" data-icon="false">
             <a {% if config.menu == 'epuap' %}class="active"{% endif %}
                 href="/epuap.html">– epuap</a></li>
+        <li class="subpage" data-icon="false">
+            <a data-ajax="false" {% if config.menu == 'stats' %}class="active"{% endif %}
+            href="/statystyki.html">– statystyki</a></li>
         <li class="subpage" data-icon="false">
             <a {% if config.menu == 'changelog' %}class="active"{% endif %}
                 href="/changelog.html">– historia zmian</a></li>
