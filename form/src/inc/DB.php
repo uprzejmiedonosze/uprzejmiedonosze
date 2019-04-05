@@ -236,11 +236,15 @@ class DB extends NoSQLite{
             return $stats;
         }
 
-        $sql = "select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day', "
-            . "count(*) as cnt from applications "
-            . "where json_extract(applications.value, '$.status') not in ('draft', 'ready') "
-            . "group by substr(json_extract(applications.value, '$.added'), 1, 10) "
-            . "order by 1 desc limit 30";
+        $sql = <<<SQL
+            select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day',
+                count(*) as cnt from applications
+            where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+                and json_extract(applications.value, '$.added') < date('now')
+            group by substr(json_extract(applications.value, '$.added'), 1, 10)
+            order by 1 desc
+            limit 30;
+SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->stats->set("%HOST%-getStatsAppsByDay", $stats, 0, 600);
