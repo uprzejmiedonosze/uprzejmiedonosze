@@ -50,6 +50,16 @@ class Application extends JSONObject{
     }
 
     /**
+     * Returns 'około godziny' or 'o godzinie'.
+     */
+    public function getDateTimeDivider(){
+        if(isset($this->dtFromPicture) && !$this->dtFromPicture){
+            return "około godziny";
+        }
+        return "o godzinie";
+    }
+
+    /**
      * Set status (and store statuses history changes)
      */
     public function setStatus($status){
