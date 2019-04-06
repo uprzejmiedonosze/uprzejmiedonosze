@@ -311,13 +311,28 @@ function setDateTime(dateTime, fromPicture = true) {
     }
     if(fromPicture){
         $('#dtPrecise').text('o');
-        $('#dateHint').text('Data i godzina pobrana ze zdjęcia');
+        if(dateTime !== ''){
+            $('#dateHint').text('Data i godzina pobrana ze zdjęcia');
+            $('#dateHint').addClass('hint');
+        }
         $('div.datetime a').hide();
     }else{
         dt = dt.startOf('hour');
         $('#dtPrecise').text('około');
         $('#dateHint').text('Podaj datę i godzinę zgłoszenia');
+        $('#dateHint').addClass('hint');
         $('div.datetime a').show();
+
+        if(luxon.DateTime.local() > dt.plus({ hours: 1 })){
+            $('#hp').removeClass('ui-state-disabled');
+        }else{
+            $('#hp').addClass('ui-state-disabled');
+        }
+        if(luxon.DateTime.local() > dt.plus({ days: 1 })){
+            $('#dp').removeClass('ui-state-disabled');
+        }else{
+            $('#dp').addClass('ui-state-disabled');
+        }
     }
 
     $('#datetime').val(dt.toFormat("yyyy-LL-dd'T'TT"));
