@@ -134,10 +134,10 @@ $(replace-inline)
 endef
 
 define replace-inline
-@sed -i '' 's/%JS_HASH%/$(JS_HASH)/g' $@
-@sed -i '' 's/%CSS_HASH%/$(CSS_HASH)/g' $@
-@sed -i '' 's/%TWIG_HASH%/$(TWIG_HASH)/g' $@
-@sed -i '' 's/%VERSION%/$(TAG_NAME)/g' $@
+@sed -i '' -e 's/%JS_HASH%/$(JS_HASH)/g' \
+	 -e 's/%CSS_HASH%/$(CSS_HASH)/g' \
+	 -e 's/%TWIG_HASH%/$(TWIG_HASH)/g' \
+	 -e 's/%VERSION%/$(TAG_NAME)/g' $@
 endef
 
 define lint
