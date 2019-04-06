@@ -124,7 +124,6 @@ function _upload(){
             $application->carInfo->recydywa = $recydywa;
         }
     }else if($pictureType == 'contextImage'){
-        $application->date = date(DT_FORMAT);
         $application->contextImage = new stdClass();
         $application->contextImage->url = make_image_url($prefix);
         $application->contextImage->thumb = make_image_url($prefix, ',t');
