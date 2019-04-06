@@ -147,6 +147,11 @@ div.error img{
     background-color: rgba(255, 0, 0, 0.3);
 }
 
+.new-application .datetime a {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 ::-webkit-input-placeholder { /* WebKit browsers */
 	text-transform: none;
 }

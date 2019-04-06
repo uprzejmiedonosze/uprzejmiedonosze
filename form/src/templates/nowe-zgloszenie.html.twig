@@ -75,9 +75,18 @@
         </div>
 
         <label for="datetime" id="dateHint">Podaj datę i czas zgłoszenia</label>
-        <input type="text" id="datetime" name="datetime" value="{{ app.date }}" />
+        <div class="datetime">
+            <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
+            <a href="#" id="dm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień wcześniej</a>
+            <span id="date"></span>
+            <a href="#" id="dp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień później</a>
+            <span id="dtPrecise">około</span>
+            <a href="#" id="hm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina wcześniej</a>
+            <span id="time"></span>
+            <a href="#" id="hp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina później</a>
+        </div>
 
-        <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '' }}" />
+        <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />
 
         <input type="hidden" id="street_number" name="street_number" />
         <input type="hidden" id="route" name="street_name" />
@@ -140,7 +149,6 @@
 <script src="js/load-image-exif-%JS_HASH%.js"></script>
 <script src="js/load-image-exif-map-%JS_HASH%.js"></script>
 
-<script src="js/jquery.datetimepicker-%JS_HASH%.js"></script>
-<link rel="stylesheet" href="css/jquery.datetimepicker-%CSS_HASH%.css">
+<script src="js/luxon-%JS_HASH%.js"></script>
 
 {% endblock %}
