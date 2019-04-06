@@ -74,16 +74,19 @@
                 data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
         </div>
 
-        <label for="datetime" id="dateHint">Podaj datę i czas zgłoszenia</label>
+        <label for="datetime" id="dateHint">Data i czas zgłoszenia</label>
         <div class="datetime">
             <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
+
             <a href="#" id="dm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień wcześniej</a>
-            <span id="date"></span>
             <a href="#" id="dp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień później</a>
+            <span id="date"></span>
+
             <span id="dtPrecise">około</span>
+
             <a href="#" id="hm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina wcześniej</a>
-            <span id="time"></span>
             <a href="#" id="hp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina później</a>
+            <span id="time"></span>
         </div>
 
         <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />
