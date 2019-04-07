@@ -60,7 +60,7 @@ $(document).on('pageshow', function () {
             }
         });
 
-        setDateTime($('#datetime').val(), !!$('#dtFromPicture').val());
+        setDateTime($('#datetime').val(), $('#dtFromPicture').val() == "1");
     }
 
     if ($("#register-submit").length) {
