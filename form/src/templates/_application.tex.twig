@@ -12,7 +12,7 @@
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb     ~ '}' %}
 
 \opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} } } }
-	W dniu {{ app.getDate }} roku o godzinie {{ app.getTime }} {{ app.guessUserSex.bylam }}
+	W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
     {{ app.address.address }}.
     {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.

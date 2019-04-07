@@ -128,3 +128,9 @@ class UDTestStatic(unittest.TestCase):
     def test_my_apps(self):
         myApps = pages.MyApps(self.driver)
         myApps.check_first(False)
+
+    def test_invalid_image(self):
+        new = pages.New(self.driver)
+        new.reload_on_edit()
+        new.test_invalid_image()
+        new.test_invalid_image_submit()

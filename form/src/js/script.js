@@ -45,6 +45,22 @@ $(document).on('pageshow', function () {
                 $('#witnessN').show();
             }
         });
+
+        $('.datetime a').click(function () {
+            let datetime = luxon.DateTime.fromISO($('#datetime').val()).startOf('hour');
+            const offset = (this.id.endsWith('p'))? 1: -1;
+
+            if(this.id.startsWith('d')){
+                datetime = datetime.plus({ days: offset });
+            }else{
+                datetime = datetime.plus({ hours: offset });
+            }
+            if(luxon.DateTime.local() > datetime){
+                setDateTime(datetime, false);
+            }
+        });
+
+        setDateTime($('#datetime').val(), $('#dtFromPicture').val() == "1");
     }
 
     if ($("#register-submit").length) {
@@ -243,8 +259,15 @@ function readGeoDataFromImage(file) {
             if(data.exif){
                 const dateTime = data.exif.getText("DateTimeOriginal");
                 if (dateTime && dateTime !== 'undefined') {
-                    setDateTime(dateTime);
+                    setDateTime(dateTime, true);
+                    $('#dtFromPicture').val(1);
+                }else{
+                    setDateTime('', false);
+                    $('#dtFromPicture').val(0);
                 }
+            }else{
+                setDateTime('', false);
+                $('#dtFromPicture').val(0);
             }
 
             if(!data.exif || data.exif.getText("GPSLatitude") === 'undefined'){
@@ -275,8 +298,46 @@ function noGeoDataInImage() {
     $('#addressHint').addClass('hint');
 }
 
-function setDateTime(dateTime) {
-    $('#datetime').val(dateTime);
+function setDateTime(dateTime, fromPicture = true) {
+    dt = dateTime;
+    if(typeof dateTime === 'string'){
+        dt = luxon.DateTime.fromFormat(dateTime, 'yyyy:MM:dd HH:mm:ss');
+        if(!!dt.invalid){
+            dt = luxon.DateTime.fromFormat(dateTime, "yyyy-MM-dd'T'HH:mm:ss");
+        }
+        if(!!dt.invalid){
+            dt = luxon.DateTime.local();
+        }
+    }
+    if(fromPicture){
+        $('#dtPrecise').text('o');
+        if(dateTime !== ''){
+            $('#dateHint').text('Data i godzina pobrana ze zdjęcia');
+            $('#dateHint').addClass('hint');
+        }
+        $('div.datetime a').hide();
+    }else{
+        dt = dt.startOf('hour');
+        $('#dtPrecise').text('około');
+        $('#dateHint').text('Podaj datę i godzinę zgłoszenia');
+        $('#dateHint').addClass('hint');
+        $('div.datetime a').show();
+
+        if(luxon.DateTime.local() > dt.plus({ hours: 1 })){
+            $('#hp').removeClass('ui-state-disabled');
+        }else{
+            $('#hp').addClass('ui-state-disabled');
+        }
+        if(luxon.DateTime.local() > dt.plus({ days: 1 })){
+            $('#dp').removeClass('ui-state-disabled');
+        }else{
+            $('#dp').addClass('ui-state-disabled');
+        }
+    }
+
+    $('#datetime').val(dt.toFormat("yyyy-LL-dd'T'TT"));
+    $('#date').text(dt.setLocale('pl').toFormat("cccc d LLL"));
+    $('#time').text(dt.toFormat("H:mm"));
 }
 
 function sendFile(fileData, id) {

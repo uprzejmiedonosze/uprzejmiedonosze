@@ -63,8 +63,6 @@
             </div>
         </div>
 
-        <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
-
         <label for="lokalizacja" id="addressHint">Podaj miejsce zgłoszenia</label>
         <div class="combo">
             <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
@@ -75,6 +73,23 @@
                 data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
                 data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
         </div>
+
+        <label for="datetime" id="dateHint">Data i czas zgłoszenia</label>
+        <div class="datetime">
+            <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
+
+            <a href="#" id="dm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień wcześniej</a>
+            <a href="#" id="dp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień później</a>
+            <span id="date"></span>
+
+            <span id="dtPrecise">około</span>
+
+            <a href="#" id="hm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina wcześniej</a>
+            <a href="#" id="hp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina później</a>
+            <span id="time"></span>
+        </div>
+
+        <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />
 
         <input type="hidden" id="street_number" name="street_number" />
         <input type="hidden" id="route" name="street_name" />
@@ -136,5 +151,7 @@
 <script src="js/load-image-orientation-%JS_HASH%.js"></script>
 <script src="js/load-image-exif-%JS_HASH%.js"></script>
 <script src="js/load-image-exif-map-%JS_HASH%.js"></script>
+
+<script src="js/luxon-%JS_HASH%.js"></script>
 
 {% endblock %}

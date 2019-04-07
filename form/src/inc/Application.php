@@ -17,7 +17,7 @@ class Application extends JSONObject{
             return;
         }
         global $storage;
-        $this->date = date(DT_FORMAT);
+        $this->date = null;
         $this->id = guidv4();
         $this->added = date(DT_FORMAT);
         $this->user = $storage->getCurrentUser()->data;
@@ -47,6 +47,16 @@ class Application extends JSONObject{
      */
     public function getTime(){
         return (new DateTime($this->date))->format('H:i');
+    }
+
+    /**
+     * Returns 'około godziny' or 'o godzinie'.
+     */
+    public function getDateTimeDivider(){
+        if(isset($this->dtFromPicture) && !$this->dtFromPicture){
+            return "około godziny";
+        }
+        return "o godzinie";
     }
 
     /**
