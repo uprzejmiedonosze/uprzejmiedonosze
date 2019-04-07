@@ -38,6 +38,9 @@ class Locators(object):
     NEW_EXPOSED = (By.XPATH, '//input[@id="exposeData"]/..')
     NEW_WITNESS = (By.ID,    "witness")
     NEW_WITNESSD= (By.XPATH, '//input[@id="witness"]/..')
+    NEW_PRECISE = (By.ID,    "dtPrecise")
+    NEW_DP      = (By.ID,    "dp")
+    NEW_HP      = (By.ID,    "hp")
 
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 

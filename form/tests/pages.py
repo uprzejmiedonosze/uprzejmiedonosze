@@ -114,16 +114,21 @@ class New(BasePage):
     def is_validation_empty_working(self):
         self.confirm(False)
         time.sleep(2)
-        assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
-        assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
-        assert "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class')
-        assert "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
+        assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class'), \
+            "Przy próbie wysłania pustego zgłoszenia adres powinien mieć klasę error"
+        assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class'), \
+            "Przy próbie wysłania pustego zgłoszenia tablica rej. powininna mieć klasę error"
+        assert "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class'), \
+            "Przy próbie wysłania pustego zgłoszenia zdjęcia powininny mieć klasę error"
+        assert "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class'), \
+            "Przy próbie wysłania pustego zgłoszenia zdjęcia powininny mieć klasę error"
 
     def is_other_comment_validation_working(self):
         self.driver.find_element(*Locators.NEW_CAT0).click()
 
         self.confirm(False)
-        assert "error" in self.driver.find_element(*Locators.NEW_COMMENT).get_attribute('class')
+        assert "error" in self.driver.find_element(*Locators.NEW_COMMENT).get_attribute('class'), \
+            "Przy kategorii 'inne' pole komentarz jest wymagane"
     
     def display_image_inputs(self):
         self.driver.execute_script("$('.image-upload input').css('display', 'block');")
@@ -152,15 +157,23 @@ class New(BasePage):
         wait = WebDriverWait(self.driver, 20)
         wait.until(EC.text_to_be_present_in_element_value(Locators.NEW_PLATEID, self.cfg.app['plateId']))
 
-        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
-        assert not "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
-        assert not "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
+        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class'), \
+            "Po załadowaniu zdjęcia nadal jest widoczny błąd walidacji"
+        assert not "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class'), \
+            "Po załadowaniu zdjęcia z tablicą nadal jest widoczny błąd walidacji przy numerze rejestracyjnym"
+        assert not "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class'), \
+            "Po załadowaniu zdjęcia z GEO nadal jest widoczny błąd walidacji przy adresie"
 
         time.sleep(1)
         assert self.driver.find_element(*Locators.NEW_PLATEIMG).is_displayed()
 
-        assert self.cfg.app['address'] in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute("value")
-        assert self.cfg.app['plateId'] in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute("value")
+        address = self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute("value")
+        assert self.cfg.app['address'] in address, \
+            "Adres pobrany ze zdjęcia jest nieprawidłowy ({} zamiast {})".format(self.cfg.app['address'], address) 
+
+        plate = self.driver.find_element(*Locators.NEW_PLATEID).get_attribute("value")
+        assert self.cfg.app['plateId'] in plate, \
+            "Tablica rej pobrana ze zdjęcia jest nieprawidłowa ({} zamiast {})".format(self.cfg.app['plateId'], plate) 
     
     def test_invalid_image(self):
         self.display_image_inputs()
@@ -169,16 +182,31 @@ class New(BasePage):
         
         time.sleep(5)
 
-        assert "Twoje zdjęcie nie ma znaczników geolokacji" in self.driver.find_element(*Locators.NEW_ADD_HINT).text
-        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class')
-        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class')
-        assert not self.driver.find_element(*Locators.NEW_PLATEIMG).is_displayed()
+        assert "Twoje zdjęcie nie ma znaczników geolokacji" in self.driver.find_element(*Locators.NEW_ADD_HINT).text, \
+            "Brakuje tekstu: Twoje zdjęcie nie ma znaczników geolokacji"
+        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class'), \
+            "Po załadowaniu zdjęcia nadal jest widoczny błąd walidacji"
+        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class'), \
+            "Po załadowaniu zdjęcia nadal jest widoczny błąd walidacji"
+        assert not "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class'), \
+            "Po załadowaniu zdjęcia nadal jest widoczny błąd walidacji"
+        assert "około" in self.driver.find_element(*Locators.NEW_PRECISE).text, \
+            "Załadowane zdjęcie bez EXIFa, a czas nie pokazuje w formacie XXXX około HH:mm"
+        assert "ui-state-disabled" in self.driver.find_element(*Locators.NEW_DP).get_attribute('class'), \
+            "Przycisk + przy dacie nie jest domyślnie wyłączony"
+        assert "ui-state-disabled" in self.driver.find_element(*Locators.NEW_HP).get_attribute('class'), \
+            "Przycisk + przy godzinie nie jest domyślnie wyłączony"
+        
+        assert not self.driver.find_element(*Locators.NEW_PLATEIMG).is_displayed(), \
+            "Po załadowaniu zdjęcia bez tablic nadal jest widoczna miniaturka tablicy rejestracyjnej"
     
     def test_invalid_image_submit(self):
         self.confirm(False)
 
-        assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class')
-        assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class')
+        assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class'), \
+            "Pusty adres (po załadowaniu zdjęcia bez geo), a nie ma błędu"
+        assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class'), \
+            "Pusty numer rej (po załadowaniu zdjęcia bez tablic), a nie ma błędu"
     
     def confirm(self, shouldPass = True):
         self.driver.find_element(*Locators.NEW_SUBMIT).click()
@@ -192,12 +220,12 @@ class New(BasePage):
 
         text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
 
-        assert self.cfg.app['plateId'] in text
-        assert self.cfg.app['address'] in text
-        assert self.cfg.app['date'] in text
-        assert self.cfg.app['time'] in text
-        assert self.cfg.app['comment'] in text
-        assert self.cfg.account['email'] in text
+        assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
+        assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
+        assert self.cfg.app['date'] in text, "Brakuje {} w tekście review".format(self.cfg.app['date'])
+        assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
+        assert self.cfg.app['comment'] in text, "Brakuje {} w tekście review".format(self.cfg.app['comment'])
+        assert self.cfg.account['email'] in text, "Brakuje {} w tekście review".format(self.cfg.app['email'])
         
         self.back('owe ')
     
@@ -208,10 +236,10 @@ class New(BasePage):
     def commit(self, has_comment = True):
         text = self.driver.find_element(*Locators.CONFIRM_TEXT).text
 
-        assert self.cfg.app['plateId'] in text
-        assert self.cfg.app['address'] in text
-        assert self.cfg.app['date'] in text
-        assert self.cfg.app['time'] in text
+        assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
+        assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
+        assert self.cfg.app['date'] in text, "Brakuje {} w tekście review".format(self.cfg.app['date'])
+        assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
         if(has_comment):
             assert self.cfg.app['comment'] in text
         assert self.cfg.account['email'] in text
@@ -224,12 +252,12 @@ class New(BasePage):
     def app_page(self):
         self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # first link with /ud-
         text = self.get_content()
-        assert self.cfg.app['plateId'] in text
-        assert self.cfg.app['address'] in text
-        assert self.cfg.app['date'] in text
-        assert self.cfg.app['time'] in text
+        assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
+        assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
+        assert self.cfg.app['date'] in text, "Brakuje {} w tekście review".format(self.cfg.app['date'])
+        assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
         #assert self.cfg.app['comment'] in text
-        assert self.cfg.account['email'] in text
+        assert self.cfg.account['email'] in text, "Brakuje {} w tekście review".format(self.cfg.app['email'])
 
         return self.driver.find_element(*Locators.APP_PDF_LINK).get_attribute('href')
     
@@ -241,13 +269,13 @@ class New(BasePage):
         read_pdf = PyPDF2.PdfFileReader(pdf_file)
         assert read_pdf.getNumPages() == 1
         page = read_pdf.getPage(0)
-        page_content = page.extractText()
+        text = page.extractText()
 
-        assert self.cfg.app['plateId'] in page_content
-        assert self.cfg.app['address'].replace(' ', '') in page_content
-        assert self.cfg.app['date'] in page_content
-        assert self.cfg.app['time'] in page_content
-        assert self.cfg.account['email'] in page_content
+        assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
+        assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
+        assert self.cfg.app['date'] in text, "Brakuje {} w tekście review".format(self.cfg.app['date'])
+        assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
+        assert self.cfg.account['email'] in text, "Brakuje {} w tekście review".format(self.cfg.app['email'])
     
     def check_default_statements(self):
         # statemens should on ON by default
@@ -259,16 +287,20 @@ class New(BasePage):
     def test_expose_statement(self, value):
         page_content = self.get_content()
         if value:
-            assert 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
+            assert 'Równocześnie proszę o niezamieszczanie w protokole' in page_content, \
+                "Brakuje 'Równocześnie proszę o niezamieszczanie w protokole' a powinno być"
         else:
-            assert not 'Równocześnie proszę o niezamieszczanie w protokole' in page_content
+            assert not 'Równocześnie proszę o niezamieszczanie w protokole' in page_content, \
+                "Jest 'Równocześnie proszę o niezamieszczanie w protokole' a nie powinno być"
     
     def test_witness_statement(self, value):
         page_content = self.get_content()
         if value:
-            assert 'Nie byłem świadkiem samego momentu parkowania' in page_content
+            assert 'Nie byłem świadkiem samego momentu parkowania' in page_content, \
+                "Brakuje 'Nie byłem świadkiem samego momentu parkowania', a powinno być"
         else:
-            assert not 'Nie byłem świadkiem samego momentu parkowania' in page_content
+            assert not 'Nie byłem świadkiem samego momentu parkowania' in page_content, \
+                "Jest 'Nie byłem świadkiem samego momentu parkowania', a nie powinno być"
 
 class MyApps(BasePage):
     def __init__(self, driver):
@@ -276,25 +308,28 @@ class MyApps(BasePage):
     
     def check_list(self):
         self.driver.find_element(*Locators.MYAPPS_EXPAND).click() # expand first item
-        first = self.driver.find_element(*Locators.MYAPPS_FIRST)
-        assert self.cfg.app['plateId'] in first.text
-        assert self.cfg.app['address'] in first.text
-        assert self.cfg.app['date'] in first.text
-        assert self.cfg.app['time'] in first.text
+        text = self.driver.find_element(*Locators.MYAPPS_FIRST).text
+        assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
+        assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
+        assert self.cfg.app['date'] in text, "Brakuje {} w tekście review".format(self.cfg.app['date'])
+        assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
 
     def check_first(self, has_comment = True):
         self.driver.find_element(*Locators.MYAPPS_EXPAND).click() # expand first item
         self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # and click very first link
         text = self.get_content()
-        assert self.cfg.app['plateId'] in text
-        assert self.cfg.app['address'] in text
-        assert self.cfg.app['date'] in text
-        assert self.cfg.app['time'] in text
+        assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
+        assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
+        assert self.cfg.app['date'] in text, "Brakuje {} w tekście review".format(self.cfg.app['date'])
+        assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
         if(has_comment):
-            assert self.cfg.app['comment'] in text
-        assert self.cfg.account['email'] in text
-        assert 'Zgłoszenie wykroczenia UD/' in text
-        assert 'Jestem świadomy odpowiedzialności karnej' in text
+            assert self.cfg.app['comment'] in text, \
+                "Brakuje {} w tekście review".format(self.cfg.app['comment'])
+        assert self.cfg.account['email'] in text, "Brakuje {} w tekście review".format(self.cfg.app['email'])
+        assert 'Zgłoszenie wykroczenia UD/' in text, \
+            "Brakuje intro 'Zgłoszenie wykroczenia UD/' w opisie"
+        assert 'Jestem świadomy odpowiedzialności karnej' in text, \
+            "Brakuje 'Jestem świadomy odpowiedzialności karnej' w opisie"
         #self.driver.find_element(*Locators.BTN_LEFT).click()
 
 class Wysylka(BasePage):
