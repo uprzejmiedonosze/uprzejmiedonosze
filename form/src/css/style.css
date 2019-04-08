@@ -7,6 +7,7 @@
     html body .ui-group-theme-a .ui-body-inherit,
     html .ui-panel-page-container-a {
     border: none;
+    font-family: 'Open Sans', sans-serif;
 }
 
 .ui-content {
@@ -104,6 +105,24 @@ p > a, li > a {
 
 .filter a.active {
     color: #009C7F!important;
+}
+
+h2, h3, h4, h5 {
+    font-weight: 300;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #009C7F;
+}
+
+h4 {
+    font-size: 1em;
+    font-weight: 600;
 }
 
 a[rel~="external"] {
