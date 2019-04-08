@@ -2,7 +2,9 @@
 {################################### full version ###################################}
 <div class="ui-body ui-body-a ui-corner-all">
 
-    <h3>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h3>
+    {% if app.number is defined %}
+    <h2>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h2>
+    {% endif %}
 
     <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
         {{ app.guessUserSex.bylam }} świadkiem pozostawienia
