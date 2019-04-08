@@ -1,6 +1,7 @@
-{% macro faq(city, sm) %}
+{% macro faq(city, sm, collapsed = true) %}
     <div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"
-    data-collapsed="true" data-role="collapsible">
+    data-content-theme="false" data-collapsed-icon="location"
+    {% if collapsed == false %}data-collapsed="false"{% endif %} data-role="collapsible">
     <h3 id="{{ sm }}">{{ city }}</h3>
 {% endmacro %}
 
