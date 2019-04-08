@@ -48,7 +48,7 @@ Pozdrawiam,
             paczkę {{ apps|length }} zgłoszeń;
         </li>
         <li class="ui-disabled">Następnie 
-            <a id="send" data-ajax="false"
+            <a id="send" data-ajax="false" target="_blank"
                 href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
                 i wyślij email do SM {{ cities | first[2] }},
