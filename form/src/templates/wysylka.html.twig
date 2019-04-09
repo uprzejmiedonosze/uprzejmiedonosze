@@ -33,7 +33,7 @@
 
 {% set emailBody = 'Dzień dobry,
 
-W załączeniu ' ~ zgloszen ~ ' nieprawidłowego parkowania. Wszystkie przypadki albo  wpływały na bezpieczeństwo pieszych, albo wiązały się z niszczeniem mienia.
+W załączeniu ' ~ zgloszen ~ ' nieprawidłowego parkowania. Wszystkie przypadki albo wpływały na bezpieczeństwo pieszych, albo wiązały się z niszczeniem mienia.
 
 Pozdrawiam,
 
@@ -51,8 +51,20 @@ Pozdrawiam,
             <a id="send" data-ajax="false" target="_blank"
                 href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-                i wyślij email do SM {{ cities | first[2] }},
-                lub <a id="sendE" href="epuap.html" target="_blank">wyślij</a> całość za pomocą EPUAP;
+            i wyślij email do SM {{ cities | first[2] }},
+            lub <a id="sendE" href="epuap.html" target="_blank">wyślij</a> całość za pomocą EPUAP;<br><br>
+            (jeśli otworzył Ci się pusty email, 
+            <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania)
+            <div data-role="popup" id="popupPadded" class="ui-content">
+                <dl>
+                    <dt>Do:</dt>
+                    <dd>{{ cities | first[1] }}</dd>
+                    <dt>Tytuł:</dt>
+                    <dd>{{ emailSubject }}</dd>
+                    <dt>Treść:</dt>
+                    <dd style="white-space: pre-wrap;">{{ emailBody }}</dd>
+                </dl>
+            </div>
         </li>
         <li class="ui-disabled">Po wysłaniu wiadomości, możesz
             <a id="email" href="moje-zgloszenia.html?changeMail" data-ajax="false"
