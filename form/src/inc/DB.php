@@ -252,6 +252,42 @@ SQL;
     }
 
     /**
+     * Returns number of new applications (by creation date)
+     * during 30 days. 
+     */
+    public function getStatsByDay($useCache = true){
+
+        $stats = $this->stats->get("%HOST%-getStatsAppsByDay");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = <<<SQL
+            select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day',
+                count(*) as acnt,
+                u.cnt as ucnt
+            from applications
+            left outer join (
+                select substr(json_extract(users.value, '$.added'), 1, 10) as 'day',
+                    count(*) as cnt
+                from users
+                group by  substr(json_extract(users.value, '$.added'), 1, 10)
+                order by 1 desc
+                limit 35
+            ) u on substr(json_extract(applications.value, '$.added'), 1, 10) = u.day
+            where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+                and json_extract(applications.value, '$.added') < date('now')
+            group by substr(json_extract(applications.value, '$.added'), 1, 10)
+            order by 1 desc
+            limit 30;
+SQL;
+
+        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $this->stats->set("%HOST%-getStatsAppsByDay", $stats, 0, 600);
+        return $stats;
+    }
+
+    /**
      * Returns number of applications per city.
      */
     public function getStatsAppsByCity($useCache = true){
