@@ -32,7 +32,7 @@ const CATEGORIES = Array(
 		"Pojazd blokował drogę dla rowerów.",
 		"<p>Przepisy są tutaj jednoznacznia. Na ścieżce rowerowej nie wolno ani parkować, ani nawet się zatrzymywać 'na chwilę'.</p> <p><i>(PoRD Art. 49. 1.11. Zabrania się zatrzymania pojazdu na drodze (ścieżce) dla rowerów.)</i></p>"],
 	12 => ["Parkowanie w strefie zamieszkania w miejscu niewyznaczonym",
-		"Pojazd był zaparkowany w strefie zamieszkania poza miejscem do tego wyznaczonym.",
+		"Pojazd był zaparkowany w strefie zamieszkania poza miejscem do tego wyznaczonym.",
 		"<p>W strefie zamieszkania obowiązuje zakaz parkowania poza miejscami do tego wyznaczonymi. Nie ma znaczenia pozostawione 1,5m, odległość od pasów czy skrzyżowania.</p> <p><i>(PoRD Art. 49. 2.4. Zabrania się zatrzymania pojazdu w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu.)</i></p>"],
 	6  => ["Parkowanie na trawniku/w parku",
 		"Pojazd był zaparkowany na trawniku/w parku.",

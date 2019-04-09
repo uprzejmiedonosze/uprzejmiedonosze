@@ -129,7 +129,7 @@ function checkAddress(where) {
         ret = ($('#latlng').val().trim().length > 5) && ret;
 
         if (!ret && where.val().trim().length > 0) {
-            $('#addressHint').text('Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
+            $('#addressHint').text('Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
             $('#addressHint').addClass('hint');
         }
     }
@@ -193,7 +193,7 @@ function setAddress(latlng, fromPicture) {
                 $('a#geo').buttonMarkup({ icon: "check" });
                 $('#lokalizacja').removeClass('error');
                 if (fromPicture) {
-                    $('#addressHint').text('Sprawdź automatycznie pobrany adres');
+                    $('#addressHint').text('Sprawdź automatycznie pobrany adres');
                     $('#addressHint').addClass('hint');
                 }else{
                     $('#addressHint').text('Zweryfikuj pobrany adres');

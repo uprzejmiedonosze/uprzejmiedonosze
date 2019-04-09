@@ -115,13 +115,13 @@ class New(BasePage):
         self.confirm(False)
         time.sleep(2)
         assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class'), \
-            "Przy próbie wysłania pustego zgłoszenia adres powinien mieć klasę error"
+            "Przy próbie wysłania pustego zgłoszenia adres powinien mieć klasę error"
         assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class'), \
-            "Przy próbie wysłania pustego zgłoszenia tablica rej. powininna mieć klasę error"
+            "Przy próbie wysłania pustego zgłoszenia tablica rej. powininna mieć klasę error"
         assert "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class'), \
-            "Przy próbie wysłania pustego zgłoszenia zdjęcia powininny mieć klasę error"
+            "Przy próbie wysłania pustego zgłoszenia zdjęcia powininny mieć klasę error"
         assert "error" in self.driver.find_element(*Locators.NEW_IMAGE2).get_attribute('class'), \
-            "Przy próbie wysłania pustego zgłoszenia zdjęcia powininny mieć klasę error"
+            "Przy próbie wysłania pustego zgłoszenia zdjęcia powininny mieć klasę error"
 
     def is_other_comment_validation_working(self):
         self.driver.find_element(*Locators.NEW_CAT0).click()
