@@ -144,6 +144,9 @@
         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
             <a href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left
                 ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
+                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-location"
+                data-ajax="false">mapa</a>
             <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
                 ui-nodisc-icon ui-icon-mail">PDF</a>
