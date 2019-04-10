@@ -28,6 +28,7 @@ class BasePage(object):
         self.driver = driver
         assert "https://" in self.driver.current_url
         assert "uprzejmiedonosze.net" in self.driver.current_url
+        self.driver.find_element(*Locators.MAIN_MENU).click()
         self.cfg = Config()
         if(click_first):
             self.driver.find_element(*click_first).click()

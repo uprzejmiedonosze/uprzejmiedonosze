@@ -9,6 +9,7 @@ class Locators(object):
     START       = (By.XPATH, "//a[@href='start.html']")
     NEW         = (By.XPATH, "//a[@href='nowe-zgloszenie.html']")
     MYAPPS      = (By.XPATH, "//a[@href='moje-zgloszenia.html']")
+    MAIN_MENU   = (By.XPATH, "//a[contains(text(),'Menu')")
 
     CONTENT     = (By.CSS_SELECTOR, "div.ui-content")
     
