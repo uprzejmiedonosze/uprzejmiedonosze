@@ -272,7 +272,8 @@ class New(BasePage):
         text = page.extractText()
 
         assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
-        assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
+        assert self.cfg.app['address'] in text or self.cfg.app['address'].replace(' ', '') in text, \
+            "Brakuje {} w tekście review".format(self.cfg.app['address'])
         assert self.cfg.app['date'] in text, "Brakuje {} w tekście review".format(self.cfg.app['date'])
         assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
         assert self.cfg.account['email'] in text, "Brakuje {} w tekście review".format(self.cfg.app['email'])
