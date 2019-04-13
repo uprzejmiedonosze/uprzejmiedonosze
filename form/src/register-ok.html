@@ -12,7 +12,7 @@ $post = $_POST;
 $name = capitalizeName($post["name"]);
 $msisdn = trim($post["msisdn"]);
 //$idnumber = strtoupper(trim($post["idnumber"]));
-$exposeData = !(boolean)$post['exposeData'];
+$exposeData = !isset($post['exposeData']);
 
 $address = str_replace(', Polska', '', trim($post["address"]));
 
