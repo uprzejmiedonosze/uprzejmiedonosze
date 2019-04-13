@@ -36,6 +36,7 @@ OTHER_FILES          = src/favicon.ico src/robots.txt src/img src/sitemap.xml sr
 
 STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
+DEV_HOST             = uprzejmiedonosze.localhost
 HOST                 = $(STAGING_HOST)
 
 BRANCH_ENV           = .branch-env
@@ -48,6 +49,14 @@ TAG_NAME             = $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`
 .PHONY: help clean log-from-last-prod
 help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
+
+dev: HOST := $(DEV_HOST)
+dev: $(DIRS) export ## Copy files to local dev Docker container.
+	@echo "==> Copying files and dirs for $@"
+	@mkdir -p ./DEV
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* ./DEV
+	@cp -r db ./DEV
+	@make --directory docker build runi
 
 staging: HOST := $(STAGING_HOST)
 staging: $(DIRS) export ## Copy files to staging server.
