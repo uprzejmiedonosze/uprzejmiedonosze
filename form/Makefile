@@ -38,6 +38,7 @@ STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
 DEV_HOST             = uprzejmiedonosze.localhost
 HOST                 = $(STAGING_HOST)
+HTTPS                = https
 
 BRANCH_ENV           = .branch-env
 GIT_BRANCH           = $(shell git rev-parse --abbrev-ref HEAD)
@@ -51,6 +52,7 @@ help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
 dev: HOST := $(DEV_HOST)
+dev: HTTPS := http
 dev: $(DIRS) export ## Copy files to local dev Docker container.
 	@echo "==> Copying files and dirs for $@"
 	@mkdir -p ./DEV
@@ -138,7 +140,7 @@ $(EXPORT)/%: ; @echo "==> Creating $@"
 # Utils
 
 define replace
-@sed 's/%HOST%/$(HOST)/g' $< > $@
+@sed -e 's/%HOST%/$(HOST)/g' -e 's/%HTTPS%/$(HTTPS)/g' $< > $@
 $(replace-inline)
 endef
 

@@ -21,11 +21,11 @@
 
         <meta name="theme-color" content="#009C7F">
         <meta property="og:image"
-            content="https://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
+            content="%HTTPS%://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
         <meta property="og:title" content="{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę" />
         <meta property="og:description"
             content="{{ head.description ?? 'Uprzejmie Donoszę pozwala na informowanie Straży Miejskiej o sytuacjach, które wpływają na komfort i bezpieczeństwo pieszych. Maksymalnie upraszcza wykonanie poprawnego zgłoszenia, i przekazanie go do SM.' }}" />
-        <meta property="og:url" content="https://%HOST%{% if config.auth is not defined %}{{ general.uri }}{% endif %}" />
+        <meta property="og:url" content="%HTTPS%://%HOST%{% if config.auth is not defined %}{{ general.uri }}{% endif %}" />
         <meta property="og:locale" content="pl_PL" />
         <meta property="og:type" content="website" />
         <meta property="fb:app_id" content="1299217686854263" />

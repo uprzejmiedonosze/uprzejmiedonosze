@@ -6,7 +6,7 @@
 
 \begin{letter}{ {\large {{ app.guessSMData[0] }} } } 
 
-{% set appUrl = '{https://%HOST%/ud-' ~ app.id  ~ '.html}' %}
+{% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html}' %}
 
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb     ~ '}' %}
