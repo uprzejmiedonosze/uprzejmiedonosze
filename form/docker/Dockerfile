@@ -3,7 +3,7 @@ LABEL net.uprzejmiedonosze=0.0.1
 
 RUN apt-get update
 
-RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get install -y \
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get --no-install-recommends install -y \
     apt-utils locales vim telnet curl xtail \
     memcached texlive \
     php7.0-fpm php7.0-sqlite3 php7.0-mcrypt php7.0-curl  \
