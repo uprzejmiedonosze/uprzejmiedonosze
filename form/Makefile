@@ -67,7 +67,7 @@ dev: $(DIRS) export dev-refresh ## Building and running docker image
 staging: HOST := $(STAGING_HOST)
 staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
-	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 
 prod: HOST := $(PROD_HOST)
 prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
