@@ -5,7 +5,7 @@ RUN apt-get update
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get --no-install-recommends install -y \
     apt-utils locales vim telnet curl xtail \
-    memcached texlive \
+    memcached texlive ca-certificates \
     php7.0-fpm php7.0-sqlite3 php7.0-mcrypt php7.0-curl  \
     php7.0-opcache php7.0-mbstring php7.0-gd \
     php-memcache php-memcached
