@@ -54,11 +54,10 @@ help: ## Displays this help.
 dev: HOST := $(DEV_HOST)
 dev: HTTPS := http
 dev: $(DIRS) export ## Copy files to local dev Docker container.
-	@echo "==> Copying files and dirs for $@"
-	@mkdir -p ./DEV
-	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* ./DEV
-	@cp -r db ./DEV
-	@make --directory docker build runi
+	@echo "==> Building docker"
+	@make --directory docker build
+	@echo "==> Running docker image"
+	@make --directory docker runi
 
 staging: HOST := $(STAGING_HOST)
 staging: $(DIRS) export ## Copy files to staging server.
