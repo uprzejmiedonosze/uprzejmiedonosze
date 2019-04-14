@@ -34,11 +34,11 @@ function verifyToken($token){
 			$_SESSION['token'] = $token;
 			return true;
 		} catch (IssuedInTheFuture $e) {
-			//logger("verifyToken IssuedInTheFuture – false " . $e->getMessage());
+			logger("verifyToken IssuedInTheFuture – false " . $e->getMessage());
 		} catch (ExpiredToken $e) {
-			//logger("verifyToken ExpiredToken – false " . $e->getMessage());
+			logger("verifyToken ExpiredToken – false " . $e->getMessage());
 		} catch (InvalidIdToken $e) {
-			//logger("verifyToken InvalidIdToken – false " . $e->getMessage());
+			logger("verifyToken InvalidIdToken – false " . $e->getMessage());
 		}
 		return false;
 	}
