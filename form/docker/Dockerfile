@@ -5,9 +5,10 @@ RUN apt-get update
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get install -y \
     apt-utils locales vim telnet curl xtail \
-    memcached \
-    php7.0-fpm php7.0-sqlite3 php7.0-mcrypt php-memcache php-memcached \
-    php7.0-opcache php7.0-mbstring php7.0-gd
+    memcached texlive \
+    php7.0-fpm php7.0-sqlite3 php7.0-mcrypt php7.0-curl  \
+    php7.0-opcache php7.0-mbstring php7.0-gd \
+    php-memcache php-memcached
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
