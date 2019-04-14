@@ -53,7 +53,10 @@ help: ## Displays this help.
 
 dev: HOST := $(DEV_HOST)
 dev: HTTPS := http
-dev: $(DIRS) export ## Copy files to local dev Docker container.
+dev-refresh: $(DIRS) export ## Refresh src files in Docker image
+	@echo "==> Refreshing sources"
+
+dev: $(DIRS) export dev-refresh ## Building and running docker image
 	@echo "==> Building docker"
 	@make --directory docker build
 	@echo "==> Running docker image"
