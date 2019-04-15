@@ -139,7 +139,7 @@ $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
 	$(replace)
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
-	@mkdir --parents $@
+	@mkdir -p $@
 
 # Utils
 
