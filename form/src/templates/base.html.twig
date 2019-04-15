@@ -52,7 +52,7 @@
         {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 {% if leftButton is defined and leftButton == 'menu' %}
-                <a href="#mainMenu"
+                <a href="#mainMenu" id="menuToggle"
                     class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-left ui-btn-icon-left
                         ui-btn-inline ui-alt-icon ui-nodisc-icon">Menu</a>
                 {% endif %}
