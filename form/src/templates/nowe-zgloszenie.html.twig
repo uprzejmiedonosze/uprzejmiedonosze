@@ -112,7 +112,10 @@
                 <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
                     name="category" value="{{ catId }}" id="{{ catId }}">
                 <label for="{{ catId }}">
-                    <img src="img/{{ catId }}.jpg">
+                    <span class="category-image">
+                        <img src="img/{{ catId }}.jpg">
+                        {% if catName[3] %}<ins class="price-list">{{ catName[3] }}</ins>{% endif %}
+                    </span>
                     <p>{{ catName[0]|raw }}</p>
                 </label>
             </div>
