@@ -30,6 +30,7 @@ class BasePage(object):
         assert "uprzejmiedonosze.net" in self.driver.current_url
         self.driver.find_element(*Locators.MAIN_MENU).click()
         time.sleep(1)
+        self.driver.execute_script("$('.ui-panel-dismiss').hide();")
         self.cfg = Config()
         if(click_first):
             self.driver.find_element(*click_first).click()
