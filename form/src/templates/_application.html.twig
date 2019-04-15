@@ -119,7 +119,9 @@
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
             samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
             {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
-            pod adresem <b>{{ app.address.address}}</b>.
+            pod adresem
+            <b><a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
+                data-ajax="false" target="_blank">{{ app.address.address}}</a></b>.
             {{ app.getCategory[1] }}</p>
 
 {% if app.userComment %}
