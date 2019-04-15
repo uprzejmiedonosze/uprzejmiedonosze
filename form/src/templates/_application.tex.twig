@@ -7,6 +7,7 @@
 \begin{letter}{ {\large {{ app.guessSMData[0] }} } } 
 
 {% set appUrl = '{https://%HOST%/ud-' ~ app.id  ~ '.html}' %}
+{% set mapUrl = '{https://www.google.com/maps/search/?api=1&query=' ~ app.address.latlng '~}' %}
 
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb     ~ '}' %}
@@ -14,7 +15,7 @@
 \opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} } } }
 	W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
-    {{ app.address.address }}.
+    \href{{ appUrl }}{ {{ app.address.address }} }.
     {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.
     Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
 
