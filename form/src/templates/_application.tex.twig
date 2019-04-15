@@ -18,10 +18,8 @@
     \href{{ appUrl }}{ {{ app.address.address }} }.
     {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.
     Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
-
 {% if app.statements is not defined or not app.statements.witness %}
-    Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania, oraz nie wiem jak długo
-    pojazd pozostawał na tym miejscu.
+    Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
 {% endif %}
 
     Jestem {{ app.guessUserSex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
