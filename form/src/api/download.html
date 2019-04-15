@@ -86,7 +86,7 @@ function generate_pdf($application, $destFile, $type) {
 
     $params = [
         'app' => $application,
-        'root' => realpath(__DIR__ . '/..')
+        'root' => realpath(ROOT)
     ];
 
     if($type == 'hearing' || $type == 'hearingAll' || $type == 'readyApps'){
