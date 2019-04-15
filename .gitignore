@@ -1,5 +1,13 @@
+testy
+tools
+node_modules/*
+functions/node_modules/*
+functions-samples/*
+vendor/**
+export/**
+.branch-env
 **/*.log
 **/*.aux
 **/*.log
 **/*.out
-form/tex/app/*
+tex/app/*
