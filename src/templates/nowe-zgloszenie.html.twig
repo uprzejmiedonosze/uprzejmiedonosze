@@ -108,13 +108,14 @@
         {% set i = 0 %}
         {% for catId,catName in categories %}
         {% if catName[0] %}
-            <div class="ui-block-{{ categoriesMatrix[i % 2] }}" title="{{ catName[2]|striptags }}">
+            <div class="ui-block-{{ categoriesMatrix[i % 2] }}"
+                title="{{ catName[2]|striptags ~ "\n\n" ~ catName[3] }}{% if catName[4] %}{{ "\n\nTaryfikator: " ~ catName[4] }}{% endif %}">
                 <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
                     name="category" value="{{ catId }}" id="{{ catId }}">
                 <label for="{{ catId }}">
                     <span class="category-image">
                         <img src="img/{{ catId }}.jpg">
-                        {% if catName[3] %}<ins class="price-list">{{ catName[3] }}</ins>{% endif %}
+                        {% if catName[4] %}<ins class="price-list">{{ catName[4] }}</ins>{% endif %}
                     </span>
                     <p>{{ catName[0]|raw }}</p>
                 </label>

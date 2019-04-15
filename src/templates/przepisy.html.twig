@@ -45,7 +45,11 @@ poniżej. Dopiero później szukaj odpowiedniej kategorii dla swojego zgłoszeni
             <img src="/img/{{ catId }}.jpg" alt="{{ catName[0] }}"/>
         </div>
         <div class="ui-block-b">
-            {{ catName[2]|raw}}
+            {{ catName[2]|raw }}
+            {% if catName[4] %}
+                <p>Mandat: <b>{{ catName[4] }}</b></p>
+            {% endif %}
+            <p><i>({{ catName[3] }})</i></p>
         </div>
     </div>
 {% endif %}
