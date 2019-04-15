@@ -22,19 +22,23 @@ function verifyToken($token){
 		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../%HOST%-firebase-adminsdk.json');
 		$firebase = (new Factory)->withServiceAccount($serviceAccount)->create();
 		try {
-			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
-			$_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
+            $verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
+            if('%HOST%' !== 'uprzejmiedonosze.localhost'){
+                $_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
+            }else{
+                $_SESSION['user_email'] = 'fake@email.com';
+            }
 			$_SESSION['user_name'] = $verifiedIdToken->getClaim('name');
 			$_SESSION['user_picture'] = $verifiedIdToken->getClaim('picture');
 			$_SESSION['user_id'] = $verifiedIdToken->getClaim('user_id');
 			$_SESSION['token'] = $token;
 			return true;
 		} catch (IssuedInTheFuture $e) {
-			//logger("verifyToken IssuedInTheFuture – false " . $e->getMessage());
+			logger("verifyToken IssuedInTheFuture – false " . $e->getMessage());
 		} catch (ExpiredToken $e) {
-			//logger("verifyToken ExpiredToken – false " . $e->getMessage());
+			logger("verifyToken ExpiredToken – false " . $e->getMessage());
 		} catch (InvalidIdToken $e) {
-			//logger("verifyToken InvalidIdToken – false " . $e->getMessage());
+			logger("verifyToken InvalidIdToken – false " . $e->getMessage());
 		}
 		return false;
 	}

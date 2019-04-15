@@ -21,11 +21,11 @@
 
         <meta name="theme-color" content="#009C7F">
         <meta property="og:image"
-            content="https://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
+            content="%HTTPS%://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
         <meta property="og:title" content="{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę" />
         <meta property="og:description"
             content="{{ head.description ?? 'Uprzejmie Donoszę pozwala na informowanie Straży Miejskiej o sytuacjach, które wpływają na komfort i bezpieczeństwo pieszych. Maksymalnie upraszcza wykonanie poprawnego zgłoszenia, i przekazanie go do SM.' }}" />
-        <meta property="og:url" content="https://%HOST%{% if config.auth is not defined %}{{ general.uri }}{% endif %}" />
+        <meta property="og:url" content="%HTTPS%://%HOST%{% if config.auth is not defined %}{{ general.uri }}{% endif %}" />
         <meta property="og:locale" content="pl_PL" />
         <meta property="og:type" content="website" />
         <meta property="fb:app_id" content="1299217686854263" />
@@ -52,7 +52,7 @@
         {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false">
                 {% if leftButton is defined and leftButton == 'menu' %}
-                <a href="#mainMenu"
+                <a href="#mainMenu" id="menuToggle"
                     class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-left ui-btn-icon-left
                         ui-btn-inline ui-alt-icon ui-nodisc-icon">Menu</a>
                 {% endif %}
@@ -102,6 +102,7 @@
     {% if head.mapsInitFunc is defined %}
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&libraries=places&callback={{ head.mapsInitFunc }}&language=pl" async defer></script>
     {% endif %}
+    {% if '%HOST%' == 'uprzejmiedonosze.net' %}
         <script>
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -110,6 +111,7 @@
             ga('create', 'UA-99241725-1', 'auto');
             ga('send', 'pageview');
         </script>
+    {% endif %}
     {% endblock %}
     </body>
 </html>

@@ -138,13 +138,13 @@ function _upload(){
 
 /**
  * https://staging.uprzejmiedonosze.net/cdn/6cab0aa0-3317-478d-97a3-31d278db5861,t.jpg
- * https://%HOST%/cdn/$HASH$THUMB.jpg » __DIR__/../cdn/$HASH$THUMB.jpg
- * https://%HOST%/$prefix$type.jpg » __DIR__/../$prefix$type.jpg
+ * https://%HOST%/cdn/$HASH$THUMB.jpg » __DIR__/../../../cdn/$HASH$THUMB.jpg
+ * https://%HOST%/$prefix$type.jpg » __DIR__/../../../cdn/$prefix$type.jpg
  */
 
 /**
- * Saves byte_stream to `__DIR__/../$prefix.jpg`
- * and it's thumb to    `__DIR__/../$prefix,t.jpg`.
+ * Saves byte_stream to `__DIR__/../../../cdn/$prefix.jpg`
+ * and it's thumb to    `__DIR__/../../../cdn/$prefix,t.jpg`.
  * 
  * Returns:
  *   $prefix
@@ -176,7 +176,7 @@ function save_img_and_thumb($image_bytes){
  * Generates fill filename from given $prefix and $suffix.
  */
 function make_image_filename($prefix, $suffix = ''){
-	return __DIR__ . "/../$prefix$suffix.jpg";
+	return __DIR__ . "/../../../$prefix$suffix.jpg";
 }
 
 function make_image_url($prefix, $suffix = ''){

@@ -14,7 +14,7 @@ class DB extends NoSQLite{
     /**
      * Creates DB instance with default store location.
      */
-    public function __construct($store = __DIR__ . '/../db/store.sqlite') {
+    public function __construct($store = __DIR__ . '/../../db/store.sqlite') {
         parent::__construct($store);
         $this->apps  = $this->getStore('applications');
         $this->users = $this->getStore('users');

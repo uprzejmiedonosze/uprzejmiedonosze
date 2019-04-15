@@ -3,13 +3,13 @@ from selenium.webdriver.common.by import By
 class Locators(object):
     """A class for main page locators. All main page locators should come here"""
     MAIN        = (By.XPATH, "//a[@href='/']")
-    CHANGELOG   = (By.XPATH, "//a[@href='changelog.html']")
-    PROJECT     = (By.XPATH, "//a[@href='projekt.html']")
+    CHANGELOG   = (By.XPATH, "//a[@href='/changelog.html']")
+    PROJECT     = (By.XPATH, "//a[@href='/projekt.html']")
     RTD         = (By.XPATH, "//a[@href='robtodobrze.html']")
-    START       = (By.XPATH, "//a[@href='start.html']")
+    START       = (By.XPATH, "//a[@href='/start.html']")
     NEW         = (By.XPATH, "//a[@href='nowe-zgloszenie.html']")
-    MYAPPS      = (By.XPATH, "//a[@href='moje-zgloszenia.html']")
-    MAIN_MENU   = (By.XPATH, "//a[contains(text(),'Menu')")
+    MYAPPS      = (By.XPATH, "//a[@href='/moje-zgloszenia.html']")
+    MAIN_MENU   = (By.ID,    "menuToggle")
 
     CONTENT     = (By.CSS_SELECTOR, "div.ui-content")
     

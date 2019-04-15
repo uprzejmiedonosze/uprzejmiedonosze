@@ -29,10 +29,12 @@ class BasePage(object):
         assert "https://" in self.driver.current_url
         assert "uprzejmiedonosze.net" in self.driver.current_url
         self.driver.find_element(*Locators.MAIN_MENU).click()
+        time.sleep(1)
+        self.driver.execute_script("$('.ui-panel-dismiss').hide();")
         self.cfg = Config()
         if(click_first):
             self.driver.find_element(*click_first).click()
-            time.sleep(5)
+            time.sleep(3)
 
     def is_new_matches(self, text="Zgłoś"):
         try:

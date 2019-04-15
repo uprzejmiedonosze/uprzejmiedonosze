@@ -36,7 +36,9 @@ OTHER_FILES          = src/favicon.ico src/robots.txt src/img src/sitemap.xml sr
 
 STAGING_HOST         = staging.uprzejmiedonosze.net
 PROD_HOST            = uprzejmiedonosze.net
+DEV_HOST             = uprzejmiedonosze.localhost
 HOST                 = $(STAGING_HOST)
+HTTPS                = https
 
 BRANCH_ENV           = .branch-env
 GIT_BRANCH           = $(shell git rev-parse --abbrev-ref HEAD)
@@ -49,10 +51,23 @@ TAG_NAME             = $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`
 help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
+dev-refresh: HOST := $(DEV_HOST)
+dev-refresh: HTTPS := http
+dev-refresh: $(DIRS) export ## Refresh src files in Docker image
+	@echo "==> Refreshing sources"
+
+dev: HOST := $(DEV_HOST)
+dev: HTTPS := http
+dev: $(DIRS) export dev-refresh ## Building and running docker image
+	@echo "==> Building docker"
+	@make --directory docker build
+	@echo "==> Running docker image"
+	@make --directory docker runi
+
 staging: HOST := $(STAGING_HOST)
 staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
-	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 
 prod: HOST := $(PROD_HOST)
 prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
@@ -124,12 +139,12 @@ $(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
 	$(replace)
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
-	@mkdir --parents $@
+	@mkdir -p $@
 
 # Utils
 
 define replace
-@sed 's/%HOST%/$(HOST)/g' $< > $@
+@sed -e 's/%HOST%/$(HOST)/g' -e 's/%HTTPS%/$(HTTPS)/g' $< > $@
 $(replace-inline)
 endef
 
