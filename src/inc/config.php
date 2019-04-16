@@ -63,7 +63,7 @@ const CATEGORIES = Array(
         "Pojazd był zaparkowany na trawniku/w parku.",
         "<p>Reguła jest prosta – parkowanie (także 'na chwilę') na trawie/parku/zieleni (lub czymś co było kiedyś zielenią) jest niedozwolone. Uważaj jednak na tę kategorię. Wymaga ona wykazania, że widoczna na zdjęciu sytuacja przyczyniła się do 'zniszczenia'. Jeśli więc masz ujęcie na którym widać koleiny za autem – śmiało. W przeciwnym wypadku sprawdź, czy nie pasuje tutaj inna kategoria.</p>",
         "KW Art. 144. 1. Kto na terenach przeznaczonych do użytku publicznego niszczy lub uszkadza roślinność [...] podlega karze grzywny do 1.000 złotych albo karze nagany.",
-        "< 1000 zł"],
+        "do 1000 zł"],
     1  => [null, "Pojazd był zaparkowany w sposób niezgodny z oznaczeniem pionowym i poziomym.", null, null, null],
     11 => ["Pojazd > 2.5t DMC na chodniku",
         "Pojazd o dopuszczalnej masie całkowitej przekraczającej 2,5 tony znajdował się na chodniku.",

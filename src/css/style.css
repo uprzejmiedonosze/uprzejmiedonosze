@@ -167,24 +167,9 @@ label {
     font-weight: 300;
 }
 
-label .category-image {
+label span.price-list {
     display: block;
-    width: 100px;
-    height: 100px;
-}
-
-label ins.price-list {
-    position: absolute;
-    left: 25px;
-    top: 4px;
-    border-radius: 10px 10px 10px 10px;
-    background: #e9c200;
-    text-align: center;
-    color: white;
-    padding: 4px 8px;
-    z-index: 1;
-    font-size: 0.7em;
-    text-decoration: none;
+    margin-top: 0.5em;
 }
 
 .ui-input-text input, .ui-input-search input {
