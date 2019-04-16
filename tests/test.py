@@ -8,7 +8,7 @@ class UDTestStatic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        profile = webdriver.FirefoxProfile('/Users/szn/Sites/uprzejmiedonosze.net/form/tests/selenium.ff-profile')
+        profile = webdriver.FirefoxProfile('/Users/szn/Sites/uprzejmiedonosze.net/webapp/tests/selenium.ff-profile')
         cls.driver = webdriver.Firefox(firefox_profile=profile,
             firefox_binary='/Applications/Firefox.app/Contents/MacOS/firefox-bin')
 
