@@ -65,7 +65,7 @@ dev: $(DIRS) export dev-refresh ## Building and running docker image
 	@make --directory docker runi
 
 staging: HOST := $(STAGING_HOST)
-staging: check-branch-staging $(DIRS) export ## Copy files to staging server.
+staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 
@@ -74,7 +74,7 @@ prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to 
 	@echo "==> Copying files and dirs for $@"
 	@git tag -a $(TAG_NAME) -m "release na produkcji"
 	@git push origin --quiet $(TAG_NAME)
-	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	@make clean
 
 export: $(DIRS) minify ## Exports files for deployment.
