@@ -107,7 +107,7 @@ process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 
 clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
-	@rm -rf $(EXPORT)
+	@rm -rf $(EXPORT)/*
 	@rm -f $(BRANCH_ENV)
 
 # Generics

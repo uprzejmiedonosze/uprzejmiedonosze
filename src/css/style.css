@@ -227,7 +227,8 @@ div.error img{
     background-color: #e9c200;
 }
 
-.new-application #pics label {
+.new-application #pics label,
+.application #pics div {
     border-radius: 0.8em;
     background: #eee;
     position: relative;
@@ -238,10 +239,10 @@ div.error img{
     padding: 0.4em;
 }
 
-.new-application #pics img {
+.new-application #pics img,
+.application #pics img {
 	border-radius: 0.8em;
     width: 100%;
-    padding-top: 0.3em;
     display: block;
     height: auto;
     position: absolute;
@@ -257,7 +258,7 @@ div.error img{
     display: none;
 }
 
-.new-application div.loader{
+.new-application div.loader {
     margin: 30px auto;
     border: 16px solid #f3f3f3; /* Light grey */
     border-top: 16px solid #009C7F; /* Blue */
@@ -401,10 +402,13 @@ div.application.status-archived {
     }
 }
 
-@media (max-width: 35em) {
-    div.application .ui-responsive > .ui-block-b {
-        display: none;
-    }
+.application #pics {
+    display: flex;
+    justify-content: space-between;
+}
+
+.application #pics div {
+    flex: 0 0 calc(50% - 0.5rem);
 }
 
 div.application.status-draft h3 .ui-btn-icon-left:after,
