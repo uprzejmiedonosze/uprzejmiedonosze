@@ -1,51 +1,51 @@
 # tools
-YUI_COMPRESSOR       = java -jar tools/yuicompressor-2.4.8.jar
-YUI_COMPRESSOR_FLAGS = --charset utf-8 --line-break 72
-BABEL                = babel-minify
-RSYNC                = rsync
-RSYNC_FLAGS          = --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
-HOSTING              = nieradka.net
+YUI_COMPRESSOR       := java -jar tools/yuicompressor-2.4.8.jar
+YUI_COMPRESSOR_FLAGS := --charset utf-8 --line-break 72
+BABEL                := babel-minify
+RSYNC                := rsync
+RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
+HOSTING              := nieradka.net
 
 # dirs and files 
-EXPORT               = export
-PUBLIC               = $(EXPORT)/public
-DIRS                 = $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc $(EXPORT)/templates
+EXPORT               := export
+PUBLIC               := $(EXPORT)/public
+DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc $(EXPORT)/templates
 
-CSS_FILES            = $(wildcard src/css/*.css)
+CSS_FILES            := $(wildcard src/css/*.css)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5 | cut -b 1-8)
-CSS_MINIFIED         = $(CSS_FILES:src/%.css=export/public/%-$(CSS_HASH).css)
+CSS_MINIFIED         := $(CSS_FILES:src/%.css=export/public/%-$(CSS_HASH).css)
 
-JS_FILES             = $(wildcard src/js/*.js)
+JS_FILES             := $(wildcard src/js/*.js)
 JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
-JS_MINIFIED          = $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
+JS_MINIFIED          := $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
 
-HTML_FILES           = $(wildcard src/*.html src/api/*.html)
-HTML_PROCESSED       = $(HTML_FILES:src/%.html=export/public/%.html)
+HTML_FILES           := $(wildcard src/*.html src/api/*.html)
+HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
 
-TWIG_FILES           = $(wildcard src/templates/*.twig)
+TWIG_FILES           := $(wildcard src/templates/*.twig)
 TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5 | cut -b 1-8)
-TWIG_PROCESSED       = $(TWIG_FILES:src/templates/%=export/templates/%)
+TWIG_PROCESSED       := $(TWIG_FILES:src/templates/%=export/templates/%)
 
-PHP_FILES            = $(wildcard src/inc/*.php)
-PHP_PROCESSED        = $(PHP_FILES:src/inc/%.php=export/inc/%.php)
+PHP_FILES            := $(wildcard src/inc/*.php)
+PHP_PROCESSED        := $(PHP_FILES:src/inc/%.php=export/inc/%.php)
 
-MANIFEST             = src/manifest.json
-MANIFEST_PROCESSED   = $(PUBLIC)/manifest.json
+MANIFEST             := src/manifest.json
+MANIFEST_PROCESSED   := $(PUBLIC)/manifest.json
 
-OTHER_FILES          = src/favicon.ico src/robots.txt src/img src/sitemap.xml src/ads.txt src/sw.js
+OTHER_FILES          := src/favicon.ico src/robots.txt src/img src/sitemap.xml src/ads.txt src/sw.js
 
-STAGING_HOST         = staging.uprzejmiedonosze.net
-PROD_HOST            = uprzejmiedonosze.net
-DEV_HOST             = uprzejmiedonosze.localhost
-HOST                 = $(STAGING_HOST)
-HTTPS                = https
+STAGING_HOST         := staging.uprzejmiedonosze.net
+PROD_HOST            := uprzejmiedonosze.net
+DEV_HOST             := uprzejmiedonosze.localhost
+HOST                 := $(STAGING_HOST)
+HTTPS                := https
 
-BRANCH_ENV           = .branch-env
-GIT_BRANCH           = $(shell git rev-parse --abbrev-ref HEAD)
-LAST_RUN             = $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
-TAG_NAME             = $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
+BRANCH_ENV           := .branch-env
+GIT_BRANCH           := $(shell git rev-parse --abbrev-ref HEAD)
+LAST_RUN             := $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
+TAG_NAME             := $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
 
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL        := help
 
 .PHONY: help clean log-from-last-prod
 help: ## Displays this help.
