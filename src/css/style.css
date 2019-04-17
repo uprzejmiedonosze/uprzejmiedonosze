@@ -243,7 +243,6 @@ div.error img{
 .application #pics img {
 	border-radius: 0.8em;
     width: 100%;
-    padding-top: 0.3em;
     display: block;
     height: auto;
     position: absolute;
@@ -403,26 +402,13 @@ div.application.status-archived {
     }
 }
 
-@media all and (max-width: 35em) {
-    div.application .ui-responsive > .ui-block-b {
-        display: none;
-    }
-    div.application .ui-responsive .ui-block-a img.bottom.transparent {
-        opacity:0;
-    }
-    div.application .ui-responsive .ui-block-a img.bottom {
-        position:absolute;
-        left:0;
-        -webkit-transition: opacity 1s ease-in-out;
-        -moz-transition: opacity 1s ease-in-out;
-        -o-transition: opacity 1s ease-in-out;
-        transition: opacity 1s ease-in-out;
-    }
+.application #pics {
+    display: flex;
+    justify-content: space-between;
 }
-@media not all and (max-width: 35em) {
-    div.application .ui-responsive .ui-block-a .bottom {
-        display: none;
-    }
+
+.application #pics div {
+    flex: 0 0 calc(50% - 0.5rem);
 }
 
 div.application.status-draft h3 .ui-btn-icon-left:after,
