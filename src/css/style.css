@@ -227,7 +227,8 @@ div.error img{
     background-color: #e9c200;
 }
 
-.new-application #pics label {
+.new-application #pics label,
+.application #pics div {
     border-radius: 0.8em;
     background: #eee;
     position: relative;
@@ -238,7 +239,8 @@ div.error img{
     padding: 0.4em;
 }
 
-.new-application #pics img {
+.new-application #pics img,
+.application #pics img {
 	border-radius: 0.8em;
     width: 100%;
     padding-top: 0.3em;
@@ -257,7 +259,7 @@ div.error img{
     display: none;
 }
 
-.new-application div.loader{
+.new-application div.loader {
     margin: 30px auto;
     border: 16px solid #f3f3f3; /* Light grey */
     border-top: 16px solid #009C7F; /* Blue */
@@ -401,8 +403,24 @@ div.application.status-archived {
     }
 }
 
-@media (max-width: 35em) {
+@media all and (max-width: 35em) {
     div.application .ui-responsive > .ui-block-b {
+        display: none;
+    }
+    div.application .ui-responsive .ui-block-a img.bottom.transparent {
+        opacity:0;
+    }
+    div.application .ui-responsive .ui-block-a img.bottom {
+        position:absolute;
+        left:0;
+        -webkit-transition: opacity 1s ease-in-out;
+        -moz-transition: opacity 1s ease-in-out;
+        -o-transition: opacity 1s ease-in-out;
+        transition: opacity 1s ease-in-out;
+    }
+}
+@media not all and (max-width: 35em) {
+    div.application .ui-responsive .ui-block-a .bottom {
         display: none;
     }
 }
