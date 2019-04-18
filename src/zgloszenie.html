@@ -16,12 +16,12 @@ generate('zgloszenie.html.twig',
             'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
             'shortTitle' => "Zgłoszenie {$application->number}",
             'image' => $application->contextImage->thumb,
+            'mainClass' => 'application-details',
             'description' => "Samochód o nr rejestracyjnym {$application->carInfo->plateId} " .
                 "pod adresem {$application->address->address}. {$application->getCategory()[1]}"
         ],
         'config' =>
         [
-            'appDetails' => true,
             'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin
         ],
         'app' => $application

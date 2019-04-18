@@ -17,7 +17,7 @@
             id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
             {% for id in user.getApplicationIds %}
                 {% set app = storage.getApplication(id) %}
-                {% include('_application.html.twig') %}
+                {% include('_application-short.html.twig') %}
             {% endfor %}
         </div>
     {% endfor %}
