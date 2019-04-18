@@ -146,6 +146,8 @@ const SM_ADDRESSES = Array (
         'sm@karlino.pl', 'Karlino'],
     'sosnowiec' => ['Straż Miejska Sosnowiec \\\\ ul. S. Małachowskiego 3 \\\\ 41-200 Sosnowiec',
         'straz@um.sosnowiec.pl', 'Sosnowiec'],
+    'rzeszów' => ['Straż Miejska w Rzeszowie \\\\ ul. Ofiar Katynia 1 \\\\ 35-209 Rzeszów',
+        'komenda@sm.erzeszow.pl', ' Rzeszów'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
