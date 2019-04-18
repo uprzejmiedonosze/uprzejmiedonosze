@@ -18,6 +18,10 @@ strong, b {
     font-weight: 400;
 }
 
+small {
+    font-size: 0.8em;
+}
+
 .ui-content {
     max-width: 800px;
     margin: 0 auto;
@@ -232,7 +236,8 @@ div.error img{
 }
 
 .new-application #pics label,
-.application #pics div {
+.application-short div.photo-thumbs div,
+.application-details #user-location div.static-map-preview {
     border-radius: 0.8em;
     background: #eee;
     position: relative;
@@ -244,7 +249,8 @@ div.error img{
 }
 
 .new-application #pics img,
-.application #pics img {
+.application-short div.photo-thumbs img,
+.application-details #user-location div.static-map-preview img {
 	border-radius: 0.8em;
     width: 100%;
     display: block;
@@ -392,68 +398,68 @@ img.static-map-preview {
 
 /* #region moje aplikacje */
 
-div.application.status-archived h3 a {
+div.application-short.status-archived h3 a {
     font-weight: 300;
 }
 
-div.application.status-archived {
+div.application-short.status-archived {
     display: none;
 }
 
 @media only screen and (min-width: 768px) {
-    div.application h3 a {
+    div.application-short h3 a {
         font-size: 16px;
     }
 }
 
-.application #pics {
+div.application-short .photo-thumbs {
     display: flex;
     justify-content: space-between;
 }
 
-.application #pics div {
+div.application-short .photo-thumbs div {
     flex: 0 0 calc(50% - 0.5rem);
 }
 
-div.application.status-draft h3 .ui-btn-icon-left:after,
-div.application select.status-draft:after {
+div.application-short.status-draft h3 .ui-btn-icon-left:after,
+div.application-short select.status-draft:after {
     background-color: #7463634d;
 }
 
-div.application.status-ready h3 .ui-btn-icon-left:after,
-div.application select.status-ready:after {
+div.application-short.status-ready h3 .ui-btn-icon-left:after,
+div.application-short select.status-ready:after {
     background-color: #0000004d;
 }
 
-div.application.status-confirmed h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed:after {
+div.application-short.status-confirmed h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed:after {
     background-color: #81c78499;
 }
 
-div.application.status-confirmed-waiting h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-waiting:after,
-div.application.status-confirmed-waitingE h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-waitingE:after {
+div.application-short.status-confirmed-waiting h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-waiting:after,
+div.application-short.status-confirmed-waitingE h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-waitingE:after {
     background-color: #3388cc99;
 }
 
-div.application.status-confirmed-sm h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-sm:after {
+div.application-short.status-confirmed-sm h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-sm:after {
     background-color: #ffc10799;
 }
 
-div.application.status-confirmed-fined h3 a.ui-btn-icon-left:after,
-div.application select.status-confirmed-fined:after {
+div.application-short.status-confirmed-fined h3 a.ui-btn-icon-left:after,
+div.application-short select.status-confirmed-fined:after {
     background-color: #8bc34aee;
 }
 
-div.application.status-confirmed-ignored h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-ignored:after {
+div.application-short.status-confirmed-ignored h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-ignored:after {
     background-color: #dd2c00cc;
 }
 
-div.application.status-archived h3 .ui-btn-icon-left:after,
-div.application select.status-archived:after {
+div.application-short.status-archived h3 .ui-btn-icon-left:after,
+div.application-short select.status-archived:after {
     background-color: #0000004C;
 }
 
