@@ -252,7 +252,6 @@ div.loader {
     width: 50px !important;
     height: 50px;
     animation: spin 2s linear infinite;
-    display: none;
 }
 
 .new-application .contextImageSection img,

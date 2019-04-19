@@ -26,7 +26,7 @@
             <div class="ui-block-a imageContainer image-upload contextImageSection">
                 <label for="contextImage">
                     Wgraj zdjęcie z widocznym wykroczeniem
-                    <div class="loader"></div>
+                    <div class="loader" style="display: none;"></div>
                     <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
                 <input type="file" accept="image/jpeg" id="contextImage"
@@ -36,7 +36,7 @@
             <div class="ui-block-b imageContainer image-upload carImageSection">
                 <label for="carImage">
                     Wgraj zdjęcie z widoczną tablicą rejestracyjną
-                    <div class="loader"></div>
+                    <div class="loader" style="display: none;"></div>
                     <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
                 <input type="file" accept="image/jpeg" id="carImage"
