@@ -42,7 +42,7 @@ HTTPS                := https
 
 BRANCH_ENV           := .branch-env
 GIT_BRANCH           := $(shell git rev-parse --abbrev-ref HEAD)
-LAST_RUN             := $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
+LAST_RUN              = $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
 TAG_NAME             := $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
 
 .DEFAULT_GOAL        := help
