@@ -401,6 +401,21 @@ img#plateImage {
     margin: .5em 0;
 }
 
+a.zoom {
+   position: absolute;
+   top: 10;
+   left: 10;
+   width: 21px;
+   height: 21px;
+   z-index: 3;
+   display: block;
+   opacity: 0.6;
+}
+
+.imageContainer:hover a.zoom {
+   opacity: 1;
+}
+
 /* #endregion zgloszenie */
 
 /* #region moje aplikacje */
