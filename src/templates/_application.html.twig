@@ -87,12 +87,15 @@
                 class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
             <img class="popphoto lazyload" data-src="{{ app.carImage.url }}" style="max-height:800px;">
         </div>
-{% if app.shouldIncludePlateImage %}
-        {#<div class="ui-block-b">
-            <img id="plateImage" src="{{ app.carInfo.plateImage }}"/>
-        </div>#}
-{% endif %}
     </div>
+{% if app.shouldIncludePlateImage %}
+    <div class="ui-grid-a ui-responsive images">
+        <div class="ui-block-a"></div>
+        <div class="ui-block-b">
+            <img id="plateImage" src="{{ app.carInfo.plateImage }}"/>
+        </div>
+    </div>
+{% endif %}
 
 {% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.confirmationScreen is not defined %}
     <div id="statusHistory">
