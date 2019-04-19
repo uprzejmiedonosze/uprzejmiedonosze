@@ -78,7 +78,7 @@ html body .ui-group-theme-a .ui-header {
     margin: 0em;
 }
 
-p > a, li > a {
+p > a, li > a, small > a {
     text-decoration: none;
     color: #009C7F!important;
     font-weight: 400!important;
