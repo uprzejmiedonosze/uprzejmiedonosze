@@ -216,6 +216,11 @@ div.error img{
 	text-transform: none;
 }
 
+div.ui-block-a > div.ui-radio,
+div.ui-block-b > div.ui-radio {
+    margin: 0;
+}
+
 /* #endregion new-application and register */
 
 /* #region nowe-zgloszenie */
@@ -233,10 +238,6 @@ div.error img{
 
 .new-application .edit-warning {
     background-color: #e9c200;
-}
-
-.new-application .image-upload {
-    width: 95%;
 }
 
 .new-application .image-upload input {
@@ -367,7 +368,6 @@ div.error img{
     overflow: hidden;
     height: 200px;
     padding: 0.4em;
-    border: 1px dotted gray;
 }
 
 .ui-grid-a.ui-responsive.images .imageContainer img {
@@ -391,11 +391,6 @@ div.error img{
     margin-top: 0.5rem;
 }
 
-div {
-    -border: 1px dotted red;
-}
-
-
 sup {
     font-size: 70%;
 }
@@ -404,6 +399,7 @@ img#plateImage {
     max-width: 150px;
     max-height: 50px;
     border-radius: 0.2em;
+    margin: .5em 0;
 }
 
 /* #endregion zgloszenie */
