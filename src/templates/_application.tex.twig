@@ -11,11 +11,13 @@
 
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb     ~ '}' %}
+{% set address      = '\\href' ~ appUrl ~ '{\\underline{' ~ app.address.address ~ '}}' %}
 
 \opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} } } }
 	W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
-    \href{{ appUrl }}{ {{ app.address.address }} }.
+    {{ address }}\footnote{Adres jest równocześnie linkiem prowadzącym
+    do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}.
     {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.
     Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
 {% if app.statements is not defined or not app.statements.witness %}
