@@ -244,7 +244,7 @@ div.ui-block-b > div.ui-radio {
     display: none;
 }
 
-.new-application div.loader {
+div.loader {
     margin: 30px auto;
     border: 16px solid #f3f3f3; /* Light grey */
     border-top: 16px solid #009C7F; /* Blue */

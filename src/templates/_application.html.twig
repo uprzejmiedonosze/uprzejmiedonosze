@@ -59,6 +59,7 @@
         </div>
         <div class="ui-block-b imageContainer">
 {% if app.address.latlng is defined %}
+            <div class="loader" style="dislay: block;"></div>
             <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
                 data-ajax="false" target="_blank">
                 <img src="https://maps.googleapis.com/maps/api/staticmap?center={{ app.address.latlng }}&zoom=18&size=380x200&maptype=roadmap&markers=color:red%7Clabel:o%7C{{ app.address.latlng }}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8">
@@ -81,11 +82,6 @@
             <a href="#" data-rel="back"
                 class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
             <img class="popphoto" src="{{ app.contextImage.url }}" style="max-height:800px;">
-        </div>
-        <div class="ui-block-b imageContainer">
-            <a href="#popup2" data-rel="popup" data-position-to="window" data-transition="fade">
-                <img class="lazyload" data-src="{{ app.carImage.thumb }}">     
-            </a>
         </div>
         <div data-role="popup" id="popup2" data-overlay-theme="a" data-theme="a" data-corners="false">
             <a href="#" data-rel="back"
