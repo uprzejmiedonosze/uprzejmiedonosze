@@ -235,33 +235,8 @@ div.error img{
     background-color: #e9c200;
 }
 
-.new-application #pics label,
-.application-short div.photo-thumbs div,
-.application-details #user-location div.static-map-preview {
-    border-radius: 0.8em;
-    background: #eee;
-    position: relative;
-    overflow: hidden;
-    max-width: 400px;
-    height: 200px;
-    width: 100%;
-    padding: 0.4em;
-}
-
-.new-application #pics img,
-.application-short div.photo-thumbs img,
-.application-details #user-location div.static-map-preview img {
-	border-radius: 0.8em;
-    width: 100%;
-    display: block;
-    height: auto;
-    position: absolute;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: cover;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.new-application .image-upload {
+    width: 95%;
 }
 
 .new-application .image-upload input {
@@ -366,32 +341,69 @@ div.error img{
 
 /* #region zgloszenie */
 
-.ui-block-a, .ui-block-b {
-    max-width: 400px;
+@media (min-width: 35em) {
+    .ui-grid-a.ui-responsive.images {
+        display: flex;
+        justify-content: space-between;
+        overflow: hidden;
+    }
 }
 
-.ui-block-a div, .ui-block-b div {
-    width: 95%;
+@media (max-width: 35em) {
+    .imageContainer + .imageContainer {
+        margin-top: 0.5rem;
+    }
 }
+
+
+.ui-grid-a.ui-responsive.images > div {
+    position: relative;
+    flex: 0 0 calc(50% - 0.5rem);
+}
+
+.ui-grid-a.ui-responsive.images-cropped .imageContainer {
+    border-radius: 0.8em;
+    background: #eee;
+    overflow: hidden;
+    height: 200px;
+    padding: 0.4em;
+    border: 1px dotted gray;
+}
+
+.ui-grid-a.ui-responsive.images .imageContainer img {
+    width: 100%;
+    display: block;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.ui-grid-a.ui-responsive.images-cropped .imageContainer img {
+    border-radius: 0.8em;
+    position: absolute;
+    object-fit: cover;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ui-grid-a.ui-responsive + .ui-grid-a.ui-responsive {
+    margin-top: 0.5rem;
+}
+
+div {
+    -border: 1px dotted red;
+}
+
 
 sup {
     font-size: 70%;
-}
-
-img.photo-thumbs {
-    max-width: 95%;
-    border-radius: 0.8em
 }
 
 img#plateImage {
     max-width: 150px;
     max-height: 50px;
     border-radius: 0.2em;
-}
-
-img.static-map-preview {
-    border-radius: 0.2em;
-    width: 95%;
 }
 
 /* #endregion zgloszenie */
@@ -410,15 +422,6 @@ div.application-short.status-archived {
     div.application-short h3 a {
         font-size: 16px;
     }
-}
-
-div.application-short .photo-thumbs {
-    display: flex;
-    justify-content: space-between;
-}
-
-div.application-short .photo-thumbs div {
-    flex: 0 0 calc(50% - 0.5rem);
 }
 
 div.application-short.status-draft h3 .ui-btn-icon-left:after,

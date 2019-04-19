@@ -22,10 +22,10 @@
             </div>
         </div>
         {% endif %}
-        <div class="ui-grid-a ui-responsive" id="pics">
+        <div class="ui-grid-a ui-responsive images-cropped">
             <div class="ui-block-a">
                 <div class="image-upload contextImageSection">
-                    <label for="contextImage">
+                    <label for="contextImage" class="imageContainer">
                         Wgraj zdjęcie z widocznym wykroczeniem
                         <div class="loader"></div>
                         <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
@@ -37,7 +37,7 @@
             </div>
             <div class="ui-block-b">
                 <div class="image-upload carImageSection">
-                    <label for="carImage">
+                    <label for="carImage" class="imageContainer">
                         Wgraj zdjęcie z widoczną tablicą rejestracyjną
                         <div class="loader"></div>
                         <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
