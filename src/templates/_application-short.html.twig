@@ -1,0 +1,64 @@
+<div id="{{ app.id }}"
+    class="application application-short {{ app.getStatus[3] }} status-all status-{{ app.getStatus[3] }}
+        status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus[2] }}"
+    data-expanded-icon="carat-d" data-role="collapsible"
+    data-filtertext="{{ "#{app.address.address} #{app.number} #{app.date} #{app.carInfo.plateId} "
+        ~ "#{app.userComment} #{app.getCategory[1]} " }}
+        {% if app.getRecydywa > 1 %}recydywa{{ app.getRecydywa }}{% endif %}">
+
+    <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}}</h3>
+    <p data-role="listview" data-inset="false">
+        <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
+            {{ app.guessUserSex.bylam }} świadkiem pozostawienia
+            samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
+            {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
+            pod adresem
+            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
+                data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
+            {{ app.getCategory[1] }}</p>
+
+{% if app.userComment %}
+    <p>{{ app.userComment }}</p>
+{% endif %}
+
+{% if config.appActionButtons %}
+        <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+            <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
+            <select name="select-status" id="select-status-{{ app.id }}"
+                class="status-{{ app.status }}"
+                onChange="_action('{{ app.id }}');">
+            {% for key,val in statuses %}
+                {% if val[3] %} {# class is empty, this is a draft or ready #}
+                    <option value="{{ key }}"
+                        {% if key == app.status %}selected="selected"{% endif %}>{{ val[1] }}</option>
+                {% endif %}
+            {% endfor %}
+            </select>
+        </fieldset></form>
+{% endif %}
+        <div class="ui-grid-a ui-responsive images images-cropped">
+            <div class="ui-block-a imageContainer">
+                <a href="/ud-{{ app.id }}.html">
+                    <img class="lazyload" data-src="{{ app.contextImage.thumb }}">
+                </a>
+            </div>
+            <div class="ui-block-b imageContainer">
+                <a href="/ud-{{ app.id }}.html">
+                    <img class="lazyload" data-src="{{ app.carImage.thumb }}">
+                </a>
+            </div>
+        </div>
+{% if config.appActionButtons %}
+        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+            <a href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left
+                ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
+                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-location"
+                data-ajax="false" target="_blank">mapa</a>
+            <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
+                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
+                ui-nodisc-icon ui-icon-mail">PDF</a>
+        </fieldset>
+{% endif %}
+    </p> <!-- data-role="listview" data-inset="false" -->
+</div>

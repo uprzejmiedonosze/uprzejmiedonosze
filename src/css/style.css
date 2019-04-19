@@ -18,6 +18,10 @@ strong, b {
     font-weight: 400;
 }
 
+small {
+    font-size: 0.8em;
+}
+
 .ui-content {
     max-width: 800px;
     margin: 0 auto;
@@ -212,6 +216,11 @@ div.error img{
 	text-transform: none;
 }
 
+div.ui-block-a > div.ui-radio,
+div.ui-block-b > div.ui-radio {
+    margin: 0;
+}
+
 /* #endregion new-application and register */
 
 /* #region nowe-zgloszenie */
@@ -229,33 +238,6 @@ div.error img{
 
 .new-application .edit-warning {
     background-color: #e9c200;
-}
-
-.new-application #pics label,
-.application #pics div {
-    border-radius: 0.8em;
-    background: #eee;
-    position: relative;
-    overflow: hidden;
-    max-width: 400px;
-    height: 200px;
-    width: 100%;
-    padding: 0.4em;
-}
-
-.new-application #pics img,
-.application #pics img {
-	border-radius: 0.8em;
-    width: 100%;
-    display: block;
-    height: auto;
-    position: absolute;
-    min-width: 100%;
-    min-height: 100%;
-    object-fit: cover;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .new-application .image-upload input {
@@ -360,100 +342,123 @@ div.error img{
 
 /* #region zgloszenie */
 
-.ui-block-a, .ui-block-b {
-    max-width: 400px;
+@media (min-width: 35em) {
+    .ui-grid-a.ui-responsive.images {
+        display: flex;
+        justify-content: space-between;
+        overflow: hidden;
+    }
 }
 
-.ui-block-a div, .ui-block-b div {
-    width: 95%;
+@media (max-width: 35em) {
+    .imageContainer + .imageContainer {
+        margin-top: 0.5rem;
+    }
+}
+
+
+.ui-grid-a.ui-responsive.images > div {
+    position: relative;
+    flex: 0 0 calc(50% - 0.5rem);
+}
+
+.ui-grid-a.ui-responsive.images-cropped .imageContainer {
+    border-radius: 0.8em;
+    background: #eee;
+    overflow: hidden;
+    height: 200px;
+    padding: 0.4em;
+}
+
+.ui-grid-a.ui-responsive.images .imageContainer img {
+    width: 100%;
+    display: block;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.ui-grid-a.ui-responsive.images-cropped .imageContainer img {
+    border-radius: 0.8em;
+    position: absolute;
+    object-fit: cover;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.ui-grid-a.ui-responsive + .ui-grid-a.ui-responsive {
+    margin-top: 0.5rem;
 }
 
 sup {
     font-size: 70%;
 }
 
-img.photo-thumbs {
-    max-width: 95%;
-    border-radius: 0.8em
-}
-
 img#plateImage {
     max-width: 150px;
     max-height: 50px;
     border-radius: 0.2em;
-}
-
-img.static-map-preview {
-    border-radius: 0.2em;
-    width: 95%;
+    margin: .5em 0;
 }
 
 /* #endregion zgloszenie */
 
 /* #region moje aplikacje */
 
-div.application.status-archived h3 a {
+div.application-short.status-archived h3 a {
     font-weight: 300;
 }
 
-div.application.status-archived {
+div.application-short.status-archived {
     display: none;
 }
 
 @media only screen and (min-width: 768px) {
-    div.application h3 a {
+    div.application-short h3 a {
         font-size: 16px;
     }
 }
 
-.application #pics {
-    display: flex;
-    justify-content: space-between;
-}
-
-.application #pics div {
-    flex: 0 0 calc(50% - 0.5rem);
-}
-
-div.application.status-draft h3 .ui-btn-icon-left:after,
-div.application select.status-draft:after {
+div.application-short.status-draft h3 .ui-btn-icon-left:after,
+div.application-short select.status-draft:after {
     background-color: #7463634d;
 }
 
-div.application.status-ready h3 .ui-btn-icon-left:after,
-div.application select.status-ready:after {
+div.application-short.status-ready h3 .ui-btn-icon-left:after,
+div.application-short select.status-ready:after {
     background-color: #0000004d;
 }
 
-div.application.status-confirmed h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed:after {
+div.application-short.status-confirmed h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed:after {
     background-color: #81c78499;
 }
 
-div.application.status-confirmed-waiting h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-waiting:after,
-div.application.status-confirmed-waitingE h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-waitingE:after {
+div.application-short.status-confirmed-waiting h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-waiting:after,
+div.application-short.status-confirmed-waitingE h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-waitingE:after {
     background-color: #3388cc99;
 }
 
-div.application.status-confirmed-sm h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-sm:after {
+div.application-short.status-confirmed-sm h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-sm:after {
     background-color: #ffc10799;
 }
 
-div.application.status-confirmed-fined h3 a.ui-btn-icon-left:after,
-div.application select.status-confirmed-fined:after {
+div.application-short.status-confirmed-fined h3 a.ui-btn-icon-left:after,
+div.application-short select.status-confirmed-fined:after {
     background-color: #8bc34aee;
 }
 
-div.application.status-confirmed-ignored h3 .ui-btn-icon-left:after,
-div.application select.status-confirmed-ignored:after {
+div.application-short.status-confirmed-ignored h3 .ui-btn-icon-left:after,
+div.application-short select.status-confirmed-ignored:after {
     background-color: #dd2c00cc;
 }
 
-div.application.status-archived h3 .ui-btn-icon-left:after,
-div.application select.status-archived:after {
+div.application-short.status-archived h3 .ui-btn-icon-left:after,
+div.application-short select.status-archived:after {
     background-color: #0000004C;
 }
 

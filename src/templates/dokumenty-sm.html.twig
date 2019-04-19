@@ -21,13 +21,13 @@
 <div data-role="collapsibleset" data-mini="true" data-inset="true">
     {% if appsEpuap|length > 0 %}
         {% for app in appsEpuap %}
-            {% include('_application.html.twig') %}
+            {% include('_application-short.html.twig') %}
         {% endfor %}
     {% endif %}
 
     {% if appsEmail|length > 0 %}
         {% for app in appsEmail %}
-            {% include('_application.html.twig') %}
+            {% include('_application-short.html.twig') %}
         {% endfor %}
     {% endif %}
 </div>

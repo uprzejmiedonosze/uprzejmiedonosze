@@ -22,35 +22,31 @@
             </div>
         </div>
         {% endif %}
-        <div class="ui-grid-a ui-responsive" id="pics">
-            <div class="ui-block-a">
-                <div class="image-upload contextImageSection">
-                    <label for="contextImage">
-                        Wgraj zdjęcie z widocznym wykroczeniem
-                        <div class="loader"></div>
-                        <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
-                    </label>
-                    <input type="file" accept="image/jpeg" id="contextImage"
-                        title="Zdjęcie przedstawiające kontekst"
+        <div class="ui-grid-a ui-responsive images images-cropped">
+            <div class="ui-block-a imageContainer image-upload contextImageSection">
+                <label for="contextImage">
+                    Wgraj zdjęcie z widocznym wykroczeniem
+                    <div class="loader"></div>
+                    <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
+                </label>
+                <input type="file" accept="image/jpeg" id="contextImage"
+                    title="Zdjęcie przedstawiające kontekst"
                         value="{{ app.contextImage.url ?? '' }}" />
-                </div>
             </div>
-            <div class="ui-block-b">
-                <div class="image-upload carImageSection">
-                    <label for="carImage">
-                        Wgraj zdjęcie z widoczną tablicą rejestracyjną
-                        <div class="loader"></div>
-                        <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
-                    </label>
-                    <input type="file" accept="image/jpeg" id="carImage"
-                        title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
-                        value="{{ app.carImage.url ?? '' }}" />
-                </div>
+            <div class="ui-block-b imageContainer image-upload carImageSection">
+                <label for="carImage">
+                    Wgraj zdjęcie z widoczną tablicą rejestracyjną
+                    <div class="loader"></div>
+                    <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
+                </label>
+                <input type="file" accept="image/jpeg" id="carImage"
+                    title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
+                    value="{{ app.carImage.url ?? '' }}" />
             </div>
         </div>
 
         <label for="plateId" id="plateHint">Podaj numer rejestracyjny</label>
-        <div class="ui-grid-a ui-responsive">
+        <div class="ui-grid-a ui-responsive images">
             <div class="ui-block-a">
                 <input class="required" type="text" id="plateId" name="plateId"
                     placeholder="(numer rejestracyjny bez spacji)" value="{{ app.carInfo.plateId ?? '' }}"
