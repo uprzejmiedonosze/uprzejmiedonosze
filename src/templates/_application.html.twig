@@ -1,8 +1,6 @@
-{% if config.appDetails %}
-{################################### full version ###################################}
-<div class="ui-body ui-body-a ui-corner-all">
+<div class="ui-body ui-body-a ui-corner-all application application-details">
 
-    {% if app.number is defined %}
+    {% if config.confirmationScreen is not defined %}
     <h2>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h2>
     {% endif %}
 
@@ -36,25 +34,50 @@
     </p>
 {% endif %}
 
-    <p>Dane adresowe oraz kontaktowe zgłaszającego:<br /><br />
-        <b>{{ app.user.name }}</b>
-{% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
-    {% if config.confirmationScreen is not defined %}
-        <sup>(nieaktualne dane? popraw je na <a href="register.html">stronie rejestracji</a>
-        i wygeneruj ponownie zgłoszenie)</sup>
-    {% endif %}
-        <br />
-        {{ app.user.email }}<br />
-        {{ app.user.address }}<br />
-        {{ app.user.msisdn }}<br />
-{% else %}
-        <br />(dane ukryte)
-{% endif %}
-    </p>
-    <div id="pics" class="ui-grid-a ui-responsive">
+    <div id="user-location" class="ui-grid-a ui-responsive images images-cropped">
         <div class="ui-block-a">
+        {% if config.confirmationScreen is not defined %}
+            <p>Dane zgłaszającego:<br /><br />
+        {% else %}
+            <p>Zweryfikuj lokalizację i swoje dane:<br /><br />
+        {% endif %}
+                <b>{{ app.user.name }}</b>
+        {% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+                <br />
+                {{ app.user.email }}<br />
+                {{ app.user.address }}<br />
+                {{ app.user.msisdn }}<br />
+            {% if config.confirmationScreen is not defined %}
+                <br />
+                <small>Nieaktualne dane? popraw je na <a href="register.html">stronie rejestracji</a>
+                i wygeneruj ponownie zgłoszenie.</small>
+            {% endif %}
+        {% else %}
+                <br />(dane ukryte)
+        {% endif %}
+            </p>
+        </div>
+        <div class="ui-block-b imageContainer">
+{% if app.address.latlng is defined %}
+            <div class="loader"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
+                data-ajax="false" target="_blank">
+                <img src="https://maps.googleapis.com/maps/api/staticmap?center={{ app.address.latlng }}&zoom=18&size=380x200&maptype=roadmap&markers=color:red%7Clabel:o%7C{{ app.address.latlng }}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8">
+            </a>
+{% endif %}
+        </div>
+    </div>
+    <div class="ui-grid-a ui-responsive images">
+        <div class="ui-block-a imageContainer">
+            <a href="#popup1" class="ui-btn ui-icon-search ui-btn-icon-notext ui-corner-all zoom"></a>
             <a href="#popup1" data-rel="popup" data-position-to="window" data-transition="fade">
-                <img class="photo-thumbs" src="{{ app.contextImage.thumb }}">     
+                <img src="{{ app.contextImage.thumb }}">     
+            </a>
+        </div>
+        <div class="ui-block-b imageContainer">
+            <a href="#popup2" class="ui-btn ui-icon-search ui-btn-icon-notext ui-corner-all zoom"></a>
+            <a href="#popup2" data-rel="popup" data-position-to="window" data-transition="fade">
+                <img class="lazyload" data-src="{{ app.carImage.thumb }}">     
             </a>
         </div>
         <div data-role="popup" id="popup1" data-overlay-theme="a" data-theme="a" data-corners="false">
@@ -62,30 +85,20 @@
                 class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
             <img class="popphoto" src="{{ app.contextImage.url }}" style="max-height:800px;">
         </div>
-        <div class="ui-block-b">
-            <a href="#popup2" data-rel="popup" data-position-to="window" data-transition="fade">
-                <img class="photo-thumbs lazyload" data-src="{{ app.carImage.thumb }}">     
-            </a>
-        </div>
         <div data-role="popup" id="popup2" data-overlay-theme="a" data-theme="a" data-corners="false">
             <a href="#" data-rel="back"
                 class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
             <img class="popphoto lazyload" data-src="{{ app.carImage.url }}" style="max-height:800px;">
         </div>
-{% if app.address.latlng is defined %}
-        <div class="ui-block-a">
-            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
-                data-ajax="false" target="_blank">
-                <img class="static-map-preview photo-thumbs" src="https://maps.googleapis.com/maps/api/staticmap?center={{ app.address.latlng }}&zoom=18&size=350x350&maptype=roadmap&markers=color:red%7Clabel:o%7C{{ app.address.latlng }}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8">
-            </a>
-        </div>
-{% endif %}
+    </div>
 {% if app.shouldIncludePlateImage %}
+    <div class="ui-grid-a ui-responsive images">
+        <div class="ui-block-a"></div>
         <div class="ui-block-b">
             <img id="plateImage" src="{{ app.carInfo.plateImage }}"/>
         </div>
-{% endif %}
     </div>
+{% endif %}
 
 {% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.confirmationScreen is not defined %}
     <div id="statusHistory">
@@ -102,70 +115,3 @@
 {% endif %}
 
 </div>
-
-{% else %} {# if config.appDetails #}
-{################################### short version ###################################}
-
-<div id="{{ app.id }}"
-    class="application {{ app.getStatus[3] }} status-all status-{{ app.getStatus[3] }}
-        status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus[2] }}"
-    data-expanded-icon="carat-d" data-role="collapsible"
-    data-filtertext="{{ app.address.address }} {{ app.number }} {{ app.date }} {{ app.carInfo.plateId }} {{ app.userComment }} {{ app.getCategory[1] }} {% if app.getRecydywa > 1 %}recydywa{% endif %}">
-
-    <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}}</h3>
-    <p data-role="listview" data-inset="false">
-        <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
-            {{ app.guessUserSex.bylam }} świadkiem pozostawienia
-            samochodu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
-            {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
-            pod adresem
-            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
-                data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
-            {{ app.getCategory[1] }}</p>
-
-{% if app.userComment %}
-    <p>{{ app.userComment }}</p>
-{% endif %}
-
-{% if config.appActionButtons %}
-        <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
-            <select name="select-status" id="select-status-{{ app.id }}"
-                class="status-{{ app.status }}"
-                onChange="_action('{{ app.id }}');">
-            {% for key,val in statuses %}
-                {% if val[3] %} {# class is empty, this is a draft or ready #}
-                    <option value="{{ key }}"
-                        {% if key == app.status %}selected="selected"{% endif %}>{{ val[1] }}</option>
-                {% endif %}
-            {% endfor %}
-            </select>
-        </fieldset></form>
-{% endif %}
-        <div id="pics" class="ui-grid-a ui-responsive">
-            <div class="ui-block-a">
-                <a href="/ud-{{ app.id }}.html">
-                    <img class="photo-thumbs lazyload" data-src="{{ app.contextImage.thumb }}">
-                </a>
-            </div>
-            <div class="ui-block-b">
-                <a href="/ud-{{ app.id }}.html">
-                    <img class="photo-thumbs lazyload" data-src="{{ app.carImage.thumb }}">
-                </a>
-            </div>
-        </div>
-{% if config.appActionButtons %}
-        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <a href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left
-                ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-location"
-                data-ajax="false" target="_blank">mapa</a>
-            <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
-                ui-nodisc-icon ui-icon-mail">PDF</a>
-        </fieldset>
-{% endif %}
-    </p> <!-- data-role="listview" data-inset="false" -->
-</div>
-{% endif %} {# if config.appDetails #}
