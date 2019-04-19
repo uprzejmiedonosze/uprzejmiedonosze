@@ -148,6 +148,8 @@ const SM_ADDRESSES = Array (
         'straz@um.sosnowiec.pl', 'Sosnowiec'],
     'rzeszów' => ['Straż Miejska w Rzeszowie \\\\ ul. Ofiar Katynia 1 \\\\ 35-209 Rzeszów',
         'komenda@sm.erzeszow.pl', ' Rzeszów'],
+    'łosice' => ['Straż Miejska Łosice \\\\ Handlowa 7 \\\\ Łosice 08-200',
+        'straz-miejska@gminalosice.pl', 'Łosice'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
