@@ -47,8 +47,6 @@ class Locators(object):
 
     MYAPPS_FIRST= (By.CSS_SELECTOR, "div.application")
     MYAPPS_EXPAND= (By.CSS_SELECTOR, "div.application")
-    MYAPPS_FIRSTL= (By.XPATH, "//a[contains(@href, 'ud-')]")
-    MYAPPS_FIRSTL= (By.CSS_SELECTOR, "div.application .images a")
 
     APP_PDF_LINK= (By.XPATH, "//a[contains(@href, '.pdf')]")
 

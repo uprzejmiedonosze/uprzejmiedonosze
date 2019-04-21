@@ -323,7 +323,7 @@ class MyApps(BasePage):
         first_element.find_element(By.CSS_SELECTOR, "h3 a").click() # expand first item
         time.sleep(1) # lazyload images
         first_element.find_element(By.CSS_SELECTOR, ".images img").click() # and click first photo
-        #self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() 
+
         text = self.get_content()
         assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
         assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])
