@@ -183,7 +183,7 @@ class New(BasePage):
         self.driver.find_element(*Locators.NEW_IIMAGE1).send_keys(os.getcwd() + self.cfg.app['invalidImage'])
         self.driver.find_element(*Locators.NEW_IIMAGE2).send_keys(os.getcwd() + self.cfg.app['invalidImage'])
         
-        time.sleep(5)
+        time.sleep(3)
 
         assert "Twoje zdjęcie nie ma znaczników geolokacji" in self.driver.find_element(*Locators.NEW_ADD_HINT).text, \
             "Brakuje tekstu: Twoje zdjęcie nie ma znaczników geolokacji"
@@ -319,8 +319,11 @@ class MyApps(BasePage):
         assert self.cfg.app['time'] in text, "Brakuje {} w tekście review".format(self.cfg.app['time'])
 
     def check_first(self, has_comment = True):
-        self.driver.find_element(*Locators.MYAPPS_EXPAND).click() # expand first item
-        self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() # and click very first link
+        first_element = self.driver.find_element(*Locators.MYAPPS_EXPAND)
+        first_element.find_element(By.CSS_SELECTOR, "h3 a").click() # expand first item
+        time.sleep(1) # lazyload images
+        first_element.find_element(By.CSS_SELECTOR, ".images img").click() # and click first photo
+        #self.driver.find_element(*Locators.MYAPPS_FIRSTL).click() 
         text = self.get_content()
         assert self.cfg.app['plateId'] in text, "Brakuje {} w tekście review".format(self.cfg.app['plateId'])
         assert self.cfg.app['address'] in text, "Brakuje {} w tekście review".format(self.cfg.app['address'])

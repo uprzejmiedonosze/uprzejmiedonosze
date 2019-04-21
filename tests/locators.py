@@ -46,8 +46,9 @@ class Locators(object):
     CONFIRM_TEXT= (By.CSS_SELECTOR, "div.ui-content > div.ui-body")
 
     MYAPPS_FIRST= (By.CSS_SELECTOR, "div.application")
-    MYAPPS_EXPAND= (By.CSS_SELECTOR, "div.application a")
+    MYAPPS_EXPAND= (By.CSS_SELECTOR, "div.application")
     MYAPPS_FIRSTL= (By.XPATH, "//a[contains(@href, 'ud-')]")
+    MYAPPS_FIRSTL= (By.CSS_SELECTOR, "div.application .images a")
 
     APP_PDF_LINK= (By.XPATH, "//a[contains(@href, '.pdf')]")
 
