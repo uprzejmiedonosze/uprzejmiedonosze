@@ -359,7 +359,8 @@ function sendFile(fileData, id) {
                     $('#plateImage').hide();
                 }
                 if (json.carInfo.recydywa && json.carInfo.recydywa > 0) {
-                    $('#recydywa').text("(recydywa: " + json.carInfo.recydywa + ")");
+                    $('#recydywa').text("recydywista, zgłoszeń: " + json.carInfo.recydywa);
+                    $('#recydywa').show();
                 }
 
             }

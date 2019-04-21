@@ -279,7 +279,12 @@ div.loader {
 }
 
 .new-application .ui-input-text input#plateId {
-	text-transform: uppercase;
+    text-transform: uppercase;
+    max-width: 10.5em;
+}
+
+.new-application .plate div.ui-input-text {
+    max-width: 10.5em;
 }
 
 .new-application #category {
@@ -399,10 +404,34 @@ sup {
 }
 
 img#plateImage {
-    max-width: 150px;
-    max-height: 50px;
+    position: absolute;
+    top: 0em;
+    left: 11em;
+    max-width: 10em;
+    height: 2.2em;
     border-radius: 0.2em;
-    margin: .5em 0;
+    margin-top: 0.5em;
+}
+
+@media (max-width: 35em) {
+    img#plateImage {
+        margin-top: 0;
+    }
+}
+
+div#recydywa {
+    position: absolute;
+    left: 0;
+    bottom: 0em;
+    padding: 0.1em;
+    background: #009c7f;
+    color: #eee;
+    font-size: 0.9em;
+    font-weight: 300;
+    text-shadow: none;
+    text-align: center;
+    width: 100%;
+    display: none;
 }
 
 a.zoom {

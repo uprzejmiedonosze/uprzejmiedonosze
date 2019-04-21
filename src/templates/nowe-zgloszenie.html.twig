@@ -39,6 +39,7 @@
                     <div class="loader" style="display: none;"></div>
                     <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
+                <div id="recydywa"></div>
                 <input type="file" accept="image/jpeg" id="carImage"
                     title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                     value="{{ app.carImage.url ?? '' }}" />
@@ -46,16 +47,16 @@
         </div>
 
         <label for="plateId" id="plateHint">Podaj numer rejestracyjny</label>
-        <div class="ui-grid-a ui-responsive images">
+        <div class="ui-grid-a ui-responsive images plate">
             <div class="ui-block-a">
                 <input class="required" type="text" id="plateId" name="plateId"
                     placeholder="(numer rejestracyjny bez spacji)" value="{{ app.carInfo.plateId ?? '' }}"
                     autocomplete="off" style="text-transform:uppercase" />
-            </div>
-            <div class="ui-block-b">
                 <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
                     {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
-                <span id="recydywa"></span>
+            </div>
+            <div class="ui-block-b">
+                &nbsp;
             </div>
         </div>
 
