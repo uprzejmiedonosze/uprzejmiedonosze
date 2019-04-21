@@ -174,6 +174,7 @@ function setAddressByPlace(place){
 /* ############################## FORM VALIDATION ############################## */
 
 function validateForm() {
+    $('#form-submit').addClass('ui-disabled');
     var ret = check($('#plateId'), 3, false);
     ret = checkAddress($('#lokalizacja')) && ret;
     ret = check($('#carImage'), 0, true) && ret;
@@ -184,6 +185,7 @@ function validateForm() {
     if (!ret) {
         $(window).scrollTop($('.error').offset().top - 100);
     }
+    $('#form-submit').removeClass('ui-disabled');
     return ret;
 }
 
@@ -234,6 +236,7 @@ function validateRegisterForm() {
 /* ############################## IMAGES ############################## */
 
 function checkFile(file, id) {
+    $('#form-submit').addClass('ui-disabled');
     if (file) {
         if (/^image\//i.test(file.type)) {
             $('.' + id + 'Section').removeClass('error');
@@ -270,6 +273,7 @@ function imageError(id) {
     $('.' + id + 'Section img').show();
     $('.' + id + 'Section').parent().addClass('error');
     $('.' + id + 'Section input').textinput('enable');
+    $('#form-submit').removeClass('ui-disabled');
 }
 
 function readGeoDataFromImage(file) {
@@ -362,8 +366,8 @@ function sendFile(fileData, id) {
                     $('#recydywa').text("recydywista, zgłoszeń: " + json.carInfo.recydywa);
                     $('#recydywa').show();
                 }
-
             }
+            $('#form-submit').removeClass('ui-disabled');
         },
         // eslint-disable-next-line no-unused-vars
         error: function (data) {
