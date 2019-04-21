@@ -407,10 +407,12 @@ sup {
     position: relative;
 }
 
-img#plateImage {
+.new-application img#plateImage {
     position: absolute;
     top: 0em;
     left: 11em;
+}
+img#plateImage {
     max-width: 10em;
     height: 2.2em;
     border-radius: 0.2em;
