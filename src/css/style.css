@@ -237,6 +237,10 @@ div.ui-block-b > div.ui-radio {
 }
 
 .new-application .edit-warning {
+    margin-bottom: 0.5em;
+}
+
+.new-application .edit-warning .ui-bar-a {
     background-color: #e9c200;
 }
 
