@@ -237,6 +237,10 @@ div.ui-block-b > div.ui-radio {
 }
 
 .new-application .edit-warning {
+    margin-bottom: 0.5em;
+}
+
+.new-application .edit-warning .ui-bar-a {
     background-color: #e9c200;
 }
 
@@ -275,7 +279,12 @@ div.loader {
 }
 
 .new-application .ui-input-text input#plateId {
-	text-transform: uppercase;
+    text-transform: uppercase;
+    max-width: 10.5em;
+}
+
+.new-application .plate div.ui-input-text {
+    max-width: 10.5em;
 }
 
 .new-application #category {
@@ -394,11 +403,34 @@ sup {
     font-size: 70%;
 }
 
+.new-application .plate {
+    position: relative;
+}
+
+.new-application img#plateImage {
+    position: absolute;
+    top: 0em;
+    left: 11em;
+}
 img#plateImage {
-    max-width: 150px;
-    max-height: 50px;
+    max-width: 10em;
+    height: 2.2em;
     border-radius: 0.2em;
-    margin: .5em 0;
+}
+
+div#recydywa {
+    position: absolute;
+    left: 0;
+    bottom: 0em;
+    padding: 0.1em;
+    background: #009c7f;
+    color: #eee;
+    font-size: 0.9em;
+    font-weight: 300;
+    text-shadow: none;
+    text-align: center;
+    width: 100%;
+    display: none;
 }
 
 a.zoom {

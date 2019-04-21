@@ -12,8 +12,8 @@
     <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
     <div>
         {% if config.edit %}
-        <div class="ui-corner-all custom-corners">
-            <div class="ui-bar ui-bar-a edit-warning">
+        <div class="ui-corner-all custom-corners edit-warning">
+            <div class="ui-bar ui-bar-a">
                 <h4>Edycja zgłoszenia</h4>
             </div>
             <div class="ui-body ui-body-a">
@@ -39,6 +39,7 @@
                     <div class="loader" style="display: none;"></div>
                     <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
+                <div id="recydywa"></div>
                 <input type="file" accept="image/jpeg" id="carImage"
                     title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                     value="{{ app.carImage.url ?? '' }}" />
@@ -46,17 +47,12 @@
         </div>
 
         <label for="plateId" id="plateHint">Podaj numer rejestracyjny</label>
-        <div class="ui-grid-a ui-responsive images">
-            <div class="ui-block-a">
-                <input class="required" type="text" id="plateId" name="plateId"
-                    placeholder="(numer rejestracyjny bez spacji)" value="{{ app.carInfo.plateId ?? '' }}"
-                    autocomplete="off" style="text-transform:uppercase" />
-            </div>
-            <div class="ui-block-b">
-                <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
-                    {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
-                <span id="recydywa"></span>
-            </div>
+        <div class="plate">
+            <input class="required" type="text" id="plateId" name="plateId"
+                placeholder="(numer rejestracyjny)" value="{{ app.carInfo.plateId ?? '' }}"
+                autocomplete="off" style="text-transform:uppercase" />
+            <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
+                {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
         </div>
 
         <label for="lokalizacja" id="addressHint">Podaj miejsce zgłoszenia</label>
