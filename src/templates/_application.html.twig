@@ -2,6 +2,12 @@
 
     {% if config.confirmationScreen is not defined %}
     <h2>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h2>
+        {% if general.isAdmin and not config.isAppOwner %}
+        <h3>
+            Podgląd administratora.
+            <small><a data-ajax="false" href="nowe-zgloszenie.html?edit={{ app.id }}">(edit)</a></small>
+        </h3>
+        {% endif %}
     {% endif %}
 
     <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>

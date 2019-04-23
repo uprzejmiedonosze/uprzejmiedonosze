@@ -5,8 +5,10 @@ $applicationId = $_GET["id"];
 $application = $storage->getApplication($applicationId);
 
 $isAppOwnerOrAdmin = false;
+$isAppOwner = false;
 if(isLoggedIn()){
-    $isAppOwnerOrAdmin = ($storage->getCurrentUser()->isAdmin()) || (getCurrentUserEmail() == $application->user->email);
+    $isAppOwner = getCurrentUserEmail() == $application->user->email;
+    $isAppOwnerOrAdmin = ($storage->getCurrentUser()->isAdmin()) || ($isAppOwner);
 }
 
 generate('zgloszenie.html.twig', 
@@ -21,7 +23,8 @@ generate('zgloszenie.html.twig',
         ],
         'config' =>
         [
-            'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin
+            'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin,
+            'isAppOwner' => $isAppOwner
         ],
         'app' => $application
     ]

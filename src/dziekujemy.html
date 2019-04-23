@@ -9,15 +9,20 @@ $applicationId = $_POST['applicationId'];
 unset($_SESSION['newAppId']);
 
 $application = $storage->getApplication($applicationId);
-$user = $storage->getCurrentUser();
-
-$user->addApplication($application);
 $application->setStatus("confirmed");
-$application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
 
+if(isset($application->number)){ // edit done by admin, number already set
+    $storage->saveApplication($application);
+    redirect("ud-$applicationId.html");
+}
+
+$user = $storage->getCurrentUser();
+$user->addApplication($application);
+$application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
 $storage->saveApplication($application);
 $storage->saveUser($user);
 $storage->updateRecydywa($application->carInfo->plateId);
+
 $storage->getUserStats(false); // update cache
 
 generate('dziekujemy.html.twig', 

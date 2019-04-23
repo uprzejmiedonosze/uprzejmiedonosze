@@ -8,7 +8,11 @@ if(isset($_GET['cleanup'])){
     redirect("nowe-zgloszenie.html");
 }
 
-if(isset($_SESSION['newAppId'])){ // edit mode
+if($storage->getCurrentUser()->isAdmin() && isset($_GET['edit'])){
+    $application = $storage->getApplication($_GET['edit']);
+    $_SESSION['newAppId'] = $application->id;
+    $edit = true;
+}elseif(isset($_SESSION['newAppId'])){ // edit mode
     try{
         $application = $storage->getApplication($_SESSION['newAppId']);
         $edit = isset($application->carImage) || isset($application->contextImage);
