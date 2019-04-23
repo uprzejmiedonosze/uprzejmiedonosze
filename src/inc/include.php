@@ -29,7 +29,7 @@ function generate($template, $parameters){
     $twig = new Twig_Environment($loader,
     [
         'debug' => false,
-        'cache' => new Twig_Cache_Filesystem('/tmp/twig%TWIG_HASH%', Twig_Cache_Filesystem::FORCE_BYTECODE_INVALIDATION),
+        'cache' => new Twig_Cache_Filesystem('/tmp/twig-%HOST%-%TWIG_HASH%', Twig_Cache_Filesystem::FORCE_BYTECODE_INVALIDATION),
         'strict_variables' => true,
         'auto_reload' => true
     ]);
