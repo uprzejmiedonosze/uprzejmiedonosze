@@ -47,7 +47,7 @@ function logger($msg, $force = null){
 
     $time = date(DT_FORMAT);
     if('%HOST%' != 'uprzejmiedonosze.net' || $force){
-        error_log($time . $user . "\t$msg\n", 3, "/tmp/%HOST%.log");
+        error_log($time . $user . "\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%VERSION%.log");
     }
     return $time;
 }
