@@ -20,10 +20,10 @@ RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.net/db
 COPY cdn                 /var/www/uprzejmiedonosze.net/cdn
 RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.net/cdn
 
-RUN touch                /tmp/uprzejmiedonosze.localhost.log
-RUN touch                /tmp/error.log
-RUN touch                /tmp/access.log
-RUN chown nginx:nginx    /tmp/*.log
+RUN mkdir                /var/log/uprzejmiedonosze.net
+RUN chown nginx:nginx    /var/log/uprzejmiedonosze.net
+RUN mkdir                /var/cache/uprzejmiedonosze.net
+RUN chown nginx:nginx    /var/cache/uprzejmiedonosze.net
 
 ADD default.conf         /etc/nginx/conf.d/default.conf
 ADD nginx.conf           /etc/nginx/nginx.conf
