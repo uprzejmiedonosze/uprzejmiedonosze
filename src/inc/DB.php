@@ -262,6 +262,8 @@ SQL;
             return $stats;
         }
 
+        $today = (date('H') < 12)? "and json_extract(applications.value, '$.added') < date('now')": "";
+
         $sql = <<<SQL
             select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day',
                 count(*) as acnt,
@@ -276,7 +278,7 @@ SQL;
                 limit 35
             ) u on substr(json_extract(applications.value, '$.added'), 1, 10) = u.day
             where json_extract(applications.value, '$.status') not in ('draft', 'ready')
-                and json_extract(applications.value, '$.added') < date('now')
+                $today
             group by substr(json_extract(applications.value, '$.added'), 1, 10)
             order by 1 desc
             limit 30;
