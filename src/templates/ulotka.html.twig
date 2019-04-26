@@ -1,0 +1,37 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+<h2>Mandat społeczny/ulotka "Robisz to Źle"</h2>
+
+<p>Mandat społeczny/ulotka "Robisz to Żle", to narzędzie do komunikacji z kierowcami,
+w sytuacji w której nie widzimy samego momentu parkowania.</p>
+
+<h3>Kiedy używać?</h3>
+<p>Naszą ulotkę wkładaj za wycieraczkę:<p>
+<ul>
+    <li>kiedy chcesz przekazać kierowcy informację <b>"Hej, robisz to źle"</b>. Na przykład mijając
+        codziennie ten sam niepoprawnie zaparkowany samochód. Jeśli ulotka nie
+        poskutkuje, nie pozostanie Ci nic innego jak dokonać zgłoszenia;</li>
+    <li>kiedy chcesz przekazać kierowcy ostrzeżenie <b>"Wierzę, że nie robisz tego świadomie. Ale
+        nie możesz parkować w tym miejscu";</b>
+    <li>kiedy chcesz zostawić kierowcy wyrok, <b>"Tu byłem, zgłosiłem i będę nadal zgłaszał"</b>.</li>
+</ul>
+<p>Możesz pomóc kierowcy i zakreślić mu rodzaj wykroczenia na pierwszej stronie. Na odwrocie masz
+też specjalnie miejsce na wiadomość dla kierowcy. Nie, to nie jest miejsce na obelgi, tylko na
+kulturalną informację.</p>
+
+<fieldset class="ui-grid-a">
+    <div class="ui-block-a">
+        <img data-src="img/mandat-1.jpg" class="lazyload one-third" />
+    </div>
+    <div class="ui-block-b">
+        <img data-src="img/mandat-2.jpg" class="lazyload one-third" />
+    </div>
+</fieldset>
+
+<h3>Jak wydrukować?</h3>
+
+<a href="img/mandat.pdf" download="mandat.pdf" class="ui-btn ui-corner-all ui-btn-inline try">Pobierz mandat do samodzielnego wydruku</a>
+{% endblock %}

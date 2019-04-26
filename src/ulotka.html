@@ -1,0 +1,19 @@
+<? 
+require_once(__DIR__ . '/../inc/include.php');
+
+generate('ulotka.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Mandat społeczny",
+            'shortTitle' => "Mandat",
+            'description' => "Mandat społeczny do zostawienia za wycieraczką",
+            'dialog' => isset($_GET['dialog']),
+            'mainClass' => 'ulotka'
+        ],
+        'config' => [
+            'menu' => 'ulotka'
+        ]
+    ]
+);
+?>
