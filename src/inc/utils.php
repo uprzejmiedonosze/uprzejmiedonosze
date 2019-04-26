@@ -171,10 +171,6 @@ function _sendSlackOnRegister($user){
 
     logger($title, true);
 
-    $url = ('%HOST%' != 'uprzejmiedonosze.net')?
-        'https://hooks.slack.com/services/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': # staging / dev
-        'https://hooks.slack.com/services/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'; # prod
-
     $msg = [
         "fallback" => $title,
         "title" => $title,
@@ -184,8 +180,7 @@ function _sendSlackOnRegister($user){
         "image_url" => @$_SESSION['user_picture'],
         "footer" => $user->data->address,
     ];
-    $client = new Maknz\Slack\Client($url);
-    $client->attach($msg)->send("");
+    _sendSlackAsync($msg, 1);
 }
 
 /**
@@ -195,10 +190,6 @@ function _sendSlackOnNewApp($app){
     $title = "Nowe zgłoszenie {$app->number} ({$app->address->city})";
 
     logger($title, true);
-
-    $url = ('%HOST%' != 'uprzejmiedonosze.net')?
-        'https://hooks.slack.com/services/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': # staging dev
-        'https://hooks.slack.com/services/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'; # prod
 
     $msg = [
         "fallback" => $title,
@@ -224,21 +215,25 @@ function _sendSlackOnNewApp($app){
         "footer_icon" => "%HTTPS%://%HOST%/img/{$app->category}.jpg",
         "ts" => strtotime($app->date)
     ];
-    $client = new Maknz\Slack\Client($url);
-    @$client->from($app->user->name)->withIcon($_SESSION['user_picture'])->attach($msg)->send("");
+    _sendSlackAsync($msg, 1);
+    #@$client->from($app->user->name)->withIcon($_SESSION['user_picture'])->attach($msg)->send("");
 }
-
 
 /** 
  * Sends message to #errors slack channel at uprzejmiedonosze.slack.com
  */
 function _sendSlackError($msg){
-    $url = ('%HOST%' != 'uprzejmiedonosze.net')?
-        'https://hooks.slack.com/services/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': # staging dev
-        'https://hooks.slack.com/services/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'; # prod
+    _sendSlackAsync($msg, 2);    
+}
 
-    $client = new Maknz\Slack\Client($url);
-    $client->send($msg);
+/**
+ * $type: 1 update, 2 error
+ */
+function _sendSlackAsync($msg, $type){
+    $queue = msg_get_queue(
+        '%HOST%' != 'uprzejmiedonosze.net'? 8888: 9999
+    );
+    return msg_send($queue, $type, $msg);
 }
 
 ?>
