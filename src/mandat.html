@@ -1,7 +1,7 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-generate('ulotka.html.twig', 
+generate('mandat.html.twig', 
     [
         'head' =>
         [
@@ -9,10 +9,10 @@ generate('ulotka.html.twig',
             'shortTitle' => "Mandat",
             'description' => "Mandat społeczny do zostawienia za wycieraczką",
             'dialog' => isset($_GET['dialog']),
-            'mainClass' => 'ulotka'
+            'mainClass' => 'mandat'
         ],
         'config' => [
-            'menu' => 'ulotka'
+            'menu' => 'mandat'
         ]
     ]
 );
