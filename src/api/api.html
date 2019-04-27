@@ -81,14 +81,15 @@ function _upload(){
         $application = new Application();
         $storage->saveApplication($application);
     }
-    $prefix = save_img_and_thumb($image_bytes);
+    $type = substr($pictureType, 0, 2);
+    $prefix = save_img_and_thumb($application, $image_bytes, $type);
 
     if($pictureType == 'carImage'){
         $car_info = get_car_info($image_bytes);
 
         $application->carImage = new stdClass();
-        $application->carImage->url = make_image_url($prefix);
-        $application->carImage->thumb = make_image_url($prefix, ',t');
+        $application->carImage->url = make_image_url($prefix, $type);
+        $application->carImage->thumb = make_image_url($prefix, $type . 't');
 
         if(isset($car_info) && count($car_info["results"])){
             logger('ALPR (cost: ' . $car_info['credit_cost'] . ', this month: ' . 
@@ -108,10 +109,11 @@ function _upload(){
                 $yes[] = $ojb->getY();
             }
 
-            $im = imagecreatefromjpeg(make_image_filename($prefix));
+            $im = imagecreatefromjpeg(make_image_filename($prefix, $type));
             $plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
             if ($plateImage !== FALSE) {
-                imagejpeg($plateImage, make_image_filename($prefix, ',p'));
+                $application->carInfo->plateImage = make_image_url($prefix, $type . 'p');
+                imagejpeg($plateImage, $application->carInfo->plateImage);
             }
 
             $recydywa = $storage->getRecydywa($result["plate"]);
@@ -120,13 +122,12 @@ function _upload(){
             $application->carInfo->plateId = strtoupper($result["plate"]);
             $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
             $application->carInfo->brand = ucfirst($result["vehicle"]['make'][0]['name']);
-            $application->carInfo->plateImage = make_image_url($prefix, ',p');
             $application->carInfo->recydywa = $recydywa;
         }
     }else if($pictureType == 'contextImage'){
         $application->contextImage = new stdClass();
-        $application->contextImage->url = make_image_url($prefix);
-        $application->contextImage->thumb = make_image_url($prefix, ',t');
+        $application->contextImage->url = make_image_url($prefix, $type);
+        $application->contextImage->thumb = make_image_url($prefix, $type . 't');
     }else{
         raiseError("Uknown picture type: " . $pictureType, 400);
     }
@@ -149,13 +150,14 @@ function _upload(){
  * Returns:
  *   $prefix
 */
-function save_img_and_thumb($image_bytes){
-    $prefix = "cdn/" . guidv4();
+function save_img_and_thumb($application, $image_bytes, $type){
+    $prefix = "cdn/" . $application->user->number . '/' . $application->id;
+    make_application_directory($prefix);
     
-    $filename  = make_image_filename($prefix);
-    $thumbname = make_image_filename($prefix, ',t');
+    $filename  = make_image_filename($prefix, $type);
+    $thumbname = make_image_filename($prefix, $type . 't');
 
-    $ifp = @fopen(make_image_filename($prefix), 'wb');
+    $ifp = @fopen($filename, 'wb');
     if($ifp === false){
         raiseError("Can't open $filename for write", 500);
     }
@@ -175,12 +177,16 @@ function save_img_and_thumb($image_bytes){
 /**
  * Generates fill filename from given $prefix and $suffix.
  */
-function make_image_filename($prefix, $suffix = ''){
-	return __DIR__ . "/../../../$prefix$suffix.jpg";
+function make_image_filename($prefix, $type){
+	return __DIR__ . "/../../../$prefix$type.jpg";
 }
 
-function make_image_url($prefix, $suffix = ''){
-    return "$prefix$suffix.jpg";
+function make_application_directory($prefix){
+    mkdir(__DIR__ . "/../../../$prefix", 0755, true);
+}
+
+function make_image_url($prefix, $type){
+    return "$prefix$type.jpg";
 }
 
 /**

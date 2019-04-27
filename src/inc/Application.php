@@ -17,11 +17,14 @@ class Application extends JSONObject{
             return;
         }
         global $storage;
+        $user = $storage->getCurrentUser();
+
         $this->date = null;
         $this->id = guidv4();
         $this->added = date(DT_FORMAT);
-        $this->user = $storage->getCurrentUser()->data;
-        $this->user->sex = guess_sex_by_name($this->user->name);
+        $this->user = $user->data;
+        $this->user->number = $user->getNumber();
+        $this->user->sex = guess_sex_by_name($user->name);
         $this->status = 'draft';
         $this->category = 7;
         $this->initStatements();
