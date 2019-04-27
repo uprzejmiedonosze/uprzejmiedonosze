@@ -216,7 +216,6 @@ function _sendSlackOnNewApp($app){
         "ts" => strtotime($app->date)
     ];
     _sendSlackAsync($msg, 1);
-    #@$client->from($app->user->name)->withIcon($_SESSION['user_picture'])->attach($msg)->send("");
 }
 
 /** 

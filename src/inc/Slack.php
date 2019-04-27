@@ -12,9 +12,9 @@ $channels = [
     'staging.uprzejmiedonosze.net-2' => 'https://hooks.slack.com/services/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'
 ];
 
-$msg = '';
-$type = 0;
-while(msg_receive($queue, 0, $type, 1000, $msg)){
+$msg = NULL;
+$type = NULL;
+while(msg_receive($queue, 0, $type, 2000, $msg)){
     if($channel = @$channels["%HOST%-$type"]){
         $client = new Maknz\Slack\Client($channel);
         if(is_array($msg)){
@@ -22,10 +22,9 @@ while(msg_receive($queue, 0, $type, 1000, $msg)){
         }else{
             $client->send($msg);
         }
-    }else{
-        echo "[not] sending data type $type\n";
-        print_r($msg);
     }
+    $msg = NULL;
+    $type = NULL;
 }
 
 ?>
