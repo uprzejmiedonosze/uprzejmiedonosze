@@ -7,7 +7,7 @@ build:
 
 runi:
 	@docker run --interactive --rm --publish 80:80/tcp \
-		--volume $(shell pwd)/../export:/var/www/uprzejmiedonosze.net/webapp --name webapp webapp:latest
+		--volume $(shell pwd)/../export:/var/www/uprzejmiedonosze.localhost/webapp --name webapp webapp:latest
 
 shell:
 	@docker exec -it webapp /bin/bash
