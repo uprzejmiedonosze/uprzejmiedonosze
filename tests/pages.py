@@ -286,6 +286,7 @@ class New(BasePage):
         assert self.driver.find_element(*Locators.NEW_WITNESS).get_attribute('value')
 
     def flip_witness_statement(self):
+        self.driver.execute_script("document.getElementById('witness').scrollIntoView(true);")
         self.driver.find_element(*Locators.NEW_WITNESSD).click()
 
     def test_expose_statement(self, value):

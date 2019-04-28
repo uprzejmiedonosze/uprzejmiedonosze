@@ -180,7 +180,7 @@ function _sendSlackOnRegister($user){
         "image_url" => @$_SESSION['user_picture'],
         "footer" => $user->data->address,
     ];
-    _sendSlackAsync($msg, 1);
+    _sendSlackAsync($msg, ('%HOST%' == 'uprzejmiedonosze.net')? 1: 11);
 }
 
 /**
@@ -215,23 +215,21 @@ function _sendSlackOnNewApp($app){
         "footer_icon" => "%HTTPS%://%HOST%/img/{$app->category}.jpg",
         "ts" => strtotime($app->date)
     ];
-    _sendSlackAsync($msg, 1);
+    _sendSlackAsync($msg, ('%HOST%' == 'uprzejmiedonosze.net')? 1: 11);
 }
 
 /** 
  * Sends message to #errors slack channel at uprzejmiedonosze.slack.com
  */
 function _sendSlackError($msg){
-    _sendSlackAsync($msg, 2);    
+    _sendSlackAsync($msg, ('%HOST%' == 'uprzejmiedonosze.net')? 2: 12);
 }
 
 /**
  * $type: 1 update, 2 error
  */
 function _sendSlackAsync($msg, $type){
-    $queue = msg_get_queue(
-        '%HOST%' != 'uprzejmiedonosze.net'? 8888: 9999
-    );
+    $queue = msg_get_queue(9999);
     return msg_send($queue, $type, $msg);
 }
 
