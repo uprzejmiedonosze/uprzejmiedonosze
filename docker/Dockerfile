@@ -1,5 +1,5 @@
 FROM nginx as webserver
-LABEL net.uprzejmiedonosze=0.0.2
+LABEL net.uprzejmiedonosze=0.0.1
 
 RUN apt-get update
 
@@ -22,10 +22,10 @@ RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn
 RUN mkdir -p             /var/www/uprzejmiedonosze.localhost/cdn2
 RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn2
 
-RUN mkdir                /var/log/uprzejmiedonosze.localhost
-RUN chown nginx:nginx    /var/log/uprzejmiedonosze.localhost
-RUN mkdir                /var/cache/uprzejmiedonosze.localhost
-RUN chown nginx:nginx    /var/cache/uprzejmiedonosze.localhost
+RUN mkdir                /var/log/uprzejmiedonosze.net
+RUN chown nginx:nginx    /var/log/uprzejmiedonosze.net
+RUN mkdir                /var/cache/uprzejmiedonosze.net
+RUN chown nginx:nginx    /var/cache/uprzejmiedonosze.net
 
 ADD default.conf         /etc/nginx/conf.d/default.conf
 ADD nginx.conf           /etc/nginx/nginx.conf
