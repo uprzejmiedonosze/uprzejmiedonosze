@@ -35,20 +35,25 @@ if($type !== 'application'){ // only applicationPDF is allowed if not logged in
     $userNumber = $application->getUserNumber();
 }
 
+$baseDir = ROOT . "cdn2/$userNumber";
+if(!file_exists($baseDir)){
+    mkdir($baseDir, 0755, true);
+}
+
 if($type == 'hearing'){
     $filename = $application->getSMPDFFilename();
-    $pdf = ROOT . "cdn2/$userNumber/$applicationId,sm.pdf";
+    $pdf = "$baseDir/$applicationId,sm.pdf";
 }else if($type == 'application'){
     $filename = $application->getAppPDFFilename();
-    $pdf = ROOT . "cdn2/$userNumber/$applicationId.pdf";
+    $pdf = "$baseDir/$applicationId.pdf";
 }else if($type == 'hearingAll'){
     $city = reset($application)->getSanitizedCity();
     $filename = "Dokumenty-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
-    $pdf = ROOT . "cdn2/$userNumber/$filename";
+    $pdf = "$baseDir/$filename";
 }else{ // readyApps
     $city = reset($application)->getSanitizedCity();
     $filename = "Zgloszenia-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
-    $pdf = ROOT . "cdn2/$userNumber/$filename";
+    $pdf = "$baseDir/$filename";
 }
 
 //if(!file_exists($pdf)){
