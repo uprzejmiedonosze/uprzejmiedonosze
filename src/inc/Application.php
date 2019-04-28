@@ -24,7 +24,7 @@ class Application extends JSONObject{
         $this->added = date(DT_FORMAT);
         $this->user = $user->data;
         $this->user->number = $user->getNumber();
-        $this->user->sex = guess_sex_by_name($user->name);
+        $this->user->sex = guess_sex_by_name($user->data->name);
         $this->status = 'draft';
         $this->category = 7;
         $this->initStatements();
