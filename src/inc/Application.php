@@ -149,6 +149,13 @@ class Application extends JSONObject{
         return SM_ADDRESSES['_nieznane'];
     }
 
+    /**
+     * Returns application city in a filename-friendly format.
+     */
+    public function getSanitizedCity(){
+        return mb_ereg_replace("([^\w\d])", '-', $this->guessSMData()[2]);
+    }
+
     public function guessUserSex(){
         if(!isset($this->user->sex)){
             $this->user->sex = guess_sex_by_name($this->user->name);
