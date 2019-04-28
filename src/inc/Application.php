@@ -17,10 +17,13 @@ class Application extends JSONObject{
             return;
         }
         global $storage;
+        $user = $storage->getCurrentUser();
+
         $this->date = null;
         $this->id = guidv4();
         $this->added = date(DT_FORMAT);
-        $this->user = $storage->getCurrentUser()->data;
+        $this->user = $user->data;
+        $this->user->number = $user->getNumber();
         $this->user->sex = guess_sex_by_name($this->user->name);
         $this->status = 'draft';
         $this->category = 7;
@@ -49,6 +52,25 @@ class Application extends JSONObject{
         return (new DateTime($this->date))->format('H:i');
     }
 
+    /**
+     * Returns application number (UD/X/Y)
+     */
+    public function getNumber(){
+        return $this->number;
+    }
+
+    /**
+     * Returns (lazy initialized) User number.
+     */
+    public function getUserNumber(){
+        if(isset($this->user->number)){
+            return $this->user->number;
+        }
+        global $storage;
+        $user = $storage->getUser($this->user->email);
+        $this->user->number = $user->number;
+        return $this->user->number;
+    }
     /**
      * Returns 'około godziny' or 'o godzinie'.
      */
@@ -125,6 +147,13 @@ class Application extends JSONObject{
             }
         }
         return SM_ADDRESSES['_nieznane'];
+    }
+
+    /**
+     * Returns application city in a filename-friendly format.
+     */
+    public function getSanitizedCity(){
+        return mb_ereg_replace("([^\w\d])", '-', $this->guessSMData()[2]);
     }
 
     public function guessUserSex(){

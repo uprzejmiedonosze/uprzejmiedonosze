@@ -14,11 +14,13 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV HOME /root
 
-RUN mkdir -p             /var/www/uprzejmiedonosze.net
-COPY db                  /var/www/uprzejmiedonosze.net/db
-RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.net/db
-COPY cdn                 /var/www/uprzejmiedonosze.net/cdn
-RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.net/cdn
+RUN mkdir -p             /var/www/uprzejmiedonosze.localhost
+COPY db                  /var/www/uprzejmiedonosze.localhost/db
+RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/db
+COPY cdn                 /var/www/uprzejmiedonosze.localhost/cdn
+RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn
+RUN mkdir -p             /var/www/uprzejmiedonosze.localhost/cdn2
+RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn2
 
 RUN mkdir                /var/log/uprzejmiedonosze.net
 RUN chown nginx:nginx    /var/log/uprzejmiedonosze.net
