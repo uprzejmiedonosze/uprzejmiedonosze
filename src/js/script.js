@@ -341,7 +341,7 @@ function sendFile(fileData, id) {
                 $('.' + id + 'Section input').textinput('disable');
                 $('.' + id + 'Section .loader').hide();
                 $('.' + id + 'Section img').css('height', '100%');
-                $('.' + id + 'Section img').attr("src", json[id].thumb);
+                $('.' + id + 'Section img').attr("src", json[id].thumb + '?v=' + Math.random().toString());
                 $('.' + id + 'Section img').show();
             }
             if (id == 'carImage' && json.carInfo) {
@@ -357,7 +357,7 @@ function sendFile(fileData, id) {
                     $('#plateId').removeClass('error');
                 }
                 if (json.carInfo.plateImage) {
-                    $('#plateImage').attr("src", json.carInfo.plateImage);
+                    $('#plateImage').attr("src", json.carInfo.plateImage + '?v=' + Math.random().toString());
                     $('#plateImage').show();
                 } else {
                     $('#plateImage').hide();

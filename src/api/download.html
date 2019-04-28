@@ -1,7 +1,7 @@
 <?PHP
 require(__DIR__ . '/../../inc/include.php');
 
-const ROOT = __DIR__ . "/../../..";
+const ROOT = '/var/www/%HOST%/';
 
 $type = 'application';                               // download application PDF for specific application
 if(isset($_GET['hearing'])) $type = 'hearing';       // download hearing PDF for SM for specific application
@@ -30,20 +30,25 @@ if($type == 'application' || $type == 'hearing'){    // specific ID is needed
 if($type !== 'application'){ // only applicationPDF is allowed if not logged in
     checkIfLogged();
     $user = $storage->getCurrentUser();
+    $userNumber = $user->number;
+}else{
+    $userNumber = $application->getUserNumber();
 }
 
 if($type == 'hearing'){
     $filename = $application->getSMPDFFilename();
-    $pdf = ROOT . "/cdn/$applicationId,sm.pdf";
+    $pdf = ROOT . "cdn2/$userNumber/$applicationId,sm.pdf";
 }else if($type == 'application'){
     $filename = $application->getAppPDFFilename();
-    $pdf = ROOT . "/cdn/$applicationId.pdf";
+    $pdf = ROOT . "cdn2/$userNumber/$applicationId.pdf";
 }else if($type == 'hearingAll'){
-    $filename = 'Dokumenty-' . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
-    $pdf = '/tmp/' . $filename;
+    $city = reset($application)->getSanitizedCity();
+    $filename = "Dokumenty-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
+    $pdf = ROOT . "cdn2/$userNumber/$filename";
 }else{ // readyApps
-    $filename = 'Zgloszenia-' . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
-    $pdf = '/tmp/' . $filename;
+    $city = reset($application)->getSanitizedCity();
+    $filename = "Zgloszenia-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
+    $pdf = ROOT . "cdn2/$userNumber/$filename";
 }
 
 //if(!file_exists($pdf)){

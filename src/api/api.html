@@ -69,6 +69,10 @@ function cmp($a, $b){
     return 0;
 }
 
+/**
+ * Saves uploaded image + automatically create thumbnail + read plate data
+ * for `carImage`.
+ */
 function _upload(){
     global $_POST, $storage;
     $image_bytes = explode( ',', $_POST['image_data'])[1]; 
@@ -81,19 +85,22 @@ function _upload(){
         $application = new Application();
         $storage->saveApplication($application);
     }
-    $prefix = save_img_and_thumb($image_bytes);
+    $type = substr($pictureType, 0, 2);
+    $baseFileName = saveImgAndThumb($application, $image_bytes, $type);
 
     if($pictureType == 'carImage'){
         $car_info = get_car_info($image_bytes);
 
         $application->carImage = new stdClass();
-        $application->carImage->url = make_image_url($prefix);
-        $application->carImage->thumb = make_image_url($prefix, ',t');
+        $application->carImage->url = "$baseFileName,$type.jpg";
+        $application->carImage->thumb = "$baseFileName,$type,t.jpg";
 
         if(isset($car_info) && count($car_info["results"])){
             logger('ALPR (cost: ' . $car_info['credit_cost'] . ', this month: ' . 
                 $car_info['credits_monthly_used'] . ', out of: ' .
                 $car_info['credits_monthly_total'], true);
+
+            $application->carInfo = new stdClass();
 
             $result = (Array)$car_info['results'];
             usort($result, "cmp");
@@ -108,31 +115,29 @@ function _upload(){
                 $yes[] = $ojb->getY();
             }
 
-            $im = imagecreatefromjpeg(make_image_filename($prefix));
+            $im = imagecreatefromjpeg("/var/www/%HOST%/$baseFileName,$type.jpg");
             $plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
             if ($plateImage !== FALSE) {
-                imagejpeg($plateImage, make_image_filename($prefix, ',p'));
+
+                $application->carInfo->plateImage = "$baseFileName,$type,p.jpg";
+                imagejpeg($plateImage, '/var/www/%HOST%/' . $application->carInfo->plateImage);
             }
 
             $recydywa = $storage->getRecydywa($result["plate"]);
-
-            $application->carInfo = new stdClass();
             $application->carInfo->plateId = strtoupper($result["plate"]);
             $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
             $application->carInfo->brand = ucfirst($result["vehicle"]['make'][0]['name']);
-            $application->carInfo->plateImage = make_image_url($prefix, ',p');
             $application->carInfo->recydywa = $recydywa;
         }
     }else if($pictureType == 'contextImage'){
         $application->contextImage = new stdClass();
-        $application->contextImage->url = make_image_url($prefix);
-        $application->contextImage->thumb = make_image_url($prefix, ',t');
+        $application->contextImage->url = "$baseFileName,$type.jpg";
+        $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
     }else{
         raiseError("Uknown picture type: " . $pictureType, 400);
     }
 
     $storage->saveApplication($application);
-
     echo json_encode($application);
 }
 
@@ -143,44 +148,35 @@ function _upload(){
  */
 
 /**
- * Saves byte_stream to `__DIR__/../../../cdn/$prefix.jpg`
- * and it's thumb to    `__DIR__/../../../cdn/$prefix,t.jpg`.
+ * Saves byte_stream to `ROOT/userId/appId,type.jpg`
+ * and it's thumb to    `ROOT/userId/appId,typet.jpg`
  * 
  * Returns:
  *   $prefix
 */
-function save_img_and_thumb($image_bytes){
-    $prefix = "cdn/" . guidv4();
+function saveImgAndThumb($application, $image_bytes, $type){
+    $baseDir = 'cdn2/' . $application->getUserNumber();
+    if(!file_exists('/var/www/%HOST%/' . $baseDir)){
+        mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
+    }
+    $baseFileName = $baseDir . '/' . $application->id;
     
-    $filename  = make_image_filename($prefix);
-    $thumbname = make_image_filename($prefix, ',t');
-
-    $ifp = @fopen(make_image_filename($prefix), 'wb');
+    $fileName     = "/var/www/%HOST%/$baseFileName,$type.jpg";
+    $thumbName    = "/var/www/%HOST%/$baseFileName,$type,t.jpg";
+    $ifp = @fopen($fileName, 'wb');
     if($ifp === false){
-        raiseError("Can't open $filename for write", 500);
+        raiseError("Can't open $fileName for write", 500);
     }
     
 	if(fwrite($ifp, base64_decode($image_bytes)) === false){
-        raiseError("Can't write to $filename", 500);
+        raiseError("Can't write to $fileName", 500);
     }
     fclose($ifp);
 
-	if(!imagejpeg(resize_image($filename, 600, 600, false), $thumbname)){
-        logger("Wasn't able to write $filename as thumb to $thumbname.", true);
+	if(!imagejpeg(resize_image($fileName, 600, 600, false), $thumbName)){
+        logger("Wasn't able to write $fileName as thumb to $thumbName.", true);
     }
-
-	return $prefix;
-}
-
-/**
- * Generates fill filename from given $prefix and $suffix.
- */
-function make_image_filename($prefix, $suffix = ''){
-	return __DIR__ . "/../../../$prefix$suffix.jpg";
-}
-
-function make_image_url($prefix, $suffix = ''){
-    return "$prefix$suffix.jpg";
+    return $baseFileName;
 }
 
 /**
