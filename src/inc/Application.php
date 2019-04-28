@@ -53,6 +53,25 @@ class Application extends JSONObject{
     }
 
     /**
+     * Returns application number (UD/X/Y)
+     */
+    public function getNumber(){
+        return $this->number;
+    }
+
+    /**
+     * Returns (lazy initialized) User number.
+     */
+    public function getUserNumber(){
+        if(isset($this->user->number)){
+            return $this->user->number;
+        }
+        global $storage;
+        $user = $storage->getUser($this->user->email);
+        $this->user->number = $user->number;
+        return $this->user->number;
+    }
+    /**
      * Returns 'około godziny' or 'o godzinie'.
      */
     public function getDateTimeDivider(){

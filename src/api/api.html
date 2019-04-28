@@ -154,7 +154,7 @@ function _upload(){
  *   $prefix
 */
 function saveImgAndThumb($application, $image_bytes, $type){
-    $baseDir = 'cdn2/' . $application->user->number;
+    $baseDir = 'cdn2/' . $application->getUserNumber();
     if(!file_exists('/var/www/%HOST%/' . $baseDir)){
         mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
     }
