@@ -137,6 +137,7 @@ function _upload(){
         raiseError("Uknown picture type: " . $pictureType, 400);
     }
 
+    $storage->saveApplication($application);
     echo json_encode($application);
 }
 
