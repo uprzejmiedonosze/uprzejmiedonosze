@@ -180,20 +180,6 @@ class DB extends NoSQLite{
         return $ret;
     }
 
-    public function removeApplication($appId){
-        if(!$this->getCurrentUser()->isAdmin()){
-            throw new Exception('Dostęp zabroniony.');
-        }
-        $this->apps->delete($appId);
-    }
-
-    public function removeUser($email){
-        if(!$this->getCurrentUser()->isAdmin()){
-            throw new Exception('Dostęp zabroniony.');
-        }
-        $this->users->delete($email);
-    }
-
     public function execute($sql){
         if(!$this->getCurrentUser()->isAdmin()){
             throw new Exception('Dostęp zabroniony.');
