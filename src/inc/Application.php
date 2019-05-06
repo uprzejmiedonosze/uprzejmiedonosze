@@ -28,6 +28,7 @@ class Application extends JSONObject{
         $this->status = 'draft';
         $this->category = 7;
         $this->initStatements();
+        $this->version = '1.0.0';
     }
 
     public function initStatements(){
