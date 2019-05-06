@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../inc/NoSQLite.php');
 require_once(__DIR__ . '/../inc/Application.php');
+require_once(__DIR__ . '/../inc/User.php');
 require_once(__DIR__ . '/../inc/config.php');
 
 class AdminToolsDB extends NoSQLite{
@@ -15,41 +16,44 @@ class AdminToolsDB extends NoSQLite{
     /**
     * Removes old drafts and it's files.
     */
-    public function removeDrafts($olderThan = 10){ // days
-        $this->_removeAppsByStatus($olderThan, 'draft');
+    public function removeDrafts($olderThan = 10, $dryRun = true){ // days
+        $this->_removeAppsByStatus($olderThan, 'draft', $dryRun);
     }
 
     /**
     * Removes old apps in ready status and it's files.
     */
-    public function removeReadyApps($olderThan = 30){
-        $this->_removeAppsByStatus($olderThan, 'ready');
+    public function removeReadyApps($olderThan = 30, $dryRun = true){
+        $this->_removeAppsByStatus($olderThan, 'ready', $dryRun);
     }
 
     /**
      * Removes user by given $email
      */
-    public function removeUser($email){
+    public function removeUser($email, $dryRun = true){
         if(!isset($email)){
-            throw new Exception('No email provided');
+            throw new Exception("No email provided\n");
         }
     
         $email = SQLite3::escapeString($email);
     
-        try{
-            $user = $this->db->getStore('users')->get($email);
-        }catch(Exception $e){
+        $userJson = $this->getStore('users')->get($email);
+        if(!$userJson){
             throw new Exception("Trying to remove nonesiting user: $email");
         }
+        $user = new User($userJson);
 
         $apps = $this->_getAllApplicationsByEmail($email);
     
         echo "Usuwam wszytkie zgłoszenia użytkownika '$email'\n";
         foreach($apps as $app){
-            $this->_removeApplication($app);
+            $this->_removeApplication($app, $dryRun);
         }
     
         echo "Zamazuję dane użytkownika w bazie\n";
+        if($dryRun){
+            return;
+        }
         // adding empty user under a different key
         $time = date(DT_FORMAT);
         $user->data->name = 'DELETED';
@@ -60,10 +64,10 @@ class AdminToolsDB extends NoSQLite{
     
         $user->deleted = $time;
         $user->applications = Array();
-        $this->db->getStore('users')->set($user->data->email, json_encode($user));
+        $this->getStore('users')->set($user->data->email, json_encode($user));
     
         // removing old user
-        $this->db->getStore('users')->delete($email);
+        $this->getStore('users')->delete($email);
     }
 
     //////////////////////// GENERICS ////////////////////////
@@ -72,7 +76,10 @@ class AdminToolsDB extends NoSQLite{
      * Removes application
      */
     private function _removeApplication($app, $dryRun = true){
-        echo "Usuwam zgłoszenie $app->id użytkownika {$app->user->email} dodane {$app->added}\n";
+        $added = (isset($app->added))? " dodane {$app->added}": "";
+        $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
+        $status = STATUSES[$app->status][0];
+        echo "Usuwam zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
         if(isset($app->carImage)){
             $this->_removeFile($app->carImage->url, $dryRun);
             $this->_removeFile($app->carImage->thumb, $dryRun);
@@ -81,20 +88,23 @@ class AdminToolsDB extends NoSQLite{
             $this->_removeFile($app->contextImage->url, $dryRun);
             $this->_removeFile($app->contextImage->thumb, $dryRun);
         }
-        if(isset($app->carInfo)){
+        if(isset($app->carInfo) && isset($app->carInfo->plateImage)){
             $this->_removeFile($app->carInfo->plateImage, $dryRun);
         }
 
-        if(preg_match('/^.?cdn2\//', $app->carImage->url)){
-        }
+        //if(preg_match('/^.?cdn2\//', $app->carImage->url)){
+        //}
 
-        $this->db->getStore('applications')->delete($app->id);
-        echo " - zgłoszenie oraz jego pliki usunięte;";
+        echo " zgłoszenie oraz jego pliki usunięte;\n\n";
+        if($dryRun){
+            return;
+        }
+        $this->getStore('applications')->delete($app->id);
     }
 
     private function _removeFile($fileName, $dryRun = true){
         $file = __DIR__ . "/../$fileName";
-        if(!isset($file)){
+        if(!isset($file) || empty($fileName)){
             return;
         }
         if(!file_exists($file)){
@@ -110,7 +120,7 @@ class AdminToolsDB extends NoSQLite{
     /**
     * Generic function to remove apps by status
      */
-    private function _removeAppsByStatus($olderThan, $status){ // days
+    private function _removeAppsByStatus($olderThan, $status, $dryRun = true){ // days
         if($status !== 'draft' && $status !== 'ready'){
             throw new Exception("Refuse to remove apps in '$status' status.");
         }
@@ -131,7 +141,7 @@ class AdminToolsDB extends NoSQLite{
             if($app->status !== $status) { // just for safety
                 continue;
             }
-            $this->_removeApplication($app);
+            $this->_removeApplication($app, $dryRun);
         }
     }
 
@@ -140,7 +150,7 @@ class AdminToolsDB extends NoSQLite{
      */
     private function _getAllApplicationsByStatus($status){
         $sql = <<<SQL
-            select value
+            select key, value
             from applications
             where json_extract(value, '$.status') = :status;
 SQL;
@@ -160,7 +170,7 @@ SQL;
      */
     private function _getAllApplicationsByEmail($email){
         $sql = <<<SQL
-            select value
+            select key, value
             from applications
             where json_extract(value, '$.user.email') = :email;
 SQL;
@@ -178,9 +188,10 @@ SQL;
 
 }
 
-$db = new ToolsDB();
+$db = new AdminToolsDB();
 
-$db->removeDrafts(10, 'draft');
-$db->removeDrafts(30, 'ready');
+//$db->removeDrafts(10, 'draft');
+//$db->removeDrafts(30, 'ready');
 
+$db->removeUser('szymon@nieradka.net');
 ?>
