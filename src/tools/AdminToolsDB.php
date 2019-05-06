@@ -49,6 +49,14 @@ class AdminToolsDB extends NoSQLite{
         foreach($apps as $app){
             $this->_removeApplication($app, $dryRun);
         }
+
+        $cdn2UserFolder = __DIR__ . "/../cdn2/{$user->number}/";
+        if(file_exists($cdn2UserFolder) && filetype($cdn2UserFolder) == 'dir'){
+            echo "Kasuję folder użytkownika\n";
+            if(!$dryRun){
+                rmdir($cdn2UserFolder);// TODO this shit is not working
+            }
+        }
     
         echo "Zamazuję dane użytkownika w bazie\n";
         if($dryRun){
@@ -68,6 +76,10 @@ class AdminToolsDB extends NoSQLite{
     
         // removing old user
         $this->getStore('users')->delete($email);
+    }
+
+    public function upgradeAllApps($version, $dryRun = true){
+        $this->_getAllApplicationsByStatus();
     }
 
     //////////////////////// GENERICS ////////////////////////
@@ -109,6 +121,10 @@ class AdminToolsDB extends NoSQLite{
         }
         if(!file_exists($file)){
             echo " ! plik '$fileName' nie istnieje\n";
+            return;
+        }
+        if(filetype($file) !== 'file'){
+            echo " ! '$fileName' nie jest plikiem\n";
             return;
         }
         echo " - usuwam '$fileName'\n";
@@ -193,5 +209,5 @@ $db = new AdminToolsDB();
 //$db->removeDrafts(10, 'draft');
 //$db->removeDrafts(30, 'ready');
 
-$db->removeUser('szymon@nieradka.net');
+$db->removeUser('szymon@nieradka.net', false);
 ?>
