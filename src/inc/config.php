@@ -150,6 +150,8 @@ const SM_ADDRESSES = Array (
         'komenda@sm.erzeszow.pl', ' Rzeszów'],
     'łosice' => ['Straż Miejska Łosice \\\\ Handlowa 7 \\\\ Łosice 08-200',
         'straz-miejska@gminalosice.pl', 'Łosice'],
+    'sieradz' => ['Straż Miejska w Sieradzu \\\\ ul. Kościuszki 6 \\\\ 98-200 Sieradz',
+        'sm@umsieradz.pl', 'Sieradz'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
