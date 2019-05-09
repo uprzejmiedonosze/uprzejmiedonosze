@@ -54,7 +54,9 @@ class AdminToolsDB extends NoSQLite{
         if(file_exists($cdn2UserFolder) && filetype($cdn2UserFolder) == 'dir'){
             echo "Kasuję folder użytkownika\n";
             if(!$dryRun){
-                rmdir($cdn2UserFolder);// TODO this shit is not working
+                $cmd = sprintf("rm -rf %s", escapeshellarg($cdn2UserFolder));
+                exec($cmd, $output);
+                unset($output);
             }
         }
     
@@ -79,7 +81,11 @@ class AdminToolsDB extends NoSQLite{
     }
 
     public function upgradeAllApps($version, $dryRun = true){
-        $this->_getAllApplicationsByStatus();
+        $apps = $this->_getAllApplicationsByStatus('confirmed');
+        foreach($apps as $app){
+            $app->version = $version;
+            $this->_migrateApplication($app, $dryRun);
+        }
     }
 
     //////////////////////// GENERICS ////////////////////////
@@ -201,6 +207,70 @@ SQL;
         return $apps;
     }
 
+    /**
+     * Moves files from CDN to CDN2
+     */
+    private function _migrateApplication($app, $dryRun = true){
+        $added = (isset($app->added))? " dodane {$app->added}": "";
+        $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
+        $status = STATUSES[$app->status][0];
+        echo "Migruję zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
+
+        if(!isset($app->user->number)){
+            $user = new User($this->getStore('users')->get($app->user->email));
+            $app->user->number = $user->number;
+        }
+        $baseDir = 'cdn2/' . $app->user->number;
+
+        if(!file_exists(__DIR__ . "/../$baseDir")){
+            mkdir(__DIR__ . "/../$baseDir", 0755, true);
+        }
+        $baseFileName = $baseDir . '/' . $app->id;
+        
+        if(isset($app->carImage)){
+            $this->_moveFileToCDN2($app->carImage->url, "$baseFileName,ca.jpg", $dryRun);
+            $app->carImage->url = "$baseFileName,ca.jpg";
+            $this->_moveFileToCDN2($app->carImage->thumb, "$baseFileName,ca,t.jpg", $dryRun);
+            $app->carImage->thumb = "$baseFileName,ca,t.jpg";
+        }
+        if(isset($app->contextImage)){
+            $this->_moveFileToCDN2($app->contextImage->url, "$baseFileName,co.jpg", $dryRun);
+            if($dryRun) $app->contextImage->url = "$baseFileName,co.jpg";
+            $this->_moveFileToCDN2($app->contextImage->thumb, "$baseFileName,co,t.jpg", $dryRun);
+            $app->contextImage->thumb = "$baseFileName,co,t.jpg";
+        }
+        if(isset($app->carInfo) && isset($app->carInfo->plateImage)){
+            $this->_moveFileToCDN2($app->carInfo->plateImage, "$baseFileName,ca,p.jpg", $dryRun);
+            $app->carInfo->plateImage = "$baseFileName,ca,p.jpg";
+        }
+        if($dryRun){
+            return;
+        }
+        $this->getStore('applications')->set($app->id, json_encode($app));
+    }
+
+    private function _moveFileToCDN2($from, $to, $dryRun = true){
+        $ffile = __DIR__ . "/../$from";
+        $tfile = __DIR__ . "/../$to";
+
+        if(!isset($ffile) || empty($from)){
+            return;
+        }
+        if(!file_exists($ffile)){
+            echo " ! plik '$from' nie istnieje\n";
+            return;
+        }
+        if(filetype($ffile) !== 'file'){
+            echo " ! '$from' nie jest plikiem\n";
+            return;
+        }
+        if(!preg_match('/^.?cdn2\//', $from)){
+            echo " - przenoszę '$from' z '$ffile' do '$tfile'\n";
+            if(!$dryRun){
+                rename($ffile, $tfile);
+            }    
+        }
+    }
 
 }
 
@@ -209,5 +279,7 @@ $db = new AdminToolsDB();
 //$db->removeDrafts(10, 'draft');
 //$db->removeDrafts(30, 'ready');
 
-$db->removeUser('szymon@nieradka.net', false);
+//$db->removeUser('szymon@nieradka.net', false);
+
+$db->upgradeAllApps('0.0.2', false);
 ?>
