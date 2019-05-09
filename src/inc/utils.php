@@ -9,6 +9,10 @@ function exception_handler($exception) {
     }
     $msg = $exception->getMessage() . " szkodnik: $email, " . $exception->getFile()
         . ':' . $exception->getLine() . "\n" . $exception->getTraceAsString();
+    if(posix_isatty(0)){
+        echo($msg . "\n");
+        return;
+    }
     $time = logger($msg, true);
 
     _sendSlackError($msg);
