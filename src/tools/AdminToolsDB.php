@@ -290,5 +290,5 @@ $db->removeDrafts(30, 'ready', false);
 
 //$db->removeUser('szymon@nieradka.net', false);
 
-$db->upgradeAllApps('0.0.2', false);
+$db->upgradeAllApps('1.0.1', false);
 ?>
