@@ -9,28 +9,28 @@ class AdminToolsDB extends NoSQLite{
     /**
      * Creates DB instance with default store location.
      */
-    public function __construct($store = __DIR__ . '/../db/store.sqlite') {
+    public function __construct($store = __DIR__ . '/../../db/store.sqlite') {
         parent::__construct($store);
     }
 
     /**
     * Removes old drafts and it's files.
     */
-    public function removeDrafts($olderThan = 10, $dryRun = true){ // days
+    public function removeDrafts($olderThan = 10, $dryRun){ // days
         $this->_removeAppsByStatus($olderThan, 'draft', $dryRun);
     }
 
     /**
     * Removes old apps in ready status and it's files.
     */
-    public function removeReadyApps($olderThan = 30, $dryRun = true){
+    public function removeReadyApps($olderThan = 30, $dryRun){
         $this->_removeAppsByStatus($olderThan, 'ready', $dryRun);
     }
 
     /**
      * Removes user by given $email
      */
-    public function removeUser($email, $dryRun = true){
+    public function removeUser($email, $dryRun){
         if(!isset($email)){
             throw new Exception("No email provided\n");
         }
@@ -50,7 +50,7 @@ class AdminToolsDB extends NoSQLite{
             $this->_removeApplication($app, $dryRun);
         }
 
-        $cdn2UserFolder = __DIR__ . "/../cdn2/{$user->number}/";
+        $cdn2UserFolder = __DIR__ . "/../../cdn2/{$user->number}/";
         if(file_exists($cdn2UserFolder) && filetype($cdn2UserFolder) == 'dir'){
             echo "Kasuję folder użytkownika\n";
             if(!$dryRun){
@@ -80,7 +80,7 @@ class AdminToolsDB extends NoSQLite{
         $this->getStore('users')->delete($email);
     }
 
-    public function upgradeAllApps($version, $dryRun = true){
+    public function upgradeAllApps($version, $dryRun){
         foreach(STATUSES as $st => $status ){
             if($status[3]){
                 echo "Migruję zgłoszenia o statusie '{$status[0]}'\n";
@@ -89,7 +89,7 @@ class AdminToolsDB extends NoSQLite{
         }
     }
 
-    public function upgradeAppsByStatus($version, $status, $dryRun = true){
+    public function upgradeAppsByStatus($version, $status, $dryRun){
         $apps = $this->_getAllApplicationsByStatus($status);
         foreach($apps as $app){
             $app->version = $version;
@@ -102,11 +102,12 @@ class AdminToolsDB extends NoSQLite{
     /**
      * Removes application
      */
-    private function _removeApplication($app, $dryRun = true){
+    private function _removeApplication($app, $dryRun){
         $added = (isset($app->added))? " dodane {$app->added}": "";
         $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
         $status = STATUSES[$app->status][0];
-        echo "Usuwam zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
+        $email = (isset($app->user->email))? " użytkownika {$app->user->email}": " użytkownika @anonim";
+        echo "Usuwam zgłoszenie numer $number [$status]$email$added\n";
         if(isset($app->carImage)){
             $this->_removeFile($app->carImage->url, $dryRun);
             $this->_removeFile($app->carImage->thumb, $dryRun);
@@ -129,8 +130,8 @@ class AdminToolsDB extends NoSQLite{
         $this->getStore('applications')->delete($app->id);
     }
 
-    private function _removeFile($fileName, $dryRun = true){
-        $file = __DIR__ . "/../$fileName";
+    private function _removeFile($fileName, $dryRun){
+        $file = __DIR__ . "/../../$fileName";
         if(!isset($file) || empty($fileName)){
             return;
         }
@@ -151,7 +152,7 @@ class AdminToolsDB extends NoSQLite{
     /**
     * Generic function to remove apps by status
      */
-    private function _removeAppsByStatus($olderThan, $status, $dryRun = true){ // days
+    private function _removeAppsByStatus($olderThan, $status, $dryRun){ // days
         if($status !== 'draft' && $status !== 'ready'){
             throw new Exception("Refuse to remove apps in '$status' status.");
         }
@@ -219,7 +220,7 @@ SQL;
     /**
      * Moves files from CDN to CDN2
      */
-    private function _migrateApplication($app, $dryRun = true){
+    private function _migrateApplication($app, $dryRun){
         $added = (isset($app->added))? " dodane {$app->added}": "";
         $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
         $status = STATUSES[$app->status][0];
@@ -231,8 +232,8 @@ SQL;
         }
         $baseDir = 'cdn2/' . $app->user->number;
 
-        if(!file_exists(__DIR__ . "/../$baseDir")){
-            mkdir(__DIR__ . "/../$baseDir", 0755, true);
+        if(!file_exists(__DIR__ . "/../../$baseDir")){
+            mkdir(__DIR__ . "/../../$baseDir", 0755, true);
         }
         $baseFileName = $baseDir . '/' . $app->id;
         
@@ -244,7 +245,7 @@ SQL;
         }
         if(isset($app->contextImage)){
             $this->_moveFileToCDN2($app->contextImage->url, "$baseFileName,co.jpg", $dryRun);
-            if($dryRun) $app->contextImage->url = "$baseFileName,co.jpg";
+            $app->contextImage->url = "$baseFileName,co.jpg";
             $this->_moveFileToCDN2($app->contextImage->thumb, "$baseFileName,co,t.jpg", $dryRun);
             $app->contextImage->thumb = "$baseFileName,co,t.jpg";
         }
@@ -258,9 +259,9 @@ SQL;
         $this->getStore('applications')->set($app->id, json_encode($app));
     }
 
-    private function _moveFileToCDN2($from, $to, $dryRun = true){
-        $ffile = __DIR__ . "/../$from";
-        $tfile = __DIR__ . "/../$to";
+    private function _moveFileToCDN2($from, $to, $dryRun){
+        $ffile = __DIR__ . "/../../$from";
+        $tfile = __DIR__ . "/../../$to";
 
         if(!isset($ffile) || empty($from)){
             return;
@@ -285,8 +286,8 @@ SQL;
 
 $db = new AdminToolsDB();
 
-$db->removeDrafts(10, 'draft', false);
-$db->removeDrafts(30, 'ready', false);
+$db->removeDrafts(10, false);
+$db->removeReadyApps(30, false);
 
 //$db->removeUser('szymon@nieradka.net', false);
 
