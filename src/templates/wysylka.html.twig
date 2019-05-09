@@ -25,7 +25,7 @@
 
     {% if apps|length == 1 %}
         {% set zgloszen = 'znajduje się jedno zgłoszenie' %}
-    {% elseif apps|length < 5 %}
+    {% elseif apps|length < 5 or (apps|length > 20 and apps|length % 10 in [2, 3, 4] ) %}
         {% set zgloszen = 'znajdują się ' ~ apps|length ~ ' zgłoszenia' %}
     {% else %}
         {% set zgloszen = 'znajduje się ' ~ apps|length ~ ' zgłoszeń' %}
@@ -40,7 +40,6 @@ Pozdrawiam,
 ' ~ user.data.name %}
 
 {% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
-
     <ol>
         <li>Najpierw 
             <a id="download" href="all-active-apps.pdf?readyApps" download="true" data-ajax="false"
