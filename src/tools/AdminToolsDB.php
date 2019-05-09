@@ -81,7 +81,16 @@ class AdminToolsDB extends NoSQLite{
     }
 
     public function upgradeAllApps($version, $dryRun = true){
-        $apps = $this->_getAllApplicationsByStatus('confirmed');
+        foreach(STATUSES as $st => $status ){
+            if($status[3]){
+                echo "Migruję zgłoszenia o statusie '{$status[0]}'\n";
+                $this->upgradeAppsByStatus($version, $st, $dryRun);
+            }
+        }
+    }
+
+    public function upgradeAppsByStatus($version, $status, $dryRun = true){
+        $apps = $this->_getAllApplicationsByStatus($status);
         foreach($apps as $app){
             $app->version = $version;
             $this->_migrateApplication($app, $dryRun);
@@ -265,7 +274,7 @@ SQL;
             return;
         }
         if(!preg_match('/^.?cdn2\//', $from)){
-            echo " - przenoszę '$from' z '$ffile' do '$tfile'\n";
+            echo " - przenoszę '$from' do '$tfile'\n";
             if(!$dryRun){
                 rename($ffile, $tfile);
             }    
@@ -276,8 +285,8 @@ SQL;
 
 $db = new AdminToolsDB();
 
-//$db->removeDrafts(10, 'draft');
-//$db->removeDrafts(30, 'ready');
+$db->removeDrafts(10, 'draft', false);
+$db->removeDrafts(30, 'ready', false);
 
 //$db->removeUser('szymon@nieradka.net', false);
 
