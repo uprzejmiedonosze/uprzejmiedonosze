@@ -83,7 +83,7 @@ class AdminToolsDB extends NoSQLite{
     public function upgradeAllApps($version, $dryRun){
         foreach(STATUSES as $st => $status ){
             if($status[3]){
-                echo "Migruję zgłoszenia o statusie '{$status[0]}'\n";
+                echo "\nMigruję zgłoszenia o statusie '{$status[0]}'\n";
                 $this->upgradeAppsByStatus($version, $st, $dryRun);
             }
         }
@@ -227,6 +227,9 @@ SQL;
         echo "Migruję zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
 
         if(!isset($app->user->number)){
+            if($app->user->email == 'zibi@nora.pl'){
+                $app->user->email = 'tapiau@gmail.com';
+            }
             $user = new User($this->getStore('users')->get($app->user->email));
             $app->user->number = $user->number;
         }
@@ -253,6 +256,8 @@ SQL;
             $this->_moveFileToCDN2($app->carInfo->plateImage, "$baseFileName,ca,p.jpg", $dryRun);
             $app->carInfo->plateImage = "$baseFileName,ca,p.jpg";
         }
+        $this->_moveFileToCDN2("cdn/{$app->id}.pdf", "$baseFileName.pdf", $dryRun);
+
         if($dryRun){
             return;
         }
