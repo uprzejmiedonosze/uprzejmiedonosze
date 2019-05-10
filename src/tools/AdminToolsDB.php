@@ -92,6 +92,9 @@ class AdminToolsDB extends NoSQLite{
     public function upgradeAppsByStatus($version, $status, $dryRun){
         $apps = $this->_getAllApplicationsByStatus($status);
         foreach($apps as $app){
+            if(isset($app->version) && $app->version == $version){
+                continue;
+            }
             $app->version = $version;
             $this->_migrateApplication($app, $dryRun);
         }
