@@ -43,7 +43,7 @@ HTTPS                := https
 BRANCH_ENV           := .branch-env
 GIT_BRANCH           := $(shell git rev-parse --abbrev-ref HEAD)
 LAST_RUN              = $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
-TAG_NAME             := $(shell echo prod_$(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
+TAG_NAME             := $(shell echo $(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
 
 .DEFAULT_GOAL        := help
 
@@ -72,8 +72,8 @@ staging: $(DIRS) export ## Copy files to staging server.
 prod: HOST := $(PROD_HOST)
 prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
-	@git tag -a $(TAG_NAME) -m "release na produkcji"
-	@git push origin --quiet $(TAG_NAME)
+	@git tag -a "prod_$(TAG_NAME)" -m "release na produkcji"
+	@git push origin --quiet "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	@make clean
 
