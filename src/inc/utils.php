@@ -233,8 +233,8 @@ function _sendSlackError($msg){
  * $type: 1 update, 2 error
  */
 function _sendSlackAsync($msg, $type){
-    $queue = msg_get_queue(9999);
-    return msg_send($queue, $type, $msg);
+    $queue = msg_get_queue(9997);
+    return msg_send($queue, $type, $msg, true, false);
 }
 
 ?>

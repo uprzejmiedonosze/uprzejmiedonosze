@@ -1,9 +1,7 @@
 <?PHP
 require __DIR__ . '/../vendor/autoload.php';
 
-$queue = msg_get_queue(
-    '%HOST%' != 'uprzejmiedonosze.net'? 8888: 9999
-);
+$queue = msg_get_queue(9997);
 
 $channels = [
     1 => 'https://hooks.slack.com/services/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', // prod
@@ -14,7 +12,7 @@ $channels = [
 
 $msg = NULL;
 $type = NULL;
-while(msg_receive($queue, 0, $type, 2000, $msg)){
+while(msg_receive($queue, 0, $type, 20000, $msg)){
     if($channel = @$channels[intval($type)]){
         $client = new Maknz\Slack\Client($channel);
         if(is_array($msg)){
