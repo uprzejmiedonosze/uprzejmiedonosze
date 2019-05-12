@@ -79,6 +79,7 @@ $(document).on('pageshow', function () {
 /* ############################## ADDRESS AUTOCOMPLETE ############################## */
 
 var autocomplete;
+let locationP;
 
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnRegister() {
@@ -88,6 +89,26 @@ function initAutocompleteOnRegister() {
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnNewApplication() {
     initAutocomplete(true, 'lokalizacja');
+
+    locationP = new locationPicker('locationPicker', {
+        setCurrentPosition: false,
+        lat: 53.426333778,
+        lng: 14.554599583
+    }, {
+        disableDefaultUI: true,
+        scrollwheel: false,
+        zoomControl: true,
+        controlSize: 25,
+        mapTypeId: google.maps.MapTypeId.SATTELITE,
+        zoom: 16,
+        minZoom: 10,
+        maxZoom: 19
+    });
+
+    google.maps.event.addListener(locationP.map, 'idle', function () {
+        var location = locationP.getMarkerPosition();
+        setAddressByLatLng(location.lat, location.lng, 'picker');
+    });
 }
 
 function initAutocomplete(trigger_change, inputId) {
@@ -107,10 +128,10 @@ function initAutocomplete(trigger_change, inputId) {
 
 /* ############################## ADDRESS ############################## */
 
-function setAddressByLatLng(latlng, fromPicture) {
+function setAddressByLatLng(lat, lng, from) {
     $('a#geo').buttonMarkup({ icon: "clock" });
     $('#lokalizacja').val("");
-    if (fromPicture) {
+    if (from == 'picture') {
         $('#lokalizacja').attr("placeholder", "(pobieram adres ze zdjęcia...)");
     } else {
         $('#lokalizacja').attr("placeholder", "(weryfikuję adres...)");
@@ -120,12 +141,16 @@ function setAddressByLatLng(latlng, fromPicture) {
     $('#locality').val("");
     $('#latlng').val("");
 
+    if(from !== 'picker'){
+        locationP.setLocation(lat, lng);
+    }
+
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
-        + latlng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
+        + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
             if (data.results.length) {
                 setAddressByPlace(data.results[0]);
 
-                if (fromPicture) {
+                if (from == 'picture') {
                     $('#addressHint').text('Sprawdź automatycznie pobrany adres');
                     $('#addressHint').addClass('hint');
                 }else{
@@ -305,7 +330,7 @@ function readGeoDataFromImage(file) {
             if (lat) {
                 lat = (parseFloat(lat[0]) + parseFloat(lat[1]) / 60 + parseFloat(lat[2]) / 3600) * (latRef == "N" ? 1 : -1);
                 lon = (parseFloat(lon[0]) + parseFloat(lon[1]) / 60 + parseFloat(lon[2]) / 3600) * (lonRef == "W" ? -1 : 1);
-                setAddressByLatLng(lat + ',' + lon, true);
+                setAddressByLatLng(lat, lon, 'picture');
             } else {
                 noGeoDataInImage();
             }
