@@ -88,8 +88,6 @@ function initAutocompleteOnRegister() {
 
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnNewApplication() {
-    initAutocomplete(true, 'lokalizacja');
-
     locationP = new locationPicker('locationPicker', {
         setCurrentPosition: false,
         lat: 53.426333778,
