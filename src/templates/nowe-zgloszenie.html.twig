@@ -56,7 +56,7 @@
         </div>
 
         <label for="lokalizacja" id="addressHint">Wskaż lokalizację na mapie</label>
-        <div class="ui-grid-a ui-responsive">
+        <div class="ui-grid-a ui-responsive images">
             <div class="ui-block-a">
                 <div id="locationPicker" style="width: 100%; height: 200px;"></div>
             </div>
@@ -155,4 +155,7 @@
 <script src="js/luxon.min-%JS_HASH%.js"></script>
 
 <script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
+<script>
+    setAddressByLatLngString('{{ app.address.latlng ?? '' }}');
+</script>
 {% endblock %}
