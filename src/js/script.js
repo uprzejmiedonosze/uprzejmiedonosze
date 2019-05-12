@@ -132,7 +132,7 @@ function setAddressByLatLng(lat, lng, from) {
     if (from == 'picture') {
         $('#lokalizacja').attr("placeholder", "(pobieram adres ze zdjęcia...)");
     } else {
-        $('#lokalizacja').attr("placeholder", "(weryfikuję adres...)");
+        $('#lokalizacja').attr("placeholder", "(pobieram adres z mapy...)");
     }
     $('#administrative_area_level_1').val("");
     $('#country').val("");
@@ -148,17 +148,12 @@ function setAddressByLatLng(lat, lng, from) {
             if (data.results.length) {
                 setAddressByPlace(data.results[0]);
 
-                if (from == 'picture') {
-                    $('#addressHint').text('Sprawdź automatycznie pobrany adres');
-                    $('#addressHint').addClass('hint');
-                }else{
-                    $('#addressHint').text('Zweryfikuj pobrany adres');
-                    $('#addressHint').addClass('hint');
-                }
+                $('#addressHint').text('Sprawdź automatycznie pobrany adres');
+                $('#addressHint').addClass('hint');
             } else {
                 $('#lokalizacja').addClass('error');
                 $('a#geo').buttonMarkup({ icon: "location" });
-                $('#addressHint').text('(zacznij wpisywać adres)');
+                $('#addressHint').text('Wskaż lokalizację na mapie');
                 $('#addressHint').removeClass('hint');
             }
         }).fail(function () {
@@ -166,7 +161,7 @@ function setAddressByLatLng(lat, lng, from) {
             $('#latlng').val("");
             $('#lokalizacja').addClass('error');
         });
-    $('#lokalizacja').attr("placeholder", "(zacznij wpisywać adres)");
+    $('#lokalizacja').attr("placeholder", "(wskaż lokalizację na mapie)");
 }
 
 function setAddressByPlace(place){
@@ -221,7 +216,7 @@ function checkAddress(where) {
         ret = ($('#latlng').val().trim().length > 5) && ret;
 
         if (!ret && where.val().trim().length > 0) {
-            $('#addressHint').text('Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
+            $('#addressHint').text('Wskaż lokalizację na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
             $('#addressHint').addClass('hint');
         }
     }

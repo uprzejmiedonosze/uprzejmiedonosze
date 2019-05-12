@@ -55,7 +55,7 @@
                 {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
         </div>
 
-        <label for="lokalizacja" id="addressHint">Podaj miejsce zgłoszenia</label>
+        <label for="lokalizacja" id="addressHint">Wskaż lokalizację na mapie</label>
         <div class="ui-grid-a ui-responsive">
             <div class="ui-block-a">
                 <div id="locationPicker" style="width: 100%; height: 200px;"></div>
@@ -63,8 +63,7 @@
             <div class="ui-block-b">
                 <div class="combo">
                     <input readonly type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                        placeholder="(zacznij wpisywać adres)" data-inline="true"
-                        autocomplete="I told you I wanted this off, Google. But you would not listen."
+                        placeholder="(wskaż lokalizację na mapie)" data-inline="true"
                         value="{{ app.address.address ?? '' }}" />
                     <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
                         data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
