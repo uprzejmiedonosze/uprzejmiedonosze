@@ -102,7 +102,7 @@ function initAutocompleteOnNewApplication() {
         maxZoom: 19
     });
     if(initialLocation.length == 2){
-        locationP.setLocation(initialLocation[0], initialLocation[1], 'init');
+        locationP.setLocation(initialLocation[0], initialLocation[1]);  
     }
     google.maps.event.addListener(locationP.map, 'idle', function () {
         var location = locationP.getMarkerPosition();
@@ -158,16 +158,17 @@ function setAddressByLatLng(lat, lng, from) { // init|picker|image
 
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
         + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
+            $('#addressHint').text('Wskaż lokalizację na mapie');
+            $('#addressHint').removeClass('hint');
             if (data.results.length) {
                 setAddressByPlace(data.results[0]);
-
-                $('#addressHint').text('Sprawdź automatycznie pobrany adres');
-                $('#addressHint').addClass('hint');
+                if(from == 'picture'){
+                    $('#addressHint').text('Sprawdź automatycznie pobrany adres');
+                    $('#addressHint').addClass('hint');
+                }
             } else {
                 $('#lokalizacja').addClass('error');
                 $('a#geo').buttonMarkup({ icon: "location" });
-                $('#addressHint').text('Wskaż lokalizację na mapie');
-                $('#addressHint').removeClass('hint');
             }
         }).fail(function () {
             $('a#geo').buttonMarkup({ icon: "alert" });
