@@ -56,13 +56,13 @@
         </div>
 
         <label for="lokalizacja" id="addressHint">Wskaż lokalizację na mapie</label>
-        <div class="ui-grid-a ui-responsive images">
+        <div class="ui-grid-a ui-responsive images images-cropped">
             <div class="ui-block-a">
-                <div id="locationPicker" style="width: 100%; height: 200px;"></div>
+                <div id="locationPicker"></div>
             </div>
             <div class="ui-block-b">
                 <div class="combo">
-                    <input readonly type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
+                    <input readonly disabled type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
                         placeholder="(wskaż lokalizację na mapie)" data-inline="true"
                         value="{{ app.address.address ?? '' }}" />
                     <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
