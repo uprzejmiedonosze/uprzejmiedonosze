@@ -41,7 +41,25 @@ class User extends JSONObject{
         if(!isset($this->applications)){
             $this->applications = Array();
         }
+        $this->lastLocation = $application->address->latlng;
         array_push($this->applications, $application->id);
+    }
+
+    public function getLastLocation(){
+        logger("getLastLocation:");
+        if(isset($this->lastLocation)){
+            logger("getLastLocation: lastLocation was set, returning");
+            return $this->lastLocation;
+        }
+        if($this->hasApps()){
+            logger("getLastLocation: has apps, getting it");
+            global $storage;
+            $lastApp = $storage->getApplication($this->getApplicationIds()[0]);
+            logger("getLastLocation:   from app {$lastApp->number}");
+            $this->lastLocation = $lastApp->address->latlng;
+            return $this->lastLocation;
+        }
+        return "53.426333778,14.554599583";
     }
 
     /**
