@@ -156,6 +156,6 @@
 
 <script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
 <script>
-    setAddressByLatLngString('{{ app.address.latlng ?? '' }}');
+    setAddressByLatLngString('{{ app.address.latlng ?? config.lastLocation }}');
 </script>
 {% endblock %}

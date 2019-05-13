@@ -46,17 +46,16 @@ class User extends JSONObject{
     }
 
     public function getLastLocation(){
-        logger("getLastLocation:");
         if(isset($this->lastLocation)){
             logger("getLastLocation: lastLocation was set, returning");
             return $this->lastLocation;
         }
         if($this->hasApps()){
-            logger("getLastLocation: has apps, getting it");
             global $storage;
             $lastApp = $storage->getApplication($this->getApplicationIds()[0]);
             logger("getLastLocation:   from app {$lastApp->number}");
             $this->lastLocation = $lastApp->address->latlng;
+            $storage->saveUser($this);
             return $this->lastLocation;
         }
         return "53.426333778,14.554599583";
