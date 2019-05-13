@@ -91,9 +91,6 @@ function initAutocompleteOnRegister() {
 function initAutocompleteOnNewApplication() {
     locationP = new locationPicker('locationPicker', {
         setCurrentPosition: true
-
-        //lat: 53.426333778,
-        //lng: 14.554599583
     }, {
         disableDefaultUI: true,
         scrollwheel: false,
@@ -130,6 +127,7 @@ function initAutocomplete(trigger_change, inputId) {
 
 /* ############################## ADDRESS ############################## */
 
+// eslint-disable-next-line no-unused-vars
 function setAddressByLatLngString(latlng){
     ll = latlng.split(',');
     if(ll.length == 2){
@@ -137,7 +135,15 @@ function setAddressByLatLngString(latlng){
     }
 }
 
-function setAddressByLatLng(lat, lng, from) {
+function setAddressByLatLng(lat, lng, from) { // init|picker|image
+    if(from !== 'picker'){
+        locationP.setLocation(lat, lng);
+    }
+
+    if(from == 'init'){
+        return;
+    }
+
     $('a#geo').buttonMarkup({ icon: "clock" });
     $('#lokalizacja').val("");
     if (from == 'picture') {
@@ -150,30 +156,25 @@ function setAddressByLatLng(lat, lng, from) {
     $('#locality').val("");
     $('#latlng').val("");
 
-    if(from !== 'picker'){
-        locationP.setLocation(lat, lng);
-    }
+    $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
+        + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
+            if (data.results.length) {
+                setAddressByPlace(data.results[0]);
 
-    if(from !== 'init'){
-        $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
-            + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
-                if (data.results.length) {
-                    setAddressByPlace(data.results[0]);
-
-                    $('#addressHint').text('Sprawdź automatycznie pobrany adres');
-                    $('#addressHint').addClass('hint');
-                } else {
-                    $('#lokalizacja').addClass('error');
-                    $('a#geo').buttonMarkup({ icon: "location" });
-                    $('#addressHint').text('Wskaż lokalizację na mapie');
-                    $('#addressHint').removeClass('hint');
-                }
-            }).fail(function () {
-                $('a#geo').buttonMarkup({ icon: "alert" });
-                $('#latlng').val("");
+                $('#addressHint').text('Sprawdź automatycznie pobrany adres');
+                $('#addressHint').addClass('hint');
+            } else {
                 $('#lokalizacja').addClass('error');
-            });
-    }
+                $('a#geo').buttonMarkup({ icon: "location" });
+                $('#addressHint').text('Wskaż lokalizację na mapie');
+                $('#addressHint').removeClass('hint');
+            }
+        }).fail(function () {
+            $('a#geo').buttonMarkup({ icon: "alert" });
+            $('#latlng').val("");
+            $('#lokalizacja').addClass('error');
+        });
+
     $('#lokalizacja').attr("placeholder", "(wskaż lokalizację na mapie)");
 }
 
@@ -200,7 +201,6 @@ function setAddressByPlace(place){
     $('a#geo').buttonMarkup({ icon: "check" });
     $('#lokalizacja').removeClass('error');
 }
-
 
 /* ############################## FORM VALIDATION ############################## */
 
