@@ -97,7 +97,7 @@ function initAutocompleteOnNewApplication() {
         zoomControl: true,
         controlSize: 25,
         mapTypeId: google.maps.MapTypeId.SATTELITE,
-        zoom: 16,
+        zoom: 17,
         minZoom: 10,
         maxZoom: 19
     });
