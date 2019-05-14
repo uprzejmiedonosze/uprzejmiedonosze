@@ -90,7 +90,7 @@ function initAutocompleteOnRegister() {
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnNewApplication() {
     locationP = new locationPicker('locationPicker', {
-        setCurrentPosition: true
+        setCurrentPosition: false
     }, {
         disableDefaultUI: true,
         scrollwheel: false,
