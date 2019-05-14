@@ -70,11 +70,11 @@ class User extends JSONObject{
 
     private function guessLatLng(){
         if(!isset($this->data->address)){
+            logger("guessLatLng: address jest pusty");
             return null;
         }
         $address = urlencode($this->data->address);
         $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl");
-        curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $output = curl_exec($ch);
         if(curl_errno($ch)){
