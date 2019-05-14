@@ -49,14 +49,47 @@ class User extends JSONObject{
         if(isset($this->lastLocation)){
             return $this->lastLocation;
         }
+        global $storage;
         if($this->hasApps()){
-            global $storage;
             $lastApp = $storage->getApplication($this->getApplicationIds()[0]);
             $this->lastLocation = $lastApp->address->latlng;
-            $storage->saveUser($this);
-            return $this->lastLocation;
+        }else{
+            $l = guessLatLng();
+            if(!isset($l)){
+                return "53.426333778,14.554599583";
+            }
+            $this->lastLocation = $l;
         }
-        return "53.426333778,14.554599583";
+        $storage->saveUser($this);
+        return $this->lastLocation;
+    }
+
+    private function guessLatLng(){
+        if(!isset($this->data->address)){
+            return null;
+        }
+        $address = urlencode($this->data->address);
+        $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
+        if(curl_errno($ch)){
+            logger("Nie udało się pobrać danych latlng: " . curl_error($ch));
+            curl_close($ch);
+            return null;
+        }
+        curl_close($ch);
+    
+        $json = @json_decode($output, true);
+       if(!json_last_error() === JSON_ERROR_NONE){
+            logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
+            return null;
+        }
+        @$latlng = $json['results'][0]['geometry']['location'];
+        if(isset($latlng)){
+            return $latlng['lat'] . ',' . $latlng['lng'];
+        }
+        return null;
     }
 
     /**
