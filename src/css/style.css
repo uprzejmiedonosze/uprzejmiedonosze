@@ -350,7 +350,7 @@ div.loader {
     margin-top: 0.3em;
 }
 
-.new-application div.combo .ui-input-text.ui-state-disabled {
+.new-application div.combo .ui-disabled {
     opacity: .5;
 }
 

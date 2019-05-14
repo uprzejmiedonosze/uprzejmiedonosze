@@ -62,8 +62,8 @@
             </div>
             <div class="ui-block-b">
                 <div class="combo">
-                    <input readonly disabled type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                        placeholder="(wskaż lokalizację na mapie)" data-inline="true"
+                    <input readonly type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
+                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="ui-disabled"
                         value="{{ app.address.address ?? '' }}" />
                     <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
                         data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
