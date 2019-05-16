@@ -55,15 +55,15 @@
                 {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
         </div>
 
-        <label for="lokalizacja" id="addressHint">Wskaż lokalizację na mapie</label>
+        <label for="lokalizacja" id="addressHint">Podaj adres lub wskaż go na mapie</label>
         <div class="ui-grid-a ui-responsive images images-cropped">
             <div class="ui-block-a">
                 <div id="locationPicker"></div>
             </div>
             <div class="ui-block-b">
                 <div class="combo">
-                    <input readonly type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="ui-disabled"
+                    <input {#readonly#} type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
+                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="{#ui-disabled#}"
                         value="{{ app.address.address ?? '' }}" />
                     <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
                         data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
