@@ -168,7 +168,7 @@ function setAddressByLatLng(lat, lng, from) { // init|picker|picture
 
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
         + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
-            $('#addressHint').text('Wskaż lokalizację na mapie');
+            $('#addressHint').text('Podaj adres lub wskaż go na mapie');
             $('#addressHint').removeClass('hint');
             if (data.results.length) {
                 setAddressByPlace(data.results[0], from);
@@ -186,7 +186,7 @@ function setAddressByLatLng(lat, lng, from) { // init|picker|picture
             $('#lokalizacja').addClass('error');
         });
 
-    $('#lokalizacja').attr("placeholder", "(wskaż lokalizację na mapie)");
+    $('#lokalizacja').attr("placeholder", "(podaj adres lub wskaż go na mapie)");
 }
 
 function _locationToLatLng(place){
@@ -246,7 +246,7 @@ function checkAddress(where) {
         ret = ($('#latlng').val().trim().length > 5) && ret;
 
         if (!ret && where.val().trim().length > 0) {
-            $('#addressHint').text('Wskaż lokalizację na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
+            $('#addressHint').text('Podaj adres lub wskaż go na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
             $('#addressHint').addClass('hint');
         }
     }
