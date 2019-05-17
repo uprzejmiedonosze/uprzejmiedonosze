@@ -59,7 +59,7 @@ class User extends JSONObject{
             logger("getLastLocation: guessLatLng");
             if(!($l = $this->guessLatLng())){
                 logger("getLastLocation: default ;(");
-                return "53.426333778,14.554599583";
+                return "52.069321,19.480311";
             }
             logger("getLastLocation: guessLatLng sukces");
             $this->lastLocation = $l;
