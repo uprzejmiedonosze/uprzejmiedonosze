@@ -89,7 +89,6 @@ function initAutocompleteOnRegister() {
 
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnNewApplication() {
-    console.log("initAutocompleteOnNewApplication"); // REMOVE
     initAutocomplete(true, 'lokalizacja');
 
     locationP = new locationPicker('locationPicker', {
@@ -100,6 +99,11 @@ function initAutocompleteOnNewApplication() {
         zoomControl: true,
         controlSize: 25,
         mapTypeId: google.maps.MapTypeId.SATTELITE,
+        gestureHandling: 'cooperative',
+        estriction: new google.maps.LatLngBounds(
+            new google.maps.LatLng(54.8, 14),
+            new google.maps.LatLng(49, 24)
+        ),
         zoom: 17,
         minZoom: 6,
         maxZoom: 19
@@ -114,7 +118,6 @@ function initAutocompleteOnNewApplication() {
 }
 
 function initAutocomplete(trigger_change, inputId) {
-    console.log("initAutocomplete:" + inputId); // REMOVE
     autocomplete = new google.maps.places.Autocomplete(
         document.getElementById(inputId),
         {
@@ -124,7 +127,6 @@ function initAutocomplete(trigger_change, inputId) {
     );
     if (trigger_change) {
         autocomplete.addListener('place_changed', function(){
-            console.log("place_changed"); // REMOVE
             const place = autocomplete.getPlace();
             setAddressByPlace(place);
             const latlng = _locationToLatLng(place);
@@ -137,7 +139,6 @@ function initAutocomplete(trigger_change, inputId) {
 
 // eslint-disable-next-line no-unused-vars
 function setAddressByLatLngString(latlng){
-    console.log("setAddressByLatLngString: ", latlng); // REMOVE
     ll = latlng.split(',');
     if(ll.length == 2){
         initialLocation = ll;
@@ -145,7 +146,6 @@ function setAddressByLatLngString(latlng){
 }
 
 function setAddressByLatLng(lat, lng, from) { // init|picker|picture
-    console.log("setAddressByLatLng", lat, lng, from); // REMOVE
     if(from !== 'picker'){
         locationP.setLocation(lat, lng);
     }
@@ -190,14 +190,12 @@ function setAddressByLatLng(lat, lng, from) { // init|picker|picture
 }
 
 function _locationToLatLng(place){
-    console.log("_locationToLatLng", place); // REMOVE
     return (typeof place.geometry.location.lat == "function")?
         [place.geometry.location.lat(), place.geometry.location.lng()]:
         [place.geometry.location.lat, place.geometry.location.lng];
 }
 
 function setAddressByPlace(place){
-    console.log("setAddressByPlace", place); // REMOVE
     const latlng = _locationToLatLng(place).join(',');
     const formatted_address = place.formatted_address.replace(', Polska', '').replace(/\d\d-\d\d\d\s/, '');
     const voivodeship = place.address_components.filter(function (e) {
