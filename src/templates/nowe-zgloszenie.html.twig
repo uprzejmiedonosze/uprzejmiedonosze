@@ -55,15 +55,21 @@
                 {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
         </div>
 
-        <label for="lokalizacja" id="addressHint">Podaj miejsce zgłoszenia</label>
-        <div class="combo">
-            <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                placeholder="(zacznij wpisywać adres)" data-inline="true"
-                autocomplete="I told you I wanted this off, Google. But you would not listen."
-                value="{{ app.address.address ?? '' }}" />
-            <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
-                data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
-                data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
+        <label for="lokalizacja" id="addressHint">Podaj adres lub wskaż go na mapie</label>
+        <div class="ui-grid-a ui-responsive images images-cropped">
+            <div class="ui-block-a">
+                <div id="locationPicker"></div>
+            </div>
+            <div class="ui-block-b">
+                <div class="combo">
+                    <input {#readonly#} type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
+                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="{#ui-disabled#}"
+                        value="{{ app.address.address ?? '' }}" />
+                    <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
+                        data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
+                        data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
+                </div>
+            </div>
         </div>
 
         <label for="datetime" id="dateHint">Data i czas zgłoszenia</label>
@@ -148,4 +154,8 @@
 
 <script src="js/luxon.min-%JS_HASH%.js"></script>
 
+<script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
+<script>
+    setAddressByLatLngString('{{ app.address.latlng ?? config.lastLocation }}');
+</script>
 {% endblock %}

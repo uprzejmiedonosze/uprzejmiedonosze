@@ -79,6 +79,8 @@ $(document).on('pageshow', function () {
 /* ############################## ADDRESS AUTOCOMPLETE ############################## */
 
 var autocomplete;
+let locationP;
+var initialLocation = [];
 
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnRegister() {
@@ -88,6 +90,31 @@ function initAutocompleteOnRegister() {
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnNewApplication() {
     initAutocomplete(true, 'lokalizacja');
+
+    locationP = new locationPicker('locationPicker', {
+        setCurrentPosition: false
+    }, {
+        disableDefaultUI: true,
+        scrollwheel: false,
+        zoomControl: true,
+        controlSize: 25,
+        mapTypeId: google.maps.MapTypeId.SATTELITE,
+        gestureHandling: 'cooperative',
+        estriction: new google.maps.LatLngBounds(
+            new google.maps.LatLng(54.8, 14),
+            new google.maps.LatLng(49, 24)
+        ),
+        zoom: 17,
+        minZoom: 6,
+        maxZoom: 19
+    });
+    if(initialLocation.length == 2){
+        locationP.setLocation(initialLocation[0], initialLocation[1]);  
+    }
+    google.maps.event.addListener(locationP.map, 'idle', function () {
+        var location = locationP.getMarkerPosition();
+        setAddressByLatLng(location.lat, location.lng, 'picker');
+    });
 }
 
 function initAutocomplete(trigger_change, inputId) {
@@ -100,20 +127,39 @@ function initAutocomplete(trigger_change, inputId) {
     );
     if (trigger_change) {
         autocomplete.addListener('place_changed', function(){
-            setAddressByPlace(autocomplete.getPlace());
+            const place = autocomplete.getPlace();
+            setAddressByPlace(place);
+            const latlng = _locationToLatLng(place);
+            locationP.setLocation(latlng[0], latlng[1]);
         });
     }
 }
 
 /* ############################## ADDRESS ############################## */
 
-function setAddressByLatLng(latlng, fromPicture) {
+// eslint-disable-next-line no-unused-vars
+function setAddressByLatLngString(latlng){
+    ll = latlng.split(',');
+    if(ll.length == 2){
+        initialLocation = ll;
+    }
+}
+
+function setAddressByLatLng(lat, lng, from) { // init|picker|picture
+    if(from !== 'picker'){
+        locationP.setLocation(lat, lng);
+    }
+
+    if(from == 'init'){
+        return;
+    }
+
     $('a#geo').buttonMarkup({ icon: "clock" });
     $('#lokalizacja').val("");
-    if (fromPicture) {
+    if (from == 'picture') {
         $('#lokalizacja').attr("placeholder", "(pobieram adres ze zdjęcia...)");
     } else {
-        $('#lokalizacja').attr("placeholder", "(weryfikuję adres...)");
+        $('#lokalizacja').attr("placeholder", "(pobieram adres z mapy...)");
     }
     $('#administrative_area_level_1').val("");
     $('#country').val("");
@@ -121,35 +167,36 @@ function setAddressByLatLng(latlng, fromPicture) {
     $('#latlng').val("");
 
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
-        + latlng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
+        + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
+            $('#addressHint').text('Podaj adres lub wskaż go na mapie');
+            $('#addressHint').removeClass('hint');
             if (data.results.length) {
-                setAddressByPlace(data.results[0]);
-
-                if (fromPicture) {
+                setAddressByPlace(data.results[0], from);
+                if(from == 'picture'){
                     $('#addressHint').text('Sprawdź automatycznie pobrany adres');
-                    $('#addressHint').addClass('hint');
-                }else{
-                    $('#addressHint').text('Zweryfikuj pobrany adres');
                     $('#addressHint').addClass('hint');
                 }
             } else {
                 $('#lokalizacja').addClass('error');
                 $('a#geo').buttonMarkup({ icon: "location" });
-                $('#addressHint').text('(zacznij wpisywać adres)');
-                $('#addressHint').removeClass('hint');
             }
         }).fail(function () {
             $('a#geo').buttonMarkup({ icon: "alert" });
             $('#latlng').val("");
             $('#lokalizacja').addClass('error');
         });
-    $('#lokalizacja').attr("placeholder", "(zacznij wpisywać adres)");
+
+    $('#lokalizacja').attr("placeholder", "(podaj adres lub wskaż go na mapie)");
+}
+
+function _locationToLatLng(place){
+    return (typeof place.geometry.location.lat == "function")?
+        [place.geometry.location.lat(), place.geometry.location.lng()]:
+        [place.geometry.location.lat, place.geometry.location.lng];
 }
 
 function setAddressByPlace(place){
-    const latlng = (typeof place.geometry.location.lat == "function")?
-        place.geometry.location.lat() + ',' + place.geometry.location.lng():
-        place.geometry.location.lat + ',' + place.geometry.location.lng;;
+    const latlng = _locationToLatLng(place).join(',');
     const formatted_address = place.formatted_address.replace(', Polska', '').replace(/\d\d-\d\d\d\s/, '');
     const voivodeship = place.address_components.filter(function (e) {
             return e.types.indexOf('administrative_area_level_1') == 0
@@ -169,7 +216,6 @@ function setAddressByPlace(place){
     $('a#geo').buttonMarkup({ icon: "check" });
     $('#lokalizacja').removeClass('error');
 }
-
 
 /* ############################## FORM VALIDATION ############################## */
 
@@ -198,7 +244,7 @@ function checkAddress(where) {
         ret = ($('#latlng').val().trim().length > 5) && ret;
 
         if (!ret && where.val().trim().length > 0) {
-            $('#addressHint').text('Zacznij wpisywać adres, a potem wybierz pasującą pozycję z listy. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
+            $('#addressHint').text('Podaj adres lub wskaż go na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej');
             $('#addressHint').addClass('hint');
         }
     }
@@ -305,7 +351,7 @@ function readGeoDataFromImage(file) {
             if (lat) {
                 lat = (parseFloat(lat[0]) + parseFloat(lat[1]) / 60 + parseFloat(lat[2]) / 3600) * (latRef == "N" ? 1 : -1);
                 lon = (parseFloat(lon[0]) + parseFloat(lon[1]) / 60 + parseFloat(lon[2]) / 3600) * (lonRef == "W" ? -1 : 1);
-                setAddressByLatLng(lat + ',' + lon, true);
+                setAddressByLatLng(lat, lon, 'picture');
             } else {
                 noGeoDataInImage();
             }

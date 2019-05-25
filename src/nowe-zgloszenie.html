@@ -40,7 +40,8 @@ generate('nowe-zgloszenie.html.twig',
         'config' =>
         [
             'auth' => true,
-            'edit' => $edit
+            'edit' => $edit,
+            'lastLocation' => $storage->getCurrentUser()->getLastLocation()
         ],
         'categories' => CATEGORIES,
         'categoriesMatrix' => CATEGORIES_MATRIX,
