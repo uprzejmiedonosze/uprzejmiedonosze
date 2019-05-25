@@ -117,8 +117,6 @@ class New(BasePage):
     def is_validation_empty_working(self):
         self.confirm(False)
         time.sleep(2)
-        assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class'), \
-            "Przy próbie wysłania pustego zgłoszenia adres powinien mieć klasę error"
         assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class'), \
             "Przy próbie wysłania pustego zgłoszenia tablica rej. powininna mieć klasę error"
         assert "error" in self.driver.find_element(*Locators.NEW_IMAGE1).get_attribute('class'), \
@@ -206,8 +204,6 @@ class New(BasePage):
     def test_invalid_image_submit(self):
         self.confirm(False)
 
-        assert "error" in self.driver.find_element(*Locators.NEW_ADDRESS).get_attribute('class'), \
-            "Pusty adres (po załadowaniu zdjęcia bez geo), a nie ma błędu"
         assert "error" in self.driver.find_element(*Locators.NEW_PLATEID).get_attribute('class'), \
             "Pusty numer rej (po załadowaniu zdjęcia bez tablic), a nie ma błędu"
     
