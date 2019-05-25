@@ -56,6 +56,7 @@ function _action($action, $appId){
     $application = $storage->getApplication($appId);
     $application->setStatus($action);
     $storage->saveApplication($application);
+    $storage->updateRecydywa($application->carInfo->plateId);
     $storage->getUserStats(false); // update cache
     echo json_encode(Array("status" => "OK"));
 }

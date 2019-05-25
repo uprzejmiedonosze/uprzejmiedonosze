@@ -93,10 +93,11 @@ class DB extends NoSQLite{
     public function countApplicationsPerPlate($plateId){
         $plateId = SQLite3::escapeString($plateId);
 
-        $sql = "select count(*) from applications "
-            . "where (json_extract(value, '$.status') = 'archived' "
-            . "or json_extract(value, '$.status') like 'confirmed%') "
-            . "and json_extract(value, '$.carInfo.plateId') = '$plateId';";
+        $sql = <<<SQL
+            select count(*) from applications 
+            where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
+            and json_extract(value, '$.carInfo.plateId') = '$plateId';
+SQL;
         
         return (int) $this->db->query($sql)->fetchColumn();
     }
