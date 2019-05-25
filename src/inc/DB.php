@@ -239,11 +239,37 @@ SQL;
 
     /**
      * Returns number of new applications (by creation date)
+     * during 12 weeks.
+     */
+    public function getStatsAppsByWeek($useCache = true){
+
+        $stats = $this->stats->get("%HOST%-getStatsAppsByWeek");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = <<<SQL
+            select min(substr(json_extract(applications.value, '$.added'), 1, 10)) as 'day',
+                count(*) as cnt from applications
+            where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+                and json_extract(applications.value, '$.added') < date('now')
+            group by strftime('%W', substr(json_extract(applications.value, '$.added'), 1, 10))
+            order by 1 desc
+            limit 12;
+SQL;
+
+        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $this->stats->set("%HOST%-getStatsAppsByWeek", $stats, 0, 600);
+        return $stats;
+    }
+
+    /**
+     * Returns number of new applications (by creation date)
      * during 30 days. 
      */
     public function getStatsByDay($useCache = true){
 
-        $stats = $this->stats->get("%HOST%-getStatsAppsByDay");
+        $stats = $this->stats->get("%HOST%-getStatsByDay");
         if($useCache && $stats){
             return $stats;
         }
@@ -271,7 +297,44 @@ SQL;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsAppsByDay", $stats, 0, 600);
+        $this->stats->set("%HOST%-getStatsByDay", $stats, 0, 600);
+        return $stats;
+    }
+
+    /**
+     * Returns number of new applications (by creation date)
+     * during 30 days. 
+     */
+    public function getStatsByWeek($useCache = true){
+
+        $stats = $this->stats->get("%HOST%-getStatsByWeek");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = <<<SQL
+            select min(substr(json_extract(applications.value, '$.added'), 1, 10)) as 'day',
+                count(*) as acnt,
+                u.cnt as ucnt
+            from applications
+            left outer join (
+                select min(substr(json_extract(users.value, '$.added'), 1, 10)) as 'day',
+                    count(*) as cnt
+                from users
+                where substr(json_extract(users.value, '$.added'), 1, 4) > 2017
+                group by strftime('%Y%W', substr(json_extract(users.value, '$.added'), 1, 10))
+                order by 1 desc
+                limit 35
+            ) u on substr(json_extract(applications.value, '$.added'), 1, 10) = u.day
+            where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+                and substr(json_extract(applications.value, '$.added'), 1, 4) > 2017
+            group by strftime('%Y-%W', substr(json_extract(applications.value, '$.added'), 1, 10))
+            order by 1 desc
+            limit 30;
+SQL;
+
+        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $this->stats->set("%HOST%-getStatsByWeek", $stats, 0, 600);
         return $stats;
     }
 

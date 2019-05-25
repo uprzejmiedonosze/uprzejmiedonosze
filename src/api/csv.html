@@ -8,10 +8,14 @@ if (isset($_GET["file"]) && !empty($_GET["file"])) {
     switch($file) {
         case "statsAppsByDay":
             _getStatsAppsByDay(); break;
+        case "statsAppsByWeek":
+            _getStatsAppsByWeek(); break;
         case "statsAppsByCity":
             _getStatsAppsByCity(); break;
         case "statsByDay":
             _getStatsByDay(); break;
+        case "statsByWeek":
+            _getStatsByWeek(); break;
         default: raiseError('Invalid file specified', 400);
     }
 }else{
@@ -22,6 +26,18 @@ function _getStatsAppsByDay(){
     GLOBAL $storage;
     $statsAppsByDay = $storage->getStatsAppsByDay(false);
     echo outputCSV($statsAppsByDay);
+}
+
+function _getStatsAppsByWeek(){
+    GLOBAL $storage;
+    $statsAppsByWeek = $storage->getStatsAppsByWeek(false);
+    echo outputCSV($statsAppsByWeek);
+}
+
+function _getStatsByWeek(){
+    GLOBAL $storage;
+    $statsByWeek = $storage->getStatsByWeek(false);
+    echo outputCSV($statsByWeek);
 }
 
 function _getStatsAppsByCity(){

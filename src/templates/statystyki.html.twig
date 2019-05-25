@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             labels: {
                 align: 'left',
                 x: 0,
-                y: 16
+                y: 0
             },
             showFirstLabel: false
         }],
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Highcharts.chart('statsByDay', {
         data: {
-            csvURL: window.location.origin + '/api/csv.html?file=statsByDay',
+            csvURL: window.location.origin + '/api/csv.html?file=statsByWeek',
             firstRowAsNames: false
         },
         chart: {
