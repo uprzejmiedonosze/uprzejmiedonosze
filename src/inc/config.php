@@ -154,6 +154,8 @@ const SM_ADDRESSES = Array (
         'sm@umsieradz.pl', 'Sieradz'],
     'tarnów' => ['Straż Miejska w Tarnowie \\\\ ul. Nadbrzeżna Dolna 7 \\\\ 33-100 Tarnów',
         'straz@umt.tarnow.pl', 'Tarnów'],
+    'wejherowo' => ['Straż Miejska Wejherowo \\\\ pl. Jakuba Wejhera 8 \\\\ 84-200 Wejherowo',
+        'sm@wejherowo.pl', 'Wejherowo'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
