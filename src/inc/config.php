@@ -156,6 +156,9 @@ const SM_ADDRESSES = Array (
         'straz@umt.tarnow.pl', 'Tarnów'],
     'wejherowo' => ['Straż Miejska Wejherowo \\\\ pl. Jakuba Wejhera 8 \\\\ 84-200 Wejherowo',
         'sm@wejherowo.pl', 'Wejherowo'],
+    'konstancin-jeziorna' => ['Straż Miejska Konstancin-Jeziorna \\\\ ul. Sobieskiego 5 \\\\ 05-510 Konstancin-Jeziorna',
+        'komendasm@konstancinjeziorna.pl', 'Konstancin-Jeziorna'
+    ],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
