@@ -130,6 +130,7 @@ function initAutocomplete(trigger_change, inputId) {
             const place = autocomplete.getPlace();
             setAddressByPlace(place);
             const latlng = _locationToLatLng(place);
+            $('#latlng').val(latlng.join(","));
             locationP.setLocation(latlng[0], latlng[1]);
         });
     }
@@ -155,16 +156,12 @@ function setAddressByLatLng(lat, lng, from) { // init|picker|picture
     }
 
     $('a#geo').buttonMarkup({ icon: "clock" });
-    $('#lokalizacja').val("");
     if (from == 'picture') {
         $('#lokalizacja').attr("placeholder", "(pobieram adres ze zdjęcia...)");
     } else {
         $('#lokalizacja').attr("placeholder", "(pobieram adres z mapy...)");
     }
-    $('#administrative_area_level_1').val("");
-    $('#country').val("");
-    $('#locality').val("");
-    $('#latlng').val("");
+    $('#latlng').val(lat + "," + lng);
 
     $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
         + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
@@ -176,13 +173,10 @@ function setAddressByLatLng(lat, lng, from) { // init|picker|picture
                     $('#addressHint').text('Sprawdź automatycznie pobrany adres');
                     $('#addressHint').addClass('hint');
                 }
-            } else {
-                $('#lokalizacja').addClass('error');
-                $('a#geo').buttonMarkup({ icon: "location" });
             }
+            $('a#geo').buttonMarkup({ icon: "location" });
         }).fail(function () {
             $('a#geo').buttonMarkup({ icon: "alert" });
-            $('#latlng').val("");
             $('#lokalizacja').addClass('error');
         });
 
@@ -196,7 +190,6 @@ function _locationToLatLng(place){
 }
 
 function setAddressByPlace(place){
-    const latlng = _locationToLatLng(place).join(',');
     const formatted_address = place.formatted_address.replace(', Polska', '').replace(/\d\d-\d\d\d\s/, '');
     const voivodeship = place.address_components.filter(function (e) {
             return e.types.indexOf('administrative_area_level_1') == 0
@@ -211,7 +204,6 @@ function setAddressByPlace(place){
     $('#administrative_area_level_1').val(voivodeship);
     $('#country').val(country);
     $('#locality').val(city);
-    $('#latlng').val(latlng);
 
     $('a#geo').buttonMarkup({ icon: "check" });
     $('#lokalizacja').removeClass('error');
