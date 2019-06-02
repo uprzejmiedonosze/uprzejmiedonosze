@@ -248,7 +248,7 @@ SQL;
                 and substr(json_extract(applications.value, '$.added'), 1, 10) = date('now');
 SQL;
 
-        $stats = intval($this->db->query($sql)->fetch(PDO::FETCH_NUM));
+        $stats = intval($this->db->query($sql)->fetchColumn());
         return $stats;
     }
 
