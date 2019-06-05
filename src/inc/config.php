@@ -157,8 +157,9 @@ const SM_ADDRESSES = Array (
     'wejherowo' => ['Straż Miejska Wejherowo \\\\ pl. Jakuba Wejhera 8 \\\\ 84-200 Wejherowo',
         'sm@wejherowo.pl', 'Wejherowo'],
     'konstancin-jeziorna' => ['Straż Miejska Konstancin-Jeziorna \\\\ ul. Sobieskiego 5 \\\\ 05-510 Konstancin-Jeziorna',
-        'komendasm@konstancinjeziorna.pl', 'Konstancin-Jeziorna'
-    ],
+        'komendasm@konstancinjeziorna.pl', 'Konstancin-Jeziorna'],
+    'nowy targ' => ['Komenda Powiatowa Policji w Nowym Targu \\\\ ul. Konfederacji Tatrzańskiej 1a \\\\ 34-400 Nowy Targ',
+        'dyzurni@nowy-targ.policja.gov.pl', 'Nowy Targ'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
