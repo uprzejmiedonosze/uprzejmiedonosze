@@ -160,6 +160,8 @@ const SM_ADDRESSES = Array (
         'komendasm@konstancinjeziorna.pl', 'Konstancin-Jeziorna'],
     'nowy targ' => ['Komenda Powiatowa Policji w Nowym Targu \\\\ ul. Konfederacji Tatrzańskiej 1a \\\\ 34-400 Nowy Targ',
         'dyzurni@nowy-targ.policja.gov.pl', 'Nowy Targ'],
+    '' => ['Straż Miejska Piaseczno \\\\ ul. Czajewicza 1a \\\\ 05-500 Piaseczno',
+        'strazmiejska@piaseczno.eu', 'Piaseczno'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
