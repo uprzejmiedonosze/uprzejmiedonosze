@@ -191,7 +191,7 @@ function _sendSlackOnRegister($user){
  * Sends formatted message to Slack.
  */
 function _sendSlackOnNewApp($app, $todaysNewAppsCount){
-    $title = "Nowe zgłoszenie {$app->number} ({$app->address->city})";
+    $title = "Nowe zgłoszenie {$app->number} ({$app->address->city}, {$todaysNewAppsCount} dzisiaj)";
 
     logger($title, true);
 
