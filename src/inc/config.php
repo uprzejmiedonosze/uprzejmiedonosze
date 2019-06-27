@@ -182,6 +182,8 @@ const SM_ADDRESSES = Array (
         'sm@lublin.eu', 'Lublin'],
     'leszno' => ['Straż Miejska w Lesznie \\\\ Berwińskich 7c \\\\ 64-100 Leszno',
         'sm@leszno.pl', 'Leszno'],
+    'inowrocław' => ['Straż Miejska Inowrocław \\\\ Gabriela Narutowicza 60 \\\\ 88-100 Inowrocław',
+        'strazmiejska@inowroclaw.pl', 'Inowrocław'],
     '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
         null, null]
 );
