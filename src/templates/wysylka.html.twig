@@ -51,6 +51,8 @@ Pozdrawiam,
                 href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
             i wyślij email do SM {{ cities | first[2] }};<br><br>
+            <b>Nie zapomnij</b> dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!
+            <br>
             (jeśli otworzył Ci się pusty email, 
             <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania)
             <div data-role="popup" id="popupPadded" class="ui-content">
