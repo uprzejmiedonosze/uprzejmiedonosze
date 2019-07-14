@@ -50,11 +50,8 @@ Pozdrawiam,
             <a id="send" data-ajax="false" target="_blank"
                 href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-            i wyślij email do SM {{ cities | first[2] }};<br><br>
-            <b>Nie zapomnij</b> dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!
-            <br>
-            (jeśli otworzył Ci się pusty email, 
-            <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania)
+            i wyślij email do SM {{ cities | first[2] }} (jeśli otworzył Ci się pusty email, 
+            <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
             <div data-role="popup" id="popupPadded" class="ui-content">
                 <dl>
                     <dt>Do:</dt>
@@ -65,12 +62,12 @@ Pozdrawiam,
                     <dd style="white-space: pre-wrap;">{{ emailBody }}</dd>
                 </dl>
             </div>
+            <p><b>Nie zapomnij dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!</b></p>
         </li>
         <li class="ui-disabled">Po wysłaniu wiadomości, możesz
             <a id="email" href="moje-zgloszenia.html?changeMail" data-ajax="false"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-mail status-confirmed-waiting">zmienić</a>
-                status wszystkich {{ apps|length }} zgłoszeń na wysłane emailem (lub 
-            <a id="epuap" href="moje-zgloszenia.html?changeEpuap" data-ajax="false">epuapem</a>).
+                status wszystkich {{ apps|length }} zgłoszeń na wysłane emailem.
         </li>
     </ol>
 
