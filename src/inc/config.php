@@ -184,7 +184,9 @@ const SM_ADDRESSES = Array (
         'sm@leszno.pl', 'Leszno'],
     'inowrocław' => ['Straż Miejska Inowrocław \\\\ Gabriela Narutowicza 60 \\\\ 88-100 Inowrocław',
         'strazmiejska@inowroclaw.pl', 'Inowrocław'],
-    '_nieznane' => ['(skontaktuj się z autorem \\\\ aby podać adres SM dla twojego miasta)',
+    'suwałki' => ['Straż Miejska Suwałki \\\\ ul. Teofila Noniewicza 71A \\\\ 16-402 Suwałki',
+        'sm@um.suwalki.pl', 'Suwałki'],
+    '_nieznane' => ['(skontaktuj się z autorem: szymon@uprzejmiedonosze.net \\\\ i podaj mu adres siedziby oraz email Straży Miejskiej)',
         null, null]
 );
 
