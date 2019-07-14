@@ -7,11 +7,11 @@
 <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.
 
 {% if apps|length == 0 %}
-    W tej chwili nie masz ani jednego zgłoszenia o statusie <i>Nowe</i>, które pozwoliłoby
+    W tej chwili nie masz ani jednego zgłoszenia o statusie <code>#nowe</code>, które pozwoliłoby
     wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
     wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
 {% else %}
-    Paczka ta zostanie przygotowana dla zgłoszeń w statusie <i>Nowe</i>.
+    Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
     Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
     wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw
     prawidłowo statusy.</p>
@@ -67,7 +67,7 @@ Pozdrawiam,
         <li class="ui-disabled">Po wysłaniu wiadomości, możesz
             <a id="email" href="moje-zgloszenia.html?changeMail" data-ajax="false"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-mail status-confirmed-waiting">zmienić</a>
-                status wszystkich {{ apps|length }} zgłoszeń na wysłane emailem.
+                status wszystkich {{ apps|length }} zgłoszeń na <code>#wysłane mailem</code>.
         </li>
     </ol>
 
