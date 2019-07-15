@@ -376,7 +376,6 @@ function sendFile(fileData, id) {
         processData: false,
         success: function (json) {
             if (json.carImage || json.contextImage){
-                $('.' + id + 'Section input').textinput('disable');
                 $('.' + id + 'Section .loader').hide();
                 $('.' + id + 'Section img').css('height', '100%');
                 $('.' + id + 'Section img').attr("src", json[id].thumb + '?v=' + Math.random().toString());
