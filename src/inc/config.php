@@ -186,6 +186,8 @@ const SM_ADDRESSES = Array (
         'strazmiejska@inowroclaw.pl', 'Inowrocław'],
     'suwałki' => ['Straż Miejska Suwałki \\\\ ul. Teofila Noniewicza 71A \\\\ 16-402 Suwałki',
         'sm@um.suwalki.pl', 'Suwałki'],
+    'gliwice' => ['Straż Miejska w Gliwicach \\\\ ul. Bolesława Śmiałego 2A \\\\ 44-121 Gliwice',
+        'dyzurny@smgliwice.pl', 'Gliwice'],
     '_nieznane' => ['(skontaktuj się z autorem: szymon@uprzejmiedonosze.net \\\\ i podaj mu adres siedziby oraz email Straży Miejskiej)',
         null, null]
 );
