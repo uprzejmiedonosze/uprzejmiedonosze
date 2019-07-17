@@ -96,12 +96,12 @@ function _upload(){
         $application->carImage->url = "$baseFileName,$type.jpg";
         $application->carImage->thumb = "$baseFileName,$type,t.jpg";
 
+        $application->carInfo = new stdClass();
+
         if(isset($car_info) && count($car_info["results"])){
             logger('ALPR (cost: ' . $car_info['credit_cost'] . ', this month: ' . 
                 $car_info['credits_monthly_used'] . ', out of: ' .
                 $car_info['credits_monthly_total'], true);
-
-            $application->carInfo = new stdClass();
 
             $result = (Array)$car_info['results'];
             usort($result, "cmp");
@@ -135,7 +135,7 @@ function _upload(){
         $application->contextImage->url = "$baseFileName,$type.jpg";
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
     }else{
-        raiseError("Uknown picture type: " . $pictureType, 400);
+        raiseError("Unknown picture type: " . $pictureType, 400);
     }
 
     $storage->saveApplication($application);
