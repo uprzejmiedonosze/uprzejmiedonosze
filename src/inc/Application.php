@@ -229,7 +229,7 @@ class Application extends JSONObject{
             logger("getMapImage(): Biorę wcześniej zapisany adres");
             return $this->address->mapImage;
         }
-        logger("getMapImage()4");
+        logger("getMapImage()");
         // @TODO refactor warning (duże copy-paste z api.html:saveImgAndThumb())
         $baseDir = 'cdn2/' . $this->getUserNumber();
         if(!file_exists('/var/www/%HOST%/' . $baseDir)){

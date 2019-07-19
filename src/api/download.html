@@ -24,7 +24,9 @@ if($type == 'application' || $type == 'hearing'){    // specific ID is needed
     $appsEpuap = $storage->getAllApplicationsByStatus('confirmed-waitingE');
     $application = array_merge($appsEmail, $appsEpuap);
 }else{ // readyApps
+    logger('download.html?readyApps', true);
     $application = $storage->getAllApplicationsByStatus('confirmed');
+    logger('download.html?readyApps sizeof($application) == ' . sizeof($application), true);
 }
 
 if($type !== 'application'){ // only applicationPDF is allowed if not logged in
@@ -51,6 +53,7 @@ if($type == 'hearing'){
     $filename = "Dokumenty-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
     $pdf = "$baseDir/$filename";
 }else{ // readyApps
+    logger('download.html?readyApps getSanitizedCity', true);
     $city = reset($application)->getSanitizedCity();
     $filename = "Zgloszenia-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
     $pdf = "$baseDir/$filename";
