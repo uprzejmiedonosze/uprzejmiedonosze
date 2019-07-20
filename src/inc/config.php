@@ -188,6 +188,10 @@ const SM_ADDRESSES = Array (
         'sm@um.suwalki.pl', 'Suwałki'],
     'gliwice' => ['Straż Miejska w Gliwicach \\\\ ul. Bolesława Śmiałego 2A \\\\ 44-121 Gliwice',
         'dyzurny@smgliwice.pl', 'Gliwice'],
+    'wodzisław śląski' => ['Straż Miejska w Wodzisławiu Śląskim \\\\ ul. Rzeczna 24 \\\\ 44-300 Wodzisław Śląski',
+        'strazmiejska@wodzislaw-slaski.pl', 'Wodzisław Śląski'],
+    'rybnik' => ['Straż Miejska w Rybniku \\\\ Władysława Stanisława Reymonta 54 \\\\ 44-200 Rybnik',
+        'interwencja@sm.rybnik.pl', 'Rybnik'],
     '_nieznane' => ['(skontaktuj się z autorem: szymon@uprzejmiedonosze.net \\\\ i podaj mu adres siedziby oraz email Straży Miejskiej)',
         null, null]
 );
