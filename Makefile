@@ -124,8 +124,8 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 	fi;
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
-	@if [ "$(HOST)" = "$(PROD_HOST)" ] && [ ! "$<" =~ "min" ]; then \
-		$(BABEL) $< > $@ ; \
+	@if [ "$(HOST)" = "$(PROD_HOST)" ] && ( ! grep -q min <<<"$<" ); then \
+		$(BABEL) $< > $@ ;\
 	else \
 		cp $< $@ ; \
 	fi;
