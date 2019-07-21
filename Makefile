@@ -117,11 +117,11 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $@'
-ifeq ($(HOST),$(PROD_HOST))
-	$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@
-else
-	cp $< $@
-endif
+	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
+		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
+	else \
+		cp $< $@ ; \
+	fi;
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ] && ( ! grep -q min <<<"$<" ); then \
