@@ -5,6 +5,11 @@ BABEL                := babel-minify
 RSYNC                := rsync
 RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
 HOSTING              := nieradka.net
+ifeq ($(filter darwin%,${OSTYPE}),)
+    SED_OPTS         := "-i ''"
+else
+    SED_OPTS         := "-i''"
+endif
 
 # dirs and files 
 EXPORT               := export
@@ -12,18 +17,18 @@ PUBLIC               := $(EXPORT)/public
 DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc $(EXPORT)/templates
 
 CSS_FILES            := $(wildcard src/css/*.css)
-CSS_HASH             := $(shell cat $(CSS_FILES) | md5 | cut -b 1-8)
+CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
 CSS_MINIFIED         := $(CSS_FILES:src/%.css=export/public/%-$(CSS_HASH).css)
 
 JS_FILES             := $(wildcard src/js/*.js)
-JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
+JS_HASH              := $(shell cat $(JS_FILES) | md5sum | cut -b 1-8)
 JS_MINIFIED          := $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
 
 HTML_FILES           := $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
 
 TWIG_FILES           := $(wildcard src/templates/*.twig)
-TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5 | cut -b 1-8)
+TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5sum | cut -b 1-8)
 TWIG_PROCESSED       := $(TWIG_FILES:src/templates/%=export/templates/%)
 
 PHP_FILES            := $(wildcard src/inc/*.php)
@@ -119,7 +124,7 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 	fi;
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
-	@if [[ "$(HOST)" = "$(PROD_HOST)" && ! "$<" =~ "min" ]]; then \
+	@if [ "$(HOST)" = "$(PROD_HOST)" ] && [ ! "$<" =~ "min" ]; then \
 		$(BABEL) $< > $@ ; \
 	else \
 		cp $< $@ ; \
@@ -152,7 +157,7 @@ $(replace-inline)
 endef
 
 define replace-inline
-@sed -i '' -e 's/%JS_HASH%/$(JS_HASH)/g' \
+@sed $(SED_OPTS) -e 's/%JS_HASH%/$(JS_HASH)/g' \
 	 -e 's/%CSS_HASH%/$(CSS_HASH)/g' \
 	 -e 's/%TWIG_HASH%/$(TWIG_HASH)/g' \
 	 -e 's/%VERSION%/$(TAG_NAME)/g' $@
