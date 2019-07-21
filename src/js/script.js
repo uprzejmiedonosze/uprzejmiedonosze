@@ -81,6 +81,7 @@ $(document).on('pageshow', function () {
 var autocomplete;
 let locationP;
 var initialLocation = [];
+var uploadInProgress = 0;
 
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnRegister() {
@@ -275,6 +276,7 @@ function validateRegisterForm() {
 
 function checkFile(file, id) {
     $('#form-submit').addClass('ui-disabled');
+    uploadInProgress++;
     if (file) {
         if (/^image\//i.test(file.type)) {
             $('.' + id + 'Section').removeClass('error');
@@ -311,7 +313,10 @@ function imageError(id) {
     $('.' + id + 'Section img').show();
     $('.' + id + 'Section').parent().addClass('error');
     $('.' + id + 'Section input').textinput('enable');
-    $('#form-submit').removeClass('ui-disabled');
+    uploadInProgress--;
+    if(uploadInProgress == 0){
+        $('#form-submit').removeClass('ui-disabled');
+    }
 }
 
 function readGeoDataFromImage(file) {
@@ -404,7 +409,10 @@ function sendFile(fileData, id) {
                     $('#recydywa').show();
                 }
             }
-            $('#form-submit').removeClass('ui-disabled');
+            uploadInProgress--;
+            if(uploadInProgress == 0){
+                $('#form-submit').removeClass('ui-disabled');
+            }
         },
         // eslint-disable-next-line no-unused-vars
         error: function (data) {
