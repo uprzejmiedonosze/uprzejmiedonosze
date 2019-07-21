@@ -6,7 +6,7 @@ RSYNC                := rsync
 RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
 HOSTING              := nieradka.net
 ifeq ($(filter darwin%,${OSTYPE}),)
-    SED_OPTS         := "-i ''"
+    SED_OPTS         := -i ''
 else
     SED_OPTS         := "-i''"
 endif
