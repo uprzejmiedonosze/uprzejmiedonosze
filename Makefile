@@ -117,11 +117,11 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $@'
-	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
-		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
-	else \
-		cp $< $@ ; \
-	fi;
+ifeq ($(HOST),$(PROD_HOST))
+	$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@
+else
+	cp $< $@
+endif
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ] && ( ! grep -q min <<<"$<" ); then \
@@ -178,5 +178,3 @@ log-from-last-prod: ## Show list of commit messages from last prod release till 
 
 diff-from-last-prod: ## Show list of commit messages from last prod release till now
 	@git diff --histogram --color-words `git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1`
-
-
