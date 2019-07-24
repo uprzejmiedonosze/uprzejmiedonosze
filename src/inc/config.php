@@ -192,6 +192,8 @@ const SM_ADDRESSES = Array (
         'strazmiejska@wodzislaw-slaski.pl', 'Wodzisław Śląski'],
     'rybnik' => ['Straż Miejska w Rybniku \\\\ Władysława Stanisława Reymonta 54 \\\\ 44-200 Rybnik',
         'interwencja@sm.rybnik.pl', 'Rybnik'],
+    'gorzów wielkopolski' => ['Straż Miejska w Gorzowie Wielkopolskim \\\\ ul. Łokietka 22 \\\\ 66-400 Gorzów Wielkopolski',
+        'ksm@um.gorzow.pl', 'Gorzów Wielkopolski'],
     '_nieznane' => ['(skontaktuj się z autorem: szymon@uprzejmiedonosze.net \\\\ i podaj mu adres siedziby oraz email Straży Miejskiej)',
         null, null]
 );
