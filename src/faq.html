@@ -1,18 +1,18 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-$sm = SM_ADDRESSES;
-ksort($sm);
+$smAddresses = $SM_ADDRESSES;
+ksort($smAddresses);
 
-foreach ($sm as $key => &$value) {
-    if(!(isset($value[2]))){
-        unset($sm[$key]);
-    }else{
-        $value = $value[2];
+$sortedSMs = array();
+
+foreach ($smAddresses as $sm) {
+    if($sm->email){
+        array_push($sortedSMs, $sm->city);
     }
 }
-unset($value);
-$sm = array_unique($sm, SORT_LOCALE_STRING);
+
+$sortedSMs = array_unique($sortedSMs, SORT_LOCALE_STRING);
 
 generate('faq.html.twig', 
     [
@@ -26,7 +26,7 @@ generate('faq.html.twig',
         ],
         'config' => [
             'menu' => 'faq',
-            'SM_ADDRESSES' => implode(', ', $sm)
+            'SM_ADDRESSES' => implode(', ', $sortedSMs)
         ]
     ]
 );

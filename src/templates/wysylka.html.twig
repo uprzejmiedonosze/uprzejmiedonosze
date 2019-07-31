@@ -48,14 +48,14 @@ Pozdrawiam,
         </li>
         <li class="ui-disabled">Następnie 
             <a id="send" data-ajax="false" target="_blank"
-                href="mailto:{{ cities | first[1] }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
+                href="mailto:{{ cities | first.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
                 class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-            i wyślij email do SM {{ cities | first[2] }} (jeśli otworzył Ci się pusty email, 
+            i wyślij email do SM {{ cities | first.city }} (jeśli otworzył Ci się pusty email, 
             <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
             <div data-role="popup" id="popupPadded" class="ui-content">
                 <dl>
                     <dt>Do:</dt>
-                    <dd>{{ cities | first[1] }}</dd>
+                    <dd>{{ cities | first.email }}</dd>
                     <dt>Tytuł:</dt>
                     <dd>{{ emailSubject }}</dd>
                     <dt>Treść:</dt>

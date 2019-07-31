@@ -14,7 +14,7 @@ endif
 # dirs and files 
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
-DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc $(EXPORT)/templates
+DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/templates
 
 CSS_FILES            := $(wildcard src/css/*.css)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
@@ -26,6 +26,9 @@ JS_MINIFIED          := $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
 
 HTML_FILES           := $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
+
+CONFIG_FILES         := $(wildcard src/api/config/*.json)
+CONFIG_PROCESSED     := $(CONFIG_FILES:src/api/config/%.json=export/public/api/config/%.json)
 
 TWIG_FILES           := $(wildcard src/templates/*.twig)
 TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5sum | cut -b 1-8)
@@ -102,10 +105,11 @@ check-branch-master: ## Checks if GIT is on branch master
 check-branch-staging: ## Checks if GIT is on branch master
 	@test "$(shell git status | grep 'origin/staging' | wc -l)" = 1 || ( echo "Not on branch staging." && exit 1 )
 
-minify: check-branch minify-css minify-js process-html process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
+minify: check-branch minify-css minify-js process-html minify-config process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
 minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED)
 process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
+minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
@@ -134,6 +138,9 @@ export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
 	$(lint)
 	$(replace)
+
+export/public/api/config/%.json: src/api/config/%.json; @echo '==> Preprocessing $<'
+	@jq -c . < $< > $@
 
 export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
 	$(lint)

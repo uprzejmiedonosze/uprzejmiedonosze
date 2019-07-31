@@ -11,8 +11,8 @@
 \vspace{1cm}
 
 {% spaceless %}
-    {% if app.guessSMData[2] %}
-        {{ app.guessSMData[2] }}
+    {% if app.guessSMData.city %}
+        {{ app.guessSMData.city }}
     {% else %}
         {% if app.address.city is not empty %}
             {{ app.address.city }}
