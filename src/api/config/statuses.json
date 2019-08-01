@@ -18,8 +18,8 @@
     "class": "active"
   },
   "confirmed-waiting": {
-    "name": "Wysłane email",
-    "action": "Wysłane mailem",
+    "name": "Wysłane",
+    "action": "Wysłane",
     "icon": "mail",
     "class": "active"
   },
