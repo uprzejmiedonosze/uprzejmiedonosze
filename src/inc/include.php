@@ -48,7 +48,8 @@ function generate($template, $parameters){
         $parameters['general']['stats'] = $storage->getUserStats();
     }
     
-    $parameters['statuses'] = STATUSES;
+    global $STATUSES;
+    $parameters['statuses'] = $STATUSES;
 
     echo $twig->render($template, $parameters);
 };

@@ -1,6 +1,6 @@
 <div id="{{ app.id }}"
-    class="application application-short {{ app.getStatus[3] }} status-all status-{{ app.getStatus[3] }}
-        status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus[2] }}"
+    class="application application-short {{ app.getStatus().class }} status-all status-{{ app.getStatus().class }}
+        status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus().icon }}"
     data-expanded-icon="carat-d" data-role="collapsible"
     data-filtertext="{{ "#{app.address.address} #{app.number} #{app.date} #{app.carInfo.plateId} "
         ~ "#{app.userComment} #{app.getCategory[1]} " }}
@@ -28,9 +28,9 @@
                 class="status-{{ app.status }}"
                 onChange="_action('{{ app.id }}');">
             {% for key,val in statuses %}
-                {% if val[3] %} {# class is empty, this is a draft or ready #}
+                {% if val.class %} {# class is empty, this is a draft or ready #}
                     <option value="{{ key }}"
-                        {% if key == app.status %}selected="selected"{% endif %}>{{ val[1] }}</option>
+                        {% if key == app.status %}selected="selected"{% endif %}>{{ val.action }}</option>
                 {% endif %}
             {% endfor %}
             </select>

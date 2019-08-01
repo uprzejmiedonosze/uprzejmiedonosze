@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/JSONObject.php');
 
 /**
- * Application class.
+ * Straz Miejska class LOL.
  */
 class SM extends JSONObject{
     /**
