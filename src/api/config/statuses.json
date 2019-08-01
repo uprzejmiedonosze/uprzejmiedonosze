@@ -24,8 +24,8 @@
     "comment": "Zapisanie gotowego zgłoszenia"
   },
   "confirmed-waiting": {
-    "name": "Wysłane email",
-    "action": "Wysłane mailem",
+    "name": "Wysłane",
+    "action": "Wysłane",
     "icon": "mail",
     "class": "active",
     "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
