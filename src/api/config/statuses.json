@@ -27,7 +27,8 @@
     "name": "Wysłane epuap",
     "action": "Wysłane epuapem",
     "icon": "clock",
-    "class": "active"
+    "class": null,
+    "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"]
   },
   "confirmed-sm": {
     "name": "Potwierdzone w SM",
