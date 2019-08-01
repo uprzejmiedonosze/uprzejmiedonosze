@@ -170,7 +170,8 @@ class Application extends JSONObject{
     }
 
     public function getStatus(){
-        return STATUSES[$this->status];
+        global $STATUSES;
+        return $STATUSES[$this->status];
     }
 
     public function isCurrentUserOwner(){

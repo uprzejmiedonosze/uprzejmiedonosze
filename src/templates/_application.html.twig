@@ -113,7 +113,7 @@
         {% for date,status in app.statusHistory %}
             <li>
                 <b>{{ date|date('Y-m-d H:i') }}</b>
-                zmiana na <b>{{ statuses[status.new][0] }}</b>
+                zmiana na <b>{{ statuses[status.new].name }}</b>
             </li>
         {% endfor %}
         </ul>

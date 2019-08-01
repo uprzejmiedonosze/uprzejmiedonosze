@@ -1,4 +1,6 @@
 <?PHP 
+require_once(__DIR__ . '/ConfigClass.php');
+
 $timeout = 60 * 60 * 24 * 365;
 ini_set("session.gc_maxlifetime", $timeout);
 ini_set("session.cookie_lifetime", $timeout);
@@ -76,28 +78,18 @@ const CATEGORIES = Array(
         null,
         null]
 );
-// key | [0] SM address in tex; [1] email address; [2] city in tex
 
-require_once(__DIR__ . '/SMConfig.php');
 const SM_CONFIG = __DIR__ . '/../public/api/config/sm.json';
 $smAddressess = fopen(SM_CONFIG, "r") or die("Unable to open config file: " . SM_CONFIG);
-$SM_ADDRESSES = (array) new SMConfig(fread($smAddressess, filesize(SM_CONFIG)));
+$SM_ADDRESSES = (array) new ConfigClass(fread($smAddressess, filesize(SM_CONFIG)), 'SM');
 fclose($smAddressess);
 
-const CATEGORIES_MATRIX = Array('a', 'b');
+const STATUSES_CONFIG = __DIR__ . '/../public/api/config/statuses.json';
+$statuses = fopen(STATUSES_CONFIG, "r") or die("Unable to open config file: " . STATUSES_CONFIG);
+$STATUSES = (array) new ConfigClass(fread($statuses, filesize(STATUSES_CONFIG)), 'Status');
+fclose($STATUSES);
 
-const STATUSES = Array (
-    // KEY                  0 desc               1 action             2 icon     3 class     4 color (not used)
-    'draft'             => ['Draft',             'Dalej',             'edit',    null,       ''],
-    'ready'             => ['Edycja',            'Potwierdź',         'shop',    null,       ''],
-    'confirmed'         => ['Nowe',              'Nowe',              'carat-u', 'active',   ''],
-    'confirmed-waiting' => ['Wysłane email',     'Wysłane mailem',    'mail',    'active',   ''],
-    'confirmed-waitingE'=> ['Wysłane epuap',     'Wysłane epuapem',   'clock',   'active',   ''],
-    'confirmed-sm'      => ['Potwierdzone w SM', 'Potwierdzone w SM', 'user',    'active',   ''],
-    'confirmed-ignored' => ['Zignorowane',       'Zignorowane',       'delete',  'active',   ''],
-    'confirmed-fined'   => ['Wystawiony mandat', 'Wystawiony mandat', 'check',   'active',   ''],
-    'archived'          => ['W archiwum',        'Do archiwum',       'cloud',   'archived', '']
-);
+const CATEGORIES_MATRIX = Array('a', 'b');
 
 const SEXSTRINGS = Array (
     '?' => [
