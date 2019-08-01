@@ -56,8 +56,8 @@
     "comment": "Zgłoszenie zostało zignorowane przez SM"
   },
   "confirmed-fined": {
-    "name": "Wystawiony mandat",
-    "action": "Wystawiony mandat",
+    "name": "Kierowca ukarany",
+    "action": "Kierowca ukarany",
     "icon": "check",
     "class": "active",
     "allowed": ["confirmed-ignored","archived"],
