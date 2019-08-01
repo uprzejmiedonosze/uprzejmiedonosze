@@ -3,25 +3,29 @@
     "name": "Draft",
     "action": "Dalej",
     "icon": "edit",
-    "class": null
+    "class": null,
+    "allowed": ["ready"]
   },
   "ready": {
     "name": "Edycja",
     "action": "Potwierdź",
     "icon": "shop",
-    "class": null
+    "class": null,
+    "allowed": ["draft", "confirmed"]
   },
   "confirmed": {
     "name": "Nowe",
     "action": "Nowe",
     "icon": "carat-u",
-    "class": "active"
+    "class": "active",
+    "allowed": ["confirmed-waiting", "confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"]
   },
   "confirmed-waiting": {
     "name": "Wysłane",
     "action": "Wysłane",
     "icon": "mail",
-    "class": "active"
+    "class": "active",
+    "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"]
   },
   "confirmed-waitingE": {
     "name": "Wysłane epuap",
@@ -34,24 +38,28 @@
     "name": "Potwierdzone w SM",
     "action": "Potwierdzone w SM",
     "icon": "user",
-    "class": "active"
+    "class": "active",
+    "allowed": ["confirmed-ignored", "confirmed-fined", "archived"]
   },
   "confirmed-ignored": {
     "name": "Zignorowane",
     "action": "Zignorowane",
     "icon": "delete",
-    "class": "active"
+    "class": "active",
+    "allowed": ["confirmed-fined", "archived"]
   },
   "confirmed-fined": {
     "name": "Kierowca ukarany",
     "action": "Kierowca ukarany",
     "icon": "check",
-    "class": "active"
+    "class": "active",
+    "allowed": ["confirmed-ignored","archived"]
   },
   "archived": {
     "name": "W archiwum",
     "action": "Do archiwum",
     "icon": "cloud",
-    "class": "archived"
+    "class": "archived",
+    "allowed": ["confirmed"]
   }
 }
