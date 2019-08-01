@@ -43,8 +43,8 @@
     "class": "active"
   },
   "confirmed-fined": {
-    "name": "Wystawiony mandat",
-    "action": "Wystawiony mandat",
+    "name": "Kierowca ukarany",
+    "action": "Kierowca ukarany",
     "icon": "check",
     "class": "active"
   },
