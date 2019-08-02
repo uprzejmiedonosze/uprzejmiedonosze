@@ -211,6 +211,13 @@ class Application extends JSONObject{
         return $string;
     }
 
+    public function getJSONSafeComment(){
+        // Remove HTML entities
+        $string = preg_replace('/&[a-zA-Z]+;/iu', '', $this->userComment);
+        $string = str_replace("\\", " ", $string);
+        return $string;
+    }
+
     /**
      * Zwraca adres do pliku z mapą lokalizacji zgłoszenia. W razie potrzeby
      * najpierw pobiera ten obrazek z API Google.
@@ -265,6 +272,26 @@ class Application extends JSONObject{
         return "$baseFileName,ma.png";
     }
 
+    public function getFirstName(){
+        return preg_split('/\s/', $this->user->name)[0];
+    }
+
+    public function getLastName(){
+        return preg_split('/^[^\s]+\s/', $this->user->name)[1];
+    }
+
+    public function getLon(){
+        return explode(',', $this->address->latlng)[1];
+    }
+
+    public function getLat(){
+        return explode(',', $this->address->latlng)[0];
+    }
+
+    public function getTitle(){
+        return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150): $this->getCategory()[0] )
+            . " ({$this->address->address})";
+    }
 }
 
 ?>
