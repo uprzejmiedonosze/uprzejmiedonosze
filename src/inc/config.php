@@ -85,9 +85,9 @@ $SM_ADDRESSES = (array) new ConfigClass(fread($smAddressess, filesize(SM_CONFIG)
 fclose($smAddressess);
 
 const STATUSES_CONFIG = __DIR__ . '/../public/api/config/statuses.json';
-$statuses = fopen(STATUSES_CONFIG, "r") or die("Unable to open config file: " . STATUSES_CONFIG);
-$STATUSES = (array) new ConfigClass(fread($statuses, filesize(STATUSES_CONFIG)), 'Status');
-fclose($STATUSES);
+$st = fopen(STATUSES_CONFIG, "r") or die("Unable to open config file: " . STATUSES_CONFIG);
+$STATUSES = (array) new ConfigClass(fread($st, filesize(STATUSES_CONFIG)), 'Status');
+fclose($st);
 
 const CATEGORIES_MATRIX = Array('a', 'b');
 
