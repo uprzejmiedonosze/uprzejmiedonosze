@@ -14,7 +14,7 @@ foreach ($smAddresses as $sm) {
 
 $sortedSMs = array_unique($sortedSMs, SORT_LOCALE_STRING);
 
-generate('faq.html.twig', 
+echo generate('faq.html.twig', 
     [
         'head' =>
         [

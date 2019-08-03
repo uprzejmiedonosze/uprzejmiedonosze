@@ -11,7 +11,7 @@ foreach($apps as $app){
     $cities[$app->guessSMData()->city] = $app->guessSMData();
 }
 
-generate('wysylka.html.twig', 
+echo generate('wysylka.html.twig', 
     [
         'head' =>
         [
