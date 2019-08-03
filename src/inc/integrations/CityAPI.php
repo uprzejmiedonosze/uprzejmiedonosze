@@ -31,8 +31,6 @@ abstract class CityAPI {
                 new CURLFile("$root/" . $application->carImage->url, "image/jpg", $application->getAppImageFilenamePrefix() . '-tablica.jpg')
             ]);
 
-        print_r($postFields);
-
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -45,14 +43,22 @@ abstract class CityAPI {
         ));
 
         $response = curl_exec($curl);
-        $err = curl_error($curl);
+
+        if(curl_errno($curl)){
+            $error = "Błąd komunikacji z API {$sm->api}: " . curl_error($curl);
+            curl_close($curl);
+            raiseError($error, 500);
+        }
         curl_close($curl);
 
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
-            echo $response;
+        $json = @json_decode($response, true);
+        if(!json_last_error() === JSON_ERROR_NONE){
+            $error = "Błąd komunikacji z API {$sm->api}: " . json_last_error_msg();
+            raiseError($error, 500);
         }
+
+        return $json;
+
     }
 }
 

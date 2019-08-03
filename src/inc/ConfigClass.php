@@ -14,8 +14,7 @@ class ConfigClass {
         $data = json_decode($json, true);
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $sub = new $class;
-                $sub->set($value);
+                $sub = new $class($value);
                 $value = $sub;
             }
             $this->{$key} = $value;

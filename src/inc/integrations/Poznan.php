@@ -22,7 +22,14 @@ class Poznan extends CityAPI {
             'address' => $application->address->address, //adres, pole opcjonalne, do 256 znaków
             'key' => '85951ba0a63d1051a09659ea0a9d8391' //klucz aplikacji, pole obowiązkowe
         );
-        parent::curlSend($url, $auth, $data, $application);
+        $output = parent::curlSend($url, $auth, $data, $application);
+
+        $reply = "Odpowiedź: {$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
+
+        $application->setStatus('confirmed-waiting');
+        $application->addComment($application->guessSMData()->address[0], $reply);
+        global $storage;
+        $storage->saveApplication($application);
     }
 }
 

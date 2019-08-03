@@ -11,6 +11,7 @@ class SM extends JSONObject{
      */
     public function __construct($json = null) {
         parent::__construct($json);
+        @$this->address = get_object_vars($this->address);
     }
 
     public function getAddress(){
