@@ -19,6 +19,8 @@ if (is_ajax()) {
                 _action($action, $_POST["id"]); break;
             case "upload":
                 _upload(); break;
+            case "send":
+                _sendViaAPI($_POST["id"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -58,6 +60,20 @@ function _action($action, $appId){
     $storage->saveApplication($application);
     $storage->updateRecydywa($application->carInfo->plateId);
     $storage->getUserStats(false); // update cache
+    echo json_encode(Array("status" => "OK"));
+}
+
+function _sendViaAPI($appId){
+    global $storage;
+    $application = $storage->getApplication($appId);
+    $sm = $application->guessSMData();
+
+    if(!$sm->api){
+        raiseError("Trying to send app via API for: " . $sm->city, 500);
+    }
+    require(__DIR__ . '/../../inc/integrations/CityAPI.php');
+    $api = new $sm->api;
+    $api->send($application);
     echo json_encode(Array("status" => "OK"));
 }
 
