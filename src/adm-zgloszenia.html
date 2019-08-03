@@ -8,7 +8,7 @@ if(!$storage->getCurrentUser()->isAdmin()){
 	die();
 }
 
-generate('adm-zgloszenia.html.twig', 
+echo generate('adm-zgloszenia.html.twig', 
     [
         'head' =>
         [

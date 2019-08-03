@@ -51,7 +51,7 @@ function generate($template, $parameters){
     global $STATUSES;
     $parameters['statuses'] = $STATUSES;
 
-    echo $twig->render($template, $parameters);
+    return $twig->render($template, $parameters);
 };
 
 ?>

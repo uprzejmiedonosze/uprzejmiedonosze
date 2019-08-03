@@ -7,7 +7,7 @@ $user = $storage->getCurrentUser();
 $appsEmail = $storage->getAllApplicationsByStatus('confirmed-waiting');
 $appsEpuap = $storage->getAllApplicationsByStatus('confirmed-waitingE');
 
-generate('dokumenty-sm.html.twig', 
+echo generate('dokumenty-sm.html.twig', 
     [
         'head' =>
         [

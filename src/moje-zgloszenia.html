@@ -34,7 +34,7 @@ if($changeMail || $changeEpuap){
     $storage->getUserStats(false); // update cache
 }
 
-generate('moje-zgloszenia.html.twig', 
+echo generate('moje-zgloszenia.html.twig', 
     [
         'head' =>
         [
