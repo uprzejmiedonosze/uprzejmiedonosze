@@ -104,6 +104,14 @@ class Application extends JSONObject{
     }
 
     /**
+     * Returns prefix for image filenames – used while sending images
+     * via API to SM.
+     */
+    public function getAppImageFilenamePrefix(){
+        return str_replace('/', '-', $this->number);
+    }
+
+    /**
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId
      * value in the application.
