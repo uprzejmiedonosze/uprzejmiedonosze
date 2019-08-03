@@ -14,6 +14,7 @@ class Application extends JSONObject{
         if($json){
             parent::__construct($json);
             @$this->statusHistory = (array)$this->statusHistory;
+            @$this->comments = (array)$this->comments;
             return;
         }
         global $storage;
@@ -299,6 +300,20 @@ class Application extends JSONObject{
     public function getTitle(){
         return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150): $this->getCategory()[0] )
             . " ({$this->address->address})";
+    }
+
+    /**
+     * Adds a comment to the application.
+     * $source <string>
+     *  Name of the author | API Miasta | Admin
+     */
+    public function addComment($source, $comment){
+        if(!isset($this->comments)){
+            $this->comments = [];
+        }
+        $this->comments[date(DT_FORMAT)] = new JSONObject();
+        $this->comments[date(DT_FORMAT)]->source = $source;
+        $this->comments[date(DT_FORMAT)]->comment = $comment;
     }
 }
 
