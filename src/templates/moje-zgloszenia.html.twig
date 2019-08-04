@@ -55,6 +55,12 @@
             updateCounters();
         });
     }
+
+    function sendViaAPI(appId){
+        $.post("/api/api.html", { id: appId, action: "send" }, function(result){
+            console.log(result);
+        });
+    }
 </script>
 
 {% endblock %}
