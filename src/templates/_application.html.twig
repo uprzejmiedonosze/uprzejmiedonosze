@@ -106,18 +106,33 @@
     </div>
 {% endif %}
 
-{% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.confirmationScreen is not defined %}
-    <div id="statusHistory">
-        <h4>Historia zmian statusów</h4>
-        <ul data-role="listview">
-        {% for date,status in app.statusHistory %}
-            <li>
-                <b>{{ date|date('Y-m-d H:i') }}</b>
-                zmiana na <b>{{ statuses[status.new].name }}</b>
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
+{% if app.isCurrentUserOwner and config.confirmationScreen is not defined %}
+    {% if app.comments is defined and app.comments|length > 0 %}
+        <div id="comments">
+            <h4>Komentarze</h4>
+            <ul data-role="listview">
+            {% for date,comment in app.comments %}
+                <li>
+                    <b>{{ date|date('Y-m-d H:i') }}</b>
+                    {{ comment.source }}: {{ comment.comment }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if app.statusHistory|length > 0 %}
+        <div id="statusHistory">
+            <h4>Historia zmian statusów</h4>
+            <ul data-role="listview">
+            {% for date,status in app.statusHistory %}
+                <li>
+                    <b>{{ date|date('Y-m-d H:i') }}</b>
+                    zmiana na <b>{{ statuses[status.new].name }}</b>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 {% endif %}
 
 </div>
