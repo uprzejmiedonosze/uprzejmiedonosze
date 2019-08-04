@@ -539,6 +539,17 @@
     "hint": null,
     "api": false
   },
+  "stronie śląskie": {
+    "address": [
+      "Straż Miejska w Stroniu Śląskim",
+      "ul. Mickiewicza 2",
+      "57-550 Stronie Śląskie"
+    ],
+    "email": "straznicy@stronie.pl",
+    "city": "Stronie Śląskie",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
