@@ -112,8 +112,7 @@
         <ul data-role="listview">
         {% for date,status in app.statusHistory %}
             <li>
-                <b>{{ date|date('Y-m-d H:i') }}</b>
-                zmiana na <b>{{ statuses[status.new].name }}</b>
+                <b>{{ date|date('Y-m-d H:i') }}</b> {{ app.user.name }}: {{ statuses[status.new].comment }}
             </li>
         {% endfor %}
         </ul>
