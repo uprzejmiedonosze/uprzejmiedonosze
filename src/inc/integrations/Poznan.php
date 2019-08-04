@@ -24,7 +24,7 @@ class Poznan extends CityAPI {
         );
         $output = parent::curlSend($url, $auth, $data, $application);
 
-        $reply = "Odpowiedź: {$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
+        $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
 
         $application->setStatus('confirmed-waiting');
         $application->addComment($application->guessSMData()->address[0], $reply);
