@@ -35,7 +35,7 @@
     "name": "Wysłane epuap",
     "action": "Wysłane epuapem",
     "icon": "clock",
-    "class": null,
+    "class": "active",
     "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
     "comment": "Wysłanie zgłoszenia za pomocą EPUAP"
   },
