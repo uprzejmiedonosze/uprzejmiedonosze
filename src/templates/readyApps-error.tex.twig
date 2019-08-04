@@ -1,0 +1,17 @@
+{% extends "pdf.tex.twig" %}
+
+{% block main %}
+\begin{letter}{  } 
+\date{ }
+\opening{ {\Large Uwaga } }
+
+Próbujesz pobrać paczkę zgłoszeń do wysyłki do Straży Miejskiej, ale żadne
+z twoich zgłoszeń nie jest w~statusie \#nowe. Może otworzyłaś/eś stronę ,,Wysyłka'' wcześniej
+(kiedy jeszcze miałaś/eś takie zgłoszenia), ale w~międzyczasie zmieniłaś/eś ich status?
+
+Odśwież stronę \href{https://uprzejmiedonosze.net/wysylka.html}{https://uprzejmiedonosze.net/wysylka.html}.
+
+Jeśli uważasz, że to błąd, skontaktuj się z autorem pod adresem szymon@uprzejmiedonosze.net.
+
+\end{letter}
+{% endblock %}
