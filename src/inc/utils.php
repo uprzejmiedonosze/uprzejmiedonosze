@@ -147,7 +147,7 @@ function capitalizeName($input){
     if(!isset($input) || trim($input) === ''){
         return '';
     }
-    return trim(ucwords(mb_strtolower($input)));
+    return trim(mb_convert_case($input, MB_CASE_TITLE, 'UTF-8'));
 }
 
 function isIOS(){
