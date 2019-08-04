@@ -24,16 +24,21 @@
 {% if config.appActionButtons %}
         <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
             <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
+    {% if app.guessSMData.hasAPI and app.status == 'confirmed' %}
+            <a href="#" onclick="sendViaAPI('{{ app.id }}')"
+                class="ui-shadow ui-btn ui-corner-all ui-btn-icon-left ui-icon-grid ui-btn-b">Wyślij</a>
+    {% else %}
             <select name="select-status" id="select-status-{{ app.id }}"
                 class="status-{{ app.status }}"
                 onChange="_action('{{ app.id }}');">
             {% for key,val in statuses %}
                 {% if val.class %} {# class is empty, this is a draft or ready #}
                     <option value="{{ key }}"
-                        {% if key == app.status %}selected="selected"{% endif %}>{{ val.action }}</option>
+                        {% if key == app.status %}selected="selected"{% endif %}>{{ val.name }}</option>
                 {% endif %}
             {% endfor %}
             </select>
+    {% endif %}
         </fieldset></form>
 {% endif %}
         <div class="ui-grid-a ui-responsive images images-cropped">
