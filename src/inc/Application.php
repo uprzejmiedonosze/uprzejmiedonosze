@@ -160,6 +160,10 @@ class Application extends JSONObject{
         return $SM_ADDRESSES['_nieznane'];
     }
 
+    public function hasAPI(){
+        return $this->guessSMData()->hasAPI();
+    }
+
     /**
      * Returns application city in a filename-friendly format.
      */

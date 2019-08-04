@@ -34,8 +34,8 @@ class SM extends JSONObject{
         return $this->hint;
     }
 
-    public function isAPI(){
-        return !!$this->api;
+    public function hasAPI(){
+        return $this->api && $this->api !== 'email';
     }  
 
 }
