@@ -459,6 +459,11 @@ a.zoom {
    opacity: 1;
 }
 
+#comments .ui-listview li,
+#statusHistory .ui-listview li  {
+    white-space: initial;
+}
+
 /* #endregion zgloszenie */
 
 /* #region moje aplikacje */

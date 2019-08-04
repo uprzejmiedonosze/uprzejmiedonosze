@@ -107,14 +107,14 @@
 {% endif %}
 
 {% if app.isCurrentUserOwner and config.confirmationScreen is not defined %}
-    {% if app.comments is defined and app.comments|length > 0 %}
+    {% if app.comments and app.comments|length > 0 %}
         <div id="comments">
             <h4>Komentarze</h4>
             <ul data-role="listview">
             {% for date,comment in app.comments %}
                 <li>
-                    <b>{{ date|date('Y-m-d H:i') }}</b>
-                    {{ comment.source }}: {{ comment.comment }}
+                    <b>{{ date|date('Y-m-d H:i') }}</b> {{ comment.source }}:
+                    <p>{{ comment.comment }}</p>
                 </li>
             {% endfor %}
             </ul>
@@ -126,8 +126,8 @@
             <ul data-role="listview">
             {% for date,status in app.statusHistory %}
                 <li>
-                    <b>{{ date|date('Y-m-d H:i') }}</b>
-                    zmiana na <b>{{ statuses[status.new].name }}</b>
+                    <b>{{ date|date('Y-m-d H:i') }}</b> {{ app.user.name }}:
+                    <p>{{ statuses[status.new].comment }}</p.
                 </li>
             {% endfor %}
             </ul>
