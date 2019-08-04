@@ -4,62 +4,71 @@
     "action": "Dalej",
     "icon": "edit",
     "class": null,
-    "allowed": ["ready"]
+    "allowed": ["ready"],
+    "comment": "Stworzenie zgłoszenia"
   },
   "ready": {
     "name": "Edycja",
     "action": "Potwierdź",
     "icon": "shop",
     "class": null,
-    "allowed": ["draft", "confirmed"]
+    "allowed": ["draft", "confirmed"],
+    "comment": "Zapisanie wersji roboczej"
   },
   "confirmed": {
     "name": "Nowe",
-    "action": "Nowe",
+    "action": "Wyślij",
     "icon": "carat-u",
     "class": "active",
-    "allowed": ["confirmed-waiting", "confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"]
+    "allowed": ["confirmed-waiting", "confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
+    "comment": "Zapisanie gotowego zgłoszenia"
   },
   "confirmed-waiting": {
     "name": "Wysłane",
     "action": "Wysłane",
     "icon": "mail",
     "class": "active",
-    "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"]
+    "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
+    "comment": "Wysłanie zgłoszenia"
   },
   "confirmed-waitingE": {
     "name": "Wysłane epuap",
     "action": "Wysłane epuapem",
     "icon": "clock",
     "class": null,
-    "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"]
+    "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
+    "comment": "Wysłanie zgłoszenia za pomocą EPUAP"
   },
   "confirmed-sm": {
     "name": "Potwierdzone w SM",
     "action": "Potwierdzone w SM",
     "icon": "user",
     "class": "active",
-    "allowed": ["confirmed-ignored", "confirmed-fined", "archived"]
+    "allowed": ["confirmed-ignored", "confirmed-fined", "archived"],
+    "comment": "Potwierdzenie przyjęcia zgłoszenia przez/w SM"
   },
   "confirmed-ignored": {
     "name": "Zignorowane",
     "action": "Zignorowane",
     "icon": "delete",
     "class": "active",
-    "allowed": ["confirmed-fined", "archived"]
+    "allowed": ["confirmed-fined", "archived"],
+    "comment": "Zgłoszenie zostało zignorowane przez SM"
   },
   "confirmed-fined": {
     "name": "Kierowca ukarany",
     "action": "Kierowca ukarany",
     "icon": "check",
     "class": "active",
-    "allowed": ["confirmed-ignored","archived"]
+    "allowed": ["confirmed-ignored","archived"],
+    "comment": "Kierowca został ukarany"
   },
   "archived": {
     "name": "W archiwum",
     "action": "Do archiwum",
     "icon": "cloud",
     "class": "archived",
-    "allowed": ["confirmed"]
+    "allowed": ["confirmed"],
+    "comment": "Zgłoszenie zostało zarchiwizowane"
   }
 }
