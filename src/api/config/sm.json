@@ -1,0 +1,552 @@
+{
+  "szczecin": {
+    "address": [
+      "Straż Miejska Szczecin",
+      "ul. Klonowica 1b",
+      "71-241 Szczecin"
+    ],
+    "email": "sm@um.szczecin.pl",
+    "city": "Szczecin",
+    "hint": null,
+    "api": false
+  },
+  "warszawa": {
+    "address": [
+      "Referat Oskarżycieli Publicznych",
+      "Straż Miejska m.st. Warszawy",
+      "ul. Młynarska 43/45",
+      "01-170 Warszawa"
+    ],
+    "email": "csk@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": null,
+    "api": false
+  },
+  "wroclaw": {
+    "address": [
+      "Straż Miejska Wrocławia",
+      "ul. Gwarna 5/7",
+      "50-001 Wrocław"
+    ],
+    "email": "straz@strazmiejska.wroclaw.pl",
+    "city": "Wrocław",
+    "hint": null,
+    "api": false
+  },
+  "wrocław": {
+    "address": [
+      "Straż Miejska Wrocławia",
+      "ul. Gwarna 5/7",
+      "50-001 Wrocław"
+    ],
+    "email": "straz@strazmiejska.wroclaw.pl",
+    "city": "Wrocław",
+    "hint": null,
+    "api": false
+  },
+  "kraków": {
+    "address": [
+      "Straż Miejska Miasta Krakowa",
+      "ul. Dobrego Pasterza 116",
+      "31-416 Kraków"
+    ],
+    "email": "smkrak@strazmiejska.krakow.pl",
+    "city": "Kraków",
+    "hint": null,
+    "api": false
+  },
+  "gdynia": {
+    "address": [
+      "Straż Miejska Gdyni",
+      "ul. Zakręt do Oksywia 10",
+      "81-244 Gdynia"
+    ],
+    "email": "straz_miejska@gdynia.pl",
+    "city": "Gdynia",
+    "hint": null,
+    "api": false
+  },
+  "białystok": {
+    "address": [
+      "Straż Miejska w Białymstoku",
+      "ul. Składowa 11",
+      "15-399 Białystok"
+    ],
+    "email": "dyzurny.sm@um.bialystok.pl",
+    "city": "Białystok",
+    "hint": null,
+    "api": false
+  },
+  "łódź": {
+    "address": [
+      "Komenda Straży Miejskiej w Łodzi",
+      "ul. Kilińskiego 81",
+      "90-119 Łódź"
+    ],
+    "email": "ogolnomiejski@strazmiejska.lodz.pl",
+    "city": "Łódź",
+    "hint": null,
+    "api": false
+  },
+  "gdańsk": {
+    "address": [
+      "Straż Miejska w Gdańsku",
+      "ul. Elbląska 54/60",
+      "80–724 Gdańsk"
+    ],
+    "email": "strazmiejska@sm.gda.pl",
+    "city": "Gdańsk",
+    "hint": null,
+    "api": false
+  },
+  "poznań": {
+    "address": [
+      "Straż Miejska Miasta Poznania",
+      "ul. Głogowska 26",
+      "60-734 Poznań"
+    ],
+    "email": "sm@um.poznan.pl",
+    "city": "Poznań",
+    "hint": null,
+    "api": false
+  },
+  "toruń": {
+    "address": [
+      "Straż Miejska w Toruniu",
+      "ul. Grudziądzka 157",
+      "87 - 100 Toruń"
+    ],
+    "email": "sm@um.torun.pl",
+    "city": "Toruń",
+    "hint": null,
+    "api": false
+  },
+  "bydgoszcz": {
+    "address": [
+      "Straż Miejska w Bydgoszczy",
+      "ul. Leśna 12",
+      "85-676 Bydgoszcz"
+    ],
+    "email": "sekretariat@strazmiejska.bydgoszcz.pl",
+    "city": "Bydgoszcz",
+    "hint": null,
+    "api": false
+  },
+  "katowice": {
+    "address": [
+      "Straż Miejska w Katowicach",
+      "ul. Żelazna 18",
+      "40-851 Katowice"
+    ],
+    "email": "interwencje@katowice.eu",
+    "city": "Katowice",
+    "hint": null,
+    "api": false
+  },
+  "górowo iławeckie": {
+    "address": [
+      "UM Górowo Iławeckie",
+      "pl. Ratuszowy 18",
+      "11-220 Górowo Iławeckie"
+    ],
+    "email": "umgorowo@gorowoilaweckie.pl",
+    "city": "Górowo Iławeckie",
+    "hint": null,
+    "api": false
+  },
+  "tczew": {
+    "address": [
+      "Straż Miejska w Tczewie",
+      "Plac Marszałka Piłsudskiego 1",
+      "83-110 Tczew"
+    ],
+    "email": "strazmiejska@um.tczew.pl",
+    "city": "Tczew",
+    "hint": null,
+    "api": false
+  },
+  "chełm": {
+    "address": [
+      "Straż Miejska Chełm",
+      "Obłońska 20",
+      "22-100 Chełm"
+    ],
+    "email": "straz.miejska@umchelm.pl",
+    "city": "Chełm",
+    "hint": null,
+    "api": false
+  },
+  "gryfino": {
+    "address": [
+      "Straż Miejska Gryfino",
+      "1 Maja 16",
+      "74-100 Gryfino"
+    ],
+    "email": "strazmiejska@gryfino.pl",
+    "city": "Gryfino",
+    "hint": null,
+    "api": false
+  },
+  "ząbki": {
+    "address": [
+      "Straż Miejska w Ząbkach",
+      "Wojska Polskiego 10",
+      "05-091 Ząbki"
+    ],
+    "email": "strazmiejska@zabki.pl",
+    "city": "Ząbki",
+    "hint": null,
+    "api": false
+  },
+  "bartoszyce": {
+    "address": [
+      "Straż Miejska w Bartoszycach",
+      "ul. Bohaterów Monte Cassino 1",
+      "11-200 Bartoszyce"
+    ],
+    "email": "urzad.miasta@bartoszyce.pl",
+    "city": "Bartoszyce",
+    "hint": null,
+    "api": false
+  },
+  "lidzbark warmiński": {
+    "address": [
+      "Straż Miejska w Lidzbarku Warmińskim",
+      "Aleksandra Świętochowskiego 14",
+      "11-100 Lidzbark Warmiński"
+    ],
+    "email": "um@lidzbarkwarminski.pl",
+    "city": "Lidzbark Warmiński",
+    "hint": null,
+    "api": false
+  },
+  "zielona góra": {
+    "address": [
+      "Straż Miejska Zielona Góra",
+      "ul. Bohaterów Westerplatte 23",
+      "65-078 Zielona Góra"
+    ],
+    "email": "dyzurny@um.zielona-gora.pl",
+    "city": "Zielona Góra",
+    "hint": null,
+    "api": false
+  },
+  "olsztyn": {
+    "address": [
+      "Straż Miejska w Olsztynie",
+      "al. J. Piłsudskiego 11/17",
+      "10-959 Olsztyn"
+    ],
+    "email": "sm@strazmiejska.olsztyn.pl",
+    "city": "Olsztyn",
+    "hint": null,
+    "api": false
+  },
+  "świdnica": {
+    "address": [
+      "Straż Miejska w Świdnicy",
+      "ul. Dworcowa 2-4-6-8",
+      "58-100 Świdnica"
+    ],
+    "email": "strazmiejska@sm.swidnica.pl",
+    "city": "Świdnica",
+    "hint": null,
+    "api": false
+  },
+  "karlino": {
+    "address": [
+      "Straż Miejska Karlino",
+      "ul. Szymanowskiego 17A",
+      "78-230 Karlino"
+    ],
+    "email": "sm@karlino.pl",
+    "city": "Karlino",
+    "hint": null,
+    "api": false
+  },
+  "sosnowiec": {
+    "address": [
+      "Straż Miejska Sosnowiec",
+      "ul. S. Małachowskiego 3",
+      "41-200 Sosnowiec"
+    ],
+    "email": "straz@um.sosnowiec.pl",
+    "city": "Sosnowiec",
+    "hint": null,
+    "api": false
+  },
+  "rzeszów": {
+    "address": [
+      "Straż Miejska w Rzeszowie",
+      "ul. Ofiar Katynia 1",
+      "35-209 Rzeszów"
+    ],
+    "email": "komenda@sm.erzeszow.pl",
+    "city": "Rzeszów",
+    "hint": null,
+    "api": false
+  },
+  "łosice": {
+    "address": [
+      "Straż Miejska Łosice",
+      "Handlowa 7",
+      "Łosice 08-200"
+    ],
+    "email": "straz-miejska@gminalosice.pl",
+    "city": "Łosice",
+    "hint": null,
+    "api": false
+  },
+  "sieradz": {
+    "address": [
+      "Straż Miejska w Sieradzu",
+      "ul. Kościuszki 6",
+      "98-200 Sieradz"
+    ],
+    "email": "sm@umsieradz.pl",
+    "city": "Sieradz",
+    "hint": null,
+    "api": false
+  },
+  "tarnów": {
+    "address": [
+      "Straż Miejska w Tarnowie",
+      "ul. Nadbrzeżna Dolna 7",
+      "33-100 Tarnów"
+    ],
+    "email": "straz@umt.tarnow.pl",
+    "city": "Tarnów",
+    "hint": null,
+    "api": false
+  },
+  "wejherowo": {
+    "address": [
+      "Straż Miejska Wejherowo",
+      "pl. Jakuba Wejhera 8",
+      "84-200 Wejherowo"
+    ],
+    "email": "sm@wejherowo.pl",
+    "city": "Wejherowo",
+    "hint": null,
+    "api": false
+  },
+  "konstancin-jeziorna": {
+    "address": [
+      "Straż Miejska Konstancin-Jeziorna",
+      "ul. Sobieskiego 5",
+      "05-510 Konstancin-Jeziorna"
+    ],
+    "email": "komendasm@konstancinjeziorna.pl",
+    "city": "Konstancin-Jeziorna",
+    "hint": null,
+    "api": false
+  },
+  "nowy targ": {
+    "address": [
+      "Komenda Powiatowa Policji w Nowym Targu",
+      "ul. Konfederacji Tatrzańskiej 1a",
+      "34-400 Nowy Targ"
+    ],
+    "email": "dyzurni@nowy-targ.policja.gov.pl",
+    "city": "Nowy Targ",
+    "hint": null,
+    "api": false
+  },
+  "piaseczno": {
+    "address": [
+      "Straż Miejska Piaseczno",
+      "ul. Czajewicza 1a",
+      "05-500 Piaseczno"
+    ],
+    "email": "strazmiejska@piaseczno.eu",
+    "city": "Piaseczno",
+    "hint": null,
+    "api": false
+  },
+  "kalisz": {
+    "address": [
+      "Straż Miejska Kalisza",
+      "ul. Krótka 5-7",
+      "62-800 Kalisz"
+    ],
+    "email": "kontakt@sm.kalisz.pl",
+    "city": "Kalisz",
+    "hint": null,
+    "api": false
+  },
+  "legnica": {
+    "address": [
+      "Straż Miejska w Legnicy",
+      "Al. Rzeczypospolitej 3",
+      "59-220 Legnica"
+    ],
+    "email": "sekretariat@sm.legnica.pl",
+    "city": "Legnica",
+    "hint": null,
+    "api": false
+  },
+  "pruszków": {
+    "address": [
+      "Straż Miejska w Pruszkowie",
+      "ul. Kraszewskiego 14/16",
+      "05-800 Pruszków"
+    ],
+    "email": "kierownikzmiany@strazmiejska.pruszkow.pl",
+    "city": "Pruszków",
+    "hint": null,
+    "api": false
+  },
+  "niechorze": {
+    "address": [
+      "Straż Gminna w Rewalu",
+      "ul. Mickiewicza 21",
+      "72-344 Rewal"
+    ],
+    "email": "strazgminna@rewal.pl",
+    "city": "Niechorze",
+    "hint": null,
+    "api": false
+  },
+  "rewal": {
+    "address": [
+      "Straż Gminna w Rewalu",
+      "ul. Mickiewicza 21",
+      "72-344 Rewal"
+    ],
+    "email": "strazgminna@rewal.pl",
+    "city": "Rewal",
+    "hint": null,
+    "api": false
+  },
+  "mysłowice": {
+    "address": [
+      "Straż Miejska Mysłowice",
+      "Strażacka 7",
+      "41-400 Mysłowice"
+    ],
+    "email": "straz.miejska@myslowice.pl",
+    "city": "Mysłowice",
+    "hint": null,
+    "api": false
+  },
+  "zabrze": {
+    "address": [
+      "Straż Miejska w Zabrzu",
+      "ul. Pawła Stalmacha 9",
+      "41-800 Zabrze"
+    ],
+    "email": "straz@strazmiejska.zabrze.pl",
+    "city": "Zabrze",
+    "hint": null,
+    "api": false
+  },
+  "ruda śląska": {
+    "address": [
+      "Straż Miejska Ruda Śląska",
+      "gen. Józefa Hallera 61",
+      "41-709 Ruda Śląska"
+    ],
+    "email": "straz@rudaslaska.pl",
+    "city": "Ruda Śląska",
+    "hint": null,
+    "api": false
+  },
+  "lublin": {
+    "address": [
+      "Straż Miejska Lublin",
+      "ul. Podwale 3a",
+      "20-400 Lublin"
+    ],
+    "email": "sm@lublin.eu",
+    "city": "Lublin",
+    "hint": null,
+    "api": false
+  },
+  "leszno": {
+    "address": [
+      "Straż Miejska w Lesznie",
+      "ul. Berwińskich 7c",
+      "64-100 Leszno"
+    ],
+    "email": "sm@leszno.pl",
+    "city": "Leszno",
+    "hint": null,
+    "api": false
+  },
+  "inowrocław": {
+    "address": [
+      "Straż Miejska Inowrocław",
+      "ul. Gabriela Narutowicza 60",
+      "88-100 Inowrocław"
+    ],
+    "email": "strazmiejska@inowroclaw.pl",
+    "city": "Inowrocław",
+    "hint": null,
+    "api": false
+  },
+  "suwałki": {
+    "address": [
+      "Straż Miejska Suwałki",
+      "ul. Teofila Noniewicza 71A",
+      "16-402 Suwałki"
+    ],
+    "email": "sm@um.suwalki.pl",
+    "city": "Suwałki",
+    "hint": null,
+    "api": false
+  },
+  "gliwice": {
+    "address": [
+      "Straż Miejska w Gliwicach",
+      "ul. Bolesława Śmiałego 2A",
+      "44-121 Gliwice"
+    ],
+    "email": "dyzurny@smgliwice.pl",
+    "city": "Gliwice",
+    "hint": null,
+    "api": false
+  },
+  "wodzisław śląski": {
+    "address": [
+      "Straż Miejska w Wodzisławiu Śląskim",
+      "ul. Rzeczna 24",
+      "44-300 Wodzisław Śląski"
+    ],
+    "email": "strazmiejska@wodzislaw-slaski.pl",
+    "city": "Wodzisław Śląski",
+    "hint": null,
+    "api": false
+  },
+  "rybnik": {
+    "address": [
+      "Straż Miejska w Rybniku",
+      "Władysława Stanisława Reymonta 54",
+      "44-200 Rybnik"
+    ],
+    "email": "interwencja@sm.rybnik.pl",
+    "city": "Rybnik",
+    "hint": null,
+    "api": false
+  },
+  "gorzów wielkopolski": {
+    "address": [
+      "Straż Miejska w Gorzowie Wielkopolskim",
+      "ul. Łokietka 22",
+      "66-400 Gorzów Wielkopolski"
+    ],
+    "email": "ksm@um.gorzow.pl",
+    "city": "Gorzów Wielkopolski",
+    "hint": null,
+    "api": false
+  },
+  "_nieznane": {
+    "address": [
+      "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
+      "i podaj mu adres siedziby oraz email Straży Miejskiej)"
+    ],
+    "email": null,
+    "city": null,
+    "hint": null,
+    "api": false
+  }
+}

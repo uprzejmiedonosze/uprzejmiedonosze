@@ -8,7 +8,7 @@ $apps = array_reverse($storage->getAllApplicationsByStatus('confirmed'));
 
 $cities = array();
 foreach($apps as $app){
-    $cities[$app->guessSMData()[2]] = $app->guessSMData();
+    $cities[$app->guessSMData()->city] = $app->guessSMData();
 }
 
 generate('wysylka.html.twig', 

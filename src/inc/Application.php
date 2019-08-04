@@ -127,34 +127,35 @@ class Application extends JSONObject{
      * [adres w formacie latex, email]
      */
     public function guessSMData(){
+        global $SM_ADDRESSES;
         if(isset($this->smCity)){
             if($this->smCity !== '_nieznane'){
-                return SM_ADDRESSES[$this->smCity];
+                return $SM_ADDRESSES[$this->smCity];
             }
         }
 
         $city = trim(mb_strtolower($this->address->city, 'UTF-8'));
 
-        if(array_key_exists($city, SM_ADDRESSES)){
+        if(array_key_exists($city, $SM_ADDRESSES)){
             $this->smCity = $city;
-            return SM_ADDRESSES[$this->smCity];
+            return $SM_ADDRESSES[$this->smCity];
         }
 
         $address = trim(mb_strtolower($this->address->address, 'UTF-8'));
-        foreach(SM_ADDRESSES as $c => $a){
+        foreach($SM_ADDRESSES as $c => $a){
             if (strpos($address, $c) !== false){
                 $this->smCity = $c;
-                return SM_ADDRESSES[$this->smCity];
+                return $SM_ADDRESSES[$this->smCity];
             }
         }
-        return SM_ADDRESSES['_nieznane'];
+        return $SM_ADDRESSES['_nieznane'];
     }
 
     /**
      * Returns application city in a filename-friendly format.
      */
     public function getSanitizedCity(){
-        return mb_ereg_replace("([^\w\d])", '-', $this->guessSMData()[2]);
+        return mb_ereg_replace("([^\w\d])", '-', $this->guessSMData()->city);
     }
 
     public function guessUserSex(){
@@ -169,7 +170,8 @@ class Application extends JSONObject{
     }
 
     public function getStatus(){
-        return STATUSES[$this->status];
+        global $STATUSES;
+        return $STATUSES[$this->status];
     }
 
     public function isCurrentUserOwner(){

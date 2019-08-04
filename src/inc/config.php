@@ -1,4 +1,6 @@
 <?PHP 
+require_once(__DIR__ . '/ConfigClass.php');
+
 $timeout = 60 * 60 * 24 * 365;
 ini_set("session.gc_maxlifetime", $timeout);
 ini_set("session.cookie_lifetime", $timeout);
@@ -76,142 +78,18 @@ const CATEGORIES = Array(
         null,
         null]
 );
-// key | [0] SM address in tex; [1] email address; [2] city in tex
-const SM_ADDRESSES = Array (
-    'szczecin' => ['Referat Wykroczeń \\\\ Straż Miejska Szczecin \\\\ ul Klonowica 1b \\\\ 71-241 Szczecin',
-        'sm@um.szczecin.pl', 'Szczecin'],
-    'warszawa' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-        'csk@strazmiejska.waw.pl', 'Warszawa'],
-    'warsaw' => ['Referat Oskarżycieli Publicznych \\\\ Straż Miejska m.st. Warszawy \\\\ ul. Młynarska 43/45 \\\\ 01-170 Warszawa',
-        'csk@strazmiejska.waw.pl', 'Warszawa'],
-    'wroclaw' => ['Straż Miejska Wrocławia \\\\ ul. Gwarna 5/7 \\\\ 50-001 Wrocław',
-        'straz@strazmiejska.wroclaw.pl', 'Wrocław'],
-    'wrocław' => ['Straż Miejska Wrocławia \\\\ ul. Gwarna 5/7 \\\\ 50-001 Wrocław',
-        'straz@strazmiejska.wroclaw.pl', 'Wrocław'],
-    'kraków' => ['Straż Miejska Miasta Krakowa \\\\ ul. Dobrego Pasterza 116 \\\ 31-416 Kraków',
-        'smkrak@strazmiejska.krakow.pl', 'Kraków'],
-    'krakow' => ['Straż Miejska Miasta Krakowa \\\\ ul. Dobrego Pasterza 116 \\\ 31-416 Kraków',
-        'smkrak@strazmiejska.krakow.pl', 'Kraków'],
-    'gdynia' => ['Straż Miejska Gdyni \\\\ ul. Zakręt do Oksywia 10 \\\\ 81-244 Gdynia',
-        'straz_miejska@gdynia.pl', 'Gdynia'],
-    'białystok' => ['Straż Miejska w Białymstoku \\\\ ul. Składowa 11 \\\\ 15-399 Białystok',
-        'dyzurny.sm@um.bialystok.pl', 'Białystok'],
-    'bialystok' => ['Straż Miejska w Białymstoku \\\\ ul. Składowa 11 \\\\ 15-399 Białystok',
-        'dyzurny.sm@um.bialystok.pl', 'Białystok'],
-    'łódź' => ['Komenda Straży Miejskiej w Łodzi \\\\ ul. Kilińskiego 81 \\\\ 90-119 Łódź',
-        'ogolnomiejski@strazmiejska.lodz.pl', 'Łódź'],
-    'lodz' => ['Komenda Straży Miejskiej w Łodzi \\\\ ul. Kilińskiego 81 \\\\ 90-119 Łódź',
-        'ogolnomiejski@strazmiejska.lodz.pl', 'Łódź'],
-    'gdańsk' => ['Straż Miejska w Gdańsku \\\\ ul. Elbląska 54/60 \\\\ 80–724 Gdańsk',
-        'strazmiejska@sm.gda.pl', 'Gdańsk'],
-    'gdansk' => ['Straż Miejska w Gdańsku \\\\ ul. Elbląska 54/60 \\\\ 80–724 Gdańsk',
-        'strazmiejska@sm.gda.pl', 'Gdańsk'],
-    'poznań' => ['Straż Miejska Miasta Poznania \\\\ ul. Głogowska 26 \\\\ 60-734 Poznań',
-        'sm@um.poznan.pl', 'Poznań'],
-    'poznan' => ['Straż Miejska Miasta Poznania \\\\ ul. Głogowska 26 \\\\ 60-734 Poznań',
-        'sm@um.poznan.pl', 'Poznań'],
-    'toruń' => ['Straż Miejska w Toruniu \\\\ ul. Grudziądzka 157 \\\\ 87 - 100 Toruń',
-        'sm@um.torun.pl', 'Toruń'],
-    'torun' => ['Straż Miejska w Toruniu \\\\ ul. Grudziądzka 157 \\\\ 87 - 100 Toruń',
-        'sm@um.torun.pl', 'Toruń'],
-    'bydgoszcz' => ['Straż Miejska w Bydgoszczy \\\\ ul. Leśna 12 \\\\ 85-676 Bydgoszcz',
-        'sekretariat@strazmiejska.bydgoszcz.pl', 'Bydgoszcz'],
-    'katowice' => ['Straż Miejska w Katowicach \\\\ ul. Żelazna 18 \\\\ 40-851 Katowice',
-        'interwencje@katowice.eu', 'Katowice'],
-    'gorowo ilaweckie' => ['UM Górowo Iławeckie \\\\ pl. Ratuszowy 18 \\\\ 11-220 Górowo Iławeckie',
-        'umgorowo@gorowoilaweckie.pl', 'Górowo Iławeckie'],
-    'górowo iławeckie' => ['UM Górowo Iławeckie \\\\ pl. Ratuszowy 18 \\\\ 11-220 Górowo Iławeckie',
-        'umgorowo@gorowoilaweckie.pl', 'Górowo Iławeckie'],
-    'tczew' => ['Straż Miejska w Tczewie \\\\ Plac Marszałka Piłsudskiego 1 \\\\ 83-110 Tczew',
-        'strazmiejska@um.tczew.pl', 'Tczew'],
-    'chełm' => ['Straż Miejska Chełm \\\\ Obłońska 20 \\\\ 22-100 Chełm',
-        'straz.miejska@umchelm.pl', 'Chełm'],
-    'chelm' => ['Straż Miejska Chełm \\\\ Obłońska 20 \\\\ 22-100 Chełm',
-        'straz.miejska@umchelm.pl', 'Chełm'],
-    'gryfino' => ['Straż Miejska Gryfino \\\\ 1 Maja 16 \\\\ 74-100 Gryfino',
-        'strazmiejska@gryfino.pl', 'Gryfino'],
-    'ząbki' => ['Straż Miejska w Ząbkach \\\\ Wojska Polskiego 10 \\\\ 05-091 Ząbki',
-        'strazmiejska@zabki.pl', 'Ząbki'],
-    'bartoszyce' => ['Straż Miejska w Bartoszycach \\\\ ul. Bohaterów Monte Cassino 1 \\\\ 11-200 Bartoszyce',
-        'urzad.miasta@bartoszyce.pl', 'Bartoszyce'],
-    'lidzbark warmiński' => ['Straż Miejska w Lidzbarku Warmińskim \\\\ Aleksandra Świętochowskiego 14 \\\\ 11-100 Lidzbark Warmiński',
-        'um@lidzbarkwarminski.pl', 'Lidzbark Warmiński'],
-    'zielona góra' => ['Straż Miejska Zielona Góra \\\\ ul. Bohaterów Westerplatte 23 \\\\ 65-078 Zielona Góra',
-        'dyzurny@um.zielona-gora.pl', 'Zielona Góra'],
-    'olsztyn' => ['Straż Miejska w Olsztynie \\\\ al. J. Piłsudskiego 11/17 \\\\ 10-959 Olsztyn',
-        'sm@strazmiejska.olsztyn.pl', 'Olsztyn'],
-    'świdnica' => ['Straż Miejska w Świdnicy \\\\ ul. Dworcowa 2-4-6-8 \\\\ 58-100 Świdnica',
-        'strazmiejska@sm.swidnica.pl', 'Świdnica'],
-    'karlino' => ['Straż Miejska Karlino \\\\ ul. Szymanowskiego 17A \\\\ 78-230 Karlino',
-        'sm@karlino.pl', 'Karlino'],
-    'sosnowiec' => ['Straż Miejska Sosnowiec \\\\ ul. S. Małachowskiego 3 \\\\ 41-200 Sosnowiec',
-        'straz@um.sosnowiec.pl', 'Sosnowiec'],
-    'rzeszów' => ['Straż Miejska w Rzeszowie \\\\ ul. Ofiar Katynia 1 \\\\ 35-209 Rzeszów',
-        'komenda@sm.erzeszow.pl', ' Rzeszów'],
-    'łosice' => ['Straż Miejska Łosice \\\\ Handlowa 7 \\\\ Łosice 08-200',
-        'straz-miejska@gminalosice.pl', 'Łosice'],
-    'sieradz' => ['Straż Miejska w Sieradzu \\\\ ul. Kościuszki 6 \\\\ 98-200 Sieradz',
-        'sm@umsieradz.pl', 'Sieradz'],
-    'tarnów' => ['Straż Miejska w Tarnowie \\\\ ul. Nadbrzeżna Dolna 7 \\\\ 33-100 Tarnów',
-        'straz@umt.tarnow.pl', 'Tarnów'],
-    'wejherowo' => ['Straż Miejska Wejherowo \\\\ pl. Jakuba Wejhera 8 \\\\ 84-200 Wejherowo',
-        'sm@wejherowo.pl', 'Wejherowo'],
-    'konstancin-jeziorna' => ['Straż Miejska Konstancin-Jeziorna \\\\ ul. Sobieskiego 5 \\\\ 05-510 Konstancin-Jeziorna',
-        'komendasm@konstancinjeziorna.pl', 'Konstancin-Jeziorna'],
-    'nowy targ' => ['Komenda Powiatowa Policji w Nowym Targu \\\\ ul. Konfederacji Tatrzańskiej 1a \\\\ 34-400 Nowy Targ',
-        'dyzurni@nowy-targ.policja.gov.pl', 'Nowy Targ'],
-    'piaseczno' => ['Straż Miejska Piaseczno \\\\ ul. Czajewicza 1a \\\\ 05-500 Piaseczno',
-        'strazmiejska@piaseczno.eu', 'Piaseczno'],
-    'kalisz' => ['Straż Miejska Kalisza \\\\ ul. Krótka 5-7 \\\\ 62-800 Kalisz',
-        'kontakt@sm.kalisz.pl', 'Kalisz'],
-    'legnica' => ['Straż Miejska w Legnicy \\\\ Al. Rzeczypospolitej 3 \\\\ 59-220 Legnica',
-        'sekretariat@sm.legnica.pl', 'Legnica'],
-    'pruszków' => ['Straż Miejska w Pruszkowie \\\\ ul. Kraszewskiego 14/16 \\\\ 05-800 Pruszków',
-        'kierownikzmiany@strazmiejska.pruszkow.pl', 'Pruszków'],
-    'niechorze' => ['Straż Gminna w Rewalu \\\\ ul. Mickiewicza 21 \\\\ 72-344 Rewal',
-        'strazgminna@rewal.pl', 'Niechorze'],
-    'rewal' => ['Straż Gminna w Rewalu \\\\ ul. Mickiewicza 21 \\\\ 72-344 Rewal',
-        'strazgminna@rewal.pl', 'Rewal'],
-    'mysłowice' => ['Straż Miejska Mysłowice \\\\ Strażacka 7 \\\\ 41-400 Mysłowice',
-        'straz.miejska@myslowice.pl', 'Mysłowice'],
-    'zabrze' => ['Straż Miejska w Zabrzu \\\\ ul. Pawła Stalmacha 9 \\\\ 41-800 Zabrze',
-        'straz@strazmiejska.zabrze.pl', 'Zabrze'],
-    'ruda śląska' => ['Straż Miejska Ruda Śląska \\\\ gen. Józefa Hallera 61 \\\\ 41-709 Ruda Śląska',
-        'straz@rudaslaska.pl', 'Ruda Śląska'],
-    'lublin' => ['Straż Miejska Lublin \\\\ ul. Podwale 3a \\\\ 20-400 Lublin',
-        'sm@lublin.eu', 'Lublin'],
-    'leszno' => ['Straż Miejska w Lesznie \\\\ ul. Berwińskich 7c \\\\ 64-100 Leszno',
-        'sm@leszno.pl', 'Leszno'],
-    'inowrocław' => ['Straż Miejska Inowrocław \\\\ ul. Gabriela Narutowicza 60 \\\\ 88-100 Inowrocław',
-        'strazmiejska@inowroclaw.pl', 'Inowrocław'],
-    'suwałki' => ['Straż Miejska Suwałki \\\\ ul. Teofila Noniewicza 71A \\\\ 16-402 Suwałki',
-        'sm@um.suwalki.pl', 'Suwałki'],
-    'gliwice' => ['Straż Miejska w Gliwicach \\\\ ul. Bolesława Śmiałego 2A \\\\ 44-121 Gliwice',
-        'dyzurny@smgliwice.pl', 'Gliwice'],
-    'wodzisław śląski' => ['Straż Miejska w Wodzisławiu Śląskim \\\\ ul. Rzeczna 24 \\\\ 44-300 Wodzisław Śląski',
-        'strazmiejska@wodzislaw-slaski.pl', 'Wodzisław Śląski'],
-    'rybnik' => ['Straż Miejska w Rybniku \\\\ Władysława Stanisława Reymonta 54 \\\\ 44-200 Rybnik',
-        'interwencja@sm.rybnik.pl', 'Rybnik'],
-    'gorzów wielkopolski' => ['Straż Miejska w Gorzowie Wielkopolskim \\\\ ul. Łokietka 22 \\\\ 66-400 Gorzów Wielkopolski',
-        'ksm@um.gorzow.pl', 'Gorzów Wielkopolski'],
-    '_nieznane' => ['(skontaktuj się z autorem: szymon@uprzejmiedonosze.net \\\\ i podaj mu adres siedziby oraz email Straży Miejskiej)',
-        null, null]
-);
 
-const CATEGORIES_MATRIX = Array( 'a', 'b');
+const SM_CONFIG = __DIR__ . '/../public/api/config/sm.json';
+$smAddressess = fopen(SM_CONFIG, "r") or die("Unable to open config file: " . SM_CONFIG);
+$SM_ADDRESSES = (array) new ConfigClass(fread($smAddressess, filesize(SM_CONFIG)), 'SM');
+fclose($smAddressess);
 
-const STATUSES = Array (
-    // KEY                  0 desc               1 action             2 icon     3 class     4 color (not used)
-    'draft'             => ['Draft',             'Dalej',             'edit',    null,       ''],
-    'ready'             => ['Edycja',            'Potwierdź',         'shop',    null,       ''],
-    'confirmed'         => ['Nowe',              'Nowe',              'carat-u', 'active',   ''],
-    'confirmed-waiting' => ['Wysłane email',     'Wysłane mailem',    'mail',    'active',   ''],
-    'confirmed-waitingE'=> ['Wysłane epuap',     'Wysłane epuapem',   'clock',   'active',   ''],
-    'confirmed-sm'      => ['Potwierdzone w SM', 'Potwierdzone w SM', 'user',    'active',   ''],
-    'confirmed-ignored' => ['Zignorowane',       'Zignorowane',       'delete',  'active',   ''],
-    'confirmed-fined'   => ['Wystawiony mandat', 'Wystawiony mandat', 'check',   'active',   ''],
-    'archived'          => ['W archiwum',        'Do archiwum',       'cloud',   'archived', '']
-);
+const STATUSES_CONFIG = __DIR__ . '/../public/api/config/statuses.json';
+$st = fopen(STATUSES_CONFIG, "r") or die("Unable to open config file: " . STATUSES_CONFIG);
+$STATUSES = (array) new ConfigClass(fread($st, filesize(STATUSES_CONFIG)), 'Status');
+fclose($st);
+
+const CATEGORIES_MATRIX = Array('a', 'b');
 
 const SEXSTRINGS = Array (
     '?' => [
