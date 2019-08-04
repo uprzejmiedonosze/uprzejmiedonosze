@@ -114,7 +114,7 @@
             {% for date,comment in app.comments %}
                 <li>
                     <b>{{ date|date('Y-m-d H:i') }}</b> {{ comment.source }}:
-                    <p>{{ comment.comment }}</p>
+                    {{ comment.comment }}
                 </li>
             {% endfor %}
             </ul>
@@ -127,7 +127,7 @@
             {% for date,status in app.statusHistory %}
                 <li>
                     <b>{{ date|date('Y-m-d H:i') }}</b> {{ app.user.name }}:
-                    <p>{{ statuses[status.new].comment }}</p.
+                    {{ statuses[status.new].comment }}
                 </li>
             {% endfor %}
             </ul>
