@@ -550,6 +550,17 @@
     "hint": null,
     "api": false
   },
+  "konstantynów łódzki": {
+    "address": [
+      "Straż Miejska w Konstantynowie Łódzkim",
+      "ul. Zgierska 2",
+      "95-050 Konstantynów Łódzki"
+    ],
+    "email": "strazmiejska@konstantynow.pl",
+    "city": "Konstantynów Łódzki",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
