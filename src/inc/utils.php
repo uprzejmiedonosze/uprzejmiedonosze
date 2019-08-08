@@ -207,7 +207,7 @@ function _sendSlackOnNewApp($app, $todaysNewAppsCount){
         "author_link" => "mailto:{$app->user->email}",
 
         'fields' => [[
-                'title' => $app->address->city,
+                'title' => $app->address->city . (($app->guessSMData()->email)? "": " (!)"),
                 'value' => ($app->category == 0)? 'Inne: ' . $app->userComment: $app->getCategory()[0],
                 'short' => true
             ],[
