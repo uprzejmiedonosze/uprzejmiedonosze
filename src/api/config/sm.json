@@ -550,6 +550,39 @@
     "hint": null,
     "api": false
   },
+  "konstantynów łódzki": {
+    "address": [
+      "Straż Miejska w Konstantynowie Łódzkim",
+      "ul. Zgierska 2",
+      "95-050 Konstantynów Łódzki"
+    ],
+    "email": "strazmiejska@konstantynow.pl",
+    "city": "Konstantynów Łódzki",
+    "hint": null,
+    "api": false
+  },
+  "częstochowa": {
+    "address": [
+      "Straż Miejska w Częstochowie",
+      "ul. Krakowska 80 blok 3",
+      "42-200 Częstochowa"
+    ],
+    "email": "dyzurny_sm@strazmiejska.czestochowa.um.gov.pl",
+    "city": "Częstochowa",
+    "hint": null,
+    "api": false
+  },
+  "sopot": {
+    "address": [
+      "Straż Miejska Sopot",
+      "ul. Kościuszki 25/27",
+      "81-704 Sopot"
+    ],
+    "email": "wykroczenia@um.sopot.pl",
+    "city": "Sopot",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
