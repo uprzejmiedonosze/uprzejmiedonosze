@@ -572,6 +572,17 @@
     "hint": null,
     "api": false
   },
+  "sopot": {
+    "address": [
+      "Straż Miejska Sopot",
+      "ul. Kościuszki 25/27",
+      "81-704 Sopot"
+    ],
+    "email": "wykroczenia@um.sopot.pl",
+    "city": "Sopot",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
