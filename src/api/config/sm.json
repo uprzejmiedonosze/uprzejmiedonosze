@@ -561,6 +561,17 @@
     "hint": null,
     "api": false
   },
+  "częstochowa": {
+    "address": [
+      "Straż Miejska w Częstochowie",
+      "ul. Krakowska 80 blok 3",
+      "42-200 Częstochowa"
+    ],
+    "email": "dyzurny_sm@strazmiejska.czestochowa.um.gov.pl",
+    "city": "Częstochowa",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
