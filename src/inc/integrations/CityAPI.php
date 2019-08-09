@@ -3,7 +3,7 @@
 abstract class CityAPI {
     abstract function send($application);
 
-    function checkApplication($application){
+    function checkApplication(&$application){
         if($application->status !== 'confirmed'){
             throw new Exception("Próba wysłania zgłoszenia $application->id w statusie $application->status.");
         }
@@ -14,13 +14,13 @@ abstract class CityAPI {
         return true;
     }
 
-    function formatMessage($application, $limit = 10000){
+    function formatMessage(&$application, $limit = 10000){
         return substr(generate('_application.txt.twig', [
             'app' => $application
         ]), 0, $limit);
     }
 
-    function curlSend($url, $auth, $data, $application){
+    function curlSend($url, $auth, &$data, &$application){
         $curl = curl_init();
         $root = realpath('/var/www/%HOST%/');
 
