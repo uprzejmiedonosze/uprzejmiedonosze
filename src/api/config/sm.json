@@ -583,6 +583,17 @@
     "hint": null,
     "api": false
   },
+  "kościelisko": {
+    "address": [
+      "Straż Gminna Kościelisko",
+      "ul. Strzelców Podhalańskich 44",
+      "34-511 Kościelisko"
+    ],
+    "email": "straz@koscielisko.com.pl",
+    "city": "Kościelisko",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
