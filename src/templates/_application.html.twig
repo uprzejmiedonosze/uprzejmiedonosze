@@ -37,6 +37,8 @@
 {% if app.status not in ['draft', 'ready'] and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
     <p>Dokument ze zgłoszeniem dostępny jest pod adresem
         <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
+            {% if app.sentViaAPI is defined %}Pamiętaj, że to zgłoszenie zostało wysłane do SM {{ app.guessSMData.city }}
+            poprzez API. Plik PDF nie jest więc oryginalnym dokumentem jaki otrzymała SM.{% endif %}
     </p>
 {% endif %}
 
