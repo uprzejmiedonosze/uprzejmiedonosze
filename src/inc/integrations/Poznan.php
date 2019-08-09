@@ -1,7 +1,7 @@
 <?php
 
 class Poznan extends CityAPI {
-    function send($application){
+    function send(&$application){
         parent::checkApplication($application);
 
         $url = "https://www.um.poznan.pl/mimtest/public/api/submit.html?service=fixmycity";

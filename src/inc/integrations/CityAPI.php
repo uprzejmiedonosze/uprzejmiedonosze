@@ -1,7 +1,7 @@
 <?php
 
 abstract class CityAPI {
-    abstract function send($application);
+    abstract function send(&$application);
 
     function checkApplication(&$application){
         if($application->status !== 'confirmed'){
@@ -56,6 +56,8 @@ abstract class CityAPI {
             $error = "Błąd komunikacji z API {$sm->api}: " . json_last_error_msg();
             raiseError($error, 500);
         }
+
+        $application->sentViaAPI = $json;
 
         return $json;
 
