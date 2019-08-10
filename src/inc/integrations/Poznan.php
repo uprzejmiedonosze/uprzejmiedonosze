@@ -28,6 +28,7 @@ class Poznan extends CityAPI {
 
         $application->setStatus('confirmed-waiting');
         $application->addComment($application->guessSMData()->address[0], $reply);
+        $application->sentViaAPI = $reply;
         global $storage;
         $storage->saveApplication($application);
     }

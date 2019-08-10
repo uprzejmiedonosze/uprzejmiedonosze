@@ -14,11 +14,14 @@
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
 {% set address      = '\\href' ~ appUrl ~ '{\\underline{' ~ app.address.address ~ '}}' %}
 
-\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} } } }
+\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} }{% if app.sentViaAPI is defined %}\footnote{Pamiętaj,
+że to zgłoszenie zostało wysłane do SM {{ app.guessSMData.city }} poprzez API. Odpowiedź SM to {{ app.sentViaAPI }}.{% endif %}} } }
 	W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia pojazdu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
-    {{ address }}\footnote{Adres oraz mapa, są równocześnie linkami prowadzącymi
-    do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}.
+    {{ address }}{% if app.sentViaAPI is not defined %}\footnote{Adres oraz mapa, są równocześnie linkami prowadzącymi
+    {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej #}
+    {# ale równocześnie chowam hint dotyczący mapy – bo zgłoszenia robią się dwustronnicowe #}
+    do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
     {{ app.getCategory[1] }} Sytuacja jest widoczna na załączonych zdjęciach.
     Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
 {% if app.statements is not defined or not app.statements.witness %}
@@ -32,6 +35,7 @@
     Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca
     zamieszkania.
 {% endif %}
+
 
     \closing{\textit{Z poważaniem,\\\n{} } }
 

@@ -57,6 +57,7 @@ abstract class CityAPI {
             raiseError($error, 500);
         }
 
+        // zaznaczam na wszelki wypadek, ale poszczególne implementacje powinny to nadpisać
         $application->sentViaAPI = $json;
 
         return $json;
