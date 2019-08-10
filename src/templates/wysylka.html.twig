@@ -24,20 +24,21 @@ Pozdrawiam,
 
 {% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
 
-{% if (cities | first.api) %}
-    <h2>Wyślij swoje zgłoszenia</h2>
-    <p>Na tej stronie możesz wysłać swoje zgłoszenia do Straży Miejskiej.
-{% else %} {# if (cities | first.api) #}
-    <h2>Pobierz paczkę zgłoszeń do wysyłki do SM</h2>
-    <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.
-{% endif %} {# if (cities | first.api) #}
-
 {% if apps|length == 0 %}
-    </p>
+    <h2>Wyślij swoje zgłoszenia</h2>
     <p>W tej chwili nie masz ani jednego zgłoszenia o statusie <code>#nowe</code>, które pozwoliłoby
     wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
     wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
 {% else %} {# if apps|length == 0 #}
+
+    {% if (cities | first.api) %}
+        <h2>Wyślij swoje zgłoszenia</h2>
+        <p>Na tej stronie możesz wysłać swoje zgłoszenia do Straży Miejskiej.</p>
+    {% else %} {# if (cities | first.api) #}
+        <h2>Pobierz paczkę zgłoszeń do wysyłki do SM</h2>
+        <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.</p>
+    {% endif %} {# if (cities | first.api) #}
+
     {% if cities|length > 1 %}
         <p><b>Poniższa lista zawiera dane z kilku miast!</b> Super, że wykonujesz zgłoszenia
         w kilku miastach, ale niestety Uprzejmie Donoszę nie jest jeszcze na tyle inteligentne,
@@ -49,6 +50,9 @@ Pozdrawiam,
         {% if (cities | first.api) %}
             <p>Na szczęście {{ cities | first.address[0] }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
             im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei.</p>
+            <script>
+            {{ include('_inline.js.twig') }}
+            </script>
         {% else %} {# if (cities | first.api) #}
             Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
             Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
