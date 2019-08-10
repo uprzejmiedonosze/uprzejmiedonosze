@@ -19,26 +19,19 @@
 
 {% if sm.hasAPI %}
 
-    <p>Co dalej? <b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do SM {{ sm.city }}</b>.
+    <p>Co dalej? <b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
     Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
     zgłoszenia.</p>
 
     <h4>Wyślij swoje zgłoszenie do SM {{ sm.city }}:</h4>
-    <a id="sendViaAPI" class="ui-btn ui-corner-all ui-btn-inline try">Wyślij zgłoszenie</a>
+    <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
+        class="ui-btn ui-corner-all ui-btn-inline try">Wyślij zgłoszenie</a>
 
     <a id="moje-zgloszenia" href="moje-zgloszenia.html" data-ajax="false"
         class="ui-btn ui-corner-all ui-btn-inline ui-disabled">Zobacz swoje zgłoszenia</a>
 
     <script>
-        $('#sendViaAPI').click(function(){
-            $('#sendViaAPI').addClass('ui-disabled');
-            $.post("/api/api.html", { id: "{{ app.id }}", action: "send" }, function(result){
-                $('#moje-zgloszenia').removeClass('ui-disabled');
-            }).fail(function (){
-                $('#sendViaAPI').removeClass('ui-disabled');
-                alert('Nie udało się wysłać zgłoszenia. Skontaktuj się z autorem: szymon@uprzejmiedonosze.net');
-            });
-        });
+    {{ include('_inline.js.twig') }}
     </script>
 
 {% else %}

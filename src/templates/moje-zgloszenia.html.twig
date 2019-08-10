@@ -31,36 +31,18 @@
 </div>
 
 <script>
-    function updateCounters(){
+$(document).on('pageshow', function () {
+    updateCounters();
+    $('.filter a').click(function(e){
+        $('div.application').hide();
+        $('div.application.status-' + this.id).show();
         $('.filter a').each(function(idx, item){
-            item.children[0].innerText = $('div.application.status-' + item.id).length;
+            $(item).removeClass('active');
         });
-    }
-    $(document).on('pageshow', function () {
-        updateCounters();
-        $('.filter a').click(function(e){
-            $('div.application').hide();
-            $('div.application.status-' + this.id).show();
-            $('.filter a').each(function(idx, item){
-                $(item).removeClass('active');
-            });
-            $(this).addClass('active');
-        });
+        $(this).addClass('active');
     });
-    function _action(appId){
-        action = document.getElementById("select-status-" + appId).value;
-        $.post('/api/api.html', {action: action, id: appId}).done(function() {
-            $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-waitingE status-confirmed-sm status-confirmed-ignored status-confirmed-fined status-archived');
-            $('#' + appId).addClass('status-' + action);
-            updateCounters();
-        });
-    }
-
-    function sendViaAPI(appId){
-        $.post("/api/api.html", { id: appId, action: "send" }, function(result){
-            console.log(result);
-        });
-    }
+});
+{{ include('_inline.js.twig') }}
 </script>
 
 {% endblock %}

@@ -1,0 +1,29 @@
+function updateCounters(){
+    $('.filter a').each(function(idx, item){
+        item.children[0].innerText = $('div.application.status-' + item.id).length;
+    });
+}
+
+function _action(appId){
+    action = document.getElementById("select-status-" + appId).value;
+    $.post('/api/api.html', {action: action, id: appId}).done(function() {
+        _updateStatus(appId, action);
+    });
+}
+
+function _sendViaAPI(appId){
+    $("#send-" + appId).addClass('ui-disabled');
+    $.post("/api/api.html", { id: appId, action: "send" }, function(result){
+        $('#moje-zgloszenia').removeClass('ui-disabled');
+        _updateStatus(appId, 'status-confirmed');
+    }).fail(function (){
+        $("#send-" + appId).removeClass('ui-disabled');
+        alert('Nie udało się wysłać zgłoszenia. Skontaktuj się z autorem: szymon@uprzejmiedonosze.net');
+    });
+}
+
+function _updateStatus(appId, status){
+    $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-waitingE status-confirmed-sm status-confirmed-ignored status-confirmed-fined status-archived');
+    $('#' + appId).addClass('status-' + status);
+    updateCounters();
+}

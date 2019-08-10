@@ -11,6 +11,7 @@ class Status extends JSONObject{
      */
     public function __construct($json = null) {
         parent::__construct($json);
+        @$this->allowed = (array)$this->allowed;
     }
 
     public function getDesc(){
