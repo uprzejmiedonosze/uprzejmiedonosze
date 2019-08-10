@@ -115,7 +115,7 @@
             <ul data-role="listview">
             {% for date,comment in app.comments %}
                 <li>
-                    <b>{{ date|date('Y-m-d H:i') }}</b> {{ comment.source }}:
+                    {{ date|date('Y-m-d H:i') }} <b>{{ comment.source }}</b>:
                     {{ comment.comment }}
                 </li>
             {% endfor %}
@@ -128,7 +128,7 @@
             <ul data-role="listview">
             {% for date,status in app.statusHistory %}
                 <li>
-                    <b>{{ date|date('Y-m-d H:i') }}</b> {{ app.user.name }}:
+                    {{ date|date('Y-m-d H:i') }} <b>{{ app.user.name }}</b>:
                     {{ statuses[status.new].comment }}
                 </li>
             {% endfor %}
