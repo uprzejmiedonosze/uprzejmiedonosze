@@ -35,7 +35,7 @@
             onChange="_action('{{ app.id }}');">
             {% for key,val in statuses %}
                 {% if val.class %} {# class is empty, this is a draft or ready #}
-                    {% if not app.sentViaAPI is defined or key != 'confirmed' %}
+                    {% if not app.sentViaAPI is defined or (key != 'confirmed' and key != 'confirmed-waitingE' ) %}
                     <option value="{{ key }}"
                         {% if key == app.status %}selected="selected"{% endif %}>{{ val.name }}</option>
                     {% endif %}
