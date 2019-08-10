@@ -27,5 +27,9 @@ class JSONObject {
             $this->{$key} = $value;
         }
     }
+
+    public function __toString(){
+        return serialize($this);
+    }
 }
 ?>
