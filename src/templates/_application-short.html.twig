@@ -20,28 +20,29 @@
 {% if app.userComment %}
     <p>{{ app.userComment }}</p>
 {% endif %}
-{% if config.wysylka is defined and app.guessSMData.hasAPI %}
-    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-        <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
-            class="ui-shadow ui-btn ui-corner-all try">Wyślij zgłoszenie bezpośrednio do SM</a>
-    </fieldset>
-{% endif %}
 
 {% if config.appActionButtons %}
     <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+    {% if app.guessSMData.hasAPI and app.status == 'confirmed' %}
+        <div class="ui-btn ui-corner-all ui-btn-inline">Status: {{ statuses[app.status].name|upper }}</div>
+        <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail cta">Wyślij bezpośrednio do SM</a>
+        <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-cloud">Do archiwum</a>
+    {% else %}
         <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
         <select name="select-status" id="select-status-{{ app.id }}"
             class="status-{{ app.status }} {% if sendViaAPI is defined %}ui-disabled{% endif %}"
             onChange="_action('{{ app.id }}');">
             {% for key,val in statuses %}
-                {% if val.class %} {# class is empty, this is a draft or ready #}
-                    {% if not app.sentViaAPI is defined or (key != 'confirmed' and key != 'confirmed-waitingE' ) %}
-                    <option value="{{ key }}"
-                        {% if key == app.status %}selected="selected"{% endif %}>{{ val.name }}</option>
-                    {% endif %}
+                {% if val.class %}
+                <option value="{{ key }}"
+                    {% if key not in statuses[app.status].allowed %}disabled="disabled"{% endif %}
+                    {% if key == app.status %}selected="selected">{{ val.name|upper }}{% else %}>{{ val.name }}{% endif %}</option>
                 {% endif %}
             {% endfor %}
         </select>
+    {% endif %}
     </fieldset></form>
 {% endif %}
         <div class="ui-grid-a ui-responsive images images-cropped">
