@@ -16,11 +16,14 @@ if (is_ajax()) {
             case "confirmed-sm":
             case "confirmed-ignored":
             case "confirmed-fined":
-                _action($action, $_POST["id"]); break;
+            case "send":
+                if(isset($_POST["api"])){
+                    _sendViaAPI($_POST["id"]); break;
+                }else{
+                    _setStatus($action, $_POST["id"]); break;
+                }
             case "upload":
                 _upload(); break;
-            case "send":
-                _sendViaAPI($_POST["id"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -53,16 +56,22 @@ function _verifyToken(){
     }
 }
 
-function _action($action, $appId){
+/**
+ * Sets application status.
+ */
+function _setStatus($status, $appId){
     global $storage;
     $application = $storage->getApplication($appId);
-    $application->setStatus($action);
+    $application->setStatus($status);
     $storage->saveApplication($application);
     $storage->updateRecydywa($application->carInfo->plateId);
     $storage->getUserStats(false); // update cache
     echo json_encode(Array("status" => "OK"));
 }
 
+/**
+ * Sends application to SM via API (if possible), and updates status.
+ */
 function _sendViaAPI($appId){
     global $storage;
     try{

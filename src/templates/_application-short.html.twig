@@ -27,7 +27,7 @@
         <div class="ui-btn ui-corner-all ui-btn-inline">Status: {{ statuses[app.status].name|upper }}</div>
         <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail cta">Wyślij bezpośrednio do SM</a>
-        <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
+        <a href="#" id="send-{{ app.id }}" onclick="setStatus('{{ app.id }}', 'archived')"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-cloud">Do archiwum</a>
     {% else %}
         <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>

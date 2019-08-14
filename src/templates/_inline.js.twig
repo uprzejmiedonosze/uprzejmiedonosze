@@ -1,23 +1,36 @@
+/**
+ * Updates application counters in menu.
+ */
 function updateCounters(){
     $('.filter a').each(function(idx, item){
         item.children[0].innerText = $('div.application.status-' + item.id).length;
     });
 }
 
-function _action(appId){
-    action = document.getElementById("select-status-" + appId).value;
-    $.post('/api/api.html', {action: action, id: appId}).done(function() {
-        _updateStatus(appId, action);
+/**
+ * Sets application status.
+ * 
+ * @param appId 
+ * @param status 
+ */
+function setStatus(appId, status){
+    $.post('/api/api.html', {action: status, id: appId}).done(function() {
+        _updateStatus(appId, status);
     });
+}
+
+function _action(appId){
+    status = document.getElementById("select-status-" + appId).value;
+    setStatus(appId, status);
 }
 
 function _sendViaAPI(appId){
     $("#send-" + appId).addClass('ui-disabled');
     $.mobile.loading( "show", { text: 'wysyłam', textVisible: true } );
 
-    $.post("/api/api.html", { id: appId, action: "send" }, function(result){
+    $.post("/api/api.html", { id: appId, action: "send" }, function(){
         $('#moje-zgloszenia').removeClass('ui-disabled');
-        _updateStatus(appId, 'status-confirmed');
+        _updateStatus(appId, 'confirmed-sm');
         $.mobile.loading( "hide" );
         showMessage('sukces', 1000);
     }).fail(function (e){
