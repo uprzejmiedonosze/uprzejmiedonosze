@@ -25,9 +25,9 @@
 
     <h4>Wyślij swoje zgłoszenie do SM {{ sm.city }}:</h4>
     <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
-        class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail cta">Wyślij bezpośrednio do SM</a>
+        class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail ui-corner-all cta">Wyślij bezpośrednio do SM</a>
     <a id="moje-zgloszenia" href="moje-zgloszenia.html" data-ajax="false"
-        class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-cloud">Zobacz swoje zgłoszenia</a>
+        class="ui-btn ui-btn-inline ui ui-btn-inline ui-corner-all ui-disabled">Zobacz swoje zgłoszenia</a>
     <script>
     {{ include('_inline.js.twig') }}
     </script>
