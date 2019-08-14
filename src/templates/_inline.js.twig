@@ -28,7 +28,7 @@ function _sendViaAPI(appId){
     $("#send-" + appId).addClass('ui-disabled');
     $.mobile.loading( "show", { text: 'wysyłam', textVisible: true } );
 
-    $.post("/api/api.html", { id: appId, action: "send" }, function(){
+    $.post("/api/api.html", { id: appId, action: "send", api: true }, function(){
         $('#moje-zgloszenia').removeClass('ui-disabled');
         _updateStatus(appId, 'confirmed-sm');
         $.mobile.loading( "hide" );
