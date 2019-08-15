@@ -37,8 +37,8 @@
             {% for key,val in statuses %}
                 {% if val.class %}
                 <option value="{{ key }}"
-                    {% if key not in statuses[app.status].allowed %}disabled="disabled"{% endif %}
-                    {% if key == app.status %}selected="selected">{{ val.name|upper }}{% else %}>{{ val.name }}{% endif %}</option>
+                    {% if key not in statuses[app.status].allowed and key != app.status %}disabled="disabled"{% endif %}
+                    {% if key == app.status %}selected="selected">#{{ val.name|lower }} *{% else %}>#{{ val.name|lower }}{% endif %}</option>
                 {% endif %}
             {% endfor %}
         </select>
