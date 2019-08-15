@@ -21,6 +21,14 @@
     żeby podzielić zgłoszenia na osobne paczki. Przycisk umożliwiający pobranie paczki zgłoszeń
     jest dostępny tylko wtedy, gdy wszystkie zgłoszenia poniżej pochodzą z jednego miasta.
     </p>
+{% elseif cities|first.email == null %}
+    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
+        Skontaktuj proszę się z nami pod adresem
+        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
+        <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
+        Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
+        oraz adres email Straży Miejskiej.
+    </p>
 {% else %}
 
     {% if apps|length == 1 %}
