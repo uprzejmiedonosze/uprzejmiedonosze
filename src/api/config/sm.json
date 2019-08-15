@@ -594,6 +594,17 @@
     "hint": null,
     "api": false
   },
+  "słupsk": {
+    "address": [
+      "Straż Miejska Słupsk",
+      "ul. Jaracza 5",
+      "76-200 Słupsk"
+    ],
+    "email": "sm@um.slupsk.pl",
+    "city": "Słupsk",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
