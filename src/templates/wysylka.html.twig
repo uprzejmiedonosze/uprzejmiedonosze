@@ -53,6 +53,10 @@ Pozdrawiam,
         żeby podzielić zgłoszenia na osobne paczki. Przycisk umożliwiający pobranie paczki zgłoszeń
         jest dostępny tylko wtedy, gdy wszystkie zgłoszenia poniżej pochodzą z jednego miasta.
         </p>
+        <p>Przejdź na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i przenieś
+        część zgłoszenia z miasta "B" do archiwum. Wróć tutaj i wyślij zgłoszenia z miasta "A".
+        Wróć na listę, przywróć zgłoszeniom z miasta "B" status <code>#nowe</code> a następnie
+        je wyślij.</p>
     {% else %} {# if cities|length > 1 #}
 
         {% if (cities | first.api) %}
