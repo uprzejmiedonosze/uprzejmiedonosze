@@ -130,7 +130,7 @@
     "email": "sekretariat@strazmiejska.bydgoszcz.pl",
     "city": "Bydgoszcz",
     "hint": null,
-    "api": "PoznanImpl"
+    "api": null
   },
   "katowice": {
     "address": [
