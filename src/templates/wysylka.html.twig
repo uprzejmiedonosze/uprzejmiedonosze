@@ -60,7 +60,7 @@ Pozdrawiam,
 
         {% if (cities | first.api) %}
             <p>Na szczęście {{ cities | first.address[0] }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
-            im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei.</p>
+            im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei. {{ cities | first.hint | raw }}</p>
             <script>
             {{ include('_inline.js.twig') }}
             </script>

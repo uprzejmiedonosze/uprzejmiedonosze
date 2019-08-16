@@ -21,7 +21,7 @@
 
     <p>Co dalej? <b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
     Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
-    zgłoszenia.</p>
+    zgłoszenia. {{ sm.hint | raw }}</p>
 
     <h4>Wyślij swoje zgłoszenie do SM {{ sm.city }}:</h4>
     <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
