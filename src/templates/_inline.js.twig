@@ -1,0 +1,55 @@
+/**
+ * Updates application counters in menu.
+ */
+function updateCounters(){
+    $('.filter a').each(function(idx, item){
+        item.children[0].innerText = $('div.application.status-' + item.id).length;
+    });
+}
+
+/**
+ * Sets application status.
+ * 
+ * @param appId 
+ * @param status 
+ */
+function setStatus(appId, status){
+    $.post('/api/api.html', {action: status, id: appId}).done(function() {
+        _updateStatus(appId, status);
+    });
+}
+
+function _action(appId){
+    status = document.getElementById("select-status-" + appId).value;
+    setStatus(appId, status);
+}
+
+function _sendViaAPI(appId){
+    $("#send-" + appId).addClass('ui-disabled');
+    $.mobile.loading( "show", { text: 'wysyłam', textVisible: true } );
+
+    $.post("/api/api.html", { id: appId, action: "send", api: true }, function(){
+        $('#moje-zgloszenia').removeClass('ui-disabled');
+        _updateStatus(appId, 'confirmed-sm');
+        $.mobile.loading( "hide" );
+        showMessage('sukces', 1000);
+    }).fail(function (e){
+        $("#send-" + appId).removeClass('ui-disabled');
+        $.mobile.loading( "hide" );
+        showMessage('Nie udało się wysłać zgłoszenia! ' + e.responseJSON.message, 4000);
+    });
+}
+
+function showMessage(msg, timeout){
+    $.mobile.loading( "show",
+        { text: msg, textVisible: true, textonly: true } );
+    window.setTimeout(function(){
+        $.mobile.loading( "hide" );
+    }, timeout);
+}
+
+function _updateStatus(appId, status){
+    $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-waitingE status-confirmed-sm status-confirmed-ignored status-confirmed-fined status-archived');
+    $('#' + appId).addClass('status-' + status);
+    updateCounters();
+}

@@ -3,41 +3,16 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-<h2>Pobierz paczkę zgłoszeń do wysyłki do SM</h2>
-<p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.
-
-{% if apps|length == 0 %}
-    W tej chwili nie masz ani jednego zgłoszenia o statusie <code>#nowe</code>, które pozwoliłoby
-    wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
-    wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
+{% if apps|length == 1 %}
+    {% set zgloszen = 'znajduje się jedno zgłoszenie' %}
+    {% set paczke = 'swoje zgłoszenie' %}
+{% elseif apps|length < 5 or (apps|length > 20 and apps|length % 10 in [2, 3, 4] ) %}
+    {% set zgloszen = 'znajdują się ' ~ apps|length ~ ' zgłoszenia' %}
+    {% set paczke = 'paczkę ' ~ apps|length ~ ' zgłoszeń' %}
 {% else %}
-    Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
-    Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
-    wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw
-    prawidłowo statusy.</p>
-{% if cities|length > 1 %}
-    <p><b>Poniższa lista zawiera dane z kilku miast!</b> Super, że wykonujesz zgłoszenia
-    w kilku miastach, ale niestety Uprzejmie Donoszę nie jest jeszcze na tyle inteligentne,
-    żeby podzielić zgłoszenia na osobne paczki. Przycisk umożliwiający pobranie paczki zgłoszeń
-    jest dostępny tylko wtedy, gdy wszystkie zgłoszenia poniżej pochodzą z jednego miasta.
-    </p>
-{% elseif cities|first.email == null %}
-    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
-        Skontaktuj proszę się z nami pod adresem
-        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
-        <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
-        Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
-        oraz adres email Straży Miejskiej.
-    </p>
-{% else %}
-
-    {% if apps|length == 1 %}
-        {% set zgloszen = 'znajduje się jedno zgłoszenie' %}
-    {% elseif apps|length < 5 or (apps|length > 20 and apps|length % 10 in [2, 3, 4] ) %}
-        {% set zgloszen = 'znajdują się ' ~ apps|length ~ ' zgłoszenia' %}
-    {% else %}
-        {% set zgloszen = 'znajduje się ' ~ apps|length ~ ' zgłoszeń' %}
-    {% endif %}
+    {% set zgloszen = 'znajduje się ' ~ apps|length ~ ' zgłoszeń' %}
+    {% set paczke = 'paczkę ' ~ apps|length ~ ' zgłoszeń' %}
+{% endif %}
 
 {% set emailBody = 'Dzień dobry,
 
@@ -48,54 +23,102 @@ Pozdrawiam,
 ' ~ user.data.name %}
 
 {% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
-    <ol>
-        <li>Najpierw 
-            <a id="download" href="all-active-apps.pdf?readyApps" download="true" data-ajax="false"
-            class="ui-btn ui-corner-all ui-btn-inline ui-mini try">pobierz</a>
-            paczkę {{ apps|length }} zgłoszeń;
-        </li>
-        <li class="ui-disabled">Następnie 
-            <a id="send" data-ajax="false" target="_blank"
-                href="mailto:{{ cities | first.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
-                class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-            i wyślij email do SM {{ cities | first.city }} (jeśli otworzył Ci się pusty email, 
-            <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
-            <div data-role="popup" id="popupPadded" class="ui-content">
-                <dl>
-                    <dt>Do:</dt>
-                    <dd>{{ cities | first.email }}</dd>
-                    <dt>Tytuł:</dt>
-                    <dd>{{ emailSubject }}</dd>
-                    <dt>Treść:</dt>
-                    <dd style="white-space: pre-wrap;">{{ emailBody }}</dd>
-                </dl>
-            </div>
-            <p><b>Nie zapomnij dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!</b></p>
-        </li>
-        <li class="ui-disabled">Po wysłaniu wiadomości, możesz
-            <a id="email" href="moje-zgloszenia.html?changeMail" data-ajax="false"
-                class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-mail status-confirmed-waiting">zmienić</a>
-                status wszystkich {{ apps|length }} zgłoszeń na <code>#wysłane mailem</code>.
-        </li>
-    </ol>
 
-    <script>
-        $('#download').on('click', function(){
-            $(this).parent().addClass('ui-disabled');
-            $('#send').parent().removeClass('ui-disabled');
-        });
-        $('#send, #sendE').on('click', function(){
-            $(this).parent().addClass('ui-disabled');
-            $('#email, #epuap').parent().removeClass('ui-disabled');
-        });
-    </script>
+{% if apps|length == 0 %}
+    <h2>Wyślij swoje zgłoszenia</h2>
+    <p>W tej chwili nie masz ani jednego zgłoszenia o statusie <code>#nowe</code>, które pozwoliłoby
+    wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
+    wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
+{% elseif cities|first.email == null %}
+    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
+        Skontaktuj proszę się z nami pod adresem
+        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
+        <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
+        Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
+        oraz adres email Straży Miejskiej.
+    </p>
+{% else %} {# if apps|length == 0 #}
 
-{% endif %}
+    {% if (cities | first.api) %}
+        <h2>Wyślij swoje zgłoszenia</h2>
+        <p>Na tej stronie możesz wysłać swoje zgłoszenia do Straży Miejskiej.</p>
+    {% else %} {# if (cities | first.api) #}
+        <h2>Pobierz paczkę zgłoszeń do wysyłki do SM</h2>
+        <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.</p>
+    {% endif %} {# if (cities | first.api) #}
 
-    <div data-role="collapsibleset" data-mini="true" data-inset="true">
-        {% for app in apps %}
-            {% include('_application-short.html.twig') %}
-        {% endfor %}
-    </div>
-{% endif %}
+    {% if cities|length > 1 %}
+        <p><b>Poniższa lista zawiera dane z kilku miast!</b> Super, że wykonujesz zgłoszenia
+        w kilku miastach, ale niestety Uprzejmie Donoszę nie jest jeszcze na tyle inteligentne,
+        żeby podzielić zgłoszenia na osobne paczki. Przycisk umożliwiający pobranie paczki zgłoszeń
+        jest dostępny tylko wtedy, gdy wszystkie zgłoszenia poniżej pochodzą z jednego miasta.
+        </p>
+        <p>Przenieś zgłoszenia z miasta "B" z poniższej listy do archiwum. Odśwież tę stronę
+        i wyślij zgłoszenia z miasta "A". Przejdź do archiwum, przywróć zgłoszeniom z miasta
+        "B" status <code>#nowe</code> a następnie wyślij je na tej stronie.</p>
+    {% else %} {# if cities|length > 1 #}
+
+        {% if (cities | first.api) %}
+            <p>Na szczęście {{ cities | first.address[0] }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
+            im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei. {{ cities | first.hint | raw }}</p>
+            <script>
+            {{ include('_inline.js.twig') }}
+            </script>
+        {% else %} {# if (cities | first.api) #}
+            Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
+            Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
+            wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw
+            prawidłowo statusy.</p>
+
+            <ol>
+                <li>Najpierw 
+                    <a id="download" href="all-active-apps.pdf?readyApps" download="true" data-ajax="false"
+                    class="ui-btn ui-corner-all ui-btn-inline ui-mini try">pobierz</a>
+                    {{ paczke }};
+                </li>
+                <li class="ui-disabled">Następnie 
+                    <a id="send" data-ajax="false" target="_blank"
+                        href="mailto:{{ cities | first.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
+                        class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
+                    i wyślij email do SM {{ cities | first.city }} (jeśli otworzył Ci się pusty email, 
+                    <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
+                    <div data-role="popup" id="popupPadded" class="ui-content">
+                        <dl>
+                            <dt>Do:</dt>
+                            <dd>{{ cities | first.email }}</dd>
+                            <dt>Tytuł:</dt>
+                            <dd>{{ emailSubject }}</dd>
+                            <dt>Treść:</dt>
+                            <dd style="white-space: pre-wrap;">{{ emailBody }}</dd>
+                        </dl>
+                    </div>
+                    <p><b>Nie zapomnij dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!</b></p>
+                </li>
+                <li class="ui-disabled">Po wysłaniu wiadomości, możesz
+                    <a id="email" href="moje-zgloszenia.html?changeMail" data-ajax="false"
+                        class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-mail status-confirmed-waiting">zmienić</a>
+                        status wszystkich {{ apps|length }} zgłoszeń na <code>#wysłane mailem</code>.
+                </li>
+            </ol>
+
+            <script>
+                $('#download').on('click', function(){
+                    $(this).parent().addClass('ui-disabled');
+                    $('#send').parent().removeClass('ui-disabled');
+                });
+                $('#send, #sendE').on('click', function(){
+                    $(this).parent().addClass('ui-disabled');
+                    $('#email, #epuap').parent().removeClass('ui-disabled');
+                });
+                {{ include('_inline.js.twig') }}
+            </script>
+        {% endif %} {# if (cities | first.api) #}
+
+    {% endif %} {# if cities|length > 1 #}
+        <div data-role="collapsibleset" data-mini="true" data-inset="true">
+            {% for app in apps %}
+                {% include('_application-short.html.twig') %}
+            {% endfor %}
+        </div>
+{% endif %} {# if apps|length == 0 #}
 {% endblock %}

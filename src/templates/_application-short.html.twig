@@ -6,7 +6,7 @@
         ~ "#{app.userComment} #{app.getCategory[1]} " }}
         {% if app.getRecydywa > 1 %}recydywa{{ app.getRecydywa }}{% endif %}">
 
-    <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}}</h3>
+    <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}} {% if app.comments %}<span title="Komentarz" class="ui-li-count">{{ app.comments|length }}</span>{% endif %}</h3>
     <p data-role="listview" data-inset="false">
         <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
@@ -22,19 +22,28 @@
 {% endif %}
 
 {% if config.appActionButtons %}
-        <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
-            <select name="select-status" id="select-status-{{ app.id }}"
-                class="status-{{ app.status }}"
-                onChange="_action('{{ app.id }}');">
+    <form><fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+    {% if app.guessSMData.hasAPI and app.status == 'confirmed' %}
+        <div class="ui-btn ui-corner-all ui-btn-inline">Status: {{ statuses[app.status].name|upper }}</div>
+        <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail cta">Wyślij bezpośrednio do SM</a>
+        <a href="#" id="send-{{ app.id }}" onclick="setStatus('{{ app.id }}', 'archived')"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-cloud">Do archiwum</a>
+    {% else %}
+        <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
+        <select name="select-status" id="select-status-{{ app.id }}"
+            class="status-{{ app.status }} {% if sendViaAPI is defined %}ui-disabled{% endif %}"
+            onChange="_action('{{ app.id }}');">
             {% for key,val in statuses %}
-                {% if val.class %} {# class is empty, this is a draft or ready #}
-                    <option value="{{ key }}"
-                        {% if key == app.status %}selected="selected"{% endif %}>{{ val.action }}</option>
+                {% if val.class %}
+                <option value="{{ key }}"
+                    {% if key not in statuses[app.status].allowed and key != app.status %}disabled="disabled"{% endif %}
+                    {% if key == app.status %}selected="selected">#{{ val.name|lower }} *{% else %}>#{{ val.name|lower }}{% endif %}</option>
                 {% endif %}
             {% endfor %}
-            </select>
-        </fieldset></form>
+        </select>
+    {% endif %}
+    </fieldset></form>
 {% endif %}
         <div class="ui-grid-a ui-responsive images images-cropped">
             <div class="ui-block-a imageContainer">

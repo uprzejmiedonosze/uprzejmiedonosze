@@ -10,7 +10,7 @@ class JSONObject {
      */
     public function __construct($json = null) {
         if($json){
-            $this->set(json_decode($json, true));
+            $this->set(is_string($json)? json_decode($json, true): $json);
         }
     }
 
@@ -26,6 +26,10 @@ class JSONObject {
             }
             $this->{$key} = $value;
         }
+    }
+
+    public function __toString(){
+        return serialize($this);
     }
 }
 ?>

@@ -107,7 +107,7 @@
     ],
     "email": "sm@um.poznan.pl",
     "city": "Poznań",
-    "hint": null,
+    "hint": "Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
     "api": "Poznan"
   },
   "toruń": {
@@ -130,7 +130,7 @@
     "email": "sekretariat@strazmiejska.bydgoszcz.pl",
     "city": "Bydgoszcz",
     "hint": null,
-    "api": "PoznanImpl"
+    "api": null
   },
   "katowice": {
     "address": [

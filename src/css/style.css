@@ -63,6 +63,12 @@ img.one-third {
     text-shadow: none!important;
 }
 
+.ui-btn.cta {
+    background-color: #e9c200!important;
+    text-shadow: none!important;
+    border-color: #e9c200!important;
+}
+
 .ui-page-theme-a .ui-header,
 html .ui-bar-a .ui-header,
 html .ui-body-a .ui-header,
@@ -457,6 +463,11 @@ a.zoom {
 
 .imageContainer:hover a.zoom {
    opacity: 1;
+}
+
+#comments .ui-listview li,
+#statusHistory .ui-listview li  {
+    white-space: initial;
 }
 
 /* #endregion zgloszenie */

@@ -118,6 +118,13 @@ class User extends JSONObject{
     }
 
     /**
+    * Super ugly function returning true for beta users.
+    */
+    function isBeta(){
+        return $this->isAdmin() || $this->data->email == 'klimatino@gmail.com';
+    }
+
+    /**
      * Updates current user's data.
      */
     function updateUserData($name, $msisdn, $address, $exposeData){ // , $idnumber){

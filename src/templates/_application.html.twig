@@ -37,6 +37,8 @@
 {% if app.status not in ['draft', 'ready'] and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
     <p>Dokument ze zgłoszeniem dostępny jest pod adresem
         <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
+            {% if app.sentViaAPI is defined %}Pamiętaj, że to zgłoszenie zostało wysłane do SM {{ app.guessSMData.city }}
+            poprzez API. Plik PDF nie jest więc oryginalnym dokumentem jaki otrzymała SM.{% endif %}
     </p>
 {% endif %}
 
@@ -106,17 +108,33 @@
     </div>
 {% endif %}
 
-{% if app.isCurrentUserOwner and app.statusHistory|length > 0 and config.confirmationScreen is not defined %}
-    <div id="statusHistory">
-        <h4>Historia zmian statusów</h4>
-        <ul data-role="listview">
-        {% for date,status in app.statusHistory %}
-            <li>
-                <b>{{ date|date('Y-m-d H:i') }}</b> {{ app.user.name }}: {{ statuses[status.new].comment }}
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
+{% if app.isCurrentUserOwner and config.confirmationScreen is not defined %}
+    {% if app.comments and app.comments|length > 0 %}
+        <div id="comments">
+            <h4>Komentarze</h4>
+            <ul data-role="listview">
+            {% for date,comment in app.comments %}
+                <li>
+                    {{ date|date('Y-m-d H:i') }} <b>{{ comment.source }}</b>:
+                    {{ comment.comment }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% if app.statusHistory|length > 0 %}
+        <div id="statusHistory">
+            <h4>Historia zmian statusów</h4>
+            <ul data-role="listview">
+            {% for date,status in app.statusHistory %}
+                <li>
+                    {{ date|date('Y-m-d H:i') }} <b>{{ app.user.name }}</b>:
+                    {{ statuses[status.new].comment }}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 {% endif %}
 
 </div>

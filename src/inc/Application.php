@@ -14,6 +14,7 @@ class Application extends JSONObject{
         if($json){
             parent::__construct($json);
             @$this->statusHistory = (array)$this->statusHistory;
+            @$this->comments = (array)$this->comments;
             return;
         }
         global $storage;
@@ -104,6 +105,14 @@ class Application extends JSONObject{
     }
 
     /**
+     * Returns prefix for image filenames – used while sending images
+     * via API to SM.
+     */
+    public function getAppImageFilenamePrefix(){
+        return str_replace('/', '-', $this->number);
+    }
+
+    /**
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId
      * value in the application.
@@ -149,6 +158,10 @@ class Application extends JSONObject{
             }
         }
         return $SM_ADDRESSES['_nieznane'];
+    }
+
+    public function hasAPI(){
+        return $this->guessSMData()->hasAPI();
     }
 
     /**
@@ -211,6 +224,13 @@ class Application extends JSONObject{
         return $string;
     }
 
+    public function getJSONSafeComment(){
+        // Remove HTML entities
+        $string = preg_replace('/&[a-zA-Z]+;/iu', '', $this->userComment);
+        $string = str_replace("\\", " ", $string);
+        return $string;
+    }
+
     /**
      * Zwraca adres do pliku z mapą lokalizacji zgłoszenia. W razie potrzeby
      * najpierw pobiera ten obrazek z API Google.
@@ -265,6 +285,40 @@ class Application extends JSONObject{
         return "$baseFileName,ma.png";
     }
 
+    public function getFirstName(){
+        return preg_split('/\s/', $this->user->name)[0];
+    }
+
+    public function getLastName(){
+        return preg_split('/^[^\s]+\s/', $this->user->name)[1];
+    }
+
+    public function getLon(){
+        return explode(',', $this->address->latlng)[1];
+    }
+
+    public function getLat(){
+        return explode(',', $this->address->latlng)[0];
+    }
+
+    public function getTitle(){
+        return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150): $this->getCategory()[0] )
+            . " ({$this->address->address})";
+    }
+
+    /**
+     * Adds a comment to the application.
+     * $source <string>
+     *  Name of the author | API Miasta | Admin
+     */
+    public function addComment($source, $comment){
+        if(!isset($this->comments)){
+            $this->comments = [];
+        }
+        $this->comments[date(DT_FORMAT)] = new JSONObject();
+        $this->comments[date(DT_FORMAT)]->source = $source;
+        $this->comments[date(DT_FORMAT)]->comment = $comment;
+    }
 }
 
 ?>

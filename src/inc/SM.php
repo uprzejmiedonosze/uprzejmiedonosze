@@ -11,6 +11,7 @@ class SM extends JSONObject{
      */
     public function __construct($json = null) {
         parent::__construct($json);
+        @$this->address = get_object_vars($this->address);
     }
 
     public function getAddress(){
@@ -33,8 +34,10 @@ class SM extends JSONObject{
         return $this->hint;
     }
 
-    public function isAPI(){
-        return !!$this->api;
+    public function hasAPI(){
+        // @TODO usunąć odwołania do BETY
+        global $storage;
+        return $this->api && $this->api !== 'email' && isLoggedIn() && $storage->getCurrentUser()->isBeta();
     }  
 
 }
