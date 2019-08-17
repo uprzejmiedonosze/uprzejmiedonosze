@@ -1,7 +1,7 @@
 import time
 import unittest
 from UDTest import UDTest
-from StaticPage import StaticPage
+from pages.StaticPage import StaticPage
 from selenium.webdriver.common.by import By
 
 class UDStatic_test(UDTest):

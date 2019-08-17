@@ -1,4 +1,4 @@
-from BasePage import BasePage
+from pages.BasePage import BasePage
 
 class StaticPage(BasePage):
     def __init__(self, driver, address):

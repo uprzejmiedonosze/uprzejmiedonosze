@@ -1,5 +1,4 @@
-from elements import *
-from Config import Config
+from pages.Config import Config
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
