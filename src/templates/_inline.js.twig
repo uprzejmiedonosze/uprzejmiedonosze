@@ -3,7 +3,13 @@
  */
 function updateCounters(){
     $('.filter a').each(function(idx, item){
-        item.children[0].innerText = $('div.application.status-' + item.id).length;
+        const count = $('div.application.status-' + item.id).length;
+        item.children[0].innerText = count;
+        if(count == 0){
+            $(item).hide();
+        }else{
+            $(item).show();
+        }
     });
 }
 
