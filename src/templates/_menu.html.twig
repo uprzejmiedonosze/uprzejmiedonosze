@@ -22,10 +22,13 @@
             {% endfor %}
         {% endif %}
 
+        {% if general.stats.confirmed is defined and general.stats.confirmed[0] > 0 %}
         <li data-icon="mail">
             <a {% if config.menu == 'wysylka' %}class="active"{% endif %}
                 href="/wysylka.html">Do wysłania
-            <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a></li>
+            <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a>
+        </li>
+        {% endif %}
     {% else %}
         <li data-icon="plus"><a class="try" href="/start.html">Spróbuj!</a></li>
     {% endif %}
