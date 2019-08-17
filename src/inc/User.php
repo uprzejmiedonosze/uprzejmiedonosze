@@ -121,7 +121,7 @@ class User extends JSONObject{
     * Super ugly function returning true for beta users.
     */
     function isBeta(){
-        return $this->isAdmin() || $this->data->email == 'klimatino@gmail.com';
+        return $this->isAdmin(); // || $this->data->email == 'klimatino@gmail.com';
     }
 
     /**
