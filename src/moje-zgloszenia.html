@@ -31,7 +31,7 @@ foreach($appIds as $id){
 }
 
 if($changeMail || $changeEpuap){
-    $storage->getUserStats(false); // update cache
+    $storage->getUserStats(false); // updates the cache
 }
 
 echo generate('moje-zgloszenia.html.twig', 

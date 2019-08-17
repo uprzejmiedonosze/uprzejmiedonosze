@@ -8,41 +8,46 @@
 {% if countChanged > 0 %}
 <p><b>(zmieniliśmy status {{ countChanged }} zgłoszeń)</b></p>
 {% endif %}
-<p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
 
-{% if general.stats.confirmed is defined %}
-    {% if general.stats.confirmed[0] > 1 %}
-        <p>Masz już <b>{{ general.stats.confirmed[0] }} 
-        {% if general.stats.confirmed[0] > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
-         na wysłanie</b>. Zapraszamy na stronę <a href="wysylka.html" data-ajax="false">wysyłka</a>.</p>
+{% if applications|length == 0 %}
+    <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
+    <a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
+{% else %}
+    <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
+
+    {% if general.stats.confirmed is defined %}
+        {% if general.stats.confirmed[0] > 1 %}
+            <p>Masz już <b>{{ general.stats.confirmed[0] }} 
+            {% if general.stats.confirmed[0] > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
+            na wysłanie</b>. Zapraszamy na stronę <a href="wysylka.html" data-ajax="false">wysyłka</a>.</p>
+        {% endif %}
     {% endif %}
-{% endif %}
 
-<form>
-    <input data-type="search" id="searchForCollapsibleSet"
-        placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu">
-</form>
+    <form>
+        <input data-type="search" id="searchForCollapsibleSet"
+            placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu">
+    </form>
 
-<div data-role="collapsibleset" data-filter="true" data-mini="true"
-    data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
-    {% for app in applications %}
-        {% include('_application-short.html.twig') %}
-    {% endfor %}
-</div>
+    <div data-role="collapsibleset" data-filter="true" data-mini="true"
+        data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
+        {% for app in applications %}
+            {% include('_application-short.html.twig') %}
+        {% endfor %}
+    </div>
 
-<script>
-$(document).on('pageshow', function () {
-    updateCounters();
-    $('.filter a').click(function(e){
-        $('div.application').hide();
-        $('div.application.status-' + this.id).show();
-        $('.filter a').each(function(idx, item){
-            $(item).removeClass('active');
+    <script>
+    $(document).on('pageshow', function () {
+        updateCounters();
+        $('.filter a').click(function(e){
+            $('div.application').hide();
+            $('div.application.status-' + this.id).show();
+            $('.filter a').each(function(idx, item){
+                $(item).removeClass('active');
+            });
+            $(this).addClass('active');
         });
-        $(this).addClass('active');
     });
-});
-{{ include('_inline.js.twig') }}
-</script>
-
+    {{ include('_inline.js.twig') }}
+    </script>
+{% endif %}
 {% endblock %}
