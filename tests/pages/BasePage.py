@@ -89,9 +89,3 @@ class BasePage(object):
         self.driver.execute_script("window.history.go(-1)")
         if wait_for_title:
             WebDriverWait(self.driver, 10).until(EC.title_contains(wait_for_title))
-
-class Start(BasePage):
-    def __init__(self, driver):
-        BasePage.__init__(self, driver, self.START)
-        if not "start" in self.driver.title.lower():
-            self.login()
