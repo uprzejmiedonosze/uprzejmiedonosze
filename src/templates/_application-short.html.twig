@@ -29,7 +29,7 @@
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail cta">Wyślij bezpośrednio do SM</a>
         <a href="#" id="send-{{ app.id }}" onclick="setStatus('{{ app.id }}', 'archived')"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-cloud">Do archiwum</a>
-    {% else %}
+    {% elseif config.wysylka is not defined %}
         <div class="ui-btn ui-corner-all ui-btn-inline">Status:</div>
         <select name="select-status" id="select-status-{{ app.id }}"
             class="status-{{ app.status }} {% if sendViaAPI is defined %}ui-disabled{% endif %}"
