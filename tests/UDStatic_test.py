@@ -1,12 +1,10 @@
-import unittest
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.common.by import By
-from StaticPage import StaticPage
 import time
-import os
+import unittest
+from UDTest import UDTest
+from StaticPage import StaticPage
+from selenium.webdriver.common.by import By
 
-class UDStatic_test(unittest.TestCase):
+class UDStatic_test(UDTest):
     MAIN        = (By.XPATH, "//a[@href='/']")
     CHANGELOG   = (By.XPATH, "//a[@href='/changelog.html']")
     PROJECT     = (By.XPATH, "//a[@href='/projekt.html']")
@@ -17,25 +15,6 @@ class UDStatic_test(unittest.TestCase):
     STATYSTYKI  = (By.XPATH, "//a[@href='/statystyki.html']")
     MANDAT      = (By.XPATH, "//a[@href='/mandat.html']")
     
-    @classmethod
-    def setUpClass(cls):
-        profile = webdriver.FirefoxProfile('/Users/szn/Sites/uprzejmiedonosze.net/webapp/tests/selenium.ff-profile')
-        options = Options()
-        options.add_argument("--headless")
-        cls.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options,
-            firefox_binary='/Applications/Firefox.app/Contents/MacOS/firefox-bin')
-
-        cls.driver.implicitly_wait(1)
-        cls.driver.set_window_size(800, 900)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.quit()
-
-    def setUp(self):
-        self.driver.get('http://staging.uprzejmiedonosze.net')
-        time.sleep(1)
-
     def test_ssl(self):
         assert "https://" in self.driver.current_url
 
