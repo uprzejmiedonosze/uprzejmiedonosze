@@ -1,24 +1,17 @@
 from elements import *
 from locators import *
+from Config import Config
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import time
 import os
 import sys
-import configparser
 import logging
 
 logger = logging.getLogger(__name__)
 logger.level = logging.DEBUG
 logger.addHandler(logging.StreamHandler(sys.stdout))
-
-class Config(object):
-    config = configparser.ConfigParser()
-    def __init__(self, file='./config.ini'):
-        self.config.read(file)
-        self.account = self.config['account']
-        self.app = self.config['app']
 
 class BasePage(object):
     WAIT = 2
@@ -44,7 +37,7 @@ class BasePage(object):
         assert len(new) > 0, "nie mogę znaleźć przycisku nowego zgłoszenia"
     
     def is_title_matches(self, title):
-        assert title in self.driver.title, "tytuł nie pasuje (jest '{}' zamiast '{}')".format(self.driver.title, title)
+        assert title.lower() in self.driver.title.lower(), "tytuł nie pasuje (jest '{}' zamiast '{}')".format(self.driver.title, title)
     
     def click_main(self):
         self.driver.find_element(*Locators.MAIN).click()
@@ -82,23 +75,6 @@ class BasePage(object):
         self.driver.execute_script("window.history.go(-1)")
         if wait_for_title:
             WebDriverWait(self.driver, 10).until(EC.title_contains(wait_for_title))
-
-class MainPage(BasePage):
-    def __init__(self, driver):
-        BasePage.__init__(self, driver, None)
-        pass
-
-class Changelog(BasePage):
-    def __init__(self, driver):
-        BasePage.__init__(self, driver, Locators.CHANGELOG)
-
-class Project(BasePage):
-    def __init__(self, driver):
-        BasePage.__init__(self, driver, Locators.PROJECT)
-
-class RTD(BasePage):
-    def __init__(self, driver):
-        BasePage.__init__(self, driver, Locators.RTD)
 
 class Start(BasePage):
     def __init__(self, driver):
