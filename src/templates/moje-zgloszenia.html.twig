@@ -34,7 +34,7 @@
             {% include('_application-short.html.twig') %}
         {% endfor %}
     </div>
-
+{% endif %}
     <script>
     $(document).on('pageshow', function () {
         updateCounters();
@@ -49,5 +49,4 @@
     });
     {{ include('_inline.js.twig') }}
     </script>
-{% endif %}
 {% endblock %}
