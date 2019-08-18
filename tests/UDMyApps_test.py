@@ -17,8 +17,6 @@ class UDMyApps_test(UDTest):
     def setUp(self):
         super().setUp()
 
-    def test_emp
-
     def test_check_list(self):
         myApps = MyApps(self.driver)
         myApps.check_list()

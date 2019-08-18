@@ -17,10 +17,10 @@
   },
   "confirmed": {
     "name": "Nowe",
-    "action": "Wyślij",
+    "action": "Nowe",
     "icon": "carat-u",
     "class": "active",
-    "allowed": ["confirmed-waiting", "confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
+    "allowed": ["confirmed-waiting", "archived"],
     "comment": "Zapisanie gotowego zgłoszenia"
   },
   "confirmed-waiting": {

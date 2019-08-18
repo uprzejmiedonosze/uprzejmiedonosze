@@ -16,8 +16,8 @@ function updateCounters(){
 /**
  * Sets application status.
  * 
- * @param appId 
- * @param status 
+ * @param appId application id to change
+ * @param status new status for the app
  */
 function setStatus(appId, status){
     $.post('/api/api.html', {action: status, id: appId}).done(function() {
@@ -25,11 +25,11 @@ function setStatus(appId, status){
     });
 }
 
-function _action(appId){
-    status = document.getElementById("select-status-" + appId).value;
-    setStatus(appId, status);
-}
-
+/**
+ * Send the application through API
+ * 
+ * @param appId application id to be sent
+ */
 function _sendViaAPI(appId){
     $("#send-" + appId).addClass('ui-disabled');
     $.mobile.loading( "show", { text: 'wysyłam', textVisible: true } );
@@ -46,6 +46,11 @@ function _sendViaAPI(appId){
     });
 }
 
+/**
+ * 
+ * @param msg Message to display
+ * @param timeout Time for the message to be visible in ms
+ */
 function showMessage(msg, timeout){
     $.mobile.loading( "show",
         { text: msg, textVisible: true, textonly: true } );
@@ -55,7 +60,23 @@ function showMessage(msg, timeout){
 }
 
 function _updateStatus(appId, status){
-    $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-waitingE status-confirmed-sm status-confirmed-ignored status-confirmed-fined status-archived');
+    {% set allClasses = '' %}
+    
+    {% for key,val in statuses %}
+        {% set allClasses = allClasses ~ ' status-' ~ key %}
+    {% endfor %}
+
+
+    $('#' + appId + ' .appActionButtons a').removeClass('ui-disabled').hide();
+    $('#' + appId + ' .appActionButtons a.status-' + status).addClass('ui-disabled').show();
+    statuses[status].allowed.forEach(function(allowed){
+        $('#' + appId + ' .appActionButtons a.status-' + allowed).show();
+    });
+
+    $('#' + appId).removeClass('{{ allClasses }}');
     $('#' + appId).addClass('status-' + status);
+
     updateCounters();
 }
+
+const statuses = {{ include('statuses.json') }};
