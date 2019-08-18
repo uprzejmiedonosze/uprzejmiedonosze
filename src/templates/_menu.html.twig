@@ -65,7 +65,7 @@
         {% if general.isLoggedIn %}
         <li data-icon="user">
             <a {% if config.menu == 'register' %}class="active"{% endif %}
-                href="/register.html">Edycja konta</a></li>
+                href="/register.html?update">Edycja konta</a></li>
         <li data-icon="false" class="subpage">
             <a href="/login.html?logout">– wyloguj się</a></li>
         {% else %}
