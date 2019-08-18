@@ -16,11 +16,10 @@ if (is_ajax()) {
             case "confirmed-sm":
             case "confirmed-ignored":
             case "confirmed-fined":
+                _setStatus($action, $_POST["id"]); break;
             case "send":
                 if(isset($_POST["api"])){
                     _sendViaAPI($_POST["id"]); break;
-                }else{
-                    _setStatus($action, $_POST["id"]); break;
                 }
             case "upload":
                 _upload(); break;
