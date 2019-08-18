@@ -121,7 +121,8 @@ class User extends JSONObject{
     * Super ugly function returning true for beta users.
     */
     function isBeta(){
-        return $this->isAdmin(); // || $this->data->email == 'klimatino@gmail.com';
+        // @TODO usunąć użytkownika testowego.
+        return $this->isAdmin() || $this->data->email == 'klimatino@gmail.com';
     }
 
     /**
