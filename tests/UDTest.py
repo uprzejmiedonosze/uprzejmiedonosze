@@ -11,7 +11,7 @@ class UDTest(unittest.TestCase):
     def setUpClass(cls):
         profile = webdriver.FirefoxProfile('/Users/szn/Sites/uprzejmiedonosze.net/webapp/tests/selenium.ff-profile')
         options = Options()
-        #options.add_argument("--headless")
+        options.add_argument("--headless")
         cls.driver = webdriver.Firefox(firefox_profile=profile, firefox_options=options,
             firefox_binary='/Applications/Firefox.app/Contents/MacOS/firefox-bin')
 
