@@ -9,7 +9,7 @@
                 {% if config.menu == 'start' %}class="active"{% endif %}
                 href="/start.html">Nowe zgłoszenie</a></li>
         <li data-icon="bullets">
-            <a {% if config.menu == 'moje-zgloszenia' %}class="active"{% endif %}
+            <a data-ajax="false" {% if config.menu == 'moje-zgloszenia' %}class="active"{% endif %}
                 href="/moje-zgloszenia.html">Moje zgłoszenia
             <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span></a></li>
 
@@ -24,7 +24,7 @@
 
         {% if general.stats.confirmed is defined and general.stats.confirmed[0] > 0 %}
         <li data-icon="mail">
-            <a {% if config.menu == 'wysylka' %}class="active"{% endif %}
+            <a data-ajax="false" {% if config.menu == 'wysylka' %}class="active"{% endif %}
                 href="/wysylka.html">Do wysłania
             <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a>
         </li>
