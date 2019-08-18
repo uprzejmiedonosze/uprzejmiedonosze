@@ -25,7 +25,7 @@ function generate($template, $parameters){
         }
     }    
     
-    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+    $loader = new Twig_Loader_Filesystem([__DIR__ . '/../templates', __DIR__ . '/../public/api/config']);
     $twig = new Twig_Environment($loader,
     [
         'debug' => false,
