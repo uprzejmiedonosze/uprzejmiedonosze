@@ -58,7 +58,7 @@
         </div>
 {% if config.appActionButtons %}
         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <a target="_blank" ajax="false" href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
+            <a target="_blank" data-ajax="false" href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
             <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-location"
                 data-ajax="false" target="_blank">mapa</a>
