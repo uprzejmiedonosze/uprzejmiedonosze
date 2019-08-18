@@ -23,6 +23,8 @@ if (is_ajax()) {
                 }
             case "upload":
                 _upload(); break;
+            case "getApp":
+                _getAppDetails($_POST["id"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -91,6 +93,19 @@ function _sendViaAPI($appId){
         raiseError($e->getMessage(), 500);
     }
     echo json_encode(Array("status" => "OK"));
+}
+
+/**
+ * Returns app details JSON
+ */
+function _getAppDetails($appId){
+    global $storage;
+    try{
+        $application = $storage->getApplication($appId);
+    }catch(Exception $e){
+        raiseError($e->getMessage(), 404);
+    }
+    echo json_encode($application);
 }
 
 /**
