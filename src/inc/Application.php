@@ -237,21 +237,17 @@ class Application extends JSONObject{
      */
     public function getMapImage(){
         if(!isset($this->address) || !isset($this->address->latlng)){
-            logger("getMapImage(): Brakuje danych latlng");
             return null;
         }
         $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$this->address->latlng}&zoom=17&size=380x200&maptype=roadmap&markers=color:red%7Clabel:o%7C{$this->address->latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
         
         if($this->status == 'draft' || $this->status == 'ready'){
-            logger("getMapImage(): draft|ready » statyczna mapa");
             return $mapsUrl;
         }
 
         if(isset($this->address->mapImage)){
-            logger("getMapImage(): Biorę wcześniej zapisany adres");
             return $this->address->mapImage;
         }
-        logger("getMapImage()");
         // @TODO refactor warning (duże copy-paste z api.html:saveImgAndThumb())
         $baseDir = 'cdn2/' . $this->getUserNumber();
         if(!file_exists('/var/www/%HOST%/' . $baseDir)){
@@ -263,18 +259,15 @@ class Application extends JSONObject{
 
         $ifp = @fopen($fileName, 'wb');
         if($ifp === false){
-            logger("getMapImage(): Nie mogę otworzyć pliku $fileName do zapisu");
             return $mapsUrl;
         }
         
         $image = file_get_contents($mapsUrl);
         if($image === false){
-            logger("getMapImage(): Nie mogę pobrać mapy z $mapsUrl");
             return $mapsUrl;
         }
         
         if(fputs($ifp, $image) === false){
-            logger("getMapImage(): Nie mogę zapisać do $fileName");
             return $mapsUrl;
         }
         fclose($ifp);
