@@ -605,6 +605,17 @@
     "hint": null,
     "api": false
   },
+  "bełżyce": {
+    "address": [
+      "Komisariat Policji w Bełżycach",
+      "ul. Lubelska 82",
+      "24-200 Bełżyce"
+    ],
+    "email": "kpbelzyce.kmplublin@lu.policja.gov.pl",
+    "city": "Bełżyce",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
