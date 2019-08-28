@@ -29,6 +29,10 @@ class Poznan extends CityAPI {
         $application->setStatus('confirmed');
         $output = parent::curlSend($url, $auth, $data, $application);
 
+        if(isset($output['response']['error_msg'])){
+            raiseError($output['response']['error_msg'], 500);
+        }
+
         $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
 
         $application->setStatus('confirmed-sm');
