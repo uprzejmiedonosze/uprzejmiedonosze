@@ -11,6 +11,8 @@ function updateCounters(){
             $(item).show();
         }
     });
+
+    $('li.wysylka a span').text($('div.application.status-confirmed').length);
 }
 
 /**
@@ -38,7 +40,7 @@ function _sendViaAPI(appId){
         $('#moje-zgloszenia').removeClass('ui-disabled');
         _updateStatus(appId, 'confirmed-sm');
         $.mobile.loading( "hide" );
-        showMessage('sukces', 1000);
+        showMessage('wysłane', 1000);
     }).fail(function (e){
         $("#send-" + appId).removeClass('ui-disabled');
         $.mobile.loading( "hide" );
