@@ -627,6 +627,17 @@
     "hint": null,
     "api": false
   },
+  "jarosław": {
+    "address": [
+      "Straż Miejska Jarosławia",
+      "Rynek 1",
+      "37-500 Jarosław"
+    ],
+    "email": "kancelaria@um.jaroslaw.pl",
+    "city": "Jarosław",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
