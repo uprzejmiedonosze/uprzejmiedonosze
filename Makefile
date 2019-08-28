@@ -3,7 +3,7 @@ YUI_COMPRESSOR       := java -jar tools/yuicompressor-2.4.8.jar
 YUI_COMPRESSOR_FLAGS := --charset utf-8 --line-break 72
 BABEL                := babel-minify
 RSYNC                := rsync
-RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
+RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/*'
 HOSTING              := nieradka.net
 ifeq ($(filter darwin%,${OSTYPE}),)
     SED_OPTS         := -i ''
