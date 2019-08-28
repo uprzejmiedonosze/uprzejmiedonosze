@@ -35,9 +35,8 @@ class SM extends JSONObject{
     }
 
     public function hasAPI(){
-        // @TODO usunąć odwołania do BETY
         global $storage;
-        return $this->api && $this->api !== 'email' && isLoggedIn() && $storage->getCurrentUser()->isBeta();
+        return $this->api && $this->api !== 'email';
     }  
 
 }
