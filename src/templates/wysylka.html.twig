@@ -100,21 +100,19 @@ Pozdrawiam,
                         status wszystkich {{ apps|length }} zgłoszeń na <code>#wysłane mailem</code>.
                 </li>
             </ol>
-
-            <script>
-                $('#download').on('click', function(){
-                    $(this).parent().addClass('ui-disabled');
-                    $('#send').parent().removeClass('ui-disabled');
-                });
-                $('#send, #sendE').on('click', function(){
-                    $(this).parent().addClass('ui-disabled');
-                    $('#email, #epuap').parent().removeClass('ui-disabled');
-                });
-                {{ include('_inline.js.twig') }}
-            </script>
         {% endif %} {# if (cities | first.api) #}
-
     {% endif %} {# if cities|length > 1 #}
+        <script>
+            $('#download').on('click', function(){
+                $(this).parent().addClass('ui-disabled');
+                $('#send').parent().removeClass('ui-disabled');
+            });
+            $('#send, #sendE').on('click', function(){
+                $(this).parent().addClass('ui-disabled');
+                $('#email, #epuap').parent().removeClass('ui-disabled');
+            });
+            {{ include('_inline.js.twig') }}
+        </script>
         <div data-role="collapsibleset" data-mini="true" data-inset="true">
             {% for app in apps %}
                 {% include('_application-short.html.twig') %}
