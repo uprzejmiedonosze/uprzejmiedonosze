@@ -638,6 +638,17 @@
     "hint": null,
     "api": false
   },
+  "legionowo": {
+    "address": [
+      "Straż Miejska w Legionowie",
+      "ul. Jagiellońska 26B",
+      "05-120 Legionowo"
+    ],
+    "email": "straz.miejska@um.legionowo.pl",
+    "city": "Legionowo",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
