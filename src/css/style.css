@@ -474,6 +474,11 @@ a.zoom {
     white-space: initial;
 }
 
+cite {
+    display: block;
+    padding: 1em;
+}
+
 /* #endregion zgloszenie */
 
 /* #region moje zgloszenia */
