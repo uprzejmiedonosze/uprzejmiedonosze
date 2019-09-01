@@ -69,6 +69,7 @@ Pozdrawiam,
             Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
             wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw
             prawidłowo statusy.</p>
+            {% if (cities | first.hint) %}<p><b>Uwagi na temat współpracy z SM:</b> {{ cities | first.hint | raw }}</p>{% endif %}
 
             <ol>
                 <li>Najpierw 
