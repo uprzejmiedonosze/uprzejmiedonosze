@@ -360,7 +360,18 @@
     ],
     "email": "strazmiejska@piaseczno.eu",
     "city": "Nowa Iwiczna",
-    "hint": null,
+    "hint": "Miejscowość Nowa Iwiczna obsługuje Straż Miejska Piaseczno.",
+    "api": null
+  },
+  "gołków": {
+    "address": [
+      "Straż Miejska Piaseczno",
+      "ul. Czajewicza 1a",
+      "05-500 Piaseczno"
+    ],
+    "email": "strazmiejska@piaseczno.eu",
+    "city": "Gołków",
+    "hint": "Miejscowość Gołków obsługuje Straż Miejska Piaseczno.",
     "api": null
   },
   "piaseczno": {
