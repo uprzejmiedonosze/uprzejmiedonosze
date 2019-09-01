@@ -7,7 +7,7 @@
     ],
     "email": "sm@um.szczecin.pl",
     "city": "Szczecin",
-    "hint": null,
+    "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku.",
     "api": null
   },
   "warszawa": {
@@ -19,7 +19,7 @@
     ],
     "email": "csk@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": null,
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": null
   },
   "wrocław": {
@@ -30,7 +30,7 @@
     ],
     "email": "straz@strazmiejska.wroclaw.pl",
     "city": "Wrocław",
-    "hint": null,
+    "hint": "SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.",
     "api": null
   },
   "kraków": {
@@ -41,7 +41,7 @@
     ],
     "email": "smkrak@strazmiejska.krakow.pl",
     "city": "Kraków",
-    "hint": null,
+    "hint": "Niestety SM Kraków wzywa na przesłuchanie do każdego zgłoszenia.",
     "api": null
   },
   "gdynia": {
@@ -52,7 +52,7 @@
     ],
     "email": "straz_miejska@gdynia.pl",
     "city": "Gdynia",
-    "hint": null,
+    "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie.",
     "api": null
   },
   "białystok": {
@@ -74,7 +74,7 @@
     ],
     "email": "ogolnomiejski@strazmiejska.lodz.pl",
     "city": "Łódź",
-    "hint": null,
+    "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, konieczne jest złożenie oświadczenie ustnie lub przesłanie go na piśmie.",
     "api": null
   },
   "gdańsk": {
@@ -96,7 +96,7 @@
     ],
     "email": "sm@um.poznan.pl",
     "city": "Poznań",
-    "hint": "Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
+    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
     "api": "Poznan"
   },
   "toruń": {
@@ -129,7 +129,7 @@
     ],
     "email": "interwencje@katowice.eu",
     "city": "Katowice",
-    "hint": null,
+    "hint": "Niestety SM Katowice wzywa na przesłuchanie do każdego zgłoszenia.",
     "api": null
   },
   "górowo iławeckie": {
