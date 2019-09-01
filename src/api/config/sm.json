@@ -22,17 +22,6 @@
     "hint": null,
     "api": null
   },
-  "wroclaw": {
-    "address": [
-      "Straż Miejska Wrocławia",
-      "ul. Gwarna 5/7",
-      "50-001 Wrocław"
-    ],
-    "email": "straz@strazmiejska.wroclaw.pl",
-    "city": "Wrocław",
-    "hint": null,
-    "api": null
-  },
   "wrocław": {
     "address": [
       "Straż Miejska Wrocławia",
