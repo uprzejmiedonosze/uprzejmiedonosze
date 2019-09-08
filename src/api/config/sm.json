@@ -649,6 +649,17 @@
     "hint": null,
     "api": false
   },
+  "wadowice": {
+    "address": [
+      "Straż Miejska Wadowice",
+      "Plac Jana Pawła II 23",
+      "34-100 Wadowice"
+    ],
+    "email": "strazmiejska@wadowice.pl",
+    "city": "Wadowice",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
