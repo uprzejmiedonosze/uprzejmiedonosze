@@ -311,6 +311,33 @@ SQL;
         return $stats;
     }
 
+    /**
+     * Returns one page of applications that can be published in the gallery.
+     */
+    public function getGalleryApps($page = 0, $useCache = true){
+        $apps = $this->stats->get("%HOST%-getGalleryApps");
+        if($useCache && $apps){
+            return $apps;
+        }
+
+        $sql = "select key, value "
+            . "from applications "
+            . "where json_extract(value, '$.status') not in ('draft', 'ready') "
+            . "  and json_extract(value, '$.user.email') in ('e@nieradka.net') "
+            . "order by json_extract(value, '$.added') desc "
+            . "limit 10 ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $apps = Array();
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $apps[$row[0]] = new Application($row[1]);
+            logger(print_r($row[0], true));
+        }
+        $this->stats->set("%HOST%-getGalleryApps", $apps, 0, 600);
+        return $apps;
+    }
 }
 
 ?>
