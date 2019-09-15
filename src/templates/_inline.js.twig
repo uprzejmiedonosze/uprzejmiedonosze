@@ -34,13 +34,13 @@ function setStatus(appId, status){
  */
 function _sendViaAPI(appId){
     $("#send-" + appId).addClass('ui-disabled');
-    $.mobile.loading( "show", { text: 'wysyłam', textVisible: true } );
+    $.mobile.loading( "show", { text: 'Wysyłam...', textVisible: true } );
 
     $.post("/api/api.html", { id: appId, action: "send", api: true }, function(){
         $('#moje-zgloszenia').removeClass('ui-disabled');
         _updateStatus(appId, 'confirmed-sm');
         $.mobile.loading( "hide" );
-        showMessage('wysłane', 1000);
+        showMessage('Wysłane', 1000);
     }).fail(function (e){
         $("#send-" + appId).removeClass('ui-disabled');
         $.mobile.loading( "hide" );
