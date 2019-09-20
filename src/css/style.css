@@ -625,3 +625,46 @@ dt {
     font-weight:400;
 }
 /* #endregion faq */
+
+/* #region galeria */
+
+div.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: space-between;
+}
+
+div.galleryItem {
+    position: relative;
+    margin: 5px;
+    flex-grow: 1;
+    flex-basis: 380px;
+    max-width: 780px;
+    margin: 5px;
+}
+  
+div.galleryItem img {
+    width: 100%;
+    height: auto;
+}
+  
+div.galleryItem > div.desc {
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-shadow: none;
+    background: #f0ffffcc;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .2s, visibility .2s;
+}
+
+div.galleryItem:hover > div.desc {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* #endregion galeria */

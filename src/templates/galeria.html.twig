@@ -4,24 +4,15 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
-<div data-role="collapsibleset" data-mini="true" data-inset="true">
-    {% for app in applications %}
-        <div class="ui-body ui-body-a ui-corner-all">
-            <h3>{{ app.carInfo.plateId }}{% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
-                {{ app.address.city}} {{ app.getDate }}</h3>
-            <p><a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
-                data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
-            {{ app.getCategory[1] }} {{ app.userComment ?? '' }}</p>
-
-            <div class="ui-grid-a ui-responsive images images-cropped">
-                <div class="ui-block-a imageContainer">
-                    <div class="loader"></div>
-                    <a href="/ud-{{ app.id }}.html?dialog">
-                        <img class="lazyload" data-src="{{ app.contextImage.url }}">
-                    </a>
-                </div>
-            </div>
+{% for app in applications %}
+    <div class="galleryItem">
+        <a href="/ud-{{ app.id }}.html?dialog">
+            <img class="lazyload" data-src="{{ app.contextImage.thumb }}" width="600" height="400">
+        </a>
+        <div class="desc">
+            <b>{{ app.carInfo.plateId }}</b>{% if app.getRecydywa > 1 %}<sup>(recydywista)</sup>{% endif %}
+            {{ app.address.city}} ({{ app.getMonthYear }})
         </div>
-    {% endfor %}
-</div>
+    </div>
+{% endfor %}
 {% endblock %}
