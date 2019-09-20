@@ -179,7 +179,8 @@ class Application extends JSONObject{
     }
 
     public function getCategory(){
-        return CATEGORIES[$this->category];
+        global $CATEGORIES;
+        return $CATEGORIES[$this->category];
     }
 
     public function getStatus(){
@@ -295,7 +296,8 @@ class Application extends JSONObject{
     }
 
     public function getTitle(){
-        return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150): $this->getCategory()[0] )
+        return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150):
+            $this->getCategory()->getTitle() )
             . " ({$this->address->address})";
     }
 

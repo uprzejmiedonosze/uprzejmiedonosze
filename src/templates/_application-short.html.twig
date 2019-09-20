@@ -3,7 +3,7 @@
         status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus().icon }}"
     data-expanded-icon="carat-d" data-role="collapsible"
     data-filtertext="{{ "#{app.address.address} #{app.number} #{app.date} #{app.carInfo.plateId} "
-        ~ "#{app.userComment} #{app.getCategory[1]} " }}
+        ~ "#{app.userComment} #{app.getCategory.short} " }}
         {% if app.getRecydywa > 1 %}recydywa{{ app.getRecydywa }}{% endif %}">
 
     <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}} {% if app.comments %}<span title="Komentarz" class="ui-li-count">{{ app.comments|length }}</span>{% endif %}</h3>
@@ -15,7 +15,7 @@
             pod adresem
             <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
                 data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
-            {{ app.getCategory[1] }}</p>
+            {{ app.getCategory.short }}</p>
 
 {% if app.userComment %}
     <p>{{ app.userComment }}</p>

@@ -43,7 +43,7 @@ echo generate('nowe-zgloszenie.html.twig',
             'edit' => $edit,
             'lastLocation' => $storage->getCurrentUser()->getLastLocation()
         ],
-        'categories' => CATEGORIES,
+        'categories' => $CATEGORIES,
         'categoriesMatrix' => CATEGORIES_MATRIX,
         'app' => $application
     ]

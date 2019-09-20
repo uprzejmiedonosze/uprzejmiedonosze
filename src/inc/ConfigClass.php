@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/SM.php');
 require_once(__DIR__ . '/Status.php');
+require_once(__DIR__ . '/Category.php');
 
 /**
  * SM Config class.
