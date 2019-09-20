@@ -20,7 +20,7 @@ echo generate('zgloszenie.html.twig',
             'image' => $application->contextImage->thumb,
             'dialog' => isset($_GET['dialog']),
             'description' => "Samochód o nr rejestracyjnym {$application->carInfo->plateId} " .
-                "pod adresem {$application->address->address}. {$application->getCategory()[1]}"
+                "pod adresem {$application->address->address}. {$application->getCategory()->getShort()}"
         ],
         'config' =>
         [
