@@ -57,7 +57,7 @@
     },
     "12": {
         "title": "Parkowanie w strefie zamieszkania w miejscu niewyznaczonym",
-        "short": "Pojazd był zaparkowany w strefie zamieszkania poza miejscem do tego wyznaczonym.",
+        "short": "Pojazd był zaparkowany w strefie zamieszkania (dłużej niż minutę) poza miejscem do tego wyznaczonym.",
         "desc": "<p>W strefie zamieszkania obowiązuje zakaz parkowania poza miejscami do tego wyznaczonymi. Nie ma znaczenia pozostawione 1,5m, odległość od pasów czy skrzyżowania.</p>",
         "law": "PoRD Art. 49. 2.4. Zabrania się zatrzymania pojazdu w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu.",
         "price": "100 zł"
