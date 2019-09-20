@@ -48,6 +48,18 @@ class Application extends JSONObject{
     }
 
     /**
+     * Returns date in "January 2017" format.
+     */
+    public function getMonthYear(){
+        $date = new DateTime($this->date);
+        $MONTHS = [
+            'styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec',
+            'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'
+        ];
+        return $MONTHS[intval($date->format('m'))] . ' '. $date->format('Y');
+    }
+
+    /**
      * Returns application time in H:i format.
      */
     public function getTime(){
