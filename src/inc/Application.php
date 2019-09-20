@@ -180,8 +180,6 @@ class Application extends JSONObject{
 
     public function getCategory(){
         global $CATEGORIES;
-        logger($this->category);
-        logger(print_r($CATEGORIES, true));
         return $CATEGORIES[$this->category];
     }
 
