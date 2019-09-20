@@ -208,7 +208,7 @@ function _sendSlackOnNewApp($app, $todaysNewAppsCount){
 
         'fields' => [[
                 'title' => $app->address->city . (($app->guessSMData()->email)? "": " (!)"),
-                'value' => ($app->category == 0)? 'Inne: ' . $app->userComment: $app->getCategory()[0],
+                'value' => ($app->category == 0)? 'Inne: ' . $app->userComment: $app->getCategory()->getTitle(),
                 'short' => true
             ],[
                 'title' => "Dzisiaj:",
@@ -218,7 +218,7 @@ function _sendSlackOnNewApp($app, $todaysNewAppsCount){
         "image_url" => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         "thumb_url" => "%HTTPS%://%HOST%/{$app->contextImage->thumb}",
 
-        "footer" => $app->getCategory()[0],
+        "footer" => $app->getCategory()->getTitle(),
         "footer_icon" => "%HTTPS%://%HOST%/img/{$app->category}.jpg",
         "ts" => strtotime($app->date)
     ];
