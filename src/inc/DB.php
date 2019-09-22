@@ -320,11 +320,13 @@ SQL;
             return $apps;
         }
 
+        // @TODO SZN
+
         $sql = "select key, value "
             . "from applications "
             . "where json_extract(value, '$.status') not in ('draft', 'ready') "
-            . "  and json_extract(value, '$.user.email') in ('e@nieradka.net') "
-            . "order by json_extract(value, '$.added') desc "
+            . "  and json_extract(value, '$.user.email') in ('e@nieradka.net', 'szymon@nieradka.net') "
+            . "order by json_extract(value, '$.id') desc "
             . "limit 10 ";
 
         $stmt = $this->db->prepare($sql);
