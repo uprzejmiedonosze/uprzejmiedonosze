@@ -7,7 +7,7 @@
 {% for app in applications %}
     <div class="galleryItem">
         <a href="#popup" data-rel="popup" data-position-to="window" data-transition="fade"
-            data-target-img="">
+            data-target-img="{{ app.contextImage.url }}">
             <img class="lazyload" data-src="{{ app.contextImage.thumb }}" width="600" height="400">
         </a>
         <div class="desc">
@@ -19,13 +19,14 @@
     <div data-role="popup" id="popup" data-overlay-theme="a" data-theme="a" data-corners="false">
         <a href="#" data-rel="back"
             class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-        <img class="popphoto" src="" style="max-height:800px;">
+        <img class="popphoto" src="/img/loading.gif" style="max-height:800px;">
     </div>
     <script>
         /* @TODO SZN */
-        $('.galleryItem > a').click(function(a){
-            console.log(this);
-            console.log(a);
+        $('.galleryItem > a').click(function(){
+            $('img.popphoto').attr('src', '/img/loading.gif');
+            $('img.popphoto').attr('src', this.getAttribute('data-target-img'));
+            $('img.popphoto').resize();
         });
     </script>
 {% endblock %}
