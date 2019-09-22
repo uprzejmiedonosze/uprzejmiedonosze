@@ -660,6 +660,17 @@
     "hint": null,
     "api": false
   },
+  "pruszcz gdański": {
+    "address": [
+      "Straż Gminna Gminy Pruszcz Gdański",
+      "Spacerowa 8",
+      "83-031 Łęgowo"
+    ],
+    "email": "strazmiejska@pruszcz-gdanski.pl",
+    "city": "Pruszcz Gdański",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
