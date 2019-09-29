@@ -693,6 +693,17 @@
     "hint": null,
     "api": false
   },
+  "żory": {
+    "address": [
+      "Komenda Miejska Policji w Żorach",
+      "ul. Wodzisławska 3",
+      "44-240 Żory"
+    ],
+    "email": "komendant@zory.ka.policja.gov.pl",
+    "city": "Żory",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
