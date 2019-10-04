@@ -164,12 +164,11 @@ function setAddressByLatLng(lat, lng, from) { // init|picker|picture
     }
     $('#latlng').val(lat + "," + lng);
 
-    $.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="
-        + lat + ',' + lng + "&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address", function (data) {
+    $.post('/api/api.html', {action: 'geoToAddress', lat: lat, lng: lng}).done(function(result) {
             $('#addressHint').text('Podaj adres lub wskaż go na mapie');
             $('#addressHint').removeClass('hint');
-            if (data.results.length) {
-                setAddressByPlace(data.results[0], from);
+            if (result) {
+                setAddressByPlace(result, from);
                 if(from == 'picture'){
                     $('#addressHint').text('Sprawdź automatycznie pobrany adres');
                     $('#addressHint').addClass('hint');

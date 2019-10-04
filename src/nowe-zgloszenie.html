@@ -1,7 +1,7 @@
 <?PHP
 require_once(__DIR__ . '/../inc/include.php');
 
-checkIfLogged();
+checkIfRegistered();
 
 if(isset($_GET['cleanup'])){
     unset($_SESSION['newAppId']);
