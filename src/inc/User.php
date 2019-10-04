@@ -47,21 +47,16 @@ class User extends JSONObject{
 
     public function getLastLocation(){
         if(isset($this->lastLocation)){
-            logger("getLastLocation: zapisana lokalizacja");
             return $this->lastLocation;
         }
         global $storage;
         if($this->hasApps()){
             $lastApp = $storage->getApplication($this->getApplicationIds()[0]);
-            logger("getLastLocation: has apps, {$lastApp->number}");
             $this->lastLocation = $lastApp->address->latlng;
         }else{
-            logger("getLastLocation: guessLatLng");
             if(!($l = $this->guessLatLng())){
-                logger("getLastLocation: default ;(");
                 return "52.069321,19.480311";
             }
-            logger("getLastLocation: guessLatLng sukces");
             $this->lastLocation = $l;
         }
         $storage->saveUser($this);
@@ -70,7 +65,6 @@ class User extends JSONObject{
 
     private function guessLatLng(){
         if(!isset($this->data->address)){
-            logger("guessLatLng: address jest pusty");
             return null;
         }
         $address = urlencode($this->data->address);
@@ -85,7 +79,7 @@ class User extends JSONObject{
         curl_close($ch);
     
         $json = @json_decode($output, true);
-       if(!json_last_error() === JSON_ERROR_NONE){
+        if(!json_last_error() === JSON_ERROR_NONE){
             logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
             return null;
         }
