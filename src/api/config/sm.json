@@ -663,11 +663,44 @@
   "pruszcz gdański": {
     "address": [
       "Straż Gminna Gminy Pruszcz Gdański",
-      "Spacerowa 8",
+      "ul. Spacerowa 8",
       "83-031 Łęgowo"
     ],
     "email": "strazmiejska@pruszcz-gdanski.pl",
     "city": "Pruszcz Gdański",
+    "hint": null,
+    "api": false
+  },
+  "rotmanka": {
+    "address": [
+      "Straż Gminna Gminy Pruszcz Gdański",
+      "ul. Spacerowa 8",
+      "83-031 Łęgowo"
+    ],
+    "email": "strazmiejska@pruszcz-gdanski.pl",
+    "city": "Rotmanka",
+    "hint": null,
+    "api": false
+  },
+  "mikołów": {
+    "address": [
+      "Straż Miejska Mikołów",
+      "ul. Rynek 7",
+      "43-190 Mikołów"
+    ],
+    "email": "bsm1@mikolow.eu",
+    "city": "Mikołów",
+    "hint": null,
+    "api": false
+  },
+  "żory": {
+    "address": [
+      "Komenda Miejska Policji w Żorach",
+      "ul. Wodzisławska 3",
+      "44-240 Żory"
+    ],
+    "email": "komendant@zory.ka.policja.gov.pl",
+    "city": "Żory",
     "hint": null,
     "api": false
   },

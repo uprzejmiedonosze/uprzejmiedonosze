@@ -3,6 +3,9 @@ header("Content-Type: application/json; charset=UTF-8");
 require_once(__DIR__ . '/../../inc/include.php');
 require(__DIR__ . '/../../autoload.php');
 
+$cache = new Memcache;
+$cache->connect('localhost', 11211);
+
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
@@ -25,6 +28,8 @@ if (is_ajax()) {
                 _upload(); break;
             case "getApp":
                 _getAppDetails($_POST["id"]); break;
+            case "geoToAddress":
+                _geoToAddress($_POST["lat"], $_POST["lng"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -106,6 +111,46 @@ function _getAppDetails($appId){
         raiseError($e->getMessage(), 404);
     }
     echo json_encode($application);
+}
+
+/**
+ * 
+ */
+
+function _geoToAddress($lat, $lng){
+    global $cache;
+    $latlng = number_format((float) $lat, 4, '.', '') . ',' . number_format((float) $lng, 4, '.', '');
+
+    $result = $cache->get("_geoToAddress-$latlng");
+    if($result){
+        echo json_encode($result);
+        return;
+    }
+
+    $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?latlng=$latlng&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $output = curl_exec($ch);
+    if(curl_errno($ch)){
+        logger("Nie udało się pobrać danych latlng: " . curl_error($ch));
+        raiseError("Nie udało się pobrać odpowiedzi z serwerów GeoAPI: " . curl_error($ch), 500);
+        curl_close($ch);
+        return;
+    }
+    curl_close($ch);
+
+    $json = @json_decode($output, true);
+    if(!json_last_error() === JSON_ERROR_NONE){
+        logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
+        raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
+        return;
+    }
+    @$result = $json['results'][0];
+    if($json['status'] == 'OK' && $json['results']){
+        $cache->set("_geoToAddress-$latlng", $result, MEMCACHE_COMPRESSED, 2592000); // 30 days
+        echo json_encode($result);
+        return;
+    }
+    raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
 }
 
 /**
