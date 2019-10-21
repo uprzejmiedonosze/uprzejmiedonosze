@@ -317,39 +317,39 @@ SQL;
     }
 
     /**
-     * Returns number of new applications (by creation date)
-     * during 30 days. 
+     * Returns number of new applications (by creation month)
+     * in last year.
      */
-    public function getStatsByWeek($useCache = true){
+    public function getStatsByYear($useCache = true){
 
-        $stats = $this->stats->get("%HOST%-getStatsByWeek");
+        $stats = $this->stats->get("%HOST%-getStatsByYear");
         if($useCache && $stats){
             return $stats;
         }
 
         $sql = <<<SQL
-            select min(substr(json_extract(applications.value, '$.added'), 1, 10)) as 'day',
+         select min(substr(json_extract(applications.value, '$.added'), 1, 7)) as 'day',
                 count(*) as acnt,
                 u.cnt as ucnt
             from applications
             left outer join (
-                select min(substr(json_extract(users.value, '$.added'), 1, 10)) as 'day',
+                select min(substr(json_extract(users.value, '$.added'), 1, 7)) as 'day',
                     count(*) as cnt
                 from users
                 where substr(json_extract(users.value, '$.added'), 1, 4) > 2017
-                group by strftime('%Y%W', substr(json_extract(users.value, '$.added'), 1, 10))
+                group by substr(json_extract(users.value, '$.added'), 1, 7)
                 order by 1 desc
                 limit 35
-            ) u on substr(json_extract(applications.value, '$.added'), 1, 10) = u.day
+            ) u on substr(json_extract(applications.value, '$.added'), 1, 7) = u.day
             where json_extract(applications.value, '$.status') not in ('draft', 'ready')
                 and substr(json_extract(applications.value, '$.added'), 1, 4) > 2017
-            group by strftime('%Y-%W', substr(json_extract(applications.value, '$.added'), 1, 10))
+            group by substr(json_extract(applications.value, '$.added'), 1, 7)
             order by 1 desc
-            limit 30;
+            limit 13;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsByWeek", $stats, 0, 600);
+        $this->stats->set("%HOST%-getStatsByYear", $stats, 0, 600);
         return $stats;
     }
 
