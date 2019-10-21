@@ -10,6 +10,10 @@
 <p>Nowe zgłoszenia oraz rejestracje nowych użytkowników w ostatnich trzydziestu dniach.</p>
 <div id="statsByDay" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 
+<p>Nowe zgłoszenia oraz rejestracje nowych użytkowników w ostatnim roku.</p>
+<div id="statsByYear" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
+
+
 <p>TOP 10 miast z największą ilością zgłoszeń.</p>
 <div id="statsAppsByCity" style="min-width: 250px; height: 300px; margin: 0 auto"></div>
 
@@ -45,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
             labels: {
                 align: 'left',
                 x: 0,
-                y: 16
+                y: 0
             },
             showFirstLabel: false
         }],
@@ -70,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
         xAxis: {
-            tickInterval: 7 * 24 * 3600 * 1000, // one week
+            tickInterval: 7 *    24 * 3600 * 1000, // one day
             tickWidth: 0,
             gridLineWidth: 1,
         },
@@ -79,10 +83,52 @@ document.addEventListener('DOMContentLoaded', function () {
             lineWidth: 5,
             color: '#009C7F'
         },{
-            name: 'Nowe rejestracje',
+            name: 'Nowe rejestracje użytkowników',
             lineWidth: 3,
             type: 'spline',
             color: '#e9c200'
+        }],
+        tooltip: {
+            shared: true,
+            crosshairs: true
+        }
+    });
+
+        Highcharts.chart('statsByYear', {
+        data: {
+            csvURL: window.location.origin + '/api/csv.html?file=statsByYear',
+            firstRowAsNames: false
+        },
+        chart: {
+            type: 'column',
+            backgroundColor: 'transparent'
+        },
+        plotOptions: {
+            column: {
+                grouping: false,
+                shadow: false,
+                borderWidth: 0,
+                fillColor: {
+                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                    stops: [ [0, '#009C7F'], [1, '#FFFFFF'] ]
+                }
+            }
+        },
+        xAxis: {
+            //tickInterval: 7 * 24 * 3600 * 1000, // one week
+            tickWidth: 0,
+            gridLineWidth: 1,
+        },
+        series: [{
+            name: 'Nowe zgłoszenia',
+            lineWidth: 5,
+            color: '#009C7F'
+        },{
+            name: 'Nowe rejestracje użytkowników',
+            lineWidth: 3,
+            color: '#e9c200',
+            pointPadding: 0.4,
+            pointPlacement: 0.2
         }],
         tooltip: {
             shared: true,
