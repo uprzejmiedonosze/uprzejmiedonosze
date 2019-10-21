@@ -1,7 +1,7 @@
 <?PHP
 require_once(__DIR__ . '/../inc/include.php');
 
-checkIfLogged();
+checkIfRegistered();
 
 if(isset($_GET['cleanup'])){
     unset($_SESSION['newAppId']);
@@ -28,7 +28,7 @@ if(!isset($application)){ // new application mode
     $edit = false;
 }
 
-generate('nowe-zgloszenie.html.twig', 
+echo generate('nowe-zgloszenie.html.twig', 
     [
         'head' =>
         [
@@ -40,9 +40,10 @@ generate('nowe-zgloszenie.html.twig',
         'config' =>
         [
             'auth' => true,
-            'edit' => $edit
+            'edit' => $edit,
+            'lastLocation' => $storage->getCurrentUser()->getLastLocation()
         ],
-        'categories' => CATEGORIES,
+        'categories' => $CATEGORIES,
         'categoriesMatrix' => CATEGORIES_MATRIX,
         'app' => $application
     ]

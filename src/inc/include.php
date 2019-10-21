@@ -25,7 +25,7 @@ function generate($template, $parameters){
         }
     }    
     
-    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
+    $loader = new Twig_Loader_Filesystem([__DIR__ . '/../templates', __DIR__ . '/../public/api/config']);
     $twig = new Twig_Environment($loader,
     [
         'debug' => false,
@@ -45,12 +45,14 @@ function generate($template, $parameters){
     if($isLoggedIn){
         $parameters['config']['sex'] = guess_sex_current_user();
         $parameters['general']['userName'] = $storage->getCurrentUser()->data->name;
-        $parameters['general']['stats'] = $storage->getUserStats();
+        // force update cache if ?update GET param is set
+        $parameters['general']['stats'] = $storage->getUserStats(! isset($_GET['update']));
     }
     
-    $parameters['statuses'] = STATUSES;
+    global $STATUSES;
+    $parameters['statuses'] = $STATUSES;
 
-    echo $twig->render($template, $parameters);
+    return $twig->render($template, $parameters);
 };
 
 ?>

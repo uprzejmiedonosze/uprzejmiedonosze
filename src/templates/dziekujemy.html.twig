@@ -15,26 +15,47 @@
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
     <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 
-<p>Co dalej? <b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
-    Na szczęście nie musisz wysyłać każdego zgłoszenia osobno. Możesz
-    wygenerować ich kilka/kilkanaście, i wysłać je dogodnym dla siebie cyklu.</p>
+{% set sm = app.guessSMData() %}
 
-{% set sm = app.guessSMData[1] %}
-{% if sm %}
-    <p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
-        na adres SM w twoim mieście. Służy do tego strona <a href="wysylka.html" data-ajax="false">wysyłka</a>.
-    </p>
-    <p>Jeśli masz pytania do mnie, skontaktuj się pod adresem
-        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
-    </p>
+{% if sm.hasAPI %}
+
+    <p>Co dalej? <b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
+    Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
+    zgłoszenia. {{ sm.hint | raw }}</p>
+
+    <h4>Wyślij swoje zgłoszenie do SM {{ sm.city }}:</h4>
+    <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
+        class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail ui-corner-all cta">Wyślij bezpośrednio do SM</a>
+    <a id="moje-zgloszenia" href="moje-zgloszenia.html" data-ajax="false"
+        class="ui-btn ui-btn-inline ui ui-btn-inline ui-corner-all ui-disabled">Zobacz swoje zgłoszenia</a>
+    <script>
+    {{ include('_inline.js.twig') }}
+    </script>
+
 {% else %}
-    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
-        Skontaktuj proszę się z nami pod adresem
-        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
-        <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
-    </p>
-{% endif %}
+    <p>Co dalej? <b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
+        Na szczęście nie musisz wysyłać każdego zgłoszenia osobno. Możesz
+        wygenerować ich kilka/kilkanaście, i wysłać je dogodnym dla siebie cyklu.</p>
 
-<a href="moje-zgloszenia.html" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
+    {% if sm.email %}
+        <p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
+            na adres SM w twoim mieście. Służy do tego strona <a href="wysylka.html" data-ajax="false">wysyłka</a>.
+        </p>
+        <p>Jeśli masz pytania do mnie, skontaktuj się pod adresem
+            <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
+        </p>
+        <a href="moje-zgloszenia.html" data-ajax="false" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
+    {% else %}
+        <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
+            Skontaktuj proszę się z nami pod adresem
+            <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
+            <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
+            Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
+            oraz adres email Straży Miejskiej.
+        </p>
+
+        <a href="wysylka.html" data-ajax="false" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz zgłoszenia do wysłania</a>
+    {% endif %}
+{% endif %}
 
 {% endblock %}

@@ -1,8 +1,8 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
-//unset($_SESSION['newAppId']); // cleaning old edits
+checkIfRegistered();
 
-generate('start.html.twig', 
+echo generate('start.html.twig', 
     [
         'head' =>
         [

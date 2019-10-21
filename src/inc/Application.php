@@ -14,6 +14,7 @@ class Application extends JSONObject{
         if($json){
             parent::__construct($json);
             @$this->statusHistory = (array)$this->statusHistory;
+            @$this->comments = (array)$this->comments;
             return;
         }
         global $storage;
@@ -104,6 +105,14 @@ class Application extends JSONObject{
     }
 
     /**
+     * Returns prefix for image filenames – used while sending images
+     * via API to SM.
+     */
+    public function getAppImageFilenamePrefix(){
+        return str_replace('/', '-', $this->number);
+    }
+
+    /**
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId
      * value in the application.
@@ -127,34 +136,39 @@ class Application extends JSONObject{
      * [adres w formacie latex, email]
      */
     public function guessSMData(){
+        global $SM_ADDRESSES;
         if(isset($this->smCity)){
             if($this->smCity !== '_nieznane'){
-                return SM_ADDRESSES[$this->smCity];
+                return $SM_ADDRESSES[$this->smCity];
             }
         }
 
         $city = trim(mb_strtolower($this->address->city, 'UTF-8'));
 
-        if(array_key_exists($city, SM_ADDRESSES)){
+        if(array_key_exists($city, $SM_ADDRESSES)){
             $this->smCity = $city;
-            return SM_ADDRESSES[$this->smCity];
+            return $SM_ADDRESSES[$this->smCity];
         }
 
         $address = trim(mb_strtolower($this->address->address, 'UTF-8'));
-        foreach(SM_ADDRESSES as $c => $a){
+        foreach($SM_ADDRESSES as $c => $a){
             if (strpos($address, $c) !== false){
                 $this->smCity = $c;
-                return SM_ADDRESSES[$this->smCity];
+                return $SM_ADDRESSES[$this->smCity];
             }
         }
-        return SM_ADDRESSES['_nieznane'];
+        return $SM_ADDRESSES['_nieznane'];
+    }
+
+    public function hasAPI(){
+        return $this->guessSMData()->hasAPI();
     }
 
     /**
      * Returns application city in a filename-friendly format.
      */
     public function getSanitizedCity(){
-        return mb_ereg_replace("([^\w\d])", '-', $this->guessSMData()[2]);
+        return mb_ereg_replace("([^\w\d])", '-', $this->guessSMData()->city);
     }
 
     public function guessUserSex(){
@@ -165,11 +179,13 @@ class Application extends JSONObject{
     }
 
     public function getCategory(){
-        return CATEGORIES[$this->category];
+        global $CATEGORIES;
+        return $CATEGORIES[$this->category];
     }
 
     public function getStatus(){
-        return STATUSES[$this->status];
+        global $STATUSES;
+        return $STATUSES[$this->status];
     }
 
     public function isCurrentUserOwner(){
@@ -209,6 +225,95 @@ class Application extends JSONObject{
         return $string;
     }
 
+    public function getJSONSafeComment(){
+        // Remove HTML entities
+        $string = preg_replace('/&[a-zA-Z]+;/iu', '', $this->userComment);
+        $string = str_replace("\\", " ", $string);
+        return $string;
+    }
+
+    /**
+     * Zwraca adres do pliku z mapą lokalizacji zgłoszenia. W razie potrzeby
+     * najpierw pobiera ten obrazek z API Google.
+     */
+    public function getMapImage(){
+        if(!isset($this->address) || !isset($this->address->latlng)){
+            return null;
+        }
+        $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$this->address->latlng}&zoom=17&size=380x200&maptype=roadmap&markers=color:red%7Clabel:o%7C{$this->address->latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
+        
+        if($this->status == 'draft' || $this->status == 'ready'){
+            return $mapsUrl;
+        }
+
+        if(isset($this->address->mapImage)){
+            return $this->address->mapImage;
+        }
+        // @TODO refactor warning (duże copy-paste z api.html:saveImgAndThumb())
+        $baseDir = 'cdn2/' . $this->getUserNumber();
+        if(!file_exists('/var/www/%HOST%/' . $baseDir)){
+            mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
+        }
+        $baseFileName = $baseDir . '/' . $this->id;
+
+        $fileName     = "/var/www/%HOST%/$baseFileName,ma.png";
+
+        $ifp = @fopen($fileName, 'wb');
+        if($ifp === false){
+            return $mapsUrl;
+        }
+        
+        $image = file_get_contents($mapsUrl);
+        if($image === false){
+            return $mapsUrl;
+        }
+        
+        if(fputs($ifp, $image) === false){
+            return $mapsUrl;
+        }
+        fclose($ifp);
+
+        global $storage;
+        $this->address->mapImage = "$baseFileName,ma.png";
+        $storage->saveApplication($this);
+        return "$baseFileName,ma.png";
+    }
+
+    public function getFirstName(){
+        return preg_split('/\s/', $this->user->name)[0];
+    }
+
+    public function getLastName(){
+        return preg_split('/^[^\s]+\s/', $this->user->name)[1];
+    }
+
+    public function getLon(){
+        return explode(',', $this->address->latlng)[1];
+    }
+
+    public function getLat(){
+        return explode(',', $this->address->latlng)[0];
+    }
+
+    public function getTitle(){
+        return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150):
+            $this->getCategory()->getTitle() )
+            . " ({$this->address->address})";
+    }
+
+    /**
+     * Adds a comment to the application.
+     * $source <string>
+     *  Name of the author | API Miasta | Admin
+     */
+    public function addComment($source, $comment){
+        if(!isset($this->comments)){
+            $this->comments = [];
+        }
+        $this->comments[date(DT_FORMAT)] = new JSONObject();
+        $this->comments[date(DT_FORMAT)]->source = $source;
+        $this->comments[date(DT_FORMAT)]->comment = $comment;
+    }
 }
 
 ?>

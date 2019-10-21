@@ -55,15 +55,21 @@
                 {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
         </div>
 
-        <label for="lokalizacja" id="addressHint">Podaj miejsce zgłoszenia</label>
-        <div class="combo">
-            <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                placeholder="(zacznij wpisywać adres)" data-inline="true"
-                autocomplete="I told you I wanted this off, Google. But you would not listen."
-                value="{{ app.address.address ?? '' }}" />
-            <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
-                data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
-                data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
+        <label for="lokalizacja" id="addressHint">Podaj adres lub wskaż go na mapie</label>
+        <div class="ui-grid-a ui-responsive images images-cropped">
+            <div class="ui-block-a">
+                <div id="locationPicker"></div>
+            </div>
+            <div class="ui-block-b">
+                <div class="combo">
+                    <input {#readonly#} type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
+                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="{#ui-disabled#}"
+                        value="{{ app.address.address ?? '' }}" />
+                    <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
+                        data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
+                        data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
+                </div>
+            </div>
         </div>
 
         <label for="datetime" id="dateHint">Data i czas zgłoszenia</label>
@@ -99,15 +105,15 @@
         <div class="ui-grid-a ui-responsive" id="category">
         {% set i = 0 %}
         {% for catId,catName in categories %}
-        {% if catName[0] %}
+        {% if catName.title %}
             <div class="ui-block-{{ categoriesMatrix[i % 2] }}"
-                title="{{ catName[2]|striptags ~ "\n\n" ~ catName[3] }}{% if catName[4] %}{{ "\n\nTaryfikator: " ~ catName[4] }}{% endif %}">
+                title="{{ catName.desc|striptags ~ "\n\n" ~ catName.law }}{% if catName.price %}{{ "\n\nTaryfikator: " ~ catName.price }}{% endif %}">
                 <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
                     name="category" value="{{ catId }}" id="{{ catId }}">
                 <label for="{{ catId }}">
                     <img src="img/{{ catId }}.jpg">
-                    <p>{{ catName[0]|raw }}
-                        {% if catName[4] %}<span class="price-list">Mandat: {{ catName[4] }}</span>{% endif %}
+                    <p>{{ catName.title|raw }}
+                        {% if catName.price %}<span class="price-list">Mandat: {{ catName.price }}</span>{% endif %}
                     </p>
                 </label>
             </div>
@@ -148,4 +154,8 @@
 
 <script src="js/luxon.min-%JS_HASH%.js"></script>
 
+<script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
+<script>
+    setAddressByLatLngString('{{ app.address.latlng ?? config.lastLocation }}');
+</script>
 {% endblock %}

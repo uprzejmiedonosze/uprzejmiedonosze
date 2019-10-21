@@ -38,18 +38,18 @@ albo zamalowana pasami przestrzeń pod samochodem), wybierz pierwszą kategorię
 poniżej. Dopiero później szukaj odpowiedniej kategorii dla swojego zgłoszenia.</p>
 
 {% for catId,catName in categories %}
-{% if catName[0] and catId != 0 %}
-    <h4>{{ catName[0] }}</h4>
+{% if catName.title and catId != 0 %}
+    <h4>{{ catName.title }}</h4>
     <div class="ui-grid-a ui-responsive przepisy-kategorie">
         <div class="ui-block-a">
-            <img src="/img/{{ catId }}.jpg" alt="{{ catName[0] }}"/>
+            <img src="/img/{{ catId }}.jpg" alt="{{ catName.title }}"/>
         </div>
         <div class="ui-block-b">
-            {{ catName[2]|raw }}
-            {% if catName[4] %}
-                <p>Mandat: <b>{{ catName[4] }}</b></p>
+            {{ catName.desc|raw }}
+            {% if catName.price %}
+                <p>Mandat: <b>{{ catName.price }}</b></p>
             {% endif %}
-            <p><i>({{ catName[3] }})</i></p>
+            <p><i>({{ catName.law }})</i></p>
         </div>
     </div>
 {% endif %}

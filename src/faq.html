@@ -1,7 +1,20 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-generate('faq.html.twig', 
+$smAddresses = $SM_ADDRESSES;
+ksort($smAddresses);
+
+$sortedSMs = array();
+
+foreach ($smAddresses as $sm) {
+    if($sm->email){
+        array_push($sortedSMs, $sm->city);
+    }
+}
+
+$sortedSMs = array_unique($sortedSMs, SORT_LOCALE_STRING);
+
+echo generate('faq.html.twig', 
     [
         'head' =>
         [
@@ -12,7 +25,8 @@ generate('faq.html.twig',
             'mainClass' => 'faq'
         ],
         'config' => [
-            'menu' => 'faq'
+            'menu' => 'faq',
+            'SM_ADDRESSES' => implode(', ', $sortedSMs)
         ]
     ]
 );

@@ -8,34 +8,34 @@
 {% if countChanged > 0 %}
 <p><b>(zmieniliśmy status {{ countChanged }} zgłoszeń)</b></p>
 {% endif %}
-<p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
 
-{% if general.stats.confirmed is defined %}
-    {% if general.stats.confirmed[0] > 1 %}
-        <p>Masz już <b>{{ general.stats.confirmed[0] }} 
-        {% if general.stats.confirmed[0] > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
-         na wysłanie</b>. Zapraszamy na stronę <a href="wysylka.html" data-ajax="false">wysyłka</a>.</p>
+{% if applications|length == 0 %}
+    <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
+    <a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
+{% else %}
+    <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
+
+    {% if general.stats.confirmed is defined %}
+        {% if general.stats.confirmed[0] > 1 %}
+            <p>Masz już <b>{{ general.stats.confirmed[0] }} 
+            {% if general.stats.confirmed[0] > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
+            na wysłanie</b>. Zapraszamy na stronę <a href="wysylka.html" data-ajax="false">wysyłka</a>.</p>
+        {% endif %}
     {% endif %}
+
+    <form>
+        <input data-type="search" id="searchForCollapsibleSet"
+            placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu">
+    </form>
+
+    <div data-role="collapsibleset" data-filter="true" data-mini="true"
+        data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
+        {% for app in applications %}
+            {% include('_application-short.html.twig') %}
+        {% endfor %}
+    </div>
 {% endif %}
-
-<form>
-    <input data-type="search" id="searchForCollapsibleSet"
-        placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu">
-</form>
-
-<div data-role="collapsibleset" data-filter="true" data-mini="true"
-    data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
-    {% for app in applications %}
-        {% include('_application-short.html.twig') %}
-    {% endfor %}
-</div>
-
-<script>
-    function updateCounters(){
-        $('.filter a').each(function(idx, item){
-            item.children[0].innerText = $('div.application.status-' + item.id).length;
-        });
-    }
+    <script>
     $(document).on('pageshow', function () {
         updateCounters();
         $('.filter a').click(function(e){
@@ -47,14 +47,6 @@
             $(this).addClass('active');
         });
     });
-    function _action(appId){
-        action = document.getElementById("select-status-" + appId).value;
-        $.post('/api/api.html', {action: action, id: appId}).done(function() {
-            $('#' + appId).removeClass('status-active status-confirmed status-confirmed-waiting status-confirmed-waitingE status-confirmed-sm status-confirmed-ignored status-confirmed-fined status-archived');
-            $('#' + appId).addClass('status-' + action);
-            updateCounters();
-        });
-    }
-</script>
-
+    {{ include('_inline.js.twig') }}
+    </script>
 {% endblock %}

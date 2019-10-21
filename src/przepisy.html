@@ -1,7 +1,7 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-generate('przepisy.html.twig', 
+echo generate('przepisy.html.twig', 
     [
         'head' =>
         [
@@ -14,7 +14,7 @@ generate('przepisy.html.twig',
         'config' => [
             'menu' => 'przepisy'
         ],
-        'categories' => CATEGORIES
+        'categories' => $CATEGORIES
     ]
 );
 ?>

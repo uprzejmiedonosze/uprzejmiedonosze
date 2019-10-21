@@ -41,7 +41,53 @@ class User extends JSONObject{
         if(!isset($this->applications)){
             $this->applications = Array();
         }
+        $this->lastLocation = $application->address->latlng;
         array_push($this->applications, $application->id);
+    }
+
+    public function getLastLocation(){
+        if(isset($this->lastLocation)){
+            return $this->lastLocation;
+        }
+        global $storage;
+        if($this->hasApps()){
+            $lastApp = $storage->getApplication($this->getApplicationIds()[0]);
+            $this->lastLocation = $lastApp->address->latlng;
+        }else{
+            if(!($l = $this->guessLatLng())){
+                return "52.069321,19.480311";
+            }
+            $this->lastLocation = $l;
+        }
+        $storage->saveUser($this);
+        return $this->lastLocation;
+    }
+
+    private function guessLatLng(){
+        if(!isset($this->data->address)){
+            return null;
+        }
+        $address = urlencode($this->data->address);
+        $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
+        if(curl_errno($ch)){
+            logger("Nie udało się pobrać danych latlng: " . curl_error($ch));
+            curl_close($ch);
+            return null;
+        }
+        curl_close($ch);
+    
+        $json = @json_decode($output, true);
+        if(!json_last_error() === JSON_ERROR_NONE){
+            logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
+            return null;
+        }
+        @$latlng = $json['results'][0]['geometry']['location'];
+        if(isset($latlng)){
+            return $latlng['lat'] . ',' . $latlng['lng'];
+        }
+        return null;
     }
 
     /**
@@ -63,6 +109,14 @@ class User extends JSONObject{
     */
     function isAdmin(){
         return $this->data->email == 'szymon@nieradka.net' || $this->data->email == 'szymon.nieradka@polidea.com';
+    }
+
+    /**
+    * Super ugly function returning true for beta users.
+    */
+    function isBeta(){
+        // @TODO usunąć użytkownika testowego.
+        return $this->isAdmin();
     }
 
     /**

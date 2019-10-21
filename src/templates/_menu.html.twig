@@ -9,23 +9,26 @@
                 {% if config.menu == 'start' %}class="active"{% endif %}
                 href="/start.html">Nowe zgłoszenie</a></li>
         <li data-icon="bullets">
-            <a {% if config.menu == 'moje-zgloszenia' %}class="active"{% endif %}
+            <a data-ajax="false" {% if config.menu == 'moje-zgloszenia' %}class="active"{% endif %}
                 href="/moje-zgloszenia.html">Moje zgłoszenia
             <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span></a></li>
 
         {% if config.menu == 'moje-zgloszenia' %}
-            <li data-icon="false" class="filter"><a href="#" id="active" class="active">#aktywne <span class="ui-li-count"></span></a></li>
+            <li data-icon="false" class="filter"><a href="#" id="active" class="active">(aktywne) <span class="ui-li-count"></span></a></li>
             {% for key,val in statuses %}
-                {% if val[3] %} {# class is empty, this is a draft or ready #}
-                    <li data-icon="false" class="filter"><a href="#" id="{{ key }}">#{{ val[0]|lower }} <span class="ui-li-count"></span></a></li>
+                {% if val.class %} {# class is empty, this is a draft or ready #}
+                    <li data-icon="false" class="filter"><a href="#" id="{{ key }}">#{{ val.name|lower }} <span class="ui-li-count"></span></a></li>
                 {% endif %}
             {% endfor %}
         {% endif %}
 
-        <li data-icon="mail">
-            <a {% if config.menu == 'wysylka' %}class="active"{% endif %}
+        {% if general.stats.confirmed is defined and general.stats.confirmed[0] > 0 %}
+        <li data-icon="mail" class="wysylka">
+            <a data-ajax="false" {% if config.menu == 'wysylka' %}class="active"{% endif %}
                 href="/wysylka.html">Do wysłania
-            <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a></li>
+            <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a>
+        </li>
+        {% endif %}
     {% else %}
         <li data-icon="plus"><a class="try" href="/start.html">Spróbuj!</a></li>
     {% endif %}
@@ -62,7 +65,7 @@
         {% if general.isLoggedIn %}
         <li data-icon="user">
             <a {% if config.menu == 'register' %}class="active"{% endif %}
-                href="/register.html">Edycja konta</a></li>
+                href="/register.html?update">Edycja konta</a></li>
         <li data-icon="false" class="subpage">
             <a href="/login.html?logout">– wyloguj się</a></li>
         {% else %}

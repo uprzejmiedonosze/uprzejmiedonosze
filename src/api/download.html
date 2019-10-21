@@ -51,8 +51,12 @@ if($type == 'hearing'){
     $filename = "Dokumenty-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
     $pdf = "$baseDir/$filename";
 }else{ // readyApps
-    $city = reset($application)->getSanitizedCity();
-    $filename = "Zgloszenia-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
+    if(sizeof($application) == 0){
+        $filename = "download-error.pdf";
+    }else{
+        $city = reset($application)->getSanitizedCity();
+        $filename = "Zgloszenia-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
+    }
     $pdf = "$baseDir/$filename";
 }
 
@@ -91,7 +95,12 @@ function generate_pdf($application, $destFile, $type) {
     }else if($type == 'hearingAll'){
         $texFile = 'hearingAll.tex.twig';
     }else if($type == 'readyApps'){
-        $texFile = 'readyApps.tex.twig';
+        if(sizeof($application) == 0){
+            $texFile = 'readyApps-error.tex.twig';
+        }else{
+            $texFile = 'readyApps.tex.twig';
+        }
+        
     }
 
     $params = [

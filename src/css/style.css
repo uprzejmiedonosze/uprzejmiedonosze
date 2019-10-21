@@ -63,6 +63,12 @@ img.one-third {
     text-shadow: none!important;
 }
 
+.ui-btn.cta {
+    background-color: #e9c200!important;
+    text-shadow: none!important;
+    border-color: #e9c200!important;
+}
+
 .ui-page-theme-a .ui-header,
 html .ui-bar-a .ui-header,
 html .ui-body-a .ui-header,
@@ -148,6 +154,10 @@ a[rel~="external"] {
     color: white;
     text-shadow: none;
     border: none;
+}
+
+.hidden {
+    display: none;
 }
 
 /* #endregion moje aplikacje */
@@ -343,6 +353,17 @@ div.loader {
     cursor: pointer;
 }
 
+.new-application #locationPicker {
+    width: 100%;
+    height: 200px;
+    border-radius: 0.8em;
+    margin-top: 0.3em;
+}
+
+.new-application div.combo .ui-disabled {
+    opacity: .5;
+}
+
 /* #endregion nowe-zgloszenie */
 
 /* #region rejestracja */
@@ -448,12 +469,29 @@ a.zoom {
    opacity: 1;
 }
 
+#comments .ui-listview li,
+#statusHistory .ui-listview li  {
+    white-space: initial;
+}
+
+cite {
+    display: block;
+    padding: 1em;
+}
+
 /* #endregion zgloszenie */
 
-/* #region moje aplikacje */
+/* #region moje zgloszenia */
 
 div.application-short.status-archived h3 a {
     font-weight: 300;
+}
+div.application-short h3 a {
+    padding-right: 2.5em;
+}
+
+.appActionButtons a.ui-btn {
+    font-weight: 400;
 }
 
 div.application-short.status-archived {
@@ -467,48 +505,48 @@ div.application-short.status-archived {
 }
 
 div.application-short.status-draft h3 .ui-btn-icon-left:after,
-div.application-short select.status-draft:after {
+div.application-short .status-draft:after {
     background-color: #7463634d;
 }
 
 div.application-short.status-ready h3 .ui-btn-icon-left:after,
-div.application-short select.status-ready:after {
+div.application-short .status-ready:after {
     background-color: #0000004d;
 }
 
 div.application-short.status-confirmed h3 .ui-btn-icon-left:after,
-div.application-short select.status-confirmed:after {
+div.application-short .status-confirmed:after {
     background-color: #81c78499;
 }
 
 div.application-short.status-confirmed-waiting h3 .ui-btn-icon-left:after,
-div.application-short select.status-confirmed-waiting:after,
+div.application-short .status-confirmed-waiting:after,
 div.application-short.status-confirmed-waitingE h3 .ui-btn-icon-left:after,
-div.application-short select.status-confirmed-waitingE:after {
+div.application-short .status-confirmed-waitingE:after {
     background-color: #3388cc99;
 }
 
 div.application-short.status-confirmed-sm h3 .ui-btn-icon-left:after,
-div.application-short select.status-confirmed-sm:after {
+div.application-short .status-confirmed-sm:after {
     background-color: #ffc10799;
 }
 
 div.application-short.status-confirmed-fined h3 a.ui-btn-icon-left:after,
-div.application-short select.status-confirmed-fined:after {
+div.application-short .status-confirmed-fined:after {
     background-color: #8bc34aee;
 }
 
 div.application-short.status-confirmed-ignored h3 .ui-btn-icon-left:after,
-div.application-short select.status-confirmed-ignored:after {
+div.application-short .status-confirmed-ignored:after {
     background-color: #dd2c00cc;
 }
 
 div.application-short.status-archived h3 .ui-btn-icon-left:after,
-div.application-short select.status-archived:after {
+div.application-short .status-archived:after {
     background-color: #0000004C;
 }
 
-/* #endregion moje aplikacje */
+/* #endregion moje zgloszenia */
 
 /* #region przepisy */
 
@@ -539,9 +577,20 @@ div.przepisy-kategorie p i {
     color: #666;
 }
 
-div.przepisy.dialog .ui-body {
-    background-color: transparent;
+.dialog .ui-body {
     padding: .4em 0em;
+}
+
+.ui-dialog .ui-dialog-contain {
+    max-width: 800px;
+    margin: 1em auto 1em;
+    box-shadow: none;
+    top: -2em;
+}
+
+.dialog.ui-content {
+    padding: 0;
+    border: 1em solid white;
 }
 
 div.przepisy img.sign {

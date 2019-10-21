@@ -1,6 +1,14 @@
-{% set leftButton = 'menu' %}
+{% if head.dialog %}
+    {% set leftButton = 'menuBack' %}
+    {% set rightButton = '' %}
+{% else %}
+    {% set leftButton = 'menu' %}
+{% endif %}
 
 {% extends "base.html.twig" %}
 {% block main %}
 {{ include('_application.html.twig') }}
 {% endblock %}
+{% if head.dialog %}
+    {% block footer %}{% endblock %}
+{% endif %}

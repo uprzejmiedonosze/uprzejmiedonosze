@@ -3,30 +3,38 @@ YUI_COMPRESSOR       := java -jar tools/yuicompressor-2.4.8.jar
 YUI_COMPRESSOR_FLAGS := --charset utf-8 --line-break 72
 BABEL                := babel-minify
 RSYNC                := rsync
-RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/jp.php' --exclude 'vendor/bin/pdepend' --exclude 'vendor/bin/phpmd'
+RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/*'
 HOSTING              := nieradka.net
+ifeq ($(filter darwin%,${OSTYPE}),)
+    SED_OPTS         := -i ''
+else
+    SED_OPTS         := "-i''"
+endif
 
 # dirs and files 
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
-DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(EXPORT)/inc $(EXPORT)/templates
+DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/templates
 
 CSS_FILES            := $(wildcard src/css/*.css)
-CSS_HASH             := $(shell cat $(CSS_FILES) | md5 | cut -b 1-8)
+CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
 CSS_MINIFIED         := $(CSS_FILES:src/%.css=export/public/%-$(CSS_HASH).css)
 
 JS_FILES             := $(wildcard src/js/*.js)
-JS_HASH              := $(shell cat $(JS_FILES) | md5 | cut -b 1-8)
+JS_HASH              := $(shell cat $(JS_FILES) | md5sum | cut -b 1-8)
 JS_MINIFIED          := $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
 
 HTML_FILES           := $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
 
+CONFIG_FILES         := $(wildcard src/api/config/*.json)
+CONFIG_PROCESSED     := $(CONFIG_FILES:src/api/config/%.json=export/public/api/config/%.json)
+
 TWIG_FILES           := $(wildcard src/templates/*.twig)
-TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5 | cut -b 1-8)
+TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5sum | cut -b 1-8)
 TWIG_PROCESSED       := $(TWIG_FILES:src/templates/%=export/templates/%)
 
-PHP_FILES            := $(wildcard src/inc/*.php)
+PHP_FILES            := $(wildcard src/inc/*.php src/inc/integrations/*.php)
 PHP_PROCESSED        := $(PHP_FILES:src/inc/%.php=export/inc/%.php)
 
 MANIFEST             := src/manifest.json
@@ -97,10 +105,11 @@ check-branch-master: ## Checks if GIT is on branch master
 check-branch-staging: ## Checks if GIT is on branch master
 	@test "$(shell git status | grep 'origin/staging' | wc -l)" = 1 || ( echo "Not on branch staging." && exit 1 )
 
-minify: check-branch minify-css minify-js process-html process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
+minify: check-branch minify-css minify-js process-html minify-config process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
 minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED)
 process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
+minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
@@ -119,8 +128,8 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 	fi;
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
-	@if [[ "$(HOST)" = "$(PROD_HOST)" && ! "$<" =~ "min" ]]; then \
-		$(BABEL) $< > $@ ; \
+	@if [ "$(HOST)" = "$(PROD_HOST)" ] && ( ! grep -q min <<<"$<" ); then \
+		$(BABEL) $< > $@ ;\
 	else \
 		cp $< $@ ; \
 	fi;
@@ -129,6 +138,9 @@ export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
 	$(lint)
 	$(replace)
+
+export/public/api/config/%.json: src/api/config/%.json; @echo '==> Preprocessing $<'
+	@jq -c . < $< > $@
 
 export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
 	$(lint)
@@ -152,7 +164,7 @@ $(replace-inline)
 endef
 
 define replace-inline
-@sed -i '' -e 's/%JS_HASH%/$(JS_HASH)/g' \
+@sed $(SED_OPTS) -e 's/%JS_HASH%/$(JS_HASH)/g' \
 	 -e 's/%CSS_HASH%/$(CSS_HASH)/g' \
 	 -e 's/%TWIG_HASH%/$(TWIG_HASH)/g' \
 	 -e 's/%VERSION%/$(TAG_NAME)/g' $@
@@ -173,5 +185,3 @@ log-from-last-prod: ## Show list of commit messages from last prod release till 
 
 diff-from-last-prod: ## Show list of commit messages from last prod release till now
 	@git diff --histogram --color-words `git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1`
-
-

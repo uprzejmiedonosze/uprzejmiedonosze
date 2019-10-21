@@ -147,7 +147,7 @@ function capitalizeName($input){
     if(!isset($input) || trim($input) === ''){
         return '';
     }
-    return trim(ucwords(mb_strtolower($input)));
+    return trim(mb_convert_case($input, MB_CASE_TITLE, 'UTF-8'));
 }
 
 function isIOS(){
@@ -190,8 +190,8 @@ function _sendSlackOnRegister($user){
 /**
  * Sends formatted message to Slack.
  */
-function _sendSlackOnNewApp($app){
-    $title = "Nowe zgłoszenie {$app->number} ({$app->address->city})";
+function _sendSlackOnNewApp($app, $todaysNewAppsCount){
+    $title = "Nowe zgłoszenie {$app->number} ({$app->address->city}, {$todaysNewAppsCount} dzisiaj)";
 
     logger($title, true);
 
@@ -207,15 +207,18 @@ function _sendSlackOnNewApp($app){
         "author_link" => "mailto:{$app->user->email}",
 
         'fields' => [[
-                'title' => $app->address->city,
-                'value' => ($app->category == 0)? 'Inne: ' . $app->userComment: $app->getCategory()[0],
-                'short' => false
+                'title' => $app->address->city . (($app->guessSMData()->email)? "": " (!)"),
+                'value' => ($app->category == 0)? 'Inne: ' . $app->userComment: $app->getCategory()->getTitle(),
+                'short' => true
+            ],[
+                'title' => "Dzisiaj:",
+                'value' => $todaysNewAppsCount,
+                'short' => true
             ]],
-
         "image_url" => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         "thumb_url" => "%HTTPS%://%HOST%/{$app->contextImage->thumb}",
 
-        "footer" => $app->getCategory()[0],
+        "footer" => $app->getCategory()->getTitle(),
         "footer_icon" => "%HTTPS%://%HOST%/img/{$app->category}.jpg",
         "ts" => strtotime($app->date)
     ];

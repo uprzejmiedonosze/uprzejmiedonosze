@@ -93,10 +93,11 @@ class DB extends NoSQLite{
     public function countApplicationsPerPlate($plateId){
         $plateId = SQLite3::escapeString($plateId);
 
-        $sql = "select count(*) from applications "
-            . "where (json_extract(value, '$.status') = 'archived' "
-            . "or json_extract(value, '$.status') like 'confirmed%') "
-            . "and json_extract(value, '$.carInfo.plateId') = '$plateId';";
+        $sql = <<<SQL
+            select count(*) from applications 
+            where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
+            and json_extract(value, '$.carInfo.plateId') = '$plateId';
+SQL;
         
         return (int) $this->db->query($sql)->fetchColumn();
     }
@@ -234,6 +235,20 @@ SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->stats->set("%HOST%-getStatsAppsByDay", $stats, 0, 600);
+        return $stats;
+    }
+
+    /**
+     * Return count of new applications created today.
+     */
+    public function getTodaysNewAppsCount(){
+        $sql = <<<SQL
+            select count(*) as cnt from applications
+            where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+                and substr(json_extract(applications.value, '$.added'), 1, 10) = date('now');
+SQL;
+
+        $stats = intval($this->db->query($sql)->fetchColumn());
         return $stats;
     }
 

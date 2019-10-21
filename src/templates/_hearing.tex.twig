@@ -11,8 +11,8 @@
 \vspace{1cm}
 
 {% spaceless %}
-    {% if app.guessSMData[2] %}
-        {{ app.guessSMData[2] }}
+    {% if app.guessSMData.city %}
+        {{ app.guessSMData.city }}
     {% else %}
         {% if app.address.city is not empty %}
             {{ app.address.city }}
@@ -65,8 +65,8 @@ pracy pokrzywdzonych i świadków uczestniczących  w czynności.
 
 {\it
 	W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
-    świadkiem pozostawienia samochodu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }
-    pod adresem {{ app.address.address }}. {{ app.getCategory[1] }} Sytuacja jest widoczna
+    świadkiem pozostawienia pojazdu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }
+    pod adresem {{ app.address.address }}. {{ app.getCategory.short }} Sytuacja jest widoczna
     na zdjęciach załączonych do zgłoszenia. Zdjęcia {{ app.guessUserSex.wykonalam }}
     samodzielnie. {{ app.userComment }} Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
 
