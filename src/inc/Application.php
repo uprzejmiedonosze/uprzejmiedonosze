@@ -38,6 +38,7 @@ class Application extends JSONObject{
         }
         $this->statements = new JSONObject();
         $this->statements->witness = false;
+        $this->statements->gallery = false;
     }
 
     /**
