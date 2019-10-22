@@ -387,8 +387,8 @@ SQL;
 
         $sql = "select key, value "
             . "from applications "
-            . "where json_extract(value, '$.status') not in ('draft', 'ready') "
-            . "  and json_extract(value, '$.user.email') in ('e@nieradka.net', 'szymon@nieradka.net') "
+            . "where json_extract(value, '$.status') not in ('draft', 'ready', 'archived') "
+            . "and json_extract(value, '$.statements.gallery') = true "
             . "order by json_extract(value, '$.id') desc "
             . "limit 10 ";
 
