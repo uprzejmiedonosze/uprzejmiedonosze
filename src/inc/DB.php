@@ -389,8 +389,9 @@ SQL;
             . "from applications "
             . "where json_extract(value, '$.status') not in ('draft', 'ready', 'archived') "
             . "and json_extract(value, '$.statements.gallery') = true "
-            . "order by json_extract(value, '$.id') desc "
-            . "limit 10 ";
+            . "and json_extract(value, '$.statements.galleryOK') = true "
+            . "order by json_extract(value, '$.added') desc "
+            . "limit 100 offset $page * 10 ";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -398,7 +399,7 @@ SQL;
         $apps = Array();
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
             $apps[$row[0]] = new Application($row[1]);
-            logger(print_r($row[0], true));
+            //logger(print_r($row[0], true));
         }
         $this->stats->set("%HOST%-getGalleryApps", $apps, 0, 600);
         return $apps;
