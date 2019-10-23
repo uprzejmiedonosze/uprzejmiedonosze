@@ -404,6 +404,25 @@ SQL;
         $this->stats->set("%HOST%-getGalleryApps", $apps, 0, 600);
         return $apps;
     }
+    /**
+     * Returns all gallery applications awaiting moderation.
+     */
+    public function getGalleryModerationApps(){
+        $sql = "select key, value "
+            . "from applications "
+            . "where json_extract(value, '$.status') not in ('draft', 'ready', 'archived') "
+            . "and json_extract(value, '$.statements.gallery') = true "
+            . "order by json_extract(value, '$.added') desc ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $apps = Array();
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $apps[$row[0]] = new Application($row[1]);
+        }
+        return $apps;
+    }
 }
 
 ?>
