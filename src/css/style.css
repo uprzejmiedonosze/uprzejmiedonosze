@@ -662,9 +662,32 @@ div.galleryItem > div.desc {
     transition: opacity .2s, visibility .2s;
 }
 
+div.galleryAdmin div.galleryItem > div.desc {
+    visibility: visible;
+    opacity: 1;
+}
+
+div.galleryAdmin div.galleryItem.decisiontrue {
+    opacity: 0.5;
+}
+
+div.galleryAdmin div.galleryItem.decisionfalse {
+    opacity: 0.5;
+}
+
 div.galleryItem:hover > div.desc {
     visibility: visible;
     opacity: 1;
 }
+
+div.galleryItem > div.actions {
+    padding: 7px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-shadow: none;
+}
+
 
 /* #endregion galeria */

@@ -36,16 +36,6 @@ $(document).on('pageshow', function () {
             }
         });
 
-        $('#witness').change(function () {
-            if($('#witness').prop("checked")){
-                $('#witnessY').show();
-                $('#witnessN').hide();
-            }else{
-                $('#witnessY').hide();
-                $('#witnessN').show();
-            }
-        });
-
         $('.datetime a').click(function () {
             let datetime = luxon.DateTime.fromISO($('#datetime').val()).startOf('hour');
             const offset = (this.id.endsWith('p'))? 1: -1;

@@ -412,6 +412,7 @@ SQL;
             . "from applications "
             . "where json_extract(value, '$.status') not in ('draft', 'ready', 'archived') "
             . "and json_extract(value, '$.statements.gallery') = true "
+            . "and json_extract(value, '$.statements.galleryOK') is null "
             . "order by json_extract(value, '$.added') desc ";
 
         $stmt = $this->db->prepare($sql);

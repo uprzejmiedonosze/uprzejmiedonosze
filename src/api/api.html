@@ -30,6 +30,8 @@ if (is_ajax()) {
                 _getAppDetails($_POST["id"]); break;
             case "geoToAddress":
                 _geoToAddress($_POST["lat"], $_POST["lng"]); break;
+            case "moderateApp":
+                _moderateApp($_POST["id"], $_POST["decision"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -151,6 +153,15 @@ function _geoToAddress($lat, $lng){
         return;
     }
     raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
+}
+
+function _moderateApp($appId, $decision){
+    global $storage;
+    $application = $storage->getApplication($appId);
+    $application->initStatements();
+    $application->statements->galleryOK = ($decision == 'true');
+    $storage->saveApplication($application);
+    echo json_encode(Array("status" => "OK"));
 }
 
 /**
