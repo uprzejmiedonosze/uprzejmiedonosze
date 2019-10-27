@@ -704,6 +704,28 @@
     "hint": null,
     "api": false
   },
+  "świętochłowice": {
+    "address": [
+      "Straż Miejska w Świętochłowicach",
+      "ul. Katowicka 54A",
+      "41-600 Świętochłowice"
+    ],
+    "email": "sm@swietochlowice.pl",
+    "city": "Świętochłowice",
+    "hint": null,
+    "api": false
+  },
+  "piastów": {
+    "address": [
+      "Straż Miejska w Świętochłowicach",
+      "ul. Popiełuszki 24",
+      "05-820 Piastów"
+    ],
+    "email": "kppruszkow@poczta.fm",
+    "city": "Piastów",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
