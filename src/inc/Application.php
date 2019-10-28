@@ -21,7 +21,7 @@ class Application extends JSONObject{
         $user = $storage->getCurrentUser();
 
         $this->date = null;
-        $this->id = guidv4();
+        $this->id = genSafeId();
         $this->added = date(DT_FORMAT);
         $this->user = $user->data;
         $this->user->number = $user->getNumber();
