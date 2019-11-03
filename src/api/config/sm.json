@@ -726,6 +726,17 @@
     "hint": null,
     "api": false
   },
+  "olkusz": {
+    "address": [
+      "Straż Miejska w Olkuszu",
+      "Rynek 1",
+      "32-300 Olkusz"
+    ],
+    "email": "sm1@umig.olkusz.pl",
+    "city": "Olkusz",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
