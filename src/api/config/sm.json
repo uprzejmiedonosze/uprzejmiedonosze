@@ -737,6 +737,17 @@
     "hint": null,
     "api": false
   },
+  "grudziądz": {
+    "address": [
+      "Straż Miejska w Grudziądzu",
+      "ul. Piłsudskiego 51",
+      "86-300 Grudziądz"
+    ],
+    "email": "strazmiejska@um.grudziadz.pl",
+    "city": "Grudziądz",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
