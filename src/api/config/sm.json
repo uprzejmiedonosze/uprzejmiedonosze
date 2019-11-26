@@ -748,6 +748,17 @@
     "hint": null,
     "api": false
   },
+  "starachowice": {
+    "address": [
+      "Straż Miejska Starachowice",
+      "ul. Radomska 45",
+      "27-200 Starachowice"
+    ],
+    "email": "strazmiejska@starachowice.eu",
+    "city": "Starachowice",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
