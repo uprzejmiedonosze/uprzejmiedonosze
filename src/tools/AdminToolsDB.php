@@ -81,9 +81,10 @@ class AdminToolsDB extends NoSQLite{
     }
 
     public function upgradeAllApps($version, $dryRun){
-        foreach(STATUSES as $st => $status ){
-            if($status[3]){
-                echo "\nMigruję zgłoszenia o statusie '{$status[0]}'\n";
+        global $STATUSES;
+        foreach($STATUSES as $st => $status ){
+            if($status->class){
+                echo "\nMigruję zgłoszenia o statusie '{$status->name}'\n";
                 $this->upgradeAppsByStatus($version, $st, $dryRun);
             }
         }
@@ -106,9 +107,10 @@ class AdminToolsDB extends NoSQLite{
      * Removes application
      */
     private function _removeApplication($app, $dryRun){
+        global $STATUSES;
         $added = (isset($app->added))? " dodane {$app->added}": "";
         $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
-        $status = STATUSES[$app->status][0];
+        $status = $STATUSES[$app->status]->name;
         $email = (isset($app->user->email))? " użytkownika {$app->user->email}": " użytkownika @anonim";
         echo "Usuwam zgłoszenie numer $number [$status]$email$added\n";
         if(isset($app->carImage)){
@@ -224,9 +226,10 @@ SQL;
      * Moves files from CDN to CDN2
      */
     private function _migrateApplication($app, $dryRun){
+        global $STATUSES;
         $added = (isset($app->added))? " dodane {$app->added}": "";
         $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
-        $status = STATUSES[$app->status][0];
+        $status = $STATUSES[$app->status]->name;
         echo "Migruję zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
 
         if(!isset($app->user->number)){
