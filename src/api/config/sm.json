@@ -771,6 +771,17 @@
     "hint": null,
     "api": false
   },
+  "kielce": {
+    "address": [
+      "Straż Miejska w Kielcach",
+      "ul. Ogrodowa 3B",
+      "25-024 Kielce"
+    ],
+    "email": "sekretariat@strazmiejska.kielce.pl",
+    "city": "Kielce",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
