@@ -22,6 +22,18 @@
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": null
   },
+  "warsaw": {
+    "address": [
+      "Referat Oskarżycieli Publicznych",
+      "Straż Miejska m.st. Warszawy",
+      "ul. Młynarska 43/45",
+      "01-170 Warszawa"
+    ],
+    "email": "csk@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": null
+  },
   "wrocław": {
     "address": [
       "Straż Miejska Wrocławia",
@@ -723,6 +735,50 @@
     ],
     "email": "kppruszkow@poczta.fm",
     "city": "Piastów",
+    "hint": null,
+    "api": false
+  },
+  "olkusz": {
+    "address": [
+      "Straż Miejska w Olkuszu",
+      "Rynek 1",
+      "32-300 Olkusz"
+    ],
+    "email": "sm1@umig.olkusz.pl",
+    "city": "Olkusz",
+    "hint": null,
+    "api": false
+  },
+  "grudziądz": {
+    "address": [
+      "Straż Miejska w Grudziądzu",
+      "ul. Piłsudskiego 51",
+      "86-300 Grudziądz"
+    ],
+    "email": "strazmiejska@um.grudziadz.pl",
+    "city": "Grudziądz",
+    "hint": null,
+    "api": false
+  },
+  "starachowice": {
+    "address": [
+      "Straż Miejska Starachowice",
+      "ul. Radomska 45",
+      "27-200 Starachowice"
+    ],
+    "email": "strazmiejska@starachowice.eu",
+    "city": "Starachowice",
+    "hint": null,
+    "api": false
+  },
+  "kielce": {
+    "address": [
+      "Straż Miejska w Kielcach",
+      "ul. Ogrodowa 3B",
+      "25-024 Kielce"
+    ],
+    "email": "sekretariat@strazmiejska.kielce.pl",
+    "city": "Kielce",
     "hint": null,
     "api": false
   },
