@@ -782,6 +782,17 @@
     "hint": null,
     "api": false
   },
+  "lubartów": {
+    "address": [
+      "Komenda Powiatowa Policji w Lubartowie",
+      "ul. Lubelska 57A",
+      "21-100 Lubartów"
+    ],
+    "email": "dyzurni.kpplubartow@lu.policja.gov.pl",
+    "city": "Lubartów",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
