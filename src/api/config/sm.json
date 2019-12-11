@@ -793,6 +793,17 @@
     "hint": null,
     "api": false
   },
+  "czechowice-dziedzice": {
+    "address": [
+      "Straż Miejska w Czechowicach-Dziedzicach",
+      "ul. Niepodległości 35",
+      "43-502 Czechowice-Dziedzice"
+    ],
+    "email": "sm@sm.czechowice-dziedzice.pl",
+    "city": "Czechowice-Dziedzice",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
