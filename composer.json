@@ -2,7 +2,9 @@
     "require": {
         "kreait/firebase-php": "^3.0",
         "twig/twig": "^2.0",
-        "maknz/slack": "^1.7"
+        "maknz/slack": "^1.7",
+        "google/photos-library": "^1.4",
+        "google/auth": "^1.5.0"
     },
     "require-dev": {
         "phpmd/phpmd": "@stable"
