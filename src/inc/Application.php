@@ -57,7 +57,7 @@ class Application extends JSONObject{
             'styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec',
             'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'
         ];
-        return $MONTHS[intval($date->format('m'))] . ' '. $date->format('Y');
+        return $MONTHS[intval($date->format('m')) - 1] . ' '. $date->format('Y');
     }
 
     /**
