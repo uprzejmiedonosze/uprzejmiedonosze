@@ -102,6 +102,7 @@ function raiseError($msg, $status){
         "code" => $status,
         "message" => $msg
     );
+    _sendSlackError($msg);
     http_response_code($status);
     echo json_encode($error);
     die();
