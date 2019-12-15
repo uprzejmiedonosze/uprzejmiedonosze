@@ -34,8 +34,11 @@
         // FirebaseUI config.
         var uiConfig = {
             signInSuccessUrl: "%HTTPS%://%HOST%/login-ok.html{% if config.signInSuccessUrl %}?next={{ config.signInSuccessUrl }}{% endif %}",
-            signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
-            tosUrl: '%HTTPS%://%HOST%/polityka-prywatnosci.html' // Terms of service url.
+            signInOptions: [
+                firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                firebase.auth.FacebookAuthProvider.PROVIDER_ID
+                ],
+            tosUrl: '%HTTPS%://%HOST%/polityka-prywatnosci.html'
         };
 
         // Initialize the FirebaseUI Widget using Firebase.
