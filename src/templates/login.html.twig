@@ -3,7 +3,7 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
-<h3>Zaloguj się za pomocą konta Google lub Facebook.</h3>
+<h3 id="login-hint">{% if config.logout %}logout{% endif %}</h3>
 <div class="ui-body ui-body-a ui-corner-all">
     <div id="firebaseui-auth-container"></div>
 </div>
@@ -11,7 +11,11 @@
 <script src="https://www.gstatic.com/firebasejs/ui/4.0.0/firebase-ui-auth__pl.js"></script>
 <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.0.0/firebase-ui-auth.css" />
 <script type="text/javascript">
+{% if config.logout %}
+    logout();
+{% else %}
     $( document ).bind( "pagecontainerload", function( e, triggerData ) {
+        $('#login-hint').text('x-redir...');
         var redirect = triggerData.xhr.getResponseHeader( "X-Redirect" );
         if ( redirect ) {
             $( e.target ).pagecontainer( "load", redirect, triggerData.options );
@@ -19,7 +23,8 @@
         }
     });
 
-    $(document).on("pageshow", function () { 
+    $(document).on("pageshow", function () {
+        firebase.auth().signOut();
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 window.location.replace('/login-ok.html{% if config.signInSuccessUrl %}?next={{ config.signInSuccessUrl }}{% endif %}');
@@ -30,8 +35,10 @@
             login();
         });
     });
+{% endif %}
 
     function login(){
+        $('#login-hint').text('Zaloguj się za pomocą konta Google lub Facebook.');
         var uiConfig = {
             signInSuccessUrl: "%HTTPS%://%HOST%/login-ok.html{% if config.signInSuccessUrl %}?next={{ config.signInSuccessUrl }}{% endif %}",
             signInOptions: [
@@ -49,7 +56,7 @@
     }
     function logout(){
         firebase.auth().signOut();
-        window.location.replace('/login.html?logout');
+        window.location.replace('/');
     }
 </script>
 {% endblock %}
