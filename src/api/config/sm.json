@@ -37,8 +37,8 @@
   "wrocław": {
     "address": [
       "Straż Miejska Wrocławia",
-      "ul. Gwarna 5/7",
-      "50-001 Wrocław"
+      "ul. Na Grobli 14/16",
+      "50-421 Wrocław"
     ],
     "email": "straz@strazmiejska.wroclaw.pl",
     "city": "Wrocław",
@@ -790,6 +790,28 @@
     ],
     "email": "dyzurni.kpplubartow@lu.policja.gov.pl",
     "city": "Lubartów",
+    "hint": null,
+    "api": false
+  },
+  "czechowice-dziedzice": {
+    "address": [
+      "Straż Miejska w Czechowicach-Dziedzicach",
+      "ul. Niepodległości 35",
+      "43-502 Czechowice-Dziedzice"
+    ],
+    "email": "sm@sm.czechowice-dziedzice.pl",
+    "city": "Czechowice-Dziedzice",
+    "hint": null,
+    "api": false
+  },
+  "płock": {
+    "address": [
+      "Straż Miejska w Płocku",
+      "ul. Otolińska 10",
+      "09-407 Płock"
+    ],
+    "email": "sekretariat@strazmiejska.plock.eu",
+    "city": "Płock",
     "hint": null,
     "api": false
   },
