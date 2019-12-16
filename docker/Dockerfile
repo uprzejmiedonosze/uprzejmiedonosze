@@ -29,8 +29,8 @@ RUN chown nginx:nginx    /var/cache/uprzejmiedonosze.net
 
 ADD default.conf         /etc/nginx/conf.d/default.conf
 ADD nginx.conf           /etc/nginx/nginx.conf
-ADD www.conf             /etc/php/7.0/fpm/pool.d/www.conf
-RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/7.*/fpm/php.ini
+ADD www.conf             /etc/php/7.3/fpm/pool.d/www.conf
+RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/7.3/fpm/php.ini
 
 RUN update-rc.d php7.3-fpm defaults
 RUN update-rc.d memcached defaults
