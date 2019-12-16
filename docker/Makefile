@@ -6,7 +6,7 @@ build:
 	#docker run --detach --volume $(shell pwd)/../export/:/var/www --rm --publish 80:80/tcp --name webapp webapp:latest
 
 runi:
-	@docker run --interactive --rm --publish 80:80/tcp \
+	@docker run --interactive --rm --publish 80:80/tcp -it \
 		--volume $(shell pwd)/../export:/var/www/uprzejmiedonosze.localhost/webapp --name webapp webapp:latest
 
 shell:
