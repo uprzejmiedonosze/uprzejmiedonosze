@@ -141,14 +141,17 @@ function _geoToAddress($lat, $lng){
     $json = @json_decode($output, true);
     if(!json_last_error() === JSON_ERROR_NONE){
         logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
-        raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
+        raiseError("Bełkotliwa odpowiedź z serwerów GeoAPI: " . $output, 500);
         return;
     }
-    @$result = $json['results'][0];
     if($json['status'] == 'OK' && $json['results']){
+        @$result = $json['results'][0];
         $cache->set("_geoToAddress-$latlng", $result, MEMCACHE_COMPRESSED, 2592000); // 30 days
         echo json_encode($result);
         return;
+    }
+    if($json['status'] == 'ZERO_RESULTS'){
+        raiseError("Brak wyników z serwerów GeoAPI: " . $output, 404, false);
     }
     raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
 }
