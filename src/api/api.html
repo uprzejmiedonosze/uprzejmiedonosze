@@ -146,7 +146,7 @@ function _geoToAddress($lat, $lng){
     }
     if($json['status'] == 'OK' && $json['results']){
         @$result = $json['results'][0];
-        $cache->set("_geoToAddress-$latlng", $result, MEMCACHE_COMPRESSED, 2592000); // 30 days
+        $cache->set("_geoToAddress-$latlng", $result, MEMCACHE_COMPRESSED, 5 * 2592000); // 30 days
         echo json_encode($result);
         return;
     }
