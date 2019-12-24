@@ -59,14 +59,14 @@ TAG_NAME             := $(shell echo $(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
 help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
-dev-refresh: HOST := $(DEV_HOST)
-dev-refresh: HTTPS := http
-dev-refresh: $(DIRS) export ## Refresh src files in Docker image
-	@echo "==> Refreshing sources"
-
 dev: HOST := $(DEV_HOST)
 dev: HTTPS := http
-dev: $(DIRS) export dev-refresh ## Building and running docker image
+dev: $(DIRS) export ## Refresh src files in Docker image
+	@echo "==> Refreshing sources"
+
+dev-run: HOST := $(DEV_HOST)
+dev-run: HTTPS := http
+dev-run: $(DIRS) export dev ## Building and running docker image
 	@echo "==> Building docker"
 	@make --directory docker build
 	@echo "==> Running docker image"
