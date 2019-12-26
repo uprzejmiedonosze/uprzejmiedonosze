@@ -96,13 +96,15 @@ function genSafeId(){
 }
 
 /** @SuppressWarnings("exit") */
-function raiseError($msg, $status){
+function raiseError($msg, $status, $notify = true){
     logger("raiseError $msg with $status", true);
     $error = Array(
         "code" => $status,
         "message" => $msg
     );
-    _sendSlackError($msg);
+    if($notify) {
+        _sendSlackError($msg);
+    }
     http_response_code($status);
     echo json_encode($error);
     die();

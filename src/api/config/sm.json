@@ -815,6 +815,17 @@
     "hint": null,
     "api": false
   },
+  "łańcut": {
+    "address": [
+      "Komenda Powiatowa Policji w Łańcucie",
+      "ul. Traugutta 13A",
+      "37-100 Łańcut"
+    ],
+    "email": "lancut@rz.policja.gov.pl",
+    "city": "Łańcut",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",

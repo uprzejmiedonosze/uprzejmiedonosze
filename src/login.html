@@ -1,9 +1,10 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
+$logout = false;
 if(isset($_GET['logout'])){
     unset($_SESSION['token']);
-    redirect("index.html");
+    $logout = true;
 }
 
 @$next = $_GET['next'];
@@ -17,7 +18,8 @@ echo generate('login.html.twig',
     ],
     'config' =>
     [
-        'signInSuccessUrl' => $next
+        'signInSuccessUrl' => $next,
+        'logout' => $logout
     ]
 ]
 );
