@@ -161,10 +161,20 @@ function _geoToAddress($lat, $lng){
 }
 
 function _moderateApp($appId, $decision){
+    require __DIR__ . '/../../inc/Tumblr.php';
     global $storage;
     $application = $storage->getApplication($appId);
     $application->initStatements();
     $application->statements->galleryOK = ($decision == 'true');
+
+    if($application->statements->galleryOK){
+        try{
+            addToTumblr($application);
+            $application->addComment('admin', "Zdjęcie dodane do galerii.");
+        } catch (Exception $ex) {
+            raiseError("Błąd Tumblr" . print_r($ex, true) , 500);
+        }    
+    }
     $storage->saveApplication($application);
     echo json_encode(Array("status" => "OK"));
 }
