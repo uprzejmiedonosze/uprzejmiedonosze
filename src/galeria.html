@@ -1,8 +1,6 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
-$applications = $storage->getGalleryApps(0, false);
-
 echo generate('galeria.html.twig', 
     [
         'head' =>
@@ -16,8 +14,7 @@ echo generate('galeria.html.twig',
         'config' => [
             'menu' => 'galeria',
             'appActionButtons' => false
-        ],
-        'applications' => $applications
+        ]
     ]
 );
 ?>

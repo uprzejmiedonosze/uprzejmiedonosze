@@ -628,45 +628,48 @@ dt {
 
 /* #region galeria */
 
-div.gallery {
+div.tumblr_posts {
+    margin: 0;
+    padding: 0;
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    align-content: flex-start;
-    justify-content: space-between;
-    flex: 1;
-    flex-direction: column;
+    margin-left: -5px;
+    margin-right: -5px;
 }
 
 div.galleryItem {
+    box-sizing: border-box;
     position: relative;
-    margin: 5px;
-    flex-grow: 1;
-    flex-basis: 380px;
-    max-width: 780px;
-    margin: 5px;
+    margin: 5px 0;
+    flex: 0 0 100%;
+    width: 100%;
+    box-shadow: 0 0 2px rgba(0,0,0,0.2);
+    background: #fff;
 }
-  
+
+@media (min-width: 40em) {
+    div.galleryItem {
+        margin: 5px;
+        flex: 0 0 calc((100% - 4 * 5px) / 2);
+        width: calc((100% - 4 * 5px) / 2);
+    }
+}
+
+@media (min-width: 60em) {
+    div.galleryItem {
+        flex: 0 0 calc((100% - 6 * 5px) / 3);
+        width: calc((100% - 6 * 5px) / 3);
+    }
+}
+
+div.galleryItem p {
+    padding: 0 10px;
+}
+
 div.galleryItem img {
     width: 100%;
     height: auto;
-}
-  
-div.galleryItem > div.desc {
-    padding: 10px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    text-shadow: none;
-    background: #e9c200;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity .2s, visibility .2s;
-}
-
-div.galleryAdmin div.galleryItem > div.desc {
-    visibility: visible;
-    opacity: 1;
 }
 
 div.galleryAdmin div.galleryItem.decisiontrue {
@@ -677,18 +680,9 @@ div.galleryAdmin div.galleryItem.decisionfalse {
     opacity: 0.5;
 }
 
-div.galleryItem:hover > div.desc {
-    visibility: visible;
-    opacity: 1;
-}
-
 div.galleryItem > div.actions {
-    padding: 7px;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     text-shadow: none;
+    padding: 0 10px;
 }
 
 
