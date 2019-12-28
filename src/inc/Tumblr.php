@@ -10,24 +10,26 @@ function addToTumblr(&$app){
       );
     $blogName = 'uprzejmie-donosze';
 
+    $recydywista = '';
     $recydywa = '';
     if($app->getRecydywa() > 1){
-        $recydywa = ' (recydywista)';
+        $recydywista = ' (recydywista)';
+        $recydywa = ', recydywa';
     }
 
     $data = array(
         'type' => 'photo', 
-        'caption' => "**{$app->carInfo->plateId}**$recydywa, {$app->address->city}\n\n{$app->getCategory()->getTitle()}\n\n![mapa](%HTTPS%://%HOST%/{$app->getMapImage()})",
+        'caption' => "**{$app->carInfo->plateId}**$recydywista, {$app->address->city} --- {$app->getCategory()->getTitle()}",
         'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         'format' => 'markdown',
-        'tags' => "{$app->address->city}, {$app->carInfo->plateId}",
+        'tags' => "{$app->address->city}, {$app->carInfo->plateId}${recydywa}",
         'state' => 'queue',
         'date' => $app->date
         );
         
 
     $reply = $client->createPost($blogName, $data);
-    return "https://uprzejmie-donosze.tumblr.com/#" . @$reply->id;
+    return "https://galeria.uprzejmiedonosze.net/#" . @$reply->id;
 }
 
 ?>
