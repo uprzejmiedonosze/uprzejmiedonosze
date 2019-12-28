@@ -39,6 +39,9 @@
                 href="/">Strona główna</a></li>
     {% if config.auth is not defined %}
         <li class="subpage" data-icon="false">
+            <a data-ajax="false" {% if config.menu == 'galeria' %}class="active"{% endif %}
+                href="/galeria.html">– galeria</a></li>
+        <li class="subpage" data-icon="false">
             <a {% if config.menu == 'przepisy' %}class="active"{% endif %}
                 href="/przepisy.html">– przepisy</a></li>
         <li class="subpage" data-icon="false">
