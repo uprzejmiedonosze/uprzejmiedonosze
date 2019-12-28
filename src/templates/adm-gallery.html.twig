@@ -4,13 +4,14 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
+<div class="tumblr_posts">
 {% for app in applications %}
     <div class="galleryItem" id="{{app.id}}">
         <img class="lazyload" data-src="{{ app.contextImage.thumb }}" width="600" height="400">
-        <div class="desc">
+        <p class="desc">
             <b>{{ app.carInfo.plateId }}</b>{% if app.getRecydywa > 1 %}<sup>(recydywista)</sup>{% endif %}
-            {{ app.address.city}} ({{ app.getMonthYear }})
-        </div>
+            {{ app.address.city}} – {{ app.getCategory.getTitle }}
+        </p>
         <div class="actions">
             <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                 <label for="OK{{ app.id }}">OK</label>
@@ -24,6 +25,7 @@
 
     </div>
 {% endfor %}
+</div>
     <script>
         function _moderateApp(appId, decision){
             $.post('/api/api.html', {action: 'moderateApp', id: appId, decision: decision
