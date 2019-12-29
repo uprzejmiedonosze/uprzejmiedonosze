@@ -49,6 +49,17 @@ function _sendViaAPI(appId){
 }
 
 /**
+ * Allow application to be placed in the gallery.
+ * 
+ * @param appId application id to be added to gallery
+ */
+function addToGallery(appId){
+    $.post('/api/api.html', {action: 'addToGallery', id: appId}).done(function() {
+        $('#' + appId + ' a.addToGallery').addClass('ui-disabled');
+    });
+}
+
+/**
  * 
  * @param msg Message to display
  * @param timeout Time for the message to be visible in ms

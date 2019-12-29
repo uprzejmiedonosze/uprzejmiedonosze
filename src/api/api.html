@@ -166,6 +166,9 @@ function _addToGallery($appId){
     global $storage;
 
     $application = $storage->getApplication($appId);
+    if(!$application->isCurrentUserOwner()){
+        raiseError("Próba zmiany cudzego zgłoszenia $appId!", 401);
+    }
 
     $application->initStatements();
     $application->statements->gallery = date(DT_FORMAT);
