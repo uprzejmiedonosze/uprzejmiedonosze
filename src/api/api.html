@@ -195,7 +195,7 @@ function _moderateApp($appId, $decision){
             raiseError("Błąd Tumblr " . print_r($ex, true) , 500);
         }
     }else{
-        $application->addedToGallery = null;
+        $application->addedToGallery = false;
     }
     
     $storage->saveApplication($application);
