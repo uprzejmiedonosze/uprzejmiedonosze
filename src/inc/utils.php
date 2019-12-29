@@ -188,13 +188,13 @@ function _sendSlackOnRegister($user){
  * Sends formatted message to Slack.
  */
 function _sendSlackOnNewApp($app, $todaysNewAppsCount){
-    $title = "Nowe zgłoszenie {$app->number} ({$app->address->city}, {$todaysNewAppsCount} dzisiaj)";
+    $title = "Kandydat do galerii {$app->number} ({$app->address->city}, {$todaysNewAppsCount} dzisiaj)";
 
     logger($title, true);
 
     $msg = [
         "fallback" => $title,
-        "title" => "Nowe zgłoszenie {$app->number}",
+        "title" => "Kandydat do galerii {$app->number}",
         "title_link" => "%HTTPS%://%HOST%/ud-{$app->id}.html",
         
         "color" => "#229A7F",
