@@ -65,10 +65,10 @@
             <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
                 ui-nodisc-icon ui-icon-mail">PDF</a>
-            <a href="#" onclick="addToGallery('{{ app.id }}'"
+            <a href="#" onclick="addToGallery('{{ app.id }}')"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
-                {% if app.statements is defined and app.statements %}ui-disabled{% endif %}
-                ui-nodisc-icon ui-icon-mail">Dodaj do galerii</a>
+                {% if app.statements is defined and app.statements.gallery is defined %}ui-disabled{% endif %}
+                ui-nodisc-icon ui-icon-grid">Dodaj do galerii</a>
         </fieldset>
 {% endif %}
     </p> <!-- data-role="listview" data-inset="false" -->
