@@ -385,7 +385,7 @@ SQL;
         $sql = "select key, value "
             . "from applications "
             . "where json_extract(value, '$.status') not in ('draft', 'ready', 'archived') "
-            . "and json_extract(value, '$.statements.gallery') = true "
+            . "and json_extract(value, '$.statements.gallery') is not null "
             . "and json_extract(value, '$.addedToGallery') is null "
             . "order by json_extract(value, '$.added') desc ";
 
