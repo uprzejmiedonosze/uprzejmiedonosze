@@ -19,7 +19,7 @@ function addToTumblr(&$app){
 
     $data = array(
         'type' => 'photo', 
-        'caption' => "**{$app->carInfo->plateId}**$recydywista, {$app->address->city} --- {$app->getCategory()->getTitle()}",
+        'caption' => "**{$app->carInfo->plateId}**$recydywista, {$app->address->city} --- {$app->getCategory()->getShort()}",
         'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         'format' => 'markdown',
         'tags' => "{$app->address->city}, {$app->carInfo->plateId}${recydywa}",

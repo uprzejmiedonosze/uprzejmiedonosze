@@ -663,6 +663,10 @@ div.galleryItem {
     }
 }
 
+div.dziekujemy div.galleryItem {
+    max-width: 20em;
+}
+
 div.galleryItem p {
     padding: 0 10px;
 }

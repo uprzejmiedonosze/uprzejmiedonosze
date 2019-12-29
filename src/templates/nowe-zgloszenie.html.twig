@@ -136,19 +136,6 @@
             {% if not witness %}
                 checked
             {% endif %} />
-
-{% set gallery = true %}
-{% if app.statements is not defined or app.statements.gallery is not defined or not app.statements.gallery %}
-    {% set gallery = false %}
-{% endif %}
-        <label for="gallery">
-                <i>To jest ciekawe zdjęcie, umieście je w <a href="">galerii</a>:</i>
-        </label>
-        <input data-mini="true" type="checkbox" data-role="flipswitch" name="gallery" id="gallery"
-            data-on-text="tak" data-off-text="nie"
-            {% if not gallery %}
-                checked
-            {% endif %} />
     </div> <!-- ui-field-contain -->
 </form>
 
