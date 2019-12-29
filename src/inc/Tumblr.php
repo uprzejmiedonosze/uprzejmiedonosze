@@ -28,8 +28,7 @@ function addToTumblr(&$app){
         );
         
 
-    $reply = $client->createPost($blogName, $data);
-    return "https://galeria.uprzejmiedonosze.net/#" . @$reply->id;
+    return $client->createPost($blogName, $data);
 }
 
 ?>

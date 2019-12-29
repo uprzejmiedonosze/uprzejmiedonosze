@@ -163,18 +163,25 @@ function _geoToAddress($lat, $lng){
 function _moderateApp($appId, $decision){
     require __DIR__ . '/../../inc/Tumblr.php';
     global $storage;
-    $application = $storage->getApplication($appId);
-    $application->initStatements();
-    $application->statements->galleryOK = ($decision == 'true');
+    if(!$storage->getCurrentUser()->isAdmin()){
+        raiseError("Dostęp zabroniony", 401);
+    }
 
-    if($application->statements->galleryOK){
+    $application = $storage->getApplication($appId);
+
+    $application->initStatements();
+    if($decision == 'true'){
         try{
-            addToTumblr($application);
+            $application->addedToGallery = addToTumblr($application);
             $application->addComment('admin', "Zdjęcie dodane do galerii.");
         } catch (Exception $ex) {
-            raiseError("Błąd Tumblr" . print_r($ex, true) , 500);
-        }    
+            $application->addedToGallery = null;
+            raiseError("Błąd Tumblr " . print_r($ex, true) , 500);
+        }
+    }else{
+        $application->addedToGallery = null;
     }
+    
     $storage->saveApplication($application);
     echo json_encode(Array("status" => "OK"));
 }
