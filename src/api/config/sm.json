@@ -826,6 +826,17 @@
     "hint": null,
     "api": false
   },
+  "Chorzów": {
+    "address": [
+      "Straż Miejska w Chorzowie",
+      "Jana III Sobieskiego 3",
+      "41-500 Chorzów"
+    ],
+    "email": "sm@chorzow.eu",
+    "city": "Chorzów",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
