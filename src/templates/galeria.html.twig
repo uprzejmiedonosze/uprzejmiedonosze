@@ -8,7 +8,8 @@
 <h2>Galeria Uprzejmie Donoszę</h2>
 <p>Pełna galeria znajduje się pod adresem <a data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">galeria.uprzejmiedonosze.net</a>.</p>
 
-<div class="tumblr_posts" />
+<div class="tumblr_posts">
+</div>
 
 <script>
 function tumblr() {
@@ -51,8 +52,5 @@ $(document).ready(function() {
   }
 });
 </script>
-{% endblock %}
 
-{% if head.dialog %}
-    {% block footer %}{% endblock %}
-{% endif %}
+{% endblock %}
