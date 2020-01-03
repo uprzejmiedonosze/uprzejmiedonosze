@@ -1,8 +1,9 @@
 {
     "require": {
         "kreait/firebase-php": "^3.0",
-        "twig/twig": "^2.0",
-        "maknz/slack": "^1.7"
+        "twig/twig": "^3.0",
+        "maknz/slack": "^1.7",
+        "tumblr/tumblr": "^0.4.0"
     },
     "require-dev": {
         "phpmd/phpmd": "@stable"
