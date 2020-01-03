@@ -17,6 +17,27 @@
 
 {% set sm = app.guessSMData() %}
 
+{% if appsCount > 3 and not sm.email %}
+<h3>Dodaj to zdjęcie do galerii</h3>
+<p>Dodaj zdjęcie do <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>.
+Udostępnimy zdjęcie z kontekstem, numer rejestracyjny (który nie jest daną osobową!), miasto oraz rodzaj wykroczenia.</p>
+
+<span id="{{ app.id }}">
+    <a href="#" onclick="addToGallery('{{ app.id }}')"
+        class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
+        ui-nodisc-icon ui-icon-grid try">Dodaj do galerii</a>
+</span>
+<div class="tumblr_posts dziekujemy">
+    <div class="galleryItem" id="{{app.id}}">
+        <img src="{{ app.contextImage.thumb }}" width="600" height="400">
+        <p class="desc">
+            <b>{{ app.carInfo.plateId }}</b>{% if app.getRecydywa > 1 %}<sup>(recydywista)</sup>{% endif %}
+            {{ app.address.city}} – {{ app.getCategory.getShort }}
+        </p>
+    </div>
+</div>
+{% endif %}
+
 {% if sm.hasAPI %}
 
     <p>Co dalej? <b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
@@ -50,25 +71,6 @@
         </p>
     {% endif %}
 {% endif %}
-
-<h3>Dodaj to zdjęcie do galerii</h3>
-<p>Dodaj zdjęcie do <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>.
-Udostępnimy zdjęcie z kontekstem, numer rejestracyjny (który nie jest daną osobową!), miasto oraz rodzaj wykroczenia.</p>
-
-<span id="{{ app.id }}">
-    <a href="#" onclick="addToGallery('{{ app.id }}')"
-        class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
-        ui-nodisc-icon ui-icon-grid try">Dodaj do galerii</a>
-</span>
-<div class="tumblr_posts dziekujemy">
-    <div class="galleryItem" id="{{app.id}}">
-        <img src="{{ app.contextImage.thumb }}" width="600" height="400">
-        <p class="desc">
-            <b>{{ app.carInfo.plateId }}</b>{% if app.getRecydywa > 1 %}<sup>(recydywista)</sup>{% endif %}
-            {{ app.address.city}} – {{ app.getCategory.getShort }}
-        </p>
-    </div>
-</div>
 
 <script>
 {{ include('_inline.js.twig') }}
