@@ -88,9 +88,11 @@
         {% block main %}{% endblock %}
             </div> <!-- main -->
         {% block footer %}
+            {% if head.dialog is not defined or not head.dialog %}
             <div data-role="footer">
                 <h4 title="%VERSION%">&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
             </div> <!-- footer -->
+            {% endif %}
         {% endblock %}
         {% block menu %}
             {% include('_menu.html.twig') %}

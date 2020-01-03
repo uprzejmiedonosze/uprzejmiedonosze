@@ -16,9 +16,9 @@ function exception_handler($exception) {
     $time = logger($msg, true);
 
     _sendSlackError($msg);
-    
-    $loader = new Twig_Loader_Filesystem(__DIR__ . '/../templates');
-    $twig = new Twig_Environment($loader,
+
+    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
+    $twig = new \Twig\Environment($loader,
     [
         'debug' => false,
         'strict_variables' => false

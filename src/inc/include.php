@@ -25,11 +25,11 @@ function generate($template, $parameters){
         }
     }    
     
-    $loader = new Twig_Loader_Filesystem([__DIR__ . '/../templates', __DIR__ . '/../public/api/config']);
-    $twig = new Twig_Environment($loader,
+    $loader = new \Twig\Loader\FilesystemLoader([__DIR__ . '/../templates', __DIR__ . '/../public/api/config']);
+    $twig = new \Twig\Environment($loader,
     [
-        'debug' => false,
-        'cache' => new Twig_Cache_Filesystem('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', Twig_Cache_Filesystem::FORCE_BYTECODE_INVALIDATION),
+        'debug' => '%HOST%' != 'uprzejmiedonosze.net',
+        'cache' => new \Twig\Cache\FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', \Twig\Cache\FilesystemCache::FORCE_BYTECODE_INVALIDATION),
         'strict_variables' => true,
         'auto_reload' => true
     ]);
