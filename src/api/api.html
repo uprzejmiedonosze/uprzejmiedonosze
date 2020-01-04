@@ -232,7 +232,7 @@ function _upload(){
         $application->contextImage->url = "$baseFileName,$type.jpg";
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
     }else{
-        raiseError("Unknown picture type: " . $pictureType, 400);
+        raiseError("Unknown picture type: $pictureType ($applicationId)", 400);
     }
 
     $storage->saveApplication($application);
