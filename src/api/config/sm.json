@@ -837,6 +837,17 @@
     "hint": null,
     "api": false
   },
+  "nysa": {
+    "address": [
+      "Straż Miejska w Nysie",
+      "ul. Kolejowa 15",
+      "48-300 Nysa"
+    ],
+    "email": "sm@chorzow.eu",
+    "city": "Nysa",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
