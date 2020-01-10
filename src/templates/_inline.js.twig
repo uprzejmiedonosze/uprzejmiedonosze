@@ -56,7 +56,12 @@ function addToGallery(appId){
     $.post('/api/api.html', {action: 'addToGallery', id: appId}).done(function() {
         $('#' + appId + ' a.addToGallery').addClass('ui-disabled');
         showMessage('Dodane do galerii. Oczekuje na moderację.', 2000);
+        $('.addToGallery').hide();
     });
+}
+
+function ignoreGallery(){
+    $('.addToGallery').hide();
 }
 
 /**
