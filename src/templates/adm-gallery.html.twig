@@ -11,6 +11,9 @@
         <p class="desc">
             <b>{{ app.number }}</b> {{ app.carInfo.plateId }}{% if app.getRecydywa > 1 %}<sup>(recydywista)</sup>{% endif %}
             {{ app.address.city}} – {{ app.getCategory.getShort }}
+            {% if app.userComment %}
+                <br />{{ app.userComment }}
+            {% endif %}
         </p>
         <div class="actions">
             <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">

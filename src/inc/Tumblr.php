@@ -16,10 +16,10 @@ function addToTumblr(&$app){
         $recydywista = ' (recydywista)';
         $recydywa = ', recydywa';
     }
-
     $data = array(
         'type' => 'photo', 
-        'caption' => "**{$app->carInfo->plateId}**$recydywista, {$app->address->city} --- {$app->getCategory()->getShort()}",
+        'caption' => "**{$app->carInfo->plateId}**$recydywista, {$app->address->city} --- {$app->getCategory()->getShort()}."
+            . $app->userComment ? ' ' . $app->userComment: '',
         'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         'format' => 'markdown',
         'tags' => "{$app->address->city}, {$app->carInfo->plateId}${recydywa}",

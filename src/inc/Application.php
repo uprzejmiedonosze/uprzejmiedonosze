@@ -86,6 +86,7 @@ class Application extends JSONObject{
         $this->user->number = $user->number;
         return $this->user->number;
     }
+
     /**
      * Returns 'około godziny' or 'o godzinie'.
      */
