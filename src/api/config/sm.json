@@ -837,6 +837,39 @@
     "hint": null,
     "api": false
   },
+  "nysa": {
+    "address": [
+      "Straż Miejska w Nysie",
+      "ul. Kolejowa 15",
+      "48-300 Nysa"
+    ],
+    "email": "straz@www.nysa.pl",
+    "city": "Nysa",
+    "hint": null,
+    "api": false
+  },
+  "niepołomice": {
+    "address": [
+      "Straż Miejska Niepołomice",
+      "pl. Zwycięstwa 8",
+      "32-005 Niepołomice"
+    ],
+    "email": "straz.miejska@niepolomice.com",
+    "city": "Niepołomice",
+    "hint": null,
+    "api": false
+  },
+  "żywiec": {
+    "address": [
+      "Straż Miejska Żywiec",
+      "ul. Zielona 7",
+      "34-300 Żywiec"
+    ],
+    "email": "strazmiejska@zywiec.pl",
+    "city": "Żywiec",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
