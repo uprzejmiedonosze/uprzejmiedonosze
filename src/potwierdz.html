@@ -10,6 +10,10 @@ if(!isset($post['applicationId'])){
 $applicationId = $post["applicationId"];
 $application = $storage->getApplication($applicationId);
 
+if(!in_array($application->status, ['draft', 'ready'])){
+    redirect("nowe-zgloszenie.html");
+}
+
 $application->date = date_format(new DateTime( preg_replace('/[^T0-9: -]/', '', $post['datetime']) ), DT_FORMAT);
 $application->dtFromPicture = (boolean) $post['dtFromPicture'];
 $application->category = intval($post["category"]);
