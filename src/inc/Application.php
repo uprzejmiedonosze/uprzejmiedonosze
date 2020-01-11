@@ -101,6 +101,13 @@ class Application extends JSONObject{
      * Set status (and store statuses history changes)
      */
     public function setStatus($status){
+        global $STATUSES;
+        if(!array_key_exists($status, $STATUSES)){
+            throw new Exception("Odmawiam ustawienia statusu na $status");
+        }
+        if(!in_array($status, $this->getStatus()->allowed)){
+            throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status");
+        }
         if(!isset($this->statusHistory)){
             $this->statusHistory = [];
         }

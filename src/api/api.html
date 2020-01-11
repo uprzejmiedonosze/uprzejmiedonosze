@@ -70,12 +70,13 @@ function _verifyToken(){
  * Sets application status.
  */
 function _setStatus($status, $appId){
-    global $storage, $STATUSES;
-    if(!array_key_exists($status, $STATUSES)){
-        raiseError("Odmawiam ustawienia statusu na $status", 500);
-    }
+    global $storage;
     $application = $storage->getApplication($appId);
-    $application->setStatus($status);
+    try{
+        $application->setStatus($status);
+    }catch(Exception $e){
+        raiseError($e->getMessage(), 500);
+    }
     $storage->saveApplication($application);
     $storage->updateRecydywa($application->carInfo->plateId);
     $storage->getUserStats(false); // update cache

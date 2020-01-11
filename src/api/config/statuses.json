@@ -12,7 +12,7 @@
     "action": "Potwierdź",
     "icon": "shop",
     "class": null,
-    "allowed": ["draft", "confirmed"],
+    "allowed": ["draft", "confirmed", "ready"],
     "comment": "Zapisanie wersji roboczej"
   },
   "confirmed": {
