@@ -19,7 +19,7 @@
 
 {% if appsCount > 3 and sm.email %}
 <div class="addToGallery">
-    <h3>Dodaj to zdjęcie do galerii</h3>
+    <h4>Dodaj to zdjęcie do galerii</h4>
     <p>Dodaj zdjęcie do <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>.
     Udostępnimy zdjęcie z kontekstem, numer rejestracyjny (który nie jest daną osobową!), miasto, twój komentarz oraz rodzaj wykroczenia.</p>
 
@@ -29,8 +29,7 @@
             ui-nodisc-icon ui-icon-grid try">Dodaj do galerii</a>
     </span>
     <a href="#" onclick="ignoreGallery()"
-        class="ui-btn ui-mini ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
-        ui-nodisc-icon ui-icon-grid">Zignoruj</a>
+        class="ui-btn ui-mini ui-corner-all ui-btn-inline">Zignoruj</a>
     <div class="tumblr_posts dziekujemy">
         <div class="galleryItem" id="{{app.id}}">
             <img src="{{ app.contextImage.thumb }}" width="600" height="400">
@@ -45,7 +44,7 @@
     </div>
 </div><!-- class="addToGallery" -->
 <div class="addedToGallery" style="display: none;">
-<h4>Dziękujemy</h4>
+<h4>Zdjęcie zostało dodane do galerii</h4>
 <p>Dziękujemy za zgłoszenie zdjęcia do
 <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>. Twoje zdjęcie oczekuje
 na moderację i zostanie opublikowane w przeciągu 24h.
@@ -53,8 +52,8 @@ na moderację i zostanie opublikowane w przeciągu 24h.
 {% endif %}
 
 {% if sm.hasAPI %}
-
-    <p>Co dalej? <b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
+    <h4>Co dalej?</h4>
+    <p><b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
     Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
     zgłoszenia. {{ sm.hint | raw }}</p>
 
@@ -62,7 +61,8 @@ na moderację i zostanie opublikowane w przeciągu 24h.
     <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
         class="ui-btn ui-mini ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail ui-corner-all cta">Wyślij bezpośrednio do SM</a>
 {% else %}
-    <p>Co dalej? <b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
+    <h4>Co dalej?</h4>
+    <p><b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
         Na szczęście nie musisz wysyłać każdego zgłoszenia osobno. Możesz
         wygenerować ich kilka/kilkanaście, i wysłać je dogodnym dla siebie cyklu.</p>
 
