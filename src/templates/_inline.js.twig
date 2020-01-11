@@ -78,6 +78,9 @@ function _updateStatus(appId, status){
     $('#' + appId).removeClass('{{ allClasses }}');
     $('#' + appId).addClass('status-' + status);
 
+    $('#' + appId + ' b.currentStatus').text($('#' + appId + ' .appActionButtons a.status-' + status).text());
+    
+
     updateCounters();
 }
 
