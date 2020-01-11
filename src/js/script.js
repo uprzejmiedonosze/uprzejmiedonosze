@@ -61,6 +61,14 @@ $(document).on('pageshow', function () {
         });
 
         setDateTime($('#datetime').val(), $('#dtFromPicture').val() == "1");
+
+        $('.contextImageSection img').on('load', function(){ 
+            $('.contextImageSection img').show();
+        });
+        $('.carImageSection img').on('load', function(){ 
+            $('.carImageSection img').show();
+        });
+
     }
 
     if ($("#register-submit").length) {
@@ -281,6 +289,7 @@ function checkFile(file, id) {
             $('.' + id + 'Section').removeClass('error');
             $('.' + id + 'Section img').hide();
             $('.' + id + 'Section .loader').show();
+            $('.' + id + 'Section .loader').addClass('l');
 
             if (id == 'carImage') {
                 readGeoDataFromImage(file);
@@ -380,10 +389,9 @@ function sendFile(fileData, id) {
         processData: false,
         success: function (json) {
             if (json.carImage || json.contextImage){
-                $('.' + id + 'Section .loader').hide();
+                $('.' + id + 'Section .loader').removeClass('l');
                 $('.' + id + 'Section img').css('height', '100%');
                 $('.' + id + 'Section img').attr("src", json[id].thumb + '?v=' + Math.random().toString());
-                $('.' + id + 'Section img').show();
             }
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
