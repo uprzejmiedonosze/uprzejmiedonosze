@@ -335,6 +335,17 @@ class Application extends JSONObject{
         $this->comments[date(DT_FORMAT)]->source = $source;
         $this->comments[date(DT_FORMAT)]->comment = $comment;
     }
+
+    /**
+     * Returns info whether the app was allowed to be added
+     * to gallery.
+     * 
+     * returns: boolean
+     */
+    public function addedToGallery(){
+        return ((bool) $this->statements) && ((bool)$this->statements->gallery);
+
+    }
 }
 
 ?>

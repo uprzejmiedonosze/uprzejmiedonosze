@@ -21,9 +21,9 @@
     <p>{{ app.userComment }}</p>
 {% endif %}
 
-{% if config.appActionButtons and (app.statements is not defined or app.statements.gallery is null or app.status == 'confirmed') %}
+{% if config.appActionButtons and (not app.addedToGallery or app.status == 'confirmed') %}
         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            {% if app.statements is not defined or app.statements.gallery is null %}
+            {% if not app.addedToGallery %}
             <a href="#" onclick="addToGallery('{{ app.id }}')"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
                 ui-nodisc-icon ui-icon-grid">Dodaj do galerii</a>
