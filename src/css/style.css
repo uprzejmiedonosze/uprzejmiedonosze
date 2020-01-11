@@ -272,6 +272,10 @@ div.loader {
     animation: spin 2s linear infinite;
 }
 
+div.loader.l {
+    animation: spinl 2s linear infinite;
+}
+
 .new-application .contextImageSection img,
 .new-application .carImageSection img{
     background-repeat: no-repeat;
@@ -291,6 +295,12 @@ div.loader {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+@keyframes spinl {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(-360deg); }
+}
+
 
 .new-application .ui-input-text input#plateId {
     text-transform: uppercase;

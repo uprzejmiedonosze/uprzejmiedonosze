@@ -51,6 +51,14 @@ $(document).on('pageshow', function () {
         });
 
         setDateTime($('#datetime').val(), $('#dtFromPicture').val() == "1");
+
+        $('.image-upload img').on('load', function(){ 
+            $(this).show();
+            uploadInProgress--;
+            if(uploadInProgress == 0){
+                $('#form-submit').removeClass('ui-disabled');
+            }
+        });
     }
 
     if ($("#register-submit").length) {
@@ -271,6 +279,7 @@ function checkFile(file, id) {
             $('.' + id + 'Section').removeClass('error');
             $('.' + id + 'Section img').hide();
             $('.' + id + 'Section .loader').show();
+            $('.' + id + 'Section .loader').addClass('l');
 
             if (id == 'carImage') {
                 readGeoDataFromImage(file);
@@ -370,10 +379,9 @@ function sendFile(fileData, id) {
         processData: false,
         success: function (json) {
             if (json.carImage || json.contextImage){
-                $('.' + id + 'Section .loader').hide();
+                $('.' + id + 'Section .loader').removeClass('l');
                 $('.' + id + 'Section img').css('height', '100%');
                 $('.' + id + 'Section img').attr("src", json[id].thumb + '?v=' + Math.random().toString());
-                $('.' + id + 'Section img').show();
             }
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
@@ -397,10 +405,6 @@ function sendFile(fileData, id) {
                     $('#recydywa').text("recydywista, zgłoszeń: " + json.carInfo.recydywa);
                     $('#recydywa').show();
                 }
-            }
-            uploadInProgress--;
-            if(uploadInProgress == 0){
-                $('#form-submit').removeClass('ui-disabled');
             }
         },
         // eslint-disable-next-line no-unused-vars
