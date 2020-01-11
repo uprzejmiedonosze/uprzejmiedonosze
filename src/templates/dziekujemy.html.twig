@@ -35,7 +35,7 @@
         <div class="galleryItem" id="{{app.id}}">
             <img src="{{ app.contextImage.thumb }}" width="600" height="400">
             <p class="desc">
-                <b>{{ app.carInfo.plateId }}</b>{% if app.getRecydywa > 1 %}<sup>(recydywista)</sup>{% endif %}
+                <b>{{ app.carInfo.plateId }}</b>
                 {{ app.address.city}} – {{ app.getCategory.getShort }}
                 {% if app.userComment %}
                     <br />{{ app.userComment }}

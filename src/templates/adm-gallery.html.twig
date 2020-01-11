@@ -9,7 +9,7 @@
     <div class="galleryItem" id="{{app.id}}">
         <img class="lazyload" data-src="{{ app.contextImage.thumb }}" width="600" height="400">
         <p class="desc">
-            <b>{{ app.number }}</b> {{ app.carInfo.plateId }}{% if app.getRecydywa > 1 %}<sup>(recydywista)</sup>{% endif %}
+            <b>{{ app.number }}</b> {{ app.carInfo.plateId }}
             {{ app.address.city}} – {{ app.getCategory.getShort }}
             {% if app.userComment %}
                 <br />{{ app.userComment }}
