@@ -50,7 +50,8 @@
             </div>
         </div>
 {% if config.appActionButtons %}
-    <p>Zmień ręcznie status zgłoszenia z <b>{{ statuses[app.status].name }}</b> na:</p>
+
+    <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ statuses[app.status].name }}</b> na:</p>
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
     {% for key,val in statuses %}
         {% if val.class %}
