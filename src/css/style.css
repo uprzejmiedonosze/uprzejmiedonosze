@@ -196,6 +196,10 @@ label span.price-list {
     margin-bottom: 1em;
 }
 
+input:disabled {
+    color: #000;
+}
+
 input.error, textarea.error{
     border: 1px solid red !important;
 }
