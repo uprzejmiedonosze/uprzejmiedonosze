@@ -38,7 +38,7 @@
 {% endif %}
 
     function login(){
-        $('#login-hint').text('Zaloguj się za pomocą konta Google lub Facebook.');
+        $('#login-hint').text('Zaloguj się za pomocą konta Google.');
         var uiConfig = {
             signInSuccessUrl: "%HTTPS%://%HOST%/login-ok.html{% if config.signInSuccessUrl %}?next={{ config.signInSuccessUrl }}{% endif %}",
             signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
