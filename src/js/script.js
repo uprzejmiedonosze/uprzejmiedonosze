@@ -90,7 +90,6 @@ var initialLocation = [];
 var uploadInProgress = 0;
 
 function checkUploadInProgress(){
-    $('h1').text(uploadInProgress);
     if(uploadInProgress <= 0){
         uploadInProgress = 0;
         $('#form-submit').removeClass('ui-disabled');
@@ -292,7 +291,7 @@ function checkFile(file, id) {
     $('#form-submit').addClass('ui-disabled');
     if (file) {
         uploadInProgress++;
-        checkUploadInProgress();    
+        checkUploadInProgress();
         if (/^image\//i.test(file.type)) {
             $('.' + id + 'Section').removeClass('error');
             $('.' + id + 'Section img').hide();
