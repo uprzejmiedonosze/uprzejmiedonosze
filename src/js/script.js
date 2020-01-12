@@ -55,9 +55,7 @@ $(document).on('pageshow', function () {
         $('.image-upload img').on('load', function(){ 
             $(this).show();
             uploadInProgress--;
-            if(uploadInProgress == 0){
-                $('#form-submit').removeClass('ui-disabled');
-            }
+            checkUploadInProgress();
         });
     }
 
@@ -80,6 +78,14 @@ var autocomplete;
 let locationP;
 var initialLocation = [];
 var uploadInProgress = 0;
+
+function checkUploadInProgress(){
+    if(uploadInProgress <= 0){
+        uploadInProgress = 0;
+        $('#form-submit').removeClass('ui-disabled');
+    }
+
+}
 
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnRegister() {
@@ -273,8 +279,9 @@ function validateRegisterForm() {
 
 function checkFile(file, id) {
     $('#form-submit').addClass('ui-disabled');
-    uploadInProgress++;
     if (file) {
+        uploadInProgress++;
+        checkUploadInProgress();
         if (/^image\//i.test(file.type)) {
             $('.' + id + 'Section').removeClass('error');
             $('.' + id + 'Section img').hide();
@@ -312,9 +319,7 @@ function imageError(id) {
     $('.' + id + 'Section').parent().addClass('error');
     $('.' + id + 'Section input').textinput('enable');
     uploadInProgress--;
-    if(uploadInProgress == 0){
-        $('#form-submit').removeClass('ui-disabled');
-    }
+    checkUploadInProgress();
 }
 
 function readGeoDataFromImage(file) {
