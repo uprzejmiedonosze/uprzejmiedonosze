@@ -144,7 +144,7 @@ class NewApplication(BasePage):
     def confirm(self, shouldPass = True):
         self.driver.find_element(*self.NEW_SUBMIT).click()
         if shouldPass:
-            WebDriverWait(self.driver, 10).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
+            WebDriverWait(self.driver, 20).until(EC.title_contains('otwierd')) # [pP]otwierd[ź]
 
     def review(self):
         self.driver.find_element(*self.NEW_COMMENT).clear()

@@ -60,7 +60,7 @@ class BasePage(object):
     def login(self):
         assert "zaloguj" in self.driver.title.lower(), "Próba logowania na stronie innej niz Zaloguj się (jest {})".format(self.driver.title)
 
-        wait = WebDriverWait(self.driver, 10)
+        wait = WebDriverWait(self.driver, 20)
         wait.until(EC.visibility_of_element_located(self.LOGIN_BTN)).click()
         
         email = wait.until(EC.visibility_of_element_located(self.LOGIN_EMAIL))
@@ -72,7 +72,7 @@ class BasePage(object):
         password.send_keys(self.cfg.account['pass'])
 
         self.driver.find_element(*self.LOGIN_FIN).click()
-        wait = WebDriverWait(self.driver, 10)
+        wait = WebDriverWait(self.driver, 20)
         wait.until(EC.title_contains('tart')) # [sS]tart
 
     def get_content(self):
