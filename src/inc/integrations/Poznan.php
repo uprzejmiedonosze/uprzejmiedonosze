@@ -26,7 +26,7 @@ class Poznan extends CityAPI {
             'address' => $application->address->address, //adres, pole opcjonalne, do 256 znaków
             'key' => '85951ba0a63d1051a09659ea0a9d8391' //klucz aplikacji, pole obowiązkowe
         );
-        $application->setStatus('confirmed');
+        //$application->setStatus('confirmed');
         $output = parent::curlSend($url, $auth, $data, $application);
 
         if(isset($output['response']['error_msg'])){
