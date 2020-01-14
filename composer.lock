@@ -479,23 +479,23 @@
         },
         {
             "name": "kreait/firebase-tokens",
-            "version": "1.9.2",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kreait/firebase-tokens-php.git",
-                "reference": "59d4f0239d7c4cc9de2cd327df1bce695a05e48d"
+                "reference": "fb4449094a7ac27b26269a388bb21cfb35f90d3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kreait/firebase-tokens-php/zipball/59d4f0239d7c4cc9de2cd327df1bce695a05e48d",
-                "reference": "59d4f0239d7c4cc9de2cd327df1bce695a05e48d",
+                "url": "https://api.github.com/repos/kreait/firebase-tokens-php/zipball/fb4449094a7ac27b26269a388bb21cfb35f90d3d",
+                "reference": "fb4449094a7ac27b26269a388bb21cfb35f90d3d",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-openssl": "*",
                 "fig/http-message-util": "^1.1",
-                "guzzlehttp/guzzle": "^6.2.1",
+                "guzzlehttp/guzzle": "^6.2.1|^7.0@beta",
                 "kreait/clock": "^1.0.1",
                 "lcobucci/jwt": "^3.2",
                 "php": "^7.0",
@@ -504,15 +504,15 @@
             },
             "require-dev": {
                 "firebase/php-jwt": "^5.0",
-                "friendsofphp/php-cs-fixer": "^2.0",
-                "phpstan/phpstan-phpunit": "^0.9.3",
-                "phpunit/phpunit": "^6.0",
-                "symfony/cache": "^3.4",
-                "symfony/var-dumper": "^3.4"
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpstan/phpstan-phpunit": "^0.9.4|^0.11.2",
+                "phpunit/phpunit": "^6.5.14|^7.5.17",
+                "symfony/cache": "^3.4|^4.4|^5.0",
+                "symfony/var-dumper": "^3.4|^4.4|^5.0"
             },
             "suggest": {
                 "firebase/php-jwt": "^5.0 can be used to create and parse tokens",
-                "guzzlehttp/guzzle": "^6.2.1 can be used as an HTTP handler",
+                "guzzlehttp/guzzle": "^6.2.1|^7.0 can be used as an HTTP handler",
                 "lcobucci/jwt": "^3.2 can be used to create and parse tokens",
                 "psr/cache-implementation": "to cache fetched remote public keys",
                 "psr/simple-cache-implementation": "to cache fetched remote public keys"
@@ -543,7 +543,7 @@
                 "google",
                 "token"
             ],
-            "time": "2019-10-16T21:09:11+00:00"
+            "time": "2020-01-14T16:43:39+00:00"
         },
         {
             "name": "lcobucci/jwt",
