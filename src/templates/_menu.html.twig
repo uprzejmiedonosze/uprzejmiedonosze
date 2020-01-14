@@ -37,7 +37,6 @@
         <li data-icon="home">
             <a {% if config.menu == 'index' %}class="active"{% endif %}
                 href="/">Strona główna</a></li>
-    {% if config.auth is not defined %}
         <li class="subpage" data-icon="false">
             <a data-ajax="false" {% if config.menu == 'galeria' %}class="active"{% endif %}
                 href="/galeria.html">– galeria</a></li>
@@ -61,7 +60,6 @@
                 href="/projekt.html">– o projekcie</a></li>
         <li data-icon="comment">
             <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a></li>
-    {% endif %}
 
         <li data-role="list-divider"></li>
         {% if general.isLoggedIn %}
