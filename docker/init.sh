@@ -1,4 +1,6 @@
 /etc/init.d/memcached start
 /etc/init.d/php7.3-fpm start
 
-exec nginx-debug -g 'daemon off;'
+xtail -f /var/log/uprzejmiedonosze.net/ &
+
+exec nginx -g 'daemon off;'
