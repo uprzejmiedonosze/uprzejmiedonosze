@@ -264,6 +264,11 @@ SQL;
         }
         $this->_moveFileToCDN2("cdn/{$app->id}.pdf", "$baseFileName.pdf", $dryRun);
 
+        $app->initStatements();
+        if(!isset($app->statements->gallery)){
+            $app->statements->gallery = false;
+        }
+
         if($dryRun){
             return;
         }

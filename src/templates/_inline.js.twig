@@ -37,7 +37,6 @@ function _sendViaAPI(appId){
     $.mobile.loading( "show", { text: 'Wysyłam...', textVisible: true } );
 
     $.post("/api/api.html", { id: appId, action: "send", api: true }, function(){
-        $('#moje-zgloszenia').removeClass('ui-disabled');
         _updateStatus(appId, 'confirmed-sm');
         $.mobile.loading( "hide" );
         showMessage('Wysłane', 1000);
@@ -46,6 +45,22 @@ function _sendViaAPI(appId){
         $.mobile.loading( "hide" );
         showMessage('Nie udało się wysłać zgłoszenia! ' + e.responseJSON.message, 4000);
     });
+}
+
+/**
+ * Allow application to be placed in the gallery.
+ * 
+ * @param appId application id to be added to gallery
+ */
+function addToGallery(appId){
+    $.post('/api/api.html', {action: 'addToGallery', id: appId}).done(function() {
+        $('.addToGallery').hide();
+        $('.addedToGallery').show();
+    });
+}
+
+function ignoreGallery(){
+    $('.addToGallery').hide();
 }
 
 /**

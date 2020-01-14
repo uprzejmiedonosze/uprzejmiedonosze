@@ -17,23 +17,52 @@
 
 {% set sm = app.guessSMData() %}
 
-{% if sm.hasAPI %}
+{% if appsCount > 3 and sm.email %}
+<div class="addToGallery">
+    <h4>Dodaj to zdjęcie do galerii</h4>
+    <p>Dodaj zdjęcie do <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>.
+    Udostępnimy zdjęcie z kontekstem, numer rejestracyjny (który nie jest daną osobową!), miasto, twój komentarz oraz rodzaj wykroczenia.</p>
 
-    <p>Co dalej? <b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
+    <span id="{{ app.id }}">
+        <a href="#" onclick="addToGallery('{{ app.id }}')"
+            class="ui-btn ui-mini ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
+            ui-nodisc-icon ui-icon-grid try">Dodaj do galerii</a>
+    </span>
+    <a href="#" onclick="ignoreGallery()"
+        class="ui-btn ui-mini ui-corner-all ui-btn-inline">Zignoruj</a>
+    <div class="tumblr_posts dziekujemy">
+        <div class="galleryItem" id="{{app.id}}">
+            <img src="{{ app.contextImage.thumb }}" width="600" height="400">
+            <p class="desc">
+                <b>{{ app.carInfo.plateId }}</b>
+                {{ app.address.city}} – {{ app.getCategory.getShort }}
+                {% if app.userComment %}
+                    <br />{{ app.userComment }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div><!-- class="addToGallery" -->
+<div class="addedToGallery" style="display: none;">
+<h4>Zdjęcie zostało dodane do galerii</h4>
+<p>Dziękujemy za zgłoszenie zdjęcia do
+<a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>. Twoje zdjęcie oczekuje
+na moderację i zostanie opublikowane w przeciągu 24h.
+</div>
+{% endif %}
+
+{% if sm.hasAPI %}
+    <h4>Co dalej?</h4>
+    <p><b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
     Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
     zgłoszenia. {{ sm.hint | raw }}</p>
 
     <h4>Wyślij swoje zgłoszenie do SM {{ sm.city }}:</h4>
     <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
-        class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail ui-corner-all cta">Wyślij bezpośrednio do SM</a>
-    <a id="moje-zgloszenia" href="moje-zgloszenia.html" data-ajax="false"
-        class="ui-btn ui-btn-inline ui ui-btn-inline ui-corner-all ui-disabled">Zobacz swoje zgłoszenia</a>
-    <script>
-    {{ include('_inline.js.twig') }}
-    </script>
-
+        class="ui-btn ui-mini ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail ui-corner-all cta">Wyślij bezpośrednio do SM</a>
 {% else %}
-    <p>Co dalej? <b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
+    <h4>Co dalej?</h4>
+    <p><b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
         Na szczęście nie musisz wysyłać każdego zgłoszenia osobno. Możesz
         wygenerować ich kilka/kilkanaście, i wysłać je dogodnym dla siebie cyklu.</p>
 
@@ -44,7 +73,6 @@
         <p>Jeśli masz pytania do mnie, skontaktuj się pod adresem
             <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
         </p>
-        <a href="moje-zgloszenia.html" data-ajax="false" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz swoje zgłoszenia</a>
     {% else %}
         <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
             Skontaktuj proszę się z nami pod adresem
@@ -53,9 +81,11 @@
             Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
             oraz adres email Straży Miejskiej.
         </p>
-
-        <a href="wysylka.html" data-ajax="false" class="ui-btn ui-corner-all ui-btn-inline try">Zobacz zgłoszenia do wysłania</a>
     {% endif %}
 {% endif %}
+
+<script>
+{{ include('_inline.js.twig') }}
+</script>
 
 {% endblock %}

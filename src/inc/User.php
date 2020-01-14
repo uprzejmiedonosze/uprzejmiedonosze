@@ -108,7 +108,7 @@ class User extends JSONObject{
     * Super ugly function returning true for admins.
     */
     function isAdmin(){
-        return $this->data->email == 'szymon@nieradka.net' || $this->data->email == 'szymon.nieradka@polidea.com';
+        return $this->data->email == 'szymon@nieradka.net' || $this->data->email == 'fake@email.com';
     }
 
     /**

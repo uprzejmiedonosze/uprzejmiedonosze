@@ -38,6 +38,7 @@ class Application extends JSONObject{
         }
         $this->statements = new JSONObject();
         $this->statements->witness = false;
+        $this->statements->gallery = null;
     }
 
     /**
@@ -45,6 +46,18 @@ class Application extends JSONObject{
      */
     public function getDate(){
         return (new DateTime($this->date))->format('Y-m-d');
+    }
+
+    /**
+     * Returns date in "January 2017" format.
+     */
+    public function getMonthYear(){
+        $date = new DateTime($this->date);
+        $MONTHS = [
+            'styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec',
+            'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'
+        ];
+        return $MONTHS[intval($date->format('m')) - 1] . ' '. $date->format('Y');
     }
 
     /**
@@ -73,6 +86,7 @@ class Application extends JSONObject{
         $this->user->number = $user->number;
         return $this->user->number;
     }
+
     /**
      * Returns 'około godziny' or 'o godzinie'.
      */
@@ -92,7 +106,7 @@ class Application extends JSONObject{
             throw new Exception("Odmawiam ustawienia statusu na $status");
         }
         if(!in_array($status, $this->getStatus()->allowed)){
-            throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status");
+            throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status dla zgłoszenia {$this->id}");
         }
         if(!isset($this->statusHistory)){
             $this->statusHistory = [];
@@ -320,6 +334,17 @@ class Application extends JSONObject{
         $this->comments[date(DT_FORMAT)] = new JSONObject();
         $this->comments[date(DT_FORMAT)]->source = $source;
         $this->comments[date(DT_FORMAT)]->comment = $comment;
+    }
+
+    /**
+     * Returns info whether the app was allowed to be added
+     * to gallery.
+     * 
+     * returns: boolean
+     */
+    public function addedToGallery(){
+        return ((bool) $this->statements) && ((bool)$this->statements->gallery);
+
     }
 }
 

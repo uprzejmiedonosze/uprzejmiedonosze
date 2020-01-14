@@ -122,23 +122,20 @@
         {% endfor %}
             <p>Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
         </div>
-        <label class="section">Oświadczenie</label>
+        <label class="section">Oświadczenia</label>
 
 {% set witness = true %}
 {% if app.statements is not defined or not app.statements.witness %}
     {% set witness = false %}
 {% endif %}
         <label for="witness">
-            <span id="witnessY" {% if witness %}style="display: none;"{% endif %}>
-                <i>Nie {{ app.guessUserSex.bylam }} świadkiem momentu parkowania.</i></span>
-            <span id="witnessN" {% if not witness %}style="display: none;"{% endif %}>
-                <i>{{ app.guessUserSex.bylam|capitalize }} świadkiem parkowania.</i></span>
+            <i>{{ app.guessUserSex.bylam|capitalize }} świadkiem momentu parkowania:</i></span>
         </label>
         <input data-mini="true" type="checkbox" data-role="flipswitch" name="witness" id="witness"
-            {% if not witness %}
+            data-on-text="tak" data-off-text="nie"
+            {% if witness %}
                 checked
-            {% endif %}
-            data-on-text="" data-off-text="">
+            {% endif %} />
     </div> <!-- ui-field-contain -->
 </form>
 
