@@ -54,7 +54,8 @@ function _sendViaAPI(appId){
  */
 function addToGallery(appId){
     $.post('/api/api.html', {action: 'addToGallery', id: appId}).done(function() {
-        $('.addToGallery').hide();
+        $('.application-details .addToGallery').hide();
+        $('#' + appId + ' .addToGallery').hide();
         $('.addedToGallery').show();
     });
 }
