@@ -106,7 +106,7 @@ class Application extends JSONObject{
             throw new Exception("Odmawiam ustawienia statusu na $status");
         }
         if(!in_array($status, $this->getStatus()->allowed)){
-            throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status");
+            throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status dla zgłoszenia {$this->id}");
         }
         if(!isset($this->statusHistory)){
             $this->statusHistory = [];
