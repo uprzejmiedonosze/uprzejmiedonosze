@@ -1,5 +1,6 @@
-<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
+
 <script>
 {% if '%HOST%' == 'staging.uprzejmiedonosze.net' %}
     var config = {
@@ -8,7 +9,8 @@
         databaseURL: "https://uprzejmiedonosze-1494607701827.firebaseio.com",
         projectId: "uprzejmiedonosze-1494607701827",
         storageBucket: "uprzejmiedonosze-1494607701827.appspot.com",
-        messagingSenderId: "509860799944"
+        messagingSenderId: "509860799944",
+        appId: "1:509860799944:web:5e24b16b56db3d44d98cfd"
     };
 {% elseif '%HOST%' == 'uprzejmiedonosze.net' %}
     var config = {

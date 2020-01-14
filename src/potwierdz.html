@@ -27,7 +27,7 @@ if(!isset($application->carInfo)) $application->carInfo = new stdClass();
 $application->carInfo->plateId = strtoupper(trim($post["plateId"]));
 $application->userComment = capitalizeSentence($post["comment"]);
 $application->initStatements();
-$application->statements->witness = !isset($post['witness']);
+$application->statements->witness = isset($post['witness']);
 $application->setStatus("ready");
 
 $storage->saveApplication($application);

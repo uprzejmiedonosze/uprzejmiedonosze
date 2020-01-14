@@ -38,6 +38,9 @@
             <a {% if config.menu == 'index' %}class="active"{% endif %}
                 href="/">Strona główna</a></li>
         <li class="subpage" data-icon="false">
+            <a data-ajax="false" {% if config.menu == 'galeria' %}class="active"{% endif %}
+                href="/galeria.html">– galeria</a></li>
+        <li class="subpage" data-icon="false">
             <a {% if config.menu == 'przepisy' %}class="active"{% endif %}
                 href="/przepisy.html">– przepisy</a></li>
         <li class="subpage" data-icon="false">
@@ -57,7 +60,7 @@
                 href="/projekt.html">– o projekcie</a></li>
         <li data-icon="comment">
             <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a></li>
-        
+
         <li data-role="list-divider"></li>
         {% if general.isLoggedIn %}
         <li data-icon="user">

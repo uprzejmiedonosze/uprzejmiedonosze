@@ -21,16 +21,17 @@
     <p>{{ app.userComment }}</p>
 {% endif %}
 
-{% if config.appActionButtons %}
+{% if config.appActionButtons and (not app.addedToGallery or app.status == 'confirmed') %}
         <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <a target="_blank" data-ajax="false" href="/ud-{{ app.id }}.html" class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-eye">szczegóły</a>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-location"
-                data-ajax="false" target="_blank">mapa</a>
+            {% if not app.addedToGallery %}
+            <a href="#" onclick="addToGallery('{{ app.id }}')"
+                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
+                ui-nodisc-icon ui-icon-grid">Dodaj do galerii</a>
+            {% endif %}
             {% if app.status == 'confirmed' %} 
             <a href="/wysylka.html" data-ajax="false"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
-                ui-nodisc-icon ui-icon-mail">wyślij</a>
+                ui-nodisc-icon ui-icon-mail">Wyślij zgłoszenie</a>
             {% endif %}
         </fieldset>
 {% endif %}

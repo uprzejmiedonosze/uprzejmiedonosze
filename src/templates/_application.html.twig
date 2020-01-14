@@ -119,7 +119,7 @@
             {% for date,comment in app.comments %}
                 <li>
                     {{ date|date('Y-m-d H:i') }} <b>{{ comment.source }}</b>:
-                    {{ comment.comment }}
+                    {{ comment.comment | raw }}
                 </li>
             {% endfor %}
             </ul>
