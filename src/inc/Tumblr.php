@@ -17,7 +17,7 @@ function addToTumblr(&$app){
         'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         'format' => 'markdown',
         'tags' => "{$app->address->city}, {$app->carInfo->plateId}",
-        'state' => 'queue',
+        'state' => 'published',
         'date' => $app->date
         );
         
