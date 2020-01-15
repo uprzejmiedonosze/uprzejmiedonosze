@@ -37,6 +37,9 @@ function tumblr() {
           if (this["photo-caption"]) {
             post += "<p>" + this["photo-caption"] + "</p>";
           }
+          if (this["tags"]){
+              post += '<p><i>#' + this["tags"].join(' #') + '</i>';
+          }
           post += "</li>";
           break;
       }
