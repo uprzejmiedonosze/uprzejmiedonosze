@@ -12,11 +12,11 @@ function addToTumblr(&$app){
 
     $data = array(
         'type' => 'photo', 
-        'caption' => "**{$app->carInfo->plateId}**, {$app->address->city} --- {$app->getCategory()->getShort()}"
-            . ( ( $app->userComment ) ? ' ' . $app->userComment: '' ),
+        'caption' => "**{$app->carInfo->plateId}** {$app->address->city} --- {$app->getCategory()->getShort()}"
+            . ( ( $app->userComment ) ? ' ' . $app->userComment: '' ) . "\n\n{$app->getMonthYear()}",
         'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         'format' => 'markdown',
-        'tags' => "{$app->address->city}, {$app->carInfo->plateId}",
+        'tags' => "{$app->address->city}, {$app->carInfo->plateId}, {$app->getYM()}",
         'state' => 'published',
         'date' => $app->date
         );
