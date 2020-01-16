@@ -11,10 +11,12 @@
 <div class="tumblr_posts">
 </div>
 
+<p>Więcej pod adresem <a data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">galeria.uprzejmiedonosze.net</a>.</p>
+
 <script>
 function tumblr() {
 
-  $.getJSON("https://galeria.uprzejmiedonosze.net/api/read/json?num=20&callback=?", function(data) {
+  $.getJSON("https://galeria.uprzejmiedonosze.net/api/read/json?num=30&callback=?", function(data) {
 
     $.each(data.posts, function(i, posts) {
       var post = "", postElement;
