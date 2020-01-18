@@ -39,7 +39,8 @@ function generate($template, $parameters){
             'uri' => $_SERVER['REQUEST_URI'],
             'isLoggedIn' => $isLoggedIn,
             'hasApps' => $isLoggedIn && $storage->getCurrentUser()->hasApps(),
-            'isAdmin' => $isLoggedIn && $storage->getCurrentUser()->isAdmin()
+            'isAdmin' => $isLoggedIn && $storage->getCurrentUser()->isAdmin(),
+            'galleryCount' => $storage->getGalleryCount(!isset($_GET['update']))
         ];
     
     if($isLoggedIn){

@@ -398,6 +398,27 @@ SQL;
         }
         return $apps;
     }
+
+    /**
+     * Returns number of applications per city.
+     */
+    public function getGalleryCount($useCache = true){
+        $stats = $this->stats->get("%HOST%-getGalleryCount");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = <<<SQL
+            select count(key) as cnt
+            from applications
+            where json_extract(value, '$.addedToGallery.state') is not null
+SQL;
+
+        $stats = intval($this->db->query($sql)->fetchColumn());
+        $this->stats->set("%HOST%-getGalleryCount", $stats, 0, 600);
+        return $stats;
+    }
+     
 }
 
 ?>
