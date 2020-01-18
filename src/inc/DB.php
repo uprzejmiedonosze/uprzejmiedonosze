@@ -418,6 +418,33 @@ SQL;
         $this->stats->set("%HOST%-getGalleryCount", $stats, 0, 600);
         return $stats;
     }
+
+    /**
+     * Returns number of applications per city.
+     */
+    public function getGalleryByCity($useCache = true){
+        $stats = $this->stats->get("%HOST%-getGalleryByCity");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = <<<SQL
+            select json_extract(value, '$.address.city') as city,
+                count(key) as cnt
+            from applications
+            where json_extract(value, '$.addedToGallery.state') is not null
+                and  json_extract(value, '$.address.city') != ''
+            group by json_extract(value, '$.address.city')
+            order by 2 desc
+            limit 10
+SQL;
+
+        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $this->stats->set("%HOST%-getGalleryByCity", $stats, 0, 600);
+        return $stats;
+    }
+
+    
      
 }
 

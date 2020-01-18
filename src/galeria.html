@@ -1,6 +1,8 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
+logger(print_r($storage->getGalleryByCity(), true));
+
 echo generate('galeria.html.twig', 
     [
         'head' =>
@@ -13,7 +15,8 @@ echo generate('galeria.html.twig',
         ],
         'config' => [
             'menu' => 'galeria',
-            'appActionButtons' => false
+            'appActionButtons' => false,
+            'galleryByCity' => $storage->getGalleryByCity()
         ]
     ]
 );

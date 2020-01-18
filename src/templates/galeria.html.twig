@@ -6,13 +6,19 @@
 {% block main %}
 
 <h2>Galeria Uprzejmie Donoszę</h2>
-<p>Pełna galeria znajduje się pod adresem <a data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">galeria.uprzejmiedonosze.net</a>.</p>
+<p>Pełna galeria, zawierająca obecnie {{ general.galleryCount }} zdjęć, znajduje się pod adresem <a data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">galeria.uprzejmiedonosze.net</a>.</p>
+
+<p>Zdjęcia dla poszczególnych miast:
+{% for city in config.galleryByCity %}
+    <a href="https://galeria.uprzejmiedonosze.net/tagged/{{ city[0] }}" data-ajax="false">#{{ city[0] }}</a>
+{% endfor %}
+</p>
 
 <div class="tumblr_posts">
     <div class="loader"></div>
 </div>
 
-<p>Więcej pod adresem <a data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">galeria.uprzejmiedonosze.net</a>.</p>
+<a data-ajax="false" href="https://galeria.uprzejmiedonosze.net/" class="ui-btn ui-corner-all ui-btn-inline try">Odwiedź pełną galerię</a>
 
 <script>
 function tumblr() {
@@ -39,9 +45,6 @@ function tumblr() {
           post = "<div class=\"galleryItem\"><a href='" + this["url-with-slug"] + "'><img src='" + this["photo-url-500"] + "'></a>";
           if (this["photo-caption"]) {
             post += "<p>" + this["photo-caption"] + "</p>";
-          }
-          if (this["tags"]){
-              post += '<p><i>#' + this["tags"].join(' #') + '</i>';
           }
           post += "</li>";
           break;
