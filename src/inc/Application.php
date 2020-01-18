@@ -49,14 +49,6 @@ class Application extends JSONObject{
     }
 
     /**
-     * Returns application date in Y-m format.
-     */
-    public function getYM(){
-        return (new DateTime($this->date))->format('Y-m');
-    }
-
-
-    /**
      * Returns date in "January 2017" format.
      */
     public function getMonthYear(){

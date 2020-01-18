@@ -16,7 +16,7 @@ function addToTumblr(&$app){
             . ( ( $app->userComment ) ? ' ' . $app->userComment: '' ) . "\n\n*-- {$app->getMonthYear()}*",
         'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
         'format' => 'markdown',
-        'tags' => "{$app->address->city}, {$app->carInfo->plateId}, {$app->getYM()}",
+        'tags' => "{$app->carInfo->plateId}, {$app->address->city}",
         'state' => 'published',
         'date' => $app->date
         );
