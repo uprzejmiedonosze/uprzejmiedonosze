@@ -54,14 +54,14 @@ function _sendViaAPI(appId){
  */
 function addToGallery(appId){
     $.post('/api/api.html', {action: 'addToGallery', id: appId}).done(function() {
-        $('.application-details .addToGallery').hide();
+        $('div.addToGallery').hide();
         $('#' + appId + ' .addToGallery').hide();
         $('.addedToGallery').show();
     });
 }
 
 function ignoreGallery(){
-    $('.addToGallery').hide();
+    $('div.addToGallery').hide();
 }
 
 /**
