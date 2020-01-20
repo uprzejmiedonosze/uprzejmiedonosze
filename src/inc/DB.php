@@ -382,12 +382,14 @@ SQL;
             throw new Exception('Dostęp zabroniony.');
         }
 
-        $sql = "select key, value "
-            . "from applications "
-            . "where json_extract(value, '$.status') not in ('draft', 'ready', 'archived') "
-            . "and json_extract(value, '$.statements.gallery') is not null "
-            . "and json_extract(value, '$.addedToGallery') is null "
-            . "order by json_extract(value, '$.added') desc ";
+		  $sql = <<<SQL
+				select key, value 
+            from applications
+            where json_extract(value, '$.status') not in ('draft', 'ready', 'archived')
+            and json_extract(value, '$.statements.gallery') is true
+            and json_extract(value, '$.addedToGallery') is null
+            order by json_extract(value, '$.added') desc;
+SQL;
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
