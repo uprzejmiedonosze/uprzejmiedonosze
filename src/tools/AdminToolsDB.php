@@ -233,9 +233,6 @@ SQL;
         echo "Migruję zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
 
         if(!isset($app->user->number)){
-            if($app->user->email == 'zibi@nora.pl'){
-                $app->user->email = 'tapiau@gmail.com';
-            }
             $user = new User($this->getStore('users')->get($app->user->email));
             $app->user->number = $user->number;
         }
@@ -307,5 +304,5 @@ $db->removeReadyApps(30, false);
 
 //$db->removeUser('szymon@nieradka.net', false);
 
-$db->upgradeAllApps('1.0.1', false);
+$db->upgradeAllApps('1.0.2', false);
 ?>
