@@ -76,6 +76,7 @@ staging: HOST := $(STAGING_HOST)
 staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	$(create-symlink)
 
 prod: HOST := $(PROD_HOST)
 prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
@@ -83,6 +84,7 @@ prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to 
 	@git tag -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	$(create-symlink)
 	@make clean
 
 export: $(DIRS) minify ## Exports files for deployment.
@@ -176,6 +178,11 @@ endef
 
 define lint-twig
 @~/.composer/vendor/bin/twig-lint lint --quiet $<
+endef
+
+define create-symlink
+@echo "==> Creating a symlink in logs directory [$(TAG_NAME).log] -> [$@.log]"
+@ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log"
 endef
 
 # GIT
