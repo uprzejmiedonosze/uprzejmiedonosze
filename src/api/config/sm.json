@@ -873,7 +873,7 @@
   "kąty wrocławskie": {
     "address": [
       "Komisariat Policji w Kątach Wrocławskich",
-      "ul.1-go Maja 16",
+      "ul. 1-go Maja 16",
       "55-080 Kąty Wrocławskie"
     ],
     "email": "dzielnicowy.katy-wroclawskie3@wroclaw.wr.policja.gov.pl",
@@ -884,11 +884,22 @@
   "mokronos dolny": {
     "address": [
       "Komisariat Policji w Kątach Wrocławskich",
-      "ul.1-go Maja 16",
+      "ul. 1-go Maja 16",
       "55-080 Kąty Wrocławskie"
     ],
     "email": "dzielnicowy.katy-wroclawskie3@wroclaw.wr.policja.gov.pl",
     "city": "Kąty Wrocławskie",
+    "hint": null,
+    "api": false
+  },
+  "nowa ruda": {
+    "address": [
+      "Straż Miejska Nowa Ruda",
+      "Rynek 11",
+      "57-400 Nowa Ruda"
+    ],
+    "email": "sm@um.nowaruda.pl",
+    "city": "Nowa Ruda",
     "hint": null,
     "api": false
   },
