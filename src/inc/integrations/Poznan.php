@@ -9,7 +9,10 @@ class Poznan extends CityAPI {
         } else {
             $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
         }
-        $auth = "Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y="; // tylko do testowego API
+        $header = array(
+            "Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=", // tylko do testowego API
+            "Content-Type: multipart/form-data"
+        );
         $data = array(
             'lat' => $application->getLat(),
             'lon' => $application->getLon(),
@@ -19,7 +22,7 @@ class Poznan extends CityAPI {
                 '86808'  // Ruch drogowy - parkowanie
             ),
             'name' => $application->getFirstName(), //imię zgłaszającego, pole obowiązkowe do 128 znaków
-            'surname' => $application->getLastName(), //nazwisko zgłaszającego, pole obowiązkowe do ,128 znaków
+            'surname' => $application->getLastName(), //nazwisko zgłaszającego, pole obowiązkowe do 128 znaków
             'email' => $application->user->email, //email użytkownika, pole obowiązkowe
             'subject' => $application->getTitle(), //temat zgłoszenia, pole obowiązkowe do 256 znaków
             'text' => trim(preg_replace('/\s+/', ' ', parent::formatMessage($application, 4000))),
@@ -27,7 +30,7 @@ class Poznan extends CityAPI {
             'key' => '85951ba0a63d1051a09659ea0a9d8391' //klucz aplikacji, pole obowiązkowe
         );
         $application->setStatus('confirmed-waiting');
-        $output = parent::curlSend($url, $auth, $data, $application);
+        $output = parent::curlShellSend($url, $header, $data, $application);
 
         if(isset($output['response']['error_msg'])){
             raiseError($output['response']['error_msg'], 500);

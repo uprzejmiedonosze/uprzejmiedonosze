@@ -20,49 +20,40 @@ abstract class CityAPI {
         ]), 0, $limit);
     }
 
-    function curlSend($url, $auth, &$data, &$application){
-        $curl = curl_init();
+    function curlShellSend($url, $header, &$data, &$application){
         $root = realpath('/var/www/%HOST%/');
+        $contextImage = "$root/{$application->contextImage->url}";
+        $json = json_encode($data);
 
-        $postFields = array(
-            'json' => json_encode($data),
-            'uz_file' => [
-                new CURLFile("$root/" . $application->contextImage->url, "image/jpg", $application->getAppImageFilenamePrefix() . '-kontekst.jpg'),
-                new CURLFile("$root/" . $application->carImage->url, "image/jpg", $application->getAppImageFilenamePrefix() . '-tablica.jpg')
-            ]);
+        $curl = "curl -s --location --request POST 'https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity' "
+            . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
+            . "--header 'Content-Type: multipart/form-data' "
+            . "--form 'json={$json}' "
+            . '--form uz_file=@\\"' . $contextImage . '\\"';
+        
+        
+        $response = exec("$curl 2>&1", $retArr, $retVal);
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => http_build_query($postFields),
-            CURLOPT_HTTPHEADER => array($auth),
-            CURLOPT_SAFE_UPLOAD => true
-        ));
-
-        $response = curl_exec($curl);
-
-        if(curl_errno($curl)){
-            $error = "Błąd komunikacji z API {$sm->api}: " . curl_error($curl);
-            curl_close($curl);
-            raiseError($error, 500);
+        if($retVal !== 0){
+            $error = "Błąd komunikacji z API {$application->address->city}: $response";
         }
-        curl_close($curl);
 
-        $json = @json_decode($response, true);
+        $json = json_decode($response, true);
         if(!json_last_error() === JSON_ERROR_NONE){
-            $error = "Błąd komunikacji z API {$sm->api}: " . json_last_error_msg();
+            $error = "Błąd komunikacji z API {$application->address->city}: " . json_last_error_msg();
+        }
+
+        if(isset($error)){
+            logger($curl, true);
+            logger($response, true);
             raiseError($error, 500);
         }
 
         // zaznaczam na wszelki wypadek, ale poszczególne implementacje powinny to nadpisać
         $application->sentViaAPI = $json;
-
         return $json;
-
     }
+
 }
 
 require(__DIR__ . '/Poznan.php');

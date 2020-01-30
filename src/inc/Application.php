@@ -250,6 +250,7 @@ class Application extends JSONObject{
         // Remove HTML entities
         $string = preg_replace('/&[a-zA-Z]+;/iu', '', $this->userComment);
         $string = str_replace("\\", " ", $string);
+        $string = str_replace("'", " ", $string);
         return $string;
     }
 
