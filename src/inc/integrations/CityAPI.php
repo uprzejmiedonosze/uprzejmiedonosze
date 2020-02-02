@@ -25,12 +25,11 @@ abstract class CityAPI {
         $contextImage = "$root/{$application->contextImage->url}";
         $json = json_encode($data);
 
-        $curl = "curl -s --location --request POST 'https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity' "
+        $curl = "curl -s --location --request POST '$url' "
             . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
             . "--header 'Content-Type: multipart/form-data' "
             . "--form 'json={$json}' "
             . '--form uz_file=@\\"' . $contextImage . '\\"';
-        
         
         $response = exec("$curl 2>&1", $retArr, $retVal);
 
