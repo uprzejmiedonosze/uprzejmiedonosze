@@ -23,7 +23,8 @@ echo generate('wysylka.html.twig',
             'auth' => true,
             'menu' => 'wysylka',
             'appActionButtons' => true,
-            'wysylka' => true
+            'wysylka' => true,
+            'isIOS' => isIOS()
         ],
         'apps' => $apps,
         'cities' => $cities,

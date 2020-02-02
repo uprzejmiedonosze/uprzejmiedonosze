@@ -73,13 +73,15 @@ Pozdrawiam,
 
             <ol>
                 <li>Najpierw 
-                    <a id="download" href="all-active-apps.pdf?readyApps" download="true" data-ajax="false"
-                    class="ui-btn ui-corner-all ui-btn-inline ui-mini try">pobierz</a>
+                    <a id="download" href="all-active-apps.pdf?readyApps"
+                        {% if config.isIOS %}target="_blank"{% else %}download="true"{% endif %}
+                        data-ajax="false"
+                        class="ui-btn ui-corner-all ui-btn-inline ui-mini try">pobierz</a>
                     {{ paczke }};
                 </li>
                 <li class="ui-disabled">Następnie 
                     <a id="send" data-ajax="false" target="_blank"
-                        href="mailto:{{ cities | first.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}"
+                        href="mailto:{{ cities | first.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}"
                         class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
                     i wyślij email do SM {{ cities | first.city }} (jeśli otworzył Ci się pusty email, 
                     <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
