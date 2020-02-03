@@ -197,7 +197,7 @@ SQL;
      */
     public function getRecydywa($plate){
         $recydywa = $this->recydywa->get($plate);
-        if(!$recydywa){
+        if(null == $recydywa){
             $recydywa = $this->updateRecydywa($plate);
         }
         return intval($recydywa);
