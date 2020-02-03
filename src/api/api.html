@@ -271,7 +271,7 @@ function _upload(){
             $recydywa = $storage->getRecydywa($result["plate"]);
             $application->carInfo->plateId = strtoupper($result["plate"]);
             $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
-            $application->carInfo->brand = ucfirst($result["vehicle"]['make'][0]['name']);
+            $application->carInfo->brand = @ucfirst($result["vehicle"]['make'][0]['name']);
             $application->carInfo->recydywa = $recydywa;
         }
     }else if($pictureType == 'contextImage'){
