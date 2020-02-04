@@ -142,7 +142,7 @@ class Application extends JSONObject{
         if(!isset($this->carInfo)){
             return false;
         }
-        if(!$this->carInfo->plateId){
+        if(!@$this->carInfo->plateId){
             return false;
         }
         if(isset($this->carInfo->plateIdFromImage) 
