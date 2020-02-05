@@ -124,7 +124,7 @@ function generate_pdf($application, $destFile, $type) {
     exec($cmd, $output, $ret);
     unset($output);
 
-   	@unlink($tex_f);
+    @unlink($tex_f);
     @unlink($aux_f);
     @unlink($log_f);
     @unlink($out_f);

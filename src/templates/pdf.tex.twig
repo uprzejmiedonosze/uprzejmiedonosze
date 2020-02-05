@@ -1,4 +1,4 @@
-\documentclass[10pt]{letter}
+\documentclass[10pt]{article}
 
 \usepackage{lmodern}
 \usepackage[pdftex,colorlinks=true,urlcolor=black,linkcolor=black]{hyperref}
@@ -6,19 +6,25 @@
 \usepackage[pdftex]{graphicx}
 \usepackage[TS1,OT1,T1]{fontenc}
 \usepackage[polish]{babel}
+%\usepackage{polski}
 \usepackage[utf8]{inputenc}
+\usepackage[hang,flushmargin,perpage]{footmisc} 
 
 \usepackage{geometry}
 \geometry{
-	paper=a4paper,
-	top=1.5cm,
-	bottom=1.5cm,
-	left=2.5cm,
-	right=2.5cm,
+    paper=a4paper,
+    top=4cm,
+    bottom=1.5cm,
+    left=2cm,
+    right=2cm,
 }
 \renewcommand\familydefault{\sfdefault}
-\setlength{\columnseprule}{0.4pt}
+\setlength{\columnseprule}{0pt}
 \frenchspacing
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.0pt}
 
 {% block commands %}{% endblock %}
 

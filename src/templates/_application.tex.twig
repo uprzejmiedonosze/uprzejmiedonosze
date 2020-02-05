@@ -1,10 +1,10 @@
 {% block commands %}
     \renewcommand{\n}{ {{ app.user.name }} }
-    \date{ Dnia {{ app.getDate }} } 
-    \address{\n{}\\{{ app.user.address }}\\Email: {{ app.user.email }}\\{% if app.user.msisdn %}Tel: {% endif %}{{ app.user.msisdn }} }
+    \rhead{ Dnia {{ app.getDate }} }
 {% endblock %}
 
-\begin{letter}{ {\large {{ app.guessSMData().getLatexAddress() }} } } 
+\vspace{\stretch{3}}\noindent
+{\large {{ app.guessSMData().getLatexAddress() }} }
 
 {% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html}' %}
 {% set mapUrl = '{https://www.google.com/maps/search/?api=1&query=' ~ app.address.latlng ~ '}' %}
@@ -14,11 +14,15 @@
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
 {% set address      = '\\href' ~ appUrl ~ '{\\underline{' ~ app.address.address ~ '}}' %}
 
-\opening{ {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} }{% if app.sentViaAPI is defined %}\footnote{Pamiętaj,
-że to zgłoszenie zostało wysłane do SM {{ app.guessSMData.city }} poprzez API. Odpowiedź SM to {{ app.sentViaAPI }}.{% endif %}} } }
-	W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
+\vspace{\stretch{2}}
+\begin{center}
+{\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} }{% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj,
+że to zgłoszenie zostało wysłane do SM {{ app.guessSMData.city }} poprzez API. Odpowiedź SM to {{ app.sentViaAPI }}.{% endif %}} }
+\end{center}
+
+    W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia pojazdu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
-    {{ address }}{% if app.sentViaAPI is not defined %}\footnote{Adres oraz mapa, są równocześnie linkami prowadzącymi
+    {{ address }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej #}
     {# ale równocześnie chowam hint dotyczący mapy – bo zgłoszenia robią się dwustronnicowe #}
     do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
@@ -30,26 +34,34 @@
 
     Jestem {{ app.guessUserSex.swiadoma }} odpowiedzialności karnej z art. 233 §1–§3 Kodeksu karnego
     oraz treści art. 182, 183 i 185 Kodeksu Postępowania Karnego.
-
 {% if app.user.exposeData is not defined or not app.user.exposeData %}
-    Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca
+    Równocześnie proszę o \textbf{niezamieszczanie} w protokole danych dotyczących mojego miejsca
     zamieszkania.
 {% endif %}
 
+\vspace{0.3cm}\noindent
+Z poważaniem,
 
-    \closing{\textit{Z poważaniem,\\\n{} } }
+\vspace{0.3cm}
+{\it \n{}
 
+{{ app.user.address }}
+
+Email: {{ app.user.email }}
+
+{% if app.user.msisdn %}Tel: {% endif %}{{ app.user.msisdn }} }
+
+\vspace{\stretch{3}}\noindent
     \href{{ appUrl }}
         {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ contextImage }} }
     \href{{ appUrl }}
         {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ carImage }} }
 
+\vspace{0.3cm}\noindent
     \href{{ mapUrl|raw }}
         {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true]{{ mapImage }} }
     {% if app.shouldIncludePlateImage %}
     {% set plateImage   = '{' ~ root ~ '/' ~ app.carInfo.plateImage ~ '}' %}
     \includegraphics[width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
     {% endif %}
-
-
-\end{letter}
+\vspace{\stretch{1}}
