@@ -86,6 +86,10 @@ na moderację i zostanie opublikowane w przeciągu 24h.
 
 <script>
 {{ include('_inline.js.twig') }}
+
+    $(document).on('pageshow', function () {
+        ga('send', 'event', { eventCategory: 'pageshow', eventAction: 'dziekujemy'});
+    });
 </script>
 
 {% endblock %}

@@ -419,7 +419,6 @@ function sendFile(fileData, id) {
     });
 }
 
-
 /* ############################## DATETIME ############################## */
 
 function setDateTime(dateTime, fromPicture = true) {
