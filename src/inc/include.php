@@ -1,6 +1,5 @@
 <?PHP
 require_once(__DIR__ . '/utils.php');
-ini_set('memcached.sess_locking', '0');
 session_start();
 
 require(__DIR__ . '/firebase.php');
