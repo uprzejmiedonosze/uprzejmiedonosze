@@ -154,5 +154,8 @@
 <script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
 <script>
     setAddressByLatLngString('{{ app.address.latlng ?? config.lastLocation }}');
+    $(document).on('pageshow', function () {
+        ga('send', 'event', { eventCategory: 'pageshow', eventAction: 'nowe-zgloszenie'});
+    });
 </script>
 {% endblock %}

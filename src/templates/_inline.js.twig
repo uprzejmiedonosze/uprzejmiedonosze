@@ -25,6 +25,7 @@ function setStatus(appId, status){
     $.post('/api/api.html', {action: status, id: appId}).done(function() {
         _updateStatus(appId, status);
     });
+    ga('send', 'event', { eventCategory: 'js', eventAction: 'setStatus', eventLabel: status});
 }
 
 /**
@@ -40,10 +41,12 @@ function _sendViaAPI(appId){
         _updateStatus(appId, 'confirmed-sm');
         $.mobile.loading( "hide" );
         showMessage('Wysłane', 1000);
+        ga('send', 'event', { eventCategory: 'js', eventAction: 'sendViaAPI'});
     }).fail(function (e){
         $("#send-" + appId).removeClass('ui-disabled');
         $.mobile.loading( "hide" );
         showMessage('Nie udało się wysłać zgłoszenia! ' + e.responseJSON.message, 4000);
+        ga('send', 'event', { eventCategory: 'js-error', eventAction: 'sendViaAPI'});
     });
 }
 
@@ -57,11 +60,13 @@ function addToGallery(appId){
         $('div.addToGallery').hide();
         $('#' + appId + ' .addToGallery').hide();
         $('.addedToGallery').show();
+        ga('send', 'event', { eventCategory: 'js', eventAction: 'addToGallery'});
     });
 }
 
 function ignoreGallery(){
     $('div.addToGallery').hide();
+    ga('send', 'event', { eventCategory: 'js', eventAction: 'ignoreGallery'});
 }
 
 /**
@@ -95,7 +100,6 @@ function _updateStatus(appId, status){
     $('#' + appId).addClass('status-' + status);
 
     $('#' + appId + ' b.currentStatus').text($('#' + appId + ' .appActionButtons a.status-' + status).text());
-    
 
     updateCounters();
 }
