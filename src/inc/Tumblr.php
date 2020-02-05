@@ -2,6 +2,8 @@
 require_once(__DIR__ . '/../vendor/autoload.php');
 
 function addToTumblr(&$app){
+    $ROOT = '/var/www/%HOST%/';
+
     $client = new Tumblr\API\Client(
         'lc2iFjN4b63gjxGrBvfbUCbIjDYkr2ofvpOrOb83oMuBRfETsP',
         'ViFzg3ewByVMvO0hyOIu3ZgBC8nVma1C0WwqoldhOCTDWVYcYL',
@@ -14,7 +16,8 @@ function addToTumblr(&$app){
         'type' => 'photo', 
         'caption' => "**{$app->carInfo->plateId}** {$app->address->city} --- {$app->getCategory()->getShort()}"
             . ( ( $app->userComment ) ? ' ' . $app->userComment: '' ) . "\n\n*-- {$app->getMonthYear()}*",
-        'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
+        //'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
+        "data" => file_get_contents("$ROOT/{$app->contextImage->url}"),
         'format' => 'markdown',
         'tags' => "{$app->carInfo->plateId}, {$app->address->city}",
         'state' => 'published',
