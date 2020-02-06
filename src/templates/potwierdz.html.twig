@@ -21,4 +21,10 @@
 <form action="/dziekujemy.html" id="form" method="post" data-ajax="true">
     <input type="hidden" id="applicationId" name="applicationId" value="{{ app.id }}"/>
 </form>
+<script>
+    $(document).on('pageshow', function () {
+        ga('send', 'event', { eventCategory: 'pageshow', eventAction: 'potwierdz'});
+    });
+</script>
+
 {% endblock %}
