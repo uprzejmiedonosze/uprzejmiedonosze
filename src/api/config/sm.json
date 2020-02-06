@@ -903,6 +903,17 @@
     "hint": null,
     "api": false
   },
+  "dąbrowa górnicza": {
+    "address": [
+      "Straż Miejska w Dąbrowie Górniczej",
+      "ul. Graniczna 21",
+      "41-300 Dąbrowa Górnicza"
+    ],
+    "email": "dyzsm@dabrowa-gornicza.pl",
+    "city": "Dąbrowa Górnicza",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
