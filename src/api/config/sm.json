@@ -914,6 +914,17 @@
     "hint": null,
     "api": false
   },
+  "będzin": {
+    "address": [
+      "Straż Miejska w Będzinie",
+      "pl. Kolei Warszawsko-Wiedeńskiej 3",
+      "42-500 Będzin"
+    ],
+    "email": "strazmiejska@um.bedzin.pl",
+    "city": "Będzin",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
