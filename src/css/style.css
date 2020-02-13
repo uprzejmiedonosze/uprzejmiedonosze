@@ -670,13 +670,6 @@ div.galleryItem {
     }
 }
 
-@media (min-width: 60em) {
-    div.galleryItem {
-        flex: 0 0 calc((100% - 6 * 5px) / 3);
-        width: calc((100% - 6 * 5px) / 3);
-    }
-}
-
 div.dziekujemy div.galleryItem {
     max-width: 20em;
 }
@@ -701,6 +694,7 @@ div.galleryAdmin div.galleryItem.decisionfalse {
 div.galleryItem > div.actions {
     text-shadow: none;
     padding: 0 10px;
+    text-align: right;
 }
 
 
