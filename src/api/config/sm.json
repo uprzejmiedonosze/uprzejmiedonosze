@@ -947,6 +947,17 @@
     "hint": null,
     "api": false
   },
+  "radom": {
+    "address": [
+      "Straż Miejska w Radomiu",
+      "ul. Stanisława Moniuszki 9",
+      "26-610 Radom"
+    ],
+    "email": "sekretariat@strazmiejska.radom.pl",
+    "city": "Radom",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
