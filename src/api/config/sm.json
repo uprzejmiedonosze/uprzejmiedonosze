@@ -958,6 +958,17 @@
     "hint": null,
     "api": false
   },
+  "siechnice": {
+    "address": [
+      "Straż Miejska w Siechnicach",
+      "ul. Kolejowa 3",
+      "55-010 Święta Katarzyna"
+    ],
+    "email": "strazmiejska@umsiechnice.pl",
+    "city": "Siechnice",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
