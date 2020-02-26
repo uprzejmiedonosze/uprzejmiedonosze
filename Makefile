@@ -99,13 +99,13 @@ check-branch: ## Detects environment and active branch changes
 		&& exit 1 )
 
 check-git-clean: ## Checks if GIT repository has uncommited changes
-	@test "$(shell git status | grep 'nothing to commit' | wc -l)" = 1 || ( echo "There are uncommitted changes." && exit 1 )
+	@test "$(shell git status | grep 'nothing to commit' | wc -l)" -eq 1 || ( echo "There are uncommitted changes." && exit 1 )
 
 check-branch-master: ## Checks if GIT is on branch master
-	@test "$(shell git status | grep 'origin/master' | wc -l)" = 1 || ( echo "Not on branch master." && exit 1 )
+	@test "$(shell git status | grep 'origin/master' | wc -l)" -eq 1 || ( echo "Not on branch master." && exit 1 )
 
 check-branch-staging: ## Checks if GIT is on branch master
-	@test "$(shell git status | grep 'origin/staging' | wc -l)" = 1 || ( echo "Not on branch staging." && exit 1 )
+	@test "$(shell git status | grep 'origin/staging' | wc -l)" -eq 1 || ( echo "Not on branch staging." && exit 1 )
 
 minify: check-branch minify-css minify-js process-html minify-config process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
