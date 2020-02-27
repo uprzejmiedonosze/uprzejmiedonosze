@@ -205,7 +205,7 @@
       "ul. Bohaterów Monte Cassino 1",
       "11-200 Bartoszyce"
     ],
-    "email": "urzad.miasta@bartoszyce.pl",
+    "email": "jerzyszostak@bartoszyce.pl",
     "city": "Bartoszyce",
     "hint": null,
     "api": null
@@ -966,6 +966,28 @@
     ],
     "email": "strazmiejska@umsiechnice.pl",
     "city": "Siechnice",
+    "hint": null,
+    "api": false
+  },
+  "sędławki": {
+    "address": [
+      "Komenda Powiatowa Policji w Bartoszycach",
+      "ul. Warszawska 9",
+      "11-200 Bartoszyce"
+    ],
+    "email": "komendant@bartoszyce.ol.policja.gov.pl",
+    "city": "Sędławki",
+    "hint": "Gmina Sędławki jest obsługiwana przez komendą Policji w Bartoszycach.",
+    "api": false
+  },
+  "głogów": {
+    "address": [
+      "Komenda Powiatowa Policji w Głogowie",
+      "ul. Obrońców Pokoju 17",
+      "67-200 Głogów"
+    ],
+    "email": "kpp.glogow@glogow.policja.gov.pl",
+    "city": "Głogów",
     "hint": null,
     "api": false
   },
