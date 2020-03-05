@@ -991,6 +991,17 @@
     "hint": null,
     "api": false
   },
+  "słubice": {
+    "address": [
+      "Straż Miejska w Słubicach",
+      "ul. Akademicka 1",
+      "69-100 Słubice"
+    ],
+    "email": "ksm@slubice.pl",
+    "city": "Słubice",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
