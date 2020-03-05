@@ -204,18 +204,25 @@ SQL;
 
     /**
      * Returns all applications by user.
+     * 
+     * @email
+     * @onlyWithNumber - ignore drafts and ready apps
      */
-    private function _getAllApplicationsByEmail($email){
+    private function _getAllApplicationsByEmail($email, $onlyWithNumber = false){
+
+        $onlyWithNumberSQL = ($onlyWithNumber)? " and json_extract(value, '$.status') not in ('ready', 'draft')": "";
+
         $sql = <<<SQL
             select key, value
             from applications
-            where json_extract(value, '$.user.email') = :email;
+            where json_extract(value, '$.user.email') = :email $onlyWithNumberSQL;
 SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
 
         $apps = Array();
+
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
             $apps[$row[0]] = new Application($row[1]);
         }
@@ -295,14 +302,38 @@ SQL;
         }
     }
 
+    public function checkConsistency(){
+        $sql = <<<SQL
+        select key, value
+        from users;
+SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $user = new User($row[1]);
+
+            echo "\n => {$user->data->email}";
+            $left = count($user->getApplicationIds());
+            $right = count($this->_getAllApplicationsByEmail($user->data->email, true));
+            echo "\n    apps in object: $left";
+            echo "\n    apps in db:     $right";
+            if($left != $right){
+                echo "\n    PROBLEM!";
+            }
+        }
+        echo "\n";
+    }
+
 }
 
 $db = new AdminToolsDB();
+$db->checkConsistency();
 
-$db->removeDrafts(10, false);
-$db->removeReadyApps(30, false);
+//$db->removeDrafts(10, false);
+//$db->removeReadyApps(30, false);
 
 //$db->removeUser('szymon@nieradka.net', false);
 
-$db->upgradeAllApps('1.0.2', false);
+//$db->upgradeAllApps('1.0.2', false);
 ?>

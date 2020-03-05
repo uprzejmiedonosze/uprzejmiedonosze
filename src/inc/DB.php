@@ -445,9 +445,6 @@ SQL;
         $this->stats->set("%HOST%-getGalleryByCity", $stats, 0, 600);
         return $stats;
     }
-
-    
-     
 }
 
 ?>
