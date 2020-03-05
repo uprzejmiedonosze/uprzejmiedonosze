@@ -105,7 +105,10 @@ class Application extends JSONObject{
         if(!array_key_exists($status, $STATUSES)){
             throw new Exception("Odmawiam ustawienia statusu na $status");
         }
-        if(!in_array($status, $this->getStatus()->allowed)){
+        if($status == $this->status){
+            logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}", true);
+            return;
+        }elseif(!in_array($status, $this->getStatus()->allowed)){
             throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status dla zgłoszenia {$this->id}");
         }
         if(!isset($this->statusHistory)){
