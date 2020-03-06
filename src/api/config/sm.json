@@ -1002,6 +1002,17 @@
     "hint": null,
     "api": false
   },
+  "ciechanów": {
+    "address": [
+      "Straż Miejska w Ciechanowie",
+      "Plac Jana Pawła II 7",
+      "06-400 Ciechanów"
+    ],
+    "email": "strazmiejska@umciechanow.pl",
+    "city": "Ciechanów",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
