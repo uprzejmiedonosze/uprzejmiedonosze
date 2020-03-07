@@ -4,11 +4,9 @@ require(__DIR__ . '/../../inc/include.php');
 const ROOT = '/var/www/%HOST%/';
 
 $type = 'application';                               // download application PDF for specific application
-if(isset($_GET['hearing'])) $type = 'hearing';       // download hearing PDF for SM for specific application
-if(isset($_GET['hearingAll'])) $type = 'hearingAll'; // download hearing PDFs for SM for all open applications
 if(isset($_GET['readyApps'])) $type = 'readyApps';   // download all apps ready to sent
 
-if($type == 'application' || $type == 'hearing'){    // specific ID is needed
+if($type == 'application' ){    // specific ID is needed
     if(!isset($_GET['appId'])){
         http_response_code(400);
         die();
@@ -19,10 +17,6 @@ if($type == 'application' || $type == 'hearing'){    // specific ID is needed
         http_response_code(404);
         die();
     }
-}else if ($type == 'hearingAll'){
-    $appsEmail = $storage->getAllApplicationsByStatus('confirmed-waiting');
-    $appsEpuap = $storage->getAllApplicationsByStatus('confirmed-waitingE');
-    $application = array_merge($appsEmail, $appsEpuap);
 }else{ // readyApps
     $application = $storage->getAllApplicationsByStatus('confirmed');
 }
@@ -40,16 +34,9 @@ if(!file_exists($baseDir)){
     mkdir($baseDir, 0755, true);
 }
 
-if($type == 'hearing'){
-    $filename = $application->getSMPDFFilename();
-    $pdf = "$baseDir/$applicationId,sm.pdf";
-}else if($type == 'application'){
+if($type == 'application'){
     $filename = $application->getAppPDFFilename();
     $pdf = "$baseDir/$applicationId.pdf";
-}else if($type == 'hearingAll'){
-    $city = reset($application)->getSanitizedCity();
-    $filename = "Dokumenty-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
-    $pdf = "$baseDir/$filename";
 }else{ // readyApps
     if(sizeof($application) == 0){
         $filename = "download-error.pdf";
@@ -90,17 +77,12 @@ function generate_pdf($application, $destFile, $type) {
     ]);
 
     $texFile = 'application.tex.twig';
-    if($type == 'hearing'){
-        $texFile = 'hearing.tex.twig';
-    }else if($type == 'hearingAll'){
-        $texFile = 'hearingAll.tex.twig';
-    }else if($type == 'readyApps'){
+    if($type == 'readyApps'){
         if(sizeof($application) == 0){
             $texFile = 'readyApps-error.tex.twig';
         }else{
             $texFile = 'readyApps.tex.twig';
         }
-        
     }
 
     $params = [
@@ -108,7 +90,7 @@ function generate_pdf($application, $destFile, $type) {
         'root' => realpath(ROOT)
     ];
 
-    if($type == 'hearing' || $type == 'hearingAll' || $type == 'readyApps'){
+    if($type == 'readyApps'){
         global $user;
         $params['user'] = $user; 
     }
