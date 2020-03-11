@@ -1,125 +1,15 @@
 <?PHP
-require(__DIR__ . '/../../inc/include.php');
+require(__DIR__ . '/../../inc/PDFGenerator.php');
 
-const ROOT = '/var/www/%HOST%/';
-
-$type = 'application';                               // download application PDF for specific application
-if(isset($_GET['readyApps'])) $type = 'readyApps';   // download all apps ready to sent
-
-if($type == 'application' ){    // specific ID is needed
-    if(!isset($_GET['appId'])){
-        http_response_code(400);
-        die();
-    }
-    $applicationId = $_GET['appId'];
-    $application = $storage->getApplication($applicationId);
-    if(!isset($application)){
-        http_response_code(404);
-        die();
-    }
-}else{ // readyApps
-    $application = $storage->getAllApplicationsByStatus('confirmed');
-}
-
-if($type !== 'application'){ // only applicationPDF is allowed if not logged in
-    checkIfLogged();
-    $user = $storage->getCurrentUser();
-    $userNumber = $user->number;
+if(isset($_GET['readyApps'])){
+    [$pdf, $filename] = readyApps2PDF();
 }else{
-    $userNumber = $application->getUserNumber();
+    [$pdf, $filename] = application2PDF($_GET['appId']);
 }
-
-$baseDir = ROOT . "cdn2/$userNumber";
-if(!file_exists($baseDir)){
-    mkdir($baseDir, 0755, true);
-}
-
-if($type == 'application'){
-    $filename = $application->getAppPDFFilename();
-    $pdf = "$baseDir/$applicationId.pdf";
-}else{ // readyApps
-    if(sizeof($application) == 0){
-        $filename = "download-error.pdf";
-    }else{
-        $city = reset($application)->getSanitizedCity();
-        $filename = "Zgloszenia-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
-    }
-    $pdf = "$baseDir/$filename";
-}
-
-//if(!file_exists($pdf)){
-    generate_pdf($application, $pdf, $type);
-//}
 
 header('Content-Type: application/pdf');
 header("Content-Transfer-Encoding: Binary");
 header("Content-disposition: attachment; filename=$filename");
-readfile($pdf);
-
-function generate_pdf($application, $destFile, $type) {
-    if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
-        throw new Exception("Failed to create temporary file");
-    }
-
-    $tex_f = "$f.tex";
-    $aux_f = "$f.aux";
-    $out_f = "$f.out";
-    $log_f = "$f.log";
-    $pdf_f = "$f.pdf";
-
-    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../../templates');
-    $twig = new \Twig\Environment($loader,
-    [
-        'debug' => '%HOST%' != 'uprzejmiedonosze.net',
-        'cache' => new \Twig\Cache\FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', \Twig\Cache\FilesystemCache::FORCE_BYTECODE_INVALIDATION),
-        'strict_variables' => true,
-        'auto_reload' => true
-    ]);
-
-    $texFile = 'application.tex.twig';
-    if($type == 'readyApps'){
-        if(sizeof($application) == 0){
-            $texFile = 'readyApps-error.tex.twig';
-        }else{
-            $texFile = 'readyApps.tex.twig';
-        }
-    }
-
-    $params = [
-        'app' => $application,
-        'root' => realpath(ROOT)
-    ];
-
-    if($type == 'readyApps'){
-        global $user;
-        $params['user'] = $user; 
-    }
-    if(isset($_GET['tomorrow'])){
-        $params['date'] = (new DateTime('tomorrow'))->format('d.m.Y');
-    }
-
-    file_put_contents($tex_f, $twig->render($texFile, $params));
-
-    $cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
-   	escapeshellarg($tex_f));
-    chdir(sys_get_temp_dir());
-    exec($cmd, $output, $ret);
-    unset($output);
-
-    @unlink($tex_f);
-    @unlink($aux_f);
-    @unlink($log_f);
-    @unlink($out_f);
-
-    if(!file_exists($pdf_f)) {
-        @unlink($f);
-        throw new Exception("Output was not generated and latex returned: $ret.");
-    }
-    
-    rename($pdf_f, $destFile);
-    @unlink($f);
-}
-
-
+readfile($pdf);    
 
 ?>
