@@ -1013,6 +1013,17 @@
     "hint": null,
     "api": false
   },
+  "żukowo": {
+    "address": [
+		"Komenda Powiatowa Policji w Kartuzach",
+      "ul. Sambora 41",
+      "83-300 Kartuzy"
+    ],
+    "email": "kppkartuzy@pomorska.policja.gov.pl",
+    "city": "Żukowo",
+	 "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach.",
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
