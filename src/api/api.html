@@ -34,6 +34,8 @@ if (is_ajax()) {
                 _addToGallery($_POST["id"]); break;
             case "moderateApp":
                 _moderateApp($_POST["id"], $_POST["decision"]); break;
+            case "sendViaEmail":
+                _sendViaEmail($_POST["subject"], $_POST["message"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -102,6 +104,28 @@ function _sendViaAPI($appId){
     }catch(Exception $e){
         raiseError($e->getMessage(), 500);
     }
+    echo json_encode(Array("status" => "OK"));
+}
+
+/**
+ * Sends listed applications to SM via email, and updates status.
+ */
+function _sendViaEmail($subject, $message){
+    require(__DIR__ . '/../../inc/PDFGenerator.php');
+    global $storage;
+
+    checkIfLogged();
+    $user = $storage->getCurrentUser();
+
+    $headers = "From: {$user->data->name} <{$user->data->email}>\r\n"
+        . "Reply-To: {$user->data->email}\r\n";
+
+    $success = mail('szymon.nieradka@gmail.com' , $subject , $message, $headers);
+
+    if (!$success) {
+        raiseError(error_get_last()['message'], 500);
+    }
+
     echo json_encode(Array("status" => "OK"));
 }
 
