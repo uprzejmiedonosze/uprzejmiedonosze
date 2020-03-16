@@ -1015,13 +1015,24 @@
   },
   "żukowo": {
     "address": [
-		"Komenda Powiatowa Policji w Kartuzach",
+		  "Komenda Powiatowa Policji w Kartuzach",
       "ul. Sambora 41",
       "83-300 Kartuzy"
     ],
     "email": "kppkartuzy@pomorska.policja.gov.pl",
     "city": "Żukowo",
 	 "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach.",
+    "api": false
+  },
+  "dzierżoniów": {
+    "address": [
+		  "Straż Miejska w Dzierżoniowie",
+      "ul. Rzeźnicza 2",
+      "58-200 Dzierżoniów"
+    ],
+    "email": "straz@um.dzierzoniow.pl",
+    "city": "Dzierżoniów",
+	 "hint": null,
     "api": false
   },
   "_nieznane": {
