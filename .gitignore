@@ -11,3 +11,4 @@ export/**
 **/*.log
 **/*.out
 tex/app/*
+*uprzejmiedonosze.net-firebase-adminsdk.json
