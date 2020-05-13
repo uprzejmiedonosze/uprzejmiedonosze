@@ -1037,12 +1037,23 @@
   },
   "dzierzgoń": {
     "address": [
-      "Straż Miejska w Dzierzgoniu.",
+      "Straż Miejska w Dzierzgoniu",
       "Plac Wolności 1",
       "82-440 Dzierzgoń"
     ],
     "email": "sm@dzierzgon.pl",
     "city": "Dzierzgoń",
+    "hint": null,
+    "api": false
+  },
+  "kobierzyce": {
+    "address": [
+      "Komisariat Policji Wrocław Krzyki",
+      "ul. Ślężna 115-129",
+      "53-305 Wrocław"
+    ],
+    "email": "slawomir.kniat@wroclaw.wr.policja.gov.pl",
+    "city": "Kobierzyce",
     "hint": null,
     "api": false
   },
