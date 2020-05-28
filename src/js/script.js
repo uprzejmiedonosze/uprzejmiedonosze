@@ -327,7 +327,7 @@ function readGeoDataFromImage(file) {
         file,
         function (data) {
             if(data.exif){
-                const dateTime = data.exif.getText("DateTimeOriginal");
+                const dateTime = data.exif.getText("DateTimeOriginal") && data.exif.getText("DateTime");
                 if (dateTime && dateTime !== 'undefined') {
                     setDateTime(dateTime, true);
                     $('#dtFromPicture').val(1);
@@ -340,14 +340,15 @@ function readGeoDataFromImage(file) {
                 $('#dtFromPicture').val(0);
             }
 
-            if(!data.exif || data.exif.getText("GPSLatitude") === 'undefined'){
+            var gpsInfo = data.exif && data.exif.get('GPSInfo');
+            if(!gpsInfo){
                 noGeoDataInImage();
                 return;
             }
-            var lat = data.exif.getText("GPSLatitude").split(',');
-            var lon = data.exif.getText("GPSLongitude").split(',');
-            var latRef = data.exif.getText("GPSLatitudeRef") || "N";
-            var lonRef = data.exif.getText("GPSLongitudeRef") || "W";
+            var lat = gpsInfo.get("GPSLatitude");
+            var lon = gpsInfo.get("GPSLongitude");
+            var latRef = gpsInfo.get("GPSLatitudeRef") || "N";
+            var lonRef = gpsInfo.get("GPSLongitudeRef") || "W";
             if (lat) {
                 lat = (parseFloat(lat[0]) + parseFloat(lat[1]) / 60 + parseFloat(lat[2]) / 3600) * (latRef == "N" ? 1 : -1);
                 lon = (parseFloat(lon[0]) + parseFloat(lon[1]) / 60 + parseFloat(lon[2]) / 3600) * (lonRef == "W" ? -1 : 1);

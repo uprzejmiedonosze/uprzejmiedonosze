@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "blueimp-load-image": "^5.12.0",
     "eslint-config-defaults": "^9.0.0",
     "exif-js": "^2.3.0",
     "openalpr_api": "^2.0.1"
