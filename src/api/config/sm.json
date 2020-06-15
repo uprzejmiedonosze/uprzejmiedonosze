@@ -1079,6 +1079,50 @@
     "hint": null,
     "api": false
   },
+  "kędzierzyn-koźle": {
+    "address": [
+      "Straż Miejska Kędzierzyn-Koźle",
+      "ul. Piramowicza 32",
+      "47-200 Kędzierzyn-Koźle"
+    ],
+    "email": "sm@kedzierzynkozle.pl",
+    "city": "Kędzierzyn-Koźle",
+    "hint": null,
+    "api": false
+  },
+  "tychy": {
+    "address": [
+      "Straż Miejska Tychy",
+      "ul. Budowlanych 67",
+      "43-100 Tychy"
+    ],
+    "email": "strazmiejska@umtychy.pl",
+    "city": "Tychy",
+    "hint": null,
+    "api": false
+  },
+  "międzychód": {
+    "address": [
+      "Straż Miejska Międzychód",
+      "ul. Marszałka Piłsudskiego 2",
+      "64-400 Międzychód"
+    ],
+    "email": "strazmiejska@miedzychod.pl",
+    "city": "Międzychód",
+    "hint": null,
+    "api": false
+  },
+  "zatom nowy": {
+    "address": [
+      "Straż Miejska Międzychód",
+      "ul. Marszałka Piłsudskiego 2",
+      "64-400 Międzychód"
+    ],
+    "email": "strazmiejska@miedzychod.pl",
+    "city": "Zatom Nowy",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
