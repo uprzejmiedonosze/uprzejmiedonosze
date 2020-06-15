@@ -42,7 +42,7 @@
     ],
     "email": "straz@strazmiejska.wroclaw.pl",
     "city": "Wrocław",
-    "hint": "SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.",
+    "hint": "<p><b>Otrzymujemy komunikaty, że SM Wrocław hurtowo odrzuca zgłoszenia powołując się na inne priorytety (COVID19)</b>. Zobacz więcej na <a href='https://www.facebook.com/story.php?story_fbid=2963032150452914&id=645390212217131&ref=page_internal' target=none>stronie Akcji Miasto</a>.</p><p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
     "api": null
   },
   "kraków": {
@@ -1037,12 +1037,89 @@
   },
   "dzierzgoń": {
     "address": [
-      "Straż Miejska w Dzierzgoniu.",
+      "Straż Miejska w Dzierzgoniu",
       "Plac Wolności 1",
       "82-440 Dzierzgoń"
     ],
     "email": "sm@dzierzgon.pl",
     "city": "Dzierzgoń",
+    "hint": null,
+    "api": false
+  },
+  "kobierzyce": {
+    "address": [
+      "Komisariat Policji Wrocław Krzyki",
+      "ul. Ślężna 115-129",
+      "53-305 Wrocław"
+    ],
+    "email": "slawomir.kniat@wroclaw.wr.policja.gov.pl",
+    "city": "Kobierzyce",
+    "hint": null,
+    "api": false
+  },
+  "konin": {
+    "address": [
+      "Straż Miejska w Koninie",
+      "ul. Przemysłowa 2",
+      "62-510 Konin"
+    ],
+    "email": "smkonin@konin.um.gov.pl",
+    "city": "Konin",
+    "hint": null,
+    "api": false
+  },
+  "kartuzy": {
+    "address": [
+      "Straż Miejska w Kartuzach",
+      "Generała Józefa Hellera 1",
+      "83-300 Kartuzy"
+    ],
+    "email": "strazmiejska@poczta.kartuzy.pl",
+    "city": "Kartuzy",
+    "hint": null,
+    "api": false
+  },
+  "kędzierzyn-koźle": {
+    "address": [
+      "Straż Miejska Kędzierzyn-Koźle",
+      "ul. Piramowicza 32",
+      "47-200 Kędzierzyn-Koźle"
+    ],
+    "email": "sm@kedzierzynkozle.pl",
+    "city": "Kędzierzyn-Koźle",
+    "hint": null,
+    "api": false
+  },
+  "tychy": {
+    "address": [
+      "Straż Miejska Tychy",
+      "ul. Budowlanych 67",
+      "43-100 Tychy"
+    ],
+    "email": "strazmiejska@umtychy.pl",
+    "city": "Tychy",
+    "hint": null,
+    "api": false
+  },
+  "międzychód": {
+    "address": [
+      "Straż Miejska Międzychód",
+      "ul. Marszałka Piłsudskiego 2",
+      "64-400 Międzychód"
+    ],
+    "email": "strazmiejska@miedzychod.pl",
+    "city": "Międzychód",
+    "hint": null,
+    "api": false
+  },
+  "zatom nowy": {
+    "address": [
+      "Straż Miejska Międzychód",
+      "ul. Marszałka Piłsudskiego 2",
+      "64-400 Międzychód"
+    ],
+    "email": "strazmiejska@miedzychod.pl",
+    "city": "Zatom Nowy",
     "hint": null,
     "api": false
   },

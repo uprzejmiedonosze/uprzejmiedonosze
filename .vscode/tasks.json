@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "staging",
+            "options": {
+                "statusbar": {
+                    "tooltip": "Deploy to staging"
+                }
+            },
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "staging",
+                "-j"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
