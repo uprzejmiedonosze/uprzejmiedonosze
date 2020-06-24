@@ -1134,6 +1134,17 @@
     "hint": null,
     "api": false
   },
+  "krosno-wlkp": {
+    "address": [
+      "Straż Miejska Mosina",
+      "ul. Krotowskiego 16",
+      "62-050 Mosina"
+    ],
+    "email": "straz.miejska@mosina.pl",
+    "city": "Krosno",
+    "hint": null,
+    "api": false
+  },
   "krosno": {
     "address": [
       "Straż Miejska Krosno",
