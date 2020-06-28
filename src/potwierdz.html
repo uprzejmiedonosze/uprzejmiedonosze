@@ -20,9 +20,9 @@ $application->category = intval($post["category"]);
 if(!isset($application->address)) $application->address = new stdClass();
 $application->address->address = $post["lokalizacja"];
 $application->address->city = $post["city"];
-$application->guessSMData(); // stores sm city inside the object
 $application->address->voivodeship = $post["voivodeship"];
 $application->address->latlng = $post["latlng"];
+$application->guessSMData(); // stores sm city inside the object
 if(!isset($application->carInfo)) $application->carInfo = new stdClass();
 $application->carInfo->plateId = strtoupper(trim($post["plateId"]));
 $application->userComment = capitalizeSentence($post["comment"]);
