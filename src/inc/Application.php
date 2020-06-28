@@ -168,6 +168,10 @@ class Application extends JSONObject{
         }
 
         $city = trim(mb_strtolower($this->address->city, 'UTF-8'));
+        if($city == 'krosno' && trim(mb_strtolower(@$this->address->voivodeship, 'UTF-8')) == 'wielkopolskie'){
+            $city = 'krosno-wlkp';
+            // tak, są dwa miasta o nazwie 'Krosno'...
+        }
 
         if(array_key_exists($city, $SM_ADDRESSES)){
             $this->smCity = $city;

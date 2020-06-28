@@ -93,7 +93,7 @@
     "address": [
       "Straż Miejska w Gdańsku",
       "ul. Elbląska 54/60",
-      "80–724 Gdańsk"
+      "80-724 Gdańsk"
     ],
     "email": "strazmiejska@sm.gda.pl",
     "city": "Gdańsk",
@@ -115,7 +115,7 @@
     "address": [
       "Straż Miejska w Toruniu",
       "ul. Grudziądzka 157",
-      "87 - 100 Toruń"
+      "87-100 Toruń"
     ],
     "email": "sm@um.torun.pl",
     "city": "Toruń",
@@ -291,7 +291,7 @@
     "address": [
       "Straż Miejska Łosice",
       "Handlowa 7",
-      "Łosice 08-200"
+      "08-200 Łosice"
     ],
     "email": "straz-miejska@gminalosice.pl",
     "city": "Łosice",
@@ -1120,6 +1120,39 @@
     ],
     "email": "strazmiejska@miedzychod.pl",
     "city": "Zatom Nowy",
+    "hint": null,
+    "api": false
+  },
+  "mosina": {
+    "address": [
+      "Straż Miejska Mosina",
+      "ul. Krotowskiego 16",
+      "62-050 Mosina"
+    ],
+    "email": "straz.miejska@mosina.pl",
+    "city": "Mosina",
+    "hint": null,
+    "api": false
+  },
+  "krosno-wlkp": {
+    "address": [
+      "Straż Miejska Mosina",
+      "ul. Krotowskiego 16",
+      "62-050 Mosina"
+    ],
+    "email": "straz.miejska@mosina.pl",
+    "city": "Krosno",
+    "hint": null,
+    "api": false
+  },
+  "krosno": {
+    "address": [
+      "Straż Miejska Krosno",
+      "ul. Staszica 2",
+      "38-400 Krosno"
+    ],
+    "email": "sm@um.krosno.pl",
+    "city": "Krosno",
     "hint": null,
     "api": false
   },

@@ -91,7 +91,8 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json src/tools $(EXPORT)/
+	#@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json src/tools $(EXPORT)/
+	@cp -r lib vendor src/*.php src/tools $(EXPORT)/
 
 check-branch: ## Detects environment and active branch changes
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \
@@ -142,6 +143,11 @@ export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '==> Preprocess
 	$(replace)
 
 export/public/api/config/%.json: src/api/config/%.json; @echo '==> Preprocessing $<'
+	@jq -c . < $< > $@
+
+export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
+	@jq '.[].address[2]?' < $< | grep -ve "\d\d-\d\d\d .*" | grep -v "null" || echo "$< postal adddresses OK"
+	@jq '.[].email?' < $< | grep -ve "@" | grep -ve "null" || echo "$< email addresses OK"
 	@jq -c . < $< > $@
 
 export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
