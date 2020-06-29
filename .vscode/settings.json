@@ -39,6 +39,7 @@
         }
     },
     "files.associations": {
-        "*.html": "php"
+        "*.html": "php",
+        "*.js.twig": "javascript"
       }
 }
