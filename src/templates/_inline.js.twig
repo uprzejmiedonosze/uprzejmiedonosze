@@ -33,12 +33,12 @@ function setStatus(appId, status){
  * 
  * @param appId application id to be sent
  */
-function _sendViaAPI(appId){
+function _send(appId){
     $("#send-" + appId).addClass('ui-disabled');
     $.mobile.loading( "show", { text: 'Wysyłam...', textVisible: true } );
 
-    $.post("/api/api.html", { id: appId, action: "send", api: true }, function(){
-        _updateStatus(appId, 'confirmed-sm');
+    $.post("/api/api.html", { id: appId, action: "send" }, function(msg){
+        _updateStatus(appId, msg.status);
         $.mobile.loading( "hide" );
         showMessage('Wysłane', 1000);
         ga('send', 'event', { eventCategory: 'js', eventAction: 'sendViaAPI'});
@@ -88,7 +88,6 @@ function _updateStatus(appId, status){
     {% for key,val in statuses %}
         {% set allClasses = allClasses ~ ' status-' ~ key %}
     {% endfor %}
-
 
     $('#' + appId + ' .appActionButtons a').removeClass('ui-disabled').hide();
     $('#' + appId + ' .appActionButtons a.status-' + status).addClass('ui-disabled').show();

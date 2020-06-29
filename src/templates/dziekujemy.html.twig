@@ -58,7 +58,7 @@ na moderację i zostanie opublikowane w przeciągu 24h.
     zgłoszenia. {{ sm.hint | raw }}</p>
 
     <h4>Wyślij swoje zgłoszenie do SM {{ sm.city }}:</h4>
-    <a href="#" id="send-{{ app.id }}" onclick="_sendViaAPI('{{ app.id }}')"
+    <a href="#" id="send-{{ app.id }}" onclick="_send('{{ app.id }}')"
         class="ui-btn ui-mini ui-btn-inline ui-btn-icon-left ui-btn-inline ui-alt-icon ui-nodisc-icon ui-icon-mail ui-corner-all cta">Wyślij bezpośrednio do SM</a>
 {% else %}
     <h4>Co dalej?</h4>

@@ -22,16 +22,16 @@
 {% endif %}
 
 {% if config.appActionButtons and (not app.addedToGallery or app.status == 'confirmed') %}
-        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
             {% if not app.addedToGallery %}
             <a href="#" onclick="addToGallery('{{ app.id }}')"
                 class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
                 ui-nodisc-icon ui-icon-grid">Dodaj do galerii</a>
             {% endif %}
             {% if app.status == 'confirmed' %} 
-            <a href="/wysylka.html" data-ajax="false"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon
-                ui-nodisc-icon ui-icon-mail">Wyślij zgłoszenie</a>
+               <a href="#" onclick="_send('{{ app.id }}')"
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline
+                ui-nodisc-icon ui-icon-user status-confirmed-sm cta">Wyślij bezpośrednio do SM</a>
             {% endif %}
         </fieldset>
 {% endif %}
@@ -54,19 +54,12 @@
     <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ statuses[app.status].name }}</b> na:</p>
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
     {% for key,val in statuses %}
-        {% if val.class %}
-            {% if app.guessSMData.hasAPI and key == 'confirmed-waiting' %}
-                <a href="#" onclick="_sendViaAPI('{{ app.id }}')"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline
-                {% if key not in statuses[app.status].allowed and key != app.status %}hidden{% endif %}
-                ui-nodisc-icon ui-icon-{{ val.icon }} status-{{ key }} cta">Wyślij bezpośrednio do SM</a>
-            {% else %}
-                <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline
-                {% if key not in statuses[app.status].allowed and key != app.status %}hidden{% endif %}
-                {% if key == app.status %}ui-disabled{% endif %}
-                ui-nodisc-icon ui-icon-{{ val.icon }} status-{{ key }}">{{ val.action }}</a>
-            {% endif %}
+        {% if val.class and key != 'confirmed-waiting' %}
+            <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline
+            {% if key not in statuses[app.status].allowed and key != app.status %}hidden{% endif %}
+            {% if key == app.status %}ui-disabled{% endif %}
+            ui-nodisc-icon ui-icon-{{ val.icon }} status-{{ key }}">{{ val.action }}</a>
         {% endif %}
     {% endfor %}
     </fieldset>

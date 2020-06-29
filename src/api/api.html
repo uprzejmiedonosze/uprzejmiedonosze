@@ -21,9 +21,7 @@ if (is_ajax()) {
             case "confirmed-fined":
                 _setStatus($action, $_POST["id"]); break;
             case "send":
-                if(isset($_POST["api"])){
-                    _sendViaAPI($_POST["id"]); break;
-                }
+                _send($_POST["id"]); break;
             case "upload":
                 _upload(); break;
             case "getApp":
@@ -34,8 +32,6 @@ if (is_ajax()) {
                 _addToGallery($_POST["id"]); break;
             case "moderateApp":
                 _moderateApp($_POST["id"], $_POST["decision"]); break;
-            case "sendViaEmail":
-                _sendViaEmail($_POST["subject"], $_POST["message"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -88,7 +84,7 @@ function _setStatus($status, $appId){
 /**
  * Sends application to SM via API (if possible), and updates status.
  */
-function _sendViaAPI($appId){
+function _send($appId){
     global $storage;
     try{
         $application = $storage->getApplication($appId);
@@ -100,33 +96,11 @@ function _sendViaAPI($appId){
 
         require(__DIR__ . '/../../inc/integrations/CityAPI.php');
         $api = new $sm->api;
-        $api->send($application);    
+        $newStatus = $api->send($application);
     }catch(Exception $e){
         raiseError($e->getMessage(), 500);
     }
-    echo json_encode(Array("status" => "OK"));
-}
-
-/**
- * Sends listed applications to SM via email, and updates status.
- */
-function _sendViaEmail($subject, $message){
-    require(__DIR__ . '/../../inc/PDFGenerator.php');
-    global $storage;
-
-    checkIfLogged();
-    $user = $storage->getCurrentUser();
-
-    $headers = "From: {$user->data->name} <{$user->data->email}>\r\n"
-        . "Reply-To: {$user->data->email}\r\n";
-
-    $success = mail('szymon.nieradka@gmail.com' , $subject , $message, $headers);
-
-    if (!$success) {
-        raiseError(error_get_last()['message'], 500);
-    }
-
-    echo json_encode(Array("status" => "OK"));
+    echo json_encode(Array("status" => "$newStatus"));
 }
 
 /**
