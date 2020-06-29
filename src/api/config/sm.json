@@ -8,7 +8,7 @@
     "email": "sm@um.szczecin.pl",
     "city": "Szczecin",
     "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku.",
-    "api": null
+    "api": "Mail"
   },
   "warszawa": {
     "address": [
