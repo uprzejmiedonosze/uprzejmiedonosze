@@ -1156,6 +1156,17 @@
     "hint": null,
     "api": false
   },
+  "wiskitki": {
+    "address": [
+      "Posterunek Policji Wiskitki",
+      "ul. Kościuszki 1A",
+      "96-315 Wiskitki"
+    ],
+    "email": "dzielnicowy.wiskitki@ra.policja.gov.pl",
+    "city": "Wiskitki",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
