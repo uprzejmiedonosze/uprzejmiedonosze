@@ -14,10 +14,11 @@ class Mail extends CityAPI {
         }
         
         $subject     = $application->getTitle();
-        $mainMessage = "Dzień dobry,\n\nW załączeniu znajduje się zgłoszenie nieprawidłowego parkowania. Wszystkie przypadki albo wpływały na bezpieczeństwo pieszych, albo wiązały się z niszczeniem mienia.\n\nPozdrawiam,";
-        $fileatt     = "/var/www/uprzejmiedonosze.net/cdn2/3/Zgloszenia-Szczecin-Szymon-Nieradka-2020-01-31.pdf";
+        $mainMessage = parent::formatEmail($application);
+
+        require(__DIR__ . '/../PDFGenerator.php');
+        [$fileatt, $fileattname] = application2PDF($application->id);
         $fileatttype = "application/pdf";
-        $fileattname = "Zgloszenia-Szczecin-Szymon-Nieradka-2020-01-31.pdf";
         
         $headers     = "From: {$application->user->name} <{$application->user->email}>\r\n";
         $headers    .= "Reply-To: {$application->user->email}\r\n";
@@ -57,7 +58,7 @@ class Mail extends CityAPI {
             raiseError(error_get_last()['message'], 500);
         }
 
-        $application->setStatus('confirmed-waiting');
+        //$application->setStatus('confirmed-waiting');
         $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->address[0]} ($to).");
         global $storage;
         $storage->saveApplication($application);

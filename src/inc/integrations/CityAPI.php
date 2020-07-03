@@ -20,6 +20,10 @@ abstract class CityAPI {
         ]), 0, $limit);
     }
 
+    function formatEmail(&$application){
+        return generate('_application.email.twig', [ 'app' => $application ]);
+    }
+
     function curlShellSend($url, $header, &$data, &$application){
         $root = realpath('/var/www/%HOST%/');
         $contextImage = "$root/{$application->contextImage->url}";
