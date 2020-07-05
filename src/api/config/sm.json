@@ -375,6 +375,17 @@
     "hint": "Miejscowość Gołków obsługuje Straż Miejska Piaseczno.",
     "api": null
   },
+  "zalesie górne": {
+    "address": [
+      "Straż Miejska Piaseczno",
+      "ul. Czajewicza 1a",
+      "05-500 Piaseczno"
+    ],
+    "email": "strazmiejska@piaseczno.eu",
+    "city": "Zalesie Górne",
+    "hint": "Miejscowość Zalesie Górne obsługuje Straż Miejska Piaseczno.",
+    "api": null
+  },
   "piaseczno": {
     "address": [
       "Straż Miejska Piaseczno",
@@ -1159,7 +1170,7 @@
   "wiskitki": {
     "address": [
       "Posterunek Policji Wiskitki",
-      "ul. Kościuszki 1A",
+      "ul. Kościuszki 1a",
       "96-315 Wiskitki"
     ],
     "email": "dzielnicowy.wiskitki@ra.policja.gov.pl",
