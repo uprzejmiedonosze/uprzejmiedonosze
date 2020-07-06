@@ -1178,6 +1178,17 @@
     "hint": null,
     "api": false
   },
+  "mińsk mazowiecki": {
+    "address": [
+      "Straż Miejska Mińsk Mazowiecki",
+      "ul. Konstytucji 3 Maja 1a",
+      "05-300 Mińsk Mazowiecki"
+    ],
+    "email": "wykroczenia@umminskmaz.pl",
+    "city": "Mińsk Mazowiecki",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
