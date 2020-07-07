@@ -20,8 +20,9 @@ class Mail extends CityAPI {
         [$fileatt, $fileattname] = application2PDF($application->id);
         $fileatttype = "application/pdf";
         
-        $headers     = "From: {$application->user->name} <{$application->user->email}>\r\n";
+        $headers     = "From: {$application->user->name} <ud@uprzejmiedonosze.net>\r\n";
         $headers    .= "Reply-To: {$application->user->email}\r\n";
+        $headers    .= "Return-Path: {$application->user->email}\r\n";
         $headers    .= "Cc: {$application->user->name} <{$application->user->email}>";
         
         // File
