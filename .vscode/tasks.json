@@ -14,14 +14,15 @@
                 "staging",
                 "-j"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "promptOnClose": false,
+            "detail": "",
+            "group": "none",
             "presentation": {
                 "reveal": "always",
                 "showReuseMessage": false,
-                "clear": true
+                "clear": false,
+                "focus": false,
+                "panel": "shared"
             },
             "problemMatcher": []
         }
