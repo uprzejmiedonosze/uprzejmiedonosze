@@ -77,6 +77,7 @@ staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
+	@echo "==> FIN"
 
 prod: HOST := $(PROD_HOST)
 prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
@@ -91,7 +92,6 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	#@cp -r lib vendor src/*.php $(HOST)-firebase-adminsdk.json src/tools $(EXPORT)/
 	@cp -r lib vendor src/*.php src/tools $(EXPORT)/
 
 check-branch: ## Detects environment and active branch changes

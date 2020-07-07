@@ -34,7 +34,6 @@
     "class": "top",
     "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
     "comment": "Wysłanie zgłoszenia",
-    "cta": "cta",
     "topButtons": true
   },
   "confirmed-waitingE": {
