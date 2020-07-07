@@ -30,21 +30,17 @@ Pozdrawiam,
     wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
     wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
 {% elseif cities|first.email == null %}
-    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
-        Skontaktuj proszę się z nami pod adresem
-        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
-        <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
-        Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
-        oraz adres email Straży Miejskiej.
+    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b> Przeczytaj
+        <a href="/brak-sm.html">co zrobić w takiej sytuacji</a>.
     </p>
 {% else %} {# if apps|length == 0 #}
-
-    {% if (cities | first.api) %}
+    {% if (cities | first.api != 'Mail' ) and (cities | first.api ) %}
         <h2>Wyślij swoje zgłoszenia</h2>
-        <p>Na tej stronie możesz wysłać swoje zgłoszenia do Straży Miejskiej.</p>
+        <p>Na tej stronie możesz wysłać zbiorczo swoje zgłoszenia do Straży Miejskiej.</p>
     {% else %} {# if (cities | first.api) #}
         <h2>Pobierz paczkę zgłoszeń do wysyłki do SM</h2>
-        <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do wysyłki do Straży Miejskiej.</p>
+        <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do samodzielnej wysyłki do Straży Miejskiej.
+        Jest to przydatne, jeśli masz więcej zgłoszeń do wysłania.</p>
     {% endif %} {# if (cities | first.api) #}
 
     {% if cities|length > 1 %}
@@ -53,22 +49,15 @@ Pozdrawiam,
         żeby podzielić zgłoszenia na osobne paczki. Przycisk umożliwiający pobranie paczki zgłoszeń
         jest dostępny tylko wtedy, gdy wszystkie zgłoszenia poniżej pochodzą z jednego miasta.
         </p>
-        <p>Przenieś zgłoszenia z miasta "B" z poniższej listy do archiwum. Odśwież tę stronę
-        i wyślij zgłoszenia z miasta "A". Przejdź do archiwum, przywróć zgłoszeniom z miasta
-        "B" status <code>#nowe</code> a następnie wyślij je na tej stronie.</p>
+        <p>Wyślij część zgłoszeń pojedynczo (rozwijając je, i naciskając przycisk "Wyślij do ..."). Kiedy
+        na liście zostanie już tylko jedno miasto, odśwież ponownie tę stronę.</p>
     {% else %} {# if cities|length > 1 #}
 
-        {% if (cities | first.api) %}
+        {% if (cities | first.api != 'Mail' ) and (cities | first.api ) %}
             <p>Na szczęście {{ cities | first.address[0] }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
             im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei. {{ cities | first.hint | raw }}</p>
-            <script>
-            {{ include('_inline.js.twig') }}
-            </script>
         {% else %} {# if (cities | first.api) #}
             Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
-            Jeśli poniższa lista jest nieprawidłowa (zbyt wiele, lub zbyt mało zgłoszeń),
-            wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw
-            prawidłowo statusy.</p>
             {% if (cities | first.hint) %}<p><b>Uwagi na temat współpracy z SM:</b> {{ cities | first.hint | raw }}</p>{% endif %}
 
             <ol>
@@ -121,4 +110,7 @@ Pozdrawiam,
             {% endfor %}
         </div>
 {% endif %} {# if apps|length == 0 #}
+<script>
+{{ include('_inline.js.twig') }}
+</script>
 {% endblock %}

@@ -21,15 +21,21 @@
     <p>{{ app.userComment }}</p>
 {% endif %}
 
-{% if config.appActionButtons and statuses[app.status].topButtons %}
+{% if statuses[app.status].topButtons %}
+    {% set send = 'confirmed-waiting' %}
         <div>
+            {% if app.guessSMData.api %}
             <a href="#" onclick="_send('{{ app.id }}');"
                 data-inline="true" data-mini="true" 
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-                {% if 'confirmed-waiting' not in statuses[app.status].allowed %}ui-disabled{% else %}{{ val.cta ?? '' }}{% endif %}
-                ui-icon-{{ statuses['confirmed-waiting'].icon }}
-                status-confirmed-waiting">{{ statuses['confirmed-waiting'].action }}</a>
-
+                {% if send not in statuses[app.status].allowed or not app.guessSMData.api %}ui-disabled{% else %}cta{% endif %}
+                ui-icon-{{ statuses[send].icon }}
+                status-{{ send }}">Wyślij do {{ app.guessSMData.address[0] }}</a>
+            {% else %}
+            <a href="/brak-sm.html"
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-{{ send }}">Wyślij zgłoszenie</a>
+            {% endif %}
+            {% if config.appActionButtons %}
             <a href="#" onclick="addToGallery('{{ app.id }}')"
                 data-inline="true" data-mini="true" 
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini addToGallery
@@ -38,7 +44,8 @@
             
             <a href="/ud-{{ app.id }}.html?dialog"
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-                ui-icon-info">Szczegóły</a>
+                ui-icon-info ui-alt-icon">Szczegóły</a>
+            {% endif %}
         </div>
 
 {% endif %}
