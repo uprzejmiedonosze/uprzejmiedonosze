@@ -3,72 +3,83 @@
     "name": "Draft",
     "action": "Dalej",
     "icon": "edit",
-    "class": null,
+    "class": "none",
     "allowed": ["ready"],
-    "comment": "Stworzenie zgłoszenia"
+    "comment": "Stworzenie zgłoszenia",
+    "topButtons": false
   },
   "ready": {
     "name": "Edycja",
     "action": "Potwierdź",
     "icon": "shop",
-    "class": null,
+    "class": "none",
     "allowed": ["draft", "confirmed", "ready"],
-    "comment": "Zapisanie wersji roboczej"
+    "comment": "Zapisanie wersji roboczej",
+    "topButtons": false
   },
   "confirmed": {
     "name": "Nowe",
     "action": "Nowe",
     "icon": "carat-u",
-    "class": "active",
+    "class": "bottom",
     "allowed": ["confirmed-waiting", "archived"],
-    "comment": "Zapisanie gotowego zgłoszenia"
+    "comment": "Zapisanie gotowego zgłoszenia",
+    "topButtons": true,
+    "bottomButtons": false
   },
   "confirmed-waiting": {
     "name": "Wysłane",
-    "action": "Wysłane",
+    "action": "Wyślij do SM",
     "icon": "mail",
-    "class": "active",
+    "class": "top",
     "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
-    "comment": "Wysłanie zgłoszenia"
+    "comment": "Wysłanie zgłoszenia",
+    "cta": "cta",
+    "topButtons": true
   },
   "confirmed-waitingE": {
     "name": "Wysłane epuap",
     "action": "Wysłane epuapem",
     "icon": "clock",
-    "class": "active",
+    "class": "top",
     "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
-    "comment": "Wysłanie zgłoszenia za pomocą EPUAP"
+    "comment": "Wysłanie zgłoszenia za pomocą EPUAP",
+    "topButtons": true
   },
   "confirmed-sm": {
     "name": "Potwierdzone w SM",
     "action": "Potwierdzone w SM",
     "icon": "user",
-    "class": "active",
+    "class": "bottom",
     "allowed": ["confirmed-ignored", "confirmed-fined", "archived"],
-    "comment": "Potwierdzenie przyjęcia zgłoszenia przez/w SM"
+    "comment": "Potwierdzenie przyjęcia zgłoszenia przez/w SM",
+    "topButtons": true
   },
   "confirmed-ignored": {
     "name": "Zignorowane",
     "action": "Zignorowane",
     "icon": "delete",
-    "class": "active",
+    "class": "bottom",
     "allowed": ["confirmed-fined", "archived"],
-    "comment": "Zgłoszenie zostało zignorowane przez SM"
+    "comment": "Zgłoszenie zostało zignorowane przez SM",
+    "topButtons": true
   },
   "confirmed-fined": {
     "name": "Kierowca ukarany",
     "action": "Kierowca ukarany",
     "icon": "check",
-    "class": "active",
-    "allowed": ["confirmed-ignored","archived"],
-    "comment": "Kierowca został ukarany"
+    "class": "bottom",
+    "allowed": ["confirmed-ignored", "archived"],
+    "comment": "Kierowca został ukarany",
+    "topButtons": true
   },
   "archived": {
     "name": "W archiwum",
     "action": "Do archiwum",
     "icon": "cloud",
-    "class": "archived",
+    "class": "bottom",
     "allowed": ["confirmed"],
-    "comment": "Zgłoszenie zostało zarchiwizowane"
+    "comment": "Zgłoszenie zostało zarchiwizowane",
+    "topButtons": false
   }
 }

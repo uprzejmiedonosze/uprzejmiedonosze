@@ -21,19 +21,26 @@
     <p>{{ app.userComment }}</p>
 {% endif %}
 
-{% if config.appActionButtons and (not app.addedToGallery or app.status == 'confirmed') %}
-        <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
-            {% if not app.addedToGallery %}
+{% if config.appActionButtons and statuses[app.status].topButtons %}
+        <div>
+            <a href="#" onclick="_send('{{ app.id }}');"
+                data-inline="true" data-mini="true" 
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
+                {% if 'confirmed-waiting' not in statuses[app.status].allowed %}ui-disabled{% else %}{{ val.cta ?? '' }}{% endif %}
+                ui-icon-{{ statuses['confirmed-waiting'].icon }}
+                status-confirmed-waiting">{{ statuses['confirmed-waiting'].action }}</a>
+
             <a href="#" onclick="addToGallery('{{ app.id }}')"
-                class="ui-btn ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
-                ui-nodisc-icon ui-icon-grid">Dodaj do galerii</a>
-            {% endif %}
-            {% if app.status == 'confirmed' %} 
-               <a href="#" onclick="_send('{{ app.id }}')"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline
-                ui-nodisc-icon ui-icon-user status-confirmed-sm cta">Wyślij bezpośrednio do SM</a>
-            {% endif %}
-        </fieldset>
+                data-inline="true" data-mini="true" 
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini addToGallery
+                    {% if app.addedToGallery %}ui-disabled{% endif %}
+                    ui-icon-grid ui-alt-icon">Dodaj do galerii</a>
+            
+            <a href="/ud-{{ app.id }}.html?dialog"
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
+                ui-icon-info">Szczegóły</a>
+        </div>
+
 {% endif %}
         <div class="ui-grid-a ui-responsive images images-cropped">
             <div class="ui-block-a imageContainer">
@@ -50,16 +57,18 @@
             </div>
         </div>
 {% if config.appActionButtons %}
-
     <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ statuses[app.status].name }}</b> na:</p>
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
     {% for key,val in statuses %}
-        {% if val.class and key != 'confirmed-waiting' %}
+        {% if val.class == 'bottom' %}
             <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')"
-            class="ui-btn ui-btn-inline ui-btn-icon-left ui-btn-inline
-            {% if key not in statuses[app.status].allowed and key != app.status %}hidden{% endif %}
-            {% if key == app.status %}ui-disabled{% endif %}
-            ui-nodisc-icon ui-icon-{{ val.icon }} status-{{ key }}">{{ val.action }}</a>
+                data-inline="true" data-mini="true" 
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
+                {% if key not in statuses[app.status].allowed and key != app.status %}hidden{% endif %}
+                {% if key == app.status %}ui-disabled{% endif %}
+                {{ val.cta ?? '' }}
+                ui-icon-{{ val.icon }}
+                status-{{ key }}">{{ val.action }}</a>
         {% endif %}
     {% endfor %}
     </fieldset>

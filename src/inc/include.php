@@ -40,7 +40,8 @@ function generate($template, $parameters){
             'isLoggedIn' => $isLoggedIn,
             'hasApps' => $isLoggedIn && $storage->getCurrentUser()->hasApps(),
             'isAdmin' => $isLoggedIn && $storage->getCurrentUser()->isAdmin(),
-            'galleryCount' => $storage->getGalleryCount(!isset($_GET['update']))
+            'galleryCount' => $storage->getGalleryCount(!isset($_GET['update'])),
+            'prod' => '%HOST%' == 'uprzejmiedonosze.net'
         ];
     
     if($isLoggedIn){

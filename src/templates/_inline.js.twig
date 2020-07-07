@@ -35,6 +35,8 @@ function setStatus(appId, status){
  */
 function _send(appId){
     $("#send-" + appId).addClass('ui-disabled');
+    $(`#${appId} .status-confirmed-waiting`).addClass('ui-disabled');
+
     $.mobile.loading( "show", { text: 'Wysyłam...', textVisible: true } );
 
     $.post("/api/api.html", { id: appId, action: "send" }, function(msg){
@@ -57,9 +59,12 @@ function _send(appId){
  */
 function addToGallery(appId){
     $.post('/api/api.html', {action: 'addToGallery', id: appId}).done(function() {
+        // dziekujemy.html.twig
         $('div.addToGallery').hide();
-        $('#' + appId + ' .addToGallery').hide();
         $('.addedToGallery').show();
+
+        // application-short.html.twig
+        $('#' + appId + ' .addToGallery').addClass('ui-disabled');
         ga('send', 'event', { eventCategory: 'js', eventAction: 'addToGallery'});
     });
 }
