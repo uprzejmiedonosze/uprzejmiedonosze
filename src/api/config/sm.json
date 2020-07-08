@@ -1189,6 +1189,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "bielsko-biała": {
+    "address": [
+      "Straż Miejska w Bielsku-Białej",
+      "ul. Hugona Kołłątaja 10",
+      "43-300 Bielsko-Biała"
+    ],
+    "email": "sm@strazmiejska.bielsko.pl",
+    "city": "Bielsko-Biała",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
