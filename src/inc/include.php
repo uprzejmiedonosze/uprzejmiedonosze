@@ -28,7 +28,7 @@ function generate($template, $parameters){
     $loader = new \Twig\Loader\FilesystemLoader([__DIR__ . '/../templates', __DIR__ . '/../public/api/config']);
     $twig = new \Twig\Environment($loader,
     [
-        'debug' => '%HOST%' != 'uprzejmiedonosze.net',
+        'debug' => !isProd(),
         'cache' => new \Twig\Cache\FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', \Twig\Cache\FilesystemCache::FORCE_BYTECODE_INVALIDATION),
         'strict_variables' => true,
         'auto_reload' => true
@@ -40,7 +40,9 @@ function generate($template, $parameters){
             'isLoggedIn' => $isLoggedIn,
             'hasApps' => $isLoggedIn && $storage->getCurrentUser()->hasApps(),
             'isAdmin' => $isLoggedIn && $storage->getCurrentUser()->isAdmin(),
-            'galleryCount' => $storage->getGalleryCount(!isset($_GET['update']))
+            'galleryCount' => $storage->getGalleryCount(!isset($_GET['update'])),
+            'isProd' => isProd(),
+            'isStaging' => isStaging()
         ];
     
     if($isLoggedIn){
