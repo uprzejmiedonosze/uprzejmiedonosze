@@ -45,6 +45,7 @@ OTHER_FILES          := src/favicon.ico src/robots.txt src/img src/sitemap.xml s
 STAGING_HOST         := staging.uprzejmiedonosze.net
 PROD_HOST            := uprzejmiedonosze.net
 DEV_HOST             := uprzejmiedonosze.localhost
+SHADOW_HOST          := shadow.uprzejmiedonosze.net
 HOST                 := $(STAGING_HOST)
 HTTPS                := https
 
@@ -74,6 +75,12 @@ dev-run: $(DIRS) export dev ## Building and running docker image
 
 staging: HOST := $(STAGING_HOST)
 staging: $(DIRS) export ## Copy files to staging server.
+	@echo "==> Copying files and dirs for $@"
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	$(create-symlink)
+
+shadow: HOST := $(SHADOW_HOST)
+shadow: $(DIRS) export ## Copy files to shadow server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
@@ -127,7 +134,7 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
 	else \
-		cp $< $@ ; \
+		sed 's/#009C7F/#ff4081/g' $< > $@ ; \
 	fi;
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
