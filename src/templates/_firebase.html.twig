@@ -2,7 +2,7 @@
 <script src="https://www.gstatic.com/firebasejs/7.15.0/firebase-auth.js"></script>
 
 <script>
-{% if '%HOST%' == 'staging.uprzejmiedonosze.net' %}
+{% if general.isStaging %}
     var config = {
         apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
         authDomain: "uprzejmiedonosze-1494607701827.firebaseapp.com",
@@ -12,7 +12,7 @@
         messagingSenderId: "509860799944",
         appId: "1:509860799944:web:5e24b16b56db3d44d98cfd"
     };
-{% elseif '%HOST%' == 'uprzejmiedonosze.net' %}
+{% elseif general.isProd %}
     var config = {
         apiKey: "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
         authDomain: "uprzejmie-donosze.firebaseapp.com",
