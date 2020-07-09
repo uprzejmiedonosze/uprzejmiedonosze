@@ -50,7 +50,7 @@ function logger($msg, $force = null){
     }
 
     $time = date(DT_FORMAT);
-    if('%HOST%' != 'uprzejmiedonosze.net' || $force){
+    if(!isProd() || $force){
         error_log($time . $user . "\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%VERSION%.log");
     }
     return $time;
@@ -89,7 +89,6 @@ function checkIfRegistered(){
         redirect("register.html?next=" . getRequestUri());
     }
 }
-
 
 function genSafeId(){
     return substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
@@ -181,7 +180,7 @@ function _sendSlackOnRegister($user){
         "image_url" => @$_SESSION['user_picture'],
         "footer" => $user->data->address,
     ];
-    _sendSlackAsync($msg, ('%HOST%' == 'uprzejmiedonosze.net')? 1: 11);
+    _sendSlackAsync($msg, isProd()? 1: 11);
 }
 
 /**
@@ -219,14 +218,14 @@ function _sendSlackOnNewApp($app, $todaysNewAppsCount){
         "footer_icon" => "%HTTPS%://%HOST%/img/{$app->category}.jpg",
         "ts" => strtotime($app->date)
     ];
-    _sendSlackAsync($msg, ('%HOST%' == 'uprzejmiedonosze.net')? 1: 11);
+    _sendSlackAsync($msg, isProd()? 1: 11);
 }
 
 /** 
  * Sends message to #errors slack channel at uprzejmiedonosze.slack.com
  */
 function _sendSlackError($msg){
-    _sendSlackAsync($msg, ('%HOST%' == 'uprzejmiedonosze.net')? 2: 12);
+    _sendSlackAsync($msg, isProd()? 2: 12);
 }
 
 /**
@@ -237,5 +236,12 @@ function _sendSlackAsync($msg, $type){
     return msg_send($queue, $type, $msg, true, false);
 }
 
-?>
+function isProd(){
+    return '%HOST%' == 'uprzejmiedonosze.net' || '%HOST%' == 'shadow.uprzejmiedonosze.net';
+}
 
+function isStaging(){
+    return '%HOST%' == 'staging.uprzejmiedonosze.net';
+}
+
+?>

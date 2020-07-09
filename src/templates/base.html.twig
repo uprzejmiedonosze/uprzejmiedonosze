@@ -65,9 +65,9 @@
                 {% endif %}
 
                 <h1>{{ head.shortTitle ?? 'Uprzejmie Donoszę' }} 
-                    {% if '%HOST%' == 'staging.uprzejmiedonosze.net' %}
+                    {% if general.isStaging %}
                         <sup>[STG]</sup>
-                    {% elseif '%HOST%' == 'uprzejmiedonosze.net' %}
+                    {% elseif general.isProd %}
                     {% else %}
                         <sup>[DEV]</sup>
                     {% endif %}
