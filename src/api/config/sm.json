@@ -1200,6 +1200,17 @@
     "hint": null,
     "api": false
   },
+  "bytom": {
+    "address": [
+      "Straż Miejska w Bytomiu",
+      "ul. Wrocławska 122",
+      "41-902 Bytom"
+    ],
+    "email": "dyzurny@strazmiejska.bytom.pl",
+    "city": "Bytom",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
