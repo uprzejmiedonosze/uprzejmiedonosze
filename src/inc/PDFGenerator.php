@@ -70,7 +70,7 @@ function tex2pdf($application, $destFile, $type) {
     $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
     $twig = new \Twig\Environment($loader,
     [
-        'debug' => '%HOST%' != 'uprzejmiedonosze.net',
+        'debug' => !isProd(),
         'cache' => new \Twig\Cache\FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', \Twig\Cache\FilesystemCache::FORCE_BYTECODE_INVALIDATION),
         'strict_variables' => true,
         'auto_reload' => true

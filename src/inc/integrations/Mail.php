@@ -7,7 +7,7 @@ class Mail extends CityAPI {
 
         $user = $storage->getCurrentUser();
 
-        if('%HOST%' == 'uprzejmiedonosze.net'){
+        if(isProd()){
             $to      = $application->guessSMData()->email;
         } else {
             $to      = "szymon.nieradka@gmail.com";

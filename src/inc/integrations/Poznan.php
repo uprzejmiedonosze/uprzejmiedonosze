@@ -4,7 +4,7 @@ class Poznan extends CityAPI {
     function send(&$application){
         parent::checkApplication($application);
 
-        if('%HOST%' == 'uprzejmiedonosze.net'){
+        if(isProd()){
             $url = "https://www.poznan.pl/mim/api/submit.html?service=fixmycity";
         } else {
             $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
