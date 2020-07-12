@@ -46,7 +46,7 @@ class User extends JSONObject{
     }
 
     public function getLastLocation(){
-        if(isset($this->lastLocation)){
+        if(isset($this->lastLocation) && $this->lastLocation != 'NaN,NaN'){
             return $this->lastLocation;
         }
         global $storage;

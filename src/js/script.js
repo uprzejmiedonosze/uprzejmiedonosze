@@ -143,11 +143,12 @@ function initAutocomplete(trigger_change, inputId) {
 
 /* ############################## ADDRESS ############################## */
 
-// eslint-disable-next-line no-unused-vars
 function setAddressByLatLngString(latlng){
-    ll = latlng.split(',');
-    if(ll.length == 2){
-        initialLocation = ll;
+    if(latlng){
+        ll = latlng.split(',');
+        if(ll.length == 2 && !isNaN(ll[0])){
+            initialLocation = ll;
+        }
     }
 }
 
