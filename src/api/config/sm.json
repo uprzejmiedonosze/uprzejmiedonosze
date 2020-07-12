@@ -1198,7 +1198,7 @@
     "email": "sm@strazmiejska.bielsko.pl",
     "city": "Bielsko-Biała",
     "hint": null,
-    "api": false
+    "api": "Mail"
   },
   "bytom": {
     "address": [
@@ -1209,7 +1209,7 @@
     "email": "dyzurny@strazmiejska.bytom.pl",
     "city": "Bytom",
     "hint": null,
-    "api": false
+    "api": "Mail"
   },
   "czeladź": {
     "address": [
@@ -1220,7 +1220,7 @@
     "email": "kniebylski@um.czeladz.pl",
     "city": "Czeladź",
     "hint": null,
-    "api": false
+    "api": "Mail"
   },
   "jarocin": {
     "address": [
@@ -1231,7 +1231,7 @@
     "email": "policja@jarocin.policja.gov.pl",
     "city": "Jarocin",
     "hint": null,
-    "api": false
+    "api": "Mail"
   },
   "_nieznane": {
     "address": [
