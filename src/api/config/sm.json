@@ -1211,6 +1211,17 @@
     "hint": null,
     "api": false
   },
+  "czeladź": {
+    "address": [
+      "Straż Miejska w Czeladzi",
+      "Katowicka 45",
+      "41-250 Czeladź"
+    ],
+    "email": "kniebylski@um.czeladz.pl",
+    "city": "Czeladź",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
