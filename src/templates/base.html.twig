@@ -87,6 +87,13 @@
                     data-ajax="false">{{ rightButtonText ?? 'Nowe zgłoszenie' }}</a>
                 {% endif %}
 
+                {% if rightButton is defined and rightButton == 'menuSend' %}
+                <a href="#" onclick="_send('{{ app.id }}');" id="send-{{ app.id }}"
+                    class="ui-btn-right ui-alt-icon
+                    ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
+                    {{ rightButtonIcon ?? 'ui-icon-mail' }}">{{ rightButtonText ?? 'Wyślij teraz!'  }}</a>
+                {% endif %}
+
                 {% block rightButtonCustom %}
                 {% endblock %}
             </div> <!-- header -->
