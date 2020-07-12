@@ -1222,6 +1222,17 @@
     "hint": null,
     "api": false
   },
+  "jarocin": {
+    "address": [
+      "Komenda Powiatowa Policji w Jarocinie",
+      "ul. Bohaterów Jarocina 15",
+      "63-200 Jarocin"
+    ],
+    "email": "policja@jarocin.policja.gov.pl",
+    "city": "Jarocin",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
