@@ -13,50 +13,28 @@ class Mail extends CityAPI {
             $to      = "szymon.nieradka@gmail.com";
         }
         
-        $subject     = $application->getTitle();
-        $mainMessage = parent::formatEmail($application);
+        $transport = (new Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl'))
+          ->setUsername('e@nieradka.net')
+          ->setPassword('e37b4317cb7fc5f');
+
+        $mailer = new Swift_Mailer($transport);
 
         require(__DIR__ . '/../PDFGenerator.php');
         [$fileatt, $fileattname] = application2PDF($application->id);
-        $fileatttype = "application/pdf";
-        
-        $headers     = "From: {$application->user->name} <ud@uprzejmiedonosze.net>\r\n";
-        $headers    .= "Reply-To: {$application->user->email}\r\n";
-        $headers    .= "Return-Path: {$application->user->email}\r\n";
-        $headers    .= "Cc: {$application->user->name} <{$application->user->email}>";
-        
-        // File
-        $file = fopen($fileatt, 'rb');
-        $data = fread($file, filesize($fileatt));
-        fclose($file);
-        
-        // This attaches the file
-        $semi_rand     = md5(time());
-        $mime_boundary = "==Multipart_Boundary_x{$semi_rand}x";
-        $headers      .= "\nMIME-Version: 1.0\r\n" .
-          "Content-Type: multipart/mixed;\r\n" .
-          " boundary=\"{$mime_boundary}\"";
-        
-        $message = "This is a multi-part message in MIME format.\r\n\r\n" .
-          "--{$mime_boundary}\r\n" .
-          "Content-type: text/plain; charset=\"UTF-8\"; format=flowed \r\n" .
-          "Mime-Version: 1.0 \r\n" .
-          "Content-Transfer-Encoding: quoted-printable \r\n\r\n" .
-          quoted_printable_encode($mainMessage) . "\r\n";
-        
-        $data = chunk_split(base64_encode($data));
-        $message .= "--{$mime_boundary}\r\n" .
-          "Content-Type: {$fileatttype};\r\n" .
-          " name=\"{$fileattname}\"\r\n" .
-          "Content-Disposition: attachment;\r\n" .
-          " filename=\"{$fileattname}\"\r\n" .
-          "Content-Transfer-Encoding: base64\r\n\\rn" .
-        $data . "\n\n" .
-         "--{$mime_boundary}--\n";
-        
-        // Send the email
-        if(!mail($to, $subject, $message, $headers)) {
-            raiseError(error_get_last()['message'], 500);
+
+        $message = (new Swift_Message($application->getTitle()))
+          ->setFrom([$application->user->email => $application->user->name])
+          ->setTo([$to])
+          ->addCc([$application->user->email => $application->user->name])
+          ->setBody(parent::formatEmail($application))
+          ->attach(Swift_Attachment::fromPath($fileatt)
+            ->setFilename($fileattname))
+          ->setSender($application->user->email)
+          ->setReturnPath($application->user->email);
+
+        $result = $mailer->send($message);
+        if(!$result){
+          raiseError($result, 500, true);
         }
 
         //$application->setStatus('confirmed-waiting');
