@@ -25,6 +25,8 @@ fclose($st);
 
 const CATEGORIES_MATRIX = Array('a', 'b');
 
+require_once(__DIR__ . '/../config.php');
+
 const SEXSTRINGS = Array (
     '?' => [
         "bylam" => "byłam/em",

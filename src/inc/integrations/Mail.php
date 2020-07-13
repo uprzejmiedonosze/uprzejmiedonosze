@@ -13,9 +13,9 @@ class Mail extends CityAPI {
             $to      = "szymon.nieradka@gmail.com";
         }
         
-        $transport = (new Swift_SmtpTransport('smtp.gmail.com', 465, 'ssl'))
-          ->setUsername('e@nieradka.net')
-          ->setPassword('e37b4317cb7fc5f');
+        $transport = (new Swift_SmtpTransport(SMTP_HOST, SMTP_PORT, SMTP_SSL))
+          ->setUsername(SMTP_USER)
+          ->setPassword(SMTP_PASS);
 
         $mailer = new Swift_Mailer($transport);
 

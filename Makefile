@@ -99,7 +99,7 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	@cp -r lib vendor src/*.php src/tools $(EXPORT)/
+	@cp -r lib vendor src/*.php src/tools config.php $(EXPORT)/
 
 check-branch: ## Detects environment and active branch changes
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \

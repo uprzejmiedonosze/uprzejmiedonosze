@@ -12,3 +12,4 @@ export/**
 **/*.out
 tex/app/*
 *uprzejmiedonosze.net-firebase-adminsdk.json
+/config.php
