@@ -23,9 +23,9 @@ class Mail extends CityAPI {
         [$fileatt, $fileattname] = application2PDF($application->id);
 
         $message = (new Swift_Message($application->getTitle()))
-          ->setFrom([$application->user->email => $application->user->name])
-          ->setTo([$to])
-          ->addCc([$application->user->email => $application->user->name])
+          ->setFrom($application->user->email, $application->user->name)
+          ->setTo($to)
+          ->addCc($application->user->email, $application->user->name)
           ->setBody(parent::formatEmail($application))
           ->attach(Swift_Attachment::fromPath($fileatt)
             ->setFilename($fileattname))
