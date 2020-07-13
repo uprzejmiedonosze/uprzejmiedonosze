@@ -1233,6 +1233,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "polkowice": {
+    "address": [
+      "Straż Miejska Polkowice",
+      "ul. Targowa 11",
+      "59-100 Polkowice"
+    ],
+    "email": "dyzurny@ksm.polkowice.pl",
+    "city": "Polkowice",
+    "hint": null,
+    "api": false
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
