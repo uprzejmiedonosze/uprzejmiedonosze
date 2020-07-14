@@ -1242,7 +1242,7 @@
     "email": "dyzurny@ksm.polkowice.pl",
     "city": "Polkowice",
     "hint": null,
-    "api": false
+    "api": "Mail"
   },
   "_nieznane": {
     "address": [
