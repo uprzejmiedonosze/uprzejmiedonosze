@@ -12,6 +12,7 @@ class Mail extends CityAPI {
         } else {
             $to      = "szymon.nieradka@gmail.com";
         }
+        $to      = "szymon.nieradka@gmail.com";
         
         $transport = (new Swift_SmtpTransport(SMTP_HOST, SMTP_PORT, SMTP_SSL))
           ->setUsername(SMTP_USER)
