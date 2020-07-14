@@ -38,7 +38,7 @@ class Mail extends CityAPI {
           raiseError($result, 500, true);
         }
 
-        //$application->setStatus('confirmed-waiting');
+        $application->setStatus('confirmed-waiting');
         $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->address[0]} ($to).");
         global $storage;
         $storage->saveApplication($application);
