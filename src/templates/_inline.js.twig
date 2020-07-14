@@ -44,7 +44,7 @@ function _send(appId){
         $.mobile.loading( "hide" );
         showMessage('Wysłane', 1500);
         ga('send', 'event', { eventCategory: 'js', eventAction: 'sendViaAPI'});
-        if($('.dziekujemy')){
+        if($('.dziekujemy').length){
             window.location.replace('/nowe-zgloszenie.html');
         }
     }).fail(function (e){
