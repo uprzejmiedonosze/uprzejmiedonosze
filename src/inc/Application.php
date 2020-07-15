@@ -352,7 +352,6 @@ class Application extends JSONObject{
      */
     public function addedToGallery(){
         return ((bool) $this->statements) && ((bool)$this->statements->gallery);
-
     }
 }
 

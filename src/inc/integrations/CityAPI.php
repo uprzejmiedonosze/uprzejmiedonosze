@@ -20,8 +20,11 @@ abstract class CityAPI {
         ]), 0, $limit);
     }
 
-    function formatEmail(&$application){
-        return generate('_application.email.twig', [ 'app' => $application ]);
+    function formatEmail(&$application, $withUserData = true){
+        return generate('_application.email.twig', [
+            'app' => $application, 
+            'config' => [ 'isAppOwnerOrAdmin' => $withUserData ]
+        ]);
     }
 
     function curlShellSend($url, $header, &$data, &$application){
