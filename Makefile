@@ -133,8 +133,10 @@ clean: ## Removes minified CSS and JS files.
 export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
-	else \
+	elif [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
 		sed 's/#009C7F/#ff4081/g' $< > $@ ; \
+	else \
+		sed 's/#009C7F/#0088bb/g' $< > $@ ; \
 	fi;
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
