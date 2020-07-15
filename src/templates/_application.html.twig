@@ -10,10 +10,14 @@
         {% endif %}
     {% endif %}
 {% if app.sentViaAPI is defined %}
-    <b>To zgłoszenie zostało wysłane do SM {{ app.guessSMData.city }} poprzez API:</b>
-
+    <b>To zgłoszenie zostało wysłane do {{ app.guessSMData.address[0] }} poprzez API:</b>
     <cite>{% include('_application.txt.twig') %}</cite>
 {% else %}
+    {% if app.sentViaMail is defined %}
+    <b>To zgłoszenie zostało wysłane do {{ app.guessSMData.address[0] }} bezpośrednio
+    z serwera Uprzejmie Donoszę w dniu {{ app.sentViaMail.date|date('Y-m-d') }}
+    o godzinie {{ app.sentViaMail.date|date('H:i') }}.</b>
+    {% endif %}
         <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
             pojazdu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
@@ -69,7 +73,7 @@
             </p>
         </div>
         <div class="ui-block-b imageContainer">
-{% if app.address.latlng is defined %}
+{% if app.address.latlng is defined and app.address.latlng != 'NaN,NaN' %}
             <div class="loader"></div>
             <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
                 data-ajax="false" target="_blank">
