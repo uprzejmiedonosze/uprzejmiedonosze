@@ -21,6 +21,35 @@
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
     <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 
+{% if sm.email %}
+<div class="whatNext">
+    <h4>Co dalej?</h4>
+        <p><b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
+
+    {% if sm.hasAPI %}
+        Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
+        zgłoszenia. Naciśnij przycisk <b>"Wyślij teraz!"</b> w prawym górnym rogu.</p><p>{{ sm.hint | raw }}</p>
+    {% else %}
+        Możesz wysłać swoje zgłoszenie za pośrednictwem serwera Uprzejmie Donoszę. 
+        {{ app.guessSMData.address[0] }} otrzyma wiadomość a Ty dostaniesz jej kopię.
+        Naciśnij przycisk <b>"Wyślij teraz!"</b> w prawym górnym rogu.</p>
+        
+        <p>{{ sm.hint | raw }}</p>
+    {% endif %}
+</div>
+<div class="whatNextDone" style="display: none;">
+    <h4>Dziękujemy za wysłanie zgłoszenia</h4>
+</div>
+{% else %}
+    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
+        Skontaktuj proszę się z nami pod adresem
+        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
+        <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
+        Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
+        oraz adres email Straży Miejskiej.
+    </p>
+{% endif %}
+
 {% if appsCount > 3 and sm.email %}
 <div class="addToGallery">
     <h4>Dodaj to zdjęcie do galerii</h4>
@@ -53,37 +82,6 @@
 <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>. Twoje zdjęcie oczekuje
 na moderację i zostanie opublikowane w przeciągu 24h.
 </div>
-{% endif %}
-
-{% if sm.email %}
-<div class="whatNext">
-    <h4>Co dalej?</h4>
-        <p><b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
-
-    {% if sm.hasAPI %}
-        Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
-        zgłoszenia. Naciśnij przycisk "Wyślij" w prawym górnym rogu.</p><p>{{ sm.hint | raw }}</p>
-    {% else %}
-        Możesz wysyłać zgłoszenia samodzielnie (za pomocą swojego klienta poczty) za pomocą strony
-        <a href="wysylka.html" data-ajax="false">wysyłka</a>.</p>
-
-        <p>Możesz też wysłać swoje zgłoszenie za pośrednictwem serwera Uprzejmie Donoszę. 
-        {{ app.guessSMData.address[0] }} otrzyma wiadomość a Ty dostaniesz kopię tej wiadomości.
-        Naciśnij przycisk "Wyślij" w prawym górnym rogu.</p><p>{{ sm.hint | raw }}</p>
-    {% endif %}
-</div>
-<div class="whatNextDone" style="display: none;">
-    <h4>Dziękujemy za wysłanie zgłoszenia</h4>
-</div>
-
-{% else %}
-    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
-        Skontaktuj proszę się z nami pod adresem
-        <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
-        <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
-        Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
-        oraz adres email Straży Miejskiej.
-    </p>
 {% endif %}
 
 <script>
