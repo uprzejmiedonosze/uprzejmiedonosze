@@ -31,6 +31,7 @@ class Mail extends CityAPI {
           ->attach(Swift_Attachment::fromPath($fileatt)
             ->setFilename($fileattname))
           ->setSender($application->user->email)
+          ->setReplyTo($application->user->email, $application->user->name)
           ->setReturnPath($application->user->email);
 
         $result = $mailer->send($message);
