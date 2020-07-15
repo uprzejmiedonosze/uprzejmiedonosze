@@ -97,6 +97,7 @@ function _send($appId){
         require(__DIR__ . '/../../inc/integrations/CityAPI.php');
         $api = new $sm->api;
         $newStatus = $api->send($application);
+        _sendSlackOnNewApp($application);
     }catch(Exception $e){
         raiseError($e->getMessage(), 500);
     }
@@ -172,8 +173,6 @@ function _addToGallery($appId){
     $application->initStatements();
     $application->statements->gallery = date(DT_FORMAT);
     $storage->saveApplication($application);
-
-    _sendSlackOnNewApp($application, $storage->getTodaysNewAppsCount());
 
     echo json_encode(Array("status" => "OK"));
 }

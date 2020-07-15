@@ -186,7 +186,7 @@ function _sendSlackOnRegister($user){
 /**
  * Sends formatted message to Slack.
  */
-function _sendSlackOnNewApp($app, $todaysNewAppsCount){
+function _sendSlackOnNewApp($app){
     $title = "Kandydat do galerii {$app->number} ({$app->address->city}, {$todaysNewAppsCount} dzisiaj)";
 
     logger($title, true);
@@ -205,10 +205,6 @@ function _sendSlackOnNewApp($app, $todaysNewAppsCount){
         'fields' => [[
                 'title' => $app->address->city . (($app->guessSMData()->email)? "": " (!)"),
                 'value' => ($app->category == 0)? 'Inne: ' . $app->userComment: $app->getCategory()->getTitle(),
-                'short' => true
-            ],[
-                'title' => "Dzisiaj:",
-                'value' => $todaysNewAppsCount,
                 'short' => true
             ]],
         "image_url" => "%HTTPS%://%HOST%/{$app->contextImage->url}",
