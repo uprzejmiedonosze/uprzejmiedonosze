@@ -418,7 +418,7 @@ div.loader.l {
     display: block;
     height: auto;
     min-width: 100%;
-    min-height: 100%;
+    -min-height: 100%;
 }
 
 .ui-grid-a.ui-responsive.images-cropped .imageContainer img {
