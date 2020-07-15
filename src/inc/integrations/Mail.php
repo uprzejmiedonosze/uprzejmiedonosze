@@ -22,11 +22,13 @@ class Mail extends CityAPI {
         require(__DIR__ . '/../PDFGenerator.php');
         [$fileatt, $fileattname] = application2PDF($application->id);
 
-        $message = (new Swift_Message($application->getTitle()))
-          ->setFrom($application->user->email, $application->user->name)
+        
+        $subject = $application->getTitle();
+        $message = (new Swift_Message($subject))
+          ->setFrom(SMTP_USER, $application->user->name)
           ->setTo($to)
           ->addCc($application->user->email, $application->user->name)
-          ->setBody(parent::formatEmail($application))
+          ->setBody(parent::formatEmail($application, true))
           ->attach(Swift_Attachment::fromPath($fileatt)
             ->setFilename($fileattname))
           ->setSender($application->user->email)
@@ -40,6 +42,14 @@ class Mail extends CityAPI {
 
         $application->setStatus('confirmed-waiting');
         $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->address[0]} ($to).");
+        $application->sentViaMail = new JSONObject();
+        $application->sentViaMail->date = date(DT_FORMAT);
+        $application->sentViaMail->subject = $subject;
+        $application->sentViaMail->to = $to;
+        $application->sentViaMail->cc = "{$application->user->name} ({$application->user->email})";
+        $application->sentViaMail->from = "{$application->user->name} (" . SMTP_USER . ")";
+        $application->sentViaMail->body = parent::formatEmail($application, false);
+
         global $storage;
         $storage->saveApplication($application);
         return 'confirmed-waiting';
