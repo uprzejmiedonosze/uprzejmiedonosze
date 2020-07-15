@@ -45,7 +45,10 @@ function _send(appId){
         showMessage('Wysłane', 1500);
         ga('send', 'event', { eventCategory: 'js', eventAction: 'sendViaAPI'});
         if($('.dziekujemy').length){
-            window.location.replace('/nowe-zgloszenie.html');
+            $("#send-" + appId).hide();
+            $("a.newApplication").show();
+            $(".whatNext").hide();
+            $(".whatNextDone").show();
         }
     }).fail(function (e){
         $("#send-" + appId).removeClass('ui-disabled');

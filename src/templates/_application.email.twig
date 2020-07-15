@@ -15,4 +15,4 @@ Zgłaszający:
   {{ app.user.name }}
   {{ app.user.address }}
   {{ app.user.email }}
-  {% if app.user.msisdn %}{{ app.user.msisdn }}{% endif %}
+  {{ app.user.msisdn ?? '' }}
