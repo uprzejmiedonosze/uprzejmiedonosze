@@ -24,16 +24,20 @@
 {% if statuses[app.status].topButtons %}
     {% set send = 'confirmed-waiting' %}
         <div>
-            {% if app.guessSMData.api %}
+            {% if app.guessSMData.automated %}
             <a href="#" onclick="_send('{{ app.id }}');"
                 data-inline="true" data-mini="true" 
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-                {% if send not in statuses[app.status].allowed or not app.guessSMData.api %}ui-disabled{% else %}cta{% endif %}
+                {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}
                 ui-icon-{{ statuses[send].icon }}
                 status-{{ send }}">Wyślij do {{ app.guessSMData.address[0] }}</a>
-            {% else %}
+            {% elseif app.guessSMData.unknown %}
             <a href="/brak-sm.html"
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-{{ send }}">Wyślij zgłoszenie</a>
+            {% else %}
+            <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}"
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-{{ send }}
+                {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}">Wyślij zgłoszenie</a>
             {% endif %}
             {% if config.appActionButtons %}
             <a href="#" onclick="addToGallery('{{ app.id }}')"

@@ -36,7 +36,15 @@ class SM extends JSONObject{
 
     public function hasAPI(){
         return $this->api && $this->api !== 'Mail';
-    }  
+    }
+
+    public function automated(){
+        return (boolean)$this->api;
+    }
+
+    public function unknown(){
+        return $this->city == null;
+    }
 
 }
 

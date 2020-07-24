@@ -18,8 +18,8 @@ class ConfigClass {
                 $sub = new $class($value);
                 $value = $sub;
             }
+            $value->key = $key;
             $this->{$key} = $value;
         }
     }
 }
-
