@@ -8,7 +8,7 @@
     "email": "sm@um.szczecin.pl",
     "city": "Szczecin",
     "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku.",
-    "api": "Mail"
+    "api": null
   },
   "warszawa": {
     "address": [
@@ -32,7 +32,7 @@
     "email": "csk@strazmiejska.waw.pl",
     "city": "Warszawa",
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "api": null
   },
   "wrocław": {
     "address": [
@@ -54,7 +54,7 @@
     "email": "smkrak@strazmiejska.krakow.pl",
     "city": "Kraków",
     "hint": "Niestety SM Kraków wzywa na przesłuchanie do każdego zgłoszenia.",
-    "api": "Mail"
+    "api": null
   },
   "gdynia": {
     "address": [
@@ -65,7 +65,7 @@
     "email": "straz_miejska@gdynia.pl",
     "city": "Gdynia",
     "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie.",
-    "api": "Mail"
+    "api": null
   },
   "białystok": {
     "address": [
@@ -76,7 +76,7 @@
     "email": "dyzurny.sm@um.bialystok.pl",
     "city": "Białystok",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "łódź": {
     "address": [
@@ -87,7 +87,7 @@
     "email": "ogolnomiejski@strazmiejska.lodz.pl",
     "city": "Łódź",
     "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, konieczne jest złożenie oświadczenie ustnie lub przesłanie go na piśmie.",
-    "api": "Mail"
+    "api": null
   },
   "gdańsk": {
     "address": [
@@ -98,7 +98,7 @@
     "email": "strazmiejska@sm.gda.pl",
     "city": "Gdańsk",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "poznań": {
     "address": [
@@ -120,7 +120,7 @@
     "email": "sm@um.torun.pl",
     "city": "Toruń",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "bydgoszcz": {
     "address": [
@@ -131,7 +131,7 @@
     "email": "sekretariat@strazmiejska.bydgoszcz.pl",
     "city": "Bydgoszcz",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "katowice": {
     "address": [
@@ -142,7 +142,7 @@
     "email": "interwencje@katowice.eu",
     "city": "Katowice",
     "hint": "Niestety SM Katowice wzywa na przesłuchanie do każdego zgłoszenia.",
-    "api": "Mail"
+    "api": null
   },
   "górowo iławeckie": {
     "address": [
@@ -153,7 +153,7 @@
     "email": "umgorowo@gorowoilaweckie.pl",
     "city": "Górowo Iławeckie",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "tczew": {
     "address": [
@@ -164,7 +164,7 @@
     "email": "strazmiejska@um.tczew.pl",
     "city": "Tczew",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "chełm": {
     "address": [
@@ -175,7 +175,7 @@
     "email": "straz.miejska@umchelm.pl",
     "city": "Chełm",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "gryfino": {
     "address": [
@@ -186,7 +186,7 @@
     "email": "strazmiejska@gryfino.pl",
     "city": "Gryfino",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "ząbki": {
     "address": [
@@ -197,7 +197,7 @@
     "email": "strazmiejska@zabki.pl",
     "city": "Ząbki",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "bartoszyce": {
     "address": [
@@ -208,7 +208,7 @@
     "email": "jerzyszostak@bartoszyce.pl",
     "city": "Bartoszyce",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "lidzbark warmiński": {
     "address": [
@@ -219,7 +219,7 @@
     "email": "um@lidzbarkwarminski.pl",
     "city": "Lidzbark Warmiński",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "zielona góra": {
     "address": [
@@ -230,7 +230,7 @@
     "email": "dyzurny@um.zielona-gora.pl",
     "city": "Zielona Góra",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "olsztyn": {
     "address": [
@@ -241,7 +241,7 @@
     "email": "sm@strazmiejska.olsztyn.pl",
     "city": "Olsztyn",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "świdnica": {
     "address": [
@@ -252,7 +252,7 @@
     "email": "strazmiejska@sm.swidnica.pl",
     "city": "Świdnica",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "karlino": {
     "address": [
@@ -263,7 +263,7 @@
     "email": "sm@karlino.pl",
     "city": "Karlino",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "sosnowiec": {
     "address": [
@@ -274,7 +274,7 @@
     "email": "straz@um.sosnowiec.pl",
     "city": "Sosnowiec",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "rzeszów": {
     "address": [
@@ -285,7 +285,7 @@
     "email": "komenda@sm.erzeszow.pl",
     "city": "Rzeszów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "łosice": {
     "address": [
@@ -296,7 +296,7 @@
     "email": "straz-miejska@gminalosice.pl",
     "city": "Łosice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "sieradz": {
     "address": [
@@ -307,7 +307,7 @@
     "email": "sm@umsieradz.pl",
     "city": "Sieradz",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "tarnów": {
     "address": [
@@ -318,7 +318,7 @@
     "email": "straz@umt.tarnow.pl",
     "city": "Tarnów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "wejherowo": {
     "address": [
@@ -329,7 +329,7 @@
     "email": "sm@wejherowo.pl",
     "city": "Wejherowo",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "konstancin-jeziorna": {
     "address": [
@@ -340,7 +340,7 @@
     "email": "komendasm@konstancinjeziorna.pl",
     "city": "Konstancin-Jeziorna",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "nowy targ": {
     "address": [
@@ -351,7 +351,7 @@
     "email": "dyzurni@nowy-targ.policja.gov.pl",
     "city": "Nowy Targ",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "nowa iwiczna": {
     "address": [
@@ -362,7 +362,7 @@
     "email": "strazmiejska@piaseczno.eu",
     "city": "Nowa Iwiczna",
     "hint": "Miejscowość Nowa Iwiczna obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
+    "api": null
   },
   "gołków": {
     "address": [
@@ -373,7 +373,7 @@
     "email": "strazmiejska@piaseczno.eu",
     "city": "Gołków",
     "hint": "Miejscowość Gołków obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
+    "api": null
   },
   "zalesie górne": {
     "address": [
@@ -384,7 +384,7 @@
     "email": "strazmiejska@piaseczno.eu",
     "city": "Zalesie Górne",
     "hint": "Miejscowość Zalesie Górne obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
+    "api": null
   },
   "piaseczno": {
     "address": [
@@ -395,7 +395,7 @@
     "email": "strazmiejska@piaseczno.eu",
     "city": "Piaseczno",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "kalisz": {
     "address": [
@@ -406,7 +406,7 @@
     "email": "kontakt@sm.kalisz.pl",
     "city": "Kalisz",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "legnica": {
     "address": [
@@ -417,7 +417,7 @@
     "email": "sekretariat@sm.legnica.pl",
     "city": "Legnica",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "pruszków": {
     "address": [
@@ -428,7 +428,7 @@
     "email": "kierownikzmiany@strazmiejska.pruszkow.pl",
     "city": "Pruszków",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "niechorze": {
     "address": [
@@ -439,7 +439,7 @@
     "email": "strazgminna@rewal.pl",
     "city": "Niechorze",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "rewal": {
     "address": [
@@ -450,7 +450,7 @@
     "email": "strazgminna@rewal.pl",
     "city": "Rewal",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "mysłowice": {
     "address": [
@@ -461,7 +461,7 @@
     "email": "straz.miejska@myslowice.pl",
     "city": "Mysłowice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "zabrze": {
     "address": [
@@ -472,7 +472,7 @@
     "email": "straz@strazmiejska.zabrze.pl",
     "city": "Zabrze",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "ruda śląska": {
     "address": [
@@ -483,7 +483,7 @@
     "email": "straz@rudaslaska.pl",
     "city": "Ruda Śląska",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "lublin": {
     "address": [
@@ -494,7 +494,7 @@
     "email": "sm@lublin.eu",
     "city": "Lublin",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "leszno": {
     "address": [
@@ -505,7 +505,7 @@
     "email": "sm@leszno.pl",
     "city": "Leszno",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "inowrocław": {
     "address": [
@@ -516,7 +516,7 @@
     "email": "strazmiejska@inowroclaw.pl",
     "city": "Inowrocław",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "suwałki": {
     "address": [
@@ -527,7 +527,7 @@
     "email": "sm@um.suwalki.pl",
     "city": "Suwałki",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "gliwice": {
     "address": [
@@ -538,7 +538,7 @@
     "email": "dyzurny@smgliwice.pl",
     "city": "Gliwice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "wodzisław śląski": {
     "address": [
@@ -549,7 +549,7 @@
     "email": "strazmiejska@wodzislaw-slaski.pl",
     "city": "Wodzisław Śląski",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "rybnik": {
     "address": [
@@ -560,7 +560,7 @@
     "email": "interwencja@sm.rybnik.pl",
     "city": "Rybnik",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "gorzów wielkopolski": {
     "address": [
@@ -571,7 +571,7 @@
     "email": "ksm@um.gorzow.pl",
     "city": "Gorzów Wielkopolski",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "stronie śląskie": {
     "address": [
@@ -582,7 +582,7 @@
     "email": "straznicy@stronie.pl",
     "city": "Stronie Śląskie",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "konstantynów łódzki": {
     "address": [
@@ -593,7 +593,7 @@
     "email": "strazmiejska@konstantynow.pl",
     "city": "Konstantynów Łódzki",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "częstochowa": {
     "address": [
@@ -604,7 +604,7 @@
     "email": "dyzurny_sm@strazmiejska.czestochowa.um.gov.pl",
     "city": "Częstochowa",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "sopot": {
     "address": [
@@ -615,7 +615,7 @@
     "email": "wykroczenia@um.sopot.pl",
     "city": "Sopot",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "kościelisko": {
     "address": [
@@ -626,7 +626,7 @@
     "email": "straz@koscielisko.com.pl",
     "city": "Kościelisko",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "słupsk": {
     "address": [
@@ -637,7 +637,7 @@
     "email": "sm@um.slupsk.pl",
     "city": "Słupsk",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "bełżyce": {
     "address": [
@@ -648,7 +648,7 @@
     "email": "kpbelzyce.kmplublin@lu.policja.gov.pl",
     "city": "Bełżyce",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "jarosław": {
     "address": [
@@ -659,7 +659,7 @@
     "email": "kancelaria@um.jaroslaw.pl",
     "city": "Jarosław",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "legionowo": {
     "address": [
@@ -670,7 +670,7 @@
     "email": "straz.miejska@um.legionowo.pl",
     "city": "Legionowo",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "wadowice": {
     "address": [
@@ -681,7 +681,7 @@
     "email": "strazmiejska@wadowice.pl",
     "city": "Wadowice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "pruszcz gdański": {
     "address": [
@@ -692,7 +692,7 @@
     "email": "strazmiejska@pruszcz-gdanski.pl",
     "city": "Pruszcz Gdański",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "rotmanka": {
     "address": [
@@ -703,7 +703,7 @@
     "email": "strazmiejska@pruszcz-gdanski.pl",
     "city": "Rotmanka",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "mikołów": {
     "address": [
@@ -714,7 +714,7 @@
     "email": "bsm1@mikolow.eu",
     "city": "Mikołów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "żory": {
     "address": [
@@ -725,7 +725,7 @@
     "email": "komendant@zory.ka.policja.gov.pl",
     "city": "Żory",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "świętochłowice": {
     "address": [
@@ -736,7 +736,7 @@
     "email": "sm@swietochlowice.pl",
     "city": "Świętochłowice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "piastów": {
     "address": [
@@ -747,7 +747,7 @@
     "email": "kppruszkow@poczta.fm",
     "city": "Piastów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "olkusz": {
     "address": [
@@ -758,7 +758,7 @@
     "email": "sm1@umig.olkusz.pl",
     "city": "Olkusz",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "grudziądz": {
     "address": [
@@ -769,7 +769,7 @@
     "email": "strazmiejska@um.grudziadz.pl",
     "city": "Grudziądz",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "starachowice": {
     "address": [
@@ -780,7 +780,7 @@
     "email": "strazmiejska@starachowice.eu",
     "city": "Starachowice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "kielce": {
     "address": [
@@ -791,7 +791,7 @@
     "email": "sekretariat@strazmiejska.kielce.pl",
     "city": "Kielce",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "lubartów": {
     "address": [
@@ -802,7 +802,7 @@
     "email": "dyzurni.kpplubartow@lu.policja.gov.pl",
     "city": "Lubartów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "czechowice-dziedzice": {
     "address": [
@@ -813,7 +813,7 @@
     "email": "sm@sm.czechowice-dziedzice.pl",
     "city": "Czechowice-Dziedzice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "płock": {
     "address": [
@@ -824,7 +824,7 @@
     "email": "sekretariat@strazmiejska.plock.eu",
     "city": "Płock",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "łańcut": {
     "address": [
@@ -835,7 +835,7 @@
     "email": "lancut@rz.policja.gov.pl",
     "city": "Łańcut",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "chorzów": {
     "address": [
@@ -846,7 +846,7 @@
     "email": "sm@chorzow.eu",
     "city": "Chorzów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "nysa": {
     "address": [
@@ -857,7 +857,7 @@
     "email": "straz@www.nysa.pl",
     "city": "Nysa",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "niepołomice": {
     "address": [
@@ -868,7 +868,7 @@
     "email": "straz.miejska@niepolomice.com",
     "city": "Niepołomice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "żywiec": {
     "address": [
@@ -879,7 +879,7 @@
     "email": "strazmiejska@zywiec.pl",
     "city": "Żywiec",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "kąty wrocławskie": {
     "address": [
@@ -890,7 +890,7 @@
     "email": "dzielnicowy.katy-wroclawskie3@wroclaw.wr.policja.gov.pl",
     "city": "Kąty Wrocławskie",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "mokronos dolny": {
     "address": [
@@ -901,7 +901,7 @@
     "email": "dzielnicowy.katy-wroclawskie3@wroclaw.wr.policja.gov.pl",
     "city": "Kąty Wrocławskie",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "nowa ruda": {
     "address": [
@@ -912,7 +912,7 @@
     "email": "sm@um.nowaruda.pl",
     "city": "Nowa Ruda",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "dąbrowa górnicza": {
     "address": [
@@ -923,7 +923,7 @@
     "email": "dyzsm@dabrowa-gornicza.pl",
     "city": "Dąbrowa Górnicza",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "będzin": {
     "address": [
@@ -934,7 +934,7 @@
     "email": "strazmiejska@um.bedzin.pl",
     "city": "Będzin",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "szczytno": {
     "address": [
@@ -945,7 +945,7 @@
     "email": "straz.miejska@um.szczytno.pl",
     "city": "Szczytno",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "bełchatów": {
     "address": [
@@ -956,7 +956,7 @@
     "email": "sm@um.belchatow.pl",
     "city": "Bełchatów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "radom": {
     "address": [
@@ -967,7 +967,7 @@
     "email": "sekretariat@strazmiejska.radom.pl",
     "city": "Radom",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "siechnice": {
     "address": [
@@ -978,7 +978,7 @@
     "email": "strazmiejska@umsiechnice.pl",
     "city": "Siechnice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "sędławki": {
     "address": [
@@ -989,7 +989,7 @@
     "email": "komendant@bartoszyce.ol.policja.gov.pl",
     "city": "Sędławki",
     "hint": "Gmina Sędławki jest obsługiwana przez komendą Policji w Bartoszycach.",
-    "api": "Mail"
+    "api": null
   },
   "głogów": {
     "address": [
@@ -1000,7 +1000,7 @@
     "email": "kpp.glogow@glogow.policja.gov.pl",
     "city": "Głogów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "słubice": {
     "address": [
@@ -1011,7 +1011,7 @@
     "email": "sm@slubice.pl",
     "city": "Słubice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "ciechanów": {
     "address": [
@@ -1022,7 +1022,7 @@
     "email": "strazmiejska@umciechanow.pl",
     "city": "Ciechanów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "żukowo": {
     "address": [
@@ -1033,7 +1033,7 @@
     "email": "kppkartuzy@pomorska.policja.gov.pl",
     "city": "Żukowo",
     "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach.",
-    "api": "Mail"
+    "api": null
   },
   "dzierżoniów": {
     "address": [
@@ -1044,7 +1044,7 @@
     "email": "straz@um.dzierzoniow.pl",
     "city": "Dzierżoniów",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "dzierzgoń": {
     "address": [
@@ -1055,7 +1055,7 @@
     "email": "sm@dzierzgon.pl",
     "city": "Dzierzgoń",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "kobierzyce": {
     "address": [
@@ -1066,7 +1066,7 @@
     "email": "slawomir.kniat@wroclaw.wr.policja.gov.pl",
     "city": "Kobierzyce",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "konin": {
     "address": [
@@ -1077,7 +1077,7 @@
     "email": "smkonin@konin.um.gov.pl",
     "city": "Konin",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "kartuzy": {
     "address": [
@@ -1088,7 +1088,7 @@
     "email": "strazmiejska@poczta.kartuzy.pl",
     "city": "Kartuzy",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "kędzierzyn-koźle": {
     "address": [
@@ -1099,7 +1099,7 @@
     "email": "sm@kedzierzynkozle.pl",
     "city": "Kędzierzyn-Koźle",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "tychy": {
     "address": [
@@ -1110,7 +1110,7 @@
     "email": "strazmiejska@umtychy.pl",
     "city": "Tychy",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "międzychód": {
     "address": [
@@ -1121,7 +1121,7 @@
     "email": "strazmiejska@miedzychod.pl",
     "city": "Międzychód",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "zatom nowy": {
     "address": [
@@ -1132,7 +1132,7 @@
     "email": "strazmiejska@miedzychod.pl",
     "city": "Zatom Nowy",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "mosina": {
     "address": [
@@ -1143,7 +1143,7 @@
     "email": "straz.miejska@mosina.pl",
     "city": "Mosina",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "krosno-wlkp": {
     "address": [
@@ -1154,7 +1154,7 @@
     "email": "straz.miejska@mosina.pl",
     "city": "Krosno",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "krosno": {
     "address": [
@@ -1165,7 +1165,7 @@
     "email": "sm@um.krosno.pl",
     "city": "Krosno",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "wiskitki": {
     "address": [
@@ -1176,7 +1176,7 @@
     "email": "dzielnicowy.wiskitki@ra.policja.gov.pl",
     "city": "Wiskitki",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "mińsk mazowiecki": {
     "address": [
@@ -1187,7 +1187,7 @@
     "email": "wykroczenia@umminskmaz.pl",
     "city": "Mińsk Mazowiecki",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "bielsko-biała": {
     "address": [
@@ -1198,7 +1198,7 @@
     "email": "sm@strazmiejska.bielsko.pl",
     "city": "Bielsko-Biała",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "bytom": {
     "address": [
@@ -1209,7 +1209,7 @@
     "email": "dyzurny@strazmiejska.bytom.pl",
     "city": "Bytom",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "czeladź": {
     "address": [
@@ -1220,7 +1220,7 @@
     "email": "kniebylski@um.czeladz.pl",
     "city": "Czeladź",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "jarocin": {
     "address": [
@@ -1231,7 +1231,7 @@
     "email": "policja@jarocin.policja.gov.pl",
     "city": "Jarocin",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "polkowice": {
     "address": [
@@ -1242,7 +1242,7 @@
     "email": "dyzurny@ksm.polkowice.pl",
     "city": "Polkowice",
     "hint": null,
-    "api": "Mail"
+    "api": null
   },
   "_nieznane": {
     "address": [
