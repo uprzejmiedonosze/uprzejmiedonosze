@@ -41,7 +41,7 @@ class Mail extends CityAPI {
         }
 
         $application->setStatus('confirmed-waiting');
-        $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->address[0]} ($to).");
+        $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->getName()} ($to).");
         $application->sentViaMail = new JSONObject();
         $application->sentViaMail->date = date(DT_FORMAT);
         $application->sentViaMail->subject = $subject;
