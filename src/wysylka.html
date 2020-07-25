@@ -2,14 +2,26 @@
 require_once(__DIR__ . '/../inc/include.php');
 
 checkIfLogged();
-
 $user = $storage->getCurrentUser();
-$apps = array_reverse($storage->getAllApplicationsByStatus('confirmed'));
 
-$cities = array();
-foreach($apps as $app){
-    $cities[$app->guessSMData()->city] = $app->guessSMData();
+if(!isset($_GET['city'])){
+    $city = $storage->getNextCityToSent();
+    logger("nextcity = $city");
+    if($city){
+        redirect("wysylka.html?city=" . urlencode($city));    
+    }
+    redirect("moje-zgloszenia.html");
 }
+
+$city = urldecode($_GET['city']);
+
+$apps = $storage->getConfirmedAppsByCity($city);
+
+if(count($apps) == 0){
+    redirect("moje-zgloszenia.html");
+}
+
+$sm = reset($apps)->guessSMData();
 
 echo generate('wysylka.html.twig', 
     [
@@ -27,8 +39,9 @@ echo generate('wysylka.html.twig',
             'isIOS' => isIOS()
         ],
         'apps' => $apps,
-        'cities' => $cities,
-        'user' => $storage->getCurrentUser()
+        'user' => $user,
+        'city' => $city,
+        'sm' => $sm
     ]
 );
 ?>

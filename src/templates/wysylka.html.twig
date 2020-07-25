@@ -24,91 +24,73 @@ Pozdrawiam,
 
 {% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
 
-{% if apps|length == 0 %}
-    <h2>Wyślij swoje zgłoszenia</h2>
-    <p>W tej chwili nie masz ani jednego zgłoszenia o statusie <code>#nowe</code>, które pozwoliłoby
-    wygenerować paczkę zgłoszeń dla Ciebie. Stwórz <a href="start.html">nowe zgłoszenie</a>, lub 
-    wróć na <a href="moje-zgloszenia.html">listę swoich zgłoszeń</a> i ustaw poprawnie statusy.</p>
-{% elseif cities|first.email == null %}
+{% if sm.unknown %}
     <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b> Przeczytaj
         <a href="/brak-sm.html">co zrobić w takiej sytuacji</a>.
     </p>
-{% else %} {# if apps|length == 0 #}
-    {% if (cities | first.api != 'Mail' ) and (cities | first.api ) %}
+{% else %} {# if sm.unknown #}
+    {% if sm.hasAPI %}
         <h2>Wyślij swoje zgłoszenia</h2>
-        <p>Na tej stronie możesz wysłać zbiorczo swoje zgłoszenia do Straży Miejskiej.</p>
-    {% else %} {# if (cities | first.api) #}
-        <h2>Pobierz paczkę zgłoszeń do wysyłki do SM</h2>
-        <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do samodzielnej wysyłki do Straży Miejskiej.
+        <p>Na tej stronie możesz wysłać swoje zgłoszenia do {{ sm.getName }}.</p>
+        <p>Na szczęście {{ sm.getName }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
+        im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei.</p>
+        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
+    {% else %} {# if sm.hasAPI #}
+        <h2>Pobierz paczkę zgłoszeń do wysyłki</h2>
+        <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do samodzielnej wysyłki do {{ sm.getName }}.
         Jest to przydatne, jeśli masz więcej zgłoszeń do wysłania.</p>
+
+        <p>Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
+        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
+
+        <ol>
+            <li>Najpierw 
+                <a id="download" href="all-active-apps.pdf?city={{ city }}"
+                    {% if config.isIOS %}target="_blank"{% else %}download="true"{% endif %}
+                    data-ajax="false"
+                    class="ui-btn ui-corner-all ui-btn-inline ui-mini try">pobierz</a>
+                {{ paczke }};
+            </li>
+            <li class="ui-disabled">Następnie 
+                <a id="send" data-ajax="false" target="_blank"
+                    href="mailto:{{ sm.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}"
+                    class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
+                i wyślij email do SM {{ sm.city }} (jeśli otworzył Ci się pusty email, 
+                <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
+                <div data-role="popup" id="popupPadded" class="ui-content">
+                    <dl>
+                        <dt>Do:</dt>
+                        <dd>{{ sm.email }}</dd>
+                        <dt>Tytuł:</dt>
+                        <dd>{{ emailSubject }}</dd>
+                        <dt>Treść:</dt>
+                        <dd style="white-space: pre-wrap;">{{ emailBody }}</dd>
+                    </dl>
+                </div>
+                <p><b>Nie zapomnij dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!</b></p>
+            </li>
+            <li class="ui-disabled">Po wysłaniu wiadomości, możesz
+                <a id="email" href="moje-zgloszenia.html?changeMail&city={{ sm.key|url_encode }}" data-ajax="false"
+                    class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-mail status-confirmed-waiting">zmienić</a>
+                    status wszystkich {{ apps|length }} zgłoszeń na <code>#wysłane mailem</code>.
+            </li>
+        </ol>
     {% endif %} {# if (cities | first.api) #}
-
-    {% if cities|length > 1 %}
-        <p><b>Poniższa lista zawiera dane z kilku miast!</b> Super, że wykonujesz zgłoszenia
-        w kilku miastach, ale niestety Uprzejmie Donoszę nie jest jeszcze na tyle inteligentne,
-        żeby podzielić zgłoszenia na osobne paczki. Przycisk umożliwiający pobranie paczki zgłoszeń
-        jest dostępny tylko wtedy, gdy wszystkie zgłoszenia poniżej pochodzą z jednego miasta.
-        </p>
-        <p>Wyślij część zgłoszeń pojedynczo (rozwijając je, i naciskając przycisk "Wyślij do ..."). Kiedy
-        na liście zostanie już tylko jedno miasto, odśwież ponownie tę stronę.</p>
-    {% else %} {# if cities|length > 1 #}
-
-        {% if (cities | first.api != 'Mail' ) and (cities | first.api ) %}
-            <p>Na szczęście {{ cities | first.address[0] }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
-            im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei. {{ cities | first.hint | raw }}</p>
-        {% else %} {# if (cities | first.api) #}
-            Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
-            {% if (cities | first.hint) %}<p><b>Uwagi na temat współpracy z SM:</b> {{ cities | first.hint | raw }}</p>{% endif %}
-
-            <ol>
-                <li>Najpierw 
-                    <a id="download" href="all-active-apps.pdf?readyApps"
-                        {% if config.isIOS %}target="_blank"{% else %}download="true"{% endif %}
-                        data-ajax="false"
-                        class="ui-btn ui-corner-all ui-btn-inline ui-mini try">pobierz</a>
-                    {{ paczke }};
-                </li>
-                <li class="ui-disabled">Następnie 
-                    <a id="send" data-ajax="false" target="_blank"
-                        href="mailto:{{ cities | first.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}"
-                        class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-                    i wyślij email do SM {{ cities | first.city }} (jeśli otworzył Ci się pusty email, 
-                    <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
-                    <div data-role="popup" id="popupPadded" class="ui-content">
-                        <dl>
-                            <dt>Do:</dt>
-                            <dd>{{ cities | first.email }}</dd>
-                            <dt>Tytuł:</dt>
-                            <dd>{{ emailSubject }}</dd>
-                            <dt>Treść:</dt>
-                            <dd style="white-space: pre-wrap;">{{ emailBody }}</dd>
-                        </dl>
-                    </div>
-                    <p><b>Nie zapomnij dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!</b></p>
-                </li>
-                <li class="ui-disabled">Po wysłaniu wiadomości, możesz
-                    <a id="email" href="moje-zgloszenia.html?changeMail" data-ajax="false"
-                        class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-mail status-confirmed-waiting">zmienić</a>
-                        status wszystkich {{ apps|length }} zgłoszeń na <code>#wysłane mailem</code>.
-                </li>
-            </ol>
-        {% endif %} {# if (cities | first.api) #}
-    {% endif %} {# if cities|length > 1 #}
-        <script>
-            $('#download').on('click', function(){
-                $(this).parent().addClass('ui-disabled');
-                $('#send').parent().removeClass('ui-disabled');
-            });
-            $('#send, #sendE').on('click', function(){
-                $(this).parent().addClass('ui-disabled');
-                $('#email, #epuap').parent().removeClass('ui-disabled');
-            });
-        </script>
-        <div data-role="collapsibleset" data-mini="true" data-inset="true">
-            {% for app in apps %}
-                {% include('_application-short.html.twig') %}
-            {% endfor %}
-        </div>
+    <script>
+        $('#download').on('click', function(){
+            $(this).parent().addClass('ui-disabled');
+            $('#send').parent().removeClass('ui-disabled');
+        });
+        $('#send, #sendE').on('click', function(){
+            $(this).parent().addClass('ui-disabled');
+            $('#email, #epuap').parent().removeClass('ui-disabled');
+        });
+    </script>
+    <div data-role="collapsibleset" data-mini="true" data-inset="true">
+        {% for app in apps %}
+            {% include('_application-short.html.twig') %}
+        {% endfor %}
+    </div>
 {% endif %} {# if apps|length == 0 #}
 <script>
 {{ include('_inline.js.twig') }}

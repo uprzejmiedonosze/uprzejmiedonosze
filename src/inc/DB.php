@@ -151,21 +151,45 @@ SQL;
     /**
      * Returns all applications for current user by status.
      */
-    public function getAllApplicationsByStatus($status){
-        $sql = "select key, value from applications "
-            . "where json_extract(value, '$.user.email') = :email "
-            . " and json_extract(value, '$.status') = :status";
+    public function getConfirmedAppsByCity($city){
+        $sql = "select key, value from applications"
+            . " where json_extract(value, '$.user.email') = :email "
+            . " and json_extract(value, '$.status') = :status "
+            . " and json_extract(value, '$.smCity') = :city";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $this->getCurrentUser()->data->email);
-        $stmt->bindValue(':status', $status);
+        $stmt->bindValue(':status', 'confirmed');
+        $stmt->bindValue(':city', $city);
         $stmt->execute();
 
         $apps = Array();
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
             $apps[$row[0]] = new Application($row[1]);
         }
-        return $apps;
+        return array_reverse($apps);
+    }
+
+    public function getNextCityToSent(){
+        $sql = "select json_extract(value, '$.smCity'), count(key) from applications"
+        . " where json_extract(value, '$.user.email') = :email "
+        . " and json_extract(value, '$.status') = :status "
+        . " and json_extract(value, '$.smCity') is not null "
+        . " group by json_extract(value, '$.smCity') "
+        . " order by count(key) desc";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $this->getCurrentUser()->data->email);
+        $stmt->bindValue(':status', 'confirmed');
+        $stmt->execute();
+
+        $ret = $stmt->fetchAll();
+        logger(print_r($ret, true));
+        logger(count($ret));
+        if(count($ret) == 0){
+            return null;
+        }
+        return $ret[0][0];
     }
 
     // ADMIN area

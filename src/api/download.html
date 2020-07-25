@@ -1,8 +1,9 @@
 <?PHP
 require(__DIR__ . '/../../inc/PDFGenerator.php');
 
-if(isset($_GET['readyApps'])){
-    [$pdf, $filename] = readyApps2PDF();
+if(isset($_GET['city'])){
+    $city = urldecode($_GET['city']);
+    [$pdf, $filename] = readyApps2PDF($city);
 }else{
     [$pdf, $filename] = application2PDF($_GET['appId']);
 }
