@@ -34,6 +34,10 @@ class SM extends JSONObject{
         return $this->hint;
     }
 
+    public function getName(){
+        return $this->address[0];
+    }
+
     public function hasAPI(){
         return $this->api && $this->api !== 'Mail';
     }

@@ -2,7 +2,7 @@
 
 {% set sm = app.guessSMData() %}
 
-{% if sm.email %}
+{% if sm.automated %}
     {% set rightButton = 'menuSend' %}
 {% else %}
     {% set rightButton = 'menuNewApplication' %}
@@ -21,32 +21,38 @@
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
     <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 
-{% if sm.email %}
+{% if sm.automated %}
 <div class="whatNext">
     <h4>Co dalej?</h4>
-        <p><b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.address[0] }}</b>.
-
+        <p><b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.getName }}</b>.
     {% if sm.hasAPI %}
         Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
-        zgłoszenia. Naciśnij przycisk <b>"Wyślij teraz!"</b> w prawym górnym rogu.</p><p>{{ sm.hint | raw }}</p>
+        zgłoszenia. Naciśnij przycisk <b>"Wyślij teraz!"</b> w prawym górnym rogu.</p>
     {% else %}
         Możesz wysłać swoje zgłoszenie za pośrednictwem serwera Uprzejmie Donoszę. 
-        {{ app.guessSMData.address[0] }} otrzyma wiadomość a Ty dostaniesz jej kopię.
+        {{ app.guessSMData.getName }} otrzyma wiadomość a Ty dostaniesz jej kopię.
         Naciśnij przycisk <b>"Wyślij teraz!"</b> w prawym górnym rogu.</p>
-        
-        <p>{{ sm.hint | raw }}</p>
     {% endif %}
+    <p>{{ sm.hint | raw }}</p>
 </div>
 <div class="whatNextDone" style="display: none;">
     <h4>Dziękujemy za wysłanie zgłoszenia</h4>
 </div>
-{% else %}
+{% elseif sm.unknown %}
     <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b>
         Skontaktuj proszę się z nami pod adresem
         <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a> albo
         <a rel="external" href="https://fb.me/uprzejmiedonosze.net">napisz do nas na FB</a>.
         Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
         oraz adres email Straży Miejskiej.
+    </p>
+{% else %}
+    <h4>Co dalej?</h4>
+    <p><b>Swoje zgłoszenia musisz wysłać samodzielnie</b>.
+    Na szczęście nie musisz wysyłać każdego zgłoszenia osobno. Możesz wygenerować ich kilka/kilkanaście,
+    i wysłać je dogodnym dla siebie cyklu.</p>
+     <p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
+        na adres SM w twoim mieście. Służy do tego strona <a href="wysylka.html?city={{ sm.key|url_encode }}" data-ajax="false">wysyłka</a>.
     </p>
 {% endif %}
 

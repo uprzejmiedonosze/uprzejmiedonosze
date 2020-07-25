@@ -43,7 +43,7 @@ class Poznan extends CityAPI {
         $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
 
         $application->setStatus('confirmed-sm');
-        $application->addComment($application->guessSMData()->address[0], $reply);
+        $application->addComment($application->guessSMData()->getName(), $reply);
         $application->sentViaAPI = $reply;
         global $storage;
         $storage->saveApplication($application);

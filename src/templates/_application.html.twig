@@ -10,11 +10,11 @@
         {% endif %}
     {% endif %}
 {% if app.sentViaAPI is defined %}
-    <b>To zgłoszenie zostało wysłane do {{ app.guessSMData.address[0] }} poprzez API:</b>
+    <b>To zgłoszenie zostało wysłane do {{ app.guessSMData.getName }} poprzez API:</b>
     <cite>{% include('_application.txt.twig') %}</cite>
 {% else %}
     {% if app.sentViaMail is defined %}
-    <b>To zgłoszenie zostało wysłane do {{ app.guessSMData.address[0] }} bezpośrednio
+    <b>To zgłoszenie zostało wysłane do {{ app.guessSMData.getName }} bezpośrednio
     z serwera Uprzejmie Donoszę w dniu {{ app.sentViaMail.date|date('Y-m-d') }}
     o godzinie {{ app.sentViaMail.date|date('H:i') }}.</b>
     {% endif %}

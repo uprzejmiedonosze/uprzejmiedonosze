@@ -192,6 +192,15 @@ class Application extends JSONObject{
         return $this->guessSMData()->hasAPI();
     }
 
+    public function automatedSM(){
+        return (boolean)$this->guessSMData()->automated();
+    }
+
+    public function unknownSM(){
+        return $this->guessSMData()->unknown();
+    }
+
+
     /**
      * Returns application city in a filename-friendly format.
      */

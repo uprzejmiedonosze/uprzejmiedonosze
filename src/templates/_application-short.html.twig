@@ -1,3 +1,5 @@
+{% set send = 'confirmed-waiting' %}
+
 <div id="{{ app.id }}"
     class="application application-short {{ app.getStatus().class }} status-all status-{{ app.getStatus().class }}
         status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus().icon }}"
@@ -6,7 +8,7 @@
         ~ "#{app.userComment} #{app.getCategory.short} " }}
         {% if app.getRecydywa > 1 %}recydywa{{ app.getRecydywa }}{% endif %}">
 
-    <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}} {% if app.comments %}<span title="Komentarz" class="ui-li-count">{{ app.comments|length }}</span>{% endif %}</h3>
+    <h3>{{ app.number }} ({{ app.getDate }}) {{ app.address.address}}{% if app.comments %}<span title="Komentarz" class="ui-li-count">{{ app.comments|length }}</span>{% endif %}</h3>
     <p data-role="listview" data-inset="false">
         <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
@@ -22,51 +24,52 @@
 {% endif %}
 
 {% if statuses[app.status].topButtons %}
-    {% set send = 'confirmed-waiting' %}
-        <div>
-            {% if app.guessSMData.automated %}
-            <a href="#" onclick="_send('{{ app.id }}');"
-                data-inline="true" data-mini="true" 
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-                {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}
-                ui-icon-{{ statuses[send].icon }}
-                status-{{ send }}">Wyślij do {{ app.guessSMData.address[0] }}</a>
-            {% elseif app.guessSMData.unknown %}
-            <a href="/brak-sm.html"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-{{ send }}">Wyślij zgłoszenie</a>
-            {% else %}
-            <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-{{ send }}
-                {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}">Wyślij zgłoszenie</a>
-            {% endif %}
-            {% if config.appActionButtons %}
-            <a href="#" onclick="addToGallery('{{ app.id }}')"
-                data-inline="true" data-mini="true" 
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini addToGallery
-                    {% if app.addedToGallery %}ui-disabled{% endif %}
-                    ui-icon-grid ui-alt-icon">Dodaj do galerii</a>
-            
-            <a href="/ud-{{ app.id }}.html?dialog"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-                ui-icon-info ui-alt-icon">Szczegóły</a>
-            {% endif %}
-        </div>
+    <div>
+        {% if app.automatedSM %}
+        <a href="#" onclick="_send('{{ app.id }}');"
+            data-inline="true" data-mini="true" 
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
+            {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}
+            ui-icon-{{ statuses[send].icon }}
+            status-{{ send }}">Wyślij do {{ app.guessSMData.getName }}</a>
+        {% elseif app.unknownSM %}
+        <a href="/brak-sm.html"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail
+            {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}
+            status-{{ send }}">Wyślij zgłoszenie</a>
+        {% elseif config.wysylka is not defined %}
+        <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false" 
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-{{ send }}
+            {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}">Wyślij zgłoszenie</a>
+        {% endif %}
+        {% if config.appActionButtons %}
+        <a href="#" onclick="addToGallery('{{ app.id }}')"
+            data-inline="true" data-mini="true"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini addToGallery
+                {% if app.addedToGallery %}ui-disabled{% endif %}
+                ui-icon-grid ui-alt-icon">Dodaj do galerii</a>
+        
+        <a href="/ud-{{ app.id }}.html?dialog"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
+            ui-icon-info ui-alt-icon">Szczegóły</a>
+        {% endif %}
+    </div>
 
 {% endif %}
-        <div class="ui-grid-a ui-responsive images images-cropped">
-            <div class="ui-block-a imageContainer">
-                <div class="loader"></div>
-                <a href="/ud-{{ app.id }}.html?dialog">
-                    <img class="lazyload" data-src="{{ app.contextImage.thumb }}">
-                </a>
-            </div>
-            <div class="ui-block-b imageContainer">
-                <div class="loader"></div>
-                <a href="/ud-{{ app.id }}.html?dialog">
-                    <img class="lazyload" data-src="{{ app.carImage.thumb }}">
-                </a>
-            </div>
+    <div class="ui-grid-a ui-responsive images images-cropped">
+        <div class="ui-block-a imageContainer">
+            <div class="loader"></div>
+            <a href="/ud-{{ app.id }}.html?dialog">
+                <img class="lazyload" data-src="{{ app.contextImage.thumb }}">
+            </a>
         </div>
+        <div class="ui-block-b imageContainer">
+            <div class="loader"></div>
+            <a href="/ud-{{ app.id }}.html?dialog">
+                <img class="lazyload" data-src="{{ app.carImage.thumb }}">
+            </a>
+        </div>
+    </div>
 {% if config.appActionButtons %}
     <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ statuses[app.status].name }}</b> na:</p>
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
