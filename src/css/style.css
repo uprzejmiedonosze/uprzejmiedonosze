@@ -518,6 +518,11 @@ div.application-short.status-archived {
     }
 }
 
+div.application-short.status-all h3 a {
+    font-weight: 100;
+}
+
+
 div.application-short.status-draft h3 .ui-btn-icon-left:after,
 div.application-short .status-draft:after {
     background-color: #7463634d;
@@ -531,6 +536,10 @@ div.application-short .status-ready:after {
 div.application-short.status-confirmed h3 .ui-btn-icon-left:after,
 div.application-short .status-confirmed:after {
     background-color: #81c78499;
+}
+
+div.application-short.status-confirmed h3 a {
+    font-weight: 700;
 }
 
 div.application-short.status-confirmed-waiting h3 .ui-btn-icon-left:after,
