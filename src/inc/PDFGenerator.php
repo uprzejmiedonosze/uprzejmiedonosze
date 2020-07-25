@@ -29,14 +29,14 @@ function application2PDF($appId){
     return [$pdf, $filename];
 }
 
-function readyApps2PDF(){
+function readyApps2PDF($city){
     global $storage;
 
     checkIfLogged();
     $user = $storage->getCurrentUser();
     $userNumber = $user->number;
 
-    $applications = $storage->getAllApplicationsByStatus('confirmed');
+    $applications = $storage->getConfirmedAppsByCity($city);
 
     if(sizeof($applications) == 0){
         $filename = "download-error.pdf";

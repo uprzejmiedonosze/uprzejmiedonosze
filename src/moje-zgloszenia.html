@@ -6,8 +6,8 @@ checkIfLogged();
 $user = $storage->getCurrentUser();
 $appIds = $user->getApplicationIds();
 
-$changeMail = isset($_GET['changeMail']);
-$changeEpuap = (!$changeMail) && isset($_GET['changeEpuap']);
+$changeMail = isset($_GET['changeMail']) && isset($_GET['city']);
+$city = urldecode($_GET['city']);
 
 $countChanged = 0;
 
@@ -18,14 +18,11 @@ foreach($appIds as $id){
     array_push($applications, $application);
     if($changeMail || $changeEpuap){
         if($application->status == 'confirmed'){
-            if($changeMail){
+            if($changeMail && $application->smCity == $city){
                 $application->setStatus('confirmed-waiting');
-            }
-            if($changeEpuap){
-                $application->setStatus('confirmed-waitingE');
+                $countChanged++;
             }
             $storage->saveApplication($application);
-            $countChanged++;
         }
     }
 }
