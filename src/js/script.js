@@ -305,6 +305,9 @@ function readFile(file, id) {
     loadImage(
         file,
         function (img) {
+            if(img.type == 'error'){
+                imageError(id);
+            }
             sendFile(img.toDataURL('image/jpeg', 0.9), id);
         }, {
             maxWidth: 1200,
@@ -317,7 +320,8 @@ function readFile(file, id) {
 
 function imageError(id) {
     $('.' + id + 'Section img').show();
-    $('.' + id + 'Section').parent().addClass('error');
+    $('.' + id + 'Section .loader').hide();
+    $('.' + id + 'Section').addClass('error');
     $('.' + id + 'Section input').textinput('enable');
     uploadInProgress--;
     checkUploadInProgress();
@@ -387,6 +391,7 @@ function sendFile(fileData, id) {
         success: function (json) {
             if (json.carImage || json.contextImage){
                 $('.' + id + 'Section .loader').removeClass('l');
+                $('.' + id + 'Section .loader').hide();
                 $('.' + id + 'Section img').css('height', '100%');
                 $('.' + id + 'Section img').attr("src", json[id].thumb + '?v=' + Math.random().toString());
             }
