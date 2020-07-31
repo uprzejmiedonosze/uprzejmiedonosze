@@ -224,12 +224,17 @@ function _upload(){
     $pictureType = $_POST['pictureType'];
     $applicationId = $_POST['applicationId'];
 
+    $semKey = $storage->getCurrentUser()->getNumber();
+    $semaphore = sem_get($semKey, 1, 0666, 1);
+    sem_acquire($semaphore);
+
     try{
         $application = $storage->getApplication($applicationId);
     }catch(Exception $e){
         $application = new Application();
         $storage->saveApplication($application);
     }
+
     $type = substr($pictureType, 0, 2);
     $baseFileName = saveImgAndThumb($application, $image_bytes, $type);
 
@@ -279,10 +284,12 @@ function _upload(){
         $application->contextImage->url = "$baseFileName,$type.jpg";
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
     }else{
+        sem_release($semaphore);
         raiseError("Unknown picture type: $pictureType ($applicationId)", 400);
     }
 
     $storage->saveApplication($application);
+    sem_release($semaphore);
     echo json_encode($application);
 }
 
@@ -382,6 +389,10 @@ function resize_image($file, $w, $h, $crop=FALSE) {
 	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
 	return $dst;
+}
+
+function _initLogs() {
+    logger("INIT %VERSION%", true);
 }
 
 ?>
