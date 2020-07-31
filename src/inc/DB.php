@@ -184,8 +184,6 @@ SQL;
         $stmt->execute();
 
         $ret = $stmt->fetchAll();
-        logger(print_r($ret, true));
-        logger(count($ret));
         if(count($ret) == 0){
             return null;
         }

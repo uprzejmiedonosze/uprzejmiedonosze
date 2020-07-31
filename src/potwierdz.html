@@ -22,7 +22,7 @@ $application->address->address = $post["lokalizacja"];
 $application->address->city = $post["city"];
 $application->address->voivodeship = $post["voivodeship"];
 $application->address->latlng = $post["latlng"];
-$application->guessSMData(); // stores sm city inside the object
+$application->guessSMData(true); // stores sm city inside the object
 if(!isset($application->carInfo)) $application->carInfo = new stdClass();
 $application->carInfo->plateId = strtoupper(trim($post["plateId"]));
 $application->userComment = capitalizeSentence($post["comment"]);
