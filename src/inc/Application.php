@@ -156,12 +156,11 @@ class Application extends JSONObject{
     }
 
     /**
-     * Zwraca najlepiej pasująca dla adresu zgłoszenia SM w postaci tablicy:
-     * [adres w formacie latex, email]
+     * Zwraca najlepiej pasująca dla adresu zgłoszenia SM.
      */
-    public function guessSMData(){
+    public function guessSMData($update = null){
         global $SM_ADDRESSES;
-        if(isset($this->smCity)){
+        if(!$update && isset($this->smCity)){
             if($this->smCity !== '_nieznane'){
                 return $SM_ADDRESSES[$this->smCity];
             }
