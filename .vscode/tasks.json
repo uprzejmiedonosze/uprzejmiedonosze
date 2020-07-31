@@ -25,6 +25,29 @@
                 "panel": "shared"
             },
             "problemMatcher": []
+        },
+        {
+            "label": "cypress",
+            "options": {
+                "statusbar": {
+                    "tooltip": "Run Cypress tests"
+                }
+            },
+            "type": "shell",
+            "command": "./node_modules/cypress/bin/cypress",
+            "args": [
+                "open"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "never",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": []
         }
     ]
 }

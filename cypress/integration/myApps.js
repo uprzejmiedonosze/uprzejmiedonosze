@@ -1,0 +1,249 @@
+beforeEach(() => {
+    // Preserve cookie in every test
+    Cypress.Cookies.defaults({
+        whitelist: (cookie) => {
+            return true;
+        }
+    })
+});
+
+function goToNewAppScreen() {
+    cy.visit('/')
+    cy.contains('Menu').click()
+    cy.contains('Nowe zgłoszenie').click()
+    cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
+    cy.contains('Dalej').click()
+}
+
+function checkAppData(config) {
+    cy.contains(config.carImage.plateId)
+    cy.contains(config.carImage.date)
+    cy.contains(config.carImage.hour)
+    cy.contains(config.address.address)
+    cy.contains(config.user.name)
+    cy.contains(config.user.email)
+}
+
+describe.skip('Empty my apps', () => {
+    before(() => {
+        cy.login()
+    })
+
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+    })
+
+    it('gets to my apps screen', () => {
+        cy.visit('/')
+        cy.contains('Menu').click()
+        cy.contains('Moje zgłoszenia').click()
+    })
+
+    it('checks my apps screen', () => {
+        cy.contains('Nie masz jeszcze ani jednego zgłoszenia.')
+    })
+})
+
+describe.skip('Application screen valitation', () => {
+    before(() => {
+        cy.login()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('checks new application screen', function () {
+        goToNewAppScreen()
+        cy.get('#lokalizacja').should('have.value', this.config.address.address)
+        cy.get('#plateId').should('be.empty')
+        cy.get('#plateImage').should('be.hidden')
+        cy.get('#latlng').should('have.value', this.config.address.latlng)
+    })
+
+    it('checks empty application validation', function () {    
+        cy.contains('Dalej').click()
+        cy.get('.imageContainer').should('have.class', 'error')
+        cy.get('#plateId').should('have.class', 'error')
+    })
+})
+
+describe.skip('Invalid images', () => {
+    before(() => {
+        cy.login()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('loads invalid images', function () {
+        goToNewAppScreen()
+        cy.uploadWrongImages()
+    })
+    
+    it('checks application page with wrong images uploaded', function () {
+        cy.contains("Twoje zdjęcie nie ma znaczników geolokacji")
+        cy.get('.imageContainer').should('not.have.class', 'error')
+        cy.contains("około")
+        cy.contains('Podaj datę i godzinę zgłoszenia')
+        cy.contains('Twoje zdjęcie nie ma znaczników geolokacji')
+
+        cy.get('#plateImage').should('be.hidden')
+
+        cy.get('#dp').should('have.class', 'ui-state-disabled')
+        cy.get('#dm').should('not.have.class', 'ui-state-disabled')
+        cy.get('#hp').should('have.class', 'ui-state-disabled')
+        cy.get('#hm').should('not.have.class', 'ui-state-disabled')
+        cy.get('#dm').click()
+        cy.get('#dp').should('not.have.class', 'ui-state-disabled')
+        cy.get('#dm').should('not.have.class', 'ui-state-disabled')
+        cy.get('#hp').should('not.have.class', 'ui-state-disabled')
+        cy.get('#hm').should('not.have.class', 'ui-state-disabled')
+    })
+})
+
+describe.skip('Valid images and location', () => {
+    before(() => {
+        cy.login()
+        goToNewAppScreen()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('checks address autocomplete', function () {
+        cy.get('#lokalizacja').clear().type('Mazurska 37, Poznań')
+        cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
+        cy.get('#lokalizacja').should('have.value', 'Mazurska 13, Poznań')
+
+    })
+
+    it('uploads images', function () {
+        cy.uploadOKImages()
+        cy.get('.imageContainer').should('not.have.class', 'error')
+
+        cy.contains('numer rejestracyjny pojazdu Skoda')
+
+        cy.get('#plateId').should('have.value', this.config.carImage.plateId)
+        cy.get('#plateImage').should('be.visible')
+        cy.get('#plateId').should('not.have.class', 'error')
+
+        cy.get('#comment').should('not.have.class', 'error')
+
+        cy.contains('Data i godzina pobrana ze zdjęcia')
+        cy.contains(this.config.carImage.dateHuman)
+        cy.contains(this.config.carImage.hour)
+
+        cy.get('#lokalizacja').should('have.value', this.config.address.address)
+    })
+})
+
+describe.skip('Create application', () => {
+    before(() => {
+        cy.login()
+        goToNewAppScreen()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('creates application', function () {
+        cy.get('.cleanup').click()
+        cy.uploadOKImages()
+    })
+
+    it('checks confirmation screen', function () {
+        cy.get('#form-submit', { timeout: 10000 }).click()
+        cy.contains('Wystąpił błąd').should('not.exist')
+        checkAppData(this.config)
+        cy.contains('Zdjęcia wykonałem samodzielnie')
+        cy.contains('proszę o niezamieszczanie')
+        cy.contains('Jestem świadomy odpowiedzialności karnej')
+    })
+
+    it('checks thank you screen', function () {
+        cy.contains('Zapisz!').click()
+        cy.contains('To twoje pierwsze zgłoszenie')
+        cy.contains('UD/4/')
+    })
+
+    it('checks application list screen', function () {
+        cy.contains('liście swoich zgłoszeń').click()
+        cy.contains(this.config.address.address)
+    })
+
+    it('checks application screen', function () {
+        cy.contains('UD/4/').click()
+        checkAppData(this.config)
+        cy.contains('Nieaktualne dane?')
+        cy.contains('Zapisanie wersji roboczej')
+    })
+})
+
+describe('Edit application', () => {
+    before(() => {
+        cy.login()
+        goToNewAppScreen()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('creates application', function () {
+        cy.uploadOKImages()
+    })
+
+    it('checks confirmation screen', function () {
+        cy.get('#form-submit', { timeout: 10000 }).click()
+        cy.contains('Wystąpił błąd').should('not.exist')
+        checkAppData(this.config)
+    })
+
+    it('checks edit', function() {
+        cy.get('.ui-icon-edit').click()
+        cy.contains('Edytujesz zgłoszenie')
+    })
+
+    it('alters application', function() {
+        cy.get('#comment').type(this.config.comment)
+        cy.get('#witness').click({force: true})
+        cy.contains('Zatrzymanie na drodze dla rowerów').click()
+    })
+
+    it('checks altered application', function(){
+        cy.get('#form-submit').click()
+        cy.contains('Wystąpił błąd').should('not.exist')
+        checkAppData(this.config)
+        cy.contains(this.config.comment)
+        cy.contains('Nie byłem świadkiem samego momentu parkowania').should('not.exist')
+    })
+
+    it('checks thank you screen', function () {
+        cy.contains('Zapisz!').click()
+        cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
+        cy.contains('UD/4/')
+    })
+
+    it('checks application list screen', function () {
+        cy.contains('liście swoich zgłoszeń').click()
+        cy.contains(this.config.address.address)
+        cy.get('#collapsiblesetForFilter').find('.application').should('have.length', 2)
+    })
+
+    it('checks application screen', function () {
+        cy.contains('UD/4/').click()
+        checkAppData(this.config)
+        cy.contains('Nieaktualne dane?')
+        cy.contains('Zapisanie wersji roboczej')
+    })
+
+})

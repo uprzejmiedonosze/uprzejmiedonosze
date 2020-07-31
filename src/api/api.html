@@ -6,6 +6,11 @@ require(__DIR__ . '/../../autoload.php');
 $cache = new Memcache;
 $cache->connect('localhost', 11211);
 
+if(isset($_GET["action"]) && $_GET["action"] == "initLogs"){
+    _initLogs();
+    die();
+}
+
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
