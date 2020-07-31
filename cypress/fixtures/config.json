@@ -1,0 +1,25 @@
+{
+    "address": {
+        "address": "Mazurska 37, Szczecin",
+        "latlng": "53.431936,14.551472"
+    },
+    "contextImage": {
+        "url": "../../tests/img_c.jpg"
+    },
+    "carImage": {
+        "url": "../../tests/img_p.jpg",
+        "plateId": "KWA00913",
+        "date": "2018-02-02",
+        "dateHuman": "piątek 2 lut",
+        "hour": "19:48"
+    },
+    "wrongImage": {
+        "url": "../../tests/img_e.jpg"
+    },
+    "comment": "Komentarz do zgłoszenia",
+    "user": {
+        "email": "e@nieradka.net",
+        "name": "Tester Automatyczny",
+        "address": "Mazurska 37, Szczecin"
+    }
+}

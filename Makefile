@@ -51,8 +51,9 @@ HTTPS                := https
 
 BRANCH_ENV           := .branch-env
 GIT_BRANCH           := $(shell git rev-parse --abbrev-ref HEAD)
+GIT_DATE             := $(shell git log -1 --date=format:"%Y-%m-%d" --format="%ad")
 LAST_RUN              = $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
-TAG_NAME             := $(shell echo $(GIT_BRANCH)_`date +%Y-%m-%d_%H.%M.%S`)
+TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(GIT_DATE))
 
 .DEFAULT_GOAL        := help
 
@@ -78,6 +79,7 @@ staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
+	@ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
 shadow: HOST := $(SHADOW_HOST)
 shadow: $(DIRS) export ## Copy files to shadow server.
@@ -195,6 +197,7 @@ endef
 
 define create-symlink
 @echo "==> Creating a symlink in logs directory [$(TAG_NAME).log] -> [$@.log]"
+@curl $(HTTPS)://$(HOST)/api/api.html?action=initLogs
 @ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log"
 endef
 

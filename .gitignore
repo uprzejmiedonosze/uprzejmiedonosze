@@ -13,3 +13,6 @@ export/**
 tex/app/*
 *uprzejmiedonosze.net-firebase-adminsdk.json
 /config.php
+**/.DS_Store
+/cypress/screenshots
+/cypress/videos
