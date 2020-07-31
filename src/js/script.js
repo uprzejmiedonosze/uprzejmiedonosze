@@ -54,8 +54,6 @@ $(document).on('pageshow', function () {
 
         $('.image-upload img').on('load', function(){ 
             $(this).show();
-            uploadInProgress--;
-            checkUploadInProgress();
         });
     }
 
@@ -77,15 +75,6 @@ $(document).on('pageshow', function () {
 var autocomplete;
 let locationP;
 var initialLocation = [];
-var uploadInProgress = 0;
-
-function checkUploadInProgress(){
-    if(uploadInProgress <= 0){
-        uploadInProgress = 0;
-        $('#form-submit').removeClass('ui-disabled');
-    }
-
-}
 
 // eslint-disable-next-line no-unused-vars
 function initAutocompleteOnRegister() {
@@ -254,7 +243,7 @@ function checkAddress(where) {
 function check(item, minLength, grandma) {
     const len = (item.val().trim().length == 0) ?
         ((item.attr('value')) ? item.attr('value').trim().length : 0) :
-        item.val().trim().length;
+            item.val().trim().length;
     if (len <= minLength) {
         if (grandma) {
             item.parent().parent().addClass('error');
@@ -278,11 +267,31 @@ function validateRegisterForm() {
 
 /* ############################## IMAGES ############################## */
 
+var uploadInProgress = 0;
+
+function uploadStarted(){
+    uploadInProgress++;
+    checkUploadInProgress();
+}
+
+function uploadFinished(){
+    uploadInProgress--;
+    checkUploadInProgress();
+}
+
+function checkUploadInProgress(){
+    if(uploadInProgress <= 0){
+        uploadInProgress = 0;
+        $('#form-submit').removeClass('ui-disabled');
+    }else{
+        $('#form-submit').addClass('ui-disabled');
+    }
+}
+
 function checkFile(file, id) {
-    $('#form-submit').addClass('ui-disabled');
+
     if (file) {
-        uploadInProgress++;
-        checkUploadInProgress();
+        uploadStarted();
         if (/^image\//i.test(file.type)) {
             $('.' + id + 'Section').removeClass('error');
             $('.' + id + 'Section img').hide();
@@ -305,6 +314,9 @@ function readFile(file, id) {
     loadImage(
         file,
         function (img) {
+            if(img.type == 'error'){
+                imageError(id);
+            }
             sendFile(img.toDataURL('image/jpeg', 0.9), id);
         }, {
             maxWidth: 1200,
@@ -317,10 +329,10 @@ function readFile(file, id) {
 
 function imageError(id) {
     $('.' + id + 'Section img').show();
-    $('.' + id + 'Section').parent().addClass('error');
+    $('.' + id + 'Section .loader').hide();
+    $('.' + id + 'Section').addClass('error');
     $('.' + id + 'Section input').textinput('enable');
-    uploadInProgress--;
-    checkUploadInProgress();
+    uploadFinished();
 }
 
 function readGeoDataFromImage(file) {
@@ -387,6 +399,7 @@ function sendFile(fileData, id) {
         success: function (json) {
             if (json.carImage || json.contextImage){
                 $('.' + id + 'Section .loader').removeClass('l');
+                $('.' + id + 'Section .loader').hide();
                 $('.' + id + 'Section img').css('height', '100%');
                 $('.' + id + 'Section img').attr("src", json[id].thumb + '?v=' + Math.random().toString());
             }
@@ -413,6 +426,7 @@ function sendFile(fileData, id) {
                     $('#recydywa').show();
                 }
             }
+            uploadFinished();
         },
         // eslint-disable-next-line no-unused-vars
         error: function (data) {
