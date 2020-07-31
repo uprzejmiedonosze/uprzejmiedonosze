@@ -1,0 +1,202 @@
+describe('API:automated (Poznań)', () => {
+    before(() => {
+        cy.initDB()
+        cy.login()
+        cy.goToNewAppScreen()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('creates application', function () {
+        cy.uploadOKImages()
+        cy.get('#lokalizacja').clear().type('Mazurska 13, Poznań')
+        cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
+        cy.get('#geo').should('have.class', 'ui-icon-location')
+        cy.get('#form-submit').click()
+        cy.contains('Zapisz!').click()
+        cy.contains('Wystąpił błąd').should('not.exist')
+    })
+
+    it('checks thank you screen', function () {
+        cy.contains('Wyślij teraz!')
+        cy.contains('Straż Miejska Miasta Poznania')
+    })
+
+    it('checks my apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Moje zgłoszenia').click({force: true})
+        cy.contains('Mazurska 13, Poznań').click()
+        cy.contains('Wyślij do Straż Miejska Miasta Poznania')
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
+        cy.contains('Dodaj do galerii')
+        cy.contains('Szczegóły')
+    })
+
+    it('checks send apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Do wysłania').click({force: true})
+        cy.contains('Na szczęście Straż Miejska Miasta Poznania udostępniła mechanizm')
+        cy.contains('Mazurska 13, Poznań').click()
+        cy.contains('Wyślij do Straż Miejska Miasta Poznania')
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
+        cy.contains('Dodaj do galerii').should('not.exist')
+        cy.contains('Szczegóły').should('not.exist')
+    })
+})
+
+describe('API:Mail (Gdynia)', () => {
+    before(() => {
+        cy.initDB()
+        cy.login()
+        cy.goToNewAppScreen()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('creates application', function () {
+        cy.uploadOKImages()
+        cy.get('#lokalizacja').clear().type('Mieszka I 12, Wrocław')
+        cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
+        cy.get('#geo').should('have.class', 'ui-icon-location')
+        cy.get('#form-submit').click()
+        cy.contains('Zapisz!').click()
+        cy.contains('Wystąpił błąd').should('not.exist')
+    })
+
+    it('checks thank you screen', function () {
+        cy.contains('Wyślij teraz!')
+        cy.contains('Straż Miejska Wrocławia')
+    })
+
+    it('checks my apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Moje zgłoszenia').click({force: true})
+        cy.contains('Mieszka I 12, Wrocław').click()
+        cy.contains('Wyślij do Straż Miejska Wrocławia')
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
+        cy.contains('Dodaj do galerii')
+        cy.contains('Szczegóły')
+    })
+
+    it('checks send apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Do wysłania').click({force: true})
+
+        cy.contains('Pobierz paczkę zgłoszeń')
+        cy.contains('Uwagi na temat współpracy z Straż Miejska Wrocławia')
+        cy.contains('Mieszka I 12, Wrocław').click()
+        cy.contains('Wyślij do Straż Miejska Wrocławia')
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
+        cy.contains('Dodaj do galerii').should('not.exist')
+        cy.contains('Szczegóły').should('not.exist')
+    })
+
+})
+
+describe('API: null (Szczecin)', () => {
+    before(() => {
+        cy.initDB()
+        cy.login()
+        cy.goToNewAppScreen()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('creates application', function () {
+        cy.uploadOKImages()
+        cy.get('#form-submit').click()
+        cy.contains('Zapisz!').click()
+        cy.contains('Wystąpił błąd').should('not.exist')
+    })
+
+    it('checks thank you screen', function () {
+        cy.contains('Jeszcze raz')
+        cy.contains('Swoje zgłoszenia musisz wysłać samodzielnie')
+        cy.contains('Straż Miejska Szczecin')
+    })
+    
+    it('checks my apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Moje zgłoszenia').click({force: true})
+        cy.contains(this.config.address.address).click()
+        cy.contains('Wyślij zgłoszenie')
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
+        cy.contains('Dodaj do galerii')
+        cy.contains('Szczegóły')
+    })
+
+    it('checks send apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Do wysłania').click({force: true})
+        cy.contains('Pobierz paczkę zgłoszeń')
+        cy.contains('Uwagi na temat współpracy z Straż Miejska Szczecin')
+        cy.contains(this.config.address.address).click()
+        cy.contains('Wyślij zgłoszenie').should('not.exist')
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
+        cy.contains('Dodaj do galerii').should('not.exist')
+        cy.contains('Szczegóły').should('not.exist')
+    })
+
+})
+
+describe('Missing SM (Poniatowa)', () => {
+    before(() => {
+        cy.initDB()
+        cy.login()
+        cy.goToNewAppScreen()
+    })
+    
+    beforeEach(() => {
+        cy.preserveLoginCookie()
+        cy.loadConfig()
+    })
+
+    it('creates application', function () {
+        cy.uploadOKImages()
+        cy.get('#lokalizacja').clear().type('Henin 93, Poniatowa')
+        cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
+        cy.get('#geo').should('have.class', 'ui-icon-location')
+        cy.get('#form-submit', { timeout: 5000 }).click()
+        cy.contains('Zapisz!').click()
+        cy.contains('Wystąpił błąd').should('not.exist')
+    })
+
+    it('checks thank you screen', function () {
+        cy.contains('Jeszcze raz')
+        cy.contains('Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM')
+    })
+    
+    it('checks my apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Moje zgłoszenia').click({force: true})
+        cy.contains('Henin 93, Poniatowa').click()
+        cy.contains('Wyślij zgłoszenie')
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
+        cy.contains('Dodaj do galerii')
+        cy.contains('Szczegóły')
+    })
+
+    it('checks send apps screen', function () {
+        cy.contains('Menu').click()
+        cy.contains('Do wysłania').click({force: true})
+        cy.contains('Pobierz paczkę zgłoszeń').should('not.exist')
+        cy.contains('Henin 93, Poniatowa').click()
+        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
+        cy.contains('Dodaj do galerii')
+        cy.contains('Szczegóły')
+    })
+
+    it('checks missing SM', function () {
+        cy.contains('Wyślij zgłoszenie').click()
+        cy.contains('Brak danych Straży Miejskiej')
+    })
+})

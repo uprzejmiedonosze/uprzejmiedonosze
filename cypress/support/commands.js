@@ -36,6 +36,8 @@ Cypress.Commands.add("uploadWrongImages", () => {
         'image/jpeg')
     cy.uploadFile('input[type=file]#carImage', '../../tests/img_e.jpg',
         'image/jpeg')
+    
+    cy.get('.carImageSection img', { timeout: 12000 }).should('have.attr', 'src').should('include', 'cdn')
 });
 
 Cypress.Commands.add("loadConfig", () => {
@@ -47,3 +49,15 @@ Cypress.Commands.add("loadConfig", () => {
 Cypress.Commands.add("preserveLoginCookie", () => {
     Cypress.Cookies.preserveOnce('PHPSESSID')
 });
+
+Cypress.Commands.add("initDB", () => {
+    cy.exec('ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-registered store.sqlite"')
+})
+
+Cypress.Commands.add("goToNewAppScreen", () => {
+    cy.visit('/')
+    cy.contains('Menu').click()
+    cy.contains('Nowe zgłoszenie').click()
+    cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
+    cy.contains('Dalej').click()
+})

@@ -1,20 +1,3 @@
-beforeEach(() => {
-    // Preserve cookie in every test
-    Cypress.Cookies.defaults({
-        whitelist: (cookie) => {
-            return true;
-        }
-    })
-});
-
-function goToNewAppScreen() {
-    cy.visit('/')
-    cy.contains('Menu').click()
-    cy.contains('Nowe zgłoszenie').click()
-    cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
-    cy.contains('Dalej').click()
-}
-
 function checkAppData(config) {
     cy.contains(config.carImage.plateId)
     cy.contains(config.carImage.date)
@@ -24,7 +7,7 @@ function checkAppData(config) {
     cy.contains(config.user.email)
 }
 
-describe.skip('Empty my apps', () => {
+describe('Empty my apps', () => {
     before(() => {
         cy.login()
     })
@@ -44,7 +27,7 @@ describe.skip('Empty my apps', () => {
     })
 })
 
-describe.skip('Application screen valitation', () => {
+describe('Application screen valitation', () => {
     before(() => {
         cy.login()
     })
@@ -55,7 +38,7 @@ describe.skip('Application screen valitation', () => {
     })
 
     it('checks new application screen', function () {
-        goToNewAppScreen()
+        cy.goToNewAppScreen()
         cy.get('#lokalizacja').should('have.value', this.config.address.address)
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
@@ -69,7 +52,7 @@ describe.skip('Application screen valitation', () => {
     })
 })
 
-describe.skip('Invalid images', () => {
+describe('Invalid images', () => {
     before(() => {
         cy.login()
     })
@@ -80,7 +63,7 @@ describe.skip('Invalid images', () => {
     })
 
     it('loads invalid images', function () {
-        goToNewAppScreen()
+        cy.goToNewAppScreen()
         cy.uploadWrongImages()
     })
     
@@ -105,10 +88,10 @@ describe.skip('Invalid images', () => {
     })
 })
 
-describe.skip('Valid images and location', () => {
+describe('Valid images and location', () => {
     before(() => {
         cy.login()
-        goToNewAppScreen()
+        cy.goToNewAppScreen()
     })
     
     beforeEach(() => {
@@ -119,8 +102,8 @@ describe.skip('Valid images and location', () => {
     it('checks address autocomplete', function () {
         cy.get('#lokalizacja').clear().type('Mazurska 37, Poznań')
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
+        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#lokalizacja').should('have.value', 'Mazurska 13, Poznań')
-
     })
 
     it('uploads images', function () {
@@ -143,10 +126,10 @@ describe.skip('Valid images and location', () => {
     })
 })
 
-describe.skip('Create application', () => {
+describe('Create application', () => {
     before(() => {
         cy.login()
-        goToNewAppScreen()
+        cy.goToNewAppScreen()
     })
     
     beforeEach(() => {
@@ -190,7 +173,7 @@ describe.skip('Create application', () => {
 describe('Edit application', () => {
     before(() => {
         cy.login()
-        goToNewAppScreen()
+        cy.goToNewAppScreen()
     })
     
     beforeEach(() => {
@@ -245,5 +228,4 @@ describe('Edit application', () => {
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
     })
-
 })
