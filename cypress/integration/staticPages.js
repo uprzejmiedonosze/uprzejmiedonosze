@@ -1,4 +1,8 @@
 describe('Checks static pages', () => {
+    before(() => {
+        cy.clearCookie('PHPSESSID')
+    })
+
     beforeEach(() => {
         cy.visit('/')
         cy.contains('Menu').click()
