@@ -22,14 +22,14 @@ describe('API:automated (Poznań)', () => {
 
     it('checks thank you screen', function () {
         cy.contains('Wyślij teraz!')
-        cy.contains('Straż Miejska Miasta Poznania')
+        cy.contains(this.sm['poznań'].address[0])
     })
 
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains('Mazurska 13, Poznań').click()
-        cy.contains('Wyślij do Straż Miejska Miasta Poznania')
+        cy.contains('Wyślij do ' + this.sm['poznań'].address[0])
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
@@ -38,16 +38,16 @@ describe('API:automated (Poznań)', () => {
     it('checks send apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Do wysłania').click({force: true})
-        cy.contains('Na szczęście Straż Miejska Miasta Poznania udostępniła mechanizm')
+        cy.contains('Na szczęście ' + this.sm['poznań'].address[0] + ' udostępniła mechanizm')
         cy.contains('Mazurska 13, Poznań').click()
-        cy.contains('Wyślij do Straż Miejska Miasta Poznania')
+        cy.contains('Wyślij do ' + this.sm['poznań'].address[0])
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
         cy.contains('Dodaj do galerii').should('not.exist')
         cy.contains('Szczegóły').should('not.exist')
     })
 })
 
-describe('API:Mail (Gdynia)', () => {
+describe('API:Mail (Wrocław)', () => {
     before(() => {
         cy.initDB()
         cy.login()
@@ -71,14 +71,14 @@ describe('API:Mail (Gdynia)', () => {
 
     it('checks thank you screen', function () {
         cy.contains('Wyślij teraz!')
-        cy.contains('Straż Miejska Wrocławia')
+        cy.contains(this.sm['wrocław'].address[0])
     })
 
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains('Mieszka I 12, Wrocław').click()
-        cy.contains('Wyślij do Straż Miejska Wrocławia')
+        cy.contains('Wyślij do ' + this.sm['wrocław'].address[0])
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
@@ -89,9 +89,9 @@ describe('API:Mail (Gdynia)', () => {
         cy.contains('Do wysłania').click({force: true})
 
         cy.contains('Pobierz paczkę zgłoszeń')
-        cy.contains('Uwagi na temat współpracy z Straż Miejska Wrocławia')
+        cy.contains('Uwagi na temat współpracy z ' + this.sm['wrocław'].address[0])
         cy.contains('Mieszka I 12, Wrocław').click()
-        cy.contains('Wyślij do Straż Miejska Wrocławia')
+        cy.contains('Wyślij do ' + this.sm['wrocław'].address[0])
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
         cy.contains('Dodaj do galerii').should('not.exist')
         cy.contains('Szczegóły').should('not.exist')
@@ -121,7 +121,7 @@ describe('API: null (Szczecin)', () => {
     it('checks thank you screen', function () {
         cy.contains('Jeszcze raz')
         cy.contains('Swoje zgłoszenia musisz wysłać samodzielnie')
-        cy.contains('Straż Miejska Szczecin')
+        cy.contains(this.sm.szczecin.address[0])
     })
     
     it('checks my apps screen', function () {
@@ -138,7 +138,7 @@ describe('API: null (Szczecin)', () => {
         cy.contains('Menu').click()
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Pobierz paczkę zgłoszeń')
-        cy.contains('Uwagi na temat współpracy z Straż Miejska Szczecin')
+        cy.contains('Uwagi na temat współpracy z ' + this.sm.szczecin.address[0])
         cy.contains(this.config.address.address).click()
         cy.contains('Wyślij zgłoszenie').should('not.exist')
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')

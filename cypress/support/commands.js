@@ -23,18 +23,18 @@ Cypress.Commands.add("uploadFile", (selector, fileUrl, type = "") => {
 });
 
 Cypress.Commands.add("uploadOKImages", () => {
-    cy.uploadFile('input[type=file]#contextImage', '../../tests/img_c.jpg',
+    cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg',
     'image/jpeg')
-    cy.uploadFile('input[type=file]#carImage', '../../tests/img_p.jpg',
+    cy.uploadFile('input[type=file]#carImage', 'img_p.jpg',
         'image/jpeg')
 
     cy.get('.carImageSection img', { timeout: 12000 }).should('have.attr', 'src').should('include', 'cdn')
 });
 
 Cypress.Commands.add("uploadWrongImages", () => {
-    cy.uploadFile('input[type=file]#contextImage', '../../tests/img_e.jpg',
+    cy.uploadFile('input[type=file]#contextImage', 'img_e.jpg',
         'image/jpeg')
-    cy.uploadFile('input[type=file]#carImage', '../../tests/img_e.jpg',
+    cy.uploadFile('input[type=file]#carImage', 'img_e.jpg',
         'image/jpeg')
     
     cy.get('.carImageSection img', { timeout: 12000 }).should('have.attr', 'src').should('include', 'cdn')
@@ -43,6 +43,12 @@ Cypress.Commands.add("uploadWrongImages", () => {
 Cypress.Commands.add("loadConfig", () => {
     cy.fixture('config.json').then(function (config) {
         this.config = config;
+    })
+    cy.fixture('../../src/api/config/sm.json').then(function (sm) {
+        this.sm = sm;
+    })
+    cy.fixture('../../src/api/config/statuses.json').then(function (statuses) {
+        this.statuses = statuses;
     })
 });
 
