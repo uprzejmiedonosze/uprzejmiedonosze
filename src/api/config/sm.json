@@ -1244,6 +1244,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "staszów": {
+    "address": [
+      "Straż Miejska Staszów",
+      "ul. Opatowska 31",
+      "28-200 Staszów"
+    ],
+    "email": "joanna.tutak@staszow.pl",
+    "city": "Staszów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "kurozwęki": {
+    "address": [
+      "Straż Miejska Staszów",
+      "ul. Opatowska 31",
+      "28-200 Staszów"
+    ],
+    "email": "joanna.tutak@staszow.pl",
+    "city": "Kurozwęki",
+    "hint": "Miejscowość Kurozwęki podlega pod SM Staszów",
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
