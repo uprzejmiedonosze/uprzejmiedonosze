@@ -1044,7 +1044,7 @@
     "email": "straz@um.dzierzoniow.pl",
     "city": "Dzierżoniów",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "dzierzgoń": {
     "address": [
@@ -1055,7 +1055,7 @@
     "email": "sm@dzierzgon.pl",
     "city": "Dzierzgoń",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "kobierzyce": {
     "address": [
@@ -1088,7 +1088,7 @@
     "email": "strazmiejska@poczta.kartuzy.pl",
     "city": "Kartuzy",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "kędzierzyn-koźle": {
     "address": [
@@ -1099,7 +1099,7 @@
     "email": "sm@kedzierzynkozle.pl",
     "city": "Kędzierzyn-Koźle",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "tychy": {
     "address": [
@@ -1121,7 +1121,7 @@
     "email": "strazmiejska@miedzychod.pl",
     "city": "Międzychód",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "zatom nowy": {
     "address": [
@@ -1132,7 +1132,7 @@
     "email": "strazmiejska@miedzychod.pl",
     "city": "Zatom Nowy",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "mosina": {
     "address": [
@@ -1165,7 +1165,7 @@
     "email": "sm@um.krosno.pl",
     "city": "Krosno",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "wiskitki": {
     "address": [
@@ -1176,7 +1176,7 @@
     "email": "dzielnicowy.wiskitki@ra.policja.gov.pl",
     "city": "Wiskitki",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "mińsk mazowiecki": {
     "address": [
@@ -1187,7 +1187,7 @@
     "email": "wykroczenia@umminskmaz.pl",
     "city": "Mińsk Mazowiecki",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "bielsko-biała": {
     "address": [
@@ -1209,7 +1209,7 @@
     "email": "dyzurny@strazmiejska.bytom.pl",
     "city": "Bytom",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "czeladź": {
     "address": [
@@ -1220,7 +1220,7 @@
     "email": "kniebylski@um.czeladz.pl",
     "city": "Czeladź",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "jarocin": {
     "address": [
@@ -1242,7 +1242,7 @@
     "email": "dyzurny@ksm.polkowice.pl",
     "city": "Polkowice",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "_nieznane": {
     "address": [
