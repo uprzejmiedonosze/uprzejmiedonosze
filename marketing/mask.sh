@@ -5,5 +5,5 @@ IFS=$'\n\t'
 MASKA=mask.png
 OUT=$(date +%Y-%m-%d).png
 
-composite -geometry +162+230 \( l.jpg -resize 530x1060 \) ${MASKA} ${OUT}
-composite -geometry +814+230 \( p.jpg -resize 530x1060 \) ${OUT} ${OUT}
+composite -geometry +210+230 \( l.jpg -resize 790x1060 \) ${MASKA} ${OUT}
+composite -geometry +819+230 \( p.jpg -resize 590x1060 \) ${OUT} ${OUT}
