@@ -4,15 +4,10 @@ class Poznan extends CityAPI {
     function send(&$application){
         parent::checkApplication($application);
 
+        $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
         if(isProd()){
             $url = "https://www.poznan.pl/mim/api/submit.html?service=fixmycity";
-        } else {
-            $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
         }
-        $header = array(
-            "Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=", // tylko do testowego API
-            "Content-Type: multipart/form-data"
-        );
         $data = array(
             'lat' => $application->getLat(),
             'lon' => $application->getLon(),
@@ -34,7 +29,7 @@ class Poznan extends CityAPI {
             'key' => '85951ba0a63d1051a09659ea0a9d8391' //klucz aplikacji, pole obowiązkowe
         );
         $application->setStatus('confirmed-waiting');
-        $output = parent::curlShellSend($url, $header, $data, $application);
+        $output = parent::curlShellSend($url, $data, $application);
 
         if(isset($output['response']['error_msg'])){
             raiseError($output['response']['error_msg'], 500);

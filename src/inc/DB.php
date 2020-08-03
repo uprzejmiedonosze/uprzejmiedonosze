@@ -261,20 +261,6 @@ SQL;
     }
 
     /**
-     * Return count of new applications created today.
-     */
-    public function getTodaysNewAppsCount(){
-        $sql = <<<SQL
-            select count(*) as cnt from applications
-            where json_extract(applications.value, '$.status') not in ('draft', 'ready')
-                and substr(json_extract(applications.value, '$.added'), 1, 10) = date('now');
-SQL;
-
-        $stats = intval($this->db->query($sql)->fetchColumn());
-        return $stats;
-    }
-
-    /**
      * Returns number of new applications (by creation date)
      * during 12 weeks.
      */

@@ -124,18 +124,6 @@ class Application extends JSONObject{
         return 'Zgloszenie_' . str_replace('/', '-', $this->number) . '.pdf';
     }
 
-    public function getSMPDFFilename(){
-        return 'Zgloszenie_' . str_replace('/', '-', $this->number) . '-SM.pdf';
-    }
-
-    /**
-     * Returns prefix for image filenames – used while sending images
-     * via API to SM.
-     */
-    public function getAppImageFilenamePrefix(){
-        return str_replace('/', '-', $this->number);
-    }
-
     /**
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId
@@ -203,7 +191,6 @@ class Application extends JSONObject{
     public function unknownSM(){
         return $this->guessSMData()->unknown();
     }
-
 
     /**
      * Returns application city in a filename-friendly format.

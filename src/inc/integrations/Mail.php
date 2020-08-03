@@ -5,12 +5,9 @@ class Mail extends CityAPI {
         parent::checkApplication($application);
         global $storage;
 
-        $user = $storage->getCurrentUser();
-
+        $to = "szymon.nieradka@gmail.com";
         if(isProd()){
-            $to      = $application->guessSMData()->email;
-        } else {
-            $to      = "szymon.nieradka@gmail.com";
+            $to = $application->guessSMData()->email;
         }
         
         $transport = (new Swift_SmtpTransport(SMTP_HOST, SMTP_PORT, SMTP_SSL))

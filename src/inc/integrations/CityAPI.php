@@ -27,7 +27,7 @@ abstract class CityAPI {
         ]);
     }
 
-    function curlShellSend($url, $header, &$data, &$application){
+    function curlShellSend($url, &$data, &$application){
         $root = realpath('/var/www/%HOST%/');
         $contextImage = "$root/{$application->contextImage->url}";
         $json = json_encode($data);
