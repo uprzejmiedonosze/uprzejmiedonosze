@@ -174,6 +174,11 @@ class Application extends JSONObject{
 
         if(array_key_exists($city, $SM_ADDRESSES)){
             $this->smCity = $city;
+            if($city == 'warszawa' && isset($this->address->district)){
+                if(array_key_exists($this->address->district, ODDZIALY_TERENOWE)){
+                    $this->smCity = ODDZIALY_TERENOWE[$this->address->district];
+                }
+            }
             return $SM_ADDRESSES[$this->smCity];
         }
 

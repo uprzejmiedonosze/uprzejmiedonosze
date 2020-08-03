@@ -27,6 +27,33 @@ const CATEGORIES_MATRIX = Array('a', 'b');
 
 require_once(__DIR__ . '/../config.php');
 
+const ODDZIALY_TERENOWE = array(
+    'Śródmieście' => 'warszawa_ot1',
+
+    'Mokotów' => 'warszawa_ot2',
+    'Wilanów' => 'warszawa_ot2',
+    'Ursynów' => 'warszawa_ot2',
+
+    'Ochota' => 'warszawa_ot3',
+    'Ursus' => 'warszawa_ot3',
+    'Włochy' => 'warszawa_ot3',
+
+    'Wola' => 'warszawa_ot4',
+    'Bemowo' => 'warszawa_ot4',
+
+    'Bielany' => 'warszawa_ot5',
+    'Żoliborz' => 'warszawa_ot5',
+
+    'Targówek' => 'warszawa_ot6',    
+    'Białołęka' => 'warszawa_ot6',
+    'Praga-Północ' => 'warszawa_ot6',
+    
+    'Wawer' => 'warszawa_ot7',
+    'Praga-Południe' => 'warszawa_ot7',
+    'Wesoła' => 'warszawa_ot7',
+    'Rembertów' => 'warszawa_ot7'
+);
+
 const SEXSTRINGS = Array (
     '?' => [
         "bylam" => "byłam/em",

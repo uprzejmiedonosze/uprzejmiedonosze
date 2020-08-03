@@ -22,6 +22,90 @@
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": "Mail"
   },
+  "warszawa_ot1": {
+    "address": [
+      "I Oddział Terenowy",
+      "Straż Miejskiej m.st. Warszawy",
+      "ul. Sołtyka 8/10",
+      "01-163 Warszawa"
+    ],
+    "email": "ot1@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
+  "warszawa_ot2": {
+    "address": [
+      "II Oddział Terenowy",
+      "Straż Miejskiej m.st. Warszawy",
+      "ul. Klimczaka 4",
+      "02-797 Warszawa"
+    ],
+    "email": "ot2@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
+  "warszawa_ot3": {
+    "address": [
+      "III Oddział Terenowy",
+      "Straż Miejskiej m.st. Warszawy",
+      "ul. Przemyska 18",
+      "02-361 Warszawa"
+    ],
+    "email": "ot3@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
+  "warszawa_ot4": {
+    "address": [
+      "IV Oddział Terenowy",
+      "Straż Miejskiej m.st. Warszawy",
+      "ul. Sołtyka 8/10",
+      "01-163 Warszawa"
+    ],
+    "email": "ot4@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
+  "warszawa_ot5": {
+    "address": [
+      "V Oddział Terenowy",
+      "Straż Miejskiej m.st. Warszawy",
+      "ul. Szegedyńska 13a",
+      "01-957 Warszawa"
+    ],
+    "email": "ot5@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
+  "warszawa_ot6": {
+    "address": [
+      "VI Oddział Terenowy",
+      "Straż Miejskiej m.st. Warszawy",
+      "ul. J. Młota 3",
+      "03-490 Warszawa"
+    ],
+    "email": "ot6@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
+  "warszawa_ot7": {
+    "address": [
+      "VII Oddział Terenowy",
+      "Straż Miejskiej m.st. Warszawy",
+      "ul. Kobielska 5",
+      "04-359 Warszawa"
+    ],
+    "email": "ot7@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
   "warsaw": {
     "address": [
       "Referat Oskarżycieli Publicznych",
