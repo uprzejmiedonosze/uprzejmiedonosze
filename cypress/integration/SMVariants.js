@@ -13,6 +13,7 @@ describe('API:automated (Poznań)', () => {
     it('creates application', function () {
         cy.uploadOKImages()
         cy.get('#lokalizacja').clear().type('Mazurska 13, Poznań')
+        cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
@@ -62,6 +63,7 @@ describe('API:Mail (Wrocław)', () => {
     it('creates application', function () {
         cy.uploadOKImages()
         cy.get('#lokalizacja').clear().type('Mieszka I 12, Wrocław')
+        cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
@@ -163,6 +165,7 @@ describe('Missing SM (Poniatowa)', () => {
     it('creates application', function () {
         cy.uploadOKImages()
         cy.get('#lokalizacja').clear().type('Henin 93, Poniatowa')
+        cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit', { timeout: 5000 }).click()

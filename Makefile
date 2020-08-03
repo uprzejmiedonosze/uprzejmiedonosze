@@ -5,6 +5,9 @@ BABEL                := babel-minify
 RSYNC                := rsync
 RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/*'
 HOSTING              := nieradka.net
+CYPRESS              := ./node_modules/cypress/bin/cypress
+CYPRESS_KEY          := 8a0db00f-b36c-4530-9c82-422b0be32b5b
+
 ifeq ($(filter darwin%,${OSTYPE}),)
     SED_OPTS         := -i ''
 else
@@ -79,7 +82,7 @@ staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
-	@ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
+	#@ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
 shadow: HOST := $(SHADOW_HOST)
 shadow: $(DIRS) export ## Copy files to shadow server.
@@ -88,7 +91,7 @@ shadow: $(DIRS) export ## Copy files to shadow server.
 	$(create-symlink)
 
 prod: HOST := $(PROD_HOST)
-prod: check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
+prod: cypress check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
 	@git tag -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet "prod_$(TAG_NAME)"
@@ -101,6 +104,10 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r lib vendor src/*.php src/tools config.php $(EXPORT)/
+
+cypress: staging
+	@echo "==> Testing staging"
+	@$(CYPRESS) run --record --key $(CYPRESS_KEY)
 
 check-branch: ## Detects environment and active branch changes
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \
