@@ -194,10 +194,15 @@ function setAddressByPlace(place){
     const city = place.address_components.filter(function (e) {
             return e.types.indexOf('locality') == 0;
         })[0].long_name;
+    const districtN = place.address_components.filter(function (e) {
+            return e.types.indexOf('sublocality_level_1') >= 0;
+        });
+    const district = (districtN.length > 0)? districtN[0].short_name: null;
     $('#lokalizacja').val(formatted_address);
     $('#administrative_area_level_1').val(voivodeship);
     $('#country').val(country);
     $('#locality').val(city);
+    $('#district').val(district);
 
     $('a#geo').buttonMarkup({ icon: "check" });
     $('#lokalizacja').removeClass('error');
