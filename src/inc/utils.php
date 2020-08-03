@@ -1,6 +1,14 @@
 <?PHP
 require_once(__DIR__ . '/config.php');
 
+function trimstr2upper($in) {
+    return trim(mb_strtoupper($in, 'UTF-8'));
+}
+
+function trimstr2lower($in) {
+    return trim(mb_strtolower($in, 'UTF-8'));
+}
+
 function exception_handler($exception) {
     try{
         $email = getCurrentUserEmail();
@@ -110,7 +118,7 @@ function raiseError($msg, $status, $notify = true){
 }
 
 function guess_sex_by_name($name){
-    $names = preg_split('/\s+/', mb_strtolower($name, 'UTF-8'));
+    $names = preg_split('/\s+/', trimstr2lower($name));
     if(count($names) < 1){
         return '?';
     }

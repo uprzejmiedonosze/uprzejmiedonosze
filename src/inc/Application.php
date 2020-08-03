@@ -166,8 +166,8 @@ class Application extends JSONObject{
             }
         }
 
-        $city = trim(mb_strtolower($this->address->city, 'UTF-8'));
-        if($city == 'krosno' && trim(mb_strtolower(@$this->address->voivodeship, 'UTF-8')) == 'wielkopolskie'){
+        $city = trimstr2lower($this->address->city);
+        if($city == 'krosno' && trimstr2lower(@$this->address->voivodeship) == 'wielkopolskie'){
             $city = 'krosno-wlkp';
             // tak, są dwa miasta o nazwie 'Krosno'...
         }
@@ -177,7 +177,7 @@ class Application extends JSONObject{
             return $SM_ADDRESSES[$this->smCity];
         }
 
-        $address = trim(mb_strtolower($this->address->address, 'UTF-8'));
+        $address = trimstr2lower($this->address->address);
         foreach($SM_ADDRESSES as $c => $a){
             if (strpos($address, $c) !== false){
                 $this->smCity = $c;
