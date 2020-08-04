@@ -60,7 +60,7 @@ TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(GIT_DATE))
 
 .DEFAULT_GOAL        := help
 
-.PHONY: help clean log-from-last-prod
+.PHONY: help clean log-from-last-prod cypress
 help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
@@ -82,7 +82,7 @@ staging: $(DIRS) export ## Copy files to staging server.
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
-	#@ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
+	@#ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
 shadow: HOST := $(SHADOW_HOST)
 shadow: $(DIRS) export ## Copy files to shadow server.
@@ -93,8 +93,8 @@ shadow: $(DIRS) export ## Copy files to shadow server.
 prod: HOST := $(PROD_HOST)
 prod: cypress check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
-	@git tag -a "prod_$(TAG_NAME)" -m "release na produkcji"
-	@git push origin --quiet "prod_$(TAG_NAME)"
+	@git tag --force -a "prod_$(TAG_NAME)" -m "release na produkcji"
+	@git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
 	@make clean
@@ -105,8 +105,10 @@ export: $(DIRS) minify ## Exports files for deployment.
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r lib vendor src/*.php src/tools config.php $(EXPORT)/
 
-cypress: staging
+cypress:
 	@echo "==> Testing staging"
+	@$(MAKE) clean
+	@$(MAKE) staging -j
 	@$(CYPRESS) run --record --key $(CYPRESS_KEY)
 
 check-branch: ## Detects environment and active branch changes
@@ -115,12 +117,15 @@ check-branch: ## Detects environment and active branch changes
 		&& exit 1 )
 
 check-git-clean: ## Checks if GIT repository has uncommited changes
+	@echo "==> Checking if the repo is clean"
 	@test "$(shell git status | grep 'nothing to commit' | wc -l)" -eq 1 || ( echo "There are uncommitted changes." && exit 1 )
 
 check-branch-master: ## Checks if GIT is on branch master
+	@echo "==> Checking if current branch is master"
 	@test "$(shell git status | grep 'origin/master' | wc -l)" -eq 1 || ( echo "Not on branch master." && exit 1 )
 
-check-branch-staging: ## Checks if GIT is on branch master
+check-branch-staging: ## Checks if GIT is on branch staging
+	@echo "==> Checking if current branch is staging"
 	@test "$(shell git status | grep 'origin/staging' | wc -l)" -eq 1 || ( echo "Not on branch staging." && exit 1 )
 
 minify: check-branch minify-css minify-js process-html minify-config process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
@@ -155,11 +160,11 @@ export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	fi;
 	$(replace-inline)
 
-export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
+export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '  - preprocessing $<'
 	$(lint)
 	$(replace)
 
-export/public/api/config/%.json: src/api/config/%.json; @echo '==> Preprocessing $<'
+export/public/api/config/%.json: src/api/config/%.json; @echo '  - preprocessing $<'
 	@jq -c . < $< > $@
 
 export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
@@ -168,15 +173,15 @@ export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating 
 	@jq '.[].api' < $< | sort | uniq | egrep -v '^("Mail"|"Poznan"|null)' || echo "$< API values OK"
 	@jq -c . < $< > $@
 
-export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
+export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '  - preprocessing $<'
 	$(lint)
 	$(replace)
 
-export/templates/%: src/templates/% $(CSS_FILES) $(JS_FILES); @echo '==> Preprocessing $<'
+export/templates/%: src/templates/% $(CSS_FILES) $(JS_FILES); @echo '  - preprocessing $<'
 	$(lint-twig)
 	$(replace)
 
-$(MANIFEST_PROCESSED): $(MANIFEST); @echo '==> Preprocessing $<'
+$(MANIFEST_PROCESSED): $(MANIFEST); @echo '  - preprocessing $<'
 	$(replace)
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
