@@ -339,9 +339,10 @@ class Application extends JSONObject{
         if(!isset($this->comments)){
             $this->comments = [];
         }
-        $this->comments[date(DT_FORMAT)] = new JSONObject();
-        $this->comments[date(DT_FORMAT)]->source = $source;
-        $this->comments[date(DT_FORMAT)]->comment = $comment;
+        $date = date(DT_FORMAT);
+        $this->comments[$date] = new JSONObject();
+        $this->comments[$date]->source = $source;
+        $this->comments[$date]->comment = $comment;
     }
 
     /**
