@@ -132,11 +132,11 @@ function _geoToAddress($lat, $lng){
 
     $result = $cache->get("_geoToAddress-$latlng");
     if($result){
-        logger("_geoToAddress cache-hit $latlng", true);
+        logger("_geoToAddress cache-hit $latlng");
         echo json_encode($result);
         return;
     }
-    logger("_geoToAddress cache-miss $latlng", true);
+    logger("_geoToAddress cache-miss $latlng");
 
     $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?latlng=$latlng&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -216,6 +216,13 @@ function cmp($a, $b){
     return 0;
 }
 
+function _check_alpr_budget($credits_monthly_used, $credits_monthly_total){
+    if((float)$credits_monthly_used / (float)$credits_monthly_total > 0.8){
+        logger("$credits_monthly_used credits out of $credits_monthly_total used!");
+        _sendSlackError("$credits_monthly_used credits out of $credits_monthly_total used!");
+    }
+}
+
 /**
  * Saves uploaded image + automatically create thumbnail + read plate data
  * for `carImage`.
@@ -250,9 +257,7 @@ function _upload(){
         $application->carInfo = new stdClass();
 
         if(isset($car_info) && count($car_info["results"])){
-            logger('ALPR (cost: ' . $car_info['credit_cost'] . ', this month: ' . 
-                $car_info['credits_monthly_used'] . ', out of: ' .
-                $car_info['credits_monthly_total'], true);
+            _check_alpr_budget($car_info['credits_monthly_used'], $car_info['credits_monthly_total']);
 
             $result = (Array)$car_info['results'];
             usort($result, "cmp");
