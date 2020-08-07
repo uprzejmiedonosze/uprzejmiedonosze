@@ -104,7 +104,7 @@ function genSafeId(){
 
 /** @SuppressWarnings("exit") */
 function raiseError($msg, $status, $notify = true){
-    logger("raiseError $msg with $status", true);
+    logger("raiseError $msg with $status", $notify);
     $error = Array(
         "code" => $status,
         "message" => $msg
