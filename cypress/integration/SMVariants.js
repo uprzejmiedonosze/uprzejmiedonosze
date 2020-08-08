@@ -101,7 +101,7 @@ describe('API:Mail (Wrocław)', () => {
 
 })
 
-describe('API: null (Szczecin)', () => {
+describe('API:null (Szczecin)', () => {
     before(() => {
         cy.initDB()
         cy.login()
@@ -200,6 +200,6 @@ describe('Missing SM (Poniatowa)', () => {
 
     it('checks missing SM', function () {
         cy.contains('Wyślij zgłoszenie').click()
-        cy.contains('Brak danych Straży Miejskiej')
+        cy.contains('Brak danych Straży Miejskiej', { timeout: 10000 })
     })
 })
