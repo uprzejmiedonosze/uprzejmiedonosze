@@ -7,7 +7,7 @@ $user = $storage->getCurrentUser();
 $appIds = $user->getApplicationIds();
 
 $changeMail = isset($_GET['changeMail']) && isset($_GET['city']);
-$city = urldecode($_GET['city']);
+$city = isset($_GET['city'])? urldecode($_GET['city']): '';
 
 $countChanged = 0;
 
@@ -16,7 +16,7 @@ $applications = [];
 foreach($appIds as $id){
     $application = $storage->getApplication($id);
     array_push($applications, $application);
-    if($changeMail || $changeEpuap){
+    if($changeMail){
         if($application->status == 'confirmed'){
             if($changeMail && $application->smCity == $city){
                 $application->setStatus('confirmed-waiting');
@@ -27,7 +27,7 @@ foreach($appIds as $id){
     }
 }
 
-if($changeMail || $changeEpuap){
+if($changeMail){
     $storage->getUserStats(false); // updates the cache
 }
 
