@@ -621,7 +621,7 @@
     ],
     "email": "dyzurny@smgliwice.pl",
     "city": "Gliwice",
-    "hint": null,
+    "hint": "Niestety SM Gliwice wzywa na przesłuchanie do każdego zgłoszenia.",
     "api": null
   },
   "wodzisław śląski": {
@@ -1347,7 +1347,29 @@
     ],
     "email": "joanna.tutak@staszow.pl",
     "city": "Kurozwęki",
-    "hint": "Miejscowość Kurozwęki podlega pod SM Staszów",
+    "hint": "Miejscowość Kurozwęki podlega pod SM Staszów.",
+    "api": "Mail"
+  },
+  "dębica": {
+    "address": [
+      "Straż Miejska w Dębicy",
+      "ul. Ratuszowa 2",
+      "39-200 Dębica"
+    ],
+    "email": "sylwester.bieszczad@umdebica.pl",
+    "city": "Dębica",
+    "hint": null,
+    "api": "Mail"
+  },
+  "mielec": {
+    "address": [
+      "Straż Miejska w Mielcu",
+      "ul. Żeromskiego 26",
+      "39-300 Mielec"
+    ],
+    "email": "strazmiejska@um.mielec.pl",
+    "city": "Mielec",
+    "hint": null,
     "api": "Mail"
   },
   "_nieznane": {
