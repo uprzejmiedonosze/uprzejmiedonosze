@@ -168,9 +168,9 @@ export/public/api/config/%.json: src/api/config/%.json; @echo '  - preprocessing
 	@jq -c . < $< > $@
 
 export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
-	@jq '.[].address[2]?' < $< | grep -ve "\d\d-\d\d\d .*" | grep -v "null" || echo "$< postal adddresses OK"
-	@jq '.[].email?' < $< | grep -ve "@" | grep -ve "null" || echo "$< email addresses OK"
-	@jq '.[].api' < $< | sort | uniq | egrep -v '^("Mail"|"Poznan"|null)' || echo "$< API values OK"
+	@jq '.[].address[2]?' < $< | grep -ve "\d\d-\d\d\d .*" | grep -v "null" || echo "(v) $< postal adddresses OK"
+	@jq '.[].email?' < $< | grep -ve "@" | grep -ve "null" || echo "(v) $< email addresses OK"
+	@jq '.[].api' < $< | sort | uniq | egrep -v '^("Mail"|"Poznan"|null)' || echo "(v) $< API values OK"
 	@jq -c . < $< > $@
 
 export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '  - preprocessing $<'
