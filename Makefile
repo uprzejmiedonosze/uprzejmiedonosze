@@ -212,7 +212,7 @@ endef
 define create-symlink
 @echo "==> Creating a symlink in logs directory [$(TAG_NAME).log] -> [$@.log]"
 @curl $(HTTPS)://$(HOST)/api/api.html?action=initLogs
-@ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log"
+@ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log" &
 endef
 
 # GIT
