@@ -354,6 +354,10 @@ class Application extends JSONObject{
     public function addedToGallery(){
         return ((bool) $this->statements) && ((bool)$this->statements->gallery);
     }
+
+    public function isEditable(){
+        return in_array($this->status, ['draft', 'ready']);
+    }
 }
 
 ?>
