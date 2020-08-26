@@ -6,7 +6,7 @@
     "openalpr_api": "^2.0.1"
   },
   "devDependencies": {
-    "cypress": "^4.11.0",
+    "cypress": "^4.12.1",
     "eslint-config-jquery": "^1.0.1"
   }
 }
