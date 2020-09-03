@@ -101,8 +101,8 @@ describe('API:Mail (Wrocław)', () => {
 
 })
 
-describe('API:null (Szczecin)', () => {
-    before(() => {
+describe.skip('API:null (Szczecin)', () => {
+    before(() => {s
         cy.initDB()
         cy.login()
         cy.goToNewAppScreen()
