@@ -32,6 +32,9 @@ class Mail extends CityAPI {
           ->setSender($application->user->email)
           ->setReplyTo($application->user->email, $application->user->name)
           ->setReturnPath($application->user->email);
+        $message->getHeaders()->addTextHeader("X-UD-AppId", $application->id);
+        $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
+        $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
 
         $result = $mailer->send($message);
         if(!$result){
