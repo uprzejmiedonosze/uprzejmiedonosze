@@ -479,7 +479,7 @@ function setDateTime(dateTime, fromPicture = true) {
         }
     }
 
-    $('#datetime').val(dt.toFormat("yyyy-LL-dd'T'TT"));
+    $('#datetime').val(dt.toFormat("yyyy-LL-dd'T'HH:mm:ss"));
     $('#date').text(dt.setLocale('pl').toFormat("cccc d LLL"));
     $('#time').text(dt.toFormat("H:mm"));
 }
