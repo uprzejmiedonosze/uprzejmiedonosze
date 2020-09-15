@@ -211,6 +211,10 @@ div.error img{
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
+.new-application .datetime a.changeDatetime {
+    font-weight: 300;
+    text-decoration: none;
+}
 
 .new-application .datetime span#date,
 .new-application .datetime span#time {

@@ -36,7 +36,7 @@ $(document).on('pageshow', function () {
             }
         });
 
-        $('.datetime a').click(function () {
+        $('div.datetime a.ui-btn').click(function () {
             let datetime = luxon.DateTime.fromISO($('#datetime').val()).startOf('hour');
             const offset = (this.id.endsWith('p'))? 1: -1;
 
@@ -48,6 +48,10 @@ $(document).on('pageshow', function () {
             if(luxon.DateTime.local() > datetime){
                 setDateTime(datetime, false);
             }
+        });
+
+        $('div.datetime a.changeDatetime').click(function () {
+            setDateTime($('#datetime').val(), false);
         });
 
         setDateTime($('#datetime').val(), $('#dtFromPicture').val() == "1");
@@ -348,14 +352,11 @@ function readGeoDataFromImage(file) {
                 const dateTime = data.exif.getText("DateTimeOriginal") && data.exif.getText("DateTime");
                 if (dateTime && dateTime !== 'undefined') {
                     setDateTime(dateTime, true);
-                    $('#dtFromPicture').val(1);
                 }else{
                     setDateTime('', false);
-                    $('#dtFromPicture').val(0);
                 }
             }else{
                 setDateTime('', false);
-                $('#dtFromPicture').val(0);
             }
 
             var gpsInfo = data.exif && data.exif.get('GPSInfo');
@@ -459,13 +460,15 @@ function setDateTime(dateTime, fromPicture = true) {
             $('#dateHint').text('Data i godzina pobrana ze zdjęcia');
             $('#dateHint').addClass('hint');
         }
-        $('div.datetime a').hide();
+        $('div.datetime a.ui-btn').hide();
+        $('div.datetime a.changeDatetime').show();
     }else{
         dt = dt.startOf('hour');
         $('#dtPrecise').text('około');
         $('#dateHint').text('Podaj datę i godzinę zgłoszenia');
         $('#dateHint').addClass('hint');
-        $('div.datetime a').show();
+        $('div.datetime a.ui-btn').show();
+        $('div.datetime a.changeDatetime').hide();
 
         if(luxon.DateTime.local() > dt.plus({ hours: 1 })){
             $('#hp').removeClass('ui-state-disabled');
@@ -482,4 +485,5 @@ function setDateTime(dateTime, fromPicture = true) {
     $('#datetime').val(dt.toFormat("yyyy-LL-dd'T'HH:mm:ss"));
     $('#date').text(dt.setLocale('pl').toFormat("cccc d LLL"));
     $('#time').text(dt.toFormat("H:mm"));
+    $('#dtFromPicture').val(fromPicture? 1: 0);
 }

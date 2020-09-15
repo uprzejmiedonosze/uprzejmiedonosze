@@ -9,6 +9,7 @@ function checkAppData(config) {
 
 describe('Empty my apps', () => {
     before(() => {
+        cy.initDB()
         cy.login()
     })
 
@@ -81,10 +82,8 @@ describe('Invalid images', () => {
         cy.get('#hp').should('have.class', 'ui-state-disabled')
         cy.get('#hm').should('not.have.class', 'ui-state-disabled')
         cy.get('#dm').click()
-        cy.get('#dp').should('not.have.class', 'ui-state-disabled')
-        cy.get('#dm').should('not.have.class', 'ui-state-disabled')
-        cy.get('#hp').should('not.have.class', 'ui-state-disabled')
-        cy.get('#hm').should('not.have.class', 'ui-state-disabled')
+        cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
+        cy.get('.datetime .changeDatetime').should('not.be.visible')
     })
 })
 
@@ -121,6 +120,7 @@ describe('Valid images and location', () => {
         cy.contains('Data i godzina pobrana ze zdjęcia')
         cy.contains(this.config.carImage.dateHuman)
         cy.contains(this.config.carImage.hour)
+        cy.get('.datetime .changeDatetime').should('be.visible')
 
         cy.get('#lokalizacja').should('have.value', this.config.address.address)
     })
@@ -200,12 +200,31 @@ describe('Edit application', () => {
         cy.get('#comment').type(this.config.comment)
         cy.get('#witness').click({force: true})
         cy.contains('Zatrzymanie na drodze dla rowerów').click()
+        cy.contains('(zmień datę, jeśli niepoprawna)').click()
+
+        cy.contains("około")
+        cy.contains('Podaj datę i godzinę zgłoszenia')
+        cy.get('#dm').click()
+        cy.get('#hp').click()
+
+        cy.contains(this.config.carImage.dateHumanDM1)
+        cy.contains(this.config.carImage.hourHumanHP1)
+        cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
+        cy.get('.datetime .changeDatetime').should('not.be.visible')
     })
 
     it('checks altered application', function(){
         cy.get('#form-submit').click()
         cy.contains('Wystąpił błąd').should('not.exist')
-        checkAppData(this.config)
+        
+        cy.contains(this.config.carImage.plateId)
+        cy.contains(this.config.carImage.dateDM1)
+        cy.contains(this.config.carImage.hourHumanHP1)
+        cy.contains(this.config.address.address)
+        cy.contains(this.config.user.name)
+        cy.contains(this.config.user.email)
+        cy.contains("około")
+
         cy.contains(this.config.comment)
         cy.contains('Nie byłem świadkiem samego momentu parkowania').should('not.exist')
     })

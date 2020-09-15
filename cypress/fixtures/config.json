@@ -10,7 +10,10 @@
         "url": "../../tests/img_p.jpg",
         "plateId": "KWA00913",
         "date": "2018-02-02",
+        "dateDM1": "2018-02-01",
         "dateHuman": "piątek 2 lut",
+        "dateHumanDM1": "czwartek 1 lut",
+        "hourHumanHP1": "20:00",
         "hour": "19:48"
     },
     "wrongImage": {
