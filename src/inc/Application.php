@@ -269,7 +269,8 @@ class Application extends JSONObject{
         if(!isset($this->address) || !isset($this->address->latlng)){
             return null;
         }
-        $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$this->address->latlng}&zoom=17&size=380x200&maptype=roadmap&markers=color:red%7Clabel:o%7C{$this->address->latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
+        $iconEncodedUrl = urlencode('%HTTPS%://%HOST%/img/map-circle.png');
+        $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$this->address->latlng}&zoom=17&size=380x200&maptype=roadmap&markers=anchor:center%7Cicon:$iconEncodedUrl%7C{$this->address->latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
         
         if($this->status == 'draft' || $this->status == 'ready'){
             return $mapsUrl;

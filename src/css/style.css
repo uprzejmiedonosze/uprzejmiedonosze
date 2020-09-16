@@ -216,6 +216,14 @@ div.error img{
     text-decoration: none;
 }
 
+.new-application .location-picker .centerMarker {
+    background: url('data:image/png;base64,{{MAP_CIRCLE}}') no-repeat;
+    height: 64px;
+    width: 64px;
+    margin-left: -32px;
+    margin-top: -32px;
+}
+
 .new-application .datetime span#date,
 .new-application .datetime span#time {
     font-weight: 400;

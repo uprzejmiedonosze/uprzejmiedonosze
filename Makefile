@@ -22,6 +22,7 @@ DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/c
 CSS_FILES            := $(wildcard src/css/*.css)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
 CSS_MINIFIED         := $(CSS_FILES:src/%.css=export/public/%-$(CSS_HASH).css)
+CSS_MAP_IMAGE        := $(shell base64 src/img/map-circle.png)
 
 JS_FILES             := $(wildcard src/js/*.js)
 JS_HASH              := $(shell cat $(JS_FILES) | md5sum | cut -b 1-8)
@@ -151,6 +152,7 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 	else \
 		sed 's/#009C7F/#0088bb/g' $< > $@ ; \
 	fi;
+	@sed $(SED_OPTS) 's%{{MAP_CIRCLE}}%$(CSS_MAP_IMAGE)%' $@
 
 export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ] && ( ! grep -q min <<<"$<" ); then \
