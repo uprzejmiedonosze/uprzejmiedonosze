@@ -10,7 +10,7 @@
 <p>Nowe zgłoszenia oraz rejestracje nowych użytkowników w ostatnich trzydziestu dniach.</p>
 <div id="statsByDay" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 
-<p>Nowe zgłoszenia oraz rejestracje nowych użytkowników w ostatnim roku.</p>
+<p>Nowe zgłoszenia oraz rejestracje nowych użytkowników.</p>
 <div id="statsByYear" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 
 
@@ -94,41 +94,41 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-        Highcharts.chart('statsByYear', {
+    const barWidth = $('#statsByYear').width() / 26;
+
+    Highcharts.chart('statsByYear', {
         data: {
             csvURL: window.location.origin + '/api/csv.html?file=statsByYear',
             firstRowAsNames: false
         },
         chart: {
             type: 'column',
+            plotBackgroundColor: null,
             backgroundColor: 'transparent'
         },
         plotOptions: {
             column: {
                 grouping: false,
                 shadow: false,
-                borderWidth: 0,
-                fillColor: {
-                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-                    stops: [ [0, '#009C7F'], [1, '#FFFFFF'] ]
-                }
+                borderWidth: 0
+            },
+            series: {
+                pointWidth: barWidth
             }
         },
         xAxis: {
-            //tickInterval: 7 * 24 * 3600 * 1000, // one week
             tickWidth: 0,
             gridLineWidth: 1,
         },
         series: [{
             name: 'Nowe zgłoszenia',
-            lineWidth: 5,
             color: '#009C7F'
         },{
             name: 'Nowe rejestracje użytkowników',
-            lineWidth: 3,
             color: '#e9c200',
             pointPadding: 0.4,
-            pointPlacement: 0.2
+            pointPlacement: 0.2,
+            pointWidth: barWidth * 0.7
         }],
         tooltip: {
             shared: true,
@@ -146,15 +146,6 @@ document.addEventListener('DOMContentLoaded', function () {
             plotBackgroundColor: null,
             backgroundColor: 'transparent'
         },
-        plotOptions: {
-            column: {
-                fillColor: {
-                    linearGradient: { x1: 0, y1: 0, x2: 1, y2: 1 },
-                    stops: [ [0, '#009C7F'], [1, '#FFFFFF'] ]
-                }
-            }
-        },
-
         series: [{
             name: 'Ilość zgłoszeń',
             color: '#009C7F'

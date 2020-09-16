@@ -353,7 +353,7 @@ SQL;
                 and substr(json_extract(applications.value, '$.added'), 1, 4) > 2017
             group by substr(json_extract(applications.value, '$.added'), 1, 7)
             order by 1 desc
-            limit 13;
+            limit 24;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
