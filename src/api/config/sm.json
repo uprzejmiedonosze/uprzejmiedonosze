@@ -1372,6 +1372,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "zgorzelec": {
+    "address": [
+      "Komenda Powiatowa Policji w Zgorzelcu",
+      "Bohaterów II Armii Wojska Polskiego 12",
+      "59-900 Zgorzelec"
+    ],
+    "email": "kpp@zgorzelec.wr.policja.gov.pl",
+    "city": "Zgorzelec",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
