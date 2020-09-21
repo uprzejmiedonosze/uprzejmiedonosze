@@ -189,6 +189,13 @@ $(MANIFEST_PROCESSED): $(MANIFEST); @echo '  - preprocessing $<'
 $(EXPORT)/%: ; @echo "==> Creating $@"
 	@mkdir -p $@
 
+update-libs: ; @echo 'Updating PHP and JS libraries'
+	@composer update
+	@npm update && npm install
+	@cp -f node_modules/blueimp-load-image/js/*js src/js/
+	@cp -f node_modules/lazysizes/lazysizes.min.js src/js/
+	@cp -f node_modules/luxon/build/global/luxon.min.js src/js/
+
 # Utils
 
 define replace

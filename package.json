@@ -1,12 +1,13 @@
 {
   "dependencies": {
     "blueimp-load-image": "^5.14.0",
-    "eslint-config-defaults": "^9.0.0",
     "exif-js": "^2.3.0",
-    "openalpr_api": "^2.0.1"
+    "lazysizes": "^5.2.2",
+    "luxon": "^1.25.0"
   },
   "devDependencies": {
-    "cypress": "^4.12.1",
-    "eslint-config-jquery": "^1.0.1"
+    "cypress": "^5.2.0",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-config-jquery": "^3.0.0"
   }
 }
