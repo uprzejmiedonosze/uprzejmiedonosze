@@ -1383,6 +1383,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "koszalin": {
+    "address": [
+      "Straż Miejska w Koszalinie",
+      "ul. Rynek Staromiejski 6-7",
+      "75-007 Koszalin"
+    ],
+    "email": "straz.miejska@um.koszalin.pl",
+    "city": "Koszalin",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
