@@ -21,7 +21,7 @@
 \end{center}
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
-    świadkiem pozostawienia pojazdu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }pod adresem
+    świadkiem pozostawienia pojazdu o nr rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w okolicy adresu
     {{ address }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej #}
     {# ale równocześnie chowam hint dotyczący mapy – bo zgłoszenia robią się dwustronnicowe #}

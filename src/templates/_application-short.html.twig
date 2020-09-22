@@ -14,7 +14,7 @@
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
             pojazdu o nr rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
             {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
-            pod adresem
+            w okolicy adresu
             <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
                 data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
             {{ app.getCategory.short }}</p>
