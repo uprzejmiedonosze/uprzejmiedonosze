@@ -453,6 +453,31 @@ SQL;
         $this->stats->set("%HOST%-getGalleryByCity", $stats, 0, 600);
         return $stats;
     }
+
+    /**
+     * Returns number of applications per city.
+     */
+    public function getStatsByCarBrand($useCache = true){
+        $stats = $this->stats->get("%HOST%-getStatsByCarBrand");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        $sql = <<<SQL
+            select json_extract(value, '$.carInfo.brand') as city,
+                count(key) as cnt
+            from applications
+            where json_extract(value, '$.status') not in ('draft', 'ready')
+                and json_extract(value, '$.carInfo.brand') is not null
+            group by json_extract(value, '$.carInfo.brand')
+            order by 2 desc
+            limit 10
+SQL;
+
+        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $this->stats->set("%HOST%-getStatsByCarBrand", $stats, 0, 600);
+        return $stats;
+    }
 }
 
 ?>

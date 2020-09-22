@@ -16,6 +16,8 @@ if (isset($_GET["file"]) && !empty($_GET["file"])) {
             _getStatsByDay(); break;
         case "statsByYear":
             _getStatsByYear(); break;
+        case "statsByCarBrand":
+            _getStatsByCarBrand(); break;
         default: raiseError('Invalid file specified', 400);
     }
 }else{
@@ -44,6 +46,12 @@ function _getStatsAppsByCity(){
     GLOBAL $storage;
     $statsAppsByCity = $storage->getStatsAppsByCity(false);
     echo outputCSV($statsAppsByCity);
+}
+
+function _getStatsByCarBrand(){
+    GLOBAL $storage;
+    $statsByCarBrand = $storage->getStatsByCarBrand(false);
+    echo outputCSV($statsByCarBrand);
 }
 
 function _getStatsByDay(){

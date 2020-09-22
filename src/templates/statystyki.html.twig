@@ -13,9 +13,11 @@
 <p>Nowe zgłoszenia oraz rejestracje nowych użytkowników.</p>
 <div id="statsByYear" style="min-width: 300px; height: 300px; margin: 0 auto"></div>
 
-
 <p>TOP 10 miast z największą ilością zgłoszeń.</p>
 <div id="statsAppsByCity" style="min-width: 250px; height: 300px; margin: 0 auto"></div>
+
+<p>TOP 10 najpopularniejszych marek pojazdów sprawcy.</p>
+<div id="statsByCarBrand" style="min-width: 250px; height: 300px; margin: 0 auto"></div>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/data.js"></script>
@@ -53,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             showFirstLabel: false
         }],
+        colors: ['#009C7F', '#e9c200', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
 
     });
 
@@ -150,6 +153,56 @@ document.addEventListener('DOMContentLoaded', function () {
             name: 'Ilość zgłoszeń',
             color: '#009C7F'
         }]
+    });
+
+    // Make monochrome colors
+    var pieColors = (function () {
+        var colors = [],
+            base = Highcharts.getOptions().colors[0],
+            i;
+
+        for (i = 0; i < 10; i += 1) {
+            // Start out with a darkened base color (negative brighten), and end
+            // up with a much brighter color
+            colors.push(Highcharts.color(base).brighten((i-2) / 15).get());
+        }
+        return colors;
+    }());
+
+    Highcharts.chart('statsByCarBrand', {
+        data: {
+            csvURL: window.location.origin + '/api/csv.html?file=statsByCarBrand',
+            firstRowAsNames: false
+        },
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie',
+            backgroundColor: 'transparent'
+        },
+        series: [{
+            name: 'Ilość zgłoszeń',
+            color: '#009C7F'
+        }],
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                colors: pieColors,
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b><br>{point.percentage:.1f} %'
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%'],
+                size: '110%'
+            }
+        },
     });
 });
 </script>
