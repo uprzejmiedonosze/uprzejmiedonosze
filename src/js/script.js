@@ -14,7 +14,6 @@ $(document).on('pageshow', function () {
             $('#plateId').removeClass('error');
             $('#plateImage').hide();
             $('#recydywa').hide();
-            $('#brand').hide();
         });
 
         $('#comment').on('change', function () {
@@ -413,11 +412,12 @@ function sendFile(fileData, id) {
                 if (json.carInfo.plateId) {
                     $('#plateId').val(json.carInfo.plateId);
                     if (json.carInfo.brand) {
-                        $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny pojazdu '
-                            + json.carInfo.brand);
-                    }else{
-                        $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny');
+                        if($('#comment').val().trim().length == 0){
+                            $('#comment').val('Pojazd prawdopodobnie marki ' + json.carInfo.brand + '.');
+                        }
+                        
                     }
+                    $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny');
                     $('#plateHint').addClass('hint');
                     $('#plateId').removeClass('error');
                 }
