@@ -367,7 +367,7 @@ function readGeoDataFromImage(file) {
             var lon = gpsInfo.get("GPSLongitude");
             var latRef = gpsInfo.get("GPSLatitudeRef") || "N";
             var lonRef = gpsInfo.get("GPSLongitudeRef") || "W";
-            if (lat) {
+            if (lat && Array.isArray(lat) && lat[0]) {
                 lat = (parseFloat(lat[0]) + parseFloat(lat[1]) / 60 + parseFloat(lat[2]) / 3600) * (latRef == "N" ? 1 : -1);
                 lon = (parseFloat(lon[0]) + parseFloat(lon[1]) / 60 + parseFloat(lon[2]) / 3600) * (lonRef == "W" ? -1 : 1);
                 setAddressByLatLng(lat, lon, 'picture');
