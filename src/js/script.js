@@ -382,7 +382,11 @@ function noGeoDataInImage() {
     if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         $('#addressHint').text('Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć');
     } else {
-        $('#addressHint').html('Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.');
+        if (/Chrome/.test(navigator.userAgent) && /Android/.test(navigator.userAgent)) {
+            $('#addressHint').html('Przeglądarka Chrome na Androidzie zapewne usunęła znaczniki geolokalizacji, <a data-ajax="false" href="/aplikacja.html">zainstaluj Firefox-a</a>.');
+        }else{
+            $('#addressHint').html('Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.');
+        }
     }
     $('#addressHint').addClass('hint');
 }
