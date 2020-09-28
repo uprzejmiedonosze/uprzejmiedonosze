@@ -1394,6 +1394,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "goleniów": {
+    "address": [
+      "Straż Miejska w Goleniowie",
+      "plac Lotników 1",
+      "72-100 Goleniów"
+    ],
+    "email": "straz@goleniow.pl",
+    "city": "Goleniów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
