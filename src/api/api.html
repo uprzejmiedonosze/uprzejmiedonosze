@@ -284,7 +284,12 @@ function _upload(){
             $application->carInfo->plateId = strtoupper($result["plate"]);
             $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
             $application->carInfo->brand = @ucfirst($result["vehicle"]['make'][0]['name']);
+            $application->carInfo->brandConfidence = @$result["vehicle"]['make'][0]['confidence'];
+            $application->carInfo->color = @ucfirst($result["vehicle"]['color'][0]['name']);
+            $application->carInfo->colorConfidence = @$result["vehicle"]['color'][0]['confidence'];
             $application->carInfo->recydywa = $recydywa;
+
+            logger(print_r($application->carInfo, true));
         }
     }else if($pictureType == 'contextImage'){
         $application->contextImage = new stdClass();

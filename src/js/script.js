@@ -415,7 +415,7 @@ function sendFile(fileData, id) {
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
                     $('#plateId').val(json.carInfo.plateId);
-                    if (json.carInfo.brand) {
+                    if (json.carInfo.brand && json.carInfo.brandConfidence > 90) {
                         if($('#comment').val().trim().length == 0){
                             $('#comment').val('Pojazd prawdopodobnie marki ' + json.carInfo.brand + '.');
                         }
