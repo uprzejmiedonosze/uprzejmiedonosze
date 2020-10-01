@@ -1405,6 +1405,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "międzyzdroje": {
+    "address": [
+      "Straż Miejska Międzyzdroje",
+      "Książąt Pomorskich 5",
+      "72-500 Międzyzdroje"
+    ],
+    "email": "strazmiejska@miedzyzdroje.pl",
+    "city": "Międzyzdroje",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
