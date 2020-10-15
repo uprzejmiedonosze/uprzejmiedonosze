@@ -43,7 +43,10 @@ describe('Application screen valitation', () => {
         cy.get('#lokalizacja').should('have.value', this.config.address.address)
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
-        cy.get('#latlng').should('have.value', this.config.address.latlng)
+        cy.get('#latlng').should(($input) => {
+            const val = $input.val()
+            expect(val).to.match(new RegExp(this.config.address.latlng))
+        })
     })
 
     it('checks empty application validation', function () {    
