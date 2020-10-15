@@ -230,11 +230,11 @@
   },
   "górowo iławeckie": {
     "address": [
-      "UM Górowo Iławeckie",
-      "pl. Ratuszowy 18",
+      "Komisariat Policji w Górowie Iławieckim",
+      "ul. gen. Władysława Sikorskiego 30",
       "11-220 Górowo Iławeckie"
     ],
-    "email": "umgorowo@gorowoilaweckie.pl",
+    "email": "dzielnicowy.gorowoilaweckie1@ol.policja.gov.pl",
     "city": "Górowo Iławeckie",
     "hint": null,
     "api": "Mail"
