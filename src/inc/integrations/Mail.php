@@ -36,6 +36,8 @@ class Mail extends CityAPI {
         $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
 
+        $messageId = $message->getHeaders()->get('Message-ID');
+
         $result = $mailer->send($message);
         if(!$result){
           raiseError($result, 500, true);
@@ -50,6 +52,7 @@ class Mail extends CityAPI {
         $application->sentViaMail->cc = "{$application->user->name} ({$application->user->email})";
         $application->sentViaMail->from = "{$application->user->name} (" . SMTP_USER . ")";
         $application->sentViaMail->body = parent::formatEmail($application, false);
+        $application->sentViaMail->$messageId = $messageId;
 
         global $storage;
         $storage->saveApplication($application);
