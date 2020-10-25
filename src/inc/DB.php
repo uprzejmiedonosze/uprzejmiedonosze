@@ -478,6 +478,43 @@ SQL;
         $this->stats->set("%HOST%-getStatsByCarBrand", $stats, 0, 600);
         return $stats;
     }
+
+    public function getAppByNumber($number, $apiToken){
+        if($apiToken !== API_TOKEN){
+            throw new Exception('Dostęp zabroniony.');
+        }
+        $sql = <<<SQL
+            select value 
+            from applications
+            where lower(json_extract(value, '$.number'))  = lower(:number)
+            limit 1;
+SQL;
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':number', $number);
+        $stmt->execute();
+
+        return new Application($stmt->fetch(\PDO::FETCH_NUM)[0]);
+    }
+
+    public function getUserByName($name, $apiToken){
+        logger("getUserByName IN");
+        if($apiToken !== API_TOKEN){
+            throw new Exception('Dostęp zabroniony.');
+        }
+        $sql = <<<SQL
+            select value 
+            from users
+            where lower(json_extract(value, '$.data')) like '%nieradka%'
+            limit 1;
+SQL;
+
+        $stmt = $this->db->prepare($sql);
+        #$stmt->bindValue(':name', $name);
+        $stmt->execute();
+
+        return new User($stmt->fetch(\PDO::FETCH_NUM)[0]);
+    }
 }
 
 ?>

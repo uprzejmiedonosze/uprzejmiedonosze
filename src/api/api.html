@@ -37,6 +37,10 @@ if (is_ajax()) {
                 _addToGallery($_POST["id"]); break;
             case "moderateApp":
                 _moderateApp($_POST["id"], $_POST["decision"]); break;
+            case "getAppByNumber":
+                _getAppByNumber($_POST["number"], $_POST["apiToken"]); break;
+            case "getUserByName":
+                _getUserByName($_POST["name"], $_POST["apiToken"]); break;
             default: raiseError('Invalid action specified', 400);
         }
     }else{
@@ -406,5 +410,26 @@ function resize_image($file, $w, $h, $crop=FALSE) {
 function _initLogs() {
     logger("INIT %VERSION%", true);
 }
+
+function _getAppByNumber($number, $apiToken){
+    global $storage;
+    try{
+        $application = $storage->getAppByNumber($number, $apiToken);
+    }catch(Exception $e){
+        raiseError($e->getMessage(), 404);
+    }
+    echo json_encode($application);
+}
+
+function _getUserByName($name, $apiToken){
+    global $storage;
+    try{
+        $user = $storage->getUserByName($name, $apiToken);
+    }catch(Exception $e){
+        raiseError($e->getMessage(), 404);
+    }
+    echo json_encode($user);
+}
+
 
 ?>
