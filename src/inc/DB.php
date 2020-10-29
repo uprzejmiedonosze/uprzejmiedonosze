@@ -498,19 +498,18 @@ SQL;
     }
 
     public function getUserByName($name, $apiToken){
-        logger("getUserByName IN");
         if($apiToken !== API_TOKEN){
             throw new Exception('Dostęp zabroniony.');
         }
         $sql = <<<SQL
             select value 
             from users
-            where lower(json_extract(value, '$.data')) like '%nieradka%'
+            where lower(json_extract(value, '$.data')) like '%' || lower(:name) || '%'
             limit 1;
 SQL;
 
         $stmt = $this->db->prepare($sql);
-        #$stmt->bindValue(':name', $name);
+        $stmt->bindValue(':name', $name);
         $stmt->execute();
 
         return new User($stmt->fetch(\PDO::FETCH_NUM)[0]);
