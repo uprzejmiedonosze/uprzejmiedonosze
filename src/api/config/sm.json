@@ -1416,6 +1416,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "krapkowice": {
+    "address": [
+      "Straż Miejska Krapkowice",
+      "ul. 3 Maja 17",
+      "47-303 Krapkowice"
+    ],
+    "email": "strazmiejska@krapkowice.pl",
+    "city": "Krapkowice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
