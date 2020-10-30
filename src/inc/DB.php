@@ -505,14 +505,18 @@ SQL;
             select value 
             from users
             where lower(json_extract(value, '$.data')) like '%' || lower(:name) || '%'
-            limit 1;
+            limit 10;
 SQL;
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':name', $name);
         $stmt->execute();
 
-        return new User($stmt->fetch(\PDO::FETCH_NUM)[0]);
+        $ret = Array();
+		  foreach($stmt->fetchAll(\PDO::FETCH_NUM) as $json){
+            $ret[] = new User($json);
+        }
+        return $ret;
     }
 }
 
