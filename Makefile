@@ -61,7 +61,7 @@ TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(GIT_DATE))
 
 .DEFAULT_GOAL        := help
 
-.PHONY: help clean log-from-last-prod cypress
+.PHONY: help clean log-from-last-prod cypress confirmation
 help: ## Displays this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
 
@@ -99,6 +99,18 @@ prod: cypress check-branch-master check-git-clean clean $(DIRS) export ## Copy f
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
 	@make clean
+
+quickfix:  HOST := $(PROD_HOST)
+quickfix: diff-from-last-prod confirmation check-branch-master check-git-clean clean $(DIRS) export ## Quickfix on production
+	@echo "==> Copying files and dirs for $@"
+	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
+	@git push origin --quiet --force "prod_$(TAG_NAME)"
+	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	$(create-symlink)
+	@make clean
+
+confirmation:
+	@echo "PRODUCTION QUICKFIX? Are you sure[yes/N] " && read ans && [ $${ans:-N} = yes ]
 
 export: $(DIRS) minify ## Exports files for deployment.
 	@echo "==> Exporting"
