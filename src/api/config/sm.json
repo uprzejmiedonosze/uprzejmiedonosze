@@ -1427,6 +1427,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "jastrzębie-zdrój": {
+    "address": [
+      "Straż Miejska w Jastrzębiu-Zdroju",
+      "al. Piłsudskiego 60",
+      "44-335 Jastrzębie-Zdrój"
+    ],
+    "email": "sm@um.jastrzebie.pl",
+    "city": "Jastrzębie-Zdrój",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
