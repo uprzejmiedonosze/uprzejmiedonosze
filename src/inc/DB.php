@@ -502,9 +502,10 @@ SQL;
             throw new Exception('Dostęp zabroniony.');
         }
         $sql = <<<SQL
-            select value 
+            select key, value 
             from users
             where lower(json_extract(value, '$.data')) like '%' || lower(:name) || '%'
+				order by json_array_length(json_extract(value, '$.applications')) desc
             limit 10;
 SQL;
 
@@ -512,11 +513,11 @@ SQL;
         $stmt->bindValue(':name', $name);
         $stmt->execute();
 
-        $ret = Array();
-		  foreach($stmt->fetchAll(\PDO::FETCH_NUM) as $json){
-            $ret[] = new User($json);
+        $users = Array();
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $users[$row[0]] = new User($row[1]);
         }
-        return $ret;
+        return $users;
     }
 }
 

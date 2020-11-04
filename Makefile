@@ -44,7 +44,9 @@ PHP_PROCESSED        := $(PHP_FILES:src/inc/%.php=export/inc/%.php)
 MANIFEST             := src/manifest.json
 MANIFEST_PROCESSED   := $(PUBLIC)/manifest.json
 
-OTHER_FILES          := src/favicon.ico src/robots.txt src/img src/sitemap.xml src/ads.txt src/sw.js
+SITEMAP_PROCESSED    := $(PUBLIC)/sitemap.xml
+
+OTHER_FILES          := src/favicon.ico src/robots.txt src/img src/ads.txt src/sw.js
 
 STAGING_HOST         := staging.uprzejmiedonosze.net
 PROD_HOST            := uprzejmiedonosze.net
@@ -112,7 +114,7 @@ quickfix: diff-from-last-prod confirmation check-branch-master check-git-clean c
 confirmation:
 	@echo "PRODUCTION QUICKFIX? Are you sure[yes/N] " && read ans && [ $${ans:-N} = yes ]
 
-export: $(DIRS) minify ## Exports files for deployment.
+export: $(DIRS) process-sitemap minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -149,6 +151,7 @@ minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
+process-sitemap: $(DIRS) $(SITEMAP_PROCESSED)
 
 clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
@@ -207,6 +210,25 @@ update-libs: ; @echo 'Updating PHP and JS libraries'
 	@cp -f node_modules/blueimp-load-image/js/*js src/js/
 	@cp -f node_modules/lazysizes/lazysizes.min.js src/js/
 	@cp -f node_modules/luxon/build/global/luxon.min.js src/js/
+
+$(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.xml'
+	
+	@echo '<urlset \n'\
+    	'\txmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'\
+    	'\txmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'\
+		'\txsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">\n' \
+		> $(SITEMAP_PROCESSED)
+	@for PAGE in $$(grep --files-with-matches "SITEMAP-PRIORITY" $^); do \
+		PRIO=$$(grep "SITEMAP-PRIORITY" $$PAGE | sed 's/[^0-9\.]//g'); \
+		URL=$$(echo $$PAGE | sed -e 's#\(.*/\)##g' -e 's/.twig//' -e 's/index.html//'); \
+		MOD_DATE=$$(stat -c '%y' $$PAGE | sed 's/ .*//'); \
+		echo "<url>\n\t"\
+			"<loc>$(HTTPS)://$(HOST)/$$URL</loc>\n\t" \
+			"<lastmod>$$MOD_DATE</lastmod>\n\t" \
+			"<priority>$$PRIO</priority>\n"\
+			"</url>" >> $(SITEMAP_PROCESSED); \
+	done
+	@echo '</urlset>\n' >> $(SITEMAP_PROCESSED)	
 
 # Utils
 
