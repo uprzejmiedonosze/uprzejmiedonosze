@@ -65,11 +65,16 @@ TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(GIT_DATE))
 
 .PHONY: help clean log-from-last-prod cypress confirmation
 help: ## Displays this help.
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST)  | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s- \033[0m %s\n", $$1, $$2}'
+	@printf "\033[36m%-22s  \033[0m %s\n\n" "TARGET" "DESCRIPTION"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s- \033[0m %s\n", $$1, $$2}'
 
-dev: HOST := $(DEV_HOST)
-dev: HTTPS := http
-dev: $(DIRS) export ## Refresh src files in Docker image
+dev: ## Refresh src files in Docker image
+	$(MAKE) dev-sequential -j
+
+dev-sequential: HOST := $(DEV_HOST)
+dev-sequential: HTTPS := http
+dev-sequential: $(DIRS) export
 	@echo "==> Refreshing sources"
 
 dev-run: HOST := $(DEV_HOST)
@@ -80,15 +85,21 @@ dev-run: $(DIRS) export dev ## Building and running docker image
 	@echo "==> Running docker image"
 	@make --directory docker runi
 
-staging: HOST := $(STAGING_HOST)
-staging: $(DIRS) export ## Copy files to staging server.
+staging: ## Copy files to staging server.
+	$(MAKE) staging-sequential -j
+
+staging-sequential: HOST := $(STAGING_HOST)
+staging-sequential: $(DIRS) export
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)
 	@#ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
-shadow: HOST := $(SHADOW_HOST)
-shadow: $(DIRS) export ## Copy files to shadow server.
+shadow: ## Copy files to shadow server.
+	$(MAKE) shadow-sequential -j
+
+shadow-sequential: HOST := $(SHADOW_HOST)
+shadow-sequential: $(DIRS) export
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(create-symlink)

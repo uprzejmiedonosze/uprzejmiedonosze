@@ -11,8 +11,7 @@
             "type": "shell",
             "command": "make",
             "args": [
-                "staging",
-                "-j"
+                "staging"
             ],
             "promptOnClose": false,
             "detail": "",
