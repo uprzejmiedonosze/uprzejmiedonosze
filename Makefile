@@ -112,7 +112,12 @@ quickfix: diff-from-last-prod confirmation check-branch-master check-git-clean c
 	@make clean
 
 confirmation:
-	@echo "PRODUCTION QUICKFIX? Are you sure[yes/N] " && read ans && [ $${ans:-N} = yes ]
+	@tput setaf 160 && \
+		echo "\nPRODUCTION QUICKFIX!!" && \
+		tput sgr0 && \
+		echo "\nAre you sure[yes/N]" && \
+		read ans && \
+		[ $${ans:-N} = yes ]
 
 export: $(DIRS) process-sitemap minify ## Exports files for deployment.
 	@echo "==> Exporting"
@@ -177,11 +182,11 @@ export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
 	fi;
 	$(replace-inline)
 
-export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); @echo '  - preprocessing $<'
+export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); $(call echo_processing,$<)
 	$(lint)
 	$(replace)
 
-export/public/api/config/%.json: src/api/config/%.json; @echo '  - preprocessing $<'
+export/public/api/config/%.json: src/api/config/%.json; $(call echo_processing,$<)
 	@jq -c . < $< > $@
 
 export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
@@ -190,15 +195,15 @@ export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating 
 	@jq '.[].api' < $< | sort | uniq | egrep -v '^("Mail"|"Poznan"|null)' || echo "(v) $< API values OK"
 	@jq -c . < $< > $@
 
-export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); @echo '  - preprocessing $<'
+export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); $(call echo_processing,$<)
 	$(lint)
 	$(replace)
 
-export/templates/%: src/templates/% $(CSS_FILES) $(JS_FILES); @echo '  - preprocessing $<'
+export/templates/%: src/templates/% $(CSS_FILES) $(JS_FILES); $(call echo_processing,$<)
 	$(lint-twig)
 	$(replace)
 
-$(MANIFEST_PROCESSED): $(MANIFEST); @echo '  - preprocessing $<'
+$(MANIFEST_PROCESSED): $(MANIFEST); $(call echo_processing,$<)
 	$(replace)
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
@@ -231,6 +236,10 @@ $(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.
 	@echo '</urlset>\n' >> $(SITEMAP_PROCESSED)	
 
 # Utils
+
+define echo_processing
+	@tput setaf 245 && echo "  - processing $1" && tput sgr0
+endef
 
 define replace
 @sed -e 's/%HOST%/$(HOST)/g' -e 's/%HTTPS%/$(HTTPS)/g' $< > $@
