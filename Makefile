@@ -247,8 +247,9 @@ $(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.
 	@echo '</urlset>\n' >> $(SITEMAP_PROCESSED)	
 
 tail:
-	HOST=$$(cut -d"|" -f2 $(BRANCH_ENV)); \
-		ssh $(HOSTING) "tail -f /var/log/uprzejmiedonosze.net/$(TAG_NAME).log"
+	@LOG="$(TAG_NAME).log"; \
+		echo "tail -f $${LOG}"; \
+		ssh $(HOSTING) "tail -f /var/log/uprzejmiedonosze.net/$${LOG}"
 
 # Utils
 
@@ -279,13 +280,18 @@ endef
 define create-symlink
 @echo "==> Creating a symlink in logs directory [$(TAG_NAME).log] -> [$@.log]"
 @curl $(HTTPS)://$(HOST)/api/api.html?action=initLogs
-@ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log" &
+@ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log"
 endef
 
 # GIT
 
 log-from-last-prod: ## Show list of commit messages from last prod release till now
-	@git log --color --pretty=format:"%cn %ci %s" HEAD...`git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1`
+	@git log --color --pretty=format:"%cn %ci %s" HEAD...$(call last-tag)
 
 diff-from-last-prod: ## Show list of commit messages from last prod release till now
-	@git diff --histogram --color-words `git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1`
+	@LAST_TAG=$$(git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1); \
+		git diff --histogram --color-words $(call last-tag)
+
+define last-tag
+$(shell git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1)
+endef
