@@ -246,6 +246,10 @@ $(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.
 	done
 	@echo '</urlset>\n' >> $(SITEMAP_PROCESSED)	
 
+tail:
+	HOST=$$(cut -d"|" -f2 $(BRANCH_ENV)); \
+		ssh $(HOSTING) "tail -f /var/log/uprzejmiedonosze.net/$(TAG_NAME).log"
+
 # Utils
 
 define echo_processing
