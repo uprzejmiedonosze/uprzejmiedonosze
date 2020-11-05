@@ -25,7 +25,6 @@ class Mail extends CityAPI {
           ->setFrom(EMAIL_SENDER, $application->user->name)
           ->setTo($to)
           ->addCc($application->user->email, $application->user->name)
-          ->addBcc(SLACK_EMAIL, 'Slack')
           ->setBody(parent::formatEmail($application, true))
           ->attach(Swift_Attachment::fromPath($fileatt)
             ->setFilename($fileattname))
