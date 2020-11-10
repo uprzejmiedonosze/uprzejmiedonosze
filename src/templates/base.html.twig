@@ -50,7 +50,7 @@
     <body class="index">
         <div data-role="page" class="container-fluid" data-theme="a" {% if head.dialog is defined and head.dialog %}data-dialog="true"{% endif %}>
         {% block header %}
-            <div data-role="header" data-position="fixed" data-tap-toggle="false">
+            <div data-role="header" data-position="fixed" data-tap-toggle="false" data-hide-during-focus="false">
                 {% if leftButton is defined and leftButton == 'menu' %}
                 <a href="#mainMenu" id="menuToggle"
                     class="ui-btn ui-shadow ui-corner-all ui-icon-bars ui-btn-left ui-btn-icon-left
