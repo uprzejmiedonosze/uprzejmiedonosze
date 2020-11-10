@@ -1438,6 +1438,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "tarnowskie góry": {
+    "address": [
+      "Straż Miejska Tarnowskie Góry",
+      "ul. Sienkiewicza 2a",
+      "42-600 Tarnowskie Góry"
+    ],
+    "email": "strazmiejska@um.tgory.pl",
+    "city": "Tarnowskie Góry",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
