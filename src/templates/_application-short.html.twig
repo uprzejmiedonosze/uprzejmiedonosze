@@ -1,6 +1,6 @@
 {% set send = 'confirmed-waiting' %}
 
-<div id="{{ app.id }}"
+<div id="{{ app.id }}"  {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
     class="application application-short {{ app.getStatus().class }} status-all status-{{ app.getStatus().class }}
         status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus().icon }}"
     data-expanded-icon="carat-d" data-role="collapsible"

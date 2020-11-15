@@ -31,11 +31,25 @@
     <div data-role="collapsibleset" data-filter="true" data-mini="true"
         data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
         {% for app in applications %}
+            {% if loop.index0 >= applicationsLimit %}
+                {% set hideAppOverLimit = true %}
+            {% endif %}
             {% include('_application-short.html.twig') %}
         {% endfor %}
     </div>
+    {% if applicationsLimit < applicationsCount %}
+    <div class="displayAllApps">
+        <p>To tylko {{ applicationsLimit }} najnowszych zgłoszeń.</p>
+        <a href="#" class="ui-btn ui-corner-all">Pokaż wszystkie</a>
+    </div>
+    {% endif %}
 {% endif %}
     <script>
+    $('div.displayAllApps a').click(function () {
+        $('div.displayAllApps').hide();
+        $('div.application').show();
+    });
+
     $(document).on('pageshow', function () {
         updateCounters();
         $('.filter a').click(function(e){

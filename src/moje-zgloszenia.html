@@ -45,7 +45,9 @@ echo generate('moje-zgloszenia.html.twig',
             'menu' => 'moje-zgloszenia'
         ],
         'applications' => $applications,
-        'countChanged' => $countChanged
+        'countChanged' => $countChanged,
+        'applicationsCount' => count($applications),
+        'applicationsLimit' => 200
     ]
 );
 ?>

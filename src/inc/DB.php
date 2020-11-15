@@ -135,13 +135,6 @@ SQL;
         @$ignored     = $stats['confirmed-ignored'][0];
         @$fined       = $stats['confirmed-fined'][0];
 
-        $stats['nice'] = [];
-        $stats['nice']['— nowe'] = $confirmed;
-        $stats['nice']['— wysłane'] = $waiting + $waitingE;
-        $stats['nice']['— potwierdzone'] = $sm;
-        $stats['nice']['— zignorowane'] = $ignored;
-        $stats['nice']['— mandat'] = $fined;
-
         $stats['active'] = $confirmed + $waiting + $waitingE + $sm + $ignored + $fined;
 
         $this->stats->set("%HOST%-stats-" . getCurrentUserEmail(), $stats);

@@ -289,8 +289,7 @@ log-from-last-prod: ## Show list of commit messages from last prod release till 
 	@git log --color --pretty=format:"%cn %ci %s" HEAD...$(call last-tag)
 
 diff-from-last-prod: ## Show list of commit messages from last prod release till now
-	@LAST_TAG=$$(git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1); \
-		git diff --histogram --color-words $(call last-tag)
+	@git diff --histogram --color-words $(call last-tag)
 
 define last-tag
 $(shell git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1)
