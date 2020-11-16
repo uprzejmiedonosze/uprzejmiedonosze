@@ -1449,6 +1449,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "żyrardów": {
+    "address": [
+      "Straż Miejska w Żyrardowie",
+      "ul. 1-go Maja 50",
+      "96-300 Żyrardów"
+    ],
+    "email": "straz.miejska@zyrardow.pl",
+    "city": "Żyrardów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
