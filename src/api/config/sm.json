@@ -1460,6 +1460,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "kępno": {
+    "address": [
+      "Straż Miejska w Kępnie",
+      "ul. Kościuszki 9a",
+      "63-600 Kępno"
+    ],
+    "email": "renata.mroz@um.kepno.pl",
+    "city": "Kępno",
+    "hint": null,
+    "api": "Mail"
+  },
+  "myślenice": {
+    "address": [
+      "Straż Miejska w Myślenicach",
+      "ul. Rynek 8/9",
+      "32-400 Myślenice"
+    ],
+    "email": "info@myslenice.pl",
+    "city": "Myślenice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
