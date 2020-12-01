@@ -166,7 +166,7 @@ describe('Create application', () => {
     })
 
     it('checks application screen', function () {
-        cy.contains('UD/4/').click()
+        cy.contains('UD/4/').click({force: true})
         checkAppData(this.config)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
@@ -245,7 +245,7 @@ describe('Edit application', () => {
     })
 
     it('checks application screen', function () {
-        cy.contains('UD/4/').click()
+        cy.contains('UD/4/').click({force: true})
         checkAppData(this.config)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
