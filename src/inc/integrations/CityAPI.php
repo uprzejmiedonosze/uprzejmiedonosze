@@ -30,13 +30,15 @@ abstract class CityAPI {
     function curlShellSend($url, &$data, &$application){
         $root = realpath('/var/www/%HOST%/');
         $contextImage = "$root/{$application->contextImage->url}";
+        $carImage = "$root/{$application->carImage->url}";
         $json = json_encode($data);
 
         $curl = "curl -s --location --request POST '$url' "
             . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
             . "--header 'Content-Type: multipart/form-data' "
             . "--form 'json={$json}' "
-            . '--form uz_file=@\\"' . $contextImage . '\\"';
+            . '--form uz_file=@\\"' . $contextImage . '\\" '
+            . '--form uz_file_0=@\\"' . $carImage . '\\"';
         
         $response = exec("$curl 2>&1", $retArr, $retVal);
 
