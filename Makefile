@@ -140,7 +140,7 @@ cypress:
 	@echo "==> Testing staging"
 	@$(MAKE) clean
 	@$(MAKE) staging -j
-	@$(CYPRESS) run --record --key $(CYPRESS_KEY)
+	@$(CYPRESS) run --record --key $(CYPRESS_KEY) --headed
 
 check-branch: ## Detects environment and active branch changes
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \
