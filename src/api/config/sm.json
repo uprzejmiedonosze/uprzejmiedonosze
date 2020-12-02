@@ -1482,6 +1482,39 @@
     "hint": null,
     "api": "Mail"
   },
+  "żagań": {
+    "address": [
+      "Straż Miejska w Żaganiu",
+      "ul. Kolejowa 88",
+      "68-100 Żagań"
+    ],
+    "email": "stramies@op.pl",
+    "city": "Żagań",
+    "hint": null,
+    "api": "Mail"
+  },
+  "wieliczka": {
+    "address": [
+      "Straż Miejska Wieliczka",
+      "pl. Skulimowskiego 2",
+      "32-020 Wieliczka"
+    ],
+    "email": "straz@wieliczka.eu",
+    "city": "Wieliczka",
+    "hint": null,
+    "api": "Mail"
+  },
+  "bożnów": {
+    "address": [
+      "Komenda Powiatowa Policji w Żaganiu",
+      "ul. Nowogródzka 1",
+      "68-100 Żagań"
+    ],
+    "email": "dzielnicowy.zagan7@go.policja.gov.pl",
+    "city": "Bożnów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
