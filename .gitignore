@@ -16,3 +16,4 @@ tex/app/*
 **/.DS_Store
 /cypress/screenshots
 /cypress/videos
+.cache

@@ -8,6 +8,8 @@
   "devDependencies": {
     "cypress": "^5.2.0",
     "eslint-config-defaults": "^9.0.0",
-    "eslint-config-jquery": "^3.0.0"
-  }
+    "eslint-config-jquery": "^3.0.0",
+    "parcel": "^1.12.4"
+  },
+  "name": "webapp"
 }
