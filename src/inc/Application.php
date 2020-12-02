@@ -29,7 +29,7 @@ class Application extends JSONObject{
         $this->status = 'draft';
         $this->category = 7;
         $this->initStatements();
-        $this->version = '1.0.1';
+        $this->version = '1.0.2';
     }
 
     public function initStatements(){
@@ -39,6 +39,7 @@ class Application extends JSONObject{
         $this->statements = new JSONObject();
         $this->statements->witness = false;
         $this->statements->gallery = false;
+        $this->statements->hideNameInPdf = true;
     }
 
     /**
@@ -358,6 +359,10 @@ class Application extends JSONObject{
 
     public function isEditable(){
         return in_array($this->status, ['draft', 'ready']);
+    }
+
+    public function hideNameInPdf() {
+        return (bool)@$this->statements->hideNameInPdf;
     }
 }
 

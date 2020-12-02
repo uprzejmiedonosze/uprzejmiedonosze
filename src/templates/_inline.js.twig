@@ -53,7 +53,8 @@ function _send(appId){
     }).fail(function (e){
         $("#send-" + appId).removeClass('ui-disabled');
         $.mobile.loading( "hide" );
-        showMessage('Nie udało się wysłać zgłoszenia! ' + e.responseJSON.message, 4000);
+        message = e.responseJSON ? e.responseJSON.message: e.statusText;
+        showMessage('Nie udało się wysłać zgłoszenia! ' + message, 4000);
         ga('send', 'event', { eventCategory: 'js-error', eventAction: 'sendViaAPI'});
     });
 }

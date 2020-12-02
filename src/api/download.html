@@ -5,7 +5,7 @@ if(isset($_GET['city'])){
     $city = urldecode($_GET['city']);
     [$pdf, $filename] = readyApps2PDF($city);
 }else{
-    [$pdf, $filename] = application2PDF($_GET['appId']);
+    [$pdf, $filename] = application2PDFById($_GET['appId']);
 }
 
 header('Content-Type: application/pdf');

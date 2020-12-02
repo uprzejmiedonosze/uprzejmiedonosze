@@ -58,17 +58,20 @@ const SEXSTRINGS = Array (
     '?' => [
         "bylam" => "byłam/em",
         "swiadoma" => "świadoma/y",
-        "wykonalam" => "wykonałam/em"
+        "wykonalam" => "wykonałam/em",
+        "zglaszajacej" => "zgłaszającej/ego"
     ],
     'm' => [
         "bylam" => "byłem",
         "swiadoma" => "świadomy",
-        "wykonalam" => "wykonałem"
+        "wykonalam" => "wykonałem",
+        "zglaszajacej" => "zgłaszającej"
     ],
     'f' => [
         "bylam" => "byłam",
         "swiadoma" => "świadoma",
-        "wykonalam" => "wykonałam"
+        "wykonalam" => "wykonałam",
+        "zglaszajacej" => "zgłaszającego"
     ]
 );
 

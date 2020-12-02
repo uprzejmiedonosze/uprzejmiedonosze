@@ -15,10 +15,6 @@ class Mail extends CityAPI {
           ->setPassword(SMTP_PASS);
 
         $mailer = new Swift_Mailer($transport);
-
-        require(__DIR__ . '/../PDFGenerator.php');
-        [$fileatt, $fileattname] = application2PDF($application->id);
-
         
         $subject = $application->getTitle();
         $message = (new Swift_Message($subject))
@@ -26,8 +22,6 @@ class Mail extends CityAPI {
           ->setTo($to)
           ->addCc($application->user->email, $application->user->name)
           ->setBody(parent::formatEmail($application, true))
-          ->attach(Swift_Attachment::fromPath($fileatt)
-            ->setFilename($fileattname))
           ->setSender($application->user->email)
           ->setReplyTo($application->user->email, $application->user->name)
           ->setReturnPath($application->user->email);
@@ -36,11 +30,6 @@ class Mail extends CityAPI {
         $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
 
         $messageId = $message->getHeaders()->get('Message-ID');
-
-        $result = $mailer->send($message);
-        if(!$result){
-          raiseError($result, 500, true);
-        }
 
         $application->setStatus('confirmed-waiting');
         $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->getName()} ($to).");
@@ -52,6 +41,17 @@ class Mail extends CityAPI {
         $application->sentViaMail->from = "{$application->user->name} (" . SMTP_USER . ")";
         $application->sentViaMail->body = parent::formatEmail($application, false);
         $application->sentViaMail->$messageId = $messageId;
+
+        require(__DIR__ . '/../PDFGenerator.php');
+        [$fileatt, $fileattname] = application2PDF($application);
+
+        $message->attach(Swift_Attachment::fromPath($fileatt)
+          ->setFilename($fileattname));
+
+        $result = $mailer->send($message);
+        if(!$result){
+          raiseError($result, 500, true);
+        }
 
         global $storage;
         $storage->saveApplication($application);

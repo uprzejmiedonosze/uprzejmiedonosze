@@ -22,7 +22,9 @@ Proszę o kontakt pod adresem email ' ~ user.data.email ~ '.
 
 Pozdrawiam,
 
-' ~ user.data.name %}
+' ~ user.data.name ~ '
+' ~ user.data.address ~ '
+' ~ user.data.msisdn|default("") %}
 
 {% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
 

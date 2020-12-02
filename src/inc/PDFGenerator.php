@@ -3,7 +3,7 @@ require_once(__DIR__ . '/include.php');
 
 const ROOT = '/var/www/%HOST%/';
 
-function application2PDF($appId){
+function application2PDFById($appId){
     global $storage;
 
     if(!isset($appId)){
@@ -14,6 +14,12 @@ function application2PDF($appId){
     if(!isset($application)){
         raiseError("Próba pobrania zgłoszenia nieistniejącego zgłoszenia $appId", 404);
     }
+
+    return application2PDF($application);
+}
+
+function application2PDF(&$application){
+    $appId = $application->id;
 
     $userNumber = $application->getUserNumber();
     $baseDir = ROOT . "cdn2/$userNumber";
