@@ -165,12 +165,12 @@
   "łódź": {
     "address": [
       "Komenda Straży Miejskiej w Łodzi",
-      "ul. Kilińskiego 81",
-      "90-119 Łódź"
+      "ul. Wólczańska 121/123",
+      "90-521 Łódź"
     ],
     "email": "ogolnomiejski@strazmiejska.lodz.pl",
     "city": "Łódź",
-    "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, konieczne jest złożenie oświadczenie ustnie lub przesłanie go na piśmie.",
+    "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie.",
     "api": "Mail"
   },
   "gdańsk": {
