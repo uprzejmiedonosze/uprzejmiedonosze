@@ -1515,6 +1515,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "nowy dwór mazowiecki": {
+    "address": [
+      "Straż Miejska Nowy Dwór Mazowiecki",
+      "ul. Zakroczymska 30",
+      "05-100 Nowy Dwór Mazowiecki"
+    ],
+    "email": "dyzurnysm@nowydwormaz.pl",
+    "city": "Nowy Dwór Mazowiecki",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
