@@ -65,13 +65,13 @@ const SEXSTRINGS = Array (
         "bylam" => "byłem",
         "swiadoma" => "świadomy",
         "wykonalam" => "wykonałem",
-        "zglaszajacej" => "zgłaszającej"
+        "zglaszajacej" => "zgłaszającego"
     ],
     'f' => [
         "bylam" => "byłam",
         "swiadoma" => "świadoma",
         "wykonalam" => "wykonałam",
-        "zglaszajacej" => "zgłaszającego"
+        "zglaszajacej" => "zgłaszającej"
     ]
 );
 
