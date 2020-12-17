@@ -1526,6 +1526,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "skierniewice": {
+    "address": [
+      "Straż Miejska  w Skierniewicach",
+      "ul. Reymonta 33",
+      "96-100 Skierniewice"
+    ],
+    "email": "komendant.sm@um.skierniewice.pl",
+    "city": "Skierniewice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
