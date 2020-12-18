@@ -332,6 +332,12 @@ class Application extends JSONObject{
             . " ({$this->address->address})";
     }
 
+    public function getEmailSubject(){
+        return "[{$this->number}] " . (($this->category == 0)? "": $this->getCategory()->getTitle() )
+            . " ({$this->address->address})";
+
+    }
+
     /**
      * Adds a comment to the application.
      * $source <string>

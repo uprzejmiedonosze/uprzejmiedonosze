@@ -19,7 +19,7 @@ class Poznan extends CityAPI {
             'name' => $application->getFirstName(), //imię zgłaszającego, pole obowiązkowe do 128 znaków
             'surname' => $application->getLastName(), //nazwisko zgłaszającego, pole obowiązkowe do 128 znaków
             'email' => $application->user->email, //email użytkownika, pole obowiązkowe
-            'subject' => $application->getTitle(), //temat zgłoszenia, pole obowiązkowe do 256 znaków
+            'subject' => $application->getEmailSubject(), //temat zgłoszenia, pole obowiązkowe do 256 znaków
             'text' => trim(
                 preg_replace('/\s+/', ' ',
                     preg_replace('/;/', ',', parent::formatMessage($application, 4000))

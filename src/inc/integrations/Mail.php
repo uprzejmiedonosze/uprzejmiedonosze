@@ -16,7 +16,7 @@ class Mail extends CityAPI {
 
         $mailer = new Swift_Mailer($transport);
         
-        $subject = $application->getTitle();
+        $subject = $application->getEmailSubject();
         $message = (new Swift_Message($subject))
           ->setFrom(EMAIL_SENDER, $application->user->name)
           ->setTo($to)
