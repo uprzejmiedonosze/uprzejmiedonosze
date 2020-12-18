@@ -47,7 +47,7 @@
     <script>
     $('div.displayAllApps a').click(function () {
         $('div.displayAllApps').hide();
-        $('div.application').show();
+        $('div.application:not(.status-archived)').show();
     });
 
     $(document).on('pageshow', function () {
