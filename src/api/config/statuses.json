@@ -6,7 +6,9 @@
     "class": "none",
     "allowed": ["ready"],
     "comment": "Stworzenie zgłoszenia",
-    "topButtons": false
+    "topButtons": false,
+    "editable": true,
+    "sendable": false
   },
   "ready": {
     "name": "Edycja",
@@ -15,7 +17,9 @@
     "class": "none",
     "allowed": ["draft", "confirmed", "ready"],
     "comment": "Zapisanie wersji roboczej",
-    "topButtons": false
+    "topButtons": false,
+    "editable": true,
+    "sendable": false
   },
   "confirmed": {
     "name": "Nowe",
@@ -25,7 +29,8 @@
     "allowed": ["confirmed-waiting", "archived"],
     "comment": "Zapisanie gotowego zgłoszenia",
     "topButtons": true,
-    "bottomButtons": false
+    "editable": true,
+    "sendable": true
   },
   "confirmed-waiting": {
     "name": "Wysłane",
@@ -34,7 +39,9 @@
     "class": "top",
     "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
     "comment": "Wysłanie zgłoszenia",
-    "topButtons": true
+    "topButtons": true,
+    "editable": false,
+    "sendable": false
   },
   "confirmed-waitingE": {
     "name": "Wysłane epuap",
@@ -43,7 +50,9 @@
     "class": "top",
     "allowed": ["confirmed-sm", "confirmed-ignored", "confirmed-fined", "archived"],
     "comment": "Wysłanie zgłoszenia za pomocą EPUAP",
-    "topButtons": true
+    "topButtons": true,
+    "editable": false,
+    "sendable": false
   },
   "confirmed-sm": {
     "name": "Potwierdzone w SM",
@@ -52,7 +61,9 @@
     "class": "bottom",
     "allowed": ["confirmed-ignored", "confirmed-fined", "archived"],
     "comment": "Potwierdzenie przyjęcia zgłoszenia przez/w SM",
-    "topButtons": true
+    "topButtons": true,
+    "editable": false,
+    "sendable": false
   },
   "confirmed-ignored": {
     "name": "Zignorowane",
@@ -61,7 +72,9 @@
     "class": "bottom",
     "allowed": ["confirmed-fined", "archived"],
     "comment": "Zgłoszenie zostało zignorowane przez SM",
-    "topButtons": true
+    "topButtons": true,
+    "editable": false,
+    "sendable": false
   },
   "confirmed-fined": {
     "name": "Kierowca ukarany",
@@ -70,7 +83,9 @@
     "class": "bottom",
     "allowed": ["confirmed-ignored", "archived"],
     "comment": "Kierowca został ukarany",
-    "topButtons": true
+    "topButtons": true,
+    "editable": false,
+    "sendable": false
   },
   "archived": {
     "name": "W archiwum",
@@ -79,6 +94,8 @@
     "class": "bottom",
     "allowed": ["confirmed"],
     "comment": "Zgłoszenie zostało zarchiwizowane",
-    "topButtons": false
+    "topButtons": false,
+    "editable": false,
+    "sendable": false
   }
 }

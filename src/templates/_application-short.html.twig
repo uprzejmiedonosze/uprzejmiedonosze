@@ -1,4 +1,4 @@
-{% set send = 'confirmed-waiting' %}
+{% set sendable = statuses[app.status].sendable %}
 
 <div id="{{ app.id }}"  {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
     class="application application-short {{ app.getStatus().class }} status-all status-{{ app.getStatus().class }}
@@ -29,20 +29,25 @@
         <a href="#" onclick="_send('{{ app.id }}');"
             data-inline="true" data-mini="true" 
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-            {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}
-            ui-icon-{{ statuses[send].icon }}
-            status-{{ send }}">Wyślij do {{ app.guessSMData.getName }}</a>
+            {% if sendable %}cta{% else %}ui-disabled{% endif %}
+            ui-icon-{{ statuses['confirmed-waiting'].icon }}
+            status-confirmed-waiting">Wyślij {% if sendable %}do {{ app.guessSMData.getName }}{% else %}zgłoszenie{% endif %}</a>
         {% elseif app.unknownSM %}
         <a href="/brak-sm.html"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail
-            {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}
-            status-{{ send }}">Wyślij zgłoszenie</a>
+            {% if sendable %}cta{% else %}ui-disabled{% endif %}
+            status-confirmed-waiting">Wyślij zgłoszenie</a>
         {% elseif config.wysylka is not defined %}
         <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false" 
-            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-{{ send }}
-            {% if send not in statuses[app.status].allowed %}ui-disabled{% else %}cta{% endif %}">Wyślij zgłoszenie</a>
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-confirmed-waiting
+            {% if sendable %}cta{% else %}ui-disabled{% endif %}">Wyślij zgłoszenie</a>
         {% endif %}
         {% if config.appActionButtons %}
+        <a href="#"
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
+            {% if not statuses[app.status].editable %}ui-disabled{% endif %}
+            ui-icon-edit ui-alt-icon">Edytuj</a>
+
         <a href="#" onclick="addToGallery('{{ app.id }}')"
             data-inline="true" data-mini="true"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini addToGallery
