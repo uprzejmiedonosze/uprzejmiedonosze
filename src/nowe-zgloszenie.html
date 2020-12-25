@@ -8,8 +8,11 @@ if(isset($_GET['cleanup'])){
     redirect("nowe-zgloszenie.html");
 }
 
-if($storage->getCurrentUser()->isAdmin() && isset($_GET['edit'])){
+if(isset($_GET['edit'])){
     $application = $storage->getApplication($_GET['edit']);
+    if(! $application->isEditable()) {
+        throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name);
+    }
     $_SESSION['newAppId'] = $application->id;
     $edit = true;
 }elseif(isset($_SESSION['newAppId'])){ // edit mode

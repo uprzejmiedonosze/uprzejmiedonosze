@@ -364,7 +364,8 @@ class Application extends JSONObject{
     }
 
     public function isEditable(){
-        return in_array($this->status, ['draft', 'ready']);
+        global $STATUSES;
+        return $STATUSES[$this->status]->editable;
     }
 
     public function hideNameInPdf() {

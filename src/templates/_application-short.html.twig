@@ -43,9 +43,9 @@
             {% if sendable %}cta{% else %}ui-disabled{% endif %}">Wyślij zgłoszenie</a>
         {% endif %}
         {% if config.appActionButtons %}
-        <a href="#"
+        <a href="/nowe-zgloszenie.html?edit={{ app.id }}"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-            {% if not statuses[app.status].editable %}ui-disabled{% endif %}
+            {% if not app.isEditable %}ui-disabled{% endif %}
             ui-icon-edit ui-alt-icon">Edytuj</a>
 
         <a href="#" onclick="addToGallery('{{ app.id }}')"

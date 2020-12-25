@@ -26,7 +26,7 @@
     "action": "Nowe",
     "icon": "carat-u",
     "class": "bottom",
-    "allowed": ["confirmed-waiting", "archived"],
+    "allowed": ["ready", "confirmed-waiting", "archived"],
     "comment": "Zapisanie gotowego zgłoszenia",
     "topButtons": true,
     "editable": true,
