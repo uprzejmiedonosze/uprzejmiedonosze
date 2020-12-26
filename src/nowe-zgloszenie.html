@@ -13,6 +13,11 @@ if(isset($_GET['edit'])){
     if(! $application->isEditable()) {
         throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name);
     }
+
+    if(! ($application->isAppOwner() || isAdmin() )){
+        throw new Exception("Próba edycji cudzego zgłoszenia. Nieładnie!");
+    }
+
     $_SESSION['newAppId'] = $application->id;
     $edit = true;
 }elseif(isset($_SESSION['newAppId'])){ // edit mode

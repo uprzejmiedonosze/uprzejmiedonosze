@@ -375,6 +375,10 @@ class Application extends JSONObject{
     public function getRevision() {
         return @count($this->statusHistory);
     }
+
+    public function isAppOwner() {
+        return isLoggedIn() && (getCurrentUserEmail() == $this->user->email);
+    }
 }
 
 ?>
