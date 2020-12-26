@@ -189,7 +189,7 @@ function _addToGallery($appId){
 function _moderateApp($appId, $decision){
     require __DIR__ . '/../../inc/Tumblr.php';
     global $storage;
-    if(!$storage->getCurrentUser()->isAdmin()){
+    if(!isAdmin()){
         raiseError("Dostęp zabroniony", 401);
     }
 

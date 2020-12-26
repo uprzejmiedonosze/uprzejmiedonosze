@@ -4,12 +4,8 @@ require_once(__DIR__ . '/../inc/include.php');
 $applicationId = $_GET["id"];
 $application = $storage->getApplication($applicationId);
 
-$isAppOwnerOrAdmin = false;
-$isAppOwner = false;
-if(isLoggedIn()){
-    $isAppOwner = getCurrentUserEmail() == $application->user->email;
-    $isAppOwnerOrAdmin = ($storage->getCurrentUser()->isAdmin()) || ($isAppOwner);
-}
+$isAppOwner = $application->isAppOwner();
+$isAppOwnerOrAdmin = isAdmin() || $isAppOwner;
 
 echo generate('zgloszenie.html.twig', 
     [

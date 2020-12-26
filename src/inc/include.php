@@ -39,7 +39,7 @@ function generate($template, $parameters){
             'uri' => $_SERVER['REQUEST_URI'],
             'isLoggedIn' => $isLoggedIn,
             'hasApps' => $isLoggedIn && $storage->getCurrentUser()->hasApps(),
-            'isAdmin' => $isLoggedIn && $storage->getCurrentUser()->isAdmin(),
+            'isAdmin' => isAdmin(),
             'galleryCount' => $storage->getGalleryCount(!isset($_GET['update'])),
             'isProd' => isProd(),
             'isStaging' => isStaging()

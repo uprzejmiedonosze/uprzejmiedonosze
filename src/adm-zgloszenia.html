@@ -3,7 +3,7 @@ require_once(__DIR__ . '/../inc/include.php');
 
 checkIfLogged();
 
-if(!$storage->getCurrentUser()->isAdmin()){
+if(!isAdmin()){
 	http_response_code(404);
 	die();
 }

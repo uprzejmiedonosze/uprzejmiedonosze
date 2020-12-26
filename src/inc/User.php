@@ -115,7 +115,6 @@ class User extends JSONObject{
     * Super ugly function returning true for beta users.
     */
     function isBeta(){
-        // @TODO usunąć użytkownika testowego.
         return $this->isAdmin();
     }
 

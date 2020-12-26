@@ -186,7 +186,7 @@ SQL;
     // ADMIN area
 
     public function getUsers(){
-        if(!$this->getCurrentUser()->isAdmin()){
+        if(!isAdmin()){
             throw new Exception('Dostęp zabroniony.');
         }
         $ret = Array();
@@ -197,7 +197,7 @@ SQL;
     }
 
     public function execute($sql){
-        if(!$this->getCurrentUser()->isAdmin()){
+        if(!isAdmin()){
             throw new Exception('Dostęp zabroniony.');
         }
         $stmt = $this->db->prepare($sql);
@@ -379,7 +379,7 @@ SQL;
      * Returns all gallery applications awaiting moderation.
      */
     public function getGalleryModerationApps(){
-        if(!$this->getCurrentUser()->isAdmin()){
+        if(!isAdmin()){
             throw new Exception('Dostęp zabroniony.');
         }
 

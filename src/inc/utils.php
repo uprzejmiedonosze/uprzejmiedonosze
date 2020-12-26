@@ -98,6 +98,11 @@ function checkIfRegistered(){
     }
 }
 
+function isAdmin(){
+    global $storage;
+    return isLoggedIn() && $storage->getCurrentUser()->isAdmin();
+}
+
 function genSafeId(){
     return substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
 }
