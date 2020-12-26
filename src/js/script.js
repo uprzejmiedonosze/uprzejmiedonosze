@@ -415,11 +415,15 @@ function sendFile(fileData, id) {
             if (id == 'carImage' && json.carInfo) {
                 if (json.carInfo.plateId) {
                     $('#plateId').val(json.carInfo.plateId);
-                    if (json.carInfo.brand && json.carInfo.brandConfidence > 90) {
+                    if (json.carInfo.brand){
                         if($('#comment').val().trim().length == 0){
-                            $('#comment').val('Pojazd prawdopodobnie marki ' + json.carInfo.brand + '.');
+                            if(json.carInfo.brandConfidence > 90) {
+                                $('#comment').val('Pojazd prawdopodobnie marki ' + json.carInfo.brand + '.');
+                            }
+                            if(json.carInfo.brandConfidence > 98) {
+                                $('#comment').val('Pojazd marki ' + json.carInfo.brand + '.');
+                            }
                         }
-                        
                     }
                     $('#plateHint').text('Sprawdź automatycznie pobrany numer rejestracyjny');
                     $('#plateHint').addClass('hint');
