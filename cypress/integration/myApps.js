@@ -112,7 +112,7 @@ describe('Valid images and location', () => {
         cy.uploadOKImages()
         cy.get('.imageContainer').should('not.have.class', 'error')
 
-        cy.get('#comment').should('have.value', 'Pojazd prawdopodobnie marki Skoda.')
+        cy.get('#comment').should('have.value', 'Pojazd marki Skoda.')
 
         cy.get('#plateId').should('have.value', this.config.carImage.plateId)
         cy.get('#plateImage').should('be.visible')

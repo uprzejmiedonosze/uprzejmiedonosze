@@ -63,7 +63,7 @@ Cypress.Commands.add("initDB", () => {
 Cypress.Commands.add("goToNewAppScreen", () => {
     cy.visit('/')
     cy.contains('Menu').click()
-    cy.contains('Nowe zgłoszenie').click()
+    cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
     cy.contains('Dalej').click()
 })
