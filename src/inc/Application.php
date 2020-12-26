@@ -371,6 +371,10 @@ class Application extends JSONObject{
     public function hideNameInPdf() {
         return (bool)@$this->statements->hideNameInPdf;
     }
+
+    public function getRevision() {
+        return @count($this->statusHistory);
+    }
 }
 
 ?>

@@ -11,18 +11,19 @@ unset($_SESSION['newAppId']);
 $application = $storage->getApplication($applicationId);
 $application->setStatus("confirmed");
 
-if(isset($application->number)){ // edit done by admin, number already set
-    $storage->saveApplication($application);
-    redirect("ud-$applicationId.html");
+$edited = true;
+if(!isset($application->number)){ // new application
+    $user = $storage->getCurrentUser();
+    $user->addApplication($application);
+    $application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
+    $storage->saveUser($user);
+    $edited = false;
+}else{
+    $application->address->mapImage = null;
 }
 
-$user = $storage->getCurrentUser();
-$user->addApplication($application);
-$application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
 $storage->saveApplication($application);
-$storage->saveUser($user);
 $storage->updateRecydywa($application->carInfo->plateId);
-
 $storage->getUserStats(false); // update cache
 
 echo generate('dziekujemy.html.twig', 
@@ -38,7 +39,8 @@ echo generate('dziekujemy.html.twig',
             'auth' => true
         ],
         'app' => $application,
-        'appsCount' => sizeof($user->applications)
+        'appsCount' => sizeof($user->applications),
+        'edited' => $edited
     ]
 );
 

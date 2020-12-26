@@ -16,8 +16,9 @@
 {% if appsCount == 1 %}
 <h2>To twoje pierwsze zgłoszenie, przeczytaj to uważnie</h2>
 {% endif %}
-<p>Twoje zgłoszenie zostało zarejestrowane pod numerem
-    <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>.
+<p>Twoje zgłoszenie {% if edited %}numer <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>
+    zostało zaktualizowane{% else %}zostało zaktualizowane zarejestrowane pod numerem
+    <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>{% endif %}.
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
     <a href="moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 
@@ -56,7 +57,7 @@
     </p>
 {% endif %}
 
-{% if appsCount > 3 and sm.email %}
+{% if appsCount > 3 and sm.email and ( not app.addedToGallery ) %}
 <div class="addToGallery">
     <h4>Dodaj to zdjęcie do galerii</h4>
     <p>Dodaj zdjęcie do <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>.
