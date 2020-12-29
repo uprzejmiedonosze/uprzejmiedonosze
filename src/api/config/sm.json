@@ -1537,6 +1537,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "elbląg": {
+    "address": [
+      "Straż Miejskiej Elbląg",
+      "ul. Winna 9",
+      "82-300 Elbląg"
+    ],
+    "email": "dyzurny.sm@elblag.eu",
+    "city": "Elbląg",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
