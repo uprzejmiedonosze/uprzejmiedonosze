@@ -81,7 +81,18 @@
         "short": "Pojazd o dopuszczalnej masie całkowitej przekraczającej 2,5 tony był zaparkowany na chodniku.",
         "desc": "<p>Na koniec najmniej znane ograniczenie. Na chodniku (wszystko jedno, czy są na nim wyznaczone miejsca parkingowe znakami poziomymi lub pionowymi, czy nie) mogą parkować wyłącznie pojazdy o dopuszczalnej masie całkowitej nie przekraczającej 2,5 tony. Dokładnie tak. To, że pojazd można prowadzić posiadając prawo jazdy kategorii B wcale nie oznacza, że można go postawić na chodniku. Ujmując to dosadniej, kierowcy takich samochodów nie mogą choćby jednym kołem wjechać na chodnik.</p> <p>Jakich samochodów to dotyczy? Automatycznie wszystkich ciężarówek, samochodów dostawczych itp. Ale także zaskakująco dużej ilości samochodów osobowych.  Np. Audi A8, SQ5, Q7; BMW X5, X6, 7; Ford Edge, Ford S-MAX (większość wersji); Hyundai Santa Fe; Jeep Grand Cheeroke; Kia Sorento; Mazda CX-9; Mercedes GL, GLC (niektóre wersje), M; Mitsubishi Pajero; Nissan Navara; Land Rover; Range Rover (prócz najprostszej wersji modelu Discovery Sport); Peugeot 807; Porsche Cayenne; Renault Espace (niektóre wersje); Skoda Kodiaq (niektóre wersje); Toyota Hilux, Land Cruiser; Volvo XC60 (niektóre wersje), XC90; Volkswagen Amarok, Touareg.</p>",
         "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t; PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na chodniku tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.",
-        "price": "100 zł"
+        "price": "100 zł",
+        "contextImageHint": "Idealne zdjęcie, to czytelne ujęcie pokazujący pojazd na chodniku.",
+        "carImageHint": "Idealne zdjęcia przedstawia cały pojazdu z przodu lub z tyłu."
+    },
+    "13": {
+        "title": "Parkowanie na miejscu dla niepełnosprawnych",
+        "short": "Pojazd bez odpowiednich uprawnień był zaparkowany na miejscu dla niepełnosprawnych.",
+        "desc": "<p>Parkowanie na miejscu dla niepełnosprawnych bez aktualnej karty (<a href=\"/przepisy.html#niepelnosprawni\" data-ajax=\"false\">zobacz aktualny wzór</a>) to mandat o wysokości 500 zł. W przypadku \"podszywania\" się pod osobę niepełnosprawną (np. przez skorzystanie z podrobionej karty), mandat może wynieść do 800 zł.</p>",
+        "law": "PoRD Art. 8. 1. «Jest to obszerny artykuł opisujący jakie uprawnienia ma \"Osoba niepełnosprawna legitymująca się kartą parkingową kierująca pojazdem samochodowym oznaczonym tą kartą\". Niestety trudno go zacytować w całości»",
+        "price": "500–800 zł",
+        "contextImageHint": "Idealne zdjęcie powinno prezentować przednią szybę z kartą (nieważną, lub jej brakiem).",
+        "carImageHint": "Idealne zdjęcia przedstawia cały pojazdu z przodu lub z tyłu, wraz z widoczną kopertą."
     },
     "0": {
         "title": "<i>Pozostałe przypadki (koniecznie dodaj komentarz)</i>",
