@@ -247,6 +247,20 @@ div.ui-block-b > div.ui-radio {
     margin: 0;
 }
 
+p.pictureHint {
+    z-index: 1;
+    bottom: 0px;
+    position: absolute;
+    text-shadow: none;
+    color: white;
+    padding: 3px;
+    display: none;
+    margin-right: 0.4em;
+    background: rgb(0, 0, 0, 0.3);
+    border-radius: 0.3em;
+    font-size: 90%;
+}
+
 /* #endregion new-application and register */
 
 /* #region nowe-zgloszenie */

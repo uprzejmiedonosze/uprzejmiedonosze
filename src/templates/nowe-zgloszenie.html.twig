@@ -27,6 +27,7 @@
             <div class="ui-block-a imageContainer image-upload contextImageSection">
                 <label for="contextImage">
                     Wgraj zdjęcie z widocznym wykroczeniem
+                    <p class="pictureHint">{{ categories[app.category].contextImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
                     <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
@@ -37,6 +38,7 @@
             <div class="ui-block-b imageContainer image-upload carImageSection">
                 <label for="carImage">
                     Wgraj zdjęcie z widoczną tablicą rejestracyjną
+                    <p class="pictureHint">{{ categories[app.category].carImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
                     <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
@@ -112,7 +114,8 @@
             <div class="ui-block-{{ categoriesMatrix[i % 2] }}"
                 title="{{ catName.desc|striptags ~ "\n\n" ~ catName.law }}{% if catName.price %}{{ "\n\nTaryfikator: " ~ catName.price }}{% endif %}">
                 <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
-                    name="category" value="{{ catId }}" id="{{ catId }}">
+                    name="category" value="{{ catId }}" id="{{ catId }}"
+                    data-contextImage-hint="{{ catName.contextImageHint }}" data-carImage-hint="{{ catName.carImageHint }}">
                 <label for="{{ catId }}">
                     <img src="img/{{ catId }}.jpg">
                     <p>{{ catName.title|raw }}
@@ -123,7 +126,7 @@
         {% set i = i + 1 %}
         {% endif %}
         {% endfor %}
-            <p>Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
+            <p style="clear: both;">Masz wątpliwości którą kategorię wybrać? Przeczytaj <a href="przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
         </div>
         <label class="section">Oświadczenia</label>
 

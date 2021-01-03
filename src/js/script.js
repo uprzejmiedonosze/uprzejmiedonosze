@@ -20,6 +20,11 @@ $(document).on('pageshow', function () {
             $('#comment').removeClass('error');
         });
 
+        $('#category').on('change', function (id) {
+            $('.contextImageSection p.pictureHint').text($(id.target).attr('data-contextImage-hint'));
+            $('.carImageSection p.pictureHint').text($(id.target).attr('data-carImage-hint'));
+        })
+
         if (window.File && window.FileReader && window.FormData) {
             $(document).on('change', "#contextImage", function (e) {
                 checkFile(e.target.files[0], this.id);
@@ -57,7 +62,19 @@ $(document).on('pageshow', function () {
 
         $('.image-upload img').on('load', function(){ 
             $(this).show();
+            showHidePictureHints($(this).parent());
         });
+
+        function showHidePictureHints(context) {
+            if(context.find('img').attr('src').endsWith('.png')) {
+                context.find('p.pictureHint').hide();
+            } else {
+                context.find('p.pictureHint').show();
+            }
+        }
+
+        showHidePictureHints($('.contextImageSection'));
+        showHidePictureHints($('.carImageSection'));
     }
 
     if ($("#register-submit").length) {
