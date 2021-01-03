@@ -1559,6 +1559,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "radzymin": {
+    "address": [
+      "Komisariat Policji w Radzyminie",
+      "ul. Romualda Traugutta 17",
+      "05-250 Radzymin"
+    ],
+    "email": "dzielnicowy.radzymin2@ksp.policja.gov.pl",
+    "city": "Radzymin",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
