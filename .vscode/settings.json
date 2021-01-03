@@ -28,7 +28,8 @@
         "latex",
         "plaintext",
         "arduino-output",
-        "twig"
+        "twig",
+        "json"
     ],
     "spellright.parserByClass": {
         "arduino-output": {
