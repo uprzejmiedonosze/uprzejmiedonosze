@@ -1570,6 +1570,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "piła": {
+    "address": [
+      "Straż Miejska w Pile",
+      "ul. Zygmunta Starego 1",
+      "64-920 Piła"
+    ],
+    "email": "sm@um.pila.pl",
+    "city": "Piła",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
