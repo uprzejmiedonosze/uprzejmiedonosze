@@ -70,12 +70,14 @@ help: ## Displays this help.
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s- \033[0m %s\n", $$1, $$2}'
 
 dev: ## Refresh src files in Docker image
-	$(MAKE) dev-sequential -j
+	@$(MAKE) dev-sequential -j
 
 dev-sequential: HOST := $(DEV_HOST)
 dev-sequential: HTTPS := http
 dev-sequential: $(DIRS) export
 	@echo "==> Refreshing sources"
+	@cp uprzejmiedonosze.localhost-firebase-adminsdk.json $(EXPORT)
+	@touch export/config.php
 
 dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
