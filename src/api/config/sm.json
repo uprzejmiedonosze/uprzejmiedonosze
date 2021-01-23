@@ -1581,6 +1581,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "świdnik": {
+    "address": [
+      "Straż Miejska w Świdniku",
+      "ul. Gen. J. Hallera 9",
+      "21-040 Świdnik"
+    ],
+    "email": "strazmiejska@poczta.e-swidnik.pl",
+    "city": "Świdnik",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
