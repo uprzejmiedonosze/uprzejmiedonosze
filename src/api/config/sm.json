@@ -1592,6 +1592,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "cieszyn": {
+    "address": [
+      "Straż Miejska w Cieszynie",
+      "ul. Limanowskiego 7",
+      "43-400 Cieszyn"
+    ],
+    "email": "sekretariat@sm.cieszyn.pl",
+    "city": "Cieszyn",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
