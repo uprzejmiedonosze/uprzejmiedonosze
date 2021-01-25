@@ -1603,6 +1603,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "rumia": {
+    "address": [
+      "Straż Miejska w Rumi",
+      "ul. Abrahama 17",
+      "84-230 Rumia"
+    ],
+    "email": "straz.miejska@sm.rumia.pl",
+    "city": "Cieszyn",
+    "hint": null,
+    "api": "Mail"
+  },
+  "kwidzyn": {
+    "address": [
+      "Straż Miejska Kwidzyn",
+      "ul. Warszawska 14",
+      "82-500 Kwidzyn"
+    ],
+    "email": "strazmiejska@um.kwidzyn.pl",
+    "city": "Kwidzyn",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
