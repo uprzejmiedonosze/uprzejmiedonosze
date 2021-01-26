@@ -1625,6 +1625,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "wolsztyn": {
+    "address": [
+      "Straż Miejska Wolsztyn",
+      "Rynek 1",
+      "64-200 Wolsztyn"
+    ],
+    "email": "strazmiejska@wolsztyn.pl",
+    "city": "Wolsztyn",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
