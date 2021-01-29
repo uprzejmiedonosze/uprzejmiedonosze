@@ -101,7 +101,7 @@
       "ul. Kobielska 5",
       "04-359 Warszawa"
     ],
-    "email": "ot7@strazmiejska.waw.pl",
+    "email": "ot7.zgloszenia@strazmiejska.waw.pl",
     "city": "Warszawa",
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": "Mail"
