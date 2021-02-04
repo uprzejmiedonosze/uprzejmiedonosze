@@ -393,9 +393,16 @@ div.loader.l {
     cursor: pointer;
 }
 
-.new-application #locationPicker {
+.new-application .locationPicker {
     width: 100%;
     height: 200px;
+    border-radius: 0.8em;
+    margin-top: 0.3em;
+}
+
+.new-application .locationPickerBig {
+    width: 100%;
+    height: 500px;
     border-radius: 0.8em;
     margin-top: 0.3em;
 }
@@ -404,6 +411,19 @@ div.loader.l {
     opacity: .5;
 }
 
+.new-application .right-align{
+    text-align: right;
+}
+
+.ui-icon-arrowsout:after {
+    background-image: url("../img/ArrowsOut.png");
+    background-size: 100%;
+}
+
+.ui-icon-arrowsin:after {
+    background-image: url("../img/ArrowsIn.png");
+    background-size: 100%;
+}
 /* #endregion nowe-zgloszenie */
 
 /* #region rejestracja */

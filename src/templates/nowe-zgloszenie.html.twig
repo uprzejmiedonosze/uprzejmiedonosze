@@ -56,12 +56,17 @@
                 autocomplete="off" style="text-transform:uppercase" />
             <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
                 {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
+        </div>  
         </div>
-
-        <label for="lokalizacja" id="addressHint">Podaj adres lub wskaż go na mapie</label>
-        <div class="ui-grid-a ui-responsive images images-cropped">
+        <div class="ui-grid-a ui-responsive images images-cropped" >
             <div class="ui-block-a">
-                <div id="locationPicker"></div>
+                <label for="lokalizacja" id="addressHint" style="display: inline;" >Podaj adres lub wskaż go na mapie</label>
+                <div style=" float: right; display: inline;">
+                    <a id="mapZoomIn" class="ui-btn ui-btn-icon-notext ui-icon-arrowsout" ></a>
+                    <a id="mapZoomOut" class="ui-btn ui-btn-icon-notext ui-icon-arrowsin" ></a>
+                </div>
+            
+                <div id="locationPicker" class="locationPicker"></div>
             </div>
             <div class="ui-block-b">
                 <div class="combo">
@@ -74,7 +79,6 @@
                 </div>
             </div>
         </div>
-
         <label for="datetime" id="dateHint">Data i czas zgłoszenia</label>
         <div class="datetime">
             <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />

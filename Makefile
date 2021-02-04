@@ -77,7 +77,6 @@ dev-sequential: HTTPS := http
 dev-sequential: $(DIRS) export
 	@echo "==> Refreshing sources"
 	@cp uprzejmiedonosze.localhost-firebase-adminsdk.json $(EXPORT)
-	@touch export/config.php
 
 dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
@@ -136,7 +135,8 @@ export: $(DIRS) process-sitemap minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	@cp -r lib vendor src/*.php src/tools config.php $(EXPORT)/
+	@cp -r lib vendor src/*.php src/tools $(EXPORT)/
+	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
 cypress:
 	@echo "==> Testing staging"
