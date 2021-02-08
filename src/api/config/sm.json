@@ -1691,6 +1691,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "parzniew": {
+    "address": [
+      "Straż Miejska w Brwinowie",
+      "ul. Grodziska 12",
+      "05-840 Brwinów"
+    ],
+    "email": "straz.miejska@brwinow.pl",
+    "city": "Parzniew",
+    "hint": "Parzniew jest obsługiwany przez SM w Brwinowie",
+    "api": "Mail"
+  },
   "grodzisk mazowiecki": {
     "address": [
       "Straż Miejska w Grodzisku Mazowieckim",
