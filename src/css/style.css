@@ -424,6 +424,11 @@ div.loader.l {
     background-image: url("../img/ArrowsIn.png");
     background-size: 100%;
 }
+
+.inline {
+    float: right;
+    display: inline;
+}
 /* #endregion nowe-zgloszenie */
 
 /* #region rejestracja */

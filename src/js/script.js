@@ -1,7 +1,5 @@
 /* eslint-disable no-undef */
 $(document).on('pageshow', function () {
-    $('#mapZoomOut').hide();
-            
     if ($(".new-application").length) {
 
         $('#lokalizacja').on('change', function () {
@@ -36,30 +34,19 @@ $(document).on('pageshow', function () {
             });
         }
 
-        $('#mapZoom').click(function () {
-            if($('#mapZoom').innerHTML == "Big"){
-                $('#mapZoom').innerHTML = "Small";
-                $('#locationPicker').removeClass('locationPicker');
-                $('#locationPicker').addClass('locationPickerBig');
-            }else{
-                $('#mapZoom').innerHTML = "Big";
-                $('#locationPicker').removeClass('locationPickerBig');
-                $('#locationPicker').addClass('locationPicker');
-            }
-        });
+        $('#resizeMap').click(function () {
+            let locationPickerBigclass = "locationPickerBig"
+            let uiIconArrowsInClass = "ui-icon-arrowsin"
+            let element = document.querySelector("#locationPicker");
 
-        $('#mapZoomIn').click(function () {
-            $('#mapZoomIn').hide();
-            $('#mapZoomOut').show();
-            $('#locationPicker').removeClass('locationPicker');
-            $('#locationPicker').addClass('locationPickerBig');
-        });
 
-        $('#mapZoomOut').click(function () {
-            $('#mapZoomOut').hide();
-            $('#mapZoomIn').show();
-            $('#locationPicker').removeClass('locationPickerBig');
-            $('#locationPicker').addClass('locationPicker');
+            if (element.classList.contains(locationPickerBigclass)) {
+                $('#locationPicker').removeClass(locationPickerBigclass);
+                $('#resizeMap').removeClass(uiIconArrowsInClass);
+              } else {
+                $('#locationPicker').addClass(locationPickerBigclass);
+                $('#resizeMap').addClass(uiIconArrowsInClass);
+              }
         });
 
         $('#form-submit').click(function () {
