@@ -415,14 +415,22 @@ div.loader.l {
     text-align: right;
 }
 
-.ui-icon-arrowsout:after {
-    background-image: url("../img/ArrowsOut.png");
+
+.ui-button-resizeMap {
+    font-weight: 400;
+    border-style: none;
+    height: 1em;
     background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.ui-icon-arrowsin:after {
+.ui-icon-arrowsout {
+    background-image: url("../img/ArrowsOut.png");
+}
+
+.ui-icon-arrowsin {
     background-image: url("../img/ArrowsIn.png");
-    background-size: 100%;
 }
 
 .inline {
