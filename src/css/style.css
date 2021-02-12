@@ -411,32 +411,41 @@ div.loader.l {
     opacity: .5;
 }
 
-.new-application .right-align{
+.new-application .right-align {
     text-align: right;
 }
 
-
 .ui-button-resizeMap {
-    font-weight: 400;
-    border-style: none;
-    height: 1em;
+    display: block;
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    text-transform: none;
+    appearance: none;
+    position: absolute;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    width: 25px;
+    height: 25px;
+    top: 2em;
+    right: 0.5em;
+    z-index: 1;
+    box-shadow: 0px 0px 10px 0px #ddd;
+    border: 1px solid #ddd;
 }
 
 .ui-icon-arrowsout {
-    background-image: url("../img/ArrowsOut.png");
+    background-image: url("../img/arrows-out.png");
 }
 
 .ui-icon-arrowsin {
-    background-image: url("../img/ArrowsIn.png");
+    background-image: url("../img/arrows-in.png");
 }
 
-.inline {
-    float: right;
-    display: inline;
-}
 /* #endregion nowe-zgloszenie */
 
 /* #region rejestracja */
