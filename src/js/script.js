@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
 $(document).on('pageshow', function () {
+    if(!window.matchMedia("(max-width: 700px)").matches){
+        $('#resizeMap').hide();
+    }
     if ($(".new-application").length) {
 
         $('#lokalizacja').on('change', function () {
@@ -35,18 +38,8 @@ $(document).on('pageshow', function () {
         }
 
         $('#resizeMap').click(function () {
-            let locationPickerBigclass = "locationPickerBig"
-            let uiIconArrowsInClass = "ui-icon-arrowsin"
-            let element = document.querySelector("#locationPicker");
-
-
-            if (element.classList.contains(locationPickerBigclass)) {
-                $('#locationPicker').removeClass(locationPickerBigclass);
-                $('#resizeMap').removeClass(uiIconArrowsInClass);
-              } else {
-                $('#locationPicker').addClass(locationPickerBigclass);
-                $('#resizeMap').addClass(uiIconArrowsInClass);
-              }
+            $('#locationPicker').toggleClass('locationPickerBig')
+            $('#resizeMap').toggleClass('ui-icon-arrowsin')
         });
 
         $('#form-submit').click(function () {

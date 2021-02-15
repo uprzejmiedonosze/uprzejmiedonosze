@@ -393,7 +393,7 @@ div.loader.l {
     cursor: pointer;
 }
 
-.new-application .locationPicker {
+.new-application .locationPickerClass {
     width: 100%;
     height: 200px;
     border-radius: 0.8em;
@@ -401,10 +401,7 @@ div.loader.l {
 }
 
 .new-application .locationPickerBig {
-    width: 100%;
     height: 500px;
-    border-radius: 0.8em;
-    margin-top: 0.3em;
 }
 
 .new-application div.combo .ui-disabled {

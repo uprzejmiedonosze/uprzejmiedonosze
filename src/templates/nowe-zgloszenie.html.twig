@@ -56,13 +56,12 @@
                 autocomplete="off" style="text-transform:uppercase" />
             <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
                 {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
-        </div>  
         </div>
         <div class="ui-grid-a ui-responsive images images-cropped" >
             <div class="ui-block-a">
                 <label for="lokalizacja" id="addressHint" style="display: inline;" >Podaj adres lub wskaż go na mapie</label>
                 <a id="resizeMap" class="ui-button-resizeMap ui-icon-arrowsout"></a>
-                <div id="locationPicker" class="locationPicker"></div>
+                <div id="locationPicker" class="locationPickerClass"></div>
             </div>
             <div class="ui-block-b">
                 <div class="combo">
