@@ -171,13 +171,6 @@ class Application extends JSONObject{
             return $SM_ADDRESSES[$this->smCity];
         }
 
-        $address = trimstr2lower($this->address->address);
-        foreach($SM_ADDRESSES as $c => $a){
-            if (strpos($address, $c) !== false){
-                $this->smCity = $c;
-                return $SM_ADDRESSES[$this->smCity];
-            }
-        }
         return $SM_ADDRESSES['_nieznane'];
     }
 

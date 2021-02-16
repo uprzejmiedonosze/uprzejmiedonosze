@@ -101,7 +101,7 @@
       "ul. Kobielska 5",
       "04-359 Warszawa"
     ],
-    "email": "ot7@strazmiejska.waw.pl",
+    "email": "ot7.zgloszenia@strazmiejska.waw.pl",
     "city": "Warszawa",
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": "Mail"
@@ -1578,6 +1578,303 @@
     ],
     "email": "sm@um.pila.pl",
     "city": "Piła",
+    "hint": null,
+    "api": "Mail"
+  },
+  "świdnik": {
+    "address": [
+      "Straż Miejska w Świdniku",
+      "ul. Gen. J. Hallera 9",
+      "21-040 Świdnik"
+    ],
+    "email": "strazmiejska@poczta.e-swidnik.pl",
+    "city": "Świdnik",
+    "hint": null,
+    "api": "Mail"
+  },
+  "cieszyn": {
+    "address": [
+      "Straż Miejska w Cieszynie",
+      "ul. Limanowskiego 7",
+      "43-400 Cieszyn"
+    ],
+    "email": "sekretariat@sm.cieszyn.pl",
+    "city": "Cieszyn",
+    "hint": null,
+    "api": "Mail"
+  },
+  "rumia": {
+    "address": [
+      "Straż Miejska w Rumi",
+      "ul. Abrahama 17",
+      "84-230 Rumia"
+    ],
+    "email": "straz.miejska@sm.rumia.pl",
+    "city": "Cieszyn",
+    "hint": null,
+    "api": "Mail"
+  },
+  "kwidzyn": {
+    "address": [
+      "Straż Miejska Kwidzyn",
+      "ul. Warszawska 14",
+      "82-500 Kwidzyn"
+    ],
+    "email": "strazmiejska@um.kwidzyn.pl",
+    "city": "Kwidzyn",
+    "hint": null,
+    "api": "Mail"
+  },
+  "wolsztyn": {
+    "address": [
+      "Straż Miejska Wolsztyn",
+      "Rynek 1",
+      "64-200 Wolsztyn"
+    ],
+    "email": "strazmiejska@wolsztyn.pl",
+    "city": "Wolsztyn",
+    "hint": null,
+    "api": "Mail"
+  },
+  "otwock": {
+    "address": [
+      "Straż Miejska w Otwocku",
+      "ul. Armii Krajowej 5c",
+      "05-400 Otwock"
+    ],
+    "email": "strazmiejska@otwock.pl",
+    "city": "Otwock",
+    "hint": null,
+    "api": "Mail"
+  },
+  "józefów": {
+    "address": [
+      "Straż Miejska w Józefowie",
+      "ul. Kardynała Wyszyńskiego 10",
+      "05-420 Józefów"
+    ],
+    "email": "sm_jozefow@wp.pl",
+    "city": "Józefów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "serock": {
+    "address": [
+      "Straż Miejska w Serocku",
+      "ul. Rynek 21",
+      "05-140 Serock"
+    ],
+    "email": "straz.miejska@serock.pl",
+    "city": "Serock",
+    "hint": null,
+    "api": "Mail"
+  },
+  "góra kalwaria": {
+    "address": [
+      "Straż Miejska w Górze Kalwarii",
+      "ul. 3-go Maja 10",
+      "05-530 Góra Kalwaria"
+    ],
+    "email": "sm@gorakalwaria.pl",
+    "city": "Góra Kalwaria",
+    "hint": null,
+    "api": "Mail"
+  },
+  "brwinów": {
+    "address": [
+      "Straż Miejska w Brwinowie",
+      "ul. Grodziska 12",
+      "05-840 Brwinów"
+    ],
+    "email": "straz.miejska@brwinow.pl",
+    "city": "Brwinów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "parzniew": {
+    "address": [
+      "Straż Miejska w Brwinowie",
+      "ul. Grodziska 12",
+      "05-840 Brwinów"
+    ],
+    "email": "straz.miejska@brwinow.pl",
+    "city": "Parzniew",
+    "hint": "Parzniew jest obsługiwany przez SM w Brwinowie",
+    "api": "Mail"
+  },
+  "grodzisk mazowiecki": {
+    "address": [
+      "Straż Miejska w Grodzisku Mazowieckim",
+      "ul. Kościuszki 41",
+      "05-825 Grodzisk Mazowiecki"
+    ],
+    "email": "sm@grodzisk.pl",
+    "city": "Grodzisk Mazowiecki",
+    "hint": null,
+    "api": "Mail"
+  },
+  "milanówek": {
+    "address": [
+      "Straż Miejska w Milanówku",
+      "ul. Warszawska 32",
+      "05-822 Milanówek"
+    ],
+    "email": "straz_miejska@milanowek.pl",
+    "city": "Milanówek",
+    "hint": null,
+    "api": "Mail"
+  },
+  "łomianki": {
+    "address": [
+      "Straż Miejska w Łomiankach",
+      "ul. Warszawska 87",
+      "05-092 Łomianki"
+    ],
+    "email": "straz.miejska@lomianki.pl",
+    "city": "Łomianki",
+    "hint": null,
+    "api": "Mail"
+  },
+  "sulejówek": {
+    "address": [
+      "Straż Miejska w Sulejówku",
+      "ul. Wrońskiego 1",
+      "05-070 Sulejówek"
+    ],
+    "email": "straz.miejska@sulejowek.pl",
+    "city": "Sulejówek",
+    "hint": null,
+    "api": "Mail"
+  },
+  "nieporęt": {
+    "address": [
+      "Straż Gminna w Nieporęcie",
+      "ul. Zegrzyńska 10h",
+      "05-126 Nieporęt"
+    ],
+    "email": "strazgminna@nieporet.pl",
+    "city": "Nieporęt",
+    "hint": null,
+    "api": "Mail"
+  },
+  "wołomin": {
+    "address": [
+      "Straż Miejska w Wołominie",
+      "ul. Legionów 31a",
+      "05-200 Wołomin"
+    ],
+    "email": "kontakt@strazmiejskawolomin.pl",
+    "city": "Wołomin",
+    "hint": null,
+    "api": "Mail"
+  },
+  "tarczyn": {
+    "address": [
+      "Straż Miejska w Tarczynie",
+      "ul. Rynek 8a",
+      "05-555 Tarczyn"
+    ],
+    "email": "smtarczyn@tarczyn.pl",
+    "city": "Tarczyn",
+    "hint": null,
+    "api": "Mail"
+  },
+  "ożarów mazowiecki": {
+    "address": [
+      "Straż Miejska w Ożarowie Mazowieckim",
+      "ul. Poznańska 127a",
+      "05-850 Ożarów Mazowiecki"
+    ],
+    "email": "strazmiejska@ozarow-mazowiecki.pl",
+    "city": "Ożarów Mazowiecki",
+    "hint": null,
+    "api": "Mail"
+  },
+  "zielonka": {
+    "address": [
+      "Straż Miejska w Zielonce",
+      "ul. Piastowska 21",
+      "05-220 Zielonka"
+    ],
+    "email": "straz.miejska@zielonka.pl",
+    "city": "Zielonka",
+    "hint": null,
+    "api": "Mail"
+  },
+  "grójec": {
+    "address": [
+      "Straż Miejska w Grójcu",
+      "ul. Mszczonowska 23",
+      "05-600 Grójec"
+    ],
+    "email": "straz@grojecmiasto.pl",
+    "city": "Grójec",
+    "hint": null,
+    "api": "Mail"
+  },
+  "siedlce": {
+    "address": [
+      "Straż Miejska w Siedlcach",
+      "ul. Świętojańska 4",
+      "08-110 Siedlce"
+    ],
+    "email": "straz.miejska@um.siedlce.pl",
+    "city": "Siedlce",
+    "hint": null,
+    "api": "Mail"
+  },
+  "łochów": {
+    "address": [
+      "Straż Miejska w Łochowie",
+      "ul. Aleja Pokoju 75",
+      "07-130 Łochów"
+    ],
+    "email": "straz.miejska@gminalochow.pl",
+    "city": "Łochów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "węgrów": {
+    "address": [
+      "Straż Miejska w Węgrowie",
+      "ul. Wyszyńskiego 1",
+      "07-100 Węgrów"
+    ],
+    "email": "piotr.koc@wegrow.com.pl",
+    "city": "Węgrów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "sierpc": {
+    "address": [
+      "Straż Miejska w Sierpcu",
+      "ul. Piastowska 11a",
+      "09-200 Sierpc"
+    ],
+    "email": "strazmiejska@um.sierpc.pl",
+    "city": "Sierpc",
+    "hint": null,
+    "api": "Mail"
+  },
+  "ostrów mazowiecka": {
+    "address": [
+      "Straż Miejska w Ostrowi Mazowieckiej",
+      "ul. 3-go Maja 66",
+      "07-300 Ostrów Mazowiecka"
+    ],
+    "email": "strazmiejska@ostrowmaz.pl",
+    "city": "Ostrów Mazowiecka",
+    "hint": null,
+    "api": "Mail"
+  },
+  "wyszków": {
+    "address": [
+      "Straż Miejska w Wyszkowie",
+      "ul. Geodetów 45",
+      "07-200 Wyszków"
+    ],
+    "email": "straz.miejska@wyszkow.pl",
+    "city": "Wyszków",
     "hint": null,
     "api": "Mail"
   },
