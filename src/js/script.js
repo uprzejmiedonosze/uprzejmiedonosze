@@ -1,8 +1,5 @@
 /* eslint-disable no-undef */
 $(document).on('pageshow', function () {
-    if(!window.matchMedia("(max-width: 700px)").matches){
-        $('#resizeMap').hide();
-    }
     if ($(".new-application").length) {
 
         $('#lokalizacja').on('change', function () {

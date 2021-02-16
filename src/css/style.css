@@ -435,6 +435,12 @@ div.loader.l {
     border: 1px solid #ddd;
 }
 
+@media (min-width: 600px) {
+    #resizeMap {
+        display: none;
+    }
+}
+
 .ui-icon-arrowsout {
     background-image: url("../img/arrows-out.png");
 }
