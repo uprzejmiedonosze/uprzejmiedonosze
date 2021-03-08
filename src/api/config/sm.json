@@ -1878,6 +1878,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "pabianice": {
+    "address": [
+      "Straż Miejska w Pabianicach",
+      "ul. Gabriela Narutowicza 33",
+      "95-200 Pabianice"
+    ],
+    "email": "sm@um.pabianice.pl",
+    "city": "Pabianice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
