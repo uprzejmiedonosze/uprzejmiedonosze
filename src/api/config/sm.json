@@ -1889,6 +1889,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "podkowa leśna": {
+    "address": [
+      "Posterunek Policji w Podkowie Leśnej",
+      "ul. Brwinowska 17a",
+      "05-807 Podkowa Leśna"
+    ],
+    "email": "komendant.grodzisk-maz@ksp.policja.gov.pl",
+    "city": "Podkowa Leśna",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
