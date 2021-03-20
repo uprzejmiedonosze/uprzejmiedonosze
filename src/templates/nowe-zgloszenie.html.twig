@@ -144,23 +144,6 @@
     </div> <!-- ui-field-contain -->
 </form>
 
-<script src="js/script-%JS_HASH%.js"></script>
+<script src="/js/new-app.js?%JS_HASH%" last-location="{{ app.address.latlng ?? config.lastLocation }}"></script>
 
-<script src="js/load-image-%JS_HASH%.js"></script>
-
-<script src="js/load-image-scale-%JS_HASH%.js"></script>
-<script src="js/load-image-meta-%JS_HASH%.js"></script>
-<script src="js/load-image-orientation-%JS_HASH%.js"></script>
-<script src="js/load-image-exif-%JS_HASH%.js"></script>
-<script src="js/load-image-exif-map-%JS_HASH%.js"></script>
-
-<script src="js/luxon.min-%JS_HASH%.js"></script>
-
-<script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
-<script>
-    setAddressByLatLngString('{{ app.address.latlng ?? config.lastLocation }}');
-    $(document).on('pageshow', function () {
-        ga('send', 'event', { eventCategory: 'pageshow', eventAction: 'nowe-zgloszenie'});
-    });
-</script>
 {% endblock %}

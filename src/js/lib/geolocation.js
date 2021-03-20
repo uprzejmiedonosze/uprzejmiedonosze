@@ -1,0 +1,152 @@
+import { Loader } from "@googlemaps/js-api-loader";
+import LocationPicker from "location-picker";
+
+let autocomplete;
+
+let locationP;
+var initialLocation = [];
+
+function getGoogleLoader() {
+  return new Loader({
+    apiKey: "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
+    version: "weekly",
+    language: "pl",
+    libraries: ["places"],
+  });
+}
+
+export function initAutocompleteRegister() {
+  const loader = getGoogleLoader();
+
+  loader.loadCallback(e => {
+    if (e) return console.error(e);
+    initAutocomplete(false, 'address', google);
+  })
+}
+
+export function initAutocompleteNewApplication() {
+  const loader = getGoogleLoader();
+
+  loader.loadCallback(e => {
+    const loader = getGoogleLoader();
+    initAutocomplete(true, 'lokalizacja', google);
+
+    locationP = new LocationPicker('locationPicker', {
+      setCurrentPosition: false
+    }, {
+      disableDefaultUI: true,
+      scrollwheel: false,
+      zoomControl: true,
+      controlSize: 25,
+      mapTypeId: google.maps.MapTypeId.SATTELITE,
+      gestureHandling: 'cooperative',
+      estriction: new google.maps.LatLngBounds(
+        new google.maps.LatLng(54.8, 14),
+        new google.maps.LatLng(49, 24)
+      ),
+      zoom: 17,
+      minZoom: 6,
+      maxZoom: 19
+    });
+    if (initialLocation.length == 2) {
+      locationP.setLocation(initialLocation[0], initialLocation[1]);
+    }
+    google.maps.event.addListener(locationP.map, 'idle', function () {
+      var location = locationP.getMarkerPosition();
+      setAddressByLatLng(location.lat, location.lng, 'picker');
+    });
+  })
+}
+
+export const initAutocomplete = function (trigger_change, inputId, google) {
+  autocomplete = new google.maps.places.Autocomplete(
+    document.getElementById(inputId), {
+    types: ['address'],
+    componentRestrictions: { country: 'pl' }
+  });
+  if (trigger_change) {
+    autocomplete.addListener('place_changed', function () {
+      const place = autocomplete.getPlace();
+      setAddressByPlace(place);
+      const latlng = locationToLatLng(place);
+      $('#latlng').val(latlng.join(","));
+      locationP.setLocation(latlng[0], latlng[1]);
+    });
+  }
+}
+
+const locationToLatLng = function (place) {
+  return (typeof place.geometry.location.lat == "function") ?
+    [place.geometry.location.lat(), place.geometry.location.lng()] :
+    [place.geometry.location.lat, place.geometry.location.lng];
+}
+
+export function setAddressByLatLngString(latlng) {
+  if (latlng) {
+    const ll = latlng.split(',');
+    if (ll.length == 2 && !isNaN(ll[0])) {
+      initialLocation = ll;
+    }
+  }
+}
+
+export function setAddressByLatLng(lat, lng, from) { // init|picker|picture
+  if (from !== 'picker') {
+    locationP.setLocation(lat, lng);
+  }
+
+  if (from == 'init') {
+    return;
+  }
+
+  $('a#geo').buttonMarkup({ icon: "clock" });
+  if (from == 'picture') {
+    $('#lokalizacja').attr("placeholder", "(pobieram adres ze zdjęcia...)");
+  } else {
+    $('#lokalizacja').attr("placeholder", "(pobieram adres z mapy...)");
+  }
+  $('#latlng').val(lat + "," + lng);
+
+  $.post('/api/api.html', { action: 'geoToAddress', lat: lat, lng: lng }).done(function (result) {
+    $('#addressHint').text('Podaj adres lub wskaż go na mapie');
+    $('#addressHint').removeClass('hint');
+    if (result) {
+      setAddressByPlace(result, from);
+      if (from == 'picture') {
+        $('#addressHint').text('Sprawdź automatycznie pobrany adres');
+        $('#addressHint').addClass('hint');
+      }
+    }
+    $('a#geo').buttonMarkup({ icon: "location" });
+  }).fail(function () {
+    $('a#geo').buttonMarkup({ icon: "alert" });
+    $('#lokalizacja').addClass('error');
+  });
+
+  $('#lokalizacja').attr("placeholder", "(podaj adres lub wskaż go na mapie)");
+}
+
+function setAddressByPlace(place) {
+  const formatted_address = place.formatted_address.replace(', Polska', '').replace(/\d\d-\d\d\d\s/, '');
+  const voivodeship = place.address_components.filter(function (e) {
+    return e.types.indexOf('administrative_area_level_1') == 0
+  })[0].long_name.replace('Województwo ', '');
+  const country = place.address_components.filter(function (e) {
+    return e.types.indexOf('country') == 0;
+  })[0].long_name;
+  const city = place.address_components.filter(function (e) {
+    return e.types.indexOf('locality') == 0;
+  })[0].long_name;
+  const districtN = place.address_components.filter(function (e) {
+    return e.types.indexOf('sublocality_level_1') >= 0;
+  });
+  const district = (districtN.length > 0) ? districtN[0].short_name : null;
+  $('#lokalizacja').val(formatted_address);
+  $('#administrative_area_level_1').val(voivodeship);
+  $('#country').val(country);
+  $('#locality').val(city);
+  $('#district').val(district);
+
+  $('a#geo').buttonMarkup({ icon: "check" });
+  $('#lokalizacja').removeClass('error');
+}

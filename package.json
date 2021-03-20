@@ -1,15 +1,17 @@
 {
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.11.2",
     "blueimp-load-image": "^5.14.0",
     "exif-js": "^2.3.0",
     "lazysizes": "^5.2.2",
+    "location-picker": "^1.1.1",
     "luxon": "^1.25.0"
   },
   "devDependencies": {
     "cypress": "^5.2.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.0",
-    "parcel": "^1.12.4"
+    "parcel-bundler": "^1.12.3"
   },
   "name": "webapp"
 }

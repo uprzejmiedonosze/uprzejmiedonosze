@@ -33,7 +33,6 @@
             }).done(function() {
                 $('#' + appId).removeClass('decisiontrue decisionfalse').addClass('decision' + decision);
             }).fail(function(e){
-                console.log(e);
                 $.mobile.loading("show",
                     { text: e.statusText, textVisible: true, textonly: true } );
                 return false;

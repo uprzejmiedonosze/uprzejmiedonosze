@@ -21,12 +21,12 @@ DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/c
 
 CSS_FILES            := $(wildcard src/css/*.css)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
-CSS_MINIFIED         := $(CSS_FILES:src/%.css=export/public/%-$(CSS_HASH).css)
+CSS_MINIFIED         := $(CSS_FILES:src/%.css=export/public/%.css)
 CSS_MAP_IMAGE        := $(shell base64 src/img/map-circle.png)
 
-JS_FILES             := $(wildcard src/js/*.js)
+JS_FILES             := $(wildcard src/js/*.js src/js/*/*.js)
 JS_HASH              := $(shell cat $(JS_FILES) | md5sum | cut -b 1-8)
-JS_MINIFIED          := $(JS_FILES:src/%.js=export/public/%-$(JS_HASH).js)
+JS_MINIFIED          := $(PUBLIC)/js/index.js $(PUBLIC)/js/new-app.js
 
 HTML_FILES           := $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
@@ -87,7 +87,7 @@ dev-run: $(DIRS) export dev ## Building and running docker image
 	@make --directory docker runi
 
 staging: ## Copy files to staging server.
-	$(MAKE) staging-sequential -j
+	@$(MAKE) staging-sequential -j
 
 staging-sequential: HOST := $(STAGING_HOST)
 staging-sequential: $(DIRS) export
@@ -177,7 +177,7 @@ clean: ## Removes minified CSS and JS files.
 	@rm -f $(BRANCH_ENV)
 
 # Generics
-export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $@'
+export/public/css/%.css: src/css/%.css; @echo '==> Minifying $< to $@'
 	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
 		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
 	elif [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
@@ -187,17 +187,18 @@ export/public/css/%-$(CSS_HASH).css: src/css/%.css; @echo '==> Minifying $< to $
 	fi;
 	@sed $(SED_OPTS) 's%{{MAP_CIRCLE}}%$(CSS_MAP_IMAGE)%' $@
 
-export/public/js/%-$(JS_HASH).js: src/js/%.js; @echo '==> Minifying $< to $@'
-	@if [ "$(HOST)" = "$(PROD_HOST)" ] && ( ! grep -q min <<<"$<" ); then \
-		$(BABEL) $< > $@ ;\
-	else \
-		cp $< $@ ; \
-	fi;
-	$(replace-inline)
+export/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo_processing,$<)
+	@$(shell npm bin)/parcel build --target browser --public-url "/js" \
+		--out-dir $(dir $@) $<
 
-export/public/%.html: src/%.html $(CSS_FILES) $(JS_FILES); $(call echo_processing,$<)
+export/public/%.html: src/%.html; $(call echo_processing,$<)
 	$(lint)
 	$(replace)
+
+export/public/api/api.html: src/api/api.html; $(call echo_processing,$<)
+	$(lint)
+	$(replace)
+	$(replace-inline)
 
 export/public/api/config/%.json: src/api/config/%.json; $(call echo_processing,$<)
 	@jq -c . < $< > $@
@@ -208,13 +209,46 @@ export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating 
 	@jq '.[].api' < $< | sort | uniq | egrep -v '^("Mail"|"Poznan"|null)' || echo "(v) $< API values OK"
 	@jq -c . < $< > $@
 
-export/inc/%.php: src/inc/%.php $(CSS_FILES) $(JS_FILES); $(call echo_processing,$<)
+export/inc/%.php: src/inc/%.php; $(call echo_processing,$<)
 	$(lint)
 	$(replace)
 
-export/templates/%: src/templates/% $(CSS_FILES) $(JS_FILES); $(call echo_processing,$<)
+export/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(call echo_processing,$<)
+	$(lint)
+	$(replace)
+	$(replace-inline)
+
+export/inc/include.php: src/inc/include.php $(TWIG_FILES); $(call echo_processing,$<)
+	$(lint)
+	$(replace)
+	$(replace-inline)
+
+export/inc/utils.php: src/inc/utils.php; $(call echo_processing,$<)
+	$(lint)
+	$(replace)
+	$(replace-inline)
+
+export/templates/%: src/templates/%; $(call echo_processing,$<)
 	$(lint-twig)
 	$(replace)
+
+export/templates/base.html.twig: src/templates/base.html.twig $(JS_FILES) $(CSS_FILES)
+	$(call echo_processing,$<)
+	$(lint-twig)
+	$(replace)
+	$(replace-inline)
+
+export/templates/nowe-zgloszenie.html.twig: src/templates/nowe-zgloszenie.html.twig $(JS_FILES)
+	$(call echo_processing,$<)
+	$(lint-twig)
+	$(replace)
+	$(replace-inline)
+
+export/templates/changelog.html.twig: src/templates/changelog.html.twig
+	$(call echo_processing,$<)
+	$(lint-twig)
+	$(replace)
+	$(replace-inline)
 
 $(MANIFEST_PROCESSED): $(MANIFEST); $(call echo_processing,$<)
 	$(replace)
@@ -226,8 +260,6 @@ update-libs: ; @echo 'Updating PHP and JS libraries'
 	@composer update
 	@npm update && npm install
 	@cp -f node_modules/blueimp-load-image/js/*js src/js/
-	@cp -f node_modules/lazysizes/lazysizes.min.js src/js/
-	@cp -f node_modules/luxon/build/global/luxon.min.js src/js/
 
 $(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.xml'
 	
@@ -261,12 +293,11 @@ endef
 
 define replace
 @sed -e 's/%HOST%/$(HOST)/g' -e 's/%HTTPS%/$(HTTPS)/g' $< > $@
-$(replace-inline)
 endef
 
 define replace-inline
 @sed $(SED_OPTS) -e 's/%JS_HASH%/$(JS_HASH)/g' \
-	 -e 's/%CSS_HASH%/$(CSS_HASH)/g' \
+   -e 's/%CSS_HASH%/$(CSS_HASH)/g' \
 	 -e 's/%TWIG_HASH%/$(TWIG_HASH)/g' \
 	 -e 's/%VERSION%/$(TAG_NAME)/g' $@
 endef
