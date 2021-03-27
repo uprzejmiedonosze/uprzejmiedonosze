@@ -1900,6 +1900,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "karpacz": {
+    "address": [
+      "Straż Miejska w Karpaczu",
+      "ul. Obrońców Pokoju 2a",
+      "58-540 Karpacz"
+    ],
+    "email": "straz.miejska@karpacz.eu",
+    "city": "Karpacz",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
