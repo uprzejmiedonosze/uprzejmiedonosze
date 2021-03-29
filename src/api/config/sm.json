@@ -1911,6 +1911,39 @@
     "hint": null,
     "api": "Mail"
   },
+  "police": {
+    "address": [
+      "Straż Miejska w Policach",
+      "ul. Tanowska 8",
+      "72-010 Police"
+    ],
+    "email": "strazmiejska@police.pl",
+    "city": "Police",
+    "hint": null,
+    "api": "Mail"
+  },
+  "pilchowo": {
+    "address": [
+      "Straż Miejska w Policach",
+      "ul. Tanowska 8",
+      "72-010 Police"
+    ],
+    "email": "strazmiejska@police.pl",
+    "city": "Police",
+    "hint": null,
+    "api": "Mail"
+  },
+  "tanowo": {
+    "address": [
+      "Straż Miejska w Policach",
+      "ul. Tanowska 8",
+      "72-010 Police"
+    ],
+    "email": "strazmiejska@police.pl",
+    "city": "Police",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
