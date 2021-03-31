@@ -1944,6 +1944,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "grodkowo": {
+    "address": [
+      "Straż Miejska w Grodkowie",
+      "ul. Warszawska 44/9",
+      "49-200 Grodków"
+    ],
+    "email": "strazmiejska@grodkow.pl",
+    "city": "Grodków",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
