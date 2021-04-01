@@ -11,17 +11,18 @@ function validateRegisterForm() {
 }
 
 $(document).on('pageshow', function () {
-  if ($('.register').length) {
-    initAutocompleteRegister()
-    
-    $('#name').on('change', function () {
-      $('#name').removeClass('error');
-    });
+  if (!$('.register').length) return;
 
-    $('#register-submit').click(function () {
-      if (validateRegisterForm()) {
-        $('#register-form').submit();
-      }
-    });
-  }
+  initAutocompleteRegister()
+  
+  $('#name').on('change', function () {
+    $('#name').removeClass('error');
+  });
+
+  $('#register-submit').click(function () {
+    if (validateRegisterForm()) {
+      $('#register-form').submit();
+    }
+  });
+
 })

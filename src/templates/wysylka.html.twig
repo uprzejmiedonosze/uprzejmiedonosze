@@ -80,16 +80,6 @@ Z poważaniem,
             </li>
         </ol>
     {% endif %} {# if (cities | first.api) #}
-    <script>
-        $('#download').on('click', function(){
-            $(this).parent().addClass('ui-disabled');
-            $('#send').parent().removeClass('ui-disabled');
-        });
-        $('#send, #sendE').on('click', function(){
-            $(this).parent().addClass('ui-disabled');
-            $('#email, #epuap').parent().removeClass('ui-disabled');
-        });
-    </script>
     <div data-role="collapsibleset" data-mini="true" data-inset="true">
         {% for app in apps %}
             {% include('_application-short.html.twig') %}

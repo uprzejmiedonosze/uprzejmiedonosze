@@ -45,22 +45,6 @@
     {% endif %}
 {% endif %}
     <script>
-    $('div.displayAllApps a').click(function () {
-        $('div.displayAllApps').hide();
-        $('div.application:not(.status-archived)').show();
-    });
-
-    $(document).on('pageshow', function () {
-        updateCounters();
-        $('.filter a').click(function(e){
-            $('div.application').hide();
-            $('div.application.status-' + this.id).show();
-            $('.filter a').each(function(idx, item){
-                $(item).removeClass('active');
-            });
-            $(this).addClass('active');
-        });
-    });
-    {{ include('_inline.js.twig') }}
+        {{ include('_inline.js.twig') }}
     </script>
 {% endblock %}
