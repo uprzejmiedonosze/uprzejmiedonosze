@@ -2,6 +2,10 @@
 require_once(__DIR__ . '/../inc/include.php');
 
 echo generate('index.html.twig', [
+    'head' =>
+    [
+        'mainClass' => 'mainPage'
+    ],
     'config' => [
         'menu' => 'index'
     ]
