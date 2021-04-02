@@ -1,28 +1,27 @@
-import { initAutocompleteRegister } from '../lib/geolocation';
-import { check, checkAddress } from '../lib/validation';
+import { check, checkAddress } from "../lib/validation";
+import { initAutocompleteRegister } from "../lib/geolocation";
 
 function validateRegisterForm() {
-  var ret = check($('#name'), 6, false);
-  ret = checkAddress($('#address')) && ret;
+  var ret = check($("#name"), 6, false);
+  ret = checkAddress($("#address")) && ret;
   if (!ret) {
-    $(window).scrollTop($('.error').offset().top - 100);
+    $(window).scrollTop($(".error").offset().top - 100);
   }
   return ret;
 }
 
-$(document).on('pageshow', function () {
-  if (!$('.register').length) return;
+$(document).on("pageshow", function () {
+  if (!$(".register").length) return;
 
-  initAutocompleteRegister()
-  
-  $('#name').on('change', function () {
-    $('#name').removeClass('error');
+  initAutocompleteRegister();
+
+  $("#name").on("change", function () {
+    $("#name").removeClass("error");
   });
 
-  $('#register-submit').click(function () {
+  $("#register-submit").click(function () {
     if (validateRegisterForm()) {
-      $('#register-form').submit();
+      $("#register-form").submit();
     }
   });
-
-})
+});

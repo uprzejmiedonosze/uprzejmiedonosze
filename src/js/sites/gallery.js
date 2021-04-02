@@ -1,38 +1,50 @@
 function tumblr() {
-  $.getJSON("https://galeria.uprzejmiedonosze.net/api/read/json?num=30&callback=?", function (data) {
+  $.getJSON(
+    "https://galeria.uprzejmiedonosze.net/api/read/json?num=30&callback=?",
+    function (data) {
+      $.each(data.posts, function (_i, _posts) {
+        var post = "";
 
-    $.each(data.posts, function (i, posts) {
-      var post = "", postElement;
+        switch (this.type) {
+          case "regular":
+            if (this["regular-title"]) {
+              post += "<h3>" + this["regular-title"] + "</h3>";
+            }
+            post += "<p>" + this["regular-body"] + "</p>";
+            break;
+          case "link":
+            post =
+              "<h3><a href='" +
+              this["link-url"] +
+              "'>" +
+              this["link-text"] +
+              "</a></h3>";
+            break;
+          case "quote":
+            post = this["quote-text"];
+            break;
+          case "photo":
+            post =
+              '<div class="galleryItem"><a href=\'' +
+              this["url-with-slug"] +
+              "'><img src='" +
+              this["photo-url-500"] +
+              "'></a>";
+            if (this["photo-caption"]) {
+              post += "<p>" + this["photo-caption"] + "</p>";
+            }
+            post += "</li>";
+            break;
+        }
 
-      switch (this.type) {
-        case "regular":
-          if (this["regular-title"]) {
-            post += "<h3>" + this["regular-title"] + "</h3>";
-          }
-          post += "<p>" + this["regular-body"] + "</p>";
-          break;
-        case "link":
-          post = "<h3><a href='" + this["link-url"] + "'>" + this["link-text"] + "</a></h3>";
-          break;
-        case "quote":
-          post = this["quote-text"];
-          break;
-        case "photo":
-          post = "<div class=\"galleryItem\"><a href='" + this["url-with-slug"] + "'><img src='" + this["photo-url-500"] + "'></a>";
-          if (this["photo-caption"]) {
-            post += "<p>" + this["photo-caption"] + "</p>";
-          }
-          post += "</li>";
-          break;
-      }
+        $("div.loader").hide();
+        $("div.tumblr_posts").append(post);
+      });
+    }
+  );
+}
 
-      $("div.loader").hide();
-      $("div.tumblr_posts").append(post);
-    });
-  });
-};
-
-if ($('.gallery').length) {
+if ($(".gallery").length) {
   $(document).ready(function () {
     if ($("div.tumblr_posts").length > 0) {
       tumblr();
