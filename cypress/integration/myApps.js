@@ -32,7 +32,7 @@ describe('Application screen valitation', () => {
     before(() => {
         cy.login()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -49,7 +49,7 @@ describe('Application screen valitation', () => {
         })
     })
 
-    it('checks empty application validation', function () {    
+    it('checks empty application validation', function () {
         cy.contains('Dalej').click()
         cy.get('.imageContainer').should('have.class', 'error')
         cy.get('#plateId').should('have.class', 'error')
@@ -60,7 +60,7 @@ describe('Invalid images', () => {
     before(() => {
         cy.login()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -70,7 +70,7 @@ describe('Invalid images', () => {
         cy.goToNewAppScreen()
         cy.uploadWrongImages()
     })
-    
+
     it('checks application page with wrong images uploaded', function () {
         cy.contains("Twoje zdjęcie nie ma znaczników geolokacji")
         cy.get('.imageContainer').should('not.have.class', 'error')
@@ -95,7 +95,7 @@ describe('Valid images and location', () => {
         cy.login()
         cy.goToNewAppScreen()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -134,7 +134,7 @@ describe('Create application', () => {
         cy.login()
         cy.goToNewAppScreen()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -178,7 +178,7 @@ describe('Edit application', () => {
         cy.login()
         cy.goToNewAppScreen()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -219,7 +219,7 @@ describe('Edit application', () => {
     it('checks altered application', function(){
         cy.get('#form-submit').click()
         cy.contains('Wystąpił błąd').should('not.exist')
-        
+
         cy.contains(this.config.carImage.plateId)
         cy.contains(this.config.carImage.dateDM1)
         cy.contains(this.config.carImage.hourHumanHP1)

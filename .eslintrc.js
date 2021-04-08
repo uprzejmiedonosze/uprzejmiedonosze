@@ -2,7 +2,8 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    jquery: true
+    jquery: true,
+    "cypress/globals": true
   },
   ecmaFeatures: {
     modules: true,
@@ -13,9 +14,10 @@ module.exports = {
     "jquery",
     "eslint:recommended",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:cypress/recommended"
   ],
-  plugins: ["import", "prettier"],
+  plugins: ["import", "prettier", "cypress"],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: "module"

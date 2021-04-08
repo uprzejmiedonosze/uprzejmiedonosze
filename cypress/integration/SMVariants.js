@@ -4,7 +4,7 @@ describe('API:automated (Poznań)', () => {
         cy.login()
         cy.goToNewAppScreen()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -54,7 +54,7 @@ describe('API:Mail (Wrocław)', () => {
         cy.login()
         cy.goToNewAppScreen()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -102,12 +102,12 @@ describe('API:Mail (Wrocław)', () => {
 })
 
 describe.skip('API:null (Szczecin)', () => {
-    before(() => {s
+    before(() => {
         cy.initDB()
         cy.login()
         cy.goToNewAppScreen()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -125,7 +125,7 @@ describe.skip('API:null (Szczecin)', () => {
         cy.contains('Swoje zgłoszenia musisz wysłać samodzielnie')
         cy.contains(this.sm.szczecin.address[0])
     })
-    
+
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
@@ -156,7 +156,7 @@ describe('Missing SM (Poniatowa)', () => {
         cy.login()
         cy.goToNewAppScreen()
     })
-    
+
     beforeEach(() => {
         cy.preserveLoginCookie()
         cy.loadConfig()
@@ -177,7 +177,7 @@ describe('Missing SM (Poniatowa)', () => {
         cy.contains('Jeszcze raz')
         cy.contains('Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM')
     })
-    
+
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
