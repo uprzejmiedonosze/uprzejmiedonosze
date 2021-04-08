@@ -170,7 +170,7 @@
     ],
     "email": "ogolnomiejski@strazmiejska.lodz.pl",
     "city": "Łódź",
-    "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie.",
+    "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie. Powyższe jednak z pewnością nie obowiązuje dla Oddziału Łódź-Polesie, które wzywa z automatu na przesłuchanie do każdego zgłoszenia.",
     "api": "Mail"
   },
   "gdańsk": {
