@@ -3,8 +3,10 @@
 const statuses = require("../../api/config/statuses.json");
 
 export function setStatus(appId, status) {
+  $.mobile.loading("show", { textVisible: false });
   $.post("/api/api.html", { action: status, id: appId }).done(function () {
     _updateStatus(appId, status);
+    $.mobile.loading("hide")
   });
   ga("send", "event", {
     eventCategory: "js",
