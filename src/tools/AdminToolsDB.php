@@ -45,7 +45,7 @@ class AdminToolsDB extends NoSQLite{
 
         $apps = $this->_getAllApplicationsByEmail($email);
     
-        echo "Usuwam wszytkie zgłoszenia użytkownika '$email'\n";
+        echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
         foreach($apps as $app){
             $this->_removeApplication($app, $dryRun);
         }
