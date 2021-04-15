@@ -1955,6 +1955,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "radlin": {
+    "address": [
+      "Straż Miejska w Radlinie",
+      "ul. Mariacka 93",
+      "44-310 Radlin"
+    ],
+    "email": "stm@radlin.pl",
+    "city": "Radlin",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
