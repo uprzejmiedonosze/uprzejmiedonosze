@@ -1,0 +1,54 @@
+div.przepisy .ui-block-a {
+  float: left;
+  width: 25%;
+  padding-right: 2%;
+  max-width: 160px;
+}
+div.przepisy .ui-block-a img {
+  max-width: 100%;
+}
+div.przepisy .ui-block-b {
+  float: left;
+  width: 73%;
+}
+
+div.przepisy .ui-block-b p {
+  margin-top: 0;
+}
+
+div.przepisy ol,
+div.przepisy ul {
+  padding-inline-start: 20px;
+}
+
+div.przepisy-kategorie p i {
+  color: #666;
+}
+
+.dialog .ui-body {
+  padding: .4em 0em;
+}
+
+.ui-dialog .ui-dialog-contain {
+  max-width: 800px;
+  margin: 1em auto 1em;
+  box-shadow: none;
+  top: -2em;
+}
+
+.dialog.ui-content {
+  padding: 0;
+  border: 1em solid white;
+}
+
+div.przepisy img.sign {
+  float: right;
+  max-width: 20%;
+  padding-left: 1em;
+  padding-bottom: 0.2em;
+  clear: right;
+}
+
+div.przepisy h4 {
+  clear: both;
+}

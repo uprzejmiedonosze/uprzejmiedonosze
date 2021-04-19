@@ -19,10 +19,9 @@ EXPORT               := export
 PUBLIC               := $(EXPORT)/public
 DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/templates
 
-CSS_FILES            := $(wildcard src/css/*.css)
+CSS_FILES            := $(wildcard src/scss/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
-CSS_MINIFIED         := $(CSS_FILES:src/%.css=export/public/%.css)
-CSS_MAP_IMAGE        := $(shell base64 src/img/map-circle.png)
+CSS_MINIFIED         := $(PUBLIC)/css/index.css
 
 JS_FILES             := $(wildcard src/js/*.js src/js/*/*.js)
 JS_HASH              := $(shell cat $(JS_FILES) | md5sum | cut -b 1-8)
@@ -177,15 +176,15 @@ clean: ## Removes minified CSS and JS files.
 	@rm -f $(BRANCH_ENV)
 
 # Generics
-export/public/css/%.css: src/css/%.css; @echo '==> Minifying $< to $@'
-	@if [ "$(HOST)" = "$(PROD_HOST)" ]; then \
-		$(YUI_COMPRESSOR) $(YUI_COMPRESSOR_FLAGS) --type css $< > $@ ; \
-	elif [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
-		sed 's/#009C7F/#ff4081/g' $< > $@ ; \
-	else \
-		sed 's/#009C7F/#0088bb/g' $< > $@ ; \
+$(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
+	@$(shell npm bin)/parcel build --no-minify --no-source-maps --out-dir $(dir $@) $< ;
+	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
+		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
+			sed $(SED_OPTS) 's/#009C7F/#ff4081/g' $@ ; \
+		else \
+			sed $(SED_OPTS) 's/#009C7F/#0088bb/g' $@ ; \
+		fi; \
 	fi;
-	@sed $(SED_OPTS) 's%{{MAP_CIRCLE}}%$(CSS_MAP_IMAGE)%' $@
 
 export/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo_processing,$<)
 	@$(shell npm bin)/parcel build --target browser --public-url "/js" \

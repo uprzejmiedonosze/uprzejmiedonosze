@@ -1,0 +1,159 @@
+.ui-body-a,
+    .ui-page-theme-a .ui-body-inherit,
+    html .ui-bar-a .ui-body-inherit,
+    html .ui-body-a .ui-body-inherit,
+    html body .ui-group-theme-a .ui-body-inherit,
+    html .ui-panel-page-container-a {
+    border: none;
+    font-family: sans-serif;
+}
+
+body, a, p, i, input, textarea, select {
+    font-weight: 300;
+}
+
+strong, b {
+    font-weight: 400;
+}
+
+small {
+    font-size: 0.8em;
+}
+
+.ui-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+img.rwd {
+    width: 100%;
+    box-shadow: 0 0 10px 2px grey;
+    margin: 1em 0;
+}
+
+img.one-third {
+    width: 90%;
+    box-shadow: 5px 5px 20px grey;
+    margin: 1em;
+}
+
+.ui-page-theme-b .ui-btn,
+    html .ui-bar-b .ui-btn,
+    html .ui-body-b .ui-btn,
+    html body .ui-group-theme-b .ui-btn,
+    html head+body .ui-btn.ui-btn-b,
+    .ui-page-theme-b .ui-btn:visited,
+    html .ui-bar-b .ui-btn:visited,
+    html .ui-body-b .ui-btn:visited,
+    html body .ui-group-theme-b .ui-btn:visited,
+    html head+body .ui-btn.ui-btn-b:visited,
+    .ui-page-theme-b .ui-btn:active,
+    html .ui-bar-b .ui-btn:active,
+    html .ui-body-b .ui-btn:active,
+    html body .ui-group-theme-b .ui-btn:active,
+    html head+body .ui-btn.ui-btn-b:active,
+    .ui-header a,
+    .ui-btn.try{
+    background-color: #e9c200!important;
+    box-shadow: none!important;
+    border: none;
+    color: #333!important;
+    text-shadow: none!important;
+}
+
+.ui-btn.cta {
+    background-color: #e9c200!important;
+    text-shadow: none!important;
+    border-color: #e9c200!important;
+}
+
+.ui-page-theme-a .ui-header,
+html .ui-bar-a .ui-header,
+html .ui-body-a .ui-header,
+html body .ui-group-theme-a .ui-header {
+    background-color: #009C7F;
+    color: white;
+    text-shadow: none;
+    box-shadow: none;
+}
+
+.ui-content .ui-listview,
+.ui-panel-inner>.ui-listview{
+    margin: 0em;
+}
+
+p > a, li > a, small > a {
+    text-decoration: none;
+    color: #009C7F!important;
+    font-weight: 400!important;
+}
+
+#mainMenu > div.ui-panel-inner {
+    padding: 0;
+}
+
+#mainMenu li.close a{
+    background-color: #009C7F;
+    color: #fff!important;
+    text-decoration: none!important;
+    border-color: #009C7F;
+    text-shadow: none;
+}
+.ui-btn-active, #mainMenu a.active {
+    background-color: #009C7F!important;
+    text-shadow: none!important;
+    color: white!important;
+    border-color: #009C7F!important;
+    box-shadow: none!important;
+}
+
+.filter a {
+    color: #666!important;
+}
+
+.filter a,
+.subpage a {
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    padding-left: 2em;
+    border: 0;
+}
+
+.filter a.active {
+    color: #009C7F!important;
+}
+
+h2, h3, h4, h5 {
+    font-weight: 300;
+}
+
+h2 {
+    font-size: 2em;
+    margin: 0.5em 0 0.5em 0;
+}
+
+h3 {
+    font-size: 1.3em;
+    border-bottom: 1px solid #009C7F;
+    margin: 0.4em 0 0.2em 0;
+}
+
+h4 {
+    font-size: 1em;
+    font-weight: 600;
+}
+
+a[rel~="external"] {
+    color: #38c!important;
+}
+
+.index .ui-page .ui-content a.fb-button {
+    background-color: #4265AA;
+    color: white;
+    text-shadow: none;
+    border: none;
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,72 @@
+
+div.application-short.status-archived h3 a {
+  font-weight: 300;
+}
+div.application-short h3 a {
+  padding-right: 2.5em;
+}
+
+.appActionButtons a.ui-btn {
+  font-weight: 400;
+}
+
+div.application-short.status-archived {
+  display: none;
+}
+
+@media only screen and (min-width: 768px) {
+  div.application-short h3 a {
+      font-size: 16px;
+  }
+}
+
+div.application-short.status-all h3 a {
+  font-weight: 100;
+}
+
+
+div.application-short.status-draft h3 .ui-btn-icon-left:after,
+div.application-short .status-draft:after {
+  background-color: #7463634d;
+}
+
+div.application-short.status-ready h3 .ui-btn-icon-left:after,
+div.application-short .status-ready:after {
+  background-color: #0000004d;
+}
+
+div.application-short.status-confirmed h3 .ui-btn-icon-left:after,
+div.application-short .status-confirmed:after {
+  background-color: #81c78499;
+}
+
+div.application-short.status-confirmed h3 a {
+  font-weight: 700;
+}
+
+div.application-short.status-confirmed-waiting h3 .ui-btn-icon-left:after,
+div.application-short .status-confirmed-waiting:after,
+div.application-short.status-confirmed-waitingE h3 .ui-btn-icon-left:after,
+div.application-short .status-confirmed-waitingE:after {
+  background-color: #3388cc99;
+}
+
+div.application-short.status-confirmed-sm h3 .ui-btn-icon-left:after,
+div.application-short .status-confirmed-sm:after {
+  background-color: #ffc10799;
+}
+
+div.application-short.status-confirmed-fined h3 a.ui-btn-icon-left:after,
+div.application-short .status-confirmed-fined:after {
+  background-color: #8bc34aee;
+}
+
+div.application-short.status-confirmed-ignored h3 .ui-btn-icon-left:after,
+div.application-short .status-confirmed-ignored:after {
+  background-color: #dd2c00cc;
+}
+
+div.application-short.status-archived h3 .ui-btn-icon-left:after,
+div.application-short .status-archived:after {
+  background-color: #0000004C;
+}

@@ -1,0 +1,55 @@
+
+div.tumblr_posts {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-left: -5px;
+  margin-right: -5px;
+}
+
+div.galleryItem {
+  box-sizing: border-box;
+  position: relative;
+  margin: 5px 0;
+  flex: 0 0 100%;
+  width: 100%;
+  box-shadow: 0 0 2px rgba(0,0,0,0.2);
+  background: #fff;
+}
+
+@media (min-width: 40em) {
+  div.galleryItem {
+      margin: 5px;
+      flex: 0 0 calc((100% - 4 * 5px) / 2);
+      width: calc((100% - 4 * 5px) / 2);
+  }
+}
+
+div.dziekujemy div.galleryItem {
+  max-width: 20em;
+}
+
+div.galleryItem p {
+  padding: 0 10px;
+}
+
+div.galleryItem img {
+  width: 100%;
+  height: auto;
+}
+
+div.galleryAdmin div.galleryItem.decisiontrue {
+  opacity: 0.5;
+}
+
+div.galleryAdmin div.galleryItem.decisionfalse {
+  opacity: 0.5;
+}
+
+div.galleryItem > div.actions {
+  text-shadow: none;
+  padding: 0 10px;
+  text-align: right;
+}
