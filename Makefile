@@ -5,7 +5,7 @@ BABEL                := babel-minify
 RSYNC                := rsync
 RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/*'
 HOSTING              := nieradka.net
-CYPRESS              := ./node_modules/cypress/bin/cypress
+CYPRESS              := ./node_modules/.bin/cypress
 CYPRESS_KEY          := 8a0db00f-b36c-4530-9c82-422b0be32b5b
 
 ifeq ($(filter darwin%,${OSTYPE}),)
@@ -142,6 +142,10 @@ cypress:
 	@$(MAKE) clean
 	@$(MAKE) staging -j
 	@$(CYPRESS) run --record --key $(CYPRESS_KEY)
+
+cypress-local:
+	@echo "==> Testing local"
+	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) open --env DOCKER=1
 
 check-branch: ## Detects environment and active branch changes
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \

@@ -1,19 +1,17 @@
 import './commands'
 
 before(() => {
-    cy.initDB()
+  cy.initDB()
 })
 
 beforeEach(() => {
-    Cypress.Cookies.defaults({
-        preserve: (cookie) => {
-            return true;
-        }
-    })
-});
+  Cypress.Cookies.defaults({
+    preserve: (_cookie) => true
+  })
+})
 
 afterEach(function() {
-    if (this.currentTest.state === 'failed') {
-        Cypress.runner.stop()
-    }
-});
+  if (this.currentTest.state === 'failed') {
+    Cypress.runner.stop()
+  }
+})

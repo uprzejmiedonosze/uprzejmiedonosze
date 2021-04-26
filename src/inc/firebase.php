@@ -26,7 +26,7 @@ function verifyToken($token){
             if('%HOST%' !== 'uprzejmiedonosze.localhost'){
                 $_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
             }else{
-                $_SESSION['user_email'] = 'fake@email.com';
+                $_SESSION['user_email'] = 'e@nieradka.net';
             }
 			$_SESSION['user_name'] = $verifiedIdToken->getClaim('name');
 			$_SESSION['user_picture'] = $verifiedIdToken->getClaim('picture');

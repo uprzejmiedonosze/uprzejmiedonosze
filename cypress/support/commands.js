@@ -55,6 +55,10 @@ Cypress.Commands.add("preserveLoginCookie", () => {
 });
 
 Cypress.Commands.add("initDB", () => {
+  if (Cypress.env('DOCKER')) {
+    cy.exec('docker exec webapp cp /var/www/uprzejmiedonosze.localhost/db/store-registered-empty.sqlite /var/www/uprzejmiedonosze.localhost/db/store.sqlite')
+    return
+  }
   cy.exec('ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-registered store.sqlite"')
 })
 

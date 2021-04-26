@@ -1,10 +1,11 @@
 
 build:
-	@docker build -t webapp .
+	@PATH="${PATH}:/usr/local/bin" docker build -t webapp .
 
 run:
 	docker run --detach --rm --publish 80:80/tcp \
-		--volume $(shell pwd)/../export:/var/www/uprzejmiedonosze.localhost/webapp --name webapp webapp:latest
+		--volume $(shell pwd)/../export:/var/www/uprzejmiedonosze.localhost/webapp \
+		--name webapp webapp:latest
 
 runi:
 	@docker run --interactive --rm -it \

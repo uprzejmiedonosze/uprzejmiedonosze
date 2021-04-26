@@ -21,6 +21,8 @@ COPY cdn                 /var/www/uprzejmiedonosze.localhost/cdn
 RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn
 RUN mkdir -p             /var/www/uprzejmiedonosze.localhost/cdn2
 RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn2
+COPY sess_php            /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
+RUN chown nginx:nginx    /var/lib/php/sessions/*
 
 RUN mkdir                /var/log/uprzejmiedonosze.net
 RUN chown nginx:nginx    /var/log/uprzejmiedonosze.net
