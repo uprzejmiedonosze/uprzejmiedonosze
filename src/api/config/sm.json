@@ -1097,6 +1097,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "górzyca": {
+    "address": [
+      "Straż Miejska w Słubicach",
+      "ul. Akademicka 1",
+      "69-100 Słubice"
+    ],
+    "email": "sm@slubice.pl",
+    "city": "Górzyca",
+    "hint": null,
+    "api": "Mail"
+  },
   "ciechanów": {
     "address": [
       "Straż Miejska w Ciechanowie",
