@@ -824,11 +824,11 @@
   },
   "piastów": {
     "address": [
-      "Straż Miejska w Świętochłowicach",
+      "Komisariat Policji w Piastowie",
       "ul. Popiełuszki 24",
       "05-820 Piastów"
     ],
-    "email": "kppruszkow@poczta.fm",
+    "email": "dyzurny.kp-piastow@ksp.policja.gov.pl",
     "city": "Piastów",
     "hint": null,
     "api": "Mail"
