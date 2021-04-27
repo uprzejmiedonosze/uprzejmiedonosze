@@ -1977,6 +1977,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "siemianowice śląskie": {
+    "address": [
+      "Straż Miejska Siemianowice Śląskie",
+      "Jarosława Dąbrowskiego 13",
+      "41-100 Siemianowice Śląskie"
+    ],
+    "email": "sm@sm.siemianowice.pl",
+    "city": "Siemianowice Śląskie",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
