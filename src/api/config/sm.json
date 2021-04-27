@@ -126,7 +126,7 @@
     ],
     "email": "straz@strazmiejska.wroclaw.pl",
     "city": "Wrocław",
-    "hint": "<p><b>Otrzymujemy komunikaty, że SM Wrocław hurtowo odrzuca zgłoszenia powołując się na inne priorytety (COVID19)</b>. Zobacz więcej na <a href='https://www.facebook.com/story.php?story_fbid=2963032150452914&id=645390212217131&ref=page_internal' target=none>stronie Akcji Miasto</a>.</p><p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
+    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
     "api": "Mail"
   },
   "kraków": {
@@ -203,7 +203,7 @@
     ],
     "email": "sm@um.torun.pl",
     "city": "Toruń",
-    "hint": null,
+    "hint": "<p>SM Toruń jest wyjątkowa w skali kraju i stoi na stanowisku, że jedyny poprawny sposób dokonywania zgłoszeń to telefon 986. Wiele SM stara się zniechęcić mieszkańców do dokonywania zgłoszeń, ale zawsze przyznają, że muszą się zająć każdym zgłoszeniem.</p> <p>Musisz liczyć się, że odmówią przyjęcia zgłoszenia i być przygotowanym na batalię odwoławczą.</p>",
     "api": "Mail"
   },
   "bydgoszcz": {
