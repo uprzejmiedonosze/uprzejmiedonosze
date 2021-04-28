@@ -116,7 +116,7 @@
                     name="category" value="{{ catId }}" id="{{ catId }}"
                     data-contextImage-hint="{{ catName.contextImageHint }}" data-carImage-hint="{{ catName.carImageHint }}">
                 <label for="{{ catId }}">
-                    <img src="img/{{ catId }}.jpg">
+                    <img src="img/{{ catId }}.jpg?fresh">
                     <p>{{ catName.title|raw }}
                         {% if catName.price %}<span class="price-list">Mandat: {{ catName.price }}</span>{% endif %}
                     </p>
