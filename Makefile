@@ -56,9 +56,9 @@ HTTPS                := https
 
 BRANCH_ENV           := .branch-env
 GIT_BRANCH           := $(shell git rev-parse --abbrev-ref HEAD)
-GIT_DATE             := $(shell git log -1 --date=format:"%Y-%m-%d" --format="%ad")
+DATE                 := $(shell date '+%Y-%m-%d')
 LAST_RUN              = $(shell test -s $(BRANCH_ENV) && cat $(BRANCH_ENV) || echo "clean")
-TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(GIT_DATE))
+TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(DATE))
 
 .DEFAULT_GOAL        := help
 
