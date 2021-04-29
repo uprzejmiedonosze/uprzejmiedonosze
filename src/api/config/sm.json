@@ -1988,6 +1988,29 @@
     "hint": null,
     "api": "Mail"
   },
+  "kołbaskowo": {
+    "address": [
+      "Straż Gminna w Kołbaskowie",
+      "Rosówek nr 16",
+      "72-001 Kołbaskowo"
+    ],
+    "email": "straz.gminna@kolbaskowo.pl",
+    "city": "Kołbaskowo",
+    "hint": null,
+    "api": "Mail"
+  },
+  "rosówek": {
+    "address": [
+      "Straż Gminna w Kołbaskowie",
+      "Rosówek nr 16",
+      "72-001 Kołbaskowo"
+    ],
+    "email": "straz.gminna@kolbaskowo.pl",
+    "city": "Rosówek",
+    "hint": null,
+    "api": "Mail"
+  },
+
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
