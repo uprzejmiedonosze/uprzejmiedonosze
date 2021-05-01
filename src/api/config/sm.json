@@ -2021,6 +2021,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "puławy": {
+    "address": [
+      "Straż Miejska Puławy",
+      "ul. Lubelska 5",
+      "24-100 Puławy"
+    ],
+    "email": "straz.miejska@um.pulawy.pl",
+    "city": "Puławy",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
