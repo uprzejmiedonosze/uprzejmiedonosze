@@ -2032,6 +2032,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "nałęczów": {
+    "address": [
+      "Straż Miejska Nałęczów",
+      "al. Lipowa 3",
+      "24-150 Nałęczów"
+    ],
+    "email": "sm@naleczow.pl",
+    "city": "Nałęczów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
