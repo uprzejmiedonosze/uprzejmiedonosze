@@ -17,7 +17,7 @@
 \vspace{\stretch{2}}
 \begin{center}
 {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} }{% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj,
-że to zgłoszenie zostało wysłane do SM {{ app.guessSMData.city }} poprzez API. Odpowiedź SM to {{ app.sentViaAPI }}.{% endif %}} }
+że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }}.{% endif %}} }
 \end{center}
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}

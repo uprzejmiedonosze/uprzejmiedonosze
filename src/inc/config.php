@@ -23,6 +23,11 @@ $st = fopen(STATUSES_CONFIG, "r") or die("Unable to open config file: " . STATUS
 $STATUSES = (array) new ConfigClass(fread($st, filesize(STATUSES_CONFIG)), 'Status');
 fclose($st);
 
+const SA_CONFIG = __DIR__ . '/../public/api/config/stop-agresji.json';
+$stopAgresji = fopen(SA_CONFIG, "r") or die("Unable to open config file: " . SA_CONFIG);
+$STOP_AGRESJI = (array) new ConfigClass(fread($stopAgresji, filesize(SA_CONFIG)), 'StopAgresji');
+fclose($stopAgresji);
+
 const CATEGORIES_MATRIX = Array('a', 'b');
 
 require_once(__DIR__ . '/../config.php');

@@ -16,6 +16,7 @@ if(!isset($application->number)){ // new application
     $user = $storage->getCurrentUser();
     $user->addApplication($application);
     $application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
+    $application->stopAgresji = $application->stopAgresji();
     $storage->saveUser($user);
     $edited = false;
 }else{

@@ -8,34 +8,55 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-<p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres email oraz adres korespondencyjny.
-    Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
+
+
 <form action="/register-ok.html?next={{ config.signInSuccessUrl ?? 'start.html' }}" id="register-form" method="post" data-ajax="false">
-    <label for="name">Podaj imię i nazwisko, które posłuży SM do identyfikacji autora zgłoszenia</label>
+    <h3>Dane konta</h3>
+    <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres email oraz adres korespondencyjny.
+        Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
+
+    <label for="name">Imię i nazwisko, które posłuży SM do identyfikacji autora zgłoszenia</label>
     <input type="text" required maxlength="30" id="name" name="name"
         placeholder="(twoje imię i nazwisko)"
-        data-inline="true" value="{{ user.data.name }}">
+        data-inline="true" value="{{ user.data.name }}" />
+
     <label for="email">Email został pobrany automatycznie w trakcie logowania</label>
     <input disabled type="email" required maxlength="30" id="email" name="email"
         placeholder="(twój email)"
-        data-inline="true" value="{{ user.data.email }}">
-    <label for="name">Podaj (opcjonalnie) numer kontaktowy</label>
-    <input type="tel" maxlength="11" id="msisdn" name="msisdn"
-        placeholder="(twój numer telefonu [opcjonalnie])"
-        data-inline="true" value="{{ user.data.msisdn ?? '' }}">
-    <label for="name">Podaj adres zamieszkania (wymagany)</label>
+        data-inline="true" value="{{ user.data.email }}" />
+
+    <label for="name">Adres zamieszkania (wymagany)</label>
     <input type="text" maxlength="70" required id="address" name="address"
         placeholder="(twój adres korespondencyjny [wymagany])"
         autocomplete="off"
-        data-inline="true" value="{{ user.data.address ?? '' }}">
-    <label for="exposeData">Chcę dołączać do zgłoszenia prośbę o niezamieszczanie
-        w protokole danych dotyczących mojego miejsca zamieszkania:</label>
-    <input type="checkbox" data-role="flipswitch" name="exposeData" id="exposeData"
-        {% if not user.canExposeData %}
-            checked
-        {% endif %}
-        data-on-text="tak" data-off-text="nie" data-wrapper-class="custom-size-flipswitch">
+        data-inline="true" value="{{ user.data.address ?? '' }}" />
 
+    <label for="name">Numer kontaktowy (opcjonalny)</label>
+    <input type="tel" maxlength="11" id="msisdn" name="msisdn"
+        placeholder="(twój numer telefonu [opcjonalnie])"
+        data-inline="true" value="{{ user.data.msisdn ?? '' }}" />
+
+    <h3>Ustawienia</h3>
+    <fieldset data-role="controlgroup">
+        <legend for="exposeData">Czy chcesz dołączać do zgłoszenia prośbę o niezamieszczanie
+        w protokole danych dotyczących swojego miejsca zamieszkania?</legend>
+        <input type="radio" name="exposeData" id="exposeData-N" value="N" {% if not user.canExposeData %}checked="checked"{% endif %}>
+        <label for="exposeData-N">Tak, chcę utrudnić sprawcy wykroczenia poznanie mojego adresu (domyślnie)</label>
+
+        <input type="radio" name="exposeData" id="exposeData-Y" value="Y" {% if user.canExposeData %}checked="checked"{% endif %}>
+        <label for="exposeData-Y">Nie, mój adres i tak łatwo znaleźć w sieci</label>
+    </fieldset>
+
+    {% if config.isRegistered == true %}
+    <fieldset data-role="controlgroup">
+        <legend for="stopAgresji">Chcę wysyłać swoje zgłoszenia</legend>
+        <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SN" {% if not user.stopAgresji %}checked="checked"{% endif %}>
+        <label for="stopAgresji-SM">do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)</label>
+
+        <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
+        <label for="stopAgresji-SA">na komendę Policji właściwą dla województwa zgłoszenia (eksperymentalnie)</label>
+    </fieldset>
+    {% endif %}
 </form>
 
 {% if config.isRegistered == false %}

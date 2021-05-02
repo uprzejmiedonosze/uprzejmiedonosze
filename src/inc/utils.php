@@ -1,5 +1,9 @@
 <?PHP
 require_once(__DIR__ . '/config.php');
+use \Exception;
+use \Twig\Loader\FilesystemLoader as FilesystemLoader;
+use \Twig\Environment as Environment;
+
 
 function trimstr2upper($in) {
     return trim(mb_strtoupper($in, 'UTF-8'));
@@ -9,6 +13,9 @@ function trimstr2lower($in) {
     return trim(mb_strtolower($in, 'UTF-8'));
 }
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 function exception_handler($exception) {
     try{
         $email = getCurrentUserEmail();
@@ -25,8 +32,8 @@ function exception_handler($exception) {
 
     _sendSlackError($msg);
 
-    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
-    $twig = new \Twig\Environment($loader,
+    $loader = new FilesystemLoader(__DIR__ . '/../templates');
+    $twig = new Environment($loader,
     [
         'debug' => false,
         'strict_variables' => false
@@ -51,6 +58,9 @@ function exception_handler($exception) {
 
 set_exception_handler('exception_handler');
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 function logger($msg, $force = null){
     $user = '';
     if(!empty($_SESSION['user_email'])){
@@ -64,6 +74,9 @@ function logger($msg, $force = null){
     return $time;
 }
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 function getCurrentUserEmail(){
     if(!empty($_SESSION['user_email'])){
         return $_SESSION['user_email'];
@@ -77,6 +90,9 @@ function checkIfLogged(){
     }
 }
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 function getRequestUri(){
     return preg_replace('/^\/*/', '', $_SERVER['REQUEST_URI']);
 }
@@ -133,6 +149,9 @@ function guess_sex_by_name($name){
     return 'f';
 }
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 function guess_sex_current_user(){
     return SEXSTRINGS[guess_sex_by_name($_SESSION['user_name'])];
 }
@@ -159,6 +178,9 @@ function capitalizeName($input){
     return trim(mb_convert_case($input, MB_CASE_TITLE, 'UTF-8'));
 }
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 function isIOS(){
     $iPod    = (bool)stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
     $iPhone  = (bool)stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
@@ -198,6 +220,7 @@ function _sendSlackOnRegister($user){
 
 /**
  * Sends formatted message to Slack.
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 function _sendSlackOnNewApp($app){
     $title = "Wysyłka zgłoszenia {$app->number} ({$app->address->city})";

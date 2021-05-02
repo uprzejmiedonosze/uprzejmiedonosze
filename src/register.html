@@ -14,8 +14,8 @@ echo generate('register.html.twig',
     [
         'head' =>
         [
-            'title' => "Zarejestruj się",
-            'shortTitle' => "Zarejestruj się",
+            'title' => $user->isRegistered() ? "Zaktualizuj konto" : "Zarejestruj się",
+            'shortTitle' => $user->isRegistered() ? "Zaktualizuj konto" : "Zarejestruj się",
             'mainClass' => 'register'
         ],
         'config' =>

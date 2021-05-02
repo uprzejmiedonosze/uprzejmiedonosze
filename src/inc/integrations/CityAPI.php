@@ -1,4 +1,5 @@
 <?php
+use \Exception;
 
 abstract class CityAPI {
     abstract function send(&$application);

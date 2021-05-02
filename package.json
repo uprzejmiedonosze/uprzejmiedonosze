@@ -1,15 +1,15 @@
 {
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.11.2",
+    "@googlemaps/js-api-loader": "^1.11.4",
     "blueimp-load-image": "^5.14.0",
     "exif-js": "^2.3.0",
     "highcharts": "^9.0.1",
-    "lazysizes": "^5.3.0",
+    "lazysizes": "^5.3.2",
     "location-picker": "^1.1.1",
     "luxon": "^1.26.0"
   },
   "devDependencies": {
-    "cypress": "^7.1.0",
+    "cypress": "^7.2.0",
     "eslint": "^7.25.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.0",
@@ -18,7 +18,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "parcel-bundler": "^1.12.3",
     "parcel-plugin-css-url-loader": "^1.0.5",
-    "sass": "^1.32.11"
+    "sass": "^1.32.12"
   },
   "name": "webapp"
 }

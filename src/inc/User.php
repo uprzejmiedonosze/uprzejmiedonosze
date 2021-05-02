@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/utils.php');
 require_once(__DIR__ . '/JSONObject.php');
+use \stdClass;
 
 /**
  * User class.
@@ -10,6 +11,8 @@ class User extends JSONObject{
 
     /**
      * Creates a new User or initiate it from JSON.
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __construct($json = null) {
         if($json){
@@ -23,6 +26,7 @@ class User extends JSONObject{
         $this->data->email = $_SESSION['user_email'];
         $this->data->name  = capitalizeName($_SESSION['user_name']);
         $this->data->exposeData = false;
+        $this->data->stopAgresji = false;
         $this->applications = Array();
     }
 
@@ -45,6 +49,10 @@ class User extends JSONObject{
         array_push($this->applications, $application->id);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @SuppressWarnings(PHPMD.IfStatementAssignment)
+     */
     public function getLastLocation(){
         if(isset($this->lastLocation) && $this->lastLocation != 'NaN,NaN'){
             return $this->lastLocation;
@@ -63,6 +71,9 @@ class User extends JSONObject{
         return $this->lastLocation;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
     private function guessLatLng(){
         if(!isset($this->data->address)){
             return null;
@@ -121,14 +132,14 @@ class User extends JSONObject{
     /**
      * Updates current user's data.
      */
-    function updateUserData($name, $msisdn, $address, $exposeData){ // , $idnumber){
+    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji){
         if(isset($this->added)){
             $this->updated = date(DT_FORMAT);
         }
         $this->data->name = $name;
         $this->data->sex = guess_sex_by_name($this->data->name);
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
-        //if(isset($idnumber)) $this->data->idnumber = $idnumber;
+        if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
         $this->data->address = $address;
         $this->data->exposeData = $exposeData;
         return true;
@@ -164,6 +175,13 @@ class User extends JSONObject{
     public function canExposeData(){
         if(isset($this->data->exposeData)){
             return $this->data->exposeData;
+        }
+        return false;
+    }
+
+    public function stopAgresji() {
+        if(isset($this->data->stopAgresji)){
+            return $this->data->stopAgresji;
         }
         return false;
     }

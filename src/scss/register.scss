@@ -1,0 +1,12 @@
+.register {
+  .ui-controlgroup-controls, .ui-input-text {
+    margin: 0 1em;
+  }
+  .ui-radio label {
+    font-weight: normal;
+  }
+
+  .ui-input-text + h3 {
+    margin-top: 1.5em;
+  }
+}

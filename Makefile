@@ -262,7 +262,6 @@ $(EXPORT)/%: ; @echo "==> Creating $@"
 update-libs: ; @echo 'Updating PHP and JS libraries'
 	@composer update
 	@npm update && npm install
-	@cp -f node_modules/blueimp-load-image/js/*js src/js/
 
 $(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.xml'
 	
@@ -306,7 +305,8 @@ define replace-inline
 endef
 
 define lint
-@! php -l $< | grep -v "No syntax errors detected"
+@set -o pipefail && php -l $< | grep -v "^$$" | grep -v "^Warning" | grep -v "No syntax errors detected" || true
+@./vendor/phpmd/phpmd/src/bin/phpmd $< text cleancode,codesize,controversial,design,naming,unusedcode || true
 endef
 
 define lint-twig

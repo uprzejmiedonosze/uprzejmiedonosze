@@ -27,7 +27,7 @@ class SM extends JSONObject{
     }
 
     public function getCity(){
-        return $this->city;
+        return "SM " . $this->city;
     }
 
     public function getHint(){

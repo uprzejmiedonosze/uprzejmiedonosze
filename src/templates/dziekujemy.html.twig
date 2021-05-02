@@ -25,7 +25,7 @@
 {% if sm.automated %}
 <div class="whatNext">
     <h4>Co dalej?</h4>
-        <p><b>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do {{ sm.getName }}</b>.
+        <p>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do <b>{{ sm.getName }}</b>.
     {% if sm.hasAPI %}
         Na szczęście w twoim mieście SM udostępniła mechanizm, umożliwiający automatyczne przekazanie
         zgłoszenia. Naciśnij przycisk <b>"Wyślij teraz!"</b> w prawym górnym rogu.</p>
@@ -34,7 +34,10 @@
         {{ app.guessSMData.getName }} otrzyma wiadomość a Ty dostaniesz jej kopię.
         Naciśnij przycisk <b>"Wyślij teraz!"</b> w prawym górnym rogu.</p>
     {% endif %}
-    <p>{{ sm.hint | raw }}</p>
+    {% if sm.hint %}
+    <h4>Uwagi do współpracy z {{ sm.getName }}</h4>
+        <p>{{ sm.hint | raw }}</p>
+    {% endif %}
 </div>
 <div class="whatNextDone" style="display: none;">
     <h4>Dziękujemy za wysłanie zgłoszenia</h4>

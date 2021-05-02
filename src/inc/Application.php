@@ -2,6 +2,9 @@
 
 require_once(__DIR__ . '/utils.php');
 require_once(__DIR__ . '/JSONObject.php');
+use \Datetime;
+use \Exception;
+use \JSONObject;
 
 /**
  * Application class.
@@ -9,6 +12,7 @@ require_once(__DIR__ . '/JSONObject.php');
 class Application extends JSONObject{
     /**
      * Creates new Application of initites it from JSON.
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function __construct($json = null) {
         if($json){
@@ -54,11 +58,11 @@ class Application extends JSONObject{
      */
     public function getMonthYear(){
         $date = new DateTime($this->date);
-        $MONTHS = [
+        $months = [
             'styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec',
             'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'
         ];
-        return $MONTHS[intval($date->format('m')) - 1] . ' '. $date->format('Y');
+        return $months[intval($date->format('m')) - 1] . ' '. $date->format('Y');
     }
 
     /**
@@ -100,6 +104,7 @@ class Application extends JSONObject{
 
     /**
      * Set status (and store statuses history changes)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function setStatus($status){
         global $STATUSES;
@@ -129,6 +134,7 @@ class Application extends JSONObject{
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId
      * value in the application.
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function shouldIncludePlateImage(){
         if(!isset($this->carInfo)){
@@ -144,23 +150,41 @@ class Application extends JSONObject{
         return false;
     }
 
+    public function stopAgresji() {
+        if(isset($this->user->stopAgresji)){
+            return $this->user->stopAgresji;
+        }
+        return false;
+    }
+
     /**
-     * Zwraca najlepiej pasująca dla adresu zgłoszenia SM.
+     * Zwraca najlepiej pasująca dla adresu zgłoszenia SM/SA.
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function guessSMData($update = null){
         global $SM_ADDRESSES;
-        if(!$update && isset($this->smCity)){
+        if(!$update && isset($this->smCity) && !$this->stopAgresji()){
             if($this->smCity !== '_nieznane'){
                 return $SM_ADDRESSES[$this->smCity];
             }
         }
+        if($this->stopAgresji()){
+            return $this->__guessSA();
+        }
+        return $this->__guessSM();
+    }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    private function __guessSM(){ // straż miejska
+        global $SM_ADDRESSES;
         $city = trimstr2lower($this->address->city);
         if($city == 'krosno' && trimstr2lower(@$this->address->voivodeship) == 'wielkopolskie'){
-            $city = 'krosno-wlkp';
-            // tak, są dwa miasta o nazwie 'Krosno'...
+            $city = 'krosno-wlkp'; // tak, są dwa miasta o nazwie 'Krosno'...
         }
-
         if(array_key_exists($city, $SM_ADDRESSES)){
             $this->smCity = $city;
             if($city == 'warszawa' && isset($this->address->district)){
@@ -170,8 +194,23 @@ class Application extends JSONObject{
             }
             return $SM_ADDRESSES[$this->smCity];
         }
-
         return $SM_ADDRESSES['_nieznane'];
+    }
+
+    /** 
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    private function __guessSA(){ // stop agresji
+        global $STOP_AGRESJI;
+
+        $voivodeship = trimstr2lower(@$this->address->voivodeship);
+        if(array_key_exists($voivodeship, $STOP_AGRESJI)){
+            $this->smCity = $voivodeship;
+            return $STOP_AGRESJI[$voivodeship];
+        }
+        return $STOP_AGRESJI['default'];
     }
 
     public function hasAPI(){
@@ -200,11 +239,17 @@ class Application extends JSONObject{
         return SEXSTRINGS[$this->user->sex];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     public function getCategory(){
         global $CATEGORIES;
         return $CATEGORIES[$this->category];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     public function getStatus(){
         global $STATUSES;
         return $STATUSES[$this->status];
@@ -258,6 +303,7 @@ class Application extends JSONObject{
     /**
      * Zwraca adres do pliku z mapą lokalizacji zgłoszenia. W razie potrzeby
      * najpierw pobiera ten obrazek z API Google.
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function getMapImage(){
         if(!isset($this->address) || !isset($this->address->latlng)){
@@ -356,15 +402,24 @@ class Application extends JSONObject{
         return ((bool) $this->statements) && ((bool)$this->statements->gallery);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     public function isEditable(){
         global $STATUSES;
         return $STATUSES[$this->status]->editable;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
     public function hideNameInPdf() {
         return (bool)@$this->statements->hideNameInPdf;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
     public function getRevision() {
         return @count($this->statusHistory);
     }

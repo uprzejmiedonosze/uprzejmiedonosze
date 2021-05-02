@@ -1,4 +1,8 @@
 <?php
+use \JSONObject;
+use \Swift_SmtpTransport;
+use \Swift_Message;
+use \Swift_Mailer;
 
 class Mail extends CityAPI {
     function send(&$application){

@@ -11,8 +11,8 @@ if(isset($_GET['next'])){
 $post = $_POST;
 $name = capitalizeName($post["name"]);
 $msisdn = trim($post["msisdn"]);
-//$idnumber = strtoupper(trim($post["idnumber"]));
-$exposeData = !isset($post['exposeData']);
+$exposeData = isset($post['exposeData']) && $post['exposeData'] == 'Y';
+$stopAgresji = isset($post['stopAgresji']) && $post['stopAgresji'] == 'SA';
 
 $address = str_replace(', Polska', '', trim($post["address"]));
 
@@ -22,7 +22,7 @@ try{
     $user = new User();
 }
 
-$user->updateUserData($name, $msisdn, $address, $exposeData); //, $idnumber);
+$user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji);
 $storage->saveUser($user);
 
 _sendSlackOnRegister($user);

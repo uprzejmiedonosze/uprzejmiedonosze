@@ -3,6 +3,11 @@ require(__DIR__ . '/NoSQLite.php');
 require(__DIR__ . '/User.php');
 require(__DIR__ . '/Application.php');
 
+/**
+ * @SuppressWarnings(PHPMD.ErrorControlOperator)
+ * @SuppressWarnings(PHPMD.MissingImport)
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ */
 class DB extends NoSQLite{
     private $users;
     private $apps;

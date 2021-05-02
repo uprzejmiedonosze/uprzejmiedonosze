@@ -13,7 +13,7 @@
 <h2>Jeszcze chwila!</h2>
 <p>Sprawdź dane przed zapisaniem zgłoszenia.
     {% if not general.hasApps %}<b>{% endif %}
-    Nie obawiaj się – na tym etapie <b>nic nie zostanie wysłane</b> do Straży Miejskiej.
+    Nie obawiaj się – na tym etapie nic nie zostanie wysłane do <b>{{ app.guessSMData.getName }}</b>.
     {% if not general.hasApps %}</b>{% endif %}</p>
 
 {% include('_application.html.twig') %}
