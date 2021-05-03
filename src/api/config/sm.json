@@ -2043,6 +2043,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "opatów": {
+    "address": [
+      "Straż Miejska Opatów",
+      "pl. Obrońców Pokoju 34",
+      "27-500 Opatów"
+    ],
+    "email": "sm@umopatow.pl",
+    "city": "Opatów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
