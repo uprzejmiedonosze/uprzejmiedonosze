@@ -34,6 +34,10 @@ class Application extends JSONObject{
         $this->category = 0;
         $this->initStatements();
         $this->version = '1.0.2';
+
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $this->browser = get_browser($user_agent, true);
+        $this->browser['user_agent'] = $user_agent;
     }
 
     public function initStatements(){
