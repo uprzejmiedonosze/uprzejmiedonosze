@@ -2054,6 +2054,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "plewiska": {
+    "address": [
+      "Straż Gminna Komorniki",
+      "ul. Młyńska 15",
+      "62-052 Komorniki"
+    ],
+    "email": "strazgminna@komorniki.pl",
+    "city": "Plewiska",
+    "hint": null,
+    "api": "Mail"
+  },
+  "komorniki": {
+    "address": [
+      "Straż Gminna Komorniki",
+      "ul. Młyńska 15",
+      "62-052 Komorniki"
+    ],
+    "email": "strazgminna@komorniki.pl",
+    "city": "Komorniki",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
