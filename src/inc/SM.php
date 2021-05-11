@@ -4,6 +4,7 @@ require_once(__DIR__ . '/JSONObject.php');
 
 /**
  * Straz Miejska class LOL.
+ * @SuppressWarnings(PHPMD.ShortClassName)
  */
 class SM extends JSONObject{
     /**
@@ -11,7 +12,7 @@ class SM extends JSONObject{
      */
     public function __construct($json = null) {
         parent::__construct($json);
-        @$this->address = get_object_vars($this->address);
+        $this->address = get_object_vars($this->address);
     }
 
     public function getAddress(){

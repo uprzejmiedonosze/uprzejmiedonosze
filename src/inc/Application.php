@@ -2,17 +2,20 @@
 
 require_once(__DIR__ . '/utils.php');
 require_once(__DIR__ . '/JSONObject.php');
-use \Datetime;
-use \Exception;
-use \JSONObject;
+use \Datetime as Datetime;
+use \Exception as Exception;
+use \JSONObject as JSONObject;
 
 /**
  * Application class.
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Application extends JSONObject{
     /**
      * Creates new Application of initites it from JSON.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __construct($json = null) {
         if($json){
@@ -35,9 +38,9 @@ class Application extends JSONObject{
         $this->initStatements();
         $this->version = '1.0.2';
 
-        $user_agent = $_SERVER['HTTP_USER_AGENT'];
-        $this->browser = get_browser($user_agent, true);
-        $this->browser['user_agent'] = $user_agent;
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $this->browser = get_browser($userAgent, true);
+        $this->browser['user_agent'] = $userAgent;
     }
 
     public function initStatements(){
@@ -308,6 +311,8 @@ class Application extends JSONObject{
      * Zwraca adres do pliku z mapą lokalizacji zgłoszenia. W razie potrzeby
      * najpierw pobiera ten obrazek z API Google.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getMapImage(){
         if(!isset($this->address) || !isset($this->address->latlng)){

@@ -1,5 +1,9 @@
 <?PHP
 require_once(__DIR__ . '/include.php');
+use \Exception as Exception;
+use \Twig\Cache\FilesystemCache as FilesystemCache;
+use \Twig\Environment as Environment;
+use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 
 const ROOT = '/var/www/%HOST%/';
 
@@ -35,6 +39,9 @@ function application2PDF(&$application){
     return [$pdf, $filename];
 }
 
+/**
+ * * @SuppressWarnings(ElseExpression)
+ */
 function readyApps2PDF($city){
     global $storage;
 
@@ -62,32 +69,36 @@ function readyApps2PDF($city){
     return [$pdf, $filename];
 }
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+ * @SuppressWarnings(PHPMD.ErrorControlOperator)
+ */
 function tex2pdf($application, $destFile, $type) {
-    if(($f = tempnam(sys_get_temp_dir(), 'tex-')) === false) {
+    $file = tempnam(sys_get_temp_dir(), 'tex-');
+    if($file === false) {
         throw new Exception("Failed to create temporary file");
     }
 
-    $tex_f = "$f.tex";
-    $aux_f = "$f.aux";
-    $out_f = "$f.out";
-    $log_f = "$f.log";
-    $pdf_f = "$f.pdf";
+    $tex_f = "$file.tex";
+    $aux_f = "$file.aux";
+    $out_f = "$file.out";
+    $log_f = "$file.log";
+    $pdf_f = "$file.pdf";
 
-    $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
-    $twig = new \Twig\Environment($loader,
+    $loader = new FilesystemLoader(__DIR__ . '/../templates');
+    $twig = new Environment($loader,
     [
         'debug' => !isProd(),
-        'cache' => new \Twig\Cache\FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', \Twig\Cache\FilesystemCache::FORCE_BYTECODE_INVALIDATION),
+        'cache' => new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', FilesystemCache::FORCE_BYTECODE_INVALIDATION),
         'strict_variables' => true,
         'auto_reload' => true
     ]);
 
     $texFile = 'application.tex.twig';
     if($type == 'readyApps'){
+        $texFile = 'readyApps.tex.twig';
         if(sizeof($application) == 0){
             $texFile = 'readyApps-error.tex.twig';
-        }else{
-            $texFile = 'readyApps.tex.twig';
         }
     }
 
@@ -115,11 +126,11 @@ function tex2pdf($application, $destFile, $type) {
     @unlink($out_f);
 
     if(!file_exists($pdf_f)) {
-        @unlink($f);
+        @unlink($file);
         throw new Exception("Output was not generated and latex returned: $ret.");
     }
     
     rename($pdf_f, $destFile);
-    @unlink($f);
+    @unlink($file);
 }
 ?>

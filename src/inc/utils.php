@@ -1,14 +1,20 @@
 <?PHP
 require_once(__DIR__ . '/config.php');
-use \Exception;
+use \Exception as Exception;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 use \Twig\Environment as Environment;
 
 
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
 function trimstr2upper($in) {
     return trim(mb_strtoupper($in, 'UTF-8'));
 }
 
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
 function trimstr2lower($in) {
     return trim(mb_strtolower($in, 'UTF-8'));
 }
@@ -124,7 +130,7 @@ function genSafeId(){
 }
 
 /** @SuppressWarnings("exit") */
-function raiseError($msg, $status, $notify = true){
+function raiseError($msg, $status, $notify = null){
     logger("raiseError $msg with $status", $notify);
     $error = Array(
         "code" => $status,
@@ -200,6 +206,8 @@ function redirect($destPath){
 
 /** 
  * Sends message to #updates slack channel at uprzejmiedonosze.slack.com
+ * @SuppressWarnings(PHPMD.ErrorControlOperator)
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 function _sendSlackOnRegister($user){
     $title = "Nowa rejestracja {$user->data->name}";
@@ -221,6 +229,7 @@ function _sendSlackOnRegister($user){
 /**
  * Sends formatted message to Slack.
  * @SuppressWarnings(PHPMD.Superglobals)
+ * @SuppressWarnings(PHPMD.ErrorControlOperator)
  */
 function _sendSlackOnNewApp($app){
     $title = "Wysyłka zgłoszenia {$app->number} ({$app->address->city})";

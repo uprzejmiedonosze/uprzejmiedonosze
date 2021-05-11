@@ -305,8 +305,8 @@ define replace-inline
 endef
 
 define lint
-@set -o pipefail && php -l $< | grep -v "^$$" | grep -v "^Warning" | grep -v "No syntax errors detected" || true
-@./vendor/phpmd/phpmd/src/bin/phpmd $< text cleancode,codesize,controversial,design,naming,unusedcode || true
+@set -o pipefail && php -l $< | grep -v "^$$" | ( grep -v "No syntax errors detected" || true )
+@./vendor/phpmd/phpmd/src/bin/phpmd $< text cleancode,codesize,controversial,design,naming,unusedcode --ignore-errors-on-exit
 endef
 
 define lint-twig

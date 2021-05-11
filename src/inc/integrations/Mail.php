@@ -1,10 +1,15 @@
 <?php
-use \JSONObject;
-use \Swift_SmtpTransport;
-use \Swift_Message;
-use \Swift_Mailer;
+use \JSONObject as JSONObject;
+use \Swift_SmtpTransport as SmtpTransport;
+use \Swift_Message as Message;
+use \Swift_Mailer as Mailer;
+use \Swift_Attachment as Attachment;
 
 class Mail extends CityAPI {
+
+    /**
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
     function send(&$application){
         parent::checkApplication($application);
         global $storage;
@@ -14,21 +19,21 @@ class Mail extends CityAPI {
             $to = $application->guessSMData()->email;
         }
         
-        $transport = (new Swift_SmtpTransport(SMTP_HOST, SMTP_PORT, SMTP_SSL))
+        $transport = (new SmtpTransport(SMTP_HOST, SMTP_PORT, SMTP_SSL))
           ->setUsername(SMTP_USER)
           ->setPassword(SMTP_PASS);
 
-        $mailer = new Swift_Mailer($transport);
+        $mailer = new Mailer($transport);
         
         $subject = $application->getEmailSubject();
-        $message = (new Swift_Message($subject))
-          ->setFrom(EMAIL_SENDER, $application->user->name)
-          ->setTo($to)
-          ->addCc($application->user->email, $application->user->name)
-          ->setBody(parent::formatEmail($application, true))
-          ->setSender($application->user->email)
-          ->setReplyTo($application->user->email, $application->user->name)
-          ->setReturnPath($application->user->email);
+        $message = (new Message($subject))
+            ->setFrom(EMAIL_SENDER, $application->user->name)
+            ->setTo($to)
+            ->addCc($application->user->email, $application->user->name)
+            ->setBody(parent::formatEmail($application, true))
+            ->setSender($application->user->email)
+            ->setReplyTo($application->user->email, $application->user->name)
+            ->setReturnPath($application->user->email);
         $message->getHeaders()->addTextHeader("X-UD-AppId", $application->id);
         $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
@@ -49,12 +54,12 @@ class Mail extends CityAPI {
         require(__DIR__ . '/../PDFGenerator.php');
         [$fileatt, $fileattname] = application2PDF($application);
 
-        $message->attach(Swift_Attachment::fromPath($fileatt)
-          ->setFilename($fileattname));
+        $message->attach(Attachment::fromPath($fileatt)
+            ->setFilename($fileattname));
 
         $result = $mailer->send($message);
         if(!$result){
-          raiseError($result, 500, true);
+            raiseError($result, 500, true);
         }
 
         global $storage;

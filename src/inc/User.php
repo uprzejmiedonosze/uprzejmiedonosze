@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . '/utils.php');
 require_once(__DIR__ . '/JSONObject.php');
-use \stdClass;
+use \stdClass as stdClass;
 
 /**
  * User class.
@@ -52,6 +52,7 @@ class User extends JSONObject{
     /**
      * @SuppressWarnings(PHPMD.ElseExpression)
      * @SuppressWarnings(PHPMD.IfStatementAssignment)
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function getLastLocation(){
         if(isset($this->lastLocation) && $this->lastLocation != 'NaN,NaN'){
@@ -73,6 +74,7 @@ class User extends JSONObject{
 
     /**
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     private function guessLatLng(){
         if(!isset($this->data->address)){

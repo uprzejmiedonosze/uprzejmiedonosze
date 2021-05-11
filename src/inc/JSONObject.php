@@ -16,6 +16,7 @@ class JSONObject {
 
     /**
      * Initiate the object based on provided data.
+     * @SuppressWarnings(PHPMD.MissingImport)
      */
     public function set($data) {
         foreach ($data as $key => $value) {

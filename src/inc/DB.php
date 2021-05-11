@@ -3,10 +3,15 @@ require(__DIR__ . '/NoSQLite.php');
 require(__DIR__ . '/User.php');
 require(__DIR__ . '/Application.php');
 
+use \Memcache as Memcache;
+
 /**
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  * @SuppressWarnings(PHPMD.MissingImport)
  * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ShortClassName)
  */
 class DB extends NoSQLite{
     private $users;
@@ -95,6 +100,9 @@ class DB extends NoSQLite{
         $this->apps->set($application->id, json_encode($application));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function countApplicationsPerPlate($plateId){
         $plateId = SQLite3::escapeString($plateId);
 
@@ -109,6 +117,7 @@ SQL;
 
     /**
      * Returns application stats (count per status) for current user.
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function countApplicationsStatuses(){
         $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
@@ -123,6 +132,7 @@ SQL;
 
     /**
      * Calculates stats for current user;
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function getUserStats($useCache = true){
 

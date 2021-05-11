@@ -2,8 +2,12 @@
 
 require(__DIR__ . '/Store.php');
 
+use \PDO as PDO;
+use \Store as Store;
+
 /**
  * Simple key => value store based on SQLite3
+ * @SuppressWarnings(PHPMD.ShortVariable)
  */
 class NoSQLite
 {
@@ -17,7 +21,7 @@ class NoSQLite
      */
     public function __construct($filename)
     {
-        $this->db = new \PDO('sqlite:' . $filename);
+        $this->db = new PDO('sqlite:' . $filename);
         $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 

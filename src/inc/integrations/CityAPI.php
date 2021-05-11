@@ -1,5 +1,5 @@
 <?php
-use \Exception;
+use \Exception as Exception;
 
 abstract class CityAPI {
     abstract function send(&$application);
@@ -21,13 +21,16 @@ abstract class CityAPI {
         ]), 0, $limit);
     }
 
-    function formatEmail(&$application, $withUserData = true){
+    function formatEmail(&$application, $withUserData = null){
         return generate('_application.email.twig', [
             'app' => $application, 
             'config' => [ 'isAppOwnerOrAdmin' => $withUserData ]
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     function curlShellSend($url, &$data, &$application){
         $root = realpath('/var/www/%HOST%/');
         $contextImage = "$root/{$application->contextImage->url}";
