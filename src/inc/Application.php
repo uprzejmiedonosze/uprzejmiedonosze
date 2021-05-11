@@ -83,7 +83,7 @@ class Application extends JSONObject{
      * Returns application number (UD/X/Y)
      */
     public function getNumber(){
-        return $this->number;
+        return isset($this->number) ? $this->number : null;
     }
 
     /**
