@@ -2076,6 +2076,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "puck": {
+    "address": [
+      "Straż Miejska Puck",
+      "ul. 1 maja 13",
+      "84-100 Puck"
+    ],
+    "email": "sm@miasto.puck.pl",
+    "city": "Puck",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
