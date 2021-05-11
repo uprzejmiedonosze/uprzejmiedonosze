@@ -1809,8 +1809,8 @@
     ],
     "email": "straz.miejska@zielonka.pl",
     "city": "Zielonka",
-    "hint": null,
-    "api": "Mail"
+    "hint": "<b>Straż Miejska Zielonka została zlikwidowana.</b> Przełącz się na <a href='https://uprzejmiedonosze.net/register.html?update'>stop agresji drogowej</a> i stwórz nowe zgłoszenie.",
+    "api": false
   },
   "grójec": {
     "address": [
