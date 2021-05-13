@@ -15,10 +15,10 @@
         </p>
         <div class="actions">
             <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                <label for="OK{{ app.id }}">Dodaj</label>
+                <label for="OK{{ app.id }}">Dodaj [d]</label>
                 <input type="radio" name="moderateApp" value="1" id="OK{{ app.id }}"
                     onclick="_moderateApp('{{ app.id }}', true)" />
-                <label for="Out{{ app.id }}">—</label>
+                <label for="Out{{ app.id }}">— [esc]</label>
                 <input type="radio" name="moderateApp" value="0" id="Out{{ app.id }}"
                     onclick="_moderateApp('{{ app.id }}', false)" />
             </fieldset>

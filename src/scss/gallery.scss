@@ -17,6 +17,11 @@ div.galleryItem {
   width: 100%;
   box-shadow: 0 0 2px rgba(0,0,0,0.2);
   background: #fff;
+  opacity: 0.5;
+}
+
+div.galleryItem.next {
+  opacity: 1;
 }
 
 @media (min-width: 40em) {
@@ -40,11 +45,7 @@ div.galleryItem img {
   height: auto;
 }
 
-div.galleryAdmin div.galleryItem.decisiontrue {
-  opacity: 0.5;
-}
-
-div.galleryAdmin div.galleryItem.decisionfalse {
+div.galleryAdmin div.galleryItem.decision {
   opacity: 0.5;
 }
 
