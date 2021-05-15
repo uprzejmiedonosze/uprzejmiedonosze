@@ -25,7 +25,7 @@ try{
 $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji);
 $storage->saveUser($user);
 
-if(null == $_GET('update')) _sendSlackOnRegister($user);
+if(null == $_GET['update']) _sendSlackOnRegister($user);
 
 redirect($signInSuccessUrl);
 
