@@ -29,7 +29,9 @@ $(document).on("pageshow", function () {
       action: "moderateApp",
       id: appId,
       decision: decision
-    }).done(() => {})
+    }).done(() => {
+      $("#" + appId).addClass("blur")
+    })
       .fail((e) => {
         $.mobile.loading("show", {
           text: e.statusText,
