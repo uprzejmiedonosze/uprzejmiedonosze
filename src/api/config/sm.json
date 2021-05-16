@@ -2087,6 +2087,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "solec kujawski": {
+    "address": [
+      "Komisariat Policji w Solcu Kujawskim",
+      "ul. Toruńska 15",
+      "86-050 Solec Kujawski"
+    ],
+    "email": "solec@bg.policja.gov.pl",
+    "city": "Solec Kujawski",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
