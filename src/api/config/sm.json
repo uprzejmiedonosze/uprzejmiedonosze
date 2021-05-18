@@ -2098,6 +2098,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "wałbrzych": {
+    "address": [
+      "Straż Miejska w Wałbrzychu",
+      "Rynek 23",
+      "58-300 Wałbrzych"
+    ],
+    "email": "strazmiejska@um.walbrzych.pl",
+    "city": "Wałbrzych",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
