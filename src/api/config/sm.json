@@ -2109,6 +2109,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "września": {
+    "address": [
+      "Straż Miejska we Wrześni",
+      "ul. Ratuszowa",
+      "62-300 Września"
+    ],
+    "email": "straz@wrzesnia.pl",
+    "city": "Września",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
