@@ -20,7 +20,7 @@
     {% endif %}
         <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
-            pojazdu o nr rejestracyjnym <b>{{ app.carInfo.plateId ?? '...' }}</b>
+            pojazdu o nr. rejestracyjnym <b>{{ app.carInfo.plateId ?? '...' }}</b>
             {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
             w okolicy adresu <b>{{ app.address.address ?? '...' }}</b>.
             {{ app.getCategory.short }}

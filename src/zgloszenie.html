@@ -15,7 +15,7 @@ echo generate('zgloszenie.html.twig',
             'shortTitle' => "Zgłoszenie {$application->number}",
             'image' => $application->contextImage->thumb,
             'dialog' => isset($_GET['dialog']),
-            'description' => "Samochód o nr rejestracyjnym {$application->carInfo->plateId} " .
+            'description' => "Samochód o nr. rejestracyjnym {$application->carInfo->plateId} " .
                 "w okolicy adresu {$application->address->address}. {$application->getCategory()->getShort()}"
         ],
         'config' =>
