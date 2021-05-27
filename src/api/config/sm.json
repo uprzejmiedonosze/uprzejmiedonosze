@@ -2120,6 +2120,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "żarki": {
+    "address": [
+      "Straż Miejska w Żarkach",
+      "ul. Kościuszki 15/17",
+      "42-310 Żarki"
+    ],
+    "email": "strazmiejska@umigzarki.pl",
+    "city": "Żarki",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
