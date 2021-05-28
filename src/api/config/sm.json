@@ -2131,6 +2131,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "złotoryja": {
+    "address": [
+      "Straż Miejska w Złotoryi",
+      "Plac Orląt Lwowskich 1",
+      "59-500 Złotoryja"
+    ],
+    "email": "sm@zlotoryja.pl",
+    "city": "Złotoryja",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
