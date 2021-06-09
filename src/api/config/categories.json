@@ -1,7 +1,7 @@
 {
     "4": {
-        "title": "Zastawienie chodnika (mniej niż 1.5m)",
-        "short": "Pojazd zastawiał chodnik (mniej niż 1.5m, PoRD Art. 47. 1.).",
+        "title": "Zastawienie chodnika (mniej niż 1,5 m)",
+        "short": "Pojazd zastawiał chodnik (mniej niż 1,5 m, PoRD Art. 47. 1.).",
         "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd utrudnia im ruch (i jest to przynajmniej 1,5m) ma zastosowanie ten przepis.</p>",
         "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m [...]",
         "price": "100 zł",
