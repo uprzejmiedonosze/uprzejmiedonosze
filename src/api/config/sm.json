@@ -1803,14 +1803,14 @@
   },
   "zielonka": {
     "address": [
-      "Straż Miejska w Zielonce",
-      "ul. Piastowska 21",
+      "Komisariat Policji w Zielonce",
+      "ul. Piastowska 17",
       "05-220 Zielonka"
     ],
-    "email": "straz.miejska@zielonka.pl",
+    "email": "komendant.kp-zielonka@ksp.policja.gov.pl",
     "city": "Zielonka",
-    "hint": "<b>Straż Miejska Zielonka została zlikwidowana.</b> Przełącz się na <a href='https://uprzejmiedonosze.net/register.html?update'>stop agresji drogowej</a> i stwórz nowe zgłoszenie.",
-    "api": false
+    "hint": null,
+    "api": "Mail"
   },
   "grójec": {
     "address": [
