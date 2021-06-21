@@ -2153,6 +2153,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "kruszwica": {
+    "address": [
+      "Komisariat Policji w Kruszwicy",
+      "ul. Niepodległości 47",
+      "88-150 Kruszwica"
+    ],
+    "email": "dzielnicowy.kruszwica2@bg.policja.gov.pl",
+    "city": "Kruszwica",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
