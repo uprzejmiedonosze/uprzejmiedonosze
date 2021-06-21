@@ -2142,6 +2142,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "orneta": {
+    "address": [
+      "Straż Miejska w Ornecie",
+      "ul. Mickiewicza 18",
+      "11-130 Orneta"
+    ],
+    "email": "strazmiejska@orneta.pl",
+    "city": "Orneta",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
