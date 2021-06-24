@@ -2164,6 +2164,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "pszczyna": {
+    "address": [
+      "Straż Miejska Pszczyna",
+      "ul. Zdrojowa 4",
+      "43-200 Pszczyna"
+    ],
+    "email": "sm@pszczyna.pl",
+    "city": "Pszczyna",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
