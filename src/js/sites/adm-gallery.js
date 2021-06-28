@@ -13,10 +13,10 @@ $(document).on("pageshow", function () {
 
   document.addEventListener('keypress', ({code}) => {
     const appId = $('.galleryItem.next').attr('id')
-    if (code === 'KeyD') {
+    if (code === 'KeyD' || code === 'Period') {
       window._moderateApp(appId, true)
     }
-    if (code === 'Escape') {
+    if (code === 'Escape' || code === 'KeyQ' || code === 'Minus' || code === 'Comma') {
       window._moderateApp(appId, false)
     }
   });
