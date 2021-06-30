@@ -229,6 +229,27 @@ SQL;
         return $apps;
     }
 
+    private function _getAllApplicationIdsByEmail($email, $onlyWithNumber = false){
+
+        $onlyWithNumberSQL = ($onlyWithNumber)? " and json_extract(value, '$.status') not in ('ready', 'draft')": "";
+
+        $sql = <<<SQL
+            select key
+            from applications
+            where json_extract(value, '$.user.email') = :email $onlyWithNumberSQL;
+SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+
+        $appIds = Array();
+
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            array_push($appIds, $row[0]);
+        }
+        return $appIds;
+    }
+
     /**
      * Moves files from CDN to CDN2
      */
@@ -302,7 +323,7 @@ SQL;
         }
     }
 
-    public function checkConsistency(){
+    public function fixConsistency(){
         $sql = <<<SQL
         select key, value
         from users;
@@ -310,16 +331,21 @@ SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
 
-        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            $user = new User($row[1]);
+        $users = Array();
 
-            echo "\n => {$user->data->email}";
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $users[$row[0]] = new User($row[1]);
+        }
+
+        foreach ($users as $email => $user) {
+            
             $left = count($user->getApplicationIds());
-            $right = count($this->_getAllApplicationsByEmail($user->data->email, true));
-            echo "\n    apps in object: $left";
-            echo "\n    apps in db:     $right";
+            $appIds = $this->_getAllApplicationIdsByEmail($email, true);
+            $right = count($appIds);
             if($left != $right){
-                echo "\n    PROBLEM!";
+                echo "=> $email       $left != $right, fixing\n";
+                $user->applications = $appIds;
+                $this->getStore('users')->set($email, json_encode($user));
             }
         }
         echo "\n";
@@ -328,7 +354,7 @@ SQL;
 }
 
 $db = new AdminToolsDB();
-$db->checkConsistency();
+$db->fixConsistency();
 
 //$db->removeDrafts(10, false);
 //$db->removeReadyApps(30, false);
