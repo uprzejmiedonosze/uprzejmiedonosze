@@ -1649,11 +1649,11 @@
   },
   "otwock": {
     "address": [
-      "Straż Miejska w Otwocku",
-      "ul. Armii Krajowej 5c",
+      "Komenda Powiatowa Policji w Otwocku",
+      "ul. Pułaskiego 7a",
       "05-400 Otwock"
     ],
-    "email": "strazmiejska@otwock.pl",
+    "email": "dyzurny.otwock@ksp.policja.gov.pl",
     "city": "Otwock",
     "hint": null,
     "api": "Mail"
