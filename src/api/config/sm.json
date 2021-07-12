@@ -2197,6 +2197,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "olsztynek": {
+    "address": [
+      "Straż Miejska w Olsztynku",
+      "ul. Ratusz 1",
+      "11-015 Olsztynek"
+    ],
+    "email": "strazmiejska@olsztynek.pl",
+    "city": "Olsztynek",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
