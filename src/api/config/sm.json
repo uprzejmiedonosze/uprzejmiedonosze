@@ -2175,6 +2175,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "ogrodzieniec": {
+    "address": [
+      "Komisariat Policji w Ogrodzieńcu",
+      "pl. Wolności 23",
+      "42-440 Ogrodzieniec"
+    ],
+    "email": "ogrodzieniec@zawiercie.ka.policja.gov.pl",
+    "city": "Ogrodzieniec",
+    "hint": null,
+    "api": "Mail"
+  },
+  "podzamcze": {
+    "address": [
+      "Komisariat Policji w Ogrodzieńcu",
+      "pl. Wolności 23",
+      "42-440 Ogrodzieniec"
+    ],
+    "email": "ogrodzieniec@zawiercie.ka.policja.gov.pl",
+    "city": "Podzamcze",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
