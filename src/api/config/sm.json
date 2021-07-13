@@ -2197,6 +2197,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "morag": {
+    "address": [
+      "Straż Miejska w Morągu",
+      "ul. Dworcowa 7",
+      "14-300 Morąg"
+    ],
+    "email": "smmorag@wp.pl",
+    "city": "Morąg",
+    "hint": "Komendant twierdzi, że email może nie wystarczyć do zgłoszenia.",
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
