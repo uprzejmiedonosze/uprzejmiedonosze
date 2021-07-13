@@ -2536,6 +2536,15 @@
     "email": "wrd.konskie@ki.policja.gov.pl",
     "city": "Końskie",
     "hint": null,
+  "morąg": {
+    "address": [
+      "Straż Miejska w Morągu",
+      "ul. Dworcowa 7",
+      "14-300 Morąg"
+    ],
+    "email": "smmorag@wp.pl",
+    "city": "Morąg",
+    "hint": "Wstępne informacje są dość pesymistyczne. Komendant twierdzi, że email może nie wystarczyć do zgłoszenia.",
     "api": "Mail"
   },
   "_nieznane": {
