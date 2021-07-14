@@ -262,6 +262,13 @@ class Application extends JSONObject{
         return $STATUSES[$this->status];
     }
 
+    /**
+     * Safety backup for a missing context image
+     */
+    public function hascontextImage() {
+        return array("thumb" => "img/fff-1.png", "url" => "img/fff-1.png");
+    }
+
     public function isCurrentUserOwner(){
         if(!isLoggedIn()) return false;
         return getCurrentUserEmail() == $this->user->email;
