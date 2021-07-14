@@ -266,7 +266,7 @@ class Application extends JSONObject{
      * Safety backup for a missing context image
      */
     public function hascontextImage() {
-        return array("thumb" => "img/fff-1.png", "url" => "img/fff-1.png");
+        return array("thumb" => "webapp/public/img/fff-1.png", "url" => "webapp/public/img/fff-1.png");
     }
 
     public function isCurrentUserOwner(){
