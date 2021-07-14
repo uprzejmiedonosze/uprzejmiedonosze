@@ -2208,6 +2208,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "ostrowiec świętokrzyski": {
+    "address": [
+      "Straż Miejska Ostrowiec Świętokrzyski",
+      "Świętokrzyska 22",
+      "27-400 Ostrowiec Świętokrzyski"
+    ],
+    "email": "sm@um.ostrowiec.pl",
+    "city": "Ostrowiec Świętokrzyski",
+    "hint": null,
+    "api": "Mail"
+  },
+  
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
