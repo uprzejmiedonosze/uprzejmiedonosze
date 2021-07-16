@@ -1,20 +1,22 @@
 {% set leftButton = 'menuBack' %}
 {% set leftButtonIcon = 'ui-icon-edit' %}
 
+{% set sm = app.guessSMData() %}
+
 {% block rightButtonCustom %}
 <a onclick="$('#form').submit();"
     class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
-    ui-btn-inline ui-btn-icon-left ui-icon-check">Zapisz!</a>
+    ui-btn-inline ui-btn-icon-left ui-icon-check">{% if autoSend %}Wyślij!{% else %}Zapisz!{% endif %}</a>
 {% endblock %}
 
 {% extends "base.html.twig" %}
 
 {% block main %}
 <h2>Jeszcze chwila!</h2>
-<p>Sprawdź dane przed zapisaniem zgłoszenia.
-    {% if not general.hasApps %}<b>{% endif %}
-    Nie obawiaj się – na tym etapie nic nie zostanie wysłane do <b>{{ app.guessSMData.getName }}</b>.
-    {% if not general.hasApps %}</b>{% endif %}</p>
+<p>Sprawdź dane przed zapisaniem {% if autoSend %} <b>i wysłaniem</b> {% endif %} zgłoszenia.
+    {% if not autoSend %}
+    Na tym etapie nic nie zostanie wysłane do <b>{{ sm.getName }}</b>.
+    {% endif %}</p>
 
 {% include('_application.html.twig') %}
 

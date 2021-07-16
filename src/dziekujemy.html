@@ -12,8 +12,8 @@ $application = $storage->getApplication($applicationId);
 $application->setStatus("confirmed");
 
 $edited = true;
+$user = $storage->getCurrentUser();
 if(!isset($application->number)){ // new application
-    $user = $storage->getCurrentUser();
     $user->addApplication($application);
     $application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
     $application->stopAgresji = $application->stopAgresji();
@@ -41,7 +41,8 @@ echo generate('dziekujemy.html.twig',
         ],
         'app' => $application,
         'appsCount' => sizeof($user->applications),
-        'edited' => $edited
+        'edited' => $edited,
+        'autoSend' => $user->autoSend() && $application->automatedSM()
     ]
 );
 

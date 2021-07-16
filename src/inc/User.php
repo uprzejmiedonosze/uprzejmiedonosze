@@ -27,6 +27,7 @@ class User extends JSONObject{
         $this->data->name  = capitalizeName($_SESSION['user_name']);
         $this->data->exposeData = false;
         $this->data->stopAgresji = false;
+        $this->data->autoSend = true;
         $this->applications = Array();
     }
 
@@ -134,7 +135,7 @@ class User extends JSONObject{
     /**
      * Updates current user's data.
      */
-    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji){
+    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend){
         if(isset($this->added)){
             $this->updated = date(DT_FORMAT);
         }
@@ -142,6 +143,7 @@ class User extends JSONObject{
         $this->data->sex = guess_sex_by_name($this->data->name);
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
+        if(isset($autoSend)) $this->data->autoSend = $autoSend;
         $this->data->address = $address;
         $this->data->exposeData = $exposeData;
         return true;
@@ -191,6 +193,13 @@ class User extends JSONObject{
             return $this->data->stopAgresji;
         }
         return false;
+    }
+
+    public function autoSend() {
+        if(isset($this->data->autoSend)){
+            return $this->data->autoSend;
+        }
+        return true;
     }
 }
 
