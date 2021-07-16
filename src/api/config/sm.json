@@ -2211,7 +2211,7 @@
   "ostrowiec świętokrzyski": {
     "address": [
       "Straż Miejska Ostrowiec Świętokrzyski",
-      "Świętokrzyska 22",
+      "ul. Świętokrzyska 22",
       "27-400 Ostrowiec Świętokrzyski"
     ],
     "email": "sm@um.ostrowiec.pl",
@@ -2219,7 +2219,17 @@
     "hint": null,
     "api": "Mail"
   },
-  
+  "jeleśnia": {
+    "address": [
+      "Komisariat Policji w Jeleśni",
+      "ul. Jana Kazimierza 79",
+      "34-340 Jeleśnia"
+    ],
+    "email": "jelesnia@zywiec.ka.policja.gov.pl",
+    "city": "Jeleśnia",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
