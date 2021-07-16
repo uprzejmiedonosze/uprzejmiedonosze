@@ -8,6 +8,17 @@ if(isset($_GET['cleanup'])){
     redirect("nowe-zgloszenie.html");
 }
 
+$user = $storage->getCurrentUser();
+
+if(isset($_GET['TermsConfirmation'])){
+    $user->confirmTerms();
+    $storage->saveUser($user);    
+}
+const LATEST_TERMS_UPDATE = '2021-07-16T22:25:00';
+if($user->data->termsConfirmation < LATEST_TERMS_UPDATE){
+    redirect("start.html");
+}
+
 if(isset($_GET['edit'])){
     $application = $storage->getApplication($_GET['edit']);
     if(! $application->isEditable()) {
@@ -48,7 +59,7 @@ echo generate('nowe-zgloszenie.html.twig',
         [
             'auth' => true,
             'edit' => $edit,
-            'lastLocation' => $storage->getCurrentUser()->getLastLocation()
+            'lastLocation' => $user->getLastLocation()
         ],
         'categories' => $CATEGORIES,
         'categoriesMatrix' => CATEGORIES_MATRIX,

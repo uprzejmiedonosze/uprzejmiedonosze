@@ -147,6 +147,11 @@ class User extends JSONObject{
         return true;
     }
 
+    function confirmTerms() {
+        $this->data->termsConfirmation = date(DT_FORMAT);
+        $this->updated = date(DT_FORMAT);
+    }
+
     /**
      * Returns information of this user has any apps registered.
      */

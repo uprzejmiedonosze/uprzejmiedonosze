@@ -73,15 +73,15 @@
                     {% endif %}
                 </h1>
 
-                {% if rightButton is defined and rightButton == 'menuStart' %}
-                <a href="start.html" class="ui-btn-right ui-alt-icon
-                    ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
-                    ui-btn-icon-left {{ rightButtonIcon ?? 'ui-icon-plus' }}">
-                    {{ rightButtonText ?? 'Zgłoś' }}</a>
-                {% endif %}
-
                 {% if rightButton is defined and rightButton == 'menuNewApplication' %}
                 <a href="nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon
+                    ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
+                    {{ rightButtonIcon ?? 'ui-icon-carat-r' }}"
+                    data-ajax="false">{{ rightButtonText ?? 'Nowe zgłoszenie' }}</a>
+                {% endif %}
+
+                {% if rightButton is defined and rightButton == 'menuNewApplicationTermsConfirmation' %}
+                <a href="nowe-zgloszenie.html?TermsConfirmation" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline ui-btn-icon-left
                     {{ rightButtonIcon ?? 'ui-icon-carat-r' }}"
                     data-ajax="false">{{ rightButtonText ?? 'Nowe zgłoszenie' }}</a>

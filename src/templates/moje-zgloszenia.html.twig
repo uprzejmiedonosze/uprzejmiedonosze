@@ -1,5 +1,5 @@
 {% set leftButton = 'menu' %}
-{% set rightButton = 'menuStart' %}
+{% set rightButton = 'menuNewApplication' %}
 
 {% extends "base.html.twig" %}
 {% block main %}
@@ -11,7 +11,7 @@
 
 {% if applications|length == 0 %}
     <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
-    <a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
+    <a href="nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
 {% else %}
     <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
 

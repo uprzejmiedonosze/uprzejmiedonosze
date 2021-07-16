@@ -1,5 +1,5 @@
 {% set leftButton = 'menu' %}
-{% set rightButton = 'menuStart' %}
+{% set rightButton = 'menuNewApplication' %}
 {# SITEMAP-PRIORITY:1.0 #}
 
 {% extends "base.html.twig" %}
@@ -25,9 +25,9 @@
     <a rel="external" href="https://alertszczecin.pl/alert2a">Alert Szczecin</a>.
 </p>
 {% if general.hasApps %}
-<a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Nowe zgłoszenie</a>
+<a href="nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Nowe zgłoszenie</a>
 {% else %}
-<a href="start.html" class="ui-btn ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
+<a href="nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
 {% endif %}
 <a target="_blank" href="https://fb.me/uprzejmiedonosze.net"
     class="fb-button ui-btn ui-corner-all ui-btn-inline">Śledź nas na FB</a>
