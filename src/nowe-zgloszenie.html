@@ -35,6 +35,9 @@ if(isset($_GET['edit'])){
     try{
         $application = $storage->getApplication($_SESSION['newAppId']);
         $edit = isset($application->carImage) || isset($application->contextImage);
+        if (!$edit) {
+            unset($application);    
+        }
     }catch(Exception $e){
         unset($application);
     }
