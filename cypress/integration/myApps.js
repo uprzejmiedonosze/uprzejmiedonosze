@@ -28,7 +28,7 @@ describe('Empty my apps', () => {
     })
 })
 
-describe('Application screen valitation', () => {
+describe('Application screen validation', () => {
     before(() => {
         cy.login()
     })
@@ -58,6 +58,7 @@ describe('Application screen valitation', () => {
 
 describe('Invalid images', () => {
     before(() => {
+        cy.initDB()
         cy.login()
     })
 
@@ -92,6 +93,7 @@ describe('Invalid images', () => {
 
 describe('Valid images and location', () => {
     before(() => {
+        cy.initDB()
         cy.login()
         cy.goToNewAppScreen()
     })
@@ -131,6 +133,7 @@ describe('Valid images and location', () => {
 
 describe('Create application', () => {
     before(() => {
+        cy.initDB()
         cy.login()
         cy.goToNewAppScreen()
     })
@@ -141,7 +144,6 @@ describe('Create application', () => {
     })
 
     it('creates application', function () {
-        cy.get('.cleanup').click()
         cy.uploadOKImages()
     })
 
@@ -155,7 +157,7 @@ describe('Create application', () => {
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Zapisz!').click()
+        cy.contains('Wyślij teraz!').click()
         cy.contains('To twoje pierwsze zgłoszenie')
         cy.contains('UD/4/')
     })
@@ -166,7 +168,7 @@ describe('Create application', () => {
     })
 
     it('checks application screen', function () {
-        cy.contains('UD/4/').click({force: true})
+        cy.contains('Szczegóły').click({force: true})
         checkAppData(this.config)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
@@ -176,7 +178,7 @@ describe('Create application', () => {
 describe('Edit application', () => {
     before(() => {
         cy.login()
-        cy.goToNewAppScreen()
+        cy.goToNewAppScreenWithoutTermsScreen()
     })
 
     beforeEach(() => {
@@ -233,7 +235,7 @@ describe('Edit application', () => {
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Zapisz!').click()
+        cy.contains('Wyślij teraz!').click()
         cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
         cy.contains('UD/4/')
     })
@@ -245,8 +247,9 @@ describe('Edit application', () => {
     })
 
     it('checks application screen', function () {
-        cy.contains('UD/4/').click({force: true})
-        checkAppData(this.config)
+        cy.contains('Szczegóły').click({force: true})
+        cy.contains(this.config.carImage.dateDM1)
+        cy.contains(this.config.carImage.hourHumanHP1)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
     })
