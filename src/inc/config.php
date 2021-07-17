@@ -6,6 +6,8 @@ ini_set("session.gc_maxlifetime", $timeout);
 ini_set("session.cookie_lifetime", $timeout);
 date_default_timezone_set('Europe/Warsaw');
 
+const LATEST_TERMS_UPDATE = '2021-07-16';
+
 const DT_FORMAT = 'Y-m-d\TH:i:s';
 
 const CATEGORIES_CONFIG = __DIR__ . '/../public/api/config/categories.json';

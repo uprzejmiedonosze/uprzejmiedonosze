@@ -14,7 +14,7 @@ if(isset($_GET['TermsConfirmation'])){
     $user->confirmTerms();
     $storage->saveUser($user);    
 }
-const LATEST_TERMS_UPDATE = '2021-07-16T22:25:00';
+
 if($user->data->termsConfirmation < LATEST_TERMS_UPDATE){
     redirect("start.html");
 }
