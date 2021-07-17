@@ -13,7 +13,7 @@ $name = capitalizeName($post["name"]);
 $msisdn = trim($post["msisdn"]);
 $exposeData = isset($post['exposeData']) && $post['exposeData'] == 'Y';
 $stopAgresji = isset($post['stopAgresji']) && $post['stopAgresji'] == 'SA';
-$autoSend = isset($post['autoSend']) && $post['autoSend'] == 'Y';
+$autoSend = isset($post['autoSend']) && isset($post['autoSend']) ? $post['autoSend'] == 'Y' : true;
 
 $address = str_replace(', Polska', '', trim($post["address"]));
 
