@@ -292,8 +292,6 @@ function _upload(){
             $application->carInfo->color = @ucfirst($result["vehicle"]['color'][0]['name']);
             $application->carInfo->colorConfidence = @$result["vehicle"]['color'][0]['confidence'];
             $application->carInfo->recydywa = $recydywa;
-
-            logger(print_r($application->carInfo, true));
         }
     }else if($pictureType == 'contextImage'){
         $application->contextImage = new stdClass();
