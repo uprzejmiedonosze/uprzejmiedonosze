@@ -22,7 +22,7 @@
 <div class="whatNext">
     <h4>Trwa wysyłka zgłoszenia...</h4>
 </div>
-<div class="whatNextDone" style="display: none;">
+<div class="afterSend">
     <h4>Dziękujemy za wysłanie zgłoszenia</h4>
 </div>
 {% elseif sm.unknown %}
@@ -48,7 +48,7 @@
 {% endif %}
 
 {% if appsCount > 3 and sm.email and ( not app.addedToGallery ) %}
-<div class="addToGallery">
+<div class="addToGallery {% if autoSend %}afterSend{% endif %}">
     <h4>Dodaj to zdjęcie do galerii</h4>
     <p>Dodaj zdjęcie do <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>.
     Udostępnimy zdjęcie z kontekstem, numer rejestracyjny (który nie jest daną osobową!), miasto, twój komentarz oraz rodzaj wykroczenia.</p>

@@ -4,21 +4,36 @@
 {% set sm = app.guessSMData() %}
 
 {% block rightButtonCustom %}
-<a onclick="$('#form').submit();"
-    class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
-    ui-btn-inline ui-btn-icon-left ui-icon-check">{% if autoSend %}Wyślij!{% else %}Zapisz!{% endif %}</a>
+    {% if not autoSend %}
+    <a onclick="$('#form').submit();"
+        class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
+        ui-btn-inline ui-btn-icon-left ui-icon-check">Zapisz!</a>
+    {% endif %}
 {% endblock %}
 
 {% extends "base.html.twig" %}
 
 {% block main %}
-<h2>Jeszcze chwila!</h2>
-<p>Sprawdź dane przed zapisaniem {% if autoSend %} <b>i wysłaniem</b> {% endif %} zgłoszenia.
-    {% if not autoSend %}
-    Na tym etapie nic nie zostanie wysłane do <b>{{ sm.getName }}</b>.
-    {% endif %}</p>
+{% if autoSend %}
+<h2>Sprawdź zgłoszenie przed wysłaniem</h2>
+<p>
+    Twoje zgłoszenie zostanie za chwilę wysłane do <b>{{ sm.getName }}</b>. Sprawdź zgłoszenie
+    zwracając szczególną uwagę na podany adres oraz numer rejestracyjny.
+</p>
+{% else %}
+<h2>Sprawdź zgłoszenie</h2>
+<p>
+    Sprawdź dane przed zapisaniem zgłoszenia. Na tym etapie nic nie zostanie wysłane do <b>{{ sm.getName }}</b>.
+</p>
+{% endif %}
 
 {% include('_application.html.twig') %}
+
+{% if autoSend %}
+<a onclick="$('#form').submit();"
+    class="ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
+    ui-btn-icon-left ui-icon-mail cta ui-disabled confirm-send-button">Wyślij teraz!</a>
+{% endif %}
 
 <form action="/dziekujemy.html" id="form" method="post" data-ajax="true">
     <input type="hidden" id="applicationId" name="applicationId" value="{{ app.id }}"/>

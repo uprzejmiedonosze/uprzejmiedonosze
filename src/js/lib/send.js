@@ -14,7 +14,7 @@ window._send = function (appId) {
     ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
     if ($(".dziekujemy").length) {
       $(".whatNext").hide();
-      $(".whatNextDone").show();
+      $(".afterSend").show();
     }
   }).fail(function (e) {
     $.mobile.loading("hide");
