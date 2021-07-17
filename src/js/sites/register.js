@@ -3,7 +3,7 @@ import { initAutocompleteRegister } from "../lib/geolocation";
 
 function validateRegisterForm() {
   var ret = checkValue($("#name"), 6);
-  ret = ret && checkAddress($("#address"));
+  ret = checkAddress($("#address")) && ret;
   if (!ret) {
     $(window).scrollTop($(".error").offset().top - 100);
   }
@@ -17,6 +17,10 @@ $(document).on("pageshow", function () {
 
   $("#name").on("change", function () {
     $("#name").removeClass("error");
+  });
+
+  $("#address").on("change", function () {
+    $("#address").removeClass("error");
   });
 
   $("#register-submit").click(function () {
