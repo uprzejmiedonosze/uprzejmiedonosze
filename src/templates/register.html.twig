@@ -27,13 +27,13 @@
 
     <label for="name">Adres zamieszkania (wymagany)</label>
     <input type="text" maxlength="70" required id="address" name="address"
-        placeholder="(twój adres korespondencyjny [wymagany])"
+        placeholder="Ulica 10, Miasto"
         autocomplete="off"
         data-inline="true" value="{{ user.data.address ?? '' }}" />
 
     <label for="name">Numer kontaktowy (opcjonalny)</label>
     <input type="tel" maxlength="12" id="msisdn" name="msisdn"
-        placeholder="(twój numer telefonu [opcjonalnie])"
+        placeholder="666 666 666"
         data-inline="true" value="{{ user.data.msisdn ?? '' }}" />
 
     <h3>Ustawienia</h3>
