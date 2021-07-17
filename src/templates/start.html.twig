@@ -5,7 +5,7 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-{% if not config.isIOS %}
+{% if config.isIOS %}
 <div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"
 {% if not general.hasApps %}data-collapsed="false"{% endif %} data-role="collapsible">
     <h4>Uwaga dla użytkowników iOS</h4>
