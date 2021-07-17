@@ -23,21 +23,20 @@ export const checkAddress = function (where) {
   return ret;
 };
 
-export const check = function (item, minLength, grandma) {
-  const len =
-    item.val().trim().length == 0
-      ? item.attr("value")
-        ? item.attr("value").trim().length
-        : 0
-      : item.val().trim().length;
+export const checkValue = function (item, minLength) {
+  const len = item.val().trim().length
   if (len <= minLength) {
-    if (grandma) {
-      item.parent().parent().addClass("error");
-    } else {
-      item.addClass("error");
-    }
+    item.addClass("error");
     return false;
-  } else {
-    return true;
   }
+  return true;
+};
+
+export const checkAttr = function (item) {
+  const len = item.attr("value") ? item.attr("value").trim().length : 0;
+  if (len === 0) {
+    item.parent().parent().addClass("error");
+    return false;
+  }
+  return true;
 };
