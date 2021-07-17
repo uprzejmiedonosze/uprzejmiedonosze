@@ -62,10 +62,22 @@ Cypress.Commands.add("initDB", () => {
   cy.exec('ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-registered store.sqlite"')
 })
 
+Cypress.Commands.add("cleanDB", () => {
+  if (Cypress.env('DOCKER')) {
+    cy.exec('docker exec webapp cp /var/www/uprzejmiedonosze.localhost/db/store.sqlite-empty /var/www/uprzejmiedonosze.localhost/db/store.sqlite')
+    return
+  }
+  cy.exec('ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-empty store.sqlite"')
+})
+
 Cypress.Commands.add("goToNewAppScreen", () => {
+  cy.goToNewAppScreenWithoutTermsScreen()
+  cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
+  cy.contains('Dalej').click()
+})
+
+Cypress.Commands.add("goToNewAppScreenWithoutTermsScreen", () => {
   cy.visit('/')
   cy.contains('Menu').click()
   cy.contains('Nowe zgłoszenie').click({force: true})
-  cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
-  cy.contains('Dalej').click()
 })
