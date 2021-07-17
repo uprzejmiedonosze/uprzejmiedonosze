@@ -23,7 +23,8 @@
 {% else %}
 <h2>Sprawdź zgłoszenie</h2>
 <p>
-    Sprawdź dane przed zapisaniem zgłoszenia. Na tym etapie nic nie zostanie wysłane do <b>{{ sm.getName }}</b>.
+    Sprawdź dane przed zapisaniem zgłoszenia.
+    {% if not sm.unknown %}Na tym etapie nic nie zostanie wysłane do <b>{{ sm.getName }}</b>.{% endif %}
 </p>
 {% endif %}
 
