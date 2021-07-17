@@ -17,12 +17,14 @@ describe('API:automated (Poznań)', () => {
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
-        cy.contains('Zapisz!').click()
+        cy.contains('Wyślij teraz!').click()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Wyślij teraz!')
+        cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
+        cy.contains('Dziękujemy za wysłanie zgłoszenia')
+        cy.contains('Jeszcze raz')
         cy.contains(this.sm['poznań'].address[0])
     })
 
@@ -30,13 +32,12 @@ describe('API:automated (Poznań)', () => {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains('Mazurska 13, Poznań').click()
-        cy.contains('Wyślij do ' + this.sm['poznań'].address[0])
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
+        cy.contains('Zmień ręcznie status zgłoszenia z Potwierdzone w SM')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
     })
 
-    it('checks send apps screen', function () {
+    /*it('checks send apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Na szczęście ' + this.sm['poznań'].address[0] + ' udostępniła mechanizm')
@@ -45,7 +46,7 @@ describe('API:automated (Poznań)', () => {
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
         cy.contains('Dodaj do galerii').should('not.exist')
         cy.contains('Szczegóły').should('not.exist')
-    })
+    })*/
 })
 
 describe('API:Mail (Wrocław)', () => {
@@ -67,12 +68,14 @@ describe('API:Mail (Wrocław)', () => {
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
-        cy.contains('Zapisz!').click()
+        cy.contains('Wyślij teraz!').click()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Wyślij teraz!')
+        cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
+        cy.contains('Dziękujemy za wysłanie zgłoszenia')
+        cy.contains('Jeszcze raz')
         cy.contains(this.sm['wrocław'].address[0])
     })
 
@@ -80,23 +83,9 @@ describe('API:Mail (Wrocław)', () => {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains('Mieszka I 12, Wrocław').click()
-        cy.contains('Wyślij do ' + this.sm['wrocław'].address[0])
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
+        cy.contains('Zmień ręcznie status zgłoszenia z Wysłane')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
-    })
-
-    it('checks send apps screen', function () {
-        cy.contains('Menu').click()
-        cy.contains('Do wysłania').click({force: true})
-
-        cy.contains('Pobierz paczkę zgłoszeń')
-        cy.contains('Uwagi na temat współpracy z ' + this.sm['wrocław'].address[0])
-        cy.contains('Mieszka I 12, Wrocław').click()
-        cy.contains('Wyślij do ' + this.sm['wrocław'].address[0])
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
-        cy.contains('Dodaj do galerii').should('not.exist')
-        cy.contains('Szczegóły').should('not.exist')
     })
 
 })
@@ -116,7 +105,7 @@ describe.skip('API:null (Szczecin)', () => {
     it('creates application', function () {
         cy.uploadOKImages()
         cy.get('#form-submit').click()
-        cy.contains('Zapisz!').click()
+        cy.contains('Wyślij teraz!').click()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 
