@@ -33,8 +33,8 @@ export const checkValue = function (item, minLength) {
 };
 
 export const checkAttr = function (item) {
-  const len = item.attr("value") ? item.attr("value").trim().length : 0;
-  if (len === 0) {
+  const len = item.val().trim().length || item.attr("value").trim().length;
+  if (len == 0) {
     item.parent().parent().addClass("error");
     return false;
   }
