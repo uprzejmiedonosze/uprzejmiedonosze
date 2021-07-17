@@ -62,10 +62,10 @@
                 {{ app.user.email }}<br />
                 {{ app.user.address }}<br />
                 {{ app.user.msisdn }}<br />
-            {% if config.confirmationScreen is not defined and app.status == 'confirmed' %}
+            {% if config.confirmationScreen is not defined %}
                 <br />
-                <small>Nieaktualne dane? Popraw je na <a href="register.html">stronie rejestracji</a>
-                i wygeneruj ponownie zgłoszenie.</small>
+                <small>Nieaktualne dane? Popraw je na <a href="register.html">stronie rejestracji</a>.
+                i stwórz nowe zgłoszenie.</small>
             {% endif %}
         {% else %}
                 <br />(dane ukryte)
