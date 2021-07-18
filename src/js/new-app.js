@@ -10,7 +10,7 @@ const currentScript = document.currentScript;
 
 $(document).on("pageshow", function () {
   initHandlers();
-  setAddressByLatLngString(currentScript.getAttribute("last-location"));
+  if (currentScript) setAddressByLatLngString(currentScript.getAttribute("last-location"));
   ga("send", "event", {
     eventCategory: "pageshow",
     eventAction: "nowe-zgloszenie"
