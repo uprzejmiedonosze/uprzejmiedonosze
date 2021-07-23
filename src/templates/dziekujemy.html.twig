@@ -35,10 +35,8 @@
     </p>
 {% else %}
     <h4>Co dalej?</h4>
-    <p>Twoje zgłoszenie zostało zapisane, ale nie zostało jeszcze wysłane do <b>{{ sm.getName }}</b>.
-    Na szczęście nie musisz wysyłać każdego zgłoszenia osobno. Możesz wygenerować ich kilka/kilkanaście,
-    i wysłać je dogodnym dla siebie cyklu.</p>
-     <p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
+    <p>Zgodnie z ustawieniami twojego konta, twoje zgłoszenie zostało zapisane, ale nie zostało wysłane do <b>{{ sm.getName }}</b>.
+    <p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
         do {{ app.guessSMData.getName }}. Służy do tego strona <a href="wysylka.html?city={{ sm.key|url_encode }}" data-ajax="false">wysyłka</a>.
     </p>
 {% endif %}

@@ -42,7 +42,8 @@ echo generate('wysylka.html.twig',
         'apps' => $apps,
         'user' => $user,
         'city' => $city,
-        'sm' => $sm
+        'sm' => $sm,
+        'autoSend' => $user->autoSend()
     ]
 );
 ?>

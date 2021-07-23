@@ -116,6 +116,18 @@ describe('Update account', () => {
 
     cy.contains('Uwagi do współpracy')
     cy.contains('To twoje pierwsze zgłoszenie')
+
+    cy.visit('/')
+    cy.contains('Menu').click()
+    cy.contains('Moje zgłoszenia').click()
+    cy.contains('UD/').click()
+    cy.contains('Wyślij do ')
+
+    cy.visit('/')
+    cy.contains('Menu').click()
+    cy.contains('Do wysłania').click()
+    cy.contains('UD/').click()
+    cy.contains('Wyślij do ')
   })
 
   it('Set opposite settings', function () {
@@ -154,7 +166,20 @@ describe('Update account', () => {
     cy.contains('Zapisz').click()
 
     cy.contains('Uwagi do współpracy z Komenda Wojewódzka')
-    cy.contains('Twoje zgłoszenie zostało zapisane')
+    cy.contains('twoje zgłoszenie zostało zapisane')
     cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
+
+    cy.visit('/')
+    cy.contains('Menu').click()
+    cy.contains('Moje zgłoszenia').click()
+    cy.contains('UD/').click()
+    cy.contains('Wyślij zgłoszenie')
+
+    cy.visit('/')
+    cy.contains('Menu').click()
+    cy.contains('Do wysłania').click()
+    cy.contains('UD/').click()
+    cy.contains('Wyślij do ').should('not.exist')
+    cy.contains('Wyślij zgłoszenie').should('not.exist')
   })
 })

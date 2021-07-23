@@ -25,7 +25,7 @@
 
 {% if statuses[app.status].topButtons %}
     <div>
-        {% if app.automatedSM %}
+        {% if app.automatedSM and autoSend is defined and autoSend %}
         <a href="#" onclick="_send('{{ app.id }}');"
             data-inline="true" data-mini="true" 
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
