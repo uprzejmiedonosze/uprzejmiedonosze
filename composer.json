@@ -1,6 +1,6 @@
 {
     "require": {
-        "kreait/firebase-php": "^3.0",
+        "kreait/firebase-php": "^5.19",
         "twig/twig": "^3.0",
         "maknz/slack": "^1.7",
         "tumblr/tumblr": "^0.4.0",

@@ -1,8 +1,6 @@
 <?PHP
 
-require(__DIR__ . '/../vendor/autoload.php');
-
-use Kreait\Firebase\Factory as Factory;
+use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount as ServiceAccount;
 use Kreait\Firebase\Exception\Auth\InvalidIdToken as InvalidIdToken;
 use Kreait\Firebase\Exception\Auth\IssuedInTheFuture as IssuedInTheFuture;
@@ -25,18 +23,19 @@ function isLoggedIn(){
  */
 function verifyToken($token){
 	if(isset($token)){
-		//logger("verifiToken token set: " . substr($token, 0, 30));
-		$serviceAccount = ServiceAccount::fromJsonFile(__DIR__ . '/../%HOST%-firebase-adminsdk.json');
-		$firebase = (new Factory)->withServiceAccount($serviceAccount)->create();
+		logger("verifiToken token set: " . substr($token, 0, 30));
+		$factory = (new Factory)->withServiceAccount(__DIR__ . '/../%HOST%-firebase-adminsdk.json');
+		$auth = $factory->createAuth();
+
 		try {
-			$verifiedIdToken = $firebase->getAuth()->verifyIdToken($token);
+			$verifiedIdToken = $auth->verifyIdToken($token);
       $_SESSION['user_email'] = 'e@nieradka.net';
 			if('%HOST%' !== 'uprzejmiedonosze.localhost'){
-        $_SESSION['user_email'] = $verifiedIdToken->getClaim('email');
+        $_SESSION['user_email'] = $verifiedIdToken->claims()->get('email');
       }
-			$_SESSION['user_name'] = $verifiedIdToken->getClaim('name');
-			$_SESSION['user_picture'] = $verifiedIdToken->getClaim('picture');
-			$_SESSION['user_id'] = $verifiedIdToken->getClaim('user_id');
+			$_SESSION['user_name'] = $verifiedIdToken->claims()->get('name');
+			$_SESSION['user_picture'] = $verifiedIdToken->claims()->get('picture');
+			$_SESSION['user_id'] = $verifiedIdToken->claims()->get('user_id');
 			$_SESSION['token'] = $token;
 			return true;
 		} catch (IssuedInTheFuture $e) {
@@ -46,6 +45,7 @@ function verifyToken($token){
 		} catch (InvalidIdToken $e) {
 			logger("verifyToken InvalidIdToken – false " . $e->getMessage());
 		}
+		\Sentry\captureLastError();
 		return false;
 	}
 	logger("verifyToken token is not set — false");

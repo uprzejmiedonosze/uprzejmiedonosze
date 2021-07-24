@@ -36,18 +36,22 @@
 
     function login(){
         $('#login-hint').text('Zaloguj się za pomocą konta Google.');
-        var provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
 
-        firebase.auth().useDeviceLanguage();
-        firebase.auth().signInWithRedirect(provider).then(function(result) {
-            var token = result.credential.accessToken;
+        firebase.auth().getRedirectResult().then(function(result) {
+            if (result.credential) {
+                var token = result.credential.accessToken;
+            }
             var user = result.user;
-        }).catch(function(error) {
-            console.log(error);
         });
 
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('profile');
+        provider.addScope('email');
+        provider.setCustomParameters({ prompt: 'select_account' });
+        firebase.auth().useDeviceLanguage();
+        firebase.auth().signInWithRedirect(provider);
     }
+
     function logout(){
         firebase.auth().signOut().then().catch(function(error) {
             console.log(error);
