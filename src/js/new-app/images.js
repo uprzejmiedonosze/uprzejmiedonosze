@@ -1,9 +1,9 @@
-import loadImage from "blueimp-load-image/js/load-image";
 import "blueimp-load-image/js/load-image-orientation";
 import "blueimp-load-image/js/load-image-scale";
 import "blueimp-load-image/js/load-image-meta";
 import "blueimp-load-image/js/load-image-exif";
 import "blueimp-load-image/js/load-image-exif-map";
+import loadImage from "blueimp-load-image/js/load-image";
 
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
@@ -79,8 +79,13 @@ function imageError(id) {
 function readGeoDataFromImage(file) {
   loadImage.parseMetaData(file, function (data) {
     if (data.exif) {
-      const dateTime =
-        data.exif.getText("DateTimeOriginal") && data.exif.getText("DateTime");
+      const DateTimeOriginal = data.exif.getText("DateTimeOriginal")
+      const DateTimeOriginal2 = data.exif[34665] && data.exif[34665][36867]
+      const DateTime = data.exif.getText("DateTime")
+
+      const dateTime = DateTimeOriginal === 'undefined'
+        ? (DateTimeOriginal2 === 'undefined' ? DateTime : DateTimeOriginal2)
+        : DateTimeOriginal
       if (dateTime && dateTime !== "undefined") {
         setDateTime(dateTime, true);
       } else {
