@@ -2,6 +2,7 @@ import "lazysizes";
 
 import "./lib/send";
 import "./lib/gallery";
+import "./lib/sentry";
 
 import "./sites/adm-gallery";
 import "./sites/application";

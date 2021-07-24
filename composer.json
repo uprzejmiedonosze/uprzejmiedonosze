@@ -4,7 +4,8 @@
         "twig/twig": "^3.0",
         "maknz/slack": "^1.7",
         "tumblr/tumblr": "^0.4.0",
-        "swiftmailer/swiftmailer": "^6.0"
+        "swiftmailer/swiftmailer": "^6.0",
+        "sentry/sdk": "^3.1"
     },
     "require-dev": {
         "phpmd/phpmd": "@stable"

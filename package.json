@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.12.1",
+    "@sentry/browser": "^6.10.0",
+    "@sentry/tracing": "^6.10.0",
     "blueimp-load-image": "^5.14.0",
     "exif-js": "^2.3.0",
     "highcharts": "^9.1.2",
