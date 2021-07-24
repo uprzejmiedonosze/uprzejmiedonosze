@@ -50,7 +50,7 @@
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed przejściem dla pieszych jest niedozwolone. Na drodzie dwukierunkowej, niedozwolone jest także zatrzymanie/postój za przejście.</p>",
         "law": "PoRD Art. 49. 1.2. Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerzystów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem.",
         "price": "100–300 zł",
-        "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od przejścia.",
+        "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd i znak pionowy D6 Przejście dla pieszych.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
     },
     "16": {
