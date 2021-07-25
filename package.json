@@ -11,6 +11,7 @@
     "luxon": "^1.28.0"
   },
   "devDependencies": {
+    "@sentry/cli": "^1.67.2",
     "cypress": "^8.0.0",
     "eslint": "^7.30.0",
     "eslint-config-defaults": "^9.0.0",
