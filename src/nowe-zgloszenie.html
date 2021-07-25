@@ -15,7 +15,7 @@ if(isset($_GET['TermsConfirmation'])){
     $storage->saveUser($user);    
 }
 
-if($user->data->termsConfirmation < LATEST_TERMS_UPDATE){
+if(!$user->checkTermsConfirmation()){
     redirect("start.html");
 }
 

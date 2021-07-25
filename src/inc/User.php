@@ -154,6 +154,11 @@ class User extends JSONObject{
         $this->updated = date(DT_FORMAT);
     }
 
+    function checkTermsConfirmation() {
+        if (!property_exists($this->data, 'termsConfirmation')) return false;
+        return $this->data->termsConfirmation > LATEST_TERMS_UPDATE;
+    }
+
     /**
      * Returns information of this user has any apps registered.
      */
