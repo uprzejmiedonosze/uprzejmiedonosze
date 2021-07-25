@@ -50,7 +50,7 @@
     {% if config.isRegistered == true %}
     <fieldset data-role="controlgroup">
         <legend for="stopAgresji">Chcę wysyłać swoje zgłoszenia</legend>
-        <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SN" {% if not user.stopAgresji %}checked="checked"{% endif %}>
+        <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
         <label for="stopAgresji-SM">do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)</label>
 
         <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
