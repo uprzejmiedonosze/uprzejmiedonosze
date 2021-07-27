@@ -54,7 +54,7 @@ export const initHandlers = () => {
 
   $("div.datetime a.ui-btn").click(function () {
     let datetime = DateTime.fromISO($("#datetime").val()).startOf("hour");
-    const offset = this.id.endsWith("p") ? 1 : -1;
+    const offset = (this.id && this.id.endsWith("p")) ? 1 : -1;
 
     if (this.id.startsWith("d")) {
       datetime = datetime.plus({ days: offset });
@@ -82,7 +82,7 @@ export const initHandlers = () => {
 };
 
 function showHidePictureHints(context) {
-  if (context.find("img").attr("src").endsWith(".png")) {
+  if ((!context.find("img").attr("src")) || context.find("img").attr("src").endsWith(".png")) {
     context.find("p.pictureHint").hide();
   } else {
     context.find("p.pictureHint").show();
