@@ -7,6 +7,7 @@
     ],
     "email": "stopagresjidrogowej@wr.policja.gov.pl",
     "voivodeship": "Dolnośląskie",
+    "city": "Dolnośląskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -18,6 +19,7 @@
     ],
     "email": "stopagresjidrogowej-kwp@bg.policja.gov.pl",
     "voivodeship": "Kujawsko-Pomorskie",
+    "city": "Kujawsko-Pomorskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -29,6 +31,7 @@
     ],
     "email": "stopagresjidrogowej@ld.policja.gov.pl",
     "voivodeship": "Łódzkie",
+    "city": "Łódzkie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -39,7 +42,8 @@
       "20-019 Lublin"
     ],
     "email": "stopagresjidrogowej@lu.policja.gov.pl",
-    "voivodeship": "lubelskie",
+    "voivodeship": "Lubelskie",
+    "city": "Lubelskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -51,6 +55,7 @@
     ],
     "email": "stopagresjidrogowej@go.policja.gov.pl",
     "voivodeship": "Lubuskie",
+    "city": "Lubuskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -62,6 +67,7 @@
     ],
     "email": "stopagresjidrogowej@malopolska.policja.gov.pl",
     "voivodeship": "Małopolskie",
+    "city": "Małopolskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -73,6 +79,7 @@
     ],
     "email": "stopagresjidrogowej@ksp.policja.gov.pl",
     "voivodeship": "Mazowieckie",
+    "city": "Mazowieckie",
     "hint": "Relacje ze współpracy ze #stopagresji w woj. Mazowieckim są zniechęcające. Wzywają na przesłuchanie do każdego zgłoszenia. W szczególności w Warszawie współpraca ze Strażą Miejską jest bardziej owocna.",
     "api": "Mail"
   },
@@ -84,6 +91,7 @@
     ],
     "email": "problemdrogowy@op.policja.gov.pl",
     "voivodeship": "Opolskie",
+    "city": "Opolskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -95,6 +103,7 @@
     ],
     "email": "stopagresjidrogowej@rz.policja.gov.pl",
     "voivodeship": "Podkarpackie",
+    "city": "Podkarpackie",
     "hint": "Mamy jednoznacznie negatywne relacje ze współpracy z komendą w Rzeszowie. Wzywają do każdego zgłoszenia, marnują po 15 minut na sztukę. Pytają o to czy brak 1,5 m został sprawdzony miarą itd. Dla Rzeszowa sugerujemy SM.",
     "api": "Mail"
   },
@@ -106,6 +115,7 @@
     ],
     "email": "stopagresjidrogowej.kwp@bk.policja.gov.pl",
     "voivodeship": "Podlaskie",
+    "city": "Podlaskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -117,6 +127,7 @@
     ],
     "email": "stopagresjidrogowej@pomorska.policja.gov.pl",
     "voivodeship": "Pomorskie",
+    "city": "Pomorskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -128,6 +139,7 @@
     ],
     "email": "stopagresjidrogowej@ka.policja.gov.pl",
     "voivodeship": "Śląskie",
+    "city": "Śląskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -139,6 +151,7 @@
     ],
     "email": "stopagresjidrogowej@ki.policja.gov.pl",
     "voivodeship": "Świętokrzyskie",
+    "city": "Świętokrzyskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -150,6 +163,7 @@
     ],
     "email": "stopagresjidrogowej@ol.policja.gov.pl",
     "voivodeship": "Warmińsko-Mazurskie",
+    "city": "Warmińsko-Mazurskie",
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -161,6 +175,7 @@
     ],
     "email": "stopagresjidrogowej@po.policja.gov.pl",
     "voivodeship": "Wielkopolskie",
+    "city": "Wielkopolskie",
     "hint": "Relacje ze współpracy ze #stopagresji w woj. Wielkopolskim są zniechęcające. Wzywają na przesłuchanie do każdego zgłoszenia. W szczególności w Poznaniu współpraca ze Strażą Miejską jest bardziej owocna.",
     "api": "Mail"
   },
@@ -172,6 +187,7 @@
     ],
     "email": "stopagresjidrogowej@zachodniopomorska.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
+    "city": "Zachodniopomorskie",
     "hint": "Wstępne relacje ze współpracy z #stopagresji w woj. Zachodniopomorskim są pozytywne. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
@@ -183,6 +199,7 @@
     ],
     "email": "stopagresjidrogowej@ksp.policja.gov.pl",
     "voivodeship": "Mazowieckie",
+    "city": "Mazowieckie",
     "hint": "Nie udało się się dobrać wojewódzkiego #stopagresji, więc kierujemy wysyłkę na Stołeczną Komendę Policji.",
     "api": "Mail"
   }
