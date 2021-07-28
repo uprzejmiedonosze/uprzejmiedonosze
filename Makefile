@@ -109,7 +109,7 @@ prod: cypress check-branch-master check-git-clean clean $(DIRS) export ## Copy f
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=webapp $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
 	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=uprzejmiedonosze-backend $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=webapp $(shell npm bin)/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js
+	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=webapp $(shell npm bin)/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js src/js/jquery-1.12.4.min.map
 	$(create-symlink)
 	@make clean
 
