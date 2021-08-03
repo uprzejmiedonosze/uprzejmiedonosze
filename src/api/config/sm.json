@@ -2230,6 +2230,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "czerwonak": {
+    "address": [
+      "Straż Gminna Czerwonak",
+      "Osiedle Leśne 16",
+      "62-028 Koziegłowy"
+    ],
+    "email": "straz@czerwonak.pl",
+    "city": "Czerwonak",
+    "hint": null,
+    "api": "Mail"
+  },
+  "koziegłowy": {
+    "address": [
+      "Straż Gminna Czerwonak",
+      "Osiedle Leśne 16",
+      "62-028 Koziegłowy"
+    ],
+    "email": "straz@czerwonak.pl",
+    "city": "Koziegłowy",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
