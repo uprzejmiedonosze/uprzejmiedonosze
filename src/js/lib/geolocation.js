@@ -100,7 +100,7 @@ export function setAddressByLatLngString(latlng) {
 export function setAddressByLatLng(lat, lng, from) {
 
   // init|picker|picture
-  if (from !== "picker") {
+  if (from !== "picker" && locationP) {
     locationP.setLocation(lat, lng);
   }
 

@@ -12,10 +12,10 @@ $(document).on("pageshow", function () {
   if (!$(".new-application").length) return;
 
   initHandlers();
+  initAutocompleteNewApplication();
   if (currentScript) setAddressByLatLngString(currentScript.getAttribute("last-location"));
   ga("send", "event", {
     eventCategory: "pageshow",
     eventAction: "nowe-zgloszenie"
   });
-  initAutocompleteNewApplication();
 });
