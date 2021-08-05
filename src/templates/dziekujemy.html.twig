@@ -81,7 +81,10 @@ na moderację i zostanie opublikowane w przeciągu 24h.
 
 {% if autoSend %}
 <script>
-    $(document).on("pageshow", function () { _send('{{ app.id }}') })
+    $(document).on("pageshow", function () {
+        if (!$(".dziekujemy").length) return
+        _send('{{ app.id }}')
+    })
 </script>
 {% endif %}
 
