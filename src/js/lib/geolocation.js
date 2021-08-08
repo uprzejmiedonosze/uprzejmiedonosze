@@ -74,6 +74,7 @@ export const initAutocomplete = function (trigger_change, inputId, google) {
   if (trigger_change) {
     autocomplete.addListener("place_changed", function () {
       const place = autocomplete.getPlace();
+      if (!place) return;
       setAddressByPlace(place);
       const latlng = locationToLatLng(place);
       $("#latlng").val(latlng.join(","));
