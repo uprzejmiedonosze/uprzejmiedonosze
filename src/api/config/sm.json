@@ -1125,7 +1125,7 @@
       "ul. Sambora 41",
       "83-300 Kartuzy"
     ],
-    "email": "kppkartuzy@pomorska.policja.gov.pl",
+    "email": "komenda.kartuzy@gd.policja.gov.pl",
     "city": "Żukowo",
     "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach.",
     "api": "Mail"
@@ -2249,6 +2249,17 @@
     ],
     "email": "straz@czerwonak.pl",
     "city": "Koziegłowy",
+    "hint": null,
+    "api": "Mail"
+  },
+  "ostrów wielkopolski": {
+    "address": [
+      "Straż Miejska Ostrów Wielkopolski",
+      "ul. Kościuszki 12a",
+      "63-400 Ostrów Wielkopolski"
+    ],
+    "email": "straz_miejska@vp.pl",
+    "city": "Ostrów Wielkopolski",
     "hint": null,
     "api": "Mail"
   },
