@@ -2263,6 +2263,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "marki": {
+    "address": [
+      "Komisariat Policji w Markach",
+      "ul. Sportowa 5",
+      "05-270 Marki"
+    ],
+    "email": "komendant.kp-marki@ksp.policja.gov.pl",
+    "city": "Marki",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
