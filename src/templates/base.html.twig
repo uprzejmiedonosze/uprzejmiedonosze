@@ -76,8 +76,8 @@
                 {% if rightButton is defined and rightButton == 'menuStart' %}
                 <a href="/nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon
                     ui-nodisc-icon ui-btn ui-corner-all ui-btn-inline
-                    ui-btn-icon-left {{ rightButtonIcon ?? 'ui-icon-plus' }}">
-                    {{ rightButtonText ?? 'Zgłoś' }}</a>
+                    ui-btn-icon-left {{ rightButtonIcon ?? 'ui-icon-plus' }}"
+                    data-ajax="false">{{ rightButtonText ?? 'Zgłoś' }}</a>
                 {% endif %}
 
                 {% if rightButton is defined and rightButton == 'menuNewApplication' %}

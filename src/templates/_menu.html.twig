@@ -5,16 +5,22 @@
         <li data-icon="carat-l" class="close"><a href="#" data-rel="close">{{ general.userName ?? '' }}</a></li>
     {% if general.isLoggedIn %}
         <li data-icon="plus">
-            <a class="try"
+            <a class="try" data-ajax="false" 
                 {% if config.menu == 'start' %}class="active"{% endif %}
-                href="/nowe-zgloszenie.html">Nowe zgłoszenie</a></li>
+                href="/nowe-zgloszenie.html">Nowe zgłoszenie
+            </a>
+        </li>
         <li data-icon="bullets">
             <a data-ajax="false" {% if config.menu == 'moje-zgloszenia' %}class="active"{% endif %}
                 href="/moje-zgloszenia.html">Moje zgłoszenia
-            <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span></a></li>
+                <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span>
+            </a>
+        </li>
 
         {% if config.menu == 'moje-zgloszenia' %}
-            <li data-icon="false" class="filter"><a href="#" id="active" class="active">(aktywne) <span class="ui-li-count"></span></a></li>
+            <li data-icon="false" class="filter">
+                <a href="#" id="active" class="active">(aktywne) <span class="ui-li-count"></span></a>
+            </li>
             {% for key,val in statuses %}
                 {% if val.class %} {# class is empty, this is a draft or ready #}
                     <li data-icon="false" class="filter"><a href="#" id="{{ key }}">#{{ val.name|lower }} <span class="ui-li-count"></span></a></li>
@@ -30,7 +36,7 @@
         </li>
         {% endif %}
     {% else %}
-        <li data-icon="plus"><a class="try" href="/nowe-zgloszenie.html">Spróbuj!</a></li>
+        <li data-icon="plus"><a class="try" href="/nowe-zgloszenie.html" data-ajax="false">Spróbuj!</a></li>
     {% endif %}
 
         <li data-role="list-divider"></li>
@@ -67,9 +73,9 @@
         <li data-role="list-divider"></li>
         {% if general.isLoggedIn %}
         <li data-icon="user">
-            <a {% if config.menu == 'register' %}class="active"{% endif %}
+            <a data-ajax="false" {% if config.menu == 'register' %}class="active"{% endif %}
                 href="/register.html?update">Edycja konta</a></li>
-        <li data-icon="false" class="subpage">
+        <li data-ajax="false" data-icon="false" class="subpage">
             <a href="/login.html?logout">– wyloguj się</a></li>
         {% else %}
         <li data-icon="user"><a href="/start.html">Zaloguj/zarejestruj się</a></li>
