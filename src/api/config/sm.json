@@ -2274,6 +2274,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "matyldzin": {
+    "address": [
+      "Komisariat Policji w Mroczy",
+      "ul. Piłsudskiego 8",
+      "89-115 Mrocza"
+    ],
+    "email": "dzielnicowy.mrocza3@bg.policja.gov.pl",
+    "city": "Matyldzin",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
