@@ -2285,6 +2285,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "kościerzyna": {
+    "address": [
+      "Straż Miejska w Kościerzynie",
+      "ul. Młyńska 15",
+      "83-400 Kościerzyna"
+    ],
+    "email": "strazmiejska@koscierzyna.gda.pl",
+    "city": "Kościerzyna",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
