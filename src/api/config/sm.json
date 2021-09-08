@@ -2296,6 +2296,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "zielonki": {
+    "address": [
+      "Komisariat Policji w Zielonkach",
+      "Władysława Łokietka 205",
+      "31-263 Kraków"
+    ],
+    "email": "dzielnicowy.zielonki1@kpp-krakow.policja.gov.pl",
+    "city": "Zielonki",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
