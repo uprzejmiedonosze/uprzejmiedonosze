@@ -2307,6 +2307,50 @@
     "hint": null,
     "api": "Mail"
   },
+  "nowy duninów": {
+    "address": [
+      "Komenda Miejska Policji w Płocku",
+      "al. Kilińskiego 8",
+      "09-400 Płock"
+    ],
+    "email": "kmpplock@ra.policja.gov.pl",
+    "city": "Nowy Duninów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "soczewka": {
+    "address": [
+      "Komenda Miejska Policji w Płocku",
+      "al. Kilińskiego 8",
+      "09-400 Płock"
+    ],
+    "email": "kmpplock@ra.policja.gov.pl",
+    "city": "Nowy Duninów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "dopiewo": {
+    "address": [
+      "Komenda Straży Gminnej",
+      "ul. Leśna 2a",
+      "62-070 Dopiewo"
+    ],
+    "email": "strazgminna@dopiewo.pl",
+    "city": "Dopiewo",
+    "hint": null,
+    "api": "Mail"
+  },
+  "konarzewo": {
+    "address": [
+      "Komenda Straży Gminnej",
+      "ul. Leśna 2a",
+      "62-070 Dopiewo"
+    ],
+    "email": "strazgminna@dopiewo.pl",
+    "city": "Dopiewo",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
