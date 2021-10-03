@@ -141,7 +141,8 @@ export function setAddressByLatLng(lat, lng, from) {
 function setAddressByPlace(place) {
   const formatted_address = place.formatted_address
     .replace(", Polska", "")
-    .replace(/\d\d-\d\d\d\s/, "");
+    .replace(/\d\d-\d\d\d\s/, "")
+    .replace(/\/\d+[a-zA-Z]?, /, ', ');
   const voivodeship = place.address_components
     .filter(function (e) {
       return e.types.indexOf("administrative_area_level_1") == 0;
