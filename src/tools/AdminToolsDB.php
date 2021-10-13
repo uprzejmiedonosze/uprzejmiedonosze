@@ -323,10 +323,15 @@ SQL;
         }
     }
 
-    public function fixConsistency(){
+    public function fixConsistency($email = ''){
+        $where = '';
+        if (!empty($email)) {
+            $where = "where key = '$email' ";
+        }
         $sql = <<<SQL
         select key, value
-        from users;
+        from users
+        $where;
 SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -362,4 +367,3 @@ $db->fixConsistency();
 //$db->removeUser('szymon@nieradka.net', false);
 
 //$db->upgradeAllApps('1.0.2', false);
-?>
