@@ -2362,6 +2362,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "człuchów": {
+    "address": [
+      "Komenda Powiatowa Policji w Człuchowie",
+      "ul. Kasztanowa 17",
+      "77-300 Człuchów"
+    ],
+    "email": "sekretariat.czluchow@gd.policja.gov.pl",
+    "city": "Człuchów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
