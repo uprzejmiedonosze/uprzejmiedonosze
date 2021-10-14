@@ -237,6 +237,7 @@ SQL;
             select key
             from applications
             where json_extract(value, '$.user.email') = :email $onlyWithNumberSQL;
+            order by json_extract(value, '$.added')
 SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
