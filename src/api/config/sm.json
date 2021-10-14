@@ -1669,6 +1669,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "karczew": {
+    "address": [
+      "Komenda Powiatowa Policji w Otwocku",
+      "ul. Pułaskiego 7a",
+      "05-400 Otwock"
+    ],
+    "email": "dyzurny.otwock@ksp.policja.gov.pl",
+    "city": "Otwock",
+    "hint": null,
+    "api": "Mail"
+  },
   "józefów": {
     "address": [
       "Straż Miejska w Józefowie",
