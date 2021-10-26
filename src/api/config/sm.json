@@ -2384,6 +2384,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "józefosław": {
+    "address": [
+      "Referat Oskarżycieli Publicznych",
+      "Straż Miejska m.st. Warszawy",
+      "ul. Młynarska 43/45",
+      "01-170 Warszawa"
+    ],
+    "email": "csk@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
