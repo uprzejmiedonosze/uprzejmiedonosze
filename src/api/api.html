@@ -224,7 +224,7 @@ function cmp($a, $b){
 }
 
 function _check_alpr_budget($credits_monthly_used, $credits_monthly_total){
-    if((float)$credits_monthly_used / (float)$credits_monthly_total > 0.8){
+    if((float)$credits_monthly_used / (float)$credits_monthly_total > 0.9){
         logger("$credits_monthly_used credits out of $credits_monthly_total used!");
         _sendSlackError("$credits_monthly_used credits out of $credits_monthly_total used!");
     }
