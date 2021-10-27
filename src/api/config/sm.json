@@ -2386,14 +2386,13 @@
   },
   "józefosław": {
     "address": [
-      "Referat Oskarżycieli Publicznych",
-      "Straż Miejska m.st. Warszawy",
-      "ul. Młynarska 43/45",
-      "01-170 Warszawa"
+      "Straż Miejska w Piasecznie",
+      "ul. Czajewicza 1a",
+      "05-500 Piaseczno"
     ],
-    "email": "csk@strazmiejska.waw.pl",
-    "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "email": "strazmiejska@piaseczno.eu",
+    "city": "Józefosław",
+    "hint": "Miejscowość Józefosław obsługuje Straż Miejska Piaseczno.",
     "api": "Mail"
   },
   "_nieznane": {
