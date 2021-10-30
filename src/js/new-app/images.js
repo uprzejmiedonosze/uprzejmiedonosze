@@ -8,6 +8,8 @@ import loadImage from "blueimp-load-image/js/load-image";
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
 
+import * as Sentry from "@sentry/browser";
+
 var uploadInProgress = 0;
 
 export function checkFile(file, id) {
@@ -57,7 +59,13 @@ function readFile(file, id) {
       if (img.type == "error") {
         imageError(id);
       }
-      sendFile(img.toDataURL("image/jpeg", 0.9), id);
+      try {
+        sendFile(img.toDataURL("image/jpeg", 0.9), id);
+      } catch (err) {
+        Sentry.captureMessage('Sentry typeof(img) == ' + typeof(img));
+        Sentry.captureException(err);
+        imageError(id);
+      }
     },
     {
       maxWidth: 1200,
