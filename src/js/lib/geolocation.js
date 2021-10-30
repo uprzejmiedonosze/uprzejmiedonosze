@@ -139,6 +139,7 @@ export function setAddressByLatLng(lat, lng, from) {
 }
 
 function setAddressByPlace(place) {
+  if(!place) return
   const formatted_address = place.formatted_address
     .replace(", Polska", "")
     .replace(/\d\d-\d\d\d\s/, "")
