@@ -2395,6 +2395,17 @@
     "hint": "Miejscowość Józefosław obsługuje Straż Miejska Piaseczno.",
     "api": "Mail"
   },
+  "zawiercie": {
+    "address": [
+		"Straż Miejska Zawiercie",
+      "ul. Leśna 2",
+		"42-400 Zawiercie"
+    ],
+    "email": "strazmiejska@zawiercie.eu",
+    "city": "Zawiercie",
+    "hint": "Miejscowość Józefosław obsługuje Straż Miejska Piaseczno.",
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
