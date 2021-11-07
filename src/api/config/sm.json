@@ -2406,6 +2406,17 @@
     "hint": "Miejscowość Józefosław obsługuje Straż Miejska Piaseczno.",
     "api": "Mail"
   },
+  "kętrzyn": {
+    "address": [
+		"Straż Miejska Kętrzyn",
+		"ul. Wojska Polskiego 11",
+      "11-400 Kętrzyn"
+    ],
+    "email": "strazmiejska@miastoketrzyn.pl",
+    "city": "Kętrzyn",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
