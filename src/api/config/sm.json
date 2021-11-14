@@ -2408,12 +2408,23 @@
   },
   "kętrzyn": {
     "address": [
-		"Straż Miejska Kętrzyn",
-		"ul. Wojska Polskiego 11",
+      "Straż Miejska Kętrzyn",
+      "ul. Wojska Polskiego 11",
       "11-400 Kętrzyn"
     ],
     "email": "strazmiejska@miastoketrzyn.pl",
     "city": "Kętrzyn",
+    "hint": null,
+    "api": "Mail"
+  },
+  "turek": {
+    "address": [
+      "Komenda Powiatowa Policji w Turku",
+      "ul. Legionów Polskich 3",
+      "62-700 Turek"
+    ],
+    "email": "dyzurny.turek@po.policja.gov.pl",
+    "city": "Turek",
     "hint": null,
     "api": "Mail"
   },
