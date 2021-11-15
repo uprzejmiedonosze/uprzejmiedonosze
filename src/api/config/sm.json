@@ -2428,6 +2428,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "kałuszyn": {
+    "address": [
+      "Komisariat Policji w Wieliszewie",
+      "ul. Aleja Solidarności 25",
+      "05-135 Wieliszew"
+    ],
+    "email": "dzielnicowy.wieliszew14@ksp.policja.gov.pl",
+    "city": "Wieliszew",
+    "hint": null,
+    "api": "Mail"
+  },
+  "wieliszew": {
+    "address": [
+      "Komisariat Policji w Wieliszewie",
+      "ul. Aleja Solidarności 25",
+      "05-135 Wieliszew"
+    ],
+    "email": "dzielnicowy.wieliszew14@ksp.policja.gov.pl",
+    "city": "Wieliszew",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
