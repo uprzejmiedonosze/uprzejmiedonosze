@@ -17,18 +17,19 @@ class AdminToolsDB extends NoSQLite{
     * Removes old drafts and it's files.
     */
     public function removeDrafts($olderThan = 10, $dryRun){ // days
-        $this->_removeAppsByStatus($olderThan, 'draft', $dryRun);
+        $this->removeAppsByStatus($olderThan, 'draft', $dryRun);
     }
 
     /**
     * Removes old apps in ready status and it's files.
     */
     public function removeReadyApps($olderThan = 30, $dryRun){
-        $this->_removeAppsByStatus($olderThan, 'ready', $dryRun);
+        $this->removeAppsByStatus($olderThan, 'ready', $dryRun);
     }
 
     /**
      * Removes user by given $email
+     * @SuppressWarnings(PHPMD.MissingImport)
      */
     public function removeUser($email, $dryRun){
         if(!isset($email)){
@@ -43,11 +44,11 @@ class AdminToolsDB extends NoSQLite{
         }
         $user = new User($userJson);
 
-        $apps = $this->_getAllApplicationsByEmail($email);
+        $apps = $this->getAllApplicationsByEmail($email);
     
         echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
         foreach($apps as $app){
-            $this->_removeApplication($app, $dryRun);
+            $this->removeApplication($app, $dryRun);
         }
 
         $cdn2UserFolder = __DIR__ . "/../../cdn2/{$user->number}/";
@@ -80,33 +81,10 @@ class AdminToolsDB extends NoSQLite{
         $this->getStore('users')->delete($email);
     }
 
-    public function upgradeAllApps($version, $dryRun){
-        global $STATUSES;
-        foreach($STATUSES as $st => $status ){
-            if($status->class){
-                echo "\nMigruję zgłoszenia o statusie '{$status->name}'\n";
-                $this->upgradeAppsByStatus($version, $st, $dryRun);
-            }
-        }
-    }
-
-    public function upgradeAppsByStatus($version, $status, $dryRun){
-        $apps = $this->_getAllApplicationsByStatus($status);
-        foreach($apps as $app){
-            if(isset($app->version) && $app->version == $version){
-                continue;
-            }
-            $app->version = $version;
-            $this->_migrateApplication($app, $dryRun);
-        }
-    }
-
-    //////////////////////// GENERICS ////////////////////////
-
     /**
      * Removes application
      */
-    private function _removeApplication($app, $dryRun){
+    private function removeApplication($app, $dryRun){
         global $STATUSES;
         $added = (isset($app->added))? " dodane {$app->added}": "";
         $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
@@ -114,19 +92,16 @@ class AdminToolsDB extends NoSQLite{
         $email = (isset($app->user->email))? " użytkownika {$app->user->email}": " użytkownika @anonim";
         echo "Usuwam zgłoszenie numer $number [$status]$email$added\n";
         if(isset($app->carImage)){
-            $this->_removeFile($app->carImage->url, $dryRun);
-            $this->_removeFile($app->carImage->thumb, $dryRun);
+            $this->removeFile($app->carImage->url, $dryRun);
+            $this->removeFile($app->carImage->thumb, $dryRun);
         }
         if(isset($app->contextImage)){
-            $this->_removeFile($app->contextImage->url, $dryRun);
-            $this->_removeFile($app->contextImage->thumb, $dryRun);
+            $this->removeFile($app->contextImage->url, $dryRun);
+            $this->removeFile($app->contextImage->thumb, $dryRun);
         }
         if(isset($app->carInfo) && isset($app->carInfo->plateImage)){
-            $this->_removeFile($app->carInfo->plateImage, $dryRun);
+            $this->removeFile($app->carInfo->plateImage, $dryRun);
         }
-
-        //if(preg_match('/^.?cdn2\//', $app->carImage->url)){
-        //}
 
         echo " zgłoszenie oraz jego pliki usunięte;\n\n";
         if($dryRun){
@@ -135,7 +110,7 @@ class AdminToolsDB extends NoSQLite{
         $this->getStore('applications')->delete($app->id);
     }
 
-    private function _removeFile($fileName, $dryRun){
+    private function removeFile($fileName, $dryRun){
         $file = __DIR__ . "/../../$fileName";
         if(!isset($file) || empty($fileName)){
             return;
@@ -155,14 +130,15 @@ class AdminToolsDB extends NoSQLite{
     }
 
     /**
-    * Generic function to remove apps by status
+     * Generic function to remove apps by status
+     * @SuppressWarnings(PHPMD.MissingImport)
      */
-    private function _removeAppsByStatus($olderThan, $status, $dryRun){ // days
+    private function removeAppsByStatus($olderThan, $status, $dryRun){ // days
         if($status !== 'draft' && $status !== 'ready'){
             throw new Exception("Refuse to remove apps in '$status' status.");
         }
 
-        $apps = $this->_getAllApplicationsByStatus($status);
+        $apps = $this->getAllApplicationsByStatus($status);
 
         $date = date_create();
         date_sub($date, date_interval_create_from_date_string("$olderThan days"));
@@ -178,19 +154,20 @@ class AdminToolsDB extends NoSQLite{
             if($app->status !== $status) { // just for safety
                 continue;
             }
-            $this->_removeApplication($app, $dryRun);
+            $this->removeApplication($app, $dryRun);
         }
     }
 
     /**
      * Returns all applications by status.
+     * @SuppressWarnings(PHPMD.MissingImport)
      */
-    private function _getAllApplicationsByStatus($status){
+    private function getAllApplicationsByStatus($status){
         $sql = <<<SQL
             select key, value
             from applications
             where json_extract(value, '$.status') = :status;
-SQL;
+        SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':status', $status);
         $stmt->execute();
@@ -203,12 +180,32 @@ SQL;
     }
 
     /**
+     * @SuppressWarnings(PHPMD.MissingImport)
+     */
+    private function getAllUsers() {
+        $sql = <<<SQL
+            select key, value
+            from users;
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $users = Array();
+
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $users[$row[0]] = new User($row[1]);
+        }
+        return $users;
+    }
+
+    /**
      * Returns all applications by user.
      * 
      * @email
      * @onlyWithNumber - ignore drafts and ready apps
+     * @SuppressWarnings(PHPMD.MissingImport)
      */
-    private function _getAllApplicationsByEmail($email, $onlyWithNumber = false){
+    private function getAllApplicationsByEmail($email, $onlyWithNumber = null){
 
         $onlyWithNumberSQL = ($onlyWithNumber)? " and json_extract(value, '$.status') not in ('ready', 'draft')": "";
 
@@ -216,7 +213,7 @@ SQL;
             select key, value
             from applications
             where json_extract(value, '$.user.email') = :email $onlyWithNumberSQL;
-SQL;
+        SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
@@ -229,7 +226,7 @@ SQL;
         return $apps;
     }
 
-    private function _getAllApplicationIdsByEmail($email, $onlyWithNumber = false){
+    private function getAllApplicationIdsByEmail($email, $onlyWithNumber = null){
 
         $onlyWithNumberSQL = ($onlyWithNumber)? " and json_extract(value, '$.status') not in ('ready', 'draft')": "";
 
@@ -238,7 +235,7 @@ SQL;
             from applications
             where json_extract(value, '$.user.email') = :email $onlyWithNumberSQL;
             order by json_extract(value, '$.added')
-SQL;
+        SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
@@ -251,108 +248,12 @@ SQL;
         return $appIds;
     }
 
-    /**
-     * Moves files from CDN to CDN2
-     */
-    private function _migrateApplication($app, $dryRun){
-        global $STATUSES;
-        $added = (isset($app->added))? " dodane {$app->added}": "";
-        $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
-        $status = $STATUSES[$app->status]->name;
-        echo "Migruję zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
-
-        if(!isset($app->user->number)){
-            $user = new User($this->getStore('users')->get($app->user->email));
-            $app->user->number = $user->number;
-        }
-        $baseDir = 'cdn2/' . $app->user->number;
-
-        if(!file_exists(__DIR__ . "/../../$baseDir")){
-            mkdir(__DIR__ . "/../../$baseDir", 0755, true);
-        }
-        $baseFileName = $baseDir . '/' . $app->id;
+    public function fixConsistency(){
+        $users = $this->getAllUsers();
         
-        if(isset($app->carImage)){
-            $this->_moveFileToCDN2($app->carImage->url, "$baseFileName,ca.jpg", $dryRun);
-            $app->carImage->url = "$baseFileName,ca.jpg";
-            $this->_moveFileToCDN2($app->carImage->thumb, "$baseFileName,ca,t.jpg", $dryRun);
-            $app->carImage->thumb = "$baseFileName,ca,t.jpg";
-        }
-        if(isset($app->contextImage)){
-            $this->_moveFileToCDN2($app->contextImage->url, "$baseFileName,co.jpg", $dryRun);
-            $app->contextImage->url = "$baseFileName,co.jpg";
-            $this->_moveFileToCDN2($app->contextImage->thumb, "$baseFileName,co,t.jpg", $dryRun);
-            $app->contextImage->thumb = "$baseFileName,co,t.jpg";
-        }
-        if(isset($app->carInfo) && isset($app->carInfo->plateImage)){
-            $this->_moveFileToCDN2($app->carInfo->plateImage, "$baseFileName,ca,p.jpg", $dryRun);
-            $app->carInfo->plateImage = "$baseFileName,ca,p.jpg";
-        }
-        $this->_moveFileToCDN2("cdn/{$app->id}.pdf", "$baseFileName.pdf", $dryRun);
-
-        $app->initStatements();
-        if(!isset($app->statements->gallery)){
-            $app->statements->gallery = false;
-        }
-
-        if($dryRun){
-            return;
-        }
-        $this->getStore('applications')->set($app->id, json_encode($app));
-    }
-
-    private function _moveFileToCDN2($from, $to, $dryRun){
-        $ffile = __DIR__ . "/../../$from";
-        $tfile = __DIR__ . "/../../$to";
-
-        if(!isset($ffile) || empty($from)){
-            return;
-        }
-        if(!file_exists($ffile)){
-            echo " ! plik '$from' nie istnieje\n";
-            return;
-        }
-        if(filetype($ffile) !== 'file'){
-            echo " ! '$from' nie jest plikiem\n";
-            return;
-        }
-        if(!preg_match('/^.?cdn2\//', $from)){
-            echo " - przenoszę '$from' do '$tfile'\n";
-            if(!$dryRun){
-                rename($ffile, $tfile);
-            }    
-        }
-    }
-
-    public function fixConsistency($email = ''){
-        $where = '';
-        if (!empty($email)) {
-            $where = "where key = '$email' ";
-        }
-        $sql = <<<SQL
-        select key, value
-        from users
-        $where;
-SQL;
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-
-        $users = Array();
-
-        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            $users[$row[0]] = new User($row[1]);
-        }
-
         foreach ($users as $email => $user) {
-            
-            $left = count($user->getApplicationIds());
-            $appIds = $this->_getAllApplicationIdsByEmail($email, true);
-            $right = count($appIds);
-            if($left != $right){
-                echo "=> $email       $left != $right, fixing\n";
-                $user->applications = $appIds;
-                $this->getStore('users')->set($email, json_encode($user));
-            }
+            $appIds = $this->getAllApplicationIdsByEmail($email, true);
+            $this->getStore('users')->set($email, json_encode($user));
         }
         echo "\n";
     }
