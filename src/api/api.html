@@ -23,6 +23,7 @@ if (is_ajax()) {
             case "confirmed-sm":
             case "confirmed-ignored":
             case "confirmed-fined":
+            case "confirmed-instructed":
                 _setStatus($action, $_POST["id"]); break;
             case "send":
                 _send($_POST["id"]); break;
