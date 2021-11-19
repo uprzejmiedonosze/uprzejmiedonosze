@@ -21,7 +21,8 @@ CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
 CSS_MINIFIED         := $(PUBLIC)/css/index.css
 
 JS_FILES             := $(wildcard src/js/*.js src/js/*/*.js)
-JS_HASH              := $(shell cat $(JS_FILES) | md5sum | cut -b 1-8)
+CONFIG_FILES         := $(wildcard src/api/config/*.json)
+JS_HASH              := $(shell cat $(JS_FILES) $(CONFIG_FILES) | md5sum | cut -b 1-8)
 JS_MINIFIED          := $(PUBLIC)/js/index.js $(PUBLIC)/js/new-app.js
 
 HTML_FILES           := $(wildcard src/*.html src/api/*.html)
@@ -59,6 +60,8 @@ TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(DATE))
 
 .DEFAULT_GOAL        := help
 
+x:
+	echo $(JS_HASH)
 .PHONY: help clean log-from-last-prod cypress confirmation
 help: ## Displays this help.
 	@printf "\033[36m%-22s  \033[0m %s\n\n" "TARGET" "DESCRIPTION"
@@ -166,7 +169,7 @@ check-branch-staging: ## Checks if GIT is on branch staging
 
 minify: check-branch minify-css minify-js process-html minify-config process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
 minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
-minify-js: $(DIRS) $(JS_FILES) $(JS_MINIFIED)
+minify-js: $(DIRS) $(JS_FILES) $(CONFIG_FILES) $(JS_MINIFIED)
 process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
