@@ -14,7 +14,6 @@ if(isset($_GET["action"]) && $_GET["action"] == "initLogs"){
 if (is_ajax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
-        logger("api.html:_ action=$action");
         switch($action) {
             case "verifyToken": _verifyToken(); break;
             case "archived":
@@ -358,6 +357,15 @@ function saveImgAndThumb($application, $image_bytes, $type){
  *  null on error
  */
 function get_car_info($image_bytes){
+    global $cache;
+    $image_hash = sha1($image_bytes);
+    $result = $cache->get("_alpr-$image_hash");
+    if($result){
+        logger("get_car_info cache-hit $image_hash");
+        return $result;
+    }
+    logger("get_car_info cache-miss $image_hash");
+
 	$api_instance = new Swagger\Client\Api\DefaultApi();
     $secret_key = (intval(date('i')) % 2)? // mixing two API keys
         "sk_0bcc0e58dab1ea40c4389d70": // SZN key
@@ -370,7 +378,9 @@ function get_car_info($image_bytes){
 	$prewarp = ""; 
 
 	try {
-		return $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
+		$alpr = $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
+        $cache->set("_alpr-$image_hash", $alpr, MEMCACHE_COMPRESSED, 0);
+        return $alpr;
 	} catch (Exception $e) {
 		logger('Exception when calling DefaultApi->recognizeBytes: ' . $e->getMessage(), true);
 		return null;

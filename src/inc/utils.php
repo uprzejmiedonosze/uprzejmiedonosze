@@ -197,8 +197,6 @@ function isIOS(){
 /** @SuppressWarnings("exit") */
 function redirect($destPath){
     $destPath = preg_replace('/\/+/', '/', $destPath);
-
-    logger("redirect to " . $destPath);
     header("X-Redirect: %HTTPS%://%HOST%/$destPath");
     header("Location: %HTTPS%://%HOST%/$destPath");
     die();
