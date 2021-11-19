@@ -149,8 +149,9 @@ SQL;
         @$sm          = $stats['confirmed-sm'][0];
         @$ignored     = $stats['confirmed-ignored'][0];
         @$fined       = $stats['confirmed-fined'][0];
+        @$instructed  = $stats['confirmed-instructed'][0];
 
-        $stats['active'] = $confirmed + $waiting + $waitingE + $sm + $ignored + $fined;
+        $stats['active'] = $confirmed + $waiting + $waitingE + $sm + $ignored + $fined + $instructed;
 
         $this->stats->set("%HOST%-stats-" . getCurrentUserEmail(), $stats);
         return $stats;
