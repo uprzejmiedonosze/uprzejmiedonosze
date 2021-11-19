@@ -11,18 +11,19 @@ unset($_SESSION['newAppId']);
 $application = $storage->getApplication($applicationId);
 $application->setStatus("confirmed");
 
-$edited = true;
+
 $user = $storage->getCurrentUser();
-if(!$application->hasNumber()){ // new application
-    $user->setLastLocation($application->address->latlng);
-    $application->stopAgresji = $application->stopAgresji();
-    $storage->saveUser($user);
-    $edited = false;
-}else{
+$user->setLastLocation($application->address->latlng);
+
+$application->stopAgresji = $user->stopAgresji();
+$edited = $application->hasNumber();
+
+if($edited) {
     $application->address->mapImage = null;
 }
 
-$lastAppNumer = $storage->saveApplication($application);
+$user->appsCount = $storage->saveApplication($application);
+$storage->saveUser($user);
 $storage->updateRecydywa($application->carInfo->plateId);
 $storage->getUserStats(false); // update cache
 
@@ -39,7 +40,7 @@ echo generate('dziekujemy.html.twig',
             'auth' => true
         ],
         'app' => $application,
-        'appsCount' => $lastAppNumer,
+        'appsCount' => $user->appsCount,
         'edited' => $edited,
         'autoSend' => $user->autoSend() && $application->automatedSM()
     ]

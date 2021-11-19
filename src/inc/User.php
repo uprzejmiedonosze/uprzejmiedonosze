@@ -17,6 +17,8 @@ class User extends JSONObject{
     public function __construct($json = null) {
         if($json){
             parent::__construct($json);
+            @$this->appsCount = sizeof(array_values((array)$this->applications));
+            unset($this->applications);
             return;
         }
 
@@ -27,6 +29,7 @@ class User extends JSONObject{
         $this->data->exposeData = false;
         $this->data->stopAgresji = false;
         $this->data->autoSend = true;
+        $this->appsCount = 0;
     }
 
     /**
@@ -138,8 +141,7 @@ class User extends JSONObject{
      * Returns information of this user has any apps registered.
      */
     function hasApps(){
-        global $storage;
-        return $storage->getNextAppNumber($this->data->email) > 1;
+        return $this->appsCount > 0;
     }
     /**
      * Returns (lazyloaded) sex-strings for this user.

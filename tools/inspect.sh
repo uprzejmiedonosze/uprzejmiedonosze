@@ -56,7 +56,7 @@ else
 fi
 
 echo "Checking user ${PARAM}:";
-ssh nieradka.net "${SQL} \"select value from users where ${WHERE1} \"" | jq 'del(.applications) + {"applications": (.applications | length)}'
+ssh nieradka.net "${SQL} \"select value from users where ${WHERE1} \"" | jq '.'
 echo "Stats:"
 ssh nieradka.net "${SQL} \"select value from applications where ${WHERE2} \"" | jq -r '.status' | sort | uniq -c | sort -nr
 echo "Last 10 applications:"
