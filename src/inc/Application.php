@@ -83,7 +83,7 @@ class Application extends JSONObject{
      * Returns application number (UD/X/Y)
      */
     public function getNumber(){
-        return isset($this->number) ? $this->number : null;
+        return $this->hasNumber() ? $this->number : null;
     }
 
     /**
@@ -329,7 +329,7 @@ class Application extends JSONObject{
         $iconEncodedUrl = urlencode('%HTTPS%://%HOST%/img/map-circle.png');
         $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$this->address->latlng}&zoom=17&size=380x200&maptype=roadmap&markers=anchor:center%7Cicon:$iconEncodedUrl%7C{$this->address->latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
         
-        if($this->status == 'draft' || $this->status == 'ready'){
+        if(!$this->hasNumber()){
             return $mapsUrl;
         }
 
@@ -364,6 +364,10 @@ class Application extends JSONObject{
         $this->address->mapImage = "$baseFileName,ma.png";
         $storage->saveApplication($this);
         return "$baseFileName,ma.png";
+    }
+
+    public function hasNumber() {
+        return isset($this->number);
     }
 
     public function getFirstName(){

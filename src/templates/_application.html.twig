@@ -46,7 +46,7 @@
             mojego miejsca zamieszkania.</p>
     {% endif %}
 
-    {% if app.status not in ['draft', 'ready'] and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+    {% if app.hasNumber and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
         <p>Dokument ze zgłoszeniem dostępny jest pod adresem
             <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
         </p>

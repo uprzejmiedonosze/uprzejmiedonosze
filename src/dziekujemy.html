@@ -13,9 +13,8 @@ $application->setStatus("confirmed");
 
 $edited = true;
 $user = $storage->getCurrentUser();
-if(!isset($application->number)){ // new application
-    $user->addApplication($application);
-    $application->number = 'UD/' . $user->number . '/' . sizeof($user->applications);
+if(!$application->hasNumber()){ // new application
+    $user->setLastLocation($application->address->latlng);
     $application->stopAgresji = $application->stopAgresji();
     $storage->saveUser($user);
     $edited = false;
