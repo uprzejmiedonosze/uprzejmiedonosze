@@ -37,7 +37,7 @@ div.application-short .status-ready:after {
 
 div.application-short.status-confirmed h3 .ui-btn-icon-left:after,
 div.application-short .status-confirmed:after {
-  background-color: #81c78499;
+  background-color: #99999999;
 }
 
 div.application-short.status-confirmed h3 a {
@@ -64,6 +64,11 @@ div.application-short .status-confirmed-fined:after {
 div.application-short.status-confirmed-ignored h3 .ui-btn-icon-left:after,
 div.application-short .status-confirmed-ignored:after {
   background-color: #dd2c00cc;
+}
+
+div.application-short.status-confirmed-instructed h3 .ui-btn-icon-left:after,
+div.application-short .status-confirmed-instructed:after {
+  background-color: #791800cc
 }
 
 div.application-short.status-archived h3 .ui-btn-icon-left:after,
