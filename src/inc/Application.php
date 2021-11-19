@@ -119,7 +119,7 @@ class Application extends JSONObject{
             throw new Exception("Odmawiam ustawienia statusu na $status");
         }
         if($status == $this->status){
-            logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}", true);
+            logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}");
             return;
         }elseif(!in_array($status, $this->getStatus()->allowed)){
             throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status dla zgłoszenia {$this->id}");
@@ -130,6 +130,14 @@ class Application extends JSONObject{
         $this->statusHistory[date(DT_FORMAT)] = new JSONObject();
         $this->statusHistory[date(DT_FORMAT)]->old = $this->status;
         $this->statusHistory[date(DT_FORMAT)]->new = $status;
+
+        if ($status == 'confirmed-waiting' || $status == 'confirmed-waitingE') {
+            $this->sentManually = new JSONObject();
+            $this->sentManually->date = date(DT_FORMAT);
+            $smData = $this->guessSMData();
+            $this->sentManually->to = $smData->getName() . " " . $smData->getEmail();
+        }
+
         $this->status = $status;
     }
 
