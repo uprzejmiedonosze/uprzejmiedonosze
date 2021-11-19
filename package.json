@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@sentry/cli": "^1.70.1",
-    "cypress": "^8.7.0",
+    "cypress": "^9.0.0",
     "eslint": "^8.1.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.0",
