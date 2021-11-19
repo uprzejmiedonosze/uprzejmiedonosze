@@ -22,7 +22,7 @@ if(!$application->hasNumber()){ // new application
     $application->address->mapImage = null;
 }
 
-$storage->saveApplication($application);
+$lastAppNumer = $storage->saveApplication($application);
 $storage->updateRecydywa($application->carInfo->plateId);
 $storage->getUserStats(false); // update cache
 
@@ -39,7 +39,7 @@ echo generate('dziekujemy.html.twig',
             'auth' => true
         ],
         'app' => $application,
-        'appsCount' => sizeof($user->applications),
+        'appsCount' => $lastAppNumer,
         'edited' => $edited,
         'autoSend' => $user->autoSend() && $application->automatedSM()
     ]

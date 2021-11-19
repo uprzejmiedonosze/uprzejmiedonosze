@@ -17,7 +17,6 @@ class User extends JSONObject{
     public function __construct($json = null) {
         if($json){
             parent::__construct($json);
-            @$this->applications = (array_values((array)$this->applications));
             return;
         }
 
@@ -28,7 +27,6 @@ class User extends JSONObject{
         $this->data->exposeData = false;
         $this->data->stopAgresji = false;
         $this->data->autoSend = true;
-        $this->applications = Array();
     }
 
     /**
@@ -39,36 +37,20 @@ class User extends JSONObject{
     	return isset($this->data) && isset($this->data->name) && isset($this->data->address);
     }
 
-    /**
-     * Connects an application with user.
-     */
-    public function addApplication($application){
-        if(!isset($this->applications)){
-            $this->applications = Array();
-        }
-        $this->lastLocation = $application->address->latlng;
-        array_push($this->applications, $application->id);
+    public function setLastLocation($latlng){
+        $this->lastLocation = $latlng;
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.ElseExpression)
-     * @SuppressWarnings(PHPMD.IfStatementAssignment)
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
     public function getLastLocation(){
         if(isset($this->lastLocation) && $this->lastLocation != 'NaN,NaN'){
             return $this->lastLocation;
         }
-        global $storage;
-        if($this->hasApps()){
-            $lastApp = $storage->getApplication($this->getApplicationIds()[0]);
-            $this->lastLocation = $lastApp->address->latlng;
-        }else{
-            if(!($l = $this->guessLatLng())){
-                return "52.069321,19.480311";
-            }
-            $this->lastLocation = $l;
+        $lastLocation = $this->guessLatLng();
+        if(!$lastLocation){
+            return "52.069321,19.480311";
         }
+        $this->lastLocation = $lastLocation;
+        global $storage;
         $storage->saveUser($this);
         return $this->lastLocation;
     }
@@ -102,13 +84,6 @@ class User extends JSONObject{
             return $latlng['lat'] . ',' . $latlng['lng'];
         }
         return null;
-    }
-
-    /**
-     * Returns an array of application ids of this user.
-     */
-    public function getApplicationIds(){
-        return array_reverse($this->applications);
     }
 
     /**
@@ -159,13 +134,13 @@ class User extends JSONObject{
         return $this->data->termsConfirmation > LATEST_TERMS_UPDATE;
     }
 
-    /**
+     /**
      * Returns information of this user has any apps registered.
      */
     function hasApps(){
-        return count($this->applications) > 0;
+        global $storage;
+        return $storage->getNextAppNumber($this->data->email) > 1;
     }
-
     /**
      * Returns (lazyloaded) sex-strings for this user.
      */

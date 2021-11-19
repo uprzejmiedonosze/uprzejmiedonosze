@@ -4,7 +4,7 @@ require_once(__DIR__ . '/../inc/include.php');
 checkIfLogged();
 
 $user = $storage->getCurrentUser();
-$appIds = $user->getApplicationIds();
+$appIds = $storage->getUserApplicationIDs($user->data->email);
 
 $changeMail = isset($_GET['changeMail']) && isset($_GET['city']);
 $city = isset($_GET['city'])? urldecode($_GET['city']): '';

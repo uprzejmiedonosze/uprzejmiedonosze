@@ -59,6 +59,50 @@ class DB extends NoSQLite{
         return $this->loggedUser;
     }
 
+    public function getNextAppNumber($email) {
+        logger("getNextAppNumber $email");
+        $sql = <<<SQL
+            select max(json_extract(value, '$.number'))
+            from applications
+            where json_extract(value, '$.user.email') = :email;
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+
+        $ret = $stmt->fetch(PDO::FETCH_NUM);
+        if(!isset($ret[0])) {
+            return 1;
+        }
+        $number = $this->extractAppNumer($ret[0]);
+        return $number + 1;
+    }
+
+    private function extractAppNumer($appNumber) {
+        $number = explode("/", $appNumber);
+        return intval($number[2]);
+    }
+
+    public function getUserApplicationIDs($email) {
+        $sql = <<<SQL
+            select key
+            from applications
+            where json_extract(value, '$.user.email') = :email
+                and json_extract(value, '$.status') not in ('ready', 'draft')
+            order by json_extract(value, '$.number') desc
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
+
+        $appIds = Array();
+
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            array_push($appIds, $row[0]);
+        }
+        return $appIds;
+    }
+
     /**
      * Returns user by email
      */
@@ -68,19 +112,33 @@ class DB extends NoSQLite{
             throw new Exception("Próba pobrania nieistniejącego użytkownika $email.");
         }
         $user = new User($json);
-        @$user->applications = (array_values((array)$user->applications));
         return $user;
     }
 
     public function saveUser($user){
+        logger("saveUser");
         if(!isset($user->number)){
-            $user->number = $this->countUsers() + 2;
+            logger("saveUser !number");
+            $user->number = $this->getNextUserNumber();
         }
         $this->users->set($user->data->email, json_encode($user));
     }
 
-    public function countUsers(){
-        return count($this->users);
+    public function getNextUserNumber(){
+        $sql = <<<SQL
+            select max(json_extract(value, '$.number'))
+            from users;
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $ret = $stmt->fetch(PDO::FETCH_NUM);
+        if(count($ret) == 0){
+            return 1;
+        }
+        $number = intval($ret[0]);
+        logger("getNextUserNumber $number + 1");
+        return $number + 1;
     }
 
     public function getApplication($appId){
@@ -97,7 +155,16 @@ class DB extends NoSQLite{
     }
 
     public function saveApplication($application){
+        if($application->status !== 'draft' && $application->status !== 'ready') {
+            if(!$application->hasNumber()) {
+                $appNumber = $this->getNextAppNumber($application->user->email);
+                $application->number = 'UD/' . $application->user->number . '/' . $appNumber;
+            }
+        }
+
         $this->apps->set($application->id, json_encode($application));
+        logger("saveApplication " . $application->getNumber());
+        return $this->extractAppNumer($application->getNumber());
     }
 
     /**
@@ -107,10 +174,10 @@ class DB extends NoSQLite{
         $plateId = SQLite3::escapeString($plateId);
 
         $sql = <<<SQL
-            select count(*) from applications 
+            select count(key) from applications 
             where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
             and json_extract(value, '$.carInfo.plateId') = '$plateId';
-SQL;
+        SQL;
         
         return (int) $this->db->query($sql)->fetchColumn();
     }
@@ -122,7 +189,7 @@ SQL;
     public function countApplicationsStatuses(){
         $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
 
-        $sql = "select json_extract(value, '$.status') as status, count(*) as cnt from applications "
+        $sql = "select json_extract(value, '$.status') as status, count(key) as cnt from applications "
             . "where json_extract(value, '$.user.email') = '$email' "
             . "group by json_extract(value, '$.status')";
         
@@ -161,10 +228,13 @@ SQL;
      * Returns all applications for current user by status.
      */
     public function getConfirmedAppsByCity($city){
-        $sql = "select key, value from applications"
-            . " where json_extract(value, '$.user.email') = :email "
-            . " and json_extract(value, '$.status') = :status "
-            . " and json_extract(value, '$.smCity') = :city";
+        $sql = <<<SQL
+        select key, value
+        from applications
+        where json_extract(value, '$.user.email') = :email
+            and json_extract(value, '$.status') = :status
+            and json_extract(value, '$.smCity') = :city
+        SQL;
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $this->getCurrentUser()->data->email);
@@ -514,7 +584,6 @@ SQL;
             select key, value 
             from users
             where lower(json_extract(value, '$.data')) like '%' || lower(:name) || '%'
-				order by json_array_length(json_extract(value, '$.applications')) desc
             limit 10;
 SQL;
 
