@@ -34,7 +34,7 @@ class Application extends JSONObject{
                     $this->sentManually = new JSONObject();
                     $this->sentManually->date = array_key_first($sentOn);
                     $smData = $this->guessSMData();
-                    $this->sentManually->to = $smData->getName() . " " . $smData->getEmail();
+                    $this->sentManually->to = $smData->getName();
                 }
             }
             return;
@@ -150,7 +150,7 @@ class Application extends JSONObject{
             $this->sentManually = new JSONObject();
             $this->sentManually->date = date(DT_FORMAT);
             $smData = $this->guessSMData();
-            $this->sentManually->to = $smData->getName() . " " . $smData->getEmail();
+            $this->sentManually->to = $smData->getName();
         }
 
         $this->status = $status;
