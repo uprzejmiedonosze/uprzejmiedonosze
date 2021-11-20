@@ -251,6 +251,7 @@ class AdminToolsDB extends NoSQLite{
     public function upgradeAllApps($version, $dryRun){
         $users = $this->getAllUsers();
         foreach ($users as $email => $user) {
+            echo date(DT_FORMAT) . " migrating user $email:\n";
             if(!$dryRun){
                 $this->getStore('users')->set($email, json_encode($user));
             }
@@ -263,10 +264,10 @@ class AdminToolsDB extends NoSQLite{
 
     private function updateApp($app, $version, $dryRun) {
         global $STATUSES;
-        $added = (isset($app->added))? " dodane {$app->added}": "";
+        $added = (isset($app->added))? " added on {$app->added}": "";
         $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
         $status = $STATUSES[$app->status]->name;
-        echo "Migruję zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
+        echo "  - migrating app $number [$status] by {$app->user->email}$added\n";
         $app->version = $version;
 
         if($dryRun){
