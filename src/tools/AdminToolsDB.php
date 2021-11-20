@@ -9,7 +9,7 @@ class AdminToolsDB extends NoSQLite{
     /**
      * Creates DB instance with default store location.
      */
-    public function __construct($store = __DIR__ . '/../../db/store.sqlite') {
+    public function __construct($store = __DIR__ . '/../../docker/db/store.sqlite') {
         parent::__construct($store);
     }
 
@@ -248,20 +248,36 @@ class AdminToolsDB extends NoSQLite{
         return $appIds;
     }
 
-    public function fixConsistency(){
+    public function upgradeAllApps($version, $dryRun){
         $users = $this->getAllUsers();
-        
         foreach ($users as $email => $user) {
-            $appIds = $this->getAllApplicationIdsByEmail($email, true);
-            $this->getStore('users')->set($email, json_encode($user));
+            if(!$dryRun){
+                $this->getStore('users')->set($email, json_encode($user));
+            }
+            $apps = $this->getAllApplicationsByEmail($email, false);
+            foreach ($apps as $appId => $app) {
+                $this->updateApp($app, $version, $dryRun);
+            }
         }
-        echo "\n";
     }
 
+    private function updateApp($app, $version, $dryRun) {
+        global $STATUSES;
+        $added = (isset($app->added))? " dodane {$app->added}": "";
+        $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
+        $status = $STATUSES[$app->status]->name;
+        echo "Migruję zgłoszenie numer $number [$status] użytkownika {$app->user->email}$added\n";
+        $app->version = $version;
+
+        if($dryRun){
+            return;
+        }
+        $this->getStore('applications')->set($app->id, json_encode($app));
+    }
 }
 
 $db = new AdminToolsDB();
-$db->fixConsistency();
+$db->upgradeAllApps('2.0.0', false);
 
 //$db->removeDrafts(10, false);
 //$db->removeReadyApps(30, false);

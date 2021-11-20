@@ -16,12 +16,27 @@ class Application extends JSONObject{
      * Creates new Application of initites it from JSON.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings("unused")
      */
     public function __construct($json = null) {
         if($json){
             parent::__construct($json);
             @$this->statusHistory = (array)$this->statusHistory;
             @$this->comments = (array)$this->comments;
+            if(!isset($this->seq) && $this->hasNumber()) {
+                $this->seq = extractAppNumer($this->getNumber());
+            }
+            if(!isset($this->sentManually) && !isset($this->sentViaAPI) && !isset($this->sentViaMail)) {
+                $sentOn = array_filter($this->statusHistory, function($entry, $key) {
+                    return $entry->new == 'confirmed-waiting' || $entry->new == 'confirmed-waitingE';
+                }, ARRAY_FILTER_USE_BOTH);
+                if(sizeof($sentOn) > 0) {
+                    $this->sentManually = new JSONObject();
+                    $this->sentManually->date = array_key_first($sentOn);
+                    $smData = $this->guessSMData();
+                    $this->sentManually->to = $smData->getName() . " " . $smData->getEmail();
+                }
+            }
             return;
         }
         global $storage;
