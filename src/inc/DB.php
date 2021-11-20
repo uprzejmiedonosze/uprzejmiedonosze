@@ -74,13 +74,8 @@ class DB extends NoSQLite{
         if(!isset($ret[0])) {
             return 1;
         }
-        $number = $this->extractAppNumer($ret[0]);
+        $number = extractAppNumer($ret[0]);
         return $number + 1;
-    }
-
-    private function extractAppNumer($appNumber) {
-        $number = explode("/", $appNumber);
-        return intval($number[2]);
     }
 
     public function getUserApplicationIDs($email) {
@@ -164,7 +159,7 @@ class DB extends NoSQLite{
 
         $this->apps->set($application->id, json_encode($application));
         logger("saveApplication " . $application->getNumber());
-        return $this->extractAppNumer($application->getNumber());
+        return extractAppNumer($application->getNumber());
     }
 
     /**

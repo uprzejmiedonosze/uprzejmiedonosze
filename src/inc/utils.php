@@ -283,4 +283,9 @@ function isStaging(){
     return '%HOST%' == 'staging.uprzejmiedonosze.net';
 }
 
+function extractAppNumer($appNumber) {
+    $number = explode("/", $appNumber);
+    return intval($number[2]);
+}
+
 ?>
