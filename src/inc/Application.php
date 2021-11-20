@@ -51,7 +51,7 @@ class Application extends JSONObject{
         $this->status = 'draft';
         $this->category = 0;
         $this->initStatements();
-        $this->version = '1.0.2';
+        $this->version = '2.0.1';
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->browser = get_browser($userAgent, true);
