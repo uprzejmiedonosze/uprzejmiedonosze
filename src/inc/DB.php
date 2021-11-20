@@ -154,6 +154,7 @@ class DB extends NoSQLite{
         if($application->status !== 'draft' && $application->status !== 'ready') {
             if(!$application->hasNumber()) {
                 $appNumber = $this->getNextAppNumber($application->user->email);
+                $application->seq = $appNumber;
                 $application->number = 'UD/' . $application->user->number . '/' . $appNumber;
             }
         }
