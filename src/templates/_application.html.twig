@@ -20,7 +20,7 @@
     {% endif %}
     {% if app.sentManually is defined %}
         <b class="appSentInfo">To zgłoszenie zostało wysłane przez Ciebie ręcznie do {{ app.sentManually.to }} 
-        w dniu {{ app.sentManually.date|date('Y-m-d') }} o godzinie {{ app.sentManually.date|date('H:i') }}.</b>
+        w dniu {{ app.sentManually.date|date('Y-m-d') }} około godziny {{ app.sentManually.date|date('H:i') }}.</b>
     {% endif %}
         <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
