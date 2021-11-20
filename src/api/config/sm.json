@@ -2450,6 +2450,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "wołów": {
+    "address": [
+      "Komenda Powiatowa Policji w Wołowie",
+      "ul. Piłsudskiego 23",
+      "56-100 Wołów"
+    ],
+    "email": "kpp@wolow.wr.policja.gov.pl",
+    "city": "Wołów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
