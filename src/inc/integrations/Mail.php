@@ -41,6 +41,7 @@ class Mail extends CityAPI {
         $messageId = $message->getHeaders()->get('Message-ID');
 
         $application->setStatus('confirmed-waiting');
+        unset($application->sentManually);
         $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->getName()} ($to).");
         $application->sentViaMail = new JSONObject();
         $application->sentViaMail->date = date(DT_FORMAT);

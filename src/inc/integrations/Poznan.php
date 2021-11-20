@@ -40,6 +40,7 @@ class Poznan extends CityAPI {
         $application->setStatus('confirmed-sm');
         $application->addComment($application->guessSMData()->getName(), $reply);
         $application->sentViaAPI = $reply;
+        unset($application->sentManually);
         global $storage;
         $storage->saveApplication($application);
         return 'confirmed-sm';
