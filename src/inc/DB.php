@@ -160,8 +160,7 @@ class DB extends NoSQLite{
         }
 
         $this->apps->set($application->id, json_encode($application));
-        logger("saveApplication " . $application->getNumber());
-        return extractAppNumer($application->getNumber());
+        if(isset($application->seq)) return $application->seq;
     }
 
     /**
