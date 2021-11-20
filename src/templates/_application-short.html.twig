@@ -1,19 +1,24 @@
-{% set sendable = statuses[app.status].sendable %}
+{% set recydywa = app.getRecydywa %}
+{% set status = app.getStatus %}
+{% set sendable = status.sendable %}
 
-<div id="{{ app.id }}"  {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
-    class="application application-short {{ app.getStatus().class }} status-all status-{{ app.getStatus().class }}
-        status-{{ app.status }}" data-collapsed-icon="{{ app.getStatus().icon }}"
+<div id="{{ app.id }}"
+    {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
+    class="application application-short {{ status.class }} status-all status-{{ status.class }}
+        status-{{ app.status }}"
+    data-collapsed-icon="{{ status.icon }}"
     data-expanded-icon="carat-d" data-role="collapsible"
-    data-filtertext="{{ "#{app.address.address} #{app.number} #{app.date} #{app.carInfo.plateId} "
-        ~ "#{app.userComment} #{app.getCategory.short} " }}
-        {% if app.getRecydywa > 1 %}recydywa{{ app.getRecydywa }}{% endif %}">
+    data-filtertext="{{ "#{app.address.address} #{app.number} #{app.date} #{app.carInfo.plateId} " ~ "#{app.userComment} #{app.getCategory.short} " }}
+    {% if recydywa > 1 %}recydywa{{ recydywa }}{% endif %}"
+    title="Status: {{ status.name }}"
+    >
 
     <h3>{{ app.number }}{%if app.user.stopAgresji is defined and app.user.stopAgresji %}<sup>#SA</sup>{% endif %} ({{ app.getDate }}) {{ app.address.address}}{% if app.comments %}<span title="Komentarz" class="ui-li-count">{{ app.comments|length }}</span>{% endif %}</h3>
     <p data-role="listview" data-inset="false">
         <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
             pojazdu o nr. rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
-            {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
+            {% if recydywa > 1 %}<sup>(recydywa {{ recydywa }})</sup>{% endif %}
             w okolicy adresu
             <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
                 data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
@@ -23,7 +28,7 @@
     <p>{{ app.userComment }}</p>
 {% endif %}
 
-{% if statuses[app.status].topButtons %}
+{% if status.topButtons %}
     <div>
         {% if app.automatedSM and autoSend is defined and autoSend %}
         <a href="#" onclick="_send('{{ app.id }}');"
@@ -76,14 +81,14 @@
         </div>
     </div>
 {% if config.appActionButtons %}
-    <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ statuses[app.status].name }}</b> na:</p>
+    <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ status.name }}</b> na:</p>
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
     {% for key,val in statuses %}
         {% if val.class == 'bottom' %}
             <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')"
                 data-inline="true" data-mini="true" 
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
-                {% if key not in statuses[app.status].allowed and key != app.status %}hidden{% endif %}
+                {% if key not in status.allowed and key != app.status %}hidden{% endif %}
                 {% if key == app.status %}ui-disabled{% endif %}
                 {{ val.cta ?? '' }}
                 ui-icon-{{ val.icon }}
