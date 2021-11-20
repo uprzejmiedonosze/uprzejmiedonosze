@@ -62,7 +62,7 @@ class DB extends NoSQLite{
     public function getNextAppNumber($email) {
         logger("getNextAppNumber $email");
         $sql = <<<SQL
-            select max(json_extract(value, '$.number'))
+            select max(json_extract(value, '$.seq'))
             from applications
             where json_extract(value, '$.user.email') = :email;
         SQL;
@@ -74,7 +74,7 @@ class DB extends NoSQLite{
         if(!isset($ret[0])) {
             return 1;
         }
-        $number = extractAppNumer($ret[0]);
+        $number = intval($ret[0]);
         return $number + 1;
     }
 
