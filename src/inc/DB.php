@@ -84,7 +84,8 @@ class DB extends NoSQLite{
             from applications
             where json_extract(value, '$.user.email') = :email
                 and json_extract(value, '$.status') not in ('ready', 'draft')
-            order by json_extract(value, '$.added') desc
+            order by json_extract(value, '$.seq') desc,
+                json_extract(value, '$.added') desc
         SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
