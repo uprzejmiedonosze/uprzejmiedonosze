@@ -2,6 +2,7 @@
 header("Content-Type: application/json; charset=UTF-8");
 require_once(__DIR__ . '/../../inc/include.php');
 require(__DIR__ . '/../../autoload.php');
+require(__DIR__ . '/../../inc/alpr.php');
 
 $cache = new Memcache;
 $cache->connect('localhost', 11211);
@@ -215,24 +216,6 @@ function _moderateApp($appId, $decision){
 }
 
 /**
- * Compares 'plate results' and sorts it by confidence.
- */
-function cmp($a, $b){
-    if($a['confidence'] > $b['confidence']) return -1;
-    if($a['confidence'] < $b['confidence']) return 1;
-    return 0;
-}
-
-function _check_alpr_budget($credits_monthly_used, $credits_monthly_total){
-    if((float)$credits_monthly_used / (float)$credits_monthly_total > 0.9){
-        logger("$credits_monthly_used credits out of $credits_monthly_total used!");
-		  if (((int)$credits_monthly_used % 10) == 0) {
-			_sendSlackError("$credits_monthly_used credits out of $credits_monthly_total used!");
-		  }
-    }
-}
-
-/**
  * Saves uploaded image + automatically create thumbnail + read plate data
  * for `carImage`.
  */
@@ -257,47 +240,7 @@ function _upload(){
     $baseFileName = saveImgAndThumb($application, $image_bytes, $type);
 
     if($pictureType == 'carImage'){
-        $car_info = get_car_info($image_bytes);
-
-        $application->carImage = new stdClass();
-        $application->carImage->url = "$baseFileName,$type.jpg";
-        $application->carImage->thumb = "$baseFileName,$type,t.jpg";
-
-        $application->carInfo = new stdClass();
-
-        if(isset($car_info) && count($car_info["results"])){
-            _check_alpr_budget($car_info['credits_monthly_used'], $car_info['credits_monthly_total']);
-
-            $result = (Array)$car_info['results'];
-            usort($result, "cmp");
-
-            $result = $result[0];
-
-            $coordinates = $result["coordinates"];
-            $xes = Array();
-            $yes = Array();
-            foreach($coordinates as $ojb){
-                $xes[] = $ojb->getX();
-                $yes[] = $ojb->getY();
-            }
-
-            $im = imagecreatefromjpeg("/var/www/%HOST%/$baseFileName,$type.jpg");
-            $plateImage = imagecrop($im, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
-            if ($plateImage !== FALSE) {
-
-                $application->carInfo->plateImage = "$baseFileName,$type,p.jpg";
-                imagejpeg($plateImage, '/var/www/%HOST%/' . $application->carInfo->plateImage);
-            }
-
-            $recydywa = $storage->getRecydywa($result["plate"]);
-            $application->carInfo->plateId = strtoupper($result["plate"]);
-            $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
-            $application->carInfo->brand = @ucfirst($result["vehicle"]['make'][0]['name']);
-            $application->carInfo->brandConfidence = @$result["vehicle"]['make'][0]['confidence'];
-            $application->carInfo->color = @ucfirst($result["vehicle"]['color'][0]['name']);
-            $application->carInfo->colorConfidence = @$result["vehicle"]['color'][0]['confidence'];
-            $application->carInfo->recydywa = $recydywa;
-        }
+        get_car_info($image_bytes, $application, $baseFileName, $type);
     }else if($pictureType == 'contextImage'){
         $application->contextImage = new stdClass();
         $application->contextImage->url = "$baseFileName,$type.jpg";
@@ -348,44 +291,6 @@ function saveImgAndThumb($application, $image_bytes, $type){
         logger("Wasn't able to write $fileName as thumb to $thumbName.", true);
     }
     return $baseFileName;
-}
-
-/**
- * Get's car info from image.
- * 
- * Returns:
- *  object
- *  null on error
- */
-function get_car_info($image_bytes){
-    global $cache;
-    $image_hash = sha1($image_bytes);
-    $result = $cache->get("_alpr-$image_hash");
-    if($result){
-        logger("get_car_info cache-hit $image_hash");
-        return $result;
-    }
-    logger("get_car_info cache-miss $image_hash");
-
-	$api_instance = new Swagger\Client\Api\DefaultApi();
-    $secret_key = (intval(date('i')) % 2)? // mixing two API keys
-        "sk_0bcc0e58dab1ea40c4389d70": // SZN key
-        "sk_aa0b80a70b2ae2268b36734a"; // KS key
-	$country = "eu"; 
-	$recognize_vehicle = 1;
-	$state = ""; 
-	$return_image = 0; 
-	$topn = 1; 
-	$prewarp = ""; 
-
-	try {
-		$alpr = $api_instance->recognizeBytes($image_bytes, $secret_key, $country, $recognize_vehicle, $state, $return_image, $topn, $prewarp);
-        $cache->set("_alpr-$image_hash", $alpr, MEMCACHE_COMPRESSED, 0);
-        return $alpr;
-	} catch (Exception $e) {
-		logger('Exception when calling DefaultApi->recognizeBytes: ' . $e->getMessage(), true);
-		return null;
-	}
 }
 
 /**
