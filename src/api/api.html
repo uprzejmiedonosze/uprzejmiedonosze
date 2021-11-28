@@ -170,7 +170,7 @@ function _geoToAddress($lat, $lng){
         return;
     }
     if($json['status'] == 'ZERO_RESULTS'){
-        raiseError("Brak wyników z serwerów GeoAPI: " . $output, 404, false);
+        raiseError("Brak wyników z serwerów GeoAPI dla $lat, $lng: $output", 404, false);
     }
     raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
 }
