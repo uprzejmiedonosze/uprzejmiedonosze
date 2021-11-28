@@ -1,5 +1,5 @@
 Cypress.Commands.add("login", () => {
-  cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0')
+  cy.setCookie('PHPSESSID', 'l13vsrpbqa21ovbm9ohi1atr9f3guj1c')
 });
 
 Cypress.Commands.add("uploadFile", (selector, fileUrl, type = "") => cy.get(selector)
