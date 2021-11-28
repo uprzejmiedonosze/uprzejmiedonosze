@@ -5,6 +5,7 @@ require(__DIR__ . '/plateRecognizer.php');
 
 /**
  * @SuppressWarnings(PHPMD.MissingImport)
+ * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
     global $storage;
@@ -15,11 +16,11 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
 
     $application->carInfo = new stdClass();
 
-    //if(intval(date('s')) % 3) { // 2/3 hits
+    if(intval(date('s')) % 3) { // 2/3 hits
+        get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
+    } else { // 1/3 hits
         get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
-    //} else { // 1/3 hits
-    //    get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
-    //}
+    }
     
     if (isset($application->carInfo->plateId)) {
         $recydywa = $storage->getRecydywa($application->carInfo->plateId);

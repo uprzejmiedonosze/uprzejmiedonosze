@@ -12,12 +12,12 @@ function cmp_alpr($left, $right){
 function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
     global $cache;
     $budgetConsumed = $cache->get('alpr_budget_consumed');
-    if($budgetConsumed > 0.9) {
-        if(intval(date('s')) % 10) { // 90% hits
-            logger("budgetConsumed ($budgetConsumed) > 90% using CLI", true);
-            $carInfo = get_alpr_cli($application->carImage->url);
-        }
-    }
+    //if($budgetConsumed > 0.9) {
+    //    if(intval(date('s')) % 10) { // 90% hits
+    //        logger("budgetConsumed ($budgetConsumed) > 90% using CLI", true);
+    //        $carInfo = get_alpr_cli($application->carImage->url);
+    //    }
+    //}
     if(!isset($carInfo)){
         logger("budgetConsumed ($budgetConsumed) > 90% using API", true);
         $carInfo = get_alpr($imageBytes);
