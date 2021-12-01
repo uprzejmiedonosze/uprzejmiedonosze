@@ -60,10 +60,7 @@ function get_platerecognizer(&$imageBytes) {
     curl_setopt($chi, CURLOPT_POSTFIELDS, $data);
     curl_setopt($chi, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
 
-    $secretKey = (intval(date('s')) % 2)? // mixing two API keys
-        "684f9f53e7e96cd36e18ec2ff9c91a4a49e034fc": // ud@nieradka.net
-        "8fdb8b5ce4201462e109c0cc2858e34e1b5e39d6"; // e@nieradka.net
-
+    $secretKey = "684f9f53e7e96cd36e18ec2ff9c91a4a49e034fc";
 
     curl_setopt($chi, CURLOPT_HTTPHEADER, array(
         "Authorization: Token $secretKey"
