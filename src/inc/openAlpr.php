@@ -10,16 +10,16 @@ function cmp_alpr($left, $right){
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  */
 function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
+    logger("get_car_info_alpr $baseFileName");
     global $cache;
     $budgetConsumed = $cache->get('alpr_budget_consumed');
-    //if($budgetConsumed > 0.9) {
-    //    if(intval(date('s')) % 10) { // 90% hits
-    //        logger("budgetConsumed ($budgetConsumed) > 90% using CLI", true);
-    //        $carInfo = get_alpr_cli($application->carImage->url);
-    //    }
-    //}
+    if($budgetConsumed > 0.9) {
+        if(intval(date('s')) % 10) { // 90% hits
+            logger("budgetConsumed ($budgetConsumed) > 90% using CLI", true);
+            $carInfo = get_alpr_cli($application->carImage->url);
+        }
+    }
     if(!isset($carInfo)){
-        logger("budgetConsumed ($budgetConsumed) > 90% using API", true);
         $carInfo = get_alpr($imageBytes);
     }
 
@@ -63,6 +63,7 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
  * @SuppressWarnings(PHPMD.MissingImport)
  */
 function get_alpr(&$imageBytes){
+    logger("  get_alpr");
     global $cache;
     $imageHash = sha1($imageBytes);
     $result = $cache->get("_alpr-$imageHash");
@@ -95,13 +96,11 @@ function get_alpr(&$imageBytes){
 }
 
 /**
- * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
 function get_alpr_cli($imagePath) {
-    $response = exec("alpr --country eu --topn 1 --json /var/www/%HOST%/$imagePath", $retArr, $retVal);
-    if($retVal !== 0){
-        return null;
-    }
+    logger("  get_alpr_cli");
+    $response = shell_exec("alpr --country eu --topn 1 --json /var/www/%HOST%/$imagePath 2>/dev/null");
     $json = json_decode($response, true);
     if(!json_last_error() === JSON_ERROR_NONE){
         return null;
