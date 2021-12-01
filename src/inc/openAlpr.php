@@ -69,6 +69,8 @@ function get_alpr(&$imageBytes){
     $result = $cache->get("_alpr-$imageHash");
     if($result){
         logger("get_alpr cache-hit $imageHash");
+        unset($result['credits_monthly_used']);
+        unset($result['credits_monthly_total']);
         return $result;
     }
     logger("get_alpr cache-miss $imageHash");
