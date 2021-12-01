@@ -104,10 +104,10 @@ describe('Valid images and location', () => {
     })
 
     it('checks address autocomplete', function () {
-        cy.get('#lokalizacja').clear().type('Mazurska 37, Poznań')
+        cy.get('#lokalizacja').clear().type('Mazurska, Poznań')
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
-        cy.get('#lokalizacja').should('have.value', 'Mazurska 13, Poznań')
+        cy.get('#lokalizacja').should('have.value', 'Mazurska 20, Poznań')
     })
 
     it('uploads images', function () {
