@@ -2461,6 +2461,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "kołobrzeg": {
+    "address": [
+      "Komenda Powiatowa Policji w Kołobrzegu",
+      "ul. Kilińskiego 20",
+      "78-100 Kołobrzeg"
+    ],
+    "email": "sekretariat.kolobrzeg@sc.policja.gov.pl",
+    "city": "Kołobrzeg",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
