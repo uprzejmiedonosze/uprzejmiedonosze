@@ -2483,6 +2483,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "drzewica": {
+    "address": [
+      "Posterunek Policji w Drzewicy",
+      "ul. Gen. Wł. Sikorskiego 1",
+      "26-340 Drzewica"
+    ],
+    "email": "dyzurny@opoczno.ld.policja.gov.pl",
+    "city": "Drzewica",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
