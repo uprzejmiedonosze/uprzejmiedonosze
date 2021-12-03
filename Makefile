@@ -122,6 +122,9 @@ quickfix: diff-from-last-prod confirmation check-branch-master check-git-clean c
 	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
+	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-php $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
+	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js src/js/jquery-1.12.4.min.map
 	$(create-symlink)
 	@make clean
 
