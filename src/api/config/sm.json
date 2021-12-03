@@ -2472,6 +2472,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "opoczno": {
+    "address": [
+      "Straż Miejska w Opocznie",
+      "ul. Piotrkowska 7",
+      "26-300 Opoczno"
+    ],
+    "email": "straz.miejska@um.opoczno.pl",
+    "city": "Opoczno",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
