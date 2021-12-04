@@ -2494,6 +2494,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "nowogard": {
+    "address": [
+      "Komisariat Policji w Nowogardzie",
+      "ul. Wojska Polskiego 9",
+      "72-200 Nowogard"
+    ],
+    "email": "sekretariat.goleniow@sc.policja.gov.pl",
+    "city": "Nowogard",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
