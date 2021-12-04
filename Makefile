@@ -60,8 +60,6 @@ TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(DATE))
 
 .DEFAULT_GOAL        := help
 
-x:
-	echo $(JS_HASH)
 .PHONY: help clean log-from-last-prod cypress confirmation
 help: ## Displays this help.
 	@printf "\033[36m%-22s  \033[0m %s\n\n" "TARGET" "DESCRIPTION"
@@ -69,7 +67,7 @@ help: ## Displays this help.
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s- \033[0m %s\n", $$1, $$2}'
 
 dev: ## Refresh src files in Docker image
-	@$(MAKE) dev-sequential -j
+	@$(MAKE) --warn-undefined-variables dev-sequential -j
 
 dev-sequential: HOST := $(DEV_HOST)
 dev-sequential: HTTPS := http
@@ -81,12 +79,12 @@ dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
 dev-run: $(DIRS) export dev ## Building and running docker image
 	@echo "==> Building docker"
-	@make --directory docker build
+	@make --warn-undefined-variables --directory docker build
 	@echo "==> Running docker image"
-	@make --directory docker runi
+	@make --warn-undefined-variables --directory docker runi
 
 staging: ## Copy files to staging server.
-	@$(MAKE) staging-sequential -j
+	@$(MAKE) --warn-undefined-variables staging-sequential -j
 
 staging-sequential: HOST := $(STAGING_HOST)
 staging-sequential: $(DIRS) export
@@ -96,7 +94,7 @@ staging-sequential: $(DIRS) export
 	@#ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
 shadow: ## Copy files to shadow server.
-	$(MAKE) shadow-sequential -j
+	$(MAKE) --warn-undefined-variables shadow-sequential -j
 
 shadow-sequential: HOST := $(SHADOW_HOST)
 shadow-sequential: $(DIRS) export
@@ -110,9 +108,7 @@ prod: cypress check-branch-master check-git-clean clean $(DIRS) export ## Copy f
 	@git tag --force -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-php $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js src/js/jquery-1.12.4.min.map
+	$(sentry-release)
 	$(create-symlink)
 	@make clean
 
@@ -122,9 +118,7 @@ quickfix: diff-from-last-prod confirmation check-branch-master check-git-clean c
 	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-php $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js src/js/jquery-1.12.4.min.map
+	$(sentry-release)
 	$(create-symlink)
 	@make clean
 
@@ -146,7 +140,7 @@ export: $(DIRS) process-sitemap minify ## Exports files for deployment.
 cypress:
 	@echo "==> Testing staging"
 	@$(MAKE) clean
-	@$(MAKE) staging -j
+	@$(MAKE) --warn-undefined-variables staging -j
 	@$(CYPRESS) run --record --key $(CYPRESS_KEY)
 
 cypress-local:
@@ -196,20 +190,20 @@ $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@
 		fi; \
 	fi;
 
-export/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo_processing,$<)
+export/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo-processing,$<)
 	@$(shell npm bin)/parcel build --target browser --public-url "/js" \
 		--out-dir $(dir $@) $<
 
-export/public/%.html: src/%.html; $(call echo_processing,$<)
+export/public/%.html: src/%.html; $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 
-export/public/api/api.html: src/api/api.html; $(call echo_processing,$<)
+export/public/api/api.html: src/api/api.html; $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 	$(replace-inline)
 
-export/public/api/config/%.json: src/api/config/%.json; $(call echo_processing,$<)
+export/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$<)
 	@jq -c . < $< > $@
 
 export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
@@ -218,48 +212,48 @@ export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating 
 	@jq '.[].api' < $< | sort | uniq | egrep -v '^("Mail"|"Poznan"|null)' || echo "(v) $< API values OK"
 	@jq -c . < $< > $@
 
-export/inc/%.php: src/inc/%.php; $(call echo_processing,$<)
+export/inc/%.php: src/inc/%.php; $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 
-export/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(call echo_processing,$<)
-	$(lint)
-	$(replace)
-	$(replace-inline)
-
-export/inc/include.php: src/inc/include.php $(TWIG_FILES); $(call echo_processing,$<)
+export/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 	$(replace-inline)
 
-export/inc/utils.php: src/inc/utils.php; $(call echo_processing,$<)
+export/inc/include.php: src/inc/include.php $(TWIG_FILES); $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 	$(replace-inline)
 
-export/templates/%: src/templates/%; $(call echo_processing,$<)
+export/inc/utils.php: src/inc/utils.php; $(call echo-processing,$<)
+	$(lint)
+	$(replace)
+	$(replace-inline)
+
+export/templates/%: src/templates/%; $(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 
 export/templates/base.html.twig: src/templates/base.html.twig $(JS_FILES) $(CSS_FILES)
-	$(call echo_processing,$<)
+	$(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 	$(replace-inline)
 
 export/templates/nowe-zgloszenie.html.twig: src/templates/nowe-zgloszenie.html.twig $(JS_FILES)
-	$(call echo_processing,$<)
+	$(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 	$(replace-inline)
 
 export/templates/changelog.html.twig: src/templates/changelog.html.twig
-	$(call echo_processing,$<)
+	$(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 	$(replace-inline)
 
-$(MANIFEST_PROCESSED): $(MANIFEST); $(call echo_processing,$<)
+$(MANIFEST_PROCESSED): $(MANIFEST); $(call echo-processing,$<)
 	$(replace)
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
@@ -270,7 +264,6 @@ update-libs: ; @echo 'Updating PHP and JS libraries'
 	@npm update && npm install
 
 $(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.xml'
-	
 	@echo '<urlset \n'\
     	'\txmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'\
     	'\txmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'\
@@ -295,7 +288,7 @@ tail:
 
 # Utils
 
-define echo_processing
+define echo-processing
 	@tput setaf 245 && echo "  - processing $1" && tput sgr0
 endef
 
@@ -323,6 +316,12 @@ define create-symlink
 @echo "==> Creating a symlink in logs directory [$(TAG_NAME).log] -> [$@.log]"
 @curl $(HTTPS)://$(HOST)/api/api.html?action=initLogs
 @ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log"
+endef
+
+define sentry-release
+@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
+@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-php $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
+@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js src/js/jquery-1.12.4.min.map
 endef
 
 # GIT
