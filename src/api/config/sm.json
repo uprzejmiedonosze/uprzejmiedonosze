@@ -2516,6 +2516,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "nowy sącz": {
+    "address": [
+      "Straż Miejska w Nowym Sączu",
+      "ul. Lwowska 71",
+      "33-300 Nowy Sącz"
+    ],
+    "email": "ksm@nowysacz.pl",
+    "city": "Nowy Sącz",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
