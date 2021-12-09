@@ -2527,6 +2527,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "końskie": {
+    "address": [
+      "Komenda Powiatowa Policji w Końskich",
+      "yl. Łazienna 12",
+      "26-200 Końskie"
+    ],
+    "email": "wrd.konskie@ki.policja.gov.pl",
+    "city": "Końskie",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
