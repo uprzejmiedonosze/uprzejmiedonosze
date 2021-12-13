@@ -309,7 +309,7 @@ define lint
 endef
 
 define lint-twig
-@~/.composer/vendor/bin/twig-lint lint --quiet $< || ~/.composer/vendor/bin/twig-lint lint $<
+@./vendor/bin/twig-linter lint --no-interaction --quiet $< || ./vendor/bin/twig-linter lint --no-interaction $<
 endef
 
 define create-symlink
