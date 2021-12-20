@@ -2549,6 +2549,17 @@
     "hint": "Wstępne informacje są dość pesymistyczne. Komendant twierdzi, że email może nie wystarczyć do zgłoszenia.",
     "api": "Mail"
   },
+  "pyskowice": {
+    "address": [
+      "Straż Miejska w Pyskowicach",
+      "ul. Strzelców Bytomskich 3",
+      "44-120 Pyskowice"
+    ],
+    "email": "sm@pyskowice.pl",
+    "city": "Pyskowice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
