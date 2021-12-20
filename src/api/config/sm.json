@@ -2560,6 +2560,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "oleśnica": {
+    "address": [
+      "Komenda Powiatowa Policji w Oleśnicy",
+      "ul. Generała Józefa Hallera 3",
+      "56-400 Oleśnica"
+    ],
+    "email": "dyzurny@olesnica.wr.policja.gov.pl",
+    "city": "Oleśnica",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
