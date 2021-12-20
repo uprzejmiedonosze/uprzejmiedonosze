@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/utils.php');
 require_once(__DIR__ . '/JSONObject.php');
+require_once(__DIR__ . '/integrations/CityAPI.php');
 use \Datetime as Datetime;
 use \Exception as Exception;
 use \JSONObject as JSONObject;
@@ -462,6 +463,15 @@ class Application extends JSONObject{
 
     public function isAppOwner() {
         return isLoggedIn() && (getCurrentUserEmail() == $this->user->email);
+    }
+
+    public function getSentDetails() {
+        if(isset($this->sentManually)) {
+            return $this->sentManually;
+        }
+        $smData = $this->guessSMData();
+        $api = new $smData->api;
+        return $api->getSentDetails($this);        
     }
 }
 

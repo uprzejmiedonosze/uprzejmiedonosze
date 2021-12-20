@@ -1,0 +1,6 @@
+<li id="{{ app.id }}">
+    Zgłoszenie nr {{ app.number }} z dnia {{ app.getDate }}, dotyczące pojazdu {{ app.carInfo.plateId }},
+    {% if app.getCategory.short %}{{ app.getCategory.title }}{% endif %}
+     pod adresem {{ app.address.address }}.
+    Wysłane {{ app.getSentDetails.date }} na adres {{ app.getSentDetails.to }}.
+</li>

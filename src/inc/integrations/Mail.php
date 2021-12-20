@@ -67,6 +67,10 @@ class Mail extends CityAPI {
         $storage->saveApplication($application);
         return 'confirmed-waiting';
     }
+
+    function getSentDetails($application) {
+        return $application->sentViaMail;
+    }
 }
 
 ?>

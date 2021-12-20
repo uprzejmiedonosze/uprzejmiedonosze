@@ -3,6 +3,7 @@ use \Exception as Exception;
 
 abstract class CityAPI {
     abstract function send(&$application);
+    abstract function getSentDetails($application);
 
     function checkApplication(&$application){
         if($application->status !== 'confirmed'){

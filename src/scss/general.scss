@@ -157,3 +157,9 @@ a[rel~="external"] {
 .hidden {
     display: none;
 }
+
+@media (max-width: 40em) {
+    .hideOnMobile {
+        display: none;   
+    }
+}

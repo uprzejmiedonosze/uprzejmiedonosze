@@ -45,6 +45,14 @@ class Poznan extends CityAPI {
         $storage->saveApplication($application);
         return 'confirmed-sm';
     }
+
+    function getSentDetails($application) {
+        return Array(
+            "date" => "",
+            "subject" => $application->getEmailSubject(),
+            "to" => "API fixmycity",
+        );
+    }
 }
 
 ?>

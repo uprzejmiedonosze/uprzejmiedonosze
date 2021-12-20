@@ -100,6 +100,30 @@ class DB extends NoSQLite{
     }
 
     /**
+    * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
+    */
+    public function getSentApplications() {
+        $sql = <<<SQL
+            select key, value
+            from applications
+            where json_extract(value, '$.user.email') = :email
+                and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE')
+            order by json_extract(value, '$.seq') desc,
+                json_extract(value, '$.added') desc
+        SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', getCurrentUserEmail());
+        $stmt->execute();
+
+        $apps = Array();
+
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $apps[$row[0]] = new Application($row[1]);
+        }
+        return $apps;
+    }
+
+    /**
      * Returns user by email
      */
     public function getUser($email){
@@ -181,6 +205,7 @@ class DB extends NoSQLite{
     /**
      * Returns application stats (count per status) for current user.
      * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
     public function countApplicationsStatuses(){
         $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
@@ -190,33 +215,29 @@ class DB extends NoSQLite{
             . "group by json_extract(value, '$.status')";
         
         $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
-        return $ret;
+        return array_map(function ($status) { return $status[0]; }, $ret);
     }
 
     /**
      * Calculates stats for current user;
      * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
     public function getUserStats($useCache = true){
+        logger("getUserStats useCache=$useCache");
 
         $stats = $this->stats->get("%HOST%-stats-" . getCurrentUserEmail());
         if($useCache && $stats){
+            logger("getUserStats stats=" . print_r($stats, true));
             return $stats;
         }
 
         $stats = $this->countApplicationsStatuses();
-        
-        @$confirmed   = $stats['confirmed'][0];
-        @$waiting     = $stats['confirmed-waiting'][0];
-        @$waitingE    = $stats['confirmed-waitingE'][0];
-        @$sm          = $stats['confirmed-sm'][0];
-        @$ignored     = $stats['confirmed-ignored'][0];
-        @$fined       = $stats['confirmed-fined'][0];
-        @$instructed  = $stats['confirmed-instructed'][0];
 
-        $stats['active'] = $confirmed + $waiting + $waitingE + $sm + $ignored + $fined + $instructed;
+        $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
 
         $this->stats->set("%HOST%-stats-" . getCurrentUserEmail(), $stats);
+        logger("getUserStats stats=" . print_r($stats, true));
         return $stats;
     }
 

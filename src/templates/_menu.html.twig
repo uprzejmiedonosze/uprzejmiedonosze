@@ -28,11 +28,18 @@
             {% endfor %}
         {% endif %}
 
-        {% if general.stats.confirmed is defined and general.stats.confirmed[0] > 0 %}
+        {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
         <li data-icon="mail" class="wysylka">
             <a data-ajax="false" {% if config.menu == 'wysylka' %}class="active"{% endif %}
                 href="/wysylka.html">Do wysłania
-            <span class="ui-li-count">{{ general.stats.confirmed[0] ?? 0 }}</span></a>
+            <span class="ui-li-count">{{ general.stats.confirmed ?? 0 }}</span></a>
+        </li>
+        {% endif %}
+        {% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
+        <li data-icon="mail" class="wysylka">
+            <a data-ajax="false" {% if config.menu == 'wysylka' %}class="active"{% endif %}
+                href="/zapytaj-o-status.html">Zapytaj o status
+            <span class="ui-li-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span></a>
         </li>
         {% endif %}
     {% else %}

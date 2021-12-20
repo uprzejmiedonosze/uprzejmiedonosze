@@ -1,0 +1,24 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2 class="hideOnMobile">Zapytaj o status swoich zgłoszeń</h2>
+
+{% if applications|length == 0 %}
+    <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
+    <a href="nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
+{% else %}
+
+
+    <div class="ui-body ui-body-a ui-corner-all">
+        <h3>Skopiuj i wyślij:</h3>
+        <p>Proszę o status moich zgłoszeń:</p>
+        <ul>{% for app in applications %}
+            {% include('_application-ask.html.twig') %}
+        {% endfor %}</ul>
+    </div>
+    
+{% endif %}
+{% endblock %}
