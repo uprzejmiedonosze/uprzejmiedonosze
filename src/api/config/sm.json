@@ -2536,6 +2536,8 @@
     "email": "wrd.konskie@ki.policja.gov.pl",
     "city": "Końskie",
     "hint": null,
+    "api": "Mail"
+  },
   "morąg": {
     "address": [
       "Straż Miejska w Morągu",
