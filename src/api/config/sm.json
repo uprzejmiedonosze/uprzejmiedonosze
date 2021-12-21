@@ -2571,6 +2571,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "spalice": {
+    "address": [
+      "Komenda Powiatowa Policji w Oleśnicy",
+      "ul. Generała Józefa Hallera 3",
+      "56-400 Oleśnica"
+    ],
+    "email": "dyzurny@olesnica.wr.policja.gov.pl",
+    "city": "Spalice",
+    "hint": null,
+    "api": "Mail"
+  },
   "borkowo": {
     "address": [
       "Straż Gminna Gminy Pruszcz Gdański",
