@@ -2571,6 +2571,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "borkowo": {
+    "address": [
+      "Straż Gminna Gminy Pruszcz Gdański",
+      "ul. Spacerowa 8",
+      "83-031 Łęgowo"
+    ],
+    "email": "strazgminna@pruszczgdanski.pl",
+    "city": "Borkowo",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
