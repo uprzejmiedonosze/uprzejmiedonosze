@@ -2593,6 +2593,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "lębork": {
+    "address": [
+      "Komenda Powiatowa Policji w Lęborku",
+      "ul. Toruńska 5",
+      "84-300 Lębork"
+    ],
+    "email": "komenda.lebork@gd.policja.gov.pl",
+    "city": "Lębork",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
