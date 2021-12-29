@@ -107,7 +107,7 @@ class DB extends NoSQLite{
             select key, value
             from applications
             where json_extract(value, '$.user.email') = :email
-                and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE')
+                and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE', 'confirmed-sm')
             order by json_extract(value, '$.seq') desc,
                 json_extract(value, '$.added') desc
         SQL;
@@ -120,6 +120,17 @@ class DB extends NoSQLite{
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
             $apps[$row[0]] = new Application($row[1]);
         }
+
+        function _cmp($left, $right){
+            if($left->sent->to > $right->sent->to) return 1;
+            if($left->sent->to < $right->sent->to) return -1;
+            if($left->sent->date > $right->sent->date) return 1;
+            if($left->sent->date < $right->sent->date) return -1;
+            return 0;
+        }
+
+        usort($apps, "_cmp");
+
         return $apps;
     }
 

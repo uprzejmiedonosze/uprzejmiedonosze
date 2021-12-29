@@ -5,19 +5,39 @@
 {% block main %}
 
 <h2 class="hideOnMobile">Zapytaj o status swoich zgłoszeń</h2>
+<p>Zarówno Straż Miejska jak i Policja zachowują się bardzo niekonsekwentnie w kwestii
+    informowania o statusie zgłoszeń. Większosć nie robi tego wcale. Cześć pisze maile.
+    Sporo wysyła powiadomienia listami poleconymi.</p>
+
+<p>Za pomocą tej strony uzyskasz gotowy do skopiowania tekst, którego możesz użyć w
+    komunikacji ze Strażą Miejską lub Policją.</p>
 
 {% if applications|length == 0 %}
-    <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
+    <p>Nie masz zgłoszeń wysłanych i nierozpatrzonych zgłoszeń.</p>
     <a href="nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
 {% else %}
 
+    <p>
+        Zwróć uwagę na adresy wysyłki na liście poniżej. Różne zgłoszenia mogły trafić do różnych
+        jednostek.
+    </p>
+    <p>
+        Najlepiej też pytać o status po upływie nie mniej niż 2 tygodni od wysłania.
+    </p>
 
+    {% set address = 'unset' %}
     <div class="ui-body ui-body-a ui-corner-all">
-        <h3>Skopiuj i wyślij:</h3>
-        <p>Proszę o status moich zgłoszeń:</p>
-        <ul>{% for app in applications %}
-            {% include('_application-ask.html.twig') %}
-        {% endfor %}</ul>
+        <ul>
+            {% for app in applications %}
+                {% if address != app.sent.to %}
+                    {% set address = app.sent.to %}
+                    </ul>
+                    <p>Proszę o status moich zgłoszeń wysłanych na adres {{ address ?? '(nieznany)' }}:</p>
+                    <ul>
+                {% endif %}
+                {% include('_application-ask.html.twig') %}
+            {% endfor %}
+        </ul>
     </div>
     
 {% endif %}

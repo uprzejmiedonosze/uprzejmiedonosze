@@ -1,6 +1,5 @@
 <li id="{{ app.id }}">
-    Zgłoszenie nr {{ app.number }} z dnia {{ app.getDate }}, dotyczące pojazdu {{ app.carInfo.plateId }},
-    {% if app.getCategory.short %}{{ app.getCategory.title }}{% endif %}
-     pod adresem {{ app.address.address }}.
-    Wysłane {{ app.getSentDetails.date }} na adres {{ app.getSentDetails.to }}.
+    Zgłoszenie nr <b>{{ app.number }}</b> z dnia {{ app.getDate }}, dotyczące pojazdu
+    <b>{{ app.carInfo.plateId }}</b>{% if app.getCategory.short %} ({{ app.getCategory.title ?? app.getCategory.short }}){% endif %}. Miejsce zgłoszenia: {{ app.address.address }}.
+    {% if app.sent.date %} Wysłane {{ app.sent.date|date('Y-m-d') }} około godziny {{ app.sent.date|date('H:i') }}.{% endif %}
 </li>
