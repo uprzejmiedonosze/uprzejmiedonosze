@@ -110,7 +110,9 @@ function _send($appId){
         $newStatus = $api->send($application);
         _sendSlackOnNewApp($application);
     }catch(Exception $e){
-        \Sentry\captureException($e);
+        if ('%HOST%' == 'uprzejmiedonosze.net') {
+            \Sentry\captureException($e);
+        }
         raiseError($e->getMessage(), 500);
     }
     echo json_encode(Array("status" => "$newStatus"));
