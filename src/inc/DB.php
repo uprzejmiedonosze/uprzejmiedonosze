@@ -232,14 +232,10 @@ class DB extends NoSQLite{
     /**
      * Calculates stats for current user;
      * @SuppressWarnings(PHPMD.ShortVariable)
-     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
     public function getUserStats($useCache = true){
-        logger("getUserStats useCache=$useCache");
-
         $stats = $this->stats->get("%HOST%-stats-" . getCurrentUserEmail());
         if($useCache && $stats){
-            logger("getUserStats stats=" . print_r($stats, true));
             return $stats;
         }
 
@@ -248,7 +244,6 @@ class DB extends NoSQLite{
         $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
 
         $this->stats->set("%HOST%-stats-" . getCurrentUserEmail(), $stats);
-        logger("getUserStats stats=" . print_r($stats, true));
         return $stats;
     }
 

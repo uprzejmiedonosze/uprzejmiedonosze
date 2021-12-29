@@ -17,7 +17,6 @@ class Application extends JSONObject{
      * Creates new Application of initites it from JSON.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings("unused")
      */
     public function __construct($json = null) {
         if($json){
@@ -27,17 +26,7 @@ class Application extends JSONObject{
             if(!isset($this->seq) && $this->hasNumber()) {
                 $this->seq = extractAppNumer($this->getNumber());
             }
-            if(!isset($this->sentManually) && !isset($this->sentViaAPI) && !isset($this->sentViaMail)) {
-                $sentOn = array_filter($this->statusHistory, function($entry, $key) {
-                    return $entry->new == 'confirmed-waiting' || $entry->new == 'confirmed-waitingE';
-                }, ARRAY_FILTER_USE_BOTH);
-                if(sizeof($sentOn) > 0) {
-                    $this->sentManually = new JSONObject();
-                    $this->sentManually->date = array_key_first($sentOn);
-                    $smData = $this->guessSMData();
-                    $this->sentManually->to = $smData->getName();
-                }
-            }
+            $this->migrateSent();
             return;
         }
         global $storage;
@@ -57,6 +46,40 @@ class Application extends JSONObject{
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $this->browser = get_browser($userAgent, true);
         $this->browser['user_agent'] = $userAgent;
+    }
+
+    /**
+     * @SuppressWarnings("unused")
+     */
+    private function migrateSent() {
+        if (isset($this->sent)) {
+            return;
+        }
+        $this->sent = new JSONObject();
+        $smData = $this->guessSMData();
+        $sentOn = array_filter($this->statusHistory, function($entry, $key) {
+            return $entry->new == 'confirmed-waiting' || $entry->new == 'confirmed-waitingE';
+        }, ARRAY_FILTER_USE_BOTH);
+        $this->sent->date = null;
+        if(sizeof($sentOn) > 0) {
+            $this->sent->date = array_key_first($sentOn);
+        }
+        if (isset($this->sentViaAPI)) {
+            $this->sent->subject = $this->getEmailSubject();
+            $this->sent->to = "fixmycity";
+            $this->sent->method = $smData->api;
+            return;
+        }
+        if (isset($this->sentViaMail)) {
+            $this->sent->date = $this->sentViaMail->date;
+            $this->sent->subject = $this->sentViaMail->subject;
+            $this->sent->to = $this->sentViaMail->to;
+            $this->sent->method = $smData->api;
+            return;
+        }
+        $this->sent->subject = $this->getEmailSubject();
+        $this->sent->to = $smData->getEmail();
+        $this->sent->method = 'manual';
     }
 
     public function initStatements(){
@@ -148,10 +171,14 @@ class Application extends JSONObject{
         $this->statusHistory[date(DT_FORMAT)]->new = $status;
 
         if ($status == 'confirmed-waiting' || $status == 'confirmed-waitingE') {
-            $this->sentManually = new JSONObject();
-            $this->sentManually->date = date(DT_FORMAT);
+            if(!isset($this->sent)) {
+                $this->sent = new JSONObject();
+            }
+            $this->sent->date = date(DT_FORMAT);
             $smData = $this->guessSMData();
-            $this->sentManually->to = $smData->getName();
+            $this->sent->to = $smData->getEmail();
+            $this->sent->subject = $this->getEmailSubject();
+            $this->sent->method = 'manual';
         }
 
         $this->status = $status;
@@ -463,15 +490,6 @@ class Application extends JSONObject{
 
     public function isAppOwner() {
         return isLoggedIn() && (getCurrentUserEmail() == $this->user->email);
-    }
-
-    public function getSentDetails() {
-        if(isset($this->sentManually)) {
-            return $this->sentManually;
-        }
-        $smData = $this->guessSMData();
-        $api = new $smData->api;
-        return $api->getSentDetails($this);        
     }
 }
 

@@ -3,7 +3,6 @@ use \Exception as Exception;
 
 abstract class CityAPI {
     abstract function send(&$application);
-    abstract function getSentDetails($application);
 
     function checkApplication(&$application){
         if($application->status !== 'confirmed'){
@@ -62,7 +61,7 @@ abstract class CityAPI {
         }
 
         // zaznaczam na wszelki wypadek, ale poszczególne implementacje powinny to nadpisać
-        $application->sentViaAPI = $json;
+        $application->sent->curl = $json;
         return $json;
     }
 

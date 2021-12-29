@@ -41,16 +41,16 @@ class Mail extends CityAPI {
         $messageId = $message->getHeaders()->get('Message-ID');
 
         $application->setStatus('confirmed-waiting');
-        unset($application->sentManually);
         $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->getName()} ($to).");
-        $application->sentViaMail = new JSONObject();
-        $application->sentViaMail->date = date(DT_FORMAT);
-        $application->sentViaMail->subject = $subject;
-        $application->sentViaMail->to = $to;
-        $application->sentViaMail->cc = "{$application->user->name} ({$application->user->email})";
-        $application->sentViaMail->from = "{$application->user->name} (" . SMTP_USER . ")";
-        $application->sentViaMail->body = parent::formatEmail($application, false);
-        $application->sentViaMail->$messageId = $messageId;
+        $application->sent = new JSONObject();
+        $application->sent->date = date(DT_FORMAT);
+        $application->sent->subject = $subject;
+        $application->sent->to = $to;
+        $application->sent->cc = "{$application->user->name} ({$application->user->email})";
+        $application->sent->from = "{$application->user->name} (" . SMTP_USER . ")";
+        $application->sent->body = parent::formatEmail($application, false);
+        $application->sent->$messageId = $messageId;
+        $application->sent->method = "Mail";
 
         require(__DIR__ . '/../PDFGenerator.php');
         [$fileatt, $fileattname] = application2PDF($application);
@@ -66,10 +66,6 @@ class Mail extends CityAPI {
         global $storage;
         $storage->saveApplication($application);
         return 'confirmed-waiting';
-    }
-
-    function getSentDetails($application) {
-        return $application->sentViaMail;
     }
 }
 

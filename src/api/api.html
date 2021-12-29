@@ -104,8 +104,6 @@ function _send($appId){
         if(!$sm->api){
             throw new Exception("SM " . $sm->city . " nie posiada API");
         }
-
-        require(__DIR__ . '/../../inc/integrations/CityAPI.php');
         $api = new $sm->api;
         $newStatus = $api->send($application);
         _sendSlackOnNewApp($application);

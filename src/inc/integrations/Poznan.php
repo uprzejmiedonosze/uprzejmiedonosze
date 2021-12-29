@@ -39,19 +39,13 @@ class Poznan extends CityAPI {
 
         $application->setStatus('confirmed-sm');
         $application->addComment($application->guessSMData()->getName(), $reply);
-        $application->sentViaAPI = $reply;
-        unset($application->sentManually);
+        $application->sent->reply = $reply;
+        $application->sent->subject = $application->getEmailSubject();
+        $application->sent->to = "fixmycity";
+        $application->sent->method = "Poznan";
         global $storage;
         $storage->saveApplication($application);
         return 'confirmed-sm';
-    }
-
-    function getSentDetails($application) {
-        return Array(
-            "date" => "",
-            "subject" => $application->getEmailSubject(),
-            "to" => "API fixmycity",
-        );
     }
 }
 
