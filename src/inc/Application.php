@@ -58,7 +58,7 @@ class Application extends JSONObject{
         $this->sent = new JSONObject();
         $smData = $this->guessSMData();
         $sentOn = array_filter($this->statusHistory, function($entry, $key) {
-            return $entry->new == 'confirmed-waiting' || $entry->new == 'confirmed-waitingE';
+            return isset($entry->new) && ($entry->new == 'confirmed-waiting' || $entry->new == 'confirmed-waitingE');
         }, ARRAY_FILTER_USE_BOTH);
         $this->sent->date = null;
         if(sizeof($sentOn) > 0) {
