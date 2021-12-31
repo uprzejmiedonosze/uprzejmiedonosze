@@ -2604,6 +2604,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "kolbudy": {
+    "address": [
+      "Straż Gminna Kolbudy",
+      "ul. Polna 55",
+      "83-050 Kolbudy"
+    ],
+    "email": "strazgminna@ug.kolbudy.pl",
+    "city": "Kolbudy",
+    "hint": null,
+    "api": "Mail"
+  },
+  "kowale": {
+    "address": [
+      "Straż Gminna Kolbudy",
+      "ul. Polna 55",
+      "83-050 Kolbudy"
+    ],
+    "email": "strazgminna@ug.kolbudy.pl",
+    "city": "Kolbudy",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
