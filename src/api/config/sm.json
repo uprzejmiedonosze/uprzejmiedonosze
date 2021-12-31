@@ -2595,11 +2595,11 @@
   },
   "lębork": {
     "address": [
-      "Komenda Powiatowa Policji w Lęborku",
-      "ul. Toruńska 5",
+      "Straż Miejska w Lęborku",
+      "ul. Armii Krajowej 14",
       "84-300 Lębork"
     ],
-    "email": "komenda.lebork@gd.policja.gov.pl",
+    "email": "strazmiejska.lebork@wp.pl",
     "city": "Lębork",
     "hint": null,
     "api": "Mail"
