@@ -2626,6 +2626,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "sanok": {
+    "address": [
+      "Straż Miejska Sanok",
+      "ul. Rynek 7",
+      "38-500 Sanok"
+    ],
+    "email": "sm@um.sanok.pl",
+    "city": "Sanok",
+    "hint": null,
+    "api": "Mail"
+  },
+  "racibórz": {
+    "address": [
+      "Straż Miejska w Raciborzu",
+      "ul. Króla Stefana Batorego 6",
+      "47-400 Racibórz"
+    ],
+    "email": "sm@um.raciborz.pl",
+    "city": "Racibórz",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
