@@ -55,6 +55,9 @@ class Application extends JSONObject{
         if (isset($this->sent)) {
             return;
         }
+        if ($this->status == 'draft') {
+            return;
+        }
         $this->sent = new JSONObject();
         $smData = $this->guessSMData();
         $sentOn = array_filter($this->statusHistory, function($entry, $key) {
