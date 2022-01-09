@@ -147,9 +147,7 @@ class DB extends NoSQLite{
     }
 
     public function saveUser($user){
-        logger("saveUser");
         if(!isset($user->number)){
-            logger("saveUser !number");
             $user->number = $this->getNextUserNumber();
         }
         $this->users->set($user->data->email, json_encode($user));
@@ -195,7 +193,7 @@ class DB extends NoSQLite{
         }
 
         $this->apps->set($application->id, json_encode($application));
-        if(isset($application->seq)) return $application->seq;
+        return $application;
     }
 
     /**

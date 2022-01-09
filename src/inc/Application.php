@@ -52,10 +52,7 @@ class Application extends JSONObject{
      * @SuppressWarnings("unused")
      */
     private function migrateSent() {
-        if (isset($this->sent)) {
-            return;
-        }
-        if ($this->status == 'draft') {
+        if (isset($this->sent) || in_array($this->status, ['draft', 'ready', 'confirmed'])) {
             return;
         }
         $this->sent = new JSONObject();

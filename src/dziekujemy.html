@@ -7,24 +7,26 @@ if (!isset($_SESSION['newAppId']) || !isset($_POST['applicationId'])) {
 
 $applicationId = $_POST['applicationId'];
 unset($_SESSION['newAppId']);
-
 $application = $storage->getApplication($applicationId);
 $user = $storage->getCurrentUser();
 
-$user->setLastLocation($application->address->latlng);
-$user->appsCount = $storage->saveApplication($application); // this also sets app number
-$storage->saveUser($user);
+$edited = $application->hasNumber();
 
 $application->setStatus("confirmed");
 $application->stopAgresji = $user->stopAgresji();
-$edited = $application->hasNumber();
+$application = $storage->saveApplication($application); // this also sets app number
+
+$user->setLastLocation($application->address->latlng);
+$user->appsCount = $application->seq;
+$storage->saveUser($user);
+
+$storage->updateRecydywa($application->carInfo->plateId);
+$storage->getUserStats(false); // update cache
 
 if($edited) {
     $application->address->mapImage = null;
 }
 
-$storage->updateRecydywa($application->carInfo->plateId);
-$storage->getUserStats(false); // update cache
 
 echo generate('dziekujemy.html.twig', 
     [
