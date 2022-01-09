@@ -38,7 +38,7 @@
         {% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
         <li data-icon="mail" class="zapyta-o-status">
             <a data-ajax="false" {% if config.menu == 'zapyta-o-status' %}class="active"{% endif %}
-                href="/zapytaj-o-status.html">Zapytaj o status
+                href="/zapytaj-o-status.html?update">Zapytaj o status
             <span class="ui-li-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span></a>
         </li>
         {% endif %}
