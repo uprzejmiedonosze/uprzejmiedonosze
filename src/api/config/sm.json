@@ -1086,17 +1086,6 @@
     "hint": "Gmina Sędławki jest obsługiwana przez komendą Policji w Bartoszycach.",
     "api": "Mail"
   },
-  "głogów": {
-    "address": [
-      "Komenda Powiatowa Policji w Głogowie",
-      "ul. Obrońców Pokoju 17",
-      "67-200 Głogów"
-    ],
-    "email": "kpp.glogow@glogow.policja.gov.pl",
-    "city": "Głogów",
-    "hint": null,
-    "api": "Mail"
-  },
   "słubice": {
     "address": [
       "Straż Miejska w Słubicach",
@@ -2648,6 +2637,7 @@
     "hint": null,
     "api": "Mail"
   },
+  
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
