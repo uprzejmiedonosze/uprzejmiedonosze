@@ -2637,7 +2637,17 @@
     "hint": null,
     "api": "Mail"
   },
-  
+  "brzeg": {
+    "address": [
+      "Straż Miejska w Brzegu",
+      "ul. Robotnicza 12",
+		"49-300 Brzeg"
+    ],
+    "email": "sm@brzeg.pl",
+    "city": "Brzeg",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
