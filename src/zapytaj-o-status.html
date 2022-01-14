@@ -3,7 +3,6 @@ require_once(__DIR__ . '/../inc/include.php');
 
 checkIfLogged();
 
-$user = $storage->getCurrentUser();
 $sent = $storage->getSentApplications();
 
 echo generate('ask-for-status.html.twig', 
