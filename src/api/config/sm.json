@@ -2641,7 +2641,7 @@
     "address": [
       "Straż Miejska w Brzegu",
       "ul. Robotnicza 12",
-		"49-300 Brzeg"
+		  "49-300 Brzeg"
     ],
     "email": "sm@brzeg.pl",
     "city": "Brzeg",
@@ -2657,6 +2657,28 @@
     "city": null,
     "hint": null,
     "api": null
+  },
+  "dobra": {
+    "address": [
+      "Straż Gminna w Dobrej z siedzibą w Wołczkowie",
+      "ul. Lipowa 51 Wołczkowo",
+		  "72-003 Dobra"
+    ],
+    "email": "strazgminna@dobraszczecinska.pl",
+    "city": "Dobra",
+    "hint": null,
+    "api": "Mail"
+  },
+  "wołczkowo": {
+    "address": [
+      "Straż Gminna w Dobrej z siedzibą w Wołczkowie",
+      "ul. Lipowa 51 Wołczkowo",
+		  "72-003 Dobra"
+    ],
+    "email": "strazgminna@dobraszczecinska.pl",
+    "city": "Wołczkowo",
+    "hint": null,
+    "api": "Mail"
   },
   "_nieznane": {
     "address": [
