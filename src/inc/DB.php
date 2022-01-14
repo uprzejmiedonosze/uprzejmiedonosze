@@ -126,6 +126,8 @@ class DB extends NoSQLite{
             if($left->sent->to < $right->sent->to) return -1;
             if($left->sent->date > $right->sent->date) return 1;
             if($left->sent->date < $right->sent->date) return -1;
+            if($left->seq > $right->seq) return 1;
+            if($left->seq < $right->seq) return -1;
             return 0;
         }
 
