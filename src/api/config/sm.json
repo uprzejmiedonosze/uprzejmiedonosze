@@ -2648,6 +2648,16 @@
     "hint": null,
     "api": "Mail"
   },
+  "głogów": {
+    "address": [
+      "(Niestety adres email KPP Głogów przestał działać. Uporczywie szukamy",
+      "aktualnego. Może Ty pomożesz?)"
+    ],
+    "email": null,
+    "city": null,
+    "hint": null,
+    "api": null
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
