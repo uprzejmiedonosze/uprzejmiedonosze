@@ -70,6 +70,18 @@
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": "Mail"
   },
+  "bielany": {
+    "address": [
+      "V Oddział Terenowy",
+      "Straży Miejskiej m.st. Warszawy",
+      "ul. Szegedyńska 13a",
+      "01-957 Warszawa"
+    ],
+    "email": "ot5@strazmiejska.waw.pl",
+    "city": "Warszawa",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
+    "api": "Mail"
+  },
   "warszawa_ot5": {
     "address": [
       "V Oddział Terenowy",
