@@ -2692,6 +2692,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "krzeszowice": {
+    "address": [
+      "Straż Miejska Gminy Krzeszowice",
+      "pl. F. Kulczyckiego 1",
+		  "32-065 Krzeszowice"
+    ],
+    "email": "strazmiejska@um.krzeszowice.pl",
+    "city": "Krzeszowice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
