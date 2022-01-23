@@ -2662,13 +2662,14 @@
   },
   "głogów": {
     "address": [
-      "(Niestety adres email KPP Głogów przestał działać. Uporczywie szukamy",
-      "aktualnego. Może Ty pomożesz?)"
+      "Komenda Powiatowa Policji w Głogowie",
+      "ul. Obrońców Pokoju 17",
+      "67-200 Głogów"
     ],
-    "email": null,
-    "city": null,
+    "email": "kpp@glogow.wr.policja.gov.pl",
+    "city": "Głogów",
     "hint": null,
-    "api": null
+    "api": "Mail"
   },
   "dobra": {
     "address": [
