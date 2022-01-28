@@ -31,15 +31,15 @@
     <div data-role="collapsibleset" data-filter="true" data-mini="true"
         data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
         {% for app in applications %}
-            {% if loop.index0 >= applicationsLimit %}
+            {% if loop.index0 >= myAppsSize %}
                 {% set hideAppOverLimit = true %}
             {% endif %}
             {% include('_application-short.html.twig') %}
         {% endfor %}
     </div>
-    {% if applicationsLimit < applicationsCount %}
+    {% if myAppsSize < applicationsCount %}
     <div class="displayAllApps">
-        <p>To tylko {{ applicationsLimit }} najnowszych zgłoszeń.</p>
+        <p>To tylko {{ myAppsSize }} najnowszych zgłoszeń.</p>
         <a href="#" class="ui-btn ui-corner-all">Pokaż wszystkie</a>
     </div>
     {% endif %}

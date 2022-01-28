@@ -14,6 +14,7 @@ $msisdn = trim($post["msisdn"]);
 $exposeData = isset($post['exposeData']) && $post['exposeData'] == 'Y';
 $stopAgresji = isset($post['stopAgresji']) && $post['stopAgresji'] == 'SA';
 $autoSend = isset($post['autoSend']) && isset($post['autoSend']) ? $post['autoSend'] == 'Y' : true;
+$myAppsSize = isset($post['myAppsSize']) ? intval($post['myAppsSize']) : 200;
 
 $address = str_replace(', Polska', '', trim($post["address"]));
 
@@ -23,7 +24,7 @@ try{
     $user = new User();
 }
 
-$user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend);
+$user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
 $storage->saveUser($user);
 
 if(!isset($_GET['update'])) _sendSlackOnRegister($user);
