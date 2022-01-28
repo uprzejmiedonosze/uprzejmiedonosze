@@ -6,21 +6,42 @@ function cmp_alpr($left, $right){
   return 0;
 }
 
-/**
- * @SuppressWarnings(PHPMD.ErrorControlOperator)
- */
-function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
-    logger("get_car_info_alpr $baseFileName");
+function _check_alpr_cache($imageHash) {
+    global $cache;
+    $result = $cache->get("_alpr-$imageHash");
+    if($result){
+        logger("get_alpr cache-hit $imageHash");
+        unset($result['credits_monthly_used']);
+        unset($result['credits_monthly_total']);
+        return $result;
+    }
+    logger("get_alpr cache-miss $imageHash");
+    return null;
+}
+
+function _use_cli() {
     global $cache;
     $budgetConsumed = $cache->get('alpr_budget_consumed');
     if($budgetConsumed > 0.9) {
         if(intval(date('s')) % 10) { // 90% hits
             logger("budgetConsumed ($budgetConsumed) > 90% using CLI", true);
-             $carInfo = get_alpr_cli($application->carImage->url);
-         }
-     }
-    if(!isset($carInfo)){
-        $carInfo = get_alpr($imageBytes);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * @SuppressWarnings(PHPMD.ErrorControlOperator)
+ */
+function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
+    logger("get_car_info_alpr $baseFileName");
+    $imageHash = sha1($imageBytes);
+    $carInfo = _check_alpr_cache($imageHash);
+
+    if(!$carInfo){
+        if(_use_cli()) $carInfo = get_alpr_cli($application->carImage->url);
+        else $carInfo = get_alpr($imageBytes);
     }
 
     if(isset($carInfo) && count($carInfo["results"])){
@@ -66,15 +87,6 @@ function get_alpr(&$imageBytes){
     logger("  get_alpr");
     global $cache;
     $imageHash = sha1($imageBytes);
-    $result = $cache->get("_alpr-$imageHash");
-    if($result){
-        logger("get_alpr cache-hit $imageHash");
-        unset($result['credits_monthly_used']);
-        unset($result['credits_monthly_total']);
-        return $result;
-    }
-    logger("get_alpr cache-miss $imageHash");
-
 	$apiInstance = new Swagger\Client\Api\DefaultApi();
     $secretKey = (intval(date('s')) % 2)? // mixing two API keys
         "sk_0bcc0e58dab1ea40c4389d70": // SZN key
@@ -121,4 +133,3 @@ function _check_alpr_budget($used, $total){
 		  }
     }
 }
-?>
