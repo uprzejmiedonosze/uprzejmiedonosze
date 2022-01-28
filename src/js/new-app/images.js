@@ -88,8 +88,8 @@ function readGeoDataFromImage(file) {
   loadImage.parseMetaData(file, function (data) {
     if (data.exif) {
       const DateTimeOriginal = data.exif.getText("DateTimeOriginal")
-      const DateTimeOriginal2 = data.exif[34665] && data.exif[34665][36867]
-      const DateTime = data.exif.getText("DateTime")
+      const DateTimeOriginal2 = (data.exif[34665] && data.exif[34665][36867]) || 'undefined'
+      const DateTime = data.exif.getText("DateTime") || 'undefined'
 
       const dateTime = DateTimeOriginal === 'undefined'
         ? (DateTimeOriginal2 === 'undefined' ? DateTime : DateTimeOriginal2)
