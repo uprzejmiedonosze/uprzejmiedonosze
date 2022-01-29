@@ -34,10 +34,14 @@ export const initHandlers = () => {
 
   if (window.File && window.FileReader && window.FormData) {
     $(document).on("change", "#contextImage", function (e) {
+      console.log('in contextImage', e.target.files)
       checkFile(e.target.files[0], this.id);
+      if(e.target.files.length > 1) checkFile(e.target.files[1], 'carImage');
     });
     $(document).on("change", "#carImage", function (e) {
+      console.log('in carImage', e.target.files)
       checkFile(e.target.files[0], this.id);
+      if(e.target.files.length > 1) checkFile(e.target.files[1], 'contextImage');
     });
   }
 

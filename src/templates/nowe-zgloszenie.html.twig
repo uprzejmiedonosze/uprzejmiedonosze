@@ -31,8 +31,8 @@
                     <div class="loader l" style="display: none;"></div>
                     <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
-                <input type="file" accept="image/jpeg" id="contextImage"
-                    title="Zdjęcie przedstawiające kontekst"
+                <input type="file" accept="image/jpeg" id="contextImage" multiple
+                    title="Zdjęcie przedstawiające kontekst" 
                         value="{{ app.contextImage.url ?? '' }}" />
             </div>
             <div class="ui-block-b imageContainer image-upload carImageSection">
@@ -43,7 +43,7 @@
                     <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
                 <div id="recydywa"></div>
-                <input type="file" accept="image/jpeg" id="carImage"
+                <input type="file" accept="image/jpeg" id="carImage" multiple
                     title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                     value="{{ app.carImage.url ?? '' }}" />
             </div>
