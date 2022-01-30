@@ -46,10 +46,9 @@ function uploadFinished() {
 function checkUploadInProgress() {
   if (uploadInProgress <= 0) {
     uploadInProgress = 0;
-    $("#form-submit").removeClass("ui-disabled");
-  } else {
-    $("#form-submit").addClass("ui-disabled");
+    return $("#form-submit").removeClass("ui-disabled");
   }
+  $("#form-submit").addClass("ui-disabled");
 }
 
 function readFile(file, id) {

@@ -31,12 +31,3 @@ export const checkValue = function (item, minLength) {
   }
   return true;
 };
-
-export const checkAttr = function (item) {
-  const len = item.val().trim().length || item.attr("value").trim().length;
-  if (len == 0) {
-    item.parent().parent().addClass("error");
-    return false;
-  }
-  return true;
-};
