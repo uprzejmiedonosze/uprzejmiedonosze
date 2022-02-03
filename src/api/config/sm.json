@@ -2704,6 +2704,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "bochnia": {
+    "address": [
+      "Straż Miejska w Bochni",
+      "ul. Regis 2",
+		  "32-700 Bochnia"
+    ],
+    "email": "straz@straznicy.bochnia.pl",
+    "city": "Bochnia",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
