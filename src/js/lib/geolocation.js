@@ -84,9 +84,9 @@ export const initAutocomplete = function (trigger_change, inputId, google) {
 };
 
 const locationToLatLng = function (place) {
-  return typeof place.geometry.location.lat == "function"
+  return typeof place?.geometry?.location?.lat == "function"
     ? [place.geometry.location.lat(), place.geometry.location.lng()]
-    : [place.geometry.location.lat, place.geometry.location.lng];
+    : [place?.geometry?.location?.lat, place?.geometry?.location?.lng];
 };
 
 export function setAddressByLatLngString(latlng) {
