@@ -17,7 +17,8 @@ class User extends JSONObject{
     public function __construct($json = null) {
         if($json){
             parent::__construct($json);
-            @$this->appsCount = sizeof(array_values((array)$this->applications));
+            if (!isset($this->appsCount))
+                @$this->appsCount = sizeof(array_values((array)$this->applications));
             unset($this->applications);
             return;
         }
