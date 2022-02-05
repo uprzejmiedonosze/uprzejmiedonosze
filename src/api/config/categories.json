@@ -45,8 +45,8 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
     },
     "5": {
-        "title": "Mniej niż 10m od przejścia dla pieszych",
-        "short": "Pojazd był zaparkowany w odległości mniejszej niż 10m od przejścia dla pieszych (PoRD Art. 49. 1.2.).",
+        "title": "Mniej niż 10 m od przejścia dla pieszych",
+        "short": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od przejścia dla pieszych (PoRD Art. 49. 1.2.).",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed przejściem dla pieszych jest niedozwolone. Na drodzie dwukierunkowej, niedozwolone jest także zatrzymanie/postój za przejście.</p>",
         "law": "PoRD Art. 49. 1.2. Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerzystów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem.",
         "price": "100–300 zł",
@@ -81,8 +81,8 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
     },
     "2": {
-        "title": "Mniej niż 15m od przystanku",
-        "short": "Pojazd był zaparkowany w odległości mniejszej niż 15m od przystanku (PoRD Art. 49. 1.9.).",
+        "title": "Mniej niż 15 m od przystanku",
+        "short": "Pojazd był zaparkowany w odległości mniejszej niż 15 m od przystanku (PoRD Art. 49. 1.9.).",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu na przystanku (zarówno na jezdni jak i na chodniku) jest niedozwolone.</p>",
         "law": "PoRD Art. 49. 1.9. Zabrania się zatrzymania pojazdu w odległości mniejszej niż 15 m od słupka lub tablicy oznaczającej przystanek, a na przystanku z zatoką - na całej jej długości.",
         "price": "100 zł",
@@ -99,7 +99,7 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
     },
     "11": {
-        "title": "Pojazd powyżej 2.5t DMC na chodniku",
+        "title": "Pojazd powyżej 2,5 t DMC na chodniku",
         "short": "Pojazd o dopuszczalnej masie całkowitej przekraczającej 2,5 tony był zaparkowany na chodniku (PoRD Art. 47. 1.).",
         "desc": "<p>Na chodniku (wszystko jedno, czy są na nim wyznaczone miejsca parkingowe znakami poziomymi lub pionowymi, czy nie) mogą parkować wyłącznie pojazdy o dopuszczalnej masie całkowitej nie przekraczającej 2,5 tony. To, że pojazd można prowadzić posiadając prawo jazdy kategorii B wcale nie oznacza, że można go postawić na chodniku. Ujmując to dosadniej, kierowcy takich samochodów nie mogą choćby jednym kołem wjechać na chodnik.</p> <p>Jakich samochodów to dotyczy? Automatycznie wszystkich ciężarówek, samochodów dostawczych itp. Ale także zaskakująco dużej ilości samochodów osobowych, w szczególności większych SUV.</p>",
         "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t; PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na chodniku tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.",
@@ -136,7 +136,7 @@
     },
     "3": {
         "title": null,
-        "short": "Pojazd był zaparkowany w odległości mniejszej niż 10m od skrzyżowania.",
+        "short": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od skrzyżowania.",
         "desc": null,
         "price": null,
         "contextImageHint": "",

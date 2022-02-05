@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     series: [
       {
-        name: "Ilość zgłoszeń",
+        name: "Liczba zgłoszeń",
         color: "#009C7F"
       }
     ]
@@ -221,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     series: [
       {
-        name: "Ilość zgłoszeń",
+        name: "Liczba zgłoszeń",
         color: "#009C7F"
       }
     ],
