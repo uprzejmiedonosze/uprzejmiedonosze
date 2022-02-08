@@ -82,7 +82,7 @@
     },
     "18": {
         "title": "Jazda wzdłuż po chodniku lub przejściu dla pieszych",
-        "short": "Pojazd jechał wzdłóż chodnika/przejścia dla pieszych (PoRD Art. 26. 3.3.).",
+        "short": "Pojazd jechał wzdłuż chodnika/przejścia dla pieszych (PoRD Art. 26. 3.3.).",
         "desc": "<p>Jazda wzdłuż chodnika lub przejścia dla pieszych jest zabroniona. Nie można z tego powodu np. parkować w drugiej linii dojeżdżając do celu wzdłuż chodnika.</p>",
         "law": "PoRD Art. 26. 3.3. Kierującemu pojazdem zabrania się: jazdy wzdłuż po chodniku lub przejściu dla pieszych.",
         "price": "1 500 zł",
