@@ -9,19 +9,26 @@
         </h3>
         {% endif %}
     {% endif %}
-{% if app.sentViaAPI is defined %}
-    <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getName }} poprzez API:</b>
+    
+{% if app.sent is defined %}
+    {% if app.sent.method == 'Mail' %}
+    <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.sent.to }}
+        bezpośrednio z serwera Uprzejmie Donoszę w dniu {{ app.sent.date|date('Y-m-d') }}
+        o godzinie {{ app.sent.date|date('H:i') }}.</b>
+    {% elseif app.sent.method == 'manual' %}
+    <b class="appSentInfo">To zgłoszenie zostało wysłane
+        przez Ciebie ręcznie do {{ app.sentManually.to }} 
+        w dniu {{ app.sentManually.date|date('Y-m-d') }}
+        około godziny {{ app.sentManually.date|date('H:i') }}.</b>
+    {% else %} {# API #}
+    <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getName }}
+        w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}
+        poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest dla {{ app.guessSMData.getName }}
+        w następującej postaci:</b>
     <cite>{% include('_application.txt.twig') %}</cite>
-{% else %}
-    {% if app.sentViaMail is defined %}
-        <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getName }} bezpośrednio
-        z serwera Uprzejmie Donoszę w dniu {{ app.sentViaMail.date|date('Y-m-d') }}
-        o godzinie {{ app.sentViaMail.date|date('H:i') }}.</b>
     {% endif %}
-    {% if app.sentManually is defined %}
-        <b class="appSentInfo">To zgłoszenie zostało wysłane przez Ciebie ręcznie do {{ app.sentManually.to }} 
-        w dniu {{ app.sentManually.date|date('Y-m-d') }} około godziny {{ app.sentManually.date|date('H:i') }}.</b>
-    {% endif %}
+{% endif %} {# app.sent #}
+    
         <p>W dniu <b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b>
             {{ app.guessUserSex.bylam }} świadkiem pozostawienia
             pojazdu o nr. rejestracyjnym <b>{{ app.carInfo.plateId ?? '...' }}</b>
@@ -51,7 +58,6 @@
             <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
         </p>
     {% endif %}
-{% endif %}
 
     <div id="user-location" class="ui-grid-a ui-responsive images images-cropped">
         <div class="ui-block-a">

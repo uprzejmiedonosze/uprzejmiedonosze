@@ -44,12 +44,10 @@ Z poważaniem
 
 \vspace{0.3cm}
 {% if app.hideNameInPdf %}
-{\it dane {{ app.guessUserSex.zglaszajacej }} w wiadomości email 
-    {% if app.sentViaMail is defined %}
-
-        wysłanej {{ app.sentViaMail.date|date('Y-m-d H:i') }}
-        
-        na adres {{ app.sentViaMail.to }}
+{\it Dane {{ app.guessUserSex.zglaszajacej }} w wiadomości email 
+    {% if app.sent is defined %}
+        wysłanej {{ app.sent.date|date('Y-m-d H:i') }}
+        na adres {{ app.sent.to }}
     {% endif %}
 }
 {% else %}
