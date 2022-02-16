@@ -2715,6 +2715,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "nowy dwór gdański": {
+    "address": [
+      "Straż Miejska Nowy Dwór Gdański",
+      "ul. Warszawska 28A",
+		  "82-100 Nowy Dwór Gdański"
+    ],
+    "email": "straz.miejska@miastonowydwor.pl",
+    "city": "Nowy Dwór Gdański",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
