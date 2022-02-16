@@ -17,9 +17,9 @@
         o godzinie {{ app.sent.date|date('H:i') }}.</b>
     {% elseif app.sent.method == 'manual' %}
     <b class="appSentInfo">To zgłoszenie zostało wysłane
-        przez Ciebie ręcznie do {{ app.sentManually.to }} 
-        w dniu {{ app.sentManually.date|date('Y-m-d') }}
-        około godziny {{ app.sentManually.date|date('H:i') }}.</b>
+        przez Ciebie ręcznie do {{ app.sent.to }} 
+        w dniu {{ app.sent.date|date('Y-m-d') }}
+        około godziny {{ app.sent.date|date('H:i') }}.</b>
     {% else %} {# API #}
     <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getName }}
         w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}
