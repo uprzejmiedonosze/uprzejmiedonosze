@@ -269,6 +269,7 @@ function _sendSlackError($msg){
 
 /**
  * $type: 1 update, 2 error
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 function _sendSlackAsync($msg, $type){
     #$queue = msg_get_queue(9997);
