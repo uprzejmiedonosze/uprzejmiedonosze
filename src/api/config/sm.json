@@ -999,6 +999,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "smolec": {
+    "address": [
+      "Komisariat Policji w Smolcu",
+      "ul. Dworcowa 4",
+      "55-080 Smolec"
+    ],
+    "email": "dzielnicowy.katy-wroclawskie2@wroclaw.wr.policja.gov.pl",
+    "city": "Smolec",
+    "hint": null,
+    "api": "Mail"
+  },
+
   "mokronos dolny": {
     "address": [
       "Komisariat Policji w Kątach Wrocławskich",
@@ -2712,6 +2724,17 @@
     ],
     "email": "straz@straznicy.bochnia.pl",
     "city": "Bochnia",
+    "hint": null,
+    "api": "Mail"
+  },
+  "nowy dwór gdański": {
+    "address": [
+      "Straż Miejska Nowy Dwór Gdański",
+      "ul. Warszawska 28A",
+		  "82-100 Nowy Dwór Gdański"
+    ],
+    "email": "straz.miejska@miastonowydwor.pl",
+    "city": "Nowy Dwór Gdański",
     "hint": null,
     "api": "Mail"
   },
