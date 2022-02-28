@@ -2034,6 +2034,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "przecław": {
+    "address": [
+      "Posterunek Policji w Kołbaskowie",
+      "Kołbaskowo nr 105",
+      "72-001 Kołbaskowo"
+    ],
+    "email": "pp.kolbaskowo@sc.policja.gov.pl",
+    "city": "Przecław",
+    "hint": null,
+    "api": "Mail"
+  },
   "rosówek": {
     "address": [
       "Straż Gminna w Kołbaskowie",
