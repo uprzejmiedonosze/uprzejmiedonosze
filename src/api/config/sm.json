@@ -2749,14 +2749,14 @@
     "hint": null,
     "api": "Mail"
   },
-  "nowy dwór gdański": {
+  "włocławek": {
     "address": [
-      "Straż Miejska Nowy Dwór Gdański",
-      "ul. Warszawska 28A",
-		  "82-100 Nowy Dwór Gdański"
+      "Straż Miejska we Włocławku",
+      "ul. Bojańczyka 11/13",
+		  "87-800 Włocławek"
     ],
-    "email": "straz.miejska@miastonowydwor.pl",
-    "city": "Nowy Dwór Gdański",
+    "email": "straz.miejska@um.wloclawek.pl",
+    "city": "Włocławek",
     "hint": null,
     "api": "Mail"
   },
