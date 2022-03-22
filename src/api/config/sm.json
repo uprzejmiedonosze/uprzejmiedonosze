@@ -2760,6 +2760,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "stargard": {
+    "address": [
+      "Straż Miejska we Stargardzie",
+      "ul. Pierwszej Brygady 35",
+      "73-110 Stargard"
+    ],
+    "email": "straz@um.stargard.pl",
+    "city": "Stargard",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
