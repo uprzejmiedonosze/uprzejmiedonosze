@@ -1099,6 +1099,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "żerniki wrocławskie": {
+    "address": [
+      "Straż Miejska w Siechnicach",
+      "ul. Kolejowa 3",
+      "55-010 Święta Katarzyna"
+    ],
+    "email": "strazmiejska@umsiechnice.pl",
+    "city": "Żerniki Wrocławskie",
+    "hint": null,
+    "api": "Mail"
+  },
   "sędławki": {
     "address": [
       "Komenda Powiatowa Policji w Bartoszycach",
