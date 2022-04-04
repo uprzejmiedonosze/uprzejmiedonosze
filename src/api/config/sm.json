@@ -2782,6 +2782,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "chodzież": {
+    "address": [
+      "Komenda Powiatowa Policji w Chodzieży",
+      "ul. Wiosny Ludów 14",
+      "64-800 Chodzież"
+    ],
+    "email": "dyzurny.chodziez@po.policja.gov.pl",
+    "city": "Chodzież",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
