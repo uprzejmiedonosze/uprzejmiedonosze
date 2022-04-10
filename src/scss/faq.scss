@@ -5,3 +5,19 @@ dd {
 dt {
   font-weight:400;
 }
+
+h4.highlight + p {
+  background-color: #E3C34166;
+  padding: 0.8em;
+  border-radius: 5px;
+}
+
+a.copyLink {
+  visibility: hidden;
+  cursor: pointer;
+  font-weight: 300;
+}
+
+h4:hover a.copyLink {
+  visibility: visible;
+} 
