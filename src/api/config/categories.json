@@ -18,10 +18,10 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, z widoczną zielenią."
     },
     "14": {
-        "title": "Niezastosowanie się do zakazu zatrzymania lub postoju",
-        "short": "Pojazd był zaparkowany za znakiem B-36 (zakaz zatrzymania lub postoju, PoRD Art. 46. 4.).",
-        "desc": "<p>Znak B-36 (zakaz zatrzymania lub postoju) nie powinien pozostawiać wątpliwości. Trudno o bardziej czytelną wskazówkę. Niestety często jest on interpretowany jako jeśli zmieszczę się na chodniku i zostawię 1,5m, to będzie OK. Nie jest to prawda (sprawdź na przykład na stronach Prawa Drogowego). <br/> Wyjątkiem jest sytuacja, w której pod znakiem znajduje się tabliczka informująca 'nie dotyczy chodnika'.</p>",
-        "law": "PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
+        "title": "Niezastosowanie się do zakazu zatrzymywania się",
+        "short": "Pojazd był zaparkowany za znakiem B-36 (zakaz zatrzymywania się, PoRD Art. 46. 4.).",
+        "desc": "<p>Znak B-36 (zakaz zatrzymywania się) nie powinien pozostawiać wątpliwości. Trudno o bardziej czytelną wskazówkę. Niestety często jest on interpretowany jako jeśli zmieszczę się na chodniku i zostawię 1,5m, to będzie OK. Nie jest to prawda (sprawdź na przykład na stronach Prawa Drogowego). <br/> Wyjątkiem jest sytuacja, w której pod znakiem znajduje się tabliczka informująca 'nie dotyczy chodnika'.</p>",
+        "law": "PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania wskazany znakami drogowymi.",
         "price": "100–300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak B-36, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
