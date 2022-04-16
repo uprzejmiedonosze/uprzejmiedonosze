@@ -45,9 +45,9 @@ if [[ ${PARAM} =~ @ ]]; then
 	WHERE1="json_extract(value, '$.data.email') = '${PARAM}'"
 	WHERE2="json_extract(value, '$.user.email') = '${PARAM}'"
 elif [[ ${PARAM} =~ [0-9] ]]; then
-	echo "Apps with plate id ${PARAM}:"
-	for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.user.email') from applications where lower(json_extract(value, '$.carInfo.plateId')) = lower('${PARAM}') order by json_extract(value, '$.added') desc limit 100 \""); do
-		print_app_url ${key%|*} "(${key#*|})"
+	echo "Apps with plate id or street ${PARAM}:"
+	for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.user.email') from applications where lower(json_extract(value, '$.carInfo.plateId')) = lower('${PARAM}') or lower(json_extract(value, '$.address.address')) like lower('%${PARAM}%') order by json_extract(value, '$.added') desc limit 100 \""); do
+		print_app_url "${key%|*}" "(${key#*|})"
 	done
 	exit 0
 else
