@@ -2793,6 +2793,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "gniezno": {
+    "address": [
+      "Straż Miejska w Gnieźnie",
+      "ul. Pocztowa 11",
+      "62-200 Gniezno"
+    ],
+    "email": "dyzurnystrazmiejska@gniezno.eu",
+    "city": "Gniezno",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
