@@ -2815,6 +2815,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "kłodzko": {
+    "address": [
+      "Straż Miejska w Kłodzku",
+      "pl. Bolesława Chrobrego 1",
+      "57-300 Kłodzko"
+    ],
+    "email": "sm-klodzko@o2.pl",
+    "city": "Kłodzko",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
