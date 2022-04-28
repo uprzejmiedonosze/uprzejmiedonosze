@@ -339,6 +339,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "łężyca": {
+    "address": [
+      "Straż Miejska Zielona Góra",
+      "ul. Bohaterów Westerplatte 23",
+      "65-078 Zielona Góra"
+    ],
+    "email": "dyzurny@um.zielona-gora.pl",
+    "city": "Zielona Góra",
+    "hint": null,
+    "api": "Mail"
+  },
   "olsztyn": {
     "address": [
       "Straż Miejska w Olsztynie",
