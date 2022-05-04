@@ -154,7 +154,6 @@ describe('Create application', () => {
         checkAppData(this.config)
         cy.contains('Zdjęcia wykonałem samodzielnie')
         cy.contains('proszę o niezamieszczanie')
-        cy.contains('Jestem świadomy odpowiedzialności karnej')
     })
 
     it('checks thank you screen', function () {
