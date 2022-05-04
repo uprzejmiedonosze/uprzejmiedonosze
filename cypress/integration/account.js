@@ -109,7 +109,7 @@ describe('Update account', () => {
     cy.uploadOKImages()
     cy.get('#form-submit').click()
 
-    cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania.')
+    cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr telefonu i adresu email.')
     cy.contains('zostanie za chwilę wysłane')
     cy.contains(this.sm.szczecin.address[0])
     cy.contains('Wyślij teraz').click()
@@ -157,7 +157,7 @@ describe('Update account', () => {
     cy.uploadOKImages()
     cy.get('#form-submit').click()
 
-    cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania.').should('not.exist')
+    cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr telefonu i adresu email.').should('not.exist')
     cy.contains('zostanie za chwilę wysłane').should('not.exist')
     cy.contains('Na tym etapie nic nie zostanie wysłane do')
     cy.contains(this.sm.szczecin.address[0]).should('not.exist')
