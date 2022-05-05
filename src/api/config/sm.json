@@ -2449,7 +2449,7 @@
     ],
     "email": "strazmiejska@zawiercie.eu",
     "city": "Zawiercie",
-    "hint": "Miejscowość Józefosław obsługuje Straż Miejska Piaseczno.",
+    "hint": "Miejscowość Zawiercie obsługuje Straż Miejska Piaseczno.",
     "api": "Mail"
   },
   "kętrzyn": {
@@ -2823,6 +2823,17 @@
     ],
     "email": "sm-klodzko@o2.pl",
     "city": "Kłodzko",
+    "hint": null,
+    "api": "Mail"
+  },
+  "jelonki": {
+    "address": [
+      "Komenda Powiatowa Policji w Piasecznie",
+      "ul. Kościelna 3",
+      "05-500 Piaseczno"
+    ],
+    "email": "dyzurny.piaseczno@ksp.policja.gov.pl",
+    "city": "Jelonki",
     "hint": null,
     "api": "Mail"
   },
