@@ -2837,6 +2837,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "julianów": {
+    "address": [
+      "Komenda Powiatowa Policji w Piasecznie",
+      "ul. Kościelna 3",
+      "05-500 Piaseczno"
+    ],
+    "email": "dyzurny.piaseczno@ksp.policja.gov.pl",
+    "city": "Julianów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
