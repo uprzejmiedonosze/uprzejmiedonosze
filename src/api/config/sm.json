@@ -1110,6 +1110,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "święta katarzyna": {
+    "address": [
+      "Straż Miejska w Siechnicach",
+      "ul. Kolejowa 3",
+      "55-010 Święta Katarzyna"
+    ],
+    "email": "strazmiejska@umsiechnice.pl",
+    "city": "Święta Katarzyna",
+    "hint": null,
+    "api": "Mail"
+  },
   "żerniki wrocławskie": {
     "address": [
       "Straż Miejska w Siechnicach",
