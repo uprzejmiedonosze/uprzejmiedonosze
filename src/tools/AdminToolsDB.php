@@ -9,7 +9,7 @@ class AdminToolsDB extends NoSQLite{
     /**
      * Creates DB instance with default store location.
      */
-    public function __construct($store = __DIR__ . '/../../docker/db/store.sqlite') {
+    public function __construct($store = __DIR__ . '/../../db/store.sqlite') {
         parent::__construct($store);
     }
 
@@ -278,11 +278,10 @@ class AdminToolsDB extends NoSQLite{
 }
 
 $db = new AdminToolsDB();
-$db->upgradeAllApps('2.0.0', false);
 
-//$db->removeDrafts(10, false);
-//$db->removeReadyApps(30, false);
+$db->removeDrafts(10, false);
+$db->removeReadyApps(30, false);
 
-//$db->removeUser('szymon@nieradka.net', false);
+// $db->removeUser('szymon@nieradka.net', false);
 
-//$db->upgradeAllApps('1.0.2', false);
+// $db->upgradeAllApps('2.0.0', false);
