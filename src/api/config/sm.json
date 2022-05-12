@@ -2859,6 +2859,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "luboń": {
+    "address": [
+      "Straż Miejska w Luboniu",
+      "ul. Dworcowa 1",
+      "62-030 Luboń"
+    ],
+    "email": "straz.miejska@lubon.pl",
+    "city": "Luboń",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
