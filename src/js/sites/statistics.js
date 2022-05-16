@@ -88,7 +88,17 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     chart: {
       type: "areaspline",
-      backgroundColor: "transparent"
+      backgroundColor: "transparent",
+      events: {
+        load() {
+          const chart = this;
+          chart.showLoading('Pobieram dane...')
+        },
+        redraw() {
+          const chart = this;
+          chart.hideLoading()
+        }
+      }
     },
     plotOptions: {
       areaspline: {
@@ -135,7 +145,18 @@ document.addEventListener("DOMContentLoaded", function () {
     chart: {
       type: "column",
       plotBackgroundColor: null,
-      backgroundColor: "transparent"
+      backgroundColor: "transparent",
+      events: {
+        load() {
+          const chart = this;
+          chart.showLoading('Pobieram dane...')
+        },
+        redraw() {
+          const chart = this;
+          chart.hideLoading()
+        }
+      }
+
     },
     plotOptions: {
       column: {
@@ -178,7 +199,18 @@ document.addEventListener("DOMContentLoaded", function () {
     chart: {
       type: "column",
       plotBackgroundColor: null,
-      backgroundColor: "transparent"
+      backgroundColor: "transparent",
+      events: {
+        load() {
+          const chart = this;
+          chart.showLoading('Pobieram dane...')
+        },
+        redraw() {
+          const chart = this;
+          chart.hideLoading()
+        }
+      }
+
     },
     series: [
       {
@@ -217,7 +249,18 @@ document.addEventListener("DOMContentLoaded", function () {
       plotBorderWidth: null,
       plotShadow: false,
       type: "pie",
-      backgroundColor: "transparent"
+      backgroundColor: "transparent",
+      events: {
+        load() {
+          const chart = this;
+          chart.showLoading('Pobieram dane...')
+        },
+        redraw() {
+          const chart = this;
+          chart.hideLoading()
+        }
+      }
+
     },
     series: [
       {
