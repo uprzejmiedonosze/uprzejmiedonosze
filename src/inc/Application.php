@@ -115,7 +115,11 @@ class Application extends JSONObject{
      * Returns application time in H:i format.
      */
     public function getTime(){
-        return (new DateTime($this->date))->format('H:i');
+        $format = 'H:i'; // 24-hour format of an hour with leading zeros : Minutes with leading zeros
+        if(isset($this->dtFromPicture) && !$this->dtFromPicture){
+            $format = 'G.'; // 24-hour format of an hour without leading zeros
+        }
+        return (new DateTime($this->date))->format($format);
     }
 
     /**
