@@ -8,3 +8,12 @@ $(document).on("pageshow", function () {
     $("a.confirm-send-button").removeClass('ui-disabled')
   }, 1500);
 });
+
+
+function confirmApplication() {
+  $('#form').submit();
+  $('.confirm-save-button').addClass('ui-disabled')
+  $(".confirm-send-button").addClass('ui-disabled')
+}
+
+window.confirmApplication = confirmApplication;

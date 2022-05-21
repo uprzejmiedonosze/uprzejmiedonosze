@@ -5,9 +5,9 @@
 
 {% block rightButtonCustom %}
     {% if not autoSend %}
-    <a onclick="$('#form').submit();"
+    <a onclick="confirmApplication()"
         class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
-        ui-btn-inline ui-btn-icon-left ui-icon-check">Zapisz!</a>
+        ui-btn-inline ui-btn-icon-left ui-icon-check confirm-save-button">Zapisz!</a>
     {% endif %}
 {% endblock %}
 
@@ -31,7 +31,7 @@
 {% include('_application.html.twig') %}
 
 {% if autoSend %}
-<a onclick="$('#form').submit();"
+<a onclick="confirmApplication()"
     class="ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
     ui-btn-icon-left ui-icon-mail cta ui-disabled confirm-send-button">Wyślij teraz!</a>
 {% endif %}
