@@ -191,6 +191,42 @@
     "hint": "Wstępne relacje ze współpracy z #stopagresji w woj. Zachodniopomorskim są pozytywne. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
+  "szczecin-niebuszewo": {
+    "address": [
+      "Komisariat Policji Szczecin Niebuszewo",
+      "al. Jana Pawła II  37",
+      "70-413 Szczecin"
+    ],
+    "email": "sekretariat.niebuszewo@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Szczecin",
+    "hint": "Komisariat Niebuszewo w Szczecinie co prawda nie wzywa na przesłuchanie, ale nęka poleconymi i załatwia sprawę w pół roku.",
+    "api": "Mail"
+  },
+  "szczecin-pogodno": {
+    "address": [
+      "Komisariat Policji Szczecin Pogodno",
+      "ul. Adama Mickiewicza 161",
+      "71-260 Szczecin"
+    ],
+    "email": "sekretariat.pogodno@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Szczecin",
+    "hint": "Komisariat Pogodno w Szczecinie nie tylko nie wzywa na przesłuchanie, to zdaje się obrabiać zgłoszenia w miesiąc/dwa!",
+    "api": "Mail"
+  },
+  "szczecin-srodmiescie": {
+    "address": [
+      "Komisariat Policji Szczecin Śródmieście",
+      "ul. Kaszubska 35",
+      "70-227 Szczecin"
+    ],
+    "email": "sekretariat.srodmiescie@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Szczecin",
+    "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie.",
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",

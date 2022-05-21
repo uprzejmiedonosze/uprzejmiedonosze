@@ -289,4 +289,55 @@ function extractAppNumer($appNumber) {
     return intval($number[2]);
 }
 
+/**
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ */
+function policeStationsSzczecin(&$app) {
+    preg_match('/(.*)\s([0-9]+)[a-zA-Z]?, Szczecin/', $app->address->address, $match);
+    $street = $match[1] ?? "(not Szczecin)";
+    $number = $match[2] ?? null;
+
+    if(str_contains($street, 'Jagiellońska')) {
+        if ($number < 45) return 'szczecin-niebuszewo';
+        if ($number > 45) return 'szczecin-srodmiescie';
+    }
+    if(str_contains($street, 'Piastów')) {
+        if ($number <= 5 || $number > 74) return 'szczecin-niebuszewo';
+        return 'szczecin-srodmiescie';
+    }
+    if(str_contains($street, 'Wojska Polskiego')) {
+        if ($number <= 50) return 'szczecin-srodmiescie';
+        return 'szczecin-niebuszewo';
+    }
+    if(str_contains($street, 'Bolesława Śmiałego')) {
+        if ($number < 11 || $number > 41) return 'szczecin-niebuszewo';
+        return 'szczecin-srodmiescie';
+    }
+    if(str_contains($street, 'Bohaterów Warszawy')) {
+        if ($number < 17 || $number > 106) return 'szczecin-niebuszewo';
+        return 'szczecin-srodmiescie';
+    }
+
+    if(str_contains($street, 'plac Odrodzenia')) return 'szczecin-niebuszewo';
+    if(str_contains($street, 'Jana Pawła II')) return 'szczecin-niebuszewo';
+    if(str_contains($street, 'Monte Cassino')) return 'szczecin-niebuszewo';
+    if(str_contains($street, 'Piłsudskiego')) return 'szczecin-niebuszewo';
+    if(str_contains($street, 'Mazurska')) return 'szczecin-niebuszewo';
+    if(str_contains($street, 'Michała Kleofasa Ogińskiego')) return 'szczecin-niebuszewo';
+    if(str_contains($street, '5 Lipca')) return 'szczecin-niebuszewo';
+    if(str_contains($street, 'Rayskiego')) return 'szczecin-niebuszewo';
+
+    if(str_contains($street, 'Waryńskiego')) return 'szczecin-pogodno';
+    if(str_contains($street, 'Sienkiewicza')) return 'szczecin-pogodno';
+
+    if(str_contains($street, 'Krzywoustego')) return 'szczecin-srodmiescie';
+    if(str_contains($street, 'Księdza Piotra Ściegiennego')) return 'szczecin-srodmiescie';
+    if(str_contains($street, 'Małkowskiego')) return 'szczecin-srodmiescie';
+    if(str_contains($street, 'Krzywoustego')) return 'szczecin-srodmiescie';
+
+
+    return 'zachodniopomorskie';
+}
+
 ?>

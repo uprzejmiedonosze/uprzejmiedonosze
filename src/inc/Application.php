@@ -268,7 +268,12 @@ class Application extends JSONObject{
         global $STOP_AGRESJI;
 
         $voivodeship = trimstr2lower(@$this->address->voivodeship);
+        $city = trimstr2lower($this->address->city);
+
         if(array_key_exists($voivodeship, $STOP_AGRESJI)){
+            if($city == 'szczecin'){
+                $voivodeship = policeStationsSzczecin($this);
+            }
             $this->smCity = $voivodeship;
             return $STOP_AGRESJI[$voivodeship];
         }
