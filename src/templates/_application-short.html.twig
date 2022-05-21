@@ -62,6 +62,10 @@
         <a href="/ud-{{ app.id }}.html?dialog"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
             ui-icon-info ui-alt-icon">Szczegóły</a>
+
+        <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
+            class="ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini
+            ui-alt-icon">PDF</a>
         {% endif %}
     </div>
 
