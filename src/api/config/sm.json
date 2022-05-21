@@ -2603,7 +2603,7 @@
     ],
     "email": "smmorag@wp.pl",
     "city": "Morąg",
-    "hint": "Wstępne informacje są dość pesymistyczne. Komendant twierdzi, że email może nie wystarczyć do zgłoszenia.",
+    "hint": "Wstępne informacje są dość pesymistyczne. Komendant twierdzi, że e-mail może nie wystarczyć do zgłoszenia.",
     "api": "Mail"
   },
   "pyskowice": {
@@ -2873,7 +2873,7 @@
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
-      "i podaj mu adres siedziby oraz email Straży Miejskiej)"
+      "i podaj mu adres siedziby oraz e-mail Straży Miejskiej)"
     ],
     "email": null,
     "city": null,

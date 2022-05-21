@@ -12,7 +12,7 @@
 
 <form action="/register-ok.html?next={{ config.signInSuccessUrl ?? 'start.html' }}" id="register-form" method="post" data-ajax="false">
     <h3>Dane konta</h3>
-    <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres email oraz adres korespondencyjny.
+    <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres e-mail oraz adres korespondencyjny.
         Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
 
     <label for="name">Imię i nazwisko, które posłuży SM do identyfikacji autora zgłoszenia</label>
@@ -20,7 +20,7 @@
         placeholder="(twoje imię i nazwisko)"
         data-inline="true" value="{{ user.data.name }}" />
 
-    <label for="email">Email został pobrany automatycznie w trakcie logowania</label>
+    <label for="email">E-mail został pobrany automatycznie w trakcie logowania</label>
     <input disabled type="email" required maxlength="30" id="email" name="email"
         placeholder="(twój email)"
         data-inline="true" value="{{ user.data.email }}" />

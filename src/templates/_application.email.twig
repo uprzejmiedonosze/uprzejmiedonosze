@@ -5,14 +5,14 @@ w dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.g
 W załączeniu znajduje się zgłoszenie wraz ze zdjęciami oraz mapką prezentującą lokalizację zdarzenia. Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getJSONSafeComment|raw }}{% if app.statements is not defined or not app.statements.witness %} Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.{% endif %}
 
 
-{% if app.user.exposeData is not defined or not app.user.exposeData %}Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu email.{% endif %}
+{% if app.user.exposeData is not defined or not app.user.exposeData %}Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.{% endif %}
 
 
 {% if not app.isEditable() and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
 Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}
 {% endif %}
 
-Proszę o kontakt pod adresem email {{ app.user.email }}, a w szczególności nie wysyłanie listów poleconych za potwierdzeniem odbioru.
+Proszę o kontakt pod adresem e-mail {{ app.user.email }}, a w szczególności nie wysyłanie listów poleconych za potwierdzeniem odbioru.
 
 Zgłaszający:
 

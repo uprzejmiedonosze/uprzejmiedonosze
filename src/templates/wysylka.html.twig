@@ -18,7 +18,7 @@
 
 w załączeniu ' ~ zgloszen ~ ' nieprawidłowego parkowania. Wszystkie przypadki albo wpływały na bezpieczeństwo pieszych, albo wiązały się z niszczeniem mienia.
 
-Proszę o kontakt pod adresem email ' ~ user.data.email ~ ', a w szczególności nie wysyłanie listów poleconych za potwierdzeniem odbioru.
+Proszę o kontakt pod adresem e-mail ' ~ user.data.email ~ ', a w szczególności nie wysyłanie listów poleconych za potwierdzeniem odbioru.
 
 Z poważaniem
 
@@ -29,7 +29,7 @@ Z poważaniem
 {% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
 
 {% if sm.unknown %}
-    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM.</b> Przeczytaj
+    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu e-mail SM.</b> Przeczytaj
         <a href="/brak-sm.html">co zrobić w takiej sytuacji</a>.
     </p>
 {% else %} {# if sm.unknown #}
@@ -59,7 +59,7 @@ Z poważaniem
                 <a id="send" data-ajax="false" target="_blank"
                     href="mailto:{{ sm.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}"
                     class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-                i wyślij email do {{ sm.city }} (jeśli otworzył Ci się pusty email, 
+                i wyślij e-mail do {{ sm.city }} (jeśli otworzył Ci się pusty e-mail, 
                 <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
                 <div data-role="popup" id="popupPadded" class="ui-content">
                     <dl>

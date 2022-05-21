@@ -164,7 +164,7 @@ describe('Missing SM (Poniatowa)', () => {
 
     it('checks thank you screen', function () {
         cy.contains('Jeszcze raz')
-        cy.contains('Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu email SM')
+        cy.contains('Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu e-mail SM')
     })
 
     it('checks my apps screen', function () {

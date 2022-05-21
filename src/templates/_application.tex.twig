@@ -34,7 +34,7 @@
 
 {% if app.user.exposeData is not defined or not app.user.exposeData %}
     Równocześnie proszę o \textbf{niezamieszczanie} w protokole danych dotyczących mojego miejsca
-    zamieszkania, nr. telefonu i adresu email.
+    zamieszkania, nr. telefonu i adresu e-mail.
 {% endif %}
 
 \vspace{0.3cm}\noindent
@@ -42,7 +42,7 @@ Z poważaniem
 
 \vspace{0.3cm}
 {% if app.hideNameInPdf %}
-{\it Dane {{ app.guessUserSex.zglaszajacej }} w wiadomości email 
+{\it Dane {{ app.guessUserSex.zglaszajacej }} w wiadomości e-mail 
     {% if app.sent is defined %}
         wysłanej {{ app.sent.date|date('Y-m-d H:i') }}
         na adres {{ app.sent.to }}
@@ -58,7 +58,7 @@ Email: {{ app.user.email }}
 {% if app.user.msisdn %}Tel: {% endif %}{{ app.user.msisdn }} }
 {% endif %}
 
-{\it Proszę o kontakt za pośrednictwem poczty email oraz nie wysyłanie korespondencji Pocztą Polską}
+{\it Proszę o kontakt za pośrednictwem poczty e-mail oraz nie wysyłanie korespondencji Pocztą Polską}
 
 \vspace{\stretch{3}}\noindent
     \href{{ appUrl }}
