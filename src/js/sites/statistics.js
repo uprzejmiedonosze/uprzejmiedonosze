@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
         color: "#009C7F"
       },
       {
-        name: "Nowe rejestracje użytkowników",
+        name: "Nowi użytkownicy",
         lineWidth: 3,
         type: "spline",
         color: "#e9c200"
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
         color: "#009C7F"
       },
       {
-        name: "Nowe rejestracje użytkowników",
+        name: "Nowi użytkownicy",
         color: "#e9c200",
         pointPadding: 0.4,
         pointPlacement: 0.2,
