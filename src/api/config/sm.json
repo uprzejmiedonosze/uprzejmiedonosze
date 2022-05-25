@@ -1550,6 +1550,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "harbutowice": {
+    "address": [
+      "Straż Miejska w Myślenicach",
+      "ul. Rynek 8/9",
+      "32-400 Myślenice"
+    ],
+    "email": "info@myslenice.pl",
+    "city": "Harbutowice",
+    "hint": null,
+    "api": "Mail"
+  },
   "żagań": {
     "address": [
       "Straż Miejska w Żaganiu",
@@ -2870,25 +2881,14 @@
     "hint": null,
     "api": "Mail"
   },
-  "myślenice": {
+  "strzelce opolskie": {
     "address": [
-      "Straż Miejska w Myślenicach",
-      "ul. Rynek 8/9",
-      "32-400 Myślenice"
+      "Komenda Powiatowa Policji w Strzelcach Opolskich",
+      "ul. Piłsudskiego 3",
+      "47-100 Strzelce Opolskie"
     ],
-    "email": "info@myslenice.pl",
-    "city": "Myślenice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "harbutowice": {
-    "address": [
-      "Straż Miejska w Myślenicach",
-      "ul. Rynek 8/9",
-      "32-400 Myślenice"
-    ],
-    "email": "info@myslenice.pl",
-    "city": "Harbutowice",
+    "email": "dyzurny.st@op.policja.gov.pl",
+    "city": "Strzelce Opolskie",
     "hint": null,
     "api": "Mail"
   },
