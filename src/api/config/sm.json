@@ -2892,6 +2892,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "trzebnica": {
+    "address": [
+      "Straż Miejska w Trzebnicy",
+      "pl. Marszałka Józefa Piłsudskiego 1",
+      "55-100 Trzebnica"
+    ],
+    "email": "strazmiejska@um.trzebnica.pl",
+    "city": "Trzebnica",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
