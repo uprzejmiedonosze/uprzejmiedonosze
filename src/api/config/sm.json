@@ -2892,6 +2892,61 @@
     "hint": null,
     "api": "Mail"
   },
+  "zawadzkie": {
+    "address": [
+      "Komenda Powiatowa Policji w Strzelcach Opolskich",
+      "ul. Piłsudskiego 3",
+      "47-100 Strzelce Opolskie"
+    ],
+    "email": "dyzurny.st@op.policja.gov.pl",
+    "city": "Strzelce Opolskie",
+    "hint": null,
+    "api": "Mail"
+  },
+  "kolonowskie": {
+    "address": [
+      "Komenda Powiatowa Policji w Strzelcach Opolskich",
+      "ul. Piłsudskiego 3",
+      "47-100 Strzelce Opolskie"
+    ],
+    "email": "dyzurny.st@op.policja.gov.pl",
+    "city": "Strzelce Opolskie",
+    "hint": null,
+    "api": "Mail"
+  },
+  "leśnica": {
+    "address": [
+      "Komenda Powiatowa Policji w Strzelcach Opolskich",
+      "ul. Piłsudskiego 3",
+      "47-100 Strzelce Opolskie"
+    ],
+    "email": "dyzurny.st@op.policja.gov.pl",
+    "city": "Strzelce Opolskie",
+    "hint": null,
+    "api": "Mail"
+  },
+  "jemielnica": {
+    "address": [
+      "Komenda Powiatowa Policji w Strzelcach Opolskich",
+      "ul. Piłsudskiego 3",
+      "47-100 Strzelce Opolskie"
+    ],
+    "email": "dyzurny.st@op.policja.gov.pl",
+    "city": "Strzelce Opolskie",
+    "hint": null,
+    "api": "Mail"
+  },
+  "izbicko": {
+    "address": [
+      "Komenda Powiatowa Policji w Strzelcach Opolskich",
+      "ul. Piłsudskiego 3",
+      "47-100 Strzelce Opolskie"
+    ],
+    "email": "dyzurny.st@op.policja.gov.pl",
+    "city": "Strzelce Opolskie",
+    "hint": null,
+    "api": "Mail"
+  },
   "trzebnica": {
     "address": [
       "Straż Miejska w Trzebnicy",
