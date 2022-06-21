@@ -2958,6 +2958,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "gryfice": {
+    "address": [
+      "Straż Miejska Gryfice",
+      "pl. Zwycięstwa 37",
+      "72-300 Gryfice"
+    ],
+    "email": "straz.miejska@urzad.gryfice.eu",
+    "city": "Gryfice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
