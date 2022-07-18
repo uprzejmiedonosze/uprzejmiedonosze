@@ -2969,6 +2969,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "tarnowo podgórne": {
+    "address": [
+      "Straż Gminna Tarnowo Podgórne",
+      "ul. Słoneczna 4",
+      "62-080 Tarnowo Podgórne"
+    ],
+    "email": "sg@tarnowo-podgorne.pl",
+    "city": "Tarnowo Podgórne",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
