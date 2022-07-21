@@ -292,6 +292,8 @@ function extractAppNumer($appNumber) {
 /**
  * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 function policeStationsSzczecin(&$app) {
     preg_match('/(.*)\s([0-9]+)[a-zA-Z]?, Szczecin/', $app->address->address, $match);
@@ -328,16 +330,22 @@ function policeStationsSzczecin(&$app) {
     if(str_contains($street, '5 Lipca')) return 'szczecin-niebuszewo';
     if(str_contains($street, 'Rayskiego')) return 'szczecin-niebuszewo';
 
-    if(str_contains($street, 'Waryńskiego')) return 'szczecin-pogodno';
-    if(str_contains($street, 'Sienkiewicza')) return 'szczecin-pogodno';
+    $x = $app->getLon();
+    $y = $app->getLat();
 
-    if(str_contains($street, 'Krzywoustego')) return 'szczecin-srodmiescie';
-    if(str_contains($street, 'Księdza Piotra Ściegiennego')) return 'szczecin-srodmiescie';
-    if(str_contains($street, 'Małkowskiego')) return 'szczecin-srodmiescie';
-    if(str_contains($street, 'Krzywoustego')) return 'szczecin-srodmiescie';
+    $odraY = 53.42745434366132;
+    $odraX = 14.565803905874402;
+    $toryX = 14.52274239523983;
+    $toryY = 53.43503982962682;
+    $xoffset = $odraX - $toryX;
+    $yoffset = $odraY - $toryY;
 
-
-    return 'zachodniopomorskie';
+    if ($x < $toryX) return 'szczecin-pogodno';
+    if ($x > $odraX) return 'szczecin-miasto';
+    
+    $niebkoSrodmiescieSplit = ($x-$toryX) * ($yoffset/$xoffset) + $toryY;
+    if ($y < $niebkoSrodmiescieSplit) return 'szczecin-srodmiescie';
+    return 'szczecin-niebuszewo';
 }
 
 ?>
