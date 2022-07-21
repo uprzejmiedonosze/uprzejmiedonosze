@@ -227,6 +227,18 @@
     "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie.",
     "api": "Mail"
   },
+  "szczecin-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Szczecinie",
+      "ul. Kaszubska 35",
+      "70-227 Szczecin"
+    ],
+    "email": "kmpszczecin@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Szczecin",
+    "hint": null,
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
