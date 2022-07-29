@@ -2980,6 +2980,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "malbork": {
+    "address": [
+      "Straż Miejska Malbork",
+      "pl. Słowiański 5",
+      "82-200 Malbork"
+    ],
+    "email": "strazm@um.malbork.pl",
+    "city": "Malbork",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
