@@ -2991,6 +2991,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "sokółka": {
+    "address": [
+      "Straż Miejska w Sokółce",
+      "pl. Kościuszki 15",
+      "16-100 Sokółka"
+    ],
+    "email": "sm@sokolka.pl",
+    "city": "Sokółka",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
