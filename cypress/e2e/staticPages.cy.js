@@ -41,7 +41,7 @@ describe('Checks static pages', () => {
 
     it('Visits statystyki', () => {
         cy.contains('statystyki').click()
-        cy.contains('Nowe zgłoszenia oraz rejestracje')
+        cy.contains('Nowe zgłoszenia oraz nowi użytkownicy')
     })
 
     it('Visits historia', () => {

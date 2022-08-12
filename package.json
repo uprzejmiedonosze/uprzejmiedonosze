@@ -5,29 +5,29 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.13.4",
-    "@sentry/browser": "^6.17.4",
-    "@sentry/tracing": "^6.17.4",
+    "@googlemaps/js-api-loader": "^1.14.3",
+    "@sentry/browser": "^7.10.0",
+    "@sentry/tracing": "^7.10.0",
     "blueimp-load-image": "^5.16.0",
     "exif-js": "^2.3.0",
-    "highcharts": "^9.3.3",
+    "highcharts": "^10.2.0",
     "lazysizes": "^5.3.2",
     "location-picker": "^1.1.1",
-    "luxon": "^2.3.0"
+    "luxon": "^3.0.1"
   },
   "devDependencies": {
-    "@sentry/cli": "^1.72.1",
-    "cypress": "^9.4.1",
-    "eslint": "^8.8.0",
+    "@sentry/cli": "^2.5.0",
+    "cypress": "^10.4.0",
+    "eslint": "^8.21.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.0",
     "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "node-sass": "^7.0.1",
     "parcel-bundler": "^1.12.5",
     "parcel-plugin-css-url-loader": "^1.0.5",
-    "sass": "^1.49.7"
+    "sass": "^1.54.4"
   },
   "name": "uprzejmiedonosze"
 }
