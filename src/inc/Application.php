@@ -117,7 +117,7 @@ class Application extends JSONObject{
     public function getTime(){
         $format = 'H:i'; // 24-hour format of an hour with leading zeros : Minutes with leading zeros
         if(isset($this->dtFromPicture) && !$this->dtFromPicture){
-            $format = 'G.'; // 24-hour format of an hour without leading zeros
+            $format = 'G:00'; // 24-hour format of an hour without leading zeros
         }
         return (new DateTime($this->date))->format($format);
     }
