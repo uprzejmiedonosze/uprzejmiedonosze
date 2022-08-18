@@ -3002,6 +3002,28 @@
     "hint": null,
     "api": "Mail"
   },
+  "biała podlaska": {
+    "address": [
+      "Straż Miejska Biała Podlaska",
+      "al. 1000-lecia 22",
+      "21-500 Biała Podlaska"
+    ],
+    "email": "strazmiejska@bialapodlaska.pl",
+    "city": "Biała Podlaska",
+    "hint": null,
+    "api": "Mail"
+  },
+  "ożarowice": {
+    "address": [
+      "Komenda Powiatowa Policji w Tarnowskich Górach",
+      "ul. Bytomska 6",
+      "42-600 Tarnowskie Góry"
+    ],
+    "email": "dyzurny@tarnowskie-gory.ka.policja.gov.pl",
+    "city": "Ożarowice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
