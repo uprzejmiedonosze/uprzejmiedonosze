@@ -7,7 +7,7 @@
     ],
     "email": "zgloszenia@sm.szczecin.pl",
     "city": "Szczecin",
-    "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku.",
+    "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku.",
     "api": "Mail"
   },
   "warszawa": {
@@ -732,7 +732,7 @@
     ],
     "email": "wykroczenia@um.sopot.pl",
     "city": "Sopot",
-    "hint": null,
+    "hint": "Niestety SM Sopot wzywa na przesłuchanie do każdego zgłoszenia.",
     "api": "Mail"
   },
   "kościelisko": {
