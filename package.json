@@ -4,6 +4,7 @@
     "node": "16.x.x"
   },
   "engineStrict": true,
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.14.3",
     "@sentry/browser": "^7.10.0",
@@ -16,6 +17,9 @@
     "luxon": "^3.0.1"
   },
   "devDependencies": {
+    "@parcel/optimizer-data-url": "^2.7.0",
+    "@parcel/transformer-inline-string": "^2.7.0",
+    "@parcel/transformer-sass": "^2.7.0",
     "@sentry/cli": "^2.5.0",
     "cypress": "^10.4.0",
     "eslint": "^8.21.0",
@@ -25,8 +29,9 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "node-sass": "^7.0.1",
-    "parcel-bundler": "^1.12.5",
+    "parcel": "^2.7.0",
     "parcel-plugin-css-url-loader": "^1.0.5",
+    "process": "^0.11.10",
     "sass": "^1.54.4"
   },
   "name": "uprzejmiedonosze"
