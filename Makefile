@@ -182,18 +182,17 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
-	@$(shell npm bin)/parcel build --no-minify --no-source-maps --out-dir $(dir $@) $< ;
+	@$(shell npm bin)/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
-			sed $(SED_OPTS) 's/#009C7F/#ff4081/g' $@ ; \
+			sed $(SED_OPTS) 's/#009C7F/#ff4081/gi' $@ ; \
 		else \
-			sed $(SED_OPTS) 's/#009C7F/#0088bb/g' $@ ; \
+			sed $(SED_OPTS) 's/#009C7F/#0088bb/gi' $@ ; \
 		fi; \
 	fi;
 
 export/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo-processing,$<)
-	@$(shell npm bin)/parcel build --target browser --public-url "/js" \
-		--out-dir $(dir $@) $<
+	@$(shell npm bin)/parcel build --public-url "/js" --dist-dir $(dir $@) $<
 
 export/public/%.html: src/%.html; $(call echo-processing,$<)
 	$(lint)

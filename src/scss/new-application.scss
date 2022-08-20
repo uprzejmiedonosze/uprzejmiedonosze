@@ -51,7 +51,7 @@ div.error img{
 }
 
 .new-application .location-picker .centerMarker {
-  background: url('../img/map-circle.png') no-repeat;
+  background: url(data-url:../img/map-circle.png) no-repeat;
   height: 64px;
   width: 64px;
   margin-left: -32px;
@@ -140,11 +140,11 @@ div.loader.l {
 }
 
 .new-application .contextImageSection img {
-  background-image: url('../img/cameraContext.png');
+  background-image: url(data-url:../img/cameraContext.png);
 }
 
 .new-application .carImageSection img {
-  background-image: url('../img/cameraPlate.png');
+  background-image: url(data-url:../img/cameraPlate.png);
 }
 
 @keyframes spin {
@@ -272,9 +272,9 @@ div.loader.l {
 }
 
 .ui-icon-arrowsout {
-  background-image: url("../img/arrows-out.png");
+  background-image: url(data-url:../img/arrows-out.png);
 }
 
 .ui-icon-arrowsin {
-  background-image: url("../img/arrows-in.png");
+  background-image: url(data-url:../img/arrows-in.png);
 }

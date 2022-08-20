@@ -17,3 +17,4 @@ tex/app/*
 /cypress/screenshots
 /cypress/videos
 .cache
+.parcel-cache
