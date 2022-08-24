@@ -188,9 +188,10 @@ function capitalizeName($input){
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function isIOS(){
-    $iPod    = (bool)stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
-    $iPhone  = (bool)stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
-    $iPad    = (bool)stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    $iPod    = (bool)stripos($userAgent, "iPod");
+    $iPhone  = (bool)stripos($userAgent, "iPhone");
+    $iPad    = (bool)stripos($userAgent, "iPad");
     return $iPod || $iPhone || $iPad;
 }
 

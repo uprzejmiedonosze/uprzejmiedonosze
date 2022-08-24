@@ -43,7 +43,7 @@ class Application extends JSONObject{
         $this->initStatements();
         $this->version = '2.0.1';
 
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'no-user-agent-set';
         $this->browser = get_browser($userAgent, true);
         $this->browser['user_agent'] = $userAgent;
     }
