@@ -3024,6 +3024,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "środa śląska": {
+    "address": [
+      "Straż Miejska w Środzie Śląskiej",
+      "pl. Wolności 4a",
+      "55-300 Środa Śląska"
+    ],
+    "email": "sm@srodaslaska.pl",
+    "city": "Środa Śląska",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
