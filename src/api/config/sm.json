@@ -3035,6 +3035,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "łeba": {
+    "address": [
+      "Straż Miejska w Łebie",
+      "ul. Kościuszki 90",
+      "84-360 Łeba"
+    ],
+    "email": "strazmiejska@leba.eu",
+    "city": "Łeba",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
