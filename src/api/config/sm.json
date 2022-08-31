@@ -3046,6 +3046,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "gogolin": {
+    "address": [
+      "Straż Miejska w Gogolinie",
+      "ul. Krapkowicka 4",
+      "47-320 Gogolin"
+    ],
+    "email": "straz.miejska@gogolin.pl",
+    "city": "Gogolin",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
