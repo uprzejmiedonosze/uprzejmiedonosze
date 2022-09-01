@@ -3057,6 +3057,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "prudnik": {
+    "address": [
+      "Straż Miejska w Prudniku",
+      "ul. Tadeusza Kościuszki 3",
+      "48-200 Prudnik"
+    ],
+    "email": "strazmiejska@prudnik.pl",
+    "city": "Prudnik",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
