@@ -3068,6 +3068,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "prószków": {
+    "address": [
+      "Posterunek Policji w Prószkowie",
+      "ul. Opolska 10",
+      "46-060 Prószków"
+    ],
+    "email": "dzielnicowy.cmentarna18@op.policja.gov.pl",
+    "city": "Prószków",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
