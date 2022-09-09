@@ -3079,6 +3079,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "stąporków": {
+    "address": [
+      "Komisariat Policji w Stąporkowie",
+      "pl. Wolności 1",
+      "26-220 Stąporków"
+    ],
+    "email": "komendant.staporkow@ki.policja.gov.pl",
+    "city": "Stąporków",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
