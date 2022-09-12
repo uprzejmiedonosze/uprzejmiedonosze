@@ -27,7 +27,7 @@ class Mail extends CityAPI {
         
         $subject = $application->getEmailSubject();
         $message = (new Message($subject))
-            ->setFrom(EMAIL_SENDER, $application->user->name)
+            ->setFrom(EMAIL_SENDER, 'uprzejmiedonosze.net')
             ->setTo($to)
             ->addCc($application->user->email, $application->user->name)
             ->setBody(parent::formatEmail($application, true))
@@ -47,7 +47,7 @@ class Mail extends CityAPI {
         $application->sent->subject = $subject;
         $application->sent->to = $to;
         $application->sent->cc = "{$application->user->name} ({$application->user->email})";
-        $application->sent->from = "{$application->user->name} (" . SMTP_USER . ")";
+        $application->sent->from = "uprzejmiedonosze.net (" . EMAIL_SENDER . ")";
         $application->sent->body = parent::formatEmail($application, false);
         $application->sent->$messageId = $messageId;
         $application->sent->method = "Mail";
