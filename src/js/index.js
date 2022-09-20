@@ -4,7 +4,6 @@ import "./lib/send";
 import "./lib/gallery";
 import "./lib/sentry";
 
-import "./sites/adm-gallery";
 import "./sites/application";
 import "./sites/confirm-application";
 import "./sites/faq";
@@ -17,3 +16,4 @@ import "./sites/shipment";
 import "./sites/start";
 import "./sites/statistics";
 import "./sites/thank-you";
+import "./sites/adm-gallery";
