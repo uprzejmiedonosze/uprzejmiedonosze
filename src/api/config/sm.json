@@ -3090,6 +3090,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "pobiedziska": {
+    "address": [
+      "Komisariat Policji w Pobiedziskach",
+      "ul. Tysiąclecia 9",
+      "62-010 Pobiedziska"
+    ],
+    "email": "komendant.pobiedziska@po.policja.gov.pl",
+    "city": "Pobiedziska",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
