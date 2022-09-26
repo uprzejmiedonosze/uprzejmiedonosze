@@ -3101,6 +3101,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "ostróda": {
+    "address": [
+      "Straż Miejska w Ostródzie",
+      "ul. Mickiewicza 24",
+      "14-100 Ostróda"
+    ],
+    "email": "um@um.ostroda.pl",
+    "city": "Ostróda",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
