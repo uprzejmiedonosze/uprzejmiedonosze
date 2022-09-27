@@ -63,8 +63,8 @@
         {% else %}
             <p>Zweryfikuj lokalizację i swoje dane:<br /><br />
         {% endif %}
-                <b>{{ app.user.name }}</b>
         {% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+                <b>{{ app.user.name }}</b>
                 <br />
                 {{ app.user.email }}<br />
                 {{ app.user.address }}<br />
@@ -75,7 +75,7 @@
                 i stwórz nowe zgłoszenie.</small>
             {% endif %}
         {% else %}
-                <br />(dane ukryte)
+                <br />(ukryte)
         {% endif %}
             </p>
         </div>
