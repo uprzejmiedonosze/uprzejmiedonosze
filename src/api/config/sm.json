@@ -3112,6 +3112,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "niemodlin": {
+    "address": [
+      "Komisariat Policji w Niemodlinie",
+      "ul. Bohaterów Powstań Śląskich 43",
+      "49-100 Niemodlin"
+    ],
+    "email": "dzielnicowy.niemodlin53@op.policja.gov.pl",
+    "city": "Niemodlin",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
