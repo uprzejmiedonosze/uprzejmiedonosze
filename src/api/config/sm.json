@@ -3123,6 +3123,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "zambrów": {
+    "address": [
+      "Komenda Powiatowa Policji w Zambrowie",
+      "ul. Aleja Wojska Polskiego 4a",
+      "18-300 Zambrów"
+    ],
+    "email": "kpp@zambrow.bk.policja.gov.pl",
+    "city": "Zambrów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
