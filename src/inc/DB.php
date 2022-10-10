@@ -102,17 +102,20 @@ class DB extends NoSQLite{
     /**
     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
     */
-    public function getSentApplications() {
+    public function getSentApplications($daysAgo=31) {
+        $olderThan = date('Y-m-d\TH:i:s',strtotime("-$daysAgo days"));
         $sql = <<<SQL
             select key, value
             from applications
             where json_extract(value, '$.user.email') = :email
                 and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE', 'confirmed-sm')
+                and json_extract(value, '$.sent.date') < :olderThan
             order by json_extract(value, '$.seq') desc,
                 json_extract(value, '$.added') desc
         SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', getCurrentUserEmail());
+        $stmt->bindValue(':olderThan', $olderThan);
         $stmt->execute();
 
         $apps = Array();

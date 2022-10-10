@@ -13,16 +13,16 @@
     komunikacji ze Strażą Miejską lub Policją.</p>
 
 {% if applications|length == 0 %}
-    <p>Nie masz zgłoszeń wysłanych i nierozpatrzonych zgłoszeń.</p>
+    <p>Nie masz zgłoszeń nierozpatrzonych zgłoszeń, które wysłałeś przynajmniej 31 dni temu.
+        Tak wiem, wskaźnik przy "zapytaj o status" jest mylący. Pokazuje wszystkie wysłane
+        i niezakończone zgłoszenia - wybacz ;).
+    </p>
     <a href="nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
 {% else %}
 
     <p>
         Zwróć uwagę na adresy wysyłki na liście poniżej. Różne zgłoszenia mogły trafić do różnych
         jednostek.
-    </p>
-    <p>
-        Najlepiej też pytać o status po upływie nie mniej niż 2 tygodni od wysłania.
     </p>
 
     {% set address = 'unset' %}
@@ -32,7 +32,11 @@
                 {% if address != app.sent.to %}
                     {% set address = app.sent.to %}
                     </ul>
-                    <p>Proszę o status moich zgłoszeń wysłanych na adres {{ address ?? '(nieznany)' }}:</p>
+                    <p>Poniższe zawiadomienia o popełnieniu wykroczenia zostały wysłane do Państwa
+                        na adres <code>{{ address ?? '(nieznany)' }}</code> ponad miesiąc temu.</p>
+                    <p>Zgodnie z art. 54. § 2 KPoW oraz art. 156. KPK proszę o informacje
+                        o zawiadomieniach zakończonych, oraz tych, dla których czynności
+                        wyjaśniające nie dostarczyły podstaw do wniesienia wniosku o ukaranie.</p>
                     <ul>
                 {% endif %}
                 {% include('_application-ask.html.twig') %}
