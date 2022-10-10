@@ -3134,6 +3134,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "chojnice": {
+    "address": [
+      "Straż Miejska w Chojnicach",
+      "Stary Rynek 1",
+      "89-600 Chojnice"
+    ],
+    "email": "sm@miastochojnice.pl",
+    "city": "Chojnice",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
