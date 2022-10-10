@@ -1492,7 +1492,7 @@
     ],
     "email": "strazmiejska@krapkowice.pl",
     "city": "Krapkowice",
-    "hint": null,
+    "hint": "SM przyjmuje zgłoszenia e-mailowe, ale wzywa każdego zgłaszającego na przesłuchanie.",
     "api": "Mail"
   },
   "jastrzębie-zdrój": {
@@ -1635,7 +1635,7 @@
     ],
     "email": "dyzurny@strazmiejska.opole.pl",
     "city": "Opole",
-    "hint": null,
+    "hint": "SM Opole nie wzywa zgłaszających na przesłuchanie. Wzywany jest sprawca. Dopiero gdy sprawca zaprzeczy, że dokonał wykroczenia wzywany jest zgłaszający.",
     "api": "Mail"
   },
   "radzymin": {
@@ -2625,7 +2625,7 @@
     ],
     "email": "sm@pyskowice.pl",
     "city": "Pyskowice",
-    "hint": null,
+    "hint": "Niestety SM Pyskowice wzywa każdego zgłaszającego na przesłuchanie.",
     "api": "Mail"
   },
   "oleśnica": {
@@ -2889,7 +2889,7 @@
     ],
     "email": "dyzurny.st@op.policja.gov.pl",
     "city": "Strzelce Opolskie",
-    "hint": null,
+    "hint": "Komenda w Strzelcach Opolskich przyjmuje zgłoszenia i nie wzywa na przesłuchania z automatu. Wzywa tylko, jeżeli w zgłoszeniu są błędy, albo sprawca nie przyznał się. Ogólnie wezwania są rzadkością, 2-3 wezwania na sto zgłoszeń.",
     "api": "Mail"
   },
   "zawadzkie": {
