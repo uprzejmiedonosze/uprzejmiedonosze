@@ -9,8 +9,8 @@
 {% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html}' %}
 {% set mapUrl = '{https://www.google.com/maps/search/?api=1&query=' ~ app.address.latlng ~ '}' %}
 
-{% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '}' %}
-{% set carImageUrl     = '{%HTTPS%://%HOST%/' ~ app.carImage.url ~ '}' %}
+{% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '?download}' %}
+{% set carImageUrl     = '{%HTTPS%://%HOST%/' ~ app.carImage.url ~ '?download}' %}
 
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb ~ '}' %}
