@@ -9,8 +9,11 @@
 {% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html}' %}
 {% set mapUrl = '{https://www.google.com/maps/search/?api=1&query=' ~ app.address.latlng ~ '}' %}
 
+{% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '}' %}
+{% set carImageUrl     = '{%HTTPS%://%HOST%/' ~ app.carImage.url ~ '}' %}
+
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
-{% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb     ~ '}' %}
+{% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb ~ '}' %}
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
 {% set address      = '\\href' ~ appUrl ~ '{\\underline{' ~ app.address.address ~ '}}' %}
 
@@ -61,9 +64,9 @@ Email: {{ app.user.email }}
 {\it Proszę o kontakt za pośrednictwem poczty e-mail oraz nie wysyłanie korespondencji Pocztą Polską}
 
 \vspace{\stretch{3}}\noindent
-    \href{{ appUrl }}
+    \href{{ contextImageUrl }}
         {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ contextImage }} }
-    \href{{ appUrl }}
+    \href{{ carImageUrl }}
         {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ carImage }} }
 
 \vspace{0.3cm}\noindent
