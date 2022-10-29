@@ -3156,6 +3156,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "śrem": {
+    "address": [
+      "Straż Miejska w Śremie",
+      "ul. Adama Mickiewicza 10",
+      "63-100 Śrem"
+    ],
+    "email": "dyzurny@strazmiejska.srem.pl",
+    "city": "Śrem",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
