@@ -122,7 +122,7 @@ class Store implements \Iterator, \Countable
      * @return string value stored
      * @throws InvalidArgumentException
      */
-    public function set($key, $value)
+    public function set($key, $value, $email = null)
     {
         if (!is_string($key)) {
             throw new InvalidArgumentException('Expected string as key');
@@ -133,9 +133,15 @@ class Store implements \Iterator, \Countable
         }
 
         $queryString = 'REPLACE INTO ' . $this->name . ' VALUES (:key, :value);';
+        if ($email) {
+            $queryString = 'REPLACE INTO ' . $this->name . ' VALUES (:key, :value, :email);';
+        }
         $stmt = $this->db->prepare($queryString);
         $stmt->bindParam(':key', $key, PDO::PARAM_STR);
         $stmt->bindParam(':value', $value, PDO::PARAM_STR);
+        if ($email) {
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        }
         $stmt->execute();
         $this->data[(string)$key] = $value;
 
