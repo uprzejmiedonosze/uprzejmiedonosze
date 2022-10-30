@@ -64,7 +64,7 @@ class DB extends NoSQLite{
         $sql = <<<SQL
             select max(json_extract(value, '$.seq'))
             from applications
-            where json_extract(value, '$.user.email') = :email;
+            where email = :email;
         SQL;
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $email);
@@ -82,7 +82,7 @@ class DB extends NoSQLite{
         $sql = <<<SQL
             select key
             from applications
-            where json_extract(value, '$.user.email') = :email
+            where email = :email
                 and json_extract(value, '$.status') not in ('ready', 'draft')
             order by json_extract(value, '$.seq') desc,
                 json_extract(value, '$.added') desc
@@ -107,7 +107,7 @@ class DB extends NoSQLite{
         $sql = <<<SQL
             select key, value
             from applications
-            where json_extract(value, '$.user.email') = :email
+            where email = :email
                 and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE', 'confirmed-sm')
                 and json_extract(value, '$.sent.date') < :olderThan
             order by json_extract(value, '$.seq') desc,
@@ -197,7 +197,7 @@ class DB extends NoSQLite{
             }
         }
 
-        $this->apps->set($application->id, json_encode($application));
+        $this->apps->set($application->id, json_encode($application), $application->user->email);
         return $application;
     }
 
@@ -225,7 +225,7 @@ class DB extends NoSQLite{
         $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
 
         $sql = "select json_extract(value, '$.status') as status, count(key) as cnt from applications "
-            . "where json_extract(value, '$.user.email') = '$email' "
+            . "where email = '$email' "
             . "group by json_extract(value, '$.status')";
         
         $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
@@ -257,7 +257,7 @@ class DB extends NoSQLite{
         $sql = <<<SQL
         select key, value
         from applications
-        where json_extract(value, '$.user.email') = :email
+        where email = :email
             and json_extract(value, '$.status') = :status
             and json_extract(value, '$.smCity') = :city
         SQL;
@@ -277,7 +277,7 @@ class DB extends NoSQLite{
 
     public function getNextCityToSent(){
         $sql = "select json_extract(value, '$.smCity'), count(key) from applications"
-        . " where json_extract(value, '$.user.email') = :email "
+        . " where email = :email "
         . " and json_extract(value, '$.status') = :status "
         . " and json_extract(value, '$.smCity') is not null "
         . " group by json_extract(value, '$.smCity') "
