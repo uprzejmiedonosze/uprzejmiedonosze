@@ -26,37 +26,37 @@ if (isset($_GET["file"]) && !empty($_GET["file"])) {
 
 function _getStatsAppsByDay(){
     GLOBAL $storage;
-    $statsAppsByDay = $storage->getStatsAppsByDay(false);
+    $statsAppsByDay = $storage->getStatsAppsByDay();
     echo outputCSV($statsAppsByDay);
 }
 
 function _getStatsAppsByWeek(){
     GLOBAL $storage;
-    $statsAppsByWeek = $storage->getStatsAppsByWeek(false);
+    $statsAppsByWeek = $storage->getStatsAppsByWeek();
     echo outputCSV($statsAppsByWeek);
 }
 
 function _getStatsByYear(){
     GLOBAL $storage;
-    $statsByYear = $storage->getStatsByYear(false);
+    $statsByYear = $storage->getStatsByYear();
     echo outputCSV($statsByYear);
 }
 
 function _getStatsAppsByCity(){
     GLOBAL $storage;
-    $statsAppsByCity = $storage->getStatsAppsByCity(false);
+    $statsAppsByCity = $storage->getStatsAppsByCity();
     echo outputCSV($statsAppsByCity);
 }
 
 function _getStatsByCarBrand(){
     GLOBAL $storage;
-    $statsByCarBrand = $storage->getStatsByCarBrand(false);
+    $statsByCarBrand = $storage->getStatsByCarBrand();
     echo outputCSV($statsByCarBrand);
 }
 
 function _getStatsByDay(){
     GLOBAL $storage;
-    $statsByDay = $storage->getStatsByDay(false);
+    $statsByDay = $storage->getStatsByDay();
     echo outputCSV($statsByDay);
 }
 
