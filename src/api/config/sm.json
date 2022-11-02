@@ -3167,6 +3167,17 @@
     "hint": null,
     "api": "Mail"
   },
+  "jędrzejów": {
+    "address": [
+      "Straż Miejska w Jędrzejowie",
+      "11 Listopada 33",
+      "28-300 Jędrzejów"
+    ],
+    "email": "strazmiejska@umjedrzejow.pl",
+    "city": "Jędrzejów",
+    "hint": null,
+    "api": "Mail"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
