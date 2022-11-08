@@ -3170,11 +3170,22 @@
   "jędrzejów": {
     "address": [
       "Straż Miejska w Jędrzejowie",
-      "11 Listopada 33",
+      "ul. 11 Listopada 33",
       "28-300 Jędrzejów"
     ],
     "email": "strazmiejska@umjedrzejow.pl",
     "city": "Jędrzejów",
+    "hint": null,
+    "api": "Mail"
+  },
+  "szklarska poręba": {
+    "address": [
+      "Straż Miejska w Szklarskiej Porębie",
+      "ul. Jedności Narodowej 32",
+      "58-580 Szklarska Poręba"
+    ],
+    "email": "strazmiejska@szklarskaporeba.pl",
+    "city": "Szklarska Poręba",
     "hint": null,
     "api": "Mail"
   },
