@@ -182,7 +182,7 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
-	$(shell npm bin)/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
+	@$(shell npm bin)/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
 			sed $(SED_OPTS) 's/#009C7F/#ff4081/gi' $@ ; \
