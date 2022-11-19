@@ -1,7 +1,17 @@
 {
+  "_nieznane": {
+    "address": [
+      "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
+      "i podaj mu adres siedziby oraz e-mail Straży Miejskiej)"
+    ],
+    "email": null,
+    "city": null,
+    "hint": null,
+    "api": null
+  },
   "warszawa_ot1": {
     "address": [
-      "I Oddział Terenowy",
+      "I Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
       "ul. Sołtyka 8/10",
       "01-163 Warszawa"
@@ -12,7 +22,7 @@
   },
   "warszawa_ot2": {
     "address": [
-      "II Oddział Terenowy",
+      "II Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
       "ul. Klimczaka 4",
       "02-797 Warszawa"
@@ -23,7 +33,7 @@
   },
   "warszawa_ot3": {
     "address": [
-      "III Oddział Terenowy",
+      "III Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
       "ul. Przemyska 18",
       "02-361 Warszawa"
@@ -34,7 +44,7 @@
   },
   "warszawa_ot4": {
     "address": [
-      "IV Oddział Terenowy",
+      "IV Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
       "ul. Sołtyka 8/10",
       "01-163 Warszawa"
@@ -44,11 +54,11 @@
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "Bielany": {
-    "parent": "Warszawa_ot5"
+    "parent": "warszawa_ot5"
   },
-  "Warszawa_ot5": {
+  "warszawa_ot5": {
     "address": [
-      "V Oddział Terenowy",
+      "V Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
       "ul. Szegedyńska 13a",
       "01-957 Warszawa"
@@ -59,7 +69,7 @@
   },
   "warszawa_ot6": {
     "address": [
-      "VI Oddział Terenowy",
+      "VI Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
       "ul. J. Młota 3",
       "03-490 Warszawa"
@@ -70,7 +80,7 @@
   },
   "warszawa_ot7": {
     "address": [
-      "VII Oddział Terenowy",
+      "VII Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
       "ul. Kobielska 5",
       "04-359 Warszawa"
@@ -78,9 +88,6 @@
     "email": "ot7.zgloszenia@strazmiejska.waw.pl",
     "city": "Warszawa",
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
-  },
-  "Warsaw": {
-    "parent": "Warszawa"
   },
   "Wrocław-Psie Pole": {
     "parent": "Wrocław"
@@ -97,7 +104,7 @@
     "email": "strazmiejska@piaseczno.eu",
     "city": "Piaseczno"
   },
-  "Mowa Iwiczna": {
+  "Nowa Iwiczna": {
     "parent": "Piaseczno"
   },
   "Gołków": {
@@ -137,7 +144,12 @@
     "parent": "Słubice"
   },
   "Dzierzgoń": {
-    "parent": "Dzierżoniów"
+    "address": [
+      "Straż Miejska w Dzierzgoniu",
+      "Plac Wolności 1",
+      "82-440 Dzierzgoń"
+    ],
+    "email": "sm@dzierzgon.pl"
   },
   "Zatom Nowy": {
     "parent": "Międzychód"
@@ -151,14 +163,13 @@
   "Harbutowice": {
     "parent": "Myślenice"
   },
-  "rumia": {
+  "Rumia": {
     "address": [
       "Straż Miejska w Rumi",
       "ul. Abrahama 17",
       "84-230 Rumia"
     ],
-    "email": "straz.miejska@sm.rumia.pl",
-    "city": "Cieszyn"
+    "email": "straz.miejska@sm.rumia.pl"
   },
   "Karczew": {
     "parent": "Otwock"
@@ -172,7 +183,7 @@
   "Tanowo": {
     "parent": "Police"
   },
-  "grodkowo": {
+  "Grodkowo": {
     "address": [
       "Straż Miejska w Grodkowie",
       "ul. Warszawska 44/9",
@@ -199,7 +210,7 @@
   "Konarzewo": {
     "parent": "Dopiewo"
   },
-  "kałuszyn": {
+  "Kałuszyn": {
     "parent": "Wieliszew"
   },
   "Spalice": {
@@ -229,95 +240,86 @@
   "Izbicko": {
     "parent": "Strzelce Opolskie"
   },
-  "dąbrowa": {
-    "parent": "niemodlin"
+  "Dąbrowa": {
+    "parent": "Niemodlin"
   },
   "Białków": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Błonie": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Brzezina": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Brzezinka Średzka": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Czerna": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Gałów": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Głoska": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Gosławice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Kadłub": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Krępice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Lenartowice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Lubiatów": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Lutynia": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Łowęcice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Mrozów": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Pisarzowice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Prężyce": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Radakowice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Wilkostów": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Wilkszyn": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Wojnowice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Wróblowice": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Zabór wielki": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Zakrzyce": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Źródła": {
-    "parent": "miękinia"
+    "parent": "Miękinia"
   },
   "Żurawiniec": {
-    "parent": "miękinia"
-  },
-  "_nieznane": {
-    "address": [
-      "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
-      "i podaj mu adres siedziby oraz e-mail Straży Miejskiej)"
-    ],
-    "email": null,
-    "city": null,
-    "api": null
+    "parent": "Miękinia"
   },
   "Szczecin": {
     "address": [
@@ -337,6 +339,10 @@
     ],
     "email": "csk@strazmiejska.waw.pl",
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+  },
+  "Warsaw": {
+    "parent": "Warszawa",
+    "city": "Warszawa"
   },
   "Wrocław": {
     "address": [
@@ -620,7 +626,7 @@
   },
   "Ruda Śląska": {
     "address": [
-      "Straż Miejska Ruda Śląska",
+      "Straż Miejska Ruda Śląska",
       "gen. Józefa Hallera 61",
       "41-709 Ruda Śląska"
     ],

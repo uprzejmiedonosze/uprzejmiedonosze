@@ -207,7 +207,7 @@ export/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$
 	@jq -c . < $< > $@
 
 export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
-	node ./tools/sm-parser.js $< > $@
+	@node ./tools/sm-parser.js $< $@
 
 export/inc/%.php: src/inc/%.php; $(call echo-processing,$<)
 	$(lint)
