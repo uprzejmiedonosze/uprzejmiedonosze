@@ -111,7 +111,7 @@ describe('Update account', () => {
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.')
     cy.contains('zostanie za chwilę wysłane')
-    cy.contains(this.sm.szczecin.address[0])
+    cy.contains(this.sm.Szczecin.address[0])
     cy.contains('Wyślij teraz').click()
 
     cy.contains('Uwagi do współpracy')
@@ -160,7 +160,7 @@ describe('Update account', () => {
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
     cy.contains('zostanie za chwilę wysłane').should('not.exist')
     cy.contains('Na tym etapie nic nie zostanie wysłane do')
-    cy.contains(this.sm.szczecin.address[0]).should('not.exist')
+    cy.contains(this.sm.Szczecin.address[0]).should('not.exist')
     cy.contains('Komenda Wojewódzka')
     cy.contains('Wyślij teraz').should('not.exist')
     cy.contains('Zapisz').click()

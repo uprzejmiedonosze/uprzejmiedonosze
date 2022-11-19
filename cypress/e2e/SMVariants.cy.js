@@ -25,7 +25,7 @@ describe('API:automated (Poznań)', () => {
         cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
         cy.contains('Dziękujemy za wysłanie zgłoszenia')
         cy.contains('Jeszcze raz')
-        cy.contains(this.sm['poznań'].address[0])
+        cy.contains(this.sm['Poznań'].address[0])
     })
 
     it('checks my apps screen', function () {
@@ -40,9 +40,9 @@ describe('API:automated (Poznań)', () => {
     /*it('checks send apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Do wysłania').click({force: true})
-        cy.contains('Na szczęście ' + this.sm['poznań'].address[0] + ' udostępniła mechanizm')
+        cy.contains('Na szczęście ' + this.sm['Poznań'].address[0] + ' udostępniła mechanizm')
         cy.contains('Mazurska 13, Poznań').click()
-        cy.contains('Wyślij do ' + this.sm['poznań'].address[0])
+        cy.contains('Wyślij do ' + this.sm['Poznań'].address[0])
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
         cy.contains('Dodaj do galerii').should('not.exist')
         cy.contains('Szczegóły').should('not.exist')
@@ -76,7 +76,7 @@ describe('API:Mail (Wrocław)', () => {
         cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
         cy.contains('Dziękujemy za wysłanie zgłoszenia')
         cy.contains('Jeszcze raz')
-        cy.contains(this.sm['wrocław'].address[0])
+        cy.contains(this.sm['Wrocław'].address[0])
     })
 
     it('checks my apps screen', function () {
@@ -112,7 +112,7 @@ describe.skip('API:null (Szczecin)', () => {
     it('checks thank you screen', function () {
         cy.contains('Jeszcze raz')
         cy.contains('Swoje zgłoszenia musisz wysłać samodzielnie')
-        cy.contains(this.sm.szczecin.address[0])
+        cy.contains(this.sm.Szczecin.address[0])
     })
 
     it('checks my apps screen', function () {
@@ -129,7 +129,7 @@ describe.skip('API:null (Szczecin)', () => {
         cy.contains('Menu').click()
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Pobierz paczkę zgłoszeń')
-        cy.contains('Uwagi na temat współpracy z ' + this.sm.szczecin.address[0])
+        cy.contains('Uwagi na temat współpracy z ' + this.sm.Szczecin.address[0])
         cy.contains(this.config.address.address).click()
         cy.contains('Wyślij zgłoszenie').should('not.exist')
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
