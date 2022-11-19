@@ -42,8 +42,8 @@ if [ ${APPKEY+x} ]; then
 fi
 
 if [[ ${PARAM} =~ @ ]]; then
-	WHERE1="json_extract(value, '$.data.email') = '${PARAM}'"
-	WHERE2="json_extract(value, '$.user.email') = '${PARAM}'"
+	WHERE1="key = '${PARAM}'"
+	WHERE2="email = '${PARAM}'"
 elif [[ ${PARAM} =~ [0-9] ]]; then
 	echo "Apps with plate id or street ${PARAM}:"
 	for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.user.email') from applications where lower(json_extract(value, '$.carInfo.plateId')) like lower('%${PARAM}%') or lower(json_extract(value, '$.address.address')) like lower('%${PARAM}%') order by json_extract(value, '$.added') desc limit 100 \""); do
@@ -51,14 +51,17 @@ elif [[ ${PARAM} =~ [0-9] ]]; then
 	done
 	exit 0
 else
-	WHERE1="lower(json_extract(value, '$.data.name')) like lower('%${PARAM}%')"
-	WHERE2="lower(json_extract(value, '$.user.name')) like lower('%${PARAM}%')"
+	WHERE1="key like lower('%${PARAM}%')"
+	WHERE2="email like lower('%${PARAM}%')"
 fi
 
 echo "Checking user ${PARAM}:";
 ssh nieradka.net "${SQL} \"select value from users where ${WHERE1} \"" | jq '.'
 echo "Stats:"
 ssh nieradka.net "${SQL} \"select value from applications where ${WHERE2} \"" | jq -r '.status' | sort | uniq -c | sort -nr
+echo "Gallery stats:"
+ssh nieradka.net "${SQL} \"select case when json_extract(value, '$.statements.gallery') != 0 then 'zgoda' else 'brak zgody' end as statement, case json_extract(value, '$.addedToGallery') = 0 when 1 then 'odrzucone' when 0 then 'zaakceptowane' else '   ' end as decyzja, count(*) from applications where ${WHERE2} group by 1, 2 ;\"" | tr "|" "	" | sed 's/^/\t/'
+
 echo "Last 10 applications:"
 for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.status') from applications where ${WHERE2} order by json_extract(value, '$.added') desc limit 10 \""); do
 	print_app_url ${key%|*} "[${key#*|}]"
