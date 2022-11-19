@@ -1,27 +1,4 @@
 {
-  "szczecin": {
-    "address": [
-      "Straż Miejska Szczecin",
-      "ul. Klonowica 1b",
-      "71-241 Szczecin"
-    ],
-    "email": "zgloszenia@sm.szczecin.pl",
-    "city": "Szczecin",
-    "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku.",
-    "api": "Mail"
-  },
-  "warszawa": {
-    "address": [
-      "Referat Oskarżycieli Publicznych",
-      "Straż Miejska m.st. Warszawy",
-      "ul. Młynarska 43/45",
-      "01-170 Warszawa"
-    ],
-    "email": "csk@strazmiejska.waw.pl",
-    "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
-  },
   "warszawa_ot1": {
     "address": [
       "I Oddział Terenowy",
@@ -31,8 +8,7 @@
     ],
     "email": "ot1@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "warszawa_ot2": {
     "address": [
@@ -43,8 +19,7 @@
     ],
     "email": "ot2@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "warszawa_ot3": {
     "address": [
@@ -55,8 +30,7 @@
     ],
     "email": "ot3@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "warszawa_ot4": {
     "address": [
@@ -67,8 +41,7 @@
     ],
     "email": "ot4@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "Bielany": {
     "parent": "Warszawa_ot5"
@@ -82,8 +55,7 @@
     ],
     "email": "ot5@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "warszawa_ot6": {
     "address": [
@@ -94,8 +66,7 @@
     ],
     "email": "ot6@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "warszawa_ot7": {
     "address": [
@@ -106,332 +77,16 @@
     ],
     "email": "ot7.zgloszenia@strazmiejska.waw.pl",
     "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
   },
   "Warsaw": {
     "parent": "Warszawa"
   },
-  "wrocław": {
-    "address": [
-      "Straż Miejska Wrocławia",
-      "ul. Na Grobli 14/16",
-      "50-421 Wrocław"
-    ],
-    "email": "straz@strazmiejska.wroclaw.pl",
-    "city": "Wrocław",
-    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
-    "api": "Mail"
+  "Wrocław-Psie Pole": {
+    "parent": "Wrocław"
   },
-  "Wrocław-Psie Pole": { "parent": "Wrocław" },
-  "kraków": {
-    "address": [
-      "Straż Miejska Miasta Krakowa",
-      "ul. Dobrego Pasterza 116",
-      "31-416 Kraków"
-    ],
-    "email": "smkrak@strazmiejska.krakow.pl",
-    "city": "Kraków",
-    "hint": "Niestety SM Kraków wzywa na przesłuchanie do każdego zgłoszenia.",
-    "api": "Mail"
-  },
-  "gdynia": {
-    "address": [
-      "Straż Miejska Gdyni",
-      "ul. Zakręt do Oksywia 10",
-      "81-244 Gdynia"
-    ],
-    "email": "straz_miejska@gdynia.pl",
-    "city": "Gdynia",
-    "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie.",
-    "api": "Mail"
-  },
-  "białystok": {
-    "address": [
-      "Straż Miejska w Białymstoku",
-      "ul. Składowa 11",
-      "15-399 Białystok"
-    ],
-    "email": "dyzurny.sm@um.bialystok.pl",
-    "city": "Białystok",
-    "hint": null,
-    "api": "Mail"
-  },
-  "łódź": {
-    "address": [
-      "Komenda Straży Miejskiej w Łodzi",
-      "ul. Wólczańska 121/123",
-      "90-521 Łódź"
-    ],
-    "email": "ogolnomiejski@strazmiejska.lodz.pl",
-    "city": "Łódź",
-    "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie. Powyższe jednak z pewnością nie obowiązuje dla Oddziału Łódź-Polesie, które wzywa z automatu na przesłuchanie do każdego zgłoszenia.",
-    "api": "Mail"
-  },
-  "gdańsk": {
-    "address": [
-      "Straż Miejska w Gdańsku",
-      "ul. Elbląska 54/60",
-      "80-724 Gdańsk"
-    ],
-    "email": "sm@gdansk.gda.pl",
-    "city": "Gdańsk",
-    "hint": null,
-    "api": "Mail"
-  },
-  "poznań": {
-    "address": [
-      "Straż Miejska Miasta Poznania",
-      "ul. Głogowska 26",
-      "60-734 Poznań"
-    ],
-    "email": "sm@um.poznan.pl",
-    "city": "Poznań",
-    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
-    "api": "Poznan"
-  },
-  "toruń": {
-    "address": [
-      "Straż Miejska w Toruniu",
-      "ul. Grudziądzka 157",
-      "87-100 Toruń"
-    ],
-    "email": "sm@um.torun.pl",
-    "city": "Toruń",
-    "hint": "<p>SM Toruń jest wyjątkowa w skali kraju i stoi na stanowisku, że jedyny poprawny sposób dokonywania zgłoszeń to telefon 986. Wiele SM stara się zniechęcić mieszkańców do dokonywania zgłoszeń, ale zawsze przyznają, że muszą się zająć każdym zgłoszeniem.</p> <p>Musisz liczyć się, że odmówią przyjęcia zgłoszenia i być przygotowanym na batalię odwoławczą.</p>",
-    "api": "Mail"
-  },
-  "bydgoszcz": {
-    "address": [
-      "Straż Miejska w Bydgoszczy",
-      "ul. Leśna 12",
-      "85-676 Bydgoszcz"
-    ],
-    "email": "sekretariat@strazmiejska.bydgoszcz.pl",
-    "city": "Bydgoszcz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "katowice": {
-    "address": [
-      "Straż Miejska w Katowicach",
-      "ul. Żelazna 18",
-      "40-851 Katowice"
-    ],
-    "email": "interwencje@katowice.eu",
-    "city": "Katowice",
-    "hint": "Niestety SM Katowice wzywa na przesłuchanie do każdego zgłoszenia.",
-    "api": "Mail"
-  },
-  "górowo iławeckie": {
-    "address": [
-      "Komisariat Policji w Górowie Iławeckim",
-      "ul. gen. Władysława Sikorskiego 30",
-      "11-220 Górowo Iławeckie"
-    ],
-    "email": "dzielnicowy.gorowoilaweckie1@ol.policja.gov.pl",
-    "city": "Górowo Iławeckie",
-    "hint": null,
-    "api": "Mail"
-  },
-  "tczew": {
-    "address": [
-      "Straż Miejska w Tczewie",
-      "Plac Marszałka Piłsudskiego 1",
-      "83-110 Tczew"
-    ],
-    "email": "strazmiejska@um.tczew.pl",
-    "city": "Tczew",
-    "hint": null,
-    "api": "Mail"
-  },
-  "chełm": {
-    "address": [
-      "Straż Miejska Chełm",
-      "Obłońska 20",
-      "22-100 Chełm"
-    ],
-    "email": "straz.miejska@umchelm.pl",
-    "city": "Chełm",
-    "hint": null,
-    "api": "Mail"
-  },
-  "gryfino": {
-    "address": [
-      "Straż Miejska Gryfino",
-      "1 Maja 16",
-      "74-100 Gryfino"
-    ],
-    "email": "strazmiejska@gryfino.pl",
-    "city": "Gryfino",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ząbki": {
-    "address": [
-      "Straż Miejska w Ząbkach",
-      "Wojska Polskiego 10",
-      "05-091 Ząbki"
-    ],
-    "email": "strazmiejska@zabki.pl",
-    "city": "Ząbki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "bartoszyce": {
-    "address": [
-      "Straż Miejska w Bartoszycach",
-      "ul. Bohaterów Monte Cassino 1",
-      "11-200 Bartoszyce"
-    ],
-    "email": "jerzyszostak@bartoszyce.pl",
-    "city": "Bartoszyce",
-    "hint": null,
-    "api": "Mail"
-  },
-  "lidzbark warmiński": {
-    "address": [
-      "Straż Miejska w Lidzbarku Warmińskim",
-      "Aleksandra Świętochowskiego 14",
-      "11-100 Lidzbark Warmiński"
-    ],
-    "email": "um@lidzbarkwarminski.pl",
-    "city": "Lidzbark Warmiński",
-    "hint": null,
-    "api": "Mail"
-  },
-  "zielona góra": {
-    "address": [
-      "Straż Miejska Zielona Góra",
-      "ul. Bohaterów Westerplatte 23",
-      "65-078 Zielona Góra"
-    ],
-    "email": "dyzurny@um.zielona-gora.pl",
-    "city": "Zielona Góra",
-    "hint": null,
-    "api": "Mail"
-  },
-  "Łężyca": { "parent": "Zielona Góra" },
-  "olsztyn": {
-    "address": [
-      "Straż Miejska w Olsztynie",
-      "ul. Żołnierska 13A",
-      "10-558 Olsztyn"
-    ],
-    "email": "dyzurny@sm.olsztyn.eu",
-    "city": "Olsztyn",
-    "hint": null,
-    "api": "Mail"
-  },
-  "świdnica": {
-    "address": [
-      "Straż Miejska w Świdnicy",
-      "ul. Dworcowa 2-4-6-8",
-      "58-100 Świdnica"
-    ],
-    "email": "strazmiejska@sm.swidnica.pl",
-    "city": "Świdnica",
-    "hint": null,
-    "api": "Mail"
-  },
-  "karlino": {
-    "address": [
-      "Straż Miejska Karlino",
-      "ul. Szymanowskiego 17A",
-      "78-230 Karlino"
-    ],
-    "email": "sm@karlino.pl",
-    "city": "Karlino",
-    "hint": null,
-    "api": "Mail"
-  },
-  "sosnowiec": {
-    "address": [
-      "Straż Miejska Sosnowiec",
-      "ul. S. Małachowskiego 3",
-      "41-200 Sosnowiec"
-    ],
-    "email": "straz@um.sosnowiec.pl",
-    "city": "Sosnowiec",
-    "hint": null,
-    "api": "Mail"
-  },
-  "rzeszów": {
-    "address": [
-      "Straż Miejska w Rzeszowie",
-      "ul. Targowa 1",
-      "35-064 Rzeszów"
-    ],
-    "email": "komenda@sm.erzeszow.pl",
-    "city": "Rzeszów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "łosice": {
-    "address": [
-      "Straż Miejska Łosice",
-      "Handlowa 7",
-      "08-200 Łosice"
-    ],
-    "email": "straz-miejska@gminalosice.pl",
-    "city": "Łosice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "sieradz": {
-    "address": [
-      "Straż Miejska w Sieradzu",
-      "ul. Kościuszki 6",
-      "98-200 Sieradz"
-    ],
-    "email": "kontakt@sm.sieradz.eu",
-    "city": "Sieradz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "tarnów": {
-    "address": [
-      "Straż Miejska w Tarnowie",
-      "ul. Nadbrzeżna Dolna 7",
-      "33-100 Tarnów"
-    ],
-    "email": "straz@umt.tarnow.pl",
-    "city": "Tarnów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wejherowo": {
-    "address": [
-      "Straż Miejska Wejherowo",
-      "pl. Jakuba Wejhera 8",
-      "84-200 Wejherowo"
-    ],
-    "email": "sm@wejherowo.pl",
-    "city": "Wejherowo",
-    "hint": null,
-    "api": "Mail"
-  },
-  "konstancin-jeziorna": {
-    "address": [
-      "Straż Miejska Konstancin-Jeziorna",
-      "ul. Sobieskiego 5",
-      "05-510 Konstancin-Jeziorna"
-    ],
-    "email": "komendasm@konstancinjeziorna.pl",
-    "city": "Konstancin-Jeziorna",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nowy targ": {
-    "address": [
-      "Komenda Powiatowa Policji w Nowym Targu",
-      "ul. Konfederacji Tatrzańskiej 1a",
-      "34-400 Nowy Targ"
-    ],
-    "email": "dyzurni@nowy-targ.policja.gov.pl",
-    "city": "Nowy Targ",
-    "hint": null,
-    "api": "Mail"
+  "Łężyca": {
+    "parent": "Zielona Góra"
   },
   "Piaseczno": {
     "address": [
@@ -440,9 +95,7 @@
       "05-500 Piaseczno"
     ],
     "email": "strazmiejska@piaseczno.eu",
-    "city": "Piaseczno",
-    "hint": null,
-    "api": "Mail"
+    "city": "Piaseczno"
   },
   "Mowa Iwiczna": {
     "parent": "Piaseczno"
@@ -456,39 +109,6 @@
   "Józefosław": {
     "parent": "Piaseczno"
   },
-  "kalisz": {
-    "address": [
-      "Straż Miejska Kalisza",
-      "ul. Krótka 5-7",
-      "62-800 Kalisz"
-    ],
-    "email": "kontakt@sm.kalisz.pl",
-    "city": "Kalisz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "legnica": {
-    "address": [
-      "Straż Miejska w Legnicy",
-      "Al. Rzeczypospolitej 3",
-      "59-220 Legnica"
-    ],
-    "email": "sekretariat@sm.legnica.pl",
-    "city": "Legnica",
-    "hint": null,
-    "api": "Mail"
-  },
-  "pruszków": {
-    "address": [
-      "Straż Miejska w Pruszkowie",
-      "ul. Kraszewskiego 14/16",
-      "05-800 Pruszków"
-    ],
-    "email": "kierownikzmiany@strazmiejska.pruszkow.pl",
-    "city": "Pruszków",
-    "hint": null,
-    "api": "Mail"
-  },
   "Rewal": {
     "address": [
       "Straż Gminna w Rewalu",
@@ -496,533 +116,16 @@
       "72-344 Rewal"
     ],
     "email": "strazgminna@rewal.pl",
-    "city": "Rewal",
-    "hint": null,
-    "api": "Mail"
+    "city": "Rewal"
   },
-  "Niechorze": { "parent": "Rewal" },
-  "mysłowice": {
-    "address": [
-      "Straż Miejska Mysłowice",
-      "Strażacka 7",
-      "41-400 Mysłowice"
-    ],
-    "email": "straz.miejska@myslowice.pl",
-    "city": "Mysłowice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "zabrze": {
-    "address": [
-      "Straż Miejska w Zabrzu",
-      "ul. Pawła Stalmacha 9",
-      "41-800 Zabrze"
-    ],
-    "email": "straz@strazmiejska.zabrze.pl",
-    "city": "Zabrze",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ruda śląska": {
-    "address": [
-      "Straż Miejska Ruda Śląska",
-      "gen. Józefa Hallera 61",
-      "41-709 Ruda Śląska"
-    ],
-    "email": "straz@rudaslaska.pl",
-    "city": "Ruda Śląska",
-    "hint": null,
-    "api": "Mail"
-  },
-  "lublin": {
-    "address": [
-      "Straż Miejska Lublin",
-      "ul. Podwale 3a",
-      "20-400 Lublin"
-    ],
-    "email": "sm@lublin.eu",
-    "city": "Lublin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "leszno": {
-    "address": [
-      "Straż Miejska w Lesznie",
-      "ul. Berwińskich 7c",
-      "64-100 Leszno"
-    ],
-    "email": "sm@leszno.pl",
-    "city": "Leszno",
-    "hint": null,
-    "api": "Mail"
-  },
-  "inowrocław": {
-    "address": [
-      "Straż Miejska Inowrocław",
-      "ul. Gabriela Narutowicza 60",
-      "88-100 Inowrocław"
-    ],
-    "email": "strazmiejska@inowroclaw.pl",
-    "city": "Inowrocław",
-    "hint": null,
-    "api": "Mail"
-  },
-  "suwałki": {
-    "address": [
-      "Straż Miejska Suwałki",
-      "ul. Teofila Noniewicza 71A",
-      "16-402 Suwałki"
-    ],
-    "email": "sm@um.suwalki.pl",
-    "city": "Suwałki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "gliwice": {
-    "address": [
-      "Straż Miejska w Gliwicach",
-      "ul. Bolesława Śmiałego 2A",
-      "44-121 Gliwice"
-    ],
-    "email": "dyzurny@smgliwice.pl",
-    "city": "Gliwice",
-    "hint": "Niestety SM Gliwice wzywa na przesłuchanie do każdego zgłoszenia.",
-    "api": "Mail"
-  },
-  "wodzisław śląski": {
-    "address": [
-      "Straż Miejska w Wodzisławiu Śląskim",
-      "ul. Rzeczna 24",
-      "44-300 Wodzisław Śląski"
-    ],
-    "email": "strazmiejska@wodzislaw-slaski.pl",
-    "city": "Wodzisław Śląski",
-    "hint": null,
-    "api": "Mail"
-  },
-  "rybnik": {
-    "address": [
-      "Straż Miejska w Rybniku",
-      "Władysława Stanisława Reymonta 54",
-      "44-200 Rybnik"
-    ],
-    "email": "sekretariat@sm.rybnik.pl",
-    "city": "Rybnik",
-    "hint": null,
-    "api": "Mail"
-  },
-  "gorzów wielkopolski": {
-    "address": [
-      "Straż Miejska w Gorzowie Wielkopolskim",
-      "ul. Łokietka 22",
-      "66-400 Gorzów Wielkopolski"
-    ],
-    "email": "ksm@um.gorzow.pl",
-    "city": "Gorzów Wielkopolski",
-    "hint": null,
-    "api": "Mail"
-  },
-  "stronie śląskie": {
-    "address": [
-      "Straż Miejska w Stroniu Śląskim",
-      "ul. Mickiewicza 2",
-      "57-550 Stronie Śląskie"
-    ],
-    "email": "straznicy@stronie.pl",
-    "city": "Stronie Śląskie",
-    "hint": null,
-    "api": "Mail"
-  },
-  "konstantynów łódzki": {
-    "address": [
-      "Straż Miejska w Konstantynowie Łódzkim",
-      "ul. Zgierska 2",
-      "95-050 Konstantynów Łódzki"
-    ],
-    "email": "strazmiejska@konstantynow.pl",
-    "city": "Konstantynów Łódzki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "częstochowa": {
-    "address": [
-      "Straż Miejska w Częstochowie",
-      "ul. Krakowska 80 blok 3",
-      "42-200 Częstochowa"
-    ],
-    "email": "dyzurny_sm@strazmiejska.czestochowa.um.gov.pl",
-    "city": "Częstochowa",
-    "hint": null,
-    "api": "Mail"
-  },
-  "sopot": {
-    "address": [
-      "Straż Miejska Sopot",
-      "ul. Kościuszki 25/27",
-      "81-704 Sopot"
-    ],
-    "email": "wykroczenia@um.sopot.pl",
-    "city": "Sopot",
-    "hint": "Niestety SM Sopot wzywa na przesłuchanie do każdego zgłoszenia.",
-    "api": "Mail"
-  },
-  "kościelisko": {
-    "address": [
-      "Straż Gminna Kościelisko",
-      "ul. Strzelców Podhalańskich 44",
-      "34-511 Kościelisko"
-    ],
-    "email": "straz@koscielisko.com.pl",
-    "city": "Kościelisko",
-    "hint": null,
-    "api": "Mail"
-  },
-  "słupsk": {
-    "address": [
-      "Straż Miejska Słupsk",
-      "ul. Jaracza 5",
-      "76-200 Słupsk"
-    ],
-    "email": "sm@um.slupsk.pl",
-    "city": "Słupsk",
-    "hint": null,
-    "api": "Mail"
-  },
-  "bełżyce": {
-    "address": [
-      "Komisariat Policji w Bełżycach",
-      "ul. Lubelska 82",
-      "24-200 Bełżyce"
-    ],
-    "email": "kpbelzyce.kmplublin@lu.policja.gov.pl",
-    "city": "Bełżyce",
-    "hint": null,
-    "api": "Mail"
-  },
-  "jarosław": {
-    "address": [
-      "Straż Miejska Jarosławia",
-      "Rynek 1",
-      "37-500 Jarosław"
-    ],
-    "email": "kancelaria@um.jaroslaw.pl",
-    "city": "Jarosław",
-    "hint": null,
-    "api": "Mail"
-  },
-  "legionowo": {
-    "address": [
-      "Straż Miejska w Legionowie",
-      "ul. Jagiellońska 26B",
-      "05-120 Legionowo"
-    ],
-    "email": "straz.miejska@um.legionowo.pl",
-    "city": "Legionowo",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wadowice": {
-    "address": [
-      "Straż Miejska Wadowice",
-      "Plac Jana Pawła II 23",
-      "34-100 Wadowice"
-    ],
-    "email": "strazmiejska@wadowice.pl",
-    "city": "Wadowice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "pruszcz gdański": {
-    "address": [
-      "Straż Gminna Gminy Pruszcz Gdański",
-      "ul. Spacerowa 8",
-      "83-031 Łęgowo"
-    ],
-    "email": "strazmiejska@pruszcz-gdanski.pl",
-    "city": "Pruszcz Gdański",
-    "hint": null,
-    "api": "Mail"
+  "Niechorze": {
+    "parent": "Rewal"
   },
   "Rotmanka": {
     "parent": "Pruszcz Gdański"
   },
-  "mikołów": {
-    "address": [
-      "Straż Miejska Mikołów",
-      "ul. Rynek 7",
-      "43-190 Mikołów"
-    ],
-    "email": "bsm1@mikolow.eu",
-    "city": "Mikołów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "żory": {
-    "address": [
-      "Komenda Miejska Policji w Żorach",
-      "ul. Wodzisławska 3",
-      "44-240 Żory"
-    ],
-    "email": "komendant@zory.ka.policja.gov.pl",
-    "city": "Żory",
-    "hint": null,
-    "api": "Mail"
-  },
-  "świętochłowice": {
-    "address": [
-      "Straż Miejska w Świętochłowicach",
-      "ul. Katowicka 54A",
-      "41-600 Świętochłowice"
-    ],
-    "email": "sm@swietochlowice.pl",
-    "city": "Świętochłowice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "piastów": {
-    "address": [
-      "Komisariat Policji w Piastowie",
-      "ul. Popiełuszki 24",
-      "05-820 Piastów"
-    ],
-    "email": "dyzurny.kp-piastow@ksp.policja.gov.pl",
-    "city": "Piastów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "olkusz": {
-    "address": [
-      "Straż Miejska w Olkuszu",
-      "Rynek 1",
-      "32-300 Olkusz"
-    ],
-    "email": "sm1@umig.olkusz.pl",
-    "city": "Olkusz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "grudziądz": {
-    "address": [
-      "Straż Miejska w Grudziądzu",
-      "ul. Piłsudskiego 51",
-      "86-300 Grudziądz"
-    ],
-    "email": "strazmiejska@um.grudziadz.pl",
-    "city": "Grudziądz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "starachowice": {
-    "address": [
-      "Straż Miejska Starachowice",
-      "ul. Radomska 45",
-      "27-200 Starachowice"
-    ],
-    "email": "strazmiejska@starachowice.eu",
-    "city": "Starachowice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kielce": {
-    "address": [
-      "Straż Miejska w Kielcach",
-      "ul. Ogrodowa 3B",
-      "25-024 Kielce"
-    ],
-    "email": "sekretariat@strazmiejska.kielce.pl",
-    "city": "Kielce",
-    "hint": null,
-    "api": "Mail"
-  },
-  "lubartów": {
-    "address": [
-      "Komenda Powiatowa Policji w Lubartowie",
-      "ul. Lubelska 57a",
-      "21-100 Lubartów"
-    ],
-    "email": "dyzurni.kpplubartow@lu.policja.gov.pl",
-    "city": "Lubartów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "czechowice-dziedzice": {
-    "address": [
-      "Straż Miejska w Czechowicach-Dziedzicach",
-      "ul. Niepodległości 35",
-      "43-502 Czechowice-Dziedzice"
-    ],
-    "email": "sm@sm.czechowice-dziedzice.pl",
-    "city": "Czechowice-Dziedzice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "płock": {
-    "address": [
-      "Straż Miejska w Płocku",
-      "ul. Otolińska 10",
-      "09-407 Płock"
-    ],
-    "email": "sekretariat@strazmiejska.plock.eu",
-    "city": "Płock",
-    "hint": null,
-    "api": "Mail"
-  },
-  "łańcut": {
-    "address": [
-      "Komenda Powiatowa Policji w Łańcucie",
-      "ul. Traugutta 13A",
-      "37-100 Łańcut"
-    ],
-    "email": "lancut@rz.policja.gov.pl",
-    "city": "Łańcut",
-    "hint": null,
-    "api": "Mail"
-  },
-  "chorzów": {
-    "address": [
-      "Straż Miejska w Chorzowie",
-      "Jana III Sobieskiego 3",
-      "41-500 Chorzów"
-    ],
-    "email": "sm@chorzow.eu",
-    "city": "Chorzów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nysa": {
-    "address": [
-      "Straż Miejska w Nysie",
-      "ul. Kolejowa 15",
-      "48-300 Nysa"
-    ],
-    "email": "straz@www.nysa.pl",
-    "city": "Nysa",
-    "hint": null,
-    "api": "Mail"
-  },
-  "niepołomice": {
-    "address": [
-      "Straż Miejska Niepołomice",
-      "pl. Zwycięstwa 8",
-      "32-005 Niepołomice"
-    ],
-    "email": "straz.miejska@niepolomice.com",
-    "city": "Niepołomice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "żywiec": {
-    "address": [
-      "Straż Miejska Żywiec",
-      "ul. Zielona 7",
-      "34-300 Żywiec"
-    ],
-    "email": "strazmiejska@zywiec.pl",
-    "city": "Żywiec",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kąty wrocławskie": {
-    "address": [
-      "Komisariat Policji w Kątach Wrocławskich",
-      "ul. 1-go Maja 16",
-      "55-080 Kąty Wrocławskie"
-    ],
-    "email": "dzielnicowy.katy-wroclawskie3@wroclaw.wr.policja.gov.pl",
-    "city": "Kąty Wrocławskie",
-    "hint": null,
-    "api": "Mail"
-  },
   "Mokronos Dolny": {
     "parent": "Kąty Wrocławskie"
-  },
-  "smolec": {
-    "address": [
-      "Komisariat Policji w Smolcu",
-      "ul. Dworcowa 4",
-      "55-080 Smolec"
-    ],
-    "email": "dzielnicowy.katy-wroclawskie2@wroclaw.wr.policja.gov.pl",
-    "city": "Smolec",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nowa ruda": {
-    "address": [
-      "Straż Miejska Nowa Ruda",
-      "Rynek 11",
-      "57-400 Nowa Ruda"
-    ],
-    "email": "sm@um.nowaruda.pl",
-    "city": "Nowa Ruda",
-    "hint": null,
-    "api": "Mail"
-  },
-  "dąbrowa górnicza": {
-    "address": [
-      "Straż Miejska w Dąbrowie Górniczej",
-      "ul. Graniczna 21",
-      "41-300 Dąbrowa Górnicza"
-    ],
-    "email": "dyzsm@dabrowa-gornicza.pl",
-    "city": "Dąbrowa Górnicza",
-    "hint": null,
-    "api": "Mail"
-  },
-  "będzin": {
-    "address": [
-      "Straż Miejska w Będzinie",
-      "pl. Kolei Warszawsko-Wiedeńskiej 3",
-      "42-500 Będzin"
-    ],
-    "email": "strazmiejska@um.bedzin.pl",
-    "city": "Będzin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "szczytno": {
-    "address": [
-      "Straż Miejska w Szczytnie",
-      "ul. Sienkiewicza 1",
-      "12-100 Szczytno"
-    ],
-    "email": "straz.miejska@um.szczytno.pl",
-    "city": "Szczytno",
-    "hint": null,
-    "api": "Mail"
-  },
-  "bełchatów": {
-    "address": [
-      "Straż Miejska w Bełchatowie",
-      "ul. Kościuszki 15",
-      "97-400 Bełchatów"
-    ],
-    "email": "sm@um.belchatow.pl",
-    "city": "Bełchatów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "radom": {
-    "address": [
-      "Straż Miejska w Radomiu",
-      "ul. Stanisława Moniuszki 9",
-      "26-610 Radom"
-    ],
-    "email": "sekretariat@strazmiejska.radom.pl",
-    "city": "Radom",
-    "hint": null,
-    "api": "Mail"
-  },
-  "siechnice": {
-    "address": [
-      "Straż Miejska w Siechnicach",
-      "ul. Kolejowa 3",
-      "55-010 Święta Katarzyna"
-    ],
-    "email": "strazmiejska@umsiechnice.pl",
-    "city": "Siechnice",
-    "hint": null,
-    "api": "Mail"
   },
   "Święta Katarzyna": {
     "parent": "Siechnice"
@@ -1030,507 +133,23 @@
   "Żerniki Wrocławskie": {
     "parent": "Siechnice"
   },
-  "sędławki": {
-    "address": [
-      "Komenda Powiatowa Policji w Bartoszycach",
-      "ul. Warszawska 9",
-      "11-200 Bartoszyce"
-    ],
-    "email": "komendant@bartoszyce.ol.policja.gov.pl",
-    "city": "Sędławki",
-    "hint": "Gmina Sędławki jest obsługiwana przez komendą Policji w Bartoszycach.",
-    "api": "Mail"
-  },
-  "słubice": {
-    "address": [
-      "Straż Miejska w Słubicach",
-      "ul. Akademicka 1",
-      "69-100 Słubice"
-    ],
-    "email": "sm@slubice.pl",
-    "city": "Słubice",
-    "hint": null,
-    "api": "Mail"
-  },
   "Górzyca": {
     "parent": "Słubice"
-  },
-  "ciechanów": {
-    "address": [
-      "Straż Miejska w Ciechanowie",
-      "Plac Jana Pawła II 7",
-      "06-400 Ciechanów"
-    ],
-    "email": "strazmiejska@umciechanow.pl",
-    "city": "Ciechanów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "żukowo": {
-    "address": [
-      "Komenda Powiatowa Policji w Kartuzach",
-      "ul. Sambora 41",
-      "83-300 Kartuzy"
-    ],
-    "email": "komenda.kartuzy@gd.policja.gov.pl",
-    "city": "Żukowo",
-    "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach.",
-    "api": "Mail"
-  },
-  "dzierżoniów": {
-    "address": [
-      "Straż Miejska w Dzierżoniowie",
-      "ul. Rzeźnicza 2",
-      "58-200 Dzierżoniów"
-    ],
-    "email": "straz@um.dzierzoniow.pl",
-    "city": "Dzierżoniów",
-    "hint": null,
-    "api": "Mail"
   },
   "Dzierzgoń": {
     "parent": "Dzierżoniów"
   },
-  "kobierzyce": {
-    "address": [
-      "Komisariat Policji Wrocław Krzyki",
-      "ul. Ślężna 115-129",
-      "53-305 Wrocław"
-    ],
-    "email": "szymon.mlynarczyk@wroclaw.wr.policja.gov.pl",
-    "city": "Kobierzyce",
-    "hint": null,
-    "api": "Mail"
-  },
-  "konin": {
-    "address": [
-      "Straż Miejska w Koninie",
-      "ul. Przemysłowa 2",
-      "62-510 Konin"
-    ],
-    "email": "smkonin@konin.um.gov.pl",
-    "city": "Konin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kartuzy": {
-    "address": [
-      "Straż Miejska w Kartuzach",
-      "Generała Józefa Hellera 1",
-      "83-300 Kartuzy"
-    ],
-    "email": "strazmiejska@poczta.kartuzy.pl",
-    "city": "Kartuzy",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kędzierzyn-koźle": {
-    "address": [
-      "Straż Miejska Kędzierzyn-Koźle",
-      "ul. Piramowicza 32",
-      "47-200 Kędzierzyn-Koźle"
-    ],
-    "email": "sm@kedzierzynkozle.pl",
-    "city": "Kędzierzyn-Koźle",
-    "hint": null,
-    "api": "Mail"
-  },
-  "tychy": {
-    "address": [
-      "Straż Miejska Tychy",
-      "ul. Budowlanych 67",
-      "43-100 Tychy"
-    ],
-    "email": "strazmiejska@umtychy.pl",
-    "city": "Tychy",
-    "hint": null,
-    "api": "Mail"
-  },
-  "międzychód": {
-    "address": [
-      "Straż Miejska Międzychód",
-      "ul. Marszałka Piłsudskiego 2",
-      "64-400 Międzychód"
-    ],
-    "email": "strazmiejska@miedzychod.pl",
-    "city": "Międzychód",
-    "hint": null,
-    "api": "Mail"
-  },
   "Zatom Nowy": {
     "parent": "Międzychód"
-  },
-  "mosina": {
-    "address": [
-      "Straż Miejska Mosina",
-      "ul. Krotowskiego 16",
-      "62-050 Mosina"
-    ],
-    "email": "straz.miejska@mosina.pl",
-    "city": "Mosina",
-    "hint": null,
-    "api": "Mail"
   },
   "Krosno-Wlkp": {
     "parent": "Mosina"
   },
-  "krosno": {
-    "address": [
-      "Straż Miejska Krosno",
-      "ul. Staszica 2",
-      "38-400 Krosno"
-    ],
-    "email": "sm@um.krosno.pl",
-    "city": "Krosno",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wiskitki": {
-    "address": [
-      "Posterunek Policji Wiskitki",
-      "ul. Kościuszki 1a",
-      "96-315 Wiskitki"
-    ],
-    "email": "dzielnicowy.wiskitki@ra.policja.gov.pl",
-    "city": "Wiskitki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "mińsk mazowiecki": {
-    "address": [
-      "Straż Miejska Mińsk Mazowiecki",
-      "ul. Konstytucji 3 Maja 1a",
-      "05-300 Mińsk Mazowiecki"
-    ],
-    "email": "wykroczenia@umminskmaz.pl",
-    "city": "Mińsk Mazowiecki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "bielsko-biała": {
-    "address": [
-      "Straż Miejska w Bielsku-Białej",
-      "ul. Hugona Kołłątaja 10",
-      "43-300 Bielsko-Biała"
-    ],
-    "email": "sm@strazmiejska.bielsko.pl",
-    "city": "Bielsko-Biała",
-    "hint": null,
-    "api": "Mail"
-  },
-  "bytom": {
-    "address": [
-      "Straż Miejska w Bytomiu",
-      "ul. Wrocławska 122",
-      "41-902 Bytom"
-    ],
-    "email": "dyzurny@strazmiejska.bytom.pl",
-    "city": "Bytom",
-    "hint": null,
-    "api": "Mail"
-  },
-  "czeladź": {
-    "address": [
-      "Straż Miejska w Czeladzi",
-      "Katowicka 45",
-      "41-250 Czeladź"
-    ],
-    "email": "kniebylski@um.czeladz.pl",
-    "city": "Czeladź",
-    "hint": null,
-    "api": "Mail"
-  },
-  "jarocin": {
-    "address": [
-      "Komenda Powiatowa Policji w Jarocinie",
-      "ul. Bohaterów Jarocina 15",
-      "63-200 Jarocin"
-    ],
-    "email": "policja@jarocin.policja.gov.pl",
-    "city": "Jarocin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "polkowice": {
-    "address": [
-      "Straż Miejska Polkowice",
-      "ul. Targowa 11",
-      "59-100 Polkowice"
-    ],
-    "email": "dyzurny@ksm.polkowice.pl",
-    "city": "Polkowice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "staszów": {
-    "address": [
-      "Straż Miejska Staszów",
-      "ul. Opatowska 31",
-      "28-200 Staszów"
-    ],
-    "email": "joanna.tutak@staszow.pl",
-    "city": "Staszów",
-    "hint": null,
-    "api": "Mail"
-  },
   "Kurozwęki": {
     "parent": "Staszów"
   },
-  "dębica": {
-    "address": [
-      "Straż Miejska w Dębicy",
-      "ul. Ratuszowa 2",
-      "39-200 Dębica"
-    ],
-    "email": "sylwester.bieszczad@umdebica.pl",
-    "city": "Dębica",
-    "hint": null,
-    "api": "Mail"
-  },
-  "mielec": {
-    "address": [
-      "Straż Miejska w Mielcu",
-      "ul. Żeromskiego 26",
-      "39-300 Mielec"
-    ],
-    "email": "strazmiejska@um.mielec.pl",
-    "city": "Mielec",
-    "hint": null,
-    "api": "Mail"
-  },
-  "zgorzelec": {
-    "address": [
-      "Komenda Powiatowa Policji w Zgorzelcu",
-      "Bohaterów II Armii Wojska Polskiego 12",
-      "59-900 Zgorzelec"
-    ],
-    "email": "kpp@zgorzelec.wr.policja.gov.pl",
-    "city": "Zgorzelec",
-    "hint": null,
-    "api": "Mail"
-  },
-  "koszalin": {
-    "address": [
-      "Straż Miejska w Koszalinie",
-      "ul. Rynek Staromiejski 6-7",
-      "75-007 Koszalin"
-    ],
-    "email": "straz.miejska@um.koszalin.pl",
-    "city": "Koszalin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "goleniów": {
-    "address": [
-      "Straż Miejska w Goleniowie",
-      "plac Lotników 1",
-      "72-100 Goleniów"
-    ],
-    "email": "straz@goleniow.pl",
-    "city": "Goleniów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "międzyzdroje": {
-    "address": [
-      "Straż Miejska Międzyzdroje",
-      "ul. Książąt Pomorskich 5",
-      "72-500 Międzyzdroje"
-    ],
-    "email": "strazmiejska@miedzyzdroje.pl",
-    "city": "Międzyzdroje",
-    "hint": null,
-    "api": "Mail"
-  },
-  "krapkowice": {
-    "address": [
-      "Straż Miejska Krapkowice",
-      "ul. 3 Maja 17",
-      "47-303 Krapkowice"
-    ],
-    "email": "strazmiejska@krapkowice.pl",
-    "city": "Krapkowice",
-    "hint": "SM przyjmuje zgłoszenia e-mailowe, ale wzywa każdego zgłaszającego na przesłuchanie.",
-    "api": "Mail"
-  },
-  "jastrzębie-zdrój": {
-    "address": [
-      "Straż Miejska w Jastrzębiu-Zdroju",
-      "al. Piłsudskiego 60",
-      "44-335 Jastrzębie-Zdrój"
-    ],
-    "email": "sm@um.jastrzebie.pl",
-    "city": "Jastrzębie-Zdrój",
-    "hint": null,
-    "api": "Mail"
-  },
-  "tarnowskie góry": {
-    "address": [
-      "Straż Miejska Tarnowskie Góry",
-      "ul. Sienkiewicza 2a",
-      "42-600 Tarnowskie Góry"
-    ],
-    "email": "strazmiejska@um.tgory.pl",
-    "city": "Tarnowskie Góry",
-    "hint": null,
-    "api": "Mail"
-  },
-  "żyrardów": {
-    "address": [
-      "Straż Miejska w Żyrardowie",
-      "ul. 1-go Maja 50",
-      "96-300 Żyrardów"
-    ],
-    "email": "straz.miejska@zyrardow.pl",
-    "city": "Żyrardów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kępno": {
-    "address": [
-      "Straż Miejska w Kępnie",
-      "ul. Kościuszki 9a",
-      "63-600 Kępno"
-    ],
-    "email": "renata.mroz@um.kepno.pl",
-    "city": "Kępno",
-    "hint": null,
-    "api": "Mail"
-  },
-  "myślenice": {
-    "address": [
-      "Straż Miejska w Myślenicach",
-      "ul. Rynek 8/9",
-      "32-400 Myślenice"
-    ],
-    "email": "info@myslenice.pl",
-    "city": "Myślenice",
-    "hint": null,
-    "api": "Mail"
-  },
   "Harbutowice": {
     "parent": "Myślenice"
-  },
-  "żagań": {
-    "address": [
-      "Straż Miejska w Żaganiu",
-      "ul. Kolejowa 88",
-      "68-100 Żagań"
-    ],
-    "email": "stramies@op.pl",
-    "city": "Żagań",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wieliczka": {
-    "address": [
-      "Straż Miejska Wieliczka",
-      "pl. Skulimowskiego 2",
-      "32-020 Wieliczka"
-    ],
-    "email": "straz@wieliczka.eu",
-    "city": "Wieliczka",
-    "hint": null,
-    "api": "Mail"
-  },
-  "bożnów": {
-    "address": [
-      "Komenda Powiatowa Policji w Żaganiu",
-      "ul. Nowogródzka 1",
-      "68-100 Żagań"
-    ],
-    "email": "dzielnicowy.zagan7@go.policja.gov.pl",
-    "city": "Bożnów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nowy dwór mazowiecki": {
-    "address": [
-      "Straż Miejska Nowy Dwór Mazowiecki",
-      "ul. Zakroczymska 30",
-      "05-100 Nowy Dwór Mazowiecki"
-    ],
-    "email": "dyzurnysm@nowydwormaz.pl",
-    "city": "Nowy Dwór Mazowiecki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "skierniewice": {
-    "address": [
-      "Straż Miejska  w Skierniewicach",
-      "ul. Reymonta 33",
-      "96-100 Skierniewice"
-    ],
-    "email": "komendant.sm@um.skierniewice.pl",
-    "city": "Skierniewice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "elbląg": {
-    "address": [
-      "Straż Miejskiej Elbląg",
-      "ul. Winna 9",
-      "82-300 Elbląg"
-    ],
-    "email": "dyzurny.sm@elblag.eu",
-    "city": "Elbląg",
-    "hint": null,
-    "api": "Mail"
-  },
-  "opole": {
-    "address": [
-      "Straż Miejska Opole",
-      "ul. Reymonta 47b",
-      "45-072 Opole"
-    ],
-    "email": "dyzurny@strazmiejska.opole.pl",
-    "city": "Opole",
-    "hint": "SM Opole nie wzywa zgłaszających na przesłuchanie. Wzywany jest sprawca. Dopiero gdy sprawca zaprzeczy, że dokonał wykroczenia wzywany jest zgłaszający.",
-    "api": "Mail"
-  },
-  "radzymin": {
-    "address": [
-      "Komisariat Policji w Radzyminie",
-      "ul. Romualda Traugutta 17",
-      "05-250 Radzymin"
-    ],
-    "email": "dzielnicowy.radzymin2@ksp.policja.gov.pl",
-    "city": "Radzymin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "piła": {
-    "address": [
-      "Straż Miejska w Pile",
-      "ul. Zygmunta Starego 1",
-      "64-920 Piła"
-    ],
-    "email": "sm@um.pila.pl",
-    "city": "Piła",
-    "hint": null,
-    "api": "Mail"
-  },
-  "świdnik": {
-    "address": [
-      "Straż Miejska w Świdniku",
-      "ul. Gen. J. Hallera 9",
-      "21-040 Świdnik"
-    ],
-    "email": "strazmiejska@poczta.e-swidnik.pl",
-    "city": "Świdnik",
-    "hint": null,
-    "api": "Mail"
-  },
-  "cieszyn": {
-    "address": [
-      "Straż Miejska w Cieszynie",
-      "ul. Limanowskiego 7",
-      "43-400 Cieszyn"
-    ],
-    "email": "sekretariat@sm.cieszyn.pl",
-    "city": "Cieszyn",
-    "hint": null,
-    "api": "Mail"
   },
   "rumia": {
     "address": [
@@ -1539,312 +158,13 @@
       "84-230 Rumia"
     ],
     "email": "straz.miejska@sm.rumia.pl",
-    "city": "Cieszyn",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kwidzyn": {
-    "address": [
-      "Straż Miejska Kwidzyn",
-      "ul. Warszawska 14",
-      "82-500 Kwidzyn"
-    ],
-    "email": "strazmiejska@um.kwidzyn.pl",
-    "city": "Kwidzyn",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wolsztyn": {
-    "address": [
-      "Straż Miejska Wolsztyn",
-      "Rynek 1",
-      "64-200 Wolsztyn"
-    ],
-    "email": "strazmiejska@wolsztyn.pl",
-    "city": "Wolsztyn",
-    "hint": null,
-    "api": "Mail"
-  },
-  "otwock": {
-    "address": [
-      "Komenda Powiatowa Policji w Otwocku",
-      "ul. Pułaskiego 7a",
-      "05-400 Otwock"
-    ],
-    "email": "dyzurny.otwock@ksp.policja.gov.pl",
-    "city": "Otwock",
-    "hint": null,
-    "api": "Mail"
+    "city": "Cieszyn"
   },
   "Karczew": {
     "parent": "Otwock"
   },
-  "józefów": {
-    "address": [
-      "Straż Miejska w Józefowie",
-      "ul. Kardynała Wyszyńskiego 10",
-      "05-420 Józefów"
-    ],
-    "email": "sm_jozefow@wp.pl",
-    "city": "Józefów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "serock": {
-    "address": [
-      "Straż Miejska w Serocku",
-      "ul. Rynek 21",
-      "05-140 Serock"
-    ],
-    "email": "straz.miejska@serock.pl",
-    "city": "Serock",
-    "hint": null,
-    "api": "Mail"
-  },
-  "góra kalwaria": {
-    "address": [
-      "Straż Miejska w Górze Kalwarii",
-      "ul. 3-go Maja 10",
-      "05-530 Góra Kalwaria"
-    ],
-    "email": "sm@gorakalwaria.pl",
-    "city": "Góra Kalwaria",
-    "hint": null,
-    "api": "Mail"
-  },
-  "brwinów": {
-    "address": [
-      "Straż Miejska w Brwinowie",
-      "ul. Grodziska 12",
-      "05-840 Brwinów"
-    ],
-    "email": "straz.miejska@brwinow.pl",
-    "city": "Brwinów",
-    "hint": null,
-    "api": "Mail"
-  },
   "Parzniew": {
     "parent": "Brwinów"
-  },
-  "grodzisk mazowiecki": {
-    "address": [
-      "Straż Miejska w Grodzisku Mazowieckim",
-      "ul. Kościuszki 41",
-      "05-825 Grodzisk Mazowiecki"
-    ],
-    "email": "sm@grodzisk.pl",
-    "city": "Grodzisk Mazowiecki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "milanówek": {
-    "address": [
-      "Straż Miejska w Milanówku",
-      "ul. Warszawska 32",
-      "05-822 Milanówek"
-    ],
-    "email": "straz_miejska@milanowek.pl",
-    "city": "Milanówek",
-    "hint": null,
-    "api": "Mail"
-  },
-  "łomianki": {
-    "address": [
-      "Straż Miejska w Łomiankach",
-      "ul. Warszawska 87",
-      "05-092 Łomianki"
-    ],
-    "email": "straz.miejska@poczta.lomianki.pl",
-    "city": "Łomianki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "sulejówek": {
-    "address": [
-      "Straż Miejska w Sulejówku",
-      "ul. Wrońskiego 1",
-      "05-070 Sulejówek"
-    ],
-    "email": "strazmiejska@umsulejowek.pl",
-    "city": "Sulejówek",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nieporęt": {
-    "address": [
-      "Straż Gminna w Nieporęcie",
-      "ul. Zegrzyńska 10h",
-      "05-126 Nieporęt"
-    ],
-    "email": "strazgminna@nieporet.pl",
-    "city": "Nieporęt",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wołomin": {
-    "address": [
-      "Straż Miejska w Wołominie",
-      "ul. Legionów 31a",
-      "05-200 Wołomin"
-    ],
-    "email": "kontakt@strazmiejskawolomin.pl",
-    "city": "Wołomin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "tarczyn": {
-    "address": [
-      "Straż Miejska w Tarczynie",
-      "ul. Rynek 8a",
-      "05-555 Tarczyn"
-    ],
-    "email": "smtarczyn@tarczyn.pl",
-    "city": "Tarczyn",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ożarów mazowiecki": {
-    "address": [
-      "Straż Miejska w Ożarowie Mazowieckim",
-      "ul. Poznańska 127a",
-      "05-850 Ożarów Mazowiecki"
-    ],
-    "email": "strazmiejska@ozarow-mazowiecki.pl",
-    "city": "Ożarów Mazowiecki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "zielonka": {
-    "address": [
-      "Komisariat Policji w Zielonce",
-      "ul. Piastowska 17",
-      "05-220 Zielonka"
-    ],
-    "email": "komendant.kp-zielonka@ksp.policja.gov.pl",
-    "city": "Zielonka",
-    "hint": null,
-    "api": "Mail"
-  },
-  "grójec": {
-    "address": [
-      "Straż Miejska w Grójcu",
-      "ul. Mszczonowska 23",
-      "05-600 Grójec"
-    ],
-    "email": "straz@grojecmiasto.pl",
-    "city": "Grójec",
-    "hint": null,
-    "api": "Mail"
-  },
-  "siedlce": {
-    "address": [
-      "Straż Miejska w Siedlcach",
-      "ul. Świętojańska 4",
-      "08-110 Siedlce"
-    ],
-    "email": "straz.miejska@um.siedlce.pl",
-    "city": "Siedlce",
-    "hint": null,
-    "api": "Mail"
-  },
-  "łochów": {
-    "address": [
-      "Straż Miejska w Łochowie",
-      "ul. Aleja Pokoju 75",
-      "07-130 Łochów"
-    ],
-    "email": "straz.miejska@gminalochow.pl",
-    "city": "Łochów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "węgrów": {
-    "address": [
-      "Straż Miejska w Węgrowie",
-      "ul. Wyszyńskiego 1",
-      "07-100 Węgrów"
-    ],
-    "email": "piotr.koc@wegrow.com.pl",
-    "city": "Węgrów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "sierpc": {
-    "address": [
-      "Straż Miejska w Sierpcu",
-      "ul. Piastowska 11a",
-      "09-200 Sierpc"
-    ],
-    "email": "strazmiejska@um.sierpc.pl",
-    "city": "Sierpc",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ostrów mazowiecka": {
-    "address": [
-      "Straż Miejska w Ostrowi Mazowieckiej",
-      "ul. 3-go Maja 66",
-      "07-300 Ostrów Mazowiecka"
-    ],
-    "email": "strazmiejska@ostrowmaz.pl",
-    "city": "Ostrów Mazowiecka",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wyszków": {
-    "address": [
-      "Straż Miejska w Wyszkowie",
-      "ul. Geodetów 45",
-      "07-200 Wyszków"
-    ],
-    "email": "straz.miejska@wyszkow.pl",
-    "city": "Wyszków",
-    "hint": null,
-    "api": "Mail"
-  },
-  "pabianice": {
-    "address": [
-      "Straż Miejska w Pabianicach",
-      "ul. Gabriela Narutowicza 33",
-      "95-200 Pabianice"
-    ],
-    "email": "sm@um.pabianice.pl",
-    "city": "Pabianice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "podkowa leśna": {
-    "address": [
-      "Posterunek Policji w Podkowie Leśnej",
-      "ul. Brwinowska 17a",
-      "05-807 Podkowa Leśna"
-    ],
-    "email": "komendant.grodzisk-maz@ksp.policja.gov.pl",
-    "city": "Podkowa Leśna",
-    "hint": null,
-    "api": "Mail"
-  },
-  "karpacz": {
-    "address": [
-      "Straż Miejska w Karpaczu",
-      "ul. Obrońców Pokoju 2a",
-      "58-540 Karpacz"
-    ],
-    "email": "straz.miejska@karpacz.eu",
-    "city": "Karpacz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "police": {
-    "address": [
-      "Straż Miejska w Policach",
-      "ul. Tanowska 8",
-      "72-010 Police"
-    ],
-    "email": "strazmiejska@police.pl",
-    "city": "Police",
-    "hint": null,
-    "api": "Mail"
   },
   "Pilchowo": {
     "parent": "Police"
@@ -1859,758 +179,40 @@
       "49-200 Grodków"
     ],
     "email": "strazmiejska@grodkow.pl",
-    "city": "Grodków",
-    "hint": null,
-    "api": "Mail"
-  },
-  "radlin": {
-    "address": [
-      "Straż Miejska w Radlinie",
-      "ul. Mariacka 93",
-      "44-310 Radlin"
-    ],
-    "email": "stm@radlin.pl",
-    "city": "Radlin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "siemianowice śląskie": {
-    "address": [
-      "Straż Miejska Siemianowice Śląskie",
-      "Jarosława Dąbrowskiego 13",
-      "41-100 Siemianowice Śląskie"
-    ],
-    "email": "sm@sm.siemianowice.pl",
-    "city": "Siemianowice Śląskie",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kołbaskowo": {
-    "address": [
-      "Straż Gminna w Kołbaskowie",
-      "Rosówek nr 16",
-      "72-001 Kołbaskowo"
-    ],
-    "email": "straz.gminna@kolbaskowo.pl",
-    "city": "Kołbaskowo",
-    "hint": null,
-    "api": "Mail"
-  },
-  "przecław": {
-    "address": [
-      "Posterunek Policji w Kołbaskowie",
-      "Kołbaskowo nr 105",
-      "72-001 Kołbaskowo"
-    ],
-    "email": "pp.kolbaskowo@sc.policja.gov.pl",
-    "city": "Przecław",
-    "hint": null,
-    "api": "Mail"
+    "city": "Grodków"
   },
   "Rosówek": {
     "parent": "Kołbaskowo"
   },
-  "bolesławiec": {
-    "address": [
-      "Straż Miejska w Bolesławcu",
-      "ul. Mikołaja Brody 14",
-      "59-700 Bolesławiec"
-    ],
-    "email": "dyzurny@sm.boleslawiec.pl",
-    "city": "Bolesławiec",
-    "hint": null,
-    "api": "Mail"
-  },
-  "puławy": {
-    "address": [
-      "Straż Miejska Puławy",
-      "ul. Lubelska 5",
-      "24-100 Puławy"
-    ],
-    "email": "straz.miejska@um.pulawy.pl",
-    "city": "Puławy",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nałęczów": {
-    "address": [
-      "Straż Miejska Nałęczów",
-      "al. Lipowa 3",
-      "24-150 Nałęczów"
-    ],
-    "email": "sm@naleczow.pl",
-    "city": "Nałęczów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "opatów": {
-    "address": [
-      "Straż Miejska Opatów",
-      "pl. Obrońców Pokoju 34",
-      "27-500 Opatów"
-    ],
-    "email": "sm@umopatow.pl",
-    "city": "Opatów",
-    "hint": null,
-    "api": "Mail"
-  },
   "Plewiska": {
     "parent": "Komorniki"
-  },
-  "komorniki": {
-    "address": [
-      "Straż Gminna Komorniki",
-      "ul. Młyńska 15",
-      "62-052 Komorniki"
-    ],
-    "email": "strazgminna@komorniki.pl",
-    "city": "Komorniki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "puck": {
-    "address": [
-      "Straż Miejska Puck",
-      "ul. 1 maja 13",
-      "84-100 Puck"
-    ],
-    "email": "sm@miasto.puck.pl",
-    "city": "Puck",
-    "hint": null,
-    "api": "Mail"
-  },
-  "solec kujawski": {
-    "address": [
-      "Komisariat Policji w Solcu Kujawskim",
-      "ul. Toruńska 15",
-      "86-050 Solec Kujawski"
-    ],
-    "email": "solec@bg.policja.gov.pl",
-    "city": "Solec Kujawski",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wałbrzych": {
-    "address": [
-      "Straż Miejska w Wałbrzychu",
-      "Rynek 23",
-      "58-300 Wałbrzych"
-    ],
-    "email": "strazmiejska@um.walbrzych.pl",
-    "city": "Wałbrzych",
-    "hint": null,
-    "api": "Mail"
-  },
-  "września": {
-    "address": [
-      "Straż Miejska we Wrześni",
-      "ul. Ratuszowa",
-      "62-300 Września"
-    ],
-    "email": "straz@wrzesnia.pl",
-    "city": "Września",
-    "hint": null,
-    "api": "Mail"
-  },
-  "żarki": {
-    "address": [
-      "Straż Miejska w Żarkach",
-      "ul. Kościuszki 15/17",
-      "42-310 Żarki"
-    ],
-    "email": "strazmiejska@umigzarki.pl",
-    "city": "Żarki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "złotoryja": {
-    "address": [
-      "Straż Miejska w Złotoryi",
-      "Plac Orląt Lwowskich 1",
-      "59-500 Złotoryja"
-    ],
-    "email": "sm@zlotoryja.pl",
-    "city": "Złotoryja",
-    "hint": null,
-    "api": "Mail"
-  },
-  "orneta": {
-    "address": [
-      "Straż Miejska w Ornecie",
-      "ul. Mickiewicza 18",
-      "11-130 Orneta"
-    ],
-    "email": "strazmiejska@orneta.pl",
-    "city": "Orneta",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kruszwica": {
-    "address": [
-      "Komisariat Policji w Kruszwicy",
-      "ul. Niepodległości 47",
-      "88-150 Kruszwica"
-    ],
-    "email": "dzielnicowy.kruszwica2@bg.policja.gov.pl",
-    "city": "Kruszwica",
-    "hint": null,
-    "api": "Mail"
-  },
-  "pszczyna": {
-    "address": [
-      "Straż Miejska Pszczyna",
-      "ul. Zdrojowa 4",
-      "43-200 Pszczyna"
-    ],
-    "email": "sm@pszczyna.pl",
-    "city": "Pszczyna",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ogrodzieniec": {
-    "address": [
-      "Komisariat Policji w Ogrodzieńcu",
-      "pl. Wolności 23",
-      "42-440 Ogrodzieniec"
-    ],
-    "email": "ogrodzieniec@zawiercie.ka.policja.gov.pl",
-    "city": "Ogrodzieniec",
-    "hint": null,
-    "api": "Mail"
   },
   "Podzamcze": {
     "parent": "Ogrodzieniec"
   },
-  "olsztynek": {
-    "address": [
-      "Straż Miejska w Olsztynku",
-      "ul. Ratusz 1",
-      "11-015 Olsztynek"
-    ],
-    "email": "strazmiejska@olsztynek.pl",
-    "city": "Olsztynek",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ostrowiec świętokrzyski": {
-    "address": [
-      "Straż Miejska Ostrowiec Świętokrzyski",
-      "ul. Świętokrzyska 22",
-      "27-400 Ostrowiec Świętokrzyski"
-    ],
-    "email": "sm@um.ostrowiec.pl",
-    "city": "Ostrowiec Świętokrzyski",
-    "hint": null,
-    "api": "Mail"
-  },
-  "jeleśnia": {
-    "address": [
-      "Komisariat Policji w Jeleśni",
-      "ul. Jana Kazimierza 79",
-      "34-340 Jeleśnia"
-    ],
-    "email": "jelesnia@zywiec.ka.policja.gov.pl",
-    "city": "Jeleśnia",
-    "hint": null,
-    "api": "Mail"
-  },
-  "czerwonak": {
-    "address": [
-      "Straż Gminna Czerwonak",
-      "Osiedle Leśne 16",
-      "62-028 Koziegłowy"
-    ],
-    "email": "straz@czerwonak.pl",
-    "city": "Czerwonak",
-    "hint": null,
-    "api": "Mail"
-  },
   "Koziegłowy": {
     "parent": "Czerwonak"
-  },
-  "ostrów wielkopolski": {
-    "address": [
-      "Straż Miejska Ostrów Wielkopolski",
-      "ul. Kościuszki 12a",
-      "63-400 Ostrów Wielkopolski"
-    ],
-    "email": "straz_miejska@vp.pl",
-    "city": "Ostrów Wielkopolski",
-    "hint": null,
-    "api": "Mail"
-  },
-  "marki": {
-    "address": [
-      "Komisariat Policji w Markach",
-      "ul. Sportowa 5",
-      "05-270 Marki"
-    ],
-    "email": "komendant.kp-marki@ksp.policja.gov.pl",
-    "city": "Marki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "matyldzin": {
-    "address": [
-      "Komisariat Policji w Mroczy",
-      "ul. Piłsudskiego 8",
-      "89-115 Mrocza"
-    ],
-    "email": "dzielnicowy.mrocza3@bg.policja.gov.pl",
-    "city": "Matyldzin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kościerzyna": {
-    "address": [
-      "Straż Miejska w Kościerzynie",
-      "ul. Młyńska 15",
-      "83-400 Kościerzyna"
-    ],
-    "email": "strazmiejska@koscierzyna.gda.pl",
-    "city": "Kościerzyna",
-    "hint": null,
-    "api": "Mail"
-  },
-  "zielonki": {
-    "address": [
-      "Komisariat Policji w Zielonkach",
-      "Władysława Łokietka 205",
-      "31-263 Kraków"
-    ],
-    "email": "dzielnicowy.zielonki1@kpp-krakow.policja.gov.pl",
-    "city": "Zielonki",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nowy duninów": {
-    "address": [
-      "Komenda Miejska Policji w Płocku",
-      "al. Kilińskiego 8",
-      "09-400 Płock"
-    ],
-    "email": "kmpplock@ra.policja.gov.pl",
-    "city": "Nowy Duninów",
-    "hint": null,
-    "api": "Mail"
   },
   "Soczewka": {
     "parent": "Nowy Duninów"
   },
-  "dopiewo": {
-    "address": [
-      "Komenda Straży Gminnej",
-      "ul. Leśna 2a",
-      "62-070 Dopiewo"
-    ],
-    "email": "strazgminna@dopiewo.pl",
-    "city": "Dopiewo",
-    "hint": null,
-    "api": "Mail"
-  },
   "Konarzewo": {
     "parent": "Dopiewo"
-  },
-  "człuchów": {
-    "address": [
-      "Komenda Powiatowa Policji w Człuchowie",
-      "ul. Kasztanowa 17",
-      "77-300 Człuchów"
-    ],
-    "email": "sekretariat.czluchow@gd.policja.gov.pl",
-    "city": "Człuchów",
-    "hint": null,
-    "api": "Mail"
-  },
-
-  "zawiercie": {
-    "address": [
-		"Straż Miejska Zawiercie",
-      "ul. Leśna 2",
-		"42-400 Zawiercie"
-    ],
-    "email": "strazmiejska@zawiercie.eu",
-    "city": "Zawiercie",
-    "hint": "Miejscowość Zawiercie obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
-  },
-  "kętrzyn": {
-    "address": [
-      "Straż Miejska Kętrzyn",
-      "ul. Wojska Polskiego 11",
-      "11-400 Kętrzyn"
-    ],
-    "email": "strazmiejska@miastoketrzyn.pl",
-    "city": "Kętrzyn",
-    "hint": null,
-    "api": "Mail"
-  },
-  "turek": {
-    "address": [
-      "Komenda Powiatowa Policji w Turku",
-      "ul. Legionów Polskich 3",
-      "62-700 Turek"
-    ],
-    "email": "dyzurny.turek@po.policja.gov.pl",
-    "city": "Turek",
-    "hint": null,
-    "api": "Mail"
-  },
-  "wieliszew": {
-    "address": [
-      "Komisariat Policji w Wieliszewie",
-      "ul. Aleja Solidarności 25",
-      "05-135 Wieliszew"
-    ],
-    "email": "dzielnicowy.wieliszew14@ksp.policja.gov.pl",
-    "city": "Wieliszew",
-    "hint": null,
-    "api": "Mail"
   },
   "kałuszyn": {
     "parent": "Wieliszew"
   },
-  "wołów": {
-    "address": [
-      "Komenda Powiatowa Policji w Wołowie",
-      "ul. Piłsudskiego 23",
-      "56-100 Wołów"
-    ],
-    "email": "kpp@wolow.wr.policja.gov.pl",
-    "city": "Wołów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kołobrzeg": {
-    "address": [
-      "Komenda Powiatowa Policji w Kołobrzegu",
-      "ul. Kilińskiego 20",
-      "78-100 Kołobrzeg"
-    ],
-    "email": "sekretariat.kolobrzeg@sc.policja.gov.pl",
-    "city": "Kołobrzeg",
-    "hint": null,
-    "api": "Mail"
-  },
-  "opoczno": {
-    "address": [
-      "Straż Miejska w Opocznie",
-      "ul. Piotrkowska 7",
-      "26-300 Opoczno"
-    ],
-    "email": "straz.miejska@um.opoczno.pl",
-    "city": "Opoczno",
-    "hint": null,
-    "api": "Mail"
-  },
-  "drzewica": {
-    "address": [
-      "Posterunek Policji w Drzewicy",
-      "ul. Gen. Wł. Sikorskiego 1",
-      "26-340 Drzewica"
-    ],
-    "email": "dyzurny@opoczno.ld.policja.gov.pl",
-    "city": "Drzewica",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nowogard": {
-    "address": [
-      "Komisariat Policji w Nowogardzie",
-      "ul. Wojska Polskiego 9",
-      "72-200 Nowogard"
-    ],
-    "email": "sekretariat.goleniow@sc.policja.gov.pl",
-    "city": "Nowogard",
-    "hint": null,
-    "api": "Mail"
-  },
-  "myszków": {
-    "address": [
-      "Straż Miejska w Myszkowie",
-      "ul. Kościuszki 26",
-      "42-300 Myszków"
-    ],
-    "email": "straz_miejska@miastomyszkow.pl",
-    "city": "Myszków",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nowy sącz": {
-    "address": [
-      "Straż Miejska w Nowym Sączu",
-      "ul. Lwowska 71",
-      "33-300 Nowy Sącz"
-    ],
-    "email": "ksm@nowysacz.pl",
-    "city": "Nowy Sącz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "końskie": {
-    "address": [
-      "Straż Miejska w Końskich",
-      "ul. Partyzantów 1",
-      "26-200 Końskie"
-    ],
-    "email": "sm@umkonskie.pl",
-    "city": "Końskie",
-    "hint": null,
-    "api": "Mail"
-  },
-  "morąg": {
-    "address": [
-      "Straż Miejska w Morągu",
-      "ul. Dworcowa 7",
-      "14-300 Morąg"
-    ],
-    "email": "smmorag@wp.pl",
-    "city": "Morąg",
-    "hint": "Wstępne informacje są dość pesymistyczne. Komendant twierdzi, że e-mail może nie wystarczyć do zgłoszenia.",
-    "api": "Mail"
-  },
-  "pyskowice": {
-    "address": [
-      "Straż Miejska w Pyskowicach",
-      "ul. Strzelców Bytomskich 3",
-      "44-120 Pyskowice"
-    ],
-    "email": "sm@pyskowice.pl",
-    "city": "Pyskowice",
-    "hint": "Niestety SM Pyskowice wzywa każdego zgłaszającego na przesłuchanie.",
-    "api": "Mail"
-  },
-  "oleśnica": {
-    "address": [
-      "Komenda Powiatowa Policji w Oleśnicy",
-      "ul. Generała Józefa Hallera 3",
-      "56-400 Oleśnica"
-    ],
-    "email": "dyzurny@olesnica.wr.policja.gov.pl",
-    "city": "Oleśnica",
-    "hint": null,
-    "api": "Mail"
-  },
   "Spalice": {
     "parent": "Oleśnica"
-  },
-  "borkowo": {
-    "address": [
-      "Straż Gminna Gminy Pruszcz Gdański",
-      "ul. Spacerowa 8",
-      "83-031 Łęgowo"
-    ],
-    "email": "strazgminna@pruszczgdanski.pl",
-    "city": "Borkowo",
-    "hint": null,
-    "api": "Mail"
-  },
-  "lębork": {
-    "address": [
-      "Straż Miejska w Lęborku",
-      "ul. Armii Krajowej 14",
-      "84-300 Lębork"
-    ],
-    "email": "strazmiejska.lebork@wp.pl",
-    "city": "Lębork",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kolbudy": {
-    "address": [
-      "Straż Gminna Kolbudy",
-      "ul. Polna 55",
-      "83-050 Kolbudy"
-    ],
-    "email": "strazgminna@ug.kolbudy.pl",
-    "city": "Kolbudy",
-    "hint": null,
-    "api": "Mail"
   },
   "Kowale": {
     "parent": "Kolbudy"
   },
-  "sanok": {
-    "address": [
-      "Straż Miejska Sanok",
-      "ul. Rynek 7",
-      "38-500 Sanok"
-    ],
-    "email": "sm@um.sanok.pl",
-    "city": "Sanok",
-    "hint": null,
-    "api": "Mail"
-  },
-  "racibórz": {
-    "address": [
-      "Straż Miejska w Raciborzu",
-      "ul. Króla Stefana Batorego 6",
-      "47-400 Racibórz"
-    ],
-    "email": "sm@um.raciborz.pl",
-    "city": "Racibórz",
-    "hint": null,
-    "api": "Mail"
-  },
-  "brzeg": {
-    "address": [
-      "Straż Miejska w Brzegu",
-      "ul. Robotnicza 12",
-		  "49-300 Brzeg"
-    ],
-    "email": "sm@brzeg.pl",
-    "city": "Brzeg",
-    "hint": null,
-    "api": "Mail"
-  },
-  "głogów": {
-    "address": [
-      "Komenda Powiatowa Policji w Głogowie",
-      "ul. Obrońców Pokoju 17",
-      "67-200 Głogów"
-    ],
-    "email": "kpp@glogow.wr.policja.gov.pl",
-    "city": "Głogów",
-    "hint": null,
-    "api": "Mail"
-  },
-  "dobra": {
-    "address": [
-      "Straż Gminna w Dobrej z siedzibą w Wołczkowie",
-      "ul. Lipowa 51 Wołczkowo",
-		  "72-003 Dobra"
-    ],
-    "email": "strazgminna@dobraszczecinska.pl",
-    "city": "Dobra",
-    "hint": null,
-    "api": "Mail"
-  },
   "Wołczkowo": {
     "parent": "Dobra"
   },
-  "krzeszowice": {
-    "address": [
-      "Straż Miejska Gminy Krzeszowice",
-      "pl. F. Kulczyckiego 1",
-		  "32-065 Krzeszowice"
-    ],
-    "email": "strazmiejska@um.krzeszowice.pl",
-    "city": "Krzeszowice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "bochnia": {
-    "address": [
-      "Straż Miejska w Bochni",
-      "ul. Regis 2",
-		  "32-700 Bochnia"
-    ],
-    "email": "straz@straznicy.bochnia.pl",
-    "city": "Bochnia",
-    "hint": null,
-    "api": "Mail"
-  },
-  "nowy dwór gdański": {
-    "address": [
-      "Straż Miejska Nowy Dwór Gdański",
-      "ul. Warszawska 28A",
-		  "82-100 Nowy Dwór Gdański"
-    ],
-    "email": "straz.miejska@miastonowydwor.pl",
-    "city": "Nowy Dwór Gdański",
-    "hint": null,
-    "api": "Mail"
-  },
-  "włocławek": {
-    "address": [
-      "Straż Miejska we Włocławku",
-      "ul. Bojańczyka 11/13",
-		  "87-800 Włocławek"
-    ],
-    "email": "straz.miejska@um.wloclawek.pl",
-    "city": "Włocławek",
-    "hint": null,
-    "api": "Mail"
-  },
-  "stargard": {
-    "address": [
-      "Straż Miejska we Stargardzie",
-      "ul. Pierwszej Brygady 35",
-      "73-110 Stargard"
-    ],
-    "email": "straz@um.stargard.pl",
-    "city": "Stargard",
-    "hint": null,
-    "api": "Mail"
-  },
-  "chodzież": {
-    "address": [
-      "Komenda Powiatowa Policji w Chodzieży",
-      "ul. Wiosny Ludów 14",
-      "64-800 Chodzież"
-    ],
-    "email": "dyzurny.chodziez@po.policja.gov.pl",
-    "city": "Chodzież",
-    "hint": null,
-    "api": "Mail"
-  },
-  "gniezno": {
-    "address": [
-      "Straż Miejska w Gnieźnie",
-      "ul. Pocztowa 11",
-      "62-200 Gniezno"
-    ],
-    "email": "dyzurnystrazmiejska@gniezno.eu",
-    "city": "Gniezno",
-    "hint": null,
-    "api": "Mail"
-  },
-  "kłodzko": {
-    "address": [
-      "Straż Miejska w Kłodzku",
-      "pl. Bolesława Chrobrego 1",
-      "57-300 Kłodzko"
-    ],
-    "email": "sm-klodzko@o2.pl",
-    "city": "Kłodzko",
-    "hint": null,
-    "api": "Mail"
-  },
-  "jelonki": {
-    "address": [
-      "Komenda Powiatowa Policji w Piasecznie",
-      "ul. Kościelna 3",
-      "05-500 Piaseczno"
-    ],
-    "email": "dyzurny.piaseczno@ksp.policja.gov.pl",
-    "city": "Jelonki",
-    "hint": null,
-    "api": "Mail"
-  },
   "Julianów": {
     "parent": "Jelonki"
-  },
-  "luboń": {
-    "address": [
-      "Straż Miejska w Luboniu",
-      "ul. Dworcowa 1",
-      "62-030 Luboń"
-    ],
-    "email": "straz.miejska@lubon.pl",
-    "city": "Luboń",
-    "hint": null,
-    "api": "Mail"
-  },
-  "strzelce opolskie": {
-    "address": [
-      "Komenda Powiatowa Policji w Strzelcach Opolskich",
-      "ul. Piłsudskiego 3",
-      "47-100 Strzelce Opolskie"
-    ],
-    "email": "dyzurny.st@op.policja.gov.pl",
-    "city": "Strzelce Opolskie",
-    "hint": "Komenda w Strzelcach Opolskich przyjmuje zgłoszenia i nie wzywa na przesłuchania z automatu. Wzywa tylko, jeżeli w zgłoszeniu są błędy, albo sprawca nie przyznał się. Ogólnie wezwania są rzadkością, 2-3 wezwania na sto zgłoszeń.",
-    "api": "Mail"
   },
   "Zawadzkie": {
     "parent": "Strzelce Opolskie"
@@ -2627,277 +229,87 @@
   "Izbicko": {
     "parent": "Strzelce Opolskie"
   },
-  "trzebnica": {
-    "address": [
-      "Straż Miejska w Trzebnicy",
-      "pl. Marszałka Józefa Piłsudskiego 1",
-      "55-100 Trzebnica"
-    ],
-    "email": "strazmiejska@um.trzebnica.pl",
-    "city": "Trzebnica",
-    "hint": null,
-    "api": "Mail"
-  },
-  "gryfice": {
-    "address": [
-      "Straż Miejska Gryfice",
-      "pl. Zwycięstwa 37",
-      "72-300 Gryfice"
-    ],
-    "email": "straz.miejska@urzad.gryfice.eu",
-    "city": "Gryfice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "tarnowo podgórne": {
-    "address": [
-      "Straż Gminna Tarnowo Podgórne",
-      "ul. Słoneczna 4",
-      "62-080 Tarnowo Podgórne"
-    ],
-    "email": "sg@tarnowo-podgorne.pl",
-    "city": "Tarnowo Podgórne",
-    "hint": null,
-    "api": "Mail"
-  },
-  "malbork": {
-    "address": [
-      "Straż Miejska Malbork",
-      "pl. Słowiański 5",
-      "82-200 Malbork"
-    ],
-    "email": "strazm@um.malbork.pl",
-    "city": "Malbork",
-    "hint": null,
-    "api": "Mail"
-  },
-  "sokółka": {
-    "address": [
-      "Straż Miejska w Sokółce",
-      "pl. Kościuszki 15",
-      "16-100 Sokółka"
-    ],
-    "email": "sm@sokolka.pl",
-    "city": "Sokółka",
-    "hint": null,
-    "api": "Mail"
-  },
-  "biała podlaska": {
-    "address": [
-      "Straż Miejska Biała Podlaska",
-      "al. 1000-lecia 22",
-      "21-500 Biała Podlaska"
-    ],
-    "email": "strazmiejska@bialapodlaska.pl",
-    "city": "Biała Podlaska",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ożarowice": {
-    "address": [
-      "Komenda Powiatowa Policji w Tarnowskich Górach",
-      "ul. Bytomska 6",
-      "42-600 Tarnowskie Góry"
-    ],
-    "email": "dyzurny@tarnowskie-gory.ka.policja.gov.pl",
-    "city": "Ożarowice",
-    "hint": null,
-    "api": "Mail"
-  },
-  "środa śląska": {
-    "address": [
-      "Straż Miejska w Środzie Śląskiej",
-      "pl. Wolności 4a",
-      "55-300 Środa Śląska"
-    ],
-    "email": "sm@srodaslaska.pl",
-    "city": "Środa Śląska",
-    "hint": null,
-    "api": "Mail"
-  },
-  "łeba": {
-    "address": [
-      "Straż Miejska w Łebie",
-      "ul. Kościuszki 90",
-      "84-360 Łeba"
-    ],
-    "email": "strazmiejska@leba.eu",
-    "city": "Łeba",
-    "hint": null,
-    "api": "Mail"
-  },
-  "gogolin": {
-    "address": [
-      "Straż Miejska w Gogolinie",
-      "ul. Krapkowicka 4",
-      "47-320 Gogolin"
-    ],
-    "email": "straz.miejska@gogolin.pl",
-    "city": "Gogolin",
-    "hint": null,
-    "api": "Mail"
-  },
-  "prudnik": {
-    "address": [
-      "Straż Miejska w Prudniku",
-      "ul. Tadeusza Kościuszki 3",
-      "48-200 Prudnik"
-    ],
-    "email": "strazmiejska@prudnik.pl",
-    "city": "Prudnik",
-    "hint": null,
-    "api": "Mail"
-  },
-  "prószków": {
-    "address": [
-      "Posterunek Policji w Prószkowie",
-      "ul. Opolska 10",
-      "46-060 Prószków"
-    ],
-    "email": "dzielnicowy.cmentarna18@op.policja.gov.pl",
-    "city": "Prószków",
-    "hint": null,
-    "api": "Mail"
-  },
-  "stąporków": {
-    "address": [
-      "Komisariat Policji w Stąporkowie",
-      "pl. Wolności 1",
-      "26-220 Stąporków"
-    ],
-    "email": "komendant.staporkow@ki.policja.gov.pl",
-    "city": "Stąporków",
-    "hint": null,
-    "api": "Mail"
-  },
-  "pobiedziska": {
-    "address": [
-      "Komisariat Policji w Pobiedziskach",
-      "ul. Tysiąclecia 9",
-      "62-010 Pobiedziska"
-    ],
-    "email": "komendant.pobiedziska@po.policja.gov.pl",
-    "city": "Pobiedziska",
-    "hint": null,
-    "api": "Mail"
-  },
-  "ostróda": {
-    "address": [
-      "Straż Miejska w Ostródzie",
-      "ul. Mickiewicza 24",
-      "14-100 Ostróda"
-    ],
-    "email": "um@um.ostroda.pl",
-    "city": "Ostróda",
-    "hint": null,
-    "api": "Mail"
-  },
-  "niemodlin": {
-    "address": [
-      "Komisariat Policji w Niemodlinie",
-      "ul. Bohaterów Powstań Śląskich 43",
-      "49-100 Niemodlin"
-    ],
-    "email": "dzielnicowy.niemodlin53@op.policja.gov.pl",
-    "city": "Niemodlin",
-    "hint": null,
-    "api": "Mail"
-  },
   "dąbrowa": {
     "parent": "niemodlin"
   },
-  "zambrów": {
-    "address": [
-      "Komenda Powiatowa Policji w Zambrowie",
-      "al. Wojska Polskiego 4a",
-      "18-300 Zambrów"
-    ],
-    "email": "kpp@zambrow.bk.policja.gov.pl",
-    "city": "Zambrów",
-    "hint": null,
-    "api": "Mail"
+  "Białków": {
+    "parent": "miękinia"
   },
-  "chojnice": {
-    "address": [
-      "Straż Miejska w Chojnicach",
-      "Stary Rynek 1",
-      "89-600 Chojnice"
-    ],
-    "email": "sm@miastochojnice.pl",
-    "city": "Chojnice",
-    "hint": null,
-    "api": "Mail"
+  "Błonie": {
+    "parent": "miękinia"
   },
-  "śrem": {
-    "address": [
-      "Straż Miejska w Śremie",
-      "ul. Adama Mickiewicza 10",
-      "63-100 Śrem"
-    ],
-    "email": "dyzurny@strazmiejska.srem.pl",
-    "city": "Śrem",
-    "hint": null,
-    "api": "Mail"
+  "Brzezina": {
+    "parent": "miękinia"
   },
-  "jędrzejów": {
-    "address": [
-      "Straż Miejska w Jędrzejowie",
-      "ul. 11 Listopada 33",
-      "28-300 Jędrzejów"
-    ],
-    "email": "strazmiejska@umjedrzejow.pl",
-    "city": "Jędrzejów",
-    "hint": null,
-    "api": "Mail"
+  "Brzezinka Średzka": {
+    "parent": "miękinia"
   },
-  "szklarska poręba": {
-    "address": [
-      "Straż Miejska w Szklarskiej Porębie",
-      "ul. Jedności Narodowej 32",
-      "58-580 Szklarska Poręba"
-    ],
-    "email": "strazmiejska@szklarskaporeba.pl",
-    "city": "Szklarska Poręba",
-    "hint": null,
-    "api": "Mail"
+  "Czerna": {
+    "parent": "miękinia"
   },
-  "miękinia": {
-    "address": [
-      "Straż Gminna Miękinia",
-      "ul. Kościuszki 41",
-      "55-330 Miękinia"
-    ],
-    "email": "sg@miekinia.pl",
-    "city": "Miękinia",
-    "hint": null,
-    "api": "Mail"
+  "Gałów": {
+    "parent": "miękinia"
   },
-  "Białków": { "parent": "miękinia" },
-  "Błonie": { "parent": "miękinia" },
-  "Brzezina": { "parent": "miękinia" },
-  "Brzezinka Średzka": { "parent": "miękinia" },
-  "Czerna": { "parent": "miękinia" },
-  "Gałów": { "parent": "miękinia" },
-  "Głoska": { "parent": "miękinia" },
-  "Gosławice": { "parent": "miękinia" },
-  "Kadłub": { "parent": "miękinia" },
-  "Krępice": { "parent": "miękinia" },
-  "Lenartowice": { "parent": "miękinia" },
-  "Lubiatów": { "parent": "miękinia" },
-  "Lutynia": { "parent": "miękinia" },
-  "Łowęcice": { "parent": "miękinia" },
-  "Mrozów": { "parent": "miękinia" },
-  "Pisarzowice": { "parent": "miękinia" },
-  "Prężyce": { "parent": "miękinia" },
-  "Radakowice": { "parent": "miękinia" },
-  "Wilkostów": { "parent": "miękinia" },
-  "Wilkszyn": { "parent": "miękinia" },
-  "Wojnowice": { "parent": "miękinia" },
-  "Wróblowice": { "parent": "miękinia" },
-  "Zabór wielki": { "parent": "miękinia" },
-  "Zakrzyce": { "parent": "miękinia" },
-  "Źródła": { "parent": "miękinia" },
-  "Żurawiniec": { "parent": "miękinia" },
+  "Głoska": {
+    "parent": "miękinia"
+  },
+  "Gosławice": {
+    "parent": "miękinia"
+  },
+  "Kadłub": {
+    "parent": "miękinia"
+  },
+  "Krępice": {
+    "parent": "miękinia"
+  },
+  "Lenartowice": {
+    "parent": "miękinia"
+  },
+  "Lubiatów": {
+    "parent": "miękinia"
+  },
+  "Lutynia": {
+    "parent": "miękinia"
+  },
+  "Łowęcice": {
+    "parent": "miękinia"
+  },
+  "Mrozów": {
+    "parent": "miękinia"
+  },
+  "Pisarzowice": {
+    "parent": "miękinia"
+  },
+  "Prężyce": {
+    "parent": "miękinia"
+  },
+  "Radakowice": {
+    "parent": "miękinia"
+  },
+  "Wilkostów": {
+    "parent": "miękinia"
+  },
+  "Wilkszyn": {
+    "parent": "miękinia"
+  },
+  "Wojnowice": {
+    "parent": "miękinia"
+  },
+  "Wróblowice": {
+    "parent": "miękinia"
+  },
+  "Zabór wielki": {
+    "parent": "miękinia"
+  },
+  "Zakrzyce": {
+    "parent": "miękinia"
+  },
+  "Źródła": {
+    "parent": "miękinia"
+  },
+  "Żurawiniec": {
+    "parent": "miękinia"
+  },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
@@ -2905,7 +317,1939 @@
     ],
     "email": null,
     "city": null,
-    "hint": null,
     "api": null
+  },
+  "Szczecin": {
+    "address": [
+      "Straż Miejska Szczecin",
+      "ul. Klonowica 1b",
+      "71-241 Szczecin"
+    ],
+    "email": "zgloszenia@sm.szczecin.pl",
+    "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku."
+  },
+  "Warszawa": {
+    "address": [
+      "Referat Oskarżycieli Publicznych",
+      "Straż Miejska m.st. Warszawy",
+      "ul. Młynarska 43/45",
+      "01-170 Warszawa"
+    ],
+    "email": "csk@strazmiejska.waw.pl",
+    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+  },
+  "Wrocław": {
+    "address": [
+      "Straż Miejska Wrocławia",
+      "ul. Na Grobli 14/16",
+      "50-421 Wrocław"
+    ],
+    "email": "straz@strazmiejska.wroclaw.pl",
+    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>"
+  },
+  "Kraków": {
+    "address": [
+      "Straż Miejska Miasta Krakowa",
+      "ul. Dobrego Pasterza 116",
+      "31-416 Kraków"
+    ],
+    "email": "smkrak@strazmiejska.krakow.pl",
+    "hint": "Niestety SM Kraków wzywa na przesłuchanie do każdego zgłoszenia."
+  },
+  "Gdynia": {
+    "address": [
+      "Straż Miejska Gdyni",
+      "ul. Zakręt do Oksywia 10",
+      "81-244 Gdynia"
+    ],
+    "email": "straz_miejska@gdynia.pl",
+    "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie."
+  },
+  "Białystok": {
+    "address": [
+      "Straż Miejska w Białymstoku",
+      "ul. Składowa 11",
+      "15-399 Białystok"
+    ],
+    "email": "dyzurny.sm@um.bialystok.pl"
+  },
+  "Łódź": {
+    "address": [
+      "Komenda Straży Miejskiej w Łodzi",
+      "ul. Wólczańska 121/123",
+      "90-521 Łódź"
+    ],
+    "email": "ogolnomiejski@strazmiejska.lodz.pl",
+    "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie. Powyższe jednak z pewnością nie obowiązuje dla Oddziału Łódź-Polesie, które wzywa z automatu na przesłuchanie do każdego zgłoszenia."
+  },
+  "Gdańsk": {
+    "address": [
+      "Straż Miejska w Gdańsku",
+      "ul. Elbląska 54/60",
+      "80-724 Gdańsk"
+    ],
+    "email": "sm@gdansk.gda.pl"
+  },
+  "Poznań": {
+    "address": [
+      "Straż Miejska Miasta Poznania",
+      "ul. Głogowska 26",
+      "60-734 Poznań"
+    ],
+    "email": "sm@um.poznan.pl",
+    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
+    "api": "Poznan"
+  },
+  "Toruń": {
+    "address": [
+      "Straż Miejska w Toruniu",
+      "ul. Grudziądzka 157",
+      "87-100 Toruń"
+    ],
+    "email": "sm@um.torun.pl",
+    "hint": "<p>SM Toruń jest wyjątkowa w skali kraju i stoi na stanowisku, że jedyny poprawny sposób dokonywania zgłoszeń to telefon 986. Wiele SM stara się zniechęcić mieszkańców do dokonywania zgłoszeń, ale zawsze przyznają, że muszą się zająć każdym zgłoszeniem.</p> <p>Musisz liczyć się, że odmówią przyjęcia zgłoszenia i być przygotowanym na batalię odwoławczą.</p>"
+  },
+  "Bydgoszcz": {
+    "address": [
+      "Straż Miejska w Bydgoszczy",
+      "ul. Leśna 12",
+      "85-676 Bydgoszcz"
+    ],
+    "email": "sekretariat@strazmiejska.bydgoszcz.pl"
+  },
+  "Katowice": {
+    "address": [
+      "Straż Miejska w Katowicach",
+      "ul. Żelazna 18",
+      "40-851 Katowice"
+    ],
+    "email": "interwencje@katowice.eu",
+    "hint": "Niestety SM Katowice wzywa na przesłuchanie do każdego zgłoszenia."
+  },
+  "Górowo Iławeckie": {
+    "address": [
+      "Komisariat Policji w Górowie Iławeckim",
+      "ul. gen. Władysława Sikorskiego 30",
+      "11-220 Górowo Iławeckie"
+    ],
+    "email": "dzielnicowy.gorowoilaweckie1@ol.policja.gov.pl"
+  },
+  "Tczew": {
+    "address": [
+      "Straż Miejska w Tczewie",
+      "Plac Marszałka Piłsudskiego 1",
+      "83-110 Tczew"
+    ],
+    "email": "strazmiejska@um.tczew.pl"
+  },
+  "Chełm": {
+    "address": [
+      "Straż Miejska Chełm",
+      "Obłońska 20",
+      "22-100 Chełm"
+    ],
+    "email": "straz.miejska@umchelm.pl"
+  },
+  "Gryfino": {
+    "address": [
+      "Straż Miejska Gryfino",
+      "1 Maja 16",
+      "74-100 Gryfino"
+    ],
+    "email": "strazmiejska@gryfino.pl"
+  },
+  "Ząbki": {
+    "address": [
+      "Straż Miejska w Ząbkach",
+      "Wojska Polskiego 10",
+      "05-091 Ząbki"
+    ],
+    "email": "strazmiejska@zabki.pl"
+  },
+  "Bartoszyce": {
+    "address": [
+      "Straż Miejska w Bartoszycach",
+      "ul. Bohaterów Monte Cassino 1",
+      "11-200 Bartoszyce"
+    ],
+    "email": "jerzyszostak@bartoszyce.pl"
+  },
+  "Lidzbark Warmiński": {
+    "address": [
+      "Straż Miejska w Lidzbarku Warmińskim",
+      "Aleksandra Świętochowskiego 14",
+      "11-100 Lidzbark Warmiński"
+    ],
+    "email": "um@lidzbarkwarminski.pl"
+  },
+  "Zielona Góra": {
+    "address": [
+      "Straż Miejska Zielona Góra",
+      "ul. Bohaterów Westerplatte 23",
+      "65-078 Zielona Góra"
+    ],
+    "email": "dyzurny@um.zielona-gora.pl"
+  },
+  "Olsztyn": {
+    "address": [
+      "Straż Miejska w Olsztynie",
+      "ul. Żołnierska 13A",
+      "10-558 Olsztyn"
+    ],
+    "email": "dyzurny@sm.olsztyn.eu"
+  },
+  "Świdnica": {
+    "address": [
+      "Straż Miejska w Świdnicy",
+      "ul. Dworcowa 2-4-6-8",
+      "58-100 Świdnica"
+    ],
+    "email": "strazmiejska@sm.swidnica.pl"
+  },
+  "Karlino": {
+    "address": [
+      "Straż Miejska Karlino",
+      "ul. Szymanowskiego 17A",
+      "78-230 Karlino"
+    ],
+    "email": "sm@karlino.pl"
+  },
+  "Sosnowiec": {
+    "address": [
+      "Straż Miejska Sosnowiec",
+      "ul. S. Małachowskiego 3",
+      "41-200 Sosnowiec"
+    ],
+    "email": "straz@um.sosnowiec.pl"
+  },
+  "Rzeszów": {
+    "address": [
+      "Straż Miejska w Rzeszowie",
+      "ul. Targowa 1",
+      "35-064 Rzeszów"
+    ],
+    "email": "komenda@sm.erzeszow.pl"
+  },
+  "Łosice": {
+    "address": [
+      "Straż Miejska Łosice",
+      "Handlowa 7",
+      "08-200 Łosice"
+    ],
+    "email": "straz-miejska@gminalosice.pl"
+  },
+  "Sieradz": {
+    "address": [
+      "Straż Miejska w Sieradzu",
+      "ul. Kościuszki 6",
+      "98-200 Sieradz"
+    ],
+    "email": "kontakt@sm.sieradz.eu"
+  },
+  "Tarnów": {
+    "address": [
+      "Straż Miejska w Tarnowie",
+      "ul. Nadbrzeżna Dolna 7",
+      "33-100 Tarnów"
+    ],
+    "email": "straz@umt.tarnow.pl"
+  },
+  "Wejherowo": {
+    "address": [
+      "Straż Miejska Wejherowo",
+      "pl. Jakuba Wejhera 8",
+      "84-200 Wejherowo"
+    ],
+    "email": "sm@wejherowo.pl"
+  },
+  "Konstancin-Jeziorna": {
+    "address": [
+      "Straż Miejska Konstancin-Jeziorna",
+      "ul. Sobieskiego 5",
+      "05-510 Konstancin-Jeziorna"
+    ],
+    "email": "komendasm@konstancinjeziorna.pl"
+  },
+  "Nowy Targ": {
+    "address": [
+      "Komenda Powiatowa Policji w Nowym Targu",
+      "ul. Konfederacji Tatrzańskiej 1a",
+      "34-400 Nowy Targ"
+    ],
+    "email": "dyzurni@nowy-targ.policja.gov.pl"
+  },
+  "Kalisz": {
+    "address": [
+      "Straż Miejska Kalisza",
+      "ul. Krótka 5-7",
+      "62-800 Kalisz"
+    ],
+    "email": "kontakt@sm.kalisz.pl"
+  },
+  "Legnica": {
+    "address": [
+      "Straż Miejska w Legnicy",
+      "Al. Rzeczypospolitej 3",
+      "59-220 Legnica"
+    ],
+    "email": "sekretariat@sm.legnica.pl"
+  },
+  "Pruszków": {
+    "address": [
+      "Straż Miejska w Pruszkowie",
+      "ul. Kraszewskiego 14/16",
+      "05-800 Pruszków"
+    ],
+    "email": "kierownikzmiany@strazmiejska.pruszkow.pl"
+  },
+  "Mysłowice": {
+    "address": [
+      "Straż Miejska Mysłowice",
+      "Strażacka 7",
+      "41-400 Mysłowice"
+    ],
+    "email": "straz.miejska@myslowice.pl"
+  },
+  "Zabrze": {
+    "address": [
+      "Straż Miejska w Zabrzu",
+      "ul. Pawła Stalmacha 9",
+      "41-800 Zabrze"
+    ],
+    "email": "straz@strazmiejska.zabrze.pl"
+  },
+  "Ruda Śląska": {
+    "address": [
+      "Straż Miejska Ruda Śląska",
+      "gen. Józefa Hallera 61",
+      "41-709 Ruda Śląska"
+    ],
+    "email": "straz@rudaslaska.pl"
+  },
+  "Lublin": {
+    "address": [
+      "Straż Miejska Lublin",
+      "ul. Podwale 3a",
+      "20-400 Lublin"
+    ],
+    "email": "sm@lublin.eu"
+  },
+  "Leszno": {
+    "address": [
+      "Straż Miejska w Lesznie",
+      "ul. Berwińskich 7c",
+      "64-100 Leszno"
+    ],
+    "email": "sm@leszno.pl"
+  },
+  "Inowrocław": {
+    "address": [
+      "Straż Miejska Inowrocław",
+      "ul. Gabriela Narutowicza 60",
+      "88-100 Inowrocław"
+    ],
+    "email": "strazmiejska@inowroclaw.pl"
+  },
+  "Suwałki": {
+    "address": [
+      "Straż Miejska Suwałki",
+      "ul. Teofila Noniewicza 71A",
+      "16-402 Suwałki"
+    ],
+    "email": "sm@um.suwalki.pl"
+  },
+  "Gliwice": {
+    "address": [
+      "Straż Miejska w Gliwicach",
+      "ul. Bolesława Śmiałego 2A",
+      "44-121 Gliwice"
+    ],
+    "email": "dyzurny@smgliwice.pl",
+    "hint": "Niestety SM Gliwice wzywa na przesłuchanie do każdego zgłoszenia."
+  },
+  "Wodzisław Śląski": {
+    "address": [
+      "Straż Miejska w Wodzisławiu Śląskim",
+      "ul. Rzeczna 24",
+      "44-300 Wodzisław Śląski"
+    ],
+    "email": "strazmiejska@wodzislaw-slaski.pl"
+  },
+  "Rybnik": {
+    "address": [
+      "Straż Miejska w Rybniku",
+      "Władysława Stanisława Reymonta 54",
+      "44-200 Rybnik"
+    ],
+    "email": "sekretariat@sm.rybnik.pl"
+  },
+  "Gorzów Wielkopolski": {
+    "address": [
+      "Straż Miejska w Gorzowie Wielkopolskim",
+      "ul. Łokietka 22",
+      "66-400 Gorzów Wielkopolski"
+    ],
+    "email": "ksm@um.gorzow.pl"
+  },
+  "Stronie Śląskie": {
+    "address": [
+      "Straż Miejska w Stroniu Śląskim",
+      "ul. Mickiewicza 2",
+      "57-550 Stronie Śląskie"
+    ],
+    "email": "straznicy@stronie.pl"
+  },
+  "Konstantynów Łódzki": {
+    "address": [
+      "Straż Miejska w Konstantynowie Łódzkim",
+      "ul. Zgierska 2",
+      "95-050 Konstantynów Łódzki"
+    ],
+    "email": "strazmiejska@konstantynow.pl"
+  },
+  "Częstochowa": {
+    "address": [
+      "Straż Miejska w Częstochowie",
+      "ul. Krakowska 80 blok 3",
+      "42-200 Częstochowa"
+    ],
+    "email": "dyzurny_sm@strazmiejska.czestochowa.um.gov.pl"
+  },
+  "Sopot": {
+    "address": [
+      "Straż Miejska Sopot",
+      "ul. Kościuszki 25/27",
+      "81-704 Sopot"
+    ],
+    "email": "wykroczenia@um.sopot.pl",
+    "hint": "Niestety SM Sopot wzywa na przesłuchanie do każdego zgłoszenia."
+  },
+  "Kościelisko": {
+    "address": [
+      "Straż Gminna Kościelisko",
+      "ul. Strzelców Podhalańskich 44",
+      "34-511 Kościelisko"
+    ],
+    "email": "straz@koscielisko.com.pl"
+  },
+  "Słupsk": {
+    "address": [
+      "Straż Miejska Słupsk",
+      "ul. Jaracza 5",
+      "76-200 Słupsk"
+    ],
+    "email": "sm@um.slupsk.pl"
+  },
+  "Bełżyce": {
+    "address": [
+      "Komisariat Policji w Bełżycach",
+      "ul. Lubelska 82",
+      "24-200 Bełżyce"
+    ],
+    "email": "kpbelzyce.kmplublin@lu.policja.gov.pl"
+  },
+  "Jarosław": {
+    "address": [
+      "Straż Miejska Jarosławia",
+      "Rynek 1",
+      "37-500 Jarosław"
+    ],
+    "email": "kancelaria@um.jaroslaw.pl"
+  },
+  "Legionowo": {
+    "address": [
+      "Straż Miejska w Legionowie",
+      "ul. Jagiellońska 26B",
+      "05-120 Legionowo"
+    ],
+    "email": "straz.miejska@um.legionowo.pl"
+  },
+  "Wadowice": {
+    "address": [
+      "Straż Miejska Wadowice",
+      "Plac Jana Pawła II 23",
+      "34-100 Wadowice"
+    ],
+    "email": "strazmiejska@wadowice.pl"
+  },
+  "Pruszcz Gdański": {
+    "address": [
+      "Straż Gminna Gminy Pruszcz Gdański",
+      "ul. Spacerowa 8",
+      "83-031 Łęgowo"
+    ],
+    "email": "strazmiejska@pruszcz-gdanski.pl"
+  },
+  "Mikołów": {
+    "address": [
+      "Straż Miejska Mikołów",
+      "ul. Rynek 7",
+      "43-190 Mikołów"
+    ],
+    "email": "bsm1@mikolow.eu"
+  },
+  "Żory": {
+    "address": [
+      "Komenda Miejska Policji w Żorach",
+      "ul. Wodzisławska 3",
+      "44-240 Żory"
+    ],
+    "email": "komendant@zory.ka.policja.gov.pl"
+  },
+  "Świętochłowice": {
+    "address": [
+      "Straż Miejska w Świętochłowicach",
+      "ul. Katowicka 54A",
+      "41-600 Świętochłowice"
+    ],
+    "email": "sm@swietochlowice.pl"
+  },
+  "Piastów": {
+    "address": [
+      "Komisariat Policji w Piastowie",
+      "ul. Popiełuszki 24",
+      "05-820 Piastów"
+    ],
+    "email": "dyzurny.kp-piastow@ksp.policja.gov.pl"
+  },
+  "Olkusz": {
+    "address": [
+      "Straż Miejska w Olkuszu",
+      "Rynek 1",
+      "32-300 Olkusz"
+    ],
+    "email": "sm1@umig.olkusz.pl"
+  },
+  "Grudziądz": {
+    "address": [
+      "Straż Miejska w Grudziądzu",
+      "ul. Piłsudskiego 51",
+      "86-300 Grudziądz"
+    ],
+    "email": "strazmiejska@um.grudziadz.pl"
+  },
+  "Starachowice": {
+    "address": [
+      "Straż Miejska Starachowice",
+      "ul. Radomska 45",
+      "27-200 Starachowice"
+    ],
+    "email": "strazmiejska@starachowice.eu"
+  },
+  "Kielce": {
+    "address": [
+      "Straż Miejska w Kielcach",
+      "ul. Ogrodowa 3B",
+      "25-024 Kielce"
+    ],
+    "email": "sekretariat@strazmiejska.kielce.pl"
+  },
+  "Lubartów": {
+    "address": [
+      "Komenda Powiatowa Policji w Lubartowie",
+      "ul. Lubelska 57a",
+      "21-100 Lubartów"
+    ],
+    "email": "dyzurni.kpplubartow@lu.policja.gov.pl"
+  },
+  "Czechowice-Dziedzice": {
+    "address": [
+      "Straż Miejska w Czechowicach-Dziedzicach",
+      "ul. Niepodległości 35",
+      "43-502 Czechowice-Dziedzice"
+    ],
+    "email": "sm@sm.czechowice-dziedzice.pl"
+  },
+  "Płock": {
+    "address": [
+      "Straż Miejska w Płocku",
+      "ul. Otolińska 10",
+      "09-407 Płock"
+    ],
+    "email": "sekretariat@strazmiejska.plock.eu"
+  },
+  "Łańcut": {
+    "address": [
+      "Komenda Powiatowa Policji w Łańcucie",
+      "ul. Traugutta 13A",
+      "37-100 Łańcut"
+    ],
+    "email": "lancut@rz.policja.gov.pl"
+  },
+  "Chorzów": {
+    "address": [
+      "Straż Miejska w Chorzowie",
+      "Jana III Sobieskiego 3",
+      "41-500 Chorzów"
+    ],
+    "email": "sm@chorzow.eu"
+  },
+  "Nysa": {
+    "address": [
+      "Straż Miejska w Nysie",
+      "ul. Kolejowa 15",
+      "48-300 Nysa"
+    ],
+    "email": "straz@www.nysa.pl"
+  },
+  "Niepołomice": {
+    "address": [
+      "Straż Miejska Niepołomice",
+      "pl. Zwycięstwa 8",
+      "32-005 Niepołomice"
+    ],
+    "email": "straz.miejska@niepolomice.com"
+  },
+  "Żywiec": {
+    "address": [
+      "Straż Miejska Żywiec",
+      "ul. Zielona 7",
+      "34-300 Żywiec"
+    ],
+    "email": "strazmiejska@zywiec.pl"
+  },
+  "Kąty Wrocławskie": {
+    "address": [
+      "Komisariat Policji w Kątach Wrocławskich",
+      "ul. 1-go Maja 16",
+      "55-080 Kąty Wrocławskie"
+    ],
+    "email": "dzielnicowy.katy-wroclawskie3@wroclaw.wr.policja.gov.pl"
+  },
+  "Smolec": {
+    "address": [
+      "Komisariat Policji w Smolcu",
+      "ul. Dworcowa 4",
+      "55-080 Smolec"
+    ],
+    "email": "dzielnicowy.katy-wroclawskie2@wroclaw.wr.policja.gov.pl"
+  },
+  "Nowa Ruda": {
+    "address": [
+      "Straż Miejska Nowa Ruda",
+      "Rynek 11",
+      "57-400 Nowa Ruda"
+    ],
+    "email": "sm@um.nowaruda.pl"
+  },
+  "Dąbrowa Górnicza": {
+    "address": [
+      "Straż Miejska w Dąbrowie Górniczej",
+      "ul. Graniczna 21",
+      "41-300 Dąbrowa Górnicza"
+    ],
+    "email": "dyzsm@dabrowa-gornicza.pl"
+  },
+  "Będzin": {
+    "address": [
+      "Straż Miejska w Będzinie",
+      "pl. Kolei Warszawsko-Wiedeńskiej 3",
+      "42-500 Będzin"
+    ],
+    "email": "strazmiejska@um.bedzin.pl"
+  },
+  "Szczytno": {
+    "address": [
+      "Straż Miejska w Szczytnie",
+      "ul. Sienkiewicza 1",
+      "12-100 Szczytno"
+    ],
+    "email": "straz.miejska@um.szczytno.pl"
+  },
+  "Bełchatów": {
+    "address": [
+      "Straż Miejska w Bełchatowie",
+      "ul. Kościuszki 15",
+      "97-400 Bełchatów"
+    ],
+    "email": "sm@um.belchatow.pl"
+  },
+  "Radom": {
+    "address": [
+      "Straż Miejska w Radomiu",
+      "ul. Stanisława Moniuszki 9",
+      "26-610 Radom"
+    ],
+    "email": "sekretariat@strazmiejska.radom.pl"
+  },
+  "Siechnice": {
+    "address": [
+      "Straż Miejska w Siechnicach",
+      "ul. Kolejowa 3",
+      "55-010 Święta Katarzyna"
+    ],
+    "email": "strazmiejska@umsiechnice.pl"
+  },
+  "Sędławki": {
+    "address": [
+      "Komenda Powiatowa Policji w Bartoszycach",
+      "ul. Warszawska 9",
+      "11-200 Bartoszyce"
+    ],
+    "email": "komendant@bartoszyce.ol.policja.gov.pl",
+    "hint": "Gmina Sędławki jest obsługiwana przez komendą Policji w Bartoszycach."
+  },
+  "Słubice": {
+    "address": [
+      "Straż Miejska w Słubicach",
+      "ul. Akademicka 1",
+      "69-100 Słubice"
+    ],
+    "email": "sm@slubice.pl"
+  },
+  "Ciechanów": {
+    "address": [
+      "Straż Miejska w Ciechanowie",
+      "Plac Jana Pawła II 7",
+      "06-400 Ciechanów"
+    ],
+    "email": "strazmiejska@umciechanow.pl"
+  },
+  "Żukowo": {
+    "address": [
+      "Komenda Powiatowa Policji w Kartuzach",
+      "ul. Sambora 41",
+      "83-300 Kartuzy"
+    ],
+    "email": "komenda.kartuzy@gd.policja.gov.pl",
+    "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach."
+  },
+  "Dzierżoniów": {
+    "address": [
+      "Straż Miejska w Dzierżoniowie",
+      "ul. Rzeźnicza 2",
+      "58-200 Dzierżoniów"
+    ],
+    "email": "straz@um.dzierzoniow.pl"
+  },
+  "Kobierzyce": {
+    "address": [
+      "Komisariat Policji Wrocław Krzyki",
+      "ul. Ślężna 115-129",
+      "53-305 Wrocław"
+    ],
+    "email": "szymon.mlynarczyk@wroclaw.wr.policja.gov.pl"
+  },
+  "Konin": {
+    "address": [
+      "Straż Miejska w Koninie",
+      "ul. Przemysłowa 2",
+      "62-510 Konin"
+    ],
+    "email": "smkonin@konin.um.gov.pl"
+  },
+  "Kartuzy": {
+    "address": [
+      "Straż Miejska w Kartuzach",
+      "Generała Józefa Hellera 1",
+      "83-300 Kartuzy"
+    ],
+    "email": "strazmiejska@poczta.kartuzy.pl"
+  },
+  "Kędzierzyn-Koźle": {
+    "address": [
+      "Straż Miejska Kędzierzyn-Koźle",
+      "ul. Piramowicza 32",
+      "47-200 Kędzierzyn-Koźle"
+    ],
+    "email": "sm@kedzierzynkozle.pl"
+  },
+  "Tychy": {
+    "address": [
+      "Straż Miejska Tychy",
+      "ul. Budowlanych 67",
+      "43-100 Tychy"
+    ],
+    "email": "strazmiejska@umtychy.pl"
+  },
+  "Międzychód": {
+    "address": [
+      "Straż Miejska Międzychód",
+      "ul. Marszałka Piłsudskiego 2",
+      "64-400 Międzychód"
+    ],
+    "email": "strazmiejska@miedzychod.pl"
+  },
+  "Mosina": {
+    "address": [
+      "Straż Miejska Mosina",
+      "ul. Krotowskiego 16",
+      "62-050 Mosina"
+    ],
+    "email": "straz.miejska@mosina.pl"
+  },
+  "Krosno": {
+    "address": [
+      "Straż Miejska Krosno",
+      "ul. Staszica 2",
+      "38-400 Krosno"
+    ],
+    "email": "sm@um.krosno.pl"
+  },
+  "Wiskitki": {
+    "address": [
+      "Posterunek Policji Wiskitki",
+      "ul. Kościuszki 1a",
+      "96-315 Wiskitki"
+    ],
+    "email": "dzielnicowy.wiskitki@ra.policja.gov.pl"
+  },
+  "Mińsk Mazowiecki": {
+    "address": [
+      "Straż Miejska Mińsk Mazowiecki",
+      "ul. Konstytucji 3 Maja 1a",
+      "05-300 Mińsk Mazowiecki"
+    ],
+    "email": "wykroczenia@umminskmaz.pl"
+  },
+  "Bielsko-Biała": {
+    "address": [
+      "Straż Miejska w Bielsku-Białej",
+      "ul. Hugona Kołłątaja 10",
+      "43-300 Bielsko-Biała"
+    ],
+    "email": "sm@strazmiejska.bielsko.pl"
+  },
+  "Bytom": {
+    "address": [
+      "Straż Miejska w Bytomiu",
+      "ul. Wrocławska 122",
+      "41-902 Bytom"
+    ],
+    "email": "dyzurny@strazmiejska.bytom.pl"
+  },
+  "Czeladź": {
+    "address": [
+      "Straż Miejska w Czeladzi",
+      "Katowicka 45",
+      "41-250 Czeladź"
+    ],
+    "email": "kniebylski@um.czeladz.pl"
+  },
+  "Jarocin": {
+    "address": [
+      "Komenda Powiatowa Policji w Jarocinie",
+      "ul. Bohaterów Jarocina 15",
+      "63-200 Jarocin"
+    ],
+    "email": "policja@jarocin.policja.gov.pl"
+  },
+  "Polkowice": {
+    "address": [
+      "Straż Miejska Polkowice",
+      "ul. Targowa 11",
+      "59-100 Polkowice"
+    ],
+    "email": "dyzurny@ksm.polkowice.pl"
+  },
+  "Staszów": {
+    "address": [
+      "Straż Miejska Staszów",
+      "ul. Opatowska 31",
+      "28-200 Staszów"
+    ],
+    "email": "joanna.tutak@staszow.pl"
+  },
+  "Dębica": {
+    "address": [
+      "Straż Miejska w Dębicy",
+      "ul. Ratuszowa 2",
+      "39-200 Dębica"
+    ],
+    "email": "sylwester.bieszczad@umdebica.pl"
+  },
+  "Mielec": {
+    "address": [
+      "Straż Miejska w Mielcu",
+      "ul. Żeromskiego 26",
+      "39-300 Mielec"
+    ],
+    "email": "strazmiejska@um.mielec.pl"
+  },
+  "Zgorzelec": {
+    "address": [
+      "Komenda Powiatowa Policji w Zgorzelcu",
+      "Bohaterów II Armii Wojska Polskiego 12",
+      "59-900 Zgorzelec"
+    ],
+    "email": "kpp@zgorzelec.wr.policja.gov.pl"
+  },
+  "Koszalin": {
+    "address": [
+      "Straż Miejska w Koszalinie",
+      "ul. Rynek Staromiejski 6-7",
+      "75-007 Koszalin"
+    ],
+    "email": "straz.miejska@um.koszalin.pl"
+  },
+  "Goleniów": {
+    "address": [
+      "Straż Miejska w Goleniowie",
+      "plac Lotników 1",
+      "72-100 Goleniów"
+    ],
+    "email": "straz@goleniow.pl"
+  },
+  "Międzyzdroje": {
+    "address": [
+      "Straż Miejska Międzyzdroje",
+      "ul. Książąt Pomorskich 5",
+      "72-500 Międzyzdroje"
+    ],
+    "email": "strazmiejska@miedzyzdroje.pl"
+  },
+  "Krapkowice": {
+    "address": [
+      "Straż Miejska Krapkowice",
+      "ul. 3 Maja 17",
+      "47-303 Krapkowice"
+    ],
+    "email": "strazmiejska@krapkowice.pl",
+    "hint": "SM przyjmuje zgłoszenia e-mailowe, ale wzywa każdego zgłaszającego na przesłuchanie."
+  },
+  "Jastrzębie-Zdrój": {
+    "address": [
+      "Straż Miejska w Jastrzębiu-Zdroju",
+      "al. Piłsudskiego 60",
+      "44-335 Jastrzębie-Zdrój"
+    ],
+    "email": "sm@um.jastrzebie.pl"
+  },
+  "Tarnowskie Góry": {
+    "address": [
+      "Straż Miejska Tarnowskie Góry",
+      "ul. Sienkiewicza 2a",
+      "42-600 Tarnowskie Góry"
+    ],
+    "email": "strazmiejska@um.tgory.pl"
+  },
+  "Żyrardów": {
+    "address": [
+      "Straż Miejska w Żyrardowie",
+      "ul. 1-go Maja 50",
+      "96-300 Żyrardów"
+    ],
+    "email": "straz.miejska@zyrardow.pl"
+  },
+  "Kępno": {
+    "address": [
+      "Straż Miejska w Kępnie",
+      "ul. Kościuszki 9a",
+      "63-600 Kępno"
+    ],
+    "email": "renata.mroz@um.kepno.pl"
+  },
+  "Myślenice": {
+    "address": [
+      "Straż Miejska w Myślenicach",
+      "ul. Rynek 8/9",
+      "32-400 Myślenice"
+    ],
+    "email": "info@myslenice.pl"
+  },
+  "Żagań": {
+    "address": [
+      "Straż Miejska w Żaganiu",
+      "ul. Kolejowa 88",
+      "68-100 Żagań"
+    ],
+    "email": "stramies@op.pl"
+  },
+  "Wieliczka": {
+    "address": [
+      "Straż Miejska Wieliczka",
+      "pl. Skulimowskiego 2",
+      "32-020 Wieliczka"
+    ],
+    "email": "straz@wieliczka.eu"
+  },
+  "Bożnów": {
+    "address": [
+      "Komenda Powiatowa Policji w Żaganiu",
+      "ul. Nowogródzka 1",
+      "68-100 Żagań"
+    ],
+    "email": "dzielnicowy.zagan7@go.policja.gov.pl"
+  },
+  "Nowy Dwór Mazowiecki": {
+    "address": [
+      "Straż Miejska Nowy Dwór Mazowiecki",
+      "ul. Zakroczymska 30",
+      "05-100 Nowy Dwór Mazowiecki"
+    ],
+    "email": "dyzurnysm@nowydwormaz.pl"
+  },
+  "Skierniewice": {
+    "address": [
+      "Straż Miejska  w Skierniewicach",
+      "ul. Reymonta 33",
+      "96-100 Skierniewice"
+    ],
+    "email": "komendant.sm@um.skierniewice.pl"
+  },
+  "Elbląg": {
+    "address": [
+      "Straż Miejskiej Elbląg",
+      "ul. Winna 9",
+      "82-300 Elbląg"
+    ],
+    "email": "dyzurny.sm@elblag.eu"
+  },
+  "Opole": {
+    "address": [
+      "Straż Miejska Opole",
+      "ul. Reymonta 47b",
+      "45-072 Opole"
+    ],
+    "email": "dyzurny@strazmiejska.opole.pl",
+    "hint": "SM Opole nie wzywa zgłaszających na przesłuchanie. Wzywany jest sprawca. Dopiero gdy sprawca zaprzeczy, że dokonał wykroczenia wzywany jest zgłaszający."
+  },
+  "Radzymin": {
+    "address": [
+      "Komisariat Policji w Radzyminie",
+      "ul. Romualda Traugutta 17",
+      "05-250 Radzymin"
+    ],
+    "email": "dzielnicowy.radzymin2@ksp.policja.gov.pl"
+  },
+  "Piła": {
+    "address": [
+      "Straż Miejska w Pile",
+      "ul. Zygmunta Starego 1",
+      "64-920 Piła"
+    ],
+    "email": "sm@um.pila.pl"
+  },
+  "Świdnik": {
+    "address": [
+      "Straż Miejska w Świdniku",
+      "ul. Gen. J. Hallera 9",
+      "21-040 Świdnik"
+    ],
+    "email": "strazmiejska@poczta.e-swidnik.pl"
+  },
+  "Cieszyn": {
+    "address": [
+      "Straż Miejska w Cieszynie",
+      "ul. Limanowskiego 7",
+      "43-400 Cieszyn"
+    ],
+    "email": "sekretariat@sm.cieszyn.pl"
+  },
+  "Kwidzyn": {
+    "address": [
+      "Straż Miejska Kwidzyn",
+      "ul. Warszawska 14",
+      "82-500 Kwidzyn"
+    ],
+    "email": "strazmiejska@um.kwidzyn.pl"
+  },
+  "Wolsztyn": {
+    "address": [
+      "Straż Miejska Wolsztyn",
+      "Rynek 1",
+      "64-200 Wolsztyn"
+    ],
+    "email": "strazmiejska@wolsztyn.pl"
+  },
+  "Otwock": {
+    "address": [
+      "Komenda Powiatowa Policji w Otwocku",
+      "ul. Pułaskiego 7a",
+      "05-400 Otwock"
+    ],
+    "email": "dyzurny.otwock@ksp.policja.gov.pl"
+  },
+  "Józefów": {
+    "address": [
+      "Straż Miejska w Józefowie",
+      "ul. Kardynała Wyszyńskiego 10",
+      "05-420 Józefów"
+    ],
+    "email": "sm_jozefow@wp.pl"
+  },
+  "Serock": {
+    "address": [
+      "Straż Miejska w Serocku",
+      "ul. Rynek 21",
+      "05-140 Serock"
+    ],
+    "email": "straz.miejska@serock.pl"
+  },
+  "Góra Kalwaria": {
+    "address": [
+      "Straż Miejska w Górze Kalwarii",
+      "ul. 3-go Maja 10",
+      "05-530 Góra Kalwaria"
+    ],
+    "email": "sm@gorakalwaria.pl"
+  },
+  "Brwinów": {
+    "address": [
+      "Straż Miejska w Brwinowie",
+      "ul. Grodziska 12",
+      "05-840 Brwinów"
+    ],
+    "email": "straz.miejska@brwinow.pl"
+  },
+  "Grodzisk Mazowiecki": {
+    "address": [
+      "Straż Miejska w Grodzisku Mazowieckim",
+      "ul. Kościuszki 41",
+      "05-825 Grodzisk Mazowiecki"
+    ],
+    "email": "sm@grodzisk.pl"
+  },
+  "Milanówek": {
+    "address": [
+      "Straż Miejska w Milanówku",
+      "ul. Warszawska 32",
+      "05-822 Milanówek"
+    ],
+    "email": "straz_miejska@milanowek.pl"
+  },
+  "Łomianki": {
+    "address": [
+      "Straż Miejska w Łomiankach",
+      "ul. Warszawska 87",
+      "05-092 Łomianki"
+    ],
+    "email": "straz.miejska@poczta.lomianki.pl"
+  },
+  "Sulejówek": {
+    "address": [
+      "Straż Miejska w Sulejówku",
+      "ul. Wrońskiego 1",
+      "05-070 Sulejówek"
+    ],
+    "email": "strazmiejska@umsulejowek.pl"
+  },
+  "Nieporęt": {
+    "address": [
+      "Straż Gminna w Nieporęcie",
+      "ul. Zegrzyńska 10h",
+      "05-126 Nieporęt"
+    ],
+    "email": "strazgminna@nieporet.pl"
+  },
+  "Wołomin": {
+    "address": [
+      "Straż Miejska w Wołominie",
+      "ul. Legionów 31a",
+      "05-200 Wołomin"
+    ],
+    "email": "kontakt@strazmiejskawolomin.pl"
+  },
+  "Tarczyn": {
+    "address": [
+      "Straż Miejska w Tarczynie",
+      "ul. Rynek 8a",
+      "05-555 Tarczyn"
+    ],
+    "email": "smtarczyn@tarczyn.pl"
+  },
+  "Ożarów Mazowiecki": {
+    "address": [
+      "Straż Miejska w Ożarowie Mazowieckim",
+      "ul. Poznańska 127a",
+      "05-850 Ożarów Mazowiecki"
+    ],
+    "email": "strazmiejska@ozarow-mazowiecki.pl"
+  },
+  "Zielonka": {
+    "address": [
+      "Komisariat Policji w Zielonce",
+      "ul. Piastowska 17",
+      "05-220 Zielonka"
+    ],
+    "email": "komendant.kp-zielonka@ksp.policja.gov.pl"
+  },
+  "Grójec": {
+    "address": [
+      "Straż Miejska w Grójcu",
+      "ul. Mszczonowska 23",
+      "05-600 Grójec"
+    ],
+    "email": "straz@grojecmiasto.pl"
+  },
+  "Siedlce": {
+    "address": [
+      "Straż Miejska w Siedlcach",
+      "ul. Świętojańska 4",
+      "08-110 Siedlce"
+    ],
+    "email": "straz.miejska@um.siedlce.pl"
+  },
+  "Łochów": {
+    "address": [
+      "Straż Miejska w Łochowie",
+      "ul. Aleja Pokoju 75",
+      "07-130 Łochów"
+    ],
+    "email": "straz.miejska@gminalochow.pl"
+  },
+  "Węgrów": {
+    "address": [
+      "Straż Miejska w Węgrowie",
+      "ul. Wyszyńskiego 1",
+      "07-100 Węgrów"
+    ],
+    "email": "piotr.koc@wegrow.com.pl"
+  },
+  "Sierpc": {
+    "address": [
+      "Straż Miejska w Sierpcu",
+      "ul. Piastowska 11a",
+      "09-200 Sierpc"
+    ],
+    "email": "strazmiejska@um.sierpc.pl"
+  },
+  "Ostrów Mazowiecka": {
+    "address": [
+      "Straż Miejska w Ostrowi Mazowieckiej",
+      "ul. 3-go Maja 66",
+      "07-300 Ostrów Mazowiecka"
+    ],
+    "email": "strazmiejska@ostrowmaz.pl"
+  },
+  "Wyszków": {
+    "address": [
+      "Straż Miejska w Wyszkowie",
+      "ul. Geodetów 45",
+      "07-200 Wyszków"
+    ],
+    "email": "straz.miejska@wyszkow.pl"
+  },
+  "Pabianice": {
+    "address": [
+      "Straż Miejska w Pabianicach",
+      "ul. Gabriela Narutowicza 33",
+      "95-200 Pabianice"
+    ],
+    "email": "sm@um.pabianice.pl"
+  },
+  "Podkowa Leśna": {
+    "address": [
+      "Posterunek Policji w Podkowie Leśnej",
+      "ul. Brwinowska 17a",
+      "05-807 Podkowa Leśna"
+    ],
+    "email": "komendant.grodzisk-maz@ksp.policja.gov.pl"
+  },
+  "Karpacz": {
+    "address": [
+      "Straż Miejska w Karpaczu",
+      "ul. Obrońców Pokoju 2a",
+      "58-540 Karpacz"
+    ],
+    "email": "straz.miejska@karpacz.eu"
+  },
+  "Police": {
+    "address": [
+      "Straż Miejska w Policach",
+      "ul. Tanowska 8",
+      "72-010 Police"
+    ],
+    "email": "strazmiejska@police.pl"
+  },
+  "Radlin": {
+    "address": [
+      "Straż Miejska w Radlinie",
+      "ul. Mariacka 93",
+      "44-310 Radlin"
+    ],
+    "email": "stm@radlin.pl"
+  },
+  "Siemianowice Śląskie": {
+    "address": [
+      "Straż Miejska Siemianowice Śląskie",
+      "Jarosława Dąbrowskiego 13",
+      "41-100 Siemianowice Śląskie"
+    ],
+    "email": "sm@sm.siemianowice.pl"
+  },
+  "Kołbaskowo": {
+    "address": [
+      "Straż Gminna w Kołbaskowie",
+      "Rosówek nr 16",
+      "72-001 Kołbaskowo"
+    ],
+    "email": "straz.gminna@kolbaskowo.pl"
+  },
+  "Przecław": {
+    "address": [
+      "Posterunek Policji w Kołbaskowie",
+      "Kołbaskowo nr 105",
+      "72-001 Kołbaskowo"
+    ],
+    "email": "pp.kolbaskowo@sc.policja.gov.pl"
+  },
+  "Bolesławiec": {
+    "address": [
+      "Straż Miejska w Bolesławcu",
+      "ul. Mikołaja Brody 14",
+      "59-700 Bolesławiec"
+    ],
+    "email": "dyzurny@sm.boleslawiec.pl"
+  },
+  "Puławy": {
+    "address": [
+      "Straż Miejska Puławy",
+      "ul. Lubelska 5",
+      "24-100 Puławy"
+    ],
+    "email": "straz.miejska@um.pulawy.pl"
+  },
+  "Nałęczów": {
+    "address": [
+      "Straż Miejska Nałęczów",
+      "al. Lipowa 3",
+      "24-150 Nałęczów"
+    ],
+    "email": "sm@naleczow.pl"
+  },
+  "Opatów": {
+    "address": [
+      "Straż Miejska Opatów",
+      "pl. Obrońców Pokoju 34",
+      "27-500 Opatów"
+    ],
+    "email": "sm@umopatow.pl"
+  },
+  "Komorniki": {
+    "address": [
+      "Straż Gminna Komorniki",
+      "ul. Młyńska 15",
+      "62-052 Komorniki"
+    ],
+    "email": "strazgminna@komorniki.pl"
+  },
+  "Puck": {
+    "address": [
+      "Straż Miejska Puck",
+      "ul. 1 maja 13",
+      "84-100 Puck"
+    ],
+    "email": "sm@miasto.puck.pl"
+  },
+  "Solec Kujawski": {
+    "address": [
+      "Komisariat Policji w Solcu Kujawskim",
+      "ul. Toruńska 15",
+      "86-050 Solec Kujawski"
+    ],
+    "email": "solec@bg.policja.gov.pl"
+  },
+  "Wałbrzych": {
+    "address": [
+      "Straż Miejska w Wałbrzychu",
+      "Rynek 23",
+      "58-300 Wałbrzych"
+    ],
+    "email": "strazmiejska@um.walbrzych.pl"
+  },
+  "Września": {
+    "address": [
+      "Straż Miejska we Wrześni",
+      "ul. Ratuszowa",
+      "62-300 Września"
+    ],
+    "email": "straz@wrzesnia.pl"
+  },
+  "Żarki": {
+    "address": [
+      "Straż Miejska w Żarkach",
+      "ul. Kościuszki 15/17",
+      "42-310 Żarki"
+    ],
+    "email": "strazmiejska@umigzarki.pl"
+  },
+  "Złotoryja": {
+    "address": [
+      "Straż Miejska w Złotoryi",
+      "Plac Orląt Lwowskich 1",
+      "59-500 Złotoryja"
+    ],
+    "email": "sm@zlotoryja.pl"
+  },
+  "Orneta": {
+    "address": [
+      "Straż Miejska w Ornecie",
+      "ul. Mickiewicza 18",
+      "11-130 Orneta"
+    ],
+    "email": "strazmiejska@orneta.pl"
+  },
+  "Kruszwica": {
+    "address": [
+      "Komisariat Policji w Kruszwicy",
+      "ul. Niepodległości 47",
+      "88-150 Kruszwica"
+    ],
+    "email": "dzielnicowy.kruszwica2@bg.policja.gov.pl"
+  },
+  "Pszczyna": {
+    "address": [
+      "Straż Miejska Pszczyna",
+      "ul. Zdrojowa 4",
+      "43-200 Pszczyna"
+    ],
+    "email": "sm@pszczyna.pl"
+  },
+  "Ogrodzieniec": {
+    "address": [
+      "Komisariat Policji w Ogrodzieńcu",
+      "pl. Wolności 23",
+      "42-440 Ogrodzieniec"
+    ],
+    "email": "ogrodzieniec@zawiercie.ka.policja.gov.pl"
+  },
+  "Olsztynek": {
+    "address": [
+      "Straż Miejska w Olsztynku",
+      "ul. Ratusz 1",
+      "11-015 Olsztynek"
+    ],
+    "email": "strazmiejska@olsztynek.pl"
+  },
+  "Ostrowiec Świętokrzyski": {
+    "address": [
+      "Straż Miejska Ostrowiec Świętokrzyski",
+      "ul. Świętokrzyska 22",
+      "27-400 Ostrowiec Świętokrzyski"
+    ],
+    "email": "sm@um.ostrowiec.pl"
+  },
+  "Jeleśnia": {
+    "address": [
+      "Komisariat Policji w Jeleśni",
+      "ul. Jana Kazimierza 79",
+      "34-340 Jeleśnia"
+    ],
+    "email": "jelesnia@zywiec.ka.policja.gov.pl"
+  },
+  "Czerwonak": {
+    "address": [
+      "Straż Gminna Czerwonak",
+      "Osiedle Leśne 16",
+      "62-028 Koziegłowy"
+    ],
+    "email": "straz@czerwonak.pl"
+  },
+  "Ostrów Wielkopolski": {
+    "address": [
+      "Straż Miejska Ostrów Wielkopolski",
+      "ul. Kościuszki 12a",
+      "63-400 Ostrów Wielkopolski"
+    ],
+    "email": "straz_miejska@vp.pl"
+  },
+  "Marki": {
+    "address": [
+      "Komisariat Policji w Markach",
+      "ul. Sportowa 5",
+      "05-270 Marki"
+    ],
+    "email": "komendant.kp-marki@ksp.policja.gov.pl"
+  },
+  "Matyldzin": {
+    "address": [
+      "Komisariat Policji w Mroczy",
+      "ul. Piłsudskiego 8",
+      "89-115 Mrocza"
+    ],
+    "email": "dzielnicowy.mrocza3@bg.policja.gov.pl"
+  },
+  "Kościerzyna": {
+    "address": [
+      "Straż Miejska w Kościerzynie",
+      "ul. Młyńska 15",
+      "83-400 Kościerzyna"
+    ],
+    "email": "strazmiejska@koscierzyna.gda.pl"
+  },
+  "Zielonki": {
+    "address": [
+      "Komisariat Policji w Zielonkach",
+      "Władysława Łokietka 205",
+      "31-263 Kraków"
+    ],
+    "email": "dzielnicowy.zielonki1@kpp-krakow.policja.gov.pl"
+  },
+  "Nowy Duninów": {
+    "address": [
+      "Komenda Miejska Policji w Płocku",
+      "al. Kilińskiego 8",
+      "09-400 Płock"
+    ],
+    "email": "kmpplock@ra.policja.gov.pl"
+  },
+  "Dopiewo": {
+    "address": [
+      "Komenda Straży Gminnej",
+      "ul. Leśna 2a",
+      "62-070 Dopiewo"
+    ],
+    "email": "strazgminna@dopiewo.pl"
+  },
+  "Człuchów": {
+    "address": [
+      "Komenda Powiatowa Policji w Człuchowie",
+      "ul. Kasztanowa 17",
+      "77-300 Człuchów"
+    ],
+    "email": "sekretariat.czluchow@gd.policja.gov.pl"
+  },
+  "Zawiercie": {
+    "address": [
+      "Straż Miejska Zawiercie",
+      "ul. Leśna 2",
+      "42-400 Zawiercie"
+    ],
+    "email": "strazmiejska@zawiercie.eu",
+    "hint": "Miejscowość Zawiercie obsługuje Straż Miejska Piaseczno."
+  },
+  "Kętrzyn": {
+    "address": [
+      "Straż Miejska Kętrzyn",
+      "ul. Wojska Polskiego 11",
+      "11-400 Kętrzyn"
+    ],
+    "email": "strazmiejska@miastoketrzyn.pl"
+  },
+  "Turek": {
+    "address": [
+      "Komenda Powiatowa Policji w Turku",
+      "ul. Legionów Polskich 3",
+      "62-700 Turek"
+    ],
+    "email": "dyzurny.turek@po.policja.gov.pl"
+  },
+  "Wieliszew": {
+    "address": [
+      "Komisariat Policji w Wieliszewie",
+      "ul. Aleja Solidarności 25",
+      "05-135 Wieliszew"
+    ],
+    "email": "dzielnicowy.wieliszew14@ksp.policja.gov.pl"
+  },
+  "Wołów": {
+    "address": [
+      "Komenda Powiatowa Policji w Wołowie",
+      "ul. Piłsudskiego 23",
+      "56-100 Wołów"
+    ],
+    "email": "kpp@wolow.wr.policja.gov.pl"
+  },
+  "Kołobrzeg": {
+    "address": [
+      "Komenda Powiatowa Policji w Kołobrzegu",
+      "ul. Kilińskiego 20",
+      "78-100 Kołobrzeg"
+    ],
+    "email": "sekretariat.kolobrzeg@sc.policja.gov.pl"
+  },
+  "Opoczno": {
+    "address": [
+      "Straż Miejska w Opocznie",
+      "ul. Piotrkowska 7",
+      "26-300 Opoczno"
+    ],
+    "email": "straz.miejska@um.opoczno.pl"
+  },
+  "Drzewica": {
+    "address": [
+      "Posterunek Policji w Drzewicy",
+      "ul. Gen. Wł. Sikorskiego 1",
+      "26-340 Drzewica"
+    ],
+    "email": "dyzurny@opoczno.ld.policja.gov.pl"
+  },
+  "Nowogard": {
+    "address": [
+      "Komisariat Policji w Nowogardzie",
+      "ul. Wojska Polskiego 9",
+      "72-200 Nowogard"
+    ],
+    "email": "sekretariat.goleniow@sc.policja.gov.pl"
+  },
+  "Myszków": {
+    "address": [
+      "Straż Miejska w Myszkowie",
+      "ul. Kościuszki 26",
+      "42-300 Myszków"
+    ],
+    "email": "straz_miejska@miastomyszkow.pl"
+  },
+  "Nowy Sącz": {
+    "address": [
+      "Straż Miejska w Nowym Sączu",
+      "ul. Lwowska 71",
+      "33-300 Nowy Sącz"
+    ],
+    "email": "ksm@nowysacz.pl"
+  },
+  "Końskie": {
+    "address": [
+      "Straż Miejska w Końskich",
+      "ul. Partyzantów 1",
+      "26-200 Końskie"
+    ],
+    "email": "sm@umkonskie.pl"
+  },
+  "Morąg": {
+    "address": [
+      "Straż Miejska w Morągu",
+      "ul. Dworcowa 7",
+      "14-300 Morąg"
+    ],
+    "email": "smmorag@wp.pl",
+    "hint": "Wstępne informacje są dość pesymistyczne. Komendant twierdzi, że e-mail może nie wystarczyć do zgłoszenia."
+  },
+  "Pyskowice": {
+    "address": [
+      "Straż Miejska w Pyskowicach",
+      "ul. Strzelców Bytomskich 3",
+      "44-120 Pyskowice"
+    ],
+    "email": "sm@pyskowice.pl",
+    "hint": "Niestety SM Pyskowice wzywa każdego zgłaszającego na przesłuchanie."
+  },
+  "Oleśnica": {
+    "address": [
+      "Komenda Powiatowa Policji w Oleśnicy",
+      "ul. Generała Józefa Hallera 3",
+      "56-400 Oleśnica"
+    ],
+    "email": "dyzurny@olesnica.wr.policja.gov.pl"
+  },
+  "Borkowo": {
+    "address": [
+      "Straż Gminna Gminy Pruszcz Gdański",
+      "ul. Spacerowa 8",
+      "83-031 Łęgowo"
+    ],
+    "email": "strazgminna@pruszczgdanski.pl"
+  },
+  "Lębork": {
+    "address": [
+      "Straż Miejska w Lęborku",
+      "ul. Armii Krajowej 14",
+      "84-300 Lębork"
+    ],
+    "email": "strazmiejska.lebork@wp.pl"
+  },
+  "Kolbudy": {
+    "address": [
+      "Straż Gminna Kolbudy",
+      "ul. Polna 55",
+      "83-050 Kolbudy"
+    ],
+    "email": "strazgminna@ug.kolbudy.pl"
+  },
+  "Sanok": {
+    "address": [
+      "Straż Miejska Sanok",
+      "ul. Rynek 7",
+      "38-500 Sanok"
+    ],
+    "email": "sm@um.sanok.pl"
+  },
+  "Racibórz": {
+    "address": [
+      "Straż Miejska w Raciborzu",
+      "ul. Króla Stefana Batorego 6",
+      "47-400 Racibórz"
+    ],
+    "email": "sm@um.raciborz.pl"
+  },
+  "Brzeg": {
+    "address": [
+      "Straż Miejska w Brzegu",
+      "ul. Robotnicza 12",
+      "49-300 Brzeg"
+    ],
+    "email": "sm@brzeg.pl"
+  },
+  "Głogów": {
+    "address": [
+      "Komenda Powiatowa Policji w Głogowie",
+      "ul. Obrońców Pokoju 17",
+      "67-200 Głogów"
+    ],
+    "email": "kpp@glogow.wr.policja.gov.pl"
+  },
+  "Dobra": {
+    "address": [
+      "Straż Gminna w Dobrej z siedzibą w Wołczkowie",
+      "ul. Lipowa 51 Wołczkowo",
+      "72-003 Dobra"
+    ],
+    "email": "strazgminna@dobraszczecinska.pl"
+  },
+  "Krzeszowice": {
+    "address": [
+      "Straż Miejska Gminy Krzeszowice",
+      "pl. F. Kulczyckiego 1",
+      "32-065 Krzeszowice"
+    ],
+    "email": "strazmiejska@um.krzeszowice.pl"
+  },
+  "Bochnia": {
+    "address": [
+      "Straż Miejska w Bochni",
+      "ul. Regis 2",
+      "32-700 Bochnia"
+    ],
+    "email": "straz@straznicy.bochnia.pl"
+  },
+  "Nowy Dwór Gdański": {
+    "address": [
+      "Straż Miejska Nowy Dwór Gdański",
+      "ul. Warszawska 28A",
+      "82-100 Nowy Dwór Gdański"
+    ],
+    "email": "straz.miejska@miastonowydwor.pl"
+  },
+  "Włocławek": {
+    "address": [
+      "Straż Miejska we Włocławku",
+      "ul. Bojańczyka 11/13",
+      "87-800 Włocławek"
+    ],
+    "email": "straz.miejska@um.wloclawek.pl"
+  },
+  "Stargard": {
+    "address": [
+      "Straż Miejska we Stargardzie",
+      "ul. Pierwszej Brygady 35",
+      "73-110 Stargard"
+    ],
+    "email": "straz@um.stargard.pl"
+  },
+  "Chodzież": {
+    "address": [
+      "Komenda Powiatowa Policji w Chodzieży",
+      "ul. Wiosny Ludów 14",
+      "64-800 Chodzież"
+    ],
+    "email": "dyzurny.chodziez@po.policja.gov.pl"
+  },
+  "Gniezno": {
+    "address": [
+      "Straż Miejska w Gnieźnie",
+      "ul. Pocztowa 11",
+      "62-200 Gniezno"
+    ],
+    "email": "dyzurnystrazmiejska@gniezno.eu"
+  },
+  "Kłodzko": {
+    "address": [
+      "Straż Miejska w Kłodzku",
+      "pl. Bolesława Chrobrego 1",
+      "57-300 Kłodzko"
+    ],
+    "email": "sm-klodzko@o2.pl"
+  },
+  "Jelonki": {
+    "address": [
+      "Komenda Powiatowa Policji w Piasecznie",
+      "ul. Kościelna 3",
+      "05-500 Piaseczno"
+    ],
+    "email": "dyzurny.piaseczno@ksp.policja.gov.pl"
+  },
+  "Luboń": {
+    "address": [
+      "Straż Miejska w Luboniu",
+      "ul. Dworcowa 1",
+      "62-030 Luboń"
+    ],
+    "email": "straz.miejska@lubon.pl"
+  },
+  "Strzelce Opolskie": {
+    "address": [
+      "Komenda Powiatowa Policji w Strzelcach Opolskich",
+      "ul. Piłsudskiego 3",
+      "47-100 Strzelce Opolskie"
+    ],
+    "email": "dyzurny.st@op.policja.gov.pl",
+    "hint": "Komenda w Strzelcach Opolskich przyjmuje zgłoszenia i nie wzywa na przesłuchania z automatu. Wzywa tylko, jeżeli w zgłoszeniu są błędy, albo sprawca nie przyznał się. Ogólnie wezwania są rzadkością, 2-3 wezwania na sto zgłoszeń."
+  },
+  "Trzebnica": {
+    "address": [
+      "Straż Miejska w Trzebnicy",
+      "pl. Marszałka Józefa Piłsudskiego 1",
+      "55-100 Trzebnica"
+    ],
+    "email": "strazmiejska@um.trzebnica.pl"
+  },
+  "Gryfice": {
+    "address": [
+      "Straż Miejska Gryfice",
+      "pl. Zwycięstwa 37",
+      "72-300 Gryfice"
+    ],
+    "email": "straz.miejska@urzad.gryfice.eu"
+  },
+  "Tarnowo Podgórne": {
+    "address": [
+      "Straż Gminna Tarnowo Podgórne",
+      "ul. Słoneczna 4",
+      "62-080 Tarnowo Podgórne"
+    ],
+    "email": "sg@tarnowo-podgorne.pl"
+  },
+  "Malbork": {
+    "address": [
+      "Straż Miejska Malbork",
+      "pl. Słowiański 5",
+      "82-200 Malbork"
+    ],
+    "email": "strazm@um.malbork.pl"
+  },
+  "Sokółka": {
+    "address": [
+      "Straż Miejska w Sokółce",
+      "pl. Kościuszki 15",
+      "16-100 Sokółka"
+    ],
+    "email": "sm@sokolka.pl"
+  },
+  "Biała Podlaska": {
+    "address": [
+      "Straż Miejska Biała Podlaska",
+      "al. 1000-lecia 22",
+      "21-500 Biała Podlaska"
+    ],
+    "email": "strazmiejska@bialapodlaska.pl"
+  },
+  "Ożarowice": {
+    "address": [
+      "Komenda Powiatowa Policji w Tarnowskich Górach",
+      "ul. Bytomska 6",
+      "42-600 Tarnowskie Góry"
+    ],
+    "email": "dyzurny@tarnowskie-gory.ka.policja.gov.pl"
+  },
+  "Środa Śląska": {
+    "address": [
+      "Straż Miejska w Środzie Śląskiej",
+      "pl. Wolności 4a",
+      "55-300 Środa Śląska"
+    ],
+    "email": "sm@srodaslaska.pl"
+  },
+  "Łeba": {
+    "address": [
+      "Straż Miejska w Łebie",
+      "ul. Kościuszki 90",
+      "84-360 Łeba"
+    ],
+    "email": "strazmiejska@leba.eu"
+  },
+  "Gogolin": {
+    "address": [
+      "Straż Miejska w Gogolinie",
+      "ul. Krapkowicka 4",
+      "47-320 Gogolin"
+    ],
+    "email": "straz.miejska@gogolin.pl"
+  },
+  "Prudnik": {
+    "address": [
+      "Straż Miejska w Prudniku",
+      "ul. Tadeusza Kościuszki 3",
+      "48-200 Prudnik"
+    ],
+    "email": "strazmiejska@prudnik.pl"
+  },
+  "Prószków": {
+    "address": [
+      "Posterunek Policji w Prószkowie",
+      "ul. Opolska 10",
+      "46-060 Prószków"
+    ],
+    "email": "dzielnicowy.cmentarna18@op.policja.gov.pl"
+  },
+  "Stąporków": {
+    "address": [
+      "Komisariat Policji w Stąporkowie",
+      "pl. Wolności 1",
+      "26-220 Stąporków"
+    ],
+    "email": "komendant.staporkow@ki.policja.gov.pl"
+  },
+  "Pobiedziska": {
+    "address": [
+      "Komisariat Policji w Pobiedziskach",
+      "ul. Tysiąclecia 9",
+      "62-010 Pobiedziska"
+    ],
+    "email": "komendant.pobiedziska@po.policja.gov.pl"
+  },
+  "Ostróda": {
+    "address": [
+      "Straż Miejska w Ostródzie",
+      "ul. Mickiewicza 24",
+      "14-100 Ostróda"
+    ],
+    "email": "um@um.ostroda.pl"
+  },
+  "Niemodlin": {
+    "address": [
+      "Komisariat Policji w Niemodlinie",
+      "ul. Bohaterów Powstań Śląskich 43",
+      "49-100 Niemodlin"
+    ],
+    "email": "dzielnicowy.niemodlin53@op.policja.gov.pl"
+  },
+  "Zambrów": {
+    "address": [
+      "Komenda Powiatowa Policji w Zambrowie",
+      "al. Wojska Polskiego 4a",
+      "18-300 Zambrów"
+    ],
+    "email": "kpp@zambrow.bk.policja.gov.pl"
+  },
+  "Chojnice": {
+    "address": [
+      "Straż Miejska w Chojnicach",
+      "Stary Rynek 1",
+      "89-600 Chojnice"
+    ],
+    "email": "sm@miastochojnice.pl"
+  },
+  "Śrem": {
+    "address": [
+      "Straż Miejska w Śremie",
+      "ul. Adama Mickiewicza 10",
+      "63-100 Śrem"
+    ],
+    "email": "dyzurny@strazmiejska.srem.pl"
+  },
+  "Jędrzejów": {
+    "address": [
+      "Straż Miejska w Jędrzejowie",
+      "ul. 11 Listopada 33",
+      "28-300 Jędrzejów"
+    ],
+    "email": "strazmiejska@umjedrzejow.pl"
+  },
+  "Szklarska Poręba": {
+    "address": [
+      "Straż Miejska w Szklarskiej Porębie",
+      "ul. Jedności Narodowej 32",
+      "58-580 Szklarska Poręba"
+    ],
+    "email": "strazmiejska@szklarskaporeba.pl"
+  },
+  "Miękinia": {
+    "address": [
+      "Straż Gminna Miękinia",
+      "ul. Kościuszki 41",
+      "55-330 Miękinia"
+    ],
+    "email": "sg@miekinia.pl"
   }
 }
