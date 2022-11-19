@@ -70,19 +70,10 @@
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": "Mail"
   },
-  "bielany": {
-    "address": [
-      "V Oddział Terenowy",
-      "Straży Miejskiej m.st. Warszawy",
-      "ul. Szegedyńska 13a",
-      "01-957 Warszawa"
-    ],
-    "email": "ot5@strazmiejska.waw.pl",
-    "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+  "Bielany": {
+    "parent": "Warszawa_ot5"
   },
-  "warszawa_ot5": {
+  "Warszawa_ot5": {
     "address": [
       "V Oddział Terenowy",
       "Straży Miejskiej m.st. Warszawy",
@@ -118,17 +109,8 @@
     "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
     "api": "Mail"
   },
-  "warsaw": {
-    "address": [
-      "Referat Oskarżycieli Publicznych",
-      "Straży Miejska m.st. Warszawy",
-      "ul. Młynarska 43/45",
-      "01-170 Warszawa"
-    ],
-    "email": "csk@strazmiejska.waw.pl",
-    "city": "Warszawa",
-    "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.",
-    "api": "Mail"
+  "Warsaw": {
+    "parent": "Warszawa"
   },
   "wrocław": {
     "address": [
@@ -141,17 +123,7 @@
     "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
     "api": "Mail"
   },
-  "wrocław-psie pole": {
-    "address": [
-      "Straż Miejska Wrocławia",
-      "ul. Na Grobli 14/16",
-      "50-421 Wrocław"
-    ],
-    "email": "straz@strazmiejska.wroclaw.pl",
-    "city": "Wrocław",
-    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
-    "api": "Mail"
-  },
+  "Wrocław-Psie Pole": { "parent": "Wrocław" },
   "kraków": {
     "address": [
       "Straż Miejska Miasta Krakowa",
@@ -339,17 +311,7 @@
     "hint": null,
     "api": "Mail"
   },
-  "łężyca": {
-    "address": [
-      "Straż Miejska Zielona Góra",
-      "ul. Bohaterów Westerplatte 23",
-      "65-078 Zielona Góra"
-    ],
-    "email": "dyzurny@um.zielona-gora.pl",
-    "city": "Zielona Góra",
-    "hint": null,
-    "api": "Mail"
-  },
+  "Łężyca": { "parent": "Zielona Góra" },
   "olsztyn": {
     "address": [
       "Straż Miejska w Olsztynie",
@@ -471,40 +433,7 @@
     "hint": null,
     "api": "Mail"
   },
-  "nowa iwiczna": {
-    "address": [
-      "Straż Miejska Piaseczno",
-      "ul. Czajewicza 1a",
-      "05-500 Piaseczno"
-    ],
-    "email": "strazmiejska@piaseczno.eu",
-    "city": "Nowa Iwiczna",
-    "hint": "Miejscowość Nowa Iwiczna obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
-  },
-  "gołków": {
-    "address": [
-      "Straż Miejska Piaseczno",
-      "ul. Czajewicza 1a",
-      "05-500 Piaseczno"
-    ],
-    "email": "strazmiejska@piaseczno.eu",
-    "city": "Gołków",
-    "hint": "Miejscowość Gołków obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
-  },
-  "zalesie górne": {
-    "address": [
-      "Straż Miejska Piaseczno",
-      "ul. Czajewicza 1a",
-      "05-500 Piaseczno"
-    ],
-    "email": "strazmiejska@piaseczno.eu",
-    "city": "Zalesie Górne",
-    "hint": "Miejscowość Zalesie Górne obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
-  },
-  "piaseczno": {
+  "Piaseczno": {
     "address": [
       "Straż Miejska Piaseczno",
       "ul. Czajewicza 1a",
@@ -514,6 +443,18 @@
     "city": "Piaseczno",
     "hint": null,
     "api": "Mail"
+  },
+  "Mowa Iwiczna": {
+    "parent": "Piaseczno"
+  },
+  "Gołków": {
+    "parent": "Piaseczno"
+  },
+  "Zalesie Górne": {
+    "parent": "Piaseczno"
+  },
+  "Józefosław": {
+    "parent": "Piaseczno"
   },
   "kalisz": {
     "address": [
@@ -548,18 +489,7 @@
     "hint": null,
     "api": "Mail"
   },
-  "niechorze": {
-    "address": [
-      "Straż Gminna w Rewalu",
-      "ul. Mickiewicza 21",
-      "72-344 Rewal"
-    ],
-    "email": "strazgminna@rewal.pl",
-    "city": "Niechorze",
-    "hint": null,
-    "api": "Mail"
-  },
-  "rewal": {
+  "Rewal": {
     "address": [
       "Straż Gminna w Rewalu",
       "ul. Mickiewicza 21",
@@ -570,6 +500,7 @@
     "hint": null,
     "api": "Mail"
   },
+  "Niechorze": { "parent": "Rewal" },
   "mysłowice": {
     "address": [
       "Straż Miejska Mysłowice",
@@ -812,16 +743,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "rotmanka": {
-    "address": [
-      "Straż Gminna Gminy Pruszcz Gdański",
-      "ul. Spacerowa 8",
-      "83-031 Łęgowo"
-    ],
-    "email": "strazmiejska@pruszcz-gdanski.pl",
-    "city": "Rotmanka",
-    "hint": null,
-    "api": "Mail"
+  "Rotmanka": {
+    "parent": "Pruszcz Gdański"
   },
   "mikołów": {
     "address": [
@@ -1010,6 +933,9 @@
     "hint": null,
     "api": "Mail"
   },
+  "Mokronos Dolny": {
+    "parent": "Kąty Wrocławskie"
+  },
   "smolec": {
     "address": [
       "Komisariat Policji w Smolcu",
@@ -1018,18 +944,6 @@
     ],
     "email": "dzielnicowy.katy-wroclawskie2@wroclaw.wr.policja.gov.pl",
     "city": "Smolec",
-    "hint": null,
-    "api": "Mail"
-  },
-
-  "mokronos dolny": {
-    "address": [
-      "Komisariat Policji w Kątach Wrocławskich",
-      "ul. 1-go Maja 16",
-      "55-080 Kąty Wrocławskie"
-    ],
-    "email": "dzielnicowy.katy-wroclawskie3@wroclaw.wr.policja.gov.pl",
-    "city": "Kąty Wrocławskie",
     "hint": null,
     "api": "Mail"
   },
@@ -1110,27 +1024,11 @@
     "hint": null,
     "api": "Mail"
   },
-  "święta katarzyna": {
-    "address": [
-      "Straż Miejska w Siechnicach",
-      "ul. Kolejowa 3",
-      "55-010 Święta Katarzyna"
-    ],
-    "email": "strazmiejska@umsiechnice.pl",
-    "city": "Święta Katarzyna",
-    "hint": null,
-    "api": "Mail"
+  "Święta Katarzyna": {
+    "parent": "Siechnice"
   },
-  "żerniki wrocławskie": {
-    "address": [
-      "Straż Miejska w Siechnicach",
-      "ul. Kolejowa 3",
-      "55-010 Święta Katarzyna"
-    ],
-    "email": "strazmiejska@umsiechnice.pl",
-    "city": "Żerniki Wrocławskie",
-    "hint": null,
-    "api": "Mail"
+  "Żerniki Wrocławskie": {
+    "parent": "Siechnice"
   },
   "sędławki": {
     "address": [
@@ -1154,16 +1052,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "górzyca": {
-    "address": [
-      "Straż Miejska w Słubicach",
-      "ul. Akademicka 1",
-      "69-100 Słubice"
-    ],
-    "email": "sm@slubice.pl",
-    "city": "Górzyca",
-    "hint": null,
-    "api": "Mail"
+  "Górzyca": {
+    "parent": "Słubice"
   },
   "ciechanów": {
     "address": [
@@ -1198,16 +1088,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "dzierzgoń": {
-    "address": [
-      "Straż Miejska w Dzierzgoniu",
-      "Plac Wolności 1",
-      "82-440 Dzierzgoń"
-    ],
-    "email": "sm@dzierzgon.pl",
-    "city": "Dzierzgoń",
-    "hint": null,
-    "api": "Mail"
+  "Dzierzgoń": {
+    "parent": "Dzierżoniów"
   },
   "kobierzyce": {
     "address": [
@@ -1275,16 +1157,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "zatom nowy": {
-    "address": [
-      "Straż Miejska Międzychód",
-      "ul. Marszałka Piłsudskiego 2",
-      "64-400 Międzychód"
-    ],
-    "email": "strazmiejska@miedzychod.pl",
-    "city": "Zatom Nowy",
-    "hint": null,
-    "api": "Mail"
+  "Zatom Nowy": {
+    "parent": "Międzychód"
   },
   "mosina": {
     "address": [
@@ -1297,16 +1171,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "krosno-wlkp": {
-    "address": [
-      "Straż Miejska Mosina",
-      "ul. Krotowskiego 16",
-      "62-050 Mosina"
-    ],
-    "email": "straz.miejska@mosina.pl",
-    "city": "Krosno",
-    "hint": null,
-    "api": "Mail"
+  "Krosno-Wlkp": {
+    "parent": "Mosina"
   },
   "krosno": {
     "address": [
@@ -1407,16 +1273,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "kurozwęki": {
-    "address": [
-      "Straż Miejska Staszów",
-      "ul. Opatowska 31",
-      "28-200 Staszów"
-    ],
-    "email": "joanna.tutak@staszow.pl",
-    "city": "Kurozwęki",
-    "hint": "Miejscowość Kurozwęki podlega pod SM Staszów.",
-    "api": "Mail"
+  "Kurozwęki": {
+    "parent": "Staszów"
   },
   "dębica": {
     "address": [
@@ -1550,16 +1408,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "harbutowice": {
-    "address": [
-      "Straż Miejska w Myślenicach",
-      "ul. Rynek 8/9",
-      "32-400 Myślenice"
-    ],
-    "email": "info@myslenice.pl",
-    "city": "Harbutowice",
-    "hint": null,
-    "api": "Mail"
+  "Harbutowice": {
+    "parent": "Myślenice"
   },
   "żagań": {
     "address": [
@@ -1726,16 +1576,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "karczew": {
-    "address": [
-      "Komenda Powiatowa Policji w Otwocku",
-      "ul. Pułaskiego 7a",
-      "05-400 Otwock"
-    ],
-    "email": "dyzurny.otwock@ksp.policja.gov.pl",
-    "city": "Otwock",
-    "hint": null,
-    "api": "Mail"
+  "Karczew": {
+    "parent": "Otwock"
   },
   "józefów": {
     "address": [
@@ -1781,16 +1623,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "parzniew": {
-    "address": [
-      "Straż Miejska w Brwinowie",
-      "ul. Grodziska 12",
-      "05-840 Brwinów"
-    ],
-    "email": "straz.miejska@brwinow.pl",
-    "city": "Parzniew",
-    "hint": "Parzniew jest obsługiwany przez SM w Brwinowie",
-    "api": "Mail"
+  "Parzniew": {
+    "parent": "Brwinów"
   },
   "grodzisk mazowiecki": {
     "address": [
@@ -2012,27 +1846,11 @@
     "hint": null,
     "api": "Mail"
   },
-  "pilchowo": {
-    "address": [
-      "Straż Miejska w Policach",
-      "ul. Tanowska 8",
-      "72-010 Police"
-    ],
-    "email": "strazmiejska@police.pl",
-    "city": "Police",
-    "hint": null,
-    "api": "Mail"
+  "Pilchowo": {
+    "parent": "Police"
   },
-  "tanowo": {
-    "address": [
-      "Straż Miejska w Policach",
-      "ul. Tanowska 8",
-      "72-010 Police"
-    ],
-    "email": "strazmiejska@police.pl",
-    "city": "Police",
-    "hint": null,
-    "api": "Mail"
+  "Tanowo": {
+    "parent": "Police"
   },
   "grodkowo": {
     "address": [
@@ -2089,16 +1907,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "rosówek": {
-    "address": [
-      "Straż Gminna w Kołbaskowie",
-      "Rosówek nr 16",
-      "72-001 Kołbaskowo"
-    ],
-    "email": "straz.gminna@kolbaskowo.pl",
-    "city": "Rosówek",
-    "hint": null,
-    "api": "Mail"
+  "Rosówek": {
+    "parent": "Kołbaskowo"
   },
   "bolesławiec": {
     "address": [
@@ -2144,16 +1954,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "plewiska": {
-    "address": [
-      "Straż Gminna Komorniki",
-      "ul. Młyńska 15",
-      "62-052 Komorniki"
-    ],
-    "email": "strazgminna@komorniki.pl",
-    "city": "Plewiska",
-    "hint": null,
-    "api": "Mail"
+  "Plewiska": {
+    "parent": "Komorniki"
   },
   "komorniki": {
     "address": [
@@ -2276,16 +2078,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "podzamcze": {
-    "address": [
-      "Komisariat Policji w Ogrodzieńcu",
-      "pl. Wolności 23",
-      "42-440 Ogrodzieniec"
-    ],
-    "email": "ogrodzieniec@zawiercie.ka.policja.gov.pl",
-    "city": "Podzamcze",
-    "hint": null,
-    "api": "Mail"
+  "Podzamcze": {
+    "parent": "Ogrodzieniec"
   },
   "olsztynek": {
     "address": [
@@ -2331,16 +2125,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "koziegłowy": {
-    "address": [
-      "Straż Gminna Czerwonak",
-      "Osiedle Leśne 16",
-      "62-028 Koziegłowy"
-    ],
-    "email": "straz@czerwonak.pl",
-    "city": "Koziegłowy",
-    "hint": null,
-    "api": "Mail"
+  "Koziegłowy": {
+    "parent": "Czerwonak"
   },
   "ostrów wielkopolski": {
     "address": [
@@ -2408,16 +2194,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "soczewka": {
-    "address": [
-      "Komenda Miejska Policji w Płocku",
-      "al. Kilińskiego 8",
-      "09-400 Płock"
-    ],
-    "email": "kmpplock@ra.policja.gov.pl",
-    "city": "Nowy Duninów",
-    "hint": null,
-    "api": "Mail"
+  "Soczewka": {
+    "parent": "Nowy Duninów"
   },
   "dopiewo": {
     "address": [
@@ -2430,16 +2208,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "konarzewo": {
-    "address": [
-      "Komenda Straży Gminnej",
-      "ul. Leśna 2a",
-      "62-070 Dopiewo"
-    ],
-    "email": "strazgminna@dopiewo.pl",
-    "city": "Dopiewo",
-    "hint": null,
-    "api": "Mail"
+  "Konarzewo": {
+    "parent": "Dopiewo"
   },
   "człuchów": {
     "address": [
@@ -2452,17 +2222,7 @@
     "hint": null,
     "api": "Mail"
   },
-  "józefosław": {
-    "address": [
-      "Straż Miejska w Piasecznie",
-      "ul. Czajewicza 1a",
-      "05-500 Piaseczno"
-    ],
-    "email": "strazmiejska@piaseczno.eu",
-    "city": "Józefosław",
-    "hint": "Miejscowość Józefosław obsługuje Straż Miejska Piaseczno.",
-    "api": "Mail"
-  },
+
   "zawiercie": {
     "address": [
 		"Straż Miejska Zawiercie",
@@ -2496,17 +2256,6 @@
     "hint": null,
     "api": "Mail"
   },
-  "kałuszyn": {
-    "address": [
-      "Komisariat Policji w Wieliszewie",
-      "ul. Aleja Solidarności 25",
-      "05-135 Wieliszew"
-    ],
-    "email": "dzielnicowy.wieliszew14@ksp.policja.gov.pl",
-    "city": "Wieliszew",
-    "hint": null,
-    "api": "Mail"
-  },
   "wieliszew": {
     "address": [
       "Komisariat Policji w Wieliszewie",
@@ -2517,6 +2266,9 @@
     "city": "Wieliszew",
     "hint": null,
     "api": "Mail"
+  },
+  "kałuszyn": {
+    "parent": "Wieliszew"
   },
   "wołów": {
     "address": [
@@ -2639,16 +2391,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "spalice": {
-    "address": [
-      "Komenda Powiatowa Policji w Oleśnicy",
-      "ul. Generała Józefa Hallera 3",
-      "56-400 Oleśnica"
-    ],
-    "email": "dyzurny@olesnica.wr.policja.gov.pl",
-    "city": "Spalice",
-    "hint": null,
-    "api": "Mail"
+  "Spalice": {
+    "parent": "Oleśnica"
   },
   "borkowo": {
     "address": [
@@ -2683,16 +2427,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "kowale": {
-    "address": [
-      "Straż Gminna Kolbudy",
-      "ul. Polna 55",
-      "83-050 Kolbudy"
-    ],
-    "email": "strazgminna@ug.kolbudy.pl",
-    "city": "Kolbudy",
-    "hint": null,
-    "api": "Mail"
+  "Kowale": {
+    "parent": "Kolbudy"
   },
   "sanok": {
     "address": [
@@ -2749,16 +2485,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "wołczkowo": {
-    "address": [
-      "Straż Gminna w Dobrej z siedzibą w Wołczkowie",
-      "ul. Lipowa 51 Wołczkowo",
-		  "72-003 Dobra"
-    ],
-    "email": "strazgminna@dobraszczecinska.pl",
-    "city": "Wołczkowo",
-    "hint": null,
-    "api": "Mail"
+  "Wołczkowo": {
+    "parent": "Dobra"
   },
   "krzeszowice": {
     "address": [
@@ -2859,16 +2587,8 @@
     "hint": null,
     "api": "Mail"
   },
-  "julianów": {
-    "address": [
-      "Komenda Powiatowa Policji w Piasecznie",
-      "ul. Kościelna 3",
-      "05-500 Piaseczno"
-    ],
-    "email": "dyzurny.piaseczno@ksp.policja.gov.pl",
-    "city": "Julianów",
-    "hint": null,
-    "api": "Mail"
+  "Julianów": {
+    "parent": "Jelonki"
   },
   "luboń": {
     "address": [
@@ -2892,60 +2612,20 @@
     "hint": "Komenda w Strzelcach Opolskich przyjmuje zgłoszenia i nie wzywa na przesłuchania z automatu. Wzywa tylko, jeżeli w zgłoszeniu są błędy, albo sprawca nie przyznał się. Ogólnie wezwania są rzadkością, 2-3 wezwania na sto zgłoszeń.",
     "api": "Mail"
   },
-  "zawadzkie": {
-    "address": [
-      "Komenda Powiatowa Policji w Strzelcach Opolskich",
-      "ul. Piłsudskiego 3",
-      "47-100 Strzelce Opolskie"
-    ],
-    "email": "dyzurny.st@op.policja.gov.pl",
-    "city": "Strzelce Opolskie",
-    "hint": null,
-    "api": "Mail"
+  "Zawadzkie": {
+    "parent": "Strzelce Opolskie"
   },
-  "kolonowskie": {
-    "address": [
-      "Komenda Powiatowa Policji w Strzelcach Opolskich",
-      "ul. Piłsudskiego 3",
-      "47-100 Strzelce Opolskie"
-    ],
-    "email": "dyzurny.st@op.policja.gov.pl",
-    "city": "Strzelce Opolskie",
-    "hint": null,
-    "api": "Mail"
+  "Kolonowskie": {
+    "parent": "Strzelce Opolskie"
   },
-  "leśnica": {
-    "address": [
-      "Komenda Powiatowa Policji w Strzelcach Opolskich",
-      "ul. Piłsudskiego 3",
-      "47-100 Strzelce Opolskie"
-    ],
-    "email": "dyzurny.st@op.policja.gov.pl",
-    "city": "Strzelce Opolskie",
-    "hint": null,
-    "api": "Mail"
+  "Leśnica": {
+    "parent": "Strzelce Opolskie"
   },
-  "jemielnica": {
-    "address": [
-      "Komenda Powiatowa Policji w Strzelcach Opolskich",
-      "ul. Piłsudskiego 3",
-      "47-100 Strzelce Opolskie"
-    ],
-    "email": "dyzurny.st@op.policja.gov.pl",
-    "city": "Strzelce Opolskie",
-    "hint": null,
-    "api": "Mail"
+  "Jemielnica": {
+    "parent": "Strzelce Opolskie"
   },
-  "izbicko": {
-    "address": [
-      "Komenda Powiatowa Policji w Strzelcach Opolskich",
-      "ul. Piłsudskiego 3",
-      "47-100 Strzelce Opolskie"
-    ],
-    "email": "dyzurny.st@op.policja.gov.pl",
-    "city": "Strzelce Opolskie",
-    "hint": null,
-    "api": "Mail"
+  "Izbicko": {
+    "parent": "Strzelce Opolskie"
   },
   "trzebnica": {
     "address": [
@@ -3192,32 +2872,32 @@
     "hint": null,
     "api": "Mail"
   },
-  "białków": { "parent": "miękinia" },
-  "błonie": { "parent": "miękinia" },
-  "brzezina": { "parent": "miękinia" },
-  "brzezinka średzka": { "parent": "miękinia" },
-  "czerna": { "parent": "miękinia" },
-  "gałów": { "parent": "miękinia" },
-  "głoska": { "parent": "miękinia" },
-  "gosławice": { "parent": "miękinia" },
-  "kadłub": { "parent": "miękinia" },
-  "krępice": { "parent": "miękinia" },
-  "lenartowice": { "parent": "miękinia" },
-  "lubiatów": { "parent": "miękinia" },
-  "lutynia": { "parent": "miękinia" },
-  "łowęcice": { "parent": "miękinia" },
-  "mrozów": { "parent": "miękinia" },
-  "pisarzowice": { "parent": "miękinia" },
-  "prężyce": { "parent": "miękinia" },
-  "radakowice": { "parent": "miękinia" },
-  "wilkostów": { "parent": "miękinia" },
-  "wilkszyn": { "parent": "miękinia" },
-  "wojnowice": { "parent": "miękinia" },
-  "wróblowice": { "parent": "miękinia" },
-  "zabór wielki": { "parent": "miękinia" },
-  "zakrzyce": { "parent": "miękinia" },
-  "źródła": { "parent": "miękinia" },
-  "żurawiniec": { "parent": "miękinia" },
+  "Białków": { "parent": "miękinia" },
+  "Błonie": { "parent": "miękinia" },
+  "Brzezina": { "parent": "miękinia" },
+  "Brzezinka Średzka": { "parent": "miękinia" },
+  "Czerna": { "parent": "miękinia" },
+  "Gałów": { "parent": "miękinia" },
+  "Głoska": { "parent": "miękinia" },
+  "Gosławice": { "parent": "miękinia" },
+  "Kadłub": { "parent": "miękinia" },
+  "Krępice": { "parent": "miękinia" },
+  "Lenartowice": { "parent": "miękinia" },
+  "Lubiatów": { "parent": "miękinia" },
+  "Lutynia": { "parent": "miękinia" },
+  "Łowęcice": { "parent": "miękinia" },
+  "Mrozów": { "parent": "miękinia" },
+  "Pisarzowice": { "parent": "miękinia" },
+  "Prężyce": { "parent": "miękinia" },
+  "Radakowice": { "parent": "miękinia" },
+  "Wilkostów": { "parent": "miękinia" },
+  "Wilkszyn": { "parent": "miękinia" },
+  "Wojnowice": { "parent": "miękinia" },
+  "Wróblowice": { "parent": "miękinia" },
+  "Zabór wielki": { "parent": "miękinia" },
+  "Zakrzyce": { "parent": "miękinia" },
+  "Źródła": { "parent": "miękinia" },
+  "Żurawiniec": { "parent": "miękinia" },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",
