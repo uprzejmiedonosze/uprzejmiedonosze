@@ -182,7 +182,7 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
-	@$(shell npm bin)/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
+	$(shell npm bin)/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
 			sed $(SED_OPTS) 's/#009C7F/#ff4081/gi' $@ ; \
@@ -207,10 +207,7 @@ export/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$
 	@jq -c . < $< > $@
 
 export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
-	@jq '.[].address[2]?' < $< | grep -ve "\d\d-\d\d\d .*" | grep -v "null" || echo "(v) $< postal adddresses OK"
-	@jq '.[].email?' < $< | grep -ve "@" | grep -ve "null" || echo "(v) $< email addresses OK"
-	@jq '.[].api' < $< | sort | uniq | egrep -v '^("Mail"|"Poznan"|null)' || echo "(v) $< API values OK"
-	@jq -c . < $< > $@
+	node ./tools/sm-parser.js $< > $@
 
 export/inc/%.php: src/inc/%.php; $(call echo-processing,$<)
 	$(lint)

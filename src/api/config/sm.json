@@ -3124,15 +3124,7 @@
     "api": "Mail"
   },
   "dąbrowa": {
-    "address": [
-      "Komisariat Policji w Niemodlinie",
-      "ul. Bohaterów Powstań Śląskich 43",
-      "49-100 Niemodlin"
-    ],
-    "email": "dzielnicowy.niemodlin53@op.policja.gov.pl",
-    "city": "Niemodlin",
-    "hint": null,
-    "api": "Mail"
+    "parent": "niemodlin"
   },
   "zambrów": {
     "address": [
@@ -3189,6 +3181,43 @@
     "hint": null,
     "api": "Mail"
   },
+  "miękinia": {
+    "address": [
+      "Straż Gminna Miękinia",
+      "ul. Kościuszki 41",
+      "55-330 Miękinia"
+    ],
+    "email": "sg@miekinia.pl",
+    "city": "Miękinia",
+    "hint": null,
+    "api": "Mail"
+  },
+  "białków": { "parent": "miękinia" },
+  "błonie": { "parent": "miękinia" },
+  "brzezina": { "parent": "miękinia" },
+  "brzezinka średzka": { "parent": "miękinia" },
+  "czerna": { "parent": "miękinia" },
+  "gałów": { "parent": "miękinia" },
+  "głoska": { "parent": "miękinia" },
+  "gosławice": { "parent": "miękinia" },
+  "kadłub": { "parent": "miękinia" },
+  "krępice": { "parent": "miękinia" },
+  "lenartowice": { "parent": "miękinia" },
+  "lubiatów": { "parent": "miękinia" },
+  "lutynia": { "parent": "miękinia" },
+  "łowęcice": { "parent": "miękinia" },
+  "mrozów": { "parent": "miękinia" },
+  "pisarzowice": { "parent": "miękinia" },
+  "prężyce": { "parent": "miękinia" },
+  "radakowice": { "parent": "miękinia" },
+  "wilkostów": { "parent": "miękinia" },
+  "wilkszyn": { "parent": "miękinia" },
+  "wojnowice": { "parent": "miękinia" },
+  "wróblowice": { "parent": "miękinia" },
+  "zabór wielki": { "parent": "miękinia" },
+  "zakrzyce": { "parent": "miękinia" },
+  "źródła": { "parent": "miękinia" },
+  "żurawiniec": { "parent": "miękinia" },
   "_nieznane": {
     "address": [
       "(skontaktuj się z autorem: szymon@uprzejmiedonosze.net",

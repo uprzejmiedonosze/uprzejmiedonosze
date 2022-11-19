@@ -1,5 +1,4 @@
 testy
-/tools
 node_modules/*
 functions/node_modules/*
 functions-samples/*
