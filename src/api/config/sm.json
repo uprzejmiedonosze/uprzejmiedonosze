@@ -2257,5 +2257,24 @@
       "55-330 Miękinia"
     ],
     "email": "sg@miekinia.pl"
-  }
+  },
+  "Głuszyca": {
+    "address": [
+      "Komisariat Policji w Głuszycy",
+      "ul. Grunwaldzka 85",
+      "58-340 Głuszyca"
+    ],
+    "email": "dzielnicowy.gluszyca1@walbrzych.wr.policja.gov.pl"
+  },
+  "Jugowice": {
+    "address": [
+      "Komisariat Policji w Głuszycy",
+      "ul. Grunwaldzka 85",
+      "58-340 Głuszyca"
+    ],
+    "email": "dzielnicowy.gluszyca6@walbrzych.wr.policja.gov.pl"
+  },
+  "Niedźwiedzica": { "parent": "Jugowice" },
+  "Olszyniec": { "parent": "Jugowice" },
+  "Zagórze Śląskie": { "parent": "Jugowice" }
 }
