@@ -104,7 +104,7 @@ shadow-sequential: $(DIRS) export
 	$(create-symlink)
 
 prod: HOST := $(PROD_HOST)
-prod: cypress check-branch-master check-git-clean clean $(DIRS) export ## Copy files to prod server.
+prod: cypress check-branch-main check-git-clean clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
@@ -114,7 +114,7 @@ prod: cypress check-branch-master check-git-clean clean $(DIRS) export ## Copy f
 	@make clean
 
 quickfix:  HOST := $(PROD_HOST)
-quickfix: diff-from-last-prod confirmation check-branch-master check-git-clean clean $(DIRS) export ## Quickfix on production
+quickfix: diff-from-last-prod confirmation check-branch-main check-git-clean clean $(DIRS) export ## Quickfix on production
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
@@ -157,9 +157,9 @@ check-git-clean: ## Checks if GIT repository has uncommited changes
 	@echo "==> Checking if the repo is clean"
 	@test "$(shell git status | grep 'nothing to commit' | wc -l)" -eq 1 || ( echo "There are uncommitted changes." && exit 1 )
 
-check-branch-master: ## Checks if GIT is on branch master
-	@echo "==> Checking if current branch is master"
-	@test "$(shell git status | grep 'origin/master' | wc -l)" -eq 1 || ( echo "Not on branch master." && exit 1 )
+check-branch-main: ## Checks if GIT is on branch main
+	@echo "==> Checking if current branch is main"
+	@test "$(shell git status | grep 'origin/main' | wc -l)" -eq 1 || ( echo "Not on branch main." && exit 1 )
 
 check-branch-staging: ## Checks if GIT is on branch staging
 	@echo "==> Checking if current branch is staging"
