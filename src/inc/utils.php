@@ -53,7 +53,9 @@ function exception_handler($exception) {
         ],
         'general' =>
         [
-            'uri' => $_SERVER['REQUEST_URI']
+            'uri' => $_SERVER['REQUEST_URI'],
+            'isProd' => isProd(),
+            'isStaging' => isStaging()
         ],
         'msg' => $msg,
         'exception' => $exception,
