@@ -14,20 +14,20 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV HOME /root
 
-RUN mkdir -p             /var/www/uprzejmiedonosze.localhost
-COPY db                  /var/www/uprzejmiedonosze.localhost/db
-RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/db
-COPY cdn                 /var/www/uprzejmiedonosze.localhost/cdn
-RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn
-RUN mkdir -p             /var/www/uprzejmiedonosze.localhost/cdn2
-RUN chown -R nginx:nginx /var/www/uprzejmiedonosze.localhost/cdn2
-COPY sess_php            /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
-RUN chown nginx:nginx    /var/lib/php/sessions/*
+RUN mkdir -p                   /var/www/uprzejmiedonosze.localhost
+COPY db                        /var/www/uprzejmiedonosze.localhost/db
+RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/db
+COPY cdn                       /var/www/uprzejmiedonosze.localhost/cdn
+RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/cdn
+RUN mkdir -p                   /var/www/uprzejmiedonosze.localhost/cdn2
+RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/cdn2
+COPY sess_php                  /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
+RUN chown www-data:www-data    /var/lib/php/sessions/*
 
-RUN mkdir                /var/log/uprzejmiedonosze.net
-RUN chown nginx:nginx    /var/log/uprzejmiedonosze.net
-RUN mkdir                /var/cache/uprzejmiedonosze.net
-RUN chown nginx:nginx    /var/cache/uprzejmiedonosze.net
+RUN mkdir                      /var/log/uprzejmiedonosze.net
+RUN chown www-data:www-data    /var/log/uprzejmiedonosze.net
+RUN mkdir                      /var/cache/uprzejmiedonosze.net
+RUN chown www-data:www-data    /var/cache/uprzejmiedonosze.net
 
 ADD default.conf         /etc/nginx/conf.d/default.conf
 ADD nginx.conf           /etc/nginx/nginx.conf
