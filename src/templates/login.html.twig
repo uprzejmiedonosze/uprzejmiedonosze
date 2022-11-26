@@ -15,9 +15,6 @@ var uiConfig = {
     'signInSuccessUrl': '%HTTPS%://%HOST%/login-ok.html?next={{ config.signInSuccessUrl }}',
     'callbacks': {
         'signInSuccess': function(user, credential, redirectUrl) {
-            console.log(user, credential, redirectUrl);
-            // The widget has been used in redirect mode, so we redirect to the signInSuccessUrl.
-            //!window.opener
             return true;
         }
     },
@@ -31,15 +28,18 @@ var uiConfig = {
             status: false
         }
     }],
-    // Terms of service url.
     'tosUrl': '%HTTPS%://%HOST%/regulamin.html',
     'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
     'adminRestrictedOperation': { status: false }
 };
 
-// Initialize the FirebaseUI Widget using Firebase.
+{% if config.logout %}
+firebase.auth().signOut();
+window.location.replace('/');
+{% else %}
 var ui = new firebaseui.auth.AuthUI(firebase.auth());
 ui.start('#firebaseui-auth-container', uiConfig);
+{% endif %}
 </script>
 
 
