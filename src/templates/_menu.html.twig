@@ -82,10 +82,10 @@
         <li data-icon="user">
             <a data-ajax="false" {% if config.menu == 'register' %}class="active"{% endif %}
                 href="/register.html?update">Edycja konta</a></li>
-        <li data-ajax="false" data-icon="false" class="subpage">
-            <a href="/login.html?logout">– wyloguj się</a></li>
+        <li data-icon="false" class="subpage">
+            <a href="/login.html?logout" data-ajax="false">– wyloguj się</a></li>
         {% else %}
-        <li data-icon="user"><a href="/start.html">Zaloguj/zarejestruj się</a></li>
+        <li data-icon="user"><a href="/start.html" data-ajax="false">Zaloguj/zarejestruj się</a></li>
         {% endif %}
 
     </ul>
