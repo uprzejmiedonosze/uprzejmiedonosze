@@ -9,6 +9,8 @@ if(isset($_GET['logout'])){
 
 @$next = $_GET['next'];
 
+@$error = $_GET['error'];
+
 echo generate('login.html.twig',
 [
     'head' =>
@@ -19,7 +21,8 @@ echo generate('login.html.twig',
     'config' =>
     [
         'signInSuccessUrl' => $next,
-        'logout' => $logout
+        'logout' => $logout,
+        'error' => $error
     ]
 ]
 );
