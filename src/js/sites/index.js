@@ -2,5 +2,5 @@
 
 $(document).on("pageshow", function () {
   if (!$(".mainPage").length) return;
-  ga("send", "event", { eventCategory: "pageshow", eventAction: "index" });
+  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "index" });
 });

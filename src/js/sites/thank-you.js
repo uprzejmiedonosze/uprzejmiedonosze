@@ -2,5 +2,5 @@
 
 $(document).on("pageshow", function () {
   if (!$(".dziekujemy").length) return;
-  ga("send", "event", { eventCategory: "pageshow", eventAction: "dziekujemy" });
+  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "dziekujemy" });
 });

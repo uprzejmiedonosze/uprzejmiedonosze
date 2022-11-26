@@ -2,7 +2,7 @@
 
 $(document).on("pageshow", function () {
   if (!$(".confirm-application").length) return;
-  ga("send", "event", { eventCategory: "pageshow", eventAction: "potwierdz" });
+  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "potwierdz" });
 
   setTimeout(function () {
     $("a.confirm-send-button").removeClass('ui-disabled')

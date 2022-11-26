@@ -2,5 +2,5 @@
 
 $(document).on("pageshow", function () {
   if (!$(".start-page").length) return;
-  ga("send", "event", { eventCategory: "pageshow", eventAction: "start" });
+  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "start" });
 });

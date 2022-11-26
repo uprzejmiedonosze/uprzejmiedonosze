@@ -14,7 +14,7 @@ $(document).on("pageshow", function () {
   initHandlers();
   initAutocompleteNewApplication();
   if (currentScript) setAddressByLatLngString(currentScript.getAttribute("last-location"));
-  ga("send", "event", {
+  (typeof ga == 'function') && ga("send", "event", {
     eventCategory: "pageshow",
     eventAction: "nowe-zgloszenie"
   });
