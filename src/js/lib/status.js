@@ -8,7 +8,7 @@ export function setStatus(appId, status) {
     _updateStatus(appId, status);
     $.mobile.loading("hide")
   });
-  ga("send", "event", {
+  (typeof ga == 'function') && ga("send", "event", {
     eventCategory: "js",
     eventAction: "setStatus",
     eventLabel: status

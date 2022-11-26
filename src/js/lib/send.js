@@ -17,13 +17,13 @@ window._send = function (appId) {
       $(".afterSend").show();
     }
     $('.ui-btn-right').removeClass("ui-disabled");
-    ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
+    (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
   }).fail(function (e) {
     $.mobile.loading("hide");
     const message = e.responseJSON ? e.responseJSON.message : e.statusText;
     showMessage("Nie udało się wysłać zgłoszenia! " + message, 4000);
     $('.ui-btn-right').removeClass("ui-disabled");
-    ga("send", "event", {
+    (typeof ga == 'function') && ga("send", "event", {
       eventCategory: "js-error",
       eventAction: "sendViaAPI"
     });

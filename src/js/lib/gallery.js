@@ -10,7 +10,7 @@ function addToGallery(appId) {
 
       // application-short.html.twig
       $("#" + appId + " .addToGallery").addClass("ui-disabled");
-      ga("send", "event", { eventCategory: "js", eventAction: "addToGallery" });
+      (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "addToGallery" });
     }
   );
 }
@@ -18,7 +18,7 @@ window.addToGallery = addToGallery;
 
 function ignoreGallery() {
   $("div.addToGallery").hide();
-  ga("send", "event", { eventCategory: "js", eventAction: "ignoreGallery" });
+  (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "ignoreGallery" });
 }
 
 window.ignoreGallery = ignoreGallery;
