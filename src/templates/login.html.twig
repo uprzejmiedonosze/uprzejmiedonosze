@@ -14,7 +14,9 @@
 var uiConfig = {
     'signInSuccessUrl': '%HTTPS%://%HOST%/login-ok.html?next={{ config.signInSuccessUrl }}',
     'callbacks': {
-        'signInSuccess': function(user, credential, redirectUrl) {
+        'signInSuccessWithAuthResult': function(authResult, redirectUrl) {
+            console.log(authResult);
+            console.log(redirectUrl);
             return true;
         }
     },
@@ -23,12 +25,14 @@ var uiConfig = {
         clientId: null
     }, {
         provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        signInMethod: 'password', // password
+        signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+        forceSameDevice: false,
         disableSignUp: {
             status: false
         }
     }],
     'tosUrl': '%HTTPS%://%HOST%/regulamin.html',
+    'privacyPolicyUrl': '%HTTPS%://%HOST%/polityka-prywatnosci.html',
     'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
     'adminRestrictedOperation': { status: false }
 };
