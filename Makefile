@@ -330,5 +330,5 @@ diff-from-last-prod: ## Show list of commit messages from last prod release till
 	@git diff --histogram --color-words $(call last-tag)
 
 define last-tag
-$(shell git show-ref --tags | grep tags/prod_ | tail -n 1 | cut -d" " -f 1)
+$(shell git show-ref --tags | grep tags/prod_main | tail -n 1 | cut -d" " -f 1)
 endef
