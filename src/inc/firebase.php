@@ -12,9 +12,7 @@ use Kreait\Firebase\Exception\Auth\ExpiredToken as ExpiredToken;
 function isLoggedIn(){
     return isset($_SESSION['token'])
         && isset($_SESSION['user_email'])
-        && isset($_SESSION['user_name'])
-        && stripos($_SESSION['user_email'], '@') !== false
-        && mb_strlen($_SESSION['user_name']) > 0;
+        && stripos($_SESSION['user_email'], '@') !== false;
 }
 
 /**
@@ -29,10 +27,10 @@ function verifyToken($token){
 
 		try {
 			$verifiedIdToken = $auth->verifyIdToken($token);
-      $_SESSION['user_email'] = 'e@nieradka.net';
-			if('%HOST%' !== 'uprzejmiedonosze.localhost'){
-        $_SESSION['user_email'] = $verifiedIdToken->claims()->get('email');
-      }
+			$_SESSION['user_email'] = $verifiedIdToken->claims()->get('email');
+			if('%HOST%' === 'uprzejmiedonosze.localhost'){
+				$_SESSION['user_email'] = 'e@nieradka.net';
+			}
 			$_SESSION['user_name'] = $verifiedIdToken->claims()->get('name');
 			$_SESSION['user_picture'] = $verifiedIdToken->claims()->get('picture');
 			$_SESSION['user_id'] = $verifiedIdToken->claims()->get('user_id');
