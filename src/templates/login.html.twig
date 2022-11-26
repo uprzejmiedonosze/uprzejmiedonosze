@@ -10,33 +10,37 @@
 <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
 
 <script type="text/javascript">
-{% if config.logout %}
-    logout();
-{% else %}
-    $( document ).bind( "pagecontainerload", function( e, triggerData ) {
-        $('#login-hint').text('x-redir...');
-        var redirect = triggerData.xhr.getResponseHeader( "X-Redirect" );
-        if ( redirect ) {
-            $( e.target ).pagecontainer( "load", redirect, triggerData.options );
-            e.preventDefault();
+
+var uiConfig = {
+    'signInSuccessUrl': '%HTTPS%://%HOST%/login-ok.html?next={{ config.signInSuccessUrl }}',
+    'callbacks': {
+        'signInSuccess': function(user, credential, redirectUrl) {
+            console.log(user, credential, redirectUrl);
+            // The widget has been used in redirect mode, so we redirect to the signInSuccessUrl.
+            //!window.opener
+            return true;
         }
-    });
+    },
+    'signInOptions': [{
+        provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        clientId: null
+    }, {
+        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        signInMethod: 'password', // password
+        disableSignUp: {
+            status: false
+        }
+    }],
+    // Terms of service url.
+    'tosUrl': '%HTTPS%://%HOST%/regulamin.html',
+    'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
+    'adminRestrictedOperation': { status: false }
+};
 
-    $(document).on("pageshow", function () {
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                window.location.replace('/login-ok.html{% if config.signInSuccessUrl %}?next={{ config.signInSuccessUrl }}{% endif %}');
-            } else {
-                login();
-            }
-        }, function(error) {
-            login();
-        });
-    });
-{% endif %}
-
-    function login(){
-        $('#login-hint').text('Zaloguj się za pomocą konta Google.');
+// Initialize the FirebaseUI Widget using Firebase.
+var ui = new firebaseui.auth.AuthUI(firebase.auth());
+ui.start('#firebaseui-auth-container', uiConfig);
+</script>
 
 
 <h3 id="login-hint">{% if config.logout %}logout{% endif %}{{ config.error ?? '' }}</h3>
@@ -44,11 +48,4 @@
     <div id="firebaseui-auth-container"></div>
 </div>
 
-    function logout(){
-        firebase.auth().signOut().then().catch(function(error) {
-            console.log(error);
-        });
-        window.location.replace('/');
-    }
-</script>
 {% endblock %}

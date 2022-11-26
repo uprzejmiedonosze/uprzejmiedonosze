@@ -9,15 +9,14 @@
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 user.getIdToken().then(function(accessToken) {
-                    $.post('api/api.html',
-                        {
+                    $.post('api/api.html', {
                             action: 'verifyToken',
                             pa: accessToken
                         },
-                        function(data){
+                        function(data) {
                             window.location.replace('{{ config.signInSuccessUrl ?? 'moje-zgloszenia.html' }}');
-                        }).fail(function(){
-                            window.location.replace('/login.html');
+                        }).fail(function(error){
+                            window.location.replace('/login.html?error=' + error);
                         });
                     });
             } else {
@@ -25,13 +24,11 @@
             }
         }, function(error) {
             console.log(error);
-            window.location.replace('/login.html');
+            window.location.replace('/login.html?error=' + error);
         });
     };
 
-    window.addEventListener('load', function() {
-        initApp()
-    });
+    window.addEventListener('load', initApp);
 </script>
 {% endblock %}
 
