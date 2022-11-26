@@ -1,13 +1,12 @@
 {
     "require": {
-        "php": "^7.3|^7.4",
-        "kreait/firebase-php": "^5.19",
+        "php": "^7.4",
+        "kreait/firebase-php": "^6.9",
         "twig/twig": "^3.0",
-        "maknz/slack": "^1.7",
-        "tumblr/tumblr": "^0.4.0",
+        "tumblr/tumblr": "^0.4",
         "swiftmailer/swiftmailer": "^6.0",
-        "sentry/sdk": "^3.1",
-        "lcobucci/jwt": "^4.1"
+        "sentry/sdk": "^3.3",
+        "lcobucci/jwt": "^4.2"
     },
     "require-dev": {
         "phpmd/phpmd": "@stable",
