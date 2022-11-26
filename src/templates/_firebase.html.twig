@@ -1,9 +1,9 @@
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-auth-compat.js"></script>
 
-<script>
+<script type="text/javascript">
 {% if general.isStaging %}
-    var config = {
+    var firebaseConfig = {
         apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
         authDomain: "auth-staging.uprzejmiedonosze.net",
         databaseURL: "https://uprzejmiedonosze-1494607701827.firebaseio.com",
@@ -13,7 +13,7 @@
         appId: "1:509860799944:web:5e24b16b56db3d44d98cfd"
     };
 {% elseif general.isProd %}
-    var config = {
+    var firebaseConfig = {
         apiKey: "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
         authDomain: "auth.uprzejmiedonosze.net",
         databaseURL: "https://uprzejmie-donosze.firebaseio.com",
@@ -23,7 +23,7 @@
         appId: "1:823788795198:web:cc0192100ac2e16324286f"
   };
 {% elseif '%HOST%' == 'uprzejmiedonosze.localhost' %}
-    var config = {
+    var firebaseConfig = {
         apiKey: "AIzaSyA-gv2Ju8TfVc9e18sB898lXp0-4JrVIQ8",
         authDomain: "uprzejmie-donosze-dev.firebaseapp.com",
         databaseURL: "https://uprzejmie-donosze-dev.firebaseio.com",
@@ -32,7 +32,9 @@
         messagingSenderId: "961138564803"
     };
 {% endif %}
-    if (!firebase.apps.length) {
-        firebase.initializeApp(config);
-    }
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
 </script>

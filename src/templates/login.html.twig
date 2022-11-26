@@ -3,10 +3,11 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
-<h3 id="login-hint">{% if config.logout %}logout{% endif %}</h3>
-<div class="ui-body ui-body-a ui-corner-all">
-    <div id="firebaseui-auth-container"></div>
-</div>
+
+{% include('_firebase.html.twig') %}
+
+<script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth__pl.js"></script>
+<link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
 
 <script type="text/javascript">
 {% if config.logout %}
@@ -37,20 +38,11 @@
     function login(){
         $('#login-hint').text('Zaloguj się za pomocą konta Google.');
 
-        firebase.auth().getRedirectResult().then(function(result) {
-            if (result.credential) {
-                var token = result.credential.accessToken;
-            }
-            var user = result.user;
-        });
 
-        var provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('profile');
-        provider.addScope('email');
-        provider.setCustomParameters({ prompt: 'select_account' });
-        firebase.auth().useDeviceLanguage();
-        firebase.auth().signInWithRedirect(provider);
-    }
+<h3 id="login-hint">{% if config.logout %}logout{% endif %}{{ config.error ?? '' }}</h3>
+<div class="ui-body ui-body-a ui-corner-all">
+    <div id="firebaseui-auth-container"></div>
+</div>
 
     function logout(){
         firebase.auth().signOut().then().catch(function(error) {
