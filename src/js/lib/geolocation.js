@@ -91,6 +91,7 @@ const locationToLatLng = function (place) {
 
 export function setAddressByLatLngString(latlng) {
   if (latlng) {
+    latlng = latlng.replace(/(\d+\.\d{6})\d+/g, '$1')
     const ll = latlng.split(",");
     if (ll.length == 2 && !isNaN(ll[0])) {
       initialLocation = ll;
