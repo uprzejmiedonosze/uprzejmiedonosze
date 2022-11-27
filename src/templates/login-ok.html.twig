@@ -5,6 +5,13 @@
 {% include('_firebase.html.twig') %}
 
 <script type="text/javascript">
+    function setError(error) {
+        if (typeof error === "object") {
+            error = JSON.stringify(error);
+        }
+        $("p.error").text(error);
+        $(".ui-footer h4").text("błąd logowania");
+    }
     function initApp() {
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
@@ -16,20 +23,20 @@
                         function(data) {
                             window.location.replace('{{ config.signInSuccessUrl ?? 'moje-zgloszenia.html' }}');
                         }).fail(function(error){
-                            window.location.replace('/login.html?error=' + error);
+                            setError(error);
                         });
                     });
             } else {
-                window.location.replace('/login.html');
+                setError('Error: missing user');
             }
         }, function(error) {
-            console.log(error);
-            window.location.replace('/login.html?error=' + error);
+            setError(error);
         });
     };
 
     window.addEventListener('load', initApp);
 </script>
+<p class="error"></p>
 {% endblock %}
 
 {% block header %}
@@ -40,6 +47,6 @@
 
 {% block footer %}
 <div data-role="footer">
-    <h4>trwa logowanie</h4>
+    <h4>trwa logowanie...</h4>
 </div> <!-- footer -->
 {% endblock %}
