@@ -77,7 +77,7 @@ function logger($msg, $force = null){
 
     $time = date(DT_FORMAT);
     if(!isProd() || $force){
-        error_log($time . $user . "\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%VERSION%.log");
+        error_log($time . $user . "\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
     return $time;
 }
