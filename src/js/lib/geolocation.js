@@ -55,6 +55,8 @@ export function initAutocompleteNewApplication() {
     );
     if (initialLocation.length == 2) {
       locationP.setLocation(initialLocation[0], initialLocation[1]);
+    } else {
+      locationP.setLocation(52.069321, 19.480311);
     }
     google.maps.event.addListener(locationP.map, "idle", function () {
       var location = locationP.getMarkerPosition();
