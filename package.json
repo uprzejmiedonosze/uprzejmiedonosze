@@ -6,32 +6,32 @@
   "engineStrict": true,
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
-    "@googlemaps/js-api-loader": "^1.14.3",
-    "@sentry/browser": "^7.13.0",
-    "@sentry/tracing": "^7.13.0",
+    "@googlemaps/js-api-loader": "^1.15.1",
+    "@sentry/browser": "^7.21.1",
+    "@sentry/tracing": "^7.21.1",
     "blueimp-load-image": "^5.16.0",
     "exif-js": "^2.3.0",
-    "highcharts": "^10.2.1",
+    "highcharts": "^10.3.1",
     "lazysizes": "^5.3.2",
     "location-picker": "^1.1.1",
-    "luxon": "^3.0.3"
+    "luxon": "^3.1.0"
   },
   "devDependencies": {
-    "@parcel/optimizer-data-url": "^2.7.0",
-    "@parcel/transformer-inline-string": "^2.7.0",
-    "@parcel/transformer-sass": "^2.7.0",
-    "@sentry/cli": "^2.5.2",
-    "cypress": "^10.4.0",
-    "eslint": "^8.23.1",
+    "@parcel/optimizer-data-url": "^2.8.0",
+    "@parcel/transformer-inline-string": "^2.8.0",
+    "@parcel/transformer-sass": "^2.8.0",
+    "@sentry/cli": "^2.9.0",
+    "cypress": "^11.2.0",
+    "eslint": "^8.28.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "node-sass": "^7.0.3",
-    "parcel": "^2.7.0",
+    "parcel": "^2.8.0",
     "process": "^0.11.10",
-    "sass": "^1.54.9"
+    "sass": "^1.56.1"
   },
   "name": "uprzejmiedonosze"
 }
