@@ -60,7 +60,7 @@ function get_platerecognizer(&$imageBytes) {
     curl_setopt($chi, CURLOPT_POSTFIELDS, $data);
     curl_setopt($chi, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
 
-    $secretKey = "684f9f53e7e96cd36e18ec2ff9c91a4a49e034fc";
+    $secretKey = PLATERECOGNIZER_SECRET;
 
     curl_setopt($chi, CURLOPT_HTTPHEADER, array(
         "Authorization: Token $secretKey"

@@ -1,7 +1,6 @@
 <?PHP
 require_once(__DIR__ . '/include.php');
 require(__DIR__ . '/openAlpr.php');
-// require(__DIR__ . '/plateRecognizer.php');
 
 /**
  * @SuppressWarnings(PHPMD.MissingImport)
