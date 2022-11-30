@@ -5,14 +5,22 @@ $smAddresses = $SM_ADDRESSES;
 ksort($smAddresses);
 
 $sortedSMs = array();
-
 foreach ($smAddresses as $sm) {
     if($sm->email){
         array_push($sortedSMs, $sm->city);
     }
 }
-
 $sortedSMs = array_unique($sortedSMs, SORT_LOCALE_STRING);
+
+$SMHints = array();
+foreach ($smAddresses as $sm) {
+    if($sm->hint){
+        if(!str_starts_with($sm->hint, 'Miejscowość ')) {
+            $SMHints[$sm->city] = $sm->hint;
+        }
+    }
+}
+$sortedSMHints = array_unique($SMHints, SORT_LOCALE_STRING);
 
 echo generate('faq.html.twig', 
     [
@@ -26,7 +34,8 @@ echo generate('faq.html.twig',
         ],
         'config' => [
             'menu' => 'faq',
-            'SM_ADDRESSES' => implode(', ', $sortedSMs)
+            'smAddresses' => implode(', ', $sortedSMs),
+            'SMHints' => $SMHints
         ]
     ]
 );

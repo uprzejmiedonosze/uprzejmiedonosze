@@ -20,4 +20,8 @@ a.copyLink {
 
 h4:hover a.copyLink {
   visibility: visible;
-} 
+}
+
+.faq .ui-listview>.ui-li-static {
+  white-space: normal;
+}

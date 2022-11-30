@@ -5,7 +5,7 @@
     {% set leftButton = 'menu' %}
     {% set rightButton = 'menuStart' %}
 {% endif %}
-{# SITEMAP-PRIORITY:0.8 #}
+{# SITEMAP-PRIORITY:0.9 #}
 
 {% import "_macros.html.twig" as macros %}
 
@@ -153,166 +153,15 @@ wykroczenia za pomocą poczty elektronicznej lub EPUAP. W praktyce oznacza prawi
 każdą miejscowość w Polsce.</p>
 
 <p>Obecnie Uprzejmie Donoszę ma w swojej bazie adresy e-mail Straży Miejskich lub
-Gminnych dla następujących miast: {{ config.SM_ADDRESSES }}.</p>
+Gminnych dla następujących miast: {{ config.smAddresses }}.</p>
 
 <p>Dla części z miast mam bezpośrednie relacje od zgłaszających. Sprawdź, czego
 możesz się spodziewać po współpracy z SM w następujących miastach:</p>
 
-{{ macros.faq('Chorzów', 'chorzow') }}
-    <p>Aktualizacja 10.01.2020.</p> {# informacja od Arek Sz z FB #}
-    {{ macros.q(1) }}
-    <p>Z doniesień użytkownika wynika, że SM Chorzów wzywa do sporządzenia
-    protokołu dla każdego zgłoszenia.</p>
-</div>
-
-{{ macros.faq('Gdańsk', 'gdansk') }}
-    <p>Aktualizacja 22.03.2019.</p> {# informacja od Miłosz Czarniakowski na FB #}
-    {{ macros.q(1) }}
-    <p>Domyślnie nie. Osoby składające zawiadomienie o wykroczeniu są wzywane
-    na świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie
-    wykroczenia lub zebrany materiał dowodowy budzi wątpliwości.</p>
-    <p>Specyfiką SM w Gdańsku była konieczność podawania marki pojazdu w zgłoszeniu
-        (ale mam zeznania świadków, którzy twierdzą, że już im przeszło).</p>
-    {{ macros.q(3) }}
-    <p>Z przekazanych na informacji wynika, że o statusie będą informować
-    (sic) listem poleconym. Ale mam przykłady osób, które dostały zawiadomienie
-    e-mailem.</p>
-</div>
-
-{{ macros.faq('Gdynia', 'gdynia') }}
-    <p>Aktualizacja 12.01.2022.</p> {# informacja od Marcin marxxx96 na e-mail #}
-    {{ macros.q(1) }}
-    <p>Domyślnie nie. Osoby składające zawiadomienie o wykroczeniu są wzywane na
-        świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie
-        wykroczenia lub zebrany materiał dowodowy budzi wątpliwości. Zdarzają
-        się wyjątki, ale są one bardzo rzadkie.</p>
-
-    {{ macros.q(2) }}
-    <p>Nie, Straż Miejska w Gdyni domyślnie nie wysyła potwierdzenia przyjęcia
-        konkretnego zgłoszenia.</p>
-
-    {{ macros.q(3) }}
-    <p>Straż Miejska po zakończeniu postępowania przesyła informację na temat skutku.
-        Gdy podany jest adres e-mail to domyślną formą przekazania informacji jest
-        przesłanie skanu dokumentu na wskazany adres. Przed uzyskaniem informacji o
-        zakończeniu najlepiej kontaktować się drogą e-mail z sekretariatem,
-        podając numer sprawy (jeśli znamy) lub numer rejestracyjny i datę wykroczenia.</p>
-</div>
-
-{{ macros.faq('Katowice', 'katowice') }}
-    <p>Aktualizacja 23.07.2019.</p> {# informacja od bartekchrupek@gmail.com #}
-    {{ macros.q(1) }}
-    <p>Z doniesień użytkownika wynika, że SM Katowice podtrzymuje wymóg wezwania
-    w roli świadka.</p>
-</div>
-
-
-{{ macros.faq('Łódź', 'lodz') }}
-    <p>Aktualizacja 22.02.2019.</p> {# informacja od Jacek Rutkowski na FB #}
-    <p>Informacje pozyskane na przykładzie Oddziały Dzielnicowego Łódź - Bałuty.
-    Procedury SM różnią się znacznie między miastami, ale wewnątrz jednego
-    ośrodka zazwyczaj są spójne. Przyjmujemy na tym etapie, że jest to stanowisko
-    SM Łódź.</p>
-
-    {{ macros.q(1) }}
-    <p>Wg informacji pozyskanych w SM, w przypadku braku naocznego potwierdzenia
-    wykroczenia przez strażników, <i>konieczne jest złożenie oświadczenie ustnie
-    lub przesłanie go na piśmie</i>.</p>
-    <p>Zawiadomienie takie można złożyć w siedzibie SM przy ul. Mokrej 10 w Łodzi.</p>
-
-    {{ macros.q(2) }}
-    <p>Tak. Zostało to empirycznie potwierdzone.</p>
-</div>
-
-{{ macros.faq('Kraków', 'krakow') }}
-    <p>Aktualizacja 26.02.2019.</p> {# informacja od Katarzyna Arabska na FB z 26.02.2019 #}
-    {{ macros.q(1) }}
-    <p>Niestety tak. SM w Krakowie domyślnie wzywa na świadka.</p>
-</div>
-
-{{ macros.faq('Poznań', 'poznan') }}
-    <p>Aktualizacja 23.06.2019.</p> {# informacja od Krzysztof Klimczak na FB z ~19.06.2019 #}
-    {{ macros.q(1) }}
-    <p>Użytkownicy z Poznania donoszą, że SM nie wzywa na przesłuchanie.</p>
-    {{ macros.q(2) }}
-    <p>Niestety nie. O tym, że zgłoszenia są faktycznie przetwarzane można dowiedzieć
-    się dopiero jeśli popełni się jakąś pomyłkę (np. w numerze rej. pojazdu). Bo wtedy
-    SM kontaktuje się mailowo z prośbą o wyjaśnienia.</p>
-</div>
-
-
-{{ macros.faq('Rzeszów', 'rzeszow') }}
-    <p>Aktualizacja 30.04.2019.</p> {# informacja od JU SI/Jan Sitarz na FB z 30.04.2019 #}
-    {{ macros.q(1) }}
-    <p>W Rzeszowie jest chyba najgorzej w z wszystkich opisywanych miast.
-    Z informacji uzyskanych przez użytkownika Uprzejmie Donoszę wynika, że "ustalenie
-    sprawców zajmie rok" a komendant wprost prosi o "niezgłaszanie takich przypadków".</p>
-</div>
-
-{{ macros.faq('Szczecin', 'szczecin') }}
-    <p>Aktualizacja 27.03.2019.</p> {# informacja od SZN #}
-    {{ macros.q(1) }}
-    <p>Niestety tak. SM wzywa automatycznie do wszystkich zgłoszeń. Musisz 
-    liczyć się z 3-6 minutami na zgłoszenie do odsiedzenia w SM. Warto
-    wysyłać paczki po ~10 sztuk, co pozwala potem przerobić całą paczkę 
-    podczas jednej, kilkudziesięciominutowej wizyty.</p>
-
-    {{ macros.q(2) }}
-    <p>Tak. SM wysyła wezwanie na przesłuchanie świadka, i podaje numer sprawy.
-    Niestety nie sposób powiązać tego numeru sprawy ze swoim zgłoszeniem. Jeśli 
-    wysłaliśmy kilka paczek zgłoszeń, to nie będzie nam łatwo zorientować się 
-    dla których dostaliśmy wezwanie. Niemniej z doświadczenia autora wynika,
-    że 100% zgłoszeń jest przyjmowanych i przetwarzanych przez SM.</p>
-
-    {{ macros.q(3) }}
-    <p>(niestety) Najprościej jest pytać o to w trakcie wizyty w SM, podając
-    numer rejestracyjny.</p>
-</div>
-
-{#
-{{ macros.faq('Świdnica', 'swidnica') }}
-    <p>Aktualizacja 30.03.2019.</p> { informacja od Dominik Całka na FB z 30.03.2019 }
-    {{ macros.q(1) }}
-    <p>Na ten moment zgłaszający są wzywanie do wszystkich spraw. Ale (!) "chodzą plotki",
-    że w przypadku spraw nie budzących wątpliwości praktyka ta zostanie zaniechana. Czekam
-    na aktualizację.</p>
-</div>
-#}
-
-{{ macros.faq('Warszawa', 'warszawa') }}
-    <p>Aktualizacja 30.03.2019.</p> {# informacja od SZN #}
-    {{ macros.q(1) }}
-    <p>Domyślnie nie. Osoby składające zawiadomienie o wykroczeniu są wzywane na świadka dopiero
-    w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub
-    zebrany materiał dowodowy budzi wątpliwości.</p>
-    <p>Powyższa procedura dotyczy wszystkich oddziałów terenowych SM.</p>
-
-    {{ macros.q(2) }}
-    <p>Tak. SM wysyła maile z "zawiadomieniem o przyjęciu sprawy". W mailu można znaleźć datę
-    i godzinę zgłoszenia, po których można zidentyfikować odpowiednie zgłoszenie w Uprzejmie 
-    Donoszę.</p>
-
-    {{ macros.q(3) }}
-    <p>Jeśli znamy numer sprawy SM, używajmy go w korespondencji. Jeśli go nie znamy
-    (np. SM nie wysłała nam potwierdzenia z numerem), najlepiej podawać numer 
-    rejestracyjny pojazdu oraz datę wykroczenia.</p>
-</div>
-
-{{ macros.faq('Wrocław', 'wroclaw') }}
-    <p>Aktualizacja 25.06.2019.</p> {# https://www.facebook.com/akcjamiastowro/photos/a.717624148327070/2273253956097407/?type=3&theater #}
-    {{ macros.q(1) }}
-    <p>Cytat za <a href="https://www.facebook.com/akcjamiastowro/posts/2271807439575392?comment_id=2273069926115810" rel="external">komentarzem</a> rzecznika SM Wrocław na fanpageu <a href="https://www.facebook.com/akcjamiastowro" rel="external">Akcja Miasto</a>:</p>
-    <blockquote>W Straży Miejskiej Wrocławia został wprowadzony algorytm, w myśl którego po otrzymaniu zawiadomienia mailowego możliwe jest ukaranie sprawcy wykroczenia z pominięciem wzywania świadka na przesłuchanie. 
-    Takie zgłoszenie mailowe musi jednak spełnić minimalne wymagania, w szczególności musi zawierać: 
-        <ul>
-            <li>imię i nazwisko zawiadamiającego oraz jego adres</li>
-            <li>wyraźny numer rejestracyjny pojazdu</li>
-            <li>wskazanie miejsca wykroczenia, daty i godziny ujawnienia</li>
-        </ul>
-    Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. 
-    Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</blockquote>
-    <p>Zgłoszenia generowane za pomocą Uprzejmie Donoszę oczywiście spełniają wszystkie oczekiwania wymienione
-    przez rzecznika SM.</p>
-</div>
+<ul data-role="listview" data-autodividers="true" data-filter="true" data-inset="true">
+{% for city,hint in config.SMHints %}
+    <li><b>{{ city }}</b> — {{ hint | striptags }}</li>
+{% endfor %}
+</ul>
 
 {% endblock %}

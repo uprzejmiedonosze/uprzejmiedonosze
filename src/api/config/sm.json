@@ -369,7 +369,7 @@
       "81-244 Gdynia"
     ],
     "email": "straz_miejska@gdynia.pl",
-    "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie."
+    "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane na świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości. Zdarzają się wyjątki, ale są one bardzo rzadkie." 
   },
   "Białystok": {
     "address": [
@@ -394,6 +394,7 @@
       "ul. Elbląska 54/60",
       "80-724 Gdańsk"
     ],
+    "hint": "SM Gdańsk domyślnie nie wzywa na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane na świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia, lub zebrany materiał dowodowy budzi wątpliwości.",
     "email": "sm@gdansk.gda.pl"
   },
   "Poznań": {
@@ -510,6 +511,7 @@
       "ul. Dworcowa 2-4-6-8",
       "58-100 Świdnica"
     ],
+    "hint": "Na ten moment zgłaszający są wzywanie do wszystkich spraw. Ale (!) chodzą plotki, że w przypadku spraw nie budzących wątpliwości praktyka ta zostanie zaniechana. Czekam na aktualizację.",
     "email": "strazmiejska@sm.swidnica.pl"
   },
   "Karlino": {
@@ -534,6 +536,7 @@
       "ul. Targowa 1",
       "35-064 Rzeszów"
     ],
+    "hint": "SM Rzeszów wzywa do każdego zgłoszenia, dbając, żeby każde przesłuchanie odbywało się innego dnia co uprzykrza życia świadkowi.",
     "email": "komenda@sm.erzeszow.pl"
   },
   "Łosice": {
@@ -888,6 +891,7 @@
       "Jana III Sobieskiego 3",
       "41-500 Chorzów"
     ],
+    "hint": "SM Chorzów wzywa do sporządzenia protokołu dla każdego zgłoszenia.",
     "email": "sm@chorzow.eu"
   },
   "Nysa": {
