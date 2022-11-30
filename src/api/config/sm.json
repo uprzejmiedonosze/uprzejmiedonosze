@@ -2277,5 +2277,13 @@
   },
   "Niedźwiedzica": { "parent": "Jugowice" },
   "Olszyniec": { "parent": "Jugowice" },
-  "Zagórze Śląskie": { "parent": "Jugowice" }
+  "Zagórze Śląskie": { "parent": "Jugowice" },
+  "Świebodzice": {
+    "address": [
+      "Straż Miejska w Świebodzicach",
+      "Plac Dworcowy 1",
+      "58-160 Świebodzice"
+    ],
+    "email": "swiebodzice@swiebodzice.pl"
+  }
 }
