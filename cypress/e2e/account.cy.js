@@ -161,11 +161,11 @@ describe('Update account', () => {
     cy.contains('zostanie za chwilę wysłane').should('not.exist')
     cy.contains('Na tym etapie nic nie zostanie wysłane do')
     cy.contains(this.sm.Szczecin.address[0]).should('not.exist')
-    cy.contains('Komenda Wojewódzka')
+    cy.contains('Komisariat Policji Szczecin Niebuszewo')
     cy.contains('Wyślij teraz').should('not.exist')
     cy.contains('Zapisz').click()
 
-    cy.contains('Uwagi do współpracy z Komenda Wojewódzka')
+    cy.contains('Uwagi do współpracy z Komisariat Policji Szczecin Niebuszewo')
     cy.contains('twoje zgłoszenie zostało zapisane')
     cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
 
