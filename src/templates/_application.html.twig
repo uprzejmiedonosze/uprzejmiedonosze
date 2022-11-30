@@ -52,7 +52,7 @@
 
     {% if app.hasNumber and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
         <p>Dokument ze zgłoszeniem dostępny jest pod adresem
-            <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
+            <a href="/{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false">{{ app.number }}.pdf</a>.
         </p>
     {% endif %}
 
@@ -71,7 +71,7 @@
                 {{ app.user.msisdn }}<br />
             {% if config.confirmationScreen is not defined %}
                 <br />
-                <small>Nieaktualne dane? Popraw je na <a href="register.html">stronie rejestracji</a>.
+                <small>Nieaktualne dane? Popraw je na <a href="/register.html">stronie rejestracji</a>.
                 i stwórz nowe zgłoszenie.</small>
             {% endif %}
         {% else %}

@@ -63,7 +63,7 @@
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
             ui-icon-info ui-alt-icon">Szczegóły</a>
 
-        <a href="{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
+        <a href="/{{ app.id }}.pdf" download="{{ app.number }}" data-ajax="false"
             class="ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini
             ui-alt-icon">PDF</a>
         {% endif %}
@@ -85,7 +85,7 @@
         </div>
     </div>
 {% if config.appActionButtons %}
-    <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ status.name }}</b> na:</p>
+    <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ status.name }}</b> na:</p>
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
     {% for key,val in statuses %}
         {% if val.class == 'bottom' %}

@@ -11,7 +11,7 @@
 
 {% if applications|length == 0 %}
     <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
-    <a href="nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
+    <a href="/nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
 {% else %}
     <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
 
@@ -19,7 +19,7 @@
         {% if general.stats.confirmed > 1 %}
             <p>Masz już <b>{{ general.stats.confirmed }} 
             {% if general.stats.confirmed > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
-            na wysłanie</b>. Zapraszamy na stronę <a href="wysylka.html" data-ajax="false">wysyłka</a>.</p>
+            na wysłanie</b>. Zapraszamy na stronę <a href="/wysylka.html" data-ajax="false">wysyłka</a>.</p>
         {% endif %}
     {% endif %}
 
