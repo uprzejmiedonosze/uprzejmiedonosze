@@ -24,7 +24,7 @@ CSS_MINIFIED         := $(PUBLIC)/css/index.css
 JS_FILES             := $(wildcard src/js/*.js src/js/*/*.js)
 CONFIG_FILES         := $(wildcard src/api/config/*.json)
 JS_HASH              := $(shell cat $(JS_FILES) $(CONFIG_FILES) | md5sum | cut -b 1-8)
-JS_MINIFIED          := $(PUBLIC)/js/index.js $(PUBLIC)/js/new-app.js
+JS_MINIFIED          := $(PUBLIC)/js/index.js $(PUBLIC)/js/new-app.js $(PUBLIC)/js/firebase.js
 
 HTML_FILES           := $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
@@ -231,6 +231,7 @@ export/inc/utils.php: src/inc/utils.php; $(call echo-processing,$<)
 export/templates/%: src/templates/%; $(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
+	$(replace-inline)
 
 export/templates/base.html.twig: src/templates/base.html.twig $(JS_FILES) $(CSS_FILES)
 	$(call echo-processing,$<)

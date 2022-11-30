@@ -1,41 +1,46 @@
 {% extends "base.html.twig" %}
 
-{% block main %}
+{% block headIncludes %}
+        <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.13.0/firebase-auth-compat.js"></script>
 
-{% include('_firebase.html.twig') %}
+        <script src="/js/firebase.js?%JS_HASH%"></script>
 
-<script type="text/javascript">
-    function setError(error) {
-        if (typeof error === "object") {
-            error = JSON.stringify(error);
-        }
-        $("p.error").text(error);
-        $(".ui-footer h4").text("błąd logowania");
-    }
-    function initApp() {
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                user.getIdToken().then(function(accessToken) {
-                    $.post('api/api.html', {
-                            action: 'verifyToken',
-                            pa: accessToken
-                        },
-                        function(data) {
-                            window.location.replace('{{ config.signInSuccessUrl ?? 'moje-zgloszenia.html' }}');
-                        }).fail(function(error){
-                            setError(error);
-                        });
-                    });
-            } else {
-                setError('Error: missing user');
+        <script type="text/javascript">
+            function setError(error) {
+                if (typeof error === "object") {
+                    error = JSON.stringify(error);
+                }
+                $("p.error").text(error);
+                $(".ui-footer h4").text("błąd logowania");
             }
-        }, function(error) {
-            setError(error);
-        });
-    };
+            function initApp() {
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        user.getIdToken().then(function(accessToken) {
+                            $.post('api/api.html', {
+                                    action: 'verifyToken',
+                                    pa: accessToken
+                                },
+                                function(data) {
+                                    window.location.replace('{{ config.signInSuccessUrl ?? 'moje-zgloszenia.html' }}');
+                                }).fail(function(error){
+                                    setError(error);
+                                });
+                            });
+                    } else {
+                        setError('Error: missing user');
+                    }
+                }, function(error) {
+                    setError(error);
+                });
+            };
 
-    window.addEventListener('load', initApp);
-</script>
+            window.addEventListener('load', initApp);
+        </script>
+{% endblock %}
+
+{% block main %}
 <p class="error"></p>
 {% endblock %}
 
