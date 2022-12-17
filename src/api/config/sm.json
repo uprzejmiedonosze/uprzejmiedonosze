@@ -2289,5 +2289,21 @@
       "58-160 Świebodzice"
     ],
     "email": "swiebodzice@swiebodzice.pl"
+  },
+  "Jelenia Góra": {
+    "address": [
+      "Straż Miejska w Jeleniej Górze",
+      "Armii Krajowej 19",
+      "50-500 Jelenia Góra"
+    ],
+    "email": "zgloszeniasm@jeleniagora.pl"
+  },
+  "Rogoźno": {
+    "address": [
+      "Straż Miejska w Rogoźnie",
+      "ul. Nowa 2",
+      "64-610 Rogoźno"
+    ],
+    "email": "straz.miejska@rogozno.pl"
   }
 }
