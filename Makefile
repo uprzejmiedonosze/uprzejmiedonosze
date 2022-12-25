@@ -182,7 +182,7 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
-	@$(shell npm bin)/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
+	@./node_modules/.bin/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
 			sed $(SED_OPTS) 's/#009C7F/#ff4081/gi' $@ ; \
@@ -192,7 +192,7 @@ $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@
 	fi;
 
 export/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo-processing,$<)
-	@$(shell npm bin)/parcel build --public-url "/js" --dist-dir $(dir $@) $<
+	@./node_modules/.bin/parcel build --public-url "/js" --dist-dir $(dir $@) $<
 
 export/public/%.html: src/%.html; $(call echo-processing,$<)
 	$(lint)
@@ -317,9 +317,9 @@ define create-symlink
 endef
 
 define sentry-release
-@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-php $(shell npm bin)/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js $(shell npm bin)/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js src/js/jquery-1.12.4.min.map
+@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js ./node_modules/.bin/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
+@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-php ./node_modules/.bin/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
+@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js ./node_modules/.bin/sentry-cli releases files "prod_$(TAG_NAME)" upload-sourcemaps export/public/js src/js/jquery-1.12.4.min.map
 endef
 
 # GIT
