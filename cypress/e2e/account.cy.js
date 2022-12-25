@@ -5,7 +5,6 @@ describe('Create account', () => {
   })
 
   beforeEach(() => {
-    cy.preserveLoginCookie()
     cy.loadConfig()
   })
 
@@ -83,7 +82,6 @@ describe('Update account', () => {
   })
 
   beforeEach(() => {
-    cy.preserveLoginCookie()
     cy.loadConfig()
   })
 

@@ -13,10 +13,6 @@ describe('Empty my apps', () => {
         cy.login()
     })
 
-    beforeEach(() => {
-        cy.preserveLoginCookie()
-    })
-
     it('gets to my apps screen', () => {
         cy.visit('/')
         cy.contains('Menu').click()
@@ -34,7 +30,6 @@ describe('Application screen validation', () => {
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
@@ -63,7 +58,6 @@ describe('Invalid images', () => {
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
@@ -95,15 +89,14 @@ describe('Valid images and location', () => {
     before(() => {
         cy.initDB()
         cy.login()
-        cy.goToNewAppScreen()
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
     it('checks address autocomplete', function () {
+        cy.goToNewAppScreen()
         cy.get('#lokalizacja').clear().type('Mazurska, Poznań')
         cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
@@ -136,15 +129,14 @@ describe('Create application', () => {
     before(() => {
         cy.initDB()
         cy.login()
-        cy.goToNewAppScreen()
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        cy.goToNewAppScreen()
         cy.uploadOKImages()
     })
 
@@ -178,15 +170,14 @@ describe('Create application', () => {
 describe('Edit application', () => {
     before(() => {
         cy.login()
-        cy.goToNewAppScreenWithoutTermsScreen()
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        cy.goToNewAppScreenWithoutTermsScreen()
         cy.uploadOKImages()
     })
 

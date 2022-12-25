@@ -1,6 +1,12 @@
 Cypress.Commands.add("login", () => {
-  cy.setCookie('PHPSESSID', 'i2hlj84rsvd3eglgoo61vmlhppgf4ipv')
-});
+  cy.session('user', () => {
+    cy.setCookie('PHPSESSID', 'i2hlj84rsvd3eglgoo61vmlhppgf4ipv')
+  }, {
+    cacheAcrossSpecs: true
+  })
+  // cy.visit('/')
+})
+
 
 Cypress.Commands.add("uploadFile", (selector, fileUrl, type = "") => cy.get(selector)
   .then((subject) => cy.fixture(fileUrl, "base64")
@@ -48,10 +54,6 @@ Cypress.Commands.add("loadConfig", () => {
   cy.fixture('../../src/api/config/statuses.json').then(function (statuses) {
     this.statuses = statuses;
   })
-});
-
-Cypress.Commands.add("preserveLoginCookie", () => {
-  Cypress.Cookies.preserveOnce('PHPSESSID')
 });
 
 Cypress.Commands.add("initDB", () => {

@@ -6,7 +6,6 @@ describe('API:automated (Poznań)', () => {
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
@@ -53,15 +52,14 @@ describe('API:Mail (Wrocław)', () => {
     before(() => {
         cy.initDB()
         cy.login()
-        cy.goToNewAppScreen()
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        cy.goToNewAppScreen()
         cy.uploadOKImages()
         cy.get('#lokalizacja').clear().type('Mieszka I 12, Wrocław')
         cy.wait(500)
@@ -94,15 +92,14 @@ describe.skip('API:null (Szczecin)', () => {
     before(() => {
         cy.initDB()
         cy.login()
-        cy.goToNewAppScreen()
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        cy.goToNewAppScreen()
         cy.uploadOKImages()
         cy.get('#form-submit').click()
         cy.contains('Wyślij teraz!').click()
@@ -143,15 +140,14 @@ describe('Missing SM (Poniatowa)', () => {
     before(() => {
         cy.initDB()
         cy.login()
-        cy.goToNewAppScreen()
     })
 
     beforeEach(() => {
-        cy.preserveLoginCookie()
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        cy.goToNewAppScreen()
         cy.uploadOKImages()
         cy.get('#lokalizacja').clear().type('Henin 93, Poniatowa')
         cy.wait(500)

@@ -8,5 +8,6 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     baseUrl: "https://staging.uprzejmiedonosze.net",
+    testIsolation: false
   },
 });
