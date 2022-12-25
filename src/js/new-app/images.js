@@ -61,9 +61,8 @@ function readFile(file, id) {
       try {
         sendFile(img.toDataURL("image/jpeg", 0.9), id);
       } catch (err) {
-        Sentry.captureMessage(img);
-        Sentry.captureException(err);
         imageError(id);
+        Sentry.captureException(err);
       }
     },
     {
