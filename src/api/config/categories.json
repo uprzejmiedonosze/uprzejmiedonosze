@@ -3,7 +3,7 @@
         "title": "Zastawienie chodnika (mniej niż 1,5 m)",
         "short": "Pojazd zastawiał chodnik (mniej niż 1,5 m, PoRD Art. 47. 1.).",
         "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd utrudnia im ruch (i jest to przynajmniej 1,5m) ma zastosowanie ten przepis.</p>",
-        "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m [...]",
+        "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość drogi dla pieszych jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym zawężonym światłem chodnika.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
@@ -48,7 +48,7 @@
         "title": "Mniej niż 10 m od przejścia dla pieszych",
         "short": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od przejścia dla pieszych (PoRD Art. 49. 1.2.).",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed przejściem dla pieszych jest niedozwolone. Na drodze dwukierunkowej, niedozwolone jest także zatrzymanie/postój za przejście.</p>",
-        "law": "PoRD Art. 49. 1.2. Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerzystów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem.",
+        "law": "PoRD Art. 49. 1.2. Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem.",
         "price": "100–300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd i znak pionowy D6 Przejście dla pieszych.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
@@ -75,7 +75,7 @@
         "title": "Parkowanie z dala od krawędzi jezdni lub za barierami",
         "short": "Pojazd był zaparkowany z dala od krawędzi jezdni (PoRD Art. 47. 2.).",
         "desc": "<p>Pojazd może wjechać na chodnik wyłącznie przodem, i musi stać przy krawędzi jezdni. Jakiekolwiek ustawienie pojazdu, które wskazywałoby na to, że kierowca jechał chodnikiem aby znaleźć się w tym miejscu jest naruszeniem przepisów.</p>",
-        "law": "PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2 (szerokość chodnika pozostawionego dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m), zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru.",
+        "law": "PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2 (szerokość drogi dla pieszych pozostawionej dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m), zatrzymanie lub postój na drodze dla pieszych przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru.",
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od krawędzi jezdni.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
@@ -84,7 +84,7 @@
         "title": "Jazda wzdłuż po chodniku lub przejściu dla pieszych",
         "short": "Pojazd jechał wzdłuż chodnika/przejścia dla pieszych (PoRD Art. 26. 3.3.).",
         "desc": "<p>Jazda wzdłuż chodnika lub przejścia dla pieszych jest zabroniona. Nie można z tego powodu np. parkować w drugiej linii dojeżdżając do celu wzdłuż chodnika.</p>",
-        "law": "PoRD Art. 26. 3.3. Kierującemu pojazdem zabrania się: jazdy wzdłuż po chodniku lub przejściu dla pieszych.",
+        "law": "PoRD Art. 26. 3.3. Kierującemu pojazdem zabrania się: jazdy wzdłuż po drodze dla pieszych lub przejściu dla pieszych.",
         "price": "1 500 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym przekroczeniem oznaczenia poziomego.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
@@ -111,7 +111,7 @@
         "title": "Pojazd powyżej 2,5 t DMC na chodniku",
         "short": "Pojazd o dopuszczalnej masie całkowitej przekraczającej 2,5 tony był zaparkowany na chodniku (PoRD Art. 47. 1.).",
         "desc": "<p>Na chodniku (wszystko jedno, czy są na nim wyznaczone miejsca parkingowe znakami poziomymi lub pionowymi, czy nie) mogą parkować wyłącznie pojazdy o dopuszczalnej masie całkowitej nie przekraczającej 2,5 tony. To, że pojazd można prowadzić posiadając prawo jazdy kategorii B wcale nie oznacza, że można go postawić na chodniku. Ujmując to dosadniej, kierowcy takich samochodów nie mogą choćby jednym kołem wjechać na chodnik.</p> <p>Jakich samochodów to dotyczy? Automatycznie wszystkich ciężarówek, samochodów dostawczych itp. Ale także zaskakująco dużej ilości samochodów osobowych, w szczególności większych SUV.</p>",
-        "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na chodniku kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t; PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na chodniku przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na chodniku tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.",
+        "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t; PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na drodze dla pieszych przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na drodze dla pieszych tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.",
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd na chodniku, w sposób umożliwiający identyfikację marki.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu."
