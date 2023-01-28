@@ -79,8 +79,10 @@ export const initAutocomplete = function (trigger_change, inputId, google) {
       if (!place) return;
       setAddressByPlace(place);
       const latlng = locationToLatLng(place);
-      $("#latlng").val(latlng.join(","));
-      locationP.setLocation(latlng[0], latlng[1]);
+      if (latlng[0] && latlng[1]) {
+        $("#latlng").val(latlng.join(","));
+        locationP.setLocation(latlng[0], latlng[1]);
+      }
     });
   }
 };
@@ -133,7 +135,8 @@ export function setAddressByLatLng(lat, lng, from) {
       }
       $("a#geo").buttonMarkup({ icon: "location" });
     })
-    .fail(function () {
+    .fail(function (e) {
+      console.log(e)
       $("a#geo").buttonMarkup({ icon: "alert" });
       $("#lokalizacja").addClass("error");
     });
