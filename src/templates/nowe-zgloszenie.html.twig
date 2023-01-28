@@ -112,7 +112,7 @@
         {% if categoryDef.title %}
             <div class="ui-block-{{ categoriesMatrix[i % 2] }}"
                 title="{{ categoryDef.desc|striptags ~ "\n\n" ~ categoryDef.law }}{% if categoryDef.price %}{{ "\n\nTaryfikator: " ~ categoryDef.price }}{% endif %}">
-                <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
+                <input type="{% if categoryDef.extension %}checkbox{% else %}radio{% endif %}" {% if catId == app.category %}checked="checked"{% endif %}
                     {% if not app.stopAgresji and categoryDef.stopAgresjiOnly %}disabled{% endif %}
                     name="category" value="{{ catId }}" id="{{ catId }}"
                     data-contextImage-hint="{{ categoryDef.contextImageHint }}" data-carImage-hint="{{ categoryDef.carImageHint }}">
@@ -129,7 +129,7 @@
             </div>
         {% set i = i + 1 %}
         {% endif %}
-        {% endfor %}
+        {% endfor %}        
             <p style="clear: both;">Masz wątpliwości którą kategorię wybrać? Przeczytaj
             <a href="/przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
         </div>
