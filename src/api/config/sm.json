@@ -2341,5 +2341,13 @@
       "11-500 Giżycko"
     ],
     "email": "sm@gizycko.pl"
+  },
+  "Skawina": {
+    "address": [
+      "Straż Miejska w Skawinie",
+      "ul. Ogrody 101/1a",
+      "32-050 Skawina"
+    ],
+    "email": "strazmiejska@gminaskawina.pl"
   }
 }
