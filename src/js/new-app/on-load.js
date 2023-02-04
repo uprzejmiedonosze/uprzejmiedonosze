@@ -23,13 +23,16 @@ export const initHandlers = () => {
     $("#comment").removeClass("error");
   });
 
-  $("#category").on("change", function (id) {
+  $("#category").on("change", function (e) {
     $(".contextImageSection p.pictureHint").text(
-      $(id.target).attr("data-contextImage-hint")
+      $(e.target).attr("data-contextImage-hint")
     );
     $(".carImageSection p.pictureHint").text(
-      $(id.target).attr("data-carImage-hint")
+      $(e.target).attr("data-carImage-hint")
     );
+    $("#extensions div.ui-checkbox").removeClass("ui-state-disabled");
+    $(`#ex${e.target.id}`).attr("checked", false).checkboxradio("refresh");
+    $(`#ex${e.target.id}`).parent().addClass('ui-state-disabled');
   });
 
   if (window.File && window.FileReader && window.FormData) {

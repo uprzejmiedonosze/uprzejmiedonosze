@@ -167,7 +167,8 @@ div.loader.l {
   max-width: 10.5em;
 }
 
-.new-application #category {
+.new-application #category,
+.new-application #extensions {
   vertical-align: top;
   display: inline-block;
   text-align: center;
@@ -180,7 +181,8 @@ div.loader.l {
   border-radius: 0.8em;
 }
 
-.new-application #category label {
+.new-application #category label,
+.new-application #extensions label {
   display: block;
   font-weight: 300;
   border: none;
@@ -191,19 +193,23 @@ div.loader.l {
 }
 
 .new-application #category label img,
-.new-application #category label p {
+.new-application #category label p,
+.new-application #extensions label p {
   display: table-cell;
   vertical-align: top;
 }
 
-.new-application #category label p {
+.new-application #category label p,
+.new-application #extensions label p {
   padding: 0 1em;
   width: 100%;
 }
 
 @media (max-width: 40em) {
   #category.ui-responsive > .ui-block-a,
-  #category.ui-responsive > .ui-block-b {
+  #category.ui-responsive > .ui-block-b,
+  #extensions.ui-responsive > .ui-block-a,
+  #extensions.ui-responsive > .ui-block-b {
       width: 100%;
       float: none;
   }
