@@ -35,6 +35,13 @@
             {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
             w okolicy adresu <b>{{ app.address.address ?? '...' }}</b>.
             {{ app.getCategory.short }}
+            {% if app.extensions is defined -%}
+                Dodatkowo
+                {% for ext in app.extensions -%}
+                    {{ categories[ext].extension }}
+                    {%- if not loop.last %} oraz {% endif -%}
+                {%- endfor -%}
+            {%- endif -%}.
             Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.
     {% if app.statements is not defined or not app.statements.witness %}
         Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.

@@ -22,7 +22,15 @@
             w okolicy adresu
             <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
                 data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
-            {{ app.getCategory.short }}</p>
+            {{ app.getCategory.short }}
+            {% if app.extensions is defined -%}
+                Dodatkowo
+                {% for ext in app.extensions -%}
+                    {{ categories[ext].extension }}
+                    {%- if not loop.last %} oraz {% endif -%}
+                {%- endfor -%}
+            {%- endif -%}.
+        </p>
 
 {% if app.userComment %}
     <p>{{ app.userComment }}</p>

@@ -1,6 +1,11 @@
 Dzień dobry,
 
 w dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }} świadkiem pozostawienia pojazdu o nr. rejestracyjnym {{ app.carInfo.plateId }} w okolicy adresu {{ app.address.address }}. {{ app.getCategory.short }}
+{%- if app.extensions is defined %} Dodatkowo {% for ext in app.extensions -%}
+        {{ categories[ext].extension }}
+        {%- if not loop.last %} oraz {% endif -%}
+    {%- endfor -%}
+{%- endif -%}.
 
 W załączeniu znajduje się zgłoszenie wraz ze zdjęciami oraz mapką prezentującą lokalizację zdarzenia. Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getJSONSafeComment|raw }}{% if app.statements is not defined or not app.statements.witness %} Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.{% endif %}
 

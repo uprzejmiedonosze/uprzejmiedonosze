@@ -29,7 +29,15 @@
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej #}
     {# ale równocześnie chowam hint dotyczący mapy – bo zgłoszenia robią się dwustronnicowe #}
     do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
-    {{ app.getCategory.short }} Sytuacja jest widoczna na załączonych zdjęciach.
+    {{ app.getCategory.short }} 
+    {% if app.extensions is defined -%}
+                Dodatkowo
+                {% for ext in app.extensions -%}
+                    {{ categories[ext].extension }}
+                    {%- if not loop.last %} oraz {% endif -%}
+                {%- endfor -%}
+            {%- endif -%}.
+    Sytuacja jest widoczna na załączonych zdjęciach.
     Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
 {% if app.statements is not defined or not app.statements.witness %}
     Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
