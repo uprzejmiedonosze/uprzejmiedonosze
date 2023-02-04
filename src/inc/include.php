@@ -64,6 +64,9 @@ function generate($template, $parameters){
   global $STATUSES;
   $parameters['statuses'] = $STATUSES;
 
+  global $CATEGORIES;
+  $parameters['categories'] = $CATEGORIES;
+
   return $twig->render($template, $parameters);
 };
 

@@ -102,9 +102,11 @@ function tex2pdf($application, $destFile, $type) {
         }
     }
 
+    global $CATEGORIES;
     $params = [
         'app' => $application,
-        'root' => realpath(ROOT)
+        'root' => realpath(ROOT),
+        'categories' => $CATEGORIES
     ];
 
     if($type == 'readyApps'){
