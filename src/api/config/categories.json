@@ -7,8 +7,7 @@
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym zawężonym światłem chodnika.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "6": {
         "title": "Niszczenie zieleni",
@@ -19,7 +18,7 @@
         "contextImageHint": "Idealne zdjęcie powinno pokazywać zniszczoną zieleń i przynajmniej fragment pojazdu.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, z widoczną zielenią.",
         "stopAgresjiOnly": false,
-        "extension": false
+        "extension": "niszczył zieleń"
     },
     "14": {
         "title": "Niezastosowanie się do zakazu zatrzymywania się",
@@ -29,8 +28,7 @@
         "price": "100–300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak B-36, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "15": {
         "title": "Niezastosowanie się do zakazu postoju",
@@ -40,8 +38,7 @@
         "price": "100–300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak B-35, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "12": {
         "title": "Parkowanie w strefie zamieszkania w miejscu niewyznaczonym",
@@ -51,8 +48,7 @@
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak strefy zamieszkania, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "5": {
         "title": "Mniej niż 10 m od przejścia dla pieszych",
@@ -62,8 +58,7 @@
         "price": "100–300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd i znak pionowy D6 Przejście dla pieszych.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "16": {
         "title": "Niezastosowanie do tabliczki T-30 wskazującej sposób parkowania",
@@ -73,8 +68,7 @@
         "price": "100–300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak parkingu z tabliczką, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "17": {
         "title": "Niezastosowanie się do znaków poziomych",
@@ -84,8 +78,7 @@
         "price": "100–300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym przekroczeniem oznaczenia poziomego.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "8": {
         "title": "Parkowanie z dala od krawędzi jezdni lub za barierami",
@@ -95,8 +88,7 @@
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od krawędzi jezdni.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "18": {
         "title": "Jazda wzdłuż po chodniku lub przejściu dla pieszych",
@@ -106,8 +98,7 @@
         "price": "1 500 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym przekroczeniem oznaczenia poziomego.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": true,
-        "extension": false
+        "stopAgresjiOnly": true
     },
     "2": {
         "title": "Mniej niż 15 m od przystanku",
@@ -117,8 +108,7 @@
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z uwidocznioną odległością od przystanku (znaku pionowego, zatoki lub zygzaka).",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "9": {
         "title": "Zatrzymanie na drodze dla rowerów",
@@ -128,8 +118,7 @@
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widoczną DDR pod pojazdem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "11": {
         "title": "Pojazd powyżej 2,5 t DMC na chodniku",
@@ -140,7 +129,7 @@
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd na chodniku, w sposób umożliwiający identyfikację marki.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false,
-        "extension": false
+        "extension": "miał ponad 2,5 tony dopuszczalnej masy całkowitej"
     },
     "13": {
         "title": "Parkowanie na miejscu dla niepełnosprawnych",
@@ -150,8 +139,7 @@
         "price": "500–800 zł",
         "contextImageHint": "Idealne zdjęcie powinno prezentować przednią szybę z nieważną/podrobioną kartą, lub jej brakiem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, wraz z widoczną kopertą.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "3": {
         "title": "Parkowanie na skrzyżowaniu (nie dotyczy parkowania na chodniku)",
@@ -161,8 +149,7 @@
         "price": "300 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od skrzyżowania.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "0": {
         "title": "<i>Pozostałe przypadki (koniecznie dodaj komentarz)</i>",
@@ -172,8 +159,7 @@
         "price": null,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, w sposób dokumentujący wykroczenie.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "1": {
         "title": null,
@@ -183,8 +169,7 @@
         "price": null,
         "contextImageHint": "",
         "carImageHint": "",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "7": {
         "title": null,
@@ -194,8 +179,7 @@
         "price": null,
         "contextImageHint": "",
         "carImageHint": "",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     },
     "10": {
         "title": null,
@@ -205,7 +189,6 @@
         "price": null,
         "contextImageHint": "",
         "carImageHint": "",
-        "stopAgresjiOnly": false,
-        "extension": false
+        "stopAgresjiOnly": false
     }
 }

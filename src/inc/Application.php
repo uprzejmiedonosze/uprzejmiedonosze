@@ -23,6 +23,7 @@ class Application extends JSONObject{
             parent::__construct($json);
             @$this->statusHistory = (array)$this->statusHistory;
             @$this->comments = (array)$this->comments;
+            @$this->extensions = (array)$this->extensions;
             if(!isset($this->seq) && $this->hasNumber()) {
                 $this->seq = extractAppNumer($this->getNumber());
             }

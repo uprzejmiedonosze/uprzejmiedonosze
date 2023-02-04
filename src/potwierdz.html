@@ -32,6 +32,7 @@ $application->userComment = capitalizeSentence($post["comment"]);
 $application->initStatements();
 $application->statements->witness = isset($post['witness']);
 $application->setStatus("ready");
+@$application->extensions = array_map('intval', $post["extensions"]);
 
 $storage->saveApplication($application);
 
