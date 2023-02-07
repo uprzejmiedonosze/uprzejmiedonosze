@@ -1,0 +1,44 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+{# SITEMAP-PRIORITY:0.8 #}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+<h2>Jak sprawdzić, co zrobiła SM w odpowiedzi na twój telefon?</h2>
+
+<p>Dzwonisz do Straży Miejskiej i nie widzisz żadnych efektów ich interwencji? Nie jesteś sam ;).</p>
+
+<p>Jest prosty sposób na zweryfikowanie jakie czynności podjęli strażnicy w odpowiedzi na nasze
+    zgłoszenie telefoniczne. Wystarczy skorzystać z dobrodziejstwa ustawy o dostępie do informacji
+    publicznej.</p>
+
+<p>To proste. Poniżej masz prawie gotowy do skopiowania tekst do twojego wniosku. Możesz go
+    wysłać emailem na adres SM, albo wysłać go <a href="/epuap.html">przez ePUAP</a>.
+</p>
+
+{% if not isLoggedIn %}<p>(zaloguj się, to wzór wniosku zostanie uzupełnione o twoje dane)</p>{% endif %}
+
+<a id="copyBtn" onclick="copyToClipboard()"
+    class="ui-btn ui-corner-all ui-btn-inline">Skopiuj tekst:</a>
+
+<dd id="copy" style="white-space: pre-wrap;">
+Dnia <i>[{{ callDate }}]</i> o godzinie <i>[{{ callTime }}]</i> {{ wykonalam | raw }} połączenie na numer Straży Miejskiej z numeru {{ msisdn | raw }} prosząc o interwencję na ulicy <i>[Ulica XXX]</i>. 
+
+Na podstawie ustawy o dostępie do informacji publicznej wnoszę o udostępnienie:
+
+- liczby wykonanych na miejscu ww. interwencji wezwań inicjujących postępowania w sprawach o wykroczenie,
+- liczby środków oddziaływania wychowawczego udzielonych na miejscu ww. interwencji,
+- liczby mandatów wypisanych na miejscu ww. interwencji,
+- liczby decyzji o skierowaniu wniosków o ukaranie do sądu, które zostały podjęte na miejscu ww. interwencji,
+- liczby holowań dokonanych na miejscu ww. interwencji,
+- liczby założonych na miejscu ww. interwencji urządzeń do blokowania kół pojazdów,
+- informacji od której godziny do której godziny, którego konkretnie dnia, trwała ww. interwencja,
+- informacji czy zgłoszenie zostało potwierdzone,
+- informacji czy funkcjonariusze znaleźli podstawy do wyciagnięcia konsekwencji wobec kierujących, a jeśli ich nie znaleźli, to  z jakim uzasadnieniem (np. nieprawidłowa organizacja ruchu - co konkretnie jest w niej nieprawidłowego).
+
+Proszę o przekazanie ww. informacji na adres poczty elektronicznej: {{ email | raw }}.
+</dd>
+{% endblock %}
+

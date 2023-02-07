@@ -1,0 +1,35 @@
+<?PHP
+require_once(__DIR__ . '/../inc/include.php');
+
+$wykonalam = '<i>[wykonałam/em]</i>';
+$email = '<i>[xxx@xxx.pl]</i>';
+$msisdn = '<i>[XXX XXX XXX]</i>';
+
+if (isLoggedIn()) {
+    $user = $storage->getCurrentUser();
+    $msisdn = $user->data->msisdn ?? $msisdn;
+    $email = $user->data->email;
+    $wykonalam = $user->guessSex()["wykonalam"];
+}
+
+echo generate('dostep-do-info.html.twig', 
+    [
+        'head' =>
+        [
+            'title' => "Jak sprawdzić co zrobiła SM w odpowiedzi na twoje zgłoszenie",
+            'shortTitle' => "Dzwoń do SM jak szeryf",
+            'mainClass' => 'public'
+        ],
+        'config' => [
+            'menu' => 'public'
+        ],
+        'user' => $user,
+        'callDate' => date('j-m-Y', strtotime('-6 hour')),
+        'callTime' => date('H:m', strtotime('-6 hour')),
+        'checkTime' => date('H:00', strtotime('-2 hour')),
+        'msisdn' => $msisdn,
+        'email' => $email,
+        'wykonalam' => $wykonalam,
+        'isLoggedIn' => isLoggedIn()
+    ]);
+?>

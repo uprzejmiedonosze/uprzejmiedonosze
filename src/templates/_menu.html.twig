@@ -74,6 +74,12 @@
         <li class="subpage" data-icon="false">
             <a {% if config.menu == 'projekt' %}class="active"{% endif %}
                 href="/projekt.html">– o projekcie</a></li>
+
+        <li {#data-icon="phone"#} data-icon="false">
+            <a {% if config.menu == 'public' %}class="active"{% endif %}
+                data-ajax="false" href="/dostep-do-informacji-publicznej.html">Dzwoń do SM jak szeryf</a>
+            <span class="ui-li-count">nowość!</span>
+        </li>
         <li data-icon="comment">
             <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a></li>
 
