@@ -38,6 +38,26 @@ describe('Application screen validation', () => {
         cy.get('#lokalizacja').should('have.value', this.config.address.address)
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
+        Object.entries(this.categories).
+            filter(c => c.title).
+            forEach((category) => {
+            const [id, def] = category
+            if (def.stopAgresjiOnly)
+                cy.get(`input#${id}`).should('be.disabled')
+            else
+                cy.get(`input#${id}`).should('be.enabled')
+        })
+        
+        Object.entries(this.extensions).forEach((extension) => {
+            const id = extension[0]
+            cy.get(`input#ex${id}`).click({force: true})
+        })
+        Object.entries(this.extensions).forEach((extension) => {
+            const id = extension[0]
+            cy.get(`input#${id}`).click({force: true})
+            cy.get(`input#ex${id}`).should('be.disabled')
+        })
+        cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
         cy.get('#latlng').should(($input) => {
             const val = $input.val()
             expect(val).to.match(new RegExp(this.config.address.latlng))

@@ -54,6 +54,12 @@ Cypress.Commands.add("loadConfig", () => {
   cy.fixture('../../src/api/config/statuses.json').then(function (statuses) {
     this.statuses = statuses;
   })
+  cy.fixture('../../src/api/config/categories.json').then(function (categories) {
+    this.categories = categories;
+  })
+  cy.fixture('../../src/api/config/extensions.json').then(function (extensions) {
+    this.extensions = extensions;
+  })
 });
 
 Cypress.Commands.add("initDB", () => {
