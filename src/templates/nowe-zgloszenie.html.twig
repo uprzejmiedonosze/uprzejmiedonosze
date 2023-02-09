@@ -137,18 +137,16 @@
         <label for="extensions">Czy pojazd dodatkowo:</label>
         <div class="ui-grid-a ui-responsive" id="extensions">
         {% set i = 0 %}
-        {% for catId,categoryDef in categories %}
-        {% if categoryDef.extension is defined %}
+        {% for extId,extensionDef in extensions %}
             <div class="ui-block-{{ categoriesMatrix[i % 2] }}">
                 <input type="checkbox" name="extensions[]"
-                    value="{{ catId }}" id="ex{{ catId }}"
-                    {% if app.extensions is defined and catId in app.extensions %}checked{% endif %}>
-                <label for="ex{{ catId }}">
-                    <p>{{ categoryDef.extension|raw }} (mandat: {{ categoryDef.price }})</p>
+                    value="{{ extId }}" id="ex{{ extId }}"
+                    {% if app.extensions is defined and extId in app.extensions %}checked{% endif %}>
+                <label for="ex{{ extId }}">
+                    <p>{{ extensionDef.title|raw }} (mandat: {{ extensionDef.price }})</p>
                 </label>
             </div>
             {% set i = i + 1 %}
-        {% endif %}
         {% endfor %}
         </div>
 

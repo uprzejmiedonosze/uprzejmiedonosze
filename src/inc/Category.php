@@ -3,11 +3,11 @@
 require_once(__DIR__ . '/JSONObject.php');
 
 /**
- * Status class.
+ * Category class.
  */
 class Category extends JSONObject{
     /**
-     * Initites new Status from JSON.
+     * Initites new Category from JSON.
      */
     public function __construct($json = null) {
         parent::__construct($json);

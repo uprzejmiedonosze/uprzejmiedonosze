@@ -17,8 +17,7 @@
         "price": "do 1000 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać zniszczoną zieleń i przynajmniej fragment pojazdu.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, z widoczną zielenią.",
-        "stopAgresjiOnly": false,
-        "extension": "niszczył zieleń"
+        "stopAgresjiOnly": false
     },
     "14": {
         "title": "Niezastosowanie się do zakazu zatrzymywania się",
@@ -128,8 +127,7 @@
         "price": "100 zł",
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd na chodniku, w sposób umożliwiający identyfikację marki.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "extension": "miał ponad 2,5 tony dopuszczalnej masy całkowitej"
+        "stopAgresjiOnly": false
     },
     "13": {
         "title": "Parkowanie na miejscu dla niepełnosprawnych",

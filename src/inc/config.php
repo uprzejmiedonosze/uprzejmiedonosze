@@ -15,6 +15,11 @@ $categories = fopen(CATEGORIES_CONFIG, "r") or die("Unable to open config file: 
 $CATEGORIES = (array) new ConfigClass(fread($categories, filesize(CATEGORIES_CONFIG)), 'Category');
 fclose($categories);
 
+const EXTENSIONS_CONFIG = __DIR__ . '/../public/api/config/extensions.json';
+$extensions = fopen(EXTENSIONS_CONFIG, "r") or die("Unable to open config file: " . EXTENSIONS_CONFIG);
+$EXTENSIONS = (array) new ConfigClass(fread($extensions, filesize(EXTENSIONS_CONFIG)), 'Extension');
+fclose($extensions);
+
 const SM_CONFIG = __DIR__ . '/../public/api/config/sm.json';
 $smAddressess = fopen(SM_CONFIG, "r") or die("Unable to open config file: " . SM_CONFIG);
 $SM_ADDRESSES = (array) new ConfigClass(fread($smAddressess, filesize(SM_CONFIG)), 'SM');
