@@ -153,6 +153,9 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Nowe zgłoszenie').click()
     cy.uploadOKImages()
+    Object.entries(this.categories)
+      .filter(c => c.title)
+      .forEach((category) => cy.get(`input#${category[0]}`).should('be.enabled'))
     cy.get('#form-submit').click()
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')

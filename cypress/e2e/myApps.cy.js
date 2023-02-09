@@ -158,6 +158,8 @@ describe('Create application', () => {
     it('creates application', function () {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
+        const firstExtension = Object.entries(this.extensions)[0]
+        cy.get(`input#ex${firstExtension[0]}`).click({force: true})
     })
 
     it('checks confirmation screen', function () {
@@ -166,6 +168,8 @@ describe('Create application', () => {
         checkAppData(this.config)
         cy.contains('Zdjęcia wykonałem samodzielnie')
         cy.contains('proszę o niezamieszczanie')
+        const firstExtension = Object.entries(this.extensions)[0]
+        cy.contains(firstExtension[1].title)
     })
 
     it('checks thank you screen', function () {
