@@ -54,4 +54,16 @@ describe('Checks static pages', () => {
         cy.contains('Bitbucket')
     })
 
+    it('Visits dzwoń jak szeryf', () => {
+        cy.contains('Dzwoń do SM').click()
+        cy.contains('Dzwonisz do Straży Miejskiej')
+        cy.contains('Proszę o przekazanie ww.')
+    })
+
+    it('Visits dzwoń jak szeryf', () => {
+        cy.login()
+        cy.contains('Dzwoń do SM').click()
+        cy.contains('adres poczty elektronicznej: e@nieradka.net.')
+    })
+
 })
