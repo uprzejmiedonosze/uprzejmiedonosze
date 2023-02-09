@@ -501,6 +501,30 @@ class Application extends JSONObject{
     public function isAppOwner() {
         return isLoggedIn() && (getCurrentUserEmail() == $this->user->email);
     }
+
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getExtensionsText() {
+        global $EXTENSIONS;
+        if(!isset($this->extensions) || count($this->extensions) == 0) {
+            return '';
+        }
+        if ($this->category == 0)
+            $text = 'Pojazd';
+        else 
+            $text = 'Dodatkowo pojazd';
+        
+        $extCount = count($this->extensions);
+        foreach($this->extensions as $extension){
+            $text .= ' ';
+            $text .= $EXTENSIONS[$extension]->title;
+            if (--$extCount > 0) {
+                $text .= ' oraz';
+            }
+        }
+        return "$text.";
+    }
 }
 
 ?>

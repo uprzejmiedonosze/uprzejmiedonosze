@@ -30,13 +30,7 @@
     {# ale równocześnie chowam hint dotyczący mapy – bo zgłoszenia robią się dwustronnicowe #}
     do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
     {{ app.getCategory.short }} 
-    {% if app.extensions is defined -%}
-                Dodatkowo
-                {% for ext in app.extensions -%}
-                    {{ extensions[ext].title }}
-                    {%- if not loop.last %} oraz {% endif -%}
-                {%- endfor -%}
-            {%- endif -%}.
+    {{ app.getExtensionsText() }}
     Sytuacja jest widoczna na załączonych zdjęciach.
     Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
 {% if app.statements is not defined or not app.statements.witness %}
