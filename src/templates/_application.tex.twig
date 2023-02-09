@@ -33,7 +33,7 @@
     {% if app.extensions is defined -%}
                 Dodatkowo
                 {% for ext in app.extensions -%}
-                    {{ categories[ext].extension }}
+                    {{ extensions[ext].title }}
                     {%- if not loop.last %} oraz {% endif -%}
                 {%- endfor -%}
             {%- endif -%}.

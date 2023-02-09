@@ -2,7 +2,7 @@ Dzień dobry,
 
 w dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }} świadkiem pozostawienia pojazdu o nr. rejestracyjnym {{ app.carInfo.plateId }} w okolicy adresu {{ app.address.address }}. {{ app.getCategory.short }}
 {%- if app.extensions is defined %} Dodatkowo {% for ext in app.extensions -%}
-        {{ categories[ext].extension }}
+        {{ extensions[ext].title }}
         {%- if not loop.last %} oraz {% endif -%}
     {%- endfor -%}
 {%- endif -%}.
