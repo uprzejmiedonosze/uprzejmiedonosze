@@ -19,6 +19,17 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, z widoczną zielenią.",
         "stopAgresjiOnly": false
     },
+    "19": {
+        "title": null,
+        "_title": "Korzystanie niezgodnie z przeznaczeniem (parkowanie na zieleni lub sug. przejściu dla pieszych)",
+        "short": "Kierowca wykorzystał z części drogi w sposób niezgodny z przeznaczeniem (PoRD Art. 45. 1.4.).",
+        "desc": "<p>...</p>",
+        "law": "PoRD Art. 45. 1.4. Zabrania się wykorzystywania drogi lub poszczególnych jej części w sposób niezgodny z przeznaczeniem.",
+        "price": "... zł",
+        "contextImageHint": "...",
+        "carImageHint": "...",
+        "stopAgresjiOnly": false
+    },
     "14": {
         "title": "Niezastosowanie się do zakazu zatrzymywania się",
         "short": "Pojazd był zaparkowany za znakiem B-36 (zakaz zatrzymywania się, PoRD Art. 46. 4.).",
