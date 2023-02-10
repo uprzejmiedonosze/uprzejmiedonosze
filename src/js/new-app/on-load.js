@@ -30,9 +30,11 @@ export const initHandlers = () => {
     $(".carImageSection p.pictureHint").text(
       $(e.target).attr("data-carImage-hint")
     );
-    $("#extensions div.ui-checkbox").removeClass("ui-state-disabled").prop( "disabled", false );
-    $(`#ex${e.target.id}`).attr("checked", false).checkboxradio("refresh").prop( "disabled", true );
-    $(`#ex${e.target.id}`).parent().addClass('ui-state-disabled');
+    $("#extensions div.ui-checkbox").removeClass("ui-state-disabled")
+    $("#extensions div.ui-checkbox input").prop("disabled", false)
+    $(`#ex${e.target.id}`).attr("checked", false).checkboxradio("refresh")
+    $(`#ex${e.target.id}`).prop("disabled", true)
+    $(`#ex${e.target.id}`).parent().addClass('ui-state-disabled')
   });
 
   if (window.File && window.FileReader && window.FormData) {
