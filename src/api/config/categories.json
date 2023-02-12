@@ -20,14 +20,13 @@
         "stopAgresjiOnly": false
     },
     "19": {
-        "title": null,
-        "_title": "Korzystanie niezgodnie z przeznaczeniem (parkowanie na zieleni lub sug. przejściu dla pieszych)",
+        "title": "Korzystanie niezgodnie z przeznaczeniem (np. parkowanie na zieleni lub sug. przejściu dla pieszych)",
         "short": "Kierowca wykorzystał z części drogi w sposób niezgodny z przeznaczeniem (PoRD Art. 45. 1.4.).",
-        "desc": "<p>...</p>",
+        "desc": "<p>Jest to trochę zapomniany przepis (nie występuje np. w taryfikatorze). A przecież idealnie pasuje do parkowania na przydrożnym zieleńcu albo sugerowanym przejściu dla pieszych.</p>",
         "law": "PoRD Art. 45. 1.4. Zabrania się wykorzystywania drogi lub poszczególnych jej części w sposób niezgodny z przeznaczeniem.",
-        "price": "... zł",
-        "contextImageHint": "...",
-        "carImageHint": "...",
+        "price": "teoretycznie do 3000 zł",
+        "contextImageHint": "Idealne zdjęcie powinno dość pojazd z kilku metrów, z widocznym terenem pod pojazdem.",
+        "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
     },
     "14": {
