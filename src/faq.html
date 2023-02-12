@@ -2,15 +2,12 @@
 require_once(__DIR__ . '/../inc/include.php');
 
 $smAddresses = $SM_ADDRESSES;
-ksort($smAddresses);
 
-$sortedSMs = array();
-foreach ($smAddresses as $sm) {
-    if($sm->email){
-        array_push($sortedSMs, $sm->city);
-    }
-}
-$sortedSMs = array_unique($sortedSMs, SORT_LOCALE_STRING);
+$smNames = array_map(function ($sm) { return $sm->city; }, $SM_ADDRESSES);
+$collator = new Collator('pl_PL');
+$collator->sort($smNames);
+
+$smNames = array_unique($smNames, SORT_LOCALE_STRING);
 
 $SMHints = array();
 foreach ($smAddresses as $sm) {
