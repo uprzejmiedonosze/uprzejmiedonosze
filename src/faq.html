@@ -4,6 +4,7 @@ require_once(__DIR__ . '/../inc/include.php');
 $smAddresses = $SM_ADDRESSES;
 
 $smNames = array_map(function ($sm) { return $sm->city; }, $SM_ADDRESSES);
+array_push($smNames, 'Patronite');
 $collator = new Collator('pl_PL');
 $collator->sort($smNames);
 
@@ -31,7 +32,7 @@ echo generate('faq.html.twig',
         ],
         'config' => [
             'menu' => 'faq',
-            'smAddresses' => implode(', ', $sortedSMs),
+            'smAddresses' => implode(', ', $smNames),
             'SMHints' => $SMHints
         ]
     ]
