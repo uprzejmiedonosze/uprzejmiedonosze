@@ -7,7 +7,8 @@ $msisdn = '<i>[XXX XXX XXX]</i>';
 
 if (isLoggedIn()) {
     $user = $storage->getCurrentUser();
-    $msisdn = $user->data->msisdn ?? $msisdn;
+    if (!empty($user->data->msisdn))
+        $msisdn = $user->data->msisdn;
     $email = $user->data->email;
     $wykonalam = $user->guessSex()["wykonalam"];
 }
