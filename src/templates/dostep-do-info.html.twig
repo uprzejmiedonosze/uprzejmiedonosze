@@ -20,25 +20,33 @@
 
 {% if not isLoggedIn %}<p>(zaloguj się, to wzór wniosku zostanie uzupełnione o twoje dane)</p>{% endif %}
 
-<a id="copyBtn" onclick="copyToClipboard()"
-    class="ui-btn ui-corner-all ui-btn-inline">Skopiuj tekst:</a>
+{% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
 
-<dd id="copy" style="white-space: pre-wrap;">
-Dnia <i>[{{ callDate }}]</i> o godzinie <i>[{{ callTime }}]</i> {{ wykonalam | raw }} połączenie na numer Straży Miejskiej z numeru {{ msisdn | raw }} prosząc o interwencję na ulicy <i>[Ulica XXX]</i>. 
+{% set emailBody = 'Dnia <i>[' ~ callDate ~ ']</i> o godzinie <i>[' ~ callTime ~ ']</i> ' ~ wykonalam | raw ~ ' połączenie na numer Straży Miejskiej z numeru ' ~ msisdn | raw ~ ' prosząc o interwencję na ulicy <i>[Ulica XXX]</i>. 
 
 Na podstawie ustawy o dostępie do informacji publicznej wnoszę o udostępnienie:
 
+- informacji, czy zgłoszenie zostało potwierdzone,
+- informacji od której godziny do której godziny, trwała ww. interwencja,
+- informacji czy funkcjonariusze znaleźli podstawy do wyciągnięcia konsekwencji wobec kierujących, a jeśli ich nie znaleźli, to  z jakim uzasadnieniem (np. nieprawidłowa organizacja ruchu - co konkretnie jest w niej nieprawidłowego),
 - liczby wykonanych na miejscu ww. interwencji wezwań inicjujących postępowania w sprawach o wykroczenie,
 - liczby środków oddziaływania wychowawczego udzielonych na miejscu ww. interwencji,
 - liczby mandatów wypisanych na miejscu ww. interwencji,
 - liczby decyzji o skierowaniu wniosków o ukaranie do sądu, które zostały podjęte na miejscu ww. interwencji,
 - liczby holowań dokonanych na miejscu ww. interwencji,
-- liczby założonych na miejscu ww. interwencji urządzeń do blokowania kół pojazdów,
-- informacji od której godziny do której godziny, którego konkretnie dnia, trwała ww. interwencja,
-- informacji czy zgłoszenie zostało potwierdzone,
-- informacji czy funkcjonariusze znaleźli podstawy do wyciagnięcia konsekwencji wobec kierujących, a jeśli ich nie znaleźli, to  z jakim uzasadnieniem (np. nieprawidłowa organizacja ruchu - co konkretnie jest w niej nieprawidłowego).
+- liczby założonych na miejscu ww. interwencji urządzeń do blokowania kół pojazdów.
 
-Proszę o przekazanie ww. informacji na adres poczty elektronicznej: {{ email | raw }}.
+Proszę o przekazanie ww. informacji na adres poczty elektronicznej: ' ~ email | raw ~ '.
+
+' ~ name ~ '
+' %}
+
+<a id="copyBtn" onclick="copyToClipboard()"
+    class="ui-btn ui-corner-all ui-btn-inline ui-mini">Skopiuj tekst</a>
+
+
+<dd id="copy" style="white-space: pre-wrap;">
+{{ emailBody | raw }}
 </dd>
 {% endblock %}
 
