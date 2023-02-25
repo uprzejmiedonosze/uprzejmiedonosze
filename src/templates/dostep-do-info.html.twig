@@ -20,7 +20,7 @@
 
 {% if not isLoggedIn %}<p>(zaloguj się, to wzór wniosku zostanie uzupełnione o twoje dane)</p>{% endif %}
 
-{% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
+{% set emailSubject = 'Zapytanie o efekty interwencji SM' %}
 
 {% set emailBody = 'Dnia <i>[' ~ callDate ~ ']</i> o godzinie <i>[' ~ callTime ~ ']</i> ' ~ wykonalam | raw ~ ' połączenie na numer Straży Miejskiej z numeru ' ~ msisdn | raw ~ ' prosząc o interwencję na ulicy <i>[Ulica XXX]</i>. 
 
@@ -28,7 +28,7 @@ Na podstawie ustawy o dostępie do informacji publicznej wnoszę o udostępnieni
 
 - informacji, czy zgłoszenie zostało potwierdzone,
 - informacji od której godziny do której godziny, trwała ww. interwencja,
-- informacji czy funkcjonariusze znaleźli podstawy do wyciągnięcia konsekwencji wobec kierujących, a jeśli ich nie znaleźli, to  z jakim uzasadnieniem (np. nieprawidłowa organizacja ruchu - co konkretnie jest w niej nieprawidłowego),
+- informacji czy funkcjonariusze znaleźli podstawy do wyciągnięcia konsekwencji wobec kierujących, a jeśli ich nie znaleźli, to z jakim uzasadnieniem (np. nieprawidłowa organizacja ruchu - co konkretnie jest w niej nieprawidłowego),
 - liczby wykonanych na miejscu ww. interwencji wezwań inicjujących postępowania w sprawach o wykroczenie,
 - liczby środków oddziaływania wychowawczego udzielonych na miejscu ww. interwencji,
 - liczby mandatów wypisanych na miejscu ww. interwencji,
