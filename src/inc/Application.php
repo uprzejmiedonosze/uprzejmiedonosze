@@ -336,9 +336,9 @@ class Application extends JSONObject{
         return 0;
     }
 
-    public function getLatexSafeComment(){
+    private function getLatexSafe($input){
         // Remove HTML entities
-        $string = preg_replace('/&[a-zA-Z]+;/iu', '', $this->userComment);
+        $string = preg_replace('/&[a-zA-Z]+;/iu', '', $input);
 
         // Remaining special characters (cannot be placed with the others,
         // as then the html entity replace would fail).
@@ -358,6 +358,14 @@ class Application extends JSONObject{
         $string = str_replace("~", "\\textasciitilde ", $string);
 
         return $string;
+    }
+
+    public function getLatexSafeComment(){
+        return $this->getLatexSafe($this->userComment);
+    }
+
+    public function getLatexSafeAddress() {
+        return $this->getLatexSafe($this->address->address);
     }
 
     public function getJSONSafeComment(){

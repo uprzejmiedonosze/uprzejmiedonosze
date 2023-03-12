@@ -15,7 +15,7 @@
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb ~ '}' %}
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
-{% set address      = '\\href' ~ appUrl ~ '{\\underline{' ~ app.address.address ~ '}}' %}
+{% set address      = '{\\underline{' ~ ( app.getLatexSafeAddress|raw ) ~ '}}' %}
 
 \vspace{\stretch{2}}
 \begin{center}
@@ -24,10 +24,10 @@
 \end{center}
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
-    świadkiem pozostawienia pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w okolicy adresu
-    {{ address }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
+    świadkiem pozostawienia pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
+    \href{{ appUrl }}{{ address|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej #}
-    {# ale równocześnie chowam hint dotyczący mapy – bo zgłoszenia robią się dwustronnicowe #}
+    {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronnicowe #}
     do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
     {{ app.getCategory.short }} 
     {{ app.getExtensionsText() }}
