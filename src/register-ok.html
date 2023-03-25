@@ -8,11 +8,11 @@ if(isset($_GET['next'])){
     $signInSuccessUrl = $_GET['next'];
 }
 
+$post = $_POST;
 if (!isset($post["name"]) || !isset($post["address"])) {
     redirect('/register.html');
 }
 
-$post = $_POST;
 $name = capitalizeName($post["name"]);
 $msisdn = trim($post["msisdn"]);
 $exposeData = isset($post['exposeData']) && $post['exposeData'] == 'Y';
