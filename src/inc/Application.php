@@ -159,6 +159,8 @@ class Application extends JSONObject{
      */
     public function setStatus($status){
         global $STATUSES;
+        $now = date(DT_FORMAT);
+
         if(!array_key_exists($status, $STATUSES)){
             throw new Exception("Odmawiam ustawienia statusu na $status");
         }
@@ -171,15 +173,15 @@ class Application extends JSONObject{
         if(!isset($this->statusHistory)){
             $this->statusHistory = [];
         }
-        $this->statusHistory[date(DT_FORMAT)] = new JSONObject();
-        $this->statusHistory[date(DT_FORMAT)]->old = $this->status;
-        $this->statusHistory[date(DT_FORMAT)]->new = $status;
+        $this->statusHistory[$now] = new JSONObject();
+        $this->statusHistory[$now]->old = $this->status;
+        $this->statusHistory[$now]->new = $status;
 
         if ($status == 'confirmed-waiting' || $status == 'confirmed-waitingE') {
             if(!isset($this->sent)) {
                 $this->sent = new JSONObject();
             }
-            $this->sent->date = date(DT_FORMAT);
+            $this->sent->date = $now;
             $smData = $this->guessSMData();
             $this->sent->to = $smData->getEmail();
             $this->sent->subject = $this->getEmailSubject();
