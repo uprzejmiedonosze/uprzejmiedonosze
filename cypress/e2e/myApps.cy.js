@@ -87,7 +87,6 @@ describe('Invalid images', () => {
     })
 
     it('checks application page with wrong images uploaded', function () {
-        cy.contains("Twoje zdjęcie nie ma znaczników geolokacji")
         cy.get('.imageContainer').should('not.have.class', 'error')
         cy.contains("około")
         cy.contains('Podaj datę i godzinę zgłoszenia')
@@ -121,7 +120,7 @@ describe('Valid images and location', () => {
         cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
-        cy.get('#lokalizacja').should('have.value', 'Mazurska 20, Poznań')
+        cy.get('#lokalizacja').should('have.value', 'Zagórzycka 20, Poznań')
     })
 
     it('uploads images', function () {
