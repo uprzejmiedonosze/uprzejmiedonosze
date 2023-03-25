@@ -8,6 +8,10 @@ if(isset($_GET['next'])){
     $signInSuccessUrl = $_GET['next'];
 }
 
+if (!isset($post["name"]) || !isset($post["address"])) {
+    redirect('/register.html');
+}
+
 $post = $_POST;
 $name = capitalizeName($post["name"]);
 $msisdn = trim($post["msisdn"]);
