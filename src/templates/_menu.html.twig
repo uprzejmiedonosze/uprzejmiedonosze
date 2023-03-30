@@ -75,13 +75,20 @@
             <a {% if config.menu == 'projekt' %}class="active"{% endif %}
                 href="/projekt.html">– o projekcie</a></li>
 
-        <li {#data-icon="phone"#} data-icon="false">
+        <li {#data-icon="phone"#} class="subpage" data-icon="false">
             <a {% if config.menu == 'public' %}class="active"{% endif %}
-                data-ajax="false" href="/dostep-do-informacji-publicznej.html">Dzwoń do SM jak szeryf</a>
+                data-ajax="false" href="/dostep-do-informacji-publicznej.html">– dzwoń do SM jak szeryf</a>
+        </li>
+        {% if general.isLoggedIn %}
+        <li data-icon="false">
+            <a target="_blank"
+                data-ajax="false" href="https://patronite.pl/uprzejmiedonosze">Zostań patronem</a>
             <span class="ui-li-count">nowość!</span>
         </li>
+        {% endif %}
         <li data-icon="comment">
-            <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a></li>
+            <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a>
+        </li>
 
         <li data-role="list-divider"></li>
         {% if general.isLoggedIn %}

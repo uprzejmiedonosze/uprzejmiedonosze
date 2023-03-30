@@ -89,7 +89,13 @@ function _setStatus($status, $appId){
     $storage->saveApplication($application);
     $storage->updateRecydywa($application->carInfo->plateId);
     $storage->getUserStats(false); // update cache
-    echo json_encode(Array("status" => "OK"));
+
+    $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
+
+    echo json_encode(Array(
+        "status" => "OK",
+        "patronite" => $patronite
+    ));
 }
 
 /**

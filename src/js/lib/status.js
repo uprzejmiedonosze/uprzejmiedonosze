@@ -3,9 +3,10 @@
 const statuses = require("../../api/config/statuses.json");
 
 export function setStatus(appId, status) {
-  $.mobile.loading("show", { textVisible: false });
-  $.post("/api/api.html", { action: status, id: appId }).done(function () {
-    _updateStatus(appId, status);
+  $.mobile.loading("show", { textVisible: true, text: '' });
+  $.post("/api/api.html", { action: status, id: appId }).done(function (e) {
+    if (e?.patronite) $('#patronite').popup("open")
+    _updateStatus(appId, status)
     $.mobile.loading("hide")
   });
   (typeof ga == 'function') && ga("send", "event", {

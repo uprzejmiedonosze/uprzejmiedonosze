@@ -27,6 +27,19 @@
         <input data-type="search" id="searchForCollapsibleSet"
             placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu">
     </form>
+    
+    <div data-role="popup" id="patronite" class="ui-content"
+        data-overlay-theme="b" data-theme="a" data-corners="true" data-tolerance="15,15"
+        data-position-to="window"> 
+        <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+        <p><b>Cieszę się, że zmieniłeś na lepsze swoje otoczenie!</b></p>
+        <p>Chciałbym poświęcić więcej czasu swojej misji odzyskania przestrzeni dla pieszych.
+            Twoje wsparcie dla serwisu Uprzejmie Donoszę może mi w tym bardzo pomóc.</p>
+            <a class="ui-btn ui-corner-all ui-btn-inline try"
+                href="https://patronite.pl/uprzejmiedonosze" target="_blank"
+                data-ajax="false">Zostań Patronem</a>
+        </p>
+    </div>
 
     <div data-role="collapsibleset" data-filter="true" data-mini="true"
         data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
