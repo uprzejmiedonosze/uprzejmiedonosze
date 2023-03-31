@@ -994,6 +994,7 @@
     ],
     "email": "strazmiejska@umsiechnice.pl"
   },
+  "Radwanice": { "parent": "Siechnice" },
   "Sędławki": {
     "address": [
       "Komenda Powiatowa Policji w Bartoszycach",
