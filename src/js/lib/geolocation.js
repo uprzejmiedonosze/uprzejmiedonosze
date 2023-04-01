@@ -151,15 +151,15 @@ function setAddressByPlace(place) {
     .replace(", Polska", "")
     .replace(/\d\d-\d\d\d\s/, "")
     .replace(/\/\d+[a-zA-Z]?, /, ', ');
-  const voivodeship = place.address_components
-    .filter(e => e.types.indexOf("administrative_area_level_1") == 0)
+  const voivodeship = place?.address_components
+    ?.filter(e => e.types.indexOf("administrative_area_level_1") == 0)
     ?.at(0)?.long_name?.replace("Województwo ", "");
-  const country = place.address_components
-    .filter(e => e.types.indexOf("country") == 0)?.at(0)?.long_name;
-  const city = place.address_components
-    .filter(e => e.types.indexOf("locality") == 0)?.at(0)?.long_name;
-  const district = place.address_components
-    .filter(e => e.types.indexOf("sublocality_level_1") >= 0)?.at(0)?.short_name;
+  const country = place?.address_components
+    ?.filter(e => e.types.indexOf("country") == 0)?.at(0)?.long_name;
+  const city = place?.address_components
+    ?.filter(e => e.types.indexOf("locality") == 0)?.at(0)?.long_name;
+  const district = place?.address_components
+    ?.filter(e => e.types.indexOf("sublocality_level_1") >= 0)?.at(0)?.short_name;
   
   $("#lokalizacja").val(formatted_address || "");
   voivodeship && $("#administrative_area_level_1").val(voivodeship || "");
