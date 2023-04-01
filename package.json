@@ -21,7 +21,7 @@
     "@parcel/transformer-inline-string": "^2.8.2",
     "@parcel/transformer-sass": "^2.8.2",
     "@sentry/cli": "^2.11.0",
-    "cypress": "^12.2.0",
+    "cypress": "^12.9.0",
     "eslint": "^8.30.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.0",
