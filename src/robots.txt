@@ -1,5 +1,6 @@
 User-agent: Googlebot
 Disallow: /login.html
+Disallow: /login-ok.html
 Disallow: /register.html
 
 User-agent: *
