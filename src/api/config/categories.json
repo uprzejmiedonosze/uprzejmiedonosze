@@ -119,9 +119,9 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
     },
-    "20": {
+    "21": {
         "title": "Zatrzymanie na drodze dla rowerów",
-        "short": "Pojazd był zaparkowany na drodze dla rowerów (PoRD Art. 49. 1.11.).",
+        "short": "Pojazd był zaparkowany na części drogi przeznaczonej dla rowerów (PoRD Art. 49. 1.11.).",
         "desc": "<p>Przepisy są tutaj jednoznaczne. Na drodze dla rowerów nie wolno ani parkować, ani nawet się zatrzymywać 'na chwilę'.</p>",
         "law": "PoRD Art. 49. 1.11. Zabrania się zatrzymania pojazdu na na drodze dla pieszych i rowerów, drodze dla rowerów, pasie ruchu dla rowerów oraz w śluzie dla rowerów, z wyjątkiem roweru.",
         "price": "100 zł",
@@ -202,6 +202,16 @@
     "9": {
         "title": null,
         "short": "Pojazd był zaparkowany w sposób utrudniający ruch użytkownikom rowerów (PoRD Art. 49. 1.11.).",
+        "desc": null,
+        "law": null,
+        "price": null,
+        "contextImageHint": "",
+        "carImageHint": "",
+        "stopAgresjiOnly": false
+    },
+    "20": {
+        "title": null,
+        "short": "Pojazd był zaparkowany na drodze dla rowerów (PoRD Art. 49. 1.11.).",
         "desc": null,
         "law": null,
         "price": null,
