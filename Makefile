@@ -117,7 +117,7 @@ quickfix:  HOST := $(PROD_HOST)
 quickfix: diff-from-last-prod confirmation check-branch-main check-git-clean clean $(DIRS) export ## Quickfix on production
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
-	@git push origin --quiet --force "prod_$(TAG_NAME)"
+	@#git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(sentry-release)
 	$(create-symlink)
