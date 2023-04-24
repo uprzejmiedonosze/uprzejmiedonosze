@@ -210,6 +210,9 @@
   "Konarzewo": {
     "parent": "Dopiewo"
   },
+  "Skórzewo": {
+    "parent": "Dopiewo"
+  },
   "Kałuszyn": {
     "parent": "Wieliszew"
   },
