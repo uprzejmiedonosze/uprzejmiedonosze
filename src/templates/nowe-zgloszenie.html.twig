@@ -116,7 +116,7 @@
                     name="category" value="{{ catId }}" id="{{ catId }}"
                     data-contextImage-hint="{{ categoryDef.contextImageHint }}" data-carImage-hint="{{ categoryDef.carImageHint }}">
                 <label for="{{ catId }}">
-                    <img src="img/{{ catId }}.jpg?refresh">
+                    <img src="img/{{ catId }}.jpg?ref">
                     <p>{{ categoryDef.title|raw }}
                     {% if not app.stopAgresji and categoryDef.stopAgresjiOnly %}
                         <span class="price-list">(kategoria niedostępna, jeśli zgłaszasz do SM)</span>
