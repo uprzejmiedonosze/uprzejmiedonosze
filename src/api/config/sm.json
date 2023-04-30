@@ -1434,6 +1434,9 @@
     ],
     "email": "straz.miejska@poczta.lomianki.pl"
   },
+  "Łomianki Dolne": {
+    "parent": "Łomianki"
+  },
   "Sulejówek": {
     "address": [
       "Straż Miejska w Sulejówku",
