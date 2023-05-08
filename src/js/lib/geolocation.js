@@ -2,6 +2,8 @@
 
 import { Loader } from "@googlemaps/js-api-loader";
 import LocationPicker from "location-picker";
+import "core-js/features/array/at";
+
 
 let autocomplete;
 
