@@ -40,6 +40,10 @@ class DB extends NoSQLite{
         }
     }
 
+    private function setStats($key, $value, $timeout=24*60*60) {
+        $this->stats->set("%HOST%-$key", $value, 0, $timeout);
+    }
+
     /**
      * Returns currently logged in user or null.
      * 
@@ -246,7 +250,8 @@ class DB extends NoSQLite{
 
         $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
 
-        $this->stats->set("%HOST%-stats-" . getCurrentUserEmail(), $stats);
+        
+        $this->setStats("stats-" . getCurrentUserEmail(), $stats, 0);
         return $stats;
     }
 
@@ -361,7 +366,7 @@ class DB extends NoSQLite{
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsAppsByDay", $stats, 0, 600);
+        $this->setStats('getStatsAppsByDay', $stats);
         return $stats;
     }
 
@@ -387,7 +392,7 @@ SQL;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsAppsByWeek", $stats, 0, 600);
+        $this->setStats('getStatsAppsByWeek', $stats);
         return $stats;
     }
 
@@ -425,7 +430,7 @@ SQL;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsByDay", $stats, 0, 600);
+        $this->setStats('getStatsByDay', $stats);
         return $stats;
     }
 
@@ -462,7 +467,7 @@ SQL;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsByYear", $stats, 0, 600);
+        $this->setStats('getStatsByYear', $stats);
         return $stats;
     }
 
@@ -483,7 +488,7 @@ SQL;
             . "order by 2 desc, 1 limit 10 ";
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsAppsByCity", $stats, 0, 600);
+        $this->setStats('getStatsAppsByCity', $stats);
         return $stats;
     }
 
@@ -530,7 +535,7 @@ SQL;
 SQL;
 
         $stats = intval($this->db->query($sql)->fetchColumn());
-        $this->stats->set("%HOST%-getGalleryCount", $stats, 0, 600);
+        $this->setStats('getGalleryCount', $stats);
         return $stats;
     }
 
@@ -555,7 +560,7 @@ SQL;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getGalleryByCity", $stats, 0, 600);
+        $this->setStats('getGalleryByCity', $stats);
         return $stats;
     }
 
@@ -580,7 +585,7 @@ SQL;
 SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->stats->set("%HOST%-getStatsByCarBrand", $stats, 0, 600);
+        $this->setStats('getStatsByCarBrand', $stats);
         return $stats;
     }
 
