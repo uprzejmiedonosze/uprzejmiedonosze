@@ -2377,6 +2377,7 @@
       "63-000 Środa Wielkopolska"
     ],
     "email": "strazmiejska@sroda.wlkp.pl"
+  },
   "Morawica": {
     "address": [
       "Straż Miejska w Morawicy",
@@ -2385,4 +2386,5 @@
     ],
     "email": "gmina@morawica.pl"
   },
+  "Bilcza": { "parent": "Morawica" }
 }
