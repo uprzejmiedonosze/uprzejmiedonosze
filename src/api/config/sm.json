@@ -2377,5 +2377,12 @@
       "63-000 Środa Wielkopolska"
     ],
     "email": "strazmiejska@sroda.wlkp.pl"
-  }
+  "Morawica": {
+    "address": [
+      "Straż Miejska w Morawicy",
+      "ul. Spacerowa 7",
+      "26-026 Morawica"
+    ],
+    "email": "gmina@morawica.pl"
+  },
 }
