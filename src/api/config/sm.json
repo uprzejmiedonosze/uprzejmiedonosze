@@ -252,9 +252,6 @@
   "Białków": {
     "parent": "Miękinia"
   },
-  "Błonie": {
-    "parent": "Miękinia"
-  },
   "Brzezina": {
     "parent": "Miękinia"
   },
@@ -2399,8 +2396,16 @@
     "address": [
       "Straż Miejska w Jaśle",
       "ul. Polskiego Czerwonego Krzyża 2a",
-      "38- 200 Jasło"
+      "38-200 Jasło"
     ],
     "email": "sm@um.jaslo.pl"
+  },
+  "Błonie": {
+    "address": [
+      "Straż Miejska w Błoniu",
+      "ul. Jana Pawła II 3",
+      "05-870 Błonie"
+    ],
+    "email": "sm@um.blonie.pl"
   }
 }
