@@ -2386,5 +2386,21 @@
     ],
     "email": "gmina@morawica.pl"
   },
-  "Bilcza": { "parent": "Morawica" }
+  "Bilcza": { "parent": "Morawica" },
+  "Praszka": {
+    "address": [
+      "Straż Miejska w Praszce",
+      "pl. Grunwaldzki 13",
+      "46-320 Praszka"
+    ],
+    "email": "sm@praszka.pl"
+  },
+  "Jasło": {
+    "address": [
+      "Straż Miejska w Jaśle",
+      "ul. Polskiego Czerwonego Krzyża 2a",
+      "38- 200 Jasło"
+    ],
+    "email": "sm@um.jaslo.pl"
+  }
 }
