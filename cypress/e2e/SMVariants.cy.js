@@ -11,7 +11,7 @@ describe('API:automated (Poznań)', () => {
 
     it('creates application', function () {
         cy.uploadOKImages()
-        cy.get('#lokalizacja').clear().type('Mazurska 13, Poznań')
+        cy.get('#lokalizacja').clear().type('Taczaka 20, Poznań')
         cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
@@ -30,7 +30,7 @@ describe('API:automated (Poznań)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains('Mazurska 13, Poznań').click()
+        cy.contains('Stanisława Taczaka 20, Poznań').click()
         cy.contains('Zmień ręcznie status zgłoszenia z Potwierdzone w SM')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
@@ -40,7 +40,7 @@ describe('API:automated (Poznań)', () => {
         cy.contains('Menu').click()
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Na szczęście ' + this.sm['Poznań'].address[0] + ' udostępniła mechanizm')
-        cy.contains('Mazurska 13, Poznań').click()
+        cy.contains('Stanisława Taczaka 20, Poznań').click()
         cy.contains('Wyślij do ' + this.sm['Poznań'].address[0])
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
         cy.contains('Dodaj do galerii').should('not.exist')
