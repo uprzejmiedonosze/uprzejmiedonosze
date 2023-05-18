@@ -2415,5 +2415,8 @@
       "48-340 Głuchołazy"
     ],
     "email": "sm@glucholazy.pl"
+  },
+  "Konradów": {
+    "parent": "Głuchołazy"
   }
 }
