@@ -993,7 +993,8 @@
       "ul. Kolejowa 3",
       "55-010 Święta Katarzyna"
     ],
-    "email": "strazmiejska@umsiechnice.pl"
+    "email": "strazmiejska@umsiechnice.pl",
+    "hint": "Niestety SM w Siechnicach wzywa na przesłuchanie do każdego zgłoszenia."
   },
   "Radwanice": { "parent": "Siechnice" },
   "Sędławki": {
