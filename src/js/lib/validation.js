@@ -25,9 +25,17 @@ export const checkAddress = function (where) {
 
 export const checkValue = function (item, minLength) {
   const len = item.val().trim().length
-  if (len <= minLength) {
-    item.addClass("error");
-    return false;
-  }
-  return true;
-};
+  if (len > minLength)
+    return true
+  item.addClass("error")
+  return false
+}
+
+export const checkCommentvalue = function () {
+  let comment = $("#comment").val().trim()
+  comment = comment.replace(/^Pojazd (prawdopodobnie )?marki [^.]+./, '').trim()
+  if (comment.length > 10)
+    return true
+  $("#comment").addClass("error");
+  return false
+}

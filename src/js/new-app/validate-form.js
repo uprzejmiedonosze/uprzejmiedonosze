@@ -1,4 +1,4 @@
-import { checkAddress, checkValue } from "../lib/validation";
+import { checkAddress, checkValue, checkCommentvalue } from "../lib/validation";
 
 export function validateForm() {
   $("#form-submit").addClass("ui-disabled");
@@ -7,7 +7,7 @@ export function validateForm() {
   ret = checkImages() && ret;
   if ($("#0").is(":checked")) {
     // if category == 0 then comment is mandatory
-    ret = checkValue($("#comment"), 10) && ret;
+    ret = checkCommentvalue() && ret;
   }
   if (!ret) {
     $(window).scrollTop($(".error").offset().top - 100);
