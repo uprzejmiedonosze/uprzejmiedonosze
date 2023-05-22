@@ -44,6 +44,11 @@ Cypress.Commands.add("uploadWrongImages", () => {
   cy.get('.carImageSection img', { timeout: 12000 }).should('have.attr', 'src').should('include', 'cdn')
 });
 
+Cypress.Commands.add("setAppCategory", (categories) => {
+  const firstNonDefaultCategoryId = Object.entries(categories).filter(c => c[1].law)[0][0]
+  cy.get(`input#${firstNonDefaultCategoryId}`).click({force: true})
+})
+
 Cypress.Commands.add("loadConfig", () => {
   cy.fixture('config.json').then(function (config) {
     this.config = config;

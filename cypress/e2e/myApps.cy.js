@@ -39,7 +39,7 @@ describe('Application screen validation', () => {
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
         Object.entries(this.categories).
-            filter(c => c.title).
+            filter(c => c[1].title).
             forEach((category) => {
             const [id, def] = category
             if (def.stopAgresjiOnly)
@@ -157,6 +157,7 @@ describe('Create application', () => {
     it('creates application', function () {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
+        cy.setAppCategory(this.categories)
         const firstExtension = Object.entries(this.extensions)[0]
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
     })
@@ -202,6 +203,7 @@ describe('Edit application', () => {
     it('creates application', function () {
         cy.goToNewAppScreenWithoutTermsScreen()
         cy.uploadOKImages()
+        cy.setAppCategory(this.categories)
     })
 
     it('checks confirmation screen', function () {

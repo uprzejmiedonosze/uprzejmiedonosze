@@ -11,6 +11,7 @@ describe('API:automated (Poznań)', () => {
 
     it('creates application', function () {
         cy.uploadOKImages()
+        cy.setAppCategory(this.categories)
         cy.get('#lokalizacja').clear().type('Taczaka 20, Poznań')
         cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
@@ -61,6 +62,7 @@ describe('API:Mail (Wrocław)', () => {
     it('creates application', function () {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
+        cy.setAppCategory(this.categories)
         cy.get('#lokalizacja').clear().type('Mieszka I 12, Wrocław')
         cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
@@ -149,6 +151,7 @@ describe('Missing SM (Poniatowa)', () => {
     it('creates application', function () {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
+        cy.setAppCategory(this.categories)
         cy.get('#lokalizacja').clear().type('Henin 93, Poniatowa')
         cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
