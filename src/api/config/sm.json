@@ -2428,6 +2428,9 @@
     ],
     "email": "dzielnicowy.ozimek60@op.policja.gov.pl"
   },
+  "Turawa": {
+    "parent": "Osowiec"
+  },
   "Nekla": {
     "address": [
       "Komisariat Policji w Nekli",
