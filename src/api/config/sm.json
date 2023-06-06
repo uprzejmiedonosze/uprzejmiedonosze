@@ -2431,9 +2431,17 @@
   "Nekla": {
     "address": [
       "Komisariat Policji w Nekli",
-      "ul. Dworcowa 8.",
+      "ul. Dworcowa 8",
       "62-330 Nekla"
     ],
     "email": "dzielnicowy.nekla13@po.policja.gov.pl"
+  },
+  "Libertów": {
+    "address": [
+      "Komisariat Policji w Świątnikach Górnych",
+      "ul. Królowej Jadwigi 12",
+      "32-040 Świątniki Górne"
+    ],
+    "email": "dzielnicowy.mogilany4@kpp-krakow.policja.gov.pl"
   }
 }
