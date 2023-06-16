@@ -287,6 +287,10 @@ function isStaging(){
     return '%HOST%' == 'staging.uprzejmiedonosze.net';
 }
 
+function isDev() {
+    return !isProd() && !isStaging();
+}
+
 function extractAppNumer($appNumber) {
     $number = explode("/", $appNumber);
     return intval($number[2]);
