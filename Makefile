@@ -91,7 +91,6 @@ staging-sequential: HOST := $(STAGING_HOST)
 staging-sequential: $(DIRS) export
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
-	$(create-symlink)
 	@#ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
 shadow: ## Copy files to shadow server.
@@ -101,7 +100,6 @@ shadow-sequential: HOST := $(SHADOW_HOST)
 shadow-sequential: $(DIRS) export
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
-	$(create-symlink)
 
 prod: HOST := $(PROD_HOST)
 prod: cypress check-branch-main check-git-clean clean $(DIRS) export ## Copy files to prod server.
@@ -110,7 +108,6 @@ prod: cypress check-branch-main check-git-clean clean $(DIRS) export ## Copy fil
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(sentry-release)
-	$(create-symlink)
 	@make clean
 
 quickfix:  HOST := $(PROD_HOST)
@@ -120,7 +117,6 @@ quickfix: diff-from-last-prod confirmation check-branch-main check-git-clean cle
 	@#git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	$(sentry-release)
-	$(create-symlink)
 	@make clean
 
 confirmation:
@@ -308,12 +304,6 @@ endef
 
 define lint-twig
 @./vendor/bin/twig-linter lint --no-interaction --quiet $< || ./vendor/bin/twig-linter lint --no-interaction $<
-endef
-
-define create-symlink
-@echo "==> Creating a symlink in logs directory [$(TAG_NAME).log] -> [$@.log]"
-@curl $(HTTPS)://$(HOST)/api/api.html?action=initLogs
-@ssh $(HOSTING) "cd /var/log/uprzejmiedonosze.net && ln -fs $(TAG_NAME).log $@.log"
 endef
 
 define sentry-release
