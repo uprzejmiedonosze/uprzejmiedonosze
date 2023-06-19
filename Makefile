@@ -15,7 +15,7 @@ endif
 # dirs and files 
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
-DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/templates
+DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/templates
 
 CSS_FILES            := $(wildcard src/scss/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
@@ -26,7 +26,7 @@ CONFIG_FILES         := $(wildcard src/api/config/*.json)
 JS_HASH              := $(shell cat $(JS_FILES) $(CONFIG_FILES) | md5sum | cut -b 1-8)
 JS_MINIFIED          := $(PUBLIC)/js/index.js $(PUBLIC)/js/new-app.js $(PUBLIC)/js/firebase.js
 
-HTML_FILES           := $(wildcard src/*.html src/api/*.html)
+HTML_FILES           := $(wildcard src/*.html src/api/*.html src/api/rest/*.html)
 HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
 
 CONFIG_FILES         := $(wildcard src/api/config/*.json)

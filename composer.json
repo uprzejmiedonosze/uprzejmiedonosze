@@ -6,7 +6,8 @@
         "tumblr/tumblr": "^0.4",
         "swiftmailer/swiftmailer": "^6.0",
         "sentry/sdk": "^3.3",
-        "lcobucci/jwt": "^4.2"
+        "lcobucci/jwt": "^4.2",
+        "firebase/php-jwt": "^6.7"
     },
     "require-dev": {
         "phpmd/phpmd": "@stable",
