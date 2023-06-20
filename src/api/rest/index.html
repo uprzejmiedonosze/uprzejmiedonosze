@@ -1,14 +1,14 @@
 <?PHP
 
+require_once(__DIR__ . '/../../../inc/include.php');
+require(__DIR__ . '/../../../inc/API.php');
+
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-//header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: POST, GET");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Origin: *");
 
-
-require_once(__DIR__ . '/../../../inc/include.php');
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -17,53 +17,29 @@ use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use \Memcache as Memcache;
 
-$ACTIONS = ['upload'];
-$ALGORITHM = 'RS256';
+$ACTIONS = [
+    'upload' => true,
+    'sm-config' => false
+];
 
-function _parseHeaders($headers) {
-    $head = array();
-    foreach($headers as $_k=>$v) {
-        $t = explode( ':', $v, 2 );
-        if( isset( $t[1] ) )
-            $head[ trim($t[0]) ] = trim( $t[1] );
-        else {
-            $head[] = $v;
-            if(preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $v, $out) )
-                $head['reponse_code'] = intval($out[1]);
-        }
-    }
-    return $head;
+
+$action = detectAction();
+
+if (needAuth($action)) {
+    validateJWT();
 }
 
-function _getPublicKeys() {
-    $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
-
-    $cache = new Memcache;
-    $cache->connect('localhost', 11211);
-    $cacheKey = "%HOST%-firebase-keys";
-
-    $keys = $cache->get($cacheKey);
-    if ($keys) return json_decode($keys, true);
-
-    $publicKeys = file_get_contents($publicKeyUrl);
-    if (!$publicKeys) 
-        raiseError('Failed to fetch JWT public keys.', 501);
-
-    $cacheControl = _parseHeaders($http_response_header)['Cache-Control'];
-    preg_match('/max-age=(\d+)/', $cacheControl, $out);
-    $timeout = $out[1];
-    $cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
-
-    return json_decode($publicKeys, true);
+switch($action) {
+    case "upload": _upload(); break;
+    case "sm-config": smConfig(); break;
 }
 
-function _decodeKid($jwt) {
-    list($headersB64, $payloadB64, $sig) = explode('.', $jwt);
-    $decoded = json_decode(base64_decode($headersB64), true);
-    if (!isset($decoded['kid']))
-        raiseError('Missing `kid` in JWT header', 501);
-    return $decoded['kid'];
+function smConfig() {
+    echo file_get_contents(__DIR__ . "/../config/sm.json");
 }
+
+
+// API utils
 
 function detectAction() {
     global $_GET, $_POST, $ACTIONS;
@@ -72,13 +48,22 @@ function detectAction() {
     isset($_POST["action"]) && $action = $_POST["action"];
     if (is_null($action))
         raiseError('GET or POST action paremeter is missing', 400);
-    if (!in_array($action, $ACTIONS))
+    if (!in_array($action, array_keys($ACTIONS)))
         raiseError("'$action' is not implemented", 501);
     return $action;
 }
 
+function needAuth($action) {
+    global $ACTIONS;
+    return $ACTIONS[$action];
+}
+
+// AUTH utils
+
 function validateJWT() {
-    global $_SERVER, $ALGORITHM;
+    global $_SERVER;
+    $algorithm = 'RS256';
+
     if (!isset($_SERVER['HTTP_AUTHORIZATION']) || !preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
         raiseError("Token not found in request", 400);
     }
@@ -93,7 +78,7 @@ function validateJWT() {
     $key = $keys[$kid];
 
     try {
-        $token = JWT::decode($jwt, new Key($key, $ALGORITHM));
+        $token = JWT::decode($jwt, new Key($key, $algorithm));
     } catch (InvalidArgumentException $e) {
         raiseError("$e", 401);
     } catch (DomainException $e) {
@@ -115,7 +100,7 @@ function validateJWT() {
         // provided key ID in key/key-array is empty or invalid.
         raiseError("$e", 401);
     }
-    
+
     if (!verifyToken($jwt)) {
         raiseError("Internal JWT verification failed", 401);
     }
@@ -123,6 +108,40 @@ function validateJWT() {
     return $token;
 }
 
-$action = detectAction();
-validateJWT();
+/**
+ * Retrieves (cached) public keys from Firebase's server
+ */
+function _getPublicKeys() {
+    $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
 
+    $cache = new Memcache;
+    $cache->connect('localhost', 11211);
+    $cacheKey = "%HOST%-firebase-keys";
+
+    $keys = $cache->get($cacheKey);
+    if ($keys) return json_decode($keys, true);
+
+    $publicKeys = file_get_contents($publicKeyUrl);
+    if (!$publicKeys)
+        raiseError('Failed to fetch JWT public keys.', 501);
+
+    $cacheControl = _parseHeaders($http_response_header)['Cache-Control'];
+    preg_match('/max-age=(\d+)/', $cacheControl, $out);
+    $timeout = $out[1];
+    $cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
+
+    return json_decode($publicKeys, true);
+}
+
+/**
+ * Retrieves key_id from JWT.
+ * 
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
+function _decodeKid($jwt) {
+    list($headersB64, $payloadB64, $sig) = explode('.', $jwt);
+    $decoded = json_decode(base64_decode($headersB64), true);
+    if (!isset($decoded['kid']))
+        raiseError('Missing `kid` in JWT header', 501);
+    return $decoded['kid'];
+}

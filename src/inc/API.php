@@ -16,6 +16,24 @@ function is_ajax() {
 }
 
 /**
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ */
+function parseHeaders($headers) {
+    $head = array();
+    foreach ($headers as $k => $v) {
+        $header = explode(':', $v, 2);
+        if (isset($header[1])) {
+            $head[trim($header[0])] = trim($header[1]);
+            continue;
+        }
+        $head[] = $v;
+        if (preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $v, $out))
+            $head['reponse_code'] = intval($out[1]);
+    }
+    return $head;
+}
+
+/**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function _verifyToken() {
@@ -329,5 +347,3 @@ function _getUserByName($name, $apiToken){
     }
     echo json_encode($user);
 }
-
-?>
