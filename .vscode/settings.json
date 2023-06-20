@@ -43,5 +43,18 @@
         "*.html": "php",
         "*.twig": "php",
         "*.js.twig": "javascript"
-      }
+    },
+    "php.validate.executablePath": "",
+    "php.validate.run": "onSave",
+    "phpmd.rules": "cleancode,codesize,controversial,design,naming,unusedcode",
+    "phpmd.unsafeCommand": "./vendor/phpmd/phpmd/src/bin/phpmd",
+    "intelephense.diagnostics.enable": true,
+    "intelephense.diagnostics.undefinedProperties": false,
+    "intelephense.environment.phpVersion": "7.4.33",
+    "intelephense.files.associations": [
+        "*.php",
+        "*.html",
+        "*.twig"
+    ],
+    "intelephense.format.braces": "k&r"
 }
