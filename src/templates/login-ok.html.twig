@@ -20,7 +20,7 @@
                         user.getIdToken().then(function(accessToken) {
                             $.post('api/api.html', {
                                     action: 'verifyToken',
-                                    pa: accessToken
+                                    jwt: accessToken
                                 },
                                 function(data) {
                                     window.location.replace('{{ config.signInSuccessUrl ?? 'moje-zgloszenia.html' }}');

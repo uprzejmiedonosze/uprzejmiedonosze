@@ -35,28 +35,6 @@ function parseHeaders($headers) {
 }
 
 /**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function _verifyToken() {
-    if (isset($_POST['pa']) && !empty($_POST['pa'])) {
-        if (verifyToken($_POST['pa'])) {
-            echo json_encode(array(
-                'user_email' => $_SESSION['user_email'],
-                'user_name' => $_SESSION['user_name'],
-                'user_picture' => $_SESSION['user_picture'],
-                'user_id' => $_SESSION['user_id']
-            ));
-            return;
-        }
-        logger('api.html:_verifyToken Token not verified');
-        raiseError("Token not verified", 401);
-        return;
-    }
-    logger('api.html:_verifyToken Token not specified');
-    raiseError("Token not specified", 400);
-}
-
-/**
  * Sets application status.
  */
 function setStatus($status, $appId) {

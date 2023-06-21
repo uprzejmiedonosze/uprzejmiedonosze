@@ -12,7 +12,19 @@ if (isAjax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];
         switch($action) {
-            case "verifyToken": _verifyToken(); break;
+            case "verifyToken": 
+                if (isset($_POST['jwt']) && !empty($_POST['jwt'])) {
+                    verifyToken($_POST['jwt']);
+                    echo json_encode(array(
+                        'user_email' => $_SESSION['user_email'],
+                        'user_name' => $_SESSION['user_name'],
+                        'user_picture' => $_SESSION['user_picture'],
+                        'user_id' => $_SESSION['user_id']
+                    ));
+                    break;
+                }
+                raiseError("Token not specified", 400);
+                break;
             case "archived":
             case "confirmed":
             case "confirmed-waiting":
