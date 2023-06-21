@@ -81,6 +81,8 @@ try {
     }
 } catch (Exception $e) {
     raiseError("$e", 500);
+} catch (Throwable $e) {
+    raiseError("$e", 500);
 }
 
 // API utils
