@@ -23,7 +23,7 @@
                                     jwt: accessToken
                                 },
                                 function(data) {
-                                    window.location.replace('{{ config.signInSuccessUrl ?? 'moje-zgloszenia.html' }}');
+                                    window.location.replace('{{ config.signInSuccessUrl ?? "moje-zgloszenia.html" }}');
                                 }).fail(function(error){
                                     setError(error);
                                 });
