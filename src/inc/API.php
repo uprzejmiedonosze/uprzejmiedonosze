@@ -218,11 +218,8 @@ function _moderateApp($appId, $decision){
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function _upload(){
-    global $_POST, $storage;
-    $imageBytes = explode( ',', $_POST['image_data'])[1]; 
-    $pictureType = $_POST['pictureType'];
-    $applicationId = $_POST['applicationId'];
+function _upload($appId, $pictureType, $imageBytes) {
+    global $storage;
 
     $semKey = $storage->getCurrentUser()->getNumber();
     $semaphore = sem_get($semKey, 1, 0666, 1);
