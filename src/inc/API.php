@@ -6,6 +6,7 @@ require(__DIR__ . '/alpr.php');
 use \Application as Application;
 use \Memcache as Memcache;
 use \stdClass as stdClass;
+use \finfo as finfo;
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
@@ -187,6 +188,40 @@ function moderateApp($appId, $decision) {
 
     $storage->saveApplication($application);
     echo json_encode(array("status" => "OK"));
+}
+
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
+function uploadedFileToBase64() {
+    global $_FILES;
+    try {
+        if (!isset($_FILES['image']['error']) || is_array($_FILES['image']['error'])) {
+            raiseError($_FILES['image']['error'], 400);
+            // 415 Unsupported Media Type
+            // 400 Bad Request
+        }
+
+        if ($_FILES['image']['size'] > 500000) {
+            raiseError("Image too big", 413);
+        }
+
+        // DO NOT TRUST $_FILES['uploaded_file']['mime'] VALUE !!
+        // Check MIME Type by yourself.
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $ext = array_search(
+            $finfo->file($_FILES['image']['tmp_name']),
+            array('jpg' => 'image/jpeg', 'png' => 'image/png'),
+            true);
+        if (false === $ext) {
+            raiseError("File type $ext is not supported", 415);
+        }
+
+        $data = file_get_contents($_FILES['image']['tmp_name']);
+        return base64_encode($data);
+    } catch (Exception $e) {
+        raiseError($e, 500);
+    }
 }
 
 
