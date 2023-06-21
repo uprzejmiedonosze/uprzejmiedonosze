@@ -37,9 +37,9 @@ function parseHeaders($headers) {
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function _verifyToken() {
-    if(isset($_POST['pa']) && !empty($_POST['pa'])){
-        if(verifyToken($_POST['pa'])){
-            echo json_encode(Array(
+    if (isset($_POST['pa']) && !empty($_POST['pa'])) {
+        if (verifyToken($_POST['pa'])) {
+            echo json_encode(array(
                 'user_email' => $_SESSION['user_email'],
                 'user_name' => $_SESSION['user_name'],
                 'user_picture' => $_SESSION['user_picture'],
@@ -58,12 +58,12 @@ function _verifyToken() {
 /**
  * Sets application status.
  */
-function _setStatus($status, $appId){
+function _setStatus($status, $appId) {
     global $storage;
     $application = $storage->getApplication($appId);
-    try{
+    try {
         $application->setStatus($status);
-    }catch(Exception $e){
+    } catch (Exception $e) {
         \Sentry\captureException($e);
         raiseError($e->getMessage(), 500);
     }
@@ -73,7 +73,7 @@ function _setStatus($status, $appId){
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
 
-    echo json_encode(Array(
+    echo json_encode(array(
         "status" => "OK",
         "patronite" => $patronite
     ));
@@ -85,35 +85,35 @@ function _setStatus($status, $appId){
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.MissingImport)
  */
-function _send($appId){
+function _send($appId) {
     global $storage;
-    try{
+    try {
         $application = $storage->getApplication($appId);
         $sm = $application->guessSMData();
 
-        if(!$sm->api){
+        if (!$sm->api) {
             throw new Exception("SM " . $sm->city . " nie posiada API");
         }
         $api = new $sm->api;
         $newStatus = $api->send($application);
         _sendSlackOnNewApp($application);
-    }catch(Exception $e){
+    } catch (Exception $e) {
         if ('%HOST%' == 'uprzejmiedonosze.net') {
             \Sentry\captureException($e);
         }
         raiseError($e->getMessage(), 500);
     }
-    echo json_encode(Array("status" => "$newStatus"));
+    echo json_encode(array("status" => "$newStatus"));
 }
 
 /**
  * Returns app details JSON
  */
-function _getAppDetails($appId){
+function _getAppDetails($appId) {
     global $storage;
-    try{
+    try {
         $application = $storage->getApplication($appId);
-    }catch(Exception $e){
+    } catch (Exception $e) {
         \Sentry\captureException($e);
         raiseError($e->getMessage(), 404);
     }
@@ -123,14 +123,14 @@ function _getAppDetails($appId){
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
-function _geoToAddress($lat, $lng){
+function _geoToAddress($lat, $lng) {
     $cache = new Memcache;
     $cache->connect('localhost', 11211);
 
     $latlng = number_format((float) $lat, 4, '.', '') . ',' . number_format((float) $lng, 4, '.', '');
 
     $result = $cache->get("_geoToAddress-$latlng");
-    if($result){
+    if ($result) {
         logger("_geoToAddress cache-hit $latlng");
         echo json_encode($result);
         return;
@@ -140,7 +140,7 @@ function _geoToAddress($lat, $lng){
     $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?latlng=$latlng&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $output = curl_exec($ch);
-    if(curl_errno($ch)){
+    if (curl_errno($ch)) {
         logger("Nie udało się pobrać danych latlng: " . curl_error($ch));
         raiseError("Nie udało się pobrać odpowiedzi z serwerów GeoAPI: " . curl_error($ch), 500);
         curl_close($ch);
@@ -149,28 +149,28 @@ function _geoToAddress($lat, $lng){
     curl_close($ch);
 
     $json = json_decode($output, true);
-    if(!json_last_error() === JSON_ERROR_NONE){
+    if (!json_last_error() === JSON_ERROR_NONE) {
         logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
         raiseError("Bełkotliwa odpowiedź z serwerów GeoAPI: " . $output, 500);
         return;
     }
-    if($json['status'] == 'OK' && $json['results']){
+    if ($json['status'] == 'OK' && $json['results']) {
         $result = $json['results'][0];
         $cache->set("_geoToAddress-$latlng", $result, MEMCACHE_COMPRESSED, 0);
         echo json_encode($result);
         return;
     }
-    if($json['status'] == 'ZERO_RESULTS'){
+    if ($json['status'] == 'ZERO_RESULTS') {
         raiseError("Brak wyników z serwerów GeoAPI dla $lat, $lng: $output", 404, false);
     }
     raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
 }
 
-function _addToGallery($appId){
+function _addToGallery($appId) {
     global $storage;
 
     $application = $storage->getApplication($appId);
-    if(!$application->isCurrentUserOwner()){
+    if (!$application->isCurrentUserOwner()) {
         raiseError("Próba zmiany cudzego zgłoszenia $appId!", 401);
     }
 
@@ -178,38 +178,38 @@ function _addToGallery($appId){
     $application->statements->gallery = date(DT_FORMAT);
     $storage->saveApplication($application);
 
-    echo json_encode(Array("status" => "OK"));
+    echo json_encode(array("status" => "OK"));
 }
 
 /**
  * @SuppressWarnings(PHPMD.ElseExpression)
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
-function _moderateApp($appId, $decision){
+function _moderateApp($appId, $decision) {
     require __DIR__ . '/../../inc/Tumblr.php';
     global $storage;
-    if(!isAdmin()){
+    if (!isAdmin()) {
         raiseError("Dostęp zabroniony", 401);
     }
 
     $application = $storage->getApplication($appId);
 
-    if($decision == 'true'){
+    if ($decision == 'true') {
         try {
             $application->addedToGallery = addToTumblr($application);
             $application->addComment('admin', "Zdjęcie dodane do galerii.");
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $application->addedToGallery = null;
-            raiseError("Błąd Tumblr " . print_r($ex, true) , 500);
+            raiseError("Błąd Tumblr " . print_r($ex, true), 500);
         }
-    }else{
+    } else {
         $application->addedToGallery = false;
     }
-    
+
     $storage->saveApplication($application);
-    echo json_encode(Array("status" => "OK"));
+    echo json_encode(array("status" => "OK"));
 }
+
 
 /**
  * Saves uploaded image + automatically create thumbnail + read plate data
@@ -225,9 +225,9 @@ function _upload($appId, $pictureType, $imageBytes) {
     $semaphore = sem_get($semKey, 1, 0666, 1);
     sem_acquire($semaphore);
 
-    try{
-        $application = $storage->getApplication($applicationId);
-    }catch(Exception $e){
+    try {
+        $application = $storage->getApplication($appId);
+    } catch (Exception $e) {
         $application = new Application();
         $storage->saveApplication($application);
     }
@@ -235,15 +235,15 @@ function _upload($appId, $pictureType, $imageBytes) {
     $type = substr($pictureType, 0, 2);
     $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
 
-    if($pictureType == 'carImage'){
+    if ($pictureType == 'carImage') {
         get_car_info($imageBytes, $application, $baseFileName, $type);
-    }else if($pictureType == 'contextImage'){
+    } else if ($pictureType == 'contextImage') {
         $application->contextImage = new stdClass();
         $application->contextImage->url = "$baseFileName,$type.jpg";
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
-    }else{
+    } else {
         sem_release($semaphore);
-        raiseError("Unknown picture type: $pictureType ($applicationId)", 400);
+        raiseError("Unknown picture type: $pictureType ($appId)", 400);
     }
 
     $storage->saveApplication($application);
@@ -257,27 +257,27 @@ function _upload($appId, $pictureType, $imageBytes) {
  * 
  * Returns:
  *   $prefix
-*/
-function saveImgAndThumb($application, $imageBytes, $type){
+ */
+function saveImgAndThumb($application, $imageBytes, $type) {
     $baseDir = 'cdn2/' . $application->getUserNumber();
-    if(!file_exists('/var/www/%HOST%/' . $baseDir)){
+    if (!file_exists('/var/www/%HOST%/' . $baseDir)) {
         mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
     }
     $baseFileName = $baseDir . '/' . $application->id;
-    
+
     $fileName     = "/var/www/%HOST%/$baseFileName,$type.jpg";
     $thumbName    = "/var/www/%HOST%/$baseFileName,$type,t.jpg";
     $ifp = fopen($fileName, 'wb');
-    if($ifp === false){
+    if ($ifp === false) {
         raiseError("Can't open $fileName for write", 500);
     }
-    
-	if(fwrite($ifp, base64_decode($imageBytes)) === false){
+
+    if (fwrite($ifp, base64_decode($imageBytes)) === false) {
         raiseError("Can't write to $fileName", 500);
     }
     fclose($ifp);
 
-	if(!imagejpeg(resize_image($fileName, 600, 600, false), $thumbName)){
+    if (!imagejpeg(resize_image($fileName, 600, 600, false), $thumbName)) {
         logger("Wasn't able to write $fileName as thumb to $thumbName.", true);
     }
     return $baseFileName;
@@ -292,53 +292,53 @@ function saveImgAndThumb($application, $imageBytes, $type){
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
  */
-function resize_image($file, $w, $h, $crop=FALSE) {
-	list($width, $height) = getimagesize($file);
-	$r = $width / $height;
-	if ($crop) {
-		if ($width > $height) {
-			$width = ceil($width-($width*abs($r-$w/$h)));
-		} else {
-			$height = ceil($height-($height*abs($r-$w/$h)));
-		}
-		$newwidth = $w;
-		$newheight = $h;
-	} else {
-		if ($w/$h > $r) {
-			$newwidth = $h*$r;
-			$newheight = $h;
-		} else {
-			$newheight = $w/$r;
-			$newwidth = $w;
-		}
-	}
-	$src = imagecreatefromjpeg($file);
-	$dst = imagecreatetruecolor($newwidth, $newheight);
-	imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
+function resize_image($file, $w, $h, $crop = FALSE) {
+    list($width, $height) = getimagesize($file);
+    $r = $width / $height;
+    if ($crop) {
+        if ($width > $height) {
+            $width = ceil($width - ($width * abs($r - $w / $h)));
+        } else {
+            $height = ceil($height - ($height * abs($r - $w / $h)));
+        }
+        $newwidth = $w;
+        $newheight = $h;
+    } else {
+        if ($w / $h > $r) {
+            $newwidth = $h * $r;
+            $newheight = $h;
+        } else {
+            $newheight = $w / $r;
+            $newwidth = $w;
+        }
+    }
+    $src = imagecreatefromjpeg($file);
+    $dst = imagecreatetruecolor($newwidth, $newheight);
+    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
-	return $dst;
+    return $dst;
 }
 
 function _initLogs() {
     logger("INIT %VERSION%", true);
 }
 
-function _getAppByNumber($number, $apiToken){
+function _getAppByNumber($number, $apiToken) {
     global $storage;
-    try{
+    try {
         $application = $storage->getAppByNumber($number, $apiToken);
-    }catch(Exception $e){
+    } catch (Exception $e) {
         \Sentry\captureException($e);
         raiseError($e->getMessage(), 404);
     }
     echo json_encode($application);
 }
 
-function _getUserByName($name, $apiToken){
+function _getUserByName($name, $apiToken) {
     global $storage;
-    try{
+    try {
         $user = $storage->getUserByName($name, $apiToken);
-    }catch(Exception $e){
+    } catch (Exception $e) {
         \Sentry\captureException($e);
         raiseError($e->getMessage(), 404);
     }
