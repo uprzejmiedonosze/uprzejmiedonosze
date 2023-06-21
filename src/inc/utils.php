@@ -133,13 +133,20 @@ function genSafeId(){
 
 /** @SuppressWarnings("exit") */
 function raiseError($msg, $status, $notify = null){
+    if (!is_string($msg)) {
+        if (method_exists($msg, 'getMessage')) {
+            if (isProd()) \Sentry\captureException($msg);
+            $msg = $msg->getMessage();
+        }
+    }
+
     logger("raiseError $msg with $status", $notify);
     $error = Array(
         "code" => $status,
-        "message" => $msg
+        "message" => (string)$msg
     );
     if($notify) {
-        _sendSlackError($msg);
+        _sendSlackError((string)$msg);
     }
     http_response_code($status);
     echo json_encode($error);

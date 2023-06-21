@@ -44,8 +44,7 @@ function setStatus($status, $appId) {
     try {
         $application->setStatus($status);
     } catch (Exception $e) {
-        \Sentry\captureException($e);
-        raiseError($e->getMessage(), 500);
+        raiseError($e, 500);
     }
     $storage->saveApplication($application);
     $storage->updateRecydywa($application->carInfo->plateId);
@@ -78,10 +77,7 @@ function sendApplication($appId) {
         $newStatus = $api->send($application);
         _sendSlackOnNewApp($application);
     } catch (Exception $e) {
-        if ('%HOST%' == 'uprzejmiedonosze.net') {
-            \Sentry\captureException($e);
-        }
-        raiseError($e->getMessage(), 500);
+        raiseError($e, 500);
     }
     echo json_encode(array("status" => "$newStatus"));
 }
@@ -94,8 +90,7 @@ function getAppDetails($appId) {
     try {
         $application = $storage->getApplication($appId);
     } catch (Exception $e) {
-        \Sentry\captureException($e);
-        raiseError($e->getMessage(), 404);
+        raiseError($e, 404);
     }
     echo json_encode($application);
 }
@@ -342,8 +337,7 @@ function getAppByNumber($number, $apiToken) {
     try {
         $application = $storage->getAppByNumber($number, $apiToken);
     } catch (Exception $e) {
-        \Sentry\captureException($e);
-        raiseError($e->getMessage(), 404);
+        raiseError($e, 404);
     }
     echo json_encode($application);
 }
@@ -353,8 +347,7 @@ function getUserByName($name, $apiToken) {
     try {
         $user = $storage->getUserByName($name, $apiToken);
     } catch (Exception $e) {
-        \Sentry\captureException($e);
-        raiseError($e->getMessage(), 404);
+        raiseError($e, 404);
     }
     echo json_encode($user);
 }

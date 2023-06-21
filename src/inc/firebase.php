@@ -43,7 +43,7 @@ function verifyToken($token){
 		} catch (InvalidIdToken $e) {
 			logger("verifyToken InvalidIdToken – false " . $e->getMessage());
 		}
-		\Sentry\captureLastError();
+		if (isProd()) \Sentry\captureLastError();
 		return false;
 	}
 	logger("verifyToken token is not set — false");
