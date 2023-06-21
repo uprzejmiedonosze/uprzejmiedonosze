@@ -2,7 +2,7 @@
 
 import { _updateStatus } from "./status";
 
-window._send = function (appId) {
+window.sendApplication = function (appId) {
   $(`#${appId} .status-confirmed-waiting`).addClass("ui-disabled");
   $('.ui-btn-right').addClass("ui-disabled");
 

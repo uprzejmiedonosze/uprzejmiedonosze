@@ -10,9 +10,10 @@ use \stdClass as stdClass;
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
-function is_ajax() {
+function isAjax() {
     global $_SERVER;
-    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+        && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 }
 
 /**
@@ -58,7 +59,7 @@ function _verifyToken() {
 /**
  * Sets application status.
  */
-function _setStatus($status, $appId) {
+function setStatus($status, $appId) {
     global $storage;
     $application = $storage->getApplication($appId);
     try {
@@ -85,7 +86,7 @@ function _setStatus($status, $appId) {
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.MissingImport)
  */
-function _send($appId) {
+function sendApplication($appId) {
     global $storage;
     try {
         $application = $storage->getApplication($appId);
@@ -109,7 +110,7 @@ function _send($appId) {
 /**
  * Returns app details JSON
  */
-function _getAppDetails($appId) {
+function getAppDetails($appId) {
     global $storage;
     try {
         $application = $storage->getApplication($appId);
@@ -123,7 +124,7 @@ function _getAppDetails($appId) {
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
-function _geoToAddress($lat, $lng) {
+function geoToAddress($lat, $lng) {
     $cache = new Memcache;
     $cache->connect('localhost', 11211);
 
@@ -166,7 +167,7 @@ function _geoToAddress($lat, $lng) {
     raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
 }
 
-function _addToGallery($appId) {
+function addToGallery($appId) {
     global $storage;
 
     $application = $storage->getApplication($appId);
@@ -185,7 +186,7 @@ function _addToGallery($appId) {
  * @SuppressWarnings(PHPMD.ElseExpression)
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
-function _moderateApp($appId, $decision) {
+function moderateApp($appId, $decision) {
     require __DIR__ . '/../../inc/Tumblr.php';
     global $storage;
     if (!isAdmin()) {
@@ -218,7 +219,7 @@ function _moderateApp($appId, $decision) {
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function _upload($appId, $pictureType, $imageBytes) {
+function uploadImage($appId, $pictureType, $imageBytes) {
     global $storage;
 
     $semKey = $storage->getCurrentUser()->getNumber();
@@ -319,11 +320,11 @@ function resize_image($file, $w, $h, $crop = FALSE) {
     return $dst;
 }
 
-function _initLogs() {
+function initLogs() {
     logger("INIT %VERSION%", true);
 }
 
-function _getAppByNumber($number, $apiToken) {
+function getAppByNumber($number, $apiToken) {
     global $storage;
     try {
         $application = $storage->getAppByNumber($number, $apiToken);
@@ -334,7 +335,7 @@ function _getAppByNumber($number, $apiToken) {
     echo json_encode($application);
 }
 
-function _getUserByName($name, $apiToken) {
+function getUserByName($name, $apiToken) {
     global $storage;
     try {
         $user = $storage->getUserByName($name, $apiToken);

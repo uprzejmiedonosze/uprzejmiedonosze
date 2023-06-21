@@ -33,7 +33,7 @@
 {% if status.topButtons %}
     <div>
         {% if app.automatedSM and autoSend is defined and autoSend %}
-        <a href="#" onclick="_send('{{ app.id }}');"
+        <a href="#" onclick="sendApplication('{{ app.id }}');"
             data-inline="true" data-mini="true" 
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
             {% if sendable %}cta{% else %}ui-disabled{% endif %}
