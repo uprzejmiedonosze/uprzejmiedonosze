@@ -39,43 +39,43 @@ if (needAuth($action)) {
 
 try {
     switch ($action) {
-        case 'upload':
-            $imageBytes = uploadedFileToBase64();
-            $pictureType = $_POST['pictureType'];
-            $appId = $_POST['id'];
+        case 'upload': // POST
+            $imageBytes = uploadedFileToBase64(); // requires file named 'image' 
+            $pictureType = $_POST['pictureType']; // carImage|contextImage
+            $appId = $_POST['id']; // application id
             uploadImage($appId, $pictureType, $imageBytes);
             break;
-        case 'set-status':
-            $appId = $_POST["id"];
-            $newStatus = $_POST["status"];
+        case 'set-status':  // POST
+            $appId = $_POST["id"]; // application id
+            $newStatus = $_POST["status"]; // see statuses.json
             setStatus($newStatus, $appId);
             break;
-        case 'send-application':
-            $appId = $_POST["id"];
+        case 'send-application':  // POST
+            $appId = $_POST["id"]; // application id
             sendApplication($appId);
             break;
-        case 'geo-to-address':
-            $lat = $_POST["lat"];
-            $lng = $_POST["lng"];
+        case 'geo-to-address': // GET
+            $lat = $_GET["lat"];
+            $lng = $_GET["lng"];
             geoToAddress($lat, $lng);
             break;
-        case 'get-application':
-            $appId = $_POST["id"];
+        case 'get-application': // GET
+            $appId = $_GET["id"]; // application id
             getAppDetails($appId);
             break;
-        case "sm":
+        case "sm": // GET
             echo file_get_contents(__DIR__ . "/../config/sm.json");
             break;
-        case 'categories':
+        case 'categories': // GET
             echo file_get_contents(__DIR__ . "/../config/categories.json");
             break;
-        case 'extensions':
+        case 'extensions': // GET
             echo file_get_contents(__DIR__ . "/../config/extensions.json");
             break;
-        case 'statuses':
+        case 'statuses': // GET
             echo file_get_contents(__DIR__ . "/../config/statuses.json");
             break;
-        case 'stop-agresji':
+        case 'stop-agresji': // GET
             echo file_get_contents(__DIR__ . "/../config/stop-agresji.json");
             break;
     }
