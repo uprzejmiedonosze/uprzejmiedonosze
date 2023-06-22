@@ -21,6 +21,7 @@ $ACTIONS = [
     'upload' => true,
     'set-status' => true,
     'send-application' => true,
+    'my-apps' => true,
 
     'geo-to-address' => false,
     'get-application' => false,
@@ -53,6 +54,16 @@ try {
         case 'send-application':  // POST
             $appId = $_POST["id"]; // application id
             sendApplication($appId);
+            break;
+        case 'my-apps': // GET
+            $user = $storage->getCurrentUser();
+            $appIds = $storage->getUserApplicationIDs($user->data->email);
+            $applications = [];
+            foreach($appIds as $id){
+                $application = $storage->getApplication($id);
+                array_push($applications, $application);
+            }
+            echo json_encode($applications);
             break;
         case 'geo-to-address': // GET
             $lat = $_GET["lat"];
