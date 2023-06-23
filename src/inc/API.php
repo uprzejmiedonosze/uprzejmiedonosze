@@ -36,6 +36,20 @@ function parseHeaders($headers) {
 }
 
 /**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
+function getParam($method, $paramName) {
+    global $_GET, $_POST;
+    $params = $_GET;
+    if ($method === 'POST') {
+        $params = $_POST;
+    }
+    if (!isset($params[$paramName]))
+        raiseError("`$paramName` $method parameter is missing", 400);
+    return $method[$paramName];
+}
+
+/**
  * Sets application status.
  */
 function setStatus($status, $appId) {

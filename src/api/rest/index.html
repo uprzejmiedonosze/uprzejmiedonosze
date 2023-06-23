@@ -41,18 +41,18 @@ if (needAuth($action)) {
 try {
     switch ($action) {
         case 'upload': // POST
-            $imageBytes = uploadedFileToBase64(); // requires file named 'image' 
-            $pictureType = $_POST['pictureType']; // carImage|contextImage
-            $appId = $_POST['id']; // application id
+            $imageBytes = uploadedFileToBase64(); // requires file named 'image'
+            $pictureType = getParam('POST', 'pictureType');  // carImage|contextImage
+            $appId = getParam('POST', 'id'); // application id
             uploadImage($appId, $pictureType, $imageBytes);
             break;
         case 'set-status':  // POST
-            $appId = $_POST["id"]; // application id
-            $newStatus = $_POST["status"]; // see statuses.json
+            $appId = getParam('POST', 'id'); // application id
+            $newStatus = getParam('POST', 'status'); // see statuses.json
             setStatus($newStatus, $appId);
             break;
         case 'send-application':  // POST
-            $appId = $_POST["id"]; // application id
+            $appId = getParam('POST', 'id'); // application id
             sendApplication($appId);
             break;
         case 'my-apps': // GET
@@ -66,12 +66,12 @@ try {
             echo json_encode($applications);
             break;
         case 'geo-to-address': // GET
-            $lat = $_GET["lat"];
-            $lng = $_GET["lng"];
+            $lat = getParam('GET', 'lat');
+            $lng = getParam('GET', 'lng');
             geoToAddress($lat, $lng);
             break;
         case 'get-application': // GET
-            $appId = $_GET["id"]; // application id
+            $appId = getParam('GET', 'id'); // application id
             getAppDetails($appId);
             break;
         case "sm": // GET
