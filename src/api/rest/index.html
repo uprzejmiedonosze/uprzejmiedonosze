@@ -56,14 +56,8 @@ try {
             sendApplication($appId);
             break;
         case 'my-apps': // GET
-            $user = $storage->getCurrentUser();
-            $appIds = $storage->getUserApplicationIDs($user->data->email);
-            $applications = [];
-            foreach($appIds as $id){
-                $application = $storage->getApplication($id);
-                array_push($applications, $application);
-            }
-            echo json_encode($applications);
+            $apps = $storage->getUserApplications();
+            echo json_encode($apps);
             break;
         case 'geo-to-address': // GET
             $lat = getParam('GET', 'lat');

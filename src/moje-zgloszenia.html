@@ -4,18 +4,14 @@ require_once(__DIR__ . '/../inc/include.php');
 checkIfLogged();
 
 $user = $storage->getCurrentUser();
-$appIds = $storage->getUserApplicationIDs($user->data->email);
+$applications = $storage->getUserApplications();
 
 $changeMail = isset($_GET['changeMail']) && isset($_GET['city']);
 $city = isset($_GET['city'])? urldecode($_GET['city']): '';
 
 $countChanged = 0;
 
-$applications = [];
-
-foreach($appIds as $id){
-    $application = $storage->getApplication($id);
-    array_push($applications, $application);
+foreach($applications as $application){
     if($changeMail){
         if($application->status == 'confirmed'){
             if($changeMail && $application->smCity == $city){

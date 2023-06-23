@@ -4,6 +4,9 @@ require(__DIR__ . '/User.php');
 require(__DIR__ . '/Application.php');
 
 use \Memcache as Memcache;
+use \Application as Application;
+use \User as User;
+use \Exception as Exception;
 
 /**
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
@@ -84,25 +87,37 @@ class DB extends NoSQLite{
         return $number + 1;
     }
 
-    public function getUserApplicationIDs($email) {
+    public function getUserApplications($status = 'all', $search = '%') {
+        $params = [':email' => getCurrentUserEmail()];
+        $params += [':search' => $search];
+        $whereStatus = <<<SQL
+            and json_extract(value, '$.status') not in ('ready', 'draft')
+        SQL;
+        if ($status !== 'all') {
+            $whereStatus = <<<SQL
+                and json_extract(value, '$.status') = :status
+            SQL;
+            $params += [':status' => $status];
+        }
+
         $sql = <<<SQL
-            select key
+            select value
             from applications
             where email = :email
-                and json_extract(value, '$.status') not in ('ready', 'draft')
+                $whereStatus
+                and value like :search
             order by json_extract(value, '$.seq') desc,
                 json_extract(value, '$.added') desc
         SQL;
+
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':email', $email);
-        $stmt->execute();
+        $stmt->execute($params);
 
-        $appIds = Array();
+        function __constructApplication($value) {
+            return new Application($value);
+        }        
 
-        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            array_push($appIds, $row[0]);
-        }
-        return $appIds;
+        return $stmt->fetchAll(PDO::FETCH_FUNC, '__constructApplication');
     }
 
     /**
@@ -242,7 +257,7 @@ class DB extends NoSQLite{
      * Calculates stats for current user;
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function getUserStats($useCache = true){
+    public function getUserStats($useCache = null){
         $stats = $this->stats->get("%HOST%-stats-" . getCurrentUserEmail());
         if($useCache && $stats){
             return $stats;
