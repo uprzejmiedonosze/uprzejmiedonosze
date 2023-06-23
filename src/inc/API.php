@@ -46,7 +46,7 @@ function getParam($method, $paramName) {
     }
     if (!isset($params[$paramName]))
         raiseError("`$paramName` $method parameter is missing", 400);
-    return $method[$paramName];
+    return $params[$paramName];
 }
 
 /**
