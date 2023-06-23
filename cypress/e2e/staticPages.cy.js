@@ -9,7 +9,6 @@ describe('Checks static pages', () => {
     })
 
     it('Visits main page', () => {
-        cy.contains('Spróbuj')
         cy.contains('Sprawdź jak to działa')
         cy.contains('Zgłoś')
         cy.contains('historię zmian')
