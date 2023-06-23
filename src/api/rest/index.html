@@ -56,7 +56,8 @@ try {
             sendApplication($appId);
             break;
         case 'my-apps': // GET
-            $apps = $storage->getUserApplications();
+            $status = getParam('GET', 'status', 'all');
+            $apps = $storage->getUserApplications($status);
             echo json_encode($apps);
             break;
         case 'geo-to-address': // GET
