@@ -57,7 +57,8 @@ try {
             break;
         case 'my-apps': // GET
             $status = getParam('GET', 'status', 'all');
-            $apps = $storage->getUserApplications($status);
+            $search = getParam('GET', 'search', '%');
+            $apps = $storage->getUserApplications($status, $search);
             echo json_encode($apps);
             break;
         case 'geo-to-address': // GET

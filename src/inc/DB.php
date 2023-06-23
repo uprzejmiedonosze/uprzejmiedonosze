@@ -87,9 +87,9 @@ class DB extends NoSQLite{
         return $number + 1;
     }
 
-    public function getUserApplications($status = 'all', $search = '%') {
+    public function getUserApplications($status = 'all', $search = 'all') {
         $params = [':email' => getCurrentUserEmail()];
-        $params += [':search' => $search];
+
         $whereStatus = <<<SQL
             and json_extract(value, '$.status') not in ('ready', 'draft')
         SQL;
@@ -100,12 +100,20 @@ class DB extends NoSQLite{
             $params += [':status' => $status];
         }
 
+        $whereSearch = '';
+        if ($search !== 'all') {
+            $whereSearch = <<<SQL
+                and lower(value) like lower(:search)
+            SQL;
+            $params += [':search' => "%$search%"];
+        }
+
         $sql = <<<SQL
             select value
             from applications
             where email = :email
                 $whereStatus
-                and value like :search
+                $whereSearch
             order by json_extract(value, '$.seq') desc,
                 json_extract(value, '$.added') desc
         SQL;
