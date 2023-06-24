@@ -58,7 +58,9 @@ try {
         case 'my-apps': // GET
             $status = getParam('GET', 'status', 'all');
             $search = getParam('GET', 'search', '%');
-            $apps = $storage->getUserApplications($status, $search);
+            $limit = getParam('GET', 'limit', 0); // 0 == no limit
+            $offset = getParam('GET', 'offset', 0);
+            $apps = $storage->getUserApplications($status, $search, $limit, $offset);
             echo json_encode($apps);
             break;
         case 'geo-to-address': // GET

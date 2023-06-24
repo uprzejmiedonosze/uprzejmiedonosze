@@ -87,8 +87,16 @@ class DB extends NoSQLite{
         return $number + 1;
     }
 
-    public function getUserApplications($status = 'all', $search = 'all') {
+    public function getUserApplications($status = 'all', $search = 'all', $limit = 0, $offset = 0) {
         $params = [':email' => getCurrentUserEmail()];
+        
+        if ($limit > 0) {
+            $params += [':limit' => $limit];
+            $params += [':offset' => $offset];
+            $limitOffset = <<<SQL
+                limit :limit offset :offset
+            SQL;
+        }
 
         $whereStatus = <<<SQL
             and json_extract(value, '$.status') not in ('ready', 'draft')
@@ -116,6 +124,7 @@ class DB extends NoSQLite{
                 $whereSearch
             order by json_extract(value, '$.seq') desc,
                 json_extract(value, '$.added') desc
+            $limitOffset
         SQL;
 
         $stmt = $this->db->prepare($sql);

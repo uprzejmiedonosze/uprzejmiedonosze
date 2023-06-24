@@ -45,7 +45,7 @@ function getParam($method, $paramName, $default = null) {
         $params = $_POST;
     }
     if (!isset($params[$paramName])) {
-        if ($default) return $default;
+        if (!is_null($default)) return $default;
         raiseError("`$paramName` $method parameter is missing", 400);
     }
     return $params[$paramName];
