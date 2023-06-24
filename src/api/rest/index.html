@@ -3,11 +3,11 @@
 require_once(__DIR__ . '/../../../inc/include.php');
 require(__DIR__ . '/../../../inc/API.php');
 
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Methods: POST, GET");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Origin: *");
+header('Content-Type: application/json; charset=UTF-8');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Access-Control-Allow-Methods: POST, GET');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Origin: *');
 
 
 use Firebase\JWT\JWT;
@@ -18,21 +18,23 @@ use Firebase\JWT\ExpiredException;
 use \Memcache as Memcache;
 
 $ACTIONS = [
-    'upload' => true,
-    'set-status' => true,
-    'send-application' => true,
-    'my-apps' => true,
     'get-user' => true,
     'register-user' => true,
     'update-user' => true,
+    'user-apps' => true,
+
+    'upload-app-image' => true,
+    'set-app-status' => true,
+    'send-app' => true,
+    'get-app' => false,
 
     'geo-to-address' => false,
-    'get-application' => false,
-    'sm' => false,
-    'categories' => false,
-    'extensions' => false,
-    'statuses' => false,
-    'stop-agresji' => false
+
+    'config-sm' => false,
+    'config-categories' => false,
+    'config-extensions' => false,
+    'config-statuses' => false,
+    'config-stop-agresji' => false
 ];
 
 $action = detectAction();
@@ -45,29 +47,6 @@ if (needAuth($action)) {
 
 try {
     switch ($action) {
-        case 'upload': // POST
-            $imageBytes = uploadedFileToBase64(); // requires file named 'image'
-            $pictureType = getParam('POST', 'pictureType');  // carImage|contextImage
-            $appId = getParam('POST', 'id'); // application id
-            uploadImage($appId, $pictureType, $imageBytes);
-            break;
-        case 'set-status':  // POST
-            $appId = getParam('POST', 'id'); // application id
-            $newStatus = getParam('POST', 'status'); // see statuses.json
-            setStatus($newStatus, $appId);
-            break;
-        case 'send-application':  // POST
-            $appId = getParam('POST', 'id'); // application id
-            sendApplication($appId);
-            break;
-        case 'my-apps': // GET
-            $status = getParam('GET', 'status', 'all');
-            $search = getParam('GET', 'search', '%');
-            $limit = getParam('GET', 'limit', 0); // 0 == no limit
-            $offset = getParam('GET', 'offset', 0);
-            $apps = $storage->getUserApplications($status, $search, $limit, $offset);
-            echo json_encode($apps);
-            break;
         case 'get-user': // GET
             $user = $storage->getCurrentUser();
             echo json_encode($user);
@@ -96,34 +75,60 @@ try {
             try {
                 $user = $storage->getCurrentUser();
             } catch (Exception $e) {
-                raiseError("Attempt to update non-existing user!", 404);
+                raiseError('Attempt to update non-existing user!', 404);
             }
             $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
             $storage->saveUser($user);
             break;
+
+        case 'user-apps': // GET
+            $status = getParam('GET', 'status', 'all');
+            $search = getParam('GET', 'search', '%');
+            $limit = getParam('GET', 'limit', 0); // 0 == no limit
+            $offset = getParam('GET', 'offset', 0);
+            $apps = $storage->getUserApplications($status, $search, $limit, $offset);
+            echo json_encode($apps);
+            break;
+
+        case 'upload-app-image': // POST
+            $imageBytes = uploadedFileToBase64(); // requires file named 'image'
+            $pictureType = getParam('POST', 'pictureType');  // carImage|contextImage
+            $appId = getParam('POST', 'id'); // application id
+            uploadImage($appId, $pictureType, $imageBytes);
+            break;
+        case 'set-app-status':  // POST
+            $appId = getParam('POST', 'id'); // application id
+            $newStatus = getParam('POST', 'status'); // see statuses.json
+            setStatus($newStatus, $appId);
+            break;
+        case 'send-app':  // POST
+            $appId = getParam('POST', 'id'); // application id
+            sendApplication($appId);
+            break;
+        case 'get-app': // GET
+            $appId = getParam('GET', 'id'); // application id
+            getAppDetails($appId);
+            break;
+    
         case 'geo-to-address': // GET
             $lat = getParam('GET', 'lat');
             $lng = getParam('GET', 'lng');
             geoToAddress($lat, $lng);
             break;
-        case 'get-application': // GET
-            $appId = getParam('GET', 'id'); // application id
-            getAppDetails($appId);
+        case 'config-sm': // GET
+            echo file_get_contents(__DIR__ . '/../config/sm.json');
             break;
-        case "sm": // GET
-            echo file_get_contents(__DIR__ . "/../config/sm.json");
+        case 'config-categories': // GET
+            echo file_get_contents(__DIR__ . '/../config/categories.json');
             break;
-        case 'categories': // GET
-            echo file_get_contents(__DIR__ . "/../config/categories.json");
+        case 'config-extensions': // GET
+            echo file_get_contents(__DIR__ . '/../config/extensions.json');
             break;
-        case 'extensions': // GET
-            echo file_get_contents(__DIR__ . "/../config/extensions.json");
+        case 'config-statuses': // GET
+            echo file_get_contents(__DIR__ . '/../config/statuses.json');
             break;
-        case 'statuses': // GET
-            echo file_get_contents(__DIR__ . "/../config/statuses.json");
-            break;
-        case 'stop-agresji': // GET
-            echo file_get_contents(__DIR__ . "/../config/stop-agresji.json");
+        case 'config-stop-agresji': // GET
+            echo file_get_contents(__DIR__ . '/../config/stop-agresji.json');
             break;
     }
 } catch (Exception $e) {
@@ -137,8 +142,8 @@ try {
 function detectAction() {
     global $_GET, $_POST, $ACTIONS;
     $action = null;
-    isset($_GET["action"]) && $action = $_GET["action"];
-    isset($_POST["action"]) && $action = $_POST["action"];
+    isset($_GET['action']) && $action = $_GET['action'];
+    isset($_POST['action']) && $action = $_POST['action'];
     if (is_null($action))
         raiseError('GET or POST action paremeter is missing', 400);
     if (!in_array($action, array_keys($ACTIONS)))
@@ -158,16 +163,16 @@ function validateJWT() {
     $algorithm = 'RS256';
 
     if (!isset($_SERVER['HTTP_AUTHORIZATION']) || !preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
-        raiseError("Token not found in request", 400);
+        raiseError('Token not found in request', 400);
     }
     $jwt = $matches[1];
     if (!$jwt)
-        raiseError("Token not found in request", 400);
+        raiseError('Token not found in request', 400);
 
     $keys  = getPublicKeys();
     $kid = decodeKid($jwt);
     if (!isset($keys[$kid]))
-        raiseError("Wrong `kid` in JWT header", 400);
+        raiseError('Wrong `kid` in JWT header', 400);
     $key = $keys[$kid];
 
     try {
@@ -195,7 +200,7 @@ function validateJWT() {
     }
 
     if (!verifyToken($jwt)) {
-        raiseError("Internal JWT verification failed", 401);
+        raiseError('Internal JWT verification failed', 401);
     }
 
     return $token;
@@ -209,7 +214,7 @@ function getPublicKeys() {
 
     $cache = new Memcache;
     $cache->connect('localhost', 11211);
-    $cacheKey = "%HOST%-firebase-keys";
+    $cacheKey = '%HOST%-firebase-keys';
 
     $keys = $cache->get($cacheKey);
     if ($keys) return json_decode($keys, true);
@@ -246,9 +251,9 @@ function checkRegistrationStatus() {
     try {
         $user = $storage->getCurrentUser();
     } catch (Exception $e) {
-        raiseError("User is not registered", 403);
+        raiseError('User is not registered', 403);
     }
     if (!$user || !$user->isRegistered()) {
-        raiseError("User is not registered", 403);
+        raiseError('User is not registered', 403);
     }
 }
