@@ -22,6 +22,9 @@ $ACTIONS = [
     'set-status' => true,
     'send-application' => true,
     'my-apps' => true,
+    'get-user' => true,
+    'register-user' => true,
+    'update-user' => true,
 
     'geo-to-address' => false,
     'get-application' => false,
@@ -36,6 +39,8 @@ $action = detectAction();
 
 if (needAuth($action)) {
     validateJWT();
+    if ($action !== 'register-user')
+        checkRegistrationStatus();
 }
 
 try {
@@ -62,6 +67,39 @@ try {
             $offset = getParam('GET', 'offset', 0);
             $apps = $storage->getUserApplications($status, $search, $limit, $offset);
             echo json_encode($apps);
+            break;
+        case 'get-user': // GET
+            $user = $storage->getCurrentUser();
+            echo json_encode($user);
+            break;
+        case 'register-user': // POST
+            $name = capitalizeName(getParam('POST', 'name'));
+            $address = str_replace(', Polska', '', getParam('POST', 'address'));
+            $msisdn = getParam('POST', 'msisdn', '');
+            $exposeData = (bool) (getParam('POST', 'exposeData', 'N') == 'Y');
+            try {
+                $user = $storage->getCurrentUser();
+            } catch (Exception $e) {
+                $user = new User();
+            }
+            $user->updateUserData($name, $msisdn, $address, $exposeData, false, true, 200);
+            $storage->saveUser($user);
+            break;
+        case 'update-user': // POST
+            $name = capitalizeName(getParam('POST', 'name'));
+            $address = str_replace(', Polska', '', getParam('POST', 'address'));
+            $msisdn = getParam('POST', 'msisdn', '');
+            $exposeData = (bool) (getParam('POST', 'exposeData', 'N') == 'Y');
+            $stopAgresji = (bool) (getParam('POST', 'stopAgresji', 'SM') == 'SA');
+            $autoSend = (bool) (getParam('POST', 'autoSend', 'Y') == 'Y');
+            $myAppsSize = getParam('POST', 'myAppsSize', 200);
+            try {
+                $user = $storage->getCurrentUser();
+            } catch (Exception $e) {
+                raiseError("Attempt to update non-existing user!", 404);
+            }
+            $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
+            $storage->saveUser($user);
             break;
         case 'geo-to-address': // GET
             $lat = getParam('GET', 'lat');
@@ -199,4 +237,18 @@ function decodeKid($jwt) {
     if (!isset($decoded['kid']))
         raiseError('Missing `kid` in JWT header', 501);
     return $decoded['kid'];
+}
+
+function checkRegistrationStatus() {
+    global $storage;
+    checkIfLogged();
+
+    try {
+        $user = $storage->getCurrentUser();
+    } catch (Exception $e) {
+        raiseError("User is not registered", 403);
+    }
+    if (!$user || !$user->isRegistered()) {
+        raiseError("User is not registered", 403);
+    }
 }
