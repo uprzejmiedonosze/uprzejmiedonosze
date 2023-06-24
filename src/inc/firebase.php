@@ -42,6 +42,10 @@ function verifyToken($token){
 			logger("verifyToken ExpiredToken – false " . $e->getMessage());
 		} catch (InvalidIdToken $e) {
 			logger("verifyToken InvalidIdToken – false " . $e->getMessage());
+		} catch (Exception $e) {
+			logger("verifyToken failed – false " . $e->getMessage());
+		} catch (Throwable $e) {
+			logger("verifyToken failed – false " . $e->getMessage());
 		}
 		if (isProd()) \Sentry\captureLastError();
 		return false;

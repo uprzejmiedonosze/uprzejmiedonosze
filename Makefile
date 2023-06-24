@@ -94,7 +94,7 @@ staging-sequential: $(DIRS) export
 	@#ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
 shadow: ## Copy files to shadow server.
-	$(MAKE) --warn-undefined-variables shadow-sequential -j
+	@$(MAKE) --warn-undefined-variables shadow-sequential -j
 
 shadow-sequential: HOST := $(SHADOW_HOST)
 shadow-sequential: $(DIRS) export
