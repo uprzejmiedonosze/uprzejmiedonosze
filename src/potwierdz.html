@@ -1,5 +1,6 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
+require(__DIR__ . '/../inc/API.php');
 
 $post = $_POST;
 
@@ -7,34 +8,28 @@ if(!isset($post['applicationId'])){
     redirect("nowe-zgloszenie.html");
 }
 
-$applicationId = $post["applicationId"];
-$application = $storage->getApplication($applicationId);
+$appId = $post["applicationId"];
 
-if(!$application->isEditable()){
+$date = $post['datetime'];
+$dtFromPicture = $post['dtFromPicture'];
+$category = $post["category"];
+$fullAddress = new stdClass();
+$fullAddress->address = $post["lokalizacja"];
+$fullAddress->city = $post["city"];
+$fullAddress->voivodeship = $post["voivodeship"];
+$fullAddress->latlng = $post["latlng"];
+$fullAddress->district = $post["district"];
+$plateId = $post["plateId"];
+$comment = $post["comment"];
+$witness = isset($post['witness']);
+@$extensions = $post["extensions"];
+
+try {
+    $application = updateApplication($appId, $date, $dtFromPicture, $category, $fullAddress,
+        $plateId, $comment, $witness, $extensions);
+} catch (Exception $e) {
     redirect("nowe-zgloszenie.html");
 }
-
-$user = $storage->getCurrentUser();
-
-$application->date = date_format(new DateTime( preg_replace('/[^T0-9: -]/', '', $post['datetime']) ), DT_FORMAT);
-$application->dtFromPicture = (boolean) $post['dtFromPicture'];
-$application->category = intval($post["category"]);
-if(!isset($application->address)) $application->address = new stdClass();
-$application->address->address = $post["lokalizacja"];
-$application->address->city = $post["city"];
-$application->address->voivodeship = $post["voivodeship"];
-$application->address->latlng = $post["latlng"];
-$application->address->district = $post["district"];
-$application->guessSMData(true); // stores sm city inside the object
-if(!isset($application->carInfo)) $application->carInfo = new stdClass();
-$application->carInfo->plateId = strtoupper(trim($post["plateId"]));
-$application->userComment = capitalizeSentence($post["comment"]);
-$application->initStatements();
-$application->statements->witness = isset($post['witness']);
-$application->setStatus("ready");
-@$application->extensions = array_map('intval', $post["extensions"]);
-
-$storage->saveApplication($application);
 
 echo generate('potwierdz.html.twig', 
     [
@@ -51,7 +46,7 @@ echo generate('potwierdz.html.twig',
             'confirmationScreen' => true
         ],
         'app' => $application,
-        'autoSend' => $user->autoSend() && $application->automatedSM()
+        'autoSend' => $storage->getCurrentUser()->autoSend() && $application->automatedSM()
     ]
 );
 

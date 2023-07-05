@@ -1,55 +1,67 @@
 <?PHP
 require_once(__DIR__ . '/include.php');
-require(__DIR__ . '/../autoload.php');
+require_once(__DIR__ . '/../autoload.php');
 require(__DIR__ . '/alpr.php');
 
 use \Application as Application;
 use \Memcache as Memcache;
 use \stdClass as stdClass;
 use \finfo as finfo;
+use \DateTime as DateTime;
+use \Exception as Exception;
 
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function isAjax() {
-    global $_SERVER;
-    return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-        && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+
+function checkRegistrationStatus() {
+    global $storage;
+    checkIfLogged();
+
+    try {
+        $user = $storage->getCurrentUser();
+    } catch (Exception $e) {
+        raiseError('User is not registered', 403);
+    }
+    if (!$user || !$user->isRegistered()) {
+        raiseError('User is not registered', 403);
+    }
 }
 
-/**
- * @SuppressWarnings(PHPMD.UnusedLocalVariable)
- */
-function parseHeaders($headers) {
-    $head = array();
-    foreach ($headers as $k => $v) {
-        $header = explode(':', $v, 2);
-        if (isset($header[1])) {
-            $head[trim($header[0])] = trim($header[1]);
-            continue;
-        }
-        $head[] = $v;
-        if (preg_match("#HTTP/[0-9\.]+\s+([0-9]+)#", $v, $out))
-            $head['reponse_code'] = intval($out[1]);
+
+function updateApplication($appId, $date, $dtFromPicture, $category, $address,
+    $plateId, $comment, $witness, $extensions) {
+    
+    global $storage;
+    $application = $storage->getApplication($appId);
+
+    if(!$application->isEditable()){
+        throw new Exception("Application in status {$application->status} can't be udpated");
     }
-    return $head;
+
+    $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
+    $application->dtFromPicture = (boolean) $dtFromPicture;
+
+    $application->category = intval($category);
+
+    if(!isset($application->address)) $application->address = new stdClass();
+    $application->address->address = $address->address;
+    $application->address->city = $address->city;
+    $application->address->voivodeship = $address->voivodeship;
+    $application->address->latlng = $address->latlng;
+    $application->address->district = $address->district;
+
+    $application->guessSMData(true); // stores sm city inside the object
+
+    if(!isset($application->carInfo)) $application->carInfo = new stdClass();
+    $application->carInfo->plateId = strtoupper(trim($plateId));
+    $application->userComment = capitalizeSentence($comment);
+    $application->initStatements();
+    $application->statements->witness = isset($witness);
+    $application->extensions = array_map('intval', $extensions);
+    $application->setStatus("ready");
+
+    $storage->saveApplication($application);
+    return $application;
 }
 
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function getParam($method, $paramName, $default = null) {
-    global $_GET, $_POST;
-    $params = $_GET;
-    if ($method === 'POST') {
-        $params = $_POST;
-    }
-    if (!isset($params[$paramName])) {
-        if (!is_null($default)) return $default;
-        raiseError("`$paramName` $method parameter is missing", 400);
-    }
-    return $params[$paramName];
-}
 
 /**
  * Sets application status.

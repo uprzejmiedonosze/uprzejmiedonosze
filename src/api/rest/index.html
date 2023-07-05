@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../../../inc/include.php');
 require(__DIR__ . '/../../../inc/API.php');
+require(__DIR__ . '/../../../inc/APIUtils.php');
 
 header('Content-Type: application/json; charset=UTF-8');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
@@ -27,6 +28,7 @@ $ACTIONS = [
     'set-app-status' => true,
     'send-app' => true,
     'get-app' => false,
+    'update-app' => true,
 
     'geo-to-address' => false,
 
@@ -101,6 +103,40 @@ try {
             $newStatus = getParam('POST', 'status'); // see statuses.json
             setStatus($newStatus, $appId);
             break;
+        case 'update-app': // POST
+            $appId = getParam('POST', 'id'); // application id
+            $plateId = getParam('POST', 'plateId');
+            $address = getParam('POST', 'address'); // Mazurska 37, Szczecin
+            $city = getParam('POST', 'city');
+            $voivodeship = getParam('POST', 'voivodeship');
+            $country = getParam('POST', 'country');
+            $district = getParam('POST', 'district');
+            $dtFromPicture = (bool)getParam('POST', 'dtFromPicture'); // 1|0
+
+            $datetime = getParam('POST', 'datetime'); // "2018-02-02T19:48:10"
+
+            $latlng = getParam('POST', 'latlng'); // 53.431786,14.551586
+            $comment = getParam('POST', 'comment', '');
+            $category = intval(getParam('POST', 'category'));
+
+            $extensions = getParam('POST', 'extensions', ''); // "6,7", "6", "", missing
+            $extensions = array_filter(explode(',', $extensions));
+
+            $fullAddress = new JSONObject();
+            $fullAddress->address = $address;
+            $fullAddress->city = $city;
+            $fullAddress->voivodeship = $voivodeship;
+            $fullAddress->latlng = $latlng;
+            $fullAddress->district = $district;
+            
+            try {
+                updateApplication($appId, $date, $dtFromPicture, $category, $fullAddress,
+                    $plateId, $comment, $witness, $extensions);
+            } catch (Exception $e) {
+                raiseError("$e", 403);
+            }
+            break;
+
         case 'send-app':  // POST
             $appId = getParam('POST', 'id'); // application id
             sendApplication($appId);
@@ -206,54 +242,3 @@ function validateJWT() {
     return $token;
 }
 
-/**
- * Retrieves (cached) public keys from Firebase's server
- */
-function getPublicKeys() {
-    $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
-
-    $cache = new Memcache;
-    $cache->connect('localhost', 11211);
-    $cacheKey = '%HOST%-firebase-keys';
-
-    $keys = $cache->get($cacheKey);
-    if ($keys) return json_decode($keys, true);
-
-    $publicKeys = file_get_contents($publicKeyUrl);
-    if (!$publicKeys)
-        raiseError('Failed to fetch JWT public keys.', 501);
-
-    $cacheControl = parseHeaders($http_response_header)['Cache-Control'];
-    preg_match('/max-age=(\d+)/', $cacheControl, $out);
-    $timeout = $out[1];
-    $cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
-
-    return json_decode($publicKeys, true);
-}
-
-/**
- * Retrieves key_id from JWT.
- * 
- * @SuppressWarnings(PHPMD.UnusedLocalVariable)
- */
-function decodeKid($jwt) {
-    list($headersB64, $payloadB64, $sig) = explode('.', $jwt);
-    $decoded = json_decode(base64_decode($headersB64), true);
-    if (!isset($decoded['kid']))
-        raiseError('Missing `kid` in JWT header', 501);
-    return $decoded['kid'];
-}
-
-function checkRegistrationStatus() {
-    global $storage;
-    checkIfLogged();
-
-    try {
-        $user = $storage->getCurrentUser();
-    } catch (Exception $e) {
-        raiseError('User is not registered', 403);
-    }
-    if (!$user || !$user->isRegistered()) {
-        raiseError('User is not registered', 403);
-    }
-}
