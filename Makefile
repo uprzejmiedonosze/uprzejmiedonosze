@@ -173,8 +173,9 @@ process-sitemap: $(DIRS) $(SITEMAP_PROCESSED)
 
 clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
-	@rm -rf $(EXPORT)/*
+	@rm -rf $(EXPORT)
 	@rm -f $(BRANCH_ENV)
+	@rm -rf .parcel-cache/ .mypy_cache/
 
 # Generics
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
