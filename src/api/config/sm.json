@@ -2454,5 +2454,19 @@
       "64-500 Szamotuły"
     ],
     "email": "straz.miejska@szamotuly.pl"
+  },
+  "Władysławowo": {
+    "address": [
+      "Straż Miejska we Władysławowie",
+      "ul. gen. J. Hallera 19",
+      "84-120 Władysławowo"
+    ],
+    "email": "wykroczenia@wladyslawowo.pl"
+  },
+  "Karwieńskie Błoto Drugie": {
+    "parent": "Władysławowo"
+  },
+  "Karwieńskie Błoto Pierwsze": {
+    "parent": "Władysławowo"
   }
 }
