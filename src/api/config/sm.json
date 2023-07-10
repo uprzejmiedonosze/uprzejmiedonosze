@@ -2468,5 +2468,13 @@
   },
   "Karwieńskie Błoto Pierwsze": {
     "parent": "Władysławowo"
+  },
+  "Trzcianka": {
+    "address": [
+      "Straż Miejska we Trzciance",
+      "ul. Sikorskiego 7",
+      "64-980 Trzcianka"
+    ],
+    "email": "strazmiejska@trzcianka.pl"
   }
 }
