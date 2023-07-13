@@ -55,7 +55,10 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->userComment = capitalizeSentence($comment);
     $application->initStatements();
     $application->statements->witness = isset($witness);
-    $application->extensions = array_map('intval', $extensions);
+    $application->extensions = [];
+    if (!is_null($extensions)) {
+        $application->extensions = array_map('intval', $extensions);
+    }
     $application->setStatus("ready");
 
     $storage->saveApplication($application);
