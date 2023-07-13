@@ -63,7 +63,7 @@ describe('API:Mail (Wrocław)', () => {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
         cy.setAppCategory(this.categories)
-        cy.get('#lokalizacja').clear().type('Mieszka I 12, Wrocław')
+        cy.get('#lokalizacja').clear().type('Kurzy Targ 1, Wrocław')
         cy.wait(500)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
@@ -82,7 +82,7 @@ describe('API:Mail (Wrocław)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains('Mieszka I 12, Wrocław').click()
+        cy.contains('Kurzy Targ 1, Wrocław').click()
         cy.contains('Zmień ręcznie status zgłoszenia z Wysłane')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
