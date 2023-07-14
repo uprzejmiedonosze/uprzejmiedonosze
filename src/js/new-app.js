@@ -1,5 +1,6 @@
 /* global ga */
 
+import * as Sentry from "@sentry/browser"
 import {
   initAutocompleteNewApplication,
   setAddressByLatLngString
@@ -14,6 +15,9 @@ $(document).on("pageshow", function () {
   initHandlers();
   if (currentScript) setAddressByLatLngString(currentScript.getAttribute("last-location"));
   initAutocompleteNewApplication();
+
+  Sentry.setTag("appId", $("#applicationId").val());
+
   (typeof ga == 'function') && ga("send", "event", {
     eventCategory: "pageshow",
     eventAction: "nowe-zgloszenie"

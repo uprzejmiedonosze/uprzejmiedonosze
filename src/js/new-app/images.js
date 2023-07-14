@@ -4,6 +4,7 @@ import "blueimp-load-image/js/load-image-meta";
 import "blueimp-load-image/js/load-image-exif";
 import "blueimp-load-image/js/load-image-exif-map";
 import loadImage from "blueimp-load-image/js/load-image";
+import * as Sentry from "@sentry/browser"
 
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
@@ -62,7 +63,9 @@ function readFile(file, id) {
         sendFile(img.toDataURL("image/jpeg", 0.9), id);
       } catch (err) {
         imageError(id);
-        Sentry.captureException(err);
+        Sentry.captureException(err, {
+          extra: (typeof img)
+        });
       }
     },
     {

@@ -23,3 +23,5 @@ Sentry.init({
     /metrics\.itunes\.apple\.com\.edgesuite\.net\//i
   ]
 });
+
+Sentry.setTag("environment", window.location.hostname);
