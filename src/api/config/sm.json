@@ -2476,5 +2476,21 @@
       "64-980 Trzcianka"
     ],
     "email": "strazmiejska@trzcianka.pl"
+  },
+  "Rawicz": {
+    "address": [
+      "Komenda Powiatowa Policji w Rawiczu",
+      "ul. Sienkiewicza 23",
+      "63-900 Rawicz"
+    ],
+    "email": "dyzurny.rawicz@po.policja.gov.pl"
+  },
+  "Gorlice": {
+    "address": [
+      "Straż Miejska w Gorlicach",
+      "ul. Rynek 2",
+      "38-300 Gorlice"
+    ],
+    "email": "sm@um.gorlice.pl"
   }
 }
