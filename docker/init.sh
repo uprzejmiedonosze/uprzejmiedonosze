@@ -1,5 +1,6 @@
+#!/bin/sh
 /etc/init.d/memcached start
-/etc/init.d/php7.4-fpm start
+/etc/init.d/php8.2-fpm start
 
 xtail -f /var/log/uprzejmiedonosze.net/ &
 

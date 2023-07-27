@@ -50,7 +50,7 @@
     "phpmd.unsafeCommand": "./vendor/phpmd/phpmd/src/bin/phpmd",
     "intelephense.diagnostics.enable": true,
     "intelephense.diagnostics.undefinedProperties": false,
-    "intelephense.environment.phpVersion": "7.4.33",
+    "intelephense.environment.phpVersion": "8.2",
     "intelephense.files.associations": [
         "*.php",
         "*.html",

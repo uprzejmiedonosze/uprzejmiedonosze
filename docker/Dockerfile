@@ -1,5 +1,5 @@
-FROM nginx as webserver
-LABEL net.uprzejmiedonosze=0.0.1
+FROM nginx:bookworm as webserver
+LABEL net.uprzejmiedonosze=0.0.2
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update
 
@@ -31,10 +31,10 @@ RUN chown www-data:www-data    /var/cache/uprzejmiedonosze.net
 
 ADD default.conf         /etc/nginx/conf.d/default.conf
 ADD nginx.conf           /etc/nginx/nginx.conf
-ADD www.conf             /etc/php/7.4/fpm/pool.d/www.conf
-RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/7.4/fpm/php.ini
+ADD www.conf             /etc/php/8.2/fpm/pool.d/www.conf
+RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.2/fpm/php.ini
 
-RUN update-rc.d php7.4-fpm defaults
+RUN update-rc.d php8.2-fpm defaults
 RUN update-rc.d memcached defaults
 
 COPY init.sh /root/init.sh
