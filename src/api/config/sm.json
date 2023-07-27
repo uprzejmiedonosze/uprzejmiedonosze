@@ -2502,5 +2502,16 @@
       "38-300 Gorlice"
     ],
     "email": "sm@um.gorlice.pl"
+  },
+  "Kurów": {
+    "address": [
+      "Komisariat Policji w Kurowie",
+      "ul. Lubelska 45",
+      "24-170 Kurów"
+    ],
+    "email": "dyzurni.kpppulawy@lu.policja.gov.pl"
+  },
+  "Markuszów": {
+    "parent": "Kurów"
   }
 }
