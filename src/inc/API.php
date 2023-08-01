@@ -57,7 +57,11 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->statements->witness = isset($witness);
     $application->extensions = [];
     if (!is_null($extensions)) {
-        $application->extensions = array_map('intval', $extensions);
+        try {
+            $application->extensions = array_map('intval', $extensions);
+        } catch(Throwable $e) {
+            $application->extensions = [];
+        }
     }
     $application->setStatus("ready");
 
