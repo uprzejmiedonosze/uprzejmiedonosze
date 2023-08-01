@@ -1,10 +1,9 @@
 Cypress.Commands.add("login", () => {
-  cy.session('user', () => {
-    cy.setCookie('PHPSESSID', 'i2hlj84rsvd3eglgoo61vmlhppgf4ipv')
+  cy.session('user' + Date.now(), () => {
+    cy.setCookie('PHPSESSID', 'og2iqbv5httioomnjl8ckmf1db16jmm2')
   }, {
     cacheAcrossSpecs: true
   })
-  // cy.visit('/')
 })
 
 
