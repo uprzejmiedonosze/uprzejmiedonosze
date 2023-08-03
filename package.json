@@ -1,7 +1,7 @@
 {
   "private": true,
   "engines": {
-    "node": "16.x.x"
+    "node": "18.x.x"
   },
   "engineStrict": true,
   "browserslist": "> 0.5%, last 2 versions, not dead",
