@@ -2513,5 +2513,13 @@
   },
   "Markuszów": {
     "parent": "Kurów"
+  },
+  "Bielawa": {
+    "address": [
+      "Straż Miejska w Bielawie",
+      "ul. Piastowska 1",
+      "58-260 Bielawa"
+    ],
+    "email": "sm@um.bielawa.pl"
   }
 }
