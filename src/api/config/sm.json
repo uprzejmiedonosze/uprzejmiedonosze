@@ -2521,5 +2521,13 @@
       "58-260 Bielawa"
     ],
     "email": "sm@um.bielawa.pl"
+  },
+  "Kościan": {
+    "address": [
+      "Straż Miejska w Kościanie",
+      "ul. Dworcowa 1",
+      "64-000 Kościan"
+    ],
+    "email": "strazmiejska@koscian.pl"
   }
 }
