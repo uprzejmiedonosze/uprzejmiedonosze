@@ -54,7 +54,7 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->carInfo->plateId = strtoupper(trim($plateId));
     $application->userComment = capitalizeSentence($comment);
     $application->initStatements();
-    $application->statements->witness = isset($witness);
+    $application->statements->witness = $witness;
     $application->extensions = [];
     if (!is_null($extensions)) {
         try {
