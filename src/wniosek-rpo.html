@@ -1,0 +1,14 @@
+<?
+require_once(__DIR__ . '/../inc/include.php');
+
+echo generate('wniosek-rpo.html.twig', 
+[
+    'head' =>
+    [
+        'title' => "Wniosek do RPO",
+        'shortTitle' => "Wniosek do RPO",
+        'mainClass' => 'rpo'
+    ]
+]);
+
+?>

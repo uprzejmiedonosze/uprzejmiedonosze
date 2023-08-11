@@ -1,0 +1,130 @@
+.rpo {
+    * {
+        font-family: "Arial";
+        font-size: 12pt;
+        widows: 2;
+        orphans: 2;
+        line-height: 1.25;
+    }
+
+    .ui-content {
+        padding: 2em;
+        margin-top: 4em;
+    }
+
+    body {
+        counter-reset: footnotes;
+    }
+
+    .ui-header {
+        max-width: 800px;
+        margin: 0 auto;
+        display: block;
+        padding: 0.3em;
+        border-width: 0 0 1px 0;
+    }
+
+    p {
+        display: block;
+        margin: 0;
+        margin-bottom: 10px;
+        margin-block-start: 1em;
+        margin-block-end: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        text-align: justify;
+    }
+
+    li {
+        padding-bottom: 10pt;
+        text-align: justify;
+        padding: 3pt;
+    }
+
+    li::before {
+        margin-left: -18pt;
+        white-space: nowrap;
+        display: inline-block;
+        min-width: 18pt;
+    }
+
+    h1 {
+        color: #434343;
+        font-weight: 700;
+        padding-bottom: 10pt;
+        padding-top: 2em;
+        page-break-after: avoid;
+        text-align: center;
+        font-size: 14pt;
+    }
+
+    h2 {
+        padding-top: 10pt;
+        text-decoration: underline;
+        padding-bottom: 10pt;
+        page-break-after: avoid;
+        text-decoration-skip-ink: none;
+        text-align: center;
+        font-size: 12pt;
+    }
+
+    strong {
+        font-weight: 700;
+        text-overflow: ellipsis;
+        text-align: left;
+        display: block;
+    }
+
+    img {
+        max-width: 700px;
+        margin-left: 0px;
+        margin-top: 0px;
+        border: 2.67px solid #f3f3f3;
+    }
+
+    [aria-describedby="footnote-label"] {
+        counter-increment: footnotes;
+        text-decoration: none;
+        color: black !important;
+        outline: none;
+        cursor: pointer;
+    }
+
+    [aria-describedby="footnote-label"]::after {
+        content: counter(footnotes) ')';
+        vertical-align: super;
+        font-size: 0.7em;
+        margin-left: 2px;
+        text-decoration: none;
+    }
+
+    [aria-describedby="footnote-label"]:focus::after {
+        outline: thin dotted;
+        outline-offset: 2px;
+    }
+
+    [aria-label="Back to content"] {
+        font-size: 0.8em;
+    }
+
+    footer {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    footer :target {
+        background: #ff05;
+    }
+
+    .visually-hidden {
+        position: absolute;
+        clip: rect(0 0 0 0);
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .p {
+        text-align: center;
+        font-size: .75em;
+        padding-top: 150px;
+    }
+}
