@@ -178,7 +178,7 @@ function capitalizeSentence($input){
     $isUpperCase = (mb_strlen($input, 'UTF-8') / 2) < (int)preg_match_all('/[A-Z]/', $input);
     
     $out = trim(
-        preg_replace_callback('/([.!?])\s+(\w)/', function ($matches) {
+        preg_replace_callback('/(?<!tj|np|tzw)([.!?])\s+([[:lower:]])/', function ($matches) {
             return mb_strtoupper($matches[1] . ' ' . $matches[2], 'UTF-8');
             }, ucfirst( $isUpperCase ? (mb_strtolower($input, 'UTF-8')): $input )
         )
