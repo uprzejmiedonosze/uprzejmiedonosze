@@ -196,7 +196,7 @@ function addToGallery($appId) {
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
 function moderateApp($appId, $decision) {
-    require __DIR__ . '/../../inc/Tumblr.php';
+    require __DIR__ . '/inc/Tumblr.php';
     global $storage;
     if (!isAdmin()) {
         raiseError("Dostęp zabroniony", 401);
