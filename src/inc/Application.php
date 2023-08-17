@@ -413,7 +413,7 @@ class Application extends JSONObject{
             return $mapsUrl;
         }
         
-        $image = file_get_contents($mapsUrl);
+        $image = @file_get_contents($mapsUrl);
         if($image === false){
             return $mapsUrl;
         }
