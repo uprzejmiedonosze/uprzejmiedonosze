@@ -21,9 +21,9 @@
         w dniu {{ app.sent.date|date('Y-m-d') }}
         około godziny {{ app.sent.date|date('H:i') }}.</b>
     {% else %} {# API #}
-    <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getName }}
+    <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }}
         w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}
-        poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest dla {{ app.guessSMData.getName }}
+        poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest dla {{ app.guessSMData.getShortName }}
         w następującej postaci:</b>
     <cite>{% include('_application.txt.twig') %}</cite>
     {% endif %}

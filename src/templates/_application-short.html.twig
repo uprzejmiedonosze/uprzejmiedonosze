@@ -38,7 +38,7 @@
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
             {% if sendable %}cta{% else %}ui-disabled{% endif %}
             ui-icon-{{ statuses['confirmed-waiting'].icon }}
-            status-confirmed-waiting">Wyślij {% if sendable %}do {{ app.guessSMData.getName }}{% else %}zgłoszenie{% endif %}</a>
+            status-confirmed-waiting">Wyślij {% if sendable %}do {{ app.guessSMData.getShortName }}{% else %}zgłoszenie{% endif %}</a>
         {% elseif app.unknownSM %}
         <a href="/brak-sm.html"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail

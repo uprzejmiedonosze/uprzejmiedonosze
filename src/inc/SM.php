@@ -32,11 +32,24 @@ class SM extends JSONObject{
     }
 
     public function getHint(){
-        return $this->hint;
+        return $this->hint;    
     }
 
     public function getName(){
         return $this->address[0];
+    }
+
+    public function getShortName(){
+        $name = $this->address[0];
+        $name = str_replace('Straż Miejska', 'SM', $name);
+        $name = str_replace('Straż Gminna', 'SG', $name);
+
+        $name = str_replace('Komenda Powiatowa Policji', 'KPP', $name);
+        $name = str_replace('Komenda Powiatowa', 'KPP', $name);
+        $name = str_replace('Komenda Miejska', 'KMP', $name);
+        $name = str_replace('Komisariat Policji', 'KP', $name);
+        $name = str_replace('Posterunek Policji', 'PP', $name);    
+        return $name;
     }
 
     public function hasAPI(){

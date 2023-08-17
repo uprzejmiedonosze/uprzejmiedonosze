@@ -38,7 +38,7 @@
     <h4>Co dalej?</h4>
     <p>Zgodnie z ustawieniami twojego konta, twoje zgłoszenie zostało zapisane, ale nie zostało wysłane do <b>{{ sm.getName }}</b>.
     <p><b>Jak wysyłać zgłoszenia?</b> Najprościej jest wysłać całą paczkę zgłoszeń
-        do {{ app.guessSMData.getName }}. Służy do tego strona <a href="/wysylka.html?city={{ sm.key|url_encode }}" data-ajax="false">wysyłka</a>.
+        do {{ app.guessSMData.getShortName }}. Służy do tego strona <a href="/wysylka.html?city={{ sm.key|url_encode }}" data-ajax="false">wysyłka</a>.
     </p>
 {% endif %}
 {% if sm.hint %}

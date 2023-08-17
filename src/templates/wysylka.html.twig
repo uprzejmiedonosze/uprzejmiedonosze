@@ -36,16 +36,16 @@ Z poważaniem
     {% if sm.hasAPI %}
         <h2>Wyślij swoje zgłoszenia</h2>
         <p>Na tej stronie możesz wysłać swoje zgłoszenia do {{ sm.getName }}.</p>
-        <p>Na szczęście {{ sm.getName }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
+        <p>Na szczęście {{ sm.getShortName }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
         im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei.</p>
-        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
+        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getShortName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
     {% else %} {# if sm.hasAPI #}
         <h2>Pobierz paczkę zgłoszeń do wysyłki</h2>
         <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do samodzielnej wysyłki do {{ sm.getName }}.
         Jest to przydatne, jeśli masz więcej zgłoszeń do wysłania.</p>
 
         <p>Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
-        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
+        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getShortName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
 
         <ol>
             <li>Najpierw 
