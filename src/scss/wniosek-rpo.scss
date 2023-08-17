@@ -1,10 +1,14 @@
 .rpo {
     * {
+        color: #434343;
         font-family: "Arial";
-        font-size: 12pt;
-        widows: 2;
-        orphans: 2;
+        font-style: normal;
+        font-weight: 400;
         line-height: 1.25;
+        orphans: 2;
+        text-decoration: none;
+        vertical-align: baseline;
+        widows: 2;
     }
 
     .ui-content {
@@ -12,7 +16,7 @@
         margin-top: 4em;
     }
 
-    body {
+    .ui-content {
         counter-reset: footnotes;
     }
 
@@ -33,12 +37,14 @@
         margin-inline-start: 0px;
         margin-inline-end: 0px;
         text-align: justify;
+        font-size: 12pt;
     }
 
     li {
         padding-bottom: 10pt;
         text-align: justify;
         padding: 3pt;
+        font-size: 12pt;
     }
 
     li::before {
@@ -49,7 +55,6 @@
     }
 
     h1 {
-        color: #434343;
         font-weight: 700;
         padding-bottom: 10pt;
         padding-top: 2em;
@@ -84,10 +89,10 @@
 
     [aria-describedby="footnote-label"] {
         counter-increment: footnotes;
-        text-decoration: none;
-        color: black !important;
+        text-decoration-line: underline;
+        text-decoration-style: dotted;
+        color: #434343 !important;
         outline: none;
-        cursor: pointer;
     }
 
     [aria-describedby="footnote-label"]::after {
@@ -96,6 +101,11 @@
         font-size: 0.7em;
         margin-left: 2px;
         text-decoration: none;
+    }
+
+    sup {
+        vertical-align: super;
+        font-size: 0.7em;
     }
 
     [aria-describedby="footnote-label"]:focus::after {
@@ -110,6 +120,7 @@
     footer {
         max-width: 800px;
         margin: 0 auto;
+        text-align: left;
     }
     footer :target {
         background: #ff05;
