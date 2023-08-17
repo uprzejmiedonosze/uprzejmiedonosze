@@ -57,14 +57,16 @@
         <label for="stopAgresji-SA">na komendę Policji właściwą dla województwa zgłoszenia (eksperymentalnie)</label>
     </fieldset>
 
+    {% if not user.data.autoSend %}
     <fieldset data-role="controlgroup">
         <legend for="autoSend">Chcę wysyłać swoje zgłoszenia</legend>
         <input type="radio" name="autoSend" id="autoSend-Y" value="Y" {% if user.autoSend %}checked="checked"{% endif %}>
         <label for="autoSend-Y">automatycznie, po zapisaniu każdego zgłoszenia (domyślnie)</label>
 
-        <input type="radio" name="autoSend" id="autoSend-N" value="N" {% if not user.autoSend %}checked="checked"{% endif %}>
+        <input disabled type="radio" name="autoSend" id="autoSend-N" value="N" {% if not user.autoSend %}checked="checked"{% endif %}>
         <label for="autoSend-N">ręcznie, w większych paczkach</label>
     </fieldset>
+    {% endif %}
     <fieldset data-role="controlgroup">
         <legend for="myAppsSize">Liczba zgłoszeń ładowana na start w "Moje zgłoszenia"</legend>
         <input type="radio" name="myAppsSize" id="myAppsSize-200" value="200" {% if user.myAppsSize == 200 %}checked="checked"{% endif %}>
