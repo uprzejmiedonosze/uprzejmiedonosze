@@ -173,7 +173,7 @@ describe('Create application', () => {
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Wyślij teraz!').click()
+        cy.contains('Wyślij do').click()
         cy.contains('To twoje pierwsze zgłoszenie')
         cy.contains('UD/4/')
     })
@@ -251,7 +251,7 @@ describe('Edit application', () => {
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Wyślij teraz!').click()
+        cy.contains('Wyślij do').click()
         cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
         cy.contains('UD/4/')
     })

@@ -17,7 +17,7 @@ describe('API:automated (Poznań)', () => {
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
-        cy.contains('Wyślij teraz!').click()
+        cy.contains('Wyślij do').click()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 
@@ -68,7 +68,7 @@ describe('API:Mail (Wrocław)', () => {
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
-        cy.contains('Wyślij teraz!').click()
+        cy.contains('Wyślij do').click()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 
@@ -104,7 +104,7 @@ describe.skip('API:null (Szczecin)', () => {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
         cy.get('#form-submit').click()
-        cy.contains('Wyślij teraz!').click()
+        cy.contains('Wyślij do').click()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 

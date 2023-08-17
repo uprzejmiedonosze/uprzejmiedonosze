@@ -92,12 +92,10 @@ describe('Update account', () => {
     cy.contains('Zaktualizuj konto')
     cy.contains('Czy chcesz dołączać do zgłoszenia')
     cy.contains('Chcę wysyłać swoje zgłoszenia')
-    cy.contains('ręcznie')
     cy.contains('na komendę')
 
     cy.get('#exposeData-N').should('be.checked')
     cy.get('#stopAgresji-SM').should('be.checked')
-    cy.get('#autoSend-Y').should('be.checked')
   })
 
   it('New app, default settings', function () {
@@ -111,7 +109,7 @@ describe('Update account', () => {
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.')
     cy.contains('zostanie za chwilę wysłane')
     cy.contains(this.sm.Szczecin.address[0])
-    cy.contains('Wyślij teraz').click()
+    cy.contains('Wyślij do ').click()
 
     cy.contains('Uwagi do współpracy')
     cy.contains('To twoje pierwsze zgłoszenie')
@@ -136,7 +134,6 @@ describe('Update account', () => {
 
     cy.get('#exposeData-Y').check({force: true})
     cy.get('#stopAgresji-SA').check({force: true})
-    cy.get('#autoSend-N').check({force: true})
 
     cy.contains('Potwierdź').click()
 
@@ -146,7 +143,6 @@ describe('Update account', () => {
 
     cy.get('#exposeData-Y').should('be.checked')
     cy.get('#stopAgresji-SA').should('be.checked')
-    cy.get('#autoSend-N').should('be.checked')
   })
 
   it('New app, opposite settings', function () {
@@ -161,28 +157,21 @@ describe('Update account', () => {
     cy.get('#form-submit').click()
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
-    cy.contains('zostanie za chwilę wysłane').should('not.exist')
-    cy.contains('Na tym etapie nic nie zostanie wysłane do')
-    cy.contains(this.sm.Szczecin.address[0]).should('not.exist')
-    cy.contains('Komisariat Policji Szczecin Niebuszewo')
-    cy.contains('Wyślij teraz').should('not.exist')
-    cy.contains('Zapisz').click()
+    cy.contains('KP Szczecin Niebuszewo')
+    cy.contains('Wyślij do ').click()
 
     cy.contains('Uwagi do współpracy z Komisariat Policji Szczecin Niebuszewo')
-    cy.contains('twoje zgłoszenie zostało zapisane')
     cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
 
     cy.visit('/')
     cy.contains('Menu').click()
     cy.contains('Moje zgłoszenia').click()
-    cy.contains('UD/').click()
-    cy.contains('Wyślij zgłoszenie')
+    cy.contains('UD/1/2').click()
+    cy.contains('Wyślij do ').click()
 
     cy.visit('/')
     cy.contains('Menu').click()
     cy.contains('Do wysłania').click()
-    cy.contains('UD/').click()
-    cy.contains('Wyślij do ').should('not.exist')
-    cy.contains('Wyślij zgłoszenie').should('not.exist')
+    cy.contains('UD/1/2').should('not.exist')
   })
 })
