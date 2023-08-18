@@ -2532,5 +2532,13 @@
       "64-000 Kościan"
     ],
     "email": "strazmiejska@koscian.pl"
+  },
+  "Tarnobrzeg": {
+    "address": [
+      "Straż Miejska w Tarnobrzegu",
+      "ul. Adama Mickiewicza 7a",
+      "39-400 Tarnobrzeg"
+    ],
+    "email": "straz@um.tarnobrzeg.pl"
   }
 }
