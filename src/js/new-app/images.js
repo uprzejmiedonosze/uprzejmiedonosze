@@ -4,7 +4,6 @@ import "blueimp-load-image/js/load-image-meta";
 import "blueimp-load-image/js/load-image-exif";
 import "blueimp-load-image/js/load-image-exif-map";
 import loadImage from "blueimp-load-image/js/load-image";
-import * as Sentry from "@sentry/browser"
 
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
