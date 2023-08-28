@@ -57,7 +57,7 @@
         <label for="stopAgresji-SA">na komendę Policji właściwą dla województwa zgłoszenia (eksperymentalnie)</label>
     </fieldset>
 
-    {% if not user.data.autoSend %}
+    {% if not user.autoSend() %}
     <fieldset data-role="controlgroup">
         <legend for="autoSend">Chcę wysyłać swoje zgłoszenia</legend>
         <input type="radio" name="autoSend" id="autoSend-Y" value="Y" {% if user.autoSend %}checked="checked"{% endif %}>
