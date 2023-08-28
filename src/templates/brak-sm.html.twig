@@ -1,11 +1,27 @@
 {% set leftButton = 'menu' %}
 {% set rightButton = 'menuStart' %}
 
+{% set emailSubject = 'Brak danych SM' %}
+{% set emailBody = '' %}
+
+{% if appCity %}
+{% set emailSubject = 'Brak danych SM dla miejscowości ' ~ appCity %}
+{% set emailBody = 'Dzień dobry,
+
+Proszę o dodanie Straży Miejskiej ' ~ appCity ~ ' (zgłoszenie ' ~ appNumber ~ '):
+
+Ulica: (uzupełnij proszę)
+Kod pocztowy: XX-XXX ' ~ appCity ~ '
+Adres email SM: (uzupełnij proszę)
+
+Z poważaniem
+
+' %}
+{% endif %}
+
 {% extends "base.html.twig" %}
 {% block main %}
-<h2>Brak danych Straży Miejskiej</h2>
-<p>Jeśli w treści swojego zgłoszenia widzisz informację, że dla twojego miasta nie mamy jeszcze
-zapisanego adresu e-mail SM, to trafiłeś na dobrą stronę.</p>
+<h2>Brak danych Straży Miejskiej {{ appCity }}</h2>
 
 <p>Uprzejmie Donoszę przygotowuje dla Ciebie gotowe pismo do właściwej Straży Miejskiej oraz
 automatycznie wysyła gotowy plik zgłoszenia na adres skrzynki SM. Dlatego konieczne jest
@@ -13,7 +29,7 @@ zarejestrowanie danych Straży Miejskiej w twoim mieście.</p>
 
 <p>Napisz na <a rel="external" href="https://www.facebook.com/groups/patologiaparkingowa/">grupie wsparcia
         dla użytkowników Uprzejmie Donoszę</a>
-    (lub napisz bezpośrednio do <a href="mailto:szymon@uprzejmiedonosze.net">autora</a>).
+    (lub napisz bezpośrednio do <a href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}">autora</a>).
     Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
     oraz adres e-mail Straży Miejskiej.
 </p>

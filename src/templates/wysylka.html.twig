@@ -30,7 +30,7 @@ Z poważaniem
 
 {% if sm.unknown %}
     <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu e-mail SM.</b> Przeczytaj
-        <a href="/brak-sm.html">co zrobić w takiej sytuacji</a>.
+        <a href="/brak-sm.html?id={{ apps[0].id }}">co zrobić w takiej sytuacji</a>.
     </p>
 {% else %} {# if sm.unknown #}
     {% if sm.hasAPI %}

@@ -40,7 +40,7 @@
             ui-icon-{{ statuses['confirmed-waiting'].icon }}
             status-confirmed-waiting">Wyślij {% if sendable %}do {{ app.guessSMData.getShortName }}{% else %}zgłoszenie{% endif %}</a>
         {% elseif app.unknownSM %}
-        <a href="/brak-sm.html"
+        <a href="/brak-sm.html?id={{ app.id }}"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail
             {% if sendable %}cta{% else %}ui-disabled{% endif %}
             status-confirmed-waiting">Wyślij zgłoszenie</a>

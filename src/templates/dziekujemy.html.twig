@@ -6,6 +6,20 @@
 {% set rightButtonText = 'Jeszcze raz' %}
 {% set rightButtonIcon = 'ui-icon-plus' %}
 
+{% set emailBody = 'Dzień dobry,
+
+Proszę o dodanie Straży Miejskiej ' ~ app.address.city ~ ' (zgłoszenie ' ~ app.number ~ '):
+
+Ulica: (uzupełnij proszę)
+Adres email: (uzupełnij proszę)
+
+Z poważaniem
+
+' ~ app.user.name ~ '
+' %}
+
+{% set emailSubject = 'Brak SM ' ~ app.address.city %}
+
 {% extends "base.html.twig" %}
 
 {% block main %}
@@ -30,7 +44,7 @@
     <p>
         Napisz na <a rel="external" href="https://www.facebook.com/groups/patologiaparkingowa/">grupie wsparcia
             dla użytkowników Uprzejmie Donoszę</a>
-        (lub napisz bezpośrednio do <a href="mailto:szymon@uprzejmiedonosze.net">autora</a>).
+        (lub napisz bezpośrednio do <a href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}">autora</a>).
         Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
         oraz adres e-mail Straży Miejskiej.
     </p>

@@ -1,6 +1,21 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
+$appCity = '';
+$appNumber = '';
+if (isset($_GET['id'])) {
+    try {
+        $appId = $_GET['id'];
+        $app = $storage->getApplication($appId);
+        $appCity = $app->address->city;
+        $appNumber = $app->number;
+    } catch (Exception $e) {
+        $appCity = '';
+        $appNumber = '';
+    }
+}
+
+
 echo generate('brak-sm.html.twig', 
     [
         'head' =>
@@ -13,7 +28,9 @@ echo generate('brak-sm.html.twig',
         ],
         'config' => [
             'menu' => 'brakSM'
-        ]
+        ],
+        'appCity' => $appCity,
+        'appNumber' => $appNumber
     ]
 );
 ?>
