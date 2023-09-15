@@ -2578,6 +2578,25 @@
     ],
     "email": "dyzurny.kp-polanica-zdroj@klodzko.wr.policja.gov.pl"
   },
+  "Duszniki-Zdrój": {
+    "address": [
+      "Komisariat Policji w Dusznikach-Zdroju",
+      "ul. Rynek 6",
+      "57-340 Duszniki-Zdrój"
+    ],
+    "email": "dyzurny.kp-polanica-zdroj@klodzko.wr.policja.gov.pl"
+  },
+  "Radków": {
+    "address": [
+      "Posterunek Policji w Radkowie",
+      "ul. Kolejowa 13",
+      "57-420 Radków"
+    ],
+    "email": "dyzurny.kp-nowa-ruda@klodzko.wr.policja.gov.pl"
+  },
+  "Karłów": {
+    "parent": "Radków"
+  },
   "Gostynin": {
     "address": [
       "Komenda Powiatowa Policji w Gostyninie",
