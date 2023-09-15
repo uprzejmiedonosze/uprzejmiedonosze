@@ -2569,5 +2569,21 @@
       "86-100 Świecie"
     ],
     "email": "straz.miejska@swiecie.eu"
+  },
+  "Polanica-Zdrój": {
+    "address": [
+      "Komisariat Policji w Polanicy-Zdroju",
+      "ul. Warszawska 1",
+      "57-320 Polanica-Zdrój"
+    ],
+    "email": "dyzurny.kp-polanica-zdroj@klodzko.wr.policja.gov.pl"
+  },
+  "Gostynin": {
+    "address": [
+      "Komenda Powiatowa Policji w Gostyninie",
+      "ul. 3 Maja 17",
+      "09-500 Gostynin"
+    ],
+    "email": "kppgostynin@ra.policja.gov.pl"
   }
 }
