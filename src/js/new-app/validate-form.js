@@ -1,8 +1,9 @@
-import { checkAddress, checkValue, checkCommentvalue } from "../lib/validation";
+import { checkAddress, checkValue, checkCommentvalue, checkDateTimeValue } from "../lib/validation";
 
 export function validateForm() {
   $("#form-submit").addClass("ui-disabled");
   var ret = checkValue($("#plateId"), 3);
+  ret = checkDateTimeValue() && ret;
   ret = checkAddress($("#lokalizacja")) && ret;
   ret = checkImages() && ret;
   if ($("#0").is(":checked")) {

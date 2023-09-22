@@ -41,13 +41,18 @@ div.error img{
   background-color: rgba(255, 0, 0, 0.3);
 }
 
-.new-application .datetime a {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+.new-application div.datetime {
+  max-width: 15em;
 }
-.new-application .datetime a.changeDatetime {
-  font-weight: 300;
+.new-application div.datetime input:disabled {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  color: black;
+}
+.new-application a.changeDatetime {
   text-decoration: none;
+  display: none;
 }
 
 .new-application .location-picker .centerMarker {
@@ -56,11 +61,6 @@ div.error img{
   width: 64px;
   margin-left: -32px;
   margin-top: -32px;
-}
-
-.new-application .datetime span#date,
-.new-application .datetime span#time {
-  font-weight: 400;
 }
 
 ::-webkit-input-placeholder { /* WebKit browsers */

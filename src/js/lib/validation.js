@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export const checkAddress = function (where) {
   var ret = where.val().trim().length > 10;
 
@@ -43,4 +45,11 @@ export const checkCommentvalue = function () {
     return true
   $("#comment").addClass("error");
   return false
+}
+
+export const checkDateTimeValue = function () {
+  const dt = DateTime.fromISO($('#datetime').val())
+  const result = !dt.invalid && dt < DateTime.now()
+  !result && $('#datetime').addClass("error")
+  return result
 }

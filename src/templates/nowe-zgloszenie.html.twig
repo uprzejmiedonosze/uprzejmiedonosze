@@ -74,20 +74,17 @@
                 </div>
             </div>
         </div>
-        <label for="datetime" id="dateHint">Data i czas zgłoszenia</label>
+        <label for="datetime"><span id="dateHint">Data i czas zgłoszenia</span> <a href="#" class="changeDatetime">(zmień datę, jeśli niepoprawna)</a></label>
         <div class="datetime">
-            <input type="hidden" id="datetime" name="datetime" value="{{ app.date }}" />
-
-            <a href="#" id="dm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień wcześniej</a>
-            <a href="#" id="dp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Dzień później</a>
-            <span id="date"></span>
-
-            <span id="dtPrecise">około</span>
-
-            <a href="#" id="hm" class="ui-btn ui-icon-minus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina wcześniej</a>
-            <a href="#" id="hp" class="ui-btn ui-icon-plus ui-btn-icon-notext ui-corner-all ui-btn-inline ui-mini">Godzina później</a>
-            <span id="time"></span>
-            <a href="#" class="changeDatetime">(zmień datę, jeśli niepoprawna)</a>
+            <input
+                type="datetime-local"
+                id="datetime"
+                name="datetime"
+                value="{{ dt }}"
+                min="{{ dtMin }}"
+                max="{{ dtMax }}"
+                {% if not config.edit %}disabled{% endif %}
+                />
         </div>
 
         <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />

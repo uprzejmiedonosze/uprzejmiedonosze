@@ -52,6 +52,8 @@ if(!isset($application)){ // new application mode
     $edit = false;
 }
 
+$now = new DateTime();
+
 echo generate('nowe-zgloszenie.html.twig', 
     [
         'head' =>
@@ -67,7 +69,10 @@ echo generate('nowe-zgloszenie.html.twig',
             'lastLocation' => $user->getLastLocation()
         ],
         'categoriesMatrix' => CATEGORIES_MATRIX,
-        'app' => $application
+        'app' => $application,
+        'dt' => $edit ? (new DateTime($application->date))->format(DT_FORMAT_SHORT) : '',
+        'dtMax' => $now->format(DT_FORMAT_SHORT),
+        'dtMin' => $now->modify("-1 year")->format(DT_FORMAT_SHORT)
     ]
 );
 

@@ -1,7 +1,5 @@
-import { DateTime } from "luxon";
 
 import { checkFile } from "./images";
-import { setDateTime } from "./set-datetime";
 import { validateForm } from "./validate-form";
 
 export const initHandlers = () => {
@@ -21,6 +19,10 @@ export const initHandlers = () => {
 
   $("#comment").on("change", function () {
     $("#comment").removeClass("error");
+  });
+
+  $("#datetime").on("change", function () {
+    $("#datetime").removeClass("error");
   });
 
   $("#category").on("change", function (e) {
@@ -57,28 +59,13 @@ export const initHandlers = () => {
     }
   });
 
-  $("div.datetime a.ui-btn").click(function () {
-    let datetime = DateTime.fromISO($("#datetime").val()).startOf("hour");
-    const offset = (this.id && this.id.endsWith("p")) ? 1 : -1;
-
-    if (this.id.startsWith("d")) {
-      datetime = datetime.plus({ days: offset });
-    } else {
-      datetime = datetime.plus({ hours: offset });
-    }
-    if (DateTime.local() > datetime) {
-      setDateTime(datetime, false);
-    }
-  });
-
-  $("div.datetime a.changeDatetime").click(function () {
-    setDateTime($("#datetime").val(), false);
+  $("a.changeDatetime").click(function () {
+    $("a.changeDatetime").hide();
+    $("#datetime").removeAttr('disabled').closest("div").removeClass("ui-state-disabled");
   });
 
   showHidePictureHints($(".contextImageSection"));
   showHidePictureHints($(".carImageSection"));
-
-  setDateTime($("#datetime").val(), $("#dtFromPicture").val() == "1");
 
   $(".image-upload img").on("load", function () {
     $(this).show();

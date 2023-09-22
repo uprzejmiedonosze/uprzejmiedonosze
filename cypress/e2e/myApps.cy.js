@@ -100,7 +100,7 @@ describe('Invalid images', () => {
         cy.get('#hm').should('not.have.class', 'ui-state-disabled')
         cy.get('#dm').click()
         cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
-        cy.get('.datetime .changeDatetime').should('not.be.visible')
+        cy.get('.changeDatetime').should('not.be.visible')
     })
 })
 
@@ -138,7 +138,7 @@ describe('Valid images and location', () => {
         cy.contains('Data i godzina pobrana ze zdjęcia')
         cy.contains(this.config.carImage.dateHuman)
         cy.contains(this.config.carImage.hour)
-        cy.get('.datetime .changeDatetime').should('be.visible')
+        cy.get('.changeDatetime').should('be.visible')
 
         cy.get('#lokalizacja').should('have.value', this.config.address.address)
     })
@@ -231,7 +231,7 @@ describe('Edit application', () => {
         cy.contains(this.config.carImage.dateHumanDM1)
         cy.contains(this.config.carImage.hourHumanHP1)
         cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
-        cy.get('.datetime .changeDatetime').should('not.be.visible')
+        cy.get('.changeDatetime').should('not.be.visible')
     })
 
     it('checks altered application', function(){
