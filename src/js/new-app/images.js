@@ -110,13 +110,8 @@ async function readGeoDataFromImage(file) {
   dateTime = setDateTime(dateTime, dtFromPicture);
 
   var gpsInfo = data.exif && data.exif.get("GPSInfo");
-  console.log('gpsInfo', gpsInfo)
   if (!gpsInfo) {
     noGeoDataInImage();
-    console.log('return', {
-      dateTime,
-      dtFromPicture
-    })
     return {
       dateTime,
       dtFromPicture
@@ -154,10 +149,8 @@ function noGeoDataInImage() {
     $("#addressHint").text(
       "Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć"
     );
-  } else if (
-    /Chrome/.test(navigator.userAgent) &&
-    /Android/.test(navigator.userAgent)
-  ) {
+  } else if (/Chrome/.test(navigator.userAgent) &&
+    /Android/.test(navigator.userAgent)) {
     $("#addressHint").html(
       'Przeglądarka Chrome na Androidzie zapewne usunęła znaczniki geolokalizacji, <a data-ajax="false" href="/aplikacja.html">zainstaluj Firefox-a</a>.'
     );
