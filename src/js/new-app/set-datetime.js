@@ -3,9 +3,12 @@ import { DateTime } from "luxon";
 export function setDateTime(dateTime, fromPicture = true) {
   let dt = dateTime;
   if (typeof dateTime === "string") {
-    dt = DateTime.fromISO(dateTime);
+    dt = DateTime.fromFormat(dateTime, "yyyy:MM:dd HH:mm:ss");
+    if (dt.invalid) dt = DateTime.fromFormat(dateTime, "yyyy:MM:dd HH:mm");
+    if (dt.invalid) dt = DateTime.fromISO(dateTime);
     if (dt.invalid) {
       dt = null
+      fromPicture = false
     }
   }
   if (fromPicture) {
