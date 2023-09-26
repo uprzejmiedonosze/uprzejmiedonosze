@@ -61,7 +61,7 @@ export const initHandlers = () => {
 
   $("a.changeDatetime").click(function () {
     $("a.changeDatetime").hide();
-    $("#datetime").removeAttr('disabled').closest("div").removeClass("ui-state-disabled");
+    $("#datetime").removeAttr('readonly')
   });
 
   showHidePictureHints($(".contextImageSection"));

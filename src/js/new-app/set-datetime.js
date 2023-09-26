@@ -12,13 +12,13 @@ export function setDateTime(dateTime, fromPicture = true) {
     if (dateTime !== "") {
       $("#dateHint").text("Data i godzina pobrana ze zdjęcia");
       $("#dateHint").addClass("hint");
-      $("#datetime").attr('disabled', 'true');
+      $("#datetime").attr('readonly', 'true');
     }
     $("a.changeDatetime").show();
   } else {
     $("#dateHint").text("Podaj datę i godzinę zgłoszenia");
     $("#dateHint").addClass("hint");
-    $("#datetime").removeAttr('disabled').closest("div").removeClass("ui-state-disabled");
+    $("#datetime").removeAttr('readonly')
     $("a.changeDatetime").hide();
   }
   $("#dtFromPicture").val(fromPicture ? 1 : 0);

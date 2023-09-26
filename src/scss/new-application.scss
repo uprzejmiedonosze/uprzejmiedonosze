@@ -44,11 +44,11 @@ div.error img{
 .new-application div.datetime {
   max-width: 15em;
 }
-.new-application div.datetime input:disabled {
+.new-application div.datetime input:read-only {
   border: none;
   box-shadow: none;
   margin: 0;
-  color: black;
+  color: #666;
 }
 .new-application a.changeDatetime {
   text-decoration: none;

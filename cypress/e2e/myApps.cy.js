@@ -57,7 +57,7 @@ describe('Application screen validation', () => {
             cy.get(`input#${id}`).click({force: true})
             cy.get(`input#ex${id}`).should('be.disabled')
         })
-        cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
+        cy.get('input#datetime').should('have.attr', 'readonly')
         cy.get('#latlng').should(($input) => {
             const val = $input.val()
             expect(val).to.match(new RegExp(this.config.address.latlng))
@@ -88,18 +88,10 @@ describe('Invalid images', () => {
 
     it('checks application page with wrong images uploaded', function () {
         cy.get('.imageContainer').should('not.have.class', 'error')
-        cy.contains("około")
         cy.contains('Podaj datę i godzinę zgłoszenia')
         cy.contains('Twoje zdjęcie nie ma znaczników geolokacji')
 
         cy.get('#plateImage').should('be.hidden')
-
-        cy.get('#dp').should('have.class', 'ui-state-disabled')
-        cy.get('#dm').should('not.have.class', 'ui-state-disabled')
-        cy.get('#hp').should('have.class', 'ui-state-disabled')
-        cy.get('#hm').should('not.have.class', 'ui-state-disabled')
-        cy.get('#dm').click()
-        cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
         cy.get('.changeDatetime').should('not.be.visible')
     })
 })
