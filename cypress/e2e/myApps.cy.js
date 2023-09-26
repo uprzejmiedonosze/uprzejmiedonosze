@@ -1,7 +1,6 @@
 function checkAppData(config) {
     cy.contains(config.carImage.plateId)
-    cy.contains(config.carImage.date)
-    cy.contains(config.carImage.hour)
+    cy.contains(config.carImage.dateHuman)
     cy.contains(config.address.address)
     cy.contains(config.user.name)
     cy.contains(config.user.email)
@@ -109,7 +108,7 @@ describe('Valid images and location', () => {
     it('checks address autocomplete', function () {
         cy.goToNewAppScreen()
         cy.get('#lokalizacja').clear().type('Mazurska, Poznań')
-        cy.wait(500)
+        cy.wait(1000)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#lokalizacja').should('have.value', 'Zagórzycka 20, Poznań')
@@ -128,8 +127,7 @@ describe('Valid images and location', () => {
         cy.get('#comment').should('not.have.class', 'error')
 
         cy.contains('Data i godzina pobrana ze zdjęcia')
-        cy.contains(this.config.carImage.dateHuman)
-        cy.contains(this.config.carImage.hour)
+        cy.get('#datetime').should('have.value', this.config.carImage.dateISO)
         cy.get('.changeDatetime').should('be.visible')
 
         cy.get('#lokalizacja').should('have.value', this.config.address.address)
@@ -213,16 +211,11 @@ describe('Edit application', () => {
         cy.get('#comment').type(this.config.comment)
         cy.get('#witness').click({force: true})
         cy.contains('Zatrzymanie na drodze dla rowerów').click()
-        cy.contains('(zmień datę, jeśli niepoprawna)').click()
 
-        cy.contains("około")
-        cy.contains('Podaj datę i godzinę zgłoszenia')
-        cy.get('#dm').click()
-        cy.get('#hp').click()
+        cy.contains('Data i czas zgłoszenia')
+        cy.get('#datetime').type(this.config.carImage.dateISOAltered)
 
-        cy.contains(this.config.carImage.dateHumanDM1)
-        cy.contains(this.config.carImage.hourHumanHP1)
-        cy.get('.datetime .ui-btn').should('not.have.class', 'ui-state-disabled')
+        cy.get('#datetime').should('have.value', this.config.carImage.dateISOAltered)
         cy.get('.changeDatetime').should('not.be.visible')
     })
 
@@ -231,12 +224,10 @@ describe('Edit application', () => {
         cy.contains('Wystąpił błąd').should('not.exist')
 
         cy.contains(this.config.carImage.plateId)
-        cy.contains(this.config.carImage.dateDM1)
-        cy.contains(this.config.carImage.hourHumanHP1)
+        cy.contains(this.config.carImage.dateHumanAltered)
         cy.contains(this.config.address.address)
         cy.contains(this.config.user.name)
         cy.contains(this.config.user.email)
-        cy.contains("około")
 
         cy.contains(this.config.comment)
         cy.contains('Nie byłem świadkiem samego momentu parkowania').should('not.exist')
@@ -250,14 +241,14 @@ describe('Edit application', () => {
 
     it('checks application list screen', function () {
         cy.contains('liście swoich zgłoszeń').click()
+        cy.wait(1000)
         cy.contains(this.config.address.address)
         cy.get('#collapsiblesetForFilter').find('.application').should('have.length', 2)
     })
 
     it('checks application screen', function () {
         cy.contains('Szczegóły').click({force: true})
-        cy.contains(this.config.carImage.dateDM1)
-        cy.contains(this.config.carImage.hourHumanHP1)
+        cy.contains(this.config.carImage.dateHumanAltered)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
     })

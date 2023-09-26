@@ -9,12 +9,12 @@
     "carImage": {
         "url": "../../tests/img_p.jpg",
         "plateId": "KWA00913",
-        "date": "2018-02-02",
-        "dateDM1": "2018-02-01",
-        "dateHuman": "piątek 2 lut",
-        "dateHumanDM1": "czwartek 1 lut",
-        "hourHumanHP1": "20:00",
-        "hour": "19:48"
+        "dateISO": "2018-02-02T19:48",
+        "dateHuman": "2018-02-02 o godzinie 19:48",
+
+        "dateInput": "020220222222",
+        "dateISOAltered": "2022-02-02T22:22",
+        "dateHumanAltered": "2022-02-02 o godzinie 22:22"
     },
     "wrongImage": {
         "url": "../../tests/img_e.jpg"
