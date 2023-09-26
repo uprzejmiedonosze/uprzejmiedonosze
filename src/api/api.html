@@ -41,9 +41,10 @@ if (isAjax()) {
                 $imageBytes = explode( ',', $_POST['image_data'])[1]; 
                 $pictureType = $_POST['pictureType'];
                 $appId = $_POST['applicationId'];
-                $dateTime = $_POST['dateTime'];
-                $dtFromPicture = $_POST['dtFromPicture'] == 'true';
-                $latLng = $_POST['latLng'];
+
+                $dateTime = isset($_POST['dateTime']) ? $_POST['dateTime'] : null;
+                $dtFromPicture = isset($_POST['dtFromPicture']) ? $_POST['dtFromPicture'] == 'true' : null;
+                $latLng = isset($_POST['latLng']) ? $_POST['latLng'] : null;
                 uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
                 break;
             case "getApp":
