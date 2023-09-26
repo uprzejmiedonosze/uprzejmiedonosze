@@ -17,6 +17,11 @@ export const checkAddress = function (where) {
       $("#addressHint").addClass("hint");
     }
   }
+  // register form
+  if (where.selector == "#address") {
+    // registration address must contain flat no
+    ret = /\d/.test(where.val()) && ret;
+  }
 
   !ret && where.addClass("error");
 
