@@ -52,7 +52,15 @@ if(!isset($application)){ // new application mode
     $edit = false;
 }
 
+
+$dt = (new DateTime($application->date))->format(DT_FORMAT_SHORT);
+
 $now = new DateTime();
+$dtMax = $now->format(DT_FORMAT_SHORT);
+$dtMin = $now->modify("-1 year")->format(DT_FORMAT_SHORT);
+
+// edit app older than 1y
+if ($dtMin > $dt) $dtMin = $dt;
 
 echo generate('nowe-zgloszenie.html.twig', 
     [
@@ -70,9 +78,9 @@ echo generate('nowe-zgloszenie.html.twig',
         ],
         'categoriesMatrix' => CATEGORIES_MATRIX,
         'app' => $application,
-        'dt' => $edit ? (new DateTime($application->date))->format(DT_FORMAT_SHORT) : '',
-        'dtMax' => $now->format(DT_FORMAT_SHORT),
-        'dtMin' => $now->modify("-1 year")->format(DT_FORMAT_SHORT)
+        'dtMin' => $dtMin,
+        'dt' => $edit ? $dt : '',
+        'dtMax' => $dtMax     
     ]
 );
 
