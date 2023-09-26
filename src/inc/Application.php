@@ -42,7 +42,8 @@ class Application extends JSONObject{
         $this->status = 'draft';
         $this->category = 0;
         $this->initStatements();
-        $this->version = '2.0.1';
+        $this->address = new JSONObject();
+        $this->version = '2.1.0';
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'no-user-agent-set';
         $this->browser = get_browser($userAgent, true);
@@ -147,9 +148,8 @@ class Application extends JSONObject{
      * Returns 'około godziny' or 'o godzinie'.
      */
     public function getDateTimeDivider(){
-        if(isset($this->dtFromPicture) && !$this->dtFromPicture){
+        if ($this->version < '2.1.0' && isset($this->dtFromPicture) && !$this->dtFromPicture)
             return "około godziny";
-        }
         return "o godzinie";
     }
 
