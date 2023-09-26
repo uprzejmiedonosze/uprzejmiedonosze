@@ -262,7 +262,7 @@ function uploadedFileToBase64() {
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function uploadImage($appId, $pictureType, $imageBytes) {
+function uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
     global $storage;
 
     $semKey = $storage->getCurrentUser()->getNumber();
@@ -280,6 +280,9 @@ function uploadImage($appId, $pictureType, $imageBytes) {
     $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
 
     if ($pictureType == 'carImage') {
+        if (!empty($dateTime)) $application->date = $dateTime;
+        if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
+        if (!empty($latLng)) $application->address->latlng = $latLng;
         get_car_info($imageBytes, $application, $baseFileName, $type);
     } else if ($pictureType == 'contextImage') {
         $application->contextImage = new stdClass();

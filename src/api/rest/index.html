@@ -96,7 +96,12 @@ try {
             $imageBytes = uploadedFileToBase64(); // requires file named 'image'
             $pictureType = getParam('POST', 'pictureType');  // carImage|contextImage
             $appId = getParam('POST', 'id'); // application id
-            uploadImage($appId, $pictureType, $imageBytes);
+            
+            // valid only for $pictureType == 'carImage'
+            $dateTime = getParam('POST', 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
+            $dtFromPicture = (bool)getParam('POST', 'dtFromPicture', ''); // 1|0 - was date and time extracted from picture?
+            $latLng = getParam('POST', 'latLng', ''); // lat,lng: 53.431786,14.551586
+            uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
             break;
         case 'set-app-status':  // POST
             $appId = getParam('POST', 'id'); // application id
@@ -111,11 +116,11 @@ try {
             $voivodeship = getParam('POST', 'voivodeship');
             $country = getParam('POST', 'country');
             $district = getParam('POST', 'district');
-            $dtFromPicture = (bool)getParam('POST', 'dtFromPicture'); // 1|0
+            $dtFromPicture = (bool)getParam('POST', 'dtFromPicture'); // 1|0 - was date and time extracted from picture?
 
             $datetime = getParam('POST', 'datetime'); // "2018-02-02T19:48:10"
 
-            $latlng = getParam('POST', 'latlng'); // 53.431786,14.551586
+            $latlng = getParam('POST', 'latlng'); // lat,lng: 53.431786,14.551586
             $comment = getParam('POST', 'comment', '');
             $category = intval(getParam('POST', 'category'));
 

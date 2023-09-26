@@ -50,6 +50,9 @@ POST params:
 
   * `pictureType` (carImage|contextImage)
   * `id`
+  * `dateTime` (optional, valid on for `pictureType` == "carImage") application event date and time, in ISO format: "2018-02-02T19:48:10"
+  * `dtFromPicture` (optional, valid on for `pictureType` == "carImage") (1|0) - was date and time extracted from picture?
+  * `latLng` (optional, valid on for `pictureType` == "carImage") lat,lng: "53.431786,14.551586"
 
 FILES params:
 
@@ -96,7 +99,7 @@ POST params:
   * `dtFromPicture` (1|0)
   * `datetime`
   * `latlng`
-  * `comment` (optiona, default '')
+  * `comment` (optional, default '')
   * `category`
   * `extensions` (optional, default none), example formats "6,7", "6", "", missing
 

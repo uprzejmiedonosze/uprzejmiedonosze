@@ -12,7 +12,7 @@ import * as Sentry from "@sentry/browser";
 
 var uploadInProgress = 0;
 
-export function checkFile(file, id) {
+export async function checkFile(file, id) {
   if (file) {
     uploadStarted();
     if (/^image\//i.test(file.type)) {
@@ -21,12 +21,13 @@ export function checkFile(file, id) {
       $("." + id + "Section .loader").show();
       $("." + id + "Section .loader").addClass("l");
 
+      let imageMetadata = {}
       if (id == "carImage") {
-        readGeoDataFromImage(file);
+        imageMetadata = await readGeoDataFromImage(file);
         $("#plateImage").attr("src", "");
         $("#plateImage").hide();
       }
-      readFile(file, id);
+      readFile(file, id, imageMetadata);
     } else {
       imageError(id);
     }
@@ -51,7 +52,7 @@ function checkUploadInProgress() {
   $("#form-submit").addClass("ui-disabled");
 }
 
-function readFile(file, id) {
+function readFile(file, id, imageMetadata) {
   loadImage(
     file,
     function (img) {
@@ -59,7 +60,7 @@ function readFile(file, id) {
         imageError(id);
       }
       try {
-        sendFile(img.toDataURL("image/jpeg", 0.9), id);
+        sendFile(img.toDataURL("image/jpeg", 0.9), id, imageMetadata);
       } catch (err) {
         imageError(id);
         Sentry.captureException(err, {
@@ -84,50 +85,68 @@ function imageError(id) {
   uploadFinished();
 }
 
-function readGeoDataFromImage(file) {
-  loadImage.parseMetaData(file, function (data) {
-    if (data.exif) {
-      const DateTimeOriginal = data.exif.getText("DateTimeOriginal")
-      const DateTimeOriginal2 = (data.exif[34665] && data.exif[34665][36867]) || 'undefined'
-      const DateTime = data.exif.getText("DateTime") || 'undefined'
+async function readGeoDataFromImage(file) {
+  const data = await loadImage.parseMetaData(file);
 
-      const dateTime = DateTimeOriginal === 'undefined'
-        ? (DateTimeOriginal2 === 'undefined' ? DateTime : DateTimeOriginal2)
-        : DateTimeOriginal
-      if (dateTime && dateTime !== "undefined") {
-        setDateTime(dateTime, true);
-      } else {
-        setDateTime("", false);
-      }
-    } else {
-      setDateTime("", false);
-    }
+  let dateTime = ""
+  let dtFromPicture = false
+  let latLng = ""
+  if (data.exif) {
+    const DateTimeOriginal = data.exif.getText("DateTimeOriginal")
+    const DateTimeOriginal2 = (data.exif[34665] && data.exif[34665][36867]) || 'undefined'
+    const DateTime = data.exif.getText("DateTime") || 'undefined'
 
-    var gpsInfo = data.exif && data.exif.get("GPSInfo");
-    if (!gpsInfo) {
-      noGeoDataInImage();
-      return;
-    }
-    var lat = gpsInfo.get("GPSLatitude");
-    var lon = gpsInfo.get("GPSLongitude");
-    var latRef = gpsInfo.get("GPSLatitudeRef") || "N";
-    var lonRef = gpsInfo.get("GPSLongitudeRef") || "W";
-    if (lat && Array.isArray(lat) && lat[0]) {
-      lat =
-        (parseFloat(lat[0]) +
-          parseFloat(lat[1]) / 60 +
-          parseFloat(lat[2]) / 3600) *
-        (latRef == "N" ? 1 : -1);
-      lon =
-        (parseFloat(lon[0]) +
-          parseFloat(lon[1]) / 60 +
-          parseFloat(lon[2]) / 3600) *
-        (lonRef == "W" ? -1 : 1);
-      setAddressByLatLng(lat, lon, "picture");
+    dateTime = DateTimeOriginal === 'undefined'
+      ? (DateTimeOriginal2 === 'undefined' ? DateTime : DateTimeOriginal2)
+      : DateTimeOriginal
+    if (dateTime && dateTime !== "undefined") {
+      dtFromPicture = true
     } else {
-      noGeoDataInImage();
+      dateTime = ""
     }
-  });
+  } else {
+    dateTime = ""
+  }
+  dateTime = setDateTime(dateTime, dtFromPicture);
+
+  var gpsInfo = data.exif && data.exif.get("GPSInfo");
+  console.log('gpsInfo', gpsInfo)
+  if (!gpsInfo) {
+    noGeoDataInImage();
+    console.log('return', {
+      dateTime,
+      dtFromPicture
+    })
+    return {
+      dateTime,
+      dtFromPicture
+    }
+  }
+  var lat = gpsInfo.get("GPSLatitude");
+  var lng = gpsInfo.get("GPSLongitude");
+  var latRef = gpsInfo.get("GPSLatitudeRef") || "N";
+  var lonRef = gpsInfo.get("GPSLongitudeRef") || "W";
+  if (lat && Array.isArray(lat) && lat[0]) {
+    lat =
+      (parseFloat(lat[0]) +
+        parseFloat(lat[1]) / 60 +
+        parseFloat(lat[2]) / 3600) *
+      (latRef == "N" ? 1 : -1);
+    lng =
+      (parseFloat(lng[0]) +
+        parseFloat(lng[1]) / 60 +
+        parseFloat(lng[2]) / 3600) *
+      (lonRef == "W" ? -1 : 1);
+    latLng = lat + "," + lng
+    setAddressByLatLng(lat, lng, "picture");
+  } else {
+    noGeoDataInImage();
+  }
+  return {
+    dateTime,
+    dtFromPicture,
+    latLng
+  }
 }
 
 function noGeoDataInImage() {
@@ -150,13 +169,19 @@ function noGeoDataInImage() {
   $("#addressHint").addClass("hint");
 }
 
-function sendFile(fileData, id) {
+function sendFile(fileData, id, imageMetadata) {
   var formData = new FormData();
 
   formData.append("action", "upload");
   formData.append("image_data", fileData);
   formData.append("pictureType", id);
   formData.append("applicationId", $("#applicationId").val());
+
+  if (id == "carImage") {
+    imageMetadata.dateTime && formData.append("dateTime", imageMetadata.dateTime);
+    imageMetadata.dtFromPicture && formData.append("dtFromPicture", imageMetadata.dtFromPicture);
+    imageMetadata.latLng && formData.append("latLng", imageMetadata.latLng);
+  }
 
   $.ajax({
     type: "POST",
