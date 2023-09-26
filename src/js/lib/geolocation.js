@@ -67,10 +67,11 @@ export function initAutocompleteNewApplication() {
 
 export const initAutocomplete = function (trigger_change, inputId, google) {
   autocomplete = new google.maps.places.Autocomplete(
-    document.getElementById(inputId),
-    {
+    document.getElementById(inputId), {
       types: ["address"],
-      componentRestrictions: { country: "pl" }
+      fields: ["address_components", "formatted_address", "geometry"],
+      componentRestrictions: { country: "pl" },
+
     }
   );
   if (trigger_change) {
@@ -123,11 +124,11 @@ export function setAddressByLatLng(lat, lng, from) {
   $("#latlng").val(lat + "," + lng);
 
   $.post("/api/api.html", { action: "geoToAddress", lat: lat, lng: lng })
-    .done(function (result) {
+    .done(function (place) {
       $("#addressHint").text("Podaj adres lub wskaż go na mapie");
       $("#addressHint").removeClass("hint");
-      if (result) {
-        setAddressByPlace(result, from);
+      if (place) {
+        setAddressByPlace(place, from);
         if (from == "picture") {
           $("#addressHint").text("Sprawdź automatycznie pobrany adres");
           $("#addressHint").addClass("hint");
@@ -136,7 +137,6 @@ export function setAddressByLatLng(lat, lng, from) {
       $("a#geo").buttonMarkup({ icon: "location" });
     })
     .fail(function (e) {
-      console.log(e)
       $("a#geo").buttonMarkup({ icon: "alert" });
       $("#lokalizacja").addClass("error");
     });
