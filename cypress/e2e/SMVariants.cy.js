@@ -36,17 +36,6 @@ describe('API:automated (Poznań)', () => {
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
     })
-
-    /*it('checks send apps screen', function () {
-        cy.contains('Menu').click()
-        cy.contains('Do wysłania').click({force: true})
-        cy.contains('Na szczęście ' + this.sm['Poznań'].address[0] + ' udostępniła mechanizm')
-        cy.contains('Stanisława Taczaka 20, Poznań').click()
-        cy.contains('Wyślij do ' + this.sm['Poznań'].address[0])
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
-        cy.contains('Dodaj do galerii').should('not.exist')
-        cy.contains('Szczegóły').should('not.exist')
-    })*/
 })
 
 describe('API:Mail (Wrocław)', () => {
@@ -76,7 +65,7 @@ describe('API:Mail (Wrocław)', () => {
         cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
         cy.contains('Dziękujemy za wysłanie zgłoszenia')
         cy.contains('Jeszcze raz')
-        cy.contains(this.sm['Wrocław'].address[0])
+        cy.contains(this.sm['Wrocław'].address[0].replace('Straż Miejska', 'SM'))
     })
 
     it('checks my apps screen', function () {
