@@ -23,7 +23,7 @@ export function setDateTime(dateTime, fromPicture = true) {
   }
   $("#dtFromPicture").val(fromPicture ? 1 : 0);
   if (dt) {
-    const formattedDt = dt.toFormat("yyyy-LL-dd'T'HH:mm:ss");
+    const formattedDt = dt.toFormat("yyyy-LL-dd'T'HH:mm");
     $("#datetime").val(formattedDt);
     return formattedDt;
   }

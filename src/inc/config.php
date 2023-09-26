@@ -9,6 +9,7 @@ date_default_timezone_set('Europe/Warsaw');
 const LATEST_TERMS_UPDATE = '2021-07-16';
 
 const DT_FORMAT = 'Y-m-d\TH:i:s';
+const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
 
 const CATEGORIES_CONFIG = __DIR__ . '/../public/api/config/categories.json';
 $categories = fopen(CATEGORIES_CONFIG, "r") or die("Unable to open config file: " . CATEGORIES_CONFIG);
