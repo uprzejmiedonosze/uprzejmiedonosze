@@ -2604,5 +2604,13 @@
       "09-500 Gostynin"
     ],
     "email": "kppgostynin@ra.policja.gov.pl"
+  },
+  "Stalowa Wola": {
+    "address": [
+      "Komenda Powiatowa Policji w Stalowej Woli",
+      "ul. Popiełuszki 24",
+      "37-450 Stalowa Wola"
+    ],
+    "email": "stalowa-wola@rz.policja.gov.pl"
   }
 }
