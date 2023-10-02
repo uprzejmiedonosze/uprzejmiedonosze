@@ -1,0 +1,11 @@
+{
+	"Insert a changelog entry": {
+		"prefix": "changelog-entry",
+		"body": [
+			"<h4>$CURRENT_DAY_NAME, $CURRENT_DATE $CURRENT_MONTH_NAME $CURRENT_YEAR</h4>"
+			"<ul>"
+			"    <li>.</li>"
+			"</ul>"
+		]
+	}
+}
