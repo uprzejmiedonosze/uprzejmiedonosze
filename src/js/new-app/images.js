@@ -174,6 +174,7 @@ function sendFile(fileData, id, imageMetadata) {
     imageMetadata.dateTime && formData.append("dateTime", imageMetadata.dateTime);
     imageMetadata.dtFromPicture && formData.append("dtFromPicture", imageMetadata.dtFromPicture);
     imageMetadata.latLng && formData.append("latLng", imageMetadata.latLng);
+    $("#plateId").removeClass();
   }
 
   $.ajax({
@@ -182,49 +183,57 @@ function sendFile(fileData, id, imageMetadata) {
     data: formData,
     contentType: false,
     processData: false,
-    success: function (json) {
-      if (json.carImage || json.contextImage) {
+    success: function (app) {
+      if (app.carImage || app.contextImage) {
         $("." + id + "Section .loader").removeClass("l");
         $("." + id + "Section .loader").hide();
         $("." + id + "Section img").css("height", "100%");
         $("." + id + "Section img").attr(
           "src",
-          json[id].thumb + "?v=" + Math.random().toString()
+          app[id].thumb + "?v=" + Math.random().toString()
         );
       }
-      if (id == "carImage" && json.carInfo) {
-        if (json.carInfo.plateId) {
-          $("#plateId").val(json.carInfo.plateId);
-          if (json.carInfo.brand) {
+      if (id == "carImage" && app.carInfo) {
+        if (app.carInfo.plateId) {
+          $("#plateId").val(app.carInfo.plateId);
+          if (app.carInfo.brand) {
             if ($("#comment").val().trim().length == 0) {
-              if (json.carInfo.brandConfidence > 90) {
+              if (app.carInfo.brandConfidence > 90) {
                 $("#comment").val(
-                  "Pojazd prawdopodobnie marki " + json.carInfo.brand + "."
+                  "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
                 );
               }
-              if (json.carInfo.brandConfidence > 98) {
-                $("#comment").val("Pojazd marki " + json.carInfo.brand + ".");
+              if (app.carInfo.brandConfidence > 98) {
+                $("#comment").val("Pojazd marki " + app.carInfo.brand + ".");
               }
             }
           }
-          $("#plateHint").text(
-            "Sprawdź automatycznie pobrany numer rejestracyjny"
-          );
-          $("#plateHint").addClass("hint");
-          $("#plateId").removeClass("error");
+          $("#plateHint").removeClass();
+          if (app.alpr === 'paid') {
+            $("#plateHint").text(
+              "Sprawdź automatycznie pobrany numer rejestracyjny"
+            );
+            $("#plateHint").addClass("hint");
+          } else {
+            $("#plateHint").text(
+              "Użyto słabszego algorytmu rozpoznawania tablic! Sprawdź automatycznie pobrany numer rejestracyjny."
+            );
+            $("#plateHint").addClass("warning");
+            $("#plateId").addClass("warning");
+          }
         }
-        if (json.carInfo.plateImage) {
+        if (app.carInfo.plateImage) {
           $("#plateImage").attr(
             "src",
-            json.carInfo.plateImage + "?v=" + Math.random().toString()
+            app.carInfo.plateImage + "?v=" + Math.random().toString()
           );
           $("#plateImage").show();
         } else {
           $("#plateImage").hide();
         }
-        if (json.carInfo.recydywa && json.carInfo.recydywa > 0) {
+        if (app.carInfo.recydywa && app.carInfo.recydywa > 0) {
           $("#recydywa").text(
-            "recydywista, zgłoszeń: " + json.carInfo.recydywa
+            "recydywista, zgłoszeń: " + app.carInfo.recydywa
           );
           $("#recydywa").show();
         }

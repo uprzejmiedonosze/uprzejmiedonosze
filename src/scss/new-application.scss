@@ -10,7 +10,7 @@ label.section {
   margin-bottom: 2em;
 }
 
-label.hint {
+label.hint, label.warning {
   color: #009C7F;
   clear: both;
 }
@@ -35,7 +35,8 @@ input:disabled {
 }
 
 input.error, textarea.error{
-  border: 1px solid red !important;
+input.warning, textarea.warning{
+  border: 2px solid #e9c200 !important;
 }
 div.error img{
   background-color: rgba(255, 0, 0, 0.3);

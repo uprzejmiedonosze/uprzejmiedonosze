@@ -36,15 +36,22 @@ function _use_cli() {
 
 /**
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
+ * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
     logger("get_car_info_alpr $baseFileName");
     $imageHash = sha1($imageBytes);
     $carInfo = _check_alpr_cache($imageHash);
 
+    $application->alpr = 'paid';
     if(!$carInfo){
-        if(_use_cli()) $carInfo = get_alpr_cli($application->carImage->url);
-        else $carInfo = get_alpr($imageBytes);
+        $useCli = _use_cli();
+        if($useCli) {
+            $carInfo = get_alpr_cli($application->carImage->url);
+            $application->alpr = 'opensource';
+        } else {
+            $carInfo = get_alpr($imageBytes);
+        }
     }
 
     if(isset($carInfo) && count($carInfo["results"])){
