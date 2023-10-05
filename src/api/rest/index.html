@@ -53,6 +53,13 @@ try {
             $user = $storage->getCurrentUser();
             echo json_encode($user);
             break;
+        case 'get-user-stats': // GET
+            // @TODO draft
+            $user = $storage->getCurrentUser();
+            // select case when json_extract(value, '$.statements.gallery') != 0 then 'zgoda' else 'brak zgody' end as statement,
+            //   case json_extract(value, '$.addedToGallery') = 0 when 1 then 'odrzucone' when 0 then 'zaakceptowane' else '   ' end as decyzja,
+            //   count(*) from applications where ${WHERE2} group by 1, 2 ;
+            echo json_encode($user);
         case 'register-user': // POST
             $name = capitalizeName(getParam('POST', 'name'));
             $address = str_replace(', Polska', '', getParam('POST', 'address'));
