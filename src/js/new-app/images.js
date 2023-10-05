@@ -174,6 +174,7 @@ function sendFile(fileData, id, imageMetadata) {
     imageMetadata.dateTime && formData.append("dateTime", imageMetadata.dateTime);
     imageMetadata.dtFromPicture && formData.append("dtFromPicture", imageMetadata.dtFromPicture);
     imageMetadata.latLng && formData.append("latLng", imageMetadata.latLng);
+    $("#recydywa").hide();
     $("#plateId").removeClass();
   }
 
