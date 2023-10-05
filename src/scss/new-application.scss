@@ -35,6 +35,8 @@ input:disabled {
 }
 
 input.error, textarea.error{
+  border: 2px solid red !important;
+}
 input.warning, textarea.warning{
   border: 2px solid #e9c200 !important;
 }
