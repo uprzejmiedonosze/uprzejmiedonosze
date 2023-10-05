@@ -26,7 +26,7 @@
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
     \href{{ appUrl }}{{ address|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
-    {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej #}
+    {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
     {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronnicowe #}
     do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
     {{ app.getCategory.short }} 
@@ -39,7 +39,7 @@
 
 {% if app.user.exposeData is not defined or not app.user.exposeData %}
     Równocześnie proszę o \textbf{niezamieszczanie} w protokole danych dotyczących mojego miejsca
-    zamieszkania, nr. telefonu i adresu e-mail.
+    zamieszkania, nr. telefonu i~adresu e-mail.
 {% endif %}
 
 \vspace{0.3cm}\noindent
@@ -63,8 +63,9 @@ Email: {{ app.user.email }}
 {% if app.user.msisdn %}Tel: {% endif %}{{ app.user.msisdn }} }
 {% endif %}
 
-{\it Proszę o kontakt za pośrednictwem poczty e-mail oraz niewysyłanie korespondencji Pocztą Polską}
+{\it Proszę o kontakt za pośrednictwem poczty e-mail oraz niewysyłanie korespondencji Pocztą Polską.}
 
+\begin{center}
 \vspace{\stretch{3}}\noindent
     \href{{ contextImageUrl }}
         {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ contextImage }} }
@@ -79,3 +80,4 @@ Email: {{ app.user.email }}
     \includegraphics[width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
     {% endif %}
 \vspace{\stretch{1}}
+\end{center}
