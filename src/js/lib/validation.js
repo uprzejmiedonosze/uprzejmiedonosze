@@ -40,7 +40,7 @@ export const checkValue = function (item, minLength) {
 
 export const checkCommentvalue = function () {
   let comment = $("#comment").val().trim()
-  comment = comment.replace(/^Pojazd (prawdopodobnie )?marki [^.]+./, '').trim()
+  comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[ -]\w*/, '').trim()
   if (comment.length > 10)
     return true
   $("#comment").addClass("error");
