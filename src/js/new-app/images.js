@@ -64,7 +64,7 @@ function readFile(file, id, imageMetadata) {
       } catch (err) {
         imageError(id);
         Sentry.captureException(err, {
-          extra: (typeof img)
+          extra: Object.prototype.toString.call(img)
         });
       }
     },
