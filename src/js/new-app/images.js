@@ -275,7 +275,7 @@ function sendFile(fileData, id, imageMetadata) {
       uploadFinished();
     },
     error: function (err) {
-      imageError(id, err.responseJSON.message);
+      imageError(id, err.responseJSON?.message);
     }
   });
 }
