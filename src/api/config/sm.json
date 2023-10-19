@@ -2612,5 +2612,13 @@
       "37-450 Stalowa Wola"
     ],
     "email": "stalowa-wola@rz.policja.gov.pl"
+  },
+  "Oława": {
+    "address": [
+      "Straż Gminna w Oławie",
+      "ul. Nowodojazdowa 9",
+      "55-200 Oława"
+    ],
+    "email": "straz@gminaolawa.pl"
   }
 }
