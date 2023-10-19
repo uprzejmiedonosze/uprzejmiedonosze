@@ -1,9 +1,5 @@
-import "blueimp-load-image/js/load-image-orientation";
-import "blueimp-load-image/js/load-image-scale";
-import "blueimp-load-image/js/load-image-meta";
-import "blueimp-load-image/js/load-image-exif";
-import "blueimp-load-image/js/load-image-exif-map";
-import loadImage from "blueimp-load-image/js/load-image";
+import heic2any from "heic2any"
+import EXIF from "exif-js"
 
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
@@ -14,27 +10,57 @@ var uploadInProgress = 0;
 
 export async function checkFile(file, id) {
   if (file) {
-    uploadStarted();
-    if (/^image\//i.test(file.type)) {
-      $("." + id + "Section").removeClass("error");
-      $("." + id + "Section img").hide();
-      $("." + id + "Section .loader").show();
-      $("." + id + "Section .loader").addClass("l");
-
-      let imageMetadata = {}
-      if (id == "carImage") {
-        imageMetadata = await readGeoDataFromImage(file);
-        $("#plateImage").attr("src", "");
-        $("#plateImage").hide();
-      }
-      readFile(file, id, imageMetadata);
-    } else {
-      imageError(id);
+    uploadStarted(id);
+    if (!/^image\//i.test(file.type)) {
+      console.error(file.type)
+      return imageError(id, `Zdjęcie o niepoprawnym type ${file.type}`);
     }
+
+    const imageToResize = document.createElement('img')
+
+    imageToResize.src = await imageToDataUri(file)
+    imageToResize.addEventListener("load", async () => {
+      try {
+        const resizedImage = resizeImage(imageToResize)
+        $(`#${id}Preview`)
+          .css('opacity', 0.3)
+          .attr('src', resizedImage)
+
+        if (id === "carImage") {
+          const exif = await getExif(file)
+          const [lat, lng] = readGeoDataFromExif(exif)
+          let dateTime = getDateTimeFromExif(exif)
+    
+          dateTime = setDateTime(dateTime, !!dateTime)
+          if(lat) setAddressByLatLng(lat, lng, "picture")
+          else noGeoDataInImage()
+    
+          $("#plateImage").attr("src", "");
+          $("#plateImage").hide();
+          sendFile(resizedImage, id, {
+            dateTime,
+            dtFromPicture: !!dateTime,
+            latLng: `${lat},${lng}`
+          });
+        } else {
+          sendFile(resizedImage, id);
+        }
+        
+      } catch (err) {
+        console.error(err)
+        imageError(id, err);
+        Sentry.captureException(err, {
+          extra: Object.prototype.toString.call(img)
+        });
+      }
+    })
   }
 }
 
-function uploadStarted() {
+function uploadStarted(id) {
+  $(`.${id}Section`).removeClass("error");
+  $(`.${id}Section img`).hide();
+  $(`.${id}Section .loader`).show().addClass("l");;
   uploadInProgress++;
   checkUploadInProgress();
 }
@@ -52,96 +78,105 @@ function checkUploadInProgress() {
   $("#form-submit").addClass("ui-disabled");
 }
 
-function readFile(file, id, imageMetadata) {
-  loadImage(
-    file,
-    function (img) {
-      if (img.type == "error") {
-        imageError(id);
-      }
-      try {
-        sendFile(img.toDataURL("image/jpeg", 0.9), id, imageMetadata);
-      } catch (err) {
-        imageError(id);
-        Sentry.captureException(err, {
-          extra: Object.prototype.toString.call(img)
-        });
-      }
-    },
-    {
-      maxWidth: 1200,
-      maxHeight: 1200,
-      orientation: true,
-      canvas: true
-    }
-  );
-}
-
-function imageError(id) {
-  $("." + id + "Section img").show();
-  $("." + id + "Section .loader").hide();
-  $("." + id + "Section").addClass("error");
-  $("." + id + "Section input").textinput("enable");
+function imageError(id, errorMsg) {
+  $(`.${id}Section .loader`).hide();
+  $(`.${id}Section`).addClass("error");
+  $(`.${id}Section input`).textinput("enable");
+  $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show();
+  if (errorMsg) alert(errorMsg)
   uploadFinished();
 }
 
-async function readGeoDataFromImage(file) {
-  const data = await loadImage.parseMetaData(file);
-
-  let dateTime = ""
-  let dtFromPicture = false
-  let latLng = ""
-  if (data.exif) {
-    const DateTimeOriginal = data.exif.getText("DateTimeOriginal")
-    const DateTimeOriginal2 = (data.exif[34665] && data.exif[34665][36867]) || 'undefined'
-    const DateTime = data.exif.getText("DateTime") || 'undefined'
-
-    dateTime = DateTimeOriginal === 'undefined'
-      ? (DateTimeOriginal2 === 'undefined' ? DateTime : DateTimeOriginal2)
-      : DateTimeOriginal
-    if (dateTime && dateTime !== "undefined") {
-      dtFromPicture = true
-    } else {
-      dateTime = ""
+async function getExif(img) {
+  return new Promise(resolve =>
+    EXIF.getData(img, function() {
+      resolve(EXIF.getAllTags(this)); 
     }
-  } else {
-    dateTime = ""
-  }
-  dateTime = setDateTime(dateTime, dtFromPicture);
+  ))
+}
 
-  var gpsInfo = data.exif && data.exif.get("GPSInfo");
-  if (!gpsInfo) {
-    noGeoDataInImage();
-    return {
-      dateTime,
-      dtFromPicture
-    }
-  }
-  var lat = gpsInfo.get("GPSLatitude");
-  var lng = gpsInfo.get("GPSLongitude");
-  var latRef = gpsInfo.get("GPSLatitudeRef") || "N";
-  var lonRef = gpsInfo.get("GPSLongitudeRef") || "W";
+function readGeoDataFromExif(exif) {
+  var lat = exif.GPSLatitude
+  var lng = exif.GPSLongitude
+  var latRef = exif.GPSLatitudeRef || "N"
+  var lonRef = exif.GPSLongitudeRef || "W"
+
   if (lat && Array.isArray(lat) && lat[0]) {
     lat =
-      (parseFloat(lat[0]) +
+      ((parseFloat(lat[0]) +
         parseFloat(lat[1]) / 60 +
         parseFloat(lat[2]) / 3600) *
-      (latRef == "N" ? 1 : -1);
+      (latRef == "N" ? 1 : -1)).toFixed(6);
     lng =
-      (parseFloat(lng[0]) +
+      ((parseFloat(lng[0]) +
         parseFloat(lng[1]) / 60 +
         parseFloat(lng[2]) / 3600) *
-      (lonRef == "W" ? -1 : 1);
-    latLng = lat + "," + lng
-    setAddressByLatLng(lat, lng, "picture");
+      (lonRef == "W" ? -1 : 1)).toFixed(6);
+    return [lat, lng]
+  }
+  return [null, null]
+}
+
+function getDateTimeFromExif(exif) {
+  return exif.DateTimeOriginal
+    || (exif[34665] && exif[34665][36867])
+    || exif.DateTime
+}
+
+async function imageToDataUri(img) {
+  if (img.type.includes('hei')){
+    const blob = await heic2any({ blob: img, toType: "image/jpeg" })
+    return URL.createObjectURL(blob)
   } else {
-    noGeoDataInImage();
+    return await pngToDataUri(img)
   }
-  return {
-    dateTime,
-    dtFromPicture,
-    latLng
+}
+
+function pngToDataUri(field) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => {
+      resolve(reader.result);
+    });
+
+    reader.readAsDataURL(field);
+  });
+}
+
+function resizeImage(imgToResize) {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  const MAX_WIDTH = 1200;
+  const MAX_HEIGHT = 1200;
+  let canvasWidth = imgToResize.width;
+  let canvasHeight = imgToResize.height;
+
+  // Add the resizing logic
+  if (canvasWidth > canvasHeight) {
+    if (canvasWidth > MAX_WIDTH) {
+      canvasHeight *= MAX_WIDTH / canvasWidth;
+      canvasWidth = MAX_WIDTH;
+    }
+  } else {
+    if (canvasHeight > MAX_HEIGHT) {
+      canvasWidth *= MAX_HEIGHT / canvasHeight;
+      canvasHeight = MAX_HEIGHT;
+    }
   }
+
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
+
+  context.drawImage(
+    imgToResize,
+    0,
+    0,
+    canvasWidth,
+    canvasHeight
+  );
+  return canvas.toDataURL("image/jpeg", 0.95);
 }
 
 function noGeoDataInImage() {
@@ -186,13 +221,11 @@ function sendFile(fileData, id, imageMetadata) {
     processData: false,
     success: function (app) {
       if (app.carImage || app.contextImage) {
-        $("." + id + "Section .loader").removeClass("l");
-        $("." + id + "Section .loader").hide();
-        $("." + id + "Section img").css("height", "100%");
-        $("." + id + "Section img").attr(
-          "src",
-          app[id].thumb + "?v=" + Math.random().toString()
-        );
+        $(`.${id}Section .loader`).removeClass("l").hide()
+        $(`#${id}Preview`)
+          .css("height", "100%")
+          .css("opacity", 1)
+          .attr("src", app[id].thumb + "?v=" + Math.random().toString())
       }
       if (id == "carImage" && app.carInfo) {
         if (app.carInfo.plateId) {
@@ -241,9 +274,8 @@ function sendFile(fileData, id, imageMetadata) {
       }
       uploadFinished();
     },
-    // eslint-disable-next-line no-unused-vars
-    error: function (data) {
-      imageError(id);
+    error: function (err) {
+      imageError(id, err.responseJSON.message);
     }
   });
 }

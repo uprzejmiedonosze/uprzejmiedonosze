@@ -9,6 +9,14 @@ if(isset($_GET["action"]) && $_GET["action"] == "initLogs"){
     die();
 }
 
+function api_exception_handler($exception) {
+    $msg = $exception->getMessage() . ", " . $exception->getFile()
+        . ':' . $exception->getLine() . "\n" . $exception->getTraceAsString();
+    raiseError($msg, 500);
+}
+
+set_exception_handler('api_exception_handler');
+
 if (isAjax()) {
     if (isset($_POST["action"]) && !empty($_POST["action"])) {
         $action = $_POST["action"];

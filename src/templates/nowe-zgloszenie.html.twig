@@ -29,9 +29,9 @@
                     Wgraj zdjęcie z widocznym wykroczeniem
                     <p class="pictureHint">{{ categories[app.category].contextImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
-                    <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
+                    <img id="contextImagePreview" src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
-                <input type="file" accept="image/jpeg, image/png" id="contextImage" multiple
+                <input type="file" accept="image/jpeg, image/png, image/heic" id="contextImage" multiple
                     title="Zdjęcie przedstawiające kontekst" 
                         value="{{ app.contextImage.url ?? '' }}" />
             </div>
@@ -40,10 +40,10 @@
                     Wgraj zdjęcie z widoczną tablicą rejestracyjną
                     <p class="pictureHint">{{ categories[app.category].carImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
-                    <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
+                    <img id="carImagePreview" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
                 <div id="recydywa"></div>
-                <input type="file" accept="image/jpeg, image/png" id="carImage" multiple
+                <input type="file" accept="image/jpeg, image/png, image/heic" id="carImage" multiple
                     title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                     value="{{ app.carImage.url ?? '' }}" />
             </div>
