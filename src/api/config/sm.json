@@ -2620,5 +2620,13 @@
       "55-200 Oława"
     ],
     "email": "straz@gminaolawa.pl"
+  },
+  "Zgierz": {
+    "address": [
+      "Straż Miejska w Zgierzu",
+      "ul. ks. J. Popiełuszki 3a",
+      "95-100 Zgierz"
+    ],
+    "email": "sm@umz.zgierz.pl"
   }
 }
