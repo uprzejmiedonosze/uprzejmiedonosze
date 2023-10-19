@@ -50,7 +50,7 @@ export async function checkFile(file, id) {
         console.error(err)
         imageError(id, err);
         Sentry.captureException(err, {
-          extra: Object.prototype.toString.call(img)
+          extra: Object.prototype.toString.call(file)
         });
       }
     })
