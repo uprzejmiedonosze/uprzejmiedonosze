@@ -2621,6 +2621,9 @@
     ],
     "email": "straz@gminaolawa.pl"
   },
+  "Stanowice": {
+    "parent": "Oława"
+  },
   "Zgierz": {
     "address": [
       "Straż Miejska w Zgierzu",
