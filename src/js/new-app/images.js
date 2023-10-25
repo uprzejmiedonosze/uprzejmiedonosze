@@ -249,8 +249,9 @@ function sendFile(fileData, id, imageMetadata) {
             );
             $("#plateHint").addClass("hint");
           } else {
-            $("#plateHint").text(
-              "Użyto słabszego algorytmu rozpoznawania tablic! Sprawdź automatycznie pobrany numer rejestracyjny."
+            $("#plateHint").html(
+              'Użyto słabszego algorytmu rozpoznawania tablic! Sprawdź automatycznie pobrany' +
+              ' numer rejestracyjny <a href="https://patronite.pl/uprzejmiedonosze#goals" target="_blank">(więcej)</a>.'
             );
             $("#plateHint").addClass("warning");
             $("#plateId").addClass("warning");
