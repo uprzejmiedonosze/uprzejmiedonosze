@@ -159,6 +159,16 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
     },
+    "22": {
+        "title": "Mniej niż 15 m od wysepki z jedną jezdnią",
+        "short": "Pojazd był zaparkowany w odległości mniejszej niż 15 m od wysepki (PoRD Art. 49. 1.10.).",
+        "desc": "<p>Parkowanie/zatrzymywanie pojazdu w odległości mniejszej niż 15 metrów od wysepki rozdzielającej jezdnie jest niedozwolone. Dotyczy to sytuacji, w której jezdnia na wysokości wysepki ma jeden pas ruchu.</p>",
+        "law": "PoRD Art. 49. 1.10. Zabrania się zatrzymania pojazdu w odległości mniejszej niż 15 m od punktów krańcowych wysepki, jeżeli jezdnia z prawej jej strony ma tylko jeden pas ruchu.",
+        "price": "100 zł (1 pkt)",
+        "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widoczną wysepką.",
+        "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
+        "stopAgresjiOnly": false
+    },
     "0": {
         "title": "<i>Pozostałe przypadki (koniecznie dodaj komentarz)</i>",
         "short": "",
