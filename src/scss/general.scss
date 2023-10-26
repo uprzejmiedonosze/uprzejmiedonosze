@@ -163,3 +163,17 @@ a[rel~="external"] {
         display: none;   
     }
 }
+
+.video {
+    margin: 1em;
+    box-shadow: 5px 5px 20px gray;
+
+    video {
+        width: 100%;
+    }
+
+    p {
+        padding: 0 1em 1em 1em;
+        font-style: italic;
+    }
+}
