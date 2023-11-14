@@ -71,7 +71,7 @@
     "icon": "check",
     "class": "bottom",
     "allowed": ["confirmed-instructed", "confirmed-ignored", "archived"],
-    "comment": "Kierowca został ukarany mandatem",
+    "comment": "Kierowca został ukarany mandatem",
     "topButtons": true,
     "editable": false,
     "sendable": false
@@ -82,7 +82,7 @@
     "icon": "audio",
     "class": "bottom",
     "allowed": ["confirmed-fined", "confirmed-ignored", "archived"],
-    "comment": "Kierowca został ukarany pouczony",
+    "comment": "Kierowca został pouczony",
     "topButtons": true,
     "editable": false,
     "sendable": false
