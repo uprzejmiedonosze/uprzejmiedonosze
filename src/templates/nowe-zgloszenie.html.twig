@@ -114,6 +114,9 @@
                     data-contextImage-hint="{{ categoryDef.contextImageHint }}" data-carImage-hint="{{ categoryDef.carImageHint }}">
                 <label for="{{ catId }}">
                     <img src="img/{{ catId }}.jpg?ref">
+                    {% if categoryDef.points > 1 %}
+                    <span class="badge">{{ categoryDef.points }}</span>
+                    {% endif %}
                     <p>{{ categoryDef.title|raw }}
                     {% if not app.stopAgresji and categoryDef.stopAgresjiOnly %}
                         <span class="price-list">(kategoria niedostępna, jeśli zgłaszasz do SM)</span>
