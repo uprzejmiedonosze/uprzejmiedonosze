@@ -32,4 +32,13 @@ class Category extends JSONObject{
     public function getPrice(){
         return $this->price;
     }
+
+    public function getMandate(){
+        return $this->mandate;
+    }
+
+    public function getPoints(){
+        return $this->points;
+    }
+
 }

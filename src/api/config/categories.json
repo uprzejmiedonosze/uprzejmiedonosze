@@ -6,6 +6,7 @@
         "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość drogi dla pieszych jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
         "price": "100 zł (1 pkt)",
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym zawężonym światłem chodnika.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -17,6 +18,7 @@
         "law": "KW Art. 144. 1. Kto na terenach przeznaczonych do użytku publicznego niszczy lub uszkadza roślinność [...] podlega karze grzywny do 1.000 złotych albo karze nagany.",
         "price": "do 1000 zł (0... pkt)",
         "points": 0,
+        "mandate": 500,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać zniszczoną zieleń i przynajmniej fragment pojazdu.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, z widoczną zielenią.",
         "stopAgresjiOnly": false
@@ -28,6 +30,7 @@
         "law": "PoRD Art. 45. 1.4. Zabrania się wykorzystywania drogi lub poszczególnych jej części w sposób niezgodny z przeznaczeniem.",
         "price": "teoretycznie do 3000 zł (1 pkt)",
         "points": 1,
+        "mandate": 500,
         "contextImageHint": "Idealne zdjęcie powinno dość pojazd z kilku metrów, z widocznym terenem pod pojazdem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -39,6 +42,7 @@
         "law": "PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania wskazany znakami drogowymi.",
         "price": "100–300 zł (1 pkt)",
         "points": 1,
+        "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak B-36, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -50,6 +54,7 @@
         "law": "PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
         "price": "100–300 zł (1 pkt)",
         "points": 1,
+        "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak B-35, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -61,6 +66,7 @@
         "law": "PoRD Art. 49. 2.4. Zabrania się zatrzymania pojazdu w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu.",
         "price": "100 zł (1 pkt)",
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak strefy zamieszkania, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -72,6 +78,7 @@
         "law": "PoRD Art. 49. 1.2. Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem.",
         "price": "100–300 zł (5 pkt)",
         "points": 5,
+        "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd i znak pionowy D6 Przejście dla pieszych.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -83,6 +90,7 @@
         "law": "PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
         "price": "100–300 zł (1 pkt)",
         "points": 1,
+        "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak parkingu z tabliczką, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -94,6 +102,7 @@
         "law": "PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
         "price": "100–300 zł (1 pkt)",
         "points": 1,
+        "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym przekroczeniem oznaczenia poziomego.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -105,6 +114,7 @@
         "law": "PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2 (szerokość drogi dla pieszych pozostawionej dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m), zatrzymanie lub postój na drodze dla pieszych przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru.",
         "price": "100 zł (1 pkt)",
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od krawędzi jezdni.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -116,6 +126,7 @@
         "law": "PoRD Art. 26. 3.3. Kierującemu pojazdem zabrania się: jazdy wzdłuż po drodze dla pieszych lub przejściu dla pieszych.",
         "price": "1 500 zł (8 pkt)",
         "points": 8,
+        "mandate": 1500,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym przekroczeniem oznaczenia poziomego.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": true
@@ -127,6 +138,7 @@
         "law": "PoRD Art. 49. 1.9. Zabrania się zatrzymania pojazdu w odległości mniejszej niż 15 m od słupka lub tablicy oznaczającej przystanek, a na przystanku z zatoką - na całej jej długości.",
         "price": "100 zł (1 pkt)",
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z uwidocznioną odległością od przystanku (znaku pionowego, zatoki lub zygzaka).",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -138,6 +150,7 @@
         "law": "PoRD Art. 26. 6. [...] Jeżeli przystanek nie jest wyposażony w wysepkę dla pasażerów, a na przystanek wjeżdża tramwaj lub stoi na nim, kierujący jest obowiązany zatrzymać pojazd w takim miejscu i na taki czas, aby zapewnić pieszemu swobodne dojście do tramwaju lub na drogę dla pieszych lub drogę dla pieszych i rowerów.",
         "price": "300 zł (6 pkt)",
         "points": 6,
+        "mandate": 300,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z uwidocznioną odległością od przystanku (znaku pionowego, zatoki lub zygzaka).",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -149,6 +162,7 @@
         "law": "PoRD Art. 49. 1.11. Zabrania się zatrzymania pojazdu na na drodze dla pieszych i rowerów, drodze dla rowerów, pasie ruchu dla rowerów oraz w śluzie dla rowerów, z wyjątkiem roweru.",
         "price": "100 zł (5 pkt)",
         "points": 5,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widoczną DDR pod pojazdem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -160,6 +174,7 @@
         "law": "PoRD Art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t; PoRD Art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na drodze dla pieszych przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na drodze dla pieszych tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.",
         "price": "100 zł (1 pkt)",
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd na chodniku, w sposób umożliwiający identyfikację marki.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -171,6 +186,7 @@
         "law": "PoRD Art. 8. 1. «Jest to obszerny artykuł opisujący jakie uprawnienia ma \"Osoba niepełnosprawna legitymująca się kartą parkingową kierująca pojazdem samochodowym oznaczonym tą kartą\". Niestety trudno go zacytować w całości»",
         "price": "500–800 zł (6 pkt)",
         "points": 6,
+        "mandate": 500,
         "contextImageHint": "Idealne zdjęcie powinno prezentować przednią szybę z nieważną/podrobioną kartą, lub jej brakiem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, wraz z widoczną kopertą.",
         "stopAgresjiOnly": false
@@ -182,6 +198,7 @@
         "law": "PoRD Art. 49. 1.1. Zabrania się zatrzymania pojazdu na przejeździe kolejowym, na przejeździe tramwajowym, na skrzyżowaniu oraz w odległości mniejszej niż 10 m od przejazdu lub skrzyżowania.",
         "price": "300 zł (5 pkt)",
         "points": 5,
+        "mandate": 300,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od skrzyżowania.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -193,6 +210,7 @@
         "law": "PoRD Art. 49. 1.10. Zabrania się zatrzymania pojazdu w odległości mniejszej niż 15 m od punktów krańcowych wysepki, jeżeli jezdnia z prawej jej strony ma tylko jeden pas ruchu.",
         "price": "100 zł (1 pkt)",
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widoczną wysepką.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -203,7 +221,8 @@
         "desc": "Wyobraźnia kierowców nie zna granic. Jeśli wybierzesz tę kategorię, koniecznie opisz szczegóły w komentarzu do zgłoszenia.",
         "law": null,
         "price": null,
-        "points": null,
+        "points": 1,
+        "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, w sposób dokumentujący wykroczenie.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false
@@ -215,6 +234,7 @@
         "law": null,
         "price": null,
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
@@ -226,6 +246,7 @@
         "law": null,
         "price": null,
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
@@ -237,6 +258,7 @@
         "law": null,
         "price": null,
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
@@ -248,6 +270,7 @@
         "law": null,
         "price": null,
         "points": 1,
+        "mandate": 100,
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
@@ -258,7 +281,8 @@
         "desc": null,
         "law": null,
         "price": null,
-        "points": 1,
+        "points": 5,
+        "mandate": 100,
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
