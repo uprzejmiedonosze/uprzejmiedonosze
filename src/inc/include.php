@@ -76,6 +76,10 @@ function generate($template, $parameters){
   global $LEVELS;
   $parameters['levels'] = $LEVELS;
 
+  global $BADGES;
+  $parameters['badges'] = $BADGES;
+
+
   return $twig->render($template, $parameters);
 };
 

@@ -41,6 +41,12 @@ $levels = fopen(SA_LEVELS, "r") or die("Unable to open config file: " . SA_LEVEL
 $LEVELS = (array) new ConfigClass(fread($levels, filesize(SA_LEVELS)), 'Level');
 fclose($levels);
 
+// I'm lazy, no specific class for that
+const SA_BADGES = __DIR__ . '/../public/api/config/badges.json';
+$badges = fopen(SA_BADGES, "r") or die("Unable to open config file: " . SA_BADGES);
+$badgesStr = fread($badges, filesize(SA_BADGES));
+$BADGES = json_decode($badgesStr, true);
+
 const CATEGORIES_MATRIX = Array('a', 'b');
 
 require_once(__DIR__ . '/../config.php');

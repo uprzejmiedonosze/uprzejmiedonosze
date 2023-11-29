@@ -41,7 +41,20 @@
         <h3>{{ general.stats['confirmed-instructed'] ?? 0 }}</h3>
         <p>Liczba pouczeń</p>
     </div>
-    
+<p>Twoje odznaki:</p>
+
+<fieldset class="badges">
+    {% for badgeId,badge in badges %}
+    <div data-role="popup" id="popup-badge-{{ badgeId }}">
+        <p>{{ badge.desc|raw }}</p>
+    </div>
+    <a href="#popup-badge-{{ badgeId }}" data-rel="popup" data-transition="pop">
+        <div class="badge">
+            <img src="{{ badge.img }}">
+            <p>{{ badge.name }}</p>
+        </div>
+    </a>
+    {% endfor %}
 </fieldset>
 
 <h2>O co chodzi?</h2>
