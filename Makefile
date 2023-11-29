@@ -179,6 +179,7 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
+	@rm -rf .parcel-cache
 	@./node_modules/.bin/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
