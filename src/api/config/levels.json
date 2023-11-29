@@ -4,34 +4,34 @@
         "points": 0,
         "desc": "Wkurzony",
         "letter": "a",
-        "introMsg": "Jesteś na poziomie <strong>wkurzony, ale walczący</strong>. Przeskoczysz do następnego poziomu kiedy zgłoszeni przez Ciebie kierowcy dostaną pierwszy punkt karny."
+        "introMsg": "Jesteś <strong>wkurzony, ale walczący</strong>. Przeskoczysz do następnego poziomu, gdy zgłoszeni przez Ciebie kierowcy dostaną pierwszy punkt karny."
     },
     "1": {
         "img": "img/level-1.png",
         "points": 1,
         "desc": "Początkujący",
         "letter": "b",
-        "introMsg": "Jesteś na poziomie <strong>początkujący, ale mający nadzieję na zmiany</strong>. Przeskoczysz do następnego poziomu gdy „twoi” kierowcy uzbierają łącznie pięć punktów."
+        "introMsg": "Jesteś <strong>początkujący, ale mający nadzieję na zmiany</strong>. Przeskoczysz do następnego poziomu, gdy „twoi” kierowcy uzbierają łącznie pięć punktów."
     },
     "2": {
         "img": "img/level-2.png",
         "points": 5,
         "desc": "Pro",
         "letter": "c",
-        "introMsg": "Jesteś na poziomie <strong>profesjonalista</strong> – gratuluję. Przeskoczysz do następnego poziomu gdy „twoi” kierowcy uzbierają łącznie 50 punktów."
+        "introMsg": "Jesteś <strong>profesjonalistą</strong> – gratuluję. Przeskoczysz do następnego poziomu, gdy „twoi” kierowcy uzbierają łącznie 50 punktów."
     },
     "3": {
         "img": "img/level-3.png",
         "points": 50,
         "desc": "Ekspert",
         "letter": "d",
-        "introMsg": "Jesteś na poziomie <strong>expert</strong> – wow! Przeskoczysz do następnego poziomu gdy „twoi” kierowcy uzbierają łącznie 200 punktów."
+        "introMsg": "Jesteś <strong>ekspertem</strong> – wow! Przeskoczysz do następnego poziomu, gdy „twoi” kierowcy uzbierają łącznie 200 punktów."
     },
     "4": {
         "img": "img/level-4.png",
         "points": 200,
         "desc": "Hurtownik",
         "letter": "e",
-        "introMsg": "Jesteś na poziomie <strong>hurtownik</strong>! Znajdujesz się w elitarnym, kilkunastoosobowym gronie użytkowników Uprzejmie Donoszę."
+        "introMsg": "Jesteś <strong>hurtownikiem</strong>! Znajdujesz się w elitarnym, kilkunastoosobowym gronie użytkowników Uprzejmie Donoszę."
     }
 }
