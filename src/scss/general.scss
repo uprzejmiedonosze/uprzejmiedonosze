@@ -165,16 +165,33 @@ a[rel~="external"] {
 }
 
 .video {
-    margin: 1em;
-    box-shadow: 5px 5px 20px gray;
 
     video {
         width: 100%;
     }
-
     p {
         padding: 0 1em 1em 1em;
         font-style: italic;
+    }
+}
+
+@media (orientation: landscape) {
+    .video-portrait {
+      display: none;
+    }
+    .video {
+        margin: 1em;
+        box-shadow: 5px 5px 20px gray;
+    }
+  }
+@media (orientation: portrait) {
+    .video-landscape {
+        display: none;
+    }
+    video {
+        max-height: 500px;
+        border: 1px solid #009C7F;
+        box-sizing: border-box;
     }
 }
 
