@@ -20,27 +20,51 @@
 </div>
 
 <p>Twoje statystyki:</p>
-<fieldset class="ui-grid-a gauges">
-    <div class="ui-block ui-block-c gauge ui-corner-all">
-        <h3>{{ general.stats.active ?? 0 }}</h3>
+<fieldset class="gauges">
+    <div class="gauge">
+        <h3>
+            {% if not general.stats.active %}
+                <a href="/moje-zgloszenia.html">{{ general.stats.active|number_format(0, ',', ' ') }}</a>
+            {% else %}
+                <a href="/nowe-zgloszenie.html" data-ajax="false">Stwórz pierwsze</a>
+            {% endif %}
+        </h3>
         <p>Aktywne zgłoszenia</p>
     </div>
-    <div class="ui-block ui-block-c gauge ui-corner-all">
-        <h3>{{ general.stats['confirmed-fined'] ?? 0 }}</h3>
+    <div class="gauge">
+        <h3>
+            {% if general.stats['confirmed-fined'] %}
+            {{ general.stats['confirmed-fined']|number_format(0, ',', ' ') }}
+            {% else %}0{% endif %}
+        </h3>
         <p>Mandaty</p>
     </div>
-    <div class="ui-block ui-block-c gauge ui-corner-all">
-        <h3>{{ general.stats.points ?? 0 }}</h3>
+    <div class="gauge">
+        <h3>
+            {% if general.stats.points %}
+            {{ general.stats.points|number_format(0, ',', ' ') }}
+            {% else %}0{% endif %}
+        </h3>
         <p>Punkty karne</p>
     </div>
-    <div class="ui-block ui-block-c gauge ui-corner-all">
-        <h3>{{ general.stats.mandates|number_format(0, ',', ' ') }} zł</h3>
+    <div class="gauge">
+        <h3>
+            {% if general.stats.mandates %}
+            {{ general.stats.mandates|number_format(0, ',', ' ') }} zł
+            {% else %}0{% endif %}
+        </h3>
         <p>Suma mandatów</p>
     </div>
-    <div class="ui-block ui-block-c gauge ui-corner-all">
-        <h3>{{ general.stats['confirmed-instructed'] ?? 0 }}</h3>
+    <div class="gauge">
+        <h3>
+            {% if general.stats['confirmed-instructed'] %}
+            {{ general.stats['confirmed-instructed']|number_format(0, ',', ' ') }}
+            {% else %}0{% endif %}
+        </h3>
         <p>Liczba pouczeń</p>
     </div>
+</fieldset>
+
 <p>Twoje odznaki:</p>
 
 <fieldset class="badges">
