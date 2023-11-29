@@ -162,6 +162,10 @@ class User extends JSONObject{
         return mb_ereg_replace("([^\w\d])", '-', $this->data->name);
     }
 
+    public function getFirstName(){
+        return mb_ereg_replace("\s.*", '', $this->data->name);
+    }
+
     /**
      * Returns data.exposeData or false as default.
      */
@@ -191,6 +195,18 @@ class User extends JSONObject{
             return $this->data->myAppsSize;
         }
         return 200;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public static function pointsToUserLevel($points) {
+        global $LEVELS;
+        $levelsReversed = array_reverse($LEVELS, true);
+        foreach($levelsReversed as $id => $level)
+            if ($points >= $level->points)
+                return $id;
+        return 0;
     }
 }
 

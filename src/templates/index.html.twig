@@ -6,6 +6,44 @@
 
 {% block main %}
 
+<h3 class="introHeader">Cześć {{ general.userName }},</h3>
+<p>
+    {{ levels[general.stats.level].introMsg | raw }}
+</p>
+<div class="heros">
+    {% for levelId,levelDef in levels %}
+    <div class="hero {% if general.stats.level == levelId %}active{% endif %}">
+        <img src="{{ levelDef.img }}">
+        <p>{{ levelDef.desc }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<p>Twoje statystyki:</p>
+<fieldset class="ui-grid-a gauges">
+    <div class="ui-block ui-block-c gauge ui-corner-all">
+        <h3>{{ general.stats.active ?? 0 }}</h3>
+        <p>Aktywne zgłoszenia</p>
+    </div>
+    <div class="ui-block ui-block-c gauge ui-corner-all">
+        <h3>{{ general.stats['confirmed-fined'] ?? 0 }}</h3>
+        <p>Mandaty</p>
+    </div>
+    <div class="ui-block ui-block-c gauge ui-corner-all">
+        <h3>{{ general.stats.points ?? 0 }}</h3>
+        <p>Punkty karne</p>
+    </div>
+    <div class="ui-block ui-block-c gauge ui-corner-all">
+        <h3>{{ general.stats.mandates|number_format(0, ',', ' ') }} zł</h3>
+        <p>Suma mandatów</p>
+    </div>
+    <div class="ui-block ui-block-c gauge ui-corner-all">
+        <h3>{{ general.stats['confirmed-instructed'] ?? 0 }}</h3>
+        <p>Liczba pouczeń</p>
+    </div>
+    
+</fieldset>
+
 <h2>O co chodzi?</h2>
 
 <p>Każdy z nas chce swobodnie i bezpiecznie poruszać się po
@@ -13,21 +51,17 @@
     często, jako piesi, zmuszeni jesteśmy do przeciskania się, chodzenia
     gęsiego, omijania, wkraczania na jezdnię zza zaparkowanych pojazdów, a
     nawet ustępowania jeżdżącym po chodnikach samochodom.</p>
-
+    
 <div class="video">
-    <video controls poster="img/tvn-ud.png">
-        <source src="img/tvn-ud.mp4" type="video/mp4" />
-        <source src="img/tvn-ud.webm" type="video/webm" />
-        <source src="img/tvn-ud.ogv" type="video/ogg" />
+    <video controls poster="img/intro.png">
+        <source src="img/intro.mp4" type="video/mp4" />
+        <source src="img/intro.webm" type="video/webm" />
+        <source src="img/intro.ogv" type="video/ogg" />
         <p>
             Twoja przeglądarka nie wspiera odtwarzania plików wideo.
-            <a href="img/tvn-ud.mp4">Pobierz film</a>.
+            <a href="img/intro.mp4">Pobierz film</a>.
         </p>
     </video>
-    <p>
-    Zródło: Materiał Uwaga TVN! <a href="https://uwaga.tvn.pl/reportaze/parkowanie-w-wielkim-miescie-kierowcy-wola-zaryzykowac-100-zlotowy-mandat-niz-placic-za-caly-dzien-st7305768" target="_blank">
-        Parkowanie w wielkim mieście</a> z 26 sierpnia 2023
-    </p>
 </div>
 
 <p>Próbowałaś/eś dzwonić do Straży Miejskiej w swoim mieście? Wiemy

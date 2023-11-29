@@ -260,15 +260,56 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
-    public function countApplicationsStatuses(){
+    private function countApplicationsStatuses(){
         $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
 
-        $sql = "select json_extract(value, '$.status') as status, count(key) as cnt from applications "
-            . "where email = '$email' "
-            . "group by json_extract(value, '$.status')";
+        $sql = <<<SQL
+            select json_extract(value, '$.status') as status, count(key) as cnt from applications
+            where email = '$email'
+            group by json_extract(value, '$.status')
+        SQL;
         
         $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
         return array_map(function ($status) { return $status[0]; }, $ret);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function countUserPoints(){
+        $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
+
+        $sql = <<<SQL
+            select
+                cast(json_extract(value, '$.category') as integer) as category,
+                count(key) as cnt
+            from applications
+            where email = '$email'
+                and json_extract(value, '$.status') in ('confirmed-fined')
+            group by 1
+            order by 1;
+        SQL;
+        
+        $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
+        $ret = array_map(function ($item) { return $item[0]; }, $ret);
+
+        $points = $ret;
+        $mandates = $ret;
+
+        array_walk($points, function(&$item, $key) { GLOBAL $CATEGORIES; $item = $item * $CATEGORIES[$key]->getPoints(); });
+        array_walk($mandates, function(&$item, $key) { GLOBAL $CATEGORIES; $item = $item * $CATEGORIES[$key]->getMandate(); });
+
+        $mandates = array_sum($mandates);
+        $points = array_sum($points);
+        $level = User::pointsToUserLevel($points);
+
+        return Array(
+            "mandates" => $mandates,
+            "points" => $points,
+            "level" => $level,
+            "badges" => []
+        );
     }
 
     /**
@@ -276,17 +317,18 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function getUserStats($useCache = null){
-        $stats = $this->stats->get("%HOST%-stats-" . getCurrentUserEmail());
+        $stats = $this->stats->get("%HOST%-stats2-" . getCurrentUserEmail());
         if($useCache && $stats){
             return $stats;
         }
 
         $stats = $this->countApplicationsStatuses();
-
         $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
 
-        
-        $this->setStats("stats-" . getCurrentUserEmail(), $stats, 0);
+        $userPoints = $this->countUserPoints();
+        $stats = $stats + $userPoints;
+
+        $this->setStats("stats2-" . getCurrentUserEmail(), $stats, 0);
         return $stats;
     }
 

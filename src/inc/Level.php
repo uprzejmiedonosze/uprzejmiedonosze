@@ -25,4 +25,8 @@ class Level extends JSONObject {
   public function getLetter() : int {
     return $this->letter;
   }
+
+  public function getIntroMsg() : string {
+    return $this->introMsg;
+  }
 }

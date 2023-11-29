@@ -177,3 +177,73 @@ a[rel~="external"] {
         font-style: italic;
     }
 }
+
+.heros {
+    flex-wrap: nowrap;
+}
+.gauges,.badges {
+    flex-wrap: wrap;
+}
+
+.gauges,.badges,.heros {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    align-content: stretch;
+    
+    .gauge,.badge,.hero {
+        align-self: auto;
+        border: 0;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+        float: left;
+        order: 0;
+
+        img {
+            max-width: 70px;
+        }
+
+        a, a:visited {
+            text-decoration: none;
+            font-weight: normal;
+            color: inherit;
+        }
+    }
+    .gauge {
+        padding: 0 0.5em 0 0.5em;
+        box-shadow: 1px 1px 3px gray;
+        h3,p {
+            text-align: end;
+        }
+    }
+    .badge,.hero {
+        text-align: center;
+        filter: grayscale(1);
+        opacity: 0.5;
+    }
+
+    .gauge,.badge {
+        width: 100px;
+        margin: 0.2em;
+    }
+    .hero {
+        max-width: 100px;
+        width: 20%;
+        margin: 0em;
+        p {
+            overflow: hidden;
+            text-overflow: clip;
+        }
+    }
+    .active, .badge:hover, .gauge:hover, .hero:hover {
+        filter: grayscale(0);
+        opacity: 1;
+    }
+}
+
+h3.introHeader {
+    border-bottom: 0;
+}
