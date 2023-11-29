@@ -73,6 +73,9 @@ function generate($template, $parameters){
   global $EXTENSIONS;
   $parameters['extensions'] = $EXTENSIONS;
 
+  global $LEVELS;
+  $parameters['levels'] = $LEVELS;
+
   return $twig->render($template, $parameters);
 };
 

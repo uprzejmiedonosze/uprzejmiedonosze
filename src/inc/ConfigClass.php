@@ -5,6 +5,7 @@ require_once(__DIR__ . '/Status.php');
 require_once(__DIR__ . '/Category.php');
 require_once(__DIR__ . '/Extension.php');
 require_once(__DIR__ . '/StopAgresji.php');
+require_once(__DIR__ . '/Level.php');
 
 /**
  * SM Config class.

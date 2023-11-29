@@ -1,0 +1,37 @@
+{
+    "0": {
+        "img": "img/level-0.png",
+        "points": 0,
+        "desc": "Wkurzony, ale walczący",
+        "letter": "a",
+        "introMsg": "Jesteś na poziomie „wkurzony, ale walczący”. Przeskoczysz do następnego poziomu kiedy "
+    },
+    "1": {
+        "img": "img/level-1.png",
+        "points": 1,
+        "desc": "Początkujący, ale z nadzieją",
+        "letter": "b",
+        "introMsg": ""
+    },
+    "2": {
+        "img": "img/level-2.png",
+        "points": 5,
+        "desc": "Profesjonalista",
+        "letter": "c",
+        "introMsg": ""
+    },
+    "3": {
+        "img": "img/level-3.png",
+        "points": 50,
+        "desc": "Ekspert",
+        "letter": "d",
+        "introMsg": ""
+    },
+    "4": {
+        "img": "img/level-4.png",
+        "points": 200,
+        "desc": "Hurtownik",
+        "letter": "e",
+        "introMsg": ""
+    }
+}

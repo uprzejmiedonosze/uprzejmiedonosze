@@ -36,6 +36,11 @@ $stopAgresji = fopen(SA_CONFIG, "r") or die("Unable to open config file: " . SA_
 $STOP_AGRESJI = (array) new ConfigClass(fread($stopAgresji, filesize(SA_CONFIG)), 'StopAgresji');
 fclose($stopAgresji);
 
+const SA_LEVELS = __DIR__ . '/../public/api/config/levels.json';
+$levels = fopen(SA_LEVELS, "r") or die("Unable to open config file: " . SA_LEVELS);
+$LEVELS = (array) new ConfigClass(fread($levels, filesize(SA_LEVELS)), 'Level');
+fclose($levels);
+
 const CATEGORIES_MATRIX = Array('a', 'b');
 
 require_once(__DIR__ . '/../config.php');
