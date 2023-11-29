@@ -25,7 +25,7 @@
 <fieldset class="gauges">
     <div class="gauge">
         <h3>
-            {% if general.stats.active %}
+            {% if general.stats.active ?? 0 > 0 %}
                 <a href="/moje-zgloszenia.html">{{ general.stats.active|number_format(0, ',', ' ') }}</a>
             {% else %}
                 <a href="/nowe-zgloszenie.html" data-ajax="false">Stwórz pierwsze</a>
@@ -35,7 +35,7 @@
     </div>
     <div class="gauge">
         <h3>
-            {% if 'confirmed-fined' in general.stats %}
+            {% if general.stats['confirmed-fined'] ?? 0 > 0 %}
             {{ general.stats['confirmed-fined']|number_format(0, ',', ' ') }}
             {% else %}0{% endif %}
         </h3>
@@ -43,7 +43,7 @@
     </div>
     <div class="gauge">
         <h3>
-            {% if general.stats.points %}
+            {% if general.stats.points ?? 0 > 0 %}
             {{ general.stats.points|number_format(0, ',', ' ') }}
             {% else %}0{% endif %}
         </h3>
@@ -51,7 +51,7 @@
     </div>
     <div class="gauge">
         <h3>
-            {% if general.stats.mandates %}
+            {% if general.stats.mandates ?? 0 > 0 %}
             {{ general.stats.mandates|number_format(0, ',', ' ') }} zł
             {% else %}0{% endif %}
         </h3>
@@ -59,7 +59,7 @@
     </div>
     <div class="gauge">
         <h3>
-            {% if 'confirmed-instructed' in general.stats %}
+            {% if general.stats['confirmed-instructed'] ?? 0 > 0 %}
             {{ general.stats['confirmed-instructed']|number_format(0, ',', ' ') }}
             {% else %}0{% endif %}
         </h3>
