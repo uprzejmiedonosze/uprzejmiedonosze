@@ -6,6 +6,8 @@
 
 {% block main %}
 
+{% if general.isLoggedIn %}
+
 <h3 class="introHeader">Cześć {{ general.userName }},</h3>
 <p>
     {{ levels[general.stats.level].introMsg | raw }}
@@ -23,7 +25,7 @@
 <fieldset class="gauges">
     <div class="gauge">
         <h3>
-            {% if not general.stats.active %}
+            {% if general.stats.active %}
                 <a href="/moje-zgloszenia.html">{{ general.stats.active|number_format(0, ',', ' ') }}</a>
             {% else %}
                 <a href="/nowe-zgloszenie.html" data-ajax="false">Stwórz pierwsze</a>
@@ -33,7 +35,7 @@
     </div>
     <div class="gauge">
         <h3>
-            {% if general.stats['confirmed-fined'] %}
+            {% if 'confirmed-fined' in general.stats %}
             {{ general.stats['confirmed-fined']|number_format(0, ',', ' ') }}
             {% else %}0{% endif %}
         </h3>
@@ -57,7 +59,7 @@
     </div>
     <div class="gauge">
         <h3>
-            {% if general.stats['confirmed-instructed'] %}
+            {% if 'confirmed-instructed' in general.stats %}
             {{ general.stats['confirmed-instructed']|number_format(0, ',', ' ') }}
             {% else %}0{% endif %}
         </h3>
@@ -81,6 +83,7 @@
     {% endfor %}
 </fieldset>
 
+{% endif %}
 <h2>O co chodzi?</h2>
 
 <p>Każdy z nas chce swobodnie i bezpiecznie poruszać się po
