@@ -67,7 +67,7 @@
     </div>
 </fieldset>
 
-<p>Twoje odznaki:</p>
+<p>Twoje odznaki: <em>(ta funkcja jest dopiero implementowana)</em></p>
 
 <fieldset class="badges">
     {% for badgeId,badge in badges %}
@@ -82,8 +82,8 @@
     </a>
     {% endfor %}
 </fieldset>
+{% else %}
 
-{% endif %}
 <h2>O co chodzi?</h2>
 
 <p>Każdy z nas chce swobodnie i bezpiecznie poruszać się po
@@ -91,6 +91,14 @@
     często, jako piesi, zmuszeni jesteśmy do przeciskania się, chodzenia
     gęsiego, omijania, wkraczania na jezdnię zza zaparkowanych pojazdów, a
     nawet ustępowania jeżdżącym po chodnikach samochodom.</p>
+
+<p>
+    Uprzemie Donoszę to ogólnopolskie rozwiązanie, pomagające w zgłaszeniu
+    przypadków nieprawidłowego parkowania, które wpływają na bezpieczeństwo
+    i komfort pieszych. Zgłoszenie stworzone za pomocą tego serwisu zawiera
+    komplet wymaganych przez Straż Miejską lub Policję informacji.
+    Ułatwia pracę Tobie i służbom. Zobacz, jakie to proste:
+</p>
     
 <div class="video video-landscape">
     <video controls -poster="img/intro.png">
@@ -102,6 +110,12 @@
             <a href="img/video/ud-intro-mobile.mp4">Pobierz film</a>.
         </p>
     </video>
+    <p>Zobacz też
+        <a target="_blank" href="https://uwaga.tvn.pl/reportaze/parkowanie-w-wielkim-miescie-kierowcy-wola-zaryzykowac-100-zlotowy-mandat-niz-placic-za-caly-dzien-st7305768">
+        materiał Uwaga! TVN
+        </a>
+        poświęcony patoparkowaniu.
+    </p>
 </div>
 
 <div class="video video-portrait">
@@ -114,16 +128,23 @@
             <a href="img/video/ud-intro-mobile.mp4">Pobierz film</a>.
         </p>
     </video>
+    <p>Zobacz też
+        <a target="_blank" href="https://uwaga.tvn.pl/reportaze/parkowanie-w-wielkim-miescie-kierowcy-wola-zaryzykowac-100-zlotowy-mandat-niz-placic-za-caly-dzien-st7305768">
+        materiał Uwaga! TVN
+        </a>
+        poświęcony patoparkowaniu.
+    </p>
 </div>
 
-<p>Próbowałaś/eś dzwonić do Straży Miejskiej w swoim mieście? Wiemy
-    jak to działa. Funkcjonariusze SM odwiedzają miejsce zgłoszenia po
-    kilkunastu godzinach
-    <a rel="external" href="https://www.facebook.com/groups/694594880572900/permalink/2483974534968250/"><sup>(źródło)</sup></a>
-    i <i>"nie stwierdzają naruszenia"</i>.
-</p>
+<a href="/nowe-zgloszenie.html" data-ajax="false" class="ui-btn ui-mini ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
+<a target="_blank" href="https://fb.me/uprzejmiedonosze.net"
+    class="fb-button ui-mini ui-btn ui-corner-all ui-btn-inline">Śledź nas na FB</a>
 
-<p>Problem jest dużo bardziej złożony. Obowiązujące w Polsce przepisy zachęcają
+{% endif %}
+
+<h3>Nie chcesz „donosić”? Dowiedz się, co możesz zrobić</h3>
+
+<p>Obowiązujące w Polsce przepisy zachęcają
     do nielegalnego parkowania. W prawie drogowym nie występują takie słowa jak 
     „zieleń”, „trawa”. Nie występuje też słowo „dostawca” albo „zaopatrzenie”.
     To właśnie dlatego każdy skrawek zieleni w mieście musi być otoczony płotkiem,
@@ -137,94 +158,15 @@
     <li>Stawki mandatów związanych z parkowaniem nie zostały zaktualizowane od 20 lat, a „opłata dodatkowa” za jazdę na gapę wzrosła w tym czasie o 500%.</li>
 </ul>
 
-<p>Dlatego zapoznaj się i podpisz mój
-    <a href="https://prawapieszych.pl/" data-ajax="false" target="_blank" class="ui-btn ui-mini ui-corner-all ui-btn-inline try">wniosek do rzecznika praw obywatelskich</a> jeśli:
-<ol>
-    <li>chcesz, żeby centra polskich miast nie były zastawione słupkami;
-    <li>przepisy nie promowały nielegalnego parkowania;</li>
-    <li>zależy Ci na ochronie zieleni w miastach;</li>
-    <li>chcesz ucywilizować zaopatrzenie sklepów i pracę kurierów, tak żeby mogli wykonywać swoją pracę bez niszczenia infrastruktury.</li>
-</ol>
+<p>Dlatego <strong>zapoznaj się i podpisz</strong> mój
+    <a href="https://prawapieszych.pl/" data-ajax="false" target="_blank" class="try">wniosek do Rzecznika Praw Obywatelskich</a>, jeśli:
+    <ol>
+        <li>chcesz, żeby centra polskich miast nie były zastawione słupkami;
+        <li>przepisy nie promowały nielegalnego parkowania;</li>
+        <li>zależy Ci na ochronie zieleni w miastach;</li>
+        <li>chcesz ucywilizować zaopatrzenie sklepów i pracę kurierów, tak żeby mogli wykonywać swoją pracę bez niszczenia infrastruktury.</li>
+    </ol>
 </p>
-<p>Jeśli chcesz wesprzeć działanie serwisu, oraz pomóc mi w walce o zmianę przepisów związanych z parkowaniem, to zostań
-    <a href="https://patronite.pl/uprzejmiedonosze" target="_blank" data-ajax="false">patronem Uprzejmie Donoszę</a>.</p>
-
-{% if general.hasApps %}
-<a href="/moje-zgloszenia.html" class="ui-btn ui-mini ui-corner-all ui-btn-inline">Twoje zgłoszenia</a>
-{% else %}
-<a href="/nowe-zgloszenie.html" data-ajax="false" class="ui-btn ui-mini ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
-{% endif %}
-<a target="_blank" href="https://fb.me/uprzejmiedonosze.net"
-    class="fb-button ui-mini ui-btn ui-corner-all ui-btn-inline">Śledź nas na FB</a>
-
-<h3>Czym jest Uprzejmie Donoszę?</h3>
-
-<p>
-    Uprzemie Donoszę to ogólnopolskie rozwiązanie, pomagające w zgłaszeniu
-    przypadków nieprawidłowego parkowania, które wpływają na bezpieczeństwo
-    i komfort pieszych. Zgłoszenie stworzone za pomocą tego serwisu zawiera
-    komplet wymaganych przez Straż Miejską lub Policję informacji.
-    Ułatwia pracę Tobie i służbom.
-</p>
-
-<p>Wystarczy zrobić dwa zdjęcia, sprawdzić automatycznie pobrany adres i numer
-    rejestracyjny oraz określić rodzaj naruszenia. Tylko tyle. Straż Miejska
-    nie musi odwiedzać tego miejsca żeby stwierdzić to naruszenie naocznie.
-    Dowód ze zdjęcia wraz twoim oświadczeniem jest wystarczający.</p>
-
-<p>Zobacz, jakie to proste:</p>
-
-<fieldset class="ui-grid-a">
-    <div class="ui-block-a">
-        <img data-src="img/przyklad-1.jpg" class="lazyload one-third" />
-    </div>
-    <div class="ui-block-b">
-        <img data-src="img/przyklad-2.jpg" class="lazyload one-third" />
-    </div>
-</fieldset>
-
-<p>Co dalej? Za pomocą Uprzejmie Donoszę automatycznie wyślesz wiadomość do Straży Miejskiej
-    w swojej miejscowości. SM otrzyma wiadomość z pięknie przygotowanym załącznikiem PDF,
-    a Ty będziesz w "Do wiadomości" tego maila. </p>
-<fieldset class="ui-grid-a">
-    <div class="ui-block-a">
-        <img data-src="img/przyklad-3.jpg" class="lazyload one-third" />
-    </div>
-    <div class="ui-block-b">
-        <img data-src="img/przyklad-4.jpg" class="lazyload one-third" />
-    </div>
-</fieldset>
-
-<p>Czym to się różni od wysłania tych samych zdjęć jako załącznika do
-    wiadomości? Wygodą:</p>
-<ol>
-    <li>Uprzejmie Donoszę automatycznie pobiera datę i godzinę wykonania
-        zdjęcia, i ustawia je we wniosku.</li>
-    <li>Także automatycznie pobierany jest numer rejestracyjny ze zdjęcia, i
-        umieszczany we wniosku.</li>
-    <li>Co więcej, z tego samego zdjęcia automagicznie wyciągane są dane
-        geolokalizacyjne. Nie musisz więc pamiętać gdzie
-        dokładnie zrobiła/eś zdjęcie.</li>
-    <li>Na koniec Uprzejmie Donoszę gromadzi wszystkie twoje zgłoszenia w jedną
-        czytelną listą, która pozwala Ci śledzić
-        postępy poszczególnych spraw.</li>
-    <li>Z rozmów z pracownikami SM i Policji wynika, że niekompletne lub wadliwe
-        zgłoszenia są bardzo częstym problemem.
-        Z Uprzejmie Donoszę nie popełnisz błędów.</li>
-</ol>
-
-
-<h3>Obowiązujące przepisy</h3>
-
-<p>Na stronie <a href="/przepisy.html">z obowiązującymi przepisami</a> dowiesz
-    się, jak poprawnie zaparkować swój samochód i na jakie przepisy powoływać
-    się w rozmowie z kierowcami. Ostatecznie dowiesz się także, jaką kategorię
-    naruszenia przepisów wybrać dla swojego zgłoszenia.</p>
-
-<h3>Czy mogę jakoś pomóc w projekcie?</h3>
-
-<p>Pewnie! Przeczytaj więcej o <a href="/projekt.html">stanie projektu i jak
-        można pomóc</a>.</p>
 
 <p>Możesz też zaostać
     <a href="https://patronite.pl/uprzejmiedonosze" target="_blank" data-ajax="false">patronem Uprzejmie Donoszę</a>.
@@ -232,7 +174,14 @@
     pieszych. Twoje wsparcie dla serwisu Uprzejmie Donoszę może mi w tym bardzo pomóc.
 </p>
 
-<iframe src="https://patronite.pl/widget/uprzejmiedonosze/760385/small/000000/F9F9F9" width="300" height="450" frameborder="0" scrolling="no"></iframe>
+<iframe src="https://patronite.pl/widget/uprzejmiedonosze/760385/small/000000/F9F9F9" width="100%" height="320" frameborder="0" scrolling="no"></iframe>
+
+<h3>Obowiązujące przepisy</h3>
+
+<p>Na stronie <a href="/przepisy.html">z obowiązującymi przepisami</a> dowiesz
+    się, jak poprawnie zaparkować swój samochód i na jakie przepisy powoływać
+    się w rozmowie z kierowcami. Ostatecznie dowiesz się także, jaką kategorię
+    naruszenia przepisów wybrać dla swojego zgłoszenia.</p>
 
 <h3>Kontakt i polityka prywatności</h3>
 

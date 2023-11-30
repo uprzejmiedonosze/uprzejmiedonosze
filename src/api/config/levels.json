@@ -4,7 +4,7 @@
         "points": 0,
         "desc": "Wkurzony",
         "letter": "a",
-        "introMsg": "Jesteś <strong>wkurzony, ale walczący</strong>. Przeskoczysz do następnego poziomu, gdy zgłoszeni przez Ciebie kierowcy dostaną pierwszy punkt karny."
+        "introMsg": "Zaczynasz swoją walkę z patoparkowaniem. Ciekawe, który kierowca tak Cię wkurzył, że trafiłaś/eś tutaj. Twój poziom użytkownika w Uprzejmie Donoszę nazywa się <strong>wkurzony, ale walczący</strong>. Przeskoczysz do następnego poziomu, gdy zgłoszeni przez Ciebie kierowcy dostaną pierwszy punkt karny."
     },
     "1": {
         "img": "img/level-1.png",
