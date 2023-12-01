@@ -43,7 +43,7 @@
             </p>
 
     {% if app.userComment is defined and app.userComment %}
-        <p>{{ app.userComment }}</p>
+        <p>{{ app.getAHrefedComment | raw }}</p>
     {% endif %}
 
     {% if app.user.exposeData is not defined or not app.user.exposeData %}

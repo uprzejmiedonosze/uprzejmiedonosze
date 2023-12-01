@@ -27,7 +27,7 @@
         </p>
 
 {% if app.userComment %}
-    <p>{{ app.userComment }}</p>
+    <p>{{ app.getAHrefedComment | raw }}</p>
 {% endif %}
 
 {% if status.topButtons %}

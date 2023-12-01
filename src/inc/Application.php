@@ -378,6 +378,12 @@ class Application extends JSONObject{
         return $string;
     }
 
+    public function getAHrefedComment(){
+        $string = preg_replace('/(https?:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(?:\/\S*(?<!\.))?)/ims', '<a href="$1" target="_blank">$1</a> ', $this->userComment);
+        return str_replace("Http", "http", $string);
+    }
+
+
     /**
      * Zwraca adres do pliku z mapą lokalizacji zgłoszenia. W razie potrzeby
      * najpierw pobiera ten obrazek z API Google.
