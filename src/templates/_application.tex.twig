@@ -28,7 +28,8 @@
     \href{{ appUrl }}{{ address|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
     {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronnicowe #}
-    do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
+    do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.
+    Kod QR prowadzi do wersji online tego zgłoszenia.}{% endif %}.
     {{ app.getCategory.short }} 
     {{ app.getExtensionsText() }}
     Sytuacja jest widoczna na załączonych zdjęciach.
@@ -76,6 +77,8 @@ Email: {{ app.user.email }}
         {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true]{{ mapImage }} }
     {% if app.shouldIncludePlateImage %}
     {% set plateImage   = '{' ~ root ~ '/' ~ app.carInfo.plateImage ~ '}' %}
-    \includegraphics[width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
+    \includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
     {% endif %}
+    \hspace{\stretch{1}}
+    \adjustbox{valign=B}{\qrcode[height=0.2\textwidth,level=Q]{{appUrl|raw}}}
 \vspace{\stretch{1}}
