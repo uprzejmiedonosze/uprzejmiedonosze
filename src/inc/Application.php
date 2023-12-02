@@ -379,7 +379,8 @@ class Application extends JSONObject{
     }
 
     public function getAHrefedComment(){
-        $string = preg_replace('/(https?:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(?:\/\S*(?<!\.))?)/ims', '<a href="$1" target="_blank">$1</a> ', $this->userComment);
+        $string = preg_replace('/(https?:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(?:\/\S*(?<!\.))?)/ims',
+            '<a href="$1" target="_blank">$1</a> ', $this->userComment);
         return str_replace("Http", "http", $string);
     }
 

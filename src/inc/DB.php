@@ -278,6 +278,7 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function countUserPoints(){
+        global $BADGES;
         $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
 
         $sql = <<<SQL
@@ -303,12 +304,24 @@ class DB extends NoSQLite{
         $mandates = array_sum($mandates);
         $points = array_sum($points);
         $level = User::pointsToUserLevel($points);
+        $badges = [];
+
+        foreach ($BADGES as $badgeName => $badgeDef) {
+            $matchingCategories = array_values($badgeDef['categories']);
+            $_filter = function($category) use ($matchingCategories) {
+                return in_array($category, $matchingCategories);
+            };
+            $badgeMandates = array_sum(array_filter($ret, $_filter, ARRAY_FILTER_USE_KEY));
+            if ($badgeMandates >= 5) {
+                array_push($badges, $badgeName);
+            }
+        }
 
         return Array(
             "mandates" => $mandates,
             "points" => $points,
             "level" => $level,
-            "badges" => []
+            "badges" => $badges
         );
     }
 
@@ -317,7 +330,7 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function getUserStats($useCache = null){
-        $stats = $this->stats->get("%HOST%-stats2-" . getCurrentUserEmail());
+        $stats = $this->stats->get("%HOST%-stats3-" . getCurrentUserEmail());
         if($useCache && $stats){
             return $stats;
         }
@@ -328,7 +341,7 @@ class DB extends NoSQLite{
         $userPoints = $this->countUserPoints();
         $stats = $stats + $userPoints;
 
-        $this->setStats("stats2-" . getCurrentUserEmail(), $stats, 0);
+        $this->setStats("stats3-" . getCurrentUserEmail(), $stats, 0);
         return $stats;
     }
 

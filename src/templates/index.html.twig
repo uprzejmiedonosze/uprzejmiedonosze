@@ -75,7 +75,7 @@
         <p>{{ badge.desc|raw }}</p>
     </div>
     <a href="#popup-badge-{{ badgeId }}" data-rel="popup" data-transition="pop">
-        <div class="badge">
+        <div class="badge {% if badgeId in general.stats.badges %}active{% endif %}">
             <img src="{{ badge.img }}">
             <p>{{ badge.name }}</p>
         </div>
