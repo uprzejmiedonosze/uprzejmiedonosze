@@ -168,6 +168,9 @@
     </ol>
 </p>
 
+{% if general.isLoggedIn and 'patron' in general.stats.badges %}
+{% else %}
+
 <p>Możesz też zaostać
     <a href="https://patronite.pl/uprzejmiedonosze" target="_blank" data-ajax="false">patronem Uprzejmie Donoszę</a>.
     Chciałbym poświęcić więcej czasu swojej misji odzyskania przestrzeni dla
@@ -175,6 +178,7 @@
 </p>
 
 <iframe src="https://patronite.pl/widget/uprzejmiedonosze/760385/small/000000/F9F9F9" width="100%" height="320" frameborder="0" scrolling="no"></iframe>
+{% endif %}
 
 <h3>Obowiązujące przepisy</h3>
 
