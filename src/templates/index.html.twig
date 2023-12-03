@@ -43,6 +43,14 @@
     </div>
     <div class="gauge">
         <h3>
+            {% if general.stats['confirmed-instructed'] ?? 0 > 0 %}
+            {{ general.stats['confirmed-instructed']|number_format(0, ',', ' ') }}
+            {% else %}0{% endif %}
+        </h3>
+        <p>Pouczenia</p>
+    </div>
+    <div class="gauge">
+        <h3>
             {% if general.stats.points ?? 0 > 0 %}
             {{ general.stats.points|number_format(0, ',', ' ') }}
             {% else %}0{% endif %}
@@ -55,15 +63,7 @@
             {{ general.stats.mandates|number_format(0, ',', ' ') }} zł
             {% else %}0{% endif %}
         </h3>
-        <p>Suma mandatów</p>
-    </div>
-    <div class="gauge">
-        <h3>
-            {% if general.stats['confirmed-instructed'] ?? 0 > 0 %}
-            {{ general.stats['confirmed-instructed']|number_format(0, ',', ' ') }}
-            {% else %}0{% endif %}
-        </h3>
-        <p>Liczba pouczeń</p>
+        <p>Kwota mandatów</p>
     </div>
 </fieldset>
 
