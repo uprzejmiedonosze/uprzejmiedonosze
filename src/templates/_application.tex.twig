@@ -6,7 +6,8 @@
 \vspace{\stretch{3}}\noindent
 {\large {{ app.guessSMData().getLatexAddress() }} }
 
-{% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html}' %}
+{% set addressUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=pdf}' %}
+{% set qrUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=qr}' %}
 {% set mapUrl = '{https://www.google.com/maps/search/?api=1&query=' ~ app.address.latlng ~ '}' %}
 
 {% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '?download}' %}
@@ -25,7 +26,7 @@
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
-    \href{{ appUrl }}{{ address|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
+    \href{{ addressUrl }}{{ address|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
     {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronnicowe #}
     do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.
@@ -80,5 +81,5 @@ Email: {{ app.user.email }}
     \includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
     {% endif %}
     \hspace{\stretch{1}}
-    \adjustbox{valign=B}{\qrcode[height=0.2\textwidth,level=Q]{{appUrl|raw}}}
+    \adjustbox{valign=B}{\qrcode[height=0.2\textwidth,level=Q]{{qrUrl|raw}}}
 \vspace{\stretch{1}}
