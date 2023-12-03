@@ -6,6 +6,7 @@ use \stdClass as stdClass;
 
 /**
  * User class.
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class User extends JSONObject{
 
@@ -94,7 +95,9 @@ class User extends JSONObject{
      * Returns user number.
      */
     public function getNumber(){
-        return $this->number;
+        if (isset($this->number))
+            return $this->number;
+        return null;
     }
 
     /**
