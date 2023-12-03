@@ -278,8 +278,8 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function countUserPoints(){
-        global $BADGES;
-        $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
+        $user = $this->getCurrentUser();
+        $email = SQLite3::escapeString($user->data->email);
 
         $sql = <<<SQL
             select
@@ -304,18 +304,7 @@ class DB extends NoSQLite{
         $mandates = array_sum($mandates);
         $points = array_sum($points);
         $level = User::pointsToUserLevel($points);
-        $badges = [];
-
-        foreach ($BADGES as $badgeName => $badgeDef) {
-            $matchingCategories = array_values($badgeDef['categories']);
-            $_filter = function($category) use ($matchingCategories) {
-                return in_array($category, $matchingCategories);
-            };
-            $badgeMandates = array_sum(array_filter($ret, $_filter, ARRAY_FILTER_USE_KEY));
-            if ($badgeMandates >= 5) {
-                array_push($badges, $badgeName);
-            }
-        }
+        $badges = $user->getUserBadges($ret);
 
         return Array(
             "mandates" => $mandates,

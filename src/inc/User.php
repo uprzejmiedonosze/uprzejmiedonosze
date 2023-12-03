@@ -208,6 +208,32 @@ class User extends JSONObject{
                 return $id;
         return 0;
     }
+
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
+     */
+    public function getUserBadges($ret) {
+        global $BADGES;
+        $badges = [];
+
+        foreach ($BADGES as $badgeName => $badgeDef) {
+            $matchingCategories = array_values($badgeDef['categories']);
+            $_filter = function($category) use ($matchingCategories) {
+                return in_array($category, $matchingCategories);
+            };
+            $badgeMandates = array_sum(array_filter($ret, $_filter, ARRAY_FILTER_USE_KEY));
+            if ($badgeMandates >= 5) {
+                array_push($badges, $badgeName);
+            }
+        }
+
+        global $PATRONITE;
+        if (in_array($this->getNumber(), $PATRONITE)) {
+            array_push($badges, 'patron');
+        }
+        return $badges;
+    }
 }
 
 ?>

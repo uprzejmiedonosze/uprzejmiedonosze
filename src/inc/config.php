@@ -48,6 +48,14 @@ $badgesStr = fread($badges, filesize(SA_BADGES));
 $BADGES = json_decode($badgesStr, true);
 fclose($badges);
 
+// I'm lazy, no specific class for that
+const SA_PATRONITE = __DIR__ . '/../public/api/config/patronite.json';
+$patronite = fopen(SA_PATRONITE, "r") or die("Unable to open config file: " . SA_PATRONITE);
+$patroniteStr = fread($patronite, filesize(SA_PATRONITE));
+$PATRONITE = array_values(json_decode($patroniteStr, false));
+fclose($patronite);
+
+
 const CATEGORIES_MATRIX = Array('a', 'b');
 
 require_once(__DIR__ . '/../config.php');
