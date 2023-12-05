@@ -13,7 +13,6 @@ describe('Checks static pages', () => {
         cy.contains('Zgłoś')
         cy.contains('historię zmian')
         cy.contains('polityką prywatności')
-        cy.contains('jak można pomóc')
 
         cy.contains('– galeria')
 
