@@ -104,6 +104,7 @@ oraz oczywiście bez paska adresu, który niepotrzebnie zajmuje miejsce.</p>
 Idealnie, jeśli będziesz mieć zrzut ekranu prezentujący problem, oraz krótki opis jak
 udało się do tej sytuacji doprowadzić.</p>
 
+
 <h3>Pytania związane ze współpracą ze Strażą Miejską</h3>
 <p>Straż Miejska w różnych miastach działa na podstawie tych samych przepisów, ale
 interpretuje je różnie. Widoczne jest to szczególnie mocno w domyślnym podejściu do zgłoszenia
@@ -121,6 +122,64 @@ Uprzejmie Donoszę ma komplet informacji, w tym kluczowe dane kontaktowe zgłasz
 <p>Natomiast często nie informują o przyjęciu zgłoszenia oraz rozpoczęciu sprawy. Nie 
 krępujcie się pytać i domagać informacji zwrotnej. W korespondencji z SM zawsze warto podawać
 numer rejestracyjny, datę i adres wykroczenia.</p>
+
+<h4>Jak wygląda postępowania mandatowe?</h4>
+
+W skrócie, koszmarnie. Ale poniżej znajdziesz uproszczoną wizualizację tego procesu.
+
+<pre class="mermaid">
+flowchart
+    start([fa:fa-camera-retro Zgłoszenie])
+
+    mandat(["`fa:fa-thumbs-up kara: taryfikator
+        punkty: taryfikator
+        **status w UD**: mandat`"]):::ok
+    fail(["`fa:fa-thumbs-down umorzenie
+    **status w UD**: zignorowane`"]):::fail
+    start ---> cepik
+
+    subgraph Sądy
+    court([fa:fa-gavel Sprawa sądowa o mandat]):::mixed
+    court2(["`fa:fa-gavel Sprawa sądowa z urzędu o niewskazanie
+        **status w UD**: mandat`"]):::mixed
+    penalty1(["`fa:fa-thumbs-up kara: 500 zł
+        punkty: 0`"]):::ok
+    innocent1([uniewinnienie])
+    penalty2(["`fa:fa-thumbs-up kara: dec. sądu
+        punkty: taryfikator
+        **status w UD**: mandat`"]):::ok
+    
+    court2 -- (mało prawdopodobne) --> innocent1
+    court -- uniewinnienie --> innocent1
+    court2 -- skazany --> penalty1
+    court -- skazany --> penalty2
+    end
+    
+    subgraph SM/Policja
+    cepik{CEPIK}
+    cepik -- jest właściciel --> mail1
+    mail1(list polecony/wezwanie)
+    mail1 --> owner
+    cepik -- brak danych ---> fail
+
+    owner{Wlaściciel}
+    mail2(list polecony/wezwanie)
+    owner -- nie wskazał --> court2
+    owner -- wskazał sprawcę --> mail2
+    owner -- wskazał obcokrajowca --> fail
+    mail2 --> driver
+
+    driver{Sprawca}
+    driver -- nie przyjął ---> court
+    driver -- przyjął mandat --> mandat
+    end
+
+classDef fail fill:#F99,color:white
+classDef ok fill:#009C7F,color:white
+classDef mixed fill:#e9c200
+
+style start fill:black,color:white
+</pre>
 
 <h4 id="marka">SM w moim mieście wymaga podania marki pojazdu. Co robić?</h4>
 <p>Faktycznie, część funkcjonariuszy tego wymaga (preferencje potrafią być 
