@@ -1,3 +1,5 @@
+import mermaid from 'mermaid';
+
 $(function () {
   if (!$(".faq").length) return;
   const hash = window.location.hash;
@@ -20,5 +22,8 @@ $(function () {
 
     document.execCommand('copy');
   });
+
+  
+  mermaid.initialize({ startOnLoad: true });
   
 });
