@@ -15,7 +15,7 @@ endif
 # dirs and files 
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
-DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/templates
+DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/templates $(EXPORT)/patronite
 
 CSS_FILES            := $(wildcard src/scss/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
@@ -189,61 +189,61 @@ $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@
 		fi; \
 	fi;
 
-export/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo-processing,$<)
+$(EXPORT)/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo-processing,$<)
 	@./node_modules/.bin/parcel build --public-url "/js" --dist-dir $(dir $@) $<
 
-export/public/%.html: src/%.html; $(call echo-processing,$<)
+$(EXPORT)/public/%.html: src/%.html; $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 
-export/public/api/api.html: src/api/api.html; $(call echo-processing,$<)
+$(EXPORT)/public/api/api.html: src/api/api.html; $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 	$(replace-inline)
 
-export/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$<)
+$(EXPORT)/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$<)
 	@jq -c . < $< > $@
 
-export/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
+$(EXPORT)/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
 	@node ./tools/sm-parser.js $< $@
 
-export/inc/%.php: src/inc/%.php; $(call echo-processing,$<)
+$(EXPORT)/inc/%.php: src/inc/%.php; $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 
-export/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(call echo-processing,$<)
-	$(lint)
-	$(replace)
-	$(replace-inline)
-
-export/inc/include.php: src/inc/include.php $(TWIG_FILES); $(call echo-processing,$<)
+$(EXPORT)/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 	$(replace-inline)
 
-export/inc/utils.php: src/inc/utils.php; $(call echo-processing,$<)
+$(EXPORT)/inc/include.php: src/inc/include.php $(TWIG_FILES); $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 	$(replace-inline)
 
-export/templates/%: src/templates/%; $(call echo-processing,$<)
+$(EXPORT)/inc/utils.php: src/inc/utils.php; $(call echo-processing,$<)
+	$(lint)
+	$(replace)
+	$(replace-inline)
+
+$(EXPORT)/templates/%: src/templates/%; $(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 	$(replace-inline)
 
-export/templates/base.html.twig: src/templates/base.html.twig $(JS_FILES) $(CSS_FILES)
+$(EXPORT)/templates/base.html.twig: src/templates/base.html.twig $(JS_FILES) $(CSS_FILES)
 	$(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 	$(replace-inline)
 
-export/templates/nowe-zgloszenie.html.twig: src/templates/nowe-zgloszenie.html.twig $(JS_FILES)
+$(EXPORT)/templates/nowe-zgloszenie.html.twig: src/templates/nowe-zgloszenie.html.twig $(JS_FILES)
 	$(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 	$(replace-inline)
 
-export/templates/changelog.html.twig: src/templates/changelog.html.twig
+$(EXPORT)/templates/changelog.html.twig: src/templates/changelog.html.twig
 	$(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
@@ -251,9 +251,6 @@ export/templates/changelog.html.twig: src/templates/changelog.html.twig
 
 $(MANIFEST_PROCESSED): $(MANIFEST); $(call echo-processing,$<)
 	$(replace)
-
-$(EXPORT)/%: ; @echo "==> Creating $@"
-	@mkdir -p $@
 
 update-libs: ; @echo 'Updating PHP and JS libraries'
 	@composer update
@@ -281,6 +278,25 @@ tail:
 	@LOG="$(TAG_NAME).log"; \
 		echo "tail -f $${LOG}"; \
 		ssh $(HOSTING) "tail -f /var/log/uprzejmiedonosze.net/$${LOG}"
+
+
+# Patronite
+
+$(EXPORT)/patronite/%.csv: $(EXPORT)/patronite
+	@curl --silent -X GET \
+		-H "Authorization: token $(PATRONITE_TOKEN)" \
+		-H "Content-Type: application/json" \
+		https://patronite.pl/author-api/patrons/$* \
+		| jq '.results[] | .id' > $@
+
+$(EXPORT)/patronite/patronite.json: $(EXPORT)/patronite/active.csv $(EXPORT)/patronite/inactive.csv
+	@jq -c -n '{active:$$active, inactive:$$inactive}' \
+		--slurpfile active export/patronite/active.csv \
+		--slurpfile inactive export/patronite/inactive.csv \
+		> $@
+
+$(EXPORT)/%: ; @echo "==> Creating $@"
+	@mkdir -p $@
 
 # Utils
 
