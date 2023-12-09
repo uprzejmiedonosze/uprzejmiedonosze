@@ -7,7 +7,7 @@
         "sentry/sdk": "^4",
         "lcobucci/jwt": "^5.2",
         "firebase/php-jwt": "^6.10",
-        "firebase/php-jwt": "^6.7"
+        "symfony/mailer": "^7.0"
     },
     "require-dev": {
         "sserbin/twig-linter": "@dev",
