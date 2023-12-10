@@ -91,6 +91,7 @@ staging-sequential: HOST := $(STAGING_HOST)
 staging-sequential: $(DIRS) export
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 	@#ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
 shadow: ## Copy files to shadow server.
@@ -131,7 +132,7 @@ export: $(DIRS) process-sitemap minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	@cp -r lib vendor src/*.php src/tools $(EXPORT)/
+	@cp -r lib src/*.php src/tools $(EXPORT)/
 	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
 cypress:

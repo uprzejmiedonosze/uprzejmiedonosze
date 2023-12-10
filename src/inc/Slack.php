@@ -1,5 +1,5 @@
 <?PHP
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 $queue = msg_get_queue(9997);
 
