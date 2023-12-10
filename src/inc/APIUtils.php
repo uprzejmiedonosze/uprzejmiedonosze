@@ -1,6 +1,5 @@
 <?PHP
 
-require_once(__DIR__ . '/../autoload.php');
 require_once(__DIR__ . '/utils.php');
 
 use \Memcache as Memcache;

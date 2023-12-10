@@ -8,7 +8,8 @@
         "lcobucci/jwt": "^5.2",
         "firebase/php-jwt": "^6.10",
         "symfony/mailer": "^7.0",
-        "symfony/google-mailer": "^7.0"
+        "symfony/google-mailer": "^7.0",
+        "openalpr/api": "*"
     },
     "require-dev": {
         "sserbin/twig-linter": "@dev",
@@ -21,5 +22,11 @@
         "allow-plugins": {
             "php-http/discovery": true
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "artifact",
+            "url": "openalpr/"
+        }
+    ]
 }

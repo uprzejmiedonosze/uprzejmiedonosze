@@ -132,7 +132,7 @@ export: $(DIRS) process-sitemap minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
-	@cp -r lib src/*.php src/tools $(EXPORT)/
+	@cp -r src/tools $(EXPORT)/
 	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
 cypress:

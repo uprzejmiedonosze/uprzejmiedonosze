@@ -1,7 +1,6 @@
 <?PHP
 header("Content-Type: text/csv; charset=UTF-8");
 require_once(__DIR__ . '/../../inc/include.php');
-require(__DIR__ . '/../../autoload.php');
 
 if (isset($_GET["file"]) && !empty($_GET["file"])) {
     $file = $_GET["file"];
