@@ -316,10 +316,15 @@ define replace-inline
 	 -e 's/%VERSION%/$(TAG_NAME)/g' $@
 endef
 
+ifeq ($(HOST),$(PROD_HOST))
 define lint
 @set -o pipefail && php -l $< | grep -v "^$$" | ( grep -v "No syntax errors detected" || true )
 @./vendor/phpmd/phpmd/src/bin/phpmd $< text cleancode,codesize,controversial,design,naming,unusedcode --ignore-errors-on-exit
 endef
+else
+define lint
+endef
+endif
 
 define lint-twig
 @./vendor/bin/twig-linter lint --no-interaction --quiet $< || ./vendor/bin/twig-linter lint --no-interaction $<
