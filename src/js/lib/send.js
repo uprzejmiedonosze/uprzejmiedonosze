@@ -11,7 +11,7 @@ window.sendApplication = function (appId) {
   $.post("/api/api.html", { id: appId, action: "send" }, function (msg) {
     _updateStatus(appId, msg.status);
     $.mobile.loading("hide");
-    showMessage("Wysłane", 1500);
+    showMessage("<p>Wysłane</p>", 1500);
     if ($(".dziekujemy").length) {
       $(".whatNext").hide();
       $(".afterSend").show();
@@ -21,7 +21,7 @@ window.sendApplication = function (appId) {
   }).fail(function (e) {
     $.mobile.loading("hide");
     const message = e.responseJSON ? e.responseJSON.message : e.statusText;
-    showMessage("Nie udało się wysłać zgłoszenia! " + message, 4000);
+    showMessage("<h3 color=red>Nie udało się wysłać zgłoszenia!</h3>" + message, 7000);
     $('.ui-btn-right').removeClass("ui-disabled");
     (typeof ga == 'function') && ga("send", "event", {
       eventCategory: "js-error",
@@ -31,7 +31,7 @@ window.sendApplication = function (appId) {
 };
 
 function showMessage(msg, timeout) {
-  $.mobile.loading("show", { text: msg, textVisible: true, textonly: true });
+  $.mobile.loading("show", { html: msg, textVisible: true, textonly: true });
   window.setTimeout(function () {
     $.mobile.loading("hide");
   }, timeout);

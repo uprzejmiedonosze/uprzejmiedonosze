@@ -1,14 +1,17 @@
 <?php
 use \JSONObject as JSONObject;
-use \Swift_SmtpTransport as SmtpTransport;
-use \Swift_Message as Message;
-use \Swift_Mailer as Mailer;
-use \Swift_Attachment as Attachment;
+
+use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class Mail extends CityAPI {
 
     /**
      * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     function send(&$application){
         parent::checkApplication($application);
@@ -18,22 +21,22 @@ class Mail extends CityAPI {
         if(isProd()){
             $to = $application->guessSMData()->email;
         }
-        
-        $transport = (new SmtpTransport(SMTP_HOST, SMTP_PORT, SMTP_SSL))
-          ->setUsername(SMTP_USER)
-          ->setPassword(SMTP_PASS);
+         
+        $transport = Transport::fromDsn(SMTP_SSL . '://' . SMTP_USER . ':' . SMTP_PASS . '@' . SMTP_HOST . ':' . SMTP_PORT);
+        $mailer = new Mailer($transport); 
 
-        $mailer = new Mailer($transport);
-        
         $subject = $application->getEmailSubject();
-        $message = (new Message($subject))
-            ->setFrom(EMAIL_SENDER, 'uprzejmiedonosze.net')
-            ->setTo($to)
-            ->addCc($application->user->email, $application->user->name)
-            ->setBody(parent::formatEmail($application, true))
-            ->setSender($application->user->email)
-            ->setReplyTo($application->user->email, $application->user->name)
-            ->setReturnPath($application->user->email);
+
+        $message = (new Email());
+        $message->from(new Address(EMAIL_SENDER, 'uprzejmiedonosze.net'));
+        $message->to($to);
+        $message->subject($subject);
+        $message->cc(new Address($application->user->email, $application->user->name));
+        $message->text(parent::formatEmail($application, true));
+        $message->sender($application->user->email);
+        $message->replyTo(new Address($application->user->email, $application->user->name));
+        $message->returnPath($application->user->email);
+        
         $message->getHeaders()->addTextHeader("X-UD-AppId", $application->id);
         $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
@@ -55,12 +58,12 @@ class Mail extends CityAPI {
         require(__DIR__ . '/../PDFGenerator.php');
         [$fileatt, $fileattname] = application2PDF($application);
 
-        $message->attach(Attachment::fromPath($fileatt)
-            ->setFilename($fileattname));
+        $message->attachFromPath($fileatt, $fileattname);
 
-        $result = $mailer->send($message);
-        if(!$result){
-            raiseError($result, 500, true);
+        try {
+            $mailer->send($message);
+        } catch (TransportExceptionInterface $error) {
+            raiseError($error, 500, true);
         }
 
         global $storage;
