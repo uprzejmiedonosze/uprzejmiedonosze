@@ -3,7 +3,7 @@
 /** 
  * Super class JSONObject able to recursively create new objects from JSON.
  */
-class JSONObject {
+class JSONObject extends stdClass {
 
     /**
      * Create empty object, or initiate it from JSON. 

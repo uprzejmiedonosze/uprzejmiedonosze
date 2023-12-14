@@ -128,12 +128,14 @@ confirmation:
 		read ans && \
 		[ $${ans:-N} = yes ]
 
-export: $(DIRS) process-sitemap minify ## Exports files for deployment.
+$(EXPORT)/config.php:
+	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
+
+export: $(DIRS) process-sitemap minify $(EXPORT)/config.php ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r src/tools $(EXPORT)/
-	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
 cypress:
 	@echo "==> Testing staging"
@@ -144,6 +146,13 @@ cypress:
 cypress-local:
 	@echo "==> Testing local"
 	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) open --env DOCKER=1
+
+.PHONY: api
+api: minify-config $(EXPORT)/config.php
+	@[ ! -L db ] && ln -s docker/db . || true
+	@[ ! -L src/config.php ] && ln -s export/config.php src || true
+	@[ ! -L src/public ] && ln -s export/public src || true
+	@php -S localhost:8080 -t api
 
 check-branch: ## Detects environment and active branch changes
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \

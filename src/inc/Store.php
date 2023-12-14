@@ -61,7 +61,6 @@ class Store implements \Iterator, \Countable
     {
         $this->db = $db;
         $this->name = $name;
-        $this->createTable();
     }
 
     /**
@@ -177,67 +176,37 @@ class Store implements \Iterator, \Countable
         $this->data = array();
     }
 
-    /**
-     * @return null
-     */
-    public function rewind()
+    public function rewind() : void
     {
         $this->iterator = $this->db->query('SELECT * FROM ' . $this->name);
         $this->current = $this->iterator->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT);
     }
 
-    /**
-     * @return null
-     */
-    public function next()
+    public function next(): void
     {
         $this->current = $this->iterator->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT);
     }
 
     /**
      * Check if current position is valid
-     *
-     * @return bool
      */
-    public function valid()
+    public function valid() : bool
     {
         return $this->current !== false;
     }
 
-    /**
-     * @return string|null
-     */
-    public function current()
+    public function current() : mixed
     {
         return isset($this->current[1]) ? $this->current[1] : null;
     }
 
-    /**
-     * @return string|null
-     */
-    public function key()
+    public function key() : mixed
     {
         return isset($this->current[0]) ? $this->current[0] : null;
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count() : int
     {
         return (int) $this->db->query('SELECT COUNT(*) FROM ' . $this->name)->fetchColumn();
-    }
-
-    /**
-     * Create storage table in database if not exists
-     *
-     * @return null
-     */
-    private function createTable()
-    {
-        $stmt = 'CREATE TABLE IF NOT EXISTS "' . $this->name;
-        $stmt.= '" ("' . $this->keyColumnName . '" TEXT PRIMARY KEY, "';
-        $stmt.= $this->valueColumnName . '" TEXT);';
-        $this->db->exec($stmt);
     }
 }

@@ -1,15 +1,8 @@
 testy
 node_modules/*
-functions/node_modules/*
-functions-samples/*
 vendor/**
 export/**
 .branch-env
-**/*.log
-**/*.aux
-**/*.log
-**/*.out
-tex/app/*
 *uprzejmiedonosze.net-firebase-adminsdk.json
 /config.php
 **/.DS_Store

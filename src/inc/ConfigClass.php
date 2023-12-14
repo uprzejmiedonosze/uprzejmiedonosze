@@ -10,7 +10,7 @@ require_once(__DIR__ . '/Level.php');
 /**
  * SM Config class.
  */
-class ConfigClass {
+class ConfigClass extends stdClass {
     /**
      * Initites new SM from JSON.
      */
