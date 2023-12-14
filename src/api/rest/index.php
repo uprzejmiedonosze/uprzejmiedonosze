@@ -37,6 +37,21 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
     return $response;
 })->add(new AuthMiddleware());
 
+$app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
+    $params = $request->getQueryParams();
+    $status = $params['status'] ?? 'all';
+    $search = $params['search'] ?? '%';
+    $limit = $params['limit'] ?? 0; // 0 == no limit
+    $offset = $params['offset'] ?? 0;
+
+    $userEmail = $request->getAttribute('user')['user_email'];
+    $apps = $storage->getUserApplications($status, $search, $limit, $offset, $userEmail);
+    
+    $response->getBody()->write(json_encode($apps));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware());
+
 $CONFIG_FILES = Array(
     'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji');
 

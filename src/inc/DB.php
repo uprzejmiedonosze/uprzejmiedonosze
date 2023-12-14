@@ -87,8 +87,12 @@ class DB extends NoSQLite{
         return $number + 1;
     }
 
-    public function getUserApplications($status = 'all', $search = 'all', $limit = 0, $offset = 0) {
-        $params = [':email' => getCurrentUserEmail()];
+    public function getUserApplications($status = 'all', $search = 'all', $limit = 0, $offset = 0, $userEmail = null) {
+        if(is_null($userEmail)) {
+            $userEmail = getCurrentUserEmail();
+        }
+
+        $params = [':email' => $userEmail];
         
         $limitOffset = '';
         if ($limit > 0) {
