@@ -29,6 +29,18 @@ $errorHandler->registerErrorRenderer('application/json', ErrorRenderer::class);
 
 $app->add(new JsonBodyParser());
 
+$app->options('/{routes:.+}', function ($request, $response, $args) {
+    return $response;
+});
+
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+});
+
 $app->get('/user', function (Request $request, Response $response, $args) use ($storage) {
     $userEmail = $request->getAttribute('user')['user_email'];
     $user = $storage->getUser($userEmail);
@@ -79,7 +91,7 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
     $application = $storage->getApplication($appId);
     $userEmail = $request->getAttribute('user')['user_email'];
 
-    if ($application->user->email == $userEmail) {
+    if ($application->user->email !== $userEmail) {
         $application->user->email = '';
         $application->user->name = '';
         $application->user->address = '';
@@ -98,6 +110,10 @@ $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $a
     $response->getBody()->write(json_encode(geoToAddress($lat, $lng, $request)));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
+});
+
+$app->map(['GET', 'POST'], '/{routes:.+}', function ($request, $response) {
+    throw new HttpNotFoundException($request);
 });
 
 $app->run();
