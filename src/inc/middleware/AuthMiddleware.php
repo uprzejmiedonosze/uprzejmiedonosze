@@ -7,12 +7,6 @@ use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\Exception\Auth\InvalidIdToken as InvalidIdToken;
-//use Kreait\Firebase\Exception\Auth\IssuedInTheFuture;
-use Kreait\Firebase\Exception\Auth\ExpiredToken as ExpiredToken;
-
-use Firebase\Auth\Token\Exception\IssuedInTheFuture;
-
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -45,7 +39,7 @@ class AuthMiddleware implements MiddlewareInterface {
         try {
             $token = JWT::decode($jwt, new Key($key, $algorithm));
         } catch (InvalidArgumentException $e) {
-            raiseError("$e", 401);
+            throw new HttpBadRequestException($request, null, $e);
         } catch (DomainException $e) {
             // provided algorithm is unsupported OR provided key is invalid
             throw new HttpForbiddenException($request, null, $e);

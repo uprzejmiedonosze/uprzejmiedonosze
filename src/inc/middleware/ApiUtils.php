@@ -30,21 +30,6 @@ function parseHeaders($headers) {
     return $head;
 }
 
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function getParam($method, $paramName, $default = null) {
-    global $_GET, $_POST;
-    $params = $_GET;
-    if ($method === 'POST') {
-        $params = $_POST;
-    }
-    if (!isset($params[$paramName])) {
-        if (!is_null($default)) return $default;
-        raiseError("`$paramName` $method parameter is missing", 400);
-    }
-    return $params[$paramName];
-}
 
 /**
  * Retrieves (cached) public keys from Firebase's server

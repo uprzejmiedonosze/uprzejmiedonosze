@@ -29,8 +29,7 @@ $errorHandler->registerErrorRenderer('application/json', ErrorRenderer::class);
 
 $app->add(new JsonBodyParser());
 
-$app->get('/user', function (Request $request, Response $response, $args) {
-    global $storage;
+$app->get('/user', function (Request $request, Response $response, $args) use ($storage) {
     $userEmail = $request->getAttribute('user')['user_email'];
     $user = $storage->getUser($userEmail);
     $response->getBody()->write(json_encode($user));
@@ -38,19 +37,27 @@ $app->get('/user', function (Request $request, Response $response, $args) {
     return $response;
 })->add(new AuthMiddleware());
 
-$app->get('/config/{name}', function (Request $request, Response $response, $args) {
-    $name = $args['name'];
-    $configFiles = Array(
-        'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji');
+$CONFIG_FILES = Array(
+    'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji');
 
-    if (!in_array($name, $configFiles))
+$app->get('/config', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
+    $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(json_encode($CONFIG_FILES));
+    return $response;
+});
+
+$app->get('/config/{name}', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
+    $name = $args['name'];
+    
+    if (!in_array($name, $CONFIG_FILES))
         throw new HttpNotFoundException($request,
-            "Config $name not found. Available " . join(", ", $configFiles));
+            "Config $name not found. Available " . join(", ", $CONFIG_FILES));
 
     $response->withHeader('Content-Type', 'application/json');
     $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
     return $response;
 });
+
 $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
