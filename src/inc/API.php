@@ -9,6 +9,9 @@ use \finfo as finfo;
 use \DateTime as DateTime;
 use \Exception as Exception;
 
+use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpInternalServerErrorException;
+
 
 function checkRegistrationStatus() {
     global $storage;
@@ -23,7 +26,6 @@ function checkRegistrationStatus() {
         raiseError('User is not registered', 403);
     }
 }
-
 
 function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $plateId, $comment, $witness, $extensions) {
@@ -135,7 +137,7 @@ function getAppDetails($appId) {
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
-function geoToAddress($lat, $lng) {
+function geoToAddress($lat, $lng, $request) {
     $cache = new Memcache;
     $cache->connect('localhost', 11211);
 
@@ -144,8 +146,7 @@ function geoToAddress($lat, $lng) {
     $result = $cache->get("_geoToAddress-$latlng");
     if ($result) {
         logger("_geoToAddress cache-hit $latlng");
-        echo json_encode($result);
-        return;
+        return $result;
     }
     logger("_geoToAddress cache-miss $latlng");
 
@@ -153,29 +154,27 @@ function geoToAddress($lat, $lng) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $output = curl_exec($ch);
     if (curl_errno($ch)) {
-        logger("Nie udało się pobrać danych latlng: " . curl_error($ch));
-        raiseError("Nie udało się pobrać odpowiedzi z serwerów GeoAPI: " . curl_error($ch), 500);
+        $error = curl_error($ch);
         curl_close($ch);
-        return;
+        logger("Nie udało się pobrać danych latlng: $error");
+        throw new HttpInternalServerErrorException($request, "Nie udało się pobrać odpowiedzi z serwerów GeoAPI: $error");
     }
     curl_close($ch);
 
     $json = json_decode($output, true);
     if (!json_last_error() === JSON_ERROR_NONE) {
         logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
-        raiseError("Bełkotliwa odpowiedź z serwerów GeoAPI: " . $output, 500);
-        return;
+        throw new HttpInternalServerErrorException($request, "Bełkotliwa odpowiedź z serwerów GeoAPI:. $output");
     }
     if ($json['status'] == 'OK' && $json['results']) {
         $result = $json['results'][0];
         $cache->set("_geoToAddress-$latlng", $result, MEMCACHE_COMPRESSED, 0);
-        echo json_encode($result);
-        return;
+        return $result;
     }
     if ($json['status'] == 'ZERO_RESULTS') {
-        raiseError("Brak wyników z serwerów GeoAPI dla $lat, $lng: $output", 404, false);
+        throw new HttpNotFoundException($request, "Brak wyników z serwerów GeoAPI dla $lat, $lng: $output");
     }
-    raiseError("Niepoprawna odpowiedź z serwerów GeoAPI: " . $output, 500);
+    throw new HttpInternalServerErrorException($request, "Niepoprawna odpowiedź z serwerów GeoAPI: $output");
 }
 
 function addToGallery($appId) {

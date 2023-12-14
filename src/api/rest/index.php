@@ -51,5 +51,12 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
     $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
     return $response;
 });
+$app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
+    $lat = $args['lat'];
+    $lng = $args['lng'];
+    $response->getBody()->write(json_encode(geoToAddress($lat, $lng, $request)));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+});
 
 $app->run();
