@@ -15,7 +15,7 @@ endif
 # dirs and files 
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
-DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/templates $(EXPORT)/patronite
+DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/templates $(EXPORT)/patronite
 
 CSS_FILES            := $(wildcard src/scss/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
@@ -26,7 +26,7 @@ CONFIG_FILES         := $(wildcard src/api/config/*.json)
 JS_HASH              := $(shell cat $(JS_FILES) $(CONFIG_FILES) | md5sum | cut -b 1-8)
 JS_MINIFIED          := $(PUBLIC)/js/index.js $(PUBLIC)/js/new-app.js $(PUBLIC)/js/firebase.js
 
-HTML_FILES           := $(wildcard src/*.html src/api/*.html src/api/rest/*.html)
+HTML_FILES           := $(wildcard src/*.html src/api/*.html)
 HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
 
 CONFIG_FILES         := $(wildcard src/api/config/*.json)
@@ -36,7 +36,7 @@ TWIG_FILES           := $(wildcard src/templates/*.twig)
 TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5sum | cut -b 1-8)
 TWIG_PROCESSED       := $(TWIG_FILES:src/templates/%=export/templates/%)
 
-PHP_FILES            := $(wildcard src/inc/*.php src/inc/integrations/*.php)
+PHP_FILES            := $(wildcard src/inc/*.php src/inc/integrations/*.php src/inc/middleware/*.php)
 PHP_PROCESSED        := $(PHP_FILES:src/inc/%.php=export/inc/%.php)
 
 MANIFEST             := src/manifest.json
@@ -75,6 +75,7 @@ dev-sequential: HTTPS := http
 dev-sequential: $(DIRS) export
 	@echo "==> Refreshing sources"
 	@cp uprzejmiedonosze.localhost-firebase-adminsdk.json $(EXPORT)
+	@$(RSYNC) -r vendor $(EXPORT)
 
 dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
@@ -101,6 +102,7 @@ shadow-sequential: HOST := $(SHADOW_HOST)
 shadow-sequential: $(DIRS) export
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 
 prod: HOST := $(PROD_HOST)
 prod: cypress check-branch-main check-git-clean clean $(DIRS) export ## Copy files to prod server.
@@ -108,6 +110,7 @@ prod: cypress check-branch-main check-git-clean clean $(DIRS) export ## Copy fil
 	@git tag --force -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 	$(sentry-release)
 	@make clean
 
@@ -236,8 +239,8 @@ $(EXPORT)/inc/utils.php: src/inc/utils.php; $(call echo-processing,$<)
 	$(replace)
 	$(replace-inline)
 
-$(EXPORT)/templates/%: src/templates/%; $(call echo-processing,$<)
-	$(lint-twig)
+$(EXPORT)/public/api/rest/index.php: src/api/rest/index.php; $(call echo-processing,$<)
+	$(lint)
 	$(replace)
 	$(replace-inline)
 
@@ -255,6 +258,11 @@ $(EXPORT)/templates/nowe-zgloszenie.html.twig: src/templates/nowe-zgloszenie.htm
 
 $(EXPORT)/templates/changelog.html.twig: src/templates/changelog.html.twig
 	$(call echo-processing,$<)
+	$(lint-twig)
+	$(replace)
+	$(replace-inline)
+
+$(EXPORT)/templates/%: src/templates/%; $(call echo-processing,$<)
 	$(lint-twig)
 	$(replace)
 	$(replace-inline)

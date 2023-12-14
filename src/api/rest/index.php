@@ -1,0 +1,55 @@
+<?php
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
+use Slim\Exception\HttpNotFoundException;
+
+const INC_DIR=__DIR__ . '/../../../inc';
+
+require(INC_DIR . '/include.php');
+require(INC_DIR . '/API.php');
+require(INC_DIR . '/middleware/APIUtils.php');
+require(INC_DIR . '/middleware/JsonBodyParser.php');
+require(INC_DIR . '/middleware/ErrorRenderer.php');
+require(INC_DIR . '/middleware/AuthMiddleware.php');
+
+$app = AppFactory::create();
+$app->addRoutingMiddleware();
+
+/**
+ * @param bool                  $displayErrorDetails -> Should be set to false in production
+ * @param bool                  $logErrors -> Parameter is passed to the default ErrorHandler
+ * @param bool                  $logErrorDetails -> Display error details in error log
+ */
+$errorMiddleware = $app->addErrorMiddleware(false, true, true);
+
+$errorHandler = $errorMiddleware->getDefaultErrorHandler();
+$errorHandler->forceContentType('application/json');
+$errorHandler->registerErrorRenderer('application/json', ErrorRenderer::class);
+
+$app->add(new JsonBodyParser());
+
+$app->get('/user', function (Request $request, Response $response, $args) {
+    global $storage;
+    $userEmail = $request->getAttribute('user')['user_email'];
+    $user = $storage->getUser($userEmail);
+    $response->getBody()->write(json_encode($user));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware());
+
+$app->get('/config/{name}', function (Request $request, Response $response, $args) {
+    $name = $args['name'];
+    $configFiles = Array(
+        'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji');
+
+    if (!in_array($name, $configFiles))
+        throw new HttpNotFoundException($request,
+            "Config $name not found. Available " . join(", ", $configFiles));
+
+    $response->withHeader('Content-Type', 'application/json');
+    $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
+    return $response;
+});
+
+$app->run();

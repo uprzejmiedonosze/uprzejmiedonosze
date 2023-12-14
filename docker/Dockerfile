@@ -38,7 +38,8 @@ RUN update-rc.d php8.2-fpm defaults
 RUN update-rc.d memcached defaults
 
 COPY init.sh /root/init.sh
+RUN ln -s /var/www/uprzejmiedonosze.localhost/webapp/vendor /var/www/uprzejmiedonosze.localhost
 
-EXPOSE 80
+EXPOSE 80 81
 
 CMD ["/bin/sh", "/root/init.sh"]
