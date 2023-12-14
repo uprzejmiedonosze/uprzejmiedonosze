@@ -141,6 +141,12 @@ flowchart
 
     subgraph Sądy
     court([fa:fa-gavel Sprawa sądowa o mandat]):::mixed
+
+    court -- uniewinnienie --> innocent1
+    court2 -- skazany --> penalty1
+    court2 -- (mało prawdopodobne) --> innocent1
+    court -- skazany --> penalty2
+
     court2(["`fa:fa-gavel Sprawa sądowa z urzędu o niewskazanie
         **status w UD**: mandat`"]):::mixed
     penalty1(["`fa:fa-thumbs-up kara: 500 zł
@@ -150,10 +156,6 @@ flowchart
         punkty: taryfikator
         **status w UD**: mandat`"]):::ok
     
-    court2 -- (mało prawdopodobne) --> innocent1
-    court -- uniewinnienie --> innocent1
-    court2 -- skazany --> penalty1
-    court -- skazany --> penalty2
     end
     
     subgraph SM/Policja
