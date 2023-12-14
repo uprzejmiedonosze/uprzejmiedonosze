@@ -58,6 +58,25 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
     return $response;
 });
 
+
+$app->get('/app/get/{appId}', function (Request $request, Response $response, $args) use ($storage) {
+    $appId = $args['appId'];
+    $application = $storage->getApplication($appId);
+    $userEmail = $request->getAttribute('user')['user_email'];
+
+    if ($application->user->email == $userEmail) {
+        $application->user->email = '';
+        $application->user->name = '';
+        $application->user->address = '';
+        $application->user->msisdn = '';
+        $application->user->sex = 'f';
+    }
+
+    $response->getBody()->write(json_encode($application));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware());
+
 $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
