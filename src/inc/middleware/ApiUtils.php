@@ -1,7 +1,7 @@
 <?PHP
 
 use \Memcache as Memcache;
-use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpForbiddenException;
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
@@ -56,12 +56,17 @@ function getPublicKeys() {
     return json_decode($publicKeys, true);
 }
 
-/**
- * Retrieves key_id from JWT.
- * 
- * @SuppressWarnings(PHPMD.UnusedLocalVariable)
- */
-function decodeKid($jwt) {
-
+function getParam($params, $name, $default=null) {
+    $param = $params[$name] ?? $default;
+    if(is_null($param)) {
+        throw new Exception("Missing required parameter '$name'");
+    }
+    return $param;
 }
 
+function getUserEmail($request) {
+    $user = $request->getAttribute('user');
+    if (is_null($user) || !isset($user['user_email']))
+        throw new HttpForbiddenException($request, null);
+    return $user['user_email'];
+}

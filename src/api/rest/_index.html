@@ -49,10 +49,6 @@ if (needAuth($action)) {
 
 try {
     switch ($action) {
-        case 'get-user': // GET
-            $user = $storage->getCurrentUser();
-            echo json_encode($user);
-            break;
         case 'get-user-stats': // GET
             // @TODO draft
             $user = $storage->getCurrentUser();
@@ -60,44 +56,7 @@ try {
             //   case json_extract(value, '$.addedToGallery') = 0 when 1 then 'odrzucone' when 0 then 'zaakceptowane' else '   ' end as decyzja,
             //   count(*) from applications where ${WHERE2} group by 1, 2 ;
             echo json_encode($user);
-        case 'register-user': // POST
-            $name = capitalizeName(getParam('POST', 'name'));
-            $address = str_replace(', Polska', '', getParam('POST', 'address'));
-            $msisdn = getParam('POST', 'msisdn', '');
-            $exposeData = (bool) (getParam('POST', 'exposeData', 'N') == 'Y');
-            try {
-                $user = $storage->getCurrentUser();
-            } catch (Exception $e) {
-                $user = new User();
-            }
-            $user->updateUserData($name, $msisdn, $address, $exposeData, false, true, 200);
-            $storage->saveUser($user);
-            break;
-        case 'update-user': // POST
-            $name = capitalizeName(getParam('POST', 'name'));
-            $address = str_replace(', Polska', '', getParam('POST', 'address'));
-            $msisdn = getParam('POST', 'msisdn', '');
-            $exposeData = (bool) (getParam('POST', 'exposeData', 'N') == 'Y');
-            $stopAgresji = (bool) (getParam('POST', 'stopAgresji', 'SM') == 'SA');
-            $autoSend = (bool) (getParam('POST', 'autoSend', 'Y') == 'Y');
-            $myAppsSize = getParam('POST', 'myAppsSize', 200);
-            try {
-                $user = $storage->getCurrentUser();
-            } catch (Exception $e) {
-                raiseError('Attempt to update non-existing user!', 404);
-            }
-            $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
-            $storage->saveUser($user);
-            break;
-
-        case 'user-apps': // GET
-            $status = getParam('GET', 'status', 'all');
-            $search = getParam('GET', 'search', '%');
-            $limit = getParam('GET', 'limit', 0); // 0 == no limit
-            $offset = getParam('GET', 'offset', 0);
-            $apps = $storage->getUserApplications($status, $search, $limit, $offset);
-            echo json_encode($apps);
-            break;
+        
 
         case 'upload-app-image': // POST
             $imageBytes = uploadedFileToBase64(); // requires file named 'image'
@@ -152,31 +111,6 @@ try {
         case 'send-app':  // POST
             $appId = getParam('POST', 'id'); // application id
             sendApplication($appId);
-            break;
-        case 'get-app': // GET
-            $appId = getParam('GET', 'id'); // application id
-            getAppDetails($appId);
-            break;
-    
-        case 'geo-to-address': // GET
-            $lat = getParam('GET', 'lat');
-            $lng = getParam('GET', 'lng');
-            geoToAddress($lat, $lng);
-            break;
-        case 'config-sm': // GET
-            echo file_get_contents(__DIR__ . '/../config/sm.json');
-            break;
-        case 'config-categories': // GET
-            echo file_get_contents(__DIR__ . '/../config/categories.json');
-            break;
-        case 'config-extensions': // GET
-            echo file_get_contents(__DIR__ . '/../config/extensions.json');
-            break;
-        case 'config-statuses': // GET
-            echo file_get_contents(__DIR__ . '/../config/statuses.json');
-            break;
-        case 'config-stop-agresji': // GET
-            echo file_get_contents(__DIR__ . '/../config/stop-agresji.json');
             break;
     }
 } catch (Exception $e) {

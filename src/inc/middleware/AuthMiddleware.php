@@ -29,7 +29,7 @@ class AuthMiddleware implements MiddlewareInterface {
     
         $keys  = getPublicKeys();
         
-        @list($headersB64, $payloadB64, $sig) = explode('.', $jwt);
+        @list($headersB64, $_payloadB64, $_sig) = explode('.', $jwt);
         $decoded = json_decode(base64_decode($headersB64), true);
         if (!isset($decoded['kid']))
             throw new HttpBadRequestException($request, 'Wrong `kid` in JWT header');
@@ -37,7 +37,7 @@ class AuthMiddleware implements MiddlewareInterface {
         $key = $keys[$decoded['kid']];
         
         try {
-            $token = JWT::decode($jwt, new Key($key, $algorithm));
+            $_token = JWT::decode($jwt, new Key($key, $algorithm));
         } catch (InvalidArgumentException $e) {
             throw new HttpBadRequestException($request, null, $e);
         } catch (DomainException $e) {

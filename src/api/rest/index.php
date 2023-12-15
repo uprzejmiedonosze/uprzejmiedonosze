@@ -3,6 +3,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpBadRequestException;
 
 const INC_DIR=__DIR__ . '/../../../inc';
 
@@ -44,7 +45,7 @@ $app->add(function ($request, $handler) {
 });
 
 $app->get('/user', function (Request $request, Response $response, $args) use ($storage) {
-    $userEmail = $request->getAttribute('user')['user_email'];
+    $userEmail = getUserEmail($request);
     $user = $storage->getUser($userEmail);
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
@@ -53,15 +54,65 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
     $params = $request->getQueryParams();
-    $status = $params['status'] ?? 'all';
-    $search = $params['search'] ?? '%';
-    $limit = $params['limit'] ?? 0; // 0 == no limit
-    $offset = $params['offset'] ?? 0;
+    $status = getParam($params, 'status', 'all');
+    $search = getParam($params, 'search', '%');
+    $limit =  getParam($params, 'limit', 0); // 0 == no limi)t
+    $offset = getParam($params, 'offset', 0);
 
-    $userEmail = $request->getAttribute('user')['user_email'];
+    $userEmail = getUserEmail($request);
     $apps = $storage->getUserApplications($status, $search, $limit, $offset, $userEmail);
     
     $response->getBody()->write(json_encode($apps));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware());
+
+$app->post('/user/register', function (Request $request, Response $response, $args) use ($storage) {
+    $params = (array)$request->getParsedBody();
+
+    try {
+        $name = capitalizeName(getParam($params, 'name'));
+        $address = str_replace(', Polska', '', getParam($params, 'address'));
+        $msisdn = getParam($params, 'msisdn', '');
+        $exposeData = (bool) getParam($params, 'exposeData', 'N') == 'Y';
+    } catch (Exception $e) {
+        throw new HttpBadRequestException($request, $e->getMessage());
+    }
+
+    $userEmail = getUserEmail($request);
+    try {
+        $user = $storage->getUser($userEmail);
+    } catch (Exception $e) {
+        $user = new User();
+    }
+    $user->updateUserData($name, $msisdn, $address, $exposeData, false, true, 200);
+    $storage->saveUser($user);
+    $exposeData = (bool) (getParam('POST', 'exposeData', 'N') == 'Y');
+
+    $response->getBody()->write(json_encode($user));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware());
+
+
+$app->post('/user/update', function (Request $request, Response $response, $args) use ($storage) {
+    $params = (array)$request->getParsedBody();
+    $name = capitalizeName(getParam($params, 'name'));
+    $address = str_replace(', Polska', '', getParam($params, 'address'));
+    $msisdn = getParam($params, 'msisdn', '');
+    $exposeData = (bool) getParam($params, 'exposeData', 'N') == 'Y';
+
+    $stopAgresji = (bool) (getParam($params, 'stopAgresji', 'SM') == 'SA');
+    $autoSend = (bool) (getParam($params, 'autoSend', 'Y') == 'Y');
+    $myAppsSize = getParam($params, 'myAppsSize', 200);
+
+    $userEmail = getUserEmail($request);
+    $user = $storage->getUser($userEmail);
+
+    $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
+    $storage->saveUser($user);
+
+    $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
 })->add(new AuthMiddleware());
@@ -91,7 +142,8 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
 $app->get('/app/get/{appId}', function (Request $request, Response $response, $args) use ($storage) {
     $appId = $args['appId'];
     $application = $storage->getApplication($appId);
-    $userEmail = $request->getAttribute('user')['user_email'];
+    
+    $userEmail = getUserEmail($request);
 
     if ($application->user->email !== $userEmail) {
         $application->user->email = '';
