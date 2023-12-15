@@ -155,7 +155,8 @@ api: minify-config $(EXPORT)/config.php
 	@[ ! -L db ] && ln -s docker/db . || true
 	@[ ! -L src/config.php ] && ln -s export/config.php src || true
 	@[ ! -L src/public ] && ln -s export/public src || true
-	@php -S localhost:8080 -t api
+	@[ ! -L inc ] && ln -s src/inc . || true
+	@php -S localhost:8080 -t src/api/rest
 
 check-branch: ## Detects environment and active branch changes
 	@test "$(LAST_RUN)" = "clean" -o "$(LAST_RUN)" = "$(GIT_BRANCH)|$(HOST)" \
