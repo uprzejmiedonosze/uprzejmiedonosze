@@ -1,7 +1,6 @@
 <?PHP
 
 use \Memcache as Memcache;
-use Slim\Exception\HttpForbiddenException;
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
@@ -30,31 +29,6 @@ function parseHeaders($headers) {
     return $head;
 }
 
-
-/**
- * Retrieves (cached) public keys from Firebase's server
- */
-function getPublicKeys() {
-    $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
-
-    $cache = new Memcache;
-    $cache->connect('localhost', 11211);
-    $cacheKey = '%HOST%-firebase-keys';
-
-    $keys = $cache->get($cacheKey);
-    if ($keys) return json_decode($keys, true);
-
-    $publicKeys = file_get_contents($publicKeyUrl);
-    if (!$publicKeys)
-        raiseError('Failed to fetch JWT public keys.', 501);
-
-    $cacheControl = parseHeaders($http_response_header)['Cache-Control'];
-    preg_match('/max-age=(\d+)/', $cacheControl, $out);
-    $timeout = $out[1];
-    $cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
-
-    return json_decode($publicKeys, true);
-}
 
 function getParam($params, $name, $default=null) {
     $param = $params[$name] ?? $default;

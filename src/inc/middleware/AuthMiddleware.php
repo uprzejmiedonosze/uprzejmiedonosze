@@ -14,20 +14,27 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpInternalServerErrorException;
 
 class AuthMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
         global $_SERVER;
         $algorithm = 'RS256';
-    
-        if (!isset($_SERVER['HTTP_AUTHORIZATION']) || !preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+
+        if (!$request->hasHeader("Authorization")) {
+            throw new HttpBadRequestException($request, 'Token not found in request');
+        }
+        $header = $request->getHeader("Authorization");
+        $bearer = trim($header[0]);
+        if(!preg_match('/Bearer\s(\S+)/', $bearer, $matches)) {
             throw new HttpBadRequestException($request, 'Token not found in request');
         }
         $jwt = $matches[1];
-        if (!$jwt)
+        if (!$jwt) {
             throw new HttpBadRequestException($request, 'Token not found in request');
+        }
     
-        $keys  = getPublicKeys();
+        $keys  = $this->getPublicKeys($request);
         
         @list($headersB64, $_payloadB64, $_sig) = explode('.', $jwt);
         $decoded = json_decode(base64_decode($headersB64), true);
@@ -75,6 +82,32 @@ class AuthMiddleware implements MiddlewareInterface {
             throw new HttpForbiddenException($request, null, $e);
         }
     }
+
+    /**
+     * Retrieves (cached) public keys from Firebase's server
+     */
+    private function getPublicKeys($request) {
+        $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
+
+        $cache = new Memcache;
+        $cache->connect('localhost', 11211);
+        $cacheKey = '%HOST%-firebase-keys';
+
+        $keys = $cache->get($cacheKey);
+        if ($keys) return json_decode($keys, true);
+
+        $publicKeys = file_get_contents($publicKeyUrl);
+        if (!$publicKeys)
+            throw new HttpInternalServerErrorException($request, 'Failed to fetch JWT public keys.');
+
+        $cacheControl = $request->getHeader('Cache-Control');
+        preg_match('/max-age=(\d+)/', $cacheControl, $out);
+        $timeout = $out[1];
+        $cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
+
+        return json_decode($publicKeys, true);
+    }
+
 }
 
 
