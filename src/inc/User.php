@@ -169,6 +169,10 @@ class User extends JSONObject{
         return mb_ereg_replace("\s.*", '', $this->data->name);
     }
 
+    public function getEmail() {
+        return $this->data->email;
+    }
+
     /**
      * Returns data.exposeData or false as default.
      */

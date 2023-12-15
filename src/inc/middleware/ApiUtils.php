@@ -63,10 +63,3 @@ function getParam($params, $name, $default=null) {
     }
     return $param;
 }
-
-function getUserEmail($request) {
-    $user = $request->getAttribute('user');
-    if (is_null($user) || !isset($user['user_email']))
-        throw new HttpForbiddenException($request, null);
-    return $user['user_email'];
-}

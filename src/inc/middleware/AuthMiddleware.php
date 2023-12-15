@@ -40,29 +40,17 @@ class AuthMiddleware implements MiddlewareInterface {
             $_token = JWT::decode($jwt, new Key($key, $algorithm));
         } catch (InvalidArgumentException $e) {
             throw new HttpBadRequestException($request, null, $e);
-        } catch (DomainException $e) {
-            // provided algorithm is unsupported OR provided key is invalid
+        } catch (DomainException // provided algorithm is unsupported OR provided key is invalid
+            | SignatureInvalidException // provided JWT signature verification failed.
+            | BeforeValidException // provided JWT is trying to be used before "nbf" claim OR before "iat" claim
+            | ExpiredException // provided JWT is trying to be used after "exp" claim.
+            | UnexpectedValueException // provided JWT is malformed OR is missing an algorithm / using an unsupported algorithm OR algorithm does not match provided key OR key ID in key/key-array is empty or invalid.
+            $e) {
+            
             throw new HttpForbiddenException($request, null, $e);
-        } catch (SignatureInvalidException $e) {
-            // provided JWT signature verification failed.
-            throw new HttpForbiddenException($request, null, $e);
-        } catch (BeforeValidException $e) {
-            throw new HttpForbiddenException($request, null, $e);
-            // provided JWT is trying to be used before "nbf" claim OR before "iat" claim
-        } catch (ExpiredException $e) {
-            // provided JWT is trying to be used after "exp" claim.
-            throw new HttpForbiddenException($request, null, $e);
-        } catch (UnexpectedValueException $e) {
-            // provided JWT is malformed OR
-            // provided JWT is missing an algorithm / using an unsupported algorithm OR
-            // provided JWT algorithm does not match provided key OR
-            // provided key ID in key/key-array is empty or invalid.
-            throw new HttpForbiddenException($request, null, $e);
-        }
-    
+        }    
         $user = $this->verifyToken($jwt, $request);
-        $request = $request->withAttribute('user', $user);
-
+        $request = $request->withAttribute('firebaseUser', $user);
         return $handler->handle($request);
     }
 
@@ -80,12 +68,12 @@ class AuthMiddleware implements MiddlewareInterface {
                 'user_id' => $claims->get('user_id')
             );
         } catch (Exception $e) {
+            if (isProd()) \Sentry\captureException($e);
             throw new HttpForbiddenException($request, null, $e);
         } catch (Throwable $e) {
+            if (isProd()) \Sentry\captureException($e);
             throw new HttpForbiddenException($request, null, $e);
         }
-        if (isProd()) \Sentry\captureLastError();
-        return false;
     }
 }
 

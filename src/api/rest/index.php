@@ -48,12 +48,12 @@ $app->add(function ($request, $handler) {
 // USER
 
 $app->get('/user', function (Request $request, Response $response, $args) use ($storage) {
-    $userEmail = getUserEmail($request);
-    $user = $storage->getUser($userEmail);
+    $user = $request->getAttribute('user');
+
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware());
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
     $params = $request->getQueryParams();
@@ -62,13 +62,13 @@ $app->get('/user/apps', function (Request $request, Response $response, $args) u
     $limit =  getParam($params, 'limit', 0); // 0 == no limi)t
     $offset = getParam($params, 'offset', 0);
 
-    $userEmail = getUserEmail($request);
-    $apps = $storage->getUserApplications($status, $search, $limit, $offset, $userEmail);
+    $user = $request->getAttribute('user');
+    $apps = $storage->getUserApplications($status, $search, $limit, $offset, $user->getEmail());
     
     $response->getBody()->write(json_encode($apps));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware());
 
 $app->post('/user/register', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
@@ -82,19 +82,19 @@ $app->post('/user/register', function (Request $request, Response $response, $ar
         throw new HttpBadRequestException($request, $e->getMessage());
     }
 
-    $userEmail = getUserEmail($request);
     try {
-        $user = $storage->getUser($userEmail);
+        $user = $request->getAttribute('user');
     } catch (Exception $e) {
         $user = new User();
     }
     $user->updateUserData($name, $msisdn, $address, $exposeData, false, true, 200);
     $storage->saveUser($user);
+    $request = $request->withAttribute('user', $user);
 
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware(false));
 
 
 $app->post('/user/update', function (Request $request, Response $response, $args) use ($storage) {
@@ -108,16 +108,16 @@ $app->post('/user/update', function (Request $request, Response $response, $args
     $autoSend = (bool) (getParam($params, 'autoSend', 'Y') == 'Y');
     $myAppsSize = getParam($params, 'myAppsSize', 200);
 
-    $userEmail = getUserEmail($request);
-    $user = $storage->getUser($userEmail);
+    $user = $request->getAttribute('user');
 
     $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
     $storage->saveUser($user);
+    $request = $request->withAttribute('user', $user);
 
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware());
 
 // CONFIG
 
@@ -148,9 +148,9 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
     $appId = $args['appId'];
     $application = $storage->getApplication($appId);
     
-    $userEmail = getUserEmail($request);
+    $user = $request->getAttribute('user');
 
-    if ($application->user->email !== $userEmail) {
+    if ($application->user->email !== $user->getEmail()) {
         $application->user->email = '';
         $application->user->name = '';
         $application->user->address = '';
@@ -161,7 +161,7 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
     $response->getBody()->write(json_encode($application));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware());
 
 $app->post('/app/update/{appId}', function (Request $request, Response $response, $args) {
     $appId = $args['appId'];
@@ -192,17 +192,17 @@ $app->post('/app/update/{appId}', function (Request $request, Response $response
     $fullAddress->latlng = $latlng;
     $fullAddress->district = $district;
 
-    $userEmail = getUserEmail($request);
+    $user = $request->getAttribute('user');
     
     try {
-        updateApplication($userEmail, $appId, $datetime, $dtFromPicture, $category, $fullAddress,
+        updateApplication($user->getEmail(), $appId, $datetime, $dtFromPicture, $category, $fullAddress,
             $plateId, $comment, $witness, $extensions);
     } catch (Exception $e) {
         throw new HttpForbiddenException($request, $e->getMessage());
     }
 
     return $response;
-})->add(new AuthMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware());
 
 $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
