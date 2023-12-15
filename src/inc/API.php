@@ -27,11 +27,15 @@ function checkRegistrationStatus() {
     }
 }
 
-function updateApplication($appId, $date, $dtFromPicture, $category, $address,
+function updateApplication($userEmail, $appId, $date, $dtFromPicture, $category, $address,
     $plateId, $comment, $witness, $extensions) {
     
     global $storage;
     $application = $storage->getApplication($appId);
+
+    if ($application->user->email !== $userEmail) {
+        throw new Exception("Refuse to update app '$appId' by non-owner '$userEmail'.");
+    }
 
     if(!$application->isEditable()){
         throw new Exception("Application in status {$application->status} can't be udpated");
@@ -119,19 +123,6 @@ function sendApplication($appId) {
         raiseError($e, 500);
     }
     echo json_encode(array("status" => "$newStatus"));
-}
-
-/**
- * Returns app details JSON
- */
-function getAppDetails($appId) {
-    global $storage;
-    try {
-        $application = $storage->getApplication($appId);
-    } catch (Exception $e) {
-        raiseError($e, 404);
-    }
-    echo json_encode($application);
 }
 
 /**

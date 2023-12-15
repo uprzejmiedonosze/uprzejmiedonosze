@@ -4,6 +4,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpForbiddenException;
 
 const INC_DIR=__DIR__ . '/../../../inc';
 
@@ -44,6 +45,8 @@ $app->add(function ($request, $handler) {
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 });
 
+// USER
+
 $app->get('/user', function (Request $request, Response $response, $args) use ($storage) {
     $userEmail = getUserEmail($request);
     $user = $storage->getUser($userEmail);
@@ -74,7 +77,7 @@ $app->post('/user/register', function (Request $request, Response $response, $ar
         $name = capitalizeName(getParam($params, 'name'));
         $address = str_replace(', Polska', '', getParam($params, 'address'));
         $msisdn = getParam($params, 'msisdn', '');
-        $exposeData = (bool) getParam($params, 'exposeData', 'N') == 'Y';
+        $exposeData = (bool) getParam($params, 'exposeData', false);
     } catch (Exception $e) {
         throw new HttpBadRequestException($request, $e->getMessage());
     }
@@ -87,7 +90,6 @@ $app->post('/user/register', function (Request $request, Response $response, $ar
     }
     $user->updateUserData($name, $msisdn, $address, $exposeData, false, true, 200);
     $storage->saveUser($user);
-    $exposeData = (bool) (getParam('POST', 'exposeData', 'N') == 'Y');
 
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
@@ -117,6 +119,8 @@ $app->post('/user/update', function (Request $request, Response $response, $args
     return $response;
 })->add(new AuthMiddleware());
 
+// CONFIG
+
 $CONFIG_FILES = Array(
     'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji');
 
@@ -138,6 +142,7 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
     return $response;
 });
 
+// APPLICATION
 
 $app->get('/app/get/{appId}', function (Request $request, Response $response, $args) use ($storage) {
     $appId = $args['appId'];
@@ -155,6 +160,47 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
 
     $response->getBody()->write(json_encode($application));
     $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware());
+
+$app->post('/app/update/{appId}', function (Request $request, Response $response, $args) {
+    $appId = $args['appId'];
+    $params = (array)$request->getParsedBody();
+
+    $plateId = getParam($params, 'plateId');
+    $address = getParam($params, 'address'); // Mazurska 37, Szczecin
+    $city = getParam($params, 'city');
+    $voivodeship = getParam($params, 'voivodeship');
+    $district = getParam($params, 'district');
+    $dtFromPicture = (bool)getParam($params, 'dtFromPicture'); // 1|0 - was date and time extracted from picture?
+
+    $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
+
+    $latlng = getParam($params, 'latlng'); // lat,lng: 53.431786,14.551586
+    $comment = getParam($params, 'comment', '');
+    $category = intval(getParam($params, 'category'));
+
+    $witness = getParam($params, 'witness');
+
+    $extensions = getParam($params, 'extensions', ''); // "6,7", "6", "", missing
+    $extensions = array_filter(explode(',', $extensions));
+
+    $fullAddress = new JSONObject();
+    $fullAddress->address = $address;
+    $fullAddress->city = $city;
+    $fullAddress->voivodeship = $voivodeship;
+    $fullAddress->latlng = $latlng;
+    $fullAddress->district = $district;
+
+    $userEmail = getUserEmail($request);
+    
+    try {
+        updateApplication($userEmail, $appId, $datetime, $dtFromPicture, $category, $fullAddress,
+            $plateId, $comment, $witness, $extensions);
+    } catch (Exception $e) {
+        throw new HttpForbiddenException($request, $e->getMessage());
+    }
+
     return $response;
 })->add(new AuthMiddleware());
 

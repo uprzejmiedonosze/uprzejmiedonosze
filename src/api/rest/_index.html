@@ -18,34 +18,13 @@ use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use \Memcache as Memcache;
 
-$ACTIONS = [
-    'get-user' => true,
-    'register-user' => true,
-    'update-user' => true,
-    'user-apps' => true,
+$ACTIONS = [];
 
-    'upload-app-image' => true,
-    'set-app-status' => true,
-    'send-app' => true,
-    'get-app' => false,
-    'update-app' => true,
-
-    'geo-to-address' => false,
-
-    'config-sm' => false,
-    'config-categories' => false,
-    'config-extensions' => false,
-    'config-statuses' => false,
-    'config-stop-agresji' => false
-];
-
-$action = detectAction();
-
-if (needAuth($action)) {
+//if (needAuth($action)) {
     validateJWT();
     if ($action !== 'register-user')
         checkRegistrationStatus();
-}
+//}
 
 try {
     switch ($action) {
@@ -56,8 +35,6 @@ try {
             //   case json_extract(value, '$.addedToGallery') = 0 when 1 then 'odrzucone' when 0 then 'zaakceptowane' else '   ' end as decyzja,
             //   count(*) from applications where ${WHERE2} group by 1, 2 ;
             echo json_encode($user);
-        
-
         case 'upload-app-image': // POST
             $imageBytes = uploadedFileToBase64(); // requires file named 'image'
             $pictureType = getParam('POST', 'pictureType');  // carImage|contextImage
@@ -74,39 +51,6 @@ try {
             $newStatus = getParam('POST', 'status'); // see statuses.json
             setStatus($newStatus, $appId);
             break;
-        case 'update-app': // POST
-            $appId = getParam('POST', 'id'); // application id
-            $plateId = getParam('POST', 'plateId');
-            $address = getParam('POST', 'address'); // Mazurska 37, Szczecin
-            $city = getParam('POST', 'city');
-            $voivodeship = getParam('POST', 'voivodeship');
-            $country = getParam('POST', 'country');
-            $district = getParam('POST', 'district');
-            $dtFromPicture = (bool)getParam('POST', 'dtFromPicture'); // 1|0 - was date and time extracted from picture?
-
-            $datetime = getParam('POST', 'datetime'); // "2018-02-02T19:48:10"
-
-            $latlng = getParam('POST', 'latlng'); // lat,lng: 53.431786,14.551586
-            $comment = getParam('POST', 'comment', '');
-            $category = intval(getParam('POST', 'category'));
-
-            $extensions = getParam('POST', 'extensions', ''); // "6,7", "6", "", missing
-            $extensions = array_filter(explode(',', $extensions));
-
-            $fullAddress = new JSONObject();
-            $fullAddress->address = $address;
-            $fullAddress->city = $city;
-            $fullAddress->voivodeship = $voivodeship;
-            $fullAddress->latlng = $latlng;
-            $fullAddress->district = $district;
-            
-            try {
-                updateApplication($appId, $date, $dtFromPicture, $category, $fullAddress,
-                    $plateId, $comment, $witness, $extensions);
-            } catch (Exception $e) {
-                raiseError("$e", 403);
-            }
-            break;
 
         case 'send-app':  // POST
             $appId = getParam('POST', 'id'); // application id
@@ -117,25 +61,6 @@ try {
     raiseError("$e", 500);
 } catch (Throwable $e) {
     raiseError("$e", 500);
-}
-
-// API utils
-
-function detectAction() {
-    global $_GET, $_POST, $ACTIONS;
-    $action = null;
-    isset($_GET['action']) && $action = $_GET['action'];
-    isset($_POST['action']) && $action = $_POST['action'];
-    if (is_null($action))
-        raiseError('GET or POST action paremeter is missing', 400);
-    if (!in_array($action, array_keys($ACTIONS)))
-        raiseError("'$action' is not implemented", 501);
-    return $action;
-}
-
-function needAuth($action) {
-    global $ACTIONS;
-    return $ACTIONS[$action];
 }
 
 // AUTH utils
