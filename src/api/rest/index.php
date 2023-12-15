@@ -6,6 +6,8 @@ use Slim\Exception\HttpNotFoundException;
 
 const INC_DIR=__DIR__ . '/../../../inc';
 
+$DISABLE_SESSION=true;
+
 require(INC_DIR . '/include.php');
 require(INC_DIR . '/API.php');
 require(INC_DIR . '/middleware/APIUtils.php');
