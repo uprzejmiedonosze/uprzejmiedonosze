@@ -204,6 +204,32 @@ $app->post('/app/update/{appId}', function (Request $request, Response $response
     return $response;
 })->add(new AuthMiddleware())->add(new LoginMiddleware());
 
+
+$app->post('/app/send/{appId}', function (Request $request, Response $response, $args) use ($storage) {
+    $appId = $args['appId'];
+    $application = $storage->getApplication($appId);
+    $user = $request->getAttribute('user');
+
+    if ($application->user->email !== $user->getEmail()) {
+        throw new HttpForbiddenException($request, "User '{$user->getEmail()}' is not allowed to send app '$appId'");
+    }
+
+    $sm = $application->guessSMData();
+
+    if (!$sm->api) {
+        throw new HttpBadRequestException($request, "SM {$sm->city} dosn't have API");
+    }
+    $api = new $sm->api;
+    $api->send($application);
+    _sendSlackOnNewApp($application);
+    $response->getBody()->write(json_encode($application));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware())->add(new LoginMiddleware());
+
+
+// GEO
+
 $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
@@ -211,6 +237,8 @@ $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $a
     $response->withHeader('Content-Type', 'application/json');
     return $response;
 });
+
+// OTHER
 
 $app->map(['GET', 'POST'], '/{routes:.+}', function ($request, $response) {
     throw new HttpNotFoundException($request);

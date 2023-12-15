@@ -52,10 +52,7 @@ try {
             setStatus($newStatus, $appId);
             break;
 
-        case 'send-app':  // POST
-            $appId = getParam('POST', 'id'); // application id
-            sendApplication($appId);
-            break;
+
     }
 } catch (Exception $e) {
     raiseError("$e", 500);
