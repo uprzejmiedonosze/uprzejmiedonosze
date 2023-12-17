@@ -1,6 +1,6 @@
 {
     "require": {
-        "php": "^7.4",
+        "php": "^8.2",
         "kreait/firebase-php": "^6.9",
         "twig/twig": "^3.0",
         "tumblr/tumblr": "^0.4",
@@ -14,6 +14,9 @@
         "sserbin/twig-linter": "@dev"
     },
     "config": {
-        "platform-check": false
+        "platform-check": false,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }
