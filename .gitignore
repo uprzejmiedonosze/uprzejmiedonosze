@@ -18,3 +18,8 @@ tex/app/*
 .cache
 .parcel-cache
 src/tensor
+/db
+/inc
+/src/public
+src/config.php
+**/*.log
