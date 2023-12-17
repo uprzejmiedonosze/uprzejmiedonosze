@@ -39,7 +39,7 @@ class User extends JSONObject{
      * (has name and address provided).
      */
     public function isRegistered(){
-    	return isset($this->data) && isset($this->data->name) && isset($this->data->address);
+    	return isset($this->data) && !empty($this->data->name) && !empty($this->data->address);
     }
 
     public function setLastLocation($latlng){
