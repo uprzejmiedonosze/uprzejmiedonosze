@@ -219,10 +219,16 @@ p.pictureHint {
     width: 100%;
   }
 
-  .combo input {
-    height: 1em;
-    vertical-align: top;
-    padding-left: 2em;
+  .combo {
+    .ui-disabled {
+      opacity: .5;
+    }
+
+    input {
+      height: 1em;
+      vertical-align: top;
+      padding-left: 2em;
+    }
 
     a {
       width: 20px;
@@ -231,11 +237,6 @@ p.pictureHint {
       display: inline-block;
       cursor: pointer;
     }
-
-    .ui-disabled {
-      opacity: .5;
-    }
-
   }
 
   .locationPickerClass {
