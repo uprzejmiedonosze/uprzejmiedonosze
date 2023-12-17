@@ -259,7 +259,8 @@ class Application extends JSONObject{
             }
             return $SM_ADDRESSES[$this->smCity];
         }
-        return $SM_ADDRESSES['_nieznane'];
+        $this->smCity = '_nieznane';
+        return $SM_ADDRESSES[$this->smCity];
     }
 
     /** 
