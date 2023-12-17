@@ -1,5 +1,3 @@
-$request = $request->withAttribute('user', $user);
-
 <?PHP
 
 use Psr\Http\Message\ResponseInterface as Response;

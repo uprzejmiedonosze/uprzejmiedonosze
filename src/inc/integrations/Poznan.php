@@ -45,7 +45,7 @@ class Poznan extends CityAPI {
         $application->sent->method = "Poznan";
         global $storage;
         $storage->saveApplication($application);
-        return 'confirmed-sm';
+        return $application;
     }
 }
 

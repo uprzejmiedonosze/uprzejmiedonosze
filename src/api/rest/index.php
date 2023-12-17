@@ -5,6 +5,7 @@ use Slim\Factory\AppFactory;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpInternalServerErrorException;
 
 const INC_DIR=__DIR__ . '/../../../inc';
 
@@ -53,7 +54,7 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware(false));
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
     $params = $request->getQueryParams();
@@ -149,6 +150,7 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
     $application = $storage->getApplication($appId);
     
     $user = $request->getAttribute('user');
+    $application = $request->getAttribute('application');
 
     if ($application->user->email !== $user->getEmail()) {
         $application->user->email = '';
@@ -161,7 +163,7 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
     $response->getBody()->write(json_encode($application));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware(false));
 
 $app->post('/app/update/{appId}', function (Request $request, Response $response, $args) {
     $appId = $args['appId'];
@@ -195,17 +197,31 @@ $app->post('/app/update/{appId}', function (Request $request, Response $response
     $user = $request->getAttribute('user');
     
     try {
-        updateApplication($user->getEmail(), $appId, $datetime, $dtFromPicture, $category, $fullAddress,
-            $plateId, $comment, $witness, $extensions);
+        updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
+            $plateId, $comment, $witness, $extensions, $user->getEmail());
     } catch (Exception $e) {
         throw new HttpForbiddenException($request, $e->getMessage());
     }
 
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware());
 
 
-$app->post('/app/send/{appId}', function (Request $request, Response $response, $args) use ($storage) {
+$app->post('/app/update/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
+    $status = $args['status'];
+    $application = $request->getAttribute('application');
+    try {
+        $application = setStatus($status, $application->id);
+    } catch (Exception $e) {
+        throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
+    }
+    $response->getBody()->write(json_encode($application));
+    $response->withHeader('Content-Type', 'application/json');
+    return $response;
+})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware());
+
+
+$app->post('/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
     $appId = $args['appId'];
     $application = $storage->getApplication($appId);
     $user = $request->getAttribute('user');
@@ -214,18 +230,11 @@ $app->post('/app/send/{appId}', function (Request $request, Response $response, 
         throw new HttpForbiddenException($request, "User '{$user->getEmail()}' is not allowed to send app '$appId'");
     }
 
-    $sm = $application->guessSMData();
-
-    if (!$sm->api) {
-        throw new HttpBadRequestException($request, "SM {$sm->city} dosn't have API");
-    }
-    $api = new $sm->api;
-    $api->send($application);
-    _sendSlackOnNewApp($application);
+    $application = sendApplication($appId);
     $response->getBody()->write(json_encode($application));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware());
+})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware());
 
 
 // GEO
@@ -233,7 +242,14 @@ $app->post('/app/send/{appId}', function (Request $request, Response $response, 
 $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
-    $response->getBody()->write(json_encode(geoToAddress($lat, $lng, $request)));
+    try {
+        $response->getBody()->write(json_encode(geoToAddress($lat, $lng, $request)));
+    } catch (Exception $e) {
+        if ($e->code ?? -1 == 404) {
+            throw new HttpNotFoundException($request, $e->getMessage(), $e);
+        }
+        throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
+    }
     $response->withHeader('Content-Type', 'application/json');
     return $response;
 });

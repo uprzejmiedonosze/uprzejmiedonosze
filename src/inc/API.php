@@ -27,11 +27,15 @@ function checkRegistrationStatus() {
     }
 }
 
-function updateApplication($userEmail, $appId, $date, $dtFromPicture, $category, $address,
-    $plateId, $comment, $witness, $extensions) {
+function updateApplication($appId, $date, $dtFromPicture, $category, $address,
+    $plateId, $comment, $witness, $extensions, $userEmail=null) {
     
     global $storage;
     $application = $storage->getApplication($appId);
+
+    if(is_null($userEmail)) {
+        $userEmail = getCurrentUserEmail();
+    }
 
     if ($application->user->email !== $userEmail) {
         throw new Exception("Refuse to update app '$appId' by non-owner '$userEmail'.");
@@ -81,11 +85,7 @@ function updateApplication($userEmail, $appId, $date, $dtFromPicture, $category,
 function setStatus($status, $appId) {
     global $storage;
     $application = $storage->getApplication($appId);
-    try {
-        $application->setStatus($status);
-    } catch (Exception $e) {
-        raiseError($e, 500);
-    }
+    $application->setStatus($status);
     $storage->saveApplication($application);
     $storage->updateRecydywa($application->carInfo->plateId);
     $stats = $storage->getUserStats(false); // update cache
@@ -94,11 +94,8 @@ function setStatus($status, $appId) {
     if(in_array('patron', $stats['badges'])) {
         $patronite = false;
     }
-
-    echo json_encode(array(
-        "status" => "OK",
-        "patronite" => $patronite
-    ));
+    $application->patronite = $patronite;
+    return $application;
 }
 
 /**
@@ -109,26 +106,24 @@ function setStatus($status, $appId) {
  */
 function sendApplication($appId) {
     global $storage;
-    try {
-        $application = $storage->getApplication($appId);
-        $sm = $application->guessSMData();
 
-        if (!$sm->api) {
-            throw new Exception("SM " . $sm->city . " nie posiada API");
-        }
-        $api = new $sm->api;
-        $newStatus = $api->send($application);
-        _sendSlackOnNewApp($application);
-    } catch (Exception $e) {
-        raiseError($e, 500);
+    $application = $storage->getApplication($appId);
+    $sm = $application->guessSMData();
+
+    if (!$sm->api) {
+        throw new Exception("SM " . $sm->city . " nie posiada API", 500);
     }
-    echo json_encode(array("status" => "$newStatus"));
+    $api = new $sm->api;
+    $application = $api->send($application);
+    _sendSlackOnNewApp($application);
+
+    return $application;
 }
 
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
-function geoToAddress($lat, $lng, $request) {
+function geoToAddress($lat, $lng) {
     $cache = new Memcache;
     $cache->connect('localhost', 11211);
 
@@ -148,14 +143,14 @@ function geoToAddress($lat, $lng, $request) {
         $error = curl_error($ch);
         curl_close($ch);
         logger("Nie udało się pobrać danych latlng: $error");
-        throw new HttpInternalServerErrorException($request, "Nie udało się pobrać odpowiedzi z serwerów GeoAPI: $error");
+        throw new Exception("Nie udało się pobrać odpowiedzi z serwerów GeoAPI: $error", 500);
     }
     curl_close($ch);
 
     $json = json_decode($output, true);
     if (!json_last_error() === JSON_ERROR_NONE) {
         logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
-        throw new HttpInternalServerErrorException($request, "Bełkotliwa odpowiedź z serwerów GeoAPI:. $output");
+        throw new Exception("Bełkotliwa odpowiedź z serwerów GeoAPI:. $output", 500);
     }
     if ($json['status'] == 'OK' && $json['results']) {
         $result = $json['results'][0];
@@ -163,9 +158,9 @@ function geoToAddress($lat, $lng, $request) {
         return $result;
     }
     if ($json['status'] == 'ZERO_RESULTS') {
-        throw new HttpNotFoundException($request, "Brak wyników z serwerów GeoAPI dla $lat, $lng: $output");
+        throw new Exception("Brak wyników z serwerów GeoAPI dla $lat, $lng: $output", 404);
     }
-    throw new HttpInternalServerErrorException($request, "Niepoprawna odpowiedź z serwerów GeoAPI: $output");
+    throw new Exception("Niepoprawna odpowiedź z serwerów GeoAPI: $output", 500);
 }
 
 function addToGallery($appId) {

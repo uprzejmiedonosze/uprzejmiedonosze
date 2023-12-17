@@ -18,7 +18,6 @@ use Slim\Exception\HttpInternalServerErrorException;
 
 class AuthMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
-        global $_SERVER;
         $algorithm = 'RS256';
 
         if (!$request->hasHeader("Authorization")) {

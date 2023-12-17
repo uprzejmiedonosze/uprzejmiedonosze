@@ -42,9 +42,24 @@ if (isAjax()) {
             case "confirmed-ignored":
             case "confirmed-fined":
             case "confirmed-instructed":
-                setStatus($action, $_POST["id"]); break;
+                try {
+                    $application = setStatus($action, $_POST["id"]);
+                    echo json_encode(array(
+                        "status" => "OK",
+                        "patronite" => $application->patronite
+                    ));
+                } catch (Exception $e) {
+                    raiseError($e, 500);
+                }
+                break;
             case "send":
-                sendApplication($_POST["id"]); break;
+                try {
+                    $application = sendApplication($_POST["id"]);
+                    echo json_encode(array("status" => $application->status));
+                } catch (Exception $e) {
+                    raiseError($e->getMessage(), $e->getCode() ?? 500);
+                }
+                break;
             case "upload":
                 $imageBytes = explode( ',', $_POST['image_data'])[1]; 
                 $pictureType = $_POST['pictureType'];
@@ -55,10 +70,14 @@ if (isAjax()) {
                 $latLng = isset($_POST['latLng']) ? $_POST['latLng'] : null;
                 uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
                 break;
-            case "getApp":
-                getAppDetails($_POST["id"]); break;
             case "geoToAddress":
-                geoToAddress($_POST["lat"], $_POST["lng"]); break;
+                try {
+                    $results = geoToAddress($_POST["lat"], $_POST["lng"]); break;
+                    echo json_encode($result);
+                } catch (Exception $e) {
+                    raiseError($e->getMessage(), $e->getCode() ?? 500);
+                }
+                break;
             case "addToGallery":
                 addToGallery($_POST["id"]); break;
             case "moderateApp":
