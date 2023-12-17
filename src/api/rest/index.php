@@ -7,9 +7,11 @@ use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 
-const INC_DIR=__DIR__ . '/../../../inc';
-
 $DISABLE_SESSION=true;
+
+const INC_DIR=__DIR__ . '/../../../inc';
+require(INC_DIR . '/middleware/ApiErrorHandler.php');
+set_error_handler("ApiErrorHandler");
 
 require(INC_DIR . '/include.php');
 require(INC_DIR . '/API.php');
