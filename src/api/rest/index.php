@@ -149,10 +149,7 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
 
 // APPLICATION
 
-$app->get('/app/get/{appId}', function (Request $request, Response $response, $args) use ($storage) {
-    $appId = $args['appId'];
-    $application = $storage->getApplication($appId);
-    
+$app->get('/app/{appId}', function (Request $request, Response $response, $args) use ($storage) {   
     $user = $request->getAttribute('user');
     $application = $request->getAttribute('application');
 
@@ -169,7 +166,7 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
     return $response;
 })->add(new AppMiddleware(false))->add(new LoginMiddleware())->add(new AuthMiddleware());
 
-$app->post('/app/update/{appId}', function (Request $request, Response $response, $args) {
+$app->post('/app/{appId}', function (Request $request, Response $response, $args) {
     $appId = $args['appId'];
     $params = (array)$request->getParsedBody();
 
@@ -211,7 +208,7 @@ $app->post('/app/update/{appId}', function (Request $request, Response $response
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 
-$app->post('/app/update/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
+$app->post('/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
     $status = $args['status'];
     $application = $request->getAttribute('application');
     try {
