@@ -19,6 +19,8 @@ require(INC_DIR . '/middleware/APIUtils.php');
 require(INC_DIR . '/middleware/JsonBodyParser.php');
 require(INC_DIR . '/middleware/ErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
+require(INC_DIR . '/middleware/LoginMiddleware.php');
+require(INC_DIR . '/middleware/AppMiddleware.php');
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -56,7 +58,7 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware(false));
+})->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
     $params = $request->getQueryParams();
@@ -71,7 +73,7 @@ $app->get('/user/apps', function (Request $request, Response $response, $args) u
     $response->getBody()->write(json_encode($apps));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware());
+})->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 $app->post('/user/register', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
@@ -97,7 +99,7 @@ $app->post('/user/register', function (Request $request, Response $response, $ar
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware(false));
+})->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
 
 $app->post('/user/update', function (Request $request, Response $response, $args) use ($storage) {
@@ -120,7 +122,7 @@ $app->post('/user/update', function (Request $request, Response $response, $args
     $response->getBody()->write(json_encode($user));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware());
+})->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 // CONFIG
 
@@ -165,7 +167,7 @@ $app->get('/app/get/{appId}', function (Request $request, Response $response, $a
     $response->getBody()->write(json_encode($application));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware(false));
+})->add(new AppMiddleware(false))->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 $app->post('/app/update/{appId}', function (Request $request, Response $response, $args) {
     $appId = $args['appId'];
@@ -206,7 +208,7 @@ $app->post('/app/update/{appId}', function (Request $request, Response $response
     }
 
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware());
+})->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 
 $app->post('/app/update/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
@@ -220,7 +222,7 @@ $app->post('/app/update/{appId}/status/{status}', function (Request $request, Re
     $response->getBody()->write(json_encode($application));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware());
+})->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 
 $app->post('/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
@@ -236,7 +238,7 @@ $app->post('/app/{appId}/send', function (Request $request, Response $response, 
     $response->getBody()->write(json_encode($application));
     $response->withHeader('Content-Type', 'application/json');
     return $response;
-})->add(new AuthMiddleware())->add(new LoginMiddleware())->add(new AppMiddleware());
+})->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 
 // GEO
