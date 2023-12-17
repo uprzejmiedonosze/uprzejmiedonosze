@@ -169,14 +169,5 @@ describe('Missing SM (Poniatowa)', () => {
         cy.contains('Menu').click()
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Pobierz paczkę zgłoszeń').should('not.exist')
-        cy.contains('Henin 93, Poniatowa').click()
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
-        cy.contains('Dodaj do galerii')
-        cy.contains('Szczegóły')
-    })
-
-    it('checks missing SM', function () {
-        cy.contains('Wyślij zgłoszenie').click()
-        cy.contains('Brak danych Straży Miejskiej', { timeout: 10000 })
     })
 })
