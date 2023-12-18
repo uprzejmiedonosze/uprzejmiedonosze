@@ -264,8 +264,11 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
-    private function countApplicationsStatuses(){
-        $email = SQLite3::escapeString($this->getCurrentUser()->data->email);
+    private function countApplicationsStatuses($userEmail=null){
+        if(is_null($userEmail)) {
+            $userEmail = $this->getCurrentUser()->data->email;
+        }
+        $email = SQLite3::escapeString($userEmail);
 
         $sql = <<<SQL
             select json_extract(value, '$.status') as status, count(key) as cnt from applications
@@ -281,9 +284,11 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function countUserPoints(){
-        $user = $this->getCurrentUser();
-        $email = SQLite3::escapeString($user->data->email);
+    private function countUserPoints($userEmail=null){
+        if(is_null($userEmail)) {
+            $userEmail = $this->getCurrentUser()->data->email;
+        }
+        $email = SQLite3::escapeString($userEmail);
 
         $sql = <<<SQL
             select
@@ -308,7 +313,8 @@ class DB extends NoSQLite{
         $mandates = array_sum($mandates);
         $points = array_sum($points);
         $level = User::pointsToUserLevel($points);
-        $badges = $user->getUserBadges($ret);
+        // @TODO, wont work in rest API
+        $badges = $this->getCurrentUser()->getUserBadges($ret);
 
         return Array(
             "mandates" => $mandates,
@@ -322,19 +328,22 @@ class DB extends NoSQLite{
      * Calculates stats for current user;
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function getUserStats($useCache = null){
-        $stats = $this->stats->get("%HOST%-stats3-" . getCurrentUserEmail());
+    public function getUserStats($useCache=null, $userEmail=null){
+        if(is_null($userEmail)) {
+            $userEmail = getCurrentUserEmail();
+        }
+        $stats = $this->stats->get("%HOST%-stats3-$userEmail");
         if($useCache && $stats){
             return $stats;
         }
 
-        $stats = $this->countApplicationsStatuses();
+        $stats = $this->countApplicationsStatuses($userEmail);
         $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
 
         $userPoints = $this->countUserPoints();
         $stats = $stats + $userPoints;
 
-        $this->setStats("stats3-" . getCurrentUserEmail(), $stats, 0);
+        $this->setStats("stats3-$userEmail", $stats, 0);
         return $stats;
     }
 

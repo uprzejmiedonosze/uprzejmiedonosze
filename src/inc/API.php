@@ -82,13 +82,13 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
 /**
  * Sets application status.
  */
-function setStatus($status, $appId) {
+function setStatus($status, $appId, $userEmail=null) {
     global $storage;
     $application = $storage->getApplication($appId);
     $application->setStatus($status);
     $storage->saveApplication($application);
     $storage->updateRecydywa($application->carInfo->plateId);
-    $stats = $storage->getUserStats(false); // update cache
+    $stats = $storage->getUserStats(false, $userEmail); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
     if(in_array('patron', $stats['badges'])) {

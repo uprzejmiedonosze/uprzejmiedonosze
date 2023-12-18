@@ -36,7 +36,7 @@ $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('application/json');
 $errorHandler->registerErrorRenderer('application/json', ErrorRenderer::class);
 
-$app->add(new JsonBodyParser());
+//$app->add(new JsonBodyParser());
 
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
@@ -211,8 +211,9 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
 $app->post('/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
     $status = $args['status'];
     $application = $request->getAttribute('application');
+    $user = $request->getAttribute('user');
     try {
-        $application = setStatus($status, $application->id);
+        $application = setStatus($status, $application->id, $user->getEmail());
     } catch (Exception $e) {
         throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
     }
