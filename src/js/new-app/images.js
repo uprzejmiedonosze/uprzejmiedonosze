@@ -1,5 +1,5 @@
 import heic2any from "heic2any"
-import EXIF from "exif-js"
+import ExifReader from 'exifreader'
 
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
@@ -27,7 +27,7 @@ export async function checkFile(file, id) {
           .attr('src', resizedImage)
 
         if (id === "carImage") {
-          const exif = await getExif(file)
+          const exif = await ExifReader.load(file)
           const [lat, lng] = readGeoDataFromExif(exif)
           let dateTime = getDateTimeFromExif(exif)
     
@@ -96,31 +96,17 @@ async function getExif(img) {
 }
 
 function readGeoDataFromExif(exif) {
-  var lat = exif.GPSLatitude
-  var lng = exif.GPSLongitude
-  var latRef = exif.GPSLatitudeRef || "N"
-  var lonRef = exif.GPSLongitudeRef || "W"
-
-  if (lat && Array.isArray(lat) && lat[0]) {
-    lat =
-      ((parseFloat(lat[0]) +
-        parseFloat(lat[1]) / 60 +
-        parseFloat(lat[2]) / 3600) *
-      (latRef == "N" ? 1 : -1)).toFixed(6);
-    lng =
-      ((parseFloat(lng[0]) +
-        parseFloat(lng[1]) / 60 +
-        parseFloat(lng[2]) / 3600) *
-      (lonRef == "W" ? -1 : 1)).toFixed(6);
-    return [lat, lng]
-  }
-  return [null, null]
+  const lat = exif?.GPSLatitude?.description
+  const lng = exif?.GPSLongitude?.description
+  return [lat, lng]
 }
 
 function getDateTimeFromExif(exif) {
-  return exif.DateTimeOriginal
-    || (exif[34665] && exif[34665][36867])
+  const dateTime = exif.DateTimeOriginal || exif.CreateDate
+    || exif.DateTimeDigitized || exif.DateCreated
+    || exif.DateTimeCreated || exif.DigitalCreationDateTime
     || exif.DateTime
+  return dateTime?.description
 }
 
 async function imageToDataUri(img) {
