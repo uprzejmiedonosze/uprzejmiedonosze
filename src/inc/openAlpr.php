@@ -22,18 +22,6 @@ function _check_alpr_cache($imageHash) {
     return null;
 }
 
-function _use_cli() {
-    global $cache;
-    $budgetConsumed = $cache->get('alpr_budget_consumed');
-    if($budgetConsumed > 0.9) {
-        if(intval(date('s')) % 10) { // 90% hits
-            logger("budgetConsumed ($budgetConsumed) > 90% using CLI", true);
-            return true;
-        }
-    }
-    return false;
-}
-
 /**
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  * @SuppressWarnings(PHPMD.ElseExpression)
@@ -45,13 +33,9 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
 
     $application->alpr = 'paid';
     if(!$carInfo){
-        $useCli = _use_cli();
-        if($useCli) {
-            $carInfo = get_alpr_cli($application->carImage->url);
-            $application->alpr = 'opensource';
-        } else {
-            $carInfo = get_alpr($imageBytes);
-        }
+        // $carInfo = get_alpr_cli($application->carImage->url);
+        // $application->alpr = 'opensource';
+        $carInfo = get_alpr($imageBytes);
     }
 
     if(isset($carInfo) && count($carInfo["results"])){

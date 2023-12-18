@@ -9,10 +9,11 @@ function cmp_platerecongnizer($left, $right){
 /**
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
-function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName, $type) {       
+function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName, $type) {
     $carInfo = get_platerecognizer($imageBytes);
+    $application->alpr = 'platerecognizer';
 
-    if(isset($carInfo) && count($carInfo["results"])){
+    if(isset($carInfo) && isset($carInfo["results"]) && count($carInfo["results"])){
 
         $result = (Array)$carInfo['results'];
         usort($result, "cmp_platerecongnizer");
@@ -36,7 +37,6 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
     }
 }
 
-
 function get_platerecognizer(&$imageBytes) {
     global $cache;
     $imageHash = sha1($imageBytes);
@@ -53,24 +53,35 @@ function get_platerecognizer(&$imageBytes) {
         'mmc' => true
     );
 
-    $chi = curl_init('https://api.platerecognizer.com/v1/plate-reader/');
+    $result = platerecognizerRequest('/plate-reader/', $data);
+    $usage = platerecognizerRequest('/statistics/');
+    if (isset($usage['total_calls']) && isset($usage['usage'])) {
+        logger("get_platerecognizer " . $usage['usage']["calls"] . "/" . $usage['total_calls'], true);
+    }
+    
+    $cache->set("_platerecognizer-$imageHash", $result, MEMCACHE_COMPRESSED, 0);
+    return $result;
+}
+
+function platerecognizerRequest($method, $data=null) {
+    $chi = curl_init('https://api.platerecognizer.com/v1' . $method);
+
     curl_setopt($chi, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($chi, CURLINFO_HEADER_OUT, true);
-    curl_setopt($chi, CURLOPT_POST, true);
-    curl_setopt($chi, CURLOPT_POSTFIELDS, $data);
     curl_setopt($chi, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2TLS);
-
+    if (!empty($data)) {
+        curl_setopt($chi, CURLOPT_POST, true);
+        curl_setopt($chi, CURLOPT_POSTFIELDS, $data);
+    }
     $secretKey = PLATERECOGNIZER_SECRET;
 
-    curl_setopt($chi, CURLOPT_HTTPHEADER, array(
-        "Authorization: Token $secretKey"
-        )
+    curl_setopt($chi, CURLOPT_HTTPHEADER,
+        array("Authorization: Token $secretKey")
     );
     $result = curl_exec($chi);
     curl_close($chi);
-    $json = json_decode($result, true);
-    $cache->set("_platerecognizer-$imageHash", $json, MEMCACHE_COMPRESSED, 0);
-    return $json;
+
+    return json_decode($result, true);
 }
 
 ?>

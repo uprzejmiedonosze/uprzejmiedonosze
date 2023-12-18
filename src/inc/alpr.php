@@ -15,10 +15,27 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
 
     $application->carInfo = new stdClass();
 
-    get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
+    if (usePlaterecognizer()) {
+        get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
+    } else {
+        get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
+    }
     
     if (isset($application->carInfo->plateId)) {
         $recydywa = $storage->getRecydywa($application->carInfo->plateId);
         $application->carInfo->recydywa = $recydywa;
     }
+}
+
+function usePlaterecognizer() {
+    global $cache;
+    $budgetConsumed = $cache->get('alpr_budget_consumed');
+    $budgetConsumed = floor($budgetConsumed*100);
+    $swithToPlaterec = false;
+    if($budgetConsumed > 90) {
+        $swithToPlaterec = (bool)(intval(date('s')) % 10); // 90% hits
+        logger("budgetConsumed $budgetConsumed% > 90%" . ($swithToPlaterec ? ' using PR' : ''), true);
+    }
+
+    return $swithToPlaterec;
 }
