@@ -141,6 +141,7 @@ function raiseError($msg, $status, $notify = null){
     }
 
     logger("raiseError $msg with $status", $notify);
+    $status = ($status ?? 0 > 300) ? $status : 500;
     $error = Array(
         "code" => $status,
         "message" => (string)$msg
