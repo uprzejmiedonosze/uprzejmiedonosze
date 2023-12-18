@@ -28,7 +28,7 @@ export function _updateStatus(appId, status) {
     $("#" + appId + " .appActionButtons a.status-" + allowed).show();
   });
 
-  const allClasses = Object.keys(statuses).join(" ");
+  const allClasses = Object.keys(statuses).map(c => `status-${c}`).join(" ");
   $("#" + appId).removeClass(allClasses);
   $("#" + appId).addClass("status-" + status);
 
