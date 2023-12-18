@@ -17,82 +17,82 @@ function api_exception_handler($exception) {
 
 set_exception_handler('api_exception_handler');
 
-if (isAjax()) {
-    if (isset($_POST["action"]) && !empty($_POST["action"])) {
-        $action = $_POST["action"];
-        switch($action) {
-            case "verifyToken": 
-                if (isset($_POST['jwt']) && !empty($_POST['jwt'])) {
-                    verifyToken($_POST['jwt']);
-                    echo json_encode(array(
-                        'user_email' => $_SESSION['user_email'],
-                        'user_name' => $_SESSION['user_name'],
-                        'user_picture' => $_SESSION['user_picture'],
-                        'user_id' => $_SESSION['user_id']
-                    ));
-                    break;
-                }
-                raiseError("Token not specified", 400);
-                break;
-            case "archived":
-            case "confirmed":
-            case "confirmed-waiting":
-            case "confirmed-waitingE":
-            case "confirmed-sm":
-            case "confirmed-ignored":
-            case "confirmed-fined":
-            case "confirmed-instructed":
-                try {
-                    $application = setStatus($action, $_POST["id"]);
-                    echo json_encode(array(
-                        "status" => "OK",
-                        "patronite" => $application->patronite
-                    ));
-                } catch (Exception $e) {
-                    raiseError($e, 500);
-                }
-                break;
-            case "send":
-                try {
-                    $application = sendApplication($_POST["id"]);
-                    echo json_encode(array("status" => $application->status));
-                } catch (Exception $e) {
-                    raiseError($e->getMessage(), $e->getCode() ?? 500);
-                }
-                break;
-            case "upload":
-                $imageBytes = explode( ',', $_POST['image_data'])[1]; 
-                $pictureType = $_POST['pictureType'];
-                $appId = $_POST['applicationId'];
+handleRequest();
 
-                $dateTime = isset($_POST['dateTime']) ? $_POST['dateTime'] : null;
-                $dtFromPicture = isset($_POST['dtFromPicture']) ? $_POST['dtFromPicture'] == 'true' : null;
-                $latLng = isset($_POST['latLng']) ? $_POST['latLng'] : null;
-                uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+function handleRequest() {
+    if (!isAjax()) raiseError('No AJAX request', 403);
+    if (empty($_POST["action"])) raiseError('No action specified', 400);
+
+    $action = $_POST["action"];
+    switch($action) {
+        case "verifyToken": 
+            if (isset($_POST['jwt']) && !empty($_POST['jwt'])) {
+                verifyToken($_POST['jwt']);
+                echo json_encode(array(
+                    'user_email' => $_SESSION['user_email'],
+                    'user_name' => $_SESSION['user_name'],
+                    'user_picture' => $_SESSION['user_picture'],
+                    'user_id' => $_SESSION['user_id']
+                ));
                 break;
-            case "geoToAddress":
-                try {
-                    $results = geoToAddress($_POST["lat"], $_POST["lng"]); break;
-                    echo json_encode($result);
-                } catch (Exception $e) {
-                    raiseError($e->getMessage(), $e->getCode() ?? 500);
-                }
-                break;
-            case "addToGallery":
-                addToGallery($_POST["id"]); break;
-            case "moderateApp":
-                moderateApp($_POST["id"], $_POST["decision"]); break;
-            case "getAppByNumber":
-                getAppByNumber($_POST["number"], $_POST["apiToken"]); break;
-            case "getUserByName":
-                getUserByName($_POST["name"], $_POST["apiToken"]); break;
-            default: raiseError('Invalid action specified', 400);
-        }
-    }else{
-        raiseError('No action specified', 400);
+            }
+            raiseError("Token not specified", 400);
+            break;
+        case "archived":
+        case "confirmed":
+        case "confirmed-waiting":
+        case "confirmed-waitingE":
+        case "confirmed-sm":
+        case "confirmed-ignored":
+        case "confirmed-fined":
+        case "confirmed-instructed":
+            try {
+                $application = setStatus($action, $_POST["id"]);
+                echo json_encode(array(
+                    "status" => "OK",
+                    "patronite" => $application->patronite
+                ));
+            } catch (Exception $e) {
+                raiseError($e, 500);
+            }
+            break;
+        case "send":
+            try {
+                $application = sendApplication($_POST["id"]);
+                echo json_encode(array("status" => $application->status));
+            } catch (Exception $e) {
+                raiseError($e->getMessage(), $e->getCode());
+            }
+            break;
+        case "upload":
+            $imageBytes = explode( ',', $_POST['image_data'])[1]; 
+            $pictureType = $_POST['pictureType'];
+            $appId = $_POST['applicationId'];
+
+            $dateTime = isset($_POST['dateTime']) ? $_POST['dateTime'] : null;
+            $dtFromPicture = isset($_POST['dtFromPicture']) ? $_POST['dtFromPicture'] == 'true' : null;
+            $latLng = isset($_POST['latLng']) ? $_POST['latLng'] : null;
+            uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+            break;
+        case "geoToAddress":
+            try {
+                $result = geoToAddress($_POST["lat"], $_POST["lng"]);
+                echo json_encode($result);
+            } catch (Exception $e) {
+                raiseError($e->getMessage(), $e->getCode());
+            }
+            break;
+        case "addToGallery":
+            addToGallery($_POST["id"]); break;
+        case "moderateApp":
+            moderateApp($_POST["id"], $_POST["decision"]); break;
+        case "getAppByNumber":
+            getAppByNumber($_POST["number"], $_POST["apiToken"]); break;
+        case "getUserByName":
+            getUserByName($_POST["name"], $_POST["apiToken"]); break;
+        default: raiseError('Invalid action specified', 400);
     }
-}else{
-    raiseError('No AJAX request', 403);
 }
+
 
 ?>
