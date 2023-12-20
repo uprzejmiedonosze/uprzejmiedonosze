@@ -13,7 +13,6 @@ class LoginMiddleware implements MiddlewareInterface {
     public function __construct($registrationRequired=true, $createIfNonExists=false) {
         $this->registrationRequired = $registrationRequired;
         $this->createIfNonExists = $createIfNonExists;
-        logger("LoginMiddleware.__construct '{$registrationRequired}'/'{$createIfNonExists}'");
     }
 
     public function process(Request $request, RequestHandler $handler): Response {
@@ -34,6 +33,8 @@ class LoginMiddleware implements MiddlewareInterface {
         if($this->registrationRequired && !$user->isRegistered()) {
             throw new HttpForbiddenException($request, "User is not registered!");
         }
+        $user->isRegistered = $user->isRegistered();
+        $user->isTermsConfirmed = $user->checkTermsConfirmation();
         $request = $request->withAttribute('user', $user);
         return $handler->handle($request);
     }
