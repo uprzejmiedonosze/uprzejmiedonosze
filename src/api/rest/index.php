@@ -15,7 +15,7 @@ set_error_handler("ApiErrorHandler");
 
 require(INC_DIR . '/include.php');
 require(INC_DIR . '/API.php');
-require(INC_DIR . '/middleware/APIUtils.php');
+require(INC_DIR . '/middleware/ApiUtils.php');
 require(INC_DIR . '/middleware/JsonBodyParser.php');
 require(INC_DIR . '/middleware/ErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
@@ -47,7 +47,10 @@ $app->add(function ($request, $handler) {
     return $response
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH')
+            ->withHeader('Access-Control-Allow-Credentials', 'true')
+            ->withHeader('Content-Type', 'application/json')
+            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
 // USER
@@ -56,7 +59,6 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
     $user = $request->getAttribute('user');
 
     $response->getBody()->write(json_encode($user));
-    $response->withHeader('Content-Type', 'application/json');
     return $response;
 })->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
@@ -97,7 +99,6 @@ $app->post('/user/register', function (Request $request, Response $response, $ar
     $request = $request->withAttribute('user', $user);
 
     $response->getBody()->write(json_encode($user));
-    $response->withHeader('Content-Type', 'application/json');
     return $response;
 })->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
@@ -130,7 +131,6 @@ $CONFIG_FILES = Array(
     'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji');
 
 $app->get('/config', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
-    $response->withHeader('Content-Type', 'application/json');
     $response->getBody()->write(json_encode($CONFIG_FILES));
     return $response;
 });
@@ -142,7 +142,6 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
         throw new HttpNotFoundException($request,
             "Config $name not found. Available " . join(", ", $CONFIG_FILES));
 
-    $response->withHeader('Content-Type', 'application/json');
     $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
     return $response;
 });
@@ -162,7 +161,6 @@ $app->get('/app/{appId}', function (Request $request, Response $response, $args)
     }
 
     $response->getBody()->write(json_encode($application));
-    $response->withHeader('Content-Type', 'application/json');
     return $response;
 })->add(new AppMiddleware(false))->add(new LoginMiddleware())->add(new AuthMiddleware());
 
@@ -218,7 +216,6 @@ $app->post('/app/{appId}/status/{status}', function (Request $request, Response 
         throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
     }
     $response->getBody()->write(json_encode($application));
-    $response->withHeader('Content-Type', 'application/json');
     return $response;
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
@@ -234,7 +231,6 @@ $app->post('/app/{appId}/send', function (Request $request, Response $response, 
 
     $application = sendApplication($appId);
     $response->getBody()->write(json_encode($application));
-    $response->withHeader('Content-Type', 'application/json');
     return $response;
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
@@ -252,7 +248,6 @@ $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $a
         }
         throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
     }
-    $response->withHeader('Content-Type', 'application/json');
     return $response;
 });
 

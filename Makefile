@@ -134,7 +134,7 @@ confirmation:
 $(EXPORT)/config.php:
 	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
-export: $(DIRS) process-sitemap minify $(EXPORT)/config.php ## Exports files for deployment.
+export: $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -240,7 +240,7 @@ $(EXPORT)/inc/utils.php: src/inc/utils.php; $(call echo-processing,$<)
 	$(replace)
 	$(replace-inline)
 
-$(EXPORT)/public/api/rest/index.php: src/api/rest/index.php; $(call echo-processing,$<)
+$(PUBLIC)/api/rest/index.php: src/api/rest/index.php; $(call echo-processing,$<)
 	$(lint)
 	$(replace)
 	$(replace-inline)

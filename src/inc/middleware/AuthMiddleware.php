@@ -61,7 +61,7 @@ class AuthMiddleware implements MiddlewareInterface {
     }
 
     private function verifyToken($token, $request){
-        $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../uprzejmiedonosze.localhost-firebase-adminsdk.json');
+        $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../%HOST%-firebase-adminsdk.json');
         $auth = $factory->createAuth();
 
         try {
