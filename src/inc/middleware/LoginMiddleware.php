@@ -35,6 +35,7 @@ class LoginMiddleware implements MiddlewareInterface {
         }
         $user->isRegistered = $user->isRegistered();
         $user->isTermsConfirmed = $user->checkTermsConfirmation();
+        $user->stats = $storage->getUserStats(true, $firebaseUser['user_email']);
         $request = $request->withAttribute('user', $user);
         return $handler->handle($request);
     }
