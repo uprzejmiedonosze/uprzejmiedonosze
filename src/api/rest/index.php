@@ -209,7 +209,7 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 
-$app->post('/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
+$app->patch('/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
     $status = $args['status'];
     $application = $request->getAttribute('application');
     $user = $request->getAttribute('user');
@@ -223,7 +223,7 @@ $app->post('/app/{appId}/status/{status}', function (Request $request, Response 
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
 
-$app->post('/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
+$app->patch('/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
     $appId = $args['appId'];
     $application = $storage->getApplication($appId);
     $user = $request->getAttribute('user');
@@ -256,7 +256,7 @@ $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $a
 
 // OTHER
 
-$app->map(['GET', 'POST'], '/{routes:.+}', function ($request, $response) {
+$app->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request, $response) {
     throw new HttpNotFoundException($request);
 });
 
