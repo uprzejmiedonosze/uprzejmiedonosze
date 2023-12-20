@@ -62,18 +62,30 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
     return $response;
 })->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
-$app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
-    $params = $request->getQueryParams();
-    $status = getParam($params, 'status', 'all');
-    $search = getParam($params, 'search', '%');
-    $limit =  getParam($params, 'limit', 0); // 0 == no limi)t
-    $offset = getParam($params, 'offset', 0);
+$app->patch('/user', function (Request $request, Response $response, $args) use ($storage) {
+    $user = $request->getAttribute('user');
+    $response->getBody()->write(json_encode($user));
+    return $response;
+})->add(new LoginMiddleware(false, true))->add(new AuthMiddleware());
+
+$app->post('/user', function (Request $request, Response $response, $args) use ($storage) {
+    $params = (array)$request->getParsedBody();
+    $name = capitalizeName(getParam($params, 'name'));
+    $address = str_replace(', Polska', '', getParam($params, 'address'));
+    $msisdn = getParam($params, 'msisdn', '');
+    $exposeData = (bool) getParam($params, 'exposeData', 'N') == 'Y';
+
+    $stopAgresji = (bool) (getParam($params, 'stopAgresji', 'SM') == 'SA');
+    $autoSend = (bool) (getParam($params, 'autoSend', 'Y') == 'Y');
+    $myAppsSize = getParam($params, 'myAppsSize', 200);
 
     $user = $request->getAttribute('user');
-    $apps = $storage->getUserApplications($status, $search, $limit, $offset, $user->getEmail());
-    
-    $response->getBody()->write(json_encode($apps));
-    $response->withHeader('Content-Type', 'application/json');
+
+    $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
+    $storage->saveUser($user);
+    $request = $request->withAttribute('user', $user);
+
+    $response->getBody()->write(json_encode($user));
     return $response;
 })->add(new LoginMiddleware())->add(new AuthMiddleware());
 
@@ -102,26 +114,17 @@ $app->post('/user/register', function (Request $request, Response $response, $ar
     return $response;
 })->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
-
-$app->post('/user/update', function (Request $request, Response $response, $args) use ($storage) {
-    $params = (array)$request->getParsedBody();
-    $name = capitalizeName(getParam($params, 'name'));
-    $address = str_replace(', Polska', '', getParam($params, 'address'));
-    $msisdn = getParam($params, 'msisdn', '');
-    $exposeData = (bool) getParam($params, 'exposeData', 'N') == 'Y';
-
-    $stopAgresji = (bool) (getParam($params, 'stopAgresji', 'SM') == 'SA');
-    $autoSend = (bool) (getParam($params, 'autoSend', 'Y') == 'Y');
-    $myAppsSize = getParam($params, 'myAppsSize', 200);
+$app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
+    $params = $request->getQueryParams();
+    $status = getParam($params, 'status', 'all');
+    $search = getParam($params, 'search', '%');
+    $limit =  getParam($params, 'limit', 0); // 0 == no limi)t
+    $offset = getParam($params, 'offset', 0);
 
     $user = $request->getAttribute('user');
-
-    $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
-    $storage->saveUser($user);
-    $request = $request->withAttribute('user', $user);
-
-    $response->getBody()->write(json_encode($user));
-    $response->withHeader('Content-Type', 'application/json');
+    $apps = $storage->getUserApplications($status, $search, $limit, $offset, $user->getEmail());
+    
+    $response->getBody()->write(json_encode($apps));
     return $response;
 })->add(new LoginMiddleware())->add(new AuthMiddleware());
 
