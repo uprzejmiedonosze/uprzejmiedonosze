@@ -2639,5 +2639,13 @@
       "44-230 Czerwionka-Leszczyny"
     ],
     "email": "sm@czerwionka-leszczyny.com.pl"
+  },
+  "Ząbkowice Śląskie": {
+    "address": [
+      "Straż Miejska w Ząbkowicach Śląskich",
+      "ul. 1 Maja 15",
+      "57-200 Ząbkowice Śląskie"
+    ],
+    "email": "straz@zabkowiceslaskie.pl"
   }
 }
