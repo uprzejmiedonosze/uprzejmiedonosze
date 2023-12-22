@@ -89,30 +89,6 @@ $app->post('/user', function (Request $request, Response $response, $args) use (
     return $response;
 })->add(new LoginMiddleware())->add(new AuthMiddleware());
 
-$app->post('/user/register', function (Request $request, Response $response, $args) use ($storage) {
-    $params = (array)$request->getParsedBody();
-
-    try {
-        $name = capitalizeName(getParam($params, 'name'));
-        $address = str_replace(', Polska', '', getParam($params, 'address'));
-        $msisdn = getParam($params, 'msisdn', '');
-        $exposeData = (bool) getParam($params, 'exposeData', false);
-    } catch (Exception $e) {
-        throw new HttpBadRequestException($request, $e->getMessage());
-    }
-
-    try {
-        $user = $request->getAttribute('user');
-    } catch (Exception $e) {
-        $user = new User();
-    }
-    $user->updateUserData($name, $msisdn, $address, $exposeData, false, true, 200);
-    $storage->saveUser($user);
-    $request = $request->withAttribute('user', $user);
-
-    $response->getBody()->write(json_encode($user));
-    return $response;
-})->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
     $params = $request->getQueryParams();
