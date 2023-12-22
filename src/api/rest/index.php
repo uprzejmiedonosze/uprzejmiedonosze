@@ -68,6 +68,15 @@ $app->patch('/user', function (Request $request, Response $response, $args) use 
     return $response;
 })->add(new LoginMiddleware(false, true))->add(new AuthMiddleware());
 
+$app->patch('/user/confirm-terms', function (Request $request, Response $response, $args) use ($storage) {
+    $user = $request->getAttribute('user');
+    $user->confirmTerms();
+    $storage->saveUser($user);
+    $user->isTermsConfirmed = $user->checkTermsConfirmation();
+    $response->getBody()->write(json_encode($user));
+    return $response;
+})->add(new LoginMiddleware())->add(new AuthMiddleware());
+
 $app->post('/user', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
     $name = capitalizeName(getParam($params, 'name'));
@@ -95,7 +104,7 @@ $app->get('/user/apps', function (Request $request, Response $response, $args) u
     $params = $request->getQueryParams();
     $status = getParam($params, 'status', 'all');
     $search = getParam($params, 'search', '%');
-    $limit =  getParam($params, 'limit', 0); // 0 == no limi)t
+    $limit =  getParam($params, 'limit', 0); // 0 == no limit
     $offset = getParam($params, 'offset', 0);
 
     $user = $request->getAttribute('user');
