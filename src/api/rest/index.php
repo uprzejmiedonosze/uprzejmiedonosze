@@ -36,7 +36,7 @@ $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('application/json');
 $errorHandler->registerErrorRenderer('application/json', ErrorRenderer::class);
 
-//$app->add(new JsonBodyParser());
+$app->add(new JsonBodyParser());
 
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
@@ -83,11 +83,12 @@ $app->post('/user', function (Request $request, Response $response, $args) use (
 
     $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
     $storage->saveUser($user);
+    $user->isRegistered = $user->isRegistered();
     $request = $request->withAttribute('user', $user);
 
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new LoginMiddleware())->add(new AuthMiddleware());
+})->add(new LoginMiddleware(false))->add(new AuthMiddleware());
 
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
