@@ -15,7 +15,11 @@ DEBUG="$*"
 
 DB="docker/db/store.sqlite"
 cp $DB $DB~
-trap "mv $DB~ $DB; echo -e '$RESET_COLOR'; exit" INT TERM EXIT 
+
+MEMCACHED=$(curl localhost:11211 2>&1 | grep -c Fail || true)
+test "$MEMCACHED" -eq 1 && (echo "Starting memcached"; memcached &)
+
+trap "mv $DB~ $DB; echo -e '$RESET_COLOR'; test "$MEMCACHED" -eq 1 && killall memcached; exit" INT TERM EXIT
 
 function PASS() {
     echo -e "$GREEN"pass"$RESET_COLOR"
