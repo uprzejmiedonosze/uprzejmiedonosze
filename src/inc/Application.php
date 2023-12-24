@@ -18,36 +18,41 @@ class Application extends JSONObject{
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function __construct($json = null) {
-        if($json){
-            parent::__construct($json);
-            @$this->statusHistory = (array)$this->statusHistory;
-            @$this->comments = (array)$this->comments;
-            @$this->extensions = (array)$this->extensions;
-            if(!isset($this->seq) && $this->hasNumber()) {
-                $this->seq = extractAppNumer($this->getNumber());
-            }
-            $this->migrateSent();
-            return;
-        }
-        global $storage;
-        $user = $storage->getCurrentUser();
+    private function __construct() {
 
-        $this->date = null;
-        $this->id = genSafeId();
-        $this->added = date(DT_FORMAT);
-        $this->user = $user->data;
-        $this->user->number = $user->getNumber();
-        $this->user->sex = guess_sex_by_name($this->user->name);
-        $this->status = 'draft';
-        $this->category = 0;
-        $this->initStatements();
-        $this->address = new JSONObject();
-        $this->version = '2.1.0';
+    }
+
+    public static function withJson($json) {
+        $instance = new self();
+        $instance->__fromJson($json);
+        @$instance->statusHistory = (array)$instance->statusHistory;
+        @$instance->comments = (array)$instance->comments;
+        @$instance->extensions = (array)$instance->extensions;
+        if(!isset($instance->seq) && $instance->hasNumber()) {
+            $instance->seq = extractAppNumer($instance->getNumber());
+        }
+        $instance->migrateSent();
+        return $instance;
+    }
+
+    public static function withUser($user) {
+        $instance = new self();
+        $instance->date = null;
+        $instance->id = genSafeId();
+        $instance->added = date(DT_FORMAT);
+        $instance->user = $user->data;
+        $instance->user->number = $user->getNumber();
+        $instance->user->sex = guess_sex_by_name($instance->user->name);
+        $instance->status = 'draft';
+        $instance->category = 0;
+        $instance->initStatements();
+        $instance->address = new JSONObject();
+        $instance->version = '2.1.0';
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'no-user-agent-set';
-        $this->browser = get_browser($userAgent, true);
-        $this->browser['user_agent'] = $userAgent;
+        $instance->browser = get_browser($userAgent, true);
+        $instance->browser['user_agent'] = $userAgent;
+        return $instance;
     }
 
     /**

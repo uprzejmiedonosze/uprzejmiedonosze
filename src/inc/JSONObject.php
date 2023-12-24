@@ -10,8 +10,15 @@ class JSONObject extends stdClass {
      */
     public function __construct($json = null) {
         if($json){
-            $this->set(is_string($json)? json_decode($json, true): $json);
+            $this->__fromJson($json);
         }
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    public function __fromJson($json) {
+        $this->set(is_string($json)? json_decode($json, true): $json);
     }
 
     /**

@@ -136,7 +136,7 @@ class DB extends NoSQLite{
         $stmt->execute($params);
 
         function __constructApplication($value) {
-            return new Application($value);
+            return Application::withJson($value);
         }        
 
         return $stmt->fetchAll(PDO::FETCH_FUNC, '__constructApplication');
@@ -164,7 +164,7 @@ class DB extends NoSQLite{
         $apps = Array();
 
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            $apps[$row[0]] = new Application($row[1]);
+            $apps[$row[0]] = Application::withJson($row[1]);
         }
 
         function _cmp($left, $right){
@@ -226,7 +226,7 @@ class DB extends NoSQLite{
         if(!$json){
             throw new Exception("Próba pobrania nieistniejącego zgłoszenia $appId.");
         }
-        $application = new Application($json);
+        $application = Application::withJson($json);
         return $application;
 
     }
@@ -284,10 +284,7 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function countUserPoints($userEmail=null){
-        if(is_null($userEmail)) {
-            $userEmail = $this->getCurrentUser()->data->email;
-        }
+    private function countUserPoints($userEmail){
         $email = SQLite3::escapeString($userEmail);
 
         $sql = <<<SQL
@@ -340,7 +337,7 @@ class DB extends NoSQLite{
         $stats = $this->countApplicationsStatuses($userEmail);
         $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
 
-        $userPoints = $this->countUserPoints();
+        $userPoints = $this->countUserPoints($userEmail);
         $stats = $stats + $userPoints;
 
         $this->setStats("stats3-$userEmail", $stats, 0);
@@ -367,7 +364,7 @@ class DB extends NoSQLite{
 
         $apps = Array();
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            $apps[$row[0]] = new Application($row[1]);
+            $apps[$row[0]] = Application::withJson($row[1]);
         }
         return array_reverse($apps);
     }
@@ -606,7 +603,7 @@ SQL;
 
         $apps = Array();
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            $apps[$row[0]] = new Application($row[1]);
+            $apps[$row[0]] = Application::withJson($row[1]);
         }
         return $apps;
     }
@@ -696,7 +693,7 @@ SQL;
         $stmt->bindValue(':number', $number);
         $stmt->execute();
 
-        return new Application($stmt->fetch(\PDO::FETCH_NUM)[0]);
+        return Application::withJson($stmt->fetch(\PDO::FETCH_NUM)[0]);
     }
 
     public function getUserByName($name, $apiToken){
