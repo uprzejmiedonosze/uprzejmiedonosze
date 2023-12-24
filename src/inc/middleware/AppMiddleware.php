@@ -29,6 +29,7 @@ class AppMiddleware implements MiddlewareInterface {
             throw new HttpForbiddenException($request, "User '{$user->getEmail()}' is not allowed to change app '$appId'");
         }
 
+        unset($application->browser);
         $request = $request->withAttribute('application', $application);
         return $handler->handle($request);
     }
