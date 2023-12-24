@@ -49,7 +49,7 @@ function handleRequest() {
         case "confirmed-fined":
         case "confirmed-instructed":
             try {
-                $application = setStatus($action, $_POST["id"]);
+                $application = setStatus($action, $_POST["id"], $storage->getCurrentUser());
                 echo json_encode(array(
                     "status" => "OK",
                     "patronite" => $application->patronite

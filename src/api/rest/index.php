@@ -210,7 +210,7 @@ $app->patch('/app/{appId}/status/{status}', function (Request $request, Response
     $application = $request->getAttribute('application');
     $user = $request->getAttribute('user');
     try {
-        $application = setStatus($status, $application->id, $user->getEmail());
+        $application = setStatus($status, $application->id, $user);
     } catch (Exception $e) {
         throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
     }

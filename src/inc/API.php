@@ -82,7 +82,7 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
 /**
  * Sets application status.
  */
-function setStatus($status, $appId, $userEmail=null) {
+function setStatus($status, $appId, $user) { // @TODO
     global $storage;
     $application = $storage->getApplication($appId);
     $application->setStatus($status);
