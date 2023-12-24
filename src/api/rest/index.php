@@ -199,6 +199,7 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
     } catch (Exception $e) {
         throw new HttpForbiddenException($request, $e->getMessage());
     }
+    // TODO: missing output
 
     return $response;
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
@@ -213,6 +214,11 @@ $app->patch('/app/{appId}/status/{status}', function (Request $request, Response
     } catch (Exception $e) {
         throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
     }
+    unset($application->browser);
+    $response->getBody()->write(json_encode($application));
+    return $response;
+})->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
+
 $app->post('/app/{appId}/image', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
     $pictureType = getParam($params, 'pictureType');  // carImage|contextImage
@@ -263,6 +269,7 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
     }
 
     $application = sendApplication($appId);
+    unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
