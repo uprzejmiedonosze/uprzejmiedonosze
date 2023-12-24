@@ -21,7 +21,7 @@ $user->appsCount = $application->seq;
 $storage->saveUser($user);
 
 $storage->updateRecydywa($application->carInfo->plateId);
-$storage->getUserStats(false); // update cache
+$storage->getUserStats(false, $user); // update cache
 
 if($edited) {
     $application->address->mapImage = null;

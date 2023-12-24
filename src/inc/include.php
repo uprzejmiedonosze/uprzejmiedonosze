@@ -50,10 +50,12 @@ function generate($template, $parameters){
     'auto_reload' => true
   ]);
 
+  $user = $storage->getCurrentUser();
+
   $parameters['general'] = [
       'uri' => $_SERVER['REQUEST_URI'],
       'isLoggedIn' => $isLoggedIn,
-      'hasApps' => $isLoggedIn && $storage->getCurrentUser()->hasApps(),
+      'hasApps' => $isLoggedIn && $user->hasApps(),
       'isAdmin' => isAdmin(),
       'galleryCount' => $storage->getGalleryCount(!isset($_GET['update'])),
       'isProd' => isProd(),
@@ -62,9 +64,9 @@ function generate($template, $parameters){
 
   if($isLoggedIn){
     $parameters['config']['sex'] = guess_sex_current_user();
-    $parameters['general']['userName'] = $storage->getCurrentUser()->getFirstName();
+    $parameters['general']['userName'] = $user->getFirstName();
     // force update cache if ?update GET param is set
-    $parameters['general']['stats'] = $storage->getUserStats(! isset($_GET['update']));
+    $parameters['general']['stats'] = $storage->getUserStats(!isset($_GET['update']), $user);
   }
 
   global $STATUSES;

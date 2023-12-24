@@ -264,10 +264,7 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
-    private function countApplicationsStatuses($userEmail=null){
-        if(is_null($userEmail)) {
-            $userEmail = $this->getCurrentUser()->data->email;
-        }
+    private function countApplicationsStatuses($userEmail){
         $email = SQLite3::escapeString($userEmail);
 
         $sql = <<<SQL
@@ -284,7 +281,8 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function countUserPoints($userEmail){
+    private function countUserPoints($user){
+        $userEmail = $user->getEmail();
         $email = SQLite3::escapeString($userEmail);
 
         $sql = <<<SQL
@@ -309,9 +307,8 @@ class DB extends NoSQLite{
 
         $mandates = array_sum($mandates);
         $points = array_sum($points);
-        $level = User::pointsToUserLevel($points);
-        // @TODO, wont work in rest API
-        $badges = $this->getCurrentUser()->getUserBadges($ret);
+        $level = $user->pointsToUserLevel($points);
+        $badges = $user->getUserBadges($ret);
 
         return Array(
             "mandates" => $mandates,
@@ -325,10 +322,9 @@ class DB extends NoSQLite{
      * Calculates stats for current user;
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function getUserStats($useCache=null, $userEmail=null){
-        if(is_null($userEmail)) {
-            $userEmail = getCurrentUserEmail();
-        }
+    public function getUserStats($useCache, $user){
+        $userEmail = $user->getEmail();
+
         $stats = $this->stats->get("%HOST%-stats3-$userEmail");
         if($useCache && $stats){
             return $stats;
@@ -337,7 +333,7 @@ class DB extends NoSQLite{
         $stats = $this->countApplicationsStatuses($userEmail);
         $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
 
-        $userPoints = $this->countUserPoints($userEmail);
+        $userPoints = $this->countUserPoints($user);
         $stats = $stats + $userPoints;
 
         $this->setStats("stats3-$userEmail", $stats, 0);

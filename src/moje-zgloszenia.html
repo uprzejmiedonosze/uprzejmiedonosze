@@ -24,7 +24,7 @@ foreach($applications as $application){
 }
 
 if($changeMail){
-    $storage->getUserStats(false); // updates the cache
+    $storage->getUserStats(false, $user); // updates the cache
 }
 
 echo generate('moje-zgloszenia.html.twig', 
