@@ -137,6 +137,15 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
 
 // APPLICATION
 
+$app->post('/app/new', function (Request $request, Response $response, $args) use ($storage) {   
+    $user = $request->getAttribute('user');
+    $application = Application::withUser($user);
+    $storage->saveApplication($application);
+    unset($application->browser);
+    $response->getBody()->write(json_encode($application));
+    return $response;
+})->add(new LoginMiddleware())->add(new AuthMiddleware());
+
 $app->get('/app/{appId}', function (Request $request, Response $response, $args) use ($storage) {   
     $user = $request->getAttribute('user');
     $application = $request->getAttribute('application');
