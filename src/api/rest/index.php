@@ -194,13 +194,13 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
     $user = $request->getAttribute('user');
     
     try {
-        updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
+        $application = updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
             $plateId, $comment, $witness, $extensions, $user->getEmail());
     } catch (Exception $e) {
         throw new HttpForbiddenException($request, $e->getMessage());
     }
-    // TODO: missing output
-
+    unset($application->browser);
+    $response->getBody()->write(json_encode($application));
     return $response;
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
 
@@ -277,6 +277,7 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
 
 // GEO
 
+// @TODO, params does not support dots inside
 $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
