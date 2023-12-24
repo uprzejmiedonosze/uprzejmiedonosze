@@ -20,6 +20,8 @@ set_exception_handler('api_exception_handler');
 handleRequest();
 
 function handleRequest() {
+    global $storage;
+
     if (!isAjax()) raiseError('No AJAX request', 403);
     if (empty($_POST["action"])) raiseError('No action specified', 400);
 
@@ -69,10 +71,17 @@ function handleRequest() {
             $pictureType = $_POST['pictureType'];
             $appId = $_POST['applicationId'];
 
+            $application = $storage->getApplication($appId);
+
             $dateTime = isset($_POST['dateTime']) ? $_POST['dateTime'] : null;
             $dtFromPicture = isset($_POST['dtFromPicture']) ? $_POST['dtFromPicture'] == 'true' : null;
             $latLng = isset($_POST['latLng']) ? $_POST['latLng'] : null;
-            uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+            try {
+                $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+            } catch (Exception $e) {
+                raiseError($e->getMessage(), $e->getCode());
+            }
+            echo json_encode($application);
             break;
         case "geoToAddress":
             try {

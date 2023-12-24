@@ -46,7 +46,7 @@ if(isset($_GET['edit'])){
 }
 
 if(!isset($application)){ // new application mode
-    $application = new Application();
+    $application = Application::withUser($user);
     $storage->saveApplication($application);
     $_SESSION['newAppId'] = $application->id;
     $edit = false;

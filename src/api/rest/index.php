@@ -213,10 +213,45 @@ $app->patch('/app/{appId}/status/{status}', function (Request $request, Response
     } catch (Exception $e) {
         throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
     }
+$app->post('/app/{appId}/image', function (Request $request, Response $response, $args) use ($storage) {
+    $params = (array)$request->getParsedBody();
+    $pictureType = getParam($params, 'pictureType');  // carImage|contextImage
+    $uploadedFiles = $request->getUploadedFiles();
+    $image = reset($uploadedFiles);
+    
+    // valid only for $pictureType == 'carImage'
+    $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
+    $dtFromPicture = (bool)getParam($params, 'dtFromPicture', ''); // 1|0 - was date and time extracted from picture?
+    $latLng = getParam($params, 'latLng', ''); // lat,lng: 53.431786,14.551586
+
+    if ($image->getError() !== UPLOAD_ERR_OK) {
+        throw new HttpBadRequestException($request, "Error uploading file ". $image->getError());
+    }
+
+    if ($image->getSize() > 500000) {
+        throw new HttpBadRequestException($request, "Image too big.");
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $tmp_file = $image->getStream()->getMetadata('uri');
+    $mime = $finfo->file($tmp_file);
+
+    $validExtensions = array('jpg' => 'image/jpeg', 'png' => 'image/png');
+
+    $ext = array_search($mime, $validExtensions, true);
+    if (false === $ext) {
+        throw new HttpBadRequestException($request, "File type $ext is not supported");
+    }
+
+    $data = file_get_contents($tmp_file);
+    $imageBytes = base64_encode($data);
+    
+    $application = $request->getAttribute('application');
+    $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+    unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
 })->add(new AppMiddleware())->add(new LoginMiddleware())->add(new AuthMiddleware());
-
 
 $app->patch('/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
     $appId = $args['appId'];

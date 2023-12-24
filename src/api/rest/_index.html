@@ -28,29 +28,6 @@ $ACTIONS = [];
 
 try {
     switch ($action) {
-        case 'get-user-stats': // GET
-            // @TODO draft
-            $user = $storage->getCurrentUser();
-            // select case when json_extract(value, '$.statements.gallery') != 0 then 'zgoda' else 'brak zgody' end as statement,
-            //   case json_extract(value, '$.addedToGallery') = 0 when 1 then 'odrzucone' when 0 then 'zaakceptowane' else '   ' end as decyzja,
-            //   count(*) from applications where ${WHERE2} group by 1, 2 ;
-            echo json_encode($user);
-        case 'upload-app-image': // POST
-            $imageBytes = uploadedFileToBase64(); // requires file named 'image'
-            $pictureType = getParam('POST', 'pictureType');  // carImage|contextImage
-            $appId = getParam('POST', 'id'); // application id
-            
-            // valid only for $pictureType == 'carImage'
-            $dateTime = getParam('POST', 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
-            $dtFromPicture = (bool)getParam('POST', 'dtFromPicture', ''); // 1|0 - was date and time extracted from picture?
-            $latLng = getParam('POST', 'latLng', ''); // lat,lng: 53.431786,14.551586
-            uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
-            break;
-        case 'set-app-status':  // POST
-            $appId = getParam('POST', 'id'); // application id
-            $newStatus = getParam('POST', 'status'); // see statuses.json
-            setStatus($newStatus, $appId);
-            break;
 
 
     }

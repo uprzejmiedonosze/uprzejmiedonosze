@@ -249,19 +249,12 @@ function uploadedFileToBase64() {
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
+function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
     global $storage;
 
-    $semKey = $storage->getCurrentUser()->getNumber();
+    $semKey = $application->user->number;
     $semaphore = sem_get($semKey, 1, 0666, 1);
     sem_acquire($semaphore);
-
-    try {
-        $application = $storage->getApplication($appId);
-    } catch (Exception $e) {
-        $application = new Application();
-        $storage->saveApplication($application);
-    }
 
     $type = substr($pictureType, 0, 2);
     $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
@@ -277,12 +270,12 @@ function uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPictur
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
     } else {
         sem_release($semaphore);
-        raiseError("Unknown picture type: $pictureType ($appId)", 400);
+        throw new Exception("Unknown picture type: $pictureType ($application->id)", 400);
     }
 
     $storage->saveApplication($application);
     sem_release($semaphore);
-    echo json_encode($application);
+    return $application;
 }
 
 /**
