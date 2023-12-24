@@ -49,8 +49,8 @@ class Application extends JSONObject{
         $instance->address = new JSONObject();
         $instance->version = '2.1.0';
 
-        $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'no-user-agent-set';
-        $instance->browser = get_browser($userAgent, true);
+        $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        //$instance->browser = get_browser($userAgent, true);
         $instance->browser['user_agent'] = $userAgent;
         return $instance;
     }
