@@ -60,13 +60,13 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
 
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new LoginMiddleware(false))->add(new AuthMiddleware());
+})->add(new LoginMiddleware(false, false, true))->add(new AuthMiddleware());
 
 $app->patch('/user', function (Request $request, Response $response, $args) use ($storage) {
     $user = $request->getAttribute('user');
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new LoginMiddleware(false, true))->add(new AuthMiddleware());
+})->add(new LoginMiddleware(false, true, true))->add(new AuthMiddleware());
 
 $app->patch('/user/confirm-terms', function (Request $request, Response $response, $args) use ($storage) {
     $user = $request->getAttribute('user');
@@ -75,7 +75,7 @@ $app->patch('/user/confirm-terms', function (Request $request, Response $respons
     $user->isTermsConfirmed = $user->checkTermsConfirmation();
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new LoginMiddleware())->add(new AuthMiddleware());
+})->add(new LoginMiddleware(true, false, true))->add(new AuthMiddleware());
 
 $app->post('/user', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
@@ -97,7 +97,7 @@ $app->post('/user', function (Request $request, Response $response, $args) use (
 
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new LoginMiddleware(false))->add(new AuthMiddleware());
+})->add(new LoginMiddleware(false, false, true))->add(new AuthMiddleware());
 
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {

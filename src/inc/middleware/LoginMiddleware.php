@@ -10,9 +10,11 @@ use Slim\Exception\HttpNotFoundException;
 class LoginMiddleware implements MiddlewareInterface {
     private $registrationRequired = true;
     private $createIfNonExists = false;
-    public function __construct($registrationRequired=true, $createIfNonExists=false) {
+    private $withStats = false;
+    public function __construct($registrationRequired=true, $createIfNonExists=false, $withStats=false) {
         $this->registrationRequired = $registrationRequired;
         $this->createIfNonExists = $createIfNonExists;
+        $this->withStats = $withStats;
     }
 
     public function process(Request $request, RequestHandler $handler): Response {
@@ -35,7 +37,8 @@ class LoginMiddleware implements MiddlewareInterface {
         }
         $user->isRegistered = $user->isRegistered();
         $user->isTermsConfirmed = $user->checkTermsConfirmation();
-        $user->stats = $storage->getUserStats(true, $firebaseUser['user_email']);
+        if ($this->withStats)
+            $user->stats = $storage->getUserStats(true, $firebaseUser['user_email']);
         $request = $request->withAttribute('user', $user);
         return $handler->handle($request);
     }
