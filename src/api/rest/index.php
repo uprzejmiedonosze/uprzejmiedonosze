@@ -60,13 +60,15 @@ $app->get('/user', function (Request $request, Response $response, $args) use ($
 
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new UserMiddleware(false, false, true))->add(new AuthMiddleware());
+})  ->add(new UserMiddleware(false, true))
+    ->add(new AuthMiddleware());
 
 $app->patch('/user', function (Request $request, Response $response, $args) use ($storage) {
     $user = $request->getAttribute('user');
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new UserMiddleware(false, true, true))->add(new AuthMiddleware());
+})  ->add(new UserMiddleware(true, true))
+    ->add(new AuthMiddleware());
 
 $app->patch('/user/confirm-terms', function (Request $request, Response $response, $args) use ($storage) {
     $user = $request->getAttribute('user');
@@ -75,7 +77,9 @@ $app->patch('/user/confirm-terms', function (Request $request, Response $respons
     $user->isTermsConfirmed = $user->checkTermsConfirmation();
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new UserMiddleware(true, false, true))->add(new AuthMiddleware());
+})  ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware(false, true))
+    ->add(new AuthMiddleware());
 
 $app->post('/user', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
@@ -97,7 +101,8 @@ $app->post('/user', function (Request $request, Response $response, $args) use (
 
     $response->getBody()->write(json_encode($user));
     return $response;
-})->add(new UserMiddleware(false, false, true))->add(new AuthMiddleware());
+})  ->add(new UserMiddleware(false, false, true))
+    ->add(new AuthMiddleware());
 
 
 $app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
@@ -112,7 +117,9 @@ $app->get('/user/apps', function (Request $request, Response $response, $args) u
     
     $response->getBody()->write(json_encode($apps));
     return $response;
-})->add(new UserMiddleware())->add(new AuthMiddleware());
+})  ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 // CONFIG
 
@@ -144,7 +151,9 @@ $app->post('/app/new', function (Request $request, Response $response, $args) us
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
-})->add(new UserMiddleware())->add(new AuthMiddleware());
+})  ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 $app->get('/app/{appId}', function (Request $request, Response $response, $args) use ($storage) {   
     $user = $request->getAttribute('user');
@@ -160,7 +169,10 @@ $app->get('/app/{appId}', function (Request $request, Response $response, $args)
 
     $response->getBody()->write(json_encode($application));
     return $response;
-})->add(new AppMiddleware(false))->add(new UserMiddleware())->add(new AuthMiddleware());
+})  ->add(new AppMiddleware(false))
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 $app->post('/app/{appId}', function (Request $request, Response $response, $args) {
     $appId = $args['appId'];
@@ -202,7 +214,10 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
-})->add(new AppMiddleware())->add(new UserMiddleware())->add(new AuthMiddleware());
+})  ->add(new AppMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 
 $app->patch('/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
@@ -217,7 +232,10 @@ $app->patch('/app/{appId}/status/{status}', function (Request $request, Response
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
-})->add(new AppMiddleware())->add(new UserMiddleware())->add(new AuthMiddleware());
+})  ->add(new AppMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 $app->post('/app/{appId}/image', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
@@ -257,7 +275,10 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
-})->add(new AppMiddleware())->add(new UserMiddleware())->add(new AuthMiddleware());
+})  ->add(new AppMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 $app->patch('/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
     $appId = $args['appId'];
@@ -272,7 +293,10 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
-})->add(new AppMiddleware())->add(new UserMiddleware())->add(new AuthMiddleware());
+})  ->add(new AppMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 
 // GEO

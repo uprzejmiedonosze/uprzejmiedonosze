@@ -8,11 +8,9 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
 
 class UserMiddleware implements MiddlewareInterface {
-    private $registrationRequired = true;
     private $createIfNonExists = false;
     private $withStats = false;
-    public function __construct($registrationRequired=true, $createIfNonExists=false, $withStats=false) {
-        $this->registrationRequired = $registrationRequired;
+    public function __construct($createIfNonExists=false, $withStats=false) {
         $this->createIfNonExists = $createIfNonExists;
         $this->withStats = $withStats;
     }
@@ -32,9 +30,6 @@ class UserMiddleware implements MiddlewareInterface {
             $storage->saveUser($user);
         }
 
-        if($this->registrationRequired && !$user->isRegistered()) {
-            throw new HttpForbiddenException($request, "User is not registered!");
-        }
         $user->isRegistered = $user->isRegistered();
         $user->isTermsConfirmed = $user->checkTermsConfirmation();
         if ($this->withStats)
@@ -44,4 +39,14 @@ class UserMiddleware implements MiddlewareInterface {
     }
 }
 
+
+class RegisteredMiddleware implements MiddlewareInterface {
+    public function process(Request $request, RequestHandler $handler): Response {
+        $user = $request->getAttribute('user');
+        if(!$user->isRegistered()) {
+            throw new HttpForbiddenException($request, "User is not registered!");
+        }
+        return $handler->handle($request);
+    }
+}
 
