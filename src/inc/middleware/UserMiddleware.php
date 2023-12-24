@@ -7,7 +7,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
 
-class LoginMiddleware implements MiddlewareInterface {
+class UserMiddleware implements MiddlewareInterface {
     private $registrationRequired = true;
     private $createIfNonExists = false;
     private $withStats = false;
