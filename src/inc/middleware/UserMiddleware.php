@@ -24,7 +24,7 @@ class UserMiddleware implements MiddlewareInterface {
             if (!$this->createIfNonExists) {
                 throw new HttpNotFoundException($request, null, $e);
             }
-            $user = User::withEmail($firebaseUser['user_email']);
+            $user = User::withFirebaseUser($firebaseUser);
             $storage->saveUser($user);
         }
 

@@ -34,9 +34,10 @@ class User extends JSONObject{
         $this->appsCount = 0;
     }
 
-    public static function withEmail($email) {
+    public static function withFirebaseUser($firebaseUser) {
         $instance = new self();
-        $instance->data->email = $email;
+        $instance->data->email = $firebaseUser['user_email'];
+        $instance->data->name = $firebaseUser['user_name'];
         return $instance;
     }
 
