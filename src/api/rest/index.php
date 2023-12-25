@@ -30,7 +30,7 @@ $app->addRoutingMiddleware();
  * @param bool                  $logErrors -> Parameter is passed to the default ErrorHandler
  * @param bool                  $logErrorDetails -> Display error details in error log
  */
-$errorMiddleware = $app->addErrorMiddleware(false, true, true);
+$errorMiddleware = $app->addErrorMiddleware(false, false, false);
 
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('application/json');
@@ -56,18 +56,15 @@ $app->add(function ($request, $handler) {
 // USER
 
 $app->get('/user', function (Request $request, Response $response, $args) use ($storage) {
-    $user = $request->getAttribute('user');
-
-    $response->getBody()->write(json_encode($user));
     return $response;
-})  ->add(new UserMiddleware(false, true))
+})  ->add(new AddStatsMiddleware())
+    ->add(new UserMiddleware($createIfNonExists=false))
     ->add(new AuthMiddleware());
 
 $app->patch('/user', function (Request $request, Response $response, $args) use ($storage) {
-    $user = $request->getAttribute('user');
-    $response->getBody()->write(json_encode($user));
     return $response;
-})  ->add(new UserMiddleware(true, true))
+})  ->add(new AddStatsMiddleware())
+    ->add(new UserMiddleware(true))
     ->add(new AuthMiddleware());
 
 $app->patch('/user/confirm-terms', function (Request $request, Response $response, $args) use ($storage) {
@@ -75,10 +72,10 @@ $app->patch('/user/confirm-terms', function (Request $request, Response $respons
     $user->confirmTerms();
     $storage->saveUser($user);
     $user->isTermsConfirmed = $user->checkTermsConfirmation();
-    $response->getBody()->write(json_encode($user));
     return $response;
 })  ->add(new RegisteredMiddleware())
-    ->add(new UserMiddleware(false, true))
+    ->add(new AddStatsMiddleware())
+    ->add(new UserMiddleware($createIfNonExists=false))
     ->add(new AuthMiddleware());
 
 $app->post('/user', function (Request $request, Response $response, $args) use ($storage) {
@@ -98,10 +95,9 @@ $app->post('/user', function (Request $request, Response $response, $args) use (
     $storage->saveUser($user);
     $user->isRegistered = $user->isRegistered();
     $request = $request->withAttribute('user', $user);
-
-    $response->getBody()->write(json_encode($user));
     return $response;
-})  ->add(new UserMiddleware(false, false, true))
+})  ->add(new AddStatsMiddleware())
+    ->add(new UserMiddleware($createIfNonExists=false))
     ->add(new AuthMiddleware());
 
 
@@ -151,7 +147,8 @@ $app->post('/app/new', function (Request $request, Response $response, $args) us
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
-})  ->add(new RegisteredMiddleware())
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
 
@@ -169,7 +166,8 @@ $app->get('/app/{appId}', function (Request $request, Response $response, $args)
 
     $response->getBody()->write(json_encode($application));
     return $response;
-})  ->add(new AppMiddleware(false))
+})  ->add(new AppMiddleware($failOnWrongOwnership=false))
+    ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
@@ -215,6 +213,7 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
     $response->getBody()->write(json_encode($application));
     return $response;
 })  ->add(new AppMiddleware())
+    ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
@@ -233,6 +232,7 @@ $app->patch('/app/{appId}/status/{status}', function (Request $request, Response
     $response->getBody()->write(json_encode($application));
     return $response;
 })  ->add(new AppMiddleware())
+    ->add(new TermsConfirmedMiddleware())    
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
@@ -276,6 +276,7 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
     $response->getBody()->write(json_encode($application));
     return $response;
 })  ->add(new AppMiddleware())
+    ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
@@ -294,6 +295,7 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
     $response->getBody()->write(json_encode($application));
     return $response;
 })  ->add(new AppMiddleware())
+    ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
