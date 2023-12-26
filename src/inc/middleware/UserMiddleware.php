@@ -22,7 +22,7 @@ class UserMiddleware implements MiddlewareInterface {
             $user = $storage->getUser($firebaseUser['user_email']);
         }catch(Exception $e){
             if (!$this->createIfNonExists) {
-                throw new HttpNotFoundException($request, null, $e);
+                throw new HttpNotFoundException($request, $e->getMessage(), $e);
             }
             $user = User::withFirebaseUser($firebaseUser);
             $storage->saveUser($user);
@@ -42,7 +42,7 @@ class RegisteredMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
         $user = $request->getAttribute('user');
         if(!$user->isRegistered) {
-            throw new HttpForbiddenException($request, "User is not registered!");
+            throw new HttpForbiddenException($request, "Nie możesz wykonać tej operacji przed rejestracją");
         }
         return $handler->handle($request);
     }
@@ -55,7 +55,7 @@ class TermsConfirmedMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
         $user = $request->getAttribute('user');
         if(!$user->isTermsConfirmed) {
-            throw new HttpForbiddenException($request, "User hasn't confirmed terms of use!");
+            throw new HttpForbiddenException($request, "Nie możesz wykonać tej opracji przed potwierdzeniem regulaminu");
         }
         return $handler->handle($request);
     }

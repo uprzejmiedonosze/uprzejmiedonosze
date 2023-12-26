@@ -132,7 +132,7 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
     
     if (!in_array($name, $CONFIG_FILES))
         throw new HttpNotFoundException($request,
-            "Config $name not found. Available " . join(", ", $CONFIG_FILES));
+            "Nie znam konfiguracji o nazwie '$name'");
 
     $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
     return $response;
@@ -207,7 +207,7 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
         $application = updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
             $plateId, $comment, $witness, $extensions, $user->getEmail());
     } catch (Exception $e) {
-        throw new HttpForbiddenException($request, $e->getMessage());
+        throw new HttpForbiddenException($request, $e->getMessage(), $e);
     }
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
@@ -249,11 +249,11 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
     $latLng = getParam($params, 'latLng', ''); // lat,lng: 53.431786,14.551586
 
     if ($image->getError() !== UPLOAD_ERR_OK) {
-        throw new HttpBadRequestException($request, "Error uploading file ". $image->getError());
+        throw new HttpBadRequestException($request, "Nie udało się pobrać pliku: ". $image->getError());
     }
 
     if ($image->getSize() > 500000) {
-        throw new HttpBadRequestException($request, "Image too big.");
+        throw new HttpBadRequestException($request, "Zbyt duże zdjęcie (>500kb)");
     }
 
     $finfo = new finfo(FILEINFO_MIME_TYPE);
@@ -264,7 +264,7 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
 
     $ext = array_search($mime, $validExtensions, true);
     if (false === $ext) {
-        throw new HttpBadRequestException($request, "File type $ext is not supported");
+        throw new HttpBadRequestException($request, "Niewspierane rozszerzenie $ext");
     }
 
     $data = file_get_contents($tmp_file);
@@ -287,7 +287,7 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
     $user = $request->getAttribute('user');
 
     if ($application->user->email !== $user->getEmail()) {
-        throw new HttpForbiddenException($request, "User '{$user->getEmail()}' is not allowed to send app '$appId'");
+        throw new HttpForbiddenException($request, "Użytkownik '{$user->getEmail()}' nie ma uprawnień do wysłania zgłoszenia '$appId'");
     }
 
     $application = sendApplication($appId);

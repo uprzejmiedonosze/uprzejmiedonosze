@@ -188,7 +188,7 @@ class DB extends NoSQLite{
     public function getUser($email){
         $json = $this->users->get($email);
         if(!$json){
-            throw new Exception("Próba pobrania nieistniejącego użytkownika $email.");
+            throw new Exception("Próba pobrania nieistniejącego użytkownika '$email'");
         }
         $user = new User($json);
         return $user;
@@ -220,11 +220,11 @@ class DB extends NoSQLite{
 
     public function getApplication($appId){
         if(!$appId){
-            throw new Exception("Próba pobrania zgłoszenia bez podania numeru.");
+            throw new Exception("Próba pobrania zgłoszenia bez podania numeru");
         }
         $json = $this->apps->get($appId);
         if(!$json){
-            throw new Exception("Próba pobrania nieistniejącego zgłoszenia $appId.");
+            throw new Exception("Próba pobrania nieistniejącego zgłoszenia '$appId'");
         }
         $application = Application::withJson($json);
         return $application;
@@ -389,7 +389,7 @@ class DB extends NoSQLite{
 
     public function getUsers(){
         if(!isAdmin()){
-            throw new Exception('Dostęp zabroniony.');
+            throw new Exception('Dostęp zabroniony');
         }
         $ret = Array();
         foreach($this->users->getAll() as $email => $json){
@@ -400,7 +400,7 @@ class DB extends NoSQLite{
 
     public function execute($sql){
         if(!isAdmin()){
-            throw new Exception('Dostęp zabroniony.');
+            throw new Exception('Dostęp zabroniony');
         }
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -582,7 +582,7 @@ SQL;
      */
     public function getGalleryModerationApps(){
         if(!isAdmin()){
-            throw new Exception('Dostęp zabroniony.');
+            throw new Exception('Dostęp zabroniony');
         }
 
 		  $sql = <<<SQL
@@ -676,7 +676,7 @@ SQL;
 
     public function getAppByNumber($number, $apiToken){
         if($apiToken !== API_TOKEN){
-            throw new Exception('Dostęp zabroniony.');
+            throw new Exception('Dostęp zabroniony');
         }
         $sql = <<<SQL
             select value 
@@ -694,7 +694,7 @@ SQL;
 
     public function getUserByName($name, $apiToken){
         if($apiToken !== API_TOKEN){
-            throw new Exception('Dostęp zabroniony.');
+            throw new Exception('Dostęp zabroniony');
         }
         $sql = <<<SQL
             select key, value 

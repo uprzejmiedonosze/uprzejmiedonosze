@@ -167,13 +167,13 @@ class Application extends JSONObject{
         $now = date(DT_FORMAT);
 
         if(!array_key_exists($status, $STATUSES)){
-            throw new Exception("Odmawiam ustawienia statusu na $status");
+            throw new Exception("Odmawiam ustawienia statusu na '$status'");
         }
         if($status == $this->status){
             logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}");
             return;
         }elseif(!in_array($status, $this->getStatus()->allowed)){
-            throw new Exception("Odmawiam zmiany statusu z {$this->status} na $status dla zgłoszenia {$this->id}");
+            throw new Exception("Odmawiam zmiany statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
         }
         if(!isset($this->statusHistory)){
             $this->statusHistory = [];

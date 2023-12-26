@@ -38,11 +38,11 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     }
 
     if ($application->user->email !== $userEmail) {
-        throw new Exception("Refuse to update app '$appId' by non-owner '$userEmail'.");
+        throw new Exception("Odmawiam aktualizacji zgłoszenia '$appId' przez '$userEmail'");
     }
 
     if(!$application->isEditable()){
-        throw new Exception("Application in status {$application->status} can't be udpated");
+        throw new Exception("Zgłoszenie w stanie '{$application->status}' nie może być aktualizowane");
     }
 
     $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
@@ -274,7 +274,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
     } else {
         sem_release($semaphore);
-        throw new Exception("Unknown picture type: $pictureType ($application->id)", 400);
+        throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($application->id)", 400);
     }
 
     $storage->saveApplication($application);

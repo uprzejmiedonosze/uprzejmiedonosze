@@ -6,10 +6,10 @@ abstract class CityAPI {
 
     function checkApplication(&$application){
         if($application->status !== 'confirmed'){
-            throw new Exception("Próba wysłania zgłoszenia $application->id w statusie $application->status.");
+            throw new Exception("Próba wysłania zgłoszenia '$application->id' w statusie '$application->status'");
         }
         if(!$application->guessSMData()->api){
-            throw new Exception("Próba wysłania zgłoszenia $application->id dla miasta "
+            throw new Exception("Próba wysłania zgłoszenia '$application->id' dla miasta "
                . $application->guessSMData()->city);
         }
         return true;

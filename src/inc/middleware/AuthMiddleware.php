@@ -45,7 +45,7 @@ class AuthMiddleware implements MiddlewareInterface {
         try {
             $_token = JWT::decode($jwt, new Key($key, $algorithm));
         } catch (InvalidArgumentException $e) {
-            throw new HttpBadRequestException($request, null, $e);
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
         } catch (DomainException // provided algorithm is unsupported OR provided key is invalid
             | SignatureInvalidException // provided JWT signature verification failed.
             | BeforeValidException // provided JWT is trying to be used before "nbf" claim OR before "iat" claim
@@ -53,7 +53,7 @@ class AuthMiddleware implements MiddlewareInterface {
             | UnexpectedValueException // provided JWT is malformed OR is missing an algorithm / using an unsupported algorithm OR algorithm does not match provided key OR key ID in key/key-array is empty or invalid.
             $e) {
             
-            throw new HttpForbiddenException($request, null, $e);
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
         }    
         $user = $this->verifyToken($jwt, $request);
         $request = $request->withAttribute('firebaseUser', $user);
@@ -75,10 +75,10 @@ class AuthMiddleware implements MiddlewareInterface {
             );
         } catch (Exception $e) {
             if (isProd()) \Sentry\captureException($e);
-            throw new HttpForbiddenException($request, null, $e);
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
         } catch (Throwable $e) {
             if (isProd()) \Sentry\captureException($e);
-            throw new HttpForbiddenException($request, null, $e);
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
         }
     }
 
