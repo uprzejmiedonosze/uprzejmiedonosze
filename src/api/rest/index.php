@@ -83,10 +83,11 @@ $app->post('/user', function (Request $request, Response $response, $args) use (
     $name = capitalizeName(getParam($params, 'name'));
     $address = str_replace(', Polska', '', getParam($params, 'address'));
     $msisdn = getParam($params, 'msisdn', '');
-    $exposeData = (bool) getParam($params, 'exposeData', 'N') == 'Y';
-
-    $stopAgresji = (bool) (getParam($params, 'stopAgresji', 'SM') == 'SA');
-    $autoSend = (bool) (getParam($params, 'autoSend', 'Y') == 'Y');
+    $exposeData = getParam($params, 'exposeData', 'N') == 'Y';
+    if ($exposeData) throw new HttpBadRequestException($request, "Naprawdę chcesz ukrywać swoje dane.");
+    $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
+    $autoSend = getParam($params, 'autoSend', 'Y') == 'Y';
+    if (!$autoSend) throw new HttpBadRequestException($request, "Odmawiam wyłączenia funkcji automatycznej wysyłki zgłoszeń");
     $myAppsSize = getParam($params, 'myAppsSize', 200);
 
     $user = $request->getAttribute('user');
@@ -181,7 +182,7 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
     $city = getParam($params, 'city');
     $voivodeship = getParam($params, 'voivodeship');
     $district = getParam($params, 'district');
-    $dtFromPicture = (bool)getParam($params, 'dtFromPicture'); // 1|0 - was date and time extracted from picture?
+    $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
 
     $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
 
