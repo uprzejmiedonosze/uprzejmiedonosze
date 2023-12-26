@@ -19,6 +19,5 @@ class ErrorRenderer implements ErrorRendererInterface {
             $response["reason"] = $previous->getMessage();
         }
         return json_encode($response, JSON_PRETTY_PRINT); // JSON_UNESCAPED_UNICODE
-        
     }
 }

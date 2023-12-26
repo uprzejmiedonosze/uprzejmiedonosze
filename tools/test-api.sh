@@ -140,7 +140,7 @@ testOutput PATCH "/user" .isRegistered "false" "$AUTH"
 Test Get user
 testOutput GET "/user" .isTermsConfirmed "false" "$AUTH"
 Test Get apps
-testOutput GET "/user/apps" .error "User is not registered!" "$AUTH"
+testOutput GET "/user/apps" .error "Nie możesz wykonać tej operacji przed rejestracją" "$AUTH"
 Test Register, bad
 testOutput POST "/user" .error "Missing required parameter 'address'" "$AUTH" '--form 'name="new-name"''
 Test Register
@@ -161,9 +161,9 @@ Test Get drafts
 testOutput GET "/user/apps?status=draft" length 1 "$AUTH"
 APP_ID=$(getFirstDraftId)
 Test Failed change status
-testOutput PATCH "/app/$APP_ID/status/confirmed" .reason "Odmawiam zmiany statusu z draft na confirmed dla zgłoszenia $APP_ID" "$AUTH"
+testOutput PATCH "/app/$APP_ID/status/confirmed" .reason "Odmawiam zmiany statusu z 'draft' na 'confirmed' dla zgłoszenia '$APP_ID'" "$AUTH"
 Test Failed send
-testOutput PATCH "/app/$APP_ID/send" .error "Nie mogę wysłać zgłoszenia w statusie draft" "$AUTH"
+testOutput PATCH "/app/$APP_ID/send" .error "Nie mogę wysłać zgłoszenia '$APP_ID' w statusie 'draft'" "$AUTH"
 Test Add image
 testOutput POST "/app/$APP_ID/image" .carImage.url "cdn2/$USER_NUMBER/$APP_ID,ca.jpg" "$AUTH" \
     '--form 'image=@"/Users/szn/dev/webapp/cypress/fixtures/img_p.jpg"' --form 'pictureType="carImage"''

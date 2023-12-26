@@ -4,12 +4,12 @@ use \Exception as Exception;
 abstract class CityAPI {
     abstract function send(&$application);
 
-    function checkApplication(&$application){
+    static function checkApplication(&$application){
         if($application->status !== 'confirmed'){
-            throw new Exception("Próba wysłania zgłoszenia '$application->id' w statusie '$application->status'");
+            throw new Exception("Nie mogę wysłać zgłoszenia '$application->id' w statusie '$application->status'");
         }
         if(!$application->guessSMData()->api){
-            throw new Exception("Próba wysłania zgłoszenia '$application->id' dla miasta "
+            throw new Exception("Nie mogę wysłać zgłoszenia '$application->id' dla miasta "
                . $application->guessSMData()->city);
         }
         return true;

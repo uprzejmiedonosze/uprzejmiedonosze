@@ -104,15 +104,8 @@ function sendApplication($appId) {
     global $storage;
 
     $application = $storage->getApplication($appId);
-    if ($application->status !== 'confirmed') {
-        throw new Exception("Nie mogę wysłać zgłoszenia w statusie {$application->status}", 400);
-    }
-
+    CityAPI::checkApplication($application);
     $sm = $application->guessSMData();
-
-    if (!$sm->api) {
-        throw new Exception("SM " . $sm->city . " nie posiada API", 500);
-    }
     $api = new $sm->api;
     $application = $api->send($application);
     _sendSlackOnNewApp($application);
