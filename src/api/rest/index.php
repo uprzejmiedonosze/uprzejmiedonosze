@@ -248,8 +248,8 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
     
     // valid only for $pictureType == 'carImage'
     $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
-    $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
     $latLng = getParam($params, 'latLng', ''); // lat,lng: 53.431786,14.551586
+    $dtFromPicture = !!$dateTime;
 
     if ($image->getError() !== UPLOAD_ERR_OK) {
         throw new HttpBadRequestException($request, "Nie udało się pobrać pliku: ". $image->getError());
