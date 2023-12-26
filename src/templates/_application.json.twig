@@ -1,0 +1,38 @@
+{
+    "application": [
+        { "text": "W dniu" }
+        ,{ "emphasis": "{{ app.getDate }}"}
+        ,{ "text": "{{ app.getDateTimeDivider }}"}
+        ,{ "emphasis": "{{ app.getTime }}"}
+        ,{ "text": "{{ app.guessUserSex.bylam }} świadkiem pozostawienia pojazdu o nr. rejestracyjnym"}
+        ,{ "emphasis": "{{ app.carInfo.plateId ?? '...' }}"}
+    {% if app.getRecydywa > 1 %}
+        ,{ "sup": "recydywa {{ app.getRecydywa }}"}
+    {% endif %}
+        ,{ "text": "w okolicy adresu" }
+        ,{ "emphasis": "{{ app.address.address ?? '...' }}"}
+        ,{ "text": "{{ app.getCategory.short }}{{ app.getExtensionsText() }}"}
+        ,{ "text": "Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie."}
+    {% if app.statements is not defined or not app.statements.witness %}
+        ,{ "text": "Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania." }
+    {% endif %}
+    ]
+{% if app.userComment is defined and app.userComment %}
+    ,"comment": "{{ app.userComment }}"
+{% endif %}
+{% if app.user.exposeData is not defined or not app.user.exposeData %}
+    ,"exposeData": "Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail"
+{% endif %}
+{% if app.sent is defined %}
+    ,"sent": {
+{% if app.sent.method == 'Mail' %}
+    "info": "To zgłoszenie zostało wysłane do {{ app.sent.to }} bezpośrednio z serwera Uprzejmie Donoszę w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}."
+{% elseif app.sent.method == 'manual' %}
+    "info": "To zgłoszenie zostało wysłane przez Ciebie ręcznie do {{ app.sent.to }} w dniu {{ app.sent.date|date('Y-m-d') }} około godziny {{ app.sent.date|date('H:i') }}."
+{% else %} {# API #}
+    "info": "To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }} w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}        poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest dla {{ app.guessSMData.getShortName }} w następującej postaci:",
+    "api": "{% include('_application.txt.twig') %}"
+{% endif %}
+    }
+{% endif %} {# app.sent #}
+}

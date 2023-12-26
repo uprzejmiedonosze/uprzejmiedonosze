@@ -157,6 +157,8 @@ $app->get('/app/{appId}', function (Request $request, Response $response, $args)
     $user = $request->getAttribute('user');
     $application = $request->getAttribute('application');
 
+    $application->formattedText = json_decode(generate('_application.json.twig', ['app' => $application]));
+
     if ($application->user->email !== $user->getEmail()) {
         $application->user->email = '';
         $application->user->name = '';
@@ -246,7 +248,7 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
     
     // valid only for $pictureType == 'carImage'
     $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
-    $dtFromPicture = (bool)getParam($params, 'dtFromPicture', ''); // 1|0 - was date and time extracted from picture?
+    $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
     $latLng = getParam($params, 'latLng', ''); // lat,lng: 53.431786,14.551586
 
     if ($image->getError() !== UPLOAD_ERR_OK) {
