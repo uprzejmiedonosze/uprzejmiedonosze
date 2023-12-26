@@ -7,7 +7,7 @@ BLUE="\033[0;35m"
 LIGHT_GRAY="\033[1;30m"
 RESET_COLOR="\033[m"
 
-function usage() { echo -e "$*\nUsage: $(basename $0) [-v] [-t jwt]"; }
+function usage() { echo -e "$*\nUsage: $(basename "$0") [-v] [-t jwt]"; }
 function tGroup() { echo -e "\n$BLUE$*$RESET_COLOR"; }
 function Test() { echo -n "  $*"; }
 function log() { echo -e "$LIGHT_GRAY$*$RESET_COLOR"; }
@@ -86,8 +86,10 @@ function testOutput() {
     local FORM="${6:-}"
 
     echo -en " $LIGHT_GRAY$1 $2 $3 == $4...$RESET_COLOR "
-    RAW=$($CURL -X $1 $HOST$2 -H "$AUTH" $FORM)
-    OUTPUT=$(echo "$RAW" | jq -r $3 || true)
+    # shellcheck disable=SC2086
+    RAW=$($CURL -X "$1" "$HOST$2" -H "$AUTH" $FORM)
+    OUTPUT=$(echo "$RAW" | jq -r "$3" || true)
+    # shellcheck disable=SC2015
     test "$OUTPUT" = "$4" && PASS || FAIL "$OUTPUT" "$RAW"
 }
 
