@@ -125,15 +125,23 @@ class User extends JSONObject{
      * Updates current user's data.
      */
     function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize){
-        if(isset($this->added)){
+        if(isset($this->added))
             $this->updated = date(DT_FORMAT);
-        }
-        $this->data->name = $name;
+
+        $this->data->name = capitalizeName($name);
+        if (!preg_match("/^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i", $this->data->name))
+            throw new Exception("Podaj pełne imię i nazwisko, bez znaków specjalnych", 403);
+
+        $this->data->address = str_replace(', Polska', '', trim($address));
+        if (!preg_match("/^.{3,50}\d.{3,40}$/i", $this->data->address))
+            throw new Exception("Podaj adres z ulicą, numerem mieszkania i miejscowością", 403);
+    
         $this->data->sex = guess_sex_by_name($this->data->name);
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
         if(isset($autoSend)) $this->data->autoSend = $autoSend;
         if(isset($myAppsSize)) $this->data->myAppsSize = $myAppsSize;
+        
         $this->data->address = $address;
         $this->data->exposeData = $exposeData;
         return true;

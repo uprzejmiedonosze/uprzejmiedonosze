@@ -1,9 +1,9 @@
-import { checkAddress, checkValue } from "../lib/validation";
+import { checkValueRe } from "../lib/validation";
 import { initAutocompleteRegister } from "../lib/geolocation";
 
 function validateRegisterForm() {
-  var ret = checkValue($("#name"), 6);
-  ret = checkAddress($("#address")) && ret;
+  ret = checkValueRe($("#name"), /^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i)
+  ret = checkValueRe($("#address"), /^.{3,50}\d.{3,40}$/i) && ret
   if (!ret) {
     $(window).scrollTop($(".error").offset().top - 100);
   }

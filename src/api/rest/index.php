@@ -80,8 +80,8 @@ $app->patch('/user/confirm-terms', function (Request $request, Response $respons
 
 $app->post('/user', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
-    $name = capitalizeName(getParam($params, 'name'));
-    $address = str_replace(', Polska', '', getParam($params, 'address'));
+    $name = getParam($params, 'name');
+    $address = getParam($params, 'address');
     $msisdn = getParam($params, 'msisdn', '');
     $exposeData = getParam($params, 'exposeData', 'N') == 'Y';
     if ($exposeData) throw new HttpBadRequestException($request, "Naprawdę chcesz ukrywać swoje dane.");

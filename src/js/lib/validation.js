@@ -38,6 +38,13 @@ export const checkValue = function (item, minLength) {
   return false
 }
 
+export const checkValueRe = function(item, regex) {
+  if (item.val().trim().match(regex))
+    return true
+  item.addClass("error")
+  return false
+}
+
 export const checkCommentvalue = function () {
   let comment = $("#comment").val().trim()
   comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[ -]\w*/, '').trim()
