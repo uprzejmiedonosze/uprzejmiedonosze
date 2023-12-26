@@ -55,13 +55,13 @@ $app->add(function ($request, $handler) {
 
 // USER
 
-$app->get('/user', function (Request $request, Response $response, $args) use ($storage) {
+$app->get('/user', function (Request $request, Response $response, $args) {
     return $response;
 })  ->add(new AddStatsMiddleware())
     ->add(new UserMiddleware($createIfNonExists=false))
     ->add(new AuthMiddleware());
 
-$app->patch('/user', function (Request $request, Response $response, $args) use ($storage) {
+$app->patch('/user', function (Request $request, Response $response, $args) {
     return $response;
 })  ->add(new AddStatsMiddleware())
     ->add(new UserMiddleware(true))

@@ -2,15 +2,11 @@
 require_once(__DIR__ . '/include.php');
 require(__DIR__ . '/alpr.php');
 
-use \Application as Application;
 use \Memcache as Memcache;
 use \stdClass as stdClass;
 use \finfo as finfo;
 use \DateTime as DateTime;
 use \Exception as Exception;
-
-use Slim\Exception\HttpNotFoundException;
-use Slim\Exception\HttpInternalServerErrorException;
 
 
 function checkRegistrationStatus() {
