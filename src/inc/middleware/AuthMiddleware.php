@@ -17,6 +17,13 @@ use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
 
 class AuthMiddleware implements MiddlewareInterface {
+    private $cache;
+
+    public function __construct() {
+        $this->cache = new Memcache;
+        $this->cache->connect('localhost', 11211);
+    }
+        
     public function process(Request $request, RequestHandler $handler): Response {
         $algorithm = 'RS256';
 
@@ -61,18 +68,24 @@ class AuthMiddleware implements MiddlewareInterface {
     }
 
     private function verifyToken($token, $request){
+        $cacheKey = '%HOST%-' . $token;
+        $firebaseUser = $this->cache->get($cacheKey);
+        if ($firebaseUser) return json_decode($firebaseUser, true);
+
         $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../%HOST%-firebase-adminsdk.json');
         $auth = $factory->createAuth();
 
         try {
             $verifiedIdToken = $auth->verifyIdToken($token);
             $claims = $verifiedIdToken->claims();
-            return Array(
+            $firebaseUser = Array(
                 'user_email' => ('%HOST%' === 'uprzejmiedonosze.localhost') ? 'e@nieradka.net' : $claims->get('email'),
                 'user_name' => $claims->get('name'),
                 'user_picture' => $claims->get('picture'),
                 'user_id' => $claims->get('user_id')
             );
+            $this->cache->set($cacheKey, json_encode($firebaseUser), 0, $claims->get('exp')->getTimestamp() - 60);
+            return $firebaseUser;
         } catch (Exception $e) {
             if (isProd()) \Sentry\captureException($e);
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
@@ -86,13 +99,9 @@ class AuthMiddleware implements MiddlewareInterface {
      * Retrieves (cached) public keys from Firebase's server
      */
     private function getPublicKeys($request) {
-        $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
-
-        $cache = new Memcache;
-        $cache->connect('localhost', 11211);
+        $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';        
         $cacheKey = '%HOST%-firebase-keys';
-
-        $keys = $cache->get($cacheKey);
+        $keys = $this->cache->get($cacheKey);
         if ($keys) return json_decode($keys, true);
 
         $publicKeys = file_get_contents($publicKeyUrl);
@@ -102,7 +111,7 @@ class AuthMiddleware implements MiddlewareInterface {
         $cacheControl = $this->parseHeaders($http_response_header)['Cache-Control'];
         preg_match('/max-age=(\d+)/', $cacheControl, $out);
         $timeout = $out[1];
-        $cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
+        $this->cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
 
         return json_decode($publicKeys, true);
     }
