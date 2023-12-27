@@ -6,6 +6,7 @@ use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
+use Slim\Exception\HttpException;
 
 $DISABLE_SESSION=true;
 
@@ -15,7 +16,6 @@ set_error_handler("ApiErrorHandler");
 
 require(INC_DIR . '/include.php');
 require(INC_DIR . '/API.php');
-require(INC_DIR . '/middleware/ApiUtils.php');
 require(INC_DIR . '/middleware/JsonBodyParser.php');
 require(INC_DIR . '/middleware/ErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
@@ -267,7 +267,7 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
 
     $ext = array_search($mime, $validExtensions, true);
     if (false === $ext) {
-        throw new HttpBadRequestException($request, "Niewspierane rozszerzenie $ext");
+        throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
     }
 
     $data = file_get_contents($tmp_file);
@@ -328,3 +328,11 @@ $app->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request, $respons
 });
 
 $app->run();
+
+function getParam(array $params, string $name, mixed $default=null) {
+    $param = $params[$name] ?? $default;
+    if (is_null($param)) {
+        throw new MissingParamException($name);
+    }
+    return $param;
+}

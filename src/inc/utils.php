@@ -1,5 +1,6 @@
 <?PHP
 require_once(__DIR__ . '/config.php');
+require_once(__DIR__ . '/Exceptions.php');
 use \Exception as Exception;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 use \Twig\Environment as Environment;
