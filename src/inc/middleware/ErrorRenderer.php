@@ -11,6 +11,8 @@ class ErrorRenderer implements ErrorRendererInterface {
         );
         if ($exception instanceof HttpException)
             $response["description"] = $exception->getDescription();
+        if ($exception instanceof MissingParamException)
+            $response["param"] = $exception->getParam();
         if (!isProd()) {
             $response["location"] = $exception->getFile() . ":" . $exception->getLine();
         }
@@ -18,6 +20,6 @@ class ErrorRenderer implements ErrorRendererInterface {
         if ($previous) {
             $response["reason"] = $previous->getMessage();
         }
-        return json_encode($response, JSON_PRETTY_PRINT); // JSON_UNESCAPED_UNICODE
+        return json_encode($response); // JSON_UNESCAPED_UNICODE
     }
 }

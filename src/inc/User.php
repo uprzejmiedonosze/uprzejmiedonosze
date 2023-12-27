@@ -130,11 +130,11 @@ class User extends JSONObject{
 
         $this->data->name = capitalizeName($name);
         if (!preg_match("/^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i", $this->data->name))
-            throw new Exception("Podaj pełne imię i nazwisko, bez znaków specjalnych", 403);
+            throw new MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");
 
         $this->data->address = str_replace(', Polska', '', trim($address));
         if (!preg_match("/^.{3,50}\d.{3,40}$/i", $this->data->address))
-            throw new Exception("Podaj adres z ulicą, numerem mieszkania i miejscowością", 403);
+            throw new MissingParamException('address', "Podaj adres z ulicą, numerem mieszkania i miejscowością");
     
         $this->data->sex = guess_sex_by_name($this->data->name);
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
