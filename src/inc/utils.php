@@ -20,6 +20,10 @@ function trimstr2lower($in) {
     return trim(mb_strtolower($in, 'UTF-8'));
 }
 
+function cleanWhiteChars($input) {
+    return trim(str_replace("\xc2\xa0", " ", $input));
+}
+
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
@@ -78,7 +82,7 @@ function logger($msg, $force = null){
 
     $time = date(DT_FORMAT);
     if(!isProd() || $force){
-        error_log($time . $user . "\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+        if (!isDev()) error_log($time . $user . "\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
     return $time;
 }

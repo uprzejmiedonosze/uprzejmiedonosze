@@ -7,21 +7,24 @@ BLUE="\033[0;35m"
 LIGHT_GRAY="\033[1;30m"
 RESET_COLOR="\033[m"
 
-function usage() { echo -e "$*\nUsage: $(basename "$0") [-v] [-t jwt]"; }
-function tGroup() { echo -e "\n$BLUE$*$RESET_COLOR"; }
-function Test() { echo -n "  $*"; }
-function log() { echo -e "$LIGHT_GRAY$*$RESET_COLOR"; }
+usage() { echo -e "$*\nUsage: $(basename "$0") [-v] [-t jwt]"; }
+tGroup() { echo -e "\n$BLUE$*$RESET_COLOR"; }
+Test() { echo -n "  $*"; }
+log() { echo -e "$LIGHT_GRAY$*$RESET_COLOR"; }
 
 JWT="eyJhbGciOiJSUzI1NiIsImtpZCI6IjUyNmM2YTg0YWMwNjcwMDVjZTM0Y2VmZjliM2EyZTA4ZTBkZDliY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3p5bW9uIE5pZXJhZGthIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FMbTV3dTFXQ0plUjQzOEd3NnQtUzVUMktXaEJuNkp1V2plSlF2d0VqT2RDTnFjPXM5Ni1jIiwiaXNzIjoiaHR0cHM6Ly9zZWN1cmV0b2tlbi5nb29nbGUuY29tL3Vwcnplam1pZWRvbm9zemUtMTQ5NDYwNzcwMTgyNyIsImF1ZCI6InVwcnplam1pZWRvbm9zemUtMTQ5NDYwNzcwMTgyNyIsImF1dGhfdGltZSI6MTcwMzEwNTIwOCwidXNlcl9pZCI6IjBTemJsNlhmSDhPdDVNTmZjRkVxYllpYUtYWDIiLCJzdWIiOiIwU3pibDZYZkg4T3Q1TU5mY0ZFcWJZaWFLWFgyIiwiaWF0IjoxNzAzNTE5Nzk0LCJleHAiOjE3MDM1MjMzOTQsImVtYWlsIjoic3p5bW9uQG5pZXJhZGthLm5ldCIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7Imdvb2dsZS5jb20iOlsiMTAzNDkxODk0MTUwMzIxMTU0NjE5Il0sImVtYWlsIjpbInN6eW1vbkBuaWVyYWRrYS5uZXQiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.SpXqpopC6dXiM0nXuUtKGEyTlxm3aCTok_FSHfockgKdVJOcBURZEtlD26I42rBXACEt6FhOlYi0UlwDnqakNjAMQwc5AoY_87FYEHhGc9D-x0jIsfjjqOyPoayd1bqtgoOPEQDQXTfS1fL1Ycx61Ac_RNgjsjxrL_pl3U3lEQwIumLpOccu2-sqZE0JNDlBkwAPzShx0ITgqfrCxHV0ZLmv5RpGnj7-6zfiw9PwbYRN48GvIOmctcQErmX7DTOmWrmFEU0pqPFO-iFE7rNODfPNFFQA4DhiR9Gaf8Qyydp6Vwy-gDMu3NGxtShX5qntRIgmA8Er28fK6bosTdgYPg"
 ENV=local
 VERBOSE=0
-CURL="curl -s"
+CURL="curl --no-progress-meter"
 
 
-while getopts ':vt:h' opt; do
+while getopts ':vdt:h' opt; do
   case "$opt" in
     v)
       VERBOSE=1
+      ;;
+    d)
+      set -x
       ;;
     t)
       JWT="$OPTARG"
@@ -69,40 +72,45 @@ fi
 
 AUTH="Authorization: Bearer $JWT"
 
-function PASS() { echo -e "$GREEN"pass"$RESET_COLOR"; }
+PASS() { echo -e "$GREEN"pass"$RESET_COLOR"; }
 
-function FAIL() {
+FAIL() {
     echo -e "${RED}fail, got $1$RESET_COLOR"
     test $VERBOSE -eq 1 && (echo -e "\n$LIGHT_GRAY$2$RESET_COLOR"; exit 1)
 }
 
-function testStatus() {
+testStatus() {
     A="${4:-X-ignore: 1}"
     testOutput "$1" "$2" .status "$3" "$A"
 }
 
-function testOutput() {
+testOutput() {
     local AUTH="${5:-X-ignore: 1}"
     local FORM="${6:-}"
 
     echo -en " $LIGHT_GRAY$1 $2 $3 == $4...$RESET_COLOR "
     # shellcheck disable=SC2086
-    RAW=$($CURL -X "$1" "$HOST$2" -H "$AUTH" $FORM)
+    RAW=$($CURL -X "$1" "$HOST$2" -H "$AUTH" $FORM || true)
     OUTPUT=$(echo "$RAW" | jq -r "$3" || true)
     # shellcheck disable=SC2015
     test "$OUTPUT" = "$4" && PASS || FAIL "$OUTPUT" "$RAW"
 }
 
-function getUserNumber() {
+getUserNumber() {
     $CURL $HOST/user -H "$AUTH" | jq -r '.number'
 }
-function getFirstDraftId() {
+getFirstDraftId() {
     $CURL $HOST/user/apps?status=draft -H "$AUTH" | jq -r '.[].id'
 }
 
 tGroup Testing static routes
 
-#testStatus GET "/geo/1,1" 500
+Test Config root
+testOutput GET "/config" length 8
+Test Config statuses
+testOutput GET "/config/statuses" .archived.icon minus
+Test Geo output
+testOutput GET "/geo/53.428438,14.5348179" .formatted_address "Bolesława Śmiałego 21, 70-347 Szczecin, Polska"
 
 tGroup Testing edge cases
 
@@ -116,10 +124,6 @@ Test New app no auth
 testStatus POST "/app/new" 400
 Test App no auth
 testStatus GET "/app/111" 400
-Test Config root
-testOutput GET "/config" length 8
-Test Config statuses
-testOutput GET "/config/statuses" .archived.icon minus
 Test Config missing
 testStatus GET "/config/xx" 404
 
@@ -144,9 +148,11 @@ testOutput GET "/user" .isTermsConfirmed "false" "$AUTH"
 Test Get apps
 testOutput GET "/user/apps" .error "Nie możesz wykonać tej operacji przed rejestracją" "$AUTH"
 Test Register, bad
-testOutput POST "/user" .error "Missing required parameter 'address'" "$AUTH" '--form 'name="new-name"''
+testOutput POST "/user" .error "Brak wymaganego parametru 'address'" "$AUTH" '--form name=new-name'
+Test Register, validation
+testOutput POST "/user" .param "name" "$AUTH" '--form name=new-name --form address=address'
 Test Register
-testOutput POST "/user" .data.name "New-Name" "$AUTH" '--form 'name="new-name"' --form 'address="address"''
+testOutput POST "/user" .data.name "New Name" "$AUTH" "--form name=new name --form address=ulica 123, miasto"
 Test Check registration
 testOutput PATCH "/user" .isRegistered "true" "$AUTH"
 Test Confirm terms
