@@ -1,28 +1,19 @@
 import { DateTime } from "luxon";
 
 export const checkAddress = function (where) {
-  var ret = where.val().trim().length > 10;
+  var ret = where.val().trim().length > 10;  
+  ret = $("#locality").val().trim().length > 2 && ret;
+  ret =
+    !!$("#latlng")
+      .val()
+      .trim()
+      .match(/\d\d\.\d+,\d\d\.\d+/) && ret;
 
-  // checking this only on new-application page (not on registration where adddress field name differs)
-  if (where.selector == "#lokalizacja") {
-    ret = $("#locality").val().trim().length > 2 && ret;
-    ret =
-      !!$("#latlng")
-        .val()
-        .trim()
-        .match(/\d\d\.\d+,\d\d\.\d+/) && ret;
-
-    if (!ret && where.val().trim().length > 0) {
-      $("#addressHint").text(
-        "Podaj adres lub wskaż go na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej"
-      );
-      $("#addressHint").addClass("hint");
-    }
-  }
-  // register form
-  if (where.selector == "#address") {
-    // registration address must contain flat no
-    ret = /\d/.test(where.val()) && ret;
+  if (!ret && where.val().trim().length > 0) {
+    $("#addressHint").text(
+      "Podaj adres lub wskaż go na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej"
+    );
+    $("#addressHint").addClass("hint");
   }
 
   !ret && where.addClass("error");
