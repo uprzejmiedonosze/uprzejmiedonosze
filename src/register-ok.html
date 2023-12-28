@@ -20,7 +20,7 @@ $stopAgresji = isset($post['stopAgresji']) && $post['stopAgresji'] == 'SA';
 $autoSend = isset($post['autoSend']) && isset($post['autoSend']) ? $post['autoSend'] == 'Y' : true;
 $myAppsSize = isset($post['myAppsSize']) ? intval($post['myAppsSize']) : 200;
 
-$address = str_replace(', Polska', '', trim($post["address"]));
+$address = str_replace(', Polska', '', cleanWhiteChars($post["address"]));
 
 try{
     $user = $storage->getCurrentUser();

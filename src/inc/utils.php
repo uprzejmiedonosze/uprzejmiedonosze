@@ -21,7 +21,7 @@ function trimstr2lower($in) {
 }
 
 function cleanWhiteChars($input) {
-    return trim(str_replace("\xc2\xa0", " ", $input));
+    return trim(preg_replace("/\s+/u", " ", $input));
 }
 
 /**
@@ -193,10 +193,10 @@ function capitalizeSentence($input){
 }
 
 function capitalizeName($input){
-    if(!isset($input) || trim($input) === ''){
+    if(!isset($input) || cleanWhiteChars($input) === ''){
         return '';
     }
-    return trim(mb_convert_case($input, MB_CASE_TITLE, 'UTF-8'));
+    return mb_convert_case(cleanWhiteChars($input), MB_CASE_TITLE, 'UTF-8');
 }
 
 /**

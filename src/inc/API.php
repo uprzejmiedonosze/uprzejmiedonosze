@@ -56,7 +56,7 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->guessSMData(true); // stores sm city inside the object
 
     if(!isset($application->carInfo)) $application->carInfo = new stdClass();
-    $application->carInfo->plateId = strtoupper(trim($plateId));
+    $application->carInfo->plateId = strtoupper(cleanWhiteChars($plateId));
     $application->userComment = capitalizeSentence($comment);
     $application->initStatements();
     $application->statements->witness = $witness;
@@ -280,10 +280,11 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
  */
 function saveImgAndThumb($application, $imageBytes, $type) {
     $baseDir = 'cdn2/' . $application->getUserNumber();
+    $baseFileName = $baseDir . '/' . $application->id;
+
     if (!file_exists('/var/www/%HOST%/' . $baseDir)) {
         mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
     }
-    $baseFileName = $baseDir . '/' . $application->id;
 
     $fileName     = "/var/www/%HOST%/$baseFileName,$type.jpg";
     $thumbName    = "/var/www/%HOST%/$baseFileName,$type,t.jpg";
