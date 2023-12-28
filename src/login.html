@@ -7,7 +7,7 @@ if(isset($_GET['logout'])){
     $logout = true;
 }
 
-@$next = $_GET['next'];
+@$next = $_GET['next'] ?? '/';
 
 @$error = $_GET['error'];
 
