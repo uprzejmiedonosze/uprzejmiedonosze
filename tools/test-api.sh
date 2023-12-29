@@ -106,11 +106,11 @@ getFirstDraftId() {
 tGroup Testing static routes
 
 Test Config root
-testOutput GET "/config" length 8
+testOutput GET "/config" length 9
 Test Config statuses
 testOutput GET "/config/statuses" .archived.icon minus
 Test Geo output
-testOutput GET "/geo/53.428438,14.5348179" .formatted_address "Bolesława Śmiałego 21, 70-347 Szczecin, Polska"
+testOutput GET "/geo/53.428438,14.5348179" .formatted_address "Bolesława Śmiałego 21, Szczecin"
 
 tGroup Testing edge cases
 
@@ -173,6 +173,6 @@ testOutput PATCH "/app/$APP_ID/status/confirmed" .reason "Odmawiam zmiany status
 Test Failed send
 testOutput PATCH "/app/$APP_ID/send" .error "Nie mogę wysłać zgłoszenia '$APP_ID' w statusie 'draft'" "$AUTH"
 Test Add image
+B64="data:image/jpeg;base64,"$(base64 -w 0 < /Users/szn/dev/webapp/cypress/fixtures/img_p.jpg)
 testOutput POST "/app/$APP_ID/image" .carImage.url "cdn2/$USER_NUMBER/$APP_ID,ca.jpg" "$AUTH" \
-    '--form 'image=@"/Users/szn/dev/webapp/cypress/fixtures/img_p.jpg"' --form 'pictureType="carImage"''
-
+  '-H Content-Type: application/json -d {"carImage":"'"$B64"'"}'
