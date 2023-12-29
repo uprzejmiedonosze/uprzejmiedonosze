@@ -247,36 +247,31 @@ $app->patch('/app/{appId}/status/{status}', function (Request $request, Response
 
 $app->post('/app/{appId}/image', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
-    $pictureType = getParam($params, 'pictureType');  // carImage|contextImage
-    $uploadedFiles = $request->getUploadedFiles();
-    $image = reset($uploadedFiles);
+
+    $imageUri = getParam($params, 'carImage', -1);
+    $pictureType = 'carImage';
+    if ($imageUri == -1) {
+        $imageUri = getParam($params, 'contextImage');
+        $pictureType = 'contextImage';
+    }
+
+    list($type, $imageBytes) = explode(',', $imageUri);
     
     // valid only for $pictureType == 'carImage'
     $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
     $latLng = getParam($params, 'latLng', ''); // lat,lng: 53.431786,14.551586
     $dtFromPicture = !!$dateTime;
 
-    if ($image->getError() !== UPLOAD_ERR_OK) {
-        throw new HttpBadRequestException($request, "Nie udało się pobrać pliku: ". $image->getError());
-    }
+    $imagemime = getimagesize($imageUri);
+    if (empty($imagemime['mime']) || strpos($imagemime['mime'], 'image/') !== 0)
+        throw new HttpBadRequestException($request, "Przekazany plik nie jest obrazkiem");
 
-    if ($image->getSize() > 500000) {
+    if (strlen(rtrim($imageBytes, '=')) * 0.75 > 500000)
         throw new HttpBadRequestException($request, "Zbyt duże zdjęcie (>500kb)");
-    }
 
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $tmp_file = $image->getStream()->getMetadata('uri');
-    $mime = $finfo->file($tmp_file);
-
-    $validExtensions = array('jpg' => 'image/jpeg', 'png' => 'image/png');
-
-    $ext = array_search($mime, $validExtensions, true);
-    if (false === $ext) {
+    $ext = substr($imagemime['mime'], 6);
+    if (!in_array($ext, ['png', 'jpeg', 'jpg']))
         throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
-    }
-
-    $data = file_get_contents($tmp_file);
-    $imageBytes = base64_encode($data);
     
     $application = $request->getAttribute('application');
     $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
