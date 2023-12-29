@@ -121,7 +121,7 @@ $app->get('/user/apps', function (Request $request, Response $response, $args) u
 // CONFIG
 
 $CONFIG_FILES = Array(
-    'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji');
+    'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', "terms");
 
 $app->get('/config', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
     $response->getBody()->write(json_encode($CONFIG_FILES));
@@ -135,6 +135,11 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
         throw new HttpNotFoundException($request,
             "Nie znam konfiguracji o nazwie '$name'");
 
+    if ($name == "terms") {
+        $terms = generate('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
+        $response->getBody()->write($terms);
+        return $response;
+    }
     $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
     return $response;
 });
