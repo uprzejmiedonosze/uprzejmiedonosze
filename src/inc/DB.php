@@ -188,7 +188,7 @@ class DB extends NoSQLite{
     public function getUser($email){
         $json = $this->users->get($email);
         if(!$json){
-            throw new Exception("Próba pobrania nieistniejącego użytkownika '$email'");
+            throw new Exception("Próba pobrania nieistniejącego użytkownika '$email'", 404);
         }
         $user = new User($json);
         return $user;
@@ -224,7 +224,7 @@ class DB extends NoSQLite{
         }
         $json = $this->apps->get($appId);
         if(!$json){
-            throw new Exception("Próba pobrania nieistniejącego zgłoszenia '$appId'");
+            throw new Exception("Próba pobrania nieistniejącego zgłoszenia '$appId'", 404);
         }
         $application = Application::withJson($json);
         return $application;

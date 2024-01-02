@@ -1,6 +1,7 @@
 <?php
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Factory\AppFactory;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpBadRequestException;
@@ -35,6 +36,26 @@ $errorMiddleware = $app->addErrorMiddleware(false, false, false);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('application/json');
 $errorHandler->registerErrorRenderer('application/json', ErrorRenderer::class);
+
+$jsonErrorHandler = function (
+    ServerRequestInterface $request,
+    Throwable $exception,
+    bool $displayErrorDetails,
+    bool $logErrors,
+    bool $logErrorDetails
+) use ($app) {
+    $payload = exceptionToErrorJson($exception);
+    $response = $app->getResponseFactory()->createResponse();
+    $response = $response->withStatus($payload['status']);
+    $response->getBody()->write(
+        json_encode($payload, JSON_UNESCAPED_UNICODE)
+    );
+
+    return $response;
+};
+
+$errorMiddleware->setDefaultErrorHandler($jsonErrorHandler);
+
 
 $app->add(new JsonBodyParser());
 
