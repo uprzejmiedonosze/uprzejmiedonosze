@@ -122,7 +122,7 @@ function geoToAddress($lat, $lng) {
 
     $latlng = number_format((float) $lat, 4, '.', '') . ',' . number_format((float) $lng, 4, '.', '');
 
-    $result = $cache->get("_geoToAddress-$latlng");
+    $result = $cache->get("_geoToAddress-v2-$latlng");
     if ($result) {
         logger("_geoToAddress cache-hit $latlng");
         return $result;
@@ -140,17 +140,17 @@ function geoToAddress($lat, $lng) {
     }
     curl_close($ch);
 
-    $json = json_decode($output, true);
+    $json = json_decode($output);
     if (!json_last_error() === JSON_ERROR_NONE) {
         logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
         throw new Exception("Bełkotliwa odpowiedź z serwerów GeoAPI:. $output", 500);
     }
-    if ($json['status'] == 'OK' && $json['results']) {
-        $result = $json['results'][0];
-        $cache->set("_geoToAddress-$latlng", $result, MEMCACHE_COMPRESSED, 0);
+    if ($json->status == 'OK' && $json->results) {
+        $result = $json->results[0];
+        $cache->set("_geoToAddress-v2-$latlng", $result, MEMCACHE_COMPRESSED, 0);
         return $result;
     }
-    if ($json['status'] == 'ZERO_RESULTS') {
+    if ($json->status == 'ZERO_RESULTS') {
         throw new Exception("Brak wyników z serwerów GeoAPI dla $lat, $lng: $output", 404);
     }
     throw new Exception("Niepoprawna odpowiedź z serwerów GeoAPI: $output", 500);
@@ -281,6 +281,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
 function saveImgAndThumb($application, $imageBytes, $type) {
     $baseDir = 'cdn2/' . $application->getUserNumber();
     $baseFileName = $baseDir . '/' . $application->id;
+    if (isDev()) return $baseFileName;
 
     if (!file_exists('/var/www/%HOST%/' . $baseDir)) {
         mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
