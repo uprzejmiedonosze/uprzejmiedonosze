@@ -1,5 +1,4 @@
 import { checkValueRe } from "../lib/validation";
-import { initAutocompleteRegister } from "../lib/geolocation";
 
 function validateRegisterForm() {
   ret = checkValueRe($("#name"), /^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i)

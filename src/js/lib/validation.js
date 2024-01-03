@@ -1,23 +1,21 @@
 import { DateTime } from "luxon";
 
-export const checkAddress = function (where) {
-  var ret = where.val().trim().length > 10;  
-  ret = $("#locality").val().trim().length > 2 && ret;
-  ret =
-    !!$("#latlng")
-      .val()
-      .trim()
-      .match(/\d\d\.\d+,\d\d\.\d+/) && ret;
+export const checkAddress = function () {
+  const textAddress = $("#lokalizacja").val().trim()
+  const jsonAddress = $("#address")
 
-  if (!ret && where.val().trim().length > 0) {
+  var ret = textAddress.length > 10;
+  var address = JSON.parse(jsonAddress.val())
+  ret = address.city?.length > 2 && ret
+  ret = address.latlng?.match(/\d\d\.\d+,\d\d\.\d+/) && ret
+  if (!ret && textAddress.length > 0) {
     $("#addressHint").text(
       "Podaj adres lub wskaż go na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej"
     );
     $("#addressHint").addClass("hint");
   }
 
-  !ret && where.addClass("error");
-
+  !ret && $("#lokalizacja").addClass("error");
   return ret;
 };
 

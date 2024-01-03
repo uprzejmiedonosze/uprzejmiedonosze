@@ -4,7 +4,7 @@ export function validateForm() {
   $("#form-submit").addClass("ui-disabled");
   var ret = checkValue($("#plateId"), 3);
   ret = checkDateTimeValue() && ret;
-  ret = checkAddress($("#lokalizacja")) && ret;
+  ret = checkAddress() && ret;
   ret = checkImages() && ret;
   if ($("#0").is(":checked")) {
     // if category == 0 then comment is mandatory

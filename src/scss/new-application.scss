@@ -1,3 +1,5 @@
+@import url(../../node_modules/mapbox-gl/dist/mapbox-gl.css);
+
 label.section {
   padding: .5em 1.143em;
   font-size: 14px;
@@ -244,6 +246,23 @@ p.pictureHint {
     height: 200px;
     border-radius: 0.8em;
     margin-top: 0.3em;
+
+    .mapboxgl-canvas {
+      border-radius: 0.8em;
+    }
+  }
+
+  #mapCenter {
+    z-index: 5;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    display: block;
+    background-image: url('https://uprzejmiedonosze.net/img/map-circle.png');
+    left: calc((400px - 64px)/2);
+    bottom: calc((200px - 64px)/2);
+    pointer-events: none;
+    user-select: none;
   }
 
   .locationPickerBig {

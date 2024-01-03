@@ -1,172 +1,181 @@
 /* global google */
 
-import { Loader } from "@googlemaps/js-api-loader";
-import LocationPicker from "location-picker";
+import mapboxgl from 'mapbox-gl'
 
-let autocomplete;
+let map // represents mapboxgl.Map
 
-let locationP;
-var initialLocation = [];
-
-function getGoogleLoader() {
-  return new Loader({
-    apiKey: "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
-    version: "weekly",
-    language: "pl",
-    libraries: ["places"]
-  });
-}
-
-export function initAutocompleteRegister() {
-  const loader = getGoogleLoader();
-
-  loader.loadCallback((e) => {
-    if (e) return console.error(e);
-    initAutocomplete(false, "address", google);
-  });
-}
-
-export function initAutocompleteNewApplication() {
-  const loader = getGoogleLoader();
-
-  loader.loadCallback((_e) => {
-    initAutocomplete(true, "lokalizacja", google);
-
-    locationP = new LocationPicker(
-      "locationPicker",
-      {
-        setCurrentPosition: false
-      },
-      {
-        disableDefaultUI: true,
-        scrollwheel: false,
-        zoomControl: true,
-        controlSize: 25,
-        mapTypeId: google.maps.MapTypeId.SATTELITE,
-        gestureHandling: "cooperative",
-        estriction: new google.maps.LatLngBounds(
-          new google.maps.LatLng(54.8, 14),
-          new google.maps.LatLng(49, 24)
-        ),
-        zoom: 17,
-        minZoom: 6,
-        maxZoom: 19
-      }
-    );
-    if (initialLocation.length == 2) {
-      locationP.setLocation(initialLocation[0], initialLocation[1]);
-    } else {
-      locationP.setLocation(52.069321, 19.480311);
-    }
-    google.maps.event.addListener(locationP.map, "idle", function () {
-      var location = locationP.getMarkerPosition();
-      setAddressByLatLng(location.lat, location.lng, "picker");
-    });
-  });
-}
-
-export const initAutocomplete = function (trigger_change, inputId, google) {
-  autocomplete = new google.maps.places.Autocomplete(
-    document.getElementById(inputId), {
-      types: ["address"],
-      fields: ["address_components", "formatted_address", "geometry"],
-      componentRestrictions: { country: "pl" },
-
-    }
-  );
-  if (trigger_change) {
-    autocomplete.addListener("place_changed", function () {
-      const place = autocomplete.getPlace();
-      if (!place) return;
-      setAddressByPlace(place);
-      const latlng = locationToLatLng(place);
-      if (latlng[0] && latlng[1]) {
-        $("#latlng").val(latlng.join(","));
-        locationP.setLocation(latlng[0], latlng[1]);
-      }
-    });
-  }
-};
-
-const locationToLatLng = function (place) {
-  return typeof place?.geometry?.location?.lat == "function"
-    ? [place.geometry.location.lat(), place.geometry.location.lng()]
-    : [place?.geometry?.location?.lat, place?.geometry?.location?.lng];
-};
-
-export function setAddressByLatLngString(latlng) {
-  if (latlng) {
-    latlng = latlng.replace(/(\d+\.\d{6})\d+/g, '$1')
-    const ll = latlng.split(",");
-    if (ll.length == 2 && !isNaN(ll[0])) {
-      initialLocation = ll;
+export function initMaps(lastLocation) {
+  let center = [19.480311, 52.069321]
+  if (lastLocation) {
+    lastLocation = lastLocation.replace(/(\d+\.\d{6})\d+/g, '$1').split(",")
+    if (lastLocation.length == 2 && !isNaN(lastLocation[0])) {
+      center = lastLocation.reverse()
     }
   }
+
+  const mapOptions = {
+    container: 'locationPicker',
+    center: center,
+    zoom: 15,
+    hash: false,
+    language: 'pl',
+    // maxBounds
+    maxZoom: 16,
+    minZoom: 6,
+    scrollZoom: false,
+    style: 'mapbox://styles/mapbox/outdoors-v12',
+    cooperativeGestures: true,
+    dragRotate: false
+  }
+  
+  mapboxgl.accessToken = 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw';
+  map = new mapboxgl.Map(mapOptions)
+
+  map.addControl(new mapboxgl.NavigationControl({
+    showCompass: false,
+    showZoom: true,
+    visualizePitch: true
+  }), 'top-left')
+
+  map.addControl(new mapboxgl.GeolocateControl({
+    positionOptions: { enableHighAccuracy: true },
+    trackUserLocation: true,
+    showUserHeading: true
+  }), 'top-left')
+
+  map.dragRotate.disable()
+  map.touchZoomRotate.disableRotation()
+
+  map.on('moveend', updateAddressDebounce)
+
+  if($("#lokalizacja").val().trim() == 0)
+    updateAddressDebounce()
+}
+
+let timeout
+function updateAddressDebounce() {
+  const { lat, lng } = map.getCenter()  
+  clearTimeout(timeout);
+  timeout = setTimeout(setAddressByLatLng.bind(this, lat, lng, 'map'), 1000);
 }
 
 export function setAddressByLatLng(lat, lng, from) {
+  if (from === "picture" && map)
+    map.setCenter([lng, lat])
 
-  // init|picker|picture
-  if (from !== "picker" && locationP) {
-    locationP.setLocation(lat, lng);
-  }
+  $("#address").val(JSON.stringify({}))
 
-  if (from == "init") {
-    return;
-  }
-
-  $("a#geo").buttonMarkup({ icon: "clock" });
+  $("a#geo").buttonMarkup({ icon: "clock" })
   if (from == "picture") {
-    $("#lokalizacja").attr("placeholder", "(pobieram adres ze zdjęcia...)");
+    $("#lokalizacja").attr("placeholder", "(pobieram adres ze zdjęcia...)")
   } else {
-    $("#lokalizacja").attr("placeholder", "(pobieram adres z mapy...)");
+    $("#lokalizacja").attr("placeholder", "(pobieram adres z mapy...)")
   }
-  $("#latlng").val(lat + "," + lng);
-
-  $.post("/api/api.html", { action: "geoToAddress", lat: lat, lng: lng })
-    .done(function (place) {
-      $("#addressHint").text("Podaj adres lub wskaż go na mapie");
-      $("#addressHint").removeClass("hint");
-      if (place) {
-        setAddressByPlace(place, from);
-        if (from == "picture") {
-          $("#addressHint").text("Sprawdź automatycznie pobrany adres");
-          $("#addressHint").addClass("hint");
-        }
-      }
-      $("a#geo").buttonMarkup({ icon: "location" });
-    })
-    .fail(function (e) {
-      $("a#geo").buttonMarkup({ icon: "alert" });
-      $("#lokalizacja").addClass("error");
-    });
-
-  $("#lokalizacja").attr("placeholder", "(podaj adres lub wskaż go na mapie)");
+  
+  latLngToAddress(lat, lng, from)
 }
 
-function setAddressByPlace(place) {
-  if(!place) return
-  if(!place.formatted_address) return
-  const formatted_address = place.formatted_address
-    .replace(", Polska", "")
-    .replace(/\d\d-\d\d\d\s/, "")
-    .replace(/\/\d+[a-zA-Z]?, /, ', ');
-  const voivodeship = place?.address_components
-    ?.filter(e => e.types.indexOf("administrative_area_level_1") == 0)
-    ?.shift()?.long_name?.replace("Województwo ", "");
-  const country = place?.address_components
-    ?.filter(e => e.types.indexOf("country") == 0)?.shift()?.long_name;
-  const city = place?.address_components
-    ?.filter(e => e.types.indexOf("locality") == 0)?.shift()?.long_name;
-  const district = place?.address_components
-    ?.filter(e => e.types.indexOf("sublocality_level_1") >= 0)?.shift()?.short_name;
-  
-  $("#lokalizacja").val(formatted_address || "");
-  voivodeship && $("#administrative_area_level_1").val(voivodeship || "");
-  country && $("#country").val(country || "");
-  city && $("#locality").val(city || "");
-  district && $("#district").val(district || "");
 
-  $("a#geo").buttonMarkup({ icon: "check" });
-  $("#lokalizacja").removeClass("error");
+async function latLngToAddress(lat, lng, from) {
+  $("#addressHint").text("Podaj adres lub wskaż go na mapie");
+  $("#addressHint").removeClass("hint");
+
+  const address = await getMapBox(lat, lng)
+
+  $("#lokalizacja").val(address?.address || '')
+  if (!address?.address?.match(/.+\d.+/)) {
+    $("a#geo").buttonMarkup({ icon: "alert" })
+    $("#lokalizacja").addClass("error")
+    return
+  }
+  $("#address").val(JSON.stringify(address))
+  $("a#geo").buttonMarkup({ icon: "location" })
+  if (from == "picture") {
+    $("#addressHint").text("Sprawdź automatycznie pobrany adres")
+    $("#addressHint").addClass("hint")
+  }
+  const nominatim = await getNominatim(lat, lng)
+  address.city = address.city || nominatim.city
+  address.voivodeship = address.voivodeship || nominatim.voivodeship
+  address.postcode = address.postcode || postcode
+  address.municipality = nominatim.municipality
+  address.county = nominatim.county
+  address.district = nominatim.district
+  $("#address").val(JSON.stringify(address))
+}
+
+function encodeGetParams(p) {
+  return Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&")
+}
+
+const headers = {
+  "Accept-Language": "pl"
+}
+
+async function getNominatim(lat, lng) {
+  const nominatimParams = {
+    lat: lat,
+    lon: lng,
+    format: 'jsonv2',
+    addressdetails: 1
+  }
+  let response = await fetch('https://nominatim.openstreetmap.org/reverse?' + encodeGetParams(nominatimParams), {
+    headers: headers
+  })
+  response = await response.json()
+  let { borough,
+    suburb,
+    quarter,
+    neighbourhood,
+    state,
+    village,
+    county,
+    municipality,
+    city,
+    postcode } = response.address
+  
+  return {
+    voivodeship: state.replace('województwo ', ''),
+    district: suburb || borough || quarter || neighbourhood || '',
+    county: county || `gmina ${city}`,
+    municipality: municipality || `powiat ${city}`,
+    city: city || village,
+    municipality,
+    postcode
+  }
+}
+
+async function getMapBox(lat, lng) {
+  const maxBoxParams = {
+    country: 'pl',
+    limit: 1,
+    types: 'address,place,district,postcode,region,neighborhood',
+    language: 'pl',
+    longitude: lng,
+    latitude: lat,
+    access_token: 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw'
+  }
+  let response = await fetch('https://api.mapbox.com/search/geocode/v6/reverse?' + encodeGetParams(maxBoxParams), {
+    headers: headers
+  })
+  response = await response.json()
+  
+  if (!response.features.length)
+    return null
+
+  const mapbox = response.features[0].properties
+  const context = mapbox.context
+
+  let voivodeship = context.region?.name?.replace('województwo ', '')
+  let city = context.place?.name || ''
+  if (city) scity = `, ${city}`
+  else scity = ''
+
+  return {
+    address: address = `${mapbox.name}${scity}`,
+    city,
+    voivodeship,
+    postcode: context.postcode?.name,
+    latlng: `${lat.toFixed(4)},${lng.toFixed(4)}`
+  }
 }
