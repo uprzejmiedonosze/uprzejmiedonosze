@@ -328,7 +328,7 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
 // GEO
 
 // @TODO, params does not support dots inside
-$app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $args) {
+$app->get('/geo/{lat},{lng}/g', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
     try {
@@ -342,14 +342,27 @@ $app->get('/geo/{lat},{lng}', function (Request $request, Response $response, $a
     return $response;
 });
 
-$app->get('/geo2/{lat},{lng}', function (Request $request, Response $response, $args) {
+$app->get('/geo/{lat},{lng}/n', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
+    $params = $request->getQueryParams();
 
-    $result = OpenStreetMaps($lat, $lng);
+    $city = getParam($params, 'city');
+
+    $result = Nominatim($lat, $lng, $city);
     $response->getBody()->write(json_encode($result));
     return $response;
 });
+
+$app->get('/geo/{lat},{lng}/m', function (Request $request, Response $response, $args) {
+    $lat = $args['lat'];
+    $lng = $args['lng'];
+
+    $result = MapBox($lat, $lng);
+    $response->getBody()->write(json_encode($result));
+    return $response;
+});
+
 
 // OTHER
 
@@ -367,75 +380,3 @@ function getParam(array $params, string $name, mixed $default=null) {
     return $param;
 }
 
-function GoogleMaps($lat, $lng) {
-    $json = geoToAddress($lat, $lng);
-    $result = new JSONObject();
-
-    $formatted_address = $json->formatted_address;
-    $formatted_address = str_replace(", Polska", "", $formatted_address);
-    $formatted_address = preg_replace("/\d\d-\d\d\d\s/", "", $formatted_address);
-    $formatted_address = preg_replace("/\/\d+[a-zA-Z]?, /", ", ", $formatted_address);
-    $result->formatted_address = $formatted_address;
-
-    function findInGoogleOutput($json, $key, $longName=true) {
-        $result = array_filter($json->address_components, function($ac) use ($key) {
-            return in_array($key, $ac->types);
-        });
-        $result = reset($result);
-        if(!$result) return null;
-        if ($longName) return $result->long_name;
-        return $result->short_name;
-    }
-    $result->voivodeship = findInGoogleOutput($json, "administrative_area_level_1");
-    $result->voivodeship = mb_convert_case(str_replace("Województwo ", "", $result->voivodeship), MB_CASE_TITLE, 'UTF-8');
-    $result->country = findInGoogleOutput($json, "country");
-    $result->city = findInGoogleOutput($json, "locality");
-    $result->postcode = findInGoogleOutput($json, "postal_code");
-    $result->district = findInGoogleOutput($json, "sublocality_level_1", false);
-    $result->suburb = null;
-    $result->json = $json;
-    return $result;
-}
-
-function OpenStreetMaps($lat, $lng) {
-    $ch = curl_init("https://nominatim.openstreetmap.org/reverse?lat=$lat&lon=$lng&format=jsonv2&addressdetails=1");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_REFERER, "https://uprzejmiedonosze.net");
-    $output = curl_exec($ch);
-    if (curl_errno($ch)) {
-        $error = curl_error($ch);
-        curl_close($ch);
-        logger("Nie udało się pobrać danych latlng: $error");
-        throw new Exception("Nie udało się pobrać odpowiedzi z serwerów OpenStreetMap: $error", 500);
-    }
-    curl_close($ch);
-
-    $json = json_decode($output);
-    if (!json_last_error() === JSON_ERROR_NONE) {
-        logger("Parsowanie JSON z OpenStreetMap " . $output . " " . json_last_error_msg());
-        throw new Exception("Bełkotliwa odpowiedź z serwerów OpenStreetMap:. $output", 500);
-    }
-    if (!$json || isset($json->error)) {
-        throw new Exception("Brak wyników z serwerów OpenStreetMap dla $lat, $lng: $output", 404);
-    }
-    if ($json->address) {
-        $result = new JSONObject();
-        logger(print_r($json->address, true));
-        $road = $json->address->road ?? "";
-        $house_number = isset($json->address->house_number) ? " " . $json->address->house_number : "";
-        $city = $json->address->city ?? '';
-        $result->formattedAddress = "$road$house_number, {$city}";
-        $result->country = $json->address->country;
-        $result->voivodeship = mb_convert_case(str_replace("województwo ", "", $json->address->state), MB_CASE_TITLE, 'UTF-8');
-        $result->city = $json->address->city ?? null;
-        $result->postcode = $json->address->postcode ?? null;
-        $result->district = $json->address->borough ?? null;
-        $result->suburb = $json->address->suburb ?? null;
-
-        $result->json = $json;
-
-        $result->isValid = isset($json->address->road) && isset($json->address->house_number);
-        return $result;
-    }
-    throw new Exception("Niepoprawna odpowiedź z serwerów OpenStreetMap: $output", 500);
-}

@@ -364,3 +364,110 @@ function getUserByName($name, $apiToken) {
     }
     echo json_encode($user);
 }
+
+
+function Nominatim($lat, $lng, $city) {
+    $params = Array(
+        "lat" => $lat,
+        "lon" => $lng,
+        "format" => 'jsonv2',
+        "addressdetails" => 1
+    );
+    $url = "https://nominatim.openstreetmap.org/reverse?";
+    $json = curlRequest($url, $params, "MapBox");
+
+    if (!$json || !isset($json['address'])) {
+        throw new Exception("Brak wyników z serwerów OpenStreetMap dla $lat,$lng " . json_encode($json), 404);
+    }
+
+    $address = $json['address'];
+
+    $address['voivodeship'] = str_replace("województwo ", "", $address['state'] ?? "");
+    unset($address['state']);
+
+    $address['district'] = $address['suburb'] ?? $address['borough'] ?? $address['quarter'] ?? $address['neighbourhood'] ?? '';
+
+    $address['county'] = $address['county'] ?? "gmina {$address['city']}";
+    $address['municipality'] = $address['municipality'] ?? "powiat {$address['city']}";
+    $address['city'] = $address['city'] ?? $address['village'] ?? '';
+
+    $address['address'] = trim(($address['road'] ?? '') . " " . ($address['house_number'] ?? '')) . ", " . $address['city'];
+
+    global $SM_ADDRESSES;
+    
+    $sm = null;
+
+    $city = trimstr2lower($city);
+    if($city == 'krosno' && trimstr2lower(@$address['voivodeship']) == 'województwo wielkopolskie'){
+        $city = 'krosno-wlkp'; // tak, są dwa miasta o nazwie 'Krosno'...
+    }
+    if(array_key_exists($city, $SM_ADDRESSES)) {
+        if($city == 'warszawa' && array_key_exists($address['district'], ODDZIALY_TERENOWE))
+            $city = ODDZIALY_TERENOWE[$address['district']];
+        $sm =  $SM_ADDRESSES[$city];
+    }
+    return array(
+        'address' => $address,
+        'sm' => $sm
+    );
+}
+
+function MapBox($lat, $lng) {
+    $params = Array(
+        "country" => 'pl',
+        "limit" => 1,
+        "types" => 'address,place,district,postcode,region,neighborhood',
+        "language" => 'pl',
+        "longitude" => $lng,
+        "latitude" => $lat,
+        "access_token" => 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw'
+    );
+    $url = "https://api.mapbox.com/search/geocode/v6/reverse?";
+    $json = curlRequest($url, $params, "MapBox");
+
+    if (!$json || !isset($json['features']) || sizeof($json['features']) == 0) {
+        throw new Exception("Brak wyników z serwerów MapBox dla $lat,$lng " . json_encode($json), 404);
+    }
+    $properties = reset($json['features'])['properties'];
+    $properties['address'] = array();
+    array_walk($properties['context'], function ($val, $key) use (&$properties) {$properties['address'][$key] = $val['name'];});
+    
+    $properties['address']['voivodeship'] = str_replace("województwo ", "", $properties['address']["region"] ?? "");
+    unset($properties['address']['region']);
+
+    $properties['address']['city'] = $properties['address']['place'] ?? "";
+    unset($properties['address']['place']);
+
+    $properties['address']['address'] = ($properties['address']['city']) ? "{$properties['name']}, {$properties['address']['city']}" : $properties['name'];  
+
+    unset($properties['coordinates']);
+    unset($properties['bbox']);
+    unset($properties['context']);
+
+    return $properties;
+}
+
+
+
+function curlRequest(string $url, array $params, string $vendor) {
+    $ch = curl_init($url . http_build_query($params));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_REFERER, "https://uprzejmiedonosze.net");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept-Language: pl"]);
+    $output = curl_exec($ch);
+    if (curl_errno($ch)) {
+        $error = curl_error($ch);
+        curl_close($ch);
+        logger("Nie udało się pobrać danych z $vendor: $error");
+        throw new Exception("Nie udało się pobrać odpowiedzi z serwerów $vendor: $error", 500);
+    }
+    curl_close($ch);
+
+    $json = json_decode($output, true);
+    //echo "$output\n\n";
+    if (!json_last_error() === JSON_ERROR_NONE) {
+        logger("Parsowanie JSON z MapBox " . $output . " " . json_last_error_msg());
+        throw new Exception("Bełkotliwa odpowiedź z serwerów MapBox:. $output", 500);
+    }
+    return $json;
+}

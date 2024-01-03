@@ -81,101 +81,50 @@ async function latLngToAddress(lat, lng, from) {
   $("#addressHint").removeClass("hint");
 
   const address = await getMapBox(lat, lng)
-
-  $("#lokalizacja").val(address?.address || '')
-  if (!address?.address?.match(/.+\d.+/)) {
-    $("a#geo").buttonMarkup({ icon: "alert" })
-    $("#lokalizacja").addClass("error")
-    return
-  }
-  $("#address").val(JSON.stringify(address))
+$("#address").val(JSON.stringify(address))
   $("a#geo").buttonMarkup({ icon: "location" })
+  $("#lokalizacja").removeClass("error")
   if (from == "picture") {
     $("#addressHint").text("Sprawdź automatycznie pobrany adres")
     $("#addressHint").addClass("hint")
   }
-  const nominatim = await getNominatim(lat, lng)
-  address.city = address.city || nominatim.city
-  address.voivodeship = address.voivodeship || nominatim.voivodeship
-  address.postcode = address.postcode || postcode
-  address.municipality = nominatim.municipality
-  address.county = nominatim.county
-  address.district = nominatim.district
-  $("#address").val(JSON.stringify(address))
-}
+  const nominatim = await getNominatim(lat, lng, address.city)
+  address.address = address.address || nominatim.address.address
+  address.city = address.city || nominatim.address.city
+  address.voivodeship = address.voivodeship || nominatim.address?.voivodeship
+  address.postcode = address.postcode || nominatim.address?.postcode
+  address.municipality = nominatim.address?.municipality
+  address.county = nominatim.address?.county
+  address.district = nominatim.address?.district
 
-function encodeGetParams(p) {
-  return Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&")
-}
-
-const headers = {
-  "Accept-Language": "pl"
-}
-
-async function getNominatim(lat, lng) {
-  const nominatimParams = {
-    lat: lat,
-    lon: lng,
-    format: 'jsonv2',
-    addressdetails: 1
+  $("#lokalizacja").val(address?.address || '')
+  if (!address?.address?.match(/.+,.+/)) {
+    $("a#geo").buttonMarkup({ icon: "alert" })
+    $("#lokalizacja").addClass("error")
   }
-  let response = await fetch('https://nominatim.openstreetmap.org/reverse?' + encodeGetParams(nominatimParams), {
-    headers: headers
-  })
-  response = await response.json()
-  let { borough,
-    suburb,
-    quarter,
-    neighbourhood,
-    state,
-    village,
-    county,
-    municipality,
-    city,
-    postcode } = response.address
   
-  return {
-    voivodeship: state.replace('województwo ', ''),
-    district: suburb || borough || quarter || neighbourhood || '',
-    county: county || `gmina ${city}`,
-    municipality: municipality || `powiat ${city}`,
-    city: city || village,
-    municipality,
-    postcode
+  $("#address").val(JSON.stringify(address))
+  if (nominatim.sm) {
+    $("#smInfo").text(nominatim.sm.address[0])
+    $("#smInfoHint").attr('title', nominatim.sm.hint)
+    $("#smInfoHint").show()
+  } else {
+    $("#smInfo").text(`(brak SM dla ${address.city})`)
+    $("#smInfoHint").attr('title', '')
+    $("#smInfoHint").hide()
   }
+}
+
+async function getNominatim(lat, lng, city) {
+  const response = await fetch(`https://apistaging.uprzejmiedonosze.net/geo/${lat},${lng}/n?city=` + encodeURIComponent(city))
+  return await response.json()
 }
 
 async function getMapBox(lat, lng) {
-  const maxBoxParams = {
-    country: 'pl',
-    limit: 1,
-    types: 'address,place,district,postcode,region,neighborhood',
-    language: 'pl',
-    longitude: lng,
-    latitude: lat,
-    access_token: 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw'
-  }
-  let response = await fetch('https://api.mapbox.com/search/geocode/v6/reverse?' + encodeGetParams(maxBoxParams), {
-    headers: headers
-  })
-  response = await response.json()
-  
-  if (!response.features.length)
-    return null
+  const response = await fetch(`https://apistaging.uprzejmiedonosze.net/geo/${lat},${lng}/m`)
+  const mapbox = await response.json()
+  const address = mapbox.address || {}
+  address.latlng = `${lat.toFixed(4)},${lng.toFixed(4)}`
 
-  const mapbox = response.features[0].properties
-  const context = mapbox.context
-
-  let voivodeship = context.region?.name?.replace('województwo ', '')
-  let city = context.place?.name || ''
-  if (city) scity = `, ${city}`
-  else scity = ''
-
-  return {
-    address: address = `${mapbox.name}${scity}`,
-    city,
-    voivodeship,
-    postcode: context.postcode?.name,
-    latlng: `${lat.toFixed(4)},${lng.toFixed(4)}`
-  }
+  return address
 }
