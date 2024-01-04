@@ -345,11 +345,8 @@ $app->get('/geo/{lat},{lng}/g', function (Request $request, Response $response, 
 $app->get('/geo/{lat},{lng}/n', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
-    $params = $request->getQueryParams();
 
-    $city = getParam($params, 'city');
-
-    $result = Nominatim($lat, $lng, $city);
+    $result = Nominatim($lat, $lng);
     $response->getBody()->write(json_encode($result));
     return $response;
 });

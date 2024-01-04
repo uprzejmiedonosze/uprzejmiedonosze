@@ -8,6 +8,8 @@ use \finfo as finfo;
 use \DateTime as DateTime;
 use \Exception as Exception;
 
+$cache = new Memcache;
+$cache->connect('localhost', 11211);
 
 function checkRegistrationStatus() {
     global $storage;
@@ -111,49 +113,6 @@ function sendApplication($appId) {
     _sendSlackOnNewApp($application);
 
     return $application;
-}
-
-/**
- * @SuppressWarnings(PHPMD.ShortVariable)
- */
-function geoToAddress($lat, $lng) {
-    $cache = new Memcache;
-    $cache->connect('localhost', 11211);
-
-    $latlng = number_format((float) $lat, 4, '.', '') . ',' . number_format((float) $lng, 4, '.', '');
-
-    $result = $cache->get("_geoToAddress-v2-$latlng");
-    if ($result) {
-        logger("_geoToAddress cache-hit $latlng");
-        return $result;
-    }
-    logger("_geoToAddress cache-miss $latlng");
-
-    $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?latlng=$latlng&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl&result_type=street_address");
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $output = curl_exec($ch);
-    if (curl_errno($ch)) {
-        $error = curl_error($ch);
-        curl_close($ch);
-        logger("Nie udało się pobrać danych latlng: $error");
-        throw new Exception("Nie udało się pobrać odpowiedzi z serwerów GeoAPI: $error", 500);
-    }
-    curl_close($ch);
-
-    $json = json_decode($output);
-    if (!json_last_error() === JSON_ERROR_NONE) {
-        logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
-        throw new Exception("Bełkotliwa odpowiedź z serwerów GeoAPI:. $output", 500);
-    }
-    if ($json->status == 'OK' && $json->results) {
-        $result = $json->results[0];
-        $cache->set("_geoToAddress-v2-$latlng", $result, MEMCACHE_COMPRESSED, 0);
-        return $result;
-    }
-    if ($json->status == 'ZERO_RESULTS') {
-        throw new Exception("Brak wyników z serwerów GeoAPI dla $lat, $lng: $output", 404);
-    }
-    throw new Exception("Niepoprawna odpowiedź z serwerów GeoAPI: $output", 500);
 }
 
 function addToGallery($appId) {
@@ -365,8 +324,54 @@ function getUserByName($name, $apiToken) {
     echo json_encode($user);
 }
 
+function normalizeLatLng($lat, $lng) {
+    return number_format((float) $lat, 4, '.', '') . ',' . number_format((float) $lng, 4, '.', '');
+}
 
-function Nominatim(float $lat, float $lng, string $city): array {
+function checkCache(string $key): array|bool {
+    global $cache;
+    $result = $cache->get($key);
+    if ($result) logger("geo cache-hit $key");
+    else logger("geo cache-miss $key");
+    return $result;
+}
+
+function setCache(string $key, array $value): void {
+    global $cache;
+    $cache->set($key, $value, MEMCACHE_COMPRESSED, 0);
+}
+
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
+function geoToAddress($lat, $lng) {
+    $latlng = normalizeLatLng($lat, $lng);
+    $prefix = "google-maps-v2";
+    $result = checkCache("$prefix $latlng");
+    if ($result) return $result;
+
+    $params = Array(
+        "latlng" => $latlng,
+        "key" => "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
+        "language" => "pl",
+        "result_type" => "street_address"
+    );
+    $url = "https://maps.googleapis.com/maps/api/geocode/json?";
+    $json = curlRequest($url, $params, "Google Maps");
+
+    if ($json['status'] == 'OK' && $json['results']) {
+        $result = $json['results'][0];
+        setCache("$prefix $latlng", $result);
+        return $result;
+    }
+    if ($json['status'] == 'ZERO_RESULTS') {
+        throw new Exception("Brak wyników z serwerów Google Maps dla $lat, $lng: " . json_encode($json), 404);
+    }
+    throw new Exception("Niepoprawna odpowiedź z serwerów Google Maps: " . json_encode($json), 500);
+}
+
+
+function Nominatim(float $lat, float $lng): array {
     $params = Array(
         "lat" => $lat,
         "lon" => $lng,
@@ -374,7 +379,11 @@ function Nominatim(float $lat, float $lng, string $city): array {
         "addressdetails" => 1
     );
     $url = "https://nominatim.openstreetmap.org/reverse?";
-    $json = curlRequest($url, $params, "MapBox");
+
+    $latlng = normalizeLatLng($lat, $lng);
+    $prefix = "nominatim-v1";
+    $json = checkCache("$prefix $latlng");
+    if (!$json) $json = curlRequest($url, $params, "Nominatim");
 
     if (!$json || !isset($json['address'])) {
         throw new Exception("Brak wyników z serwerów OpenStreetMap dla $lat,$lng " . json_encode($json), 404);
@@ -401,6 +410,8 @@ function Nominatim(float $lat, float $lng, string $city): array {
     global $STOP_AGRESJI;
 
     $address['latlng'] = "$lat,$lng"; // needed by __guessSA()
+
+    setCache("$prefix $latlng", $json);
     
     return array(
         'address' => $address,
@@ -410,6 +421,11 @@ function Nominatim(float $lat, float $lng, string $city): array {
 }
 
 function MapBox($lat, $lng) {
+    $latlng = normalizeLatLng($lat, $lng);
+    $prefix = "mapbox-v1";
+    $properties = checkCache("$prefix $latlng");
+    if ($properties) return $properties;
+
     $params = Array(
         "country" => 'pl',
         "limit" => 1,
@@ -441,6 +457,7 @@ function MapBox($lat, $lng) {
     unset($properties['bbox']);
     unset($properties['context']);
 
+    setCache("$prefix $latlng", $properties);
     return $properties;
 }
 
@@ -463,8 +480,8 @@ function curlRequest(string $url, array $params, string $vendor) {
     $json = json_decode($output, true);
     //echo "$output\n\n";
     if (!json_last_error() === JSON_ERROR_NONE) {
-        logger("Parsowanie JSON z MapBox " . $output . " " . json_last_error_msg());
-        throw new Exception("Bełkotliwa odpowiedź z serwerów MapBox:. $output", 500);
+        logger("Parsowanie JSON z $vendor " . $output . " " . json_last_error_msg());
+        throw new Exception("Bełkotliwa odpowiedź z serwerów $vendor: $output", 500);
     }
     return $json;
 }

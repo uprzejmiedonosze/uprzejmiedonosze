@@ -123,7 +123,7 @@ async function latLngToAddress(lat, lng, from) {
   if (address.error) geoError()
   else geoSuccess(address)
 
-  const nominatim = await getNominatim(lat, lng, address.city || null)
+  const nominatim = await getNominatim(lat, lng)
   if (nominatim.error) {
     running = false
     return
@@ -151,8 +151,8 @@ async function latLngToAddress(lat, lng, from) {
   running = false
 }
 
-async function getNominatim(lat, lng, city) {
-  const response = await fetch(`https://apistaging.uprzejmiedonosze.net/geo/${lat},${lng}/n?city=` + encodeURIComponent(city))
+async function getNominatim(lat, lng) {
+  const response = await fetch(`https://apistaging.uprzejmiedonosze.net/geo/${lat},${lng}/n`)
   return await response.json()
 }
 
