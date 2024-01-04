@@ -3,8 +3,12 @@
 import mapboxgl from 'mapbox-gl'
 
 let map // represents mapboxgl.Map
+let stopAgresji = false
 
-export function initMaps(lastLocation) {
+export function initMaps(lastLocation, _stopAgresji) {
+  stopAgresji = _stopAgresji ?? false
+  const $input = $("#lokalizacja")
+
   let center = [19.480311, 52.069321]
   if (lastLocation) {
     lastLocation = lastLocation.replace(/(\d+\.\d{6})\d+/g, '$1').split(",")
@@ -48,7 +52,7 @@ export function initMaps(lastLocation) {
 
   map.on('moveend', updateAddressDebounce)
 
-  if($("#lokalizacja").val().trim() == 0)
+  if($input.val().trim() == 0)
     updateAddressDebounce()
 }
 
@@ -60,35 +64,62 @@ function updateAddressDebounce() {
 }
 
 export function setAddressByLatLng(lat, lng, from) {
+  const $input = $("#lokalizacja")
+  const $geoIcon = $("#geo")
+  const $address = $("#address")
+  const $sm = $("#smInfo")
+  const $smHint = $("#smInfoHint")
+
   if (from === "picture" && map)
     map.setCenter([lng, lat])
 
-  $("#address").val(JSON.stringify({}))
+  $address.val(JSON.stringify({}))
 
-  $("a#geo").buttonMarkup({ icon: "clock" })
+  $geoIcon.buttonMarkup({ icon: "clock" })
   if (from == "picture") {
-    $("#lokalizacja").attr("placeholder", "(pobieram adres ze zdjęcia...)")
+    $input.attr("placeholder", "(pobieram adres ze zdjęcia...)")
   } else {
-    $("#lokalizacja").attr("placeholder", "(pobieram adres z mapy...)")
+    $input.attr("placeholder", "(pobieram adres z mapy...)")
   }
   
-  latLngToAddress(lat, lng, from)
+
+  latLngToAddress(lat, lng, from).then(address => {
+    if (address.error) {
+      $geoIcon.buttonMarkup({ icon: "alert" })
+      $sm.text('')
+      $smHint.attr('title', '')
+    }
+  })
+  
 }
 
 
 async function latLngToAddress(lat, lng, from) {
-  $("#addressHint").text("Podaj adres lub wskaż go na mapie");
-  $("#addressHint").removeClass("hint");
+  const $addressHint = $("#addressHint")
+  const $address = $("#address")
+  const $input = $("#lokalizacja")
+  const $geoIcon = $("#geo")
+  const $sm = $("#smInfo")
+  const $smHint = $("#smInfoHint")
+
+  $addressHint.text("Podaj adres lub wskaż go na mapie")
+  $addressHint.removeClass("hint")
 
   const address = await getMapBox(lat, lng)
-$("#address").val(JSON.stringify(address))
-  $("a#geo").buttonMarkup({ icon: "location" })
-  $("#lokalizacja").removeClass("error")
+  if (address.error) {
+    return address
+  }
+  $address.val(JSON.stringify(address))
+  $geoIcon.buttonMarkup({ icon: "location" })
+  $geoIcon.removeClass("error")
   if (from == "picture") {
-    $("#addressHint").text("Sprawdź automatycznie pobrany adres")
-    $("#addressHint").addClass("hint")
+    $addressHint.text("Sprawdź automatycznie pobrany adres")
+    $input.addClass("hint")
   }
   const nominatim = await getNominatim(lat, lng, address.city)
+  if (nominatim.error) {
+    return nominatim
+  }
   address.address = address.address || nominatim.address.address
   address.city = address.city || nominatim.address.city
   address.voivodeship = address.voivodeship || nominatim.address?.voivodeship
@@ -96,23 +127,27 @@ $("#address").val(JSON.stringify(address))
   address.municipality = nominatim.address?.municipality
   address.county = nominatim.address?.county
   address.district = nominatim.address?.district
+  
 
-  $("#lokalizacja").val(address?.address || '')
+  $input.val(address?.address || '')
   if (!address?.address?.match(/.+,.+/)) {
-    $("a#geo").buttonMarkup({ icon: "alert" })
-    $("#lokalizacja").addClass("error")
+    $geoIcon.buttonMarkup({ icon: "alert" })
+    $input.addClass("error")
   }
   
-  $("#address").val(JSON.stringify(address))
-  if (nominatim.sm) {
-    $("#smInfo").text(nominatim.sm.address[0])
-    $("#smInfoHint").attr('title', nominatim.sm.hint)
-    $("#smInfoHint").show()
-  } else {
-    $("#smInfo").text(`(brak SM dla ${address.city})`)
-    $("#smInfoHint").attr('title', '')
-    $("#smInfoHint").hide()
+  $address.val(JSON.stringify(address))
+
+  $sm.text('')
+  $smHint.attr('title', '')
+  if (stopAgresji) {
+    $sm.text(nominatim.sa.address[0])
+    $smHint.attr('title', nominatim.sa.hint ?? '')
+  } else if (nominatim.sm?.email) {
+    $sm.text(nominatim.sm.address[0])
+    $smHint.attr('title', nominatim.sm.hint ?? '')
   }
+  $smHint.css('visibility', ($sm.text() == '') ? 'none': 'visible')
+  return address
 }
 
 async function getNominatim(lat, lng, city) {
@@ -123,6 +158,8 @@ async function getNominatim(lat, lng, city) {
 async function getMapBox(lat, lng) {
   const response = await fetch(`https://apistaging.uprzejmiedonosze.net/geo/${lat},${lng}/m`)
   const mapbox = await response.json()
+  if (mapbox.error) return mapbox
+
   const address = mapbox.address || {}
   address.latlng = `${lat.toFixed(4)},${lng.toFixed(4)}`
 

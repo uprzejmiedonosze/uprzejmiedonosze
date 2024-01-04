@@ -231,17 +231,20 @@ class Application extends JSONObject{
      * Zwraca najlepiej pasująca dla adresu zgłoszenia SM/SA.
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function guessSMData($update = null){
+    public function guessSMData(bool $update=null): object {
         global $SM_ADDRESSES;
+        global $STOP_AGRESJI;
         if(!$update && isset($this->smCity) && !$this->stopAgresji()){
             if($this->smCity !== '_nieznane'){
                 return $SM_ADDRESSES[$this->smCity];
             }
         }
         if($this->stopAgresji()){
-            return $this->__guessSA();
+            $this->smCity = Application::__guessSA($this->address);
+            return $STOP_AGRESJI[$this->smCity];
         }
-        return $this->__guessSM();
+        $this->smCity = Application::__guessSM($this->address);
+        return $SM_ADDRESSES[$this->smCity];
     }
 
     /**
@@ -249,23 +252,23 @@ class Application extends JSONObject{
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
-    private function __guessSM(){ // straż miejska
+    public static function __guessSM(object $address): string{ // straż miejska
         global $SM_ADDRESSES;
-        $city = trimstr2lower($this->address->city);
-        if($city == 'krosno' && trimstr2lower(@$this->address->voivodeship) == 'wielkopolskie'){
+        $city = trimstr2lower($address->city);
+        if($city == 'krosno' && trimstr2lower(@$address->voivodeship) == 'wielkopolskie'){
             $city = 'krosno-wlkp'; // tak, są dwa miasta o nazwie 'Krosno'...
         }
         if(array_key_exists($city, $SM_ADDRESSES)){
-            $this->smCity = $city;
-            if($city == 'warszawa' && isset($this->address->district)){
-                if(array_key_exists($this->address->district, ODDZIALY_TERENOWE)){
-                    $this->smCity = ODDZIALY_TERENOWE[$this->address->district];
+            $smCity = $city;
+            if($city == 'warszawa' && isset($address->district)){
+                if(array_key_exists($address->district, ODDZIALY_TERENOWE)){
+                    $smCity = ODDZIALY_TERENOWE[$address->district];
                 }
             }
-            return $SM_ADDRESSES[$this->smCity];
+            return $smCity;
         }
-        $this->smCity = '_nieznane';
-        return $SM_ADDRESSES[$this->smCity];
+        $smCity = '_nieznane';
+        return $smCity;
     }
 
     /** 
@@ -273,23 +276,22 @@ class Application extends JSONObject{
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
-    private function __guessSA(){ // stop agresji
+    public static function __guessSA(object $address): string { // stop agresji
         global $STOP_AGRESJI;
 
-        $voivodeship = trimstr2lower(@$this->address->voivodeship);
-        $city = trimstr2lower($this->address->city);
+        $voivodeship = trimstr2lower(@$address->voivodeship);
+        $city = trimstr2lower($address->city);
 
         if(array_key_exists($voivodeship, $STOP_AGRESJI)){
             if($city == 'szczecin'){
-                $voivodeship = policeStationsSzczecin($this);
+                $voivodeship = policeStationsSzczecin($address);
             }
-            $this->smCity = $voivodeship;
-            return $STOP_AGRESJI[$voivodeship];
+            return $voivodeship;
         }
-        return $STOP_AGRESJI['default'];
+        return 'default';
     }
 
-    public function hasAPI(){
+    public function hasAPI(): bool{
         return $this->guessSMData()->hasAPI();
     }
 

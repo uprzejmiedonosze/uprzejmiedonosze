@@ -315,8 +315,8 @@ function extractAppNumer($appNumber) {
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-function policeStationsSzczecin(&$app) {
-    preg_match('/(.*)\s([0-9]+)[a-zA-Z]?, Szczecin/', $app->address->address, $match);
+function policeStationsSzczecin(object $address): string {
+    preg_match('/(.*)\s([0-9]+)[a-zA-Z]?, Szczecin/', $address->address, $match);
     $street = $match[1] ?? "(not Szczecin)";
     $number = $match[2] ?? null;
 
@@ -350,8 +350,8 @@ function policeStationsSzczecin(&$app) {
     if(str_contains($street, '5 Lipca')) return 'szczecin-niebuszewo';
     if(str_contains($street, 'Rayskiego')) return 'szczecin-niebuszewo';
 
-    $x = $app->getLon();
-    $y = $app->getLat();
+    $x = explode(',', $address->latlng)[1];
+    $y = explode(',', $address->latlng)[0];
 
     $odraY = 53.42745434366132;
     $odraX = 14.565803905874402;

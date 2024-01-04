@@ -10,7 +10,7 @@ $(document).on("pageshow", function () {
   if (!$(".new-application").length) return;
 
   initHandlers();
-  initMaps(currentScript?.getAttribute("last-location"));
+  initMaps(currentScript?.getAttribute("last-location"), currentScript?.getAttribute("stop-agresji"));
 
   Sentry.setTag("appId", $("#applicationId").val());
 

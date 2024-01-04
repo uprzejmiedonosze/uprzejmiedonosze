@@ -366,7 +366,7 @@ function getUserByName($name, $apiToken) {
 }
 
 
-function Nominatim($lat, $lng, $city) {
+function Nominatim(float $lat, float $lng, string $city): array {
     $params = Array(
         "lat" => $lat,
         "lon" => $lng,
@@ -382,33 +382,30 @@ function Nominatim($lat, $lng, $city) {
 
     $address = $json['address'];
 
+    if ($address["country_code"] !== "pl") {
+        throw new Exception("Poza granicami kraju OpenStreetMap dla $lat,$lng {$address['country_code']}", 404);
+    }
+
     $address['voivodeship'] = str_replace("województwo ", "", $address['state'] ?? "");
     unset($address['state']);
 
     $address['district'] = $address['suburb'] ?? $address['borough'] ?? $address['quarter'] ?? $address['neighbourhood'] ?? '';
 
-    $address['county'] = $address['county'] ?? "gmina {$address['city']}";
-    $address['municipality'] = $address['municipality'] ?? "powiat {$address['city']}";
-    $address['city'] = $address['city'] ?? $address['village'] ?? '';
+    $address['city'] = $address['city'] ?? $address['village'] ?? null;
+    $address['county'] = $address['county'] ?? (($address['city'])? "gmina {$address['city']}": null);
+    $address['municipality'] = $address['municipality'] ?? (($address['city'])? "powiat {$address['city']}": null);
 
-    $address['address'] = trim(($address['road'] ?? '') . " " . ($address['house_number'] ?? '')) . ", " . $address['city'];
+    $address['address'] = trim(($address['road'] ?? '') . " " . ($address['house_number'] ?? '')) . ", " . ($address['city'] ?? '');
 
     global $SM_ADDRESSES;
-    
-    $sm = null;
+    global $STOP_AGRESJI;
 
-    $city = trimstr2lower($city);
-    if($city == 'krosno' && trimstr2lower(@$address['voivodeship']) == 'województwo wielkopolskie'){
-        $city = 'krosno-wlkp'; // tak, są dwa miasta o nazwie 'Krosno'...
-    }
-    if(array_key_exists($city, $SM_ADDRESSES)) {
-        if($city == 'warszawa' && array_key_exists($address['district'], ODDZIALY_TERENOWE))
-            $city = ODDZIALY_TERENOWE[$address['district']];
-        $sm =  $SM_ADDRESSES[$city];
-    }
+    $address['latlng'] = "$lat,$lng"; // needed by __guessSA()
+    
     return array(
         'address' => $address,
-        'sm' => $sm
+        'sm' => $SM_ADDRESSES[Application::__guessSM((object)$address)],
+        'sa' => $STOP_AGRESJI[Application::__guessSA((object)$address)]
     );
 }
 

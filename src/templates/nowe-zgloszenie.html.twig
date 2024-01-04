@@ -90,7 +90,10 @@
                         data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
                         data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
                 </div>
-                <p><span id="smInfo"></span><span id="smInfoHint" class="ui-btn-inline ui-icon-info ui-btn-icon-notext" title=""></span></p>
+                <div>
+                    <span id="smInfoHint" title=""></span>
+                    <span id="smInfo"></span>
+                </div>
             </div>
         </div>
 
@@ -166,7 +169,6 @@
             {% endif %} />
     </div> <!-- ui-field-contain -->
 </form>
-
-<script src="/js/new-app.js?%JS_HASH%" last-location="{{ app.getLatLng() ?? config.lastLocation }}"></script>
+<script src="/js/new-app.js?%JS_HASH%" last-location="{{ app.address.latlng ?? config.lastLocation }}" stop-agresji="{{ app.user.stopAgresji }}"></script>
 
 {% endblock %}
