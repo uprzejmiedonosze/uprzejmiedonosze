@@ -57,7 +57,10 @@ export function initMaps(lastLocation, _stopAgresji) {
 }
 
 let timeout
+let running = false
 function updateAddressDebounce() {
+  if (running) return
+  running = true
   const { lat, lng } = map.getCenter()  
   clearTimeout(timeout);
   timeout = setTimeout(setAddressByLatLng.bind(this, lat, lng, 'map'), 1000);
@@ -122,6 +125,7 @@ async function latLngToAddress(lat, lng, from) {
 
   const nominatim = await getNominatim(lat, lng, address.city || null)
   if (nominatim.error) {
+    running = false
     return
   }
   address.address = address.address || nominatim.address.address
@@ -144,7 +148,7 @@ async function latLngToAddress(lat, lng, from) {
     $smHint.attr('title', nominatim.sm.hint ?? '')
   }
   $smHint.css('visibility', ($sm.text() == '') ? 'none': 'visible')
-  return address
+  running = false
 }
 
 async function getNominatim(lat, lng, city) {
