@@ -67,8 +67,6 @@ export function setAddressByLatLng(lat, lng, from) {
   const $input = $("#lokalizacja")
   const $geoIcon = $("#geo")
   const $address = $("#address")
-  const $sm = $("#smInfo")
-  const $smHint = $("#smInfoHint")
 
   if (from === "picture" && map)
     map.setCenter([lng, lat])
@@ -81,16 +79,7 @@ export function setAddressByLatLng(lat, lng, from) {
   } else {
     $input.attr("placeholder", "(pobieram adres z mapy...)")
   }
-  
-
-  latLngToAddress(lat, lng, from).then(address => {
-    if (address.error) {
-      $geoIcon.buttonMarkup({ icon: "alert" })
-      $sm.text('')
-      $smHint.attr('title', '')
-    }
-  })
-  
+  latLngToAddress(lat, lng, from)
 }
 
 
@@ -105,20 +94,35 @@ async function latLngToAddress(lat, lng, from) {
   $addressHint.text("Podaj adres lub wskaż go na mapie")
   $addressHint.removeClass("hint")
 
+  const geoError = () => {
+    $geoIcon.buttonMarkup({ icon: "alert" })
+    $sm.text('')
+    $smHint.attr('title', '')
+  }
+
+  const geoSuccess = (address) => {
+    $address.val(JSON.stringify(address))
+    $input.val(address?.address || '')
+    $geoIcon.buttonMarkup({ icon: "location" })
+    $geoIcon.removeClass("error")
+    if (!address?.address?.match(/.+,.+/)) {
+      $geoIcon.buttonMarkup({ icon: "alert" })
+      $input.addClass("error")
+    }
+    if (from == "picture") {
+      $addressHint.text("Sprawdź automatycznie pobrany adres")
+      $input.addClass("hint")
+    }
+  }
+
   const address = await getMapBox(lat, lng)
-  if (address.error) {
-    return address
-  }
-  $address.val(JSON.stringify(address))
-  $geoIcon.buttonMarkup({ icon: "location" })
-  $geoIcon.removeClass("error")
-  if (from == "picture") {
-    $addressHint.text("Sprawdź automatycznie pobrany adres")
-    $input.addClass("hint")
-  }
-  const nominatim = await getNominatim(lat, lng, address.city)
+
+  if (address.error) geoError()
+  else geoSuccess(address)
+
+  const nominatim = await getNominatim(lat, lng, address.city || null)
   if (nominatim.error) {
-    return nominatim
+    return
   }
   address.address = address.address || nominatim.address.address
   address.city = address.city || nominatim.address.city
@@ -128,14 +132,7 @@ async function latLngToAddress(lat, lng, from) {
   address.county = nominatim.address?.county
   address.district = nominatim.address?.district
   
-
-  $input.val(address?.address || '')
-  if (!address?.address?.match(/.+,.+/)) {
-    $geoIcon.buttonMarkup({ icon: "alert" })
-    $input.addClass("error")
-  }
-  
-  $address.val(JSON.stringify(address))
+  geoSuccess(address)
 
   $sm.text('')
   $smHint.attr('title', '')
