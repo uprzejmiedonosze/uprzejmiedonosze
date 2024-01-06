@@ -53,7 +53,10 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->address->city = $address->city;
     $application->address->voivodeship = $address->voivodeship;
     $application->address->latlng = $address->latlng;
-    $application->address->district = $address->district;
+    $application->address->district = $address?->district;
+    $application->address->county = $address?->county;
+    $application->address->municipality = $address?->municipality;
+    $application->address->postcode = $address?->postcode;
 
     $application->guessSMData(true); // stores sm city inside the object
 
