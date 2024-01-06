@@ -50,7 +50,7 @@ class AuthMiddleware implements MiddlewareInterface {
         $key = $keys[$decoded['kid']];
         
         try {
-            $_token = JWT::decode($jwt, new Key($key, $algorithm));
+            $decodedToken = JWT::decode($jwt, new Key($key, $algorithm));
         } catch (InvalidArgumentException $e) {
             throw new HttpBadRequestException($request, $e->getMessage(), $e);
         } catch (DomainException // provided algorithm is unsupported OR provided key is invalid
@@ -59,6 +59,15 @@ class AuthMiddleware implements MiddlewareInterface {
             | ExpiredException // provided JWT is trying to be used after "exp" claim.
             | UnexpectedValueException // provided JWT is malformed OR is missing an algorithm / using an unsupported algorithm OR algorithm does not match provided key OR key ID in key/key-array is empty or invalid.
             $e) {
+
+            if ($e instanceof ExpiredException && isDev()) {
+                $user = Array(
+                    'user_email' => $decodedToken->email,
+                    'user_name' => $decodedToken->name
+                );
+                $request = $request->withAttribute('firebaseUser', $user);
+                return $handler->handle($request);
+            }
             
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
         }    
