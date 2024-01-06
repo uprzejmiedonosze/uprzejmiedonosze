@@ -25,10 +25,10 @@ Cypress.Commands.add("uploadFile", (selector, fileUrl, type = "") => cy.get(sele
   )
 )
 
-Cypress.Commands.add("uploadOKImages", () => {
+Cypress.Commands.add("uploadOKImages", (carImage='img_p.jpg') => {
   cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg',
   'image/jpeg')
-  cy.uploadFile('input[type=file]#carImage', 'img_p.jpg',
+  cy.uploadFile('input[type=file]#carImage', carImage,
     'image/jpeg')
 
   cy.get('.carImageSection img', { timeout: 12000 }).should('have.attr', 'src').should('include', 'cdn')

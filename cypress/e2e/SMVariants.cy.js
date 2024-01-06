@@ -10,11 +10,10 @@ describe('API:automated (Poznań)', () => {
     })
 
     it('creates application', function () {
-        cy.uploadOKImages()
+        cy.uploadOKImages('poznan.jpg')
+        cy.wait(1000)
+        cy.get('.mapboxgl-ctrl-zoom-out').click()
         cy.setAppCategory(this.categories)
-        cy.get('#lokalizacja').clear().type('Taczaka 20, Poznań')
-        cy.wait(500)
-        cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
         cy.contains('Wyślij do').click()
@@ -31,7 +30,7 @@ describe('API:automated (Poznań)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains('Stanisława Taczaka 20, Poznań').click()
+        cy.contains('Jana Matejki 22, Poznań').click()
         cy.contains('Zmień ręcznie status zgłoszenia z Potwierdzone w SM')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
@@ -50,11 +49,10 @@ describe('API:Mail (Wrocław)', () => {
 
     it('creates application', function () {
         cy.goToNewAppScreen()
-        cy.uploadOKImages()
+        cy.uploadOKImages('wroclaw.jpg')
+        cy.wait(1000)
+        cy.get('.mapboxgl-ctrl-zoom-out').click()
         cy.setAppCategory(this.categories)
-        cy.get('#lokalizacja').clear().type('Szewska 75, Wrocław')
-        cy.wait(500)
-        cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
         cy.contains('Wyślij do').click()
@@ -71,7 +69,7 @@ describe('API:Mail (Wrocław)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains('Szewska 75, Wrocław').click()
+        cy.contains('Plac Generała Walerego Wróblewskiego 1, Wrocław').click()
         cy.contains('Zmień ręcznie status zgłoszenia z Wysłane')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
@@ -142,7 +140,7 @@ describe('Missing SM (Poniatowa)', () => {
         cy.uploadOKImages()
         cy.setAppCategory(this.categories)
         cy.get('#lokalizacja').clear().type('Henin 93, Poniatowa')
-        cy.wait(500)
+        cy.wait(1000)
         cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit', { timeout: 5000 }).click()
