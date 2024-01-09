@@ -79,6 +79,12 @@ function platerecognizerRequest($method, $data=null) {
         array("Authorization: Token $secretKey")
     );
     $result = curl_exec($chi);
+    if (curl_errno($chi)) {
+        $error = curl_error($chi);
+        curl_close($chi);
+        logger("Nie udało się pobrać danych platerecognizer: $error");
+        throw new Exception("Nie udało się pobrać odpowiedzi z serwerów platerecognizer: $error", 500);
+    }
     curl_close($chi);
 
     return json_decode($result, true);

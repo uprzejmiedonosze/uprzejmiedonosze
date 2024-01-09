@@ -16,12 +16,21 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
 
     $application->carInfo = new stdClass();
 
-    if (usePlaterecognizer()) {
-        get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
-    } else {
-        get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
+    $usePlaterecognizer = usePlaterecognizer();
+    try {
+        if ($usePlaterecognizer)
+            get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
+        else
+            get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
+    } catch (Exception $e) {
+        logger("Exception on get_car_info, 1st attepmt with usePlaterecognizer=$usePlaterecognizer " . $e->getMessage(), true);
+        $usePlaterecognizer = !$usePlaterecognizer;
+        if ($usePlaterecognizer)
+            get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
+        else
+            get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
     }
-    
+
     if (isset($application->carInfo->plateId)) {
         $recydywa = $storage->getRecydywa($application->carInfo->plateId);
         $application->carInfo->recydywa = $recydywa;

@@ -86,21 +86,16 @@ function get_alpr(&$imageBytes){
         "sk_0bcc0e58dab1ea40c4389d70": // SZN key
         "sk_aa0b80a70b2ae2268b36734a"; // KS key
 
-	try {
-		$alpr = $apiInstance->recognizeBytes($imageBytes, $secretKey,
-            "eu", // country
-            1, // recognize_vehicle
-            "", // state
-            0, // return_image
-            1, // topn
-            "" // prewarp
-        );
-        $cache->set("_alpr-$imageHash", $alpr, MEMCACHE_COMPRESSED, 0);
-        return $alpr;
-	} catch (Exception $e) {
-		logger('Exception when calling DefaultApi->recognizeBytes: ' . $e->getMessage(), true);
-		return null;
-	}
+    $alpr = $apiInstance->recognizeBytes($imageBytes, $secretKey,
+        "eu", // country
+        1, // recognize_vehicle
+        "", // state
+        0, // return_image
+        1, // topn
+        "" // prewarp
+    );
+    $cache->set("_alpr-$imageHash", $alpr, MEMCACHE_COMPRESSED, 0);
+    return $alpr;
 }
 
 /**
