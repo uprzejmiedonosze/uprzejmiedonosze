@@ -9,7 +9,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym zawężonym światłem chodnika.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 0
     },
     "6": {
         "title": "Niszczenie zieleni",
@@ -21,7 +22,8 @@
         "mandate": 500,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać zniszczoną zieleń i przynajmniej fragment pojazdu.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, z widoczną zielenią.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 1
     },
     "19": {
         "title": "Korzystanie niezgodnie z przeznaczeniem (np. parkowanie na zieleni lub sug. przejściu dla pieszych)",
@@ -33,7 +35,8 @@
         "mandate": 500,
         "contextImageHint": "Idealne zdjęcie powinno dość pojazd z kilku metrów, z widocznym terenem pod pojazdem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 2        
     },
     "14": {
         "title": "Niezastosowanie się do zakazu zatrzymywania się",
@@ -45,7 +48,8 @@
         "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak B-36, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 3
     },
     "15": {
         "title": "Niezastosowanie się do zakazu postoju",
@@ -57,7 +61,8 @@
         "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak B-35, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 4
     },
     "12": {
         "title": "Parkowanie w strefie zamieszkania w miejscu niewyznaczonym",
@@ -69,7 +74,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak strefy zamieszkania, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 5
     },
     "5": {
         "title": "Mniej niż 10 m od przejścia dla pieszych",
@@ -81,7 +87,8 @@
         "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd i znak pionowy D6 Przejście dla pieszych.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 6
     },
     "16": {
         "title": "Niezastosowanie do tabliczki T-30 wskazującej sposób parkowania",
@@ -93,7 +100,8 @@
         "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać znak parkingu z tabliczką, i pojazd w tle.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 7
     },
     "17": {
         "title": "Niezastosowanie się do znaków poziomych",
@@ -105,7 +113,8 @@
         "mandate": 200,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym przekroczeniem oznaczenia poziomego.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 8
     },
     "8": {
         "title": "Parkowanie z dala od krawędzi jezdni lub za barierami",
@@ -117,7 +126,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od krawędzi jezdni.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 9
     },
     "18": {
         "title": "Jazda wzdłuż po chodniku lub przejściu dla pieszych",
@@ -129,7 +139,8 @@
         "mandate": 1500,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym przekroczeniem oznaczenia poziomego.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": true
+        "stopAgresjiOnly": true,
+        "order": 10
     },
     "2": {
         "title": "Mniej niż 15 m od przystanku",
@@ -141,7 +152,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z uwidocznioną odległością od przystanku (znaku pionowego, zatoki lub zygzaka).",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 11
     },
     "23": {
         "title": "Utrudnianie pieszym dostępu do tramwaju/autobusu",
@@ -153,7 +165,8 @@
         "mandate": 300,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z uwidocznioną odległością od przystanku (znaku pionowego, zatoki lub zygzaka).",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 12
     },
     "21": {
         "title": "Zatrzymanie na drodze dla rowerów",
@@ -165,7 +178,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widoczną DDR pod pojazdem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 13
     },
     "11": {
         "title": "Pojazd powyżej 2,5 t DMC na chodniku",
@@ -177,7 +191,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd na chodniku, w sposób umożliwiający identyfikację marki.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 14
     },
     "13": {
         "title": "Parkowanie na miejscu dla niepełnosprawnych",
@@ -189,7 +204,8 @@
         "mandate": 500,
         "contextImageHint": "Idealne zdjęcie powinno prezentować przednią szybę z nieważną/podrobioną kartą, lub jej brakiem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu, wraz z widoczną kopertą.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 15
     },
     "3": {
         "title": "Parkowanie na skrzyżowaniu (nie dotyczy parkowania na chodniku)",
@@ -201,7 +217,8 @@
         "mandate": 300,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widocznym odstępem od skrzyżowania.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 16
     },
     "22": {
         "title": "Mniej niż 15 m od wysepki z jedną jezdnią",
@@ -213,7 +230,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, z widoczną wysepką.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 17
     },
     "0": {
         "title": "<i>Pozostałe przypadki (koniecznie dodaj komentarz)</i>",
@@ -225,7 +243,8 @@
         "mandate": 100,
         "contextImageHint": "Idealne zdjęcie powinno pokazywać pojazd z kilku metrów, w sposób dokumentujący wykroczenie.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false
+        "stopAgresjiOnly": false,
+        "order": 99
     },
     "1": {
         "title": null,
