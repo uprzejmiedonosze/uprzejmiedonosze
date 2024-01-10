@@ -121,7 +121,7 @@
                     {% if categoryDef.points > 1 %}
                     <span class="badge">{{ categoryDef.points }}</span>
                     {% endif %}
-                    <p>{{ categoryDef.title|raw }}
+                    <p>{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}
                     {% if not app.stopAgresji and categoryDef.stopAgresjiOnly %}
                         <span class="price-list">(kategoria niedostępna, jeśli zgłaszasz do SM)</span>
                     {% elseif categoryDef.price %}
