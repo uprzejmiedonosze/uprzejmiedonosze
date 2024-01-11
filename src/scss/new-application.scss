@@ -279,8 +279,8 @@ p.pictureHint {
     height: 64px;
     display: block;
     background-image: url('https://uprzejmiedonosze.net/img/map-circle.png');
-    left: calc((400px - 64px)/2);
-    bottom: calc((200px - 64px)/2);
+    left: calc(50% - 32px);
+    bottom: calc(50% - 32px);
     pointer-events: none;
     user-select: none;
   }
