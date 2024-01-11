@@ -99,7 +99,7 @@
 
         <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />
         
-        <input type="hidden" id="address" name="address" value="{{ app.address }}" />
+        <input type="hidden" id="address" name="address" value="{{ app.address | json_encode }}" />
 
         <label for="comment">Podaj komentarz</label>
         <textarea type="text" id="comment" name="comment"
