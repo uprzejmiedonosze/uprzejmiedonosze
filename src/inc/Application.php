@@ -47,10 +47,16 @@ class Application extends JSONObject{
         $instance->category = 0;
         $instance->initStatements();
         $instance->address = new JSONObject();
-        $instance->version = '2.1.0';
+        $instance->version = '2.2.0';
+
+        /*
+        2.2.0 (2024-01-11):
+          - browser property reduced to minimum
+          - extended address property
+        2.1.0
+        */
 
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        //$instance->browser = get_browser($userAgent, true);
         $instance->browser['user_agent'] = $userAgent;
         return $instance;
     }
