@@ -20,7 +20,7 @@ export function initMaps(lastLocation, _stopAgresji) {
   const mapOptions = {
     container: 'locationPicker',
     center: center,
-    zoom: 15,
+    zoom: 16,
     hash: false,
     language: 'pl',
     // maxBounds
