@@ -407,13 +407,10 @@ class Application extends JSONObject{
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getMapImage(){
-        $latlng = $this->getLatLng();
-        if(!$latlng){
-            return null;
-        }
         $iconEncodedUrl = urlencode('%HTTPS%://%HOST%/img/map-circle.png');
-        $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$latlng}&zoom=17&size=380x200&maptype=roadmap&markers=anchor:center%7Cicon:$iconEncodedUrl%7C{$latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
-        
+        $lonLat = $this->getLonLat();
+        $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lonLat)/$lonLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
+
         if(!$this->hasNumber()){
             return $mapsUrl;
         }
@@ -479,6 +476,10 @@ class Application extends JSONObject{
         if(isset($this->address->latlng))
             return $this->address->latlng;
         return null;
+    }
+
+    private function getLonLat(): string {
+        return implode(',', array_reverse(explode(',', $this->address->latlng)));
     }
 
     public function getTitle(){
