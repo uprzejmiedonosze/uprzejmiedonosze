@@ -149,18 +149,27 @@ $app->get('/config', function (Request $request, Response $response, $args) use 
     return $response;
 });
 
+$app->get('/config/categories', function (Request $request, Response $response, $args) {
+    $categories = file_get_contents(__DIR__ . "/../config/categories.json");
+    $categories = json_decode($categories, true);
+    array_walk($categories, function(&$val, $key) { $val["id"] = (string)$key; });
+    $response->getBody()->write(json_encode(array_values($categories)));
+    return $response;
+});
+
+$app->get('/config/terms', function (Request $request, Response $response, $args) {
+    $terms = generate('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
+    $response->getBody()->write($terms);
+    return $response;
+});
+
 $app->get('/config/{name}', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
     $name = $args['name'];
-    
+
     if (!in_array($name, $CONFIG_FILES))
         throw new HttpNotFoundException($request,
             "Nie znam konfiguracji o nazwie '$name'");
 
-    if ($name == "terms") {
-        $terms = generate('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
-        $response->getBody()->write($terms);
-        return $response;
-    }
     $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
     return $response;
 });
