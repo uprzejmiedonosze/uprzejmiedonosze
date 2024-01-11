@@ -54,6 +54,8 @@ export function initMaps(lastLocation, _stopAgresji) {
 
   if($input.val().trim() == 0)
     updateAddressDebounce()
+
+  return map
 }
 
 let timeout

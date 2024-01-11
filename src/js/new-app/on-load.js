@@ -2,7 +2,7 @@
 import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
 
-export const initHandlers = () => {
+export const initHandlers = (map) => {
   $("#lokalizacja").on("change", function () {
     $("a#geo").buttonMarkup({ icon: "alert" });
   });
@@ -49,8 +49,9 @@ export const initHandlers = () => {
   }
 
   $("#resizeMap").click(function () {
-    $("#locationPicker").toggleClass("locationPickerBig");
-    $("#resizeMap").toggleClass("ui-icon-arrowsin");
+    $("#locationPicker").toggleClass("locationPickerBig")
+    $("#resizeMap").toggleClass("ui-icon-arrowsin")
+    map.resize()
   });
 
   $("#form-submit").click(function () {
