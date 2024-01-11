@@ -24,7 +24,7 @@ export function initMaps(lastLocation, _stopAgresji) {
     hash: false,
     language: 'pl',
     // maxBounds
-    maxZoom: 16,
+    maxZoom: 17,
     minZoom: 6,
     scrollZoom: false,
     style: 'mapbox://styles/mapbox/outdoors-v12',
