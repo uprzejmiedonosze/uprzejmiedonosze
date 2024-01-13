@@ -9,8 +9,8 @@ class Poznan extends CityAPI {
             $url = "https://www.poznan.pl/mim/api/submit.html?service=fixmycity";
         }
         $data = array(
-            'lat' => $application->getLat(),
-            'lon' => $application->getLon(),
+            'lat' => $application->address->lat,
+            'lon' => $application->address->lng,
             'category' => '1118_9608', // "Zagrożenia w ruchu drogowym"
             'subcategory' => (($application->category == 6)?
                 '17402': // Ruch drogowy - niszczenie zieleni

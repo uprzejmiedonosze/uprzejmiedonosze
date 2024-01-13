@@ -52,7 +52,8 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->address->address = $address->address;
     $application->address->city = $address->city;
     $application->address->voivodeship = $address->voivodeship;
-    $application->address->latlng = $address->latlng;
+    $application->address->lat = $address->lat;
+    $application->address->lng = $address->lng;
     $application->address->district = $address?->district;
     $application->address->county = $address?->county;
     $application->address->municipality = $address?->municipality;
@@ -217,7 +218,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
     if ($pictureType == 'carImage') {
         if (!empty($dateTime)) $application->date = $dateTime;
         if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
-        if (!empty($latLng)) $application->address->latlng = $latLng;
+        if (!empty($latLng)) $application->setLatLng($latLng);
         get_car_info($imageBytes, $application, $baseFileName, $type);
     } else if ($pictureType == 'contextImage') {
         $application->contextImage = new stdClass();
@@ -327,8 +328,12 @@ function getUserByName($name, $apiToken) {
     echo json_encode($user);
 }
 
+function normalizeGeo(float|string $g): string {
+    return sprintf('%.4F', $g);
+}
+
 function normalizeLatLng($lat, $lng) {
-    return number_format((float) $lat, 4, '.', '') . ',' . number_format((float) $lng, 4, '.', '');
+    return normalizeGeo($lat) . "," . normalizeGeo($lng);
 }
 
 function checkCache(string $key): array|bool {
@@ -348,13 +353,14 @@ function setCache(string $key, array $value): void {
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
 function geoToAddress($lat, $lng) {
-    $latlng = normalizeLatLng($lat, $lng);
+    $lat = normalizeGeo($lat);
+    $lng = normalizeGeo($lng);
     $prefix = "google-maps-v2";
-    $result = checkCache("$prefix $latlng");
+    $result = checkCache("$prefix $lat,$lng");
     if ($result) return $result;
 
     $params = Array(
-        "latlng" => $latlng,
+        "latlng" => "$lat,$lng",
         "key" => "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
         "language" => "pl",
         "result_type" => "street_address"
@@ -364,17 +370,19 @@ function geoToAddress($lat, $lng) {
 
     if ($json['status'] == 'OK' && $json['results']) {
         $result = $json['results'][0];
-        setCache("$prefix $latlng", $result);
+        setCache("$prefix $lat,$lng", $result);
         return $result;
     }
     if ($json['status'] == 'ZERO_RESULTS') {
-        throw new Exception("Brak wyników z serwerów Google Maps dla $lat, $lng: " . json_encode($json), 404);
+        throw new Exception("Brak wyników z serwerów Google Maps dla $lat,$lng: " . json_encode($json), 404);
     }
     throw new Exception("Niepoprawna odpowiedź z serwerów Google Maps: " . json_encode($json), 500);
 }
 
 
 function Nominatim(float $lat, float $lng): array {
+    $lat = normalizeGeo($lat);
+    $lng = normalizeGeo($lng);
     $params = Array(
         "lat" => $lat,
         "lon" => $lng,
@@ -383,9 +391,8 @@ function Nominatim(float $lat, float $lng): array {
     );
     $url = "https://nominatim.openstreetmap.org/reverse?";
 
-    $latlng = normalizeLatLng($lat, $lng);
     $prefix = "nominatim-v1";
-    $json = checkCache("$prefix $latlng");
+    $json = checkCache("$prefix $lat,$lng");
     if (!$json) $json = curlRequest($url, $params, "Nominatim");
 
     if (!$json || !isset($json['address'])) {
@@ -403,7 +410,7 @@ function Nominatim(float $lat, float $lng): array {
 
     $address['district'] = $address['suburb'] ?? $address['borough'] ?? $address['quarter'] ?? $address['neighbourhood'] ?? '';
 
-    $address['city'] = $address['city'] ?? $address['village'] ?? null;
+    $address['city'] = $address['city'] ?? $address['town'] ?? $address['village'] ?? null;
     $address['county'] = $address['county'] ?? (($address['city'])? "gmina {$address['city']}": null);
     $address['municipality'] = $address['municipality'] ?? (($address['city'])? "powiat {$address['city']}": null);
 
@@ -412,9 +419,10 @@ function Nominatim(float $lat, float $lng): array {
     global $SM_ADDRESSES;
     global $STOP_AGRESJI;
 
-    $address['latlng'] = "$lat,$lng"; // needed by __guessSA()
+    $address['lat'] = $lat; // needed by __guessSA()
+    $address['lng'] = $lng; // needed by __guessSA()
 
-    setCache("$prefix $latlng", $json);
+    setCache("$prefix $lat,$lng", $json);
     
     return array(
         'address' => $address,
@@ -423,10 +431,11 @@ function Nominatim(float $lat, float $lng): array {
     );
 }
 
-function MapBox($lat, $lng) {
-    $latlng = normalizeLatLng($lat, $lng);
+function MapBox(float $lat, float $lng): array {
+    $lat = normalizeGeo($lat);
+    $lng = normalizeGeo($lng);
     $prefix = "mapbox-v1";
-    $properties = checkCache("$prefix $latlng");
+    $properties = checkCache("$prefix $lat,$lng");
     if ($properties) return $properties;
 
     $params = Array(
@@ -460,7 +469,7 @@ function MapBox($lat, $lng) {
     unset($properties['bbox']);
     unset($properties['context']);
 
-    setCache("$prefix $latlng", $properties);
+    setCache("$prefix $lat,$lng", $properties);
     return $properties;
 }
 

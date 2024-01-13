@@ -32,6 +32,7 @@ class Application extends JSONObject{
             $instance->seq = extractAppNumer($instance->getNumber());
         }
         $instance->migrateSent();
+        $instance->migrateLatLng();
         return $instance;
     }
 
@@ -50,6 +51,8 @@ class Application extends JSONObject{
         $instance->version = '2.2.0';
 
         /*
+        2.2.1 (2023-01-12)
+          - separate lat & lng
         2.2.0 (2024-01-11):
           - browser property reduced to minimum
           - extended address property
@@ -95,7 +98,18 @@ class Application extends JSONObject{
         $this->sent->method = 'manual';
     }
 
-    public function initStatements(){
+    public function setLatLng(string $latLng): void {
+        [$lat, $lng] = explode(',', $latLng);
+        $this->address->lat = (float)$lat;
+        $this->address->lng = (float)$lng;
+    }
+
+    private function migrateLatLng(): void {
+        if(isset($this->address->latlng))
+            $this->setLatLng($this->address->latlng);
+    }
+
+    public function initStatements() {
         if(isset($this->statements)){
             return;
         }
@@ -352,7 +366,7 @@ class Application extends JSONObject{
         return 0;
     }
 
-    private function getLatexSafe($input){
+    private static function getLatexSafe($input){
         // Remove HTML entities
         $string = preg_replace('/&[a-zA-Z]+;/iu', '', $input);
 
@@ -407,9 +421,12 @@ class Application extends JSONObject{
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getMapImage(){
+        if(!isset($this->address) || !isset($this->address->lat)){
+            return null;
+        }
         $iconEncodedUrl = urlencode('%HTTPS%://%HOST%/img/map-circle.png');
-        $lonLat = $this->getLonLat();
-        $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lonLat)/$lonLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
+        $lngLat = $this->getLngLat();
+        $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lngLat)/$lngLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
 
         if(!$this->hasNumber()){
             return $mapsUrl;
@@ -460,27 +477,22 @@ class Application extends JSONObject{
         return preg_split('/^[^\s]+\s/', $this->user->name)[1];
     }
 
-    public function getLon(){
-        return explode(',', $this->getLatLng())[1];
-    }
-
-    public function getLat(){
-        return explode(',', $this->getLatLng())[0];
-    }
-
-    public function getLatLng(): string|null {
-        // TODO: temporary forward compatibility, should be removed once
-        // Application version is bumped to 2.3.0
-        if (isset($this->address->lng))
-            return sprintf('%.4F,%.4F', $this->address->lat, $this->address->lng); 
-        if(isset($this->address->latlng))
-            return $this->address->latlng;
+    private function getLngLat(): string|null {
+        if ($this->address->lng)
+            return sprintf('%.4F,%.4F', $this->address->lng, $this->address->lat);
         return null;
     }
 
-    private function getLonLat(): string {
-        return implode(',', array_reverse(explode(',', $this->address->latlng)));
+    public function getLatLng(): string|null {
+        if ($this->address->lng)
+            return sprintf('%.4F,%.4F', $this->address->lat, $this->address->lng);
+        return null;
     }
+
+    public function getMapUrl(): string {
+        return "https://www.google.com/maps/search/?api=1&query={$this->getLatLng()}";
+    }
+
 
     public function getTitle(){
         return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150):

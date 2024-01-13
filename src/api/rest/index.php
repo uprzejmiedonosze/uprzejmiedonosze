@@ -223,7 +223,8 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
 
     $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
 
-    $latlng = getParam($params, 'latlng'); // lat,lng: 53.431786,14.551586
+    $lat = getParam($params, 'lat');
+    $lng = getParam($params, 'lng');
     $comment = getParam($params, 'comment', '');
     $category = intval(getParam($params, 'category'));
 
@@ -236,7 +237,8 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
     $fullAddress->address = $address;
     $fullAddress->city = $city;
     $fullAddress->voivodeship = $voivodeship;
-    $fullAddress->latlng = $latlng;
+    $fullAddress->lat = $lat;
+    $fullAddress->lng = $lng;
     $fullAddress->district = $district;
 
     $user = $request->getAttribute('user');
@@ -289,7 +291,10 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
     
     // valid only for $pictureType == 'carImage'
     $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
-    $latLng = getParam($params, 'latLng', ''); // lat,lng: 53.431786,14.551586
+    $lat = getParam($params, 'lat', '');
+    $lng = getParam($params, 'lng', '');
+    $latLng = null;
+    if ($lat && $lng) $latLng = normalizeLatLng($lat, $lng);
     $dtFromPicture = !!$dateTime;
 
     $imagemime = getimagesize($imageUri);
@@ -336,14 +341,13 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
 
 // GEO
 
-// @TODO, params does not support dots inside
 $app->get('/geo/{lat},{lng}/g', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
     try {
-        $response->getBody()->write(json_encode(GoogleMaps($lat, $lng)));
+        $response->getBody()->write(json_encode(geoToAddress($lat, $lng)));
     } catch (Exception $e) {
-        if ($e->code ?? -1 == 404) {
+        if ($e->getCode() ?? -1 == 404) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);
         }
         throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);

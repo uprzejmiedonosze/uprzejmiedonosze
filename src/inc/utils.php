@@ -350,8 +350,8 @@ function policeStationsSzczecin(object $address): string {
     if(str_contains($street, '5 Lipca')) return 'szczecin-niebuszewo';
     if(str_contains($street, 'Rayskiego')) return 'szczecin-niebuszewo';
 
-    $x = explode(',', $address->latlng)[1];
-    $y = explode(',', $address->latlng)[0];
+    $x = $address->lng;
+    $y = $address->lat;
 
     $odraY = 53.42745434366132;
     $odraX = 14.565803905874402;

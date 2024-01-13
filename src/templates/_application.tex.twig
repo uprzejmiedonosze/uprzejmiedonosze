@@ -8,7 +8,7 @@
 
 {% set addressUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=pdf}' %}
 {% set qrUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=qr}' %}
-{% set mapUrl = '{https://www.google.com/maps/search/?api=1&query=' ~ app.getLatLng() ~ '}' %}
+{% set mapUrl = '{' ~ app.getMapUrl() ~ '}' %}
 
 {% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '?download}' %}
 {% set carImageUrl     = '{%HTTPS%://%HOST%/' ~ app.carImage.url ~ '?download}' %}
