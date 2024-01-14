@@ -105,7 +105,7 @@ shadow-sequential: $(DIRS) export
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 
 prod: HOST := $(PROD_HOST)
-prod: cypress check-branch-main check-git-clean clean $(DIRS) export ## Copy files to prod server.
+prod: check-branch-main check-git-clean cypress clean $(DIRS) export ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
@@ -115,7 +115,7 @@ prod: cypress check-branch-main check-git-clean clean $(DIRS) export ## Copy fil
 	@make clean
 
 quickfix:  HOST := $(PROD_HOST)
-quickfix: diff-from-last-prod confirmation check-branch-main check-git-clean clean $(DIRS) export ## Quickfix on production
+quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation clean npm-install $(DIRS) export ## Quickfix on production
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
 	@#git push origin --quiet --force "prod_$(TAG_NAME)"
@@ -131,6 +131,10 @@ confirmation:
 		read ans && \
 		[ $${ans:-N} = yes ]
 
+.PHONY: npm-install
+npm-install:
+	@npm install
+
 $(EXPORT)/config.php:
 	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
@@ -140,7 +144,7 @@ export: $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/i
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r src/tools $(EXPORT)/
 
-cypress:
+cypress: npm-install
 	@echo "==> Testing staging"
 	@$(MAKE) clean
 	@$(MAKE) --warn-undefined-variables staging -j
