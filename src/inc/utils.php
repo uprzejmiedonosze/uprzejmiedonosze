@@ -320,7 +320,7 @@ function policeStationsSzczecin(&$app) {
         if ($number > 45) return 'szczecin-srodmiescie';
     }
     if(str_contains($street, 'Piastów')) {
-        if ($number <= 5 || $number > 74) return 'szczecin-niebuszewo';
+        if ($number <= 5 || $number >= 74) return 'szczecin-niebuszewo';
         return 'szczecin-srodmiescie';
     }
     if(str_contains($street, 'Wojska Polskiego')) {
