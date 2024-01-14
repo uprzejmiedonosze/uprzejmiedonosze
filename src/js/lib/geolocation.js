@@ -164,8 +164,8 @@ async function getMapBox(lat, lng) {
   if (mapbox.error) return mapbox
 
   const address = mapbox.address || {}
-  address.lat = parseFloat(lat)
-  address.lat = parseFloat(lng)
+  address.lat = lat
+  address.lng = lng
 
   return address
 }

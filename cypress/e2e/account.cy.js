@@ -43,8 +43,7 @@ describe('Create account', () => {
     cy.contains('Potwierdź').click()
     cy.get('#address').should('have.class', 'error')
     cy.get('#address').clear().type(this.config.user.address)
-    cy.wait(500)
-    cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
+    cy.get('#msisdn').focus()
     cy.get('#address').should('not.have.class', 'error')
   })
 
@@ -103,6 +102,8 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Nowe zgłoszenie').click()
     cy.uploadOKImages()
+    cy.wait(500)
+    cy.get('#geo').should('have.class', 'ui-icon-location')
     cy.setAppCategory(this.categories)
     cy.get('#form-submit').click()
 
@@ -136,7 +137,6 @@ describe('Update account', () => {
     cy.get('#stopAgresji-SA').check({force: true})
 
     cy.contains('Potwierdź').click()
-
     cy.visit('/')
     cy.contains('Menu').click()
     cy.contains('Edycja konta').click({force: true})
@@ -150,6 +150,8 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Nowe zgłoszenie').click()
     cy.uploadOKImages()
+    cy.wait(500)
+    cy.get('#geo').should('have.class', 'ui-icon-location')
     Object.entries(this.categories)
       .filter(c => c[1].title)
       .forEach((category) => cy.get(`input#${category[0]}`).should('be.enabled'))

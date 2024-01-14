@@ -12,7 +12,7 @@ describe('API:automated (Poznań)', () => {
     it('creates application', function () {
         cy.uploadOKImages('poznan.jpg')
         cy.wait(1000)
-        cy.get('.mapboxgl-ctrl-zoom-out').click()
+        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
@@ -52,6 +52,8 @@ describe('API:Mail (Wrocław)', () => {
         cy.uploadOKImages('wroclaw.jpg')
         cy.wait(1000)
         cy.get('.mapboxgl-ctrl-zoom-out').click()
+        cy.wait(500)
+        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()

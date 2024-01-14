@@ -1,7 +1,7 @@
 {
     "address": {
-        "address": "Mazurska 37, Szczecin",
-        "latlng": "53.431[0-9]+,14.551[0-9]+"
+        "address": "Plac Lotników 3, Szczecin",
+        "latlng": "53.430[0-9]+,14.550[0-9]+"
     },
     "contextImage": {
         "url": "../../tests/img_c.jpg"
@@ -23,6 +23,6 @@
     "user": {
         "email": "e@nieradka.net",
         "name": "Tester Automatyczny",
-        "address": "Mazurska 37, Szczecin"
+        "address": "Plac Lotników 3, Szczecin"
     }
 }

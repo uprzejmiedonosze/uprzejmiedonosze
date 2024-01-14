@@ -64,6 +64,12 @@ Cypress.Commands.add("loadConfig", () => {
   cy.fixture('../../src/api/config/extensions.json').then(function (extensions) {
     this.extensions = extensions;
   })
+  cy.fixture('../../src/api/config/badges.json').then(function (badges) {
+    this.badges = badges;
+  })
+  cy.fixture('../../src/api/config/levels.json').then(function (levels) {
+    this.levels = levels;
+  })
 });
 
 Cypress.Commands.add("initDB", () => {

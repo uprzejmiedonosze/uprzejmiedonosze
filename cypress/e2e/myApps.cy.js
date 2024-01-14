@@ -57,9 +57,10 @@ describe('Application screen validation', () => {
             cy.get(`input#ex${id}`).should('be.disabled')
         })
         cy.get('input#datetime').should('have.attr', 'readonly')
-        cy.get('#latlng').should(($input) => {
-            const val = $input.val()
-            expect(val).to.match(new RegExp(this.config.address.latlng))
+        cy.get('#address').should(($input) => {
+            const address = JSON.parse($input.val())
+            const latlng = `${address.lat},${address.lng}`
+            expect(latlng).to.match(new RegExp(this.config.address.latlng))
         })
     })
 

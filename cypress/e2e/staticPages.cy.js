@@ -1,9 +1,10 @@
-describe('Checks static pages', () => {
+describe('Checks static pages', function() {
     before(() => {
         cy.clearCookie('PHPSESSID')
     })
 
     beforeEach(() => {
+        cy.loadConfig()
         cy.visit('/')
         cy.contains('Menu').click()
     })
@@ -62,6 +63,20 @@ describe('Checks static pages', () => {
         cy.login()
         cy.contains('dzwoń do SM').click()
         cy.contains('adres poczty elektronicznej: e@nieradka.net.')
+    })
+
+    it('Visits main page after login', function () {
+        cy.login()
+        cy.visit('/')
+        cy.contains('Cześć Tester')
+        Object.values(this.levels).forEach(level => {
+            cy.contains(level.desc)
+        })
+        Object.values(this.badges).forEach(badge => {
+            cy.contains(badge.name)
+        })
+        cy.get('.badge').should('not.have.class', 'active')
+        cy.contains('wkurzony, ale walczący')
     })
 
 })
