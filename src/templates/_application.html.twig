@@ -81,9 +81,9 @@
             </p>
         </div>
         <div class="ui-block-b imageContainer">
-{% if app.address.latlng is defined and app.address.latlng != 'NaN,NaN' %}
+{% if app.getLatLng() %}
             <div class="loader"></div>
-            <a href="https://www.google.com/maps/search/?api=1&query={{ app.address.latlng }}"
+            <a href="https://www.google.com/maps/search/?api=1&query={{ app.getLatLng() }}"
                 data-ajax="false" target="_blank">
                 <img src="{{ app.getMapImage }}?v={{ app.getRevision }}">
             </a>

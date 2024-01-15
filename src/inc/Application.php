@@ -394,11 +394,12 @@ class Application extends JSONObject{
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function getMapImage(){
-        if(!isset($this->address) || !isset($this->address->latlng)){
+        $latlng = $this->getLatLng();
+        if(!$latlng){
             return null;
         }
         $iconEncodedUrl = urlencode('%HTTPS%://%HOST%/img/map-circle.png');
-        $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$this->address->latlng}&zoom=17&size=380x200&maptype=roadmap&markers=anchor:center%7Cicon:$iconEncodedUrl%7C{$this->address->latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
+        $mapsUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$latlng}&zoom=17&size=380x200&maptype=roadmap&markers=anchor:center%7Cicon:$iconEncodedUrl%7C{$latlng}&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&format=png";
         
         if(!$this->hasNumber()){
             return $mapsUrl;
@@ -450,11 +451,21 @@ class Application extends JSONObject{
     }
 
     public function getLon(){
-        return explode(',', $this->address->latlng)[1];
+        return explode(',', $this->getLatLng())[1];
     }
 
     public function getLat(){
-        return explode(',', $this->address->latlng)[0];
+        return explode(',', $this->getLatLng())[0];
+    }
+
+    public function getLatLng(): string|null {
+        // TODO: temporary forward compatibility, should be removed once
+        // Application version is bumped to 2.3.0
+        if (isset($this->address->lng))
+            return sprintf('%.4F,%.4F', $this->address->lat, $this->address->lng); 
+        if(isset($this->address->latlng))
+            return $this->address->latlng;
+        return null;
     }
 
     public function getTitle(){

@@ -95,7 +95,7 @@
         <input type="hidden" id="administrative_area_level_1" name="voivodeship" value="{{ app.address.voivodeship ?? '' }}" />
         <input type="hidden" id="country" name="country" />
         <input type="hidden" id="district" name="district" />
-        <input type="hidden" id="latlng" name="latlng" value="{{ app.address.latlng ?? '' }}" />
+        <input type="hidden" id="latlng" name="latlng" value="{{ app.getLatLng() ?? '' }}" />
 
         <label for="comment">Podaj komentarz</label>
         <textarea type="text" id="comment" name="comment"
@@ -166,6 +166,6 @@
     </div> <!-- ui-field-contain -->
 </form>
 
-<script src="/js/new-app.js?%JS_HASH%" last-location="{{ app.address.latlng ?? config.lastLocation }}"></script>
+<script src="/js/new-app.js?%JS_HASH%" last-location="{{ app.getLatLng() ?? config.lastLocation }}"></script>
 
 {% endblock %}

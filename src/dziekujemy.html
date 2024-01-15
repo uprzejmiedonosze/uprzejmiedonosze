@@ -16,7 +16,7 @@ $application->setStatus("confirmed");
 $application->stopAgresji = $user->stopAgresji();
 $application = $storage->saveApplication($application); // this also sets app number
 
-$user->setLastLocation($application->address->latlng);
+$user->setLastLocation($application->getLatLng());
 $user->appsCount = $application->seq;
 $storage->saveUser($user);
 
