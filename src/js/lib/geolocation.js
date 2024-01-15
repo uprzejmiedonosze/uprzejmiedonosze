@@ -154,12 +154,12 @@ async function latLngToAddress(lat, lng, from) {
 }
 
 async function getNominatim(lat, lng) {
-  const response = await fetch(`https://apistaging.uprzejmiedonosze.net/geo/${lat},${lng}/n`)
+  const response = await fetch(`/api/rest/geo/${lat},${lng}/n`)
   return await response.json()
 }
 
 async function getMapBox(lat, lng) {
-  const response = await fetch(`https://apistaging.uprzejmiedonosze.net/geo/${lat},${lng}/m`)
+  const response = await fetch(`/api/rest/geo/${lat},${lng}/m`)
   const mapbox = await response.json()
   if (mapbox.error) return mapbox
 

@@ -76,19 +76,19 @@ $app->add(function ($request, $handler) {
 
 // USER
 
-$app->get('/user', function (Request $request, Response $response, $args) {
+$app->get('/api/rest/user', function (Request $request, Response $response, $args) {
     return $response;
 })  ->add(new AddStatsMiddleware())
     ->add(new UserMiddleware($createIfNonExists=false))
     ->add(new AuthMiddleware());
 
-$app->patch('/user', function (Request $request, Response $response, $args) {
+$app->patch('/api/rest/user', function (Request $request, Response $response, $args) {
     return $response;
 })  ->add(new AddStatsMiddleware())
     ->add(new UserMiddleware(true))
     ->add(new AuthMiddleware());
 
-$app->patch('/user/confirm-terms', function (Request $request, Response $response, $args) use ($storage) {
+$app->patch('/api/rest/user/confirm-terms', function (Request $request, Response $response, $args) use ($storage) {
     $user = $request->getAttribute('user');
     $user->confirmTerms();
     $storage->saveUser($user);
@@ -99,7 +99,7 @@ $app->patch('/user/confirm-terms', function (Request $request, Response $respons
     ->add(new UserMiddleware($createIfNonExists=false))
     ->add(new AuthMiddleware());
 
-$app->post('/user', function (Request $request, Response $response, $args) use ($storage) {
+$app->post('/api/rest/user', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
     $name = getParam($params, 'name');
     $address = getParam($params, 'address');
@@ -123,7 +123,7 @@ $app->post('/user', function (Request $request, Response $response, $args) use (
     ->add(new AuthMiddleware());
 
 
-$app->get('/user/apps', function (Request $request, Response $response, $args) use ($storage) {
+$app->get('/api/rest/user/apps', function (Request $request, Response $response, $args) use ($storage) {
     $params = $request->getQueryParams();
     $status = getParam($params, 'status', 'all');
     $search = getParam($params, 'search', '%');
@@ -144,12 +144,12 @@ $app->get('/user/apps', function (Request $request, Response $response, $args) u
 $CONFIG_FILES = Array(
     'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', "terms");
 
-$app->get('/config', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
+$app->get('/api/rest/config', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
     $response->getBody()->write(json_encode($CONFIG_FILES));
     return $response;
 });
 
-$app->get('/config/categories', function (Request $request, Response $response, $args) {
+$app->get('/api/rest/config/categories', function (Request $request, Response $response, $args) {
     $categories = file_get_contents(__DIR__ . "/../config/categories.json");
     $categories = json_decode($categories, true);
     array_walk($categories, function(&$val, $key) { $val["id"] = (string)$key; });
@@ -157,13 +157,13 @@ $app->get('/config/categories', function (Request $request, Response $response, 
     return $response;
 });
 
-$app->get('/config/terms', function (Request $request, Response $response, $args) {
+$app->get('/api/rest/config/terms', function (Request $request, Response $response, $args) {
     $terms = generate('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
     $response->getBody()->write($terms);
     return $response;
 });
 
-$app->get('/config/{name}', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
+$app->get('/api/rest/config/{name}', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
     $name = $args['name'];
 
     if (!in_array($name, $CONFIG_FILES))
@@ -176,7 +176,7 @@ $app->get('/config/{name}', function (Request $request, Response $response, $arg
 
 // APPLICATION
 
-$app->post('/app/new', function (Request $request, Response $response, $args) use ($storage) {   
+$app->post('/api/rest/app/new', function (Request $request, Response $response, $args) use ($storage) {   
     $user = $request->getAttribute('user');
     $application = Application::withUser($user);
     $storage->saveApplication($application);
@@ -188,7 +188,7 @@ $app->post('/app/new', function (Request $request, Response $response, $args) us
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
 
-$app->get('/app/{appId}', function (Request $request, Response $response, $args) use ($storage) {   
+$app->get('/api/rest/app/{appId}', function (Request $request, Response $response, $args) use ($storage) {   
     $user = $request->getAttribute('user');
     $application = $request->getAttribute('application');
 
@@ -210,7 +210,7 @@ $app->get('/app/{appId}', function (Request $request, Response $response, $args)
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
 
-$app->post('/app/{appId}', function (Request $request, Response $response, $args) {
+$app->post('/api/rest/app/{appId}', function (Request $request, Response $response, $args) {
     $appId = $args['appId'];
     $params = (array)$request->getParsedBody();
 
@@ -259,7 +259,7 @@ $app->post('/app/{appId}', function (Request $request, Response $response, $args
     ->add(new AuthMiddleware());
 
 
-$app->patch('/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
+$app->patch('/api/rest/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
     $status = $args['status'];
     $application = $request->getAttribute('application');
     $user = $request->getAttribute('user');
@@ -277,7 +277,7 @@ $app->patch('/app/{appId}/status/{status}', function (Request $request, Response
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
 
-$app->post('/app/{appId}/image', function (Request $request, Response $response, $args) use ($storage) {
+$app->post('/api/rest/app/{appId}/image', function (Request $request, Response $response, $args) use ($storage) {
     $params = (array)$request->getParsedBody();
 
     $imageUri = getParam($params, 'carImage', -1);
@@ -319,7 +319,7 @@ $app->post('/app/{appId}/image', function (Request $request, Response $response,
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
 
-$app->patch('/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
+$app->patch('/api/rest/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
     $appId = $args['appId'];
     $application = $storage->getApplication($appId);
     $user = $request->getAttribute('user');
@@ -341,7 +341,7 @@ $app->patch('/app/{appId}/send', function (Request $request, Response $response,
 
 // GEO
 
-$app->get('/geo/{lat},{lng}/g', function (Request $request, Response $response, $args) {
+$app->get('/api/rest/geo/{lat},{lng}/g', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
     try {
@@ -355,7 +355,7 @@ $app->get('/geo/{lat},{lng}/g', function (Request $request, Response $response, 
     return $response;
 });
 
-$app->get('/geo/{lat},{lng}/n', function (Request $request, Response $response, $args) {
+$app->get('/api/rest/geo/{lat},{lng}/n', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
 
@@ -364,7 +364,7 @@ $app->get('/geo/{lat},{lng}/n', function (Request $request, Response $response, 
     return $response;
 });
 
-$app->get('/geo/{lat},{lng}/m', function (Request $request, Response $response, $args) {
+$app->get('/api/rest/geo/{lat},{lng}/m', function (Request $request, Response $response, $args) {
     $lat = $args['lat'];
     $lng = $args['lng'];
 
