@@ -76,7 +76,7 @@ class User extends JSONObject{
             return null;
         }
         $address = urlencode($this->data->address);
-        $ch = curl_init("https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8&language=pl");
+        $ch = curl_init("https://api.mapbox.com/geocoding/v5/mapbox.places/$address.json?limit=1&fuzzyMatch=true&types=place&access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $output = curl_exec($ch);
         if(curl_errno($ch)){
@@ -88,12 +88,12 @@ class User extends JSONObject{
     
         $json = @json_decode($output, true);
         if(!json_last_error() === JSON_ERROR_NONE){
-            logger("Parsowanie JSON z Google Maps APIS " . $output . " " . json_last_error_msg());
+            logger("Parsowanie JSON z MapBox API " . $output . " " . json_last_error_msg());
             return null;
         }
-        @$latlng = $json['results'][0]['geometry']['location'];
+        @$latlng = $json['features'][0]['center'];
         if(isset($latlng)){
-            return $latlng['lat'] . ',' . $latlng['lng'];
+            return $latlng[1] . ',' . $latlng[0];
         }
         return null;
     }
