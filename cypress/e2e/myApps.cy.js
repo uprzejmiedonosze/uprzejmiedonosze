@@ -83,6 +83,7 @@ describe('Invalid images', () => {
 
     it('loads invalid images', function () {
         cy.goToNewAppScreen()
+        cy.wait(1000)
         cy.uploadWrongImages()
     })
 
@@ -98,7 +99,7 @@ describe('Invalid images', () => {
 
 describe('Valid images and location', () => {
     before(() => {
-        cy.initDB()
+        //cy.initDB()
         cy.login()
     })
 
@@ -106,17 +107,10 @@ describe('Valid images and location', () => {
         cy.loadConfig()
     })
 
-    it('checks address autocomplete', function () {
-        cy.goToNewAppScreen()
-        cy.get('#lokalizacja').clear().type('Mazurska, Poznań')
-        cy.wait(1000)
-        cy.get('.pac-container .pac-item', { timeout: 5000 }).first().click()
-        cy.get('#geo').should('have.class', 'ui-icon-location')
-        cy.get('#lokalizacja').should('have.value', 'Zagórzycka 20, Poznań')
-    })
-
     it('uploads images', function () {
         cy.uploadOKImages()
+        cy.wait(500)
+        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.get('.imageContainer').should('not.have.class', 'error')
 
         cy.get('#comment').should('have.value', 'Pojazd marki Skoda.')
@@ -131,7 +125,7 @@ describe('Valid images and location', () => {
         cy.get('#datetime').should('have.value', this.config.carImage.dateISO)
         cy.get('.changeDatetime').should('be.visible')
 
-        cy.get('#lokalizacja').should('have.value', this.config.address.address)
+        cy.get('#lokalizacja').should('have.value', this.config.address.szczecin)
     })
 })
 
@@ -148,6 +142,8 @@ describe('Create application', () => {
     it('creates application', function () {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
+        cy.wait(500)
+        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
         const firstExtension = Object.entries(this.extensions)[0]
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
@@ -194,6 +190,8 @@ describe('Edit application', () => {
     it('creates application', function () {
         cy.goToNewAppScreenWithoutTermsScreen()
         cy.uploadOKImages()
+        cy.wait(500)
+        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
     })
 

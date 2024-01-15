@@ -30,7 +30,7 @@ describe('API:automated (Poznań)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains('Jana Matejki 22, Poznań').click()
+        cy.contains(this.config.address.poznan).click()
         cy.contains('Zmień ręcznie status zgłoszenia z Potwierdzone w SM')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
@@ -71,7 +71,7 @@ describe('API:Mail (Wrocław)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains('Plac Generała Walerego Wróblewskiego 1, Wrocław').click()
+        cy.contains(this.config.address.wroclaw).click()
         cy.contains('Zmień ręcznie status zgłoszenia z Wysłane')
         cy.contains('Dodaj do galerii')
         cy.contains('Szczegóły')
@@ -106,7 +106,7 @@ describe.skip('API:null (Szczecin)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains(this.config.address.address).click()
+        cy.contains(this.config.address.szczecin).click()
         cy.contains('Wyślij zgłoszenie')
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
         cy.contains('Dodaj do galerii')
@@ -118,7 +118,7 @@ describe.skip('API:null (Szczecin)', () => {
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Pobierz paczkę zgłoszeń')
         cy.contains('Uwagi na temat współpracy z ' + this.sm.Szczecin.address[0])
-        cy.contains(this.config.address.address).click()
+        cy.contains(this.config.address.szczecin).click()
         cy.contains('Wyślij zgłoszenie').should('not.exist')
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
         cy.contains('Dodaj do galerii').should('not.exist')
