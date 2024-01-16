@@ -157,7 +157,7 @@ describe('Missing SM (Poniatowa)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains('Henin 93, Poniatowa').click()
+        cy.contains(this.config.address.poniatowa).click()
         cy.contains('Wyślij zgłoszenie')
         cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
         cy.contains('Dodaj do galerii')
