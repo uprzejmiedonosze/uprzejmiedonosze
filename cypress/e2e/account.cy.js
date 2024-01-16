@@ -102,7 +102,7 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Nowe zgłoszenie').click()
     cy.uploadOKImages()
-    cy.wait(500)
+    cy.wait(1000)
     cy.get('#geo').should('have.class', 'ui-icon-location')
     cy.setAppCategory(this.categories)
     cy.get('#form-submit').click()

@@ -1,7 +1,7 @@
 function checkAppData(config) {
     cy.contains(config.carImage.plateId)
     cy.contains(config.carImage.dateHuman)
-    cy.contains(config.address.address)
+    cy.contains(config.address.szczecin)
     cy.contains(config.user.name)
     cy.contains(config.user.email)
 }
@@ -167,7 +167,7 @@ describe('Create application', () => {
 
     it('checks application list screen', function () {
         cy.contains('liście swoich zgłoszeń').click()
-        cy.contains(this.config.address.address)
+        cy.contains(this.config.address.szczecin)
     })
 
     it('checks application screen', function () {
@@ -224,7 +224,7 @@ describe('Edit application', () => {
 
         cy.contains(this.config.carImage.plateId)
         cy.contains(this.config.carImage.dateHumanAltered)
-        cy.contains(this.config.address.address)
+        cy.contains(this.config.address.szczecin)
         cy.contains(this.config.user.name)
         cy.contains(this.config.user.email)
 
@@ -241,7 +241,7 @@ describe('Edit application', () => {
     it('checks application list screen', function () {
         cy.contains('liście swoich zgłoszeń').click()
         cy.wait(1000)
-        cy.contains(this.config.address.address)
+        cy.contains(this.config.address.szczecin)
         cy.get('#collapsiblesetForFilter').find('.application').should('have.length', 2)
     })
 

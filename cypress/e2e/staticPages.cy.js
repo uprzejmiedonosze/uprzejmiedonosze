@@ -59,7 +59,7 @@ describe('Checks static pages', function() {
         cy.contains('Proszę o przekazanie ww.')
     })
 
-    it('Visits dzwoń jak szeryf', () => {
+    it('Visits dzwoń jak szeryf after login', () => {
         cy.login()
         cy.contains('dzwoń do SM').click()
         cy.contains('adres poczty elektronicznej: e@nieradka.net.')

@@ -7,6 +7,10 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+
+    experimentalRunAllSpecs: true,
+    watchForFileChanges: false,
+    viewportHeight: 1000,
     baseUrl: "https://staging.uprzejmiedonosze.net",
     testIsolation: false
   },
