@@ -31,8 +31,8 @@ class Application extends JSONObject{
         if(!isset($instance->seq) && $instance->hasNumber()) {
             $instance->seq = extractAppNumer($instance->getNumber());
         }
-        $instance->migrateSent();
         $instance->migrateLatLng();
+        $instance->migrateSent();
         return $instance;
     }
 
@@ -98,15 +98,19 @@ class Application extends JSONObject{
         $this->sent->method = 'manual';
     }
 
-    public function setLatLng(string $latLng): void {
-        [$lat, $lng] = explode(',', $latLng);
-        $this->address->lat = (float)$lat;
-        $this->address->lng = (float)$lng;
+    public function setLatLng(string|null $latLng): void {
+        if ($latLng && preg_match("/\d+.\d+,\d+.\d+/", $latLng)) {
+            [$lat, $lng] = explode(',', $latLng);
+            $this->address->lat = (float)$lat;
+            $this->address->lng = (float)$lng;
+            return;
+        }
+        $this->address->lat = null;
+        $this->address->lng = null;
     }
 
     private function migrateLatLng(): void {
-        if(isset($this->address->latlng))
-            $this->setLatLng($this->address->latlng);
+        $this->setLatLng($this->address->latlng);
     }
 
     public function initStatements() {
