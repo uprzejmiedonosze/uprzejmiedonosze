@@ -478,13 +478,13 @@ class Application extends JSONObject{
     }
 
     private function getLngLat(): string|null {
-        if ($this->address->lng)
+        if (isset($this->address->lng))
             return sprintf('%.4F,%.4F', $this->address->lng, $this->address->lat);
         return null;
     }
 
     public function getLatLng(): string|null {
-        if ($this->address->lng)
+        if (isset($this->address->lng))
             return sprintf('%.4F,%.4F', $this->address->lat, $this->address->lng);
         return null;
     }
