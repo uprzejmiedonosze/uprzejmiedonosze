@@ -50,10 +50,10 @@ export function initMaps(lastLocation, _stopAgresji) {
   map.dragRotate.disable()
   map.touchZoomRotate.disableRotation()
 
-  map.on('moveend', updateAddressDebounce)
-
   if($input.val().trim() == 0)
-    updateAddressDebounce()
+    setAddressByLatLng(center[1], center[0], 'init');
+
+  map.on('moveend', updateAddressDebounce)
 
   return map
 }
