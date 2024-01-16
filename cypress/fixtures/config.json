@@ -4,7 +4,7 @@
         "latlng": "53.430[0-9]+,14.550[0-9]+",
         "szczecin": "Mazurska 43, Szczecin",
         "poznan": "Jana Matejki 22, Poznań",
-        "wroclaw": "Plac Generała Walerego Wróblewskiego 1, Wrocław",
+        "wroclaw": "Plac Generała Walerego Wróblewskiego 1, Wrocław"
     },
     "contextImage": {
         "url": "../../tests/img_c.jpg"
