@@ -110,7 +110,8 @@ class Application extends JSONObject{
     }
 
     private function migrateLatLng(): void {
-        $this->setLatLng($this->address->latlng);
+        if (!empty($this->address->latlng))
+            $this->setLatLng($this->address->latlng);
     }
 
     public function initStatements() {
