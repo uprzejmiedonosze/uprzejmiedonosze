@@ -143,7 +143,7 @@ describe('Missing SM (Poniatowa)', () => {
         cy.wait(500)
         cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
-        cy.wait(500)
+        cy.wait(1000)
         cy.get('#form-submit', { timeout: 5000 }).click()
         cy.contains('Zapisz!').click()
         cy.contains('Wystąpił błąd').should('not.exist')
