@@ -50,6 +50,7 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
 
     if(!isset($application->address)) $application->address = new stdClass();
     $application->address->address = $address->address;
+    $application->address->addressGPS = $address?->addressGPS;
     $application->address->city = $address->city;
     $application->address->voivodeship = $address->voivodeship;
     $application->address->lat = $address->lat;
