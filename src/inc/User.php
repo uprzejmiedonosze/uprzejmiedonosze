@@ -130,13 +130,13 @@ class User extends JSONObject{
 
         $this->data->name = capitalizeName(cleanWhiteChars($name));
         if (!preg_match("/^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i", $this->data->name))
-            throw new MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");
+            throw new MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");        
+        $this->guessSex();
 
         $this->data->address = str_replace(', Polska', '', cleanWhiteChars($address));
         if (!preg_match("/^.{3,50}\d.{3,40}$/i", $this->data->address))
             throw new MissingParamException('address', "Podaj adres z ulicą, numerem mieszkania i miejscowością");
     
-        $this->data->sex = guess_sex_by_name($this->data->name);
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
         if(isset($autoSend)) $this->data->autoSend = $autoSend;
@@ -163,14 +163,30 @@ class User extends JSONObject{
     function hasApps(){
         return $this->appsCount > 0;
     }
+    
+    function guessSex(){
+        $this->data->sex = User::_guessSex($this->data->name);
+        return SEXSTRINGS[$this->data->sex];
+    }
+
     /**
      * Returns (lazyloaded) sex-strings for this user.
      */
-    function guessSex(){
-        if(!isset($this->data->sex)){
-            $this->data->sex = guess_sex_by_name($this->data->name);
-        }
+    function getSex() {
+        if(!isset($this->data->sex))
+            return $this->guessSex();
         return SEXSTRINGS[$this->data->sex];
+    }
+
+    private static function _guessSex(string $name): string {
+        $names = preg_split('/\s+/', trimstr2lower($name));
+        if(count($names) < 1){
+            return '?';
+        }
+        if($names[0] == 'kuba' || substr($names[0], -1) != 'a'){
+            return 'm';
+        }
+        return 'f';
     }
 
     /**

@@ -159,24 +159,6 @@ function raiseError($msg, $status, $notify = null){
     die();
 }
 
-function guess_sex_by_name($name){
-    $names = preg_split('/\s+/', trimstr2lower($name));
-    if(count($names) < 1){
-        return '?';
-    }
-    if($names[0] == 'kuba' || substr($names[0], -1) != 'a'){
-        return 'm';
-    }
-    return 'f';
-}
-
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function guess_sex_current_user(){
-    return SEXSTRINGS[guess_sex_by_name($_SESSION['user_name'])];
-}
-
 function capitalizeSentence($input){
     if(!isset($input) || trim($input) === ''){
         return '';
