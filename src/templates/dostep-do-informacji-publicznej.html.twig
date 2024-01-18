@@ -22,7 +22,7 @@
 
 {% set emailSubject = 'Zapytanie o efekty interwencji SM' %}
 
-{% set emailBody = 'Dnia <i>[' ~ callDate ~ ']</i> o godzinie <i>[' ~ callTime ~ ']</i> ' ~ wykonalam | raw ~ ' połączenie na numer Straży Miejskiej z numeru ' ~ msisdn | raw ~ ' prosząc o interwencję na ulicy <i>[Ulica XXX]</i>. 
+{% set emailBody = 'Dnia <i>[' ~ callDate ~ ']</i> o godzinie <i>[' ~ callTime ~ ']</i> ' ~ config.sex.wykonalam | raw ~ ' połączenie na numer Straży Miejskiej z numeru ' ~ msisdn | raw ~ ' prosząc o interwencję na ulicy <i>[Ulica XXX]</i>. 
 
 Na podstawie ustawy o dostępie do informacji publicznej wnoszę o udostępnienie:
 

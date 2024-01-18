@@ -11,7 +11,6 @@ if (isLoggedIn()) {
     if (!empty($user->data->msisdn))
         $msisdn = $user->data->msisdn;
     $email = $user->data->email;
-    $wykonalam = $user->guessSex()["wykonalam"];
     $name = $user->data->name;
 }
 
@@ -32,7 +31,6 @@ echo generate('dostep-do-informacji-publicznej.html.twig',
         'msisdn' => $msisdn,
         'email' => $email,
         'name' => $name,
-        'wykonalam' => $wykonalam,
         'isLoggedIn' => isLoggedIn()
     ]);
 ?>
