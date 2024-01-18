@@ -47,7 +47,7 @@ class Application extends JSONObject{
         $instance->category = 0;
         $instance->initStatements();
         $instance->address = new JSONObject();
-        $instance->version = '2.2.0';
+        $instance->version = '2.2.1';
 
         /*
         2.2.1 (2023-01-12)
