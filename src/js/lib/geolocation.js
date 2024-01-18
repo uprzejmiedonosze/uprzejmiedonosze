@@ -98,6 +98,8 @@ async function latLngToAddress(lat, lng, from) {
 
   $addressHint.text("Podaj adres lub wskaż go na mapie")
   $addressHint.removeClass("hint")
+  $sm.text('')
+  $smHint.attr('title', '')
 
   const geoError = () => {
     $geoIcon.buttonMarkup({ icon: "alert" })
@@ -120,10 +122,18 @@ async function latLngToAddress(lat, lng, from) {
     }
   }
 
-  const address = await getMapBox(lat, lng)
+  let address = {
+    lat,
+    lng
+  }
 
-  if (address.error) geoError()
-  else geoSuccess(address)
+  const mapbox = await getMapBox(lat, lng)
+
+  if (mapbox.error) geoError()
+  else {
+    address = {...address, ...mapbox}
+    geoSuccess(address)
+  }
 
   const nominatim = await getNominatim(lat, lng)
   if (nominatim.error) {
@@ -140,8 +150,6 @@ async function latLngToAddress(lat, lng, from) {
   
   geoSuccess(address)
 
-  $sm.text('')
-  $smHint.attr('title', '')
   if (stopAgresji) {
     $sm.text(nominatim.sa.address[0])
     $smHint.attr('title', nominatim.sa.hint ?? '')
@@ -161,11 +169,7 @@ async function getNominatim(lat, lng) {
 async function getMapBox(lat, lng) {
   const response = await fetch(`/api/rest/geo/${lat},${lng}/m`)
   const mapbox = await response.json()
+  
   if (mapbox.error) return mapbox
-
-  const address = mapbox.address || {}
-  address.lat = lat
-  address.lng = lng
-
-  return address
+  return mapbox.address || {}
 }
