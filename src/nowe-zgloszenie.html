@@ -40,6 +40,7 @@ if(isset($_GET['edit'])){
         } elseif (!$application->isEditable()) {
             unset($application);
         }
+        $application->updateUserData($user);
     }catch(Exception $e){
         unset($application);
     }

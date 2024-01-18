@@ -13,7 +13,6 @@ $user = $storage->getCurrentUser();
 $edited = $application->hasNumber();
 
 $application->setStatus("confirmed");
-$application->stopAgresji = $user->stopAgresji();
 $application = $storage->saveApplication($application); // this also sets app number
 
 $user->setLastLocation($application->getLatLng());

@@ -22,7 +22,7 @@ class Application extends JSONObject{
 
     }
 
-    public static function withJson($json) {
+    public static function withJson($json): Application {
         $instance = new self();
         $instance->__fromJson($json);
         @$instance->statusHistory = (array)$instance->statusHistory;
@@ -36,14 +36,13 @@ class Application extends JSONObject{
         return $instance;
     }
 
-    public static function withUser($user) {
+    public static function withUser(User $user): Application {
         $instance = new self();
         $instance->date = null;
         $instance->id = genSafeId();
         $instance->added = date(DT_FORMAT);
-        $instance->user = $user->data;
-        $instance->user->number = $user->getNumber();
-        $instance->user->sex = guess_sex_by_name($instance->user->name);
+        $instance->updateUserData($user);
+
         $instance->status = 'draft';
         $instance->category = 0;
         $instance->initStatements();
@@ -62,6 +61,12 @@ class Application extends JSONObject{
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $instance->browser['user_agent'] = $userAgent;
         return $instance;
+    }
+
+    public function updateUserData(User $user): void {
+        $this->user = $user->data;
+        $this->user->number = $user->getNumber();
+        $this->stopAgresji = $user->stopAgresji();
     }
 
     /**
@@ -246,8 +251,8 @@ class Application extends JSONObject{
     }
 
     public function stopAgresji() {
-        if(isset($this->user->stopAgresji)){
-            return $this->user->stopAgresji;
+        if(isset($this->stopAgresji)){
+            return $this->stopAgresji;
         }
         return false;
     }
@@ -263,6 +268,9 @@ class Application extends JSONObject{
             if($this->smCity !== '_nieznane'){
                 return $SM_ADDRESSES[$this->smCity];
             }
+        }
+        if(!isset($this->address)) {
+            return $SM_ADDRESSES['_nieznane'];
         }
         if($this->stopAgresji()){
             $this->smCity = Application::__guessSA($this->address);
@@ -336,9 +344,6 @@ class Application extends JSONObject{
     }
 
     public function guessUserSex(){
-        if(!isset($this->user->sex)){
-            $this->user->sex = guess_sex_by_name($this->user->name);
-        }
         return SEXSTRINGS[$this->user->sex];
     }
 

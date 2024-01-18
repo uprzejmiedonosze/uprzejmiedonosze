@@ -22,8 +22,9 @@ $witness = isset($post['witness']);
 @$extensions = $post["extensions"];
 
 try {
+    $user = $storage->getCurrentUser();
     $application = updateApplication($appId, $date, $dtFromPicture, $category, $fullAddress,
-        $plateId, $comment, $witness, $extensions);
+        $plateId, $comment, $witness, $extensions, $user);
 } catch (Exception $e) {
     redirect("nowe-zgloszenie.html");
 }

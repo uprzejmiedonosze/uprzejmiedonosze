@@ -245,7 +245,7 @@ $app->post('/api/rest/app/{appId}', function (Request $request, Response $respon
     
     try {
         $application = updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
-            $plateId, $comment, $witness, $extensions, $user->getEmail());
+            $plateId, $comment, $witness, $extensions, $user);
     } catch (Exception $e) {
         throw new HttpForbiddenException($request, $e->getMessage(), $e);
     }

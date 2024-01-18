@@ -63,7 +63,7 @@ function generate($template, $parameters){
     ];
 
   if($isLoggedIn){
-    $parameters['config']['sex'] = guess_sex_current_user();
+    $parameters['config']['sex'] = $user->getSex();
     $parameters['general']['userName'] = $user->getFirstName();
     // force update cache if ?update GET param is set
     $parameters['general']['stats'] = $storage->getUserStats(!isset($_GET['update']), $user);

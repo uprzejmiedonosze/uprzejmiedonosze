@@ -26,17 +26,13 @@ function checkRegistrationStatus() {
 }
 
 function updateApplication($appId, $date, $dtFromPicture, $category, $address,
-    $plateId, $comment, $witness, $extensions, $userEmail=null) {
+    $plateId, $comment, $witness, $extensions, User $user) {
     
     global $storage;
     $application = $storage->getApplication($appId);
 
-    if(is_null($userEmail)) {
-        $userEmail = getCurrentUserEmail();
-    }
-
-    if ($application->user->email !== $userEmail) {
-        throw new Exception("Odmawiam aktualizacji zgłoszenia '$appId' przez '$userEmail'");
+    if ($application->user->email !== $user->getEmail()) {
+        throw new Exception("Odmawiam aktualizacji zgłoszenia '$appId' przez '{$user->getEmail()}'");
     }
 
     if(!$application->isEditable()){
@@ -60,6 +56,7 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->address->municipality = $address?->municipality;
     $application->address->postcode = $address?->postcode;
 
+    $application->updateUserData($user);
     $application->guessSMData(true); // stores sm city inside the object
 
     if(!isset($application->carInfo)) $application->carInfo = new stdClass();
@@ -90,7 +87,8 @@ function setStatus($status, $appId, $user) {
     $application = $storage->getApplication($appId);
     $application->setStatus($status);
     $storage->saveApplication($application);
-    $storage->updateRecydywa($application->carInfo->plateId);
+    if(isset($application->carInfo->plateId))
+        $storage->updateRecydywa($application->carInfo->plateId);
     $stats = $storage->getUserStats(false, $user); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
