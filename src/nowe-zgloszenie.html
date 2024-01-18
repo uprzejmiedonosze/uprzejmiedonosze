@@ -35,12 +35,12 @@ if(isset($_GET['edit'])){
     try{
         $application = $storage->getApplication($_SESSION['newAppId']);
         $edit = isset($application->carImage) || isset($application->contextImage);
+        $application->updateUserData($user);
         if (!$edit) {
             unset($application);
         } elseif (!$application->isEditable()) {
             unset($application);
         }
-        $application->updateUserData($user);
     }catch(Exception $e){
         unset($application);
     }
