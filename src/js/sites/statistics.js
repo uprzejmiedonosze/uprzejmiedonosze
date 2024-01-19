@@ -55,19 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
     credits: {
       enabled: false
     },
-    yAxis: [
-      {
-        title: {
-          text: null
-        },
-        labels: {
-          align: "left",
-          x: 0,
-          y: 0
-        },
-        showFirstLabel: false
-      }
-    ],
     colors: [
       "#009C7F",
       "#e9c200",
