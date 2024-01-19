@@ -178,7 +178,7 @@ class User extends JSONObject{
         return SEXSTRINGS[$this->data->sex];
     }
 
-    private static function _guessSex(string $name): string {
+    public static function _guessSex(string $name): string {
         $names = preg_split('/\s+/', trimstr2lower($name));
         if(count($names) < 1){
             return '?';

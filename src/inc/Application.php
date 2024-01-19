@@ -33,6 +33,9 @@ class Application extends JSONObject{
         }
         $instance->migrateLatLng();
         $instance->migrateSent();
+        if (!isset($instance->user->sex)) {
+            $instance->user->sex = User::_guessSex($instance->user->name);
+        }
         return $instance;
     }
 
