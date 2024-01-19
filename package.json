@@ -6,8 +6,8 @@
   "engineStrict": true,
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
-    "@sentry/browser": "^7.34.0",
-    "@sentry/tracing": "^7.34.0",
+    "@sentry/browser": "^7.94.1",
+    "@sentry/tracing": "^7.94.1",
     "exif-js": "^2.3.0",
     "exifreader": "^4.20.0",
     "heic2any": "^0.0.4",
