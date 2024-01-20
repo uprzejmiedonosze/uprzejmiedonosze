@@ -3,22 +3,21 @@ import * as Sentry from "@sentry/browser"
 if (!window.location.hostname.includes('staging')) {
   Sentry.init({
     dsn: "https://66b5f54d37b1474daf0d95059e69c0b2@o929176.ingest.sentry.io/5878019",
-    tracesSampleRate: 0.3,
+    tracesSampleRate: 0.1,
+    integrations: [
+      new Sentry.Replay()
+    ],
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
     environment: window.location.hostname,
     denyUrls: [
-      // Google Adsense
-      /pagead\/js/i,
-      // Facebook flakiness
-      /graph\.facebook\.com/i,
-      // Facebook blocked
-      /connect\.facebook\.net\/en_US\/all\.js/i,
-      // Woopra flakiness
-      /eatdifferent\.com\.woopra-ns\.com/i,
-      /static\.woopra\.com\/js\/woopra\.js/i,
-      // Chrome extensions
-      /extensions\//i,
+      /pagead\/js/i, // Google Adsense
+      /graph\.facebook\.com/i, // Facebook flakiness
+      /connect\.facebook\.net\/en_US\/all\.js/i, // Facebook blocked
+      /eatdifferent\.com\.woopra-ns\.com/i, // Woopra flakiness
+      /static\.woopra\.com\/js\/woopra\.js/i, // Woopra flakiness
+      /extensions\//i, // Chrome extensions
       /^chrome:\/\//i,
-      // Other plugins
       /127\.0\.0\.1:4001\/isrunning/i,  // Cacaoweb
       /webappstoolbarba\.texthelp\.com\//i,
       /metrics\.itunes\.apple\.com\.edgesuite\.net\//i
