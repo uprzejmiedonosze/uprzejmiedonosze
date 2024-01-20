@@ -26,5 +26,8 @@ if (!window.location.hostname.includes('staging')) {
   });
 
   Sentry.setTag("environment", window.location.hostname);
+  const currentScript = document.currentScript
+  const userNumber = currentScript?.getAttribute("user-number") ?? 0
+  Sentry.setTag("userNumber", userNumber)
 
 }
