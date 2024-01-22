@@ -350,4 +350,13 @@ function policeStationsSzczecin(object $address): string {
     return 'szczecin-niebuszewo';
 }
 
+function setSentryTag(string $tag, $value): void {
+    if (!isProd()) return;
+
+    \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($tag, $value): void {
+        $scope->setTag($tag, $value);
+    });    
+}
+
+
 ?>

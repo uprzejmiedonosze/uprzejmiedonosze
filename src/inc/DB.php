@@ -185,12 +185,13 @@ class DB extends NoSQLite{
     /**
      * Returns user by email
      */
-    public function getUser($email){
+    public function getUser(string $email): User{
         $json = $this->users->get($email);
         if(!$json){
             throw new Exception("Próba pobrania nieistniejącego użytkownika '$email'", 404);
         }
         $user = new User($json);
+        setSentryTag("userNumber", $user->getNumber() ?? 0);
         return $user;
     }
 
@@ -222,6 +223,7 @@ class DB extends NoSQLite{
         if(!$appId){
             throw new Exception("Próba pobrania zgłoszenia bez podania numeru");
         }
+        @setSentryTag("appId", $appId);
         $json = $this->apps->get($appId);
         if(!$json){
             throw new Exception("Próba pobrania nieistniejącego zgłoszenia '$appId'", 404);
@@ -232,6 +234,7 @@ class DB extends NoSQLite{
     }
 
     public function saveApplication($application){
+        @setSentryTag("appId", $application->id);
         if($application->status !== 'draft' && $application->status !== 'ready') {
             if(!$application->hasNumber()) {
                 $appNumber = $this->getNextAppNumber($application->user->email);
