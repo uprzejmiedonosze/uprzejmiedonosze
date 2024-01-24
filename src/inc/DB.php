@@ -135,11 +135,8 @@ class DB extends NoSQLite{
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
 
-        function __constructApplication($value) {
-            return Application::withJson($value);
-        }        
-
-        return $stmt->fetchAll(PDO::FETCH_FUNC, '__constructApplication');
+        return $stmt->fetchAll(PDO::FETCH_FUNC,
+            fn($value) => Application::withJson($value));
     }
 
     /**
@@ -167,7 +164,7 @@ class DB extends NoSQLite{
             $apps[$row[0]] = Application::withJson($row[1]);
         }
 
-        function _cmp($left, $right){
+        function _cmp($left, $right) {
             if($left->sent->to > $right->sent->to) return 1;
             if($left->sent->to < $right->sent->to) return -1;
             if($left->sent->date > $right->sent->date) return 1;
@@ -195,14 +192,14 @@ class DB extends NoSQLite{
         return $user;
     }
 
-    public function saveUser($user){
+    public function saveUser(User $user): void{
         if(!isset($user->number)){
             $user->number = $this->getNextUserNumber();
         }
         $this->users->set($user->data->email, json_encode($user));
     }
 
-    public function getNextUserNumber(){
+    public function getNextUserNumber(): int{
         $sql = <<<SQL
             select max(json_extract(value, '$.number'))
             from users;
@@ -219,7 +216,7 @@ class DB extends NoSQLite{
         return $number + 1;
     }
 
-    public function getApplication($appId){
+    public function getApplication(string $appId): Application{
         if(!$appId){
             throw new Exception("Próba pobrania zgłoszenia bez podania numeru");
         }
@@ -230,10 +227,9 @@ class DB extends NoSQLite{
         }
         $application = Application::withJson($json);
         return $application;
-
     }
 
-    public function saveApplication($application){
+    public function saveApplication(Application $application): Application{
         @setSentryTag("appId", $application->id);
         if($application->status !== 'draft' && $application->status !== 'ready') {
             if(!$application->hasNumber()) {
@@ -242,7 +238,6 @@ class DB extends NoSQLite{
                 $application->number = 'UD/' . $application->user->number . '/' . $appNumber;
             }
         }
-
         $this->apps->set($application->id, json_encode($application), $application->user->email);
         return $application;
     }
@@ -250,16 +245,20 @@ class DB extends NoSQLite{
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function countApplicationsPerPlate($plateId){
+    public function countApplicationsPerPlate(string $plateId): int{
         $plateId = SQLite3::escapeString($plateId);
 
         $sql = <<<SQL
             select count(key) from applications 
             where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
-            and json_extract(value, '$.carInfo.plateId') = '$plateId';
+            and json_extract(value, '$.carInfo.plateId') = :plateId;
         SQL;
-        
-        return (int) $this->db->query($sql)->fetchColumn();
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':plateId', $plateId);
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
     }
 
     /**
@@ -267,16 +266,22 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
-    private function countApplicationsStatuses($userEmail){
+    private function countApplicationsStatuses(string $userEmail): Array{
         $email = SQLite3::escapeString($userEmail);
 
         $sql = <<<SQL
-            select json_extract(value, '$.status') as status, count(key) as cnt from applications
-            where email = '$email'
+            select json_extract(value, '$.status') as status,
+                count(key) as cnt
+            from applications
+            where email = :email
             group by json_extract(value, '$.status')
         SQL;
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
         
-        $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
+        $ret = $stmt->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
         return array_map(function ($status) { return $status[0]; }, $ret);
     }
 
@@ -284,7 +289,7 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function countUserPoints($user){
+    private function countUserPoints(User $user): Array{
         $userEmail = $user->getEmail();
         $email = SQLite3::escapeString($userEmail);
 
@@ -293,13 +298,16 @@ class DB extends NoSQLite{
                 cast(json_extract(value, '$.category') as integer) as category,
                 count(key) as cnt
             from applications
-            where email = '$email'
+            where email = :email
                 and json_extract(value, '$.status') in ('confirmed-fined')
             group by 1
             order by 1;
         SQL;
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->execute();
         
-        $ret = $this->db->query($sql)->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
+        $ret = $stmt->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_GROUP);
         $ret = array_map(function ($item) { return $item[0]; }, $ret);
 
         $points = $ret;
@@ -325,7 +333,7 @@ class DB extends NoSQLite{
      * Calculates stats for current user;
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
-    public function getUserStats($useCache, $user){
+    public function getUserStats(bool $useCache, User $user): Array{
         $userEmail = $user->getEmail();
 
         $stats = $this->stats->get("%HOST%-stats3-$userEmail");
@@ -346,7 +354,7 @@ class DB extends NoSQLite{
     /**
      * Returns all applications for current user by status.
      */
-    public function getConfirmedAppsByCity($city){
+    public function getConfirmedAppsByCity(string $city): Array{
         $sql = <<<SQL
         select key, value
         from applications
@@ -369,12 +377,15 @@ class DB extends NoSQLite{
     }
 
     public function getNextCityToSent(){
-        $sql = "select json_extract(value, '$.smCity'), count(key) from applications"
-        . " where email = :email "
-        . " and json_extract(value, '$.status') = :status "
-        . " and json_extract(value, '$.smCity') is not null "
-        . " group by json_extract(value, '$.smCity') "
-        . " order by count(key) desc";
+        $sql = <<<SQL
+            select json_extract(value, '$.smCity'),
+                count(key) from applications
+            where email = :email
+                and json_extract(value, '$.status') = :status
+                and json_extract(value, '$.smCity') is not null
+            group by json_extract(value, '$.smCity')
+            order by count(key) desc
+        SQL;
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':email', $this->getCurrentUser()->data->email);
@@ -390,17 +401,6 @@ class DB extends NoSQLite{
 
     // ADMIN area
 
-    public function getUsers(){
-        if(!isAdmin()){
-            throw new Exception('Dostęp zabroniony');
-        }
-        $ret = Array();
-        foreach($this->users->getAll() as $email => $json){
-            $ret[$email] = new User($json);
-        }
-        return $ret;
-    }
-
     public function execute($sql){
         if(!isAdmin()){
             throw new Exception('Dostęp zabroniony');
@@ -415,7 +415,7 @@ class DB extends NoSQLite{
      * If there is no value in DB initializes it counting active
      * apps in the 'applications' store (lazy load).
      */
-    public function getRecydywa($plate){
+    public function getRecydywa(string $plate): int{
         $recydywa = $this->recydywa->get($plate);
         if(null == $recydywa){
             $recydywa = $this->updateRecydywa($plate);
@@ -426,7 +426,7 @@ class DB extends NoSQLite{
     /**
      * Recalculates recydywa.
      */
-    public function updateRecydywa($plate){
+    public function updateRecydywa(string $plate): int{
         $recydywa = $this->countApplicationsPerPlate($plate);
         $this->recydywa->set($plate, strval($recydywa));
         return $recydywa;
@@ -436,7 +436,7 @@ class DB extends NoSQLite{
      * Returns number of new applications (by creation date)
      * during 30 days. 
      */
-    public function getStatsAppsByDay($useCache = true){
+    public function getStatsAppsByDay(bool $useCache=true){
 
         $stats = $this->stats->get("%HOST%-getStatsAppsByDay");
         if($useCache && $stats){
@@ -451,7 +451,7 @@ class DB extends NoSQLite{
             group by substr(json_extract(applications.value, '$.added'), 1, 10)
             order by 1 desc
             limit 30;
-SQL;
+        SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->setStats('getStatsAppsByDay', $stats);
@@ -462,7 +462,7 @@ SQL;
      * Returns number of new applications (by creation date)
      * during 12 weeks.
      */
-    public function getStatsAppsByWeek($useCache = true){
+    public function getStatsAppsByWeek(bool $useCache=true) {
 
         $stats = $this->stats->get("%HOST%-getStatsAppsByWeek");
         if($useCache && $stats){
@@ -477,7 +477,7 @@ SQL;
             group by strftime('%W', substr(json_extract(applications.value, '$.added'), 1, 10))
             order by 1 desc
             limit 12;
-SQL;
+        SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->setStats('getStatsAppsByWeek', $stats);
@@ -488,7 +488,7 @@ SQL;
      * Returns number of new applications (by creation date)
      * during 30 days. 
      */
-    public function getStatsByDay($useCache = true){
+    public function getStatsByDay(bool $useCache=true){
 
         $stats = $this->stats->get("%HOST%-getStatsByDay");
         if($useCache && $stats){
@@ -515,7 +515,7 @@ SQL;
             group by substr(json_extract(applications.value, '$.added'), 1, 10)
             order by 1 desc
             limit 30;
-SQL;
+        SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->setStats('getStatsByDay', $stats);
@@ -526,7 +526,7 @@ SQL;
      * Returns number of new applications (by creation month)
      * in last year.
      */
-    public function getStatsByYear($useCache = true){
+    public function getStatsByYear(bool $useCache=true){
 
         $stats = $this->stats->get("%HOST%-getStatsByYear");
         if($useCache && $stats){
@@ -552,7 +552,7 @@ SQL;
             group by substr(json_extract(applications.value, '$.added'), 1, 7)
             order by 1 desc
             limit 24;
-SQL;
+        SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->setStats('getStatsByYear', $stats);
@@ -562,18 +562,20 @@ SQL;
     /**
      * Returns number of applications per city.
      */
-    public function getStatsAppsByCity($useCache = true){
+    public function getStatsAppsByCity(bool $useCache=true){
         $stats = $this->stats->get("%HOST%-getStatsAppsByCity");
         if($useCache && $stats){
             return $stats;
         }
 
-        $sql = "select json_extract(applications.value, '$.address.city') as city, "
-            . "count(*) as cnt "
-            . "from applications "
-            . "where json_extract(applications.value, '$.status') not in ('draft', 'ready') "
-            . "group by json_extract(applications.value, '$.address.city') "
-            . "order by 2 desc, 1 limit 10 ";
+        $sql = <<<SQL
+            select json_extract(value, '$.address.city') as city,
+                count(key) as cnt
+            from applications
+            where json_extract(value, '$.status') not in ('draft', 'ready')
+            group by json_extract(value, '$.address.city')
+            order by 2 desc, 1 limit 10
+        SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->setStats('getStatsAppsByCity', $stats);
@@ -589,13 +591,13 @@ SQL;
         }
 
 		  $sql = <<<SQL
-				select key, value 
+            select key, value 
             from applications
             where json_extract(value, '$.status') not in ('draft', 'ready', 'archived')
             and json_extract(value, '$.statements.gallery') is true
             and json_extract(value, '$.addedToGallery') is null
             order by json_extract(value, '$.added') desc;
-SQL;
+        SQL;
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -610,7 +612,7 @@ SQL;
     /**
      * Returns number of applications per city.
      */
-    public function getGalleryCount($useCache = true){
+    public function getGalleryCount(bool $useCache=true): int{
         $stats = $this->stats->get("%HOST%-getGalleryCount");
         if($useCache && $stats){
             return $stats;
@@ -620,7 +622,7 @@ SQL;
             select count(key) as cnt
             from applications
             where json_extract(value, '$.addedToGallery.state') is not null
-SQL;
+        SQL;
 
         $stats = intval($this->db->query($sql)->fetchColumn());
         $this->setStats('getGalleryCount', $stats);
@@ -630,7 +632,7 @@ SQL;
     /**
      * Returns number of applications per city.
      */
-    public function getGalleryByCity($useCache = true){
+    public function getGalleryByCity(bool $useCache=true){
         $stats = $this->stats->get("%HOST%-getGalleryByCity");
         if($useCache && $stats){
             return $stats;
@@ -645,7 +647,7 @@ SQL;
             group by json_extract(value, '$.address.city')
             order by 2 desc
             limit 10
-SQL;
+        SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->setStats('getGalleryByCity', $stats);
@@ -655,7 +657,7 @@ SQL;
     /**
      * Returns number of applications per city.
      */
-    public function getStatsByCarBrand($useCache = true){
+    public function getStatsByCarBrand(bool $useCache=true){
         $stats = $this->stats->get("%HOST%-getStatsByCarBrand");
         if($useCache && $stats){
             return $stats;
@@ -670,7 +672,7 @@ SQL;
             group by json_extract(value, '$.carInfo.brand')
             order by 2 desc
             limit 10
-SQL;
+        SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
         $this->setStats('getStatsByCarBrand', $stats);

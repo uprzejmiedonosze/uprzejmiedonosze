@@ -176,7 +176,7 @@ $app->get('/api/rest/config/{name}', function (Request $request, Response $respo
 
 // APPLICATION
 
-$app->post('/api/rest/app/new', function (Request $request, Response $response, $args) use ($storage) {   
+$app->post('/api/rest/app/new', function (Request $request, Response $response, $args) use ($storage) {
     $user = $request->getAttribute('user');
     $application = Application::withUser($user);
     $storage->saveApplication($application);
@@ -188,7 +188,7 @@ $app->post('/api/rest/app/new', function (Request $request, Response $response, 
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
 
-$app->get('/api/rest/app/{appId}', function (Request $request, Response $response, $args) use ($storage) {   
+$app->get('/api/rest/app/{appId}', function (Request $request, Response $response, $args) {
     $user = $request->getAttribute('user');
     $application = $request->getAttribute('application');
 
@@ -259,7 +259,7 @@ $app->post('/api/rest/app/{appId}', function (Request $request, Response $respon
     ->add(new AuthMiddleware());
 
 
-$app->patch('/api/rest/app/{appId}/status/{status}', function (Request $request, Response $response, $args) use ($storage) {
+$app->patch('/api/rest/app/{appId}/status/{status}', function (Request $request, Response $response, $args) {
     $status = $args['status'];
     $application = $request->getAttribute('application');
     $user = $request->getAttribute('user');
@@ -277,7 +277,7 @@ $app->patch('/api/rest/app/{appId}/status/{status}', function (Request $request,
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
 
-$app->post('/api/rest/app/{appId}/image', function (Request $request, Response $response, $args) use ($storage) {
+$app->post('/api/rest/app/{appId}/image', function (Request $request, Response $response, $args) {
     $params = (array)$request->getParsedBody();
 
     $imageUri = getParam($params, 'carImage', -1);

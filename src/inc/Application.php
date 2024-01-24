@@ -154,7 +154,7 @@ class Application extends JSONObject{
     /**
      * Returns application time in H:i format.
      */
-    public function getTime(){
+    public function getTime(): string{
         $format = 'H:i'; // 24-hour format of an hour with leading zeros : Minutes with leading zeros
         if ($this->version < '2.1.0' && isset($this->dtFromPicture) && !$this->dtFromPicture) {
             $format = 'G:00'; // 24-hour format of an hour without leading zeros
@@ -185,7 +185,7 @@ class Application extends JSONObject{
     /**
      * Returns 'około godziny' or 'o godzinie'.
      */
-    public function getDateTimeDivider(){
+    public function getDateTimeDivider(): string{
         if ($this->version < '2.1.0' && isset($this->dtFromPicture) && !$this->dtFromPicture)
             return "około godziny";
         return "o godzinie";
@@ -195,7 +195,7 @@ class Application extends JSONObject{
      * Set status (and store statuses history changes)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function setStatus($status){
+    public function setStatus(string $status): void{
         global $STATUSES;
         $now = date(DT_FORMAT);
 
@@ -229,7 +229,7 @@ class Application extends JSONObject{
         $this->status = $status;
     }
 
-    public function getAppPDFFilename(){
+    public function getAppPDFFilename(): string {
         return 'Zgloszenie_' . str_replace('/', '-', $this->number) . '.pdf';
     }
 
@@ -239,7 +239,7 @@ class Application extends JSONObject{
      * value in the application.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
-    public function shouldIncludePlateImage(){
+    public function shouldIncludePlateImage(): bool {
         if(!isset($this->carInfo)){
             return false;
         }
@@ -262,9 +262,8 @@ class Application extends JSONObject{
 
     /**
      * Zwraca najlepiej pasująca dla adresu zgłoszenia SM/SA.
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function guessSMData(bool $update=null): object {
+    public function guessSMData(bool $update=false): object {
         global $SM_ADDRESSES;
         global $STOP_AGRESJI;
         if(!$update && isset($this->smCity) && !$this->stopAgresji()){
@@ -342,7 +341,7 @@ class Application extends JSONObject{
     /**
      * Returns application city in a filename-friendly format.
      */
-    public function getSanitizedCity(){
+    public function getSanitizedCity(): string{
         return mb_ereg_replace("([^\w\d])", '-', $this->guessSMData()->city);
     }
 
@@ -547,7 +546,7 @@ class Application extends JSONObject{
     /**
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function isEditable(){
+    public function isEditable(): bool {
         global $STATUSES;
         return $STATUSES[$this->status]->editable;
     }
