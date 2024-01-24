@@ -60,9 +60,7 @@ class Application extends JSONObject{
           - extended address property
         2.1.0
         */
-
-        $userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $instance->browser['user_agent'] = $userAgent;
+        $instance->browser = $_SERVER['HTTP_USER_AGENT'];
         return $instance;
     }
 
