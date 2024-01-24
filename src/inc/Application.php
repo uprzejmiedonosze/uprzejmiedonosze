@@ -68,6 +68,8 @@ class Application extends JSONObject{
         $this->user = $user->data;
         $this->user->number = $user->getNumber();
         $this->stopAgresji = $user->stopAgresji();
+        unset($this->user->stopAgresji);
+        unset($this->user->myAppsSize);
     }
 
     /**
