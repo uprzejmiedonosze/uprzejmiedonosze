@@ -419,7 +419,7 @@
       "60-734 Poznań"
     ],
     "email": "sm@um.poznan.pl",
-    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
+    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
     "api": "Poznan"
   },
   "Toruń": {
@@ -429,7 +429,7 @@
       "87-100 Toruń"
     ],
     "email": "sm@um.torun.pl",
-    "hint": "<p>SM Toruń jest wyjątkowa w skali kraju i stoi na stanowisku, że jedyny poprawny sposób dokonywania zgłoszeń to telefon 986. Wiele SM stara się zniechęcić mieszkańców do dokonywania zgłoszeń, ale zawsze przyznają, że muszą się zająć każdym zgłoszeniem.</p> <p>Musisz liczyć się, że odmówią przyjęcia zgłoszenia i być przygotowanym na batalię odwoławczą.</p>"
+    "hint": "Najnowsze informacje (styczeń 2024): SM przyjmuje zgłoszenie wysłane przez Uprzejmie Donoszę (czyli emailem). Niestety należy spodziewać się wezwania na przesłuchanie."
   },
   "Bydgoszcz": {
     "address": [
@@ -2666,5 +2666,16 @@
       "55-040 Kobierzyce"
     ],
     "email": "slawomir.tylicki@wroclaw.wr.policja.gov.pl"
+  },
+  "Swarzędz": {
+    "address": [
+      "Komisariatu Policji w Swarzędzu",
+      "Ul. Dworcowa 24",
+      "62-020 Swarzędz"
+    ],
+    "email": "kubczak.piotr@umig.swarzedz.pl"
+  },
+  "Jasin": {
+    "parent": "Swarzędz"
   }
 }
