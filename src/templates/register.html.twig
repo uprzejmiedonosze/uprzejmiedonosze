@@ -54,7 +54,7 @@
         <label for="stopAgresji-SM">do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)</label>
 
         <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
-        <label for="stopAgresji-SA">na komendę Policji właściwą dla województwa zgłoszenia (eksperymentalnie)</label>
+        <label for="stopAgresji-SA">na komendę Policji właściwą dla województwa zgłoszenia</label>
     </fieldset>
 
     {% if not user.autoSend() %}
