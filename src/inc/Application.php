@@ -65,7 +65,7 @@ class Application extends JSONObject{
     }
 
     public function updateUserData(User $user): void {
-        $this->user = $user->data;
+        $this->user = clone $user->data;
         $this->user->number = $user->getNumber();
         $this->stopAgresji = $user->stopAgresji();
         unset($this->user->stopAgresji);
