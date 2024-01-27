@@ -275,55 +275,11 @@ class Application extends JSONObject{
             return $SM_ADDRESSES['_nieznane'];
         }
         if($this->stopAgresji()){
-            $this->smCity = Application::__guessSA($this->address);
+            $this->smCity = StopAgresji::guess($this->address);
             return $STOP_AGRESJI[$this->smCity];
         }
-        $this->smCity = Application::__guessSM($this->address);
+        $this->smCity = SM::guess($this->address);
         return $SM_ADDRESSES[$this->smCity];
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
-    public static function __guessSM(object $address): string{ // straż miejska
-        global $SM_ADDRESSES;
-        $city = trimstr2lower($address->city);
-        if($city == 'krosno' && trimstr2lower(@$address->voivodeship) == 'wielkopolskie'){
-            $city = 'krosno-wlkp'; // tak, są dwa miasta o nazwie 'Krosno'...
-        }
-        if(array_key_exists($city, $SM_ADDRESSES)){
-            $smCity = $city;
-            if($city == 'warszawa' && isset($address->district)){
-                if(array_key_exists($address->district, ODDZIALY_TERENOWE)){
-                    $smCity = ODDZIALY_TERENOWE[$address->district];
-                }
-            }
-            return $smCity;
-        }
-        $smCity = '_nieznane';
-        return $smCity;
-    }
-
-    /** 
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
-    public static function __guessSA(object $address): string { // stop agresji
-        global $STOP_AGRESJI;
-
-        $voivodeship = trimstr2lower(@$address->voivodeship);
-        $city = trimstr2lower($address->city);
-
-        if(array_key_exists($voivodeship, $STOP_AGRESJI)){
-            if($city == 'szczecin'){
-                $voivodeship = policeStationsSzczecin($address);
-            }
-            return $voivodeship;
-        }
-        return 'default';
     }
 
     public function hasAPI(): bool{
@@ -513,7 +469,8 @@ class Application extends JSONObject{
     }
 
     public function getEmailSubject(){
-        return "[{$this->number}] " . (($this->category == 0)? "": $this->getCategory()->getTitle() )
+        $title = preg_replace('/\s\(.*\)/', '', $this->getCategory()->getTitle());
+        return "[{$this->number}] " . (($this->category == 0)? "": $title)
             . " ({$this->address->address})";
 
     }

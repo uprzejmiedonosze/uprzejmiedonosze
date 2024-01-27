@@ -418,15 +418,15 @@ function Nominatim(float $lat, float $lng): array {
     global $SM_ADDRESSES;
     global $STOP_AGRESJI;
 
-    $address['lat'] = $lat; // needed by __guessSA()
-    $address['lng'] = $lng; // needed by __guessSA()
+    $address['lat'] = $lat; // needed by StopAgresji::guess()
+    $address['lng'] = $lng; // needed by StopAgresji::guess()
 
     setCache("$prefix $lat,$lng", $json);
     
     return array(
         'address' => $address,
-        'sm' => $SM_ADDRESSES[Application::__guessSM((object)$address)],
-        'sa' => $STOP_AGRESJI[Application::__guessSA((object)$address)]
+        'sm' => $SM_ADDRESSES[SM::guess((object)$address)],
+        'sa' => $STOP_AGRESJI[StopAgresji::guess((object)$address)]
     );
 }
 

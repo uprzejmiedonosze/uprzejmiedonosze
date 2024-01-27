@@ -138,7 +138,7 @@ npm-install:
 $(EXPORT)/config.php:
 	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
-export: $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php ## Exports files for deployment.
+export: $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -317,6 +317,10 @@ $(EXPORT)/patronite/patronite.json: $(EXPORT)/patronite/active.csv $(EXPORT)/pat
 		--slurpfile active export/patronite/active.csv \
 		--slurpfile inactive export/patronite/inactive.csv \
 		> $@
+
+$(PUBLIC)/api/config/police-stations.pjson: src/api/config/police-stations.csv src/api/config/stop-agresji.json
+	$(call echo-processing,$<)
+	@php tools/police-stations.php $^ > $@ || (rm -f $@)
 
 $(EXPORT)/%: ; @echo "==> Creating $@"
 	@mkdir -p $@

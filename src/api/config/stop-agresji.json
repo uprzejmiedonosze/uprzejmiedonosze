@@ -227,6 +227,30 @@
     "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie.",
     "api": "Mail"
   },
+  "szczecin-dabie": {
+    "address": [
+      "Komisariat Policji Szczecin Dąbie",
+      "ul. Pomorska 15",
+      "70-227 Szczecin"
+    ],
+    "email": "sekretariat.dabie@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Szczecin",
+    "hint": "Komisariat Dąbie w Szczecinie czasem wzywa na przesłuchanie.",
+    "api": "Mail"
+  },
+  "szczecin-nad-odra": {
+    "address": [
+      "Komisariat Policji Szczecin Nad Odrą",
+      "ul. Pomorska 15",
+      "70-227 Szczecin"
+    ],
+    "email": "sekretariat.nadodra@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Szczecin",
+    "hint": null,
+    "api": "Mail"
+  },
   "szczecin-miasto": {
     "address": [
       "Komenda Miejska Policji w Szczecinie",

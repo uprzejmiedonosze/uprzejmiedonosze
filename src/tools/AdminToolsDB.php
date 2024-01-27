@@ -16,14 +16,14 @@ class AdminToolsDB extends NoSQLite{
     /**
     * Removes old drafts and it's files.
     */
-    public function removeDrafts($olderThan = 10, $dryRun){ // days
+    public function removeDrafts($olderThan=10, $dryRun=true){ // days
         $this->removeAppsByStatus($olderThan, 'draft', $dryRun);
     }
 
     /**
     * Removes old apps in ready status and it's files.
     */
-    public function removeReadyApps($olderThan = 30, $dryRun){
+    public function removeReadyApps($olderThan = 30, $dryRun=true){
         $this->removeAppsByStatus($olderThan, 'ready', $dryRun);
     }
 
@@ -31,7 +31,7 @@ class AdminToolsDB extends NoSQLite{
      * Removes user by given $email
      * @SuppressWarnings(PHPMD.MissingImport)
      */
-    public function removeUser($email, $dryRun){
+    public function removeUser($email, $dryRun=true){
         if(!isset($email)){
             throw new Exception("No email provided\n");
         }
@@ -48,7 +48,7 @@ class AdminToolsDB extends NoSQLite{
     
         echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
         foreach($apps as $app){
-            $this->removeApplication($app, $dryRun);
+            $this->removeApplication($app, $dryRun=true);
         }
 
         $cdn2UserFolder = __DIR__ . "/../../cdn2/{$user->number}/";

@@ -64,5 +64,29 @@ class SM extends JSONObject{
         return $this->city == null;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    public static function guess(object $address): string{ // straż miejska
+        global $SM_ADDRESSES;
+        $city = trimstr2lower($address->city);
+        if($city == 'krosno' && trimstr2lower(@$address->voivodeship) == 'wielkopolskie'){
+            $city = 'krosno-wlkp'; // tak, są dwa miasta o nazwie 'Krosno'...
+        }
+        if(array_key_exists($city, $SM_ADDRESSES)){
+            $smCity = $city;
+            if($city == 'warszawa' && isset($address->district)){
+                if(array_key_exists($address->district, ODDZIALY_TERENOWE)){
+                    $smCity = ODDZIALY_TERENOWE[$address->district];
+                }
+            }
+            return $smCity;
+        }
+        $smCity = '_nieznane';
+        return $smCity;
+    }
+
 }
 

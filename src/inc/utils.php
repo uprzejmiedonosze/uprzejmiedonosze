@@ -291,65 +291,6 @@ function extractAppNumer($appNumber) {
     return intval($number[2]);
 }
 
-/**
- * @SuppressWarnings(PHPMD.CyclomaticComplexity)
- * @SuppressWarnings(PHPMD.NPathComplexity)
- * @SuppressWarnings(PHPMD.ShortVariable)
- * @SuppressWarnings(PHPMD.LongVariable)
- */
-function policeStationsSzczecin(object $address): string {
-    preg_match('/(.*)\s([0-9]+)[a-zA-Z]?, Szczecin/', $address->address, $match);
-    $street = $match[1] ?? "(not Szczecin)";
-    $number = $match[2] ?? null;
-
-    if(str_contains($street, 'Jagiellońska')) {
-        if ($number < 45) return 'szczecin-niebuszewo';
-        if ($number > 45) return 'szczecin-srodmiescie';
-    }
-    if(str_contains($street, 'Piastów')) {
-        if ($number <= 5 || $number >= 74) return 'szczecin-niebuszewo';
-        return 'szczecin-srodmiescie';
-    }
-    if(str_contains($street, 'Wojska Polskiego')) {
-        if ($number <= 50) return 'szczecin-srodmiescie';
-        return 'szczecin-niebuszewo';
-    }
-    if(str_contains($street, 'Bolesława Śmiałego')) {
-        if ($number < 11 || $number > 41) return 'szczecin-niebuszewo';
-        return 'szczecin-srodmiescie';
-    }
-    if(str_contains($street, 'Bohaterów Warszawy')) {
-        if ($number < 17 || $number > 106) return 'szczecin-niebuszewo';
-        return 'szczecin-srodmiescie';
-    }
-
-    if(str_contains($street, 'plac Odrodzenia')) return 'szczecin-niebuszewo';
-    if(str_contains($street, 'Jana Pawła II')) return 'szczecin-niebuszewo';
-    if(str_contains($street, 'Monte Cassino')) return 'szczecin-niebuszewo';
-    if(str_contains($street, 'Piłsudskiego')) return 'szczecin-niebuszewo';
-    if(str_contains($street, 'Mazurska')) return 'szczecin-niebuszewo';
-    if(str_contains($street, 'Michała Kleofasa Ogińskiego')) return 'szczecin-niebuszewo';
-    if(str_contains($street, '5 Lipca')) return 'szczecin-niebuszewo';
-    if(str_contains($street, 'Rayskiego')) return 'szczecin-niebuszewo';
-
-    $x = $address->lng;
-    $y = $address->lat;
-
-    $odraY = 53.42745434366132;
-    $odraX = 14.565803905874402;
-    $toryX = 14.52274239523983;
-    $toryY = 53.43503982962682;
-    $xoffset = $odraX - $toryX;
-    $yoffset = $odraY - $toryY;
-
-    if ($x < $toryX) return 'szczecin-pogodno';
-    if ($x > $odraX) return 'szczecin-miasto';
-    
-    $niebkoSrodmiescieSplit = ($x-$toryX) * ($yoffset/$xoffset) + $toryY;
-    if ($y < $niebkoSrodmiescieSplit) return 'szczecin-srodmiescie';
-    return 'szczecin-niebuszewo';
-}
-
 function setSentryTag(string $tag, $value): void {
     if (!isProd()) return;
 
