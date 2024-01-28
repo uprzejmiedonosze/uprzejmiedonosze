@@ -163,9 +163,6 @@
   "Zatom Nowy": {
     "parent": "Międzychód"
   },
-  "Krosno-Wlkp": {
-    "parent": "Mosina"
-  },
   "Kurozwęki": {
     "parent": "Staszów"
   },
@@ -374,6 +371,15 @@
     "email": "smkrak@strazmiejska.krakow.pl",
     "hint": "Najnowsze (01.2024) doniesienia wskazują na to, że SM Kraków wzywa obligatoryjnie na przesłuchanie do pierwszego zgłoszenia. Ale warto iść, bo jest miło i szybko. A potem już z górki."
   },
+  "Kraków-Podgórze": {
+    "parent": "Kraków"
+  },
+  "Kraków-Śródmieście": {
+    "parent": "Kraków"
+  },
+  "Kraków-Krowodrza": {
+    "parent": "Kraków"
+  },
   "Gdynia": {
     "address": [
       "Straż Miejska Gdyni",
@@ -403,6 +409,7 @@
   "Łódź-Śródmieście": { "parent": "Łódź" },
   "Łódź-Górna": { "parent": "Łódź" },
   "Łódź-Widzew": { "parent": "Łódź" },
+  "Łódź-Polesie": { "parent": "Łódź" },
   "Gdańsk": {
     "address": [
       "Straż Miejska w Gdańsku",
@@ -421,6 +428,18 @@
     "email": "sm@um.poznan.pl",
     "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
     "api": "Poznan"
+  },
+  "Poznań-Jeżyce": {
+    "parent": "Poznań"
+  },
+  "Poznań-Nowe Miasto": {
+    "parent": "Poznań"
+  },
+  "Poznań-Stare Miasto": {
+    "parent": "Poznań"
+  },
+  "Poznań-Grunwald": {
+    "parent": "Poznań"
   },
   "Toruń": {
     "address": [
@@ -1107,6 +1126,12 @@
       "62-050 Mosina"
     ],
     "email": "straz.miejska@mosina.pl"
+  },
+  "gmina Mosina": {
+    "parent": "Mosina"
+  },
+  "Krosno-Wlkp": {
+    "parent": "Mosina"
   },
   "Krosno": {
     "address": [

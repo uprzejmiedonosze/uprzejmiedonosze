@@ -12,24 +12,25 @@ class StopAgresji extends SM {
     return "Stop Agresji Drogowej " . $this->voivodeship;
   }
 
-  /** 
-   * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-   * @SuppressWarnings(PHPMD.CamelCaseMethodName)
-   * @SuppressWarnings(PHPMD.ErrorControlOperator)
-   */
   public static function guess(object $address): string  { // stop agresji
     global $STOP_AGRESJI;
 
     $voivodeship = trimstr2lower(@$address->voivodeship);
     $city = trimstr2lower($address->city);
 
-    if (array_key_exists($voivodeship, $STOP_AGRESJI)) {
-      if ($city == 'szczecin') {
-        $policeStationAreas = new \PoliceStationAreas;
-        return $policeStationAreas->guess($address->lat, $address->lng) ?? 'szczecin-miasto';
-      }
-      return $voivodeship;
+    // this is a complex alghorithm and runs on a single city at the moment
+    // it's better to run it only when needed
+    if ($city == 'szczecin') {
+      $policeStationAreas = new \PoliceStationAreas;
+      return $policeStationAreas->guess($address->lat, $address->lng) ?? 'szczecin-miasto';
     }
+
+    if (array_key_exists("$city-miasto", $STOP_AGRESJI))
+      return "$city-miasto";
+
+    if (array_key_exists($voivodeship, $STOP_AGRESJI))
+      return $voivodeship;
+
     return 'default';
   }
 }

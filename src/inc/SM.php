@@ -66,15 +66,20 @@ class SM extends JSONObject{
 
     /**
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public static function guess(object $address): string{ // straż miejska
         global $SM_ADDRESSES;
-        $city = trimstr2lower($address->city);
-        if($city == 'krosno' && trimstr2lower(@$address->voivodeship) == 'wielkopolskie'){
-            $city = 'krosno-wlkp'; // tak, są dwa miasta o nazwie 'Krosno'...
+
+        // post code level
+        if(isset($address->postcode)) {
+            $postcode = $address->postcode;
+            if(array_key_exists($postcode, $SM_ADDRESSES))
+                return $postcode;
         }
+
+        // city level
+        $city = trimstr2lower($address->city);
         if(array_key_exists($city, $SM_ADDRESSES)){
             $smCity = $city;
             if($city == 'warszawa' && isset($address->district)){
@@ -84,9 +89,13 @@ class SM extends JSONObject{
             }
             return $smCity;
         }
-        $smCity = '_nieznane';
-        return $smCity;
+
+        // county level
+        if(isset($address->county)) {
+            $county = trimstr2lower($address->county);
+            if(array_key_exists($county, $SM_ADDRESSES))
+                return $county;
+        }
+        return '_nieznane';
     }
-
 }
-
