@@ -276,6 +276,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "poznań-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Poznaniu",
+      "ul. Szylinga 2",
+      "60-787 Poznań"
+    ],
+    "email": "dyzurny.poznan@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Poznań",
+    "hint": null,
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
