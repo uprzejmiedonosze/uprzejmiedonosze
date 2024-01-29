@@ -300,6 +300,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "warszawa-miasto": {
+    "address": [
+      "Komenda Stołeczna Policji",
+      "ul. Nowolipie 2",
+      "00-150 Warszawa"
+    ],
+    "email": "wrd@ksp.policja.gov.pl",
+    "voivodeship": "Mazowieckie",
+    "city": "Warszawa",
+    "hint": null,
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
