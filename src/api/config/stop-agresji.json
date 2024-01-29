@@ -288,6 +288,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "rzeszów-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Rzeszowie",
+      "ul. Jagiellońska 13",
+      "35-959 Rzeszów"
+    ],
+    "email": "kmp.rzeszow@rz.policja.gov.pl",
+    "voivodeship": "Podkarpackie",
+    "city": "Rzeszów",
+    "hint": null,
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
