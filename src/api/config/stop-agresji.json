@@ -312,6 +312,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "stargard-miasto": {
+    "address": [
+      "Komenda Powiatowa Policji w Stargardzie",
+      "ul. Warszawska 29",
+      "73-110 Stargard"
+    ],
+    "email": "sekretariat.stargard@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Stargard",
+    "hint": null,
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
