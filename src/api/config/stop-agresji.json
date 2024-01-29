@@ -264,6 +264,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "wrocław-miasto": {
+    "address": [
+      "Komenda Miejska Policji we Wrocławiu",
+      "ul. Sołtysowicka 21",
+      "51-168 Wrocław"
+    ],
+    "email": "dyzurny@wroclaw.wr.policja.gov.pl",
+    "voivodeship": "Dolnośląskie",
+    "city": "Wrocław",
+    "hint": null,
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
