@@ -28,6 +28,12 @@ class StopAgresji extends SM {
     if (array_key_exists("$city-miasto", $STOP_AGRESJI))
       return "$city-miasto";
 
+    if(isset($address->county)) {
+      $county = trimstr2lower($address->county);
+      if(array_key_exists($county, $STOP_AGRESJI))
+          return $county;
+    }
+
     if (array_key_exists($voivodeship, $STOP_AGRESJI))
       return $voivodeship;
 
