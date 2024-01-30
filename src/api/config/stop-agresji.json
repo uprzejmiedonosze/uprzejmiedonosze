@@ -324,6 +324,18 @@
     "hint": null,
     "api": "Mail"
   },
+  "gmina Zielonki": {
+    "address": [
+      "Komisariat Policji w Zielonkach",
+      "Władysława Łokietka 205",
+      "31-263 Kraków"
+    ],
+    "email": "dzielnicowy.zielonki1@kpp-krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie",
+    "city": "Zielonki",
+    "hint": null,
+    "api": "Mail"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
@@ -332,7 +344,7 @@
     ],
     "email": "stopagresjidrogowej@ksp.policja.gov.pl",
     "voivodeship": "Mazowieckie",
-    "city": "Mazowieckie",
+    "city": "Warszawa",
     "hint": "Nie udało się się dobrać wojewódzkiego #stopagresji, więc kierujemy wysyłkę na Stołeczną Komendę Policji.",
     "api": "Mail"
   }
