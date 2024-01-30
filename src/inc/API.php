@@ -410,8 +410,20 @@ function Nominatim(float $lat, float $lng): array {
     $address['district'] = $address['suburb'] ?? $address['borough'] ?? $address['quarter'] ?? $address['neighbourhood'] ?? '';
 
     $address['city'] = $address['city'] ?? $address['town'] ?? $address['village'] ?? null;
-    $address['county'] = $address['county'] ?? (($address['city'])? "gmina {$address['city']}": null);
-    $address['municipality'] = $address['municipality'] ?? (($address['city'])? "powiat {$address['city']}": null);
+
+    $county = $address['county'] ?? (($address['city'])? "gmina {$address['city']}": null);
+    $municipality = $address['municipality'] ?? (($address['city'])? "powiat {$address['city']}": null);
+
+    // nominantin can replace county and municipality...
+    if (str_starts_with($county, 'powiat'))
+        $address['municipality'] = $county;
+    if (str_starts_with($municipality, 'powiat'))
+        $address['municipality'] = $municipality;
+    
+    if (str_starts_with($county, 'gmina'))
+        $address['county'] = $county;
+    if (str_starts_with($municipality, 'gmina'))
+        $address['county'] = $municipality;
 
     $address['address'] = trim(($address['road'] ?? '') . " " . ($address['house_number'] ?? '')) . ", " . ($address['city'] ?? '');
 
