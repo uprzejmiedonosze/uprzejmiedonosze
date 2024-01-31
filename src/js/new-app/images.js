@@ -16,10 +16,9 @@ export async function checkFile(file, id) {
       return imageError(id, `Zdjęcie o niepoprawnym type ${file.type}`);
     }
 
-    const imageToResize = document.createElement('img')
+    const imageToResize = new Image()
 
-    imageToResize.src = await imageToDataUri(file)
-    imageToResize.addEventListener("load", async () => {
+    imageToResize.onload = async () => {
       try {
         const resizedImage = resizeImage(imageToResize)
         $(`#${id}Preview`)
@@ -53,7 +52,9 @@ export async function checkFile(file, id) {
           extra: Object.prototype.toString.call(file)
         });
       }
-    })
+    }
+
+    imageToResize.src = await imageToDataUri(file)
   }
 }
 
