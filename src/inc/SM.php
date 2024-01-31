@@ -96,6 +96,13 @@ class SM extends JSONObject{
             if(array_key_exists($county, $SM_ADDRESSES))
                 return $county;
         }
+
+        // municipality level
+        if(isset($address->municipality)) {
+            $municipality = trimstr2lower($address->municipality);
+            if(array_key_exists($municipality, $SM_ADDRESSES))
+                return $municipality;
+        }
         return '_nieznane';
     }
 }
