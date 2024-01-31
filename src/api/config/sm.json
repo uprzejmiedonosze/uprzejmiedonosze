@@ -2695,12 +2695,20 @@
   "Swarzędz": {
     "address": [
       "Komisariatu Policji w Swarzędzu",
-      "Ul. Dworcowa 24",
+      "ul. Dworcowa 24",
       "62-020 Swarzędz"
     ],
     "email": "kubczak.piotr@umig.swarzedz.pl"
   },
   "Jasin": {
     "parent": "Swarzędz"
+  },
+  "powiat strzyżowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Strzyżowie",
+      "ul. Gen. Władysława Andersa 2 ",
+      "38-100 Strzyżów"
+    ],
+    "email": "strzyzow@rz.policja.gov.pl"
   }
 }
