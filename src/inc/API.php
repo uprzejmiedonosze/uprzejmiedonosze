@@ -46,15 +46,15 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
 
     if(!isset($application->address)) $application->address = new stdClass();
     $application->address->address = $address->address;
-    $application->address->addressGPS = $address?->addressGPS;
+    $application->address->addressGPS = $address->addressGPS ?? null;
     $application->address->city = $address->city;
     $application->address->voivodeship = $address->voivodeship;
     $application->address->lat = $address->lat;
     $application->address->lng = $address->lng;
-    $application->address->district = $address?->district;
-    $application->address->county = $address?->county;
-    $application->address->municipality = $address?->municipality;
-    $application->address->postcode = $address?->postcode;
+    $application->address->district = $address->district ?? null;
+    $application->address->county = $address->county ?? null;
+    $application->address->municipality = $address->municipality ?? null;
+    $application->address->postcode = $address->postcode ?? null;
 
     $application->updateUserData($user);
     $application->guessSMData(true); // stores sm city inside the object
