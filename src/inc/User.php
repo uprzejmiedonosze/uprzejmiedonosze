@@ -21,6 +21,9 @@ class User extends JSONObject{
             if (!isset($this->appsCount))
                 @$this->appsCount = sizeof(array_values((array)$this->applications));
             unset($this->applications);
+            if (!isset($this->data->sex)) {
+                $this->guessSex();
+            }
             return;
         }
 
