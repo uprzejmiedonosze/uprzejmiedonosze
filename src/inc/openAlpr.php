@@ -40,7 +40,7 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
 
     if(isset($carInfo) && count($carInfo["results"])){
         if(isset($carInfo['credits_monthly_used'])) {
-            _check_alpr_budget($carInfo['credits_monthly_used'], $carInfo['credits_monthly_total']);
+            store_alpr_budget_cache($carInfo['credits_monthly_used'], $carInfo['credits_monthly_total']);
         }
 
         $result = (Array)$carInfo['results'];
@@ -98,9 +98,6 @@ function get_alpr(&$imageBytes){
     return $alpr;
 }
 
-/**
- * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
- */
 function get_alpr_cli($imagePath) {
     logger("  get_alpr_cli");
     $response = shell_exec("alpr --country eu --topn 1 --json /var/www/%HOST%/$imagePath 2>/dev/null");
@@ -111,14 +108,8 @@ function get_alpr_cli($imagePath) {
     return $json;
 }
 
-function _check_alpr_budget($used, $total){
+function store_alpr_budget_cache($used, $total): void {
     global $cache;
     $budgetConsumed = (float)$used / (float)$total;
     $cache->set('alpr_budget_consumed', $budgetConsumed);
-    if($budgetConsumed > 0.9){
-        logger("$used credits out of $total used!");
-		  if (((int)$used % 10) == 0) {
-			_sendSlackError("$used credits out of $total used!");
-		  }
-    }
 }
