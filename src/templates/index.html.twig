@@ -1,5 +1,7 @@
 {% set leftButton = 'menu' %}
+{% if general.isLoggedIn %}
 {% set rightButton = 'menuStart' %}
+{% endif %}
 {# SITEMAP-PRIORITY:1.0 #}
 
 {% extends "base.html.twig" %}
