@@ -1,13 +1,16 @@
 <? 
 require_once(__DIR__ . '/../inc/include.php');
 
+$stats = $storage->getMainPageStats();
+
 echo generate('index.html.twig', [
     'head' =>
     [
         'mainClass' => 'mainPage'
     ],
     'config' => [
-        'menu' => 'index'
+        'menu' => 'index',
+        'stats' => $stats
     ]
 ]);
 

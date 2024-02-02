@@ -679,6 +679,33 @@ class DB extends NoSQLite{
         return $stats;
     }
 
+    public function getMainPageStats(bool $useCache=true): array{
+        $stats = $this->stats->get("%HOST%-getMainPageStats");
+        if($useCache && $stats){
+            return $stats;
+        }
+
+        global $SM_ADDRESSES;
+        $sm = count($SM_ADDRESSES);
+
+        $sql = <<<SQL
+            select count(key) as cnt
+            from applications
+            where json_extract(value, '$.status') not in ('ready', 'draft', 'archive')
+        SQL;
+        $apps = intval($this->db->query($sql)->fetchColumn());
+
+        $sql = <<<SQL
+            select count(key) as cnt
+            from users
+        SQL;
+        $users = intval($this->db->query($sql)->fetchColumn());
+
+        $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm);
+        $this->setStats('getMainPageStats', $stats);
+        return $stats;
+    }
+
     public function getAppByNumber($number, $apiToken){
         if($apiToken !== API_TOKEN){
             throw new Exception('Dostęp zabroniony');

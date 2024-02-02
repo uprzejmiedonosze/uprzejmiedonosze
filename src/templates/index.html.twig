@@ -84,22 +84,24 @@
 </fieldset>
 {% else %}
 
-<h2>O co chodzi?</h2>
+<h2>Pomagamy walczyć z nielegalnym parkowaniem!</h2>
 
-<p>Każdy z nas chce swobodnie i bezpiecznie poruszać się po
-    mieście. Niestety nie zawsze jest to możliwe. Zbyt
-    często, jako piesi, zmuszeni jesteśmy do przeciskania się, chodzenia
-    gęsiego, omijania, wkraczania na jezdnię zza zaparkowanych pojazdów, a
-    nawet ustępowania jeżdżącym po chodnikach samochodom.</p>
+<ul class="main-page-stats">
+    <li><em>{{ (config.stats.apps / 1000) | round(0)}} tysięcy</em> wysłanych zgłoszeń</li>
+    <li><em>{{ (config.stats.users / 1000) | round(0) }} tysięcy</em> użytkowników</li>
+    <li>generujemy <em>prawidłowe i kompletne</em> zgłoszenie</li>
+    <li>wysyłamy do właściwego oddziału SM w <em>{{ config.stats.sm }} miejscowościach</em></li>
+    <li>ułatwia życie Tobie i służbom</li>
+</ul>
 
-<p>
-    Uprzemie Donoszę to ogólnopolskie rozwiązanie, pomagające w zgłaszeniu
-    przypadków nieprawidłowego parkowania, które wpływają na bezpieczeństwo
-    i komfort pieszych. Zgłoszenie stworzone za pomocą tego serwisu zawiera
-    komplet wymaganych przez Straż Miejską lub Policję informacji.
-    Ułatwia pracę Tobie i służbom. Zobacz, jakie to proste:
-</p>
-    
+
+<a href="/nowe-zgloszenie.html" data-ajax="false"
+    class="ui-btn ui-mini ui-corner-all ui-btn-inline try">
+        Zgłoś nieprawidłowe parkowanie!
+</a>
+<p></p>
+
+<h3>Jak działa Uprzejmie Donoszę?</h3>
 <div class="video video-landscape">
     <video controls poster="img/ud-intro-desktop.png">
         <source src="img/video/ud-intro-desktop.mp4" type="video/mp4" />
@@ -135,12 +137,9 @@
         poświęcony patoparkowaniu.
     </p>
 </div>
-
-<a href="/nowe-zgloszenie.html" data-ajax="false" class="ui-btn ui-mini ui-corner-all ui-btn-inline try">Sprawdź jak to działa</a>
-<a target="_blank" href="https://fb.me/uprzejmiedonosze.net"
-    class="fb-button ui-mini ui-btn ui-corner-all ui-btn-inline">Śledź nas na FB</a>
 <p></p>
 {% endif %}
+
 
 <h3>Nie chcesz „donosić”? Dowiedz się, co możesz zrobić</h3>
 
@@ -183,27 +182,5 @@
     Nie chcesz subskrybcji Patronite? <a href="https://suppi.pl/uprzejmiedonosze" target="_blank">Suppi pozwala na jednorazową wpłatę niewielkiej kwoty</a> (za którą z góry dziękuję).
 </p>
 {% endif %}
-
-<h3>Obowiązujące przepisy</h3>
-
-<p>Na stronie <a href="/przepisy.html">z obowiązującymi przepisami</a> dowiesz
-    się, jak poprawnie zaparkować swój samochód i na jakie przepisy powoływać
-    się w rozmowie z kierowcami. Ostatecznie dowiesz się także, jaką kategorię
-    naruszenia przepisów wybrać dla swojego zgłoszenia.</p>
-
-<h3>Kontakt i polityka prywatności</h3>
-
-<p>Brakuje danych Straży Miejskiej w twoim mieście? Masz uwagi do rozwiązania?
-    Zajrzyj na stronę <a rel="external" href="https://fb.me/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a>.
-
-<p>Zapraszamy także na <a rel="external" href="https://www.facebook.com/groups/patologiaparkingowa/">grupę wsparcia
-        dla użytkowników Uprzejmie Donoszę</a>.</p>
-
-<p>Zapoznaj się z <a href="/polityka-prywatnosci.html">polityką prywatności</a> Uprzejmie Donoszę.</p>
-
-<h3>Historia zmian</h3>
-
-<p>Zobacz <a href="/changelog.html">historię zmian</a>.</p>
-
 
 {% endblock %}
