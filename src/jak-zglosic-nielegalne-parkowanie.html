@@ -1,0 +1,19 @@
+<? 
+require_once(__DIR__ . '/../inc/include.php');
+
+echo generate('jak-zglosic-nielegalne-parkowanie.html.twig',
+    [
+        'head' =>
+        [
+            'title' => "Jak zgłosić nielegalne parkowanie",
+            'shortTitle' => "Jak zgłosić",
+            'description' => "Gdzie i jak zgłosić nielegalne parkowanie samochodu?",
+            'dialog' => isset($_GET['dialog']),
+            'mainClass' => 'faq'
+        ],
+        'config' => [
+            'menu' => 'how'
+        ]
+    ]
+);
+?>

@@ -1,0 +1,281 @@
+{% if head.dialog %}
+    {% set leftButton = 'menuBack' %}
+    {% set rightButton = '' %}
+{% else %}
+    {% set leftButton = 'menu' %}
+    {% set rightButton = 'menuStart' %}
+{% endif %}
+{# SITEMAP-PRIORITY:0.9 #}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>Jak zgłosić nielegalne parkowanie?</h2>
+
+<h3>Za pomocą Uprzejmie Donoszę</h3>
+
+<div class="ui-grid-a ui-responsive use-dont-use">
+    <div class="ui-block-a pros">
+        <ul>
+            <li>W miejscach, które często odwiedzamy</li>
+            <li>Na recydywistów</li>
+            <li>Gdy sprawca może niedługo odjechać</li>
+        </ul>
+    </div>
+    <div class="ui-block-b cons">
+        <ul>
+            <li>W miejscach z dużą rotacją „losowych” kierowców</li>
+            <li>Gdy pojazd jest na zagranicznych nrach rej.</li>
+        </ul>
+    </div>
+</div>
+<div class="ui-grid-a ui-responsive pros-cons">
+    <div class="ui-block-a pros">
+        <ul>
+            <li>Wygodne</li>
+            <li>Archiwum zgłoszeń</li>
+        </ul>
+    </div>
+    <div class="ui-block-b cons">
+        <ul>
+            <li>Nie jest anonimowe</li>
+        </ul>
+    </div>
+</div>
+
+<h3>Telefonicznie do straży miejskiej</h3>
+<div class="ui-grid-a ui-responsive use-dont-use">
+    <div class="ui-block-a">
+        <ul>
+            <li>Kiedy mamy regularny „wypas” wielu pojazdów</li>
+            <li>Gdy sprawcy raczej nie odjadą za chwilę</li>
+            <li>Gdy pojazd jest na zagranicznych nrach rej.</li>
+        </ul>
+    </div>
+    <div class="ui-block-b">
+        <ul>
+            <li>W miejscach z dużą rotacją „losowych” kierowców</li>
+            <li>Gdy pojazd jest na zagranicznych nrach rej.</li>
+        </ul>
+    </div>
+</div>
+
+<h3>Emailem na Stop Agresji Drogowej</h3>
+<div class="ui-grid-a ui-responsive use-dont-use">
+    <div class="ui-block-a">
+        <ul>
+            <li>Kiedy mamy film z jazdą po chodniku</li>
+            <li>Kiedy sprawca jest agresywny</li>
+            <li>Kiedy w twojej gminie nie ma straży gminnej</li>
+        </ul>
+    </div>
+    <div class="ui-block-b">
+        <ul>
+            <li></li>
+            <li>Gdy pojazd jest na zagranicznych nrach rej.</li>
+        </ul>
+    </div>
+</div>
+
+<h3>Na Krajowej Mapie Zagrożeń Bezpieczeństwa</h3>
+<h3>Składając wniosek o słupki</h3>
+
+<h4 id="telefon">Czy nie lepiej zadzwonić do Straży Miejskiej?</h4>
+<p>To zależy. Telefon do Straży Miejskiej daje Ci cień szansy na interwencję
+w przeciągu kilku/kilkunastu godzin od wezwania. W bardzo wielu sytuacjach jest
+już zdecydowanie za późno. W wielu innych przypadkach nie ma sensu wzywać patrolu
+do jednego zaparkowanego pojazdu. Wtedy najlepiej wykonać zgłoszenie Uprzejmie
+Donoszę.</p>
+
+{#<h4>Kiedy korzystać z jakich narzędzi?</h4>
+<dl>
+    <dt>Widzę jak kierowca parkuje w miejscu niedozwolonym:</dt>
+    <dd>Podejdź i spróbuj porozmawiać. Jeśli nie zadziała, zgłoś przez Uprzejmie Donoszę.</dd>
+
+    <dt>Ktoś zaparkował stwarzając realne zagrożenie dla pieszych:</dt>
+    <dd>Zadzwoń do SM wskazując, że jest to sytuacja od odholowania auta. Dodatkowo zgłoś
+    przez Uprzejmie Donoszę.</dd>
+
+    <dt>Ktoś parkuje w tym samym miejscu dzień w dzień:</dt>
+    <dd>Zgłoś Uprzejmie Donoszę. Obszerny opis poniżej.</dd>
+
+    <dt>Ktoś stanął nieprawidłowo, i stoi tak tydzień/miesiąc:</dt>
+    <dd>Zgłoś Uprzejmie Donoszę. Obszerny opis poniżej.</dd>
+
+    <dt>Musiałbym zrobić ze 100 zgłoszeń na jednym odcinku:</dt>
+    <dd>Dzwoń do Straży Miejskiej z prośbą o blokady.</dd>
+
+    <dt>Mam film z kierowcą jadącym po chodniku:</dt>
+    <dd>Wyślij na "Stop agresji drogowej". Więcej detali poniżej.</dd>
+
+    <dt></dt>
+    <dd></dd>
+
+</dl>#}
+
+<h4 id="30">Na ulicy codziennie stoi 30 nieprawidłowo zaparkowanych samochodów. Zgłaszać?</h4>
+<p>Moim zdaniem nie. To jest sytuacja, w której rozsądniej jest zadzwonić do Straży
+Miejskiej z prośbą o interwencję z blokadami.</p>
+<p>Dlaczego? Proces przetwarzania zgłoszeń przez Straż Miejską trwa. Zanim mandaty
+trafią do kierowców minie miesiąc, może dwa. W tym czasie przez ten odcinek przewiną
+się setki pojazdów. Blokady mają znacznie większą moc rażenia oraz bezpośredni
+efekt marketingowo-wychowawczy (inni kierowcy widzą "że tu nie wolno").</p>
+
+<h4 id="wideo">Mam film z kierowcą jadącym po chodniku. Jak to zgłosić?</h4>
+<p>Jest taki nieformalny podział – zdjęcia do Straży Miejskiej, filmy na Policję.
+A konkretnie na adres "Stop Agresji Drogowej". Bez problemu znajdziesz w internecie
+odpowiednią skrzynkę mailową dla swojego województwa. Pamiętaj, że zgłoszenie na
+Policję powinno posiadać te same dane co zgłoszenie w Uprzejmie Donoszę. Świetny
+przewodnik na ten temat napisał <a rel="external" target="_blank" data-ajax="false"
+href="https://www.facebook.com/groups/694594880572900?view=permalink&id=1712898748742503&ref=m_notif&notif_t=group_comment_mention">administrator grupy Święte Krowy Warszawskie 
+Marek Smyk</a>.</p>
+<p>Zgłoszenia z tytułu "Jazdy wzdłuż chodnika lub przejścia dla pieszych pojazdem silnikowym"
+mają osobną pozycję w taryfikatorze – 1500 zł.</p>
+
+<h4 id="to">Czy "to" warto zgłaszać?</h4>
+<p>Gdzie "to", to najczęściej konkretna sytuacja na chodniku/trawniku/ulicy. Pamiętaj, że Uprzejmie Donoszę
+nie jest magiczną aplikacją do generowania mandatów. Nawet, jeśli nie zostaniesz wezwany
+na świadka (co jest powszechną praktyką w coraz większej ilości miast), to zamienienie
+twoich zdjęć w mandat wymaga realnej pracy strażników miejskich. Przyjmij, że na każde
+twoje zgłoszenie Straż Miejska musi poświęcić godzinę swojej pracy. I wtedy zastanów się,
+czy przypadek, który chcesz zgłosić jest warty tej inwestycji.</p>
+
+<h4 id="swiadek">Czy zostanę wezwany na świadka?</h4>
+<p>To zależy od miasta w którym zgłaszasz. Zobacz listę miast na końcu tej strony żeby
+dowiedzieć się więcej.</p>
+
+<h4 id="recydywa">Czy zgłaszać ten sam pojazd kilka razy?</h4>
+<p>Mandat wystawiany jest za czynność, a nie stan. Oznacza to, że jeśli ktoś zaparkował
+nieprawidłowo, i stoi tam tydzień, to nie dostanie siedmiu mandatów. Nawet jeśli wyślesz
+w tym czasie dziesięć zgłoszeń. Zmarnujesz tylko czas strażników.</p>
+<p>Oczywiście z inną sytuacją mamy do czynienia, gdy ktoś codziennie staje w określonym 
+miejscu. Wtedy faktycznie każde zgłoszenie może zakończyć się mandatem. Weź jednak pod uwagę,
+że od twojego pierwszego zgłoszenia, do momentu w którym kierowca otrzyma wezwanie może minąć
+miesiąc. Dlatego jeśli masz do czynienia z recydywistą, to postaraj się z nim skontaktować.
+Włóż kartkę za wycieraczkę. Podejdź kiedy parkuje albo odjeżdża.</p>
+<p>Jeśli powyższe nie pomoże, to częstotliwość zgłoszeń pozostawiam już twojemu sumieniu. Autor 
+zgłasza recydywistów nie częściej niż raz w tygodniu.</p>
+
+<h3>Pytania techniczne</h3>
+<h4 id="aplikacja">Gdzie mogę pobrać aplikację?</h4>
+<p>Nie możesz, bo Uprzejmie Donoszę nie jest aplikacją. Jest mobilną stroną WWW,
+która jednak dość skutecznie udaje aplikację (szczególnie na telefonach z Androidem).
+Spróbuj zrobić sobie skrót na pulpicie, i będziesz miał Uprzejmie Donoszę dostępne
+pod własną ikonką, uruchamiane jako osobny program (a nie zakładka w przeglądarce),
+oraz oczywiście bez paska adresu, który niepotrzebnie zajmuje miejsce.</p>
+
+<h4 id="bug">Co zrobić, jeśli coś nie działa?</h4>
+<p>Napisz do mnie <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">na FB</a>.
+Idealnie, jeśli będziesz mieć zrzut ekranu prezentujący problem, oraz krótki opis jak
+udało się do tej sytuacji doprowadzić.</p>
+
+
+<h3>Pytania związane ze współpracą ze Strażą Miejską</h3>
+<p>Straż Miejska w różnych miastach działa na podstawie tych samych przepisów, ale
+interpretuje je różnie. Widoczne jest to szczególnie mocno w domyślnym podejściu do zgłoszenia
+przysłanego mailem.</p>
+<p>Ta sekcja ma być źródłem informacji o specyfice poszczególnych
+Straży Miejskich, wraz ze wskazówkami "jak rozmawiać ze swoim komendantem".</p>
+<p>Jeśli widzisz jakieś nieprawidłowości, brakuje twojego miasta,
+lub twoje doświadczenia są inne niż opisane poniżej, napisz do mnie
+<a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">na FB</a>.</p>
+
+<h4 id="zignorowac">Czy SM zdarza się zignorować zgłoszenia?</h4>
+<p>Moje doświadczenia, poparte informacjami od użytkowników wskazuje na to,
+że raczej nie. SM może zignorować anonimy. Ale zgłoszenie przygotowane przez
+Uprzejmie Donoszę ma komplet informacji, w tym kluczowe dane kontaktowe zgłaszającego.</p>
+<p>Natomiast często nie informują o przyjęciu zgłoszenia oraz rozpoczęciu sprawy. Nie 
+krępujcie się pytać i domagać informacji zwrotnej. W korespondencji z SM zawsze warto podawać
+numer rejestracyjny, datę i adres wykroczenia.</p>
+
+
+<h4 id="kpw">Jak wygląda postępowania mandatowe?</h4>
+
+W skrócie, koszmarnie. Ale poniżej znajdziesz uproszczoną wizualizację tego procesu.
+
+<pre class="mermaid">
+flowchart
+    start([fa:fa-camera-retro Zgłoszenie])
+
+    mandat(["`fa:fa-thumbs-up kara: taryfikator
+        punkty: taryfikator
+        **status w UD**: mandat`"]):::ok
+    fail(["`fa:fa-thumbs-down umorzenie
+    **status w UD**: zignorowane`"]):::fail
+    start ---> cepik
+
+    subgraph Sądy
+    court([fa:fa-gavel Sprawa sądowa o mandat]):::mixed
+
+    court -- uniewinnienie --> innocent1
+    court2 -- skazany --> penalty1
+    court2 -- (mało prawdopodobne) --> innocent1
+    court -- skazany --> penalty2
+
+    court2(["`fa:fa-gavel Sprawa sądowa z urzędu o niewskazanie
+        **status w UD**: mandat`"]):::mixed
+    penalty1(["`fa:fa-thumbs-up kara: 500 zł
+        punkty: 0`"]):::ok
+    innocent1([uniewinnienie])
+    penalty2(["`fa:fa-thumbs-up kara: dec. sądu
+        punkty: taryfikator
+        **status w UD**: mandat`"]):::ok
+    
+    end
+    
+    subgraph SM/Policja
+    cepik{CEPIK}
+    cepik -- jest właściciel --> mail1
+    mail1(list polecony/wezwanie)
+    mail1 --> owner
+    cepik -- brak danych ---> fail
+
+    owner{Wlaściciel}
+    mail2(list polecony/wezwanie)
+    owner -- nie wskazał --> court2
+    owner -- wskazał sprawcę --> mail2
+    owner -- wskazał obcokrajowca --> fail
+    mail2 --> driver
+
+    driver{Sprawca}
+    driver -- nie przyjął ---> court
+    driver -- przyjął mandat --> mandat
+    end
+
+classDef fail fill:#F99,color:white
+classDef ok fill:#009C7F,color:white
+classDef mixed fill:#e9c200
+
+style start fill:black,color:white
+</pre>
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+</script>
+
+<h4 id="marka">SM w moim mieście wymaga podania marki pojazdu. Co robić?</h4>
+<p>Faktycznie, część funkcjonariuszy tego wymaga (preferencje potrafią być 
+rozbieżne nawet w ramach jednej komendy). Z informacji, które pozyskałem w 
+trakcie przesłuchań wynika, że podanie marki pojazdu służy dodatkowej
+weryfikacji, czy wskazany numer rejestracyjny jest prawidłowy. I o ile 
+byłoby to zrozumiałe w przypadku zgłoszenia bez zdjęcia, o tyle w przypadku 
+Uprzejmie Donoszę uważam ten wymóg za fanaberię SM.</p>
+
+<p>Straż Miejska mając dostęp do systemu CEPIK (Centralna Ewidencja Pojazdów
+i Kierowców) ma możliwość sprawdzenia tego co kryje się pod wskazanym numerem
+rejestracyjnym, oraz porównać, czy marka i kolor z systemu zgadza się ze zdjęciem.</p>
+
+<h4 id="telefon2">SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?</h4>
+<p>Część SM (oraz komisariatów) odmawia wszczęcia postępowania na podstawie
+    wysłanej wiadomości e-mail. Nalegają, żeby "dzwonić".
+
+    W takiej sytuacji spróbuj argumentować, że nie prosisz o interwencję, bo całe 
+    wykroczenie trwa czasem 15 minut i nie dojadą. Jeśli będziesz potrzebował(a) interwencji,
+    to z radością zadzwonisz. Natomiast tutaj wnosisz o ukarania z pozycji
+    świadka popełnionego wykroczenia. Jeśli jest inny adres, na który można to wysyłać,
+    to poproś o ten adres.
+
+    Jak nie pomoże, to musisz napisać skargę "wyżej" – do urzędu gminy (który ich
+    powołał i sponsoruje).</p>
+
+
+{% endblock %}
