@@ -1,5 +1,7 @@
 /* global ga */
 
+import * as Sentry from "@sentry/browser";
+
 import { _updateStatus } from "./status";
 
 window.sendApplication = function (appId) {
@@ -23,10 +25,14 @@ window.sendApplication = function (appId) {
     const message = e.responseJSON ? e.responseJSON.message : e.statusText;
     showMessage("<h3 color=red>Nie udało się wysłać zgłoszenia!</h3>" + message, 7000);
     $('.ui-btn-right').removeClass("ui-disabled");
-    (typeof ga == 'function') && ga("send", "event", {
-      eventCategory: "js-error",
-      eventAction: "sendViaAPI"
+    Sentry.captureException(e, {
+      extra: message
     });
+    if (typeof ga == 'function')
+      ga("send", "event", {
+        eventCategory: "js-error",
+        eventAction: "sendViaAPI"
+      });
   });
 };
 
