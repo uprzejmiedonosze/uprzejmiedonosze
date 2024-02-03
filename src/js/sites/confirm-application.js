@@ -4,9 +4,9 @@ $(document).on("pageshow", function () {
   if (!$(".confirm-application").length) return;
   (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "potwierdz" });
 
-  $('img.mapImage').load(() =>{
+  setTimeout(function () {
     $("a.confirm-send-button").removeClass('ui-disabled')
-  })
+  }, 1500);
 });
 
 
