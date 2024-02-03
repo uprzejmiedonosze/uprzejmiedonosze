@@ -124,15 +124,16 @@ function tex2pdf($application, $destFile, $type) {
     exec($cmd, $output, $ret);
     unset($output);
 
-    @unlink($tex_f);
     @unlink($aux_f);
-    @unlink($log_f);
     @unlink($out_f);
 
     if(!file_exists($pdf_f)) {
         @unlink($file);
         throw new Exception("Output was not generated and latex returned: $ret.");
     }
+
+    @unlink($log_f);
+    @unlink($tex_f);
     
     rename($pdf_f, $destFile);
     @unlink($file);
