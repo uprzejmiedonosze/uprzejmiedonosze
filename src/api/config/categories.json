@@ -51,9 +51,9 @@
         "stopAgresjiOnly": false,
         "order": 3
     },
-    "15": {
+    "24": {
         "title": "Niezastosowanie się do zakazu postoju",
-        "short": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad minutę (PoRD Art. 46. 4.).",
+        "short": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad dozwolony czas (PoRD Art. 46. 4.).",
         "desc": "<p>Znak B-35 'zakaz postoju' oznacza zakaz postoju pojazdu; dopuszczalny czas unieruchomienia pojazdu dłuższy niż jedna minuta jest wskazany napisem na znaku albo na umieszczonej pod nim tabliczce.</p>",
         "law": "PoRD Art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
         "price": "100–300 zł (1 pkt)",
@@ -302,6 +302,18 @@
         "price": null,
         "points": 5,
         "mandate": 100,
+        "contextImageHint": "",
+        "carImageHint": "",
+        "stopAgresjiOnly": false
+    },
+    "15": {
+        "title": "",
+        "short": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad minutę (PoRD Art. 46. 4.).",
+        "desc": "",
+        "law": "",
+        "price": "",
+        "points": 1,
+        "mandate": 200,
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
