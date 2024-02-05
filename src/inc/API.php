@@ -140,16 +140,18 @@ function addToGallery($appId) {
 function moderateApp($appId, $decision) {
     require __DIR__ . '/Tumblr.php';
     global $storage;
-    if(!$storage->getCurrentUser()->isModerator()){
+    $currentUser = $storage->getCurrentUser();
+    if(!$currentUser->isModerator()){
         raiseError("Dostęp zabroniony", 401);
     }
+    $who = $currentUser->isAdmin() ? 'admin' : 'moderator';
 
     $application = $storage->getApplication($appId);
 
     if ($decision == 'true') {
         try {
             $application->addedToGallery = addToTumblr($application);
-            $application->addComment('admin', "Zdjęcie dodane do galerii.");
+            $application->addComment($who, "Zdjęcie dodane do galerii.");
         } catch (Exception $ex) {
             $application->addedToGallery = null;
             raiseError("Błąd Tumblr " . print_r($ex, true), 500);
