@@ -3,11 +3,6 @@ require_once(__DIR__ . '/../inc/include.php');
 
 checkIfLogged();
 
-if(!isAdmin()){
-	http_response_code(404);
-	die();
-}
-
 $applications = $storage->getGalleryModerationApps();
 
 echo generate('adm-gallery.html.twig', 

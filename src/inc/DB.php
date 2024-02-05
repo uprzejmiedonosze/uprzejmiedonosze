@@ -586,7 +586,7 @@ class DB extends NoSQLite{
      * Returns all gallery applications awaiting moderation.
      */
     public function getGalleryModerationApps(){
-        if(!isAdmin()){
+        if(!$this->getCurrentUser()->isModerator()){
             throw new Exception('Dostęp zabroniony');
         }
 
@@ -596,7 +596,8 @@ class DB extends NoSQLite{
             where json_extract(value, '$.status') not in ('draft', 'ready', 'archived')
             and json_extract(value, '$.statements.gallery') is true
             and json_extract(value, '$.addedToGallery') is null
-            order by json_extract(value, '$.added') desc;
+            order by json_extract(value, '$.added') desc
+            limit 300;
         SQL;
 
         $stmt = $this->db->prepare($sql);

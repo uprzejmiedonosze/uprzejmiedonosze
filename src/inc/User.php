@@ -114,7 +114,16 @@ class User extends JSONObject{
     * Super ugly function returning true for admins.
     */
     function isAdmin(){
-        return $this->data->email == 'szymon@nieradka.net' || $this->data->email == 'e@nieradka.net';
+        return in_array(sha1($this->data->email), Array(
+            '27fd28af098bc2eeb4cefe036d9c83664288bf42',
+            'cff111b5bc29fca91506d7d9de12c77b42c74431'
+        ));
+    }
+
+    function isModerator() {
+        return $this->isAdmin() || in_array(sha1($this->data->email), Array(
+            '63fcdf67bfd73b32bf10a8db5d2ad504027b1e8e'
+        ));
     }
 
     /**
