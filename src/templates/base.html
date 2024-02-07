@@ -1,3 +1,9 @@
+{% if title is defined %}
+    {% set title = title ~ ' | Uprzejmie Donoszę' %}
+{% else %}
+    {% set title = 'Uprzejmie Donoszę' %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -6,7 +12,7 @@
             maximum-scale=1, user-scalable=no, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <title>{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę</title>
+        <title>{{ title }}</title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
         <link rel="apple-touch-icon" sizes="57x57" href="/img/apple-touch-icon-57x57.png" />
@@ -22,7 +28,7 @@
         <meta name="theme-color" content="#009C7F">
         <meta property="og:image"
             content="%HTTPS%://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
-        <meta property="og:title" content="{% if head.title is defined %}{{ head.title ~ ' | ' }}{% endif %}Uprzejmie Donoszę" />
+        <meta property="og:title" content="{{ title }}" />
         <meta property="og:description"
             content="{{ head.description ?? 'Uprzejmie Donoszę pozwala na informowanie Straży Miejskiej lub Policji o sytuacjach, które wpływają na komfort i bezpieczeństwo pieszych. Maksymalnie upraszcza wykonanie poprawnego zgłoszenia, i przekazanie go do SM.' }}" />
         <meta property="og:url" content="%HTTPS%://%HOST%{% if config.auth is not defined %}{{ general.uri }}{% endif %}" />
@@ -57,7 +63,7 @@
                     data-role="button" role="button">{{ leftButtonText ?? 'Back' }}</a>
                 {% endif %}
 
-                <h1>{{ head.shortTitle ?? 'Uprzejmie Donoszę' }} 
+                <h1>{{ shortTitle ?? 'Uprzejmie Donoszę' }} 
                     {% if general.isStaging %}
                         <sup>[STG]</sup>
                     {% elseif general.isProd %}
