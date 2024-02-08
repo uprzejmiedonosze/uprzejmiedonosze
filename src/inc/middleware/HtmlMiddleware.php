@@ -20,7 +20,7 @@ class HtmlMiddleware implements MiddlewareInterface {
 
         $parameters['general'] = [
             'uri' => $_SERVER['REQUEST_URI'],
-            'isLoggedIn' => false,
+            'isLoggedIn' => $request->getAttribute('isLoggedIn'),
             'hasApps' => false,
             'isAdmin' => false,
             'galleryCount' => 0,

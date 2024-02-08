@@ -8,9 +8,11 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 class SessionMiddleware implements MiddlewareInterface {
 
     private $mustBeRegistered = true;
+    private $optional = false;
 
-    public function __construct(bool $mustBeRegistered = true) {
+    public function __construct(bool $mustBeRegistered=true, bool $optional=false) {
         $this->mustBeRegistered = $mustBeRegistered;
+        $this->optional = $optional;
     }
 
     private static function isLoggedIn(): bool {
@@ -28,17 +30,24 @@ class SessionMiddleware implements MiddlewareInterface {
 
 
     public function process(Request $request, RequestHandler $handler): Response {
-        if (!$this->isLoggedIn())
+        $isLoggedIn = $this->isLoggedIn();
+
+        $request = $request->withAttribute('isLoggedIn', $isLoggedIn);
+        if (!$isLoggedIn && !$this->optional)
             return $this->redirect($request, 'login.html');
 
-        $request = $request->withAttribute('user_email', $_SESSION['user_email']);
+        if ($isLoggedIn)
+            $request = $request->withAttribute('user_email', $_SESSION['user_email']);
 
-        if ($this->mustBeRegistered) {
+        if ($isLoggedIn && $this->mustBeRegistered) {
             global $storage;
             $user = $storage->getCurrentUser();
 
             $request = $request->withAttribute('user', $user);
-            if (!$user->isRegistered())
+
+            $isRegistered = $user->isRegistered();
+            $request = $request->withAttribute('isRegistered', $isRegistered);
+            if (!$isRegistered && !$this->optional)
                 return $this->redirect($request, 'register.html');
         }
         

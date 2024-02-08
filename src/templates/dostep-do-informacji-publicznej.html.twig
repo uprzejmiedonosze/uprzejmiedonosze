@@ -2,6 +2,10 @@
 {% set rightButton = 'menuStart' %}
 {# SITEMAP-PRIORITY:0.8 #}
 
+{% set title = 'Jak sprawdzić co zrobiła SM w odpowiedzi na twoje zgłoszenie' %}
+{% set shortTitle = 'Dzwoń do SM jak szeryf' %}
+{% set mainClass = 'public' %}
+
 {% extends "base.html.twig" %}
 
 {% block main %}
@@ -18,7 +22,7 @@
     wysłać emailem na adres SM, albo wysłać go <a href="/epuap.html">przez ePUAP</a>.
 </p>
 
-{% if not isLoggedIn %}<p>(zaloguj się, to wzór wniosku zostanie uzupełnione o twoje dane)</p>{% endif %}
+{% if not general.isLoggedIn %}<p>(zaloguj się, to wzór wniosku zostanie uzupełnione o twoje dane)</p>{% endif %}
 
 {% set emailSubject = 'Zapytanie o efekty interwencji SM' %}
 

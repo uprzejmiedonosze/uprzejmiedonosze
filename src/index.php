@@ -1,5 +1,6 @@
 <?php
 require(__DIR__ . '/../inc/include.php');
+require(__DIR__ . '/../inc/Twig.php');
 require(__DIR__ . '/../inc/middleware/HtmlMiddleware.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
@@ -10,9 +11,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Exception\HttpNotFoundException;
-use Slim\Views\Twig;
+
 use Slim\Views\TwigMiddleware;
-use \Twig\Cache\FilesystemCache as FilesystemCache;
 use Slim\Routing\RouteCollectorProxy;
 
 $app = AppFactory::create();
@@ -21,31 +21,7 @@ $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('text/html');
 
-$twig = Twig::create([__DIR__ . '/../templates', __DIR__ . '/../public/api/config'], [
-    'debug' => !isProd(),
-    'cache' => isProd() ? new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', FilesystemCache::FORCE_BYTECODE_INVALIDATION) : false,
-    'strict_variables' => true,
-    'auto_reload' => true]);
-
-
-class Project_Twig_Extension extends \Twig\Extension\AbstractExtension
-{
-    public function getFunctions()
-    {
-        return [
-            new \Twig\TwigFunction('iff', function ($bool, $string) {
-                if ($bool) return $string;
-                return '';
-            }),
-            new \Twig\TwigFunction('active', function ($menu, $menuPos) {
-                if ($menu == $menuPos) return 'class="active"';
-                return '';
-            })
-        ];
-    }
-}
-
-$twig->addExtension(new Project_Twig_Extension());
+$twig = initTwig();
 
 $app->add(TwigMiddleware::create($app, $twig));
 
@@ -67,9 +43,32 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
             'applications' => $sent
         ]);
     });
-})->add(new SessionMiddleware(false))->add(new HtmlMiddleware());
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage) {
+    $group->get('/dostep-do-informacji-publicznej.html', function (Request $request, Response $response, $args) {
+        $email = '<i>[xxx@xxx.pl]</i>';
+        $msisdn = '<i>[XXX XXX XXX]</i>';
+        $name = '<i>[Imię Nazwisko]</i>';
+
+        if ($request->getAttribute('isRegistered')) {
+            $user = $request->getAttribute('user');
+            if (!empty($user->data->msisdn))
+                $msisdn = $user->data->msisdn;
+            $email = $user->data->email;
+            $name = $user->data->name;
+        }
+
+        return HtmlMiddleware::render($request, $response, 'dostep-do-informacji-publicznej', [
+            'callDate' => date('j-m-Y', strtotime('-6 hour')),
+            'callTime' => date('H:i', strtotime('-6 hour')),
+            'checkTime' => date('H:00', strtotime('-2 hour')),
+            'msisdn' => $msisdn,
+            'email' => $email,
+            'name' => $name
+        ]);
+    });
+})->add(new SessionMiddleware($mustBeRegisterer=false, $optional=true))->add(new HtmlMiddleware());
+
+$app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) {
     $group->get('/', function (Request $request, Response $response, $args) use ($storage) {
         $stats = $storage->getMainPageStats();
         return HtmlMiddleware::render($request, $response, 'index', [
@@ -103,6 +102,37 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
     $group->get('/regulamin.html', function (Request $request, Response $response, $args) {
         return HtmlMiddleware::render($request, $response, 'regulamin', [
             'latestTermUpdate' => LATEST_TERMS_UPDATE
+        ]);
+    });
+
+    $group->get('/faq.html', function (Request $request, Response $response, $args) use ($SM_ADDRESSES) {
+        $smAddresses = $SM_ADDRESSES;
+
+        $smNames = array_map(function ($sm) { return $sm->city; }, $SM_ADDRESSES);
+        $collator = new Collator('pl_PL');
+        $collator->sort($smNames);
+
+        $smNames = array_unique($smNames, SORT_LOCALE_STRING);
+
+        $SMHints = array();
+        foreach ($smAddresses as $sm) {
+            if($sm->hint){
+                if(!str_starts_with($sm->hint, 'Miejscowość ')) {
+                    $SMHints[$sm->city] = $sm->hint;
+                }
+            }
+        }
+        $sortedSMHints = array_unique($SMHints, SORT_LOCALE_STRING);
+        return HtmlMiddleware::render($request, $response, 'faq', [
+            'smAddresses' => implode(', ', $smNames),
+            'SMHints' => $sortedSMHints
+        ]);
+    });
+
+    $group->get('/galeria.html', function (Request $request, Response $response, $args) use ($storage){
+        return HtmlMiddleware::render($request, $response, 'galeria', [
+            'appActionButtons' => false,
+            'galleryByCity' => $storage->getGalleryByCity()
         ]);
     });
 
