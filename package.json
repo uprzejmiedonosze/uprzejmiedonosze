@@ -6,14 +6,29 @@
   "engineStrict": true,
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "targets": {
-    "default": {
+    "scss": {
+      "source": "src/scss/index.scss",
+      "distDir": "export/public/css",
+      "publicUrl": "/",
+      "context": "browser",
+      "optimize": true,
+      "sourceMap": true
+    },
+    "js": {
       "source": [
-        "src/scss/index.scss",
         "src/js/index.js",
         "src/js/new-app.js",
         "src/js/firebase.js"
       ],
-      "distDir": "export/public",
+      "distDir": "export/public/js",
+      "publicUrl": "/",
+      "context": "browser",
+      "optimize": true,
+      "sourceMap": true
+    },
+    "img": {
+      "source": "src/images-index.html",
+      "distDir": "export/public/img",
       "publicUrl": "/",
       "context": "browser",
       "optimize": true,
@@ -21,7 +36,8 @@
     }
   },
   "scripts": {
-    "build": "parcel build --no-cache --target default"
+    "scss": "parcel build --target scss",
+    "js": "parcel build --target js"
   },
   "dependencies": {
     "@sentry/browser": "^7.94.1",

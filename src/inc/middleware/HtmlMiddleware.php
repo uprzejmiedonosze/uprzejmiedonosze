@@ -63,7 +63,7 @@ class HtmlMiddleware implements MiddlewareInterface {
         $view = Twig::fromRequest($request);
         return $view->render(
             $response,
-            "$route.html",
+            "$route.html.twig",
             array_merge_recursive($parameters, $extraParameters)
         );
     }

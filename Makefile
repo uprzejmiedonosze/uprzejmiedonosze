@@ -1,6 +1,6 @@
 # tools
 RSYNC                := rsync
-RSYNC_FLAGS          := --human-readable --recursive --exclude 'vendor/bin/*'
+RSYNC_FLAGS          := --human-readable --recursive --delete --exclude 'vendor/bin/*'
 HOSTING              := nieradka.net
 CYPRESS              := ./node_modules/.bin/cypress
 CYPRESS_KEY          := 8a0db00f-b36c-4530-9c82-422b0be32b5b
@@ -15,21 +15,21 @@ endif
 # dirs and files 
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
-DIRS                 := $(PUBLIC)/js $(PUBLIC)/css $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/templates $(EXPORT)/patronite
+DIRS                 := $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/templates $(EXPORT)/patronite
 
 CSS_FILES            := $(wildcard src/scss/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
 CSS_MINIFIED         := $(PUBLIC)/css/index.css
 
-JS_FILES             := $(wildcard src/js/*.js src/js/*/*.js)
+JS_FILES             := $(wildcard src/js/*.js)
+JS_FILES_DEPS        := $(wildcard src/js/*.js src/js/*/*.js)
 CONFIG_FILES         := $(wildcard src/api/config/*.json)
-JS_HASH              := $(shell cat $(JS_FILES) $(CONFIG_FILES) | md5sum | cut -b 1-8)
-JS_MINIFIED          := $(PUBLIC)/js/index.js $(PUBLIC)/js/new-app.js $(PUBLIC)/js/firebase.js
+JS_HASH              := $(shell cat $(JS_FILES_DEPS) $(CONFIG_FILES) | md5sum | cut -b 1-8)
+JS_MINIFIED          := $(JS_FILES:src/js/%.js=export/public/js/%.js)
 
-HTML_FILES           := $(wildcard src/*.html src/api/*.html)
-HTML_PROCESSED       := $(HTML_FILES:src/%.html=export/public/%.html)
+HTML_FILES           := $(wildcard src/api/*.html)
+HTML_PROCESSED       := $(HTML_FILES:src/api/%.html=export/public/api/%.html)
 
-CONFIG_FILES         := $(wildcard src/api/config/*.json)
 CONFIG_PROCESSED     := $(CONFIG_FILES:src/api/config/%.json=export/public/api/config/%.json)
 
 TWIG_FILES           := $(wildcard src/templates/*.twig)
@@ -44,7 +44,7 @@ MANIFEST_PROCESSED   := $(PUBLIC)/manifest.json
 
 SITEMAP_PROCESSED    := $(PUBLIC)/sitemap.xml
 
-OTHER_FILES          := src/favicon.ico src/robots.txt src/img src/ads.txt src/sw.js
+OTHER_FILES          := src/favicon.ico src/robots.txt src/ads.txt src/index.php
 
 STAGING_HOST         := staging.uprzejmiedonosze.net
 PROD_HOST            := uprzejmiedonosze.net
@@ -179,15 +179,23 @@ check-branch-staging: ## Checks if GIT is on branch staging
 	@echo "==> Checking if current branch is staging"
 	@test "$(shell git status | grep 'origin/staging' | wc -l)" -eq 1 || ( echo "Not on branch staging." && exit 1 )
 
-minify: check-branch minify-css minify-js process-html minify-config process-php process-twig process-manifest ## Minifies CSS and JS, processing PHP, HTML, TWIG and manifest.json files.
-minify-css: $(DIRS) $(CSS_FILES) $(CSS_MINIFIED)
-minify-js: $(DIRS) $(JS_FILES) $(CONFIG_FILES) $(JS_MINIFIED)
-process-html: $(DIRS) $(HTML_FILES) $(HTML_PROCESSED)
+minify: check-branch parcel minify-config process-php process-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
+parcel: $(DIRS) $(JS_FILES) $(JS_MINIFIED) $(CSS_FILES) $(CSS_MINIFIED) assets
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 process-sitemap: $(DIRS) $(SITEMAP_PROCESSED)
+
+
+ASSETS := $(shell find src/img)
+.PHONY: assets
+assets: $(ASSETS)
+	@(cat src/images-index.html; grep 'src="/img[^"{]\+"' --only-matching --no-filename --recursive --color=never src/templates \
+		| sed 's|src="/|<img src="./|' | sed 's|$$| />|' ) | sort | uniq | sponge src/images-index.html
+	@./node_modules/.bin/parcel build --target img
+	@rm -f $(PUBLIC)/images-index.html
+
 
 clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
@@ -197,8 +205,7 @@ clean: ## Removes minified CSS and JS files.
 
 # Generics
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
-	@rm -rf .parcel-cache
-	@./node_modules/.bin/parcel build --no-optimize --no-source-maps --dist-dir $(dir $@) $< ;
+	@./node_modules/.bin/parcel build --target scss;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
 			sed $(SED_OPTS) 's/#009C7F/#ff4081/gi' $@ ; \
@@ -207,12 +214,8 @@ $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@
 		fi; \
 	fi;
 
-$(EXPORT)/public/js/%.js: src/js/%.js $(JS_FILES); $(call echo-processing,$<)
-	@./node_modules/.bin/parcel build --public-url "/js" --dist-dir $(dir $@) $<
-
-$(EXPORT)/public/%.html: src/%.html; $(call echo-processing,$<)
-	$(lint)
-	$(replace)
+$(JS_MINIFIED): $(JS_FILES); @echo '==> Minifying $< to $@'
+	@./node_modules/.bin/parcel build --target js;
 
 $(EXPORT)/public/api/api.html: src/api/api.html; $(call echo-processing,$<)
 	$(lint)
@@ -224,6 +227,10 @@ $(EXPORT)/public/api/config/%.json: src/api/config/%.json; $(call echo-processin
 
 $(EXPORT)/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
 	@node ./tools/sm-parser.js $< $@
+
+$(EXPORT)/public/index.php: src/index.php; $(call echo-processing,$<)
+	$(lint)
+	$(replace)
 
 $(EXPORT)/inc/%.php: src/inc/%.php; $(call echo-processing,$<)
 	$(lint)
@@ -249,29 +256,9 @@ $(PUBLIC)/api/rest/index.php: src/api/rest/index.php; $(call echo-processing,$<)
 	$(replace)
 	$(replace-inline)
 
-$(EXPORT)/templates/base.html.twig: src/templates/base.html.twig $(JS_FILES) $(CSS_FILES)
-	$(call echo-processing,$<)
-	$(lint-twig)
+$(EXPORT)/templates/%: src/templates/% lint-twig; $(call echo-processing,$<)
 	$(replace)
 	$(replace-inline)
-
-$(EXPORT)/templates/nowe-zgloszenie.html.twig: src/templates/nowe-zgloszenie.html.twig $(JS_FILES)
-	$(call echo-processing,$<)
-	$(lint-twig)
-	$(replace)
-	$(replace-inline)
-
-$(EXPORT)/templates/changelog.html.twig: src/templates/changelog.html.twig
-	$(call echo-processing,$<)
-	$(lint-twig)
-	$(replace)
-	$(replace-inline)
-
-$(EXPORT)/templates/%: src/templates/%; $(call echo-processing,$<)
-	$(lint-twig)
-	$(replace)
-	$(replace-inline)
-
 $(MANIFEST_PROCESSED): $(MANIFEST); $(call echo-processing,$<)
 	$(replace)
 
@@ -352,9 +339,9 @@ define lint
 endef
 endif
 
-define lint-twig
-@./vendor/bin/twig-linter lint --no-interaction --quiet $< || ./vendor/bin/twig-linter lint --no-interaction $<
-endef
+.PHONY: lint-twig
+lint-twig: src/templates/*.twig
+	@./vendor/bin/twig-linter lint --no-interaction --quiet $^ || ./vendor/bin/twig-linter lint --no-interaction $^
 
 define sentry-release
 @SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js ./node_modules/.bin/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
