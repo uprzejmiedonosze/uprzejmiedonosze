@@ -10,7 +10,8 @@
         "symfony/mailer": "^7.0",
         "symfony/google-mailer": "^7.0",
         "slim/slim": "4.*",
-        "openalpr/api": "*"
+        "openalpr/api": "*",
+        "slim/twig-view": "^3.3"
     },
     "require-dev": {
         "sserbin/twig-linter": "@dev",

@@ -6,12 +6,13 @@
     {% if general.isLoggedIn %}
         <li data-icon="plus">
             <a class="try" data-ajax="false" 
-                {% if config.menu == 'start' %}class="active"{% endif %}
+                {{active(config.menu,'start')}}
                 href="/nowe-zgloszenie.html">Nowe zgłoszenie
             </a>
         </li>
         <li data-icon="bullets">
-            <a data-ajax="false" {% if config.menu == 'moje-zgloszenia' %}class="active"{% endif %}
+            <a data-ajax="false"
+                {{active(config.menu,'moje-zgloszenia')}}
                 href="/moje-zgloszenia.html">Moje zgłoszenia
                 <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span>
             </a>
@@ -30,14 +31,16 @@
 
         {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
         <li data-icon="mail" class="wysylka">
-            <a data-ajax="false" {% if config.menu == 'wysylka' %}class="active"{% endif %}
+            <a data-ajax="false"
+                {{active(config.menu,'wysylka')}}
                 href="/wysylka.html">Do wysłania
             <span class="ui-li-count">{{ general.stats.confirmed ?? 0 }}</span></a>
         </li>
         {% endif %}
         {% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
-        <li data-icon="mail" class="zapyta-o-status">
-            <a data-ajax="false" {% if config.menu == 'zapyta-o-status' %}class="active"{% endif %}
+        <li data-icon="mail" class="zapytaj-o-status">
+            <a data-ajax="false"
+                {{active(config.menu,'zapytaj-o-status')}}
                 href="/zapytaj-o-status.html?update">Zapytaj o status
             <span class="ui-li-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span></a>
         </li>
@@ -48,35 +51,36 @@
 
         <li data-role="list-divider"></li>
         <li data-icon="home">
-            <a {% if config.menu == 'index' %}class="active"{% endif %}
+            <a {{active(config.menu,'index')}}
                 href="/">Strona główna</a></li>
         <li class="subpage" data-icon="false">
-            <a data-ajax="false" {% if config.menu == 'galeria' %}class="active"{% endif %}
+            <a data-ajax="false"
+                {{active(config.menu,'galeria')}}
                 href="/galeria.html">– galeria <span class="ui-li-count">{{ general.galleryCount }}</span></a></li>
         <li class="subpage" data-icon="false">
-            <a {% if config.menu == 'przepisy' %}class="active"{% endif %}
+            <a {{active(config.menu,'przepisy')}}
                 href="/przepisy.html">– przepisy</a></li>
         <li class="subpage" data-icon="false">
-            <a {% if config.menu == 'faq' %}class="active"{% endif %} data-ajax="false"
+            <a data-ajax="false" {{active(config.menu,'faq')}}
                 href="/faq.html">– faq</a></li>
         <li class="subpage" data-icon="false">
-            <a {% if config.menu == 'regulamin' %}class="active"{% endif %}
+            <a {{active(config.menu,'regulamin')}}
                 href="/regulamin.html">– regulamin</a></li>
         <li class="subpage" data-icon="false">
-            <a data-ajax="false" {% if config.menu == 'stats' %}class="active"{% endif %}
+            <a data-ajax="false" {{active(config.menu,'statystyki')}}
             href="/statystyki.html">– statystyki</a></li>
         <li class="subpage" data-icon="false">
-            <a {% if config.menu == 'changelog' %}class="active"{% endif %}
+            <a {{active(config.menu,'changelog')}}
                 href="/changelog.html">– historia zmian</a></li>
         <li class="subpage" data-icon="false">
-            <a data-ajax="false" {% if config.menu == 'aplikacja' %}class="active"{% endif %}
+            <a data-ajax="false" {{active(config.menu,'aplikacja')}}
                 href="/aplikacja.html">– zainstaluj UD</a></li>
         <li class="subpage" data-icon="false">
-            <a {% if config.menu == 'projekt' %}class="active"{% endif %}
+            <a {{active(config.menu,'projekt')}}
                 href="/projekt.html">– o projekcie</a></li>
 
         <li {#data-icon="phone"#} class="subpage" data-icon="false">
-            <a {% if config.menu == 'public' %}class="active"{% endif %}
+            <a {{active(config.menu,'public')}}
                 data-ajax="false" href="/dostep-do-informacji-publicznej.html">– dzwoń do SM jak szeryf</a>
         </li>
         {% if general.isLoggedIn %}
@@ -97,7 +101,7 @@
         <li data-role="list-divider"></li>
         {% if general.isLoggedIn %}
         <li data-icon="user">
-            <a data-ajax="false" {% if config.menu == 'register' %}class="active"{% endif %}
+            <a data-ajax="false" {{active(config.menu,'register')}}
                 href="/register.html?update">Edycja konta</a></li>
         <li data-icon="false" class="subpage">
             <a href="/login.html?logout" data-ajax="false">– wyloguj się</a></li>

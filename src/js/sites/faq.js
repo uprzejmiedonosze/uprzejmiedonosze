@@ -1,5 +1,5 @@
 $(function () {
-  if (!$(".faq").length) return;
+  if (!$(".faq").length || !$(".how").length) return;
   const hash = window.location.hash;
   if ($(hash).length) {
     $("html, body").animate({

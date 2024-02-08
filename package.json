@@ -5,6 +5,24 @@
   },
   "engineStrict": true,
   "browserslist": "> 0.5%, last 2 versions, not dead",
+  "targets": {
+    "default": {
+      "source": [
+        "src/scss/index.scss",
+        "src/js/index.js",
+        "src/js/new-app.js",
+        "src/js/firebase.js"
+      ],
+      "distDir": "export/public",
+      "publicUrl": "/",
+      "context": "browser",
+      "optimize": true,
+      "sourceMap": true
+    }
+  },
+  "scripts": {
+    "build": "parcel build --no-cache --target default"
+  },
   "dependencies": {
     "@sentry/browser": "^7.94.1",
     "@sentry/tracing": "^7.94.1",
@@ -18,8 +36,10 @@
   },
   "devDependencies": {
     "@parcel/optimizer-data-url": "^2.11.0",
+    "@parcel/packager-raw-url": "^2.11.0",
     "@parcel/transformer-inline-string": "^2.11.0",
     "@parcel/transformer-sass": "^2.11.0",
+    "@parcel/transformer-webmanifest": "^2.11.0",
     "@sentry/cli": "^2.25.3",
     "cypress": "^13.6.3",
     "eslint": "^8.56.0",
@@ -31,7 +51,8 @@
     "node-sass": "^9.0.0",
     "parcel": "^2.11.0",
     "process": "^0.11.10",
-    "sass": "^1.70.0"
+    "sass": "^1.70.0",
+    "sharp": "^0.31.3"
   },
   "name": "uprzejmiedonosze"
 }

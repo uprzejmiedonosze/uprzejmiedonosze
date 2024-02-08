@@ -20,8 +20,8 @@
             pojazdu o nr. rejestracyjnym <b>{{ app.carInfo.plateId }}</b>
             {% if recydywa > 1 %}<sup>(recydywa {{ recydywa }})</sup>{% endif %}
             w okolicy adresu
-            <a href="{{ app.getMapUrl() }}"
-                data-ajax="false" target="_blank"><b>{{ app.address.address}}</b></a>.
+            <a href="{{ app.getMapUrl }}"
+                data-ajax="false" target="_blank"><b>{{ app.address.address }}</b></a>.
             {{ app.getCategory.short }}
             {{ app.getExtensionsText() }}
         </p>

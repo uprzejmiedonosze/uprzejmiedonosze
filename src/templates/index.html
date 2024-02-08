@@ -4,6 +4,8 @@
 {% endif %}
 {# SITEMAP-PRIORITY:1.0 #}
 
+{% set mainClass = 'mainPage' %}
+
 {% extends "base.html.twig" %}
 
 {% block main %}
@@ -106,12 +108,12 @@
 <h3>Jak działa Uprzejmie Donoszę?</h3>
 <div class="video video-landscape">
     <video controls poster="img/ud-intro-desktop.png">
-        <source src="img/video/ud-intro-desktop.mp4" type="video/mp4" />
-        <source src="img/video/ud-intro-desktop.webm" type="video/webm" />
-        <source src="img/video/ud-intro-desktop.ogv" type="video/ogg" />
+        <source src="/img/video/ud-intro-desktop.mp4" type="video/mp4" />
+        <source src="/img/video/ud-intro-desktop.webm" type="video/webm" />
+        <source src="/img/video/ud-intro-desktop.ogv" type="video/ogg" />
         <p>
             Twoja przeglądarka nie wspiera odtwarzania plików wideo.
-            <a href="img/video/ud-intro-mobile.mp4">Pobierz film</a>.
+            <a href="/img/video/ud-intro-desktop.mp4">Pobierz film</a>.
         </p>
     </video>
     <p>Zobacz też

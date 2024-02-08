@@ -4,11 +4,11 @@ import "./lib/send";
 import "./lib/gallery";
 import "./lib/sentry";
 
+import "./sites/main";
 import "./sites/application";
 import "./sites/confirm-application";
 import "./sites/faq";
 import "./sites/gallery";
-import "./sites/index";
 import "./sites/my-application";
 import "./sites/register";
 import "./sites/regulations";
