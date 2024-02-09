@@ -2710,5 +2710,16 @@
       "38-100 Strzyżów"
     ],
     "email": "strzyzow@rz.policja.gov.pl"
+  },
+  "Kórnik": {
+    "address": [
+      "Komisariatu Policji w Kórniku",
+      "ul. Poznańska 83",
+      "62-035 Kórnik"
+    ],
+    "email": "kubczak.piotr@umig.swarzedz.pl"
+  },
+  "gmina Kórnik": {
+    "parent": "Kórnik"
   }
 }
