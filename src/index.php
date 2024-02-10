@@ -7,7 +7,7 @@ require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
 require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
 require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
-
+require(__DIR__ . '/../inc/handlers/ApplicationHandler.php');
 
 $DISABLE_SESSION=false;
 
@@ -67,6 +67,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
     
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) {
+    $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
 
     $group->get('/start.html', function (Request $request, Response $response, $args) {
         return HtmlMiddleware::render($request, $response, 'start', [
@@ -96,8 +97,8 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
         ]);
     });
 })  ->add(new RegisteredMiddleware())
-    ->add(new SessionMiddleware())
-    ->add(new HtmlMiddleware());
+    ->add(new HtmlMiddleware())
+    ->add(new SessionMiddleware());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) {
 

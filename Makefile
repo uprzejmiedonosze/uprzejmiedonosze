@@ -15,7 +15,7 @@ endif
 # dirs and files 
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
-DIRS                 := $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/templates $(EXPORT)/patronite
+DIRS                 := $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/inc/handlers $(EXPORT)/templates $(EXPORT)/patronite
 
 CSS_FILES            := $(wildcard src/scss/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
@@ -36,7 +36,7 @@ TWIG_FILES           := $(wildcard src/templates/*.twig)
 TWIG_HASH            := $(shell cat $(TWIG_FILES) | md5sum | cut -b 1-8)
 TWIG_PROCESSED       := $(TWIG_FILES:src/templates/%=export/templates/%)
 
-PHP_FILES            := $(wildcard src/inc/*.php src/inc/integrations/*.php src/inc/middleware/*.php)
+PHP_FILES            := $(wildcard src/inc/*.php src/inc/integrations/*.php src/inc/middleware/*.php src/inc/handlers/*.php)
 PHP_PROCESSED        := $(PHP_FILES:src/inc/%.php=export/inc/%.php)
 
 MANIFEST             := src/manifest.json
