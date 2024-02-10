@@ -18,7 +18,8 @@
       "source": [
         "src/js/index.js",
         "src/js/new-app.js",
-        "src/js/firebase.js"
+        "src/js/firebase.js",
+        "src/js/sw.js"
       ],
       "distDir": "export/public/js",
       "publicUrl": "/",

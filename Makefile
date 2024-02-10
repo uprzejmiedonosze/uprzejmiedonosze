@@ -125,8 +125,8 @@ $(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/res
 	@cp -r src/tools $(EXPORT)/
 
 
-minify: check-branch parcel minify-config process-php process-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
-parcel: $(DIRS) $(JS_FILES) $(JS_MINIFIED) $(CSS_FILES) $(CSS_MINIFIED) assets
+.PHONY: minify
+minify: check-branch js css assets minify-config process-php process-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
@@ -145,8 +145,9 @@ $(EXPORT)/images-index.html: $(ASSETS) $(DIRS)
 	@./node_modules/.bin/parcel build --target img --no-cache
 
 
-# Generics
-$(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@'
+.PHONY: css
+css: $(CSS_MINIFIED)
+$(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); $(call echo-processing,$@ with parcel)
 	@./node_modules/.bin/parcel build --target scss --no-cache;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
@@ -156,20 +157,19 @@ $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); @echo '==> Minifying $< to $@
 		fi; \
 	fi;
 
-$(JS_MINIFIED): $(JS_FILES); @echo '==> Minifying $< to $@'
+.PHONY: js
+js: $(JS_MINIFIED)
+$(JS_MINIFIED): $(JS_FILES_DEPS); $(call echo-processing,$@ with parcel)
 	@./node_modules/.bin/parcel build --target js --no-cache;
 
-
-$(EXPORT)/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$<)
+$(EXPORT)/public/api/config/%.json: src/api/config/%.json $(DIRS); $(call echo-processing,$<)
 	@jq -c . < $< > $@
 
-$(EXPORT)/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
+$(EXPORT)/public/api/config/sm.json: src/api/config/sm.json $(DIRS); $(call echo-processing,$< with node)
 	@node ./tools/sm-parser.js $< $@
 
-$(EXPORT)/public/api/api.html: src/api/api.html; $(lint_replace_inline)
-$(EXPORT)/public/%.php: src/%.php; $(lint_replace_inline)
 $(EXPORT)/inc/%.php: src/inc/%.php; $(lint_replace_inline)
-$(EXPORT)/api/%.html: src/api/%.html; $(lint_replace_inline)
+$(PUBLIC)/%.php: src/%.php; $(lint_replace_inline)
 $(PUBLIC)/api/rest/index.php: src/api/rest/index.php; $(lint_replace_inline)
 
 $(EXPORT)/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(lint_replace_inline)
