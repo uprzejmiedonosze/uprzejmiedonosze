@@ -40,15 +40,15 @@
     "js": "parcel build --target js"
   },
   "dependencies": {
-    "@sentry/browser": "^7.94.1",
-    "@sentry/tracing": "^7.94.1",
+    "@sentry/browser": "^7.100.1",
+    "@sentry/tracing": "^7.100.1",
     "exif-js": "^2.3.0",
-    "exifreader": "^4.20.0",
+    "exifreader": "^4.21.0",
     "heic2any": "^0.0.4",
     "highcharts": "^11.3.0",
     "lazysizes": "^5.3.2",
     "luxon": "^3.4.4",
-    "mapbox-gl": "^3.1.0"
+    "mapbox-gl": "^3.1.2"
   },
   "devDependencies": {
     "@parcel/optimizer-data-url": "^2.11.0",
@@ -56,8 +56,8 @@
     "@parcel/transformer-inline-string": "^2.11.0",
     "@parcel/transformer-sass": "^2.11.0",
     "@parcel/transformer-webmanifest": "^2.11.0",
-    "@sentry/cli": "^2.25.3",
-    "cypress": "^13.6.3",
+    "@sentry/cli": "^2.28.0",
+    "cypress": "^13.6.4",
     "eslint": "^8.56.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.2",
