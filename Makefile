@@ -118,17 +118,11 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	$(sentry-release)
 	@make clean
 
-export: $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson ## Exports files for deployment.
+$(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r src/tools $(EXPORT)/
-
-# UTILS
-
-
-$(EXPORT)/config.php: $(DIRS); $(call echo-processing,$<)
-	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
 
 minify: check-branch parcel minify-config process-php process-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
@@ -139,13 +133,16 @@ process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 process-sitemap: $(DIRS) $(SITEMAP_PROCESSED)
 
+$(EXPORT)/config.php: $(DIRS); $(call echo-processing,$<)
+	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
-ASSETS := $(shell find src/img)
-assets: $(ASSETS)
+ASSETS := $(shell find src/img -type f)
+assets: $(EXPORT)/images-index.html
+$(EXPORT)/images-index.html: $(ASSETS) $(DIRS)
 	@(cat src/images-index.html; grep 'src="/img[^"{]\+"' --only-matching --no-filename --recursive --color=never src/templates \
 		| sed 's|src="/|<img src="./|' | sed 's|$$| />|' ) | sort | uniq | sponge src/images-index.html
+	@cp src/images-index.html $@
 	@./node_modules/.bin/parcel build --target img --no-cache
-	@rm -f $(PUBLIC)/images-index.html
 
 
 # Generics
@@ -169,20 +166,11 @@ $(EXPORT)/public/api/config/%.json: src/api/config/%.json; $(call echo-processin
 $(EXPORT)/public/api/config/sm.json: src/api/config/sm.json; @echo '==> Validating $<'
 	@node ./tools/sm-parser.js $< $@
 
-define lint_replace_inline
-$(call echo-processing,$<)
-$(lint)
-$(replace)
-$(replace-inline)
-endef
-
 $(EXPORT)/public/api/api.html: src/api/api.html; $(lint_replace_inline)
 $(EXPORT)/public/%.php: src/%.php; $(lint_replace_inline)
 $(EXPORT)/inc/%.php: src/inc/%.php; $(lint_replace_inline)
 $(EXPORT)/api/%.html: src/api/%.html; $(lint_replace_inline)
 $(PUBLIC)/api/rest/index.php: src/api/rest/index.php; $(lint_replace_inline)
-	
-
 
 $(EXPORT)/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(lint_replace_inline)
 $(EXPORT)/inc/include.php: src/inc/include.php $(TWIG_FILES); $(lint_replace_inline)
@@ -194,15 +182,13 @@ $(EXPORT)/templates/%: src/templates/% lint-twig; $(call echo-processing,$<)
 $(MANIFEST_PROCESSED): $(MANIFEST); $(call echo-processing,$<)
 	$(replace)
 
-
-
-$(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.xml'
-	@echo '<urlset \n'\
+$(SITEMAP_PROCESSED): src/templates/*.html.twig ; $(call echo-processing,$@)
+	@(echo '<urlset \n'\
     	'\txmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'\
     	'\txmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'\
 		'\txsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">\n' \
-		> $(SITEMAP_PROCESSED)
-	@for PAGE in $$(grep --files-with-matches "SITEMAP-PRIORITY" $^); do \
+		; \
+	for PAGE in $$(grep --files-with-matches "SITEMAP-PRIORITY" $^); do \
 		PRIO=$$(grep "SITEMAP-PRIORITY" $$PAGE | sed 's/[^0-9\.]//g'); \
 		URL=$$(echo $$PAGE | sed -e 's#\(.*/\)##g' -e 's/.twig//' -e 's/index.html//'); \
 		MOD_DATE=$$(stat -c '%y' $$PAGE | sed 's/ .*//'); \
@@ -210,9 +196,9 @@ $(SITEMAP_PROCESSED): src/templates/*.html.twig ; @echo '==> Generating sitemap.
 			"<loc>$(HTTPS)://$(HOST)/$$URL</loc>\n\t" \
 			"<lastmod>$$MOD_DATE</lastmod>\n\t" \
 			"<priority>$$PRIO</priority>\n"\
-			"</url>" >> $(SITEMAP_PROCESSED); \
-	done
-	@echo '</urlset>\n' >> $(SITEMAP_PROCESSED)	
+			"</url>" ; \
+	done ; \
+	echo '</urlset>\n' ) | xmllint --format - > $(SITEMAP_PROCESSED)	
 
 
 $(EXPORT)/patronite/%.csv: $(EXPORT)/patronite
@@ -360,3 +346,10 @@ else
 define lint
 endef
 endif
+
+define lint_replace_inline
+$(call echo-processing,$<)
+$(lint)
+$(replace)
+$(replace-inline)
+endef
