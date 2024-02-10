@@ -2,7 +2,7 @@
 use Slim\Exception\HttpException;
 use Slim\Interfaces\ErrorRendererInterface;
 
-class ErrorRenderer implements ErrorRendererInterface {
+class JsonErrorRenderer implements ErrorRendererInterface {
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string {
         return json_encode(exceptionToErrorJson($exception), JSON_UNESCAPED_UNICODE);
     }

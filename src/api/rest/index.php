@@ -18,7 +18,7 @@ set_error_handler("ApiErrorHandler");
 require(INC_DIR . '/include.php');
 require(INC_DIR . '/API.php');
 require(INC_DIR . '/middleware/JsonBodyParser.php');
-require(INC_DIR . '/middleware/ErrorRenderer.php');
+require(INC_DIR . '/middleware/JsonErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
 require(INC_DIR . '/middleware/UserMiddleware.php');
 require(INC_DIR . '/middleware/AppMiddleware.php');
@@ -35,7 +35,7 @@ $errorMiddleware = $app->addErrorMiddleware(false, false, false);
 
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->forceContentType('application/json');
-$errorHandler->registerErrorRenderer('application/json', ErrorRenderer::class);
+$errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::class);
 
 $jsonErrorHandler = function (
     ServerRequestInterface $request,

@@ -2,9 +2,6 @@
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/Exceptions.php');
 use \Exception as Exception;
-use \Twig\Loader\FilesystemLoader as FilesystemLoader;
-use \Twig\Environment as Environment;
-
 
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
@@ -23,53 +20,6 @@ function trimstr2lower($in) {
 function cleanWhiteChars($input) {
     return trim(preg_replace("/\s+/u", " ", $input));
 }
-
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function exception_handler($exception) {
-    try{
-        $email = getCurrentUserEmail();
-    }catch(Exception $e){
-        $email = 'niezalogowany';
-    }
-    $msg = $exception->getMessage() . " szkodnik: $email, " . $exception->getFile()
-        . ':' . $exception->getLine() . "\n" . $exception->getTraceAsString();
-    if(posix_isatty(0)){
-        echo($msg . "\n");
-        return;
-    }
-    $time = logger($msg, true);
-
-    _sendSlackError($msg);
-
-    $loader = new FilesystemLoader(__DIR__ . '/../templates');
-    $twig = new Environment($loader,
-    [
-        'debug' => false,
-        'strict_variables' => false
-    ]);
-
-    echo $twig->render('error.html.twig', [
-        'head' =>
-        [
-            'title' => "Wystąpił błąd",
-            'shortTitle' => "Wystąpił błąd"
-        ],
-        'general' =>
-        [
-            'uri' => $_SERVER['REQUEST_URI'],
-            'isProd' => isProd(),
-            'isStaging' => isStaging()
-        ],
-        'msg' => $msg,
-        'exception' => $exception,
-        'email' => $email,
-        'time' => $time
-    ]);
-}
-
-set_exception_handler('exception_handler');
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals)

@@ -4,6 +4,10 @@ require(__DIR__ . '/../inc/Twig.php');
 require(__DIR__ . '/../inc/middleware/HtmlMiddleware.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
+require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
+require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
+require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
+
 
 $DISABLE_SESSION=false;
 
@@ -17,25 +21,125 @@ use Slim\Routing\RouteCollectorProxy;
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
-$errorMiddleware = $app->addErrorMiddleware(true, true, true);
-$errorHandler = $errorMiddleware->getDefaultErrorHandler();
-$errorHandler->forceContentType('text/html');
-
-$twig = initTwig();
+$twig = initSlimTwig();
 
 $app->add(TwigMiddleware::create($app, $twig));
+
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorHandler = $errorMiddleware->getDefaultErrorHandler();
+$errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
+
 
 $app->get('/{appId}.pdf', function (Request $request, Response $response, $args) {
     $appId = $args['appId'];
     require(__DIR__ . '/../inc/PDFGenerator.php');
     [$pdf, $filename] = application2PDFById($appId);
-    $response = $response->withHeader('Content-Type', 'application/pdf');
-    $response = $response->withHeader('Content-Transfer-Encoding', 'Binary');
     $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
     readfile($pdf);
 })->add(new PdfMiddleware());
 
+
+// API
+
+$app->post('/api/verify-token', function (Request $request, Response $response, $args) {
+    $firebaseUser = $request->getAttribute('firebaseUser');
+    $_SESSION['user_email'] = $firebaseUser['user_email'];
+    $_SESSION['user_name'] = $firebaseUser['user_name'];
+    $_SESSION['user_picture'] = $firebaseUser['user_picture'];
+    $_SESSION['user_id'] = $firebaseUser['user_id'];
+    $response->getBody()->write(json_encode($firebaseUser));
+    return $response;
+})->add(new AuthMiddleware());
+
+
 $app->group('', function (RouteCollectorProxy $group) use ($storage) {
+    $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {
+        $applications = $storage->getGalleryModerationApps();
+
+        return HtmlMiddleware::render($request, $response, 'adm-gallery', [
+            'appActionButtons' => false,
+            'applications' => $applications
+        ]);
+    });
+})  ->add(new ModeratorMiddleware())
+    ->add(new SessionMiddleware())
+    ->add(new HtmlMiddleware());
+    
+
+$app->group('', function (RouteCollectorProxy $group) use ($storage) {
+
+    $group->get('/start.html', function (Request $request, Response $response, $args) {
+        return HtmlMiddleware::render($request, $response, 'start', [
+            'latestTermUpdate' => LATEST_TERMS_UPDATE
+        ]);
+    });
+
+    $group->get('/brak-sm.html', function (Request $request, Response $response, $args) use ($storage) {
+        $params = $request->getQueryParams();
+        $appId = getParam($params, 'id', -1);
+        $appCity = '';
+        $appNumber = '';
+        if ($appId !== -1) {
+            try {
+                $app = $storage->getApplication($appId);
+                $appCity = $app->address->city;
+                $appNumber = $app->number;
+            } catch (Exception $e) {
+                $appCity = '';
+                $appNumber = '';
+            }
+        }
+
+        return HtmlMiddleware::render($request, $response, 'brak-sm', [
+            'appCity' => $appCity,
+            'appNumber' => $appNumber
+        ]);
+    });
+})  ->add(new RegisteredMiddleware())
+    ->add(new SessionMiddleware())
+    ->add(new HtmlMiddleware());
+
+$app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) {
+
+    $group->get('/login-ok.html', function (Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $next = getParam($params, 'next', '/start.html');
+        
+        return HtmlMiddleware::render($request, $response, 'login-ok', [
+            'config' => [
+                'signInSuccessUrl' => $next
+            ]
+        ]);
+    });
+
+    $group->get('/zgloszenie.html', function (Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $appId = getParam($params, 'id');
+        return $response->withHeader('Location', "/ud-$appId.html")
+                ->withStatus(302);
+
+    });
+    $group->get('/ud-{appId}.html', function (Request $request, Response $response, $args) use ($storage) {
+        $appId = $args['appId'];
+        $application = $storage->getApplication($appId);
+    
+        $isAppOwner = $application->isAppOwner();
+        $isAppOwnerOrAdmin = isAdmin() || $isAppOwner;
+    
+        return HtmlMiddleware::render($request, $response, "zgloszenie", [
+            'head' => [
+                'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
+                'shortTitle' => "Zgłoszenie {$application->number}",
+                'image' => $application->contextImage->thumb,
+                'description' => "Samochód o nr. rejestracyjnym {$application->carInfo->plateId} " .
+                    "w okolicy adresu {$application->address->address}. {$application->getCategory()->getShort()}"
+            ], 'config' => [
+                'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin,
+                'isAppOwner' => $isAppOwner
+            ], 'app' => $application
+        ]);
+    });
+
     $group->get('/zapytaj-o-status.html', function (Request $request, Response $response, $args) use ($storage) {
         $sent = $storage->getSentApplications(31);
 
@@ -66,36 +170,33 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
             'name' => $name
         ]);
     });
-})->add(new SessionMiddleware($mustBeRegisterer=false, $optional=true))->add(new HtmlMiddleware());
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) {
-    $group->get('/', function (Request $request, Response $response, $args) use ($storage) {
-        $stats = $storage->getMainPageStats();
-        return HtmlMiddleware::render($request, $response, 'index', [
+    $group->get('/login.html', function (Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $logout = getParam($params, 'logout', false);
+        if($logout !== false){
+            unset($_SESSION['token']);
+            $logout = true;
+        }
+        $next = getParam($params, 'next', '/');
+        $error = getParam($params, 'error', '');
+        
+        return HtmlMiddleware::render($request, $response, 'login', [
             'config' => [
-                'stats' => $stats
+                'signInSuccessUrl' => $next,
+                'logout' => $logout,
+                'error' => $error
             ]
         ]);
     });
-    
-    $group->get('/ud-{appId}.html', function (Request $request, Response $response, $args) use ($storage) {
-        $appId = $args['appId'];
-        $application = $storage->getApplication($appId);
-    
-        $isAppOwner = $application->isAppOwner();
-        $isAppOwnerOrAdmin = isAdmin() || $isAppOwner;
-    
-        return HtmlMiddleware::render($request, $response, "zgloszenie", [
-            'head' => [
-                'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
-                'shortTitle' => "Zgłoszenie {$application->number}",
-                'image' => $application->contextImage->thumb,
-                'description' => "Samochód o nr. rejestracyjnym {$application->carInfo->plateId} " .
-                    "w okolicy adresu {$application->address->address}. {$application->getCategory()->getShort()}"
-            ], 'config' => [
-                'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin,
-                'isAppOwner' => $isAppOwner
-            ], 'app' => $application
+
+
+    $group->get('/', function (Request $request, Response $response, $args) use ($storage) {
+        $mainPageStats = $storage->getMainPageStats();
+        return HtmlMiddleware::render($request, $response, 'index', [
+            'config' => [
+                'stats' => $mainPageStats
+            ]
         ]);
     });
 
@@ -195,7 +296,16 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
     $group->map(['GET', 'POST'], '/{routes:.+}', function ($request, $response) {
         throw new HttpNotFoundException($request);
     });
+})  ->add(new HtmlMiddleware())
+    ->add(new SessionMiddleware());
 
-})->add(new HtmlMiddleware());
 
 $app->run();
+
+function getParam(array $params, string $name, mixed $default=null) {
+    $param = $params[$name] ?? $default;
+    if (is_null($param)) {
+        throw new MissingParamException($name);
+    }
+    return $param;
+}

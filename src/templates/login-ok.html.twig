@@ -1,3 +1,5 @@
+{% set title = 'trwa logowanie' %}
+
 {% extends "base.html.twig" %}
 
 {% block headIncludes %}
@@ -9,7 +11,9 @@
         <script type="text/javascript">
             function setError(error) {
                 if (typeof error === "object") {
-                    error = JSON.stringify(error);
+                    if (error.message)
+                        error = error.message
+                    else error = JSON.stringify(error);
                 }
                 $("p.error").text(error);
                 $(".ui-footer h4").text("błąd logowania");
@@ -18,16 +22,20 @@
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
                         user.getIdToken().then(function(accessToken) {
-                            $.post('api/api.html', {
-                                    action: 'verifyToken',
-                                    jwt: accessToken
-                                },
-                                function(data) {
+                            $.ajax({
+                                url: '/api/verify-token',
+                                type: 'POST',
+                                dataType: 'json',
+                                contentType: 'application/json',
+                                success: function(data) {
                                     window.location.replace('{{ config.signInSuccessUrl ?? "moje-zgloszenia.html" }}');
-                                }).fail(function(error){
-                                    setError(error);
-                                });
+                                },
+                                error: setError,
+                                headers: {
+                                    "Authorization": `Bearer ${accessToken}`
+                                }
                             });
+                        });
                     } else {
                         setError('Error: missing user');
                     }

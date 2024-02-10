@@ -7,20 +7,19 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Views\Twig;
 
 class HtmlMiddleware implements MiddlewareInterface {
-    public function process(Request $request, RequestHandler $handler): Response {
-        $queryParams = $request->getQueryParams();
-
+    public static function getDefaultParameters(bool $isLoggedIn=false, bool $isDialog=false): array {
+        
         $parameters = Array();
         $parameters['config'] = [
             'menu' => ''
         ];
         $parameters['head'] = [
-            'dialog' => isset($queryParams['dialog'])
+            'dialog' => $isDialog
         ];
 
         $parameters['general'] = [
             'uri' => $_SERVER['REQUEST_URI'],
-            'isLoggedIn' => $request->getAttribute('isLoggedIn'),
+            'isLoggedIn' => $isLoggedIn,
             'hasApps' => false,
             'isAdmin' => false,
             'galleryCount' => 0,
@@ -42,6 +41,17 @@ class HtmlMiddleware implements MiddlewareInterface {
 
         global $BADGES;
         $parameters['badges'] = $BADGES;
+        return $parameters;
+    }
+
+    public function process(Request $request, RequestHandler $handler): Response {
+        logger('HtmlMiddleware');
+        $queryParams = $request->getQueryParams();
+
+        $parameters = HtmlMiddleware::getDefaultParameters(
+            $request->getAttribute('isLoggedIn') ?? false,
+            isset($queryParams['dialog'])
+        );
 
         $request = $request->withAttribute('parameters', $parameters);
 
@@ -56,10 +66,21 @@ class HtmlMiddleware implements MiddlewareInterface {
     }
 
     public static function render(Request $request, Response $response, string $route, Array $extraParameters=[]) {
+        global $storage;
+
         $parameters = $request->getAttribute('parameters');
         $parameters['head']['mainClass'] = $route;
         $parameters['config']['menu'] = $route;
         $parameters['config']['isIOS'] = isIOS();
+
+        $user = $request->getAttribute('user', null);
+        if($user) {
+            $parameters['config']['sex'] = $user->getSex();
+            $parameters['config']['userNumber'] = $user->getNumber();
+            $parameters['general']['userName'] = $user->getFirstName();
+            // force update cache if ?update GET param is set
+            $parameters['general']['stats'] = $storage->getUserStats(!isset($_GET['update']), $user);
+        }
         $view = Twig::fromRequest($request);
         return $view->render(
             $response,

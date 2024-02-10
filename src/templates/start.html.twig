@@ -2,6 +2,9 @@
 {% set rightButton = 'menuNewApplicationTermsConfirmation' %}
 {% set rightButtonText = 'Dalej' %}
 
+{% set title = 'Start' %}
+{% set mainClass = 'start-page' %}
+
 {% extends "base.html.twig" %}
 {% block main %}
 
@@ -11,7 +14,7 @@
 <p>Ma jednak kilka ograniczeń, których musisz być {{ config.sex.swiadoma }}:</p>
 <div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"
     data-collapsed="false" data-role="collapsible">
-    <h4>Regulamin (aktualizacja {{ config.latestTermUpdate }})</h4>
+    <h4>Regulamin (aktualizacja {{ latestTermUpdate }})</h4>
     <p>Wszystkie zgłoszenia w Uprzejmie Donoszę muszą być zgłoszone pod twoim
     nazwiskiem. Nie dopuszczamy anonimów.</p>
     <p>Pamiętaj też, że zgłoszenie wykroczenia do Straży Miejskiej to

@@ -49,7 +49,7 @@
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-confirmed-waiting
             {% if sendable %}cta{% else %}ui-disabled{% endif %}">Wyślij zgłoszenie</a>
         {% endif %}
-        {% if config.appActionButtons %}
+        {% if appActionButtons %}
         <a href="/nowe-zgloszenie.html?edit={{ app.id }}" data-ajax="false"
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
             {% if not app.isEditable %}ui-disabled{% endif %}
@@ -86,7 +86,7 @@
             </a>
         </div>
     </div>
-{% if config.appActionButtons %}
+{% if appActionButtons %}
     <p>Zmień ręcznie status zgłoszenia z <b class="currentStatus">{{ status.name }}</b> na:</p>
     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" class="appActionButtons">
     {% for key,val in statuses %}

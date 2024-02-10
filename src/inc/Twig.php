@@ -1,13 +1,27 @@
 <?PHP
 use Slim\Views\Twig;
 use \Twig\Cache\FilesystemCache as FilesystemCache;
+use \Twig\Loader\FilesystemLoader as FilesystemLoader;
+use \Twig\Environment as Environment;
 
-function initTwig() {
-    $twig = Twig::create([__DIR__ . '/../templates', __DIR__ . '/../public/api/config'], [
+function _twigConfig(): array {
+    return [
         'debug' => !isProd(),
         'cache' => isProd() ? new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', FilesystemCache::FORCE_BYTECODE_INVALIDATION) : false,
         'strict_variables' => true,
-        'auto_reload' => true]);
+        'auto_reload' => true
+    ];
+}
+
+function initSlimTwig() {
+    $twig = Twig::create(__DIR__ . '/../templates', _twigConfig());
+    $twig->addExtension(new TwigExtension());
+    return $twig;
+}
+
+function initBareTwig() {
+    $loader = new FilesystemLoader(__DIR__ . '/../templates');
+    $twig = new Environment($loader, _twigConfig());
     $twig->addExtension(new TwigExtension());
     return $twig;
 }
