@@ -3,48 +3,10 @@
 {% extends "base.html.twig" %}
 
 {% block headIncludes %}
-        <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth-compat.js"></script>
-
-        <script src="/js/firebase.js?%JS_HASH%"></script>
-
-        <script type="text/javascript">
-            function setError(error) {
-                if (typeof error === "object") {
-                    if (error.message)
-                        error = error.message
-                    else error = JSON.stringify(error);
-                }
-                $("p.error").text(error);
-                $(".ui-footer h4").text("błąd logowania");
-            }
-            function initApp() {
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user) {
-                        user.getIdToken().then(function(accessToken) {
-                            $.ajax({
-                                url: '/api/verify-token',
-                                type: 'POST',
-                                dataType: 'json',
-                                contentType: 'application/json',
-                                success: function(data) {
-                                    window.location.replace('{{ config.signInSuccessUrl ?? "moje-zgloszenia.html" }}');
-                                },
-                                error: setError,
-                                headers: {
-                                    "Authorization": `Bearer ${accessToken}`
-                                }
-                            });
-                        });
-                    } else {
-                        setError('Error: missing user');
-                    }
-                }, function(error) {
-                    setError(error);
-                });
-            };
-
-            window.addEventListener('load', initApp);
+        <script src="/js/firebase.js?%JS_HASH%"
+                login-redirect="true"
+                host="%HTTPS%://%HOST%/"
+                signInSuccessUrl="{{ config.signInSuccessUrl ?? '/moje-zgloszenia.html' }}">
         </script>
 {% endblock %}
 

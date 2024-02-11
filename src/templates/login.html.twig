@@ -5,51 +5,10 @@
 {% extends "base.html.twig" %}
 
 {% block headIncludes %}
-        <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth-compat.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth__pl.js"></script>
-
-        <script src="/js/firebase.js?%JS_HASH%"></script>
-        <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.1.0/firebase-ui-auth.css" />
-
-        <script type="text/javascript">
-
-            var uiConfig = {
-                'signInSuccessUrl': '/login-ok.html?next={{ config.signInSuccessUrl }}',
-                'callbacks': {
-                    'signInSuccessWithAuthResult': function(authResult, redirectUrl) {
-                        if (window.opener) {
-                            window.close();
-                            return false;
-                        }
-                        return true;
-                    }
-                },
-                'signInOptions': [{
-                    provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                    clientId: null
-                }, {
-                    provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-                    signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
-                    forceSameDevice: false,
-                    disableSignUp: {
-                        status: false
-                    }
-                }],
-                'tosUrl': '%HTTPS%://%HOST%/regulamin.html',
-                'privacyPolicyUrl': '%HTTPS%://%HOST%/polityka-prywatnosci.html',
-                'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
-                'adminRestrictedOperation': { status: false },
-                'signInFlow': 'popup'
-            };
-
-            {% if config.logout %}
-            firebase.auth().signOut();
-            window.location.replace('/');
-            {% else %}
-            var ui = new firebaseui.auth.AuthUI(firebase.auth());
-            ui.start('#firebaseui-auth-container', uiConfig);
-            {% endif %}
+        <script src="/js/firebase.js?%JS_HASH%"
+                logout="{{ config.logout }}"
+                host="%HTTPS%://%HOST%/"
+                signInSuccessUrl="{{ config.signInSuccessUrl ?? '/moje-zgloszenia.html' }}">
         </script>
 {% endblock %}
 {% block main %}
