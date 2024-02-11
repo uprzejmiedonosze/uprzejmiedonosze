@@ -67,35 +67,25 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
     
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) {
+    $group->get('/start.html', ApplicationHandler::class . ':start');
+
     $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
 
-    $group->get('/start.html', function (Request $request, Response $response, $args) {
-        return HtmlMiddleware::render($request, $response, 'start', [
-            'latestTermUpdate' => LATEST_TERMS_UPDATE
-        ]);
+    $group->post('/potwierdz.html', ApplicationHandler::class . ':confirm');
+    $group->get('/potwierdz.html', function (Request $request, Response $response, $args) {
+        return $response
+            ->withHeader('Location', '/moje-zgloszenia.html')
+            ->withStatus(302);
     });
 
-    $group->get('/brak-sm.html', function (Request $request, Response $response, $args) use ($storage) {
-        $params = $request->getQueryParams();
-        $appId = getParam($params, 'id', -1);
-        $appCity = '';
-        $appNumber = '';
-        if ($appId !== -1) {
-            try {
-                $app = $storage->getApplication($appId);
-                $appCity = $app->address->city;
-                $appNumber = $app->number;
-            } catch (Exception $e) {
-                $appCity = '';
-                $appNumber = '';
-            }
-        }
-
-        return HtmlMiddleware::render($request, $response, 'brak-sm', [
-            'appCity' => $appCity,
-            'appNumber' => $appNumber
-        ]);
+    $group->post('/dziekujemy.html', ApplicationHandler::class . ':finish');
+    $group->get('/dziekujemy.html', function (Request $request, Response $response, $args) {
+        return $response
+            ->withHeader('Location', '/moje-zgloszenia.html')
+            ->withStatus(302);
     });
+
+    $group->get('/brak-sm.html', ApplicationHandler::class . ':missingSM');
 })  ->add(new RegisteredMiddleware())
     ->add(new HtmlMiddleware())
     ->add(new SessionMiddleware());
