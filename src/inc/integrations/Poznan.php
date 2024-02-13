@@ -30,7 +30,7 @@ class Poznan extends CityAPI {
         $output = parent::curlShellSend($url, $data, $application);
 
         if(isset($output['response']['error_msg'])){
-            raiseError($output['response']['error_msg'], 500);
+            throw new Exception($output['response']['error_msg'], 500);
         }
 
         $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";

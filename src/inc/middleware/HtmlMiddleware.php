@@ -7,7 +7,8 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Views\Twig;
 
 class HtmlMiddleware implements MiddlewareInterface {
-    public static function getDefaultParameters(bool $isLoggedIn=false, bool $isDialog=false): array {
+    public static function getDefaultParameters(bool $isDialog=false): array {
+        $isLoggedIn = SessionMiddleware::isLoggedIn();
         
         $parameters = Array();
         $parameters['config'] = [
@@ -45,11 +46,10 @@ class HtmlMiddleware implements MiddlewareInterface {
     }
 
     public function process(Request $request, RequestHandler $handler): Response {
-        logger('HtmlMiddleware');
+        logger(static::class . ": {$request->getUri()->getPath()}");
         $queryParams = $request->getQueryParams();
 
         $parameters = HtmlMiddleware::getDefaultParameters(
-            $request->getAttribute('isLoggedIn') ?? false,
             isset($queryParams['dialog'])
         );
 

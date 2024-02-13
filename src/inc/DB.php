@@ -55,9 +55,6 @@ class DB extends NoSQLite{
      * May throw an exception if user is logged in but not registered.
      */
     public function getCurrentUser(){
-        if(!isLoggedIn()){
-            return $this->loggedUser = null;
-        }
         if(!isset($this->loggedUser)){
             try{
                 $this->loggedUser = $this->getUser(getCurrentUserEmail());

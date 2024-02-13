@@ -57,7 +57,7 @@ abstract class CityAPI {
         logger($curl, true);
         if(isset($error)){
             logger($response, true);
-            raiseError($error, 500);
+            throw new Exception($error, 500);
         }
 
         // zaznaczam na wszelki wypadek, ale poszczególne implementacje powinny to nadpisać

@@ -30,7 +30,7 @@ function exceptionToErrorHtml($exception): string {
     if ($code == 404)
         $template = '404';
 
-    $parameters = HtmlMiddleware::getDefaultParameters(isLoggedIn());
+    $parameters = HtmlMiddleware::getDefaultParameters();
     $parameters['msg'] = $msg;
     $parameters['exception'] = $exception;
     $parameters['email'] = $email;

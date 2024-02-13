@@ -11,40 +11,36 @@ use \Exception as Exception;
 $cache = new Memcache;
 $cache->connect('localhost', 11211);
 
-function checkRegistrationStatus() {
-    global $storage;
-    checkIfLogged();
+function updateApplication(
+    $appId,
+    $date,
+    $dtFromPicture,
+    $category,
+    $address,
+    $plateId,
+    $comment,
+    $witness,
+    $extensions,
+    User $user
+) {
 
-    try {
-        $user = $storage->getCurrentUser();
-    } catch (Exception $e) {
-        raiseError('User is not registered', 403);
-    }
-    if (!$user || !$user->isRegistered()) {
-        raiseError('User is not registered', 403);
-    }
-}
-
-function updateApplication($appId, $date, $dtFromPicture, $category, $address,
-    $plateId, $comment, $witness, $extensions, User $user) {
-    
     global $storage;
     $application = $storage->getApplication($appId);
 
     if ($application->user->email !== $user->getEmail()) {
-        throw new Exception("Odmawiam aktualizacji zgłoszenia '$appId' przez '{$user->getEmail()}'");
+        throw new Exception("Odmawiam aktualizacji zgłoszenia '$appId' przez '{$user->getEmail()}'", 401);
     }
 
-    if(!$application->isEditable()){
-        throw new Exception("Zgłoszenie w stanie '{$application->status}' nie może być aktualizowane");
+    if (!$application->isEditable()) {
+        throw new Exception("Zgłoszenie w stanie '{$application->status}' nie może być aktualizowane", 401);
     }
 
     $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
-    $application->dtFromPicture = (boolean) $dtFromPicture;
+    $application->dtFromPicture = (bool) $dtFromPicture;
 
     $application->category = intval($category);
 
-    if(!isset($application->address)) $application->address = new stdClass();
+    if (!isset($application->address)) $application->address = new stdClass();
     $application->address->address = $address->address;
     $application->address->addressGPS = $address->addressGPS ?? null;
     $application->address->city = $address->city;
@@ -59,7 +55,7 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     $application->updateUserData($user);
     $application->guessSMData(true); // stores sm city inside the object
 
-    if(!isset($application->carInfo)) $application->carInfo = new stdClass();
+    if (!isset($application->carInfo)) $application->carInfo = new stdClass();
     $application->carInfo->plateId = strtoupper(cleanWhiteChars($plateId));
     $application->userComment = capitalizeSentence($comment);
     $application->initStatements();
@@ -68,7 +64,7 @@ function updateApplication($appId, $date, $dtFromPicture, $category, $address,
     if (!is_null($extensions)) {
         try {
             $application->extensions = array_map('intval', $extensions);
-        } catch(Throwable $e) {
+        } catch (Throwable $e) {
             $application->extensions = [];
         }
     }
@@ -87,12 +83,12 @@ function setStatus($status, $appId, $user) {
     $application = $storage->getApplication($appId);
     $application->setStatus($status);
     $storage->saveApplication($application);
-    if(isset($application->carInfo->plateId))
+    if (isset($application->carInfo->plateId))
         $storage->updateRecydywa($application->carInfo->plateId);
     $stats = $storage->getUserStats(false, $user); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
-    if(in_array('patron', $stats['badges'])) {
+    if (in_array('patron', $stats['badges'])) {
         $patronite = false;
     }
     $application->patronite = $patronite;
@@ -123,14 +119,12 @@ function addToGallery($appId) {
 
     $application = $storage->getApplication($appId);
     if (!$application->isCurrentUserOwner()) {
-        raiseError("Próba zmiany cudzego zgłoszenia $appId!", 401);
+        throw new Exception("Próba zmiany cudzego zgłoszenia $appId!", 401);
     }
 
     $application->initStatements();
     $application->statements->gallery = date(DT_FORMAT);
     $storage->saveApplication($application);
-
-    echo json_encode(array("status" => "OK"));
 }
 
 /**
@@ -141,8 +135,8 @@ function moderateApp($appId, $decision) {
     require __DIR__ . '/Tumblr.php';
     global $storage;
     $currentUser = $storage->getCurrentUser();
-    if(!$currentUser->isModerator()){
-        raiseError("Dostęp zabroniony", 401);
+    if (!$currentUser->isModerator()) {
+        throw new Exception("Dostęp zabroniony", 401);
     }
     $who = $currentUser->isAdmin() ? 'admin' : 'moderator';
 
@@ -154,14 +148,13 @@ function moderateApp($appId, $decision) {
             $application->addComment($who, "Zdjęcie dodane do galerii.");
         } catch (Exception $ex) {
             $application->addedToGallery = null;
-            raiseError("Błąd Tumblr " . print_r($ex, true), 500);
+            throw new Exception("Błąd Tumblr " . print_r($ex, true), 500, $ex);
         }
     } else {
         $application->addedToGallery = false;
     }
 
     $storage->saveApplication($application);
-    echo json_encode(array("status" => "OK"));
 }
 
 /**
@@ -169,33 +162,31 @@ function moderateApp($appId, $decision) {
  */
 function uploadedFileToBase64() {
     global $_FILES;
-    try {
-        if (!isset($_FILES['image']['error']) || is_array($_FILES['image']['error'])) {
-            raiseError($_FILES['image']['error'], 400);
-            // 415 Unsupported Media Type
-            // 400 Bad Request
-        }
 
-        if ($_FILES['image']['size'] > 500000) {
-            raiseError("Image too big", 413);
-        }
-
-        // DO NOT TRUST $_FILES['uploaded_file']['mime'] VALUE !!
-        // Check MIME Type by yourself.
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $ext = array_search(
-            $finfo->file($_FILES['image']['tmp_name']),
-            array('jpg' => 'image/jpeg', 'png' => 'image/png'),
-            true);
-        if (false === $ext) {
-            raiseError("File type $ext is not supported", 415);
-        }
-
-        $data = file_get_contents($_FILES['image']['tmp_name']);
-        return base64_encode($data);
-    } catch (Exception $e) {
-        raiseError($e, 500);
+    if (!isset($_FILES['image']['error']) || is_array($_FILES['image']['error'])) {
+        throw new Exception($_FILES['image']['error'], 400);
+        // 415 Unsupported Media Type
+        // 400 Bad Request
     }
+
+    if ($_FILES['image']['size'] > 500000) {
+        throw new Exception("Image too big", 413);
+    }
+
+    // DO NOT TRUST $_FILES['uploaded_file']['mime'] VALUE !!
+    // Check MIME Type by yourself.
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $ext = array_search(
+        $finfo->file($_FILES['image']['tmp_name']),
+        array('jpg' => 'image/jpeg', 'png' => 'image/png'),
+        true
+    );
+    if (false === $ext) {
+        throw new Exception("File type $ext is not supported", 415);
+    }
+
+    $data = file_get_contents($_FILES['image']['tmp_name']);
+    return base64_encode($data);
 }
 
 
@@ -255,11 +246,11 @@ function saveImgAndThumb($application, $imageBytes, $type) {
     $thumbName    = "/var/www/%HOST%/$baseFileName,$type,t.jpg";
     $ifp = fopen($fileName, 'wb');
     if ($ifp === false) {
-        raiseError("Can't open $fileName for write", 500);
+        throw new Exception("Can't open $fileName for write", 500);
     }
 
     if (fwrite($ifp, base64_decode($imageBytes)) === false) {
-        raiseError("Can't write to $fileName", 500);
+        throw new Exception("Can't write to $fileName", 500);
     }
     fclose($ifp);
 
@@ -311,21 +302,13 @@ function initLogs() {
 
 function getAppByNumber($number, $apiToken) {
     global $storage;
-    try {
-        $application = $storage->getAppByNumber($number, $apiToken);
-    } catch (Exception $e) {
-        raiseError($e, 404);
-    }
+    $application = $storage->getAppByNumber($number, $apiToken);
     echo json_encode($application);
 }
 
 function getUserByName($name, $apiToken) {
     global $storage;
-    try {
-        $user = $storage->getUserByName($name, $apiToken);
-    } catch (Exception $e) {
-        raiseError($e, 404);
-    }
+    $user = $storage->getUserByName($name, $apiToken);
     echo json_encode($user);
 }
 
@@ -360,7 +343,7 @@ function geoToAddress($lat, $lng) {
     $result = checkCache("$prefix $lat,$lng");
     if ($result) return $result;
 
-    $params = Array(
+    $params = array(
         "latlng" => "$lat,$lng",
         "key" => "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
         "language" => "pl",
@@ -384,7 +367,7 @@ function geoToAddress($lat, $lng) {
 function Nominatim(float $lat, float $lng): array {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);
-    $params = Array(
+    $params = array(
         "lat" => $lat,
         "lon" => $lng,
         "format" => 'jsonv2',
@@ -413,15 +396,15 @@ function Nominatim(float $lat, float $lng): array {
 
     $address['city'] = $address['city'] ?? $address['town'] ?? $address['village'] ?? null;
 
-    $county = $address['county'] ?? (($address['city'])? "gmina {$address['city']}": null);
-    $municipality = $address['municipality'] ?? (($address['city'])? "powiat {$address['city']}": null);
+    $county = $address['county'] ?? (($address['city']) ? "gmina {$address['city']}" : null);
+    $municipality = $address['municipality'] ?? (($address['city']) ? "powiat {$address['city']}" : null);
 
     // nominantin can replace county and municipality...
     if (str_starts_with($county, 'powiat'))
         $address['municipality'] = $county;
     if (str_starts_with($municipality, 'powiat'))
         $address['municipality'] = $municipality;
-    
+
     if (str_starts_with($county, 'gmina'))
         $address['county'] = $county;
     if (str_starts_with($municipality, 'gmina'))
@@ -436,7 +419,7 @@ function Nominatim(float $lat, float $lng): array {
     $address['lng'] = $lng; // needed by StopAgresji::guess()
 
     setCache("$prefix $lat,$lng", $json);
-    
+
     return array(
         'address' => $address,
         'sm' => $SM_ADDRESSES[SM::guess((object)$address)],
@@ -451,7 +434,7 @@ function MapBox(float $lat, float $lng): array {
     $properties = checkCache("$prefix $lat,$lng");
     if ($properties) return $properties;
 
-    $params = Array(
+    $params = array(
         "country" => 'pl',
         "limit" => 1,
         "types" => 'address,place,district,postcode,region,neighborhood',
@@ -468,15 +451,17 @@ function MapBox(float $lat, float $lng): array {
     }
     $properties = reset($json['features'])['properties'];
     $properties['address'] = array();
-    array_walk($properties['context'], function ($val, $key) use (&$properties) {$properties['address'][$key] = $val['name'];});
-    
+    array_walk($properties['context'], function ($val, $key) use (&$properties) {
+        $properties['address'][$key] = $val['name'];
+    });
+
     $properties['address']['voivodeship'] = str_replace("województwo ", "", $properties['address']["region"] ?? "");
     unset($properties['address']['region']);
 
     $properties['address']['city'] = $properties['address']['place'] ?? "";
     unset($properties['address']['place']);
 
-    $properties['address']['address'] = ($properties['address']['city']) ? "{$properties['name']}, {$properties['address']['city']}" : $properties['name'];  
+    $properties['address']['address'] = ($properties['address']['city']) ? "{$properties['name']}, {$properties['address']['city']}" : $properties['name'];
 
     unset($properties['coordinates']);
     unset($properties['bbox']);

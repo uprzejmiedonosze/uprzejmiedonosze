@@ -11,12 +11,12 @@ function application2PDFById($appId){
     global $storage;
 
     if(!isset($appId)){
-        raiseError("Próba pobrania zgłoszenia w formacie PDF bez wskazania appId", 400);
+        throw new Exception("Próba pobrania zgłoszenia w formacie PDF bez wskazania appId", 400);
     }
 
     $application = $storage->getApplication($appId);
     if(!isset($application)){
-        raiseError("Próba pobrania zgłoszenia nieistniejącego zgłoszenia $appId", 404);
+        throw new Exception("Próba pobrania zgłoszenia nieistniejącego zgłoszenia $appId", 404);
     }
 
     return application2PDF($application);

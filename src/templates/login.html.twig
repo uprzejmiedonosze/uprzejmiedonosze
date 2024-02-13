@@ -7,7 +7,7 @@
 {% block headIncludes %}
         <script src="/js/firebase.js?%JS_HASH%"
                 logout="{{ config.logout }}"
-                host="%HTTPS%://%HOST%/"
+                login="true"
                 signInSuccessUrl="{{ config.signInSuccessUrl ?? '/moje-zgloszenia.html' }}">
         </script>
 {% endblock %}

@@ -1,12 +1,13 @@
 <?php
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');
+require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
+require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/HtmlMiddleware.php');
+require(__DIR__ . '/../inc/middleware/JsonBodyParser.php');
+require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
-require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
-require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
-require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
 require(__DIR__ . '/../inc/handlers/ApplicationHandler.php');
 
 $DISABLE_SESSION=false;
@@ -29,27 +30,23 @@ $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 
-
-$app->get('/{appId}.pdf', function (Request $request, Response $response, $args) {
-    $appId = $args['appId'];
-    require(__DIR__ . '/../inc/PDFGenerator.php');
-    [$pdf, $filename] = application2PDFById($appId);
-    $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
-    readfile($pdf);
+$app->group('', function (RouteCollectorProxy $group) {
+    $group->get('/{appId}.pdf', function (Request $request, Response $response, $args) {
+        $appId = $args['appId'];
+        require(__DIR__ . '/../inc/PDFGenerator.php');
+        [$pdf, $filename] = application2PDFById($appId);
+        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
+        readfile($pdf);
+    });
+    $group->get('/city/{city}.pdf', function (Request $request, Response $response, $args) {
+        $city = $args['city'];
+        require(__DIR__ . '/../inc/PDFGenerator.php');
+        [$pdf, $filename] = readyApps2PDF($city);
+        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
+        readfile($pdf);
+    });
 })->add(new PdfMiddleware());
 
-
-// API
-
-$app->post('/api/verify-token', function (Request $request, Response $response, $args) {
-    $firebaseUser = $request->getAttribute('firebaseUser');
-    $_SESSION['user_email'] = $firebaseUser['user_email'];
-    $_SESSION['user_name'] = $firebaseUser['user_name'];
-    $_SESSION['user_picture'] = $firebaseUser['user_picture'];
-    $_SESSION['user_id'] = $firebaseUser['user_id'];
-    $response->getBody()->write(json_encode($firebaseUser));
-    return $response;
-})->add(new AuthMiddleware());
 
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) {
@@ -64,9 +61,22 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
 })  ->add(new ModeratorMiddleware())
     ->add(new SessionMiddleware())
     ->add(new HtmlMiddleware());
-    
+
+$app->group('/api', function (RouteCollectorProxy $group) use ($storage) {
+    $group->post('/verify-token', SessionApiHandler::class . ':verifyToken')
+        ->add(new AuthMiddleware());
+
+    $group->post('/app/{appId}/image', ApplicationHandler::class . ':image');
+
+    $group->patch('/app/{appId}/status/{status}', ApplicationHandler::class . ':setStatus');
+    $group->patch('/app/{appId}/send', ApplicationHandler::class . ':sendApplication');
+    $group->patch('/app/{appId}/gallery/add', ApplicationHandler::class . ':addToGallery');
+    $group->patch('/app/{appId}/gallery/moderate/{decision}', ApplicationHandler::class . ':moderateGallery');
+        
+})->add(new JsonMiddleware())->add(new JsonBodyParser());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) {
+
     $group->get('/start.html', ApplicationHandler::class . ':start');
 
     $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
@@ -86,9 +96,10 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
     });
 
     $group->get('/brak-sm.html', ApplicationHandler::class . ':missingSM');
-})  ->add(new RegisteredMiddleware())
-    ->add(new HtmlMiddleware())
+})  ->add(new HtmlMiddleware())
+    ->add(new RegisteredMiddleware())
     ->add(new SessionMiddleware());
+    
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) {
 

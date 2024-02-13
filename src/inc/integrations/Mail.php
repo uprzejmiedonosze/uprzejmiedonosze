@@ -63,7 +63,7 @@ class Mail extends CityAPI {
         try {
             $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
-            raiseError($error, 500, true);
+            throw new Exception($error, 500);
         }
 
         global $storage;

@@ -10,16 +10,22 @@ window.sendApplication = function (appId) {
 
   $.mobile.loading("show", { text: "Wysyłam...", textVisible: true });
 
-  $.post("/api/api.html", { id: appId, action: "send" }, function (msg) {
-    _updateStatus(appId, msg.status);
-    $.mobile.loading("hide");
-    showMessage("<p>Wysłane</p>", 1500);
-    if ($(".dziekujemy").length) {
-      $(".whatNext").hide();
-      $(".afterSend").show();
-    }
-    $('.ui-btn-right').removeClass("ui-disabled");
-    (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
+  $.ajax({
+    type: 'PATCH',
+    url: `/api/app/${appId}/send`,
+    contentType: false,
+    processData: false,
+    success: function (msg) {
+      _updateStatus(appId, msg.status);
+      $.mobile.loading("hide");
+      showMessage("<p>Wysłane</p>", 1500);
+      if ($(".dziekujemy").length) {
+        $(".whatNext").hide();
+        $(".afterSend").show();
+      }
+      $('.ui-btn-right').removeClass("ui-disabled");
+      (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
+    },
   }).fail(function (e) {
     $.mobile.loading("hide");
     const message = e.responseJSON ? e.responseJSON.message : e.statusText;

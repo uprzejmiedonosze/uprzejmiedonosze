@@ -37,13 +37,13 @@ export async function checkFile(file, id) {
     
           $("#plateImage").attr("src", "");
           $("#plateImage").hide();
-          sendFile(resizedImage, id, {
+          await sendFile(resizedImage, id, {
             dateTime,
             dtFromPicture: !!dateTime,
             latLng: `${lat},${lng}`
           });
         } else {
-          sendFile(resizedImage, id);
+          await sendFile(resizedImage, id);
         }
         
       } catch (err) {
@@ -85,14 +85,6 @@ function imageError(id, errorMsg) {
   $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show();
   if (errorMsg) alert(errorMsg)
   uploadFinished();
-}
-
-async function getExif(img) {
-  return new Promise(resolve =>
-    EXIF.getData(img, function() {
-      resolve(EXIF.getAllTags(this)); 
-    }
-  ))
 }
 
 function readGeoDataFromExif(exif) {
@@ -184,12 +176,12 @@ function noGeoDataInImage() {
 }
 
 function sendFile(fileData, id, imageMetadata) {
+  const appId = $("#applicationId").val()
   var formData = new FormData();
 
   formData.append("action", "upload");
   formData.append("image_data", fileData);
   formData.append("pictureType", id);
-  formData.append("applicationId", $("#applicationId").val());
 
   if (id == "carImage") {
     imageMetadata.dateTime && formData.append("dateTime", imageMetadata.dateTime);
@@ -201,7 +193,7 @@ function sendFile(fileData, id, imageMetadata) {
 
   $.ajax({
     type: "POST",
-    url: "/api/api.html",
+    url: `/api/app/${appId}/image`,
     data: formData,
     contentType: false,
     processData: false,
@@ -261,7 +253,7 @@ function sendFile(fileData, id, imageMetadata) {
       uploadFinished();
     },
     error: function (err) {
-      imageError(id, err.responseJSON?.message);
+      imageError(id, err.responseJSON?.error);
     }
   });
 }

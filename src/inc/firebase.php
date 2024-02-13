@@ -10,7 +10,7 @@ use Kreait\Firebase\Exception\Auth\ExpiredToken as ExpiredToken;
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function isLoggedIn(){
-    return isset($_SESSION['token'])
+    return isset($_SESSION['user_id'])
         && isset($_SESSION['user_email'])
         && stripos($_SESSION['user_email'], '@') !== false;
 }

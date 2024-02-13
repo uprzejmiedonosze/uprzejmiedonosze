@@ -5,7 +5,6 @@
 {% block headIncludes %}
         <script src="/js/firebase.js?%JS_HASH%"
                 login-redirect="true"
-                host="%HTTPS%://%HOST%/"
                 signInSuccessUrl="{{ config.signInSuccessUrl ?? '/moje-zgloszenia.html' }}">
         </script>
 {% endblock %}

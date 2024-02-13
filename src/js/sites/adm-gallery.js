@@ -25,20 +25,21 @@ $(document).on("pageshow", function () {
     $("#" + appId).removeClass('next')
     $("#" + appId).addClass("decision")
     scrollNext()
-    $.post("/api/api.html", {
-      action: "moderateApp",
-      id: appId,
-      decision: decision
+
+    $.ajax({
+      type: 'PATCH',
+      url: `/api/app/${appId}/gallery/moderate/${decision}`,
+      contentType: false,
+      processData: false,
     }).done(() => {
       $("#" + appId).addClass("blur")
-    })
-      .fail((e) => {
-        $.mobile.loading("show", {
-          text: e.statusText,
-          textVisible: true,
-          textonly: true
-        });
-        return false;
+    }).fail((e) => {
+      $.mobile.loading("show", {
+        text: e.statusText,
+        textVisible: true,
+        textonly: true
       });
+      return false;
+    });
   }
 })

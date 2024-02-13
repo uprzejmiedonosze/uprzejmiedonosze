@@ -322,7 +322,6 @@ class Application extends JSONObject{
     }
 
     public function isCurrentUserOwner(){
-        if(!isLoggedIn()) return false;
         return getCurrentUserEmail() == $this->user->email;
     }
 
@@ -523,7 +522,7 @@ class Application extends JSONObject{
     }
 
     public function isAppOwner() {
-        return isLoggedIn() && (getCurrentUserEmail() == $this->user->email);
+        return getCurrentUserEmail() == $this->user->email;
     }
 
     /**
