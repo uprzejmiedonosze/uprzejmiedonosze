@@ -1,16 +1,20 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, EmailAuthProvider, CredentialHelper } from "firebase/auth";
 import * as firebaseui from 'firebaseui';
 
 const currentScript = document.currentScript;
 addEventListener("load", () => initLogin(currentScript));
 
-function initLogin(currentScript) {
-    
-    const signInSuccessUrl = encodeURIComponent(currentScript?.getAttribute("signInSuccessUrl") ?? '/moje-zgloszenia.html');
-    const hostName = currentScript.getAttribute("host")
+let firebaseAuth = null;
 
-    firebase.initializeApp(getFirebaseConfig(hostName));
+function getFirebaseAuth() {
+    if(!firebaseAuth)
+        firebaseAuth = getAuth(initializeApp(getFirebaseConfig()))
+    return firebaseAuth
+}
+
+function initLogin(currentScript) {
+    const signInSuccessUrl = currentScript?.getAttribute("signInSuccessUrl") ?? encodeURIComponent('/moje-zgloszenia.html');
 
     if (currentScript?.getAttribute("login-redirect")) {
         finishLogin(signInSuccessUrl)
@@ -22,15 +26,19 @@ function initLogin(currentScript) {
         return
     }
 
-    doLogin(signInSuccessUrl, hostName)
+    if (currentScript?.getAttribute("login")) {
+        doLogin(signInSuccessUrl)
+        return
+    }
 }
 
 function doLogout() {
-    firebase.auth().signOut();
+    getFirebaseAuth().signOut();
     window.location.replace('/');
 }
 
-function getFirebaseConfig(hostName) {
+function getFirebaseConfig() {
+    const hostName = document.location.hostname
     if (hostName.includes('staging'))
         return {
             apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
@@ -63,8 +71,9 @@ function getFirebaseConfig(hostName) {
     };
 }
 
-function doLogin(signInSuccessUrl, hostName) {
-        var uiConfig = {
+function doLogin(signInSuccessUrl) {
+    const hostName = document.location.hostname;
+    var uiConfig = {
         'signInSuccessUrl': `/login-ok.html?next=${signInSuccessUrl}`,
         'callbacks': {
             'signInSuccessWithAuthResult': function (authResult, redirectUrl) {
@@ -76,11 +85,11 @@ function doLogin(signInSuccessUrl, hostName) {
             }
         },
         'signInOptions': [{
-            provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            provider: GoogleAuthProvider.PROVIDER_ID,
             clientId: null
         }, {
-            provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-            signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+            provider: EmailAuthProvider.PROVIDER_ID,
+            signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
             forceSameDevice: false,
             disableSignUp: {
                 status: false
@@ -92,7 +101,7 @@ function doLogin(signInSuccessUrl, hostName) {
         'adminRestrictedOperation': { status: false },
         'signInFlow': 'popup'
     };
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    var ui = new firebaseui.auth.AuthUI(getFirebaseAuth());
     ui.start('#firebaseui-auth-container', uiConfig);
 }
 
@@ -107,26 +116,23 @@ function setError(error) {
 }
 
 function finishLogin(signInSuccessUrl) {
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-            user.getIdToken().then(function (accessToken) {
-                $.ajax({
-                    url: '/api/verify-token',
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    success: function (data) {
-                        window.location.replace(decodeURIComponent(signInSuccessUrl));
-                    },
-                    error: setError,
-                    headers: {
-                        "Authorization": `Bearer ${accessToken}`
-                    }
-                });
+    onAuthStateChanged(getFirebaseAuth(), (user) => {
+        if (!user) setError('Error: missing user');
+        user.getIdToken().then(function (accessToken) {
+            $.ajax({
+                url: '/api/verify-token',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    window.location.replace(decodeURIComponent(signInSuccessUrl));
+                },
+                error: setError,
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
             });
-        } else {
-            setError('Error: missing user');
-        }
+        });
     }, function (error) {
         setError(error);
     });

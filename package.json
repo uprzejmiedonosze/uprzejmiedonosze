@@ -5,41 +5,6 @@
   },
   "engineStrict": true,
   "browserslist": "> 0.5%, last 2 versions, not dead",
-  "targets": {
-    "scss": {
-      "source": "src/scss/index.scss",
-      "distDir": "export/public/css",
-      "publicUrl": "/",
-      "context": "browser",
-      "optimize": true,
-      "sourceMap": true
-    },
-    "js": {
-      "source": [
-        "src/js/index.js",
-        "src/js/new-app.js",
-        "src/js/firebase.js",
-        "src/js/sw.js"
-      ],
-      "distDir": "export/public/js",
-      "publicUrl": "/",
-      "context": "browser",
-      "optimize": true,
-      "sourceMap": true
-    },
-    "img": {
-      "source": "src/images-index.html",
-      "distDir": "export/public/img",
-      "publicUrl": "/",
-      "context": "browser",
-      "optimize": true,
-      "sourceMap": true
-    }
-  },
-  "scripts": {
-    "scss": "parcel build --target scss",
-    "js": "parcel build --target js"
-  },
   "dependencies": {
     "@sentry/browser": "^7.100.1",
     "@sentry/tracing": "^7.100.1",
