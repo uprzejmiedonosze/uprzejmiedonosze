@@ -32,7 +32,8 @@ class SessionApiHandler extends AbstractHandler {
         global $storage;
         $appId = $args['appId'];
         $status = $args['status'];
-        $application = setStatus($status, $appId, $storage->getCurrentUser());
+        $user = $request->getAttribute('user');
+        $application = setStatus($status, $appId, $user);
         return $this->renderJson($response, array(
             "status" => "OK",
             "patronite" => $application->patronite
@@ -57,7 +58,8 @@ class SessionApiHandler extends AbstractHandler {
     public function moderateGallery(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $decision = $args['decision'];
-        moderateApp($appId, $decision);
+        $user = $request->getAttribute('user');
+        moderateApp($user, $appId, $decision);
         return $this->renderJson($response, array(
             "status" => "OK"
         ));

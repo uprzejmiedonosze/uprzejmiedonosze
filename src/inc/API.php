@@ -4,13 +4,15 @@ require(__DIR__ . '/alpr.php');
 
 use \Memcache as Memcache;
 use \stdClass as stdClass;
-use \finfo as finfo;
 use \DateTime as DateTime;
 use \Exception as Exception;
 
 $cache = new Memcache;
 $cache->connect('localhost', 11211);
 
+/** 
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ */
 function updateApplication(
     $appId,
     $date,
@@ -130,15 +132,14 @@ function addToGallery(string $appId): void {
  * @SuppressWarnings(PHPMD.ElseExpression)
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
-function moderateApp(string $appId, string $decision): void {
+function moderateApp(User $user, string $appId, string $decision): void {
     require __DIR__ . '/Tumblr.php';
     global $storage;
-    $currentUser = $storage->getCurrentUser();
-    if (!$currentUser->isModerator()) {
+
+    if (!$user->isModerator()) {
         throw new Exception("Dostęp zabroniony", 401);
     }
-    $who = $currentUser->isAdmin() ? 'admin' : 'moderator';
-
+    $who = $user->isAdmin() ? 'admin' : 'moderator';
     $application = $storage->getApplication($appId);
 
     if ($decision == 'true') {
