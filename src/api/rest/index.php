@@ -131,7 +131,7 @@ $app->get('/api/rest/user/apps', function (Request $request, Response $response,
     $offset = getParam($params, 'offset', 0);
 
     $user = $request->getAttribute('user');
-    $apps = $storage->getUserApplications($status, $search, $limit, $offset, $user->getEmail());
+    $apps = $storage->getUserApplications($user, $status, $search, $limit, $offset);
     
     $response->getBody()->write(json_encode($apps));
     return $response;
