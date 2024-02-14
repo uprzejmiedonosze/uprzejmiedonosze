@@ -41,6 +41,8 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
     $group->get('/{appId}.pdf', StaticPagesHandler::class . 'application');
     $group->get('/city/{city}.pdf', ApplicationHandler::class . 'package')
         ->add(new RegisteredMiddleware());
+})  ->add(new OptionalUserMiddleware())
+    ->add(new PdfMiddleware());
 
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
@@ -52,7 +54,6 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin 
         ]);
     });
 })  ->add(new ModeratorMiddleware())
-    ->add(new SessionMiddleware())
     ->add(new HtmlMiddleware());
 
 $app->post('/api/verify-token', SessionApiHandler::class . ':verifyToken')
@@ -65,8 +66,11 @@ $app->group('/api', function (RouteCollectorProxy $group) use ($storage) { // JS
     $group->patch('/app/{appId}/status/{status}', SessionApiHandler::class . ':setStatus');
     $group->patch('/app/{appId}/send', SessionApiHandler::class . ':sendApplication');
     $group->patch('/app/{appId}/gallery/add', SessionApiHandler::class . ':addToGallery');
-    $group->patch('/app/{appId}/gallery/moderate/{decision}', SessionApiHandler::class . ':moderateGallery');
-})->add(new JsonMiddleware())->add(new JsonBodyParser());
+    $group->patch('/app/{appId}/gallery/moderate/{decision}', SessionApiHandler::class . ':moderateGallery')
+        ->add(new ModeratorMiddleware());
+})  ->add(new RegisteredMiddleware())
+    ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Application
 
@@ -84,16 +88,14 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Applic
     $group->get('/wysylka.html', ApplicationHandler::class . ':shipment');
 
 })  ->add(new HtmlMiddleware())
-    ->add(new RegisteredMiddleware())
-    ->add(new SessionMiddleware());
+    ->add(new RegisteredMiddleware());
 
 $app->group('', function (RouteCollectorProxy $group) { // user register
     $group->get('/register.html', UserHandler::class . ':register');
     $group->post('/register-ok.html', UserHandler::class . ':finish');
     $group->get('/register-ok.html', AbstractHandler::redirect('/register.html'));
 })  ->add(new HtmlMiddleware())
-    ->add(new LoggedInMiddleware())
-    ->add(new SessionMiddleware());
+    ->add(new LoggedInMiddleware());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) { // sessionless pages
 
@@ -234,7 +236,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         throw new HttpNotFoundException($request);
     });
 })  ->add(new HtmlMiddleware())
-    ->add(new SessionMiddleware());
+    ->add(new OptionalUserMiddleware());
 
 
 $app->run();
@@ -242,7 +244,7 @@ $app->run();
 function getParam(array $params, string $name, mixed $default=null) {
     $param = $params[$name] ?? $default;
     if (is_null($param)) {
-        throw new MissingParamException($name);
+        throw new \MissingParamException($name);
     }
     return $param;
 }
