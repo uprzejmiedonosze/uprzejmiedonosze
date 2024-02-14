@@ -42,10 +42,9 @@ function application2PDF(Application &$application): array{
 /**
  * * @SuppressWarnings(ElseExpression)
  */
-function readyApps2PDF(string $city): array{
+function readyApps2PDF(User $user, string $city): array{
     global $storage;
 
-    $user = $storage->getCurrentUser();
     $userNumber = $user->number;
 
     $applications = $storage->getConfirmedAppsByCity($city);
