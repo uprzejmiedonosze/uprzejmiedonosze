@@ -203,57 +203,30 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
 
     $group->get('/{route}.html', function (Request $request, Response $response, $args) {
         $ROUTES = [
-            '404.html',
-            'changelog.html',
-            
-            'brak-sm.html',
-
-            
-            'dostep-do-informacji-publicznej.html',
-            'dziekujemy.html',
-            'epuap.html',
-            'faq.html',
-            'galeria.html',
-            'index.html',
-            'jak-zglosic-nielegalne-parkowanie.html',
-            'login-ok.html',
-            'login.html',
-            'maintenance.html',
-            'mandat.html',
-            'moje-zgloszenia.html',
-            'nowe-zgloszenie.html',
-            'polityka-prywatnosci.html',
-            'potwierdz.html',
-            'projekt.html',
-            'przepisy.html',
-            'register-ok.html',
-            'register.html',
-            'regulamin.html',
-            'robtodobrze.html',
-            'start.html',
-            'statystyki.html',
-            'wniosek-odpowiedz1.html',
-            'wniosek-rpo.html',
-            'wysylka.html',
-            'zapytaj-o-status.html',
-            'zgloszenie.html',
-        ];
-        $authRoutes = [
-            'adm-gallery.html',
-
+            '404',
+            'changelog',
+            'epuap',
+            'jak-zglosic-nielegalne-parkowanie',
+            'maintenance',
+            'mandat',
+            'polityka-prywatnosci',
+            'projekt',
+            'przepisy',
+            'robtodobrze',
+            'statystyki',
+            'wniosek-odpowiedz1',
+            'wniosek-rpo'
         ];
         $route = $args['route'];
+
+        if (!in_array($route, $ROUTES)) {
+            throw new HttpNotFoundException($request);
+        }
     
         try {
             return AbstractHandler::render($request, $response, $route);
-        }catch (\Twig\Error\LoaderError $error) {
+        } catch (\Twig\Error\LoaderError $error) {
             return AbstractHandler::render($request, $response, "404");
-        }catch (\Twig\Error\RuntimeError $error) {
-            return AbstractHandler::render($request, $response, "error", [
-                "exception" => $error,
-                "email" => "",
-                "time" => ""
-            ]);
         }
     });
 
