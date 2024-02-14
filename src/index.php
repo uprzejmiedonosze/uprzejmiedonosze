@@ -55,8 +55,12 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin 
     ->add(new SessionMiddleware())
     ->add(new HtmlMiddleware());
 
+$app->post('/api/verify-token', SessionApiHandler::class . ':verifyToken')
+    ->add(new AuthMiddleware())
+    ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
+
 $app->group('/api', function (RouteCollectorProxy $group) use ($storage) { // JSON API
-    $group->post('/verify-token', SessionApiHandler::class . ':verifyToken')->add(new AuthMiddleware());
     $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
     $group->patch('/app/{appId}/status/{status}', SessionApiHandler::class . ':setStatus');
     $group->patch('/app/{appId}/send', SessionApiHandler::class . ':sendApplication');
