@@ -162,20 +162,26 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         ]);
     });
 
+    $group->get('/logout.html', function (Request $request, Response $response, $args) {
+        unset($_SESSION['token']);
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_email']);
+        return AbstractHandler::render($request, $response, 'login', [
+            'config' => [
+                'logout' => true
+            ]
+        ]);
+    });
+
     $group->get('/login.html', function (Request $request, Response $response, $args) {
         $params = $request->getQueryParams();
-        $logout = getParam($params, 'logout', false);
-        if($logout !== false){
-            unset($_SESSION['token']);
-            $logout = true;
-        }
         $next = getParam($params, 'next', '/');
         $error = getParam($params, 'error', '');
         
         return AbstractHandler::render($request, $response, 'login', [
             'config' => [
                 'signInSuccessUrl' => $next,
-                'logout' => $logout,
+                'logout' => false,
                 'error' => $error
             ]
         ]);
