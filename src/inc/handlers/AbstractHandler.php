@@ -2,15 +2,14 @@
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Psr7\Response as ResponseObject;
 use Slim\Views\Twig;
 
 abstract class AbstractHandler {
-    public static function redirect(string $path) {
-        return function (Request $request, Response $response, $args) use ($path): Response {
-            return $response
-                ->withHeader('Location', $path)
-                ->withStatus(302);
-        };
+    public static function redirect(string $newLocation): Response {
+        $response = new ResponseObject(302);
+        $response = $response->withHeader('Location', $newLocation);
+        return $response;
     }
 
     public static function renderJson(Response $response, object|array $object): Response {

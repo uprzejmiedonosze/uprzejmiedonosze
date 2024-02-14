@@ -73,11 +73,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Applic
     $group->get('/potwierdz.html', AbstractHandler::redirect('/moje-zgloszenia.html'));
 
     $group->post('/dziekujemy.html', ApplicationHandler::class . ':finish');
-    $group->get('/dziekujemy.html', function (Request $request, Response $response, $args) {
-        return $response
-            ->withHeader('Location', '/moje-zgloszenia.html')
-            ->withStatus(302);
-    });
+    $group->get('/dziekujemy.html', AbstractHandler::redirect('/moje-zgloszenia.html'));
 
     $group->get('/brak-sm.html', ApplicationHandler::class . ':missingSM');
     $group->get('/moje-zgloszenia.html', ApplicationHandler::class . ':myApps');
@@ -90,11 +86,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Applic
 $app->group('', function (RouteCollectorProxy $group) { // user register
     $group->get('/register.html', UserHandler::class . ':register');
     $group->post('/register-ok.html', UserHandler::class . ':finish');
-    $group->get('/register-ok.html', function (Request $request, Response $response, $args) {
-        return $response
-            ->withHeader('Location', '/register.html')
-            ->withStatus(302);
-    });
+    $group->get('/register-ok.html', AbstractHandler::redirect('/register.html'));
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware())
     ->add(new SessionMiddleware());
@@ -115,9 +107,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
     $group->get('/zgloszenie.html', function (Request $request, Response $response, $args) {
         $params = $request->getQueryParams();
         $appId = getParam($params, 'id');
-        return $response->withHeader('Location', "/ud-$appId.html")
-                ->withStatus(302);
-
+        return AbstractHandler::redirect("/ud-$appId.html");
     });
     $group->get('/ud-{appId}.html', function (Request $request, Response $response, $args) use ($storage) {
         $appId = $args['appId'];
