@@ -1,8 +1,8 @@
 <?PHP
 
-require_once(__DIR__ . '/utils.php');
+require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
-require_once(__DIR__ . '/integrations/CityAPI.php');
+require_once(__DIR__ . '/../integrations/CityAPI.php');
 use \Datetime as Datetime;
 use \Exception as Exception;
 use \JSONObject as JSONObject;

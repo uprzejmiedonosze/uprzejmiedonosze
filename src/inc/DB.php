@@ -1,7 +1,7 @@
 <?PHP
-require(__DIR__ . '/NoSQLite.php');
-require(__DIR__ . '/User.php');
-require(__DIR__ . '/Application.php');
+require(__DIR__ . '/dataclasses/NoSQLite.php');
+require(__DIR__ . '/dataclasses/User.php');
+require(__DIR__ . '/dataclasses/Application.php');
 
 use \Memcache as Memcache;
 use \Application as Application;

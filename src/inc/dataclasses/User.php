@@ -1,6 +1,6 @@
 <?PHP
 
-require_once(__DIR__ . '/utils.php');
+require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
 use \stdClass as stdClass;
 

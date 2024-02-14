@@ -1,5 +1,5 @@
 <?PHP 
-require_once(__DIR__ . '/ConfigClass.php');
+require_once(__DIR__ . '/dataclasses/ConfigClass.php');
 
 $timeout = 60 * 60 * 24 * 365;
 ini_set("session.gc_maxlifetime", $timeout);
