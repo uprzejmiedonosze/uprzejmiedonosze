@@ -91,7 +91,8 @@ class AuthMiddleware implements MiddlewareInterface {
                 'user_email' => ('%HOST%' === 'uprzejmiedonosze.localhost') ? 'e@nieradka.net' : $claims->get('email'),
                 'user_name' => $claims->get('name'),
                 'user_picture' => $claims->get('picture'),
-                'user_id' => $claims->get('user_id')
+                'user_id' => $claims->get('user_id'),
+                'token' => $token
             );
             $this->cache->set($cacheKey, json_encode($firebaseUser), 0, $claims->get('exp')->getTimestamp() - 60);
             return $firebaseUser;

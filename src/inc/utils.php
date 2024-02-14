@@ -47,46 +47,6 @@ function getCurrentUserEmail(){
     throw new Exception("Próba pobrania danych niezalogowanego użytkownika");
 }
 
-
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function getRequestUri(){
-    return preg_replace('/^\/*/', '', $_SERVER['REQUEST_URI']);
-}
-
-function isAdmin(){
-    global $storage;
-    return isLoggedIn() && $storage->getCurrentUser()->isAdmin();
-}
-
-function genSafeId(){
-    return substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
-}
-
-/** @SuppressWarnings("exit") */
-function raiseError($msg, $status, $notify = null){
-    if (!is_string($msg)) {
-        if (method_exists($msg, 'getMessage')) {
-            if (isProd()) \Sentry\captureException($msg);
-            $msg = $msg->getMessage();
-        }
-    }
-
-    logger("raiseError $msg with $status", $notify);
-    $status = ($status ?? 0 > 300) ? $status : 500;
-    $error = Array(
-        "code" => $status,
-        "message" => (string)$msg
-    );
-    if($notify) {
-        _sendSlackError((string)$msg);
-    }
-    http_response_code($status);
-    echo json_encode($error);
-    die();
-}
-
 function capitalizeSentence($input){
     if(!isset($input) || trim($input) === ''){
         return '';
@@ -118,80 +78,6 @@ function isIOS(){
     $iPhone  = (bool)stripos($userAgent, "iPhone");
     $iPad    = (bool)stripos($userAgent, "iPad");
     return $iPod || $iPhone || $iPad;
-}
-
-/** 
- * Sends message to #updates slack channel at uprzejmiedonosze.slack.com
- * @SuppressWarnings(PHPMD.ErrorControlOperator)
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function _sendSlackOnRegister($user){
-    $title = "Nowa rejestracja {$user->data->name}";
-
-    logger($title, true);
-
-    $msg = [
-        "fallback" => $title,
-        "title" => $title,
-        "color" => "#E7BF3D",
-        "author_name" => $user->data->email,
-        "author_link" => "mailto:{$user->data->email}",
-        "image_url" => @$_SESSION['user_picture'],
-        "footer" => $user->data->address,
-    ];
-    _sendSlackAsync($msg, isProd()? 1: 11);
-}
-
-/**
- * Sends formatted message to Slack.
- * @SuppressWarnings(PHPMD.Superglobals)
- * @SuppressWarnings(PHPMD.ErrorControlOperator)
- */
-function _sendSlackOnNewApp($app){
-    $title = "Wysyłka zgłoszenia {$app->number} ({$app->address->city})";
-
-    logger($title, true);
-
-    $msg = [
-        "fallback" => $title,
-        "title" => "Wysyłka zgłoszenia {$app->number}",
-        "title_link" => "%HTTPS%://%HOST%/ud-{$app->id}.html",
-        
-        "color" => "#229A7F",
-
-        "author_name" => "{$app->user->name}",
-        "author_icon" => @$_SESSION['user_picture'],
-        "author_link" => "mailto:{$app->user->email}",
-
-        'fields' => [[
-                'title' => $app->address->city . (($app->guessSMData()->email)? "": " (!)"),
-                'value' => ($app->category == 0)? 'Inne: ' . $app->userComment: $app->getCategory()->getTitle(),
-                'short' => true
-            ]],
-        "image_url" => "%HTTPS%://%HOST%/{$app->contextImage->url}",
-        "thumb_url" => "%HTTPS%://%HOST%/{$app->contextImage->thumb}",
-
-        "footer" => $app->getCategory()->getTitle(),
-        "footer_icon" => "%HTTPS%://%HOST%/img/{$app->category}.jpg",
-        "ts" => strtotime($app->date)
-    ];
-    _sendSlackAsync($msg, isProd()? 1: 11);
-}
-
-/** 
- * Sends message to #errors slack channel at uprzejmiedonosze.slack.com
- */
-function _sendSlackError($msg){
-    _sendSlackAsync($msg, isProd()? 2: 12);
-}
-
-/**
- * $type: 1 update, 2 error
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
- */
-function _sendSlackAsync($msg, $type){
-    #$queue = msg_get_queue(9997);
-    #return msg_send($queue, $type, $msg, true, false);
 }
 
 function isProd(){

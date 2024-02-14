@@ -345,7 +345,7 @@ $app->get('/api/rest/geo/{lat},{lng}/g', function (Request $request, Response $r
     $lat = $args['lat'];
     $lng = $args['lng'];
     try {
-        $response->getBody()->write(json_encode(geoToAddress($lat, $lng)));
+        $response->getBody()->write(json_encode(GoogleMaps($lat, $lng)));
     } catch (Exception $e) {
         if ($e->getCode() ?? -1 == 404) {
             throw new HttpNotFoundException($request, $e->getMessage(), $e);

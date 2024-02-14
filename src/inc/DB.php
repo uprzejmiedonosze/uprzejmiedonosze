@@ -399,9 +399,6 @@ class DB extends NoSQLite{
     // ADMIN area
 
     public function execute($sql){
-        if(!isAdmin()){
-            throw new Exception('Dostęp zabroniony');
-        }
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt;

@@ -40,6 +40,9 @@ class Application extends JSONObject{
     }
 
     public static function withUser(User $user): Application {
+        function genSafeId() {
+            return substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
+        }
         $instance = new self();
         $instance->date = null;
         $instance->id = genSafeId();
@@ -521,8 +524,8 @@ class Application extends JSONObject{
         return @count($this->statusHistory);
     }
 
-    public function isAppOwner() {
-        return getCurrentUserEmail() == $this->user->email;
+    public function isAppOwner(User $user): bool {
+        return $user->getEmail() == $this->user->email;
     }
 
     /**

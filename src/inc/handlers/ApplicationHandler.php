@@ -1,24 +1,24 @@
 <?PHP
 
+require_once(__DIR__ . '/AbstractHandler.php');
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 
-class ApplicationHandler {
-    public function start(Request $request, Response $response, $args) {
-        return HtmlMiddleware::render($request, $response, 'start', [
+class ApplicationHandler extends AbstractHandler {
+    public function start(Request $request, Response $response, $args): Response {
+        return AbstractHandler::render($request, $response, 'start', [
             'latestTermUpdate' => LATEST_TERMS_UPDATE
         ]);
     }
 
-    public function newApplication(Request $request, Response $response, $args) {
+    public function newApplication(Request $request, Response $response, $args): Response {
         global $storage;
         $params = $request->getQueryParams();
         if (isset($params['cleanup'])) {
             unset($_SESSION['newAppId']);
-            return $response
-                ->withHeader('Location', '/nowe-zgloszenie.html')
-                ->withStatus(302);
+            return $this->redirect('/nowe-zgloszenie.html');
         }
 
         $user = $request->getAttribute('user');
@@ -29,9 +29,7 @@ class ApplicationHandler {
         }
 
         if (!$user->checkTermsConfirmation()) {
-            return $response
-                ->withHeader('Location', '/start.html')
-                ->withStatus(302);
+            return $this->redirect('/start.html');
         }
 
         if (isset($params['edit'])) {
@@ -40,7 +38,7 @@ class ApplicationHandler {
                 throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name);
             }
 
-            if (!($application->isAppOwner() || isAdmin())) {
+            if (!($application->isAppOwner($user) || $user->isAdmin())) {
                 throw new Exception("Próba edycji cudzego zgłoszenia. Nieładnie!");
             }
 
@@ -78,7 +76,7 @@ class ApplicationHandler {
         // edit app older than 1y
         if ($dtMin > $dt) $dtMin = $dt;
 
-        return HtmlMiddleware::render($request, $response, 'nowe-zgloszenie', [
+        return AbstractHandler::render($request, $response, 'nowe-zgloszenie', [
             'config' => [
                 'edit' => $edit,
                 'lastLocation' => $user->getLastLocation()
@@ -91,14 +89,12 @@ class ApplicationHandler {
         ]);
     }
 
-    public function confirm(Request $request, Response $response, $args) {
+    public function confirm(Request $request, Response $response, $args): Response {
         $params = (array)$request->getParsedBody();
 
         $appId = getParam($params, 'applicationId', -1);
         if ($appId == -1) {
-            return $response
-                ->withHeader('Location', '/nowe-zgloszenie.html')
-                ->withStatus(302);
+            return $this->redirect('/nowe-zgloszenie.html');
         }
 
         $plateId = getParam($params, 'plateId');
@@ -134,7 +130,7 @@ class ApplicationHandler {
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
         }
 
-        return HtmlMiddleware::render($request, $response, 'potwierdz', [
+        return AbstractHandler::render($request, $response, 'potwierdz', [
             'config' => [
                 'isAppOwnerOrAdmin' => true,
                 'confirmationScreen' => true
@@ -145,16 +141,14 @@ class ApplicationHandler {
         ]);
     }
 
-    public function finish(Request $request, Response $response, $args) {
+    public function finish(Request $request, Response $response, $args): Response {
         global $storage;
         $params = (array)$request->getParsedBody();
 
         $appId = getParam($params, 'applicationId', -1);
 
         if (!isset($_SESSION['newAppId']) || $appId == -1) {
-            return $response
-                ->withHeader('Location', '/moje-zgloszenia.html')
-                ->withStatus(302);
+            return $this->redirect('/moje-zgloszenia.html');
         }
 
         unset($_SESSION['newAppId']);
@@ -177,7 +171,7 @@ class ApplicationHandler {
             $application->address->mapImage = null;
         }
 
-        return HtmlMiddleware::render($request, $response, 'dziekujemy', [
+        return AbstractHandler::render($request, $response, 'dziekujemy', [
             'app' => $application,
             'appsCount' => $user->appsCount,
             'edited' => $edited,
@@ -186,7 +180,7 @@ class ApplicationHandler {
         ]);
     }
 
-    public function missingSM(Request $request, Response $response, $args) {
+    public function missingSM(Request $request, Response $response, $args): Response {
         global $storage;
         $params = $request->getQueryParams();
         $appId = getParam($params, 'id', -1);
@@ -203,13 +197,13 @@ class ApplicationHandler {
             }
         }
 
-        return HtmlMiddleware::render($request, $response, 'brak-sm', [
+        return AbstractHandler::render($request, $response, 'brak-sm', [
             'appCity' => $appCity,
             'appNumber' => $appNumber
         ]);
     }
 
-    public function myApps(Request $request, Response $response, $args) {
+    public function myApps(Request $request, Response $response, $args): Response {
         global $storage;
 
         $user = $request->getAttribute('user');
@@ -238,7 +232,7 @@ class ApplicationHandler {
             $storage->getUserStats(false, $user); // updates the cache
         }
 
-        return HtmlMiddleware::render($request, $response, 'moje-zgloszenia', [
+        return AbstractHandler::render($request, $response, 'moje-zgloszenia', [
             'appActionButtons' => true,
             'applications' => $applications,
             'countChanged' => $countChanged,
@@ -248,7 +242,7 @@ class ApplicationHandler {
         ]);
     }
 
-    public function shipment(Request $request, Response $response, $args) {
+    public function shipment(Request $request, Response $response, $args): Response {
         global $storage;
         $user = $request->getAttribute('user');
         $params = $request->getQueryParams();
@@ -257,13 +251,9 @@ class ApplicationHandler {
             $city = $storage->getNextCityToSent();
             logger("nextcity = $city");
             if ($city) {
-                return $response
-                    ->withHeader('Location', '/wysylka.html?city=' . urlencode($city))
-                    ->withStatus(302);
+                return $this->redirect('/wysylka.html?city=' . urlencode($city));
             }
-            return $response
-                ->withHeader('Location', '/moje-zgloszenia.html')
-                ->withStatus(302);
+            return $this->redirect('/moje-zgloszenia.html');
         }
 
         $city = urldecode($params['city']);
@@ -271,14 +261,12 @@ class ApplicationHandler {
         $apps = $storage->getConfirmedAppsByCity($city);
 
         if (count($apps) == 0) {
-            return $response
-                ->withHeader('Location', '/moje-zgloszenia.html')
-                ->withStatus(302);
+            return $this->redirect('/moje-zgloszenia.html');
         }
 
         $sm = reset($apps)->guessSMData();
 
-        return HtmlMiddleware::render($request, $response, 'wysylka', [
+        return AbstractHandler::render($request, $response, 'wysylka', [
             'appActionButtons' => false,
             'wysylka' => true,
             'apps' => $apps,
@@ -288,4 +276,5 @@ class ApplicationHandler {
             'autoSend' => $user->autoSend()
         ]);
     }
+
 }

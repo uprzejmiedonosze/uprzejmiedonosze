@@ -7,7 +7,7 @@ use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 
 const ROOT = '/var/www/%HOST%/';
 
-function application2PDFById($appId){
+function application2PDFById(string $appId): array {
     global $storage;
 
     if(!isset($appId)){
@@ -22,7 +22,7 @@ function application2PDFById($appId){
     return application2PDF($application);
 }
 
-function application2PDF(&$application){
+function application2PDF(Application &$application): array{
     $appId = $application->id;
 
     $userNumber = $application->getUserNumber();
@@ -42,7 +42,7 @@ function application2PDF(&$application){
 /**
  * * @SuppressWarnings(ElseExpression)
  */
-function readyApps2PDF($city){
+function readyApps2PDF(string $city): array{
     global $storage;
 
     $user = $storage->getCurrentUser();
@@ -72,7 +72,7 @@ function readyApps2PDF($city){
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  */
-function tex2pdf($application, $destFile, $type) {
+function tex2pdf(array|Application $application, string $destFile, string $type) {
     $file = tempnam(sys_get_temp_dir(), 'tex-');
     if($file === false) {
         throw new Exception("Failed to create temporary file");

@@ -5,6 +5,7 @@ require(__DIR__ . '/../inc/Twig.php');
 require(__DIR__ . '/../inc/handlers/ApplicationHandler.php');
 require(__DIR__ . '/../inc/handlers/SessionApiHandler.php');
 require(__DIR__ . '/../inc/handlers/UserHandler.php');
+require(__DIR__ . '/../inc/handlers/StaticPagesHandler.php');
 
 require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
 require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
@@ -35,28 +36,15 @@ $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 
 $app->group('', function (RouteCollectorProxy $group) { // PDFs
-    $group->get('/{appId}.pdf', function (Request $request, Response $response, $args) {
-        $appId = $args['appId'];
-        require(__DIR__ . '/../inc/PDFGenerator.php');
-        [$pdf, $filename] = application2PDFById($appId);
-        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
-        readfile($pdf);
-    });
-    $group->get('/city/{city}.pdf', function (Request $request, Response $response, $args) {
-        $city = $args['city'];
-        require(__DIR__ . '/../inc/PDFGenerator.php');
-        [$pdf, $filename] = readyApps2PDF($city);
-        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
-        readfile($pdf);
-    });
+    $group->get('/{appId}.pdf', StaticPagesHandler::class . 'application');
+    $group->get('/city/{city}.pdf', StaticPagesHandler::class . 'package');
 })->add(new PdfMiddleware());
 
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
     $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {
         $applications = $storage->getGalleryModerationApps();
-
-        return HtmlMiddleware::render($request, $response, 'adm-gallery', [
+        return AbstractHandler::render($request, $response, 'adm-gallery', [
             'appActionButtons' => false,
             'applications' => $applications
         ]);
@@ -66,29 +54,21 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin 
     ->add(new HtmlMiddleware());
 
 $app->group('/api', function (RouteCollectorProxy $group) use ($storage) { // JSON API
-    $group->post('/verify-token', SessionApiHandler::class . ':verifyToken')
-        ->add(new AuthMiddleware());
-
+    $group->post('/verify-token', SessionApiHandler::class . ':verifyToken')->add(new AuthMiddleware());
     $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
     $group->patch('/app/{appId}/status/{status}', SessionApiHandler::class . ':setStatus');
     $group->patch('/app/{appId}/send', SessionApiHandler::class . ':sendApplication');
     $group->patch('/app/{appId}/gallery/add', SessionApiHandler::class . ':addToGallery');
     $group->patch('/app/{appId}/gallery/moderate/{decision}', SessionApiHandler::class . ':moderateGallery');
-        
 })->add(new JsonMiddleware())->add(new JsonBodyParser());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Application
 
     $group->get('/start.html', ApplicationHandler::class . ':start');
-
     $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
 
     $group->post('/potwierdz.html', ApplicationHandler::class . ':confirm');
-    $group->get('/potwierdz.html', function (Request $request, Response $response, $args) {
-        return $response
-            ->withHeader('Location', '/moje-zgloszenia.html')
-            ->withStatus(302);
-    });
+    $group->get('/potwierdz.html', AbstractHandler::redirect('/moje-zgloszenia.html'));
 
     $group->post('/dziekujemy.html', ApplicationHandler::class . ':finish');
     $group->get('/dziekujemy.html', function (Request $request, Response $response, $args) {
@@ -123,7 +103,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $params = $request->getQueryParams();
         $next = getParam($params, 'next', '/start.html');
         
-        return HtmlMiddleware::render($request, $response, 'login-ok', [
+        return AbstractHandler::render($request, $response, 'login-ok', [
             'config' => [
                 'signInSuccessUrl' => $next
             ]
@@ -142,9 +122,10 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $application = $storage->getApplication($appId);
     
         $isAppOwner = $application->isAppOwner();
-        $isAppOwnerOrAdmin = isAdmin() || $isAppOwner;
+        $user = $request->getAttribute('user', null);
+        $isAppOwnerOrAdmin = $user?->isAdmin() || $isAppOwner;
     
-        return HtmlMiddleware::render($request, $response, "zgloszenie", [
+        return AbstractHandler::render($request, $response, "zgloszenie", [
             'head' => [
                 'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
                 'shortTitle' => "Zgłoszenie {$application->number}",
@@ -161,7 +142,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
     $group->get('/zapytaj-o-status.html', function (Request $request, Response $response, $args) use ($storage) {
         $sent = $storage->getSentApplications(31);
 
-        return HtmlMiddleware::render($request, $response, 'zapytaj-o-status', [
+        return AbstractHandler::render($request, $response, 'zapytaj-o-status', [
             'applications' => $sent
         ]);
     });
@@ -179,7 +160,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
             $name = $user->data->name;
         }
 
-        return HtmlMiddleware::render($request, $response, 'dostep-do-informacji-publicznej', [
+        return AbstractHandler::render($request, $response, 'dostep-do-informacji-publicznej', [
             'callDate' => date('j-m-Y', strtotime('-6 hour')),
             'callTime' => date('H:i', strtotime('-6 hour')),
             'checkTime' => date('H:00', strtotime('-2 hour')),
@@ -199,7 +180,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $next = getParam($params, 'next', '/');
         $error = getParam($params, 'error', '');
         
-        return HtmlMiddleware::render($request, $response, 'login', [
+        return AbstractHandler::render($request, $response, 'login', [
             'config' => [
                 'signInSuccessUrl' => $next,
                 'logout' => $logout,
@@ -211,7 +192,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
 
     $group->get('/', function (Request $request, Response $response, $args) use ($storage) {
         $mainPageStats = $storage->getMainPageStats();
-        return HtmlMiddleware::render($request, $response, 'index', [
+        return AbstractHandler::render($request, $response, 'index', [
             'config' => [
                 'stats' => $mainPageStats
             ]
@@ -219,7 +200,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
     });
 
     $group->get('/regulamin.html', function (Request $request, Response $response, $args) {
-        return HtmlMiddleware::render($request, $response, 'regulamin', [
+        return AbstractHandler::render($request, $response, 'regulamin', [
             'latestTermUpdate' => LATEST_TERMS_UPDATE
         ]);
     });
@@ -242,14 +223,14 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
             }
         }
         $sortedSMHints = array_unique($SMHints, SORT_LOCALE_STRING);
-        return HtmlMiddleware::render($request, $response, 'faq', [
+        return AbstractHandler::render($request, $response, 'faq', [
             'smAddresses' => implode(', ', $smNames),
             'SMHints' => $sortedSMHints
         ]);
     });
 
     $group->get('/galeria.html', function (Request $request, Response $response, $args) use ($storage){
-        return HtmlMiddleware::render($request, $response, 'galeria', [
+        return AbstractHandler::render($request, $response, 'galeria', [
             'appActionButtons' => false,
             'galleryByCity' => $storage->getGalleryByCity()
         ]);
@@ -299,11 +280,11 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $route = $args['route'];
     
         try {
-            return HtmlMiddleware::render($request, $response, $route);
+            return AbstractHandler::render($request, $response, $route);
         }catch (\Twig\Error\LoaderError $error) {
-            return HtmlMiddleware::render($request, $response, "404");
+            return AbstractHandler::render($request, $response, "404");
         }catch (\Twig\Error\RuntimeError $error) {
-            return HtmlMiddleware::render($request, $response, "error", [
+            return AbstractHandler::render($request, $response, "error", [
                 "exception" => $error,
                 "email" => "",
                 "time" => ""

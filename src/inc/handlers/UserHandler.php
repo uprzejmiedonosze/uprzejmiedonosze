@@ -1,9 +1,11 @@
 <?PHP
 
+require_once(__DIR__ . '/AbstractHandler.php');
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class UserHandler {
+class UserHandler extends AbstractHandler {
     public function register(Request $request, Response $response, $args): Response {
         global $storage;
         try {
@@ -12,7 +14,7 @@ class UserHandler {
             $user = new User();
             $storage->saveUser($user);
         }
-        return HtmlMiddleware::render($request, $response, 'register', [
+        return AbstractHandler::render($request, $response, 'register', [
             'signInSuccessUrl' => isset($_GET['next']) ? $_GET['next'] : 'start.html',
             'user' => $user
         ]);
@@ -38,7 +40,6 @@ class UserHandler {
         $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
         $storage->saveUser($user);
 
-        $response = $response->withHeader('Location', $signInSuccessUrl)->withStatus(302);
-        return $response;
+        return AbstractHandler::redirect($signInSuccessUrl);
     }
 }

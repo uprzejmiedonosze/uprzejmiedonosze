@@ -22,7 +22,7 @@ function updateApplication(
     $witness,
     $extensions,
     User $user
-) {
+): Application {
 
     global $storage;
     $application = $storage->getApplication($appId);
@@ -78,7 +78,7 @@ function updateApplication(
 /**
  * Sets application status.
  */
-function setStatus($status, $appId, $user) {
+function setStatus(string $status, string $appId, User $user): Application {
     global $storage;
     $application = $storage->getApplication($appId);
     $application->setStatus($status);
@@ -101,7 +101,7 @@ function setStatus($status, $appId, $user) {
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.MissingImport)
  */
-function sendApplication($appId) {
+function sendApplication(string $appId): Application {
     global $storage;
 
     $application = $storage->getApplication($appId);
@@ -109,12 +109,11 @@ function sendApplication($appId) {
     $sm = $application->guessSMData();
     $api = new $sm->api;
     $application = $api->send($application);
-    _sendSlackOnNewApp($application);
 
     return $application;
 }
 
-function addToGallery($appId) {
+function addToGallery(string $appId): void {
     global $storage;
 
     $application = $storage->getApplication($appId);
@@ -131,7 +130,7 @@ function addToGallery($appId) {
  * @SuppressWarnings(PHPMD.ElseExpression)
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
-function moderateApp($appId, $decision) {
+function moderateApp(string $appId, string $decision): void {
     require __DIR__ . '/Tumblr.php';
     global $storage;
     $currentUser = $storage->getCurrentUser();
@@ -156,39 +155,6 @@ function moderateApp($appId, $decision) {
 
     $storage->saveApplication($application);
 }
-
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function uploadedFileToBase64() {
-    global $_FILES;
-
-    if (!isset($_FILES['image']['error']) || is_array($_FILES['image']['error'])) {
-        throw new Exception($_FILES['image']['error'], 400);
-        // 415 Unsupported Media Type
-        // 400 Bad Request
-    }
-
-    if ($_FILES['image']['size'] > 500000) {
-        throw new Exception("Image too big", 413);
-    }
-
-    // DO NOT TRUST $_FILES['uploaded_file']['mime'] VALUE !!
-    // Check MIME Type by yourself.
-    $finfo = new finfo(FILEINFO_MIME_TYPE);
-    $ext = array_search(
-        $finfo->file($_FILES['image']['tmp_name']),
-        array('jpg' => 'image/jpeg', 'png' => 'image/png'),
-        true
-    );
-    if (false === $ext) {
-        throw new Exception("File type $ext is not supported", 415);
-    }
-
-    $data = file_get_contents($_FILES['image']['tmp_name']);
-    return base64_encode($data);
-}
-
 
 /**
  * Saves uploaded image + automatically create thumbnail + read plate data
@@ -296,22 +262,6 @@ function resize_image($file, $w, $h, $crop = FALSE) {
     return $dst;
 }
 
-function initLogs() {
-    logger("INIT %VERSION%", true);
-}
-
-function getAppByNumber($number, $apiToken) {
-    global $storage;
-    $application = $storage->getAppByNumber($number, $apiToken);
-    echo json_encode($application);
-}
-
-function getUserByName($name, $apiToken) {
-    global $storage;
-    $user = $storage->getUserByName($name, $apiToken);
-    echo json_encode($user);
-}
-
 function normalizeGeo(float|string $g): string {
     return sprintf('%.4F', $g);
 }
@@ -336,7 +286,7 @@ function setCache(string $key, array $value): void {
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
-function geoToAddress($lat, $lng) {
+function GoogleMaps($lat, $lng) {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);
     $prefix = "google-maps-v2";

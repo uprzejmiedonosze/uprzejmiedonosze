@@ -1,12 +1,14 @@
 <?PHP
 
+require_once(__DIR__ . '/AbstractHandler.php');
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 require(__DIR__ . '/../API.php');
 
-class SessionApiHandler {
-    public function image(Request $request, Response $response, $args) {
+class SessionApiHandler extends AbstractHandler {
+    public function image(Request $request, Response $response, $args): Response {
         global $storage;
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
@@ -21,53 +23,51 @@ class SessionApiHandler {
         $latLng = isset($_POST['latLng']) ? $_POST['latLng'] : null;
         $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
 
-        $response->getBody()->write(json_encode($application));
-        return $response;
+        return $this->renderJson($response, $application);
     }
 
-    public function setStatus(Request $request, Response $response, $args) {
+    public function setStatus(Request $request, Response $response, $args): Response {
         global $storage;
         $appId = $args['appId'];
         $status = $args['status'];
         $application = setStatus($status, $appId, $storage->getCurrentUser());
-        $response->getBody()->write(json_encode(array(
+        return $this->renderJson($response, array(
             "status" => "OK",
             "patronite" => $application->patronite
-        )));
-        return $response;
+        ));
     }
 
-    public function sendApplication(Request $request, Response $response, $args) {
+    public function sendApplication(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $application = sendApplication($appId);
-        $response->getBody()->write(json_encode(array(
+        return $this->renderJson($response, array(
             "status" => $application->status
-        )));
-        return $response;
+        ));
     }
 
-    public function addToGallery(Request $request, Response $response, $args) {
+    public function addToGallery(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         addToGallery($appId);
-        $response->getBody()->write(json_encode(array(
+        return $this->renderJson($response, array(
             "status" => "OK"
-        )));
-        return $response;
+        ));
     }
-    public function moderateGallery(Request $request, Response $response, $args) {
+    public function moderateGallery(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $decision = $args['decision'];
         moderateApp($appId, $decision);
+        return $this->renderJson($response, array(
+            "status" => "OK"
+        ));
     }
 
-    public function verifyToken(Request $request, Response $response, $args) {
+    public function verifyToken(Request $request, Response $response, $args): Response {
         $firebaseUser = $request->getAttribute('firebaseUser');
         $_SESSION['user_email'] = $firebaseUser['user_email'];
         $_SESSION['user_name'] = $firebaseUser['user_name'];
         $_SESSION['user_picture'] = $firebaseUser['user_picture'];
         $_SESSION['user_id'] = $firebaseUser['user_id'];
-        $response->getBody()->write(json_encode($firebaseUser));
-        return $response;
+        return $this->renderJson($response, $firebaseUser);
     }
     
 }
