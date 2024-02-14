@@ -192,51 +192,13 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
     });
 
 
-    $group->get('/', function (Request $request, Response $response, $args) use ($storage) {
-        $mainPageStats = $storage->getMainPageStats();
-        return AbstractHandler::render($request, $response, 'index', [
-            'config' => [
-                'stats' => $mainPageStats
-            ]
-        ]);
-    });
+    $group->get('/', StaticPagesHandler::class . ':root');
 
-    $group->get('/regulamin.html', function (Request $request, Response $response, $args) {
-        return AbstractHandler::render($request, $response, 'regulamin', [
-            'latestTermUpdate' => LATEST_TERMS_UPDATE
-        ]);
-    });
+    $group->get('/regulamin.html', StaticPagesHandler::class . ':rules');
 
-    $group->get('/faq.html', function (Request $request, Response $response, $args) use ($SM_ADDRESSES) {
-        $smAddresses = $SM_ADDRESSES;
+    $group->get('/faq.html', StaticPagesHandler::class . ':faq');
 
-        $smNames = array_map(function ($sm) { return $sm->city; }, $SM_ADDRESSES);
-        $collator = new Collator('pl_PL');
-        $collator->sort($smNames);
-
-        $smNames = array_unique($smNames, SORT_LOCALE_STRING);
-
-        $SMHints = array();
-        foreach ($smAddresses as $sm) {
-            if($sm->hint){
-                if(!str_starts_with($sm->hint, 'Miejscowość ')) {
-                    $SMHints[$sm->city] = $sm->hint;
-                }
-            }
-        }
-        $sortedSMHints = array_unique($SMHints, SORT_LOCALE_STRING);
-        return AbstractHandler::render($request, $response, 'faq', [
-            'smAddresses' => implode(', ', $smNames),
-            'SMHints' => $sortedSMHints
-        ]);
-    });
-
-    $group->get('/galeria.html', function (Request $request, Response $response, $args) use ($storage){
-        return AbstractHandler::render($request, $response, 'galeria', [
-            'appActionButtons' => false,
-            'galleryByCity' => $storage->getGalleryByCity()
-        ]);
-    });
+    $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
 
     $group->get('/{route}.html', function (Request $request, Response $response, $args) {
         $ROUTES = [
