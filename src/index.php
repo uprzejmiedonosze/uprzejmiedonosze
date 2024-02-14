@@ -39,8 +39,8 @@ $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 
 $app->group('', function (RouteCollectorProxy $group) { // PDFs
     $group->get('/{appId}.pdf', StaticPagesHandler::class . 'application');
-    $group->get('/city/{city}.pdf', StaticPagesHandler::class . 'package');
-})->add(new PdfMiddleware());
+    $group->get('/city/{city}.pdf', ApplicationHandler::class . 'package')
+        ->add(new RegisteredMiddleware());
 
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff

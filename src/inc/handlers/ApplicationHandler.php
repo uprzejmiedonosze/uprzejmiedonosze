@@ -281,4 +281,13 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
+    public function package(Request $request, Response $response, $args): Response {
+        $city = $args['city'];
+        $user = $request->getAttribute('user');
+        [$pdf, $filename] = readyApps2PDF($user, $city);
+        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
+        readfile($pdf);
+        return $response;
+    }
+
 }
