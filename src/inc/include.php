@@ -8,8 +8,8 @@ if (isProd()) {
   Sentry\init(['dsn' => 'https://fb9d61b89dc24608b00a4e02353e5f7f@o929176.ingest.sentry.io/5878025' ]);
 }
 
-if(!isset($DISABLE_SESSION)) {
-  session_start();
+if (!isProd()) {
+  error_reporting(E_ALL & ~E_DEPRECATED);
 }
 
 ?>
