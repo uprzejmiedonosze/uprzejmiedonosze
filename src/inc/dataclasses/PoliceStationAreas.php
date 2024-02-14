@@ -15,7 +15,7 @@ class PoliceStationAreas {
     private $polygons = Array();
     
     public function __construct() {
-        $policeStations = file_get_contents(__DIR__ . "/../public/api/config/police-stations.pjson");
+        $policeStations = file_get_contents(__DIR__ . "/../../public/api/config/police-stations.pjson");
         $this->polygons = unserialize($policeStations);
     }
 
