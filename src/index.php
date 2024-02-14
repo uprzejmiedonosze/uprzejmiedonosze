@@ -1,6 +1,11 @@
 <?php
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');
+
+require(__DIR__ . '/../inc/handlers/ApplicationHandler.php');
+require(__DIR__ . '/../inc/handlers/SessionApiHandler.php');
+require(__DIR__ . '/../inc/handlers/UserHandler.php');
+
 require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
 require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/HtmlMiddleware.php');
@@ -8,7 +13,6 @@ require(__DIR__ . '/../inc/middleware/JsonBodyParser.php');
 require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
-require(__DIR__ . '/../inc/handlers/ApplicationHandler.php');
 
 $DISABLE_SESSION=false;
 
@@ -30,7 +34,7 @@ $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 
-$app->group('', function (RouteCollectorProxy $group) {
+$app->group('', function (RouteCollectorProxy $group) { // PDFs
     $group->get('/{appId}.pdf', function (Request $request, Response $response, $args) {
         $appId = $args['appId'];
         require(__DIR__ . '/../inc/PDFGenerator.php');
@@ -48,8 +52,7 @@ $app->group('', function (RouteCollectorProxy $group) {
 })->add(new PdfMiddleware());
 
 
-
-$app->group('', function (RouteCollectorProxy $group) use ($storage) {
+$app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
     $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {
         $applications = $storage->getGalleryModerationApps();
 
@@ -62,20 +65,19 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
     ->add(new SessionMiddleware())
     ->add(new HtmlMiddleware());
 
-$app->group('/api', function (RouteCollectorProxy $group) use ($storage) {
+$app->group('/api', function (RouteCollectorProxy $group) use ($storage) { // JSON API
     $group->post('/verify-token', SessionApiHandler::class . ':verifyToken')
         ->add(new AuthMiddleware());
 
-    $group->post('/app/{appId}/image', ApplicationHandler::class . ':image');
-
-    $group->patch('/app/{appId}/status/{status}', ApplicationHandler::class . ':setStatus');
-    $group->patch('/app/{appId}/send', ApplicationHandler::class . ':sendApplication');
-    $group->patch('/app/{appId}/gallery/add', ApplicationHandler::class . ':addToGallery');
-    $group->patch('/app/{appId}/gallery/moderate/{decision}', ApplicationHandler::class . ':moderateGallery');
+    $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
+    $group->patch('/app/{appId}/status/{status}', SessionApiHandler::class . ':setStatus');
+    $group->patch('/app/{appId}/send', SessionApiHandler::class . ':sendApplication');
+    $group->patch('/app/{appId}/gallery/add', SessionApiHandler::class . ':addToGallery');
+    $group->patch('/app/{appId}/gallery/moderate/{decision}', SessionApiHandler::class . ':moderateGallery');
         
 })->add(new JsonMiddleware())->add(new JsonBodyParser());
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage) {
+$app->group('', function (RouteCollectorProxy $group) use ($storage) { // Application
 
     $group->get('/start.html', ApplicationHandler::class . ':start');
 
@@ -96,12 +98,26 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) {
     });
 
     $group->get('/brak-sm.html', ApplicationHandler::class . ':missingSM');
+    $group->get('/moje-zgloszenia.html', ApplicationHandler::class . ':myApps');
+    $group->get('/wysylka.html', ApplicationHandler::class . ':shipment');
+
 })  ->add(new HtmlMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new SessionMiddleware());
-    
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) {
+$app->group('', function (RouteCollectorProxy $group) { // user register
+    $group->get('/register.html', UserHandler::class . ':register');
+    $group->post('/register-ok.html', UserHandler::class . ':finish');
+    $group->get('/register-ok.html', function (Request $request, Response $response, $args) {
+        return $response
+            ->withHeader('Location', '/register.html')
+            ->withStatus(302);
+    });
+})  ->add(new HtmlMiddleware())
+    ->add(new LoggedInMiddleware())
+    ->add(new SessionMiddleware());
+
+$app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) { // sessionless pages
 
     $group->get('/login-ok.html', function (Request $request, Response $response, $args) {
         $params = $request->getQueryParams();

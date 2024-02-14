@@ -44,7 +44,7 @@
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail
             {% if sendable %}cta{% else %}ui-disabled{% endif %}
             status-confirmed-waiting">Wyślij zgłoszenie</a>
-        {% elseif config.wysylka is not defined %}
+        {% elseif wysylka is not defined %}
         <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false" 
             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-confirmed-waiting
             {% if sendable %}cta{% else %}ui-disabled{% endif %}">Wyślij zgłoszenie</a>

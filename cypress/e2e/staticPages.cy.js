@@ -10,10 +10,8 @@ describe('Checks static pages', function() {
     })
 
     it('Visits main page', () => {
-        cy.contains('Sprawdź jak to działa')
-        cy.contains('Zgłoś')
-        cy.contains('historię zmian')
-        cy.contains('polityką prywatności')
+        cy.contains('Zgłoś nieprawidłowe parkowanie!')
+        cy.contains('Suppi')
 
         cy.contains('– galeria')
 

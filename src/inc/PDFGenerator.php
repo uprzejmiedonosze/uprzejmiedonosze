@@ -45,7 +45,6 @@ function application2PDF(&$application){
 function readyApps2PDF($city){
     global $storage;
 
-    checkIfLogged();
     $user = $storage->getCurrentUser();
     $userNumber = $user->number;
 

@@ -47,34 +47,12 @@ function getCurrentUserEmail(){
     throw new Exception("Próba pobrania danych niezalogowanego użytkownika");
 }
 
-function checkIfLogged(){
-    if(!isLoggedIn()){
-        redirect("login.html?next=" . getRequestUri());
-    }
-}
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function getRequestUri(){
     return preg_replace('/^\/*/', '', $_SERVER['REQUEST_URI']);
-}
-
-function checkIfRegistered(){
-    global $storage;
-    checkIfLogged();
-
-    try {
-        $user = $storage->getCurrentUser();
-    }catch (Exception $e){
-        redirect("register.html?next=" . getRequestUri());
-    }
-    if(!$user){
-        redirect("register.html?next=" . getRequestUri());
-    }
-    if(!$user->isRegistered()) {
-        redirect("register.html?next=" . getRequestUri());
-    }
 }
 
 function isAdmin(){
@@ -140,14 +118,6 @@ function isIOS(){
     $iPhone  = (bool)stripos($userAgent, "iPhone");
     $iPad    = (bool)stripos($userAgent, "iPad");
     return $iPod || $iPhone || $iPad;
-}
-
-/** @SuppressWarnings("exit") */
-function redirect($destPath){
-    $destPath = preg_replace('/\/+/', '/', $destPath);
-    header("X-Redirect: %HTTPS%://%HOST%/$destPath");
-    header("Location: %HTTPS%://%HOST%/$destPath");
-    die();
 }
 
 /** 

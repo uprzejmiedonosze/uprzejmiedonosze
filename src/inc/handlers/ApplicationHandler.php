@@ -21,7 +21,7 @@ class ApplicationHandler {
                 ->withStatus(302);
         }
 
-        $user = $storage->getCurrentUser();
+        $user = $request->getAttribute('user');
 
         if (isset($params['TermsConfirmation'])) {
             $user->confirmTerms();
@@ -102,12 +102,12 @@ class ApplicationHandler {
         }
 
         $plateId = getParam($params, 'plateId');
-        
+
         $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
         $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
         $comment = getParam($params, 'comment', '');
         $category = intval(getParam($params, 'category'));
-        $witness = getParam($params, 'witness');
+        $witness = isset($params['witness']);
         $extensions = getParam($params, 'extensions', ''); // "6,7", "6", "", missing
         $extensions = array_filter(explode(',', $extensions));
 
@@ -156,27 +156,27 @@ class ApplicationHandler {
                 ->withHeader('Location', '/moje-zgloszenia.html')
                 ->withStatus(302);
         }
-        
+
         unset($_SESSION['newAppId']);
         $application = $storage->getApplication($appId);
         $user = $request->getAttribute('user');
-        
+
         $edited = $application->hasNumber();
-        
+
         $application->setStatus("confirmed");
         $application = $storage->saveApplication($application); // this also sets app number
-        
+
         $user->setLastLocation($application->getLatLng());
         $user->appsCount = $application->seq;
         $storage->saveUser($user);
-        
+
         $storage->updateRecydywa($application->carInfo->plateId);
         $storage->getUserStats(false, $user); // update cache
-        
-        if($edited) {
+
+        if ($edited) {
             $application->address->mapImage = null;
         }
-        
+
         return HtmlMiddleware::render($request, $response, 'dziekujemy', [
             'app' => $application,
             'appsCount' => $user->appsCount,
@@ -206,6 +206,86 @@ class ApplicationHandler {
         return HtmlMiddleware::render($request, $response, 'brak-sm', [
             'appCity' => $appCity,
             'appNumber' => $appNumber
+        ]);
+    }
+
+    public function myApps(Request $request, Response $response, $args) {
+        global $storage;
+
+        $user = $request->getAttribute('user');
+        $applications = $storage->getUserApplications();
+
+        $params = $request->getQueryParams();
+
+        $changeMail = isset($params['changeMail']) && isset($params['city']);
+        $city = urldecode(getParam($params, 'city', ''));
+
+        $countChanged = 0;
+
+        foreach ($applications as $application) {
+            if ($changeMail) {
+                if ($application->status == 'confirmed') {
+                    if ($changeMail && $application->smCity == $city) {
+                        $application->setStatus('confirmed-waiting');
+                        $countChanged++;
+                    }
+                    $storage->saveApplication($application);
+                }
+            }
+        }
+
+        if ($changeMail) {
+            $storage->getUserStats(false, $user); // updates the cache
+        }
+
+        return HtmlMiddleware::render($request, $response, 'moje-zgloszenia', [
+            'appActionButtons' => true,
+            'applications' => $applications,
+            'countChanged' => $countChanged,
+            'applicationsCount' => count($applications),
+            'myAppsSize' => $user->myAppsSize(),
+            'autoSend' => $user->autoSend()
+        ]);
+    }
+
+    public function shipment(Request $request, Response $response, $args) {
+        global $storage;
+        $user = $request->getAttribute('user');
+        $params = $request->getQueryParams();
+
+        if (!isset($params['city'])) {
+            $city = $storage->getNextCityToSent();
+            logger("nextcity = $city");
+            if ($city) {
+                return $response
+                    ->withHeader('Location', '/wysylka.html?city=' . urlencode($city))
+                    ->withStatus(302);
+            }
+            return $response
+                ->withHeader('Location', '/moje-zgloszenia.html')
+                ->withStatus(302);
+        }
+
+        $city = urldecode($params['city']);
+
+        $apps = $storage->getConfirmedAppsByCity($city);
+
+        if (count($apps) == 0) {
+            return $response
+                ->withHeader('Location', '/moje-zgloszenia.html')
+                ->withStatus(302);
+        }
+
+        $sm = reset($apps)->guessSMData();
+
+        return HtmlMiddleware::render($request, $response, 'wysylka', [
+            'appActionButtons' => false,
+            'wysylka' => true,
+            'apps' => $apps,
+            'user' => $user,
+            'city' => $city,
+            'sm' => $sm,
+            'autoSend' => $user->autoSend()
         ]);
     }
 }

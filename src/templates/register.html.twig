@@ -5,12 +5,12 @@
     ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Potwierdź</a>
 {% endblock %}
 
+{% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
+
 {% extends "base.html.twig" %}
 {% block main %}
 
-
-
-<form action="/register-ok.html?next={{ config.signInSuccessUrl ?? 'start.html' }}" id="register-form" method="post" data-ajax="false">
+<form action="/register-ok.html?next={{ signInSuccessUrl ?? 'start.html' }}" id="register-form" method="post" data-ajax="false">
     <h3>Dane konta</h3>
     <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres e-mail oraz adres korespondencyjny.
         Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
@@ -47,7 +47,7 @@
         <label for="exposeData-Y">Nie, mój adres i tak łatwo znaleźć w sieci</label>
     </fieldset>
 
-    {% if config.isRegistered == true %}
+    {% if user.isRegistered %}
     <fieldset data-role="controlgroup">
         <legend for="stopAgresji">Chcę wysyłać swoje zgłoszenia</legend>
         <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
@@ -78,7 +78,7 @@
     {% endif %}
 </form>
 
-{% if config.isRegistered == false %}
+{% if not user.isRegistered %}
 <script>
 $(document).ajaxComplete(function(e, xhr, settings){
     target = e.target.baseURI.replace(/.*uprzejmiedonosze.net./, '');
