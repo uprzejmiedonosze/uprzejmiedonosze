@@ -108,8 +108,8 @@ class ApplicationHandler extends AbstractHandler {
         $comment = getParam($params, 'comment', '');
         $category = intval(getParam($params, 'category'));
         $witness = isset($params['witness']);
-        $extensions = getParam($params, 'extensions', ''); // "6,7", "6", "", missing
-        $extensions = array_filter(explode(',', $extensions));
+        $extensions = getParam($params, 'extensions', []); // "6,7", "6", "", missing
+        $extensions = array_filter($extensions);
 
         $fullAddress = json_decode(getParam($params, 'address'));
         $fullAddress->addressGPS = $fullAddress->address;
