@@ -226,28 +226,6 @@ class AdminToolsDB extends NoSQLite{
         return $apps;
     }
 
-    private function getAllApplicationIdsByEmail($email, $onlyWithNumber = null){
-
-        $onlyWithNumberSQL = ($onlyWithNumber)? " and json_extract(value, '$.status') not in ('ready', 'draft')": "";
-
-        $sql = <<<SQL
-            select key
-            from applications
-            where json_extract(value, '$.user.email') = :email $onlyWithNumberSQL;
-            order by json_extract(value, '$.added')
-        SQL;
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':email', $email);
-        $stmt->execute();
-
-        $appIds = Array();
-
-        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            array_push($appIds, $row[0]);
-        }
-        return $appIds;
-    }
-
     public function upgradeAllApps($version, $dryRun){
         $users = $this->getAllUsers();
         foreach ($users as $email => $user) {

@@ -1,21 +1,17 @@
 <?PHP
 
-use Psr\Http\Message\ResponseInterface;
+
+use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
-use Slim\Psr7\Response;
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
-class SessionMiddleware implements MiddlewareInterface {
-    private static function redirect(string $newLocation): Response {
-        $httpCode = 302;
-        $response = new Response($httpCode);
-        $response = $response->withHeader('Location', $newLocation);
-        return $response;
-    }
-    
+abstract class SessionMiddleware implements MiddlewareInterface {
     public static function isLoggedIn(): bool {
         return isset($_SESSION['user_id'])
             && isset($_SESSION['user_email'])
@@ -26,7 +22,7 @@ class SessionMiddleware implements MiddlewareInterface {
         $isLoggedIn = $request->getAttribute('isLoggedIn');
         $destination = urlencode($request->getUri()->getPath());
         if (!$isLoggedIn)
-            return SessionMiddleware::redirect("/login.html?next=$destination");
+            return AbstractHandler::redirect("/login.html?next=$destination");
         return null;
     }
 
@@ -34,11 +30,13 @@ class SessionMiddleware implements MiddlewareInterface {
         $isRegistered = $request->getAttribute('isRegistered');
         $destination = urlencode($request->getUri()->getPath());
         if (!$isRegistered)
-            return SessionMiddleware::redirect("/register.html?next=$destination");
+            return AbstractHandler::redirect("/register.html?next=$destination");
         return null;
     }
 
-    public function process(Request $request, RequestHandler $handler): ResponseInterface {
+    public abstract function process(Request $request, RequestHandler $handler): Response;
+
+    public function preprocess(Request $request, RequestHandler $handler): Array {
         logger(static::class . ": {$request->getUri()->getPath()}");
         $isLoggedIn = $this->isLoggedIn();
         $request = $request->withAttribute('isLoggedIn', $isLoggedIn);
@@ -54,12 +52,22 @@ class SessionMiddleware implements MiddlewareInterface {
             $request = $request->withAttribute('isRegistered', $isRegistered);
         }
         
+        return [$request, $handler];
+    }
+}
+
+class OptionalUserMiddleware extends SessionMiddleware {
+    public function process(Request $request, RequestHandler $handler): Response {
+        [$request, $handler] = parent::preprocess($request, $handler);
+        logger(static::class . ": {$request->getUri()->getPath()}");
         return $handler->handle($request);
     }
 }
 
+
 class LoggedInMiddleware extends SessionMiddleware {
-    public function process(Request $request, RequestHandler $handler): ResponseInterface {
+    public function process(Request $request, RequestHandler $handler): Response {
+        [$request, $handler] = parent::preprocess($request, $handler);
         logger(static::class . ": {$request->getUri()->getPath()}");
         $checkLoggedIn = SessionMiddleware::checkLoggedIn($request);
         if($checkLoggedIn) return $checkLoggedIn;
@@ -68,7 +76,8 @@ class LoggedInMiddleware extends SessionMiddleware {
 }
 
 class RegisteredMiddleware extends SessionMiddleware {
-    public function process(Request $request, RequestHandler $handler): ResponseInterface {
+    public function process(Request $request, RequestHandler $handler): Response {
+        [$request, $handler] = parent::preprocess($request, $handler);
         logger(static::class . ": {$request->getUri()->getPath()}");
         $checkLoggedIn = SessionMiddleware::checkLoggedIn($request);
         if($checkLoggedIn) return $checkLoggedIn;
@@ -79,7 +88,8 @@ class RegisteredMiddleware extends SessionMiddleware {
 }
 
 class ModeratorMiddleware extends SessionMiddleware {
-    public function process(Request $request, RequestHandler $handler): ResponseInterface {
+    public function process(Request $request, RequestHandler $handler): Response {
+        [$request, $handler] = parent::preprocess($request, $handler);
         logger(static::class . ": {$request->getUri()->getPath()}");
         $checkLoggedIn = SessionMiddleware::checkLoggedIn($request);
         if($checkLoggedIn) return $checkLoggedIn;
@@ -94,7 +104,8 @@ class ModeratorMiddleware extends SessionMiddleware {
 }
 
 class AdminMiddleware extends SessionMiddleware {
-    public function process(Request $request, RequestHandler $handler): ResponseInterface {
+    public function process(Request $request, RequestHandler $handler): Response {
+        [$request, $handler] = parent::preprocess($request, $handler);
         logger(static::class . ": {$request->getUri()->getPath()}");
         $checkLoggedIn = SessionMiddleware::checkLoggedIn($request);
         if($checkLoggedIn) return $checkLoggedIn;

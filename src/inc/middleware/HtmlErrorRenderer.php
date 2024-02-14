@@ -4,11 +4,11 @@ use Slim\Interfaces\ErrorRendererInterface;
 
 class HtmlErrorRenderer implements ErrorRendererInterface {
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string {
-        return exceptionToErrorHtml($exception);
+        return exceptionToErrorHtml($exception, $displayErrorDetails);
     }
 }
 
-function exceptionToErrorHtml($exception): string {
+function exceptionToErrorHtml($exception, $displayErrorDetails): string {
     try{
         $email = getCurrentUserEmail();
     }catch(Exception $e){

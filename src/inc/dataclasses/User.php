@@ -4,6 +4,9 @@ require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
 use \stdClass as stdClass;
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 /**
  * User class.
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -16,6 +19,7 @@ class User extends JSONObject{
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __construct($json = null) {
+        global $_SESSION;
         if($json){
             parent::__construct($json);
             if (!isset($this->appsCount))

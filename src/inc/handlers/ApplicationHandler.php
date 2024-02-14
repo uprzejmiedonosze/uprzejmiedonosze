@@ -6,14 +6,18 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 class ApplicationHandler extends AbstractHandler {
-    public function start(Request $request, Response $response, $args): Response {
+    public function start(Request $request, Response $response): Response {
         return AbstractHandler::render($request, $response, 'start', [
             'latestTermUpdate' => LATEST_TERMS_UPDATE
         ]);
     }
 
-    public function newApplication(Request $request, Response $response, $args): Response {
+    public function newApplication(Request $request, Response $response): Response {
         global $storage;
         $params = $request->getQueryParams();
         if (isset($params['cleanup'])) {
@@ -89,7 +93,7 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
-    public function confirm(Request $request, Response $response, $args): Response {
+    public function confirm(Request $request, Response $response): Response {
         $params = (array)$request->getParsedBody();
 
         $appId = getParam($params, 'applicationId', -1);
@@ -141,7 +145,7 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
-    public function finish(Request $request, Response $response, $args): Response {
+    public function finish(Request $request, Response $response): Response {
         global $storage;
         $params = (array)$request->getParsedBody();
 
@@ -180,7 +184,7 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
-    public function missingSM(Request $request, Response $response, $args): Response {
+    public function missingSM(Request $request, Response $response): Response {
         global $storage;
         $params = $request->getQueryParams();
         $appId = getParam($params, 'id', -1);
@@ -203,11 +207,11 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
-    public function myApps(Request $request, Response $response, $args): Response {
+    public function myApps(Request $request, Response $response): Response {
         global $storage;
 
         $user = $request->getAttribute('user');
-        $applications = $storage->getUserApplications();
+        $applications = $storage->getUserApplications($user);
 
         $params = $request->getQueryParams();
 
@@ -242,7 +246,7 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
-    public function shipment(Request $request, Response $response, $args): Response {
+    public function shipment(Request $request, Response $response): Response {
         global $storage;
         $user = $request->getAttribute('user');
         $params = $request->getQueryParams();

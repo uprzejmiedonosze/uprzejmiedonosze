@@ -16,13 +16,15 @@ abstract class CityAPI {
     }
 
     function formatMessage(&$application, $limit = 10000){
-        return substr(generate('_application.txt.twig', [
+        $twig = initBareTwig();
+        return substr($twig->render('_application.txt.twig', [
             'app' => $application
         ]), 0, $limit);
     }
 
     function formatEmail(&$application, $withUserData = null){
-        return generate('_application.email.twig', [
+        $twig = initBareTwig();
+        return $twig->render('_application.email.twig', [
             'app' => $application, 
             'config' => [ 'isAppOwnerOrAdmin' => $withUserData ]
         ]);

@@ -15,15 +15,17 @@ require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
 
-$DISABLE_SESSION=false;
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Exception\HttpNotFoundException;
-
 use Slim\Views\TwigMiddleware;
 use Slim\Routing\RouteCollectorProxy;
+
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();

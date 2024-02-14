@@ -1,11 +1,12 @@
 <?php
-use \JSONObject as JSONObject;
+require_once(__DIR__ . '/../PDFGenerator.php');
 
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use \JSONObject as JSONObject;
 
 class Mail extends CityAPI {
 
@@ -55,7 +56,6 @@ class Mail extends CityAPI {
         $application->sent->$messageId = $messageId;
         $application->sent->method = "Mail";
 
-        require(__DIR__ . '/../PDFGenerator.php');
         [$fileatt, $fileattname] = application2PDF($application);
 
         $message->attachFromPath($fileatt, $fileattname);

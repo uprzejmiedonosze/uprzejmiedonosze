@@ -1,12 +1,14 @@
 <?PHP
 
 require_once(__DIR__ . '/AbstractHandler.php');
+require(__DIR__ . '/../API.php');
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-require(__DIR__ . '/../API.php');
-
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 class SessionApiHandler extends AbstractHandler {
     public function image(Request $request, Response $response, $args): Response {
         global $storage;
