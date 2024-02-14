@@ -113,12 +113,13 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $appId = getParam($params, 'id');
         return AbstractHandler::redirect("/ud-$appId.html");
     });
+
     $group->get('/ud-{appId}.html', function (Request $request, Response $response, $args) use ($storage) {
         $appId = $args['appId'];
         $application = $storage->getApplication($appId);
     
-        $isAppOwner = $application->isAppOwner();
         $user = $request->getAttribute('user', null);
+        $isAppOwner = $application->isAppOwner($user);
         $isAppOwnerOrAdmin = $user?->isAdmin() || $isAppOwner;
     
         return AbstractHandler::render($request, $response, "zgloszenie", [
