@@ -3,6 +3,8 @@ require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/dataclasses/Exceptions.php');
 use \Exception as Exception;
 
+session_start();
+
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
@@ -24,15 +26,22 @@ function cleanWhiteChars($input) {
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
-function logger($msg, $force = null){
-    $user = '';
-    if(!empty($_SESSION['user_email'])){
-        $user = " [" . $_SESSION['user_email'] . ']';
-    }
-
+function logger(string|object|array $msg, $force = null): string {
     $time = date(DT_FORMAT);
-    if(!isProd() || $force){
-        if (!isDev()) error_log($time . $user . "\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+    if(!isProd() || $force) {
+        if (isDev()) return $time;
+
+        $user = "[" . ($_SESSION['user_email'] ?? '') . ']';
+
+        if (!is_string($msg))
+            $msg = print_r($msg, true);
+
+        $bt = debug_backtrace();
+        $caller = array_shift($bt);
+        $location = $caller['file'] . ':' . $caller['line'];
+        $location = preg_replace('/^.var.www.%HOST%.webapp/i', '', $location);
+
+        error_log("$time $user $location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
     return $time;
 }
