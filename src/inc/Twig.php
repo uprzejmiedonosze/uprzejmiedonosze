@@ -3,6 +3,23 @@ use Slim\Views\Twig;
 use \Twig\Cache\FilesystemCache as FilesystemCache;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 use \Twig\Environment as Environment;
+use \Twig\TwigFunction;
+use \Twig\Extension\AbstractExtension;
+
+class TwigExtension extends AbstractExtension {
+    public function getFunctions() {
+        return [
+            new TwigFunction('iff', function ($bool, $string) {
+                if ($bool) return $string;
+                return '';
+            }),
+            new TwigFunction('active', function ($menu, $menuPos) {
+                if ($menu == $menuPos) return 'class="active"';
+                return '';
+            })
+        ];
+    }
+}
 
 function _twigConfig(): array {
     return [
@@ -26,17 +43,3 @@ function initBareTwig() {
     return $twig;
 }
 
-class TwigExtension extends \Twig\Extension\AbstractExtension {
-    public function getFunctions() {
-        return [
-            new \Twig\TwigFunction('iff', function ($bool, $string) {
-                if ($bool) return $string;
-                return '';
-            }),
-            new \Twig\TwigFunction('active', function ($menu, $menuPos) {
-                if ($menu == $menuPos) return 'class="active"';
-                return '';
-            })
-        ];
-    }
-}
