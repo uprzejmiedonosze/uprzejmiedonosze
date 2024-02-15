@@ -46,6 +46,7 @@ class HtmlMiddleware implements MiddlewareInterface {
 
     public function process(Request $request, RequestHandler $handler): Response {
         logger(static::class . ": {$request->getUri()->getPath()}");
+        $request = $request->withAttribute('content', 'html');
         $queryParams = $request->getQueryParams();
 
         $parameters = HtmlMiddleware::getDefaultParameters(

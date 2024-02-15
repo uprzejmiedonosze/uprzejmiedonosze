@@ -21,23 +21,29 @@ abstract class SessionMiddleware implements MiddlewareInterface {
     protected static function checkLoggedIn(Request $request): Response|null {
         $isLoggedIn = $request->getAttribute('isLoggedIn');
         $destination = urlencode($request->getUri()->getPath());
-        if (!$isLoggedIn)
+        if (!$isLoggedIn) {
+            if ($request->getAttribute('content') == 'json')
+                throw new HttpForbiddenException($request, "User not logged in");
             return AbstractHandler::redirect("/login.html?next=$destination");
+        }
         return null;
     }
 
     protected static function checkRegistered(Request $request): Response|null {
         $isRegistered = $request->getAttribute('isRegistered');
         $destination = urlencode($request->getUri()->getPath());
-        if (!$isRegistered)
+        if (!$isRegistered) {
+            if ($request->getAttribute('content') == 'json')
+                throw new HttpForbiddenException($request, "User not registered");
             return AbstractHandler::redirect("/register.html?next=$destination");
+        }
         return null;
     }
 
     public abstract function process(Request $request, RequestHandler $handler): Response;
 
     public function preprocess(Request $request, RequestHandler $handler): Array {
-        logger(static::class . ": {$request->getUri()->getPath()}");
+        logger("SessionMiddleware: {$request->getUri()->getPath()}");
         $isLoggedIn = $this->isLoggedIn();
         $request = $request->withAttribute('isLoggedIn', $isLoggedIn);
         if ($isLoggedIn)
