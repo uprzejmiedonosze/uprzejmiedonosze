@@ -12,7 +12,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class ApplicationHandler extends AbstractHandler {
     public function start(Request $request, Response $response): Response {
-        return AbstractHandler::render($request, $response, 'start', [
+        return AbstractHandler::renderHtml($request, $response, 'start', [
             'latestTermUpdate' => LATEST_TERMS_UPDATE
         ]);
     }
@@ -80,7 +80,7 @@ class ApplicationHandler extends AbstractHandler {
         // edit app older than 1y
         if ($dtMin > $dt) $dtMin = $dt;
 
-        return AbstractHandler::render($request, $response, 'nowe-zgloszenie', [
+        return AbstractHandler::renderHtml($request, $response, 'nowe-zgloszenie', [
             'config' => [
                 'edit' => $edit,
                 'lastLocation' => $user->getLastLocation()
@@ -134,7 +134,7 @@ class ApplicationHandler extends AbstractHandler {
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
         }
 
-        return AbstractHandler::render($request, $response, 'potwierdz', [
+        return AbstractHandler::renderHtml($request, $response, 'potwierdz', [
             'config' => [
                 'isAppOwnerOrAdmin' => true,
                 'confirmationScreen' => true
@@ -175,7 +175,7 @@ class ApplicationHandler extends AbstractHandler {
             $application->address->mapImage = null;
         }
 
-        return AbstractHandler::render($request, $response, 'dziekujemy', [
+        return AbstractHandler::renderHtml($request, $response, 'dziekujemy', [
             'app' => $application,
             'appsCount' => $user->appsCount,
             'edited' => $edited,
@@ -201,7 +201,7 @@ class ApplicationHandler extends AbstractHandler {
             }
         }
 
-        return AbstractHandler::render($request, $response, 'brak-sm', [
+        return AbstractHandler::renderHtml($request, $response, 'brak-sm', [
             'appCity' => $appCity,
             'appNumber' => $appNumber
         ]);
@@ -236,7 +236,7 @@ class ApplicationHandler extends AbstractHandler {
             $storage->getUserStats(false, $user); // updates the cache
         }
 
-        return AbstractHandler::render($request, $response, 'moje-zgloszenia', [
+        return AbstractHandler::renderHtml($request, $response, 'moje-zgloszenia', [
             'appActionButtons' => true,
             'applications' => $applications,
             'countChanged' => $countChanged,
@@ -270,7 +270,7 @@ class ApplicationHandler extends AbstractHandler {
 
         $sm = reset($apps)->guessSMData();
 
-        return AbstractHandler::render($request, $response, 'wysylka', [
+        return AbstractHandler::renderHtml($request, $response, 'wysylka', [
             'appActionButtons' => false,
             'wysylka' => true,
             'apps' => $apps,
@@ -284,10 +284,8 @@ class ApplicationHandler extends AbstractHandler {
     public function package(Request $request, Response $response, $args): Response {
         $city = $args['city'];
         $user = $request->getAttribute('user');
-        [$pdf, $filename] = readyApps2PDF($user, $city);
-        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
-        readfile($pdf);
-        return $response;
+        [$path, $filename] = readyApps2PDF($user, $city);
+        return AbstractHandler::renderPdf($response, $path, $filename);
     }
 
 }

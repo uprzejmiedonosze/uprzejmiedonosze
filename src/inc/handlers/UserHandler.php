@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class UserHandler extends AbstractHandler {
     public function register(Request $request, Response $response): Response {
         $user = $request->getAttribute('user');
-        return AbstractHandler::render($request, $response, 'register', [
+        return AbstractHandler::renderHtml($request, $response, 'register', [
             'signInSuccessUrl' => isset($_GET['next']) ? $_GET['next'] : 'start.html',
             'user' => $user
         ]);

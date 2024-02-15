@@ -11,7 +11,7 @@ class StaticPagesHandler extends AbstractHandler {
     function root(Request $request, Response $response): Response {
         global $storage;
         $mainPageStats = $storage->getMainPageStats();
-        return AbstractHandler::render($request, $response, 'index', [
+        return AbstractHandler::renderHtml($request, $response, 'index', [
             'config' => [
                 'stats' => $mainPageStats
             ]
@@ -19,7 +19,7 @@ class StaticPagesHandler extends AbstractHandler {
     }
 
     function rules(Request $request, Response $response): Response {
-        return AbstractHandler::render($request, $response, 'regulamin', [
+        return AbstractHandler::renderHtml($request, $response, 'regulamin', [
             'latestTermUpdate' => LATEST_TERMS_UPDATE
         ]);
     }
@@ -42,7 +42,7 @@ class StaticPagesHandler extends AbstractHandler {
             }
         }
         $sortedSMHints = array_unique($SMHints, SORT_LOCALE_STRING);
-        return AbstractHandler::render($request, $response, 'faq', [
+        return AbstractHandler::renderHtml($request, $response, 'faq', [
             'smAddresses' => implode(', ', $smNames),
             'SMHints' => $sortedSMHints
         ]);
@@ -50,7 +50,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     function gallery(Request $request, Response $response) {
         global $storage;
-        return AbstractHandler::render($request, $response, 'galeria', [
+        return AbstractHandler::renderHtml($request, $response, 'galeria', [
             'appActionButtons' => false,
             'galleryByCity' => $storage->getGalleryByCity()
         ]);
@@ -58,9 +58,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     public function application(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
-        [$pdf, $filename] = application2PDFById($appId);
-        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
-        readfile($pdf);
-        return $response;
+        [$path, $filename] = application2PDFById($appId);
+        return AbstractHandler::renderPdf($response, $path, $filename);
     }
 }

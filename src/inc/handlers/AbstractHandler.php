@@ -17,7 +17,13 @@ abstract class AbstractHandler {
         return $response;
     }
 
-    public static function render(Request $request, Response $response, string $route, Array $extraParameters=[]): Response {
+    public static function renderPdf(Response $response, $path, $filename): Response {
+        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
+        $response->getBody()->write(file_get_contents($path));
+        return $response;
+    }
+
+    public static function renderHtml(Request $request, Response $response, string $route, Array $extraParameters=[]): Response {
         global $storage;
 
         $parameters = $request->getAttribute('parameters');

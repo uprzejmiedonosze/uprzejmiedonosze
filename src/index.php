@@ -12,6 +12,7 @@ require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/HtmlMiddleware.php');
 require(__DIR__ . '/../inc/middleware/JsonBodyParser.php');
 require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
+require(__DIR__ . '/../inc/middleware/JsonErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
 
@@ -36,10 +37,11 @@ $app->add(TwigMiddleware::create($app, $twig));
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
+$errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::class);
 
 $app->group('', function (RouteCollectorProxy $group) { // PDFs
-    $group->get('/{appId}.pdf', StaticPagesHandler::class . 'application');
-    $group->get('/city/{city}.pdf', ApplicationHandler::class . 'package')
+    $group->get('/{appId}.pdf', StaticPagesHandler::class . ':application');
+    $group->get('/city/{city}.pdf', ApplicationHandler::class . ':package')
         ->add(new RegisteredMiddleware());
 })  ->add(new OptionalUserMiddleware())
     ->add(new PdfMiddleware());
@@ -48,7 +50,7 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
     $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {
         $applications = $storage->getGalleryModerationApps();
-        return AbstractHandler::render($request, $response, 'adm-gallery', [
+        return AbstractHandler::renderHtml($request, $response, 'adm-gallery', [
             'appActionButtons' => false,
             'applications' => $applications
         ]);
@@ -103,7 +105,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $params = $request->getQueryParams();
         $next = getParam($params, 'next', '/start.html');
         
-        return AbstractHandler::render($request, $response, 'login-ok', [
+        return AbstractHandler::renderHtml($request, $response, 'login-ok', [
             'config' => [
                 'signInSuccessUrl' => $next
             ]
@@ -124,7 +126,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $isAppOwner = $application->isAppOwner($user);
         $isAppOwnerOrAdmin = $user?->isAdmin() || $isAppOwner;
     
-        return AbstractHandler::render($request, $response, "zgloszenie", [
+        return AbstractHandler::renderHtml($request, $response, "zgloszenie", [
             'head' => [
                 'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
                 'shortTitle' => "Zgłoszenie {$application->number}",
@@ -141,7 +143,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
     $group->get('/zapytaj-o-status.html', function (Request $request, Response $response, $args) use ($storage) {
         $sent = $storage->getSentApplications(31);
 
-        return AbstractHandler::render($request, $response, 'zapytaj-o-status', [
+        return AbstractHandler::renderHtml($request, $response, 'zapytaj-o-status', [
             'applications' => $sent
         ]);
     });
@@ -159,7 +161,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
             $name = $user->data->name;
         }
 
-        return AbstractHandler::render($request, $response, 'dostep-do-informacji-publicznej', [
+        return AbstractHandler::renderHtml($request, $response, 'dostep-do-informacji-publicznej', [
             'callDate' => date('j-m-Y', strtotime('-6 hour')),
             'callTime' => date('H:i', strtotime('-6 hour')),
             'checkTime' => date('H:00', strtotime('-2 hour')),
@@ -173,7 +175,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         unset($_SESSION['token']);
         unset($_SESSION['user_id']);
         unset($_SESSION['user_email']);
-        return AbstractHandler::render($request, $response, 'login', [
+        return AbstractHandler::renderHtml($request, $response, 'login', [
             'config' => [
                 'logout' => true
             ]
@@ -185,7 +187,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         $next = getParam($params, 'next', '/');
         $error = getParam($params, 'error', '');
         
-        return AbstractHandler::render($request, $response, 'login', [
+        return AbstractHandler::renderHtml($request, $response, 'login', [
             'config' => [
                 'signInSuccessUrl' => $next,
                 'logout' => false,
@@ -226,9 +228,9 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESS
         }
     
         try {
-            return AbstractHandler::render($request, $response, $route);
+            return AbstractHandler::renderHtml($request, $response, $route);
         } catch (\Twig\Error\LoaderError $error) {
-            return AbstractHandler::render($request, $response, "404");
+            return AbstractHandler::renderHtml($request, $response, "404");
         }
     });
 
