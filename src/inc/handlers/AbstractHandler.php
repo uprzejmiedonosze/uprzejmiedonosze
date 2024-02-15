@@ -23,6 +23,12 @@ abstract class AbstractHandler {
         return $response;
     }
 
+    public static function renderCsv(Response $response, $content, $filename): Response {
+        $response = $response->withHeader('Content-disposition', "inline; filename=$filename");
+        $response->getBody()->write($content);
+        return $response;
+    }
+
     public static function renderHtml(Request $request, Response $response, string $route, Array $extraParameters=[]): Response {
         global $storage;
         $params = $request->getQueryParams();

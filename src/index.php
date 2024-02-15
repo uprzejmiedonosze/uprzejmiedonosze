@@ -15,6 +15,7 @@ require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
 require(__DIR__ . '/../inc/middleware/JsonErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
+require(__DIR__ . '/../inc/middleware/CsvMiddleware.php');
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -46,6 +47,8 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
 })  ->add(new OptionalUserMiddleware())
     ->add(new PdfMiddleware());
 
+$app->get('/stats/{file}.csv', StaticPagesHandler::class . ':csv')
+    ->add(new CsvMiddleware());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
     $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {

@@ -4,7 +4,7 @@ import Data from "highcharts/modules/data";
 Data(Highcharts);
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (!$(".stats").length) return;
+  if (!$(".statystyki").length) return;
 
   Highcharts.setOptions({
     lang: {
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsByDay", {
     data: {
-      csvURL: window.location.origin + "/api/csv.html?file=statsByDay",
+      csvURL: window.location.origin + "/stats/appsByDay.csv",
       firstRowAsNames: false
     },
     chart: {
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsByYear", {
     data: {
-      csvURL: window.location.origin + "/api/csv.html?file=statsByYear",
+      csvURL: window.location.origin + "/stats/byYear.csv",
       firstRowAsNames: false
     },
     chart: {
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsAppsByCity", {
     data: {
-      csvURL: window.location.origin + "/api/csv.html?file=statsAppsByCity",
+      csvURL: window.location.origin + "/stats/appsByCity.csv",
       firstRowAsNames: false
     },
     chart: {
@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsByCarBrand", {
     data: {
-      csvURL: window.location.origin + "/api/csv.html?file=statsByCarBrand",
+      csvURL: window.location.origin + "/stats/byCarBrand.csv",
       firstRowAsNames: false
     },
     chart: {
