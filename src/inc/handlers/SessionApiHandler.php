@@ -20,9 +20,9 @@ class SessionApiHandler extends AbstractHandler {
 
         $application = $storage->getApplication($appId);
 
-        $dateTime = isset($_POST['dateTime']) ? $_POST['dateTime'] : null;
-        $dtFromPicture = isset($_POST['dtFromPicture']) ? $_POST['dtFromPicture'] == 'true' : null;
-        $latLng = isset($_POST['latLng']) ? $_POST['latLng'] : null;
+        $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;
+        $dtFromPicture = isset($params['dtFromPicture']) ? $params['dtFromPicture'] == 'true' : null;
+        $latLng = isset($params['latLng']) ? $params['latLng'] : null;
         $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
 
         return $this->renderJson($response, $application);
