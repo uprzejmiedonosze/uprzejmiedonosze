@@ -96,24 +96,24 @@ class ApplicationHandler extends AbstractHandler {
     public function confirm(Request $request, Response $response): Response {
         $params = (array)$request->getParsedBody();
 
-        $appId = getParam($params, 'applicationId', -1);
+        $appId = $this->getParam($params, 'applicationId', -1);
         if ($appId == -1) {
             return $this->redirect('/nowe-zgloszenie.html');
         }
 
-        $plateId = getParam($params, 'plateId');
+        $plateId = $this->getParam($params, 'plateId');
 
-        $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
-        $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
-        $comment = getParam($params, 'comment', '');
-        $category = intval(getParam($params, 'category'));
+        $dtFromPicture = $this->getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
+        $datetime = $this->getParam($params, 'datetime'); // "2018-02-02T19:48:10"
+        $comment = $this->getParam($params, 'comment', '');
+        $category = intval($this->getParam($params, 'category'));
         $witness = isset($params['witness']);
-        $extensions = getParam($params, 'extensions', []); // "6,7", "6", "", missing
+        $extensions = $this->getParam($params, 'extensions', []); // "6,7", "6", "", missing
         $extensions = array_filter($extensions);
 
-        $fullAddress = json_decode(getParam($params, 'address'));
+        $fullAddress = json_decode($this->getParam($params, 'address'));
         $fullAddress->addressGPS = $fullAddress->address;
-        $fullAddress->address = getParam($params, 'lokalizacja');
+        $fullAddress->address = $this->getParam($params, 'lokalizacja');
 
         $user = $request->getAttribute('user');
 
@@ -149,7 +149,7 @@ class ApplicationHandler extends AbstractHandler {
         global $storage;
         $params = (array)$request->getParsedBody();
 
-        $appId = getParam($params, 'applicationId', -1);
+        $appId = $this->getParam($params, 'applicationId', -1);
 
         if (!isset($_SESSION['newAppId']) || $appId == -1) {
             return $this->redirect('/moje-zgloszenia.html');
@@ -187,7 +187,7 @@ class ApplicationHandler extends AbstractHandler {
     public function missingSM(Request $request, Response $response): Response {
         global $storage;
         $params = $request->getQueryParams();
-        $appId = getParam($params, 'id', -1);
+        $appId = $this->getParam($params, 'id', -1);
         $appCity = '';
         $appNumber = '';
         if ($appId !== -1) {
@@ -216,7 +216,7 @@ class ApplicationHandler extends AbstractHandler {
         $params = $request->getQueryParams();
 
         $changeMail = isset($params['changeMail']) && isset($params['city']);
-        $city = urldecode(getParam($params, 'city', ''));
+        $city = urldecode($this->getParam($params, 'city', ''));
 
         $countChanged = 0;
 

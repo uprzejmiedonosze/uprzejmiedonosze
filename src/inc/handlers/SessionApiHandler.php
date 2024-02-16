@@ -15,8 +15,8 @@ class SessionApiHandler extends AbstractHandler {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
 
-        $imageBytes = explode( ',', getParam($params, 'image_data'))[1]; 
-        $pictureType = getParam($params, 'pictureType');
+        $imageBytes = explode( ',', $this->getParam($params, 'image_data'))[1]; 
+        $pictureType = $this->getParam($params, 'pictureType');
 
         $application = $storage->getApplication($appId);
 

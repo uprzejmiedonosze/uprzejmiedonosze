@@ -65,7 +65,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     public function applicationRedirect(Request $request, Response $response, $args) {
         $params = $request->getQueryParams();
-        $appId = getParam($params, 'id');
+        $appId = $this->getParam($params, 'id');
         return AbstractHandler::redirect("/ud-$appId.html");
     }
 
@@ -126,8 +126,8 @@ class StaticPagesHandler extends AbstractHandler {
 
     public function login(Request $request, Response $response, $args) {
         $params = $request->getQueryParams();
-        $next = getParam($params, 'next', '/');
-        $error = getParam($params, 'error', '');
+        $next = $this->getParam($params, 'next', '/');
+        $error = $this->getParam($params, 'error', '');
         
         return AbstractHandler::renderHtml($request, $response, 'login', [
             'config' => [
@@ -140,7 +140,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     public function loginOK(Request $request, Response $response, $args): Response {
         $params = $request->getQueryParams();
-        $next = getParam($params, 'next', '/start.html');
+        $next = $this->getParam($params, 'next', '/start.html');
         
         return AbstractHandler::renderHtml($request, $response, 'login-ok', [
             'config' => [

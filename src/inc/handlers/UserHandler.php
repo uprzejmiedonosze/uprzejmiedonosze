@@ -10,7 +10,7 @@ class UserHandler extends AbstractHandler {
         $user = $request->getAttribute('user');
         $params = $request->getQueryParams();
         return AbstractHandler::renderHtml($request, $response, 'register', [
-            'signInSuccessUrl' => getParam($params, 'next', '/start.html'),
+            'signInSuccessUrl' => $this->getParam($params, 'next', '/start.html'),
             'user' => $user
         ]);
     }
@@ -18,18 +18,18 @@ class UserHandler extends AbstractHandler {
     public function finish(Request $request): Response {
         global $storage;
         $params = (array)$request->getParsedBody();
-        $signInSuccessUrl = getParam($params, 'next', '/start.html');
-        $name = capitalizeName(getParam($params, 'name'));
+        $signInSuccessUrl = $this->getParam($params, 'next', '/start.html');
+        $name = capitalizeName($this->getParam($params, 'name'));
 
-        $address = getParam($params, 'address');
+        $address = $this->getParam($params, 'address');
         $address = str_replace(', Polska', '', cleanWhiteChars($address));
 
-        $msisdn = getParam($params, 'msisdn', '');
+        $msisdn = $this->getParam($params, 'msisdn', '');
 
-        $exposeData  = getParam($params, 'exposeData', 'N') == 'Y';
-        $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
-        $autoSend    = getParam($params, 'autoSend', 'Y') == 'Y';
-        $myAppsSize  = getParam($params, 'myAppsSize', 200);
+        $exposeData  = $this->getParam($params, 'exposeData', 'N') == 'Y';
+        $stopAgresji = $this->getParam($params, 'stopAgresji', 'SM') == 'SA';
+        $autoSend    = $this->getParam($params, 'autoSend', 'Y') == 'Y';
+        $myAppsSize  = $this->getParam($params, 'myAppsSize', 200);
 
         $user = $request->getAttribute('user');
         $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);

@@ -29,6 +29,15 @@ abstract class AbstractHandler {
         return $response;
     }
 
+    public static function getParam(array $params, string $name, mixed $default=null) {
+        $param = $params[$name] ?? $default;
+        if (is_null($param)) {
+            throw new MissingParamException($name);
+        }
+        return $param;
+    }
+    
+
     public static function renderHtml(Request $request, Response $response, string $route, Array $extraParameters=[]): Response {
         global $storage;
         $params = $request->getQueryParams();

@@ -127,11 +127,3 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessio
 
 
 $app->run();
-
-function getParam(array $params, string $name, mixed $default=null) {
-    $param = $params[$name] ?? $default;
-    if (is_null($param)) {
-        throw new \MissingParamException($name);
-    }
-    return $param;
-}
