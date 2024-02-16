@@ -5,6 +5,7 @@ require_once(__DIR__ . '/../PDFGenerator.php');
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpNotFoundException;
 
 class StaticPagesHandler extends AbstractHandler {
 
@@ -56,10 +57,135 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function application(Request $request, Response $response, $args): Response {
+    public function applicationPdf(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         [$path, $filename] = application2PDFById($appId);
         return AbstractHandler::renderPdf($response, $path, $filename);
     }
 
+    public function applicationRedirect(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $appId = getParam($params, 'id');
+        return AbstractHandler::redirect("/ud-$appId.html");
+    }
+
+    public function applicationHtml(Request $request, Response $response, $args) {
+        global $storage;
+        $appId = $args['appId'];
+        $application = $storage->getApplication($appId);
+    
+        $user = $request->getAttribute('user');
+        $isAppOwner = $application->isAppOwner($user);
+        $isAppOwnerOrAdmin = $user?->isAdmin() || $isAppOwner;
+    
+        return AbstractHandler::renderHtml($request, $response, "zgloszenie", [
+            'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
+            'shortTitle' => "Zgłoszenie {$application->number}",
+            'image' => $application->contextImage->thumb,
+            'description' => "Samochód o nr. rejestracyjnym {$application->carInfo->plateId} " .
+                "w okolicy adresu {$application->address->address}. {$application->getCategory()->getShort()}",
+            'app' => $application,
+            'config' => [
+                'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin,
+                'isAppOwner' => $isAppOwner
+            ]
+        ]);
+    }
+
+    public function askForStatus(Request $request, Response $response, $args) {
+        global $storage;
+        $sent = $storage->getSentApplications(31);
+
+        return AbstractHandler::renderHtml($request, $response, 'zapytaj-o-status', [
+            'applications' => $sent
+        ]);
+    }
+
+    public function publicInfo(Request $request, Response $response, $args) {
+        $email = '<i>[xxx@xxx.pl]</i>';
+        $msisdn = '<i>[XXX XXX XXX]</i>';
+        $name = '<i>[Imię Nazwisko]</i>';
+
+        if ($request->getAttribute('isRegistered')) {
+            $user = $request->getAttribute('user');
+            if (!empty($user->data->msisdn))
+                $msisdn = $user->data->msisdn;
+            $email = $user->data->email;
+            $name = $user->data->name;
+        }
+
+        return AbstractHandler::renderHtml($request, $response, 'dostep-do-informacji-publicznej', [
+            'callDate' => date('j-m-Y', strtotime('-6 hour')),
+            'callTime' => date('H:i', strtotime('-6 hour')),
+            'checkTime' => date('H:00', strtotime('-2 hour')),
+            'msisdn' => $msisdn,
+            'email' => $email,
+            'name' => $name
+        ]);
+    }
+
+    public function login(Request $request, Response $response, $args) {
+        $params = $request->getQueryParams();
+        $next = getParam($params, 'next', '/');
+        $error = getParam($params, 'error', '');
+        
+        return AbstractHandler::renderHtml($request, $response, 'login', [
+            'config' => [
+                'signInSuccessUrl' => $next,
+                'logout' => false,
+                'error' => $error
+            ]
+        ]);
+    }
+
+    public function loginOK(Request $request, Response $response, $args): Response {
+        $params = $request->getQueryParams();
+        $next = getParam($params, 'next', '/start.html');
+        
+        return AbstractHandler::renderHtml($request, $response, 'login-ok', [
+            'config' => [
+                'signInSuccessUrl' => $next
+            ]
+        ]);
+    }
+
+    public function logout(Request $request, Response $response, $args) {
+        unset($_SESSION['token']);
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_email']);
+        return AbstractHandler::renderHtml($request, $response, 'login', [
+            'config' => [
+                'logout' => true
+            ]
+        ]);
+    }
+
+    public function default(Request $request, Response $response, $args) {
+        $ROUTES = [
+            '404',
+            'changelog',
+            'epuap',
+            'jak-zglosic-nielegalne-parkowanie',
+            'maintenance',
+            'mandat',
+            'polityka-prywatnosci',
+            'projekt',
+            'przepisy',
+            'robtodobrze',
+            'statystyki',
+            'wniosek-odpowiedz1',
+            'wniosek-rpo'
+        ];
+        $route = $args['route'];
+
+        if (!in_array($route, $ROUTES)) {
+            throw new HttpNotFoundException($request);
+        }
+    
+        try {
+            return AbstractHandler::renderHtml($request, $response, $route);
+        } catch (\Twig\Error\LoaderError $error) {
+            return AbstractHandler::renderHtml($request, $response, "404");
+        }
+    }
 }

@@ -38,7 +38,7 @@ $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 $errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::class);
 
 $app->group('', function (RouteCollectorProxy $group) { // PDFs
-    $group->get('/{appId}.pdf', StaticPagesHandler::class . ':application');
+    $group->get('/{appId}.pdf', StaticPagesHandler::class . ':applicationPdf');
     $group->get('/city/{city}.pdf', ApplicationHandler::class . ':package')
         ->add(new RegisteredMiddleware());
 })  ->add(new OptionalUserMiddleware())
@@ -99,142 +99,26 @@ $app->group('', function (RouteCollectorProxy $group) { // user register
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware());
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage, $SM_ADDRESSES) { // sessionless pages
-
-    $group->get('/login-ok.html', function (Request $request, Response $response, $args) {
-        $params = $request->getQueryParams();
-        $next = getParam($params, 'next', '/start.html');
-        
-        return AbstractHandler::renderHtml($request, $response, 'login-ok', [
-            'config' => [
-                'signInSuccessUrl' => $next
-            ]
-        ]);
-    });
-
-    $group->get('/zgloszenie.html', function (Request $request, Response $response, $args) {
-        $params = $request->getQueryParams();
-        $appId = getParam($params, 'id');
-        return AbstractHandler::redirect("/ud-$appId.html");
-    });
-
-    $group->get('/ud-{appId}.html', function (Request $request, Response $response, $args) use ($storage) {
-        $appId = $args['appId'];
-        $application = $storage->getApplication($appId);
-    
-        $user = $request->getAttribute('user', null);
-        $isAppOwner = $application->isAppOwner($user);
-        $isAppOwnerOrAdmin = $user?->isAdmin() || $isAppOwner;
-    
-        return AbstractHandler::renderHtml($request, $response, "zgloszenie", [
-            'head' => [
-                'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
-                'shortTitle' => "Zgłoszenie {$application->number}",
-                'image' => $application->contextImage->thumb,
-                'description' => "Samochód o nr. rejestracyjnym {$application->carInfo->plateId} " .
-                    "w okolicy adresu {$application->address->address}. {$application->getCategory()->getShort()}"
-            ], 'config' => [
-                'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin,
-                'isAppOwner' => $isAppOwner
-            ], 'app' => $application
-        ]);
-    });
-
-    $group->get('/zapytaj-o-status.html', function (Request $request, Response $response, $args) use ($storage) {
-        $sent = $storage->getSentApplications(31);
-
-        return AbstractHandler::renderHtml($request, $response, 'zapytaj-o-status', [
-            'applications' => $sent
-        ]);
-    });
-
-    $group->get('/dostep-do-informacji-publicznej.html', function (Request $request, Response $response, $args) {
-        $email = '<i>[xxx@xxx.pl]</i>';
-        $msisdn = '<i>[XXX XXX XXX]</i>';
-        $name = '<i>[Imię Nazwisko]</i>';
-
-        if ($request->getAttribute('isRegistered')) {
-            $user = $request->getAttribute('user');
-            if (!empty($user->data->msisdn))
-                $msisdn = $user->data->msisdn;
-            $email = $user->data->email;
-            $name = $user->data->name;
-        }
-
-        return AbstractHandler::renderHtml($request, $response, 'dostep-do-informacji-publicznej', [
-            'callDate' => date('j-m-Y', strtotime('-6 hour')),
-            'callTime' => date('H:i', strtotime('-6 hour')),
-            'checkTime' => date('H:00', strtotime('-2 hour')),
-            'msisdn' => $msisdn,
-            'email' => $email,
-            'name' => $name
-        ]);
-    });
-
-    $group->get('/logout.html', function (Request $request, Response $response, $args) {
-        unset($_SESSION['token']);
-        unset($_SESSION['user_id']);
-        unset($_SESSION['user_email']);
-        return AbstractHandler::renderHtml($request, $response, 'login', [
-            'config' => [
-                'logout' => true
-            ]
-        ]);
-    });
-
-    $group->get('/login.html', function (Request $request, Response $response, $args) {
-        $params = $request->getQueryParams();
-        $next = getParam($params, 'next', '/');
-        $error = getParam($params, 'error', '');
-        
-        return AbstractHandler::renderHtml($request, $response, 'login', [
-            'config' => [
-                'signInSuccessUrl' => $next,
-                'logout' => false,
-                'error' => $error
-            ]
-        ]);
-    });
-
-
+$app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessionless pages
     $group->get('/', StaticPagesHandler::class . ':root');
 
+    $group->get('/zgloszenie.html', StaticPagesHandler::class . ':applicationRedirect');
+    $group->get('/ud-{appId}.html', StaticPagesHandler::class . ':applicationHtml');
+
+    $group->get('/login.html', StaticPagesHandler::class . ':login');
+    $group->get('/login-ok.html', StaticPagesHandler::class . ':loginOK');
+    $group->get('/logout.html', StaticPagesHandler::class . ':logout');
+
+    $group->get('/zapytaj-o-status.html', StaticPagesHandler::class . 'askForStatus');
+    $group->get('/dostep-do-informacji-publicznej.html', StaticPagesHandler::class . ':publicInfo');
+
     $group->get('/regulamin.html', StaticPagesHandler::class . ':rules');
-
     $group->get('/faq.html', StaticPagesHandler::class . ':faq');
-
     $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
 
-    $group->get('/{route}.html', function (Request $request, Response $response, $args) {
-        $ROUTES = [
-            '404',
-            'changelog',
-            'epuap',
-            'jak-zglosic-nielegalne-parkowanie',
-            'maintenance',
-            'mandat',
-            'polityka-prywatnosci',
-            'projekt',
-            'przepisy',
-            'robtodobrze',
-            'statystyki',
-            'wniosek-odpowiedz1',
-            'wniosek-rpo'
-        ];
-        $route = $args['route'];
+    $group->get('/{route}.html', StaticPagesHandler::class . ':default');
 
-        if (!in_array($route, $ROUTES)) {
-            throw new HttpNotFoundException($request);
-        }
-    
-        try {
-            return AbstractHandler::renderHtml($request, $response, $route);
-        } catch (\Twig\Error\LoaderError $error) {
-            return AbstractHandler::renderHtml($request, $response, "404");
-        }
-    });
-
-    $group->map(['GET', 'POST'], '/{routes:.+}', function ($request, $response) {
+    $group->map(['GET', 'POST'], '/{routes:.+}', function ($request) {
         throw new HttpNotFoundException($request);
     });
 })  ->add(new HtmlMiddleware())

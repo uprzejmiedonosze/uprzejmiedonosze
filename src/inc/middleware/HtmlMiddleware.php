@@ -13,9 +13,7 @@ class HtmlMiddleware implements MiddlewareInterface {
         $parameters['config'] = [
             'menu' => ''
         ];
-        $parameters['head'] = [
-            'dialog' => $isDialog
-        ];
+        $parameters['dialog'] = $isDialog;
 
         $parameters['general'] = [
             'uri' => $_SERVER['REQUEST_URI'],
