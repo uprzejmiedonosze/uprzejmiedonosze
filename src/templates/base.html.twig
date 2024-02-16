@@ -27,7 +27,7 @@
 
         <meta name="theme-color" content="#009C7F">
         <meta property="og:image"
-            content="%HTTPS%://%HOST%/{{ head.image ?? 'img/uprzejmiedonosze.png' }}" />
+            content="%HTTPS%://%HOST%/{{ image ?? 'img/uprzejmiedonosze.png' }}" />
         <meta property="og:title" content="{{ title }}" />
         <meta property="og:description"
             content="{{ description ?? 'Uprzejmie Donoszę pozwala na informowanie Straży Miejskiej lub Policji o sytuacjach, które wpływają na komfort i bezpieczeństwo pieszych. Maksymalnie upraszcza wykonanie poprawnego zgłoszenia, i przekazanie go do SM.' }}" />
@@ -47,7 +47,7 @@
         {% block headIncludes %}{% endblock %}
     </head>
     <body class="index">
-        <div data-role="page" class="container-fluid" data-theme="a" {{iff(head.dialog,'data-dialog="true"')}}>
+        <div data-role="page" class="container-fluid" data-theme="a" {{iff(dialog,'data-dialog="true"')}}>
         {% block header %}
             <div data-role="header" data-position="fixed" data-tap-toggle="false" data-hide-during-focus="false">
                 {% if leftButton is defined and leftButton == 'menu' %}
@@ -97,11 +97,11 @@
                 {% endblock %}
             </div> <!-- header -->
         {% endblock %}
-            <div data-role="main" class="ui-content {{ mainClass ?? head.mainClass ?? '' }} {% if head.dialog %}dialog{% endif %}">
+            <div data-role="main" class="ui-content {{ mainClass ?? mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
             </div> <!-- main -->
         {% block footer %}
-            {% if head.dialog is not defined or not head.dialog %}
+            {% if dialog is not defined or not dialog %}
             <div data-role="footer">
                 <h4 title="%VERSION%">&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
             </div> <!-- footer -->

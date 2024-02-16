@@ -1,4 +1,4 @@
-{% if head.dialog %}
+{% if dialog %}
 {% set leftButton = 'menuBack' %}
 {% set rightButton = '' %}
 {% else %}
@@ -21,7 +21,13 @@
   <div class="howto">
     <h3>Emailem/przez Uprzejmie Donoszę</h3>
     <img src="/img/how-ud.png?width=395&as=jpg&quality=90">
-    <p>Zgłoszenie takie </p>
+    <p>Zgłoszenie nieprawidłowo zaparkowanego samochodu emailem do 
+      straży miejskiej lub na komisariat policji jest w znacznym
+      stopniu zautomatyzowane dzięki Uprzejmie Donoszę. Wystarczą
+      dwa zdjęcia i minuta pracy.
+      <a href="/nowe-zgloszenie.html">Spróbuj</a>
+    </p>
+    
 
     <div class="ui-grid-a ui-responsive use-dont-use">
       <div class="ui-block-a pros">
@@ -42,12 +48,14 @@
       <div class="ui-block-a pros">
         <ul>
           <li>Wygodne</li>
+          <li>Szybkie</li>
           <li>Archiwum zgłoszeń</li>
         </ul>
       </div>
       <div class="ui-block-b cons">
         <ul>
           <li>Nie jest anonimowe</li>
+          <li>Skuteczność zależy od SM</li>
           <li>Efekt po tygodniach/miesiącach</li>
         </ul>
       </div>

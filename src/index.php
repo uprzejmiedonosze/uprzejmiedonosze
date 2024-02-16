@@ -5,14 +5,15 @@ require(__DIR__ . '/../inc/Twig.php');
 require(__DIR__ . '/../inc/handlers/index.php');
 
 require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
-require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
+require(__DIR__ . '/../inc/middleware/CsvMiddleware.php');
 require(__DIR__ . '/../inc/middleware/HtmlMiddleware.php');
-require(__DIR__ . '/../inc/middleware/JsonBodyParser.php');
 require(__DIR__ . '/../inc/middleware/JsonMiddleware.php');
-require(__DIR__ . '/../inc/middleware/JsonErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/PdfMiddleware.php');
 require(__DIR__ . '/../inc/middleware/SessionMiddleware.php');
-require(__DIR__ . '/../inc/middleware/CsvMiddleware.php');
+
+require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
+require(__DIR__ . '/../inc/middleware/JsonBodyParser.php');
+require(__DIR__ . '/../inc/middleware/JsonErrorRenderer.php');
 
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
