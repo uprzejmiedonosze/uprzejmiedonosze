@@ -2,10 +2,7 @@
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');
 
-require(__DIR__ . '/../inc/handlers/ApplicationHandler.php');
-require(__DIR__ . '/../inc/handlers/SessionApiHandler.php');
-require(__DIR__ . '/../inc/handlers/UserHandler.php');
-require(__DIR__ . '/../inc/handlers/StaticPagesHandler.php');
+require(__DIR__ . '/../inc/handlers/index.php');
 
 require(__DIR__ . '/../inc/middleware/AuthMiddleware.php');
 require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
@@ -47,7 +44,7 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
 })  ->add(new OptionalUserMiddleware())
     ->add(new PdfMiddleware());
 
-$app->get('/stats/{file}.csv', StaticPagesHandler::class . ':csv')
+$app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
     ->add(new CsvMiddleware());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
