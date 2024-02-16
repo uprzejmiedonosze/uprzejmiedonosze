@@ -22,6 +22,7 @@ require(INC_DIR . '/middleware/JsonErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
 require(INC_DIR . '/middleware/UserMiddleware.php');
 require(INC_DIR . '/middleware/AppMiddleware.php');
+require(INC_DIR . '/Twig.php');
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -158,7 +159,8 @@ $app->get('/api/rest/config/categories', function (Request $request, Response $r
 });
 
 $app->get('/api/rest/config/terms', function (Request $request, Response $response, $args) {
-    $terms = generate('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
+    $twig = initBareTwig();
+    $terms = $twig->render('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
     $response->getBody()->write($terms);
     return $response;
 });
@@ -192,7 +194,10 @@ $app->get('/api/rest/app/{appId}', function (Request $request, Response $respons
     $user = $request->getAttribute('user');
     $application = $request->getAttribute('application');
 
-    $application->formattedText = json_decode(generate('_application.json.twig', ['app' => $application]));
+    $twig = initBareTwig();
+    $appJson = $twig->render('_application.json.twig', ['app' => $application]);
+
+    $application->formattedText = json_decode($appJson);
 
     if ($application->user->email !== $user->getEmail()) {
         $application->user->email = '';
