@@ -325,7 +325,11 @@ class Application extends JSONObject{
     }
 
     public function isCurrentUserOwner(){
-        return getCurrentUserEmail() == $this->user->email;
+        try {
+            return getCurrentUserEmail() == $this->user->email;
+        } catch(Exception $e) {
+            return false;
+        }
     }
 
     public function getRecydywa(){
