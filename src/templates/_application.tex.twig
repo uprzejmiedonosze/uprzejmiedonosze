@@ -18,7 +18,7 @@
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
 {% set address      = '{\\underline{' ~ ( app.getLatexSafeAddress|raw ) ~ '}}' %}
 
-\vspace{\stretch{2}}
+\vspace{15 mm}
 \begin{center}
 {\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} }{% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj,
 że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }}.{% endif %}} }
@@ -28,7 +28,7 @@
     świadkiem pozostawienia pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
     \href{{ addressUrl }}{{ address|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
-    {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronnicowe #}
+    {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronicowe #}
     do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.
     Kod QR prowadzi do wersji online tego zgłoszenia.}{% endif %}.
     {{ app.getCategory.short }} 
