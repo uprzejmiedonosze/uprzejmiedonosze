@@ -160,6 +160,15 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    public function trafficAdvice(Request $request, Response $response) {
+        return $this->renderJson($response, json_decode('[{
+            "user_agent": "prefetch-proxy",
+            "google_prefetch_proxy_eap": {
+              "fraction": 1.0 
+            }
+        }]'));
+    }
+
     public function default(Request $request, Response $response, $args) {
         $ROUTES = [
             '404',

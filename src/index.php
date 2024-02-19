@@ -100,6 +100,9 @@ $app->group('', function (RouteCollectorProxy $group) { // user register
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware());
 
+$app->get('/.well-known/traffic-advice', StaticPagesHandler::class . ':trafficAdvice')
+    ->add(new JsonMiddleware());
+
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessionless pages
     $group->get('/', StaticPagesHandler::class . ':root');
 
