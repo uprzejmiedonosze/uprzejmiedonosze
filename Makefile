@@ -126,7 +126,7 @@ $(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/res
 
 
 .PHONY: minify
-minify: check-branch js css assets minify-config process-php process-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
+minify: check-branch js css $(EXPORT)/images-index.html  minify-config process-php process-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
@@ -136,19 +136,18 @@ process-sitemap: $(DIRS) $(SITEMAP_PROCESSED)
 $(EXPORT)/config.php: $(DIRS); $(call echo-processing,$<)
 	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
-ASSETS := $(shell find src/img -type f)
-assets: $(EXPORT)/images-index.html
-$(EXPORT)/images-index.html: $(ASSETS) $(DIRS)
+ASSETS := $(wildcard src/img/* src/img/*/*)
+$(EXPORT)/images-index.html: src/images-index.html $(ASSETS) $(DIRS)
 	@(cat src/images-index.html; grep 'src="/img[^"{]\+"' --only-matching --no-filename --recursive --color=never src/templates \
 		| sed 's|src="/|<img src="./|' | sed 's|$$| />|' ) | sort | uniq | sponge src/images-index.html
+	@./node_modules/.bin/parcel build --no-cache --dist-dir $(PUBLIC)/img $< ;
 	@cp src/images-index.html $@
-	@./node_modules/.bin/parcel build --target img --no-cache
 
 
 .PHONY: css
 css: $(CSS_MINIFIED)
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); $(call echo-processing,$@ with parcel)
-	@./node_modules/.bin/parcel build --target scss --no-cache;
+	@./node_modules/.bin/parcel build --no-cache --dist-dir $(dir $@) $< ;
 	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
 		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
 			sed $(SED_OPTS) 's/#009C7F/#ff4081/gi' $@ ; \
@@ -159,8 +158,8 @@ $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); $(call echo-processing,$@ wit
 
 .PHONY: js
 js: $(JS_MINIFIED)
-$(JS_MINIFIED): $(JS_FILES_DEPS); $(call echo-processing,$@ with parcel)
-	@./node_modules/.bin/parcel build --target js --no-cache;
+export/public/js/%.js: src/js/%.js $(JS_FILES_DEPS); $(call echo-processing,$@ with parcel)
+	@./node_modules/.bin/parcel build --no-cache --dist-dir $(dir $@) $< ;
 
 $(EXPORT)/public/api/config/%.json: src/api/config/%.json $(DIRS); $(call echo-processing,$<)
 	@jq -c . < $< > $@
@@ -346,6 +345,14 @@ else
 define lint
 endef
 endif
+
+PWD=$(shell pwd)
+lint-php:
+	@./vendor/phpmd/phpmd/src/bin/phpmd src/ text \
+		cleancode,codesize,controversial,design,naming,unusedcode \
+		--minimumpriority 10 --color | \
+		grep -v -e Superglobals -e StaticAccess -e CamelCaseVariableName | \
+		sed 's|$(PWD)/||'
 
 define lint_replace_inline
 $(call echo-processing,$<)
