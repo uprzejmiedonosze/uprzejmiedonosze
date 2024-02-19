@@ -38,7 +38,7 @@
 
         <link rel="stylesheet"
             href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
-        <link rel="stylesheet" href="/css/index.css">
+        <link rel="stylesheet" href="/css/index.css?%CSS_HASH%">
 
         <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
         <script
@@ -97,7 +97,7 @@
                 {% endblock %}
             </div> <!-- header -->
         {% endblock %}
-            <div data-role="main" class="ui-content {{ mainClass ?? mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
+            <div data-role="main" class="ui-content {{ mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
             </div> <!-- main -->
         {% block footer %}
