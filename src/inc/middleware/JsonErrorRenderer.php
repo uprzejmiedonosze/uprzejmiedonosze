@@ -9,6 +9,7 @@ class JsonErrorRenderer implements ErrorRendererInterface {
 }
 
 function exceptionToErrorJson($exception): array {
+    if (isProd()) \Sentry\captureException($exception);
     $code = $exception->getCode();
     $response = Array(
         "error" => $exception->getMessage(),

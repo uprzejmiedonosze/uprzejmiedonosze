@@ -9,6 +9,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface {
 }
 
 function exceptionToErrorHtml($exception): string {
+    if (isProd()) \Sentry\captureException($exception);
     try{
         $email = getCurrentUserEmail();
     }catch(Exception $e){
