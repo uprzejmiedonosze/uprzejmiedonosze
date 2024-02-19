@@ -524,7 +524,8 @@ class Application extends JSONObject{
         return @count($this->statusHistory);
     }
 
-    public function isAppOwner(User $user): bool {
+    public function isAppOwner(User|null $user): bool {
+        if (!$user) return false;
         return $user->getEmail() == $this->user->email;
     }
 
