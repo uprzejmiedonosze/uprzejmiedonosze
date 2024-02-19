@@ -26,7 +26,7 @@ function cleanWhiteChars($input) {
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
-function logger(string|object|array $msg, $force = true): string {
+function logger(string|object|array $msg, $force = null): string {
     $time = date(DT_FORMAT);
     if(!isProd() || $force) {
         if (isDev()) return $time;
