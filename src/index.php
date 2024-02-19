@@ -81,10 +81,10 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Applic
     $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
 
     $group->post('/potwierdz.html', ApplicationHandler::class . ':confirm');
-    $group->get('/potwierdz.html', AbstractHandler::redirect('/moje-zgloszenia.html'));
+    $group->get('/potwierdz.html', function () { return AbstractHandler::redirect('/moje-zgloszenia.html'); });
 
     $group->post('/dziekujemy.html', ApplicationHandler::class . ':finish');
-    $group->get('/dziekujemy.html', AbstractHandler::redirect('/moje-zgloszenia.html'));
+    $group->get('/dziekujemy.html', function () { return AbstractHandler::redirect('/moje-zgloszenia.html'); });
 
     $group->get('/brak-sm.html', ApplicationHandler::class . ':missingSM');
     $group->get('/moje-zgloszenia.html', ApplicationHandler::class . ':myApps');
@@ -96,7 +96,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Applic
 $app->group('', function (RouteCollectorProxy $group) { // user register
     $group->get('/register.html', UserHandler::class . ':register');
     $group->post('/register-ok.html', UserHandler::class . ':finish');
-    $group->get('/register-ok.html', AbstractHandler::redirect('/register.html'));
+    $group->get('/register-ok.html', function () { return AbstractHandler::redirect('/register.html'); });
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware());
 
