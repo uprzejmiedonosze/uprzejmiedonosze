@@ -110,7 +110,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessio
     $group->get('/login-ok.html', StaticPagesHandler::class . ':loginOK');
     $group->get('/logout.html', StaticPagesHandler::class . ':logout');
 
-    $group->get('/zapytaj-o-status.html', StaticPagesHandler::class . 'askForStatus');
+    $group->get('/zapytaj-o-status.html', StaticPagesHandler::class . ':askForStatus');
     $group->get('/dostep-do-informacji-publicznej.html', StaticPagesHandler::class . ':publicInfo');
 
     $group->get('/regulamin.html', StaticPagesHandler::class . ':rules');
