@@ -115,6 +115,7 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
 	@#git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
+	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 	$(sentry-release)
 	@make clean
 
