@@ -11,7 +11,7 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-<form action="/potwierdz.html" id="form" method="post" data-ajax="false">
+<form action="/potwierdz.html?id={{ app.id }}" id="form" method="post" data-ajax="false">
     <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
     <div>
         {% if config.edit %}

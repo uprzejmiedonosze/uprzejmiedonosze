@@ -39,7 +39,7 @@
     ui-btn-icon-left ui-icon-mail cta ui-disabled confirm-send-button">Wyślij do {{ sm.getShortName }}!</a>
 {% endif %}
 
-<form action="/dziekujemy.html" id="form" method="post" data-ajax="true">
+<form action="/dziekujemy.html?id={{ app.id }}" id="form" method="post" data-ajax="true">
     <input type="hidden" id="applicationId" name="applicationId" value="{{ app.id }}"/>
 </form>
 {% endblock %}
