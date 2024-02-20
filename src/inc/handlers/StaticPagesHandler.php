@@ -169,6 +169,10 @@ class StaticPagesHandler extends AbstractHandler {
         }]'));
     }
 
+    public function assetlinks(Request $request, Response $response) {
+        return $this->renderJson($response, json_decode('[]'));
+    }
+
     public function default(Request $request, Response $response, $args) {
         $ROUTES = [
             '404',
