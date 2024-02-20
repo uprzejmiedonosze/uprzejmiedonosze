@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, EmailAuthProvider, CredentialHelper } from "firebase/auth";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, EmailAuthProvider } from "firebase/auth";
 import * as firebaseui from 'firebaseui';
 
 const currentScript = document.currentScript;
