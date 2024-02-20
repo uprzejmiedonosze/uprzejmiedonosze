@@ -39,13 +39,19 @@ class Application extends JSONObject{
         return $instance;
     }
 
+    private static function genSafeId(User $user): string {
+        $id = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
+        global $storage;
+        logger("generated $id for user {$user->getEmail()}");
+        if ($storage->checkApplicationId($id))
+            throw new Exception("Identyfikator zgłoszenia '$id' dla '{$user->getEmail()}' już istnieje!");
+        return $id;
+    }
+
     public static function withUser(User $user): Application {
-        function genSafeId() {
-            return substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
-        }
         $instance = new self();
         $instance->date = null;
-        $instance->id = genSafeId();
+        $instance->id = Application::genSafeId($user);
         $instance->added = date(DT_FORMAT);
         $instance->updateUserData($user);
 

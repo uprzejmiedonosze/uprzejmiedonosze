@@ -224,6 +224,11 @@ class DB extends NoSQLite{
         return $application;
     }
 
+    public function checkApplicationId(string $appId): bool {
+        $json = $this->apps->get($appId);
+        return is_string($json);
+    }
+
     public function saveApplication(Application $application): Application{
         @setSentryTag("appId", $application->id);
         if($application->status !== 'draft' && $application->status !== 'ready') {
