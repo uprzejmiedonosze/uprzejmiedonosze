@@ -20,8 +20,9 @@
 {% if autoSend %}
 <h2>Sprawdź zgłoszenie przed wysłaniem</h2>
 <p>
-    Twoje zgłoszenie zostanie za chwilę wysłane do <b>{{ sm.getName }}</b>. Sprawdź zgłoszenie
-    zwracając szczególną uwagę na podany adres oraz numer rejestracyjny.
+    Twoje zgłoszenie zostanie za chwilę wysłane do <b>{{ sm.getName }}</b>, do wiadomości
+    <b>{{ app.user.name }} ({{ app.user.email }})</b>.
+    Sprawdź zgłoszenie zwracając szczególną uwagę na podany adres oraz numer rejestracyjny.
 </p>
 {% else %}
 <h2>Sprawdź zgłoszenie</h2>
