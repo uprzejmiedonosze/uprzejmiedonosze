@@ -1,4 +1,13 @@
 <?php
+
+date_default_timezone_set('Europe/Warsaw');
+if (session_status() == PHP_SESSION_NONE) {
+    $timeout = 60 * 60 * 24 * 365;
+    ini_set("session.gc_maxlifetime", $timeout);
+    ini_set("session.cookie_lifetime", $timeout);
+    session_start();
+}
+
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');
 
@@ -15,9 +24,7 @@ require(__DIR__ . '/../inc/middleware/HtmlErrorRenderer.php');
 require(__DIR__ . '/../inc/middleware/JsonBodyParser.php');
 require(__DIR__ . '/../inc/middleware/JsonErrorRenderer.php');
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;

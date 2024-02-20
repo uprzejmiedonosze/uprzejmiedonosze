@@ -7,9 +7,6 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 
 abstract class SessionMiddleware implements MiddlewareInterface {
     public static function isLoggedIn(): bool {

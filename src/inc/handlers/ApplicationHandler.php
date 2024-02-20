@@ -6,10 +6,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
 class ApplicationHandler extends AbstractHandler {
     public function start(Request $request, Response $response): Response {
         return AbstractHandler::renderHtml($request, $response, 'start', [

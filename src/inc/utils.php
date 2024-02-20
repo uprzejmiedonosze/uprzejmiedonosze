@@ -3,8 +3,6 @@ require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/dataclasses/Exceptions.php');
 use \Exception as Exception;
 
-session_start();
-
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  */

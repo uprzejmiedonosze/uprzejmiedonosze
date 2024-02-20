@@ -6,9 +6,6 @@ require(__DIR__ . '/../API.php');
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 class SessionApiHandler extends AbstractHandler {
     public function image(Request $request, Response $response, $args): Response {
         global $storage;
@@ -29,7 +26,6 @@ class SessionApiHandler extends AbstractHandler {
     }
 
     public function setStatus(Request $request, Response $response, $args): Response {
-        global $storage;
         $appId = $args['appId'];
         $status = $args['status'];
         $user = $request->getAttribute('user');
@@ -65,8 +61,14 @@ class SessionApiHandler extends AbstractHandler {
         ));
     }
 
-    public function verifyToken(Request $request, Response $response, $args): Response {
+    public function verifyToken(Request $request, Response $response): Response {
         $firebaseUser = $request->getAttribute('firebaseUser');
+
+        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== $firebaseUser['user_id']) {
+            logger("Session collision! {$_SESSION['user_email']} != {$firebaseUser['user_email']}", true);
+            session_regenerate_id(true);
+        }
+
         $_SESSION['user_email'] = $firebaseUser['user_email'];
         $_SESSION['user_name'] = $firebaseUser['user_name'];
         $_SESSION['user_picture'] = $firebaseUser['user_picture'];

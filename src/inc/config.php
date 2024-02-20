@@ -1,11 +1,6 @@
 <?PHP 
 require_once(__DIR__ . '/dataclasses/ConfigClass.php');
 
-$timeout = 60 * 60 * 24 * 365;
-ini_set("session.gc_maxlifetime", $timeout);
-ini_set("session.cookie_lifetime", $timeout);
-date_default_timezone_set('Europe/Warsaw');
-
 const LATEST_TERMS_UPDATE = '2021-07-16';
 
 const DT_FORMAT = 'Y-m-d\TH:i:s';

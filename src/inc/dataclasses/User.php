@@ -4,9 +4,6 @@ require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
 use \stdClass as stdClass;
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
 /**
  * User class.
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
