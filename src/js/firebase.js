@@ -72,7 +72,6 @@ function getFirebaseConfig() {
 }
 
 function doLogin(signInSuccessUrl) {
-    const hostName = document.location.hostname;
     var uiConfig = {
         'signInSuccessUrl': `/login-ok.html?next=${signInSuccessUrl}`,
         'callbacks': {
@@ -95,8 +94,8 @@ function doLogin(signInSuccessUrl) {
                 status: false
             }
         }],
-        'tosUrl': `${hostName}regulamin.html`,
-        'privacyPolicyUrl': `${hostName}polityka-prywatnosci.html`,
+        'tosUrl': '/regulamin.html',
+        'privacyPolicyUrl': '/polityka-prywatnosci.html',
         'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
         'adminRestrictedOperation': { status: false },
         'signInFlow': 'popup'
