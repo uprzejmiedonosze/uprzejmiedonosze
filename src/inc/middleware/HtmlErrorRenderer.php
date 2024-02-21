@@ -23,7 +23,7 @@ function exceptionToErrorHtml($exception): string {
         return '';
     }
     $code = $exception->getCode() ?? 500;
-    $time = logger($msg, true);
+    $time = logger($msg, $code !== 404);
 
     $twig = initBareTwig();
 

@@ -40,7 +40,7 @@ $twig = initSlimTwig();
 
 $app->add(TwigMiddleware::create($app, $twig));
 
-$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware = $app->addErrorMiddleware(true, true, !isProd());
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
 $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 $errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::class);
@@ -131,7 +131,9 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessio
 
     $group->get('/{route}.html', StaticPagesHandler::class . ':default');
 
-    $group->map(['GET', 'POST'], '/{routes:.+}', function ($request) {
+    $group->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request) {
+        $path = $request->getUri()->getPath();
+        logger("404 $path", true);
         throw new HttpNotFoundException($request);
     });
 })  ->add(new HtmlMiddleware())
