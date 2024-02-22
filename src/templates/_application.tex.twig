@@ -6,7 +6,7 @@
 \vspace{\stretch{3}}\noindent
 {\large {{ app.guessSMData().getLatexAddress() }} }
 
-{% set addressUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=pdf}' %}
+{% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=pdf}' %}
 {% set qrUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=qr}' %}
 {% set mapUrl = '{' ~ app.getMapUrl() ~ '}' %}
 
@@ -16,21 +16,21 @@
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb ~ '}' %}
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
-{% set address      = '{\\underline{' ~ ( app.getLatexSafeAddress|raw ) ~ '}}' %}
+
+{% set appNumber    = '\\underline{\\texttt{' ~ app.number ~ '}}' %}
 
 \vspace{15 mm}
 \begin{center}
-{\Large Zgłoszenie wykroczenia\texttt{ {{ app.number }} }{% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj,
+{\Large \href{{ appUrl }}{Zgłoszenie wykroczenia {{ appNumber|raw }} }{% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj,
 że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }}.{% endif %}} }
 \end{center}
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem pozostawienia pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
-    \href{{ addressUrl }}{{ address|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Adres oraz mapa, są równocześnie linkami prowadzącymi
+    {{ app.getLatexSafeAddress|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Kod QR oraz numer {{ app.number }} prowadzą do wersji online tego zgłoszenia.
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
     {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronicowe #}
-    do mapy z lokalizacją zgłoszenia. Podobnie zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.
-    Kod QR prowadzi do wersji online tego zgłoszenia.}{% endif %}.
+    Obrazek z mapą prowadzi do Google Maps z lokalizacją zgłoszenia. Natomiast zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
     {{ app.getCategory.short }} 
     {{ app.getExtensionsText() }}
     Sytuacja jest widoczna na załączonych zdjęciach.
@@ -81,5 +81,5 @@ Email: {{ app.user.email }}
     \includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
     {% endif %}
     \hspace{\stretch{1}}
-    \adjustbox{valign=B}{\qrcode[height=0.2\textwidth,level=Q]{{qrUrl|raw}}}
+    \adjustbox{valign=B}{\qrcode[nolink,height=0.2\textwidth,level=Q]{{qrUrl|raw}}}
 \vspace{\stretch{1}}
