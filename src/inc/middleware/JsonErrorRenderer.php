@@ -9,12 +9,12 @@ class JsonErrorRenderer implements ErrorRendererInterface {
 }
 
 function exceptionToErrorJson($exception): array {
-    if (isProd()) \Sentry\captureException($exception);
-    $code = $exception->getCode();
+    $code = $exception->getCode() ?? 500;
     $response = Array(
         "error" => $exception->getMessage(),
-        "status" => ($code ? $code : 500)
+        "status" => $code
     );
+    if (isProd() && $code !== 404) \Sentry\captureException($exception);
     if ($exception instanceof HttpException)
         $response["description"] = $exception->getDescription();
     if ($exception instanceof MissingParamException)

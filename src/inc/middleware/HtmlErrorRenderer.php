@@ -23,6 +23,7 @@ function exceptionToErrorHtml($exception): string {
         return '';
     }
     $code = $exception->getCode() ?? 500;
+    if (isProd() && $code !== 404) \Sentry\captureException($exception);
     $time = logger($msg, $code !== 404);
 
     $twig = initBareTwig();
