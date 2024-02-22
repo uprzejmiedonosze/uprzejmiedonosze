@@ -2721,5 +2721,16 @@
   },
   "gmina Kórnik": {
     "parent": "Kórnik"
+  },
+  "Raszyn": {
+    "address": [
+      "Komisariat Policji w Raszynie",
+      "Al. Krakowska 16",
+      "05-090 Raszyn"
+    ],
+    "email": "kpppruszkow@policja.waw.pl"
+  },
+  "gmina Raszyn": {
+    "parent": "Raszyn"
   }
 }
