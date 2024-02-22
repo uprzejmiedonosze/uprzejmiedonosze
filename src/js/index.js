@@ -18,3 +18,4 @@ import "./sites/statistics";
 import "./sites/thank-you";
 import "./sites/adm-gallery";
 import "./sites/public-info";
+import "./sites/how";

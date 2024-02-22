@@ -127,6 +127,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessio
 
     $group->get('/regulamin.html', StaticPagesHandler::class . ':rules');
     $group->get('/faq.html', StaticPagesHandler::class . ':faq');
+    $group->get('/przesluchanie.html', StaticPagesHandler::class . ':hearing');
     $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
 
     $group->get('/{route}.html', StaticPagesHandler::class . ':default');

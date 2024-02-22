@@ -8,105 +8,180 @@
 {# SITEMAP-PRIORITY:0.9 #}
 
 {% set title = 'Jak walczyć z nielegalnym parkowaniem' %}
-{% set shortTitle = 'Jak walczyć z patoparkowaniem' %}
+{% set shortTitle = 'Jak walczyć z patoparkowaniem?' %}
 {% set description = 'Gdzie i jak zgłosić nielegalne parkowanie samochodu?' %}
 {% set mainClass = 'how' %}
 
 {% extends "base.html.twig" %}
 {% block main %}
 
-<h2>Jak zgłosić nielegalne parkowanie?</h2>
+<h2>{{ shortTitle }}</h2>
+
+{% macro link(target, name) %}
+<a href="#{{ target }}" style="font-weight: 300!important;" onclick="window._activateHowTo('{{ target }}')">#{{ name }}</a>
+{% endmacro link %}
 
 <div class="howtos">
-  <div class="howto">
-    <h3>Emailem/przez Uprzejmie Donoszę</h3>
-    <img src="/img/how-ud.png?width=395&as=jpg&quality=90">
-    <p>Zgłoszenie nieprawidłowo zaparkowanego samochodu emailem do 
-      straży miejskiej lub na komisariat policji jest w znacznym
-      stopniu zautomatyzowane dzięki Uprzejmie Donoszę. Wystarczą
-      dwa zdjęcia i minuta pracy.
-      <a href="/nowe-zgloszenie.html">Spróbuj</a>
-    </p>
-    
-
-    <div class="ui-grid-a ui-responsive use-dont-use">
-      <div class="ui-block-a pros">
-        <ul>
-          <li>W miejscach, które często odwiedzasz</li>
-          <li>Gdy sprawca może niedługo odjechać</li>
-          <li>Na recydywistów</li>
-        </ul>
-      </div>
-      <div class="ui-block-b cons">
-        <ul>
-          <li>W miejscach z dużą rotacją „losowych” kierowców</li>
-          <li>Gdy pojazd jest na zagranicznych nr. rej.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="ui-grid-a ui-responsive pros-cons">
-      <div class="ui-block-a pros">
-        <ul>
-          <li>Wygodne</li>
-          <li>Szybkie</li>
-          <li>Archiwum zgłoszeń</li>
-        </ul>
-      </div>
-      <div class="ui-block-b cons">
-        <ul>
-          <li>Nie jest anonimowe</li>
-          <li>Skuteczność zależy od SM</li>
-          <li>Efekt po tygodniach/miesiącach</li>
-        </ul>
+  <div class="howto" id="email">
+    <h3 class="title">Emailem/przez Uprzejmie Donoszę</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-ud.png?width=395&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Stosuj</em> w miejsach, które często odwiedzasz, na recydywistów parkowania
+          i kierowców, którzy mogą w każdej chwili odjechać.
+        </p>
+        <p>W tym właśnie wyręczna Cię Uprzejmie Donoszę. Wystarczą
+          dwa zdjęcia i minuta pracy.
+        </p>
+        <p>
+          <em>Anonimowość:</em> sprawca wykroczenia może poznać jedynie
+          twoje imię i nazwisko. Twój adres zamieszkania jest chroniony.
+        </p>
+        <p><em>Wezwania na przesłuchanie:</em> możesz zostać wezwany przez SM
+          lub policję na przesłuchanie w charakterze świadka. To nic groźnego.
+          Sprawdź swoją straż miejską na stronie <a href="/przesluchanie.html">opisującą doświadczenia z SM</a>.
+        </p>
+        <p><em>Skuteczność:</em> W miejscach z dużą rotacją „losowych” kierowców
+          {{ _self.link('telefon', 'dzwoń') }} lub wnioskuj o {{ _self.link('slupki', 'słupki') }}.
+          {{ _self.link('telefon', 'dzwoń') }} także, gdy pojazd jest na zagranicznych numerach
+          rejestracyjnych.
+        </p>
+        {% if general.isLoggedIn %}
+        <a href="/nowe-zgloszenie.html" class="cta">Stwórz nowe zgłoszenie</a>
+        {% else %}
+        <a href="/nowe-zgloszenie.html" class="cta">Załóż konto</a>
+        {% endif %}
       </div>
     </div>
   </div>
 
-  <div class="howto">
-    <h3>Telefonicznie</h3>
-    <img src="/img/how-tel.png?width=395&as=jpg&quality=90">
-    <div class="ui-grid-a ui-responsive use-dont-use">
-      <div class="ui-block-a">
-        <ul>
-          <li>Na regularny „wypas” wielu pojazdów</li>
-          <li>Gdy sprawcy raczej nie odjadą za chwilę</li>
-          <li>Gdy pojazd jest na zagranicznych nr. rej.</li>
-        </ul>
-      </div>
-      <div class="ui-block-b">
-        <ul>
-          <li>W miejscach z dużą rotacją „losowych” kierowców</li>
-          <li>Gdy pojazd jest na zagranicznych nr. rej.</li>
-        </ul>
+  <div class="howto" id="telefon">
+    <h3 class="title">Telefonicznie</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-tel.png?width=395&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Stosuj</em> na całych patoparkingach, w przypadku pojazdów na zagranicznych
+          numerach rejestracyjnych, gdy wiadomo, że auto jeszcze trochę postoi.
+        </p>
+        <p>Wykonując połączenie jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }}. Nie możesz jednak anonimowo
+          sprawdzić co w praktyce <a href="/dostep-do-informacji-publicznej.html">straż miejska zrobiła na miejscu</a>.
+          A bez tego skuteczność dzwonienia jest ograniczona.
+        </p>
+        <p><em>Skuteczność:</em> w miejscach z dużą rotacją „losowych” kierowców (np. turystów)
+          jedynym narzędziem mogą okazać {{ _self.link('slupki', 'słupki') }}. Nie masz także
+          żadnych gwarancji czasu reakcji patrolu SM. To może zarówno 15 minut jak i 15 godzin.
+          Koniecznie <a href="/dostep-do-informacji-publicznej.html">sprawdzaj efekty pracy SM</a>!
+        </p>
+        <a href="tel:986" rel="external" class="cta">Zadzwoń pod 986</a>
       </div>
     </div>
   </div>
-  <div class="howto">
-    <h3>Na Stop Agresji Drogowej</h3>
-    <img src="/img/how-sa.png?width=395&as=jpg&quality=90">
-    <div class="ui-grid-a ui-responsive use-dont-use">
-      <div class="ui-block-a">
-        <ul>
-          <li>Kiedy masz film z jazdą po chodniku</li>
-          <li>Kiedy w twojej gminie nie ma straży gminnej</li>
-          <li>Kiedy sprawca jest agresywny</li>
-        </ul>
-      </div>
-      <div class="ui-block-b">
-        <ul>
-          <li>Gdy pojazd jest na zagranicznych nr. rej.</li>
-        </ul>
-      </div>
-    </div>
 
+  <div class="howto" id="policja">
+    <h3 class="title">Na Stop Agresji Drogowej</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-sa.png?width=395&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Stosuj</em> zawsze, kiedy masz film dokumentujący jazdę po chodniku
+          lub przejściu dla pieszych. Wysyłaj w ten sposób wszelkie zarejestrowane
+          przejawy agresji kierowców wobec pieszych lub rowerzystów.
+        </p>
+        <p>
+          Stop Agresji Drogowej to program policji, który umożliwia wysłanie filmu
+          lub zdjęcia z wykroczeniem. Zasady są prawie identycznie jak w przypadku
+          zgłoszenia do straży miejskiej, ale policja ma nieco większe uprawnienia.
+        </p>
+        <p>
+          Możesz wykorzystać Uprzejmie Donoszę do wysłania zgłoszenia na policję.
+          Zobacz odpowiednią funkcję w <a href="/register.html?update">ustawieniach</a>.
+        </p>
+        <p>
+          <em>Anonimowość:</em> zgłaszając na Stop Agresji musisz podać swoje dane,
+          a sprawca wykroczenia może poznać twoje imię i nazwisko.
+        </p>
+        <p><em>Wezwania na przesłuchanie:</em> możesz zostać wezwany przez policję na
+          przesłuchanie w charakterze świadka.
+        </p>
+        <p><em>Skuteczność:</em> niestety, jeśli pojazd jest na zagranicznych numerach
+          rejestracyjnych to szanse na to, że policja podejmie działanie są niewielkie.
+        </p>
+      </div>
+    </div>
   </div>
-  <div class="howto">
-    <h3>Na Krajową Mapę Zagrożeń</h3>
-    <img src="/img/how-kmz.png?width=395&as=jpg&quality=90">
+
+  <div class="howto" id="kmz">
+    <h3 class="title">Na Krajową Mapę Zagrożeń</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-kmz.png?width=395&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Stosuj</em> jako uzupełnienie dla pozostałych działań. Zaznaczaj
+          stałe patoparki, oraz miejsca, które są rozjeżdżane w określonych dniach
+          lub godzinach (ale powtarzalnie).
+        </p>
+        <p>
+          Pamiętaj, że możesz dodać tylko jedno zagrożenie dziennie!
+        </p>
+        <p>
+          <em>Anonimowość:</em> nie licząc adresu IP, jesteś całkowicie {{ config.sex.anonimowa ?? 'anonimowa/y' }}.
+        </p>
+        <p><em>Skuteczność:</em> całkowicie losowa. Czasem jeden punkt na tej mapie potrafi
+          zdziałać cuda. Innym razem zmasowana akcja oznaczania problemu nic nie przynosi.
+        </p>
+        <a href="https://mapy.geoportal.gov.pl/iMapLite/KMZBPublic.html" target="_blank" rel="external" class="cta">Zaznacz swój pierwszy punkt na KMZ</a>
+      </div>
+    </div>
   </div>
-  <div class="howto">
-    <h3>Składając wniosek o słupki</h3>
-    <img src="/img/how-stick.png?width=395&as=jpg&quality=90">
+
+  <div class="howto" id="slupki">
+    <h3 class="title">Składając wniosek o słupki</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-stick.png?width=395&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Stosuj</em> gdy zawiodły inne środki. Nikt nie lubi słupków, ale często
+          to jedyne skuteczne narzędzie.
+        </p>
+        <p>
+          Sprawdź wnikliwie, czy przypadkiem w miejscu które jest niszczone przez 
+          kierowców <em>nie było wcześniej słupków</em>, ale zostały wyrwane. Jeśli tak, to
+          wystarczy prosty email ze zdjęciem do zarządcy drogi (najczęściej spółka
+          mająca „zarząd dróg” w nazwie). Jeśli twoje miasto ma aplikację/serwis pozwalający
+          zgłaszać mieszkańcom problemy z infrastrukturą – skorzystaj z niej.
+        </p>
+        <p>
+          Jeśli słupków w tym miejscu nigdy nie było, sprawdź, czy <em>nie jest to teren wspólnoty
+            mieszkaniowej</em>. Wbrew pozorom to wiele ułatwia. Proste email do wspólnoty potrafi 
+            być skuteczny, i po 2-3 miesiącach miejsce może zostać zabezpieczone.
+        </p>
+        <p>
+          <em>Jeśli jest to teren nie jest to teren miasta</em>, to musisz napisać swój email 
+          z wnioskiem o słupki do urzędu miasta albo gminy. Pismo kierujesz do prezydenta – urząd 
+          skieruje go na odpowiednie biurko.
+        </p>
+        <p>
+          <em>Anonimowość:</em> nie jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }} dla urzędnika,
+          który rozpatruje twój wniosek. Ale jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }} względem
+          kierowców, którzy stracili swój dziki parking.
+        </p>
+        <p><em>Skuteczność:</em> zależna od współpracy z gminą lub wspólnotą. Generalnie dużo łatwiej
+        ustawia się wyrwane słupki, niż stawia nowe. Próbować warto i należy.
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 

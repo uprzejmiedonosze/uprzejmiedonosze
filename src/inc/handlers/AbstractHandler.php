@@ -7,6 +7,7 @@ use Slim\Views\Twig;
 
 abstract class AbstractHandler {
     public static function redirect(string $newLocation): Response {
+        logger(static::class . ":redirect to $newLocation");
         $response = new ResponseObject(302);
         $response = $response->withHeader('Location', $newLocation);
         return $response;
