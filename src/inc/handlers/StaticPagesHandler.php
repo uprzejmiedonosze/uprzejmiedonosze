@@ -27,13 +27,18 @@ class StaticPagesHandler extends AbstractHandler {
 
     function faq(Request $request, Response $response) {
         global $SM_ADDRESSES;
-
         $smNames = array_map(function ($sm) { return $sm->city; }, $SM_ADDRESSES);
         $collator = new Collator('pl_PL');
         $collator->sort($smNames);
-
         $smNames = array_unique($smNames, SORT_LOCALE_STRING);
 
+        return AbstractHandler::renderHtml($request, $response, 'faq', [
+            'smAddresses' => implode(', ', $smNames)
+        ]);
+    }
+
+    function hearing(Request $request, Response $response) {
+        global $SM_ADDRESSES;
         $SMHints = array();
         foreach ($SM_ADDRESSES as $sm) {
             if($sm->hint){
@@ -43,8 +48,7 @@ class StaticPagesHandler extends AbstractHandler {
             }
         }
         $sortedSMHints = array_unique($SMHints, SORT_LOCALE_STRING);
-        return AbstractHandler::renderHtml($request, $response, 'faq', [
-            'smAddresses' => implode(', ', $smNames),
+        return AbstractHandler::renderHtml($request, $response, 'przesluchanie', [
             'SMHints' => $sortedSMHints
         ]);
     }
@@ -92,7 +96,7 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function askForStatus(Request $request, Response $response, $args) {
+    public function askForStatus(Request $request, Response $response) {
         global $storage;
         $sent = $storage->getSentApplications(31);
 
@@ -101,7 +105,7 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function publicInfo(Request $request, Response $response, $args) {
+    public function publicInfo(Request $request, Response $response) {
         $email = '<i>[xxx@xxx.pl]</i>';
         $msisdn = '<i>[XXX XXX XXX]</i>';
         $name = '<i>[Imię Nazwisko]</i>';
@@ -124,7 +128,7 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function login(Request $request, Response $response, $args) {
+    public function login(Request $request, Response $response) {
         $params = $request->getQueryParams();
         $next = $this->getParam($params, 'next', '/');
         $error = $this->getParam($params, 'error', '');
@@ -138,7 +142,7 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function loginOK(Request $request, Response $response, $args): Response {
+    public function loginOK(Request $request, Response $response): Response {
         $params = $request->getQueryParams();
         $next = $this->getParam($params, 'next', '/start.html');
         
@@ -149,7 +153,7 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function logout(Request $request, Response $response, $args) {
+    public function logout(Request $request, Response $response) {
         unset($_SESSION['token']);
         unset($_SESSION['user_id']);
         unset($_SESSION['user_email']);

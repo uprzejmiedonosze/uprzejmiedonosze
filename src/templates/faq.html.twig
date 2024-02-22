@@ -5,7 +5,7 @@
     {% set leftButton = 'menu' %}
     {% set rightButton = 'menuStart' %}
 {% endif %}
-{# SITEMAP-PRIORITY:0.9 #}
+{# SITEMAP-PRIORITY:0.7 #}
 
 {% set title = 'Najczęściej zadawane pytania' %}
 {% set shortTitle = 'FAQ' %}
@@ -219,16 +219,12 @@ rejestracyjnym, oraz porównać, czy marka i kolor z systemu zgadza się ze zdj�
 wykroczenia za pomocą poczty elektronicznej lub EPUAP. W praktyce oznacza prawie 
 każdą miejscowość w Polsce.</p>
 
+<p>Dla części z miast mam bezpośrednie relacje od zgłaszających. Sprawdź, czego
+możesz się spodziewać po współpracy z SM na stronie o
+<a href="/przesluchanie.html">przesłuchaniu w charakterze świadka</a>.
+
 <p>Obecnie Uprzejmie Donoszę ma w swojej bazie adresy e-mail Straży Miejskich lub
 Gminnych dla następujących miast: {{ smAddresses }}.</p>
 
-<p>Dla części z miast mam bezpośrednie relacje od zgłaszających. Sprawdź, czego
-możesz się spodziewać po współpracy z SM w następujących miastach:</p>
-
-<ul data-role="listview" data-autodividers="true" data-filter="true" data-inset="true">
-{% for city,hint in SMHints %}
-    <li><b>{{ city }}</b> — {{ hint | striptags }}</li>
-{% endfor %}
-</ul>
 
 {% endblock %}
