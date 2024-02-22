@@ -65,8 +65,10 @@ class SessionApiHandler extends AbstractHandler {
         $firebaseUser = $request->getAttribute('firebaseUser');
 
         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== $firebaseUser['user_id']) {
-            logger("Session collision! {$_SESSION['user_email']} != {$firebaseUser['user_email']}", true);
+            $errorMsg = "Session collision! {$_SESSION['user_email']} != {$firebaseUser['user_email']}";
+            logger($errorMsg, true);
             session_regenerate_id(true);
+            \Sentry\captureException(new Exception($errorMsg));
         }
 
         $_SESSION['user_email'] = $firebaseUser['user_email'];
