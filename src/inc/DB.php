@@ -15,6 +15,7 @@ use \Exception as Exception;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.ShortClassName)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class DB extends NoSQLite{
     private $users;
@@ -353,6 +354,7 @@ class DB extends NoSQLite{
 
     /**
      * Returns all applications for current user by status.
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function getConfirmedAppsByCity(string $city): Array{
         $sql = <<<SQL
@@ -581,6 +583,7 @@ class DB extends NoSQLite{
 
     /**
      * Returns all gallery applications awaiting moderation.
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function getGalleryModerationApps(){
         if(!$this->getCurrentUser()->isModerator()){
@@ -677,6 +680,10 @@ class DB extends NoSQLite{
         return $stats;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     public function getMainPageStats(bool $useCache=true): array{
         $stats = $this->stats->get("%HOST%-getMainPageStats");
         if($useCache && $stats){

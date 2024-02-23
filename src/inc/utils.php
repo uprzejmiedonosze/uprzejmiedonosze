@@ -23,6 +23,7 @@ function cleanWhiteChars($input) {
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
+ * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
 function logger(string|object|array $msg, $force = null): string {
     $time = date(DT_FORMAT);
@@ -34,8 +35,7 @@ function logger(string|object|array $msg, $force = null): string {
         if (!is_string($msg))
             $msg = print_r($msg, true);
 
-        $bt = debug_backtrace();
-        $caller = array_shift($bt);
+        $caller = array_shift(debug_backtrace());
         $location = $caller['file'] . ':' . $caller['line'];
         $location = preg_replace('/^.var.www.%HOST%.webapp/i', '', $location);
 

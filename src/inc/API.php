@@ -102,6 +102,7 @@ function setStatus(string $status, string $appId, User $user): Application {
  * 
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.MissingImport)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 function sendApplication(string $appId): Application {
     global $storage;
@@ -263,8 +264,8 @@ function resize_image($file, $w, $h, $crop = FALSE) {
     return $dst;
 }
 
-function normalizeGeo(float|string $g): string {
-    return sprintf('%.4F', $g);
+function normalizeGeo(float|string $geo): string {
+    return sprintf('%.4F', $geo);
 }
 
 function normalizeLatLng($lat, $lng) {
@@ -314,7 +315,13 @@ function GoogleMaps($lat, $lng) {
     throw new Exception("Niepoprawna odpowiedź z serwerów Google Maps: " . json_encode($json), 500);
 }
 
-
+/**
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+ * @TODO
+ */
 function Nominatim(float $lat, float $lng): array {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);
@@ -423,7 +430,9 @@ function MapBox(float $lat, float $lng): array {
 }
 
 
-
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ */
 function curlRequest(string $url, array $params, string $vendor) {
     $ch = curl_init($url . http_build_query($params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -16,14 +16,26 @@ use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @TODO
+ */
 class AuthMiddleware implements MiddlewareInterface {
     private $cache;
 
+    /**
+     * @SuppressWarnings(PHPMD.MissingImport)
+     */
     public function __construct() {
         $this->cache = new Memcache;
         $this->cache->connect('localhost', 11211);
     }
-        
+
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function process(Request $request, RequestHandler $handler): Response {
         $algorithm = 'RS256';
 
@@ -42,7 +54,7 @@ class AuthMiddleware implements MiddlewareInterface {
     
         $keys  = $this->getPublicKeys($request);
         
-        @list($headersB64, $_payloadB64, $_sig) = explode('.', $jwt);
+        @list($headersB64, $payloadB64, $sig) = explode('.', $jwt);
         $decoded = json_decode(base64_decode($headersB64), true);
         if (!isset($decoded['kid']))
             throw new HttpBadRequestException($request, 'Wrong `kid` in JWT header');

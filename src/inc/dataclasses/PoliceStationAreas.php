@@ -28,6 +28,9 @@ class PoliceStationAreas {
     }
 
 
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function pointInPolygon(float $lat, float $lng, array $vertices): bool {
         $point = array("x" => $lng, "y" => $lat);
         // Check if the point is inside the polygon or on the boundary

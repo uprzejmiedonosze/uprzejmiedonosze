@@ -1,6 +1,9 @@
 <?php
 use Slim\Exception\HttpInternalServerErrorException;
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
 function ApiErrorHandler($errno, $errstr, $errfile, $errline) {
     if (!(error_reporting() & $errno)) {
         // This error code is not included in error_reporting, so let it fall

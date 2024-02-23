@@ -36,6 +36,9 @@ class SessionApiHandler extends AbstractHandler {
         ));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function sendApplication(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $application = sendApplication($appId);
@@ -44,6 +47,9 @@ class SessionApiHandler extends AbstractHandler {
         ));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function addToGallery(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         addToGallery($appId);
@@ -61,6 +67,10 @@ class SessionApiHandler extends AbstractHandler {
         ));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.MissingImport)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function verifyToken(Request $request, Response $response): Response {
         $firebaseUser = $request->getAttribute('firebaseUser');
 

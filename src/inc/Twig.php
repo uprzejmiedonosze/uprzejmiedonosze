@@ -30,12 +30,19 @@ function _twigConfig(): array {
     ];
 }
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 function initSlimTwig() {
     $twig = Twig::create(__DIR__ . '/../templates', _twigConfig());
     $twig->addExtension(new TwigExtension());
     return $twig;
 }
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
 function initBareTwig() {
     $loader = new FilesystemLoader(__DIR__ . '/../templates');
     $twig = new Environment($loader, _twigConfig());

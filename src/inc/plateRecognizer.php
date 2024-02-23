@@ -63,6 +63,9 @@ function get_platerecognizer(&$imageBytes) {
     return $result;
 }
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
 function platerecognizerRequest($method, $data=null) {
     $chi = curl_init('https://api.platerecognizer.com/v1' . $method);
 

@@ -3,6 +3,9 @@ use Slim\Exception\HttpException;
 use Slim\Interfaces\ErrorRendererInterface;
 
 class JsonErrorRenderer implements ErrorRendererInterface {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string {
         return json_encode(exceptionToErrorJson($exception), JSON_UNESCAPED_UNICODE);
     }

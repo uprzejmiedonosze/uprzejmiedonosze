@@ -15,6 +15,9 @@ class CsvHandler extends AbstractHandler {
         return rtrim(stream_get_contents($memory));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function csv(Request $request, Response $response, $args): Response {
         global $storage;
         $file = $args['file'];

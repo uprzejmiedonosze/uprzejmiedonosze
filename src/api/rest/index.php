@@ -387,6 +387,9 @@ $app->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request, $respons
 
 $app->run();
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
 function getParam(array $params, string $name, mixed $default=null) {
     $param = $params[$name] ?? $default;
     if (is_null($param)) {
@@ -394,4 +397,3 @@ function getParam(array $params, string $name, mixed $default=null) {
     }
     return $param;
 }
-

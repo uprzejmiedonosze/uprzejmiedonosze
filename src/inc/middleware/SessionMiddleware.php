@@ -8,6 +8,10 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
 
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 abstract class SessionMiddleware implements MiddlewareInterface {
     public static function isLoggedIn(): bool {
         return isset($_SESSION['user_id'])
@@ -65,6 +69,9 @@ abstract class SessionMiddleware implements MiddlewareInterface {
     }
 }
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class OptionalUserMiddleware extends SessionMiddleware {
     public function process(Request $request, RequestHandler $handler): Response {
         [$request, $handler] = parent::preprocess($request, $handler);
@@ -74,6 +81,9 @@ class OptionalUserMiddleware extends SessionMiddleware {
 }
 
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class LoggedInMiddleware extends SessionMiddleware {
     public function process(Request $request, RequestHandler $handler): Response {
         [$request, $handler] = parent::preprocess($request, $handler);
@@ -84,6 +94,9 @@ class LoggedInMiddleware extends SessionMiddleware {
     }
 }
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class RegisteredMiddleware extends SessionMiddleware {
     public function process(Request $request, RequestHandler $handler): Response {
         [$request, $handler] = parent::preprocess($request, $handler);
@@ -96,6 +109,9 @@ class RegisteredMiddleware extends SessionMiddleware {
     }
 }
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class ModeratorMiddleware extends SessionMiddleware {
     public function process(Request $request, RequestHandler $handler): Response {
         [$request, $handler] = parent::preprocess($request, $handler);
@@ -112,6 +128,9 @@ class ModeratorMiddleware extends SessionMiddleware {
     }
 }
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class AdminMiddleware extends SessionMiddleware {
     public function process(Request $request, RequestHandler $handler): Response {
         [$request, $handler] = parent::preprocess($request, $handler);

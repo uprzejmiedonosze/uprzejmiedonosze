@@ -2,6 +2,9 @@
 
 date_default_timezone_set('Europe/Warsaw');
 
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
 function initSession() {
     global $_SESSION;
     $timeout = 60 * 60 * 24 * 10;

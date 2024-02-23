@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
 class Poznan extends CityAPI {
     function send(&$application){
         parent::checkApplication($application);

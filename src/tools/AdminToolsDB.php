@@ -5,6 +5,9 @@ require_once(__DIR__ . '/../inc/Application.php');
 require_once(__DIR__ . '/../inc/User.php');
 require_once(__DIR__ . '/../inc/config.php');
 
+/**
+ * @SuppressWarnings(PHPMD)
+ */
 class AdminToolsDB extends NoSQLite{
     /**
      * Creates DB instance with default store location.
@@ -226,6 +229,9 @@ class AdminToolsDB extends NoSQLite{
         return $apps;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function upgradeAllApps($version, $dryRun){
         $users = $this->getAllUsers();
         foreach ($users as $email => $user) {

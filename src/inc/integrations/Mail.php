@@ -8,6 +8,9 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use \JSONObject as JSONObject;
 
+/**
+ * @SuppressWarnings(PHPMD.MissingImport)
+ */
 class Mail extends CityAPI {
 
     /**

@@ -11,17 +11,17 @@ use \JSONObject as JSONObject;
  * Application class.
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class Application extends JSONObject{
+    private function __construct() {
+    }
+
     /**
      * Creates new Application of initites it from JSON.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    private function __construct() {
-
-    }
-
     public static function withJson($json): Application {
         $instance = new self();
         $instance->__fromJson($json);
@@ -39,6 +39,10 @@ class Application extends JSONObject{
         return $instance;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     private static function genSafeId(User $user): string {
         $id = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
         global $storage;
@@ -48,6 +52,9 @@ class Application extends JSONObject{
         return $id;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public static function withUser(User $user): Application {
         $instance = new self();
         $instance->date = null;
@@ -126,6 +133,10 @@ class Application extends JSONObject{
         $this->address->lng = null;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     * It is used in constructor
+     */
     private function migrateLatLng(): void {
         if (!empty($this->address->latlng))
             $this->setLatLng($this->address->latlng);
@@ -271,6 +282,8 @@ class Application extends JSONObject{
 
     /**
      * Zwraca najlepiej pasująca dla adresu zgłoszenia SM/SA.
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     * @SuppressWarnings(CamelCaseVariableName)
      */
     public function guessSMData(bool $update=false): object {
         global $SM_ADDRESSES;

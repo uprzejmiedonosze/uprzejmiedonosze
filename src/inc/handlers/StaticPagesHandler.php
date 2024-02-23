@@ -7,6 +7,10 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ */
 class StaticPagesHandler extends AbstractHandler {
 
     function root(Request $request, Response $response): Response {
@@ -25,6 +29,11 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.MissingImport)
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     function faq(Request $request, Response $response) {
         global $SM_ADDRESSES;
         $smNames = array_map(function ($sm) { return $sm->city; }, $SM_ADDRESSES);
@@ -37,6 +46,9 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     function hearing(Request $request, Response $response) {
         global $SM_ADDRESSES;
         $SMHints = array();
@@ -61,13 +73,16 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function applicationPdf(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         [$path, $filename] = application2PDFById($appId);
         return AbstractHandler::renderPdf($response, $path, $filename);
     }
 
-    public function applicationRedirect(Request $request, Response $response, $args) {
+    public function applicationRedirect(Request $request) {
         $params = $request->getQueryParams();
         $appId = $this->getParam($params, 'id');
         return AbstractHandler::redirect("/ud-$appId.html");
@@ -153,6 +168,9 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function logout(Request $request, Response $response) {
         unset($_SESSION['token']);
         unset($_SESSION['user_id']);
@@ -164,6 +182,9 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function trafficAdvice(Request $request, Response $response) {
         return $this->renderJson($response, json_decode('[{
             "user_agent": "prefetch-proxy",
@@ -173,10 +194,16 @@ class StaticPagesHandler extends AbstractHandler {
         }]'));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function assetlinks(Request $request, Response $response) {
         return $this->renderJson($response, json_decode('[]'));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     public function default(Request $request, Response $response, $args) {
         $ROUTES = [
             '404',

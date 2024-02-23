@@ -67,6 +67,7 @@ class SM extends JSONObject{
     /**
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function guess(object $address): string{ // straż miejska
         global $SM_ADDRESSES;

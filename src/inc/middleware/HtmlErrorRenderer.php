@@ -3,11 +3,17 @@ use Slim\Interfaces\ErrorRendererInterface;
 
 
 class HtmlErrorRenderer implements ErrorRendererInterface {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string {
         return exceptionToErrorHtml($exception);
     }
 }
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 function exceptionToErrorHtml($exception): string {
     if (isProd()) \Sentry\captureException($exception);
     try{

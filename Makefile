@@ -352,8 +352,9 @@ lint-php:
 	@./vendor/phpmd/phpmd/src/bin/phpmd src/ text \
 		cleancode,codesize,controversial,design,naming,unusedcode \
 		--minimumpriority 10 --color | \
-		grep -v -e Superglobals -e StaticAccess -e CamelCaseVariableName | \
 		sed 's|$(PWD)/||'
+	@./vendor/phpmd/phpmd/src/bin/phpmd src/ text \
+		cleancode,codesize,controversial,design,naming,unusedcode | wc -l
 
 define lint_replace_inline
 $(call echo-processing,$<)

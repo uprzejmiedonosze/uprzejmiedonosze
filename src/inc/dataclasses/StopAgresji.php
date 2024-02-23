@@ -12,6 +12,10 @@ class StopAgresji extends SM {
     return "Stop Agresji Drogowej " . $this->voivodeship;
   }
 
+  /**
+   * @SuppressWarnings(PHPMD.MissingImport)
+   * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+   */  
   public static function guess(object $address): string  { // stop agresji
     global $STOP_AGRESJI;
 

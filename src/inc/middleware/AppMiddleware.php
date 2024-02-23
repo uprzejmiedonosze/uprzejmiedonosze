@@ -7,6 +7,10 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Routing\RouteContext;
 
+/**
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class AppMiddleware implements MiddlewareInterface {
     private $failOnWrongOwnership = true;
 

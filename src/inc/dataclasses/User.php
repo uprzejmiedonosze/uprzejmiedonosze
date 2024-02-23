@@ -7,6 +7,7 @@ use \stdClass as stdClass;
 /**
  * User class.
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class User extends JSONObject{
 
@@ -136,6 +137,7 @@ class User extends JSONObject{
 
     /**
      * Updates current user's data.
+     * @SuppressWarnings(PHPMD.MissingImport)
      */
     function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize){
         if(isset($this->added))
@@ -177,6 +179,9 @@ class User extends JSONObject{
         return $this->appsCount > 0;
     }
     
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     function guessSex(){
         $this->data->sex = User::_guessSex($this->data->name);
         return SEXSTRINGS[$this->data->sex];
@@ -191,6 +196,9 @@ class User extends JSONObject{
         return SEXSTRINGS[$this->data->sex];
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
     public static function _guessSex(string $name): string {
         $names = preg_split('/\s+/', trimstr2lower($name));
         if(count($names) < 1){

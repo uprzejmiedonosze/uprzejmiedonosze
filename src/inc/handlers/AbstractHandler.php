@@ -30,6 +30,9 @@ abstract class AbstractHandler {
         return $response;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.MissingImport)
+     */
     public static function getParam(array $params, string $name, mixed $default=null) {
         $param = $params[$name] ?? $default;
         if (is_null($param)) {
@@ -39,6 +42,9 @@ abstract class AbstractHandler {
     }
     
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public static function renderHtml(Request $request, Response $response, string $route, Array $extraParameters=[]): Response {
         global $storage;
         $params = $request->getQueryParams();

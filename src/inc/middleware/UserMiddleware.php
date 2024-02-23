@@ -7,8 +7,15 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class UserMiddleware implements MiddlewareInterface {
     private $createIfNonExists = false;
+
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public function __construct($createIfNonExists=false) {
         $this->createIfNonExists = $createIfNonExists;
     }

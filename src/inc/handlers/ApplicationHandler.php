@@ -6,6 +6,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 
+/**
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ */
 class ApplicationHandler extends AbstractHandler {
     public function start(Request $request, Response $response): Response {
         return AbstractHandler::renderHtml($request, $response, 'start', [
@@ -13,6 +16,14 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.MissingImport)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(ShortVariable)
+     * @TODO
+     */
     public function newApplication(Request $request, Response $response): Response {
         global $storage;
         $params = $request->getQueryParams();
@@ -141,6 +152,9 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function finish(Request $request, Response $response): Response {
         global $storage;
         $params = (array)$request->getParsedBody();
@@ -242,6 +256,9 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ShortVariable)
+     */
     public function shipment(Request $request, Response $response): Response {
         global $storage;
         $user = $request->getAttribute('user');

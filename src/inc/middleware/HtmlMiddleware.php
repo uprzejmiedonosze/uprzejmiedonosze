@@ -5,7 +5,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
+/**
+ * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+ * @SuppressWarnings(PHPMD.StaticAccess)
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+ */
 class HtmlMiddleware implements MiddlewareInterface {
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public static function getDefaultParameters(bool $isDialog=false): array {
         $isLoggedIn = SessionMiddleware::isLoggedIn();
         
