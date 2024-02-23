@@ -98,11 +98,11 @@ function doLogin(signInSuccessUrl) {
         }, {
             provider: EmailAuthProvider.PROVIDER_ID,
             signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
-            forceSameDevice: false,
+            forceSameDevice: true,
             disableSignUp: {
                 status: false
             }
-        }*/],
+        }],
         'tosUrl': '/regulamin.html',
         'privacyPolicyUrl': '/polityka-prywatnosci.html',
         'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
