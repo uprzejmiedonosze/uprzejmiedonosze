@@ -27,7 +27,8 @@ function initLogin(currentScript) {
     }
 
     if (currentScript?.getAttribute("login")) {
-        doLogin(signInSuccessUrl)
+        const withEmail = currentScript?.getAttribute("withEmail") == 'true'
+        doLogin(signInSuccessUrl, withEmail)
         return
     }
 }
@@ -80,7 +81,23 @@ function getClientId() {
     return '823788795198-inlf6ld2q1o7up7vbkerb4gdu30bm5tu.apps.googleusercontent.com'
 }
 
-function doLogin(signInSuccessUrl) {
+function doLogin(signInSuccessUrl, withEmail) {
+    const emailAuthProvider = {
+        provider: EmailAuthProvider.PROVIDER_ID,
+        signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+        forceSameDevice: true,
+        disableSignUp: {
+            status: false
+        }
+    }
+    const googleAuthProvider = {
+        provider: GoogleAuthProvider.PROVIDER_ID,
+        clientId: getClientId()
+    }
+
+    let signInOptions = [googleAuthProvider]
+    if (withEmail) signInOptions.push(emailAuthProvider)
+
     var uiConfig = {
         'signInSuccessUrl': `/login-ok.html?next=${signInSuccessUrl}`,
         'callbacks': {
@@ -92,17 +109,7 @@ function doLogin(signInSuccessUrl) {
                 return true;
             }
         },
-        'signInOptions': [{
-            provider: GoogleAuthProvider.PROVIDER_ID,
-            clientId: getClientId()
-        }/*, {
-            provider: EmailAuthProvider.PROVIDER_ID,
-            signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
-            forceSameDevice: true,
-            disableSignUp: {
-                status: false
-            }
-        }*/],
+        'signInOptions': signInOptions,
         'tosUrl': '/regulamin.html',
         'privacyPolicyUrl': '/polityka-prywatnosci.html',
         'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
