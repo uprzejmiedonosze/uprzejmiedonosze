@@ -73,6 +73,8 @@ class SessionApiHandler extends AbstractHandler {
      */
     public function verifyToken(Request $request, Response $response): Response {
         $firebaseUser = $request->getAttribute('firebaseUser');
+        logger('verifyToken');
+        logger($firebaseUser);
 
         if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== $firebaseUser['user_id']) {
             $errorMsg = "Session collision! {$_SESSION['user_email']} != {$firebaseUser['user_email']}";
