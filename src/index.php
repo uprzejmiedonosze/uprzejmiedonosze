@@ -2,33 +2,32 @@
 
 date_default_timezone_set('Europe/Warsaw');
 
+require_once(__DIR__ . '/../inc/Logger.php');
+
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
-function initSession() {
-    global $_SESSION;
-    $timeout = 60 * 60 * 24 * 10;
-    ini_set("session.gc_maxlifetime", $timeout);
-    ini_set("session.cookie_lifetime", $timeout);
-    session_start();
+function resetSession() {
+    session_unset();
+    session_regenerate_id(true);
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 }
 
 if (session_status() == PHP_SESSION_NONE) {
-    initSession();
-} else {
+    $timeout = 60 * 60 * 24 * 10;
+    ini_set("session.gc_maxlifetime", $timeout);
+    ini_set("session.cookie_lifetime", $timeout);
+    session_start();
+
     $userEmail = $_SESSION['user_email'] ?? '@?';
     $userAgent = $_SESSION['user_agent'] ?? '?';
-    if (($_SESSION['user_agent'] ?? '') !== $_SERVER['HTTP_USER_AGENT']) {
-        $errorMsg = "Session collision! $userEmail $userAgent";
-        session_unset();
-        session_destroy();
-        initSession();
+    if ($userAgent !== $_SERVER['HTTP_USER_AGENT']) {
+        $errorMsg = "Browser changed! $userEmail $userAgent";
         logger($errorMsg, true);
+        resetSession();
     }
+    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 }
-
-
 
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');

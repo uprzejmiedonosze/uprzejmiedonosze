@@ -1,6 +1,7 @@
 <?PHP
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/dataclasses/Exceptions.php');
+require_once(__DIR__ . '/Logger.php');
 use \Exception as Exception;
 
 /**
@@ -19,29 +20,6 @@ function trimstr2lower($in) {
 
 function cleanWhiteChars($input) {
     return trim(preg_replace("/\s+/u", " ", $input));
-}
-
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
- */
-function logger(string|object|array $msg, $force = null): string {
-    $time = date(DT_FORMAT);
-    if(!isProd() || $force) {
-        if (isDev()) return $time;
-
-        $user = "[" . ($_SESSION['user_email'] ?? '') . ']';
-
-        if (!is_string($msg))
-            $msg = print_r($msg, true);
-
-        $caller = array_shift(debug_backtrace());
-        $location = $caller['file'] . ':' . $caller['line'];
-        $location = preg_replace('/^.var.www.%HOST%.webapp/i', '', $location);
-
-        error_log("$time $user $location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
-    }
-    return $time;
 }
 
 /**
@@ -85,18 +63,6 @@ function isIOS(){
     $iPhone  = (bool)stripos($userAgent, "iPhone");
     $iPad    = (bool)stripos($userAgent, "iPad");
     return $iPod || $iPhone || $iPad;
-}
-
-function isProd(){
-    return '%HOST%' == 'uprzejmiedonosze.net' || '%HOST%' == 'shadow.uprzejmiedonosze.net';
-}
-
-function isStaging(){
-    return '%HOST%' == 'staging.uprzejmiedonosze.net';
-}
-
-function isDev() {
-    return !isProd() && !isStaging();
 }
 
 function extractAppNumer($appNumber) {

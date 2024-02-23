@@ -44,11 +44,11 @@ abstract class SessionMiddleware implements MiddlewareInterface {
     public abstract function process(Request $request, RequestHandler $handler): Response;
 
     public function preprocess(Request $request, RequestHandler $handler): Array {
+        logger($_SESSION, true);
         $path = $request->getUri()->getPath();
         logger("SessionMiddleware: $path");
-        if ($path == '/login.html') {
-            session_unset();
-            session_regenerate_id(true);
+        if ($path == '/login.html' || $path == '/logout.html') {
+            resetSession();
         }
 
         $isLoggedIn = $this->isLoggedIn();
