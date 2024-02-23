@@ -86,14 +86,14 @@ function doLogin(signInSuccessUrl) {
         'signInOptions': [{
             provider: GoogleAuthProvider.PROVIDER_ID,
             clientId: null
-        }, {
+        }/*, {
             provider: EmailAuthProvider.PROVIDER_ID,
             signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
             forceSameDevice: false,
             disableSignUp: {
                 status: false
             }
-        }],
+        }*/],
         'tosUrl': '/regulamin.html',
         'privacyPolicyUrl': '/polityka-prywatnosci.html',
         'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
