@@ -16,7 +16,7 @@ function isDev() {
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
-function logger(string|object|array|null $msg, $force = true): string {
+function logger(string|object|array|null $msg, $force = null): string {
     $DT_FORMAT = 'Y-m-d\TH:i:s';
     $time = date($DT_FORMAT);
     if(!isProd() || $force) {
