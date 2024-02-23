@@ -14,7 +14,7 @@ function resetSession() {
 }
 
 if (session_status() == PHP_SESSION_NONE) {
-    $timeout = 60 * 60 * 24 * 10;
+    $timeout = 60 * 60 * 24 * 31;
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
     session_start();
