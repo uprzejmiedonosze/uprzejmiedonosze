@@ -1,12 +1,31 @@
 <?php
 
 date_default_timezone_set('Europe/Warsaw');
-if (session_status() == PHP_SESSION_NONE) {
+
+function initSession() {
+    global $_SESSION;
     $timeout = 60 * 60 * 24 * 10;
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
     session_start();
+    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 }
+
+if (session_status() == PHP_SESSION_NONE) {
+    initSession();
+} else {
+    $userEmail = $_SESSION['user_email'] ?? '@?';
+    $userAgent = $_SESSION['user_agent'] ?? '?';
+    if (($_SESSION['user_agent'] ?? '') !== $_SERVER['HTTP_USER_AGENT']) {
+        $errorMsg = "Session collision! $userEmail $userAgent";
+        session_unset();
+        session_destroy();
+        initSession();
+        logger($errorMsg, true);
+    }
+}
+
+
 
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');
