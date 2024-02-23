@@ -20,8 +20,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 
     $userEmail = $_SESSION['user_email'] ?? '@?';
-    $userAgent = $_SESSION['user_agent'] ?? '?';
-    if ($userAgent !== $_SERVER['HTTP_USER_AGENT']) {
+    if (isset($_SESSION['user_agent']) && $_SESSION['user_agent'] !== $_SERVER['HTTP_USER_AGENT']) {
         $errorMsg = "Browser changed! $userEmail $userAgent";
         logger($errorMsg, true);
         resetSession();
