@@ -2,7 +2,7 @@
 
 date_default_timezone_set('Europe/Warsaw');
 if (session_status() == PHP_SESSION_NONE) {
-    $timeout = 60 * 60 * 24 * 365;
+    $timeout = 60 * 60 * 24 * 10;
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
     session_start();
