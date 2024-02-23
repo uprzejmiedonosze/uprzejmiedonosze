@@ -7,5 +7,17 @@
 			"    <li>.</li>"
 			"</ul>"
 		]
+	},
+	"Suppress PHPMD warnings": {
+		"prefix": "suppress-warnings",
+		"body": [
+			"/**"
+			" * @SuppressWarnings(PHPMD.${CLIPBOARD})"
+			" */"
+		]
+	},
+	"Suppress PHPMD warnings inline": {
+		"prefix": "inline-suppress-warnings",
+		"body": "@SuppressWarnings(PHPMD.${CLIPBOARD})"
 	}
 }
