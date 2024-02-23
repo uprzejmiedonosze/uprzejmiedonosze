@@ -71,6 +71,15 @@ function getFirebaseConfig() {
     };
 }
 
+function getClientId() {
+    const hostName = document.location.hostname
+    if (hostName.includes('staging'))
+        return '509860799944-7e8qe7knqkcjm5jbi932gg3tmgo657vf.apps.googleusercontent.com'
+    if (hostName.includes('localhost'))
+        return '961138564803-2id1ke8mjl1lr35div1i40dtrn1op369.apps.googleusercontent.com'
+    return '823788795198-inlf6ld2q1o7up7vbkerb4gdu30bm5tu.apps.googleusercontent.com'
+}
+
 function doLogin(signInSuccessUrl) {
     var uiConfig = {
         'signInSuccessUrl': `/login-ok.html?next=${signInSuccessUrl}`,
@@ -85,8 +94,8 @@ function doLogin(signInSuccessUrl) {
         },
         'signInOptions': [{
             provider: GoogleAuthProvider.PROVIDER_ID,
-            clientId: null
-        }/*, {
+            clientId: getClientId()
+        }, {
             provider: EmailAuthProvider.PROVIDER_ID,
             signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
             forceSameDevice: false,
