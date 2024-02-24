@@ -104,7 +104,7 @@ function setStatus(string $status, string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.MissingImport)
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-function sendApplication(string $appId): Application {
+function sendApplication(string $appId, User $user): Application {
     global $storage;
 
     $application = $storage->getApplication($appId);
@@ -112,7 +112,7 @@ function sendApplication(string $appId): Application {
     $sm = $application->guessSMData();
     $api = new $sm->api;
     $application = $api->send($application);
-
+    $storage->getUserStats(false, $user);
     return $application;
 }
 

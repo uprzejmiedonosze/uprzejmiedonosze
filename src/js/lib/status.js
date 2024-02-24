@@ -57,6 +57,14 @@ export function updateCounters() {
     }
   });
 
-  $("li.wysylka a span").text($("div.application.status-confirmed").length);
+  const $sendMenu = $("li.wysylka a span")
+  if ($('.dziekujemy').length) { // send on thank page
+    $sendMenu.text(parseInt($sendMenu.text()) - 1)
+  } else {
+    $sendMenu.text($("div.application.status-confirmed").length);
+  }
+  if (parseInt($sendMenu.text()) <= 0) {
+    $sendMenu.parent().hide()
+  }
 }
 window.updateCounters = updateCounters;

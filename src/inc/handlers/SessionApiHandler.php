@@ -36,12 +36,10 @@ class SessionApiHandler extends AbstractHandler {
         ));
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
     public function sendApplication(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
-        $application = sendApplication($appId);
+        $user = $request->getAttribute('user');
+        $application = sendApplication($appId, $user);
         return $this->renderJson($response, array(
             "status" => $application->status
         ));

@@ -270,7 +270,7 @@ class ApplicationHandler extends AbstractHandler {
             if ($city) {
                 return $this->redirect('/wysylka.html?city=' . urlencode($city));
             }
-            return $this->redirect('/moje-zgloszenia.html');
+            return $this->redirect('/moje-zgloszenia.html?update');
         }
 
         $city = urldecode($params['city']);
@@ -278,7 +278,7 @@ class ApplicationHandler extends AbstractHandler {
         $apps = $storage->getConfirmedAppsByCity($city);
 
         if (count($apps) == 0) {
-            return $this->redirect('/moje-zgloszenia.html');
+            return $this->redirect('/moje-zgloszenia.html?update');
         }
 
         $sm = reset($apps)->guessSMData();
