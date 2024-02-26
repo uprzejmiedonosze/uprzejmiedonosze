@@ -333,7 +333,7 @@ $app->patch('/api/rest/app/{appId}/send', function (Request $request, Response $
         throw new HttpForbiddenException($request, "Użytkownik '{$user->getEmail()}' nie ma uprawnień do wysłania zgłoszenia '$appId'");
     }
 
-    $application = sendApplication($appId);
+    $application = sendApplication($appId, $user);
     unset($application->browser);
     $response->getBody()->write(json_encode($application));
     return $response;
