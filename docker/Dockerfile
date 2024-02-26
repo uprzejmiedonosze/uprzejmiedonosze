@@ -1,5 +1,5 @@
 FROM nginx:bookworm as webserver
-LABEL net.uprzejmiedonosze=0.0.2
+LABEL net.uprzejmiedonosze=0.1.2
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update
 
@@ -40,6 +40,6 @@ RUN update-rc.d memcached defaults
 COPY init.sh /root/init.sh
 RUN ln -s /var/www/uprzejmiedonosze.localhost/webapp/vendor /var/www/uprzejmiedonosze.localhost
 
-EXPOSE 80 81
+EXPOSE 80
 
 CMD ["/bin/sh", "/root/init.sh"]
