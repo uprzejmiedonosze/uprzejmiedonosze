@@ -301,4 +301,13 @@ class ApplicationHandler extends AbstractHandler {
         return AbstractHandler::renderPdf($response, $path, $filename);
     }
 
+    public function askForStatus(Request $request, Response $response) {
+        global $storage;
+        $sent = $storage->getSentApplications(31);
+
+        return AbstractHandler::renderHtml($request, $response, 'zapytaj-o-status', [
+            'applications' => $sent
+        ]);
+    }
+
 }

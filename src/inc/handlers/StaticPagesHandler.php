@@ -111,15 +111,6 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function askForStatus(Request $request, Response $response) {
-        global $storage;
-        $sent = $storage->getSentApplications(31);
-
-        return AbstractHandler::renderHtml($request, $response, 'zapytaj-o-status', [
-            'applications' => $sent
-        ]);
-    }
-
     public function publicInfo(Request $request, Response $response) {
         $email = '<i>[xxx@xxx.pl]</i>';
         $msisdn = '<i>[XXX XXX XXX]</i>';

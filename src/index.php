@@ -117,6 +117,8 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Applic
     $group->get('/moje-zgloszenia.html', ApplicationHandler::class . ':myApps');
     $group->get('/wysylka.html', ApplicationHandler::class . ':shipment');
 
+    $group->get('/zapytaj-o-status.html', ApplicationHandler::class . ':askForStatus');
+
 })  ->add(new HtmlMiddleware())
     ->add(new RegisteredMiddleware());
 
@@ -142,7 +144,6 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessio
     $group->get('/login-ok.html', StaticPagesHandler::class . ':loginOK');
     $group->get('/logout.html', StaticPagesHandler::class . ':logout');
 
-    $group->get('/zapytaj-o-status.html', StaticPagesHandler::class . ':askForStatus');
     $group->get('/dostep-do-informacji-publicznej.html', StaticPagesHandler::class . ':publicInfo');
 
     $group->get('/regulamin.html', StaticPagesHandler::class . ':rules');
