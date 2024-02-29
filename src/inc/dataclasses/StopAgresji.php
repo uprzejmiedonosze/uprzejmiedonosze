@@ -15,7 +15,7 @@ class StopAgresji extends SM {
   /**
    * @SuppressWarnings(PHPMD.MissingImport)
    * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-   */  
+   */
   public static function guess(object $address): string  { // stop agresji
     global $STOP_AGRESJI;
 
@@ -42,6 +42,11 @@ class StopAgresji extends SM {
       return $voivodeship;
 
     return 'default';
+  }
+
+  public function isPolice(): bool
+  {
+    return true;
   }
 }
 

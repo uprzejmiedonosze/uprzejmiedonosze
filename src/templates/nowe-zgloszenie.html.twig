@@ -35,7 +35,7 @@
                     <img id="contextImagePreview" src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
                 <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="contextImage" multiple
-                    title="Zdjęcie przedstawiające kontekst" 
+                    title="Zdjęcie przedstawiające kontekst"
                         value="{{ app.contextImage.url ?? '' }}" />
             </div>
             <div class="ui-block-b imageContainer image-upload carImageSection">
@@ -101,7 +101,7 @@
         </div>
 
         <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />
-        
+
         <input type="hidden" id="address" name="address" value="{{ app.address | json_encode }}" />
 
         <label for="comment">Podaj komentarz</label>
@@ -116,9 +116,10 @@
             <div class="ui-block-{{ categoriesMatrix[i % 2] }}"
                 title="{{ categoryDef.desc|striptags ~ "\n\n" ~ categoryDef.law }}{% if categoryDef.price %}{{ "\n\nTaryfikator: " ~ categoryDef.price }}{% endif %}">
                 <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
-                    {% if not app.stopAgresji and categoryDef.stopAgresjiOnly %}disabled{% endif %}
                     name="category" value="{{ catId }}" id="{{ catId }}"
-                    data-contextImage-hint="{{ categoryDef.contextImageHint }}" data-carImage-hint="{{ categoryDef.carImageHint }}">
+                    data-contextImage-hint="{{ categoryDef.contextImageHint }}"
+                    data-carImage-hint="{{ categoryDef.carImageHint }}"
+                >
                 <label for="{{ catId }}">
                     <img src="/img/{{ catId }}.jpg?ref">
                     {% if categoryDef.points > 1 %}
@@ -126,7 +127,7 @@
                     {% endif %}
                     <p>{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}
                     {% if not app.stopAgresji and categoryDef.stopAgresjiOnly %}
-                        <span class="price-list">(kategoria niedostępna, jeśli zgłaszasz do SM)</span>
+                        <span class="price-list">(Zostanie wysłane na komendę Policji zamiast SM)</span>
                     {% elseif categoryDef.price %}
                         <span class="price-list">Mandat: {{ categoryDef.price }}</span>
                     {% endif %}

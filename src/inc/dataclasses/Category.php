@@ -41,4 +41,7 @@ class Category extends JSONObject{
         return $this->points;
     }
 
+    public function isStopAgresjiOnly(){
+        return $this->stopAgresjiOnly;
+    }
 }

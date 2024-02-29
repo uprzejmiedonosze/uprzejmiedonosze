@@ -10,20 +10,20 @@ use \Exception as Exception;
 $cache = new Memcache;
 $cache->connect('localhost', 11211);
 
-/** 
+/**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 function updateApplication(
     $appId,
     $date,
     $dtFromPicture,
-    $category,
+    int $category,
     $address,
     $plateId,
     $comment,
     $witness,
     $extensions,
-    User $user
+    User $user,
 ): Application {
 
     global $storage;
@@ -40,9 +40,9 @@ function updateApplication(
     $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
     $application->dtFromPicture = (bool) $dtFromPicture;
 
-    $application->category = intval($category);
+    $application->category = $category;
 
-    if (!isset($application->address)) $application->address = new stdClass();
+    $application->address ??= new stdClass();
     $application->address->address = $address->address;
     $application->address->addressGPS = $address->addressGPS ?? null;
     $application->address->city = $address->city;
@@ -55,9 +55,18 @@ function updateApplication(
     $application->address->postcode = $address->postcode ?? null;
 
     $application->updateUserData($user);
-    $application->guessSMData(true); // stores sm city inside the object
 
-    if (!isset($application->carInfo)) $application->carInfo = new stdClass();
+    /** @var \SM|\StopAgresji $sm */
+    $sm = $application->guessSMData(true); // stores sm city inside the object
+
+    /** @var array<int, Category> $CATEGORIES */
+    global $CATEGORIES;
+    if ($CATEGORIES[$category]->isStopAgresjiOnly() && !$sm->isPolice()) {
+        $application->stopAgresji = true;
+        $application->guessSMData(true);
+    }
+
+    $application->carInfo ??= new stdClass();
     $application->carInfo->plateId = strtoupper(cleanWhiteChars($plateId));
     $application->userComment = capitalizeSentence($comment);
     $application->initStatements();
@@ -99,7 +108,7 @@ function setStatus(string $status, string $appId, User $user): Application {
 
 /**
  * Sends application to SM via API (if possible), and updates status.
- * 
+ *
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.MissingImport)
  * @SuppressWarnings(PHPMD.StaticAccess)
@@ -161,7 +170,7 @@ function moderateApp(User $user, string $appId, string $decision): void {
 /**
  * Saves uploaded image + automatically create thumbnail + read plate data
  * for `carImage`.
- * 
+ *
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
@@ -197,7 +206,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
 /**
  * Saves byte_stream to `ROOT/userId/appId,type.jpg`
  * and it's thumb to    `ROOT/userId/appId,typet.jpg`
- * 
+ *
  * Returns:
  *   $prefix
  */
@@ -230,7 +239,7 @@ function saveImgAndThumb($application, $imageBytes, $type) {
 
 /**
  * Resizes given .jpg file data_stream.
- * 
+ *
  * Returns:
  *   destination image link resource
  * @SuppressWarnings(PHPMD.ElseExpression)

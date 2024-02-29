@@ -1,6 +1,7 @@
 <?PHP
 use Slim\Views\Twig;
 use \Twig\Cache\FilesystemCache as FilesystemCache;
+use Twig\Extension\DebugExtension;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 use \Twig\Environment as Environment;
 use \Twig\TwigFunction;
@@ -37,6 +38,10 @@ function _twigConfig(): array {
 function initSlimTwig() {
     $twig = Twig::create(__DIR__ . '/../templates', _twigConfig());
     $twig->addExtension(new TwigExtension());
+    if (!isProd()){
+        $twig->addExtension(new DebugExtension());
+    }
+
     return $twig;
 }
 
@@ -49,4 +54,3 @@ function initBareTwig() {
     $twig->addExtension(new TwigExtension());
     return $twig;
 }
-

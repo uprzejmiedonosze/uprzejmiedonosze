@@ -32,7 +32,7 @@ class SM extends JSONObject{
     }
 
     public function getHint(){
-        return $this->hint;    
+        return $this->hint;
     }
 
     public function getName(){
@@ -48,7 +48,7 @@ class SM extends JSONObject{
         $name = str_replace('Komenda Powiatowa', 'KPP', $name);
         $name = str_replace('Komenda Miejska', 'KMP', $name);
         $name = str_replace('Komisariat Policji', 'KP', $name);
-        $name = str_replace('Posterunek Policji', 'PP', $name);    
+        $name = str_replace('Posterunek Policji', 'PP', $name);
         return $name;
     }
 
@@ -62,6 +62,11 @@ class SM extends JSONObject{
 
     public function unknown(){
         return $this->city == null;
+    }
+
+    public function isPolice(): bool
+    {
+        return str_contains($this->getEmail(), 'policja');
     }
 
     /**

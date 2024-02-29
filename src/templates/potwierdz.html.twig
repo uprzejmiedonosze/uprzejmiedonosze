@@ -3,7 +3,6 @@
 
 {% set title = 'Potwierdź' %}
 {% set mainClass = 'confirm-application' %}
-
 {% set sm = app.guessSMData() %}
 
 {% block rightButtonCustom %}
@@ -17,6 +16,7 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
+
 {% if autoSend %}
 <h2>Sprawdź zgłoszenie przed wysłaniem</h2>
 <p>
@@ -32,7 +32,12 @@
 </p>
 {% endif %}
 
-{% include('_application.html.twig') %}
+{% if app.stopAgresji and not user.stopAgresji %}
+    <p><b>Wybrane naruszenie wykracza poza zakres uprawnień Straży Miejskiej. Adresat został automatycznie zmieniony na Policję.</b></p>
+{% endif %}
+
+
+    {% include('_application.html.twig') %}
 
 {% if autoSend %}
 <a onclick="confirmApplication()"

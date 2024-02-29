@@ -113,7 +113,7 @@ class ApplicationHandler extends AbstractHandler {
         $dtFromPicture = $this->getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
         $datetime = $this->getParam($params, 'datetime'); // "2018-02-02T19:48:10"
         $comment = $this->getParam($params, 'comment', '');
-        $category = intval($this->getParam($params, 'category'));
+        $category = (int) $this->getParam($params, 'category');
         $witness = isset($params['witness']);
         $extensions = $this->getParam($params, 'extensions', []); // "6,7", "6", "", missing
         $extensions = array_filter($extensions);
@@ -135,7 +135,7 @@ class ApplicationHandler extends AbstractHandler {
                 $comment,
                 $witness,
                 $extensions,
-                $user
+                $user,
             );
         } catch (Exception $e) {
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
@@ -147,8 +147,8 @@ class ApplicationHandler extends AbstractHandler {
                 'confirmationScreen' => true
             ],
             'app' => $application,
-            'autoSend' => $user->autoSend() && $application->automatedSM()
-
+            'autoSend' => $user->autoSend() && $application->automatedSM(),
+            'user' => $user
         ]);
     }
 
