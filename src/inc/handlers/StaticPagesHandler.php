@@ -212,7 +212,8 @@ class StaticPagesHandler extends AbstractHandler {
             'robtodobrze',
             'statystyki',
             'wniosek-odpowiedz1',
-            'wniosek-rpo'
+            'wniosek-rpo',
+            'zwrot-za-przesluchanie'
         ];
         $route = $args['route'];
 

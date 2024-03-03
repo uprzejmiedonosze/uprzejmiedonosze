@@ -1,0 +1,77 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuNewApplication' %}
+
+{% set title = 'Zwrot środków za przesłuchanie' %}
+{% set mainClass = 'faq' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>Jak uzyskać zwrot środków za przesłuchanie?</h2>
+
+<p>
+    Straż miejska i policja mogą ponieść koszty twojego stawiennictwa na przesłuchaniu.
+    Jako świadkowi przysługuje Ci m.in.:
+</p>
+<ol>
+    <li>Zwrot utraconego dochodu. Maksymalna kwota zwrotu w 2024 roku wynosi 82,32 zł. Choć nie jest to
+        zawrotna kwota, to w większości przypadków pozwoli na pokrycie 1-2 godzin nieobecności w pracy
+        w związku z wezwaniem. Jeżeli jesteśmy pracownikiem na umowie o pracę, pracodawca musi nas zwolnić
+        na czas przesłuchania oraz podróży i wystawić zaświadczenie o wysokości utraconego dochodu.</li>
+    <li>Zwrot kosztów noclegu. Maksymalna kwota zwrotu w 2024 roku wynosi 900 zł za jedną dobę hotelową.
+        Jest to szczególnie przydatne, gdy jesteśmy wzywani w odległe miejsce.</li>
+    <li>Zwrot kosztów dojazdu z miejsca zamieszkania do komisariatu/komendy SM i z powrotem. Zwrot
+        przyznaje się na podstawie racjonalnie poniesionych kosztów, czyli przejazd komunikacją
+        miejską, pociągiem. W przypadku przejazdu własnym samochodem maksymalną kwotę zwrotu ustala
+        tzw. kilometrówka i w 2024 roku wynosi 89 groszy za przejechany kilometr.</li>
+</ol>
+
+<p>Wniosek trzeba złożyć na piśmie w terminie 3 dni od przesłuchania. Najlepiej zrobić to osobiście
+    lub listownie. Można taki wniosek złożyć również ustnie do protokołu przesłuchania. Kwotę zwrotu trzeba
+    “należycie wykazać”, czyli załączyć do wniosku bilety na przejazd, fakturę za nocleg i zaświadczenie o
+    utraconym dochodzie, lub pisemne oświadczenie. Zwrot przysługuje świadkom, którzy otrzymali formalne
+    wezwanie na przesłuchanie nawet wtedy, gdy się stawili i nie zostali przesłuchani (np. policjant
+    jest na zwolnieniu lekarskim). </p>
+
+<h3>Pytania i odpowiedzi</h3>
+
+<h4>Jeżeli w danym dniu mam mieć dwa przesłuchania, czy mogę złożyć dwa wnioski o zwrot kosztów?</h4>
+<p>Nie. Jeżeli w danym dniu jesteśmy wzywani na kilka przesłuchań, możemy złożyć tylko
+    jeden wniosek o zwrot kosztów.</p>
+
+<h4>Co jeżeli otrzymałem “zaproszenie” na przesłuchanie?</h4>
+
+<p>Chodzi o sytuację w której organ prosi o telefoniczne ustalenie
+    terminu przesłuchania, ale nie przesyła formalnego wezwania do stawiennictwa.</h4>
+
+<p>Nic nie stoi na przeszkodzie, żeby złożyć wniosek o zwrot wyżej wymienionych kosztów nawet, gdy nie
+    byliśmy wzywani. Warunkiem jednak jest to, żeby przesłuchanie się odbyło - w innym przypadku
+    zwrot nie przysługuje.</p>
+
+<h4>Straż Miejska/Policja postanowiła o niezwracaniu kosztów, lub o zwróceniu w mniejszej kwocie, niż
+    ta o którą wnioskowałem.</h4>
+
+<p>Możemy złożyć zażalenie w terminie 7 dni od doręczenia niekorzystnego postanowienia. Zażalenie na
+    postanowienie straży miejskiej wnosi się do prokuratora, a w przypadku policji - do organu nadrzędnego.</p>
+
+
+<h3>Podstawa prawna</h3>
+
+<ul>
+    <li>Art. 618b KPK "§ 3. Górną granicę należności, o których mowa w § 2, stanowi równowartość 4,6% kwoty
+        bazowej dla osób zajmujących kierownicze stanowiska państwowe" - w 2024 roku kwota bazowa wynosi
+        1789,42 zł, a 4,6% z tej kwoty to 82,32 zł zaokrąglone w górę</li>
+    <li>Art. 618a KPK: "§ 2. Górną granicę należności, o których mowa w § 1, stanowi wysokość kosztów
+        przysługujących pracownikowi zatrudnionemu w państwowej lub samorządowej jednostce sfery
+        budżetowej z tytułu podróży służbowej na obszarze kraju. § 3. Według tych samych zasad świadkowi
+        przysługuje zwrot kosztów noclegu oraz utrzymania w miejscu"
+    <li>Rozporządzenie <a href="https://sip.lex.pl/akty-prawne/dzu-dziennik-ustaw/naleznosci-przyslugujace-pracownikowi-zatrudnionemu-w-panstwowej-lub-17949634" rel="external">
+        w sprawie należności przysługujących pracownikowi zatrudnionemu w państwowej lub samorządowej
+        jednostce sfery budżetowej z tytułu podróży służbowej</a>.</li>
+    <li>Art. 120. KPSW "Zażalenie na postanowienie organu prowadzącego czynności wyjaśniające w przedmiocie kosztów wnosi się
+        do organu nadrzędnego, a w przypadku: 1) czynności wyjaśniających przeprowadzanych przez
+        straż gminną (miejską) – do prokuratora;".</li>
+</ul>
+
+
+{% endblock %}
