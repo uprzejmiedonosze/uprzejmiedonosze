@@ -4,6 +4,11 @@
 {% set title = 'Potwierdź' %}
 {% set mainClass = 'confirm-application' %}
 {% set sm = app.guessSMData() %}
+{% set forcedPolice = app.stopAgresji and not user.stopAgresji %}
+{% set smName = sm.getName %}
+{% if forcedPolice %}
+{% set smName = '<b class="lightWarning">' ~ sm.getName ~ '</b>' %}
+{% endif %}
 
 {% block rightButtonCustom %}
     {% if not autoSend %}
@@ -20,7 +25,7 @@
 {% if autoSend %}
 <h2>Sprawdź zgłoszenie przed wysłaniem</h2>
 <p>
-    Twoje zgłoszenie zostanie za chwilę wysłane do <b>{{ sm.getName }}</b>, do wiadomości
+    Twoje zgłoszenie zostanie za chwilę wysłane do <b>{{ smName|raw }}</b>, do wiadomości
     <b>{{ app.user.name }} ({{ app.user.email }})</b>.
     Sprawdź zgłoszenie zwracając szczególną uwagę na podany adres oraz numer rejestracyjny.
 </p>
@@ -28,12 +33,15 @@
 <h2>Sprawdź zgłoszenie</h2>
 <p>
     Sprawdź dane przed zapisaniem zgłoszenia.
-    {% if not sm.unknown %}Na tym etapie nic nie zostanie wysłane do <b>{{ sm.getName }}</b>.{% endif %}
+    {% if not sm.unknown %}Na tym etapie nic nie zostanie wysłane do <b>{{ smName|raw }}</b>.{% endif %}
 </p>
 {% endif %}
 
-{% if app.stopAgresji and not user.stopAgresji %}
-    <p><b>Wybrane naruszenie wykracza poza zakres uprawnień Straży Miejskiej. Adresat został automatycznie zmieniony na Policję.</b></p>
+{% if forcedPolice %}
+    <p><b class="forcedPoliceInfo lightWarning">
+        Straż Miejska nie ma uprawnień do karania za jazdę po chodniku. Uprzejmie
+        zmieniliśmy adresata na {{ sm.getShortName }}.
+    </b></p>
 {% endif %}
 
 

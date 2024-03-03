@@ -105,10 +105,16 @@ cite {
   padding: 1em;
 }
 
-b.appSentInfo {
+b.appSentInfo, .forcedPoliceInfo {
   background-color: #e9c200;
   display: block;
   padding: 1em;
   border-radius: 5px;
   text-shadow: none;
+}
+
+b.lightWarning {
+  background-color: #e9c20066;
+  padding: 0.1em 0.5em;
+  border-radius: 5px;
 }
