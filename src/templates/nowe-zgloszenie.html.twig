@@ -126,11 +126,7 @@
                     <span class="badge">{{ categoryDef.points }}</span>
                     {% endif %}
                     <p>{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}
-                    {% if not app.stopAgresji and categoryDef.stopAgresjiOnly %}
-                        <span class="price-list">(Zostanie wysłane na komendę Policji zamiast SM)</span>
-                    {% elseif categoryDef.price %}
-                        <span class="price-list">Mandat: {{ categoryDef.price }}</span>
-                    {% endif %}
+                    <span class="price-list">Mandat: {{ categoryDef.price }}</span>
                     </p>
                 </label>
             </div>
