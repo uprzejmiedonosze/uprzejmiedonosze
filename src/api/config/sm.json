@@ -2732,5 +2732,16 @@
   },
   "gmina Raszyn": {
     "parent": "Raszyn"
+  },
+  "Brodnica": {
+    "address": [
+      "Straż Gminna w Brodnicy",
+      "ul. Kamionka 23",
+      "87-300 Brodnica"
+    ],
+    "email": "mchwialkowski@brodnica.pl"
+  },
+  "gmina Brodnica": {
+    "parent": "Brodnica"
   }
 }
