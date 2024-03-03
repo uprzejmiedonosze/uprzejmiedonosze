@@ -1,6 +1,6 @@
 describe('Checks static pages', function() {
     before(() => {
-        cy.clearCookie('PHPSESSID')
+        cy.clearCookie('UDSESSIONID')
     })
 
     beforeEach(() => {
@@ -49,6 +49,16 @@ describe('Checks static pages', function() {
     it('Visits o projekcie', () => {
         cy.contains('o projekcie').click()
         cy.contains('Bitbucket')
+    })
+
+    it('Visits zwrot za przesłuchanie', () => {
+        cy.visit('/zwrot-za-przesluchanie.html')
+        cy.contains('Jak uzyskać zwrot środków')
+    })
+
+    it('Visits jak zgłosić nielegalne parkowanie', () => {
+        cy.visit('/jak-zglosic-nielegalne-parkowanie.html')
+        cy.contains('przez Uprzejmie Donoszę')
     })
 
     it('Visits dzwoń jak szeryf', () => {

@@ -41,10 +41,7 @@ describe('Application screen validation', () => {
             filter(c => c[1].title).
             forEach((category) => {
             const [id, def] = category
-            if (def.stopAgresjiOnly)
-                cy.get(`input#${id}`).should('be.disabled')
-            else
-                cy.get(`input#${id}`).should('be.enabled')
+            cy.get(`input#${id}`).should('be.enabled')
         })
         
         Object.entries(this.extensions).forEach((extension) => {
