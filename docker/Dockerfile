@@ -6,9 +6,9 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get --no-install-recommends install -y \
     apt-utils locales vim telnet curl xtail \
     memcached texlive ca-certificates \
-    php-fpm php-sqlite3 php-curl  \
+    php-fpm php-sqlite3 php-curl \
     php-opcache php-mbstring php-gd \
-    php-memcache php-memcached
+    php-memcache php-memcached php-intl
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
