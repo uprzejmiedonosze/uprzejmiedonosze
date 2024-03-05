@@ -1,6 +1,10 @@
 Cypress.Commands.add("login", () => {
   cy.session('user' + Date.now(), () => {
-    cy.setCookie('UDSESSIONID', '3341ec29r3okfsqetn0o447399979216n0p3dgjk')
+    if (Cypress.env('DOCKER')) {
+      cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0')
+    } else {
+      cy.setCookie('UDSESSIONID', '3341ec29r3okfsqetn0o447399979216n0p3dgjk')
+    }
   }, {
     cacheAcrossSpecs: true
   })
