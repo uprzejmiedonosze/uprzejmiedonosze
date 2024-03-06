@@ -2743,5 +2743,16 @@
   },
   "gmina Brodnica": {
     "parent": "Brodnica"
+  },
+  "Stare Babice": {
+    "address": [
+      "Straż Gminna Starych Babicach",
+		"Rynek 21",
+		"05-082 Stare Babice"
+    ],
+    "email": "sekretariat@sgsb.pl"
+  },
+  "gmina Stare Babice": {
+	  "parent": "Stare Babice"
   }
 }
