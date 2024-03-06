@@ -14,17 +14,10 @@ function resetSession() {
 }
 
 if (session_status() == PHP_SESSION_NONE) {
-    $timeout = 60 * 60 * 24 * 31;
+    $timeout = 60 * 60 * 24 * 180;
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
     session_start();
-
-    $userEmail = $_SESSION['user_email'] ?? '@?';
-    if (isProd() && isset($_SESSION['user_agent']) && $_SESSION['user_agent'] !== $_SERVER['HTTP_USER_AGENT']) {
-        $errorMsg = "Browser changed! $userEmail";
-        logger($errorMsg, true);
-        resetSession();
-    }
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 }
 
