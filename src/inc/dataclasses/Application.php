@@ -497,6 +497,14 @@ class Application extends JSONObject{
         $title = preg_replace('/\s\(.*\)/', '', $this->getCategory()->getTitle());
         return "[{$this->number}] " . (($this->category == 0)? "": $title)
             . " ({$this->address->address})";
+    }
+
+    public function getShortAddress() {
+        if (str_ends_with($this->user->address, $this->address->city ?? 'none')) {
+            $re = '/,\s' . ($this->address->city ?? 'none') . '$/';
+            return preg_replace($re, '', $this->address->address);
+        }
+        return $this->address->address;
 
     }
 

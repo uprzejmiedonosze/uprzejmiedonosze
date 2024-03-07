@@ -85,6 +85,7 @@ const ODDZIALY_TERENOWE = array(
 const SEXSTRINGS = Array (
     '?' => [
         "bylam" => "byłam/em",
+        "bylas" => "byłaś/eś",
         "swiadoma" => "świadoma/y",
         "wykonalam" => "wykonałam/em",
         "zglaszajacej" => "zgłaszającej/ego",
@@ -92,6 +93,7 @@ const SEXSTRINGS = Array (
     ],
     'm' => [
         "bylam" => "byłem",
+        "bylas" => "byłeś",
         "swiadoma" => "świadomy",
         "wykonalam" => "wykonałem",
         "zglaszajacej" => "zgłaszającego",
@@ -99,6 +101,7 @@ const SEXSTRINGS = Array (
     ],
     'f' => [
         "bylam" => "byłam",
+        "bylas" => "byłaś",
         "swiadoma" => "świadoma",
         "wykonalam" => "wykonałam",
         "zglaszajacej" => "zgłaszającej",
