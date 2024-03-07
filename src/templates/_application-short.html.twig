@@ -27,7 +27,7 @@
         <div class="ui-block-a">
             
 
-            <p>{{ _self.icon('calendar') }}<b>{{ app.getDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b></p>
+            <p>{{ _self.icon('calendar') }}<b>{{ app.getHRDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b></p>
             <p>{{ _self.icon('tag') }}<span class="plate-id">{{ app.carInfo.plateId }}</span>{% if recydywa > 1 %} <sup>(recydywa {{ recydywa }})</sup>{% endif %}</p>
             <p>{{ _self.icon('location') }}<a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank">{{ app.getShortAddress }}</a></p>
             <p>{{ _self.icon('mail') }}Wysłano do <b>{{ app.guessSMData.getShortName }}</b></p>

@@ -14,7 +14,15 @@ use \JSONObject as JSONObject;
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class Application extends JSONObject{
+    private static $dateFormatter;
+
     private function __construct() {
+        Application::$dateFormatter = datefmt_create('pl-PL',
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::FULL,
+            'Europe/Warsaw',
+            IntlDateFormatter::GREGORIAN,
+            'eeee, d MMMM YYYY');
     }
 
     /**
@@ -169,6 +177,10 @@ class Application extends JSONObject{
             'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'
         ];
         return $months[intval($date->format('m')) - 1] . ' '. $date->format('Y');
+    }
+
+    public function getHRDate() {
+        return datefmt_format(Application::$dateFormatter, new DateTime($this->date));
     }
 
     /**
