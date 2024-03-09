@@ -47,7 +47,7 @@ export function _updateStatus(appId, status) {
 window._updateStatus = _updateStatus;
 
 export function updateCounters() {
-  $(".filter a").each(function (_idx, item) {
+  $(".status-filter a").each(function (_idx, item) {
     const count = $("div.application.status-" + item.id).length;
     item.children[0].innerText = count;
     if (count == 0) {

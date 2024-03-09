@@ -9,12 +9,17 @@ $(document).on("pageshow", function () {
   });
 
   updateCounters();
-  $(".filter a").click(function (_e) {
+
+  $(".status-filter a").click(function (_e) {
+    // unclick scenarion
+    if (this.classList.contains('active')) {
+      $(this).removeClass("active");
+      $("div.application:not(.status-archived)").show();
+      return;
+    }
     $("div.application").hide();
     $("div.application.status-" + this.id).show();
-    $(".filter a").each(function (_idx, item) {
-      $(item).removeClass("active");
-    });
+    $(".status-filter a").removeClass("active");
     $(this).addClass("active");
   });
   window._recydywa = function(plateId) {

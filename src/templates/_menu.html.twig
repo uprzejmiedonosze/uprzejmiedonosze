@@ -17,18 +17,6 @@
                 <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span>
             </a>
         </li>
-
-        {% if config.menu == 'moje-zgloszenia' %}
-            <li data-icon="false" class="filter">
-                <a href="#" id="active" class="active">(aktywne) <span class="ui-li-count"></span></a>
-            </li>
-            {% for key,val in statuses %}
-                {% if val.class %} {# class is empty, this is a draft or ready #}
-                    <li data-icon="false" class="filter"><a href="#" id="{{ key }}">#{{ val.name|lower }} <span class="ui-li-count"></span></a></li>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
         {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
         <li data-icon="mail" class="wysylka">
             <a data-ajax="false"

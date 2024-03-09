@@ -29,6 +29,13 @@
     <form autocomplete="off">
         <input autocomplete="false" data-type="search" id="autocomplete-input"
             placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu" value="{{ query }}">
+        <ul class="status-filter">
+        {% for key,val in statuses %}
+            {% if val.class %} {# class is empty, this is a draft or ready #}
+                <li><a href="#" id="{{ key }}">#{{ val.name|lower }} <span class="ui-li-count"></span></a></li>
+            {% endif %}
+        {% endfor %}
+        </ul>
     </form>
     
     <div data-role="popup" id="patronite" class="ui-content"
