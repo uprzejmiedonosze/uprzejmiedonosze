@@ -45,7 +45,7 @@
     </div>
 
     <div data-role="collapsibleset" data-iconpos="right" data-filter="true" data-mini="true"
-        data-inset="true" id="collapsiblesetForFilter" data-input="#searchForCollapsibleSet">
+        data-inset="true" id="collapsiblesetForFilter" data-input="#autocomplete-input">
         {% for app in applications %}
             {% if loop.index0 >= myAppsSize %}
                 {% set hideAppOverLimit = true %}

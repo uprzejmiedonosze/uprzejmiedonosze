@@ -224,7 +224,7 @@ class ApplicationHandler extends AbstractHandler {
         $params = $request->getQueryParams();
 
         $query = $this->getParam($params, 'q', '');
-        $applications = $storage->getUserApplications(user: $user, limit: $user->myAppsSize() + 100, search: $query);
+        $applications = $storage->getUserApplications(user: $user, search: $query);
         $changeMail = isset($params['changeMail']) && isset($params['city']);
         $city = urldecode($this->getParam($params, 'city', ''));
 
