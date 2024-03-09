@@ -28,14 +28,18 @@
 <p>Twoje statystyki:</p>
 <fieldset class="gauges">
     <div class="gauge">
+        {% if general.stats.active ?? 0 > 0 %}
         <h3>
-            {% if general.stats.active ?? 0 > 0 %}
-                <a href="/moje-zgloszenia.html">{{ general.stats.active|number_format(0, ',', ' ') }}</a>
-            {% else %}
-                <a href="/nowe-zgloszenie.html" data-ajax="false">Stwórz pierwsze</a>
-            {% endif %}
+            <a href="/moje-zgloszenia.html">{{ general.stats.active|number_format(0, ',', ' ') }}</a>
+        </h3>
+        <p><a href="/moje-zgloszenia.html">Aktywne zgłoszenia</a></p>
+        {% else %}
+        <h3>
+            <a href="/nowe-zgloszenie.html" data-ajax="false">Stwórz pierwsze</a>
         </h3>
         <p>Aktywne zgłoszenia</p>
+        {% endif %}
+        
     </div>
     <div class="gauge">
         <h3>
