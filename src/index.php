@@ -108,6 +108,7 @@ $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Applic
 
     $group->get('/brak-sm.html', ApplicationHandler::class . ':missingSM');
     $group->get('/moje-zgloszenia.html', ApplicationHandler::class . ':myApps');
+    $group->get('/my-apps-partial.html', ApplicationHandler::class . ':myAppsPartial');
     $group->get('/wysylka.html', ApplicationHandler::class . ':shipment');
 
     $group->get('/zapytaj-o-status.html', ApplicationHandler::class . ':askForStatus');

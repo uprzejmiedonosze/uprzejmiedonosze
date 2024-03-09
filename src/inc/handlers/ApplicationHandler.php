@@ -221,10 +221,10 @@ class ApplicationHandler extends AbstractHandler {
         global $storage;
 
         $user = $request->getAttribute('user');
-        $applications = $storage->getUserApplications($user);
-
         $params = $request->getQueryParams();
 
+        $query = $this->getParam($params, 'q', '');
+        $applications = $storage->getUserApplications(user: $user, limit: $user->myAppsSize() + 100, search: $query);
         $changeMail = isset($params['changeMail']) && isset($params['city']);
         $city = urldecode($this->getParam($params, 'city', ''));
 
@@ -252,6 +252,28 @@ class ApplicationHandler extends AbstractHandler {
             'countChanged' => $countChanged,
             'applicationsCount' => count($applications),
             'myAppsSize' => $user->myAppsSize(),
+            'autoSend' => $user->autoSend(),
+            'query' => $query
+        ]);
+    }
+
+    public function myAppsPartial(Request $request, Response $response): Response {
+        global $storage;
+        $user = $request->getAttribute('user');
+
+        $params = $request->getQueryParams();
+        $status = $this->getParam($params, 'status', 'all');
+        $search = $this->getParam($params, 'search', '%');
+        $limit =  $this->getParam($params, 'limit', $user->myAppsSize() + 1);
+        $offset = $this->getParam($params, 'offset', 0);
+        
+        $apps = $storage->getUserApplications($user, $status, $search, $user->myAppsSize() + 100, $offset);
+
+        return AbstractHandler::renderHtml($request, $response, 'my-apps-partial', [
+            'appActionButtons' => true,
+            'applications' => $apps,
+            'myAppsSize' => $user->myAppsSize(),
+            'applicationsCount' => count($apps),
             'autoSend' => $user->autoSend()
         ]);
     }

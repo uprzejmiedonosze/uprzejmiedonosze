@@ -1,0 +1,13 @@
+{% for app in applications %}
+    {% if loop.index0 >= myAppsSize %}
+        {% set hideAppOverLimit = true %}
+    {% endif %}
+    {% include('_application-short.html.twig') %}
+{% endfor %}
+
+{% if myAppsSize < applicationsCount %}
+    <div class="displayAllApps">
+        <p>To tylko {{ myAppsSize }} najnowszych zgłoszeń.</p>
+        <a href="#" class="ui-btn ui-corner-all">Pokaż wszystkie</a>
+    </div>
+{% endif %}

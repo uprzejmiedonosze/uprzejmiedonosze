@@ -27,8 +27,8 @@
     {% endif %}
 
     <form autocomplete="off">
-        <input autocomplete="false" data-type="search" id="searchForCollapsibleSet"
-            placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu">
+        <input autocomplete="false" data-type="search" id="autocomplete-input"
+            placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu" value="{{ query }}">
     </form>
     
     <div data-role="popup" id="patronite" class="ui-content"

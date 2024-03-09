@@ -1,4 +1,10 @@
-{% set recydywa = app.getRecydywa %}
+{% set recydywaCnt = app.getRecydywa %}
+{% set recydywa = '' %}
+{% if recydywaCnt > 1 %}
+{% set wrappedPlateId = "'" ~ app.carInfo.plateId ~ "'" %}
+{% set recydywa = ' 🚨 <a href="#" onclick="window._recydywa(' ~ wrappedPlateId  ~ ')"><sup>recydywa#' ~ recydywaCnt ~ '</sup></a>' %}
+{% endif %}
+
 {% set status = app.getStatus %}
 {% set sendable = status.sendable %}
 
@@ -8,13 +14,11 @@
 
 <div id="{{ app.id }}"
     {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
-    class="application application-short {{ status.class }} status-all status-{{ status.class }}
-        status-{{ app.status }}"
+    class="application application-short {{ status.class }} status-all status-{{ status.class }} status-{{ app.status }}"
     data-collapsed-icon="{{ status.icon }}"
     data-expanded-icon="carat-d" data-role="collapsible"
     data-filtertext="{{ app.address.address }} {{app.number}} {{app.date}} {{app.carInfo.plateId}} {{app.userComment}} {{app.getCategory.short}} {% if recydywa > 1 %}recydywa{{ recydywa }}{% endif %}"
-    title="Status: {{ status.name }}"
-    >
+    title="Status: {{ status.name }}">
 
     <h3>
         <span title="{{ app.number }}" class="app-number">{{ app.seq }}</span>
@@ -23,26 +27,21 @@
         <sup>{%if app.guessSMData.isPolice %}#Policja{%else%}#SM</sup>{% endif %}
     </h3>
 
-    <div data-role="listview" data-inset="false" class="ui-grid-a ui-responsive">
-        <div class="ui-block-a">
-            
-
-            <p>{{ _self.icon('calendar') }}<b>{{ app.getHRDate }}</b> {{ app.getDateTimeDivider }} <b>{{ app.getTime }}</b></p>
-            <p>{{ _self.icon('tag') }}<span class="plate-id">{{ app.carInfo.plateId }}</span>{% if recydywa > 1 %} <sup>(recydywa {{ recydywa }})</sup>{% endif %}</p>
-            <p>{{ _self.icon('location') }}<a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank">{{ app.getShortAddress }}</a></p>
-            <p>{{ _self.icon('mail') }}Wysłano do <b>{{ app.guessSMData.getShortName }}</b></p>
-        </div>
-        <div class="ui-block-b">
-            <p><b>{{ app.getCategory.title }}.</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</p>
-            <p>
-            {% if app.statements is not defined or not app.statements.witness %}
-                <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
-            {% else %}
-                <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.</p>
-            {% endif %}
-            </p>
-        </div>
-    </div>
+    <div data-role="listview" data-inset="false">
+        <ul class="application-details-list">
+            <li class="calendar"><b>{{ app.getHRDate }}, {{ app.getTime }}</b></li>
+            <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
+            <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank">{{ app.getShortAddress }}</a></li>
+            <li class="sent-to">Wysłano do <b>{{ app.guessSMData.getShortName }}</b></li>
+            <li class="description"><b>{{ app.getCategory.title }}.</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
+            <li class="witness">
+                {% if app.statements is not defined or not app.statements.witness %}
+                    <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
+                {% else %}
+                    <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.</p>
+                {% endif %}
+            </li>
+        </ul>
 
 {% if status.topButtons %}
     <div>
@@ -103,5 +102,5 @@
     {% endfor %}
     </fieldset>
 {% endif %}
-    </p> <!-- data-role="listview" data-inset="false" -->
+    </div> <!-- data-role="listview" data-inset="false" -->
 </div>

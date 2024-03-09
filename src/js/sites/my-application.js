@@ -17,4 +17,8 @@ $(document).on("pageshow", function () {
     });
     $(this).addClass("active");
   });
+  window._recydywa = function(plateId) {
+    $input = $('#autocomplete-input')
+    $input.val(plateId)
+  }
 });
