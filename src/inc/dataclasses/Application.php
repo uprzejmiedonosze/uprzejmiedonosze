@@ -511,13 +511,13 @@ class Application extends JSONObject{
             . " ({$this->address->address})";
     }
 
-    public function getShortAddress() {
+    public function getShortAddress(): string {
+        $shortStreetAddress = preg_replace('/\D.*\s(\w+\s\w+\s[\w\d-]+,\s.+)/iu', '$1', $this->address->address);
         if (str_ends_with($this->user->address, $this->address->city ?? 'none')) {
             $re = '/,\s' . ($this->address->city ?? 'none') . '$/';
-            return preg_replace($re, '', $this->address->address);
+            return preg_replace($re, '', $shortStreetAddress);
         }
-        return $this->address->address;
-
+        return $shortStreetAddress;
     }
 
     /**
