@@ -110,7 +110,7 @@ $app->post('/api/rest/user', function (Request $request, Response $response, $ar
     $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
     $autoSend = getParam($params, 'autoSend', 'Y') == 'Y';
     if (!$autoSend) throw new HttpBadRequestException($request, "Odmawiam wyłączenia funkcji automatycznej wysyłki zgłoszeń");
-    $myAppsSize = getParam($params, 'myAppsSize', 200);
+    $myAppsSize = (int)getParam($params, 'myAppsSize', 200);
 
     $user = $request->getAttribute('user');
 

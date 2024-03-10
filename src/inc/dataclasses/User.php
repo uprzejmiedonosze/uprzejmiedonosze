@@ -139,7 +139,7 @@ class User extends JSONObject{
      * Updates current user's data.
      * @SuppressWarnings(PHPMD.MissingImport)
      */
-    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize){
+    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, int $myAppsSize){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 

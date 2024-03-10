@@ -32,7 +32,7 @@ class UserHandler extends AbstractHandler {
         $exposeData  = $this->getParam($params, 'exposeData', 'N') == 'Y';
         $stopAgresji = $this->getParam($params, 'stopAgresji', 'SM') == 'SA';
         $autoSend    = $this->getParam($params, 'autoSend', 'Y') == 'Y';
-        $myAppsSize  = $this->getParam($params, 'myAppsSize', 200);
+        $myAppsSize  = (int)$this->getParam($params, 'myAppsSize', 200);
 
         $user = $request->getAttribute('user');
         $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
