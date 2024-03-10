@@ -17,15 +17,14 @@
     class="application application-short {{ status.class }} status-all status-{{ status.class }} status-{{ app.status }}"
     data-collapsed-icon="{{ status.icon }}"
     data-expanded-icon="carat-d" data-role="collapsible"
-    data-filtertext="{{ app.address.address }} {{app.number}} {{app.date}} {{app.carInfo.plateId}} {{app.userComment}} {{app.getCategory.short}} {% if recydywaCnt > 1 %}recydywa{{ recydywaCnt }}{% endif %}"
-    title="Status: {{ status.name }}">
+    data-filtertext="{{ app.address.address }} {{app.number}} {{app.date}} {{app.carInfo.plateId}} {{app.userComment}} {{app.getCategory.short}} {% if recydywaCnt > 1 %}recydywa{{ recydywaCnt }}{% endif %}">
 
     <h3>
         <span title="{{ app.number }}" class="app-number">{{ app.seq }}</span>
         {{ app.getDate }},
         {{ app.getShortAddress }}
-        {%if app.guessSMData.isPolice %}👮‍♀️{% endif %}
-        {% if recydywaCnt > 1 %}🚨{% endif %}
+        {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️{% endif %}</span>
+        {% if recydywaCnt > 1 %}<span title="Recydywa#{{ recydywaCnt }}">🚨</span>{% endif %}
     </h3>
 
     <div data-role="listview" data-inset="false">
