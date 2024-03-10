@@ -96,16 +96,31 @@ div#recydywa {
 }
 
 .application {
-  h3 .app-number {
-    background-color: #F9F9F9;
-    border-radius: 0.3125em;
-    border: 1px solid;
-    font-size: 12.5px;
-    font-weight: 700;
-    padding: 0.3em 0.6em;
-    margin-left: -0.3em;
-    margin-right: 0.6em;
-    text-align: center;
+  h3 {
+    a {
+      padding-top: 3px;
+    }
+    img {
+      height: 24px;
+      width: 24px;
+      filter: grayscale(0.5);
+      top: 7px;
+      position: relative;
+      border-radius: 0.3125em;
+      margin-right: 0.3em;
+    }
+
+    .app-number {
+      background-color: #F9F9F9;
+      border-radius: 0.3125em;
+      border: 1px solid;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 0.3em 0.6em;
+      margin-left: -0.3em;
+      margin-right: 0.6em;
+      text-align: center;
+    }
   }
 
   span.plate-id {

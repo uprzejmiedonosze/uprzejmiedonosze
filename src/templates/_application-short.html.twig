@@ -21,6 +21,7 @@
 
     <h3>
         <span title="{{ app.number }}" class="app-number">{{ app.seq }}</span>
+        <img title="{{app.getCategory.short}}" src="/img/{{ app.category }}.jpg">
         {{ app.getDate }},
         {{ app.getShortAddress }}
         {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️{% endif %}</span>
@@ -31,9 +32,9 @@
         <ul class="application-details-list">
             <li class="calendar"><b>{{ app.getHRDate }}, {{ app.getTime }}</b></li>
             <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
-            <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank">{{ app.getShortAddress }}</a></li>
+            <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank">{{ app.address.address }}</a></li>
             <li class="sent-to">Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b></li>
-            <li class="description"><b>{{ app.getCategory.title }}.</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
+            <li class="description"><b>{{ app.getCategory.short }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
             <li class="witness">
                 {% if app.statements is not defined or not app.statements.witness %}
                     <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
