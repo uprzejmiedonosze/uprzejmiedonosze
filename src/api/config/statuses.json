@@ -56,7 +56,7 @@
   },
   "confirmed-sm": {
     "name": "Potwierdzone w SM",
-    "action": "Potwierdzone w SM",
+    "action": "Zgłoszenie zostało potwierdzone w SM",
     "icon": "user",
     "class": "bottom",
     "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
@@ -67,7 +67,7 @@
   },
   "confirmed-fined": {
     "name": "Mandat",
-    "action": "Mandat",
+    "action": "Kierowca dostał mandat",
     "icon": "check",
     "class": "bottom",
     "allowed": ["confirmed-instructed", "confirmed-ignored", "archived"],
@@ -78,7 +78,7 @@
   },
   "confirmed-instructed": {
     "name": "Pouczenie",
-    "action": "Pouczenie",
+    "action": "Kierowca został pouczony",
     "icon": "audio",
     "class": "bottom",
     "allowed": ["confirmed-fined", "confirmed-ignored", "archived"],
@@ -89,18 +89,18 @@
   },
   "confirmed-ignored": {
     "name": "Zignorowane",
-    "action": "Zignorowane",
+    "action": "Nie ukarano ani nie pouczono kierowcy",
     "icon": "delete",
     "class": "bottom",
     "allowed": ["confirmed-fined", "confirmed-instructed", "archived"],
-    "comment": "Zgłoszenie zostało zignorowane",
+    "comment": "Zgłoszenie zostało zignorowane, nie wskazany ",
     "topButtons": true,
     "editable": false,
     "sendable": false
   },
   "archived": {
     "name": "W archiwum",
-    "action": "Do archiwum",
+    "action": "Przenieś do archiwum",
     "icon": "minus",
     "class": "bottom",
     "allowed": ["confirmed"],
