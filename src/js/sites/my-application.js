@@ -27,5 +27,6 @@ $(document).on("pageshow", function () {
     $input = $('#autocomplete-input')
     $input.val(plateId)
     $input.keyup()
+    $("[data-role=collapsible]").collapsible( "collapse" ) // close all
   }
 });
