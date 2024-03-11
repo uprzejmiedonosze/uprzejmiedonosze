@@ -22,8 +22,10 @@ $(document).on("pageshow", function () {
     $(".status-filter a").removeClass("active");
     $(this).addClass("active");
   });
+
   window._recydywa = function(plateId) {
     $input = $('#autocomplete-input')
     $input.val(plateId)
+    $input.keyup()
   }
 });
