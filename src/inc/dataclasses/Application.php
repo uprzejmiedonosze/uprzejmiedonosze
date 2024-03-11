@@ -352,7 +352,15 @@ class Application extends JSONObject{
      */
     public function getStatus(){
         global $STATUSES;
-        return $STATUSES[$this->status];
+        $status = $STATUSES[$this->status];
+        if (!$this->guessSMData()->isPolice())
+            return $status;
+        if (str_ends_with($status->name, 'w SM')) {
+            $status->name = str_replace('w SM', 'na Policji', $status->name);
+            $status->comment = str_replace('w SM', 'na Policji', $status->comment);
+            $status->action = str_replace('w SM', 'na Policji', $status->action);
+        }
+        return $status;
     }
 
     public function isCurrentUserOwner(){
