@@ -34,7 +34,7 @@ class UserHandler extends AbstractHandler {
         $autoSend    = $this->getParam($params, 'autoSend', 'Y') == 'Y';
 
         $user = $request->getAttribute('user');
-        $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $myAppsSize);
+        $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend);
         $storage->saveUser($user);
 
         return AbstractHandler::redirect($signInSuccessUrl);
