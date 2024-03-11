@@ -1,12 +1,15 @@
 import { updateCounters } from "../lib/status";
 
 $(document).on("pageshow", function () {
-  if (!$(".my-applications").length) return;
 
-  $("div.displayAllApps a").click(function () {
+  displayAllApps = function () {
     $("div.displayAllApps").hide();
     $("div.application:not(.archived)").show();
-  });
+  }
+
+  if (!$(".my-applications").length) return;
+
+  $("div.displayAllApps a").click(displayAllApps);
 
   updateCounters();
 
@@ -23,10 +26,12 @@ $(document).on("pageshow", function () {
     $(this).addClass("active");
   });
 
-  window._recydywa = function(plateId) {
+  window._recydywa = function (plateId) {
     $input = $('#autocomplete-input')
     $input.val(plateId)
     $input.keyup()
-    $("[data-role=collapsible]").collapsible( "collapse" ) // close all
+    $("[data-role=collapsible]").collapsible("collapse") // close all
+    displayAllApps()
   }
+
 });
