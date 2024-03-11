@@ -5,7 +5,7 @@ $(document).on("pageshow", function () {
 
   $("div.displayAllApps a").click(function () {
     $("div.displayAllApps").hide();
-    $("div.application:not(.status-archived)").show();
+    $("div.application:not(.archived)").show();
   });
 
   updateCounters();
@@ -14,11 +14,11 @@ $(document).on("pageshow", function () {
     // unclick scenarion
     if (this.classList.contains('active')) {
       $(this).removeClass("active");
-      $("div.application:not(.status-archived)").show();
+      $("div.application:not(.archived)").show();
       return;
     }
     $("div.application").hide();
-    $("div.application.status-" + this.id).show();
+    $("div.application." + this.id).show();
     $(".status-filter a").removeClass("active");
     $(this).addClass("active");
   });

@@ -1,4 +1,4 @@
-div.application-short.status-archived h3 a {
+div.application-short.archived h3 a {
   font-weight: 300;
 }
 
@@ -10,7 +10,7 @@ div.application-short h3 a {
   font-weight: 400;
 }
 
-div.application-short.status-archived {
+div.application-short.archived {
   display: none;
 }
 
@@ -25,64 +25,64 @@ div.application-short {
     font-weight: 100;
   }
 
-  .status-draft h3 .ui-btn-icon-right:after,
-  .status-draft:after,
-  .status-draft::marker {
+  &.draft h3 .ui-btn-icon-right:after,
+  .draft:after,
+  .draft::marker {
     background-color: #7463634d;
   }
 
-  .status-ready h3 .ui-btn-icon-right:after,
-  .status-ready:after,
-  .status-ready::marker {
+  &.ready h3 .ui-btn-icon-right:after,
+  .ready:after,
+  .ready::marker {
     background-color: #0000004d;
   }
 
-  .status-confirmed h3 .ui-btn-icon-right:after,
-  .status-confirmed:after,
-  .status-confirmed::marker {
+  &.confirmed h3 .ui-btn-icon-right:after,
+  .confirmed:after,
+  .confirmed::marker {
     background-color: #99999999;
   }
 
-  .status-confirmed h3 a {
+  .confirmed h3 a {
     font-weight: 700;
   }
 
-  .status-confirmed-waiting h3 .ui-btn-icon-right:after,
-  .status-confirmed-waiting:after,
-  .status-confirmed-waiting::marker,
-  .status-confirmed-waitingE h3 .ui-btn-icon-right:after,
-  .status-confirmed-waitingE:after,
-  .status-confirmed-waiting::marker {
+  &.confirmed-waiting h3 .ui-btn-icon-right:after,
+  .confirmed-waiting:after,
+  .confirmed-waiting::marker,
+  &.confirmed-waitingE h3 .ui-btn-icon-right:after,
+  .confirmed-waitingE:after,
+  .confirmed-waiting::marker {
     background-color: #3388cc99;
   }
 
-  .status-confirmed-sm h3 .ui-btn-icon-right:after,
-  .status-confirmed-sm:after,
-  .status-confirmed-sm::marker {
+  &.confirmed-sm h3 .ui-btn-icon-right:after,
+  .confirmed-sm:after,
+  .confirmed-sm::marker {
     background-color: #ffc10799;
   }
 
-  .status-confirmed-fined h3 a.ui-btn-icon-right:after,
-  .status-confirmed-fined:after,
-  .status-confirmed-fined::marker {
+  &.confirmed-fined h3 a.ui-btn-icon-right:after,
+  .confirmed-fined:after,
+  .confirmed-fined::marker {
     background-color: #8bc34aee;
   }
 
-  .status-confirmed-ignored h3 .ui-btn-icon-right:after,
-  .status-confirmed-ignored:after,
-  .status-confirmed-ignored::marker {
+  &.confirmed-ignored h3 .ui-btn-icon-right:after,
+  .confirmed-ignored:after,
+  .confirmed-ignored::marker {
     background-color: #dd2c00cc;
   }
 
-  .status-confirmed-instructed h3 .ui-btn-icon-right:after,
-  .status-confirmed-instructed:after,
-  .status-confirmed-instructed::marker {
+  &.confirmed-instructed h3 .ui-btn-icon-right:after,
+  .confirmed-instructed:after,
+  .confirmed-instructed::marker {
     background-color: #791800cc
   }
 
-  .status-archived h3 .ui-btn-icon-right:after,
-  .status-archived:after,
-  .status-archived::marker {
+  &.archived h3 .ui-btn-icon-right:after,
+  .archived:after,
+  .archived::marker {
     background-color: #0000004C;
   }
 }
@@ -110,8 +110,8 @@ div.application-short {
       }
     }
 
-    li+li {
-      margin-top: 6px;
+    li:visible+li {
+      margin-top: 9px;
     }
   }
 }

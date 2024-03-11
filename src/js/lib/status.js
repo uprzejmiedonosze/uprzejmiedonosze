@@ -5,7 +5,7 @@ const statuses = require("../../api/config/statuses.json");
 export function setStatus(appId, status) {
   if (statuses[status]?.confirmationNeeded) {
     const confirmation = window.confirm('Czy na pewno chcesz przeniesć zgłoszenie do archiwum?')
-    if (!confirmation) return;
+    if (!confirmation) return $("#changeStatus" + appId).popup( "close" );
   }
   $.mobile.loading("show", { textVisible: true, text: '' });
   $.ajax({
@@ -17,6 +17,7 @@ export function setStatus(appId, status) {
       if (e?.patronite) $('#patronite').popup("open")
       _updateStatus(appId, status)
       $.mobile.loading("hide")
+      $("#changeStatus" + appId).popup( "close" )
     }
   });
   (typeof ga == 'function') && ga("send", "event", {
@@ -28,23 +29,25 @@ export function setStatus(appId, status) {
 window.setStatus = setStatus;
 
 export function _updateStatus(appId, status) {
-  $("#" + appId + " .appActionButtons a")
-    .removeClass("ui-disabled")
-    .hide();
-  $("#" + appId + " .appActionButtons a.status-" + status)
-    .addClass("ui-disabled")
-    .show();
-  statuses[status].allowed.forEach(function (allowed) {
-    $("#" + appId + " .appActionButtons a.status-" + allowed).show();
+  const statusDef = statuses[status]
+  const newIcon = "ui-icon-" + statusDef.icon
+  const $popup = $("#changeStatus" + appId)
+  const $application = $("#" + appId)
+
+  $popup.find("li a").parent().hide()
+  statusDef.allowed.forEach(function (allowed) {
+    $popup.find("a." + allowed).parent().show()
   });
 
-  const allClasses = Object.keys(statuses).map(c => `status-${c}`).join(" ");
-  $("#" + appId).removeClass(allClasses);
-  $("#" + appId).addClass("status-" + status);
-
-  $("#" + appId + " b.currentStatus").text(
-    $("#" + appId + " .appActionButtons a.status-" + status).text()
-  );
+  const allClasses = Object.keys(statuses).join(" ");
+  const allIcons = Object.values(statuses).map(c => `ui-icon-${c.icon}`).join(" ");
+  $application.removeClass(allClasses).removeClass(allIcons)
+  $application.find('.application-details-list li.status').removeClass(allClasses)
+  $application.find('.application-details-list li.status').addClass(status)
+  $application.addClass(status).addClass(newIcon);
+  $application.find('h3 a').removeClass(allIcons).addClass(newIcon);
+  $application.find(".currentStatus").text(statusDef.action);
+  $popup.find(".currentStatus").text(statusDef.action);
 
   window.updateCounters();
 }
@@ -52,7 +55,7 @@ window._updateStatus = _updateStatus;
 
 export function updateCounters() {
   $(".status-filter a").each(function (_idx, item) {
-    const count = $("div.application.status-" + item.id).length;
+    const count = $("div.application." + item.id).length;
     item.children[0].innerText = count;
     if (count == 0) {
       $(item).parent().hide();
@@ -65,7 +68,7 @@ export function updateCounters() {
   if ($('.dziekujemy').length) { // send on thank page
     $sendMenu.text(parseInt($sendMenu.text()) - 1)
   } else {
-    $sendMenu.text($("div.application.status-confirmed").length);
+    $sendMenu.text($("div.application.confirmed").length);
   }
   if (parseInt($sendMenu.text()) <= 0) {
     $sendMenu.parent().hide()

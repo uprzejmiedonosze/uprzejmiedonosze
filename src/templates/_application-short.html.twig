@@ -14,7 +14,7 @@
 
 <div id="{{ app.id }}"
     {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
-    class="application application-short {{ status.class }} status-all status-{{ status.class }} status-{{ app.status }}"
+    class="application application-short status-all {{ app.status }}"
     data-collapsed-icon="{{ status.icon }}"
     data-expanded-icon="{{ status.icon }}"
     data-role="collapsible"
@@ -34,23 +34,24 @@
             <li class="calendar"><b>{{ app.getHRDate }}, {{ app.getTime }}</b></li>
             <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
             <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank">{{ app.address.address }}</a></li>
-            <li class="status {{app.status}}"><b>{{ status.name }}</b>
+            <li class="status {{app.status}}"><b class="currentStatus">{{ status.name }}</b>
                 {% if appActionButtons %}
-                <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="slideup">
-                    (zmień)
+                <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none">
+                    (zmień status)
                 </a>
                 <div data-role="popup" id="changeStatus{{ app.id }}" class="application-short">
                     <ul data-role="listview" data-inset="true" style="min-width:210px;">
                         <li data-role="list-divider">
-                            Zmień ręcznie status zgłoszenia z {{ status.name }} na:
+                            Zmień ręcznie status zgłoszenia z <span class="currentStatus">{{ status.name }}</span> na:
                         </li>
                         {% for key,val in statuses %}
-                        {% if val.class == 'bottom' and key != app.status and key in status.allowed %}
-                        <li><a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true"
+                        {% if val.class == 'bottom' %}
+                        <li style="{% if key not in status.allowed %}display: none;{% endif %}">
+                            <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true"
                             class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
                                 {{ val.cta ?? '' }}
                                 ui-icon-{{ val.icon }}
-                                status-{{ key }}">{{ val.action }}</a></li>
+                                {{ key }}">{{ val.action }}</a></li>
                         {% endif %}
                         {% endfor %}
                     </ul>
@@ -76,15 +77,15 @@
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
             {% if sendable %}cta{% else %}hidden{% endif %}
             ui-icon-{{ statuses['confirmed-waiting'].icon }}
-            status-confirmed-waiting">Wyślij {% if sendable %}do {{ app.guessSMData.getShortName }}{% else %}zgłoszenie{% endif %}</a>
+            confirmed-waiting">Wyślij {% if sendable %}do {{ app.guessSMData.getShortName }}{% else %}zgłoszenie{% endif %}</a>
             {% elseif app.unknownSM %}
             <a href="/brak-sm.html?id={{ app.id }}"
                 class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail
             {% if sendable %}cta{% else %}hidden{% endif %}
-            status-confirmed-waiting">Wyślij zgłoszenie</a>
+            confirmed-waiting">Wyślij zgłoszenie</a>
             {% elseif wysylka is not defined %}
             <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
-            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail status-confirmed-waiting
+            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail confirmed-waiting
             {% if sendable %}cta{% else %}hidden{% endif %}">Wyślij zgłoszenie</a>
             {% endif %}
             {% if appActionButtons %}
