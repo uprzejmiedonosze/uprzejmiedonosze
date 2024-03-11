@@ -51,9 +51,9 @@ export function updateCounters() {
     const count = $("div.application.status-" + item.id).length;
     item.children[0].innerText = count;
     if (count == 0) {
-      $(item).hide();
+      $(item).parent().hide();
     } else {
-      $(item).show();
+      $(item).parent().show();
     }
   });
 
