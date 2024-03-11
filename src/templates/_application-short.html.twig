@@ -46,7 +46,8 @@
                         </li>
                         {% for key,val in statuses %}
                         {% if val.class == 'bottom' and key != app.status and key in status.allowed %}
-                        <li><a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true" class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
+                        <li><a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true"
+                            class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini
                                 {{ val.cta ?? '' }}
                                 ui-icon-{{ val.icon }}
                                 status-{{ key }}">{{ val.action }}</a></li>

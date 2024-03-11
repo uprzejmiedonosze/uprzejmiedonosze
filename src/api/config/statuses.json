@@ -107,6 +107,7 @@
     "comment": "Zgłoszenie zostało zarchiwizowane",
     "topButtons": false,
     "editable": false,
-    "sendable": false
+    "sendable": false,
+    "confirmationNeeded": true
   }
 }

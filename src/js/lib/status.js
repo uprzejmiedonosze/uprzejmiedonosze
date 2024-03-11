@@ -3,6 +3,10 @@
 const statuses = require("../../api/config/statuses.json");
 
 export function setStatus(appId, status) {
+  if (statuses[status]?.confirmationNeeded) {
+    const confirmation = window.confirm('Czy na pewno chcesz przeniesć zgłoszenie do archiwum?')
+    if (!confirmation) return;
+  }
   $.mobile.loading("show", { textVisible: true, text: '' });
   $.ajax({
     type: 'PATCH',
