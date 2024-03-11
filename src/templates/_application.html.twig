@@ -1,14 +1,16 @@
 <div class="ui-body ui-body-a ui-corner-all application application-details">
 
-    {% if config.confirmationScreen is not defined %}
+{% if config.confirmationScreen is not defined %}
+    {% if not dialog %}
     <h2>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h2>
         {% if general.isAdmin and not config.isAppOwner %}
         <h3>
             Podgląd administratora.
             <small><a data-ajax="false" href="nowe-zgloszenie.html?edit={{ app.id }}">(edit)</a></small>
         </h3>
-        {% endif %}
-    {% endif %}
+        {% endif %} {# admin #}
+    {% endif %} {# not dialog#}
+{% endif %} {# not confirmationScreen #}
     
 {% if app.sent is defined %}
     {% if app.sent.method == 'Mail' %}
