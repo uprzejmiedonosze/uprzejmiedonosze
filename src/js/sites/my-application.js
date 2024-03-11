@@ -34,4 +34,24 @@ $(document).on("pageshow", function () {
     displayAllApps()
   }
 
+  $("#collapsiblesetForFilter").on("collapsibleexpand", (e) => {
+    const target = e.target
+    const appId = target.id
+    const appDetailsDiv = $(target).find('.ui-collapsible-content div')
+
+    appDetailsDiv.html('<div class="loader"></div>')
+
+    $.ajax({
+      url: `/short-${appId}-partial.html`,
+      dataType: "html"
+    }).then(function (appDetails) {
+      location.hash = appId
+      appDetailsDiv.html(appDetails)
+      $(`#changeStatus${appId}`).popup()
+    });
+  })
+
+
+
+
 });

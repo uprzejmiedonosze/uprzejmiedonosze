@@ -332,4 +332,17 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
+    public function applicationShortHtml(Request $request, Response $response, $args) {
+        global $storage;
+        $appId = $args['appId'];
+        $user = $request->getAttribute('user');
+        $application = $storage->getApplication($appId);
+
+        return AbstractHandler::renderHtml($request, $response, '_application-short-details', [
+            'appActionButtons' => true,
+            'app' => $application,
+            'autoSend' => $user->autoSend()
+        ]);
+    }
+
 }
