@@ -1,7 +1,7 @@
-
 div.application-short.status-archived h3 a {
   font-weight: 300;
 }
+
 div.application-short h3 a {
   padding-right: 2.5em;
 }
@@ -16,62 +16,102 @@ div.application-short.status-archived {
 
 @media only screen and (min-width: 768px) {
   div.application-short h3 a {
-      font-size: 16px;
+    font-size: 16px;
   }
 }
 
-div.application-short.status-all h3 a {
-  font-weight: 100;
+div.application-short {
+  &.status-all h3 a {
+    font-weight: 100;
+  }
+
+  .status-draft h3 .ui-btn-icon-right:after,
+  .status-draft:after,
+  .status-draft::marker {
+    background-color: #7463634d;
+  }
+
+  .status-ready h3 .ui-btn-icon-right:after,
+  .status-ready:after,
+  .status-ready::marker {
+    background-color: #0000004d;
+  }
+
+  .status-confirmed h3 .ui-btn-icon-right:after,
+  .status-confirmed:after,
+  .status-confirmed::marker {
+    background-color: #99999999;
+  }
+
+  .status-confirmed h3 a {
+    font-weight: 700;
+  }
+
+  .status-confirmed-waiting h3 .ui-btn-icon-right:after,
+  .status-confirmed-waiting:after,
+  .status-confirmed-waiting::marker,
+  .status-confirmed-waitingE h3 .ui-btn-icon-right:after,
+  .status-confirmed-waitingE:after,
+  .status-confirmed-waiting::marker {
+    background-color: #3388cc99;
+  }
+
+  .status-confirmed-sm h3 .ui-btn-icon-right:after,
+  .status-confirmed-sm:after,
+  .status-confirmed-sm::marker {
+    background-color: #ffc10799;
+  }
+
+  .status-confirmed-fined h3 a.ui-btn-icon-right:after,
+  .status-confirmed-fined:after,
+  .status-confirmed-fined::marker {
+    background-color: #8bc34aee;
+  }
+
+  .status-confirmed-ignored h3 .ui-btn-icon-right:after,
+  .status-confirmed-ignored:after,
+  .status-confirmed-ignored::marker {
+    background-color: #dd2c00cc;
+  }
+
+  .status-confirmed-instructed h3 .ui-btn-icon-right:after,
+  .status-confirmed-instructed:after,
+  .status-confirmed-instructed::marker {
+    background-color: #791800cc
+  }
+
+  .status-archived h3 .ui-btn-icon-right:after,
+  .status-archived:after,
+  .status-archived::marker {
+    background-color: #0000004C;
+  }
 }
 
 
-div.application-short.status-draft h3 .ui-btn-icon-right:after,
-div.application-short .status-draft:after {
-  background-color: #7463634d;
-}
+.my-applications {
+  ul.status-filter {
+    list-style-type: none;
+    padding-inline-start: 0;
+    columns: 2;
 
-div.application-short.status-ready h3 .ui-btn-icon-right:after,
-div.application-short .status-ready:after {
-  background-color: #0000004d;
-}
+    li {
+      display: none;
 
-div.application-short.status-confirmed h3 .ui-btn-icon-right:after,
-div.application-short .status-confirmed:after {
-  background-color: #99999999;
-}
+      a.active {
+        color: #009C7F !important;
+      }
 
-div.application-short.status-confirmed h3 a {
-  font-weight: 700;
-}
+      a {
+        color: #666 !important;
+      }
 
-div.application-short.status-confirmed-waiting h3 .ui-btn-icon-right:after,
-div.application-short .status-confirmed-waiting:after,
-div.application-short.status-confirmed-waitingE h3 .ui-btn-icon-right:after,
-div.application-short .status-confirmed-waitingE:after {
-  background-color: #3388cc99;
-}
+      .ui-li-count {
+        position: unset;
+      }
+    }
 
-div.application-short.status-confirmed-sm h3 .ui-btn-icon-right:after,
-div.application-short .status-confirmed-sm:after {
-  background-color: #ffc10799;
-}
-
-div.application-short.status-confirmed-fined h3 a.ui-btn-icon-right:after,
-div.application-short .status-confirmed-fined:after {
-  background-color: #8bc34aee;
-}
-
-div.application-short.status-confirmed-ignored h3 .ui-btn-icon-right:after,
-div.application-short .status-confirmed-ignored:after {
-  background-color: #dd2c00cc;
-}
-
-div.application-short.status-confirmed-instructed h3 .ui-btn-icon-right:after,
-div.application-short .status-confirmed-instructed:after {
-  background-color: #791800cc
-}
-
-div.application-short.status-archived h3 .ui-btn-icon-right:after,
-div.application-short .status-archived:after {
-  background-color: #0000004C;
+    li+li {
+      margin-top: 6px;
+    }
+  }
 }
