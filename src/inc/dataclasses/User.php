@@ -139,7 +139,7 @@ class User extends JSONObject{
      * Updates current user's data.
      * @SuppressWarnings(PHPMD.MissingImport)
      */
-    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, int $myAppsSize){
+    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
@@ -155,7 +155,6 @@ class User extends JSONObject{
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
         if(isset($autoSend)) $this->data->autoSend = $autoSend;
-        if(isset($myAppsSize)) $this->data->myAppsSize = $myAppsSize;
         
         $this->data->address = $address;
         $this->data->exposeData = $exposeData;
@@ -247,13 +246,6 @@ class User extends JSONObject{
             return $this->data->autoSend;
         }
         return true;
-    }
-
-    public function myAppsSize(){
-        if(isset($this->data->myAppsSize)){
-            return $this->data->myAppsSize;
-        }
-        return 200;
     }
 
     /**

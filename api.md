@@ -27,7 +27,7 @@ POST params:
   * `exposeData` (optional, defaults 'N')
   * `stopAgresji` (optional, default 'SM')
   * `autoSend` (deprecated, default 'Y')
-  * `myAppsSize` (optional, default 200)
+
 
 ### GET `user-apps`
 

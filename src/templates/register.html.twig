@@ -67,14 +67,6 @@
         <label for="autoSend-N">ręcznie, w większych paczkach</label>
     </fieldset>
     {% endif %}
-    <fieldset data-role="controlgroup">
-        <legend for="myAppsSize">Liczba zgłoszeń ładowana na start w "Moje zgłoszenia"</legend>
-        <input type="radio" name="myAppsSize" id="myAppsSize-200" value="200" {% if user.myAppsSize == 200 %}checked="checked"{% endif %}>
-        <label for="myAppsSize-200">200 (domyślnie)</label>
-
-        <input type="radio" name="myAppsSize" id="myAppsSize-50" value="50" {% if user.myAppsSize == 50 %}checked="checked"{% endif %}>
-        <label for="myAppsSize-50">50, dobre na starszych telefonach i słabej sieci</label>
-    </fieldset>
     {% endif %}
 </form>
 

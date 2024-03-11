@@ -251,7 +251,7 @@ class ApplicationHandler extends AbstractHandler {
             'applications' => $applications,
             'countChanged' => $countChanged,
             'applicationsCount' => count($applications),
-            'myAppsSize' => $user->myAppsSize(),
+            'myAppsSize' => 500,
             'autoSend' => $user->autoSend(),
             'query' => $query
         ]);
@@ -264,15 +264,15 @@ class ApplicationHandler extends AbstractHandler {
         $params = $request->getQueryParams();
         $status = $this->getParam($params, 'status', 'all');
         $search = $this->getParam($params, 'search', '%');
-        $limit =  $this->getParam($params, 'limit', $user->myAppsSize() + 1);
+        $limit =  $this->getParam($params, 'limit', 0);
         $offset = $this->getParam($params, 'offset', 0);
         
-        $apps = $storage->getUserApplications($user, $status, $search, $user->myAppsSize() + 100, $offset);
+        $apps = $storage->getUserApplications($user, $status, $search, $limit, $offset);
 
         return AbstractHandler::renderHtml($request, $response, 'my-apps-partial', [
             'appActionButtons' => true,
             'applications' => $apps,
-            'myAppsSize' => $user->myAppsSize(),
+            'myAppsSize' => 500,
             'applicationsCount' => count($apps),
             'autoSend' => $user->autoSend()
         ]);
