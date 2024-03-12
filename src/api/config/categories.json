@@ -157,7 +157,7 @@
     },
     "23": {
         "title": "Utrudnianie pieszym dostępu do tramwaju/autobusu",
-        "short": "Pojazd był zaparkowany w sposób utrudniający swobodny pieszym swobodny dostęp do pojazdu komunikacji publicznej (PoRD Art. 26. 6.).",
+        "short": "Pojazd był zaparkowany w sposób utrudniający pieszym swobodny dostęp do pojazdu komunikacji publicznej (PoRD Art. 26. 6.).",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu na przystanku lub między przystankiem a tramwajem w taki sposób, że utrudnia to pieszym wsiadanie i wysiadanie z pojazdu komunikacji zbiorowej jest niedozwolone.</p>",
         "law": "PoRD Art. 26. 6. [...] Jeżeli przystanek nie jest wyposażony w wysepkę dla pasażerów, a na przystanek wjeżdża tramwaj lub stoi na nim, kierujący jest obowiązany zatrzymać pojazd w takim miejscu i na taki czas, aby zapewnić pieszemu swobodne dojście do tramwaju lub na drogę dla pieszych lub drogę dla pieszych i rowerów.",
         "price": "300 zł (6 pkt)",
