@@ -6,87 +6,14 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-{% if apps|length == 1 %}
-    {% set zgloszen = 'znajduje się jedno zgłoszenie' %}
-    {% set paczke = 'swoje zgłoszenie' %}
-{% elseif apps|length < 5 or (apps|length > 20 and apps|length % 10 in [2, 3, 4] ) %}
-    {% set zgloszen = 'znajdują się ' ~ apps|length ~ ' zgłoszenia' %}
-    {% set paczke = 'paczkę ' ~ apps|length ~ ' zgłoszeń' %}
-{% else %}
-    {% set zgloszen = 'znajduje się ' ~ apps|length ~ ' zgłoszeń' %}
-    {% set paczke = 'paczkę ' ~ apps|length ~ ' zgłoszeń' %}
-{% endif %}
-
-{% set emailBody = 'Dzień dobry,
-
-w załączeniu ' ~ zgloszen ~ ' nieprawidłowego parkowania. Wszystkie przypadki albo wpływały na bezpieczeństwo pieszych, albo wiązały się z niszczeniem mienia.
-
-Proszę o kontakt pod adresem e-mail ' ~ user.data.email ~ ', a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.
-
-Z poważaniem
-
-' ~ user.data.name ~ '
-' ~ user.data.address ~ '
-' ~ user.data.msisdn|default("") %}
-
-{% set emailSubject = 'Zgłoszenie wykroczeń związanych z parkowaniem' %}
-
 {% if sm.unknown %}
     <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu e-mail SM.</b> Przeczytaj
         <a href="/brak-sm.html?id={{ apps | first.id }}">co zrobić w takiej sytuacji</a>.
     </p>
-{% else %} {# if sm.unknown #}
-    {% if sm.hasAPI %}
-        <h2>Wyślij swoje zgłoszenia</h2>
-        <p>Na tej stronie możesz wysłać swoje zgłoszenia do {{ sm.getName }}.</p>
-        <p>Na szczęście {{ sm.getShortName }} udostępniła mechanizm, umożliwiający automatyczne przekazanie
-        im zgłoszeń. Rozwiń poniższe zgłoszenia, i wyślij je po kolei.</p>
-        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getShortName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
-    {% else %} {# if sm.hasAPI #}
-        <h2>Pobierz paczkę zgłoszeń do wysyłki</h2>
-        <p>Na tej stronie możesz pobrać gotową paczkę zgłoszeń do samodzielnej wysyłki do {{ sm.getName }}.
-        Jest to przydatne, jeśli masz więcej zgłoszeń do wysłania.</p>
-
-        <p>Paczka ta zostanie przygotowana dla zgłoszeń w statusie <code>#nowe</code>.
-        {% if (sm.hint) %}<p><b>Uwagi na temat współpracy z {{ sm.getShortName }}:</b> {{ sm.hint | raw }}</p>{% endif %}
-
-        <ol>
-            <li>Najpierw 
-                <a id="download" href="all-active-apps.pdf?city={{ city }}"
-                    {% if config.isIOS %}target="_blank"{% else %}download="true"{% endif %}
-                    data-ajax="false"
-                    class="ui-btn ui-corner-all ui-btn-inline ui-mini try">pobierz</a>
-                {{ paczke }};
-            </li>
-            <li class="ui-disabled">Następnie 
-                <a id="send" data-ajax="false" target="_blank"
-                    href="mailto:{{ sm.email }}?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}"
-                    class="ui-btn ui-corner-all ui-btn-inline ui-mini try">wygeneruj</a>
-                i wyślij e-mail do {{ sm.city }} (jeśli otworzył Ci się pusty e-mail, 
-                <a href="#popupPadded" data-rel="popup">skopiuj stąd</a> treść wiadomości do wysłania);</p>
-                <div data-role="popup" id="popupPadded" class="ui-content">
-                    <dl>
-                        <dt>Do:</dt>
-                        <dd>{{ sm.email }}</dd>
-                        <dt>Tytuł:</dt>
-                        <dd>{{ emailSubject }}</dd>
-                        <dt>Treść:</dt>
-                        <dd style="white-space: pre-wrap;">{{ emailBody }}</dd>
-                    </dl>
-                </div>
-                <p><b>Nie zapomnij dodać do wiadomości pobranego przed chwilą pliku ze zgłoszeniami!</b></p>
-            </li>
-            <li class="ui-disabled">Po wysłaniu wiadomości, możesz
-                <a id="email" href="moje-zgloszenia.html?changeMail&city={{ sm.key|url_encode }}" data-ajax="false"
-                    class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-mail confirmed-waiting">zmienić</a>
-                    status wszystkich {{ apps|length }} zgłoszeń na <code>#wysłane mailem</code>.
-            </li>
-        </ol>
-    {% endif %} {# if (cities | first.api) #}
-    <div data-role="collapsibleset" data-mini="true" data-inset="true">
-        {% for app in apps %}
-            {% include('_application-short.html.twig') %}
-        {% endfor %}
-    </div>
-{% endif %} {# if apps|length == 0 #}
+{% else %}
+    <h2>Wysyłka zgłoszeń w paczkach to przeszłość</h2>
+    <p>Przejdź na automatyczną wysyłkę zgłoszeń, a życie twoje, moje (autora) i straży miejskiej będzie prostsze.</p>
+    <p>Przejdź do strony <a data-ajax="false" href="/register.html?update">edycji konta</a> i zmień opcję
+    <b>Chcę wysyłać swoje zgłoszenia</b> na <b>automatycznie</b></p>
+{% endif %}
 {% endblock %}

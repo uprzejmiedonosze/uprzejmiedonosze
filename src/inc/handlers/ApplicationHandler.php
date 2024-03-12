@@ -303,7 +303,12 @@ class ApplicationHandler extends AbstractHandler {
             return $this->redirect('/moje-zgloszenia.html?update');
         }
 
-        $sm = reset($apps)->guessSMData();
+        $firstApp = reset($apps);
+        $sm = $firstApp->guessSMData();
+
+        if ($sm->unknown()) {
+            return $this->redirect('/brak-sm.html?id=' . $firstApp->id);
+        }
 
         return AbstractHandler::renderHtml($request, $response, 'wysylka', [
             'appActionButtons' => false,
