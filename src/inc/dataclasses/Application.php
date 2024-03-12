@@ -14,15 +14,22 @@ use \JSONObject as JSONObject;
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class Application extends JSONObject{
-    private static $dateFormatter;
+    private static $hrDateFormatterLong;
+    private static $hrDateFormatterShort;
 
     private function __construct() {
-        Application::$dateFormatter = datefmt_create('pl-PL',
+        Application::$hrDateFormatterLong = datefmt_create('pl-PL',
             IntlDateFormatter::FULL,
             IntlDateFormatter::FULL,
             'Europe/Warsaw',
             IntlDateFormatter::GREGORIAN,
-            'eeee, d MMMM YYYY');
+            "k'<sup>'mm'</sup>' eeee, d MMMM YYYY");
+        Application::$hrDateFormatterShort = datefmt_create('pl-PL',
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::FULL,
+            'Europe/Warsaw',
+            IntlDateFormatter::GREGORIAN,
+            "k'<sup>'mm'</sup>', d MMM YYYY");
     }
 
     /**
@@ -94,6 +101,10 @@ class Application extends JSONObject{
         $this->stopAgresji = $user->stopAgresji();
         unset($this->user->stopAgresji);
         unset($this->user->myAppsSize);
+    }
+
+    public function wasSent(): bool {
+        return isset($this->sent) && isset($this->sent->date) && !in_array($this->status, ['draft', 'ready', 'confirmed']);
     }
 
     /**
@@ -179,8 +190,14 @@ class Application extends JSONObject{
         return $months[intval($date->format('m')) - 1] . ' '. $date->format('Y');
     }
 
-    public function getHRDate() {
-        return datefmt_format(Application::$dateFormatter, new DateTime($this->date));
+    public function getHRDateTime() {
+        return datefmt_format(Application::$hrDateFormatterLong, new DateTime($this->date));
+    }
+
+    public function getSentDate() {
+        if (isset($this->sent->date))
+            return datefmt_format(Application::$hrDateFormatterShort, new DateTime($this->sent->date));
+        return '';
     }
 
     /**

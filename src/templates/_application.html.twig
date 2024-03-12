@@ -14,19 +14,15 @@
     
 {% if app.sent is defined %}
     {% if app.sent.method == 'Mail' %}
-    <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.sent.to }}
-        bezpośrednio z serwera Uprzejmie Donoszę w dniu {{ app.sent.date|date('Y-m-d') }}
-        o godzinie {{ app.sent.date|date('H:i') }}.</b>
+    <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }} &lt;{{ app.sent.to }}&gt;
+        bezpośrednio z serwera Uprzejmie Donoszę o {{ app.getSentDate|raw }}.</b>
     {% elseif app.sent.method == 'manual' %}
-    <b class="appSentInfo">To zgłoszenie zostało wysłane
-        przez Ciebie ręcznie do {{ app.sent.to }} 
-        w dniu {{ app.sent.date|date('Y-m-d') }}
-        około godziny {{ app.sent.date|date('H:i') }}.</b>
+    <b class="appSentInfo">To zgłoszenie zostało wysłane przez Ciebie ręcznie do {{ app.guessSMData.getShortName }}
+        &lt;{{ app.sent.to }}&gt; o {{ app.getSentDate|raw }}.</b>
     {% else %} {# API #}
     <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }}
-        w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}
-        poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest dla {{ app.guessSMData.getShortName }}
-        w następującej postaci:</b>
+        o {{ app.getSentDate|raw }} poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest
+        dla {{ app.guessSMData.getShortName }} w następującej postaci:</b>
     <cite>{% include('_application.txt.twig') %}</cite>
     {% endif %}
 {% endif %} {# app.sent #}
