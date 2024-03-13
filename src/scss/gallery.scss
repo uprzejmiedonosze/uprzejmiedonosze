@@ -18,7 +18,7 @@ div.galleryItem {
   background: #fff;
 }
 
-@media (min-width: 40em) {
+@media (min-width: 35em) {
   div.galleryItem {
     margin: 5px;
     flex: 0 0 calc((100% - 4 * 5px) / 2);
