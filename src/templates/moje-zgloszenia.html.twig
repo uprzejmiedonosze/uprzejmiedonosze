@@ -32,7 +32,7 @@
         <ul class="status-filter">
         {% for key,val in statuses %}
             {% if val.class %} {# class is empty, this is a draft or ready #}
-                <li><a href="#" id="{{ key }}">#{{ val.name|lower }} <span class="ui-li-count"></span></a></li>
+                <li data-icon="{{ val.icon }}"class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|lower }} <span class="ui-li-count"></span></a></li>
             {% endif %}
         {% endfor %}
         </ul>
