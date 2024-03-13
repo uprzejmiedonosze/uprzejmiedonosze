@@ -49,13 +49,13 @@
     "icon": "clock",
     "class": "top",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
-    "comment": "Wysłanie zgłoszenia za pomocą EPUAP",
+    "comment": "Wysłanie zgłoszenia za pomocą EPUAP",
     "topButtons": true,
     "editable": false,
     "sendable": false
   },
   "confirmed-sm": {
-    "name": "Potwierdzone w SM",
+    "name": "Potwierdzone",
     "action": "Zgłoszenie zostało potwierdzone w SM",
     "icon": "user",
     "class": "bottom",
