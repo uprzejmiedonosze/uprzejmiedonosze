@@ -14,6 +14,10 @@ div.application-short.archived {
   display: none;
 }
 
+div.application-short h3 a {
+  font-size: 14px;
+}
+
 @media only screen and (min-width: 35em) {
   div.application-short h3 a {
     font-size: 16px;
@@ -90,9 +94,9 @@ div.application-short {
 
 .my-applications {
   ul.status-filter {
-    list-style-type: none;
     padding-inline-start: 0;
     columns: 2;
+    list-style-position: inside;
 
     li {
       display: none;
