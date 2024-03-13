@@ -9,7 +9,7 @@
 
 {% set title = 'Najczęściej zadawane pytania' %}
 {% set shortTitle = 'FAQ' %}
-{% set description = 'Najczęście zadawane pytania w podziale na miasta' %}
+{% set description = 'Najczęście zadawane pytania' %}
 
 {% extends "base.html.twig" %}
 {% block main %}
@@ -17,57 +17,10 @@
 <h2>Najczęściej zadawane pytania</h2>
 
 <h3>Korzystanie z Uprzejmie Donoszę</h3>
-<h4 id="telefon">Czy nie lepiej zadzwonić do Straży Miejskiej?</h4>
-<p>To zależy. Telefon do Straży Miejskiej daje Ci cień szansy na interwencję
-w przeciągu kilku/kilkunastu godzin od wezwania. W bardzo wielu sytuacjach jest
-już zdecydowanie za późno. W wielu innych przypadkach nie ma sensu wzywać patrolu
-do jednego zaparkowanego pojazdu. Wtedy najlepiej wykonać zgłoszenie Uprzejmie
-Donoszę.</p>
-
-{#<h4>Kiedy korzystać z jakich narzędzi?</h4>
-<dl>
-    <dt>Widzę jak kierowca parkuje w miejscu niedozwolonym:</dt>
-    <dd>Podejdź i spróbuj porozmawiać. Jeśli nie zadziała, zgłoś przez Uprzejmie Donoszę.</dd>
-
-    <dt>Ktoś zaparkował stwarzając realne zagrożenie dla pieszych:</dt>
-    <dd>Zadzwoń do SM wskazując, że jest to sytuacja od odholowania auta. Dodatkowo zgłoś
-    przez Uprzejmie Donoszę.</dd>
-
-    <dt>Ktoś parkuje w tym samym miejscu dzień w dzień:</dt>
-    <dd>Zgłoś Uprzejmie Donoszę. Obszerny opis poniżej.</dd>
-
-    <dt>Ktoś stanął nieprawidłowo, i stoi tak tydzień/miesiąc:</dt>
-    <dd>Zgłoś Uprzejmie Donoszę. Obszerny opis poniżej.</dd>
-
-    <dt>Musiałbym zrobić ze 100 zgłoszeń na jednym odcinku:</dt>
-    <dd>Dzwoń do Straży Miejskiej z prośbą o blokady.</dd>
-
-    <dt>Mam film z kierowcą jadącym po chodniku:</dt>
-    <dd>Wyślij na "Stop agresji drogowej". Więcej detali poniżej.</dd>
-
-    <dt></dt>
-    <dd></dd>
-
-</dl>#}
-
-<h4 id="30">Na ulicy codziennie stoi 30 nieprawidłowo zaparkowanych samochodów. Zgłaszać?</h4>
-<p>Moim zdaniem nie. To jest sytuacja, w której rozsądniej jest zadzwonić do Straży
-Miejskiej z prośbą o interwencję z blokadami.</p>
-<p>Dlaczego? Proces przetwarzania zgłoszeń przez Straż Miejską trwa. Zanim mandaty
-trafią do kierowców minie miesiąc, może dwa. W tym czasie przez ten odcinek przewiną
-się setki pojazdów. Blokady mają znacznie większą moc rażenia oraz bezpośredni
-efekt marketingowo-wychowawczy (inni kierowcy widzą "że tu nie wolno").</p>
-
-<h4 id="wideo">Mam film z kierowcą jadącym po chodniku. Jak to zgłosić?</h4>
-<p>Jest taki nieformalny podział – zdjęcia do Straży Miejskiej, filmy na Policję.
-A konkretnie na adres "Stop Agresji Drogowej". Bez problemu znajdziesz w internecie
-odpowiednią skrzynkę mailową dla swojego województwa. Pamiętaj, że zgłoszenie na
-Policję powinno posiadać te same dane co zgłoszenie w Uprzejmie Donoszę. Świetny
-przewodnik na ten temat napisał <a rel="external" target="_blank" data-ajax="false"
-href="https://www.facebook.com/groups/694594880572900?view=permalink&id=1712898748742503&ref=m_notif&notif_t=group_comment_mention">administrator grupy Święte Krowy Warszawskie 
-Marek Smyk</a>.</p>
-<p>Zgłoszenia z tytułu "Jazdy wzdłuż chodnika lub przejścia dla pieszych pojazdem silnikowym"
-mają osobną pozycję w taryfikatorze – 1500 zł.</p>
+<h4 id="telefon">Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?</h4>
+<p>Zobacz nasz poradnik, który opisuje
+    <a href="/jak-zglosic-nielegalne-parkowanie.html" data-ajax="false">najważniejsze techniki walki z patoparkowaniem</a>.
+</p>
 
 <h4 id="to">Czy "to" warto zgłaszać?</h4>
 <p>Gdzie "to", to najczęściej konkretna sytuacja na chodniku/trawniku/ulicy. Pamiętaj, że Uprzejmie Donoszę
@@ -78,8 +31,9 @@ twoje zgłoszenie Straż Miejska musi poświęcić godzinę swojej pracy. I wted
 czy przypadek, który chcesz zgłosić jest warty tej inwestycji.</p>
 
 <h4 id="swiadek">Czy zostanę wezwany na świadka?</h4>
-<p>To zależy od miasta w którym zgłaszasz. Zobacz listę miast na końcu tej strony żeby
-dowiedzieć się więcej.</p>
+<p>To zależy od miasta w którym zgłaszasz. Dowiedz się więcej na stronie
+    <a href="/przesluchanie.html">Czy straż miejska wezwie mnie na przesłuchanie?</a>
+</p>
 
 <h4 id="recydywa">Czy zgłaszać ten sam pojazd kilka razy?</h4>
 <p>Mandat wystawiany jest za czynność, a nie stan. Oznacza to, że jeśli ktoś zaparkował
@@ -97,25 +51,16 @@ zgłasza recydywistów nie częściej niż raz w tygodniu.</p>
 <h4 id="aplikacja">Gdzie mogę pobrać aplikację?</h4>
 <p>Nie możesz, bo Uprzejmie Donoszę nie jest aplikacją. Jest mobilną stroną WWW,
 która jednak dość skutecznie udaje aplikację (szczególnie na telefonach z Androidem).
-Spróbuj zrobić sobie skrót na pulpicie, i będziesz miał Uprzejmie Donoszę dostępne
-pod własną ikonką, uruchamiane jako osobny program (a nie zakładka w przeglądarce),
-oraz oczywiście bez paska adresu, który niepotrzebnie zajmuje miejsce.</p>
+Zobacz jak zrobić sobie <a href="/aplikacja.html">wygodny skrót do Uprzejmie Donoszę</a>.</p>
 
 <h4 id="bug">Co zrobić, jeśli coś nie działa?</h4>
-<p>Napisz do mnie <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">na FB</a>.
+<p>Napisz na
+    <a data-ajax="false" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa">grupie
+        wsparcia użytkowników Uprzejmie Donoszę</a>.
 Idealnie, jeśli będziesz mieć zrzut ekranu prezentujący problem, oraz krótki opis jak
 udało się do tej sytuacji doprowadzić.</p>
 
-
 <h3>Pytania związane ze współpracą ze Strażą Miejską</h3>
-<p>Straż Miejska w różnych miastach działa na podstawie tych samych przepisów, ale
-interpretuje je różnie. Widoczne jest to szczególnie mocno w domyślnym podejściu do zgłoszenia
-przysłanego mailem.</p>
-<p>Ta sekcja ma być źródłem informacji o specyfice poszczególnych
-Straży Miejskich, wraz ze wskazówkami "jak rozmawiać ze swoim komendantem".</p>
-<p>Jeśli widzisz jakieś nieprawidłowości, brakuje twojego miasta,
-lub twoje doświadczenia są inne niż opisane poniżej, napisz do mnie
-<a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">na FB</a>.</p>
 
 <h4 id="zignorowac">Czy SM zdarza się zignorować zgłoszenia?</h4>
 <p>Moje doświadczenia, poparte informacjami od użytkowników wskazuje na to,
@@ -125,10 +70,15 @@ Uprzejmie Donoszę ma komplet informacji, w tym kluczowe dane kontaktowe zgłasz
 krępujcie się pytać i domagać informacji zwrotnej. W korespondencji z SM zawsze warto podawać
 numer rejestracyjny, datę i adres wykroczenia.</p>
 
+<h4 id="zwrot">Czy mogę uzyskać zwrot pieniędzy za przesłuchanie?</h4>
+<p>
+    Tak. Dowiedz się więcej na stronie <a href="/zwrot-za-przesluchanie.html">jak uzyskać zwrot środków za przesłuchanie</a>.
+</p>
+
 
 <h4 id="kpw">Jak wygląda postępowania mandatowe?</h4>
 
-W skrócie, koszmarnie. Ale poniżej znajdziesz uproszczoną wizualizację tego procesu.
+<p>W skrócie, koszmarnie. Ale poniżej znajdziesz uproszczoną wizualizację tego procesu.</p>
 
 <pre class="mermaid">
 flowchart
@@ -189,18 +139,6 @@ style start fill:black,color:white
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 </script>
 
-<h4 id="marka">SM w moim mieście wymaga podania marki pojazdu. Co robić?</h4>
-<p>Faktycznie, część funkcjonariuszy tego wymaga (preferencje potrafią być 
-rozbieżne nawet w ramach jednej komendy). Z informacji, które pozyskałem w 
-trakcie przesłuchań wynika, że podanie marki pojazdu służy dodatkowej
-weryfikacji, czy wskazany numer rejestracyjny jest prawidłowy. I o ile 
-byłoby to zrozumiałe w przypadku zgłoszenia bez zdjęcia, o tyle w przypadku 
-Uprzejmie Donoszę uważam ten wymóg za fanaberię SM.</p>
-
-<p>Straż Miejska mając dostęp do systemu CEPIK (Centralna Ewidencja Pojazdów
-i Kierowców) ma możliwość sprawdzenia tego co kryje się pod wskazanym numerem
-rejestracyjnym, oraz porównać, czy marka i kolor z systemu zgadza się ze zdjęciem.</p>
-
 <h4 id="telefon2">SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?</h4>
 <p>Część SM (oraz komisariatów) odmawia wszczęcia postępowania na podstawie
     wysłanej wiadomości e-mail. Nalegają, żeby "dzwonić".
@@ -213,6 +151,7 @@ rejestracyjnym, oraz porównać, czy marka i kolor z systemu zgadza się ze zdj�
 
     Jak nie pomoże, to musisz napisać skargę "wyżej" – do urzędu gminy (który ich
     powołał i sponsoruje).</p>
+
 
 <h3 id="miasta">W jakich miastach działa Uprzejmie Donoszę?</h3>
 <p>Uprzejmie Donoszę działa wszędzie tam, gdzie istnieje możliwość zgłoszenia

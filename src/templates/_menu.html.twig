@@ -2,7 +2,15 @@
     data-display="overlay" data-theme="a" id="mainMenu">
 
     <ul data-role="listview" data-inset="false">
-        <li data-icon="carat-l" class="close"><a href="#" data-rel="close">{{ general.userName ?? '' }}</a></li>
+        <li data-icon="home">
+            <a href="/" class="active">
+                {% if general.isLoggedIn %}
+                Dashboard
+                {% else %}
+                Strona główna
+                {% endif %}
+            </a>
+        </li>
     {% if general.isLoggedIn %}
         <li data-icon="plus">
             <a class="try" data-ajax="false" 
@@ -33,18 +41,20 @@
             <span class="ui-li-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span></a>
         </li>
         {% endif %}
+        <li data-icon="forbidden">
+            <a data-ajax="false" {{ active(config.menu, 'register')|raw }}
+                href="/register.html?update">Edycja konta
+            </a>
+            <a href="/logout.html" data-ajax="false">wyloguj się</a>
+        </li>
     {% else %}
         <li data-icon="plus"><a class="try" href="/nowe-zgloszenie.html" data-ajax="false">Spróbuj!</a></li>
     {% endif %}
 
         <li data-role="list-divider"></li>
-        <li data-icon="home">
-            <a {{ active(config.menu, 'index')|raw }}
-                href="/">Strona główna</a></li>
-        <li class="subpage" data-icon="false">
-            <a data-ajax="false"
-                {{ active(config.menu, 'galeria')|raw }}
-                href="/galeria.html">– galeria <span class="ui-li-count">{{ general.galleryCount }}</span></a></li>
+        <li data-icon="info">
+            <a data-ajax="false" {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }}
+            href="/jak-zglosic-nielegalne-parkowanie.html">Jak zgłaszać?</a></li>
         <li class="subpage" data-icon="false">
             <a {{ active(config.menu, 'przepisy')|raw }}
                 href="/przepisy.html">– przepisy</a></li>
@@ -52,48 +62,30 @@
             <a data-ajax="false" {{ active(config.menu, 'faq')|raw }}
                 href="/faq.html">– faq</a></li>
         <li class="subpage" data-icon="false">
-            <a {{ active(config.menu, 'regulamin')|raw }}
-                href="/regulamin.html">– regulamin</a></li>
-        <li class="subpage" data-icon="false">
+            <a {{ active(config.menu, 'przesluchanie')|raw }}
+                href="/przesluchanie.html">– przesłuchanie świadka</a></li>
+        <li data-icon="star">
             <a data-ajax="false" {{ active(config.menu, 'statystyki')|raw }}
-            href="/statystyki.html">– statystyki</a></li>
-        <li class="subpage" data-icon="false">
-            <a {{ active(config.menu, 'changelog')|raw }}
-                href="/changelog.html">– historia zmian</a></li>
-        <li class="subpage" data-icon="false">
-            <a data-ajax="false" {{ active(config.menu, 'aplikacja')|raw }}
-                href="/aplikacja.html">– zainstaluj UD</a></li>
-        <li class="subpage" data-icon="false">
-            <a {{ active(config.menu, 'projekt')|raw }}
-                href="/projekt.html">– o projekcie</a></li>
+            href="/statystyki.html">Statystyki</a></li>
 
-        <li {#data-icon="phone"#} class="subpage" data-icon="false">
-            <a {{ active(config.menu, 'dostep-do-informacji-publicznej')|raw }}
-                data-ajax="false" href="/dostep-do-informacji-publicznej.html">– dzwoń do SM jak szeryf</a>
-        </li>
+        <li data-role="list-divider"></li>
         {% if general.isLoggedIn %}
-        <li data-icon="false">
+        <li data-icon="action">
             <a target="_blank"
                 data-ajax="false" href="https://patronite.pl/uprzejmiedonosze">Zostań patronem</a>
         </li>
         {% endif %}
-        <li data-icon="false">
+        <li data-icon="action">
             <a target="_blank"
-                data-ajax="false" href="https://prawapieszych.pl">Podpisz wniosek do RPO</a>
+                data-ajax="false" href="https://agendaparkingowa.pl/">Agenda Parkingowa</a>
             <span class="ui-li-count">nowość!</span>
         </li>
-        <li data-icon="comment">
-            <a data-ajax="false" target="_blank" href="https://fb.com/uprzejmiedonosze.net">Uprzejmie Donoszę na FB</a>
+        <li data-icon="action">
+            <a target="_blank"
+                data-ajax="false" href="https://prawapieszych.pl">Podpisz wniosek do RPO</a>
         </li>
 
-        <li data-role="list-divider"></li>
-        {% if general.isLoggedIn %}
-        <li data-icon="user">
-            <a data-ajax="false" {{ active(config.menu, 'register')|raw }}
-                href="/register.html?update">Edycja konta</a></li>
-        <li data-icon="false" class="subpage">
-            <a href="/logout.html" data-ajax="false">– wyloguj się</a></li>
-        {% else %}
+        {% if not general.isLoggedIn %}
         <li data-icon="user"><a href="/start.html" data-ajax="false">Zaloguj/zarejestruj się</a></li>
         {% endif %}
 
