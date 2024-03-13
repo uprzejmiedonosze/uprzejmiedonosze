@@ -101,9 +101,16 @@
         {% block main %}{% endblock %}
             </div> <!-- main -->
         {% block footer %}
-            {% if dialog is not defined or not dialog %}
+            {% if not dialog %}
             <div data-role="footer">
                 <h4 title="%VERSION%">&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
+                <p>
+                    <a href="/regulamin.html" data-role="none">regulamin</a>
+                    |
+                    <a href="/changelog.html" data-role="none">historia zmian</a>
+                    |
+                    <a href="/projekt.html">o projekcie</a>
+                </p>
             </div> <!-- footer -->
             {% endif %}
         {% endblock %}

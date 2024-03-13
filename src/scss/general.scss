@@ -177,7 +177,6 @@ a[rel~="external"] {
 }
 
 .video {
-
     video {
         width: 100%;
     }
@@ -215,7 +214,6 @@ a[rel~="external"] {
 }
 
 .gauges,.badges,.heros {
-
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -275,4 +273,12 @@ a[rel~="external"] {
 
 h3.introHeader {
     border-bottom: 0;
+}
+
+.ui-footer {
+    p {
+        margin: 0 auto 0.7em auto;
+        text-align: center;
+        font-size: 0.8em;
+    }
 }
