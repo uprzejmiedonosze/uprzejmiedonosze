@@ -127,7 +127,7 @@ $(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/res
 
 
 .PHONY: minify
-minify: check-branch js css $(EXPORT)/images-index.html  minify-config process-php process-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
+minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
@@ -138,7 +138,7 @@ $(EXPORT)/config.php: $(DIRS); $(call echo-processing,$<)
 	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
 
 ASSETS := $(wildcard src/img/* src/img/*/*)
-$(EXPORT)/images-index.html: src/images-index.html $(ASSETS) $(DIRS)
+$(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
 	@(cat src/images-index.html; grep 'src="/img[^"{]\+"' --only-matching --no-filename --recursive --color=never src/templates \
 		| sed 's|src="/|<img src="./|' | sed 's|$$| />|' ) | sort | uniq | sponge src/images-index.html
 	@./node_modules/.bin/parcel build --no-cache --dist-dir $(PUBLIC)/img $< ;
@@ -162,11 +162,11 @@ js: $(JS_MINIFIED)
 export/public/js/%.js: src/js/%.js $(JS_FILES_DEPS); $(call echo-processing,$@ with parcel)
 	@./node_modules/.bin/parcel build --no-cache --dist-dir $(dir $@) $< ;
 
-$(EXPORT)/public/api/config/%.json: src/api/config/%.json $(DIRS); $(call echo-processing,$<)
-	@jq -c . < $< > $@
-
-$(EXPORT)/public/api/config/sm.json: src/api/config/sm.json $(DIRS); $(call echo-processing,$< with node)
+$(EXPORT)/public/api/config/sm.json: src/api/config/sm.json; $(call echo-processing,$< with node)
 	@node ./tools/sm-parser.js $< $@
+
+$(EXPORT)/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$<)
+	@jq -c . < $< > $@
 
 $(EXPORT)/inc/%.php: src/inc/%.php; $(lint_replace_inline)
 $(PUBLIC)/%.php: src/%.php; $(lint_replace_inline)
@@ -175,7 +175,7 @@ $(PUBLIC)/api/rest/index.php: src/api/rest/index.php; $(lint_replace_inline)
 $(EXPORT)/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(lint_replace_inline)
 $(EXPORT)/inc/include.php: src/inc/include.php $(TWIG_FILES); $(lint_replace_inline)
 
-$(EXPORT)/templates/%: src/templates/% lint-twig; $(call echo-processing,$<)
+$(EXPORT)/templates/%: src/templates/%; $(call echo-processing,$<)
 	$(replace)
 	$(replace-inline)
 
