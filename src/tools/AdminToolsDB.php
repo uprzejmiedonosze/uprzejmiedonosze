@@ -1,9 +1,8 @@
 <?PHP
 
-require_once(__DIR__ . '/../inc/NoSQLite.php');
-require_once(__DIR__ . '/../inc/Application.php');
-require_once(__DIR__ . '/../inc/User.php');
-require_once(__DIR__ . '/../inc/config.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
+require(__DIR__ . '/../inc/include.php');
+
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -51,7 +50,7 @@ class AdminToolsDB extends NoSQLite{
     
         echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
         foreach($apps as $app){
-            $this->removeApplication($app, $dryRun=true);
+            $this->removeApplication($app, $dryRun);
         }
 
         $cdn2UserFolder = __DIR__ . "/../../cdn2/{$user->number}/";
@@ -177,7 +176,7 @@ class AdminToolsDB extends NoSQLite{
 
         $apps = Array();
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            $apps[$row[0]] = new Application($row[1]);
+            $apps[$row[0]] = Application::withJson($row[1]);
         }
         return $apps;
     }
@@ -224,7 +223,7 @@ class AdminToolsDB extends NoSQLite{
         $apps = Array();
 
         while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-            $apps[$row[0]] = new Application($row[1]);
+            $apps[$row[0]] = Application::withJson($row[1]);
         }
         return $apps;
     }
