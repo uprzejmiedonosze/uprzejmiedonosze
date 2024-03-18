@@ -2,10 +2,10 @@ import * as Sentry from "@sentry/browser"
 
 if (!window.location.hostname.includes('staging')) {
   Sentry.init({
-    dsn: "https://66b5f54d37b1474daf0d95059e69c0b2@o929176.ingest.sentry.io/5878019",
+    dsn: "https://66b5f54d37b1474daf0d95059e69c0b2@o929176.ingest.us.sentry.io/5878019",
     tracesSampleRate: 0.1,
     integrations: [
-      new Sentry.Replay()
+      Sentry.replayIntegration(),
     ],
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
