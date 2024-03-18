@@ -9,7 +9,7 @@
 {% set sendable = status.sendable %}
 
 <ul class="application-details-list">
-    <li class="calendar"><b>{{ app.getHRDateTime|raw }}</b></li>
+    <li class="calendar"><b>{{ app.getDate("k'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</b></li>
     <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
     <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank">{{ app.address.address }}</a></li>
     <li class="status {{app.status}}"><b class="currentStatus">{{ status.name }}</b>
@@ -22,7 +22,7 @@
     </li>
     {% if app.wasSent %}
     <li class="sent-to">Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
-        o {{ app.getSentDate|raw }}</li>
+        o {{ app.getSentDate("k'<sup>'mm'</sup>', d MMM YYYY")|raw }}</li>
     {% elseif sendable %}
         <li class="send">
             {% if app.automatedSM and (autoSend ?? false) %}

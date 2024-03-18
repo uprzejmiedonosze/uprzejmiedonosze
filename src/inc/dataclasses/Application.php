@@ -14,22 +14,8 @@ use \JSONObject as JSONObject;
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class Application extends JSONObject{
-    private static $hrDateFormatterLong;
-    private static $hrDateFormatterShort;
 
     private function __construct() {
-        Application::$hrDateFormatterLong = datefmt_create('pl-PL',
-            IntlDateFormatter::FULL,
-            IntlDateFormatter::FULL,
-            'Europe/Warsaw',
-            IntlDateFormatter::GREGORIAN,
-            "k'<sup>'mm'</sup>' eeee, d MMMM YYYY");
-        Application::$hrDateFormatterShort = datefmt_create('pl-PL',
-            IntlDateFormatter::FULL,
-            IntlDateFormatter::FULL,
-            'Europe/Warsaw',
-            IntlDateFormatter::GREGORIAN,
-            "k'<sup>'mm'</sup>', d MMM YYYY");
     }
 
     /**
@@ -174,29 +160,13 @@ class Application extends JSONObject{
     /**
      * Returns application date in Y-m-d format.
      */
-    public function getDate(){
-        return (new DateTime($this->date))->format('Y-m-d');
+    public function getDate($pattern='YYYY-MM-dd'){
+        return formatDateTime($this->date, $pattern);
     }
 
-    /**
-     * Returns date in "January 2017" format.
-     */
-    public function getMonthYear(){
-        $date = new DateTime($this->date);
-        $months = [
-            'styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec',
-            'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'
-        ];
-        return $months[intval($date->format('m')) - 1] . ' '. $date->format('Y');
-    }
-
-    public function getHRDateTime() {
-        return datefmt_format(Application::$hrDateFormatterLong, new DateTime($this->date));
-    }
-
-    public function getSentDate() {
+    public function getSentDate($pattern="YYYY-MM-dd") {
         if (isset($this->sent->date))
-            return datefmt_format(Application::$hrDateFormatterShort, new DateTime($this->sent->date));
+            return formatDateTime($this->sent->date, $pattern);
         return '';
     }
 

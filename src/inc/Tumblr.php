@@ -17,8 +17,7 @@ function addToTumblr(&$app){
     $data = array(
         'type' => 'photo', 
         'caption' => "**{$app->carInfo->plateId}** {$app->address->city} --- {$app->getCategory()->getShort()}"
-            . ( ( $app->userComment ) ? ' ' . $app->userComment: '' ) . "\n\n*-- {$app->getMonthYear()}*",
-        //'source' => "%HTTPS%://%HOST%/{$app->contextImage->url}",
+            . ( ( $app->userComment ) ? ' ' . $app->userComment: '' ) . "\n\n*-- {$app->getDate("MMMM YYYY")}*",
         "data64" => base64_encode(file_get_contents("$root/{$app->contextImage->url}")),
         'format' => 'markdown',
         'tags' => "{$app->carInfo->plateId}, {$app->address->city}",

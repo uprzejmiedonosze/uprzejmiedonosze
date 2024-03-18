@@ -54,6 +54,11 @@ function capitalizeName($input){
     return mb_convert_case(cleanWhiteChars($input), MB_CASE_TITLE, 'UTF-8');
 }
 
+function formatDateTime(string $jsonDate, string $pattern): string {
+    $formatter = new IntlDateFormatter(locale: 'pl-PL', timezone: 'Europe/Warsaw', pattern: $pattern);
+    return $formatter->format(new DateTime($jsonDate));
+}
+
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
