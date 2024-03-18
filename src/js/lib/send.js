@@ -2,7 +2,7 @@
 
 import * as Sentry from "@sentry/browser";
 
-import { _updateStatus } from "./status";
+import { updateStatus } from "./status";
 
 window.sendApplication = function (appId) {
   $(`#${appId} .status-confirmed-waiting`).addClass("ui-disabled");
@@ -16,7 +16,7 @@ window.sendApplication = function (appId) {
     contentType: false,
     processData: false,
     success: function (msg) {
-      _updateStatus(appId, msg.status);
+      updateStatus(appId, msg.status);
       $.mobile.loading("hide");
       showMessage("<p>Wysłane</p>", 1500);
       if ($(".dziekujemy").length) {

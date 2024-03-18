@@ -15,7 +15,7 @@ export function setStatus(appId, status) {
     processData: false,
     success: function (e) {
       if (e?.patronite) $('#patronite').popup("open")
-      _updateStatus(appId, status)
+      updateStatus(appId, status)
       $.mobile.loading("hide")
       $("#changeStatus" + appId).popup( "close" )
     }
@@ -28,7 +28,7 @@ export function setStatus(appId, status) {
 }
 window.setStatus = setStatus;
 
-export function _updateStatus(appId, status) {
+export function updateStatus(appId, status) {
   const statusDef = statuses[status]
   const newIcon = "ui-icon-" + statusDef.icon
   const $popup = $("#changeStatus" + appId)
@@ -49,9 +49,8 @@ export function _updateStatus(appId, status) {
   $application.find(".currentStatus").text(statusDef.action);
   $popup.find(".currentStatus").text(statusDef.action);
 
-  window.updateCounters();
+  updateCounters();
 }
-window._updateStatus = _updateStatus;
 
 export function updateCounters() {
   $(".status-filter a").each(function (_idx, item) {
@@ -74,4 +73,3 @@ export function updateCounters() {
     $sendMenu.parent().hide()
   }
 }
-window.updateCounters = updateCounters;
