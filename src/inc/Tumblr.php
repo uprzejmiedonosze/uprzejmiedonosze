@@ -14,10 +14,20 @@ function addToTumblr(&$app){
       );
     $blogName = 'uprzejmie-donosze';
 
+    $recydywa = "";
+    if ($app->getRecydywa() > 1)
+        $recydywa = "*(recydywa {$app->getRecydywa()})*";
+
+    $description = $app->getCategory()->getShort()
+        . " "
+        . $app->getExtensionsText()
+        . " "
+        . $app->userComment;
+
     $data = array(
         'type' => 'photo', 
-        'caption' => "**{$app->carInfo->plateId}** {$app->address->city} --- {$app->getCategory()->getShort()}"
-            . ( ( $app->userComment ) ? ' ' . $app->userComment: '' ) . "\n\n*-- {$app->getDate("MMMM YYYY")}*",
+        'caption' => "**{$app->carInfo->plateId}** $recydywa {$app->address->city} — {$description}"
+            . "\n\n*-- {$app->getDate("MMMM YYYY")}*",
         "data64" => base64_encode(file_get_contents("$root/{$app->contextImage->url}")),
         'format' => 'markdown',
         'tags' => "{$app->carInfo->plateId}, {$app->address->city}",
