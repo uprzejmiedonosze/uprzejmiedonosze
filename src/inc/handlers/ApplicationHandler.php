@@ -46,7 +46,7 @@ class ApplicationHandler extends AbstractHandler {
         if (isset($params['edit'])) {
             $application = $storage->getApplication($params['edit']);
             if (!$application->isEditable()) {
-                throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name);
+                throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name);
             }
 
             if (!($application->isAppOwner($user) || $user->isAdmin())) {
