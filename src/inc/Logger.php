@@ -20,8 +20,6 @@ function logger(string|object|array|null $msg, $force = null): string {
     $DT_FORMAT = 'Y-m-d\TH:i:s';
     $time = date($DT_FORMAT);
     if(!isProd() || $force) {
-        if (isDev()) return $time;
-
         $sessionId = session_id() ?? 'no-session';
 
         $user = "[" . ($_SESSION['user_email'] ?? '') . ']';

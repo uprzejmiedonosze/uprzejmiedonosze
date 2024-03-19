@@ -213,7 +213,6 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
 function saveImgAndThumb($application, $imageBytes, $type) {
     $baseDir = 'cdn2/' . $application->getUserNumber();
     $baseFileName = $baseDir . '/' . $application->id;
-    if (isDev()) return $baseFileName;
 
     if (!file_exists('/var/www/%HOST%/' . $baseDir)) {
         mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
