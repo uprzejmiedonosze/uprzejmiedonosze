@@ -102,7 +102,7 @@ describe('Static pages logged in', function() {
     })
 
     it('/', function () {
-        cy.contains('Cześć Ud,')
+        cy.contains('Cześć Tester,')
         Object.values(this.levels).forEach(level => {
             cy.contains(level.desc)
         })

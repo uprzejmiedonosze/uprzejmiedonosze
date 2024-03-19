@@ -31,9 +31,9 @@ describe('API:automated (Poznań)', () => {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.poznan).click()
-        cy.contains('Zmień ręcznie status zgłoszenia z Potwierdzone w SM')
-        cy.contains('Dodaj do galerii')
-        cy.contains('Szczegóły')
+        cy.contains(this.sm['Poznań'].address[0].replace('Straż Miejska', 'SM'))
+        cy.contains('zmień status').click()
+        cy.contains('Zmień status zgłoszenia z Potwierdzone na')
     })
 })
 
@@ -71,58 +71,9 @@ describe('API:Mail (Wrocław)', () => {
     it('checks my apps screen', function () {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains(this.config.address.wroclaw).click()
-        cy.contains('Zmień ręcznie status zgłoszenia z Wysłane')
-        cy.contains('Dodaj do galerii')
-        cy.contains('Szczegóły')
-    })
-
-})
-
-describe.skip('API:null (Szczecin)', () => {
-    before(() => {
-        cy.initDB()
-        cy.login()
-    })
-
-    beforeEach(() => {
-        cy.loadConfig()
-    })
-
-    it('creates application', function () {
-        cy.goToNewAppScreen()
-        cy.uploadOKImages()
-        cy.get('#form-submit').click()
-        cy.contains('Wyślij do').click()
-        cy.contains('Wystąpił błąd').should('not.exist')
-    })
-
-    it('checks thank you screen', function () {
-        cy.contains('Jeszcze raz')
-        cy.contains('Swoje zgłoszenia musisz wysłać samodzielnie')
-        cy.contains(this.sm.Szczecin.address[0])
-    })
-
-    it('checks my apps screen', function () {
-        cy.contains('Menu').click()
-        cy.contains('Moje zgłoszenia').click({force: true})
-        cy.contains(this.config.address.szczecin).click()
-        cy.contains('Wyślij zgłoszenie')
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
-        cy.contains('Dodaj do galerii')
-        cy.contains('Szczegóły')
-    })
-
-    it('checks send apps screen', function () {
-        cy.contains('Menu').click()
-        cy.contains('Do wysłania').click({force: true})
-        cy.contains('Pobierz paczkę zgłoszeń')
-        cy.contains('Uwagi na temat współpracy z ' + this.sm.Szczecin.address[0])
-        cy.contains(this.config.address.szczecin).click()
-        cy.contains('Wyślij zgłoszenie').should('not.exist')
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe').should('not.exist')
-        cy.contains('Dodaj do galerii').should('not.exist')
-        cy.contains('Szczegóły').should('not.exist')
+        cy.contains(this.config.address.wroclaw.replace('Plac Generała ', '')).click()
+        cy.contains('zmień status').click()
+        cy.contains('Zmień status zgłoszenia z Wysłane na')
     })
 
 })
@@ -159,14 +110,16 @@ describe('Missing SM (Poniatowa)', () => {
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.poniatowa).click()
         cy.contains('Wyślij zgłoszenie')
-        cy.contains('Zmień ręcznie status zgłoszenia z Nowe')
-        cy.contains('Dodaj do galerii')
-        cy.contains('Szczegóły')
+        cy.contains('edytuj')
+        cy.contains('zmień status').click()
+        cy.contains('Zmień status zgłoszenia z Nowe na')
     })
 
     it('checks send apps screen', function () {
-        cy.contains('Menu').click()
+        cy.contains('nowe').click({force: true})
+        cy.contains('Menu').click({force: true})
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Pobierz paczkę zgłoszeń').should('not.exist')
+        cy.contains('Brak danych Straży Miejskiej Poniatowa')
     })
 })
