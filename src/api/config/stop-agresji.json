@@ -95,6 +95,18 @@
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
+  "opole-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Opolu",
+      "ul. Leona Powolnego 1",
+      "45-078 Opole"
+    ],
+    "email": "wrd.op@op.policja.gov.pl",
+    "voivodeship": "Opolskie",
+    "city": "Opole",
+    "hint": null,
+    "api": "Mail"
+  },
   "podkarpackie": {
     "address": [
       "Komenda Wojewódzka Policji w Rzeszowie",
