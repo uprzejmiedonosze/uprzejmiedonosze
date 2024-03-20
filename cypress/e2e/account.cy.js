@@ -118,12 +118,7 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Moje zgłoszenia').click()
     cy.contains('Mazurska').click()
-    cy.contains('Wyślij do SM Szczecin')
-
-    cy.visit('/')
-    cy.contains('Menu').click()
-    cy.contains('Do wysłania').click()
-    cy.contains('Wysyłka zgłoszeń w paczkach to przeszłość')
+    cy.contains('Wysłano do SM Szczecin')
   })
 
   it('Set opposite settings', function () {
@@ -166,11 +161,6 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Moje zgłoszenia').click()
     cy.contains('Mazurska').click()
-    cy.contains('Wyślij do KP Szczecin Niebuszewo').click()
-
-    cy.visit('/')
-    cy.contains('Menu').click()
-    cy.contains('Do wysłania').click()
-    cy.contains('UD/1/2').should('not.exist')
+    cy.contains('Wysłano do 👮‍♀️ KP Szczecin Niebuszewo')
   })
 })
