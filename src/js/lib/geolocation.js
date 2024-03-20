@@ -69,14 +69,20 @@ function updateAddressDebounce() {
 }
 
 export function setAddressByLatLng(lat, lng, from) {
-  const $input = $("#lokalizacja")
-  const $geoIcon = $("#geo")
+  geoLoading()  
   const $address = $("#address")
 
   if (from === "picture" && map)
     map.setCenter([lng, lat])
 
   $address.val(JSON.stringify({}))
+  latLngToAddress(lat, lng, from)
+}
+
+function geoLoading(from) {
+  const $geoIcon = $("#geo")
+  const $input = $("#lokalizacja")
+  $("#form-submit").addClass("ui-disabled");
 
   $geoIcon.buttonMarkup({ icon: "clock" })
   if (from == "picture") {
@@ -84,9 +90,7 @@ export function setAddressByLatLng(lat, lng, from) {
   } else {
     $input.attr("placeholder", "(pobieram adres z mapy...)")
   }
-  latLngToAddress(lat, lng, from)
 }
-
 
 async function latLngToAddress(lat, lng, from) {
   const $addressHint = $("#addressHint")
@@ -120,6 +124,7 @@ async function latLngToAddress(lat, lng, from) {
       $addressHint.text("Sprawdź automatycznie pobrany adres")
       $input.addClass("hint")
     }
+    $("#form-submit").removeClass("ui-disabled");
   }
 
   let address = {
