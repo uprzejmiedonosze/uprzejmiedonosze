@@ -14,4 +14,8 @@ module.exports = defineConfig({
     baseUrl: "https://staging.uprzejmiedonosze.net",
     testIsolation: false
   },
+  retries: {
+    runMode: 1,
+    openMode: 1,
+  },
 });
