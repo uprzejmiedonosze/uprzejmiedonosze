@@ -64,7 +64,8 @@ class Mail extends CityAPI {
         $message->attachFromPath($fileatt, $fileattname);
 
         try {
-            $mailer->send($message);
+            if (!isDev())
+                $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
             throw new Exception($error, 500);
         }
