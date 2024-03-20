@@ -11,17 +11,14 @@ describe('API:automated (Poznań)', () => {
 
     it('creates application', function () {
         cy.uploadOKImages('poznan.jpg')
-        cy.wait(1000)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
+        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
-        cy.contains('Wyślij do').click()
+        cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 
     it('checks thank you screen', function () {
-        cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
         cy.contains('Dziękujemy za wysłanie zgłoszenia')
         cy.contains('Jeszcze raz')
         cy.contains(this.sm['Poznań'].address[0])
@@ -52,17 +49,14 @@ describe('API:Mail (Wrocław)', () => {
         cy.uploadOKImages('wroclaw.jpg')
         cy.wait(1000)
         cy.get('.mapboxgl-ctrl-zoom-out').click()
-        cy.wait(500)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
+        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
         cy.get('#form-submit').click()
-        cy.contains('Wyślij do').click()
+        cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
 
     it('checks thank you screen', function () {
-        cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
         cy.contains('Dziękujemy za wysłanie zgłoszenia')
         cy.contains('Jeszcze raz')
         cy.contains(this.sm['Wrocław'].address[0].replace('Straż Miejska', 'SM'))
@@ -91,10 +85,8 @@ describe('Missing SM (Poniatowa)', () => {
     it('creates application', function () {
         cy.goToNewAppScreen()
         cy.uploadOKImages('poniatowa.jpg')
-        cy.wait(500)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
-        cy.wait(1000)
+        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
         cy.get('#form-submit', { timeout: 5000 }).click()
         cy.contains('Zapisz!').click()
         cy.contains('Wystąpił błąd').should('not.exist')

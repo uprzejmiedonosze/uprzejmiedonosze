@@ -29,12 +29,24 @@ Cypress.Commands.add("uploadFile", (selector, fileUrl, type = "") => cy.get(sele
   )
 )
 
+Cypress.Commands.add("sendApp", () => {
+  cy.intercept('PATCH', '/api/app/**').as("send")
+  cy.contains('Wyślij do').click()
+  cy.wait("@send")
+  cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
+})
+
 Cypress.Commands.add("uploadOKImages", (carImage='img_p.jpg') => {
-  cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg',
-  'image/jpeg')
+  cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg', 'image/jpeg')
+
+  cy.intercept('GET', '/api/rest/geo/**/m').as("mapbox")
+  cy.intercept('GET', '/api/rest/geo/**/n').as("nominantim")
+
   cy.uploadFile('input[type=file]#carImage', carImage,
     'image/jpeg')
 
+  cy.wait('@mapbox')
+  cy.wait('@nominantim')
   cy.get('.carImageSection img', { timeout: 12000 }).should('have.attr', 'src').should('include', 'cdn')
 });
 

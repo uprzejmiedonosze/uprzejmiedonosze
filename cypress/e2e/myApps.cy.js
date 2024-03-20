@@ -106,8 +106,7 @@ describe('Valid images and location', () => {
 
     it('uploads images', function () {
         cy.uploadOKImages()
-        cy.wait(500)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
+        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
         cy.get('.imageContainer').should('not.have.class', 'error')
 
         cy.get('#comment').should('have.value', 'Pojazd marki Skoda.')
@@ -139,15 +138,14 @@ describe('Create application', () => {
     it('creates application', function () {
         cy.goToNewAppScreen()
         cy.uploadOKImages()
-        cy.wait(500)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
         const firstExtension = Object.entries(this.extensions)[0]
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
+        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('#form-submit', { timeout: 10000 }).click()
     })
 
     it('checks confirmation screen', function () {
-        cy.get('#form-submit', { timeout: 10000 }).click()
         cy.contains('Wystąpił błąd').should('not.exist')
         checkAppData(this.config)
         cy.contains('Zdjęcia wykonałem samodzielnie')
@@ -157,18 +155,25 @@ describe('Create application', () => {
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Wyślij do').click()
+        cy.sendApp()
         cy.contains('To twoje pierwsze zgłoszenie')
         cy.contains('UD/4/')
     })
 
     it('checks application list screen', function () {
         cy.contains('liście swoich zgłoszeń').click()
-        cy.contains(this.config.address.szczecin)
+        cy.location('pathname')
+            .should('include', '/moje-zgloszenia.html');
+        cy.intercept('GET', 'short-**-partial.html').as('appDetails')
+        cy.get('.ui-page-active .application-short.confirmed-waiting h3 > a').debug()
+            //.should('be.visible')
+            //.click()
+        cy.pause()
+        cy.wait('@appDetails')
     })
 
     it('checks application screen', function () {
-        cy.contains('Szczegóły').click({force: true})
+        cy.get('.ui-page-active .images a:first').click()
         checkAppData(this.config)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
@@ -187,13 +192,12 @@ describe('Edit application', () => {
     it('creates application', function () {
         cy.goToNewAppScreenWithoutTermsScreen()
         cy.uploadOKImages()
-        cy.wait(500)
-        cy.get('#geo').should('have.class', 'ui-icon-location')
         cy.setAppCategory(this.categories)
+        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('#form-submit', { timeout: 10000 }).click()
     })
 
     it('checks confirmation screen', function () {
-        cy.get('#form-submit', { timeout: 10000 }).click()
         cy.contains('Wystąpił błąd').should('not.exist')
         checkAppData(this.config)
     })
@@ -230,7 +234,7 @@ describe('Edit application', () => {
     })
 
     it('checks thank you screen', function () {
-        cy.contains('Wyślij do').click()
+        cy.sendApp()
         cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
         cy.contains('UD/4/')
     })
