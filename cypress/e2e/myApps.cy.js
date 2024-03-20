@@ -161,19 +161,16 @@ describe('Create application', () => {
     })
 
     it('checks application list screen', function () {
-        cy.contains('liście swoich zgłoszeń').click()
-        cy.location('pathname')
-            .should('include', '/moje-zgloszenia.html');
+        cy.visit('/moje-zgloszenia.html')
+        cy.location('pathname').should('include', '/moje-zgloszenia.html');
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.ui-page-active .application-short.confirmed-waiting h3 > a').debug()
-            //.should('be.visible')
-            //.click()
-        cy.pause()
+        cy.get('.ui-page-active .application-short.confirmed-waiting h3')
+            .should('be.visible').click()
         cy.wait('@appDetails')
     })
 
     it('checks application screen', function () {
-        cy.get('.ui-page-active .images a:first').click()
+        cy.get('.ui-page-active .images a:first').invoke('removeAttr', 'target').click()
         checkAppData(this.config)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
@@ -240,14 +237,18 @@ describe('Edit application', () => {
     })
 
     it('checks application list screen', function () {
-        cy.contains('liście swoich zgłoszeń').click()
-        cy.wait(1000)
+        cy.visit('/moje-zgloszenia.html')
+        cy.location('pathname').should('include', '/moje-zgloszenia.html');
+        cy.intercept('GET', 'short-**-partial.html').as('appDetails')
+        cy.get('.ui-page-active .application-short.confirmed-waiting h3:first')
+            .should('be.visible').click()
+        cy.wait('@appDetails')
         cy.contains(this.config.address.szczecin)
         cy.get('#collapsiblesetForFilter').find('.application').should('have.length', 2)
     })
 
     it('checks application screen', function () {
-        cy.contains('Szczegóły').click({force: true})
+        cy.get('.ui-page-active .images a:first').invoke('removeAttr', 'target').click()
         cy.contains(this.config.carImage.dateHumanAltered)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
