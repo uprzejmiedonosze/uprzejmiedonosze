@@ -117,7 +117,7 @@ function tex2pdf(array|Application $application, string $destFile, string $type)
     file_put_contents($tex_f, $twig->render($texFile, $params));
 
     $cmd = sprintf("/usr/bin/pdflatex -interaction nonstopmode %s", // -halt-on-error
-   	escapeshellarg($tex_f));
+   	    escapeshellarg($tex_f));
     chdir(sys_get_temp_dir());
     exec($cmd, $output, $ret);
     unset($output);

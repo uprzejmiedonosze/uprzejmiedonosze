@@ -423,7 +423,7 @@ class Application extends JSONObject{
         if(!isset($this->address) || !isset($this->address->lat)){
             return null;
         }
-        $iconEncodedUrl = urlencode('%HTTPS%://%HOST%/img/map-circle.png');
+        $iconEncodedUrl = urlencode('https://uprzejmiedonosze.net/img/map-circle.png');
         $lngLat = $this->getLngLat();
         $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lngLat)/$lngLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
 
