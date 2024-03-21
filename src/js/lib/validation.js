@@ -37,7 +37,7 @@ export const checkValueRe = function(item, regex) {
 
 export const checkCommentvalue = function () {
   let comment = $("#comment").val().trim()
-  comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[ -]\w*/, '').trim()
+  comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/ig, '').trim()
   if (comment.length > 10)
     return true
   $("#comment").addClass("error");
