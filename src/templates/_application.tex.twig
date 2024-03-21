@@ -21,8 +21,10 @@
 
 \vspace{15 mm}
 \begin{center}
-{\Large \href{{ appUrl }}{Zgłoszenie wykroczenia {{ appNumber|raw }} }{% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj,
-że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }}.{% endif %}} }
+    {\Large
+        \href{{ appUrl }}{Zgłoszenie wykroczenia {{ appNumber|raw }} }
+        {% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj, że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }}.{% endif %}}
+    }
 \end{center}
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
