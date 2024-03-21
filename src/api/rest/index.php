@@ -61,7 +61,7 @@ $errorMiddleware->setDefaultErrorHandler($jsonErrorHandler);
 
 $app->add(new JsonBodyParser());
 
-$app->options('/{routes:.+}', function ($request, $response, $args) {
+$app->options('/{routes:.+}', function ($request, $response) {
     return $response;
 });
 
@@ -76,273 +76,254 @@ $app->add(function ($request, $handler) {
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
-// USER
-
-$app->get('/api/rest/user', function (Request $request, Response $response, $args) {
-    return $response;
-})  ->add(new AddStatsMiddleware())
-    ->add(new UserMiddleware($createIfNonExists=false))
-    ->add(new AuthMiddleware());
-
-$app->patch('/api/rest/user', function (Request $request, Response $response, $args) {
-    return $response;
-})  ->add(new AddStatsMiddleware())
-    ->add(new UserMiddleware(true))
-    ->add(new AuthMiddleware());
-
-$app->patch('/api/rest/user/confirm-terms', function (Request $request, Response $response, $args) use ($storage) {
-    $user = $request->getAttribute('user');
-    $user->confirmTerms();
-    $storage->saveUser($user);
-    $user->isTermsConfirmed = $user->checkTermsConfirmation();
-    return $response;
-})  ->add(new RegisteredMiddleware())
-    ->add(new AddStatsMiddleware())
-    ->add(new UserMiddleware($createIfNonExists=false))
-    ->add(new AuthMiddleware());
-
-$app->post('/api/rest/user', function (Request $request, Response $response, $args) use ($storage) {
-    $params = (array)$request->getParsedBody();
-    $name = getParam($params, 'name');
-    $address = getParam($params, 'address');
-    $msisdn = getParam($params, 'msisdn', '');
-    $exposeData = getParam($params, 'exposeData', 'N') == 'Y';
-    if ($exposeData) throw new HttpBadRequestException($request, "Naprawdę chcesz ukrywać swoje dane.");
-    $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
-    $autoSend = getParam($params, 'autoSend', 'Y') == 'Y';
-    if (!$autoSend) throw new HttpBadRequestException($request, "Odmawiam wyłączenia funkcji automatycznej wysyłki zgłoszeń");
-
-    $user = $request->getAttribute('user');
-
-    $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend);
-    $storage->saveUser($user);
-    $user->isRegistered = $user->isRegistered();
-    $request = $request->withAttribute('user', $user);
-    return $response;
-})  ->add(new AddStatsMiddleware())
-    ->add(new UserMiddleware($createIfNonExists=false))
-    ->add(new AuthMiddleware());
-
-
-$app->get('/api/rest/user/apps', function (Request $request, Response $response, $args) use ($storage) {
-    $params = $request->getQueryParams();
-    $status = getParam($params, 'status', 'all');
-    $search = getParam($params, 'search', '%');
-    $limit =  getParam($params, 'limit', 0); // 0 == no limit
-    $offset = getParam($params, 'offset', 0);
-
-    $user = $request->getAttribute('user');
-    $apps = $storage->getUserApplications($user, $status, $search, $limit, $offset);
+$app->group('/api/rest/user', function (RouteCollectorProxy $group) use ($storage) { // USER
+    $group->get('/', function (Request $request, Response $response) {
+        return $response;
+    })  ->add(new AddStatsMiddleware())
+        ->add(new UserMiddleware(createIfNonExists: false))
+        ->add(new AuthMiddleware());
     
-    $response->getBody()->write(json_encode($apps));
-    return $response;
-})  ->add(new RegisteredMiddleware())
-    ->add(new UserMiddleware())
-    ->add(new AuthMiddleware());
+    $group->patch('/', function (Request $request, Response $response) {
+        return $response;
+    })  ->add(new AddStatsMiddleware())
+        ->add(new UserMiddleware(createIfNonExists: true))
+        ->add(new AuthMiddleware());
+    
+    $group->patch('/confirm-terms', function (Request $request, Response $response) use ($storage) {
+        $user = $request->getAttribute('user');
+        $user->confirmTerms();
+        $storage->saveUser($user);
+        $user->isTermsConfirmed = $user->checkTermsConfirmation();
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new AddStatsMiddleware())
+        ->add(new UserMiddleware(createIfNonExists: false))
+        ->add(new AuthMiddleware());
+    
+    $group->post('/', function (Request $request, Response $response) use ($storage) {
+        $params = (array)$request->getParsedBody();
+        $name = getParam($params, 'name');
+        $address = getParam($params, 'address');
+        $msisdn = getParam($params, 'msisdn', '');
+        $exposeData = getParam($params, 'exposeData', 'N') == 'Y';
+        if ($exposeData) throw new HttpBadRequestException($request, "Naprawdę chcesz ukrywać swoje dane.");
+        $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
+        $autoSend = getParam($params, 'autoSend', 'Y') == 'Y';
+        if (!$autoSend) throw new HttpBadRequestException($request, "Odmawiam wyłączenia funkcji automatycznej wysyłki zgłoszeń");
+    
+        $user = $request->getAttribute('user');
+    
+        $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend);
+        $storage->saveUser($user);
+        $user->isRegistered = $user->isRegistered();
+        $request = $request->withAttribute('user', $user);
+        return $response;
+    })  ->add(new AddStatsMiddleware())
+        ->add(new UserMiddleware(createIfNonExists: false))
+        ->add(new AuthMiddleware());
+    
+    
+    $group->get('/apps', function (Request $request, Response $response) use ($storage) {
+        $params = $request->getQueryParams();
+        $status = getParam($params, 'status', 'all');
+        $search = getParam($params, 'search', '%');
+        $limit =  getParam($params, 'limit', 0); // 0 == no limit
+        $offset = getParam($params, 'offset', 0);
+    
+        $user = $request->getAttribute('user');
+        $apps = $storage->getUserApplications($user, $status, $search, $limit, $offset);
+        
+        $response->getBody()->write(json_encode($apps));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new AuthMiddleware());
+    
+}); 
 
-// CONFIG
-
-$CONFIG_FILES = Array(
-    'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', "terms");
-
-$app->get('/api/rest/config', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
-    $response->getBody()->write(json_encode($CONFIG_FILES));
-    return $response;
+$app->group('/api/rest/config', function (RouteCollectorProxy $group) { // CONFIG
+    $CONFIG_FILES = Array(
+        'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', 'terms');
+    
+    $group->get('/', function (Request $request, Response $response) use ($CONFIG_FILES) {
+        $response->getBody()->write(json_encode($CONFIG_FILES));
+        return $response;
+    });
+    
+    $group->get('/categories', function (Request $request, Response $response) {
+        $categories = file_get_contents(__DIR__ . "/../config/categories.json");
+        $categories = json_decode($categories, true);
+        array_walk($categories, function(&$val, $key) { $val["id"] = (string)$key; });
+        $response->getBody()->write(json_encode(array_values($categories)));
+        return $response;
+    });
+    
+    $group->get('/terms', function (Request $request, Response $response) {
+        $twig = initBareTwig();
+        $terms = $twig->render('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
+        $response->getBody()->write($terms);
+        return $response;
+    });
+    
+    $group->get('/{name}', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
+        $name = $args['name'];
+    
+        if (!in_array($name, $CONFIG_FILES))
+            throw new HttpNotFoundException($request,
+                "Nie znam konfiguracji o nazwie '$name'");
+    
+        $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
+        return $response;
+    });
 });
 
-$app->get('/api/rest/config/categories', function (Request $request, Response $response, $args) {
-    $categories = file_get_contents(__DIR__ . "/../config/categories.json");
-    $categories = json_decode($categories, true);
-    array_walk($categories, function(&$val, $key) { $val["id"] = (string)$key; });
-    $response->getBody()->write(json_encode(array_values($categories)));
-    return $response;
-});
+$app->group('/api/rest/app', function (RouteCollectorProxy $group) use ($storage) { // APPLICATION
+    $group->post('/new', function (Request $request, Response $response) use ($storage) {
+        $user = $request->getAttribute('user');
+        $application = Application::withUser($user);
+        $storage->saveApplication($application);
+        unset($application->browser);
+        $response->getBody()->write(json_encode($application));
+        return $response;
+    });
 
-$app->get('/api/rest/config/terms', function (Request $request, Response $response, $args) {
-    $twig = initBareTwig();
-    $terms = $twig->render('regulamin.json.twig', ['latestTermUpdate' => LATEST_TERMS_UPDATE]);
-    $response->getBody()->write($terms);
-    return $response;
-});
+    $group->get('/{appId}', function (Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        $application = $request->getAttribute('application');
+    
+        $twig = initBareTwig();
+        $appJson = $twig->render('_application.json.twig', ['app' => $application]);
+    
+        $application->formattedText = json_decode($appJson);
+    
+        if ($application->user->email !== $user->getEmail()) {
+            $application->user->email = '';
+            $application->user->name = '';
+            $application->user->address = '';
+            $application->user->msisdn = '';
+            $application->user->sex = 'f';
+        }
+    
+        $response->getBody()->write(json_encode($application));
+        return $response;
+    })  ->add(new AppMiddleware(failOnWrongOwnership: false));
 
-$app->get('/api/rest/config/{name}', function (Request $request, Response $response, $args) use ($CONFIG_FILES) {
-    $name = $args['name'];
+    $group->post('/{appId}', function (Request $request, Response $response, $args) {
+        $appId = $args['appId'];
+        $params = (array)$request->getParsedBody();
+    
+        $plateId = getParam($params, 'plateId');
+        $address = getParam($params, 'address'); // Mazurska 37, Szczecin
+        $city = getParam($params, 'city');
+        $voivodeship = getParam($params, 'voivodeship');
+        $district = getParam($params, 'district');
+        $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
+    
+        $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
+    
+        $lat = getParam($params, 'lat');
+        $lng = getParam($params, 'lng');
+        $comment = getParam($params, 'comment', '');
+        $category = intval(getParam($params, 'category'));
+    
+        $witness = getParam($params, 'witness');
+    
+        $extensions = getParam($params, 'extensions', ''); // "6,7", "6", "", missing
+        $extensions = array_filter(explode(',', $extensions));
+    
+        $fullAddress = new JSONObject();
+        $fullAddress->address = $address;
+        $fullAddress->city = $city;
+        $fullAddress->voivodeship = $voivodeship;
+        $fullAddress->lat = $lat;
+        $fullAddress->lng = $lng;
+        $fullAddress->district = $district;
+    
+        $user = $request->getAttribute('user');
+        
+        try {
+            $application = updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
+                $plateId, $comment, $witness, $extensions, $user);
+        } catch (Exception $e) {
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
+        }
+        unset($application->browser);
+        $response->getBody()->write(json_encode($application));
+        return $response;
+    })  ->add(new AppMiddleware());
 
-    if (!in_array($name, $CONFIG_FILES))
-        throw new HttpNotFoundException($request,
-            "Nie znam konfiguracji o nazwie '$name'");
+    $group->patch('/{appId}/status/{status}', function (Request $request, Response $response, $args) {
+        $status = $args['status'];
+        $application = $request->getAttribute('application');
+        $user = $request->getAttribute('user');
+        try {
+            $application = setStatus($status, $application->id, $user);
+        } catch (Exception $e) {
+            throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
+        }
+        unset($application->browser);
+        $response->getBody()->write(json_encode($application));
+        return $response;
+    })  ->add(new AppMiddleware());
 
-    $response->getBody()->write(file_get_contents(__DIR__ . "/../config/$name.json"));
-    return $response;
-});
 
-// APPLICATION
+    $group->post('/{appId}/image', function (Request $request, Response $response) {
+        $params = (array)$request->getParsedBody();
+    
+        $imageUri = getParam($params, 'carImage', -1);
+        $pictureType = 'carImage';
+        if ($imageUri == -1) {
+            $imageUri = getParam($params, 'contextImage');
+            $pictureType = 'contextImage';
+        }
+    
+        list($type, $imageBytes) = explode(',', $imageUri);
+        
+        // valid only for $pictureType == 'carImage'
+        $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
+        $lat = getParam($params, 'lat', '');
+        $lng = getParam($params, 'lng', '');
+        $latLng = null;
+        if ($lat && $lng) $latLng = normalizeLatLng($lat, $lng);
+        $dtFromPicture = !!$dateTime;
+    
+        $imagemime = getimagesize($imageUri);
+        if (empty($imagemime['mime']) || strpos($imagemime['mime'], 'image/') !== 0)
+            throw new HttpBadRequestException($request, "Przekazany plik nie jest obrazkiem");
+    
+        if (strlen(rtrim($imageBytes, '=')) * 0.75 > 500000)
+            throw new HttpBadRequestException($request, "Zbyt duże zdjęcie (>500kb)");
+    
+        $ext = substr($imagemime['mime'], 6);
+        if (!in_array($ext, ['png', 'jpeg', 'jpg']))
+            throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
+        
+        $application = $request->getAttribute('application');
+        $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+        unset($application->browser);
+        $response->getBody()->write(json_encode($application));
+        return $response;
+    })  ->add(new AppMiddleware());
 
-$app->post('/api/rest/app/new', function (Request $request, Response $response, $args) use ($storage) {
-    $user = $request->getAttribute('user');
-    $application = Application::withUser($user);
-    $storage->saveApplication($application);
-    unset($application->browser);
-    $response->getBody()->write(json_encode($application));
-    return $response;
+    $group->patch('/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
+        $appId = $args['appId'];
+        $application = $storage->getApplication($appId);
+        $user = $request->getAttribute('user');
+    
+        if ($application->user->email !== $user->getEmail()) {
+            throw new HttpForbiddenException($request, "Użytkownik '{$user->getEmail()}' nie ma uprawnień do wysłania zgłoszenia '$appId'");
+        }
+    
+        $application = sendApplication($appId, $user);
+        unset($application->browser);
+        $response->getBody()->write(json_encode($application));
+        return $response;
+    })  ->add(new AppMiddleware());
+
 })  ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
     ->add(new AuthMiddleware());
-
-$app->get('/api/rest/app/{appId}', function (Request $request, Response $response, $args) {
-    $user = $request->getAttribute('user');
-    $application = $request->getAttribute('application');
-
-    $twig = initBareTwig();
-    $appJson = $twig->render('_application.json.twig', ['app' => $application]);
-
-    $application->formattedText = json_decode($appJson);
-
-    if ($application->user->email !== $user->getEmail()) {
-        $application->user->email = '';
-        $application->user->name = '';
-        $application->user->address = '';
-        $application->user->msisdn = '';
-        $application->user->sex = 'f';
-    }
-
-    $response->getBody()->write(json_encode($application));
-    return $response;
-})  ->add(new AppMiddleware($failOnWrongOwnership=false))
-    ->add(new TermsConfirmedMiddleware())
-    ->add(new RegisteredMiddleware())
-    ->add(new UserMiddleware())
-    ->add(new AuthMiddleware());
-
-$app->post('/api/rest/app/{appId}', function (Request $request, Response $response, $args) {
-    $appId = $args['appId'];
-    $params = (array)$request->getParsedBody();
-
-    $plateId = getParam($params, 'plateId');
-    $address = getParam($params, 'address'); // Mazurska 37, Szczecin
-    $city = getParam($params, 'city');
-    $voivodeship = getParam($params, 'voivodeship');
-    $district = getParam($params, 'district');
-    $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
-
-    $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
-
-    $lat = getParam($params, 'lat');
-    $lng = getParam($params, 'lng');
-    $comment = getParam($params, 'comment', '');
-    $category = intval(getParam($params, 'category'));
-
-    $witness = getParam($params, 'witness');
-
-    $extensions = getParam($params, 'extensions', ''); // "6,7", "6", "", missing
-    $extensions = array_filter(explode(',', $extensions));
-
-    $fullAddress = new JSONObject();
-    $fullAddress->address = $address;
-    $fullAddress->city = $city;
-    $fullAddress->voivodeship = $voivodeship;
-    $fullAddress->lat = $lat;
-    $fullAddress->lng = $lng;
-    $fullAddress->district = $district;
-
-    $user = $request->getAttribute('user');
-    
-    try {
-        $application = updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
-            $plateId, $comment, $witness, $extensions, $user);
-    } catch (Exception $e) {
-        throw new HttpForbiddenException($request, $e->getMessage(), $e);
-    }
-    unset($application->browser);
-    $response->getBody()->write(json_encode($application));
-    return $response;
-})  ->add(new AppMiddleware())
-    ->add(new TermsConfirmedMiddleware())
-    ->add(new RegisteredMiddleware())
-    ->add(new UserMiddleware())
-    ->add(new AuthMiddleware());
-
-
-$app->patch('/api/rest/app/{appId}/status/{status}', function (Request $request, Response $response, $args) {
-    $status = $args['status'];
-    $application = $request->getAttribute('application');
-    $user = $request->getAttribute('user');
-    try {
-        $application = setStatus($status, $application->id, $user);
-    } catch (Exception $e) {
-        throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
-    }
-    unset($application->browser);
-    $response->getBody()->write(json_encode($application));
-    return $response;
-})  ->add(new AppMiddleware())
-    ->add(new TermsConfirmedMiddleware())    
-    ->add(new RegisteredMiddleware())
-    ->add(new UserMiddleware())
-    ->add(new AuthMiddleware());
-
-$app->post('/api/rest/app/{appId}/image', function (Request $request, Response $response, $args) {
-    $params = (array)$request->getParsedBody();
-
-    $imageUri = getParam($params, 'carImage', -1);
-    $pictureType = 'carImage';
-    if ($imageUri == -1) {
-        $imageUri = getParam($params, 'contextImage');
-        $pictureType = 'contextImage';
-    }
-
-    list($type, $imageBytes) = explode(',', $imageUri);
-    
-    // valid only for $pictureType == 'carImage'
-    $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
-    $lat = getParam($params, 'lat', '');
-    $lng = getParam($params, 'lng', '');
-    $latLng = null;
-    if ($lat && $lng) $latLng = normalizeLatLng($lat, $lng);
-    $dtFromPicture = !!$dateTime;
-
-    $imagemime = getimagesize($imageUri);
-    if (empty($imagemime['mime']) || strpos($imagemime['mime'], 'image/') !== 0)
-        throw new HttpBadRequestException($request, "Przekazany plik nie jest obrazkiem");
-
-    if (strlen(rtrim($imageBytes, '=')) * 0.75 > 500000)
-        throw new HttpBadRequestException($request, "Zbyt duże zdjęcie (>500kb)");
-
-    $ext = substr($imagemime['mime'], 6);
-    if (!in_array($ext, ['png', 'jpeg', 'jpg']))
-        throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
-    
-    $application = $request->getAttribute('application');
-    $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
-    unset($application->browser);
-    $response->getBody()->write(json_encode($application));
-    return $response;
-})  ->add(new AppMiddleware())
-    ->add(new TermsConfirmedMiddleware())
-    ->add(new RegisteredMiddleware())
-    ->add(new UserMiddleware())
-    ->add(new AuthMiddleware());
-
-$app->patch('/api/rest/app/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
-    $appId = $args['appId'];
-    $application = $storage->getApplication($appId);
-    $user = $request->getAttribute('user');
-
-    if ($application->user->email !== $user->getEmail()) {
-        throw new HttpForbiddenException($request, "Użytkownik '{$user->getEmail()}' nie ma uprawnień do wysłania zgłoszenia '$appId'");
-    }
-
-    $application = sendApplication($appId, $user);
-    unset($application->browser);
-    $response->getBody()->write(json_encode($application));
-    return $response;
-})  ->add(new AppMiddleware())
-    ->add(new TermsConfirmedMiddleware())
-    ->add(new RegisteredMiddleware())
-    ->add(new UserMiddleware())
-    ->add(new AuthMiddleware());
-
 
 $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
     $group->get('/{lat},{lng}/g', function (Request $request, Response $response, $args) {
@@ -383,7 +364,7 @@ $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
 
 // OTHER
 
-$app->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request, $response) {
+$app->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request) {
     throw new HttpNotFoundException($request);
 });
 
