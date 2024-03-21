@@ -2,12 +2,13 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Factory\AppFactory;
-use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpException;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
-use Slim\Exception\HttpException;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Factory\AppFactory;
+use Slim\Routing\RouteCollectorProxy;
 
 $DISABLE_SESSION=true;
 
@@ -343,40 +344,42 @@ $app->patch('/api/rest/app/{appId}/send', function (Request $request, Response $
     ->add(new AuthMiddleware());
 
 
-// GEO
-
-$app->get('/api/rest/geo/{lat},{lng}/g', function (Request $request, Response $response, $args) {
-    $lat = $args['lat'];
-    $lng = $args['lng'];
-    try {
-        $response->getBody()->write(json_encode(GoogleMaps($lat, $lng)));
-    } catch (Exception $e) {
-        if ($e->getCode() ?? -1 == 404) {
-            throw new HttpNotFoundException($request, $e->getMessage(), $e);
+$app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
+    $group->get('/{lat},{lng}/g', function (Request $request, Response $response, $args) {
+        $lat = $args['lat'];
+        $lng = $args['lng'];
+        try {
+            $response->getBody()->write(json_encode(GoogleMaps($lat, $lng)));
+        } catch (Exception $e) {
+            if ($e->getCode() ?? -1 == 404) {
+                throw new HttpNotFoundException($request, $e->getMessage(), $e);
+            }
+            throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
         }
-        throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
-    }
-    return $response;
-});
-
-$app->get('/api/rest/geo/{lat},{lng}/n', function (Request $request, Response $response, $args) {
-    $lat = $args['lat'];
-    $lng = $args['lng'];
-
-    $result = Nominatim($lat, $lng);
-    $response->getBody()->write(json_encode($result));
-    return $response;
-});
-
-$app->get('/api/rest/geo/{lat},{lng}/m', function (Request $request, Response $response, $args) {
-    $lat = $args['lat'];
-    $lng = $args['lng'];
-
-    $result = MapBox($lat, $lng);
-    $response->getBody()->write(json_encode($result));
-    return $response;
-});
-
+        return $response;
+    });
+    
+    $group->get('/{lat},{lng}/n', function (Request $request, Response $response, $args) {
+        $lat = $args['lat'];
+        $lng = $args['lng'];
+    
+        $result = Nominatim($lat, $lng);
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    });
+    
+    $group->get('/{lat},{lng}/m', function (Request $request, Response $response, $args) {
+        $lat = $args['lat'];
+        $lng = $args['lng'];
+    
+        $result = MapBox($lat, $lng);
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    });
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new AuthMiddleware());
 
 // OTHER
 
