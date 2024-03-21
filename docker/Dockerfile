@@ -8,7 +8,8 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get --no-install-recommends install -y 
     memcached texlive ca-certificates \
     php-fpm php-sqlite3 php-curl \
     php-opcache php-mbstring php-gd \
-    php-memcache php-memcached php-intl
+    php-memcache php-memcached php-intl \
+    lmodern texlive-lang-polish texlive-latex-recommended texlive-latex-extra
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
