@@ -85,5 +85,19 @@ class SessionApiHandler extends AbstractHandler {
         $_SESSION['user_id'] = $firebaseUser['user_id'];
         return $this->renderJson($response, $firebaseUser);
     }
+
+    public function Nominatim(Request $request, Response $response, $args) {
+        extract($args);
+        $result = Nominatim($lat, $lng);
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    }
+
+    public function MapBox(Request $request, Response $response, $args) {
+        extract($args);
+        $result = MapBox($lat, $lng);
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    }
     
 }

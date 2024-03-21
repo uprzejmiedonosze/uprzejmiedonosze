@@ -84,18 +84,21 @@ $app->post('/api/verify-token', SessionApiHandler::class . ':verifyToken')
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());
 
-$app->group('/api', function (RouteCollectorProxy $group) use ($storage) { // JSON API
+$app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
     $group->patch('/app/{appId}/status/{status}', SessionApiHandler::class . ':setStatus');
     $group->patch('/app/{appId}/send', SessionApiHandler::class . ':sendApplication');
     $group->patch('/app/{appId}/gallery/add', SessionApiHandler::class . ':addToGallery');
     $group->patch('/app/{appId}/gallery/moderate/{decision}', SessionApiHandler::class . ':moderateGallery')
         ->add(new ModeratorMiddleware());
+    
+    $group->get('/geo/{lat},{lng}/n', SessionApiHandler::class . ':Nominatim');
+    $group->get('/geo/{lat},{lng}/m', SessionApiHandler::class . ':MapBox');
 })  ->add(new RegisteredMiddleware())
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage) { // Application
+$app->group('', function (RouteCollectorProxy $group) { // Application
 
     $group->get('/start.html', ApplicationHandler::class . ':start');
     $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
@@ -129,7 +132,7 @@ $app->group('/.well-known', function (RouteCollectorProxy $group) { // user regi
     $group->get('/assetlinks.json', StaticPagesHandler::class . ':assetlinks');
 })   ->add(new JsonMiddleware());
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage) { // sessionless pages
+$app->group('', function (RouteCollectorProxy $group) { // sessionless pages
     $group->get('/', StaticPagesHandler::class . ':root');
 
     $group->get('/zgloszenie.html', StaticPagesHandler::class . ':applicationRedirect');

@@ -40,8 +40,8 @@ Cypress.Commands.add("uploadOKImages", (carImage='img_p.jpg') => {
   cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg', 'image/jpeg')
 
   cy.intercept('POST', '/api/app/**/image').as("image")
-  cy.intercept('GET', '/api/rest/geo/**/m').as("mapbox")
-  cy.intercept('GET', '/api/rest/geo/**/n').as("nominantim")
+  cy.intercept('GET', '/api/geo/**/m').as("mapbox")
+  cy.intercept('GET', '/api/geo/**/n').as("nominantim")
 
   cy.uploadFile('input[type=file]#carImage', carImage,
     'image/jpeg')
