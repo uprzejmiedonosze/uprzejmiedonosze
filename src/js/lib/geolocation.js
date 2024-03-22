@@ -92,23 +92,30 @@ function geoLoading(from) {
   }
 }
 
+function setSM(sm, hint) {
+  const $sm = $("#smInfo")
+  const $smHint = $("#smInfoHint")
+
+  sm = sm ? `Rejon: ${sm}`: ''
+  $sm.text(sm)  
+  $smHint.attr('title', hint ?? '')
+  $smHint.css('visibility', (sm == '') ? 'hidden': 'visible')
+}
+
 async function latLngToAddress(lat, lng, from) {
   const $addressHint = $("#addressHint")
   const $address = $("#address")
   const $input = $("#lokalizacja")
   const $geoIcon = $("#geo")
-  const $sm = $("#smInfo")
-  const $smHint = $("#smInfoHint")
+  
 
   $addressHint.text("Podaj adres lub wskaż go na mapie")
   $addressHint.removeClass("hint")
-  $sm.text('')
-  $smHint.attr('title', '')
+  setSM()
 
   const geoError = () => {
     $geoIcon.buttonMarkup({ icon: "alert" })
-    $sm.text('')
-    $smHint.attr('title', '')
+    setSM()
   }
 
   const geoSuccess = (address) => {
@@ -156,13 +163,10 @@ async function latLngToAddress(lat, lng, from) {
   geoSuccess(address)
 
   if (stopAgresji) {
-    $sm.text(nominatim.sa.address[0])
-    $smHint.attr('title', nominatim.sa.hint ?? '')
+    setSM(nominatim.sa.address[0], nominatim.sa.hint ?? '')
   } else if (nominatim.sm?.email) {
-    $sm.text(nominatim.sm.address[0])
-    $smHint.attr('title', nominatim.sm.hint ?? '')
+    setSM(nominatim.sm.address[0], nominatim.sm.hint ?? '')
   }
-  $smHint.css('visibility', ($sm.text() == '') ? 'none': 'visible')
   running = false
 }
 
