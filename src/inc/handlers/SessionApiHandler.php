@@ -12,7 +12,7 @@ class SessionApiHandler extends AbstractHandler {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
 
-        $imageBytes = explode( ',', $this->getParam($params, 'image_data'))[1]; 
+        $imageBytes = explode( ',', $this->getParam($params, 'image_data'))[1];
         $pictureType = $this->getParam($params, 'pictureType');
 
         $application = $storage->getApplication($appId);
@@ -34,6 +34,28 @@ class SessionApiHandler extends AbstractHandler {
             "status" => "OK",
             "patronite" => $application->patronite
         ));
+    }
+    public function setFields(Request $request, Response $response, array $args): Response
+    {
+        global $storage;
+        $appId = $args['appId'];
+        $application = $storage->getApplication($appId);
+        if(!$application->isCurrentUserOwner()) {
+            throw new \Exception('Nie posiadasz aplikacji o ID ' . $appId, 404);
+        }
+
+        $fields = json_decode($request->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+        foreach ($fields as $field => $value) {
+            match ($field) {
+                'externalId' => $application->externalId = $value,
+                'privateComment' => $application->privateComment = $value,
+                default => throw new \Exception('Pole ' . $field . ' nie może być edytowane'),
+            };
+        }
+
+        $storage->saveApplication($application);
+
+        return self::renderJson($response, []);
     }
 
     public function sendApplication(Request $request, Response $response, $args): Response {
@@ -99,5 +121,5 @@ class SessionApiHandler extends AbstractHandler {
         $response->getBody()->write(json_encode($result));
         return $response;
     }
-    
+
 }

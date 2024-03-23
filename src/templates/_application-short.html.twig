@@ -14,7 +14,7 @@
     data-collapsed-icon="{{ status.icon }}"
     data-expanded-icon="{{ status.icon }}"
     data-role="collapsible"
-    data-filtertext="{{ app.address.address }} {{app.number}} {{app.date}} {{app.carInfo.plateId}} {{app.userComment}} {{app.getCategory.short}} {{ app.guessSMData.getName }} {% if recydywaCnt > 1 %}recydywa{{ recydywaCnt }}{% endif %}">
+    data-filtertext="{{ app.address.address }} {{app.number}} {{app.date}} {{app.carInfo.plateId}} {{app.userComment}} {{app.getCategory.short}} {{ app.guessSMData.getName }} {{ app.externalId }} {{ app.privateComment }} {% if recydywaCnt > 1 %}recydywa{{ recydywaCnt }}{% endif %}">
 
     <h3>
         <span title="{{ app.number }}" class="app-number">{{ app.seq }}</span>

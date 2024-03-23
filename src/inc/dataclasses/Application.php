@@ -13,10 +13,9 @@ use \JSONObject as JSONObject;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-class Application extends JSONObject{
-
-    private function __construct() {
-    }
+class Application extends JSONObject implements JsonSerializable {
+    public string $externalId = '';
+    public string $privateComment  = '';
 
     /**
      * Creates new Application of initites it from JSON.
@@ -265,7 +264,7 @@ class Application extends JSONObject{
         if(!@$this->carInfo->plateId){
             return false;
         }
-        if(isset($this->carInfo->plateIdFromImage) 
+        if(isset($this->carInfo->plateIdFromImage)
             && $this->carInfo->plateIdFromImage == $this->carInfo->plateId){
             return true;
         }
@@ -284,7 +283,7 @@ class Application extends JSONObject{
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      * @SuppressWarnings(CamelCaseVariableName)
      */
-    public function guessSMData(bool $update=false): object {
+    public function guessSMData(bool $update=false): SM {
         global $SM_ADDRESSES;
         global $STOP_AGRESJI;
         if(!$update && isset($this->smCity) && !$this->stopAgresji()){
@@ -447,12 +446,12 @@ class Application extends JSONObject{
         if($ifp === false){
             return $mapsUrl;
         }
-        
+
         $image = @file_get_contents($mapsUrl);
         if($image === false){
             return $mapsUrl;
         }
-        
+
         if(fputs($ifp, $image) === false){
             return $mapsUrl;
         }
@@ -532,7 +531,7 @@ class Application extends JSONObject{
     /**
      * Returns info whether the app was allowed to be added
      * to gallery.
-     * 
+     *
      * returns: boolean
      */
     public function addedToGallery(){
@@ -576,9 +575,9 @@ class Application extends JSONObject{
         }
         if ($this->category == 0)
             $text = 'Pojazd';
-        else 
+        else
             $text = 'Dodatkowo pojazd';
-        
+
         $extCount = count($this->extensions);
         foreach($this->extensions as $extension){
             $text .= ' ';
@@ -589,6 +588,28 @@ class Application extends JSONObject{
         }
         return "$text.";
     }
-}
 
-?>
+    public function getExternalId(): string
+    {
+        return $this->externalId;
+    }
+
+    public function getPrivateComment(): string
+    {
+        return $this->privateComment;
+    }
+
+    public function jsonSerialize(): array
+    {
+        $data = (array)$this;
+        $hasDefaults = ['externalId', 'privateComment'];
+
+        foreach ($hasDefaults as $key) {
+            if ($data[$key] === '') {
+                unset($data[$key]);
+            }
+        }
+
+        return $data;
+    }
+}

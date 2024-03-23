@@ -87,6 +87,7 @@ $app->post('/api/verify-token', SessionApiHandler::class . ':verifyToken')
 $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
     $group->patch('/app/{appId}/status/{status}', SessionApiHandler::class . ':setStatus');
+    $group->patch('/app/{appId}/fields', SessionApiHandler::class . ':setFields');
     $group->patch('/app/{appId}/send', SessionApiHandler::class . ':sendApplication');
     $group->patch('/app/{appId}/gallery/add', SessionApiHandler::class . ':addToGallery');
     $group->patch('/app/{appId}/gallery/moderate/{decision}', SessionApiHandler::class . ':moderateGallery')

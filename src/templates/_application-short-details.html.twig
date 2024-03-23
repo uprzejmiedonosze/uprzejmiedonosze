@@ -12,41 +12,6 @@
     <li class="calendar"><b>{{ app.getDate("k'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</b></li>
     <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
     <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank" rel="external">{{ app.address.address }}</a></li>
-    <li class="status {{app.status}}"><b class="currentStatus">{{ status.name }}</b>
-        {% if appActionButtons %}
-        <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none" aria-haspopup="true" aria-owns="changeStatus{{ app.id }}" aria-expanded="false" class="ui-link">
-            (zmień status)
-        </a>
-        <div style="display: none;"><!-- placeholder for pre-rendered --></div>
-        {% endif %}
-    </li>
-    {% if app.wasSent %}
-    <li class="sent-to">Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
-        o {{ app.getSentDate("k'<sup>'mm'</sup>', d MMM YYYY")|raw }}</li>
-    {% elseif sendable %}
-        <li class="send">
-            {% if app.automatedSM and (autoSend ?? false) %}
-            <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini cta ui-icon-{{ statuses['confirmed-waiting'].icon }} confirmed-waiting">
-                Wyślij do {{ app.guessSMData.getShortName }}
-            </a>
-            {% elseif app.unknownSM %}
-            <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail cta confirmed-waiting">
-                Wyślij zgłoszenie
-            </a>
-            {% elseif wysylka is not defined %}
-            <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail confirmed-waiting cta">
-                Wyślij zgłoszenie
-            </a>
-            {% endif %}
-            {% if appActionButtons and app.isEditable %}
-            <a href="/nowe-zgloszenie.html?edit={{ app.id }}" data-ajax="false">edytuj</a>
-            {% endif %}
-        </li>
-    {% endif %}
-
     <li class="description"><b>{{ app.getCategory.short }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
     <li class="witness">
         {% if app.statements is not defined or not app.statements.witness %}
@@ -71,7 +36,53 @@
         </a>
     </div>
 </div>
+<hr/>
+<ul class="application-details-list">
+    <li class="status {{app.status}}"><b class="currentStatus">{{ status.name }}</b>
+        {% if appActionButtons %}
+            <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none" aria-haspopup="true" aria-owns="changeStatus{{ app.id }}" aria-expanded="false" class="ui-link">
+                (zmień status)
+            </a>
+            <div style="display: none;"><!-- placeholder for pre-rendered --></div>
+        {% endif %}
+    </li>
+    {% if app.wasSent %}
+        <li class="sent-to">Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
+            o {{ app.getSentDate("k'<sup>'mm'</sup>', d MMM YYYY")|raw }}</li>
+    {% elseif sendable %}
+        <li class="send">
+            {% if app.automatedSM and (autoSend ?? false) %}
+                <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
+                   class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini cta ui-icon-{{ statuses['confirmed-waiting'].icon }} confirmed-waiting">
+                    Wyślij do {{ app.guessSMData.getShortName }}
+                </a>
+            {% elseif app.unknownSM %}
+                <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
+                   class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail cta confirmed-waiting">
+                    Wyślij zgłoszenie
+                </a>
+            {% elseif wysylka is not defined %}
+                <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
+                   class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail confirmed-waiting cta">
+                    Wyślij zgłoszenie
+                </a>
+            {% endif %}
+            {% if appActionButtons and app.isEditable %}
+                <a href="/nowe-zgloszenie.html?edit={{ app.id }}" data-ajax="false">edytuj</a>
+            {% endif %}
+        </li>
+    {% endif %}
+    {% if app.wasSent %}
+        <li class="external-id">
+            <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="Miejsce na numer sprawy np. SM/3/5/7" value="{{ app.externalId }}">
+        </li>
+    {% endif %}
 
+    <li class="private-comment">
+        <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="Miejsce na Twoje prywatne uwagi">{{ app.privateComment }}</textarea>
+    </li>
+
+</ul>
 <div id="changeStatus{{ app.id }}-screen" class="ui-popup-screen ui-overlay-inherit ui-screen-hidden"></div>
 <div id="changeStatus{{ app.id }}-popup" class="ui-popup-container ui-popup-hidden ui-popup-truncate">
     <div data-role="popup" id="changeStatus{{ app.id }}" data-enhanced="true" data-transition="none" class="application-short ui-popup ui-body-inherit ui-overlay-shadow ui-corner-all">

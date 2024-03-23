@@ -41,6 +41,10 @@ $(document).on("pageshow", function () {
 
     appDetailsDiv.html('<div class="loader"></div>')
 
+    const resizeTextarea = function(){
+      $(this).height(0).height(this.scrollHeight);
+    };
+
     $.ajax({
       url: `/short-${appId}-partial.html`,
       dataType: "html"
@@ -48,10 +52,27 @@ $(document).on("pageshow", function () {
       location.hash = `#${appId}`
       appDetailsDiv.html(appDetails)
       $(`#changeStatus${appId}`).popup()
+      const $privateComment = $('.private-comment > textarea');
+
+      $('.app-field-editable')
+        .on('focusout', function() {
+          if (this.dataset.initialValue === this.value) {
+            return;
+          }
+          const body = {
+            [this.name]: this.value
+          };
+          $.ajax({
+            url: `/api/app/${ appId }/fields`,
+            dataType: "json",
+            method: 'PATCH',
+            data: JSON.stringify(body),
+            contentType: 'application/json'
+          })
+        })
+      $privateComment
+        .on('keyup', resizeTextarea)
+        .trigger('keyup');
     });
   })
-
-
-
-
 });
