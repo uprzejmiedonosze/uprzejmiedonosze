@@ -5,6 +5,7 @@ require(__DIR__ . '/../API.php');
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpException;
 
 class SessionApiHandler extends AbstractHandler {
     public function image(Request $request, Response $response, $args): Response {
@@ -41,7 +42,7 @@ class SessionApiHandler extends AbstractHandler {
         $appId = $args['appId'];
         $application = $storage->getApplication($appId);
         if(!$application->isCurrentUserOwner()) {
-            throw new \Exception('Nie posiadasz aplikacji o ID ' . $appId, 404);
+            throw new HttpException($request, 'Nie posiadasz aplikacji o ID ' . $appId, 404);
         }
 
         $fields = json_decode($request->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
@@ -49,7 +50,7 @@ class SessionApiHandler extends AbstractHandler {
             match ($field) {
                 'externalId' => $application->externalId = $value,
                 'privateComment' => $application->privateComment = $value,
-                default => throw new \Exception('Pole ' . $field . ' nie może być edytowane'),
+                default => throw new HttpException($request, 'Pole ' . $field . ' nie może być edytowane', 400),
             };
         }
 

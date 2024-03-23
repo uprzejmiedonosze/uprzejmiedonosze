@@ -55,8 +55,10 @@ $app->add(TwigMiddleware::create($app, $twig));
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, !isProd());
 $errorHandler = $errorMiddleware->getDefaultErrorHandler();
+$customErrorHandler = getCustomErrorHandler($app);
 $errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 $errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::class);
+$errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 $app->group('', function (RouteCollectorProxy $group) { // PDFs
     $group->get('/{appId}.pdf', StaticPagesHandler::class . ':applicationPdf');
