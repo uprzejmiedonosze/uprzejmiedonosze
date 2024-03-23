@@ -45,7 +45,7 @@ $(document).on("pageshow", function () {
       url: `/short-${appId}-partial.html`,
       dataType: "html"
     }).then(function (appDetails) {
-      location.hash = appId
+      location.hash = `#${appId}`
       appDetailsDiv.html(appDetails)
       $(`#changeStatus${appId}`).popup()
     });
