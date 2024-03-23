@@ -1,4 +1,5 @@
 import { updateCounters } from "../lib/status";
+import showMessage from './../lib/showMessage'
 
 $(document).on("pageshow", function () {
 
@@ -59,6 +60,8 @@ $(document).on("pageshow", function () {
           if (this.dataset.initialValue === this.value) {
             return;
           }
+          $target = $(this)
+
           const body = {
             [this.name]: this.value
           };
@@ -67,7 +70,20 @@ $(document).on("pageshow", function () {
             dataType: "json",
             method: 'PATCH',
             data: JSON.stringify(body),
-            contentType: 'application/json'
+            contentType: 'application/json',
+            beforeSend: (e) => {
+              $target.attr('readonly', true)
+            },              
+            success: (e) => {
+              $target.removeAttr('readonly')
+              $target.removeClass("error")
+              this.setAttribute("data-initial-value", this.value)
+            }
+          }).fail(e => {
+            $target.removeAttr('readonly')
+            $target.addClass("error")
+            const message = e.responseJSON ? e.responseJSON.error : e.statusText
+            showMessage(message, 7000)
           })
         })
       $privateComment

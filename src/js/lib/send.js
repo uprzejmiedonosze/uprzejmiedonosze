@@ -3,6 +3,7 @@
 import * as Sentry from "@sentry/browser";
 
 import { updateStatus } from "./status";
+import showMessage from './showMessage'
 
 window.sendApplication = function (appId) {
   $(`#${appId} .status-confirmed-waiting`).addClass("ui-disabled");
@@ -42,9 +43,3 @@ window.sendApplication = function (appId) {
   });
 };
 
-function showMessage(msg, timeout) {
-  $.mobile.loading("show", { html: msg, textVisible: true, textonly: true });
-  window.setTimeout(function () {
-    $.mobile.loading("hide");
-  }, timeout);
-}
