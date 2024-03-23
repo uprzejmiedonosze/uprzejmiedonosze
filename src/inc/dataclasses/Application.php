@@ -17,6 +17,9 @@ class Application extends JSONObject implements JsonSerializable {
     public string $externalId = '';
     public string $privateComment  = '';
 
+    private function __construct() {
+    }
+
     /**
      * Creates new Application of initites it from JSON.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
