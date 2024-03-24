@@ -1,7 +1,7 @@
 <?PHP
 
 class MissingParamException extends Exception {
-    private $param = null;
+    private ?string $param = null;
     public function __construct(string $param, string $msg=null, Exception $parent=null) {
         $this->param = $param;
         if (is_null($msg))

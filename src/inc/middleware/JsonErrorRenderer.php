@@ -19,8 +19,8 @@ function exceptionToErrorJson($exception): string {
 
     if ($exception instanceof HttpException)
         $response["description"] = $exception->getDescription();
-    if ($exception instanceof MissingParamException)
-        $response["param"] = $exception->getParam();
+    if ($exception->getPrevious() instanceof MissingParamException)
+        $response["param"] = $exception->getPrevious()->getParam();
     if (!isProd()) {
         $response["location"] = $exception->getFile() . ":" . $exception->getLine();
     }
