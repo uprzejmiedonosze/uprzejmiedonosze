@@ -282,3 +282,7 @@ h3.introHeader {
         font-size: 0.8em;
     }
 }
+
+:target {
+    scroll-margin-top: 45px;
+}
