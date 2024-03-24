@@ -7,17 +7,16 @@ class JsonErrorRenderer implements ErrorRendererInterface {
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(Throwable $exception, bool $displayErrorDetails): string {
-        return json_encode(exceptionToErrorJson($exception), JSON_UNESCAPED_UNICODE);
+        return exceptionToErrorJson($exception);
     }
 }
 
-function exceptionToErrorJson($exception): array {
-    $code = $exception->getCode() ?? 500;
+function exceptionToErrorJson($exception): string {
     $response = Array(
         "error" => $exception->getMessage(),
-        "status" => $code
+        "status" => $exception->getCode()
     );
-    if (isProd() && $code !== 404) \Sentry\captureException($exception);
+
     if ($exception instanceof HttpException)
         $response["description"] = $exception->getDescription();
     if ($exception instanceof MissingParamException)
@@ -29,5 +28,5 @@ function exceptionToErrorJson($exception): array {
     if ($previous) {
         $response["reason"] = $previous->getMessage();
     }
-    return $response;
+    return json_encode($response, JSON_UNESCAPED_UNICODE);
 }

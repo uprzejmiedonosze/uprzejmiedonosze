@@ -14,22 +14,30 @@ function getCustomErrorHandler(App $app): callable {
         bool $logErrorDetails,
         ?LoggerInterface $logger = null
     ) use ($app) {
-        if ($logErrors) {
-            logger($exception->getMessage());
-        }
         $status = $exception->getCode() ?? 500;
-        $httpException = new HttpException($request, $exception->getMessage(), $status, $exception);
+        if ($status === 0) $status = 500;
 
+        $email = $_SESSION['user_email'] ?? 'niezalogowany';
+        $msg = $exception->getMessage() . " szkodnik: $email, " . $exception->getFile()
+            . ':' . $exception->getLine() . "\n" . $exception->getTraceAsString();
+
+        if (isProd() && $status !== 404) \Sentry\captureException($exception);
+        logger($msg, $status !== 404);
+        
+        $httpException = $exception;
+        if (!($exception instanceof HttpException)) {
+            $httpException = new HttpException($request, $exception->getMessage(), $status, $exception);
+        }
         $response = $app->getResponseFactory()->createResponse();
 
         $accept = $request->getHeaderLine('Accept');
         if (str_contains($accept, 'application/json')) {
             $payload = exceptionToErrorJson($httpException);
-            $response->getBody()->write(json_encode($payload, JSON_UNESCAPED_UNICODE));
         } else {
             $payload = exceptionToErrorHtml($httpException);
-            $response->getBody()->write($payload);
+            
         }
+        $response->getBody()->write($payload);
         return $response->withStatus($status);
     };
 }

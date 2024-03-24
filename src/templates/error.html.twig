@@ -7,7 +7,9 @@
 {% block main %}
 <h2>Wystąpił błąd</h2>
 <p>{{ exception.getMessage }}</p>
-<p>Użytkownik: {{ email }}, moment wystąpienia: {{ time }}.</p>
+{% if email %}
+    <p>Użytkownik: {{ email }}.</p>
+{% endif %}
 <p>Napisz do nas na <a rel="external" href="https://www.facebook.com/groups/patologiaparkingowa/">grupie wsparcia
     dla użytkowników Uprzejmie Donoszę</a> podając powyższy opis w wiadomości.</p>
 <p>W międzyczasie spróbuj się <a rel="external" href="/logout.html">wylogować</a> i zalogować ponownie.</p>

@@ -14,35 +14,14 @@ class HtmlErrorRenderer implements ErrorRendererInterface {
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-function exceptionToErrorHtml($exception): string {
-    if (isProd()) \Sentry\captureException($exception);
-    try{
-        $email = getCurrentUserEmail();
-    }catch(Exception $e){
-        $email = 'niezalogowany';
-    }
-    $msg = $exception->getMessage() . " szkodnik: $email, " . $exception->getFile()
-        . ':' . $exception->getLine() . "\n" . $exception->getTraceAsString();
-    
-    if(posix_isatty(0)){
-        echo($msg . "\n");
-        return '';
-    }
-    $code = $exception->getCode() ?? 500;
-    if (isProd() && $code !== 404) \Sentry\captureException($exception);
-    $time = logger($msg, $code !== 404);
-
+function exceptionToErrorHtml($exception): string {    
+    $status = $exception->getCode();
     $twig = initBareTwig();
 
-    $template = 'error';
-    if ($code == 404)
-        $template = '404';
-
+    $template = ($status == 404) ? '404' : 'error';
     $parameters = HtmlMiddleware::getDefaultParameters();
-    $parameters['msg'] = $msg;
     $parameters['exception'] = $exception;
-    $parameters['email'] = $email;
-    $parameters['time'] = $time;
+    $parameters['email'] = $_SESSION['user_email'] ?? null;
     
     return $twig->render("$template.html.twig", $parameters);
 }
