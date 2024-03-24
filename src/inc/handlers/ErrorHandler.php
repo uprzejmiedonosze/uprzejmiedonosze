@@ -14,8 +14,7 @@ function getCustomErrorHandler(App $app): callable {
         bool $logErrorDetails,
         ?LoggerInterface $logger = null
     ) use ($app) {
-        $status = $exception->getCode() ?? 500;
-        if ($status === 0) $status = 500;
+        $status = $exception->getCode() ? : 500;
 
         $email = $_SESSION['user_email'] ?? 'niezalogowany';
         $msg = $exception->getMessage() . " szkodnik: $email, " . $exception->getFile()
