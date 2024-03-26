@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, EmailAuthProvider } from "firebase/auth";
 import * as firebaseui from 'firebaseui';
 
+import Api from './lib/Api'
+
 const currentScript = document.currentScript;
 addEventListener("load", () => initLogin(currentScript));
 
@@ -133,20 +135,14 @@ function setError(error) {
 function finishLogin(signInSuccessUrl) {
     onAuthStateChanged(getFirebaseAuth(), (user) => {
         if (!user) setError('Error: missing user');
-        user.getIdToken().then(function (accessToken) {
-            $.ajax({
-                url: '/api/verify-token',
-                type: 'POST',
-                dataType: 'json',
-                contentType: 'application/json',
-                success: function (data) {
-                    window.location.replace(decodeURIComponent(signInSuccessUrl));
-                },
-                error: setError,
-                headers: {
-                    "Authorization": `Bearer ${accessToken}`
-                }
-            });
+        user.getIdToken().then(async function (accessToken) {
+            try {
+                const api = new Api('/api/verify-token')
+                await api.post(null, {"Authorization": `Bearer ${accessToken}`})
+                window.location.replace(decodeURIComponent(signInSuccessUrl))
+            } catch(error) {
+                setError(error)
+            }
         });
     }, function (error) {
         setError(error);

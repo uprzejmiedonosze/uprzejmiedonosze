@@ -3,8 +3,10 @@ import ExifReader from 'exifreader'
 
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
+import Api from '../lib/Api'
 
 import * as Sentry from "@sentry/browser";
+import showMessage from "../lib/showMessage";
 
 var uploadInProgress = 0;
 
@@ -47,8 +49,7 @@ export async function checkFile(file, id) {
         }
         
       } catch (err) {
-        console.error(err)
-        imageError(id, err);
+        imageError(id, err.message);
         Sentry.captureException(err, {
           extra: Object.prototype.toString.call(file)
         });
@@ -83,7 +84,7 @@ function imageError(id, errorMsg) {
   $(`.${id}Section`).addClass("error");
   $(`.${id}Section input`).textinput("enable");
   $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show();
-  if (errorMsg) alert(errorMsg)
+  if (errorMsg) showMessage(errorMsg, 7000)
   uploadFinished();
 }
 
@@ -175,85 +176,79 @@ function noGeoDataInImage() {
   $("#addressHint").addClass("hint");
 }
 
-function sendFile(fileData, id, imageMetadata) {
+async function sendFile(fileData, id, imageMetadata) {
   const appId = $("#applicationId").val()
-  var formData = new FormData();
-
-  formData.append("action", "upload");
-  formData.append("image_data", fileData);
-  formData.append("pictureType", id);
+  var data = {
+    image_data: fileData,
+    pictureType: id
+  }
 
   if (id == "carImage") {
-    imageMetadata.dateTime && formData.append("dateTime", imageMetadata.dateTime);
-    imageMetadata.dtFromPicture && formData.append("dtFromPicture", imageMetadata.dtFromPicture);
-    imageMetadata.latLng && formData.append("latLng", imageMetadata.latLng);
+    imageMetadata.dateTime && (data.dateTime = imageMetadata.dateTime)
+    imageMetadata.dtFromPicture && (data.dtFromPicture = imageMetadata.dtFromPicture)
+    imageMetadata.latLng && (data.latLng = imageMetadata.latLng)
+
     $("#recydywa").hide();
     $("#plateId").removeClass();
   }
 
-  $.ajax({
-    type: "POST",
-    url: `/api/app/${appId}/image`,
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (app) {
-      if (app.carImage || app.contextImage) {
-        $(`.${id}Section .loader`).removeClass("l").hide()
-        $(`#${id}Preview`)
-          .css("height", "100%")
-          .css("opacity", 1)
-          .attr("src", app[id].thumb + "?v=" + Math.random().toString())
-      }
-      if (id == "carImage" && app.carInfo) {
-        if (app.carInfo.plateId) {
-          $("#plateId").val(app.carInfo.plateId);
-          if (app.carInfo.brand) {
-            if ($("#comment").val().trim().length == 0) {
-              if (app.carInfo.brandConfidence > 90) {
-                $("#comment").val(
-                  "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
-                );
-              }
-              if (app.carInfo.brandConfidence > 98) {
-                $("#comment").val("Pojazd marki " + app.carInfo.brand + ".");
-              }
+  try {
+    const api = new Api(`/api/app/${appId}/image`)
+    const app = await api.post(data)
+    if (app.carImage || app.contextImage) {
+      $(`.${id}Section .loader`).removeClass("l").hide()
+      $(`#${id}Preview`)
+        .css("height", "100%")
+        .css("opacity", 1)
+        .attr("src", app[id].thumb + "?v=" + Math.random().toString())
+    }
+    if (id == "carImage" && app.carInfo) {
+      if (app.carInfo.plateId) {
+        $("#plateId").val(app.carInfo.plateId);
+        if (app.carInfo.brand) {
+          if ($("#comment").val().trim().length == 0) {
+            if (app.carInfo.brandConfidence > 90) {
+              $("#comment").val(
+                "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
+              );
+            }
+            if (app.carInfo.brandConfidence > 98) {
+              $("#comment").val("Pojazd marki " + app.carInfo.brand + ".");
             }
           }
-          $("#plateHint").removeClass();
-          if (app.alpr === 'paid') {
-            $("#plateHint").text(
-              "Sprawdź automatycznie pobrany numer rejestracyjny"
-            );
-            $("#plateHint").addClass("hint");
-          } else {
-            $("#plateHint").html(
-              'Użyto słabszego algorytmu rozpoznawania tablic, który nie rozpoznaje marki pojazdu' +
-              '  <a href="https://patronite.pl/uprzejmiedonosze#goals" target="_blank">(więcej)</a>.'
-            );
-            $("#plateHint").addClass("warning");
-          }
         }
-        if (app.carInfo.plateImage) {
-          $("#plateImage").attr(
-            "src",
-            app.carInfo.plateImage + "?v=" + Math.random().toString()
+        $("#plateHint").removeClass();
+        if (app.alpr === 'paid') {
+          $("#plateHint").text(
+            "Sprawdź automatycznie pobrany numer rejestracyjny"
           );
-          $("#plateImage").show();
+          $("#plateHint").addClass("hint");
         } else {
-          $("#plateImage").hide();
-        }
-        if (app.carInfo.recydywa && app.carInfo.recydywa > 0) {
-          $("#recydywa").text(
-            "recydywista, zgłoszeń: " + app.carInfo.recydywa
+          $("#plateHint").html(
+            'Użyto słabszego algorytmu rozpoznawania tablic, który nie rozpoznaje marki pojazdu' +
+            '  <a href="https://patronite.pl/uprzejmiedonosze#goals" target="_blank">(więcej)</a>.'
           );
-          $("#recydywa").show();
+          $("#plateHint").addClass("warning");
         }
       }
-      uploadFinished();
-    },
-    error: function (err) {
-      imageError(id, err.responseJSON?.error);
+      if (app.carInfo.plateImage) {
+        $("#plateImage").attr(
+          "src",
+          app.carInfo.plateImage + "?v=" + Math.random().toString()
+        );
+        $("#plateImage").show();
+      } else {
+        $("#plateImage").hide();
+      }
+      if (app.carInfo.recydywa && app.carInfo.recydywa > 0) {
+        $("#recydywa").text(
+          "recydywista, zgłoszeń: " + app.carInfo.recydywa
+        );
+        $("#recydywa").show();
+      }
     }
-  });
+    uploadFinished();
+  } catch(err) {
+    imageError(id)
+  }
 }

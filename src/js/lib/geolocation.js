@@ -1,6 +1,7 @@
 /* global google */
 
 import mapboxgl from 'mapbox-gl'
+import Api from './Api'
 
 let map // represents mapboxgl.Map
 let stopAgresji = false
@@ -139,19 +140,22 @@ async function latLngToAddress(lat, lng, from) {
     lng
   }
 
-  const mapbox = await getMapBox(lat, lng)
-
-  if (mapbox.error) geoError()
-  else {
-    address = {...address, ...mapbox}
+  try {
+    const mapbox = await getMapBox(lat, lng)
+    address = {...address, ...mapbox.address}
     geoSuccess(address)
+  } catch (_e) {
+    geoError()
   }
 
-  const nominatim = await getNominatim(lat, lng)
-  if (nominatim.error) {
+  let nominatim = {}
+  try {
+    nominatim = await getNominatim(lat, lng)
+  } catch (_e) {
     running = false
     return
   }
+
   address.address = address.address || nominatim.address.address
   address.city = address.city || nominatim.address.city
   address.voivodeship = address.voivodeship || nominatim.address?.voivodeship
@@ -171,14 +175,11 @@ async function latLngToAddress(lat, lng, from) {
 }
 
 async function getNominatim(lat, lng) {
-  const response = await fetch(`/api/geo/${lat},${lng}/n`)
-  return await response.json()
+  const api = new Api(`/api/geo/${lat},${lng}/n`, true)
+  return await api.getJson()
 }
 
 async function getMapBox(lat, lng) {
-  const response = await fetch(`/api/geo/${lat},${lng}/m`)
-  const mapbox = await response.json()
-  
-  if (mapbox.error) return mapbox
-  return mapbox.address || {}
+  const api = new Api(`/api/geo/${lat},${lng}/m`, true)
+  return await api.getJson()
 }

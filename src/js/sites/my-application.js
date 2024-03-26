@@ -1,6 +1,8 @@
 import { updateCounters } from "../lib/status";
 import showMessage from './../lib/showMessage'
 
+import Api from '../lib/Api'
+
 $(document).on("pageshow", function () {
 
   displayAllApps = function () {
@@ -35,7 +37,7 @@ $(document).on("pageshow", function () {
     displayAllApps()
   }
 
-  $("#collapsiblesetForFilter").on("collapsibleexpand", (e) => {
+  $("#collapsiblesetForFilter").on("collapsibleexpand", async (e) => {
     const target = e.target
     const appId = target.id
     const appDetailsDiv = $(target).find('.ui-collapsible-content div')
@@ -46,49 +48,36 @@ $(document).on("pageshow", function () {
       $(this).height(0).height(this.scrollHeight);
     };
 
-    $.ajax({
-      url: `/short-${appId}-partial.html`,
-      dataType: "html"
-    }).then(function (appDetails) {
-      location.hash = `#${appId}`
-      appDetailsDiv.html(appDetails)
-      $(`#changeStatus${appId}`).popup()
-      const $privateComment = $('.private-comment > textarea');
+    const api = new Api(`/short-${appId}-partial.html`)
+    const appDetails = await api.getHtml()
+    location.hash = `#${appId}`
+    appDetailsDiv.html(appDetails)
+    $(`#changeStatus${appId}`).popup()
+    const $privateComment = $('.private-comment > textarea')
+    $privateComment.on('keyup', resizeTextarea).trigger('keyup')
 
-      $('.app-field-editable')
-        .on('focusout', function() {
-          if (this.dataset.initialValue === this.value) {
-            return;
-          }
-          $target = $(this)
+    $('.app-field-editable')
+      .on('focusout', async function() {
+        if (this.dataset.initialValue === this.value) {
+          return;
+        }
+        $target = $(this)
 
-          const body = {
-            [this.name]: this.value
-          };
-          $.ajax({
-            url: `/api/app/${ appId }/fields`,
-            dataType: "json",
-            method: 'PATCH',
-            data: JSON.stringify(body),
-            contentType: 'application/json',
-            beforeSend: (e) => {
-              $target.attr('readonly', true)
-            },              
-            success: (e) => {
-              $target.removeAttr('readonly')
-              $target.removeClass("error")
-              this.setAttribute("data-initial-value", this.value)
-            }
-          }).fail(e => {
-            $target.removeAttr('readonly')
-            $target.addClass("error")
-            const message = e.responseJSON ? e.responseJSON.error : e.statusText
-            showMessage(message, 7000)
-          })
-        })
-      $privateComment
-        .on('keyup', resizeTextarea)
-        .trigger('keyup');
-    });
+        const body = {
+          [this.name]: this.value
+        };
+
+        $target.attr('readonly', true)
+        try {
+          const api = new Api(`/api/app/${ appId }/fields`)
+          await api.patch(body)
+          $target.removeAttr('readonly')
+          $target.removeClass("error")
+          this.setAttribute("data-initial-value", this.value)
+        } catch(e) {
+          $target.removeAttr('readonly')
+          $target.addClass("error")
+        }
+      })
   })
 });

@@ -1,3 +1,5 @@
+import Api from '../lib/Api'
+
 $(document).on("pageshow", function () {
   if (!$(".galleryAdmin").length) return;
 
@@ -21,25 +23,17 @@ $(document).on("pageshow", function () {
     }
   });
 
-  window._moderateApp = (appId, decision) => {
+  window._moderateApp = async (appId, decision) => {
     $("#" + appId).removeClass('next')
     $("#" + appId).addClass("decision")
     scrollNext()
 
-    $.ajax({
-      type: 'PATCH',
-      url: `/api/app/${appId}/gallery/moderate/${decision}`,
-      contentType: false,
-      processData: false,
-    }).done(() => {
+    try {
+      const api = new Api(`/api/app/${appId}/gallery/moderate/${decision}`)
+      await api.patch()
       $("#" + appId).addClass("blur")
-    }).fail((e) => {
-      $.mobile.loading("show", {
-        text: e.statusText,
-        textVisible: true,
-        textonly: true
-      });
+    } catch (e) {
       return false;
-    });
+    }
   }
 })

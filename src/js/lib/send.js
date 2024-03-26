@@ -5,32 +5,28 @@ import * as Sentry from "@sentry/browser";
 import { updateStatus } from "./status";
 import showMessage from './showMessage'
 
-window.sendApplication = function (appId) {
+import Api from './Api'
+
+window.sendApplication = async function (appId) {
   $(`#${appId} .status-confirmed-waiting`).addClass("ui-disabled");
   $('.ui-btn-right').addClass("ui-disabled");
 
   $.mobile.loading("show", { text: "Wysyłam...", textVisible: true });
 
-  $.ajax({
-    type: 'PATCH',
-    url: `/api/app/${appId}/send`,
-    contentType: false,
-    processData: false,
-    success: function (msg) {
-      updateStatus(appId, msg.status);
-      $.mobile.loading("hide");
-      showMessage("<p>Wysłane</p>", 1500);
-      if ($(".dziekujemy").length) {
-        $(".whatNext").hide();
-        $(".afterSend").show();
-      }
-      $('.ui-btn-right').removeClass("ui-disabled");
-      (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
-    },
-  }).fail(function (e) {
+  try {
+    const api = new Api(`/api/app/${appId}/send`)
+    const msg = await api.patch()
+    updateStatus(appId, msg.status);
     $.mobile.loading("hide");
-    const message = e.responseJSON ? e.responseJSON.message : e.statusText;
-    showMessage("<h3 color=red>Nie udało się wysłać zgłoszenia!</h3>" + message, 7000);
+    showMessage("<p>Wysłane</p>", 1500);
+    if ($(".dziekujemy").length) {
+      $(".whatNext").hide();
+      $(".afterSend").show();
+    }
+    $('.ui-btn-right').removeClass("ui-disabled");
+    (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
+  } catch (e) {
+    $.mobile.loading("hide");
     $('.ui-btn-right').removeClass("ui-disabled");
     Sentry.captureException(e, {
       extra: message
@@ -40,6 +36,8 @@ window.sendApplication = function (appId) {
         eventCategory: "js-error",
         eventAction: "sendViaAPI"
       });
-  });
+
+  }
+  
 };
 

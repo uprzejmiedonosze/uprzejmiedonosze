@@ -1,25 +1,24 @@
 /* global ga */
 
+import Api from './Api'
+
 const statuses = require("../../api/config/statuses.json");
 
-export function setStatus(appId, status) {
+export async function setStatus(appId, status) {
   if (statuses[status]?.confirmationNeeded) {
     const confirmation = window.confirm('Czy na pewno chcesz przeniesć zgłoszenie do archiwum?')
     if (!confirmation) return $("#changeStatus" + appId).popup( "close" );
   }
   $.mobile.loading("show", { textVisible: true, text: '' });
-  $.ajax({
-    type: 'PATCH',
-    url: `/api/app/${appId}/status/${status}`,
-    contentType: false,
-    processData: false,
-    success: function (e) {
-      if (e?.patronite) $('#patronite').popup("open")
-      updateStatus(appId, status)
-      $.mobile.loading("hide")
-      $("#changeStatus" + appId).popup( "close" )
-    }
-  });
+
+  const api = new Api(`/api/app/${appId}/status/${status}`)
+  const result = await api.patch()
+  
+  if (result?.patronite) $('#patronite').popup("open")
+  updateStatus(appId, status)
+  $.mobile.loading("hide")
+  $("#changeStatus" + appId).popup( "close" )
+
   (typeof ga == 'function') && ga("send", "event", {
     eventCategory: "js",
     eventAction: "setStatus",
