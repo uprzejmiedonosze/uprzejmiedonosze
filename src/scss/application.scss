@@ -42,6 +42,7 @@
 }
 
 .ui-grid-a.ui-responsive.images .imageContainer img {
+  border-radius: 0.8em;
   width: 100%;
   display: block;
   height: auto;
@@ -141,7 +142,7 @@ div#recydywa {
     margin: 0;
   }
 
-  .application a.zoom {
+  a.zoom {
     position: absolute;
     top: 10;
     left: 10;
