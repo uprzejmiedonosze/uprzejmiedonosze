@@ -30,23 +30,28 @@
     </p>
 
     {% set address = 'unset' %}
-    <div class="ui-body ui-body-a ui-corner-all">
-        <ul>
-            {% for app in applications %}
-                {% if address != app.sent.to %}
-                    {% set address = app.sent.to %}
-                    </ul>
-                    <p>Poniższe zawiadomienia o popełnieniu wykroczenia zostały wysłane do Państwa
-                        na adres <code>{{ address ?? '(nieznany)' }}</code> ponad miesiąc temu.</p>
-                    <p>Zgodnie z art. 54. § 2 KPoW oraz art. 156. KPK proszę o informacje
-                        o zawiadomieniach zakończonych, oraz tych, dla których czynności
-                        wyjaśniające nie dostarczyły podstaw do wniesienia wniosku o ukaranie.</p>
-                    <ul>
-                {% endif %}
-                {% include('_application-ask.html.twig') %}
-            {% endfor %}
-        </ul>
-    </div>
+    {% for app in applications %}
+        {% if address != app.sent.to %}
+            {% set address = app.sent.to %}
+            {% if not loop.first %}
+                </ul>
+                <p>-- <br>{{ user.data.name }}<br></p>
+            </div>
+            {% endif %}
+            <h3>{{ app.guessSMData.getShortName }} <a href="#">(skopiuj tekst)</a></h3>
+            <div class="ui-body ui-body-a ui-corner-all ask-section">
+                <p>Dzień dobry,</p>
+                <p>poniższe zawiadomienia o popełnieniu wykroczenia zostały wysłane do Państwa
+                    na adres <code>{{ address ?? '(nieznany)' }}</code> ponad miesiąc temu.</p>
+                <p>Zgodnie z art. 54. § 2 KPoW oraz art. 156. KPK proszę o informacje
+                    o zawiadomieniach zakończonych, oraz tych, dla których czynności
+                    wyjaśniające nie dostarczyły podstaw do wniesienia wniosku o ukaranie.</p>
+                <ul>
+        {% endif %}
+        {% include('_application-ask.html.twig') %}
+    {% endfor %}
+    </ul></div>
+
     
 {% endif %}
 {% endblock %}

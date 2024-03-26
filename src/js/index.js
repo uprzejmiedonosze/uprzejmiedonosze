@@ -19,3 +19,4 @@ import "./sites/thank-you";
 import "./sites/adm-gallery";
 import "./sites/public-info";
 import "./sites/how";
+import "./sites/ask-for-status"

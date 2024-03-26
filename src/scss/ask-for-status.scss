@@ -2,4 +2,22 @@
     li {
         padding-bottom: 15px;
     }
+
+    .ask-section + .ask-section {
+        margin-top: 1em;
+    }
+
+    h3 > a {
+        font-size: 70%;
+        text-decoration: none;
+        vertical-align: top;
+
+        &.visited {
+            color: #333;
+        }
+
+        &.error {
+            color: red;
+        }
+    }
 }
