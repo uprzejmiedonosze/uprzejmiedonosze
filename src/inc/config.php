@@ -1,7 +1,7 @@
 <?PHP 
 require_once(__DIR__ . '/dataclasses/ConfigClass.php');
 
-const LATEST_TERMS_UPDATE = '2021-07-16';
+const LATEST_TERMS_UPDATE = '2024-03-26';
 
 const DT_FORMAT = 'Y-m-d\TH:i:s';
 const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
