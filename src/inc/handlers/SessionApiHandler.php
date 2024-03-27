@@ -55,9 +55,13 @@ class SessionApiHandler extends AbstractHandler {
             };
         }
 
+        $isSent = in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE']);
+        $hasExternalId = !empty($application->externalId);
         $storage->saveApplication($application);
 
-        return self::renderJson($response, []);
+        return self::renderJson($response, [
+            "suggestStatusChange" => $isSent && $hasExternalId
+        ]);
     }
 
     public function sendApplication(Request $request, Response $response, $args): Response {

@@ -1,6 +1,5 @@
 import { updateCounters } from "../lib/status";
-import showMessage from './../lib/showMessage'
-
+import { setStatus } from "../lib/status"
 import Api from '../lib/Api'
 
 $(document).on("pageshow", function () {
@@ -70,10 +69,16 @@ $(document).on("pageshow", function () {
         $target.attr('readonly', true)
         try {
           const api = new Api(`/api/app/${ appId }/fields`)
-          await api.patch(body)
+          const reply = await api.patch(body)
           $target.removeAttr('readonly')
           $target.removeClass("error")
           this.setAttribute("data-initial-value", this.value)
+
+          if (reply.suggestStatusChange) {
+            if (confirm('Zgłoszenie na numer sprawy. Zmienić jego status na „potwierdzone”?')) {
+              setStatus(appId, 'confirmed-sm')
+            }
+          }
         } catch(e) {
           $target.removeAttr('readonly')
           $target.addClass("error")
