@@ -74,10 +74,9 @@
     {% endif %}
     {% if app.wasSent %}
         <li class="external-id">
-            <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="Miejsce na numer sprawy np. SM/3/5/7" value="{{ app.externalId }}">
+            <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="Nr sprawy, np. RSOW 0000/24, ew. L. Dz. WP - 000/24" value="{{ app.externalId }}">
         </li>
     {% endif %}
-
     <li class="private-comment">
         <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="Miejsce na twoje prywatne uwagi">{{ app.privateComment }}</textarea>
     </li>
