@@ -328,7 +328,6 @@ function GoogleMaps($lat, $lng) {
  * @SuppressWarnings(PHPMD.NPathComplexity)
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
- * @TODO
  */
 function Nominatim(float $lat, float $lng): array {
     $lat = normalizeGeo($lat);

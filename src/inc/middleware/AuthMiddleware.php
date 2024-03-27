@@ -19,7 +19,6 @@ use Slim\Exception\HttpInternalServerErrorException;
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @TODO
  */
 class AuthMiddleware implements MiddlewareInterface {
     private $cache;
@@ -91,7 +90,7 @@ class AuthMiddleware implements MiddlewareInterface {
     private function verifyToken($token, $request){
         $cacheKey = '%HOST%-' . $token;
         $firebaseUser = $this->cache->get($cacheKey);
-        // @TODO!
+        // @TODO
         //if ($firebaseUser) return json_decode($firebaseUser, true);
 
         $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../%HOST%-firebase-adminsdk.json');
