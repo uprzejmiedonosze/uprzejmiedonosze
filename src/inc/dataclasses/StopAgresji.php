@@ -4,11 +4,11 @@ require_once(__DIR__ . '/SM.php');
 require_once(__DIR__ . '/PoliceStationAreas.php');
 
 class StopAgresji extends SM {
-  public function unknown() {
+  public function unknown(): bool {
     return false;
   }
 
-  public function getCity() {
+  public function getCity(): string {
     return "Stop Agresji Drogowej " . $this->voivodeship;
   }
 

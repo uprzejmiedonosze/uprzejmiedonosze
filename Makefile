@@ -12,7 +12,7 @@ else
     SED_OPTS         := "-i''"
 endif
 
-# dirs and files 
+# dirs and files
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
 DIRS                 := $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/inc/handlers $(EXPORT)/inc/dataclasses $(EXPORT)/templates $(EXPORT)/patronite
@@ -198,7 +198,7 @@ $(SITEMAP_PROCESSED): src/templates/*.html.twig ; $(call echo-processing,$@)
 			"<priority>$$PRIO</priority>\n"\
 			"</url>" ; \
 	done ; \
-	echo '</urlset>\n' ) | xmllint --format - > $(SITEMAP_PROCESSED)	
+	echo '</urlset>\n' ) | xmllint --format - > $(SITEMAP_PROCESSED)
 
 
 $(EXPORT)/patronite/%.csv: $(EXPORT)/patronite

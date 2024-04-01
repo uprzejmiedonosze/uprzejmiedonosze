@@ -1,12 +1,13 @@
-<?PHP
+<?php
 
-/** 
+/**
  * Super class JSONObject able to recursively create new objects from JSON.
  */
 class JSONObject extends stdClass {
+    protected const USE_ARRAY_FLOW = false;
 
     /**
-     * Create empty object, or initiate it from JSON. 
+     * Create empty object, or initiate it from JSON.
      */
     public function __construct($json = null) {
         if($json){
@@ -28,9 +29,12 @@ class JSONObject extends stdClass {
     public function set($data) {
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $sub = new JSONObject;
-                $sub->set($value);
-                $value = $sub;
+                if (!static::USE_ARRAY_FLOW || !array_is_list($value)) {
+                    // Keep old flow for the classes like Applications - to make sure that fields like statusHistory works before
+                    $sub = new JSONObject;
+                    $sub->set($value);
+                    $value = $sub;
+                }
             }
             $this->{$key} = $value;
         }
@@ -40,4 +44,3 @@ class JSONObject extends stdClass {
         return serialize($this);
     }
 }
-?>
