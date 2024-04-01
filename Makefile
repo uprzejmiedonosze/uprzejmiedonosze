@@ -12,7 +12,7 @@ else
     SED_OPTS         := "-i''"
 endif
 
-# dirs and files 
+# dirs and files
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
 DIRS                 := $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/inc/handlers $(EXPORT)/inc/dataclasses $(EXPORT)/templates $(EXPORT)/patronite
@@ -198,7 +198,7 @@ $(SITEMAP_PROCESSED): src/templates/*.html.twig ; $(call echo-processing,$@)
 			"<priority>$$PRIO</priority>\n"\
 			"</url>" ; \
 	done ; \
-	echo '</urlset>\n' ) | xmllint --format - > $(SITEMAP_PROCESSED)	
+	echo '</urlset>\n' ) | xmllint --format - > $(SITEMAP_PROCESSED)
 
 
 $(EXPORT)/patronite/%.csv: $(EXPORT)/patronite
@@ -355,6 +355,9 @@ lint-php:
 		sed 's|$(PWD)/||'
 	@./vendor/phpmd/phpmd/src/bin/phpmd src/ text \
 		cleancode,codesize,controversial,design,naming,unusedcode | wc -l
+
+test-phpunit:
+	@tools/phpunit  --display-deprecations tests
 
 define lint_replace_inline
 $(call echo-processing,$<)

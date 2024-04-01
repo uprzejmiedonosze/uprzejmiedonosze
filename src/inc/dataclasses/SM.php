@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 require_once(__DIR__ . '/JSONObject.php');
 
@@ -6,67 +6,67 @@ require_once(__DIR__ . '/JSONObject.php');
  * Straz Miejska class LOL.
  * @SuppressWarnings(PHPMD.ShortClassName)
  */
-class SM extends JSONObject{
-    /**
-     * Initites new SM from JSON.
-     */
-    public function __construct($json = null) {
-        parent::__construct($json);
-        $this->address = get_object_vars($this->address);
-    }
+class SM extends JSONObject {
+    protected const USE_ARRAY_FLOW = true;
 
-    public function getAddress(){
+    public array $address;
+    public ?string $email;
+    public ?string $city;
+    public ?string $hint;
+    public ?string $api;
+
+    public function getAddress(): array {
         return $this->address;
     }
 
-    public function getLatexAddress(){
-        return join(' \\\\ ', (array) $this->address);
+    public function getLatexAddress(): string {
+        return implode(' \\\\ ', $this->address);
     }
 
-    public function getEmail(){
+    public function getEmail(): ?string {
         return $this->email;
     }
 
-    public function getCity(){
+    public function getCity(): string {
         return "SM " . $this->city;
     }
 
-    public function getHint(){
+    public function getHint(): ?string {
         return $this->hint;
     }
 
-    public function getName(){
+    public function getName(): string {
         return $this->address[0];
     }
 
-    public function getShortName(){
-        $name = $this->address[0];
-        $name = str_replace('Straż Miejska', 'SM', $name);
-        $name = str_replace('Straż Gminna', 'SG', $name);
-
-        $name = str_replace('Komenda Powiatowa Policji', 'KPP', $name);
-        $name = str_replace('Komenda Powiatowa', 'KPP', $name);
-        $name = str_replace('Komenda Miejska', 'KMP', $name);
-        $name = str_replace('Komisariat Policji', 'KP', $name);
-        $name = str_replace('Posterunek Policji', 'PP', $name);
-        return $name;
+    public function getShortName(): string {
+        return strtr($this->address[0], [
+            'Straż Miejska' => 'SM',
+            'Straż Gminna' => 'SG',
+            'Komenda Powiatowa Policji' => 'KPP',
+            'Komenda Powiatowa' => 'KPP',
+            'Komenda Miejska' => 'KMP',
+            'Komisariat Policji' => 'KP',
+            'Posterunek Policji' => 'PP',
+            'Komenda Wojewódzka Policji' => 'KWP'
+        ]);
     }
 
-    public function hasAPI(){
+    public function hasAPI(): bool {
         return $this->api && $this->api !== 'Mail';
     }
 
-    public function automated(){
-        return (boolean)$this->api;
+    public function automated(): bool {
+        return (bool) $this->api;
     }
 
-    public function unknown(){
-        return $this->city == null;
+    public function unknown(): bool {
+        return $this->city === null;
     }
 
     public function isPolice(): bool
     {
-        return str_contains($this->getEmail(), 'policja');
+        return str_contains($this->getEmail() ?? '', 'policja');
     }
 
     /**
@@ -74,7 +74,7 @@ class SM extends JSONObject{
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public static function guess(object $address): string{ // straż miejska
+    public static function guess(object $address): string { // straż miejska
         global $SM_ADDRESSES;
 
         // post code level

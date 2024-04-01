@@ -16,3 +16,4 @@ src/tensor
 /src/public
 src/config.php
 **/*.log
+.phpunit.cache
