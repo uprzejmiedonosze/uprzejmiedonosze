@@ -127,7 +127,7 @@ $(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/res
 
 
 .PHONY: minify
-minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
+minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig test-phpunit process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
@@ -162,10 +162,10 @@ js: $(JS_MINIFIED)
 export/public/js/%.js: src/js/%.js $(JS_FILES_DEPS); $(call echo-processing,$@ with parcel)
 	@./node_modules/.bin/parcel build --no-cache --dist-dir $(dir $@) $< ;
 
-$(EXPORT)/public/api/config/sm.json: src/api/config/sm.json; $(call echo-processing,$< with node)
+$(EXPORT)/public/api/config/sm.json: src/api/config/sm.json $(EXPORT)/public/api/config; $(call echo-processing,$< with node)
 	@node ./tools/sm-parser.js $< $@
 
-$(EXPORT)/public/api/config/%.json: src/api/config/%.json; $(call echo-processing,$<)
+$(EXPORT)/public/api/config/%.json: src/api/config/%.json $(EXPORT)/public/api/config; $(call echo-processing,$<)
 	@jq -c . < $< > $@
 
 $(EXPORT)/inc/%.php: src/inc/%.php; $(lint_replace_inline)
@@ -355,6 +355,9 @@ lint-php:
 		sed 's|$(PWD)/||'
 	@./vendor/phpmd/phpmd/src/bin/phpmd src/ text \
 		cleancode,codesize,controversial,design,naming,unusedcode | wc -l
+
+test-phpunit: $(EXPORT)/public/api/config/sm.json $(EXPORT)/public/api/config/stop-agresji.json
+	@tools/phpunit  --display-deprecations tests
 
 define lint_replace_inline
 $(call echo-processing,$<)
