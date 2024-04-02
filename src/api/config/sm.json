@@ -2747,12 +2747,23 @@
   "Stare Babice": {
     "address": [
       "Straż Gminna Starych Babicach",
-		"Rynek 21",
-		"05-082 Stare Babice"
+		  "ul. Rynek 21",
+		  "05-082 Stare Babice"
     ],
     "email": "sekretariat@sgsb.pl"
   },
   "gmina Stare Babice": {
 	  "parent": "Stare Babice"
-  }
+  },
+  "Oświęcim": {
+    "address": [
+      "Straż Miejska w Oświęcimiu",
+		  "ul. Jagiełły 23",
+		  "32-600 Oświęcim"
+    ],
+    "email": "sm@um.oswiecim.pl"
+  },
+  "gmina Chełmek": {
+	  "parent": "Oświęcim"
+  }  
 }
