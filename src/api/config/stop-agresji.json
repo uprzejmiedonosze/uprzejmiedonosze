@@ -155,6 +155,18 @@
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
+  "katowice-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Katowicach",
+      "ul. Lompy 19",
+      "40-038 Katowice"
+    ],
+    "email": "ruch-drogowy@ka.policja.gov.pl",
+    "voivodeship": "Śląskie",
+    "city": "Katowice",
+    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w Katowicach. Masz jakieś doświadczenia – napisz do nas.",
+    "api": "Mail"
+  },
   "świętokrzyskie": {
     "address": [
       "Komenda Wojewódzka Policji w Kielcach",
