@@ -121,7 +121,7 @@ class AuthMiddleware implements MiddlewareInterface {
      * Retrieves (cached) public keys from Firebase's server
      */
     private function getPublicKeys($request) {
-        $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';        
+        $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
         $cacheKey = '%HOST%-firebase-keys';
         $keys = $this->cache->get($cacheKey);
         if ($keys) return json_decode($keys, true);
@@ -130,7 +130,7 @@ class AuthMiddleware implements MiddlewareInterface {
         if (!$publicKeys)
             throw new HttpInternalServerErrorException($request, 'Failed to fetch JWT public keys.');
 
-        $cacheControl = $this->parseHeaders($http_response_header)['Cache-Control'];
+        $cacheControl = $this->parseHeaders($http_response_header)['cache-control'] ?? 'cache-control: public, max-age=600, must-revalidate, no-transform';
         preg_match('/max-age=(\d+)/', $cacheControl, $out);
         $timeout = $out[1];
         $this->cache->set($cacheKey, $publicKeys, 0, (int)$timeout);
@@ -146,7 +146,7 @@ class AuthMiddleware implements MiddlewareInterface {
        foreach ($headers as $k => $v) {
            $header = explode(':', $v, 2);
            if (isset($header[1])) {
-               $head[trim($header[0])] = trim($header[1]);
+               $head[strtolower(trim($header[0]))] = trim($header[1]);
                continue;
            }
            $head[] = $v;
