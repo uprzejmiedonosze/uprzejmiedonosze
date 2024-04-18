@@ -155,6 +155,18 @@
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
+  "bielsko-biała-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Bielsku-Białej",
+      "ul. Wapienna 45",
+      "43-300 Bielsko-Biała"
+    ],
+    "email": "prewencja@bielsko.ka.policja.gov.pl",
+    "voivodeship": "Śląskie",
+    "city": "Śląskie",
+    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w Bielsko-Białej. Masz jakieś doświadczenia – napisz do nas.",
+    "api": "Mail"
+  },
   "katowice-miasto": {
     "address": [
       "Komenda Miejska Policji w Katowicach",
@@ -215,7 +227,6 @@
     "hint": "Wstępne relacje ze współpracy z #stopagresji w woj. Zachodniopomorskim są pozytywne. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
-
   "szczecin-niebuszewo": {
     "address": [
       "Komisariat Policji Szczecin Niebuszewo",
