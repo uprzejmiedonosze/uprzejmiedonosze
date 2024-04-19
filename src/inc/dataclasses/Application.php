@@ -254,6 +254,10 @@ class Application extends JSONObject implements JsonSerializable {
         return 'Zgloszenie_' . str_replace('/', '-', $this->number) . '.pdf';
     }
 
+    public function getAppXlsFilename(): string {
+        return 'Zgloszenie_' . str_replace('/', '-', $this->number) . '.xls';
+    }
+
     /**
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId

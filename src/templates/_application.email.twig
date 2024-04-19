@@ -19,3 +19,5 @@ Zgłaszający:
   {{ app.user.name }}
   {{ app.user.address }}
   {{ app.user.msisdn ?? '' }}
+
+  Wersja excel do kopiowania: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.xls' }}

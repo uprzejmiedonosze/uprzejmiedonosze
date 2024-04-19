@@ -26,7 +26,8 @@ abstract class CityAPI {
         $twig = initBareTwig();
         return $twig->render('_application.email.twig', [
             'app' => $application, 
-            'config' => [ 'isAppOwnerOrAdmin' => $withUserData ]
+            'config' => [ 'isAppOwnerOrAdmin' => $withUserData ],
+            'now' => date(DT_FORMAT)
         ]);
     }
 
