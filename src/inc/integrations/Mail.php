@@ -7,11 +7,13 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use \JSONObject as JSONObject;
+use Symfony\Component\Mime\Part\DataPart;
 
 /**
  * @SuppressWarnings(PHPMD.MissingImport)
  */
 class Mail extends CityAPI {
+    public bool $withXls = false;
 
     /**
      * @SuppressWarnings(PHPMD.ShortVariable)
@@ -62,6 +64,14 @@ class Mail extends CityAPI {
         [$fileatt, $fileattname] = application2PDF($application);
 
         $message->attachFromPath($fileatt, $fileattname);
+
+        if ($this->withXls) {
+            $message->addPart(new DataPart(
+                XlsHandler::Application2Xls($application),
+                $application->getAppXlsFilename(),
+                "application/vnd.ms-excel"
+            ));
+        }
 
         try {
             if (!isDev())
