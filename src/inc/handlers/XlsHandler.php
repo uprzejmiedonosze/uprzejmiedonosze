@@ -7,25 +7,20 @@ use Slim\Exception\HttpNotFoundException;
 
 class XlsHandler extends AbstractHandler {
 
-    private function array2xls(Array &$data): string {
-        $header = implode("\t", array_keys($data)) . "\n";
-        function filterData(string &$str): void { 
-            $str = preg_replace("/\t/", "\\t", $str); 
-            $str = preg_replace("/\r?\n/", "\\n", $str); 
-            if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
-        }
-        array_walk($data, 'filterData');
-        $content = implode("\t", array_values($data)) . "\n"; 
-        return $header . $content;
-    }
-
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
+     * Disabled
      */
-    public function xls(Request $request, Response $response, $args): Response {
+    public function __xls(Request $request, Response $response, $args): Response {
         global $storage;
 
         $app = $storage->getApplication($args['appId']);
+        $fileName = $app->getAppXlsFilename();
+        $xls = XlsHandler::Application2Xls($app);
+        return AbstractHandler::renderXls($response, $xls, "$fileName");
+    }
+
+    public static function Application2Xls(Application &$app) {
         $data = array(
             "L.P." => '',
             "Nr służbowy" => '',
@@ -50,14 +45,24 @@ class XlsHandler extends AbstractHandler {
             "Sposób zakończenia" => '',
             "Data zakończenia" => '',
             "Nr służbowy3" => '',
-            "UWAGI" => $app->userComment,
-            "TECZKA" => '',
-            "ILOŚĆ ZGŁOSZEŃ" => ''
+            "Uwagi" => $app->userComment,
+            "Teczka" => '',
+            "Liczba zgłoszeń" => $app->getRecydywa()
         );
 
-        $xls = $this->array2xls($data);
-        $fileName = $app->getAppXlsFilename();
+        return XlsHandler::array2xls($data);
+    }
 
-        return AbstractHandler::renderXls($response, $xls, "$fileName");
+    private static function array2xls(Array &$data): string {
+        $header = implode("\t", array_keys($data)) . "\n";
+        function filterData(string|null &$str): void { 
+            $str = $str ?? '';
+            $str = preg_replace("/\t/", "\\t", $str); 
+            $str = preg_replace("/\r?\n/", "\\n", $str); 
+            if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
+        }
+        array_walk($data, 'filterData');
+        $content = implode("\t", array_values($data)) . "\n"; 
+        return $header . $content;
     }
 }
