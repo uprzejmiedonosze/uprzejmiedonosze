@@ -56,12 +56,7 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
     ->add(new PdfMiddleware());
 
 $app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
-    ->add(new CsvMiddleware());
-
-$app->get('/ud-{appId}.xls', XlsHandler::class . ':xls')
-    ->add(new XlsMiddleware())
-    ->add(new OptionalUserMiddleware());
-    
+    ->add(new CsvMiddleware());    
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
     $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {
