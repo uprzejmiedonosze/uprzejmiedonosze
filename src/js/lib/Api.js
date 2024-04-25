@@ -1,4 +1,4 @@
-import showMessage from './showMessage'
+import { showError } from './showMessage'
 
 export default class Api {
   constructor(url, mute404=false) {
@@ -52,7 +52,7 @@ export default class Api {
   async #parseResponse(response) {
     const repl = await response.json()
     if (response.ok) return repl
-    if (!this.mute404) showMessage(repl.error, 7000)
+    if (!this.mute404) showError(repl.error, 7000)
     throw new Error(repl.error, repl)
   }
 

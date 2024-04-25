@@ -1,8 +1,22 @@
 
-export default function showMessage(msg, timeout=1500) {
-    $.mobile.loading("show", { html: msg, textVisible: true, textonly: true });
+export function showMessage(msg) {
+    $.mobile.loading("show", {
+        html: msg,
+        textVisible: true,
+        textonly: true
+    });
     window.setTimeout(function () {
         $.mobile.loading("hide");
-    }, timeout);
+    }, 1500);
 }
-  
+
+export function showError(msg) {
+    $.mobile.loading("show", {
+        html: `<b style="color: red;">Błąd: ${msg}</b>`,
+        textVisible: true,
+        textonly: true
+    });
+    window.setTimeout(function () {
+        $.mobile.loading("hide");
+    }, 7000);
+}

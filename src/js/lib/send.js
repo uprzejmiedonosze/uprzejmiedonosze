@@ -3,7 +3,7 @@
 import * as Sentry from "@sentry/browser";
 
 import { updateStatus } from "./status";
-import showMessage from './showMessage'
+import { showMessage, showError } from './showMessage'
 
 import Api from './Api'
 
@@ -18,7 +18,7 @@ window.sendApplication = async function (appId) {
     const msg = await api.patch()
     updateStatus(appId, msg.status);
     $.mobile.loading("hide");
-    showMessage("<p>Wysłane</p>", 1500);
+    showMessage("<p>Wysłane</p>")
     if ($(".dziekujemy").length) {
       $(".whatNext").hide();
       $(".afterSend").show();
@@ -28,8 +28,9 @@ window.sendApplication = async function (appId) {
   } catch (e) {
     $.mobile.loading("hide");
     $('.ui-btn-right').removeClass("ui-disabled");
+    showError(e.message)
     Sentry.captureException(e, {
-      extra: message
+      extra: e.message
     });
     if (typeof ga == 'function')
       ga("send", "event", {
