@@ -3,7 +3,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpException;
 use Slim\App;
-use Slim\Interfaces\ErrorHandlerInterface;
 
 function getCustomErrorHandler(App $app): callable {
     return function (
