@@ -84,7 +84,7 @@ function imageError(id, errorMsg) {
   $(`.${id}Section`).addClass("error");
   $(`.${id}Section input`).textinput("enable");
   $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show();
-  if (errorMsg) showError(errorMsg, 7000)
+  if (errorMsg) showError(errorMsg)
   uploadFinished();
 }
 
