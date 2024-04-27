@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  webapp:
+    image: webapp
+    build:
+      context: .
+    container_name: webapp
+    ports:
+      - 80-81:80-81
+    restart: always
+    volumes:
+      - ../export:/var/www/uprzejmiedonosze.localhost/webapp

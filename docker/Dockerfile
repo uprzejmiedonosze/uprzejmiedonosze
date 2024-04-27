@@ -22,6 +22,8 @@ COPY cdn                       /var/www/uprzejmiedonosze.localhost/cdn
 RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/cdn
 RUN mkdir -p                   /var/www/uprzejmiedonosze.localhost/cdn2
 RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/cdn2
+RUN mkdir -p                   /var/www/uprzejmiedonosze.localhost/video
+RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/video
 COPY sess_php                  /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
 RUN chown www-data:www-data    /var/lib/php/sessions/*
 
