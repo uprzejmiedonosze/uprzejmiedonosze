@@ -12,7 +12,7 @@ shell:
 	docker compose exec webapp bash
 
 stop:
-	docker compose stop
+	docker compose down
 
 prune:
 	@docker system prune --volumes -f

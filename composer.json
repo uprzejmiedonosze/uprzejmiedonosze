@@ -12,7 +12,9 @@
         "slim/slim": "4.*",
         "openalpr/api": "*",
         "slim/twig-view": "^3.3",
-        "slim/psr7": "^1.6"
+        "slim/psr7": "^1.6",
+        "php-ffmpeg/php-ffmpeg": "^1.2",
+        "symfony/console": "^6.4"
     },
     "require-dev": {
         "sserbin/twig-linter": "@dev",

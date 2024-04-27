@@ -9,5 +9,6 @@ services:
     ports:
       - 80-81:80-81
     restart: always
+    working_dir: /var/www/uprzejmiedonosze.localhost/webapp
     volumes:
       - ../export:/var/www/uprzejmiedonosze.localhost/webapp
