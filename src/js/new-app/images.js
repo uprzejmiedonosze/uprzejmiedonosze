@@ -32,11 +32,11 @@ export async function checkFile(file, id) {
           const exif = await ExifReader.load(file)
           const [lat, lng] = readGeoDataFromExif(exif)
           let dateTime = getDateTimeFromExif(exif)
-    
+
           dateTime = setDateTime(dateTime, !!dateTime)
-          if(lat) setAddressByLatLng(lat, lng, "picture")
+          if (lat) setAddressByLatLng(lat, lng, "picture")
           else noGeoDataInImage()
-    
+
           $("#plateImage").attr("src", "");
           $("#plateImage").hide();
           await sendFile(resizedImage, id, {
@@ -47,7 +47,7 @@ export async function checkFile(file, id) {
         } else {
           await sendFile(resizedImage, id);
         }
-        
+
       } catch (err) {
         imageError(id, err.message);
         Sentry.captureException(err, {
@@ -103,7 +103,7 @@ function getDateTimeFromExif(exif) {
 }
 
 async function imageToDataUri(img) {
-  if (img.type.includes('hei')){
+  if (img.type.includes('hei')) {
     const blob = await heic2any({ blob: img, toType: "image/jpeg" })
     return URL.createObjectURL(blob)
   } else {
@@ -218,18 +218,10 @@ async function sendFile(fileData, id, imageMetadata) {
           }
         }
         $("#plateHint").removeClass();
-        if (app.alpr === 'paid') {
-          $("#plateHint").text(
-            "Sprawdź automatycznie pobrany numer rejestracyjny"
-          );
-          $("#plateHint").addClass("hint");
-        } else {
-          $("#plateHint").html(
-            'Użyto słabszego algorytmu rozpoznawania tablic, który nie rozpoznaje marki pojazdu' +
-            '  <a href="https://patronite.pl/uprzejmiedonosze#goals" target="_blank">(więcej)</a>.'
-          );
-          $("#plateHint").addClass("warning");
-        }
+        $("#plateHint").text(
+          "Sprawdź automatycznie pobrany numer rejestracyjny"
+        );
+        $("#plateHint").addClass("hint");
       }
       if (app.carInfo.plateImage) {
         $("#plateImage").attr(
@@ -248,7 +240,7 @@ async function sendFile(fileData, id, imageMetadata) {
       }
     }
     uploadFinished();
-  } catch(err) {
+  } catch (err) {
     imageError(id)
   }
 }
