@@ -179,6 +179,18 @@
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w Katowicach. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
+  "powiat mikołowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Mikołowie",
+      "ul. Rymera 1",
+      "43-190 Mikołów"
+    ],
+    "email": "rd@mikolow.ka.policja.gov.pl",
+    "voivodeship": "Śląskie",
+    "city": "Mikołów",
+    "hint": "KPP w Mikołowie niestety wzywa na przesłuchanie twierdząc, że obecnie można manipulować zdjęciami...",
+    "api": "Mail"
+  },
   "świętokrzyskie": {
     "address": [
       "Komenda Wojewódzka Policji w Kielcach",
