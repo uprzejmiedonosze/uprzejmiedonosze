@@ -32,7 +32,23 @@ function getCurrentUserEmail(){
     throw new Exception("Próba pobrania danych niezalogowanego użytkownika");
 }
 
-function capitalizeSentence($input){
+function fixCapitalizedBrandNames(string $input): string {
+    $acronyms = [
+        "Bmw" => "BMW",
+        "Mercedes-benz" => "Mercedes-Benz",
+        "Alfa-romeo" => "Alfa-Romeo",
+        "Land-rover" => "Land-Rover",
+        "Alfa-romeo" => "Alfa-Romeo",
+        "Fso" => "FSO",
+        "Ssangyong" => "SsangYong"
+    ];
+    foreach ($acronyms as $key => $value) {
+        $input = str_replace($key, $value, $input);
+    }
+    return $input;
+}
+
+function capitalizeSentence(string $input): string{
     if(!isset($input) || trim($input) === ''){
         return '';
     }
@@ -44,6 +60,7 @@ function capitalizeSentence($input){
             }, ucfirst( $isUpperCase ? (mb_strtolower($input, 'UTF-8')): $input )
         )
     );
+    $out = fixCapitalizedBrandNames($out);
     return (substr($out, -1) == '.')? $out: "{$out}.";
 }
 

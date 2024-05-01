@@ -33,8 +33,6 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
 
     $application->alpr = 'paid';
     if(!$carInfo){
-        // $carInfo = get_alpr_cli($application->carImage->url);
-        // $application->alpr = 'opensource';
         $carInfo = get_alpr($imageBytes);
     }
 
@@ -67,7 +65,8 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
         
         $application->carInfo->plateId = strtoupper($result["plate"]);
         $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
-        $application->carInfo->brand = @ucfirst($result["vehicle"]['make'][0]['name']);
+        $application->carInfo->brand = 
+            @fixCapitalizedBrandNames(ucfirst($result["vehicle"]['make'][0]['name']));
         $application->carInfo->brandConfidence = @$result["vehicle"]['make'][0]['confidence'];
         $application->carInfo->color = @ucfirst($result["vehicle"]['color'][0]['name']);
         $application->carInfo->colorConfidence = @$result["vehicle"]['color'][0]['confidence'];
