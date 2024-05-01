@@ -213,12 +213,6 @@
   "Soczewka": {
     "parent": "Nowy Duninów"
   },
-  "Konarzewo": {
-    "parent": "Dopiewo"
-  },
-  "Skórzewo": {
-    "parent": "Dopiewo"
-  },
   "Kałuszyn": {
     "parent": "Wieliszew"
   },
@@ -1853,10 +1847,19 @@
   "Dopiewo": {
     "address": [
       "Komenda Straży Gminnej",
-      "ul. Leśna 2a",
+      "ul. Łąkowa 5a",
       "62-070 Dopiewo"
     ],
     "email": "strazgminna@dopiewo.pl"
+  },
+  "gmina Dopiewo": {
+    "parent": "Dopiewo"
+  },
+  "Konarzewo": {
+    "parent": "Dopiewo"
+  },
+  "Skórzewo": {
+    "parent": "Dopiewo"
   },
   "Człuchów": {
     "address": [
