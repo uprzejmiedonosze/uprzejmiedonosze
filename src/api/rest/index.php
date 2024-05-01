@@ -48,11 +48,8 @@ $jsonErrorHandler = function (
 ) use ($app) {
     $payload = exceptionToErrorJson($exception);
     $response = $app->getResponseFactory()->createResponse();
-    $response = $response->withStatus($payload['status']);
-    $response->getBody()->write(
-        json_encode($payload, JSON_UNESCAPED_UNICODE)
-    );
-
+    $response = $response->withStatus($exception->getCode());
+    $response->getBody()->write($payload);
     return $response;
 };
 
