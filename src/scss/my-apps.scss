@@ -2,10 +2,6 @@ div.application-short.archived h3 a {
   font-weight: 300;
 }
 
-div.application-short h3 a {
-  padding-right: 2.5em;
-}
-
 .appActionButtons a.ui-btn {
   font-weight: 400;
 }
@@ -24,9 +20,17 @@ div.application-short h3 a {
   }
 }
 
+.ui-collapsible-inset.ui-collapsible-themed-content .ui-collapsible-content  {
+  border-color: #ddd;
+  border-top: 0;
+  border-style: solid;
+}
+
+
 div.application-short {
-  &.status-all h3 a {
-    font-weight: 100;
+  &.ui-collapsible.ui-corner-all {
+    margin-bottom: 0.5em;
+    border-radius: 0.8em;
   }
 
   h3 {
@@ -37,7 +41,7 @@ div.application-short {
     }
 
     a.ui-btn {
-      //padding: 0.5em; @TODO
+      padding: 0.5em;
     }
 
     a {
@@ -98,12 +102,6 @@ div.application-short {
     }
   }
 
-  .ui-collapsible-content {
-    border-width: 0 1px;
-    border-style: solid;
-    border-color: #ddd;
-  }
-
   &:not(.ui-collapsible-collapsed) {
     border-bottom: 0;
     h3 {
@@ -124,62 +122,62 @@ div.application-short {
   &.draft h3 .status-dot::before,
   .draft:after,
   .draft::marker {
-    background-color: #7463634d;
+    background-color: $draft;
   }
 
-  &.ready h3 .ui-btn-icon-right:after,
+  &.ready h3 .status-dot::before,
   .ready:after,
   .ready::marker {
-    background-color: #0000004d;
+    background-color: $ready;
   }
 
-  &.confirmed h3 .ui-btn-icon-right:after,
+  &.confirmed h3 .status-dot::before,
   .confirmed:after,
   .confirmed::marker {
-    background-color: #99999999;
+    background-color: $confirmed;
   }
 
   .confirmed h3 a {
     font-weight: 700;
   }
 
-  &.confirmed-waiting h3 .ui-btn-icon-right:after,
+  &.confirmed-waiting h3 .status-dot::before,
   .confirmed-waiting:after,
   .confirmed-waiting::marker,
-  &.confirmed-waitingE h3 .ui-btn-icon-right:after,
+  &.confirmed-waitingE h3 .status-dot::before,
   .confirmed-waitingE:after,
   .confirmed-waiting::marker {
-    background-color: #3388cc99;
+    background-color: $confirmed-waiting;
   }
 
-  &.confirmed-sm h3 .ui-btn-icon-right:after,
+  &.confirmed-sm h3 .status-dot::before,
   .confirmed-sm:after,
   .confirmed-sm::marker {
-    background-color: #ffc10799;
+    background-color: $confirmed-sm;
   }
 
-  &.confirmed-fined h3 a.ui-btn-icon-right:after,
+  &.confirmed-fined h3 .status-dot::before,
   .confirmed-fined:after,
   .confirmed-fined::marker {
-    background-color: #8bc34aee;
+    background-color: $confirmed-fined;
   }
 
-  &.confirmed-ignored h3 .ui-btn-icon-right:after,
+  &.confirmed-ignored h3 .status-dot::before,
   .confirmed-ignored:after,
   .confirmed-ignored::marker {
-    background-color: #dd2c00cc;
+    background-color: $confirmed-ignored;
   }
 
-  &.confirmed-instructed h3 .ui-btn-icon-right:after,
+  &.confirmed-instructed h3 .status-dot::before,
   .confirmed-instructed:after,
   .confirmed-instructed::marker {
-    background-color: #791800cc
+    background-color: $confirmed-instructed;
   }
 
-  &.archived h3 .ui-btn-icon-right:after,
+  &.archived h3 .status-dot::before,
   .archived:after,
   .archived::marker {
-    background-color: #0000004C;
+    background-color: $archived;
   }
 }
 

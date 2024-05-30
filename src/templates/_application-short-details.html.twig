@@ -8,6 +8,20 @@
 {% set status = app.getStatus %}
 {% set sendable = status.sendable %}
 
+<div class="images-slider">
+    <div class="imageContainer">
+        <div class="loader"></div>
+        <a target="_blank" href="/ud-{{ app.id }}.html">
+            <img src="{{ app.contextImage.thumb }}?v={{ app.getRevision }}">
+        </a>
+    </div>
+    <div class="imageContainer">
+        <div class="loader"></div>
+        <a target="_blank" href="/ud-{{ app.id }}.html">
+            <img src="{{ app.carImage.thumb }}?v={{ app.getRevision }}">
+        </a>
+    </div>
+</div>
 <ul class="application-details-list">
     <li class="calendar"><b>{{ app.getDate("k'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</b></li>
     <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
@@ -22,21 +36,6 @@
     </li>
 </ul>
 
-<div class="ui-grid-a ui-responsive images images-cropped">
-    <div class="ui-block-a imageContainer">
-        <div class="loader"></div>
-        <a target="_blank" href="/ud-{{ app.id }}.html">
-            <img src="{{ app.contextImage.thumb }}?v={{ app.getRevision }}">
-        </a>
-    </div>
-    <div class="ui-block-b imageContainer">
-        <div class="loader"></div>
-        <a target="_blank" href="/ud-{{ app.id }}.html">
-            <img src="{{ app.carImage.thumb }}?v={{ app.getRevision }}">
-        </a>
-    </div>
-</div>
-<hr/>
 <ul class="application-details-list">
     <li class="status {{app.status}}"><b class="currentStatus">{{ status.name }}</b>
         {% if appActionButtons %}

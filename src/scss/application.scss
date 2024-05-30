@@ -22,24 +22,42 @@
   }
 }
 
-@media (max-width: 35em) {
-  .imageContainer+.imageContainer {
-    margin-top: 0.5rem;
+.images-slider {
+  text-align: left;
+  overflow-x: scroll;
+  display: flex;
+  box-sizing: border-box;
+
+  .imageContainer {
+    flex: 0 0 calc(100% - 64px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+    position: relative;
+    border-radius: 0.8em;
+    background: #eee;
+    overflow: hidden;
+    height: 200px;
+    padding: 0.4em;
+
+    img {
+      border-radius: 0.8em;
+      position: absolute;
+      object-fit: cover;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      width: 100%;
+      display: block;
+      height: auto;
+      min-width: 100%;
+    }
+    & + & {
+      margin-left: 16px;
+    }
   }
-}
-
-
-.ui-grid-a.ui-responsive.images>div {
-  position: relative;
-  flex: 0 0 calc(50% - 0.5rem);
-}
-
-.ui-grid-a.ui-responsive.images-cropped .imageContainer {
-  border-radius: 0.8em;
-  background: #eee;
-  overflow: hidden;
-  height: 200px;
-  padding: 0.4em;
 }
 
 .ui-grid-a.ui-responsive.images .imageContainer img {
@@ -48,19 +66,6 @@
   display: block;
   height: auto;
   min-width: 100%;
-}
-
-.ui-grid-a.ui-responsive.images-cropped .imageContainer img {
-  border-radius: 0.8em;
-  position: absolute;
-  object-fit: cover;
-  top: 0;
-  left: 0;
-  object-position: 50% 50%;
-}
-
-.ui-grid-a.ui-responsive+.ui-grid-a.ui-responsive {
-  margin-top: 0.5rem;
 }
 
 sup {
@@ -101,10 +106,6 @@ div#recydywa {
 .application,
 .my-applications {
   h3 {
-    a {
-      padding-top: 3px;
-    }
-
     img {
       height: 24px;
       width: 24px;
@@ -138,6 +139,13 @@ div#recydywa {
     border-radius: 3px;
     border-width: 1px 1px 2px 10px;
     border-style: solid;
+
+    &.small {
+      font-size: 9pt;
+      font-weight: 300;
+      border-width: 1px 1px 1px 7px;
+      padding: 2px 3px;
+    }
   }
   .ui-btn-fake {
     margin: 0;
