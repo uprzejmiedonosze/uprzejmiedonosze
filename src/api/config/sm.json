@@ -2770,5 +2770,16 @@
   },
   "gmina Chełmek": {
 	  "parent": "Oświęcim"
-  }  
+  },
+  "Murowana Goślina": {
+    "address": [
+      "Straż Miejska w Murowanej Goślinie",
+		  "ul. Gen. T. Kutrzeby 3",
+		  "62-095 Murowana Goślina"
+    ],
+    "email": "straz.miejska@murowana-goslina.pl"
+  },
+  "gmina Murowana Goślina": {
+    "parent": "Murowana Goślina"
+  }
 }
