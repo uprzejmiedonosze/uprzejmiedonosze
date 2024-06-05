@@ -1,4 +1,5 @@
 <?PHP
+use \JSONObject as JSONObject;
 
 $cache = new Memcache;
 $cache->connect('localhost', 11211);
@@ -70,6 +71,14 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
         $application->carInfo->brandConfidence = @$result["vehicle"]['make'][0]['confidence'];
         $application->carInfo->color = @ucfirst($result["vehicle"]['color'][0]['name']);
         $application->carInfo->colorConfidence = @$result["vehicle"]['color'][0]['confidence'];
+        if (isset($result['vehicle_region']['x'])) {
+            $vehicleBox = $result['vehicle_region'];
+            $application->carInfo->vehicleBox = new JSONObject();
+            $application->carInfo->vehicleBox->x = $vehicleBox['x'];
+            $application->carInfo->vehicleBox->y = $vehicleBox['y'];
+            $application->carInfo->vehicleBox->width = $vehicleBox['width'];
+            $application->carInfo->vehicleBox->height = $vehicleBox['height'];
+        }
     }
 }
 

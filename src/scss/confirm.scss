@@ -1,0 +1,40 @@
+.confirm-application {
+  .application {
+
+    .images .imageContainer:hover .plate-box {
+      display: none;
+    }
+
+    .plate-box {
+      background-color: transparent;
+      border: 5px solid #e9c200;
+      font-size: 90%;
+      left: 5px;
+      position: absolute;
+      top: 5px;
+      z-index: 1;
+    }
+
+    span.floating-box {
+      background: #fff;
+      border-radius: 3px;
+      border-width: 1px;
+      border: 1px solid #000;
+      font-size: 90%;
+      left: 5px;
+      padding: 3px;
+      position: absolute;
+      top: 5px;
+      z-index: 1;
+    }
+
+    div.sender-data {
+      cite {
+        padding: 0 0 1em 2em;
+        font-size: 90%;
+      }
+
+    }
+
+  }
+}

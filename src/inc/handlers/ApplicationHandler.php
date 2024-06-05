@@ -141,12 +141,23 @@ class ApplicationHandler extends AbstractHandler {
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
         }
 
+        $vehicleBox = false;
+        if (isset($application->carInfo->vehicleBox->x)) {
+            $vehicleBox = array (
+                "x" =>  $application->carInfo->vehicleBox->x / 2 / 6,
+                "y" => $application->carInfo->vehicleBox->y / 2 / 4.5,
+                "width" => $application->carInfo->vehicleBox->width / 2 / 6,
+                "height" => $application->carInfo->vehicleBox->height / 2 / 4.5
+            );
+        }
+
         return AbstractHandler::renderHtml($request, $response, 'potwierdz', [
             'config' => [
                 'isAppOwnerOrAdmin' => true,
                 'confirmationScreen' => true
             ],
             'app' => $application,
+            'vehicleBox' => $vehicleBox,
             'autoSend' => $user->autoSend() && $application->automatedSM(),
             'user' => $user
         ]);

@@ -1,4 +1,5 @@
 <?PHP
+use \JSONObject as JSONObject;
 
 function cmp_platerecongnizer($left, $right){
     if($left['score'] > $right['score']) return -1;
@@ -34,6 +35,15 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
         $application->carInfo->brandConfidence = 0;
         $application->carInfo->color = null;
         $application->carInfo->colorConfidence = 0;
+
+        if (isset($result['vehicle']['box'])) {
+            $vehicleBox = $result['vehicle']['box'];
+            $application->carInfo->vehicleBox = new JSONObject();
+            $application->carInfo->vehicleBox->x = $vehicleBox['xmin'];
+            $application->carInfo->vehicleBox->y = $vehicleBox['ymin'];
+            $application->carInfo->vehicleBox->width = $vehicleBox['xmax'] - $vehicleBox['xmin'];
+            $application->carInfo->vehicleBox->height = $vehicleBox['ymax'] - $vehicleBox['ymin'];
+        }
     }
 }
 
