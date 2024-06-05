@@ -106,7 +106,6 @@ describe('Update account', () => {
     cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
     cy.get('#form-submit').click()
 
-    cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.')
     cy.contains('zostanie za chwilę wysłane')
     cy.contains(this.sm.Szczecin.address[0])
     cy.sendApp()

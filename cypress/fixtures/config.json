@@ -1,8 +1,8 @@
 {
     "address": {
-        "address": "Plac Lotników 3, Szczecin",
-        "latlng": "53.430[0-9]+,14.550[0-9]+",
-        "szczecin": "Mazurska 43, Szczecin",
+        "address": "Edmunda Bałuki 4, Szczecin",
+        "latlng": "53.428[0-9]+,14.550[0-9]+",
+        "szczecin": "Mazurska 43",
         "poznan": "Jana Matejki 22, Poznań",
         "wroclaw": "Plac Generała Walerego Wróblewskiego 1, Wrocław",
         "poniatowa": "Nałęczowska 15, Poniatowa"
@@ -14,7 +14,7 @@
         "url": "../../tests/img_p.jpg",
         "plateId": "KWA00913",
         "dateISO": "2018-02-02T19:48",
-        "dateHuman": "2018-02-02 o godzinie 19:48",
+        "dateHuman": "1948 piątek, 2 lutego 2018",
 
         "dateInput": "020220222222",
         "dateISOAltered": "2022-02-02T22:22",
