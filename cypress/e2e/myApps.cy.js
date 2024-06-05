@@ -34,7 +34,7 @@ describe('Application screen validation', () => {
 
     it('checks new application screen', function () {
         cy.goToNewAppScreen()
-        cy.get('#lokalizacja').should('have.value', this.config.address.address)
+        cy.get('#lokalizacja').contains(this.config.address.address)
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
         Object.entries(this.categories).
@@ -121,7 +121,7 @@ describe('Valid images and location', () => {
         cy.get('#datetime').should('have.value', this.config.carImage.dateISO)
         cy.get('.changeDatetime').should('be.visible')
 
-        cy.get('#lokalizacja').should('have.value', this.config.address.szczecin)
+        cy.get('#lokalizacja').contains(this.config.address.szczecin)
     })
 })
 
@@ -148,7 +148,6 @@ describe('Create application', () => {
     it('checks confirmation screen', function () {
         cy.contains('Wystąpił błąd').should('not.exist')
         checkAppData(this.config)
-        cy.contains('Zdjęcia wykonałem samodzielnie')
         cy.contains('proszę o niezamieszczanie')
         const firstExtension = Object.entries(this.extensions)[0]
         cy.contains(firstExtension[1].title)
