@@ -23,10 +23,9 @@
 {% block main %}
 
 {% if autoSend %}
-<h2>Sprawdź zgłoszenie przed wysłaniem</h2>
+<h2>Sprawdź przed wysłaniem</h2>
 <p>
     Twoje zgłoszenie zostanie za chwilę wysłane do <b>{{ smName|raw }}</b>.
-    Sprawdź zgłoszenie zwracając szczególną uwagę na podany adres oraz numer rejestracyjny.
 </p>
 {% else %}
 <h2>Sprawdź zgłoszenie</h2>
@@ -37,15 +36,62 @@
 {% endif %}
 
 {% if forcedPolice %}
-    <p><b class="forcedPoliceInfo lightWarning">
+<p><b class="forcedPoliceInfo lightWarning">
         Straż Miejska nie ma uprawnień do karania za jazdę po chodniku. Uprzejmie
         zmieniliśmy adresata na {{ sm.getShortName }}.
     </b></p>
 {% endif %}
 
+<div class="application">
+    <div class="ui-grid-a ui-responsive images images-cropped">
+        <div class="ui-block-a">
+            <ul class="application-details-list" style="columns: 1">
+                <li class="description"><b>{{ app.getCategory.short }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
+                <li class="witness">
+                    {% if app.statements is not defined or not app.statements.witness %}
+                    <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
+                    {% else %}
+                    <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.</p>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+        <div class="ui-block-b imageContainer">
+            <span class="floating-box">{{ app.getShortAddress }}</span>
+            {% if app.address.lat is defined %}
+            <div class="loader"></div>
+            <img class="mapImage" src="{{ app.getMapImage }}?v={{ app.getRevision }}">
+            {% endif %}
+        </div>
+    </div>
 
-    {% include('_application.html.twig') %}
+    <div class="ui-grid-a ui-responsive images">
+        <div class="ui-block-a imageContainer">
+            <span class="floating-box">{{ app.getDate("k'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</span>
+            <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" />
+        </div>
+        <div class="ui-block-b imageContainer">
+            <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" />
+            {% if vehicleBox %}
+            <div class="plate-box" style="top: {{vehicleBox.y}}%; left: {{vehicleBox.x}}%; width: {{vehicleBox.width}}%; height: {{vehicleBox.height}}%;">
+            {% else %}
+            <div class="plate-box" style="border: none;">
+            {% endif %}
+                <span class="plate-id">{{ app.carInfo.plateId }} ?</span>
+            </div>
+        </div>
+    </div>
 
+    <div class="sender-data">
+        <p>Twoje dane:</p>
+        <cite>
+        <b>{{ app.user.name }}</b><br />
+        {{ app.user.email }}<br />
+        {{ app.user.address }}<br />
+        {{ app.user.msisdn }}<br />
+        </cite>
+    </div>
+</div>
 {% if autoSend %}
 <a onclick="confirmApplication()"
     class="ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
