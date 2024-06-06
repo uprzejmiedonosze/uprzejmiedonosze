@@ -34,13 +34,13 @@ function logger(string|object|array|null $msg, $force = null): string {
 
         error_log("$time $user $location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
-    if(isProd())
-        send_syslog($msg, $force == null);
+    if(isProd() || $force)
+        send_syslog($msg, false);
     return $time;
 }
 
 function send_syslog(string $msg, bool $debug) {
     openlog("uprzejmiedonosze", LOG_PID | LOG_PERROR, LOG_LOCAL0);
-    syslog($debug ? LOG_DEBUG : LOG_INFO, ($debug ? '[DEBUG]' : '[INFO]') . $msg);
+    syslog($debug ? LOG_DEBUG : LOG_INFO, ($debug ? '[DEBUG] ' : '[INFO] ') . $msg);
     closelog();
 }
