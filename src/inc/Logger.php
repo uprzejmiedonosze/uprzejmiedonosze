@@ -34,7 +34,7 @@ function logger(string|object|array|null $msg, $force = null): string {
 
         error_log("$time $user $location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
-    if(isProd() || $force)
+    if($force)
         send_syslog($msg, false);
     return $time;
 }
