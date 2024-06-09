@@ -114,7 +114,7 @@ function doLogin(signInSuccessUrl, withEmail) {
         'signInOptions': signInOptions,
         'tosUrl': '/regulamin.html',
         'privacyPolicyUrl': '/polityka-prywatnosci.html',
-        'credentialHelper': firebaseui.auth.CredentialHelper.GOOGLE_YOLO,
+        'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
         'adminRestrictedOperation': { status: false },
         'signInFlow': 'popup'
     };
