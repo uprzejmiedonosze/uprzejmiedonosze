@@ -87,7 +87,7 @@ function doLogin(signInSuccessUrl, withEmail) {
     const emailAuthProvider = {
         provider: EmailAuthProvider.PROVIDER_ID,
         signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
-        forceSameDevice: true,
+        forceSameDevice: false,
         disableSignUp: {
             status: false
         }
