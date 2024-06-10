@@ -470,6 +470,10 @@ class Application extends JSONObject implements JsonSerializable {
         return "$baseFileName,ma.png";
     }
 
+    public function isMapImageInCDN() {
+        return $this->hasNumber() && isset($this->address->mapImage);
+    }
+
     public function hasNumber() {
         return isset($this->number);
     }

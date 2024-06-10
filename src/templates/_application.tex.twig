@@ -76,7 +76,7 @@ Email: {{ app.user.email }}
         {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ carImage }} }
 
 \vspace{0.3cm}\noindent
-    {% if not 'https' in mapImage %}
+    {% if app.isMapImageInCDN %}
     \href{{ mapUrl|raw }}
         {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true]{{ mapImage }} }
     {% endif %}
