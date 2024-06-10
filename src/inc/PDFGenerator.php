@@ -72,7 +72,7 @@ function readyApps2PDF(User $user, string $city): array{
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  */
 function tex2pdf(array|Application $application, string $destFile, string $type) {
-    $file = tempnam(sys_get_temp_dir(), 'tex-');
+    $file = tempnam(sys_get_temp_dir(), $application->id);
     if($file === false) {
         throw new Exception("Failed to create temporary file");
     }
