@@ -24,6 +24,7 @@ window.sendApplication = async function (appId) {
       $(".afterSend").show();
     }
     $('.ui-btn-right').removeClass("ui-disabled");
+    $(`#${appId}`).trigger('collapsibleexpand')
     (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
   } catch (e) {
     $.mobile.loading("hide");
