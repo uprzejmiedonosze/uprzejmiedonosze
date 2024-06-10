@@ -23,7 +23,7 @@
 \begin{center}
     {\Large
         \href{{ appUrl }}{Zgłoszenie wykroczenia {{ appNumber|raw }} }
-        {% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj, że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }}.{% endif %}}
+        {% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj, że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }} }.{% endif %}
     }
 \end{center}
 
