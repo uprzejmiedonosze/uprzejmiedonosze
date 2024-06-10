@@ -433,13 +433,10 @@ class Application extends JSONObject implements JsonSerializable {
         $lngLat = $this->getLngLat();
         $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lngLat)/$lngLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
 
-        if(!$this->hasNumber()){
-            return $mapsUrl;
-        }
-
-        if(isset($this->address->mapImage)){
+        if($this->hasNumber() && isset($this->address->mapImage)){
             return $this->address->mapImage;
         }
+
         // @TODO refactor warning (duże copy-paste z api.html:saveImgAndThumb())
         $baseDir = 'cdn2/' . $this->getUserNumber();
         if(!file_exists('/var/www/%HOST%/' . $baseDir)){

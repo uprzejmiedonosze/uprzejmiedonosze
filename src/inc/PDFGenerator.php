@@ -61,7 +61,6 @@ function readyApps2PDF(User $user, string $city): array{
         mkdir($baseDir, 0755, true);
     }
     $pdf = "$baseDir/$filename";
-    //if(!file_exists($pdf))
     tex2pdf($applications, $pdf, 'readyApps');
 
     return [$pdf, $filename];
@@ -72,7 +71,7 @@ function readyApps2PDF(User $user, string $city): array{
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  */
 function tex2pdf(array|Application $application, string $destFile, string $type) {
-    $file = tempnam(sys_get_temp_dir(), $application->id);
+    $file = tempnam(sys_get_temp_dir(), 'tex-' . $application->id . '-');
     if($file === false) {
         throw new Exception("Failed to create temporary file");
     }
@@ -127,7 +126,7 @@ function tex2pdf(array|Application $application, string $destFile, string $type)
 
     if(!file_exists($pdf_f)) {
         @unlink($file);
-        throw new Exception("Output was not generated and latex returned: $ret.");
+        throw new Exception("Błąd generowania pliku PDF.");
     }
 
     @unlink($log_f);
