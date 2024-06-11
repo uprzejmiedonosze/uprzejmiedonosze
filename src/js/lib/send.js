@@ -23,8 +23,10 @@ window.sendApplication = async function (appId) {
       $(".whatNext").hide();
       $(".afterSend").show();
     }
+    if ($('.my-applications').length) {
+      $(`#${appId}`).trigger('collapsibleexpand')
+    }
     $('.ui-btn-right').removeClass("ui-disabled");
-    $(`#${appId}`).trigger('collapsibleexpand')
     (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" });
   } catch (e) {
     $.mobile.loading("hide");
