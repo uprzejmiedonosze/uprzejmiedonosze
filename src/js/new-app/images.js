@@ -203,8 +203,20 @@ async function sendFile(fileData, id, imageMetadata) {
         .attr("src", app[id].thumb + "?v=" + Math.random().toString())
     }
     if (id == "carImage" && app.carInfo) {
+      $('.plate-box').css('border', 'none')
+      
       if (app.carInfo.plateId) {
         $("#plateId").val(app.carInfo.plateId);
+
+        vehicleBox = app.carInfo.vehicleBox
+        if(vehicleBox.width) {
+          $('.plate-box').css('left', (vehicleBox.x /2/6) + '%')
+          $('.plate-box').css('top', (vehicleBox.y /2/4.5) + '%')
+          $('.plate-box').css('width', (vehicleBox.width /2/6) + '%')
+          $('.plate-box').css('height', (vehicleBox.height /2/4.5) + '%')
+          $('.plate-box').css('border', '2px solid #e9c200')
+        }
+
         if (app.carInfo.brand) {
           if ($("#comment").val().trim().length == 0) {
             if (app.carInfo.brandConfidence > 90) {

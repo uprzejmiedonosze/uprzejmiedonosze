@@ -46,6 +46,7 @@
                     <img id="carImagePreview" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
                 <div id="recydywa"></div>
+                <div class="plate-box" style="border: none;"></div>
                 <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="carImage" multiple
                     title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                     value="{{ app.carImage.url ?? '' }}" />
