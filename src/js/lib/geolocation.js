@@ -98,9 +98,8 @@ function setSM(sm, hint) {
   const $smHint = $("#smInfoHint")
 
   sm = sm ? `Rejon: ${sm}`: ''
-  $sm.text(sm)  
-  $smHint.attr('title', hint ?? '')
-  $smHint.css('visibility', (sm == '') ? 'hidden': 'visible')
+  $sm.text(sm)
+  $smHint.html(hint ?? '')
 }
 
 async function latLngToAddress(lat, lng, from) {

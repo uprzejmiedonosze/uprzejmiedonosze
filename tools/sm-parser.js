@@ -26,7 +26,7 @@ Object.entries(sm)
 Object.entries(sm)
 	.forEach(([e, _v]) => {
 		if (e === '_nieznane') return
-		if (!sm[e].hint) sm[e].hint = null
+		if (!sm[e].hint) sm[e].hint = 'Masz doświadczenia we współpracy z tą jednostką? <a href="mailto:szymon@uprzejmiedonosze.net" target="_blank">Podziel się</a>.'
 		if (!sm[e].api) sm[e].api = 'Mail'
 		if (!sm[e].city) sm[e].city = e
 		if (e.toLowerCase() !== e) {
