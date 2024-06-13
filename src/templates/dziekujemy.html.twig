@@ -58,9 +58,24 @@ Z poważaniem
         do {{ app.guessSMData.getShortName }}. Służy do tego strona <a href="/wysylka.html?city={{ sm.key|url_encode }}" data-ajax="false">wysyłka</a>.
     </p>
 {% endif %}
-{% if sm.hint %}
-    <h4>Uwagi do współpracy z {{ sm.getName }}</h4>
-    <p>{{ sm.hint | raw }}</p>
+
+{% if ( not 'patron' in general.stats.badges ) and (random(4) == 1) %}
+{% if random(2) == 1 %}
+<h4>Podobało Ci się?</h4>
+{% else %}
+<h4>Wygodniej niż telefon do SM?</h4>
+{% endif %}
+
+Pomóż mi rozwijać serwis i walczyć w sejmie o zmianę przepisów. Możesz zostać 
+<a href="https://patronite.pl/uprzejmiedonosze"
+        target="_blank"
+        rel="external"
+        data-ajax="false">patronem Uprzejmie Donoszę</a> lub wesprzeć mnie 
+    <a href="https://suppi.pl/uprzejmiedonosze"
+        target="_blank"
+        rel="external"
+        data-ajax="false">jednorazową wpłatę niewielkiej kwoty</a> na Suppi.
+</p>
 {% endif %}
 
 {% if appsCount > 3 and sm.email and ( not app.addedToGallery ) %}
