@@ -72,7 +72,7 @@
         </div>
         <div class="ui-block-b imageContainer">
             <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" />
-            {% if vehicleBox %}
+            {% if vehicleBox and app.shouldIncludePlateImage %}
             <div class="plate-box" style="top: {{vehicleBox.y}}%; left: {{vehicleBox.x}}%; width: {{vehicleBox.width}}%; height: {{vehicleBox.height}}%;">
             {% else %}
             <div class="plate-box" style="border: none;">
