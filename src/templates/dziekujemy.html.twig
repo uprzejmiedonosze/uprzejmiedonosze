@@ -59,22 +59,28 @@ Z poważaniem
     </p>
 {% endif %}
 
-{% if ( not 'patron' in general.stats.badges ) and (random(4) == 1) %}
+{% if ( not isPatron ) and ( random(3) == 1 ) %}
 {% if random(2) == 1 %}
 <h4>Podobało Ci się?</h4>
 {% else %}
 <h4>Wygodniej niż telefon do SM?</h4>
 {% endif %}
 
-Pomóż mi rozwijać serwis i walczyć w sejmie o zmianę przepisów. Możesz zostać 
-<a href="https://patronite.pl/uprzejmiedonosze"
+Pomóż mi rozwijać serwis i walczyć w sejmie o 
+    <a href="https://agendaparkingowa.pl/"
         target="_blank"
         rel="external"
-        data-ajax="false">patronem Uprzejmie Donoszę</a> lub wesprzeć mnie 
+        data-ajax="false">zmianę przepisów</a>.
+Możesz zostać 
+    <a href="https://patronite.pl/uprzejmiedonosze"
+        target="_blank"
+        rel="external"
+        data-ajax="false">patronem</a>
+lub wesprzeć mnie 
     <a href="https://suppi.pl/uprzejmiedonosze"
         target="_blank"
         rel="external"
-        data-ajax="false">jednorazową wpłatę niewielkiej kwoty</a> na Suppi.
+        data-ajax="false">jednorazową wpłatą</a> niewielkiej kwoty.
 </p>
 {% endif %}
 

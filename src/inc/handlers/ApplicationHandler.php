@@ -200,6 +200,7 @@ class ApplicationHandler extends AbstractHandler {
             'app' => $application,
             'appsCount' => $user->appsCount,
             'edited' => $edited,
+            'isPatron' => $user->isPatron(),
             'autoSend' => $user->autoSend() && $application->automatedSM()
 
         ]);
