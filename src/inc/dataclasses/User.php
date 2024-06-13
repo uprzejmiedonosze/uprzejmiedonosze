@@ -279,11 +279,15 @@ class User extends JSONObject{
             }
         }
 
-        global $PATRONITE;
-        if (in_array($this->getNumber(), $PATRONITE)) {
+        if ($this->isPatron()) {
             array_push($badges, 'patron');
         }
         return $badges;
+    }
+
+    public function isPatron() {
+        global $PATRONITE;
+        return (in_array($this->getNumber(), $PATRONITE));
     }
 }
 
