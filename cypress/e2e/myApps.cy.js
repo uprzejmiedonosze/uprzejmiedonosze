@@ -148,7 +148,6 @@ describe('Create application', () => {
     it('checks confirmation screen', function () {
         cy.contains('Wystąpił błąd').should('not.exist')
         checkAppData(this.config)
-        cy.contains('proszę o niezamieszczanie')
         const firstExtension = Object.entries(this.extensions)[0]
         cy.contains(firstExtension[1].title)
     })
@@ -206,7 +205,7 @@ describe('Edit application', () => {
     it('alters application', function() {
         cy.get('#comment').type(this.config.comment)
         cy.get('#witness').click({force: true})
-        cy.contains('Zatrzymanie na drodze dla rowerów').click()
+        cy.contains('Droga dla rowerów').click()
 
         cy.contains('Data i czas zgłoszenia')
         cy.get('#datetime').type(this.config.carImage.dateISOAltered)

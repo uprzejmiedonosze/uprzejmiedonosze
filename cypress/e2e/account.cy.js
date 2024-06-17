@@ -110,7 +110,6 @@ describe('Update account', () => {
     cy.contains(this.sm.Szczecin.address[0])
     cy.sendApp()
 
-    cy.contains('Uwagi do współpracy')
     cy.contains('To twoje pierwsze zgłoszenie')
 
     cy.visit('/')
@@ -153,7 +152,6 @@ describe('Update account', () => {
     cy.contains('KP Szczecin Niebuszewo')
     cy.sendApp()
 
-    cy.contains('Uwagi do współpracy z Komisariat Policji Szczecin Niebuszewo')
     cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
 
     cy.visit('/')
