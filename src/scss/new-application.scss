@@ -26,11 +26,6 @@ label {
   font-weight: 300;
 }
 
-label span.price-list {
-  display: block;
-  margin-top: 0.5em;
-}
-
 .ui-input-text input,
 .ui-input-search input {
   border: 1px solid #009C7F;
@@ -208,10 +203,24 @@ p.pictureHint {
   }
 
   #category label img,
-  #category label p,
+  #category label div,
   #extensions label p {
     display: table-cell;
     vertical-align: top;
+  }
+
+  #category label div {
+    .category-title {
+      margin-top: 0;
+      font-weight: 500;
+    }
+    .category-short {
+      font-size: 90%;
+    }
+    .price-list {
+      font-size: 90%;
+    }
+    
   }
 
   #category label p,

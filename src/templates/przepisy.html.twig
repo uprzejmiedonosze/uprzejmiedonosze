@@ -45,7 +45,7 @@ poniżej. Dopiero później szukaj odpowiedniej kategorii dla swojego zgłoszeni
 
 {% for catId,catName in categories %}
 {% if catName.title and catId != 0 %}
-    <h4>{{ catName.title }}</h4>
+    <h4>{{ catName.short }}</h4>
     <div class="ui-grid-a ui-responsive przepisy-kategorie">
         <div class="ui-block-a">
             <img src="/img/{{ catId }}.jpg?fresh" alt="{{ catName.title }}"/>

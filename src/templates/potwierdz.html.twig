@@ -46,7 +46,7 @@
     <div class="ui-grid-a ui-responsive images images-cropped">
         <div class="ui-block-a">
             <ul class="application-details-list" style="columns: 1">
-                <li class="description"><b>{{ app.getCategory.short }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
+                <li class="description"><b>{{ app.getCategory.formal }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
                 <li class="witness">
                     {% if app.statements is not defined or not app.statements.witness %}
                     <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.

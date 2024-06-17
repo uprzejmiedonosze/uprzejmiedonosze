@@ -126,9 +126,11 @@
                     {% if categoryDef.points > 1 %}
                     <span class="badge">{{ categoryDef.points }}</span>
                     {% endif %}
-                    <p>{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}
-                    <span class="price-list">Mandat: {{ categoryDef.price }}</span>
-                    </p>
+                    <div>
+                        <p class="category-title">{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}</p>
+                        <p class="category-short">{{ categoryDef.short }}</p>
+                        <p class="price-list">{% if catId != 0 %}Mandat: {{ categoryDef.price }}{% endif %}</p>
+                    </div>
                 </label>
             </div>
         {% set i = i + 1 %}

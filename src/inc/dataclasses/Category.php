@@ -21,6 +21,10 @@ class Category extends JSONObject{
         return $this->short;
     }
 
+    public function getFormal(){
+        return $this->formal;
+    }
+
     public function getDesc(){
         return $this->descs;
     }

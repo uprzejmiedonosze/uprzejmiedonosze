@@ -32,7 +32,7 @@
             pojazdu o nr. rejestracyjnym <b>{{ app.carInfo.plateId ?? '...' }}</b>
             {% if app.getRecydywa > 1 %}<sup>(recydywa {{ app.getRecydywa }})</sup>{% endif %}
             w okolicy adresu <b>{{ app.address.address ?? '...' }}</b>.
-            {{ app.getCategory.short }}
+            {{ app.getCategory.formal }}
             {{ app.getExtensionsText() }}
             Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.
     {% if app.statements is not defined or not app.statements.witness %}

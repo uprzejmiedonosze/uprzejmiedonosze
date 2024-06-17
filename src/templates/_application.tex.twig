@@ -33,7 +33,7 @@
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
     {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronicowe #}
     Obrazek z mapą prowadzi do Google Maps z lokalizacją zgłoszenia. Natomiast zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
-    {{ app.getCategory.short }} 
+    {{ app.getCategory.formal }} 
     {{ app.getExtensionsText() }}
     Sytuacja jest widoczna na załączonych zdjęciach.
     Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}

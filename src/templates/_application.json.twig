@@ -11,7 +11,7 @@
     {% endif %}
         ,{ "text": "w okolicy adresu" }
         ,{ "emphasis": "{{ app.address.address ?? '...' }}"}
-        ,{ "text": "{{ app.getCategory.short }}{{ app.getExtensionsText() }}"}
+        ,{ "text": "{{ app.getCategory.formal }}{{ app.getExtensionsText() }}"}
         ,{ "text": "Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie."}
     {% if app.statements is not defined or not app.statements.witness %}
         ,{ "text": "Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania." }

@@ -12,7 +12,7 @@
     <li class="calendar"><b>{{ app.getDate("k'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</b></li>
     <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
     <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank" rel="external">{{ app.address.address }}</a></li>
-    <li class="description"><b>{{ app.getCategory.short }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
+    <li class="description"><b>{{ app.getCategory.formal }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
     <li class="witness">
         {% if app.statements is not defined or not app.statements.witness %}
         <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.

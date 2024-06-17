@@ -34,7 +34,7 @@ class XlsHandler extends AbstractHandler {
             "Miejsce zdarzenia na ul." => $app->address->address,
             "Data zdarzenia" => $app->getDate(),
             "Godzina" => $app->getTime(),
-            "Zdarzenie polegające na:" => $app->getCategory()->short . " " . $app->getExtensionsText(),
+            "Zdarzenie polegające na:" => $app->getCategory()->formal . " " . $app->getExtensionsText(),
             "Podstawa prawna" => $app->getCategory()->law,
             "Pojazd" => $app->carInfo->brand ?? '',
             "Nr rej." => $app->carInfo->plateId,
