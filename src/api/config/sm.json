@@ -1446,6 +1446,9 @@
     ],
     "email": "straz.miejska@brwinow.pl"
   },
+  "gmina Brwinów": {
+    "parent": "Brwinów"
+  },
   "Grodzisk Mazowiecki": {
     "address": [
       "Straż Miejska w Grodzisku Mazowieckim",
