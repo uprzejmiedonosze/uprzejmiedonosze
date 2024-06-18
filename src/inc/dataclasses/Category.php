@@ -18,7 +18,7 @@ class Category extends JSONObject{
     }
 
     public function getShort(){
-        return $this->short;
+        return $this->short ?? $this->formal;
     }
 
     public function getFormal(){

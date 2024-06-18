@@ -18,7 +18,7 @@ function addToTumblr(&$app){
     if ($app->getRecydywa() > 1)
         $recydywa = "*(recydywa {$app->getRecydywa()})*";
 
-    $description = $app->getCategory()->getShort()
+    $description = $app->getCategory()->getFormal()
         . " "
         . $app->getExtensionsText()
         . " "
