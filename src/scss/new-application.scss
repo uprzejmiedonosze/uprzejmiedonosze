@@ -169,6 +169,20 @@ p.pictureHint {
     vertical-align: top;
     display: inline-block;
     text-align: center;
+
+    div {
+      position: relative;
+    }
+
+    a.category-popup {
+      position: absolute;
+      top: 0;
+      z-index: 2;
+      right: 0;
+      font-weight: 300;
+      border: none;
+      filter: opacity(0.3);
+    }
   }
 
   #category .badge {
@@ -212,13 +226,18 @@ p.pictureHint {
   #category label div {
     .category-title {
       margin-top: 0;
-      font-weight: 500;
+      font-weight: 600;
+      width: 90%;
     }
     .category-short {
       font-size: 90%;
+      margin-top: 0;
     }
     .price-list {
-      font-size: 90%;
+      font-size: 80%;
+      font-weight: 400;
+      margin: 0;
+      text-transform: uppercase;
     }
     
   }
