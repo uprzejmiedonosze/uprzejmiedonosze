@@ -92,6 +92,20 @@ p.pictureHint {
   font-size: 90%;
 }
 
+.ui-popup-container .category-law {
+  text-decoration: italic;
+  color: #999;
+}
+
+.price-list {
+  font-size: 80%;
+  font-weight: 400;
+  margin: 0;
+  text-transform: uppercase;
+  max-width: 70%;
+}
+
+
 .new-application {
   div.datetime {
     max-width: 15em;
@@ -175,27 +189,32 @@ p.pictureHint {
     }
 
     a.category-popup {
-      position: absolute;
-      top: 0;
-      z-index: 2;
-      right: 0;
+      bottom: 0;
+      font-size: 80%;
       font-weight: 300;
-      border: none;
-      filter: opacity(0.3);
+      font-weight: 400;
+      padding: 6px;
+      position: absolute;
+      right: 0;
+      text-transform: uppercase;
+      text-decoration: none;
+      z-index: 2;
+      background-color: aliceblue;
+      border-radius: 3px;
     }
   }
 
-  #category .badge {
+  #category .points-badge {
     position: absolute;
-    left: calc(1.5em + 88px);
-    top: 1em;
-    background: red;
     text-align: center;
     border-radius: 50%;
     color: white;
-    width: 22px;
     height: 22px;
     font-size: 16px;
+    left: 3px;
+    background: red;
+    top: 3px;
+    width: 22px;
   }
 
   #category img {
@@ -232,14 +251,7 @@ p.pictureHint {
     .category-short {
       font-size: 90%;
       margin-top: 0;
-    }
-    .price-list {
-      font-size: 80%;
-      font-weight: 400;
-      margin: 0;
-      text-transform: uppercase;
-    }
-    
+    }    
   }
 
   #category label p,

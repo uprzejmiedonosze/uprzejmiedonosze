@@ -121,20 +121,27 @@
                     data-carImage-hint="{{ categoryDef.carImageHint }}"
                 >
                 <label for="{{ catId }}">
-                    <img src="/img/{{ catId }}.jpg?ref">
-                    {% if categoryDef.points > 1 %}
-                    <span class="badge">{{ categoryDef.points }}</span>
-                    {% endif %}
+                    <div>
+                        <img src="/img/{{ catId }}.jpg?ref">
+                        {% if categoryDef.points > 1 %}
+                        <span class="points-badge">{{ categoryDef.points }}</span>
+                        {% endif %}
+                    </div>
                     <div>
                         <p class="category-title">{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}</p>
                         <p class="category-short">{{ categoryDef.short }}</p>
-                        <p class="price-list">{% if catId != 0 %}Mandat: {{ categoryDef.price }}{% endif %}</p>
+                        {% if catId != 0 %}
+                        <p class="price-list">Mandat ~{{ categoryDef.mandate }} zł</p>
+                        {% endif %}
                     </div>
                 </label>
-                <a href="#category-popup-{{ catId }}" data-rel="popup" data-transition="pop" class="category-popup ui-btn ui-alt-icon ui-nodisc-icon ui-btn-inline ui-icon-info ui-btn-icon-notext">więcej...</a>
+                <a href="#category-popup-{{ catId }}" data-rel="popup" data-transition="pop" class="category-popup">więcej...</a>
                 <div data-role="popup" id="category-popup-{{ catId }}" class="ui-content" style="max-width: 500px;">
-                    <p>{{ categoryDef.desc|raw }}
-                    <p><i>({{ categoryDef.law }})</i></p>
+                    <p>{{ categoryDef.desc|raw }}</p>
+                    {% if categoryDef.price %}
+                    <p class="price-list">Mandat: {{ categoryDef.price }}</p>
+                    {% endif %}
+                    <p class="category-law">{{ categoryDef.law }}</p>
                 </div>
 
             </div>
