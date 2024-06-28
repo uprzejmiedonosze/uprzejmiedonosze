@@ -27,20 +27,6 @@
         "stopAgresjiOnly": false,
         "order": 1
     },
-    "19": {
-        "title": "Korzystanie niezgodnie z przeznaczeniem",
-        "short": "Pojazd np. stał na sugerowanym przejściu dla pieszych",
-        "formal": "Kierowca wykorzystał z części drogi w sposób niezgodny z przeznaczeniem (PoRD Art. 45. 1.4.).",
-        "desc": "<p>Jest to trochę zapomniany przepis (nie występuje np. w taryfikatorze). A przecież idealnie pasuje do parkowania na przydrożnym zieleńcu albo sugerowanym przejściu dla pieszych.</p>",
-        "law": "PoRD Art. 45. 1.4. Zabrania się wykorzystywania drogi lub poszczególnych jej części w sposób niezgodny z przeznaczeniem.",
-        "price": "teoretycznie 3000 zł (1 pkt)",
-        "points": 1,
-        "mandate": 500,
-        "contextImageHint": "Idealne zdjęcie powinno dość pojazd z kilku metrów, z widocznym terenem pod pojazdem.",
-        "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
-        "order": 2        
-    },
     "14": {
         "title": "Zakaz zatrzymywania się",
         "short": "Pojazd stał za zakazem zatrzymywania się",
@@ -250,6 +236,20 @@
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
         "stopAgresjiOnly": false,
         "order": 17
+    },
+    "19": {
+        "title": "Korzystanie niezgodnie z przeznaczeniem",
+        "short": "Pojazd np. stał na sugerowanym przejściu dla pieszych",
+        "formal": "Kierowca wykorzystał z części drogi w sposób niezgodny z przeznaczeniem (PoRD Art. 45. 1.4.).",
+        "desc": "<p>Jest to trochę zapomniany przepis (nie występuje np. w taryfikatorze). A przecież idealnie pasuje do parkowania na przydrożnym zieleńcu albo sugerowanym przejściu dla pieszych.</p>",
+        "law": "PoRD Art. 45. 1.4. Zabrania się wykorzystywania drogi lub poszczególnych jej części w sposób niezgodny z przeznaczeniem.",
+        "price": "teoretycznie 3000 zł (1 pkt)",
+        "points": 1,
+        "mandate": 500,
+        "contextImageHint": "Idealne zdjęcie powinno dość pojazd z kilku metrów, z widocznym terenem pod pojazdem.",
+        "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
+        "stopAgresjiOnly": false,
+        "order": 18
     },
     "0": {
         "title": "Pozostałe przypadki",
