@@ -2784,5 +2784,13 @@
   },
   "gmina Murowana Goślina": {
     "parent": "Murowana Goślina"
+  },
+  "gmina Damnica": {
+    "address": [
+      "Posterunek Policji w Damnicy",
+		  "ul. Szkolna 2",
+		  "76-231 Damnica"
+    ],
+    "email": "dzielnicowy.damnica31@gd.policja.gov.pl"
   }
 }
