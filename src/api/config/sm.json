@@ -2792,5 +2792,16 @@
 		  "76-231 Damnica"
     ],
     "email": "dzielnicowy.damnica31@gd.policja.gov.pl"
+  },
+  "Ostrołęka": {
+    "address": [
+      "Straż Miejska Ostrołęki",
+		  "ul. Berka Joselewicza 2",
+		  "07-410 Ostrołęka"
+    ],
+    "email": "smo@um.ostroleka.pl"
+  },
+  "gmina Ostrołęka": {
+    "parent": "Ostrołęka"
   }
 }
