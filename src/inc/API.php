@@ -184,15 +184,22 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
     $type = substr($pictureType, 0, 2);
     $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
 
+    $fileName = "/var/www/%HOST%/$baseFileName,$type.jpg";
+    list($width, $height) = getimagesize($fileName);
+
     if ($pictureType == 'carImage') {
         if (!empty($dateTime)) $application->date = $dateTime;
         if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
         if (!empty($latLng)) $application->setLatLng($latLng);
         get_car_info($imageBytes, $application, $baseFileName, $type);
+        $application->carImage->width = $width;
+        $application->carImage->height = $height;
     } else if ($pictureType == 'contextImage') {
         $application->contextImage = new stdClass();
         $application->contextImage->url = "$baseFileName,$type.jpg";
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
+        $application->contextImage->width = $width;
+        $application->contextImage->height = $height;
     } else {
         sem_release($semaphore);
         throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($application->id)", 400);

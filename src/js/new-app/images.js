@@ -176,6 +176,23 @@ function noGeoDataInImage() {
   $("#addressHint").addClass("hint");
 }
 
+export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
+  if(!vehicleBox.width) return
+  const boxWidth = $('.carImageSection').width()
+  const boxHeight = $('.carImageSection').height()
+  const ratio = boxWidth / imageWidth
+  $('img#carImagePreview').css('object-position', '50% ' + 100*(vehicleBox.y + vehicleBox.height)/imageHeight + '%')
+  $('img#carImagePreview').css("height", "100%")
+  
+  $('.plate-box').css('left', 100*vehicleBox.x/imageWidth + '%')
+  $('.plate-box').css('width', 100*vehicleBox.width/imageWidth + '%')
+
+  $('.plate-box').css('top', 100 * (vehicleBox.y * ratio - ((vehicleBox.y + vehicleBox.height) * ratio - boxHeight)) / boxHeight + '%')
+  $('.plate-box').css('height', 100 * vehicleBox.height * ratio / boxHeight + '%')
+  $('.plate-box').css('border', '2px solid #e9c200')
+}
+
+
 async function sendFile(fileData, id, imageMetadata) {
   const appId = $("#applicationId").val()
   var data = {
@@ -207,16 +224,8 @@ async function sendFile(fileData, id, imageMetadata) {
       
       if (app.carInfo.plateId) {
         $("#plateId").val(app.carInfo.plateId);
-
-        vehicleBox = app.carInfo.vehicleBox
-        if(vehicleBox.width) {
-          $('.plate-box').css('left', (vehicleBox.x /2/6) + '%')
-          $('.plate-box').css('top', (vehicleBox.y /2/4.5) + '%')
-          $('.plate-box').css('width', (vehicleBox.width /2/6) + '%')
-          $('.plate-box').css('height', (vehicleBox.height /2/4.5) + '%')
-          $('.plate-box').css('border', '2px solid #e9c200')
-        }
-
+        repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
+        
         if (app.carInfo.brand) {
           if ($("#comment").val().trim().length == 0) {
             if (app.carInfo.brandConfidence > 90) {

@@ -184,6 +184,12 @@
             {% endif %} />
     </div> <!-- ui-field-contain -->
 </form>
-<script src="/js/new-app.js?%JS_HASH%" last-location="{{ app.getLatLng() ?? config.lastLocation }}" stop-agresji="{{ app.stopAgresji }}"></script>
+<script src="/js/new-app.js?%JS_HASH%"
+    last-location="{{ app.getLatLng() ?? config.lastLocation }}"
+    stop-agresji="{{ app.stopAgresji }}"
+    vehicleBox="{{ app.carInfo.vehicleBox | json_encode() }}"
+    imageWidth="{{ app.carImage.width }}"
+    imageHeight="{{ app.carImage.height }}"
+    ></script>
 
 {% endblock %}

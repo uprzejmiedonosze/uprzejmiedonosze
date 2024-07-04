@@ -54,9 +54,9 @@
   border-radius: 0.8em;
   position: absolute;
   object-fit: cover;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  object-position: 50% 50%;
 }
 
 .ui-grid-a.ui-responsive+.ui-grid-a.ui-responsive {
