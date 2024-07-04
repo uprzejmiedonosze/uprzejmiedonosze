@@ -13,10 +13,15 @@ $(document).on("pageshow", function () {
   const map = initMaps(currentScript?.getAttribute("last-location"), currentScript?.getAttribute("stop-agresji"))
   initHandlers(map)
 
-  if (currentScript?.getAttribute("vehicleBox")) {
-    const vehicleBox = JSON.parse(currentScript.getAttribute("vehicleBox"))
-    const imageWidth = currentScript?.getAttribute("imageWidth")
-    const imageHeight = currentScript?.getAttribute("imageHeight")
+  if (currentScript?.getAttribute("data-vehiclebox-x")) {
+    const vehicleBox = {
+      x: currentScript.getAttribute("data-vehiclebox-x"),
+      y: currentScript.getAttribute("data-vehiclebox-y"),
+      width: currentScript.getAttribute("data-vehiclebox-width"),
+      height: currentScript.getAttribute("data-vehiclebox-height")
+    }
+    const imageWidth = currentScript?.getAttribute("data-image-width")
+    const imageHeight = currentScript?.getAttribute("data-image-height")
     repositionCarImage(vehicleBox, imageWidth, imageHeight)
   }
 

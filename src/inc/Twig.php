@@ -5,6 +5,7 @@ use Twig\Extension\DebugExtension;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 use \Twig\Environment as Environment;
 use \Twig\TwigFunction;
+use \Twig\TwigFilter;
 use \Twig\Extension\AbstractExtension;
 
 class TwigExtension extends AbstractExtension {
@@ -17,8 +18,21 @@ class TwigExtension extends AbstractExtension {
             new TwigFunction('active', function ($menu, $menuPos) {
                 if ($menu == $menuPos) return 'class="active"';
                 return '';
+            }),
+            new TwigFunction('cast_to_array', function ($object) {
+                return (array)$object;
             })
         ];
+    }
+
+    public function getFilters() {
+        return [
+            new TwigFilter('cast_to_array', array($this, 'castToArray'))
+        ];
+    }
+
+    public function castToArray($object) {
+        return (array)$object;
     }
 }
 

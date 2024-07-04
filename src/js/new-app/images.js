@@ -181,13 +181,13 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   const boxWidth = $('.carImageSection').width()
   const boxHeight = $('.carImageSection').height()
   const ratio = boxWidth / imageWidth
-  $('img#carImagePreview').css('object-position', '50% ' + 100*(vehicleBox.y + vehicleBox.height)/imageHeight + '%')
+  $('img#carImagePreview').css('object-position', `50% -${vehicleBox.y * ratio}px`)
   $('img#carImagePreview').css("height", "100%")
   
   $('.plate-box').css('left', 100*vehicleBox.x/imageWidth + '%')
   $('.plate-box').css('width', 100*vehicleBox.width/imageWidth + '%')
 
-  $('.plate-box').css('top', 100 * (vehicleBox.y * ratio - ((vehicleBox.y + vehicleBox.height) * ratio - boxHeight)) / boxHeight + '%')
+  $('.plate-box').css('top', '10px')
   $('.plate-box').css('height', 100 * vehicleBox.height * ratio / boxHeight + '%')
   $('.plate-box').css('border', '2px solid #e9c200')
 }
