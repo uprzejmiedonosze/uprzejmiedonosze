@@ -187,9 +187,9 @@
 <script src="/js/new-app.js?%JS_HASH%"
     last-location="{{ app.getLatLng() ?? config.lastLocation }}"
     stop-agresji="{{ app.stopAgresji }}"
-    vehicleBox="{{ app.carInfo.vehicleBox | json_encode() }}"
-    imageWidth="{{ app.carImage.width }}"
-    imageHeight="{{ app.carImage.height }}"
+    vehicleBox="{{ app.carInfo is defined ? (app.carInfo.vehicleBox | json_encode()) : null }}"
+    imageWidth="{{ app.carImage is defined ? app.carImage.width : 1200 }}"
+    imageHeight="{{ app.carImage is defined ? app.carImage.height : 1200 }}"
     ></script>
 
 {% endblock %}

@@ -157,7 +157,8 @@ p.pictureHint {
   .contextImageSection img,
   .carImageSection img {
     background-repeat: no-repeat;
-    background-position: center;
+    background-position-x: 50%;
+    background-position-y: 55px;
     height: 110px;
   }
 
