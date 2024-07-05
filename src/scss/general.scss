@@ -32,6 +32,12 @@ small {
     border-width: 0 1px;
 }
 
+@media (min-width: 900px) {
+    .ui-content {
+        padding: 1em 2em;
+    }
+}
+
 img.rwd {
     width: 100%;
     box-shadow: 0 0 10px 2px grey;
