@@ -188,7 +188,7 @@
     last-location="{{ app.getLatLng() ?? config.lastLocation }}"
     stop-agresji="{{ app.stopAgresji }}"
 
-    {% if app.carInfo is defined and (app.carInfo.vehicleBox) %}
+    {% if app.carInfo is defined and (app.carInfo.vehicleBox is defined) %}
     {% for key,value in app.carInfo.vehicleBox|cast_to_array %}
     data-vehiclebox-{{ key }}="{{ value | raw }}"
     {% endfor %}
