@@ -23,6 +23,10 @@ small {
 .ui-content {
     max-width: 800px;
     margin: 0 auto;
+    background-color: white;
+    border-color: rgba(217, 217, 217, 0.5);
+    border-style: solid;
+    border-width: 0 1px;
 }
 
 img.rwd {
