@@ -6,10 +6,13 @@
     html .ui-panel-page-container-a {
     border: none;
     font-family: sans-serif;
+    color: #000;
 }
 
 body, a, p, i, input, textarea, select {
     font-weight: 300;
+    color: #000;
+    line-height: 1.4;
 }
 
 strong, b {
@@ -61,7 +64,7 @@ img.one-third {
     background-color: #e9c200!important;
     box-shadow: none!important;
     border: none;
-    color: #333!important;
+    color: #000!important;
     text-shadow: none!important;
 }
 
@@ -79,6 +82,7 @@ html body .ui-group-theme-a .ui-header {
     color: white;
     text-shadow: none;
     box-shadow: none;
+    line-height: 1.3;
 }
 
 .ui-content .ui-listview,
