@@ -75,7 +75,7 @@ div.error img {
 
 div.ui-block-a>div.ui-radio,
 div.ui-block-b>div.ui-radio {
-  margin: 0;
+  margin: 3px;
 }
 
 p.pictureHint {
@@ -190,13 +190,13 @@ p.pictureHint {
     }
 
     a.category-popup {
-      bottom: 0;
+      bottom: 3px;
       font-size: 80%;
       font-weight: 300;
       font-weight: 400;
       padding: 6px;
       position: absolute;
-      right: 0;
+      right: 3px;
       text-transform: uppercase;
       text-decoration: none;
       z-index: 2;
@@ -234,6 +234,8 @@ p.pictureHint {
     --webkit-columns: 2 120px;
     --columns: 2 120px;
     display: table;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   #category label img,
