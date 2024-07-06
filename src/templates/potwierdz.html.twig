@@ -74,8 +74,8 @@
             <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" id="carImage"/>
             {% if vehicleBox and app.shouldIncludePlateImage %}
 
-            {% set imageWidth = app.carImage.width %}
-            {% set imageHeight = app.carImage.height %}
+            {% set imageWidth = app.carImage.width ?? 1200 %}
+            {% set imageHeight = app.carImage.height ?? 1200 %}
             {% set left = 100 * vehicleBox.x / imageWidth %}
             {% set width = 100 * vehicleBox.width / imageWidth %}
 
