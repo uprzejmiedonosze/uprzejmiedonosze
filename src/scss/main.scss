@@ -1,35 +1,12 @@
-.patronite {
-    img.responsive {
-        width: calc(100% - 20px);
-        margin: 10px;
-        box-shadow: 0px 0px 10px 0px gray;
-        border-radius: 5px;
-    }
-
-    .spacer {
-        height: 80px;
-    }
-
-
+.mainPage {
     .patronite-button {
-        @media (max-width: 40em) {
-            bottom: 5px;
-        }
-    
-        position: fixed;
-        bottom: 85px;
-        width: 400px;
-        z-index: 99999;
-        left: 50%;
-        margin-left: -200px;
-        
         background-color: #f23e17!important;
         color: #fff!important;
         font-size: 18px;
         font-weight: 400;
-        letter-spacing: 0.3px;
         min-height: 40px;
-        min-width: 144px;
+        width: 100%;
+        letter-spacing: 0.3px;
         user-select: none;
         text-shadow: none !important;
         display: inline-flex;
