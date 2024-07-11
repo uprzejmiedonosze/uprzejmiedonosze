@@ -119,7 +119,7 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	$(sentry-release)
 	@make clean
 
-$(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson ## Exports files for deployment.
+$(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson src/api/config/patronite.json ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -205,14 +205,15 @@ $(EXPORT)/patronite/%.csv: $(EXPORT)/patronite
 	@curl --silent -X GET \
 		-H "Authorization: token $(PATRONITE_TOKEN)" \
 		-H "Content-Type: application/json" \
-		https://patronite.pl/author-api/patrons/$* \
-		| jq '.results[] | .id' > $@
+		"https://patronite.pl/author-api/patrons/$*?with_notes=yes" \
+		| jq -r '.results[] | .note' | tr "," "\n" \
+		| grep -v null | sort | uniq > $@
 
-$(EXPORT)/patronite/patronite.json: $(EXPORT)/patronite/active.csv $(EXPORT)/patronite/inactive.csv
-	@jq -c -n '{active:$$active, inactive:$$inactive}' \
+src/api/config/patronite.json: $(EXPORT)/patronite/active.csv $(EXPORT)/patronite/inactive.csv
+	@jq -n '{active:$$active, inactive:$$inactive}' \
 		--slurpfile active export/patronite/active.csv \
 		--slurpfile inactive export/patronite/inactive.csv \
-		> $@
+		> src/api/config/patronite.json
 
 $(PUBLIC)/api/config/police-stations.pjson: src/api/config/police-stations.csv src/api/config/stop-agresji.json
 	$(call echo-processing,$<)

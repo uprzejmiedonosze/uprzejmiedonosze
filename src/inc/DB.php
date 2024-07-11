@@ -707,7 +707,7 @@ class DB extends NoSQLite{
         $users = intval($this->db->query($sql)->fetchColumn());
 
         global $PATRONITE;
-        $patrons = count($PATRONITE);
+        $patrons = count($PATRONITE->active);
 
         $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm, 'patrons' => $patrons);
         $this->setStats('getMainPageStats', $stats);

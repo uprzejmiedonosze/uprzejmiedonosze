@@ -282,12 +282,20 @@ class User extends JSONObject{
         if ($this->isPatron()) {
             array_push($badges, 'patron');
         }
+        if ($this->isFormerPatron()) {
+            array_push($badges, 'former_patron');
+        }
         return $badges;
     }
 
     public function isPatron() {
         global $PATRONITE;
-        return (in_array($this->getNumber(), $PATRONITE));
+        return (in_array($this->getNumber(), $PATRONITE->active));
+    }
+
+    public function isFormerPatron() {
+        global $PATRONITE;
+        return (in_array($this->getNumber(), $PATRONITE->inactive));
     }
 }
 

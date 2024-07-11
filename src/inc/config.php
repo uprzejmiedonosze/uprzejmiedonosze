@@ -47,7 +47,7 @@ fclose($badges);
 const SA_PATRONITE = __DIR__ . '/../public/api/config/patronite.json';
 $patronite = fopen(SA_PATRONITE, "r") or die("Unable to open config file: " . SA_PATRONITE);
 $patroniteStr = fread($patronite, filesize(SA_PATRONITE));
-$PATRONITE = array_values(json_decode($patroniteStr, false));
+$PATRONITE = json_decode($patroniteStr, false);
 fclose($patronite);
 
 
