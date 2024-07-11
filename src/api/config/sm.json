@@ -201,9 +201,6 @@
   "Rosówek": {
     "parent": "Kołbaskowo"
   },
-  "Plewiska": {
-    "parent": "Komorniki"
-  },
   "Podzamcze": {
     "parent": "Ogrodzieniec"
   },
@@ -1683,6 +1680,9 @@
       "62-052 Komorniki"
     ],
     "email": "strazgminna@komorniki.pl"
+  },
+  "gmina Komorniki": {
+    "parent": "Komorniki"
   },
   "Puck": {
     "address": [
