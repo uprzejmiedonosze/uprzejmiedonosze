@@ -143,6 +143,42 @@
     "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
     "api": "Mail"
   },
+  "gdańsk-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Gdańsku",
+      "ul. Nowe Ogrody 27",
+      "80-803 Gdańsk"
+    ],
+    "email": "wpd.gdansk@gd.policja.gov.pl",
+    "voivodeship": "Pomorskie",
+    "city": "Gdańsk",
+    "hint": "Nie wzywają na przesłuchanie bez potrzeby.",
+    "api": "Mail"
+  },
+  "gdynia-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Gdyni",
+      "ul. Portowa 15",
+      "81-350 Gdynia"
+    ],
+    "email": "dyzurny.gdynia@gd.policja.gov.pl",
+    "voivodeship": "Pomorskie",
+    "city": "Gdynia",
+    "hint": "Nie wzywają na przesłuchanie bez potrzeby.",
+    "api": "Mail"
+  },
+  "sopot-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Sopocie",
+      "ul. Armii Krajowej 112a",
+      "81-824 Sopot"
+    ],
+    "email": "komenda.sopot@gd.policja.gov.pl",
+    "voivodeship": "Pomorskie",
+    "city": "Sopot",
+    "hint": "Masz doświadczenia we współpracy z tą jednostką? <a href=\"mailto:szymon@uprzejmiedonosze.net\" target=\"_blank\">Podziel się</a>.",
+    "api": "Mail"
+  },
   "śląskie": {
     "address": [
       "Komenda Wojewódzka Policji w Katowicach",
