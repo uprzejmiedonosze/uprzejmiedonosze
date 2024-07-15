@@ -48,7 +48,7 @@
     </li>
     {% if app.wasSent %}
         <li class="sent-to">Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
-            o {{ app.getSentDate("k'<sup>'mm'</sup>', d MMM YYYY")|raw }}</li>
+            o {{ app.getSentDate("H'<sup>'mm'</sup>', d MMM YYYY")|raw }}</li>
     {% elseif sendable %}
         <li class="send">
             {% if app.automatedSM and (autoSend ?? false) %}

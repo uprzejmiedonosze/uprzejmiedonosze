@@ -15,13 +15,13 @@
 {% if app.sent is defined %}
     {% if app.sent.method == 'Mail' %}
     <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }} &lt;{{ app.sent.to }}&gt;
-        bezpośrednio z serwera Uprzejmie Donoszę o {{ app.getSentDate("k'<sup>'mm'</sup>', d MMM YYYY")|raw }}.</b>
+        bezpośrednio z serwera Uprzejmie Donoszę o {{ app.getSentDate("H'<sup>'mm'</sup>', d MMM YYYY")|raw }}.</b>
     {% elseif app.sent.method == 'manual' %}
     <b class="appSentInfo">To zgłoszenie zostało wysłane przez Ciebie ręcznie do {{ app.guessSMData.getShortName }}
-        &lt;{{ app.sent.to }}&gt; o {{ app.getSentDate("k'<sup>'mm'</sup>', d MMM YYYY")|raw }}.</b>
+        &lt;{{ app.sent.to }}&gt; o {{ app.getSentDate("H'<sup>'mm'</sup>', d MMM YYYY")|raw }}.</b>
     {% else %} {# API #}
     <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }}
-        o {{ app.getSentDate("k'<sup>'mm'</sup>', d MMM YYYY")|raw }} poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest
+        o {{ app.getSentDate("H'<sup>'mm'</sup>', d MMM YYYY")|raw }} poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest
         dla {{ app.guessSMData.getShortName }} w następującej postaci:</b>
     <cite>{% include('_application.txt.twig') %}</cite>
     {% endif %}
