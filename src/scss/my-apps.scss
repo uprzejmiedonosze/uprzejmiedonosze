@@ -29,7 +29,99 @@ div.application-short {
     font-weight: 100;
   }
 
-  &.draft h3 .ui-btn-icon-right:after,
+  h3 {
+    border-bottom: none;
+
+    a.ui-btn:focus {
+      box-shadow: none;
+    }
+
+    a.ui-btn {
+      //padding: 0.5em; @TODO
+    }
+
+    a {
+      font-weight: 100;
+    }
+    .top-line, .bottom-line {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      align-content: stretch;
+    }
+
+    .top-line {
+      font-size: 11pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding-bottom: 3px;
+
+      .calendar::before {
+        @extend %icon;
+        background-image: url($date-icon);
+      }
+
+      .status-dot::before {
+        @extend %icon;
+        border-radius: 7px;
+      }
+
+
+    }
+
+    .bottom-line {
+      div {
+        flex-shrink: 1;
+        flex-basis: auto;
+        align-self: auto;
+        order: 0;
+      }
+      .address {
+        flex-grow: 1;
+        max-width: calc(100% - 23px);
+        overflow: hidden;
+        height: 32px;
+        font-size: 130%;
+      }
+      .expander {
+        flex-grow: 0;
+        position: relative;
+        &:after {
+          @extend %icon;
+          top: 15px;
+          background-image: url($chevron-icon);
+          transition: transform 0.5s;
+        }
+      }
+    }
+  }
+
+  .ui-collapsible-content {
+    border-width: 0 1px;
+    border-style: solid;
+    border-color: #ddd;
+  }
+
+  &:not(.ui-collapsible-collapsed) {
+    border-bottom: 0;
+    h3 {
+      a {
+        background-color: white;
+        border-bottom: 0;
+      }
+    }
+  }
+
+  &.ui-collapsible-collapsed {
+    h3 .bottom-line .expander:after {
+      transform: rotate(180deg);
+      transition: transform 0s;
+    }
+  }
+
+  &.draft h3 .status-dot::before,
   .draft:after,
   .draft::marker {
     background-color: #7463634d;
