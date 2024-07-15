@@ -29,7 +29,9 @@
         "plaintext",
         "arduino-output",
         "twig",
-        "json"
+        "json",
+        "html",
+        "php"
     ],
     "spellright.parserByClass": {
         "arduino-output": {
