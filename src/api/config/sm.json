@@ -1684,6 +1684,9 @@
   "gmina Komorniki": {
     "parent": "Komorniki"
   },
+  "Plewiska": {
+    "parent": "Komorniki"
+  },
   "Puck": {
     "address": [
       "Straż Miejska Puck",
