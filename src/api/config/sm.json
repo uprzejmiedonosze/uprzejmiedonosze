@@ -2806,5 +2806,13 @@
   },
   "gmina Ostrołęka": {
     "parent": "Ostrołęka"
+  },
+  "Starogard Gdański": {
+    "address": [
+      "Straż Miejska Starogard Gdański",
+		  "ul. Kolejowa 5a",
+		  "83-200 Starogard Gdański"
+    ],
+    "email": "straz.miejska@um.starogard.pl"
   }
 }
