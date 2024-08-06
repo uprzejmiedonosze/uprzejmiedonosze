@@ -207,7 +207,7 @@ $(EXPORT)/patronite/%.csv: $(EXPORT)/patronite
 		-H "Content-Type: application/json" \
 		"https://patronite.pl/author-api/patrons/$*?with_notes=yes" \
 		| jq -r '.results[] | .note' | tr "," "\n" \
-		| grep -v null | sort | uniq > $@
+		| grep -v null | sort -n | uniq > $@
 
 src/api/config/patronite.json: $(EXPORT)/patronite/active.csv $(EXPORT)/patronite/inactive.csv
 	@jq -n '{active:$$active, inactive:$$inactive}' \
