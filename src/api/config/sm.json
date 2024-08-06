@@ -2814,5 +2814,21 @@
 		  "83-200 Starogard Gdański"
     ],
     "email": "straz.miejska@um.starogard.pl"
+  },
+  "Dębno": {
+    "address": [
+      "Straż Miejska Dębno",
+		  "ul. Piłsudskiego 5",
+		  "74-400 Dębno"
+    ],
+    "email": "sm@debno.pl"
+  },
+  "Zakopane": {
+    "address": [
+      "Straż Miejska Zakopane",
+		  "ul. Tadeusza Kościuszki 13",
+		  "34-500 Zakopane"
+    ],
+    "email": "sm@zakopane.eu"
   }
 }
