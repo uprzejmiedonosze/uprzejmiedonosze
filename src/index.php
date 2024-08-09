@@ -142,6 +142,9 @@ $app->group('', function (RouteCollectorProxy $group) { // sessionless pages
 
     $group->get('/{route}.html', StaticPagesHandler::class . ':default');
 
+    $group->get('/apple-touch-icon.png', function () { return AbstractHandler::redirect('/img/apple-touch-icon.png'); });
+    $group->get('/apple-touch-icon-precomposed.png', function () { return AbstractHandler::redirect('/img/apple-touch-icon.png'); });
+
     $group->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request) {
         $path = $request->getUri()->getPath();
         logger("404 $path", true);
