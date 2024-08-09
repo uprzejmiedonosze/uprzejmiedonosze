@@ -12,7 +12,7 @@
 
 
     .patronite-button {
-        @media (max-width: 40em) {
+        @media (max-width: $width-break) {
             bottom: 5px;
         }
 

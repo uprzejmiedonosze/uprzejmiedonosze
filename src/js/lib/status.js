@@ -52,13 +52,13 @@ export function updateStatus(appId, status) {
 }
 
 export function updateCounters() {
-  $(".status-filter a").each(function (_idx, item) {
-    const count = $("div.application." + item.id).length;
-    item.children[0].innerText = count;
+  $(".status-filter li").each(function (_idx, item) {
+    const count = $("div.application." + item.children[0].id).length;
+    item.children[1].innerText = count;
     if (count == 0) {
-      $(item).parent().hide();
+      $(item).hide();
     } else {
-      $(item).parent().show();
+      $(item).show();
     }
   });
 

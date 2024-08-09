@@ -8,7 +8,7 @@ $datetime-icon: "../img/icons/datetime.svg";
 $home-icon: "../img/icons/home.svg";
 $info-icon: "../img/icons/info.svg";
 $menu-icon: "../img/icons/menu.svg";
-$new-icon: "../img/icons/new-app.svg";
+$description-icon: "../img/icons/description.svg";
 $pin-icon: "../img/icons/pin.svg";
 $search-icon: "../img/icons/search.svg";
 
@@ -20,4 +20,10 @@ $search-icon: "../img/icons/search.svg";
     position: relative;
     background-size: contain;
     top: 1px;
+}
+
+%list-icon {
+    &::marker {
+        font-size: 2rem;
+    }
 }

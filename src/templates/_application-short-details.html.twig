@@ -2,7 +2,7 @@
 {% set recydywa = '' %}
 {% if recydywaCnt > 1 %}
 {% set wrappedPlateId = "'" ~ app.carInfo.plateId ~ "'" %}
-{% set recydywa = ' 🚨 <a href="#" onclick="window._recydywa(' ~ wrappedPlateId  ~ ')"><sup>recydywa#' ~ recydywaCnt ~ '</sup></a>' %}
+{% set recydywa = 'recydywa #' ~ recydywaCnt ~ ' <a href="#" onclick="window._recydywa(' ~ wrappedPlateId  ~ ')">(zobacz pozostałe)</a>' %}
 {% endif %}
 
 {% set status = app.getStatus %}
@@ -10,59 +10,46 @@
 
 <div class="images-slider">
     <div class="imageContainer">
-        <div class="loader"></div>
         <a target="_blank" href="/ud-{{ app.id }}.html">
             <img src="{{ app.contextImage.thumb }}?v={{ app.getRevision }}">
         </a>
     </div>
     <div class="imageContainer">
-        <div class="loader"></div>
         <a target="_blank" href="/ud-{{ app.id }}.html">
             <img src="{{ app.carImage.thumb }}?v={{ app.getRevision }}">
         </a>
     </div>
 </div>
 <ul class="application-details-list">
-    <li class="calendar"><b>{{ app.getDate("k'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</b></li>
-    <li class="plate-id"><span class="plate-id">{{ app.carInfo.plateId }}</span>{{ recydywa|raw }}</li>
-    <li class="address"><a href="{{ app.getMapUrl }}" data-ajax="false" target="_blank" rel="external">{{ app.address.address }}</a></li>
-    <li class="description"><b>{{ app.getCategory.formal }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
-    <li class="witness">
-        {% if app.statements is not defined or not app.statements.witness %}
-        <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
-        {% else %}
-        <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.</p>
-        {% endif %}
-    </li>
-</ul>
-
-<ul class="application-details-list">
-    <li class="status {{app.status}}"><b class="currentStatus">{{ status.name }}</b>
+    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b>
         {% if appActionButtons %}
-            <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none" aria-haspopup="true" aria-owns="changeStatus{{ app.id }}" aria-expanded="false" class="ui-link">
-                (zmień status)
+            <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none" aria-haspopup="true"
+                aria-owns="changeStatus{{ app.id }}" aria-expanded="false"
+                data-inline="true" data-mini="true"
+                class="ui-link change-status ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini">
+                {{ status.name|upper }} <u>zmień</u>
             </a>
             <div style="display: none;"><!-- placeholder for pre-rendered --></div>
         {% endif %}
+
     </li>
-    {% if app.wasSent %}
-        <li class="sent-to">Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
-            o {{ app.getSentDate("H'<sup>'mm'</sup>', d MMM YYYY")|raw }}</li>
-    {% elseif sendable %}
+
+    <li class="address">{{ app.address.address }}</li>
+    {% if sendable %}
         <li class="send">
             {% if app.automatedSM and (autoSend ?? false) %}
                 <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
-                   class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini cta ui-icon-{{ statuses['confirmed-waiting'].icon }} confirmed-waiting">
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini cta ui-icon-{{ statuses['confirmed-waiting'].icon }} confirmed-waiting">
                     Wyślij do {{ app.guessSMData.getShortName }}
                 </a>
             {% elseif app.unknownSM %}
                 <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
-                   class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail cta confirmed-waiting">
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail cta confirmed-waiting">
                     Wyślij zgłoszenie
                 </a>
             {% elseif wysylka is not defined %}
                 <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
-                   class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail confirmed-waiting cta">
+                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail confirmed-waiting cta">
                     Wyślij zgłoszenie
                 </a>
             {% endif %}
@@ -71,13 +58,32 @@
             {% endif %}
         </li>
     {% endif %}
+
+    <li class="plate-id {% if recydywaCnt > 1 %}recydywa{% endif %}"><span class="plate-id light">{{ app.carInfo.plateId }}</span> {{ recydywa|raw }}</li>
+
+    <li class="description"><b>TREŚĆ ZGŁOSZENIA</b><br>{{ app.getCategory.formal }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
+    <li class="info-icon"><b>INFORMACJE DODATKOWE</b><br>
+        {% if app.statements is not defined or not app.statements.witness %}
+        <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
+        {% else %}
+        <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.
+        {% endif %}
+        {% if app.wasSent %}
+        <br>
+        Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
+            {{ app.getSentDate("d MMMM YYYY 'o' H:mm")|raw }}
+        {% endif %}
+    </li>
+</ul>
+
+<ul class="application-details-list">
     {% if app.wasSent %}
-        <li class="external-id">
-            <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="Nr sprawy, np. RSOW 0000/24, ew. L. Dz. WP - 000/24" value="{{ app.externalId }}">
+        <li class="external-id">NUMER SPRAWY SM/Policji<br>
+        <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="RSOW 0000/24 / WP 000/24" value="{{ app.externalId }}">
         </li>
     {% endif %}
-    <li class="private-comment">
-        <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="Miejsce na twoje prywatne uwagi">{{ app.privateComment }}</textarea>
+    <li class="private-comment">UWAGI (widoczne tylko dla Ciebie)<br>
+        <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="">{{ app.privateComment }}</textarea>
     </li>
 
 </ul>

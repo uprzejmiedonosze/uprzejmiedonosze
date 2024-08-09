@@ -5,6 +5,15 @@
     display: none;
   }
 
+  .map-container {
+    min-height: 200px;
+    .mapImage {
+      top: 0;
+      height: auto;
+      width: 100%;
+    }
+  }
+
   .plate-box {
     background-color: transparent;
     border: 5px solid #e9c200;

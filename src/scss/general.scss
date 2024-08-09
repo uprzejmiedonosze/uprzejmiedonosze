@@ -184,7 +184,7 @@ a[rel~="external"] {
     display: none;
 }
 
-@media (max-width: 40em) {
+@media (max-width: $width-break) {
     .hideOnMobile {
         display: none;   
     }
@@ -300,3 +300,7 @@ h3.introHeader {
 :target {
     scroll-margin-top: 45px;
 }
+
+sup {
+    font-size: 70%;
+  }

@@ -27,12 +27,12 @@
     {% endif %}
 
     <form autocomplete="off">
-        <input autocomplete="false" data-type="search" id="autocomplete-input"
-            placeholder="szukaj po adresie, numerze rejestracyjnym lub zgłoszenia, dacie lub komentarzu" value="{{ query }}">
+        <input autocomplete="false" data-type="search" id="autocomplete-input" data-iconpos="right"
+            placeholder="Adres, numer rej. lub zgłoszenia, data, komentarz" value="{{ query }}">
         <ul class="status-filter">
         {% for key,val in statuses %}
             {% if val.class %} {# class is empty, this is a draft or ready #}
-                <li data-icon="{{ val.icon }}"class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|lower }} <span class="ui-li-count"></span></a></li>
+                <li class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|upper }}</a> <span class="ui-li-count"></span></li>
             {% endif %}
         {% endfor %}
         </ul>

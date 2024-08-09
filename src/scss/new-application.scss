@@ -53,23 +53,11 @@ div.error img {
 
 
 
-::-webkit-input-placeholder {
-  /* WebKit browsers */
-  text-transform: none;
-}
-
-:-moz-placeholder {
-  /* Mozilla Firefox 4 to 18 */
-  text-transform: none;
-}
-
-::-moz-placeholder {
-  /* Mozilla Firefox 19+ */
-  text-transform: none;
-}
-
+::-webkit-input-placeholder,
+:-moz-placeholder,
+::-moz-placeholder,
 :-ms-input-placeholder {
-  /* Internet Explorer 10+ */
+  /* WebKit browsers */
   text-transform: none;
 }
 
@@ -78,35 +66,62 @@ div.ui-block-b>div.ui-radio {
   margin: 3px;
 }
 
-p.pictureHint {
-  z-index: 2;
-  bottom: 0px;
-  position: absolute;
-  text-shadow: none;
-  color: white;
-  padding: 3px;
-  display: none;
-  margin-right: 0.4em;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 0.3em;
-  font-size: 90%;
-}
-
 .ui-popup-container .category-law {
   text-decoration: italic;
   color: #999;
 }
 
-.price-list {
-  font-size: 80%;
-  font-weight: 400;
-  margin: 0;
-  text-transform: uppercase;
-  max-width: 70%;
-}
-
-
 .new-application {
+
+  .imageContainer {
+    background: #eee;
+    border-radius: .8em;
+    height: 200px;
+    padding: .4em;
+    overflow: hidden;
+
+    img {
+      object-fit: cover;
+      object-position: 50% 50%;
+      border-radius: .8em;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  .plate {
+    position: relative;
+  
+    img#plateImage {
+      position: absolute;
+      top: 0em;
+      left: 11em;
+    }
+  }
+  
+  .price-list {
+    font-size: 80%;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+    max-width: 70%;
+  }
+
+  p.pictureHint {
+    z-index: 2;
+    bottom: 0px;
+    position: absolute;
+    text-shadow: none;
+    color: white;
+    padding: 3px;
+    display: none;
+    margin-right: 0.4em;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0.3em;
+    font-size: 90%;
+  }
+
   div.datetime {
     max-width: 15em;
 
@@ -205,24 +220,38 @@ p.pictureHint {
     }
   }
 
-  #category .points-badge {
-    position: absolute;
-    text-align: center;
-    border-radius: 50%;
-    color: white;
-    height: 22px;
-    font-size: 16px;
-    left: 4px;
-    background: red;
-    top: 4px;
-    width: 22px;
-  }
-
-  #category img {
-    width: 100px;
-    height: 100px;
-    background-color: grey;
-    border-radius: 0.8em;
+  #category {
+    .points-badge {
+      position: absolute;
+      text-align: center;
+      border-radius: 50%;
+      color: white;
+      height: 22px;
+      font-size: 16px;
+      left: 4px;
+      background: red;
+      top: 4px;
+      width: 22px;
+    }
+  
+    img {
+      width: 100px;
+      height: 100px;
+      background-color: grey;
+      border-radius: 0.8em;
+    }
+    label div {
+      .category-title {
+        margin-top: 0;
+        font-weight: 600;
+        width: 90%;
+      }
+  
+      .category-short {
+        font-size: 90%;
+        margin-top: 0;
+      }
+    }
   }
 
   #category label,
@@ -245,18 +274,6 @@ p.pictureHint {
     vertical-align: top;
   }
 
-  #category label div {
-    .category-title {
-      margin-top: 0;
-      font-weight: 600;
-      width: 90%;
-    }
-    .category-short {
-      font-size: 90%;
-      margin-top: 0;
-    }    
-  }
-
   #category label p,
   #extensions label p {
     padding: 0 1em;
@@ -266,7 +283,7 @@ p.pictureHint {
   .combo {
     margin-top: 1.5em;
     height: 50px;
-    
+
     .ui-disabled {
       opacity: .5;
     }
@@ -289,7 +306,7 @@ p.pictureHint {
   #smInfoHint {
     font-size: 90%;
     padding: 1em;
-    
+
     a {
       font-weight: 300;
       text-decoration: none;
@@ -354,7 +371,9 @@ p.pictureHint {
 }
 
 div.loader {
-  margin: 30px auto;
+  position: absolute;
+  z-index: -1;
+  margin: 50px calc(50% - 25px);
   border: 16px solid #f3f3f3;
   /* Light grey */
   border-top: 16px solid #009C7F;
@@ -390,7 +409,7 @@ div.loader.l {
 }
 
 
-@media (max-width: 40em) {
+@media (max-width: $width-break) {
 
   #category.ui-responsive>.ui-block-a,
   #category.ui-responsive>.ui-block-b,

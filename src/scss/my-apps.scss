@@ -1,208 +1,423 @@
-div.application-short.archived h3 a {
-  font-weight: 300;
-}
-
-.appActionButtons a.ui-btn {
-  font-weight: 400;
-}
-
-div.application-short.archived {
-  display: none;
-}
-
-div.application-short h3 a {
-  font-size: 14px;
-}
-
-@media only screen and (min-width: 35em) {
-  div.application-short h3 a {
-    font-size: 16px;
-  }
-}
-
-.ui-collapsible-inset.ui-collapsible-themed-content .ui-collapsible-content  {
-  border-color: #ddd;
-  border-top: 0;
-  border-style: solid;
-}
-
-
-div.application-short {
-  &.ui-collapsible.ui-corner-all {
-    margin-bottom: 0.5em;
-    border-radius: 0.8em;
-  }
-
-  h3 {
-    border-bottom: none;
-
-    a.ui-btn:focus {
-      box-shadow: none;
-    }
-
-    a.ui-btn {
-      padding: 0.5em;
-    }
-
-    a {
-      font-weight: 100;
-    }
-    .top-line, .bottom-line {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: flex-start;
-      align-content: stretch;
-    }
-
-    .top-line {
-      font-size: 11pt;
-      font-weight: 600;
-      text-transform: uppercase;
-      padding-bottom: 3px;
-
-      .calendar::before {
-        @extend %icon;
-        background-image: url($date-icon);
-      }
-
-      .status-dot::before {
-        @extend %icon;
-        border-radius: 7px;
-      }
-
-
-    }
-
-    .bottom-line {
-      div {
-        flex-shrink: 1;
-        flex-basis: auto;
-        align-self: auto;
-        order: 0;
-      }
-      .address {
-        flex-grow: 1;
-        max-width: calc(100% - 23px);
-        overflow: hidden;
-        height: 32px;
-        font-size: 130%;
-      }
-      .expander {
-        flex-grow: 0;
-        position: relative;
-        &:after {
-          @extend %icon;
-          top: 15px;
-          background-image: url($chevron-icon);
-          transition: transform 0.5s;
-        }
-      }
-    }
-  }
-
-  &:not(.ui-collapsible-collapsed) {
-    border-bottom: 0;
-    h3 {
-      a {
-        background-color: white;
-        border-bottom: 0;
-      }
-    }
-  }
-
-  &.ui-collapsible-collapsed {
-    h3 .bottom-line .expander:after {
-      transform: rotate(180deg);
-      transition: transform 0s;
-    }
-  }
-
-  &.draft h3 .status-dot::before,
-  .draft:after,
-  .draft::marker {
-    background-color: $draft;
-  }
-
-  &.ready h3 .status-dot::before,
-  .ready:after,
-  .ready::marker {
-    background-color: $ready;
-  }
-
-  &.confirmed h3 .status-dot::before,
-  .confirmed:after,
-  .confirmed::marker {
-    background-color: $confirmed;
-  }
-
-  .confirmed h3 a {
-    font-weight: 700;
-  }
-
-  &.confirmed-waiting h3 .status-dot::before,
-  .confirmed-waiting:after,
-  .confirmed-waiting::marker,
-  &.confirmed-waitingE h3 .status-dot::before,
-  .confirmed-waitingE:after,
-  .confirmed-waiting::marker {
-    background-color: $confirmed-waiting;
-  }
-
-  &.confirmed-sm h3 .status-dot::before,
-  .confirmed-sm:after,
-  .confirmed-sm::marker {
-    background-color: $confirmed-sm;
-  }
-
-  &.confirmed-fined h3 .status-dot::before,
-  .confirmed-fined:after,
-  .confirmed-fined::marker {
-    background-color: $confirmed-fined;
-  }
-
-  &.confirmed-ignored h3 .status-dot::before,
-  .confirmed-ignored:after,
-  .confirmed-ignored::marker {
-    background-color: $confirmed-ignored;
-  }
-
-  &.confirmed-instructed h3 .status-dot::before,
-  .confirmed-instructed:after,
-  .confirmed-instructed::marker {
-    background-color: $confirmed-instructed;
-  }
-
-  &.archived h3 .status-dot::before,
-  .archived:after,
-  .archived::marker {
-    background-color: $archived;
-  }
-}
-
-
 .my-applications {
   ul.status-filter {
     padding-inline-start: 0;
     columns: 2;
-    list-style-position: inside;
+    list-style: none;
+    padding-top: 9px;
 
     li {
       display: none;
-      padding-top: 9px;
-
+      text-wrap: nowrap;
       a.active {
         color: #009C7F !important;
       }
 
       a {
         color: #666 !important;
+        overflow: hidden;
+        max-width: calc(100% - 2em);
+        display: inline-flex;
+        margin-right: 0.5em;
       }
 
       .ui-li-count {
         position: unset;
+        border: none;
+        text-shadow: none;
+        color: black;
       }
+
+      &.archived .ui-li-count {
+        background-color: $archived;
+      }
+      &.confirmed .ui-li-count {
+        background-color: $confirmed;
+      }
+      &.confirmed-fined .ui-li-count {
+        background-color: $confirmed-fined;
+      }
+      &.confirmed-ignored .ui-li-count {
+        background-color: $confirmed-ignored;
+        color: white;
+      }
+      &.confirmed-instructed .ui-li-count {
+        background-color: $confirmed-instructed;
+        color: white;
+      }
+      &.confirmed-sm .ui-li-count {
+        background-color: $confirmed-sm;
+      }
+      &.confirmed-waitingE .ui-li-count,
+      &.confirmed-waiting .ui-li-count {
+        background-color: $confirmed-waiting;
+      }
+      &.draft .ui-li-count {
+        background-color: $draft;
+      }
+      &.ready .ui-li-count {
+        background-color: $ready;
+      }
+    }
+  }
+
+  @media (min-width: $width-break) {
+    div.application-short h3 a {
+      font-size: 16px;
+    }
+
+    ul.status-filter {
+      columns: 3 !important;
+      -webkit-columns: 3;
+      -moz-columns: 3;
+    }
+  }
+
+  .images-slider {
+    columns: 2;
+    height: 280px;
+
+    .imageContainer {
+      background: #eee;
+      height: 280px;
+      position: relative;
+      box-sizing: border-box;
+
+      img {
+        position: absolute;
+        object-fit: cover;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        display: block;
+        height: 280px;
+      }
+
+      &+& {
+        margin-left: 16px;
+      }
+    }
+  }
+
+  @media (max-width: $width-break) {
+
+    .images-slider {
+      text-align: left;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      display: flex;
+      column-gap: 10px;
+      box-sizing: border-box;
+      height: 280px;
+
+      .imageContainer {
+        flex: 0 0 calc(100% - 64px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        scroll-snap-align: start;
+        position: relative;
+        background: #eee;
+        overflow: hidden;
+        height: 280px;
+
+        img {
+          position: absolute;
+          object-fit: cover;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+
+          width: 100%;
+          display: block;
+          min-height: 280px;
+          min-width: 100%;
+        }
+
+        &+& {
+          margin-left: 16px;
+        }
+      }
+    }
+  }
+
+
+  ul.application-details-list {
+    padding-inline-start: 2em;
+
+    &>li.calendar {
+      @extend %list-icon;
+      list-style-image: url($datetime-icon);
+    }
+
+    &>li.plate-id {
+      list-style-image: url(data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22iso-8859-1%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20%20width%3D%2214px%22%20height%3D%2214px%22%20viewBox%3D%220%200%2014%2014%22%20style%3D%22enable-background%3Anew%200%200%2014%2014%3B%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M5%2C0H0v5l9%2C9l5-5L5%2C0z%20M3%2C4C2.447%2C4%2C2%2C3.553%2C2%2C3s0.447-1%2C1-1s1%2C0.447%2C1%2C1S3.553%2C4%2C3%2C4z%22%2F%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3Cg%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+
+      &.recydywa {
+        list-style: '🚨 ';
+      }
+    }
+
+    &>li.address {
+      @extend %list-icon;
+      list-style-image: url($pin-icon);
+    }
+
+    &>li.send {
+      list-style: '✉️';
+    }
+
+    &>li.description {
+      @extend %list-icon;
+      list-style-image: url($description-icon);
+    }
+
+    &>li.witness {
+      @extend %list-icon;
+      list-style-image: url("data:image/svg+xml;charset=US-ASCII,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22iso-8859-1%22%3F%3E%3C!DOCTYPE%20svg%20PUBLIC%20%22-%2F%2FW3C%2F%2FDTD%20SVG%201.1%2F%2FEN%22%20%22http%3A%2F%2Fwww.w3.org%2FGraphics%2FSVG%2F1.1%2FDTD%2Fsvg11.dtd%22%3E%3Csvg%20version%3D%221.1%22%20id%3D%22Layer_1%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%20%20width%3D%2214px%22%20height%3D%2214px%22%20viewBox%3D%220%200%2014%2014%22%20style%3D%22enable-background%3Anew%200%200%2014%2014%3B%22%20xml%3Aspace%3D%22preserve%22%3E%3Cpath%20style%3D%22fill%3A%23999%3B%22%20d%3D%22M7%2C2C3%2C2%2C0%2C7%2C0%2C7s3%2C5%2C7%2C5s7-5%2C7-5S11%2C2%2C7%2C2z%20M7%2C10c-1.657%2C0-3-1.344-3-3c0-1.657%2C1.343-3%2C3-3%20s3%2C1.343%2C3%2C3C10%2C8.656%2C8.657%2C10%2C7%2C10z%20M7%2C6C6.448%2C6%2C6%2C6.447%2C6%2C7c0%2C0.553%2C0.448%2C1%2C1%2C1s1-0.447%2C1-1C8%2C6.447%2C7.552%2C6%2C7%2C6z%22%2F%3E%3C%2Fsvg%3E");
+    }
+
+    &>li.info-icon {
+      @extend %list-icon;
+      list-style-image: url($info-icon);
+    }
+
+    &>li.external-id,
+    &>li.private-comment {
+      list-style: none;
+    }
+
+    &>li.external-id input {
+      text-transform: uppercase;
+    }
+
+    &>li.private-comment textarea,
+    &>li.external-id input {
+      border: 1px solid #999;
+      width: calc(100% - 2em);
+      vertical-align: top;
+
+      &:hover {
+        border: 1px solid black;
+      }
+
+      &[readonly] {
+        color: #ccc;
+      }
+
+      &.error {
+        border: 2px solid red !important;
+      }
+    }
+  }
+
+
+  .change-status {
+    color: black !important;
+    text-shadow: none;
+    font-weight: 600 !important;
+    border-radius: 20px;
+    margin-left: 1em;
+    &:hover {
+      text-shadow: none;
+    }
+
+    &:after {
+      background-image: url($chevron-icon);
+    }
+  }
+
+  .appActionButtons a.ui-btn {
+    font-weight: 400;
+  }
+
+  .ui-collapsible-inset.ui-collapsible-themed-content .ui-collapsible-content {
+    border-color: #ddd;
+    border-top: 0;
+    border-style: solid;
+    padding: 0;
+  }
+
+  .ui-input-has-clear {
+    padding-right: 0 !important;
+
+    input {
+      border-radius: 5px !important;
+    }
+  }
+
+
+  div.application-short {
+
+    &.archived {
+      display: none;
+    }
+
+    &.ui-collapsible.ui-corner-all {
+      margin-bottom: 0.5em;
+      border-radius: 0.8em;
+    }
+
+    h3 {
+      border-bottom: none;
+
+      a.ui-btn:focus {
+        box-shadow: none;
+      }
+
+      a.ui-btn {
+        padding: 0.5em;
+      }
+
+      a {
+        font-weight: 100;
+        font-size: 14px;
+      }
+
+      .top-line,
+      .bottom-line {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        align-content: stretch;
+      }
+
+      .top-line {
+        font-weight: 600;
+        text-transform: uppercase;
+        padding-bottom: 3px;
+
+        .status-dot::before {
+          @extend %icon;
+          border-radius: 7px;
+        }
+      }
+
+      .bottom-line {
+        div {
+          flex-shrink: 1;
+          flex-basis: auto;
+          align-self: auto;
+          order: 0;
+        }
+
+        .address {
+          flex-grow: 1;
+          max-width: calc(100% - 23px);
+          overflow: hidden;
+          height: 32px;
+          font-size: 150%;
+
+          .short-address {
+            vertical-align: sub;
+          }
+        }
+
+        .expander {
+          flex-grow: 0;
+          position: relative;
+
+          &:after {
+            @extend %icon;
+            top: 15px;
+            background-image: url($chevron-icon);
+            transition: transform 0.5s;
+          }
+        }
+      }
+    }
+
+    &:not(.ui-collapsible-collapsed) {
+      border-bottom: 0;
+
+      h3 {
+        a {
+          background-color: white;
+          border-bottom: 0;
+        }
+      }
+    }
+
+    &.ui-collapsible-collapsed {
+      h3 .bottom-line .expander:after {
+        transform: rotate(180deg);
+        transition: transform 0s;
+      }
+    }
+
+    &.draft h3 .status-dot::before,
+    &.draft .change-status,
+    .draft:after,
+    .draft::marker {
+      background-color: $draft;
+    }
+
+    &.ready h3 .status-dot::before,
+    &.ready .change-status,
+    .ready:after,
+    .ready::marker {
+      background-color: $ready;
+    }
+
+    &.confirmed h3 .status-dot::before,
+    &.confirmed .change-status,
+    .confirmed:after,
+    .confirmed::marker {
+      background-color: $confirmed;
+    }
+
+    .confirmed h3 a {
+      font-weight: 700;
+    }
+
+    &.confirmed-waiting h3 .status-dot::before,
+    &.confirmed-waiting .change-status,
+    .confirmed-waiting:after,
+    .confirmed-waiting::marker,
+    &.confirmed-waitingE h3 .status-dot::before,
+    &.confirmed-waitingE .change-status,
+    .confirmed-waitingE:after,
+    .confirmed-waiting::marker {
+      background-color: $confirmed-waiting;
+    }
+
+    &.confirmed-sm h3 .status-dot::before,
+    &.confirmed-sm .change-status,
+    .confirmed-sm:after,
+    .confirmed-sm::marker {
+      background-color: $confirmed-sm;
+    }
+
+    &.confirmed-fined h3 .status-dot::before,
+    &.confirmed-fined .change-status,
+    .confirmed-fined:after,
+    .confirmed-fined::marker {
+      background-color: $confirmed-fined;
+    }
+
+    &.confirmed-ignored h3 .status-dot::before,
+    &.confirmed-ignored .change-status,
+    .confirmed-ignored:after,
+    .confirmed-ignored::marker {
+      background-color: $confirmed-ignored;
+      color: white!important;
+    }
+
+    &.confirmed-instructed h3 .status-dot::before,
+    &.confirmed-instructed .change-status,
+    .confirmed-instructed:after,
+    .confirmed-instructed::marker {
+      background-color: $confirmed-instructed;
+      color: white!important;
+    }
+
+    &.archived h3 .status-dot::before,
+    &.archived .change-status,
+    .archived:after,
+    .archived::marker {
+      background-color: $archived;
     }
   }
 }
