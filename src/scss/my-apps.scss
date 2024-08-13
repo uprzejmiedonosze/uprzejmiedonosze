@@ -61,10 +61,6 @@
   }
 
   @media (min-width: $width-break) {
-    div.application-short h3 a {
-      font-size: 16px;
-    }
-
     ul.status-filter {
       columns: 3 !important;
       -webkit-columns: 3;
@@ -74,6 +70,10 @@
 
   ul.application-details-list {
     padding-inline-start: 2em;
+
+    &>li {
+      min-height: 30px;
+    }
 
     tt {
       font-weight: 600;
@@ -253,6 +253,9 @@
           overflow: hidden;
           height: 32px;
           font-size: 150%;
+          @media (max-width: $width-break) {
+            font-size: 130%;
+          }
         }
 
         .expander {
