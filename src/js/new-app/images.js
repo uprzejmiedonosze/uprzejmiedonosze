@@ -11,57 +11,63 @@ import { showError } from "../lib/showMessage";
 var uploadInProgress = 0;
 
 export async function checkFile(file, id) {
-  if (file) {
-    uploadStarted(id);
-    if (!/^image\//i.test(file.type)) {
-      console.error(file.type)
-      return imageError(id, `Zdjęcie o niepoprawnym type ${file.type}`);
-    }
+  if (!file) return
 
-    const imageToResize = document.createElement('img')
-
-    imageToResize.src = await imageToDataUri(file)
-    imageToResize.addEventListener("load", async () => {
-      try {
-        const resizedImage = resizeImage(imageToResize)
-        $(`#${id}Preview`)
-          .css('opacity', 0.3)
-          .attr('src', resizedImage)
-
-        if (id === "carImage") {
-          const exif = await ExifReader.load(file)
-          const [lat, lng] = readGeoDataFromExif(exif)
-          let dateTime = getDateTimeFromExif(exif)
-
-          dateTime = setDateTime(dateTime, !!dateTime)
-          if (lat) setAddressByLatLng(lat, lng, "picture")
-          else noGeoDataInImage()
-
-          $("#plateImage").attr("src", "");
-          $("#plateImage").hide();
-          await sendFile(resizedImage, id, {
-            dateTime,
-            dtFromPicture: !!dateTime,
-            latLng: `${lat},${lng}`
-          });
-        } else {
-          await sendFile(resizedImage, id);
-        }
-
-      } catch (err) {
-        imageError(id, err.message);
-        Sentry.captureException(err, {
-          extra: Object.prototype.toString.call(file)
-        });
-      }
-    })
+  uploadStarted(id);
+  if (!/^image\//i.test(file.type)) {
+    console.error(file.type)
+    return imageError(id, `Zdjęcie o niepoprawnym type ${file.type}`);
   }
+
+  const imageToResize = document.createElement('img')
+
+  imageToResize.src = await imageToDataUri(file)
+  imageToResize.addEventListener("load", async () => {
+    try {
+      const resizedImage = resizeImage(imageToResize)
+      $(`#${id}Preview`)
+        .css('opacity', 0.3)
+        .attr('src', resizedImage)
+
+      if (id === "carImage") {
+        const exif = await ExifReader.load(file)
+        const [lat, lng] = readGeoDataFromExif(exif)
+        let dateTime = getDateTimeFromExif(exif)
+
+        dateTime = setDateTime(dateTime, !!dateTime)
+        if (lat) setAddressByLatLng(lat, lng, "picture")
+        else noGeoDataInImage()
+
+        $("#plateImage").attr("src", "");
+        $("#plateImage").hide();
+        await sendFile(resizedImage, id, {
+          dateTime,
+          dtFromPicture: !!dateTime,
+          latLng: `${lat},${lng}`
+        });
+      } else {
+        await sendFile(resizedImage, id);
+      }
+
+    } catch (err) {
+      imageError(id, err.message);
+      Sentry.captureException(err, {
+        extra: Object.prototype.toString.call(file)
+      });
+    }
+  })
+
 }
 
 function uploadStarted(id) {
   $(`.${id}Section`).removeClass("error");
   $(`.${id}Section img`).hide();
-  $(`.${id}Section .loader`).show().addClass("l");;
+  $(`.${id}Section .loader`).show().addClass("l");
+  if (id == "carImage") {
+    $("#recydywa").hide()
+    $("#plateId").removeClass()
+    $('.plate-box').hide()
+  }
   uploadInProgress++;
   checkUploadInProgress();
 }
@@ -177,19 +183,20 @@ function noGeoDataInImage() {
 }
 
 export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
-  if(!vehicleBox.width) return
+  if (!vehicleBox.width) return
   const boxWidth = $('.carImageSection').width()
   const boxHeight = $('.carImageSection').height()
   const ratio = boxWidth / imageWidth
   $('img#carImagePreview').css('object-position', `50% -${vehicleBox.y * ratio}px`)
   $('img#carImagePreview').css("height", "100%")
-  
-  $('.plate-box').css('left', 100*vehicleBox.x/imageWidth + '%')
-  $('.plate-box').css('width', 100*vehicleBox.width/imageWidth + '%')
+
+  $('.plate-box').css('left', 100 * vehicleBox.x / imageWidth + '%')
+  $('.plate-box').css('width', 100 * vehicleBox.width / imageWidth + '%')
 
   $('.plate-box').css('top', '10px')
   $('.plate-box').css('height', 100 * vehicleBox.height * ratio / boxHeight + '%')
   $('.plate-box').css('border', '2px solid #e9c200')
+  $('.plate-box').show()
 }
 
 
@@ -204,16 +211,13 @@ async function sendFile(fileData, id, imageMetadata) {
     imageMetadata.dateTime && (data.dateTime = imageMetadata.dateTime)
     imageMetadata.dtFromPicture && (data.dtFromPicture = imageMetadata.dtFromPicture)
     imageMetadata.latLng && (data.latLng = imageMetadata.latLng)
-
-    $("#recydywa").hide();
-    $("#plateId").removeClass();
   }
 
   try {
     const api = new Api(`/api/app/${appId}/image`)
     const app = await api.post(data)
     if (app.carImage || app.contextImage) {
-      $(`.${id}Section .loader`).removeClass("l").hide()
+      $(`.${id}Section .loader`).removeClass("l")
       $(`#${id}Preview`)
         .css("height", "100%")
         .css("opacity", 1)
@@ -221,11 +225,11 @@ async function sendFile(fileData, id, imageMetadata) {
     }
     if (id == "carImage" && app.carInfo) {
       $('.plate-box').css('border', 'none')
-      
+
       if (app.carInfo.plateId) {
         $("#plateId").val(app.carInfo.plateId);
         repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
-        
+
         if (app.carInfo.brand) {
           if ($("#comment").val().trim().length == 0) {
             if (app.carInfo.brandConfidence > 90) {
@@ -260,7 +264,7 @@ async function sendFile(fileData, id, imageMetadata) {
         $("#recydywa").show();
       }
     }
-    uploadFinished();
+    uploadFinished()
   } catch (err) {
     imageError(id)
   }

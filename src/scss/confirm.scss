@@ -6,11 +6,18 @@
   }
 
   .map-container {
-    min-height: 200px;
     .mapImage {
-      top: 0;
+      position: relative;
       height: auto;
       width: 100%;
+      z-index: 1;
+    }
+    .loader {
+      position: absolute;
+      position: absolute;
+      margin: 0;
+      left: calc(50% - 50px);
+      top: calc(50% - 50px);
     }
   }
 

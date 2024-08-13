@@ -371,21 +371,17 @@ div.ui-block-b>div.ui-radio {
 }
 
 div.loader {
-  position: absolute;
-  z-index: -1;
-  margin: 50px calc(50% - 25px);
+  margin: auto;
   border: 16px solid #f3f3f3;
-  /* Light grey */
   border-top: 16px solid #009C7F;
-  /* Blue */
   border-radius: 50%;
   width: 50px !important;
   height: 50px;
   animation: spin 2s linear infinite;
-}
 
-div.loader.l {
-  animation: spinl 2s linear infinite;
+  &.l {
+    animation: spinl 2s linear infinite;
+  }
 }
 
 @keyframes spin {
