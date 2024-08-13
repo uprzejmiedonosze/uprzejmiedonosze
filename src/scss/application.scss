@@ -119,15 +119,6 @@
   .imageContainer:hover a.zoom {
     opacity: 1;
   }
-
-  ul.application-details-list {
-
-    &>li {
-      padding-block-end: 16px;
-      break-inside: avoid-column;
-    }
-  }
-
 }
 
 #comments .ui-listview li,
