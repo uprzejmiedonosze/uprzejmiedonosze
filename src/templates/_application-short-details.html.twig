@@ -1,10 +1,4 @@
 {% set recydywaCnt = app.getRecydywa %}
-{% set recydywa = '' %}
-{% if recydywaCnt > 1 %}
-{% set wrappedPlateId = "'" ~ app.carInfo.plateId ~ "'" %}
-{% set recydywa = 'recydywa #' ~ recydywaCnt ~ ' <a href="#" onclick="window._recydywa(' ~ wrappedPlateId  ~ ')">(zobacz pozostałe)</a>' %}
-{% endif %}
-
 {% set status = app.getStatus %}
 {% set sendable = status.sendable %}
 
@@ -21,7 +15,7 @@
     </div>
 </div>
 <ul class="application-details-list">
-    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b>
+    <li class="no-icon">
         {% if appActionButtons %}
             <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none" aria-haspopup="true"
                 aria-owns="changeStatus{{ app.id }}" aria-expanded="false"
@@ -31,8 +25,14 @@
             </a>
             <div style="display: none;"><!-- placeholder for pre-rendered --></div>
         {% endif %}
-
+        Numer zgłoszenia: <tt>{{ app.number }}</tt>
     </li>
+    {% if recydywaCnt > 1 %}
+    {% set wrappedPlateId = "'" ~ app.carInfo.plateId ~ "'" %}
+    <li class="no-icon">RECYDYWA <span class="recydywa">#{{ recydywaCnt }}</span> <a href="#" onclick="window._recydywa(' ~ wrappedPlateId  ~ ')">(zobacz pozostałe)</a></li>
+    {% endif %}
+
+    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
 
     <li class="address">{{ app.address.address }}</li>
     {% if sendable %}
@@ -57,9 +57,7 @@
                 <a href="/nowe-zgloszenie.html?edit={{ app.id }}" data-ajax="false">edytuj</a>
             {% endif %}
         </li>
-    {% endif %}
-
-    <li class="plate-id {% if recydywaCnt > 1 %}recydywa{% endif %}"><span class="plate-id light">{{ app.carInfo.plateId }}</span> {{ recydywa|raw }}</li>
+    {% endif %}    
 
     <li class="description"><b>TREŚĆ ZGŁOSZENIA</b><br>{{ app.getCategory.formal }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
     <li class="info-icon"><b>INFORMACJE DODATKOWE</b><br>

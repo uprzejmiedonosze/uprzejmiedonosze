@@ -145,6 +145,10 @@
   ul.application-details-list {
     padding-inline-start: 2em;
 
+    tt {
+      font-weight: 600;
+    }
+
     &>li.calendar {
       @extend %list-icon;
       list-style-image: url($datetime-icon);
@@ -208,6 +212,19 @@
       &.error {
         border: 2px solid red !important;
       }
+    }
+  }
+
+  .recydywa {
+    background-color: #D55745;
+    border-radius: 5px;
+    display: inline-block;
+    text-shadow: none;
+    padding: 0 5px;
+    color: white;
+
+    &.small {
+      font-size: 80%;
     }
   }
 
