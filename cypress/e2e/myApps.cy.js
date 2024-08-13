@@ -34,7 +34,7 @@ describe('Application screen validation', () => {
 
     it('checks new application screen', function () {
         cy.goToNewAppScreen()
-        cy.get('#lokalizacja').contains(this.config.address.address)
+        cy.get('#lokalizacja').should('match', new RegExp(this.config.address.address + '.*'))
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
         Object.entries(this.categories).
@@ -121,7 +121,7 @@ describe('Valid images and location', () => {
         cy.get('#datetime').should('have.value', this.config.carImage.dateISO)
         cy.get('.changeDatetime').should('be.visible')
 
-        cy.get('#lokalizacja').contains(this.config.address.szczecin)
+        cy.get('#lokalizacja').should('match', new RegExp(this.config.address.szczecin + '.*'))
     })
 })
 
@@ -168,7 +168,7 @@ describe('Create application', () => {
     })
 
     it('checks application screen', function () {
-        cy.get('.ui-page-active .images a:first').invoke('removeAttr', 'target').click()
+        cy.get('.ui-page-active .images-slider a:first').invoke('removeAttr', 'target').click({force: true})
         checkAppData(this.config)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
@@ -246,7 +246,7 @@ describe('Edit application', () => {
     })
 
     it('checks application screen', function () {
-        cy.get('.ui-page-active .images a:first').invoke('removeAttr', 'target').click()
+        cy.get('.ui-page-active .images-slider a:first').invoke('removeAttr', 'target').click({force: true})
         cy.contains(this.config.carImage.dateHumanAltered)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')

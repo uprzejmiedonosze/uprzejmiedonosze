@@ -29,7 +29,7 @@ describe('API:automated (Poznań)', () => {
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.poznan).click()
         cy.contains(this.sm['Poznań'].address[0].replace('Straż Miejska', 'SM'))
-        cy.contains('zmień status').click()
+        cy.contains('POTWIERDZONE zmień').click()
         cy.contains('Zmień status zgłoszenia z Potwierdzone na')
     })
 })
@@ -66,7 +66,7 @@ describe('API:Mail (Wrocław)', () => {
         cy.contains('Menu').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.wroclaw.replace('Plac Generała ', '')).click()
-        cy.contains('zmień status').click()
+        cy.contains('WYSŁANE zmień').click()
         cy.contains('Zmień status zgłoszenia z Wysłane na')
     })
 
@@ -103,12 +103,11 @@ describe('Missing SM (Poniatowa)', () => {
         cy.contains(this.config.address.poniatowa).click()
         cy.contains('Wyślij zgłoszenie')
         cy.contains('edytuj')
-        cy.contains('zmień status').click()
-        cy.contains('Zmień status zgłoszenia z Nowe na')
+        cy.contains('NOWE zmień').click()
+        cy.contains('Zmień status zgłoszenia z Nowe na')'
     })
 
     it('checks send apps screen', function () {
-        cy.contains('nowe').click({force: true})
         cy.contains('Menu').click({force: true})
         cy.contains('Do wysłania').click({force: true})
         cy.contains('Pobierz paczkę zgłoszeń').should('not.exist')
