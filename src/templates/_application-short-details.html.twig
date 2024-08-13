@@ -76,11 +76,11 @@
 
 <ul class="application-details-list">
     {% if app.wasSent %}
-        <li class="external-id">NUMER SPRAWY SM/Policji<br>
+        <li class="external-id no-icon">NUMER SPRAWY SM/Policji<br>
         <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="RSOW 0000/24 / WP 000/24" value="{{ app.externalId }}">
         </li>
     {% endif %}
-    <li class="private-comment">UWAGI (widoczne tylko dla Ciebie)<br>
+    <li class="private-comment no-icon">UWAGI (widoczne tylko dla Ciebie)<br>
         <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="">{{ app.privateComment }}</textarea>
     </li>
 
