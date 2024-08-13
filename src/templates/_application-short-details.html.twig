@@ -28,8 +28,7 @@
         Zgłoszenie <tt>{{ app.number }}</tt>
     </li>
     {% if recydywaCnt > 1 %}
-    {% set wrappedPlateId = "'" ~ app.carInfo.plateId ~ "'" %}
-    <li class="no-icon">RECYDYWA <span class="recydywa">#{{ recydywaCnt }}</span> <a href="#" onclick="window._recydywa(' ~ wrappedPlateId  ~ ')">(zobacz pozostałe)</a></li>
+    <li class="no-icon">RECYDYWA <span class="recydywa">#{{ recydywaCnt }}</span> <a href="#" onclick="window._recydywa('{{ app.carInfo.plateId }}')">(zobacz pozostałe)</a></li>
     {% endif %}
 
     <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
