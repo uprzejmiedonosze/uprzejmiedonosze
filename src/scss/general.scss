@@ -304,3 +304,73 @@ h3.introHeader {
 sup {
     font-size: 70%;
   }
+
+
+  .images-slider {
+    columns: 2;
+    height: 280px;
+
+    .imageContainer {
+      background: #eee;
+      height: 280px;
+      position: relative;
+      box-sizing: border-box;
+
+      img {
+        position: absolute;
+        object-fit: cover;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        display: block;
+        height: 280px;
+      }
+
+      &+& {
+        margin-left: 16px;
+      }
+    }
+  }
+
+  @media (max-width: $width-break) {
+
+    .images-slider {
+      text-align: left;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      display: flex;
+      column-gap: 10px;
+      box-sizing: border-box;
+      height: 280px;
+
+      .imageContainer {
+        flex: 0 0 calc(100% - 64px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        scroll-snap-align: start;
+        position: relative;
+        background: #eee;
+        overflow: hidden;
+        height: 280px;
+
+        img {
+          position: absolute;
+          object-fit: cover;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+
+          width: 100%;
+          display: block;
+          min-height: 280px;
+          min-width: 100%;
+        }
+
+        &+& {
+          margin-left: 16px;
+        }
+      }
+    }
+  }
