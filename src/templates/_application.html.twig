@@ -80,7 +80,6 @@
         </div>
         <div class="ui-block-b imageContainer">
 {% if app.address.lat is defined %}
-            <div class="loader"></div>
             <a href="{{ app.getMapUrl() }}"
                 data-ajax="false" target="_blank">
                 <img class="mapImage" src="{{ app.getMapImage }}?v={{ app.getRevision }}">
