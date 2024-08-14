@@ -133,12 +133,16 @@ cite {
 }
 
 b.appSentInfo,
-.forcedPoliceInfo {
+.forcedPoliceInfo,
+b.recydywaInfo {
   background-color: #e9c200;
   display: block;
   padding: 1em;
   border-radius: 5px;
   text-shadow: none;
+}
+b.recydywaInfo {
+  display: none;
 }
 
 b.lightWarning {

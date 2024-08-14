@@ -141,7 +141,7 @@
     }
   }
 
-  .recydywa {
+  span.recydywa {
     background-color: #D55745;
     border-radius: 5px;
     display: inline-block;
@@ -255,6 +255,7 @@
           font-size: 150%;
           @media (max-width: $width-break) {
             font-size: 130%;
+            font-weight: 400;
           }
         }
 

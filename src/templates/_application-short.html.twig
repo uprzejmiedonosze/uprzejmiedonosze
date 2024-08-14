@@ -14,7 +14,7 @@
         <div class="top-line">
             <div><span class="status-dot"></span> {{ status.name }}{%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję"> 👮‍♀️</span>{% endif %}</div>
             <div> {{ app.getDate }}</div>
-            <div>{% if recydywaCnt > 1 %}<span class="recydywa small">#{{ recydywaCnt }}</span> {% endif %}<span class="plate-id small">{{ app.carInfo.plateId }}</span></div>
+            <div>{% if recydywaCnt > 1 %}<span data-recydywacnt="{{ recydywaCnt }}" class="recydywa small">#{{ recydywaCnt }}</span> {% endif %}<span class="plate-id small">{{ app.carInfo.plateId }}</span></div>
         </div>
         <div class="bottom-line">
             <div class="address">
