@@ -137,9 +137,6 @@
   "Pogorzelica": {
     "parent": "Rewal"
   },
-  "Rotmanka": {
-    "parent": "Pruszcz Gdański"
-  },
   "Mokronos Dolny": {
     "parent": "Kąty Wrocławskie"
   },
@@ -815,6 +812,23 @@
       "83-031 Łęgowo"
     ],
     "email": "strazmiejska@pruszcz-gdanski.pl"
+  },
+  "Rotmanka": {
+    "parent": "Pruszcz Gdański"
+  },
+  "Borkowo": {
+    "parent": "Pruszcz Gdański"
+  },
+  "gmina Pruszcz Gdański": {
+    "parent": "Pruszcz Gdański"
+  },
+  "gmina Suchy Dąb": {
+    "address": [
+      "Komenda Powiatowa Policji w Pruszczu Gdańskim",
+      "ul. Wita Stwosza 4",
+      "83-000 Pruszcz Gdański"
+    ],
+    "email": "dyzurny.pruszcz-gd@gd.policja.gov.pl"
   },
   "Mikołów": {
     "address": [
@@ -1997,14 +2011,6 @@
       "56-400 Oleśnica"
     ],
     "email": "dyzurny@olesnica.wr.policja.gov.pl"
-  },
-  "Borkowo": {
-    "address": [
-      "Straż Gminna Gminy Pruszcz Gdański",
-      "ul. Spacerowa 8",
-      "83-031 Łęgowo"
-    ],
-    "email": "strazgminna@pruszczgdanski.pl"
   },
   "Lębork": {
     "address": [
