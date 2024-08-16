@@ -1527,6 +1527,9 @@
     ],
     "email": "strazmiejska@ozarow-mazowiecki.pl"
   },
+  "gmina Ożarów Mazowiecki": {
+    "parent": "Ożarów Mazowiecki"
+  },
   "Zielonka": {
     "address": [
       "Komisariat Policji w Zielonce",
