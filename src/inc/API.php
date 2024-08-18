@@ -30,11 +30,13 @@ function updateApplication(
     $application = $storage->getApplication($appId);
 
     if ($application->user->email !== $user->getEmail()) {
-        throw new Exception("Odmawiam aktualizacji zgłoszenia '$appId' przez '{$user->getEmail()}'", 401);
+        throw new ForbiddenException("Odmawiam aktualizacji zgłoszenia '$appId' przez '{$user->getEmail()}'");
     }
 
     if (!$application->isEditable()) {
-        throw new Exception("Zgłoszenie w stanie '{$application->status}' nie może być aktualizowane", 401);
+        if ($application->status == 'confirmed-waiting') // Sentry UD-PHP-B3
+            throw new Exception("Ponowna aktualizacja wysłanego zgłoszenia");
+        throw new ForbiddenException("Zgłoszenie w stanie '{$application->status}' nie może być aktualizowane");
     }
 
     $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
@@ -130,7 +132,7 @@ function addToGallery(string $appId): void {
 
     $application = $storage->getApplication($appId);
     if (!$application->isCurrentUserOwner()) {
-        throw new Exception("Próba zmiany cudzego zgłoszenia $appId!", 401);
+        throw new ForbiddenException("Próba zmiany cudzego zgłoszenia $appId!");
     }
 
     $application->initStatements();
@@ -147,7 +149,7 @@ function moderateApp(User $user, string $appId, string $decision): void {
     global $storage;
 
     if (!$user->isModerator()) {
-        throw new Exception("Dostęp zabroniony", 401);
+        throw new ForbiddenException("Dostęp zabroniony");
     }
     $who = $user->isAdmin() ? 'admin' : 'moderator';
     $application = $storage->getApplication($appId);

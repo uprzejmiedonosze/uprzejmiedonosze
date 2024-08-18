@@ -137,8 +137,10 @@ class ApplicationHandler extends AbstractHandler {
                 $extensions,
                 $user,
             );
-        } catch (Exception $e) {
+        } catch (ForbiddenException $e) {
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
+        } catch (Exception $e) {
+            return $this->redirect('/moje-zgloszenia.html');
         }
 
         return AbstractHandler::renderHtml($request, $response, 'potwierdz', [

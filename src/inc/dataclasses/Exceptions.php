@@ -1,5 +1,7 @@
 <?PHP
 
+use \Exception as Exception;
+
 class MissingParamException extends Exception {
     private string $param;
     public function __construct(string $param, string $msg=null, Exception $parent=null) {
@@ -11,5 +13,11 @@ class MissingParamException extends Exception {
 
     public function getParam() {
         return $this->param;
+    }
+}
+
+class ForbiddenException extends Exception {
+    public function __construct(string $msg) {
+        parent::__construct($msg, 401);
     }
 }
