@@ -1,4 +1,5 @@
-.application, .new-application {
+.application,
+.new-application {
 
   @media (min-width: $width-break) {
     .ui-grid-a.ui-responsive.images {
@@ -53,7 +54,8 @@
 }
 
 .application,
-.my-applications {
+.my-applications,
+.car-info {
   h3 {
     img {
       height: 24px;
@@ -78,7 +80,7 @@
     }
   }
 
-  span.plate-id {
+  .plate-id {
     font-family: monospace;
     font-weight: 600;
     background: white;
@@ -98,6 +100,13 @@
 
     &.light {
       border: none;  
+    }
+
+    &.h2 {
+      border-left-width: 15px;
+      border-radius: 5px;
+      padding: 0px 8px;
+      display: inline-block;
     }
   }
 

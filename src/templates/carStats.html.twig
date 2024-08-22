@@ -1,0 +1,33 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+
+{% set title = 'Tablica ' ~ plateId %}
+{% set mainClass = 'car-info' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2 class="plate-id h2">{{ plateId }}</h2>
+<p>
+    <img src="{{ plateImage }}">
+</p>
+<p>
+    RECYDYWA <span class="recydywa">#{{ recydywaCnt }}</span>, zgłoszone przez {{ users | length }} użytkowników.
+</p>
+<p>
+    <img src="{{ image }}">
+</p>
+
+<ol>
+    {% for app in apps %}
+    {% set status = app.getStatus %}
+    <li><img width="24" height="24" title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg">
+        {{ status.name }},
+        zgłoszony przez użytkownika <b>{{ app.user.number }}</b>,
+        {{ app.getDate }},
+        {{ app.address.city }} / {{ app.address.district ?? '' }},
+        {{ app.guessSMData.getShortName }}</li>
+    {% endfor %}
+</ol>
+
+{% endblock %}

@@ -173,6 +173,38 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    public function carStats(Request $request, Response $response, $args) {
+        global $storage;
+        
+        $plateId = $args['plateId'];
+        $apps = array_reverse($storage->getApplicationsByPlate($plateId));
+
+        $users = array();
+        $userCounter = 1;
+        $image = null;
+        $plateImage = null;
+
+        foreach($apps as $app) {
+            if(!array_key_exists($app->user->number, $users))
+                $users[$app->user->number] = $userCounter++;
+            $app->user->number = $users[$app->user->number];
+            if(!$image && $app->statements->gallery) $image = $app->contextImage->thumb;
+            if(!$plateImage) $plateImage = $app->carInfo->plateImage;
+        }
+
+        return AbstractHandler::renderHtml($request, $response, "carStats", [
+            'title' => "Tablica rejestracyjna {$plateId}",
+            'shortTitle' => $plateId,
+            'image' => $image,
+            'plateImage' => $plateImage,
+            'description' => "Samochód o nr. rejestracyjnym {$plateId} ",
+            'apps' => $apps,
+            'users' => $users,
+            'recydywaCnt' => count($apps),
+            'plateId' => $plateId
+        ]);
+    }
+
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

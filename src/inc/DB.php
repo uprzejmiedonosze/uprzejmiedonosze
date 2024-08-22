@@ -240,17 +240,26 @@ class DB extends NoSQLite{
             }
         }
         $this->apps->set($application->id, json_encode($application), $application->user->email);
+
+        if ($application->carInfo->plateId ?? false)
+            $this->stats->delete("%HOST%-getApplicationsByPlate-{$application->carInfo->plateId}");
         return $application;
     }
 
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function countApplicationsPerPlate(string $plateId): int{
+    public function getApplicationsByPlate(string $plateId): array|null {
+        $cache = $this->stats->get("%HOST%-getApplicationsByPlate-$plateId");
+        if($cache){
+            return $cache;
+        }
+
         $plateId = SQLite3::escapeString($plateId);
 
         $sql = <<<SQL
-            select count(key) from applications 
+            select value
+            from applications 
             where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
             and json_extract(value, '$.carInfo.plateId') = :plateId;
         SQL;
@@ -259,7 +268,11 @@ class DB extends NoSQLite{
         $stmt->bindValue(':plateId', $plateId);
         $stmt->execute();
 
-        return (int) $stmt->fetchColumn();
+        $apps = $stmt->fetchAll(PDO::FETCH_FUNC,
+            fn($value) => Application::withJson($value));
+
+        $this->setStats("getApplicationsByPlate-$plateId", $apps);
+        return $apps;
     }
 
     /**
@@ -426,7 +439,7 @@ class DB extends NoSQLite{
      * Recalculates recydywa.
      */
     public function updateRecydywa(string $plate): int{
-        $recydywa = $this->countApplicationsPerPlate($plate);
+        $recydywa = count($this->getApplicationsByPlate($plate));
         $this->recydywa->set($plate, strval($recydywa));
         return $recydywa;
     }
