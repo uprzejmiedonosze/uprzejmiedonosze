@@ -288,12 +288,12 @@ check-branch: ## Detects environment and active branch changes
 .PHONY: check-git-clean
 check-git-clean: ## Checks if GIT repository has uncommited changes
 	@echo "==> Checking if the repo is clean"
-	@test "$(shell git status | grep 'nothing to commit' | wc -l)" -eq 1 || ( echo "There are uncommitted changes." && exit 1 )
+	@test "$(shell LC_ALL=en_US git status | grep 'nothing to commit' | wc -l)" -eq 1 || ( echo "There are uncommitted changes." && exit 1 )
 
 .PHONY: check-branch-main
 check-branch-main: ## Checks if GIT is on branch main
 	@echo "==> Checking if current branch is main"
-	@test "$(shell git status | grep 'origin/main' | wc -l)" -eq 1 || ( echo "Not on branch main." && exit 1 )
+	@test "$(shell LC_ALL=en_US git status | grep 'origin/main' | wc -l)" -eq 1 || ( echo "Not on branch main." && exit 1 )
 
 
 .PHONY: log-from-last-prod
