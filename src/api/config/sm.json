@@ -2718,7 +2718,10 @@
       "ul. Dworcowa 24",
       "62-020 Swarzędz"
     ],
-    "email": "kubczak.piotr@umig.swarzedz.pl"
+    "email": "straz.miejska@swarzedz.pl"
+  },
+  "gmina Swarzędz": {
+    "parent": "Swarzędz"
   },
   "Jasin": {
     "parent": "Swarzędz"
