@@ -2733,11 +2733,11 @@
   },
   "Kórnik": {
     "address": [
-      "Komisariat Policji w Kórniku",
+      "Straż Miejska w Kórniku",
       "ul. Poznańska 83",
-      "62-035 Kórnik"
+      "Kórnik 62-035"
     ],
-    "email": "kubczak.piotr@umig.swarzedz.pl"
+    "email": "sm@kornik.pl"
   },
   "gmina Kórnik": {
     "parent": "Kórnik"
