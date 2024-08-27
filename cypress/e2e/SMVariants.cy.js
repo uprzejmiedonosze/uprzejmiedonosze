@@ -104,7 +104,7 @@ describe('Missing SM (Poniatowa)', () => {
         cy.contains('Wyślij zgłoszenie')
         cy.contains('edytuj')
         cy.contains('NOWE zmień').click()
-        cy.contains('Zmień status zgłoszenia z Nowe na')'
+        cy.contains('Zmień status zgłoszenia z Nowe na');
     })
 
     it('checks send apps screen', function () {
