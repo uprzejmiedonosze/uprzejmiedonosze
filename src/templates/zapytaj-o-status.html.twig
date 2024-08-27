@@ -35,6 +35,12 @@
             {% set address = app.sent.to %}
             {% if not loop.first %}
                 </ul>
+
+                <p>Zgodnie z wyrokiem Naczelnego Sądu Administracyjnego z 15 maja 2024 r. (III OSK 4312/21)
+                    Informacja o sposobie ukarania nieokreślonej osoby jest informacją publiczną, a jej
+                    ujawnienie nie może prowadzić do naruszenia prawa do prywatności.</p>
+                <p>Wnoszę o przesłanie wskazanej informacji za pośrednictwem poczty elektronicznej na adres 
+                    {{ user.getEmail }}.</p>
                 <p>Z góry dziękuję za przekazane informacje,</p>
                 <p>-- <br>{{ user.data.name }}<br></p>
             </div>
@@ -44,9 +50,11 @@
                 <p>Dzień dobry,</p>
                 <p>poniższe zawiadomienia o popełnieniu wykroczenia zostały wysłane do Państwa
                     na adres <code>{{ address ?? '(nieznany)' }}</code> ponad miesiąc temu.</p>
-                <p>Zgodnie z art. 54. § 2 KPoW oraz art. 156. KPK proszę o <b>informacje
-                    o zawiadomieniach zakończonych</b>, oraz tych, dla których czynności
-                    wyjaśniające nie dostarczyły podstaw do wniesienia wniosku o ukaranie.</p>
+                <p>Na podstawie art. 61 ust. 1 i 2 Konstytucji RP oraz art. 10 ust. 1 ustawy
+                    o dostępie do informacji publicznej wnoszę o udostępnienie następującej
+                    informacji publicznej: <b>informacje o zawiadomieniach zakończonych</b>,
+                    oraz tych, dla których czynności wyjaśniające nie dostarczyły podstaw do
+                    wniesienia wniosku o ukaranie.</p>
                 <ul>
         {% endif %}
         {% include('_application-ask.html.twig') %}
