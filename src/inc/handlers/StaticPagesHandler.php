@@ -102,7 +102,7 @@ class StaticPagesHandler extends AbstractHandler {
             'shortTitle' => "Zgłoszenie {$application->number}",
             'image' => $application->contextImage->thumb,
             'description' => "Samochód o nr. rejestracyjnym {$application->carInfo->plateId} " .
-                "w okolicy adresu {$application->address->address}. {$application->getCategory()->getFormal()}",
+                "w okolicy adresu {$application->address->address}. {$application->getCategory()->getInformal()}",
             'app' => $application,
             'config' => [
                 'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin,

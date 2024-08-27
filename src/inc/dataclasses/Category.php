@@ -7,7 +7,7 @@ require_once(__DIR__ . '/JSONObject.php');
  */
 class Category extends JSONObject{
     /**
-     * Initites new Category from JSON.
+     * Inits new Category from JSON.
      */
     public function __construct($json = null) {
         parent::__construct($json);
@@ -18,11 +18,15 @@ class Category extends JSONObject{
     }
 
     public function getShort(){
-        return $this->short ?? $this->formal;
+        return $this->short ?? $this->informal;
     }
 
     public function getFormal(){
         return $this->formal;
+    }
+
+    public function getInformal(){
+        return $this->informal;
     }
 
     public function getDesc(){

@@ -502,12 +502,12 @@ class Application extends JSONObject implements JsonSerializable {
 
     public function getTitle(){
         return "[{$this->number}] " . (($this->category == 0)? substr($this->userComment, 0, 150):
-            $this->getCategory()->getTitle() )
+            $this->getCategory()->getInformal() )
             . " ({$this->address->address})";
     }
 
     public function getEmailSubject(){
-        $title = preg_replace('/\s\(.*\)/', '', $this->getCategory()->getTitle());
+        $title = preg_replace('/\s\(.*\)/', '', $this->getCategory()->getInformal());
         return "[{$this->number}] " . (($this->category == 0)? "": $title)
             . " ({$this->address->address})";
     }
