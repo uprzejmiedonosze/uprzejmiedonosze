@@ -2843,5 +2843,16 @@
 		  "34-500 Zakopane"
     ],
     "email": "sm@zakopane.eu"
+  },
+  "Głogów Małopolski": {
+    "address": [
+      "Straż Miejska Głogów Małopolski",
+      "ul. Rynek 1",
+      "36-060 Głogów Małopolski"
+    ],
+    "email": "sm@glogow-mlp.pl"
+  },
+  "gmina Głogów Małopolski": {
+    "parent": "Głogów Małopolski"
   }
 }
