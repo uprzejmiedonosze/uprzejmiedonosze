@@ -43,7 +43,7 @@
     },
     "files.associations": {
         "*.html": "php",
-        "*.twig": "php",
+        "*.html.twig": "twig",
         "*.js.twig": "javascript"
     },
     "php.validate.executablePath": "",
