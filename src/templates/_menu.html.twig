@@ -54,16 +54,20 @@
         <li data-role="list-divider"></li>
         <li data-icon="info">
             <a data-ajax="false" {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }}
-            href="/jak-zglosic-nielegalne-parkowanie.html">Jak zgłaszać?</a></li>
+            href="/jak-zglosic-nielegalne-parkowanie.html">Poradnik „Jak zgłaszać”</a></li>
         <li class="subpage" data-icon="false">
             <a {{ active(config.menu, 'przepisy')|raw }}
-                href="/przepisy.html">– przepisy</a></li>
+                href="/przepisy.html">Przepisy</a></li>
         <li class="subpage" data-icon="false">
             <a data-ajax="false" {{ active(config.menu, 'faq')|raw }}
-                href="/faq.html">– faq</a></li>
+                href="/faq.html">FAQ</a></li>
         <li class="subpage" data-icon="false">
             <a {{ active(config.menu, 'przesluchanie')|raw }}
-                href="/przesluchanie.html">– przesłuchanie świadka</a></li>
+                href="/przesluchanie.html">Przesłuchanie świadka</a></li>
+        <li class="subpage" data-icon="false">
+            <a {{ active(config.menu, 'naklejki-robisz-to-zle')|raw }}
+                href="/naklejki-robisz-to-zle.html">Naklejki i mazaki</a>
+                <span class="ui-li-count">nowość!</span></li>
         <li data-icon="star">
             <a data-ajax="false" {{ active(config.menu, 'statystyki')|raw }}
             href="/statystyki.html">Statystyki</a></li>
@@ -77,7 +81,6 @@
         <li data-icon="action">
             <a target="_blank"
                 data-ajax="false" href="https://agendaparkingowa.pl/">Agenda Parkingowa</a>
-            <span class="ui-li-count">nowość!</span>
         </li>
         <li data-icon="action">
             <a target="_blank"
