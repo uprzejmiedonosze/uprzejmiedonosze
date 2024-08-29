@@ -29,8 +29,7 @@ function initLogin(currentScript) {
     }
 
     if (currentScript?.getAttribute("login")) {
-        const withEmail = currentScript?.getAttribute("withEmail") == 'true'
-        doLogin(signInSuccessUrl, withEmail)
+        doLogin(signInSuccessUrl)
         return
     }
 }
@@ -83,7 +82,7 @@ function getClientId() {
     return '823788795198-inlf6ld2q1o7up7vbkerb4gdu30bm5tu.apps.googleusercontent.com'
 }
 
-function doLogin(signInSuccessUrl, withEmail) {
+function doLogin(signInSuccessUrl) {
     const emailAuthProvider = {
         provider: EmailAuthProvider.PROVIDER_ID,
         signInMethod: EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
@@ -97,8 +96,7 @@ function doLogin(signInSuccessUrl, withEmail) {
         clientId: getClientId()
     }
 
-    let signInOptions = [googleAuthProvider]
-    if (withEmail) signInOptions.push(emailAuthProvider)
+    let signInOptions = [googleAuthProvider, emailAuthProvider]
 
     var uiConfig = {
         'signInSuccessUrl': `/login-ok.html?next=${signInSuccessUrl}`,

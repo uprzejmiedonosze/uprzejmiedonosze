@@ -138,14 +138,12 @@ class StaticPagesHandler extends AbstractHandler {
         $params = $request->getQueryParams();
         $next = $this->getParam($params, 'next', '/');
         $error = $this->getParam($params, 'error', '');
-        $withEmail = !!($this->getParam($params, 'withEmail', false));
         
         return AbstractHandler::renderHtml($request, $response, 'login', [
             'config' => [
                 'signInSuccessUrl' => $next,
                 'logout' => false,
-                'error' => $error,
-                'withEmail' => $withEmail ? 'true' : 'false'
+                'error' => $error
             ]
         ]);
     }
@@ -214,7 +212,8 @@ class StaticPagesHandler extends AbstractHandler {
             'wniosek-odpowiedz1',
             'wniosek-rpo',
             'zwrot-za-przesluchanie',
-            'patronite'
+            'patronite',
+            'naklejki-robisz-to-zle'
         ];
         $route = $args['route'];
 
