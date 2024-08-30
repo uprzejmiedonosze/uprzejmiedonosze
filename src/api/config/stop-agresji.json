@@ -1,71 +1,58 @@
 {
-  "dolnośląskie": {
+  "Dolnośląskie": {
     "address": [
       "Komenda Wojewódzka Policji we Wrocławiu",
       "ul. Podwale 31-33",
       "50-040 Wrocław"
     ],
     "email": "stopagresjidrogowej@wr.policja.gov.pl",
-    "voivodeship": "Dolnośląskie",
-    "city": "Dolnośląskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Dolnośląskie"
   },
-  "kujawsko-pomorskie": {
+  "Kujawsko-Pomorskie": {
     "address": [
       "Komenda Wojewódzka Policji w Bydgoszczy",
       "al. Powstańców Wielkopolskich 7",
       "85-090 Bydgoszcz"
     ],
     "email": "stopagresjidrogowej-kwp@bg.policja.gov.pl",
-    "voivodeship": "Kujawsko-Pomorskie",
-    "city": "Kujawsko-Pomorskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Kujawsko-Pomorskie"
   },
-  "łódzkie": {
+  "Łódzkie": {
     "address": [
       "Komenda Wojewódzka Policji w Łodzi",
       "Sosnowiec 25a",
       "95-010 Stryków"
     ],
     "email": "stopagresjidrogowej@ld.policja.gov.pl",
-    "voivodeship": "Łódzkie",
-    "city": "Łódzkie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Łódzkie"
   },
-  "lubelskie": {
+  "Lubelskie": {
     "address": [
       "Komenda Wojewódzka Policji w Lublinie",
       "ul. Narutowicza 73",
       "20-019 Lublin"
     ],
     "email": "stopagresjidrogowej@lu.policja.gov.pl",
-    "voivodeship": "Lubelskie",
-    "city": "Lubelskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Lubelskie"
   },
-  "lubuskie": {
+  "Lubuskie": {
     "address": [
       "Komenda Wojewódzka Policji w Gorzowie Wielkopolskim",
       "ul. Kwiatowa 10",
       "66-400 Gorzów Wielkopolski"
     ],
     "email": "stopagresjidrogowej@go.policja.gov.pl",
-    "voivodeship": "Lubuskie",
-    "city": "Lubuskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Lubuskie"
   },
-  "małopolskie": {
+  "Małopolskie": {
     "address": [
       "Komenda Wojewódzka Policji w Krakowie",
       "ul. Mogilska 109",
       "31-571 Kraków"
     ],
     "email": "stopagresjidrogowej@malopolska.policja.gov.pl",
+    "voivodeship": "Małopolskie"
+  },
   "Kraków-miasto": {
     "address": [
       "Komenda Miejska Policji w Krakowie",
@@ -202,7 +189,7 @@
   "Kraków-Czyżyny": {
     "parent": "Kraków-kp8"
   },
-  "mazowieckie": {
+  "Mazowieckie": {
     "address": [
       "Komenda Stołeczna Policji",
       "ul. Nowolipie 2",
@@ -210,23 +197,18 @@
     ],
     "email": "stopagresjidrogowej@ksp.policja.gov.pl",
     "voivodeship": "Mazowieckie",
-    "city": "Mazowieckie",
-    "hint": "Relacje ze współpracy ze #stopagresji w woj. Mazowieckim są zniechęcające. Wzywają na przesłuchanie do każdego zgłoszenia. W szczególności w Warszawie współpraca ze Strażą Miejską jest bardziej owocna.",
-    "api": "Mail"
+    "hint": "Relacje ze współpracy ze #stopagresji w woj. Mazowieckim są zniechęcające. Wzywają na przesłuchanie do każdego zgłoszenia. W szczególności w Warszawie współpraca ze Strażą Miejską jest bardziej owocna."
   },
-  "opolskie": {
+  "Opolskie": {
     "address": [
       "Komenda Wojewódzka Policji w Opolu",
       "ul. Korfantego 2",
       "45-077 Opole"
     ],
     "email": "problemdrogowy@op.policja.gov.pl",
-    "voivodeship": "Opolskie",
-    "city": "Opolskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Opolskie"
   },
-  "opole-miasto": {
+  "Opole-miasto": {
     "address": [
       "Komenda Miejska Policji w Opolu",
       "ul. Leona Powolnego 1",
@@ -234,11 +216,9 @@
     ],
     "email": "wrd.op@op.policja.gov.pl",
     "voivodeship": "Opolskie",
-    "city": "Opole",
-    "hint": null,
-    "api": "Mail"
+    "city": "Opole"
   },
-  "podkarpackie": {
+  "Podkarpackie": {
     "address": [
       "Komenda Wojewódzka Policji w Rzeszowie",
       "ul. Dąbrowskiego 30",
@@ -246,35 +226,27 @@
     ],
     "email": "stopagresjidrogowej@rz.policja.gov.pl",
     "voivodeship": "Podkarpackie",
-    "city": "Podkarpackie",
-    "hint": "Mamy jednoznacznie negatywne relacje ze współpracy z komendą w Rzeszowie. Wzywają do każdego zgłoszenia, marnują po 15 minut na sztukę. Pytają o to czy brak 1,5 m został sprawdzony miarą itd. Dla Rzeszowa sugerujemy SM.",
-    "api": "Mail"
+    "hint": "Mamy jednoznacznie negatywne relacje ze współpracy z komendą w Rzeszowie. Wzywają do każdego zgłoszenia, marnują po 15 minut na sztukę. Pytają o to czy brak 1,5 m został sprawdzony miarą itd. Dla Rzeszowa sugerujemy SM."
   },
-  "podlaskie": {
+  "Podlaskie": {
     "address": [
       "Komenda Wojewódzka Policji w Białymstoku",
       "ul. Sienkiewicza 65",
       "15-003 Białystok"
     ],
     "email": "stopagresjidrogowej.kwp@bk.policja.gov.pl",
-    "voivodeship": "Podlaskie",
-    "city": "Podlaskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Podlaskie"
   },
-  "pomorskie": {
+  "Pomorskie": {
     "address": [
       "Komenda Wojewódzka Policji w Gdańsku",
       "ul. Okopowa 15",
       "80-819 Gdańsk"
     ],
     "email": "stopagresjidrogowej@gd.policja.gov.pl",
-    "voivodeship": "Pomorskie",
-    "city": "Pomorskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Pomorskie"
   },
-  "gdańsk-miasto": {
+  "Gdańsk-miasto": {
     "address": [
       "Komenda Miejska Policji w Gdańsku",
       "ul. Nowe Ogrody 27",
@@ -283,10 +255,9 @@
     "email": "wpd.gdansk@gd.policja.gov.pl",
     "voivodeship": "Pomorskie",
     "city": "Gdańsk",
-    "hint": "Nie wzywają na przesłuchanie bez potrzeby.",
-    "api": "Mail"
+    "hint": "Nie wzywają na przesłuchanie bez potrzeby."
   },
-  "gdynia-miasto": {
+  "Gdynia-miasto": {
     "address": [
       "Komenda Miejska Policji w Gdyni",
       "ul. Portowa 15",
@@ -295,10 +266,9 @@
     "email": "dyzurny.gdynia@gd.policja.gov.pl",
     "voivodeship": "Pomorskie",
     "city": "Gdynia",
-    "hint": "Nie wzywają na przesłuchanie bez potrzeby.",
-    "api": "Mail"
+    "hint": "Nie wzywają na przesłuchanie bez potrzeby."
   },
-  "sopot-miasto": {
+  "Sopot-miasto": {
     "address": [
       "Komenda Miejska Policji w Sopocie",
       "ul. Armii Krajowej 112a",
@@ -306,23 +276,18 @@
     ],
     "email": "komenda.sopot@gd.policja.gov.pl",
     "voivodeship": "Pomorskie",
-    "city": "Sopot",
-    "hint": "Masz doświadczenia we współpracy z tą jednostką? <a href=\"mailto:szymon@uprzejmiedonosze.net\" target=\"_blank\">Podziel się</a>.",
-    "api": "Mail"
+    "city": "Sopot"
   },
-  "śląskie": {
+  "Śląskie": {
     "address": [
       "Komenda Wojewódzka Policji w Katowicach",
       "ul. Lompy 19",
       "40-038 Katowice"
     ],
     "email": "stopagresjidrogowej@ka.policja.gov.pl",
-    "voivodeship": "Śląskie",
-    "city": "Śląskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Śląskie"
   },
-  "bielsko-biała-miasto": {
+  "Bielsko-Biała-miasto": {
     "address": [
       "Komenda Miejska Policji w Bielsku-Białej",
       "ul. Wapienna 45",
@@ -330,11 +295,9 @@
     ],
     "email": "prewencja@bielsko.ka.policja.gov.pl",
     "voivodeship": "Śląskie",
-    "city": "Śląskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w Bielsko-Białej. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "city": "Bielsko Biała"
   },
-  "katowice-miasto": {
+  "Katowice-miasto": {
     "address": [
       "Komenda Miejska Policji w Katowicach",
       "ul. Lompy 19",
@@ -342,9 +305,7 @@
     ],
     "email": "ruch-drogowy@ka.policja.gov.pl",
     "voivodeship": "Śląskie",
-    "city": "Katowice",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w Katowicach. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "city": "Katowice"
   },
   "powiat mikołowski": {
     "address": [
@@ -355,46 +316,36 @@
     "email": "rd@mikolow.ka.policja.gov.pl",
     "voivodeship": "Śląskie",
     "city": "Mikołów",
-    "hint": "KPP w Mikołowie niestety wzywa na przesłuchanie twierdząc, że obecnie można manipulować zdjęciami...",
-    "api": "Mail"
+    "hint": "KPP w Mikołowie niestety wzywa na przesłuchanie twierdząc, że obecnie można manipulować zdjęciami..."
   },
-  "świętokrzyskie": {
+  "Świętokrzyskie": {
     "address": [
       "Komenda Wojewódzka Policji w Kielcach",
       "ul. Seminaryjska 12",
       "25-372 Kielce"
     ],
     "email": "stopagresjidrogowej@ki.policja.gov.pl",
-    "voivodeship": "Świętokrzyskie",
-    "city": "Świętokrzyskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Świętokrzyskie"
   },
-  "warmińsko-mazurskie": {
+  "Warmińsko-Mazurskie": {
     "address": [
       "Komenda Wojewódzka Policji w Olsztynie",
       "ul. Partyzantów 6/8",
       "10-521 Olsztyn"
     ],
     "email": "stopagresjidrogowej@ol.policja.gov.pl",
-    "voivodeship": "Warmińsko-Mazurskie",
-    "city": "Warmińsko-Mazurskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "voivodeship": "Warmińsko-Mazurskie"
   },
-  "wielkopolskie": {
+  "Wielkopolskie": {
     "address": [
       "Komenda Wojewódzka Policji w Poznaniu",
       "ul. Kochanowskiego 2a",
       "60-844 Poznań"
     ],
     "email": "stopagresjidrogowej@po.policja.gov.pl",
-    "voivodeship": "Wielkopolskie",
-    "city": "Wielkopolskie",
-    "hint": "Relacje ze współpracy ze #stopagresji w woj. Wielkopolskim są zniechęcające. Wzywają na przesłuchanie do każdego zgłoszenia. W szczególności w Poznaniu współpraca ze Strażą Miejską jest bardziej owocna.",
-    "api": "Mail"
+    "voivodeship": "Wielkopolskie"
   },
-  "zachodniopomorskie": {
+  "Zachodniopomorskie": {
     "address": [
       "Komenda Wojewódzka Policji w Szczecinie",
       "ul. Małopolska 47",
@@ -402,11 +353,9 @@
     ],
     "email": "stopagresjidrogowej@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "city": "Zachodniopomorskie",
-    "hint": "Wstępne relacje ze współpracy z #stopagresji w woj. Zachodniopomorskim są pozytywne. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "hint": "Wstępne relacje ze współpracy z #stopagresji w woj. Zachodniopomorskim są pozytywne. Masz jakieś doświadczenia – napisz do nas."
   },
-  "szczecin-niebuszewo": {
+  "Szczecin-Niebuszewo": {
     "address": [
       "Komisariat Policji Szczecin Niebuszewo",
       "al. Jana Pawła II  37",
@@ -414,11 +363,9 @@
     ],
     "email": "sekretariat.niebuszewo@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "city": "Szczecin",
-    "hint": "Komisariat Niebuszewo w Szczecinie nie wzywa na przesłuchanie, i dość wybiórczo informuje o zakończeniu sprawy. Ale faktycznie je obrabia!",
-    "api": "Mail"
+    "hint": "Komisariat Niebuszewo w Szczecinie nie wzywa na przesłuchanie, i dość wybiórczo informuje o zakończeniu sprawy. Ale faktycznie je obrabia!"
   },
-  "szczecin-pogodno": {
+  "Szczecin-Pogodno": {
     "address": [
       "Komisariat Policji Szczecin Pogodno",
       "ul. Adama Mickiewicza 161",
@@ -426,11 +373,9 @@
     ],
     "email": "sekretariat.pogodno@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "city": "Szczecin",
-    "hint": "Komisariat Pogodno w Szczecinie nie tylko nie wzywa na przesłuchanie, to zdaje się obrabiać zgłoszenia w miesiąc/dwa!",
-    "api": "Mail"
+    "hint": "Komisariat Pogodno w Szczecinie nie tylko nie wzywa na przesłuchanie, to zdaje się obrabiać zgłoszenia w miesiąc/dwa!"
   },
-  "szczecin-srodmiescie": {
+  "Szczecin-Śródmieście": {
     "address": [
       "Komisariat Policji Szczecin Śródmieście",
       "ul. Kaszubska 35",
@@ -438,11 +383,9 @@
     ],
     "email": "sekretariat.srodmiescie@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "city": "Szczecin",
-    "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie.",
-    "api": "Mail"
+    "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie."
   },
-  "szczecin-dabie": {
+  "Szczecin-Dąbie": {
     "address": [
       "Komisariat Policji Szczecin Dąbie",
       "ul. Pomorska 15",
@@ -450,23 +393,18 @@
     ],
     "email": "sekretariat.dabie@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "city": "Szczecin",
-    "hint": "Komisariat Dąbie w Szczecinie czasem wzywa na przesłuchanie.",
-    "api": "Mail"
+    "hint": "Komisariat Dąbie w Szczecinie czasem wzywa na przesłuchanie."
   },
-  "szczecin-nad-odra": {
+  "Szczecin-Nad-Odrą": {
     "address": [
       "Komisariat Policji Szczecin Nad Odrą",
       "ul. Bardzińska 1a",
       "71-710 Szczecin"
     ],
     "email": "sekretariat.nadodra@sc.policja.gov.pl",
-    "voivodeship": "Zachodniopomorskie",
-    "city": "Szczecin",
-    "hint": null,
-    "api": "Mail"
+    "voivodeship": "Zachodniopomorskie"
   },
-  "szczecin-miasto": {
+  "Szczecin-miasto": {
     "address": [
       "Komenda Miejska Policji w Szczecinie",
       "ul. Kaszubska 35",
@@ -474,11 +412,9 @@
     ],
     "email": "kmpszczecin@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "city": "Szczecin",
-    "hint": null,
-    "api": "Mail"
+    "city": "Szczecin"
   },
-  "wrocław-miasto": {
+  "Wrocław-miasto": {
     "address": [
       "Komenda Miejska Policji we Wrocławiu",
       "ul. Sołtysowicka 21",
@@ -486,11 +422,9 @@
     ],
     "email": "dyzurny@wroclaw.wr.policja.gov.pl",
     "voivodeship": "Dolnośląskie",
-    "city": "Wrocław",
-    "hint": null,
-    "api": "Mail"
+    "city": "Wrocław"
   },
-  "poznań-miasto": {
+  "Poznań-miasto": {
     "address": [
       "Komenda Miejska Policji w Poznaniu",
       "ul. Szylinga 2",
@@ -498,11 +432,9 @@
     ],
     "email": "dyzurny.poznan@po.policja.gov.pl",
     "voivodeship": "Wielkopolskie",
-    "city": "Poznań",
-    "hint": null,
-    "api": "Mail"
+    "city": "Poznań"
   },
-  "rzeszów-miasto": {
+  "Rzeszów-miasto": {
     "address": [
       "Komenda Miejska Policji w Rzeszowie",
       "ul. Jagiellońska 13",
@@ -510,11 +442,9 @@
     ],
     "email": "kmp.rzeszow@rz.policja.gov.pl",
     "voivodeship": "Podkarpackie",
-    "city": "Rzeszów",
-    "hint": null,
-    "api": "Mail"
+    "city": "Rzeszów"
   },
-  "warszawa-miasto": {
+  "Warszawa-miasto": {
     "address": [
       "Komenda Stołeczna Policji",
       "ul. Nowolipie 2",
@@ -522,11 +452,9 @@
     ],
     "email": "stopagresjidrogowej@ksp.policja.gov.pl",
     "voivodeship": "Mazowieckie",
-    "city": "Warszawa",
-    "hint": null,
-    "api": "Mail"
+    "city": "Warszawa"
   },
-  "stargard-miasto": {
+  "Stargard-miasto": {
     "address": [
       "Komenda Powiatowa Policji w Stargardzie",
       "ul. Warszawska 29",
@@ -534,9 +462,7 @@
     ],
     "email": "sekretariat.stargard@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "city": "Stargard",
-    "hint": null,
-    "api": "Mail"
+    "city": "Stargard"
   },
   "gmina Zielonki": {
     "address": [
@@ -546,9 +472,7 @@
     ],
     "email": "dzielnicowy.zielonki1@kpp-krakow.policja.gov.pl",
     "voivodeship": "Małopolskie",
-    "city": "Zielonki",
-    "hint": null,
-    "api": "Mail"
+    "city": "Zielonki"
   },
   "default": {
     "address": [
@@ -559,7 +483,6 @@
     "email": "stopagresjidrogowej@ksp.policja.gov.pl",
     "voivodeship": "Mazowieckie",
     "city": "Warszawa",
-    "hint": "Nie udało się się dobrać wojewódzkiego #stopagresji, więc kierujemy wysyłkę na Stołeczną Komendę Policji.",
-    "api": "Mail"
+    "hint": "Nie udało się się dobrać wojewódzkiego #stopagresji, więc kierujemy wysyłkę na Stołeczną Komendę Policji."
   }
 }
