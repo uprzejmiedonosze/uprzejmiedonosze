@@ -23,7 +23,7 @@ Object.entries(sm)
 			if (city.startsWith('gmina') || city.startsWith('powiat')) {
 				city = city.replace('gmina', 'Gminę')
 				city = city.replace('powiat', 'Powiat')
-			} else city = `Miejscowość ${e}` 
+			} else city = `${e}` 
 			sm[e].hint = `${city} obsługuje ${sm[e].address[0]}`
 			+ ( (sm[e].hint) ? `: ${sm[e].hint}` : '')
 		}
