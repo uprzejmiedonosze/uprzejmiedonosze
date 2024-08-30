@@ -9,7 +9,11 @@ class StopAgresji extends SM {
   }
 
   public function getCity(): string {
-    return "Stop Agresji Drogowej " . $this->voivodeship;
+    return "Stop Agresji Drogowej " . $this->city;
+  }
+
+  public function getHint(): ?string {
+    return $this->hint ?? ('Nie mamy jeszcze relacji ze współpracy z ' . $this->address[0]);
   }
 
   /**
