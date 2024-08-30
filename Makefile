@@ -223,7 +223,7 @@ patronite: src/api/config/patronite.json
 
 $(PUBLIC)/api/config/police-stations.pjson: src/api/config/police-stations.csv $(PUBLIC)/api/config/stop-agresji.json
 	$(call echo-processing,$<)
-	@php tools/police-stations.php $^ > $@ || (rm -f $@)
+	@php tools/police-stations.php $^ > $@ || (rm -f $@; exit -1)
 
 $(DIRS): ; @echo "==> Creating $@"
 	@mkdir -p $@
