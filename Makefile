@@ -221,7 +221,7 @@ src/api/config/patronite.json: $(EXPORT)/patronite/active.csv $(EXPORT)/patronit
 .PHONY: patronite
 patronite: src/api/config/patronite.json
 
-$(PUBLIC)/api/config/police-stations.pjson: src/api/config/police-stations.csv src/api/config/stop-agresji.json
+$(PUBLIC)/api/config/police-stations.pjson: src/api/config/police-stations.csv $(PUBLIC)/api/config/stop-agresji.json
 	$(call echo-processing,$<)
 	@php tools/police-stations.php $^ > $@ || (rm -f $@)
 
