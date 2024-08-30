@@ -28,7 +28,7 @@ class StopAgresji extends SM {
 
     // this is a complex algorithm and runs on two cities at the moment
     // it's better to run it only when needed
-    if (in_array($city, ['szczecin', 'kraków'])) {
+    if (in_array($city, ['szczecin', 'kraków']) && $address->lat && $address->lng) {
       $policeStationAreas = new \PoliceStationAreas;
       return $policeStationAreas->guess($address->lat, $address->lng) ?? "$city-miasto";
     }
