@@ -66,10 +66,141 @@
       "31-571 Kraków"
     ],
     "email": "stopagresjidrogowej@malopolska.policja.gov.pl",
+  "Kraków-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Krakowie",
+      "ul. Henryka Siemiradzkiego 24",
+      "31-137 Kraków"
+    ],
+    "email": "sekretariatkmp@krakow.policja.gov.pl",
     "voivodeship": "Małopolskie",
-    "city": "Małopolskie",
-    "hint": "Nie mamy jeszcze relacji ze współpracy z #stopagresji w tym województwie. Masz jakieś doświadczenia – napisz do nas.",
-    "api": "Mail"
+    "city": "Kraków"
+  },
+  "Kraków-Stare-Miasto": {
+    "address": [
+      "Komisariat Policji I w Krakowie",
+      "ul. Szeroka 35",
+      "31-053 Kraków"
+    ],
+    "email": "kp1@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie"
+  },
+  "Kraków-Grzegórzki": {
+    "address": [
+      "Komisariat Policji II w Krakowie",
+      "ul. Lubicz 21",
+      "31-503 Kraków"
+    ],
+    "email": "kp2@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie"
+  },
+  "Kraków-kp3": {
+    "address": [
+      "Komisariat Policji III w Krakowie",
+      "ul. Strzelców 16",
+      "31-422 Kraków"
+    ],
+    "email": "kp3@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie",
+    "city": "Kraków"
+  },
+  "Kraków-Prądnik-Biały": {
+    "parent": "Kraków-kp3"
+  },
+  "Kraków-Prądnik-Czerwony": {
+    "parent": "Kraków-kp3"
+  },
+  "Kraków-kp4": {
+    "address": [
+      "Komisariat Policji IV w Krakowie",
+      "ul. Królewska 4",
+      "30-045 Kraków"
+    ],
+    "email": "kp4@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie",
+    "city": "Kraków"
+  },
+  "Kraków-Krowodrza": {
+    "parent": "Kraków-kp4"
+  },
+  "Kraków-Bronowice": {
+    "parent": "Kraków-kp4"
+  },
+  "Kraków-Zwierzyniec": {
+    "parent": "Kraków-kp4"
+  },
+  "Kraków-kp5": {
+    "address": [
+      "Komisariat Policji V w Krakowie",
+      "ul. Zamoyskiego 20/22",
+      "30-523 Kraków"
+    ],
+    "email": "kp5@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie",
+    "city": "Kraków"
+  },
+  "Kraków-Łagiewniki": {
+    "parent": "Kraków-kp5"
+  },
+  "Kraków-Dębniki": {
+    "parent": "Kraków-kp5"
+  },
+  "Kraków-Podgórze": {
+    "parent": "Kraków-kp5"
+  },
+  "Kraków-kp6": {
+    "address": [
+      "Komisariat Policji VI w Krakowie",
+      "ul. Mieczysławy Ćwiklińskiej 4",
+      "30-863 Kraków"
+    ],
+    "email": "kp6@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie",
+    "city": "Kraków"
+  },
+  "Kraków-Swoszowice": {
+    "parent": "Kraków-kp6"
+  },
+  "Kraków-Podgórze-Duchackie": {
+    "parent": "Kraków-kp6"
+  },
+  "Kraków-Bieżanów-Prokocim": {
+    "parent": "Kraków-kp6"
+  },
+  "Kraków-kp7": {
+    "address": [
+      "Komisariat Policji VII w Krakowie",
+      "os. Złotej Jesieni 11c",
+      "31-827 Kraków"
+    ],
+    "email": "kp7@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie",
+    "city": "Kraków"
+  },
+  "Kraków-Mistrzejowice": {
+    "parent": "Kraków-kp7"
+  },
+  "Kraków-Bieńczyce": {
+    "parent": "Kraków-kp7"
+  },
+  "Kraków-Wzgórza-Krzesławickie": {
+    "parent": "Kraków-kp7"
+  },
+  "Kraków-kp8": {
+    "address": [
+      "Komisariat Policji VIII w Krakowie",
+      "os. Zgody 10",
+      "31-950 Kraków"
+    ],
+    "email": "kp8@krakow.policja.gov.pl",
+    "voivodeship": "Małopolskie",
+    "city": "Kraków"
+  },
+  "Kraków-Nowa-Huta": {
+    "parent": "Kraków-kp8"
+  },
+  "Kraków-Czyżyny": {
+    "parent": "Kraków-kp8"
   },
   "mazowieckie": {
     "address": [

@@ -22,11 +22,11 @@ class StopAgresji extends SM {
     $voivodeship = trimstr2lower(@$address->voivodeship);
     $city = trimstr2lower($address->city);
 
-    // this is a complex alghorithm and runs on a single city at the moment
+    // this is a complex algorithm and runs on two cities at the moment
     // it's better to run it only when needed
-    if ($city == 'szczecin') {
+    if (in_array($city, ['szczecin', 'kraków'])) {
       $policeStationAreas = new \PoliceStationAreas;
-      return $policeStationAreas->guess($address->lat, $address->lng) ?? 'szczecin-miasto';
+      return $policeStationAreas->guess($address->lat, $address->lng) ?? "$city-miasto";
     }
 
     if (array_key_exists("$city-miasto", $STOP_AGRESJI))
