@@ -2481,6 +2481,14 @@
   "Konradów": {
     "parent": "Głuchołazy"
   },
+  "Ozimek": {
+    "address": [
+      "Komisariat Policji w Ozimku",
+      "ul. Wyzwolenia 15",
+      "46-040 Ozimek"
+    ],
+    "email": "dyzurny.op.ozimek@op.policja.gov.pl"
+  },
   "Osowiec": {
     "address": [
       "Komisariat Policji w Ozimku",
