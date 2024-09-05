@@ -21,7 +21,7 @@
                 aria-owns="changeStatus{{ app.id }}" aria-expanded="false"
                 data-inline="true" data-mini="true"
                 class="ui-link change-status ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini">
-                {{ status.name|upper }} <u>zmień</u>
+                <span class="currentStatus">{{ status.name|upper }}</span> <u>zmień</u>
             </a>
             <div style="display: none;"><!-- placeholder for pre-rendered --></div>
         {% endif %}
