@@ -6,25 +6,40 @@ const statuses = require("../../api/config/statuses.json");
 
 export async function setStatus(appId, status) {
   if (statuses[status]?.confirmationNeeded) {
-    const confirmation = window.confirm('Czy na pewno chcesz przeniesć zgłoszenie do archiwum?')
-    if (!confirmation) return $("#changeStatus" + appId).popup( "close" );
+    const confirmation = window.confirm('Czy na pewno chcesz przeniesć zgłoszenie do archiwum?');
+    if (!confirmation) return optionallyClosePopup(appId);
   }
+  // @ts-ignore
   $.mobile.loading("show", { textVisible: true, text: '' });
 
-  const api = new Api(`/api/app/${appId}/status/${status}`)
-  const result = await api.patch()
+  const api = new Api(`/api/app/${appId}/status/${status}`);
+  const result = await api.patch();
   
-  if (result?.patronite) $('#patronite').popup("open")
-  updateStatus(appId, status)
-  $.mobile.loading("hide")
-  $("#changeStatus" + appId).popup( "close" )
-
+  if (result?.patronite)
+    // @ts-ignore
+    $('#patronite').popup("open");
+  
+  updateStatus(appId, status);
+  optionallyClosePopup(appId);
+  
+  // @ts-ignore
   (typeof ga == 'function') && ga("send", "event", {
     eventCategory: "js",
     eventAction: "setStatus",
     eventLabel: status
   });
 }
+
+function optionallyClosePopup(appId) {
+  try {
+    // @ts-ignore
+    $(`#changeStatus${appId}`).popup('close')
+    // @ts-ignore
+    $.mobile.loading("hide")
+  } catch(_e) {}
+}
+
+// @ts-ignore
 window.setStatus = setStatus;
 
 export function updateStatus(appId, status) {
@@ -45,7 +60,7 @@ export function updateStatus(appId, status) {
   $application.find('.application-details-list li.status').addClass(status)
   $application.addClass(status).addClass(newIcon);
   $application.find('h3 a').removeClass(allIcons).addClass(newIcon);
-  $application.find(".currentStatus").text(statusDef.action);
+  $application.find(".currentStatus").text(statusDef.name.toUpperCase());
   $popup.find(".currentStatus").text(statusDef.action);
 
   updateCounters();
@@ -54,6 +69,7 @@ export function updateStatus(appId, status) {
 export function updateCounters() {
   $(".status-filter li").each(function (_idx, item) {
     const count = $("div.application." + item.children[0].id).length;
+    // @ts-ignore
     item.children[1].innerText = count;
     if (count == 0) {
       $(item).hide();
