@@ -2862,5 +2862,14 @@
   },
   "gmina Głogów Małopolski": {
     "parent": "Głogów Małopolski"
-  }
+  },
+  "Darłowo": {
+    "address": [
+      "Straż Miejska w Darłowie",
+      "ul. H. Wieniawskiego 17g",
+      "76-150 Darłowo"
+    ],
+    "email": "poczta@darlowo.pl"
+  },
+
 }
