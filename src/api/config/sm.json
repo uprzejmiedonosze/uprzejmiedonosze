@@ -2870,5 +2870,16 @@
       "76-150 Darłowo"
     ],
     "email": "poczta@darlowo.pl"
+  },
+  "Rabka-Zdrój": {
+    "address": [
+      "Straż Miejska w Rabce-Zdroju",
+      "ul. Parkowa 2",
+      "34-700 Rabka-Zdrój"
+    ],
+    "email": "sm@rabka.pl"
+  },
+  "gmina Rabka-Zdrój": {
+    "parent": "Rabka-Zdrój"
   }
 }
