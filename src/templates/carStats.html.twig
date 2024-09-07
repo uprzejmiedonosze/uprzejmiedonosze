@@ -7,27 +7,57 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-<h2 class="plate-id h2">{{ plateId }}</h2>
-<p>
-    <img src="{{ plateImage }}">
-</p>
-<p>
-    RECYDYWA <span class="recydywa">#{{ recydywaCnt }}</span>, zgłoszone przez {{ users | length }} użytkowników.
-</p>
-<p>
-    <img src="{{ image }}">
-</p>
-
-<ol>
-    {% for app in apps %}
+<h2>
+    <span class="recydywa">#{{ recydywaCnt }}</span> recydywa
+    numeru <span class="plate-id h2">{{ plateId }}</span>
+    od {{ users }} użytkowników
+</h2>
+<div class="list">
+{% for app in apps %}
     {% set status = app.getStatus %}
-    <li><img width="24" height="24" title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg">
-        {{ status.name }},
-        zgłoszony przez użytkownika <b>{{ app.user.number }}</b>,
-        {{ app.getDate }},
-        {{ app.address.city }} / {{ app.address.district ?? '' }},
-        {{ app.guessSMData.getShortName }}</li>
-    {% endfor %}
-</ol>
+
+    <div class="car application application-short status-all {{ app.status }}">
+        <div class="card {% if app.isAppOwner %}app-owner{% endif %}">
+            <h3>
+                <div class="top-line">
+                    <div>
+                        <span class="status-dot"></span>
+                        <span class="currentStatus">{{ status.name }}</span>
+                        {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję"> 👮‍♀️</span>{% endif %}
+                    </div>
+                    {% if app.isAppOwner %} twoje zgłoszenie {% endif %}
+                </div>
+            </h3>
+            {% if app.statements.gallery or app.isAppOwner %}
+            <figure>
+                <img src="{{ app.contextImage.thumb }}">
+            </figure>
+            {% elseif app.carInfo.plateImage is defined %}
+            <figure class="plate-image">
+                <img src="{{ app.carInfo.plateImage }}">
+            </figure>
+            {% endif %}
+            <div class="content">
+                <ul class="application-details-list">
+                    <li class="no-icon category">
+                        <img width="24" height="24" title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg">
+                        {{ app.getCategory.short }}
+                        {% if app.statements.gallery %}
+                        {{app.userComment}}
+                        {% endif %}
+                    </li>
+                    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
+                    <li class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</li>
+                    {% if app.wasSent %}
+                    <li class="info-icon">
+                        Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
 
 {% endblock %}

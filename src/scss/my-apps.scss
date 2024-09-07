@@ -1,4 +1,4 @@
-.my-applications {
+.my-applications, .car-info {
   ul.status-filter {
     padding-inline-start: 0;
     columns: 2;
@@ -191,7 +191,7 @@
   }
 
 
-  div.application-short {
+  div.application-short, .list .car .card {
 
     &.archived {
       display: none;

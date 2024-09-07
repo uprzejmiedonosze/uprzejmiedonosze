@@ -175,6 +175,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     public function carStats(Request $request, Response $response, $args) {
         global $storage;
+        $user = $request->getAttribute('user');
         
         $plateId = $args['plateId'];
         $apps = array_reverse($storage->getApplicationsByPlate($plateId));
@@ -185,9 +186,8 @@ class StaticPagesHandler extends AbstractHandler {
         $plateImage = null;
 
         foreach($apps as $app) {
-            if(!array_key_exists($app->user->number, $users))
-                $users[$app->user->number] = $userCounter++;
-            $app->user->number = $users[$app->user->number];
+            $users[$app->user->number] = 1;
+            $app->isAppOwner = $app->isAppOwner($user);
             if(!$image && $app->statements->gallery) $image = $app->contextImage->thumb;
             if(!$plateImage) $plateImage = $app->carInfo->plateImage;
         }
@@ -199,7 +199,7 @@ class StaticPagesHandler extends AbstractHandler {
             'plateImage' => $plateImage,
             'description' => "Samochód o nr. rejestracyjnym {$plateId} ",
             'apps' => $apps,
-            'users' => $users,
+            'users' => count($users),
             'recydywaCnt' => count($apps),
             'plateId' => $plateId
         ]);

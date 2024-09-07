@@ -102,7 +102,7 @@
       border: none;  
     }
 
-    &.h2 {
+    h2 > & {
       border-left-width: 15px;
       border-radius: 5px;
       padding: 0px 8px;
