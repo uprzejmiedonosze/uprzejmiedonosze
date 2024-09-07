@@ -129,6 +129,8 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/przesluchanie.html', StaticPagesHandler::class . ':hearing');
     $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
 
+    $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStats');
+
     $group->get('/{route}.html', StaticPagesHandler::class . ':default');
 
     $group->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request) {

@@ -15,7 +15,9 @@
         "slim/psr7": "^1.6",
         "php-ffmpeg/php-ffmpeg": "^1.2",
         "symfony/console": "^6.4",
-        "qmegas/memcache-search": "^0.1.3"
+        "qmegas/memcache-search": "^0.1.3",
+        "symfony/mailgun-mailer": "^7.1",
+        "symfony/http-client": "^7.1"
     },
     "require-dev": {
         "sserbin/twig-linter": "@dev",
