@@ -125,7 +125,7 @@ class StaticPagesHandler extends AbstractHandler {
         }
 
         return AbstractHandler::renderHtml($request, $response, 'dostep-do-informacji-publicznej', [
-            'callDate' => date('j-m-Y', strtotime('-6 hour')),
+            'callDate' => date('d.MM.YYYY', strtotime('-6 hour')),
             'callTime' => date('H:i', strtotime('-6 hour')),
             'checkTime' => date('H:00', strtotime('-2 hour')),
             'msisdn' => $msisdn,
