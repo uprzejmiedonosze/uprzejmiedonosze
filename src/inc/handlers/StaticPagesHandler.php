@@ -187,6 +187,7 @@ class StaticPagesHandler extends AbstractHandler {
         foreach($apps as $app) {
             $users[$app->user->number] = 1;
             $app->isAppOwner = $app->isAppOwner($user);
+            $app->canShareRecydywa = $storage->canShareRecydywa($app->user->email);
             if(!$image && $app->statements->gallery) $image = $app->contextImage->thumb;
             if(!$plateImage) $plateImage = $app->carInfo->plateImage;
         }

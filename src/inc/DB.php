@@ -188,6 +188,12 @@ class DB extends NoSQLite{
         return $user;
     }
 
+    public function canShareRecydywa(string $email): bool {
+        $json = $this->users->get($email);
+        $user = new User($json);
+        return $user->shareRecydywa();
+    }
+
     public function saveUser(User $user): void{
         if(!isset($user->number)){
             $user->number = $this->getNextUserNumber();

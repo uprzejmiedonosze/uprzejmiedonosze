@@ -36,6 +36,7 @@ class User extends JSONObject{
         $this->data->exposeData = false;
         $this->data->stopAgresji = false;
         $this->data->autoSend = true;
+        $this->data->shareRecydywa = false;
         $this->appsCount = 0;
     }
 
@@ -139,7 +140,7 @@ class User extends JSONObject{
      * Updates current user's data.
      * @SuppressWarnings(PHPMD.MissingImport)
      */
-    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend){
+    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $shareRecydywa){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
@@ -155,6 +156,7 @@ class User extends JSONObject{
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
         if(isset($autoSend)) $this->data->autoSend = $autoSend;
+        if(isset($shareRecydywa)) $this->data->shareRecydywa = $shareRecydywa;
         
         $this->data->address = $address;
         $this->data->exposeData = $exposeData;
@@ -246,6 +248,13 @@ class User extends JSONObject{
             return $this->data->autoSend;
         }
         return true;
+    }
+
+    public function shareRecydywa() {
+        if(isset($this->data->shareRecydywa)){
+            return $this->data->shareRecydywa;
+        }
+        return false;
     }
 
     /**

@@ -50,7 +50,6 @@
     </fieldset>
     {% endif %}
 
-    {% if user.isRegistered %}
     <fieldset data-role="controlgroup">
         <legend for="stopAgresji">Chcę wysyłać swoje zgłoszenia</legend>
         <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
@@ -58,6 +57,14 @@
 
         <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
         <label for="stopAgresji-SA">na komendę Policji właściwą dla województwa zgłoszenia</label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend for="shareRecydywa">Chcę pozwalać na prezentowanie moich zdjęć w galerii recydywistów parkowania</legend>
+        <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>
+        <label for="shareRecydywa-Y">tak, chce udostępniać pierwsze zdjęcie zgłoszenia</label>
+        <input type="radio" name="shareRecydywa" id="shareRecydywa-N" value="N" {% if not user.shareRecydywa %}checked="checked"{% endif %}>
+        <label for="shareRecydywa-N">nie (domyślnie)</label>
     </fieldset>
 
     {% if not user.autoSend() %}
@@ -69,7 +76,6 @@
         <input disabled type="radio" name="autoSend" id="autoSend-N" value="N" {% if not user.autoSend %}checked="checked"{% endif %}>
         <label for="autoSend-N">ręcznie, w większych paczkach</label>
     </fieldset>
-    {% endif %}
     {% endif %}
 </form>
 

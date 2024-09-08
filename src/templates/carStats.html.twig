@@ -28,13 +28,9 @@
                     {% if app.isAppOwner %} twoje zgłoszenie {% endif %}
                 </div>
             </h3>
-            {% if app.statements.gallery or app.isAppOwner %}
+            {% if app.statements.gallery or app.isAppOwner or app.canShareRecydywa %}
             <figure>
                 <img src="{{ app.contextImage.thumb }}">
-            </figure>
-            {% elseif app.carInfo.plateImage is defined %}
-            <figure class="plate-image">
-                <img src="{{ app.carInfo.plateImage }}">
             </figure>
             {% endif %}
             <div class="content">

@@ -32,9 +32,10 @@ class UserHandler extends AbstractHandler {
         $exposeData  = $this->getParam($params, 'exposeData', 'N') == 'Y';
         $stopAgresji = $this->getParam($params, 'stopAgresji', 'SM') == 'SA';
         $autoSend    = $this->getParam($params, 'autoSend', 'Y') == 'Y';
+        $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
 
         $user = $request->getAttribute('user');
-        $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend);
+        $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $shareRecydywa);
         $storage->saveUser($user);
 
         return AbstractHandler::redirect($signInSuccessUrl);
