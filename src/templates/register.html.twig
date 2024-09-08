@@ -37,15 +37,18 @@
         data-inline="true" value="{{ user.data.msisdn ?? '' }}" />
 
     <h3>Ustawienia</h3>
+
+    {% if user.canExposeData() %}
     <fieldset data-role="controlgroup">
         <legend for="exposeData">Czy chcesz dołączać do zgłoszenia prośbę o niezamieszczanie
         w protokole danych dotyczących swojego miejsca zamieszkania?</legend>
         <input type="radio" name="exposeData" id="exposeData-N" value="N" {% if not user.canExposeData %}checked="checked"{% endif %}>
         <label for="exposeData-N">Tak, chcę utrudnić sprawcy wykroczenia poznanie mojego adresu (domyślnie)</label>
 
-        <input type="radio" name="exposeData" id="exposeData-Y" value="Y" {% if user.canExposeData %}checked="checked"{% endif %}>
+        <input disabled type="radio" name="exposeData" id="exposeData-Y" value="Y" {% if user.canExposeData %}checked="checked"{% endif %}>
         <label for="exposeData-Y">Nie, mój adres i tak łatwo znaleźć w sieci</label>
     </fieldset>
+    {% endif %}
 
     {% if user.isRegistered %}
     <fieldset data-role="controlgroup">
