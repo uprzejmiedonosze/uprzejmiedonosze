@@ -12,15 +12,16 @@ https://ko-fi.com/assemblysys
 */
 
 class PoliceStationAreas {
-    private $polygons = Array();
+    private static $polygons = Array();
     
     public function __construct() {
+        if (count(PoliceStationAreas::$polygons)) return;
         $policeStations = file_get_contents(__DIR__ . "/../../public/api/config/police-stations.pjson");
-        $this->polygons = unserialize($policeStations);
+        PoliceStationAreas::$polygons = unserialize($policeStations);
     }
 
     public function guess(float $lat, float $lng): string|null {
-        foreach($this->polygons as $name => $polygon) {
+        foreach(PoliceStationAreas::$polygons as $name => $polygon) {
             if ($this->pointInPolygon($lat, $lng, $polygon))
                 return $name;
         }
