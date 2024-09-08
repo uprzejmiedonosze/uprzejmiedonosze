@@ -250,6 +250,7 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function getApplicationsByPlate(string $plateId): array|null {
+        $plateId = trim(strtoupper($plateId));
         $cache = $this->stats->get("%HOST%-getApplicationsByPlate-$plateId");
         if($cache){
             return $cache;

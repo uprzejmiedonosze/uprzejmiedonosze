@@ -181,7 +181,6 @@ class StaticPagesHandler extends AbstractHandler {
         $apps = array_reverse($storage->getApplicationsByPlate($plateId));
 
         $users = array();
-        $userCounter = 1;
         $image = null;
         $plateImage = null;
 
