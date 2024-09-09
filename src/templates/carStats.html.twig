@@ -46,7 +46,8 @@
                     <li class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</li>
                     {% if app.wasSent %}
                     <li class="info-icon">
-                        Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
+                        {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}{{ app.guessSMData.getShortName }}
+                        <tt>{{ app.getExternalId }}</tt>
                     </li>
                     {% endif %}
                 </ul>
