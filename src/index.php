@@ -123,7 +123,7 @@ $app->group('/.well-known', function (RouteCollectorProxy $group) { // user regi
     $group->get('/assetlinks.json', StaticPagesHandler::class . ':assetlinks');
 })   ->add(new JsonMiddleware());
 
-$app->group('', function (RouteCollectorProxy $group) { // sessionless pages
+$app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/', StaticPagesHandler::class . ':root');
 
     $group->get('/zgloszenie.html', StaticPagesHandler::class . ':applicationRedirect');
@@ -140,7 +140,8 @@ $app->group('', function (RouteCollectorProxy $group) { // sessionless pages
     $group->get('/przesluchanie.html', StaticPagesHandler::class . ':hearing');
     $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
 
-    $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStats');
+    $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStatsFull');
+    $group->get('/recydywa-{plateId}-partial.html', StaticPagesHandler::class . ':carStatsPartial');
 
     $group->get('/{route}.html', StaticPagesHandler::class . ':default');
 

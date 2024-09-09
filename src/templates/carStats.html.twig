@@ -4,7 +4,7 @@
 {% set title = 'Tablica ' ~ plateId %}
 {% set mainClass = 'car-info' %}
 
-{% extends "base.html.twig" %}
+{% extends partial ? "base-partial.html.twig" : "base.html.twig" %}
 {% block main %}
 
 <h2>

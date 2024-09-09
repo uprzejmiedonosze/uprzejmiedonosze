@@ -42,6 +42,11 @@ $(document).on("pageshow", function () {
     $(this).addClass("active");
   });
 
+  $('#recydywa').on('click', function() {
+    $(this).hide();
+  })
+
+
   $("#collapsiblesetForFilter").on("collapsibleexpand", async (e) => {
     const target = e.target
     const appId = target.id
@@ -61,14 +66,15 @@ $(document).on("pageshow", function () {
     const $privateComment = $('.private-comment > textarea')
     $privateComment.on('keyup', resizeTextarea).trigger('keyup')
 
-    $('a.recydywa').on('click', function () {
+    $('a.recydywa').on('click', async function () {
       const plateId = $(this).data('plateid')
-      $.mobile.loading("show")
-      const $input = $('#autocomplete-input')
-      $input.val(plateId)
-      $input.keyup()
-      $("[data-role=collapsible]").collapsible("collapse") // close all
-      displayAllApps()
+      const $popup = $('#recydywa')
+      const $popupContent = $('#recydywa .popup-content')
+      $popupContent.html('<div class="loader"></div>')
+      $popup.show()
+      const api = new Api(`/recydywa-${plateId}-partial.html`)
+      const recydywa = await api.getHtml()
+      $popupContent.html(recydywa)
     })
   
 

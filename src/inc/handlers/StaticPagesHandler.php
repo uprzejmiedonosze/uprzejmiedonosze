@@ -173,7 +173,17 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    public function carStats(Request $request, Response $response, $args) {
+    public function carStatsPartial(Request $request, Response $response, $args) {
+        $request = $request->withAttribute('partial', true);
+        return $this->carStats($request, $response, $args);
+    }
+
+    public function carStatsFull(Request $request, Response $response, $args) {
+        $request = $request->withAttribute('partial', false);
+        return $this->carStats($request, $response, $args);
+    }
+
+    private function carStats(Request $request, Response $response, $args) {
         global $storage;
         $user = $request->getAttribute('user');
         
@@ -204,7 +214,8 @@ class StaticPagesHandler extends AbstractHandler {
             'users' => count($users),
             'cities' => count($cities),
             'recydywaCnt' => count($apps),
-            'plateId' => $plateId
+            'plateId' => $plateId,
+            'partial' => $request->getAttribute('partial')
         ]);
     }
 
