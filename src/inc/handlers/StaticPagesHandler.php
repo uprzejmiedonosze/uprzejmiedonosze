@@ -181,11 +181,13 @@ class StaticPagesHandler extends AbstractHandler {
         $apps = array_reverse($storage->getApplicationsByPlate($plateId));
 
         $users = array();
+        $cities = array();
         $image = null;
         $plateImage = null;
 
         foreach($apps as $app) {
             $users[$app->user->number] = 1;
+            $cities[$app->address->city] = 1;
             $app->isAppOwner = $app->isAppOwner($user);
             $app->canShareRecydywa = $storage->canShareRecydywa($app->user->email);
             if(!$image && $app->statements->gallery) $image = $app->contextImage->thumb;
@@ -200,6 +202,7 @@ class StaticPagesHandler extends AbstractHandler {
             'description' => "Samochód o nr. rejestracyjnym {$plateId} ",
             'apps' => $apps,
             'users' => count($users),
+            'cities' => count($cities),
             'recydywaCnt' => count($apps),
             'plateId' => $plateId
         ]);

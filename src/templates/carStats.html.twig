@@ -11,6 +11,7 @@
     <span class="recydywa">#{{ recydywaCnt }}</span> recydywa
     numeru <span class="plate-id h2">{{ plateId }}</span>
     {% if users > 1 %}od {{ users }} użytkowników {% endif %}
+    {% if cities > 1 %}w {{ cities}} miastach {% endif %}
 </h2>
 <div class="list">
 {% for app in apps %}
