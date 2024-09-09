@@ -10,7 +10,7 @@
 <h2>
     <span class="recydywa">#{{ recydywaCnt }}</span> recydywa
     numeru <span class="plate-id h2">{{ plateId }}</span>
-    od {{ users }} użytkowników
+    {% if users > 1 %}od {{ users }} użytkowników {% endif %}
 </h2>
 <div class="list">
 {% for app in apps %}
