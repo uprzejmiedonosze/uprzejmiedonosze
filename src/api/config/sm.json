@@ -2892,5 +2892,13 @@
   },
   "gmina Suchy Las": {
     "parent": "Suchy Las"
+  },
+  "Przemyśl": {
+    "address": [
+      "Straż Gminna Przemyśl",
+      "ul. Sportowa 8",
+      "37-700 Przemyśl"
+    ],
+    "email": "administracja@smprzemysl.pl"
   }
 }
