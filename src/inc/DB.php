@@ -139,7 +139,7 @@ class DB extends NoSQLite{
     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
     */
     public function getSentApplications($daysAgo=31) {
-        $olderThan = date('Y-m-d\TH:i:s',strtotime("-$daysAgo days"));
+        $olderThan = date('Y-m-d\TH:i:s', strtotime("-$daysAgo days"));
         $sql = <<<SQL
             select key, value
             from applications

@@ -21,7 +21,7 @@
             </div>
             <div class="ui-body ui-body-a">
                 <p>Edytujesz zgłoszenie {% if app.number %}numer {{ app.number }}{% endif %}
-                {% if app.added is defined %}powstałe {{ app.added|date('Y-m-d H:i') }}{% endif %}.
+                {% if app.added is defined %}powstałe {{ app.added|date('j.m.Y H:i') }}{% endif %}.
                 Jeśli chcesz zacząć od nowa, <a data-ajax="false" class="cleanup" href="?cleanup">kliknij tutaj</a>.</p>
             </div>
         </div>

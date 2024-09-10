@@ -7,5 +7,5 @@
         {% endif %} z dnia {{ app.getDate }}, dotyczące pojazdu
     <b>{{ app.carInfo.plateId }}</b>
     {% if app.getCategory.informal %} ({{ app.getCategory.informal }}){% endif %}. Miejsce zgłoszenia: {{ app.address.address }}.
-    {% if app.sent.date %} Wysłane {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}.{% endif %}
+    {% if app.sent.date %} Wysłane {{ app.sent.date|date('j.m.Y') }} o godzinie {{ app.sent.date|date('H:i') }}.{% endif %}
 </li>

@@ -26,11 +26,11 @@
 {% if app.sent is defined %}
     ,"sent": {
 {% if app.sent.method == 'Mail' %}
-    "info": "To zgłoszenie zostało wysłane do {{ app.sent.to }} bezpośrednio z serwera Uprzejmie Donoszę w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}."
+    "info": "To zgłoszenie zostało wysłane do {{ app.sent.to }} bezpośrednio z serwera Uprzejmie Donoszę w dniu {{ app.sent.date|date('j.m.Y') }} o godzinie {{ app.sent.date|date('H:i') }}."
 {% elseif app.sent.method == 'manual' %}
-    "info": "To zgłoszenie zostało wysłane przez Ciebie ręcznie do {{ app.sent.to }} w dniu {{ app.sent.date|date('Y-m-d') }} około godziny {{ app.sent.date|date('H:i') }}."
+    "info": "To zgłoszenie zostało wysłane przez Ciebie ręcznie do {{ app.sent.to }} w dniu {{ app.sent.date|date('j.m.Y') }} około godziny {{ app.sent.date|date('H:i') }}."
 {% else %} {# API #}
-    "info": "To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }} w dniu {{ app.sent.date|date('Y-m-d') }} o godzinie {{ app.sent.date|date('H:i') }}        poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest dla {{ app.guessSMData.getShortName }} w następującej postaci:",
+    "info": "To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }} w dniu {{ app.sent.date|date('j.m.Y') }} o godzinie {{ app.sent.date|date('H:i') }}        poprzez API {{ app.sent.to }}. Zgłoszenie jest widoczne jest dla {{ app.guessSMData.getShortName }} w następującej postaci:",
     "api": "{% include('_application.txt.twig') %}"
 {% endif %}
     }

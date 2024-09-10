@@ -53,7 +53,7 @@ Z poważaniem
 {% if app.hideNameInPdf %}
 {\it Dane {{ app.guessUserSex.zglaszajacej }} w wiadomości e-mail 
     {% if app.sent is defined %}
-        wysłanej {{ app.sent.date|date('Y-m-d H:i') }}
+        wysłanej {{ app.sent.date|date('j.m.Y H:i') }}
         na adres {{ app.sent.to }}
     {% endif %}
 }
