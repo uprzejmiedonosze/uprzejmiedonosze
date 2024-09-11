@@ -482,7 +482,7 @@ class Application extends JSONObject implements \JsonSerializable {
      * $source <string>
      *  Name of the author | API Miasta | Admin
      */
-    public function addComment($source, $comment){
+    public function addComment(string $source, string $comment, ?string $status=null){
         if(!isset($this->comments)){
             $this->comments = [];
         }
@@ -490,6 +490,7 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->comments[$date] = new JSONObject();
         $this->comments[$date]->source = $source;
         $this->comments[$date]->comment = $comment;
+        $this->comments[$date]->status = $status;
     }
 
     /**
