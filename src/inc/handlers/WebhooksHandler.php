@@ -1,0 +1,134 @@
+<?PHP
+
+require_once(__DIR__ . '/AbstractHandler.php');
+
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Symfony\Component\Webhook\Exception\RejectWebhookException;
+use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+
+class WebhooksHandler extends AbstractHandler {
+    private static HttpFoundationFactory $httpFoundationFactory;
+
+    public function __construct() {
+        WebhooksHandler::$httpFoundationFactory = new HttpFoundationFactory();
+    }
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function mailgun(Request $request, Response $response, $args): Response {
+        $this->verify($request);
+
+        global $storage;
+        $body = $request->getParsedBody();        
+        
+        $payload = $body['event-data'];
+        $appId = $payload['user-variables']['appid'];
+        $mailEvent = new MailEvent($payload);
+
+        $application = $storage->getApplication($appId);
+        $comment = $mailEvent->formatComment();
+        if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
+        $ccToUser = $application->sent->to !== $payload['recipient'];
+
+        if (!$ccToUser) {
+            $application->sent->status = $mailEvent->status;
+            if ($mailEvent->status == 'failed')
+                $application->setStatus('confirmed', true);
+        }
+
+        $application = $storage->saveApplication($application);
+
+        return $this->renderJson($response, array(
+            "status" => "OK"
+        ));
+    }
+
+    private function verify(Request $psrRequest): void {
+        $request = WebhooksHandler::$httpFoundationFactory->createRequest($psrRequest);
+
+        $content = $request->toArray();
+        if (
+            !isset($content['signature']['timestamp'])
+            || !isset($content['signature']['token'])
+            || !isset($content['signature']['signature'])
+            || !isset($content['event-data']['event'])
+        ) {
+            throw new HttpForbiddenException($request, 'Payload is malformed.');
+        }
+        if (
+            !isset($content['event-data']['user-variables']['appid'])
+        ) {
+            throw new HttpForbiddenException($request, 'Missing app-id');
+        }
+
+        $this->validateSignature($content['signature']);
+    }
+
+    private function validateSignature(array $signature): void {
+        // see https://documentation.mailgun.com/en/latest/user_manual.html#webhooks-1
+        if (!hash_equals($signature['signature'], hash_hmac('sha256', $signature['timestamp'].$signature['token'], MAILER_WEBHOOK_SECRET))) {
+            throw new RejectWebhookException(406, 'Signature is wrong.');
+        }
+    }
+}
+
+class MailEvent { // MailgunPayloadConverter
+    public string $name;
+    public string $id;
+    public DateTimeImmutable $date;
+    public string $reason;
+    public string $recipient;
+    public array $variables;
+    public array $tags;
+    public string $status;
+
+    public function __construct(array $payload) {
+        $this->id = $payload['id'];
+        $this->reason = $this->getReason($payload);
+        $this->name = $payload['event'];
+        $this->date = \DateTimeImmutable::createFromFormat('U.u', sprintf('%.6F', $payload['timestamp']));
+        $this->recipient = $payload['recipient'];
+        $this->variables = $payload['user-variables'] ?? [];
+        $this->tags = $payload['tags'] ?? [];
+
+        $this->status = match ($this->name) {
+            'accepted' => 'accepted',
+            'rejected' => 'failed',
+            'delivered' => 'delivered',
+            'blocked' => 'failed',
+            'failed' => 'failed',
+            'clicked' => 'delivered',
+            'unsubscribed' => 'delivered',
+            'opened' => 'delivered',
+            'complained' => 'failed'
+        };
+        if ('temporary' === $payload['severity']) {
+            $this->status = 'warned';
+        }
+    }
+
+    public function formatComment(): ?string {
+        $status = EMAIL_STATUS[$this->status] ?? null;
+        if(!$status) return null;
+
+        $reason = '';
+        if ($this->reason) $reason = " ($this->reason)";
+
+        return "Wiadomość $status do {$this->recipient}$reason";
+    }
+
+    private function getReason(array $payload): string {
+        if ('' !== ($payload['delivery-status']['description'] ?? '')) {
+            return $payload['delivery-status']['description'];
+        }
+        if ('' !== ($payload['delivery-status']['message'] ?? '')) {
+            return $payload['delivery-status']['message'];
+        }
+        if ('' !== ($payload['reason'] ?? '')) {
+            return $payload['reason'];
+        }
+
+        return '';
+    }
+}

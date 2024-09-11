@@ -57,6 +57,10 @@ $app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
 $app->get('/img-{hash}.php', JpegHandler::class . ':jpeg')
     ->add(new JpegMiddleware());
 
+$app->post('/webhooks/mailgun', WebhooksHandler::class . ':mailgun')
+    ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
+
 $app->post('/api/verify-token', SessionApiHandler::class . ':verifyToken')
     ->add(new AuthMiddleware())
     ->add(new JsonMiddleware())
