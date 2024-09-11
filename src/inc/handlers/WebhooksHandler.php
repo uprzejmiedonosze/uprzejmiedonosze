@@ -4,6 +4,7 @@ require_once(__DIR__ . '/AbstractHandler.php');
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Exception\HttpForbiddenException;
 use Symfony\Component\Webhook\Exception\RejectWebhookException;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 
@@ -16,13 +17,17 @@ class WebhooksHandler extends AbstractHandler {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function mailgun(Request $request, Response $response, $args): Response {
-        $this->verify($request);
-
+    public function mailgun(Request $request, Response $response): Response {
         global $storage;
-        $body = $request->getParsedBody();        
         
-        $payload = $body['event-data'];
+        $event = $request->getParsedBody();
+        $id = $event['event-data']['id'] ?? null;
+        if (!$id) throw new HttpForbiddenException($request, 'Missing event id.');
+
+        \webhook\add($id, $event);
+        $this->verify($request);
+        
+        $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
         $mailEvent = new MailEvent($payload);
 
@@ -32,12 +37,15 @@ class WebhooksHandler extends AbstractHandler {
         $ccToUser = $application->sent->to !== $payload['recipient'];
 
         if (!$ccToUser) {
-            $application->sent->status = $mailEvent->status;
+            // set sent status to accepted only if empty
+            if ($mailEvent->status !== 'accepted' || !$application->sent->status)
+                $application->sent->status = $mailEvent->status;
             if ($mailEvent->status == 'failed')
                 $application->setStatus('confirmed', true);
         }
 
         $application = $storage->saveApplication($application);
+        \webhook\mark($id);
 
         return $this->renderJson($response, array(
             "status" => "OK"
@@ -54,12 +62,12 @@ class WebhooksHandler extends AbstractHandler {
             || !isset($content['signature']['signature'])
             || !isset($content['event-data']['event'])
         ) {
-            throw new HttpForbiddenException($request, 'Payload is malformed.');
+            throw new HttpForbiddenException($psrRequest, 'Payload is malformed.');
         }
         if (
             !isset($content['event-data']['user-variables']['appid'])
         ) {
-            throw new HttpForbiddenException($request, 'Missing app-id');
+            throw new HttpForbiddenException($psrRequest, 'Missing app-id');
         }
 
         $this->validateSignature($content['signature']);
