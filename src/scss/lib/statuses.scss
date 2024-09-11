@@ -76,18 +76,18 @@
     background-color: $archived;
 }
 
-.comment-status-failed .status-dot::before {
+.delivery-status-failed .status-dot::before {
     background-color: $confirmed-ignored;
 }
 
-.comment-status-warned .status-dot::before {
+.delivery-status-warned .status-dot::before {
     background-color: $confirmed-instructed;
 }
 
-.comment-status-delivered .status-dot::before {
+.delivery-status-delivered .status-dot::before {
     background-color: $confirmed-fined;
 }
 
-.comment-status-ok .status-dot::before {
+.delivery-status-ok .status-dot::before {
     background-color: $draft;
 }

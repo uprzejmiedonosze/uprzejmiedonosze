@@ -121,7 +121,7 @@
             <h4>Historia wysyłki</h4>
             <ul data-role="listview">
             {% for date,comment in app.comments %}
-                <li class="comment-status-{{ comment.status ?? 'ok' }}">
+                <li class="delivery-status-{{ comment.status ?? 'ok' }}">
                     <span class="status-dot"></span>
                     {{ date|date('d.m.Y H:i') }} <b>{{ comment.source }}</b>:
                     {{ comment.comment | raw }}

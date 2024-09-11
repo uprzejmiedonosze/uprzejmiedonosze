@@ -47,6 +47,8 @@ class HtmlMiddleware implements MiddlewareInterface {
 
         global $BADGES;
         $parameters['badges'] = $BADGES;
+
+        $parameters['email_status'] = EMAIL_STATUS;
         return $parameters;
     }
 
