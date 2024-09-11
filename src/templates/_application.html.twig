@@ -118,11 +118,12 @@
 {% if app.isCurrentUserOwner and config.confirmationScreen is not defined %}
     {% if app.comments and app.comments|length > 0 %}
         <div id="comments">
-            <h4>Komentarze</h4>
+            <h4>Historia wysyłki</h4>
             <ul data-role="listview">
             {% for date,comment in app.comments %}
-                <li>
-                    {{ date|date('j.m.Y H:i') }} <b>{{ comment.source }}</b>:
+                <li class="comment-status-{{ comment.status ?? 'ok' }}">
+                    <span class="status-dot"></span>
+                    {{ date|date('d.m.Y H:i') }} <b>{{ comment.source }}</b>:
                     {{ comment.comment | raw }}
                 </li>
             {% endfor %}
@@ -131,15 +132,18 @@
     {% endif %}
     {% if app.statusHistory|length > 0 %}
         <div id="statusHistory">
-            <h4>Historia zmian statusów</h4>
-            <ul data-role="listview">
-            {% for date,status in app.statusHistory %}
-                <li>
-                    {{ date|date('j.m.Y H:i') }} <b>{{ app.user.name }}</b>:
-                    {{ statuses[status.new].comment }}
-                </li>
-            {% endfor %}
-            </ul>
+            <div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"
+                data-role="collapsible">
+                <h4>Historia zmian statusów</h4>
+                <ul data-role="listview">
+                {% for date,status in app.statusHistory %}
+                    <li class="status-history {{status.new}}">
+                        <span class="status-dot"></span>
+                        {{ date|date('d.m.Y H:i') }} {{ statuses[status.new].comment }}
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
         </div>
     {% endif %}
 {% endif %}
