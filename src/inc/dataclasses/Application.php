@@ -172,7 +172,7 @@ class Application extends JSONObject implements \JsonSerializable {
      * Set status (and store statuses history changes)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function setStatus(string $status): void{
+    public function setStatus(string $status, bool $force=false): void{
         global $STATUSES;
         $now = date(DT_FORMAT);
 
@@ -183,7 +183,8 @@ class Application extends JSONObject implements \JsonSerializable {
             logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}");
             return;
         }elseif(!in_array($status, $this->getStatus()->allowed)){
-            throw new Exception("Odmawiam zmiany statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
+            if (!$force)
+                throw new Exception("Odmawiam zmiany statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
         }
         if(!isset($this->statusHistory)){
             $this->statusHistory = [];
@@ -192,6 +193,7 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->statusHistory[$now]->old = $this->status;
         $this->statusHistory[$now]->new = $status;
 
+        // @TODO this is obsolete
         if ($status == 'confirmed-waiting' || $status == 'confirmed-waitingE') {
             if(!isset($this->sent)) {
                 $this->sent = new JSONObject();
