@@ -1,0 +1,93 @@
+.status-dot::before {
+    @extend %icon;
+    border-radius: 7px;
+}
+
+.draft .status-dot::before,
+.draft .change-status,
+.draft:after,
+.draft::marker {
+    background-color: $draft;
+}
+
+.ready .status-dot::before,
+.ready .change-status,
+.ready:after,
+.ready::marker {
+    background-color: $ready;
+}
+
+.confirmed .status-dot::before,
+.confirmed .change-status,
+.confirmed:after,
+.confirmed::marker {
+    background-color: $confirmed;
+}
+
+.confirmed h3 a {
+    font-weight: 700;
+}
+
+.confirmed-waiting .status-dot::before,
+.confirmed-waiting .change-status,
+.confirmed-waiting:after,
+.confirmed-waiting::marker,
+.confirmed-waitingE .status-dot::before,
+.confirmed-waitingE .change-status,
+.confirmed-waitingE:after,
+.confirmed-waiting::marker {
+    background-color: $confirmed-waiting;
+}
+
+.confirmed-sm .status-dot::before,
+.confirmed-sm .change-status,
+.confirmed-sm:after,
+.confirmed-sm::marker {
+    background-color: $confirmed-sm;
+}
+
+.confirmed-fined .status-dot::before,
+.confirmed-fined .change-status,
+.confirmed-fined:after,
+.confirmed-fined::marker {
+    background-color: $confirmed-fined;
+}
+
+.confirmed-ignored .status-dot::before,
+.confirmed-ignored .change-status,
+.confirmed-ignored:after,
+.confirmed-ignored::marker {
+    background-color: $confirmed-ignored;
+    color: white !important;
+}
+
+.confirmed-instructed .status-dot::before,
+.confirmed-instructed .change-status,
+.confirmed-instructed:after,
+.confirmed-instructed::marker {
+    background-color: $confirmed-instructed;
+    color: white !important;
+}
+
+.archived .status-dot::before,
+.archived .change-status,
+.archived:after,
+.archived::marker {
+    background-color: $archived;
+}
+
+.comment-status-failed .status-dot::before {
+    background-color: $confirmed-ignored;
+}
+
+.comment-status-warned .status-dot::before {
+    background-color: $confirmed-instructed;
+}
+
+.comment-status-delivered .status-dot::before {
+    background-color: $confirmed-fined;
+}
+
+.comment-status-ok .status-dot::before {
+    background-color: $draft;
+}
