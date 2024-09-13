@@ -13,7 +13,7 @@
 {% endif %} {# not confirmationScreen #}
     
 {% if app.sent is defined %}
-    {% if app.sent.method == 'Mail' %}
+    {% if app.sent.method == 'Mail' or app.sent.method == 'MailGun' %}
     <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }} &lt;{{ app.sent.to }}&gt;
         bezpośrednio z serwera Uprzejmie Donoszę o {{ app.getSentDate("H'<sup>'mm'</sup>', d MMM YYYY")|raw }}.</b>
     {% elseif app.sent.method == 'manual' %}
