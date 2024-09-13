@@ -13,6 +13,13 @@
     {% if users > 1 %}od {{ users }} użytkowników {% endif %}
     {% if cities > 1 %}w {{ cities}} miastach {% endif %}
 </h2>
+{% if not allImagesVisible and not userAllowedSharing %}
+<b class="recydywaInfo">
+    Nie widać wszystkich zdjęć? Możesz dodawać pojedyncze zdjęcia do galerii
+    lub <a data-ajax="false" target="_blank" href="/register.html?update">udostępnić wszystkie swoje zdjęcia innym</a>. Pomożesz w ten sposób rozwijać
+    galerię recydywistów.
+</b>
+{% endif %}
 <div class="list">
 {% for app in apps %}
     {% set status = app.getStatus %}
@@ -29,7 +36,7 @@
                     {% if app.isAppOwner %} twoje zgłoszenie {% endif %}
                 </div>
             </h3>
-            {% if app.statements.gallery or app.isAppOwner or app.canShareRecydywa %}
+            {% if app.showImage %}
             <figure>
                 <img src="{{ app.contextImage.thumb }}">
             </figure>

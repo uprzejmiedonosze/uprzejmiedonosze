@@ -193,29 +193,38 @@ class StaticPagesHandler extends AbstractHandler {
         $users = array();
         $cities = array();
         $image = null;
-        $plateImage = null;
+        $imagesCount = 0;
 
         foreach($apps as $app) {
             $users[$app->user->number] = 1;
             $cities[$app->address->city] = 1;
             $app->isAppOwner = $app->isAppOwner($user);
-            $app->canShareRecydywa = $storage->canShareRecydywa($app->user->email);
-            if(!$image && $app->statements->gallery) $image = $app->contextImage->thumb;
-            if(!$plateImage) $plateImage = $app->carInfo->plateImage;
+
+            // display image if this is user's own application, other user
+            // added it to gallery or allowed sharing globally
+            $app->showImage = $storage->canShareRecydywa($app->user->email)
+                || $app->statements->gallery
+                || $app->isAppOwner;
+
+            if($app->showImage) {
+                $imagesCount++;
+                if (!$image) $image = $app->contextImage->thumb;
+            }
         }
 
         return AbstractHandler::renderHtml($request, $response, "carStats", [
             'title' => "Tablica rejestracyjna {$plateId}",
-            'shortTitle' => $plateId,
+            'shortTitle' => "Tablica $plateId",
             'image' => $image,
-            'plateImage' => $plateImage,
-            'description' => "Samochód o nr. rejestracyjnym {$plateId} ",
+            'description' => "Samochód o nr. rejestracyjnym {$plateId}",
             'apps' => $apps,
             'users' => count($users),
             'cities' => count($cities),
             'recydywaCnt' => count($apps),
             'plateId' => $plateId,
-            'partial' => $request->getAttribute('partial')
+            'partial' => $request->getAttribute('partial'),
+            'allImagesVisible' => count($apps) == $imagesCount,
+            'userAllowedSharing' => $user->shareRecydywa()
         ]);
     }
 
