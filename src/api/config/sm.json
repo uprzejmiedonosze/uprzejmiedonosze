@@ -2900,5 +2900,13 @@
       "37-700 Przemyśl"
     ],
     "email": "administracja@smprzemysl.pl"
+  },
+  "Kaźmierz": {
+    "address": [
+      "Komenda Powiatowa Policji w Szamotułach",
+      "ul. Polna 3",
+      "64-500 Szamotuły"
+    ],
+    "email": "dyzurny.szamotuly@po.policja.gov.pl"
   }
 }
