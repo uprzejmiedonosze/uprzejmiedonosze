@@ -2908,5 +2908,13 @@
       "64-500 Szamotuły"
     ],
     "email": "dyzurny.szamotuly@po.policja.gov.pl"
+  },
+  "Sochaczew": {
+    "address": [
+      "Komenda Powiatowa Policji w Sochaczewie",
+      "ul. 1 Maja 10",
+      "96-500 Sochaczew"
+    ],
+    "email": "kppsochaczew@ra.policja.gov.pl"
   }
 }
