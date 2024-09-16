@@ -25,7 +25,7 @@ Object.entries(sm)
 				city = city.replace('powiat', 'Powiat')
 			} else city = `${e}` 
 			sm[e].hint = `${city} obsługuje ${sm[e].address[0]}`
-			+ ( (sm[e].hint) ? `: ${sm[e].hint}` : '')
+				+ ( (sm[e].hint) ? `: ${sm[e].hint}` : '')
 		}
 		if (orig.city) sm[e].city = orig.city
 	})

@@ -204,9 +204,6 @@
   "Koziegłowy": {
     "parent": "Czerwonak"
   },
-  "Soczewka": {
-    "parent": "Nowy Duninów"
-  },
   "Kałuszyn": {
     "parent": "Wieliszew"
   },
@@ -1859,13 +1856,22 @@
     ],
     "email": "strazgminna@zielonki.pl"
   },
-  "Nowy Duninów": {
+  "powiat Płocki": {
     "address": [
       "Komenda Miejska Policji w Płocku",
       "al. Kilińskiego 8",
       "09-400 Płock"
     ],
     "email": "kmpplock@ra.policja.gov.pl"
+  },
+  "Nowy Duninów": {
+    "parent": "powiat Płocki"
+  },
+  "gmina Słupno": {
+    "parent": "powiat Płocki"
+  },
+  "Soczewka": {
+    "parent": "powiat Płocki"
   },
   "Dopiewo": {
     "address": [
