@@ -76,7 +76,7 @@
     },
     "5": {
         "title": "Przejście dla pieszych",
-        "short": "Pojazd stał mniej niż 10m przed przejściem dla pieszych",
+        "short": "Pojazd stał mniej niż 10m od przejścia dla pieszych",
         "formal": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od przejścia dla pieszych (art. 49. 1.2 prd)",
         "informal": "Postój przy przejściu",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed przejściem dla pieszych jest niedozwolone. Na drodze dwukierunkowej niedozwolone jest także zatrzymanie/postój za przejściem.</p>",
