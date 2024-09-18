@@ -78,7 +78,7 @@
         "title": "Przejście dla pieszych",
         "short": "Pojazd stał mniej niż 10m przed przejściem dla pieszych",
         "formal": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od przejścia dla pieszych (PoRD Art. 49. 1.2.).",
-        "informal": "Postój przed przejściem",
+        "informal": "Postój przy przejściu",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed przejściem dla pieszych jest niedozwolone. Na drodze dwukierunkowej, niedozwolone jest także zatrzymanie/postój za przejście.</p>",
         "law": "PoRD Art. 49. 1.2. Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem.",
         "price": "100–300 zł (5 pkt)",
