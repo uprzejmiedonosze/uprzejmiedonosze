@@ -2922,5 +2922,16 @@
       "96-500 Sochaczew"
     ],
     "email": "kppsochaczew@ra.policja.gov.pl"
+  },
+  "powiat łódzki wschodni": {
+    "address": [
+      "Komenda Powiatowa Policji powiatu Łódzkiego Wschodniego",
+      "ul. 11 Listopada 62f",
+      "95-040 Koluszki"
+    ],
+    "email": "dyzurny@lodz-wschod.ld.policja.gov.pl"
+  },
+  "Koluszki": {
+    "parent": "powiat łódzki wschodni"
   }
 }
