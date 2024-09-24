@@ -1343,7 +1343,7 @@
   },
   "Skierniewice": {
     "address": [
-      "Straż Miejska  w Skierniewicach",
+      "Straż Miejska w Skierniewicach",
       "ul. Reymonta 33",
       "96-100 Skierniewice"
     ],
@@ -2933,5 +2933,13 @@
   },
   "Koluszki": {
     "parent": "powiat łódzki wschodni"
+  },
+  "Ostrzeszów": {
+    "address": [
+      "Straż Miejska w Ostrzeszowie",
+      "ul. Zamkowa 31",
+      "63-500 Ostrzeszów"
+    ],
+    "email": "sm@ostrzeszow.pl"
   }
 }
