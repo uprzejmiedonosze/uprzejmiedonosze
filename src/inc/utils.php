@@ -97,8 +97,7 @@ function setSentryTag(string $tag, $value): void {
 
     \Sentry\configureScope(function (\Sentry\State\Scope $scope) use ($tag, $value): void {
         $scope->setTag($tag, $value);
-    });    
+    });
 }
-
 
 ?>

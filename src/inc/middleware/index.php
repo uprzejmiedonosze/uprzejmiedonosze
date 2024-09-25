@@ -10,3 +10,4 @@ require(__DIR__ . '/SessionMiddleware.php');
 require(__DIR__ . '/HtmlErrorRenderer.php');
 require(__DIR__ . '/JsonBodyParser.php');
 require(__DIR__ . '/JsonErrorRenderer.php');
+require(__DIR__ . '/JpegMiddleware.php');

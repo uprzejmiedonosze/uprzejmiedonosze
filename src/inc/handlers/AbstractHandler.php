@@ -24,6 +24,16 @@ abstract class AbstractHandler {
         return $response;
     }
 
+    public static function renderJpeg(Response $response, $path): Response {
+        logger("renderJpeg: $path");
+        $response = $response->withHeader('Content-disposition', "inline");
+
+        $fullImagePath = ROOT . $path;
+        $image = file_get_contents($fullImagePath);
+        $response->getBody()->write($image);
+        return $response;
+    }
+
     public static function renderCsv(Response $response, $content, $filename): Response {
         $response = $response->withHeader('Content-disposition', "inline; filename=$filename");
         $response->getBody()->write($content);

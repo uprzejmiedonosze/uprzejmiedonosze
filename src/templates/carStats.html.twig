@@ -38,7 +38,7 @@
             </h3>
             {% if app.showImage %}
             <figure>
-                <img src="{{ app.contextImage.thumb }}">
+                <img src="{{ app.getSafeImageUrl }}">
             </figure>
             {% endif %}
             <div class="content">

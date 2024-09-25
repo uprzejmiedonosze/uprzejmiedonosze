@@ -58,6 +58,9 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
 $app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
     ->add(new CsvMiddleware());
 
+$app->get('/img-{hash}.jpg', JpegHandler::class . ':jpeg')
+    ->add(new JpegMiddleware());
+
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
     $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {
         $applications = $storage->getGalleryModerationApps();
@@ -155,6 +158,5 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     });
 })  ->add(new HtmlMiddleware())
     ->add(new OptionalUserMiddleware());
-
 
 $app->run();

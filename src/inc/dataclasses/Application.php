@@ -3,6 +3,7 @@
 require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
 require_once(__DIR__ . '/../integrations/CityAPI.php');
+require_once(__DIR__ . '/../Crypto.php');
 use \Datetime as Datetime;
 use \Exception as Exception;
 use \JSONObject as JSONObject;
@@ -619,5 +620,10 @@ class Application extends JSONObject implements JsonSerializable {
         }
 
         return $data;
+    }
+
+    public function getSafeImageUrl(): string {
+        $image = $this->contextImage->thumb ?? 'img/fff-1.png';
+        return 'img-' . (new Crypto())->encode($image) . '.jpg';
     }
 }
