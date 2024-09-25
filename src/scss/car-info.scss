@@ -11,6 +11,22 @@
     width: 100%;
 
     .card {
+
+      &.app-owner::before {
+        background-color: #009C7F;
+        border-radius: 5px 5px 0 0;
+        color: white;
+        content: "TWOJE ZGŁOSZENIE";
+        display: block;
+        font-size: 14px;
+        font-weight: 600;
+        padding-bottom: 3px;
+        padding: 5px;
+        padding: auto;
+        text-align: center;
+        text-shadow: none;
+      }
+
       border-radius: 0.3125em;
       box-shadow: 0 0 25px 0 rgba(0, 0, 0, .1);
       box-sizing: border-box;
@@ -33,7 +49,7 @@
       }
 
       .content {
-        padding: 0 0 1px 0;
+        padding: 0 1em 1px 0;
 
         li.category {
           img {

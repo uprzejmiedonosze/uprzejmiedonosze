@@ -33,7 +33,7 @@
                         <span class="currentStatus">{{ status.name }}</span>
                         {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję"> 👮‍♀️</span>{% endif %}
                     </div>
-                    {% if app.isAppOwner %} twoje zgłoszenie {% endif %}
+                    {{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}
                 </div>
             </h3>
             {% if app.showImage %}
@@ -50,7 +50,6 @@
                         {{app.userComment}}
                         {% endif %}
                     </li>
-                    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
                     <li class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</li>
                     {% if app.wasSent %}
                     <li class="info-icon">
