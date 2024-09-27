@@ -29,7 +29,8 @@
             placeholder="Adres, numer rej. lub zgłoszenia, data, komentarz" value="{{ query }}">
         <ul class="status-filter">
         {% for key,val in statuses %}
-            {% if val.class %} {# class is empty, this is a draft or ready #}
+        {# @TODO #}
+            {% if val.action %} {# class is empty, this is a draft or ready #}
                 <li class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|upper }}</a> <span class="ui-li-count"></span></li>
             {% endif %}
         {% endfor %}
