@@ -369,7 +369,7 @@ class Application extends JSONObject implements JsonSerializable {
         if(isset($this->carInfo) && isset($this->carInfo->plateId)){
             return $storage->getRecydywa($this->carInfo->plateId);
         }
-        return 0;
+        return 1;
     }
 
     private static function getLatexSafe($input){

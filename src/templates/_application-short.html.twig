@@ -1,11 +1,16 @@
 {% set recydywaCnt = app.getRecydywa %}
+{% set recydywa = "" %}
+{% if recydywaCnt > 1 %}
+{% set recydywa = recydywaCnt %}
+{% endif %}
+
 
 {% set status = app.getStatus %}
 
 
 <div id="{{ app.id }}"
     {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
-    class="application application-short status-all {{ app.status }}"
+    class="application application-short status-all {{ app.status }} {% if recydywa %}recydywa{% endif %}"
     data-role="collapsible"
     data-iconpos="none"
     data-filtertext="{{ app.address.address }} {{app.number}} {{app.date}} {{app.carInfo.plateId}} {{app.userComment}} {{app.getCategory.formal}} {{ app.guessSMData.getName }} {{ app.externalId }} {{ app.privateComment }} {% if recydywaCnt > 1 %}recydywa{{ recydywaCnt }}{% endif %}">
@@ -14,7 +19,12 @@
         <div class="top-line">
             <div><span class="status-dot"></span> <span class="currentStatus">{{ status.name }}</span>{%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję"> 👮‍♀️</span>{% endif %}</div>
             <div> {{ app.getDate|raw }}</div>
-            <div>{% if recydywaCnt > 1 %}<span data-recydywacnt="{{ recydywaCnt }}" class="recydywa small">#{{ recydywaCnt }}</span> {% endif %}<span class="plate-id small">{{ app.carInfo.plateId }}</span></div>
+            <div>
+                <span class="plate-id small">
+                    <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-cnt">{{ recydywaCnt }}</span>
+                    {{ app.carInfo.plateId }}
+                </span>
+            </div>
         </div>
         <div class="bottom-line">
             <div class="address">

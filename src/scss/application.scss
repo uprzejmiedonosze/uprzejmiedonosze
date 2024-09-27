@@ -80,7 +80,23 @@
     }
   }
 
-  .plate-id {
+  .recydywa span.plate-id {
+    border-left-color: #D55745;
+    border-width: 1px 1px 2px 1em;
+    border-color: #D55745;
+    .recydywa-cnt {
+      margin-left: -1em;
+      text-shadow: none;
+      color: white;
+      display: inline;
+    }
+    &.small {
+      border-width: 1px 1px 1px 1em;
+    }
+    
+  }
+
+  span.plate-id {
     font-family: monospace;
     font-weight: 600;
     background: white;
@@ -90,6 +106,10 @@
     border-radius: 3px;
     border-width: 1px 1px 2px 10px;
     border-style: solid;
+
+    .recydywa-cnt {
+      display: none;
+    }
 
     &.small {
       font-size: 9pt;

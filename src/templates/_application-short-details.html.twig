@@ -28,7 +28,7 @@
         Zgłoszenie <tt>{{ app.number }}</tt>
     </li>
     {% if recydywaCnt > 1 %}
-    <li class="no-icon">RECYDYWA <span class="recydywa">#{{ recydywaCnt }}</span> <a href="#" class="recydywa" data-plateid="{{ app.carInfo.plateId }}">(zobacz pozostałe)</a></li>
+    <li class="no-icon"><span class="recydywa">RECYDYWA {{ recydywaCnt }}</span> <a href="#" class="recydywa" data-plateid="{{ app.carInfo.plateId }}">(zobacz pozostałe)</a></li>
     {% endif %}
 
     <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
@@ -38,17 +38,17 @@
         <li class="send">
             {% if app.automatedSM and (autoSend ?? false) %}
                 <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini cta ui-icon-{{ statuses['confirmed-waiting'].icon }} confirmed-waiting">
+                class="ui-btn ui-btn-inline ui-corner-all ui-mini cta confirmed-waiting">
                     Wyślij do {{ app.guessSMData.getShortName }}
                 </a>
             {% elseif app.unknownSM %}
                 <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail cta confirmed-waiting">
+                class="ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini cta confirmed-waiting">
                     Wyślij zgłoszenie
                 </a>
             {% elseif wysylka is not defined %}
                 <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
-                class="ui-btn ui-btn-inline ui-btn-icon-left ui-corner-all ui-nodisc-icon ui-mini ui-icon-mail confirmed-waiting cta">
+                class="ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini confirmed-waiting cta">
                     Wyślij zgłoszenie
                 </a>
             {% endif %}
