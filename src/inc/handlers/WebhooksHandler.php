@@ -5,7 +5,6 @@ require_once(__DIR__ . '/AbstractHandler.php');
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
-use Symfony\Component\Webhook\Exception\RejectWebhookException;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 
 class WebhooksHandler extends AbstractHandler {
@@ -80,7 +79,7 @@ class WebhooksHandler extends AbstractHandler {
     private function validateSignature(array $signature): void {
         // see https://documentation.mailgun.com/en/latest/user_manual.html#webhooks-1
         if (!hash_equals($signature['signature'], hash_hmac('sha256', $signature['timestamp'].$signature['token'], MAILER_WEBHOOK_SECRET))) {
-            throw new RejectWebhookException(406, 'Signature is wrong.');
+            throw new RejectWebhookException('Signature is wrong.');
         }
     }
 }

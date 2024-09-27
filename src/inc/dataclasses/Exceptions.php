@@ -21,3 +21,9 @@ class ForbiddenException extends Exception {
         parent::__construct($msg, 401);
     }
 }
+
+class RejectWebhookException extends Exception {
+    public function __construct(string $msg) {
+        parent::__construct($msg, 406);
+    }
+}
