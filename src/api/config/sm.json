@@ -719,7 +719,8 @@
       "ul. Łokietka 22",
       "66-400 Gorzów Wielkopolski"
     ],
-    "email": "ksm@um.gorzow.pl"
+    "email": "ksm@um.gorzow.pl",
+    "hint": "Niestety SM Gorzów wzywa na przesłuchanie w każdej sprawie."
   },
   "Stronie Śląskie": {
     "address": [
@@ -2905,7 +2906,8 @@
       "ul. Sportowa 8",
       "37-700 Przemyśl"
     ],
-    "email": "administracja@smprzemysl.pl"
+    "email": "administracja@smprzemysl.pl",
+    "hint": "Niestety SM Przemyśl wzywa na przesłuchanie w każdej sprawie."
   },
   "Kaźmierz": {
     "address": [
