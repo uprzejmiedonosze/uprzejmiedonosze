@@ -383,7 +383,8 @@
     ],
     "email": "sekretariat.srodmiescie@sc.policja.gov.pl",
     "voivodeship": "Zachodniopomorskie",
-    "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie."
+    "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie.",
+    "api": "MailGun"
   },
   "Szczecin-Dąbie": {
     "address": [

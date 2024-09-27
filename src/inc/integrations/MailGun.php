@@ -12,7 +12,7 @@ use Symfony\Component\Mime\Part\DataPart;
 /**
  * @SuppressWarnings(PHPMD.MissingImport)
  */
-class Mail extends CityAPI {
+class MailGun extends CityAPI {
     public bool $withXls = false;
 
     /**
