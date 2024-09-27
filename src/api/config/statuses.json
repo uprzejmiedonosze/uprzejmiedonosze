@@ -1,23 +1,19 @@
 {
   "draft": {
     "name": "Draft",
-    "action": "Dalej",
+    "action": null,
     "icon": "edit",
-    "class": "none",
     "allowed": ["ready"],
     "comment": "Stworzenie zgłoszenia",
-    "topButtons": false,
     "editable": true,
     "sendable": false
   },
   "ready": {
     "name": "Edycja",
-    "action": "Potwierdź",
+    "action": null,
     "icon": "shop",
-    "class": "none",
     "allowed": ["draft", "confirmed", "ready"],
     "comment": "Zapisanie wersji roboczej",
-    "topButtons": false,
     "editable": true,
     "sendable": false
   },
@@ -25,32 +21,53 @@
     "name": "Nowe",
     "action": "Nowe",
     "icon": "cloud",
-    "class": "bottom",
-    "allowed": ["ready", "confirmed-waiting", "archived"],
+    "allowed": ["ready", "sending", "sending-problem", "sending-failed", "confirmed-waiting", "archived"],
     "comment": "Zapisanie gotowego zgłoszenia",
-    "topButtons": true,
     "editable": true,
+    "sendable": true
+  },
+  "sending": {
+    "name": "Wysyłam",
+    "action": null,
+    "icon": "mail",
+    "allowed": ["sending-problem", "sending-failed", "confirmed-waiting", "archived"],
+    "comment": "Wysyłka w trakcie",
+    "editable": false,
+    "sendable": false
+  },
+  "sending-problem": {
+    "name": "Problem z wysyłką",
+    "action": null,
+    "icon": "mail",
+    "allowed": ["sending-failed", "confirmed-waiting", "archived"],
+    "comment": "Tymczasowy problem z wysyłką",
+    "editable": false,
+    "sendable": false
+  },
+  "sending-failed": {
+    "name": "Niewysłane",
+    "action": null,
+    "icon": "mail",
+    "allowed": ["sending-problem", "confirmed-waiting", "archived"],
+    "comment": "Nie udało się wysłać wiadomości",
+    "editable": false,
     "sendable": true
   },
   "confirmed-waiting": {
     "name": "Wysłane",
-    "action": "Wyślij do SM",
+    "action": null,
     "icon": "mail",
-    "class": "top",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Wysłanie zgłoszenia",
-    "topButtons": true,
     "editable": false,
     "sendable": false
   },
   "confirmed-waitingE": {
     "name": "Wysłane epuap",
-    "action": "Wysłane epuapem",
+    "action": null,
     "icon": "clock",
-    "class": "top",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Wysłanie zgłoszenia za pomocą EPUAP",
-    "topButtons": true,
     "editable": false,
     "sendable": false
   },
@@ -58,10 +75,8 @@
     "name": "Potwierdzone",
     "action": "Zgłoszenie zostało potwierdzone w SM",
     "icon": "user",
-    "class": "bottom",
     "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Potwierdzenie przyjęcia zgłoszenia przez/w SM",
-    "topButtons": true,
     "editable": false,
     "sendable": false
   },
@@ -69,10 +84,8 @@
     "name": "Mandat",
     "action": "Kierowca dostał mandat",
     "icon": "check",
-    "class": "bottom",
     "allowed": ["confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Kierowca został ukarany mandatem",
-    "topButtons": true,
     "editable": false,
     "sendable": false
   },
@@ -80,10 +93,8 @@
     "name": "Pouczenie",
     "action": "Kierowca został pouczony",
     "icon": "audio",
-    "class": "bottom",
     "allowed": ["confirmed-fined", "confirmed-ignored", "archived"],
     "comment": "Kierowca został pouczony",
-    "topButtons": true,
     "editable": false,
     "sendable": false
   },
@@ -91,10 +102,8 @@
     "name": "Zignorowane",
     "action": "Nie ukarano ani nie pouczono kierowcy",
     "icon": "delete",
-    "class": "bottom",
     "allowed": ["confirmed-fined", "confirmed-instructed", "archived"],
     "comment": "Zgłoszenie zostało zignorowane, nie wskazany ",
-    "topButtons": true,
     "editable": false,
     "sendable": false
   },
@@ -102,10 +111,8 @@
     "name": "W archiwum",
     "action": "Przenieś do archiwum",
     "icon": "minus",
-    "class": "bottom",
     "allowed": ["confirmed"],
     "comment": "Zgłoszenie zostało zarchiwizowane",
-    "topButtons": false,
     "editable": false,
     "sendable": false,
     "confirmationNeeded": true

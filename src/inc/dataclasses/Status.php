@@ -26,9 +26,5 @@ class Status extends JSONObject{
     public function getIcon(){
         return $this->icon;
     }
-
-    public function getClass(){
-        return $this->class;
-    }
 }
 

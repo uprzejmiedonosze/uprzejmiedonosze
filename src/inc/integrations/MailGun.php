@@ -51,7 +51,7 @@ class Mail extends CityAPI {
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
-        $application->setStatus('confirmed-waiting');
+        $application->setStatus('sending');
         $application->addComment("admin", "Wysłano do {$application->guessSMData()->getName()}.");
         $application->sent = new JSONObject();
         $application->sent->date = date(DT_FORMAT);

@@ -76,14 +76,17 @@
     background-color: $archived;
 }
 
+.sending-failed .status-dot::before,
 .delivery-status-failed .status-dot::before {
     background-color: $confirmed-ignored;
 }
 
-.delivery-status-warned .status-dot::before {
+.sending-problem .status-dot::before,
+.delivery-status-problem .status-dot::before {
     background-color: $confirmed-instructed;
 }
 
+.sending .status-dot::before,
 .delivery-status-delivered .status-dot::before {
     background-color: $confirmed-fined;
 }

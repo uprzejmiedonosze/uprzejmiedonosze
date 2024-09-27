@@ -113,10 +113,10 @@ const SEXSTRINGS = Array (
 );
 
 const EMAIL_STATUS = Array (
-    'accepted' => null,
-    'delivered' => "dotarła",
-    'failed' => "nie dotarła",
-    'warned' => "ma problem z dotarciem"
+    'accepted' => "wysyłam",
+    'delivered' => "wysłane",
+    'failed' => "niewysłane",
+    'problem' => "problem z wysyłką"
 );
 
 ?>

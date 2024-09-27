@@ -33,13 +33,16 @@
       &.confirmed .ui-li-count {
         background-color: $confirmed;
       }
+      &.sending .ui-li-count,
       &.confirmed-fined .ui-li-count {
         background-color: $confirmed-fined;
       }
+      &.sending-failed .ui-li-count,
       &.confirmed-ignored .ui-li-count {
         background-color: $confirmed-ignored;
         color: white;
       }
+      &.sending-problem .ui-li-count,
       &.confirmed-instructed .ui-li-count {
         background-color: $confirmed-instructed;
         color: white;

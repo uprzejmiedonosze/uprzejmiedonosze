@@ -38,10 +38,14 @@ class WebhooksHandler extends AbstractHandler {
 
         if (!$ccToUser) {
             // set sent status to accepted only if empty
-            if ($mailEvent->status !== 'accepted' || !$application->sent->status)
-                $application->sent->status = $mailEvent->status;
+            if ($mailEvent->status == 'accepted' || $application->status == 'confirmed')
+                $application->setStatus('sending', true);
+            if ($mailEvent->status == 'problem')
+                $application->setStatus('sending-problem', true);
             if ($mailEvent->status == 'failed')
-                $application->setStatus('confirmed', true);
+                $application->setStatus('sending-failed', true);
+            if ($mailEvent->status == 'delivered')
+                $application->setStatus('confirmed-waiting', true);
         }
 
         $application = $storage->saveApplication($application);
@@ -111,8 +115,8 @@ class MailEvent { // MailgunPayloadConverter
             'opened' => 'delivered',
             'complained' => 'failed'
         };
-        if ('temporary' === $payload['severity']) {
-            $this->status = 'warned';
+        if ('temporary' === ($payload['severity'] ?? null)) {
+            $this->status = 'problem';
         }
     }
 
