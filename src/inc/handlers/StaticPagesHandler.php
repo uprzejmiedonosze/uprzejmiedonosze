@@ -224,7 +224,7 @@ class StaticPagesHandler extends AbstractHandler {
             'plateId' => $plateId,
             'partial' => $request->getAttribute('partial'),
             'allImagesVisible' => count($apps) == $imagesCount,
-            'userAllowedSharing' => $user->shareRecydywa()
+            'userAllowedSharing' => $user ? $user->shareRecydywa() : true
         ]);
     }
 
