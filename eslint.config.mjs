@@ -34,6 +34,7 @@ export default [...fixupConfigRules(compat.extends(
             ...globals.browser,
             ...globals.jquery,
             ...cypress.environments.globals.globals,
+            "cypress/globals": true
         },
 
         ecmaVersion: 2018,

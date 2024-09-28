@@ -50,33 +50,33 @@ describe('Static pages no session', function() {
 
     it('/menu » przepisy', () => {
         cy.contains('Menu').click()
-        cy.contains('– przepisy').click()
+        cy.contains('Przepisy').click()
         cy.contains('Pojazd może być usunięty z drogi na koszt właściciela')
     })
 
     it('/menu » faq', () => {
         cy.contains('Menu').click()
-        cy.contains('faq').click()
+        cy.contains('FAQ').click()
         cy.contains('Konstantynów Łódzki')
         cy.contains('Szczecin')
     })
 
     it('/menu » faq » aplikacja', () => {
         cy.contains('Menu').click()
-        cy.contains('faq').click()
+        cy.contains('FAQ').click()
         cy.contains('wygodny skrót').click()
         cy.contains('Zainstaluj przeglądarkę')
     })
 
     it('/menu » przesłuchanie', () => {
         cy.contains('Menu').click()
-        cy.contains('przesłuchanie świadka').click()
+        cy.contains('Wizyta w SM').click()
         cy.contains('Czy straż miejska wezwie mnie na przesłuchanie?')
     })
 
     it('/menu » przesłuchanie » zwrot', () => {
         cy.contains('Menu').click()
-        cy.contains('przesłuchanie świadka').click()
+        cy.contains('Wizyta w SM').click()
         cy.contains('zwrot środków za przesłuchanie').click()
         cy.contains('Zwrot utraconego dochodu')
     })

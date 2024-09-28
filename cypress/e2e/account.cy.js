@@ -13,8 +13,7 @@ describe('Create account', () => {
     cy.contains('Menu').click()
     cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Dane konta')
-    cy.contains('Czy chcesz dołączać do zgłoszenia')
-    cy.contains('Chcę wysyłać swoje zgłoszenia').should('not.exist')
+    cy.contains('Chcę wysyłać swoje zgłoszenia').should('exist')
 
     cy.contains('Menu').click()
     cy.contains('Moje zgłoszenia').click({force: true})
@@ -89,11 +88,10 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Edycja konta').click({force: true})
     cy.contains('Zaktualizuj konto')
-    cy.contains('Czy chcesz dołączać do zgłoszenia')
+    cy.contains('Chcę pozwalać na prezentowanie')
     cy.contains('Chcę wysyłać swoje zgłoszenia')
     cy.contains('na komendę')
 
-    cy.get('#exposeData-N').should('be.checked')
     cy.get('#stopAgresji-SM').should('be.checked')
   })
 
@@ -124,7 +122,6 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Edycja konta').click({force: true})
 
-    cy.get('#exposeData-Y').check({force: true})
     cy.get('#stopAgresji-SA').check({force: true})
 
     cy.contains('Potwierdź').click()
@@ -132,7 +129,6 @@ describe('Update account', () => {
     cy.contains('Menu').click()
     cy.contains('Edycja konta').click({force: true})
 
-    cy.get('#exposeData-Y').should('be.checked')
     cy.get('#stopAgresji-SA').should('be.checked')
   })
 

@@ -28,6 +28,7 @@
     "@parcel/transformer-sass": "^2.12.0",
     "@parcel/transformer-webmanifest": "^2.12.0",
     "@sentry/cli": "^2.33.1",
+    "@types/jest": "^29.5.13",
     "@types/jquery": "^3.5.30",
     "cypress": "^13.13.2",
     "eslint": "^9.9.0",
