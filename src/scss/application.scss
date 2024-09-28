@@ -80,20 +80,32 @@
     }
   }
 
-  .recydywa span.plate-id {
-    border-left-color: #D55745;
-    border-width: 1px 1px 2px 1em;
-    border-color: #D55745;
-    .recydywa-cnt {
-      margin-left: -1em;
-      text-shadow: none;
+  .recydywa {
+    span.recydywa-cnt {
+      background-color: #D55745;
+      border: 1px solid #D55745;
+      border-radius: 3px 0 0 3px;
       color: white;
       display: inline;
+      font-size: 9pt;
+      font-weight: 300;
+      margin-right: -4px;
+      padding: 2px 3px;
+      text-shadow: none;
     }
-    &.small {
-      border-width: 1px 1px 1px 1em;
+    span.plate-id {
+      border-left-color: #D55745;
+      border-width: 1px 1px 2px 0;
+      border-color: #D55745;
+      border-radius: 0 3px 3px 0;
+      &.small {
+        border-width: 1px 1px 1px 0;
+      }
     }
-    
+  }
+
+  .recydywa-cnt {
+    display: none;
   }
 
   span.plate-id {
@@ -106,10 +118,6 @@
     border-radius: 3px;
     border-width: 1px 1px 2px 10px;
     border-style: solid;
-
-    .recydywa-cnt {
-      display: none;
-    }
 
     &.small {
       font-size: 9pt;
