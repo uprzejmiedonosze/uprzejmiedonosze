@@ -8,7 +8,6 @@ class JpegHandler extends AbstractHandler {
 
     private function decode(string $hash): string {
         $decoded = (new Crypto())->decode($hash);
-        logger("decoded = $decoded", true);
         return $decoded;
     }
 
@@ -17,7 +16,6 @@ class JpegHandler extends AbstractHandler {
      */
     public function jpeg(Request $request, Response $response, $args): Response {
         $hash = $args['hash'];
-        logger("hash: $hash", true);
         return AbstractHandler::renderJpeg($response, $this->decode($hash));
     }
 }
