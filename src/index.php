@@ -13,7 +13,7 @@ function resetSession() {
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
 }
 
-if (session_status() == PHP_SESSION_NONE) {
+if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
     $timeout = 60 * 60 * 24 * 180;
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
@@ -58,7 +58,7 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
 $app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
     ->add(new CsvMiddleware());
 
-$app->get('/img-{hash}.jpg', JpegHandler::class . ':jpeg')
+$app->get('/img-{hash}.php', JpegHandler::class . ':jpeg')
     ->add(new JpegMiddleware());
 
 $app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
@@ -111,6 +111,9 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
 
     $group->get('/zapytaj-o-status.html', ApplicationHandler::class . ':askForStatus');
 
+    $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStatsFull');
+    $group->get('/recydywa-{plateId}-partial.html', StaticPagesHandler::class . ':carStatsPartial');
+
 })  ->add(new HtmlMiddleware())
     ->add(new RegisteredMiddleware());
 
@@ -142,9 +145,6 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/faq.html', StaticPagesHandler::class . ':faq');
     $group->get('/przesluchanie.html', StaticPagesHandler::class . ':hearing');
     $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
-
-    $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStatsFull');
-    $group->get('/recydywa-{plateId}-partial.html', StaticPagesHandler::class . ':carStatsPartial');
 
     $group->get('/{route}.html', StaticPagesHandler::class . ':default');
 

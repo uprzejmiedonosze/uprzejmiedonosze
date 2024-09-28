@@ -14,6 +14,7 @@ class JpegMiddleware implements MiddlewareInterface {
             ->withHeader('Access-Control-Allow-Origin', '*')
             ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Origin')
             ->withHeader('Access-Control-Allow-Methods', 'GET')
+            ->withHeader('Cache-Control', 'public, max-age=604800')
             ->withHeader('Content-Type', 'image/jpeg');
     }
 }

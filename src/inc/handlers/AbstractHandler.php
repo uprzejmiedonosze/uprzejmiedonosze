@@ -27,6 +27,7 @@ abstract class AbstractHandler {
     public static function renderJpeg(Response $response, $path): Response {
         logger("renderJpeg: $path");
         $response = $response->withHeader('Content-disposition', "inline");
+        $response = $response->withStatus(200);
 
         $fullImagePath = ROOT . $path;
         $image = file_get_contents($fullImagePath);

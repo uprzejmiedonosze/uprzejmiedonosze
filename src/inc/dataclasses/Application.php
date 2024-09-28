@@ -624,6 +624,6 @@ class Application extends JSONObject implements JsonSerializable {
 
     public function getSafeImageUrl(): string {
         $image = $this->contextImage->thumb ?? 'img/fff-1.png';
-        return 'img-' . (new Crypto())->encode($image) . '.jpg';
+        return 'img-' . (new Crypto())->encode($image) . '.php?sessionless';
     }
 }
