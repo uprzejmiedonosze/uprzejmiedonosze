@@ -12,18 +12,11 @@ $(document).on("pageshow", function () {
 
   $("#collapsiblesetForFilter" ).on("filterablebeforefilter", function() {
     $.mobile.loading("show")
-    $('b.recydywaInfo').css('display', 'none');
-
   })
 
   $("#collapsiblesetForFilter" ).on("filterablefilter", function() {
     $.mobile.loading("hide")
-    const should = $("div.application:not(.ui-screen-hidden):first .recydywa.small").data('recydywacnt')
-    const is = $("div.application:not(.ui-screen-hidden)").length
-    if (is < should)
-      $('b.recydywaInfo').css('display', 'block');
   });
-
 
   $("div.displayAllApps a").on('click', displayAllApps);
 

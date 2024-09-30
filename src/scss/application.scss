@@ -176,9 +176,11 @@ b.recydywaInfo {
   padding: 1em;
   border-radius: 5px;
   text-shadow: none;
-}
-b.recydywaInfo {
-  display: none;
+  margin: 1em;
+
+  a {
+    font-weight: 400;
+  }
 }
 
 b.lightWarning {
