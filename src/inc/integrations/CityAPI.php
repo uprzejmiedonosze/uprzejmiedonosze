@@ -5,11 +5,12 @@ abstract class CityAPI {
     abstract function send(&$application);
 
     static function checkApplication(&$application){
-        if($application->status !== 'confirmed'){
-            throw new Exception("Nie mogę wysłać zgłoszenia '$application->id' w statusie '$application->status'");
+        global $STATUSES;
+        if(!$STATUSES[$application->status]->sendable){
+            throw new Exception("Nie mogę wysłać zgłoszenia '$application->number' w statusie '$application->status'");
         }
         if(!$application->guessSMData()->api){
-            throw new Exception("Nie mogę wysłać zgłoszenia '$application->id' dla miasta "
+            throw new Exception("Nie mogę wysłać zgłoszenia '$application->number' dla miasta "
                . $application->guessSMData()->city);
         }
         return true;
