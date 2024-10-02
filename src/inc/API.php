@@ -127,19 +127,6 @@ function sendApplication(string $appId, User $user): Application {
     return $application;
 }
 
-function addToGallery(string $appId): void {
-    global $storage;
-
-    $application = $storage->getApplication($appId);
-    if (!$application->isCurrentUserOwner()) {
-        throw new ForbiddenException("Próba zmiany cudzego zgłoszenia $appId!");
-    }
-
-    $application->initStatements();
-    $application->statements->gallery = date(DT_FORMAT);
-    $storage->saveApplication($application);
-}
-
 /**
  * @SuppressWarnings(PHPMD.ElseExpression)
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)

@@ -82,40 +82,6 @@ lub wesprzeć mnie
 </p>
 {% endif %}
 
-{% if appsCount > 3 and sm.email and ( not app.addedToGallery ) %}
-<div class="addToGallery {% if autoSend %}afterSend{% endif %}">
-    <h4>Dodaj to zdjęcie do galerii</h4>
-    <p>Dodaj zdjęcie do <a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>.
-    Udostępnimy zdjęcie z kontekstem, numer rejestracyjny (nr rej. to nie dane osobowe!), miasto, twój komentarz oraz rodzaj wykroczenia.</p>
-
-    <span id="{{ app.id }}">
-        <a href="#" onclick="addToGallery('{{ app.id }}')"
-            class="ui-btn ui-mini ui-corner-all ui-btn-icon-left ui-btn-inline ui-alt-icon addToGallery
-            ui-nodisc-icon ui-icon-grid try">Dodaj do galerii</a>
-    </span>
-    <a href="#" onclick="ignoreGallery()"
-        class="ui-btn ui-mini ui-corner-all ui-btn-inline">Zignoruj</a>
-    <div class="tumblr_posts dziekujemy">
-        <div class="galleryItem" id="{{app.id}}">
-            <img src="{{ app.contextImage.thumb }}" width="600" height="400">
-            <p class="desc">
-                <b>{{ app.carInfo.plateId }}</b>
-                {{ app.address.city}} – {{ app.getCategory.getShort }}
-                {% if app.userComment %}
-                    <br />{{ app.userComment }}
-                {% endif %}
-            </p>
-        </div>
-    </div>
-</div><!-- class="addToGallery" -->
-<div class="addedToGallery" style="display: none;">
-<h4>Zdjęcie zostało dodane do galerii</h4>
-<p>Dziękujemy za zgłoszenie zdjęcia do
-<a target="_blank" data-ajax="false" href="https://galeria.uprzejmiedonosze.net/">Galerii Uprzejmie Donoszę</a>. Twoje zdjęcie oczekuje
-na moderację i zostanie opublikowane w przeciągu 24h.
-</div>
-{% endif %}
-
 {% if autoSend %}
 <script>
     $(document).on("pageshow", function () {

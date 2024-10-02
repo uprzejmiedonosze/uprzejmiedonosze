@@ -73,16 +73,6 @@ class SessionApiHandler extends AbstractHandler {
         ));
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function addToGallery(Request $request, Response $response, $args): Response {
-        $appId = $args['appId'];
-        addToGallery($appId);
-        return $this->renderJson($response, array(
-            "status" => "OK"
-        ));
-    }
     public function moderateGallery(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $decision = $args['decision'];
