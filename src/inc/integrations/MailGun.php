@@ -43,9 +43,6 @@ class MailGun extends CityAPI {
         $message->replyTo(new Address($application->user->email, $application->user->name));
         //$message->returnPath($application->user->email);
         
-        $message->getHeaders()->addTextHeader("X-UD-AppId", $application->id);
-        $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
-        $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
@@ -81,10 +78,38 @@ class MailGun extends CityAPI {
             throw new Exception($error, 500);
         }
 
-        global $storage;
         $storage->saveApplication($application);
         return $application;
     }
+
+    function notifyUser(Application &$application, string $subject, string $reason){
+        $messageBody = initBareTwig()->render('_notification.email.twig', [
+            'app' => $application,
+            'reason' => $reason,
+            'sm' => $application->guessSMData()->getShortName()
+        ]);
+        $transport = Transport::fromDsn(MAILER_DSN);
+        $mailer = new Mailer($transport); 
+        $message = (new Email());
+        $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
+        $message->to(new Address($application->user->email, $application->user->name));
+        $message->subject($subject);
+        $message->text($messageBody);
+        
+        $message->getHeaders()->addTextHeader("v:appid", $application->id);
+        $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
+        $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
+        $message->getHeaders()->addTextHeader("v:nofitication", true);
+        $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
+
+        try {
+            if (!isDev())
+                $mailer->send($message);
+        } catch (TransportExceptionInterface $error) {
+            throw new Exception($error, 500);
+        }
+    }
+
 }
 
 ?>

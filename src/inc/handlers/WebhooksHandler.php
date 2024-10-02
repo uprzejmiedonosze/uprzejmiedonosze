@@ -28,6 +28,14 @@ class WebhooksHandler extends AbstractHandler {
         
         $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
+
+        if(isset($payload['user-variables']['nofitication'])) {
+            // this is a notification sent by this web-hook, don't process it
+            return $this->renderJson($response, array(
+                "type" => "notification",
+                "status" => "ignored"
+            ));
+        }
         $mailEvent = new MailEvent($payload);
 
         $application = $storage->getApplication($appId);
@@ -49,6 +57,11 @@ class WebhooksHandler extends AbstractHandler {
 
         $application = $storage->saveApplication($application);
         \webhook\mark($id);
+
+        if ($mailEvent->status == 'failed')
+            (new MailGun())->notifyUser($application,
+                "Nie udało się nam dostarczyć wiadomości zgłoszenia {$application->getNumber()}",
+                $mailEvent->getReason());
 
         return $this->renderJson($response, array(
             "status" => "OK"
@@ -96,7 +109,7 @@ class MailEvent { // MailgunPayloadConverter
 
     public function __construct(array $payload) {
         $this->id = $payload['id'];
-        $this->reason = $this->getReason($payload);
+        $this->reason = $this->parsetReason($payload);
         $this->name = $payload['event'];
         $this->date = \DateTimeImmutable::createFromFormat('U.u', sprintf('%.6F', $payload['timestamp']));
         $this->recipient = $payload['recipient'];
@@ -117,6 +130,8 @@ class MailEvent { // MailgunPayloadConverter
         if ('temporary' === ($payload['severity'] ?? null)) {
             $this->status = 'problem';
         }
+
+        logger("MailEvent {$this->name} <{$this->recipient}>");
     }
 
     public function formatComment(): ?string {
@@ -126,10 +141,14 @@ class MailEvent { // MailgunPayloadConverter
         $reason = '';
         if ($this->reason) $reason = " ($this->reason)";
 
-        return "Wiadomość $status do {$this->recipient}$reason";
+        return "$status do {$this->recipient}$reason";
     }
 
-    private function getReason(array $payload): string {
+    public function getReason(): string {
+        return $this->reason;
+    }
+
+    private function parsetReason(array $payload): string {
         if ('' !== ($payload['delivery-status']['description'] ?? '')) {
             return $payload['delivery-status']['description'];
         }
