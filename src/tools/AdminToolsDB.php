@@ -258,6 +258,29 @@ class AdminToolsDB extends NoSQLite{
         }
         $this->getStore('applications')->set($app->id, json_encode($app));
     }
+
+    public function refreshRecydywa() {
+        $sql = <<<SQL
+            select json_extract(value, '$.carInfo.plateId') as plateId,
+                count(key) as appsCnt,
+                count(distinct email) as usersCnt,
+                count(distinct json_extract(value, '$.address.city')) as citiesCnt
+            from applications 
+            where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
+            group by 1;
+        SQL;
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+
+        $recydywa = $this->getStore('recydywa');
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $plateId = trim(strtoupper($row[0]));
+            echo "$plateId set\n";
+            $rec = Recydywa::withValues($row[1], $row[2], $row[3]);
+            $recydywa->set("$plateId v2", json_encode($rec));
+        }
+    }
 }
 
 $db = new AdminToolsDB();
