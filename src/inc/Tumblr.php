@@ -15,8 +15,8 @@ function addToTumblr(&$app){
     $blogName = 'uprzejmie-donosze';
 
     $recydywa = "";
-    if ($app->getRecydywa() > 1)
-        $recydywa = "*(recydywa {$app->getRecydywa()})*";
+    if ($app->getRecydywa()->appsCnt > 1)
+        $recydywa = "*(recydywa {$app->getRecydywa()->appsCnt})*";
 
     $description = $app->getCategory()->getFormal()
         . " "

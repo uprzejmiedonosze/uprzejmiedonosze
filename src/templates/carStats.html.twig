@@ -8,16 +8,15 @@
 {% block main %}
 
 <h2>
-    <span class="recydywa">recydywa {{ recydywaCnt }}</span> 
+    <span class="recydywa">recydywa {{ recydywa.appsCnt }}</span> 
     numeru <span class="plate-id h2">{{ plateId }}</span>
-    {% if users > 1 %}od {{ users }} użytkowników {% endif %}
-    {% if cities > 1 %}w {{ cities}} miastach {% endif %}
+    {% if recydywa.usersCnt > 1 %}od {{ recydywa.usersCnt }} użytkowników {% endif %}
+    {% if recydywa.citiesCnt > 1 %}w {{ recydywa.citiesCnt }} miastach {% endif %}
 </h2>
 {% if not allImagesVisible and not userAllowedSharing %}
 <b class="recydywaInfo">
-    Nie widać wszystkich zdjęć? Możesz dodawać pojedyncze zdjęcia do galerii
-    lub <a data-ajax="false" target="_blank" href="/register.html?update">udostępnić wszystkie swoje zdjęcia innym</a>. Pomożesz w ten sposób rozwijać
-    galerię recydywistów.
+    Nie widać wszystkich zdjęć? <a data-ajax="false" target="_blank" href="/register.html?update">Udostępnij swoje zdjęcia innym</a>.
+    Pomożesz w ten sposób rozwijać galerię recydywistów.
 </b>
 {% endif %}
 <div class="list">
@@ -46,7 +45,7 @@
                     <li class="no-icon category">
                         <img width="24" height="24" title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg">
                         {{ app.getCategory.short }}
-                        {% if app.statements.gallery %}
+                        {% if app.statements.gallery ?? false %}
                         {{app.userComment}}
                         {% endif %}
                     </li>

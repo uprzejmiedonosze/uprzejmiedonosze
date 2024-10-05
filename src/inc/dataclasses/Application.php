@@ -364,12 +364,12 @@ class Application extends JSONObject implements JsonSerializable {
         }
     }
 
-    public function getRecydywa(){
+    public function getRecydywa(): Recydywa|null {
         global $storage;
-        if(isset($this->carInfo) && isset($this->carInfo->plateId)){
+        if(isset($this->carInfo) && isset($this->carInfo->plateId) && $this->status != 'archived'){
             return $storage->getRecydywa($this->carInfo->plateId);
         }
-        return 1;
+        return new Recydywa(); // fake it
     }
 
     private static function getLatexSafe($input){

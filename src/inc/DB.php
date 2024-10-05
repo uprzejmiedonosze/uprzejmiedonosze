@@ -2,10 +2,12 @@
 require(__DIR__ . '/dataclasses/NoSQLite.php');
 require(__DIR__ . '/dataclasses/User.php');
 require(__DIR__ . '/dataclasses/Application.php');
+require(__DIR__ . '/dataclasses/Recydywa.php');
 
 use \Memcache as Memcache;
 use \Application as Application;
 use \User as User;
+use \Recydywa as Recydywa;
 use \Exception as Exception;
 
 /**
@@ -42,7 +44,7 @@ class DB extends NoSQLite{
         try{
             $this->getCurrentUser();
         }catch(Exception $e){
-            // register mode, user looged in but not registered
+            // register mode, user logged in but not registered
         }
     }
 
@@ -434,20 +436,20 @@ class DB extends NoSQLite{
      * If there is no value in DB initializes it counting active
      * apps in the 'applications' store (lazy load).
      */
-    public function getRecydywa(string $plate): int{
-        $recydywa = $this->recydywa->get($plate);
-        if(null == $recydywa){
-            $recydywa = $this->updateRecydywa($plate);
-        }
-        return intval($recydywa);
+    public function getRecydywa(string $plate): Recydywa {
+        $recydywaJson = $this->recydywa->get("$plate v2");
+        if($recydywaJson)
+            return new Recydywa($recydywaJson);
+        return $this->updateRecydywa($plate);
     }
 
     /**
      * Recalculates recydywa.
      */
-    public function updateRecydywa(string $plate): int{
-        $recydywa = count($this->getApplicationsByPlate($plate));
-        $this->recydywa->set($plate, strval($recydywa));
+    public function updateRecydywa(string $plate): Recydywa {
+        $apps = $this->getApplicationsByPlate($plate);
+        $recydywa = Recydywa::withApps($apps);
+        $this->recydywa->set("$plate v2", json_encode($recydywa));
         return $recydywa;
     }
 

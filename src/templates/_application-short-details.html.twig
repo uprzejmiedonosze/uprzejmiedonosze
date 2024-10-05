@@ -1,4 +1,5 @@
-{% set recydywaCnt = app.getRecydywa %}
+{% set recydywa = app.getRecydywa %}
+{% set recydywaCnt = recydywa.appsCnt %}
 {% set status = app.getStatus %}
 {% set sendable = status.sendable %}
 
@@ -28,7 +29,13 @@
         Zgłoszenie <tt>{{ app.number }}</tt>
     </li>
     {% if recydywaCnt > 1 %}
-    <li class="no-icon"><span class="recydywa">RECYDYWA {{ recydywaCnt }}</span> <a href="#" class="recydywa" data-plateid="{{ app.carInfo.plateId }}">(zobacz pozostałe)</a></li>
+    <li class="no-icon">
+        <span class="recydywa-cnt">RECYDYWA {{ recydywaCnt }}</span> 
+            numeru <span class="plate-id small">{{ app.carInfo.plateId }}</span>
+            {% if recydywa.usersCnt > 1 %}od <span class="recydywa-userscnt">✌︎ {{ recydywa.usersCnt }} użytkowników</span> {% endif %}
+            {% if recydywa.citiesCnt > 1 %}w {{ recydywa.citiesCnt }} miastach {% endif %}
+        <a href="#" class="recydywa" data-plateid="{{ app.carInfo.plateId }}">(zobacz pozostałe)</a>
+    </li>
     {% endif %}
 
     <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
