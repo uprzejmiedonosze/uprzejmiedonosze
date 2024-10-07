@@ -8,8 +8,6 @@ require(__DIR__ . '/plateRecognizer.php');
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
-    global $storage;
-
     $application->carImage = new stdClass();
     $application->carImage->url = "$baseFileName,$type.jpg";
     $application->carImage->thumb = "$baseFileName,$type,t.jpg";
@@ -38,8 +36,7 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
 }
 
 function usePlaterecognizer() {
-    global $cache;
-    $budgetConsumed = $cache->get('alpr_budget_consumed');
+    $budgetConsumed = \cache\get('alpr_budget_consumed');
     $budgetConsumed = floor($budgetConsumed*100);
     $swithToPlaterec = false;
     if($budgetConsumed > 90) {

@@ -8,8 +8,7 @@ function cmp_alpr($left, $right){
 }
 
 function _check_alpr_cache($imageHash) {
-    global $cache;
-    $result = $cache->get("_alpr-$imageHash");
+    $result = \cache\get("_alpr-$imageHash");
     if($result){
         logger("get_alpr cache-hit $imageHash");
         unset($result['credits_monthly_used']);
@@ -84,7 +83,6 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
  */
 function get_alpr(&$imageBytes){
     logger("  get_alpr");
-    global $cache;
     $imageHash = sha1($imageBytes);
 	$apiInstance = new Swagger\Client\Api\DefaultApi();
     $secretKey = (intval(date('s')) % 2)? // mixing two API keys
@@ -99,7 +97,7 @@ function get_alpr(&$imageBytes){
         1, // topn
         "" // prewarp
     );
-    $cache->set("_alpr-$imageHash", $alpr, MEMCACHE_COMPRESSED, 0);
+    \cache\set("_alpr-$imageHash", $alpr, MEMCACHE_COMPRESSED, 0);
     return $alpr;
 }
 

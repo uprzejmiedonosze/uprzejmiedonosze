@@ -273,16 +273,14 @@ function normalizeLatLng($lat, $lng) {
 }
 
 function checkCache(string $key): array|bool {
-    global $cache;
-    $result = $cache->get($key);
+    $result = \cache\get($key);
     if ($result) logger("geo cache-hit $key");
     else logger("geo cache-miss $key");
     return $result;
 }
 
 function setCache(string $key, array $value): void {
-    global $cache;
-    $cache->set($key, $value, MEMCACHE_COMPRESSED, 0);
+    \cache\set($key, $value, MEMCACHE_COMPRESSED, 0);
 }
 
 /**

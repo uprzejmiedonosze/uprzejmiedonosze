@@ -9,9 +9,9 @@ $store = (new NoSQLite(STORE))->getStore('recydywa');
  * Returns the number of applications per specified $plate.
  */
 function get(string $plate): Recydywa {
-    global $store, $cache;
+    global $store;
 
-    $cached = $cache->get($plate);
+    $cached = \cache\get($plate);
     if ($cached)
         return $cached;
     
@@ -27,12 +27,12 @@ function get(string $plate): Recydywa {
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 function update(string $plate): Recydywa {
-    global $store, $storage, $cache;
+    global $store, $storage;
 
     $apps = $storage->getApplicationsByPlate($plate);
     $recydywa = Recydywa::withApps($apps);
 
-    $cache->set("%HOST%-$plate", $recydywa);
+    \cache\set("%HOST%-$plate", $recydywa);
     $store->set("$plate v2", json_encode($recydywa));
     return $recydywa;
 }
