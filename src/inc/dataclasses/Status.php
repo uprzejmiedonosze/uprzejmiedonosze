@@ -7,7 +7,7 @@ require_once(__DIR__ . '/JSONObject.php');
  */
 class Status extends JSONObject{
     /**
-     * Initites new Status from JSON.
+     * Initiates new Status from JSON.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function __construct($json = null) {

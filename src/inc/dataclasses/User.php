@@ -189,7 +189,7 @@ class User extends JSONObject{
     }
 
     /**
-     * Returns (lazyloaded) sex-strings for this user.
+     * Returns (lazy-loaded) sex-strings for this user.
      */
     function getSex() {
         if(!isset($this->data->sex))

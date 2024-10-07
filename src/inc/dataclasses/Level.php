@@ -4,7 +4,7 @@ require_once(__DIR__ . '/JSONObject.php');
 
 class Level extends JSONObject {
   /**
-   * Initites new Level from JSON.
+   * Initiates new Level from JSON.
    */
   public function __construct($json = null) {
     parent::__construct($json);

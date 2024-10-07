@@ -12,7 +12,7 @@ require_once(__DIR__ . '/Level.php');
  */
 class ConfigClass extends stdClass {
     /**
-     * Initites new SM from JSON.
+     * Initiates new SM from JSON.
      */
     public function __construct($json, $class) {
         $data = json_decode($json, true);

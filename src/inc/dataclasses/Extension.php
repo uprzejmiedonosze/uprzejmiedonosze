@@ -7,7 +7,7 @@ require_once(__DIR__ . '/JSONObject.php');
  */
 class Extension extends JSONObject{
     /**
-     * Initites new Extension from JSON.
+     * Initiates new Extension from JSON.
      */
     public function __construct($json = null) {
         parent::__construct($json);
