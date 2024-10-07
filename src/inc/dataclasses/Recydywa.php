@@ -1,8 +1,8 @@
-<?php
+<?PHP namespace recydywa;
 
 require_once(__DIR__ . '/JSONObject.php');
 
-class Recydywa extends JSONObject {
+class Recydywa extends \JSONObject {
     protected const USE_ARRAY_FLOW = true;
 
     public int $appsCnt = 1;

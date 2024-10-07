@@ -3,11 +3,11 @@ require(__DIR__ . '/dataclasses/NoSQLite.php');
 require(__DIR__ . '/dataclasses/User.php');
 require(__DIR__ . '/dataclasses/Application.php');
 require(__DIR__ . '/dataclasses/Recydywa.php');
+require(__DIR__ . '/RecydywaStore.php');
+require(__DIR__ . '/Cache.php');
 
-use \Memcache as Memcache;
 use \Application as Application;
 use \User as User;
-use \Recydywa as Recydywa;
 use \Exception as Exception;
 
 /**
@@ -22,10 +22,8 @@ use \Exception as Exception;
 class DB extends NoSQLite{
     private $users;
     private $apps;
-    private $recydywa;
-    private $stats;
-
     private $loggedUser;
+    private Cache $cache;
 
     /**
      * Creates DB instance with default store location.
@@ -36,20 +34,15 @@ class DB extends NoSQLite{
         parent::__construct($store);
         $this->apps  = $this->getStore('applications');
         $this->users = $this->getStore('users');
-        $this->recydywa = $this->getStore('recydywa');
-        
-        $this->stats = new Memcache;
-        $this->stats->connect('localhost', 11211);
+
+        global $cache;
+        $this->cache = $cache;
 
         try{
             $this->getCurrentUser();
         }catch(Exception $e){
             // register mode, user logged in but not registered
         }
-    }
-
-    private function setStats($key, $value, $timeout=24*60*60) {
-        $this->stats->set("%HOST%-$key", $value, 0, $timeout);
     }
 
     /**
@@ -250,7 +243,7 @@ class DB extends NoSQLite{
         $this->apps->set($application->id, json_encode($application), $application->user->email);
 
         if ($application->carInfo->plateId ?? false)
-            $this->stats->delete("%HOST%-getApplicationsByPlate-{$application->carInfo->plateId}");
+            $this->cache->delete("getApplicationsByPlate-{$application->carInfo->plateId}");
         return $application;
     }
 
@@ -259,7 +252,7 @@ class DB extends NoSQLite{
      */
     public function getApplicationsByPlate(string $plateId): array|null {
         $plateId = trim(strtoupper($plateId));
-        $cache = $this->stats->get("%HOST%-getApplicationsByPlate-$plateId");
+        $cache = $this->cache->get("getApplicationsByPlate-$plateId");
         if($cache){
             return $cache;
         }
@@ -280,7 +273,7 @@ class DB extends NoSQLite{
         $apps = $stmt->fetchAll(PDO::FETCH_FUNC,
             fn($value) => Application::withJson($value));
 
-        $this->setStats("getApplicationsByPlate-$plateId", $apps);
+        $this->cache->set("getApplicationsByPlate-$plateId", $apps);
         return $apps;
     }
 
@@ -359,7 +352,7 @@ class DB extends NoSQLite{
     public function getUserStats(bool $useCache, User $user): Array{
         $userEmail = $user->getEmail();
 
-        $stats = $this->stats->get("%HOST%-stats3-$userEmail");
+        $stats = $this->cache->get("stats3-$userEmail");
         if($useCache && $stats){
             return $stats;
         }
@@ -370,7 +363,7 @@ class DB extends NoSQLite{
         $userPoints = $this->countUserPoints($user);
         $stats = $stats + $userPoints;
 
-        $this->setStats("stats3-$userEmail", $stats, 0);
+        $this->cache->set("stats3-$userEmail", $stats, 0);
         return $stats;
     }
 
@@ -432,34 +425,12 @@ class DB extends NoSQLite{
     }
 
     /**
-     * Returns the amount of applications per specified $plate.
-     * If there is no value in DB initializes it counting active
-     * apps in the 'applications' store (lazy load).
-     */
-    public function getRecydywa(string $plate): Recydywa {
-        $recydywaJson = $this->recydywa->get("$plate v2");
-        if($recydywaJson)
-            return new Recydywa($recydywaJson);
-        return $this->updateRecydywa($plate);
-    }
-
-    /**
-     * Recalculates recydywa.
-     */
-    public function updateRecydywa(string $plate): Recydywa {
-        $apps = $this->getApplicationsByPlate($plate);
-        $recydywa = Recydywa::withApps($apps);
-        $this->recydywa->set("$plate v2", json_encode($recydywa));
-        return $recydywa;
-    }
-
-    /**
      * Returns number of new applications (by creation date)
      * during 30 days. 
      */
     public function getStatsAppsByDay(bool $useCache=true){
 
-        $stats = $this->stats->get("%HOST%-getStatsAppsByDay");
+        $stats = $this->cache->get("getStatsAppsByDay");
         if($useCache && $stats){
             return $stats;
         }
@@ -475,7 +446,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->setStats('getStatsAppsByDay', $stats);
+        $this->cache->set('getStatsAppsByDay', $stats);
         return $stats;
     }
 
@@ -485,7 +456,7 @@ class DB extends NoSQLite{
      */
     public function getStatsAppsByWeek(bool $useCache=true) {
 
-        $stats = $this->stats->get("%HOST%-getStatsAppsByWeek");
+        $stats = $this->cache->get("getStatsAppsByWeek");
         if($useCache && $stats){
             return $stats;
         }
@@ -501,7 +472,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->setStats('getStatsAppsByWeek', $stats);
+        $this->cache->set('getStatsAppsByWeek', $stats);
         return $stats;
     }
 
@@ -511,7 +482,7 @@ class DB extends NoSQLite{
      */
     public function getStatsByDay(bool $useCache=true){
 
-        $stats = $this->stats->get("%HOST%-getStatsByDay");
+        $stats = $this->cache->get("getStatsByDay");
         if($useCache && $stats){
             return $stats;
         }
@@ -539,7 +510,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->setStats('getStatsByDay', $stats);
+        $this->cache->set('getStatsByDay', $stats);
         return $stats;
     }
 
@@ -549,7 +520,7 @@ class DB extends NoSQLite{
      */
     public function getStatsByYear(bool $useCache=true){
 
-        $stats = $this->stats->get("%HOST%-getStatsByYear");
+        $stats = $this->cache->get("getStatsByYear");
         if($useCache && $stats){
             return $stats;
         }
@@ -576,7 +547,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->setStats('getStatsByYear', $stats);
+        $this->cache->set('getStatsByYear', $stats);
         return $stats;
     }
 
@@ -584,7 +555,7 @@ class DB extends NoSQLite{
      * Returns number of applications per city.
      */
     public function getStatsAppsByCity(bool $useCache=true){
-        $stats = $this->stats->get("%HOST%-getStatsAppsByCity");
+        $stats = $this->cache->get("getStatsAppsByCity");
         if($useCache && $stats){
             return $stats;
         }
@@ -599,7 +570,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->setStats('getStatsAppsByCity', $stats);
+        $this->cache->set('getStatsAppsByCity', $stats);
         return $stats;
     }
 
@@ -636,7 +607,7 @@ class DB extends NoSQLite{
      * Returns number of applications per city.
      */
     public function getGalleryCount(bool $useCache=true): int{
-        $stats = $this->stats->get("%HOST%-getGalleryCount");
+        $stats = $this->cache->get("getGalleryCount");
         if($useCache && $stats){
             return $stats;
         }
@@ -648,7 +619,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = intval($this->db->query($sql)->fetchColumn());
-        $this->setStats('getGalleryCount', $stats);
+        $this->cache->set('getGalleryCount', $stats);
         return $stats;
     }
 
@@ -656,7 +627,7 @@ class DB extends NoSQLite{
      * Returns number of applications per city.
      */
     public function getGalleryByCity(bool $useCache=true){
-        $stats = $this->stats->get("%HOST%-getGalleryByCity");
+        $stats = $this->cache->get("getGalleryByCity");
         if($useCache && $stats){
             return $stats;
         }
@@ -673,7 +644,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->setStats('getGalleryByCity', $stats);
+        $this->cache->set('getGalleryByCity', $stats);
         return $stats;
     }
 
@@ -681,7 +652,7 @@ class DB extends NoSQLite{
      * Returns number of applications per city.
      */
     public function getStatsByCarBrand(bool $useCache=true){
-        $stats = $this->stats->get("%HOST%-getStatsByCarBrand");
+        $stats = $this->cache->get("getStatsByCarBrand");
         if($useCache && $stats){
             return $stats;
         }
@@ -698,7 +669,7 @@ class DB extends NoSQLite{
         SQL;
 
         $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
-        $this->setStats('getStatsByCarBrand', $stats);
+        $this->cache->set('getStatsByCarBrand', $stats);
         return $stats;
     }
 
@@ -707,7 +678,7 @@ class DB extends NoSQLite{
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMainPageStats(bool $useCache=true): array{
-        $stats = $this->stats->get("%HOST%-getMainPageStats");
+        $stats = $this->cache->get("getMainPageStats");
         if($useCache && $stats){
             return $stats;
         }
@@ -732,7 +703,7 @@ class DB extends NoSQLite{
         $patrons = count($PATRONITE->active);
 
         $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm, 'patrons' => $patrons);
-        $this->setStats('getMainPageStats', $stats);
+        $this->cache->set('getMainPageStats', $stats);
         return $stats;
     }
 

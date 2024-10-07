@@ -181,7 +181,7 @@ class ApplicationHandler extends AbstractHandler {
         $user->appsCount = $application->seq;
         $storage->saveUser($user);
 
-        $storage->updateRecydywa($application->carInfo->plateId);
+        \recydywa\update($application->carInfo->plateId);
         $storage->getUserStats(false, $user); // update cache
 
         if ($edited) {

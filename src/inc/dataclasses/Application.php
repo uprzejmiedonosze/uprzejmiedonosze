@@ -7,6 +7,7 @@ require_once(__DIR__ . '/../Crypto.php');
 use \Datetime as Datetime;
 use \Exception as Exception;
 use \JSONObject as JSONObject;
+use recydywa\Recydywa;
 
 /**
  * Application class.
@@ -22,7 +23,7 @@ class Application extends JSONObject implements JsonSerializable {
     }
 
     /**
-     * Creates new Application of initites it from JSON.
+     * Creates new Application of initiates it from JSON.
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -365,9 +366,8 @@ class Application extends JSONObject implements JsonSerializable {
     }
 
     public function getRecydywa(): Recydywa|null {
-        global $storage;
         if(isset($this->carInfo) && isset($this->carInfo->plateId) && $this->status != 'archived'){
-            return $storage->getRecydywa($this->carInfo->plateId);
+            return \recydywa\get($this->carInfo->plateId);
         }
         return new Recydywa(); // fake it
     }

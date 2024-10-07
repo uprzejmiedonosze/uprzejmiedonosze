@@ -32,7 +32,7 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
     }
 
     if (isset($application->carInfo->plateId)) {
-        $recydywa = $storage->getRecydywa($application->carInfo->plateId);
+        $recydywa = \recydywa\get($application->carInfo->plateId);
         $application->carInfo->recydywa = $recydywa;
     }
 }

@@ -97,7 +97,7 @@ function setStatus(string $status, string $appId, User $user): Application {
     $application->setStatus($status);
     $storage->saveApplication($application);
     if (isset($application->carInfo->plateId))
-        $storage->updateRecydywa($application->carInfo->plateId);
+        \recydywa\update($application->carInfo->plateId);
     $stats = $storage->getUserStats(false, $user); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
@@ -360,7 +360,7 @@ function Nominatim(float $lat, float $lng): array {
     $county = $address['county'] ?? (($address['city']) ? "gmina {$address['city']}" : null);
     $municipality = $address['municipality'] ?? (($address['city']) ? "powiat {$address['city']}" : null);
 
-    // nominantin can replace county and municipality...
+    // nominantim can replace county and municipality...
     if (str_starts_with($county, 'powiat'))
         $address['municipality'] = $county;
     if (str_starts_with($municipality, 'powiat'))
