@@ -251,6 +251,9 @@ class AdminToolsDB extends NoSQLite{
         $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
         $status = $STATUSES[$app->status]->name;
         echo "  - migrating app $number [$status] by {$app->user->email}$added\n";
+        if($app->version < '2.1.0') {
+            $app->inexactHour = true;
+        }
         $app->version = $version;
 
         if($dryRun){
@@ -290,4 +293,4 @@ $db->removeReadyApps(30, false);
 
 // $db->removeUser('szymon@nieradka.net', false);
 
-// $db->upgradeAllApps('2.0.0', false);
+// $db->upgradeAllApps('2.3.0', false);

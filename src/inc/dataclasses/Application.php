@@ -71,7 +71,7 @@ class Application extends JSONObject implements JsonSerializable {
         $instance->category = 0;
         $instance->initStatements();
         $instance->address = new JSONObject();
-        $instance->version = '2.2.1';
+        $instance->version = '2.3.0';
 
         /*
         2.2.1 (2023-01-12)
@@ -101,6 +101,8 @@ class Application extends JSONObject implements JsonSerializable {
      * @SuppressWarnings("unused")
      */
     private function migrateSent() {
+        if (isset($this->sent))
+            unset($this->sent->{''});
         if (isset($this->sent) || in_array($this->status, ['draft', 'ready', 'confirmed'])) {
             return;
         }
@@ -179,7 +181,7 @@ class Application extends JSONObject implements JsonSerializable {
      */
     public function getTime(): string{
         $format = 'H:i'; // 24-hour format of an hour with leading zeros : Minutes with leading zeros
-        if (($this->version ?? '0.0.0') < '2.1.0' && isset($this->dtFromPicture) && !$this->dtFromPicture) {
+        if (($this->inexactHour ?? false) && !($this->dtFromPicture ?? true)) {
             $format = 'G:00'; // 24-hour format of an hour without leading zeros
         }
         return (new DateTime($this->date))->format($format);
@@ -209,7 +211,7 @@ class Application extends JSONObject implements JsonSerializable {
      * Returns 'około godziny' or 'o godzinie'.
      */
     public function getDateTimeDivider(): string{
-        if ($this->version < '2.1.0' && isset($this->dtFromPicture) && !$this->dtFromPicture)
+        if (($this->inexactHour ?? false) && !($this->dtFromPicture ?? true))
             return "około godziny";
         return "o godzinie";
     }
