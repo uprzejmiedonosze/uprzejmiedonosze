@@ -2,13 +2,9 @@
 require_once(__DIR__ . '/include.php');
 require(__DIR__ . '/alpr.php');
 
-use \Memcache as Memcache;
 use \stdClass as stdClass;
 use \DateTime as DateTime;
 use \Exception as Exception;
-
-$cache = new Memcache;
-$cache->connect('localhost', 11211);
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)

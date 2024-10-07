@@ -12,8 +12,8 @@ class Cache {
         return $this->cache->get("%HOST%-$key");
     }
 
-    public function set(string $key, $value, int $timeout=24*60*60): void {
-        $this->cache->set("%HOST%-$key", $value, 0, $timeout);
+    public function set(string $key, $value, $flag=0, $expire=24*60*60): void {
+        $this->cache->set("%HOST%-$key", $value, $flag, $expire);
     }
     
     public function delete(string $key): void {

@@ -21,14 +21,14 @@ use Slim\Exception\HttpInternalServerErrorException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthMiddleware implements MiddlewareInterface {
-    private $cache;
+    private Cache $cache;
 
     /**
      * @SuppressWarnings(PHPMD.MissingImport)
      */
     public function __construct() {
-        $this->cache = new Memcache;
-        $this->cache->connect('localhost', 11211);
+        global $cache;
+        $this->cache = $cache;
     }
 
     /**

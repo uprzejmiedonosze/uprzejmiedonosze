@@ -1,9 +1,6 @@
 <?PHP
 use \JSONObject as JSONObject;
 
-$cache = new Memcache;
-$cache->connect('localhost', 11211);
-
 function cmp_alpr($left, $right){
   if($left['confidence'] > $right['confidence']) return -1;
   if($left['confidence'] < $right['confidence']) return 1;
