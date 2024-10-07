@@ -59,7 +59,7 @@ class Mail extends CityAPI {
         $application->sent->cc = "{$application->user->name} ({$application->user->email})";
         $application->sent->from = "uprzejmiedonosze.net (" . EMAIL_SENDER . ")";
         $application->sent->body = parent::formatEmail($application, false);
-        $application->sent->$messageId = $messageId;
+        $application->sent->messageId = $messageId;
         $application->sent->method = "Mail";
 
         [$fileatt, $fileattname] = application2PDF($application);
