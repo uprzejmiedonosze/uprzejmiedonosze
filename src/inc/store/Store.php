@@ -1,4 +1,4 @@
-<?php
+<?php namespace store;
 
 use \PDO as PDO;
 use \PDOStatement as PDOStatement;

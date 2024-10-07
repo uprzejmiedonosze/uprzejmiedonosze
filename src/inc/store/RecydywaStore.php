@@ -1,9 +1,7 @@
 <?PHP namespace recydywa;
 
-use NoSQLite;
-
-const STORE = __DIR__ . '/../../db/store.sqlite';
-$store = (new NoSQLite(STORE))->getStore('recydywa');
+const STORE = __DIR__ . '/../../../db/store.sqlite';
+$store = (new \store\NoSQLite(STORE))->getStore('recydywa');
 
 /**
  * Returns the number of applications per specified $plate.

@@ -1,8 +1,9 @@
 <?PHP
-require(__DIR__ . '/dataclasses/NoSQLite.php');
 require(__DIR__ . '/dataclasses/User.php');
 require(__DIR__ . '/dataclasses/Application.php');
 require(__DIR__ . '/dataclasses/Recydywa.php');
+require(__DIR__ . '/store/NoSQLite.php');
+require(__DIR__ . '/store/RecydywaStore.php');
 require(__DIR__ . '/store/Cache.php');
 
 use \Application as Application;
@@ -18,11 +19,10 @@ use \Exception as Exception;
  * @SuppressWarnings(PHPMD.ShortClassName)
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-class DB extends NoSQLite{
+class DB extends \store\NoSQLite{
     private $users;
     private $apps;
     private $loggedUser;
-    private Cache $cache;
 
     /**
      * Creates DB instance with default store location.
