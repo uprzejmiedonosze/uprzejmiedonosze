@@ -21,7 +21,6 @@ class Mail extends CityAPI {
      */
     function send(&$application){
         parent::checkApplication($application);
-        global $storage;
 
         $to = "szymon.nieradka@gmail.com";
         if(isProd()){
@@ -81,8 +80,7 @@ class Mail extends CityAPI {
             throw new Exception($error, 500);
         }
 
-        global $storage;
-        $storage->saveApplication($application);
+        \app\save($application);
         return $application;
     }
 }

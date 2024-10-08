@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/AbstractHandler.php');
 
+use app\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
@@ -25,7 +26,6 @@ class ApplicationHandler extends AbstractHandler {
      * @TODO
      */
     public function newApplication(Request $request, Response $response): Response {
-        global $storage;
         $params = $request->getQueryParams();
         if (isset($params['cleanup'])) {
             unset($_SESSION['newAppId']);
@@ -36,7 +36,7 @@ class ApplicationHandler extends AbstractHandler {
 
         if (isset($params['TermsConfirmation'])) {
             $user->confirmTerms();
-            $storage->saveUser($user);
+            \user\save($user);
         }
 
         if (!$user->checkTermsConfirmation()) {
@@ -44,7 +44,7 @@ class ApplicationHandler extends AbstractHandler {
         }
 
         if (isset($params['edit'])) {
-            $application = $storage->getApplication($params['edit']);
+            $application = \app\get($params['edit']);
             if (!$application->isEditable()) {
                 throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name);
             }
@@ -57,7 +57,7 @@ class ApplicationHandler extends AbstractHandler {
             $edit = true;
         } elseif (isset($_SESSION['newAppId'])) { // edit mode
             try {
-                $application = $storage->getApplication($_SESSION['newAppId']);
+                $application = \app\get($_SESSION['newAppId']);
                 $edit = isset($application->carImage) || isset($application->contextImage);
                 $application->updateUserData($user);
                 if (!$edit) {
@@ -72,7 +72,7 @@ class ApplicationHandler extends AbstractHandler {
 
         if (!isset($application)) { // new application mode
             $application = Application::withUser($user);
-            $storage->saveApplication($application);
+            \app\save($application);
             $_SESSION['newAppId'] = $application->id;
             $edit = false;
         }
@@ -159,7 +159,6 @@ class ApplicationHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function finish(Request $request, Response $response): Response {
-        global $storage;
         $params = (array)$request->getParsedBody();
 
         $appId = $this->getParam($params, 'applicationId', -1);
@@ -169,20 +168,20 @@ class ApplicationHandler extends AbstractHandler {
         }
 
         unset($_SESSION['newAppId']);
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
         $user = $request->getAttribute('user');
 
         $edited = $application->hasNumber();
 
         $application->setStatus("confirmed");
-        $application = $storage->saveApplication($application); // this also sets app number
+        $application = \app\save($application); // this also sets app number
 
         $user->setLastLocation($application->getLatLng());
         $user->appsCount = $application->seq;
-        $storage->saveUser($user);
+        \user\save($user);
 
         \recydywa\update($application->carInfo->plateId);
-        $storage->getUserStats(false, $user); // update cache
+        \user\stats(false, $user); // update cache
 
         if ($edited) {
             $application->address->mapImage = null;
@@ -199,14 +198,13 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function missingSM(Request $request, Response $response): Response {
-        global $storage;
         $params = $request->getQueryParams();
         $appId = $this->getParam($params, 'id', -1);
         $appCity = '';
         $appNumber = '';
         if ($appId !== -1) {
             try {
-                $app = $storage->getApplication($appId);
+                $app = \app\get($appId);
                 $appCity = $app->address->city;
                 $appNumber = $app->number;
             } catch (Exception $e) {
@@ -222,13 +220,11 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function myApps(Request $request, Response $response): Response {
-        global $storage;
-
         $user = $request->getAttribute('user');
         $params = $request->getQueryParams();
 
         $query = $this->getParam($params, 'q', '');
-        $applications = $storage->getUserApplications(user: $user, search: $query);
+        $applications = \user\apps(user: $user, search: $query);
         $changeMail = isset($params['changeMail']) && isset($params['city']);
         $city = urldecode($this->getParam($params, 'city', ''));
 
@@ -241,13 +237,13 @@ class ApplicationHandler extends AbstractHandler {
                         $application->setStatus('confirmed-waiting');
                         $countChanged++;
                     }
-                    $storage->saveApplication($application);
+                    \app\save($application);
                 }
             }
         }
 
         if ($changeMail) {
-            $storage->getUserStats(false, $user); // updates the cache
+            \user\stats(false, $user); // updates the cache
         }
 
         return AbstractHandler::renderHtml($request, $response, 'moje-zgloszenia', [
@@ -262,7 +258,6 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function myAppsPartial(Request $request, Response $response): Response {
-        global $storage;
         $user = $request->getAttribute('user');
 
         $params = $request->getQueryParams();
@@ -271,7 +266,7 @@ class ApplicationHandler extends AbstractHandler {
         $limit =  $this->getParam($params, 'limit', 0);
         $offset = $this->getParam($params, 'offset', 0);
         
-        $apps = $storage->getUserApplications($user, $status, $search, $limit, $offset);
+        $apps = \user\apps($user, $status, $search, $limit, $offset);
 
         return AbstractHandler::renderHtml($request, $response, 'my-apps-partial', [
             'appActionButtons' => true,
@@ -286,12 +281,11 @@ class ApplicationHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function shipment(Request $request, Response $response): Response {
-        global $storage;
         $user = $request->getAttribute('user');
         $params = $request->getQueryParams();
 
         if (!isset($params['city'])) {
-            $city = $storage->getNextCityToSent();
+            $city = \user\nextCityToSent();
             logger("nextcity = $city");
             if ($city) {
                 return $this->redirect('/wysylka.html?city=' . urlencode($city));
@@ -301,7 +295,7 @@ class ApplicationHandler extends AbstractHandler {
 
         $city = urldecode($params['city']);
 
-        $apps = $storage->getConfirmedAppsByCity($city);
+        $apps = \user\appsConfirmedByCity($city);
 
         if (count($apps) == 0) {
             return $this->redirect('/moje-zgloszenia.html?update');
@@ -333,8 +327,7 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function askForStatus(Request $request, Response $response) {
-        global $storage;
-        $sent = $storage->getSentApplications(31);
+        $sent = \app\sent(31);
         $user = $request->getAttribute('user');
 
         return AbstractHandler::renderHtml($request, $response, 'zapytaj-o-status', [
@@ -344,10 +337,9 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function applicationShortHtml(Request $request, Response $response, $args) {
-        global $storage;
         $appId = $args['appId'];
         $user = $request->getAttribute('user');
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
 
         return AbstractHandler::renderHtml($request, $response, '_application-short-details', [
             'appActionButtons' => true,

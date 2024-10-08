@@ -15,8 +15,7 @@ use Slim\Exception\HttpNotFoundException;
 class StaticPagesHandler extends AbstractHandler {
 
     function root(Request $request, Response $response): Response {
-        global $storage;
-        $mainPageStats = $storage->getMainPageStats();
+        $mainPageStats = \global_stats\mainPage();
         return AbstractHandler::renderHtml($request, $response, 'index', [
             'config' => [
                 'stats' => $mainPageStats
@@ -74,10 +73,9 @@ class StaticPagesHandler extends AbstractHandler {
     }
 
     function gallery(Request $request, Response $response) {
-        global $storage;
         return AbstractHandler::renderHtml($request, $response, 'galeria', [
             'appActionButtons' => false,
-            'galleryByCity' => $storage->getGalleryByCity()
+            'galleryByCity' => \app\galleryByCity()
         ]);
     }
 
@@ -97,9 +95,8 @@ class StaticPagesHandler extends AbstractHandler {
     }
 
     public function applicationHtml(Request $request, Response $response, $args) {
-        global $storage;
         $appId = $args['appId'];
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
     
         $user = $request->getAttribute('user');
         $isAppOwner = $application->isAppOwner($user);
@@ -192,11 +189,10 @@ class StaticPagesHandler extends AbstractHandler {
     }
 
     private function carStats(Request $request, Response $response, $args) {
-        global $storage;
         $user = $request->getAttribute('user');
         
         $plateId = $args['plateId'];
-        $apps = array_reverse($storage->getApplicationsByPlate($plateId));
+        $apps = array_reverse(\app\byPlate($plateId));
 
         $image = null;
         $imagesCount = 0;
@@ -208,7 +204,7 @@ class StaticPagesHandler extends AbstractHandler {
 
             // display image if this is user's own application, other user
             // added it to gallery or allowed sharing globally
-            $app->showImage = $storage->canShareRecydywa($app->user->email)
+            $app->showImage = \user\canShareRecydywa($app->user->email)
                 || $app->statements->gallery
                 || $app->isAppOwner;
 

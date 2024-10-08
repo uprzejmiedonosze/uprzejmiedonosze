@@ -19,7 +19,6 @@ class UserHandler extends AbstractHandler {
     }
 
     public function finish(Request $request): Response {
-        global $storage;
         $params = (array)$request->getParsedBody();
         $signInSuccessUrl = $this->getParam($params, 'next', '/start.html');
         $name = capitalizeName($this->getParam($params, 'name'));
@@ -36,7 +35,7 @@ class UserHandler extends AbstractHandler {
 
         $user = $request->getAttribute('user');
         $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $shareRecydywa);
-        $storage->saveUser($user);
+        \user\save($user);
 
         return AbstractHandler::redirect($signInSuccessUrl);
     }

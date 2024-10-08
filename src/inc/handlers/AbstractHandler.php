@@ -63,7 +63,6 @@ abstract class AbstractHandler {
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function renderHtml(Request $request, Response $response, string $route, Array $extraParameters=[]): Response {
-        global $storage;
         $params = $request->getQueryParams();
 
         $parameters = $request->getAttribute('parameters');
@@ -77,7 +76,7 @@ abstract class AbstractHandler {
             $parameters['config']['userNumber'] = $user->getNumber();
             $parameters['general']['userName'] = $user->getFirstName();
             // force update cache if ?update GET param is set
-            $parameters['general']['stats'] = $storage->getUserStats(!isset($params['update']), $user);
+            $parameters['general']['stats'] = \user\stats(!isset($params['update']), $user);
         }
         $view = Twig::fromRequest($request);
         return $view->render(

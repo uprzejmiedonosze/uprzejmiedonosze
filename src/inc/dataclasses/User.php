@@ -1,4 +1,4 @@
-<?PHP
+<?PHP namespace user;
 
 require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
@@ -9,7 +9,7 @@ use \stdClass as stdClass;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class User extends JSONObject{
+class User extends \JSONObject{
 
     /**
      * Creates a new User or initiate it from JSON.
@@ -68,8 +68,7 @@ class User extends JSONObject{
             return "52.069321,19.480311";
         }
         $this->lastLocation = $lastLocation;
-        global $storage;
-        $storage->saveUser($this);
+        \user\save($this);
         return $this->lastLocation;
     }
 
@@ -146,12 +145,12 @@ class User extends JSONObject{
 
         $this->data->name = capitalizeName(cleanWhiteChars($name));
         if (!preg_match("/^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i", $this->data->name))
-            throw new MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");        
+            throw new \MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");        
         $this->guessSex();
 
         $this->data->address = str_replace(', Polska', '', cleanWhiteChars($address));
         if (!preg_match("/^.{3,50}\d.{3,40}$/i", $this->data->address))
-            throw new MissingParamException('address', "Podaj adres z ulicą, numerem mieszkania i miejscowością");
+            throw new \MissingParamException('address', "Podaj adres z ulicą, numerem mieszkania i miejscowością");
     
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;

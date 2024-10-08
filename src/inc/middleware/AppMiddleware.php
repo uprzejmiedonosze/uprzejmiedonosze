@@ -19,14 +19,12 @@ class AppMiddleware implements MiddlewareInterface {
     }
 
     public function process(Request $request, RequestHandler $handler): Response {
-        global $storage;
-
         $routeContext = RouteContext::fromRequest($request);
         $route = $routeContext->getRoute();
         $args = $route->getArguments();
         $appId = $args['appId'];
 
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
         $user = $request->getAttribute('user');
 
         if ($this->failOnWrongOwnership && $application->user->email !== $user->getEmail()) {

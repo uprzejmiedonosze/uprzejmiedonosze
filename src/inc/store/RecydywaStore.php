@@ -1,4 +1,5 @@
 <?PHP namespace recydywa;
+require(__DIR__ . '/../dataclasses/Recydywa.php');
 
 CONST TABLE = 'recydywa';
 
@@ -22,9 +23,7 @@ function get(string $plate): Recydywa {
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 function update(string $plate): Recydywa {
-    global $storage;
-
-    $apps = $storage->getApplicationsByPlate($plate);
+    $apps = \app\byPlate($plate);
     $recydywa = Recydywa::withApps($apps);
 
     \cache\set("%HOST%-$plate", $recydywa);

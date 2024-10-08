@@ -1,4 +1,6 @@
 <?php
+
+use app\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ServerRequestInterface;
@@ -73,7 +75,7 @@ $app->add(function ($request, $handler) {
             ->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
-$app->group('/api/rest/user', function (RouteCollectorProxy $group) use ($storage) { // USER
+$app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
     $group->get('/', function (Request $request, Response $response) {
         return $response;
     })  ->add(new AddStatsMiddleware())
@@ -86,10 +88,10 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) use ($storag
         ->add(new UserMiddleware(createIfNonExists: true))
         ->add(new AuthMiddleware());
     
-    $group->patch('/confirm-terms', function (Request $request, Response $response) use ($storage) {
+    $group->patch('/confirm-terms', function (Request $request, Response $response) {
         $user = $request->getAttribute('user');
         $user->confirmTerms();
-        $storage->saveUser($user);
+        \user\save($user);
         $user->isTermsConfirmed = $user->checkTermsConfirmation();
         return $response;
     })  ->add(new RegisteredMiddleware())
@@ -97,7 +99,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) use ($storag
         ->add(new UserMiddleware(createIfNonExists: false))
         ->add(new AuthMiddleware());
     
-    $group->post('/', function (Request $request, Response $response) use ($storage) {
+    $group->post('/', function (Request $request, Response $response) {
         $params = (array)$request->getParsedBody();
         $name = getParam($params, 'name');
         $address = getParam($params, 'address');
@@ -111,7 +113,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) use ($storag
         $user = $request->getAttribute('user');
     
         $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend);
-        $storage->saveUser($user);
+        \user\save($user);
         $user->isRegistered = $user->isRegistered();
         $request = $request->withAttribute('user', $user);
         return $response;
@@ -120,7 +122,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) use ($storag
         ->add(new AuthMiddleware());
     
     
-    $group->get('/apps', function (Request $request, Response $response) use ($storage) {
+    $group->get('/apps', function (Request $request, Response $response) {
         $params = $request->getQueryParams();
         $status = getParam($params, 'status', 'all');
         $search = getParam($params, 'search', '%');
@@ -128,7 +130,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) use ($storag
         $offset = getParam($params, 'offset', 0);
     
         $user = $request->getAttribute('user');
-        $apps = $storage->getUserApplications($user, $status, $search, $limit, $offset);
+        $apps = \user\apps($user, $status, $search, $limit, $offset);
         
         $response->getBody()->write(json_encode($apps));
         return $response;
@@ -174,11 +176,11 @@ $app->group('/api/rest/config', function (RouteCollectorProxy $group) { // CONFI
     });
 });
 
-$app->group('/api/rest/app', function (RouteCollectorProxy $group) use ($storage) { // APPLICATION
-    $group->post('/new', function (Request $request, Response $response) use ($storage) {
+$app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICATION
+    $group->post('/new', function (Request $request, Response $response) {
         $user = $request->getAttribute('user');
         $application = Application::withUser($user);
-        $storage->saveApplication($application);
+        \app\save($application);
         unset($application->browser);
         $response->getBody()->write(json_encode($application));
         return $response;
@@ -302,9 +304,9 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) use ($storage
         return $response;
     })  ->add(new AppMiddleware());
 
-    $group->patch('/{appId}/send', function (Request $request, Response $response, $args) use ($storage) {
+    $group->patch('/{appId}/send', function (Request $request, Response $response, $args) {
         $appId = $args['appId'];
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
         $user = $request->getAttribute('user');
     
         if ($application->user->email !== $user->getEmail()) {

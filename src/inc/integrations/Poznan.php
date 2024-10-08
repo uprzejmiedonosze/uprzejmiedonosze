@@ -44,8 +44,8 @@ class Poznan extends CityAPI {
         $application->sent->subject = $application->getEmailSubject();
         $application->sent->to = "fixmycity";
         $application->sent->method = "Poznan";
-        global $storage;
-        $storage->saveApplication($application);
+
+        \app\save($application);
         return $application;
     }
 }

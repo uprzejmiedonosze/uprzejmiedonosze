@@ -1,4 +1,4 @@
-<?PHP
+<?PHP namespace app;
 
 require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
@@ -8,6 +8,7 @@ use \Datetime as Datetime;
 use \Exception as Exception;
 use \JSONObject as JSONObject;
 use recydywa\Recydywa;
+use user\User;
 
 /**
  * Application class.
@@ -15,7 +16,7 @@ use recydywa\Recydywa;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-class Application extends JSONObject implements JsonSerializable {
+class Application extends JSONObject implements \JsonSerializable {
     public string $externalId = '';
     public string $privateComment  = '';
 
@@ -50,9 +51,8 @@ class Application extends JSONObject implements JsonSerializable {
      */
     private static function genSafeId(User $user): string {
         $id = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
-        global $storage;
         logger("generated $id for user {$user->getEmail()}");
-        if ($storage->checkApplicationId($id))
+        if (\app\checkId($id))
             throw new Exception("Identyfikator zgłoszenia '$id' dla '{$user->getEmail()}' już istnieje!");
         return $id;
     }
@@ -201,8 +201,7 @@ class Application extends JSONObject implements JsonSerializable {
         if(isset($this->user->number)){
             return $this->user->number;
         }
-        global $storage;
-        $user = $storage->getUser($this->user->email);
+        $user = \user\get($this->user->email);
         $this->user->number = $user->number;
         return $this->user->number;
     }
@@ -294,7 +293,7 @@ class Application extends JSONObject implements JsonSerializable {
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      * @SuppressWarnings(CamelCaseVariableName)
      */
-    public function guessSMData(bool $update=false): SM {
+    public function guessSMData(bool $update=false): \SM {
         global $SM_ADDRESSES;
         global $STOP_AGRESJI;
         if(!$update && isset($this->smCity) && !$this->stopAgresji()){
@@ -306,10 +305,10 @@ class Application extends JSONObject implements JsonSerializable {
             return $SM_ADDRESSES['_nieznane'];
         }
         if($this->stopAgresji()){
-            $this->smCity = StopAgresji::guess($this->address);
+            $this->smCity = \StopAgresji::guess($this->address);
             return $STOP_AGRESJI[$this->smCity];
         }
-        $this->smCity = SM::guess($this->address);
+        $this->smCity = \SM::guess($this->address);
         return $SM_ADDRESSES[$this->smCity];
     }
 
@@ -361,7 +360,7 @@ class Application extends JSONObject implements JsonSerializable {
 
     public function isCurrentUserOwner(){
         try {
-            return getCurrentUserEmail() == $this->user->email;
+            return \user\currentEmail() == $this->user->email;
         } catch(Exception $e) {
             return false;
         }
@@ -464,9 +463,8 @@ class Application extends JSONObject implements JsonSerializable {
         }
         fclose($ifp);
 
-        global $storage;
         $this->address->mapImage = "$baseFileName,ma.png";
-        $storage->saveApplication($this);
+        \app\save($this);
         return "$baseFileName,ma.png";
     }
 
@@ -626,6 +624,6 @@ class Application extends JSONObject implements JsonSerializable {
 
     public function getSafeImageUrl(): string {
         $image = $this->contextImage->thumb ?? 'img/fff-1.png';
-        return 'img-' . (new Crypto())->encode($image) . '.php?sessionless';
+        return 'img-' . (new \Crypto())->encode($image) . '.php?sessionless';
     }
 }

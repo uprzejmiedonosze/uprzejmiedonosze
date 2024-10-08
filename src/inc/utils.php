@@ -22,16 +22,6 @@ function cleanWhiteChars($input) {
     return trim(preg_replace("/\s+/u", " ", $input));
 }
 
-/**
- * @SuppressWarnings(PHPMD.Superglobals)
- */
-function getCurrentUserEmail(){
-    if(!empty($_SESSION['user_email'])){
-        return $_SESSION['user_email'];
-    }
-    throw new Exception("Próba pobrania danych niezalogowanego użytkownika");
-}
-
 function fixCapitalizedBrandNames(string $input): string {
     $acronyms = [
         "Bmw" => "BMW",

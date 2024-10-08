@@ -1,8 +1,7 @@
 <?PHP
 require(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/utils.php');
-require_once(__DIR__ . '/DB.php');
-$storage = new DB();
+require(__DIR__ . '/store/index.php');
 
 if (isProd()) {
   Sentry\init(['dsn' => 'https://fb9d61b89dc24608b00a4e02353e5f7f@o929176.ingest.sentry.io/5878025' ]);

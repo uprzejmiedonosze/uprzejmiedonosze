@@ -2,9 +2,11 @@
 require_once(__DIR__ . '/include.php');
 require(__DIR__ . '/alpr.php');
 
+use app\Application;
 use \stdClass as stdClass;
 use \DateTime as DateTime;
 use \Exception as Exception;
+use user\User;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -22,8 +24,7 @@ function updateApplication(
     User $user,
 ): Application {
 
-    global $storage;
-    $application = $storage->getApplication($appId);
+    $application = \app\get($appId);
 
     if ($application->user->email !== $user->getEmail()) {
         throw new ForbiddenException("Odmawiam aktualizacji zgłoszenia '$appId' przez '{$user->getEmail()}'");
@@ -79,7 +80,7 @@ function updateApplication(
     }
     $application->setStatus("ready");
 
-    $storage->saveApplication($application);
+    \app\save($application);
     return $application;
 }
 
@@ -88,13 +89,12 @@ function updateApplication(
  * Sets application status.
  */
 function setStatus(string $status, string $appId, User $user): Application {
-    global $storage;
-    $application = $storage->getApplication($appId);
+    $application = \app\get($appId);
     $application->setStatus($status);
-    $storage->saveApplication($application);
+    \app\save($application);
     if (isset($application->carInfo->plateId))
         \recydywa\update($application->carInfo->plateId);
-    $stats = $storage->getUserStats(false, $user); // update cache
+    $stats = \user\stats(false, $user); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
     if (in_array('patron', $stats['badges'])) {
@@ -112,14 +112,12 @@ function setStatus(string $status, string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
 function sendApplication(string $appId, User $user): Application {
-    global $storage;
-
-    $application = $storage->getApplication($appId);
+    $application = \app\get($appId);
     CityAPI::checkApplication($application);
     $sm = $application->guessSMData();
     $api = new $sm->api;
     $application = $api->send($application);
-    $storage->getUserStats(false, $user);
+    \user\stats(false, $user);
     return $application;
 }
 
@@ -131,8 +129,6 @@ function sendApplication(string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
-    global $storage;
-
     $semKey = $application->user->number;
     $semaphore = sem_get($semKey, 1, 0666, 1);
     sem_acquire($semaphore);
@@ -161,7 +157,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
         throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($application->id)", 400);
     }
 
-    $storage->saveApplication($application);
+    \app\save($application);
     sem_release($semaphore);
     return $application;
 }

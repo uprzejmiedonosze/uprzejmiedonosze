@@ -57,8 +57,7 @@ abstract class SessionMiddleware implements MiddlewareInterface {
 
 
         if ($isLoggedIn) {
-            global $storage;
-            $user = $storage->getCurrentUser();
+            $user = \user\current();
             $request = $request->withAttribute('user', $user);
             $isRegistered = $user->isRegistered();
             $request = $request->withAttribute('isRegistered', $isRegistered);

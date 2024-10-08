@@ -1,20 +1,21 @@
 <?PHP
 require_once(__DIR__ . '/include.php');
+
+use app\Application;
 use \Exception as Exception;
 use \Twig\Cache\FilesystemCache as FilesystemCache;
 use \Twig\Environment as Environment;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
+use user\User;
 
 const ROOT = '/var/www/%HOST%/';
 
 function application2PDFById(string $appId): array {
-    global $storage;
-
     if(!isset($appId)){
         throw new Exception("Próba pobrania zgłoszenia w formacie PDF bez wskazania appId", 400);
     }
 
-    $application = $storage->getApplication($appId);
+    $application = \app\get($appId);
     if(!isset($application)){
         throw new Exception("Próba pobrania zgłoszenia nieistniejącego zgłoszenia $appId", 404);
     }
@@ -43,11 +44,9 @@ function application2PDF(Application &$application): array{
  * * @SuppressWarnings(ElseExpression)
  */
 function readyApps2PDF(User $user, string $city): array{
-    global $storage;
-
     $userNumber = $user->number;
 
-    $applications = $storage->getConfirmedAppsByCity($city);
+    $applications = \user\appsConfirmedByCity($city);
 
     if(sizeof($applications) == 0){
         $filename = "download-error.pdf";

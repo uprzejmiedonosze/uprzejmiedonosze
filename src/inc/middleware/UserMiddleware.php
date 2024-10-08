@@ -6,6 +6,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
+use user\User;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
@@ -21,18 +22,17 @@ class UserMiddleware implements MiddlewareInterface {
     }
 
     public function process(Request $request, RequestHandler $handler): Response {
-        global $storage;
 
         $firebaseUser = $request->getAttribute('firebaseUser');
 
         try{
-            $user = $storage->getUser($firebaseUser['user_email']);
+            $user = \user\get($firebaseUser['user_email']);
         }catch(Exception $e){
             if (!$this->createIfNonExists) {
                 throw new HttpNotFoundException($request, $e->getMessage(), $e);
             }
             $user = User::withFirebaseUser($firebaseUser);
-            $storage->saveUser($user);
+            \user\save($user);
         }
 
         $user->isRegistered = $user->isRegistered();
@@ -73,10 +73,9 @@ class TermsConfirmedMiddleware implements MiddlewareInterface {
  */
 class AddStatsMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
-        global $storage;
         $response = $handler->handle($request);
         $user = $request->getAttribute('user');
-        $user->stats = $storage->getUserStats(true, $user);
+        $user->stats = \user\stats(true, $user);
         $request = $request->withAttribute('user', $user);
         $response->getBody()->write(json_encode($user));
         return $response;

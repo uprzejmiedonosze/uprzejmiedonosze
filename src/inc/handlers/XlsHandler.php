@@ -1,9 +1,9 @@
 <?PHP
 require_once(__DIR__ . '/AbstractHandler.php');
 
+use app\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpNotFoundException;
 
 class XlsHandler extends AbstractHandler {
 
@@ -12,9 +12,8 @@ class XlsHandler extends AbstractHandler {
      * Disabled
      */
     public function __xls(Request $request, Response $response, $args): Response {
-        global $storage;
 
-        $app = $storage->getApplication($args['appId']);
+        $app = \app\get($args['appId']);
         $fileName = $app->getAppXlsFilename();
         $xls = XlsHandler::Application2Xls($app);
         return AbstractHandler::renderXls($response, $xls, "$fileName");
