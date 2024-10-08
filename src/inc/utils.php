@@ -2,7 +2,6 @@
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/dataclasses/Exceptions.php');
 require_once(__DIR__ . '/Logger.php');
-use \Exception as Exception;
 
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
@@ -28,7 +27,6 @@ function fixCapitalizedBrandNames(string $input): string {
         "Mercedes-benz" => "Mercedes-Benz",
         "Alfa-romeo" => "Alfa-Romeo",
         "Land-rover" => "Land-Rover",
-        "Alfa-romeo" => "Alfa-Romeo",
         "Fso" => "FSO",
         "Ssangyong" => "SsangYong"
     ];
