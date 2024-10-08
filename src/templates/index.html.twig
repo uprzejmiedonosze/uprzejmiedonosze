@@ -79,13 +79,20 @@
 
 <fieldset class="badges">
     {% for badgeId,badge in badges %}
+    {% set former_patron = (badgeId == 'patron' and 'former_patron' in general.stats.badges) %}
     <div data-role="popup" id="popup-badge-{{ badgeId }}">
         <p>{{ badge.desc|raw }}</p>
     </div>
     <a href="#popup-badge-{{ badgeId }}" data-rel="popup" data-transition="pop">
-        <div class="badge {% if badgeId in general.stats.badges %}active{% endif %}">
+        <div class="badge {% if badgeId in general.stats.badges %}active{% endif %} {% if former_patron %}former_patron{% endif %}">
             <img src="{{ badge.img }}">
-            <p>{{ badge.name }}</p>
+            <p>
+            {% if former_patron %}
+                Były patron ☹︎
+            {% else %}
+                {{ badge.name }}
+            {% endif %}
+            </p>
         </div>
     </a>
     {% endfor %}

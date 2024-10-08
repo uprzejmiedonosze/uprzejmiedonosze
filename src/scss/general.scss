@@ -260,13 +260,18 @@ a[rel~="external"] {
             text-align: end;
         }
     }
-    .badge,.hero {
+    .badge, .hero {
         text-align: center;
         filter: grayscale(1);
         opacity: 0.5;
+
+        &.former_patron {
+            filter: grayscale(0.5);
+            opacity: 1;
+        }
     }
 
-    .gauge,.badge {
+    .gauge, .badge {
         width: 100px;
         margin: 0.2em;
     }
