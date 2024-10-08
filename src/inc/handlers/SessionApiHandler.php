@@ -10,14 +10,13 @@ use Slim\Exception\HttpNotFoundException;
 
 class SessionApiHandler extends AbstractHandler {
     public function image(Request $request, Response $response, $args): Response {
-        global $storage;
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
 
         $imageBytes = explode( ',', $this->getParam($params, 'image_data'))[1];
         $pictureType = $this->getParam($params, 'pictureType');
 
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
 
         $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;
         $dtFromPicture = isset($params['dtFromPicture']) ? $params['dtFromPicture'] == 'true' : null;
@@ -39,9 +38,8 @@ class SessionApiHandler extends AbstractHandler {
     }
     public function setFields(Request $request, Response $response, array $args): Response
     {
-        global $storage;
         $appId = $args['appId'];
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
         if(!$application->isCurrentUserOwner()) {
             throw new HttpNotFoundException($request, 'Nie posiadasz aplikacji o ID ' . $appId);
         }
@@ -57,7 +55,7 @@ class SessionApiHandler extends AbstractHandler {
 
         $isSent = in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE']);
         $hasExternalId = !empty($application->externalId);
-        $storage->saveApplication($application);
+        \app\save($application);
 
         return self::renderJson($response, [
             "suggestStatusChange" => $isSent && $hasExternalId
