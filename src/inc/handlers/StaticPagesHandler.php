@@ -54,14 +54,21 @@ class StaticPagesHandler extends AbstractHandler {
         $SMHints = array();
         foreach ($SM_ADDRESSES as $sm) {
             if($sm->hint){
+                if(str_starts_with($sm->hint, 'Masz doświadczenia we współpracy'))
+                    continue;
                 if(!str_starts_with($sm->hint, 'Miejscowość ')) {
                     $SMHints[$sm->city] = $sm->hint;
                 }
             }
         }
-        $sortedSMHints = array_unique($SMHints, SORT_LOCALE_STRING);
+        
+        $collator = new Collator('pl_PL');
+        uksort($SMHints, function ($a, $b) use ($collator) {
+            return $collator->compare($a, $b);
+        });
+
         return AbstractHandler::renderHtml($request, $response, 'przesluchanie', [
-            'SMHints' => $sortedSMHints
+            'SMHints' => $SMHints
         ]);
     }
 
