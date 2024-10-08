@@ -10,6 +10,9 @@ use \Application as Application;
 use \User as User;
 use \Exception as Exception;
 
+const APPS_TABLE = 'applications';
+const USERS_TABLE = 'users';
+
 /**
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  * @SuppressWarnings(PHPMD.MissingImport)
@@ -19,21 +22,13 @@ use \Exception as Exception;
  * @SuppressWarnings(PHPMD.ShortClassName)
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-class DB extends \store\NoSQLite{
-    private $users;
-    private $apps;
+class DB {
     private $loggedUser;
 
     /**
      * Creates DB instance with default store location.
      */
     public function __construct() {
-        $store = __DIR__ . '/../../db/store.sqlite';
-
-        parent::__construct($store);
-        $this->apps  = $this->getStore('applications');
-        $this->users = $this->getStore('users');
-
         try{
             $this->getCurrentUser();
         }catch(Exception $e){
@@ -64,7 +59,7 @@ class DB extends \store\NoSQLite{
             from applications
             where email = :email;
         SQL;
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
 
@@ -119,7 +114,7 @@ class DB extends \store\NoSQLite{
             $limitOffset
         SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->execute($params);
 
         return $stmt->fetchAll(PDO::FETCH_FUNC,
@@ -140,7 +135,7 @@ class DB extends \store\NoSQLite{
             order by json_extract(value, '$.seq') desc,
                 json_extract(value, '$.added') desc
         SQL;
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':email', getCurrentUserEmail());
         $stmt->bindValue(':olderThan', $olderThan);
         $stmt->execute();
@@ -170,7 +165,7 @@ class DB extends \store\NoSQLite{
      * Returns user by email
      */
     public function getUser(string $email): User{
-        $json = $this->users->get($email);
+        $json = \store\get(USERS_TABLE, $email);
         if(!$json){
             throw new Exception("Próba pobrania nieistniejącego użytkownika '$email'", 404);
         }
@@ -180,7 +175,7 @@ class DB extends \store\NoSQLite{
     }
 
     public function canShareRecydywa(string $email): bool {
-        $json = $this->users->get($email);
+        $json = \store\get(USERS_TABLE, $email);
         $user = new User($json);
         return $user->shareRecydywa();
     }
@@ -197,7 +192,7 @@ class DB extends \store\NoSQLite{
             select max(json_extract(value, '$.number'))
             from users;
         SQL;
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->execute();
 
         $ret = $stmt->fetch(PDO::FETCH_NUM);
@@ -214,7 +209,7 @@ class DB extends \store\NoSQLite{
             throw new Exception("Próba pobrania zgłoszenia bez podania numeru");
         }
         @setSentryTag("appId", $appId);
-        $json = $this->apps->get($appId);
+        $json = \store\get(APPS_TABLE, $appId);
         if(!$json){
             throw new Exception("Próba pobrania nieistniejącego zgłoszenia '$appId'", 404);
         }
@@ -223,7 +218,7 @@ class DB extends \store\NoSQLite{
     }
 
     public function checkApplicationId(string $appId): bool {
-        $json = $this->apps->get($appId);
+        $json = \store\get(APPS_TABLE, $appId);
         return is_string($json);
     }
 
@@ -262,7 +257,7 @@ class DB extends \store\NoSQLite{
             and json_extract(value, '$.carInfo.plateId') = :plateId;
         SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':plateId', $plateId);
         $stmt->execute();
 
@@ -289,7 +284,7 @@ class DB extends \store\NoSQLite{
             group by json_extract(value, '$.status')
         SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
         
@@ -315,7 +310,7 @@ class DB extends \store\NoSQLite{
             group by 1
             order by 1;
         SQL;
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();
         
@@ -376,7 +371,7 @@ class DB extends \store\NoSQLite{
             and json_extract(value, '$.smCity') = :city
         SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':email', $this->getCurrentUser()->data->email);
         $stmt->bindValue(':status', 'confirmed');
         $stmt->bindValue(':city', $city);
@@ -400,7 +395,7 @@ class DB extends \store\NoSQLite{
             order by count(key) desc
         SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':email', $this->getCurrentUser()->data->email);
         $stmt->bindValue(':status', 'confirmed');
         $stmt->execute();
@@ -415,7 +410,7 @@ class DB extends \store\NoSQLite{
     // ADMIN area
 
     public function execute($sql){
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->execute();
         return $stmt;
     }
@@ -441,7 +436,7 @@ class DB extends \store\NoSQLite{
             limit 30;
         SQL;
 
-        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $stats = \store\query($sql)->fetchAll(PDO::FETCH_NUM);
         \cache\set('getStatsAppsByDay', $stats);
         return $stats;
     }
@@ -467,7 +462,7 @@ class DB extends \store\NoSQLite{
             limit 12;
         SQL;
 
-        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $stats = \store\query($sql)->fetchAll(PDO::FETCH_NUM);
         \cache\set('getStatsAppsByWeek', $stats);
         return $stats;
     }
@@ -505,7 +500,7 @@ class DB extends \store\NoSQLite{
             limit 30;
         SQL;
 
-        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $stats = \store\query($sql)->fetchAll(PDO::FETCH_NUM);
         \cache\set('getStatsByDay', $stats);
         return $stats;
     }
@@ -542,7 +537,7 @@ class DB extends \store\NoSQLite{
             limit 24;
         SQL;
 
-        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $stats = \store\query($sql)->fetchAll(PDO::FETCH_NUM);
         \cache\set('getStatsByYear', $stats);
         return $stats;
     }
@@ -565,7 +560,7 @@ class DB extends \store\NoSQLite{
             order by 2 desc, 1 limit 10
         SQL;
 
-        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $stats = \store\query($sql)->fetchAll(PDO::FETCH_NUM);
         \cache\set('getStatsAppsByCity', $stats);
         return $stats;
     }
@@ -589,7 +584,7 @@ class DB extends \store\NoSQLite{
             limit 300;
         SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->execute();
 
         $apps = Array();
@@ -614,7 +609,7 @@ class DB extends \store\NoSQLite{
             where json_extract(value, '$.addedToGallery.state') is not null
         SQL;
 
-        $stats = intval($this->db->query($sql)->fetchColumn());
+        $stats = intval(\store\query($sql)->fetchColumn());
         \cache\set('getGalleryCount', $stats);
         return $stats;
     }
@@ -639,7 +634,7 @@ class DB extends \store\NoSQLite{
             limit 10
         SQL;
 
-        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $stats = \store\query($sql)->fetchAll(PDO::FETCH_NUM);
         \cache\set('getGalleryByCity', $stats);
         return $stats;
     }
@@ -664,7 +659,7 @@ class DB extends \store\NoSQLite{
             limit 10
         SQL;
 
-        $stats = $this->db->query($sql)->fetchAll(PDO::FETCH_NUM);
+        $stats = \store\query($sql)->fetchAll(PDO::FETCH_NUM);
         \cache\set('getStatsByCarBrand', $stats);
         return $stats;
     }
@@ -687,13 +682,13 @@ class DB extends \store\NoSQLite{
             from applications
             where json_extract(value, '$.status') not in ('ready', 'draft', 'archive')
         SQL;
-        $apps = intval($this->db->query($sql)->fetchColumn());
+        $apps = intval(\store\query($sql)->fetchColumn());
 
         $sql = <<<SQL
             select count(key) as cnt
             from users
         SQL;
-        $users = intval($this->db->query($sql)->fetchColumn());
+        $users = intval(\store\query($sql)->fetchColumn());
 
         global $PATRONITE;
         $patrons = count($PATRONITE->active);
@@ -714,7 +709,7 @@ class DB extends \store\NoSQLite{
             limit 1;
 SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':number', $number);
         $stmt->execute();
 
@@ -732,7 +727,7 @@ SQL;
             limit 10;
 SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = \store\prepare($sql);
         $stmt->bindValue(':name', $name);
         $stmt->execute();
 
