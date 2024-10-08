@@ -19,20 +19,19 @@ class CsvHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function csv(Request $request, Response $response, $args): Response {
-        global $storage;
         $file = $args['file'];
         $stats = Array();
         switch($file) {
             case "appsByDay":
-                $stats = $storage->getStatsAppsByDay(); break;
+                $stats = \global_stats\appsByDay(); break;
             case "appsByCity":
-                $stats = $storage->getStatsAppsByCity(); break;
+                $stats = \global_stats\appsByCity(); break;
             case "byDay":
-                $stats = $storage->getStatsByDay(); break;
+                $stats = \global_stats\statsByDay(); break;
             case "byYear":
-                $stats = $storage->getStatsByYear(); break;
+                $stats = \global_stats\statsByYear(); break;
             case "byCarBrand":
-                $stats = $storage->getStatsByCarBrand(); break;
+                $stats = \global_stats\statsByCarBrand(); break;
             default: 
                 throw new HttpNotFoundException($request);
         }

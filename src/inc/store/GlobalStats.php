@@ -1,0 +1,211 @@
+<?PHP namespace global_stats;
+
+/**
+ * Returns number of new applications (by creation date)
+ * during 30 days. 
+ */
+function appsByDay(bool $useCache=true){
+
+    $stats = \cache\get("appsByDay");
+    if($useCache && $stats){
+        return $stats;
+    }
+
+    $sql = <<<SQL
+        select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day',
+            count(*) as cnt from applications
+        where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+            and json_extract(applications.value, '$.added') < date('now')
+        group by substr(json_extract(applications.value, '$.added'), 1, 10)
+        order by 1 desc
+        limit 30;
+    SQL;
+
+    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
+    \cache\set('appsByDay', $stats);
+    return $stats;
+}
+
+/**
+ * Returns number of new applications (by creation date)
+ * during 12 weeks.
+ */
+function getStatsAppsByWeek(bool $useCache=true) {
+
+    $stats = \cache\get("getStatsAppsByWeek");
+    if($useCache && $stats){
+        return $stats;
+    }
+
+    $sql = <<<SQL
+        select min(substr(json_extract(applications.value, '$.added'), 1, 10)) as 'day',
+            count(*) as cnt from applications
+        where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+            and json_extract(applications.value, '$.added') < date('now')
+        group by strftime('%W', substr(json_extract(applications.value, '$.added'), 1, 10))
+        order by 1 desc
+        limit 12;
+    SQL;
+
+    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
+    \cache\set('getStatsAppsByWeek', $stats);
+    return $stats;
+}
+
+/**
+ * Returns number of new applications (by creation date)
+ * during 30 days. 
+ */
+function statsByDay(bool $useCache=true){
+
+    $stats = \cache\get("statsByDay");
+    if($useCache && $stats){
+        return $stats;
+    }
+
+    $today = (date('H') < 12)? "and json_extract(applications.value, '$.added') < date('now')": "";
+
+    $sql = <<<SQL
+        select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day',
+            count(*) as acnt,
+            u.cnt as ucnt
+        from applications
+        left outer join (
+            select substr(json_extract(users.value, '$.added'), 1, 10) as 'day',
+                count(*) as cnt
+            from users
+            group by  substr(json_extract(users.value, '$.added'), 1, 10)
+            order by 1 desc
+            limit 35
+        ) u on substr(json_extract(applications.value, '$.added'), 1, 10) = u.day
+        where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+            $today
+        group by substr(json_extract(applications.value, '$.added'), 1, 10)
+        order by 1 desc
+        limit 30;
+    SQL;
+
+    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
+    \cache\set('statsByDay', $stats);
+    return $stats;
+}
+
+/**
+ * Returns number of new applications (by creation month)
+ * in last year.
+ */
+function statsByYear(bool $useCache=true){
+
+    $stats = \cache\get("statsByYear");
+    if($useCache && $stats){
+        return $stats;
+    }
+
+    $sql = <<<SQL
+        select min(substr(json_extract(applications.value, '$.added'), 1, 7)) as 'day',
+            count(*) as acnt,
+            u.cnt as ucnt
+        from applications
+        left outer join (
+            select min(substr(json_extract(users.value, '$.added'), 1, 7)) as 'day',
+                count(*) as cnt
+            from users
+            where substr(json_extract(users.value, '$.added'), 1, 4) > 2017
+            group by substr(json_extract(users.value, '$.added'), 1, 7)
+            order by 1 desc
+            limit 35
+        ) u on substr(json_extract(applications.value, '$.added'), 1, 7) = u.day
+        where json_extract(applications.value, '$.status') not in ('draft', 'ready')
+            and substr(json_extract(applications.value, '$.added'), 1, 4) > 2017
+        group by substr(json_extract(applications.value, '$.added'), 1, 7)
+        order by 1 desc
+        limit 24;
+    SQL;
+
+    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
+    \cache\set('statsByYear', $stats);
+    return $stats;
+}
+
+/**
+ * Returns number of applications per city.
+ */
+function appsByCity(bool $useCache=true){
+    $stats = \cache\get("appsByCity");
+    if($useCache && $stats){
+        return $stats;
+    }
+
+    $sql = <<<SQL
+        select json_extract(value, '$.address.city') as city,
+            count(key) as cnt
+        from applications
+        where json_extract(value, '$.status') not in ('draft', 'ready')
+        group by json_extract(value, '$.address.city')
+        order by 2 desc, 1 limit 10
+    SQL;
+
+    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
+    \cache\set('appsByCity', $stats);
+    return $stats;
+}
+
+
+    /**
+ * Returns number of applications per city.
+ */
+function statsByCarBrand(bool $useCache=true){
+    $stats = \cache\get("statsByCarBrand");
+    if($useCache && $stats){
+        return $stats;
+    }
+
+    $sql = <<<SQL
+        select json_extract(value, '$.carInfo.brand') as city,
+            count(key) as cnt
+        from applications
+        where json_extract(value, '$.status') not in ('draft', 'ready')
+            and json_extract(value, '$.carInfo.brand') is not null
+        group by json_extract(value, '$.carInfo.brand')
+        order by 2 desc
+        limit 10
+    SQL;
+
+    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
+    \cache\set('statsByCarBrand', $stats);
+    return $stats;
+}
+
+/**
+ * @SuppressWarnings(PHPMD.ShortVariable)
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+ */
+function mainPage(bool $useCache=true): array{
+    $stats = \cache\get("mainPage");
+    if($useCache && $stats){
+        return $stats;
+    }
+
+    global $SM_ADDRESSES;
+    $sm = count($SM_ADDRESSES);
+
+    $sql = <<<SQL
+        select count(key) as cnt
+        from applications
+        where json_extract(value, '$.status') not in ('ready', 'draft', 'archive')
+    SQL;
+    $apps = intval(\store\query($sql)->fetchColumn());
+
+    $sql = <<<SQL
+        select count(key) as cnt
+        from users
+    SQL;
+    $users = intval(\store\query($sql)->fetchColumn());
+
+    global $PATRONITE;
+    $patrons = count($PATRONITE->active);
+
+    $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm, 'patrons' => $patrons);
+    \cache\set('mainPage', $stats);
+    return $stats;
+}
