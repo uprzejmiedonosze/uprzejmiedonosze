@@ -124,35 +124,6 @@ function sendApplication(string $appId, User $user): Application {
 }
 
 /**
- * @SuppressWarnings(PHPMD.ElseExpression)
- * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
- */
-function moderateApp(User $user, string $appId, string $decision): void {
-    require __DIR__ . '/Tumblr.php';
-    global $storage;
-
-    if (!$user->isModerator()) {
-        throw new ForbiddenException("Dostęp zabroniony");
-    }
-    $who = $user->isAdmin() ? 'admin' : 'moderator';
-    $application = $storage->getApplication($appId);
-
-    if ($decision == 'true') {
-        try {
-            $application->addedToGallery = addToTumblr($application);
-            $application->addComment($who, "Zdjęcie dodane do galerii.");
-        } catch (Exception $ex) {
-            $application->addedToGallery = null;
-            throw new Exception("Błąd Tumblr " . print_r($ex, true), 500, $ex);
-        }
-    } else {
-        $application->addedToGallery = false;
-    }
-
-    $storage->saveApplication($application);
-}
-
-/**
  * Saves uploaded image + automatically create thumbnail + read plate data
  * for `carImage`.
  *

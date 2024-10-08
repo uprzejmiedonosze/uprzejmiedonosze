@@ -61,17 +61,6 @@ $app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
 $app->get('/img-{hash}.php', JpegHandler::class . ':jpeg')
     ->add(new JpegMiddleware());
 
-$app->group('', function (RouteCollectorProxy $group) use ($storage) { // Admin stuff
-    $group->get('/adm-gallery.html', function (Request $request, Response $response, $args) use ($storage) {
-        $applications = $storage->getGalleryModerationApps();
-        return AbstractHandler::renderHtml($request, $response, 'adm-gallery', [
-            'appActionButtons' => false,
-            'applications' => $applications
-        ]);
-    });
-})  ->add(new ModeratorMiddleware())
-    ->add(new HtmlMiddleware());
-
 $app->post('/api/verify-token', SessionApiHandler::class . ':verifyToken')
     ->add(new AuthMiddleware())
     ->add(new JsonMiddleware())
