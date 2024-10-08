@@ -73,16 +73,6 @@ class SessionApiHandler extends AbstractHandler {
         ));
     }
 
-    public function moderateGallery(Request $request, Response $response, $args): Response {
-        $appId = $args['appId'];
-        $decision = $args['decision'];
-        $user = $request->getAttribute('user');
-        moderateApp($user, $appId, $decision);
-        return $this->renderJson($response, array(
-            "status" => "OK"
-        ));
-    }
-
     /**
      * @SuppressWarnings(PHPMD.MissingImport)
      * @SuppressWarnings(PHPMD.Superglobals)
