@@ -1,11 +1,11 @@
 <?PHP namespace admin;
 
+require_once(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/../inc/include.php');
+
 use app\Application;
 use recydywa\Recydywa;
 use user\User;
-
-require_once(__DIR__ . '/../../vendor/autoload.php');
-require(__DIR__ . '/../inc/store/Store.php');
 
 
 function removeDrafts($olderThan=10, $dryRun=true){ // days
@@ -15,7 +15,7 @@ function removeDrafts($olderThan=10, $dryRun=true){ // days
 /**
 * Removes old apps in ready status and it's files.
 */
-function removeReadyApps($olderThan = 30, $dryRun=true){
+function removeReadyApps($olderThan=30, $dryRun=true){
     removeAppsByStatus($olderThan, 'ready', $dryRun);
 }
 
@@ -215,7 +215,7 @@ function getAllApplicationsByEmail($email, $onlyWithNumber = null){
     return $apps;
 }
 
-function upgradeAllApps($version, $dryRun){
+function upgradeAllApps($version, $dryRun=true){
     $users = getAllUsers();
     foreach ($users as $email => $user) {
         echo date(DT_FORMAT) . " migrating user $email:\n";
@@ -235,7 +235,7 @@ function updateApp($app, $version, $dryRun) {
     $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
     $status = $STATUSES[$app->status]->name;
     echo "  - migrating app $number [$status] by {$app->user->email}$added\n";
-    if($app->version < '2.1.0') {
+    if(($app->version ?? '0.0.0') < '2.1.0') {
         $app->inexactHour = true;
     }
     $app->version = $version;
@@ -243,7 +243,7 @@ function updateApp($app, $version, $dryRun) {
     if($dryRun){
         return;
     }
-    \store\set('applications', $app->id, json_encode($app));
+    \store\set('applications', $app->id, json_encode($app), $app->user->email);
 }
 
 function refreshRecydywa() {
