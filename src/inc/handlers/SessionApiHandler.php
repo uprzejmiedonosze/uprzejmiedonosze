@@ -94,14 +94,14 @@ class SessionApiHandler extends AbstractHandler {
 
     public function Nominatim(Request $request, Response $response, $args) {
         extract($args);
-        $result = Nominatim($lat, $lng);
+        $result = \geo\Nominatim($lat, $lng);
         $response->getBody()->write(json_encode($result));
         return $response;
     }
 
     public function MapBox(Request $request, Response $response, $args) {
         extract($args);
-        $result = MapBox($lat, $lng);
+        $result = \geo\MapBox($lat, $lng);
         $response->getBody()->write(json_encode($result));
         return $response;
     }
