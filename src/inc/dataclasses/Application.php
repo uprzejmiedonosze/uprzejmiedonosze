@@ -514,7 +514,7 @@ class Application extends JSONObject implements JsonSerializable {
     }
 
     public function getShortAddress(): string {
-        $shortStreetAddress = preg_replace('/\D.*\s(\w+\s\w+\s[\w\d-]+,\s.+)/iu', '$1', $this->address->address);
+        $shortStreetAddress = preg_replace('/\D.*\s(\w{3,}\s(\w{1,3}\s)?\w{3,}\s(\w{1,3}\s)?[\/\w\d]+,\s.+)/iu', '$1', $this->address->address);
         if (str_ends_with($this->user->address, $this->address->city ?? 'none')) {
             $re = '/,\s' . ($this->address->city ?? 'none') . '$/';
             return preg_replace($re, '', $shortStreetAddress);
