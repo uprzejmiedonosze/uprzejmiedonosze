@@ -132,7 +132,7 @@ function setError(error) {
 
 function finishLogin(signInSuccessUrl) {
     onAuthStateChanged(getFirebaseAuth(), (user) => {
-        if (!user) setError('Error: missing user');
+        if (!user) return setError('Error: missing user');
         user.getIdToken().then(async function (accessToken) {
             try {
                 const api = new Api('/api/verify-token')
