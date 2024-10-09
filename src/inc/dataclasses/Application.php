@@ -138,6 +138,7 @@ class Application extends JSONObject implements \JsonSerializable {
             [$lat, $lng] = explode(',', $latLng);
             $this->address->lat = (float)$lat;
             $this->address->lng = (float)$lng;
+            unset($this->address->latlng);
             return;
         }
         $this->address->lat = null;
