@@ -1,11 +1,6 @@
-<?PHP
-use \JSONObject as JSONObject;
+<?PHP namespace alpr;
 
-function cmp_alpr($left, $right){
-  if($left['confidence'] > $right['confidence']) return -1;
-  if($left['confidence'] < $right['confidence']) return 1;
-  return 0;
-}
+use \JSONObject as JSONObject;
 
 function _check_alpr_cache($imageHash) {
     $result = \cache\get("_alpr-$imageHash");
@@ -39,7 +34,11 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
         }
 
         $result = (Array)$carInfo['results'];
-        usort($result, "cmp_alpr");
+        usort($result, function ($left, $right){
+            if($left['confidence'] > $right['confidence']) return -1;
+            if($left['confidence'] < $right['confidence']) return 1;
+            return 0;
+        });
 
         $result = $result[0];
 
@@ -84,7 +83,7 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
 function get_alpr(&$imageBytes){
     logger("  get_alpr");
     $imageHash = sha1($imageBytes);
-	$apiInstance = new Swagger\Client\Api\DefaultApi();
+	$apiInstance = new \Swagger\Client\Api\DefaultApi();
     $secretKey = (intval(date('s')) % 2)? // mixing two API keys
         "sk_0bcc0e58dab1ea40c4389d70": // SZN key
         "sk_aa0b80a70b2ae2268b36734a"; // KS key

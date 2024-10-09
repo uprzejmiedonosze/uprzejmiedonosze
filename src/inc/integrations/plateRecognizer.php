@@ -1,4 +1,5 @@
-<?PHP
+<?PHP namespace alpr;
+
 use \JSONObject as JSONObject;
 
 function cmp_platerecongnizer($left, $right){
@@ -95,7 +96,7 @@ function platerecognizerRequest($method, $data=null) {
         $error = curl_error($chi);
         curl_close($chi);
         logger("Nie udało się pobrać danych platerecognizer: $error");
-        throw new Exception("Nie udało się pobrać odpowiedzi z serwerów platerecognizer: $error", 500);
+        throw new \Exception("Nie udało się pobrać odpowiedzi z serwerów platerecognizer: $error", 500);
     }
     curl_close($chi);
 

@@ -1,5 +1,7 @@
-<?PHP
-require_once(__DIR__ . '/include.php');
+<?PHP namespace alpr;
+
+use stdClass;
+
 require(__DIR__ . '/openAlpr.php');
 require(__DIR__ . '/plateRecognizer.php');
 
@@ -20,7 +22,7 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
         else
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
         logger("Exception on get_car_info, 1st attepmt with usePlaterecognizer=$usePlaterecognizer " . $e->getMessage(), true);
         $usePlaterecognizer = !$usePlaterecognizer;
         if ($usePlaterecognizer)
