@@ -15,7 +15,6 @@ import "./sites/shipment";
 import "./sites/start";
 import "./sites/statistics";
 import "./sites/thank-you";
-import "./sites/adm-gallery";
 import "./sites/public-info";
 import "./sites/how";
 import "./sites/ask-for-status"
