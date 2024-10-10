@@ -28,32 +28,6 @@ function appsByDay(bool $useCache=true){
 
 /**
  * Returns number of new applications (by creation date)
- * during 12 weeks.
- */
-function getStatsAppsByWeek(bool $useCache=true) {
-
-    $stats = \cache\get("getStatsAppsByWeek");
-    if($useCache && $stats){
-        return $stats;
-    }
-
-    $sql = <<<SQL
-        select min(substr(json_extract(applications.value, '$.added'), 1, 10)) as 'day',
-            count(*) as cnt from applications
-        where json_extract(applications.value, '$.status') not in ('draft', 'ready')
-            and json_extract(applications.value, '$.added') < date('now')
-        group by strftime('%W', substr(json_extract(applications.value, '$.added'), 1, 10))
-        order by 1 desc
-        limit 12;
-    SQL;
-
-    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set('getStatsAppsByWeek', $stats);
-    return $stats;
-}
-
-/**
- * Returns number of new applications (by creation date)
  * during 30 days. 
  */
 function statsByDay(bool $useCache=true){
@@ -150,8 +124,7 @@ function appsByCity(bool $useCache=true){
     return $stats;
 }
 
-
-    /**
+/**
  * Returns number of applications per city.
  */
 function statsByCarBrand(bool $useCache=true){

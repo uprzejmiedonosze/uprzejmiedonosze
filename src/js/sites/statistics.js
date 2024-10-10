@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsByDay", {
     data: {
-      csvURL: window.location.origin + "/stats/appsByDay.csv",
+      csvURL: window.location.origin + "/stats/statsByDay.csv",
       firstRowAsNames: false
     },
     chart: {
