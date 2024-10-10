@@ -21,18 +21,6 @@ declare(ticks = 1); // Allow posix signal handling
 pcntl_signal(SIGINT, "\\admin\\shutdown");
 pcntl_signal(SIGTERM, "\\admin\\shutdown");
 
-
-function removeDrafts($olderThan=10, $dryRun=true){ // days
-    removeAppsByStatus($olderThan, 'draft', $dryRun);
-}
-
-/**
-* Removes old apps in ready status and it's files.
-*/
-function removeReadyApps($olderThan=30, $dryRun=true){
-    removeAppsByStatus($olderThan, 'ready', $dryRun);
-}
-
 /**
  * Removes user by given $email
  */
@@ -168,13 +156,12 @@ function removeAppsByStatus($olderThan, $status, $dryRun){ // days
  * Returns all applications by status.
  */
 function getAllApplicationsByStatus($status){
-    global $store;
     $sql = <<<SQL
         select key, value
         from applications
         where json_extract(value, '$.status') = :status;
     SQL;
-    $stmt = $store->prepare($sql);
+    $stmt = \store\prepare($sql);
     $stmt->bindValue(':status', $status);
     $stmt->execute();
 
@@ -186,12 +173,11 @@ function getAllApplicationsByStatus($status){
 }
 
 function getAllUsers() {
-    global $store;
     $sql = <<<SQL
         select key, value
         from users;
     SQL;
-    $stmt = $store->prepare($sql);
+    $stmt = \store\prepare($sql);
     $stmt->execute();
 
     $users = Array();
@@ -202,8 +188,43 @@ function getAllUsers() {
     return $users;
 }
 
+function getTopAppsToMigrate(string $version): array {
+    $sql = <<<SQL
+        select key, value
+        from applications
+        where json_extract(value, '$.version') <> :version
+        order by key
+        limit 1000;
+    SQL;
+    $stmt = \store\prepare($sql);
+    $stmt->bindValue(':version', $version);
+    $stmt->execute();
+
+    $apps = Array();
+    while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+        $apps[$row[0]] = Application::withJson($row[1]);
+    }
+    return $apps;   
+}
+
 
 function upgradeAllApps($version, $dryRun=true){
+    global $interrupt;
+    $apps = Array(1);
+    $counter = 1;
+    while(count($apps)) {
+        if ($interrupt) exit;
+        echo "\nGetting top 1K apps to migrate. Batch $counter\n\n";
+        $apps = getTopAppsToMigrate($version);
+        foreach ($apps as $appId => $app) {
+            if ($interrupt) exit;
+            updateApp($app, $version, $dryRun);
+        }
+        $counter++;
+    }
+}
+
+function upgradeAllUsers($dryRun=true) {
     global $interrupt;
     $users = getAllUsers();
     foreach ($users as $email => $user) {
@@ -211,10 +232,6 @@ function upgradeAllApps($version, $dryRun=true){
         echo date(DT_FORMAT) . " migrating user $email:\n";
         if(!$dryRun){
             \store\set('users', $email, json_encode($user));
-        }
-        $apps = getAllApplicationsByEmail($email, false);
-        foreach ($apps as $appId => $app) {
-            updateApp($app, $version, $dryRun);
         }
     }
 }
@@ -253,20 +270,20 @@ function refreshRecydywa() {
 
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
         if ($interrupt) exit;
-        $plateId = trim(strtoupper($row[0]));
-        echo "$plateId set\n";
-        $rec = Recydywa::withValues($row[1], $row[2], $row[3]);
-        
-        \store\set('recydywa', "$plateId v2", json_encode($rec));
+        $plateIdNoWs = \recydywa\cleanPlateId($row[0]);
+        echo "$plateIdNoWs set\n";
+        $recydywa = Recydywa::withValues($row[1], $row[2], $row[3]);
+
+        \cache\set("byPlate-$plateIdNoWs", $recydywa);
+        \store\set('recydywa', "$plateIdNoWs v2", json_encode($recydywa));
     }
 }
 
 
-
-
-removeDrafts(10, false);
-removeReadyApps(30, false);
+removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
+removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
 
 // removeUser('szymon@nieradka.net', false);
-
+// upgradeAllUsers(false);
+// refreshRecydywa();
 // upgradeAllApps('2.3.0', false);
