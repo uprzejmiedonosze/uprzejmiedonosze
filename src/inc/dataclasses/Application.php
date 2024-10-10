@@ -37,8 +37,6 @@ class Application extends JSONObject implements \JsonSerializable {
         if(!isset($instance->seq) && $instance->hasNumber()) {
             $instance->seq = extractAppNumer($instance->getNumber());
         }
-        $instance->migrateLatLng();
-        $instance->migrateSent();
         if (!isset($instance->user->sex)) {
             $instance->user->sex = User::_guessSex($instance->user->name);
         }
@@ -97,42 +95,6 @@ class Application extends JSONObject implements \JsonSerializable {
         return isset($this->sent) && isset($this->sent->date) && !in_array($this->status, ['draft', 'ready', 'confirmed']);
     }
 
-    /**
-     * @SuppressWarnings("unused")
-     */
-    private function migrateSent() {
-        if (isset($this->sent))
-            unset($this->sent->{''});
-        if (isset($this->sent) || in_array($this->status, ['draft', 'ready', 'confirmed'])) {
-            return;
-        }
-        $this->sent = new JSONObject();
-        $smData = $this->guessSMData();
-        $sentOn = array_filter($this->statusHistory, function($entry, $key) {
-            return isset($entry->new) && ($entry->new == 'confirmed-waiting' || $entry->new == 'confirmed-waitingE');
-        }, ARRAY_FILTER_USE_BOTH);
-        $this->sent->date = null;
-        if(sizeof($sentOn) > 0) {
-            $this->sent->date = array_key_first($sentOn);
-        }
-        if (isset($this->sentViaAPI)) {
-            $this->sent->subject = $this->getEmailSubject();
-            $this->sent->to = "fixmycity";
-            $this->sent->method = $smData->api;
-            return;
-        }
-        if (isset($this->sentViaMail)) {
-            $this->sent->date = $this->sentViaMail->date;
-            $this->sent->subject = $this->sentViaMail->subject;
-            $this->sent->to = $this->sentViaMail->to;
-            $this->sent->method = $smData->api;
-            return;
-        }
-        $this->sent->subject = $this->getEmailSubject();
-        $this->sent->to = $smData->getEmail();
-        $this->sent->method = 'manual';
-    }
-
     public function setLatLng(string|null $latLng): void {
         if ($latLng && preg_match("/\d+.\d+,\d+.\d+/", $latLng)) {
             [$lat, $lng] = explode(',', $latLng);
@@ -143,15 +105,6 @@ class Application extends JSONObject implements \JsonSerializable {
         }
         $this->address->lat = null;
         $this->address->lng = null;
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     * It is used in constructor
-     */
-    private function migrateLatLng(): void {
-        if (!empty($this->address->latlng))
-            $this->setLatLng($this->address->latlng);
     }
 
     public function initStatements() {

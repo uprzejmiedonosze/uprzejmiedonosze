@@ -20,9 +20,6 @@ class User extends \JSONObject{
         global $_SESSION;
         if($json){
             parent::__construct($json);
-            if (!isset($this->appsCount))
-                @$this->appsCount = sizeof(array_values((array)$this->applications));
-            unset($this->applications);
             if (!isset($this->data->sex)) {
                 $this->guessSex();
             }
