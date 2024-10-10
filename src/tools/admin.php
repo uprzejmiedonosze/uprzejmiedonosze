@@ -270,12 +270,12 @@ function refreshRecydywa() {
 
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
         if ($interrupt) exit;
-        $plateIdNoWs = \recydywa\cleanPlateId($row[0]);
-        echo "$plateIdNoWs set\n";
+        $cleanPlateId = \recydywa\cleanPlateId($row[0]);
+        echo "$cleanPlateId set\n";
         $recydywa = Recydywa::withValues($row[1], $row[2], $row[3]);
 
-        \cache\set("byPlate-$plateIdNoWs", $recydywa);
-        \store\set('recydywa', "$plateIdNoWs v2", json_encode($recydywa));
+        \cache\set("recydywa-$cleanPlateId", $recydywa);
+        \store\set('recydywa', "$cleanPlateId v2", json_encode($recydywa));
     }
 }
 

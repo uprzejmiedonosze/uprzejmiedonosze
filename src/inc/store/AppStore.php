@@ -27,8 +27,10 @@ function save(Application $application): Application{
     }
     \store\set(TABLE, $application->id, json_encode($application), $application->user->email);
 
-    if ($application->carInfo->plateId ?? false)
-        \cache\delete("getApplicationsByPlate-{$application->carInfo->plateId}");
+    if ($application->carInfo->plateId ?? false) {
+        $cleanPlateId = \recydywa\cleanPlateId($application->carInfo->plateId);
+        \cache\delete("byPlate-$cleanPlateId");
+    }
     return $application;
 }
 
@@ -106,7 +108,7 @@ function byPlate(string $plateId): array|null {
         select value
         from applications 
         where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
-        and json_extract(value, '$.carInfo.plateId') in (:plateId, :cleanPlateId;
+        and json_extract(value, '$.carInfo.plateId') in (:plateId, :cleanPlateId);
     SQL;
 
     $stmt = \store\prepare($sql);

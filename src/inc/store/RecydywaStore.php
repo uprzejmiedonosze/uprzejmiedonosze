@@ -8,7 +8,7 @@ CONST TABLE = 'recydywa';
  */
 function get(string $plateId): Recydywa {
     $cleanPlateId = \recydywa\cleanPlateId($plateId);
-    $cached = \cache\get("byPlate-$cleanPlateId");
+    $cached = \cache\get("recydywa-$cleanPlateId");
     if ($cached)
         return $cached;
     
@@ -28,7 +28,7 @@ function update(string $plateId): Recydywa {
     $apps = \app\byPlate($cleanPlateId);
     $recydywa = Recydywa::withApps($apps);
 
-    \cache\set("byPlate-$cleanPlateId", $recydywa);
+    \cache\set("recydywa-$cleanPlateId", $recydywa);
     \store\set(TABLE, "$cleanPlateId v2", json_encode($recydywa));
     return $recydywa;
 }
