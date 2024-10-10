@@ -1,7 +1,7 @@
 <?PHP namespace recydywa;
 require(__DIR__ . '/../dataclasses/Recydywa.php');
 
-CONST TABLE = 'recydywa';
+const TABLE = 'recydywa';
 
 /**
  * Returns the number of applications per specified $plate.

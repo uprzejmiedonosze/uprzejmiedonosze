@@ -4,7 +4,7 @@ require(__DIR__ . '/../dataclasses/User.php');
 
 use app\Application;
 
-CONST TABLE = 'users';
+const TABLE = 'users';
 $currentUser = null;
 
 current();
@@ -149,8 +149,8 @@ function points(User $user): Array{
     $points = $ret;
     $mandates = $ret;
 
-    array_walk($points, function(&$item, $key) { GLOBAL $CATEGORIES; $item = $item * $CATEGORIES[$key]->getPoints(); });
-    array_walk($mandates, function(&$item, $key) { GLOBAL $CATEGORIES; $item = $item * $CATEGORIES[$key]->getMandate(); });
+    array_walk($points, function(&$item, $key) { global $CATEGORIES; $item = $item * $CATEGORIES[$key]->getPoints(); });
+    array_walk($mandates, function(&$item, $key) { global $CATEGORIES; $item = $item * $CATEGORIES[$key]->getMandate(); });
 
     $mandates = array_sum($mandates);
     $points = array_sum($points);
