@@ -7,6 +7,20 @@ use app\Application;
 use recydywa\Recydywa;
 use user\User;
 
+$interrupt = false;
+
+function shutdown() {
+    global $interrupt;
+    $interrupt = true;
+    echo "\nStopping job...\n";
+}
+
+register_shutdown_function("\\admin\\shutdown"); // Handle END of script
+
+declare(ticks = 1); // Allow posix signal handling
+pcntl_signal(SIGINT, "\\admin\\shutdown");
+pcntl_signal(SIGTERM, "\\admin\\shutdown");
+
 
 function removeDrafts($olderThan=10, $dryRun=true){ // days
     removeAppsByStatus($olderThan, 'draft', $dryRun);
@@ -124,6 +138,7 @@ function removeFile($fileName, $dryRun){
  * Generic function to remove apps by status
  */
 function removeAppsByStatus($olderThan, $status, $dryRun){ // days
+    global $interrupt;
     if($status !== 'draft' && $status !== 'ready'){
         throw new \Exception("Refuse to remove apps in '$status' status.");
     }
@@ -135,6 +150,7 @@ function removeAppsByStatus($olderThan, $status, $dryRun){ // days
     $latest = date_format($date, "Y-m-d");;
 
     foreach($apps as $app){
+        if ($interrupt) exit;
         if(isset($app->added)){
             if($app->added > $latest){
                 echo "Not removing $app->id from $app->added by {$app->user->email} as it's still fresh\n";
@@ -216,8 +232,10 @@ function getAllApplicationsByEmail($email, $onlyWithNumber = null){
 }
 
 function upgradeAllApps($version, $dryRun=true){
+    global $interrupt;
     $users = getAllUsers();
     foreach ($users as $email => $user) {
+        if ($interrupt) exit;
         echo date(DT_FORMAT) . " migrating user $email:\n";
         if(!$dryRun){
             \store\set('users', $email, json_encode($user));
@@ -247,7 +265,7 @@ function updateApp($app, $version, $dryRun) {
 }
 
 function refreshRecydywa() {
-    global $store;
+    global $interrupt;
     $sql = <<<SQL
         select json_extract(value, '$.carInfo.plateId') as plateId,
             count(key) as appsCnt,
@@ -258,10 +276,11 @@ function refreshRecydywa() {
         group by 1;
     SQL;
 
-    $stmt = $store->prepare($sql);
+    $stmt = \store\prepare($sql);
     $stmt->execute();
 
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+        if ($interrupt) exit;
         $plateId = trim(strtoupper($row[0]));
         echo "$plateId set\n";
         $rec = Recydywa::withValues($row[1], $row[2], $row[3]);
