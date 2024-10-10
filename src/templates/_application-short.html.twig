@@ -16,7 +16,7 @@
             <div> {{ app.getDate|raw }}</div>
             <div>
                 <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-cnt">{{ recydywaCnt }}</span>
-                {% if recydywa.usersCnt > 1 %}<span class="recydywa-userscnt">✌︎</span>{% endif %}
+                {% if recydywa.usersCnt > 1 %}<span class="recydywa-userscnt">{{ recydywa.usersCnt }}</span>{% endif %}
                 <span class="plate-id small">{{ app.carInfo.plateId }}</span>
             </div>
         </div>

@@ -31,10 +31,10 @@
     {% if recydywaCnt > 1 %}
     <li class="no-icon">
         <span class="recydywa-cnt">RECYDYWA {{ recydywaCnt }}</span> 
-            numeru <span class="plate-id small">{{ app.carInfo.plateId }}</span>
-            {% if recydywa.usersCnt > 1 %}od <span class="recydywa-userscnt">✌︎ {{ recydywa.usersCnt }} użytkowników</span> {% endif %}
-            {% if recydywa.citiesCnt > 1 %}w {{ recydywa.citiesCnt }} miastach {% endif %}
-        <a href="#" class="recydywa" data-plateid="{{ app.carInfo.plateId }}">(zobacz pozostałe)</a>
+            {% if recydywa.usersCnt > 1 %}od&nbsp;<span class="recydywa-userscnt">{{ recydywa.usersCnt }} użytkowników</span> {% endif %}
+            numeru&nbsp;<span class="plate-id small">{{ app.carInfo.plateId }}</span>
+            {% if recydywa.citiesCnt > 1 %}w&nbsp;{{ recydywa.citiesCnt }}&nbsp;miastach {% endif %}
+        <a href="#" class="recydywa" data-plateid="{{ app.carInfo.plateId }}">(zobacz&nbsp;pozostałe)</a>
     </li>
     {% endif %}
 
