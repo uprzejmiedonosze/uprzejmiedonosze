@@ -279,7 +279,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $lat = getParam($params, 'lat', '');
         $lng = getParam($params, 'lng', '');
         $latLng = null;
-        if ($lat && $lng) $latLng = normalizeLatLng($lat, $lng);
+        if ($lat && $lng) $latLng = \geo\normalizeLatLng($lat, $lng);
         $dtFromPicture = !!$dateTime;
     
         $imagemime = getimagesize($imageUri);
@@ -325,7 +325,7 @@ $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
         $lat = $args['lat'];
         $lng = $args['lng'];
         try {
-            $response->getBody()->write(json_encode(GoogleMaps($lat, $lng)));
+            $response->getBody()->write(json_encode(\geo\GoogleMaps($lat, $lng)));
         } catch (Exception $e) {
             if ($e->getCode() ?? -1 == 404) {
                 throw new HttpNotFoundException($request, $e->getMessage(), $e);
@@ -339,7 +339,7 @@ $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
         $lat = $args['lat'];
         $lng = $args['lng'];
     
-        $result = Nominatim($lat, $lng);
+        $result = \geo\Nominatim($lat, $lng);
         $response->getBody()->write(json_encode($result));
         return $response;
     });
@@ -348,7 +348,7 @@ $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
         $lat = $args['lat'];
         $lng = $args['lng'];
     
-        $result = MapBox($lat, $lng);
+        $result = \geo\MapBox($lat, $lng);
         $response->getBody()->write(json_encode($result));
         return $response;
     });
