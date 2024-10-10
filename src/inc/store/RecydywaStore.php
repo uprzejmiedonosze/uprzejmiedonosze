@@ -6,27 +6,33 @@ CONST TABLE = 'recydywa';
 /**
  * Returns the number of applications per specified $plate.
  */
-function get(string $plate): Recydywa {
-    $cached = \cache\get($plate);
+function get(string $plateId): Recydywa {
+    $cleanPlateId = \recydywa\cleanPlateId($plateId);
+    $cached = \cache\get("byPlate-$cleanPlateId");
     if ($cached)
         return $cached;
     
-    $recydywaJson = \store\get(TABLE, "$plate v2");
+    $recydywaJson = \store\get(TABLE, "$cleanPlateId v2");
     if($recydywaJson)
         return new Recydywa($recydywaJson);
 
-    return update($plate);
+    return update($cleanPlateId);
 }
 
 /**
  * Recalculates recydywa.
  * @SuppressWarnings(PHPMD.StaticAccess)
  */
-function update(string $plate): Recydywa {
-    $apps = \app\byPlate($plate);
+function update(string $plateId): Recydywa {
+    $cleanPlateId = cleanPlateId($plateId);
+    $apps = \app\byPlate($cleanPlateId);
     $recydywa = Recydywa::withApps($apps);
 
-    \cache\set("%HOST%-$plate", $recydywa);
-    \store\set(TABLE, "$plate v2", json_encode($recydywa));
+    \cache\set("byPlate-$cleanPlateId", $recydywa);
+    \store\set(TABLE, "$cleanPlateId v2", json_encode($recydywa));
     return $recydywa;
+}
+
+function cleanPlateId(string $plateId): string {
+    return preg_replace('/\s+/', '', trim(strtoupper($plateId)));
 }

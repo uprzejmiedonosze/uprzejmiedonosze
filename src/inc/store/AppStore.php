@@ -93,28 +93,31 @@ function nextNumber(string $email): int{
 
 function byPlate(string $plateId): array|null {
     $plateId = trim(strtoupper($plateId));
-    $cache = \cache\get("byPlate-$plateId");
+    $cleanPlateId = \recydywa\cleanPlateId($plateId);
+    $cache = \cache\get("byPlate-$cleanPlateId");
     if($cache){
         return $cache;
     }
 
     $plateId = \SQLite3::escapeString($plateId);
+    $cleanPlateId = \SQLite3::escapeString($cleanPlateId);
 
     $sql = <<<SQL
         select value
         from applications 
         where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
-        and json_extract(value, '$.carInfo.plateId') = :plateId;
+        and json_extract(value, '$.carInfo.plateId') in (:plateId, :cleanPlateId;
     SQL;
 
     $stmt = \store\prepare($sql);
     $stmt->bindValue(':plateId', $plateId);
+    $stmt->bindValue(':cleanPlateId', $cleanPlateId);
     $stmt->execute();
 
     $apps = $stmt->fetchAll(\PDO::FETCH_FUNC,
         fn($value) => Application::withJson($value));
 
-    \cache\set("byPlate-$plateId", $apps);
+    \cache\set("byPlate-$cleanPlateId", $apps);
     return $apps;
 }
 
