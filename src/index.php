@@ -27,8 +27,6 @@ require(__DIR__ . '/../inc/handlers/index.php');
 require(__DIR__ . '/../inc/middleware/index.php');
 
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Views\TwigMiddleware;
@@ -78,9 +76,11 @@ $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     ->add(new JsonBodyParser());
 
 $app->group('', function (RouteCollectorProxy $group) { // Application
+    $group->any('/start.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
+    $group->any('/nowe-zgloszenie.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
 
-    $group->get('/start.html', ApplicationHandler::class . ':start');
-    $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
+    //$group->get('/start.html', ApplicationHandler::class . ':start');
+    //$group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
 
     $group->post('/potwierdz.html', ApplicationHandler::class . ':confirm');
     $group->get('/potwierdz.html', function () { return AbstractHandler::redirect('/moje-zgloszenia.html'); });
