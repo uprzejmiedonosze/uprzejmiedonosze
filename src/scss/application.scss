@@ -50,6 +50,7 @@
     text-align: center;
     width: 100%;
     display: none;
+    z-index: 2;
   }
 }
 
@@ -89,6 +90,7 @@
       padding: 2px 6px;
       font-weight: 300;
       display: inline;
+      white-space: nowrap;
     }
     span.recydywa-cnt {
       background-color: $recydywa;

@@ -257,10 +257,13 @@ async function sendFile(fileData, id, imageMetadata) {
       } else {
         $("#plateImage").hide();
       }
-      if (app.carInfo.recydywa && app.carInfo.recydywa > 0) {
+      const recydywa = app.carInfo?.recydywa
+      if (recydywa?.appsCnt > 1) {
+        
         $("#recydywa").text(
-          "recydywista, zgłoszeń: " + app.carInfo.recydywa
-        );
+          `recydywista, zgłoszeń: ${recydywa.appsCnt}`
+          + ((recydywa?.usersCnt > 1) ? `od ${recydywa.usersCnt} użytkowników` : "")
+        )
         $("#recydywa").show();
       }
     }
