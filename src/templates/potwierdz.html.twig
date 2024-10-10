@@ -11,7 +11,7 @@
 {% endif %}
 
 {% block rightButtonCustom %}
-    {% if not autoSend %}
+    {% if not app.automatedSM %}
     <a onclick="confirmApplication()"
         class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
         ui-btn-inline ui-btn-icon-left ui-icon-check confirm-save-button">Zapisz!</a>
@@ -22,7 +22,7 @@
 
 {% block main %}
 
-{% if autoSend %}
+{% if app.automatedSM %}
 <h2>Sprawdź przed wysłaniem</h2>
 <p>
     Twoje zgłoszenie zostanie za chwilę wysłane do <b>{{ smName|raw }}</b>.
@@ -100,7 +100,7 @@
         </cite>
     </div>
 </div>
-{% if autoSend %}
+{% if app.automatedSM %}
 <a onclick="confirmApplication()"
     class="ui-alt-icon ui-nodisc-icon ui-btn ui-corner-all
     ui-btn-icon-left ui-icon-mail cta ui-disabled confirm-send-button">Wyślij do {{ sm.getShortName }}!</a>

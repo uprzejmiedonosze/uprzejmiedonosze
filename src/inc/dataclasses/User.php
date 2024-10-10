@@ -33,9 +33,7 @@ class User extends \JSONObject{
         $this->data = new stdClass();
         $this->data->email = $_SESSION['user_email'] ?? '';
         $this->data->name  = capitalizeName($_SESSION['user_name'] ?? '');
-        $this->data->exposeData = false;
         $this->data->stopAgresji = false;
-        $this->data->autoSend = true;
         $this->data->shareRecydywa = false;
         $this->appsCount = 0;
     }
@@ -139,7 +137,7 @@ class User extends \JSONObject{
      * Updates current user's data.
      * @SuppressWarnings(PHPMD.MissingImport)
      */
-    function updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend, $shareRecydywa){
+    function updateUserData($name, $msisdn, $address, $stopAgresji, $shareRecydywa){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
@@ -154,11 +152,9 @@ class User extends \JSONObject{
     
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
-        if(isset($autoSend)) $this->data->autoSend = $autoSend;
         if(isset($shareRecydywa)) $this->data->shareRecydywa = $shareRecydywa;
         
         $this->data->address = $address;
-        $this->data->exposeData = $exposeData;
         return true;
     }
 
@@ -225,13 +221,7 @@ class User extends \JSONObject{
         return $this->data->email;
     }
 
-    /**
-     * Returns data.exposeData or false as default.
-     */
     public function canExposeData(){
-        if(isset($this->data->exposeData)){
-            return $this->data->exposeData;
-        }
         return false;
     }
 
@@ -243,9 +233,6 @@ class User extends \JSONObject{
     }
 
     public function autoSend() {
-        if(isset($this->data->autoSend)){
-            return $this->data->autoSend;
-        }
         return true;
     }
 

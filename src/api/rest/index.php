@@ -104,15 +104,11 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $name = getParam($params, 'name');
         $address = getParam($params, 'address');
         $msisdn = getParam($params, 'msisdn', '');
-        $exposeData = getParam($params, 'exposeData', 'N') == 'Y';
-        if ($exposeData) throw new HttpBadRequestException($request, "Naprawdę chcesz ukrywać swoje dane.");
         $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
-        $autoSend = getParam($params, 'autoSend', 'Y') == 'Y';
-        if (!$autoSend) throw new HttpBadRequestException($request, "Odmawiam wyłączenia funkcji automatycznej wysyłki zgłoszeń");
     
         $user = $request->getAttribute('user');
     
-        $user->updateUserData($name, $msisdn, $address, $exposeData, $stopAgresji, $autoSend);
+        $user->updateUserData($name, $msisdn, $address, $stopAgresji);
         \user\save($user);
         $user->isRegistered = $user->isRegistered();
         $request = $request->withAttribute('user', $user);

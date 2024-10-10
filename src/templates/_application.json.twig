@@ -20,7 +20,7 @@
 {% if app.userComment is defined and app.userComment %}
     ,"comment": "{{ app.userComment }}"
 {% endif %}
-{% if app.user.exposeData is not defined or not app.user.exposeData %}
+{% if not (app.user.exposeData ?? false) %}
     ,"exposeData": "Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail"
 {% endif %}
 {% if app.sent is defined %}

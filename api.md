@@ -13,7 +13,6 @@ POST params:
   * `name`
   * `address`
   * `msisdn` (optional)
-  * `exposeData` (optional, defaults 'N')
         
 ### POST `update-user`
 
@@ -24,9 +23,8 @@ POST params:
   * `name`
   * `address`
   * `msisdn` (optional)
-  * `exposeData` (optional, defaults 'N')
   * `stopAgresji` (optional, default 'SM')
-  * `autoSend` (deprecated, default 'Y')
+
 
 
 ### GET `user-apps`

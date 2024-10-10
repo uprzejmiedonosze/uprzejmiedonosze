@@ -35,7 +35,7 @@ Z poważaniem
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
     <a href="/moje-zgloszenia.html" data-ajax="false">liście swoich zgłoszeń</a>.</p>
 
-{% if autoSend %}
+{% if app.automatedSM %}
 <div class="whatNext">
     <h4>Trwa wysyłka zgłoszenia...</h4>
 </div>
@@ -82,7 +82,7 @@ lub wesprzeć mnie
 </p>
 {% endif %}
 
-{% if autoSend %}
+{% if app.automatedSM %}
 <script>
     $(document).on("pageshow", function () {
         if (!$(".dziekujemy").length) return

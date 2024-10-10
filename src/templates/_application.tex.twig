@@ -41,7 +41,7 @@
     Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
 {% endif %}
 
-{% if app.user.exposeData is not defined or not app.user.exposeData %}
+{% if not (app.user.exposeData ?? false) %}
     Równocześnie proszę o \textbf{niezamieszczanie} w protokole danych dotyczących mojego miejsca
     zamieszkania, nr. telefonu i~adresu e-mail.
 {% endif %}

@@ -150,7 +150,6 @@ class ApplicationHandler extends AbstractHandler {
             ],
             'app' => $application,
             'vehicleBox' => (isset($application->carInfo->vehicleBox->x)) ? $application->carInfo->vehicleBox : false,
-            'autoSend' => $user->autoSend() && $application->automatedSM(),
             'user' => $user
         ]);
     }
@@ -191,8 +190,7 @@ class ApplicationHandler extends AbstractHandler {
             'app' => $application,
             'appsCount' => $user->appsCount,
             'edited' => $edited,
-            'isPatron' => $user->isPatron(),
-            'autoSend' => $user->autoSend() && $application->automatedSM()
+            'isPatron' => $user->isPatron()
 
         ]);
     }
@@ -252,7 +250,6 @@ class ApplicationHandler extends AbstractHandler {
             'countChanged' => $countChanged,
             'applicationsCount' => count($applications),
             'myAppsSize' => 500,
-            'autoSend' => $user->autoSend(),
             'query' => $query
         ]);
     }
@@ -272,8 +269,7 @@ class ApplicationHandler extends AbstractHandler {
             'appActionButtons' => true,
             'applications' => $apps,
             'myAppsSize' => 500,
-            'applicationsCount' => count($apps),
-            'autoSend' => $user->autoSend()
+            'applicationsCount' => count($apps)
         ]);
     }
 
@@ -314,8 +310,7 @@ class ApplicationHandler extends AbstractHandler {
             'apps' => $apps,
             'user' => $user,
             'city' => $city,
-            'sm' => $sm,
-            'autoSend' => $user->autoSend()
+            'sm' => $sm
         ]);
     }
 
@@ -343,8 +338,7 @@ class ApplicationHandler extends AbstractHandler {
 
         return AbstractHandler::renderHtml($request, $response, '_application-short-details', [
             'appActionButtons' => true,
-            'app' => $application,
-            'autoSend' => $user->autoSend()
+            'app' => $application
         ]);
     }
 

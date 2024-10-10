@@ -43,7 +43,7 @@
     <li class="address">{{ app.address.address }}</li>
     {% if sendable %}
         <li class="send">
-            {% if app.automatedSM and (autoSend ?? false) %}
+            {% if app.automatedSM %}
                 <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
                 class="ui-btn ui-btn-inline ui-corner-all ui-mini cta confirmed-waiting">
                     Wyślij do {{ app.guessSMData.getShortName }}
