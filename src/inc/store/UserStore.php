@@ -72,7 +72,9 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
     $whereStatus = <<<SQL
         and json_extract(value, '$.status') not in ('ready', 'draft')
     SQL;
-    if ($status !== 'all') {
+    if ($status == 'allWithDrafts') {
+        $whereStatus = '';
+    } elseif ($status !== 'all') {
         $whereStatus = <<<SQL
             and json_extract(value, '$.status') = :status
         SQL;

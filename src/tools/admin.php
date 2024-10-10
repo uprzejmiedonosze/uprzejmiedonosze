@@ -49,7 +49,7 @@ function removeUser($email, $dryRun=true){
     }
     $user = new User($userJson);
 
-    $apps = getAllApplicationsByEmail($email);
+    $apps = \user\apps($user, 'allWithDrafts');
 
     echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
     foreach($apps as $app){
@@ -202,34 +202,6 @@ function getAllUsers() {
     return $users;
 }
 
-/**
- * Returns all applications by user.
- * 
- * @email
- * @onlyWithNumber - ignore drafts and ready apps
- * @SuppressWarnings(PHPMD.MissingImport)
- */
-function getAllApplicationsByEmail($email, $onlyWithNumber = null){
-    global $store;
-
-    $onlyWithNumberSQL = ($onlyWithNumber)? " and json_extract(value, '$.status') not in ('ready', 'draft')": "";
-
-    $sql = <<<SQL
-        select key, value
-        from applications
-        where json_extract(value, '$.user.email') = :email $onlyWithNumberSQL;
-    SQL;
-    $stmt = $store->prepare($sql);
-    $stmt->bindValue(':email', $email);
-    $stmt->execute();
-
-    $apps = Array();
-
-    while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $apps[$row[0]] = Application::withJson($row[1]);
-    }
-    return $apps;
-}
 
 function upgradeAllApps($version, $dryRun=true){
     global $interrupt;
