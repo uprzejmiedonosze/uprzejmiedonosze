@@ -88,4 +88,20 @@ function setSentryTag(string $tag, $value): void {
     });
 }
 
-?>
+
+/**
+ * See js: function num(value, numerals)
+ */
+function __num(int $value, array $numerals) {
+    $t0 = $value % 10;
+    $t1 = $value % 100;
+    $vo = [];
+    $vo[] = $value;
+    if ($value === 1 && $numerals[1])
+        $vo[] = $numerals[1];
+    else if (($value == 0 || ($t0 >= 0 && $t0 <= 1) || ($t0 >= 5 && $t0 <= 9) || ($t1 > 10 && $t1 < 20)) && $numerals[0])
+        $vo[] = $numerals[0];
+    else if ((($t1 < 10 || $t1 > 20) && $t0 >= 2 && $t0 <= 4) && $numerals[2])
+        $vo[] = $numerals[2];
+    return join(" ", $vo);
+};
