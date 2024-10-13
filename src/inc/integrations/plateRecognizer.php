@@ -1,5 +1,6 @@
 <?PHP namespace alpr;
 
+use cache\Type;
 use \JSONObject as JSONObject;
 
 function cmp_platerecongnizer($left, $right){
@@ -50,12 +51,10 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
 
 function get_platerecognizer(&$imageBytes) {
     $imageHash = sha1($imageBytes);
-    $result = \cache\get("_platerecognizer-$imageHash");
+    $result = \cache\alpr\get(Type::Platerecognizer, $imageHash);
     if($result){
-        logger("get_platerecognizer cache-hit $imageHash");
         return $result;
     }
-    logger("get_platerecognizer cache-miss $imageHash");
 
     $data = array(
         'upload' => $imageBytes,
@@ -69,7 +68,7 @@ function get_platerecognizer(&$imageBytes) {
         logger("get_platerecognizer " . $usage['usage']["calls"] . "/" . $usage['total_calls'], true);
     }
     
-    \cache\set("_platerecognizer-$imageHash", $result, MEMCACHE_COMPRESSED, 0);
+    \cache\alpr\set(Type::Platerecognizer, $imageHash, $result);
     return $result;
 }
 

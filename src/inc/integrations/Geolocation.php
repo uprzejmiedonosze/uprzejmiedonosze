@@ -1,10 +1,11 @@
 <?PHP namespace geo;
 
+use cache\Type;
+
 function GoogleMaps($lat, $lng) {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);
-    $prefix = "google-maps-v2";
-    $result = checkCache("$prefix $lat,$lng");
+    $result = \cache\geo\get(Type::GoogleMaps, "$lat,$lng");
     if ($result) return $result;
 
     $params = array(
@@ -18,7 +19,7 @@ function GoogleMaps($lat, $lng) {
 
     if ($json['status'] == 'OK' && $json['results']) {
         $result = $json['results'][0];
-        setCache("$prefix $lat,$lng", $result);
+        \cache\geo\set(Type::GoogleMaps, "$lat,$lng", $result);
         return $result;
     }
     if ($json['status'] == 'ZERO_RESULTS') {
@@ -38,8 +39,7 @@ function Nominatim(float $lat, float $lng): array {
     );
     $url = "https://nominatim.openstreetmap.org/reverse?";
 
-    $prefix = "nominatim-v1";
-    $json = checkCache("$prefix $lat,$lng");
+    $json = \cache\geo\get(Type::Nominatim, "$lat,$lng");
     if (!$json) $json = curlRequest($url, $params, "Nominatim");
 
     if (!$json || !isset($json['address'])) {
@@ -81,7 +81,7 @@ function Nominatim(float $lat, float $lng): array {
     $address['lat'] = $lat; // needed by StopAgresji::guess()
     $address['lng'] = $lng; // needed by StopAgresji::guess()
 
-    setCache("$prefix $lat,$lng", $json);
+    \cache\geo\set(Type::Nominatim, "$lat,$lng", $json);
 
     return array(
         'address' => $address,
@@ -93,8 +93,7 @@ function Nominatim(float $lat, float $lng): array {
 function MapBox(float $lat, float $lng): array {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);
-    $prefix = "mapbox-v1";
-    $properties = checkCache("$prefix $lat,$lng");
+    $properties = \cache\geo\get(Type::MapBox, "$lat,$lng");
     if ($properties) return $properties;
 
     $params = array(
@@ -130,7 +129,7 @@ function MapBox(float $lat, float $lng): array {
     unset($properties['bbox']);
     unset($properties['context']);
 
-    setCache("$prefix $lat,$lng", $properties);
+    \cache\geo\set(Type::MapBox, "$lat,$lng", $properties);
     return $properties;
 }
 
@@ -164,15 +163,4 @@ function normalizeGeo(float|string $geo): string {
 
 function normalizeLatLng($lat, $lng) {
     return normalizeGeo($lat) . "," . normalizeGeo($lng);
-}
-
-function checkCache(string $key): array|bool {
-    $result = \cache\get($key);
-    if ($result) logger("geo cache-hit $key");
-    else logger("geo cache-miss $key");
-    return $result;
-}
-
-function setCache(string $key, array $value): void {
-    \cache\set($key, $value, MEMCACHE_COMPRESSED, 0);
 }

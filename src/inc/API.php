@@ -8,6 +8,7 @@ use \stdClass as stdClass;
 use \DateTime as DateTime;
 use \Exception as Exception;
 use user\User;
+use cache\Type;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)

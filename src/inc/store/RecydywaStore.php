@@ -1,6 +1,8 @@
 <?PHP namespace recydywa;
 require(__DIR__ . '/../dataclasses/Recydywa.php');
 
+use cache\Type;
+
 const TABLE = 'recydywa';
 
 /**
@@ -8,7 +10,7 @@ const TABLE = 'recydywa';
  */
 function get(string $plateId): Recydywa {
     $cleanPlateId = \recydywa\cleanPlateId($plateId);
-    $cached = \cache\get("recydywa-$cleanPlateId");
+    $cached = \cache\get(Type::Recydywa, $cleanPlateId);
     if ($cached)
         return $cached;
     
@@ -28,10 +30,17 @@ function update(string $plateId): Recydywa {
     $apps = \app\byPlate($cleanPlateId);
     $recydywa = Recydywa::withApps($apps);
 
-    \cache\set("recydywa-$cleanPlateId", $recydywa);
+    \cache\set(Type::Recydywa, $cleanPlateId, $recydywa);
     \store\set(TABLE, "$cleanPlateId v2", json_encode($recydywa));
     return $recydywa;
 }
+
+function delete(string $plateId) {
+    $cleanPlateId = cleanPlateId($plateId);
+    \cache\delete(Type::Recydywa, $cleanPlateId);
+    \store\delete(TABLE, "$cleanPlateId v2");
+}
+
 
 function cleanPlateId(string $plateId): string {
     return preg_replace('/\s+/', '', trim(strtoupper($plateId)));

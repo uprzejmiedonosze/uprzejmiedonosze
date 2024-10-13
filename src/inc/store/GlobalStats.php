@@ -1,12 +1,14 @@
 <?PHP namespace global_stats;
 
+use cache\Type;
+
 /**
  * Returns number of new applications (by creation date)
  * during 30 days. 
  */
 function appsByDay(bool $useCache=true){
 
-    $stats = \cache\get("appsByDay");
+    $stats = \cache\get(Type::Stats, "appsByDay");
     if($useCache && $stats){
         return $stats;
     }
@@ -22,7 +24,7 @@ function appsByDay(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set('appsByDay', $stats);
+    \cache\set(Type::Stats, 'appsByDay', $stats);
     return $stats;
 }
 
@@ -32,7 +34,7 @@ function appsByDay(bool $useCache=true){
  */
 function statsByDay(bool $useCache=true){
 
-    $stats = \cache\get("statsByDay");
+    $stats = \cache\get(Type::Stats, "statsByDay");
     if($useCache && $stats){
         return $stats;
     }
@@ -60,7 +62,7 @@ function statsByDay(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set('statsByDay', $stats);
+    \cache\set(Type::Stats, 'statsByDay', $stats);
     return $stats;
 }
 
@@ -70,7 +72,7 @@ function statsByDay(bool $useCache=true){
  */
 function statsByYear(bool $useCache=true){
 
-    $stats = \cache\get("statsByYear");
+    $stats = \cache\get(Type::Stats, "statsByYear");
     if($useCache && $stats){
         return $stats;
     }
@@ -97,7 +99,7 @@ function statsByYear(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set('statsByYear', $stats);
+    \cache\set(Type::Stats, 'statsByYear', $stats);
     return $stats;
 }
 
@@ -105,7 +107,7 @@ function statsByYear(bool $useCache=true){
  * Returns number of applications per city.
  */
 function appsByCity(bool $useCache=true){
-    $stats = \cache\get("appsByCity");
+    $stats = \cache\get(Type::Stats, "appsByCity");
     if($useCache && $stats){
         return $stats;
     }
@@ -120,7 +122,7 @@ function appsByCity(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set('appsByCity', $stats);
+    \cache\set(Type::Stats, 'appsByCity', $stats);
     return $stats;
 }
 
@@ -128,7 +130,7 @@ function appsByCity(bool $useCache=true){
  * Returns number of applications per city.
  */
 function statsByCarBrand(bool $useCache=true){
-    $stats = \cache\get("statsByCarBrand");
+    $stats = \cache\get(Type::Stats, "statsByCarBrand");
     if($useCache && $stats){
         return $stats;
     }
@@ -145,7 +147,7 @@ function statsByCarBrand(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set('statsByCarBrand', $stats);
+    \cache\set(Type::Stats, 'statsByCarBrand', $stats);
     return $stats;
 }
 
@@ -154,7 +156,7 @@ function statsByCarBrand(bool $useCache=true){
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  */
 function mainPage(bool $useCache=true): array{
-    $stats = \cache\get("mainPage");
+    $stats = \cache\get(Type::Stats, "mainPage");
     if($useCache && $stats){
         return $stats;
     }
@@ -179,6 +181,6 @@ function mainPage(bool $useCache=true): array{
     $patrons = count($PATRONITE->active);
 
     $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm, 'patrons' => $patrons);
-    \cache\set('mainPage', $stats);
+    \cache\set(Type::Stats, 'mainPage', $stats);
     return $stats;
 }

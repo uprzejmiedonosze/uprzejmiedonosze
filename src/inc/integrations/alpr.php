@@ -1,6 +1,7 @@
 <?PHP namespace alpr;
 
 use stdClass;
+use cache\Type;
 
 require(__DIR__ . '/openAlpr.php');
 require(__DIR__ . '/plateRecognizer.php');
@@ -38,7 +39,7 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
 }
 
 function usePlaterecognizer() {
-    $budgetConsumed = \cache\get('alpr_budget_consumed');
+    $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
     $budgetConsumed = floor($budgetConsumed*100);
     $swithToPlaterec = false;
     if($budgetConsumed > 90) {

@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
+use cache\Type;
 
 class SessionApiHandler extends AbstractHandler {
     public function image(Request $request, Response $response, $args): Response {

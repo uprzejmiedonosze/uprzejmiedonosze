@@ -1,6 +1,8 @@
 <?PHP namespace app;
 
 require(__DIR__ . '/../dataclasses/Application.php');
+use cache\Type;
+
 const TABLE = 'applications';
 
 function get(string $appId): Application {
@@ -29,7 +31,7 @@ function save(Application $application): Application{
 
     if ($application->carInfo->plateId ?? false) {
         $cleanPlateId = \recydywa\cleanPlateId($application->carInfo->plateId);
-        \cache\delete("byPlate-$cleanPlateId");
+        \cache\delete(type::AppsByPlate, $cleanPlateId);
     }
     return $application;
 }
@@ -96,7 +98,7 @@ function nextNumber(string $email): int{
 function byPlate(string $plateId): array|null {
     $plateId = trim(strtoupper($plateId));
     $cleanPlateId = \recydywa\cleanPlateId($plateId);
-    $cache = \cache\get("byPlate-$cleanPlateId");
+    $cache = \cache\get(Type::AppsByPlate, $cleanPlateId);
     if($cache){
         return $cache;
     }
@@ -119,7 +121,7 @@ function byPlate(string $plateId): array|null {
     $apps = $stmt->fetchAll(\PDO::FETCH_FUNC,
         fn($value) => Application::withJson($value));
 
-    \cache\set("byPlate-$cleanPlateId", $apps);
+    \cache\set(Type::AppsByPlate, $cleanPlateId, $apps);
     return $apps;
 }
 
@@ -142,7 +144,7 @@ SQL;
 }
 
 function galleryByCity(bool $useCache=true){
-    $stats = \cache\get("galleryByCity");
+    $stats = \cache\get(Type::Stats, "galleryByCity");
     if($useCache && $stats){
         return $stats;
     }
@@ -159,6 +161,6 @@ function galleryByCity(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set('galleryByCity', $stats);
+    \cache\set(Type::Stats, 'galleryByCity', $stats);
     return $stats;
 }

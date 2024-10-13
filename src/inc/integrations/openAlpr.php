@@ -1,18 +1,7 @@
 <?PHP namespace alpr;
 
 use \JSONObject as JSONObject;
-
-function _check_alpr_cache($imageHash) {
-    $result = \cache\get("_alpr-$imageHash");
-    if($result){
-        logger("get_alpr cache-hit $imageHash");
-        unset($result['credits_monthly_used']);
-        unset($result['credits_monthly_total']);
-        return $result;
-    }
-    logger("get_alpr cache-miss $imageHash");
-    return null;
-}
+use \cache\Type;
 
 /**
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
@@ -21,7 +10,7 @@ function _check_alpr_cache($imageHash) {
 function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
     logger("get_car_info_alpr $baseFileName");
     $imageHash = sha1($imageBytes);
-    $carInfo = _check_alpr_cache($imageHash);
+    $carInfo = \cache\alpr\get(Type::OpenAlpr, $imageHash);
 
     $application->alpr = 'paid';
     if(!$carInfo){
@@ -96,7 +85,7 @@ function get_alpr(&$imageBytes){
         1, // topn
         "" // prewarp
     );
-    \cache\set("_alpr-$imageHash", $alpr, MEMCACHE_COMPRESSED, 0);
+    \cache\alpr\set(Type::OpenAlpr, $imageHash, $alpr);
     return $alpr;
 }
 
@@ -111,7 +100,6 @@ function get_alpr_cli($imagePath) {
 }
 
 function store_alpr_budget_cache($used, $total): void {
-    global $cache;
     $budgetConsumed = (float)$used / (float)$total;
-    $cache->set('alpr_budget_consumed', $budgetConsumed);
+    \cache\set(Type::AlprBudgetConsumed,  "", $budgetConsumed);
 }

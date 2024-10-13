@@ -78,7 +78,7 @@ class AuthMiddleware implements MiddlewareInterface {
     }
 
     private function verifyToken($token, $request){
-        $firebaseUser = \cache\get($token);
+        // $firebaseUser = \cache\get($token);
         // @TODO
         //if ($firebaseUser) return json_decode($firebaseUser, true);
 
@@ -95,7 +95,7 @@ class AuthMiddleware implements MiddlewareInterface {
                 'user_id' => $claims->get('user_id'),
                 'token' => $token
             );
-            \cache\set($token, json_encode($firebaseUser), 0, $claims->get('exp')->getTimestamp() - 60);
+            // \cache\set($token, json_encode($firebaseUser), 0, $claims->get('exp')->getTimestamp() - 60);
             return $firebaseUser;
         } catch (Exception $e) {
             if (isProd()) \Sentry\captureException($e);
@@ -111,8 +111,7 @@ class AuthMiddleware implements MiddlewareInterface {
      */
     private function getPublicKeys($request) {
         $publicKeyUrl = 'https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com';
-        $cacheKey = 'firebase-keys';
-        $keys = \cache\get($cacheKey);
+        $keys = \cache\get(\cache\Type::FirebaseKeys);
         if ($keys) return json_decode($keys, true);
 
         $publicKeys = file_get_contents($publicKeyUrl);
@@ -122,7 +121,7 @@ class AuthMiddleware implements MiddlewareInterface {
         $cacheControl = $this->parseHeaders($http_response_header)['cache-control'] ?? 'cache-control: public, max-age=600, must-revalidate, no-transform';
         preg_match('/max-age=(\d+)/', $cacheControl, $out);
         $timeout = $out[1];
-        \cache\set($cacheKey, $publicKeys, 0, (int)$timeout);
+        \cache\set(\cache\Type::FirebaseKeys, "", $publicKeys, 0, (int)$timeout);
 
         return json_decode($publicKeys, true);
     }
