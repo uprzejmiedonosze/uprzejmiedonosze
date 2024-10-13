@@ -26,6 +26,7 @@ class WebhooksHandler extends AbstractHandler {
         
         $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
+        $userNumber = $payload['user-variables']['userid'];
 
         if(isset($payload['user-variables']['nofitication'])) {
             // this is a notification sent by this web-hook, don't process it
@@ -36,7 +37,9 @@ class WebhooksHandler extends AbstractHandler {
         }
         $mailEvent = new MailEvent($payload);
 
+        $semaphore = \semaphore\acquire(intval($userNumber));
         $application = \app\get($appId);
+
         $comment = $mailEvent->formatComment();
         if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
         $ccToUser = $application->sent->to !== $payload['recipient'];
@@ -55,6 +58,7 @@ class WebhooksHandler extends AbstractHandler {
 
         $application = \app\save($application);
         \webhook\mark($id);
+        \semaphore\release($semaphore);
 
         if ($mailEvent->status == 'failed')
             (new MailGun())->notifyUser($application,
