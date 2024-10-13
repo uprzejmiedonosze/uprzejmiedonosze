@@ -33,8 +33,6 @@ function updateApplication(
     }
 
     if (!$application->isEditable()) {
-        if ($application->status == 'confirmed-waiting') // Sentry UD-PHP-B3
-            throw new Exception("Ponowna aktualizacja wysłanego zgłoszenia");
         throw new ForbiddenException("Zgłoszenie w stanie '{$application->status}' nie może być aktualizowane");
     }
 
