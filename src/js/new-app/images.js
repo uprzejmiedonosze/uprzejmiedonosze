@@ -7,6 +7,7 @@ import Api from '../lib/Api'
 
 import * as Sentry from "@sentry/browser";
 import { showError } from "../lib/showMessage";
+import isIOS from "../lib/isIOS";
 
 var uploadInProgress = 0;
 
@@ -165,7 +166,7 @@ function resizeImage(imgToResize) {
 }
 
 function noGeoDataInImage() {
-  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+  if (isIOS()) {
     $("#addressHint").text(
       "Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć"
     );
