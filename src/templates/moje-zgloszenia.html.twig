@@ -18,13 +18,12 @@
 {% else %}
     <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
 
-    {% if general.stats.confirmed is defined %}
-        {% if general.stats.confirmed > 1 %}
-            <p>Masz już <b>{{ general.stats.confirmed }} 
-            {% if general.stats.confirmed > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
-            na wysłanie</b>. Zapraszamy na stronę <a href="/wysylka.html" data-ajax="false">wysyłka</a>.</p>
-        {% endif %}
+    {% if general.stats.confirmed ?? 0 > 0 %}
+        <p>Masz <b>{{ general.stats.confirmed }} 
+        {% if general.stats.confirmed > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
+        na wysłanie</b>. Rozwiń zgłoszenia poniżej, i wybierz duży przycisk „wyślij”.</p>
     {% endif %}
+
 
     <form autocomplete="off">
         <input autocomplete="false" data-type="search" id="autocomplete-input" data-iconpos="right"

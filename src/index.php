@@ -48,8 +48,6 @@ $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 $app->group('', function (RouteCollectorProxy $group) { // PDFs
     $group->get('/{appId}.pdf', StaticPagesHandler::class . ':applicationPdf');
-    $group->get('/city/{city}.pdf', ApplicationHandler::class . ':package')
-        ->add(new RegisteredMiddleware());
 })  ->add(new OptionalUserMiddleware())
     ->add(new PdfMiddleware());
 

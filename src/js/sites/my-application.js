@@ -39,6 +39,9 @@ $(document).on("pageshow", function () {
     $(this).hide();
   })
 
+  if ($('#autocomplete-input').val() !== '') {
+    $('#autocomplete-input').trigger("keyup");
+  }
 
   $("#collapsiblesetForFilter").on("collapsibleexpand", async (e) => {
     const target = e.target

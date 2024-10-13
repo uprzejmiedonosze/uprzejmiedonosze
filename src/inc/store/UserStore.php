@@ -2,7 +2,7 @@
 
 require(__DIR__ . '/../dataclasses/User.php');
 
-use app\Application;
+
 
 const TABLE = 'users';
 $currentUser = null;
@@ -200,55 +200,6 @@ function _countAppsByStatus(string $userEmail): Array{
     
     $ret = $stmt->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_GROUP);
     return array_map(function ($status) { return $status[0]; }, $ret);
-}
-
-/**
- * Returns all applications for current user by status.
-
- */
-function appsConfirmedByCity(string $city): Array{
-    $sql = <<<SQL
-    select key, value
-    from applications
-    where email = :email
-        and json_extract(value, '$.status') = :status
-        and json_extract(value, '$.smCity') = :city
-    SQL;
-
-    $stmt = \store\prepare($sql);
-    $stmt->bindValue(':email', currentEmail());
-    $stmt->bindValue(':status', 'confirmed');
-    $stmt->bindValue(':city', $city);
-    $stmt->execute();
-
-    $apps = Array();
-    while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $apps[$row[0]] = Application::withJson($row[1]);
-    }
-    return array_reverse($apps);
-}
-
-function nextCityToSent(){
-    $sql = <<<SQL
-        select json_extract(value, '$.smCity'),
-            count(key) from applications
-        where email = :email
-            and json_extract(value, '$.status') = :status
-            and json_extract(value, '$.smCity') is not null
-        group by json_extract(value, '$.smCity')
-        order by count(key) desc
-    SQL;
-
-    $stmt = \store\prepare($sql);
-    $stmt->bindValue(':email', currentEmail());
-    $stmt->bindValue(':status', 'confirmed');
-    $stmt->execute();
-
-    $ret = $stmt->fetchAll();
-    if(count($ret) == 0){
-        return null;
-    }
-    return $ret[0][0];
 }
 
 function byName($name, $apiToken){

@@ -222,27 +222,9 @@ class ApplicationHandler extends AbstractHandler {
         $params = $request->getQueryParams();
 
         $query = $this->getParam($params, 'q', '');
-        $applications = \user\apps(user: $user, search: $query);
-        $changeMail = isset($params['changeMail']) && isset($params['city']);
-        $city = urldecode($this->getParam($params, 'city', ''));
+        $applications = \user\apps(user: $user); //, search: $query);
 
         $countChanged = 0;
-
-        foreach ($applications as $application) {
-            if ($changeMail) {
-                if ($application->status == 'confirmed') {
-                    if ($changeMail && $application->smCity == $city) {
-                        $application->setStatus('confirmed-waiting');
-                        $countChanged++;
-                    }
-                    \app\save($application);
-                }
-            }
-        }
-
-        if ($changeMail) {
-            \user\stats(false, $user); // updates the cache
-        }
 
         return AbstractHandler::renderHtml($request, $response, 'moje-zgloszenia', [
             'appActionButtons' => true,
@@ -277,48 +259,7 @@ class ApplicationHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function shipment(Request $request, Response $response): Response {
-        $user = $request->getAttribute('user');
-        $params = $request->getQueryParams();
-
-        if (!isset($params['city'])) {
-            $city = \user\nextCityToSent();
-            logger("nextcity = $city");
-            if ($city) {
-                return $this->redirect('/wysylka.html?city=' . urlencode($city));
-            }
-            return $this->redirect('/moje-zgloszenia.html?update');
-        }
-
-        $city = urldecode($params['city']);
-
-        $apps = \user\appsConfirmedByCity($city);
-
-        if (count($apps) == 0) {
-            return $this->redirect('/moje-zgloszenia.html?update');
-        }
-
-        $firstApp = reset($apps);
-        $sm = $firstApp->guessSMData();
-
-        if ($sm->unknown()) {
-            return $this->redirect('/brak-sm.html?id=' . $firstApp->id);
-        }
-
-        return AbstractHandler::renderHtml($request, $response, 'wysylka', [
-            'appActionButtons' => false,
-            'wysylka' => true,
-            'apps' => $apps,
-            'user' => $user,
-            'city' => $city,
-            'sm' => $sm
-        ]);
-    }
-
-    public function package(Request $request, Response $response, $args): Response {
-        $city = $args['city'];
-        $user = $request->getAttribute('user');
-        [$path, $filename] = readyApps2PDF($user, $city);
-        return AbstractHandler::renderPdf($response, $path, $filename);
+        return $this->redirect('/moje-zgloszenia.html?update&q=wysyłka');
     }
 
     public function askForStatus(Request $request, Response $response) {
@@ -333,7 +274,6 @@ class ApplicationHandler extends AbstractHandler {
 
     public function applicationShortHtml(Request $request, Response $response, $args) {
         $appId = $args['appId'];
-        $user = $request->getAttribute('user');
         $application = \app\get($appId);
 
         return AbstractHandler::renderHtml($request, $response, '_application-short-details', [

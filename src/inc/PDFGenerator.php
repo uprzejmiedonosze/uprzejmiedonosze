@@ -35,32 +35,7 @@ function application2PDF(Application &$application): array{
     $filename = $application->getAppPDFFilename();
     $pdf = "$baseDir/$appId.pdf";
     //if(!file_exists($pdf))
-    tex2pdf($application, $pdf, 'application');
-
-    return [$pdf, $filename];
-}
-
-/**
- * * @SuppressWarnings(ElseExpression)
- */
-function readyApps2PDF(User $user, string $city): array{
-    $userNumber = $user->number;
-
-    $applications = \user\appsConfirmedByCity($city);
-
-    if(sizeof($applications) == 0){
-        $filename = "download-error.pdf";
-    }else{
-        $city = reset($applications)->getSanitizedCity();
-        $filename = "Zgloszenia-$city-" . $user->getSanitizedName() . '-' . date('Y-m-d') . '.pdf';
-    }
-
-    $baseDir = ROOT . "cdn2/$userNumber";
-    if(!file_exists($baseDir)){
-        mkdir($baseDir, 0755, true);
-    }
-    $pdf = "$baseDir/$filename";
-    tex2pdf($applications, $pdf, 'readyApps');
+    tex2pdf($application, $pdf);
 
     return [$pdf, $filename];
 }
@@ -69,7 +44,7 @@ function readyApps2PDF(User $user, string $city): array{
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  */
-function tex2pdf(array|Application $application, string $destFile, string $type) {
+function tex2pdf(array|Application $application, string $destFile) {
     $file = tempnam(sys_get_temp_dir(), 'tex-' . $application->id . '-');
     if($file === false) {
         throw new Exception("Failed to create temporary file");
@@ -91,12 +66,6 @@ function tex2pdf(array|Application $application, string $destFile, string $type)
     ]);
 
     $texFile = 'application.tex.twig';
-    if($type == 'readyApps'){
-        $texFile = 'readyApps.tex.twig';
-        if(sizeof($application) == 0){
-            $texFile = 'readyApps-error.tex.twig';
-        }
-    }
 
     global $CATEGORIES;
     global $EXTENSIONS;
@@ -106,11 +75,6 @@ function tex2pdf(array|Application $application, string $destFile, string $type)
         'categories' => $CATEGORIES,
         'extensions' => $EXTENSIONS
     ];
-
-    if($type == 'readyApps'){
-        global $user;
-        $params['user'] = $user; 
-    }
 
     file_put_contents($tex_f, $twig->render($texFile, $params));
 
