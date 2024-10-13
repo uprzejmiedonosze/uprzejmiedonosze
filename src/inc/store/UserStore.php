@@ -3,6 +3,7 @@
 require(__DIR__ . '/../dataclasses/User.php');
 
 
+use cache\Type;
 
 const TABLE = 'users';
 $currentUser = null;
@@ -168,7 +169,7 @@ function points(User $user): Array{
 function stats(bool $useCache, User $user): Array{
     $userEmail = $user->getEmail();
 
-    $stats = \cache\get("stats3-$userEmail");
+    $stats = \cache\get(Type::UserStats, $userEmail);
     if($useCache && $stats){
         return $stats;
     }
@@ -179,7 +180,7 @@ function stats(bool $useCache, User $user): Array{
     $userPoints = \user\points($user);
     $stats = $stats + $userPoints;
 
-    \cache\set("stats3-$userEmail", $stats, 0);
+    \cache\set(Type::UserStats, $userEmail, $stats);
     return $stats;
 }
 

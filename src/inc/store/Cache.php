@@ -14,7 +14,8 @@ namespace cache {
         case MapBox;
 
         case AppsByPlate;
-        case Stats;
+        case GlobalStats;
+        case UserStats;
 
         case Recydywa;
         case FirebaseKeys;
@@ -26,7 +27,8 @@ namespace cache {
         'Recydywa' => 'recydywa-',
         'Nominatim' => 'nominatim-v1 ',
         'GoogleMaps' => 'google-maps-v2 ',
-        'MapBox' => "mapbox-v1 "
+        'MapBox' => 'mapbox-v1 ',
+        'UserStats' => 'stats3-'
     );
 
     function key(Type $type, ?string $key): string {

@@ -144,7 +144,7 @@ SQL;
 }
 
 function galleryByCity(bool $useCache=true){
-    $stats = \cache\get(Type::Stats, "galleryByCity");
+    $stats = \cache\get(Type::GlobalStats, "galleryByCity");
     if($useCache && $stats){
         return $stats;
     }
@@ -161,6 +161,6 @@ function galleryByCity(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::Stats, 'galleryByCity', $stats);
+    \cache\set(Type::GlobalStats, 'galleryByCity', $stats);
     return $stats;
 }
