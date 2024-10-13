@@ -48,7 +48,7 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         $application->setStatus('sending');
-        $application->addComment("admin", "Wysłano do {$application->guessSMData()->getName()}.");
+        $application->addComment("admin", "Zlecam wysyłkę do {$application->guessSMData()->getName()}.");
         $application->sent = new JSONObject();
         $application->sent->date = date(DT_FORMAT);
         $application->sent->subject = $subject;
