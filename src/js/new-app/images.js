@@ -214,6 +214,12 @@ async function sendFile(fileData, id, imageMetadata) {
     imageMetadata.latLng && (data.latLng = imageMetadata.latLng)
   }
 
+  const $comment = $("#comment")
+  const $plateImage = $("#plateImage")
+  const $plateHint = $("#plateHint")
+  const $plateId = $("#plateId")
+  const $recydywa = $("#recydywa")
+
   try {
     const api = new Api(`/api/app/${appId}/image`)
     const app = await api.post(data)
@@ -228,44 +234,39 @@ async function sendFile(fileData, id, imageMetadata) {
       $('.plate-box').css('border', 'none')
 
       if (app.carInfo.plateId) {
-        $("#plateId").val(app.carInfo.plateId);
+        $plateId.val(app.carInfo.plateId);
         repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
 
         if (app.carInfo.brand) {
-          if ($("#comment").val().trim().length == 0) {
+          if (($comment?.val() + "").trim().length == 0) {
             if (app.carInfo.brandConfidence > 90) {
-              $("#comment").val(
+              $comment.val(
                 "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
               );
             }
             if (app.carInfo.brandConfidence > 98) {
-              $("#comment").val("Pojazd marki " + app.carInfo.brand + ".");
+              $comment.val("Pojazd marki " + app.carInfo.brand + ".");
             }
           }
         }
-        $("#plateHint").removeClass();
-        $("#plateHint").text(
+        $plateHint.removeClass().addClass("hint").text(
           "Sprawdź automatycznie pobrany numer rejestracyjny"
         );
-        $("#plateHint").addClass("hint");
       }
       if (app.carInfo.plateImage) {
-        $("#plateImage").attr(
+        $plateImage.attr(
           "src",
           app.carInfo.plateImage + "?v=" + Math.random().toString()
-        );
-        $("#plateImage").show();
+        ).show();
       } else {
-        $("#plateImage").hide();
+        $plateImage.hide();
       }
       const recydywa = app.carInfo?.recydywa
       if (recydywa?.appsCnt > 1) {
-        
-        $("#recydywa").text(
+        $recydywa.text(
           'recydywista, ' + num(recydywa.appsCnt, ['zgłoszeń', 'zgłoszenie', 'zgłoszenia'])
-          + ((recydywa?.usersCnt > 1) ? ` od ${recydywa.usersCnt} użytkowników` : "")
-        )
-        $("#recydywa").show();
+          + ((recydywa?.otherUsersCount > 0) ? ' od ' + num(recydywa.usersCnt, ['użytkowników', 'użytkownika', 'użytkowników']) : "")
+        ).show();
       }
     }
     uploadFinished()

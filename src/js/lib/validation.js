@@ -1,11 +1,11 @@
 import { DateTime } from "luxon";
 
 export const checkAddress = function () {
-  const textAddress = $("#lokalizacja").val().trim()
-  const jsonAddress = $("#address")
+  const textAddress = ($("#lokalizacja")?.val() + "").trim()
+  const jsonAddress = $("#address")?.val() + ""
 
   var ret = textAddress.length > 10;
-  var address = JSON.parse(jsonAddress.val())
+  var address = JSON.parse(jsonAddress)
   ret = address.city?.length > 2 && ret
   ret = address.lat > 0 && ret
   ret = address.lng > 0 && ret
@@ -36,7 +36,7 @@ export const checkValueRe = function(item, regex) {
 }
 
 export const checkCommentvalue = function () {
-  let comment = $("#comment").val().trim()
+  let comment = ($("#comment")?.val() + "")?.trim()
   comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/ig, '').trim()
   if (comment.length > 10)
     return true
@@ -45,8 +45,8 @@ export const checkCommentvalue = function () {
 }
 
 export const checkDateTimeValue = function () {
-  const dt = DateTime.fromISO($('#datetime').val())
-  const result = !dt.invalid && dt < DateTime.now()
+  const dt = DateTime.fromISO($('#datetime')?.val() + "")
+  const result = dt.isValid && dt < DateTime.now()
   !result && $('#datetime').addClass("error")
   return result
 }

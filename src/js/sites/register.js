@@ -4,10 +4,10 @@ const $name = $("#name")
 const $address = $("#address")
 
 function validateRegisterForm() {
-  ret = checkValueRe($name, /^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i)
+  let ret = checkValueRe($name, /^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i)
   ret = checkValueRe($address, /^.{3,50}\d.{3,40}\D$/i) && ret
   if (!ret) {
-    $(window).scrollTop($(".error").offset().top - 100);
+    $(window).scrollTop(($(".error")?.offset()?.top ?? 0) - 100);
   }
   return ret;
 }

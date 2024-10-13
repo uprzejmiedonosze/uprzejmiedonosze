@@ -1,10 +1,11 @@
 $(document).on("pageshow", function () {
     if (!$(".ask-for-status").length) return;
   
-    $('h3 > a').click(e => {
+    $('h3 > a').on('click', e => {
         const link = e.currentTarget
+        if (!link) return
         try {
-            const apps = link.parentElement.nextElementSibling
+            const apps = link?.parentElement?.nextElementSibling
             const type = "text/html";
             const blob = new Blob([apps.innerHTML], {type});
             const data = [new ClipboardItem({[type]: blob})];

@@ -7,6 +7,7 @@ import { showMessage, showError } from './showMessage'
 
 import Api from './Api'
 
+// @ts-ignore
 window.sendApplication = async function (appId) {
   const $whatNext = $(".whatNext")
   const $afterSend = $(".afterSend")
@@ -30,6 +31,7 @@ window.sendApplication = async function (appId) {
     if ($('.my-applications').length) {
       $(`#${appId}`).trigger('collapsibleexpand')
     }
+    // @ts-ignore
     (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" })
   } catch (e) {
     $.mobile.loading("hide")
@@ -39,7 +41,9 @@ window.sendApplication = async function (appId) {
     Sentry.captureException(e, {
       extra: e.message
     })
+    // @ts-ignore
     if (typeof ga == 'function')
+      // @ts-ignore
       ga("send", "event", {
         eventCategory: "js-error",
         eventAction: "sendViaAPI"

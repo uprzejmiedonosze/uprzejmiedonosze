@@ -10,6 +10,7 @@ function activate(howto, makeActive=true) {
   
 }
 
+// @ts-ignore
 window._activateHowTo = (id) => {
   const howtos = document.getElementsByClassName("howto") || [];
   Array.from(howtos).forEach(howto => {
