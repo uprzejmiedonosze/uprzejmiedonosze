@@ -16,9 +16,7 @@ class WebhooksHandler extends AbstractHandler {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function mailgun(Request $request, Response $response): Response {
-        global $storage;
-        
+    public function mailgun(Request $request, Response $response): Response {        
         $event = $request->getParsedBody();
         $id = $event['event-data']['id'] ?? null;
         if (!$id) throw new HttpForbiddenException($request, 'Missing event id.');
@@ -38,7 +36,7 @@ class WebhooksHandler extends AbstractHandler {
         }
         $mailEvent = new MailEvent($payload);
 
-        $application = $storage->getApplication($appId);
+        $application = \app\get($appId);
         $comment = $mailEvent->formatComment();
         if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
         $ccToUser = $application->sent->to !== $payload['recipient'];
@@ -55,7 +53,7 @@ class WebhooksHandler extends AbstractHandler {
                 $application->setStatus('confirmed-waiting', true);
         }
 
-        $application = $storage->saveApplication($application);
+        $application = \app\save($application);
         \webhook\mark($id);
 
         if ($mailEvent->status == 'failed')

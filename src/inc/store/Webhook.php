@@ -16,6 +16,7 @@ function add(string $id, array $event): void {
  */
 function mark(string $id): void {
     logger("marking addWebhook $id as done");
+    $event = json_decode(\store\get(TABLE, $id), true);
     $event['processed'] = true;
-    $event = json_decode(\store\get(TABLE, $id));
+    \store\set(TABLE, $id, json_encode($event));
 }

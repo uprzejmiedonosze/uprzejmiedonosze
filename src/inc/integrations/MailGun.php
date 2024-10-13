@@ -21,7 +21,6 @@ class MailGun extends CityAPI {
      */
     function send(&$application){
         parent::checkApplication($application);
-        global $storage;
 
         $to = "szymon.nieradka@gmail.co";
         if(isProd()){
@@ -78,11 +77,10 @@ class MailGun extends CityAPI {
             throw new Exception($error, 500);
         }
 
-        $storage->saveApplication($application);
-        return $application;
+        return \app\save($application);
     }
 
-    function notifyUser(Application &$application, string $subject, string $reason){
+    function notifyUser(app\Application &$application, string $subject, string $reason){
         $messageBody = initBareTwig()->render('_notification.email.twig', [
             'app' => $application,
             'reason' => $reason,
