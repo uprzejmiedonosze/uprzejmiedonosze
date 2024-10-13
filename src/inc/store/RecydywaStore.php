@@ -8,10 +8,10 @@ const TABLE = 'recydywa';
 /**
  * Returns the number of applications per specified $plate.
  */
-function get(string $plateId): Recydywa {
+function get(string $plateId, bool $withCache=true): Recydywa {
     $cleanPlateId = \recydywa\cleanPlateId($plateId);
     $cached = \cache\get(Type::Recydywa, $cleanPlateId);
-    if ($cached)
+    if ($cached && $withCache)
         return $cached;
     
     $recydywaJson = \store\get(TABLE, "$cleanPlateId v2");

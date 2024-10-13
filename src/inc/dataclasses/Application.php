@@ -320,8 +320,8 @@ class Application extends JSONObject implements \JsonSerializable {
         }
     }
 
-    public function getRecydywa(): Recydywa|null {
-        if(isset($this->carInfo) && isset($this->carInfo->plateId) && $this->status != 'archived'){
+    public function getRecydywa(): Recydywa {
+        if(isset($this->carInfo->plateId) && $this->status != 'archived'){
             return \recydywa\get($this->carInfo->plateId);
         }
         return new Recydywa(); // fake it
