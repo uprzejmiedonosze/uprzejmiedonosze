@@ -43,7 +43,7 @@ class WebhooksHandler extends AbstractHandler {
 
         if (!$ccToUser) {
             // set sent status to accepted only if empty
-            if ($mailEvent->status == 'accepted' || $application->status == 'confirmed')
+            if ($mailEvent->status == 'accepted' && $application->status == 'confirmed')
                 $application->setStatus('sending', true);
             if ($mailEvent->status == 'problem')
                 $application->setStatus('sending-problem', true);
