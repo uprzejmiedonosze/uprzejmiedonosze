@@ -110,7 +110,16 @@ describe('Missing SM (Poniatowa)', () => {
     it('checks send apps screen', function () {
         cy.contains('Menu').click({force: true})
         cy.contains('Do wysłania').click({force: true})
-        cy.contains('Pobierz paczkę zgłoszeń').should('not.exist')
+
+        cy.contains('Masz zgłoszenia czekające na wysłanie')
+
+        cy.intercept('GET', 'short-**-partial.html').as('appDetails')
+        cy.get('.ui-page-active .application-short.confirmed h3')
+            .should('be.visible').click()
+        cy.wait('@appDetails')
+
+        cy.contains('Wyślij zgłoszenie').click()
+        
         cy.contains('Brak danych Straży Miejskiej Poniatowa')
     })
 })

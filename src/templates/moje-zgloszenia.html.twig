@@ -19,9 +19,8 @@
     <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
 
     {% if general.stats.confirmed ?? 0 > 0 %}
-        <p>Masz <b>{{ general.stats.confirmed }} 
-        {% if general.stats.confirmed > 4 %}zgłoszeń czekających{% else %}zgłoszenia czekające{% endif %}
-        na wysłanie</b>. Rozwiń zgłoszenia poniżej, i wybierz duży przycisk „wyślij”.</p>
+        <p>Masz <b>zgłoszenia czekające na wysłanie</b>.
+        Rozwiń zgłoszenia poniżej, i wybierz duży przycisk „wyślij”.</p>
     {% endif %}
 
 

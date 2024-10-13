@@ -1,6 +1,6 @@
-function checkAppData(config) {
+function checkAppData(config, confirmationScreen=false) {
     cy.contains(config.carImage.plateId)
-    cy.contains(config.carImage.dateHuman)
+    cy.contains(confirmationScreen ? config.carImgage.dateOnConfirmation: config.carImage.dateHuman)
     cy.contains(config.address.szczecin)
     cy.contains(config.user.name)
     cy.contains(config.user.email)
@@ -96,7 +96,6 @@ describe('Invalid images', () => {
 
 describe('Valid images and location', () => {
     before(() => {
-        //cy.initDB()
         cy.login()
     })
 
@@ -147,7 +146,7 @@ describe('Create application', () => {
 
     it('checks confirmation screen', function () {
         cy.contains('Wystąpił błąd').should('not.exist')
-        checkAppData(this.config)
+        checkAppData(this.config, true)
         const firstExtension = Object.entries(this.extensions)[0]
         cy.contains(firstExtension[1].title)
     })
@@ -194,7 +193,7 @@ describe('Edit application', () => {
 
     it('checks confirmation screen', function () {
         cy.contains('Wystąpił błąd').should('not.exist')
-        checkAppData(this.config)
+        checkAppData(this.config, true)
     })
 
     it('checks edit', function() {

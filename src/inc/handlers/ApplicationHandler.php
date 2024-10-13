@@ -232,7 +232,7 @@ class ApplicationHandler extends AbstractHandler {
             'countChanged' => $countChanged,
             'applicationsCount' => count($applications),
             'myAppsSize' => 500,
-            'query' => $query
+            'query' => urldecode($query)
         ]);
     }
 
@@ -259,7 +259,7 @@ class ApplicationHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function shipment(Request $request, Response $response): Response {
-        return $this->redirect('/moje-zgloszenia.html?update&q=wysyłka');
+        return $this->redirect('/moje-zgloszenia.html?update&q=' . urlencode('wysyłka'));
     }
 
     public function askForStatus(Request $request, Response $response) {
