@@ -21,6 +21,15 @@ function prepare(string $query, array $options = []): \PDOStatement|false
     return $store->prepare($query, $options);
 }
 
+function dump(\PDOStatement $stmt)
+{
+    if(isStaging()) {
+        ob_start();
+        $stmt->debugDumpParams();
+        logger(ob_get_clean(), true);
+    }
+}
+
 function get(string $table, string $key): string|null
 {
     global $store;
