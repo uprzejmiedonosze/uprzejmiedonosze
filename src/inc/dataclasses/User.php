@@ -138,7 +138,7 @@ class User extends \JSONObject{
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
-        $this->data->name = capitalizeName(cleanWhiteChars($name));
+        $this->data->name = capitalizeName($name);
         if (!preg_match("/^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i", $this->data->name))
             throw new \MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");        
         $this->guessSex();
