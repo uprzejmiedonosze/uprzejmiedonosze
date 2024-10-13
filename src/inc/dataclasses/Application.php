@@ -193,18 +193,6 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->statusHistory[$now]->old = $this->status;
         $this->statusHistory[$now]->new = $status;
 
-        // @TODO this is obsolete
-        if ($status == 'confirmed-waiting' || $status == 'confirmed-waitingE') {
-            if(!isset($this->sent)) {
-                $this->sent = new JSONObject();
-            }
-            $this->sent->date = $now;
-            $smData = $this->guessSMData();
-            $this->sent->to = $smData->getEmail();
-            $this->sent->subject = $this->getEmailSubject();
-            $this->sent->method = 'manual';
-        }
-
         $this->status = $status;
     }
 
