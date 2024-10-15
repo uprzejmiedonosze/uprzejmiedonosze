@@ -2952,5 +2952,13 @@
       "18-400 Łomża"
     ],
     "email": "straz.miejska@um.lomza.pl"
+  },
+  "powiat szydłowiecki": {
+    "address": [
+      "Komenda Powiatowa Policji w Szydłowcu",
+      "ul. Kościuszki 194",
+      "26-500 Szydłowiec"
+    ],
+    "email": "kppszydlowiec@ra.policja.gov.pl"
   }
 }
