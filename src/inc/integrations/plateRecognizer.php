@@ -3,11 +3,6 @@
 use cache\Type;
 use \JSONObject as JSONObject;
 
-function cmp_platerecongnizer($left, $right){
-    if($left['score'] > $right['score']) return -1;
-    if($left['score'] < $right['score']) return 1;
-    return 0;
-}
 
 /**
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
@@ -19,7 +14,11 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
     if(isset($carInfo) && isset($carInfo["results"]) && count($carInfo["results"])){
 
         $result = (Array)$carInfo['results'];
-        usort($result, "cmp_platerecongnizer");
+        usort($result, function ($left, $right){
+            if($left['score'] > $right['score']) return -1;
+            if($left['score'] < $right['score']) return 1;
+            return 0;
+        });
 
         $result = $result[0];
         $box = $result['box'];
