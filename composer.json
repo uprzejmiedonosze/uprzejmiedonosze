@@ -20,7 +20,8 @@
         "sserbin/twig-linter": "@dev",
         "pdepend/pdepend": "^2.15",
         "phpmd/phpmd": "^2.13",
-        "symfony/config": "^6.4"
+        "symfony/config": "^6.4",
+        "phpunit/phpunit": "^11.4"
     },
     "config": {
         "platform-check": false,
