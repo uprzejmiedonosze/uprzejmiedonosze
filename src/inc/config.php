@@ -6,45 +6,48 @@ const LATEST_TERMS_UPDATE = '2024-03-26';
 const DT_FORMAT = 'Y-m-d\TH:i:s';
 const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
 
-const CATEGORIES_CONFIG = __DIR__ . '/../public/api/config/categories.json';
+const CONFIG_DIR = __DIR__ . '/../public/api/config';
+
+
+const CATEGORIES_CONFIG = CONFIG_DIR . '/categories.json';
 $categories = fopen(CATEGORIES_CONFIG, "r") or die("Unable to open config file: " . CATEGORIES_CONFIG);
 $CATEGORIES = (array) new ConfigClass(fread($categories, filesize(CATEGORIES_CONFIG)), 'Category');
 fclose($categories);
 
-const EXTENSIONS_CONFIG = __DIR__ . '/../public/api/config/extensions.json';
+const EXTENSIONS_CONFIG = CONFIG_DIR . '/extensions.json';
 $extensions = fopen(EXTENSIONS_CONFIG, "r") or die("Unable to open config file: " . EXTENSIONS_CONFIG);
 $EXTENSIONS = (array) new ConfigClass(fread($extensions, filesize(EXTENSIONS_CONFIG)), 'Extension');
 fclose($extensions);
 
-const SM_CONFIG = __DIR__ . '/../public/api/config/sm.json';
+const SM_CONFIG = CONFIG_DIR . '/sm.json';
 $smAddressess = fopen(SM_CONFIG, "r") or die("Unable to open config file: " . SM_CONFIG);
 $SM_ADDRESSES = (array) new ConfigClass(fread($smAddressess, filesize(SM_CONFIG)), 'SM');
 fclose($smAddressess);
 
-const STATUSES_CONFIG = __DIR__ . '/../public/api/config/statuses.json';
+const STATUSES_CONFIG = CONFIG_DIR . '/statuses.json';
 $st = fopen(STATUSES_CONFIG, "r") or die("Unable to open config file: " . STATUSES_CONFIG);
 $STATUSES = (array) new ConfigClass(fread($st, filesize(STATUSES_CONFIG)), 'Status');
 fclose($st);
 
-const SA_CONFIG = __DIR__ . '/../public/api/config/stop-agresji.json';
+const SA_CONFIG = CONFIG_DIR . '/stop-agresji.json';
 $stopAgresji = fopen(SA_CONFIG, "r") or die("Unable to open config file: " . SA_CONFIG);
 $STOP_AGRESJI = (array) new ConfigClass(fread($stopAgresji, filesize(SA_CONFIG)), 'StopAgresji');
 fclose($stopAgresji);
 
-const SA_LEVELS = __DIR__ . '/../public/api/config/levels.json';
+const SA_LEVELS = CONFIG_DIR . '/levels.json';
 $levels = fopen(SA_LEVELS, "r") or die("Unable to open config file: " . SA_LEVELS);
 $LEVELS = (array) new ConfigClass(fread($levels, filesize(SA_LEVELS)), 'Level');
 fclose($levels);
 
 // I'm lazy, no specific class for that
-const SA_BADGES = __DIR__ . '/../public/api/config/badges.json';
+const SA_BADGES = CONFIG_DIR . '/badges.json';
 $badges = fopen(SA_BADGES, "r") or die("Unable to open config file: " . SA_BADGES);
 $badgesStr = fread($badges, filesize(SA_BADGES));
 $BADGES = json_decode($badgesStr, true);
 fclose($badges);
 
 // I'm lazy, no specific class for that
-const SA_PATRONITE = __DIR__ . '/../public/api/config/patronite.json';
+const SA_PATRONITE = CONFIG_DIR . '/patronite.json';
 $patronite = fopen(SA_PATRONITE, "r") or die("Unable to open config file: " . SA_PATRONITE);
 $patroniteStr = fread($patronite, filesize(SA_PATRONITE));
 $PATRONITE = json_decode($patroniteStr, false);
