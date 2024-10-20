@@ -262,7 +262,7 @@ async function sendFile(fileData, id, imageMetadata) {
         $plateImage.hide();
       }
       const recydywa = app.carInfo?.recydywa
-      if (recydywa?.appsCnt > 1) {
+      if (recydywa?.appsCnt > 0) {
         $recydywa.text(
           'recydywista, ' + num(recydywa.appsCnt, ['zgłoszeń', 'zgłoszenie', 'zgłoszenia'])
           + ((recydywa?.otherUsersCount > 0) ? ' od ' + num(recydywa.usersCnt, ['użytkowników', 'użytkownika', 'użytkowników']) : "")
