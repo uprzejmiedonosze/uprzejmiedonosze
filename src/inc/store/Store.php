@@ -1,7 +1,9 @@
 <?php namespace store;
 
 
-const DB_FILENAME = __DIR__ . '/../../../db/store.sqlite';
+if (!defined('DB_FILENAME'))
+    define('DB_FILENAME', __DIR__ . '/../../../db/store.sqlite');
+
 const KEY = 'key';
 
 $store = new \PDO('sqlite:' . DB_FILENAME);
