@@ -82,26 +82,49 @@
   }
 
   .recydywa {
-    span.recydywa-cnt, span.recydywa-userscnt {
-      color: #fff;
-      text-shadow: none;
-      border-radius: 10px;
-      font-size: 9pt;
-      padding: 2px 6px;
-      font-weight: 300;
+    .top-line .recydywa-cnt {
+      border-radius: 3px;
+      border: 1px solid $recydywa;
       display: inline;
+      padding: 2px 3px;
+      margin: 0 5px;
+    }
+    .recydywa-cnt, .recydywa-seemore {
+      background-color: $recydywaBg;
+      color: $recydywa;
+      font-size: 11pt;
+      font-weight: 600;
+      padding: 10px;
+      text-shadow: none;
       white-space: nowrap;
-    }
-    span.recydywa-cnt {
-      background-color: $recydywa;
-    }
-    span.recydywa-userscnt {
-      background-color: $plateId;
-    }
-  }
+      border-radius: 5px;
+      display: inline-block;
 
-  .recydywa-cnt {
-    display: none;
+      .recydywa-userscnt, .recydywa-appscnt {
+        &:before {
+          @extend %icon;
+          margin-right: 2px;
+        }
+      }
+
+      .recydywa-appscnt + .recydywa-userscnt {
+        margin-left: 3px;
+      }
+
+      .recydywa-appscnt:before {
+        background-image: url("../img/icons/recydywa-apps.svg");
+      }
+
+      .recydywa-userscnt:before {
+        background-image: url("../img/icons/recydywa-users.svg");
+        width: 11px;
+      }
+    }
+
+    .recydywa-seemore {
+      background-color: $recydywa;
+      color: $recydywaBg !important;
+    }
   }
 
   span.plate-id {

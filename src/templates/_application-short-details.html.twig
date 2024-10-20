@@ -30,11 +30,17 @@
     </li>
     {% if recydywaCnt > 1 %}
     <li class="no-icon">
-        <span class="recydywa-cnt">RECYDYWA {{ recydywaCnt }}</span> 
-            {% if recydywa.usersCnt > 1 %}od&nbsp;<span class="recydywa-userscnt">{{ recydywa.usersCnt }} użytkowników</span> {% endif %}
-            numeru&nbsp;<span class="plate-id small">{{ app.carInfo.plateId }}</span>
-            {% if recydywa.citiesCnt > 1 %}w&nbsp;{{ recydywa.citiesCnt }}&nbsp;miastach {% endif %}
-        <a href="#" class="recydywa" data-plateid="{{ app.carInfo.plateId }}">(zobacz&nbsp;pozostałe)</a>
+        <span class="recydywa-cnt">
+            <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt">{{ recydywaCnt }} recydywa</span>
+            {% if recydywa.usersCnt > 1 %}
+                <span class="recydywa-userscnt">{{ recydywa.usersCnt }} użytkowników</span>
+            {% endif %}
+        </span>
+        <a href="#" data-rel="popup" data-inline="true" data-mini="true"
+            data-plateid="{{ app.carInfo.plateId }}"
+            class="recydywa-seemore">
+            POZOSTAŁE
+        </a>
     </li>
     {% endif %}
 

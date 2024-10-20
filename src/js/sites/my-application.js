@@ -62,7 +62,7 @@ $(document).on("pageshow", function () {
     const $privateComment = $('.private-comment > textarea')
     $privateComment.on('keyup', resizeTextarea).trigger('keyup')
 
-    $('a.recydywa').on('click', async function () {
+    $('a.recydywa-seemore').on('click', async function () {
       const plateId = $(this).data('plateid')
       const $popup = $('#recydywa')
       const $popupContent = $('#recydywa .popup-content')

@@ -8,11 +8,14 @@
 {% block main %}
 
 <h2>
-    <span class="recydywa">recydywa {{ recydywa.appsCnt }}</span> 
-    numeru <span class="plate-id h2">{{ plateId }}</span>
+    <span class="recydywa">{{ recydywa.appsCnt }} recydywa </span> 
     {% if recydywa.usersCnt > 1 %}od {{ recydywa.usersCnt }} użytkowników {% endif %}
     {% if recydywa.citiesCnt > 1 %}w {{ recydywa.citiesCnt }} miastach {% endif %}
+    <div>
+    <span class="plate-id h2">{{ plateId }}</span>
+    </div>
 </h2>
+
 {% if not allImagesVisible and not userAllowedSharing %}
 <b class="recydywaInfo">
     Nie widać wszystkich zdjęć? <a data-ajax="false" target="_blank" href="/register.html?update">Udostępnij swoje zdjęcia innym</a>.
