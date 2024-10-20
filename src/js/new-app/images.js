@@ -183,11 +183,17 @@ function noGeoDataInImage() {
   $("#addressHint").addClass("hint");
 }
 
+/**
+ * @param {*} vehicleBox {x, y, width, height} of box in which the car is located
+ * @param {number} imageWidth real image file width
+ * @param {number} imageHeight real image file height
+ * @returns 
+ */
 export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   if (!vehicleBox.width) return
-  const boxWidth = $('.carImageSection').width()
-  const boxHeight = $('.carImageSection').height()
-  const ratio = boxWidth / imageWidth
+  const renderedImageWidth = $('.carImageSection').width() // rendered image width
+  const renderedImageHeight = $('.carImageSection').height() // rendered image height
+  const ratio = renderedImageWidth / imageWidth // scaling factor of rendered image
   $('img#carImagePreview').css('object-position', `50% -${vehicleBox.y * ratio}px`)
   $('img#carImagePreview').css("height", "100%")
 
@@ -195,7 +201,7 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   $('.plate-box').css('width', 100 * vehicleBox.width / imageWidth + '%')
 
   $('.plate-box').css('top', '10px')
-  $('.plate-box').css('height', 100 * vehicleBox.height * ratio / boxHeight + '%')
+  $('.plate-box').css('height', 100 * vehicleBox.height * ratio / renderedImageHeight + '%')
   $('.plate-box').css('border', '2px solid #e9c200')
   $('.plate-box').show()
 }
