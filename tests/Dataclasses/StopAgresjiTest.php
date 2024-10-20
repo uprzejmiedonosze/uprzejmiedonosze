@@ -2,7 +2,7 @@
 
 namespace UprzejmieDonosze\Tests\Dataclasses;
 
-require_once __DIR__ . '/../../src/inc/dataclasses/StopAgresji.php';
+require_once __DIR__ . '/../../export/inc/dataclasses/StopAgresji.php';
 
 use PHPUnit\Framework\TestCase;
 
