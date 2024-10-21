@@ -287,10 +287,13 @@ async function sendFile(fileData, id, imageMetadata={}) {
       }
       const recydywa = app.carInfo?.recydywa
       if (recydywa?.appsCnt > 0) {
-        $recydywa.text(
-          'recydywista, ' + num(recydywa.appsCnt, ['zgłoszeń', 'zgłoszenie', 'zgłoszenia'])
-          + ((recydywa?.otherUsersCount > 0) ? ' od ' + num(recydywa.usersCnt, ['użytkowników', 'użytkownika', 'użytkowników']) : "")
-        ).show();
+        $recydywa.find('.recydywa-appscnt').text(recydywa.appsCnt + ' recydywa')
+        $recydywa.show()
+
+        $recydywa.find('.recydywa-userscnt').hide()
+        if (recydywa?.usersCnt > 1) {
+          $recydywa.find('.recydywa-userscnt').text(num(recydywa.usersCnt, ['zgłaszających', 'zgłaszający', 'zgłaszających'])).show()
+        }
       }
     }
     uploadFinished()

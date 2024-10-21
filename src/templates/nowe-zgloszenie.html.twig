@@ -45,7 +45,12 @@
                     <div class="loader l" style="display: none;"></div>
                     <img id="carImagePreview" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
-                <div id="recydywa"></div>
+                <div id="recydywa" class="recydywa new-app-recydywa">
+                    <span class="recydywa-cnt">
+                        <span class="recydywa-appscnt"></span>
+                        <span class="recydywa-userscnt"></span>
+                    </span>
+                </div>
                 <div class="plate-box" style="border: none;"></div>
                 <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="carImage" multiple
                     title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
