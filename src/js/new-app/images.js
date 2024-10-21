@@ -11,6 +11,11 @@ import isIOS from "../lib/isIOS";
 
 var uploadInProgress = 0;
 
+/**
+ * @param {File} file 
+ * @param {'contextImage' | 'carImage'} id 
+ * @returns void
+ */
 export async function checkFile(file, id) {
   if (!file) return
 
@@ -60,6 +65,9 @@ export async function checkFile(file, id) {
 
 }
 
+/**
+ * @param {'contextImage' | 'carImage'} id 
+ */
 function uploadStarted(id) {
   $(`.${id}Section`).removeClass("error");
   $(`.${id}Section img`).hide();
@@ -86,6 +94,11 @@ function checkUploadInProgress() {
   $("#form-submit").addClass("ui-disabled");
 }
 
+/**
+ * 
+ * @param {'contextImage' | 'carImage'} id 
+ * @param {string} errorMsg
+ */
 function imageError(id, errorMsg) {
   $(`.${id}Section .loader`).hide();
   $(`.${id}Section`).addClass("error");
@@ -206,8 +219,13 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   $('.plate-box').show()
 }
 
-
-async function sendFile(fileData, id, imageMetadata) {
+/**
+ * 
+ * @param {*} fileData 
+ * @param {'contextImage' | 'carImage'} id 
+ * @param {*} imageMetadata 
+ */
+async function sendFile(fileData, id, imageMetadata={}) {
   const appId = $("#applicationId").val()
   var data = {
     image_data: fileData,
@@ -277,11 +295,15 @@ async function sendFile(fileData, id, imageMetadata) {
     }
     uploadFinished()
   } catch (err) {
-    imageError(id)
+    imageError(id, err.toString())
   }
 }
 
-
+/**
+ * @param {Number} value 
+ * @param {Array} numerals 
+ * @returns 
+ */
 function num(value, numerals) {
 	var t0 = value % 10,
 		t1 = value % 100,

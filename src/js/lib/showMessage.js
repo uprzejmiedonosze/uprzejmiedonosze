@@ -10,6 +10,9 @@ export function showMessage(msg) {
     }, 1500);
 }
 
+/**
+ * @param {string} msg
+ */
 export function showError(msg) {
     $.mobile.loading("show", {
         html: `<b style="color: red;">Błąd: ${msg}</b>`,
