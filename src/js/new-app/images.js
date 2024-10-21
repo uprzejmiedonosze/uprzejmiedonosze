@@ -204,19 +204,29 @@ function noGeoDataInImage() {
  */
 export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   if (!vehicleBox.width) return
-  const renderedImageWidth = $('.carImageSection').width() // rendered image width
-  const renderedImageHeight = $('.carImageSection').height() // rendered image height
-  const ratio = renderedImageWidth / imageWidth // scaling factor of rendered image
-  $('img#carImagePreview').css('object-position', `50% -${vehicleBox.y * ratio}px`)
-  $('img#carImagePreview').css("height", "100%")
 
-  $('.plate-box').css('left', 100 * vehicleBox.x / imageWidth + '%')
-  $('.plate-box').css('width', 100 * vehicleBox.width / imageWidth + '%')
+  const $carImagePreview = $('img#carImagePreview')
+  const trimBoxWidth = $carImagePreview.width() // trim box width
+  const trimBoxHeight = 200 //$carImagePreview.height() // trim box height
+  const ratio = trimBoxWidth / imageWidth // scaling factor of rendered image
 
-  $('.plate-box').css('top', '10px')
-  $('.plate-box').css('height', 100 * vehicleBox.height * ratio / renderedImageHeight + '%')
-  $('.plate-box').css('border', '2px solid #e9c200')
-  $('.plate-box').show()
+  const middleOfCar = parseInt(vehicleBox.y) + parseInt(vehicleBox.height) / 2
+  let offsetY = middleOfCar * ratio - trimBoxHeight / 2
+  // don't move the image outside of the trim box
+  if (offsetY > trimBoxHeight / 2)
+    offsetY = trimBoxHeight / 2 - 5
+
+  $carImagePreview.css('object-position', `0% -${offsetY}px`)
+  $carImagePreview.css("height", "100%")
+
+
+  const $plateBox = $('.plate-box')
+  $plateBox.css('left', 100 * vehicleBox.x / imageWidth + '%')
+  $plateBox.css('width', 100 * vehicleBox.width / imageWidth + '%')
+  $plateBox.css('top', vehicleBox.y * ratio - offsetY + 'px')
+  $plateBox.css('height', vehicleBox.height * ratio + 'px')
+  $plateBox.css('border', '2px solid #e9c200')
+  $plateBox.show()
 }
 
 /**
