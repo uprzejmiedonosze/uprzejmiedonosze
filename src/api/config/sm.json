@@ -2960,5 +2960,13 @@
       "26-500 Szydłowiec"
     ],
     "email": "kppszydlowiec@ra.policja.gov.pl"
+  },
+  "gmina Sobótka": {
+    "address": [
+      "Komisariat Policji w Sobótce",
+      "ul. Ogrodowa 8/10",
+      "55-050 Sobótka"
+    ],
+    "email": "policja@sobotka.pl"
   }
 }
