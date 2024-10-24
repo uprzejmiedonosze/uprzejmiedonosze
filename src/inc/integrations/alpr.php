@@ -56,8 +56,8 @@ function usePlaterecognizer(): bool {
 
     if(floor(log10(random_int(1, $budgetConsumed+1))) == 0) {
         logger("use OpenAlpr budgetConsumed $budgetConsumed%", true);
-        return true;
+        return false;
     }
     logger("use plateRec budgetConsumed $budgetConsumed%", true);
-    return false;
+    return true;
 }
