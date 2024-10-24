@@ -1,5 +1,6 @@
 <?PHP namespace alpr;
 
+use app\Application;
 use stdClass;
 use cache\Type;
 
@@ -7,10 +8,9 @@ require(__DIR__ . '/openAlpr.php');
 require(__DIR__ . '/plateRecognizer.php');
 
 /**
- * @SuppressWarnings(PHPMD.MissingImport)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
+function get_car_info(&$imageBytes, Application &$application, string $baseFileName, string $type) {
     $application->carImage = new stdClass();
     $application->carImage->url = "$baseFileName,$type.jpg";
     $application->carImage->thumb = "$baseFileName,$type,t.jpg";
@@ -38,14 +38,26 @@ function get_car_info(&$imageBytes, &$application, $baseFileName, $type) {
     }
 }
 
-function usePlaterecognizer() {
-    $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
-    $budgetConsumed = floor($budgetConsumed*100);
-    $swithToPlaterec = false;
-    if($budgetConsumed > 90) {
-        $swithToPlaterec = (bool)(intval(date('s')) % 10); // 90% hits
-        logger("budgetConsumed $budgetConsumed% > 90%" . ($swithToPlaterec ? ' using PR' : ''), true);
+function usePlaterecognizer(): bool {
+    $user = \user\current();
+
+    if(!$user->hasApps()) {
+        logger('use OpenAlpr if this is User first app', true);
+        return false;
     }
 
-    return $swithToPlaterec;
+    if($user->isPatron()) {
+        logger('use OpenAlpr for Patrons', true);
+        return false;
+    }
+    
+    $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
+    $budgetConsumed = floor($budgetConsumed*100);
+
+    if(floor(log10(random_int(1, $budgetConsumed+1))) == 0) {
+        logger("use OpenAlpr budgetConsumed $budgetConsumed%", true);
+        return true;
+    }
+    logger("use plateRec budgetConsumed $budgetConsumed%", true);
+    return false;
 }
