@@ -2968,5 +2968,13 @@
       "55-050 Sobótka"
     ],
     "email": "policja@sobotka.pl"
+  },
+  "gmina Bukowina Tatrzańska": {
+    "address": [
+      "Komisariat Policji w Bukowinie Tatrzańskiej",
+      "ul. Długa 144",
+      "34-530 Bukowina Tatrzańska"
+    ],
+    "email": "kp-bukowina-tatrzanska@zakopane.policja.gov.pl"
   }
 }
