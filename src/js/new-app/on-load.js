@@ -70,14 +70,16 @@ export const initHandlers = (map) => {
 
   $(".image-upload img").on("load", function () {
     $(this).show();
-    showHidePictureHints($(this).parent());
+    showHidePictureHints($(this).parent().parent());
   });
 };
 
 function showHidePictureHints(context) {
-  if ((!context.find("img").attr("src")) || context.find("img").attr("src").endsWith(".png")) {
-    context.find("p.pictureHint").hide();
-  } else {
-    context.find("p.pictureHint").show();
-  }
+  const placeholder = context?.find("img")?.attr("src") == 'img/fff-1.png'
+  const recydywaVisible = context.find('#recydywa:visible').length
+
+  context.find("p.pictureHint").hide()
+
+  if (!placeholder && !recydywaVisible)
+    context.find("p.pictureHint").show()
 }
