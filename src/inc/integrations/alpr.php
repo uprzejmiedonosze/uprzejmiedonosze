@@ -17,16 +17,16 @@ function get_car_info(&$imageBytes, Application &$application, string $baseFileN
 
     $application->carInfo = new stdClass();
 
-    $usePlaterecognizer = usePlaterecognizer();
+    $use_openAlpr = use_openAlpr($imageBytes);
     try {
-        if ($usePlaterecognizer)
-            get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
-        else
+        if ($use_openAlpr)
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
+        else
+            get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
+            
     } catch (\Exception $e) {
-        logger("Exception on get_car_info, 1st attepmt with usePlaterecognizer=$usePlaterecognizer " . $e->getMessage(), true);
-        $usePlaterecognizer = !$usePlaterecognizer;
-        if ($usePlaterecognizer)
+        logger("Exception on get_car_info, 1st attepmt with use_openAlpr=$use_openAlpr " . $e->getMessage(), true);
+        if ($use_openAlpr) // do the opposite
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
         else
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
@@ -38,31 +38,40 @@ function get_car_info(&$imageBytes, Application &$application, string $baseFileN
     }
 }
 
-function usePlaterecognizer(): bool {
+function use_openAlpr(&$imageBytes): bool {
+    $imageHash = sha1($imageBytes);
+    $cache = \cache\alpr\get(Type::OpenAlpr, $imageHash);
+
+    if($cache) {
+        logger('use OpenAlpr cos its cached', true);
+        return true;
+    }
+
+
     $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
     $budgetConsumed = floor($budgetConsumed*100);
 
     if ($budgetConsumed == 100) {
         logger('use plateRec as OpenAlpr budget is consumed', true);
-        return true;
+        return false;
     }
 
     $user = \user\current();
 
     if(!$user->hasApps()) {
         logger('use OpenAlpr if this is User first app', true);
-        return false;
+        return true;
     }
 
     if($user->isPatron()) {
         logger('use OpenAlpr for Patrons', true);
-        return false;
+        return true;
     }
 
     if(floor(log10(random_int(1, $budgetConsumed+1))) == 0) {
         logger("use OpenAlpr budgetConsumed $budgetConsumed%", true);
-        return false;
+        return true;
     }
     logger("use plateRec budgetConsumed $budgetConsumed%", true);
-    return true;
+    return false;
 }
