@@ -66,8 +66,9 @@ function get_platerecognizer(&$imageBytes) {
     if (isset($usage['total_calls']) && isset($usage['usage'])) {
         logger("get_platerecognizer " . $usage['usage']["calls"] . "/" . $usage['total_calls'], true);
     }
-    
-    \cache\alpr\set(Type::Platerecognizer, $imageHash, $result);
+
+    if(isset($result["results"]) && count($result["results"]))
+        \cache\alpr\set(Type::Platerecognizer, $imageHash, $result);
     return $result;
 }
 
