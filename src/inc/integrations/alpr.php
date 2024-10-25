@@ -39,6 +39,14 @@ function get_car_info(&$imageBytes, Application &$application, string $baseFileN
 }
 
 function usePlaterecognizer(): bool {
+    $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
+    $budgetConsumed = floor($budgetConsumed*100);
+
+    if ($budgetConsumed == 100) {
+        logger('use plateRec as OpenAlpr budget is consumed', true);
+        return true;
+    }
+
     $user = \user\current();
 
     if(!$user->hasApps()) {
@@ -50,9 +58,6 @@ function usePlaterecognizer(): bool {
         logger('use OpenAlpr for Patrons', true);
         return false;
     }
-    
-    $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
-    $budgetConsumed = floor($budgetConsumed*100);
 
     if(floor(log10(random_int(1, $budgetConsumed+1))) == 0) {
         logger("use OpenAlpr budgetConsumed $budgetConsumed%", true);
