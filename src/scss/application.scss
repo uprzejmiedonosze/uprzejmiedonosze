@@ -41,8 +41,8 @@
     z-index: 2;
     display: none;
     position: absolute;
-    bottom: 5px;
-    right: 1px;
+    top: 5px;
+    right: 5px;
   }
 }
 
@@ -75,7 +75,7 @@
   }
 
   .recydywa {
-    .top-line, &.new-app-recydywa {
+    .top-line {
       .recydywa-cnt {
         border-radius: 3px;
         border: 1px solid $recydywa;
