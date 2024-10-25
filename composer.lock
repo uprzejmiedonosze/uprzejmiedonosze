@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f970506d8750022529c5983dce637025",
+    "content-hash": "1087763b1551ff9911d8dfa1307f7782",
     "packages": [
         {
             "name": "beste/clock",
@@ -2274,6 +2274,51 @@
                 "source": "https://github.com/php-fig/log/tree/3.0.0"
             },
             "time": "2021-07-14T16:46:02+00:00"
+        },
+        {
+            "name": "qmegas/memcache-search",
+            "version": "0.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qmegas/memcache-search.git",
+                "reference": "433d143dc5aa9a865afc46cf498b6594457f46b2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/qmegas/memcache-search/zipball/433d143dc5aa9a865afc46cf498b6594457f46b2",
+                "reference": "433d143dc5aa9a865afc46cf498b6594457f46b2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qmegas\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Qmegas",
+                    "homepage": "http://qmegas.info"
+                }
+            ],
+            "description": "PHP library to search memcache keys",
+            "keywords": [
+                "key search",
+                "memcache",
+                "memcached"
+            ],
+            "support": {
+                "issues": "https://github.com/qmegas/memcache-search/issues",
+                "source": "https://github.com/qmegas/memcache-search/tree/0.1.3"
+            },
+            "time": "2023-07-18T11:30:23+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
