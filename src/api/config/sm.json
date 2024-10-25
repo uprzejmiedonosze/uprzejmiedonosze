@@ -2976,5 +2976,13 @@
       "34-530 Bukowina Tatrzańska"
     ],
     "email": "kp-bukowina-tatrzanska@zakopane.policja.gov.pl"
+  },
+  "Nowa Sól": {
+    "address": [
+      "Straż Miejska w Nowej Soli",
+      "ul. Towarowa 2",
+      "67-100 Nowa Sól"
+    ],
+    "email": "strazmiejska@nowasol.pl"
   }
 }
