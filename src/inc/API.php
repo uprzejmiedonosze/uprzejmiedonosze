@@ -145,7 +145,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
         if (!empty($dateTime)) $application->date = $dateTime;
         if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
         if (!empty($latLng)) $application->setLatLng($latLng);
-        \alpr\get_car_info($imageBytes, $application, $baseFileName, $type);
+        \alpr\get($imageBytes, $application, $baseFileName, $type);
         $application->carImage->width = $width;
         $application->carImage->height = $height;
     } else if ($pictureType == 'contextImage') {
