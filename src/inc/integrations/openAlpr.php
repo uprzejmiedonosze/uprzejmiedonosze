@@ -12,7 +12,7 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
     $imageHash = sha1($imageBytes);
     $carInfo = \cache\alpr\get(Type::OpenAlpr, $imageHash);
 
-    $application->alpr = 'paid';
+    $application->alpr = 'openalpr';
     if(!$carInfo){
         $carInfo = get_alpr($imageBytes);
     }

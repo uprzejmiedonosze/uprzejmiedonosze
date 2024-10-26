@@ -246,6 +246,7 @@ function updateApp($app, $version, $dryRun) {
         $app->inexactHour = true;
     }
     $app->version = $version;
+    if($app->alpr == 'paid') $app->alpr = 'openalpr';
 
     if($dryRun){
         return;
