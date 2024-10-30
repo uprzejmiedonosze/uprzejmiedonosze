@@ -19,7 +19,10 @@ class WebhooksHandler extends AbstractHandler {
     public function mailgun(Request $request, Response $response): Response {        
         $event = $request->getParsedBody();
         $id = $event['event-data']['id'] ?? null;
-        if (!$id) throw new HttpForbiddenException($request, 'Missing event id.');
+        if (!$id) {
+            logger($event, true);
+            throw new HttpForbiddenException($request, 'Missing event id.');
+        }
 
         \webhook\add($id, $event);
         $this->verify($request);
