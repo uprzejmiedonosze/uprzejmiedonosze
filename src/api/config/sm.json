@@ -2984,5 +2984,13 @@
       "67-100 Nowa Sól"
     ],
     "email": "strazmiejska@nowasol.pl"
+  },
+  "powiat limanowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Limanowej",
+      "ul. Żwirki i Wigury 7",
+      "34-600 Limanowa"
+    ],
+    "email": "kpp@limanowa.policja.gov.pl"
   }
 }
