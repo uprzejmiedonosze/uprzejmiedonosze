@@ -77,10 +77,9 @@
   .recydywa {
     .top-line {
       .recydywa-cnt {
-        border-radius: 3px;
-        border: 1px solid $recydywa;
+        border-radius: 12px;
         display: inline;
-        padding: 2px 0 2px 3px;
+        padding: 2px 2px 2px 5px;
         margin: 0 5px;
         font-size: 12px;
 
@@ -99,12 +98,11 @@
     }
     .recydywa-cnt, .recydywa-seemore {
       background-color: $recydywaBg;
-      color: $recydywa;
       font-weight: 600;
       padding: 5px 12px;
       text-shadow: none;
       white-space: nowrap;
-      border-radius: 5px;
+      border-radius: 24px;
       display: inline-block;
 
       .recydywa-userscnt, .recydywa-appscnt {
@@ -129,9 +127,9 @@
     }
 
     .recydywa-seemore {
-      background-color: $recydywa;
-      color: $recydywaBg !important;
-      border-radius: 20px;
+      background-color: #EBEBEB;
+      color: black !important;
+      border-radius: 24px;
     }
   }
 
