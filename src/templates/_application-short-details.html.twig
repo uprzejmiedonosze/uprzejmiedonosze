@@ -71,7 +71,8 @@
         </li>
     {% endif %}    
 
-    <li class="description"><b>TREŚĆ ZGŁOSZENIA</b><br>{{ app.getCategory.formal }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
+    <li class="description"><b>TREŚĆ ZGŁOSZENIA</b><br>
+        {{ app.getCategory.formal }} {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
     <li class="info-icon"><b>INFORMACJE DODATKOWE</b><br>
         {% if app.statements is not defined or not app.statements.witness %}
         <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.

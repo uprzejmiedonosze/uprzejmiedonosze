@@ -2,7 +2,7 @@
     "4": {
         "title": "Zastawienie chodnika",
         "short": "Pojazd utrudniał ruch pieszych lub zostawił mniej niż 1,5m na przejście",
-        "formal": "Pojazd zastawiał chodnik (mniej niż 1,5 m, art. 47. 1 prd)",
+        "formal": "Pojazd zastawiał chodnik (mniej niż 1,5 m, art. 47. 1 prd).",
         "informal": "Zastawienie chodnika",
         "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd utrudnia im ruch (i jest to przynajmniej 1,5m) ma zastosowanie ten przepis.</p>",
         "law": "art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość drogi dla pieszych jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
@@ -17,7 +17,7 @@
     "6": {
         "title": "Zieleń",
         "short": "Pojazd niszczył lub uszkadzał zieleń",
-        "formal": "Pojazd był zaparkowany na trawniku/w parku (KW Art. 144. 1 prd)",
+        "formal": "Pojazd był zaparkowany na trawniku/w parku (KW Art. 144. 1 prd).",
         "informal": "Niszczenie zieleni",
         "desc": "<p>Reguła jest prosta – parkowanie (także 'na chwilę') na trawie/parku/zieleni (lub czymś co było kiedyś zielenią) jest niedozwolone. Uważaj jednak na tę kategorię. Wymaga ona wykazania, że widoczna na zdjęciu sytuacja przyczyniła się do 'zniszczenia'. Jeśli więc masz ujęcie na którym widać koleiny za autem – śmiało. W przeciwnym wypadku sprawdź, czy nie pasuje tutaj inna kategoria.</p>",
         "law": "KW Art. 144. 1. Kto na terenach przeznaczonych do użytku publicznego niszczy lub uszkadza roślinność [...] podlega karze grzywny do 1.000 złotych albo karze nagany.",
@@ -32,7 +32,7 @@
     "14": {
         "title": "Zakaz zatrzymywania się",
         "short": "Pojazd stał za zakazem zatrzymywania się",
-        "formal": "Pojazd był zaparkowany za znakiem B-36 (zakaz zatrzymywania się, art. 46. 4 prd)",
+        "formal": "Pojazd był zaparkowany za znakiem B-36 (zakaz zatrzymywania się, art. 46. 4 prd).",
         "informal": "Postój na zakazie",
         "desc": "<p>Znak B-36 (zakaz zatrzymywania się) nie powinien pozostawiać wątpliwości. Trudno o bardziej czytelną wskazówkę. Niestety często jest on interpretowany jako jeśli zmieszczę się na chodniku i zostawię 1,5m, to będzie OK. Nie jest to prawda (sprawdź na przykład na stronach Prawa Drogowego). <br/> Wyjątkiem jest sytuacja, w której pod znakiem znajduje się tabliczka informująca 'nie dotyczy chodnika'.</p>",
         "law": "art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania wskazany znakami drogowymi.",
@@ -47,7 +47,7 @@
     "24": {
         "title": "Zakaz postoju",
         "short": "Pojazd stał za zakazem postoju",
-        "formal": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad dozwolony czas (art. 46. 4 prd)",
+        "formal": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad dozwolony czas (art. 46. 4 prd).",
         "informal": "Postój na zakazie",
         "desc": "<p>Znak B-35 'zakaz postoju' oznacza zakaz postoju pojazdu; dopuszczalny czas unieruchomienia pojazdu dłuższy niż jedna minuta jest wskazany napisem na znaku albo na umieszczonej pod nim tabliczce.</p>",
         "law": "art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
@@ -62,7 +62,7 @@
     "12": {
         "title": "Strefa zamieszkania",
         "short": "Pojazd stał w strefie zamieszkania poza wyznaczonym miejscem",
-        "formal": "Pojazd był zaparkowany w strefie zamieszkania (dłużej niż minutę) poza miejscem do tego wyznaczonym (art. 49. 2.4 prd)",
+        "formal": "Pojazd był zaparkowany w strefie zamieszkania (dłużej niż minutę) poza miejscem do tego wyznaczonym (art. 49. 2.4 prd).",
         "informal": "Nieprawidłowy postój w strefie zamieszkania",
         "desc": "<p>W strefie zamieszkania obowiązuje zakaz parkowania poza miejscami do tego wyznaczonymi. Nie ma znaczenia pozostawione 1,5m, odległość od pasów czy skrzyżowania.</p>",
         "law": "art. 49. 2.4. Zabrania się zatrzymania pojazdu w strefie zamieszkania w innym miejscu niż wyznaczone w tym celu.",
@@ -77,7 +77,7 @@
     "5": {
         "title": "Przejście dla pieszych",
         "short": "Pojazd stał mniej niż 10m od przejścia dla pieszych",
-        "formal": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od przejścia dla pieszych (art. 49. 1.2 prd)",
+        "formal": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od przejścia dla pieszych (art. 49. 1.2 prd).",
         "informal": "Postój przy przejściu",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed przejściem dla pieszych jest niedozwolone. Na drodze dwukierunkowej niedozwolone jest także zatrzymanie/postój za przejściem.</p>",
         "law": "art. 49. 1.2. Zabrania się zatrzymania pojazdu na przejściu dla pieszych, na przejeździe dla rowerów oraz w odległości mniejszej niż 10 m przed tym przejściem lub przejazdem; na drodze dwukierunkowej o dwóch pasach ruchu zakaz ten obowiązuje także za tym przejściem lub przejazdem.",
@@ -92,7 +92,7 @@
     "16": {
         "title": "Tabliczka",
         "short": "Pojazd stał niezgodnie z oznaczaniem na tabliczce wskazującej sposób parkowania",
-        "formal": "Pojazd był zaparkowany w sposób niezgodny z tabliczką T-30 pod znakiem D-18 wskazującej sposób parkowania (art. 46. 4 prd)",
+        "formal": "Pojazd był zaparkowany w sposób niezgodny z tabliczką T-30 pod znakiem D-18 wskazującej sposób parkowania (art. 46. 4 prd).",
         "informal": "Postój niezgodny z tabliczką",
         "desc": "<p>Znak D-18 (parking) występuje często w połączeniu z tabliczką T-30, która precyzyjnie wskazuje sposób ustawienia pojazdu względem krawędzi jezdni.</p> </p>Co więcej, najczęściej na samej jezdni lub chodniku namalowane są dodatkowe znaki poziome. Dzięki nim nie trzeba po zaparkowaniu iść na spacer na początek ulicy, żeby sprawdzić, czy stoimy poprawnie.</p>",
         "law": "art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
@@ -107,7 +107,7 @@
     "17": {
         "title": "Znaki poziome",
         "short": "Pojazd przejechał linię ciągłą lub stanął na powierzchni wyłączonej z ruchu",
-        "formal": "Pojazd był zaparkowany niezgodnie ze znakami poziomymi (art. 46. 4 prd)",
+        "formal": "Pojazd był zaparkowany niezgodnie ze znakami poziomymi (art. 46. 4 prd).",
         "informal": "Postój niezgodny ze znakami poziomymi",
         "desc": "<p>Jeśli na danym obszarze, miejsca do parkowania są wyznaczone za pomocą znaków poziomych, to kierowców obowiązują właśnie te znaki. Nie ma żadnego znaczenia, czy na chodniku zostało 1,5m albo czy do przejścia dla pieszych pozostało 5 czy 50 metrów.</p>",
         "law": "art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
@@ -122,7 +122,7 @@
     "8": {
         "title": "W głębi chodnika",
         "short": "Pojazd stał w głębi chodnika (np. za słupkami, pod budynkiem z dala od krawędzi jezdni)",
-        "formal": "Pojazd był zaparkowany z dala od krawędzi jezdni (art. 47. 2 prd)",
+        "formal": "Pojazd był zaparkowany z dala od krawędzi jezdni (art. 47. 2 prd).",
         "informal": "Postój z dala od krawędzi jezdni",
         "desc": "<p>Pojazd może wjechać na chodnik wyłącznie przodem, i musi stać przy krawędzi jezdni. Jakiekolwiek ustawienie pojazdu, które wskazywałoby na to, że kierowca jechał chodnikiem aby znaleźć się w tym miejscu jest naruszeniem przepisów.</p>",
         "law": "art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2 (szerokość drogi dla pieszych pozostawionej dla pieszych jest taka, że nie utrudni im ruchu i jest nie mniejsza niż 1,5m), zatrzymanie lub postój na drodze dla pieszych przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru.",
@@ -137,7 +137,7 @@
     "18": {
         "title": "Jazda po chodniku",
         "short": "Pojazd jechał wzdłuż chodnika lub po przejściu dla pieszych",
-        "formal": "Pojazd jechał wzdłuż chodnika/przejścia dla pieszych (art. 26. 3.3 prd)",
+        "formal": "Pojazd jechał wzdłuż chodnika/przejścia dla pieszych (art. 26. 3.3 prd).",
         "informal": "Jazda po chodniku",
         "desc": "<p>Jazda wzdłuż chodnika lub przejścia dla pieszych jest zabroniona. Nie można z tego powodu np. parkować w drugiej linii dojeżdżając do celu wzdłuż chodnika.</p>",
         "law": "art. 26. 3.3. Kierującemu pojazdem zabrania się: jazdy wzdłuż po drodze dla pieszych lub przejściu dla pieszych.",
@@ -152,7 +152,7 @@
     "2": {
         "title": "Przystanek",
         "short": "Pojazd stał w obrębie zatoki przystankowej (jeśli jest) lub mniej niż 15 metrów od słupka „przystanek”",
-        "formal": "Pojazd był zaparkowany w odległości mniejszej niż 15 m od przystanku (art. 49. 1.9 prd)",
+        "formal": "Pojazd był zaparkowany w odległości mniejszej niż 15 m od przystanku (art. 49. 1.9 prd).",
         "informal": "Postój na przystanku",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu na przystanku (zarówno na jezdni jak i na chodniku) jest niedozwolone.</p>",
         "law": "art. 49. 1.9. Zabrania się zatrzymania pojazdu w odległości mniejszej niż 15 m od słupka lub tablicy oznaczającej przystanek, a na przystanku z zatoką - na całej jej długości.",
@@ -167,7 +167,7 @@
     "23": {
         "title": "Przystanek bezczelny",
         "short": "Pojazd stał w sposób utrudniający pieszym swobodny dostęp do pojazdu komunikacji publicznej",
-        "formal": "Pojazd był zaparkowany w sposób utrudniający pieszym swobodny dostęp do pojazdu komunikacji publicznej (art. 26. 6 prd)",
+        "formal": "Pojazd był zaparkowany w sposób utrudniający pieszym swobodny dostęp do pojazdu komunikacji publicznej (art. 26. 6 prd).",
         "informal": "Utrudnianie dostępu do pojazdu komunikacji publicznej",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu na przystanku lub między przystankiem a tramwajem w taki sposób, że utrudnia to pieszym wsiadanie i wysiadanie z pojazdu komunikacji zbiorowej jest niedozwolone.</p>",
         "law": "art. 26. 6. [...] Jeżeli przystanek nie jest wyposażony w wysepkę dla pasażerów, a na przystanek wjeżdża tramwaj lub stoi na nim, kierujący jest obowiązany zatrzymać pojazd w takim miejscu i na taki czas, aby zapewnić pieszemu swobodne dojście do tramwaju lub na drogę dla pieszych lub drogę dla pieszych i rowerów.",
@@ -182,7 +182,7 @@
     "21": {
         "title": "Droga dla rowerów",
         "short": "Pojazd stał na drodze na rowerów",
-        "formal": "Pojazd był zaparkowany na części drogi przeznaczonej dla rowerów (art. 49. 1.11 prd)",
+        "formal": "Pojazd był zaparkowany na części drogi przeznaczonej dla rowerów (art. 49. 1.11 prd).",
         "informal": "Postój na DDR",
         "desc": "<p>Przepisy są tutaj jednoznaczne. Na drodze dla rowerów nie wolno ani parkować, ani nawet się zatrzymywać 'na chwilę'.</p>",
         "law": "art. 49. 1.11. Zabrania się zatrzymania pojazdu na na drodze dla pieszych i rowerów, drodze dla rowerów, pasie ruchu dla rowerów oraz w śluzie dla rowerów, z wyjątkiem roweru.",
@@ -197,7 +197,7 @@
     "11": {
         "title": "Ciężkie auto",
         "short": "Pojazd o dopuszczalnej masie całkowitej większej niż 2,5 tony stał na chodniku",
-        "formal": "Pojazd o dopuszczalnej masie całkowitej przekraczającej 2,5 tony był zaparkowany na chodniku (art. 47. 1 prd)",
+        "formal": "Pojazd o dopuszczalnej masie całkowitej przekraczającej 2,5 tony był zaparkowany na chodniku (art. 47. 1 prd).",
         "informal": "Przekroczenie DMC na chodniku",
         "desc": "<p>Na chodniku (wszystko jedno, czy są na nim wyznaczone miejsca parkingowe znakami poziomymi lub pionowymi, czy nie) mogą parkować wyłącznie pojazdy o dopuszczalnej masie całkowitej nie przekraczającej 2,5 tony. To, że pojazd można prowadzić posiadając prawo jazdy kategorii B wcale nie oznacza, że można go postawić na chodniku. Ujmując to dosadniej, kierowcy takich samochodów nie mogą choćby jednym kołem wjechać na chodnik.</p> <p>Jakich samochodów to dotyczy? Automatycznie wszystkich ciężarówek, samochodów dostawczych itp. Ale także zaskakująco dużej ilości samochodów osobowych, w szczególności większych SUV.</p>",
         "law": "art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t; art. 47. 2. Dopuszcza się, przy zachowaniu warunków określonych w ust. 1 pkt 2, zatrzymanie lub postój na drodze dla pieszych przy krawędzi jezdni całego samochodu osobowego, motocykla, motoroweru lub roweru. Inny pojazd o dopuszczalnej masie całkowitej nie przekraczającej 2,5 t może być w całości umieszczony na drodze dla pieszych tylko w miejscu wyznaczonym odpowiednimi znakami drogowymi.",
@@ -212,7 +212,7 @@
     "13": {
         "title": "Niepełnosprawni",
         "short": "Pojazd bez odpowiedni uprawnień stał na kopercie dla niepełnosprawnych",
-        "formal": "Pojazd bez odpowiednich uprawnień był zaparkowany na miejscu dla niepełnosprawnych (art. 8. 1 prd)",
+        "formal": "Pojazd bez odpowiednich uprawnień był zaparkowany na miejscu dla niepełnosprawnych (art. 8. 1 prd).",
         "informal": "Postój na miejscu dla niepełnosprawnych",
         "desc": "<p>Parkowanie na miejscu dla niepełnosprawnych bez aktualnej karty (<a href=\"/przepisy.html#niepelnosprawni\" data-ajax=\"false\">zobacz aktualny wzór</a>) to mandat o wysokości 500 zł. W przypadku \"podszywania\" się pod osobę niepełnosprawną (np. przez skorzystanie z podrobionej karty), mandat może wynieść do 800 zł.</p>",
         "law": "art. 8. 1. «Jest to obszerny artykuł opisujący jakie uprawnienia ma \"Osoba niepełnosprawna legitymująca się kartą parkingową kierująca pojazdem samochodowym oznaczonym tą kartą\". Niestety trudno go zacytować w całości»",
@@ -242,7 +242,7 @@
     "22": {
         "title": "Wysepka rozdzielająca jezdnie",
         "short": "Pojazd stał w odległości mniejszej niż 15 m od wysepki rozdzielającej jezdnie",
-        "formal": "Pojazd był zaparkowany w odległości mniejszej niż 15 m od wysepki (art. 49. 1.10 prd)",
+        "formal": "Pojazd był zaparkowany w odległości mniejszej niż 15 m od wysepki (art. 49. 1.10 prd).",
         "informal": "Postój przed wysepką rozdzielającą jezdnie",
         "desc": "<p>Parkowanie/zatrzymywanie pojazdu w odległości mniejszej niż 15 metrów od wysepki rozdzielającej jezdnie jest niedozwolone. Dotyczy to sytuacji, w której jezdnia na wysokości wysepki ma jeden pas ruchu.</p>",
         "law": "art. 49. 1.10. Zabrania się zatrzymania pojazdu w odległości mniejszej niż 15 m od punktów krańcowych wysepki, jeżeli jezdnia z prawej jej strony ma tylko jeden pas ruchu.",
@@ -257,7 +257,7 @@
     "19": {
         "title": "Korzystanie niezgodnie z przeznaczeniem",
         "short": "Pojazd np. stał na sugerowanym przejściu dla pieszych",
-        "formal": "Kierowca wykorzystał z części drogi w sposób niezgodny z przeznaczeniem (art. 45. 1.4 prd)",
+        "formal": "Kierowca wykorzystał z części drogi w sposób niezgodny z przeznaczeniem (art. 45. 1.4 prd).",
         "informal": "Korzystanie z części drogi niezgodnie z przeznaczeniem",
         "desc": "<p>Jest to trochę zapomniany przepis (nie występuje np. w taryfikatorze). A przecież idealnie pasuje do parkowania na przydrożnym zieleńcu albo sugerowanym przejściu dla pieszych.</p>",
         "law": "art. 45. 1.4. Zabrania się wykorzystywania drogi lub poszczególnych jej części w sposób niezgodny z przeznaczeniem.",
@@ -325,7 +325,7 @@
     },
     "9": {
         "title": null,
-        "formal": "Pojazd był zaparkowany w sposób utrudniający ruch użytkownikom rowerów (art. 49. 1.11 prd)",
+        "formal": "Pojazd był zaparkowany w sposób utrudniający ruch użytkownikom rowerów (art. 49. 1.11 prd).",
         "informal": "Utrudnianie ruchu rowerów",
         "desc": null,
         "law": null,
@@ -338,7 +338,7 @@
     },
     "20": {
         "title": null,
-        "formal": "Pojazd był zaparkowany na drodze dla rowerów (art. 49. 1.11 prd)",
+        "formal": "Pojazd był zaparkowany na drodze dla rowerów (art. 49. 1.11 prd).",
         "informal": "Postój na DDR",
         "desc": null,
         "law": null,
@@ -351,7 +351,7 @@
     },
     "15": {
         "title": "",
-        "formal": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad minutę (art. 46. 4 prd)",
+        "formal": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad minutę (art. 46. 4 prd).",
         "informal": "Postój na zakazie",
         "desc": "",
         "law": "",
