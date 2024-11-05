@@ -28,7 +28,7 @@
 \end{center}
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
-    świadkiem pozostawienia pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
+    świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
     {{ app.getLatexSafeAddress|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Kod QR oraz numer {{ app.number }} prowadzą do wersji online tego zgłoszenia.
     {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
     {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronicowe #}
