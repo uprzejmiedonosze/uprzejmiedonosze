@@ -1,80 +1,40 @@
 .how .howtos {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 5px;
-  padding: 0;
-
   .howto {
+    margin-top: 3em;
     h3 {
       font-weight: 600;
       border: 0;
     }
 
-    &.active .card .content {
-      max-height: none !important;
-      mask-image: none !important;
-      -webkit-mask-image: none !important;
-    }
-
-    &.active .card,
-    &:hover .card {
-      box-shadow: 0 0 20px 0 rgba(0, 0, 0, .25);
-      img {
-        filter: none;
-      }
-    }
-
     .card {
-      border-radius: 0.3125em;
-      box-shadow: 0 0 25px 0 rgba(0, 0, 0, .1);
       box-sizing: border-box;
-      cursor: pointer;
       margin-bottom: 1em;
-      transition: all .30s ease-in-out;
 
       figure {
         position: relative;
-        height: 200px;
+        max-height: 300px;
         margin: 0;
         overflow: hidden;
-        border-radius: 0.3125em 0.3125em 0 0;
 
         img {
           object-fit: cover;
-          transition: all .3s ease-in-out;
           width: 100%;
-          filter: brightness(0.5);
+          margin-top: -15%;
         }
       }
 
       .content {
-        mask-image: linear-gradient(to bottom, black 5%, transparent 90%);
-        -webkit-mask-image: linear-gradient(to bottom, black 5%, transparent 90%);
-        max-height: calc(1em * 4 + 20px);
-        overflow: hidden;
-        padding: 1em;
-        transition: all 0.25s ease-out;
-        will-change: max-height;
+        padding-top: 1em;
 
         & p:first-child {
           margin-top: 0;
         }
 
         em {
-          font-weight: 500;
+          font-weight: 600;
           font-style: normal;
         }
       }
-    }
-  }
-
-  @media (min-width: $width-break) {
-    div.howto {
-      flex: 0 0 calc((100% - 4 * 5px) / 2);
-      width: calc((100% - 4 * 5px) / 2);
     }
   }
 }

@@ -18,35 +18,49 @@
 <h2>{{ shortTitle }}</h2>
 
 {% macro link(target, name) %}
-<a href="#{{ target }}" style="font-weight: 300!important;" onclick="window._activateHowTo('{{ target }}')">#{{ name }}</a>
+<a href="#{{ target }}" style="font-weight: 300!important;" onclick="window._scrollToHowTo('#{{ target }}')">{{ name }}</a>
 {% endmacro link %}
+
+<h3 class="howto">Dostępne metody</h3>
+<ul>
+  <li>{{ _self.link('email', 'E-mailem lub przez Uprzejmie Donoszę') }} — stosuj w pojedynczych przypadkach.</li>
+  <li>{{ _self.link('telefon', 'Telefonicznie (986)') }} — używaj, kiedy walczysz z całymi nielegalnymi parkingami.</li>
+  <li>{{ _self.link('kmz', 'Krajowa Mapa Zagrożeń') }} — patoparkingi lub powtarzające się nielegalne parkowanie w określonych dniach/godzinach.</li>
+  <li>{{ _self.link('policja', 'Stop Agresji Drogowej') }} — kiedy masz film z jeżdżenia po chodniku lub przejściu dla pieszych.</li>
+  <li>{{ _self.link('slupki', 'Składając wniosek o słupki') }} — ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</li>
+  <li>{{ _self.link('naklejki', 'Mazak') }} — gdy zawiodły inne środki, na recydywę i „obcokrajowców”.</li>
+</ul>
 
 <div class="howtos">
   <div class="howto" id="email">
-    <h3 class="title">Emailem/przez Uprzejmie Donoszę</h3>
+    <h3 class="title">Emailem lub przez Uprzejmie Donoszę</h3>
     <div class="card">
       <figure>
-        <img src="/img/how-ud.png?width=395&as=jpg&quality=90">
+        <img src="/img/how-ud.png?width=800&as=jpg&quality=90">
       </figure>
       <div class="content">
         <p>
-          <em>Stosuj</em> w miejscach, które często odwiedzasz, na recydywistów parkowania
-          i kierowców, którzy mogą w każdej chwili odjechać.
-        </p>
-        <p>W tym właśnie wyręcza Cię Uprzejmie Donoszę. Wystarczą
-          dwa zdjęcia i minuta pracy.
+          <em>Kiedy stosować:</em> reaguj na konkretne sytuacje, zwłaszcza w miejscach, które często odwiedzasz.
+          Rozwiązanie ma szanse się sprawdzić w przypadku recydywistów patoparkowania i kierowców. Stosuj
+          także w przypadkach, gdy kierowca może w każdej chwili odjechać.
         </p>
         <p>
-          <em>Anonimowość:</em> sprawca wykroczenia może poznać jedynie
-          twoje imię i nazwisko. Twój adres zamieszkania jest chroniony.
+          Z Uprzejmie Donoszę do wysłania poprawnego zgłoszenia, wystarczą dwa zdjęcia i minuta pracy.
         </p>
-        <p><em>Wezwania na przesłuchanie:</em> możesz zostać wezwany przez SM
+        <p>
+          <em>Anonimowość:</em> sprawca wykroczenia ma prawo poznać jedynie twoje imię i nazwisko. Twój adres zamieszkania jest chroniony.
+        </p>
+        <p>
+          <em>Wezwania na przesłuchanie:</em> możesz zostać wezwany przez SM
           lub policję na przesłuchanie w charakterze świadka. To nic groźnego.
-          Sprawdź swoją straż miejską na stronie <a href="/przesluchanie.html">opisującą doświadczenia z SM</a>.
+          Sprawdź swoją straż miejską na stronie
+          <a href="/przesluchanie.html">opisującą doświadczenia z SM</a>.
         </p>
-        <p><em>Skuteczność:</em> W miejscach z dużą rotacją „losowych” kierowców
-          {{ _self.link('telefon', 'dzwoń') }} lub wnioskuj o {{ _self.link('slupki', 'słupki') }}.
-          {{ _self.link('telefon', 'dzwoń') }} także, gdy pojazd jest na zagranicznych numerach
+        <p><em>Skuteczność:</em> Zależy od straży miejskiej. Ze swojej
+          strony staramy się monitorować działania SM oraz rozwiązywać
+          bieżące problemy. W miejscach z dużą rotacją „losowych” kierowców
+          {{ _self.link('telefon', '#dzwoń') }} lub wnioskuj o {{ _self.link('slupki', '#słupki') }}.
+          {{ _self.link('telefon', '#dzwoń') }} także, gdy pojazd jest na zagranicznych numerach
           rejestracyjnych.
         </p>
         {% if general.isLoggedIn %}
@@ -62,23 +76,54 @@
     <h3 class="title">Telefonicznie</h3>
     <div class="card">
       <figure>
-        <img src="/img/how-tel.png?width=395&as=jpg&quality=90">
+        <img src="/img/how-tel.png?width=800&as=jpg&quality=90">
       </figure>
       <div class="content">
         <p>
-          <em>Stosuj</em> na całych patoparkingach, w przypadku pojazdów na zagranicznych
-          numerach rejestracyjnych, gdy wiadomo, że auto jeszcze trochę postoi.
+          <em>Kiedy stosować:</em> na całych patoparkingach, w przypadku pojazdów na zagranicznych
+          numerach rejestracyjnych lub gdy wiadomo, że auto jeszcze trochę postoi.
         </p>
-        <p>Wykonując połączenie jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }}. Także anonimowo
-          możesz sprawdzić co w praktyce <a href="/dostep-do-informacji-publicznej.html">straż
-          miejska zrobiła na miejscu</a>.
+        <p>
+          <em>Anonimowość:</em> Wykonując połączenie jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }}.
+          Także anonimowo możesz sprawdzić co w praktyce
+          <a href="/dostep-do-informacji-publicznej.html">straż miejska zrobiła na miejscu</a>.
         </p>
-        <p><em>Skuteczność:</em> w miejscach z dużą rotacją „losowych” kierowców (np. turystów)
-          jedynym narzędziem mogą okazać {{ _self.link('slupki', 'słupki') }}. Nie masz także
-          żadnych gwarancji czasu reakcji patrolu SM. To może zarówno 15 minut jak i 15 godzin.
+        <p>
+          <em>Skuteczność:</em> w miejscach z dużą rotacją „losowych” kierowców (np. turystów)
+          jedynym narzędziem mogą okazać {{ _self.link('slupki', '#słupki') }}. Nie masz także
+          żadnych gwarancji czasu reakcji patrolu SM. To może być zarówno 15 minut jak i 15 godzin.
           Koniecznie <a href="/dostep-do-informacji-publicznej.html">sprawdzaj efekty pracy SM</a>!
         </p>
         <a href="tel:986" rel="external" class="cta">Zadzwoń pod 986</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="howto" id="kmz">
+    <h3 class="title">Na Krajową Mapę Zagrożeń</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-kmz.png?width=800&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Kiedy stosować:</em> jako uzupełnienie dla pozostałych działań. Zaznaczaj
+          stałe patoparkingi, oraz miejsca, które są rozjeżdżane w określonych dniach
+          lub godzinach (ale powtarzalnie).
+        </p>
+        <p>
+          Pamiętaj, że możesz dodać tylko jedno zagrożenie dziennie. System wspiera dodawanie
+          zdjęć (do łącznej wagi 5MB) więc możesz dokumentować wykroczenia.
+        </p>
+        <p>
+          <em>Anonimowość:</em> nie licząc adresu IP, jesteś całkowicie {{ config.sex.anonimowa ?? 'anonimowa/y' }}.
+        </p>
+        <p><em>Skuteczność:</em> całkowicie losowa. Czasem jeden punkt na tej mapie potrafi
+          zdziałać cuda. Innym razem zmasowana akcja oznaczania problemu nic nie przynosi.
+          Pamiętaj sprawdzać efekty i nie wahaj się ponownie zgłaszać problemu, zwłaszcza
+          kiedy masz zdjęcia i jesteś pewny/a wykroczenia.
+        </p>
+        <a href="https://mapy.geoportal.gov.pl/iMapLite/KMZBPublic.html" target="_blank" rel="external" class="cta">Zaznacz swój pierwszy punkt na KMZ</a>
       </div>
     </div>
   </div>
@@ -87,11 +132,11 @@
     <h3 class="title">Na Stop Agresji Drogowej</h3>
     <div class="card">
       <figure>
-        <img src="/img/how-sa.png?width=395&as=jpg&quality=90">
+        <img src="/img/how-sa.png?width=800&as=jpg&quality=90">
       </figure>
       <div class="content">
         <p>
-          <em>Stosuj</em> zawsze, kiedy masz film dokumentujący jazdę po chodniku
+          <em>Kiedy stosować:</em> zawsze, kiedy masz film dokumentujący jazdę po chodniku
           lub przejściu dla pieszych. Wysyłaj w ten sposób wszelkie zarejestrowane
           przejawy agresji kierowców wobec pieszych lub rowerzystów.
         </p>
@@ -108,38 +153,14 @@
           <em>Anonimowość:</em> zgłaszając na Stop Agresji musisz podać swoje dane,
           a sprawca wykroczenia może poznać twoje imię i nazwisko.
         </p>
-        <p><em>Wezwania na przesłuchanie:</em> możesz zostać wezwany przez policję na
+        <p>
+          <em>Wezwania na przesłuchanie:</em> możesz zostać wezwany przez policję na
           przesłuchanie w charakterze świadka.
         </p>
-        <p><em>Skuteczność:</em> niestety, jeśli pojazd jest na zagranicznych numerach
+        <p>
+          <em>Skuteczność:</em> niestety, jeśli pojazd jest na zagranicznych numerach
           rejestracyjnych to szanse na to, że policja podejmie działanie są niewielkie.
         </p>
-      </div>
-    </div>
-  </div>
-
-  <div class="howto" id="kmz">
-    <h3 class="title">Na Krajową Mapę Zagrożeń</h3>
-    <div class="card">
-      <figure>
-        <img src="/img/how-kmz.png?width=395&as=jpg&quality=90">
-      </figure>
-      <div class="content">
-        <p>
-          <em>Stosuj</em> jako uzupełnienie dla pozostałych działań. Zaznaczaj
-          stałe patoparkingi, oraz miejsca, które są rozjeżdżane w określonych dniach
-          lub godzinach (ale powtarzalnie).
-        </p>
-        <p>
-          Pamiętaj, że możesz dodać tylko jedno zagrożenie dziennie!
-        </p>
-        <p>
-          <em>Anonimowość:</em> nie licząc adresu IP, jesteś całkowicie {{ config.sex.anonimowa ?? 'anonimowa/y' }}.
-        </p>
-        <p><em>Skuteczność:</em> całkowicie losowa. Czasem jeden punkt na tej mapie potrafi
-          zdziałać cuda. Innym razem zmasowana akcja oznaczania problemu nic nie przynosi.
-        </p>
-        <a href="https://mapy.geoportal.gov.pl/iMapLite/KMZBPublic.html" target="_blank" rel="external" class="cta">Zaznacz swój pierwszy punkt na KMZ</a>
       </div>
     </div>
   </div>
@@ -148,11 +169,11 @@
     <h3 class="title">Składając wniosek o słupki</h3>
     <div class="card">
       <figure>
-        <img src="/img/how-stick.png?width=395&as=jpg&quality=90">
+        <img src="/img/how-stick.png?width=800&as=jpg&quality=90">
       </figure>
       <div class="content">
         <p>
-          <em>Stosuj</em> gdy zawiodły inne środki. Nikt nie lubi słupków, ale często
+          <em>Kiedy stosować:</em> gdy zawiodły inne środki. Nikt nie lubi słupków, ale często
           to jedyne skuteczne narzędzie.
         </p>
         <p>
@@ -168,7 +189,7 @@
             być skuteczny, i po 2-3 miesiącach miejsce może zostać zabezpieczone.
         </p>
         <p>
-          <em>Jeśli jest to teren miasta</em>, to musisz napisać swój email 
+          Jeśli jest to teren miasta, to musisz napisać swój email 
           z wnioskiem o słupki do urzędu miasta albo gminy. Pismo kierujesz do prezydenta/wójta –
           urząd skieruje twój wniosek na odpowiednie biurko.
         </p>
@@ -188,11 +209,11 @@
     <h3 class="title">Naklejki/mazaki</h3>
     <div class="card">
       <figure>
-        <img src="/img/mazak.jpg?width=500">
+        <img src="/img/mazak.jpg?width=800">
       </figure>
       <div class="content">
         <p>
-          <em>Stosuj</em> gdy zawiodły inne środki, na recydywę i „obcokrajowców”.
+          <em>Kiedy stosować:</em> gdy zawiodły inne środki, na recydywę i „obcokrajowców”.
         </p>
         <p>
           Mazak kredowy pozwala w kontekstowy sposób wyjaśnić kierowcy to, jaki problem
