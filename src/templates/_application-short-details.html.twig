@@ -28,6 +28,9 @@
         {% endif %}
         Zgłoszenie <tt>{{ app.number }}</tt>
     </li>
+    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
+
+    <li class="address">{{ app.address.address }}</li>
     {% if recydywaCnt > 1 %}
     <li class="no-icon">
         <span class="recydywa-cnt">
@@ -43,10 +46,6 @@
         </a>
     </li>
     {% endif %}
-
-    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
-
-    <li class="address">{{ app.address.address }}</li>
     {% if sendable %}
         <li class="send">
             {% if app.automatedSM %}
@@ -69,7 +68,7 @@
                 <a href="/nowe-zgloszenie.html?edit={{ app.id }}" data-ajax="false">edytuj</a>
             {% endif %}
         </li>
-    {% endif %}    
+    {% endif %}
 
     <li class="description"><b>TREŚĆ ZGŁOSZENIA</b><br>
         {{ app.getCategory.formal }} {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
