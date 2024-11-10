@@ -4,6 +4,7 @@ $(function () {
 
 function scrollTo(hash) {
   const $hash = $(hash)
+  window.location.hash = hash
   const scrollTop = (($hash.offset() ?? {}).top ?? 0) - 60
   if (scrollTop > 0)
     $("html, body").animate({scrollTop})
