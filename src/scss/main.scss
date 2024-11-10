@@ -1,20 +1,21 @@
-.mainPage {
-}
-.patronite-button {
+@use "components";
+
+.patronite.button {
+    @extend %button;
+    align-items: center;
     background-color: #f23e17!important;
+    box-sizing: border-box;
     color: #fff!important;
+    display: flex;
     font-size: 18px;
     font-weight: 400;
-    min-height: 40px;
-    width: 100%;
-    letter-spacing: 0.3px;
-    user-select: none;
-    text-shadow: none !important;
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    box-sizing: border-box;
+    letter-spacing: 0.3px;
+    min-height: 40px;
     padding: 1em;
+    text-shadow: none !important;
+    user-select: none;
+    width: 100%;
 
     &::before {
         content: '';

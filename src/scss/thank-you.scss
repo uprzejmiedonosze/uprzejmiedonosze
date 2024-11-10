@@ -1,7 +1,30 @@
+@use "components";
+
 .afterSend {
   display: none;
 
   &.error {
     color: red;
   }
+}
+
+.patronite.button.small {
+  width: fit-content;
+  margin: 1em;
+  font-size: 16px;
+  padding: 0.5em 1em;
+}
+
+.suppi.button {
+  @extend %button;
+  background-color: #6457ff;
+  width: fit-content;
+  margin: 1em;
+}
+
+.map.button {
+  @extend %button;
+  background-color: #20155e;
+  width: fit-content;
+  margin: 1em;
 }

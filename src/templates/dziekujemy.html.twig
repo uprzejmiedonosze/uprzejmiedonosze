@@ -53,27 +53,40 @@ Z poważaniem
     </p>
 {% endif %}
 
-{% if ( not isPatron ) and ( random(3) == 1 ) %}
-{% if random(2) == 1 %}
-<h4>Podobało Ci się?</h4>
-{% else %}
-<h4>Wygodniej niż telefon do SM?</h4>
-{% endif %}
+{% if ( not isPatron ) and ( random(3) == 2 ) %}
+{% set dice = random('ABC') %}
+{% if dice == 'A' %}
 
-Pomóż mi rozwijać serwis i walczyć w sejmie o 
-    <a href="https://agendaparkingowa.pl/"
-        target="_blank"
-        rel="external"
-        data-ajax="false">zmianę przepisów</a>.
-Możesz zostać 
-    <a href="/patronite.html"
-        data-ajax="false">patronem</a>
-lub wesprzeć mnie 
+    <h4>Nie lubisz zgłaszać?</h4>
+    Zapoznaj się z Miejską Agendą Parkingową i dowiedz się jak niewielkie zmiany
+    w przepisach mogą sprawić, że Uprzejmie Donoszę nie będzie potrzebne.
+    
+        <a href="https://agendaparkingowa.pl/"
+            target="_blank" rel="external"
+            class="map button"
+            data-ajax="false">Miejska Agenda Parkingowa</a>.
+
+{% elseif dice == 'B' %}
+
+    <h4>Podobało Ci się?</h4>
+
+    Dołącz do {{ config.stats.patrons }} Patronek i Patronów!
+
+    <a href="/patronite.html" data-ajax="false"
+        class="patronite button small">
+        Patronite
+    </a>
+
+{% elseif dice == 'C' %}
+    <h4>Wygodniej niż telefon do SM?</h4>
+    Możesz wspomóc Uprzejmie Donoszę jednorazową wpłatą
+    niewielkiej kwoty na Suppi.pl (bez prowizji):
+    
     <a href="https://suppi.pl/uprzejmiedonosze"
-        target="_blank"
-        rel="external"
-        data-ajax="false">jednorazową wpłatą</a> niewielkiej kwoty.
-</p>
+        target="_blank" rel="external" data-ajax="false"
+        class="suppi button">Suppi</a>
+
+{% endif %}
 {% endif %}
 
 {% if app.automatedSM %}

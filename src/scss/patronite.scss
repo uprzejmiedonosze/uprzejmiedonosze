@@ -12,45 +12,17 @@
         height: 80px;
     }
 
-
-    .patronite-button {
-        position: fixed;
-        bottom: 85px;
-        width: 400px;
-        z-index: 99999;
+    .patronite.button.floating {
+        bottom: 94px;
         left: 50%;
         margin-left: -200px;
-
-        background-color: #f23e17 !important;
-        color: #fff !important;
-        font-size: 18px;
-        font-weight: 400;
-        letter-spacing: 0.3px;
-        min-height: 40px;
         min-width: 144px;
-        user-select: none;
-        text-shadow: none !important;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
-        padding: 1em;
+        position: fixed;
+        width: 400px;
+        z-index: 99999;
 
         @media (max-width: variables.$width-break) {
             bottom: 5px;
-        }
-
-
-        &::before {
-            content: '';
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-image: url(https://cdn.patronite.pl/webapp/img/widget/sygnet-white.svg);
-            display: inline-flex;
-            margin-right: 12px;
-            width: 26px;
-            height: 36px;
         }
     }
 }
