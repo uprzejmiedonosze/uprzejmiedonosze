@@ -50,9 +50,9 @@
     <fieldset data-role="controlgroup">
         <legend for="shareRecydywa">Chcę pozwalać na prezentowanie moich zdjęć w galerii recydywistów parkowania</legend>
         <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>
-        <label for="shareRecydywa-Y">tak, chcę udostępniać <u>pierwsze</u> zdjęcie każdego zgłoszenia</label>
+        <label for="shareRecydywa-Y">tak (domyślnie), chcę udostępniać <u>pierwsze</u> zdjęcie każdego zgłoszenia</label>
         <input type="radio" name="shareRecydywa" id="shareRecydywa-N" value="N" {% if not user.shareRecydywa %}checked="checked"{% endif %}>
-        <label for="shareRecydywa-N">nie (domyślnie)</label>
+        <label for="shareRecydywa-N">nie</label>
     </fieldset>
 </form>
 

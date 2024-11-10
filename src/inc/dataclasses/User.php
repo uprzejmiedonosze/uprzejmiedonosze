@@ -31,7 +31,7 @@ class User extends \JSONObject{
         $this->data->email = $_SESSION['user_email'] ?? '';
         $this->data->name  = capitalizeName($_SESSION['user_name'] ?? '');
         $this->data->stopAgresji = false;
-        $this->data->shareRecydywa = false;
+        $this->data->shareRecydywa = true;
         $this->appsCount = 0;
     }
 
@@ -102,9 +102,7 @@ class User extends \JSONObject{
      * Returns user number.
      */
     public function getNumber(){
-        if (isset($this->number))
-            return $this->number;
-        return null;
+        return $this->number ?? null;
     }
 
     /**
@@ -223,10 +221,7 @@ class User extends \JSONObject{
     }
 
     public function stopAgresji() {
-        if(isset($this->data->stopAgresji)){
-            return $this->data->stopAgresji;
-        }
-        return false;
+        return $this->data->stopAgresji ?? false;
     }
 
     public function autoSend() {
@@ -234,10 +229,7 @@ class User extends \JSONObject{
     }
 
     public function shareRecydywa() {
-        if(isset($this->data->shareRecydywa)){
-            return $this->data->shareRecydywa;
-        }
-        return false;
+        return $this->data->shareRecydywa ?? true;
     }
 
     /**
