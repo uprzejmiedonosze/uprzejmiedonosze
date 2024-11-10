@@ -1,10 +1,11 @@
-import {Namer} from '@parcel/plugin';
-import path from 'path';
+const plugin = require('@parcel/plugin')
+const Namer = plugin.Namer
+const path = require('path')
 
-export default new Namer({
+module.exports = new Namer({
   name({bundle}) {
     const me = bundle.getMainEntry()
-    if (!me) return null;
+    if (!me) return null
     
     const filename = path.parse(me.filePath)
     let ext = filename.ext
@@ -17,4 +18,4 @@ export default new Namer({
       subdir = imageSubdir[1] + '/'
     return `${subdir}${filename.name}${ext}`
   }
-});
+})

@@ -1,4 +1,4 @@
 {
   "extends": "@parcel/config-default",
-  "namers": ["./tools/parcel-namer.mjs", "..."]
+  "namers": ["./tools/parcel-namer.js", "..."]
 }
