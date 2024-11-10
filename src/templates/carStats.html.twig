@@ -7,20 +7,22 @@
 {% extends partial ? "base-partial.html.twig" : "base.html.twig" %}
 {% block main %}
 
-<h2>
-    <span class="recydywa">{{ recydywa.appsCnt }} recydywa </span> 
-    {% if recydywa.usersCnt > 1 %}od {{ recydywa.usersCnt }} użytkowników {% endif %}
-    {% if recydywa.citiesCnt > 1 %}w {{ recydywa.citiesCnt }} miastach {% endif %}
-    <div>
+<h2 class="recydywa">
+    <span data-recydywacnt="{{ recydywa.appsCnt }}" class="recydywa-appscnt">{{ recydywa.appsCnt }}&nbsp;recydywa</span>
+    {% if recydywa.usersCnt > 1 %}
+        <span class="recydywa-userscnt">{{ recydywa.usersCnt }}&nbsp;zgłaszających</span>
+    {% endif %}
+    {% if recydywa.citiesCnt > 1 %}w {{ recydywa.citiesCnt }}&nbsp;miastach {% endif %}
     <span class="plate-id h2">{{ plateId }}</span>
-    </div>
 </h2>
 
 {% if not allImagesVisible and not userAllowedSharing %}
-<b class="recydywaInfo">
-    Nie widać wszystkich zdjęć? <a data-ajax="false" target="_blank" href="/register.html?update">Udostępnij swoje zdjęcia innym</a>.
-    Pomożesz w ten sposób rozwijać galerię recydywistów.
-</b>
+<div class="shareRecydywaHint">
+    <h3>Chcesz widzieć więcej zdjęć? Udostępnij&nbsp;swoje!</h3>
+    <p>Publikujemy wyłącznie zdjęcia od użytkowników, którzy się na to zgodzili.</p>
+    <p>Przejdź do ustawień i zaznacz zgodę na udostępnianie zdjęć.</p>
+    <a data-ajax="false" target="_blank" href="/register.html?update">Przejdź do ustawień</a>
+</div>
 {% endif %}
 <div class="list">
 {% for app in apps %}
