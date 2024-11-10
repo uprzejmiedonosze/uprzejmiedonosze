@@ -13,12 +13,12 @@ label.section {
 }
 
 label.hint {
-  color: #009C7F;
+  color: $primaryColor;
   clear: both;
 }
 
 label.warning {
-  color: #e9c200;
+  color: $secondaryColor;
   clear: both;
 }
 
@@ -28,8 +28,8 @@ label {
 
 .ui-input-text input,
 .ui-input-search input {
-  border: 1px solid #009C7F;
-  color: #009C7F;
+  border: 1px solid $primaryColor;
+  color: $primaryColor;
   margin-bottom: 1em;
 }
 
@@ -44,7 +44,7 @@ textarea.error {
 
 input.warning,
 textarea.warning {
-  border: 2px solid #e9c200 !important;
+  border: 2px solid $secondaryColor;
 }
 
 div.error img {
@@ -161,7 +161,7 @@ div.ui-block-b>div.ui-radio {
     margin-bottom: 0.5em;
 
     .ui-bar-a {
-      background-color: #e9c200;
+      background-color: $secondaryColor;
     }
   }
 
@@ -373,7 +373,7 @@ div.ui-block-b>div.ui-radio {
 div.loader {
   margin: auto;
   border: 16px solid #f3f3f3;
-  border-top: 16px solid #009C7F;
+  border-top: 16px solid $primaryColor;
   border-radius: 50%;
   width: 50px !important;
   height: 50px;

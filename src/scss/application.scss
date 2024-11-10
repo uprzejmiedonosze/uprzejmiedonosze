@@ -196,7 +196,7 @@ cite {
 b.appSentInfo,
 .forcedPoliceInfo,
 b.recydywaInfo {
-  background-color: #e9c200;
+  background-color: $secondaryColor;
   display: block;
   padding: 1em;
   border-radius: 5px;
@@ -209,7 +209,7 @@ b.recydywaInfo {
 }
 
 b.lightWarning {
-  background-color: #e9c20066;
+  background-color: $secondaryColor;
   padding: 0.1em 0.5em;
   border-radius: 5px;
 }

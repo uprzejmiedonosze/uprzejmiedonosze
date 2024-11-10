@@ -67,7 +67,7 @@ img.one-third {
     html head+body .ui-btn.ui-btn-b:active,
     .ui-header a,
     .ui-btn.try{
-    background-color: #e9c200!important;
+    background-color: $secondaryColor!important;
     box-shadow: none!important;
     border: none;
     color: #000!important;
@@ -75,16 +75,16 @@ img.one-third {
 }
 
 .ui-btn.cta {
-    background-color: #e9c200!important;
+    background-color: $secondaryColor!important;
     text-shadow: none!important;
-    border-color: #e9c200!important;
+    border-color: $secondaryColor!important;
 }
 
 .ui-page-theme-a .ui-header,
 html .ui-bar-a .ui-header,
 html .ui-body-a .ui-header,
 html body .ui-group-theme-a .ui-header {
-    background-color: #009C7F;
+    background-color: $primaryColor;
     color: white;
     text-shadow: none;
     box-shadow: none;
@@ -98,7 +98,7 @@ html body .ui-group-theme-a .ui-header {
 
 p > a, li > a, small > a {
     text-decoration: none;
-    color: #009C7F!important;
+    color: $primaryColor!important;
     font-weight: 400!important;
 }
 
@@ -107,17 +107,17 @@ p > a, li > a, small > a {
 }
 
 #mainMenu li.close a{
-    background-color: #009C7F;
+    background-color: $primaryColor;
     color: #fff!important;
     text-decoration: none!important;
-    border-color: #009C7F;
+    border-color: $primaryColor;
     text-shadow: none;
 }
 .ui-btn-active, #mainMenu a.active {
-    background-color: #009C7F!important;
+    background-color: $primaryColor!important;
     text-shadow: none!important;
     color: white!important;
-    border-color: #009C7F!important;
+    border-color: $primaryColor!important;
     box-shadow: none!important;
 }
 
@@ -134,7 +134,7 @@ p > a, li > a, small > a {
 }
 
 .filter a.active {
-    color: #009C7F!important;
+    color: $primaryColor!important;
 }
 
 h2, h3, h4, h5 {
@@ -148,7 +148,7 @@ h2 {
 
 h3 {
     font-size: 1.3em;
-    border-bottom: 1px solid #009C7F;
+    border-bottom: 1px solid $primaryColor;
     margin: 0.4em 0 0.2em 0;
 }
 
@@ -215,7 +215,7 @@ a[rel~="external"] {
     }
     video {
         max-height: 500px;
-        border: 1px solid #009C7F;
+        border: 1px solid $primaryColor;
         box-sizing: border-box;
     }
 }

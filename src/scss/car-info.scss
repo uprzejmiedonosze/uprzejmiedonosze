@@ -13,7 +13,7 @@
     .card {
 
       &.app-owner::before {
-        background-color: #009C7F;
+        background-color: $primaryColor;
         border-radius: 5px 5px 0 0;
         color: white;
         content: "TWOJE ZGŁOSZENIE";
