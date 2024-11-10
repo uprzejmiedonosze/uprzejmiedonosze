@@ -302,7 +302,7 @@ log-from-last-prod: ## Show list of commit messages from last prod release till 
 
 .PHONY: diff-from-last-prod
 diff-from-last-prod: ## Show list of commit messages from last prod release till now
-	@git diff --histogram --color-words $(call last-tag)
+	@git diff --histogram --color-words $(call last-tag) -- . ':(exclude)package-lock.json'
 
 .PHONY: lint-twig
 lint-twig: src/templates/*.twig
