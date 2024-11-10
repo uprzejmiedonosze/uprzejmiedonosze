@@ -35,9 +35,12 @@ $(document).on("pageshow", function () {
     $(this).addClass("active");
   });
 
-  $('#recydywa').on('click', function() {
-    $(this).hide();
-  })
+
+  const $recydywa = $('#recydywa')
+
+  // close „recydywa” dialong on Esc
+  $(document).on('keyup', e => e.key === "Escape" && $recydywa.hide())
+  $recydywa.on('click', _e => $recydywa.hide())
 
   if ($('#autocomplete-input').val() !== '') {
     $('#autocomplete-input').trigger("keyup");
@@ -64,16 +67,15 @@ $(document).on("pageshow", function () {
 
     $('a.recydywa-seemore').on('click', async function () {
       const plateId = $(this).data('plateid')
-      const $popup = $('#recydywa')
-      const $popupContent = $('#recydywa .popup-content')
-      $popupContent.html('<div class="loader"></div>')
-      $popup.show()
+      const $recydywa = $('#recydywa')
+      const $recydywaContent = $('#recydywa .popup-content')
+      $recydywaContent.html('<div class="loader"></div>')
+      $recydywa.show()
       const api = new Api(`/recydywa-${plateId}-partial.html`)
       const recydywa = await api.getHtml()
-      $popupContent.html(recydywa)
+      $recydywaContent.html(recydywa)
     })
   
-
     $('.app-field-editable')
       .on('focusout', async function() {
         if (this.dataset.initialValue === this.value) {
