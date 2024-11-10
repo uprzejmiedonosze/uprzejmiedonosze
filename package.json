@@ -10,7 +10,7 @@
     "@sentry/tracing": "^7.114.0",
     "exif-js": "^2.3.0",
     "exifreader": "^4.25.0",
-    "firebase": "^11.0.1",
+    "firebase": "^10.14.1",
     "firebaseui": "^6.1.0",
     "heic2any": "^0.0.4",
     "highcharts": "^11.4.8",
