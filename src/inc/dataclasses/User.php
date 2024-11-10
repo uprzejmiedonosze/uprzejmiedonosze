@@ -229,7 +229,7 @@ class User extends \JSONObject{
     }
 
     public function shareRecydywa() {
-        return $this->data->shareRecydywa ?? true;
+        return $this->data->shareRecydywa ?? false;
     }
 
     /**
