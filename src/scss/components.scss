@@ -1,0 +1,25 @@
+%button {
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+    background-color: $primaryColor;
+    border-radius: .3125em;
+    border: none;
+    color: #fff!important;
+    display: block;
+    font-weight: 700;
+    margin: auto;
+    overflow: hidden;
+    padding: .7em 1em;
+    text-align: center;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-shadow: none;
+    white-space: nowrap;
+    max-width: $width-break;
+    z-index: 10;
+}
+
+%inline-button {
+    @extend %button;
+    display: inline-block;
+}
