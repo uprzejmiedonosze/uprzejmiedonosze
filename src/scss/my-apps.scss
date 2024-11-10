@@ -1,3 +1,6 @@
+@use "icons";
+@use "variables";
+
 .my-applications, .car-info {
   ul.status-filter {
     padding-inline-start: 0;
@@ -9,7 +12,7 @@
       display: none;
       text-wrap: nowrap;
       a.active {
-        color: $primaryColor!important;
+        color: variables.$primaryColor!important;
       }
 
       a {
@@ -28,39 +31,39 @@
       }
 
       &.archived .ui-li-count {
-        background-color: $archived;
+        background-color: variables.$archived;
       }
       &.confirmed .ui-li-count {
-        background-color: $confirmed;
+        background-color: variables.$confirmed;
       }
       &.confirmed-fined .ui-li-count {
-        background-color: $confirmed-fined;
+        background-color: variables.$confirmed-fined;
       }
       &.confirmed-ignored .ui-li-count {
-        background-color: $confirmed-ignored;
+        background-color: variables.$confirmed-ignored;
         color: white;
       }
       &.confirmed-instructed .ui-li-count {
-        background-color: $confirmed-instructed;
+        background-color: variables.$confirmed-instructed;
         color: white;
       }
       &.confirmed-sm .ui-li-count {
-        background-color: $confirmed-sm;
+        background-color: variables.$confirmed-sm;
       }
       &.confirmed-waitingE .ui-li-count,
       &.confirmed-waiting .ui-li-count {
-        background-color: $confirmed-waiting;
+        background-color: variables.$confirmed-waiting;
       }
       &.draft .ui-li-count {
-        background-color: $draft;
+        background-color: variables.$draft;
       }
       &.ready .ui-li-count {
-        background-color: $ready;
+        background-color: variables.$ready;
       }
     }
   }
 
-  @media (min-width: $width-break) {
+  @media (min-width: variables.$width-break) {
     ul.status-filter {
       columns: 3 !important;
       -webkit-columns: 3;
@@ -87,12 +90,12 @@
 
     &>li.calendar {
       @extend %list-icon;
-      list-style-image: url($datetime-icon);
+      list-style-image: url(icons.$datetime-icon);
     }
 
     &>li.address {
       @extend %list-icon;
-      list-style-image: url($pin-icon);
+      list-style-image: url(icons.$pin-icon);
     }
 
     &>li.send {
@@ -101,7 +104,7 @@
 
     &>li.description {
       @extend %list-icon;
-      list-style-image: url($description-icon);
+      list-style-image: url(icons.$description-icon);
     }
 
     &>li.witness {
@@ -111,7 +114,7 @@
 
     &>li.info-icon {
       @extend %list-icon;
-      list-style-image: url($info-icon);
+      list-style-image: url(icons.$info-icon);
     }
 
     &>li.external-id {
@@ -154,7 +157,7 @@
     }
 
     &:after {
-      background-image: url($chevron-icon);
+      background-image: url(icons.$chevron-icon);
     }
   }
 
@@ -240,7 +243,7 @@
           overflow: hidden;
           height: 32px;
           font-size: 150%;
-          @media (max-width: $width-break) {
+          @media (max-width: variables.$width-break) {
             font-size: 130%;
             font-weight: 400;
           }
@@ -254,7 +257,7 @@
             @extend %icon;
             transform: rotate(180deg);
             top: 15px;
-            background-image: url($chevron-icon);
+            background-image: url(icons.$chevron-icon);
             transition: transform 0.5s;
           }
         }
@@ -283,21 +286,21 @@
     &.draft .change-status,
     .draft:after,
     .draft::marker {
-      background-color: $draft;
+      background-color: variables.$draft;
     }
 
     &.ready h3 .status-dot::before,
     &.ready .change-status,
     .ready:after,
     .ready::marker {
-      background-color: $ready;
+      background-color: variables.$ready;
     }
 
     &.confirmed h3 .status-dot::before,
     &.confirmed .change-status,
     .confirmed:after,
     .confirmed::marker {
-      background-color: $confirmed;
+      background-color: variables.$confirmed;
     }
 
     .confirmed h3 a {
@@ -312,28 +315,28 @@
     &.confirmed-waitingE .change-status,
     .confirmed-waitingE:after,
     .confirmed-waiting::marker {
-      background-color: $confirmed-waiting;
+      background-color: variables.$confirmed-waiting;
     }
 
     &.confirmed-sm h3 .status-dot::before,
     &.confirmed-sm .change-status,
     .confirmed-sm:after,
     .confirmed-sm::marker {
-      background-color: $confirmed-sm;
+      background-color: variables.$confirmed-sm;
     }
 
     &.confirmed-fined h3 .status-dot::before,
     &.confirmed-fined .change-status,
     .confirmed-fined:after,
     .confirmed-fined::marker {
-      background-color: $confirmed-fined;
+      background-color: variables.$confirmed-fined;
     }
 
     &.confirmed-ignored h3 .status-dot::before,
     &.confirmed-ignored .change-status,
     .confirmed-ignored:after,
     .confirmed-ignored::marker {
-      background-color: $confirmed-ignored;
+      background-color: variables.$confirmed-ignored;
       color: white!important;
     }
 
@@ -341,7 +344,7 @@
     &.confirmed-instructed .change-status,
     .confirmed-instructed:after,
     .confirmed-instructed::marker {
-      background-color: $confirmed-instructed;
+      background-color: variables.$confirmed-instructed;
       color: white!important;
     }
 
@@ -349,7 +352,7 @@
     &.archived .change-status,
     .archived:after,
     .archived::marker {
-      background-color: $archived;
+      background-color: variables.$archived;
     }
   }
 }

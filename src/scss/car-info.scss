@@ -1,8 +1,11 @@
+@use "variables";
+@use "components";
+
 .car-info .list {
   padding: 0;
   columns: 1;
 
-  @media (min-width: $width-break) {
+  @media (min-width: variables.$width-break) {
     columns: 2;
   }
   
@@ -13,7 +16,7 @@
     .card {
 
       &.app-owner::before {
-        background-color: $primaryColor;
+        background-color: variables.$primaryColor;
         border-radius: 5px 5px 0 0;
         color: white;
         content: "TWOJE ZGŁOSZENIE";

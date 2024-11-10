@@ -1,3 +1,5 @@
+@use "variables";
+
 .ui-body-a,
     .ui-page-theme-a .ui-body-inherit,
     html .ui-bar-a .ui-body-inherit,
@@ -67,7 +69,7 @@ img.one-third {
     html head+body .ui-btn.ui-btn-b:active,
     .ui-header a,
     .ui-btn.try{
-    background-color: $secondaryColor!important;
+    background-color: variables.$secondaryColor!important;
     box-shadow: none!important;
     border: none;
     color: #000!important;
@@ -75,16 +77,16 @@ img.one-third {
 }
 
 .ui-btn.cta {
-    background-color: $secondaryColor!important;
+    background-color: variables.$secondaryColor!important;
     text-shadow: none!important;
-    border-color: $secondaryColor!important;
+    border-color: variables.$secondaryColor!important;
 }
 
 .ui-page-theme-a .ui-header,
 html .ui-bar-a .ui-header,
 html .ui-body-a .ui-header,
 html body .ui-group-theme-a .ui-header {
-    background-color: $primaryColor;
+    background-color: variables.$primaryColor;
     color: white;
     text-shadow: none;
     box-shadow: none;
@@ -98,7 +100,7 @@ html body .ui-group-theme-a .ui-header {
 
 p > a, li > a, small > a {
     text-decoration: none;
-    color: $primaryColor!important;
+    color: variables.$primaryColor!important;
     font-weight: 400!important;
 }
 
@@ -107,17 +109,17 @@ p > a, li > a, small > a {
 }
 
 #mainMenu li.close a{
-    background-color: $primaryColor;
+    background-color: variables.$primaryColor;
     color: #fff!important;
     text-decoration: none!important;
-    border-color: $primaryColor;
+    border-color: variables.$primaryColor;
     text-shadow: none;
 }
 .ui-btn-active, #mainMenu a.active {
-    background-color: $primaryColor!important;
+    background-color: variables.$primaryColor!important;
     text-shadow: none!important;
     color: white!important;
-    border-color: $primaryColor!important;
+    border-color: variables.$primaryColor!important;
     box-shadow: none!important;
 }
 
@@ -134,7 +136,7 @@ p > a, li > a, small > a {
 }
 
 .filter a.active {
-    color: $primaryColor!important;
+    color: variables.$primaryColor!important;
 }
 
 h2, h3, h4, h5 {
@@ -148,7 +150,7 @@ h2 {
 
 h3 {
     font-size: 1.3em;
-    border-bottom: 1px solid $primaryColor;
+    border-bottom: 1px solid variables.$primaryColor;
     margin: 0.4em 0 0.2em 0;
 }
 
@@ -184,7 +186,7 @@ a[rel~="external"] {
     display: none;
 }
 
-@media (max-width: $width-break) {
+@media (max-width: variables.$width-break) {
     .hideOnMobile {
         display: none;   
     }
@@ -215,7 +217,7 @@ a[rel~="external"] {
     }
     video {
         max-height: 500px;
-        border: 1px solid $primaryColor;
+        border: 1px solid variables.$primaryColor;
         box-sizing: border-box;
     }
 }
@@ -333,7 +335,7 @@ sup {
     }
   }
 
-  @media (max-width: $width-break) {
+  @media (max-width: variables.$width-break) {
 
     .images-slider {
       text-align: left;

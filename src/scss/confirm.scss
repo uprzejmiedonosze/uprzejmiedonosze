@@ -1,3 +1,5 @@
+@use "variables";
+
 .confirm-application .application,
 .new-application .images {
 
@@ -23,7 +25,7 @@
 
   .plate-box {
     background-color: transparent;
-    border: 5px solid $secondaryColor;
+    border: 5px solid variables.$secondaryColor;
     font-size: 90%;
     left: 5px;
     position: absolute;

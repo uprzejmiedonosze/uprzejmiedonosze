@@ -1,3 +1,5 @@
+@use "variables";
+
 @import url(../../node_modules/mapbox-gl/dist/mapbox-gl.css);
 
 label.section {
@@ -13,12 +15,12 @@ label.section {
 }
 
 label.hint {
-  color: $primaryColor;
+  color: variables.$primaryColor;
   clear: both;
 }
 
 label.warning {
-  color: $secondaryColor;
+  color: variables.$secondaryColor;
   clear: both;
 }
 
@@ -28,8 +30,8 @@ label {
 
 .ui-input-text input,
 .ui-input-search input {
-  border: 1px solid $primaryColor;
-  color: $primaryColor;
+  border: 1px solid variables.$primaryColor;
+  color: variables.$primaryColor;
   margin-bottom: 1em;
 }
 
@@ -44,7 +46,7 @@ textarea.error {
 
 input.warning,
 textarea.warning {
-  border: 2px solid $secondaryColor;
+  border: 2px solid variables.$secondaryColor;
 }
 
 div.error img {
@@ -161,7 +163,7 @@ div.ui-block-b>div.ui-radio {
     margin-bottom: 0.5em;
 
     .ui-bar-a {
-      background-color: $secondaryColor;
+      background-color: variables.$secondaryColor;
     }
   }
 
@@ -373,7 +375,7 @@ div.ui-block-b>div.ui-radio {
 div.loader {
   margin: auto;
   border: 16px solid #f3f3f3;
-  border-top: 16px solid $primaryColor;
+  border-top: 16px solid variables.$primaryColor;
   border-radius: 50%;
   width: 50px !important;
   height: 50px;
@@ -405,7 +407,7 @@ div.loader {
 }
 
 
-@media (max-width: $width-break) {
+@media (max-width: variables.$width-break) {
 
   #category.ui-responsive>.ui-block-a,
   #category.ui-responsive>.ui-block-b,

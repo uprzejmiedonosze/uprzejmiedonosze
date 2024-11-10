@@ -1,3 +1,5 @@
+@use "variables";
+
 div.tumblr_posts {
   margin: 0;
   padding: 0;
@@ -18,7 +20,7 @@ div.galleryItem {
   background: #fff;
 }
 
-@media (min-width: $width-break) {
+@media (min-width: variables.$width-break) {
   div.galleryItem {
     margin: 5px;
     flex: 0 0 calc((100% - 4 * 5px) / 2);

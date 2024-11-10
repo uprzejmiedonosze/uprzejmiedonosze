@@ -1,7 +1,9 @@
+@use "variables";
+
 %button {
     -webkit-background-clip: padding;
     background-clip: padding-box;
-    background-color: $primaryColor;
+    background-color: variables.$primaryColor;
     border-radius: .3125em;
     border: none;
     color: #fff!important;
@@ -15,7 +17,7 @@
     text-overflow: ellipsis;
     text-shadow: none;
     white-space: nowrap;
-    max-width: $width-break;
+    max-width: variables.$width-break;
     z-index: 10;
 }
 
