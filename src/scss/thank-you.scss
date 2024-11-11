@@ -1,4 +1,5 @@
 @use "components";
+@use "variables";
 
 .afterSend {
   display: none;
@@ -24,7 +25,7 @@
 
 .map.button {
   @extend %button;
-  background-color: #20155e;
+  background-color: variables.$mapColor;
   width: fit-content;
   margin: 1em;
 }
