@@ -812,13 +812,18 @@
     "email": "strazmiejska@pruszcz-gdanski.pl"
   },
   "Rotmanka": {
-    "parent": "Pruszcz Gdański"
+    "parent": "gmina Pruszcz Gdański"
   },
   "Borkowo": {
-    "parent": "Pruszcz Gdański"
+    "parent": "gmina Pruszcz Gdański"
   },
   "gmina Pruszcz Gdański": {
-    "parent": "Pruszcz Gdański"
+    "address": [
+      "Straż Gminna Gminy Pruszcz Gdański",
+      "ul. Spacerowa 8",
+      "83-031 Łęgowo"
+    ],
+    "email": "strazgminna@pruszczgdanski.pl"
   },
   "gmina Suchy Dąb": {
     "address": [
