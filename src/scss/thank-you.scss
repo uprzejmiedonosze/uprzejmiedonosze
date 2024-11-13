@@ -17,14 +17,12 @@
 }
 
 .suppi.button {
-  @extend %button;
   background-color: #6457ff;
   width: fit-content;
   margin: 1em;
 }
 
 .map.button {
-  @extend %button;
   background-color: variables.$mapColor;
   width: fit-content;
   margin: 1em;

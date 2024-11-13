@@ -2,7 +2,6 @@
 @use "variables";
 
 .patronite.button {
-    @extend %button;
     align-items: center;
     background-color: variables.$patroniteColor!important;
     box-sizing: border-box;

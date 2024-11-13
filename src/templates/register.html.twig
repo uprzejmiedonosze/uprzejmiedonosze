@@ -1,8 +1,9 @@
 {% set leftButton = 'menu' %}
 
 {% block rightButtonCustom %}
-<a id="register-submit" class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn
-    ui-corner-all ui-btn-inline ui-btn-icon-left ui-icon-action">Potwierdź</a>
+<a id="register-submit" class="ui-btn-right ui-btn ui-btn-inline ui-btn-icon-right">
+    Potwierdź
+</a>
 {% endblock %}
 
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}

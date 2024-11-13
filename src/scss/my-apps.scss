@@ -145,16 +145,9 @@
     }
   }
 
-  .change-status {
-    color: black !important;
-    text-shadow: none;
-    font-weight: 600 !important;
-    border-radius: 20px;
-    margin-left: 0;
-    top: -2px;
-    &:hover {
-      text-shadow: none;
-    }
+  a.change-status {
+    border: 1px solid black;
+    margin-top: -3px!important;
 
     &:after {
       background-image: url(icons.$chevron-icon);

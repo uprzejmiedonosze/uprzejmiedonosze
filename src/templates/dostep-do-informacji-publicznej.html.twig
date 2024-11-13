@@ -46,11 +46,11 @@ Proszę o przekazanie ww. informacji na adres poczty elektronicznej: ' ~ email |
 ' %}
 
 <a id="copyBtn" onclick="copyToClipboard()"
-    class="ui-btn ui-corner-all ui-btn-inline ui-mini">Skopiuj tekst</a>
+    class="button light small">Skopiuj tekst</a>
 
 <a id="sendBtn" data-ajax="false" target="_blank"
                     href="mailto:POPRAW@EMAIL.DO?subject={{ emailSubject|escape('url') }}&body={{ emailBody|striptags|escape('url')|replace({'%0A': '%0D%0A'}) }}"
-                    class="ui-btn ui-corner-all ui-btn-inline ui-mini try">Wyślij twoim domyślnym programem pocztowym</a>
+                    class="button cta small">Wyślij twoim domyślnym programem pocztowym</a>
 
 <dd id="copy" style="white-space: pre-wrap;">
 {{ emailBody | raw }}

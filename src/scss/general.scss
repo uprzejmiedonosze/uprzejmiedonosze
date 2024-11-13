@@ -74,6 +74,20 @@ img.one-third {
     border: none;
     color: #000!important;
     text-shadow: none!important;
+
+    &.ui-btn-inline {
+        border: 0;
+
+        &.ui-btn-left {
+            border-top-right-radius: 6vmin;
+            border-bottom-right-radius: 6vmin;
+        }
+        &.ui-btn-right {
+            border-top-left-radius: 6vmin;
+            border-bottom-left-radius: 6vmin;
+        }
+    }
+    
 }
 
 .ui-btn.cta {
@@ -310,7 +324,7 @@ h3.introHeader {
 
 sup {
     font-size: 70%;
-  }
+}
 
 
 .images-slider {
