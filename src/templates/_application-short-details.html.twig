@@ -31,11 +31,16 @@
 
     <li class="address">{{ app.address.address }}</li>
     {% if recydywaCnt > 1 %}
+    <div class="recydywa"><b>RECYDYWA</b><br>
+        <p data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt"> {{ num(recydywaCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']) }}
+            {% if recydywa.usersCnt > 1 %}<span class="recydywa-userscnt"> {{ recydywa.usersCnt }} zgłaszających</span>{% endif %}
             <a href="#" data-rel="popup" data-inline="true" data-mini="true"
                 data-plateid="{{ app.carInfo.plateId }}"
                 class="button small recydywa-seemore">
                 Zobacz zgłoszenia
             </a>
+        </p>
+    </div>
     {% endif %}
     {% if sendable %}
         <li class="send">

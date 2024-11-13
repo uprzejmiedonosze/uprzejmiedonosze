@@ -40,12 +40,17 @@
     border-radius: 0.2em;
   }
 
-  div#recydywa {
+  div#recydywa { // new app recydywa overlay on image
     z-index: 2;
     display: none;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    .recydywa-appscnt:before {
+      background-image: url("../img/icons/recydywa-apps.svg?2");
+    }
   }
 }
 
@@ -89,6 +94,7 @@
         .recydywa-appscnt:before {
           width: 10px;
           height: 10px;
+          background-image: url("../img/icons/recydywa-apps.svg?2");
         }
         .recydywa-userscnt:before {
           width: 8px;
@@ -98,6 +104,7 @@
     }
     &.new-app-recydywa > .recydywa-cnt {
       padding: 2px 5px;
+      border-radius: 0;
     }
     .recydywa-cnt, .recydywa-seemore {
       background-color: variables.$recydywaBg;
@@ -106,33 +113,30 @@
       text-shadow: none;
       white-space: nowrap;
       border-radius: 24px;
-      display: inline-block;
-
-      .recydywa-userscnt, .recydywa-appscnt {
-        &:before {
-          @extend %icon;
-          margin-right: 2px;
-        }
-      }
-
-      .recydywa-appscnt + .recydywa-userscnt {
-        margin-left: 3px;
-      }
-
-      .recydywa-appscnt:before {
-        background-image: url("../img/icons/recydywa-apps.svg?2");
-      }
-
-      .recydywa-userscnt:before {
-        background-image: url("../img/icons/recydywa-users.svg?2");
-        width: 11px;
+    }
+    .recydywa-userscnt, .recydywa-appscnt {
+      &:before {
+        @extend %icon;
+        margin-right: 2px;
       }
     }
 
+    .recydywa-appscnt + .recydywa-userscnt {
+      margin-left: 3px;
+    }
+
+    .recydywa-appscnt:before {
+      background-image: url("../img/icons/recydywa-apps-white.svg?2");
+    }
+
+    .recydywa-userscnt:before {
+      background-image: url("../img/icons/recydywa-users.svg?2");
+      width: 11px;
+    }
+
     .recydywa-seemore {
-      background-color: #EBEBEB;
-      color: black !important;
-      border-radius: 24px;
+      background-color: variables.$recydywaBg;
+      color: black!important;
     }
   }
 
