@@ -21,7 +21,8 @@ class TwigExtension extends AbstractExtension {
             }),
             new TwigFunction('cast_to_array', function ($object) {
                 return (array)$object;
-            })
+            }),
+            new TwigFunction('num', 'num')
         ];
     }
 

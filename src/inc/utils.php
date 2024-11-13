@@ -92,7 +92,7 @@ function setSentryTag(string $tag, $value): void {
 /**
  * See js: function num(value, numerals)
  */
-function __num(int $value, array $numerals) {
+function num(int $value, array $numerals) {
     $t0 = $value % 10;
     $t1 = $value % 100;
     $vo = [];

@@ -297,7 +297,7 @@ async function sendFile(fileData, id, imageMetadata={}) {
       }
       const recydywa = app.carInfo?.recydywa
       if (recydywa?.appsCnt > 0) {
-        $recydywa.find('.recydywa-appscnt').text(recydywa.appsCnt + ' recydywa')
+        $recydywa.find('.recydywa-appscnt').text(num(recydywa.appsCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']))
         $recydywa.show()
 
         $recydywa.find('.recydywa-userscnt').hide()

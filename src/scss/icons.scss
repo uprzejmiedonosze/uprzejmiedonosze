@@ -21,10 +21,7 @@ $recydywa-icon: "../img/icons/recydywa.svg";
     position: relative;
     background-size: contain;
     top: 1px;
-}
+    background-repeat: no-repeat;
+    background-position: center;
 
-%list-icon {
-    &::marker {
-        font-size: 2rem;
-    }
 }

@@ -15,8 +15,11 @@
         </a>
     </div>
 </div>
-<ul class="application-details-list">
-    <li class="no-icon">
+<div class="application-details-list">
+    <div class="current-status">
+        <b>{{ status.name|upper }}
+        {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}</b>
+
         {% if appActionButtons %}
             <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none" aria-haspopup="true"
                 aria-owns="changeStatus{{ app.id }}" aria-expanded="false"
@@ -25,11 +28,15 @@
             </a>
             <div style="display: none;"><!-- placeholder for pre-rendered --></div>
         {% endif %}
-        Zgłoszenie <tt>{{ app.number }}</tt>
-    </li>
-    <li class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></li>
 
-    <li class="address">{{ app.address.address }}</li>
+        Zgłoszenie&nbsp;<tt>{{ app.number }}</tt>
+    </div>
+
+        
+    <div class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></div>
+
+    <div class="address">{{ app.address.address }}</div>
+
     {% if recydywaCnt > 1 %}
     <div class="recydywa"><b>RECYDYWA</b><br>
         <p data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt"> {{ num(recydywaCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']) }}
@@ -43,7 +50,7 @@
     </div>
     {% endif %}
     {% if sendable %}
-        <li class="send">
+        <div class="send">
             {% if app.automatedSM %}
                 <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
                 class="ui-btn ui-btn-inline ui-corner-all ui-mini cta confirmed-waiting">
@@ -63,40 +70,50 @@
             {% if appActionButtons and app.isEditable %}
                 <a href="/nowe-zgloszenie.html?edit={{ app.id }}" data-ajax="false">edytuj</a>
             {% endif %}
-        </li>
+        </div>
     {% endif %}
 
-    <li class="description"><b>TREŚĆ ZGŁOSZENIA</b><br>
-        {{ app.getCategory.formal }} {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</li>
-    <li class="info-icon"><b>INFORMACJE DODATKOWE</b><br>
-        {% if app.statements is not defined or not app.statements.witness %}
-        <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
-        {% else %}
-        <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.
-        {% endif %}
-        {% if app.wasSent %}
-        <br>
-        Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
-            {{ app.getSentDate("d MMMM YYYY 'o' H:mm")|raw }}
-        {% endif %}
-    </li>
-</ul>
+    <div class="description"><b>TREŚĆ ZGŁOSZENIA</b>
+        <p>
+            {{ app.getCategory.formal }} {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}
+        </p>
+    </div>
+    <div class="info-icon"><b>INFORMACJE DODATKOWE</b>
+        <p>
+            {% if app.statements is not defined or not app.statements.witness %}
+            <b>Nie {{ app.guessUserSex.bylas }}</b> świadkiem parkowania.
+            {% else %}
+            <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.
+            {% endif %}
+            {% if app.wasSent %}
+        </p>
+        <p>
+            Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
+                {{ app.getSentDate("d MMMM YYYY 'o' H:mm")|raw }}
+            {% endif %}
+        </p>
+    </div>
+</div>
 
-<ul class="application-details-list">
+<div class="application-details-list">
     {% if app.wasSent %}
-        <li class="external-id no-icon">NUMER SPRAWY SM/Policji<br>
-        <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="RSOW 0000/24 / WP 000/24" value="{{ app.externalId }}">
-        </li>
+        <div class="external-id no-icon">NUMER SPRAWY SM/Policji
+            <p>
+                <input class="app-field-editable" name="externalId" data-initial-value="{{ app.externalId }}" type="text" placeholder="RSOW 0000/24 / WP 000/24" value="{{ app.externalId }}">
+            </p>
+        </div>
     {% endif %}
-    <li class="private-comment no-icon">UWAGI (widoczne tylko dla Ciebie)<br>
-        <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="">{{ app.privateComment }}</textarea>
-    </li>
+    <div class="private-comment no-icon">UWAGI (widoczne tylko dla Ciebie)
+        <p>
+            <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="">{{ app.privateComment }}</textarea>
+        </p>
+    </div>
+</div>
 
-</ul>
 <div id="changeStatus{{ app.id }}-screen" class="ui-popup-screen ui-overlay-inherit ui-screen-hidden"></div>
 <div id="changeStatus{{ app.id }}-popup" class="ui-popup-container ui-popup-hidden ui-popup-truncate">
     <div data-role="popup" id="changeStatus{{ app.id }}" data-enhanced="true" data-transition="none" class="application-short ui-popup ui-body-inherit ui-overlay-shadow ui-corner-all">
-        <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset">
+        <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset change-status">
             <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
                 Zmień status zgłoszenia z <span class="currentStatus">{{ status.name }}</span> na:
             </li>
@@ -109,7 +126,6 @@
             <li {{ liStyle|raw }}>
                 <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true" class="ui-btn ui-btn-inline ui-btn-icon-left ui-nodisc-icon ui-mini 
                             {{ val.cta ?? '' }}
-                            ui-icon-{{ val.icon }}
                             {{ key }}">{{ val.action }}</a>
             </li>
             {% endif %}
