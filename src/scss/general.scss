@@ -204,13 +204,13 @@ a[rel~="external"] {
 
 @media (orientation: landscape) {
     .video-portrait {
-      display: none;
+        display: none;
     }
     .video {
         margin: 1em;
         box-shadow: 5px 5px 20px gray;
     }
-  }
+}
 @media (orientation: portrait) {
     .video-landscape {
         display: none;
@@ -313,40 +313,39 @@ sup {
   }
 
 
-  .images-slider {
+.images-slider {
     columns: 2;
     height: 280px;
 
     .imageContainer {
-      background: #eee;
-      height: 280px;
-      position: relative;
-      box-sizing: border-box;
+        background: #eee;
+        height: 280px;
+        position: relative;
+        box-sizing: border-box;
 
-      img {
+        img {
         object-fit: cover;
         width: 100%;
         height: 280px;
-      }
+        }
 
-      &+& {
+        &+& {
         margin-left: 16px;
-      }
+        }
     }
-  }
+}
 
-  @media (max-width: variables.$width-break) {
-
+@media (max-width: variables.$width-break) {
     .images-slider {
-      text-align: left;
-      overflow-x: scroll;
-      overflow-y: hidden;
-      display: flex;
-      column-gap: 10px;
-      box-sizing: border-box;
-      height: 280px;
+        text-align: left;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        display: flex;
+        column-gap: 10px;
+        box-sizing: border-box;
+        height: 280px;
 
-      .imageContainer {
+        .imageContainer {
         flex: 0 0 calc(100% - 64px);
         display: flex;
         align-items: center;
@@ -358,21 +357,21 @@ sup {
         height: 280px;
 
         img {
-          position: absolute;
-          object-fit: cover;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
+            position: absolute;
+            object-fit: cover;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
 
-          width: 100%;
-          display: block;
-          min-height: 280px;
-          min-width: 100%;
+            width: 100%;
+            display: block;
+            min-height: 280px;
+            min-width: 100%;
         }
 
         &+& {
-          margin-left: 16px;
+            margin-left: 16px;
         }
-      }
+        }
     }
-  }
+}
