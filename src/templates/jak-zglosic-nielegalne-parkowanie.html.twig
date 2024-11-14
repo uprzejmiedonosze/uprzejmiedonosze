@@ -18,17 +18,17 @@
 <h2>{{ shortTitle }}</h2>
 
 {% macro link(target, name) %}
-<a href="#{{ target }}" style="font-weight: 300!important;" onclick="window._scrollToHowTo('#{{ target }}')">{{ name }}</a>
+<a href="#{{ target }}" onclick="window._scrollToHowTo('#{{ target }}')">{{ name }}</a>
 {% endmacro link %}
 
 <h3 class="howto">Dostępne metody</h3>
 <ul>
-  <li>{{ _self.link('email', 'E-mailem lub przez Uprzejmie Donoszę') }} — stosuj w pojedynczych przypadkach.</li>
-  <li>{{ _self.link('telefon', 'Telefonicznie (986)') }} — używaj, kiedy walczysz z całymi nielegalnymi parkingami.</li>
-  <li>{{ _self.link('kmz', 'Krajowa Mapa Zagrożeń') }} — patoparkingi lub powtarzające się nielegalne parkowanie w określonych dniach/godzinach.</li>
-  <li>{{ _self.link('policja', 'Stop Agresji Drogowej') }} — kiedy masz film z jeżdżenia po chodniku lub przejściu dla pieszych.</li>
-  <li>{{ _self.link('slupki', 'Składając wniosek o słupki') }} — ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</li>
-  <li>{{ _self.link('naklejki', 'Mazak') }} — gdy zawiodły inne środki, na recydywę i „obcokrajowców”.</li>
+  <li>{{ _self.link('email', 'E-mail/Uprzejmie Donoszę') }} – stosuj w pojedynczych przypadkach.</li>
+  <li>{{ _self.link('telefon', 'Telefon') }} – używaj, kiedy walczysz z całymi nielegalnymi parkingami.</li>
+  <li>{{ _self.link('kmz', 'Krajowa Mapa Zagrożeń') }} – patoparkingi lub powtarzające się nielegalne parkowanie.</li>
+  <li>{{ _self.link('policja', 'Stop Agresji Drogowej') }} – kiedy masz film z jeżdżenia po chodniku lub przejściu dla pieszych.</li>
+  <li>{{ _self.link('slupki', 'Wniosek o słupki') }} – ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</li>
+  <li>{{ _self.link('naklejki', 'Naklejki/mazak') }} – gdy zawiodły inne środki, na recydywę i „obcokrajowców”.</li>
 </ul>
 
 <div class="howtos">

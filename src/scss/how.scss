@@ -1,38 +1,46 @@
-.how .howtos {
-  .howto {
-    margin-top: 3em;
-    h3 {
-      font-weight: 600;
-      border: 0;
-    }
+.how {
+  ul {
+    li + li {
+      margin-top: 10px;
+    }  
+  }
+  .howtos {
+    .howto {
+      margin-top: 3em;
 
-    .card {
-      box-sizing: border-box;
-      margin-bottom: 1em;
-
-      figure {
-        position: relative;
-        max-height: 300px;
-        margin: 0;
-        overflow: hidden;
-
-        img {
-          object-fit: cover;
-          width: 100%;
-          margin-top: -15%;
-        }
+      h3 {
+        font-weight: 600;
+        border: 0;
       }
 
-      .content {
-        padding-top: 1em;
+      .card {
+        box-sizing: border-box;
+        margin-bottom: 1em;
 
-        & p:first-child {
-          margin-top: 0;
+        figure {
+          position: relative;
+          max-height: 300px;
+          margin: 0;
+          overflow: hidden;
+
+          img {
+            object-fit: cover;
+            width: 100%;
+            margin-top: -15%;
+          }
         }
 
-        em {
-          font-weight: 600;
-          font-style: normal;
+        .content {
+          padding-top: 1em;
+
+          & p:first-child {
+            margin-top: 0;
+          }
+
+          em {
+            font-weight: 600;
+            font-style: normal;
+          }
         }
       }
     }
