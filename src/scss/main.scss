@@ -39,10 +39,6 @@
     background-color: variables.$patroniteColor!important;
 }
 
-.ui-btn-icon-right:hover:after {
-    background-color: #333;
-}
-
 .ui-icon-map:hover {
     &:after {
         background-color: variables.$mapColor!important;

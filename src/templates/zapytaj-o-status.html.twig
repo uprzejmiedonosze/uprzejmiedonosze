@@ -13,17 +13,17 @@
     informowania o statusie zgłoszeń. Większość nie robi tego wcale. Cześć pisze maile.
     Sporo wysyła powiadomienia listami poleconymi.</p>
 
-<p>Za pomocą tej strony uzyskasz gotowy do skopiowania tekst, którego możesz użyć w
-    komunikacji ze Strażą Miejską lub Policją.</p>
 
 {% if applications|length == 0 %}
     <p>Nie masz nierozpatrzonych zgłoszeń, które wysłałeś ponad 31 dni temu.
         Tak wiem, wskaźnik przy "zapytaj o status" jest mylący. Pokazuje wszystkie wysłane
         i niezakończone zgłoszenia - wybacz ;).
     </p>
-    <a href="/nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
+    <a href="/nowe-zgloszenie.html" class="button cta last">Stwórz nowe</a>
 {% else %}
 
+    <p>Za pomocą tej strony uzyskasz gotowy do skopiowania tekst, którego możesz użyć w
+    komunikacji ze Strażą Miejską lub Policją.</p>
     <p>
         Zwróć uwagę na adresy wysyłki na liście poniżej. Różne zgłoszenia mogły trafić do różnych
         jednostek.
@@ -46,7 +46,7 @@
             </div>
             {% endif %}
             <h3>{{ app.guessSMData.getShortName }} <a href="#">(skopiuj tekst)</a></h3>
-            <div class="ui-body ui-body-a ui-corner-all ask-section">
+            <div class="ui-body ui-body-a ask-section">
                 <p>Dzień dobry,</p>
                 <p>poniższe zawiadomienia o popełnieniu wykroczenia zostały wysłane do Państwa
                     na adres <code>{{ address ?? '(nieznany)' }}</code> ponad miesiąc temu.</p>
@@ -64,3 +64,4 @@
     
 {% endif %}
 {% endblock %}
+

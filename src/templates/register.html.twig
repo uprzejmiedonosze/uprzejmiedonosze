@@ -1,11 +1,5 @@
 {% set leftButton = 'menu' %}
 
-{% block rightButtonCustom %}
-<a id="register-submit" class="ui-btn-right ui-btn ui-btn-inline ui-btn-icon-right">
-    Potwierdź
-</a>
-{% endblock %}
-
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
 
 {% extends "base.html.twig" %}
@@ -55,6 +49,10 @@
         <input type="radio" name="shareRecydywa" id="shareRecydywa-N" value="N" {% if not user.shareRecydywa %}checked="checked"{% endif %}>
         <label for="shareRecydywa-N">nie</label>
     </fieldset>
+
+    <a id="register-submit" class="button cta last">
+        Potwierdź
+    </a>
 </form>
 
 {% if not user.isRegistered %}

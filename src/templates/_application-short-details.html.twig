@@ -53,17 +53,17 @@
         <div class="send">
             {% if app.automatedSM %}
                 <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
-                class="ui-btn ui-btn-inline ui-corner-all ui-mini cta confirmed-waiting">
+                class="button small cta confirmed-waiting">
                     Wyślij do {{ app.guessSMData.getShortName }}
                 </a>
             {% elseif app.unknownSM %}
                 <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
-                class="ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini cta confirmed-waiting">
+                class="button small cta cta confirmed-waiting">
                     Wyślij zgłoszenie
                 </a>
             {% elseif wysylka is not defined %}
                 <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
-                class="ui-btn ui-btn-inline ui-corner-all ui-nodisc-icon ui-mini confirmed-waiting cta">
+                class="button small cta confirmed-waiting">
                     Wyślij zgłoszenie
                 </a>
             {% endif %}
@@ -112,7 +112,7 @@
 
 <div id="changeStatus{{ app.id }}-screen" class="ui-popup-screen ui-overlay-inherit ui-screen-hidden"></div>
 <div id="changeStatus{{ app.id }}-popup" class="ui-popup-container ui-popup-hidden ui-popup-truncate">
-    <div data-role="popup" id="changeStatus{{ app.id }}" data-enhanced="true" data-transition="none" class="application-short ui-popup ui-body-inherit ui-overlay-shadow ui-corner-all">
+    <div data-role="popup" id="changeStatus{{ app.id }}" data-enhanced="true" data-transition="none" class="application-short ui-popup ui-body-inherit ui-overlay-shadow">
         <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset change-status">
             <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
                 Zmień status zgłoszenia z <span class="currentStatus">{{ status.name }}</span> na:
@@ -124,7 +124,7 @@
             {% set liStyle = 'style="display: none;"' %}
             {% endif %}
             <li {{ liStyle|raw }}>
-                <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true" class="ui-btn ui-btn-inline ui-btn-icon-left ui-nodisc-icon ui-mini 
+                <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true" class="ui-btn ui-btn-icon-left ui-nodisc-icon ui-mini 
                             {{ val.cta ?? '' }}
                             {{ key }}">{{ val.action }}</a>
             </li>

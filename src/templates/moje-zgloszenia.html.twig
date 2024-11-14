@@ -14,7 +14,7 @@
 
 {% if applications|length == 0 %}
     <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
-    <a href="/nowe-zgloszenie.html" class="ui-btn ui-corner-all ui-btn-inline try">Stwórz nowe</a>
+    <a href="/nowe-zgloszenie.html" class="button cta last">Stwórz nowe</a>
 {% else %}
     <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
 
@@ -43,7 +43,7 @@
         <p><b>Cieszę się, że zmieniłeś na lepsze swoje otoczenie!</b></p>
         <p>Chciałbym poświęcić więcej czasu swojej misji odzyskania przestrzeni dla pieszych.
             Twoje wsparcie dla serwisu Uprzejmie Donoszę może mi w tym bardzo pomóc.</p>
-            <a class="ui-btn ui-corner-all ui-btn-inline try"
+            <a class="button patronite small"
                 href="/patronite.html"
                 data-ajax="false">Zostań Patronem</a>
         </p>
@@ -67,7 +67,7 @@
     {% if myAppsSize < applicationsCount %}
     <div class="displayAllApps">
         <p>To tylko {{ myAppsSize }} najnowszych zgłoszeń.</p>
-        <a href="#" class="ui-btn ui-corner-all">Pokaż wszystkie</a>
+        <a href="#" class="button light last">Pokaż wszystkie</a>
     </div>
     {% endif %}
 {% endif %}

@@ -1,4 +1,4 @@
-<div class="ui-body ui-body-a ui-corner-all application application-details">
+<div class="ui-body ui-body-a application application-details">
 
 {% if config.confirmationScreen is not defined %}
     {% if not dialog %}
@@ -89,25 +89,25 @@
     </div>
     <div class="ui-grid-a ui-responsive images">
         <div class="ui-block-a imageContainer">
-            <a href="#popup1" class="ui-btn ui-icon-search ui-btn-icon-notext ui-corner-all zoom"></a>
+            <a href="#popup1" class="ui-btn ui-icon-search ui-btn-icon-notext zoom"></a>
             <a href="#popup1" data-rel="popup" data-position-to="window" data-transition="fade">
                 <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}"/>
             </a>
         </div>
         <div class="ui-block-b imageContainer">
-            <a href="#popup2" class="ui-btn ui-icon-search ui-btn-icon-notext ui-corner-all zoom"></a>
+            <a href="#popup2" class="ui-btn ui-icon-search ui-btn-icon-notext zoom"></a>
             <a href="#popup2" data-rel="popup" data-position-to="window" data-transition="fade">
                 <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}"/> 
             </a>
         </div>
         <div data-role="popup" id="popup1" data-overlay-theme="a" data-theme="a" data-corners="false">
             <a href="#" data-rel="back"
-                class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                class="ui-btn ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
             <img class="popphoto" src="{{ app.contextImage.url ??  'img/fff-1.png' }}?v={{ app.getRevision }}" style="max-height:800px;">
         </div>
         <div data-role="popup" id="popup2" data-overlay-theme="a" data-theme="a" data-corners="false">
             <a href="#" data-rel="back"
-                class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
+                class="ui-btn ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
             <img class="popphoto lazyload" data-src="{{ app.carImage.url ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" style="max-height:800px;">
         </div>
     </div>

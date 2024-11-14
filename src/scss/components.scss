@@ -1,10 +1,9 @@
 @use "variables";
 
-.button {
+.base-button {
     -webkit-background-clip: padding;
     background-clip: padding-box;
     background-color: variables.$primaryColor;
-    border-radius: 6vmin;
     border: none;
     color: #fff!important;
     display: block;
@@ -20,7 +19,25 @@
     white-space: nowrap;
     max-width: variables.$width-break;
     z-index: 10;
+    transition: 0.3s;
+    &:hover {
+        filter: brightness(110%);
+    }
+    &:focus {
+        box-shadow: none!important;
+    }
+}
 
+.button {
+    @extend .base-button;
+    border-radius: 6vmin;
+}
+
+.button, .base-button {
+    &.cta {
+        background-color: variables.$secondaryColor!important;
+        color: black!important;
+    }
     &.inline {
         display: inline-block;
     }
@@ -28,17 +45,20 @@
     &.light {
         background-color: #f6f6f6;
         color: black!important;
+        &:hover {
+            filter: brightness(90%);
+        }
     }
 
-    &.cta {
-        background-color: variables.$secondaryColor!important;
-        color: black!important;
+    &.last {
+        margin-top: 2em;
+        margin-bottom: 1em;
     }
 
     &.small {
         display: inline-block;
         font-size: 12.5px;
-        margin: 0 0.5em;
+        margin: 0.5em;
         padding: .3em .7em;
         vertical-align: middle;
     }
