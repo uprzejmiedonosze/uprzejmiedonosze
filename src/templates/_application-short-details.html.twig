@@ -36,6 +36,31 @@
     <div class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></div>
 
     <div class="address">{{ app.address.address }}</div>
+    {% if sendable %}
+        <div class="no-icon">
+            {% if app.automatedSM %}
+                <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
+                class="button inline cta confirmed-waiting">
+                    Wyślij do {{ app.guessSMData.getShortName }}
+                </a>
+            {% elseif app.unknownSM %}
+                <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
+                class="button inline cta confirmed-waiting">
+                    Wyślij zgłoszenie
+                </a>
+            {% elseif wysylka is not defined %}
+                <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
+                class="button inline cta confirmed-waiting">
+                    Wyślij zgłoszenie
+                </a>
+            {% endif %}
+            {% if appActionButtons and app.isEditable %}
+                <br>
+                <a href="/nowe-zgloszenie.html?edit={{ app.id }}" class="button inline light" data-ajax="false">edytuj</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
 
     {% if recydywaCnt > 1 %}
     <div class="recydywa"><b>RECYDYWA</b><br>
@@ -48,29 +73,6 @@
             </a>
         </p>
     </div>
-    {% endif %}
-    {% if sendable %}
-        <div class="send">
-            {% if app.automatedSM %}
-                <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
-                class="button small cta confirmed-waiting">
-                    Wyślij do {{ app.guessSMData.getShortName }}
-                </a>
-            {% elseif app.unknownSM %}
-                <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
-                class="button small cta cta confirmed-waiting">
-                    Wyślij zgłoszenie
-                </a>
-            {% elseif wysylka is not defined %}
-                <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
-                class="button small cta confirmed-waiting">
-                    Wyślij zgłoszenie
-                </a>
-            {% endif %}
-            {% if appActionButtons and app.isEditable %}
-                <a href="/nowe-zgloszenie.html?edit={{ app.id }}" data-ajax="false">edytuj</a>
-            {% endif %}
-        </div>
     {% endif %}
 
     <div class="description"><b>TREŚĆ ZGŁOSZENIA</b>
