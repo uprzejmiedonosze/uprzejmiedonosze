@@ -1,4 +1,5 @@
 @use "variables";
+@use "components";
 
 .ui-body-a,
     .ui-page-theme-a .ui-body-inherit,
@@ -9,6 +10,7 @@
     border: none;
     font-family: sans-serif;
     color: #000;
+    text-shadow: none;
 }
 
 body, a, p, i, input, textarea, select {
@@ -26,7 +28,7 @@ small {
 }
 
 .ui-content {
-    max-width: 800px;
+    max-width: variables.$content-width;
     margin: 0 auto;
     background-color: white;
     border-color: rgba(217, 217, 217, 0.5);
@@ -52,48 +54,39 @@ img.one-third {
     margin: 1em;
 }
 
-.ui-page-theme-b .ui-btn,
-    html .ui-bar-b .ui-btn,
-    html .ui-body-b .ui-btn,
-    html body .ui-group-theme-b .ui-btn,
-    html head+body .ui-btn.ui-btn-b,
-    .ui-page-theme-b .ui-btn:visited,
-    html .ui-bar-b .ui-btn:visited,
-    html .ui-body-b .ui-btn:visited,
-    html body .ui-group-theme-b .ui-btn:visited,
-    html head+body .ui-btn.ui-btn-b:visited,
-    .ui-page-theme-b .ui-btn:active,
-    html .ui-bar-b .ui-btn:active,
-    html .ui-body-b .ui-btn:active,
-    html body .ui-group-theme-b .ui-btn:active,
-    html head+body .ui-btn.ui-btn-b:active,
-    .ui-header a,
-    .ui-btn.try{
-    background-color: variables.$secondaryColor!important;
-    box-shadow: none!important;
-    border: none;
-    color: #000!important;
-    text-shadow: none!important;
-
-    &.ui-btn-inline {
-        border: 0;
-
-        &.ui-btn-left {
-            border-top-right-radius: 6vmin;
-            border-bottom-right-radius: 6vmin;
-        }
-        &.ui-btn-right {
-            border-top-left-radius: 6vmin;
-            border-bottom-left-radius: 6vmin;
-        }
-    }
+#mainMenu {
+    a {
+        @extend .base-button;
+        color: variables.$primaryColor!important;
+        text-align: left;
+        background-color: #f6f6f6;
+        border-style: solid;
+        border-color: #ddd;
+        border-width: 0 1px 1px 1px;
+        box-sizing: border-box;
     
+    }
 }
 
-.ui-btn.cta {
+.ui-header a {
+    border: 0;
+    top: 4px;
     background-color: variables.$secondaryColor!important;
-    text-shadow: none!important;
-    border-color: variables.$secondaryColor!important;
+
+    &.ui-btn-left {
+        @extend .base-button;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        padding-left: 2.5em;
+        color: black!important;
+    }
+    &.ui-btn-right {
+        @extend .base-button;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        padding-right: 2.5em;
+        color: black!important;
+    }
 }
 
 .ui-page-theme-a .ui-header,
@@ -116,6 +109,7 @@ p > a, li > a, small > a {
     text-decoration: none;
     color: variables.$primaryColor!important;
     font-weight: 400!important;
+    text-shadow: none;
 }
 
 #mainMenu > div.ui-panel-inner {

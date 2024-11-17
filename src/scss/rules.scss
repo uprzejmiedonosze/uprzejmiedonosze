@@ -1,3 +1,5 @@
+@use "variables";
+
 div.przepisy .ui-block-a {
   float: left;
   width: 25%;
@@ -30,7 +32,7 @@ div.przepisy-kategorie p i {
 }
 
 .ui-dialog .ui-dialog-contain {
-  max-width: 800px;
+  max-width: variables.$content-width;
   margin: 1em auto 1em;
   box-shadow: none;
   top: -2em;

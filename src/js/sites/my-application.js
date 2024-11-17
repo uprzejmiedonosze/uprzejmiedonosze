@@ -53,17 +53,15 @@ $(document).on("pageshow", function () {
 
     appDetailsDiv.html('<div class="loader"></div>')
 
-    const resizeTextarea = function(){
-      $(this).height(0).height(this.scrollHeight);
-    };
 
     const api = new Api(`/short-${appId}-partial.html`)
     const appDetails = await api.getHtml()
     location.hash = `#${appId}`
     appDetailsDiv.html(appDetails)
     $(`#changeStatus${appId}`).popup()
-    const $privateComment = $('.private-comment > textarea')
-    $privateComment.on('keyup', resizeTextarea).trigger('keyup')
+    $('.private-comment textarea').on('keyup',  function(){
+      $(this).height(0).height(this.scrollHeight);
+    }).trigger('keyup')
 
     $('a.recydywa-seemore').on('click', async function () {
       const plateId = $(this).data('plateid')

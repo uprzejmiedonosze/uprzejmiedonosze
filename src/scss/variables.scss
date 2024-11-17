@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $primaryColor: #009C7F;
 $secondaryColor: #e9c200;
 
@@ -23,6 +25,8 @@ $archived-stroke: #A2A2A2;
 
 $width-break: 35em;
 
+$content-width: 800px;
+
 $recydywaBg: #FFD60E;
 $plateId: #0C27EC;
 $recydywa: $plateId;
@@ -31,3 +35,33 @@ $patroniteIcon: url(https://cdn.patronite.pl/webapp/img/widget/sygnet-white.svg)
 $patroniteColor: #f23e17;
 
 $mapColor: #20155e;
+
+$container-gutter: 2rem;
+
+$screen-sizes: (
+  'sm': 30rem,
+  'md': 48rem,
+  'lg': 73rem,
+  'xl': 87rem
+);
+
+@function media-min-width($screen-sizes-name) {
+    @return ('only screen and (min-width: #{map.get($screen-sizes, $screen-sizes-name)})');
+  }
+
+@function media-max-width($screen-sizes-name) {
+    @return ('only screen and (max-width: #{map.get($screen-sizes, $screen-sizes-name) - .16rem})');
+}
+
+$screen-max-md: media-max-width('md');
+$screen-md: media-min-width('md');
+
+$container-width: map.get($screen-sizes, 'lg');
+
+%textBold {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: .5px;
+}

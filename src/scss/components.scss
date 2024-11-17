@@ -26,6 +26,9 @@
     &:focus {
         box-shadow: none!important;
     }
+    &:active {
+        transform: translateY(2px);
+    }
 }
 
 .button {

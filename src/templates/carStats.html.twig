@@ -46,22 +46,22 @@
             </figure>
             {% endif %}
             <div class="content">
-                <ul class="application-details-list">
-                    <li class="no-icon category">
+                <div class="application-details-list">
+                    <div class="no-icon category">
                         <img width="24" height="24" title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg">
                         {{ app.getCategory.short }}
                         {% if app.statements.gallery ?? false %}
                         {{app.userComment}}
                         {% endif %}
-                    </li>
-                    <li class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</li>
+                    </div>
+                    <div class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</li>
                     {% if app.wasSent %}
-                    <li class="info-icon">
+                    <div class="info-icon">
                         {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}{{ app.guessSMData.getShortName }}
                         <tt>{{ app.getExternalId }}</tt>
-                    </li>
+                    </div>
                     {% endif %}
-                </ul>
+                </div>
             </div>
         </div>
     </div>

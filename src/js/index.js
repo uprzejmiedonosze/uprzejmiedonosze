@@ -18,3 +18,4 @@ import "./sites/thank-you";
 import "./sites/public-info";
 import "./sites/how";
 import "./sites/ask-for-status"
+import "./sites/menu"

@@ -30,6 +30,9 @@
         border-radius: 20px;
         text-shadow: none;
         color: black;
+        top: -2px;
+        position: relative;
+        right: unset;
       }
 
       &.draft .ui-li-count {
@@ -52,10 +55,12 @@
       &.confirmed-sm .ui-li-count {
         background-color: variables.$confirmed-sm;
         border-color: variables.$confirmed-sm-stroke;
+        color: white;
       }
       &.confirmed-fined .ui-li-count {
         background-color: variables.$confirmed-fined;
         border-color: variables.$confirmed-fined-stroke;
+        color: white;
       }
       &.confirmed-ignored .ui-li-count {
         background-color: variables.$confirmed-ignored;
@@ -170,7 +175,6 @@
 
   a.change-status {
     border: 1px solid black;
-    margin-top: -3px!important;
 
     &:after {
       @extend %icon;
@@ -186,7 +190,7 @@
     border-color: #ddd;
     border-top: 0;
     border-style: solid;
-    padding: 0;
+    padding: 0 0 1em 0;
   }
 
   .ui-input-has-clear {
@@ -202,11 +206,6 @@
 
     &.archived {
       display: none;
-    }
-
-    &.ui-collapsible.ui-corner-all {
-      margin-bottom: 0.5em;
-      border-radius: 0.8em;
     }
 
     h3 {
@@ -414,7 +413,7 @@
   .popup-content {
     background: #fff;
     border-radius: 5px;
-    max-width: 800px;
+    max-width: variables.$content-width;
     padding: 1em;
     position: sticky;
     overflow-y: scroll;

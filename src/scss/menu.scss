@@ -1,0 +1,202 @@
+@use "variables";
+
+$border-radius: 5px;
+$nav-menu-width: 300px;
+
+@keyframes smoothScroll {
+    0% {
+        transform: translateY(-40px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+
+nav {
+
+    .nav__buttons {
+        z-index: 1030;
+        max-width: 800px;
+        width: 100%;
+        background-color: red;
+        position: fixed;
+        top: 10px;
+        left: 50%;
+        transform: translate(-50%);
+
+        .nav__burger {
+            left: 0px;
+            background-color: variables.$secondaryColor;
+            border-radius: 100%;
+            color: #FFFFFF;
+            height: 3rem;
+            position: absolute;
+            width: 3rem;
+            z-index: 10;
+            top: 0;
+    
+            &:active {
+                transform: translateY(2px);
+            }
+
+            .nav__icon {
+                position: absolute;
+                top: calc((100% - 3px) / 2);
+                left: calc((100% - 50%) / 2);
+                width: 50%;
+                height: 3px;
+                background: #FFFFFF;
+                border-radius: $border-radius;
+                transition: transform .3s ease-in-out;
+        
+                &:first-child {
+                    &::before,
+                    &::after {
+                        position: absolute;
+                        left: 0;
+                        width: 100%;
+                        height: 3px;
+                        background: #FFFFFF;
+                        border-radius: $border-radius;
+                        content: '';
+                        transition: transform .2s ease-in-out .1s;
+                        transform-origin: 50% 50%;
+                    }
+        
+                    &::before {
+                        top: 7px;
+                    }
+        
+                    &::after {
+                        bottom: 7px;
+                    }
+                }
+            }
+        
+        }
+
+        .button {
+            display: inline-block;
+            top: 0;
+            right: 0;
+            position: absolute;
+        }
+    }
+
+
+    .nav__menu {
+        background: variables.$secondaryColor;
+        color: #FFFFFF;
+        height: 100vh;
+        left: -$nav-menu-width;
+        overflow: hidden scroll;
+        padding: 0;
+        position: fixed;
+        top: 0;
+        transition: transform .3s;
+        width: $nav-menu-width;
+        z-index: 10;
+        
+        color: #FFFFFF;
+
+
+        &::-webkit-scrollbar {
+            width: 1px;
+        }
+
+        &::-webkit-scrollbar-track,
+        &::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+
+        &__item__hidden {
+            display: none;
+        }
+    
+        a {
+            @extend %textBold;
+    
+            position: relative;
+            z-index: 1;
+            padding: variables.$container-gutter 0;
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: $border-radius;
+            transition: opacity .2s ease-in-out;
+    
+            &::after {
+                position: absolute;
+                bottom: calc(#{variables.$container-gutter} - 5px);
+                left: 0;
+                z-index: -1;
+                width: 100%;
+                height: 3px;
+                background-color: variables.$secondaryColor;
+                border-radius: $border-radius;
+                content: '';
+                transform: scaleX(0);
+                transition: transform .2s ease-in-out;
+            }
+    
+            &:hover {
+                opacity: .7;
+            }
+    
+            &:focus {
+                outline: 1px solid rgba(variables.$primaryColor, .2);
+            }
+
+            &.active {
+                &::after {
+                    transform: scaleX(1);
+                }
+            }
+        }
+    
+        &__list {
+            position: absolute;
+            top: 30px;
+            left: 0;
+        }
+    
+        &__item {
+            display: block;
+
+            .ui-li-count {
+                position: static;
+            }
+        }
+    
+        &__text::after {
+            background-color: #FFFFFF;
+        }
+    }   
+
+    &.active {
+        .nav__menu {
+            transform: translateX($nav-menu-width);
+        }
+
+        .nav__burger {
+            position: fixed;
+        }
+
+        .nav__icon:first-child {
+            transform: rotate(45deg);
+        }
+
+        .nav__icon:last-child {
+            transform: rotate(-45deg);
+        }
+
+        .nav__icon::before,
+        .nav__icon::after {
+            transform: scaleX(0);
+        }
+    }
+
+}
+

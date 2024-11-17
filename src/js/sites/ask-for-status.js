@@ -9,7 +9,7 @@ $(document).on("pageshow", function () {
             const type = "text/html";
             const blob = new Blob([apps.innerHTML], {type});
             const data = [new ClipboardItem({[type]: blob})];
-            navigator.clipboard.write(data).then(() =>{
+            navigator.clipboard.write(data).then(() => {
                 apps.style.opacity = '0.4'
                 $(link).addClass('visited')
                 setTimeout(() => apps.style.opacity = '1', 80)
