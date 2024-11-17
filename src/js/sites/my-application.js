@@ -78,28 +78,35 @@ $(document).on("pageshow", function () {
   
     $('.app-field-editable')
       .on('focusout', async function() {
-        if (this.dataset.initialValue === this.value) {
+        const initialValue = this.dataset.initialValue ?? ''
+        const newValue = this.value ?? ''
+        if (initialValue === newValue) {
           return;
         }
         var $target = $(this)
 
         const body = {
-          [this.name]: this.value
+          [this.name]: newValue
         };
 
-        $target.attr('readonly', true)
+        $target.attr('readonly', "true")
         try {
-          const api = new Api(`/api/app/${ appId }/fields`)
+          const api = new Api(`/api/app/${appId}/fields`)
           const reply = await api.patch(body)
           $target.removeAttr('readonly')
           $target.removeClass("error")
-          this.setAttribute("data-initial-value", this.value)
+          this.setAttribute("data-initial-value", newValue)
 
           if (reply.suggestStatusChange) {
             if (confirm('Zgłoszenie ma numer sprawy. Zmienić jego status na „potwierdzone”?')) {
               setStatus(appId, 'confirmed-sm')
             }
           }
+
+          const app = $(`#${appId}`)
+          const oldFilterText = app.attr('data-filtertext') ?? ''
+          if (initialValue.length>5) app.attr('data-filtertext', oldFilterText.replace(initialValue, newValue))
+          else app.attr('data-filtertext', oldFilterText + newValue)
         } catch(e) {
           $target.removeAttr('readonly')
           $target.addClass("error")
