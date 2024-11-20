@@ -6,7 +6,7 @@
         {% if general.isAdmin and not config.isAppOwner %}
         <h3>
             Podgląd administratora.
-            <small><a data-ajax="false" href="nowe-zgloszenie.html?edit={{ app.id }}">(edit)</a></small>
+            <small><a href="nowe-zgloszenie.html?edit={{ app.id }}">(edit)</a></small>
         </h3>
         {% endif %} {# admin #}
     {% endif %} {# not dialog#}
@@ -81,7 +81,7 @@
         <div class="ui-block-b imageContainer">
 {% if app.address.lat is defined %}
             <a href="{{ app.getMapUrl() }}"
-                data-ajax="false" target="_blank">
+               target="_blank">
                 <img class="mapImage" src="{{ app.getMapImage }}?v={{ app.getRevision }}">
             </a>
 {% endif %}

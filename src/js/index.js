@@ -19,3 +19,5 @@ import "./sites/public-info";
 import "./sites/how";
 import "./sites/ask-for-status"
 import "./sites/menu"
+
+$("a").attr('data-ajax', 'false')
