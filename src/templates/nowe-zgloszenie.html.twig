@@ -2,11 +2,7 @@
 
 {% set title = 'Nowe zgłoszenie' %}
 {% set mainClass = 'new-application' %}
-
-{% block rightButtonCustom %}
-<a id="form-submit"
-    class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn ui-btn-icon-right ui-icon-carat-r">Dalej</a>
-{% endblock %}
+{% set rightButton = 'newAppNext' %}
 
 {% extends "base.html.twig" %}
 {% block main %}

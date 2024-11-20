@@ -10,13 +10,9 @@
 {% set smName = '<b class="lightWarning">' ~ sm.getName ~ '</b>' %}
 {% endif %}
 
-{% block rightButtonCustom %}
-    {% if not app.automatedSM %}
-    <a onclick="confirmApplication()"
-        class="ui-btn-right ui-alt-icon ui-nodisc-icon ui-btn
-        ui-btn-icon-right ui-icon-check confirm-save-button">Zapisz!</a>
-    {% endif %}
-{% endblock %}
+{% if not app.automatedSM %}
+{% set rightButton = 'newAppSave' %}
+{% endif %}
 
 {% extends "base.html.twig" %}
 

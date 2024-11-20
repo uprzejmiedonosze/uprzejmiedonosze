@@ -1,134 +1,130 @@
+<input data-role="none" id="toggle" type="checkbox">
+
+<div id="courtain"></div>
+<div class="container">
+
 {% if leftButton ?? '' == 'menu' %}
-<nav class="nav js-nav">
-    <div class="nav__buttons">
-        <a class="nav__burger js-nav-button" role="switch" aria-checked="true">
-            <span class="nav__icon"></span>
-            <span class="nav__icon"></span>
-        </a>
-        {% endif %}
-        {% if leftButton ?? '' == 'menuBack' %}
-        <a href="javascript:history.back()" data-rel="back" class="ui-btn-left
-            ui-alt-icon ui-nodisc-icon ui-btn ui-btn-icon-notext
-            {{ leftButtonIcon ?? 'ui-icon-carat-l' }}"
-            data-role="button" role="button">{{ leftButtonText ?? 'Back' }}</a>
-        {% endif %}
-        {% if rightButton is defined and rightButton == 'menuStart' %}
-        <a href="/nowe-zgloszenie.html" class="button cta
-            ui-btn-icon-right {{ rightButtonIcon ?? 'ui-icon-plus' }}"
-            data-ajax="false">{{ rightButtonText ?? '&nbsp;' }}</a>
-        {% endif %}
+    <label data-role="none" class="toggle-container" for="toggle">
+        <span data-role-menu class="button-toggle">
+            <span data-role-menu class="icon"></span>
+            <span data-role-menu class="icon"></span>
+        </span>
+    </label>
+{% endif %}
 
-        {% if rightButton is defined and rightButton == 'menuNewApplication' %}
-        <a href="/nowe-zgloszenie.html" class="ui-btn-right ui-alt-icon
-            ui-nodisc-icon ui-btn ui-btn-icon-right
-            {{ rightButtonIcon ?? 'ui-icon-carat-r' }}"
-            data-ajax="false">{{ rightButtonText ?? 'Nowe zgłoszenie' }}</a>
-        {% endif %}
+{% if leftButton ?? '' == 'menuBack' %}
+    <a href="javascript:history.back()" data-rel="back" class="menu-button left">{{ leftButtonText ?? 'Edytuj' }}</a>
+{% endif %}
 
-        {% if rightButton is defined and rightButton == 'menuNewApplicationTermsConfirmation' %}
-        <a href="/nowe-zgloszenie.html?TermsConfirmation" class="ui-btn-right ui-alt-icon
-            ui-nodisc-icon ui-btn ui-btn-icon-right
-            {{ rightButtonIcon ?? 'ui-icon-carat-r' }}"
-            data-ajax="false">{{ rightButtonText ?? 'Nowe zgłoszenie' }}</a>
-        {% endif %}
 
-        {% block rightButtonCustom %}
-        {% endblock %}
-    </div>{# nav__buttons #}
-    <div class="nav__menu">
-        <div class="nav__menu__container">
-            <ul class="nav__menu__list js-nav-menu">
-                <li class="nav__menu__item" data-icon="home">
-                    <a tabindex="0" class="nav__menu__text js-nav-item" href="/">
-                        {% if general.isLoggedIn %}
-                        Start
-                        {% else %}
-                        Strona główna
-                        {% endif %}
-                    </a>
-                </li>
+{% if rightButton ?? '' == 'menuStart' %}
+    <a href="/nowe-zgloszenie.html" class="menu-button right">
+        Zgłoś
+    </a>
+{% endif %}
+{% if rightButton ?? '' == 'menuNewApplication' %}
+    <a href="/nowe-zgloszenie.html" class="menu-button right">
+        Nowe zgłoszenie
+    </a>
+{% endif %}
+{% if rightButton ?? '' == 'menuNewApplicationTermsConfirmation' %}
+    <a href="/nowe-zgloszenie.html?TermsConfirmation" class="menu-button right">
+        {{ rightButtonText ?? 'Nowe zgłoszenie' }}
+    </a>
+{% endif %}
+{% if rightButton ?? '' == 'newAppNext' %}
+    <a id="form-submit" class="menu-button right">Dalej</a>
+{% endif %}
+{% if rightButton ?? '' == 'newAppSave' %}
+    <a onclick="confirmApplication()"
+        class="menu-button right confirm-save-button">Zapisz!</a>
+{% endif %}
+
+    <nav class="nav" data-role-menu>
+        <a tabindex="0" data-role="none" href="/">
             {% if general.isLoggedIn %}
-                <li class="nav__menu__item js-nav-item" data-icon="plus">
-                    <a class="cta" data-ajax="false" 
-                        {{ active(config.menu, 'start')|raw }}
-                        href="/nowe-zgloszenie.html">Nowe zgłoszenie
-                    </a>
-                </li>
-                <li class="nav__menu__item" data-icon="bullets">
-                    <a data-ajax="false"
-                        {{ active(config.menu, 'moje-zgloszenia')|raw }}
-                        href="/moje-zgloszenia.html">Moje zgłoszenia
-                        <span class="ui-li-count">{{ general.stats.active ?? 0 }}</span>
-                    </a>
-                </li>
-                {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
-                <li class="nav__menu__item js-nav-item" data-icon="mail" class="wysylka">
-                    <a data-ajax="false"
-                        {{ active(config.menu, 'wysylka')|raw }}
-                        href="/wysylka.html">Do wysłania
-                    <span class="ui-li-count">{{ general.stats.confirmed ?? 0 }}</span></a>
-                </li>
-                {% endif %}
-                {% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
-                <li class="nav__menu__item" data-icon="mail" class="zapytaj-o-status">
-                    <a data-ajax="false"
-                        {{ active(config.menu, 'zapytaj-o-status')|raw }}
-                        href="/zapytaj-o-status.html?update">Zapytaj o status
-                    <span class="ui-li-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span></a>
-                </li>
-                {% endif %}
-                <li class="nav__menu__item" data-icon="forbidden">
-                    <a data-ajax="false" {{ active(config.menu, 'register')|raw }}
-                        href="/register.html?update">Edycja konta
-                    </a>
-                    <a href="/logout.html" data-ajax="false">wyloguj się</a>
-                </li>
+                Start
             {% else %}
-                <li class="nav__menu__item" data-icon="plus"><a class="cta" href="/nowe-zgloszenie.html" data-ajax="false">Spróbuj!</a></li>
+                Strona główna
             {% endif %}
+        </a>
+{% if general.isLoggedIn %}
+        <a data-role="none" {{ active(config.menu, 'index')|raw }} href="/nowe-zgloszenie.html">
+            Nowe zgłoszenie
+        </a>
+        <a data-role="none" {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/moje-zgloszenia.html">
+            Moje zgłoszenia
+            <span class="menu-count">{{ general.stats.active ?? 0 }}</span>
+        </a>
 
-                <li data-role="list-divider"></li>
-                <li class="nav__menu__item" data-icon="info">
-                    <a data-ajax="false" {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }}
-                    href="/jak-zglosic-nielegalne-parkowanie.html">Poradnik „Jak zgłaszać”</a></li>
-                <li class="nav__menu__item" class="subpage" data-icon="false">
-                    <a {{ active(config.menu, 'przepisy')|raw }}
-                        href="/przepisy.html">Przepisy</a></li>
-                <li class="nav__menu__item" class="subpage" data-icon="false">
-                    <a data-ajax="false" {{ active(config.menu, 'faq')|raw }}
-                        href="/faq.html">FAQ</a></li>
-                <li class="nav__menu__item" class="subpage" data-icon="false">
-                    <a {{ active(config.menu, 'przesluchanie')|raw }}
-                        href="/przesluchanie.html">Wizyta w SM</a></li>
-                <li class="nav__menu__item" class="subpage" data-icon="false">
-                    <a {{ active(config.menu, 'naklejki-robisz-to-zle')|raw }}
-                        href="/naklejki-robisz-to-zle.html">Naklejki i mazaki</a>
-                        <span class="ui-li-count">nowość!</span></li>
-                <li class="nav__menu__item" data-icon="star">
-                    <a data-ajax="false" {{ active(config.menu, 'statystyki')|raw }}
-                    href="/statystyki.html">Statystyki</a></li>
+    {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
+		<a data-role="none" {{ active(config.menu, 'wysylka')|raw }} href="/wysylka.html">
+            Do wysłania
+			<span class="menu-count">{{ general.stats.confirmed ?? 0 }}</span>
+		</a>
+    {% endif %}
 
-                <li data-role="list-divider"></li>
-                {% if general.isLoggedIn %}
-                <li class="nav__menu__item" data-icon="patronite">
-                    <a data-ajax="false" {{ active(config.menu, 'patronite')|raw }}
-                    href="/patronite.html">Zostań patronem</a>
-                </li>
-                {% endif %}
-                <li class="nav__menu__item" data-icon="action">
-                    <a target="_blank" class="ui-icon-map"
-                        data-ajax="false" href="https://agendaparkingowa.pl/">Agenda Parkingowa</a>
-                </li>
-                <li class="nav__menu__item" data-icon="action">
-                    <a target="_blank"
-                        data-ajax="false" href="https://prawapieszych.pl">Podpisz wniosek do RPO</a>
-                </li>
+	{% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
+		<a data-role="none" {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/zapytaj-o-status.html?update">
+            Zapytaj o status
+			<span class="menu-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span>
+		</a>
+	{% endif %}
 
-                {% if not general.isLoggedIn %}
-                <li class="nav__menu__item" data-icon="user"><a href="/start.html" data-ajax="false">Zaloguj/zarejestruj się</a></li>
-                {% endif %}
+        <a data-role="none" {{ active(config.menu, 'register')|raw }} href="/register.html?update">
+            Edycja konta
+        </a>
 
-            </ul>
-        </div>
-    </div>
-</nav>
+        <a data-role="none" class="sub" href="/logout.html" data-ajax="false">
+            wyloguj się
+        </a>
+{% else %} {# not logged in #}
+        <a class="cta" href="/nowe-zgloszenie.html" data-ajax="false">
+            Spróbuj!
+        </a>
+{% endif %}
+
+        <div class="spacer"></div>
+
+        <a data-role="none" {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }} href="/jak-zglosic-nielegalne-parkowanie.html">
+            Poradnik „Jak zgłaszać”
+        </a>
+        <a data-role="none" {{ active(config.menu, 'przepisy', 'sub')|raw }} href="/przepisy.html">
+            Przepisy
+        </a>
+        <a data-role="none" {{ active(config.menu, 'faq', 'sub')|raw }} href="/faq.html">
+            FAQ
+        </a>
+        <a data-role="none" {{ active(config.menu, 'przesluchanie', 'sub')|raw }} href="/przesluchanie.html">
+            Wizyta w SM
+        </a>
+        <a data-role="none" {{ active(config.menu, 'naklejki-robisz-to-zle', 'sub')|raw }} href="/naklejki-robisz-to-zle.html">
+            Naklejki i mazaki
+            <span class="menu-count">nowość!</span>
+        </a>
+        <a data-role="none" {{ active(config.menu, 'statystyki')|raw }} href="/statystyki.html">
+            Statystyki
+        </a>
+
+        <div class="spacer"></div>
+
+{% if general.isLoggedIn %}
+    	<a data-role="none" {{ active(config.menu, 'patronite')|raw }} href="/patronite.html">
+            Zostań patronem
+        </a>
+{% endif %}
+
+        <a data-role="none" target="_blank" class="ui-icon-map"href="https://agendaparkingowa.pl/">
+            Agenda Parkingowa
+        </a>
+        <a data-role="none" target="_blank"href="https://prawapieszych.pl">
+            Podpisz wniosek do RPO
+        </a>
+
+{% if not general.isLoggedIn %}
+	    <a data-role="none" href="/start.html" data-ajax="false">
+            Zaloguj/zarejestruj się
+        </a>
+{% endif %}
+    </nav>
+</div>

@@ -49,10 +49,6 @@
     <body class="index">
         <div data-role="page" class="container-fluid" data-theme="a" {{iff(dialog,'data-dialog="true"')}}>
         {% include('header.html.twig') %}
-        {% block menu %}
-            {% include('_menu.html.twig') %}
-        {% endblock %}
-
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
             </div> <!-- main -->

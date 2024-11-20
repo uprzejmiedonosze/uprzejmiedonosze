@@ -14,7 +14,6 @@ $(document).on("pageshow", function () {
 function confirmApplication() {
   $('#form').submit();
   $('.confirm-save-button').addClass('ui-disabled')
-  $(".confirm-send-button").addClass('ui-disabled')
 }
 
 window.confirmApplication = confirmApplication;

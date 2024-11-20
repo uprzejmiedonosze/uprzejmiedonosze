@@ -15,9 +15,9 @@ class TwigExtension extends AbstractExtension {
                 if ($bool) return $string;
                 return '';
             }),
-            new TwigFunction('active', function ($menu, $menuPos) {
-                if ($menu == $menuPos) return 'class="active"';
-                return '';
+            new TwigFunction('active', function ($menu, $menuPos, $classes="") {
+                $active = ($menu == $menuPos) ? "active " : "";
+                return "class=\"$active$classes\"";;
             }),
             new TwigFunction('cast_to_array', function ($object) {
                 return (array)$object;

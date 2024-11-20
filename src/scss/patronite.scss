@@ -19,7 +19,7 @@
         min-width: 144px;
         position: fixed;
         width: 400px;
-        z-index: 99999;
+        z-index: 1;
 
         @media (max-width: variables.$width-break) {
             bottom: 5px;

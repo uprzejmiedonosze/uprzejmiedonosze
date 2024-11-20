@@ -1,12 +1,15 @@
 {% block header %}
-    <header>
-        <h1>{{ shortTitle ?? title }} 
-            {% if general.isStaging %}
-                <sup>[STG]</sup>
-            {% elseif general.isProd %}
-            {% else %}
-                <sup>[DEV]</sup>
-            {% endif %}
-        </h1>
-    </header>
+<header>
+    <h1>{{ shortTitle ?? title }} 
+        {% if general.isStaging %}
+            <sup>[STG]</sup>
+        {% elseif general.isProd %}
+        {% else %}
+            <sup>[DEV]</sup>
+        {% endif %}
+    </h1>
+{% block menu %}
+    {% include('_menu.html.twig') %}
+{% endblock %}
+</header>
 {% endblock %}
