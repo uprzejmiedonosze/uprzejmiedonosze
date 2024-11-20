@@ -66,7 +66,7 @@ nav.nav > a {
     cursor: pointer;
     white-space: nowrap;
     width: 100%;
-    padding: 1em 2em;
+    padding: 1em;
     font-weight: 400;
     text-decoration: none;
     display: inline-block;
@@ -75,12 +75,16 @@ nav.nav > a {
     text-shadow: none;
     transition: opacity .2s ease-in-out;
 
+    @media (min-width: 900px) {
+        padding: 1em 2em;
+    }
+
     &.first {
         background-color: variables.$primaryColor;
         color: white !important;
         font-weight: 600;
         height: 44px;
-        padding: 11px 2em;
+        padding-top: 11px;
         &:hover {
             color: white !important;
         }
@@ -149,10 +153,14 @@ label.toggle-container {
 
 .button-toggle {
     @extend .menu-button;
-    margin-left: calc(2em - 12px);
+    margin-left: calc(1em - 12px);
     margin-top: 5px;
     width: 50px;
     background: transparent;
+
+    @media (min-width: 900px) {
+        margin-left: calc(2em - 12px);
+    }
     .icon {
         position: absolute;
         top: calc((100% - 3px) / 2);
