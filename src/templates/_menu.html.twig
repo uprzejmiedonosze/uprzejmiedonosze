@@ -7,7 +7,6 @@
     <label data-role="none" class="toggle-container" for="toggle">
         <span data-role-menu class="button-toggle">
             <span data-role-menu class="icon"></span>
-            <span data-role-menu class="icon"></span>
         </span>
     </label>
 {% endif %}
@@ -41,7 +40,7 @@
 {% endif %}
 
     <nav class="nav" data-role-menu>
-        <a tabindex="0" data-role="none" href="/">
+        <a tabindex="0" data-role="none" href="/" class="first">
             {% if general.isLoggedIn %}
                 Start
             {% else %}
@@ -75,9 +74,6 @@
             Edycja konta
         </a>
 
-        <a data-role="none" class="sub" href="/logout.html" data-ajax="false">
-            wyloguj się
-        </a>
 {% else %} {# not logged in #}
         <a class="cta" href="/nowe-zgloszenie.html" data-ajax="false">
             Spróbuj!
@@ -114,17 +110,23 @@
         </a>
 {% endif %}
 
-        <a data-role="none" target="_blank" class="ui-icon-map"href="https://agendaparkingowa.pl/">
+        <a data-role="none" rel="external" target="_blank" href="https://agendaparkingowa.pl/">
             Agenda Parkingowa
         </a>
-        <a data-role="none" target="_blank"href="https://prawapieszych.pl">
+        <a data-role="none" rel="external" target="_blank" href="https://prawapieszych.pl">
             Podpisz wniosek do RPO
         </a>
 
-{% if not general.isLoggedIn %}
+<div class="spacer"></div>
+{% if general.isLoggedIn %}
+        <a data-role="none" href="/logout.html" data-ajax="false">
+            Wyloguj się
+        </a>
+{% else %}
 	    <a data-role="none" href="/start.html" data-ajax="false">
             Zaloguj/zarejestruj się
         </a>
 {% endif %}
+
     </nav>
 </div>
