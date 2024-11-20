@@ -15,7 +15,7 @@ $confirmed-sm: #08BB0F;
 $confirmed-sm-stroke: #08BB0F;
 $confirmed-fined: #256EC6;
 $confirmed-fined-stroke: #256EC6;
-$confirmed-instructed: #256EC6;
+$confirmed-instructed: #FFFFFF;
 $confirmed-instructed-stroke: #256EC6;
 $confirmed-ignored: #FF640A;
 $confirmed-ignored-stroke: #FF640A;
@@ -35,33 +35,3 @@ $patroniteIcon: url(https://cdn.patronite.pl/webapp/img/widget/sygnet-white.svg)
 $patroniteColor: #f23e17;
 
 $mapColor: #20155e;
-
-$container-gutter: 2rem;
-
-$screen-sizes: (
-  'sm': 30rem,
-  'md': 48rem,
-  'lg': 73rem,
-  'xl': 87rem
-);
-
-@function media-min-width($screen-sizes-name) {
-    @return ('only screen and (min-width: #{map.get($screen-sizes, $screen-sizes-name)})');
-  }
-
-@function media-max-width($screen-sizes-name) {
-    @return ('only screen and (max-width: #{map.get($screen-sizes, $screen-sizes-name) - .16rem})');
-}
-
-$screen-max-md: media-max-width('md');
-$screen-md: media-min-width('md');
-
-$container-width: map.get($screen-sizes, 'lg');
-
-%textBold {
-    margin: 0;
-    font-size: 1.05rem;
-    font-weight: 600;
-    line-height: 1.5;
-    letter-spacing: .5px;
-}

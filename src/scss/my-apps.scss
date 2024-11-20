@@ -70,7 +70,6 @@
       &.confirmed-instructed .ui-li-count {
         background-color: variables.$confirmed-instructed;
         border-color: variables.$confirmed-instructed-stroke;
-        color: white;
       }
       &.archived .ui-li-count {
         background-color: variables.$archived;
@@ -360,7 +359,6 @@
     .confirmed-instructed::marker {
       background-color: variables.$confirmed-instructed;
       border-color: variables.$confirmed-instructed-stroke;
-      color: white!important;
     }
 
     &.archived .current-statust::before,
