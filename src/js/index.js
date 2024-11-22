@@ -26,4 +26,6 @@ import "./sites/how";
 import "./sites/ask-for-status"
 import "./sites/menu"
 
-$("a").attr('data-ajax', 'false')
+$('.menu-button.right').on('click', function() {
+    $(this).addClass('ui-disabled');
+})
