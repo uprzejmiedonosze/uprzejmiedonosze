@@ -18,7 +18,6 @@ import "./sites/gallery";
 import "./sites/my-application";
 import "./sites/register";
 import "./sites/regulations";
-import "./sites/shipment";
 import "./sites/start";
 import "./sites/statistics";
 import "./sites/thank-you";

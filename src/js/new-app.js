@@ -25,8 +25,9 @@ $(document).on("pageshow", function () {
     repositionCarImage(vehicleBox, imageWidth, imageHeight)
   }
 
-  Sentry.setTag("appId", $("#applicationId").val());
+  Sentry.setTag("appId", $(".new-application #applicationId").val()?.toString());
 
+  // @ts-ignore
   (typeof ga == 'function') && ga("send", "event", {
     eventCategory: "pageshow",
     eventAction: "nowe-zgloszenie"

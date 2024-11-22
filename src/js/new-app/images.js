@@ -237,7 +237,7 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
  * @param {*} imageMetadata 
  */
 async function sendFile(fileData, id, imageMetadata={}) {
-  const appId = $("#applicationId").val()
+  const appId = $(".new-application #applicationId").val()
   var data = {
     image_data: fileData,
     pictureType: id

@@ -11,10 +11,9 @@ import Api from './Api'
 window.sendApplication = async function (appId) {
   const $whatNext = $(".whatNext")
   const $afterSend = $(".afterSend")
-  const $buttonRight = $('.ui-btn-right')
+  const $buttonRight = $('.menu-button.right')
 
   $(`#${appId} .status-confirmed-waiting`).addClass("ui-disabled")
-  $buttonRight.addClass("ui-disabled")
 
   $.mobile.loading("show", { text: "Wysyłam...", textVisible: true })
 
