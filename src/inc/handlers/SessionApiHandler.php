@@ -3,13 +3,24 @@
 require_once(__DIR__ . '/AbstractHandler.php');
 require(__DIR__ . '/../API.php');
 
+use app\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpNotFoundException;
-use cache\Type;
 
 class SessionApiHandler extends AbstractHandler {
+
+    private function checkEditable(Request $request, Application $app) {
+        if (!$app->isEditable())
+            throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
+    }
+
+    private function checkOwnership(Request $request, Application $app) {
+        if(!$app->isCurrentUserOwner())
+            throw new HttpNotFoundException($request, "Nie posiadasz zgłoszenia o ID {$app->id}");
+    }
+
     public function image(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
@@ -18,6 +29,8 @@ class SessionApiHandler extends AbstractHandler {
         $pictureType = $this->getParam($params, 'pictureType');
 
         $application = \app\get($appId);
+        $this->checkEditable($request, $application);
+        $this->checkOwnership($request, $application);
 
         $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;
         $dtFromPicture = isset($params['dtFromPicture']) ? $params['dtFromPicture'] == 'true' : null;
@@ -32,6 +45,7 @@ class SessionApiHandler extends AbstractHandler {
         $status = $args['status'];
         $user = $request->getAttribute('user');
         $application = setStatus($status, $appId, $user);
+        $this->checkOwnership($request, $application);
         return $this->renderJson($response, array(
             "status" => "OK",
             "patronite" => $application->patronite
@@ -41,9 +55,7 @@ class SessionApiHandler extends AbstractHandler {
     {
         $appId = $args['appId'];
         $application = \app\get($appId);
-        if(!$application->isCurrentUserOwner()) {
-            throw new HttpNotFoundException($request, 'Nie posiadasz aplikacji o ID ' . $appId);
-        }
+        $this->checkOwnership($request, $application);
 
         $fields = json_decode($request->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
         foreach ($fields as $field => $value) {
