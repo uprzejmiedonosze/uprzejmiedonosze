@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 $(document).on("pageshow", function () {
     if (!$(".ask-for-status").length) return;
   

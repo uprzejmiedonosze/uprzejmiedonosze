@@ -1,4 +1,4 @@
-/* global google */
+import $ from "jquery"
 
 import mapboxgl from 'mapbox-gl'
 import Api from './Api'

@@ -1,4 +1,11 @@
+import $ from "jquery";
+// @ts-ignore
+window.$ = $;
+// @ts-ignore
+window.jQuery = $;
+
 import "lazysizes";
+
 
 import "./lib/send";
 import "./lib/sentry";

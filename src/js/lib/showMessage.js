@@ -1,3 +1,4 @@
+import $ from "jquery"
 
 export function showMessage(msg) {
     $.mobile.loading("show", {

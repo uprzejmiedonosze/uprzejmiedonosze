@@ -1,3 +1,4 @@
+import $ from "jquery"
 import { checkAddress, checkValue, checkCommentvalue, checkDateTimeValue } from "../lib/validation";
 
 export function validateForm() {

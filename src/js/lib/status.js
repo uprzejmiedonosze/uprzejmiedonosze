@@ -1,4 +1,4 @@
-/* global ga */
+import $ from "jquery"
 
 import Api from './Api'
 

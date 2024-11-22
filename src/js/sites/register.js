@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 import { checkValueRe } from "../lib/validation"
 
 const $name = $("#name")

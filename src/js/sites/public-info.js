@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 function copyToClipboard() {
     var txt = $('dd#copy').text().trim()
     navigator.clipboard.writeText(txt)

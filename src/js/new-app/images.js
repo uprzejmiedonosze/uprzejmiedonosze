@@ -1,3 +1,4 @@
+import $ from "jquery"
 import heic2any from "heic2any"
 import ExifReader from 'exifreader'
 

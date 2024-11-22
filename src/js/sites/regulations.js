@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 $(function () {
   if (!$(".przepisy").length) return;
   const hash = window.location.hash;

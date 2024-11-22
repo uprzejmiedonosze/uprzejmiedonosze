@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 import { updateCounters } from "../lib/status";
 import { setStatus } from "../lib/status"
 import Api from '../lib/Api'

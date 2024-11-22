@@ -1,4 +1,4 @@
-/* global ga */
+import $ from "jquery"
 
 import * as Sentry from "@sentry/browser";
 

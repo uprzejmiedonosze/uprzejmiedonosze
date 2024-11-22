@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 $(function () {
   if (!$(".faq").length || !$(".how").length) return;
   const hash = window.location.hash;

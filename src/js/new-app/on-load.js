@@ -1,3 +1,4 @@
+import $ from "jquery"
 
 import { checkFile } from "./images";
 import { validateForm } from "./validate-form";

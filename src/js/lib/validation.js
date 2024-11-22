@@ -1,3 +1,4 @@
+import $ from "jquery"
 import { DateTime } from "luxon";
 
 export const checkAddress = function () {

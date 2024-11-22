@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 import Highcharts from "highcharts";
 import Data from "highcharts/modules/data";
 

@@ -1,4 +1,4 @@
-/* global ga */
+import $ from "jquery"
 
 $(document).on("pageshow", function () {
   if (!$(".confirm-application").length) return;

@@ -1,3 +1,5 @@
+import $ from "jquery"
+
 function tumblr() {
   $.getJSON(
     "https://galeria.uprzejmiedonosze.net/api/read/json?num=30&callback=?",

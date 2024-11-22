@@ -1,4 +1,4 @@
-/* global ga */
+import $ from "jquery"
 
 $(document).on("pageshow", function () {
   if (!$(".dziekujemy").length) return;
