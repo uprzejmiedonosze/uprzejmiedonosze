@@ -169,11 +169,11 @@ h4 {
     font-weight: 600;
 }
 
-a[rel~="external"] {
+a[rel~="external"]:not(:has(img)) {
     color: #38c!important;
 }
 
-a[rel~="external"]::after {
+a[rel~="external"]:not(:has(img))::after {
   content: "";
   width: 11px;
   height: 11px;
