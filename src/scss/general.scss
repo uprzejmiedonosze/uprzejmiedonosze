@@ -170,11 +170,11 @@ h4 {
     font-weight: 600;
 }
 
-a[rel~="external"]:not(:has(img)) {
+a[rel~="external"]:not(:has(img)):not(.button) {
     color: #38c!important;
 }
 
-a[rel~="external"]:not(:has(img))::after {
+a[rel~="external"]:not(:has(img)):not(.button)::after {
   content: "";
   width: 11px;
   height: 11px;
