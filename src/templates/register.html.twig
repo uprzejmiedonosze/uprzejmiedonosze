@@ -35,19 +35,26 @@
 
     <fieldset data-role="controlgroup">
         <legend for="stopAgresji">Chcę wysyłać swoje zgłoszenia</legend>
-        <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
-        <label for="stopAgresji-SM">do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)</label>
-
-        <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
-        <label for="stopAgresji-SA">na komendę Policji właściwą dla województwa zgłoszenia</label>
+        <label for="stopAgresji-SM" class="radio">
+            <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
+            <span>do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)</span>
+        </label>
+        <label for="stopAgresji-SA" class="radio">
+            <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
+            <span>na komendę Policji właściwą dla województwa zgłoszenia</span>
+        </label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend for="shareRecydywa">Chcę pozwalać na prezentowanie moich zdjęć w galerii recydywistów parkowania</legend>
-        <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>
-        <label for="shareRecydywa-Y">tak (domyślnie), chcę udostępniać <u>pierwsze</u> zdjęcie każdego zgłoszenia</label>
-        <input type="radio" name="shareRecydywa" id="shareRecydywa-N" value="N" {% if not user.shareRecydywa %}checked="checked"{% endif %}>
-        <label for="shareRecydywa-N">nie</label>
+        <label for="shareRecydywa-Y" class="radio">
+            <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>
+            <span>tak (domyślnie), chcę udostępniać <u>pierwsze</u> zdjęcie każdego zgłoszenia</span>
+        </label>
+        <label for="shareRecydywa-N" class="radio">
+            <input type="radio" name="shareRecydywa" id="shareRecydywa-N" value="N" {% if not user.shareRecydywa %}checked="checked"{% endif %}>
+            <span>nie</span>
+        </label>
     </fieldset>
 
     <a id="register-submit" class="button cta last">

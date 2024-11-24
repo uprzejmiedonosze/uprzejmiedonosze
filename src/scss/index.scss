@@ -19,6 +19,7 @@
 @use 'patronite';
 @use 'car-info';
 @use 'main';
+@use 'radio';
 @use 'button';
 @use 'menu';
 @use 'header';
@@ -27,6 +28,12 @@ fieldset {
     border-width: 0;
     padding: 0;
     margin: 0;
+
+    legend {
+        padding-top: 1.5em;
+        padding-bottom: 1em;
+        font-weight: 400;
+    }
 }
 
 html {
@@ -44,7 +51,9 @@ body {
     line-height: 1.4;
 }
 
-.ui-mobile [data-role=page], .ui-mobile [data-role=dialog], .ui-page {
+.ui-mobile [data-role=page],
+.ui-mobile [data-role=dialog],
+.ui-page {
     top: 0;
     left: 0;
     width: 100%;
@@ -57,4 +66,76 @@ body {
     outline: 0;
     padding: 0;
     margin: 0;
+}
+
+
+.ui-block-a {
+    clear: left;
+}
+
+.ui-block-a,
+.ui-block-b {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    float: left;
+    min-height: 1px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.ui-grid-a>.ui-block-a {
+    width: 50%;
+}
+
+input {
+    background: transparent none;
+    border-radius: 5px;
+    border: 1px solid variables.$primaryColor;
+    box-sizing: border-box;
+    color: variables.$primaryColor;
+    display: block;
+    font-size: 1em;
+    line-height: 1.4em;
+    margin-bottom: 1em;
+    min-height: 2.2em;
+    outline: 0;
+    padding: .4em;
+    text-align: left;
+    width: 100%;
+
+    &:disabled {
+        opacity: .3;
+        cursor: default !important;
+        pointer-events: none;
+    }
+}
+
+input:disabled {
+    color: #000;
+}
+
+input.error,
+textarea.error {
+    border: 2px solid red !important;
+}
+
+input.warning,
+textarea.warning {
+    border: 2px solid variables.$secondaryColor;
+}
+
+.ui-radio .ui-btn {
+    margin: 0;
+    text-align: left;
+    white-space: normal;
+    z-index: 2;
+}
+
+label {
+    display: block;
+    margin: 0 0 .4em;
+    font-weight: 400;
+    font-size: 16px;
 }
