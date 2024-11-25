@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const appsList = document.getElementById('apps-list')
   if (!appsList) return
 
-  filterable('apps')
+  filterable('apps', 'apps-list')
 
   const appHeaders = appsList?.getElementsByTagName('h3') || []
   for (let h3 of appHeaders)
