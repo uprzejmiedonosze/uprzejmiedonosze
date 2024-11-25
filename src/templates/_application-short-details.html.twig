@@ -21,12 +21,30 @@
         {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}</b>
 
         {% if appActionButtons %}
-            <a href="#changeStatus{{ app.id }}" data-rel="popup" data-transition="none" aria-haspopup="true"
-                aria-owns="changeStatus{{ app.id }}" aria-expanded="false"
-                data-inline="true" data-mini="true"
-                class="button small light change-status">ZMIEŃ
-            </a>
-            <div style="display: none;"><!-- placeholder for pre-rendered --></div>
+        <div data-role="dropdown" id="changeStatus{{ app.id }}"
+            class="application-short dropdown">
+            <button class="button small light change-status dropdown-button">ZMIEŃ</button>
+            <ul data-role="listview" class="change-status dropdown-content">
+                <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
+                    Zmień status zgłoszenia z <span class="currentStatus">{{ status.name }}</span> na:
+                </li>
+                {% for key,val in statuses %}
+                {% if val.class == 'bottom' %}
+                {% set liStyle = '' %}
+                {% if key not in status.allowed %}
+                {% set liStyle = 'style="display: none;"' %}
+                {% endif %}
+                <li {{ liStyle|raw }}>
+                    <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true" class="ui-btn ui-btn-icon-left ui-nodisc-icon ui-mini 
+                                {{ val.cta ?? '' }}
+                                {{ key }}">{{ val.action }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+
         {% endif %}
 
         Zgłoszenie&nbsp;<tt>{{ app.number }}</tt>
@@ -109,29 +127,5 @@
         <p>
             <textarea class="app-field-editable" name="privateComment" data-initial-value="{{ app.privateComment }}" placeholder="">{{ app.privateComment }}</textarea>
         </p>
-    </div>
-</div>
-
-<div id="changeStatus{{ app.id }}-screen" class="ui-popup-screen ui-overlay-inherit ui-screen-hidden"></div>
-<div id="changeStatus{{ app.id }}-popup" class="ui-popup-container ui-popup-hidden ui-popup-truncate">
-    <div data-role="popup" id="changeStatus{{ app.id }}" data-enhanced="true" data-transition="none" class="application-short ui-popup ui-body-inherit ui-overlay-shadow">
-        <ul data-role="listview" data-inset="true" class="ui-listview ui-listview-inset change-status">
-            <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                Zmień status zgłoszenia z <span class="currentStatus">{{ status.name }}</span> na:
-            </li>
-            {% for key,val in statuses %}
-            {% if val.class == 'bottom' %}
-            {% set liStyle = '' %}
-            {% if key not in status.allowed %}
-            {% set liStyle = 'style="display: none;"' %}
-            {% endif %}
-            <li {{ liStyle|raw }}>
-                <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true" class="ui-btn ui-btn-icon-left ui-nodisc-icon ui-mini 
-                            {{ val.cta ?? '' }}
-                            {{ key }}">{{ val.action }}</a>
-            </li>
-            {% endif %}
-            {% endfor %}
-        </ul>
     </div>
 </div>

@@ -4,6 +4,7 @@ import { updateCounters } from "../lib/status";
 import { setStatus } from "../lib/status"
 import Api from '../lib/Api'
 import filterable from "../lib/filterable";
+import makeDropdown from "../lib/dropdown";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   const appsList = document.getElementById('apps-list')
@@ -45,7 +46,9 @@ async function appClickEvent() {
   const appDetails = await api.getHtml()
   location.hash = `#${appId}`
   appDetailsDiv.innerHTML = appDetails
-  $(`#changeStatus${appId}`).popup()
+
+  makeDropdown()
+
   $('.private-comment textarea').on('keyup',  function(){
     $(this).height(0).height(this.scrollHeight);
   }).trigger('keyup')
