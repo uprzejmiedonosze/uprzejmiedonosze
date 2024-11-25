@@ -1,18 +1,6 @@
 @use "variables";
 @use "button";
 
-.ui-body-a,
-    .ui-page-theme-a .ui-body-inherit,
-    html .ui-bar-a .ui-body-inherit,
-    html .ui-body-a .ui-body-inherit,
-    html body .ui-group-theme-a .ui-body-inherit,
-    html .ui-panel-page-container-a {
-    border: none;
-    font-family: sans-serif;
-    color: #000;
-    text-shadow: none;
-}
-
 body, a, p, i, input, textarea, select {
     font-weight: 300;
     color: #000;
@@ -29,7 +17,7 @@ small {
 
 .ui-content {
     max-width: variables.$content-width;
-    margin: 32px auto 0 auto;
+    margin: 50px auto 0 auto;
     background-color: white;
     border-color: rgba(217, 217, 217, 0.5);
     border-style: solid;
@@ -37,6 +25,7 @@ small {
     position: relative;
     z-index: 1;
     overflow-x: visible;
+    padding: 1em;
 }
 
 @media (min-width: 900px) {
@@ -71,38 +60,6 @@ img.one-third {
     }
 }
 
-.ui-header a {
-    border: 0;
-    top: 4px;
-    background-color: variables.$secondaryColor!important;
-
-    &.ui-btn-left {
-        @extend .base-button;
-        border-top-left-radius: 5px;
-        border-bottom-left-radius: 5px;
-        padding-left: 2.5em;
-        color: black!important;
-    }
-    &.ui-btn-right {
-        @extend .base-button;
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-        padding-right: 2.5em;
-        color: black!important;
-    }
-}
-
-.ui-page-theme-a .ui-header,
-html .ui-bar-a .ui-header,
-html .ui-body-a .ui-header,
-html body .ui-group-theme-a .ui-header {
-    background-color: variables.$primaryColor;
-    color: white;
-    text-shadow: none;
-    box-shadow: none;
-    line-height: 1.3;
-}
-
 ul[data-role="listview"] {
     margin-top: .5em;
     padding: 0;
@@ -122,7 +79,6 @@ p > a, li > a, small > a {
     text-decoration: none;
     color: variables.$primaryColor!important;
     font-weight: 400!important;
-    text-shadow: none;
 }
 
 #mainMenu > div.ui-panel-inner {
@@ -134,22 +90,13 @@ p > a, li > a, small > a {
     color: #fff!important;
     text-decoration: none!important;
     border-color: variables.$primaryColor;
-    text-shadow: none;
-}
-.ui-btn-active, #mainMenu a.active {
-    background-color: variables.$primaryColor!important;
-    text-shadow: none!important;
-    color: white!important;
-    border-color: variables.$primaryColor!important;
-    box-shadow: none!important;
 }
 
 .filter a {
     color: #666!important;
 }
 
-.filter a,
-.subpage a {
+.filter a {
     padding-top: 0.3em;
     padding-bottom: 0.3em;
     padding-left: 2em;
@@ -205,13 +152,6 @@ a[rel~="external"]:not(:has(img)):not(.button)::after {
             font-style: normal;
             font-weight: 400;
         }
-    }
-
-    .ui-page .ui-content a.fb-button {
-        background-color: #4265AA;
-        color: white;
-        text-shadow: none;
-        border: none;
     }
 }
 
