@@ -28,27 +28,6 @@ label {
   font-weight: 300;
 }
 
-.ui-input-text input,
-.ui-input-search input {
-  border: 1px solid variables.$primaryColor;
-  color: variables.$primaryColor;
-  margin-bottom: 1em;
-}
-
-input:disabled {
-  color: #000;
-}
-
-input.error,
-textarea.error {
-  border: 2px solid red !important;
-}
-
-input.warning,
-textarea.warning {
-  border: 2px solid variables.$secondaryColor;
-}
-
 div.error img {
   background-color: rgba(255, 0, 0, 0.3);
 }

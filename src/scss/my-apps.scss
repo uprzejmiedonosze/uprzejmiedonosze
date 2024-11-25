@@ -181,26 +181,6 @@
     }
   }
 
-  .appActionButtons a.ui-btn {
-    font-weight: 400;
-  }
-
-  .ui-collapsible-inset.ui-collapsible-themed-content .ui-collapsible-content {
-    border-color: #ddd;
-    border-top: 0;
-    border-style: solid;
-    padding: 0 0 1em 0;
-  }
-
-  .ui-input-has-clear {
-    padding-right: 0 !important;
-
-    input {
-      border-radius: 5px !important;
-    }
-  }
-
-
   div.application-short, .list .car .card {
 
     &.archived {
@@ -209,19 +189,8 @@
 
     h3 {
       border-bottom: none;
-
-      a.ui-btn:focus {
-        box-shadow: none;
-      }
-
-      a.ui-btn {
-        padding: 0.5em;
-      }
-
-      a {
-        font-weight: 100;
-        font-size: 14px;
-      }
+      font-weight: 100;
+      font-size: 14px;
 
       .top-line,
       .bottom-line {
@@ -274,18 +243,7 @@
       }
     }
 
-    &:not(.ui-collapsible-collapsed) {
-      border-bottom: 0;
-
-      h3 {
-        a {
-          background-color: white;
-          border-bottom: 0;
-        }
-      }
-    }
-
-    &.ui-collapsible-collapsed {
+    &:not(.expanded) {
       h3 .bottom-line .expander:after {
         transform: rotate(0deg);
         transition: transform 0s;
@@ -420,3 +378,41 @@
   }
 }
 
+.application h3:hover {
+  .bottom-line {
+    color: variables.$primaryColor;
+  }
+}
+
+
+div[data-role="collapsibleset"] {
+
+  .application {
+    border-radius: .8em;
+    margin-bottom: .5em;
+    background-color: #f6f6f6;
+    border: 1px solid #ddd;
+
+    h3 {
+      display: block;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      padding: .5em;
+      border-right-width: 1px;
+      border-left-width: 1px;
+      display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+      position: relative;
+      border-color: #ddd;
+    }
+
+    .app-details {
+      background-color: white;
+    }
+  }
+    
+}

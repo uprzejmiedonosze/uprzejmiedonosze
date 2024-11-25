@@ -25,9 +25,11 @@ możesz się spodziewać po współpracy ze swoją strażą miejską.</p>
 
 <p>Pamiętaj, że przysługuje Ci <a href="/zwrot-za-przesluchanie.html">zwrot środków za przesłuchanie</a>.
 
-<ul data-role="listview" data-autodividers="true" data-filter="true" data-inset="true" placeholder="Szukaj...">
+
+<input data-type="filterable" type="text" id="filterable" placeholder="Szukaj...">
+<ul data-role="listview" id="filterable-list">
 {% for city,hint in SMHints %}
-    <li><b>{{ city }}</b> — {{ hint | striptags }}</li>
+    <li data-filtertext="{{ city }}"><b>{{ city }}</b> — {{ hint | striptags }}</li>
 {% endfor %}
 </ul>
 

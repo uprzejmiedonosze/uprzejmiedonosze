@@ -7,7 +7,6 @@
     {% if hideAppOverLimit is defined %}style="display: none;"{% endif %}
     class="application application-short status-all {{ app.status }} {% if recydywaCnt > 1 %}recydywa{% endif %}"
     data-role="collapsible"
-    data-iconpos="none"
     data-filtertext="{{ app.address.address }} {{ app.number }} {{ app.getDate|raw }} {{ app.carInfo.plateId }} {{ app.userComment }} {{ app.getCategory.formal }} {{ app.guessSMData.getName }} {{ app.externalId }} {{ app.privateComment }} {% if recydywaCnt > 1 %}recydywa{{ recydywaCnt }}{% endif %} {% if app.getStatus.sendable %}wysyłka{% endif %}">
 
     <h3>
@@ -39,6 +38,5 @@
         </div>
     </h3>
 
-    <div data-role="listview" data-inset="false">
-    </div>
+    <div data-role="listview" class="app-details"></div>
 </div>

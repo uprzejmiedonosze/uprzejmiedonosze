@@ -25,7 +25,7 @@
 
 
     <form autocomplete="off">
-        <input autocomplete="false" data-type="search" id="autocomplete-input" data-iconpos="right"
+        <input autocomplete="false" data-type="filterable" type="text" id="apps"
             placeholder="Adres, numer rej. lub zgłoszenia, data, komentarz" value="{{ query }}">
         <ul class="status-filter">
         {% for key,val in statuses %}
@@ -36,10 +36,8 @@
         </ul>
     </form>
     
-    <div data-role="popup" id="patronite" class="ui-content"
-        data-overlay-theme="b" data-theme="a" data-corners="true" data-tolerance="15,15"
-        data-position-to="window"> 
-        <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+    <dialog data-role="popup" id="patronite"> 
+        <a href="#" data-rel="back">Close</a>
         <p><b>Cieszę się, że zmieniłeś na lepsze swoje otoczenie!</b></p>
         <p>Chciałbym poświęcić więcej czasu swojej misji odzyskania przestrzeni dla pieszych.
             Twoje wsparcie dla serwisu Uprzejmie Donoszę może mi w tym bardzo pomóc.</p>
@@ -47,7 +45,7 @@
                 href="/patronite.html"
                 data-ajax="false">Zostań Patronem</a>
         </p>
-    </div>
+    </dialog>
 
 
     <div id="recydywa" class="popup-overlay">
@@ -55,8 +53,7 @@
         </div>
     </div>
 
-    <div data-role="collapsibleset" data-iconpos="right" data-filter="true" data-mini="true"  data-enhanced="true"
-        data-inset="true" id="collapsiblesetForFilter" data-input="#autocomplete-input">
+    <div data-role="collapsibleset" data-iconpos="right" data-filter="true" id="apps-list">
         {% for app in applications %}
             {% if loop.index0 >= myAppsSize %}
                 {% set hideAppOverLimit = true %}
