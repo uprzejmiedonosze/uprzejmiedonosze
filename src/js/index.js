@@ -25,7 +25,13 @@ import "./sites/public-info";
 import "./sites/how";
 import "./sites/ask-for-status"
 import "./sites/menu"
+import makeDialog from "./lib/dialog";
 
 $('.menu-button.right').on('click', function() {
     $(this).addClass('ui-disabled');
+})
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    makeDialog()
 })

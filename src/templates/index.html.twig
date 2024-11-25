@@ -83,7 +83,7 @@
     <dialog data-role="popup" id="popup-badge-{{ badgeId }}">
         <p>{{ badge.desc|raw }}</p>
     </dialog>
-    <a href="#popup-badge-{{ badgeId }}" data-rel="popup" data-transition="pop">
+    <a href="#popup-badge-{{ badgeId }}" data-rel="popup">
         <div class="badge {% if badgeId in general.stats.badges %}active{% endif %} {% if former_patron %}former_patron{% endif %}">
             <img src="{{ badge.img }}">
             <p>
