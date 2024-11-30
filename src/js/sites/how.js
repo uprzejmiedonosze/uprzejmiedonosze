@@ -18,4 +18,5 @@ function scrollTo(hash) {
 // @ts-ignore
 window._scrollToHowTo = scrollTo
 
-filterable('filterable')
+filterable('filterable', 'filterable-list')
+
