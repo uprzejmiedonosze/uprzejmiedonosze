@@ -12,11 +12,47 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   filterable('apps', 'apps-list')
 
+  // app headers clickable
   const appHeaders = appsList?.getElementsByTagName('h3') || []
   for (let h3 of appHeaders)
-    h3.addEventListener("click", appClickEvent)
+    h3.addEventListener("click", appClickHandler)
+
+  // filters
+  const filters = document.querySelectorAll(".status-filter a") || []
+  for (let filter of filters) {
+      filter.addEventListener("click", filterAppsHandler)
+  }
+
+  // show all apps
+  const displayAllAppsBtn = document.querySelector("div.displayAllApps a")
+  displayAllAppsBtn?.addEventListener("click", displayAllAppsHandler)
+
+  updateCounters()
+
+  const $recydywa = $('#recydywa')
+
+  // close „recydywa” dialong on Esc
+  $(document).on('keyup', e => e.key === "Escape" && $recydywa.hide())
+  $recydywa.on('click', _e => $recydywa.hide())
 })
 
+function filterAppsHandler() {
+    if (this.classList.contains('active')) {
+      this.classList.remove("active")
+      $("div.application:not(.archived)").show()
+      return
+    }
+    $("div.application").hide();
+    $("div.application." + this.id).show();
+    $(".status-filter a").removeClass("active");
+    this.classList.add("active")
+}
+
+
+function displayAllAppsHandler() {
+  $("div.displayAllApps").hide();
+  $("div.application:not(.archived)").show();
+}
 
 function closeAllApps() {
   const expanded = document.querySelectorAll("#apps-list .expanded")
@@ -29,7 +65,7 @@ function closeAllApps() {
 }
 
 
-async function appClickEvent() {
+async function appClickHandler() {
   const target = this.parentElement
   const appId = target.id
   const appDetailsDiv = target.getElementsByClassName("app-details").item(0)
@@ -101,48 +137,3 @@ async function appClickEvent() {
       }
     })
 }
-
-$(document).on("pageshow", function () {
-  const displayAllApps = function () {
-    $("div.displayAllApps").hide();
-    $("div.application:not(.archived)").show();
-  }
-
-  if (!$(".my-applications").length) return;
-
-  $("#collapsiblesetForFilter" ).on("filterablebeforefilter", function() {
-    $.mobile.loading("show")
-  })
-
-  $("#collapsiblesetForFilter" ).on("filterablefilter", function() {
-    $.mobile.loading("hide")
-  });
-
-  $("div.displayAllApps a").on('click', displayAllApps);
-
-  updateCounters();
-
-  $(".status-filter a").on('click', function (_e) {
-    // unclick scenarion
-    if (this.classList.contains('active')) {
-      $(this).removeClass("active");
-      $("div.application:not(.archived)").show();
-      return;
-    }
-    $("div.application").hide();
-    $("div.application." + this.id).show();
-    $(".status-filter a").removeClass("active");
-    $(this).addClass("active");
-  });
-
-
-  const $recydywa = $('#recydywa')
-
-  // close „recydywa” dialong on Esc
-  $(document).on('keyup', e => e.key === "Escape" && $recydywa.hide())
-  $recydywa.on('click', _e => $recydywa.hide())
-
-  if ($('#autocomplete-input').val() !== '') {
-    $('#autocomplete-input').trigger("keyup");
-  }
-});
