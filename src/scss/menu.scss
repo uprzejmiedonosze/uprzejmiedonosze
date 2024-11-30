@@ -1,5 +1,6 @@
 @use "variables";
 @use "button";
+@use "badge";
 
 $borderRadius: 5px;
 $transition-duration: 0.5s;
@@ -14,7 +15,6 @@ $transition-duration: 0.5s;
     transform: translate(-50%);
     width: 100%;
     box-sizing: border-box;
-    //z-index: 30;
 
     * {
         box-sizing: border-box;
@@ -102,14 +102,7 @@ nav.nav > a {
     }
 
     .menu-count {
-        border-style: solid;
-        border-width: 1px;
-        border-radius: 20px;
-        position: relative;
-        padding: 0 .48em;
-        min-width: .64em;
-        font-size: 12.5px;
-        top: -1px;
+        @extend .badge;
         margin-left: 1em;
     }
 

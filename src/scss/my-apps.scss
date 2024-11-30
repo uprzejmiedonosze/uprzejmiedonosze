@@ -1,5 +1,6 @@
 @use "icons";
 @use "variables";
+@use "badge";
 
 .my-applications, .car-info {
   ul.status-filter {
@@ -24,15 +25,10 @@
       }
 
       .ui-li-count {
-        position: unset;
+        @extend .badge;
         border-width: 2px;
-        border-style: solid;
-        border-radius: 20px;
-        text-shadow: none;
         color: black;
-        top: -2px;
-        position: relative;
-        right: unset;
+        font-weight: 600;
       }
 
       &.draft .ui-li-count {
