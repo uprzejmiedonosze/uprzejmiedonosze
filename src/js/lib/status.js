@@ -7,11 +7,13 @@ const statuses = require("../../api/config/statuses.json");
 export async function setStatus(appId, status) {
   if (statuses[status]?.confirmationNeeded) {
     const confirmation = window.confirm('Czy na pewno chcesz przeniesć zgłoszenie do archiwum?');
-    if (!confirmation) return optionallyClosePopup(appId);
+    if (!confirmation) return
   }
-  // @ts-ignore
-  $.mobile.loading("show", { textVisible: true, text: '' });
 
+  const changeStatusButton = document.querySelector(`#changeStatus${appId}`)
+  if (changeStatusButton)
+    changeStatusButton.classList.add('disabled')
+  
   const api = new Api(`/api/app/${appId}/status/${status}`);
   const result = await api.patch();
   
@@ -20,23 +22,17 @@ export async function setStatus(appId, status) {
     $('#patronite').popup("open");
   
   updateStatus(appId, status);
-  optionallyClosePopup(appId);
-  
+
+  if (changeStatusButton)
+    // @ts-ignore
+    changeStatusButton.classList.remove('disabled')
+
   // @ts-ignore
   (typeof ga == 'function') && ga("send", "event", {
     eventCategory: "js",
     eventAction: "setStatus",
     eventLabel: status
   });
-}
-
-function optionallyClosePopup(appId) {
-  try {
-    // @ts-ignore
-    $(`#changeStatus${appId}`).popup('close')
-    // @ts-ignore
-    $.mobile.loading("hide")
-  } catch(_e) {}
 }
 
 // @ts-ignore
