@@ -6,14 +6,14 @@ $(document).on("pageshow", function () {
   (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "potwierdz" });
 
   setTimeout(function () {
-    $("a.confirm-send-button").removeClass('ui-disabled')
+    $("a.confirm-send-button").removeClass('disabled')
   }, 1500);
 });
 
 
 function confirmApplication() {
   $('#form').submit();
-  $('.confirm-save-button').addClass('ui-disabled')
+  $('.confirm-save-button').addClass('disabled')
 }
 
 window.confirmApplication = confirmApplication;

@@ -2,7 +2,7 @@ import $ from "jquery"
 import { checkAddress, checkValue, checkCommentvalue, checkDateTimeValue } from "../lib/validation";
 
 export function validateForm() {
-  $("#form-submit").addClass("ui-disabled");
+  $("#form-submit").addClass("disabled");
   var ret = checkValue($("#plateId"), 3);
   ret = checkDateTimeValue() && ret;
   ret = checkAddress() && ret;
@@ -14,7 +14,7 @@ export function validateForm() {
   if (!ret) {
     $(window).scrollTop($(".error").offset().top - 100);
   }
-  $("#form-submit").removeClass("ui-disabled");
+  $("#form-submit").removeClass("disabled");
   return ret;
 }
 

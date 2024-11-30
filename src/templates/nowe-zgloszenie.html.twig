@@ -89,7 +89,7 @@
             <div class="ui-block-b">
                 <div class="combo">
                     <input {#readonly#} type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="{#ui-disabled#}"
+                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="{#disabled#}"
                         value="{{ app.address.address ?? '' }}" />
                     <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
                         data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
@@ -137,14 +137,13 @@
                     </div>
                 </label>
                 <a href="#category-popup-{{ catId }}" data-rel="popup" data-transition="pop" class="category-popup">więcej...</a>
-                <div data-role="popup" id="category-popup-{{ catId }}" class="ui-content" style="max-width: 500px;">
+                <dialog data-role="popup" id="category-popup-{{ catId }}" class="ui-content" style="max-width: 500px;">
                     <p>{{ categoryDef.desc|raw }}</p>
                     {% if categoryDef.price %}
                     <p class="price-list">Mandat: {{ categoryDef.price }}</p>
                     {% endif %}
                     <p class="category-law">{{ categoryDef.law }}</p>
-                </div>
-
+                </dialog>
             </div>
         {% set i = i + 1 %}
         {% endif %}

@@ -90,9 +90,9 @@ function uploadFinished() {
 function checkUploadInProgress() {
   if (uploadInProgress <= 0) {
     uploadInProgress = 0;
-    return $("#form-submit").removeClass("ui-disabled");
+    return $("#form-submit").removeClass("disabled");
   }
-  $("#form-submit").addClass("ui-disabled");
+  $("#form-submit").addClass("disabled");
 }
 
 /**
