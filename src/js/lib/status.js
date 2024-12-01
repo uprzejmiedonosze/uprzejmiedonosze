@@ -19,13 +19,13 @@ export async function setStatus(appId, status) {
   
   if (result?.patronite)
     // @ts-ignore
-    $('#patronite').popup("open");
+    document.getElementById('patronite')?.showModal()
   
-  updateStatus(appId, status);
+  updateStatus(appId, status)
 
-  if (changeStatusButton)
-    // @ts-ignore
+  if (changeStatusButton) {
     changeStatusButton.classList.remove('disabled')
+  }
 
   // @ts-ignore
   (typeof ga == 'function') && ga("send", "event", {
@@ -43,21 +43,19 @@ export function updateStatus(appId, status) {
   const newIcon = "ui-icon-" + statusDef.icon
   const $popup = $("#changeStatus" + appId)
   const $application = $("#" + appId)
-
   $popup.find("li a").parent().hide()
+
   statusDef.allowed.forEach(function (allowed) {
     $popup.find("a." + allowed).parent().show()
   });
 
-  const allClasses = Object.keys(statuses).join(" ");
-  const allIcons = Object.values(statuses).map(c => `ui-icon-${c.icon}`).join(" ");
-  $application.removeClass(allClasses).removeClass(allIcons)
+  const allClasses = Object.keys(statuses).join(" ")
+  $application.removeClass(allClasses)
   $application.find('.application-details-list li.status').removeClass(allClasses)
   $application.find('.application-details-list li.status').addClass(status)
   $application.addClass(status).addClass(newIcon);
-  $application.find('h3 a').removeClass(allIcons).addClass(newIcon);
-  $application.find(".currentStatus").text(statusDef.name.toUpperCase());
-  $popup.find(".currentStatus").text(statusDef.action);
+  $application.find(".application-details-list .current-status > b").text(statusDef.name.toUpperCase());
+  $application.find(".top-line > .current-status > span").text(statusDef.name.toUpperCase());
 
   updateCounters();
 }

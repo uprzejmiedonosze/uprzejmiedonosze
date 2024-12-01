@@ -17,17 +17,14 @@
 </div>
 <div class="application-details-list">
     <div class="current-status">
-        <b>{{ status.name|upper }}
-        {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}</b>
+        <b>{{ status.name|upper }}</b>
+        {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}
 
         {% if appActionButtons %}
         <div data-role="dropdown" id="changeStatus{{ app.id }}"
             class="application-short dropdown">
             <button class="button small light change-status dropdown-button">ZMIEŃ</button>
             <ul data-role="listview" class="change-status dropdown-content">
-                <li data-role="list-divider" role="heading" class="ui-li-divider ui-bar-inherit ui-first-child">
-                    Zmień status zgłoszenia z <span class="currentStatus">{{ status.name }}</span> na:
-                </li>
                 {% for key,val in statuses %}
                 {% if val.class == 'bottom' %}
                 {% set liStyle = '' %}
@@ -35,9 +32,7 @@
                 {% set liStyle = 'style="display: none;"' %}
                 {% endif %}
                 <li {{ liStyle|raw }}>
-                    <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" data-inline="true" data-mini="true" class="ui-btn ui-btn-icon-left ui-nodisc-icon ui-mini 
-                                {{ val.cta ?? '' }}
-                                {{ key }}">{{ val.action }}</a>
+                    <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" class="{{ val.cta ?? '' }} {{ key }}">{{ val.action }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
