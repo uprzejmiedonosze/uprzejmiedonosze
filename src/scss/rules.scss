@@ -1,26 +1,40 @@
 @use "variables";
 
-div.przepisy .ui-block-a {
-  float: left;
-  width: 25%;
-  padding-right: 2%;
-  max-width: 160px;
-}
-div.przepisy .ui-block-a img {
-  max-width: 100%;
-}
-div.przepisy .ui-block-b {
-  float: left;
-  width: 73%;
-}
+div.przepisy {
+  img.sign {
+    float: right;
+    max-width: 20%;
+    padding-left: 1em;
+    padding-bottom: 0.2em;
+    clear: right;
+  }
+  
+  h4 {
+    clear: both;
+  }
 
-div.przepisy .ui-block-b p {
-  margin-top: 0;
-}
+  .ui-block-a {
+    float: left;
+    width: 25%;
+    padding-right: 2%;
+    max-width: 160px;
+  }
+  .ui-block-a img {
+    max-width: 100%;
+  }
+  .ui-block-b {
+    float: left;
+    width: 73%;
+  }
+  
+  .ui-block-b p {
+    margin-top: 0;
+  }
+  
+  ol, ul {
+    padding-inline-start: 20px;
+  }
 
-div.przepisy ol,
-div.przepisy ul {
-  padding-inline-start: 20px;
 }
 
 div.przepisy-kategorie p i {
@@ -41,16 +55,4 @@ div.przepisy-kategorie p i {
 .dialog.ui-content {
   padding: 0;
   border: 1em solid white;
-}
-
-div.przepisy img.sign {
-  float: right;
-  max-width: 20%;
-  padding-left: 1em;
-  padding-bottom: 0.2em;
-  clear: right;
-}
-
-div.przepisy h4 {
-  clear: both;
 }
