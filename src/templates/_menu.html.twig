@@ -75,7 +75,7 @@
         </a>
 
 {% else %} {# not logged in #}
-        <a class="cta" href="/nowe-zgloszenie.html" data-ajax="false">
+        <a class="cta" href="/nowe-zgloszenie.html">
             Spróbuj!
         </a>
 {% endif %}
@@ -119,11 +119,11 @@
 
 <div class="spacer"></div>
 {% if general.isLoggedIn %}
-        <a data-role="none" href="/logout.html" data-ajax="false">
+        <a data-role="none" href="/logout.html">
             Wyloguj się
         </a>
 {% else %}
-	    <a data-role="none" href="/start.html" data-ajax="false">
+	    <a data-role="none" href="/start.html">
             Zaloguj/zarejestruj się
         </a>
 {% endif %}

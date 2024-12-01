@@ -57,19 +57,19 @@
                     Wyślij do {{ app.guessSMData.getShortName }}
                 </a>
             {% elseif app.unknownSM %}
-                <a href="/brak-sm.html?id={{ app.id }}" data-ajax="false"
+                <a href="/brak-sm.html?id={{ app.id }}"
                 class="button inline cta confirmed-waiting">
                     Wyślij zgłoszenie
                 </a>
             {% elseif wysylka is not defined %}
-                <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}" data-ajax="false"
+                <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}"
                 class="button inline cta confirmed-waiting">
                     Wyślij zgłoszenie
                 </a>
             {% endif %}
             {% if appActionButtons and app.isEditable %}
                 <br>
-                <a href="/nowe-zgloszenie.html?edit={{ app.id }}" class="button inline light" data-ajax="false">edytuj</a>
+                <a href="/nowe-zgloszenie.html?edit={{ app.id }}" class="button inline light">edytuj</a>
             {% endif %}
         </div>
     {% endif %}

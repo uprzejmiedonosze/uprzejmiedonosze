@@ -33,7 +33,7 @@ Z poważaniem
     zostało zaktualizowane{% else %}zostało zarejestrowane pod numerem
     <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>{% endif %}.
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
-    <a href="/moje-zgloszenia.html" data-ajax="false">liście swoich zgłoszeń</a>.</p>
+    <a href="/moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
 
 {% if app.automatedSM %}
 <div class="whatNext">
@@ -45,9 +45,9 @@ Z poważaniem
 {% else %}
     <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu e-mail SM.</b>
     <p>
-        Napisz na <a rel="external" href="https://www.facebook.com/groups/patologiaparkingowa/">grupie wsparcia
+        Napisz na <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">grupie wsparcia
             dla użytkowników Uprzejmie Donoszę</a>
-        (lub napisz bezpośrednio do <a href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}">autora</a>).
+        (lub napisz bezpośrednio do <a rel="external" target="_blank" href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}">autora</a>).
         Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
         oraz adres e-mail Straży Miejskiej.
     </p>
@@ -63,8 +63,7 @@ Z poważaniem
     
         <a href="https://agendaparkingowa.pl/"
             target="_blank" rel="external"
-            class="map button"
-            data-ajax="false">Miejska Agenda Parkingowa</a>.
+            class="map button">Miejska Agenda Parkingowa</a>.
 
 {% elseif dice == 'B' %}
 
@@ -72,7 +71,7 @@ Z poważaniem
 
     Dołącz do kilkudziesięciu Patronek i Patronów!
 
-    <a href="/patronite.html" data-ajax="false"
+    <a href="/patronite.html"
         class="patronite button small">
         Patronite
     </a>
@@ -83,7 +82,7 @@ Z poważaniem
     niewielkiej kwoty na Suppi.pl (bez prowizji):
     
     <a href="https://suppi.pl/uprzejmiedonosze"
-        target="_blank" rel="external" data-ajax="false"
+        rel="external" target="_blank"
         class="suppi button">Suppi</a>
 
 {% endif %}

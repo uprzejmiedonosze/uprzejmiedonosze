@@ -187,7 +187,7 @@ function noGeoDataInImage() {
   } else if (/Chrome/.test(navigator.userAgent) &&
     /Android/.test(navigator.userAgent)) {
     $("#addressHint").html(
-      'Przeglądarka Chrome na Androidzie zapewne usunęła znaczniki geolokalizacji, <a data-ajax="false" href="/aplikacja.html">zainstaluj Firefox-a</a>.'
+      'Przeglądarka Chrome na Androidzie zapewne usunęła znaczniki geolokalizacji, <a href="/aplikacja.html">zainstaluj Firefox-a</a>.'
     );
   } else {
     $("#addressHint").html(

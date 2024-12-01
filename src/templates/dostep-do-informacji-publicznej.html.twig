@@ -48,7 +48,7 @@ Proszę o przekazanie ww. informacji na adres poczty elektronicznej: ' ~ email |
 <a id="copyBtn" onclick="copyToClipboard()"
     class="button light small">Skopiuj tekst</a>
 
-<a id="sendBtn" target="_blank"
+<a id="sendBtn" target="_blank" rel="external" 
                     href="mailto:POPRAW@EMAIL.DO?subject={{ emailSubject|escape('url') }}&body={{ emailBody|striptags|escape('url')|replace({'%0A': '%0D%0A'}) }}"
                     class="button cta small">Wyślij twoim domyślnym programem pocztowym</a>
 
