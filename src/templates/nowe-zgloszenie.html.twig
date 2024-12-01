@@ -22,7 +22,7 @@
             </div>
         </div>
         {% endif %}
-        <div class="ui-grid-a ui-responsive images images-cropped">
+        <div class="grid images images-cropped">
             <div class="ui-block-a imageContainer image-upload contextImageSection">
                 <label for="contextImage">
                     Wgraj zdjęcie z widocznym wykroczeniem
@@ -53,8 +53,8 @@
                     value="{{ app.carImage.url ?? '' }}" />
             </div>
         </div>
-        <div class="ui-grid-a ui-responsive ">
-            <div class="ui-block-a">
+        <div class="grid">
+            <div>
                 <label for="datetime"><span id="dateHint">Data i czas zgłoszenia</span> <a href="#" class="changeDatetime">(zmień datę, jeśli niepoprawna)</a></label>
                 <div class="datetime">
                     <input
@@ -68,7 +68,7 @@
                         />
                 </div>
             </div>
-            <div class="ui-block-b">
+            <div>
                 <label for="plateId" id="plateHint">Podaj numer rejestracyjny</label>
                 <div class="plate">
                     <input class="required" type="text" id="plateId" name="plateId"
@@ -79,14 +79,14 @@
                 </div>
             </div>
         </div>
-        <div class="ui-grid-a ui-responsive images images-cropped" >
-            <div class="ui-block-a">
+        <div class="grid images images-cropped" >
+            <div>
                 <label for="lokalizacja" id="addressHint" style="display: inline;" >Podaj adres lub wskaż go na mapie</label>
                 <a id="resizeMap" class="ui-button-resizeMap ui-icon-arrowsout"></a>
                 <div id="locationPicker" class="locationPickerClass"></div>
                 <span id="mapCenter"></span>
             </div>
-            <div class="ui-block-b">
+            <div>
                 <div class="combo">
                     <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
                         placeholder="(wskaż lokalizację na mapie)" data-type="geo"
@@ -108,16 +108,15 @@
             placeholder="(opcjonalny komentarz, np. szczegóły dotyczące lokalizacji)">{{ app.userComment ?? '' }}</textarea>
 
         <label for="category">Wybierz rodzaj wykroczenia</label>
-        <div class="ui-grid-a ui-responsive" id="category">
+        <div class="grid" id="category">
         {% set i = 0 %}
         {% for catId,categoryDef in categories %}
         {% if categoryDef.title %}
-            <div class="ui-block-{{ categoriesMatrix[i % 2] }}">
+            <div>
                 <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
                     name="category" value="{{ catId }}" id="{{ catId }}"
                     data-contextImage-hint="{{ categoryDef.contextImageHint }}"
-                    data-carImage-hint="{{ categoryDef.carImageHint }}"
-                >
+                    data-carImage-hint="{{ categoryDef.carImageHint }}">
                 <label for="{{ catId }}">
                     <div>
                         <img src="/img/{{ catId }}.jpg?ref">
@@ -134,7 +133,7 @@
                     </div>
                 </label>
                 <a href="#category-popup-{{ catId }}" data-rel="popup" data-transition="pop" class="category-popup">więcej...</a>
-                <dialog data-role="popup" id="category-popup-{{ catId }}" class="ui-content" style="max-width: 500px;">
+                <dialog data-role="popup" id="category-popup-{{ catId }}">
                     <p>{{ categoryDef.desc|raw }}</p>
                     {% if categoryDef.price %}
                     <p class="price-list">Mandat: {{ categoryDef.price }}</p>
@@ -151,7 +150,7 @@
 
 
         <label for="extensions">Czy pojazd dodatkowo:</label>
-        <div class="ui-grid-a ui-responsive" id="extensions">
+        <div class="grid" id="extensions">
         {% set i = 0 %}
         {% for extId,extensionDef in extensions %}
             <div class="ui-block-{{ categoriesMatrix[i % 2] }}">

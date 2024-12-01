@@ -25,6 +25,7 @@
 @use 'header';
 @use 'dropdown';
 @use 'dialog';
+@use 'grid';
 
 fieldset {
     border-width: 0;
@@ -89,6 +90,11 @@ body {
 
 .ui-grid-a {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
 }
 
 .ui-grid-a>.ui-block-a {

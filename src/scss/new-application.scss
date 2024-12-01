@@ -47,7 +47,7 @@ div.ui-block-b>div.ui-radio {
   margin: 3px;
 }
 
-.ui-popup-container .category-law {
+.category-law {
   text-decoration: italic;
   color: #999;
 }
@@ -168,29 +168,44 @@ div.ui-block-b>div.ui-radio {
     max-width: 10.5em;
   }
 
+
   #category,
   #extensions {
-    vertical-align: top;
-    display: inline-block;
-    text-align: center;
 
-    div {
-      position: relative;
+    input:checked ~ label {
+      border: 2px solid variables.$primaryColor;
+    }
+    input {
+      display: none;
     }
 
+    label {
+      border: 2px solid transparent;
+      margin-top: 10px;
+      background-color: #F9F9F9;
+      border-radius: 18px;
+      padding: 5px;
+      cursor: pointer;
+      height: 100%;
+
+      &:hover .category-title {
+        color: variables.$primaryColor;
+      }
+    }
+
+
     a.category-popup {
-      bottom: 3px;
+      bottom: -6px;
       font-size: 80%;
-      font-weight: 300;
       font-weight: 400;
-      padding: 6px;
+      padding: 6px 10px;
       position: absolute;
       right: 3px;
       text-transform: uppercase;
       text-decoration: none;
       z-index: 2;
       background-color: aliceblue;
-      border-radius: 3px;
+      border-radius: 20px;
     }
   }
 
@@ -202,9 +217,9 @@ div.ui-block-b>div.ui-radio {
       color: white;
       height: 22px;
       font-size: 16px;
-      left: 4px;
       background: red;
-      top: 4px;
+      top: 3px;
+      left: 3px;
       width: 22px;
     }
   
@@ -230,22 +245,15 @@ div.ui-block-b>div.ui-radio {
 
   #category label,
   #extensions label {
-    display: block;
-    font-weight: 300;
-    border: none;
-    --moz-columns: 2 120px;
-    --webkit-columns: 2 120px;
-    --columns: 2 120px;
-    display: table;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 100px 1fr;
     box-sizing: border-box;
   }
 
   #category label img,
   #category label div,
   #extensions label p {
-    display: table-cell;
-    vertical-align: top;
+    position: relative;
   }
 
   #category label p,
