@@ -7,7 +7,7 @@ import { repositionCarImage } from "./new-app/images";
 
 const currentScript = document.currentScript;
 
-$(document).on("pageshow", function () {
+document.addEventListener("DOMContentLoaded", () => {
   if (!$(".new-application").length) return;
 
   const map = initMaps(currentScript?.getAttribute("last-location"), currentScript?.getAttribute("stop-agresji"))

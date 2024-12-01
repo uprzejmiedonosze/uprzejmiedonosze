@@ -1,6 +1,6 @@
 import $ from "jquery"
 
-$(document).on("pageshow", function () {
+document.addEventListener("DOMContentLoaded", () => {
     if (!$(".ask-for-status").length) return;
   
     $('h3 > a').on('click', e => {

@@ -14,7 +14,7 @@ function validateRegisterForm() {
   return ret;
 }
 
-$(document).on("pageshow", function () {
+document.addEventListener("DOMContentLoaded", () => {
   if (!$(".register").length) return;
 
   $name.on("change", function () {

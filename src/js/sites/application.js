@@ -2,7 +2,7 @@ import $ from "jquery"
 
 import isIOS from "../lib/isIOS";
 
-$(document).on("pageshow", function () {
+document.addEventListener("DOMContentLoaded", () => {
   if (!$(".aplikacja").length) return;
 
   if (isIOS()) {
