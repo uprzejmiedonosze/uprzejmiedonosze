@@ -20,9 +20,9 @@
         placeholder="(twój email)"
         data-inline="true" value="{{ user.data.email }}" />
 
-    <label for="name">Adres zamieszkania wraz z numerem lokalu i miastem</label>
+    <label for="name">Adres zamieszkania wraz z <b>numerem lokalu i miastem</b></label>
     <input type="text" maxlength="70" required id="address" name="address"
-        placeholder="Ulica 10, Miasto"
+        placeholder="(Ulica 10a/7, Miasto)"
         autocomplete="off"
         data-inline="true" value="{{ user.data.address ?? '' }}" />
 
