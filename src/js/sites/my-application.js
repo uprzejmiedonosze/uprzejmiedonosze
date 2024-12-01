@@ -5,12 +5,14 @@ import { setStatus } from "../lib/status"
 import Api from '../lib/Api'
 import filterable from "../lib/filterable";
 import makeDropdown from "../lib/dropdown";
+import makeDialog from "../lib/dialog";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   const appsList = document.getElementById('apps-list')
   if (!appsList) return
 
   filterable('apps', 'apps-list')
+  makeDialog()
 
   // app headers clickable
   const appHeaders = appsList?.getElementsByTagName('h3') || []
