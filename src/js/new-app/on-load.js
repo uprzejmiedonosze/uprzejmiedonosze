@@ -4,10 +4,6 @@ import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
 
 export const initHandlers = (map) => {
-  $("#lokalizacja").on("change", function () {
-    $("a#geo").buttonMarkup({ icon: "alert" });
-  });
-
   $("#msisdn").on("change", function () {
     $("#msisdn").removeClass("error");
   });

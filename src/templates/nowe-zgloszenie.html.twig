@@ -88,12 +88,9 @@
             </div>
             <div class="ui-block-b">
                 <div class="combo">
-                    <input {#readonly#} type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
-                        placeholder="(wskaż lokalizację na mapie)" data-inline="true" class="{#disabled#}"
+                    <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
+                        placeholder="(wskaż lokalizację na mapie)" data-type="geo"
                         value="{{ app.address.address ?? '' }}" />
-                    <a id="geo" data-role="button" data-icon="location" data-iconpos="notext"
-                        data-mini="true" data-inline="true" data-corners="true" data-shadow="false"
-                        data-iconshadow="false" data-wrapperels="span" data-theme="b" title="GPS"></a>
                 </div>
                 <div>
                     <div id="smInfo"></div>

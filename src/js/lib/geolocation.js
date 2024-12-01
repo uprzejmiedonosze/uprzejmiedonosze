@@ -9,6 +9,8 @@ let stopAgresji = false
 export function initMaps(lastLocation, _stopAgresji) {
   stopAgresji = _stopAgresji ?? false
   const $input = $("#lokalizacja")
+  $input.removeClass()
+  $input.addClass("clock")
 
   let center = [19.480311, 52.069321]
   if (lastLocation) {
@@ -81,11 +83,11 @@ export function setAddressByLatLng(lat, lng, from) {
 }
 
 function geoLoading(from) {
-  const $geoIcon = $("#geo")
   const $input = $("#lokalizacja")
-  $("#form-submit").addClass("ui-disabled");
+  $input.removeClass()
+  $input.addClass("clock")
 
-  $geoIcon.buttonMarkup({ icon: "clock" })
+  $("#form-submit").addClass("disabled");
   if (from == "picture") {
     $input.attr("placeholder", "(pobieram adres ze zdjęcia...)")
   } else {
@@ -106,25 +108,23 @@ async function latLngToAddress(lat, lng, from) {
   const $addressHint = $("#addressHint")
   const $address = $("#address")
   const $input = $("#lokalizacja")
-  const $geoIcon = $("#geo")
-  
 
   $addressHint.text("Podaj adres lub wskaż go na mapie")
   $addressHint.removeClass("hint")
   setSM()
 
   const geoError = () => {
-    $geoIcon.buttonMarkup({ icon: "alert" })
+    $input.removeClass()
+    $input.addClass("alert")
     setSM()
   }
 
   const geoSuccess = (address) => {
     $address.val(JSON.stringify(address))
     $input.val(address?.address || '')
-    $geoIcon.buttonMarkup({ icon: "location" })
-    $geoIcon.removeClass("error")
+    $input.removeClass()
     if (!address?.address?.match(/.+,.+/)) {
-      $geoIcon.buttonMarkup({ icon: "alert" })
+      $input.removeClass()
       $input.addClass("error")
     }
     if (from == "picture") {
