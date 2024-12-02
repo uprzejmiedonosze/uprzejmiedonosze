@@ -35,15 +35,13 @@ small {
 }
 
 img.rwd {
-    width: 100%;
     box-shadow: 0 0 10px 2px grey;
-    margin: 1em 0;
 }
 
 img.one-third {
-    width: 90%;
-    box-shadow: 5px 5px 20px grey;
     margin: 1em;
+    box-shadow: 5px 5px 20px gray;
+    width: 90% !important;
 }
 
 #mainMenu {
