@@ -14,81 +14,84 @@
 <p>Poradnik informujący jak korzystać z Uprzejmie Donoszę w sposób możliwie
 	zbliżony do regularnej aplikacji mobilnej.</p>
 
-<div data-role="tabs" id="tabs">
-	<div data-role="navbar">
-		<ul>
-			<li><a href="#android">Android</a></li>
-			<li><a href="#ios">iOS</a></li>
-		</ul>
-	</div>
-	<div id="android" class="ui-body-d ui-content">
-		<ol>
-			<li>Zainstaluj przeglądarkę
-				<a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox&hl=pl" rel="external" target="_blank">Firefox</a>
-				(Jest to sugerowana przeglądarka, Uprzejmie Donoszę będzie działać z większością innych rozwiązań. Jednak
-				domyślna przeglądarka Chrome Android "wycina" lokalizację ze zdjęć przed przekazaniem ich do Uprzejmie
-				Donoszę co znacznie utrudnia tworzenie zgłoszeń);
-			</li>
-			<li>Uruchom Firefoxa;</li>
-			<li>Wejdź na adres
-				<a href="https://uprzejmiedonosze.net">https://uprzejmiedonosze.net</a>;</li>
+<div class="tabs">
+	<input type="radio" id="android" name="tab">
+	<label for="android">
+		Android
+	</label>
+	<input type="radio" id="ios" name="tab">
+	<label for="ios">
+		iOS
+	</label>
+</div>
 
-			<fieldset class="ui-grid-a">
-				<div class="ui-block-a">
-					<img data-src="/img/firefox-play-store.jpg" class="lazyload one-third"/>
-				</div>
-				<div class="ui-block-b">
-					<img data-src="/img/firefox-address.jpg" class="lazyload one-third"/>
-				</div>
-			</fieldset>
+<div id="android-tab" class="tabcontent">
+	<ol>
+		<li>Zainstaluj przeglądarkę
+			<a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox&hl=pl" rel="external" target="_blank">Firefox</a>
+			(Jest to sugerowana przeglądarka, Uprzejmie Donoszę będzie działać z większością innych rozwiązań. Jednak
+			domyślna przeglądarka Chrome Android "wycina" lokalizację ze zdjęć przed przekazaniem ich do Uprzejmie
+			Donoszę co znacznie utrudnia tworzenie zgłoszeń);
+		</li>
+		<li>Uruchom Firefoxa;</li>
+		<li>Wejdź na adres
+			<a href="https://uprzejmiedonosze.net">https://uprzejmiedonosze.net</a>;</li>
 
-			<li>Naciśnij ikonę menu (z trzeba kropkami, zapewne w prawym dolnym lub górnym rogu);</li>
-			<li>Wybierz opcję <i>Install</i> (czasem <i>Add to Home screen</i>);</li>
-			<li>Umieść ikonę w wybranym miejscu;</li>
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a">
+				<img data-src="/img/firefox-play-store.jpg" class="lazyload one-third"/>
+			</div>
+			<div class="ui-block-b">
+				<img data-src="/img/firefox-address.jpg" class="lazyload one-third"/>
+			</div>
+		</fieldset>
 
-			<fieldset class="ui-grid-a">
-				<div class="ui-block-a">
-					<img data-src="/img/firefox-install.jpg" class="lazyload one-third"/>
-				</div>
-				<div class="ui-block-b">
-					<img data-src="/img/firefox-installed.jpg" class="lazyload one-third"/>
-				</div>
-			</fieldset>
+		<li>Naciśnij ikonę menu (z trzeba kropkami, zapewne w prawym dolnym lub górnym rogu);</li>
+		<li>Wybierz opcję <i>Install</i> (czasem <i>Add to Home screen</i>);</li>
+		<li>Umieść ikonę w wybranym miejscu;</li>
 
-			<li>Bingo – teraz możesz uruchomić Uprzejmie Donoszę jak aplikację;</li>
-		</ol>
-	</div>
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a">
+				<img data-src="/img/firefox-install.jpg" class="lazyload one-third"/>
+			</div>
+			<div class="ui-block-b">
+				<img data-src="/img/firefox-installed.jpg" class="lazyload one-third"/>
+			</div>
+		</fieldset>
 
-	<div id="ios">
-		<ol>
-			<li>Uruchom Safari;</li>
-			<li>Wejdź na adres
-				<a href="https://uprzejmiedonosze.net">https://uprzejmiedonosze.net</a>;</li>
+		<li>Bingo – teraz możesz uruchomić Uprzejmie Donoszę jak aplikację;</li>
+	</ol>
+</div>
 
-			<li>Naciśnij ikonę <i>Share</i> (na dole ekranu);</li>
-			<li>Wybierz opcję <i>Add to Home screen</i>;</li>
+<div id="ios-tab" class="tabcontent">
+	<ol>
+		<li>Uruchom Safari;</li>
+		<li>Wejdź na adres
+			<a href="https://uprzejmiedonosze.net">https://uprzejmiedonosze.net</a>;</li>
 
-			<fieldset class="ui-grid-a">
-				<div class="ui-block-a">
-					<img data-src="/img/safari-start.jpg" class="lazyload one-third"/>
-				</div>
-				<div class="ui-block-b">
-					<img data-src="/img/safari-install.jpg" class="lazyload one-third"/>
-				</div>
-			</fieldset>
+		<li>Naciśnij ikonę <i>Share</i> (na dole ekranu);</li>
+		<li>Wybierz opcję <i>Add to Home screen</i>;</li>
 
-			<fieldset class="ui-grid-a">
-				<div class="ui-block-a">
-					<img data-src="/img/safari-add-to-homescreen.jpg" class="lazyload one-third"/>
-				</div>
-				<div class="ui-block-b">
-					<img data-src="/img/safari-installed.jpg" class="lazyload one-third"/>
-				</div>
-			</fieldset>
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a">
+				<img data-src="/img/safari-start.jpg" class="lazyload one-third"/>
+			</div>
+			<div class="ui-block-b">
+				<img data-src="/img/safari-install.jpg" class="lazyload one-third"/>
+			</div>
+		</fieldset>
 
-			<li>Bingo – teraz możesz uruchomić Uprzejmie Donoszę jak aplikację;</li>
-		</ol>
-	</div>
+		<fieldset class="ui-grid-a">
+			<div class="ui-block-a">
+				<img data-src="/img/safari-add-to-homescreen.jpg" class="lazyload one-third"/>
+			</div>
+			<div class="ui-block-b">
+				<img data-src="/img/safari-installed.jpg" class="lazyload one-third"/>
+			</div>
+		</fieldset>
+
+		<li>Bingo – teraz możesz uruchomić Uprzejmie Donoszę jak aplikację;</li>
+	</ol>
 </div>
 
 {% endblock %}

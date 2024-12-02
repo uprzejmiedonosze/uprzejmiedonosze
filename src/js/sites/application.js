@@ -1,13 +1,16 @@
-import $ from "jquery"
-
-import isIOS from "../lib/isIOS";
+import isIOS from "../lib/isIOS"
+import makeTabs from "../lib/tabs"
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (!$(".aplikacja").length) return;
 
-  if (isIOS()) {
-    $("#tabs ul a:nth-child(1)").trigger( "click" );
-  } else {
-    $("#tabs ul a:first").trigger( "click" );
-  }
-});
+  if (!document.getElementsByClassName('aplikacja').length)
+    return
+
+  makeTabs()
+  const platform = isIOS() ? "ios": "android"
+
+  // @ts-ignore
+  document.getElementById(platform).checked = true
+  // @ts-ignore
+  document.getElementById(`${platform}-tab`).style.display = "block"
+})
