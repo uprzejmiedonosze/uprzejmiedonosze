@@ -20,6 +20,7 @@
         position: fixed;
         width: 400px;
         z-index: 1;
+        box-shadow: 0 0 30px white;
 
         @media (max-width: variables.$width-break) {
             bottom: 5px;
