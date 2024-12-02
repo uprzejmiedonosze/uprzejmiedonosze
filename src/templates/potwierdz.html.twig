@@ -39,8 +39,8 @@
 {% endif %}
 
 <div class="application">
-    <div class="ui-grid-a ui-responsive images">
-        <div class="ui-block-a">
+    <div class="grid">
+        <div>
             <p><b>{{ app.getCategory.formal }}</b> {{ app.getExtensionsText }} {% if app.userComment %}{{ app.getAHrefedComment | raw }}{% endif %}</p>
             <p>
                 {% if app.statements is not defined or not app.statements.witness %}
@@ -50,21 +50,17 @@
                 {% endif %}
             </p>
         </div>
-        <div class="ui-block-b map-container">
+        <div>
             <span class="floating-box">{{ app.getShortAddress }}</span>
             {% if app.address.lat is defined %}
-            <div class="loader"></div>
             <img class="mapImage" src="{{ app.getMapImage }}?v={{ app.getRevision }}">
             {% endif %}
         </div>
-    </div>
-
-    <div class="ui-grid-a ui-responsive images">
-        <div class="ui-block-a imageContainer">
+        <div>
             <span class="floating-box">{{ app.getDate("H'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</span>
             <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" />
         </div>
-        <div class="ui-block-b imageContainer">
+        <div>
             <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" id="carImage"/>
             {% if vehicleBox and app.shouldIncludePlateImage %}
 
