@@ -14,32 +14,32 @@
 
     <div>
         {% if config.edit %}
-        <div class="ui-corner-all custom-corners edit-warning">
-            <div class="ui-bar ui-bar-a">
-                <h4>Edycja zgłoszenia</h4>
-            </div>
-            <div class="ui-body ui-body-a">
-                <p>Edytujesz zgłoszenie {% if app.number %}numer {{ app.number }}{% endif %}
+        <div class="warning-header">
+            <h4>Edytujesz zgłoszenie {% if app.number %}numer {{ app.number }}{% endif %}
                 {% if app.added is defined %}powstałe {{ app.added|date('j.m.Y H:i') }}{% endif %}.
-                Jeśli chcesz zacząć od nowa, <a class="cleanup" href="?cleanup">kliknij tutaj</a>.</p>
-            </div>
+            </h4>
+            <a class="button inline" href="?cleanup">zacznij od nowa</a>
         </div>
         {% endif %}
-        <div class="grid images images-cropped">
+        <div class="grid images">
             <div class="imageContainer image-upload contextImageSection">
-                <label for="contextImage">
+                <label>
                     Wgraj zdjęcie z widocznym wykroczeniem
+                    <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="contextImage" multiple
+                        title="Zdjęcie przedstawiające kontekst"
+                        value="{{ app.contextImage.url ?? '' }}" />
+
                     <p class="pictureHint">{{ categories[app.category].contextImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
                     <img id="contextImagePreview" src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
-                <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="contextImage" multiple
-                    title="Zdjęcie przedstawiające kontekst"
-                        value="{{ app.contextImage.url ?? '' }}" />
             </div>
             <div class="imageContainer image-upload carImageSection">
-                <label for="carImage">
+                <label>
                     Wgraj zdjęcie z widoczną tablicą rejestracyjną
+                    <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="carImage" multiple
+                        title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
+                        value="{{ app.carImage.url ?? '' }}" />
                     <p class="pictureHint">{{ categories[app.category].carImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
                     <img id="carImagePreview" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
@@ -51,9 +51,6 @@
                     </div>
                 </div>
                 <div class="plate-box" style="border: none;"></div>
-                <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="carImage" multiple
-                    title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
-                    value="{{ app.carImage.url ?? '' }}" />
             </div>
             <div>
                 <label for="datetime"><span id="dateHint">Data i czas zgłoszenia</span> <a href="#" class="changeDatetime">(zmień datę, jeśli niepoprawna)</a></label>

@@ -33,18 +33,12 @@ div.error img {
 }
 
 
-
 ::-webkit-input-placeholder,
 :-moz-placeholder,
 ::-moz-placeholder,
 :-ms-input-placeholder {
   /* WebKit browsers */
   text-transform: none;
-}
-
-div.ui-block-a>div.ui-radio,
-div.ui-block-b>div.ui-radio {
-  margin: 3px;
 }
 
 .category-law {
@@ -128,24 +122,19 @@ div.ui-block-b>div.ui-radio {
     }
   }
 
-  .edit-warning {
-    margin-bottom: 0.5em;
-
-    .ui-bar-a {
-      background-color: variables.$secondaryColor;
+  .image-upload {
+    label {
+      height: 100%;
     }
-  }
-
-  .image-upload input {
-    display: none;
-  }
-
-  .contextImageSection img,
-  .carImageSection img {
-    background-repeat: no-repeat;
-    background-position-x: 50%;
-    background-position-y: 55px;
-    height: 110px;
+    input {
+      display: none;
+    }
+    img {
+      background-repeat: no-repeat;
+      background-position-x: 50%;
+      background-position-y: 55px;
+      height: 100%;  
+    }
   }
 
   .contextImageSection img {
@@ -156,7 +145,7 @@ div.ui-block-b>div.ui-radio {
     background-image: url(data-url:../img/cameraPlate.png);
   }
 
-  .ui-input-text input#plateId {
+  input#plateId {
     text-transform: uppercase;
     max-width: 10.5em;
   }

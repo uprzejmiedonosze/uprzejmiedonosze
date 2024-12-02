@@ -3,41 +3,11 @@
 
 .application,
 .new-application {
-
-  @media (min-width: variables.$width-break) {
-    .ui-grid-a.ui-responsive.images {
-      display: flex;
-      justify-content: space-between;
-      overflow: hidden;
-      align-items: flex-start;
-    }
-
-    .application ul.application-details-list {
-      columns: 2;
-      -webkit-columns: 2;
-      -moz-columns: 2;
-      column-gap: 25px;
-    }
-  }
-
-  .ui-grid-a.ui-responsive.images {
-    &>div {
-      flex: 0 0 calc(50% - .5rem);
-      position: relative;
-      margin-top: 1em;
-    }
-
-    .imageContainer img {
-      width: 100%;
-      height: auto;
-      min-width: 100%;
-    }
-  }
-
   img#plateImage {
     max-width: 10em;
     height: 2.2em;
     border-radius: 0.2em;
+    width: unset;
   }
 
   div#recydywa { // new app recydywa overlay on image
