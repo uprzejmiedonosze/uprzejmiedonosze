@@ -1,6 +1,4 @@
 {% set leftButton = 'menu' %}
-{% set rightButton = 'menuNewApplicationTermsConfirmation' %}
-{% set rightButtonText = 'Dalej' %}
 
 {% set title = 'Start' %}
 {% set mainClass = 'start-page' %}
@@ -15,8 +13,8 @@
 <div data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u"
     data-collapsed="false" data-role="collapsible">
     <h4>Regulamin (aktualizacja {{ latestTermUpdate }})</h4>
-    <p>Wszystkie zgłoszenia w Uprzejmie Donoszę muszą być zgłoszone pod twoim
-    nazwiskiem. Nie dopuszczamy anonimów.</p>
+    <p>Wszystkie zgłoszenia w Uprzejmie Donoszę muszą być zgłoszone <b>pod twoim
+    nazwiskiem</b>. Nie dopuszczamy anonimów.</p>
     <p>Pamiętaj też, że zgłoszenie wykroczenia do Straży Miejskiej to
     ostateczność. Jeśli masz możliwość porozmawiania z kierowcą, który
     naruszył przepisy to zrób to. Część z nich robi to ze zwykłej
@@ -31,12 +29,16 @@
     <p>Informujemy Cię, że pole „numer sprawy” może być wykorzystywane do generowania 
     automatycznego opisu do zgłoszeń innych Użytkowników w przypadku 
     wykrycia recydywy.</p>
-    <p>Musisz mieć świadomość, że Straż Miejska lub Policją mogą kontaktować się z
-    Tobą, w celu złożenia dodatkowych wyjaśnień.</p>
-    <p><a href="/regulamin.html?dialog">Pełen regulamin</a> oraz
+    <p>Musisz mieć świadomość, że <b>Straż Miejska lub Policją mogą kontaktować się z
+    Tobą</b>, w celu złożenia dodatkowych wyjaśnień.</p>
+    <p>
+        <a href="/regulamin.html?dialog">Pełen regulamin</a> oraz
         <a href="/polityka-prywatnosci.html?dialog">polityka prywatności</a> Uprzejmie Donoszę.</p>
 </div>
 
-<p>Używając Uprzejmie Donoszę wyrażasz zgodę na <a href="/regulamin.html?dialog">regulamin</a>.</p>
+<a href="/nowe-zgloszenie.html?TermsConfirmation" class="button cta last">
+    Wyrażam zgodę na regulamin
+</a>
+
 
 {% endblock %}
