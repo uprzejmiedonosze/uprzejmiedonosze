@@ -90,6 +90,7 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
     $group->get('/moje-zgloszenia.html', ApplicationHandler::class . ':myApps');
     $group->get('/my-apps-partial.html', ApplicationHandler::class . ':myAppsPartial');
     $group->get('/short-{appId}-partial.html', ApplicationHandler::class . ':applicationShortHtml');
+    $group->get('/wysylka.html', ApplicationHandler::class . ':shipment');
 
     $group->get('/zapytaj-o-status.html', ApplicationHandler::class . ':askForStatus');
 
