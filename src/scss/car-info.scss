@@ -1,7 +1,7 @@
 @use "variables";
 @use "button";
 
-.car-info .list {
+.car-info .grid {
   padding: 0;
   columns: 1;
 
@@ -54,9 +54,11 @@
       .content {
         padding: 0 1em 1px 0;
 
-        li.category {
+        .category {
           img {
             vertical-align: bottom;
+            width: 24px;
+            height: 24px;
           }
         }
         em {

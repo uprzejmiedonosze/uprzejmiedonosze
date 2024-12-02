@@ -24,10 +24,9 @@
     <a target="_blank" href="/register.html?update">Przejdź do ustawień</a>
 </div>
 {% endif %}
-<div class="list">
+<div class="grid">
 {% for app in apps %}
     {% set status = app.getStatus %}
-
     <div class="car application application-short status-all {{ app.status }}">
         <div class="card {% if app.isAppOwner %}app-owner{% endif %}">
             <h3>
@@ -48,13 +47,13 @@
             <div class="content">
                 <div class="application-details-list">
                     <div class="no-icon category">
-                        <img width="24" height="24" title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg">
+                        <img title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg" />
                         {{ app.getCategory.short }}
                         {% if app.statements.gallery ?? false %}
                         {{app.userComment}}
                         {% endif %}
                     </div>
-                    <div class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</li>
+                    <div class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</div>
                     {% if app.wasSent %}
                     <div class="info-icon">
                         {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}{{ app.guessSMData.getShortName }}
