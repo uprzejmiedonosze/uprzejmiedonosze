@@ -34,8 +34,11 @@ small {
     }
 }
 
-img.rwd {
-    box-shadow: 0 0 10px 2px grey;
+img.shadow {
+    box-shadow: 0 0 10px 2px gray;
+    margin: 1em;
+    width: 90%;
+    border-radius: 5px;
 }
 
 img.one-third {
