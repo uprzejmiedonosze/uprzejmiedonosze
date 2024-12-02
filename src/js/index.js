@@ -6,7 +6,7 @@ window.jQuery = $;
 
 import "lazysizes";
 
-
+import "./lib/nodeListExt";
 import "./lib/send";
 import "./lib/sentry";
 
