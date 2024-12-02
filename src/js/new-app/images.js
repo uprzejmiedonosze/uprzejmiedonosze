@@ -7,7 +7,7 @@ import { setDateTime } from "./set-datetime";
 import Api from '../lib/Api'
 
 import * as Sentry from "@sentry/browser";
-import { showError } from "../lib/showMessage";
+import { error } from "../lib/toast";
 import isIOS from "../lib/isIOS";
 
 var uploadInProgress = 0;
@@ -105,7 +105,7 @@ function imageError(id, errorMsg) {
   $(`.${id}Section`).addClass("error");
   $(`.${id}Section input`).textinput("enable");
   $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show();
-  if (errorMsg) showError(errorMsg)
+  if (errorMsg) error(errorMsg)
   uploadFinished();
 }
 

@@ -3,7 +3,7 @@ import $ from "jquery"
 import * as Sentry from "@sentry/browser";
 
 import { updateStatus } from "./status";
-import { showMessage, showError } from './showMessage'
+import { toast, error } from './toast'
 
 import Api from './Api'
 
@@ -15,14 +15,13 @@ window.sendApplication = async function (appId) {
 
   $(`#${appId} .status-confirmed-waiting`).addClass("ui-disabled")
 
-  $.mobile.loading("show", { text: "Wysyłam...", textVisible: true })
+  toast("Wysyłam...")
 
   try {
     const api = new Api(`/api/app/${appId}/send`)
     const msg = await api.patch()
     updateStatus(appId, msg.status)
-    $.mobile.loading("hide")
-    showMessage("<p>Wysłane</p>")
+    toast("Wysłane")
     if ($(".dziekujemy").length) {
       $whatNext.hide();
       $afterSend.show();
@@ -33,8 +32,7 @@ window.sendApplication = async function (appId) {
     // @ts-ignore
     (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" })
   } catch (e) {
-    $.mobile.loading("hide")
-    showError(e.message)
+    error(e.message)
     $whatNext.hide()
     $afterSend.text('Błąd: ' + e.message).show().addClass('error')
     Sentry.captureException(e, {

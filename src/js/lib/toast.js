@@ -1,0 +1,36 @@
+import $ from "jquery"
+
+/**
+ * @param {string} msg
+ */
+export function toast(msg) {
+    const toast = document.getElementById("toast")
+    if (!toast) return
+    // @ts-ignore
+    toast.innerHTML = msg
+    toast.classList.remove('error')
+    show(toast, 1500)
+}
+
+/**
+ * @param {string} msg
+ */
+export function error(msg) {
+    const toast = document.getElementById("toast")
+    if (!toast) return
+    // @ts-ignore
+    toast.innerHTML = msg
+    toast.classList.add('error')
+    show(toast, 7000)
+}
+
+/**
+ * @param {HTMLElement} toast
+ * @param {number} ms
+ */
+function show(toast, ms) {
+    toast?.classList.add("show")
+    setTimeout(() => {
+        toast?.classList.remove("show")
+    }, ms);
+}

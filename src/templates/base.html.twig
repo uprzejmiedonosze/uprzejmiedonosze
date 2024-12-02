@@ -47,6 +47,7 @@
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
             </div> <!-- main -->
+            <div id="toast"></div>
         {% block footer %}
             {% if not dialog %}
             <footer data-role="footer">
