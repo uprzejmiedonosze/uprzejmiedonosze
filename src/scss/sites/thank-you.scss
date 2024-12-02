@@ -1,5 +1,5 @@
-@use "button";
-@use "variables";
+@use "../lib/button";
+@use "../lib/variables";
 
 .afterSend {
   display: none;

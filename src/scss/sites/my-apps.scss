@@ -1,6 +1,6 @@
-@use "icons";
-@use "variables";
-@use "badge";
+@use "../lib/icons";
+@use "../lib/variables";
+@use "../lib/badge";
 
 .my-applications, .car-info {
   ul.status-filter {
