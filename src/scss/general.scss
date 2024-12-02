@@ -1,8 +1,16 @@
 @use "lib/variables";
 @use "lib/button";
 
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
+* {
+    font-family: "Red Hat Display", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
 body, a, p, i, input, textarea, select {
-    font-weight: 300;
     color: #000;
     line-height: 1.4;
 }
