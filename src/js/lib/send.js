@@ -3,7 +3,7 @@ import $ from "jquery"
 import * as Sentry from "@sentry/browser";
 
 import { updateStatus } from "./status";
-import { toast, error } from './toast'
+import { toast, error, message } from './toast'
 
 import Api from './Api'
 import { appClicked, closeAllApps } from "../sites/my-application";
@@ -14,9 +14,9 @@ window.sendApplication = async function (appId) {
   const $afterSend = $(".afterSend")
   const $buttonRight = $('.menu-button.right')
 
-  $(`#${appId} .status-confirmed-waiting`).addClass("ui-disabled")
+  $(`#${appId} .status-confirmed-waiting`).addClass("disabled")
 
-  toast("Wysyłam...")
+  message("Wysyłam...")
 
   try {
     const api = new Api(`/api/app/${appId}/send`)
@@ -49,6 +49,6 @@ window.sendApplication = async function (appId) {
       })
 
   }
-  $buttonRight.removeClass("ui-disabled")
+  $buttonRight.removeClass("disabled")
 };
 

@@ -129,7 +129,7 @@ function setError(error) {
         else error = JSON.stringify(error);
     }
     $("p.error").text(error);
-    $(".ui-footer h4").text("błąd logowania");
+    $("footer h4").text("błąd logowania");
 }
 
 function finishLogin(signInSuccessUrl) {

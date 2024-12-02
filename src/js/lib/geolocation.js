@@ -72,7 +72,7 @@ function updateAddressDebounce() {
 }
 
 export function setAddressByLatLng(lat, lng, from) {
-  geoLoading()  
+  geoLoading()
   const $address = $("#address")
 
   if (from === "picture" && map)
@@ -131,7 +131,7 @@ async function latLngToAddress(lat, lng, from) {
       $addressHint.text("Sprawdź automatycznie pobrany adres")
       $input.addClass("hint")
     }
-    $("#form-submit").removeClass("ui-disabled");
+    $("#form-submit").removeClass("disabled");
   }
 
   let address = {

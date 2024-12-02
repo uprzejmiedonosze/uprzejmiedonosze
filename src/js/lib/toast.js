@@ -1,4 +1,15 @@
-import $ from "jquery"
+/**
+ * @param {string} msg
+ */
+export function message(msg) {
+    const toast = document.getElementById("toast")
+    if (!toast) return
+    // @ts-ignore
+    toast.innerHTML = msg
+    toast.classList.remove('error')
+    toast?.classList.add("show")
+}
+
 
 /**
  * @param {string} msg

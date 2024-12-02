@@ -1,17 +1,23 @@
 #toast {
-    visibility: hidden;
-    min-width: 250px;
     margin-left: -125px;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 2px;
-    padding: 16px;
     position: fixed;
     z-index: 1;
     left: 50%;
     bottom: 30px;
     font-size: 17px;
+    padding: 1em;
+    visibility: hidden;
+    min-width: 250px;
+    width: 350px;
+    max-width: 100%;
+    font-size: .875rem;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    border-radius: .25rem;
+    padding: 1em;
 }
 
 #toast.show {

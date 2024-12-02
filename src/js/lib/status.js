@@ -40,7 +40,6 @@ window.setStatus = setStatus;
 
 export function updateStatus(appId, status) {
   const statusDef = statuses[status]
-  const newIcon = "ui-icon-" + statusDef.icon
   const $popup = $("#changeStatus" + appId)
   const $application = $("#" + appId)
   $popup.find("li a").parent().hide()
@@ -53,7 +52,6 @@ export function updateStatus(appId, status) {
   $application.removeClass(allClasses)
   $application.find('.application-details-list li.status').removeClass(allClasses)
   $application.find('.application-details-list li.status').addClass(status)
-  $application.addClass(status).addClass(newIcon);
   $application.find(".application-details-list .current-status > b").text(statusDef.name.toUpperCase());
   $application.find(".top-line > .current-status > span").text(statusDef.name.toUpperCase());
 

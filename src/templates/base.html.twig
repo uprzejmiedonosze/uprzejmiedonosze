@@ -42,7 +42,7 @@
         {% block headIncludes %}{% endblock %}
     </head>
     <body class="index">
-        <div data-role="page" class="container-fluid ui-page ui-page-theme-a ui-page-header-fixed ui-page-active" {{iff(dialog,'data-dialog="true"')}}>
+        <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
         {% include('header.html.twig') %}
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
