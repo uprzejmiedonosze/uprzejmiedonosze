@@ -6,6 +6,7 @@ import { updateStatus } from "./status";
 import { toast, error } from './toast'
 
 import Api from './Api'
+import { appClicked, closeAllApps } from "../sites/my-application";
 
 // @ts-ignore
 window.sendApplication = async function (appId) {
@@ -27,7 +28,8 @@ window.sendApplication = async function (appId) {
       $afterSend.show();
     }
     if ($('.my-applications').length) {
-      $(`#${appId}`).trigger('collapsibleexpand')
+      closeAllApps()
+      appClicked(document.getElementById(appId))
     }
     // @ts-ignore
     (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" })

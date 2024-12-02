@@ -56,7 +56,7 @@ function displayAllAppsHandler() {
   $("div.application:not(.archived)").show();
 }
 
-function closeAllApps() {
+export function closeAllApps() {
   const expanded = document.querySelectorAll("#apps-list .expanded")
   for (let app of expanded) {
     app.classList.remove("expanded")
@@ -66,9 +66,16 @@ function closeAllApps() {
   }
 }
 
-
 async function appClickHandler() {
-  const target = this.parentElement
+  appClicked(this.parentElement)
+}
+
+/**
+ * @param {HTMLElement|null} target
+ */
+export async function appClicked(target) {
+  if (!target) return
+
   const appId = target.id
   const appDetailsDiv = target.getElementsByClassName("app-details").item(0)
 
@@ -78,18 +85,20 @@ async function appClickHandler() {
 
   target.classList.add("expanded")
 
+  // @ts-ignore
   appDetailsDiv.innerHTML = '<div class="loader"></div>'
 
   const api = new Api(`/short-${appId}-partial.html`)
   const appDetails = await api.getHtml()
   location.hash = `#${appId}`
+  // @ts-ignore
   appDetailsDiv.innerHTML = appDetails
 
   makeDropdown()
 
   $('.private-comment textarea').on('keyup',  function(){
     $(this).height(0).height(this.scrollHeight);
-  }).trigger('keyup')
+  })
 
   $('a.recydywa-seemore').on('click', async function () {
     const plateId = $(this).data('plateid')
