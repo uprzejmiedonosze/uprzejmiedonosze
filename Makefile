@@ -17,7 +17,7 @@ EXPORT               := export
 PUBLIC               := $(EXPORT)/public
 DIRS                 := $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc $(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/inc/handlers $(EXPORT)/inc/dataclasses $(EXPORT)/inc/store $(EXPORT)/templates $(EXPORT)/patronite
 
-CSS_FILES            := $(wildcard src/scss/*.scss)
+CSS_FILES            := $(wildcard src/scss/*.scss src/scss/*/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
 CSS_MINIFIED         := $(PUBLIC)/css/index.css
 
