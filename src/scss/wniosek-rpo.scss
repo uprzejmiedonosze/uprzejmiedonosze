@@ -1,15 +1,18 @@
 @use "variables";
 
 .rpo {
+    header {
+        top: 0;
+        padding: 5px;
+
+        a {
+            color: #fff;
+        }
+    }
+
     * {
-        color: #434343;
-        font-family: "Arial";
-        font-style: normal;
-        font-weight: 400;
         line-height: 1.25;
         orphans: 2;
-        text-decoration: none;
-        vertical-align: baseline;
         widows: 2;
     }
 
@@ -21,21 +24,6 @@
     .ui-content {
         counter-reset: footnotes;
     }
-
-    .ui-header {
-        max-width: variables.$content-width;
-        margin: 0 auto;
-        display: block;
-        padding: 0.3em;
-        border-width: 0 0 1px 0;
-    }
-    
-    .ui-header > a {
-        position: absolute;
-        right: 0;
-        background-color: white !important;
-    }
-
     p {
         display: block;
         margin: 0;
@@ -124,12 +112,12 @@
         font-size: 0.8em;
     }
 
-    footer {
+    .footnotes {
         max-width: variables.$content-width;
         margin: 0 auto;
         text-align: left;
     }
-    footer :target {
+    .footnotes :target {
         background: #ff05;
     }
 
