@@ -55,8 +55,8 @@
         </p>
     {% endif %}
 
-    <div id="user-location" class="ui-grid-a ui-responsive images images-cropped">
-        <div class="ui-block-a">
+    <div id="user-location" class="grid">
+        <div>
         {% if config.confirmationScreen is not defined %}
             <p>Dane zgłaszającego:<br /><br />
         {% else %}
@@ -78,7 +78,7 @@
         {% endif %}
             </p>
         </div>
-        <div class="ui-block-b imageContainer">
+        <div>
 {% if app.address.lat is defined %}
             <a href="{{ app.getMapUrl() }}"
                target="_blank">
@@ -87,34 +87,28 @@
 {% endif %}
         </div>
     </div>
-    <div class="ui-grid-a ui-responsive images">
-        <div class="ui-block-a imageContainer">
-            <a href="#popup1" class="ui-btn ui-icon-search ui-btn-icon-notext zoom"></a>
-            <a href="#popup1" data-rel="popup" data-position-to="window" data-transition="fade">
+    <div class="grid">
+        <div class="imageContainer">
+            <a href="#popup1" data-rel="popup">
                 <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}"/>
             </a>
         </div>
-        <div class="ui-block-b imageContainer">
-            <a href="#popup2" class="ui-btn ui-icon-search ui-btn-icon-notext zoom"></a>
-            <a href="#popup2" data-rel="popup" data-position-to="window" data-transition="fade">
+        <div class="imageContainer">
+            <a href="#popup2" data-rel="popup">
                 <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}"/> 
             </a>
         </div>
-        <div data-role="popup" id="popup1" data-overlay-theme="a" data-theme="a" data-corners="false">
-            <a href="#" data-rel="back"
-                class="ui-btn ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-            <img class="popphoto" src="{{ app.contextImage.url ??  'img/fff-1.png' }}?v={{ app.getRevision }}" style="max-height:800px;">
-        </div>
-        <div data-role="popup" id="popup2" data-overlay-theme="a" data-theme="a" data-corners="false">
-            <a href="#" data-rel="back"
-                class="ui-btn ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-            <img class="popphoto lazyload" data-src="{{ app.carImage.url ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" style="max-height:800px;">
-        </div>
+        <dialog id="popup1" class="fullscreen">
+            <img src="{{ app.contextImage.url ??  'img/fff-1.png' }}?v={{ app.getRevision }}">
+        </dialog>
+        <dialog id="popup2" class="fullscreen">
+            <img src="{{ app.carImage.url ?? 'img/fff-1.png' }}?v={{ app.getRevision }}">
+        </dialog>
     </div>
 {% if app.shouldIncludePlateImage %}
-    <div class="ui-grid-a ui-responsive images">
-        <div class="ui-block-a"></div>
-        <div class="ui-block-b">
+    <div class="grid">
+        <div></div>
+        <div>
             <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}?v={{ app.getRevision }}"/>
         </div>
     </div>
