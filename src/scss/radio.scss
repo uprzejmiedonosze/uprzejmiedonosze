@@ -1,59 +1,68 @@
 @use 'variables';
 
+input[type=radio], 
+input[type=checkbox] {
+    display: none;
+    &:checked + label:after {
+        opacity: 1;
+        transform: scale(1, 1);
+    }
+    &:checked + label {
+        border: 2px solid variables.$primaryColor;
+    }
+}
+
 .radio {
-    display: block;
-    cursor: pointer;
-    user-select: none;
-    text-align: left;
-    padding: 0.7em;
-    margin: 0;
+    border: 2px solid transparent;
     border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 0;
+    padding: 0.7em;
+    padding-left: 40px;
+    position: relative;
+    text-align: left;
+    user-select: none;
+
+    background-color: #F9F9F9;
 
     &:hover {
         color: variables.$primaryColor;
     }
 
-    input {
-        display: none;
-
-        &+span {
-            display: inline-block;
-            position: relative;
-            padding-left: 30px;
-
-            &:before {
-                content: '';
-                display: block;
-                position: absolute;
-                top: 2px;
-                left: 0px;
-                border-radius: 50%;
-                margin-right: 5px;
-                width: 16px;
-                height: 16px;
-                border: 1px solid #ccc;
-                background: #fff;
-            }
-
-            &:after {
-                content: '';
-                display: block;
-                width: 10px;
-                height: 10px;
-                background: #222;
-                position: absolute;
-                border-radius: 50%;
-                top: 6px;
-                left: 4px;
-                opacity: 0;
-                transform: scale(0, 0);
-                transition: all .2s cubic-bezier(0.64, 0.57, 0.67, 1.53);
-            }
+    &.no-bullet {
+        &:before,
+        &:after {
+            display: none;
         }
+    }
 
-        &:checked+span:after {
-            opacity: 1;
-            transform: scale(1, 1);
-        }
+    &:before,
+    &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    &:before {
+        background: #fff;
+        border: 1px solid #ccc;
+        height: 16px;
+        left: 10px;
+        margin-right: 5px;
+        top: 13px;
+        width: 16px;
+    }
+
+    &:after {
+        background: #222;
+        height: 10px;
+        left: 14px;
+        opacity: 0;
+        top: 17px;
+        transform: scale(0, 0);
+        transition: all .2s cubic-bezier(0.64, 0.57, 0.67, 1.53);
+        width: 10px;
     }
 }

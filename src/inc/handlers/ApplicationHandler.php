@@ -92,7 +92,6 @@ class ApplicationHandler extends AbstractHandler {
                 'edit' => $edit,
                 'lastLocation' => $user->getLastLocation()
             ],
-            'categoriesMatrix' => CATEGORIES_MATRIX,
             'app' => $application,
             'dtMin' => $dtMin,
             'dt' => $edit ? $dt : '',

@@ -1,0 +1,9 @@
+@use "radio";
+
+.checkbox {
+    @extend .radio;
+
+    &:before, &:after {
+        border-radius: 0;
+    }
+}

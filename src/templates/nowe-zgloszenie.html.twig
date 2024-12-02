@@ -9,6 +9,9 @@
 
 <form action="/potwierdz.html?id={{ app.id }}" id="form" method="post">
     <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
+    <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />
+    <input type="hidden" id="address" name="address" value="{{ app.address | json_encode }}" />
+
     <div>
         {% if config.edit %}
         <div class="ui-corner-all custom-corners edit-warning">
@@ -23,7 +26,7 @@
         </div>
         {% endif %}
         <div class="grid images images-cropped">
-            <div class="ui-block-a imageContainer image-upload contextImageSection">
+            <div class="imageContainer image-upload contextImageSection">
                 <label for="contextImage">
                     Wgraj zdjęcie z widocznym wykroczeniem
                     <p class="pictureHint">{{ categories[app.category].contextImageHint }}</p>
@@ -34,7 +37,7 @@
                     title="Zdjęcie przedstawiające kontekst"
                         value="{{ app.contextImage.url ?? '' }}" />
             </div>
-            <div class="ui-block-b imageContainer image-upload carImageSection">
+            <div class="imageContainer image-upload carImageSection">
                 <label for="carImage">
                     Wgraj zdjęcie z widoczną tablicą rejestracyjną
                     <p class="pictureHint">{{ categories[app.category].carImageHint }}</p>
@@ -52,8 +55,6 @@
                     title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                     value="{{ app.carImage.url ?? '' }}" />
             </div>
-        </div>
-        <div class="grid">
             <div>
                 <label for="datetime"><span id="dateHint">Data i czas zgłoszenia</span> <a href="#" class="changeDatetime">(zmień datę, jeśli niepoprawna)</a></label>
                 <div class="datetime">
@@ -78,8 +79,6 @@
                         {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
                 </div>
             </div>
-        </div>
-        <div class="grid images images-cropped" >
             <div>
                 <label for="lokalizacja" id="addressHint" style="display: inline;" >Podaj adres lub wskaż go na mapie</label>
                 <a id="resizeMap" class="ui-button-resizeMap ui-icon-arrowsout"></a>
@@ -98,16 +97,15 @@
                 </div>
             </div>
         </div>
+        <fieldset>
+            <label for="comment">Dodaj komentarz</label>
+            <textarea type="text" id="comment" name="comment"
+                placeholder="(opcjonalny komentarz, np. szczegóły dotyczące lokalizacji)">{{ app.userComment ?? '' }}</textarea>
+        </fieldset>
 
-        <input type="hidden" id="dtFromPicture" name="dtFromPicture" value="{{ app.dtFromPicture ?? '1' }}" />
 
-        <input type="hidden" id="address" name="address" value="{{ app.address | json_encode }}" />
-
-        <label for="comment">Dodaj komentarz</label>
-        <textarea type="text" id="comment" name="comment"
-            placeholder="(opcjonalny komentarz, np. szczegóły dotyczące lokalizacji)">{{ app.userComment ?? '' }}</textarea>
-
-        <label for="category">Wybierz rodzaj wykroczenia</label>
+        <fieldset>
+        <legend>Wybierz rodzaj wykroczenia</legend>
         <div class="grid" id="category">
         {% set i = 0 %}
         {% for catId,categoryDef in categories %}
@@ -117,7 +115,7 @@
                     name="category" value="{{ catId }}" id="{{ catId }}"
                     data-contextImage-hint="{{ categoryDef.contextImageHint }}"
                     data-carImage-hint="{{ categoryDef.carImageHint }}">
-                <label for="{{ catId }}">
+                <label for="{{ catId }}" class="radio no-bullet">
                     <div>
                         <img src="/img/{{ catId }}.jpg?ref">
                         {% if categoryDef.points > 1 %}
@@ -147,37 +145,31 @@
             <p style="clear: both;">Masz wątpliwości którą kategorię wybrać? Przeczytaj
             <a href="/przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
         </div>
+        </fieldset>
 
-
-        <label for="extensions">Czy pojazd dodatkowo:</label>
-        <div class="grid" id="extensions">
-        {% set i = 0 %}
+        <fieldset class="grid" id="extensions">
+            <legend>Czy pojazd dodatkowo:</legend>
         {% for extId,extensionDef in extensions %}
-            <div class="ui-block-{{ categoriesMatrix[i % 2] }}">
-                <input type="checkbox" name="extensions[]"
-                    value="{{ extId }}" id="ex{{ extId }}"
-                    {% if app.extensions is defined and extId in app.extensions %}checked{% endif %}>
-                <label for="ex{{ extId }}">
-                    <p>{{ extensionDef.title|raw }} (mandat: {{ extensionDef.price }})</p>
-                </label>
-            </div>
-            {% set i = i + 1 %}
+            <input type="checkbox" name="extensions[]"
+                value="{{ extId }}" id="ex{{ extId }}"
+                {% if app.extensions is defined and extId in app.extensions %}checked{% endif %}>
+            <label class="checkbox" for="ex{{ extId }}">
+                {{ extensionDef.title|raw }} (mandat: {{ extensionDef.price }})
+            </label>
         {% endfor %}
-        </div>
+        </fieldset>
 
-        <label class="section">Oświadczenia</label>
+        <fieldset>
+        <legend class="section">Oświadczenia</legend>
 {% set witness = true %}
 {% if app.statements is not defined or not app.statements.witness %}
     {% set witness = false %}
 {% endif %}
-        <label for="witness">
-            <i>{{ app.guessUserSex.bylam|capitalize }} świadkiem momentu parkowania:</i></span>
+        <input type="checkbox" name="witness" id="witness" {% if witness %}checked{% endif %} />
+        <label for="witness" class="checkbox">
+            {{ app.guessUserSex.bylam|capitalize }} świadkiem momentu parkowania
         </label>
-        <input data-mini="true" type="checkbox" data-role="flipswitch" name="witness" id="witness"
-            data-on-text="tak" data-off-text="nie"
-            {% if witness %}
-                checked
-            {% endif %} />
+        </fieldset>
     </div> <!-- ui-field-contain -->
 </form>
 <script src="/js/new-app.js?%JS_HASH%"

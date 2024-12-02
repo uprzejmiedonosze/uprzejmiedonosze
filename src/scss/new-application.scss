@@ -121,9 +121,6 @@ div.ui-block-b>div.ui-radio {
   }
 
   label {
-    margin-bottom: 0;
-    margin-top: 1em;
-
     a {
       font-weight: 400 !important;
       font-size: 70%;
@@ -169,30 +166,18 @@ div.ui-block-b>div.ui-radio {
   }
 
 
-  #category,
-  #extensions {
-
-    input:checked ~ label {
-      border: 2px solid variables.$primaryColor;
-    }
-    input {
-      display: none;
-    }
+  #category {
 
     label {
-      border: 2px solid transparent;
       margin-top: 10px;
-      background-color: #F9F9F9;
       border-radius: 18px;
       padding: 5px;
-      cursor: pointer;
       height: 100%;
 
       &:hover .category-title {
         color: variables.$primaryColor;
       }
     }
-
 
     a.category-popup {
       bottom: -6px;
@@ -243,21 +228,18 @@ div.ui-block-b>div.ui-radio {
     }
   }
 
-  #category label,
-  #extensions label {
+  #category label {
     display: grid;
     grid-template-columns: 100px 1fr;
     box-sizing: border-box;
   }
 
   #category label img,
-  #category label div,
-  #extensions label p {
+  #category label div {
     position: relative;
   }
 
-  #category label p,
-  #extensions label p {
+  #category label p {
     padding: 0 1em;
     width: 100%;
   }
@@ -379,18 +361,6 @@ div.loader {
 
   100% {
     transform: rotate(-360deg);
-  }
-}
-
-
-@media (max-width: variables.$width-break) {
-
-  #category.ui-responsive>.ui-block-a,
-  #category.ui-responsive>.ui-block-b,
-  #extensions.ui-responsive>.ui-block-a,
-  #extensions.ui-responsive>.ui-block-b {
-    width: 100%;
-    float: none;
   }
 }
 

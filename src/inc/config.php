@@ -53,9 +53,6 @@ $patroniteStr = fread($patronite, filesize(SA_PATRONITE));
 $PATRONITE = json_decode($patroniteStr, false);
 fclose($patronite);
 
-
-const CATEGORIES_MATRIX = Array('a', 'b');
-
 require_once(__DIR__ . '/../config.php');
 
 const ODDZIALY_TERENOWE = array(

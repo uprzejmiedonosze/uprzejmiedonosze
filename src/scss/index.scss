@@ -20,6 +20,7 @@
 @use 'car-stats';
 @use 'main';
 @use 'radio';
+@use 'checkbox';
 @use 'button';
 @use 'menu';
 @use 'header';
@@ -33,9 +34,8 @@ fieldset {
     padding: 0;
     margin: 0;
 
-    legend {
+    legend, &>label {
         padding-top: 1.5em;
-        padding-bottom: 1em;
         font-weight: 400;
     }
 }
@@ -111,7 +111,6 @@ input, textarea {
     display: block;
     font-size: 1em;
     line-height: 1.4em;
-    margin-bottom: 1em;
     min-height: 2.2em;
     outline: 0;
     padding: .4em;

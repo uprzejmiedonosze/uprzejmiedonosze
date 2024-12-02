@@ -3,7 +3,7 @@
 .grid {
     display: grid;
     grid-template-columns: 100%;
-    gap: 10px;
+    gap: 20px 10px;
 
     @media (min-width: variables.$width-break) {
         grid-template-columns: 50% 50%;

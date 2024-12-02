@@ -10,6 +10,7 @@
     <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres e-mail oraz adres korespondencyjny.
         Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
 
+    <fieldset>
     <label for="name">Imię i nazwisko, które posłużą SM do identyfikacji autora zgłoszenia</label>
     <input type="text" required maxlength="30" id="name" name="name"
         placeholder="(twoje imię i nazwisko)"
@@ -30,30 +31,32 @@
     <input type="tel" maxlength="12" id="msisdn" name="msisdn"
         placeholder="666 666 666"
         data-inline="true" value="{{ user.data.msisdn ?? '' }}" />
+    
+    </fieldset>
 
     <h3>Ustawienia</h3>
 
-    <fieldset data-role="controlgroup">
+    <fieldset class="grid">
         <legend for="stopAgresji">Chcę wysyłać swoje zgłoszenia</legend>
+        <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
         <label for="stopAgresji-SM" class="radio">
-            <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
-            <span>do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)</span>
+            do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)
         </label>
+        <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
         <label for="stopAgresji-SA" class="radio">
-            <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
-            <span>na komendę Policji właściwą dla województwa zgłoszenia</span>
+            na komendę Policji właściwą dla województwa zgłoszenia
         </label>
     </fieldset>
 
-    <fieldset data-role="controlgroup">
+    <fieldset class="grid">
         <legend for="shareRecydywa">Chcę pozwalać na prezentowanie moich zdjęć w galerii recydywistów parkowania</legend>
+        <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>
         <label for="shareRecydywa-Y" class="radio">
-            <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>
-            <span>tak (domyślnie), chcę udostępniać <u>pierwsze</u> zdjęcie każdego zgłoszenia</span>
+            tak (domyślnie), chcę udostępniać <u>pierwsze</u> zdjęcie każdego zgłoszenia
         </label>
+        <input type="radio" name="shareRecydywa" id="shareRecydywa-N" value="N" {% if not user.shareRecydywa %}checked="checked"{% endif %}>
         <label for="shareRecydywa-N" class="radio">
-            <input type="radio" name="shareRecydywa" id="shareRecydywa-N" value="N" {% if not user.shareRecydywa %}checked="checked"{% endif %}>
-            <span>nie</span>
+            nie
         </label>
     </fieldset>
 
