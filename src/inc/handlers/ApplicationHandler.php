@@ -255,13 +255,6 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     */
-    public function shipment(Request $request, Response $response): Response {
-        return $this->redirect('/moje-zgloszenia.html?update&q=' . urlencode('wysyłka'));
-    }
-
     public function askForStatus(Request $request, Response $response) {
         $sent = \app\sent(31);
         $user = $request->getAttribute('user');
