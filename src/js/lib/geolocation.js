@@ -53,7 +53,7 @@ export function initMaps(lastLocation, _stopAgresji) {
   map.dragRotate.disable()
   map.touchZoomRotate.disableRotation()
 
-  if($input.val().trim() == 0)
+  if($input?.val()?.trim()?.length == 0)
     setAddressByLatLng(center[1], center[0], 'init');
 
   map.on('moveend', updateAddressDebounce)
