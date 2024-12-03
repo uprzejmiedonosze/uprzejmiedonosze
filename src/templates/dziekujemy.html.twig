@@ -57,7 +57,7 @@ Z poważaniem
     </div>
 {% endif %}
 
-{% if ( not isPatron ) and ( random(2) == 1 or appsCount == 1 ) %}
+{% if ( not isPatron ) and ( random(2) == 1 or appsCount == 1 ) and app.automatedSM %}
 {% set dice = random('ABC') %}
 {% if dice == 'A' %}
 
