@@ -26,7 +26,7 @@
     "patron": {
         "img": "img/badge-patron.png",
         "name": "Patron",
-        "desc": "Odznaka przyznawana za wspieranie serwisu na <a target=\"_blank\" rel=\"external\" href=\"https://patronite.pl/uprzejmiedonosze\">Patronite</a>",
+        "desc": "Odznaka przyznawana za wspieranie serwisu na <a target=\"_blank\" rel=\"external\" href=\"/patronite.html\">Patronite</a>",
         "categories": []
     }
 }
