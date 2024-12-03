@@ -42,14 +42,18 @@ Z poważaniem
     <h4>Dziękujemy za wysłanie zgłoszenia</h4>
 </div>
 {% else %}
-    <p><b>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu e-mail SM.</b>
-    <p>
-        Napisz na <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">grupie wsparcia
-            dla użytkowników Uprzejmie Donoszę</a>
-        (lub napisz bezpośrednio do <a rel="external" target="_blank" href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}">autora</a>).
-        Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
-        oraz adres e-mail Straży Miejskiej.
-    </p>
+    {% set rightButton = 'menuStart' %}
+    <div class="warning-header">
+        <h4>Niestety, dla twojego miasta nie mamy jeszcze zapisanego adresu e-mail SM.</h4>
+        <p>
+            Napisz na grupie wsparcia dla użytkowników Uprzejmie Donoszę, lub napisz email do autora.
+        </p>
+        <p>Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby oraz adres e-mail Straży Miejskiej.</p>
+
+        <a class="button inline" rel="external" target="_blank" href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url')|replace({'%0A': '%0D%0A'}) }}">email</a>
+        <a class="button inline light" rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">
+                grupa FB</a>
+    </div>
 {% endif %}
 
 {% if ( not isPatron ) and ( random(2) == 1 or appsCount == 1 ) %}
