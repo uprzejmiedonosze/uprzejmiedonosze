@@ -25,16 +25,16 @@ export const initHandlers = (map) => {
   $("#category").on("change", function (e) {
     $(".contextImageSection p.pictureHint").text(
       $(e.target).attr("data-contextImage-hint")
-    );
+    )
     $(".carImageSection p.pictureHint").text(
       $(e.target).attr("data-carImage-hint")
-    );
-    $("#extensions div.ui-checkbox").removeClass("ui-state-disabled")
-    $("#extensions div.ui-checkbox input").prop("disabled", false)
-    $(`#ex${e.target.id}`).attr("checked", false).checkboxradio("refresh")
-    $(`#ex${e.target.id}`).prop("disabled", true)
-    $(`#ex${e.target.id}`).parent().addClass('ui-state-disabled')
+    )
+
+    validateExtensions()
   });
+
+  // initial validation on load
+  validateExtensions()
 
   if (window.File && window.FileReader && window.FormData) {
     $(document).on("change", ".image-upload input", function (e) {
@@ -79,4 +79,21 @@ function showHidePictureHints(context) {
 
   if (!placeholder && !recydywaVisible)
     context.find("p.pictureHint").show()
+}
+
+function validateExtensions() {
+  const selectedCategory = document?.querySelector('input[name="category"]:checked')?.value || '0'
+
+  const $extensions = document?.getElementById('extensions')
+  const $labels = [... ($extensions?.querySelectorAll('label') || [])]
+
+  $labels.forEach(e => e.classList.remove('disabled'))
+
+  const matchingExtension = document.querySelector(`#ex${selectedCategory}`)
+  const matchingExtensionLabel = document.querySelector(`#ex${selectedCategory} + label`)
+  
+  if (matchingExtension) {
+    matchingExtension.checked = false
+    matchingExtensionLabel?.classList.add('disabled')
+  }
 }
