@@ -191,7 +191,7 @@ function noGeoDataInImage() {
     );
   } else {
     $("#addressHint").html(
-      'Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.'
+      'Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" target="_blank" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.'
     );
   }
   $("#addressHint").addClass("hint");
