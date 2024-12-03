@@ -30,9 +30,9 @@ export function error(msg) {
     const toast = document.getElementById("toast")
     if (!toast) return
     // @ts-ignore
-    toast.innerHTML = msg
+    toast.innerHTML = `<h3>Błąd!</h3>${msg}`
     toast.classList.add('error')
-    show(toast, 7000)
+    show(toast, 10000)
 }
 
 /**

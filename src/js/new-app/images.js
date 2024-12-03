@@ -101,12 +101,11 @@ function checkUploadInProgress() {
  * @param {string} errorMsg
  */
 function imageError(id, errorMsg) {
-  $(`.${id}Section .loader`).hide();
-  $(`.${id}Section`).addClass("error");
-  $(`.${id}Section input`).textinput("enable");
-  $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show();
+  $(`.${id}Section .loader`).hide()
+  $(`.${id}Section`).addClass("error")
+  $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show()
   if (errorMsg) error(errorMsg)
-  uploadFinished();
+  uploadFinished()
 }
 
 function readGeoDataFromExif(exif) {
