@@ -10,19 +10,19 @@ describe('Create account', () => {
 
   it('Check if account is not active before registration', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Dane konta')
     cy.contains('Chcę wysyłać swoje zgłoszenia').should('exist')
 
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click({force: true})
     cy.contains('Dane konta')
   })
 
   it('Check registration form validation', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Dane konta')
 
@@ -48,7 +48,7 @@ describe('Create account', () => {
 
   it('Register', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Dane konta')
 
@@ -61,14 +61,14 @@ describe('Create account', () => {
 
   it('Check terms screen', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Dane konta').should('not.exist')
 
     cy.contains('Regulamin')
 
-    cy.contains('Dalej').click()
-    cy.contains('Menu').click()
+    cy.contains('Wyrażam zgodę na regulamin').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Regulamin').should('not.exist')
   })
@@ -85,7 +85,7 @@ describe('Update account', () => {
 
   it('Check default', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Edycja konta').click({force: true})
     cy.contains('Zaktualizuj konto')
     cy.contains('Chcę pozwalać na prezentowanie')
@@ -97,11 +97,11 @@ describe('Update account', () => {
 
   it('New app, default settings', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click()
     cy.uploadOKImages()
     cy.setAppCategory(this.categories)
-    cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+    cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
     cy.get('#form-submit').click()
 
     cy.contains('zostanie za chwilę wysłane')
@@ -111,7 +111,7 @@ describe('Update account', () => {
     cy.contains('To twoje pierwsze zgłoszenie')
 
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click()
     cy.contains('Mazurska').click()
     cy.contains('Wysłano do SM Szczecin')
@@ -119,14 +119,14 @@ describe('Update account', () => {
 
   it('Set opposite settings', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Edycja konta').click({force: true})
 
     cy.get('#stopAgresji-SA').check({force: true})
 
     cy.contains('Potwierdź').click()
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Edycja konta').click({force: true})
 
     cy.get('#stopAgresji-SA').should('be.checked')
@@ -134,14 +134,14 @@ describe('Update account', () => {
 
   it('New app, opposite settings', function () {
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click()
     cy.uploadOKImages()
     Object.entries(this.categories)
       .filter(c => c[1].title)
       .forEach((category) => cy.get(`input#${category[0]}`).should('be.enabled'))
     cy.setAppCategory(this.categories)
-    cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+    cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
     cy.get('#form-submit').click()
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
@@ -151,7 +151,7 @@ describe('Update account', () => {
     cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
 
     cy.visit('/')
-    cy.contains('Menu').click()
+    cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click()
     cy.contains('Mazurska').click()
     cy.contains('Wysłano do 👮‍♀️ KP Szczecin Niebuszewo')

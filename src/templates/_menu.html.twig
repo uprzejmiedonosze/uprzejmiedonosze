@@ -4,7 +4,7 @@
 <div class="container">
 
 {% if leftButton ?? '' == 'menu' %}
-    <label data-role="none" class="toggle-container" for="toggle">
+    <label data-role="none" class="menu" for="toggle">
         <span data-role-menu class="button-toggle">
             <span data-role-menu class="icon"></span>
         </span>
@@ -23,7 +23,7 @@
 {% endif %}
 {% if rightButton ?? '' == 'menuNewApplication' %}
     <a href="/nowe-zgloszenie.html" class="menu-button right disabled">
-        Nowe zgłoszenie
+        {{ rightButtonText ?? 'Nowe zgłoszenie' }}
     </a>
 {% endif %}
 {% if rightButton ?? '' == 'newAppNext' %}

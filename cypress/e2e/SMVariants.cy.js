@@ -12,7 +12,7 @@ describe('API:automated (Poznań)', () => {
     it('creates application', function () {
         cy.uploadOKImages('poznan.jpg')
         cy.setAppCategory(this.categories)
-        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit').click()
         cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
@@ -21,16 +21,16 @@ describe('API:automated (Poznań)', () => {
     it('checks thank you screen', function () {
         cy.contains('Dziękujemy za wysłanie zgłoszenia')
         cy.contains('Jeszcze raz')
-        cy.contains(this.sm['Poznań'].address[0])
     })
 
     it('checks my apps screen', function () {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.poznan).click()
         cy.contains(this.sm['Poznań'].address[0].replace('Straż Miejska', 'SM'))
-        cy.contains('POTWIERDZONE zmień').click()
-        cy.contains('Zmień status zgłoszenia z Potwierdzone na')
+        cy.contains('POTWIERDZONE')
+        cy.contains('ZMIEŃ').click()
+        cy.contains('Kierowca dostał mandat')
     })
 })
 
@@ -48,9 +48,9 @@ describe('API:Mail (Wrocław)', () => {
         cy.goToNewAppScreen()
         cy.uploadOKImages('wroclaw.jpg')
         cy.wait(1000)
-        cy.get('.mapboxgl-ctrl-zoom-out').click()
+        cy.get('.mapboxgl-ctrl-zoom-out').click({force: true})
         cy.setAppCategory(this.categories)
-        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit').click()
         cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
@@ -59,15 +59,16 @@ describe('API:Mail (Wrocław)', () => {
     it('checks thank you screen', function () {
         cy.contains('Dziękujemy za wysłanie zgłoszenia')
         cy.contains('Jeszcze raz')
-        cy.contains(this.sm['Wrocław'].address[0].replace('Straż Miejska', 'SM'))
     })
 
     it('checks my apps screen', function () {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.wroclaw.replace('Plac Generała ', '')).click()
-        cy.contains('WYSŁANE zmień').click()
-        cy.contains('Zmień status zgłoszenia z Wysłane na')
+
+        cy.contains('WYSŁANE')
+        cy.contains('ZMIEŃ').click()
+        cy.contains('Przenieś do archiwum')
     })
 
 })
@@ -86,7 +87,7 @@ describe('Missing SM (Poniatowa)', () => {
         cy.goToNewAppScreen()
         cy.uploadOKImages('poniatowa.jpg')
         cy.setAppCategory(this.categories)
-        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit', { timeout: 5000 }).click()
         cy.contains('Zapisz!').click()
         cy.contains('Wystąpił błąd').should('not.exist')
@@ -98,23 +99,24 @@ describe('Missing SM (Poniatowa)', () => {
     })
 
     it('checks my apps screen', function () {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.poniatowa).click()
         cy.contains('Wyślij zgłoszenie')
         cy.contains('edytuj')
-        cy.contains('NOWE zmień').click()
-        cy.contains('Zmień status zgłoszenia z Nowe na');
+        cy.contains('NOWE')
+        cy.contains('ZMIEŃ').click()
+        cy.contains('Przenieś do archiwum')
     })
 
     it('checks send apps screen', function () {
-        cy.contains('Menu').click({force: true})
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Do wysłania').click({force: true})
 
         cy.contains('Masz zgłoszenia czekające na wysłanie')
 
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.ui-page-active .application-short.confirmed h3')
+        cy.get('.application-short.confirmed h3')
             .should('be.visible').click()
         cy.wait('@appDetails')
 

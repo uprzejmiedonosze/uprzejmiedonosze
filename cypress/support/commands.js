@@ -110,11 +110,11 @@ Cypress.Commands.add("cleanDB", () => {
 Cypress.Commands.add("goToNewAppScreen", () => {
   cy.goToNewAppScreenWithoutTermsScreen()
   cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
-  cy.contains('Dalej').click()
+  cy.contains('Wyrażam zgodę na regulamin').click()
 })
 
 Cypress.Commands.add("goToNewAppScreenWithoutTermsScreen", () => {
   cy.visit('/')
-  cy.contains('Menu').click()
+  cy.get('label.menu > .button-toggle').click()
   cy.contains('Nowe zgłoszenie').click({force: true})
 })

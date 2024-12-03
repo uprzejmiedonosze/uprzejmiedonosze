@@ -1,7 +1,13 @@
 function checkAppData(config, confirmationScreen=false) {
+    let address = config.address.szczecin
+    let date = config.carImage.dateHuman
+    if (confirmationScreen) {
+        address = address.replace(", Szczecin", "")
+        date = config.carImage.dateOnConfirmation
+    }
     cy.contains(config.carImage.plateId)
-    cy.contains(confirmationScreen ? config.carImgage.dateOnConfirmation: config.carImage.dateHuman)
-    cy.contains(config.address.szczecin)
+    cy.contains(date)
+    cy.contains(address)
     cy.contains(config.user.name)
     cy.contains(config.user.email)
 }
@@ -14,7 +20,7 @@ describe('Empty my apps', () => {
 
     it('gets to my apps screen', () => {
         cy.visit('/')
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Moje zgłoszenia').click()
     })
 
@@ -34,7 +40,9 @@ describe('Application screen validation', () => {
 
     it('checks new application screen', function () {
         cy.goToNewAppScreen()
-        cy.get('#lokalizacja').should('match', new RegExp(this.config.address.address + '.*'))
+
+        
+        cy.get('#lokalizacja').should("have.value", this.config.address.address)
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
         Object.entries(this.categories).
@@ -51,7 +59,7 @@ describe('Application screen validation', () => {
         Object.entries(this.extensions).forEach((extension) => {
             const id = extension[0]
             cy.get(`input#${id}`).click({force: true})
-            cy.get(`input#ex${id}`).should('be.disabled')
+            cy.get(`input#ex${id} + label`).should('have.class', 'disabled')
         })
         cy.get('input#datetime').should('have.attr', 'readonly')
         cy.get('#address').should(($input) => {
@@ -105,7 +113,7 @@ describe('Valid images and location', () => {
 
     it('uploads images', function () {
         cy.uploadOKImages()
-        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('.imageContainer').should('not.have.class', 'error')
 
         cy.get('#comment').should('have.value', 'Pojazd marki Skoda.')
@@ -120,7 +128,7 @@ describe('Valid images and location', () => {
         cy.get('#datetime').should('have.value', this.config.carImage.dateISO)
         cy.get('.changeDatetime').should('be.visible')
 
-        cy.get('#lokalizacja').should('match', new RegExp(this.config.address.szczecin + '.*'))
+        cy.get('#lokalizacja').should("have.value", this.config.address.szczecin)
     })
 })
 
@@ -140,7 +148,7 @@ describe('Create application', () => {
         cy.setAppCategory(this.categories)
         const firstExtension = Object.entries(this.extensions)[0]
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
-        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit', { timeout: 10000 }).click()
     })
 
@@ -161,13 +169,13 @@ describe('Create application', () => {
         cy.visit('/moje-zgloszenia.html')
         cy.location('pathname').should('include', '/moje-zgloszenia.html');
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.ui-page-active .application-short.confirmed-waiting h3')
+        cy.get('.application-short.confirmed-waiting h3')
             .should('be.visible').click()
         cy.wait('@appDetails')
     })
 
     it('checks application screen', function () {
-        cy.get('.ui-page-active .images-slider a:first').invoke('removeAttr', 'target').click({force: true})
+        cy.get('.images-slider a:first').invoke('removeAttr', 'target').click({force: true})
         checkAppData(this.config)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
@@ -187,7 +195,7 @@ describe('Edit application', () => {
         cy.goToNewAppScreenWithoutTermsScreen()
         cy.uploadOKImages()
         cy.setAppCategory(this.categories)
-        cy.get('#geo', { timeout: 1000 }).should('have.class', 'ui-icon-location')
+        cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit', { timeout: 10000 }).click()
     })
 
@@ -197,7 +205,7 @@ describe('Edit application', () => {
     })
 
     it('checks edit', function() {
-        cy.get('.ui-icon-edit').click()
+        cy.contains('Edytuj').click()
         cy.contains('Edytujesz zgłoszenie')
     })
 
@@ -218,8 +226,8 @@ describe('Edit application', () => {
         cy.contains('Wystąpił błąd').should('not.exist')
 
         cy.contains(this.config.carImage.plateId)
-        cy.contains(this.config.carImage.dateHumanAltered)
-        cy.contains(this.config.address.szczecin)
+        cy.contains("2222 środa, 2 lutego 2022")
+        cy.contains(this.config.address.szczecin.replace(", Szczecin", ""))
         cy.contains(this.config.user.name)
         cy.contains(this.config.user.email)
 
@@ -237,15 +245,15 @@ describe('Edit application', () => {
         cy.visit('/moje-zgloszenia.html')
         cy.location('pathname').should('include', '/moje-zgloszenia.html');
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.ui-page-active .application-short.confirmed-waiting h3:first')
+        cy.get('.application-short.confirmed-waiting h3:first')
             .should('be.visible').click()
         cy.wait('@appDetails')
         cy.contains(this.config.address.szczecin)
-        cy.get('#collapsiblesetForFilter').find('.application').should('have.length', 2)
+        cy.get('#apps-list').find('.application').should('have.length', 2)
     })
 
     it('checks application screen', function () {
-        cy.get('.ui-page-active .images-slider a:first').invoke('removeAttr', 'target').click({force: true})
+        cy.get('.images-slider a:first').invoke('removeAttr', 'target').click({force: true})
         cy.contains(this.config.carImage.dateHumanAltered)
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')

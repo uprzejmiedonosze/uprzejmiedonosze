@@ -111,7 +111,7 @@ nav.nav > a {
     }
 }
 
-label.toggle-container {
+label.menu {
     margin: 0;
 }
 
@@ -194,7 +194,7 @@ label.toggle-container {
         transform: translateY(0);
     }
 
-    & ~ .container .toggle-container .button-toggle {
+    & ~ .container .menu .button-toggle {
         box-shadow: 0 0px 20px #00000030;
     }
 

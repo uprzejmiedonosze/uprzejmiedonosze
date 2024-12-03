@@ -64,15 +64,4 @@
         Potwierdź
     </a>
 </form>
-
-{% if not user.isRegistered %}
-<script>
-$(document).ajaxComplete(function(e, xhr, settings){
-    target = e.target.baseURI.replace(/.*uprzejmiedonosze.net./, '');
-    if(!target.startsWith('register.html')){
-        window.location.replace('register.html?next=' + target);
-    }
-});
-</script>
-{% endif %}
 {% endblock %}
