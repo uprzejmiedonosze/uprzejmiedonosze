@@ -13,7 +13,7 @@ describe('Static pages no session', function() {
         cy.contains('Zgłoś nieprawidłowe parkowanie!')
         cy.contains('Suppi')
 
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Zaloguj')
         cy.contains('zarejestruj')
     })
@@ -34,55 +34,55 @@ describe('Static pages no session', function() {
     })
 
     it('/menu » Jak zgłaszać', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Jak zgłaszać').click()
         cy.contains('przez Uprzejmie Donoszę')
     })
 
     it('/menu » Jak zgłaszać » dzwoń jak szeryf', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Jak zgłaszać').click()
-        cy.contains('Stosuj na całych patoparkingach').click()
+        cy.contains('na całych patoparkingach').click()
         cy.contains('sprawdzaj efekty pracy SM').click()
         cy.contains('Proszę o przekazanie ww.')
     })
 
 
     it('/menu » przepisy', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Przepisy').click()
         cy.contains('Pojazd może być usunięty z drogi na koszt właściciela')
     })
 
     it('/menu » faq', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('FAQ').click()
         cy.contains('Konstantynów Łódzki')
         cy.contains('Szczecin')
     })
 
     it('/menu » faq » aplikacja', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('FAQ').click()
         cy.contains('wygodny skrót').click()
         cy.contains('Zainstaluj przeglądarkę')
     })
 
     it('/menu » przesłuchanie', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Wizyta w SM').click()
         cy.contains('Czy straż miejska wezwie mnie na przesłuchanie?')
     })
 
     it('/menu » przesłuchanie » zwrot', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Wizyta w SM').click()
         cy.contains('zwrot środków za przesłuchanie').click()
         cy.contains('Zwrot utraconego dochodu')
     })
 
     it('/menu » Statystyki', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Statystyki').click()
         cy.contains('Nowe zgłoszenia oraz nowi użytkownicy')
     })
@@ -114,9 +114,9 @@ describe('Static pages logged in', function() {
     })
 
     it('/menu » Jak zgłaszać » dzwoń jak szeryf', () => {
-        cy.contains('Menu').click()
+        cy.get('label.menu > .button-toggle').click()
         cy.contains('Jak zgłaszać').click()
-        cy.contains('Stosuj na całych patoparkingach').click()
+        cy.contains('na całych patoparkingach').click()
         cy.contains('sprawdzaj efekty pracy SM').click()
         cy.contains('Proszę o przekazanie ww.')
         cy.contains('adres poczty elektronicznej: e@nieradka.net.')
