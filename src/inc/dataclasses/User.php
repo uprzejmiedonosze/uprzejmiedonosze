@@ -42,6 +42,13 @@ class User extends \JSONObject{
         return $instance;
     }
 
+    public function asEncryptedJson(): string {
+        $clone = new User(json_encode($this));
+        $clone->encrypted = true;
+        $clone->data = \crypto\encode($clone->data, 'uuid', $clone->number);
+        return json_encode($clone);
+    }
+
     /**
      * Check if user having is already registered
      * (has name and address provided).
