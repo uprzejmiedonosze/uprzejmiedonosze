@@ -1,3 +1,7 @@
+{% if shortTitle is not defined %}
+    {% set shortTitle = title ?? 'Uprzejmie Donoszę' %}
+{% endif %}
+
 {% if title is defined %}
     {% set title = title ~ ' | Uprzejmie Donoszę' %}
 {% else %}
