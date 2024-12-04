@@ -1,5 +1,5 @@
 import $ from "jquery"
-import filterable from "../lib/filterable"
+import { filterable } from "../lib/filterable"
 
 $(function () {
   scrollTo(window.location.hash)

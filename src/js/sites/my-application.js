@@ -3,7 +3,7 @@ import $ from "jquery"
 import { updateCounters } from "../lib/status";
 import { setStatus } from "../lib/status"
 import Api from '../lib/Api'
-import filterable from "../lib/filterable";
+import { filterable, triggerFilter} from "../lib/filterable";
 import makeDropdown from "../lib/dropdown";
 import makeDialog from "../lib/dialog";
 
@@ -54,6 +54,7 @@ function filterAppsHandler() {
 function displayAllAppsHandler() {
   $("div.displayAllApps").hide();
   $("div.application:not(.archived)").show();
+  triggerFilter('apps')
 }
 
 export function closeAllApps() {

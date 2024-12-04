@@ -4,11 +4,19 @@ import delay from './delay'
  * @param {string} inputId
  * @param {string|null} listId
  */
-function filterable(inputId, listId) {
+export function filterable(inputId, listId) {
     const input = document.getElementById(inputId)
     if (!input) return
     input.addEventListener("input", delay(filter(inputId, listId), 300), false)
+    triggerFilter(inputId)
+}
 
+/**
+ * @param {string} inputId
+ */
+export function triggerFilter(inputId) {
+    const input = document.getElementById(inputId)
+    if (!input) return
     if (input.value.trim())
         input.dispatchEvent(new Event('input', {bubbles: true}))
 }
@@ -26,5 +34,3 @@ function filter(inputId, listId) {
         }
     }
 }
-
-export default filterable
