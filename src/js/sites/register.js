@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $("#register-submit").click(function () {
     if (validateRegisterForm()) {
       $("#register-form").submit();
+    } else {
+      $("#register-submit").removeClass('disabled')
     }
   });
 });
