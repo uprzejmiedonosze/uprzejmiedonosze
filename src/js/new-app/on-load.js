@@ -53,6 +53,7 @@ export const initHandlers = (map) => {
 
   $("#form-submit").click(function () {
     if (validateForm()) {
+      $("#form-submit").addClass('disabled')
       $("#form").submit();
     }
   });

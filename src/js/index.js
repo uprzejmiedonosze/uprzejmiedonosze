@@ -30,7 +30,9 @@ import makeDialog from "./lib/dialog";
 $('.menu-button.right').on('click', function() {
     $(this).addClass('disabled');
 })
-
+$('.button.cta').on('click', function() {
+    $(this).addClass('disabled');
+})
 
 document.addEventListener("DOMContentLoaded", () => {
     makeDialog()
