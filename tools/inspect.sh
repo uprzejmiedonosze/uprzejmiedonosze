@@ -63,7 +63,7 @@ echo "Gallery stats:"
 ssh nieradka.net "${SQL} \"select case when json_extract(value, '$.statements.gallery') != 0 then 'zgoda' else 'brak zgody' end as statement, case json_extract(value, '$.addedToGallery') = 0 when 1 then 'odrzucone' when 0 then 'zaakceptowane' else '   ' end as decyzja, count(*) from applications where ${WHERE2} group by 1, 2 ;\"" | tr "|" "	" | sed 's/^/\t/'
 
 echo "Last 10 applications:"
-for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.status') from applications where ${WHERE2} order by json_extract(value, '$.added') desc limit 10 \""); do
+for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.status') from applications where ${WHERE2} and json_extract(value, '$.status') != 'draft' order by json_extract(value, '$.added') desc limit 10 \""); do
 	print_app_url ${key%|*} "[${key#*|}]"
 done
 exit 0
