@@ -122,6 +122,11 @@ div.error img {
     }
   }
 
+  .image-upload:hover .pictureHint {
+    display: none;
+  }
+
+
   .image-upload {
     label {
       height: 100%;
@@ -147,13 +152,12 @@ div.error img {
 
   input#plateId {
     text-transform: uppercase;
-    max-width: 10.5em;
+    max-width: 11em;
+    font-family: monospace;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 16px;
   }
-
-  .plate div.ui-input-text {
-    max-width: 10.5em;
-  }
-
 
   #category {
 

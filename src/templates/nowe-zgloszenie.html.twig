@@ -70,8 +70,8 @@
                 <label for="plateId" id="plateHint">Podaj numer rejestracyjny</label>
                 <div class="plate">
                     <input class="required" type="text" id="plateId" name="plateId"
-                        placeholder="(numer rejestracyjny)" value="{{ app.carInfo.plateId ?? '' }}"
-                        autocomplete="off" style="text-transform:uppercase" />
+                        placeholder="(numer rej.)" value="{{ app.carInfo.plateId ?? '' }}"
+                        autocomplete="off" />
                     <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
                         {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
                 </div>
