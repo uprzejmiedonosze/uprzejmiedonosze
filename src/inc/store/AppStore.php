@@ -27,7 +27,7 @@ function save(Application $application): Application{
             $application->number = 'UD/' . $application->user->number . '/' . $appNumber;
         }
     }
-    \store\set(TABLE, $application->id, json_encode($application), $application->user->email);
+    \store\set(TABLE, $application->id, $application->encode(), $application->user->email);
 
     if ($application->carInfo->plateId ?? false) {
         $cleanPlateId = \recydywa\cleanPlateId($application->carInfo->plateId);

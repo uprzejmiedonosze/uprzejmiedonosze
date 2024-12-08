@@ -31,6 +31,7 @@ class Application extends JSONObject implements \JsonSerializable {
     public static function withJson($json): Application {
         $instance = new self();
         $instance->__fromJson($json);
+        $instance->decode();
         @$instance->statusHistory = (array)$instance->statusHistory;
         @$instance->comments = (array)$instance->comments;
         @$instance->extensions = (array)$instance->extensions;
@@ -42,6 +43,29 @@ class Application extends JSONObject implements \JsonSerializable {
         }
         return $instance;
     }
+
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    function encode(): string {
+        $clone = Application::withJson(json_encode($this));
+        $clone->encrypted = true;
+        $clone->user = \crypto\encode(json_encode($clone->user), $_SESSION['user_id'], $clone->id . $clone->added);
+        $clone->privateComment = \crypto\encode(json_encode($clone->privateComment), $_SESSION['user_id'], $clone->id . $clone->added);
+        return json_encode($clone);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    function decode(): void {
+        if ($this->encrypted ?? false) {
+            $this->user = new JSONObject(\crypto\decode($this->user, $_SESSION['user_id'], $this->id . $this->added));
+            $this->privateComment = new JSONObject(\crypto\decode($this->privateComment, $_SESSION['user_id'], $this->id . $this->added));
+            unset($this->encrypted);
+        }
+    }
+
 
     /**
      * @SuppressWarnings(PHPMD.ShortVariable)
@@ -557,7 +581,8 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     public function getSafeImageUrl(): string {
-        $image = $this->contextImage->thumb ?? 'img/fff-1.png';
-        return 'img-' . (new \Crypto())->encode($image) . '.php?sessionless';
+        $imageFileName = $this->contextImage->thumb ?? 'img/fff-1.png';
+        $image = \crypto\encode($imageFileName, CRYPTO_KEY, CRYPTO_IV);
+        return "img-$image.php?sessionless";
     }
 }

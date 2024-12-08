@@ -2,6 +2,9 @@
 
 require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
+require_once(__DIR__ . '/../Crypto.php');
+
+use JSONObject;
 use \stdClass as stdClass;
 
 /**
@@ -20,6 +23,7 @@ class User extends \JSONObject{
         global $_SESSION;
         if($json){
             parent::__construct($json);
+            $this->decode();
             if (!isset($this->data->sex)) {
                 $this->guessSex();
             }
@@ -40,6 +44,26 @@ class User extends \JSONObject{
         $instance->data->email = $firebaseUser['user_email'];
         $instance->data->name = $firebaseUser['user_name'];
         return $instance;
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    function encode(): string {
+        $clone = new User(json_encode($this));
+        $clone->encrypted = true;
+        $clone->data = \crypto\encode(json_encode($clone->data), $_SESSION['user_id'], $clone->number . $clone->added);
+        return json_encode($clone);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    function decode(): void {
+        if ($this->encrypted ?? false) {
+            $this->data = new JSONObject(\crypto\decode($this->data, $_SESSION['user_id'], $this->number . $this->added));
+            unset($this->encrypted);
+        }
     }
 
     /**

@@ -30,13 +30,7 @@ function removeUser($email, $dryRun=true){
     }
 
     $email = \SQLite3::escapeString($email);
-
-    $userJson = \store\get('users', $email);
-    if(!$userJson){
-        throw new \Exception("Trying to remove nonesiting user: $email");
-    }
-    $user = new User($userJson);
-
+    $user = \user\get($email);
     $apps = \user\apps($user, 'allWithDrafts');
 
     echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
@@ -69,7 +63,7 @@ function removeUser($email, $dryRun=true){
 
     $user->deleted = $time;
     $user->applications = Array();
-    \store\set('users', $user->data->email, json_encode($user));
+    \user\save($user);
 
     // removing old user
     \store\delete('users', $email);
@@ -231,8 +225,8 @@ function upgradeAllUsers($dryRun=true) {
     foreach ($users as $email => $user) {
         if ($interrupt) exit;
         echo date(DT_FORMAT) . " migrating user $email:\n";
-        if(!$dryRun){
-            \store\set('users', $email, json_encode($user));
+        if(!$dryRun) {
+            \user\save($user);
         }
     }
 }
@@ -252,7 +246,7 @@ function updateApp($app, $version, $dryRun) {
     if($dryRun){
         return;
     }
-    \store\set('applications', $app->id, json_encode($app), $app->user->email);
+    \app\save($app);
 }
 
 function refreshRecydywa() {
@@ -276,7 +270,7 @@ function refreshRecydywa() {
         echo "$cleanPlateId set\n";
         $recydywa = Recydywa::withValues($row[1], $row[2], $row[3]);
 
-        \cache\set("recydywa-$cleanPlateId", $recydywa);
+        \cache\set(type:\cache\Type::Recydywa, key:$cleanPlateId, value:$recydywa, flag:0, expire:0);
         \store\set('recydywa', "$cleanPlateId v2", json_encode($recydywa));
     }
 }

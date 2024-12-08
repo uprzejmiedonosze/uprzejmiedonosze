@@ -2,7 +2,6 @@
 
 require(__DIR__ . '/../dataclasses/User.php');
 
-
 use cache\Type;
 
 const TABLE = 'users';
@@ -30,7 +29,7 @@ function save(User $user): void {
     if(!isset($user->number)){
         $user->number = nextNumber();
     }
-    \store\set(TABLE, $user->getEmail(), json_encode($user));
+    \store\set(TABLE, $user->getEmail(), $user->encode());
 }
 
 // getCurrentUser
@@ -39,7 +38,7 @@ function current(): User{
     if(is_null($currentUser)){
         try{
             $currentUser = get(currentEmail());
-        }catch(\Exception $e){
+        } catch(\Exception $e){
             $currentUser = new User();
         }
     }

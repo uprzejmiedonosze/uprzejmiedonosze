@@ -7,8 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class JpegHandler extends AbstractHandler {
 
     private function decode(string $hash): string {
-        $decoded = (new Crypto())->decode($hash);
-        return $decoded;
+        return \crypto\decode($hash, CRYPTO_KEY, CRYPTO_IV);
     }
 
     /**
