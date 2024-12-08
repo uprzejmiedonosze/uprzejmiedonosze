@@ -2,6 +2,7 @@ import $ from "jquery"
 
 import mapboxgl from 'mapbox-gl'
 import Api from './Api'
+import { error } from "./toast"
 
 let map // represents mapboxgl.Map
 let stopAgresji = false
@@ -36,7 +37,12 @@ export function initMaps(lastLocation, _stopAgresji) {
   }
   
   mapboxgl.accessToken = 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw';
-  map = new mapboxgl.Map(mapOptions)
+  try {
+    map = new mapboxgl.Map(mapOptions)
+  } catch(e) {
+    error(e.getMessage())
+  }
+  
 
   map.addControl(new mapboxgl.NavigationControl({
     showCompass: false,

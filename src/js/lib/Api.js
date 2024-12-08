@@ -52,7 +52,8 @@ export default class Api {
   async #parseResponse(response) {
     const repl = await response.json()
     if (response.ok) return repl
-    if (!this.mute404) error(repl.error)
+    if (response.status != 404 || !this.mute404)
+      error(repl.error)
     throw new Error(repl.error, repl)
   }
 
