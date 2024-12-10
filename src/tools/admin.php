@@ -237,12 +237,7 @@ function updateApp($app, $version, $dryRun) {
     $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
     $status = $STATUSES[$app->status]->name;
     echo "  - migrating app $number [$status] by {$app->user->email}$added\n";
-    if(($app->version ?? '0.0.0') < '2.1.0') {
-        $app->inexactHour = true;
-    }
     $app->version = $version;
-    if($app->alpr == 'paid') $app->alpr = 'openalpr';
-
     if($dryRun){
         return;
     }
@@ -282,4 +277,4 @@ removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
 // removeUser('szymon@nieradka.net', false);
 // upgradeAllUsers(false);
 // refreshRecydywa();
-// upgradeAllApps('2.3.0', false);
+// upgradeAllApps('2.4.0', false);

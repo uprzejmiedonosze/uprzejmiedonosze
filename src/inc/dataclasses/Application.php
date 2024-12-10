@@ -73,7 +73,6 @@ class Application extends JSONObject implements \JsonSerializable {
      */
     private static function genSafeId(User $user): string {
         $id = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
-        logger("generated $id for user {$user->getEmail()}");
         if (\app\checkId($id))
             throw new Exception("Identyfikator zgłoszenia '$id' dla '{$user->getEmail()}' już istnieje!");
         return $id;
@@ -93,9 +92,10 @@ class Application extends JSONObject implements \JsonSerializable {
         $instance->category = 0;
         $instance->initStatements();
         $instance->address = new JSONObject();
-        $instance->version = '2.3.0';
-
         /*
+        2.4.0 (2024-12-09)
+          - encryption support
+        2.3.0
         2.2.1 (2023-01-12)
           - separate lat & lng
         2.2.0 (2024-01-11):
@@ -103,6 +103,7 @@ class Application extends JSONObject implements \JsonSerializable {
           - extended address property
         2.1.0
         */
+        $instance->version = '2.4.0';
         $instance->browser = $_SERVER['HTTP_USER_AGENT'];
         return $instance;
     }
