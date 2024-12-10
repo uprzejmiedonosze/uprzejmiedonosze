@@ -6,7 +6,7 @@ run:
 	docker compose up -d
 
 runi:
-	docker compose up
+	GREP_COLOR='1;30;49' docker compose up | grep --color -E '^|.*vendor.*'
 
 shell:
 	docker compose exec webapp bash
