@@ -137,7 +137,7 @@ h4 {
 }
 
 a[rel~="external"]:not(:has(img)):not(.button) {
-    color: #38c!important;
+    color: #38c;
 }
 
 a[rel~="external"]:not(:has(img)):not(.button)::after {
