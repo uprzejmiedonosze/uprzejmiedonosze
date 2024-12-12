@@ -1,5 +1,5 @@
-FROM nginx:bookworm as webserver
-LABEL net.uprzejmiedonosze=0.1.2
+FROM nginx:bookworm:1.27.3 as webserver
+LABEL net.uprzejmiedonosze=0.2.3
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update
 
