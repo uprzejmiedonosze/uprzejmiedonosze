@@ -67,8 +67,8 @@
                 <br />
                 {{ app.user.email }}<br />
                 {{ app.user.address }}<br />
-                {% if app.user.msisdn %}Tel: <span class="msisdn">{{ app.user.msisdn }}</span><br />{% endif %}
-                {% if app.user.edelivery %}E-doręczenia: <span class="edelivery">{{ app.user.edelivery ?? '' }}</span>{% endif %}
+                {% if app.user.msisdn ?? false %}Tel: <span class="msisdn">{{ app.user.msisdn }}</span><br />{% endif %}
+                {% if app.user.edelivery ?? false %}E-doręczenia: <span class="edelivery">{{ app.user.edelivery ?? '' }}</span>{% endif %}
             {% if config.confirmationScreen is not defined %}
                 <br />
                 <small>Nieaktualne dane? Popraw je na <a href="/register.html?update">stronie rejestracji</a>
