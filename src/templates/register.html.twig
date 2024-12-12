@@ -14,24 +14,36 @@
     <label for="name">Imię i nazwisko, które posłużą SM do identyfikacji autora zgłoszenia</label>
     <input type="text" required maxlength="30" id="name" name="name"
         placeholder="(twoje imię i nazwisko)"
-        data-inline="true" value="{{ user.data.name }}" />
+        value="{{ user.data.name }}" />
 
     <label for="email">E-mail został pobrany automatycznie w trakcie logowania</label>
     <input disabled type="email" required maxlength="30" id="email" name="email"
         placeholder="(twój email)"
-        data-inline="true" value="{{ user.data.email }}" />
+        value="{{ user.data.email }}" />
 
-    <label for="name">Adres zamieszkania wraz z <b>numerem lokalu i miastem</b></label>
+    <label for="address">Adres zamieszkania wraz z <b>numerem lokalu i miastem</b></label>
     <input type="text" maxlength="70" required id="address" name="address"
         placeholder="(Ulica 10a/7, Miasto)"
         autocomplete="off"
-        data-inline="true" value="{{ user.data.address ?? '' }}" />
+        value="{{ user.data.address ?? '' }}" />
 
-    <label for="name">Numer kontaktowy (opcjonalny, ale ułatwi SM kontakt z Tobą)</label>
+    <label for="msisdn">Numer kontaktowy (opcjonalny, ale ułatwi SM kontakt z Tobą)</label>
     <input type="tel" maxlength="12" id="msisdn" name="msisdn"
         placeholder="666 666 666"
         data-inline="true" value="{{ user.data.msisdn ?? '' }}" />
-    
+
+{% if user.isRegistered %}
+
+    <label for="edelivery">Adres
+        <a href="https://info.mobywatel.gov.pl/aktualnosci/loguj-sie-do-e-doreczen-aplikacja-mobywatel"
+            target="_blank" rel="external">e-doręczeń</a>
+        (opcjonalny)</label>
+    <input type="tel" id="edelivery" name="edelivery"
+        maxlength="26" minlength="26"
+        placeholder="AE:PL-00000-00000-AAAAA-00"
+        value="{{ user.data.edelivery ?? '' }}" />
+{% endif %}
+
     </fieldset>
 
     <h3>Ustawienia</h3>

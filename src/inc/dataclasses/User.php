@@ -128,11 +128,7 @@ class User extends \JSONObject{
         return $this->isAdmin();
     }
 
-    /**
-     * Updates current user's data.
-     * @SuppressWarnings(PHPMD.MissingImport)
-     */
-    function updateUserData($name, $msisdn, $address, $stopAgresji, $shareRecydywa){
+    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, bool $stopAgresji, bool $shareRecydywa){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
@@ -146,9 +142,9 @@ class User extends \JSONObject{
             throw new \MissingParamException('address', "Podaj adres z ulicą, numerem mieszkania i miejscowością");
     
         if(isset($msisdn)) $this->data->msisdn = $msisdn;
+        if(isset($edelivery)) $this->data->edelivery = trimstr2upper($edelivery);
         if(isset($stopAgresji)) $this->data->stopAgresji = $stopAgresji;
         if(isset($shareRecydywa)) $this->data->shareRecydywa = $shareRecydywa;
-        
         $this->data->address = $address;
         return true;
     }

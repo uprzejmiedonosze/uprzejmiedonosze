@@ -104,11 +104,14 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $name = getParam($params, 'name');
         $address = getParam($params, 'address');
         $msisdn = getParam($params, 'msisdn', '');
+        $edelivery = $this->getParam($params, 'edelivery', '');
         $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
+        $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
     
+        /** @var \user\User $user */
         $user = $request->getAttribute('user');
     
-        $user->updateUserData($name, $msisdn, $address, $stopAgresji);
+        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa);
         \user\save($user);
         $user->isRegistered = $user->isRegistered();
         $request = $request->withAttribute('user', $user);

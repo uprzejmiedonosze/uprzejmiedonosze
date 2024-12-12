@@ -27,12 +27,14 @@ class UserHandler extends AbstractHandler {
         $address = str_replace(', Polska', '', cleanWhiteChars($address));
 
         $msisdn = $this->getParam($params, 'msisdn', '');
+        $edelivery = $this->getParam($params, 'edelivery', '');
 
         $stopAgresji = $this->getParam($params, 'stopAgresji', 'SM') == 'SA';
         $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
 
+        /** @var \user\User $user */
         $user = $request->getAttribute('user');
-        $user->updateUserData($name, $msisdn, $address, $stopAgresji, $shareRecydywa);
+        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa);
         \user\save($user);
 
         return AbstractHandler::redirect($signInSuccessUrl);

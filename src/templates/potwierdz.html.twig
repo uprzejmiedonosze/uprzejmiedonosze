@@ -87,7 +87,8 @@
         <b>{{ app.user.name }}</b><br />
         {{ app.user.email }}<br />
         {{ app.user.address }}<br />
-        {{ app.user.msisdn }}<br />
+        {% if app.user.msisdn %}Tel: <span class="msisdn">{{ app.user.msisdn }}</span><br />{% endif %}
+        {% if app.user.edelivery %}E-doręczenia: <span class="edelivery">{{ app.user.edelivery ?? '' }}</span>{% endif %}
         </cite>
     </div>
 </div>

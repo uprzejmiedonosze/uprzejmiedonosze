@@ -62,6 +62,7 @@ function removeUser($email, $dryRun=true){
     $time = date(DT_FORMAT);
     $user->data->name = 'DELETED';
     $user->data->msisdn = 'DELETED';
+    $user->data->edelivery = 'DELETED';
     $user->data->address = 'DELETED';
     $user->data->email = md5($email . $time);
     $user->data->emailMD5 = md5($email);
