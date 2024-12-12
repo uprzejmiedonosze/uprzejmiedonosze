@@ -414,6 +414,16 @@
     "voivodeship": "Zachodniopomorskie",
     "city": "Szczecin"
   },
+  "Koszalin-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Koszalinie",
+      "ul. Słowackiego 11",
+      "75-950 Koszalin"
+    ],
+    "email": "sekretariat.koszalin@sc.policja.gov.pl",
+    "voivodeship": "Zachodniopomorskie",
+    "city": "Koszalin"
+  },
   "Wrocław-miasto": {
     "address": [
       "Komenda Miejska Policji we Wrocławiu",
