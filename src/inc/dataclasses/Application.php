@@ -114,7 +114,6 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->statements = new JSONObject();
         $this->statements->witness = false;
         $this->statements->gallery = false;
-        $this->statements->hideNameInPdf = true;
     }
 
     /**
@@ -507,13 +506,6 @@ class Application extends JSONObject implements \JsonSerializable {
     public function isEditable(): bool {
         global $STATUSES;
         return $STATUSES[$this->status]->editable;
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
-    public function hideNameInPdf() {
-        return (bool)@$this->statements->hideNameInPdf;
     }
 
     /**

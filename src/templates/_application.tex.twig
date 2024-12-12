@@ -50,22 +50,12 @@
 Z poważaniem
 
 \vspace{0.3cm}
-{% if app.hideNameInPdf %}
 {\it Dane {{ app.guessUserSex.zglaszajacej }} w wiadomości e-mail 
     {% if app.sent is defined %}
         wysłanej {{ app.sent.date|date('j.m.Y H:i') }}
         na adres {{ app.sent.to }}
     {% endif %}
 }
-{% else %}
-{\it \n{}
-
-{{ app.user.address }}
-
-Email: {{ app.user.email }}
-
-{% if app.user.msisdn %}Tel: {% endif %}{{ app.user.msisdn }} }
-{% endif %}
 
 {\it Proszę o kontakt za pośrednictwem poczty e-mail oraz niewysyłanie korespondencji Pocztą Polską.}
 
