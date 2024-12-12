@@ -269,7 +269,7 @@ cypress: npm-install
 .PHONY: cypress-local
 cypress-local:
 	@echo "==> Testing local"
-	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) open --env DOCKER=1
+	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) run --env DOCKER=1
 
 .PHONY: api
 api: minify-config $(EXPORT)/config.php
