@@ -28,7 +28,7 @@
         @extend .badge;
         border-width: 2px;
         color: black;
-        font-weight: 600;
+        font-weight: 700;
       }
 
       &.draft .ui-li-count {
@@ -89,7 +89,7 @@
     &>div {
       margin-top: 1em;
       &>b {
-        font-weight: 600;
+        font-weight: 700;
       }
       &>p {
         margin: .3em 0 0 -4px;
@@ -165,7 +165,7 @@
     }
 
     tt {
-      font-weight: 600;
+      font-weight: 700;
     }
   }
 
@@ -187,7 +187,7 @@
 
     h3 {
       border-bottom: none;
-      font-weight: 100;
+      font-weight: 400;
       font-size: 14px;
 
       .top-line,
@@ -201,7 +201,7 @@
       }
 
       .top-line {
-        font-weight: 600;
+        font-weight: 700;
         text-transform: uppercase;
         padding-bottom: 3px;
       }

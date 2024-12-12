@@ -8,12 +8,12 @@ input[type=checkbox] {
         transform: scale(1, 1);
     }
     &:checked + label {
-        border: 2px solid variables.$primaryColor;
+        border: 3px solid variables.$primaryColor;
     }
 }
 
 .radio {
-    border: 2px solid transparent;
+    border: 3px solid transparent;
     border-radius: 5px;
     cursor: pointer;
     display: block;
