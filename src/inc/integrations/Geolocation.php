@@ -123,6 +123,8 @@ function MapBox(float $lat, float $lng): array {
     $properties['address']['city'] = $properties['address']['place'] ?? "";
     unset($properties['address']['place']);
 
+    $properties['name'] = fixRomanNumerals($properties['name']);
+
     $properties['address']['address'] = ($properties['address']['city']) ? "{$properties['name']}, {$properties['address']['city']}" : $properties['name'];
 
     unset($properties['coordinates']);

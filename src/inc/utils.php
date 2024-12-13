@@ -36,6 +36,14 @@ function fixCapitalizedBrandNames(string $input): string {
     return $input;
 }
 
+function fixRomanNumerals(string $input): string {
+    return preg_replace_callback('/\s((XC|XL|L?X{0,3})(IX|IV|V?I{0,3}))\s/i', function ($matches) {
+        return mb_strtoupper(
+            $matches[0], 'UTF-8');
+        }, $input
+    );
+}
+
 function capitalizeSentence(string $input): string{
     if(!isset($input) || trim($input) === ''){
         return '';
