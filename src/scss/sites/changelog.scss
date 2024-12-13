@@ -1,0 +1,23 @@
+@use '../lib/variables.scss';
+
+div.changelog {
+    h4 {
+        margin: 0;
+        padding: 1em;
+        border-radius: 5px 5px 0 0;
+    }
+    ul {
+        margin: 0;
+        padding: 0 2em 1em 3em;
+        border-radius: 0 0 5px 5px ;
+    }
+
+    h4.milestone {
+        background-color: rgba(variables.$secondaryColor, 0.3);
+
+        & + ul {
+            background-color: rgba(variables.$secondaryColor, 0.3);
+
+        }
+    }
+}
