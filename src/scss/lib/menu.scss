@@ -19,6 +19,10 @@ $transition-duration: 0.5s;
     * {
         box-sizing: border-box;
     }
+
+    &:has(nav) {
+        z-index: 2;
+    }
 }
 
 // To hide the checkbox
@@ -30,7 +34,7 @@ $transition-duration: 0.5s;
 
 #courtain {
     position: fixed;
-    z-index: -1;
+    z-index: 1;
     width: 100vw;
     height: 100vh;
     background-color: #0009;
@@ -39,14 +43,12 @@ $transition-duration: 0.5s;
 }
 
 .nav {
-    /* pointer-events: none; */
     box-shadow: 8px 0 20px #00000033;
     background-color: white;
     flex-direction: column;
     width: 70%;
     height: 100vh;
     transition: transform .4s ease-in-out;
-    display: flex;
     position: fixed;
     transform: translateY(-100%);
     overflow: hidden auto;
@@ -56,7 +58,7 @@ $transition-duration: 0.5s;
 
 nav.nav > .spacer {
     background-color: #00000033;
-    padding-top: 4px;
+    padding-top: 2px;
 }
 
 nav.nav > a {
@@ -82,8 +84,7 @@ nav.nav > a {
         background-color: variables.$primaryColor;
         color: white !important;
         font-weight: 700;
-        height: 44px;
-        padding-top: 11px;
+        height: 60px;
         &:hover {
             color: white !important;
         }
@@ -115,14 +116,14 @@ label.menu {
     margin: 0;
 }
 
+
 .menu-button {
     @extend .button;
     border: none;
     cursor: pointer;
     position: absolute;
     display: inline-block;
-    height: 32px;
-    padding: .3em 1em;
+    padding: calc((60px - 36px) / 2) 1em;
     &:active {
         transform: translateY(2px);
     }
@@ -138,20 +139,21 @@ label.menu {
 .menu-button.right {
     @extend .menu-button;
     right: 0;
-    margin: 5px 10px 25px 25px;
     color: black!important;
     background-color: variables.$secondaryColor;
+    border: 10px solid variables.$primaryColor;
+    padding: 8px 1em;
 }
 
 .button-toggle {
     @extend .menu-button;
-    margin-left: calc(1em - 12px);
-    margin-top: 5px;
-    width: 50px;
-    background: transparent;
+    margin-left: calc(1em - 22px);
+    padding: 30px 0;
+    width: 80px;
+    background: variables.$primaryColor;
 
     @media (min-width: 900px) {
-        margin-left: calc(2em - 12px);
+        margin-left: calc(2em - 22px);
     }
     .icon {
         position: absolute;
