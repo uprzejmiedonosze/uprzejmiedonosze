@@ -1,13 +1,14 @@
 {% block header %}
 <header>
     <h1>
-        <a href="/">{{ shortTitle ?? title }}</a>
+        <a href="{{ general.uri }}">{{ shortTitle ?? title }}
         {% if general.isStaging %}
             <sup>[STG]</sup>
         {% elseif general.isProd %}
         {% else %}
             <sup>[DEV]</sup>
         {% endif %}
+        </a>
     </h1>
     {% block menu %}
     {% include('_menu.html.twig') %}
