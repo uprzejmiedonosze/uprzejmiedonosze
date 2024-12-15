@@ -1,3 +1,6 @@
+@use "variables";
+@use "icons";
+
 .status-dot::before {
     @extend %icon;
     border-radius: 7px;
@@ -7,21 +10,21 @@
 .draft .change-status,
 .draft:after,
 .draft::marker {
-    background-color: $draft;
+    background-color: variables.$draft;
 }
 
 .ready .status-dot::before,
 .ready .change-status,
 .ready:after,
 .ready::marker {
-    background-color: $ready;
+    background-color: variables.$ready;
 }
 
 .confirmed .status-dot::before,
 .confirmed .change-status,
 .confirmed:after,
 .confirmed::marker {
-    background-color: $confirmed;
+    background-color: variables.$confirmed;
 }
 
 .confirmed h3 a {
@@ -36,28 +39,28 @@
 .confirmed-waitingE .change-status,
 .confirmed-waitingE:after,
 .confirmed-waiting::marker {
-    background-color: $confirmed-waiting;
+    background-color: variables.$confirmed-waiting;
 }
 
 .confirmed-sm .status-dot::before,
 .confirmed-sm .change-status,
 .confirmed-sm:after,
 .confirmed-sm::marker {
-    background-color: $confirmed-sm;
+    background-color: variables.$confirmed-sm;
 }
 
 .confirmed-fined .status-dot::before,
 .confirmed-fined .change-status,
 .confirmed-fined:after,
 .confirmed-fined::marker {
-    background-color: $confirmed-fined;
+    background-color: variables.$confirmed-fined;
 }
 
 .confirmed-ignored .status-dot::before,
 .confirmed-ignored .change-status,
 .confirmed-ignored:after,
 .confirmed-ignored::marker {
-    background-color: $confirmed-ignored;
+    background-color: variables.$confirmed-ignored;
     color: white !important;
 }
 
@@ -65,7 +68,7 @@
 .confirmed-instructed .change-status,
 .confirmed-instructed:after,
 .confirmed-instructed::marker {
-    background-color: $confirmed-instructed;
+    background-color: variables.$confirmed-instructed;
     color: white !important;
 }
 
@@ -73,24 +76,24 @@
 .archived .change-status,
 .archived:after,
 .archived::marker {
-    background-color: $archived;
+    background-color: variables.$archived;
 }
 
 .sending-failed .status-dot::before,
 .delivery-status-failed .status-dot::before {
-    background-color: $confirmed-ignored;
+    background-color: variables.$confirmed-ignored;
 }
 
 .sending-problem .status-dot::before,
 .delivery-status-problem .status-dot::before {
-    background-color: $confirmed-instructed;
+    background-color: variables.$sending-problem;
 }
 
 .sending .status-dot::before,
 .delivery-status-delivered .status-dot::before {
-    background-color: $confirmed-fined;
+    background-color: variables.$confirmed-fined;
 }
 
 .delivery-status-ok .status-dot::before {
-    background-color: $draft;
+    background-color: variables.$draft;
 }
