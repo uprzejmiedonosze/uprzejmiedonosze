@@ -248,7 +248,7 @@
       }
     }
 
-    .current-status::before,
+    .status-dot::before,
     .change-status a::before {
       box-sizing: border-box;
       border-width: 2px;
@@ -262,27 +262,27 @@
     }
 
 
-    &.draft .current-status::before, // app header
+    &.draft .status-dot::before, // app header
     .change-status .draft::before, // status change dropdown icon
     .draft::marker {
       background-color: variables.$draft;
       border-color: variables.$draft-stroke;
     }
 
-    &.ready .current-status::before,
+    &.ready .status-dot::before,
     .change-status .ready::before,
     .ready::marker {
       background-color: variables.$ready;
       border-color: variables.$draft-stroke;
     }
 
-    &.confirmed .current-status::before,
+    &.confirmed .status-dot::before,
     .change-status .confirmed::before,
     .confirmed::marker {
       background-color: variables.$confirmed;
       border-color: variables.$confirmed-stroke;
     }
-    &.confirmed-waiting .current-status::before,
+    &.confirmed-waiting .status-dot::before,
     .change-status .confirmed-waiting::before,
     &.confirmed-waitingE .status-dot::before,
     .change-status .confirmed-waitingE::before {
@@ -290,21 +290,21 @@
       border-color: variables.$confirmed-waiting-stroke;
     }
 
-    &.confirmed-sm .current-status::before,
+    &.confirmed-sm .status-dot::before,
     .change-status .confirmed-sm::before,
     .confirmed-sm::marker {
       background-color: variables.$confirmed-sm;
       border-color: variables.$confirmed-sm-stroke;
     }
 
-    &.confirmed-fined .current-status::before,
+    &.confirmed-fined .status-dot::before,
     .change-status .confirmed-fined::before,
     .confirmed-fined::marker {
       background-color: variables.$confirmed-fined;
       border-color: variables.$confirmed-fined-stroke;
     }
 
-    &.confirmed-ignored .current-status::before,
+    &.confirmed-ignored .status-dot::before,
     .change-status .confirmed-ignored::before,
     .confirmed-ignored::marker {
       background-color: variables.$confirmed-ignored;
@@ -312,14 +312,14 @@
       color: white!important;
     }
 
-    &.confirmed-instructed .current-status::before,
+    &.confirmed-instructed .status-dot::before,
     .change-status .confirmed-instructed::before,
     .confirmed-instructed::marker {
       background-color: variables.$confirmed-instructed;
       border-color: variables.$confirmed-instructed-stroke;
     }
 
-    &.archived .current-statust::before,
+    &.archived .status-dott::before,
     .change-status .archived::before,
     .archived::marker {
       background-color: variables.$archived;

@@ -5,9 +5,10 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use \JSONObject as JSONObject;
-use Symfony\Component\Mime\Part\DataPart;
+
 
 /**
  * @SuppressWarnings(PHPMD.MissingImport)
@@ -22,7 +23,7 @@ class MailGun extends CityAPI {
     function send(&$application){
         parent::checkApplication($application);
 
-        $to = "szymon.nieradka@gmail.co";
+        $to = "szymon.nieradka@gmail.com";
         if(isProd()){
             $to = $application->guessSMData()->email;
         }

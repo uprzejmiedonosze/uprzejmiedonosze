@@ -11,9 +11,9 @@
 
     <h3>
         <div class="top-line">
-            <div class="current-status">
+            <div class="status-dot">
                 <span>{{ status.name }}</span>
-                <span class="currentStatus">{{ (app.sent.status ?? null) ? email_status[app.sent.status] : status.name }}</span>{%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję"> 👮‍♀️</span>{% endif %}
+                {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}
             </div>
             <div> {{ app.getDate|raw }}</div>
             <div>

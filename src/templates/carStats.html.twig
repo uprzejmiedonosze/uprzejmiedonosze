@@ -31,12 +31,11 @@
         <div class="card {% if app.isAppOwner %}app-owner{% endif %}">
             <h3>
                 <div class="top-line">
-                    <div>
-                        <span class="status-dot"></span>
-                        <span class="currentStatus">{{ status.name }}</span>
-                        {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję"> 👮‍♀️</span>{% endif %}
+                    <div class="status-dot">
+                        <span>{{ status.name }}</span>
+                        {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}
                     </div>
-                    {{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}
+                    <div> {{ app.getDate|raw }}</div>
                 </div>
             </h3>
             {% if app.showImage %}

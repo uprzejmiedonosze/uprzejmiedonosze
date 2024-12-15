@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="application-details-list">
-    <div class="current-status">
+    <div class="status-dot">
         <b>{{ status.name|upper }}</b>
         {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}
 
@@ -26,11 +26,11 @@
             <button class="button small light change-status dropdown-button">ZMIEŃ</button>
             <ul data-role="listview" class="change-status dropdown-content">
                 {% for key,val in statuses %}
-                {% if val.class == 'bottom' %}
-                {% set liStyle = '' %}
-                {% if key not in status.allowed %}
-                {% set liStyle = 'style="display: none;"' %}
-                {% endif %}
+                {% if val.action %}
+                    {% set liStyle = '' %}
+                    {% if key not in status.allowed %}
+                        {% set liStyle = 'style="display: none;"' %}
+                    {% endif %}
                 <li {{ liStyle|raw }}>
                     <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" class="{{ val.cta ?? '' }} {{ key }}">{{ val.action }}</a>
                 </li>
