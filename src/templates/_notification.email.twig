@@ -2,7 +2,9 @@ Dzień dobry,
 
 Niestety nie udało się nam dostarczyć twojego zgłoszenia nr {{ app.number }} dotyczące pojazdu {{ app.carInfo.plateId }} do {{ sm }}.
 
-Odpowiedź, jaką otrzymaliśmy to: {{ reason }}
+Odpowiedź, jaką otrzymaliśmy to:
+
+  {{ reason | replace({"\n": "\n  "}) }}
 
 Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}#comments
 
