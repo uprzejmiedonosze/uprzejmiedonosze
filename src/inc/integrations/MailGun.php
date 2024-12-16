@@ -38,10 +38,9 @@ class MailGun extends CityAPI {
         $message->to($to);
         $message->subject($subject);
         $message->cc(new Address($application->user->email, $application->user->name));
+        $message->bcc(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
         $message->text(parent::formatEmail($application, true));
-        //$message->sender($application->user->email);
         $message->replyTo(new Address($application->user->email, $application->user->name));
-        //$message->returnPath($application->user->email);
         
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());

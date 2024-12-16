@@ -32,7 +32,9 @@ class WebhooksHandler extends AbstractHandler {
         $userNumber = $payload['user-variables']['userid'];
 
         if(isset($payload['user-variables']['nofitication'])) {
-            // this is a notification sent by this web-hook, don't process it
+            // this is a notification triggered by an email sent by this webhook
+            // so I have to ignore it not to trigger an endless loop
+            \webhook\mark($id);
             return $this->renderJson($response, array(
                 "type" => "notification",
                 "status" => "ignored"
@@ -46,6 +48,16 @@ class WebhooksHandler extends AbstractHandler {
         $comment = $mailEvent->formatComment();
         if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
         $ccToUser = $application->sent->to !== $payload['recipient'];
+
+        if ($payload['recipient'] == MAILER_FROM) {
+            // this is BCC to Uprzejmie Donoszę, ignore it
+            \webhook\mark($id);
+            \semaphore\release($semaphore);
+            return $this->renderJson($response, array(
+                "type" => "notification",
+                "status" => "ignored"
+            ));
+        }
 
         if (!$ccToUser) {
             // set sent status to accepted only if empty

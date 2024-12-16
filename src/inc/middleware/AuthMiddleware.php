@@ -79,7 +79,6 @@ class AuthMiddleware implements MiddlewareInterface {
 
     private function verifyToken($token, $request){
         // $firebaseUser = \cache\get($token);
-        // @TODO
         //if ($firebaseUser) return json_decode($firebaseUser, true);
 
         $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../%HOST%-firebase-adminsdk.json');
