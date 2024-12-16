@@ -46,7 +46,7 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
         $message->getHeaders()->addTextHeader("o:tag", $application->address->city ?? '-no-city');
-        $message->getHeaders()->addTextHeader("o:testmode", !isProd());
+        $message->getHeaders()->addTextHeader("o:testmode", isDev());
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         $application->setStatus('sending');
