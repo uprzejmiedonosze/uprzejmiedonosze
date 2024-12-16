@@ -7,10 +7,10 @@ abstract class CityAPI {
     static function checkApplication(&$application){
         global $STATUSES;
         if(!$STATUSES[$application->status]->sendable){
-            throw new Exception("Nie mogę wysłać zgłoszenia '$application->number' w statusie '$application->status'");
+            throw new Exception("Nie mogę wysłać zgłoszenia '{$application->number}' w statusie '{$application->status}'");
         }
         if(!$application->guessSMData()->api){
-            throw new Exception("Nie mogę wysłać zgłoszenia '$application->number' dla miasta "
+            throw new Exception("Nie mogę wysłać zgłoszenia '{$application->number}' dla miasta "
                . $application->guessSMData()->city);
         }
         return true;
