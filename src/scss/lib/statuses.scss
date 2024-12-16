@@ -9,110 +9,95 @@
     border-style: solid;
 }
 
-.draft .status-dot::before,
-.draft .change-status,
-.draft:after,
-.draft::marker {
+li-count
+current-status
+
+.draft .li-count,
+.draft.status-dot::before {
     background-color: variables.$draft;
     border-color: variables.$draft-stroke;
 }
 
-.ready .status-dot::before,
-.ready .change-status,
-.ready:after,
-.ready::marker {
+.ready .li-count,
+.ready.status-dot::before {
     background-color: variables.$ready;
     border-color: variables.$ready-stroke;
 }
 
-.confirmed .status-dot::before,
-.confirmed .change-status,
-.confirmed:after,
-.confirmed::marker {
+.confirmed .li-count,
+.confirmed.status-dot::before {
     background-color: variables.$confirmed;
     border-color: variables.$confirmed-stroke;
 }
 
-.confirmed h3 a {
-    font-weight: 700;
-}
-
-.confirmed-waiting .status-dot::before,
-.confirmed-waiting .change-status,
-.confirmed-waiting:after,
-.confirmed-waiting::marker,
-.confirmed-waitingE .status-dot::before,
-.confirmed-waitingE .change-status,
-.confirmed-waitingE:after,
-.confirmed-waiting::marker {
+.confirmed-waiting .li-count,
+.confirmed-waiting.status-dot::before,
+.confirmed-waitingE .li-count,
+.confirmed-waitingE.status-dot::before {
     background-color: variables.$confirmed-waiting;
     border-color: variables.$confirmed-waiting-stroke;
 }
 
-.confirmed-sm .status-dot::before,
-.confirmed-sm .change-status,
-.confirmed-sm:after,
-.confirmed-sm::marker {
+.confirmed-sm .li-count,
+.confirmed-sm.status-dot::before {
     background-color: variables.$confirmed-sm;
     border-color: variables.$confirmed-sm-stroke;
 }
 
-.confirmed-fined .status-dot::before,
-.confirmed-fined .change-status,
-.confirmed-fined:after,
-.confirmed-fined::marker {
+.confirmed-fined .li-count,
+.confirmed-fined.status-dot::before {
     background-color: variables.$confirmed-fined;
     border-color: variables.$confirmed-fined-stroke;
+    color: white;
 }
 
-.confirmed-ignored .status-dot::before,
-.confirmed-ignored .change-status,
-.confirmed-ignored:after,
-.confirmed-ignored::marker {
+.confirmed-ignored .li-count,
+.confirmed-ignored.status-dot::before {
     background-color: variables.$confirmed-ignored;
     border-color: variables.$confirmed-ignored-stroke;
+    color: white;
 }
 
-.confirmed-instructed .status-dot::before,
-.confirmed-instructed .change-status,
-.confirmed-instructed:after,
-.confirmed-instructed::marker {
+.confirmed-instructed .li-count,
+.confirmed-instructed.status-dot::before {
     background-color: variables.$confirmed-instructed;
     border-color: variables.$confirmed-instructed-stroke;
 }
 
-.archived .status-dot::before,
-.archived .change-status,
-.archived:after,
-.archived::marker {
+.archived .li-count,
+.archived.status-dot::before {
     background-color: variables.$archived;
     border-color: variables.$archived-stroke;
 }
 
-.sending-failed .status-dot::before,
-.delivery-status-failed .status-dot::before {
+.sending-failed .li-count,
+.sending-failed.status-dot::before,
+.delivery-status-failed.status-dot::before {
     background-color: variables.$confirmed-ignored;
     border-color: variables.$confirmed-ignored-stroke;
+    color: white;
 }
 
-.sending-problem .status-dot::before,
-.delivery-status-problem .status-dot::before {
+.sending-problem .li-count,
+.sending-problem.status-dot::before,
+.delivery-status-problem.status-dot::before {
     background-color: variables.$sending-problem;
     border-color: variables.$sending-problem-stroke;
 }
 
-.sending .status-dot::before,
-.delivery-status-delivered .status-dot::before {
+.sending .li-count,
+.sending.status-dot::before,
+.delivery-status-delivered.status-dot::before {
     background-color: variables.$confirmed-fined;
     border-color: variables.$confirmed-fined-stroke;
 }
 
-.delivery-status-accepted .status-dot::before {
+.delivery-status-accepted.status-dot::before {
     background-color: variables.$draft;
     border-color: variables.$draft-stroke;
 }
 
-.delivery-status-ok .status-dot::before {
+.delivery-status-ok.status-dot::before {
     background-color: variables.$draft;
     border-color: variables.$draft-stroke;
 }

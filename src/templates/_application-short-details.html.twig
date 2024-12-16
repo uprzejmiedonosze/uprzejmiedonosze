@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="application-details-list">
-    <div class="status-dot">
+    <div class="status-dot {{ app.status }}">
         <b>{{ status.name|upper }}</b>
         {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}
 
@@ -32,7 +32,7 @@
                         {% set liStyle = 'style="display: none;"' %}
                     {% endif %}
                 <li {{ liStyle|raw }}>
-                    <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" class="{{ val.cta ?? '' }} {{ key }}">{{ val.action }}</a>
+                    <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" class="status-dot {{ key }}">{{ val.action }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}

@@ -24,52 +24,10 @@
         margin-right: 3px;
       }
 
-      .ui-li-count {
+      .li-count {
         @extend .badge;
         border-width: 2px;
-        color: black;
         font-weight: 700;
-      }
-
-      &.draft .ui-li-count {
-        background-color: variables.$draft;
-        border-color: variables.$draft-stroke;
-      }
-      &.ready .ui-li-count {
-        background-color: variables.$ready;
-        border-color: variables.$ready-stroke;
-      }
-      &.confirmed .ui-li-count {
-        background-color: variables.$confirmed;
-        border-color: variables.$confirmed-stroke;
-      }
-      &.confirmed-waitingE .ui-li-count,
-      &.confirmed-waiting .ui-li-count {
-        background-color: variables.$confirmed-waiting;
-        border-color: variables.$confirmed-waiting-stroke;
-      }
-      &.confirmed-sm .ui-li-count {
-        background-color: variables.$confirmed-sm;
-        border-color: variables.$confirmed-sm-stroke;
-        color: white;
-      }
-      &.confirmed-fined .ui-li-count {
-        background-color: variables.$confirmed-fined;
-        border-color: variables.$confirmed-fined-stroke;
-        color: white;
-      }
-      &.confirmed-ignored .ui-li-count {
-        background-color: variables.$confirmed-ignored;
-        border-color: variables.$confirmed-ignored-stroke;
-        color: white;
-      }
-      &.confirmed-instructed .ui-li-count {
-        background-color: variables.$confirmed-instructed;
-        border-color: variables.$confirmed-instructed-stroke;
-      }
-      &.archived .ui-li-count {
-        background-color: variables.$archived;
-        border-color: variables.$archived-stroke;
       }
     }
   }
@@ -248,7 +206,7 @@
       }
     }
 
-    .status-dot::before,
+   .status-dot::before,
     .change-status a::before {
       box-sizing: border-box;
       border-width: 2px;
@@ -259,71 +217,6 @@
     }
     .change-status a::before {
       left: -5px;
-    }
-
-
-    &.draft .status-dot::before, // app header
-    .change-status .draft::before, // status change dropdown icon
-    .draft::marker {
-      background-color: variables.$draft;
-      border-color: variables.$draft-stroke;
-    }
-
-    &.ready .status-dot::before,
-    .change-status .ready::before,
-    .ready::marker {
-      background-color: variables.$ready;
-      border-color: variables.$draft-stroke;
-    }
-
-    &.confirmed .status-dot::before,
-    .change-status .confirmed::before,
-    .confirmed::marker {
-      background-color: variables.$confirmed;
-      border-color: variables.$confirmed-stroke;
-    }
-    &.confirmed-waiting .status-dot::before,
-    .change-status .confirmed-waiting::before,
-    &.confirmed-waitingE .status-dot::before,
-    .change-status .confirmed-waitingE::before {
-      background-color: variables.$confirmed-waiting;
-      border-color: variables.$confirmed-waiting-stroke;
-    }
-
-    &.confirmed-sm .status-dot::before,
-    .change-status .confirmed-sm::before,
-    .confirmed-sm::marker {
-      background-color: variables.$confirmed-sm;
-      border-color: variables.$confirmed-sm-stroke;
-    }
-
-    &.confirmed-fined .status-dot::before,
-    .change-status .confirmed-fined::before,
-    .confirmed-fined::marker {
-      background-color: variables.$confirmed-fined;
-      border-color: variables.$confirmed-fined-stroke;
-    }
-
-    &.confirmed-ignored .status-dot::before,
-    .change-status .confirmed-ignored::before,
-    .confirmed-ignored::marker {
-      background-color: variables.$confirmed-ignored;
-      border-color: variables.$confirmed-ignored-stroke;
-      color: white!important;
-    }
-
-    &.confirmed-instructed .status-dot::before,
-    .change-status .confirmed-instructed::before,
-    .confirmed-instructed::marker {
-      background-color: variables.$confirmed-instructed;
-      border-color: variables.$confirmed-instructed-stroke;
-    }
-
-    &.archived .status-dott::before,
-    .change-status .archived::before,
-    .archived::marker {
-      background-color: variables.$archived;
-      border-color: variables.$archived-stroke;
     }
   }
 }

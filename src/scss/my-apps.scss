@@ -19,47 +19,6 @@
         display: inline-flex;
         margin-right: 3px;
       }
-
-      .ui-li-count {
-        position: unset;
-        border: none;
-        text-shadow: none;
-        color: black;
-      }
-
-      &.archived .ui-li-count {
-        background-color: $archived;
-      }
-      &.confirmed .ui-li-count {
-        background-color: $confirmed;
-      }
-      &.sending .ui-li-count,
-      &.confirmed-fined .ui-li-count {
-        background-color: $confirmed-fined;
-      }
-      &.sending-failed .ui-li-count,
-      &.confirmed-ignored .ui-li-count {
-        background-color: $confirmed-ignored;
-        color: white;
-      }
-      &.sending-problem .ui-li-count,
-      &.confirmed-instructed .ui-li-count {
-        background-color: $confirmed-instructed;
-        color: white;
-      }
-      &.confirmed-sm .ui-li-count {
-        background-color: $confirmed-sm;
-      }
-      &.confirmed-waitingE .ui-li-count,
-      &.confirmed-waiting .ui-li-count {
-        background-color: $confirmed-waiting;
-      }
-      &.draft .ui-li-count {
-        background-color: $draft;
-      }
-      &.ready .ui-li-count {
-        background-color: $ready;
-      }
     }
   }
 
@@ -163,22 +122,6 @@
   .appActionButtons a.ui-btn {
     font-weight: 400;
   }
-
-  .ui-collapsible-inset.ui-collapsible-themed-content .ui-collapsible-content {
-    border-color: #ddd;
-    border-top: 0;
-    border-style: solid;
-    padding: 0;
-  }
-
-  .ui-input-has-clear {
-    padding-right: 0 !important;
-
-    input {
-      border-radius: 5px !important;
-    }
-  }
-
 
   div.application-short, .list .car .card, .application-details {
 

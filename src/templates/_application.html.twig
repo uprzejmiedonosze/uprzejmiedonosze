@@ -122,7 +122,7 @@
             <ul data-role="listview">
             {% for date,comment in app.comments %}
                 <li class="delivery-status-{{ comment.status ?? 'ok' }}">
-                    <span class="status-dot"></span>
+                    <span class="status-dot {{ comment.status ?? 'ok' }}"></span>
                     {{ date|date('d.m.Y H:i') }} <b>{{ comment.source }}</b>:
                     {{ comment.comment | raw }}
                 </li>
@@ -137,8 +137,8 @@
                 <h4>Historia zmian statusów</h4>
                 <ul data-role="listview">
                 {% for date,status in app.statusHistory %}
-                    <li class="status-history {{status.new}}">
-                        <span class="status-dot"></span>
+                    <li class="status-history">
+                        <span class="status-dot {{status.new}}"></span>
                         {{ date|date('d.m.Y H:i') }} {{ statuses[status.new].comment }}
                     </li>
                 {% endfor %}

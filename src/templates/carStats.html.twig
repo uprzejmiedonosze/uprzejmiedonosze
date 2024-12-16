@@ -31,7 +31,7 @@
         <div class="card {% if app.isAppOwner %}app-owner{% endif %}">
             <h3>
                 <div class="top-line">
-                    <div class="status-dot">
+                    <div class="status-dot {{ app.status }}">
                         <span>{{ status.name }}</span>
                         {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}
                     </div>
