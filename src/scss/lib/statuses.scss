@@ -72,7 +72,7 @@ current-status
 
 .sending-failed .li-count,
 .sending-failed.status-dot::before,
-.delivery-status-failed.status-dot::before {
+.delivery-status-failed .status-dot::before {
     background-color: variables.$confirmed-ignored;
     border-color: variables.$confirmed-ignored-stroke;
     color: white;
@@ -80,24 +80,24 @@ current-status
 
 .sending-problem .li-count,
 .sending-problem.status-dot::before,
-.delivery-status-problem.status-dot::before {
+.delivery-status-problem .status-dot::before {
     background-color: variables.$sending-problem;
     border-color: variables.$sending-problem-stroke;
 }
 
 .sending .li-count,
 .sending.status-dot::before,
-.delivery-status-delivered.status-dot::before {
+.delivery-status-delivered .status-dot::before {
     background-color: variables.$confirmed-fined;
     border-color: variables.$confirmed-fined-stroke;
 }
 
-.delivery-status-accepted.status-dot::before {
+.delivery-status-accepted .status-dot::before {
     background-color: variables.$draft;
     border-color: variables.$draft-stroke;
 }
 
-.delivery-status-ok.status-dot::before {
+.delivery-status-ok .status-dot::before {
     background-color: variables.$draft;
     border-color: variables.$draft-stroke;
 }

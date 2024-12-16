@@ -12,7 +12,7 @@
     <h3>
         <div class="top-line">
             <div class="status-dot {{ app.status }}">
-                <span>{{ status.name }}</span>
+                <b>{{ status.name }}</b>
                 {%if app.guessSMData.isPolice %}<span title="Zgłoszenie na Policję">👮‍♀️</span>{% endif %}
             </div>
             <div> {{ app.getDate|raw }}</div>

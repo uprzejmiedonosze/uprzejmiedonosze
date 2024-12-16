@@ -50,10 +50,11 @@ export function updateStatus(appId, status) {
 
   const allClasses = Object.keys(statuses).join(" ")
   $application.removeClass(allClasses)
-  $application.find('.application-details-list li.status').removeClass(allClasses)
-  $application.find('.application-details-list li.status').addClass(status)
-  $application.find(".application-details-list .current-status > b").text(statusDef.name.toUpperCase());
-  $application.find(".top-line > .current-status > span").text(statusDef.name.toUpperCase());
+  $application.addClass(status)
+  $application.find('div.status-dot').removeClass(allClasses)
+  $application.find('div.status-dot').addClass(status)
+  $application.find(".application-details-list > .status-dot > b").text(statusDef.name.toUpperCase());
+  $application.find(".top-line > .status-dot > b").text(statusDef.name.toUpperCase());
 
   updateCounters();
 }
