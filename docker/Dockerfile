@@ -1,49 +1,41 @@
 FROM nginx:1.27.3-bookworm AS webserver
+
 LABEL net.uprzejmiedonosze=0.2.3
 
-RUN DEBIAN_FRONTEND="noninteractive" apt-get update
+ENV HOME=/root
 
-RUN DEBIAN_FRONTEND="noninteractive" apt-get --no-install-recommends install -y \
-    apt-utils locales vim telnet curl xtail \
-    memcached texlive ca-certificates \
-    php-fpm php-sqlite3 php-curl \
-    php-opcache php-mbstring php-gd \
-    php-memcache php-memcached php-intl \
-    ffmpeg \
-    lmodern texlive-lang-polish texlive-latex-recommended texlive-latex-extra
+# Install packages, create directories, and set ownership in one RUN command
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
+    apt-get --no-install-recommends -y install \
+        locales vim curl xtail \
+        memcached texlive ca-certificates \
+        php-fpm php-sqlite3 php-curl \
+        php-opcache php-mbstring php-gd \
+        php-memcache php-memcached php-intl \
+        ffmpeg \
+        lmodern texlive-lang-polish texlive-latex-recommended texlive-latex-extra && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
+    mkdir -p /var/www/uprzejmiedonosze.localhost/db \
+             /var/www/uprzejmiedonosze.localhost/cdn \
+             /var/www/uprzejmiedonosze.localhost/cdn2 \
+             /var/www/uprzejmiedonosze.localhost/video \
+             /var/log/uprzejmiedonosze.net \
+             /var/cache/uprzejmiedonosze.net && \
+    chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost && \
+    chown www-data:www-data /var/log/uprzejmiedonosze.net /var/cache/uprzejmiedonosze.net
 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+COPY db          /var/www/uprzejmiedonosze.localhost/db
+COPY cdn         /var/www/uprzejmiedonosze.localhost/cdn
+COPY --chown=www-data:www-data sess_php    /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf   /etc/nginx/nginx.conf
+COPY www.conf     /etc/php/8.2/fpm/pool.d/www.conf
+COPY init.sh      /root/init.sh
 
-ENV HOME /root
-
-RUN mkdir -p                   /var/www/uprzejmiedonosze.localhost
-COPY db                        /var/www/uprzejmiedonosze.localhost/db
-RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/db
-COPY cdn                       /var/www/uprzejmiedonosze.localhost/cdn
-RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/cdn
-RUN mkdir -p                   /var/www/uprzejmiedonosze.localhost/cdn2
-RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/cdn2
-RUN mkdir -p                   /var/www/uprzejmiedonosze.localhost/video
-RUN chown -R www-data:www-data /var/www/uprzejmiedonosze.localhost/video
-COPY sess_php                  /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
-RUN chown www-data:www-data    /var/lib/php/sessions/*
-
-RUN mkdir                      /var/log/uprzejmiedonosze.net
-RUN chown www-data:www-data    /var/log/uprzejmiedonosze.net
-RUN mkdir                      /var/cache/uprzejmiedonosze.net
-RUN chown www-data:www-data    /var/cache/uprzejmiedonosze.net
-
-ADD default.conf         /etc/nginx/conf.d/default.conf
-ADD nginx.conf           /etc/nginx/nginx.conf
-ADD www.conf             /etc/php/8.2/fpm/pool.d/www.conf
-RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.2/fpm/php.ini
-
-RUN update-rc.d php8.2-fpm defaults
-RUN update-rc.d memcached defaults
-
-COPY init.sh /root/init.sh
-RUN ln -s /var/www/uprzejmiedonosze.localhost/webapp/vendor /var/www/uprzejmiedonosze.localhost
+RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.2/fpm/php.ini && \
+    update-rc.d php8.2-fpm defaults && \
+    update-rc.d memcached defaults && \
+    ln -s /var/www/uprzejmiedonosze.localhost/webapp/vendor /var/www/uprzejmiedonosze.localhost
 
 EXPOSE 80
-
 CMD ["/bin/sh", "/root/init.sh"]
