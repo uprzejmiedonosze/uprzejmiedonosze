@@ -27,10 +27,10 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
 COPY --chown=www-data:www-data db          /var/www/uprzejmiedonosze.localhost/db
 COPY --chown=www-data:www-data cdn         /var/www/uprzejmiedonosze.localhost/cdn
 COPY --chown=www-data:www-data sess_php    /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
-COPY default.conf /etc/nginx/conf.d/default.conf
-COPY nginx.conf   /etc/nginx/nginx.conf
-COPY www.conf     /etc/php/8.2/fpm/pool.d/www.conf
-COPY init.sh      /root/init.sh
+COPY nginx.conf   /etc/nginx/
+COPY nginx_php_configuration.conf   /etc/nginx/
+COPY www.conf     /etc/php/8.2/fpm/pool.d/
+COPY init.sh      /root/
 
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.2/fpm/php.ini && \
     update-rc.d php8.2-fpm defaults && \
