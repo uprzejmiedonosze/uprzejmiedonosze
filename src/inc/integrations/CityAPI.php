@@ -1,10 +1,12 @@
 <?php
+
+use app\Application;
 use \Exception as Exception;
 
 abstract class CityAPI {
-    abstract function send(&$application);
+    abstract function send(Application &$application);
 
-    static function checkApplication(&$application){
+    static function checkApplication(Application &$application){
         global $STATUSES;
         if(!$STATUSES[$application->status]->sendable){
             throw new Exception("Nie mogę wysłać zgłoszenia '{$application->number}' w statusie '{$application->status}'");
@@ -16,14 +18,14 @@ abstract class CityAPI {
         return true;
     }
 
-    function formatMessage(&$application, $limit = 10000){
+    function formatMessage(Application &$application, $limit = 10000){
         $twig = initBareTwig();
         return substr($twig->render('_application.txt.twig', [
             'app' => $application
         ]), 0, $limit);
     }
 
-    function formatEmail(&$application, $withUserData = null){
+    function formatEmail(Application &$application, $withUserData = null){
         $twig = initBareTwig();
         return $twig->render('_application.email.twig', [
             'app' => $application, 
@@ -35,7 +37,7 @@ abstract class CityAPI {
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    function curlShellSend($url, &$data, &$application){
+    function curlShellSend(string $url, &$data, Application &$application){
         $root = realpath('/var/www/%HOST%/');
         $contextImage = "$root/{$application->contextImage->url}";
         $carImage = "$root/{$application->carImage->url}";

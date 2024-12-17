@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/../PDFGenerator.php');
 
+use app\Application;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
@@ -20,7 +21,7 @@ class MailGun extends CityAPI {
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    function send(&$application){
+    function send(Application &$application){
         parent::checkApplication($application);
 
         $to = "szymon.nieradka@gmail.com";
@@ -50,7 +51,6 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         $application->setStatus('sending');
-        $application->addComment("admin", "Zlecam wysyłkę do {$application->guessSMData()->getName()}.");
         $application->sent = new JSONObject();
         $application->sent->date = date(DT_FORMAT);
         $application->sent->subject = $subject;
@@ -73,9 +73,10 @@ class MailGun extends CityAPI {
         }
 
         try {
-            if (!isDev())
-                $mailer->send($message);
+            $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
+            $application->sent->error = $error->getMessage();
+            $application->setStatus('sending-problem', true);
             throw new Exception($error, 500);
         }
 
@@ -104,8 +105,7 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         try {
-            if (!isDev())
-                $mailer->send($message);
+            $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
             throw new Exception($error, 500);
         }

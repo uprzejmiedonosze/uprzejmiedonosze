@@ -114,7 +114,6 @@ describe('Update account', () => {
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click()
     cy.contains('Mazurska').click()
-    cy.contains('Zlecam wysyłkę do SM Szczecin')
   })
 
   it('Set opposite settings', function () {
@@ -154,6 +153,5 @@ describe('Update account', () => {
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click()
     cy.contains('Mazurska').click()
-    cy.contains('Zlecam wysyłkę do 👮‍♀️ KP Szczecin Niebuszewo')
   })
 })

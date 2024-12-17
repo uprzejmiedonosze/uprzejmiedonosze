@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/../PDFGenerator.php');
 
+use app\Application;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
@@ -19,7 +20,7 @@ class Mail extends CityAPI {
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    function send(&$application){
+    function send(Application &$application){
         parent::checkApplication($application);
 
         $to = "szymon.nieradka@gmail.com";
@@ -77,6 +78,8 @@ class Mail extends CityAPI {
             if (!isDev())
                 $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
+            $application->sent->error = $error->getMessage();
+            $application->setStatus('sending-problem', true);
             throw new Exception($error, 500);
         }
 

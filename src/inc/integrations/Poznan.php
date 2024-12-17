@@ -1,10 +1,12 @@
 <?php
 
+use app\Application;
+
 /**
  * @SuppressWarnings(PHPMD.MissingImport)
  */
 class Poznan extends CityAPI {
-    function send(&$application){
+    function send(Application &$application){
         parent::checkApplication($application);
 
         $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
@@ -30,9 +32,13 @@ class Poznan extends CityAPI {
             'key' => '85951ba0a63d1051a09659ea0a9d8391' //klucz aplikacji, pole obowiązkowe
         );
         $application->setStatus('confirmed-waiting');
+        $application->sent = new JSONObject();
+
         $output = parent::curlShellSend($url, $data, $application);
 
         if(isset($output['response']['error_msg'])){
+            $application->sent->error = $output['response']['error_msg'];
+            $application->setStatus('sending-problem', true);
             throw new Exception($output['response']['error_msg'], 500);
         }
 
@@ -40,6 +46,7 @@ class Poznan extends CityAPI {
 
         $application->setStatus('confirmed-sm');
         $application->addComment($application->guessSMData()->getName(), $reply);
+        $application->sent->date = date(DT_FORMAT);
         $application->sent->reply = $reply;
         $application->sent->subject = $application->getEmailSubject();
         $application->sent->to = "fixmycity";
