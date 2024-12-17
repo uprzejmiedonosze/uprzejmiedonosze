@@ -30,6 +30,14 @@ class WebhooksHandler extends AbstractHandler {
         $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
         $userNumber = $payload['user-variables']['userid'];
+        
+        if($payload['user-variables']['isprod'] !== "1") {
+            \webhook\mark($id);
+            return $this->renderJson($response, array(
+                "type" => "non-prod",
+                "status" => "ignored"
+            ));
+        }
 
         if(isset($payload['user-variables']['nofitication'])) {
             // this is a notification triggered by an email sent by this webhook
