@@ -361,7 +361,8 @@ lint-php:
 		cleancode,codesize,controversial,design,naming,unusedcode | wc -l
 
 test-phpunit: $(EXPORT)/public/api/config/sm.json $(EXPORT)/public/api/config/stop-agresji.json
-	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests
+	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
+	./vendor/phpunit/phpunit/phpunit --display-deprecations tests
 
 define lint_replace_inline
 $(call echo-processing,$<)
