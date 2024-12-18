@@ -322,8 +322,7 @@
       "71-241 Szczecin"
     ],
     "email": "zgloszenia@sm.szczecin.pl",
-    "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku.",
-    "api": "MailGun"
+    "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku."
   },
   "Warszawa": {
     "address": [
@@ -346,8 +345,7 @@
       "50-421 Wrocław"
     ],
     "email": "straz@strazmiejska.wroclaw.pl",
-    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
-    "api": "MailGun"
+    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>"
   },
   "Kraków": {
     "address": [
