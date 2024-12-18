@@ -53,7 +53,7 @@ class SM extends JSONObject {
     }
 
     public function hasAPI(): bool {
-        return $this->api && $this->api !== 'Mail';
+        return $this->api && !str_contains(strtolower($this->api), 'mail');
     }
 
     public function automated(): bool {
