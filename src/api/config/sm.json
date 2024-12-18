@@ -3019,9 +3019,17 @@
   "Żary": {
     "address": [
       "Straż Miejska Żary",
-      "Rynek 1-5, ",
+      "Rynek 1-5",
       "68-200 Żary"
     ],
     "email": "miasto@um.zary.pl"
+  },
+  "Puszczykowo": {
+    "address": [
+      "Straż Miejska Puszczykowo",
+      "ul. Poznańska 1",
+      "62-040 Puszczykowo"
+    ],
+    "email": "straz.miejska@puszczykowo.pl"
   }
 }
