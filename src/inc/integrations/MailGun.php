@@ -63,6 +63,8 @@ class MailGun extends CityAPI {
 
         [$fileatt, $fileattname] = application2PDF($application);
 
+        logger("Sending message {$application->id} with MailGun, sent->to {$application->sent->to}", true);
+
         $message->attachFromPath($fileatt, $fileattname);
 
         if ($this->withXls) {
