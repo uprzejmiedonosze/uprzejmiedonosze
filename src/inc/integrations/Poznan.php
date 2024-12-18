@@ -39,6 +39,7 @@ class Poznan extends CityAPI {
         if(isset($output['response']['error_msg'])){
             $application->sent->error = $output['response']['error_msg'];
             $application->setStatus('sending-problem', true);
+            \app\save($application);
             throw new Exception($output['response']['error_msg'], 500);
         }
 

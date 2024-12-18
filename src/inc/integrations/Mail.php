@@ -80,6 +80,7 @@ class Mail extends CityAPI {
         } catch (TransportExceptionInterface $error) {
             $application->sent->error = $error->getMessage();
             $application->setStatus('sending-problem', true);
+            \app\save($application);
             throw new Exception($error, 500);
         }
 
