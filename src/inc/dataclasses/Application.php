@@ -52,6 +52,8 @@ class Application extends JSONObject implements \JsonSerializable {
         $clone->encrypted = true;
         $clone->user = \crypto\encode(json_encode($clone->user), $_SESSION['user_id'], $clone->id . $clone->added);
         $clone->privateComment = \crypto\encode($clone->privateComment, $_SESSION['user_id'], $clone->id . $clone->added);
+        if (isset($clone->sent))
+            $clone->sent = \crypto\encode(json_encode($clone->sent), $_SESSION['user_id'], $clone->id . $clone->added);
         return json_encode($clone);
     }
 
@@ -59,11 +61,13 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function decode(): void {
-        if ($this->encrypted ?? false) {
-            $this->user = new JSONObject(\crypto\decode($this->user, $_SESSION['user_id'], $this->id . $this->added));
-            $this->privateComment = \crypto\decode($this->privateComment, $_SESSION['user_id'], $this->id . $this->added);
-            unset($this->encrypted);
-        }
+        if (!($this->encrypted ?? false))
+            return; 
+        $this->user = new JSONObject(\crypto\decode($this->user, $_SESSION['user_id'], $this->id . $this->added));
+        $this->privateComment = \crypto\decode($this->privateComment, $_SESSION['user_id'], $this->id . $this->added);
+        if (isset($clone->sent))
+            $this->sent = new JSONObject(\crypto\decode($this->sent, $_SESSION['user_id'], $this->id . $this->added));
+        unset($this->encrypted);
     }
 
     /**
