@@ -12,7 +12,7 @@ W załączeniu znajduje się zgłoszenie wraz ze zdjęciami oraz mapką prezentu
 Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}
 {% endif %}
 
-Proszę o kontakt pod adresem e-mail {{ app.user.email }}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.
+Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-doręczeń {{ app.user.edelivery }}.{% else %}e-mail {{ app.user.email }}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru{% endif %}.
 
 Zgłaszający:
 
