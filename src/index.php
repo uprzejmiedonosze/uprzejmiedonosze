@@ -18,7 +18,7 @@ if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
     session_start();
-    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';
 }
 
 require(__DIR__ . '/../inc/include.php');
