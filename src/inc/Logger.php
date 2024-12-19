@@ -12,6 +12,11 @@ function isDev(): bool {
     return !isProd() && !isStaging();
 }
 
+function trimAbsolutePaths(string $backtrace): string {
+    $backtrace = preg_replace('/\/var\/www\/%HOST%\/webapp/i', '[webapp] ', $backtrace);
+    return preg_replace('/\/var\/www\/%HOST%\/vendor/i', '', $backtrace);
+}
+
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
@@ -30,7 +35,7 @@ function logger(string|object|array|null $msg, $force = null): string {
         $debug_backtrace = debug_backtrace();
         $caller = array_shift($debug_backtrace);
         $location = $caller['file'] . ':' . $caller['line'];
-        $location = preg_replace('/^.var.www.%HOST%.webapp/i', '', $location);
+        $location = trimAbsolutePaths($location);
         $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
 
         error_log("$time $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
