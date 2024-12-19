@@ -1,14 +1,14 @@
 <?PHP
 
-function isProd(){
+function isProd(): bool {
     return '%HOST%' == 'uprzejmiedonosze.net' || '%HOST%' == 'shadow.uprzejmiedonosze.net';
 }
 
-function isStaging(){
+function isStaging(): bool {
     return '%HOST%' == 'staging.uprzejmiedonosze.net';
 }
 
-function isDev() {
+function isDev(): bool {
     return !isProd() && !isStaging();
 }
 
@@ -31,8 +31,9 @@ function logger(string|object|array|null $msg, $force = null): string {
         $caller = array_shift($debug_backtrace);
         $location = $caller['file'] . ':' . $caller['line'];
         $location = preg_replace('/^.var.www.%HOST%.webapp/i', '', $location);
+        $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
 
-        error_log("$time $user $location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+        error_log("$time $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
     if($force)
         send_syslog($msg, false);

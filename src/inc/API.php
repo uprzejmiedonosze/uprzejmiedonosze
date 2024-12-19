@@ -33,7 +33,7 @@ function updateApplication(
     }
 
     if (!$application->isEditable()) {
-        throw new ForbiddenException("Zgłoszenie w stanie '{$application->status}' nie może być aktualizowane");
+        throw new ForbiddenException("Zgłoszenie '$appId' w stanie '{$application->status}' nie może być aktualizowane");
     }
 
     $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
