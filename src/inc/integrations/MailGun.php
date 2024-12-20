@@ -86,7 +86,7 @@ class MailGun extends CityAPI {
             $application->setStatus('sending-problem', true);
             \app\save($application);
             logger("Sending email {$application->id} with MailGun, exception, saved", true);
-            throw new Exception($error, 500);
+            throw new Exception($error->getMessage(), 500, $error);
         }
 
         logger("Sending email {$application->id} with MailGun, saved", true);
