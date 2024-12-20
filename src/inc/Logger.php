@@ -24,6 +24,7 @@ function trimAbsolutePaths(string $backtrace): string {
 function logger(string|object|array|null $msg, $force = null): string {
     $DT_FORMAT = 'Y-m-d\TH:i:s';
     $time = date($DT_FORMAT);
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '?.?.?.?';
     if (is_null($msg))
         $msg = 'null';
     if (!is_string($msg))
@@ -38,7 +39,7 @@ function logger(string|object|array|null $msg, $force = null): string {
         $location = trimAbsolutePaths($location);
         $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
 
-        error_log("$time $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+        error_log("$ip $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
     if($force)
         send_syslog($msg, false);
