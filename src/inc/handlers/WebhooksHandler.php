@@ -53,6 +53,10 @@ class WebhooksHandler extends AbstractHandler {
         $semaphore = \semaphore\acquire(intval($userNumber));
         $application = \app\get($appId);
 
+        if (!$application->wasSent()) {
+            logger("mailgun webhook error, Application $appId was not sent!", true);
+        }
+
         $comment = $mailEvent->formatComment();
         if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
         $ccToUser = $application->sent->to !== $payload['recipient'];
