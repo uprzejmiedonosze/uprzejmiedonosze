@@ -169,7 +169,7 @@ describe('Create application', () => {
         cy.visit('/moje-zgloszenia.html')
         cy.location('pathname').should('include', '/moje-zgloszenia.html');
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.application-short.confirmed-waiting h3')
+        cy.get('.application-short.sending h3')
             .should('be.visible').click()
         cy.wait('@appDetails')
     })
@@ -245,7 +245,7 @@ describe('Edit application', () => {
         cy.visit('/moje-zgloszenia.html')
         cy.location('pathname').should('include', '/moje-zgloszenia.html');
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.application-short.confirmed-waiting h3:first')
+        cy.get('.application-short.sending h3:first')
             .should('be.visible').click()
         cy.wait('@appDetails')
         cy.contains(this.config.address.szczecin)
