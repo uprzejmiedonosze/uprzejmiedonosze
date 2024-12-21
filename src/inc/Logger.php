@@ -13,7 +13,7 @@ function isDev(): bool {
 }
 
 function trimAbsolutePaths(string $backtrace): string {
-    $backtrace = preg_replace('/\/var\/www\/%HOST%\/webapp/i', '[webapp] ', $backtrace);
+    $backtrace = preg_replace('/\/var\/www\/%HOST%\/webapp/i', '#UD', $backtrace);
     return preg_replace('/\/var\/www\/%HOST%\/vendor/i', '', $backtrace);
 }
 
@@ -39,15 +39,15 @@ function logger(string|object|array|null $msg, $force = null): string {
         $location = trimAbsolutePaths($location);
         $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
 
-        error_log("$ip $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+        send_syslog("$ip $user $prefix$location \"$msg\"");
+        error_log("$time $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
     }
-    if($force)
-        send_syslog($msg, false);
+        
     return $time;
 }
 
-function send_syslog(string $msg, bool $debug) {
+function send_syslog(string $msg): void {
     openlog("uprzejmiedonosze", LOG_PID | LOG_PERROR, LOG_LOCAL0);
-    syslog($debug ? LOG_DEBUG : LOG_INFO, ($debug ? '[DEBUG] ' : '[INFO] ') . $msg);
+    syslog(LOG_INFO, $msg);
     closelog();
 }
