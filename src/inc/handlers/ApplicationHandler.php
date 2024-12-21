@@ -123,9 +123,16 @@ class ApplicationHandler extends AbstractHandler {
 
         $user = $request->getAttribute('user');
 
+        $application = \app\get($appId);
+        global $STATUSES;
+        $status = $STATUSES[$application->status];
+        if (!$status->editable) {
+            logger("Ponowny POST na /potwierdz.html dla zgłoszenia {$application->number} w statusie {$status->name}");
+            return $this->redirect("/ud-$appId.html");
+        }
         try {
             $application = updateApplication(
-                $appId,
+                $application,
                 $datetime,
                 $dtFromPicture,
                 $category,

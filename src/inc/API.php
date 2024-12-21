@@ -14,7 +14,7 @@ use cache\Type;
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 function updateApplication(
-    $appId,
+    Application $application,
     $date,
     $dtFromPicture,
     int $category,
@@ -26,14 +26,12 @@ function updateApplication(
     User $user,
 ): Application {
 
-    $application = \app\get($appId);
-
     if ($application->user->email !== $user->getEmail()) {
-        throw new ForbiddenException("Odmawiam aktualizacji zgłoszenia '$appId' przez '{$user->getEmail()}'");
+        throw new ForbiddenException("Odmawiam aktualizacji zgłoszenia '{$application->id}' przez '{$user->getEmail()}'");
     }
 
     if (!$application->isEditable()) {
-        throw new ForbiddenException("Zgłoszenie '$appId' w stanie '{$application->status}' nie może być aktualizowane");
+        throw new ForbiddenException("Zgłoszenie '{$application->id}' w stanie '{$application->status}' nie może być aktualizowane");
     }
 
     $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);

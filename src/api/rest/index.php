@@ -238,9 +238,10 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $fullAddress->district = $district;
     
         $user = $request->getAttribute('user');
+        $application = \app\get($appId);
         
         try {
-            $application = updateApplication($appId, $datetime, $dtFromPicture, $category, $fullAddress,
+            $application = updateApplication($application, $datetime, $dtFromPicture, $category, $fullAddress,
                 $plateId, $comment, $witness, $extensions, $user);
         } catch (Exception $e) {
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
