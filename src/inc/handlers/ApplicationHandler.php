@@ -46,7 +46,7 @@ class ApplicationHandler extends AbstractHandler {
         if (isset($params['edit'])) {
             $application = \app\get($params['edit']);
             if (!$application->isEditable()) {
-                throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name);
+                throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name, 403);
             }
 
             if (!($application->isAppOwner($user) || $user->isAdmin())) {
@@ -157,6 +157,7 @@ class ApplicationHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function finish(Request $request, Response $response): Response {
+        global $STATUSES;
         $params = (array)$request->getParsedBody();
 
         $appId = $this->getParam($params, 'applicationId', -1);
@@ -167,6 +168,12 @@ class ApplicationHandler extends AbstractHandler {
 
         unset($_SESSION['newAppId']);
         $application = \app\get($appId);
+        $status = $STATUSES[$application->status];
+        if(!$status->editable) {
+            logger("Ponowny POST na /dziekujemy.html dla zgłoszenia {$application->number} w statusie {$status->name}");
+            return $this->redirect("/ud-$appId.html");
+        }
+        
         $user = $request->getAttribute('user');
 
         $edited = $application->hasNumber();
