@@ -3029,5 +3029,13 @@
       "62-040 Puszczykowo"
     ],
     "email": "straz.miejska@puszczykowo.pl"
+  },
+  "Tomaszów Mazowiecki": {
+    "address": [
+      "Straż Miejska w Tomaszowie Mazowieckim",
+      "pl. T. Kościuszki 24",
+      "97-200 Tomaszów Mazowiecki"
+    ],
+    "email": "smtm@post.pl"
   }
 }
