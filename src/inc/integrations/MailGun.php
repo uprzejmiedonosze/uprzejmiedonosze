@@ -65,17 +65,13 @@ class MailGun extends CityAPI {
         [$fileatt, $fileattname] = application2PDF($application);
 
         logger("Sending email {$application->id} with MailGun, sent->to {$application->sent->to}", true);
-
         $message->attachFromPath($fileatt, $fileattname);
-        logger("Sending email {$application->id} with MailGun, PDF attached", true);
-
         if ($this->withXls) {
             $message->addPart(new DataPart(
                 XlsHandler::Application2Xls($application),
                 $application->getAppXlsFilename(),
                 "application/vnd.ms-excel"
             ));
-            logger("Sending email {$application->id} with MailGun, XLS attached", true);
         }
 
         try {
@@ -83,14 +79,11 @@ class MailGun extends CityAPI {
             logger("Sending email {$application->id} with MailGun, sent", true);
         } catch (TransportExceptionInterface $error) {
             logger("Sending email {$application->id} with MailGun, exception" . $error->getMessage(), true);
-            $application->sent->error = $error->getMessage();
             $application->setStatus('sending-problem', true);
+            unset($application->sent);
             \app\save($application);
-            logger("Sending email {$application->id} with MailGun, exception, saved", true);
             throw new Exception($error->getMessage(), 500, $error);
         }
-
-        logger("Sending email {$application->id} with MailGun, saved", true);
         return $application;
     }
 
