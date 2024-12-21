@@ -60,6 +60,7 @@ class MailGun extends CityAPI {
         $application->sent->from = "uprzejmiedonosze.net (" . MAILER_FROM . ")";
         $application->sent->body = parent::formatEmail($application, false);
         $application->sent->method = "MailGun";
+        \app\save($application);
 
         [$fileatt, $fileattname] = application2PDF($application);
 
@@ -90,7 +91,7 @@ class MailGun extends CityAPI {
         }
 
         logger("Sending email {$application->id} with MailGun, saved", true);
-        return \app\save($application);
+        return $application;
     }
 
     function notifyUser(app\Application &$application, string $subject, string $reason){
