@@ -79,7 +79,7 @@ class MailGun extends CityAPI {
             logger("Sending email {$application->id} with MailGun, sent", true);
         } catch (TransportExceptionInterface $error) {
             logger("Sending email {$application->id} with MailGun, exception" . $error->getMessage(), true);
-            $application->setStatus('sending-problem', true);
+            $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);
             throw new Exception($error->getMessage(), 500, $error);

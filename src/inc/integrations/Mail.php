@@ -78,7 +78,7 @@ class Mail extends CityAPI {
             if (!isDev())
                 $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
-            $application->setStatus('sending-problem', true);
+            $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);
             throw new Exception($error, 500);

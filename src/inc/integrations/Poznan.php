@@ -37,7 +37,7 @@ class Poznan extends CityAPI {
         $output = parent::curlShellSend($url, $data, $application);
 
         if(isset($output['response']['error_msg'])){
-            $application->setStatus('sending-problem', true);
+            $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);
             throw new Exception($output['response']['error_msg'], 500);
