@@ -97,10 +97,6 @@ export async function appClicked(target) {
 
   makeDropdown()
 
-  $('.private-comment textarea').on('keyup',  function(){
-    $(this).height(0).height(this.scrollHeight);
-  })
-
   $('a.recydywa-seemore').on('click', async function () {
     const plateId = $(this).data('plateid')
     const $recydywa = $('#recydywa')

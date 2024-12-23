@@ -34,6 +34,15 @@ $('.button.cta').on('click', function() {
     $(this).addClass('disabled');
 })
 
+$("textarea").each(function () {
+    this.style.height = this.scrollHeight + "px";
+    this.style.overflowY = "hidden";
+}).on("input", function () {
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + "px";
+})
+
+
 document.addEventListener("DOMContentLoaded", () => {
     makeDialog()
 })
