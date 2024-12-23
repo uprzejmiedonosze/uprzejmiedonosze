@@ -345,8 +345,7 @@
       "50-421 Wrocław"
     ],
     "email": "straz@strazmiejska.wroclaw.pl",
-    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
-    "api": "Mail"    
+    "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>"
   },
   "Kraków": {
     "address": [
@@ -390,7 +389,7 @@
       "90-521 Łódź"
     ],
     "email": "oskarzyciele@strazmiejska.lodz.pl",
-    "api": "MailWithXls",
+    "api": "MaiGunWithXls",
     "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie. Powyższe jednak z pewnością nie obowiązuje dla Oddziału Łódź-Polesie, które wzywa z automatu na przesłuchanie do każdego zgłoszenia."
   },
   "Łódź-Śródmieście": { "parent": "Łódź" },
