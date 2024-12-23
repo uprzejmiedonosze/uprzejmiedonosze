@@ -114,7 +114,12 @@ class MailGun extends CityAPI {
             throw new Exception($error, 500);
         }
     }
+}
 
+class MailGunWithXls extends Mail {
+    public function __construct() {
+        $this->withXls = true;
+    }
 }
 
 ?>
