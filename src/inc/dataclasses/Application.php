@@ -58,6 +58,8 @@ class Application extends JSONObject implements \JsonSerializable {
             $clone->sent = $encode(json_encode($clone->sent));
         if (isset($clone->address))
             $clone->address = $encode(json_encode($clone->address));
+        if (isset($clone->userComment))
+            $clone->userComment = $encode(json_encode($clone->userComment));
         return json_encode($clone);
     }
 
@@ -75,6 +77,9 @@ class Application extends JSONObject implements \JsonSerializable {
             $this->sent = new JSONObject($decode($this->sent));
         if (isset($this->address))
             $this->address = new JSONObject($decode($this->address));
+        if (isset($this->userComment))
+            $this->userComment = new JSONObject($decode($this->userComment));
+        
         unset($this->encrypted);
     }
 
