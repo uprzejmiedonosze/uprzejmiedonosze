@@ -105,7 +105,10 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
+        $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
         $message->getHeaders()->addTextHeader("v:nofitication", true);
+        $message->getHeaders()->addTextHeader("o:tag", $application->address->city ?? '-no-city');
+        $message->getHeaders()->addTextHeader("o:testmode", isDev());
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         try {
