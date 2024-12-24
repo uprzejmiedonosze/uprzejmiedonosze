@@ -65,7 +65,7 @@ class Application extends JSONObject implements \JsonSerializable {
             return; 
         $this->user = new JSONObject(\crypto\decode($this->user, $_SESSION['user_id'], $this->id . $this->added));
         $this->privateComment = \crypto\decode($this->privateComment, $_SESSION['user_id'], $this->id . $this->added);
-        if (isset($clone->sent))
+        if (isset($this->sent))
             $this->sent = new JSONObject(\crypto\decode($this->sent, $_SESSION['user_id'], $this->id . $this->added));
         unset($this->encrypted);
     }
