@@ -50,10 +50,14 @@ class Application extends JSONObject implements \JsonSerializable {
     function encode(): string {
         $clone = Application::withJson(json_encode($this));
         $clone->encrypted = true;
-        $clone->user = \crypto\encode(json_encode($clone->user), $_SESSION['user_id'], $clone->id . $clone->added);
-        $clone->privateComment = \crypto\encode($clone->privateComment, $_SESSION['user_id'], $clone->id . $clone->added);
+
+        $encode = fn($value) => \crypto\encode($value, $_SESSION['user_id'], $clone->id . $clone->added);
+        $clone->user = $encode(json_encode($clone->user));
+        $clone->privateComment = $encode($clone->privateComment);
         if (isset($clone->sent))
-            $clone->sent = \crypto\encode(json_encode($clone->sent), $_SESSION['user_id'], $clone->id . $clone->added);
+            $clone->sent = $encode(json_encode($clone->sent));
+        if (isset($clone->address))
+            $clone->address = $encode(json_encode($clone->address));
         return json_encode($clone);
     }
 
@@ -62,11 +66,15 @@ class Application extends JSONObject implements \JsonSerializable {
      */
     function decode(): void {
         if (!($this->encrypted ?? false))
-            return; 
-        $this->user = new JSONObject(\crypto\decode($this->user, $_SESSION['user_id'], $this->id . $this->added));
-        $this->privateComment = \crypto\decode($this->privateComment, $_SESSION['user_id'], $this->id . $this->added);
+            return;
+
+        $decode = fn($value) => \crypto\decode($value, $_SESSION['user_id'], $this->id . $this->added);
+        $this->user = new JSONObject($decode($this->user));
+        $this->privateComment = $decode($this->privateComment);
         if (isset($this->sent))
-            $this->sent = new JSONObject(\crypto\decode($this->sent, $_SESSION['user_id'], $this->id . $this->added));
+            $this->sent = new JSONObject($decode($this->sent));
+        if (isset($this->address))
+            $this->address = new JSONObject($decode($this->address));
         unset($this->encrypted);
     }
 
