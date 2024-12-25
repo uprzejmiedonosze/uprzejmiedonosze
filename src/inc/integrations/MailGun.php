@@ -98,7 +98,7 @@ class MailGun extends CityAPI {
         $message = (new Email());
         $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
         $message->to(new Address($application->user->email, $application->user->name));
-        $message->cc(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
+        $message->cc(new Address('ud@uprzejmiedonosze.net', 'Uprzejmie Donoszę'));
         $message->subject($subject);
         $message->text($messageBody);
         
