@@ -3037,5 +3037,27 @@
       "97-200 Tomaszów Mazowiecki"
     ],
     "email": "smtm@post.pl"
+  },
+  "Kosakowo": {
+    "address": [
+      "Straż Gminna Kosakowo",
+      "ul. Chrzanowskiego 46",
+      "81-198 Kosakowo"
+    ],
+    "email": "strazgminna@kosakowo.pl"
+  },
+  "gmina Kosakowo": {
+    "parent": "Kosakowo"
+  },
+  "Jaworzno": {
+    "address": [
+      "Straż Miejska Jaworzno",
+      "pl. Górników 5",
+      "43-600 Jaworzno"
+    ],
+    "email": "straz.miejska@um.jaworzno.pl"
+  },
+  "gmina Jaworzno": {
+    "parent": "Jaworzno"
   }
 }
