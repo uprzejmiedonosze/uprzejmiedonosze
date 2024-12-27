@@ -217,8 +217,6 @@ class Application extends JSONObject implements \JsonSerializable {
         global $STATUSES;
         $now = date(DT_FORMAT);
 
-        logger("App::setStatus($status) dla zgłoszenia {$this->id}", true);
-
         if(!array_key_exists($status, $STATUSES)){
             throw new Exception("Odmawiam ustawienia statusu na '$status'");
         }

@@ -43,7 +43,7 @@ function _use_openAlpr(&$imageBytes): bool {
     $cache = \cache\alpr\get(Type::OpenAlpr, $imageHash);
 
     if($cache) {
-        logger('use OpenAlpr cos its cached', true);
+        logger('use OpenAlpr cos its cached');
         return true;
     }
 
@@ -51,26 +51,26 @@ function _use_openAlpr(&$imageBytes): bool {
     $budgetConsumed = floor($budgetConsumed*100);
 
     if ($budgetConsumed == 100) {
-        logger('use plateRec as OpenAlpr budget is consumed', true);
+        logger('use plateRec as OpenAlpr budget is consumed');
         return false;
     }
 
     $user = \user\current();
 
     if(!$user->hasApps()) {
-        logger('use OpenAlpr if this is User first app', true);
+        logger('use OpenAlpr if this is User first app');
         return true;
     }
 
     if($user->isPatron()) {
-        logger('use OpenAlpr for Patrons', true);
+        logger('use OpenAlpr for Patrons');
         return true;
     }
 
     if(floor(log10(random_int(1, $budgetConsumed+1))) == 0) {
-        logger("use OpenAlpr budgetConsumed $budgetConsumed%", true);
+        logger("use OpenAlpr budgetConsumed $budgetConsumed%");
         return true;
     }
-    logger("use plateRec budgetConsumed $budgetConsumed%", true);
+    logger("use plateRec budgetConsumed $budgetConsumed%");
     return false;
 }
