@@ -13,8 +13,12 @@ function isDev(): bool {
 }
 
 function trimAbsolutePaths(string $backtrace): string {
-    $backtrace = preg_replace('/\/var\/www\/%HOST%\/webapp/i', '#UD', $backtrace);
-    return preg_replace('/\/var\/www\/%HOST%\/vendor/i', '', $backtrace);
+    $backtrace = preg_replace('/^.*\/var\/www\/.*\/webapp\//im', '  #UD ', $backtrace);
+    return preg_replace('/^.*\/var\/www\/.*\/vendor\//im', '  ', $backtrace);
+}
+
+function removeVendor(string $backtrace): string {
+    return preg_replace('/^.*\/var\/www\/.*\/vendor.*\n/im', '', $backtrace);
 }
 
 /**
@@ -38,19 +42,24 @@ function logger(string|object|array|null $msg, $force = null): string {
         $location = $caller['file'] . ':' . $caller['line'];
         $location = trimAbsolutePaths($location);
         $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
+        $prefix = $force ? $prefix : "dbg $prefix";
 
-        send_syslog("$ip $user $prefix$location \"$msg\"");
+        send_syslog("$ip $user $prefix$location \"$msg\"", debug:!$force);
         error_log("$time $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+        if ($force) {
+            $e = new Exception();
+            error_log(trimAbsolutePaths(removeVendor($e->getTraceAsString())), 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+        }
     }
         
     return $time;
 }
-
-function send_syslog(string $msg): void {
+    
+function send_syslog(string $msg, bool $debug): void {
     if (str_ends_with($_SERVER['_'] ?? '', 'phpunit'))
         return;
-    
+
     openlog("uprzejmiedonosze", LOG_PID | LOG_PERROR, LOG_LOCAL0);
-    syslog(LOG_INFO, $msg);
+    syslog($debug ? LOG_DEBUG: LOG_INFO, $msg);
     closelog();
 }
