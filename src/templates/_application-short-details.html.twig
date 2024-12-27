@@ -52,8 +52,8 @@
     {% if sendable %}
         <div class="no-icon">
             {% if app.automatedSM %}
-                <a href="#" onclick="sendApplication('{{ app.id }}');" data-inline="true" data-mini="true"
-                class="button inline cta confirmed-waiting">
+                <a href="#" class="button inline cta confirmed-waiting send-application"
+                    data-appid="{{ app.id }}">
                     Wyślij do {{ app.guessSMData.getShortName }}
                 </a>
             {% elseif app.unknownSM %}

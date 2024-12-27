@@ -6,6 +6,7 @@ import Api from '../lib/Api'
 import { filterable, triggerFilter} from "../lib/filterable";
 import makeDropdown from "../lib/dropdown";
 import makeDialog from "../lib/dialog";
+import sendApplication from "../lib/send";
 
 document.addEventListener("DOMContentLoaded", (event) => {
   const appsList = document.getElementById('apps-list')
@@ -96,6 +97,11 @@ export async function appClicked(target) {
   appDetailsDiv.innerHTML = appDetails
 
   makeDropdown()
+
+  $('a.send-application').on('click', async function () {
+    const appId = $(this).data('appid')
+    sendApplication(appId)
+  })
 
   $('a.recydywa-seemore').on('click', async function () {
     const plateId = $(this).data('plateid')

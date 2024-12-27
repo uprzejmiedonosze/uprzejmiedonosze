@@ -92,13 +92,7 @@ Z poważaniem
 {% endif %}
 {% endif %}
 
-{% if app.automatedSM %}
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        if (!$(".dziekujemy").length) return
-        sendApplication('{{ app.id }}')
-    })
-</script>
-{% endif %}
+<input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
+<input type="hidden" name="automatedSM" id="automatedSM" value="{{ app.automatedSM }}"/>
 
 {% endblock %}

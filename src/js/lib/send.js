@@ -8,8 +8,7 @@ import { toast, error, message } from './toast'
 import Api from './Api'
 import { appClicked, closeAllApps } from "../sites/my-application";
 
-// @ts-ignore
-window.sendApplication = async function (appId) {
+async function sendApplication(/** @type {string} */ appId) {
   const $whatNext = $(".whatNext")
   const $afterSend = $(".afterSend")
   const $buttonRight = $('.menu-button.right')
@@ -50,5 +49,6 @@ window.sendApplication = async function (appId) {
 
   }
   $buttonRight.removeClass("disabled")
-};
+}
 
+export default sendApplication
