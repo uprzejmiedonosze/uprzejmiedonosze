@@ -1,24 +1,30 @@
 <?php namespace store;
 
-
 if (!defined('DB_FILENAME'))
     define('DB_FILENAME', __DIR__ . '/../../../db/store.sqlite');
 
 const KEY = 'key';
+$store = null;
 
-$store = new \PDO('sqlite:' . DB_FILENAME);
-$store->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+function store(): \PDO
+{
+    global $store;
+    if ($store)
+        return $store;
+    $store = new \PDO('sqlite:' . DB_FILENAME);
+    $store->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    return $store;
+}
+
 
 function query(string $query, int|null $fetchMode = null, mixed ...$fetch_mode_args): \PDOStatement|false
 {
-    global $store;
-    return $store->query($query, $fetchMode, $fetch_mode_args);
+    return store()->query($query, $fetchMode, $fetch_mode_args);
 }
 
 function prepare(string $query, array $options = []): \PDOStatement|false
 {
-    global $store;
-    return $store->prepare($query, $options);
+    return store()->prepare($query, $options);
 }
 
 function dump(\PDOStatement $stmt)
@@ -32,12 +38,11 @@ function dump(\PDOStatement $stmt)
 
 function get(string $table, string $key): string|null
 {
-    global $store;
     if (!is_string($key)) {
         throw new \InvalidArgumentException('Expected string as key');
     }
 
-    $stmt = $store->prepare(
+    $stmt = store()->prepare(
         'SELECT * FROM ' . $table . ' WHERE ' . KEY
         . ' = :key;'
     );
@@ -53,7 +58,6 @@ function get(string $table, string $key): string|null
 
 function set(string $table, string $key, string $value, string $email = null): string
 {
-    global $store;
     if (!is_string($key)) {
         throw new \InvalidArgumentException('Expected string as key');
     }
@@ -66,7 +70,7 @@ function set(string $table, string $key, string $value, string $email = null): s
     if ($email) {
         $queryString = 'REPLACE INTO ' . $table . ' VALUES (:key, :value, :email);';
     }
-    $stmt = $store->prepare($queryString);
+    $stmt = store()->prepare($queryString);
     $stmt->bindParam(':key', $key, \PDO::PARAM_STR);
     $stmt->bindParam(':value', $value, \PDO::PARAM_STR);
     if ($email) {
@@ -79,8 +83,7 @@ function set(string $table, string $key, string $value, string $email = null): s
 
 function delete(string $table, string $key): void
 {
-    global $store;
-    $stmt = $store->prepare(
+    $stmt = store()->prepare(
         'DELETE FROM ' . $table . ' WHERE ' . KEY
         . ' = :key;'
     );

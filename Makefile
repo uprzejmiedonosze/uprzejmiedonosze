@@ -119,7 +119,7 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	$(sentry-release)
 	@make clean
 
-$(EXPORT): $(DIRS) process-sitemap minify $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson src/api/config/patronite.json ## Exports files for deployment.
+$(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson src/api/config/patronite.json minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -134,8 +134,8 @@ process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 process-sitemap: $(DIRS) $(SITEMAP_PROCESSED)
 
-$(EXPORT)/config.php: $(DIRS); $(call echo-processing,$<)
-	@test -s config.php && cp config.php $(EXPORT)/ || touch $(EXPORT)/config.php
+$(EXPORT)/config.php: $(DIRS); $(call echo-processing,$@)
+	@test -s config.php && cp config.php $@ || touch $@
 
 ASSETS := $(wildcard src/img/* src/img/*/*)
 $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)

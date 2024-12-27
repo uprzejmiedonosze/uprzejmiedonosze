@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd" colors="true" beStrictAboutOutputDuringTests="true" failOnRisky="true" failOnWarning="false" cacheDirectory=".phpunit.cache">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+  colors="true"
+  beStrictAboutOutputDuringTests="true"
+  failOnRisky="true"
+  failOnWarning="false"
+  bootstrap="tests/bootstrap.php"
+  cacheDirectory=".phpunit.cache">
   <php>
     <ini name="error_reporting" value="E_ALL"/>
   </php>
