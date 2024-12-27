@@ -3059,5 +3059,16 @@
   },
   "gmina Jaworzno": {
     "parent": "Jaworzno"
+  },
+  "Głubczyce": {
+    "address": [
+      "Straż Miejska w Głubczycach",
+      "ul. Niepodległości 12",
+      "48-100 Głubczyce"
+    ],
+    "email": "sm@glubczyce.pl"
+  },
+  "gmina Głubczyce": {
+    "parent": "Głubczyce"
   }
 }
