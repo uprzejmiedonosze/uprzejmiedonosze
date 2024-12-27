@@ -59,7 +59,7 @@ class Application extends JSONObject implements \JsonSerializable {
         if (isset($clone->address))
             $clone->address = $encode(json_encode($clone->address));
         if (isset($clone->userComment))
-            $clone->userComment = $encode(json_encode($clone->userComment));
+            $clone->userComment = $encode($clone->userComment);
         return json_encode($clone);
     }
 
@@ -78,7 +78,7 @@ class Application extends JSONObject implements \JsonSerializable {
         if (isset($this->address))
             $this->address = new JSONObject($decode($this->address));
         if (isset($this->userComment))
-            $this->userComment = new JSONObject($decode($this->userComment));
+            $this->userComment = $decode($this->userComment);
         
         unset($this->encrypted);
     }
@@ -216,6 +216,8 @@ class Application extends JSONObject implements \JsonSerializable {
     public function setStatus(string $status, bool $force=false): void{
         global $STATUSES;
         $now = date(DT_FORMAT);
+
+        logger("App::setStatus($status) dla zgłoszenia {$this->id}", true);
 
         if(!array_key_exists($status, $STATUSES)){
             throw new Exception("Odmawiam ustawienia statusu na '$status'");
