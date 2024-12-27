@@ -308,11 +308,13 @@ diff-from-last-prod: ## Show list of commit messages from last prod release till
 lint-twig: src/templates/*.twig
 	@./vendor/bin/twig-linter lint --no-interaction --quiet $^ || ./vendor/bin/twig-linter lint --no-interaction $^
 
-.PHONY: tail
-tail:
-	@LOG="$(TAG_NAME).log"; \
-		echo "tail -f $${LOG}"; \
-		ssh $(HOSTING) "tail -f /var/log/uprzejmiedonosze.net/$${LOG}"
+.PHONY: init-db-staging
+init-db-staging:
+	@ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-registered store.sqlite"
+
+.PHONY: init-db-dev
+init-db-dev:
+	@docker exec webapp cp /var/www/uprzejmiedonosze.localhost/db/store.sqlite-empty /var/www/uprzejmiedonosze.localhost/db/store.sqlite
 
 # defines
 
