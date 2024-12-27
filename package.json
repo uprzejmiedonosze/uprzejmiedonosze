@@ -13,8 +13,8 @@
     "firebase": "^10.14.1",
     "firebaseui": "^6.1.0",
     "heic2any": "^0.0.4",
-    "highcharts": "^12.1.2",
-    "jquery": "^1.12.4",
+    "highcharts": "^11.4.8",
+    "jquery": "^3.7.1",
     "lazysizes": "^5.3.2",
     "luxon": "^3.5.0",
     "mapbox-gl": "^3.9.1"
@@ -43,12 +43,7 @@
     "parcel": "^2.13.3",
     "process": "^0.11.10",
     "sass": "^1.83.0",
-    "sharp": "^0.31.3"
-  },
-  "overrides": {
-    "@parcel/transformer-image": {
-      "sharp": "^0.33.4"
-    }
+    "sharp": "^0.33.5"
   },
   "name": "uprzejmiedonosze"
 }
