@@ -499,11 +499,8 @@ class Application extends JSONObject implements \JsonSerializable {
         return $STATUSES[$this->status]->editable;
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
-     */
     public function getRevision() {
-        return @count($this->statusHistory);
+        return count($this->statusHistory ?? []);
     }
 
     public function isAppOwner(User|null $user): bool {
