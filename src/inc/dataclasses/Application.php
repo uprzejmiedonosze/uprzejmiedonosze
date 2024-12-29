@@ -116,6 +116,8 @@ class Application extends JSONObject implements \JsonSerializable {
         $instance->initStatements();
         $instance->address = new JSONObject();
         /*
+        2.5.0 (2024-12-28)
+          - removed absolute myAppsSize, autoSend, exposeData
         2.4.0 (2024-12-09)
           - encryption support
         2.3.0
@@ -136,7 +138,6 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->user->number = $user->getNumber();
         $this->stopAgresji = $user->stopAgresji();
         unset($this->user->stopAgresji);
-        unset($this->user->myAppsSize);
     }
 
     public function wasSent(): bool {

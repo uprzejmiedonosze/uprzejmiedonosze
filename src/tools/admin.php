@@ -243,6 +243,8 @@ function updateApp($app, $version, $dryRun) {
     $status = $STATUSES[$app->status]->name;
     echo "  - migrating app $number [$status] by {$app->user->email}$added\n";
     $app->version = $version;
+
+    fakeFirebaseId($app->user->email);
     unset($app->user->myAppsSize);
     unset($app->user->autoSend);
     unset($app->user->exposeData);
@@ -300,6 +302,8 @@ function fakeFirebaseId(string $email): void {
 //removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
 
 // removeUser('szymon@nieradka.net', false);
-// upgradeAllUsers(false);
+
+//define('DB_FILENAME', __DIR__ . '/../../docker/db/store.sqlite');
+upgradeAllUsers(true);
 // refreshRecydywa();
 // upgradeAllApps('2.4.0', false);
