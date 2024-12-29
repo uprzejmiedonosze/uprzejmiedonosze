@@ -225,6 +225,10 @@ function upgradeAllUsers($dryRun=true) {
     foreach ($users as $email => $user) {
         if ($interrupt) exit;
         echo date(DT_FORMAT) . " migrating user $email:\n";
+        unset($user->data->myAppsSize);
+        unset($user->data->autoSend);
+        unset($user->data->exposeData);
+
         if(!$dryRun) {
             \user\save($user);
         }
@@ -238,6 +242,9 @@ function updateApp($app, $version, $dryRun) {
     $status = $STATUSES[$app->status]->name;
     echo "  - migrating app $number [$status] by {$app->user->email}$added\n";
     $app->version = $version;
+    unset($app->user->myAppsSize);
+    unset($app->user->autoSend);
+    unset($app->user->exposeData);
     if($dryRun){
         return;
     }

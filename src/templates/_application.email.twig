@@ -5,7 +5,7 @@ w dniu {{ app.getDate("d MMMM y 'o godzinie' H:mm") }} {{ app.guessUserSex.bylam
 W załączeniu znajduje się zgłoszenie wraz ze zdjęciami oraz mapką prezentującą lokalizację zdarzenia. Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getJSONSafeComment|raw }}{% if app.statements is not defined or not app.statements.witness %} Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.{% endif %}
 
 
-{% if not (app.user.exposeData ?? false) %}Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.{% endif %}
+Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.
 
 
 {% if app.hasNumber() and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}

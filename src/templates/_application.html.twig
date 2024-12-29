@@ -44,10 +44,10 @@
         <p>{{ app.getAHrefedComment | raw }}</p>
     {% endif %}
 
-    {% if not (app.user.exposeData ?? false) %}
+    
         <p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
             mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.</p>
-    {% endif %}
+    
 
     {% if app.hasNumber and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
         <p>Dokument ze zgłoszeniem dostępny jest pod adresem
