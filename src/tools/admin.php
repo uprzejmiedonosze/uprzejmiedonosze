@@ -225,6 +225,7 @@ function upgradeAllUsers($dryRun=true) {
     foreach ($users as $email => $user) {
         if ($interrupt) exit;
         echo date(DT_FORMAT) . " migrating user $email:\n";
+        fakeFirebaseId($email);
         unset($user->data->myAppsSize);
         unset($user->data->autoSend);
         unset($user->data->exposeData);
@@ -277,9 +278,26 @@ function refreshRecydywa() {
     }
 }
 
+$firebaseDb = null;
+function fakeFirebaseId(string $email): void {
+    global $firebaseDb;
+    if (!$firebaseDb) {
+        $firebaseDb = json_decode(file_get_contents(__DIR__ . '/../../save_file.json'), true);
+        $firebaseDb = array_column($firebaseDb['users'], 'localId', 'email');
+    }
 
-removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
-removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
+    if (!isset($firebaseDb[$email])) {
+        $_SESSION['user_id'] = null;
+        echo "  error migrating user $email: No firebase id\n";
+        return;
+    }
+
+    $_SESSION['user_id'] = $firebaseDb[$email];
+}
+
+
+//removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
+//removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
 
 // removeUser('szymon@nieradka.net', false);
 // upgradeAllUsers(false);
