@@ -50,6 +50,10 @@ class User extends \JSONObject{
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function encode(): string {
+        if ($_SESSION['user_id'] == null) {
+            logger("Can't encode user without user_id ({$this->data->email})", true);
+            return json_encode($this);
+        }
         $clone = new User(json_encode($this));
         $clone->encrypted = true;
 
@@ -69,6 +73,10 @@ class User extends \JSONObject{
     function decode(): void {
         if (!($this->encrypted ?? false))
             return;
+
+        if ($_SESSION['user_id'] == null) {
+            throw new \Exception("User data is encrypted, but no user_id is set");
+        }
         $decode = fn(&$value) => $value = \crypto\decode($value, $_SESSION['user_id'], $this->number . $this->data->email);
 
         $decode($this->data->name);

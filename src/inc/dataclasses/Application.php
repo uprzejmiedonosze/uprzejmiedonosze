@@ -48,6 +48,10 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function encode(): string {
+        if ($_SESSION['user_id'] == null) {
+            logger("Can't encode application without user_id ({$this->id})", true);
+            return json_encode($this);
+        }
         $clone = Application::withJson(json_encode($this));
         $clone->encrypted = true;
 
@@ -70,6 +74,9 @@ class Application extends JSONObject implements \JsonSerializable {
         if (!($this->encrypted ?? false))
             return;
 
+        if ($_SESSION['user_id'] == null) {
+            throw new \Exception("Application is encrypted, but no user_id is set");
+        }
         $decode = fn($value) => \crypto\decode($value, $_SESSION['user_id'], $this->id . $this->added);
         $this->user = new JSONObject($decode($this->user));
         $this->privateComment = $decode($this->privateComment);
