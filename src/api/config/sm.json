@@ -3070,5 +3070,13 @@
   },
   "gmina Głubczyce": {
     "parent": "Głubczyce"
+  },
+  "Rawa Mazowiecka": {
+    "address": [
+      "Straż Miejska Rawa Mazowiecka",
+      "pl. Marszałka Józefa Piłsudskiego 4",
+      "96-200 Rawa Mazowiecka"
+    ],
+    "email": "straz@rawamazowiecka.pl"
   }
 }
