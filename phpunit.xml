@@ -4,7 +4,7 @@
   colors="true"
   beStrictAboutOutputDuringTests="true"
   failOnRisky="true"
-  failOnWarning="false"
+  failOnWarning="true"
   bootstrap="tests/bootstrap.php"
   cacheDirectory=".phpunit.cache">
   <php>

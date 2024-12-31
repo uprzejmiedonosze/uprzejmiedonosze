@@ -85,7 +85,7 @@ class SM extends JSONObject {
         }
 
         // city level
-        $city = trimstr2lower($address->city);
+        $city = trimstr2lower($address->city ?? '');
         if(array_key_exists($city, $SM_ADDRESSES)){
             $smCity = $city;
             if($city == 'warszawa' && isset($address->district)){
