@@ -47,6 +47,9 @@ function logger(string|object|array|null $msg, $force = null): string {
 }
 
 function send_syslog(string $msg): void {
+    if (str_ends_with($_SERVER['_'] ?? '', 'phpunit'))
+        return;
+    
     openlog("uprzejmiedonosze", LOG_PID | LOG_PERROR, LOG_LOCAL0);
     syslog(LOG_INFO, $msg);
     closelog();
