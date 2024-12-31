@@ -3092,5 +3092,13 @@
   },
   "gmina Lwówek Śląski": {
     "parent": "Lwówek Śląski"
+  },
+  "Radzionków": {
+    "address": [
+      "Straż Miejska Radzionków",
+      "ul. Męczenników Oświęcimia 43b",
+      "41-922 Radzionków"
+    ],
+    "email": "sm@radzionkow.pl"
   }
 }
