@@ -27,7 +27,7 @@ function addToTumblr(&$app){
     $data = array(
         'type' => 'photo', 
         'caption' => "**{$app->carInfo->plateId}** $recydywa {$app->address->city} — {$description}"
-            . "\n\n*-- {$app->getDate("MMMM YYYY")}*",
+            . "\n\n*-- {$app->getDate("MMMM y")}*",
         "data64" => base64_encode(file_get_contents("$root/{$app->contextImage->url}")),
         'format' => 'markdown',
         'tags' => "{$app->carInfo->plateId}, {$app->address->city}",

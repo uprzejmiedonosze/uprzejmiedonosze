@@ -119,11 +119,11 @@ class Application extends JSONObject implements \JsonSerializable {
     /**
      * Returns application date in Y-m-d format.
      */
-    public function getDate($pattern='d.MM.YYYY'){
+    public function getDate($pattern='d.MM.y'){
         return formatDateTime($this->date, $pattern);
     }
 
-    public function getSentDate($pattern="d.MM.YYYY") {
+    public function getSentDate($pattern="d.MM.y") {
         if (isset($this->sent->date))
             return formatDateTime($this->sent->date, $pattern);
         return '';

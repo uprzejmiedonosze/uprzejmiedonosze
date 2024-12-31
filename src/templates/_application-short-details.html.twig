@@ -46,7 +46,7 @@
     </div>
 
         
-    <div class="calendar"><b>{{ app.getDate("d.MM.YYYY, H:mm (eee)")|raw }}</b></div>
+    <div class="calendar"><b>{{ app.getDate("d.MM.y, H:mm (eee)")|raw }}</b></div>
 
     <div class="address">{{ app.address.address }}</div>
     {% if sendable %}
@@ -104,7 +104,7 @@
         </p>
         <p>
             Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
-                {{ app.getSentDate("d MMMM YYYY 'o' H:mm")|raw }}
+                {{ app.getSentDate("d MMMM y 'o' H:mm")|raw }}
             {% endif %}
         </p>
     </div>

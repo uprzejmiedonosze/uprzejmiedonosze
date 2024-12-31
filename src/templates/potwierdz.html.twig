@@ -56,7 +56,7 @@
             {% endif %}
         </div>
         <div>
-            <span class="floating-box">{{ app.getDate("H'<sup>'mm'</sup>' eeee, d MMMM YYYY")|raw }}</span>
+            <span class="floating-box">{{ app.getDate("H'<sup>'mm'</sup>' eeee, d MMMM y")|raw }}</span>
             <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" />
         </div>
         <div>
