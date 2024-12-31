@@ -2509,6 +2509,9 @@
     ],
     "email": "dzielnicowy.ozimek60@op.policja.gov.pl"
   },
+  "Chrząstowice": {
+    "parent": "Ozimek"
+  },
   "Turawa": {
     "parent": "Osowiec"
   },
