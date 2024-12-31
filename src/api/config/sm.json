@@ -3078,5 +3078,16 @@
       "96-200 Rawa Mazowiecka"
     ],
     "email": "straz@rawamazowiecka.pl"
+  },
+  "Lwówek Śląski": {
+    "address": [
+      "Straż Miejska Lwówek Śląski",
+      "pl. Wojska Polskiego 25",
+      "59-600 Lwówek Śląski"
+    ],
+    "email": "sekretariat@lwowekslaski.pl"
+  },
+  "gmina Lwówek Śląski": {
+    "parent": "Lwówek Śląski"
   }
 }
