@@ -3109,5 +3109,15 @@
     ],
     "email": "komendant@mragowo.ol.policja.gov.pl"
   },
+  "Pelplin": {
+    "address": [
+      "Straż Miejska Pelplin",
+      "pl. Grunwaldzki 4",
+      "83-130 Pelplin"
+    ],
+    "email": "straz.miejska@pelplin.pl"
+  },
+  "gmina Pelplin": {
+    "parent": "Pelplin"
   }
 }
