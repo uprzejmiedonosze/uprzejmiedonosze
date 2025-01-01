@@ -3100,5 +3100,14 @@
       "41-922 Radzionków"
     ],
     "email": "sm@radzionkow.pl"
+  },
+  "Mrągowo": {
+    "address": [
+      "Komenda Powiatowa Policji w Mrągowie",
+      "ul. Wolności 2",
+      "11-700 Mrągowo"
+    ],
+    "email": "komendant@mragowo.ol.policja.gov.pl"
+  },
   }
 }
