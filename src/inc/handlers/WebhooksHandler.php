@@ -30,6 +30,7 @@ class WebhooksHandler extends AbstractHandler {
         $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
         $userNumber = $payload['user-variables']['userid'];
+        $recipient = $payload['recipient'];
         
         if($payload['user-variables']['isprod'] !== "1") {
             \webhook\mark($id);
@@ -59,9 +60,9 @@ class WebhooksHandler extends AbstractHandler {
 
         $comment = $mailEvent->formatComment();
         if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
-        $ccToUser = $application->sent->to !== $payload['recipient'];
+        $ccToUser = $application->sent->to !== $recipient;
 
-        if ($payload['recipient'] == MAILER_FROM) {
+        if ($recipient == MAILER_FROM) {
             // this is BCC to Uprzejmie Donoszę, ignore it
             \webhook\mark($id);
             \semaphore\release($semaphore);
@@ -87,10 +88,11 @@ class WebhooksHandler extends AbstractHandler {
         \webhook\mark($id);
         \semaphore\release($semaphore);
 
-        if ($mailEvent->status == 'failed')
+        if ($mailEvent->status == 'failed' && !$ccToUser)
             (new MailGun())->notifyUser($application,
                 "Nie udało się nam dostarczyć wiadomości zgłoszenia {$application->getNumber()}",
-                $mailEvent->getReason());
+                $mailEvent->getReason(),
+                $recipient);
 
         return $this->renderJson($response, array(
             "status" => "OK"

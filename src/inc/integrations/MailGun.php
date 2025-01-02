@@ -87,11 +87,11 @@ class MailGun extends CityAPI {
         return $application;
     }
 
-    function notifyUser(app\Application &$application, string $subject, string $reason){
+    function notifyUser(app\Application &$application, string $subject, string $reason, string $recipient){
         $messageBody = initBareTwig()->render('_notification.email.twig', [
             'app' => $application,
             'reason' => $reason,
-            'sm' => $application->guessSMData()->getShortName()
+            'recipient' => $recipient
         ]);
         $transport = Transport::fromDsn(MAILER_DSN);
         $mailer = new Mailer($transport); 
