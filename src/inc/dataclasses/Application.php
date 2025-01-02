@@ -74,8 +74,8 @@ class Application extends JSONObject implements \JsonSerializable {
         if (!($this->encrypted ?? false))
             return;
 
-        if ($_SESSION['user_id'] == null) {
-            throw new \Exception("Application is encrypted, but no user_id is set");
+        if (!($_SESSION['user_id'] ?? false)) {
+            return;
         }
         $decode = fn($value) => \crypto\decode($value, $_SESSION['user_id'], $this->id . $this->added);
         $this->user = new JSONObject($decode($this->user));
