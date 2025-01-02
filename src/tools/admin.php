@@ -167,7 +167,8 @@ function getAllApplicationsByStatus($status){
     return $apps;
 }
 
-function getAllUsers() {
+function upgradeAllUsers($dryRun=true) {
+    global $interrupt;
     $sql = <<<SQL
         select key, value
         from users;
@@ -175,12 +176,25 @@ function getAllUsers() {
     $stmt = \store\prepare($sql);
     $stmt->execute();
 
-    $users = Array();
-
+    $users = array();
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $users[$row[0]] = new User($row[1]);
+        $users[$row[0]] = $row[1];
     }
-    return $users;
+    foreach ($users as $email => $json) {
+        if ($interrupt) exit;
+        if (!fakeFirebaseId($email)) {
+            continue;
+        }
+        echo date(DT_FORMAT) . " migrating user $email:\n";  
+        $user = new User($json);
+        unset($user->data->myAppsSize);
+        unset($user->data->autoSend);
+        unset($user->data->exposeData);
+
+        if(!$dryRun) {
+            \user\save($user);
+        }
+    }
 }
 
 function getTopAppsToMigrate(string $version): array {
@@ -197,9 +211,9 @@ function getTopAppsToMigrate(string $version): array {
 
     $apps = Array();
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $apps[$row[0]] = Application::withJson($row[1]);
+        $apps[$row[0]] = $row[1];
     }
-    return $apps;   
+    return $apps;
 }
 
 
@@ -211,40 +225,28 @@ function upgradeAllApps($version, $dryRun=true){
         if ($interrupt) exit;
         echo "\nGetting top 1K apps to migrate. Batch $counter\n\n";
         $apps = getTopAppsToMigrate($version);
-        foreach ($apps as $appId => $app) {
+        foreach ($apps as $appId => $json) {
             if ($interrupt) exit;
-            updateApp($app, $version, $dryRun);
+            updateApp($json, $version, $dryRun);
         }
         $counter++;
     }
 }
 
-function upgradeAllUsers($dryRun=true) {
-    global $interrupt;
-    $users = getAllUsers();
-    foreach ($users as $email => $user) {
-        if ($interrupt) exit;
-        echo date(DT_FORMAT) . " migrating user $email:\n";
-        fakeFirebaseId($email);
-        unset($user->data->myAppsSize);
-        unset($user->data->autoSend);
-        unset($user->data->exposeData);
-
-        if(!$dryRun) {
-            \user\save($user);
-        }
+function updateApp(string $json, string $version, bool $dryRun) {
+    $encoded = json_decode($json);
+    if (!fakeFirebaseId($encoded->user->email)) {
+        return;
     }
-}
+    $app = Application::withJson($json);
 
-function updateApp($app, $version, $dryRun) {
-    global $STATUSES;
-    $added = (isset($app->added))? " added on {$app->added}": "";
     $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
-    $status = $STATUSES[$app->status]->name;
-    echo "  - migrating app $number [$status] by {$app->user->email}$added\n";
+    echo "  - migrating app $number by {$app->user->email}\n";
     $app->version = $version;
 
-    fakeFirebaseId($app->user->email);
+    if (!isset($app->added)) # one time fix
+        $app->added = $app->date;
+
     unset($app->user->myAppsSize);
     unset($app->user->autoSend);
     unset($app->user->exposeData);
@@ -281,7 +283,7 @@ function refreshRecydywa() {
 }
 
 $firebaseDb = null;
-function fakeFirebaseId(string $email): void {
+function fakeFirebaseId(string $email): bool {
     global $firebaseDb;
     if (!$firebaseDb) {
         $firebaseDb = json_decode(file_get_contents(__DIR__ . '/../../save_file.json'), true);
@@ -290,11 +292,12 @@ function fakeFirebaseId(string $email): void {
 
     if (!isset($firebaseDb[$email])) {
         $_SESSION['user_id'] = null;
-        echo "  error migrating user $email: No firebase id\n";
-        return;
+        //echo "  error migrating user $email: No firebase id\n";
+        return false;
     }
 
     $_SESSION['user_id'] = $firebaseDb[$email];
+    return true;
 }
 
 
@@ -304,6 +307,6 @@ function fakeFirebaseId(string $email): void {
 // removeUser('szymon@nieradka.net', false);
 
 //define('DB_FILENAME', __DIR__ . '/../../docker/db/store.sqlite');
-upgradeAllUsers(true);
+upgradeAllUsers(false);
 // refreshRecydywa();
-// upgradeAllApps('2.4.0', false);
+upgradeAllApps('2.5.0', false);
