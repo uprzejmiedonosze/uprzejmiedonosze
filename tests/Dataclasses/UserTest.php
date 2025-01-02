@@ -2,6 +2,7 @@
 
 namespace UprzejmieDonosze\Tests\Dataclasses;
 
+use Exception;
 use MissingParamException;
 use PHPUnit\Framework\TestCase;
 use user\User;
@@ -147,5 +148,37 @@ class UserTest extends TestCase
     {
         $user = new User();
         $this->assertTrue($user->shareRecydywa());
+    }
+
+    public function testEncode()
+    {
+        $user = new User();
+        $user->number = 3;
+        $user->data->name = 'John Doe';
+        $user->data->email = 'John@Doe';
+        $_SESSION['user_id'] = 1;
+
+        $encoded = $user->encode();
+        $decoded = new User($encoded);
+        $encoded = json_decode($encoded);
+
+        $this->assertNotEquals($user->data->name, $encoded->data->name);
+        $this->assertEquals($user->data->name, $decoded->data->name);
+    }
+
+    public function testEncodeNoSession()
+    {
+        $user = new User();
+        $user->number = 3;
+        $user->data->name = 'John Doe';
+        $user->data->email = 'John@Doe';
+        $_SESSION['user_id'] = 1;
+
+        $encoded = $user->encode();
+
+        $_SESSION['user_id'] = null;
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("User data is encrypted, but no user_id is set");
+        new User($encoded);
     }
 }

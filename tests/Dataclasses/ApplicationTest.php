@@ -5,7 +5,6 @@ namespace UprzejmieDonosze\Tests\Dataclasses;
 use PHPUnit\Framework\TestCase;
 use app\Application;
 use Error;
-use MailGun;
 use user\User;
 
 class ApplicationTest extends TestCase
@@ -161,5 +160,46 @@ class ApplicationTest extends TestCase
         $user->method('getEmail')->willReturn('other@example.com');
 
         $this->assertFalse($app->isAppOwner(null));
+    }
+
+    public function testEncode()
+    {
+        $app = Application::withJson($this->appJson);
+        $_SESSION['user_id'] = 1;
+
+        $encoded = $app->encode();
+        $decoded = Application::withJson($encoded);
+        $encoded = json_decode($encoded);
+
+        $this->assertIsString($encoded->user);
+        $this->assertEquals($app->user->name, $decoded->user->name);
+    }
+
+    public function testEncodeNoSession()
+    {
+        $app = Application::withJson($this->appJson);
+        $_SESSION['user_id'] = 1;
+
+        $encoded = $app->encode();
+
+        $_SESSION['user_id'] = null;
+        $decoded = Application::withJson($encoded);
+        $this->assertIsString($decoded->user);
+        $this->assertIsString($decoded->address);
+        $this->assertTrue($decoded->encrypted);
+    }
+
+    public function testEncodeOtherSession()
+    {
+        $app = Application::withJson($this->appJson);
+        $_SESSION['user_id'] = 1;
+
+        $encoded = $app->encode();
+
+        $_SESSION['user_id'] = 2;
+        $decoded = Application::withJson($encoded);
+        $this->assertIsString($decoded->user);
+        $this->assertIsString($decoded->address);
+        $this->assertTrue($decoded->encrypted);
     }
 }
