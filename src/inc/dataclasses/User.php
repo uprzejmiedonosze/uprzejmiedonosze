@@ -57,12 +57,12 @@ class User extends \JSONObject{
         $clone = new User(json_encode($this));
         $clone->encrypted = true;
 
-        $encode = fn(&$value) => $value = \crypto\encode($value, $_SESSION['user_id'], $clone->number . $clone->data->email);
+        $encode = fn(&$value) => $value && ($value = \crypto\encode($value, $_SESSION['user_id'], $clone->number . $clone->data->email));
 
         $encode($clone->data->name);
         $encode($clone->data->msisdn);
         $encode($clone->data->address);
-        if (isset($clone->data->edelivery)) $encode($clone->data->edelivery);
+        $encode($clone->data->edelivery);
         $encode($clone->lastLocation);
         return json_encode($clone);
     }
@@ -77,12 +77,12 @@ class User extends \JSONObject{
         if ($_SESSION['user_id'] == null) {
             throw new \Exception("User data is encrypted, but no user_id is set");
         }
-        $decode = fn(&$value) => $value = \crypto\decode($value, $_SESSION['user_id'], $this->number . $this->data->email);
+        $decode = fn(&$value) => $value && ($value = \crypto\decode($value, $_SESSION['user_id'], $this->number . $this->data->email));
 
         $decode($this->data->name);
         $decode($this->data->msisdn);
         $decode($this->data->address);
-        if (isset($this->data->edelivery)) $decode($this->data->edelivery);
+        $decode($this->data->edelivery);
         $decode($this->lastLocation);
         unset($this->encrypted);
         
