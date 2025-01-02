@@ -3,6 +3,8 @@
 const CIPHER = 'AES-256-CBC';
 const IV_LENGTH = 16; // openssl_cipher_iv_length(CIPHER);
 
+class DecodingException extends \Exception {}
+
 function encode(string $message, string $uuid, string $salt): string {
     return __base64urlEncode(
         openssl_encrypt(
@@ -33,7 +35,7 @@ function __openssl_decrypt(
         iv:  __initVector($salt)
     );
     if ($ret === false) {
-        throw new \Exception("Decryption failed $salt $uuid");
+        throw new DecodingException("Decryption failed $salt $uuid");
     }
     return $ret;
 }

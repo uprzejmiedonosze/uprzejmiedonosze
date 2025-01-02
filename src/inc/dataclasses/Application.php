@@ -38,7 +38,7 @@ class Application extends JSONObject implements \JsonSerializable {
         if(!isset($instance->seq) && $instance->hasNumber()) {
             $instance->seq = extractAppNumer($instance->getNumber());
         }
-        if (!isset($instance->user->sex)) {
+        if (!isset($instance->user->sex) && !$instance->isEncrypted()) {
             $instance->user->sex = User::_guessSex($instance->user->name);
         }
         return $instance;
@@ -88,6 +88,10 @@ class Application extends JSONObject implements \JsonSerializable {
             $this->userComment = $decode($this->userComment);
         
         unset($this->encrypted);
+    }
+
+    private function isEncrypted(): bool {
+        return $this->encrypted ?? false;
     }
 
     /**
@@ -324,7 +328,7 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     public function guessUserSex(){
-        return SEXSTRINGS[$this->user->sex];
+        return SEXSTRINGS[$this->user->sex ?? '?'];
     }
 
     /**
