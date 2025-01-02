@@ -14,12 +14,28 @@ function encode(string $message, string $uuid, string $salt): string {
 }
 
 function decode(string $message, string $uuid, string $salt): string {
-    return openssl_decrypt(
+    return __openssl_decrypt(
         data: __base64urlDecode($message),
+        uuid: $uuid,
+        salt: $salt);
+}
+
+function __openssl_decrypt(
+    string $data,
+    string $uuid,
+    string $salt
+): string {
+    $ret = openssl_decrypt(
+        data: $data,
         cipher_algo: CIPHER,
         passphrase: __passphrase($uuid),
         options: 0,
-        iv: __initVector($salt));
+        iv:  __initVector($salt)
+    );
+    if ($ret === false) {
+        throw new \Exception("Decryption failed $salt $uuid");
+    }
+    return $ret;
 }
 
 function __passphrase(string $passphrase): string {
