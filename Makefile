@@ -363,6 +363,7 @@ lint-php:
 		cleancode,codesize,controversial,design,naming,unusedcode | wc -l
 
 test-phpunit: $(DIRS) $(EXPORT)/public/api/config/sm.json $(EXPORT)/public/api/config/stop-agresji.json $(EXPORT)/config.php process-php minify-config
+	@echo "==> Testing phpunit"
 	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
 	./vendor/phpunit/phpunit/phpunit --display-deprecations tests
 
