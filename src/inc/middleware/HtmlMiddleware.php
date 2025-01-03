@@ -27,7 +27,6 @@ class HtmlMiddleware implements MiddlewareInterface {
             'uri' => $_SERVER['REQUEST_URI'],
             'isLoggedIn' => $isLoggedIn,
             'hasApps' => false,
-            'isAdmin' => false,
             'galleryCount' => 0,
             'isProd' => isProd(),
             'isStaging' => isStaging()

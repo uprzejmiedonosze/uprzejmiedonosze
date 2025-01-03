@@ -8,16 +8,18 @@ W załączeniu znajduje się zgłoszenie wraz ze zdjęciami oraz mapką prezentu
 Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.
 
 
-{% if app.hasNumber() and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+{% if app.hasNumber() and config.isAppOwner ?? false and config.withUserData %}
 Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}
 {% endif %}
 
 Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-Doręczeń {{ app.user.edelivery }}{% else %}e-mail {{ app.user.email }}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.{% endif %}
 
+{% if config.withUserData %}
 Zgłaszający:
 
   {{ app.user.name }}
   {{ app.user.address }}
   {{ app.user.msisdn ?? '' }}
+{% endif %}
 
 Uwaga: Uprzejmie Donoszę nie tylko pomaga mieszkańcom w przygotowaniu poprawnego zgłoszenia, ale także stara się pomóc funkcjonariuszom Straży Miejskiej i Policji w ukaraniu sprawcy wykroczenia. Zachęcam do kontaktu z autorem (ud@uprzejmiedonosze.net) jeśli mają Państwo propozycje usprawnień ułatwiających proces wystawiania mandatu.

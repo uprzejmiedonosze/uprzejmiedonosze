@@ -26,11 +26,11 @@ abstract class CityAPI {
         ]), 0, $limit);
     }
 
-    function formatEmail(Application &$application, $withUserData = null){
+    function formatEmail(Application &$application, bool $withUserData) {
         $twig = initBareTwig();
         return $twig->render('_application.email.twig', [
-            'app' => $application, 
-            'config' => [ 'isAppOwnerOrAdmin' => $withUserData ],
+            'app' => $application,
+            'withUserData' => $withUserData,
             'now' => date(DT_FORMAT)
         ]);
     }

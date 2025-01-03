@@ -167,13 +167,6 @@ class User extends \JSONObject{
         ));
     }
 
-    /**
-    * Super ugly function returning true for beta users.
-    */
-    function isBeta(){
-        return $this->isAdmin();
-    }
-
     function updateUserData(string $name, string $msisdn, string $address, string $edelivery, bool $stopAgresji, bool $shareRecydywa){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);

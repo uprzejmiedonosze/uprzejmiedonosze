@@ -100,7 +100,6 @@ class StaticPagesHandler extends AbstractHandler {
     
         $user = $request->getAttribute('user');
         $isAppOwner = $application->isAppOwner($user);
-        $isAppOwnerOrAdmin = $user?->isAdmin() || $isAppOwner;
     
         return AbstractHandler::renderHtml($request, $response, "zgloszenie", [
             'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
@@ -110,7 +109,6 @@ class StaticPagesHandler extends AbstractHandler {
                 "w okolicy adresu {$application->address->address}. {$application->getCategory()->getInformal()}",
             'app' => $application,
             'config' => [
-                'isAppOwnerOrAdmin' => $isAppOwnerOrAdmin,
                 'isAppOwner' => $isAppOwner
             ]
         ]);

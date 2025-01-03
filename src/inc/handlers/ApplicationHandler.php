@@ -49,7 +49,7 @@ class ApplicationHandler extends AbstractHandler {
                 throw new Exception("Nie mogę pozwolić na edycję zgłoszenia w statusie " . $application->getStatus()->name, 403);
             }
 
-            if (!($application->isAppOwner($user) || $user->isAdmin())) {
+            if (!$application->isAppOwner($user)) {
                 throw new Exception("Próba edycji cudzego zgłoszenia. Nieładnie!");
             }
 
@@ -151,7 +151,6 @@ class ApplicationHandler extends AbstractHandler {
 
         return AbstractHandler::renderHtml($request, $response, 'potwierdz', [
             'config' => [
-                'isAppOwnerOrAdmin' => true,
                 'confirmationScreen' => true
             ],
             'app' => $application,

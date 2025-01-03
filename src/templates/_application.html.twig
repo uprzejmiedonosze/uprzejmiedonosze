@@ -3,12 +3,6 @@
 {% if config.confirmationScreen is not defined %}
     {% if not dialog %}
     <h2>Zgłoszenie wykroczenia {{ app.number ?? '' }}</h2>
-        {% if general.isAdmin and not config.isAppOwner %}
-        <h3>
-            Podgląd administratora.
-            <small><a href="nowe-zgloszenie.html?edit={{ app.id }}">(edit)</a></small>
-        </h3>
-        {% endif %} {# admin #}
     {% endif %} {# not dialog#}
 {% endif %} {# not confirmationScreen #}
     
@@ -49,7 +43,7 @@
             mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.</p>
     
 
-    {% if app.hasNumber and config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+    {% if app.hasNumber and config.isAppOwner ?? false %}
         <p>Dokument ze zgłoszeniem dostępny jest pod adresem
             <a href="/{{ app.id }}.pdf" download="{{ app.number }}">{{ app.number }}.pdf</a>.
         </p>
@@ -62,7 +56,7 @@
         {% else %}
             <p>Zweryfikuj lokalizację i swoje dane:<br /><br />
         {% endif %}
-        {% if config.isAppOwnerOrAdmin is defined and config.isAppOwnerOrAdmin %}
+        {% if config.isAppOwner ?? false %}
                 <b>{{ app.user.name }}</b>
                 <br />
                 {{ app.user.email }}<br />
