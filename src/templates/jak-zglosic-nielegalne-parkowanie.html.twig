@@ -27,7 +27,8 @@
   <li>{{ _self.link('telefon', 'Telefon') }} – używaj, kiedy walczysz z całymi nielegalnymi parkingami.</li>
   <li>{{ _self.link('kmz', 'Krajowa Mapa Zagrożeń') }} – patoparkingi lub powtarzające się nielegalne parkowanie.</li>
   <li>{{ _self.link('policja', 'Stop Agresji Drogowej') }} – kiedy masz film z jeżdżenia po chodniku lub przejściu dla pieszych.</li>
-  <li>{{ _self.link('slupki', 'Wniosek o słupki') }} – ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</li>
+  <li>{{ _self.link('slupki2', 'Wniosek o uzupełnienie słupków') }} – stosuj do uzupełnienia zniszczonej infrastruktury.</li>
+  <li>{{ _self.link('slupki', 'Wniosek o nowe słupki') }} – ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</li>
   <li>{{ _self.link('naklejki', 'Naklejki/mazak') }} – gdy zawiodły inne środki, na recydywę i „obcokrajowców”.</li>
 </ul>
 
@@ -166,11 +167,46 @@
     </div>
   </div>
 
-  <div class="howto" id="slupki">
-    <h3 class="title">Składając wniosek o słupki</h3>
+  <div class="howto" id="slupki2">
+    <h3 class="title">Składając wniosek o uzupełnienie słupków</h3>
     <div class="card">
       <figure>
         <img src="/img/how-stick.png?width=800&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Kiedy stosować:</em> do zgłaszania wyrwanych bądź uszkodzonych słupków.
+        </p>
+        <p>
+          Możesz korzystać z aplikacji miejskich, takich jak
+          <a href="https://warszawa19115.pl/incydenty" target="_blank" rel="external">19115 Warszawa</a>,
+          <a href="https://alertszczecin.pl/" target="_blank" rel="external">Alert Szczecin</a> czy
+          <a href="https://smartcitypoznan.pl/" target="_blank" rel="external">Smart City Poznań</a>.
+          W pozostałych miastach wpisz w wyszukiwarkę „zarząd dróg nazwa-miasta” i poszukaj adresu email.
+        </p>
+        <p>
+          Sam wniosek (bez względu na formę) musi zawierać lokalizację, opis problemu oraz zdjęcie.
+          Warto podkreślić, że słupek w tym miejscu był i został uszkodzony/usunięty. Czasem można
+          posiłkować się historycznymi zdjęciami z Google Street View/Apple Maps.
+        </p>
+        <p>
+          <em>Anonimowość:</em> nie jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }} dla urzędnika,
+          który rozpatruje twój wniosek. Ale jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }} względem
+          kierowców, którzy stracili swój dziki parking.
+        </p>
+        <p><em>Skuteczność:</em> zależna od miasta, ale zazwyczaj duża. O ile bardzo trudno jest
+          zmusić gminę do postawienia nowego słupka, to relatywnie łatwo jest skutecznie zgłosić ich 
+          naprawienie.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="howto" id="slupki">
+    <h3 class="title">Składając wniosek o nowe słupki</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-stick2.jpg?width=800&as=png&quality=90">
       </figure>
       <div class="content">
         <p>
@@ -178,16 +214,9 @@
           to jedyne skuteczne narzędzie.
         </p>
         <p>
-          Sprawdź wnikliwie, czy przypadkiem w miejscu które jest niszczone przez 
-          kierowców <em>nie było wcześniej słupków</em>, ale zostały wyrwane. Jeśli tak, to
-          wystarczy prosty email ze zdjęciem do zarządcy drogi (najczęściej spółka
-          mająca „zarząd dróg” w nazwie). Jeśli twoje miasto ma aplikację/serwis pozwalający
-          zgłaszać mieszkańcom problemy z infrastrukturą – skorzystaj z niej.
-        </p>
-        <p>
-          Jeśli słupków w tym miejscu nigdy nie było, sprawdź, czy <em>nie jest to teren wspólnoty
-            mieszkaniowej</em>. Wbrew pozorom to wiele ułatwia. Proste email do wspólnoty potrafi 
-            być skuteczny, i po 2-3 miesiącach miejsce może zostać zabezpieczone.
+          Sprawdź, czy <em>nie jest to teren wspólnoty
+          mieszkaniowej</em>. Wbrew pozorom to wiele ułatwia. Proste email do wspólnoty potrafi 
+          być skuteczny, i po 2-3 miesiącach miejsce może zostać zabezpieczone.
         </p>
         <p>
           Jeśli jest to teren miasta, to musisz napisać swój email 
