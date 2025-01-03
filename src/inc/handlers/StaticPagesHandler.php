@@ -256,6 +256,7 @@ class StaticPagesHandler extends AbstractHandler {
             'aplikacja',
             'changelog',
             'epuap',
+            'e-doreczenia',
             'jak-zglosic-nielegalne-parkowanie',
             'maintenance',
             'mandat',
