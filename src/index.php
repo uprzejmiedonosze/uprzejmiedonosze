@@ -137,7 +137,7 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
 
     $group->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request) {
         $path = $request->getUri()->getPath();
-        logger("404 $path", true);
+        logger("not-found $path");
         throw new HttpNotFoundException($request);
     });
 })  ->add(new HtmlMiddleware())
