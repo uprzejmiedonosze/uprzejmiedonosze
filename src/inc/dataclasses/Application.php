@@ -50,7 +50,7 @@ class Application extends JSONObject implements \JsonSerializable {
     function encode(): string {
         return json_encode($this);
         // @TODO: disabled for now
-        
+
         if ($_SESSION['user_id'] == null) {
             logger("Can't encode application without user_id ({$this->id})", true);
             return json_encode($this);
@@ -137,7 +137,7 @@ class Application extends JSONObject implements \JsonSerializable {
           - extended address property
         2.1.0
         */
-        $instance->version = '2.4.0';
+        $instance->version = '2.5.1';
         $instance->browser = $_SERVER['HTTP_USER_AGENT'];
         return $instance;
     }
