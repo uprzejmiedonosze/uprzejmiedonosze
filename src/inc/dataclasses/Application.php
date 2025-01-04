@@ -48,6 +48,9 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function encode(): string {
+        return json_encode($this);
+        // @TODO: disabled for now
+        
         if ($_SESSION['user_id'] == null) {
             logger("Can't encode application without user_id ({$this->id})", true);
             return json_encode($this);
@@ -71,6 +74,8 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function decode(): void {
+        return;
+        // @TODO: disabled for now
         if (!($this->encrypted ?? false))
             return;
 
