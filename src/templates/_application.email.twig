@@ -7,8 +7,7 @@ W załączeniu znajduje się zgłoszenie wraz ze zdjęciami oraz mapką prezentu
 
 Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.
 
-
-{% if app.hasNumber() and isAppOwner ?? false and withUserData %}
+{% if app.hasNumber() and withUserData %}
 Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}
 {% endif %}
 
