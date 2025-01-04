@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsByDay", {
     data: {
-      csvURL: window.location.origin + "/stats/statsByDay.csv",
+      csvURL: window.location.origin + "/stats/statsByDay.csv?sessionless",
       firstRowAsNames: false
     },
     chart: {
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsByYear", {
     data: {
-      csvURL: window.location.origin + "/stats/byYear.csv",
+      csvURL: window.location.origin + "/stats/byYear.csv?sessionless",
       firstRowAsNames: false
     },
     chart: {
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsAppsByCity", {
     data: {
-      csvURL: window.location.origin + "/stats/appsByCity.csv",
+      csvURL: window.location.origin + "/stats/appsByCity.csv?sessionless",
       firstRowAsNames: false
     },
     chart: {
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   Highcharts.chart("statsByCarBrand", {
     data: {
-      csvURL: window.location.origin + "/stats/byCarBrand.csv",
+      csvURL: window.location.origin + "/stats/byCarBrand.csv?sessionless",
       firstRowAsNames: false
     },
     chart: {
