@@ -7,16 +7,15 @@ ENV HOME=/root
 # Install packages, create directories, and set ownership in one RUN command
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     apt-get --no-install-recommends -y install \
-        locales vim curl xtail \
+        locales vim curl xtail sqlite3 \
         memcached texlive ca-certificates \
         php-fpm php-sqlite3 php-curl \
         php-opcache php-mbstring php-gd \
         php-memcache php-memcached php-intl \
-        ffmpeg \
-        lmodern texlive-lang-polish texlive-latex-recommended texlive-latex-extra && \
+        lmodern texlive-lang-polish \
+        texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     mkdir -p /var/www/uprzejmiedonosze.localhost/db \
-             /var/www/uprzejmiedonosze.localhost/cdn \
              /var/www/uprzejmiedonosze.localhost/cdn2 \
              /var/www/uprzejmiedonosze.localhost/video \
              /var/log/uprzejmiedonosze.net \
