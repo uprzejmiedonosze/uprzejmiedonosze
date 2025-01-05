@@ -152,7 +152,6 @@ class UserTest extends TestCase
 
     public function testEncode()
     {
-        $this->markTestSkipped('enable after encryption is implemented');
         $user = new User();
         $user->number = 3;
         $user->data->name = 'John Doe';
@@ -169,7 +168,6 @@ class UserTest extends TestCase
 
     public function testEncodeNoSession()
     {
-        $this->markTestSkipped('enable after encryption is implemented'); 
         $user = new User();
         $user->number = 3;
         $user->data->name = 'John Doe';
