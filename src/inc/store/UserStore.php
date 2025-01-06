@@ -201,25 +201,3 @@ function _countAppsByStatus(string $userEmail): Array{
     $ret = $stmt->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_GROUP);
     return array_map(function ($status) { return $status[0]; }, $ret);
 }
-
-function byName($name, $apiToken){
-    if($apiToken !== API_TOKEN){
-        throw new \Exception('Dostęp zabroniony');
-    }
-    $sql = <<<SQL
-        select key, value 
-        from users
-        where lower(json_extract(value, '$.data')) like '%' || lower(:name) || '%'
-        limit 10;
-SQL;
-
-    $stmt = \store\prepare($sql);
-    $stmt->bindValue(':name', $name);
-    $stmt->execute();
-
-    $users = Array();
-    while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $users[$row[0]] = new User($row[1]);
-    }
-    return $users;
-}
