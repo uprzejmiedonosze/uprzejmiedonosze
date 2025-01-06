@@ -10,18 +10,18 @@ $currentUser = null;
 current();
 
 // getUser
-function get(string $email): User {
+function get(string $email, bool $dontDecode=false): User {
     $json = \store\get(TABLE, $email);
     if(!$json){
         throw new \Exception("Próba pobrania nieistniejącego użytkownika '$email'", 404);
     }
-    $user = new User($json);
+    $user = new User($json, $dontDecode);
     setSentryTag("userNumber", $user->getNumber() ?? 0);
     return $user;
 }
 
 function canShareRecydywa(string $email): bool {
-    return get($email)->shareRecydywa();
+    return get($email, true)->shareRecydywa();
 }
 
 // saveUser

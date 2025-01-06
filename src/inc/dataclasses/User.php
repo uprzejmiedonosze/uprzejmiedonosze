@@ -19,13 +19,15 @@ class User extends \JSONObject{
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function __construct($json = null) {
+    public function __construct($json=null, bool $dontDecode=false){
         global $_SESSION;
         if($json){
             parent::__construct($json);
-            $this->decode();
-            if (!isset($this->data->sex)) {
-                $this->guessSex();
+            if (!$dontDecode) {
+                $this->decode();
+                if (!isset($this->data->sex)) {
+                    $this->guessSex();
+                }
             }
             return;
         }
