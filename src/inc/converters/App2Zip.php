@@ -12,9 +12,9 @@ function toZip(Application &$application): array{
         throw new \Exception("Błąd tworzenia archiwum ZIP.");
     }
     $zip->addFile(ROOT . $application->contextImage->url,
-        $application->getAppFilename('-1.jpg'));
+        $application->getAppFilename('a.jpg'));
     $zip->addFile(ROOT . $application->carImage->url,
-        $application->getAppFilename('-2.jpg'));
+        $application->getAppFilename('b.jpg'));
     $zip->close();
 
     return [$fullPath, $filename];
