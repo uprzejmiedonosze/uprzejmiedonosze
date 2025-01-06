@@ -24,7 +24,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     chown www-data:www-data /var/log/uprzejmiedonosze.net /var/cache/uprzejmiedonosze.net
 
 COPY --chown=www-data:www-data db          /var/www/uprzejmiedonosze.localhost/db
-COPY --chown=www-data:www-data cdn2         /var/www/uprzejmiedonosze.localhost/cdn2
+COPY --chown=www-data:www-data cdn         /var/www/uprzejmiedonosze.localhost/cdn
 COPY --chown=www-data:www-data sess_php    /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
 COPY nginx.conf   /etc/nginx/
 COPY nginx_php_configuration.conf   /etc/nginx/
