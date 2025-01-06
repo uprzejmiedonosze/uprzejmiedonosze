@@ -85,6 +85,9 @@ class MailGun extends CityAPI {
             unset($application->sent);
             \app\save($application);
             throw new Exception($error->getMessage(), 500, $error);
+        } finally {
+            \app\rmPdf($application);
+            \app\rmZip($application);
         }
         return $application;
     }

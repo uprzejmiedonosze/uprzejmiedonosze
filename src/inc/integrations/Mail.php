@@ -62,19 +62,20 @@ class Mail extends CityAPI {
         $application->sent->messageId = $messageId;
         $application->sent->method = "Mail";
 
-        [$fileatt, $fileattname] = \app\toPdf($application);
-
-        $message->attachFromPath($fileatt, $fileattname);
-
-        if ($this->withXls) {
-            $message->addPart(new DataPart(
-                \app\App2Xls($application),
-                $application->getAppFilename('.xls'),
-                "application/vnd.ms-excel"
-            ));
-        }
-
         try {
+            [$fileatt, $fileattname] = \app\toPdf($application);
+            $message->attachFromPath($fileatt, $fileattname);
+            [$fileatt, $fileattname] = \app\toZip($application);
+            $message->attachFromPath($fileatt, $fileattname);
+
+            if ($this->withXls) {
+                $message->addPart(new DataPart(
+                    \app\App2Xls($application),
+                    $application->getAppFilename('.xls'),
+                    "application/vnd.ms-excel"
+                ));
+            }
+
             if (!isDev())
                 $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
@@ -82,6 +83,9 @@ class Mail extends CityAPI {
             unset($application->sent);
             \app\save($application);
             throw new Exception($error, 500);
+        } finally {
+            \app\rmPdf($application);
+            \app\rmZip($application);
         }
 
         \app\save($application);

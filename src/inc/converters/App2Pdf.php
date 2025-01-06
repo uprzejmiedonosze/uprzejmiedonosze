@@ -17,6 +17,18 @@ function toPdf(Application &$application): array{
     return [$pdf, $filename];
 }
 
+function rmPdf(Application &$application): void{
+    $userNumber = $application->getUserNumber();
+    $baseDir = checkUserFoder($userNumber);
+
+    $filename = $application->getAppFilename('.pdf');
+    $pdf = "$baseDir/$filename";
+
+    if (file_exists($pdf)) {
+        unlink($pdf);
+    }
+}
+
 /**
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
