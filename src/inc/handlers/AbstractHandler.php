@@ -30,9 +30,25 @@ abstract class AbstractHandler {
         $response = $response->withStatus(200);
 
         $fullImagePath = ROOT . $path;
-        $image = file_get_contents($fullImagePath);
+        if (strpos($path, '?pixelate') !== false) {
+            $fullImagePath = str_replace('?pixelate', '', $fullImagePath);
+            $image = AbstractHandler::pixelate($fullImagePath);
+        } else {
+            $image = file_get_contents($fullImagePath);
+        }
+
         $response->getBody()->write($image);
         return $response;
+    }
+
+    private static function pixelate(string $imagePath): string {
+        $src = imagecreatefromjpeg($imagePath);
+        imagefilter($src, IMG_FILTER_PIXELATE, 10, true);
+        ob_start();
+        imagejpeg($src);
+        $stringdata = ob_get_contents();
+        ob_end_clean();
+        return $stringdata;
     }
 
     public static function renderCsv(Response $response, $content, $filename): Response {

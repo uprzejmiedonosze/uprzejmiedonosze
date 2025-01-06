@@ -38,11 +38,9 @@
                     <div> {{ app.getDate|raw }}</div>
                 </div>
             </h3>
-            {% if app.showImage %}
             <figure>
                 <img src="{{ app.getSafeImageUrl }}">
             </figure>
-            {% endif %}
             <div class="content">
                 <div class="application-details-list">
                     <div class="no-icon category">
