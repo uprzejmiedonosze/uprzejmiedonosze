@@ -2,7 +2,7 @@
 
 namespace app;
 
-function App2Xls(Application &$app) {
+function app2Xls(Application &$app) {
     $data = array(
         "L.P." => '',
         "Nr służbowy" => '',
@@ -37,13 +37,13 @@ function App2Xls(Application &$app) {
 
 function _array2xls(array &$data): string {
     $header = implode("\t", array_keys($data)) . "\n";
-    function filterData(string|null &$str): void {
+    
+    array_walk($data, function (string|null &$str): void {
         $str = $str ?? '';
         $str = preg_replace("/\t/", "\\t", $str);
         $str = preg_replace("/\r?\n/", "\\n", $str);
         if (strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
-    }
-    array_walk($data, 'filterData');
+    });
     $content = implode("\t", array_values($data)) . "\n";
     return $header . $content;
 }
