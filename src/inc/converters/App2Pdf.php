@@ -1,24 +1,16 @@
 <?PHP namespace app;
 
-require_once(__DIR__ . '/include.php');
-
-use \Exception as Exception;
 use \Twig\Cache\FilesystemCache as FilesystemCache;
 use \Twig\Environment as Environment;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
-
-const ROOT = '/var/www/%HOST%/';
 
 function toPdf(Application &$application): array{
     $appId = $application->id;
 
     $userNumber = $application->getUserNumber();
-    $baseDir = ROOT . "cdn2/$userNumber";
-    if(!file_exists($baseDir)){
-        mkdir($baseDir, 0755, true);
-    }
+    $baseDir = checkUserFoder($userNumber);
 
-    $filename = $application->getAppPDFFilename();
+    $filename = $application->getAppFilename('.pdf');
     $pdf = "$baseDir/$appId.pdf";
     _tex2pdf($application, $pdf);
 
@@ -32,7 +24,7 @@ function toPdf(Application &$application): array{
 function _tex2pdf(array|Application $application, string $destFile) {
     $file = tempnam(sys_get_temp_dir(), 'tex-' . $application->id . '-');
     if($file === false) {
-        throw new Exception("Failed to create temporary file");
+        throw new \Exception("Failed to create temporary file");
     }
 
     $tex_f = "$file.tex";
@@ -41,7 +33,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
     $log_f = "$file.log";
     $pdf_f = "$file.pdf";
 
-    $loader = new FilesystemLoader(__DIR__ . '/../templates');
+    $loader = new FilesystemLoader(__DIR__ . '/../../templates');
     $twig = new Environment($loader,
     [
         'debug' => !isProd(),
@@ -74,7 +66,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
 
     if(!file_exists($pdf_f)) {
         @unlink($file);
-        throw new Exception("Błąd generowania pliku PDF.");
+        throw new \Exception("Błąd generowania pliku PDF.");
     }
 
     @unlink($log_f);

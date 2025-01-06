@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../converters/App2Pdf.php');
+require_once(__DIR__ . '/../converters/index.php');
 
 use app\Application;
 use Symfony\Component\Mailer\Transport;
@@ -51,30 +51,32 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader("o:testmode", isDev());
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
-        $application->setStatus('sending');
-        $application->sent = new JSONObject();
-        $application->sent->date = date(DT_FORMAT);
-        $application->sent->subject = $subject;
-        $application->sent->to = $to;
-        $application->sent->cc = "{$application->user->name} ({$application->user->email})";
-        $application->sent->from = "uprzejmiedonosze.net (" . MAILER_FROM . ")";
-        $application->sent->body = parent::formatEmail($application, false);
-        $application->sent->method = "MailGun";
-        \app\save($application);
-
-        [$fileatt, $fileattname] = \app\toPdf($application);
-
-        logger("Sending email {$application->id} with MailGun, sent->to {$application->sent->to}");
-        $message->attachFromPath($fileatt, $fileattname);
-        if ($this->withXls) {
-            $message->addPart(new DataPart(
-                XlsHandler::Application2Xls($application),
-                $application->getAppXlsFilename(),
-                "application/vnd.ms-excel"
-            ));
-        }
-
         try {
+            $application->setStatus('sending');
+            $application->sent = new JSONObject();
+            $application->sent->date = date(DT_FORMAT);
+            $application->sent->subject = $subject;
+            $application->sent->to = $to;
+            $application->sent->cc = "{$application->user->name} ({$application->user->email})";
+            $application->sent->from = "uprzejmiedonosze.net (" . MAILER_FROM . ")";
+            $application->sent->body = parent::formatEmail($application, false);
+            $application->sent->method = "MailGun";
+            \app\save($application);
+
+            logger("Sending email {$application->id} with MailGun, sent->to {$application->sent->to}");
+            [$fileatt, $fileattname] = \app\toPdf($application);
+            $message->attachFromPath($fileatt, $fileattname);
+            [$fileatt, $fileattname] = \app\toZip($application);
+            $message->attachFromPath($fileatt, $fileattname);
+
+            if ($this->withXls) {
+                $message->addPart(new DataPart(
+                    \app\App2Xls($application),
+                    $application->getAppFilename('.xls'),
+                    "application/vnd.ms-excel"
+                ));
+            }
+
             $mailer->send($message);
             logger("Sending email {$application->id} with MailGun, sent");
         } catch (TransportExceptionInterface $error) {

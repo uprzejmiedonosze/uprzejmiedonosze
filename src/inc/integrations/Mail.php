@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../converters/App2Pdf.php');
+require_once(__DIR__ . '/../converters/index.php');
 
 use app\Application;
 use Symfony\Component\Mailer\Transport;
@@ -68,8 +68,8 @@ class Mail extends CityAPI {
 
         if ($this->withXls) {
             $message->addPart(new DataPart(
-                XlsHandler::Application2Xls($application),
-                $application->getAppXlsFilename(),
+                \app\App2Xls($application),
+                $application->getAppFilename('.xls'),
                 "application/vnd.ms-excel"
             ));
         }
