@@ -1,7 +1,7 @@
 <?PHP
 
 require_once(__DIR__ . '/AbstractHandler.php');
-require_once(__DIR__ . '/../converters/App2Pdf.php');
+require_once(__DIR__ . '/../converters/index.php');
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
