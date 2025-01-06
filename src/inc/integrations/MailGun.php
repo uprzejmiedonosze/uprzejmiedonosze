@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../PDFGenerator.php');
+require_once(__DIR__ . '/../converters/App2Pdf.php');
 
 use app\Application;
 use Symfony\Component\Mailer\Transport;
@@ -62,7 +62,7 @@ class MailGun extends CityAPI {
         $application->sent->method = "MailGun";
         \app\save($application);
 
-        [$fileatt, $fileattname] = application2PDF($application);
+        [$fileatt, $fileattname] = \app\toPdf($application);
 
         logger("Sending email {$application->id} with MailGun, sent->to {$application->sent->to}");
         $message->attachFromPath($fileatt, $fileattname);

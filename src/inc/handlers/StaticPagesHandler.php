@@ -1,7 +1,7 @@
 <?PHP
 
 require_once(__DIR__ . '/AbstractHandler.php');
-require_once(__DIR__ . '/../PDFGenerator.php');
+require_once(__DIR__ . '/../converters/App2Pdf.php');
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -84,7 +84,8 @@ class StaticPagesHandler extends AbstractHandler {
      */
     public function applicationPdf(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
-        [$path, $filename] = application2PDFById($appId);
+        $application = \app\get($appId);
+        [$path, $filename] = \app\toPdf($application);
         return AbstractHandler::renderPdf($response, $path, $filename);
     }
 

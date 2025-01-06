@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '/../PDFGenerator.php');
+require_once(__DIR__ . '/../converters/App2Pdf.php');
 
 use app\Application;
 use Symfony\Component\Mailer\Transport;
@@ -62,7 +62,7 @@ class Mail extends CityAPI {
         $application->sent->messageId = $messageId;
         $application->sent->method = "Mail";
 
-        [$fileatt, $fileattname] = application2PDF($application);
+        [$fileatt, $fileattname] = \app\toPdf($application);
 
         $message->attachFromPath($fileatt, $fileattname);
 

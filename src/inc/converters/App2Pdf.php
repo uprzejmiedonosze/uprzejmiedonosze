@@ -1,29 +1,15 @@
-<?PHP
+<?PHP namespace app;
+
 require_once(__DIR__ . '/include.php');
 
-use app\Application;
 use \Exception as Exception;
 use \Twig\Cache\FilesystemCache as FilesystemCache;
 use \Twig\Environment as Environment;
 use \Twig\Loader\FilesystemLoader as FilesystemLoader;
-use user\User;
 
 const ROOT = '/var/www/%HOST%/';
 
-function application2PDFById(string $appId): array {
-    if(!isset($appId)){
-        throw new Exception("Próba pobrania zgłoszenia w formacie PDF bez wskazania appId", 400);
-    }
-
-    $application = \app\get($appId);
-    if(!isset($application)){
-        throw new Exception("Próba pobrania zgłoszenia nieistniejącego zgłoszenia $appId", 404);
-    }
-
-    return application2PDF($application);
-}
-
-function application2PDF(Application &$application): array{
+function toPdf(Application &$application): array{
     $appId = $application->id;
 
     $userNumber = $application->getUserNumber();
@@ -34,8 +20,7 @@ function application2PDF(Application &$application): array{
 
     $filename = $application->getAppPDFFilename();
     $pdf = "$baseDir/$appId.pdf";
-    //if(!file_exists($pdf))
-    tex2pdf($application, $pdf);
+    _tex2pdf($application, $pdf);
 
     return [$pdf, $filename];
 }
@@ -44,7 +29,7 @@ function application2PDF(Application &$application): array{
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  * @SuppressWarnings(PHPMD.ErrorControlOperator)
  */
-function tex2pdf(array|Application $application, string $destFile) {
+function _tex2pdf(array|Application $application, string $destFile) {
     $file = tempnam(sys_get_temp_dir(), 'tex-' . $application->id . '-');
     if($file === false) {
         throw new Exception("Failed to create temporary file");
@@ -98,4 +83,3 @@ function tex2pdf(array|Application $application, string $destFile) {
     rename($pdf_f, $destFile);
     @unlink($file);
 }
-?>
