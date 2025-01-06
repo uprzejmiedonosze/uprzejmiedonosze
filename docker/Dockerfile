@@ -9,7 +9,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     apt-get --no-install-recommends -y install \
         locales vim curl xtail sqlite3 \
         memcached texlive ca-certificates \
-        php-fpm php-sqlite3 php-curl \
+        php-fpm php-sqlite3 php-curl php-zip \
         php-opcache php-mbstring php-gd \
         php-memcache php-memcached php-intl \
         lmodern texlive-lang-polish \
@@ -24,7 +24,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     chown www-data:www-data /var/log/uprzejmiedonosze.net /var/cache/uprzejmiedonosze.net
 
 COPY --chown=www-data:www-data db          /var/www/uprzejmiedonosze.localhost/db
-COPY --chown=www-data:www-data cdn         /var/www/uprzejmiedonosze.localhost/cdn
+COPY --chown=www-data:www-data cdn2         /var/www/uprzejmiedonosze.localhost/cdn2
 COPY --chown=www-data:www-data sess_php    /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
 COPY nginx.conf   /etc/nginx/
 COPY nginx_php_configuration.conf   /etc/nginx/
