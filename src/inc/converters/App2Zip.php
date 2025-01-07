@@ -4,7 +4,7 @@ function toZip(Application &$application): array{
     $userNumber = $application->getUserNumber();
     $baseDir = checkUserFoder($userNumber);
 
-    $filename = $application->getAppFilename('.zip');
+    $filename = $application->getAppFilename('.zip', 'Zdjecia_');
     $fullPath = "$baseDir/$filename";
 
     $zip = new \ZipArchive;

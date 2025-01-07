@@ -254,8 +254,8 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->status = $status;
     }
 
-    public function getAppFilename(string $ext): string {
-        return 'Zgloszenie_' . str_replace('/', '-', $this->number) . "$ext";
+    public function getAppFilename(string $suffix, string $prefix='Zgloszenie_'): string {
+        return $prefix . str_replace('/', '-', $this->number) . "$suffix";
     }
 
     /**
