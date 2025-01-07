@@ -164,7 +164,6 @@ class ApplicationTest extends TestCase
 
     public function testEncode()
     {
-        $this->markTestSkipped('enable after encryption is implemented');
         $app = Application::withJson($this->appJson);
         $_SESSION['user_id'] = 1;
 
@@ -178,7 +177,6 @@ class ApplicationTest extends TestCase
 
     public function testEncodeNoSession()
     {
-        $this->markTestSkipped('enable after encryption is implemented');
         $app = Application::withJson($this->appJson);
         $_SESSION['user_id'] = 1;
 
@@ -188,12 +186,11 @@ class ApplicationTest extends TestCase
         $decoded = Application::withJson($encoded);
         $this->assertIsString($decoded->user);
         $this->assertIsString($decoded->address);
-        $this->assertTrue($decoded->encrypted);
+        $this->assertIsString($decoded->encrypted);
     }
 
     public function testEncodeOtherSession()
     {
-        $this->markTestSkipped('enable after encryption is implemented');
         $app = Application::withJson($this->appJson);
         $_SESSION['user_id'] = 1;
 
@@ -203,6 +200,6 @@ class ApplicationTest extends TestCase
         $decoded = Application::withJson($encoded);
         $this->assertIsString($decoded->user);
         $this->assertIsString($decoded->address);
-        $this->assertTrue($decoded->encrypted);
+        $this->assertIsString($decoded->encrypted);
     }
 }

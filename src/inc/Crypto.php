@@ -10,7 +10,7 @@ function encode(string $message, string $uuid, string $salt): string {
         openssl_encrypt(
             data: $message,
             cipher_algo: CIPHER,
-            passphrase: __passphrase($uuid),
+            passphrase: passphrase($uuid),
             options: 0,
             iv: __initVector($salt)));
 }
@@ -30,7 +30,7 @@ function __openssl_decrypt(
     $ret = openssl_decrypt(
         data: $data,
         cipher_algo: CIPHER,
-        passphrase: __passphrase($uuid),
+        passphrase: passphrase($uuid),
         options: 0,
         iv:  __initVector($salt)
     );
@@ -40,7 +40,7 @@ function __openssl_decrypt(
     return $ret;
 }
 
-function __passphrase(string $passphrase): string {
+function passphrase(string $passphrase): string {
     return hash('sha256', $passphrase);
 }
 

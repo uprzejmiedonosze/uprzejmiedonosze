@@ -48,15 +48,12 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function encode(): string {
-        return json_encode($this);
-        // @TODO: disabled for now
-
         if ($_SESSION['user_id'] == null) {
             logger("Can't encode application without user_id ({$this->id})", true);
             return json_encode($this);
         }
         $clone = Application::withJson(json_encode($this));
-        $clone->encrypted = true;
+        $clone->encrypted = \crypto\passphrase($_SESSION['user_id'] . $clone->id . $clone->added);
 
         $encode = fn($value) => \crypto\encode($value, $_SESSION['user_id'], $clone->id . $clone->added);
         $clone->user = $encode(json_encode($clone->user));
@@ -74,14 +71,22 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function decode(): void {
-        return;
-        // @TODO: disabled for now
+        // not encrypted
         if (!($this->encrypted ?? false))
             return;
 
+        // public access, no session
         if (!($_SESSION['user_id'] ?? false)) {
             return;
         }
+
+        // other user opened
+        $encrypted = \crypto\passphrase($_SESSION['user_id'] . $this->id . $this->added);
+        if ($encrypted != $this->encrypted) {
+            logger("Can't decode application ({$this->id}) with wrong passphrase");
+            return;
+        }
+
         $decode = fn($value) => \crypto\decode($value, $_SESSION['user_id'], $this->id . $this->added);
         $this->user = new JSONObject($decode($this->user));
         $this->privateComment = $decode($this->privateComment);
@@ -262,27 +267,14 @@ class Application extends JSONObject implements \JsonSerializable {
      * Defines if a plate image should be included in the application.
      * True if plate image is present, and user didn't change plateId
      * value in the application.
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function shouldIncludePlateImage(): bool {
-        if(!isset($this->carInfo)){
-            return false;
-        }
-        if(!@$this->carInfo->plateId){
-            return false;
-        }
-        if(isset($this->carInfo->plateIdFromImage)
-            && $this->carInfo->plateIdFromImage == $this->carInfo->plateId){
-            return true;
-        }
-        return false;
+        return ($this->carInfo->plateIdFromImage ?? false )
+            == ($this->carInfo->plateId ?? true);
     }
 
     public function stopAgresji() {
-        if(isset($this->stopAgresji)){
-            return $this->stopAgresji;
-        }
-        return false;
+        return $this->stopAgresji ?? false;
     }
 
     /**
