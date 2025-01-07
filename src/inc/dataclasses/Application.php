@@ -48,7 +48,9 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     function encode(): string {
-        if ($_SESSION['user_id'] == null) {
+        return json_encode($this);
+
+        if (!isset($_SESSION['user_id'])) {
             logger("Can't encode application without user_id ({$this->id})", true);
             return json_encode($this);
         }
