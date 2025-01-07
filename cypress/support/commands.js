@@ -3,7 +3,7 @@ Cypress.Commands.add("login", () => {
     if (Cypress.env('DOCKER')) {
       cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0')
     } else {
-      cy.setCookie('UDSESSIONID', '3341ec29r3okfsqetn0o447399979216n0p3dgjk')
+      cy.setCookie('UDSESSIONID', 'mc48egedks8oebpaf4ulkhaopuck5d1s73sl505d')
     }
   }, {
     cacheAcrossSpecs: true
