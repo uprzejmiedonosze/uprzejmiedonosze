@@ -2,8 +2,6 @@
 
 require_once(__DIR__ . '/../include.php');
 
-const ROOT = '/var/www/%HOST%/';
-
 function checkUserFoder(string $userNumber): string{
     $baseDir = ROOT . "cdn2/$userNumber";
     if(!file_exists($baseDir))

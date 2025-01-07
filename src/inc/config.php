@@ -8,6 +8,8 @@ const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
 
 const CONFIG_DIR = __DIR__ . '/../public/api/config';
 
+const ROOT = '/var/www/%HOST%/';
+
 
 const CATEGORIES_CONFIG = CONFIG_DIR . '/categories.json';
 $categories = fopen(CATEGORIES_CONFIG, "r") or die("Unable to open config file: " . CATEGORIES_CONFIG);
