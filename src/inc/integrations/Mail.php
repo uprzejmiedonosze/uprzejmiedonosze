@@ -70,7 +70,7 @@ class Mail extends CityAPI {
 
             if ($this->withXls) {
                 $message->addPart(new DataPart(
-                    \app\App2Xls($application),
+                    \app\app2Xls($application),
                     $application->getAppFilename('.xls'),
                     "application/vnd.ms-excel"
                 ));
