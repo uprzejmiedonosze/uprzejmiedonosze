@@ -3,7 +3,6 @@
 if (!defined('DB_FILENAME'))
     define('DB_FILENAME', __DIR__ . '/../../../db/store.sqlite');
 
-const KEY = 'key';
 $store = null;
 
 function store(): \PDO
@@ -43,17 +42,14 @@ function get(string $table, string $key): string|null
     }
 
     $stmt = store()->prepare(
-        'SELECT * FROM ' . $table . ' WHERE ' . KEY
-        . ' = :key;'
+        "SELECT value FROM $table WHERE key = :key;"
     );
     $stmt->bindParam(':key', $key, \PDO::PARAM_STR);
     $stmt->execute();
 
-    $row = $stmt->fetch(\PDO::FETCH_NUM);
-    if ($row)
-        return $row[1];
-
-    return null;
+    $value = $stmt->fetch(\PDO::FETCH_COLUMN);
+    if (!$value) return null;
+    return $value;
 }
 
 function set(string $table, string $key, string $value, string $email = null): string
@@ -66,9 +62,9 @@ function set(string $table, string $key, string $value, string $email = null): s
         throw new \InvalidArgumentException('Expected string as value');
     }
 
-    $queryString = 'REPLACE INTO ' . $table . ' VALUES (:key, :value);';
+    $queryString = "REPLACE INTO $table VALUES (:key, :value);";
     if ($email) {
-        $queryString = 'REPLACE INTO ' . $table . ' VALUES (:key, :value, :email);';
+        $queryString = "REPLACE INTO $table VALUES (:key, :value, :email);";
     }
     $stmt = store()->prepare($queryString);
     $stmt->bindParam(':key', $key, \PDO::PARAM_STR);
@@ -84,8 +80,7 @@ function set(string $table, string $key, string $value, string $email = null): s
 function delete(string $table, string $key): void
 {
     $stmt = store()->prepare(
-        'DELETE FROM ' . $table . ' WHERE ' . KEY
-        . ' = :key;'
+        "DELETE FROM $table WHERE key = :key;"
     );
     $stmt->bindParam(':key', $key, \PDO::PARAM_STR);
     $stmt->execute();
