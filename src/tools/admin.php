@@ -261,8 +261,7 @@ function refreshRecydywa() {
     $sql = <<<SQL
         select json_extract(value, '$.carInfo.plateId') as plateId,
             count(key) as appsCnt,
-            count(distinct email) as usersCnt,
-            count(distinct json_extract(value, '$.address.city')) as citiesCnt
+            count(distinct email) as usersCnt
         from applications 
         where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
         group by 1;
