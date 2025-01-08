@@ -114,7 +114,7 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
         $message->getHeaders()->addTextHeader("v:environment", environment());
         $message->getHeaders()->addTextHeader("v:nofitication", true);
-        $message->getHeaders()->addTextHeader("o:tag", $application->address->city ?? '-no-city');
+        $message->getHeaders()->addTextHeader("o:tag", $application->smCity ?? '-no-city');
         $message->getHeaders()->addTextHeader("o:testmode", isDev());
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
