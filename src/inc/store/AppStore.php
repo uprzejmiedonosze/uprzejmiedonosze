@@ -10,11 +10,18 @@ function get(string $appId): Application {
         throw new \Exception("Próba pobrania zgłoszenia bez podania numeru");
     }
     @setSentryTag("appId", $appId);
-    $json = \store\get(TABLE, $appId);
-    if(!$json){
+
+    $stmt = \store\prepare(
+        'SELECT value, email FROM ' . TABLE . ' WHERE key = :key;'
+    );
+    $stmt->bindValue(':key', $appId, \PDO::PARAM_STR);
+    $stmt->execute();
+
+    $row = $stmt->fetch(\PDO::FETCH_NUM);
+    if(!$row){
         throw new \Exception("Próba pobrania nieistniejącego zgłoszenia '$appId'", 404);
     }
-    $application = Application::withJson($json);
+    $application = Application::withJson($row[0], $row[1]);
     return $application;
 }
 
@@ -22,12 +29,12 @@ function save(Application $application): Application{
     @setSentryTag("appId", $application->id);
     if($application->status !== 'draft' && $application->status !== 'ready') {
         if(!$application->hasNumber()) {
-            $appNumber = nextNumber($application->user->email);
+            $appNumber = nextNumber($application->email);
             $application->seq = $appNumber;
             $application->number = 'UD/' . $application->user->number . '/' . $appNumber;
         }
     }
-    \store\set(TABLE, $application->id, $application->encode(), $application->user->email);
+    \store\set(TABLE, $application->id, $application->encode(), $application->email);
 
     if ($application->carInfo->plateId ?? false) {
         $cleanPlateId = \recydywa\cleanPlateId($application->carInfo->plateId);
@@ -44,7 +51,7 @@ function checkId(string $appId): bool {
 function sent(int $daysAgo=31): array {
     $olderThan = date('Y-m-d\TH:i:s', strtotime("-$daysAgo days"));
     $sql = <<<SQL
-        select key, value
+        select key, value, email
         from applications
         where email = :email
             and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE', 'confirmed-sm')
@@ -60,7 +67,7 @@ function sent(int $daysAgo=31): array {
     $apps = Array();
 
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $apps[$row[0]] = Application::withJson($row[1]);
+        $apps[$row[0]] = Application::withJson($row[1], $row[2]);
     }
 
     usort($apps, function ($left, $right) {
@@ -107,7 +114,7 @@ function byPlate(string $plateId): array|null {
     $cleanPlateId = \SQLite3::escapeString($cleanPlateId);
 
     $sql = <<<SQL
-        select value
+        select value, email
         from applications 
         where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
         and json_extract(value, '$.carInfo.plateId') in (:plateId, :cleanPlateId);
@@ -119,7 +126,7 @@ function byPlate(string $plateId): array|null {
     $stmt->execute();
 
     $apps = $stmt->fetchAll(\PDO::FETCH_FUNC,
-        fn($value) => Application::withJson($value));
+        fn($json, $email) => Application::withJson($json, $email));
 
     \cache\set(Type::AppsByPlate, $cleanPlateId, $apps);
     return $apps;
@@ -130,7 +137,7 @@ function byNumber($number, $apiToken){
         throw new \Exception('Dostęp zabroniony');
     }
     $sql = <<<SQL
-        select value 
+        select value, email
         from applications
         where lower(json_extract(value, '$.number')) = lower(:number)
         limit 1;
@@ -140,7 +147,9 @@ SQL;
     $stmt->bindValue(':number', $number);
     $stmt->execute();
 
-    return Application::withJson($stmt->fetch(\PDO::FETCH_NUM)[0]);
+    $row = $stmt->fetch(\PDO::FETCH_NUM);
+
+    return Application::withJson($row[0], $row[1]);
 }
 
 function galleryByCity(bool $useCache=true){

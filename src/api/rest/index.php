@@ -194,12 +194,8 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
     
         $application->formattedText = json_decode($appJson);
     
-        if ($application->user->email !== $user->getEmail()) {
-            $application->user->email = '';
-            $application->user->name = '';
-            $application->user->address = '';
-            $application->user->msisdn = '';
-            $application->user->sex = 'f';
+        if ($application->email !== $user->getEmail()) {
+            $application->user = '';
         }
     
         $response->getBody()->write(json_encode($application));
@@ -309,7 +305,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $application = \app\get($appId);
         $user = $request->getAttribute('user');
     
-        if ($application->user->email !== $user->getEmail()) {
+        if ($application->email !== $user->getEmail()) {
             throw new HttpForbiddenException($request, "Użytkownik '{$user->getEmail()}' nie ma uprawnień do wysłania zgłoszenia '$appId'");
         }
     

@@ -59,7 +59,7 @@
         {% if config.isAppOwner ?? false %}
                 <b>{{ app.user.name }}</b>
                 <br />
-                {{ app.user.email }}<br />
+                {{ app.email }}<br />
                 {{ app.user.address }}<br />
                 {% if app.user.msisdn ?? false %}Tel: <span class="msisdn">{{ app.user.msisdn }}</span><br />{% endif %}
                 {% if app.user.edelivery ?? false %}e-Doręczenia: <span class="edelivery">{{ app.user.edelivery ?? '' }}</span>{% endif %}

@@ -28,9 +28,10 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function withJson($json): Application {
+    public static function withJson($json, string $email): Application {
         $instance = new self();
         $instance->__fromJson($json);
+        $instance->email = $email;
         $instance->decode();
         @$instance->statusHistory = (array)$instance->statusHistory;
         @$instance->comments = (array)$instance->comments;
@@ -54,7 +55,7 @@ class Application extends JSONObject implements \JsonSerializable {
             logger("Can't encode application without user_id ({$this->id})", true);
             return json_encode($this);
         }
-        $clone = Application::withJson(json_encode($this));
+        $clone = Application::withJson(json_encode($this), $this->email);
         $clone->encrypted = \crypto\passphrase($_SESSION['user_id'] . $clone->id . $clone->added);
 
         $encode = fn($value) => \crypto\encode($value, $_SESSION['user_id'], $clone->id . $clone->added);
@@ -153,11 +154,12 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->user = clone $user->data;
         $this->user->number = $user->getNumber();
         $this->stopAgresji = $user->stopAgresji();
+        $this->email = $user->getEmail();
         unset($this->user->stopAgresji);
     }
 
     public function wasSent(): bool {
-        return isset($this->sent) && isset($this->sent->date) && !in_array($this->status, ['draft', 'ready', 'confirmed']);
+        return isset($this->sent) && !in_array($this->status, ['draft', 'ready', 'confirmed']);
     }
 
     public function setLatLng(string|null $latLng): void {
@@ -219,7 +221,7 @@ class Application extends JSONObject implements \JsonSerializable {
         if(isset($this->user->number)){
             return $this->user->number;
         }
-        $user = \user\get($this->user->email);
+        $user = \user\get($this->email);
         $this->user->number = $user->number;
         return $this->user->number;
     }
@@ -351,7 +353,7 @@ class Application extends JSONObject implements \JsonSerializable {
 
     public function isCurrentUserOwner(){
         try {
-            return \user\currentEmail() == $this->user->email;
+            return \user\currentEmail() == $this->email;
         } catch(Exception $e) {
             return false;
         }
@@ -553,7 +555,7 @@ class Application extends JSONObject implements \JsonSerializable {
 
     public function isAppOwner(User|null $user): bool {
         if (!$user) return false;
-        return $user->getEmail() == $this->user->email;
+        return $user->getEmail() == $this->email;
     }
 
     /**

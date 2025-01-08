@@ -203,7 +203,7 @@ class StaticPagesHandler extends AbstractHandler {
 
             // display image if this is user's own application, other user
             // added it to gallery or allowed sharing globally
-            $app->showImage = \user\canShareRecydywa($app->user->email)
+            $app->showImage = \user\canShareRecydywa($app->email)
                 || $app->statements->gallery
                 || $app->isAppOwner;
 

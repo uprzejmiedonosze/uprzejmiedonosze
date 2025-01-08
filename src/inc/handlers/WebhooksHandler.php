@@ -60,7 +60,7 @@ class WebhooksHandler extends AbstractHandler {
 
         $comment = $mailEvent->formatComment();
         if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
-        $ccToUser = $application->sent->to !== $recipient;
+        $ccToUser = $application->email == $recipient;
 
         if ($recipient == MAILER_FROM) {
             // this is BCC to Uprzejmie Donoszę, ignore it

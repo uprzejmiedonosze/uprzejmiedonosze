@@ -37,11 +37,11 @@ class Mail extends CityAPI {
         $message->from(new Address(EMAIL_SENDER, 'uprzejmiedonosze.net'));
         $message->to($to);
         $message->subject($subject);
-        $message->cc(new Address($application->user->email, $application->user->name));
+        $message->cc(new Address($application->email, $application->user->name));
         $message->text(parent::formatEmail($application, true));
-        $message->sender($application->user->email);
-        $message->replyTo(new Address($application->user->email, $application->user->name));
-        $message->returnPath($application->user->email);
+        $message->sender($application->email);
+        $message->replyTo(new Address($application->email, $application->user->name));
+        $message->returnPath($application->email);
         
         $message->getHeaders()->addTextHeader("X-UD-AppId", $application->id);
         $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
@@ -56,7 +56,7 @@ class Mail extends CityAPI {
         $application->sent->date = date(DT_FORMAT);
         $application->sent->subject = $subject;
         $application->sent->to = $to;
-        $application->sent->cc = "{$application->user->name} ({$application->user->email})";
+        $application->sent->cc = "{$application->user->name} ({$application->email})";
         $application->sent->from = "uprzejmiedonosze.net (" . EMAIL_SENDER . ")";
         $application->sent->body = parent::formatEmail($application, false);
         $application->sent->messageId = $messageId;

@@ -26,7 +26,7 @@ function updateApplication(
     User $user,
 ): Application {
 
-    if ($application->user->email !== $user->getEmail()) {
+    if ($application->email !== $user->getEmail()) {
         throw new ForbiddenException("Odmawiam aktualizacji zgłoszenia '{$application->id}' przez '{$user->getEmail()}'");
     }
 

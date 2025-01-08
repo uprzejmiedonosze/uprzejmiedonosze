@@ -38,10 +38,10 @@ class MailGun extends CityAPI {
         $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
         $message->to($to);
         $message->subject($subject);
-        $message->cc(new Address($application->user->email, $application->user->name));
+        $message->cc(new Address($application->email, $application->user->name));
         $message->bcc(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
         $message->text(parent::formatEmail($application, true));
-        $message->replyTo(new Address($application->user->email, $application->user->name));
+        $message->replyTo(new Address($application->email, $application->user->name));
         
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
@@ -57,7 +57,7 @@ class MailGun extends CityAPI {
             $application->sent->date = date(DT_FORMAT);
             $application->sent->subject = $subject;
             $application->sent->to = $to;
-            $application->sent->cc = "{$application->user->name} ({$application->user->email})";
+            $application->sent->cc = "{$application->user->name} ({$application->email})";
             $application->sent->from = "uprzejmiedonosze.net (" . MAILER_FROM . ")";
             $application->sent->body = parent::formatEmail($application, false);
             $application->sent->method = "MailGun";
@@ -102,7 +102,7 @@ class MailGun extends CityAPI {
         $mailer = new Mailer($transport); 
         $message = (new Email());
         $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
-        $message->to(new Address($application->user->email, $application->user->name));
+        $message->to(new Address($application->email));
         $message->cc(new Address('ud@uprzejmiedonosze.net', 'Uprzejmie Donoszę'));
         $message->subject($subject);
         $message->text($messageBody);

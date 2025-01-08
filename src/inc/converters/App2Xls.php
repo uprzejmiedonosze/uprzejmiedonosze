@@ -9,7 +9,7 @@ function app2Xls(Application &$app) {
         "Osoba zgłaszająca" => $app->user->name,
         "Adres" => $app->user->address,
         "Telefon" => $app->user->msisdn ?? '',
-        "Mail" => $app->user->email,
+        "Mail" => $app->email,
         "Znak zgłoszenia/maila" => $app->number,
         "Data wpływu" => date('Y-m-d'),
         "Data rejestr." => '',

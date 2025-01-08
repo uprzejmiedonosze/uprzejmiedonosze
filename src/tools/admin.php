@@ -77,7 +77,7 @@ function removeApplication($app, $dryRun){
     $added = (isset($app->added))? " dodane {$app->added}": "";
     $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
     $status = $STATUSES[$app->status]->name;
-    $email = (isset($app->user->email))? " użytkownika {$app->user->email}": " użytkownika @anonim";
+    $email = (isset($app->email))? " użytkownika {$app->email}": " użytkownika @anonim";
     echo "Usuwam zgłoszenie numer $number [$status]$email$added\n";
     if(isset($app->carImage)){
         removeFile($app->carImage->url, $dryRun);
@@ -136,7 +136,7 @@ function removeAppsByStatus($olderThan, $status, $dryRun){ // days
         if ($interrupt) exit;
         if(isset($app->added)){
             if($app->added > $latest){
-                echo "Not removing $app->id from $app->added by {$app->user->email} as it's still fresh\n";
+                echo "Not removing $app->id from $app->added by {$app->email} as it's still fresh\n";
                 continue;
             }
         }
@@ -152,7 +152,7 @@ function removeAppsByStatus($olderThan, $status, $dryRun){ // days
  */
 function getAllApplicationsByStatus($status){
     $sql = <<<SQL
-        select key, value
+        select key, value, email
         from applications
         where json_extract(value, '$.status') = :status;
     SQL;
@@ -162,7 +162,7 @@ function getAllApplicationsByStatus($status){
 
     $apps = Array();
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $apps[$row[0]] = Application::withJson($row[1]);
+        $apps[$row[0]] = Application::withJson($row[1], $row[2]);
     }
     return $apps;
 }
@@ -238,10 +238,10 @@ function updateApp(string $json, string $version, bool $dryRun) {
     if (!fakeFirebaseId($encoded->user->email)) {
         return;
     }
-    $app = Application::withJson($json);
+    $app = Application::withJson($json, $encoded->email);
 
     $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
-    echo "  - migrating app $number by {$app->user->email}\n";
+    echo "  - migrating app $number by {$app->email}\n";
     $app->version = $version;
 
     if (!isset($app->added)) # one time fix

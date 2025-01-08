@@ -27,7 +27,7 @@ class AppMiddleware implements MiddlewareInterface {
         $application = \app\get($appId);
         $user = $request->getAttribute('user');
 
-        if ($this->failOnWrongOwnership && $application->user->email !== $user->getEmail()) {
+        if ($this->failOnWrongOwnership && $application->email !== $user->getEmail()) {
             throw new HttpForbiddenException($request, "User '{$user->getEmail()}' is not allowed to change app '$appId'");
         }
 

@@ -90,7 +90,7 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
     }
 
     $sql = <<<SQL
-        select value
+        select value, email
         from applications
         where email = :email
             $whereStatus
@@ -104,7 +104,7 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
     $stmt->execute($params);
 
     return $stmt->fetchAll(\PDO::FETCH_FUNC,
-        fn($value) => \app\Application::withJson($value));
+        fn($json, $email) => \app\Application::withJson($json, $email));
 }
 
 

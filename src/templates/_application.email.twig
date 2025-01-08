@@ -11,7 +11,7 @@ Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego
 Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}
 {% endif %}
 
-Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-Doręczeń {{ app.user.edelivery }}{% else %}e-mail {{ app.user.email }}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.{% endif %}
+Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-Doręczeń {{ app.user.edelivery }}{% else %}e-mail {{ app.email }}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.{% endif %}
 
 {% if withUserData %}
 Zgłaszający:
