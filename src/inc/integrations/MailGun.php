@@ -109,7 +109,6 @@ class MailGun extends CityAPI {
         $message->text($messageBody);
         
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
-        $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
         $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
         $message->getHeaders()->addTextHeader("v:environment", environment());
