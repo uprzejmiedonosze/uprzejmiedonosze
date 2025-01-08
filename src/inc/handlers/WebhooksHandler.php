@@ -43,7 +43,7 @@ class WebhooksHandler extends AbstractHandler {
         if(isset($payload['user-variables']['nofitication'])) {
             // this is a notification triggered by an email sent by this webhook
             // so I have to ignore it not to trigger an endless loop
-            \webhook\mark($id);
+            \webhook\mark($id, 'this is notification, ignoring');
             return $this->renderJson($response, array(
                 "type" => "notification",
                 "status" => "ignored"
@@ -64,7 +64,7 @@ class WebhooksHandler extends AbstractHandler {
 
         if ($recipient == MAILER_FROM) {
             // this is BCC to Uprzejmie Donoszę, ignore it
-            \webhook\mark($id);
+            \webhook\mark($id, 'bcc to ud@, ignoring');
             \semaphore\release($semaphore);
             return $this->renderJson($response, array(
                 "type" => "notification",
