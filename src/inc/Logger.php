@@ -12,6 +12,13 @@ function isDev(): bool {
     return !isProd() && !isStaging();
 }
 
+function environment(): string {
+    if (isProd()) return 'prod';
+    if (isStaging()) return 'staging';
+    return 'dev';
+
+}
+
 function trimAbsolutePaths(string $backtrace): string {
     $backtrace = preg_replace('/^.*\/var\/www\/.*\/webapp\//im', '  #UD ', $backtrace);
     return preg_replace('/^.*\/var\/www\/.*\/vendor\//im', '  ', $backtrace);

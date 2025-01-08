@@ -32,10 +32,10 @@ class WebhooksHandler extends AbstractHandler {
         $userNumber = $payload['user-variables']['userid'];
         $recipient = $payload['recipient'];
         
-        if($payload['user-variables']['isprod'] !== "1") {
-            \webhook\mark($id);
+        if(($payload['user-variables']['environment'] ?? 'prod') !== environment()) {
+            \webhook\mark($id, 'other environment, ignoring');
             return $this->renderJson($response, array(
-                "type" => "non-prod",
+                "type" => "other-env",
                 "status" => "ignored"
             ));
         }
