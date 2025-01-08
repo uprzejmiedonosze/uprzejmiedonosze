@@ -211,7 +211,7 @@ class Application extends JSONObject implements \JsonSerializable {
      * Returns application number (UD/X/Y)
      */
     public function getNumber(){
-        return $this->hasNumber() ? $this->number : null;
+        return $this->number ?? null;
     }
 
     /**
@@ -432,7 +432,6 @@ class Application extends JSONObject implements \JsonSerializable {
             return $this->address->mapImage;
         }
 
-        // @TODO refactor warning (duże copy-paste z api.html:saveImgAndThumb())
         $baseDir = 'cdn2/' . $this->getUserNumber();
         if(!file_exists('/var/www/%HOST%/' . $baseDir)){
             mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);

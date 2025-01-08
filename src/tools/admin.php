@@ -302,10 +302,6 @@ function fakeFirebaseId(string $email): bool {
 
 //removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
 //removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
-
-// removeUser('szymon@nieradka.net', false);
-
-//define('DB_FILENAME', __DIR__ . '/../../docker/db/store.sqlite');
 upgradeAllUsers(false);
 // refreshRecydywa();
 upgradeAllApps('2.5.0', false);
