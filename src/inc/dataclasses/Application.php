@@ -50,7 +50,7 @@ class Application extends JSONObject implements \JsonSerializable {
      */
     function encode(): string {
         if (!isset($_SESSION['user_id'])) {
-            logger("Can't encode application without user_id ({$this->id})", true);
+            logger("Can't encode application without user_id ({$this->id})");
             return json_encode($this);
         }
         $clone = Application::withJson(json_encode($this), $this->email);
