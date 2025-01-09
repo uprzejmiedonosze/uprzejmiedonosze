@@ -340,6 +340,9 @@ class Application extends JSONObject implements \JsonSerializable {
     public function getStatus(){
         global $STATUSES;
         $status = $STATUSES[$this->status];
+
+        if ($this->isEncrypted())
+            return $status;
         if (!$this->guessSMData()->isPolice())
             return $status;
         if (str_ends_with($status->action, 'w SM')) {
