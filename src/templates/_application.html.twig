@@ -6,7 +6,7 @@
     {% endif %} {# not dialog#}
 {% endif %} {# not confirmationScreen #}
     
-{% if app.sent is defined and not app.encrypted %}
+{% if app.sent is defined and not app.isEncrypted %}
     {% if app.sent.method == 'Mail' or app.sent.method == 'MailGun' %}
     <b class="appSentInfo">To zgłoszenie zostało wysłane do {{ app.guessSMData.getShortName }} &lt;{{ app.sent.to }}&gt;
         bezpośrednio z serwera Uprzejmie Donoszę o {{ app.getSentDate("H'<sup>'mm'</sup>', d MMM y")|raw }}.</b>
@@ -34,7 +34,7 @@
     {% endif %}
             </p>
 
-    {% if app.userComment is defined and app.userComment and not app.encrypted %}
+    {% if app.userComment is defined and app.userComment and not app.isEncrypted %}
         <p>{{ app.getAHrefedComment | raw }}</p>
     {% endif %}
 

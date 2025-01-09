@@ -101,7 +101,7 @@ class Application extends JSONObject implements \JsonSerializable {
         unset($this->encrypted);
     }
 
-    private function isEncrypted(): bool {
+    public function isEncrypted(): bool {
         return $this->encrypted ?? false;
     }
 
