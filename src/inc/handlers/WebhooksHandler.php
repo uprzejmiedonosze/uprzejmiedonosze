@@ -52,7 +52,19 @@ class WebhooksHandler extends AbstractHandler {
         $mailEvent = new MailEvent($payload);
 
         $semaphore = \semaphore\acquire(intval($userNumber));
-        $application = \app\get($appId);
+
+        try {
+            $application = \app\get($appId);
+        } catch (Exception $e) {
+            if (isProd())
+                throw $e;
+            \webhook\mark($id, 'app already removed, ignoring');
+            return $this->renderJson($response, array(
+                "type" => "app-removed",
+                "status" => "ignored"
+            ));
+        }
+        
 
         if (!$application->wasSent()) {
             logger("mailgun webhook error, Application $appId was not sent!", true);
@@ -67,7 +79,7 @@ class WebhooksHandler extends AbstractHandler {
             \webhook\mark($id, 'bcc to ud@, ignoring');
             \semaphore\release($semaphore);
             return $this->renderJson($response, array(
-                "type" => "notification",
+                "type" => "bcc",
                 "status" => "ignored"
             ));
         }
