@@ -29,7 +29,6 @@ class WebhooksHandler extends AbstractHandler {
         
         $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
-        $userNumber = $payload['user-variables']['userid'];
         $recipient = $payload['recipient'];
         
         if(($payload['user-variables']['environment'] ?? 'prod') !== environment()) {
@@ -50,6 +49,7 @@ class WebhooksHandler extends AbstractHandler {
             ));
         }
         $mailEvent = new MailEvent($payload);
+        $userNumber = $payload['user-variables']['userid'];
 
         $semaphore = \semaphore\acquire(intval($userNumber));
 
