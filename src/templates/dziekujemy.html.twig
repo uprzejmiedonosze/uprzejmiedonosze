@@ -58,12 +58,14 @@ Z poważaniem
 {% endif %}
 
 {% if ( not isPatron ) and ( random(2) == 1 or appsCount == 1 ) and app.automatedSM %}
-{% set dice = random('ABC') %}
+{% set dice = random('ABCD') %}
 {% if dice == 'A' %}
 
     <h4>Nie lubisz zgłaszać?</h4>
+    <p>
     Zapoznaj się z Miejską Agendą Parkingową i dowiedz się jak niewielkie zmiany
     w przepisach mogą sprawić, że Uprzejmie Donoszę nie będzie potrzebne.
+    </p>
     
         <a href="https://agendaparkingowa.pl/"
             target="_blank" rel="external"
@@ -72,8 +74,9 @@ Z poważaniem
 {% elseif dice == 'B' %}
 
     <h4>Podobało Ci się?</h4>
-
+    <p>
     Dołącz do kilkudziesięciu Patronek i Patronów!
+    </p>
 
     <a href="/patronite.html"
         class="patronite button small">
@@ -82,12 +85,26 @@ Z poważaniem
 
 {% elseif dice == 'C' %}
     <h4>Wygodniej niż telefon do SM?</h4>
+    <p>
     Możesz wspomóc Uprzejmie Donoszę jednorazową wpłatą
     niewielkiej kwoty na Suppi.pl (bez prowizji):
+    </p>
     
     <a href="https://suppi.pl/uprzejmiedonosze"
         rel="external" target="_blank"
         class="suppi button">Suppi</a>
+
+{% elseif dice == 'D' %}
+    <h4>Wysłanie jednego zgłoszenia kosztuje około 0,75 zł</h4>
+    <p>
+    Z czego około 0,15 zł to koszty serwera, licencji, przetwarzania i przechowywania
+    danych. A 0,60 zł to koszt mojej codziennej pracy nad utrzymaniem serwisu.
+    </p>
+    
+    <a href="/patronite.html"
+        class="patronite button small">
+        Dowiedz się więcej
+    </a>
 
 {% endif %}
 {% endif %}
