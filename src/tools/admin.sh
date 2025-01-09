@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-SQL="sqlite3 store-havefun.sqlite"
+SQL="sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite"
 
 function is_app_key() {
 	[[ "$1" =~ ^[0-9a-f-]{36}$ || "$1" =~ ^[0-9a-zA-Z]{12}$ ]]
@@ -28,7 +28,7 @@ function red() {
 function yesno() {
 	red "Apply changes [yes/N]?"
 	read ans
-	[ ${ans:-N} = yes ]
+	[ "${ans:-N}" = yes ]
 }
 
 is_app_key "$1" && APPKEY=$1
@@ -41,20 +41,20 @@ if [ ${APPKEY+x} ]; then
 	red "Updated"
 	jq < /tmp/_m.json
 	if ! diff /tmp/_o.json /tmp/_m.json; then
-		yesno && ${SQL} "update applications set value ='`jq -Mrc < /tmp/_m.json`' where key = '${APPKEY}'"
+		yesno && ${SQL} "update applications set value ='$(jq -Mrc . < /tmp/_m.json)' where key = '${APPKEY}'"
 	else
 		echo 'no changes, ignoring'
 	fi
 fi
 
-PARAM="$@"
+PARAM="$*"
 if [[ ${PARAM} =~ @ ]]; then
-	${SQL} "select value from users where json_extract(value, '$.data.email') = '${PARAM}';" | jq '.' | tee /tmp/_o.json > /tmp/_m.json
+	${SQL} "select value from users where key = '${PARAM}';" | jq '.' | tee /tmp/_o.json > /tmp/_m.json
 	vim /tmp/_m.json
 	red "Updated"
 	jq < /tmp/_m.json
 	if ! diff /tmp/_o.json /tmp/_m.json; then
-		yesno && ${SQL} "update users set value ='`jq -Mrc < /tmp/_m.json`' where json_extract(value, '$.data.email') = '${PARAM}';"
+		yesno && ${SQL} "update users set value ='$(jq .-Mrc < /tmp/_m.json)' where key = '${PARAM}';"
 	else
 		echo 'no changes, ignoring'
 	fi

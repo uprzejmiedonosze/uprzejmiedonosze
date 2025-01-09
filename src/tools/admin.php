@@ -256,6 +256,13 @@ function updateApp(string $json, string $version, bool $dryRun) {
     \app\save($app);
 }
 
+function unsentApp($appId) {
+    $app = \app\get($appId);
+    $app->setStatus('sending-failed', true);
+    unset($app->sent);
+    \app\save($app);
+}
+
 function refreshRecydywa() {
     global $interrupt;
     $sql = <<<SQL
