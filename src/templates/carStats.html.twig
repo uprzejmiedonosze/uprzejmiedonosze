@@ -49,7 +49,6 @@
                         {{app.userComment}}
                         {% endif %}
                     </div>
-                    <div class="address">{{ app.address.city }} {{ app.address.district ?? '' }}</div>
                     {% if app.wasSent %}
                     <div class="info-icon">
                         {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}{{ app.guessSMData.getShortName }}
