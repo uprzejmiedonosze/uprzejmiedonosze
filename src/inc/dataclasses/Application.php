@@ -283,17 +283,18 @@ class Application extends JSONObject implements \JsonSerializable {
      * Zwraca najlepiej pasująca dla adresu zgłoszenia SM/SA.
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      * @SuppressWarnings(CamelCaseVariableName)
+    * 
+     * @TODO do StopAgresji::guess if $this->smCity is set?
      */
     public function guessSMData(bool $update=false): \SM {
         global $SM_ADDRESSES;
         global $STOP_AGRESJI;
-        if(!$update && isset($this->smCity) && $this->smCity !== '_nieznane'){
-            if ($this->stopAgresji())
-                return $STOP_AGRESJI[$this->smCity];
-            return $SM_ADDRESSES[$this->smCity];
-            
+        if(!$update && isset($this->smCity) && !$this->stopAgresji()){
+            if($this->smCity !== '_nieznane'){
+                return $SM_ADDRESSES[$this->smCity];
+            }
         }
-        if(!isset($this->address) || $this->isEncrypted()) {
+        if(!isset($this->address)) {
             return $SM_ADDRESSES['_nieznane'];
         }
         if($this->stopAgresji()){
