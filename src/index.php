@@ -10,16 +10,20 @@ require_once(__DIR__ . '/../inc/Logger.php');
 function resetSession() {
     session_unset();
     session_regenerate_id(true);
-    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+    $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';
 }
 
 if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
     $timeout = 60 * 60 * 24 * 180;
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
+
+    set_error_handler(fn($errno, $errstr) => logger($errstr), E_WARNING);
     session_start();
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';
+    restore_error_handler();
 }
+
 
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');
