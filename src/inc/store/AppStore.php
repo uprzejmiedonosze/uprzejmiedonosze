@@ -38,13 +38,13 @@ function save(Application $application): Application{
     $stmt = \store\prepare($queryString);
 
     $encoded = $application->encode();
+    $plateId = $application->carInfo->plateId ?? null;
+
     $stmt->bindParam(':key', $application->id, \PDO::PARAM_STR);
     $stmt->bindParam(':value', $encoded, \PDO::PARAM_STR);
     $stmt->bindParam(':email', $application->email, \PDO::PARAM_STR);
     $stmt->bindParam(':plateId', $plateId, \PDO::PARAM_STR);
     $stmt->execute();
-
-    $plateId = $application->carInfo->plateId ?? null;
 
     if ($plateId) {
         $cleanPlateId = \recydywa\cleanPlateId($plateId);
