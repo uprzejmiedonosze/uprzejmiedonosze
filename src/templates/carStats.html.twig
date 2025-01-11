@@ -45,9 +45,6 @@
                     <div class="no-icon category">
                         <img title="{{app.getCategory.formal}}" src="/img/{{ app.category }}.jpg" />
                         {{ app.getCategory.short }}
-                        {% if app.statements.gallery ?? false %}
-                        {{app.userComment}}
-                        {% endif %}
                     </div>
                     {% if app.wasSent %}
                     <div class="info-icon">
