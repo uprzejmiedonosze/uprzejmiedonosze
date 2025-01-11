@@ -304,6 +304,10 @@ class Application extends JSONObject implements \JsonSerializable {
             return $SM_ADDRESSES['_nieznane'];
         }
         if($this->stopAgresji()){
+            if (in_array($this->smCity, $STOP_AGRESJI))
+                return $STOP_AGRESJI[$this->smCity];
+            if ($this->isEncrypted())
+                return $STOP_AGRESJI['default'];
             $this->smCity = \StopAgresji::guess($this->address);
             return $STOP_AGRESJI[$this->smCity];
         }
