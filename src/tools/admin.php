@@ -199,7 +199,7 @@ function upgradeAllUsers($dryRun=true) {
 
 function getTopAppsToMigrate(string $version): array {
     $sql = <<<SQL
-        select key, value
+        select key, email, value
         from applications
         where json_extract(value, '$.version') <> :version
         order by key
@@ -211,7 +211,7 @@ function getTopAppsToMigrate(string $version): array {
 
     $apps = Array();
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $apps[$row[0]] = $row[1];
+        $apps[$row[0]] = [$row[1], $row[2]];
     }
     return $apps;
 }
@@ -225,23 +225,26 @@ function upgradeAllApps($version, $dryRun=true){
         if ($interrupt) exit;
         echo "\nGetting top 1K apps to migrate. Batch $counter\n\n";
         $apps = getTopAppsToMigrate($version);
-        foreach ($apps as $appId => $json) {
+        foreach ($apps as $appId => $app) {
             if ($interrupt) exit;
-            updateApp($json, $version, $dryRun);
+
+            $email = $app[1];
+            $json = $app[2];
+            updateApp($json, $email, $version, $dryRun);
         }
         $counter++;
     }
 }
 
-function updateApp(string $json, string $version, bool $dryRun) {
+function updateApp(string $json, string $email, string $version, bool $dryRun) {
     $encoded = json_decode($json);
-    if (!fakeFirebaseId($encoded->user->email)) {
+    if (!fakeFirebaseId($email)) {
         return;
     }
-    $app = Application::withJson($json, $encoded->email);
+    $app = Application::withJson($json, $email);
 
     $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
-    echo "  - migrating app $number by {$app->email}\n";
+    echo "  - migrating app $number by {$email}\n";
     $app->version = $version;
 
     if (!isset($app->added)) # one time fix
@@ -309,6 +312,6 @@ function fakeFirebaseId(string $email): bool {
 
 //removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
 //removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
-upgradeAllUsers(false);
+// upgradeAllUsers(false);
 // refreshRecydywa();
-upgradeAllApps('2.5.0', false);
+upgradeAllApps('2.5.2', false);
