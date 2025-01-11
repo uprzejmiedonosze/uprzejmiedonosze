@@ -365,10 +365,21 @@ lint-php:
 	@./vendor/phpmd/phpmd/src/bin/phpmd src/ text \
 		cleancode,codesize,controversial,design,naming,unusedcode | wc -l
 
+.PHONY: test-phpunit
+.ONESHELL: test-phpunit
+test-phpunit: MEMCACHED := $(shell curl localhost:11211 2>&1 | grep -c Fail || true)
 test-phpunit: $(DIRS) $(EXPORT)/public/api/config/sm.json $(EXPORT)/public/api/config/stop-agresji.json $(EXPORT)/config.php process-php minify-config
 	@echo "==> Testing phpunit"
+	@test $(MEMCACHED) -eq 1 && (echo "    starting memcached"; memcached &); sleep 1 || true
+	@trap 'echo "    reverting DB and killing memcache"; test $(MEMCACHED) -eq 1 && killall memcached; exit' INT TERM EXIT
 	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
 	./vendor/phpunit/phpunit/phpunit --display-deprecations tests
+
+
+.PHONY: memcached
+memcached: MEMCACHED := $(shell curl localhost:11211 2>&1 | grep -c Fail || true)
+	
+	
 
 define lint_replace_inline
 $(call echo-processing,$<)
