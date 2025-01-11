@@ -131,6 +131,12 @@ class Application extends JSONObject implements \JsonSerializable {
         $instance->initStatements();
         $instance->address = new JSONObject();
         /*
+        2.5.3 (2025-01-11)
+          - post-migration apps
+        2.5.2 (2025-01-11)
+          - full migration of historical apps
+        2.5.1 (2025-01-09)
+          - added root $email field
         2.5.0 (2024-12-28)
           - removed absolute myAppsSize, autoSend, exposeData
         2.4.0 (2024-12-09)
@@ -143,7 +149,7 @@ class Application extends JSONObject implements \JsonSerializable {
           - extended address property
         2.1.0
         */
-        $instance->version = '2.5.1';
+        $instance->version = '2.5.3';
         $instance->browser = $_SERVER['HTTP_USER_AGENT'];
         return $instance;
     }
