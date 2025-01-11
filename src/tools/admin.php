@@ -228,8 +228,8 @@ function upgradeAllApps($version, $dryRun=true){
         foreach ($apps as $appId => $app) {
             if ($interrupt) exit;
 
-            $email = $app[1];
-            $json = $app[2];
+            $email = $app[0];
+            $json = $app[1];
             updateApp($json, $email, $version, $dryRun);
         }
         $counter++;
