@@ -82,11 +82,11 @@ $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     ->add(new JsonBodyParser());
 
 $app->group('', function (RouteCollectorProxy $group) { // Application
-    $group->any('/start.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
-    $group->any('/nowe-zgloszenie.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
+    //$group->any('/start.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
+    //$group->any('/nowe-zgloszenie.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
 
-    //$group->get('/start.html', ApplicationHandler::class . ':start');
-    //$group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
+    $group->get('/start.html', ApplicationHandler::class . ':start');
+    $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
 
     $group->post('/potwierdz.html', ApplicationHandler::class . ':confirm');
     $group->get('/potwierdz.html', function () { return AbstractHandler::redirect('/moje-zgloszenia.html'); });
