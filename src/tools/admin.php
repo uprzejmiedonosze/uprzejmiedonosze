@@ -266,7 +266,7 @@ function unsentApp($appId) {
 function refreshRecydywa() {
     global $interrupt;
     $sql = <<<SQL
-        select json_extract(value, '$.carInfo.plateId') as plateId,
+        select plateId,
             count(key) as appsCnt,
             count(distinct email) as usersCnt
         from applications 

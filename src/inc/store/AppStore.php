@@ -34,10 +34,20 @@ function save(Application $application): Application{
             $application->number = 'UD/' . $application->user->number . '/' . $appNumber;
         }
     }
-    \store\set(TABLE, $application->id, $application->encode(), $application->email);
+    $queryString = "REPLACE INTO " . TABLE . "(key, value, email, plateId) VALUES (:key, :value, :email, upper(:plateId));";
+    $stmt = \store\prepare($queryString);
 
-    if ($application->carInfo->plateId ?? false) {
-        $cleanPlateId = \recydywa\cleanPlateId($application->carInfo->plateId);
+    $encoded = $application->encode();
+    $stmt->bindParam(':key', $application->id, \PDO::PARAM_STR);
+    $stmt->bindParam(':value', $encoded, \PDO::PARAM_STR);
+    $stmt->bindParam(':email', $application->email, \PDO::PARAM_STR);
+    $stmt->bindParam(':plateId', $plateId, \PDO::PARAM_STR);
+    $stmt->execute();
+
+    $plateId = $application->carInfo->plateId ?? null;
+
+    if ($plateId) {
+        $cleanPlateId = \recydywa\cleanPlateId($plateId);
         \cache\delete(type::AppsByPlate, $cleanPlateId);
     }
     return $application;
@@ -117,7 +127,7 @@ function byPlate(string $plateId): array|null {
         select value, email
         from applications 
         where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
-        and json_extract(value, '$.carInfo.plateId') in (:plateId, :cleanPlateId);
+        and plateId in (:plateId, :cleanPlateId);
     SQL;
 
     $stmt = \store\prepare($sql);

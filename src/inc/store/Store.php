@@ -37,9 +37,8 @@ function dump(\PDOStatement $stmt)
 
 function get(string $table, string $key): string|null
 {
-    if (!is_string($key)) {
+    if (!is_string($key))
         throw new \InvalidArgumentException('Expected string as key');
-    }
 
     $stmt = store()->prepare(
         "SELECT value FROM $table WHERE key = :key;"
@@ -52,26 +51,18 @@ function get(string $table, string $key): string|null
     return $value;
 }
 
-function set(string $table, string $key, string $value, string $email = null): string
+function set(string $table, string $key, string $value): string
 {
-    if (!is_string($key)) {
+    if (!is_string($key))
         throw new \InvalidArgumentException('Expected string as key');
-    }
 
-    if (!is_string($value)) {
+    if (!is_string($value))
         throw new \InvalidArgumentException('Expected string as value');
-    }
 
     $queryString = "REPLACE INTO $table VALUES (:key, :value);";
-    if ($email) {
-        $queryString = "REPLACE INTO $table VALUES (:key, :value, :email);";
-    }
     $stmt = store()->prepare($queryString);
     $stmt->bindParam(':key', $key, \PDO::PARAM_STR);
     $stmt->bindParam(':value', $value, \PDO::PARAM_STR);
-    if ($email) {
-        $stmt->bindParam(':email', $email, \PDO::PARAM_STR);
-    }
     $stmt->execute();
 
     return $value;
