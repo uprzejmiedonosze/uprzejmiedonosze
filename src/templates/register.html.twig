@@ -9,11 +9,15 @@
     <h3>Dane konta</h3>
     <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres e-mail oraz adres korespondencyjny.
         Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
+    <p>
+        Dane oznaczone ikoną <span class="encrypted"></span> są zaszyfrowane dla twojego bezpieczeństwa.
+        Dowiedz się więcej o <a target="_blank" href="/polityka-prywatnosci.html#encryption">bezpieczeństwie twoich danych</a>.
+    </p>
 
     <fieldset>
     <label for="name">Imię i nazwisko, które posłużą SM do identyfikacji autora zgłoszenia</label>
     <input type="text" required maxlength="30" id="name" name="name"
-        placeholder="(twoje imię i nazwisko)"
+        placeholder="(twoje imię i nazwisko)" data-type="encrypted"
         value="{{ user.data.name }}" />
 
     <label for="email">E-mail został pobrany automatycznie w trakcie logowania</label>
@@ -24,12 +28,12 @@
     <label for="address">Adres zamieszkania wraz z <b>numerem lokalu i miastem</b></label>
     <input type="text" maxlength="70" required id="address" name="address"
         placeholder="(Ulica 10a/7, Miasto)"
-        autocomplete="off"
+        autocomplete="off"  data-type="encrypted"
         value="{{ user.data.address ?? '' }}" />
 
     <label for="msisdn">Numer kontaktowy (opcjonalny, ale ułatwi SM kontakt z Tobą)</label>
     <input type="tel" maxlength="12" id="msisdn" name="msisdn"
-        placeholder="666 666 666"
+        placeholder="666 666 666"  data-type="encrypted"
         data-inline="true" value="{{ user.data.msisdn ?? '' }}" />
 
 {% if user.isRegistered %}
@@ -39,7 +43,7 @@
             target="_blank" rel="external">e-Doręczeń</a>
         (opcjonalny)</label>
     <input type="tel" id="edelivery" name="edelivery"
-        maxlength="26" minlength="26"
+        maxlength="26" minlength="26"  data-type="encrypted"
         placeholder="AE:PL-00000-00000-AAAAA-00"
         value="{{ user.data.edelivery ?? '' }}" />
 {% endif %}
