@@ -24,8 +24,6 @@ class CsvHandler extends AbstractHandler {
         switch($file) {
             case "appsByDay":
                 $stats = \global_stats\appsByDay(); break;
-            case "appsByCity":
-                $stats = \global_stats\appsByCity(); break;
             case "statsByDay":
                 $stats = \global_stats\statsByDay(); break;
             case "byYear":

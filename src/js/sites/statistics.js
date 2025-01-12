@@ -180,35 +180,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  Highcharts.chart("statsAppsByCity", {
-    data: {
-      csvURL: window.location.origin + "/stats/appsByCity.csv?sessionless",
-      firstRowAsNames: false
-    },
-    chart: {
-      type: "column",
-      plotBackgroundColor: null,
-      backgroundColor: "transparent",
-      events: {
-        load() {
-          const chart = this;
-          chart.showLoading('Pobieram dane...')
-        },
-        redraw() {
-          const chart = this;
-          chart.hideLoading()
-        }
-      }
-
-    },
-    series: [
-      {
-        name: "Liczba zgłoszeń",
-        color: "#009C7F"
-      }
-    ]
-  });
-
   // Make monochrome colors
   var pieColors = (function () {
     var colors = [],

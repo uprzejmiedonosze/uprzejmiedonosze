@@ -106,29 +106,6 @@ function statsByYear(bool $useCache=true){
 /**
  * Returns number of applications per city.
  */
-function appsByCity(bool $useCache=true){
-    $stats = \cache\get(Type::GlobalStats, "appsByCity");
-    if($useCache && $stats){
-        return $stats;
-    }
-
-    $sql = <<<SQL
-        select json_extract(value, '$.address.city') as city,
-            count(key) as cnt
-        from applications
-        where json_extract(value, '$.status') not in ('draft', 'ready')
-        group by json_extract(value, '$.address.city')
-        order by 2 desc, 1 limit 10
-    SQL;
-
-    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::GlobalStats, 'appsByCity', $stats);
-    return $stats;
-}
-
-/**
- * Returns number of applications per city.
- */
 function statsByCarBrand(bool $useCache=true){
     $stats = \cache\get(Type::GlobalStats, "statsByCarBrand");
     if($useCache && $stats){
