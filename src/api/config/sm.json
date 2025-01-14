@@ -631,6 +631,14 @@
     ],
     "email": "kierownikzmiany@strazmiejska.pruszkow.pl"
   },
+  "powiat pruszkowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Pruszkowie",
+      "ul. Kraszewskiego 8",
+      "05-800 Pruszków"
+    ],
+    "email": "komendant.pruszkow@ksp.policja.gov.pl"
+  },
   "Mysłowice": {
     "address": [
       "Straż Miejska Mysłowice",
