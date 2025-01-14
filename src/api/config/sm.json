@@ -3128,5 +3128,13 @@
   },
   "gmina Pelplin": {
     "parent": "Pelplin"
+  },
+  "Kluczbork": {
+    "address": [
+      "Straż Miejska Kluczbork",
+      "ul. Katowicka 1",
+      "46-200 Kluczbork"
+    ],
+    "email": "sm@kluczbork.pl"
   }
 }
