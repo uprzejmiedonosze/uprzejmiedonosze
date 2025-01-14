@@ -7,6 +7,7 @@ require(__DIR__ . '/../export/inc/Twig.php');
 
 $GLOBALS['STATUSES'] = $STATUSES;
 $GLOBALS['SM_ADDRESSES'] = $SM_ADDRESSES;
+$GLOBALS['STOP_AGRESJI'] = $STOP_AGRESJI;
 $GLOBALS['CATEGORIES'] = $CATEGORIES;
 $GLOBALS['cache'] = $cache;
 $_SERVER['HTTP_USER_AGENT'] = 'PHPUnit';

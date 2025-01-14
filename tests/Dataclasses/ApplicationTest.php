@@ -177,7 +177,6 @@ class ApplicationTest extends TestCase
 
     public function testEncodeNoSession()
     {
-        //$this->markTestSkipped('enable after encryption is implemented');
         $app = Application::withJson($this->appJson, $this->email);
         $_SESSION['user_id'] = 1;
 
@@ -192,7 +191,6 @@ class ApplicationTest extends TestCase
 
     public function testEncodeOtherSession()
     {
-        //$this->markTestSkipped('enable after encryption is implemented');
         $app = Application::withJson($this->appJson, $this->email);
         $_SESSION['user_id'] = 1;
 
@@ -203,5 +201,34 @@ class ApplicationTest extends TestCase
         $this->assertIsString($app->user);
         $this->assertIsString($app->address);
         $this->assertIsString($app->encrypted);
+    }
+
+    public function testGuessSM()
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+
+        $this->assertFalse($app->stopAgresji());
+        $this->assertEquals('szczecin', $app->smCity);
+        $smData = $app->guessSMData();
+        $this->assertInstanceOf(\SM::class, $smData);
+        $this->assertEquals('SM Szczecin', $smData->getShortName());
+        $this->assertFalse($smData->hasAPI());
+        $this->assertTrue($smData->automated());
+        $this->assertFalse($smData->isPolice());
+
+        // Test with stopAgresji
+        $app->stopAgresji = true;
+        $smData = $app->guessSMData(true);
+        $this->assertInstanceOf(\StopAgresji::class, $smData);
+        $this->assertEquals('KP Szczecin Niebuszewo', $smData->getShortName());
+        $this->assertFalse($smData->hasAPI());
+        $this->assertTrue($smData->automated());
+        $this->assertTrue($smData->isPolice());
+
+        // Test with unknown address
+        $app->address = null;
+        $smData = $app->guessSMData(true);
+        $this->assertEquals('szczecin-niebuszewo', $app->smCity);
+        $this->assertInstanceOf(\SM::class, $smData);
     }
 }

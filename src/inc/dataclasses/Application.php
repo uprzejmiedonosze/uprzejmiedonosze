@@ -289,25 +289,36 @@ class Application extends JSONObject implements \JsonSerializable {
      * Zwraca najlepiej pasująca dla adresu zgłoszenia SM/SA.
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      * @SuppressWarnings(CamelCaseVariableName)
-    * 
-     * @TODO do StopAgresji::guess if $this->smCity is set?
      */
     public function guessSMData(bool $update=false): \SM {
         global $SM_ADDRESSES;
         global $STOP_AGRESJI;
-        if(!$update && isset($this->smCity) && !$this->stopAgresji()){
-            if($this->smCity !== '_nieznane'){
-                return $SM_ADDRESSES[$this->smCity];
-            }
-        }
-        if(!isset($this->address)) {
-            return $SM_ADDRESSES['_nieznane'];
-        }
-        if($this->stopAgresji()){
-            if (in_array(($this->smCity ?? null), $STOP_AGRESJI))
+
+        $smCity = $this->smCity ?? null;
+        
+        // don't update, smCity is set
+        if (!$update && $smCity) {
+            if ($this->stopAgresji())
                 return $STOP_AGRESJI[$this->smCity];
-            if ($this->isEncrypted())
-                return $STOP_AGRESJI['default'];
+            return $SM_ADDRESSES[$this->smCity];
+        }
+
+        // smCity is set, should update but it is not possible as the app is encrypted
+        if ($this->isEncrypted() && $smCity) {
+            if ($this->stopAgresji())
+                return $STOP_AGRESJI[$this->smCity];
+            return $SM_ADDRESSES[$this->smCity];
+        }
+
+        // can't update
+        if (!$this->address) {
+            if ($this->stopAgresji())
+                return $STOP_AGRESJI[$smCity ?? 'default'];
+            return $SM_ADDRESSES[$smCity ?? '_nieznane'];
+        }
+
+        // can update
+        if ($this->stopAgresji()) {
             $this->smCity = \StopAgresji::guess($this->address);
             return $STOP_AGRESJI[$this->smCity];
         }
