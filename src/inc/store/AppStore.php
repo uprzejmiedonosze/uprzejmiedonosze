@@ -65,19 +65,19 @@ function sent(int $daysAgo=31): array {
         from applications
         where email = :email
             and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE', 'confirmed-sm')
-            and json_extract(value, '$.sent.date') < :olderThan
         order by json_extract(value, '$.seq') desc,
             json_extract(value, '$.added') desc
     SQL;
     $stmt = \store\prepare($sql);
     $stmt->bindValue(':email', \user\currentEmail());
-    $stmt->bindValue(':olderThan', $olderThan);
     $stmt->execute();
 
     $apps = Array();
 
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
-        $apps[$row[0]] = Application::withJson($row[1], $row[2]);
+        $app = Application::withJson($row[1], $row[2]);
+        if ($app->sent->date < $olderThan)
+            $apps[$row[0]] = $app;
     }
 
     usort($apps, function ($left, $right) {
