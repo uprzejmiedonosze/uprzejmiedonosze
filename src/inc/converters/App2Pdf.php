@@ -58,11 +58,16 @@ function _tex2pdf(array|Application $application, string $destFile) {
 
     global $CATEGORIES;
     global $EXTENSIONS;
+    $user = \user\current();
+    $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
     $params = [
         'app' => $application,
         'root' => realpath(ROOT),
         'categories' => $CATEGORIES,
-        'extensions' => $EXTENSIONS
+        'extensions' => $EXTENSIONS,
+        'config' => [
+            'sex' => $sex
+        ]
     ];
 
     file_put_contents($tex_f, $twig->render($texFile, $params));
