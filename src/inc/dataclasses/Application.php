@@ -131,6 +131,8 @@ class Application extends JSONObject implements \JsonSerializable {
         $instance->initStatements();
         $instance->address = new JSONObject();
         /*
+        2.5.4 (2025-01-15)
+          - "Jestem świadoma odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk."
         2.5.3 (2025-01-11)
           - post-migration apps
         2.5.2 (2025-01-11)
@@ -149,7 +151,7 @@ class Application extends JSONObject implements \JsonSerializable {
           - extended address property
         2.1.0
         */
-        $instance->version = '2.5.3';
+        $instance->version = '2.5.4';
         $instance->browser = $_SERVER['HTTP_USER_AGENT'];
         return $instance;
     }
