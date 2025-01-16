@@ -87,8 +87,9 @@ abstract class AbstractHandler {
         $parameters['config']['isIOS'] = isIOS();
 
         $user = $request->getAttribute('user', null);
+
+        $parameters['config']['sex'] = ($user)? $user->getSex(): SEXSTRINGS['?'];
         if($user) {
-            $parameters['config']['sex'] = $user->getSex();
             $parameters['config']['userNumber'] = $user->getNumber();
             $parameters['general']['userName'] = $user->getFirstName();
             // force update cache if ?update GET param is set

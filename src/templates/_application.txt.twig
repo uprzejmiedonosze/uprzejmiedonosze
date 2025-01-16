@@ -1,1 +1,11 @@
-W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }} świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym {{ app.carInfo.plateId }} w okolicy adresu {{ app.address.address }}. {{ app.getCategory.formal }} {{ app.getExtensionsText() }} Sytuacja jest widoczna na załączonych zdjęciach. Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getJSONSafeComment|raw }} {% if app.statements is not defined or not app.statements.witness %}Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.{% endif %} Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail. Numer zgłoszenia: {{ app.number }}. Zgłaszający: {{ app.user.name }}, {{ app.user.address }}{% if app.user.edelivery ?? false %}, {{ app.user.edelivery }}{% endif %}. Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}{##}
+W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }} {##}
+świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym {{ app.carInfo.plateId }} w okolicy adresu {##}
+{{ app.address.address -}}. {##}
+{{ app.getCategory.formal }} {{ app.getExtensionsText() }} {{ app.getJSONSafeComment|raw }} {##}
+{% if not (app.statements.witness ?? false) -%}
+Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
+{%- endif %} {##}
+{% if app.version >= '2.5.4' -%}
+Jestem {{ config.sex.swiadoma }} odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk.
+{%- endif %} {##}
+Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie i nie zostały one zmanipulowane. Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail. Numer zgłoszenia: {{ app.number }}. Zgłaszający: {{ app.user.name }}, {{ app.user.address }}{% if app.user.edelivery ?? false %}, {{ app.user.edelivery }}{% endif %}.{##}

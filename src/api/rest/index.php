@@ -190,7 +190,14 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $application = $request->getAttribute('application');
     
         $twig = initBareTwig();
-        $appJson = $twig->render('_application.json.twig', ['app' => $application]);
+        $user = \user\current();
+        $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
+        $appJson = $twig->render('_application.json.twig', [
+            'app' => $application,
+            'config' => [
+                'sex' => $sex
+            ]
+        ]);
     
         $application->formattedText = json_decode($appJson);
     

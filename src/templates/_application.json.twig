@@ -11,11 +11,8 @@
     {% endif %}
         ,{ "text": "w okolicy adresu" }
         ,{ "emphasis": "{{ app.address.address ?? '...' }}"}
-        ,{ "text": "{{ app.getCategory.formal }}{{ app.getExtensionsText() }}"}
-        ,{ "text": "Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie."}
-    {% if app.statements is not defined or not app.statements.witness %}
-        ,{ "text": "Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania." }
-    {% endif %}
+        ,{ "text": "{{ app.getCategory.formal }}{{ app.getExtensionsText() }} {% if (app.userComment ?? false) and not app.isEncrypted %}{{ app.userComment }}{% endif %}{% if not (app.statements.witness ?? false) %} Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.{% endif %}"}
+        ,{ "text": "{% if app.version >= '2.5.4' %}Jestem {{ config.sex.swiadoma }} odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk. {% endif %}Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie i nie zostały one zmanipulowane."}
     ]
 {% if app.userComment is defined and app.userComment %}
     ,"comment": "{{ app.userComment }}"

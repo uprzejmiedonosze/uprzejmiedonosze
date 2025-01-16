@@ -34,14 +34,19 @@
     {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronicowe #}
     Obrazek z mapą prowadzi do Google Maps z lokalizacją zgłoszenia. Natomiast zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
     {{ app.getCategory.formal }} 
-    {{ app.getExtensionsText() }}
-    Sytuacja jest widoczna na załączonych zdjęciach.
-    Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie. {{ app.getLatexSafeComment|raw }}
-{% if app.statements is not defined or not app.statements.witness %}
-    Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
-{% endif %}
+    {{ app.getExtensionsText() -}}
+    {{ app.getLatexSafeComment|raw }}
+    {% if not (app.statements.witness ?? false) %}
+        Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
+    {% endif %}
 
-    Równocześnie proszę o \textbf{niezamieszczanie} w protokole danych dotyczących mojego miejsca
+    {% if app.version >= '2.5.4' %}
+    Jestem {{ config.sex.swiadoma }} odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk.
+    {% endif %}
+    Sytuacja jest widoczna na załączonych zdjęciach.
+    Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie i nie zostały one zmanipulowane.
+
+    Proszę o \textbf{niezamieszczanie} w protokole danych dotyczących mojego miejsca
     zamieszkania, nr. telefonu i~adresu e-mail.
 
 \vspace{0.3cm}\noindent

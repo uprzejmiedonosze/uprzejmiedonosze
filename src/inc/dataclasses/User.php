@@ -38,6 +38,7 @@ class User extends \JSONObject{
         $this->data->name  = capitalizeName($_SESSION['user_name'] ?? '');
         $this->data->stopAgresji = false;
         $this->data->shareRecydywa = true;
+        $this->data->sex = '?';
         $this->appsCount = 0;
     }
 
@@ -219,7 +220,7 @@ class User extends \JSONObject{
      * Returns (lazy-loaded) sex-strings for this user.
      */
     function getSex() {
-        if(!isset($this->data->sex))
+        if(($this->data->sex ?? '?') == '?')
             return $this->guessSex();
         return SEXSTRINGS[$this->data->sex];
     }

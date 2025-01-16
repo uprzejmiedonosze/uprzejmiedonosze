@@ -28,17 +28,21 @@
             w okolicy adresu <b>{{ app.address.address ?? '...' }}</b>.
             {{ app.getCategory.formal }}
             {{ app.getExtensionsText() }}
-            Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie.
-    {% if app.statements is not defined or not app.statements.witness %}
-        Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
-    {% endif %}
-            </p>
+            {% if (app.userComment ?? false) and not app.isEncrypted %}
+                {{ app.getAHrefedComment | raw }}
+            {% endif %}
+            {% if not (app.statements.witness ?? false) %}
+                Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
+            {% endif %}
+        </p>
+        <p>
+            {% if app.version >= '2.5.4' %}
+                Jestem {{ config.sex.swiadoma }} odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk.
+            {% endif %}
+            Sytuacja jest widoczna na załączonych zdjęciach. Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie i nie zostały one zmanipulowane.
+        </p>
 
-    {% if app.userComment is defined and app.userComment and not app.isEncrypted %}
-        <p>{{ app.getAHrefedComment | raw }}</p>
-    {% endif %}
-
-        <p>Równocześnie proszę o niezamieszczanie w protokole danych dotyczących
+        <p>Proszę o niezamieszczanie w protokole danych dotyczących
             mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.</p>
 
     {% if app.hasNumber and config.isAppOwner ?? false %}

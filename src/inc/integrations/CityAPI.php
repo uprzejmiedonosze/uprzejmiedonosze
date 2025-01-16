@@ -21,16 +21,26 @@ abstract class CityAPI {
 
     function formatMessage(Application &$application, $limit = 10000){
         $twig = initBareTwig();
+        $user = \user\current();
+        $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
         return substr($twig->render('_application.txt.twig', [
-            'app' => $application
+            'app' => $application,
+            'config' => [
+                'sex' => $sex
+            ]
         ]), 0, $limit);
     }
 
     function formatEmail(Application &$application, bool $withUserData) {
         $twig = initBareTwig();
+        $user = \user\current();
+        $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
         return $twig->render('_application.email.twig', [
             'app' => $application,
             'withUserData' => $withUserData,
+            'config' => [
+                'sex' => $sex
+            ],
             'now' => date(DT_FORMAT)
         ]);
     }
