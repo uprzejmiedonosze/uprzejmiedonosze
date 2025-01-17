@@ -1,5 +1,7 @@
 <?PHP namespace geo;
 
+require(__DIR__ . '/curl.php');
+
 use cache\Type;
 
 function GoogleMaps($lat, $lng) {
@@ -15,7 +17,7 @@ function GoogleMaps($lat, $lng) {
         "result_type" => "street_address"
     );
     $url = "https://maps.googleapis.com/maps/api/geocode/json?";
-    $json = curlRequest($url, $params, "Google Maps");
+    $json = \curl\request($url, $params, "Google Maps");
 
     if ($json['status'] == 'OK' && $json['results']) {
         $result = $json['results'][0];
@@ -40,7 +42,7 @@ function Nominatim(float $lat, float $lng): array {
     $url = "https://nominatim.openstreetmap.org/reverse?";
 
     $json = \cache\geo\get(Type::Nominatim, "$lat,$lng");
-    if (!$json) $json = curlRequest($url, $params, "Nominatim");
+    if (!$json) $json = \curl\request($url, $params, "Nominatim");
 
     if (!$json || !isset($json['address'])) {
         throw new \Exception("Brak wyników z serwerów OpenStreetMap dla $lat,$lng " . json_encode($json), 404);
@@ -106,7 +108,7 @@ function MapBox(float $lat, float $lng): array {
         "access_token" => 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw'
     );
     $url = "https://api.mapbox.com/search/geocode/v6/reverse?";
-    $json = curlRequest($url, $params, "MapBox");
+    $json = \curl\request($url, $params, "MapBox");
 
     if (!$json || !isset($json['features']) || sizeof($json['features']) == 0) {
         throw new \Exception("Brak wyników z serwerów MapBox dla $lat,$lng " . json_encode($json), 404);
@@ -133,30 +135,6 @@ function MapBox(float $lat, float $lng): array {
 
     \cache\geo\set(Type::MapBox, "$lat,$lng", $properties);
     return $properties;
-}
-
-
-function curlRequest(string $url, array $params, string $vendor) {
-    $ch = curl_init($url . http_build_query($params));
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_REFERER, "https://uprzejmiedonosze.net");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Accept-Language: pl"]);
-    $output = curl_exec($ch);
-    if (curl_errno($ch)) {
-        $error = curl_error($ch);
-        curl_close($ch);
-        logger("Nie udało się pobrać danych z $vendor: $error");
-        throw new \Exception("Nie udało się pobrać odpowiedzi z serwerów $vendor: $error", 500);
-    }
-    curl_close($ch);
-
-    $json = json_decode($output, true);
-    //echo "$output\n\n";
-    if (!json_last_error() === JSON_ERROR_NONE) {
-        logger("Parsowanie JSON z $vendor " . $output . " " . json_last_error_msg());
-        throw new \Exception("Bełkotliwa odpowiedź z serwerów $vendor: $output", 500);
-    }
-    return $json;
 }
 
 function normalizeGeo(float|string $geo): string {
