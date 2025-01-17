@@ -8,12 +8,12 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
-<p><i>Wersja <code>%VERSION%</code></i></p>
-<!-- %GITLOG% -->
+<!-- %VERSION% -->
 <h4>Piątek, 17 stycznia 2025</h4>
 <ul>
     <li>Zmiana adresu email SM Tychy.</li>
     <li>Tylko autor zgłoszenia może pobrać plik .pdf.</li>
+    <li>Aktualizacja bibliotek PHP.</li>
 </ul>
 <h4>Czwartek, 16 stycznia 2025</h4>
 <ul>
@@ -2050,7 +2050,6 @@
     listy.</li>
     <li>Klikając w dowolne zdjęcie na liście zgłoszeń, detale zgłoszenia otwierane 
     są domyślnie jako popup.</li>
-    <li></li>
 </ul>
 <h4>Sobota, 17 sierpnia 2019</h4>
 <ul>
@@ -2275,23 +2274,23 @@
     <li>Dodana SM w Gryfinie.</li>
 </ul>
 <h4 class="milestone">Wtorek, 12 marca 2019</h4>
-<ol>
+<ul>
     <li>Uprzejmie Donoszę ma "normalne" menu, a nie rozsiane po wszystkich
         stronach linki jak do tej pory.</li>
     <li>W ramach menu dostępne są statystyki zgłoszeń wg statusów.</li>
-</ol>
+</ul>
 <h4>Poniedziałek, 11 marca 2019</h4>
-<ol>
+<ul>
     <li>Dodane dane SM Chełm</li>
-</ol>
+</ul>
 <h4 class="milestone">Piątek, 8 marca 2019</h4>
-<ol>
+<ul>
     <li>Uprzejmie Donoszę wykrywa porzucone zgłoszenia. Kiedy wejdziesz drugi raz 
         na stronę tworzenia nowego zgłoszenia, zostaniesz zapytany o to, czy chcesz 
         kontynuować poprzednio wprowadzane zgłoszenie, czy zacząć od nowa.</li>
-</ol>
+</ul>
 <h4 class="milestone">Czwartek, 7 marca 2019</h4>
-<ol>
+<ul>
     <li>Zmiana statusów odbywa się za pomocą listy drop-down, a nie szeregu buttonów.</li>
     <li>Recydywiści mają swój badge <sup>recydywa</sup> przy numerze rejestracyjnym.</li>
     <li>Wpisanie hasła 'recydywa' w wyszukiwarce na
@@ -2300,20 +2299,20 @@
     <li>W Warszawie e-maile kierowane są domyślnie na adres ogólny (CSK@) a nie
     do pierwszego oddziału terenowego (OT1@) jak do tej pory.</li>
     <li>Nowa podstrona z instrukcjami <a href="/epuap.html">jak dokonać zgłoszenia przez EPUAP</a>.
-</ol>
+</ul>
 <h4>Poniedziałek, 4 marca 2019</h4>
-<ol>
+<ul>
     <li>Nowy (ładniejszy) sposób ładowania zdjęć do zgłoszenia.</li>
     <li>W małym podglądzie zgłoszeń (np. na liście), nie widać już zdania "zdjęcia wykonałam/em osobiście".</li>
     <li>W małym podglądzie zgłoszeń, na małych ekranach, widoczne jest tylko pierwsze zdjęcie.</li>
-</ol>
+</ul>
 <h4>Sobota, 2 marca 2019</h4>
-<ol>
+<ul>
     <li>Strona <a href="/wysylka.html">wysyłka</a> pozwala także 
     na hurtową zmianę statusów zgłoszeń.</li>
-</ol>
+</ul>
 <h4>Sobota, 2 marca 2019</h4>
-<ol>
+<ul>
     <li>Zachęty do wysyłki zgłoszeń do SM także na stronie na stronie
     podziękowania za zgłoszenia.</li>
     <li>Dane geolokalizacyjne pobierane są teraz z drugiego zdjęcia (z tablicą
@@ -2321,9 +2320,9 @@
     <li>Zmiana kolejności pól adres i numer rejestracyjny.</li>
     <li>W opisie pola z tablicą rejestracyjną widoczna jest nazwa marki pojazdu</li>
     <li>Uszczegółowienie <a href="/regulamin.html">regulaminu</a> Uprzejmie Donoszę.</li>
-</ol>
+</ul>
 <h4 class="milestone">Środa, 27 lutego 2019</h4>
-<ol>
+<ul>
     <li>Nowa funkcja – generowanie paczki zgłoszeń w postaci jednego,
     wielostronicowego PDF-a.</li>
     <li>Nowa funkcja – generowanie gotowej wiadomości e-mail do SM.</li>
@@ -2332,9 +2331,9 @@
     są pozbawione danych kontaktowych jego autora.</li>
     <li>Sugestia poprawienia danych zgłaszającego przeniesiona z "moje zgłoszenia" na 
     stronę szczegółów zgłoszenia.</li>
-</ol>
+</ul>
 <h4 class="milestone">Wtorek, 26 lutego 2019</h4>
-<ol>
+<ul>
     <li>Nowa funkcja, umożliwiająca wysyłkę paczki zgłoszeń do SM. Nie trzeba już
     pobierać pojedynczych plików, i przygotowywać wiadomości. Funkcja w trakcie 
     testów, dostępna pod adresem <a href="/wysylka.html">wysyłka</a>.</li>
@@ -2342,46 +2341,46 @@
     mniej agresywnie. Jeśli w zdaniu nie ma przewagi wielkich liter, to całość
     nie zostanie automatycznie poprawiona. Czyli UD nie pozwoli na pisanie 
     CAPS-LOCKIEM, ale nie poprawi ci już nazwy ulicy na z małej litery.</li>
-</ol>
+</ul>
 <h4 class="milestone">Sobota, 23 lutego 2019</h4>
-<ol>
+<ul>
     <li>Wsparcie dla <a rel="external" target="_blank"href="https://pl.wikipedia.org/wiki/Progressive_web_app">Progressive 
     Web Apps</a>. W największym uproszczeniu oznacza to zwiększenia
     wrażenia współpracy z aplikacją mobilną a nie stroną internetową.</li>
-</ol>
+</ul>
 <h4>Piątek, 22 lutego 2019</h4>
-<ol>
+<ul>
     <li>Przy generowaniu pierwszego zgłoszenia Uprzejmie Donoszę dużo intensywniej
     komunikuje regulamin oraz konieczność samodzielnego wysyłania zgłoszenia do SM.</li>
-</ol>
+</ul>
 <h4>Czwartek, 21 lutego 2019</h4>
-<ol>
+<ul>
     <li>[fixed] Na iPhone'ach zdjęcia wykonane w innej orientacji niż pozioma były
     wyświetlane obrócone. Problem dotyczył także wniosku w PDF.</li>
     <li>[fixed] Do tej pory UD wymagało odświeżenia sesji co 60 minut. Sesja
     została znacznie wydłużona.</li>
-</ol>
+</ul>
 <h4>Wtorek, 19 lutego 2019</h4>
-<ol>
+<ul>
     <li>Dodane dane UM w Górowie Iławeckim.</li>
-</ol>
+</ul>
 <h4>Poniedziałek, 18 lutego 2019</h4>
-<ol>
+<ul>
     <li>Dodane dane Straży Miejskiej we Wrocławiu, Krakowie, Gdyni, Białymstoku,
         Łodzi, Gdańsku, Poznaniu, Toruniu, Bydgoszczy i Katowicach.</li>
-</ol>
+</ul>
 <h4>Niedziela, 3 lutego 2019</h4>
-<ol>
+<ul>
     <li>Widok mapy w szczegółach zgłoszenia.</li>
     <li>Pola adresu i numeru rejestracyjnego mają obecnie wyłączone "autocomplete"
         (które podpowiada historyczne wartości, co bywa irytujące)</li>
-</ol>
+</ul>
 <h4>Wtorek, 29 stycznia 2019</h4>
-<ol>
+<ul>
     <li>Dostępna jest historia zmian statusów w szczegółach zgłoszenia</li>
-</ol>
+</ul>
 <h4 class="milestone">Niedziela, 27 stycznia 2019</h4>
-<ol>
+<ul>
     <li>Jeśli użytkownik zmieni automatycznie pobrany numer rejestracyjny pojazdu, to nie
     będzie on wyświetlany w dokumencie PDF.</li>
     <li>Użytkownicy, dla których nie udaje się pobrać danych GEO ze zdjęcia są o tym informowaniu
@@ -2391,95 +2390,95 @@
     <li>Nowy status "wysłane (epuap)" – przydatny dla osób wysyłający swoje wnioski
     zarówno e-mailem jaki i poprzez EPUAP.</li>
     <li>Drobne poprawki (zduplikowane wyrazy, literówki) w szablonie dokumentu PDF.</li>
-</ol>
+</ul>
 <h4>Sobota, 19 stycznia 2019</h4>
-<ol>
+<ul>
     <li>Uproszczenie procesu rejestracji (podpowiadanie imienia i nazwiska).
     Wystarczy uzupełnić adres i telefon.</li>
-</ol>
+</ul>
 <h4>Czwartek, 17 stycznia 2019</h4>
-<ol>
+<ul>
     <li>Lepsze wsparcie dla pionowych obrazków w widoku zgłoszenia.</li>
     <li>[fixed] Uprzejmie Donoszę czasem błędnie wybierało tablicę rejestracyjną.
     Np. odczytywało tę widoczną np. gdzieś w oddali, a nie tę na pierwszym planie.</li>
-</ol>
+</ul>
 
 <h4>Poniedziałek, 14 stycznia 2019</h4>
-<ol>
+<ul>
     <li>[fixed] Wyświetlanie tekstów kategorii nie jest już przycinane
     na małych ekranach.</li>
-</ol>
+</ul>
 <h4>Sobota, 12 stycznia 2019</h4>
-<ol>
+<ul>
     <li>Link do <a href="/przepisy.html">przepisów</a> na stronie głównej.</li>
     <li>Nowa kategoria zgłoszenia: parkowanie w strefie zamieszkania w miejscu niewyznaczonym.</li>
-</ol>
+</ul>
 <h4>Piątek, 11 stycznia 2019</h4>
-<ol>
+<ul>
     <li>Opis drogi wewnętrznej, strefy ruchu i strefy zamieszkania w
         <a href="/przepisy.html">przepisach</a>.</li>
-</ol>
+</ul>
 <h4>Środa, 9 stycznia 2019</h4>
-<ol>
+<ul>
     <li>Nowa kategoria zgłoszeń – pojazdy powyżej 2,5 t DMC.</li>
     <li>Poprawki copy w przepisach</li>
-</ol>
+</ul>
 <h4>Wtorek, 8 stycznia 2019</h4>
-<ol>
+<ul>
     <li>W zgłoszeniach PDF na końcu pierwszego akapitu dodawany jest komentarz użytkownika.</li>
-</ol>
+</ul>
 <h4>Poniedziałek, 31 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>W polu adresu wyszukiwane są teraz tylko adresy z Polski.</li>
     <li>Intensywne zmiany na stronie <a href="/przepisy.html">przepisy</a>, zmiana kolejności kategorii, bardziej
         szczegółowy opis z odniesieniami do kodeksu.</li>
-</ol>
+</ul>
 <h4 class="milestone">Sobota, 29 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Po wprowadzeniu zgłoszenia (ale przed jego potwierdzeniem), można bezpiecznie
         wrócić na poprzednią stronę, dokonać edycji wniosku i dopiero wtedy go potwierdzić.</li>
     <li>[fixed] W specyficznych sytuacjach powrót na stronę "dziękujemy" generował błąd.</li>
-</ol>
+</ul>
 <h4 class="milestone">Czwartek, 27 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Nowa strona z przepisami ruchu drogowego związanego z parkowaniem: <a href="/przepisy.html">Przepisy</a></li>
     <li>Istotne poprawki w copy w trakcie procesu dokonywania zgłoszenia. W tym prezentowanie sugerowanego
         adresu SM do wysyłki zgłoszeń.</li>
     <li>Dla kategorii "pozostałe" pole "komentarz" staje się wymagany.</li>
-</ol>
+</ul>
 <h4>Środa, 26 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Strona ze szczegółami zgłoszenia ma w metadanych obrazek, tytuł i opis specyficzny
         dla tego zgłoszenia (przydaje się przy shareowaniu na FB).</li>
     <li>Mocno zaktualizowana strona główna oraz opis projektu.</li>
     <li>Wersja draft <a href="/przepisy.html">poradnika dotyczącego przepisów związanych z parkowaniem</a>.</li>
-</ol>
+</ul>
 <h4>Wtorek, 25 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Użytkownicy, którzy nie podali w trakcie rejestracji swojego numeru tel.,
         nie będą już mieli pustego napisu "Tel. " na swoim zgłoszeniu PDF.</li>
-</ol>
+</ul>
 <h4>Niedziela, 23 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Użytkownicy systemu iOS przed dokonaniem zgłoszenia, otrzymują
         sugestię aby wykonać ten proces na laptopie/komputerze stacjonarnym
         (ponieważ iOS nie przekazuje danych geolokacyjnych zawartych w zdjęciach).</li>
-</ol>
+</ul>
 <h4>Sobota, 22 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Zgrabniejsze linki do szczegółów zgłoszenia (bez parametrów typu ?appId=xxxx)</li>
     <li>Niezalogowane osoby mogą otworzyć szczegóły dowolnego zgłoszenia (dla którego posiadają link)</li>
-</ol>
+</ul>
 <h4>Czwartek, 20 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Wsparcie dla nowego statusu: "po wizycie w SM"</li>
-</ol>
+</ul>
 <h4>Środa, 19 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Wsparcie dla nowych statusów: "oczekujący", "zignorowany", "wystawiony mandat"</li>
-</ol>
+</ul>
 <h4 class="milestone">Wtorek, 11 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Nowy format wniosku PDF (bardziej kompaktowy).</li>
     <li>Dopisek "Zdjęcia wykonałem samodzielnie." we wniosku.</li>
     <li>Dopisek "Jestem świadomy odpowiedzialności karnej ..." we wniosku.</li>
@@ -2493,9 +2492,9 @@
         mają jakieś zarejestrowane zgłoszenia).</li>
     <li>Dostęp do ekranu rejestracji z poziomu listy zgłoszeń.</li>
     <li>[fixed] Autocomplete adresu znowu działa.</li>
-</ol>
+</ul>
 <h4 class="milestone">Poniedziałek, 10 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>UD nie wysyła już e-maili do autora zgłoszenia (ani do SM).
         Zgłaszający powinien pobrać dokument(y) ze strony swoich zgłoszeń
         i wysłać je samodzielnie.</li>
@@ -2503,58 +2502,58 @@
         zdjęcia nadal mają 1200px. Wpływa to na wielkość plików PDF (średnio
         mają teraz około 150kb). Wydaje się to być dobrym kompromisem między
         szybkością, wielkością plików oraz jakością zdjęć.</li>
-</ol>
+</ul>
 <h4>Niedziela, 9 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>[fixed] Filtrowanie zgłoszeń na liście "Moje zgłoszenia" znowu działa</li>
-</ol>
+</ul>
 <h4>Sobota, 8 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Uprzejmie Donoszę pozwala archiwizować zgłoszenia. Na liście "Moje zgłoszenia",
         poszczególne wnioski mają dodatkową opcję "archiwizuj", która przenosi
         wniosek do drugiej listy archiwalnych zgłoszeń.</li>
-</ol>
+</ul>
 <h4 class="milestone">Piątek, 7 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Uprzejmie Donoszę dokonuje detekcji płci (na podstawie imienia). Dzięki temu
         w generowanych wnioskach zamiast <i>byłem(am) świadkiem</i> jest prawidłowa
         forma gramatyczna.</li>
     <li>Dodatkowy przycisk <i>"Moje zgłoszenia"</i> na stronie nowego zgłoszenia.</li>
-</ol>
+</ul>
 <h4 class="milestone">Czwartek, 6 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Nowa funkcja: recydywa. Po zeskanowaniu numeru rejestracyjnego widzimy informację ile
         wniosków zostało już zarejestrowane na ten numer.</li>
     <li>Zdjęcia na liście zgłoszeń ("moje zgłoszenia") linkują do szczegółów zgłoszenia.
         Nie trzeba celować w link <i>"szczegóły"</i></li>
     <li>Zdjęcia we wniosku PDF linkują do szczegółów zgłoszenia (oczywiście nie po wydrukowaniu...).</li>
     <li>Zdjęcia na stronie szczegółów zgłoszenia kierują do zdjęcia o większej rozdzielczości.</li>
-</ol>
+</ul>
 <h4>Środa, 5 grudnia, 2018</h4>
-<ol>
+<ul>
     <li>Zgłoszenia PDF generowane są z użyciem małych wersji zdjęć. Redukuje to średnią wielkość
         pliku PDF z ~500kb to ~70kb. Oczywiście kosztem jakości zdjęć (ale są one nadal akceptowalne).</li>
-</ol>
+</ul>
 <h4>Wtorek, 13 listopada, 2018</h4>
-<ol>
+<ul>
     <li>[fixed] Aktualizacja API Google Maps po zmianach Google rozwiązała problem niedziałającego
     podpowiadania adresów.</li>
     <li>Zgłoszenia na liście zgłoszeń prezentowane są od najnowszego do najstarszego.</li>
     <li>Wsparcie dla wielu straży miejskich. Obecnie wprowadzone są adresy SM
         dla Warszawy i Szczecina.</li>
-</ol>
+</ul>
 <h4>Poniedziałek, 12 lutego, 2018</h4>
-<ol>
+<ul>
     <li>Wsparcie dla automatycznego rozpoznawania numeru rejestracyjnego na podstawie zdjęcia.</li>
     <li>Nowy format zgłoszeń generowanych do postaci PDF.</li>
-</ol>
+</ul>
 <h4>Wtorek, 30 stycznia, 2018</h4>
-<ol>
+<ul>
     <li>Numer telefonu nie jest już wymagany przy rejestracji.</li>
-</ol>
-<h4>Poniedziałek, 22 stycznia, 2018</h4>
-<ol>
+</ul>
+<h4 class="milestone">Poniedziałek, 22 stycznia, 2018</h4>
+<ul>
     <li>Możliwość zakładania kont i logowania się za pomocą Google Auth.</li>
-</ol>
+</ul>
 
 {% endblock %}
