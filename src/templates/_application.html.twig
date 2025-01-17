@@ -53,12 +53,12 @@
 
     <div id="user-location" class="grid">
         <div>
-        {% if config.confirmationScreen is not defined %}
-            <p>Dane zgłaszającego:<br /><br />
-        {% else %}
-            <p>Zweryfikuj lokalizację i swoje dane:<br /><br />
-        {% endif %}
         {% if config.isAppOwner ?? false %}
+            {% if config.confirmationScreen is not defined %}
+                <p>Dane zgłaszającego:<br /><br />
+            {% else %}
+                <p>Zweryfikuj lokalizację i swoje dane:<br /><br />
+            {% endif %}
                 <b>{{ app.user.name }}</b>
                 <br />
                 {{ app.email }}<br />
@@ -70,10 +70,7 @@
                 <small>Nieaktualne dane? Popraw je na <a href="/register.html?update">stronie rejestracji</a>
                 zanim stworzysz nowe zgłoszenie.</small>
             {% endif %}
-        {% else %}
-                <br />(ukryte)
         {% endif %}
-            </p>
         </div>
         <div>
 {% if app.address.lat is defined %}
