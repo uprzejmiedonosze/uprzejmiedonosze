@@ -8,3 +8,4 @@ require(__DIR__ . '/GlobalStats.php');
 require(__DIR__ . '/RecydywaStore.php');
 require(__DIR__ . '/Webhook.php');
 require(__DIR__ . '/Semaphore.php');
+require(__DIR__ . '/Queue.php');
