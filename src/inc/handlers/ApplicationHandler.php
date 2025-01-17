@@ -248,6 +248,21 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function applicationPdf(Request $request, Response $response, $args): Response {
+        $user = $request->getAttribute('user');
+        $appId = $args['appId'];
+        $application = \app\get($appId);
+
+        if (!$application->isAppOwner($user))
+            return $this->redirect("/ud-$appId.html");
+
+        [$path, $filename] = \app\toPdf($application);
+        return AbstractHandler::renderPdf($response, $path, $filename);
+    }
+
     public function myAppsPartial(Request $request, Response $response): Response {
         $user = $request->getAttribute('user');
 

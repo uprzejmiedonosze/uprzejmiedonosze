@@ -79,16 +79,6 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function applicationPdf(Request $request, Response $response, $args): Response {
-        $appId = $args['appId'];
-        $application = \app\get($appId);
-        [$path, $filename] = \app\toPdf($application);
-        return AbstractHandler::renderPdf($response, $path, $filename);
-    }
-
     public function applicationRedirect(Request $request) {
         $params = $request->getQueryParams();
         $appId = $this->getParam($params, 'id');

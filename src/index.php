@@ -51,8 +51,8 @@ $errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::clas
 $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
 
 $app->group('', function (RouteCollectorProxy $group) { // PDFs
-    $group->get('/{appId}.pdf', StaticPagesHandler::class . ':applicationPdf');
-})  ->add(new OptionalUserMiddleware())
+    $group->get('/{appId}.pdf', ApplicationHandler::class . ':applicationPdf');
+})  ->add(new RegisteredMiddleware())
     ->add(new PdfMiddleware());
 
 $app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
