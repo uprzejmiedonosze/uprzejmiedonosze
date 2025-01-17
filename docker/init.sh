@@ -7,4 +7,6 @@ xtail -f \
     /var/log/uprzejmiedonosze.net/error.log \
     /var/log/uprzejmiedonosze.net/uprzejmiedonosze.localhost.log &
 
+su -l www-data -s /bin/bash -c "php /var/www/uprzejmiedonosze.localhost/webapp/tools/face-blur-consumer.php &"
+
 exec nginx -g 'daemon off;'
