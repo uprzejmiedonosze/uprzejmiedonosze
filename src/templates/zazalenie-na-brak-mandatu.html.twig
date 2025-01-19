@@ -1,0 +1,122 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+
+{% set title = 'Zażalenie na brak mandatu' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+	<h2>Jak napisać zażalenie na decyzję straży miejskiej lub policji?</h2>
+
+	<h3>Najważniejsze informacje:</h3>
+	<ul>
+		<li>Masz tylko 7 dni na zażalenie!</li>
+		<li>Nie możesz go wysłać mailem</li>
+		<li>Warto to robić</li>
+	</ul>
+
+	<h3>Konkrety</h3>
+
+	<p>Jeśli SM lub Policja nie doszuka się w twoim zgłoszeniu wykroczenia, to ma
+					obowiązek poinformować Cię o tym. Najczęściej robi to listem poleconym, które
+					powinno jednak być systematycznie zastępowanie
+		<a href="/e-doreczenia.html">e-Doręczeniem</a>.</p>
+
+	<p>Jeśli w odpowiedzi znajdziesz mniej więcej takie zdanie:</p>
+	<blockquote>
+		Czynności wyjaśniające nie doprowadziły do skierowania sprawy do organu
+		        orzekającego z powodu braku danych dostatecznie uzasadniających popełnienie
+		        czynu.
+	</blockquote>
+	<p>To znaczy, że zdaniem funkcjonariusza nie dopatrzono się wykroczenia lub
+					uznano, że przedstawione dowody nie są wystarczające.</p>
+
+    <p>Taką decyzję możesz zażalić, ale musisz uważać na kilka rzeczy.</p>
+    <h4>Termin</h4>
+
+	<p>Masz zaledwie 7 dni na wniesienie zażalenia (od daty odebrania korespondencji).</p>
+
+    <h4>Forma</h4>
+
+	<p>Musisz to zrobić z mocą pisma procesowego. Jeśli wyślesz maila, to zostanie on po
+			            cichu zignorowany.</p>
+
+	<p>W praktyce oznacza to, że możesz:</p>
+	<ol>
+		<li>Wydrukować, podpisać i zanieść zażalenie na komisariat/komendę;</li>
+		<li>Wydrukować, podpisać i wysłać pocztą;</li>
+		<li>Wysłać
+			<a href="/e-doreczenia.html">e-Doręczeniem</a>.</li>
+	</ol>
+
+    <h4>Adresat</h4>
+
+    <p>Zgodnie kodeksem zażalenie wnosi się „do organu nadrzędnego”. Ustalenie takiego
+    organu jest proste w przypadku policji. Jest to ściśle hierarchiczna formacja. Każdy
+    komisariat dzielnicowy podlega pod komendę miejską. Komenda miejska podlega pod 
+    komendę wojewódzką a ta pod komendę główną.</p>
+    
+    <p>Ze strażami miejskimi i gminnymi jest trudniej. Nie ma komendy głównej straży miejskich.
+    Znane są przypadki pisania zażalenia do prezydenta miasta, wojewody, oraz do samej SM.</p>
+
+    <p>Sam stosuję to ostatnie rozwiązanie, czyli piszę bezpośrednio do SM. Formalnie jest
+    to pewnie skarga a nie zażalenie. Ale ważne, że działa.</p>
+
+    <p>W praktyce, poprawnie zaadresowane pismo powinno wyglądać następująco:</p>
+
+    <pre><blockquote>Komenda Miejska Policji w Szczecinie
+ul. Kaszubska 35
+70-227 Szczecin
+
+za pośrednictwem
+
+Komisariat Policji Szczecin-Śródmieście
+ul. Kaszubska 35
+70-227 Szczecin</blockquote></pre>
+
+    <p>Co ważne, pismo nadal wysyłasz do komisariatu, którego decyzję chcesz zażalić.</p>
+
+    <h4>Przykład pisma</h4>
+	<p>Poniżej znajdziesz przykład zażalenia na decyzję szczecińskiego komisariatu.
+		        W tym wypadku składam zażalenie na pouczenie, a nie odmowę podjęcia działań. Ale
+		        schemat jest ten sam.</p>
+
+	<pre><blockquote>Zażalenia na niewniesienie wniosku o ukaranie
+
+Zgodnie z art. 56a k.p.w. wnoszę zażalenie na niewniesienie wniosku o ukaranie
+w sprawie jazdy wzdłuż chodnika i przystanku (art. 26. 3.3 prd) oraz postoju na
+chodniku pojazdem o DMC ponad 2,5 t na pl. Zamenhofa w Szczecinie kierowcy
+pojazdu ZS110CC w dniu 13.03.2024 o 14:18 (ERSOW 1014/24).
+
+Zgodnie z informacją o czynnościach wyjaśniających wobec wskazanych zdarzeń, KP
+Szczecin-Śródmieście pouczył sprawcę wykroczenia.
+
+Kierowca tego pojazdu dokonał szeregu wykroczeń, niszcząc infrastrukturę i narażając
+pieszych na niebezpieczeństwo. Wjazd ciężarówką, bez kamery cofania, na wstecznym
+biegu na przystanek jest skrajną nieodpowiedzialnością.
+
+W bezpośredniej okolicy tego miejsca są wyznaczone trzy miejsca dostaw (licząc
+z terenem ul. Bogusława, gdzie w tamtym okresie było dopuszczone wykonywanie
+dostaw do godziny 12:00).
+
+W konsekwencji proszę o ukaranie sprawcy wykroczenia.
+</blockquote></pre>
+
+	<h3>Podstawa prawna</h3>
+
+	<ul>
+		<li>Art. 56a. k.p.w. „Zażalenie na niewniesienie wniosku o ukaranie – 
+			    Jeżeli nie zachodzą okoliczności określone w art. 27 uprawnienia pokrzywdzonego, osobie,
+			    która złożyła zawiadomienie o popełnieniu wykroczenia, przysługuje zażalenie do
+			    organu nadrzędnego na niewniesienie wniosku o ukaranie.”
+        </li>
+		<li>Art. 108. k.p.w. „Termin i tryb wnoszenia zażalenia – 
+			    Zażalenie wnosi się na piśmie w terminie 7 dni od daty ogłoszenia
+                rozstrzygnięcia albo ustnie do protokołu rozprawy lub posiedzenia,
+                a gdy podlega ono doręczeniu, od daty doręczenia lub od daty
+                dokonania zaskarżonej czynności, chyba że ustawa stanowi inaczej.”
+        </li>
+	</ul>
+
+{% endblock %}
