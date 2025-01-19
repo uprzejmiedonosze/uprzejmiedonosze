@@ -1,25 +1,20 @@
-import $ from "jquery"
+document.addEventListener("DOMContentLoaded", () => {
 
-$(function () {
-  if (!$(".faq").length || !$(".how").length) return;
-  const hash = window.location.hash;
-  if ($(hash).length) {
-    $("html, body").animate({
-      scrollTop: $(hash).offset().top - 60
-    });
-    $('h4'+hash).addClass('highlight')
-  }
-  $('h4').append(' <a class="copyLink" data-toggle="tooltip" title="Skopiuk link do sekcji">(link)</a>')
+  if (!document.getElementsByClassName('faq').length)
+    return
 
-  $('a.copyLink').click(function (e) {
+  let copyLink = document.createElement('a')
+  copyLink.classList.add('copyLink')
+  copyLink.title = 'Skopiuk link do sekcji'
+  copyLink.innerText = ' (link)'
+
+  document.querySelectorAll('h4[id]').forEach(
+    node => node.appendChild(copyLink.cloneNode(true))
+  )
+
+  document.querySelectorAll('a.copyLink').addEventListener('click', function (e) {
     e.preventDefault();
-    var copyText = `${window.location.origin}${window.location.pathname}#` + $(this).parent().attr('id');
-
-    document.addEventListener('copy', function(e) {
-       e.clipboardData.setData('text/plain', copyText);
-       e.preventDefault();
-    }, true);
-
-    document.execCommand('copy');
-  });  
+    var copyText = `${window.location.origin}${window.location.pathname}#` + this.parentElement.id;
+    navigator.clipboard.writeText(copyText);
+  })
 });

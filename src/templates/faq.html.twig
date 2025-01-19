@@ -1,9 +1,9 @@
 {% if dialog %}
-    {% set leftButton = 'menuBack' %}
-    {% set rightButton = '' %}
+	{% set leftButton = 'menuBack' %}
+	{% set rightButton = '' %}
 {% else %}
-    {% set leftButton = 'menu' %}
-    {% set rightButton = 'menuStart' %}
+	{% set leftButton = 'menu' %}
+	{% set rightButton = 'menuStart' %}
 {% endif %}
 {# SITEMAP-PRIORITY:0.7 #}
 
@@ -14,90 +14,117 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-<h2>Najczęściej zadawane pytania</h2>
+	{% macro link(target, name) %}
+        <a href="#{{ target }}" onclick="window._scrollToHowTo('#{{ target }}')">{{ name }}</a>
+    {% endmacro link %}
 
-<h3>Korzystanie z Uprzejmie Donoszę</h3>
-<h4 id="telefon">Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?</h4>
-<p>Zobacz nasz poradnik, który opisuje
-    <a href="/jak-zglosic-nielegalne-parkowanie.html">najważniejsze techniki walki z patoparkowaniem</a>.
-</p>
-
-<h4 id="to">Czy "to" warto zgłaszać?</h4>
-<p>Gdzie "to", to najczęściej konkretna sytuacja na chodniku/trawniku/ulicy. Pamiętaj, że Uprzejmie Donoszę
-nie jest magiczną aplikacją do generowania mandatów. Nawet, jeśli nie zostaniesz wezwany
-na świadka (co jest powszechną praktyką w coraz większej ilości miast), to zamienienie
-twoich zdjęć w mandat wymaga realnej pracy strażników miejskich. Przyjmij, że na każde
-twoje zgłoszenie Straż Miejska musi poświęcić godzinę swojej pracy. I wtedy zastanów się,
-czy przypadek, który chcesz zgłosić jest warty tej inwestycji.</p>
-
-<h4 id="swiadek">Czy zostanę wezwany na świadka?</h4>
-<p>To zależy od miasta w którym zgłaszasz. Dowiedz się więcej na stronie
-    <a href="/przesluchanie.html">Czy straż miejska wezwie mnie na przesłuchanie?</a>
-</p>
-
-<h4 id="recydywa">Czy zgłaszać ten sam pojazd kilka razy?</h4>
-<p>Mandat wystawiany jest za czynność, a nie stan. Oznacza to, że jeśli ktoś zaparkował
-nieprawidłowo, i stoi tam tydzień, to nie dostanie siedmiu mandatów. Nawet jeśli wyślesz
-w tym czasie dziesięć zgłoszeń. Zmarnujesz tylko czas strażników.</p>
-<p>Oczywiście z inną sytuacją mamy do czynienia, gdy ktoś codziennie staje w określonym 
-miejscu. Wtedy faktycznie każde zgłoszenie może zakończyć się mandatem. Weź jednak pod uwagę,
-że od twojego pierwszego zgłoszenia, do momentu w którym kierowca otrzyma wezwanie może minąć
-miesiąc. Dlatego jeśli masz do czynienia z recydywistą, to postaraj się z nim skontaktować.
-Włóż kartkę za wycieraczkę. Podejdź kiedy parkuje albo odjeżdża.</p>
-<p>Jeśli powyższe nie pomoże, to częstotliwość zgłoszeń pozostawiam już twojemu sumieniu. Autor 
-zgłasza recydywistów nie częściej niż raz w tygodniu.</p>
-
-<h3>Pytania techniczne</h3>
-<h4 id="aplikacja">Gdzie mogę pobrać aplikację?</h4>
-<p>Nie możesz, bo Uprzejmie Donoszę nie jest aplikacją. Jest mobilną stroną WWW,
-która jednak dość skutecznie udaje aplikację (szczególnie na telefonach z Androidem).
-Zobacz jak zrobić sobie <a href="/aplikacja.html">wygodny skrót do Uprzejmie Donoszę</a>.</p>
-
-<h4 id="3zdjęcie">Czy można dodać więcej zdjęć?</h4>
-<p>Oczywiście, że to jest możliwe z technicznego punktu widzenia. Choć nietrywialne, bo cały
-    interfejs użytkownika, już dość skomplikowany dla początkujących, jest zbudowany w oparciu
-    o dwa zdjęcia.</p>
-<p>Problemem jest jednak to, że SM drukuje 100% spraw jakie do nich trafiają. Dodatkowe zdjęcie
-    rozepchnie zgłoszenie o drugą stronę. A tego bardzo bym nie chciał.</p>
-<p>Jeśli jednak masz potrzebę uzupełnienia zgłoszenia o dodatkowe informacje (zdjęcie, film,
-    uwagi o których zapomniałaś/eś), to jest na to prosty sposób:</p>
-<ol>
-    <li>Znajdź swoje zgłoszenie i skopiuj jego numer</li>
-    <li>Zaloguj się do swojej poczty, i poszukaj wiadomości z tym numerem</li>
-    <li>Naciśnij „odpowiedz wszystkim”</li>
-    <li>Usuń swój email z listy odbiorców, pozostanie tam tylko email jednostki SM/policji</li>
-    <li>Załącz brakujące materiały</li>
-    <li>Wyślij wiadomość</li>
-</ol>
-
-<h4 id="bug">Co zrobić, jeśli coś nie działa?</h4>
-<p>Napisz na
-    <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa">grupie
-        wsparcia użytkowników Uprzejmie Donoszę</a>.
-Idealnie, jeśli będziesz mieć zrzut ekranu prezentujący problem, oraz krótki opis jak
-udało się do tej sytuacji doprowadzić.</p>
-
-<h3>Pytania związane ze współpracą ze Strażą Miejską</h3>
-
-<h4 id="zignorowac">Czy SM zdarza się zignorować zgłoszenia?</h4>
-<p>Moje doświadczenia, poparte informacjami od użytkowników wskazuje na to,
-że raczej nie. SM może zignorować anonimy. Ale zgłoszenie przygotowane przez
-Uprzejmie Donoszę ma komplet informacji, w tym kluczowe dane kontaktowe zgłaszającego.</p>
-<p>Natomiast często nie informują o przyjęciu zgłoszenia oraz rozpoczęciu sprawy. Nie 
-krępujcie się pytać i domagać informacji zwrotnej. W korespondencji z SM zawsze warto podawać
-numer rejestracyjny, datę i adres wykroczenia.</p>
-
-<h4 id="zwrot">Czy mogę uzyskać zwrot pieniędzy za przesłuchanie?</h4>
-<p>
-    Tak. Dowiedz się więcej na stronie <a href="/zwrot-za-przesluchanie.html">jak uzyskać zwrot środków za przesłuchanie</a>.
-</p>
+	<h2>Najczęściej zadawane pytania</h2>
 
 
-<h4 id="kpw">Jak wygląda postępowania mandatowe?</h4>
+	<h4>Korzystanie z Uprzejmie Donoszę</h4>
+	<ul>
+		<li>{{ _self.link('telefon', 'Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?') }}</li>
+		<li>{{ _self.link('to', 'Czy "to" warto zgłaszać?') }}</li>
+		<li>{{ _self.link('swiadek', 'Czy zostanę wezwany na świadka?') }}</li>
+		<li>{{ _self.link('recydywa', 'Czy zgłaszać ten sam pojazd kilka razy?') }}</li>
+	</ul>
 
-<p>W skrócie, koszmarnie. Ale poniżej znajdziesz uproszczoną wizualizację tego procesu.</p>
+	<h4>Pytania techniczne</h4>
+	<ul>
+		<li>{{ _self.link('aplikacja', 'Gdzie mogę pobrać aplikację?') }}</li>
+		<li>{{ _self.link('3zdjęcie', 'Czy można dodać więcej zdjęć?') }}</li>
+		<li>{{ _self.link('bug', 'Co zrobić, jeśli coś nie działa?') }}</li>
+	</ul>
+	<h4>Pytania związane ze współpracą ze Strażą Miejską</h4>
+	<ul>
+		<li>{{ _self.link('zignorowac', 'Czy SM zdarza się zignorować zgłoszenia?') }}</li>
+		<li>{{ _self.link('zwrot', 'Czy mogę uzyskać zwrot pieniędzy za przesłuchanie?') }}</li>
+		<li>{{ _self.link('kpw', 'Jak wygląda postępowania mandatowe?') }}</li>
+		<li>{{ _self.link('telefon2', 'SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?') }}</li>
+		<li>{{ _self.link('miasta', 'W jakich miastach działa Uprzejmie Donoszę?') }}</li>
+	</ul>
 
-<pre class="mermaid">
+
+	<h3>Korzystanie z Uprzejmie Donoszę</h3>
+	<h4 id="telefon">Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?</h4>
+	<p>Zobacz nasz poradnik, który opisuje
+		<a href="/jak-zglosic-nielegalne-parkowanie.html">najważniejsze techniki walki z patoparkowaniem</a>.
+	</p>
+
+	<h4 id="to">Czy "to" warto zgłaszać?</h4>
+	<p>Gdzie "to", to najczęściej konkretna sytuacja na chodniku/trawniku/ulicy.
+		Pamiętaj, że Uprzejmie Donoszę nie jest magiczną aplikacją do generowania mandatów.
+		Nawet, jeśli nie zostaniesz wezwany świadka, to zamienienie twoich zdjęć w mandat
+		wymaga realnej pracy strażników miejskich.</p>
+	<p>Przyjmij, że na każde
+		twoje zgłoszenie Straż Miejska musi poświęcić kilka godzin swojej pracy.
+		I wtedy zastanów się, czy przypadek, który chcesz zgłosić jest warty tego wysiłku.</p>
+
+	<h4 id="swiadek">Czy zostanę wezwany na świadka?</h4>
+	<p>To zależy od miasta w którym zgłaszasz. Dowiedz się więcej na stronie
+		<a href="/przesluchanie.html">Czy straż miejska wezwie mnie na przesłuchanie?</a>
+	</p>
+
+	<h4 id="recydywa">Czy zgłaszać ten sam pojazd kilka razy?</h4>
+	<p>Mandat wystawiany jest za czynność, a nie stan. Oznacza to, że jeśli ktoś zaparkował
+		nieprawidłowo, i stoi tam tydzień, to nie dostanie siedmiu mandatów. Nawet jeśli wyślesz
+		w tym czasie dziesięć zgłoszeń. Zmarnujesz tylko czas strażników.</p>
+	<p>Oczywiście z inną sytuacją mamy do czynienia, gdy ktoś codziennie staje w określonym 
+		miejscu. Wtedy faktycznie każde zgłoszenie może zakończyć się mandatem. Weź jednak pod uwagę,
+		że od twojego pierwszego zgłoszenia, do momentu w którym kierowca otrzyma wezwanie może minąć
+		miesiąc. Dlatego jeśli masz do czynienia z recydywistą, to postaraj się z nim skontaktować.
+		Włóż kartkę za wycieraczkę. Podejdź kiedy parkuje albo odjeżdża.</p>
+	<p>Jeśli powyższe nie pomoże, to częstotliwość zgłoszeń pozostawiam już twojemu sumieniu. Autor 
+		zgłasza recydywistów nie częściej niż raz w tygodniu.</p>
+
+	<h3>Pytania techniczne</h3>
+	<h4 id="aplikacja">Gdzie mogę pobrać aplikację?</h4>
+	<p>Nie możesz, bo Uprzejmie Donoszę nie jest aplikacją. Jest mobilną stroną WWW,
+		która jednak dość skutecznie udaje aplikację (szczególnie na telefonach z Androidem).
+		Zobacz jak zrobić sobie
+		<a href="/aplikacja.html">wygodny skrót do Uprzejmie Donoszę</a>.</p>
+
+	<h4 id="3zdjęcie">Czy można dodać więcej zdjęć?</h4>
+	<p>Pracuję nad tym.</p>
+	<p>Tymczasem, jeśli jednak masz potrzebę uzupełnienia zgłoszenia o dodatkowe informacje (zdjęcie, film,
+		    uwagi o których zapomniałaś/eś), to jest na to prosty sposób:</p>
+	<ol>
+		<li>Znajdź swoje zgłoszenie i skopiuj jego numer</li>
+		<li>Zaloguj się do swojej poczty, i poszukaj wiadomości z tym numerem</li>
+		<li>Naciśnij „odpowiedz wszystkim”</li>
+		<li>Usuń swój email z listy odbiorców, pozostanie tam tylko email jednostki SM/policji</li>
+		<li>Załącz brakujące materiały</li>
+		<li>Wyślij wiadomość</li>
+	</ol>
+
+	<h4 id="bug">Co zrobić, jeśli coś nie działa?</h4>
+	<p>Napisz na
+		<a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa">grupie
+			        wsparcia użytkowników Uprzejmie Donoszę</a>.
+			Idealnie, jeśli będziesz mieć zrzut ekranu prezentujący problem, oraz krótki opis jak
+			udało się do tej sytuacji doprowadzić.</p>
+
+	<h3>Pytania związane ze współpracą ze Strażą Miejską</h3>
+
+	<h4 id="zignorowac">Czy SM zdarza się zignorować zgłoszenia?</h4>
+	<p>Moje doświadczenia, poparte informacjami od użytkowników wskazuje na to,
+		że raczej nie. SM może zignorować anonimy. Ale zgłoszenie przygotowane przez
+		Uprzejmie Donoszę ma komplet informacji, w tym kluczowe dane kontaktowe zgłaszającego.</p>
+	<p>Natomiast często nie informują o przyjęciu zgłoszenia oraz rozpoczęciu sprawy. Nie 
+		krępujcie się pytać i domagać informacji zwrotnej. W korespondencji z SM zawsze warto podawać
+		numer rejestracyjny, datę i adres wykroczenia.</p>
+
+	<h4 id="zwrot">Czy mogę uzyskać zwrot pieniędzy za przesłuchanie?</h4>
+	<p>
+		Tak. Dowiedz się więcej na stronie
+		<a href="/zwrot-za-przesluchanie.html">jak uzyskać zwrot środków za przesłuchanie</a>.
+	</p>
+
+	<h4 id="kpw">Jak wygląda postępowania mandatowe?</h4>
+
+	<p>W skrócie, koszmarnie. Ale poniżej znajdziesz uproszczoną wizualizację tego procesu.</p>
+
+	<pre class="mermaid">
 flowchart
     start([fa:fa-camera-retro Zgłoszenie])
 
@@ -152,36 +179,37 @@ classDef mixed fill:#e9c200
 
 style start fill:black,color:white
 </pre>
-<script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
-</script>
+	<script type="module">
+		import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+	</script>
 
-<h4 id="telefon2">SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?</h4>
-<p>Część SM (oraz komisariatów) odmawia wszczęcia postępowania na podstawie
-    wysłanej wiadomości e-mail. Nalegają, żeby "dzwonić".</p>
+	<h4 id="telefon2">SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?</h4>
+	<p>Część SM (oraz komisariatów) odmawia wszczęcia postępowania na podstawie
+		    wysłanej wiadomości e-mail. Nalegają, żeby "dzwonić".</p>
 
-<p>W takiej sytuacji spróbuj argumentować, że nie prosisz o interwencję, bo całe 
-    wykroczenie trwa czasem 15 minut i nie dojadą. Jeśli będziesz potrzebował(a) interwencji,
-    to z radością zadzwonisz. Natomiast tutaj wnosisz o ukarania z pozycji
-    świadka popełnionego wykroczenia.</p>
+	<p>W takiej sytuacji spróbuj argumentować, że nie prosisz o interwencję, bo całe 
+		    wykroczenie trwa czasem 15 minut i nie dojadą. Jeśli będziesz potrzebował(a) interwencji,
+		    to z radością zadzwonisz. Natomiast tutaj wnosisz o ukarania z pozycji
+		    świadka popełnionego wykroczenia.</p>
 
-<p>Zachęcam także do wysłania im zgłoszenia z pomocą <a href="/e-doreczenia.html">e-Doręczenia</a>.
-    Nie mamy jeszcze doświadczeń w tej kwestii bo to bardzo nowe rozwiązanie. Będziesz miał(a) 
-    własne, to koniecznie do mnie napisz!
-</p>
+	<p>Zachęcam także do wysłania im zgłoszenia z pomocą
+		<a href="/e-doreczenia.html">e-Doręczenia</a>.
+			    Nie mamy jeszcze doświadczeń w tej kwestii bo to bardzo nowe rozwiązanie. Będziesz miał(a) 
+			    własne, to koniecznie do mnie napisz!
+	</p>
 
 
-<h3 id="miasta">W jakich miastach działa Uprzejmie Donoszę?</h3>
-<p>Uprzejmie Donoszę działa wszędzie tam, gdzie istnieje możliwość zgłoszenia
-wykroczenia za pomocą poczty elektronicznej lub EPUAP. W praktyce oznacza prawie 
-każdą miejscowość w Polsce.</p>
+	<h4 id="miasta">W jakich miastach działa Uprzejmie Donoszę?</h4>
+	<p>Uprzejmie Donoszę działa wszędzie tam, gdzie istnieje możliwość zgłoszenia
+		wykroczenia za pomocą poczty elektronicznej lub EPUAP. W praktyce oznacza prawie 
+		każdą miejscowość w Polsce.</p>
 
-<p>Dla części z miast mam bezpośrednie relacje od zgłaszających. Sprawdź, czego
-możesz się spodziewać po współpracy z SM na stronie o
-<a href="/przesluchanie.html">przesłuchaniu w charakterze świadka</a>.
-
-<p>Obecnie Uprzejmie Donoszę ma w swojej bazie adresy e-mail Straży Miejskich lub
-Gminnych dla następujących miast: {{ smAddresses }}.</p>
+	<p>Dla części z miast mam bezpośrednie relacje od zgłaszających. Sprawdź, czego
+		możesz się spodziewać po współpracy z SM na stronie o
+		<a href="/przesluchanie.html">przesłuchaniu w charakterze świadka</a>.</p>
+	<p>Obecnie Uprzejmie Donoszę ma w swojej bazie adresy e-mail Straży Miejskich lub
+		Gminnych dla następujących miast:
+		{{ smAddresses }}.</p>
 
 
 {% endblock %}
