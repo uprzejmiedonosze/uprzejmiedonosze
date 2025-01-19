@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let copyLink = document.createElement('a')
   copyLink.classList.add('copyLink')
   copyLink.title = 'Skopiuk link do sekcji'
-  copyLink.innerText = ' (link)'
+  copyLink.innerText = ' (skopiuj link)'
 
   document.querySelectorAll('h4[id]').forEach(
     node => node.appendChild(copyLink.cloneNode(true))

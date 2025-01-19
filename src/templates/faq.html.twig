@@ -15,7 +15,7 @@
 {% block main %}
 
 	{% macro link(target, name) %}
-        <a href="#{{ target }}" onclick="window._scrollToHowTo('#{{ target }}')">{{ name }}</a>
+        <a href="#{{ target }}">{{ name }}</a>
     {% endmacro link %}
 
 	<h2>Najczęściej zadawane pytania</h2>
@@ -126,14 +126,16 @@
 
 	<pre class="mermaid">
 flowchart
-    start([fa:fa-camera-retro Zgłoszenie])
+    start([fa:fa-camera-retro Zgłoszenie]):::start
 
     mandat(["`fa:fa-thumbs-up kara: taryfikator
         punkty: taryfikator
         **status w UD**: mandat`"]):::ok
     fail(["`fa:fa-thumbs-down umorzenie
     **status w UD**: zignorowane`"]):::fail
-    start ---> cepik
+    start ---> klasyfikacja
+    rejected(["`fa:fa-thumbs-down brak znamion wykroczenia
+    **status w UD**: zignorowane`"]):::fail
 
     subgraph Sądy
     court([fa:fa-gavel Sprawa sądowa o mandat]):::mixed
@@ -151,15 +153,21 @@ flowchart
     penalty2(["`fa:fa-thumbs-up kara: dec. sądu
         punkty: taryfikator
         **status w UD**: mandat`"]):::ok
-    
     end
-    
     subgraph SM/Policja
+    klasyfikacja{Klasyfikacja}
+    klasyfikacja -- wykroczenie --> cepik
+    klasyfikacja -- odmowa --> rejected
     cepik{CEPIK}
     cepik -- jest właściciel --> mail1
     mail1(list polecony/wezwanie)
     mail1 --> owner
     cepik -- brak danych ---> fail
+
+    rejected --> mail3
+	mail3(list polecony)
+	mail3 --> complaint
+	complaint@{ shape: "stadium", label: "złóż zażalenie" }
 
     owner{Wlaściciel}
     mail2(list polecony/wezwanie)
@@ -176,11 +184,11 @@ flowchart
 classDef fail fill:#F99,color:white
 classDef ok fill:#009C7F,color:white
 classDef mixed fill:#e9c200
+classDef start fill:black,color:white
 
-style start fill:black,color:white
 </pre>
 	<script type="module">
-		import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+		import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 	</script>
 
 	<h4 id="telefon2">SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?</h4>
