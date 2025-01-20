@@ -191,7 +191,10 @@ class ApplicationHandler extends AbstractHandler {
         $user->appsCount = $application->seq;
         \user\save($user);
 
-        \recydywa\update($application->carInfo->plateId);
+        $recydywa = \recydywa\update($application->carInfo->plateId);
+        if ($recydywa->usersCnt > 1)
+            \queue\produce($appId);
+
         \user\stats(false, $user); // update cache
 
         if ($edited) {
