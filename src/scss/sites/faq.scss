@@ -32,8 +32,27 @@ h4:hover a.copyLink {
 
 blockquote {
   font-style: italic;
-  quotes: "“" "”" "‘" "’";
-  background: rgb(249, 249, 249);
-  margin: 0.5em;
-  padding: 1em;
+  max-width: 500px;
+  margin: 0.25em 0;
+  padding: 0.35em 40px;
+  position: relative;
+}
+
+blockquote::before {
+  display: block;
+  padding-left: 10px;
+  content: "\201C";
+  font-size: 80px;
+  position: absolute;
+  left: -20px;
+  top: -20px;
+  color: #7a7a7a;
+}
+
+blockquote.doc::before {
+  content: "📃";
+  font-size: 35px;
+  padding-top: 20px;
+  font-style: normal;
+  padding-left: 15px;
 }
