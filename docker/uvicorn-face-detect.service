@@ -1,0 +1,24 @@
+[Unit]
+Description=Uvicorn face detect service.
+Wants=network.target network-online.target
+After=network.target network-online.target
+AssertFileIsExecutable=/var/face-detect/start.sh
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/var/face-detect/start.sh
+User=www-data
+Group=www-data
+WorkingDirectory=/var/face-detect
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+RestartSec=5
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

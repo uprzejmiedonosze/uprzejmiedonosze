@@ -1,0 +1,24 @@
+[Unit]
+Description=Face detect queue consumer service.
+Wants=network.target network-online.target
+After=network.target network-online.target
+AssertFileIsExecutable=/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.sh
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+ExecStart=/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.sh
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/uprzejmiedonosze.net/webapp/tools/
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+RestartSec=5
+Restart=always
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
