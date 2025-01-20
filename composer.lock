@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7add60f0d73cc47a2bc29f5069cc0e36",
+    "content-hash": "22baada020ba66979fc75a702aa9b7a3",
     "packages": [
         {
             "name": "beste/clock",
@@ -1981,6 +1981,72 @@
             ]
         },
         {
+            "name": "pda/pheanstalk",
+            "version": "v5.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pheanstalk/pheanstalk.git",
+                "reference": "5deb29e4fc9b738bed0ae7b60dfeab4fd49abb16"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pheanstalk/pheanstalk/zipball/5deb29e4fc9b738bed0ae7b60dfeab4fd49abb16",
+                "reference": "5deb29e4fc9b738bed0ae7b60dfeab4fd49abb16",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": ">=8.1.0"
+            },
+            "require-dev": {
+                "captainhook/plugin-composer": "^5.3",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpstan/phpstan-strict-rules": "^1.1",
+                "phpunit/phpunit": "^10",
+                "ramsey/conventional-commits": "^1.2",
+                "symplify/easy-coding-standard": "^12",
+                "vimeo/psalm": "^5"
+            },
+            "suggest": {
+                "ext-sockets": "Socket implementation works best for long running processes"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Pheanstalk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Annesley",
+                    "email": "paul@annesley.cc",
+                    "homepage": "http://paul.annesley.cc/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Sam Mousa",
+                    "email": "sam@mousa.nl",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "PHP client for beanstalkd queue",
+            "homepage": "https://github.com/pheanstalk/pheanstalk",
+            "keywords": [
+                "beanstalkd"
+            ],
+            "support": {
+                "issues": "https://github.com/pheanstalk/pheanstalk/issues",
+                "source": "https://github.com/pheanstalk/pheanstalk/tree/v5.0.9"
+            },
+            "time": "2025-01-02T16:22:04+00:00"
+        },
+        {
             "name": "php-ffmpeg/php-ffmpeg",
             "version": "v1.3.1",
             "source": {
@@ -2068,6 +2134,67 @@
                 "source": "https://github.com/PHP-FFMpeg/PHP-FFMpeg/tree/v1.3.1"
             },
             "time": "2025-01-10T20:23:57+00:00"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/predis/predis.git",
+                "reference": "bac46bfdb78cd6e9c7926c697012aae740cb9ec9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/predis/predis/zipball/bac46bfdb78cd6e9c7926c697012aae740cb9ec9",
+                "reference": "bac46bfdb78cd6e9c7926c697012aae740cb9ec9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.3",
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^8.0 || ^9.4"
+            },
+            "suggest": {
+                "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Till Krüss",
+                    "homepage": "https://till.im",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A flexible and feature-complete Redis client for PHP.",
+            "homepage": "http://github.com/predis/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "support": {
+                "issues": "https://github.com/predis/predis/issues",
+                "source": "https://github.com/predis/predis/tree/v2.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/tillkruss",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-11-21T20:00:02+00:00"
         },
         {
             "name": "psr/cache",
@@ -3332,6 +3459,46 @@
                 "source": "https://github.com/slimphp/Twig-View/tree/3.4.1"
             },
             "time": "2024-09-26T05:42:02+00:00"
+        },
+        {
+            "name": "slowmove/simple-php-queue",
+            "version": "v0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slowmove/simple-php-queue.git",
+                "reference": "d61ee1a837af203476eec7c21b227fc93aed2b62"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slowmove/simple-php-queue/zipball/d61ee1a837af203476eec7c21b227fc93aed2b62",
+                "reference": "d61ee1a837af203476eec7c21b227fc93aed2b62",
+                "shasum": ""
+            },
+            "require": {
+                "pda/pheanstalk": "^5.0",
+                "php": ">=8.1",
+                "predis/predis": "^2.2"
+            },
+            "require-dev": {
+                "pestphp/pest": "^2.34",
+                "pestphp/pest-plugin-type-coverage": "^2.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Slowmove\\SimplePhpQueue\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A simple, primarily file based, queue with multiple adapters",
+            "support": {
+                "issues": "https://github.com/slowmove/simple-php-queue/issues",
+                "source": "https://github.com/slowmove/simple-php-queue/tree/v0.4"
+            },
+            "time": "2024-02-28T10:49:37+00:00"
         },
         {
             "name": "spatie/temporary-directory",
