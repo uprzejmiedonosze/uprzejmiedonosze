@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-curl -s -o /dev/null 'https://uprzejmiedonosze.net/api/csv.html?file=statsByDay'
-curl -s -o /dev/null 'https://uprzejmiedonosze.net/api/csv.html?file=statsByYear'
-curl -s -o /dev/null 'https://uprzejmiedonosze.net/api/csv.html?file=statsByCarBrand'
+curl -s -f -o /dev/null 'https://uprzejmiedonosze.net/stats/byYear.csv?sessionless'
+curl -s -f -o /dev/null 'https://uprzejmiedonosze.net/stats/byCarBrand.csv?sessionless'
+curl -s -f -o /dev/null 'https://uprzejmiedonosze.net/stats/statsByDay.csv?sessionless'
+
