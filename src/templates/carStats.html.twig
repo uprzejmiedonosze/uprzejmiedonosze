@@ -39,6 +39,13 @@
             </h3>
             <figure>
                 <img src="{{ app.getSafeImageUrl }}">
+                {% if app.isAppOwner and app.faces.count ?? 0 > 0 %}
+                    <span class="blured-hint">Zostanie nałożony blur: widoczna twarz</span>
+                {% elseif app.faces.count ?? 0 > 0 %}
+                    <span class="blured-hint">Nałożony blur: widoczna twarz</span>
+                {% elseif not app.showImage %}
+                    <span class="blured-hint">Nałożony blur: brak zgody na publikację</span>
+                {% endif %}
             </figure>
             <div class="content">
                 <div class="application-details-list">

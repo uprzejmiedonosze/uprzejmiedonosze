@@ -197,7 +197,7 @@ class StaticPagesHandler extends AbstractHandler {
                 || $app->statements->gallery;
             
             // hide photos with faces
-            $app->showImage = $app->showImage && ($app->faces->count ?? 0) > 0;
+            $app->showImage = $app->showImage && ($app->faces->count ?? 0) == 0;
 
             // app owner can always see his photos
             $app->showImage = $app->showImage || $app->isAppOwner;

@@ -43,11 +43,24 @@
       figure {
         margin: 0;
         height: 300px;
+        position: relative;
 
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+        }
+        .blured-hint {
+          background-color: #f9f9f9;
+          border-radius: 0.3125em;
+          border: 1px solid;
+          font-size: 12px;
+          font-weight: 700;
+          padding: 0.3em 0.6em;
+          text-align: center;
+          position: absolute;
+          bottom: 5px;
+          left: 5px;
         }
       }
 
