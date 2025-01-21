@@ -8,19 +8,19 @@ logger("Starting face-blur-consumer...", true);
 
 $consumer = function (string $appId): void {
   try {
-    $application = \app\get($appId);
-    if (isset($app->faces)) {
+    $app = \app\get($appId);
+    if (isset($app->faces->count)) {
       logger("Faces already detected in $appId");
       return;
     }
 
-    $filename = ROOT . $application->contextImage->url;
+    $filename = ROOT . $app->contextImage->url;
     $url = "http://localhost:2000/detect/$filename";
     $faces = \curl\request($url, [], "FaceRecogniton");
-    $application->faces = $faces;
-    \app\save($application);
+    $app->faces = $faces;
+    \app\save($app);
 
-    logger("Detected face in $appId: " . ($faces->count ?? 0)); 
+    logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
     sleep(5);
   } catch (\Exception $e) {
     logger("ERROR: Failed detect face in $appId " . $e->getMessage(), true);
