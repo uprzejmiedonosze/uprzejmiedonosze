@@ -30,6 +30,10 @@ function update(string $plateId): Recydywa {
     $apps = \app\byPlate($cleanPlateId);
     $recydywa = Recydywa::withApps($apps);
 
+    if ($recydywa->usersCnt > 1)
+        foreach($apps as $app)
+            \queue\produce($app->id);
+
     \cache\set(type:Type::Recydywa, key:$cleanPlateId, value:$recydywa, flag:0, expire:0);
     \store\set(TABLE, "$cleanPlateId v2", json_encode($recydywa));
     return $recydywa;
