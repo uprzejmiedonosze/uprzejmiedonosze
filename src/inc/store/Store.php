@@ -12,6 +12,7 @@ function store(): \PDO
         return $store;
     $store = new \PDO('sqlite:' . DB_FILENAME);
     $store->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    $store->setAttribute(\PDO::ATTR_TIMEOUT, 10);
     return $store;
 }
 
