@@ -17,3 +17,5 @@ src/tensor
 src/config.php
 **/*.log
 .phpunit.cache
+**/*-shm
+**/*-wal
