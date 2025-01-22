@@ -23,7 +23,6 @@ function get(string $plateId, bool $withCache=true): Recydywa {
 
 /**
  * Recalculates recydywa.
- * @SuppressWarnings(PHPMD.StaticAccess)
  */
 function update(string $plateId): Recydywa {
     $cleanPlateId = cleanPlateId($plateId);
