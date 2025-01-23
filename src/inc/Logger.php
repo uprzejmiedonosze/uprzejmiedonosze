@@ -35,7 +35,7 @@ function removeVendor(string $backtrace): string {
 function logger(string|object|array|null $msg, $force = null): string {
     $DT_FORMAT = 'Y-m-d\TH:i:s';
     $time = date($DT_FORMAT);
-    $ip = $_SERVER['REMOTE_ADDR'] ?? '?.?.?.?';
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
     if (is_null($msg))
         $msg = 'null';
     if (!is_string($msg))
@@ -66,7 +66,7 @@ function send_syslog(string $msg, bool $debug): void {
     if (str_ends_with($_SERVER['_'] ?? '', 'phpunit'))
         return;
 
-    openlog("uprzejmiedonosze", LOG_PID | LOG_PERROR, LOG_LOCAL0);
+    openlog("uprzejmiedonosze", LOG_NDELAY, LOG_DAEMON);
     if (str_contains(mb_strtolower($msg), 'error'))
         syslog(LOG_ERR, $msg);
     else
