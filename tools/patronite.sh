@@ -12,5 +12,5 @@ fi
 
 SQL="sqlite3 /var/www/${ENV}uprzejmiedonosze.net/db/store.sqlite"
 
-ssh nieradka.net "${SQL} \"select value from users where key = '$@' or json_extract(value, '$.data.name') like lower('%$@%') \"" \
+ssh nieradka.net "${SQL} \"select value from users where lower(key) = lower('$@') \"" \
 	| jq -r '.data, "number: \(.number)", "appsCount: \(.appsCount)"'
