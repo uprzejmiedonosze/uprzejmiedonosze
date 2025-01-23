@@ -67,6 +67,9 @@ function send_syslog(string $msg, bool $debug): void {
         return;
 
     openlog("uprzejmiedonosze", LOG_PID | LOG_PERROR, LOG_LOCAL0);
-    syslog($debug ? LOG_DEBUG: LOG_INFO, $msg);
+    if (str_contains(mb_strtolower($msg), 'error'))
+        syslog(LOG_ERR, $msg);
+    else
+        syslog($debug ? LOG_DEBUG: LOG_INFO, $msg);
     closelog();
 }
