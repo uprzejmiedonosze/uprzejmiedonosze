@@ -6,3 +6,7 @@
     @extend .button;
     max-width: 220px;
 }
+
+.firebaseui-info-bar {
+    z-index: 4;
+}
