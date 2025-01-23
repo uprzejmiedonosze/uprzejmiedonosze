@@ -23,7 +23,9 @@ $consumer = function (string $appId): void {
     logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
     sleep(5);
   } catch (\Exception $e) {
-    logger("ERROR: Failed detect face in $appId " . $e->getMessage(), true);
+    $plateId = $app->carInfo->plateId ?? '[plateId]';
+    logger("ERROR: Failed detect face in $appId ($plateId) " . $e->getMessage(), true);
+    sleep(30);
   }
 };
 
