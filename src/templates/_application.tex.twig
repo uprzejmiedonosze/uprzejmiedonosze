@@ -1,6 +1,6 @@
 {% block commands %}
     \renewcommand{\n}{ {{ app.user.name }} }
-    \rhead{ Dnia {{ app.getDate }} }
+    \rhead{ Dnia {{ app.getSentDate }} }
 {% endblock %}
 
 \vspace{\stretch{3}}\noindent

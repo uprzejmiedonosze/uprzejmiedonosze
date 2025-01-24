@@ -198,7 +198,7 @@ class Application extends JSONObject implements \JsonSerializable {
     public function getSentDate($pattern="d.MM.y") {
         if (isset($this->sent->date))
             return formatDateTime($this->sent->date, $pattern);
-        return '';
+        return $this->getDate($pattern);
     }
 
     /**
