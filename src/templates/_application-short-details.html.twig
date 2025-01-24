@@ -14,6 +14,13 @@
             <img src="{{ app.carImage.thumb }}?v={{ app.getRevision }}">
         </a>
     </div>
+    {% if app.thirdImage ?? false %}
+    <div class="imageContainer thirdImage">
+        <a target="_blank" href="/ud-{{ app.id }}.html">
+            <img src="{{ app.thirdImage.thumb }}?v={{ app.getRevision }}">
+        </a>
+    </div>
+    {% endif %}
 </div>
 <div class="application-details-list">
     <div class="status-dot {{ app.status }}">
@@ -38,14 +45,11 @@
                 {% endfor %}
             </ul>
         </div>
-
-
         {% endif %}
 
         Zgłoszenie&nbsp;<tt>{{ app.number }}</tt>
     </div>
 
-        
     <div class="calendar"><b>{{ app.getDate("d.MM.y, H:mm (eee)")|raw }}</b></div>
 
     <div class="address">{{ app.address.address }}</div>
