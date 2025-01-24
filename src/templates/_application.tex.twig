@@ -6,7 +6,6 @@
 \vspace{\stretch{3}}\noindent
 {\large {{ app.guessSMData().getLatexAddress() }} }
 
-{% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=pdf}' %}
 {% set mapUrl = '{' ~ app.getMapUrl() ~ '}' %}
 
 {% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '?download}' %}
@@ -18,12 +17,12 @@
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
 {% set thirdImage     = '{' ~ root ~ '/' ~ (app.thirdImage.thumb ?? '')~ '}' %}
 
-{% set appNumber    = '\\underline{\\texttt{' ~ app.number ~ '}}' %}
+{% set appNumber    = '\\texttt{' ~ app.number ~ '}' %}
 
 \vspace{15 mm}
 \begin{center}
     {\Large
-        \href{{ appUrl }}{Zgłoszenie wykroczenia {{ appNumber|raw }} }
+        Zgłoszenie wykroczenia {{ appNumber|raw }}
         {% if app.sentViaAPI is defined %}\footnote{\noindent Pamiętaj, że to zgłoszenie zostało wysłane do {{ app.guessSMData.city }} poprzez API. Odpowiedź to {{ app.sentViaAPI }} }.{% endif %}
     }
 \end{center}
