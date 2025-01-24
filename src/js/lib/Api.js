@@ -35,6 +35,10 @@ export default class Api {
   async patch(data, headers={}) {
     return await this.#postOrPatch(data, 'PATCH', headers)
   }
+
+  async delete(data, headers={}) {
+    return await this.#postOrPatch(data, 'DELETE', headers)
+  }
   
   async #postOrPatch(data, method, headers) {
     const response = await fetch(this.url, {

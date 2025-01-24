@@ -79,17 +79,21 @@
                 <span class="plate-id">{{ app.carInfo.plateId }}</span>
             </div>
         </div>
-    </div>
-
-    <div class="sender-data">
-        <p>Twoje dane:</p>
-        <cite>
-        <b>{{ app.user.name }}</b><br />
-        {{ app.email }}<br />
-        {{ app.user.address }}<br />
-        {% if app.user.msisdn %}Tel: <span class="msisdn">{{ app.user.msisdn }}</span><br />{% endif %}
-        {% if app.user.edelivery ?? false %}e-Doręczenia: <span class="edelivery">{{ app.user.edelivery ?? '' }}</span>{% endif %}
-        </cite>
+        <div>
+            {% if app.thirdImage ?? false %}
+            <img src="{{ app.thirdImage.thumb }}?v={{ app.getRevision }}" />
+            {% endif %}
+        </div>
+        <div class="sender-data">
+            <p>Twoje dane:</p>
+            <cite>
+                <b>{{ app.user.name }}</b><br />
+                {{ app.email }}<br />
+                {{ app.user.address }}<br />
+                {% if app.user.msisdn %}Tel: <span class="msisdn">{{ app.user.msisdn }}</span><br />{% endif %}
+                {% if app.user.edelivery ?? false %}e-Doręczenia: <span class="edelivery">{{ app.user.edelivery ?? '' }}</span>{% endif %}
+            </cite>
+        </div>
     </div>
 </div>
 {% if app.automatedSM %}

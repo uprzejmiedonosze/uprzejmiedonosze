@@ -22,9 +22,9 @@
         </div>
         {% endif %}
         <div class="grid images">
-            <div class="imageContainer image-upload contextImageSection">
+            <div class="imageContainer image-upload contextImageSection button inverse">
                 <label>
-                    Wgraj zdjęcie z widocznym wykroczeniem
+                    <b>+ Dodaj zdjęcie z widocznym wykroczeniem</b>
                     <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="contextImage" multiple
                         title="Zdjęcie przedstawiające kontekst"
                         value="{{ app.contextImage.url ?? '' }}" />
@@ -34,9 +34,9 @@
                     <img id="contextImagePreview" src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
             </div>
-            <div class="imageContainer image-upload carImageSection">
+            <div class="imageContainer image-upload carImageSection button inverse">
                 <label>
-                    Wgraj zdjęcie z widoczną tablicą rejestracyjną
+                    <b>+ Dodaj zdjęcie z widoczną tablicą rejestracyjną</b>
                     <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="carImage" multiple
                         title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
                         value="{{ app.carImage.url ?? '' }}" />
@@ -52,6 +52,24 @@
                 </div>
                 <div class="plate-box" style="border: none;"></div>
             </div>
+            {% set thirdImage = (app.thirdImage.thumb ?? false) %}
+            <div class="imageButton image-upload thirdImageSection"
+                {% if thirdImage %}style="display: none"{% endif %}>
+                <label class="button inverse">+ Dodaj trzecie zdjęcie (opcjonalnie)
+                <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="thirdImage"
+                        title="Zdjęcie przedstawiające kontekst"
+                        value="{{ app.thirdImage.url ?? '' }}" />
+                </label>
+            </div>
+            <div class="imageContainer image-upload thirdImageSection"
+                {% if not thirdImage %}style="display: none"{% endif %}>
+                <label>
+                    <a class="button remove" href="#">X</a>
+                    <div class="loader l" style="display: none;"></div>
+                    <img id="thirdImagePreview" src="{{ app.thirdImage.thumb ?? 'img/fff-1.png' }}"/>
+                </label>
+            </div>
+            <div></div>
             <div>
                 <label for="datetime"><span id="dateHint">Data i czas zgłoszenia</span> <a href="#" class="changeDatetime">(zmień datę, jeśli niepoprawna)</a></label>
                 <div class="datetime">

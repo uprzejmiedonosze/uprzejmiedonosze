@@ -22,6 +22,7 @@
     transition: 0.3s;
     &:hover {
         filter: brightness(110%);
+        cursor: pointer;
     }
     &:focus {
         box-shadow: none!important;
@@ -51,6 +52,12 @@
     }
     &.inline {
         display: inline-block;
+    }
+    &.inverse {
+        background-color: #fff;
+        color: variables.$primaryColor!important;
+        border: 2px solid variables.$primaryColor;
+        border-radius: .8em;
     }
 
     &.light {

@@ -3,7 +3,7 @@ import $ from "jquery"
 import * as Sentry from "@sentry/browser"
 import { initMaps } from "./lib/geolocation";
 import { initHandlers } from "./new-app/on-load";
-import { repositionCarImage } from "./new-app/images";
+import { removeFile, repositionCarImage } from "./new-app/images";
 
 const currentScript = document.currentScript;
 
@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const map = initMaps(currentScript?.getAttribute("last-location"), currentScript?.getAttribute("stop-agresji"))
   initHandlers(map)
+
+  document.querySelector('.button.remove')?.addEventListener('click', function () {
+    removeFile('thirdImage')
+  })
 
   if (currentScript?.getAttribute("data-vehiclebox-x")) {
     const vehicleBox = {

@@ -150,6 +150,12 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
         $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
         $application->contextImage->width = $width;
         $application->contextImage->height = $height;
+    } else if ($pictureType == 'thirdImage') {
+        $application->thirdImage = new stdClass();
+        $application->thirdImage->url = "$baseFileName,$type.jpg";
+        $application->thirdImage->thumb = "$baseFileName,$type,t.jpg";
+        $application->thirdImage->width = $width;
+        $application->thirdImage->height = $height;
     } else {
         \semaphore\release($semaphore);
         throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($application->id)", 400);

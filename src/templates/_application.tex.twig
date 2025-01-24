@@ -12,10 +12,12 @@
 
 {% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '?download}' %}
 {% set carImageUrl     = '{%HTTPS%://%HOST%/' ~ app.carImage.url ~ '?download}' %}
+{% set thirdImageUrl     = '{%HTTPS%://%HOST%/' ~ (app.thirdImage.url ?? '') ~ '?download}' %}
 
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb ~ '}' %}
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}
+{% set thirdImage     = '{' ~ root ~ '/' ~ (app.thirdImage.thumb ?? '')~ '}' %}
 
 {% set appNumber    = '\\underline{\\texttt{' ~ app.number ~ '}}' %}
 
@@ -69,9 +71,14 @@ Z poważaniem
         {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ carImage }} }
 
 \vspace{0.3cm}\noindent
-    {% if app.isMapImageInCDN %}
-    \href{{ mapUrl|raw }}
-        {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true]{{ mapImage }} }
+    {% if app.thirdImage ?? false %}
+    \href{{ thirdImageUrl }}
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ thirdImage }} }
+    {% else %}
+        {% if app.isMapImageInCDN %}
+        \href{{ mapUrl|raw }}
+            {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true]{{ mapImage }} }
+        {% endif %}
     {% endif %}
     {% if app.shouldIncludePlateImage %}
     {% set plateImage   = '{' ~ root ~ '/' ~ app.carInfo.plateImage ~ '}' %}

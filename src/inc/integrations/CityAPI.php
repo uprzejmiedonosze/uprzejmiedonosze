@@ -54,12 +54,19 @@ abstract class CityAPI {
         $carImage = "$root/{$application->carImage->url}";
         $json = json_encode($data);
 
+        $thirdImageForm = '';
+        if (isset($application->thirdImage->url)) {
+            $thirdImage = "$root/{$application->thirdImage->url}";
+            $thirdImageForm = '--form uz_file_1=@\\"' . $thirdImage . '\\" ';
+        }
+
         $curl = "curl -s --location --request POST '$url' "
             . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
             . "--header 'Content-Type: multipart/form-data' "
             . "--form 'json={$json}' "
             . '--form uz_file=@\\"' . $contextImage . '\\" '
-            . '--form uz_file_0=@\\"' . $carImage . '\\"';
+            . '--form uz_file_0=@\\"' . $carImage . '\\"'
+            . $thirdImageForm;
         
         $response = exec("$curl 2>&1", $retArr, $retVal);
 

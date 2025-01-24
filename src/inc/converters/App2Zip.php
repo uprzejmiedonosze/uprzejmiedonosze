@@ -15,6 +15,10 @@ function toZip(Application &$application): array{
         $application->getAppFilename('a.jpg'));
     $zip->addFile(ROOT . $application->carImage->url,
         $application->getAppFilename('b.jpg'));
+
+    if (isset($application->thirdImage->url))
+        $zip->addFile(ROOT . $application->thirdImage->url,
+            $application->getAppFilename('c.jpg'));
     $zip->close();
 
     return [$fullPath, $filename];

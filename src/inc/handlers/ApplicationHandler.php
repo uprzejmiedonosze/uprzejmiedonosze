@@ -58,7 +58,9 @@ class ApplicationHandler extends AbstractHandler {
         } elseif (isset($_SESSION['newAppId'])) { // edit mode
             try {
                 $application = \app\get($_SESSION['newAppId']);
-                $edit = isset($application->carImage) || isset($application->contextImage);
+                $edit = isset($application->carImage)
+                     || isset($application->contextImage)
+                     || isset($application->thirdImage);
                 $application->updateUserData($user);
                 if (!$edit) {
                     unset($application);

@@ -99,14 +99,20 @@
             <img src="{{ app.carImage.url ?? 'img/fff-1.png' }}?v={{ app.getRevision }}">
         </dialog>
     </div>
-{% if app.shouldIncludePlateImage %}
+
     <div class="grid">
-        <div></div>
         <div>
+        {% if app.thirdImage ?? false %}
+            <img src="{{ app.thirdImage.thumb }}?v={{ app.getRevision }}" />
+        {% endif %}
+        </div>
+        <div>
+        {% if app.shouldIncludePlateImage %}
             <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}?v={{ app.getRevision }}"/>
+        {% endif %}
         </div>
     </div>
-{% endif %}
+
 
 {% if app.isCurrentUserOwner and config.confirmationScreen is not defined %}
     {% if app.comments and app.comments|length > 0 %}

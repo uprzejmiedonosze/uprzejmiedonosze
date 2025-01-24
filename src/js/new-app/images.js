@@ -14,7 +14,7 @@ var uploadInProgress = 0;
 
 /**
  * @param {File} file 
- * @param {'contextImage' | 'carImage'} id 
+ * @param {'contextImage' | 'carImage' | 'thirdImage'} id 
  * @returns void
  */
 export async function checkFile(file, id) {
@@ -97,7 +97,7 @@ function checkUploadInProgress() {
 
 /**
  * 
- * @param {'contextImage' | 'carImage'} id 
+ * @param {'contextImage' | 'carImage' | 'thirdImage'} id 
  * @param {string} errorMsg
  */
 function imageError(id, errorMsg) {
@@ -230,9 +230,8 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
 }
 
 /**
- * 
  * @param {*} fileData 
- * @param {'contextImage' | 'carImage'} id 
+ * @param {'contextImage' | 'carImage' | 'thirdImage'} id 
  * @param {*} imageMetadata 
  */
 async function sendFile(fileData, id, imageMetadata={}) {
@@ -257,12 +256,18 @@ async function sendFile(fileData, id, imageMetadata={}) {
   try {
     const api = new Api(`/api/app/${appId}/image`)
     const app = await api.post(data)
-    if (app.carImage || app.contextImage) {
+    if (app.carImage || app.contextImage || app.thirdImage) {
+      $(`.${id}Section`).show()
       $(`.${id}Section .loader`).removeClass("l")
       $(`#${id}Preview`)
         .css("height", "100%")
         .css("opacity", 1)
         .attr("src", app[id].thumb + "?v=" + Math.random().toString())
+    }
+    if (app.thirdImage) {
+      $(".thirdImageSection.imageButton").hide()
+    } else {
+      $(".thirdImageSection.imageButton").show()
     }
     if (id == "carImage" && app.carInfo) {
       $('.plate-box').css('border', 'none')
@@ -309,6 +314,18 @@ async function sendFile(fileData, id, imageMetadata={}) {
     uploadFinished()
   } catch (err) {
     imageError(id, err.toString())
+  }
+}
+
+export async function removeFile(id) {
+  const appId = $(".new-application #applicationId").val()
+  const api = new Api(`/api/app/${appId}/image/${id}`)
+  try {
+    await api.delete()
+    $(`.${id}Section`).hide()
+    $(`.${id}Section.imageButton`).show()
+  } catch (err) {
+    error(err.toString())
   }
 }
 

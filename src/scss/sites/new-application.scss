@@ -49,11 +49,11 @@ div.error img {
 .new-application {
 
   .imageContainer {
-    background: #eee;
     border-radius: .8em;
     height: 200px;
     padding: .4em;
     overflow: hidden;
+    margin: inherit; 
 
     img {
       object-fit: cover;
@@ -128,8 +128,20 @@ div.error img {
 
 
   .image-upload {
-    label {
-      height: 100%;
+    label {      
+      b {
+        font-weight: 600;
+        position: absolute;
+        bottom: 40px;
+        display: block;
+        width: calc(100% - 2 * .4em);
+        text-align: center;
+      }
+      .button.remove {
+        position: absolute;
+        right: .4em;
+        font-weight: 700!important;
+      }
     }
     input {
       display: none;
@@ -137,7 +149,7 @@ div.error img {
     img {
       background-repeat: no-repeat;
       background-position-x: 50%;
-      background-position-y: 55px;
+      background-position-y: 30px;
       height: 100%;  
     }
   }

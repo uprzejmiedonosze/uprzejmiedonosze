@@ -21,6 +21,26 @@ class SessionApiHandler extends AbstractHandler {
             throw new HttpNotFoundException($request, "Nie posiadasz zgłoszenia o ID {$app->id}");
     }
 
+    public function deleteImage(Request $request, Response $response, $args): Response {
+        $appId = $args['appId'];
+        $imageId = $args['image'];
+        $application = \app\get($appId);
+        $this->checkEditable($request, $application);
+        $this->checkOwnership($request, $application);
+        $application = $this->removeImageFile($application, $imageId);
+        \app\save($application);
+        return $this->renderJson($response, $application);
+    }
+
+    private function removeImageFile(Application $app, string $imageId): Application {
+        $rmFile = fn($fileName) => @unlink(ROOT . $fileName);
+
+        $rmFile($app->$imageId->url);
+        $rmFile($app->$imageId->thumb);
+        unset($app->$imageId);
+        return $app;
+    }
+
     public function image(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
