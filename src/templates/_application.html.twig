@@ -98,14 +98,20 @@
         <dialog id="popup2" class="fullscreen">
             <img src="{{ app.carImage.url ?? 'img/fff-1.png' }}?v={{ app.getRevision }}">
         </dialog>
-    </div>
 
-    <div class="grid">
-        <div>
         {% if app.thirdImage ?? false %}
-            <img src="{{ app.thirdImage.thumb }}?v={{ app.getRevision }}" />
+            <div class="imageContainer">
+                <a href="#popup3" data-rel="popup">
+                    <img src="{{ app.thirdImage.thumb }}?v={{ app.getRevision }}"/> 
+                </a>
+            </div>
+            <dialog id="popup3" class="fullscreen">
+                <img src="{{ app.thirdImage.url }}?v={{ app.getRevision }}">
+            </dialog>
+        {% else %}
+            <div></div>            
         {% endif %}
-        </div>
+
         <div>
         {% if app.shouldIncludePlateImage %}
             <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}?v={{ app.getRevision }}"/>
