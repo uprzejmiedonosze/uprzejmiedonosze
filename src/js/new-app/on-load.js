@@ -38,9 +38,15 @@ export const initHandlers = (map) => {
 
   if (window.File && window.FileReader && window.FormData) {
     $(document).on("change", ".image-upload input", function (e) {
+      /** @var {'contextImage' | 'carImage' | 'thirdImage'} imagesOrder */
+      let imagesOrder = ['contextImage', 'carImage', 'thirdImage'].reverse()
       checkFile(e.target.files[0], e.target.id);
+      imagesOrder = imagesOrder.filter(i => i !== e.target.id)
       if(e.target.files.length > 1) {
-        checkFile(e.target.files[1], e.target.id === 'carImage' ? 'contextImage': 'carImage');
+        checkFile(e.target.files[1], imagesOrder.pop());
+      }
+      if(e.target.files.length > 2) {
+        checkFile(e.target.files[2], imagesOrder.pop());
       }
     });
   }
