@@ -47,6 +47,7 @@ div.error img {
 }
 
 .new-application {
+  padding-top: 2em;
 
   .imageContainer {
     border-radius: .8em;
@@ -58,7 +59,6 @@ div.error img {
     img {
       object-fit: cover;
       object-position: 50% 50%;
-      border-radius: .8em;
       position: absolute;
       top: 0;
       left: 0;
@@ -128,7 +128,9 @@ div.error img {
 
 
   .image-upload {
-    label {      
+    label {
+      white-space: normal;
+
       b {
         font-weight: 600;
         position: absolute;
