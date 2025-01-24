@@ -7,7 +7,6 @@
 {\large {{ app.guessSMData().getLatexAddress() }} }
 
 {% set appUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=pdf}' %}
-{% set qrUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=qr}' %}
 {% set mapUrl = '{' ~ app.getMapUrl() ~ '}' %}
 
 {% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '?download}' %}
@@ -31,10 +30,8 @@
 
     W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
     świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
-    {{ app.getLatexSafeAddress|raw }}{% if app.sentViaAPI is not defined %}\footnote{\noindent Kod QR oraz numer {{ app.number }} prowadzą do wersji online tego zgłoszenia.
-    {# jeśli zgłoszenie zostało wysłane przez API, to pokazuję odpowiedni komunikat (widać go powyżej) #}
-    {# ale równocześnie chowam hint dotyczący mapy - bo zgłoszenia robią się dwustronicowe #}
-    Obrazek z mapą prowadzi do Google Maps z lokalizacją zgłoszenia. Natomiast zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}{% endif %}.
+    {{ app.getLatexSafeAddress|raw }}\footnote{\noindent Obrazek z mapą prowadzi do Google Maps z lokalizacją zgłoszenia.
+    Natomiast zdjęcia można ,,kliknąć'' aby uzyskać ich powiększenie.}.
     {{ app.getCategory.formal }} 
     {{ app.getExtensionsText() -}}
     {{ app.getLatexSafeComment|raw }}
@@ -85,5 +82,4 @@ Z poważaniem
     \includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
     {% endif %}
     \hspace{\stretch{1}}
-    \adjustbox{valign=B}{\qrcode[nolink,height=0.2\textwidth,level=Q]{{qrUrl|raw}}}
 \vspace{\stretch{1}}
