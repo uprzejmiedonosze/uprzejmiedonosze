@@ -62,23 +62,23 @@ Z poważaniem
 
 \vspace{\stretch{3}}\noindent
     \href{{ contextImageUrl }}
-        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ contextImage }} }
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true,valign=t]{{ contextImage }} }
     \href{{ carImageUrl }}
-        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ carImage }} }
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true,valign=t]{{ carImage }} }
 
 \vspace{0.3cm}\noindent
     {% if app.thirdImage ?? false %}
     \href{{ thirdImageUrl }}
-        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true]{{ thirdImage }} }
+        {\includegraphics[width=0.5\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true,valign=t]{{ thirdImage }} }
     {% else %}
         {% if app.isMapImageInCDN %}
         \href{{ mapUrl|raw }}
-            {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true]{{ mapImage }} }
+            {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true,valign=t]{{ mapImage }} }
         {% endif %}
     {% endif %}
     {% if app.shouldIncludePlateImage %}
     {% set plateImage   = '{' ~ root ~ '/' ~ app.carInfo.plateImage ~ '}' %}
-    \includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true]{{ plateImage }}
+    \includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true,valign=t]{{ plateImage }}
     {% endif %}
     \hspace{\stretch{1}}
 \vspace{\stretch{1}}
