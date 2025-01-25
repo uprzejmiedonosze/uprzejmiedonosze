@@ -127,6 +127,7 @@ $(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.php $(PUBLIC)/api/rest/index
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r src/tools $(EXPORT)/
+	@cp -r src/sql $(EXPORT)/
 
 
 .PHONY: minify
@@ -278,7 +279,7 @@ cypress: npm-install
 .PHONY: cypress-local
 cypress-local:
 	@echo "==> Testing local"
-	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) run --env DOCKER=1
+	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) run --e2e --env DOCKER=1
 
 .PHONY: api
 api: minify-config $(EXPORT)/config.php

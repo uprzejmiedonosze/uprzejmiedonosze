@@ -105,7 +105,7 @@ describe('Update account', () => {
     cy.get('#form-submit').click()
 
     cy.contains('zostanie za chwilę wysłane')
-    cy.contains(this.sm.Szczecin.address[0])
+    cy.contains(this.sm.szczecin.address[0])
     cy.sendApp()
 
     cy.contains('To twoje pierwsze zgłoszenie')

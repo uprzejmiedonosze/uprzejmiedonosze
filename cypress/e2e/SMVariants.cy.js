@@ -27,7 +27,7 @@ describe('API:automated (Poznań)', () => {
         cy.get('label.menu > .button-toggle').click()
         cy.contains('Moje zgłoszenia').click({force: true})
         cy.contains(this.config.address.poznan).click()
-        cy.contains(this.sm['Poznań'].address[0].replace('Straż Miejska', 'SM'))
+        cy.contains(this.sm['poznań'].address[0].replace('Straż Miejska', 'SM'))
         cy.contains('POTWIERDZONE')
         cy.contains('ZMIEŃ').click()
         cy.contains('Kierowca dostał mandat')

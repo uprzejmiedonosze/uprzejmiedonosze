@@ -1,3 +1,4 @@
+// @ts-nocheck
 function checkAppData(config, confirmationScreen=false) {
     let address = config.address.szczecin
     let date = config.carImage.dateHuman

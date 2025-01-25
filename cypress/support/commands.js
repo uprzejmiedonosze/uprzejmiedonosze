@@ -1,3 +1,4 @@
+// @ts-nocheck
 Cypress.Commands.add("login", () => {
   cy.session('user' + Date.now(), () => {
     if (Cypress.env('DOCKER')) {
@@ -71,40 +72,38 @@ Cypress.Commands.add("loadConfig", () => {
   cy.fixture('config.json').then(function (config) {
     this.config = config;
   })
-  cy.fixture('../../src/api/config/sm.json').then(function (sm) {
+  cy.fixture('../../export/public/api/config/sm.json').then(function (sm) {
     this.sm = sm;
   })
-  cy.fixture('../../src/api/config/statuses.json').then(function (statuses) {
+  cy.fixture('../../export/public/api/config/statuses.json').then(function (statuses) {
     this.statuses = statuses;
   })
-  cy.fixture('../../src/api/config/categories.json').then(function (categories) {
+  cy.fixture('../../export/public/api/config/categories.json').then(function (categories) {
     this.categories = categories;
   })
-  cy.fixture('../../src/api/config/extensions.json').then(function (extensions) {
+  cy.fixture('../../export/public/api/config/extensions.json').then(function (extensions) {
     this.extensions = extensions;
   })
-  cy.fixture('../../src/api/config/badges.json').then(function (badges) {
+  cy.fixture('../../export/public/api/config/badges.json').then(function (badges) {
     this.badges = badges;
   })
-  cy.fixture('../../src/api/config/levels.json').then(function (levels) {
+  cy.fixture('../../export/public/api/config/levels.json').then(function (levels) {
     this.levels = levels;
   })
 });
 
 Cypress.Commands.add("initDB", () => {
-  if (Cypress.env('DOCKER')) {
-    cy.exec('docker exec webapp cp /var/www/uprzejmiedonosze.localhost/db/store-registered-empty.sqlite /var/www/uprzejmiedonosze.localhost/db/store.sqlite')
-    return
-  }
-  cy.exec('ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-registered store.sqlite"')
+  if (Cypress.env('DOCKER'))
+    return cy.exec('docker exec webapp sqlite3 /var/www/uprzejmiedonosze.localhost/db/store.sqlite -init /var/www/uprzejmiedonosze.localhost/webapp/sql/init_registered.sql')
+
+  cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_registered.sql"')
 })
 
 Cypress.Commands.add("cleanDB", () => {
-  if (Cypress.env('DOCKER')) {
-    cy.exec('docker exec webapp cp /var/www/uprzejmiedonosze.localhost/db/store.sqlite-empty /var/www/uprzejmiedonosze.localhost/db/store.sqlite')
-    return
-  }
-  cy.exec('ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-empty store.sqlite"')
+  if (Cypress.env('DOCKER'))
+    return cy.exec('docker exec webapp sqlite3 /var/www/uprzejmiedonosze.localhost/db/store.sqlite -init /var/www/uprzejmiedonosze.localhost/webapp/sql/init_empty.sql')
+
+  cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_empty.sql"')
 })
 
 Cypress.Commands.add("goToNewAppScreen", () => {
