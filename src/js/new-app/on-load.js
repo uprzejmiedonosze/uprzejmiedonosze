@@ -24,9 +24,11 @@ export const initHandlers = (map) => {
 
   $("#category").on("change", function (e) {
     $(".contextImageSection p.pictureHint").text(
+      // @ts-ignore
       $(e.target).attr("data-contextImage-hint")
     )
     $(".carImageSection p.pictureHint").text(
+      // @ts-ignore
       $(e.target).attr("data-carImage-hint")
     )
 
@@ -39,15 +41,19 @@ export const initHandlers = (map) => {
   if (window.File && window.FileReader && window.FormData) {
     $(document).on("change", ".image-upload input", function (e) {
       /** @var {'contextImage' | 'carImage' | 'thirdImage'} imagesOrder */
+      if(e.target.files.length === 1) {
+        return checkFile(e.target.files[0], e.target.id);
+      }
       let imagesOrder = ['contextImage', 'carImage', 'thirdImage'].reverse()
-      checkFile(e.target.files[0], e.target.id);
+      // @ts-ignore
+      checkFile(e.target.files[0], imagesOrder.pop()); 
       imagesOrder = imagesOrder.filter(i => i !== e.target.id)
-      if(e.target.files.length > 1) {
+      if(e.target.files.length > 1)
+        // @ts-ignore
         checkFile(e.target.files[1], imagesOrder.pop());
-      }
-      if(e.target.files.length > 2) {
+      if(e.target.files.length > 2) 
+        // @ts-ignore
         checkFile(e.target.files[2], imagesOrder.pop());
-      }
     });
   }
 
@@ -89,6 +95,7 @@ function showHidePictureHints(context) {
 }
 
 function validateExtensions() {
+  // @ts-ignore
   const selectedCategory = document?.querySelector('input[name="category"]:checked')?.value || '0'
 
   const $extensions = document?.getElementById('extensions')
@@ -100,6 +107,7 @@ function validateExtensions() {
   const matchingExtensionLabel = document.querySelector(`#ex${selectedCategory} + label`)
   
   if (matchingExtension) {
+    // @ts-ignore
     matchingExtension.checked = false
     matchingExtensionLabel?.classList.add('disabled')
   }
