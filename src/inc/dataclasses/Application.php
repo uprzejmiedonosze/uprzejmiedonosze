@@ -639,4 +639,16 @@ class Application extends JSONObject implements \JsonSerializable {
         $image = \crypto\encode($imageFileName, CRYPTO_KEY, CRYPTO_IV);
         return "img-$image.php?sessionless";
     }
+
+    public function areAllImagesVertical(): bool {
+        $isVertical = fn($image) => ($image->height ?? false) > ($image->width ?? false);
+
+        return $isVertical($this->contextImage ?? null)
+            && $isVertical($this->carImage ?? null)
+            && $isVertical($this->thirdImage ?? null);
+    }
+
+    public function sentViaAPI(): bool {
+        return ($this->sent->method ?? false) == 'Poznan';
+    }
 }

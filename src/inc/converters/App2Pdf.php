@@ -46,8 +46,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
     $pdf_f = "$file.pdf";
 
     $loader = new FilesystemLoader(__DIR__ . '/../../templates');
-    $twig = new Environment($loader,
-    [
+    $twig = new Environment($loader, [
         'debug' => !isProd(),
         'cache' => new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', FilesystemCache::FORCE_BYTECODE_INVALIDATION),
         'strict_variables' => true,
