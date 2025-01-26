@@ -35,8 +35,8 @@ class SessionApiHandler extends AbstractHandler {
     private function removeImageFile(Application $app, string $imageId): Application {
         $rmFile = fn($fileName) => @unlink(ROOT . $fileName);
 
-        $rmFile($app->$imageId->url);
-        $rmFile($app->$imageId->thumb);
+        isset($app->$imageId->url) && $rmFile($app->$imageId->url);
+        isset($app->$imageId->thumb ) && $rmFile($app->$imageId->thumb);
         unset($app->$imageId);
         return $app;
     }
