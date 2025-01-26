@@ -71,20 +71,21 @@ abstract class CityAPI {
         $response = exec("$curl 2>&1", $retArr, $retVal);
 
         if($retVal !== 0){
-            $error = "Błąd komunikacji z API {$application->address->city}: $response";
+            $error = "Błąd komunikacji z API {$application->address->city}: retVal=$retVal, response=$response";
         }
 
         $json = json_decode($response, true);
         if(!json_last_error() === JSON_ERROR_NONE){
-            $error = "Błąd komunikacji z API {$application->address->city}: " . json_last_error_msg();
+            $error = "Błąd komunikacji z API {$application->address->city}: json_last_error=" . json_last_error_msg();
         }
 
         if (is_null($json)) {
-            $error = "Błąd komunikacji z API {$application->address->city}: " . print_r($response, true);
+            $error = "Błąd komunikacji z API {$application->address->city}: empty-json, response=" . print_r($response, true);
         }
 
         if(isset($error)){
             logger($response, true);
+            logger($curl, true);
             throw new Exception($error, 500);
         }
 
