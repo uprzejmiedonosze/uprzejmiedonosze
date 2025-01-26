@@ -16,13 +16,17 @@ function environment(): string {
     if (isProd()) return 'prod';
     if (isStaging()) return 'staging';
     return 'dev';
+}
 
+function environmentSuffix(): string {
+    if (isProd()) return '';
+    if (isStaging()) return '-stg';
+    return '-dev';
 }
 
 function trimAbsolutePaths(string $backtrace): string {
-    $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
-    $backtrace = preg_replace('/^.*\/var\/www\/.*\/webapp\//im', "  $prefix#UD ", $backtrace);
-    return preg_replace('/^.*\/var\/www\/.*\/vendor\//im', "  $prefix", $backtrace);
+    $backtrace = preg_replace('/^.*\/var\/www\/.*\/webapp\//im', "  #UD ", $backtrace);
+    return preg_replace('/^.*\/var\/www\/.*\/vendor\//im', "  ", $backtrace);
 }
 
 function removeVendor(string $backtrace): string {
@@ -49,10 +53,9 @@ function logger(string|object|array|null $msg, $force = null): string {
         $caller = array_shift($debug_backtrace);
         $location = $caller['file'] . ':' . $caller['line'];
         $location = trimAbsolutePaths($location);
-        $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
 
-        send_syslog("$ip $user $prefix$location \"$msg\"", debug:!$force);
-        error_log("$time $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
+        send_syslog("$ip $user $location \"$msg\"", debug:!$force);
+        error_log("$time $user $location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
         if ($force) {
             $e = new Exception();
             error_log(trimAbsolutePaths(removeVendor($e->getTraceAsString())), 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
@@ -66,7 +69,8 @@ function send_syslog(string $msg, bool $debug): void {
     if (str_ends_with($_SERVER['_'] ?? '', 'phpunit'))
         return;
 
-    openlog("uprzejmiedonosze", LOG_NDELAY, LOG_DAEMON);
+    $environment = environmentSuffix();
+    openlog("uprzejmiedonosze$environment", LOG_NDELAY, LOG_DAEMON);
     if (str_contains(mb_strtolower($msg), 'error'))
         syslog(LOG_ERR, $msg);
     else
