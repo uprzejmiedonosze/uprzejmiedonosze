@@ -19,8 +19,8 @@ function getCustomErrorHandler(App $app): callable {
         $msg = $exception->getMessage() . " szkodnik: $email, " . trimAbsolutePaths($exception->getFile())
             . ':' . $exception->getLine() . "\n" . trimAbsolutePaths($exception->getTraceAsString());
 
-        if (isProd() && $status !== 404) \Sentry\captureException($exception);
-        logger($msg, $status !== 404);
+        if (isProd() && $status != 404) \Sentry\captureException($exception);
+        logger($msg, $status != 404);
         
         $httpException = $exception;
         if (!($exception instanceof HttpException)) {

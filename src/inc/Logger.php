@@ -20,8 +20,9 @@ function environment(): string {
 }
 
 function trimAbsolutePaths(string $backtrace): string {
-    $backtrace = preg_replace('/^.*\/var\/www\/.*\/webapp\//im', '  #UD ', $backtrace);
-    return preg_replace('/^.*\/var\/www\/.*\/vendor\//im', '  ', $backtrace);
+    $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
+    $backtrace = preg_replace('/^.*\/var\/www\/.*\/webapp\//im', "  $prefix#UD ", $backtrace);
+    return preg_replace('/^.*\/var\/www\/.*\/vendor\//im', "  $prefix", $backtrace);
 }
 
 function removeVendor(string $backtrace): string {
@@ -49,7 +50,6 @@ function logger(string|object|array|null $msg, $force = null): string {
         $location = $caller['file'] . ':' . $caller['line'];
         $location = trimAbsolutePaths($location);
         $prefix = str_replace('uprzejmiedonosze.net', '', '%HOST%');
-        $prefix = $force ? $prefix : "dbg $prefix";
 
         send_syslog("$ip $user $prefix$location \"$msg\"", debug:!$force);
         error_log("$time $user $prefix$location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/%HOST%.log");
