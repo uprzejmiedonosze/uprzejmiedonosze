@@ -65,7 +65,7 @@ abstract class CityAPI {
             . "--header 'Content-Type: multipart/form-data' "
             . "--form 'json={$json}' "
             . '--form uz_file=@\\"' . $contextImage . '\\" '
-            . '--form uz_file_0=@\\"' . $carImage . '\\"'
+            . '--form uz_file_0=@\\"' . $carImage . '\\" '
             . $thirdImageForm;
         
         $response = exec("$curl 2>&1", $retArr, $retVal);
