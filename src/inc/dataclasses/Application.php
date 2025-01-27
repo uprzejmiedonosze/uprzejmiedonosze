@@ -432,9 +432,10 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     public function getAHrefedComment(){
-        $string = preg_replace('/(https?:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(?:\/\S*(?<!\.))?)/ims',
-            '<a href="$1" target="_blank">$1</a> ', $this->userComment);
-        return str_replace("Http", "http", $string);
+        $comment = htmlspecialchars($this->userComment);
+        $comment = preg_replace('/(https?:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}(?:\/\S*(?<!\.))?)/ims',
+            '<a href="$1" target="_blank">$1</a> ', $comment);
+        return str_replace("Http", "http", $comment);
     }
 
 
