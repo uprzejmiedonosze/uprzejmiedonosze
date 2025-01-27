@@ -68,6 +68,14 @@ class WebhooksHandler extends AbstractHandler {
 
         if (!$application->wasSent()) {
             logger("mailgun webhook error, Application $appId was not sent!", true);
+            $application->sent = new JSONObject();
+            $application->sent->date = date(DT_FORMAT);
+            $application->sent->subject = $payload['message']['headers']['subject'];
+            $application->sent->to = $payload['message']['headers']['to'];
+            $application->sent->cc = "({$application->email})";
+            $application->sent->from = "uprzejmiedonosze.net (" . MAILER_FROM . ")";
+            $application->sent->body = "Mailgun webhook error, was not sent field was not saved, thus email body is missing!";
+            $application->sent->method = "MailGun";
         }
 
         $comment = $mailEvent->formatComment();
