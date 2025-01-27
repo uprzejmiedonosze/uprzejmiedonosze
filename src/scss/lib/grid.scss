@@ -17,6 +17,10 @@
         position: relative;
     }
 
+    & > div:has(.plate-box) {
+        height: fit-content;
+    }
+
     & img {
         width: 100%;
     }
