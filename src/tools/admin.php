@@ -30,7 +30,7 @@ function removeUser($email, $dryRun=true){
     }
 
     $email = \SQLite3::escapeString($email);
-    $user = \user\get($email);
+    $user = \user\get($email, dontDecode:true);
     $apps = \user\apps($user, 'allWithDrafts');
 
     echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
@@ -62,7 +62,6 @@ function removeUser($email, $dryRun=true){
     $user->data->emailMD5 = md5($email);
 
     $user->deleted = $time;
-    $user->applications = Array();
     \user\save($user);
 
     // removing old user
