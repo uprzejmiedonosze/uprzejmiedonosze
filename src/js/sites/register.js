@@ -8,13 +8,17 @@ const $edelivery = $("#edelivery")
 
 function validateRegisterForm() {
   let ret = checkValueRe($name, /^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i)
-  ret = checkValueRe($address, /^.{3,50}\d.{3,40}\D$/i) && ret
-  if ($edelivery.length)
-    ret = checkValueRe($edelivery, /(^[A-Z]{2}:[A-Z]{2}-(\d{5}-){2}[A-Z]{5}-\d{2})$|^$/i) && ret
+  const addressCheck = checkValueRe($address, /^.{3,50}\d.{3,40}\D$/i)
+  ret = addressCheck && ret
+  ret = checkValueRe($edelivery, /(^[A-Z]{2}:[A-Z]{2}-(\d{5}-){2}[A-Z]{5}-\d{2})$|^$/i) && ret
   
-  if (!ret) {
+  if (!ret)
     $(window).scrollTop(($(".error")?.offset()?.top ?? 0) - 100);
-  }
+
+  if (!addressCheck)
+    $('label[for="address"]').text(
+      'Poprawny format to: "Ulica numer domu/mieszkania, Miasto"')
+
   return ret;
 }
 
