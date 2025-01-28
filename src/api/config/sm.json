@@ -1495,6 +1495,9 @@
     ],
     "email": "straz.miejska@poczta.lomianki.pl"
   },
+  "gmina Łomianki": {
+    "parent": "Łomianki"
+  },
   "Łomianki Dolne": {
     "parent": "Łomianki"
   },
