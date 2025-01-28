@@ -308,9 +308,88 @@ function fakeFirebaseId(string $email): bool {
     return true;
 }
 
+function processWebhook(string $id): void {
+    $event = \webhook\get($id);
+
+    $payload = $event['event-data'];
+    $appId = $payload['user-variables']['appid'];
+    $recipient = $payload['recipient'];
+    
+    if(($payload['user-variables']['environment'] ?? 'prod') !== environment()) {
+        \webhook\mark($id, 'other environment, ignoring');
+        echo "other environment, ignoring";
+        return;
+    }
+
+    if(isset($payload['user-variables']['nofitication'])) {
+        // this is a notification triggered by an email sent by this webhook
+        // so I have to ignore it not to trigger an endless loop
+        \webhook\mark($id, 'this is notification, ignoring');
+        echo "this is notification, ignoring";
+        return;
+    }
+    $mailEvent = new \MailEvent($payload);
+    $userNumber = $payload['user-variables']['userid'];
+
+    $semaphore = \semaphore\acquire(intval($userNumber));
+
+    try {
+        $application = \app\get($appId);
+    } catch (\Exception $e) {
+        if (isProd())
+            throw $e;
+        \webhook\mark($id, 'app already removed, ignoring');
+        echo 'app already removed, ignoring';
+        return;
+    }
+    
+
+    if (!$application->wasSent()) {
+        echo "mailgun webhook error, Application $appId was not sent!";
+        return;
+    }
+
+    $comment = $mailEvent->formatComment();
+    if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
+    $ccToUser = $application->email == $recipient;
+
+    if ($recipient == MAILER_FROM) {
+        // this is BCC to Uprzejmie Donoszę, ignore it
+        \webhook\mark($id, 'bcc to ud@, ignoring');
+        \semaphore\release($semaphore);
+        echo 'bcc to ud@, ignoring';
+    }
+
+    if (!$ccToUser) {
+        // set sent status to accepted only if empty
+        if ($mailEvent->status == 'accepted' && $application->status == 'confirmed')
+            $application->setStatus('sending', true);
+        if ($mailEvent->status == 'problem')
+            $application->setStatus('sending-problem', true);
+        if ($mailEvent->status == 'failed')
+            $application->setStatus('sending-failed', true);
+        if ($mailEvent->status == 'delivered')
+            $application->setStatus('confirmed-waiting', true);
+    }
+
+    $application = \app\save($application);
+    \webhook\mark($id);
+    \semaphore\release($semaphore);
+
+    if ($mailEvent->status == 'failed' && !$ccToUser)
+        (new \MailGun())->notifyUser($application,
+            "Nie udało się nam dostarczyć wiadomości zgłoszenia {$application->getNumber()}",
+            $mailEvent->getReason(),
+            $recipient);
+
+    echo "OK";
+}
+
 
 //removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
 //removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
-// upgradeAllUsers(false);
-// refreshRecydywa();
-upgradeAllApps('2.5.2', false);
+//upgradeAllUsers(false);
+//refreshRecydywa();
+//upgradeAllApps('2.5.2', false);
+
+processWebhook('dPwlXqMyTvWm1MnT6C0C3g');

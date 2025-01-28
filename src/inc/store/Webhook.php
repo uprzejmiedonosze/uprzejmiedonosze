@@ -14,8 +14,12 @@ function add(string $id, array $event): void {
  * Mark web-hook as processed.
  */
 function mark(string $id, ?string $reason=null): void {
-    $event = json_decode(\store\get(TABLE, $id), true);
+    $event = get($id);
     $event['processed'] = true;
     if ($reason) $event['reason'] = $reason;
     \store\set(TABLE, $id, json_encode($event));
+}
+
+function get(string $id): ?array {
+    return json_decode(\store\get(TABLE, $id), true);
 }
