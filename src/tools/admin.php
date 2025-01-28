@@ -2,6 +2,7 @@
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
+require_once(__DIR__ . '/../inc/handlers/WebhooksHandler.php');
 
 use app\Application;
 use recydywa\Recydywa;
@@ -59,9 +60,10 @@ function removeUser($email, $dryRun=true){
     $user->data->edelivery = 'DELETED';
     $user->data->address = 'DELETED';
     $user->data->email = md5($email . $time);
-    $user->data->emailMD5 = md5($email);
+    $user->emailMD5 = md5($email);
 
     $user->deleted = $time;
+    $_SESSION['user_id'] = 'fake';
     \user\save($user);
 
     // removing old user
