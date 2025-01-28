@@ -36,8 +36,6 @@
         placeholder="666 666 666"  data-type="encrypted"
         data-inline="true" value="{{ user.data.msisdn ?? '' }}" />
 
-{% if user.isRegistered %}
-
     <label for="edelivery">Adres
         <a href="https://info.mobywatel.gov.pl/aktualnosci/loguj-sie-do-e-doreczen-aplikacja-mobywatel"
             target="_blank" rel="external">e-Doręczeń</a>
@@ -46,7 +44,6 @@
         maxlength="26" minlength="26"  data-type="encrypted"
         placeholder="AE:PL-00000-00000-AAAAA-00"
         value="{{ user.data.edelivery ?? '' }}" />
-{% endif %}
 
     </fieldset>
 
