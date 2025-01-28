@@ -120,7 +120,7 @@
     </div>
 
 
-{% if app.isCurrentUserOwner and config.confirmationScreen is not defined %}
+{% if (config.isAppOwner or config.isAdmin) and config.confirmationScreen is not defined %}
     {% if app.comments and app.comments|length > 0 %}
         <div id="comments">
             <h4>Historia wysyłki</h4>

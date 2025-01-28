@@ -165,9 +165,9 @@
   }
 }
 
-#comments .ui-listview li,
-#statusHistory .ui-listview li {
-  white-space: initial;
+#comments ul[data-role="listview"],
+#statusHistory ul[data-role="listview"] {
+  text-indent: -1em;
 }
 
 cite {
