@@ -20,6 +20,9 @@ async function sendApplication(/** @type {string} */ appId) {
   try {
     const api = new Api(`/api/app/${appId}/send`)
     const msg = await api.patch()
+    if (msg.status == 'redirect')
+      return location.href = '/brak-sm.html?id=' + appId
+
     updateStatus(appId, msg.status)
     toast("Wysłane")
     if ($(".dziekujemy").length) {

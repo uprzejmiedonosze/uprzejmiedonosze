@@ -98,7 +98,13 @@ class SessionApiHandler extends AbstractHandler {
     public function sendApplication(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $user = $request->getAttribute('user');
-        $application = sendApplication($appId, $user);
+        try {
+            $application = sendApplication($appId, $user);
+        } catch (MissingSMException $e) {
+            return $this->renderJson($response, array(
+                "status" => "redirect"
+            ));
+        }
         return $this->renderJson($response, array(
             "status" => $application->status
         ));

@@ -56,13 +56,13 @@
     {% if sendable %}
         <div class="no-icon">
             {% if app.automatedSM %}
-                <a href="#" class="button inline cta confirmed-waiting send-application"
+                <a href="#{{ app.id }}" class="button inline cta confirmed-waiting send-application"
                     data-appid="{{ app.id }}">
                     Wyślij do {{ app.guessSMData.getShortName }}
                 </a>
             {% elseif app.unknownSM %}
-                <a href="/brak-sm.html?id={{ app.id }}"
-                class="button inline cta confirmed-waiting">
+                <a href="#{{ app.id }}" class="button inline cta confirmed-waiting send-application"
+                    data-appid="{{ app.id }}">
                     Wyślij zgłoszenie
                 </a>
             {% elseif wysylka is not defined %}

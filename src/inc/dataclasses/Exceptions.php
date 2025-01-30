@@ -27,3 +27,9 @@ class RejectWebhookException extends Exception {
         parent::__construct($msg, 406);
     }
 }
+
+class MissingSMException extends Exception {
+    public function __construct(string $msg) {
+        parent::__construct($msg, 307);
+    }
+}
