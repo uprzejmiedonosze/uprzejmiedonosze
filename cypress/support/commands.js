@@ -4,7 +4,7 @@ Cypress.Commands.add("login", () => {
     if (Cypress.env('DOCKER')) {
       cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0')
     } else {
-      cy.setCookie('UDSESSIONID', '20q543p3cd9ndttaa83hpcu5b1fdiu27qhlth76r')
+      cy.setCookie('UDSESSIONID', 'f0d9qelotli6h5tp5pnmkp9dn01uvj40ehds4deb')
     }
   }, {
     cacheAcrossSpecs: true
