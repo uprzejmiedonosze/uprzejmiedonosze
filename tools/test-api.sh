@@ -59,7 +59,7 @@ EMAIL=$(decode_jwt "$JWT")
 
 if [ $ENV = 'staging' ]; then
     log Usign staging API with given JWT token
-    ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-empty store.sqlite"
+    #ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-empty store.sqlite"
     HOST="https://apistaging.uprzejmiedonosze.net"
 else
     log Usign localhost API, local DB and memcache

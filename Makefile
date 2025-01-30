@@ -320,11 +320,11 @@ lint-twig: src/templates/*.twig
 
 .PHONY: init-db-staging
 init-db-staging:
-	@ssh nieradka.net "cd /var/www/staging.uprzejmiedonosze.net/db && cp store.sqlite-registered store.sqlite"
+	@ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_empty.sql"
 
 .PHONY: init-db-dev
 init-db-dev:
-	@docker exec webapp cp /var/www/uprzejmiedonosze.localhost/db/store.sqlite-empty /var/www/uprzejmiedonosze.localhost/db/store.sqlite
+	@docker exec webapp sqlite3 /var/www/uprzejmiedonosze.localhost/db/store.sqlite -init /var/www/uprzejmiedonosze.localhost/webapp/sql/init_empty.sql
 
 # defines
 
