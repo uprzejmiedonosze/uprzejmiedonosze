@@ -18,10 +18,8 @@ To start you have to:
 First clone git repo:
 
 ```
-$ git clone git@bitbucket.org:uprzejmiedonosze/webapp.git
+$ git clone git@bitbucket.org:uprzejmiedonosze/uprzejmiedonosze.git
 ```
-
-Don't be surprised, that `staging` is the default branch. Don't switch to `master`.
 
 Enter the repository folder and download PHP dependencies.
 
