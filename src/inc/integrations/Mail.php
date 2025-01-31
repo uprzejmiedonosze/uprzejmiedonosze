@@ -46,6 +46,8 @@ class Mail extends CityAPI {
         $message->getHeaders()->addTextHeader("X-UD-AppId", $application->id);
         $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
+        $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", $application->id);
+        $message->getHeaders()->addTextHeader("References", $application->id . "@dka.email");
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         $messageId = $message->getHeaders()->get('Message-ID');

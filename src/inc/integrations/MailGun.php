@@ -50,6 +50,8 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader("v:environment", environment());
         $message->getHeaders()->addTextHeader("o:tag", $application->address->city ?? '-no-city');
         $message->getHeaders()->addTextHeader("o:testmode", isDev());
+        $message->getHeaders()->addTextHeader("References", $application->id . "@dka.email");
+        $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", $application->id);
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         try {
@@ -115,6 +117,8 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader("v:nofitication", true);
         $message->getHeaders()->addTextHeader("o:tag", $application->smCity ?? '-no-city');
         $message->getHeaders()->addTextHeader("o:testmode", isDev());
+        $message->getHeaders()->addTextHeader("References", $application->id . "@dka.email");
+        $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", $application->id);
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         try {
