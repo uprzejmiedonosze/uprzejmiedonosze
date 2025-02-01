@@ -9,6 +9,6 @@ function acquire(int $semKey): SysvSemaphore|false {
 }
 
 function release(SysvSemaphore $semaphore): bool {
-    return sem_release($semaphore);
+    return sem_remove($semaphore);
 }
 
