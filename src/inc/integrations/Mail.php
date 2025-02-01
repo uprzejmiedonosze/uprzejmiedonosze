@@ -70,14 +70,6 @@ class Mail extends CityAPI {
             [$fileatt, $fileattname] = \app\toZip($application);
             $message->attachFromPath($fileatt, $fileattname);
 
-            if ($this->withXls) {
-                $message->addPart(new DataPart(
-                    \app\app2Xls($application),
-                    $application->getAppFilename('.xls'),
-                    "application/vnd.ms-excel"
-                ));
-            }
-
             if (!isDev())
                 $mailer->send($message);
         } catch (TransportExceptionInterface $error) {

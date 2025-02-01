@@ -50,7 +50,7 @@ if(zip.length) console.error('zip code problem:', zip)
 const email = smArray.filter(([_e, v]) => v.email.search(/@/) <= 0)
 if(email.length) console.error('email problem', email)
 
-const api = smArray.filter(([_e, v]) => ! ['MailGun', 'Poznan', 'MailGunWithXls'].includes(v.api))
+const api = smArray.filter(([_e, v]) => ! ['MailGun', 'Poznan', 'Mail'].includes(v.api))
 if(api.length) console.error('api problem', api)
 
 if ((zip.length + email.length + api.length) != 0) process.exit(1)
