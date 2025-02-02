@@ -63,6 +63,10 @@ nav.nav > a {
 }
 
 nav.nav > .spacer {
+    background-color: #00000033;
+    padding: 1px 0 !important;
+}
+nav.nav > .spacer-new {
     text-transform: uppercase;
     color: variables.$primaryColor;
     font-weight: 700;
@@ -78,10 +82,8 @@ nav.nav > a, nav.nav > .spacer {
     width: 100%;
     padding: 14px;
     text-decoration: none;
-    display: inline-block;
+    display: block;
     position: relative;
-    text-shadow: none;
-    transition: opacity .2s ease-in-out;
     user-select: none;
 
     @media (min-width: 900px) {
@@ -93,13 +95,14 @@ nav.nav > a, nav.nav > .spacer {
         color: white !important;
         font-weight: 700;
         height: 60px;
+        padding-top: 16px;
         &:hover {
             color: white !important;
         }
     }
 
     &.first + a {
-        padding-top: 32px;
+        padding-top: 22px;
     }
 
     &:hover {
