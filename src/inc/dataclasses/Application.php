@@ -90,7 +90,7 @@ class Application extends JSONObject implements \JsonSerializable {
         $decode = fn($value) => \crypto\decode($value, $_SESSION['user_id'], $this->id . $this->added);
         $this->user = new JSONObject($decode($this->user));
         $this->privateComment = $decode($this->privateComment);
-        if (isset($this->sent))
+        if (isset($this->sent) && is_string($this->sent))
             $this->sent = new JSONObject($decode($this->sent));
         if (isset($this->address))
             $this->address = new JSONObject($decode($this->address));
