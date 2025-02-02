@@ -103,7 +103,7 @@ class WebhooksHandler extends AbstractHandler {
 
         if ($mailEvent->status == 'failed' && !$ccToUser)
             (new MailGun())->notifyUser($application,
-                "Nie udało się nam dostarczyć wiadomości zgłoszenia {$application->getNumber()}",
+                "Nie udało się nam dostarczyć zgłoszenia {$application->getNumber()}",
                 $mailEvent->getReason(),
                 $recipient);
 
