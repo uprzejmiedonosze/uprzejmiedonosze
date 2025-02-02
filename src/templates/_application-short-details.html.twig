@@ -39,7 +39,7 @@
                         {% set liStyle = 'style="display: none;"' %}
                     {% endif %}
                 <li {{ liStyle|raw }}>
-                    <a href="#" onclick="setStatus('{{ app.id }}', '{{ key }}')" class="status-dot {{ key }}">{{ val.action }}</a>
+                    <a href="#{{ app.id }}" onclick="setStatus('{{ app.id }}', '{{ key }}')" class="status-dot {{ key }}">{{ val.action }}</a>
                 </li>
                 {% endif %}
                 {% endfor %}
