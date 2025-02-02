@@ -55,8 +55,7 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         try {
-            $userNumber = $application->user->number;
-            $semaphore = \semaphore\acquire(intval($userNumber));
+            \semaphore\acquire($application->id);
             $application->setStatus('sending');
             $application->sent = new JSONObject();
             $application->sent->date = date(DT_FORMAT);
@@ -89,7 +88,7 @@ class MailGun extends CityAPI {
             \app\save($application);
             throw new Exception($error->getMessage(), 500, $error);
         } finally {
-            \semaphore\release($semaphore);
+            \semaphore\release($application->id);
             \app\rmPdf($application);
             \app\rmZip($application);
         }

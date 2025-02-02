@@ -1,14 +1,16 @@
 <?php namespace semaphore;
 
-use SysvSemaphore;
+const SEMAPHORE_WAIT = 30;
 
-function acquire(int $semKey): SysvSemaphore|false {
-    $semaphore = sem_get($semKey, 1, 0666, 1);
-    sem_acquire($semaphore);
-    return $semaphore;
+function acquire(string $semKey): void {
+    $limit = SEMAPHORE_WAIT+10;
+    while (!\cache\add(type:\cache\Type::Semaphore, key:$semKey, value:1, flag:0, expire:SEMAPHORE_WAIT)) {
+        usleep(1000);
+        if ($limit-- < 0)
+            throw new \Exception("Error semaphore $semKey is locked.");
+    }
 }
 
-function release(SysvSemaphore $semaphore): bool {
-    return sem_remove($semaphore);
+function release(string $semKey): void {
+    \cache\delete(type:\cache\Type::Semaphore, key:$semKey);
 }
-

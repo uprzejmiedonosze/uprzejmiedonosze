@@ -19,6 +19,8 @@ namespace cache {
 
         case Recydywa;
         case FirebaseKeys;
+
+        case Semaphore;
     }
 
     const _KEY_MAPPPING = array(
@@ -43,6 +45,11 @@ namespace cache {
     function set(Type $type, ?string $key, mixed $value, int $flag = 0, int $expire = 24 * 60 * 60): void {
         global $cache;
         $cache->set(key($type, $key), $value, $flag, $expire);
+    }
+
+    function add(Type $type, ?string $key, mixed $value, int $flag = 0, int $expire = 24 * 60 * 60): bool {
+        global $cache;
+        return $cache->add(key($type, $key), $value, $flag, $expire);
     }
 
     function delete(Type $type, ?string $key): void {
