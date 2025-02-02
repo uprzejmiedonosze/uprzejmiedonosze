@@ -68,7 +68,6 @@ class MailGun extends CityAPI {
             $application->sent->method = "MailGun";
             \app\save($application);
 
-            logger("Sending email {$application->id} with MailGun, sent->to {$application->sent->to}");
             [$fileatt, $fileattname] = \app\toPdf($application);
             $message->attachFromPath($fileatt, $fileattname);
             [$fileatt, $fileattname] = \app\toZip($application);
@@ -83,9 +82,8 @@ class MailGun extends CityAPI {
             }
 
             $mailer->send($message);
-            logger("Sending email {$application->id} with MailGun, sent");
         } catch (TransportExceptionInterface $error) {
-            logger("Sending email {$application->id} with MailGun, exception" . $error->getMessage(), true);
+            logger("Sending email {$application->id} with MailGun, exception: " . $error->getMessage(), true);
             $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);
