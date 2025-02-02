@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   var automatedSM = document.getElementById('automatedSM')?.value
 
   if (applicationId && automatedSM) {
-    setTimeout(() => {
+    //setTimeout(() => {
       sendApplication(applicationId)
-    }, 1000)
+    //}, 1000)
   }
   // @ts-ignore
   (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "dziekujemy" });
