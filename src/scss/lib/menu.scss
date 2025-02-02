@@ -56,28 +56,36 @@ $transition-duration: 0.5s;
     z-index: 3;
 }
 
-nav.nav > .spacer {
-    background-color: #00000033;
-    padding-top: 2px;
+nav.nav > a {
+    cursor: pointer;
+    color: #000 !important;
+    font-weight: 400;
 }
 
-nav.nav > a {
+nav.nav > .spacer {
+    text-transform: uppercase;
+    color: variables.$primaryColor;
+    font-weight: 700;
+    font-size: 0.9em;
+    padding-top: 20px!important;
+    padding-left: 64px!important;
+    
+}
 
+nav.nav > a, nav.nav > .spacer {
     clear: both;
-    cursor: pointer;
     white-space: nowrap;
     width: 100%;
-    padding: 1em;
-    font-weight: 400;
+    padding: 14px;
     text-decoration: none;
     display: inline-block;
     position: relative;
-    color: #000 !important;
     text-shadow: none;
     transition: opacity .2s ease-in-out;
+    user-select: none;
 
     @media (min-width: 900px) {
-        padding: 1em 2em;
+        padding: 14px 28px;
     }
 
     &.first {
@@ -91,11 +99,7 @@ nav.nav > a {
     }
 
     &.first + a {
-        padding-top: 2em;
-    }
-
-    &.sub {
-        padding: 0 0 1em 3.5em;
+        padding-top: 32px;
     }
 
     &:hover {
@@ -104,7 +108,7 @@ nav.nav > a {
 
     .menu-count {
         @extend .badge;
-        margin-left: 1em;
+        margin-left: 16px;
     }
 
     &.active {

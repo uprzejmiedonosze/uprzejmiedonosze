@@ -60,14 +60,49 @@
         {% block footer %}
             {% if not dialog %}
             <footer data-role="footer">
-                <h4 title="%VERSION%">&copy; Uprzejmie Donoszę, 2015–{{ 'now'|date('Y') }}</h4>
-                <p>
-                    <a href="/regulamin.html" data-role="none">regulamin</a>
-                    |
-                    <a href="/changelog.html" data-role="none">historia zmian</a>
-                    |
-                    <a href="/projekt.html">o projekcie</a>
-                </p>
+
+                <div class="grid3">
+                    <div>
+                        <div class="header">Warto wiedzieć</div>
+                        <a href="/jak-zglosic-nielegalne-parkowanie.html">Poradnik „jak zgłaszać”</a>
+                        <a href="/przesluchanie.html.html">Wizyta na komisariacie</a>
+                        <a href="/zwrot-za-przesluchanie.html">Zwrot środków za przesłuchanie</a>
+                        <a href="/dostep-do-informacji-publicznej.html">Jak sprawdzić efekty pracy SM?</a>
+                        <a href="/faq.html">Najczęstsze pytania</a>
+                        <a href="/e-doreczenia.html">E-doręczenia</a>
+                        <a href="/zazalenie-na-brak-mandatu.html">Zażalenie na brak mandatu</a>
+                        <a href="/przepisy.html">Przepisy zw. z parkowaniem</a>
+                    </div>
+                    <div>
+                        <div class="header">Warto wspierać</div>
+                        <a href="/patronite.html">Patronite</a>
+                        <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">
+                            Agenda Parkingowa
+                        </a>
+                        <a rel="external" target="_blank" href="https://prawapieszych.pl">
+                            Podpisz wniosek do RPO
+                        </a>
+                        <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">
+                            Grupa wsparcia na FB
+                        </a>
+                        <a href="https://suppi.pl/uprzejmiedonosze"
+                            target="_blank"
+                            rel="external">Jednorazowa wpłata</a>
+                        <a href="/naklejki-robisz-to-zle.html">Kup naklejki</a>
+                    </div>
+                    <div>
+                        <div class="header">O projekcie</div>
+                        <a href="https://patronite.pl/uprzejmiedonosze/posts" target="_blank" rel="external">
+                            Comiesięczna aktualizacja
+                        </a>
+                        <a href="https://x.com/SzymonNieradka" target="_blank" rel="external">
+                            Codzienne aktualizacje
+                        </a>
+                        <a href="/changelog.html">Historia zmian</a>
+                        <a href="/regulamin.html">Regulamin</a>
+                        <a href="/polityka-prywatnosci.html">Polityka prywatności</a>
+                    </div>
+                </div>
             </footer> <!-- footer -->
             {% endif %}
         {% endblock %}

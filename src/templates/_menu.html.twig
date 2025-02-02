@@ -1,10 +1,10 @@
-<input data-role="none" id="toggle" type="checkbox">
+<input id="toggle" type="checkbox">
 
 <div id="courtain"></div>
 <div class="container">
 
 {% if leftButton ?? '' == 'menu' %}
-    <label data-role="none" class="menu" for="toggle">
+    <label class="menu" for="toggle">
         <span data-role-menu class="button-toggle">
             <span data-role-menu class="icon"></span>
         </span>
@@ -36,7 +36,7 @@
 </div>
 <div class="container">
     <nav class="nav" data-role-menu>
-        <a tabindex="0" data-role="none" href="/" class="first">
+        <a tabindex="0" href="/" class="first">
             {% if general.isLoggedIn %}
                 Start
             {% else %}
@@ -44,29 +44,29 @@
             {% endif %}
         </a>
 {% if general.isLoggedIn %}
-        <a data-role="none" {{ active(config.menu, 'nowe-zgloszenie')|raw }} href="/nowe-zgloszenie.html">
+        <a {{ active(config.menu, 'nowe-zgloszenie')|raw }} href="/nowe-zgloszenie.html">
             Nowe zgłoszenie
         </a>
-        <a data-role="none" {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/moje-zgloszenia.html">
+        <a {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/moje-zgloszenia.html">
             Moje zgłoszenia
             <span class="menu-count">{{ general.stats.active ?? 0 }}</span>
         </a>
 
     {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
-		<a data-role="none" {{ active(config.menu, 'wysylka')|raw }} href="/wysylka.html">
+		<a {{ active(config.menu, 'wysylka')|raw }} href="/wysylka.html">
             Do wysłania
 			<span class="menu-count">{{ general.stats.confirmed ?? 0 }}</span>
 		</a>
     {% endif %}
 
 	{% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
-		<a data-role="none" {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/zapytaj-o-status.html?update">
+		<a {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/zapytaj-o-status.html?update">
             Zapytaj o status
 			<span class="menu-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span>
 		</a>
 	{% endif %}
 
-        <a data-role="none" {{ active(config.menu, 'register')|raw }} href="/register.html?update">
+        <a {{ active(config.menu, 'register')|raw }} href="/register.html?update">
             Edycja konta
         </a>
 
@@ -76,52 +76,56 @@
         </a>
 {% endif %}
 
-        <div class="spacer"></div>
+        <div class="spacer">
+            Poradniki i informacje
+        </div>
 
-        <a data-role="none" {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }} href="/jak-zglosic-nielegalne-parkowanie.html">
+        <a {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }} href="/jak-zglosic-nielegalne-parkowanie.html">
             Poradnik „Jak zgłaszać”
         </a>
-        <a data-role="none" {{ active(config.menu, 'przepisy', 'sub')|raw }} href="/przepisy.html">
+        <a {{ active(config.menu, 'przepisy')|raw }} href="/przepisy.html">
             Przepisy
         </a>
-        <a data-role="none" {{ active(config.menu, 'faq', 'sub')|raw }} href="/faq.html">
+        <a {{ active(config.menu, 'faq')|raw }} href="/faq.html">
             FAQ
         </a>
-        <a data-role="none" {{ active(config.menu, 'przesluchanie', 'sub')|raw }} href="/przesluchanie.html">
+        <a {{ active(config.menu, 'przesluchanie')|raw }} href="/przesluchanie.html">
             Wizyta w SM
         </a>
-        <a data-role="none" {{ active(config.menu, 'naklejki-robisz-to-zle', 'sub')|raw }} href="/naklejki-robisz-to-zle.html">
+        <a {{ active(config.menu, 'naklejki-robisz-to-zle')|raw }} href="/naklejki-robisz-to-zle.html">
             Naklejki i mazaki
             <span class="menu-count">nowość!</span>
         </a>
-        <a data-role="none" {{ active(config.menu, 'statystyki')|raw }} href="/statystyki.html">
+        <a {{ active(config.menu, 'statystyki')|raw }} href="/statystyki.html">
             Statystyki
         </a>
 
-        <div class="spacer"></div>
+        <div class="spacer">
+            Wspieraj
+        </div>
 
 {% if general.isLoggedIn %}
-    	<a data-role="none" {{ active(config.menu, 'patronite')|raw }} href="/patronite.html">
+    	<a {{ active(config.menu, 'patronite')|raw }} href="/patronite.html">
             Zostań patronem
         </a>
 {% endif %}
 
-        <a data-role="none" rel="external" target="_blank" href="https://agendaparkingowa.pl/">
+        <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">
             Agenda Parkingowa
         </a>
-        <a data-role="none" rel="external" target="_blank" href="https://prawapieszych.pl">
+        <a rel="external" target="_blank" href="https://prawapieszych.pl">
             Podpisz wniosek do RPO
         </a>
-        <a data-role="none" rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">
+        <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">
             Grupa wsparcia na FB</a>
 
 <div class="spacer"></div>
 {% if general.isLoggedIn %}
-        <a data-role="none" href="/logout.html">
+        <a href="/logout.html">
             Wyloguj się
         </a>
 {% else %}
-	    <a data-role="none" href="/start.html">
+	    <a href="/start.html">
             Zaloguj/zarejestruj się
         </a>
 {% endif %}
