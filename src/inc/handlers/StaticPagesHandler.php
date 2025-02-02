@@ -181,7 +181,7 @@ class StaticPagesHandler extends AbstractHandler {
         $user = $request->getAttribute('user');
         
         $plateId = $args['plateId'];
-        $apps = array_reverse(\app\byPlate($plateId));
+        $apps = \app\byPlate($plateId);
 
         $image = null;
         $imagesCount = 0;
