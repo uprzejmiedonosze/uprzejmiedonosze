@@ -3,6 +3,7 @@
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
 
 {% extends "base.html.twig" %}
+{% block footer %}{% endblock %}
 {% block main %}
 
 <form action="/register-ok.html?next={{ signInSuccessUrl ?? 'start.html' }}" id="register-form" method="post">
