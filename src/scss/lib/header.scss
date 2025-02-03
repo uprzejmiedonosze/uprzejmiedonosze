@@ -1,10 +1,12 @@
+@use "variables";
+
 header {
     position: fixed;
     width: 100%;
     z-index: 2;
     color: #fff;
     background-color: #009c7f;
-    height: 60px;
+    height: variables.$headerHeight;
 
     h1 {
         text-align: center;

@@ -312,7 +312,7 @@ h3.introHeader {
 }
 
 :target {
-    scroll-margin-top: 60px;
+    scroll-margin-top: variables.$headerHeight;
 }
 
 sup {

@@ -228,7 +228,7 @@
   height: 100vw;
   background-color: rgba(0,0,0,0.7);
   z-index: 3;
-  top: 0;
+  top: 20px;
   left: 0;
 
   .close {
@@ -266,7 +266,7 @@
     padding: 1em;
     position: sticky;
     overflow-y: scroll;
-    height: calc(100vh - 1em);
+    height: calc(100vh - 1em - variables.$headerHeight);
     overflow-y: scroll;
   }
 }

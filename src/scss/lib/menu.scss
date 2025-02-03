@@ -94,7 +94,7 @@ nav.nav > a, nav.nav > .spacer {
         background-color: variables.$primaryColor;
         color: white !important;
         font-weight: 700;
-        height: 60px;
+        height: variables.$headerHeight;
         padding-top: 16px;
         &:hover {
             color: white !important;
@@ -131,7 +131,7 @@ label.menu {
     cursor: pointer;
     position: absolute;
     display: inline-block;
-    padding: calc((60px - 36px) / 2) 1em;
+    padding: calc((variables.$headerHeight - 36px) / 2) 1em;
     &:active {
         transform: translateY(2px);
     }
