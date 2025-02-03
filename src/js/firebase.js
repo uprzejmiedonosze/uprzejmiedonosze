@@ -116,7 +116,7 @@ function doLogin(signInSuccessUrl) {
         'privacyPolicyUrl': '/polityka-prywatnosci.html',
         'credentialHelper': firebaseui.auth.CredentialHelper.NONE,
         'adminRestrictedOperation': { status: false },
-        'signInFlow': 'popup'
+        'signInFlow': 'redirect'
     };
     var ui = new firebaseui.auth.AuthUI(getFirebaseAuth());
     ui.start('#firebaseui-auth-container', uiConfig);
