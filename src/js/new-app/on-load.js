@@ -111,4 +111,7 @@ function validateExtensions() {
     matchingExtension.checked = false
     matchingExtensionLabel?.classList.add('disabled')
   }
+
+  if (selectedCategory !== '0')
+    document?.getElementById('comment')?.classList.remove('error')
 }
