@@ -1,19 +1,25 @@
 {% set leftButton = 'menu' %}
 
 {% set title = 'Zaloguj się' %}
-{% if config.logout %}
-{% set title = 'Wylogowuję' %}
-{% endif %}
-
 
 {% extends "base.html.twig" %}
-{% block footer %}{% endblock %}
+{% if config.logout %}
+    {% set title = '' %}
+{% endif %}
+{% block footer %}
+    {% if config.logout %}
+    <footer data-role="footer">
+    <h4>wylogowuję...</h4>
+    </footer>
+    {% endif %}
+{% endblock %}
+
 {% block headIncludes %}
-        <script src="/js/firebase.js?%JS_HASH%"
-                logout="{{ config.logout }}"
-                login="true"
-                signInSuccessUrl="{{ config.signInSuccessUrl ?? '/moje-zgloszenia.html' }}">
-        </script>
+    <script src="/js/firebase.js?%JS_HASH%"
+            logout="{{ config.logout }}"
+            login="true"
+            signInSuccessUrl="{{ config.signInSuccessUrl ?? '/moje-zgloszenia.html' }}">
+    </script>
 {% endblock %}
 {% block main %}
 
