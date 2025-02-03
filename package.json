@@ -6,7 +6,7 @@
   "engineStrict": true,
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
-    "@sentry/browser": "^8.52.0",
+    "@sentry/browser": "^8.53.0",
     "@sentry/tracing": "^7.120.3",
     "exif-js": "^2.3.0",
     "exifreader": "^4.26.1",
@@ -20,7 +20,7 @@
     "mapbox-gl": "^3.9.4"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.2.5",
+    "@eslint/compat": "^1.2.6",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.19.0",
     "@parcel/optimizer-data-url": "^2.13.3",
