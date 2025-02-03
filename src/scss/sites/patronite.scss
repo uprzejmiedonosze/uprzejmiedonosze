@@ -8,22 +8,16 @@
         box-shadow: 0 0 5px gray;
     }
 
-    .spacer {
-        height: 80px;
-    }
-
     .patronite.button.floating {
-        bottom: 94px;
-        left: 50%;
-        margin-left: -200px;
-        min-width: 144px;
-        position: fixed;
+        bottom: 30px;
+        position: sticky;
         width: 400px;
         z-index: 1;
         box-shadow: 0 0 30px white;
 
         @media (max-width: variables.$width-break) {
-            bottom: 5px;
+            bottom: 10px;
+            width: 300px;
         }
     }
 }
