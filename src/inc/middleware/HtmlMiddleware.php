@@ -68,7 +68,6 @@ class HtmlMiddleware implements MiddlewareInterface {
                 ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST')
                 ->withHeader('Access-Control-Allow-Credentials', 'true')
-                ->withHeader('Content-Type', 'text/html')
                 ->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 }
