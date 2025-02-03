@@ -18,7 +18,7 @@ footer {
         gap: 10px;
         padding: 1em 2em;
 
-        @media (min-width: 400px) {
+        @media (min-width: 500px) {
             grid-template-columns: 1fr 1fr;
         }
 
