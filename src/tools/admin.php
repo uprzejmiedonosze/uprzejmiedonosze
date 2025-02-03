@@ -346,8 +346,15 @@ function processWebhook(string $id): void {
     
 
     if (!$application->wasSent()) {
-        echo "mailgun webhook error, Application $appId was not sent!";
-        return;
+        logger("mailgun webhook error, Application $appId was not sent!", true);
+        $application->sent = new \JSONObject();
+        $application->sent->date = date(DT_FORMAT);
+        $application->sent->subject = $payload['message']['headers']['subject'];
+        $application->sent->to = $payload['message']['headers']['to'];
+        $application->sent->cc = "({$application->email})";
+        $application->sent->from = "uprzejmiedonosze.net (" . MAILER_FROM . ")";
+        $application->sent->body = "Mailgun webhook error, was not sent field was not saved, thus email body is missing!";
+        $application->sent->method = "MailGun";
     }
 
     $comment = $mailEvent->formatComment();
@@ -386,6 +393,13 @@ function processWebhook(string $id): void {
     echo "OK";
 }
 
+function processWebhooks(): void {
+    $ids = \webhook\getUnprocessed();
+    foreach ($ids as $id) {
+        processWebhook($id);
+    }
+}
+
 
 //removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
 //removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
@@ -393,4 +407,4 @@ function processWebhook(string $id): void {
 //refreshRecydywa();
 //upgradeAllApps('2.5.2', false);
 
-processWebhook('dPwlXqMyTvWm1MnT6C0C3g');
+processWebhooks();
