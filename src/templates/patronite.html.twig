@@ -8,61 +8,104 @@
 {% extends "base.html.twig" %}
 {% block main %}
 
-<h2>Co chcę zrobić</h2>
-<h4>Chcę zmienić przepisy dotyczące parkowania, bo utopijnie wierzę, że chodniki służą do chodzenia.</h4>
+	<h2>Co chcę zrobić</h2>
+	<h4>Chcę zmienić przepisy dotyczące parkowania, bo utopijnie wierzę, że chodniki służą do chodzenia.</h4>
 
-<p>Dlatego poza rozwijaniem serwisu Uprzejmie Donoszę, postuluję
-    <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">cztery zmiany w przepisach związanych z parkowaniem</a>,
-    <strong>które są są na „słupkozę” polskich miast, zniszczone chodniki i dewastację zieleni</strong>.</p>
+	<p>Dlatego poza rozwijaniem serwisu Uprzejmie Donoszę, postuluję
+		<a rel="external" target="_blank" href="https://agendaparkingowa.pl/">cztery zmiany w przepisach związanych z parkowaniem</a>,
+		<strong>które są są na „słupkozę” polskich miast, zniszczone chodniki i dewastację zieleni</strong>.</p>
 
-<img class="responsive" src="/img/agenda-parkingowa-konferencja.jpg?width=800" />
+    
+    <figure>
+        <img src="/img/agenda-parkingowa-konferencja.jpg?width=800"/>
+        <figcaption>Konferencja prasowa po prowokacji parkingowej w Warszawie, kwiecień 2024</figcaption>
+    </figure>
 
-<p>Ujmując to inaczej – postuluję takie zmiany, dzięki którym nie będziesz
-    {{ config.sex.musiala ?? 'musiał(a)' }} donosić,
-    bo straż miejska zajmie się patokierowcą sama.</p>
+	<p>Ujmując to inaczej – postuluję takie zmiany, dzięki którym nie będziesz
+		{{ config.sex.musiala ?? 'musiał(a)' }}
+		donosić,
+		    bo straż miejska zajmie się patokierowcą sama.</p>
 
-<h2>Co zrobiłem do tej pory</h2>
+	<h2 id="done">Co zrobiłem do tej pory</h2>
 
-<p>Stworzyłem <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">Miejską Agendę Parkingową</a> i lobbuję
-    za zmianami w Sejmie. Napisałem serię interpelacji poselskich do ministerstw. Odbyłem kilkadziesiąt
-    spotkań na żywo z przedstawicielami straży miejskich, policji, ruchami miejskimi, urzędnikami
-    i samorządowcami. Prowadzę <a rel="external" href="https://agendaparkingowa.pl/warsztaty.html">szkolenia
-        w terenie z patoparkowania</a> dla samorządowców.</p>
+	<p>Stworzyłem
+		<a rel="external" target="_blank" href="https://agendaparkingowa.pl/">Miejską Agendę Parkingową</a>
+		i lobbuję
+		    za zmianami w Sejmie. Napisałem serię interpelacji poselskich do ministerstw. Odbyłem kilkadziesiąt
+		    spotkań na żywo z przedstawicielami straży miejskich, policji, ruchami miejskimi, urzędnikami
+		    i samorządowcami. Prowadzę
+		<a rel="external" href="https://agendaparkingowa.pl/warsztaty.html">szkolenia
+			        w terenie z patoparkowania</a>
+		dla samorządowców.</p>
 
-<p>Zgłosiłem <a rel="external" target="_blank" href="https://prawapieszych.pl/">wniosek do Rzecznika Praw Obywatelskich</a> w sprawie przepisów związanych z parkowaniem, który odbił się szerokim echem w mediach (wpadł Ci może w oko artykuł o „zakazie parkowania na chodniku”?).</p>
+	<p>Zgłosiłem
+		<a rel="external" target="_blank" href="https://prawapieszych.pl/">wniosek do Rzecznika Praw Obywatelskich</a>
+		w sprawie przepisów związanych z parkowaniem, który odbił się szerokim echem w mediach
+        (wpadł Ci może w oko artykuł o „zakazie parkowania na chodniku”?).</p>
 
-<p>Stworzyłem także serwis <a rel="external" target="_blank" href="https://uprzejmiedonosze.net/">Uprzejmie Donoszę</a>, generujący co miesiąc ponad 5000 zgłoszeń nieprawidłowego parkowania.</p>
+	<p>Stworzyłem także serwis
+		<a rel="external" target="_blank" href="https://uprzejmiedonosze.net/">Uprzejmie Donoszę</a>,
+        generujący co miesiąc ponad 5000 zgłoszeń nieprawidłowego parkowania.</p>
 
-<p>Zrobiłem <a rel="external" target="_blank" href="https://agendaparkingowa.pl/prowokacja.html">prowokację parkingową</a>, dzięki której cała Polska usłyszała, że nielegalne parkowanie jest tańsze niż legalny postój w strefie płatnego parkowania. A plac pięciu rogów w Warszawie stał się placem Skody Fabii.</p>
+	<p>Zrobiłem
+		<a rel="external" target="_blank" href="https://agendaparkingowa.pl/prowokacja.html">prowokację parkingową</a>,
+        dzięki której cała Polska usłyszała, że nielegalne parkowanie jest tańsze niż legalny postój w strefie
+        płatnego parkowania. A plac pięciu rogów w Warszawie stał się placem Skody Fabii.</p>
+    
+    <p>Wziąłem udział w <a rel="external" target="_blank" href="https://www.youtube.com/watch?v=VXg8TV3zbu8">
+        posiedzeniu Parlamentarnego Zespołu ds. Bezpieczeństwa Ruchu Drogowego</a> gdzie przygotowałem prezentację 
+        na temat absurdów parkowania. Zobacz koniecznie odpowiedź ministerstwa infrastruktury.</p>
+    
+    <p>Napisałem petycję do Sejmu w sprawie 
+        <a href="https://patronite.pl/post/76720/podsumowanie-stycznia-czyli-petycja-do-sejmu" rel="external" target="_blank">
+        usuwania/holowania nieprawidłowo zaparkowanych samochodów</a>. Czekam na zaproszenie na posiedzenie komisji.</p>
 
-<p>A w wolnych chwilach współprowadzę satyryczno-kaskaderski profil <a rel="external" target="_blank" href="https://www.youtube.com/c/stopchamszczecin">Stop Cham Szczecin</a>.</p>
+    <p>Zmotywowałem kilkaset osób do udziału w <a href="https://patronite.pl/post/75163/podsumowanie-grudnia-czyli-bezpieczenstwo-waszych-danych"
+        rel="external" target="_blank">konsultacjach społecznych ustawy o drogach publicznych</a> i na bieżąco 
+        <a href="https://x.com/SzymonNieradka/status/1878765477000015890" rel="external" targeg="_blank">monitoruję
+        proces legislacyjny</a> tej ustawy.</p>
 
-<p>Co miesiąc informuję o tym, co zrobiłem na profilu Patronite. <a rel="external" target="_blank" href="https://patronite.pl/uprzejmiedonosze/posts">Zobacz historyczne wpisy</a>.</p>
+	<p>A w wolnych chwilach współprowadzę satyryczno-kaskaderski profil
+		<a rel="external" target="_blank" href="https://www.youtube.com/c/stopchamszczecin">Stop Cham Szczecin</a>.</p>
 
+	<p>Co miesiąc informuję o tym, co zrobiłem na profilu Patronite.
+		<a rel="external" target="_blank" href="https://patronite.pl/uprzejmiedonosze/posts">Zobacz historyczne wpisy</a>.</p>
 
-<img class="responsive" src="/img/spotkanie-rpo.jpg?width=800" />
+    <figure>
+        <img class="responsive" src="/img/sejm-brd-2024.png?width=800"/>
+        <figcaption>Posiedzenie Parlamentarnego Zespołu BRD, październik 2024</figcaption>
+    </figure>
 
-<h2>Ile to kosztuje</h2>
+	<h2>Ile to kosztuje</h2>
 
-<p>Niestety sporo:</p>
-<ol>
-    <li>Jeden wyjazd do Warszawy na spotkanie z RPO, posłankami/posłami lub urzędnikami <b>to około 1000 zł</b>. Wyjazd do innych miast wojewódzkich to zbliżona kwota. Jeżdżę 1-2 razy w miesiącu.</li>
-    <li>Koszt utrzymania serwisu Uprzejmie Donoszę to <b>ponad 800 zł miesięcznie</b>.</li>
-    <li>Prowokacja parkingowa w Warszawie zamknęła się w <b>kwocie 4000 zł</b> (wliczając w to sprzedaż pojazdu na koniec).</li>
-    <li>Miesięcznie <b>poświęcam też od 50 do 120 godzin</b> na prace związane Agendą Parkingową i wnioskiem do RPO i Uprzejmie Donoszę. Ile to kosztuje? Licząc wg średniego wynagrodzenia wychodzi ponad 4000 zł brutto. Ale przelicz to wedle uznania.</li>
-</ol>
+	<p>Niestety sporo:</p>
+	<ol>
+		<li>Jeden wyjazd do Warszawy na spotkanie z RPO, posłankami/posłami lub urzędnikami
+			<b>to około 1000 zł</b>. Wyjazd do innych miast wojewódzkich to zbliżona kwota. Jeżdżę 1-2 razy w miesiącu.</li>
+		<li>Koszt utrzymania serwisu Uprzejmie Donoszę to
+			<b>ponad 800 zł miesięcznie</b>.</li>
+		<li>Prowokacja parkingowa w Warszawie zamknęła się w
+			<b>kwocie 4000 zł</b>
+			(wliczając w to sprzedaż pojazdu na koniec).</li>
+		<li>Miesięcznie
+			<b>poświęcam też od 50 do 120 godzin</b>
+			na prace związane Agendą Parkingową i wnioskiem do RPO i Uprzejmie Donoszę. Ile to kosztuje? Licząc wg średniego wynagrodzenia wychodzi ponad 4000 zł brutto. Ale przelicz to wedle uznania.</li>
+	</ol>
 
-<p>Jest jeszcze jeden wymiar, niefinansowy. Kilka razy w miesiącu jestem <b>wściekle atakowany przez obrońców status quo</b>. Otrzymuję groźby pobicia. SMS-y obrażające mnie i moją rodzinę. Obraźliwych komentarzy nie zliczę. Można się do tego przyzwyczaić, ale nie można zupełnie zignorować. Szczególnie gdy swoją krucjatę robi się pod pełnym imieniem i nazwiskiem.</p>
+	<p>Jest jeszcze jeden wymiar, niefinansowy. Kilka razy w miesiącu jestem
+		<b>wściekle atakowany przez obrońców status quo</b>. Otrzymuję groźby pobicia. SMS-y obrażające mnie i moją rodzinę. Obraźliwych komentarzy nie zliczę. Można się do tego przyzwyczaić, ale nie można zupełnie zignorować. Szczególnie gdy swoją krucjatę robi się pod pełnym imieniem i nazwiskiem.</p>
 
-<p><em>Szymon Nieradka</em></p>
+	<p>
+		<em>Szymon Nieradka</em>
+	</p>
 
-<h4>Gratisy</h4>
+	<h4>Gratisy</h4>
 
-<p>
-    Dla wspierających wyższych progach wsparcia wysyłam <a href="/naklejki-robisz-to-zle.html">naklejki ROBISZ TO ŹLE i „mazaki sprawiedliwości”</a>.
-</p>
+	<p>
+		Dla wspierających wyższych progach wsparcia wysyłam
+		<a href="/naklejki-robisz-to-zle.html">naklejki ROBISZ TO ŹLE i „mazaki sprawiedliwości”</a>.
+	</p>
 
-<a href="https://patronite.pl/uprzejmiedonosze"
-    class="patronite button floating">Wesprzyj!</a>
+	<a href="https://patronite.pl/uprzejmiedonosze" class="patronite button floating">Wesprzyj!</a>
 
 {% endblock %}

@@ -1,13 +1,6 @@
 @use "../lib/variables";
 
 .patronite {
-    img.responsive {
-        border-radius: 3px;
-        width: calc(100% - 10px);
-        margin: 5px;
-        box-shadow: 0 0 5px gray;
-    }
-
     .patronite.button.floating {
         bottom: 30px;
         position: sticky;
