@@ -20,8 +20,8 @@ function environment(): string {
 
 function environmentSuffix(): string {
     if (isProd()) return '';
-    if (isStaging()) return '-stg';
-    return '-dev';
+    if (isStaging()) return 'stg';
+    return 'dev';
 }
 
 function trimAbsolutePaths(string $backtrace): string {
@@ -70,7 +70,7 @@ function send_syslog(string $msg, bool $debug): void {
         return;
 
     $environment = environmentSuffix();
-    openlog("uprzejmiedonosze$environment", LOG_NDELAY, LOG_DAEMON);
+    openlog("uprzejmiedonosze $environment", LOG_NDELAY, LOG_DAEMON);
     if (str_contains(mb_strtolower($msg), 'error'))
         syslog(LOG_ERR, $msg);
     else

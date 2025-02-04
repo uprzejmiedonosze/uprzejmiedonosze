@@ -127,7 +127,7 @@ function sendApplication(string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
-    \semaphore\acquire($application->id);
+    \semaphore\acquire($application->id, "uploadImage:$pictureType");
 
     $type = substr($pictureType, 0, 2);
     $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
@@ -155,12 +155,12 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
         $application->thirdImage->width = $width;
         $application->thirdImage->height = $height;
     } else {
-        \semaphore\release($application->id);
+        \semaphore\release($application->id, "uploadImage:$pictureType");
         throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($application->id)", 400);
     }
 
     \app\save($application);
-    \semaphore\release($application->id);
+    \semaphore\release($application->id, "uploadImage:$pictureType");
     return $application;
 }
 

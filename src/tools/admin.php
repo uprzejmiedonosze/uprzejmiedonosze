@@ -332,7 +332,7 @@ function processWebhook(string $id): void {
     }
     $mailEvent = new \MailEvent($payload);
 
-    \semaphore\acquire($appId);
+    \semaphore\acquire($appId, "webhook:" . $mailEvent->name);
 
     try {
         $application = \app\get($appId);
@@ -364,7 +364,7 @@ function processWebhook(string $id): void {
     if ($recipient == MAILER_FROM) {
         // this is BCC to Uprzejmie Donoszę, ignore it
         \webhook\mark($id, 'bcc to ud@, ignoring');
-        \semaphore\release($appId);
+        \semaphore\release($appId, "webhook:" . $mailEvent->name);
         echo 'bcc to ud@, ignoring';
     }
 
@@ -382,7 +382,7 @@ function processWebhook(string $id): void {
 
     $application = \app\save($application);
     \webhook\mark($id);
-    \semaphore\release($appId);
+    \semaphore\release($appId, "webhook:" . $mailEvent->name);
 
     if ($mailEvent->status == 'failed' && !$ccToUser)
         (new \MailGun())->notifyUser($application,

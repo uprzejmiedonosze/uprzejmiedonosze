@@ -49,7 +49,7 @@ class WebhooksHandler extends AbstractHandler {
             ));
         }
         $mailEvent = new MailEvent($payload);
-        \semaphore\acquire($appId);
+        \semaphore\acquire($appId, 'webhook:' . $mailEvent->name);
 
         try {
             $application = \app\get($appId);
@@ -78,7 +78,7 @@ class WebhooksHandler extends AbstractHandler {
         if ($recipient == MAILER_FROM) {
             // this is BCC to Uprzejmie Donoszę, ignore it
             \webhook\mark($id, 'bcc to ud@, ignoring');
-            \semaphore\release($appId);
+            \semaphore\release($appId, 'webhook:' . $mailEvent->name);
             return $this->renderJson($response, array(
                 "type" => "bcc",
                 "status" => "ignored"
@@ -99,7 +99,7 @@ class WebhooksHandler extends AbstractHandler {
 
         $application = \app\save($application);
         \webhook\mark($id);
-        \semaphore\release($appId);
+        \semaphore\release($appId, 'webhook:' . $mailEvent->name);
 
         if ($mailEvent->status == 'failed' && !$ccToUser)
             (new MailGun())->notifyUser($application,
