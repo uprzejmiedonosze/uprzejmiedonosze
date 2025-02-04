@@ -16,8 +16,8 @@ function getCustomErrorHandler(App $app): callable {
         $status = $exception->getCode() ? : 500;
 
         $email = $_SESSION['user_email'] ?? 'niezalogowany';
-        $msg = $exception->getMessage() . " szkodnik: $email, " . trimAbsolutePaths($exception->getFile())
-            . ':' . $exception->getLine() . "\n" . trimAbsolutePaths($exception->getTraceAsString());
+        $msg = $exception->getMessage() . " [$email], " . trimAbsolutePaths($exception->getFile())
+            . ':' . $exception->getLine();
 
         if (isProd() && $status != 404) \Sentry\captureException($exception);
         logger($msg, $status != 404);
