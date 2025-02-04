@@ -403,9 +403,12 @@ sup {
 figure {
     position: relative;
     overflow: hidden;
-    border-radius: 5px;
-    margin: 5px;
-    box-shadow: 0 0 5px gray;
+
+    &.pop {
+        border-radius: 5px;
+        margin: 5px;
+        box-shadow: 0 0 5px gray;    
+    }
 
     img {
         width: 100%;
