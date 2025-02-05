@@ -8,7 +8,7 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use \JSONObject as JSONObject;
-use Symfony\Component\Mime\Part\DataPart;
+
 
 /**
  * @SuppressWarnings(PHPMD.MissingImport)
@@ -20,16 +20,16 @@ class Mail extends CityAPI {
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    function send(Application &$application){
+    function send(Application $application) {
         parent::checkApplication($application);
 
         $to = "szymon.nieradka@gmail.com";
-        if(isProd()){
+        if (isProd()) {
             $to = $application->guessSMData()->email;
         }
-         
+
         $transport = Transport::fromDsn(SMTP_GMAIL . '://' . SMTP_USER . ':' . SMTP_PASS . '@' . SMTP_HOST . ':' . SMTP_PORT);
-        $mailer = new Mailer($transport); 
+        $mailer = new Mailer($transport);
 
         $subject = $application->getEmailSubject();
 
@@ -42,7 +42,7 @@ class Mail extends CityAPI {
         $message->sender($application->email);
         $message->replyTo(new Address($application->email, $application->user->name));
         $message->returnPath($application->email);
-        
+
         $message->getHeaders()->addTextHeader("X-UD-AppId", $application->id);
         $message->getHeaders()->addTextHeader("X-UD-UserId", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("X-UD-AppNumber", $application->getNumber());
@@ -52,19 +52,23 @@ class Mail extends CityAPI {
 
         $messageId = $message->getHeaders()->get('Message-ID');
 
-        $application->setStatus('confirmed-waiting');
-        $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->getName()} ($to).");
-        $application->sent = new JSONObject();
-        $application->sent->date = date(DT_FORMAT);
-        $application->sent->subject = $subject;
-        $application->sent->to = $to;
-        $application->sent->cc = "{$application->user->name} ({$application->email})";
-        $application->sent->from = "uprzejmiedonosze.net (" . EMAIL_SENDER . ")";
-        $application->sent->body = parent::formatEmail($application, false);
-        $application->sent->messageId = $messageId;
-        $application->sent->method = "Mail";
-
         try {
+            \semaphore\acquire($application->id, "sendMail");
+            $application = \app\get($application->id); // get the latest version of the application
+
+            $application->setStatus('confirmed-waiting');
+            $application->addComment("admin", "Wysłano na adres {$application->guessSMData()->getName()} ($to).");
+            $application->sent = new JSONObject();
+            $application->sent->date = date(DT_FORMAT);
+            $application->sent->subject = $subject;
+            $application->sent->to = $to;
+            $application->sent->cc = "{$application->user->name} ({$application->email})";
+            $application->sent->from = "uprzejmiedonosze.net (" . EMAIL_SENDER . ")";
+            $application->sent->body = parent::formatEmail($application, false);
+            $application->sent->messageId = $messageId;
+            $application->sent->method = "Mail";
+            \app\save($application);
+
             [$fileatt, $fileattname] = \app\toPdf($application);
             $message->attachFromPath($fileatt, $fileattname);
             [$fileatt, $fileattname] = \app\toZip($application);
@@ -72,19 +76,18 @@ class Mail extends CityAPI {
 
             if (!isDev())
                 $mailer->send($message);
+
         } catch (TransportExceptionInterface $error) {
             $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);
-            throw new Exception($error, 500);
+            throw new Exception($error->getMessage(), 500, $error);
         } finally {
+            \semaphore\release($application->id, "sendMail");
             \app\rmPdf($application);
             \app\rmZip($application);
         }
 
-        \app\save($application);
         return $application;
     }
 }
-
-?>
