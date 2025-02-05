@@ -4,7 +4,7 @@ use app\Application;
 use \Exception as Exception;
 
 abstract class CityAPI {
-    abstract function send(Application &$application);
+    abstract function send(Application $application);
 
     static function checkApplication(Application &$application){
         global $STATUSES;
