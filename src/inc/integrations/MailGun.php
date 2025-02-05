@@ -6,7 +6,6 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use \JSONObject as JSONObject;
 
@@ -21,16 +20,16 @@ class MailGun extends CityAPI {
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    function send(Application $application){
+    function send(Application $application) {
         parent::checkApplication($application);
 
         $to = "szymon.nieradka@gmail.com";
-        if(isProd()){
+        if (isProd()) {
             $to = $application->guessSMData()->email;
         }
-         
+
         $transport = Transport::fromDsn(MAILER_DSN);
-        $mailer = new Mailer($transport); 
+        $mailer = new Mailer($transport);
 
         $subject = $application->getEmailSubject();
 
@@ -72,14 +71,6 @@ class MailGun extends CityAPI {
             $message->attachFromPath($fileatt, $fileattname);
             [$fileatt, $fileattname] = \app\toZip($application);
             $message->attachFromPath($fileatt, $fileattname);
-
-            if ($this->withXls) {
-                $message->addPart(new DataPart(
-                    \app\app2Xls($application),
-                    $application->getAppFilename('.xls'),
-                    "application/vnd.ms-excel"
-                ));
-            }
 
             $mailer->send($message);
         } catch (TransportExceptionInterface $error) {
@@ -127,12 +118,6 @@ class MailGun extends CityAPI {
         } catch (TransportExceptionInterface $error) {
             throw new Exception($error, 500);
         }
-    }
-}
-
-class MailGunWithXls extends Mail {
-    public function __construct() {
-        $this->withXls = true;
     }
 }
 
