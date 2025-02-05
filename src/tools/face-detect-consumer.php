@@ -17,8 +17,15 @@ $consumer = function (string $appId): void {
     $filename = ROOT . $app->contextImage->url;
     $url = "http://localhost:2000/detect/$filename";
     $faces = \curl\request($url, [], "FaceRecogniton");
-    $app->faces = $faces;
-    \app\save($app);
+
+    try {
+      \semaphore\acquire($appId, "face-detect-consumer");
+      $app = \app\get($appId);
+      $app->faces = $faces;
+      \app\save($app);
+    } finally {
+      \semaphore\release($appId, "face-detect-consumer");
+    }
 
     logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
     sleep(5);
