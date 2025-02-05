@@ -6,7 +6,7 @@ use app\Application;
  * @SuppressWarnings(PHPMD.MissingImport)
  */
 class Poznan extends CityAPI {
-    function send(Application &$application){
+    function send(Application $application){
         parent::checkApplication($application);
 
         $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
@@ -31,29 +31,37 @@ class Poznan extends CityAPI {
             'address' => $application->address->address, //adres, pole opcjonalne, do 256 znaków
             'key' => '85951ba0a63d1051a09659ea0a9d8391' //klucz aplikacji, pole obowiązkowe
         );
-        $application->setStatus('confirmed-waiting');
-        $application->sent = new JSONObject();
 
-        $output = parent::curlShellSend($url, $data, $application);
-
-        if(isset($output['response']['error_msg'])){
-            $application->setStatus('sending-failed', true);
-            unset($application->sent);
+        try {
+            \semaphore\acquire($application->id, "sendPoznan");
+            $application = \app\get($application->id); // get the latest version of the application
+            $application->setStatus('confirmed-waiting');
+            $application->sent = new JSONObject();
+    
+            $output = parent::curlShellSend($url, $data, $application);
+    
+            if(isset($output['response']['error_msg'])){
+                $application->setStatus('sending-failed', true);
+                unset($application->sent);
+                \app\save($application);
+                throw new Exception($output['response']['error_msg'], 500);
+            }
+    
+            $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
+    
+            $application->setStatus('confirmed-sm');
+            $application->addComment($application->guessSMData()->getName(), $reply);
+            $application->sent->date = date(DT_FORMAT);
+            $application->sent->reply = $reply;
+            $application->sent->subject = $application->getEmailSubject();
+            $application->sent->to = "fixmycity";
+            $application->sent->method = "Poznan";
+    
             \app\save($application);
-            throw new Exception($output['response']['error_msg'], 500);
+        } finally {
+            \semaphore\release($application->id, "sendPoznan");
         }
 
-        $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
-
-        $application->setStatus('confirmed-sm');
-        $application->addComment($application->guessSMData()->getName(), $reply);
-        $application->sent->date = date(DT_FORMAT);
-        $application->sent->reply = $reply;
-        $application->sent->subject = $application->getEmailSubject();
-        $application->sent->to = "fixmycity";
-        $application->sent->method = "Poznan";
-
-        \app\save($application);
         return $application;
     }
 }
