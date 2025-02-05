@@ -21,7 +21,7 @@ class MailGun extends CityAPI {
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    function send(Application &$application){
+    function send(Application $application){
         parent::checkApplication($application);
 
         $to = "szymon.nieradka@gmail.com";
@@ -56,6 +56,7 @@ class MailGun extends CityAPI {
 
         try {
             \semaphore\acquire($application->id, "sendMailGun");
+            $application = \app\get($application->id); // get the latest version of the application
             $application->setStatus('sending');
             $application->sent = new JSONObject();
             $application->sent->date = date(DT_FORMAT);
