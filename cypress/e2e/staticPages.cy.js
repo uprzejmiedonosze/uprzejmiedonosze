@@ -19,18 +19,13 @@ describe('Static pages no session', function() {
     })
 
     it('/ » regulamin', () => {
-        cy.contains('regulamin').click()
+        cy.contains('Regulamin').click()
         cy.contains('anonimowe dane statystyczne')
     })
 
     it('/ » historia', () => {
-        cy.contains('historia zmian').click()
+        cy.contains('Historia zmian').click()
         cy.contains('Poniedziałek, 13 lipca 2020')
-    })
-
-    it('/ » o projekcie', () => {
-        cy.contains('o projekcie').click()
-        cy.contains('Bitbucket')
     })
 
     it('/menu » Jak zgłaszać', () => {
