@@ -55,6 +55,10 @@ $app->group('', function (RouteCollectorProxy $group) { // PDFs
 })  ->add(new RegisteredMiddleware())
     ->add(new PdfMiddleware());
 
+$app->get('/zgloszenia.xls', XlsHandler::class . ':xls')
+    ->add(new RegisteredMiddleware())
+    ->add(new XlsMiddleware());
+
 $app->get('/stats/{file}.csv', CsvHandler::class . ':csv')
     ->add(new CsvMiddleware());
 

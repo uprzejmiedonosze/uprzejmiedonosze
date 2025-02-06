@@ -2,40 +2,28 @@
 
 namespace app;
 
-function app2Xls(Application &$app) {
+function app2Xls(Application &$app, bool $withHeader) {
     $data = array(
-        "L.P." => '',
-        "Nr służbowy" => '',
-        "Osoba zgłaszająca" => $app->user->name,
-        "Adres" => $app->user->address,
-        "Telefon" => $app->user->msisdn ?? '',
-        "Mail" => $app->email,
-        "Znak zgłoszenia/maila" => $app->number,
-        "Data wpływu" => date('Y-m-d'),
-        "Data rejestr." => '',
-        "Miejsce zdarzenia na ul." => $app->address->address,
-        "Data zdarzenia" => $app->getDate(),
-        "Godzina" => $app->getTime(),
-        "Zdarzenie polegające na:" => $app->getCategory()->formal . " " . $app->getExtensionsText(),
-        "Podstawa prawna" => $app->getCategory()->law,
-        "Pojazd" => $app->carInfo->brand ?? '',
+        "Numer" => '=HYPERLINK("%HTTPS%://%HOST%/ud-' . $app->id . '.html"; "' . $app->number . '")',
+        "Status" => $app->getStatus()->name,
+        "Data" => $app->getDate("d.MM.y H:mm"),
+        "Miejsce" => '=HYPERLINK("' . $app->getMapUrl() . '"; "' . $app->getShortAddress() . '")',
         "Nr rej." => $app->carInfo->plateId,
-        "Właściciel CEPIK" => '',
-        "Adres2" => '',
-        "Gmina" => '',
-        "Płeć" => '',
-        "Sposób zakończenia" => '',
-        "Data zakończenia" => '',
-        "Nr służbowy3" => '',
+        "Kategoria" => $app->getCategory()->formal,
+        "Dodatki" => $app->getExtensionsText(),
+        "Naocznie?" => $app->statements->witness ? "Tak" : "",
         "Uwagi" => $app->userComment,
-        "Teczka" => '',
-        "Liczba zgłoszeń" => $app->getRecydywa()
+        "Uwagi prywatne" => $app->privateComment,
+        "RSOW" =>  trimstr2upper($app->externalId),
+        "Wysłano do" => $app->guessSMData()->getEmail(),
+        "Wysłania dnia"  => $app->getSentDate("d.MM.y H:mm")
     );
 
-    return _array2xls($data);
+    return _array2xls($data, $withHeader);
 }
 
-function _array2xls(array &$data): string {
+
+function _array2xls(array &$data, bool $withHeader): string {
     $header = implode("\t", array_keys($data)) . "\n";
     
     array_walk($data, function (string|null &$str): void {
@@ -45,5 +33,5 @@ function _array2xls(array &$data): string {
         if (strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
     });
     $content = implode("\t", array_values($data)) . "\n";
-    return $header . $content;
+    return ($withHeader ? $header : '') . $content;
 }

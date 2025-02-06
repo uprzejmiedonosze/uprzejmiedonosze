@@ -247,6 +247,7 @@ class ApplicationHandler extends AbstractHandler {
             'countChanged' => $countChanged,
             'applicationsCount' => count($applications),
             'myAppsSize' => 500,
+            'isAdmin'  => $user->isAdmin(),
             'query' => urldecode($query)
         ]);
     }

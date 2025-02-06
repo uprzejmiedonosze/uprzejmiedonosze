@@ -17,7 +17,13 @@
     <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
     <a href="/nowe-zgloszenie.html" class="button cta last">Stwórz nowe</a>
 {% else %}
-    <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub pobrać wersję do druku.</p>
+    <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub dodać komentarz.</p>
+
+    {% if isAdmin or 'patron' in general.stats.badges %}
+    <p><a href="/zgloszenia.xls">Pobierz</a> wszystkie zgłoszenia w jednym pliku xls.</p>
+    {% elseif applicationsCount > 50 %}
+        <p>Dużo zgłoszeń? <a href="/patronite.html">Patroni i Patronki</a> mogą pobierać zgłoszenia w pliku xls.</p>
+    {% endif %}
 
     {% if general.stats.confirmed ?? 0 > 0 %}
         <p>Masz <b>zgłoszenia czekające na wysłanie</b>.
