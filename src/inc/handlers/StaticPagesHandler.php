@@ -179,6 +179,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     private function carStats(Request $request, Response $response, $args) {
         $user = $request->getAttribute('user');
+        $partial = $request->getAttribute('partial');
         
         $plateId = $args['plateId'];
         $apps = \app\byPlate($plateId);
@@ -187,6 +188,12 @@ class StaticPagesHandler extends AbstractHandler {
         $imagesCount = 0;
 
         $recydywa = Recydywa::withApps($apps);
+
+        if ($recydywa->appsCnt < 2)
+            throw new HttpNotFoundException($request);
+
+        if ($recydywa->usersCnt < 2 && !$partial)
+            throw new HttpNotFoundException($request);
 
         foreach($apps as $app) {
             $app->isAppOwner = $app->isAppOwner($user);
@@ -216,7 +223,7 @@ class StaticPagesHandler extends AbstractHandler {
             'apps' => $apps,
             'recydywa' => $recydywa,
             'plateId' => $plateId,
-            'partial' => $request->getAttribute('partial'),
+            'partial' => $partial,
             'allImagesVisible' => count($apps) == $imagesCount,
             'userAllowedSharing' => $user ? $user->shareRecydywa() : true
         ]);

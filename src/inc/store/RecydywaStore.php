@@ -46,5 +46,5 @@ function delete(string $plateId) {
 
 
 function cleanPlateId(string $plateId): string {
-    return preg_replace('/\s+/', '', trim(strtoupper($plateId)));
+    return substr(preg_replace('/\s+/', '', trim(strtoupper($plateId))), 0, 8);
 }
