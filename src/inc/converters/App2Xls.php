@@ -4,10 +4,12 @@ namespace app;
 
 function app2Xls(Application &$app, bool $withHeader) {
     $data = array(
-        "Numer" => '=HYPERLINK("%HTTPS%://%HOST%/ud-' . $app->id . '.html"; "' . $app->number . '")',
+        //"Numer" => '=HYPERLINK("%HTTPS%://%HOST%/ud-' . $app->id . '.html"; "' . $app->number . '")',
+        "Numer" => $app->number,
         "Status" => $app->getStatus()->name,
         "Data" => $app->getDate("d.MM.y H:mm"),
-        "Miejsce" => '=HYPERLINK("' . $app->getMapUrl() . '"; "' . $app->getShortAddress() . '")',
+        //"Miejsce" => '=HYPERLINK("' . $app->getMapUrl() . '"; "' . $app->getShortAddress() . '")',
+        "Miejsce" => $app->getShortAddress(),
         "Nr rej." => $app->carInfo->plateId,
         "Kategoria" => $app->getCategory()->formal,
         "Dodatki" => $app->getExtensionsText(),
