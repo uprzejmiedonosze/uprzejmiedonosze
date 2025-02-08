@@ -166,12 +166,14 @@
         <fieldset class="grid" id="extensions">
             <legend>Czy pojazd dodatkowo:</legend>
         {% for extId,extensionDef in extensions %}
+        {% if not (extensionDef.disabled ?? false) %}
             <input type="checkbox" name="extensions[]"
                 value="{{ extId }}" id="ex{{ extId }}"
                 {% if app.extensions is defined and extId in app.extensions %}checked{% endif %}>
             <label class="checkbox" for="ex{{ extId }}">
                 {{ extensionDef.title|raw }} (mandat: {{ extensionDef.price }})
             </label>
+        {% endif %}
         {% endfor %}
         </fieldset>
 

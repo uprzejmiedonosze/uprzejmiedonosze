@@ -3,6 +3,13 @@
         "law": "Art. 144. 1 kw: Kto na terenach przeznaczonych do użytku publicznego niszczy lub uszkadza roślinność [...] podlega karze grzywny do 1.000 złotych albo karze nagany.",
         "price": "do 1000 zł",
         "stopAgresjiOnly": false,
+        "title": "niszczył zieleń",
+        "disabled": true
+    },
+    "25": {
+        "law": "Art. 144. 1 kw: Kto na terenach przeznaczonych do użytku publicznego niszczy lub uszkadza roślinność [...] podlega karze grzywny do 1.000 złotych albo karze nagany.",
+        "price": "do 1000 zł",
+        "stopAgresjiOnly": false,
         "title": "niszczył zieleń"
     },
     "11": {
