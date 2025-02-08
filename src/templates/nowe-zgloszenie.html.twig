@@ -142,7 +142,7 @@
                         <p class="category-title">{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}</p>
                         <p class="category-short">{{ categoryDef.short }}</p>
                         {% if catId != 0 %}
-                        <p class="price-list">Mandat ~{{ categoryDef.mandate }} zł</p>
+                        <p class="price-list">Mandat {% if categoryDef.mandate > 100 %}~{% endif %}{{ categoryDef.mandate }} zł</p>
                         {% endif %}
                     </div>
                 </label>
