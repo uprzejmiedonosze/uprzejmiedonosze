@@ -16,6 +16,6 @@ class XlsHandler extends AbstractHandler {
 
         $xls = \app\appsToXlsx($applications, $user->getSanitizedName());
         
-        return AbstractHandler::renderXls($response, $xls, $user->getSanitizedName().".xls");
+        return AbstractHandler::renderXls($response, $xls, $user->getSanitizedName().".xlsx");
     }
 }

@@ -20,7 +20,7 @@
     <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub dodać komentarz.</p>
 
     {% if isAdmin or 'patron' in general.stats.badges %}
-    <p><a href="/zgloszenia.xls">Pobierz</a> wszystkie zgłoszenia w jednym pliku xls.</p>
+    <p><a href="/zgloszenia.xlsx">Pobierz</a> wszystkie zgłoszenia w jednym pliku xls.</p>
     {% elseif applicationsCount > 50 %}
         <p>Dużo zgłoszeń? <a href="/patronite.html">Patroni i Patronki</a> mogą pobierać zgłoszenia w pliku xls.</p>
     {% endif %}
