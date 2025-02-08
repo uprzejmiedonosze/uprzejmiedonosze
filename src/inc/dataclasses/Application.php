@@ -644,6 +644,29 @@ class Application extends JSONObject implements \JsonSerializable {
         return "img-$image.php?sessionless";
     }
 
+    public function canImageBeShown(User $whoIsWathing, bool|null $canShareRecydywa=null): bool {
+        logger("canImageBeShown: {$this->id}", true);
+        // display image if app owner allowed sharing 
+        $showImage = $canShareRecydywa ?? \user\canShareRecydywa($this->email);
+
+        logger("canImageBeShown: canShareRecydywa:$canShareRecydywa", true);
+        
+        // or added it to gallery
+        $showImage = $showImage && $this->statements->gallery;
+        logger("canImageBeShown: gallery:" . $this->statements->gallery, true);
+        
+        // hide photos with faces
+        $showImage = $showImage && ($app->faces->count ?? 0) == 0;
+        logger("canImageBeShown: faces:" . ($app->faces->count ?? 0), true);
+
+        logger("canImageBeShown: isAppOwner:" . $this->isAppOwner($whoIsWathing), true);
+
+        // app owner can always see his photos
+        $showImage = $showImage || $this->isAppOwner($whoIsWathing);
+
+        return $showImage;
+    }
+
     public function areAllImagesVertical(): bool {
         $isVertical = fn($image) => ($image->height ?? false) > ($image->width ?? false);
 

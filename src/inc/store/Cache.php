@@ -19,6 +19,7 @@ namespace cache {
 
         case Recydywa;
         case FirebaseKeys;
+        case RecydywaStats;
 
         case Semaphore;
 

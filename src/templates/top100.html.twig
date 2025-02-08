@@ -1,0 +1,43 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+
+{% set title = 'Tablica ' %}
+{% set mainClass = 'car-info' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2 class="recydywa">
+    
+</h2>
+
+{% if not userAllowedSharing %}
+<div class="warning-header">
+    <h3>Chcesz widzieć więcej zdjęć? Udostępnij&nbsp;swoje!</h3>
+    <p>Publikujemy wyłącznie zdjęcia od użytkowników, którzy się na to zgodzili.</p>
+    <p>Przejdź do ustawień i zaznacz zgodę na udostępnianie zdjęć.</p>
+    <a target="_blank" class="button" href="/register.html?update">Przejdź do ustawień</a>
+</div>
+{% endif %}
+
+<div class="grid">
+{% for recydywa in top100 %}
+    <div class="car application application-short status-all ">
+        <div class="card">
+            <figure>
+                <a href="/tablica-rejestracyjna-{{ recydywa.plateId }}.html"><img src="{{ recydywa.app.getSafeImageUrl }}"></a>
+            </figure>
+            <div class="content">
+                <div class="no-icon">
+                    <a href="/ud-{{ recydywa.app.id }}.html">{{ recydywa.app.getCategory.short }}</a>
+                    <span class="plate-id h2">{{ recydywa.plateId }}</span>
+                    {{ num(recydywa.appsCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']) }},
+                    {{ recydywa.usersCnt }}&nbsp;zgłaszających
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}

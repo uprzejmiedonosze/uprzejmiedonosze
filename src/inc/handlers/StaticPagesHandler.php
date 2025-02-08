@@ -200,17 +200,7 @@ class StaticPagesHandler extends AbstractHandler {
 
         foreach($apps as $app) {
             $app->isAppOwner = $app->isAppOwner($user);
-
-            // display image if app owner allowed sharing or
-            // added it to gallery
-            $app->showImage = \user\canShareRecydywa($app->email)
-                || $app->statements->gallery;
-            
-            // hide photos with faces
-            $app->showImage = $app->showImage && ($app->faces->count ?? 0) == 0;
-
-            // app owner can always see his photos
-            $app->showImage = $app->showImage || $app->isAppOwner;
+            $app->showImage = $app->canImageBeShown(whoIsWathing:$user);
 
             if($app->showImage) {
                 $imagesCount++;
@@ -229,6 +219,19 @@ class StaticPagesHandler extends AbstractHandler {
             'partial' => $partial,
             'allImagesVisible' => count($apps) == $imagesCount,
             'userAllowedSharing' => $user ? $user->shareRecydywa() : true
+        ]);
+    }
+
+    public function top100(Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        $top100 = \recydywa\top100($user);
+
+        return AbstractHandler::renderHtml($request, $response, "top100", [
+            'title' => "Pato-liderzy parkowania",
+            //'image' => $image,
+            'description' => "Pato-liderzy parkowania",
+            'userAllowedSharing' => $user ? $user->shareRecydywa() : true,
+            'top100' => $top100
         ]);
     }
 
