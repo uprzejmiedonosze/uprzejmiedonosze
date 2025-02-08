@@ -62,6 +62,7 @@ abstract class CityAPI {
         $curl = "curl -s --location --request POST '$url' "
             . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
             . "--header 'Content-Type: multipart/form-data' "
+            . "--max-time 30 "
             . "--form 'json={$json}' "
             . '--form uz_file=@\\"' . $contextImage . '\\" '
             . '--form uz_file_0=@\\"' . $carImage . '\\" '
