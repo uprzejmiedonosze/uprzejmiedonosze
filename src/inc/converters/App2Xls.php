@@ -46,6 +46,8 @@ function appsToXlsx(array $apps, string $name) {
         $sheet->setCellValue(__coordinate(12, $rowNum), $app->guessSMData()->getEmail());
         $sheet->setCellValue(__coordinate(13, $rowNum), $app->getSentDate("d.MM.y H:mm"));
         $rowNum++;
+        if ($rowNum % 500 === 0) // Free memory every 500 rows
+            gc_collect_cycles();
     }
 
     $colNum = 1;
