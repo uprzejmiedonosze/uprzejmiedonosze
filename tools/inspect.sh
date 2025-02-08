@@ -36,7 +36,7 @@ is_appId "$1" && APPKEY=$(get_app_key_by_id "$1")
 
 if [ ${APPKEY+x} ]; then
 	echo "Checking application id ${APPKEY}:";
-	ssh nieradka.net "${SQL} \"select value from applications where key = '${APPKEY}'\"" | jq '. | del(.user) | del(.address) | del(.userComment) | del(.sent) | del(.encrypted) | del(.privateComment) | del(.browser)'
+	ssh nieradka.net "${SQL} \"select value from applications where key = '${APPKEY}'\"" | jq '. | del(.user) | del(.address) | del(.userComment) | del(.encrypted) | del(.privateComment) | del(.browser)'
 	print_app_url "${APPKEY}"
 	exit 0
 fi
@@ -46,7 +46,7 @@ if [[ ${PARAM} =~ @ ]]; then
 	WHERE2="email = '${PARAM}'"
 elif [[ ${PARAM} =~ [0-9] ]]; then
 	echo "Apps with plate id ${PARAM}:"
-	for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.email'), plateId from applications where plateId like upper('%${PARAM}%') order by json_extract(value, '$.added') desc limit 100 \""); do
+	for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.email'), plateId from applications where plateId = '${PARAM}' order by json_extract(value, '$.added') desc limit 100 \""); do
 		print_app_url "${key%%|*}" "(${key#*|})"
 	done
 	exit 0
