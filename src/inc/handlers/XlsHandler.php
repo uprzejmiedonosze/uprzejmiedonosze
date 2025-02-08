@@ -14,10 +14,7 @@ class XlsHandler extends AbstractHandler {
         }
         $applications = \user\apps(user: $user);
 
-        $xls = '';
-        foreach($applications as $app) {
-            $xls .= \app\app2Xls(app:$app, withHeader:$xls === '');
-        }
+        $xls = \app\appsToXlsx($applications, $user->getSanitizedName());
         
         return AbstractHandler::renderXls($response, $xls, $user->getSanitizedName().".xls");
     }
