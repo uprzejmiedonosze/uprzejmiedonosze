@@ -13,7 +13,7 @@ function isFormer(string $email):bool {
 }
 
 function active(): array {
-    return array_filter(get(), fn($patron) => $patron['active']);
+    return array_filter(get(), fn($patron) => $patron['active'] && !($patron['duplicate'] ?? false));
 }
 
 function get(bool $useCache=true) {
@@ -55,7 +55,8 @@ function __get(PatronieStatus $status) {
             $output[$email] = array(
                 "amount" => $patron["amount"],
                 "note" => "imported from " . $patron["email"],
-                "active" => (($patron["status"] ?? false) == 'aktywna')
+                "active" => (($patron["status"] ?? false) == 'aktywna'),
+                "duplicate" => true
             );
         }
     }
