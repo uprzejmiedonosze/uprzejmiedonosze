@@ -4,6 +4,7 @@ vendor/**
 export/**
 .branch-env
 *uprzejmiedonosze.net-firebase-adminsdk.json
+/config.prod.php
 /config.php
 **/.DS_Store
 /cypress/screenshots
