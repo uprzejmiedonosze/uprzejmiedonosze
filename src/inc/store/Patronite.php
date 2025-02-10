@@ -4,12 +4,12 @@ use cache\Type;
 
 function is(string $email): bool {
     $patrons = get();
-    return $patrons[$email]['acvite'] ?? false;
+    return $patrons[$email]['active'] ?? false;
 }
 
 function isFormer(string $email):bool {
     $patrons = get();
-    return array_key_exists($email, $patrons) && !($patrons[$email]['acvite'] ?? false);
+    return array_key_exists($email, $patrons) && !($patrons[$email]['active'] ?? false);
 }
 
 function active(): array {
