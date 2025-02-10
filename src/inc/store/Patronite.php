@@ -9,7 +9,7 @@ function is(string $email): bool {
 
 function isFormer(string $email):bool {
     $patrons = get();
-    return array_key_exists($email, $patrons) && $patrons[$email]['acvite'] == false;
+    return array_key_exists($email, $patrons) && !($patrons[$email]['acvite'] ?? false);
 }
 
 function active(): array {
