@@ -18,7 +18,24 @@
     left: 0;
     width: 100%;
 
-    .recydywa-appscnt:before {
+    .recydywa {
+      font-weight: 700;
+    }
+
+    .recydywa::before {
+      background-image: url(icons.$recydywa-icon);
+      content: "";
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 16px;
+      height: 14px;
+      display: inline-block;
+      position: relative;
+      top: 2px;
+      margin-left: 4px;
+    }
+
+    .recydywa-appscnt::before {
       background-image: url("../img/icons/recydywa-apps.svg?2");
     }
   }
@@ -52,7 +69,7 @@
     }
   }
 
-  .recydywa {
+  .recydywa, #recydywa {
     .top-line {
       .recydywa-cnt {
         border-radius: 12px;
@@ -61,12 +78,12 @@
         margin: 0 5px;
         font-size: 12px;
 
-        .recydywa-appscnt:before {
+        .recydywa-appscnt::before {
           width: 10px;
           height: 10px;
           background-image: url("../img/icons/recydywa-apps.svg?2");
         }
-        .recydywa-userscnt:before {
+        .recydywa-userscnt::before {
           width: 8px;
           height: 10px;
         }
@@ -86,7 +103,7 @@
       border-radius: 24px;
     }
     .recydywa-userscnt, .recydywa-appscnt {
-      &:before {
+      &::before {
         @extend %icon;
         margin-right: 5px;
       }
@@ -96,11 +113,11 @@
       margin-left: 3px;
     }
 
-    .recydywa-appscnt:before {
+    .recydywa-appscnt::before {
       background-image: url("../img/icons/recydywa-apps-white.svg?2");
     }
 
-    .recydywa-userscnt:before {
+    .recydywa-userscnt::before {
       background-image: url("../img/icons/recydywa-users.svg?2");
       width: 11px;
     }

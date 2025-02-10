@@ -29,17 +29,17 @@
     }
 }
 
-.ui-icon-patronite:after {
+.ui-icon-patronite::after {
     background-image: variables.$patroniteIcon;
     background-size: 70% 70%;
 }
 
-.ui-icon-patronite:hover:after {
+.ui-icon-patronite:hover::after {
     background-color: variables.$patroniteColor!important;
 }
 
 .ui-icon-map:hover {
-    &:after {
+    &::after {
         background-color: variables.$mapColor!important;
     }
 }

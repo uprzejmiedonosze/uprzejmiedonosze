@@ -3,7 +3,7 @@
 input[type=radio], 
 input[type=checkbox] {
     display: none;
-    &:checked + label:after {
+    &:checked + label::after {
         opacity: 1;
         transform: scale(1, 1);
     }
@@ -31,21 +31,21 @@ input[type=checkbox] {
     }
 
     &.no-bullet {
-        &:before,
-        &:after {
+        &::before,
+        &::after {
             display: none;
         }
     }
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
         content: '';
         display: block;
         position: absolute;
         border-radius: 50%;
     }
 
-    &:before {
+    &::before {
         background: #fff;
         border: 1px solid #ccc;
         height: 16px;
@@ -55,7 +55,7 @@ input[type=checkbox] {
         width: 16px;
     }
 
-    &:after {
+    &::after {
         background: #222;
         height: 10px;
         left: 14px;

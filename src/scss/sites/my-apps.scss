@@ -130,7 +130,7 @@
   button.change-status {
     border: 1px solid black;
 
-    &:after {
+    &::after {
       @extend %icon;
       background-image: url(icons.$chevron-icon);
       padding-left: 10px;
@@ -188,7 +188,7 @@
           flex-grow: 0;
           position: relative;
 
-          &:after {
+          &::after {
             @extend %icon;
             transform: rotate(180deg);
             top: 15px;
@@ -200,7 +200,7 @@
     }
 
     &:not(.expanded) {
-      h3 .bottom-line .expander:after {
+      h3 .bottom-line .expander::after {
         transform: rotate(0deg);
         transition: transform 0s;
       }
@@ -244,7 +244,7 @@
     opacity: 1;
     cursor: pointer;
   }
-  .close:before, .close:after {
+  .close::before, .close::after {
     position: absolute;
     left: 15px;
     content: ' ';
@@ -252,10 +252,10 @@
     width: 2px;
     background-color: #333;
   }
-  .close:before {
+  .close::before {
     transform: rotate(45deg);
   }
-  .close:after {
+  .close::after {
     transform: rotate(-45deg);
   }
 

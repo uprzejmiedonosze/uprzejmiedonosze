@@ -3,7 +3,7 @@
 .checkbox {
     @extend .radio;
 
-    &:before, &:after {
+    &::before, &::after {
         border-radius: 0;
     }
 }
