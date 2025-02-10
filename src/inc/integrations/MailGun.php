@@ -28,9 +28,6 @@ class MailGun extends CityAPI {
             $to = $application->guessSMData()->email;
         }
 
-        $transport = Transport::fromDsn(MAILER_DSN);
-        $mailer = new Mailer($transport);
-
         $subject = $application->getEmailSubject();
 
         $message = (new Email());
@@ -72,7 +69,11 @@ class MailGun extends CityAPI {
             [$fileatt, $fileattname] = \app\toZip($application);
             $message->attachFromPath($fileatt, $fileattname);
 
-            $mailer->send($message);
+            if (!isDev()) {
+                $transport = Transport::fromDsn(MAILER_DSN);
+                $mailer = new Mailer($transport);    
+                $mailer->send($message);    
+            }
         } catch (TransportExceptionInterface $error) {
             logger("Sending email {$application->id} with MailGun, exception: " . $error->getMessage(), true);
             $application->setStatus('sending-failed', true);

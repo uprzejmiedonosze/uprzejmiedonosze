@@ -1,4 +1,4 @@
-<?PHP 
+<?PHP
 require_once(__DIR__ . '/dataclasses/ConfigClass.php');
 
 const LATEST_TERMS_UPDATE = '2024-03-26';
@@ -48,7 +48,10 @@ $badgesStr = fread($badges, filesize(SA_BADGES));
 $BADGES = json_decode($badgesStr, true);
 fclose($badges);
 
-require_once(__DIR__ . '/../config.php');
+if (file_exists(__DIR__ . '/../config.prod.php'))
+    require(__DIR__ . '/../config.prod.php');
+else
+    require(__DIR__ . '/../config.php');
 
 const ODDZIALY_TERENOWE = array(
     'Śródmieście' => 'warszawa_ot1',

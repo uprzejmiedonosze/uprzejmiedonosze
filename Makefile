@@ -87,7 +87,7 @@ staging: ## Copy files to staging server.
 	@$(MAKE) --warn-undefined-variables staging-sequential -j
 
 staging-sequential: HOST := $(STAGING_HOST)
-staging-sequential: $(DIRS) export
+staging-sequential: $(DIRS) exportserver
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
@@ -97,13 +97,13 @@ shadow: ## Copy files to shadow server.
 	@$(MAKE) --warn-undefined-variables shadow-sequential -j
 
 shadow-sequential: HOST := $(SHADOW_HOST)
-shadow-sequential: $(DIRS) export
+shadow-sequential: $(DIRS) exportserver
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 
 prod: HOST := $(PROD_HOST)
-prod: check-branch-main check-git-clean cypress clean $(DIRS) export ## Copy files to prod server.
+prod: check-branch-main check-git-clean cypress clean $(DIRS) exportserver ## Copy files to prod server.
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
@@ -113,22 +113,26 @@ prod: check-branch-main check-git-clean cypress clean $(DIRS) export ## Copy fil
 	@make clean
 
 quickfix:  HOST := $(PROD_HOST)
-quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation clean npm-install $(DIRS) export ## Quickfix on production
+quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation clean npm-install $(DIRS) exportserver ## Quickfix on production
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "quickfix na produkcji"
-	@#git push origin --quiet --force "prod_$(TAG_NAME)"
+	@git push origin --quiet --force "prod_$(TAG_NAME)"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 	$(sentry-release)
 	@make clean
 
-$(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
+$(EXPORT): $(DIRS) process-sitemap $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r src/tools $(EXPORT)/
 	@cp -r src/sql $(EXPORT)/
+	@cp config.php $(EXPORT)/
 
+.PHONY: exportserver
+exportserver: $(EXPORT) config.prod.php
+	@cp config.prod.php $(EXPORT)
 
 .PHONY: minify
 minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig test-phpunit process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
@@ -137,9 +141,6 @@ process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
 process-manifest: $(DIRS) $(MANIFEST) $(MANIFEST_PROCESSED)
 process-sitemap: $(DIRS) $(SITEMAP_PROCESSED)
-
-$(EXPORT)/config.php: $(DIRS); $(call echo-processing,$@)
-	@test -s config.php && cp config.php $@ || touch $@
 
 ASSETS := $(wildcard src/img/* src/img/*/*)
 $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
@@ -262,7 +263,7 @@ cypress-local:
 	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) run --e2e --env DOCKER=1
 
 .PHONY: api
-api: minify-config $(EXPORT)/config.php
+api: minify-config
 	@[ ! -L db ] && ln -s docker/db . || true
 	@[ ! -L src/config.php ] && ln -s export/config.php src || true
 	@[ ! -L src/public ] && ln -s export/public src || true
@@ -355,8 +356,9 @@ lint-php:
 .PHONY: test-phpunit
 .ONESHELL: test-phpunit
 test-phpunit: MEMCACHED := $(shell curl localhost:11211 2>&1 | grep -c Fail || true)
-test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.json $(PUBLIC)/api/config/police-stations.pjson $(PUBLIC)/api/config/police-stations.pjson $(EXPORT)/config.php process-php minify-config
+test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.json $(PUBLIC)/api/config/police-stations.pjson $(PUBLIC)/api/config/police-stations.pjson process-php minify-config
 	@echo "==> Testing phpunit"
+	@cp config.php $(EXPORT)/
 	@test $(MEMCACHED) -eq 1 && (echo "    starting memcached"; memcached &); sleep 1 || true
 	@#trap 'echo "    reverting DB and killing memcache"; test $(MEMCACHED) -eq 1 && killall memcached; exit' INT TERM EXIT
 	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
