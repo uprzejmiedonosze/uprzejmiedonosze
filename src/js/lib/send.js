@@ -11,7 +11,6 @@ import { appClicked, closeAllApps } from "../sites/my-application";
 async function sendApplication(/** @type {string} */ appId) {
   const $whatNext = $(".whatNext")
   const $afterSend = $(".afterSend")
-  const $buttonRight = $('.menu-button.right')
 
   $(`#${appId} .status-confirmed-waiting`).addClass("disabled")
 
@@ -49,9 +48,12 @@ async function sendApplication(/** @type {string} */ appId) {
         eventCategory: "js-error",
         eventAction: "sendViaAPI"
       })
-
   }
-  $buttonRight.removeClass("disabled")
+  showButtons()
+}
+
+export function showButtons() {
+  $('.button.disabled').removeClass("disabled")
 }
 
 export default sendApplication

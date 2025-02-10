@@ -1,4 +1,5 @@
-import sendApplication from "../lib/send";
+import sendApplication, { showButtons } from "../lib/send"
+import $ from "jquery"
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!document.getElementsByClassName('dziekujemy').length)
@@ -11,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       sendApplication(applicationId)
     }, 1000)
+  } else {
+    showButtons()
   }
   // @ts-ignore
   (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "dziekujemy" });

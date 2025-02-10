@@ -2,9 +2,6 @@
 
 {% set sm = app.guessSMData() %}
 
-{% set rightButton = 'menuNewApplication' %}
-{% set rightButtonText = 'Jeszcze raz' %}
-
 {% set title = 'Dziękujemy' %}
 {% set mainClass = 'dziekujemy' %}
 
@@ -111,5 +108,14 @@ Z poważaniem
 
 <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
 <input type="hidden" name="automatedSM" id="automatedSM" value="{{ app.automatedSM }}"/>
+
+<a href="/moje-zgloszenia.html" class="button light disabled last">
+    Moje zgłoszenia
+</a>
+
+<a href="/nowe-zgloszenie.html" class="button disabled">
+    Jeszcze raz
+</a>
+
 
 {% endblock %}

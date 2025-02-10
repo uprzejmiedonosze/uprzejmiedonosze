@@ -67,7 +67,7 @@ export async function checkFile(file, id) {
 }
 
 /**
- * @param {'contextImage' | 'carImage'} id 
+ * @param {'contextImage' | 'carImage' | 'thirdImage'} id
  */
 function uploadStarted(id) {
   $(`.${id}Section`).removeClass("error");
@@ -168,7 +168,7 @@ function resizeImage(imgToResize) {
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
 
-  context.drawImage(
+  context?.drawImage(
     imgToResize,
     0,
     0,

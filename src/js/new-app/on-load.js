@@ -1,5 +1,3 @@
-import $ from "jquery"
-
 import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
 
@@ -85,7 +83,7 @@ export const initHandlers = (map) => {
 };
 
 function showHidePictureHints(context) {
-  const placeholder = context?.find("img")?.attr("src") == 'img/fff-1.png'
+const placeholder = context?.find("img")?.attr("src") == 'img/fff-1.png'
   const recydywaVisible = context.find('#recydywa:visible').length
 
   context.find("p.pictureHint").hide()
