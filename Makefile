@@ -18,7 +18,7 @@ PUBLIC               := $(EXPORT)/public
 DIRS                 := $(PUBLIC)/api $(PUBLIC)/api/rest $(PUBLIC)/api/config $(EXPORT)/inc \
 						$(EXPORT)/inc/integrations $(EXPORT)/inc/middleware $(EXPORT)/inc/handlers \
 						$(EXPORT)/inc/dataclasses $(EXPORT)/inc/store $(EXPORT)/inc/converters \
-						$(EXPORT)/templates $(EXPORT)/patronite
+						$(EXPORT)/templates
 
 CSS_FILES            := $(wildcard src/scss/*.scss src/scss/*/*.scss)
 CSS_HASH             := $(shell cat $(CSS_FILES) | md5sum | cut -b 1-8)
@@ -122,7 +122,7 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	$(sentry-release)
 	@make clean
 
-$(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson src/api/config/patronite.json minify ## Exports files for deployment.
+$(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -206,26 +206,6 @@ $(SITEMAP_PROCESSED): src/templates/*.html.twig ; $(call echo-processing,$@)
 			"</url>" ; \
 	done ; \
 	echo '</urlset>\n' ) | xmllint --format - > $(SITEMAP_PROCESSED)
-
-
-$(EXPORT)/patronite/%.csv: $(EXPORT)/patronite
-	@curl --silent -X GET \
-		-H "Authorization: token $(PATRONITE_TOKEN)" \
-		-H "Content-Type: application/json" \
-		"https://patronite.pl/author-api/patrons/$*?with_notes=yes" \
-		| jq -r '.results[] | .note' | tr "," "\n" \
-		| grep -v null | sort -n | uniq > $@
-
-src/api/config/patronite.json: $(EXPORT)/patronite/active.csv $(EXPORT)/patronite/inactive.csv
-	@jq -n '{active:$$active, inactive:$$inactive}' \
-		--slurpfile active export/patronite/active.csv \
-		--slurpfile inactive export/patronite/inactive.csv \
-		> src/api/config/patronite.json
-
-.PHONY: patronite
-patronite:
-	@rm -f src/api/config/patronite.json
-	@make src/api/config/patronite.json
 
 
 $(PUBLIC)/api/config/police-stations.pjson: src/api/config/police-stations.csv $(PUBLIC)/api/config/stop-agresji.json

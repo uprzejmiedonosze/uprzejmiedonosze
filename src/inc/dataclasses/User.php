@@ -310,13 +310,11 @@ class User extends \JSONObject{
     }
 
     public function isPatron() {
-        global $PATRONITE;
-        return (in_array($this->getNumber(), $PATRONITE->active));
+        return \patronite\is($this->getEmail());
     }
 
     public function isFormerPatron() {
-        global $PATRONITE;
-        return (in_array($this->getNumber(), $PATRONITE->inactive));
+        return \patronite\isFormer($this->getEmail());
     }
 }
 

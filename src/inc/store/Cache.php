@@ -21,6 +21,8 @@ namespace cache {
         case FirebaseKeys;
 
         case Semaphore;
+
+        case Patronite;
     }
 
     const _KEY_MAPPPING = array(
