@@ -12,7 +12,7 @@ function GoogleMaps($lat, $lng) {
 
     $params = array(
         "latlng" => "$lat,$lng",
-        "key" => "AIzaSyC2vVIN-noxOw_7mPMvkb-AWwOk6qK1OJ8",
+        "key" => GOOGLE_MAPS_API_TOKEN,
         "language" => "pl",
         "result_type" => "street_address"
     );
@@ -105,7 +105,7 @@ function MapBox(float $lat, float $lng): array {
         "language" => 'pl',
         "longitude" => $lng,
         "latitude" => $lat,
-        "access_token" => 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw'
+        "access_token" => MAPBOX_API_TOKEN
     );
     $url = "https://api.mapbox.com/search/geocode/v6/reverse?";
     $json = \curl\request($url, $params, "MapBox");
