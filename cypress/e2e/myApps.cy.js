@@ -42,22 +42,22 @@ describe('Application screen validation', () => {
     it('checks new application screen', function () {
         cy.goToNewAppScreen()
 
-        
+        const extensions = Object.entries(this.extensions).filter((e) => !e[1].disabled)
+        const categories = Object.entries(this.categories).filter(c => c[1].title)
+
         cy.get('#lokalizacja').should("have.value", this.config.address.address)
         cy.get('#plateId').should('be.empty')
         cy.get('#plateImage').should('be.hidden')
-        Object.entries(this.categories).
-            filter(c => c[1].title).
-            forEach((category) => {
+        categories.forEach((category) => {
             const [id, def] = category
             cy.get(`input#${id}`).should('be.enabled')
         })
         
-        Object.entries(this.extensions).forEach((extension) => {
+        extensions.forEach((extension) => {
             const id = extension[0]
             cy.get(`input#ex${id}`).click({force: true})
         })
-        Object.entries(this.extensions).forEach((extension) => {
+        extensions.forEach((extension) => {
             const id = extension[0]
             cy.get(`input#${id}`).click({force: true})
             cy.get(`input#ex${id} + label`).should('have.class', 'disabled')
@@ -144,19 +144,21 @@ describe('Create application', () => {
     })
 
     it('creates application', function () {
+        const extensions = Object.entries(this.extensions).filter((e) => !e[1].disabled)
         cy.goToNewAppScreen()
         cy.uploadOKImages()
         cy.setAppCategory(this.categories)
-        const firstExtension = Object.entries(this.extensions)[0]
+        const firstExtension = extensions[0]
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit', { timeout: 10000 }).click()
     })
 
     it('checks confirmation screen', function () {
+        const extensions = Object.entries(this.extensions).filter((e) => !e[1].disabled)
         cy.contains('Wystąpił błąd').should('not.exist')
         checkAppData(this.config, true)
-        const firstExtension = Object.entries(this.extensions)[0]
+        const firstExtension = extensions[0]
         cy.contains(firstExtension[1].title)
     })
 
