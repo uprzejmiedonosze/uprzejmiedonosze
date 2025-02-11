@@ -350,7 +350,7 @@
         "stopAgresjiOnly": false
     },
     "15": {
-        "title": "",
+        "title": null,
         "formal": "Pojazd był zaparkowany za znakiem B-35 (zakaz postoju), postój ponad minutę (art. 46. 4 prd).",
         "informal": "Postój na zakazie",
         "desc": "",
@@ -363,7 +363,7 @@
         "stopAgresjiOnly": false
     },
     "6": {
-        "title": "",
+        "title": null,
         "short": "Pojazd niszczył lub uszkadzał zieleń",
         "formal": "Pojazd był zaparkowany na trawniku/w parku (kw art. 144. 1 prd).",
         "informal": "Niszczenie zieleni",
