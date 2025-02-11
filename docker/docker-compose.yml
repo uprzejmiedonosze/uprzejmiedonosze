@@ -10,3 +10,5 @@ services:
     working_dir: /var/www/uprzejmiedonosze.localhost/webapp
     volumes:
       - ../export:/var/www/uprzejmiedonosze.localhost/webapp
+    environment:
+        WATCHPACK_POLLING: "true"

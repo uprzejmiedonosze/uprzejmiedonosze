@@ -45,7 +45,7 @@ OTHER_FILES          := src/favicon.ico src/robots.txt src/ads.txt src/index.php
 
 STAGING_HOST         := staging.uprzejmiedonosze.net
 PROD_HOST            := uprzejmiedonosze.net
-DEV_HOST             := uprzejmiedonosze.localhost
+DEV_HOST             := localhost
 SHADOW_HOST          := shadow.uprzejmiedonosze.net
 HOST                 := $(STAGING_HOST)
 HTTPS                := https
@@ -271,7 +271,7 @@ cypress: npm-install
 .PHONY: cypress-local
 cypress-local:
 	@echo "==> Testing local"
-	@CYPRESS_BASE_URL=http://uprzejmiedonosze.localhost $(CYPRESS) run --e2e --env DOCKER=1
+	@CYPRESS_BASE_URL=http://127.0.0.1 $(CYPRESS) run --e2e --env DOCKER=1
 
 .PHONY: api
 api: minify-config

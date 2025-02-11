@@ -7,7 +7,7 @@ To start you have to:
 1. Have Posix compatible OS (Linux / OSX)
 2. Have `Docker` CE installed
 3. Have `GIT` installed
-4. Have `PHP8.*` and `composer` installed
+4. Have `PHP>=8.2` and `composer` installed
 5. Have `node 18.*` installed
 5. Have `rsync`, `curl`, `make`, `sed`, `jq` and `md5sum` available
 
@@ -24,21 +24,15 @@ $ git clone git@bitbucket.org:uprzejmiedonosze/uprzejmiedonosze.git
 Enter the repository folder and download PHP dependencies.
 
 ```
-$ cd webapp
+$ cd uprzejmiedonosze
 $ composer update
 $ npm install
 ```
 
-Install `twig-lint` globally by:
+Copy config template. You are going to need real credentials in that file – contact me. But a basic copy is enough to start.
 
 ```
-$ composer global require "asm89/twig-lint" "@stable"
-```
-
-Now configure localhost. To do so, add this line to `/etc/hosts`:
-
-```
-127.0.0.1 uprzejmiedonosze.localhost
+$ cp config.dev.php config.php
 ```
 
 Now compile the app, build a Docker image, and run it simply by:
@@ -50,7 +44,7 @@ $ make dev-run
 If there is no error in the terminal, you should be able to run:
 
 ```
-$ open http://uprzejmiedonosze.localhost
+$ open http://127.0.0.1
 ```
 
 To refresh the sources on the docker image make:
@@ -64,8 +58,6 @@ $ make dev
 Docker image has three folders installed. Two of them are copied after each docker image build:
 
 `db` – database file with pre-filled data with one user and two applications
-
-`cdn` – images used in pre-filled applications (old format, all images in one directory)
 
 `cdn2` – new CDN schema (each user has its own folder)
 
