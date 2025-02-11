@@ -6,12 +6,6 @@ CYPRESS              := ./node_modules/.bin/cypress
 CYPRESS_KEY          := 8a0db00f-b36c-4530-9c82-422b0be32b5b
 UNAME                := $(shell uname -s)
 
-ifeq ($(filter darwin%,$(UNAME)),)
-    SED_OPTS         := -i ''
-else
-    SED_OPTS         := "-i''"
-endif
-
 # dirs and files
 EXPORT               := export
 PUBLIC               := $(EXPORT)/public
