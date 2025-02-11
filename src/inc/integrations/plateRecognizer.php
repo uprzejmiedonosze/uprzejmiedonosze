@@ -64,7 +64,7 @@ function get_platerecognizer(&$imageBytes) {
     $result = platerecognizerRequest('/plate-reader/', $data);
     $usage = platerecognizerRequest('/statistics/');
     if (isset($usage['total_calls']) && isset($usage['usage'])) {
-        logger("get_platerecognizer " . $usage['usage']["calls"] . "/" . $usage['total_calls'], true);
+        logger("get_platerecognizer " . $usage['usage']["calls"] . "/" . $usage['total_calls']);
     }
 
     if(isset($result["results"]) && count($result["results"]))
