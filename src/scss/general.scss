@@ -424,5 +424,9 @@ figure {
         color: #fff;
         background-color: variables.$primaryColor;
         border-radius: 0 5px;
+        a {
+            color: white!important;
+            text-decoration: none;
+        }
     }
 }
