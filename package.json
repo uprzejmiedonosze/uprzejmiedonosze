@@ -22,7 +22,7 @@
   "devDependencies": {
     "@eslint/compat": "^1.2.6",
     "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.19.0",
+    "@eslint/js": "^9.20.0",
     "@parcel/optimizer-data-url": "^2.13.3",
     "@parcel/packager-raw-url": "^2.13.3",
     "@parcel/transformer-inline-string": "^2.13.3",
@@ -32,8 +32,8 @@
     "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.32",
     "@types/jquerymobile": "^1.4.35",
-    "cypress": "^14.0.1",
-    "eslint": "^9.19.0",
+    "cypress": "^14.0.2",
+    "eslint": "^9.20.1",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.2",
     "eslint-plugin-cypress": "^4.1.0",
@@ -42,7 +42,7 @@
     "node-sass": "^9.0.0",
     "parcel": "^2.13.3",
     "process": "^0.11.10",
-    "sass": "^1.83.4",
+    "sass": "^1.84.0",
     "sharp": "^0.33.5"
   },
   "name": "uprzejmiedonosze"
