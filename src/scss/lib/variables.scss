@@ -1,6 +1,7 @@
 @use "sass:map";
+@use 'variables.env.scss';
 
-$primaryColor: #009C7F;
+$primaryColor: var(--color);
 $secondaryColor: #e9c200;
 
 $draft: #C5C5C5;

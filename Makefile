@@ -149,18 +149,13 @@ $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
 	@./node_modules/.bin/parcel build --no-cache --dist-dir $(PUBLIC)/img $< ;
 	@cp src/images-index.html $@
 
+src/scss/lib/variables.env.scss:
+	@HOST=$(HOST) node ./src/scss/env.js > $@
 
 .PHONY: css
 css: $(CSS_MINIFIED)
-$(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES); $(call echo-processing,$@ with parcel)
+$(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES) src/scss/lib/variables.env.scss; $(call echo-processing,$@ with parcel)
 	@./node_modules/.bin/parcel build --no-cache --dist-dir $(dir $@) $< ;
-	@if [ "$(HOST)" != "$(PROD_HOST)" ]; then \
-		if [ "$(HOST)" = "$(SHADOW_HOST)" ]; then \
-			sed $(SED_OPTS) 's/#009C7F/#ff4081/gi' $@ ; \
-		else \
-			sed $(SED_OPTS) 's/#009C7F/#0088bb/gi' $@ ; \
-		fi; \
-	fi;
 
 .PHONY: js
 js: $(JS_MINIFIED)

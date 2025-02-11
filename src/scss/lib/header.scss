@@ -5,7 +5,7 @@ header {
     width: 100%;
     z-index: 2;
     color: #fff;
-    background-color: #009c7f;
+    background-color: variables.$primaryColor;
     height: variables.$headerHeight;
 
     h1 {
