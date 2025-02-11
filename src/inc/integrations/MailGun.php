@@ -90,6 +90,7 @@ class MailGun extends CityAPI {
 
     function notifyUser(app\Application &$application, string $subject, string $reason, string $recipient){
         $messageBody = initBareTwig()->render('_notification.email.twig', [
+            'BASE_URL' => BASE_URL,
             'app' => $application,
             'reason' => $reason,
             'recipient' => $recipient

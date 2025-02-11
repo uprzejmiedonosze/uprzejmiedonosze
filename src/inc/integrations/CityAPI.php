@@ -48,7 +48,7 @@ abstract class CityAPI {
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     function curlShellSend(string $url, &$data, Application &$application){
-        $root = realpath('/var/www/%HOST%/');
+        $root = realpath(ROOT);
         $contextImage = "$root/{$application->contextImage->url}";
         $carImage = "$root/{$application->carImage->url}";
         $json = json_encode($data);

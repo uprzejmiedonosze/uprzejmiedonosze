@@ -39,12 +39,12 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
             $yes[] = $coo['y'];
         }
 
-        $imp = imagecreatefromjpeg("/var/www/%HOST%/$baseFileName,$type.jpg");
+        $imp = imagecreatefromjpeg(ROOT . "$baseFileName,$type.jpg");
         $plateImage = imagecrop($imp, ['x' => min($xes), 'y' => min($yes), 'width' => (max($xes) - min($xes)), 'height' => (max($yes) - min($yes))]);
         if ($plateImage !== FALSE) {
 
             $application->carInfo->plateImage = "$baseFileName,$type,p.jpg";
-            imagejpeg($plateImage, '/var/www/%HOST%/' . $application->carInfo->plateImage);
+            imagejpeg($plateImage, ROOT . $application->carInfo->plateImage);
         }
 
         
@@ -91,7 +91,7 @@ function get_alpr(&$imageBytes){
 
 function get_alpr_cli($imagePath) {
     logger("  get_alpr_cli");
-    $response = shell_exec("alpr --country eu --topn 1 --json /var/www/%HOST%/$imagePath 2>/dev/null");
+    $response = shell_exec("alpr --country eu --topn 1 --json " . ROOT . "$imagePath 2>/dev/null");
     $json = json_decode($response, true);
     if(!json_last_error() === JSON_ERROR_NONE){
         return null;

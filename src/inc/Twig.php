@@ -40,7 +40,7 @@ class TwigExtension extends AbstractExtension {
 function _twigConfig(): array {
     return [
         'debug' => !isProd(),
-        'cache' => isProd() ? new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', FilesystemCache::FORCE_BYTECODE_INVALIDATION) : false,
+        'cache' => isProd() ? new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-' . HOST . '-' .TWIG_HASH, FilesystemCache::FORCE_BYTECODE_INVALIDATION) : false,
         'strict_variables' => true,
         'auto_reload' => true
     ];

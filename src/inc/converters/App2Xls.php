@@ -31,7 +31,7 @@ function appsToXlsx(array $apps, string $name) {
     $rowNum = 2;
     foreach ($apps as $app) {
         $sheet->setCellValue(__coordinate(1, $rowNum), $app->number);
-        $sheet->getCell(__coordinate(1, $rowNum))->getHyperlink()->setUrl('%HTTPS%://%HOST%/ud-' . $app->id . '.html');
+        $sheet->getCell(__coordinate(1, $rowNum))->getHyperlink()->setUrl(HTTPS . '://' . HOST . '/ud-' . $app->id . '.html');
         $sheet->setCellValue(__coordinate(2, $rowNum), $app->getStatus()->name);
         $sheet->setCellValue(__coordinate(3, $rowNum), $app->getDate("d.MM.y H:mm"));
         $sheet->setCellValue(__coordinate(4, $rowNum), $app->getShortAddress());

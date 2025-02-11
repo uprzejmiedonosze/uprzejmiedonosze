@@ -81,14 +81,14 @@ class AuthMiddleware implements MiddlewareInterface {
         // $firebaseUser = \cache\get($token);
         //if ($firebaseUser) return json_decode($firebaseUser, true);
 
-        $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../%HOST%-firebase-adminsdk.json');
+        $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../' . HOST . '-firebase-adminsdk.json');
         $auth = $factory->createAuth();
 
         try {
             $verifiedIdToken = $auth->verifyIdToken($token);
             $claims = $verifiedIdToken->claims();
             $firebaseUser = Array(
-                'user_email' => ('%HOST%' === 'uprzejmiedonosze.localhost') ? 'e@nieradka.net' : $claims->get('email'),
+                'user_email' => (HOST === 'uprzejmiedonosze.localhost') ? 'e@nieradka.net' : $claims->get('email'),
                 'user_name' => $claims->get('name'),
                 'user_picture' => $claims->get('picture'),
                 'user_id' => $claims->get('user_id'),

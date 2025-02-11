@@ -122,7 +122,7 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	$(sentry-release)
 	@make clean
 
-$(EXPORT): $(DIRS) process-sitemap $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
+$(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.env.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -149,6 +149,17 @@ $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
 	@./node_modules/.bin/parcel build --no-cache --dist-dir $(PUBLIC)/img $< ;
 	@cp src/images-index.html $@
 
+$(EXPORT)/config.env.php: src/inc/config.env.php
+	@cp $< $@
+
+src/inc/config.env.php: $(JS_FILES_DEPS) $(TWIG_FILES) $(CONFIG_FILES) $(CSS_FILES)
+	@echo "<?php" > $@
+	@echo "define('HOST', '$(HOST)');" >> $@
+	@echo "define('TWIG_HASH', '$(TWIG_HASH)');" >> $@
+	@echo "define('CSS_HASH', '$(CSS_HASH)');" >> $@
+	@echo "define('JS_HASH', '$(JS_HASH)');" >> $@
+	@echo "define('HTTPS', '$(HTTPS)');" >> $@
+
 src/scss/lib/variables.env.scss:
 	@HOST=$(HOST) node ./src/scss/env.js > $@
 
@@ -171,19 +182,30 @@ $(EXPORT)/public/api/config/stop-agresji.json: src/api/config/stop-agresji.json 
 $(EXPORT)/public/api/config/%.json: src/api/config/%.json $(EXPORT)/public/api/config; $(call echo-processing,$<)
 	@jq -c . < $< > $@
 
-$(EXPORT)/inc/%.php: src/inc/%.php; $(lint_replace_inline)
-$(PUBLIC)/%.php: src/%.php; $(lint_replace_inline)
-$(PUBLIC)/api/rest/index.php: src/api/rest/index.php; $(lint_replace_inline)
+$(EXPORT)/inc/%.php: src/inc/%.php
+	@cp $< $@
+	$(lint)
+$(PUBLIC)/%.php: src/%.php
+	@cp $< $@
+	$(lint)
+$(PUBLIC)/api/rest/index.php: src/api/rest/index.php
+	@cp $< $@
+	$(lint)
 
-$(EXPORT)/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES); $(lint_replace_inline)
-$(EXPORT)/inc/include.php: src/inc/include.php $(TWIG_FILES); $(lint_replace_inline)
+$(EXPORT)/inc/PDFGenerator.php: src/inc/PDFGenerator.php $(TWIG_FILES)
+	@cp $< $@
+	$(lint)
+
+$(EXPORT)/inc/include.php: src/inc/include.php $(TWIG_FILES)
+	@cp $< $@
+	$(lint)
+
 
 $(EXPORT)/templates/%: src/templates/%; $(call echo-processing,$<)
-	$(replace)
-	$(replace-inline)
+	@cp $< $@
 
 $(MANIFEST_PROCESSED): $(MANIFEST); $(call echo-processing,$<)
-	$(replace)
+	@cp $< $@
 
 $(SITEMAP_PROCESSED): src/templates/*.html.twig ; $(call echo-processing,$@)
 	@(echo '<urlset \n'\
@@ -318,17 +340,6 @@ define echo-processing
 	@tput setaf 245 && echo "  - processing $1" && tput sgr0
 endef
 
-define replace
-@sed -e 's/%HOST%/$(HOST)/g' -e 's/%HTTPS%/$(HTTPS)/g' $< > $@
-endef
-
-define replace-inline
-@sed $(SED_OPTS) -e 's/%JS_HASH%/$(JS_HASH)/g' \
-   -e 's/%CSS_HASH%/$(CSS_HASH)/g' \
-	 -e 's/%TWIG_HASH%/$(TWIG_HASH)/g' \
-	 -e 's/%VERSION%/$(TAG_NAME)/g' $@
-endef
-
 ifeq ($(HOST),$(PROD_HOST))
 define lint
 	@set -o pipefail && php -l $< | grep -v "^$$" | ( grep -v "No syntax errors detected" || true )
@@ -362,12 +373,3 @@ test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.jso
 
 .PHONY: memcached
 memcached: MEMCACHED := $(shell curl localhost:11211 2>&1 | grep -c Fail || true)
-	
-	
-
-define lint_replace_inline
-$(call echo-processing,$<)
-$(lint)
-$(replace)
-$(replace-inline)
-endef

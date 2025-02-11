@@ -48,7 +48,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
     $loader = new FilesystemLoader(__DIR__ . '/../../templates');
     $twig = new Environment($loader, [
         'debug' => !isProd(),
-        'cache' => new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-%HOST%-%TWIG_HASH%', FilesystemCache::FORCE_BYTECODE_INVALIDATION),
+        'cache' => new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-' . HOST . '-' .TWIG_HASH, FilesystemCache::FORCE_BYTECODE_INVALIDATION),
         'strict_variables' => true,
         'auto_reload' => true
     ]);
@@ -60,6 +60,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
     $user = \user\current();
     $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
     $params = [
+        'BASE_URL' => BASE_URL,
         'app' => $application,
         'root' => realpath(ROOT),
         'categories' => $CATEGORIES,

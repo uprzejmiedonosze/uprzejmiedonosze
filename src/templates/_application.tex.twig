@@ -7,13 +7,13 @@
 {\large {{ app.guessSMData().getLatexAddress() }} }
 
 {% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
-{% set contextImageUrl = '{%HTTPS%://%HOST%/' ~ app.contextImage.url ~ '?download}' %}
+{% set contextImageUrl = '{' ~ BASE_URL ~ app.contextImage.url ~ '?download}' %}
 
 {% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb ~ '}' %}
-{% set carImageUrl     = '{%HTTPS%://%HOST%/' ~ app.carImage.url ~ '?download}' %}
+{% set carImageUrl     = '{' ~ BASE_URL ~ app.carImage.url ~ '?download}' %}
 
 {% set thirdImage     = '{' ~ root ~ '/' ~ (app.thirdImage.thumb ?? '')~ '}' %}
-{% set thirdImageUrl     = '{%HTTPS%://%HOST%/' ~ (app.thirdImage.url ?? '') ~ '?download}' %}
+{% set thirdImageUrl     = '{' ~ BASE_URL ~ (app.thirdImage.url ?? '') ~ '?download}' %}
 
 {% set mapUrl = '{' ~ app.getMapUrl() ~ '}' %}
 {% set mapImage     = '{' ~ root ~ '/' ~ app.getMapImage ~ '}' %}

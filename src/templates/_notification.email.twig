@@ -6,7 +6,7 @@ Odpowiedź, jaką otrzymaliśmy to:
 
   {{ reason | replace({"\n": "\n  "}) }}
 
-Szczegóły: {{ '%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html' }}#comments
+Szczegóły: {{ BASE_URL ~ 'ud-' ~ app.id  ~ '.html' }}#comments
 
 Możesz spróbować wysłać tę wiadomość ponownie na stronie „moje zgłoszenia”. Najlepiej odczekaj jeden dzień przed powtórką. Jeśli to nie pomoże, to skontaktuj się proszę ze mną: szymon@uprzejmiedonosze.net.
 

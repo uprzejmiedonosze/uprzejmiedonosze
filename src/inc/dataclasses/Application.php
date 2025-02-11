@@ -459,12 +459,12 @@ class Application extends JSONObject implements \JsonSerializable {
         }
 
         $baseDir = 'cdn2/' . $this->getUserNumber();
-        if(!file_exists('/var/www/%HOST%/' . $baseDir)){
-            mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
+        if(!file_exists(ROOT . $baseDir)){
+            mkdir(ROOT . $baseDir, 0755, true);
         }
         $baseFileName = $baseDir . '/' . $this->id;
 
-        $fileName     = "/var/www/%HOST%/$baseFileName,ma.png";
+        $fileName     = ROOT . "$baseFileName,ma.png";
 
         $ifp = @fopen($fileName, 'wb');
         if($ifp === false){

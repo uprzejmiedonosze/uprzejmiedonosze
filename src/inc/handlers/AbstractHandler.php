@@ -82,6 +82,8 @@ abstract class AbstractHandler {
         $params = $request->getQueryParams();
 
         $parameters = $request->getAttribute('parameters');
+        $parameters['HOST'] = HOST;
+        $parameters['BASE_URL'] = BASE_URL;
         $parameters['mainClass'] = $route;
         $parameters['config']['menu'] = $route;
         $parameters['config']['isIOS'] = isIOS();

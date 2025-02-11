@@ -21,6 +21,7 @@ function exceptionToErrorHtml($exception): string {
     $template = ($status == 404) ? '404' : 'error';
     $parameters = HtmlMiddleware::getDefaultParameters();
     $parameters['exception'] = $exception;
+    $parameters['BASE_URL'] = BASE_URL;
     $parameters['email'] = $_SESSION['user_email'] ?? null;
     
     return $twig->render("$template.html.twig", $parameters);

@@ -8,9 +8,6 @@ const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
 
 const CONFIG_DIR = __DIR__ . '/../public/api/config';
 
-const ROOT = '/var/www/%HOST%/';
-
-
 const CATEGORIES_CONFIG = CONFIG_DIR . '/categories.json';
 $categories = fopen(CATEGORIES_CONFIG, "r") or die("Unable to open config file: " . CATEGORIES_CONFIG);
 $CATEGORIES = (array) new ConfigClass(fread($categories, filesize(CATEGORIES_CONFIG)), 'Category');
@@ -52,6 +49,10 @@ if (file_exists(__DIR__ . '/../config.prod.php'))
     require(__DIR__ . '/../config.prod.php');
 else
     require(__DIR__ . '/../config.php');
+
+require(__DIR__ . '/../config.env.php');
+const ROOT = '/var/www/' . HOST . '/';
+const BASE_URL = HTTPS . '://' . HOST . '/';
 
 const ODDZIALY_TERENOWE = array(
     'Śródmieście' => 'warszawa_ot1',

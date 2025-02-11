@@ -23,12 +23,12 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
         $result = $result[0];
         $box = $result['box'];
 
-        $imp = imagecreatefromjpeg("/var/www/%HOST%/$baseFileName,$type.jpg");
+        $imp = imagecreatefromjpeg(ROOT . "$baseFileName,$type.jpg");
         $plateImage = imagecrop($imp, ['x' => $box['xmin'], 'y' => $box['ymin'],
             'width' => ($box['xmax'] - $box['xmin']), 'height' => ($box['ymax'] - $box['ymin'])]);
         if ($plateImage !== FALSE) {
             $application->carInfo->plateImage = "$baseFileName,$type,p.jpg";
-            imagejpeg($plateImage, '/var/www/%HOST%/' . $application->carInfo->plateImage);
+            imagejpeg($plateImage, ROOT . $application->carInfo->plateImage);
         }
         $application->carInfo->plateId = strtoupper($result["plate"]);
         $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);

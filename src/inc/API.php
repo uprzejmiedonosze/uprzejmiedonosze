@@ -132,7 +132,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
     $type = substr($pictureType, 0, 2);
     $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
 
-    $fileName = "/var/www/%HOST%/$baseFileName,$type.jpg";
+    $fileName = ROOT . "$baseFileName,$type.jpg";
     list($width, $height) = getimagesize($fileName);
 
     if ($pictureType == 'carImage') {
@@ -175,12 +175,12 @@ function saveImgAndThumb($application, $imageBytes, $type) {
     $baseDir = 'cdn2/' . $application->getUserNumber();
     $baseFileName = $baseDir . '/' . $application->id;
 
-    if (!file_exists('/var/www/%HOST%/' . $baseDir)) {
-        mkdir('/var/www/%HOST%/' . $baseDir, 0755, true);
+    if (!file_exists(ROOT . $baseDir)) {
+        mkdir(ROOT . $baseDir, 0755, true);
     }
 
-    $fileName     = "/var/www/%HOST%/$baseFileName,$type.jpg";
-    $thumbName    = "/var/www/%HOST%/$baseFileName,$type,t.jpg";
+    $fileName     = ROOT . "$baseFileName,$type.jpg";
+    $thumbName    = ROOT . "$baseFileName,$type,t.jpg";
     $ifp = fopen($fileName, 'wb');
     if ($ifp === false) {
         throw new Exception("Can't open $fileName for write", 500);
