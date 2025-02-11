@@ -64,14 +64,14 @@ dev: ## Refresh src files in Docker image
 
 dev-sequential: HOST := $(DEV_HOST)
 dev-sequential: HTTPS := http
-dev-sequential: $(DIRS) export
+dev-sequential: export_minimal
 	@echo "==> Refreshing sources"
 	@cp uprzejmiedonosze.localhost-firebase-adminsdk.json $(EXPORT)
 	@$(RSYNC) -r vendor $(EXPORT)
 
 dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
-dev-run: $(DIRS) export dev ## Building and running docker image
+dev-run: $(DIRS) dev ## Building and running docker image
 	@echo "==> Building docker"
 	@make --warn-undefined-variables --directory docker build
 	@echo "==> Running docker image"
@@ -116,7 +116,8 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	$(sentry-release)
 	@make clean
 
-$(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.env.php $(PUBLIC)/api/rest/index.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
+.PHONY: export_minimal
+export_minimal: $(DIRS) $(EXPORT)/config.env.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
@@ -124,12 +125,15 @@ $(EXPORT): $(DIRS) process-sitemap $(EXPORT)/config.env.php $(PUBLIC)/api/rest/i
 	@cp -r src/sql $(EXPORT)/
 	@cp config.php $(EXPORT)/
 
+$(EXPORT): export_minimal process-sitemap $(PUBLIC)/api/rest/index.php test-phpunit ## Exports files for deployment.
+	@echo "==> Exporting"
+
 .PHONY: exportserver
 exportserver: $(EXPORT) config.prod.php
 	@cp config.prod.php $(EXPORT)
 
 .PHONY: minify
-minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig test-phpunit process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
+minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
