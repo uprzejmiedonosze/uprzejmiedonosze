@@ -84,6 +84,8 @@ abstract class AbstractHandler {
         $parameters = $request->getAttribute('parameters');
         $parameters['HOST'] = HOST;
         $parameters['BASE_URL'] = BASE_URL;
+        $parameters['CSS_HASH'] = CSS_HASH;
+        $parameters['JS_HASH'] = JS_HASH;
         $parameters['mainClass'] = $route;
         $parameters['config']['menu'] = $route;
         $parameters['config']['isIOS'] = isIOS();

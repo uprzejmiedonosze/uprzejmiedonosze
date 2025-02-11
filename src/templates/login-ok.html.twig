@@ -3,7 +3,7 @@
 {% extends "base.html.twig" %}
 
 {% block headIncludes %}
-        <script src="/js/firebase.js?%JS_HASH%"
+        <script src="/js/firebase.js?{{ JS_HASH }}"
                 login-redirect="true"
                 signInSuccessUrl="{{ config.signInSuccessUrl ?? '/moje-zgloszenia.html' }}">
         </script>
