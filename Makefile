@@ -238,7 +238,8 @@ clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
 	@rm -rf $(EXPORT)
 	@rm -f $(BRANCH_ENV)
-	@rm -rf .parcel-cache/ .mypy_cache/
+	@rm -f src/inc/config.env.php src/scss/lib/variables.env.scss
+	@rm -rf .parcel-cache/
 
 .PHONY: help
 help: ## Displays this help.
