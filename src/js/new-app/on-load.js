@@ -44,8 +44,7 @@ export const initHandlers = (map) => {
       }
       let imagesOrder = ['contextImage', 'carImage', 'thirdImage'].reverse()
       // @ts-ignore
-      checkFile(e.target.files[0], imagesOrder.pop()); 
-      imagesOrder = imagesOrder.filter(i => i !== e.target.id)
+      checkFile(e.target.files[0], imagesOrder.pop());
       if(e.target.files.length > 1)
         // @ts-ignore
         checkFile(e.target.files[1], imagesOrder.pop());
