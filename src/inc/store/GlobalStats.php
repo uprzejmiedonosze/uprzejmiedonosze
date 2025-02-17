@@ -42,23 +42,27 @@ function statsByDay(bool $useCache=true){
     $today = (date('H') < 12)? "and json_extract(applications.value, '$.added') < date('now')": "";
 
     $sql = <<<SQL
-        select substr(json_extract(applications.value, '$.added'), 1, 10) as 'day',
-            count(*) as acnt,
-            u.cnt as ucnt
-        from applications
-        left outer join (
-            select substr(json_extract(users.value, '$.added'), 1, 10) as 'day',
-                count(*) as cnt
+        with a as (
+            select substr(json_extract(value, '$.added'), 1, 10) as 'day',
+                count(key) as cnt
+            from applications
+            where json_extract(value, '$.status') not in ('draft', 'ready')
+                and json_extract(value, '$.added') >= date('now', '-1 month')
+                -- $today
+            group by 1
+        ), u as (
+            select substr(json_extract(value, '$.added'), 1, 10) as 'day',
+                count(key) as cnt
             from users
-            group by  substr(json_extract(users.value, '$.added'), 1, 10)
-            order by 1 desc
-            limit 35
-        ) u on substr(json_extract(applications.value, '$.added'), 1, 10) = u.day
-        where json_extract(applications.value, '$.status') not in ('draft', 'ready')
-            $today
-        group by substr(json_extract(applications.value, '$.added'), 1, 10)
-        order by 1 desc
-        limit 30;
+            where json_extract(value, '$.added') >= date('now', '-1 month')
+            group by 1
+        )
+        select a.day,
+            a.cnt as acnt,
+            u.cnt as ucnt
+        from a
+        left outer join u on a.day = u.day
+        order by 1 desc;
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
