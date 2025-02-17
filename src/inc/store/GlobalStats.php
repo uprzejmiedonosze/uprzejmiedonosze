@@ -82,22 +82,25 @@ function statsByYear(bool $useCache=true){
     }
 
     $sql = <<<SQL
-        select min(substr(json_extract(applications.value, '$.added'), 1, 7)) as 'day',
-            count(*) as acnt,
-            u.cnt as ucnt
-        from applications
-        left outer join (
-            select min(substr(json_extract(users.value, '$.added'), 1, 7)) as 'day',
-                count(*) as cnt
+        with a as (
+            select substr(json_extract(value, '$.added'), 1, 7) as 'month',
+                count(key) as cnt
+            from applications
+            where json_extract(value, '$.status') not in ('draft', 'ready')
+                and json_extract(value, '$.added') >= date('now', '-24 months')
+            group by 1
+        ), u as (
+            select substr(json_extract(value, '$.added'), 1, 7) as 'month',
+                count(key) as cnt
             from users
-            where substr(json_extract(users.value, '$.added'), 1, 4) > 2017
-            group by substr(json_extract(users.value, '$.added'), 1, 7)
-            order by 1 desc
-            limit 35
-        ) u on substr(json_extract(applications.value, '$.added'), 1, 7) = u.day
-        where json_extract(applications.value, '$.status') not in ('draft', 'ready')
-            and substr(json_extract(applications.value, '$.added'), 1, 4) > 2017
-        group by substr(json_extract(applications.value, '$.added'), 1, 7)
+            where json_extract(value, '$.added') >= date('now', '-24 months')
+            group by 1
+        )
+        select a.month,
+            a.cnt as acnt,
+            u.cnt as ucnt
+        from a
+        left outer join u on a.month = u.month
         order by 1 desc
         limit 24;
     SQL;
