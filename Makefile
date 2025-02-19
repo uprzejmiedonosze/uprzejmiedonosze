@@ -129,7 +129,7 @@ $(EXPORT): export_minimal process-sitemap $(PUBLIC)/api/rest/index.php test-phpu
 	@echo "==> Exporting"
 
 .PHONY: exportserver
-exportserver: $(EXPORT) config.prod.php
+exportserver: $(EXPORT) config.prod.php $(PUBLIC)/fail2ban/index.html
 	@cp config.prod.php $(EXPORT)
 
 .PHONY: minify
@@ -198,6 +198,9 @@ $(EXPORT)/inc/include.php: src/inc/include.php $(TWIG_FILES)
 	@cp $< $@
 	$(lint)
 
+$(PUBLIC)/fail2ban/index.html: src/templates/fail2ban.html.twig
+	@mkdir -p $(@D)
+	@php tools/fail2ban-twig.php > $@
 
 $(EXPORT)/templates/%: src/templates/%; $(call echo-processing,$<)
 	@cp $< $@

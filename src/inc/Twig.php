@@ -1,12 +1,13 @@
 <?PHP
-use Slim\Views\Twig;
+
+use \Slim\Views\Twig;
 use \Twig\Cache\FilesystemCache as FilesystemCache;
-use Twig\Extension\DebugExtension;
-use \Twig\Loader\FilesystemLoader as FilesystemLoader;
 use \Twig\Environment as Environment;
-use \Twig\TwigFunction;
-use \Twig\TwigFilter;
 use \Twig\Extension\AbstractExtension;
+use \Twig\Extension\DebugExtension;
+use \Twig\Loader\FilesystemLoader as FilesystemLoader;
+use \Twig\TwigFilter;
+use \Twig\TwigFunction;
 
 class TwigExtension extends AbstractExtension {
     public function getFunctions() {
@@ -46,10 +47,6 @@ function _twigConfig(): array {
     ];
 }
 
-/**
- * @SuppressWarnings(PHPMD.MissingImport)
- * @SuppressWarnings(PHPMD.StaticAccess)
- */
 function initSlimTwig() {
     $twig = Twig::create(__DIR__ . '/../templates', _twigConfig());
     $twig->addExtension(new TwigExtension());
@@ -60,9 +57,6 @@ function initSlimTwig() {
     return $twig;
 }
 
-/**
- * @SuppressWarnings(PHPMD.MissingImport)
- */
 function initBareTwig() {
     $loader = new FilesystemLoader(__DIR__ . '/../templates');
     $twig = new Environment($loader, _twigConfig());

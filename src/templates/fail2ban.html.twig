@@ -1,0 +1,47 @@
+{% set title = 'Zostałaś/eś zablokowany' %}
+{% set shortTitle = title %}
+
+{% set emailSubject = 'Odblokuj mnie' %}
+{% set emailBody = 'Cześć,
+
+Odblokuj proszę mój adres IP: __IP__
+
+' %}
+
+
+{% extends "base.html.twig" %}
+{% block main %}
+<h2>Zostałaś/eś zablokowany</h2>
+<p>
+    Mechanizmy obrony Uprzejmie Donoszę są podkręcone do poziomu paranoidalnego.
+    Jest więc bardzo prawdopodobne, że nie zrobiłaś/eś nic nieprawidłowego.
+</p>
+<p>
+    Blokada zostanie automatycznie zdjęta w przeciągu 5 dni.
+</p>
+<p>
+    Domyślam się, że nie chcesz czekać tak długo. Napisz proszę wiadomość, podając swój adres IP.
+</p>
+
+<a id="email" class="button light inline" rel="external" target="_blank" href="mailto:szymon+ubanip@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}">
+    szymon@uprzejmiedonosze.net
+</a>
+
+<script>
+    function getIp() {
+        var xmlHttp = new XMLHttpRequest()
+        xmlHttp.open( "GET", "/ip", false )
+        xmlHttp.send()
+        return xmlHttp.responseText;
+    }
+
+    const ip = getIp()
+
+    const emailButton = document.getElementById('email')
+    emailButton.href = emailButton.href.replace('__IP__', ip)
+</script>
+{% endblock %}
+
+{% block footer %}
+<footer></footer>
+{% endblock %}
