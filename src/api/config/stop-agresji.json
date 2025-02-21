@@ -35,6 +35,16 @@
     "email": "stopagresjidrogowej@lu.policja.gov.pl",
     "voivodeship": "Lubelskie"
   },
+  "Lublin-Miasto": {
+    "address": [
+      "Komenda Miejska Policji w Lublinie",
+      "ul. Północna 3",
+      "20-064 Lublin"
+    ],
+    "email": "komendant.kmplublin@lu.policja.gov.pl",
+    "hint": "Komenda Miejsca w Lublinie wzywa na przesłuchanie. Poza tym doświadczenia są przeważająco pozytywne.",
+    "voivodeship": "Lubelskie"
+  },
   "Lubuskie": {
     "address": [
       "Komenda Wojewódzka Policji w Gorzowie Wielkopolskim",
