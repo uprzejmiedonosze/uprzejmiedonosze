@@ -87,6 +87,11 @@
         </span>
         {% endif %}
         <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt">{{ num(recydywaCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']) }}
+        <a href="#{{ app.id }}" data-rel="popup" data-inline="true" data-mini="true"
+            data-plateid="{{ app.carInfo.plateId }}"
+            class="button small recydywa-seemore">
+            Zobacz zgłoszenia
+        </a>
     </div>
     {% endif %}
 
