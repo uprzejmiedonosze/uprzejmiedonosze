@@ -306,7 +306,7 @@ async function sendFile(fileData, id, imageMetadata={}) {
 
         $recydywa.find('.recydywa-userscnt').hide()
         if (recydywa?.usersCnt > 1) {
-          $recydywa.find('.recydywa-userscnt').text(num(recydywa.usersCnt, ['zgłaszających', 'zgłaszający', 'zgłaszających'])).show()
+          $recydywa.find('.recydywa-userscnt').text(num(recydywa.usersCnt, ['osób zgłosiło', 'osoba zgłosiła', 'osoby zgłosiły'])).show()
         }
       }
     }
@@ -330,7 +330,7 @@ export async function removeFile(id) {
 
 /**
  * @param {Number} value 
- * @param {Array} numerals 
+ * @param {Array} numerals
  * @returns 
  */
 function num(value, numerals) {

@@ -19,10 +19,10 @@
             <div>
             {% if recydywaCnt > 1 %}
                 <span class="recydywa-cnt">
-                    <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt">{{ recydywaCnt }}</span>
                     {% if recydywa.usersCnt > 1 %}
                         <span class="recydywa-userscnt">{{ recydywa.usersCnt }}</span>
                     {% endif %}
+                    <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt">{{ recydywaCnt }}</span>
                 </span>
             {% endif %}
                 <span class="plate-id small">{{ app.carInfo.plateId }}</span>

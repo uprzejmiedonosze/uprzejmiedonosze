@@ -105,12 +105,8 @@
     .recydywa-userscnt, .recydywa-appscnt {
       &::before {
         @extend %icon;
-        margin-right: 5px;
+        margin: 0 3px;
       }
-    }
-
-    .recydywa-appscnt + .recydywa-userscnt {
-      margin-left: 3px;
     }
 
     .recydywa-appscnt::before {

@@ -8,10 +8,13 @@
 {% block main %}
 
 <h2 class="recydywa">
-    <span data-recydywacnt="{{ recydywa.appsCnt }}">{{ num(recydywa.appsCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']) }},</span>
+
     {% if recydywa.usersCnt > 1 %}
-        {{ recydywa.usersCnt }}&nbsp;zgłaszających
+        <span>
+            {{- num(recydywa.usersCnt, ['osób zgłosiło', 'osoba zgłosiła', 'osoby zgłosiły']) }}
+        </span>
     {% endif %}
+    <span data-recydywacnt="{{ recydywa.appsCnt }}">{{ num(recydywa.appsCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']) }}
     <span class="plate-id h2">{{ plateId }}</span>
 </h2>
 
