@@ -1,0 +1,66 @@
+{% if dialog %}
+{% set leftButton = 'menuBack' %}
+{% set rightButton = '' %}
+{% else %}
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+{% endif %}
+{# SITEMAP-PRIORITY:0.3 #}
+
+{% set title = 'Kontakt' %}
+{% set shortTitle = 'Kontakt' %}
+{% set mainClass = 'how' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>{{ shortTitle }}</h2>
+
+<h3>Dyskutuj</h3>
+
+<p>Szukasz porady? Masz sugestie zmian w aplikacji? Chcesz podzielić się swoimi doświadczeniami?
+Dołącz do grupy dla użytkowników Uprzejmie Donoszę na Facebooku.</p>
+<a href="https://www.facebook.com/groups/patologiaparkingowa"
+    class="facebook button" target="_blank" rel="external">
+    Grupa wsparcia na Facebooku
+</a>
+
+<p>Możesz też zgłosić błąd bezpośrednio na
+    <a href="https://bitbucket.org/uprzejmiedonosze/uprzejmiedonosze/issues" rel="external" target="_blank">
+        stronie repozytorium projektu</a>
+(dla zaawansowanych).</p>
+
+<p>Temat nie nadaje się do publicznej dyskusji? Napisz do mnie bezpośrednio.</p>
+<a href="mailto:szymon@uprzejmiedonosze.net"
+    class="email button" target="_blank" rel="external">
+    szymon(a)uprzejmiedonosze.net
+</a>
+
+
+<h3>Obserwuj</h3>
+
+<p>Comiesięczne podsumowanie zmian w aplikacji oraz mojej starań o ucywilizowanie polskich chodników znajdziesz na Patronite.</p>
+
+<a href="https://patronite.pl/uprzejmiedonosze/posts"
+    class="patronite button small" target="_blank" rel="external">
+    Newsletter Patronite
+</a>
+
+<p>Częstsze aktualizacja znajdziesz na Twitterze, gdzie staram się pisać wyłącznie o parkowaniu.</p>
+<a href="https://x.com/SzymonNieradka"
+    class="twitter button" target="_blank" rel="external">
+    Twitter @SzymonNieradka
+</a>
+
+<p>Po treści tragikomiczne zapraszam na mój kanał na YouTube</p>
+<a href="http://youtube.com/@StopChamSzczecin"
+    class="youtube button" target="_blank" rel="external">
+    YouTube @StopChamSzczecin
+</a>
+
+<br><br><br>
+
+<a class="twitter-timeline" href="https://twitter.com/SzymonNieradka?ref_src=twsrc%5Etfw">https://x.com/SzymonNieradka</a>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+{% endblock %}

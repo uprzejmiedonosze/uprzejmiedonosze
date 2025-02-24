@@ -80,4 +80,24 @@
         padding: .3em .7em;
         vertical-align: middle;
     }
+
+    &.youtube, &.twitter, &.facebook, &.email {
+        width: fit-content;
+        margin: 1em;
+        padding: .5em 1em;
+        font-size: 16px;
+    }
+
+    &.youtube {
+        background-color: #FF0000;
+    }
+
+    &.twitter {
+        background-color: black;
+    }
+
+    &.facebook {
+        background-color: #1877F2;
+    }
+
 }
