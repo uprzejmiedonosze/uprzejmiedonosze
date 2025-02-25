@@ -255,6 +255,7 @@ class StaticPagesHandler extends AbstractHandler {
         $ROUTES = [
             '404',
             'aplikacja',
+            'bezpieczenstwo',
             'changelog',
             'epuap',
             'e-doreczenia',

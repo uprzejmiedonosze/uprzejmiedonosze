@@ -1,0 +1,55 @@
+{# SITEMAP-PRIORITY:0.3 #}
+
+{% set title = 'Bezpieczeństwo Uprzejmie Donoszę' %}
+{% set shortTitle = 'Bezpieczeństwo UD' %}
+{% set description = title %}
+{% set mainClass = 'polityka' %}
+{# SITEMAP-PRIORITY:0.4 #}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>Bezpieczeństwo danych w serwisie Uprzejmie Donoszę</h2>
+
+<p>Od stycznia 2025 wprowadziłem w serwisie pełne szyfrowanie danych użytkowników oraz zgłoszeń.
+Oto 3 rzeczy jakie musisz wiedzieć o bezpieczeństwie swoich danych.</p>
+
+<h3>1. Nie mam wglądu w twoje dane osobowe</h3>
+
+<p>Szyfrowanie sprawia, że nawet jako administrator systemu nie mam bezpośredniego
+dostępu do przesyłanych przez Ciebie danych. Dane osobowe przechowywane w bazie
+serwisu są dla mnie nieczytelne. Nie mogę poznać twojego adresu zamieszkania,
+numeru telefonu i większości informacji, które podajesz w zgłoszeniach.</p>
+
+<p>Zaznaczę, że nie jest to (jeszcze) tzw.
+<a href="https://en.wikipedia.org/wiki/Zero-knowledge_service" target="_blank" rel="external">zero-knowledge security</a>, ani
+<a href="https://en.wikipedia.org/wiki/End-to-end_encryption" target="_blank" rel="external">end-to-end encryption</a>.
+Tzn. gdyby policja mnie chciała zmusić do odszyfrowania tych danych, to będę w stanie
+to zrobić. Wymaga to połączenia danych z dwóch, fizycznie odseparowanych oraz odległych
+od siebie geograficznie systemów zabezpieczonych różnymi metodami uwierzytelniającymi z
+<a href="https://en.wikipedia.org/wiki/Multi-factor_authentication" target="_blank" rel="external">MFA</a>.</p>
+
+<h3>2. W razie wycieku danych będą one dla włamywaczy bezwartościowe</h3>
+
+<p>W przypadku włamania do systemu, potencjalny atakujący uzyska dostęp jedynie do zaszyfrowanych danych,
+których nie będzie w stanie odczytać. Wszystkie wrażliwe informacje pozostają bezpieczne dzięki
+wykorzystaniu <a href="https://bitbucket.org/uprzejmiedonosze/uprzejmiedonosze/src/main/src/inc/Crypto.php"
+    target="_blank" rel="external">najnowszych standardów kryptograficznych</a>,
+co sprawia, że złamanie szyfrowania jest praktycznie niemożliwe.</p>
+
+<p>Pod <a href="https://www.facebook.com/uprzejmiedonosze.net/posts/pfbid0BzeeBsqzUi2rAPhS9pkQiqgEiMycehXw2STdMmN7LdhJKEgwGBedqodEKJA7YEzGl"
+    target="_blank" rel="external">tym adresem publikuję zawartość bazy danych Uprzejmie Donoszę</a> z danymi mojego konta.
+Jeśli potrafisz złamać szyfrowanie, to poznasz np. mój adres zamieszkania. Pierwszej osobie
+która tego dokona płacę 500 zł tzw. bug-bounty. Powodzenia!</p>
+
+<h3>3. Organy ścigania będą mogły mieć wgląd wyłącznie w ściśle określonych przypadkach</h3>
+
+<p>Dostęp do danych przez organy ścigania jest możliwy wyłącznie w przypadkach przewidzianych
+przez prawo, po przedstawieniu odpowiedniego nakazu sądowego. Proces ten jest ściśle
+kontrolowany i udokumentowany, co gwarantuje, że Twoje dane nie zostaną wykorzystane
+w nieodpowiedni sposób.</p>
+
+<p>Jeśli poszukujesz informacji na temat tego, jak twoje dane są przetwarzane przez serwis,
+zapoznaj się <a href="/polityka-prywatnosci.html#encryption">polityką prywatności</a>.</p>
+
+{% endblock %}
