@@ -19,7 +19,7 @@
   },
   "confirmed": {
     "name": "Nowe",
-    "action": "Nowe",
+    "action": "Zgłoszenie gotowe do wysłania",
     "icon": "cloud",
     "allowed": ["ready", "sending", "sending-problem", "sending-failed", "confirmed-waiting", "archived"],
     "comment": "Zapisanie gotowego zgłoszenia",
@@ -55,7 +55,7 @@
   },
   "confirmed-waiting": {
     "name": "Wysłane",
-    "action": null,
+    "action": "Zgłoszenie zostało wysłane",
     "icon": "mail",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Wysłanie zgłoszenia",
@@ -111,7 +111,7 @@
     "name": "W archiwum",
     "action": "Przenieś do archiwum",
     "icon": "minus",
-    "allowed": ["confirmed"],
+    "allowed": ["confirmed", "confirmed-waiting"],
     "comment": "Zgłoszenie zostało zarchiwizowane",
     "editable": false,
     "sendable": false,
