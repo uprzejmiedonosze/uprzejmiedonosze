@@ -12,13 +12,17 @@
 {% set emailSubject = 'Brak danych SM dla miejscowości ' ~ appCity %}
 {% set emailBody = 'Dzień dobry,
 
-Proszę o dodanie Straży Miejskiej ' ~ appCity ~ ' (zgłoszenie ' ~ appNumber ~ '):
+Proszę o dodanie Straży Miejskiej ' ~ appCity ~ ':
 
 Ulica: (uzupełnij proszę)
 Kod pocztowy: XX-XXX ' ~ appCity ~ '
 Adres email SM: (uzupełnij proszę)
 
 Z poważaniem
+
+Dane techniczne zgłoszenia:
+- numer: ' ~ appNumber ~ ' (' ~ appId ~ ')
+- mapa: ' ~ address ~ '
 
 ' %}
 {% endif %}

@@ -215,20 +215,22 @@ class ApplicationHandler extends AbstractHandler {
         $appId = $this->getParam($params, 'id', -1);
         $appCity = '';
         $appNumber = '';
+        $address = '';
         if ($appId !== -1) {
             try {
                 $app = \app\get($appId);
                 $appCity = $app->address->city;
                 $appNumber = $app->number;
+                $address = $app->getMapUrl();
             } catch (Exception $e) {
-                $appCity = '';
-                $appNumber = '';
             }
         }
 
         return AbstractHandler::renderHtml($request, $response, 'brak-sm', [
             'appCity' => $appCity,
-            'appNumber' => $appNumber
+            'appNumber' => $appNumber,
+            'appId' => $appId,
+            'address' => $address
         ]);
     }
 
