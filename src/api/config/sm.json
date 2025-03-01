@@ -3194,5 +3194,13 @@
       "05-506 Lesznowola"
     ],
     "email": "dyzurny.kp-lesznowola@ksp.policja.gov.pl"
+  },
+  "Mielno": {
+    "address": [
+      "Straż Gminna w Mielnie",
+      "ul. Chrobrego 10",
+      "76-032 Mielno"
+    ],
+    "email": "sm@gmina.mielno.pl"
   }
 }
