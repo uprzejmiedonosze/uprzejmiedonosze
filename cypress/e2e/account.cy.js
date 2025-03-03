@@ -1,10 +1,13 @@
 describe('Create account', () => {
   before(() => {
+    // @ts-ignore
     cy.cleanDB()
+    // @ts-ignore
     cy.login()
   })
 
   beforeEach(() => {
+    // @ts-ignore
     cy.loadConfig()
   })
 
@@ -76,10 +79,12 @@ describe('Create account', () => {
 
 describe('Update account', () => {
   before(() => {
+    // @ts-ignore
     cy.login()
   })
 
   beforeEach(() => {
+    // @ts-ignore
     cy.loadConfig()
   })
 
@@ -99,13 +104,16 @@ describe('Update account', () => {
     cy.visit('/')
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click()
+    // @ts-ignore
     cy.uploadOKImages()
+    // @ts-ignore
     cy.setAppCategory(this.categories)
     cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
     cy.get('#form-submit').click()
 
     cy.contains('zostanie za chwilę wysłane')
     cy.contains(this.sm.szczecin.address[0])
+    // @ts-ignore
     cy.sendApp()
 
     cy.contains('To twoje pierwsze zgłoszenie')
@@ -135,16 +143,19 @@ describe('Update account', () => {
     cy.visit('/')
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click()
+    // @ts-ignore
     cy.uploadOKImages()
     Object.entries(this.categories)
       .filter(c => c[1].title)
       .forEach((category) => cy.get(`input#${category[0]}`).should('be.enabled'))
+    // @ts-ignore
     cy.setAppCategory(this.categories)
     cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
     cy.get('#form-submit').click()
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
     cy.contains('KP Szczecin Niebuszewo')
+    // @ts-ignore
     cy.sendApp()
 
     cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')

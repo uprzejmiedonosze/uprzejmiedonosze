@@ -5,6 +5,7 @@ describe('Static pages no session', function() {
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
         cy.visit('/')
     })
@@ -91,7 +92,9 @@ describe('Static pages logged in', function() {
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
+        // @ts-ignore
         cy.login()
         cy.visit('/')
     })

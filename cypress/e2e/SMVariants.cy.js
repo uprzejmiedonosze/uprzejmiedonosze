@@ -1,19 +1,26 @@
 describe('API:automated (Poznań)', () => {
     before(() => {
+        // @ts-ignore
         cy.initDB()
+        // @ts-ignore
         cy.login()
+        // @ts-ignore
         cy.goToNewAppScreen()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        // @ts-ignore
         cy.uploadOKImages('poznan.jpg')
+        // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit').click()
+        // @ts-ignore
         cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
@@ -36,22 +43,29 @@ describe('API:automated (Poznań)', () => {
 
 describe('API:Mail (Wrocław)', () => {
     before(() => {
+        // @ts-ignore
         cy.initDB()
+        // @ts-ignore
         cy.login()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        // @ts-ignore
         cy.goToNewAppScreen()
+        // @ts-ignore
         cy.uploadOKImages('wroclaw.jpg')
         cy.wait(1000)
         cy.get('.mapboxgl-ctrl-zoom-out').click({force: true})
+        // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit').click()
+        // @ts-ignore
         cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
     })
@@ -75,17 +89,23 @@ describe('API:Mail (Wrocław)', () => {
 
 describe('Missing SM (Poniatowa)', () => {
     before(() => {
+        // @ts-ignore
         cy.initDB()
+        // @ts-ignore
         cy.login()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        // @ts-ignore
         cy.goToNewAppScreen()
+        // @ts-ignore
         cy.uploadOKImages('poniatowa.jpg')
+        // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit', { timeout: 5000 }).click()

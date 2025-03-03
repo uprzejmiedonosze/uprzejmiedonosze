@@ -1,4 +1,3 @@
-// @ts-nocheck
 function checkAppData(config, confirmationScreen=false) {
     let address = config.address.szczecin
     let date = config.carImage.dateHuman
@@ -15,7 +14,9 @@ function checkAppData(config, confirmationScreen=false) {
 
 describe('Empty my apps', () => {
     before(() => {
+        // @ts-ignore
         cy.initDB()
+        // @ts-ignore
         cy.login()
     })
 
@@ -32,14 +33,17 @@ describe('Empty my apps', () => {
 
 describe('Application screen validation', () => {
     before(() => {
+        // @ts-ignore
         cy.login()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('checks new application screen', function () {
+        // @ts-ignore
         cy.goToNewAppScreen()
 
         const extensions = Object.entries(this.extensions).filter((e) => !e[1].disabled)
@@ -64,8 +68,10 @@ describe('Application screen validation', () => {
         })
         cy.get('input#datetime').should('have.attr', 'readonly')
         cy.get('#address').should(($input) => {
+            // @ts-ignore
             const address = JSON.parse($input.val())
             const latlng = `${address.lat},${address.lng}`
+            // @ts-ignore
             expect(latlng).to.match(new RegExp(this.config.address.latlng))
         })
     })
@@ -79,17 +85,22 @@ describe('Application screen validation', () => {
 
 describe('Invalid images', () => {
     before(() => {
+        // @ts-ignore
         cy.initDB()
+        // @ts-ignore
         cy.login()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('loads invalid images', function () {
+        // @ts-ignore
         cy.goToNewAppScreen()
         cy.wait(1000)
+        // @ts-ignore
         cy.uploadWrongImages()
     })
 
@@ -105,14 +116,17 @@ describe('Invalid images', () => {
 
 describe('Valid images and location', () => {
     before(() => {
+        // @ts-ignore
         cy.login()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('uploads images', function () {
+        // @ts-ignore
         cy.uploadOKImages()
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('.imageContainer').should('not.have.class', 'error')
@@ -135,18 +149,24 @@ describe('Valid images and location', () => {
 
 describe('Create application', () => {
     before(() => {
+        // @ts-ignore
         cy.initDB()
+        // @ts-ignore
         cy.login()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('creates application', function () {
         const extensions = Object.entries(this.extensions).filter((e) => !e[1].disabled)
+        // @ts-ignore
         cy.goToNewAppScreen()
+        // @ts-ignore
         cy.uploadOKImages()
+        // @ts-ignore
         cy.setAppCategory(this.categories)
         const firstExtension = extensions[0]
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
@@ -163,6 +183,7 @@ describe('Create application', () => {
     })
 
     it('checks thank you screen', function () {
+        // @ts-ignore
         cy.sendApp()
         cy.contains('To twoje pierwsze zgłoszenie')
         cy.contains('UD/4/')
@@ -187,16 +208,21 @@ describe('Create application', () => {
 
 describe('Edit application', () => {
     before(() => {
+        // @ts-ignore
         cy.login()
     })
 
     beforeEach(() => {
+        // @ts-ignore
         cy.loadConfig()
     })
 
     it('creates application', function () {
+        // @ts-ignore
         cy.goToNewAppScreenWithoutTermsScreen()
+        // @ts-ignore
         cy.uploadOKImages()
+        // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#form-submit', { timeout: 10000 }).click()
@@ -239,6 +265,7 @@ describe('Edit application', () => {
     })
 
     it('checks thank you screen', function () {
+        // @ts-ignore
         cy.sendApp()
         cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
         cy.contains('UD/4/')
