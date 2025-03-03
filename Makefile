@@ -117,13 +117,12 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	@make clean
 
 .PHONY: export_minimal
-export_minimal: $(DIRS) $(EXPORT)/config.env.php $(PUBLIC)/api/config/police-stations.pjson minify ## Exports files for deployment.
+export_minimal: $(DIRS) $(EXPORT)/config.env.php $(PUBLIC)/api/config/police-stations.pjson minify $(EXPORT)/config.php ## Exports files for deployment.
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r src/tools $(EXPORT)/
 	@cp -r src/sql $(EXPORT)/
-	@cp config.php $(EXPORT)/
 
 $(EXPORT): export_minimal process-sitemap $(PUBLIC)/api/rest/index.php test-phpunit ## Exports files for deployment.
 	@echo "==> Exporting"
@@ -198,7 +197,7 @@ $(EXPORT)/inc/include.php: src/inc/include.php $(TWIG_FILES)
 	@cp $< $@
 	$(lint)
 
-$(PUBLIC)/fail2ban/index.html: src/templates/fail2ban.html.twig
+$(PUBLIC)/fail2ban/index.html: export_minimal src/templates/fail2ban.html.twig
 	@mkdir -p $(@D)
 	@php tools/fail2ban-twig.php > $@
 
@@ -364,9 +363,8 @@ lint-php:
 .PHONY: test-phpunit
 .ONESHELL: test-phpunit
 test-phpunit: MEMCACHED := $(shell curl localhost:11211 2>&1 | grep -c Fail || true)
-test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.json $(PUBLIC)/api/config/police-stations.pjson $(PUBLIC)/api/config/police-stations.pjson process-php minify-config
+test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.json $(PUBLIC)/api/config/police-stations.pjson $(PUBLIC)/api/config/police-stations.pjson process-php minify-config $(EXPORT)/config.php
 	@echo "==> Testing phpunit"
-	@cp config.php $(EXPORT)/
 	@test $(MEMCACHED) -eq 1 && (echo "    starting memcached"; memcached &); sleep 1 || true
 	@#trap 'echo "    reverting DB and killing memcache"; test $(MEMCACHED) -eq 1 && killall memcached; exit' INT TERM EXIT
 	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
