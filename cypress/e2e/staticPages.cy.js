@@ -22,11 +22,68 @@ describe('Static pages no session', function() {
     it('/ » regulamin', () => {
         cy.contains('Regulamin').click()
         cy.contains('anonimowe dane statystyczne')
+        cy.contains('Aktualizacja 2024-03-26')
     })
 
     it('/ » historia', () => {
         cy.contains('Historia zmian').click()
         cy.contains('Poniedziałek, 13 lipca 2020')
+
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ]
+        
+        months.forEach(month => {
+            cy.contains(month).should('not.exist')
+        })
+
+        const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+        months.forEach(weekdays => {
+            cy.contains(weekdays).should('not.exist')
+        })
+    })
+
+    it('/ » dla programistów', () => {
+        cy.contains('Dla programistów').click()
+        cy.contains('Jesteś programistą')
+    })
+
+    it('/ » polityka prywatności', () => {
+        cy.contains('Polityka prywatności').click()
+        cy.contains('szymon@uprzejmiedonosze.net')
+    })
+
+    it('/ » bezpieczeństwo', () => {
+        cy.contains('Bezpieczeństwo').click()
+        cy.contains('zero-knowledge security')
+    })
+
+    it('/ » naklejki', () => {
+        cy.contains('Kup naklejki').click()
+        cy.contains('naklejki ROBISZ TO ŹLE')
+    })
+
+    it('/ » zażalenie', () => {
+        cy.contains('Zażalenie na brak mandatu').click()
+        cy.contains('Masz zaledwie 7 dni')
+    })
+
+    it('/ » e-doręczenie', () => {
+        cy.contains('e-Doręczenia').click()
+        cy.contains('Wskaż odpowiednią jednostkę.')
+    })
+
+    it('/ » jak sprawdzić SM', () => {
+        cy.contains('Jak sprawdzić efekty pracy SM?').click()
+        cy.contains('Ścieżka dostępu do informacji Sieci Obywatelskiej Watchdog')
+    })
+
+    it('/menu » kontakt', () => {
+        cy.get('label.menu > .button-toggle').click()
+        cy.contains('Kontakt').click()
+        cy.contains('Grupa wsparcia na Facebooku')
     })
 
     it('/menu » Jak zgłaszać', () => {
@@ -42,7 +99,6 @@ describe('Static pages no session', function() {
         cy.contains('sprawdzaj efekty pracy SM').click()
         cy.contains('Proszę o przekazanie ww.')
     })
-
 
     it('/menu » przepisy', () => {
         cy.get('label.menu > .button-toggle').click()
@@ -118,6 +174,12 @@ describe('Static pages logged in', function() {
         cy.contains('sprawdzaj efekty pracy SM').click()
         cy.contains('Proszę o przekazanie ww.')
         cy.contains('adres poczty elektronicznej: e@nieradka.net.')
+    })
+
+    it('/menu » patronite', () => {
+        cy.get('label.menu > .button-toggle').click()
+        cy.contains('Zostań Patronem').click()
+        cy.contains('ponad 8000 zgłoszeń')
     })
 
 })
