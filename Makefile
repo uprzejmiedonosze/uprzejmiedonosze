@@ -143,7 +143,7 @@ ASSETS := $(wildcard src/img/* src/img/*/*)
 $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
 	@(cat src/images-index.html; grep 'src="/img[^"{]\+"' --only-matching --no-filename --recursive --color=never src/templates \
 		| sed 's|src="/|<img src="./|' | sed 's|$$| />|' ) | sort | uniq | sponge src/images-index.html
-	@./node_modules/.bin/parcel build --no-cache --dist-dir $(PUBLIC)/img $< ;
+	@$(PARCEL_BUILD_CMD) $(PUBLIC)/img $< ;
 	@cp src/images-index.html $@
 
 $(EXPORT)/config.env.php: src/config.env.php
@@ -163,15 +163,24 @@ src/config.env.php: $(JS_FILES_DEPS) $(TWIG_FILES) $(CONFIG_FILES) $(CSS_FILES)
 src/scss/lib/variables.env.scss:
 	@HOST=$(HOST) node ./src/scss/env.js > $@
 
+# Define the PARCEL_BUILD_CMD variable based on the HOST variable
+ifeq ($(HOST),$(PROD_HOST))
+	PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --no-cache --no-source-maps --dist-dir
+else ifeq ($(HOST),$(SHADOW_HOST))
+    PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --no-cache --dist-dir
+else
+    PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --dist-dir
+endif
+
 .PHONY: css
 css: $(CSS_MINIFIED)
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES) src/scss/lib/variables.env.scss; $(call echo-processing,$@ with parcel)
-	@./node_modules/.bin/parcel build --no-cache --dist-dir $(dir $@) $< ;
+	@$(PARCEL_BUILD_CMD) $(dir $@) $< ;
 
 .PHONY: js
 js: $(JS_MINIFIED)
 export/public/js/%.js: src/js/%.js $(JS_FILES_DEPS); $(call echo-processing,$@ with parcel)
-	@./node_modules/.bin/parcel build --no-cache --dist-dir $(dir $@) $< ;
+	@$(PARCEL_BUILD_CMD) $(dir $@) $< ;
 
 $(EXPORT)/public/api/config/sm.json: src/api/config/sm.json $(EXPORT)/public/api/config; $(call echo-processing,$< with node)
 	@node ./tools/sm-parser.js $< $@
