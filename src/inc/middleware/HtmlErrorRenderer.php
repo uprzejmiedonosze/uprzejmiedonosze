@@ -25,7 +25,8 @@ function exceptionToErrorHtml($exception): string {
     $parameters['CSS_HASH'] = CSS_HASH;
     $parameters['JS_HASH'] = JS_HASH;
     $parameters['email'] = $_SESSION['user_email'] ?? null;
-    
+    $parameters['config']['sex'] = SEXSTRINGS['?'];
+
     return $twig->render("$template.html.twig", $parameters);
 }
 
