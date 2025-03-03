@@ -35,7 +35,8 @@
             "type": "shell",
             "command": "./node_modules/cypress/bin/cypress",
             "args": [
-                "open"
+                "open",
+                "--e2e"
             ],
             "group": {
                 "kind": "test",
