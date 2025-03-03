@@ -15,7 +15,7 @@
 /inc
 /src/public
 /src/scss/lib/variables.env.scss
-/src/inc/config.env.php
+/src/config.env.php
 export/**
 node_modules/*
 src/config.php

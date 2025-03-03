@@ -146,10 +146,13 @@ $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
 	@./node_modules/.bin/parcel build --no-cache --dist-dir $(PUBLIC)/img $< ;
 	@cp src/images-index.html $@
 
-$(EXPORT)/config.env.php: src/inc/config.env.php
+$(EXPORT)/config.env.php: src/config.env.php
 	@cp $< $@
 
-src/inc/config.env.php: $(JS_FILES_DEPS) $(TWIG_FILES) $(CONFIG_FILES) $(CSS_FILES)
+$(EXPORT)/config.php: config.php
+	@cp config.php $(EXPORT)/
+
+src/config.env.php: $(JS_FILES_DEPS) $(TWIG_FILES) $(CONFIG_FILES) $(CSS_FILES)
 	@echo "<?php" > $@
 	@echo "define('HOST', '$(HOST)');" >> $@
 	@echo "define('TWIG_HASH', '$(TWIG_HASH)');" >> $@
@@ -240,7 +243,7 @@ clean: ## Removes minified CSS and JS files.
 	@echo "==> Cleaning"
 	@rm -rf $(EXPORT)
 	@rm -f $(BRANCH_ENV)
-	@rm -f src/inc/config.env.php src/scss/lib/variables.env.scss
+	@rm -f src/config.env.php src/scss/lib/variables.env.scss
 	@rm -rf .parcel-cache/
 
 .PHONY: help
