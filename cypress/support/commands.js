@@ -1,11 +1,8 @@
 // @ts-nocheck
 Cypress.Commands.add("login", () => {
   cy.session('user' + Date.now(), () => {
-    if (Cypress.env('DOCKER')) {
-      cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0')
-    } else {
-      cy.setCookie('UDSESSIONID', 'f0d9qelotli6h5tp5pnmkp9dn01uvj40ehds4deb')
-    }
+    cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0') // dev -> docker
+    cy.setCookie('UDSESSIONID', 'idp1umm3p5n0aiknogfql8vmdv27cmuq1896qagv') // staging
   }, {
     cacheAcrossSpecs: true
   })
