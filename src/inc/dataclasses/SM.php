@@ -96,14 +96,19 @@ class SM extends JSONObject {
             return $smCity;
         }
 
-        // county level
+        // county level | gmina
         if(isset($address->county)) {
             $county = trimstr2lower($address->county);
             if(array_key_exists($county, $SM_ADDRESSES))
                 return $county;
+
+            // guessed county level (remove 'gmina ' from county name)
+            $county = str_replace('gmina ', '', $county);
+            if(array_key_exists($county, $SM_ADDRESSES))
+                return $county;
         }
 
-        // municipality level
+        // municipality level | powiat
         if(isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
             if(array_key_exists($municipality, $SM_ADDRESSES))

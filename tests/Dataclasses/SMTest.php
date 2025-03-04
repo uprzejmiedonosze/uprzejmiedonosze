@@ -2,6 +2,7 @@
 
 namespace UprzejmieDonosze\Tests\Dataclasses;
 
+use JSONObject;
 use PHPUnit\Framework\TestCase;
 
 class SMTest extends TestCase
@@ -40,6 +41,21 @@ class SMTest extends TestCase
         self::assertEquals('KPP w Otwocku', $sm->getShortName());
         self::assertFalse($sm->hasAPI());
         self::assertTrue($sm->isPolice());
+    }
+
+    public function testGuessSM() : void {
+        $sm1 = new \SM($this->getData('dziwnów'));
+        $sm2Key = \SM::guess(new JSONObject(['county' => 'gmina Dziwnów', 'city' => 'Międzywodzie']));
+        $sm2 = new \SM($this->getData($sm2Key));
+        self::assertEquals($sm1, $sm2);
+
+        $byCity = new \SM($this->getData(\SM::guess(new JSONObject(['county' => '__', 'city' => 'Oświęcim']))));
+        $byCounty = new \SM($this->getData(\SM::guess(new JSONObject(['county' => 'gmina Chełmek', 'city' => '__']))));
+        $byReference = new \SM($this->getData(\SM::guess(new JSONObject(['county' => 'gmina Oświęcim', 'city' => '__']))));
+
+        self::assertEquals($byCity->getEmail(), $byCounty->getEmail());
+        self::assertEquals($byCity->getEmail(), $byReference->getEmail());
+        
     }
 
     private function getData(string $city): array
