@@ -28,6 +28,7 @@ describe('Static pages no session', function() {
     it('/ » historia', () => {
         cy.contains('Historia zmian').click()
         cy.contains('Poniedziałek, 13 lipca 2020')
+        cy.contains(', 0').should('not.exist')
 
         const months = [
             'January', 'February', 'March', 'April', 'May', 'June',
@@ -43,6 +44,11 @@ describe('Static pages no session', function() {
         months.forEach(weekdays => {
             cy.contains(weekdays).should('not.exist')
         })
+    })
+
+    it('/404', () => {
+        cy.visit('/non-existing-page', { failOnStatusCode: false })
+        cy.contains('404')
     })
 
     it('/ » dla programistów', () => {
