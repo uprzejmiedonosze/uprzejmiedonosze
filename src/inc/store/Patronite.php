@@ -12,8 +12,8 @@ function isFormer(string $email):bool {
     return array_key_exists($email, $patrons) && !($patrons[$email]['active'] ?? false);
 }
 
-function active(): array {
-    return array_filter(get(), fn($patron) => $patron['active'] && !($patron['duplicate'] ?? false));
+function active(bool $useCache=true): array {
+    return array_filter(get(useCache:$useCache), fn($patron) => $patron['active'] && !($patron['duplicate'] ?? false));
 }
 
 function get(bool $useCache=true) {

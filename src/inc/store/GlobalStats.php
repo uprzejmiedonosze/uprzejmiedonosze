@@ -161,7 +161,7 @@ function mainPage(bool $useCache=true): array{
     SQL;
     $users = intval(\store\query($sql)->fetchColumn());
 
-    $patrons = count(\patronite\active());
+    $patrons = count(\patronite\active(useCache:false));
 
     $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm, 'patrons' => $patrons);
     \cache\set(Type::GlobalStats, 'mainPage', $stats);

@@ -16,7 +16,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     function root(Request $request, Response $response): Response {
         $params = $request->getQueryParams();
-        $useCache = !$this->getParam($params, '_refresh', false);
+        $useCache = !(array_key_exists('_refresh', $params));
 
         $mainPageStats = \global_stats\mainPage(useCache: $useCache);
         return AbstractHandler::renderHtml($request, $response, 'index', [
