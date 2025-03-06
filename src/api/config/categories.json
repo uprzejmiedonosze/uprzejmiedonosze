@@ -266,7 +266,7 @@
         "mandate": 500,
         "contextImageHint": "Idealne zdjęcie powinno dość pojazd z kilku metrów, z widocznym terenem pod pojazdem.",
         "carImageHint": "Idealne zdjęcia przedstawia cały pojazd z przodu lub z tyłu.",
-        "stopAgresjiOnly": false,
+        "stopAgresjiOnly": true,
         "order": 18
     },
     "0": {
