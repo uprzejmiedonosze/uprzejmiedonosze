@@ -73,7 +73,7 @@ class WebhooksHandler extends AbstractHandler {
                 ));
             }
 
-            $comment = $mailEvent->formatComment();
+            $comment = $mailEvent->formatComment($application->email);
             if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
             $ccToUser = $application->email == $recipient;
 
@@ -181,12 +181,15 @@ class MailEvent { // MailgunPayloadConverter
         logger("MailEvent {$this->name} <{$this->recipient}>");
     }
 
-    public function formatComment(): ?string {
+    public function formatComment(string $author): ?string {
         $status = EMAIL_STATUS[$this->status] ?? null;
         if(!$status) return null;
 
         $reason = '';
         if ($this->reason) $reason = " ($this->reason)";
+
+        $recipient = $this->recipient;
+        if ($recipient == $author) $recipient = 'autora (CC)';
 
         return "$status do {$this->recipient}$reason";
     }

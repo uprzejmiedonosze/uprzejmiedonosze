@@ -357,7 +357,7 @@ function processWebhook(string $id): void {
         $application->sent->method = "MailGun";
     }
 
-    $comment = $mailEvent->formatComment();
+    $comment = $mailEvent->formatComment($application->email);
     if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
     $ccToUser = $application->email == $recipient;
 
