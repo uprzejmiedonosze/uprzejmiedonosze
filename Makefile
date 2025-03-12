@@ -175,6 +175,7 @@ endif
 .PHONY: css
 css: $(CSS_MINIFIED)
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES) src/scss/lib/variables.env.scss; $(call echo-processing,$@ with parcel)
+	@rm -rf .parcel-cache
 	@$(PARCEL_BUILD_CMD) $(dir $@) $< ;
 
 .PHONY: js
