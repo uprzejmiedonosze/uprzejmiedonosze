@@ -3218,5 +3218,13 @@
       "63-800 Gostyń"
     ],
     "email": "strazmiejska@gostyn.pl"
+  },
+  "Ziębice": {
+    "address": [
+      "Straż Miejska w Ziębicach",
+      "pl. Strażacki 4",
+      "57-220 Ziębice"
+    ],
+    "email": "straz_miejska@ziebice.pl"
   }
 }
