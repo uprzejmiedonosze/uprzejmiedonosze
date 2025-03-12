@@ -266,6 +266,9 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->statusHistory[$now]->new = $status;
 
         $this->status = $status;
+
+        if (isset($this->carInfo->plateId))
+            \recydywa\delete($this->carInfo->plateId);
     }
 
     public function getAppFilename(string $suffix, string $prefix='Zgloszenie_'): string {

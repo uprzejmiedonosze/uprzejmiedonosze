@@ -90,8 +90,6 @@ function setStatus(string $status, string $appId, User $user): Application {
     $application = \app\get($appId);
     $application->setStatus($status);
     \app\save($application);
-    if (isset($application->carInfo->plateId))
-        \recydywa\delete($application->carInfo->plateId);
     $stats = \user\stats(false, $user); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
