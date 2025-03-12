@@ -9,9 +9,6 @@
     border-style: solid;
 }
 
-li-count
-current-status
-
 .draft .li-count,
 .draft.status-dot::before {
     background-color: variables.$draft;
@@ -86,15 +83,18 @@ current-status
 }
 
 .sending .li-count,
-.sending.status-dot::before,
+.sending.status-dot::before {
+    background-color: variables.$sending;
+    border-color: variables.$sending-stroke;
+}
 .delivery-status-delivered .status-dot::before {
-    background-color: variables.$confirmed-fined;
-    border-color: variables.$confirmed-fined-stroke;
+    background-color: variables.$confirmed-sm;
+    border-color: variables.$confirmed-sm-stroke;
 }
 
 .delivery-status-accepted .status-dot::before {
-    background-color: variables.$draft;
-    border-color: variables.$draft-stroke;
+    background-color: variables.$confirmed;
+    border-color: variables.$confirmed-stroke;
 }
 
 .delivery-status-ok .status-dot::before {

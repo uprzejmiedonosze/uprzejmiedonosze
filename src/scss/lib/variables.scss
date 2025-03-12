@@ -4,12 +4,16 @@
 $primaryColor: var(--color);
 $secondaryColor: #e9c200;
 
-$draft: #C5C5C5;
-$draft-stroke: #C5C5C5;
-$ready: #C5C5C5;
+$draft: #FFFFFF;
+$draft-stroke: #FFFFFF;
+$ready: #FFFFFF;
 $ready-stroke: #C5C5C5;
-$confirmed: #C5C5C5;
+$confirmed: #FFFFFF;
 $confirmed-stroke: #333333;
+$sending: #C5C5C5;
+$sending-stroke: #333333;
+$sending-problem: #FF640A;
+$sending-problem-stroke: #FF640A;
 $confirmed-waiting: #FFFFFF;
 $confirmed-waiting-stroke: #08BB0F;
 $confirmed-sm: #08BB0F;
@@ -22,8 +26,7 @@ $confirmed-ignored: #FF640A;
 $confirmed-ignored-stroke: #FF640A;
 $archived: #FFFFFF;
 $archived-stroke: #A2A2A2;
-$sending-problem: #FF640A;
-$sending-problem-stroke: #FF640A;
+
 
 $width-break: 35em;
 
