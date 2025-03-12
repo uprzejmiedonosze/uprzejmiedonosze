@@ -274,7 +274,7 @@ function refreshRecydywa() {
             count(key) as appsCnt,
             count(distinct email) as usersCnt
         from applications 
-        where json_extract(value, '$.status') not in ('archived', 'ready', 'draft')
+        where json_extract(value, '$.status') not in ('archived', 'ready', 'draft', 'confirmed')
         group by 1;
     SQL;
 
