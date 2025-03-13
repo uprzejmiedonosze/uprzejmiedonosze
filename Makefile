@@ -71,13 +71,13 @@ dev-sequential: export_minimal
 
 dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
-dev-run: $(DIRS) dev ## Building and running docker image
+dev-run: $(DIRS) dev ## Building and running Docker image
 	@echo "==> Building docker"
 	@make --warn-undefined-variables --directory docker build
 	@echo "==> Running docker image"
 	@make --warn-undefined-variables --directory docker runi
 
-staging: ## Copy files to staging server.
+staging: ## Copy files to staging server
 	@$(MAKE) --warn-undefined-variables staging-sequential -j
 
 staging-sequential: HOST := $(STAGING_HOST)
@@ -87,7 +87,7 @@ staging-sequential: $(DIRS) exportserver
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 	@#ssh $(HOSTING) "xtail /var/log/uprzejmiedonosze.net/staging.log"
 
-shadow: ## Copy files to shadow server.
+shadow: ## Copy files to shadow server
 	@$(MAKE) --warn-undefined-variables shadow-sequential -j
 
 shadow-sequential: HOST := $(SHADOW_HOST)
@@ -97,7 +97,7 @@ shadow-sequential: $(DIRS) exportserver
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 
 prod: HOST := $(PROD_HOST)
-prod: check-branch-main check-git-clean cypress clean $(DIRS) exportserver ## Copy files to prod server.
+prod: check-branch-main check-git-clean cypress clean $(DIRS) exportserver ## Copy files to prod server
 	@echo "==> Copying files and dirs for $@"
 	@git tag --force -a "prod_$(TAG_NAME)" -m "release na produkcji"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
@@ -117,14 +117,14 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	@make clean
 
 .PHONY: export_minimal
-export_minimal: $(DIRS) $(EXPORT)/config.env.php $(PUBLIC)/api/config/police-stations.pjson minify $(EXPORT)/config.php ## Exports files for deployment.
+export_minimal: $(DIRS) $(EXPORT)/config.env.php $(PUBLIC)/api/config/police-stations.pjson minify $(EXPORT)/config.php ## Exports files for deployment
 	@echo "==> Exporting"
 	@echo "$(GIT_BRANCH)|$(HOST)" > $(BRANCH_ENV)
 	@cp -r $(OTHER_FILES) $(PUBLIC)/
 	@cp -r src/tools $(EXPORT)/
 	@cp -r src/sql $(EXPORT)/
 
-$(EXPORT): export_minimal process-sitemap $(PUBLIC)/api/rest/index.php test-phpunit ## Exports files for deployment.
+$(EXPORT): export_minimal process-sitemap $(PUBLIC)/api/rest/index.php test-phpunit ## Exports files for deployment
 	@echo "==> Exporting"
 
 .PHONY: exportserver
@@ -132,7 +132,7 @@ exportserver: $(EXPORT) config.prod.php $(PUBLIC)/fail2ban/index.html
 	@cp config.prod.php $(EXPORT)
 
 .PHONY: minify
-minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files.
+minify: check-branch js css $(EXPORT)/images-index.html minify-config process-php process-twig lint-twig process-manifest ## Processing PHP, HTML, TWIG and manifest.json files
 minify-config: $(DIRS) $(CONFIG_FILES) $(CONFIG_PROCESSED)
 process-php: $(DIRS) $(PHP_FILES) $(PHP_PROCESSED)
 process-twig: $(DIRS) $(TWIG_FILES) $(TWIG_PROCESSED)
@@ -250,7 +250,7 @@ $(DIRS): ; @echo "==> Creating $@"
 # PHONY
 
 .PHONY: clean
-clean: ## Removes minified CSS and JS files.
+clean: ## Removes minified CSS and JS files
 	@echo "==> Cleaning"
 	@rm -rf $(EXPORT)
 	@rm -f $(BRANCH_ENV)
@@ -258,9 +258,9 @@ clean: ## Removes minified CSS and JS files.
 	@rm -rf .parcel-cache/
 
 .PHONY: help
-help: ## Displays this help.
+help:
 	@printf "\033[36m%-22s  \033[0m %s\n\n" "TARGET" "DESCRIPTION"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s- \033[0m %s\n", $$1, $$2}'
 
 
@@ -324,7 +324,7 @@ log-from-last-prod: ## Show list of commit messages from last prod release till 
 	@git log --color --pretty=format:"%cn %ci %s" HEAD...$(call last-tag)
 
 .PHONY: diff-from-last-prod
-diff-from-last-prod: ## Show list of commit messages from last prod release till now
+diff-from-last-prod: ## Show diff from last prod release till now
 	@git diff --histogram --color-words $(call last-tag) -- . ':(exclude)package-lock.json'
 
 .PHONY: lint-twig
