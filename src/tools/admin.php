@@ -286,7 +286,7 @@ function refreshRecydywa() {
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
         if ($interrupt) exit;
         echo "{$row[0]} set\n";
-        usleep(300*1000);
+        sleep(1);
         \recydywa\set($row[0], Recydywa::withValues($row[1], $row[2]));
     }
 }
@@ -406,4 +406,4 @@ function processWebhooks(): void {
 //refreshRecydywa();
 //upgradeAllApps('2.5.2', false);
 
-processWebhooks();
+//processWebhooks();
