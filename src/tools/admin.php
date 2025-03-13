@@ -283,12 +283,9 @@ function refreshRecydywa() {
 
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
         if ($interrupt) exit;
-        $cleanPlateId = \recydywa\cleanPlateId($row[0]);
-        echo "$cleanPlateId set\n";
-        $recydywa = Recydywa::withValues($row[1], $row[2]);
-
-        \cache\set(type:\cache\Type::Recydywa, key:$cleanPlateId, value:$recydywa, flag:0, expire:0);
-        \store\set('recydywa', "$cleanPlateId v2", json_encode($recydywa));
+        echo "{$row[0]} set\n";
+        sleep(1);
+        \recydywa\set($row[0], Recydywa::withValues($row[1], $row[2]));
     }
 }
 

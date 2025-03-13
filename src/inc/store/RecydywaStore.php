@@ -33,9 +33,14 @@ function update(string $plateId): Recydywa {
         foreach($apps as $app)
             \queue\produce($app->id);
 
+    set($cleanPlateId, $recydywa);
+    return $recydywa;
+}
+
+function set(string $plateId, Recydywa $recydywa) {
+    $cleanPlateId = cleanPlateId($plateId);
     \cache\set(type:Type::Recydywa, key:$cleanPlateId, value:$recydywa, flag:0, expire:0);
     \store\set(TABLE, "$cleanPlateId v2", json_encode($recydywa));
-    return $recydywa;
 }
 
 function delete(string $plateId) {
