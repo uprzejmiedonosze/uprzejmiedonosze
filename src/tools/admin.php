@@ -275,7 +275,9 @@ function refreshRecydywa() {
             count(distinct email) as usersCnt
         from applications 
         where json_extract(value, '$.status') not in ('archived', 'ready', 'draft', 'confirmed')
-        group by 1;
+            and plateId || ' v2' in (select key from recydywa where json_extract(value, '$.appsCnt') > 1)
+        group by 1
+        order by 3 desc, 2 desc
     SQL;
 
     $stmt = \store\prepare($sql);
@@ -284,7 +286,7 @@ function refreshRecydywa() {
     while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
         if ($interrupt) exit;
         echo "{$row[0]} set\n";
-        sleep(1);
+        usleep(300*1000);
         \recydywa\set($row[0], Recydywa::withValues($row[1], $row[2]));
     }
 }
