@@ -11,7 +11,7 @@
 
 <h2>Bezpieczeństwo danych w serwisie Uprzejmie Donoszę</h2>
 
-<p>Od stycznia 2025 wprowadziłem w serwisie pełne szyfrowanie danych użytkowników oraz zgłoszeń.
+<p>W styczniu 2025 wprowadziłem w serwisie pełne szyfrowanie danych użytkowników oraz zgłoszeń.
 Oto 3 rzeczy jakie musisz wiedzieć o bezpieczeństwie swoich danych.</p>
 
 <h3>1. Nie mam wglądu w twoje dane osobowe</h3>
@@ -51,5 +51,17 @@ w nieodpowiedni sposób.</p>
 
 <p>Jeśli poszukujesz informacji na temat tego, jak twoje dane są przetwarzane przez serwis,
 zapoznaj się <a href="/polityka-prywatnosci.html#encryption">polityką prywatności</a>.</p>
+
+<hr>
+
+{% set last_day_previous_month = "now" | date_modify("last day of previous month") %}
+<p>Na dzień {{ last_day_previous_month | date("j.m.Y") }}:
+<ul>
+    <li>Nie było żadnego przypadku, w którym organy ścigania zwróciłyby się do mnie o udostępnienie danych użytkowników serwisu Uprzejmie Donoszę.</li>
+    <li>Wystąpiła jedna sytuacja, w której dwóch użytkowników zobaczyło nie swoje dane osobowe w zgłoszeniu. Błąd został
+        <a href="https://patronite.pl/post/59535/donioslem-na-samego-siebie" target="_blank" rel="external">natychmiast naprawiony i doniosłem na samego siebie do GIODO</a>.</li>
+</ul>
+</p>
+
 
 {% endblock %}
