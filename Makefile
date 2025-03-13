@@ -143,6 +143,7 @@ ASSETS := $(wildcard src/img/* src/img/*/*)
 $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
 	@(cat src/images-index.html; grep 'src="/img[^"{]\+"' --only-matching --no-filename --recursive --color=never src/templates \
 		| sed 's|src="/|<img src="./|' | sed 's|$$| />|' ) | sort | uniq | sponge src/images-index.html
+	@rm -rf .parcel-cache
 	@$(PARCEL_BUILD_CMD) $(PUBLIC)/img $< ;
 	@cp src/images-index.html $@
 
