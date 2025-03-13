@@ -21,34 +21,39 @@ document.addEventListener("DOMContentLoaded", (event) => {
     h3.addEventListener("click", appClickHandler)
 
   // filters
+  const hash = window.location.hash.substring(1)
   const filters = document.querySelectorAll(".status-filter a") || []
   for (let filter of filters) {
       filter.addEventListener("click", filterAppsHandler)
+      if (filter.id == hash) filterApps(filter)
   }
 
-  // show all apps
+  // show all apps button
   const displayAllAppsBtn = document.querySelector("div.displayAllApps a")
   displayAllAppsBtn?.addEventListener("click", displayAllAppsHandler)
 
-  updateCounters()
-
-  const $recydywa = $('#recydywa')
-
   // close „recydywa” dialong on Esc
+  const $recydywa = $('#recydywa')
   $(document).on('keyup', e => e.key === "Escape" && $recydywa.hide())
   $recydywa.on('click', _e => $recydywa.hide())
+  
+  updateCounters()
 })
 
 function filterAppsHandler() {
-    if (this.classList.contains('active')) {
-      this.classList.remove("active")
+  filterApps(this)
+}
+
+function filterApps(target) {
+    if (target.classList.contains('active')) {
+      target.classList.remove("active")
       $("div.application:not(.archived)").show()
       return
     }
     $("div.application").hide();
-    $("div.application." + this.id).show();
+    $("div.application." + target.id).show();
     $(".status-filter a").removeClass("active");
-    this.classList.add("active")
+    target.classList.add("active")
 }
 
 

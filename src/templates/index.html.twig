@@ -27,50 +27,50 @@
 
 <p>Twoje statystyki:</p>
 <fieldset class="gauges">
+
+    {% set active = general.stats.active ?? 0 %}
+    {% set fined = general.stats['confirmed-fined'] ?? 0 %}
+    {% set instructed = general.stats['confirmed-instructed'] ?? 0 %}
     <div class="gauge">
-        {% if general.stats.active ?? 0 > 0 %}
-        <h3>
-            <a href="/moje-zgloszenia.html">{{ general.stats.active|number_format(0, ',', ' ') }}</a>
-        </h3>
-        <p><a href="/moje-zgloszenia.html">Aktywne zgłoszenia</a></p>
+        {% if active > 0 %}
+        <a href="/moje-zgloszenia.html">
+            <h3>{{ active|number_format(0, ',', ' ') }}</h3>
+            <p>Aktywne zgłoszenia</p>
+        </a>
         {% else %}
-        <h3>
-            <a href="/nowe-zgloszenie.html">Stwórz pierwsze</a>
-        </h3>
+        <h3><a href="/nowe-zgloszenie.html">Stwórz pierwsze</a></h3>
         <p>Aktywne zgłoszenia</p>
         {% endif %}
         
     </div>
     <div class="gauge">
-        <h3>
-            {% if general.stats['confirmed-fined'] ?? 0 > 0 %}
-            {{ general.stats['confirmed-fined']|number_format(0, ',', ' ') }}
-            {% else %}0{% endif %}
-        </h3>
+        {% if fined > 0 %}
+        <a href="/moje-zgloszenia.html#confirmed-fined">
+            <h3>{{ fined|number_format(0, ',', ' ') }}</h3>
+            <p>Mandaty</p>
+        </a>
+        {% else %}
+        <h3>0</h3>
         <p>Mandaty</p>
+        {% endif %}
     </div>
     <div class="gauge">
-        <h3>
-            {% if general.stats['confirmed-instructed'] ?? 0 > 0 %}
-            {{ general.stats['confirmed-instructed']|number_format(0, ',', ' ') }}
-            {% else %}0{% endif %}
-        </h3>
+        {% if instructed > 0 %}
+        <a href="/moje-zgloszenia.html#confirmed-instructed">
+            <h3>{{ instructed|number_format(0, ',', ' ') }}</h3>
+            <p>Pouczenia</p>
+        </a>
+        {% else %}
+        <h3>0</h3>
         <p>Pouczenia</p>
+        {% endif %}
     </div>
     <div class="gauge">
-        <h3>
-            {% if general.stats.points ?? 0 > 0 %}
-            {{ general.stats.points|number_format(0, ',', ' ') }}
-            {% else %}0{% endif %}
-        </h3>
+        <h3>{{ (general.stats.points ?? 0)|number_format(0, ',', ' ') }}</h3>
         <p>Punkty karne</p>
     </div>
     <div class="gauge">
-        <h3>
-            {% if general.stats.mandates ?? 0 > 0 %}
-            {{ general.stats.mandates|number_format(0, ',', ' ') }} zł
-            {% else %}0{% endif %}
-        </h3>
+        <h3>{{ (general.stats.mandates ?? 0)|number_format(0, ',', ' ') }} zł</h3>
         <p>Kwota mandatów</p>
     </div>
 </fieldset>

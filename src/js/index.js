@@ -15,7 +15,7 @@ import "./sites/application";
 import "./sites/confirm-application";
 import "./sites/faq";
 import "./sites/gallery";
-import "./sites/my-application";
+import "./sites/my-apps";
 import "./sites/register";
 import "./sites/regulations";
 import "./sites/start";

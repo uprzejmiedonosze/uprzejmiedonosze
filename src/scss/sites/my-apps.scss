@@ -14,6 +14,7 @@
       text-wrap: nowrap;
       a.active {
         color: variables.$primaryColor!important;
+        text-decoration: underline;
       }
 
       a {
