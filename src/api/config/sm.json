@@ -3227,5 +3227,13 @@
       "57-220 Ziębice"
     ],
     "email": "straz_miejska@ziebice.pl"
+  },
+  "Opatówek": {
+    "address": [
+      "Komisariat Policji w Opatówku",
+      "ul. Poniatowskiego 1",
+      "62-860 Opatówek"
+    ],
+    "email": "komendant.opatowek@po.policja.gov.pl"
   }
 }
