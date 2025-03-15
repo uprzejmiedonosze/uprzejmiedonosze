@@ -504,7 +504,7 @@
   "Lidzbark Warmiński": {
     "address": [
       "Straż Miejska w Lidzbarku Warmińskim",
-      "Aleksandra Świętochowskiego 14",
+      "ul. Aleksandra Świętochowskiego 14",
       "11-100 Lidzbark Warmiński"
     ],
     "email": "um@lidzbarkwarminski.pl"
@@ -3235,5 +3235,13 @@
       "62-860 Opatówek"
     ],
     "email": "komendant.opatowek@po.policja.gov.pl"
+  },
+  "Aleksandrów Kujawski": {
+    "address": [
+      "Straż Miejska Aleksandrów Kujawski",
+      "ul. Wojska Polskiego 2",
+      "87-700 Aleksandrów Kujawski"
+    ],
+    "email": "strazmiejska@aleksandrowkujawski.pl"
   }
 }
