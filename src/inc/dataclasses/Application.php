@@ -530,7 +530,7 @@ class Application extends JSONObject implements \JsonSerializable {
 
     public function getEmailSubject(){
         $title = preg_replace('/\s\(.*\)/', '', $this->getCategory()->getInformal());
-        return "[{$this->number}] " . (($this->category == 0)? "": $title)
+        return "[{$this->number}] " . (($this->category == 0)? "Wykroczenie": $title)
             . " ({$this->address->address})";
     }
 
