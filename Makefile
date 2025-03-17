@@ -167,8 +167,6 @@ src/scss/lib/variables.env.scss:
 # Define the PARCEL_BUILD_CMD variable based on the HOST variable
 ifeq ($(HOST),$(PROD_HOST))
 	PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --no-cache --no-source-maps --dist-dir
-else ifeq ($(HOST),$(SHADOW_HOST))
-    PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --no-cache --dist-dir
 else
     PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --dist-dir
 endif
