@@ -174,7 +174,10 @@ function stats(bool $useCache, User $user): Array{
     }
 
     $stats = _countAppsByStatus($userEmail);
-    $stats['active'] = array_sum($stats) - @$stats['archived'] - @$stats['draft'];
+    $stats['active'] = array_sum($stats)
+        - ($stats['archived'] ?? 0)
+        - ($stats['draft'] ?? 0)
+        - ($stats['ready'] ?? 0);
 
     $userPoints = \user\points($user);
     $stats = $stats + $userPoints;
