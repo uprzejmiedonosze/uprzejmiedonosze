@@ -102,8 +102,16 @@
     "name": "Zignorowane",
     "action": "Nie ukarano ani nie pouczono kierowcy",
     "icon": "delete",
-    "allowed": ["confirmed-fined", "confirmed-instructed", "archived"],
-    "comment": "Zgłoszenie zostało zignorowane, nie wskazany ",
+    "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-complaint", "archived"],
+    "comment": "Zgłoszenie zostało zignorowane, SM/Policja nie ustaliła sprawcy albo nie doszukała się znamion wykroczenia",
+    "editable": false,
+    "sendable": false
+  },
+  "confirmed-complaint": {
+    "name": "Zażalone",
+    "action": "Złożone oficjalne zażalenie",
+    "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
+    "comment": "Złożone oficjalne zażalenie zgodnie z art. 56a kpw",
     "editable": false,
     "sendable": false
   },

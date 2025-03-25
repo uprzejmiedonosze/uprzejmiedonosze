@@ -55,6 +55,12 @@
     color: white;
 }
 
+.confirmed-complaint .li-count,
+.confirmed-complaint.status-dot::before {
+    background-color: variables.$confirmed-complaint;
+    border-color: variables.$confirmed-complaint-stroke;
+}
+
 .confirmed-instructed .li-count,
 .confirmed-instructed.status-dot::before {
     background-color: variables.$confirmed-instructed;
