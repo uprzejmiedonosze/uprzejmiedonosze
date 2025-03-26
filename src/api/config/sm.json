@@ -3251,5 +3251,13 @@
       "95-070 Aleksandrów Łódzki"
     ],
     "email": "komendant.aleksandrow@zgierz.ld.policja.gov.pl"
+  },
+  "Nowy Wiśnicz": {
+    "address": [
+      "Komisariat Policji w Nowym Wiśniczu",
+      "ul. Rynek 12",
+      "32-720 Nowy Wiśnicz"
+    ],
+    "email": "kp-nowy-wisnicz@bochnia.policja.gov.pl"
   }
 }
