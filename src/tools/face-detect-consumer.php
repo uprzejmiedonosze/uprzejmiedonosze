@@ -3,6 +3,7 @@
 require_once(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 require_once(__DIR__ . '/../inc/integrations/curl.php');
+require_once(__DIR__ . '/../inc/integrations/Tumblr.php');
 
 logger("Starting face-blur-consumer...", true);
 
@@ -11,19 +12,29 @@ $consumer = function (string $appId): void {
     $app = \app\get($appId);
     if (isset($app->faces->count)) {
       logger("Faces already detected in $appId");
+      addToGallery($app);
       return;
     }
 
     $filename = ROOT . $app->contextImage->url;
     $url = "http://localhost:2000/detect/$filename";
-    $faces = \curl\request($url, [], "FaceRecogniton");
+    $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
 
     try {
       \semaphore\acquire($appId, "face-detect-consumer");
       $app = \app\get($appId);
       $app->faces = $faces;
-      \app\save($app);
+      $facesCount = $faces->count ?? 0;
+
+      if ($facesCount == 0) {
+        logger("no facces, adding to gallery $appId");
+        addToGallery($app);
+        return;
+      }
+
+      $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");      
     } finally {
+      \app\save($app);
       \semaphore\release($appId, "face-detect-consumer");
     }
 
@@ -35,5 +46,14 @@ $consumer = function (string $appId): void {
     sleep(30);
   }
 };
+
+function addToGallery(\app\Application &$app): void {
+  if (isset($app->addedToGallery)) return;
+  if ($app->faces->count ?? 0 > 0) return;
+  
+  $app->addedToGallery = \addToTumblr($app);
+  $app->addComment("admin", "Zdjęcie dodane do galerii.");
+
+}
 
 consume($consumer);
