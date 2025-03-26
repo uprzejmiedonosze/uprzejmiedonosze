@@ -51,12 +51,18 @@ function delete(string $plateId) {
 }
 
 function top100(\user\User $whoIsWathing): array {
-    $cache = \cache\get(Type::RecydywaStats, "top100");
-    if($cache){
-        //return $cache;
+    $canImageBeShown = function (array &$top100) use ($whoIsWathing) {
+        foreach($top100 as $recydywa)
+            $recydywa['app']->showImage = $recydywa['app']->canImageBeShown($whoIsWathing, $recydywa['canShareRecydywa']);
+    };
+
+    $top100 = \cache\get(Type::RecydywaStats, "top100");
+    if($top100) {
+        $canImageBeShown($top100);
+        return $top100;
     }
 
-    $olderThan = date('Y-m-d\TH:i:s', strtotime("-1 years"));
+    $olderThan = date('Y-m-d\TH:i:s', strtotime("-3 years"));
 
     $sql = <<<SQL
 
@@ -66,7 +72,13 @@ function top100(\user\User $whoIsWathing): array {
             a.email,
             plateId,
             json_extract(u.value, '$.data.shareRecydywa') as shareRecydywa,
-            json_extract(a.value, '$.faces.count') as faces
+            json_extract(a.value, '$.faces.count') as faces,
+            ROW_NUMBER() OVER (
+                PARTITION BY plateId
+                ORDER BY json_extract(u.value, '$.data.shareRecydywa') DESC,
+                    json_extract(a.value, '$.faces.count'),
+                    json_extract(a.value, '$.added') DESC
+            ) AS "rnk"
         from applications a
         inner join users u on email = u.key
         where json_extract(a.value, '$.status') not in ('archived', 'ready', 'draft', 'confirmed')
@@ -77,23 +89,14 @@ function top100(\user\User $whoIsWathing): array {
     select plateId,
         count(distinct email) as usersCnt,
         count(key) as appsCnt,
-        first_value(value) over (
-            partition by plateId
-            order by shareRecydywa desc, faces
-        ) as app,
-        first_value(email) over (
-            partition by plateId
-            order by shareRecydywa desc, faces
-        ) as email,
-        first_value(shareRecydywa) over (
-            partition by plateId
-            order by shareRecydywa desc, faces
-        ) as shareRecydywa
+        value as app,
+        email,
+        shareRecydywa
     from apps
     group by plateId
     having count(distinct email) > 1
     order by 2 desc, 3 desc
-    limit 10;
+    limit 100;
     SQL;
 
     $stmt = \store\prepare($sql);
@@ -109,9 +112,7 @@ function top100(\user\User $whoIsWathing): array {
                 'canShareRecydywa' => $canShareRecydywa,
                 'app' => Application::withJson($app, $email)));
 
-    foreach($top100 as $recydywa) 
-        $recydywa['app']->showImage = $recydywa['app']->canImageBeShown($whoIsWathing, $recydywa['canShareRecydywa']);
-
+    $canImageBeShown($top100);
     \cache\set(Type::RecydywaStats, "top100", $top100);
     return $top100;
 }
