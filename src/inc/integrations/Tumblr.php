@@ -5,12 +5,7 @@ use app\Application;
 use Tumblr\API\Client as Tumblr;
 
 function addToTumblr(Application $app): stdClass|array {
-    $client = new Tumblr(
-        'lc2iFjN4b63gjxGrBvfbUCbIjDYkr2ofvpOrOb83oMuBRfETsP',
-        'ViFzg3ewByVMvO0hyOIu3ZgBC8nVma1C0WwqoldhOCTDWVYcYL',
-        'S5qgkho10AT22hUJEAvKBxKop6wLJ4e0pcAymUQKVPmSSHrqkp',
-        '9plPRCyDlrtqbYbvuGBITiFCHqWs2QFcLWjpXGcGA0UxwCKVxo'
-      );
+    $client = new Tumblr(TUMBLR_CONSUMERKEY, TUMBLR_CONSUMERSECRET, TUMBLR_TOKEN, TUMBLR_SECRET);
     $blogName = 'uprzejmie-donosze';
     $recydywa = "";
     if ($app->getRecydywa()->appsCnt > 1)
