@@ -109,7 +109,7 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
 
     $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStatsFull');
     $group->get('/recydywa-{plateId}-partial.html', StaticPagesHandler::class . ':carStatsPartial');
-    $group->get('/top100.html', StaticPagesHandler::class . ':top100');
+    //$group->get('/top100.html', StaticPagesHandler::class . ':top100');
 
 })  ->add(new HtmlMiddleware())
     ->add(new RegisteredMiddleware());
