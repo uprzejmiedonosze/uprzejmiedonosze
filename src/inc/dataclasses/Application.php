@@ -644,7 +644,7 @@ class Application extends JSONObject implements \JsonSerializable {
         return "img-$image.php?sessionless";
     }
 
-    public function canImageBeShown(User $whoIsWathing, bool|null $canShareRecydywa=null): bool {
+    public function canImageBeShown(User|null $whoIsWathing, bool|null $canShareRecydywa=null): bool {
         // display image if app owner allowed sharing 
         $showImage = $canShareRecydywa ?? \user\canShareRecydywa($this->email);
         

@@ -50,10 +50,10 @@ $consumer = function (string $appId): void {
 function addToGallery(\app\Application &$app): void {
   if (isset($app->addedToGallery)) return;
   if ($app->faces->count ?? 0 > 0) return;
+  if (!$app->canImageBeShown(whoIsWathing:null)) return;
   
   $app->addedToGallery = \addToTumblr($app);
   $app->addComment("admin", "Zdjęcie dodane do galerii.");
-
 }
 
 consume($consumer);
