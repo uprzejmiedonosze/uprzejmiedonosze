@@ -7,8 +7,8 @@ services:
     ports:
       - 80-81:80-81
     restart: always
-    working_dir: /var/www/uprzejmiedonosze.localhost/webapp
+    working_dir: /var/www/localhost/webapp
     volumes:
-      - ../export:/var/www/uprzejmiedonosze.localhost/webapp
+      - ../export:/var/www/localhost/webapp
     environment:
         WATCHPACK_POLLING: "true"

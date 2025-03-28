@@ -81,9 +81,9 @@ Looking for logs? Run:
 $ make -C docker shell
 docker# tail /var/log/uprzejmiedonosze.net/error.log # nginx debug log (very verbose)
 docker# tail /var/log/uprzejmiedonosze.net/access.log # nginx access log (not very useful)
-docker# tail /var/log/uprzejmiedonosze.net/prod_*.log # application log (quite useful)
+docker# tail /var/log/uprzejmiedonosze.net/localhost.log # application log (quite useful)
 ```
 
-Use `logger()` function to write to `uprzejmiedonosze.localhost.log`.
+Use `logger()` function to write to `/var/log/localhost.log`.
 
 Want to copy files from Docker image to host or vice versa? Use hosts `export` director as a proxy. Whatever you put there, it will be available inside the Docker image under `/var/www/uprzejmiedonosze.net/webapp`. It works both directions.

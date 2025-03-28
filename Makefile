@@ -335,7 +335,7 @@ init-db-staging:
 
 .PHONY: init-db-dev
 init-db-dev:
-	@docker exec webapp sqlite3 /var/www/uprzejmiedonosze.localhost/db/store.sqlite -init /var/www/uprzejmiedonosze.localhost/webapp/sql/init_empty.sql
+	@docker exec webapp sqlite3 /var/www/localhost/db/store.sqlite -init /var/www/localhost/webapp/sql/init_empty.sql
 
 # defines
 
