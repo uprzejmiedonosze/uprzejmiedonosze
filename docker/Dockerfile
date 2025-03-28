@@ -7,7 +7,7 @@ ENV HOME=/root
 # Install packages, create directories, and set ownership in one RUN command
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     apt-get --no-install-recommends -y install \
-        locales vim curl xtail sqlite3 \
+        locales vim curl sqlite3 \
         memcached texlive ca-certificates \
         php-fpm php-sqlite3 php-curl php-zip \
         php-opcache php-mbstring php-gd \
