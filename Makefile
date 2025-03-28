@@ -151,7 +151,7 @@ $(EXPORT)/config.env.php: src/config.env.php
 	@cp $< $@
 
 $(EXPORT)/config.php: config.php
-	@cp config.php $(EXPORT)/
+	@cp $< $@
 
 src/config.env.php: $(JS_FILES_DEPS) $(TWIG_FILES) $(CONFIG_FILES) $(CSS_FILES)
 	@echo "<?php" > $@
