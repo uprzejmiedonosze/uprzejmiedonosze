@@ -107,13 +107,18 @@
             {% else %}
             <b>{{ app.guessUserSex.bylas|capitalize }} świadkiem</b> parkowania.
             {% endif %}
-            {% if app.wasSent %}
         </p>
+        {% if app.wasSent %}
         <p>
-            Wysłano do {%if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
-                {{ app.getSentDate("d MMMM y 'o' H:mm")|raw }}
-            {% endif %}
+            Wysłano do {% if app.guessSMData.isPolice %}👮‍♀️ {% endif %}<b>{{ app.guessSMData.getShortName }}</b>
+                {{ app.getSentDate("d MMMM y 'o' H:mm")|raw }}.
         </p>
+        {% endif %}
+        {% if app.addedToGallery.state ?? '' == 'published' %}
+        <p>
+           Dodano do <a href="https://galeria.uprzejmiedonosze.net/post/{{ app.addedToGallery.id }}" target="_blank" rel="external">galerii recydywistów</a>.
+        </p>
+        {% endif %}
     </div>
 </div>
 
