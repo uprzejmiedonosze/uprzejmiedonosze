@@ -3,6 +3,7 @@
 date_default_timezone_set('Europe/Warsaw');
 
 require_once(__DIR__ . '/../inc/Logger.php');
+require(__DIR__ . '/../inc/include.php');
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
@@ -24,8 +25,6 @@ if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
     restore_error_handler();
 }
 
-
-require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/Twig.php');
 require(__DIR__ . '/../inc/handlers/index.php');
 require(__DIR__ . '/../inc/middleware/index.php');
