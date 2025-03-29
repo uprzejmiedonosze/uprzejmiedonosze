@@ -11,13 +11,7 @@
 {% block main %}
 
 <h2>Galeria Uprzejmie Donoszę</h2>
-<p>Pełna galeria, zawierająca obecnie {{ general.galleryCount }} zdjęć, znajduje się pod adresem <a href="https://galeria.uprzejmiedonosze.net/">galeria.uprzejmiedonosze.net</a>.</p>
-
-<p>Zdjęcia dla poszczególnych miast:
-{% for city in galleryByCity %}
-    <a href="https://galeria.uprzejmiedonosze.net/tagged/{{ city[0] }}">#{{ city[0] }}</a>
-{% endfor %}
-</p>
+<p>Pełna galeria znajduje się pod adresem <a href="https://galeria.uprzejmiedonosze.net/">galeria.uprzejmiedonosze.net</a>.</p>
 
 <div class="tumblr_posts">
     <div class="loader"></div>

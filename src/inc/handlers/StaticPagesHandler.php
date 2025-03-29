@@ -77,8 +77,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     function gallery(Request $request, Response $response) {
         return AbstractHandler::renderHtml($request, $response, 'galeria', [
-            'appActionButtons' => false,
-            'galleryByCity' => \app\galleryByCity()
+            'appActionButtons' => false
         ]);
     }
 

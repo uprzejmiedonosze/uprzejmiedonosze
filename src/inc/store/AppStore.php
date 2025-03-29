@@ -162,25 +162,3 @@ SQL;
 
     return Application::withJson($row[0], $row[1]);
 }
-
-function galleryByCity(bool $useCache=true){
-    $stats = \cache\get(Type::GlobalStats, "galleryByCity");
-    if($useCache && $stats){
-        return $stats;
-    }
-
-    $sql = <<<SQL
-        select json_extract(value, '$.address.city') as city,
-            count(key) as cnt
-        from applications
-        where json_extract(value, '$.addedToGallery.state') is not null
-            and  json_extract(value, '$.address.city') != ''
-        group by json_extract(value, '$.address.city')
-        order by 2 desc
-        limit 10
-    SQL;
-
-    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::GlobalStats, 'galleryByCity', $stats);
-    return $stats;
-}
