@@ -1,7 +1,10 @@
 <?PHP
 require(__DIR__ . '/../../vendor/autoload.php');
+require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/utils.php');
-require(__DIR__ . '/store/index.php');
+require_once(__DIR__ . '/store/index.php');
+require_once(__DIR__ . '/Logger.php');
+
 
 if (isProd()) {
   Sentry\init(['dsn' => 'https://fb9d61b89dc24608b00a4e02353e5f7f@o929176.ingest.sentry.io/5878025' ]);

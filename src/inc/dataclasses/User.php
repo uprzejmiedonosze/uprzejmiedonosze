@@ -1,6 +1,5 @@
 <?PHP namespace user;
 
-require_once(__DIR__ . '/../utils.php');
 require_once(__DIR__ . '/JSONObject.php');
 require_once(__DIR__ . '/../Crypto.php');
 

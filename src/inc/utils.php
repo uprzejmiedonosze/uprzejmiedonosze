@@ -1,7 +1,6 @@
 <?PHP
-require_once(__DIR__ . '/config.php');
+
 require_once(__DIR__ . '/dataclasses/Exceptions.php');
-require_once(__DIR__ . '/Logger.php');
 
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
