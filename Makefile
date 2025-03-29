@@ -143,7 +143,6 @@ ASSETS := $(wildcard src/img/* src/img/*/*)
 $(EXPORT)/images-index.html: src/images-index.html $(ASSETS)
 	@(cat src/images-index.html; grep 'src="/img[^"{]\+"' --only-matching --no-filename --recursive --color=never src/templates \
 		| sed 's|src="/|<img src="./|' | sed 's|$$| />|' ) | sort | uniq | sponge src/images-index.html
-	@rm -rf .parcel-cache
 	@$(PARCEL_BUILD_CMD) $(PUBLIC)/img $< ;
 	@cp src/images-index.html $@
 
@@ -168,13 +167,12 @@ src/scss/lib/variables.env.scss:
 ifeq ($(HOST),$(PROD_HOST))
 	PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --no-cache --no-source-maps --dist-dir
 else
-    PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --dist-dir
+    PARCEL_BUILD_CMD := ./node_modules/.bin/parcel build --no-cache --dist-dir
 endif
 
 .PHONY: css
 css: $(CSS_MINIFIED)
 $(CSS_MINIFIED): src/scss/index.scss $(CSS_FILES) src/scss/lib/variables.env.scss; $(call echo-processing,$@ with parcel)
-	@rm -rf .parcel-cache
 	@$(PARCEL_BUILD_CMD) $(dir $@) $< ;
 
 .PHONY: js
