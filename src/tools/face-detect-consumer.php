@@ -28,16 +28,14 @@ $consumer = function (string $appId): void {
 
       if ($facesCount == 0) {
         logger("no facces, adding to gallery $appId");
-        addToGallery($app);
-        return;
+        $app = addToGallery($app);
+      } else {
+        $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");
       }
-
-      $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");      
-    } finally {
       \app\save($app);
+    } finally {
       \semaphore\release($appId, "face-detect-consumer");
     }
-
     logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
     sleep(5);
   } catch (\Exception $e) {
@@ -47,19 +45,20 @@ $consumer = function (string $appId): void {
   }
 };
 
-function addToGallery(\app\Application &$app): void {
+function addToGallery(\app\Application $app): \app\Application {
   $canImageBeShown = $app->canImageBeShown(whoIsWathing:null);
   $facesCount = $app->faces->count ?? 0;
   $alreadyInGallery = isset($app->addedToGallery);
   logger("addToGallery faces:$facesCount canImageBeShown: $canImageBeShown alreadyInGallery:$alreadyInGallery", true);
   
-  if ($alreadyInGallery) return;
-  if ($facesCount > 0) return;
-  if (!$canImageBeShown) return;
+  if ($alreadyInGallery) return $app;
+  if ($facesCount > 0) return $app;
+  if (!$canImageBeShown) return $app;
   $app->addedToGallery = \addToTumblr($app);
   logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
 
   $app->addComment("admin", "Zdjęcie dodane do galerii.");
+  return $app;
 }
 
 consume($consumer);
