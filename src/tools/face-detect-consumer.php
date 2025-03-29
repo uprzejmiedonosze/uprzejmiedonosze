@@ -50,14 +50,14 @@ $consumer = function (string $appId): void {
 function addToGallery(\app\Application &$app): void {
   $canImageBeShown = $app->canImageBeShown(whoIsWathing:null);
   $facesCount = $app->faces->count ?? 0;
-  $alreadyInGallery = $app->addedToGallery ?? false;
+  $alreadyInGallery = isset($app->addedToGallery);
   logger("addToGallery faces:$facesCount canImageBeShown: $canImageBeShown alreadyInGallery:$alreadyInGallery", true);
   
   if ($alreadyInGallery) return;
   if ($facesCount > 0) return;
   if (!$canImageBeShown) return;
   $app->addedToGallery = \addToTumblr($app);
-  logger("galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
+  logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
 
   $app->addComment("admin", "Zdjęcie dodane do galerii.");
 }
