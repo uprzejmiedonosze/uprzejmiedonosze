@@ -135,8 +135,8 @@ describe('Static pages no session', function() {
     it('/menu » przesłuchanie » zwrot', () => {
         cy.get('label.menu > .button-toggle').click()
         cy.contains('Wizyta w SM').click()
-        cy.contains('zwrot środków za przesłuchanie').click()
-        cy.contains('Zwrot utraconego dochodu')
+        cy.contains('jak zniechęcić SM').click()
+        cy.contains('Nieznany jest przypadek przekonania SM')
     })
 
     it('/menu » Statystyki', () => {
