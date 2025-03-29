@@ -266,10 +266,6 @@ a[rel~="external"]:not(:has(img)):not(.button)::after {
         p {
             text-align: end;
         }
-
-        h3 {
-            white-space: nowrap;
-        }
     }
 
     .badge,
