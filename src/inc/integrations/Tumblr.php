@@ -1,5 +1,4 @@
 <?PHP
-require_once(__DIR__ . '/../../vendor/autoload.php');
 
 use app\Application;
 use Tumblr\API\Client as Tumblr;
