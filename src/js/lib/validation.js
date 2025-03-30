@@ -1,5 +1,6 @@
 import $ from "jquery"
-import { DateTime } from "luxon";
+import { DateTime } from "luxon"
+import { error } from "./toast"
 
 export const checkAddress = function () {
   const textAddress = ($("#lokalizacja")?.val() + "").trim()
@@ -41,13 +42,23 @@ export const checkCommentvalue = function () {
   comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/ig, '').trim()
   if (comment.length > 10)
     return true
-  $("#comment").addClass("error");
+  $("#comment").addClass("error")
+  $("#comment").attr("placeholder", "Podaj rodzaj wykroczenia z listy poniżej, albo opisz je w tym polu")
   return false
 }
 
 export const checkDateTimeValue = function () {
   const dt = DateTime.fromISO($('#datetime')?.val() + "")
-  const result = dt.isValid && dt < DateTime.now()
-  !result && $('#datetime').addClass("error")
-  return result
+  if(dt > DateTime.now()) {
+    $('#datetime').addClass("error")
+    error("Data nie może być z przyszłości")
+    return false
+  }
+  const eightMonthsAgo = DateTime.now().minus({ months: 10 })
+  if (dt < eightMonthsAgo) {
+    $('#datetime').addClass("error")
+    error("Wykroczenie starsze niż 10 miesięcy. SM/Policja nie zdąży zareagować!")
+    return false
+  }
+  return dt.isValid
 }

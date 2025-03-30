@@ -84,7 +84,7 @@ class ApplicationHandler extends AbstractHandler {
 
         $now = new DateTime();
         $dtMax = $now->format(DT_FORMAT_SHORT);
-        $dtMin = $now->modify("-1 year")->format(DT_FORMAT_SHORT);
+        $dtMin = $now->modify("-10 months")->format(DT_FORMAT_SHORT);
 
         // edit app older than 1y
         if ($dtMin > $dt) $dtMin = $dt;

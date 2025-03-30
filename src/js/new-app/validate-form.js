@@ -21,7 +21,7 @@ export function validateForm() {
 function checkImages() {
   let success = true;
   ['contextImage', 'carImage'].forEach(img => {
-    if ($(`.${img}Section img`).attr('src').startsWith('img/')) {
+    if ($(`.${img}Section img`)?.attr('src')?.startsWith('img/')) {
       $(`.${img}Section`).addClass("error");
       success = false;
     }
