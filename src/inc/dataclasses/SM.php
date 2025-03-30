@@ -70,6 +70,15 @@ class SM extends JSONObject {
     }
 
     /**
+     * Will SM/Police request a user to visit them?
+     * @return bool
+     */
+    public function isQuestioning(): bool
+    {
+        return stripos($this->getHint() ?? '', 'nie wzyw') === false;
+    }
+
+    /**
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

@@ -7,6 +7,10 @@ W załączeniu znajduje się zgłoszenie oraz zdjęcia w pliku zip. Jestem {{ co
 
 Proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail. Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-Doręczeń {{ app.user.edelivery }}{% else %}e-mail {{ app.email }}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.{% endif %}
 
+{% if app.guessSMData.isQuestioning %}
+
+Informuję, że zgodnie §10, punkt 11 wytycznych nr 3 Komendanta Głównego Policji z 13 lipca 2020 r. „Sporządzenie protokołu przyjęcia ustnego zawiadomienia o wykroczeniu nie jest wymagane, jeśli zawiadomienie zostało złożone na piśmie i wyczerpująco przedstawia okoliczności zdarzenia”.
+{% endif %}
 
 {% if withUserData %}
 Zgłaszający:
