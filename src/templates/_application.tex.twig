@@ -83,11 +83,13 @@ Z poważaniem
 {% endif %}
 {% if app.isMapImageInCDN %}
     \noindent\href{{ mapUrl|raw }}
-        {\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true,valign=t]{{ mapImage }} }
+        {\raisebox{\dimexpr\ht\strutbox-\height}{\includegraphics[width=0.5\textwidth,height=0.3\textwidth,clip=true,keepaspectratio=true,valign=t]{{ mapImage }} } }
 {% endif %}
 {% if app.shouldIncludePlateImage %}
     {% set plateImage   = '{' ~ root ~ '/' ~ app.carInfo.plateImage ~ '}' %}
-    \noindent\includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true,valign=t]{{ plateImage }}
+    \noindent{\raisebox{\dimexpr\ht\strutbox-\height}{\includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true,valign=t]{{ plateImage }} }
 {% endif %}
-    \hspace{\stretch{1}}
+{% set qrUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=qr}' %}
+\noindent\adjustbox{valign=T}{\qrcode[nolink,height=0.2\textwidth,level=Q,valign=t]{{qrUrl|raw}}}
+    
 \vspace{\stretch{1}}
