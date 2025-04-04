@@ -75,6 +75,7 @@ class WebhooksHandler extends AbstractHandler {
 
             $comment = $mailEvent->formatComment($application->email);
             if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
+            logger("$appId: $comment", true);
             $ccToUser = $application->email == $recipient;
 
             if ($recipient == MAILER_FROM) {
@@ -99,6 +100,7 @@ class WebhooksHandler extends AbstractHandler {
             }
 
             $application = \app\save($application);
+            \semaphore\release($appId, 'webhook:' . $recipient);
             \webhook\mark($id);
 
             if ($mailEvent->status == 'failed' && !$ccToUser)
