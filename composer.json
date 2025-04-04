@@ -8,7 +8,7 @@
         "lcobucci/jwt": "^5.2",
         "firebase/php-jwt": "^6.10",
         "symfony/mailer": "^7.0",
-        "symfony/google-mailer": "^7.0",
+        "symfony/google-mailer": "^7.2",
         "slim/slim": "4.*",
         "openalpr/api": "*",
         "slim/twig-view": "^3.3",
