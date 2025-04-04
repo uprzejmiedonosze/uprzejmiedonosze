@@ -89,7 +89,7 @@ Z poważaniem
     {% set plateImage   = '{' ~ root ~ '/' ~ app.carInfo.plateImage ~ '}' %}
     \noindent{\raisebox{\dimexpr\ht\strutbox-\height}{\includegraphics[valign=B,width=0.2\textwidth,height=0.2\textwidth,clip=true,keepaspectratio=true,valign=t]{{ plateImage }} }
 {% endif %}
-{% set qrUrl = '{%HTTPS%://%HOST%/ud-' ~ app.id  ~ '.html?s=qr}' %}
+{% set qrUrl = '{https://uprzejmiedonosze.net/ud-' ~ app.id  ~ '.html?s=qr}' %}
 \noindent\adjustbox{valign=T}{\qrcode[nolink,height=0.2\textwidth,level=Q,valign=t]{{qrUrl|raw}}}
     
 \vspace{\stretch{1}}
