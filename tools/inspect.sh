@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC2029
 
 ENV=""
 
@@ -9,7 +10,7 @@ then
 fi
 
 SQL="sqlite3 /var/www/${ENV}uprzejmiedonosze.net/db/store.sqlite"
-PARAM="$@"
+PARAM="$*"
 
 function print_app_url() {
 	echo "      https://${ENV}uprzejmiedonosze.net/ud-$1.html $2"
@@ -21,10 +22,6 @@ function is_app_key() {
 
 function is_appId() {
 	[[ "$1" =~ ^[Uu][Dd]/[0-9]+/[0-9]+$ ]]
-}
-
-function get_app_json() {
-	ssh nieradka.net "${SQL} \"select value from applications where key = '$1' \""
 }
 
 function get_app_key_by_id() {
@@ -62,7 +59,7 @@ ssh nieradka.net "${SQL} \"select value from applications where ${WHERE2} \"" | 
 
 echo "Last 10 applications:"
 for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.status') from applications where ${WHERE2} and json_extract(value, '$.status') != 'draft' order by json_extract(value, '$.added') desc limit 10 \""); do
-	print_app_url ${key%|*} "[${key#*|}]"
+	print_app_url "${key%|*}" "[${key#*|}]"
 done
 exit 0
 
