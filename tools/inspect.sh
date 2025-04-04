@@ -36,7 +36,7 @@ is_appId "$1" && APPKEY=$(get_app_key_by_id "$1")
 
 if [ ${APPKEY+x} ]; then
 	echo "Checking application id ${APPKEY}:";
-	ssh nieradka.net "${SQL} \"select value from applications where key = '${APPKEY}'\"" | jq '. | del(.user) | del(.address) | del(.userComment) | del(.encrypted) | del(.privateComment) | del(.browser)'
+	ssh nieradka.net "${SQL} \"select value from applications where key = '${APPKEY}'\"" | jq 'walk(if type == "string" then .[:100] else . end)'
 	print_app_url "${APPKEY}"
 	exit 0
 fi
@@ -56,7 +56,7 @@ else
 fi
 
 echo "Checking user ${PARAM}:";
-ssh nieradka.net "${SQL} \"select value from users where ${WHERE1} \"" | jq '.'
+ssh nieradka.net "${SQL} \"select value from users where ${WHERE1} \"" | jq 'walk(if type == "string" then .[:100] else . end)'
 echo "Stats:"
 ssh nieradka.net "${SQL} \"select value from applications where ${WHERE2} \"" | jq -r '.status' | sort | uniq -c | sort -nr
 
