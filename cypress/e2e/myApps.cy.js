@@ -255,7 +255,7 @@ describe('Edit application', () => {
         cy.contains('Wystąpił błąd').should('not.exist')
 
         cy.contains(this.config.carImage.plateId)
-        cy.contains("2222 środa, 2 lutego 2022")
+        cy.contains("2222 niedziela, 2 lutego 2025")
         cy.contains(this.config.address.szczecin.replace(", Szczecin", ""))
         cy.contains(this.config.user.name)
         cy.contains(this.config.user.email)
