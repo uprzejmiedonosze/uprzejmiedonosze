@@ -1,5 +1,7 @@
 <?PHP namespace queue;
 
+use JSONObject;
+
 require_once(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 require_once(__DIR__ . '/../inc/integrations/curl.php');
@@ -56,7 +58,12 @@ function addToGallery(\app\Application $app): \app\Application {
   if ($alreadyInGallery) return $app;
   if ($facesCount > 0) return $app;
   if (!$canImageBeShown) return $app;
-  $app->addedToGallery = \addToTumblr($app);
+
+  if (isProd()) 
+    $app->addedToGallery = \addToTumblr($app);
+  else
+    $app->addedToGallery = new JSONObject(array("id" => "fake", "state" => "published"));
+  
   logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
 
   $app->addComment("admin", "Zdjęcie dodane do galerii.");
