@@ -245,7 +245,6 @@ class Application extends JSONObject implements \JsonSerializable {
      */
     public function setStatus(string $status, bool $force=false): void{
         global $STATUSES;
-        $now = date(DT_FORMAT);
 
         if(!array_key_exists($status, $STATUSES)){
             throw new Exception("Odmawiam ustawienia statusu na '$status'");
@@ -257,9 +256,10 @@ class Application extends JSONObject implements \JsonSerializable {
             if (!$force)
                 throw new Exception("Odmawiam zmiany statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
         }
-        if(!isset($this->statusHistory)){
+        if(!isset($this->statusHistory))
             $this->statusHistory = [];
-        }
+        
+        $now = (new DateTime())->format(DT_FORMAT_LONG);
         $this->statusHistory[$now] = new JSONObject();
         $this->statusHistory[$now]->old = $this->status;
         $this->statusHistory[$now]->new = $status;
@@ -548,10 +548,10 @@ class Application extends JSONObject implements \JsonSerializable {
      *  Name of the author | API Miasta | Admin
      */
     public function addComment(string $source, string $comment, ?string $status=null){
-        if(!isset($this->comments)){
+        if(!isset($this->comments))
             $this->comments = [];
-        }
-        $date = date(DT_FORMAT);
+
+        $date = (new DateTime())->format(DT_FORMAT_LONG);
         $this->comments[$date] = new JSONObject();
         $this->comments[$date]->source = $source;
         $this->comments[$date]->comment = $comment;

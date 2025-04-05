@@ -5,6 +5,7 @@ const LATEST_TERMS_UPDATE = '2024-03-26';
 
 const DT_FORMAT = 'Y-m-d\TH:i:s';
 const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
+const DT_FORMAT_LONG = 'Y-m-d\TH:i:s.u';
 
 const CONFIG_DIR = __DIR__ . '/../public/api/config';
 
