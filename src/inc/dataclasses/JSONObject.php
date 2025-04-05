@@ -36,6 +36,14 @@ class JSONObject extends stdClass {
                     $value = $sub;
                 }
             }
+            // @TODO should this be also supported?
+            //elseif (is_object($value)) {
+            //    // wrap stdClass into JSONObject too
+            //    $value = json_decode(json_encode($value), true);
+            //    $sub = new JSONObject;
+            //    $sub->set($value);
+            //    $value = $sub;
+            //}
             $this->{$key} = $value;
         }
     }

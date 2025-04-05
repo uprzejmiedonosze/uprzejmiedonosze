@@ -52,6 +52,9 @@ class Application extends JSONObject implements \JsonSerializable {
             return json_encode($this);
 
         $clone = Application::withJson(json_encode($this), $this->email);
+        // @TODO can this be replaced with:
+        // $clone = clone $this;
+        // ?
         $clone->encrypted = \crypto\passphrase($_SESSION['user_id'] . $clone->id . $clone->added);
 
         $encode = fn($value) => \crypto\encode($value, $_SESSION['user_id'], $clone->id . $clone->added);
@@ -556,16 +559,6 @@ class Application extends JSONObject implements \JsonSerializable {
         $this->comments[$date]->source = $source;
         $this->comments[$date]->comment = $comment;
         $this->comments[$date]->status = $status;
-    }
-
-    /**
-     * Returns info whether the app was allowed to be added
-     * to gallery.
-     *
-     * returns: boolean
-     */
-    public function addedToGallery(){
-        return ((bool) $this->statements) && ((bool)$this->statements->gallery);
     }
 
     /**
