@@ -94,8 +94,8 @@
     border-color: variables.$sending-stroke;
 }
 .delivery-status-delivered .status-dot::before {
-    background-color: variables.$confirmed-sm;
-    border-color: variables.$confirmed-sm-stroke;
+    background-color: variables.$confirmed-waiting;
+    border-color: variables.$confirmed-waiting-stroke;
 }
 
 .delivery-status-accepted .status-dot::before {
