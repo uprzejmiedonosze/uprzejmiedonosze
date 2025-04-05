@@ -22,6 +22,7 @@ $consumer = function (string $appId): void {
 
     try {
       \semaphore\acquire($appId, "face-detect-consumer");
+      logger("semaphore acquired($appId, face-detect-consumer)", true);
       $app = \app\get($appId);
       $app->faces = $faces;
       $facesCount = $faces->count ?? 0;
@@ -32,9 +33,10 @@ $consumer = function (string $appId): void {
       } else {
         $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");
       }
-      \app\save($app);
     } finally {
+      \app\save($app);
       \semaphore\release($appId, "face-detect-consumer");
+      logger("app saved, semaphore released($appId, face-detect-consumer)", true);
     }
     logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
     sleep(5);
