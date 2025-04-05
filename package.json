@@ -34,6 +34,7 @@
     "@types/jquery": "^3.5.32",
     "@types/jquerymobile": "^1.4.35",
     "cypress": "^14.1.0",
+    "cypress-fail-fast": "^7.1.1",
     "eslint": "^9.21.0",
     "eslint-config-defaults": "^9.0.0",
     "eslint-config-jquery": "^3.0.2",

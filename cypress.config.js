@@ -1,11 +1,13 @@
 const { defineConfig } = require("cypress");
 
+const cypressFailFast = require('cypress-fail-fast/plugin');
+
 module.exports = defineConfig({
   projectId: "ttzx1f",
 
   e2e: {
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      cypressFailFast(on, config);
     },
 
     experimentalRunAllSpecs: true,
