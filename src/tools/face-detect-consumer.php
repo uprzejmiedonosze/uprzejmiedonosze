@@ -24,7 +24,6 @@ $consumer = function (string $appId): void {
 
     try {
       \semaphore\acquire($appId, "face-detect-consumer");
-      logger("semaphore acquired($appId, face-detect-consumer)", true);
       $app = \app\get($appId);
       $app->faces = $faces;
       $facesCount = $faces->count ?? 0;
@@ -38,7 +37,7 @@ $consumer = function (string $appId): void {
     } finally {
       \app\save($app);
       \semaphore\release($appId, "face-detect-consumer");
-      logger("app saved, semaphore released($appId, face-detect-consumer)", true);
+      logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null), true);
     }
     logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
     sleep(5);
