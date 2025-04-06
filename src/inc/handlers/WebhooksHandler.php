@@ -52,7 +52,6 @@ class WebhooksHandler extends AbstractHandler {
 
         try {
             \semaphore\acquire($appId, 'webhook:' . $recipient);
-            logger("semaphore acquired($appId, WebhooksHandler)", true);
 
             try {
                 $application = \app\get($appId);
@@ -76,7 +75,6 @@ class WebhooksHandler extends AbstractHandler {
 
             $comment = $mailEvent->formatComment($application->email);
             if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
-            logger("$appId: $comment", true);
             $ccToUser = $application->email == $recipient;
 
             if ($recipient == MAILER_FROM) {
@@ -102,7 +100,6 @@ class WebhooksHandler extends AbstractHandler {
 
             $application = \app\save($application);
             \semaphore\release($appId, 'webhook:' . $recipient);
-            logger("app saved semaphore released($appId, WebhooksHandler)", true);
             \webhook\mark($id);
 
             if ($mailEvent->status == 'failed' && !$ccToUser)
@@ -116,7 +113,6 @@ class WebhooksHandler extends AbstractHandler {
             ));
         } finally {
             \semaphore\release($appId, 'webhook:' . $recipient);
-            logger("semaphore released($appId, WebhooksHandler)", true);
         }
     }
 
