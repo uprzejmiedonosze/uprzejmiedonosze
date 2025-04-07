@@ -13,7 +13,7 @@ function addToTumblr(Application $app): stdClass|array {
         . " "
         . $app->getExtensionsText();
     $data = array(
-        'type' => 'photo', 
+        'type' => 'photo',
         'caption' => "**{$app->carInfo->plateId}** $recydywa — {$description}"
             . "Zgłoszone do {$app->guessSMData()->getShortName()}"
             . "\n\n*-- {$app->getDate("LLLL y")}*",
@@ -22,7 +22,29 @@ function addToTumblr(Application $app): stdClass|array {
         'tags' => "{$app->carInfo->plateId}, {$app->guessSMData()->getShortName()}",
         'state' => 'published',
         'date' => $app->date
-        );
-        
+    );
+
     return $client->createPost($blogName, $data);
+}
+
+function addToGallery(\app\Application $app): stdClass|array {
+    print_r("x:" . $app->canImageBeShown(whoIsWathing: null));
+    $canImageBeShown = $app->canImageBeShown(whoIsWathing: null);
+    $facesCount = $app->faces->count ?? 0;
+    $alreadyInGallery = isset($app->addedToGallery);
+    logger("addToGallery faces:$facesCount canImageBeShown: $canImageBeShown alreadyInGallery:$alreadyInGallery", true);
+
+    if ($alreadyInGallery) return $app;
+    if ($facesCount > 0) return $app;
+    if (!$canImageBeShown) return $app;
+
+    if (isProd())
+        $addedToGallery = \addToTumblr($app);
+    else
+        $addedToGallery = new JSONObject(array("id" => "fake", "state" => "published"));
+
+    logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
+
+    $app->addComment("admin", "Zdjęcie dodane do galerii.");
+    return $addedToGallery;
 }

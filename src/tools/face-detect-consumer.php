@@ -48,25 +48,4 @@ $consumer = function (string $appId): void {
   }
 };
 
-function addToGallery(\app\Application $app): \app\Application {
-  $canImageBeShown = $app->canImageBeShown(whoIsWathing:null);
-  $facesCount = $app->faces->count ?? 0;
-  $alreadyInGallery = isset($app->addedToGallery);
-  logger("addToGallery faces:$facesCount canImageBeShown: $canImageBeShown alreadyInGallery:$alreadyInGallery", true);
-  
-  if ($alreadyInGallery) return $app;
-  if ($facesCount > 0) return $app;
-  if (!$canImageBeShown) return $app;
-
-  if (isProd()) 
-    $app->addedToGallery = \addToTumblr($app);
-  else
-    $app->addedToGallery = new JSONObject(array("id" => "fake", "state" => "published"));
-  
-  logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
-
-  $app->addComment("admin", "Zdjęcie dodane do galerii.");
-  return $app;
-}
-
 consume($consumer);

@@ -545,11 +545,6 @@ class Application extends JSONObject implements \JsonSerializable {
         return $shortStreetAddress;
     }
 
-    /**
-     * Adds a comment to the application.
-     * $source <string>
-     *  Name of the author | API Miasta | Admin
-     */
     public function addComment(string $source, string $comment, ?string $status=null){
         if(!isset($this->comments))
             $this->comments = [];

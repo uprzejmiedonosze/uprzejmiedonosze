@@ -141,6 +141,6 @@ function normalizeGeo(float|string $geo): string {
     return sprintf('%.4F', $geo);
 }
 
-function normalizeLatLng($lat, $lng) {
+function normalizeLatLng(float|string $lat, float|string $lng): string {
     return normalizeGeo($lat) . "," . normalizeGeo($lng);
 }
