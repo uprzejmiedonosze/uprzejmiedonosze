@@ -83,9 +83,6 @@ function getDetailed(string $plateId): array|false {
                 'smCity' => $smCity,
                 'stopAgresji' => $stopAgresji,
                 'date' => $date));
-    if (!$details)
-        return false;
-
     return $details;
 }
 
