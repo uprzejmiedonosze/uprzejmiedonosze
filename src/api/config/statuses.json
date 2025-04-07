@@ -2,7 +2,6 @@
   "draft": {
     "name": "Draft",
     "action": null,
-    "icon": "edit",
     "allowed": ["ready"],
     "comment": "Stworzenie zgłoszenia",
     "editable": true,
@@ -11,7 +10,6 @@
   "ready": {
     "name": "Edycja",
     "action": null,
-    "icon": "shop",
     "allowed": ["draft", "confirmed", "ready"],
     "comment": "Zapisanie wersji roboczej",
     "editable": true,
@@ -20,7 +18,6 @@
   "confirmed": {
     "name": "Nowe",
     "action": "Zgłoszenie gotowe do wysłania",
-    "icon": "cloud",
     "allowed": ["ready", "sending", "sending-problem", "sending-failed", "confirmed-waiting", "archived"],
     "comment": "Zapisanie gotowego zgłoszenia",
     "editable": true,
@@ -29,7 +26,6 @@
   "sending": {
     "name": "Wysyłam",
     "action": null,
-    "icon": "mail",
     "allowed": ["sending-problem", "sending-failed", "confirmed-waiting", "archived"],
     "comment": "Wysyłka w trakcie",
     "editable": false,
@@ -38,7 +34,6 @@
   "sending-problem": {
     "name": "Problem z wysyłką",
     "action": null,
-    "icon": "mail",
     "allowed": ["sending-failed", "confirmed-waiting", "archived"],
     "comment": "Tymczasowy problem z wysyłką",
     "editable": false,
@@ -47,7 +42,6 @@
   "sending-failed": {
     "name": "Niewysłane",
     "action": null,
-    "icon": "mail",
     "allowed": ["sending", "sending-problem", "confirmed-waiting", "archived"],
     "comment": "Nie udało się wysłać wiadomości",
     "editable": false,
@@ -56,7 +50,6 @@
   "confirmed-waiting": {
     "name": "Wysłane",
     "action": "Zgłoszenie zostało wysłane",
-    "icon": "mail",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Wysłanie zgłoszenia",
     "editable": false,
@@ -65,7 +58,6 @@
   "confirmed-waitingE": {
     "name": "Wysłane epuap",
     "action": null,
-    "icon": "clock",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Wysłanie zgłoszenia za pomocą EPUAP",
     "editable": false,
@@ -82,7 +74,6 @@
   "confirmed-fined": {
     "name": "Mandat",
     "action": "Kierowca dostał mandat",
-    "icon": "check",
     "allowed": ["confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Kierowca został ukarany mandatem",
     "editable": false,
@@ -91,7 +82,6 @@
   "confirmed-instructed": {
     "name": "Pouczenie",
     "action": "Kierowca został pouczony",
-    "icon": "audio",
     "allowed": ["confirmed-fined", "confirmed-ignored", "archived"],
     "comment": "Kierowca został pouczony",
     "editable": false,
@@ -100,7 +90,6 @@
   "confirmed-ignored": {
     "name": "Zignorowane",
     "action": "Nie ukarano ani nie pouczono kierowcy",
-    "icon": "delete",
     "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-complaint", "archived"],
     "comment": "Zgłoszenie zostało zignorowane, SM/Policja nie ustaliła sprawcy albo nie doszukała się znamion wykroczenia",
     "editable": false,
@@ -117,7 +106,6 @@
   "archived": {
     "name": "W archiwum",
     "action": "Przenieś do archiwum",
-    "icon": "minus",
     "allowed": ["confirmed", "confirmed-waiting"],
     "comment": "Zgłoszenie zostało zarchiwizowane",
     "editable": false,
