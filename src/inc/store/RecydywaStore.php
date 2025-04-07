@@ -50,6 +50,45 @@ function delete(string $plateId) {
     \store\delete(TABLE, "$cleanPlateId v2");
 }
 
+function getDetailed(string $plateId): array|false {
+    $cleanPlateId = cleanPlateId($plateId);
+    $sql = <<<SQL
+    select json_extract(value, '$.status'),
+        json_extract(value, '$.externalId'),
+        email,
+        json_extract(value, '$.smCity'),
+        json_extract(value, '$.stopAgresji'),
+        json_extract(value, '$.date')
+    from applications
+    where plateId = :plateId
+        and json_extract(value, '$.status') not in ('archived', 'ready', 'draft', 'confirmed')
+    order by json_extract(value, '$.externalId') is null,
+        email = :currentUser,
+        json_extract(value, '$.date')
+    limit 1
+    SQL;
+
+    $stmt = \store\prepare($sql);
+    $stmt->bindValue(':plateId', $cleanPlateId);
+    $stmt->bindValue(':currentUser', \user\currentEmail());
+    $stmt->execute();
+
+    $details = $stmt->fetchAll(\PDO::FETCH_FUNC,
+        fn($status, $externalId, $email, $smCity, $stopAgresji, $date) =>
+            array(
+                'status' => $status,
+                'externalId' => $externalId,
+                'email' => \crypto\encode($email, $_SESSION['user_id'], $plateId),
+                'owner' => $email == \user\currentEmail(),
+                'smCity' => $smCity,
+                'stopAgresji' => $stopAgresji,
+                'date' => $date));
+    if (!$details)
+        return false;
+
+    return $details;
+}
+
 function top100(\user\User $whoIsWathing): array {
     $canImageBeShown = function (array &$top100) use ($whoIsWathing) {
         foreach($top100 as $recydywa)

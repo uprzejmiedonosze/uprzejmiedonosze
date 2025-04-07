@@ -9,6 +9,7 @@ import Api from '../lib/Api'
 import * as Sentry from "@sentry/browser";
 import { error } from "../lib/toast";
 import isIOS from "../lib/isIOS";
+import { updateRecydywa } from "./recydywa";
 
 var uploadInProgress = 0;
 
@@ -254,7 +255,7 @@ async function sendFile(fileData, id, imageMetadata={}) {
   const $plateImage = $("#plateImage")
   const $plateHint = $("#plateHint")
   const $plateId = $("#plateId")
-  const $recydywa = $("#recydywa")
+
 
   try {
     const api = new Api(`/api/app/${appId}/image`)
@@ -274,6 +275,7 @@ async function sendFile(fileData, id, imageMetadata={}) {
       if (app.carInfo.plateId) {
         $plateId.val(app.carInfo.plateId);
         repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
+        updateRecydywa(appId)
 
         if (app.carInfo.brand) {
           if (($comment?.val() + "").trim().length == 0) {
@@ -299,16 +301,6 @@ async function sendFile(fileData, id, imageMetadata={}) {
       } else {
         $plateImage.hide();
       }
-      const recydywa = app.carInfo?.recydywa
-      if (recydywa?.appsCnt > 0) {
-        $recydywa.find('.recydywa-appscnt').text(num(recydywa.appsCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']))
-        $recydywa.show()
-
-        $recydywa.find('.recydywa-userscnt').hide()
-        if (recydywa?.usersCnt > 1) {
-          $recydywa.find('.recydywa-userscnt').text(num(recydywa.usersCnt, ['osób zgłosiło', 'osoba zgłosiła', 'osoby zgłosiły'])).show()
-        }
-      }
     }
     uploadFinished()
   } catch (err) {
@@ -326,25 +318,6 @@ export async function removeFile(id) {
     showThirdImage(true)
     imageError(id, err.toString())
   }
-}
-
-/**
- * @param {Number} value 
- * @param {Array} numerals
- * @returns 
- */
-function num(value, numerals) {
-	var t0 = value % 10,
-		t1 = value % 100,
-		vo = [];
-  vo.push(value);
-	if (value === 1 && numerals[1])
-		vo.push(numerals[1]);
-	else if ((value == 0 || (t0 >= 0 && t0 <= 1) || (t0 >= 5 && t0 <= 9) || (t1 > 10 && t1 < 20)) && numerals[0])
-		vo.push(numerals[0]);
-	else if (((t1 < 10 || t1 > 20) && t0 >= 2 && t0 <= 4) && numerals[2])
-		vo.push(numerals[2]);
-	return vo.join(' ');
 }
 
 function showThirdImage(show) {

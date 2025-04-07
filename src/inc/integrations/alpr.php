@@ -31,11 +31,6 @@ function get(&$imageBytes, Application &$application, string $baseFileName, stri
         else
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
     }
-
-    if (isset($application->carInfo->plateId)) {
-        $recydywa = \recydywa\get($application->carInfo->plateId);
-        $application->carInfo->recydywa = $recydywa;
-    }
 }
 
 function _use_openAlpr(&$imageBytes): bool {
