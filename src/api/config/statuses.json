@@ -73,8 +73,7 @@
   },
   "confirmed-sm": {
     "name": "Potwierdzone",
-    "action": "Zgłoszenie zostało potwierdzone w SM",
-    "icon": "user",
+    "action": "Zgłoszenie zostało potwierdzone",
     "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Potwierdzenie przyjęcia zgłoszenia przez/w SM",
     "editable": false,
