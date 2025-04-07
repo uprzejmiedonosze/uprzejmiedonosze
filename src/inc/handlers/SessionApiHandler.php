@@ -131,6 +131,18 @@ class SessionApiHandler extends AbstractHandler {
         return $this->renderJson($response, $firebaseUser);
     }
 
+    public function recydywa(Request $request, Response $response, $args): Response {
+        $appId = $args['appId'];
+        $application = \app\get($appId);
+        $this->checkEditable($request, $application);
+        $this->checkOwnership($request, $application);
+        if (!isset($application->carInfo->plateId)) {
+            throw new \Exception("Brak numeru rejestracyjnego dla zgłoszenia $appId", 404);
+        }
+        $recydywa = \recydywa\getDetailed($application->carInfo->plateId);
+        return $this->renderJson($response, $recydywa);
+    }
+
     public function Nominatim(Request $request, Response $response, $args) {
         extract($args);
         $result = \geo\Nominatim($lat, $lng);
