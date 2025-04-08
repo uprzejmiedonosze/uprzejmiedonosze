@@ -65,6 +65,7 @@ function sent(int $daysAgo=31): array {
         from applications
         where email = :email
             and json_extract(value, '$.status') in ('confirmed-waiting', 'confirmed-waitingE', 'confirmed-sm')
+            and json_extract(value, '$.sent') is not null
         order by json_extract(value, '$.seq') desc,
             json_extract(value, '$.added') desc
     SQL;
