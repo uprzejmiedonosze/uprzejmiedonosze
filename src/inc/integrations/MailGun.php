@@ -73,6 +73,11 @@ class MailGun extends CityAPI {
                 $transport = Transport::fromDsn(MAILER_DSN);
                 $mailer = new Mailer($transport);    
                 $mailer->send($message);    
+            } else {
+                logger("Sending app {$application->id} with MailGun");
+                $application->setStatus('confirmed-waiting');
+                logger("Marking app {$application->id} as confirmed-waiting (sent)");
+                \app\save($application);
             }
         } catch (Exception $error) {
             logger("Sending email {$application->id} with MailGun, exception: " . $error->getMessage(), true);
