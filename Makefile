@@ -66,7 +66,7 @@ dev-sequential: HOST := $(DEV_HOST)
 dev-sequential: HTTPS := http
 dev-sequential: export_minimal
 	@echo "==> Refreshing sources"
-	@cp uprzejmiedonosze.localhost-firebase-adminsdk.json $(EXPORT)
+	@cp localhost-firebase-adminsdk.json $(EXPORT)
 	@$(RSYNC) -r vendor $(EXPORT)
 
 dev-run: HOST := $(DEV_HOST)
@@ -377,6 +377,7 @@ test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.jso
 	$(PUBLIC)/api/config/police-stations.pjson process-php minify-config $(EXPORT)/config.php $(EXPORT)/config.env.php
 	@echo "==> Testing phpunit"
 	@test $(MEMCACHED) -eq 1 && (echo "    starting memcached"; memcached &); sleep 1 || true
+	@git restore docker/db/store.sqlite
 	@#trap 'echo "    reverting DB and killing memcache"; test $(MEMCACHED) -eq 1 && killall memcached; exit' INT TERM EXIT
 	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
 	./vendor/phpunit/phpunit/phpunit --display-deprecations tests
