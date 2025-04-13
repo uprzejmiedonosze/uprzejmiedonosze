@@ -27,8 +27,7 @@ function addToTumblr(Application $app): stdClass|array {
     return $client->createPost($blogName, $data);
 }
 
-function addToGallery(\app\Application $app): stdClass|array {
-    print_r("x:" . $app->canImageBeShown(whoIsWathing: null));
+function addToGallery(\app\Application $app): \app\Application {
     $canImageBeShown = $app->canImageBeShown(whoIsWathing: null);
     $facesCount = $app->faces->count ?? 0;
     $alreadyInGallery = isset($app->addedToGallery);
@@ -39,12 +38,12 @@ function addToGallery(\app\Application $app): stdClass|array {
     if (!$canImageBeShown) return $app;
 
     if (isProd())
-        $addedToGallery = \addToTumblr($app);
+        $app->addedToGallery = \addToTumblr($app);
     else
-        $addedToGallery = new JSONObject(array("id" => "fake", "state" => "published"));
+        $app->addedToGallery = new JSONObject(array("id" => "fake", "state" => "published"));
 
     logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
 
     $app->addComment("admin", "Zdjęcie dodane do galerii.");
-    return $addedToGallery;
+    return $app;
 }
