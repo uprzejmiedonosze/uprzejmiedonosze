@@ -62,7 +62,7 @@ Z poważaniem
     {% endif -%}
 }
 
-{\it Proszę o kontakt za pośrednictwem poczty e-mail oraz niewysyłanie korespondencji Pocztą Polską.}
+{\it Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-Doręczeń {{ app.user.edelivery }}{% else %}e-mail {{ app.email }}{% endif %}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.}
 
 \vspace{\stretch{3}}\noindent
 \href{{ contextImageUrl }}

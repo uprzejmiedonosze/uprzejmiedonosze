@@ -5,7 +5,7 @@ w dniu {{ app.getDate("d MMMM y 'o godzinie' H:mm") }} {{ app.guessUserSex.bylam
 
 W załączeniu znajduje się zgłoszenie oraz zdjęcia w pliku zip. Jestem {{ config.sex.swiadoma }} odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk. Zdjęcia {{ app.guessUserSex.wykonalam }} samodzielnie i nie zostały one zmanipulowane.
 
-Proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail. Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-Doręczeń {{ app.user.edelivery }}{% else %}e-mail {{ app.email }}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.{% endif %}
+Proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail. Proszę o kontakt pod adresem {% if app.user.edelivery ?? false %}e-Doręczeń {{ app.user.edelivery }}{% else %}e-mail {{ app.email }}{% endif %}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.
 
 {% if app.guessSMData.isQuestioning %}
 
