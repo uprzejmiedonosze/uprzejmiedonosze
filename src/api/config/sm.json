@@ -3270,5 +3270,13 @@
       "46-300 Olesno"
     ],
     "email": "krzysztof.latocha@olesno.pl"
-  }  
+  },
+  "Stryków": {
+    "address": [
+      "Komisariat Policji w Strykowie",
+      "ul. Grunwaldzka 5",
+      "95-010 Stryków"
+    ],
+    "email": "komendant.strykow@zgierz.ld.policja.gov.pl"
+  }
 }
