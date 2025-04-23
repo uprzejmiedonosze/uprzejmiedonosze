@@ -60,8 +60,9 @@ class RecydywaStoreTest extends TestCase
         $_SESSION['user_id'] = 1;
         \app\save($app);
         $detailed = \recydywa\getDetailed($app->carInfo->plateId, false);
-        self::assertIsObject($detailed->apps);
-        self::assertEquals(1, count(get_object_vars($detailed->apps)));
+        self::assertIsObject($detailed);
+        self::assertIsArray($detailed->apps);
+        self::assertEquals(1, count($detailed->apps));
     }
 
     public function testAddToGallery(): void
