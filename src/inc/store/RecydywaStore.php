@@ -3,6 +3,7 @@ require(__DIR__ . '/../dataclasses/Recydywa.php');
 
 use app\Application;
 use cache\Type;
+use JSONObject;
 
 const TABLE = 'recydywa';
 
@@ -50,7 +51,7 @@ function delete(string $plateId) {
     \store\delete(TABLE, "$cleanPlateId v2");
 }
 
-function getDetailed(string $plateId): array|false {
+function getDetailed(string $plateId): JSONObject {
     $cleanPlateId = cleanPlateId($plateId);
     $sql = <<<SQL
     select json_extract(value, '$.status'),
@@ -58,14 +59,15 @@ function getDetailed(string $plateId): array|false {
         email,
         json_extract(value, '$.smCity'),
         json_extract(value, '$.stopAgresji'),
-        json_extract(value, '$.date')
+        json_extract(value, '$.date'),
+        json_extract(value, '$.number')
     from applications
     where plateId = :plateId
-        and json_extract(value, '$.status') not in ('archived', 'ready', 'draft', 'confirmed')
+        and json_extract(value, '$.status')
+            not in ('archived', 'ready', 'draft', 'confirmed', 'sending', 'sending-failed', 'sending-problem')
     order by json_extract(value, '$.externalId') is null,
         email = :currentUser,
         json_extract(value, '$.date')
-    limit 1
     SQL;
 
     $stmt = \store\prepare($sql);
@@ -73,17 +75,42 @@ function getDetailed(string $plateId): array|false {
     $stmt->bindValue(':currentUser', \user\currentEmail());
     $stmt->execute();
 
-    $details = $stmt->fetchAll(\PDO::FETCH_FUNC,
-        fn($status, $externalId, $email, $smCity, $stopAgresji, $date) =>
-            array(
+    $apps = $stmt->fetchAll(\PDO::FETCH_FUNC,
+        fn($status, $externalId, $email, $smCity, $stopAgresji, $date, $number) =>
+            new JSONObject(array(
                 'status' => $status,
                 'externalId' => $externalId,
                 'email' => \crypto\encode($email, $_SESSION['user_id'], $plateId),
                 'owner' => $email == \user\currentEmail(),
                 'smCity' => $smCity,
                 'stopAgresji' => $stopAgresji,
-                'date' => $date));
-    return $details;
+                'date' => $date,
+                'number' => $number)));
+
+    $ret = new JSONObject();
+    $ret->apps = $apps;
+    $ret->lastTicket = lastTicket($apps);
+    return $ret;
+}
+
+function lastTicket(array $recydywa): string {
+    if (!sizeof($recydywa)) return "";
+
+    $lastTicket = array_shift($recydywa);
+
+    global $STATUSES;
+    global $SM_ADDRESSES;
+    global $STOP_AGRESJI;
+
+    $penalty = $STATUSES[$lastTicket->status]->recydywa;
+    $by = $lastTicket->owner ? 'Moje zgłoszenie' : 'Zgłoszenie innej osoby';
+    $number = $lastTicket->number . ($lastTicket->externalId ? " ($lastTicket->externalId)" : '');
+    $date = formatDateTime($lastTicket->date, 'd.MM.y');
+    
+    $sm = $lastTicket->stopAgresji ? $STOP_AGRESJI[$lastTicket->smCity] : $SM_ADDRESSES[$lastTicket->smCity];
+    $smShort = $sm->getShortName();
+
+    return "$penalty. $by wykroczenia z dnia $date numer $number wysłane do $smShort.";
 }
 
 function top100(\user\User $whoIsWathing): array {

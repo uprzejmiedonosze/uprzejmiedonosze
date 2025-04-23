@@ -7,9 +7,9 @@ export async function updateRecydywa(appId) {
     const $recydywa = $("#recydywa")
 
     const recydywa = await getRecydywa(appId)
-    const appsCnt = recydywa?.length || 0
-    const youAreNotAlone = recydywa?.filter(item => !item.owner).length || 0
-    const uniqueUsers = new Set(recydywa?.map(item => item.email)).size
+    const appsCnt = recydywa?.apps.length || 0
+    const youAreNotAlone = recydywa?.apps.filter(item => !item.owner).length || 0
+    const uniqueUsers = new Set(recydywa?.apps.map(item => item.email)).size
 
     if (appsCnt > 0) {
         $recydywa.find('.recydywa-appscnt').text(
