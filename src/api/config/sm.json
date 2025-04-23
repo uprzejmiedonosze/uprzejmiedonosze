@@ -3278,5 +3278,13 @@
       "95-010 Stryków"
     ],
     "email": "komendant.strykow@zgierz.ld.policja.gov.pl"
+  },
+  "powiat żyrardowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Żyrardowie",
+      "ul. Fryderyka Chopina 4-6",
+      "96-300 Żyrardów"
+    ],
+    "email": "dyzurny.kppzyrardow@ra.policja.gov.pl"
   }
 }
