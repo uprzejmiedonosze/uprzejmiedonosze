@@ -83,20 +83,6 @@ div.error img {
     max-width: 70%;
   }
 
-  p.pictureHint {
-    z-index: 2;
-    bottom: 0px;
-    position: absolute;
-    text-shadow: none;
-    color: white;
-    padding: 3px;
-    display: none;
-    margin-right: 0.4em;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 0.3em;
-    font-size: 90%;
-  }
-
   div.datetime {
     max-width: 15em;
   }
@@ -122,11 +108,6 @@ div.error img {
     }
   }
 
-  .image-upload:hover .pictureHint {
-    display: none;
-  }
-
-
   .image-upload {
     label {
       white-space: normal;
@@ -134,7 +115,7 @@ div.error img {
       b {
         font-weight: 600;
         position: absolute;
-        bottom: 40px;
+        bottom: 20px;
         display: block;
         width: calc(100% - 2 * .4em);
         text-align: center;

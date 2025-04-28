@@ -21,11 +21,11 @@ export const initHandlers = (map) => {
   });
 
   $("#category").on("change", function (e) {
-    $(".contextImageSection p.pictureHint").text(
+    $(".contextImageSection label b").text(
       // @ts-ignore
       $(e.target).attr("data-contextImage-hint")
     )
-    $(".carImageSection p.pictureHint").text(
+    $(".carImageSection label b").text(
       // @ts-ignore
       $(e.target).attr("data-carImage-hint")
     )
@@ -72,24 +72,12 @@ export const initHandlers = (map) => {
     $("#datetime").removeAttr('readonly')
   });
 
-  showHidePictureHints($(".contextImageSection"));
-  showHidePictureHints($(".carImageSection"));
 
   $(".image-upload img").on("load", function () {
     $(this).show();
-    showHidePictureHints($(this).parent().parent());
   });
 };
 
-function showHidePictureHints(context) {
-const placeholder = context?.find("img")?.attr("src") == 'img/fff-1.png'
-  const recydywaVisible = context.find('#recydywa:visible').length
-
-  context.find("p.pictureHint").hide()
-
-  if (!placeholder && !recydywaVisible)
-    context.find("p.pictureHint").show()
-}
 
 function validateExtensions() {
   // @ts-ignore

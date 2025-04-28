@@ -27,23 +27,20 @@
         <div class="grid images">
             <div class="imageContainer image-upload contextImageSection button inverse">
                 <label>
-                    <b>+ Dodaj zdjęcie z widocznym wykroczeniem</b>
+                    <b>{{ categories[app.category].contextImageHint }}</b>
                     <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="contextImage" multiple
-                        title="Zdjęcie przedstawiające kontekst"
+                        title="{{ categories[app.category].contextImageHint }}"
                         value="{{ app.contextImage.url ?? '' }}" />
-
-                    <p class="pictureHint">{{ categories[app.category].contextImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
                     <img id="contextImagePreview" src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
             </div>
             <div class="imageContainer image-upload carImageSection button inverse">
                 <label>
-                    <b>+ Dodaj zdjęcie z widoczną tablicą rejestracyjną</b>
+                    <b>{{ categories[app.category].carImageHint }}</b>
                     <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="carImage" multiple
-                        title="Zdjęcie przedstawiające samochód i tablicę rejestracyjną"
+                        title="{{ categories[app.category].carImageHint }}"
                         value="{{ app.carImage.url ?? '' }}" />
-                    <p class="pictureHint">{{ categories[app.category].carImageHint }}</p>
                     <div class="loader l" style="display: none;"></div>
                     <img id="carImagePreview" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
