@@ -52,7 +52,6 @@ function delete(string $plateId) {
 }
 
 function getDetailed(string $plateId): JSONObject {
-    $cleanPlateId = cleanPlateId($plateId);
     $sql = <<<SQL
     select json_extract(value, '$.status'),
         json_extract(value, '$.externalId'),
@@ -60,36 +59,37 @@ function getDetailed(string $plateId): JSONObject {
         json_extract(value, '$.smCity'),
         json_extract(value, '$.stopAgresji'),
         json_extract(value, '$.date'),
-        json_extract(value, '$.number')
+        json_extract(value, '$.number'),
+        json_extract(value, '$.addedToGallery.state')
     from applications
     where plateId = :plateId
         and json_extract(value, '$.status')
             not in ('archived', 'ready', 'draft', 'confirmed', 'sending', 'sending-failed', 'sending-problem')
-    order by json_extract(value, '$.externalId') is null,
-        email = :currentUser,
+    order by json_extract(value, '$.status') = 'confirmed-fined' desc,
+        json_extract(value, '$.status') = 'confirmed-instructed' desc,
+        json_extract(value, '$.externalId') is null,
+        email = :currentUser desc,
         json_extract(value, '$.date')
     SQL;
 
-    $stmt = \store\prepare($sql);
-    $stmt->bindValue(':plateId', $cleanPlateId);
-    $stmt->bindValue(':currentUser', \user\currentEmail());
-    $stmt->execute();
-
-    $apps = $stmt->fetchAll(\PDO::FETCH_FUNC,
-        fn($status, $externalId, $email, $smCity, $stopAgresji, $date, $number) =>
-            new JSONObject(array(
-                'status' => $status,
-                'externalId' => $externalId,
-                'email' => \crypto\encode($email, $_SESSION['user_id'], $plateId),
-                'owner' => $email == \user\currentEmail(),
-                'smCity' => $smCity,
-                'stopAgresji' => $stopAgresji,
-                'date' => $date,
-                'number' => $number)));
+    $apps = \app\byPlate($plateId);
+    $apps = array_map(
+        fn($app) => array(
+            'status' => $app->status,
+            'externalId' => $app->externalId ?? '',
+            'email' => \crypto\encode($app->email, $_SESSION['user_id'], $plateId),
+            'owner' => $app->email == \user\currentEmail(),
+            'smCity' => $app->smCity,
+            'stopAgresji' => $app->stopAgresji,
+            'date' => $app->date,
+            'number' => $app->number,
+            'addedToGallery' => $app->addedToGallery->state ?? null),
+        $apps);
 
     $ret = new JSONObject();
     $ret->apps = $apps;
     $ret->lastTicket = lastTicket($apps);
+    $ret->isPresentInGallery = isPresentInGallery($apps);
     return $ret;
 }
 
@@ -102,15 +102,26 @@ function lastTicket(array $recydywa): string {
     global $SM_ADDRESSES;
     global $STOP_AGRESJI;
 
-    $penalty = $STATUSES[$lastTicket->status]->recydywa;
-    $by = $lastTicket->owner ? 'Moje zgłoszenie' : 'Zgłoszenie innej osoby';
+    $penalty = '';
+    if (isset($STATUSES[$lastTicket->status]->recydywa))
+        $penalty = $STATUSES[$lastTicket->status]->recydywa . '. ';
+
+    $by = $lastTicket->owner ? 'Twoje zgłoszenie' : 'Zgłoszenie innej osoby';
     $number = $lastTicket->number . ($lastTicket->externalId ? " ($lastTicket->externalId)" : '');
     $date = formatDateTime($lastTicket->date, 'd.MM.y');
     
     $sm = $lastTicket->stopAgresji ? $STOP_AGRESJI[$lastTicket->smCity] : $SM_ADDRESSES[$lastTicket->smCity];
     $smShort = $sm->getShortName();
 
-    return "$penalty. $by wykroczenia z dnia $date numer $number wysłane do $smShort.";
+    return "$penalty$by wykroczenia z dnia $date numer $number wysłane do $smShort.";
+}
+
+function isPresentInGallery(array $recydywa): bool {
+    foreach($recydywa as $r) {
+        if ($r->addedToGallery == 'published')
+            return true;
+    }
+    return false;
 }
 
 function top100(\user\User $whoIsWathing): array {

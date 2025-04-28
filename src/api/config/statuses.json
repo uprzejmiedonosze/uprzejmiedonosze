@@ -50,7 +50,6 @@
   "confirmed-waiting": {
     "name": "Wysłane",
     "action": "Zgłoszenie zostało wysłane",
-    "recydywa": "Względem kierowcy tego pojazdu wysłano zgłoszenie",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Wysłanie zgłoszenia",
     "editable": false,
@@ -59,7 +58,6 @@
   "confirmed-waitingE": {
     "name": "Wysłane epuap",
     "action": "Zgłoszenie zostało wysłane przez EPUAP",
-    "recydywa": "Względem kierowcy tego pojazdu wysłano zgłoszenie",
     "allowed": ["confirmed-sm", "confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Wysłanie zgłoszenia za pomocą EPUAP",
     "editable": false,
@@ -68,7 +66,6 @@
   "confirmed-sm": {
     "name": "Potwierdzone",
     "action": "Zgłoszenie zostało potwierdzone",
-    "recydywa": "Względem kierowcy tego pojazdu wysłano zgłoszenie",
     "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-ignored", "archived"],
     "comment": "Potwierdzenie przyjęcia zgłoszenia przez/w SM",
     "editable": false,

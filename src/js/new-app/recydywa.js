@@ -22,6 +22,16 @@ export async function updateRecydywa(appId) {
             $recydywa.find('.recydywa-userscnt').text(num(uniqueUsers, ['osób zgłosiło', 'osoba zgłosiła', 'osoby zgłosiły'])).show()
         }
     }
+
+    if (recydywa.isPresentInGallery) {
+        const $galleryLink = $('.recydywa .galleryLink')
+        $galleryLink.html(`<a href="https://galeria.uprzejmiedonosze.net/tagged/DW9096Y">zobacz galerię</a>`);
+    }
+
+    if (recydywa.lastTicket) {
+        const $lastTicket = $('.recydywa .lastTicket')
+        $lastTicket.html(recydywa.lastTicket);
+    }
 }
 
 async function getRecydywa(appId) {

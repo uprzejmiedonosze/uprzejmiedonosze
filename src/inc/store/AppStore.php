@@ -127,7 +127,7 @@ function byPlate(string $plateId): array|null {
     $sql = <<<SQL
         select value, email
         from applications 
-        where json_extract(value, '$.status') not in ('archived', 'ready', 'draft', 'confirmed')
+        where json_extract(value, '$.status') not in ('archived', 'ready', 'draft', 'confirmed', 'sending', 'sending-failed', 'sending-problem')
             and plateId in (:plateId, :cleanPlateId)
         order by json_extract(value, '$.date') desc;
     SQL;
