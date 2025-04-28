@@ -4,6 +4,11 @@ use app\Application;
 use Tumblr\API\Client as Tumblr;
 
 function addToTumblr(Application $app): stdClass|array {
+    if (!defined('TUMBLR_CONSUMERKEY')) {
+        logger("Error TUMBLR_CONSUMERKEY not set", true);
+        return new JSONObject(array("id" => "fake", "state" => "published"));
+    }
+
     $client = new Tumblr(TUMBLR_CONSUMERKEY, TUMBLR_CONSUMERSECRET, TUMBLR_TOKEN, TUMBLR_SECRET);
     $blogName = 'uprzejmie-donosze';
     $recydywa = "";
@@ -37,10 +42,7 @@ function addToGallery(\app\Application $app): \app\Application {
     if ($facesCount > 0) return $app;
     if (!$canImageBeShown) return $app;
 
-    if (isProd())
-        $app->addedToGallery = \addToTumblr($app);
-    else
-        $app->addedToGallery = new JSONObject(array("id" => "fake", "state" => "published"));
+    $app->addedToGallery = \addToTumblr($app);
 
     logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
 
