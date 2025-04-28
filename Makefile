@@ -377,9 +377,8 @@ test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.jso
 	$(PUBLIC)/api/config/police-stations.pjson process-php minify-config $(EXPORT)/config.php $(EXPORT)/config.env.php
 	@echo "==> Testing phpunit"
 	@test $(MEMCACHED) -eq 1 && (echo "    starting memcached"; memcached &); sleep 1 || true
-	@git restore docker/db/store.sqlite
-	@#trap 'echo "    reverting DB and killing memcache"; test $(MEMCACHED) -eq 1 && killall memcached; exit' INT TERM EXIT
-	@./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
+	@trap 'echo "    reverting DB"; git restore docker/db/store.sqlite; exit' INT TERM EXIT; \
+	./vendor/phpunit/phpunit/phpunit --display-deprecations --no-output tests || \
 	./vendor/phpunit/phpunit/phpunit --display-deprecations tests
 
 
