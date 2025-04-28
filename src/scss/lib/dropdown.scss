@@ -19,7 +19,8 @@
 
         li > a {
             color: #000;
-            padding: .7em 0.3em;
+            display: inline-block;
+            width: 100%;
             &:hover {
                 color: variables.$primaryColor;
             }
