@@ -375,7 +375,7 @@
       "81-244 Gdynia"
     ],
     "email": "straz_miejska@gdynia.pl",
-    "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane na świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości. Zdarzają się wyjątki, ale są one bardzo rzadkie." 
+    "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane na świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości. Zdarzają się wyjątki, ale są one bardzo rzadkie."
   },
   "Białystok": {
     "address": [
@@ -394,10 +394,18 @@
     "email": "oskarzyciele@strazmiejska.lodz.pl",
     "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie. Powyższe jednak z pewnością nie obowiązuje dla Oddziału Łódź-Polesie, które wzywa z automatu na przesłuchanie do każdego zgłoszenia."
   },
-  "Łódź-Śródmieście": { "parent": "Łódź" },
-  "Łódź-Górna": { "parent": "Łódź" },
-  "Łódź-Widzew": { "parent": "Łódź" },
-  "Łódź-Polesie": { "parent": "Łódź" },
+  "Łódź-Śródmieście": {
+    "parent": "Łódź"
+  },
+  "Łódź-Górna": {
+    "parent": "Łódź"
+  },
+  "Łódź-Widzew": {
+    "parent": "Łódź"
+  },
+  "Łódź-Polesie": {
+    "parent": "Łódź"
+  },
   "Gdańsk": {
     "address": [
       "Straż Miejska w Gdańsku",
@@ -547,8 +555,8 @@
   },
   "Sosnowiec": {
     "address": [
-      "Straż Miejska Sosnowiec",
-      "ul. S. Małachowskiego 3",
+      "Straż Miejska w Sosnowcu",
+      "ul. Stanisława Małachowskiego 3",
       "41-200 Sosnowiec"
     ],
     "email": "straz@um.sosnowiec.pl"
@@ -656,7 +664,7 @@
       "ul. Pawła Stalmacha 9",
       "41-800 Zabrze"
     ],
-    "email": "straz@sm.miastozabrze.pl"
+    "email": "straz@strazmiejska.zabrze.pl"
   },
   "Ruda Śląska": {
     "address": [
@@ -719,7 +727,7 @@
   "Rybnik": {
     "address": [
       "Straż Miejska w Rybniku",
-      "Władysława Stanisława Reymonta 54",
+      "ul. Władysława Stanisława Reymonta 54",
       "44-200 Rybnik"
     ],
     "email": "sekretariat@sm.rybnik.pl"
@@ -864,7 +872,7 @@
   "Świętochłowice": {
     "address": [
       "Straż Miejska w Świętochłowicach",
-      "ul. Katowicka 54A",
+      "ul. Katowicka 54a",
       "41-600 Świętochłowice"
     ],
     "email": "sm@swietochlowice.pl"
@@ -945,7 +953,7 @@
   "Chorzów": {
     "address": [
       "Straż Miejska w Chorzowie",
-      "Jana III Sobieskiego 3",
+      "ul. Jana III Sobieskiego 3",
       "41-500 Chorzów"
     ],
     "hint": "SM Chorzów wzywa do sporządzenia protokołu dla każdego zgłoszenia.",
@@ -969,7 +977,7 @@
   },
   "Żywiec": {
     "address": [
-      "Straż Miejska Żywiec",
+      "Straż Miejska w Żywcu",
       "ul. Zielona 7",
       "34-300 Żywiec"
     ],
@@ -1049,7 +1057,9 @@
     "email": "strazmiejska@umsiechnice.pl",
     "hint": "Niestety SM w Siechnicach wzywa na przesłuchanie do każdego zgłoszenia."
   },
-  "Radwanice": { "parent": "Siechnice" },
+  "Radwanice": {
+    "parent": "Siechnice"
+  },
   "Sędławki": {
     "address": [
       "Komenda Powiatowa Policji w Bartoszycach",
@@ -1126,7 +1136,7 @@
   },
   "Tychy": {
     "address": [
-      "Straż Miejska Tychy",
+      "Straż Miejska w Tychach",
       "ul. Budowlanych 67",
       "43-100 Tychy"
     ],
@@ -1197,7 +1207,7 @@
   "Czeladź": {
     "address": [
       "Straż Miejska w Czeladzi",
-      "Katowicka 45",
+      "ul. Katowicka 45",
       "41-250 Czeladź"
     ],
     "email": "kniebylski@um.czeladz.pl"
@@ -1411,7 +1421,7 @@
   "Cieszyn": {
     "address": [
       "Straż Miejska w Cieszynie",
-      "ul. Limanowskiego 7",
+      "ul. Bolesława Limanowskiego 7",
       "43-400 Cieszyn"
     ],
     "email": "sekretariat@sm.cieszyn.pl"
@@ -1654,8 +1664,8 @@
   },
   "Siemianowice Śląskie": {
     "address": [
-      "Straż Miejska Siemianowice Śląskie",
-      "Jarosława Dąbrowskiego 13",
+      "Straż Miejska w Siemianowicach Śląskich",
+      "ul. Jarosława Dąbrowskiego 13",
       "41-100 Siemianowice Śląskie"
     ],
     "email": "sm@sm.siemianowice.pl"
@@ -1757,7 +1767,7 @@
   "Żarki": {
     "address": [
       "Straż Miejska w Żarkach",
-      "ul. Kościuszki 15/17",
+      "ul. Tadeusza Kościuszki 15/17",
       "42-310 Żarki"
     ],
     "email": "strazmiejska@umigzarki.pl"
@@ -1925,8 +1935,7 @@
       "ul. Leśna 2",
       "42-400 Zawiercie"
     ],
-    "email": "strazmiejska@zawiercie.eu",
-    "hint": "Miejscowość Zawiercie obsługuje Straż Miejska Piaseczno."
+    "email": "strazmiejska@zawiercie.eu"
   },
   "Kętrzyn": {
     "address": [
@@ -2211,7 +2220,9 @@
     ],
     "email": "sg@tarnowo-podgorne.pl"
   },
-  "Przeźmierowo": { "parent": "Tarnowo Podgórne" },
+  "Przeźmierowo": {
+    "parent": "Tarnowo Podgórne"
+  },
   "Malbork": {
     "address": [
       "Straż Miejska Malbork",
@@ -2348,7 +2359,9 @@
     ],
     "email": "strazmiejska@umjedrzejow.pl"
   },
-  "Chlewice": { "parent": "Jędrzejów" },
+  "Chlewice": {
+    "parent": "Jędrzejów"
+  },
   "Szklarska Poręba": {
     "address": [
       "Straż Miejska w Szklarskiej Porębie",
@@ -2381,9 +2394,15 @@
     ],
     "email": "dzielnicowy.gluszyca6@walbrzych.wr.policja.gov.pl"
   },
-  "Niedźwiedzica": { "parent": "Jugowice" },
-  "Olszyniec": { "parent": "Jugowice" },
-  "Zagórze Śląskie": { "parent": "Jugowice" },
+  "Niedźwiedzica": {
+    "parent": "Jugowice"
+  },
+  "Olszyniec": {
+    "parent": "Jugowice"
+  },
+  "Zagórze Śląskie": {
+    "parent": "Jugowice"
+  },
   "Świebodzice": {
     "address": [
       "Straż Miejska w Świebodzicach",
@@ -2450,7 +2469,7 @@
   },
   "Rydułtowy": {
     "address": [
-      "Straż Miejska Rydułtowy",
+      "Straż Miejska w Rydułtowach",
       "ul. Jagiellońska 33",
       "44-280 Rydułtowy"
     ],
@@ -2472,7 +2491,9 @@
     ],
     "email": "gmina@morawica.pl"
   },
-  "Bilcza": { "parent": "Morawica" },
+  "Bilcza": {
+    "parent": "Morawica"
+  },
   "Praszka": {
     "address": [
       "Straż Miejska w Praszce",
@@ -2809,30 +2830,30 @@
   "Stare Babice": {
     "address": [
       "Straż Gminna Starych Babicach",
-		  "ul. Rynek 21",
-		  "05-082 Stare Babice"
+      "ul. Rynek 21",
+      "05-082 Stare Babice"
     ],
     "email": "sekretariat@sgsb.pl"
   },
   "gmina Stare Babice": {
-	  "parent": "Stare Babice"
+    "parent": "Stare Babice"
   },
   "Oświęcim": {
     "address": [
       "Straż Miejska w Oświęcimiu",
-		  "ul. Jagiełły 23",
-		  "32-600 Oświęcim"
+      "ul. Jagiełły 23",
+      "32-600 Oświęcim"
     ],
     "email": "sm@um.oswiecim.pl"
   },
   "gmina Chełmek": {
-	  "parent": "Oświęcim"
+    "parent": "Oświęcim"
   },
   "Murowana Goślina": {
     "address": [
       "Straż Miejska w Murowanej Goślinie",
-		  "ul. Gen. T. Kutrzeby 3",
-		  "62-095 Murowana Goślina"
+      "ul. Gen. T. Kutrzeby 3",
+      "62-095 Murowana Goślina"
     ],
     "email": "straz.miejska@murowana-goslina.pl"
   },
@@ -2842,16 +2863,16 @@
   "gmina Damnica": {
     "address": [
       "Posterunek Policji w Damnicy",
-		  "ul. Szkolna 2",
-		  "76-231 Damnica"
+      "ul. Szkolna 2",
+      "76-231 Damnica"
     ],
     "email": "dzielnicowy.damnica31@gd.policja.gov.pl"
   },
   "Ostrołęka": {
     "address": [
       "Straż Miejska Ostrołęki",
-		  "ul. Berka Joselewicza 2",
-		  "07-410 Ostrołęka"
+      "ul. Berka Joselewicza 2",
+      "07-410 Ostrołęka"
     ],
     "email": "smo@um.ostroleka.pl"
   },
@@ -2861,24 +2882,24 @@
   "Starogard Gdański": {
     "address": [
       "Straż Miejska Starogard Gdański",
-		  "ul. Kolejowa 5a",
-		  "83-200 Starogard Gdański"
+      "ul. Kolejowa 5a",
+      "83-200 Starogard Gdański"
     ],
     "email": "straz.miejska@um.starogard.pl"
   },
   "Dębno": {
     "address": [
       "Straż Miejska Dębno",
-		  "ul. Piłsudskiego 5",
-		  "74-400 Dębno"
+      "ul. Piłsudskiego 5",
+      "74-400 Dębno"
     ],
     "email": "sm@debno.pl"
   },
   "Zakopane": {
     "address": [
       "Straż Miejska Zakopane",
-		  "ul. Tadeusza Kościuszki 13",
-		  "34-500 Zakopane"
+      "ul. Tadeusza Kościuszki 13",
+      "34-500 Zakopane"
     ],
     "email": "sm@zakopane.eu"
   },
@@ -3286,5 +3307,117 @@
       "96-300 Żyrardów"
     ],
     "email": "dyzurny.kppzyrardow@ra.policja.gov.pl"
+  },
+  "Ustroń": {
+    "address": [
+      "Straż Miejska w Ustroniu",
+      "ul. Andrzeja Brody 16",
+      "43-450 Ustroń"
+    ],
+    "email": "strazmiejska@ustron.pl"
+  },
+  "Bieruń": {
+    "address": [
+      "Straż Miejska w Bieruniu",
+      "ul. Władysława Jagiełły 1",
+      "43-155 Bieruń"
+    ],
+    "email": "straz@sm.bierun.pl"
+  },
+  "Knurów": {
+    "address": [
+      "Straż Miejska w Knurowie",
+      "ul. Niepodległości 5",
+      "44-190 Knurów"
+    ],
+    "email": "sm@knurow.pl,"
+  },
+  "Lędziny": {
+    "address": [
+      "Straż Miejska w Lędzinach",
+      "ul. Lędzińska 55",
+      "43-140 Lędziny"
+    ],
+    "email": "straz@ledziny.pl"
+  },
+  "Lubliniec": {
+    "address": [
+      "Straż Miejska w Lublińcu",
+      "ul. Ignacego Paderewskiego 5",
+      "42-700 Lubliniec"
+    ],
+    "email": "sm@lubliniec.pl"
+  },
+  "Lubomia": {
+    "address": [
+      "Straż Gminna w Lubomi",
+      "ul. Adama Mickiewicza 69",
+      "44-360 Lubomia"
+    ],
+    "email": "sgminna@lubomia.pl"
+  },
+  "Lyski": {
+    "address": [
+      "Straż Gminna w Lyskach",
+      "ul. Dworcowa 1a",
+      "44-295 Lyski"
+    ],
+    "email": "strazgminna@lyski.pl"
+  },
+  "Myszków,": {
+    "address": [
+      "Straż Miejska w Myszkowie",
+      "ul. Tadeusza Kościuszki 26",
+      "42-300 Myszków,"
+    ],
+    "email": "straz_miejska@miastomyszkow.pl"
+  },
+  "Piekary Śląskie": {
+    "address": [
+      "Straż Miejska w Piekarach Śląskich",
+      "ul. Kalwaryjska 62",
+      "41-940 Piekary Śląskie"
+    ],
+    "email": "sm@piekary.pl"
+  },
+  "Skoczów": {
+    "address": [
+      "Straż Miejska w Skoczowie",
+      "ul. Adama Mickiewicza 14",
+      "43-430 Skoczów"
+    ],
+    "email": "sm@um.skoczow.pl"
+  },
+  "Sławków": {
+    "address": [
+      "Straż Miejska w Sławkowie",
+      "Mały Rynek 10",
+      "41-260 Sławków"
+    ],
+    "email": "sm@slawkow.pl"
+  },
+  "Wilkowice": {
+    "address": [
+      "Straż Gminna w Wilkowicach",
+      "ul. Parkowa 10",
+      "43-365 Wilkowice"
+    ],
+    "email": "strazgminna@wilkowice.pl"
+  },
+  "Wisła": {
+    "address": [
+      "Straż Miejska w Wiśle",
+      "ul. 1 Maja 69 a",
+      "43-460 Wisła"
+    ],
+    "email": "sm@um.wisla.pl"
+  },
+  "Pułtusk": {
+    "address": [
+      "Straż Miejska w Pułtusku",
+      "ul. Staszica 35",
+      "06-100 Pułtusk"
+    ],
+    "email": "um@pultusk.pl"
   }
 }
