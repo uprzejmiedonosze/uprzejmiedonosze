@@ -487,12 +487,32 @@
   "gmina Zielonki": {
     "address": [
       "Komisariat Policji w Zielonkach",
-      "Władysława Łokietka 205",
+      "ul. Władysława Łokietka 205",
       "31-263 Kraków"
     ],
     "email": "dzielnicowy.zielonki1@kpp-krakow.policja.gov.pl",
     "voivodeship": "Małopolskie",
     "city": "Zielonki"
+  },
+  "Jarosław-miasto": {
+    "address": [
+      "Komenda Powiatowa Policji w Jarosławiu",
+      "ul. Poniatowskiego 50",
+      "37-500 Jarosław"
+    ],
+    "email": "jaroslaw@rz.policja.gov.pl",
+    "voivodeship": "Podkarpackie",
+    "city": "Jarosław"
+  },
+  "powiat jarosławski": {
+    "address": [
+      "Komenda Powiatowa Policji w Jarosławiu",
+      "ul. Poniatowskiego 50",
+      "37-500 Jarosław"
+    ],
+    "email": "jaroslaw@rz.policja.gov.pl",
+    "voivodeship": "Podkarpackie",
+    "city": "Jarosław"
   },
   "default": {
     "address": [
