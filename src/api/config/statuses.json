@@ -83,7 +83,7 @@
   "confirmed-instructed": {
     "name": "Pouczenie",
     "action": "Kierowca został pouczony",
-    "recydywa": "Kierowca tego pojazdu został ukarany pouczony",
+    "recydywa": "Kierowca tego pojazdu został pouczony",
     "allowed": ["confirmed-fined", "confirmed-ignored", "archived"],
     "comment": "Kierowca został pouczony",
     "editable": false,

@@ -18,10 +18,8 @@
             <div> {{ app.getDate|raw }}</div>
             <div>
             {% if recydywaCnt > 1 %}
-                <span class="recydywa-cnt">
-                    {% if recydywa.usersCnt > 1 %}
-                        <span class="recydywa-userscnt">{{ recydywa.usersCnt }}</span>
-                    {% endif %}
+                <span class="recydywa recydywa-list {% if recydywa.usersCnt == 1 %}onlyme{% endif %}">
+                    <span class="recydywa-userscnt">{{ recydywa.usersCnt }}</span>
                     <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt">{{ recydywaCnt }}</span>
                 </span>
             {% endif %}

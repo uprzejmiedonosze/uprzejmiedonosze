@@ -9,36 +9,6 @@
     border-radius: 0.2em;
     width: unset;
   }
-
-  div#recydywa { // new app recydywa overlay on image
-    z-index: 2;
-    display: none;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-
-    .recydywa {
-      font-weight: 700;
-    }
-
-    .recydywa::before {
-      background-image: url(icons.$recydywa-icon);
-      content: "";
-      background-repeat: no-repeat;
-      background-size: contain;
-      width: 16px;
-      height: 14px;
-      display: inline-block;
-      position: relative;
-      top: 2px;
-      margin-left: 4px;
-    }
-
-    .recydywa-appscnt::before {
-      background-image: url("../img/icons/recydywa-apps.svg?2");
-    }
-  }
 }
 
 .application,
@@ -66,61 +36,6 @@
       margin-left: -0.3em;
       margin-right: 0.6em;
       text-align: center;
-    }
-  }
-
-  .recydywa, #recydywa {
-    .top-line {
-      .recydywa-cnt {
-        border-radius: 12px;
-        display: inline;
-        padding: 2px 2px 2px 5px;
-        margin: 0 5px;
-        font-size: 12px;
-
-        .recydywa-appscnt::before {
-          width: 10px;
-          height: 10px;
-          background-image: url("../img/icons/recydywa-apps.svg?2");
-        }
-        .recydywa-userscnt::before {
-          width: 8px;
-          height: 10px;
-        }
-      }
-    }
-    &.new-app-recydywa > .recydywa-cnt {
-      padding: 2px 5px;
-      border-radius: 0;
-      color: black;
-      text-align: left;
-    }
-    .recydywa-cnt, .recydywa-seemore {
-      background-color: variables.$recydywaBg;
-      font-weight: 700;
-      padding: 5px 12px;
-      white-space: nowrap;
-      border-radius: 24px;
-    }
-    .recydywa-userscnt, .recydywa-appscnt {
-      &::before {
-        @extend %icon;
-        margin: 0 3px;
-      }
-    }
-
-    .recydywa-appscnt::before {
-      background-image: url("../img/icons/recydywa-apps-white.svg?2");
-    }
-
-    .recydywa-userscnt::before {
-      background-image: url("../img/icons/recydywa-users.svg?2");
-      width: 11px;
-    }
-
-    .recydywa-seemore {
-      background-color: variables.$recydywaBg;
-      color: black!important;
     }
   }
 
@@ -189,8 +104,7 @@ cite {
 }
 
 b.appSentInfo,
-.forcedPoliceInfo,
-b.recydywaInfo {
+.forcedPoliceInfo {
   background-color: variables.$secondaryColor;
   display: block;
   padding: 1em;

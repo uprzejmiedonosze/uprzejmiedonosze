@@ -7,8 +7,7 @@
 {% extends partial ? "base-partial.html.twig" : "base.html.twig" %}
 {% block main %}
 
-<h2 class="recydywa">
-
+<h2>
     {% if recydywa.usersCnt > 1 %}
         <span>
             {{- num(recydywa.usersCnt, ['osób zgłosiło', 'osoba zgłosiła', 'osoby zgłosiły']) }}

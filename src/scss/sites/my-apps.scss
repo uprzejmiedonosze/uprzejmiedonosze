@@ -57,16 +57,6 @@
         @extend %icon;
         left: -3px;
       }
-
-      &.recydywa::before {
-        border-radius: 20px;
-        background-size: auto;
-        background-color: variables.$recydywaBg;
-        border: 2px solid variables.$recydywaBg;
-        background-image: url(icons.$recydywa-icon);
-        left: -5px;
-      }
-
       &.no-icon::before {
         margin-left: -17px;
       }
@@ -218,56 +208,6 @@
     .change-status a::before {
       left: -5px;
     }
-  }
-}
-
-.popup-overlay#recydywa {
-  position: fixed;
-  display: none;
-  width: 100vw;
-  height: 100vw;
-  background-color: rgba(0,0,0,0.7);
-  z-index: 3;
-  top: 20px;
-  left: 0;
-
-  .close {
-    opacity: 0.3;
-    width: 2em;
-    height: 2em;
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    z-index: 1;
-  }
-  .close:hover {
-    opacity: 1;
-    cursor: pointer;
-  }
-  .close::before, .close::after {
-    position: absolute;
-    left: 15px;
-    content: ' ';
-    height: 33px;
-    width: 2px;
-    background-color: #333;
-  }
-  .close::before {
-    transform: rotate(45deg);
-  }
-  .close::after {
-    transform: rotate(-45deg);
-  }
-
-  .popup-content {
-    background: #fff;
-    border-radius: 5px;
-    max-width: variables.$content-width;
-    padding: 1em;
-    position: sticky;
-    overflow-y: scroll;
-    height: calc(100vh - 1em - variables.$headerHeight);
-    overflow-y: scroll;
   }
 }
 

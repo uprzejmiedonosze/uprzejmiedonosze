@@ -74,7 +74,7 @@ function getDetailed(string $plateId): JSONObject {
 
     $apps = \app\byPlate($plateId);
     $apps = array_map(
-        fn($app) => array(
+        fn($app) => new JSONObject(array(
             'status' => $app->status,
             'externalId' => $app->externalId ?? '',
             'email' => \crypto\encode($app->email, $_SESSION['user_id'], $plateId),
@@ -83,7 +83,7 @@ function getDetailed(string $plateId): JSONObject {
             'stopAgresji' => $app->stopAgresji,
             'date' => $app->date,
             'number' => $app->number,
-            'addedToGallery' => $app->addedToGallery->state ?? null),
+            'addedToGallery' => $app->addedToGallery->state ?? null)),
         $apps);
 
     $ret = new JSONObject();
@@ -102,11 +102,14 @@ function lastTicket(array $recydywa): string {
     global $SM_ADDRESSES;
     global $STOP_AGRESJI;
 
-    $penalty = '';
-    if (isset($STATUSES[$lastTicket->status]->recydywa))
+    if (isset($STATUSES[$lastTicket->status]->recydywa)) {
         $penalty = $STATUSES[$lastTicket->status]->recydywa . '. ';
-
-    $by = $lastTicket->owner ? 'Twoje zgłoszenie' : 'Zgłoszenie innej osoby';
+        $by = $lastTicket->owner ? 'Twoje zgłoszenie' : 'Zgłoszenie innej osoby';
+    } else {
+        $penalty = '';
+        $by = $lastTicket->owner ? 'Np. twoje zgłoszenie' : 'Np. zgłoszenie innej osoby';
+    }
+    
     $number = $lastTicket->number . ($lastTicket->externalId ? " ($lastTicket->externalId)" : '');
     $date = formatDateTime($lastTicket->date, 'd.MM.y');
     

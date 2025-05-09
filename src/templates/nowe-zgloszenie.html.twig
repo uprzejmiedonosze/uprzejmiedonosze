@@ -44,13 +44,10 @@
                     <div class="loader l" style="display: none;"></div>
                     <img id="carImagePreview" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
-                <div id="recydywa" class="new-app-recydywa">
-                    <div class="recydywa-cnt">
-                        <span class="recydywa">RECYDYWA:</span>
-                        <span class="recydywa-userscnt"></span>
-                        <span class="recydywa-appscnt"></span>
-                        
-                    </div>
+                <div class="recydywa recydywa-overlay">
+                    <span class="recydywa-title">Recydywa</span>
+                    <span class="recydywa-userscnt"></span>
+                    <span class="recydywa-appscnt"></span>
                 </div>
                 <div class="plate-box" style="border: none;"></div>
             </div>
@@ -71,9 +68,11 @@
                     <img id="thirdImagePreview" src="{{ app.thirdImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
             </div>
-            <div class="recydywa">
-                <p class="lastTicket"><p>
-                <p class="galleryLink"></p>
+            <div class="recydywa recydywa-details">
+                <p class="recydywa-header"></p>
+                <p class="recydywa-lastTicket"><p>
+                <p class="recydywa-galleryLink"></p>
+                <p class="recydywa-hint">Liczymy recydywę od dwóch i więcej użytkowników</p>
             </div>
             <div>
                 <label for="datetime"><span id="dateHint">Data i czas zgłoszenia</span> <a href="#" class="changeDatetime">(zmień datę, jeśli niepoprawna)</a></label>

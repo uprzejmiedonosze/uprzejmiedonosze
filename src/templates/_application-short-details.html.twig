@@ -80,12 +80,12 @@
 
 
     {% if recydywaCnt > 1 %}
-    <div class="recydywa"><b>RECYDYWA:</b>
-        {% if recydywa.usersCnt > 1 %}
+    <div class="recydywa recydywa-app-details {% if recydywa.usersCnt == 1 %}onlyme{% endif %}">
+        <b class="recydywa-title">Recydywa:</b>
         <span class="recydywa-userscnt">
             {{- num(recydywa.usersCnt, ['osób zgłosiło', 'osoba zgłosiła', 'osoby zgłosiły']) }}
         </span>
-        {% endif %}
+        
         <span data-recydywacnt="{{ recydywaCnt }}" class="recydywa-appscnt">{{ num(recydywaCnt, ['wykroczeń', 'wykroczenie', 'wykroczenia']) }}
         <a href="#{{ app.id }}" data-rel="popup" data-inline="true" data-mini="true"
             data-plateid="{{ app.carInfo.plateId }}"
