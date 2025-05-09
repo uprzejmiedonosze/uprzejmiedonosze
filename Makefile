@@ -81,7 +81,7 @@ staging: ## Copy files to staging server
 	@$(MAKE) --warn-undefined-variables staging-sequential -j
 
 staging-sequential: HOST := $(STAGING_HOST)
-staging-sequential: $(DIRS) exportserver
+staging-sequential: $(DIRS) $(EXPORT)
 	@echo "==> Copying files and dirs for $@"
 	@$(RSYNC) $(RSYNC_FLAGS) $(EXPORT)/* $(HOSTING):/var/www/$(HOST)/webapp
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
