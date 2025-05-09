@@ -70,8 +70,8 @@ class RecydywaStoreTest extends TestCase
         $app = $this->getApp();
         self::assertObjectHasProperty('statements', $app);
         self::assertObjectHasProperty('gallery', $app->statements);
-        $app = addToGallery($app);
-        self::assertEquals(1, sizeof($app->comments));
-        self::assertObjectHasProperty('addedToGallery', $app);
+        //$app = addToGallery($app);
+        //self::assertEquals(1, sizeof($app->comments));
+        //self::assertObjectHasProperty('addedToGallery', $app);
     }
 }

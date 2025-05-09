@@ -90,13 +90,15 @@ function getDetailed(string $plateId): JSONObject {
     $ret->apps = $apps;
     $ret->lastTicket = lastTicket($apps);
     $ret->isPresentInGallery = isPresentInGallery($apps);
+    $ret->plateId = cleanPlateId($plateId);
     return $ret;
 }
 
 function lastTicket(array $recydywa): string {
     if (!sizeof($recydywa)) return "";
 
-    $lastTicket = array_shift($recydywa);
+    // for no reason the order of this array is reversed 
+    $lastTicket = end($recydywa);
 
     global $STATUSES;
     global $SM_ADDRESSES;

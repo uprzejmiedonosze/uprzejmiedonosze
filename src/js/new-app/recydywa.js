@@ -14,13 +14,13 @@ export async function updateRecydywa(appId) {
 
     if (appsCnt == 0) {
         $overlay.hide()
-        $details.hide()
+        $details.css('visibility', 'hidden')
         return
     }
 
     $overlay.show()
     if (recydywa.lastTicket) {
-        $details.show()
+        $details.css("visibility", "visible")
         $details.find('.recydywa-lastTicket').html(recydywa.lastTicket);
     }
 
@@ -56,7 +56,7 @@ export async function updateRecydywa(appId) {
 
     if (recydywa.isPresentInGallery) {
         $details.find('.recydywa-galleryLink')
-            .html(`<a href="https://galeria.uprzejmiedonosze.net/tagged/DW9096Y">zobacz galerię</a>`);
+            .html(`<a target="_blank" href="https://galeria.uprzejmiedonosze.net/tagged/${recydywa.plateId}">zobacz galerię</a>`);
     }
 }
 
