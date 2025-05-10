@@ -514,6 +514,16 @@
     "voivodeship": "Podkarpackie",
     "city": "Jarosław"
   },
+  "powiat trzebnicki": {
+    "address": [
+      "Komenda Powiatowa Policji w Trzebnicy",
+      "ul. Księdza Dziekana Wawrzyńca Bochenka 8",
+      "55-100 Trzebnica"
+    ],
+    "email": "dyzurny@trzebnica.wr.policja.gov.pl",
+    "voivodeship": "Dolnośląskie",
+    "city": "Trzebnica"
+  },
   "default": {
     "address": [
       "Komenda Stołeczna Policji",
@@ -526,3 +536,10 @@
     "hint": "Nie udało się się dobrać wojewódzkiego #stopagresji, więc kierujemy wysyłkę na Stołeczną Komendę Policji."
   }
 }
+
+
+
+
+
+
+
