@@ -3427,5 +3427,13 @@
       "87-200 Wąbrzeźno"
     ],
     "email": "strazmiejska@wabrzezno.com"
+  },
+  "powiat garwoliński": {
+    "address": [
+      "Komenda Powiatowa Policji w Garwolinie",
+      "ul. Stacyjna 23 ",
+      "08-400 Garwolin"
+    ],
+    "email": "dyzurny.kppgarwolin@ra.policja.gov.pl"
   }
 }
