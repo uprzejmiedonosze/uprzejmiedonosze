@@ -43,7 +43,16 @@ $consumer = function (string $appId): void {
     sleep(5);
   } catch (\Exception $e) {
     $plateId = $app->carInfo->plateId ?? '[plateId]';
-    logger("ERROR: Failed detect face in $appId ($plateId) " . $e->getMessage(), true);
+
+    $message = $e->getMessage();
+
+    if (strpos($message, 'photo upload limit for today') !== false) {
+      logger("Warning: Tumblr upload limit reached $appId ($plateId)", true);
+    } else {
+      logger("ERROR: Failed detect face in $appId ($plateId) $message", true);
+    }
+    
+    
     sleep(30);
   }
 };
