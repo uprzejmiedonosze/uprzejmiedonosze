@@ -80,7 +80,7 @@ function getDetailed(string $plateId): JSONObject {
             'email' => \crypto\encode($app->email, $_SESSION['user_id'], $plateId),
             'owner' => $app->email == \user\currentEmail(),
             'smCity' => $app->smCity,
-            'stopAgresji' => $app->stopAgresji,
+            'stopAgresji' => $app->stopAgresji(),
             'date' => $app->date,
             'number' => $app->number,
             'addedToGallery' => $app->addedToGallery->state ?? null)),
