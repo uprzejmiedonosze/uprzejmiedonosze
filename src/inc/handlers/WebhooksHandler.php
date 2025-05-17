@@ -25,7 +25,15 @@ class WebhooksHandler extends AbstractHandler {
         }
 
         \webhook\add($id, $event);
-        $this->verify($request);
+        try {
+            $this->verify($request);
+        } catch (RejectSilentlyWebhookException $e) {
+            \webhook\mark($id, $e->getMessage());
+            return $this->renderJson($response, array(
+                "type" => $e->getMessage(),
+                "status" => "ignored"
+            ));
+        }
         
         $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
@@ -120,18 +128,15 @@ class WebhooksHandler extends AbstractHandler {
         $request = WebhooksHandler::$httpFoundationFactory->createRequest($psrRequest);
 
         $content = $request->toArray();
-        if (
-            !isset($content['signature']['timestamp'])
+        if (   !isset($content['signature']['timestamp'])
             || !isset($content['signature']['token'])
             || !isset($content['signature']['signature'])
-            || !isset($content['event-data']['event'])
-        ) {
+            || !isset($content['event-data']['event'])) {
             throw new HttpForbiddenException($psrRequest, 'Payload is malformed.');
         }
-        if (
-            !isset($content['event-data']['user-variables']['appid'])
-        ) {
-            throw new HttpForbiddenException($psrRequest, 'Missing app-id');
+
+        if (!isset($content['event-data']['user-variables']['appid'])) {
+            throw new RejectSilentlyWebhookException('Missing app-id');
         }
 
         $this->validateSignature($content['signature']);

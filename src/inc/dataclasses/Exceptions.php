@@ -28,6 +28,12 @@ class RejectWebhookException extends Exception {
     }
 }
 
+class RejectSilentlyWebhookException extends Exception {
+    public function __construct(string $msg) {
+        parent::__construct($msg, 200);
+    }
+}
+
 class MissingSMException extends Exception {
     public function __construct(string $msg) {
         parent::__construct($msg, 307);
