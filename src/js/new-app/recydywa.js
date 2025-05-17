@@ -14,7 +14,10 @@ export async function updateRecydywa(appId) {
 
     if (appsCnt == 0) {
         $overlay.hide()
-        $details.css('visibility', 'hidden')
+        $details.removeClass('onlyme').css('visibility', 'hidden')
+        $details.find('.recydywa-lastTicket').html('')
+        $details.find('.recydywa-header').text('')
+        $details.find('.recydywa-galleryLink').html('')
         return
     }
 
