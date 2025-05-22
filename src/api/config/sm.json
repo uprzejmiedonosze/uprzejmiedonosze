@@ -3443,5 +3443,29 @@
       "06-500 Mława"
     ],
     "email": "strazmiejska@mlawa.pl"
+  },
+  "Trzebiatów": {
+    "address": [
+      "Straż Miejska Trzebiatów",
+      "ul. Rynek 15",
+      "72-320 Trzebiatów"
+    ],
+    "email": "strazmiejska@trzebiatow.pl"
+  },
+  "Szczawno-Zdrój": {
+    "address": [
+      "Straż Miejska Szczawno-Zdrój",
+      "ul. Mickiewicza 3",
+      "58-310 Szczawno-Zdrój"
+    ],
+    "email": "sm@szczawno-zdroj.pl"
+  },
+  "Krościenko nad Dunajcem": {
+    "address": [
+      "Posterunek Policji w Krościenku nad Dunajcem",
+      "al. Wędkarzy 1A",
+      "34-450 Krościenko nad Dunajcem"
+    ],
+    "email": "dzielnicowy.szczawnica5@nowy-targ.policja.gov.pl"
   }
 }
