@@ -3467,5 +3467,21 @@
       "34-450 Krościenko nad Dunajcem"
     ],
     "email": "dzielnicowy.szczawnica5@nowy-targ.policja.gov.pl"
+  },
+  "Ełk": {
+    "address": [
+      "Straż Miejska w Ełku",
+      "ul. Piłsudskiego 2",
+      "19-300 Ełk"
+    ],
+    "email": "strazmiejska@um.elk.pl"
+  },
+  "Zamość": {
+    "address": [
+      "Straż Miejska miasta Zamość",
+      "Rynek Wielki 13",
+      "22-400 Zamość"
+    ],
+    "email": "komendant@strazmiejska.zamosc.pl"
   }
 }
