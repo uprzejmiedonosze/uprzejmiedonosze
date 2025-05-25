@@ -3483,5 +3483,13 @@
       "22-400 Zamość"
     ],
     "email": "komendant@strazmiejska.zamosc.pl"
+  },
+  "Łuków": {
+    "address": [
+      "Komenda Powiatowa Policji w Łukowie",
+      "ul. Międzyrzecka 9",
+      "21-400 Łuków"
+    ],
+    "email": "kpp.lukow@lu.policja.gov.pl"
   }
 }
