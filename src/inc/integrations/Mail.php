@@ -28,7 +28,7 @@ class Mail extends CityAPI {
             $to = $application->guessSMData()->email;
         }
 
-        $transport = Transport::fromDsn(SMTP_GMAIL . '://' . SMTP_USER . ':' . urlencode(SMTP_PASS) . '@' . SMTP_HOST);
+        $transport = Transport::fromDsn(SMTP_GMAIL . '://' . SMTP_USER . ':' . rawurlencode(SMTP_PASS) . '@' . SMTP_HOST);
         
         $mailer = new Mailer($transport);
 
