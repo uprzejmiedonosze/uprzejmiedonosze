@@ -664,7 +664,8 @@
       "ul. Pawła Stalmacha 9",
       "41-800 Zabrze"
     ],
-    "email": "straz@strazmiejska.zabrze.pl"
+    "email": "straz@strazmiejska.zabrze.pl",
+    "api": "Mail"
   },
   "Ruda Śląska": {
     "address": [
@@ -1392,7 +1393,8 @@
       "45-072 Opole"
     ],
     "email": "dyzurny@strazmiejska.opole.pl",
-    "hint": "SM Opole nie wzywa zgłaszających na przesłuchanie. Wzywany jest sprawca. Dopiero gdy sprawca zaprzeczy, że dokonał wykroczenia wzywany jest zgłaszający."
+    "hint": "SM Opole nie wzywa zgłaszających na przesłuchanie. Wzywany jest sprawca. Dopiero gdy sprawca zaprzeczy, że dokonał wykroczenia wzywany jest zgłaszający.",
+    "api": "Mail"
   },
   "Radzymin": {
     "address": [
