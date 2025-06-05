@@ -265,6 +265,7 @@ class StaticPagesHandler extends AbstractHandler {
             'epuap',
             'e-doreczenia',
             'jak-zglosic-nielegalne-parkowanie',
+            'jak-zlozyc-wniosek-o-slupki',
             'kontakt',
             'maintenance',
             'mandat',

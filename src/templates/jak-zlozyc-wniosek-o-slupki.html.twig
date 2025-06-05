@@ -1,0 +1,136 @@
+{% if dialog %}
+	{% set leftButton = 'menuBack' %}
+	{% set rightButton = '' %}
+{% else %}
+	{% set leftButton = 'menu' %}
+	{% set rightButton = 'menuStart' %}
+{% endif %}
+{# SITEMAP-PRIORITY:0.9 #}
+
+{% set title = 'Jak złożyć wniosek o słupki?' %}
+{% set shortTitle = 'Poradnik: słupki' %}
+{% set description = 'Jak złożyć wniosek o postawienie słupków utrudniających nielegalne parkowanie samochodu?' %}
+{% set mainClass = 'how' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+	<h2>{{ shortTitle }}</h2>
+
+	{% macro link(target, name) %}
+		<a href="#{{ target }}" onclick="window._scrollToHowTo('#{{ target }}')">{{ name }}</a>
+	{% endmacro link %}
+
+	<p>
+		Najtrudniejszym elementem w procesie wnioskowania o postawienie słupków jest
+						sprawdzenie, kto jest właścicielem danego terenu.
+						W Warszawie trochę ułatwia sprawę aplikacja miejska 19115.
+	</p>
+
+	<p>Sprawdź jak możesz wnioskować o słupki:
+	</p>
+	<h3 class="howto">Dostępne metody</h3>
+	<ul>
+
+		<li>{{ _self.link('znajdź-właściciela', 'Znajdź właściciela terenu i wyślij wniosek o słupki') }}</li>
+		<li>{{ _self.link('Warszawa', 'Warszawa: serwis lub aplikacja 19115') }}</li>
+		<li>{{ _self.link('zrób-to-sam', 'Zrób to sam') }}</li>
+	</ul>
+	<div class="howtos">
+		<div class="howto" id="znajdź-właściciela">
+			<h3 class="title">Znajdź właściciela terenu i wyślij wniosek o słupki</h3>
+			<div class="card">
+				<figure>
+					<img src="/img/how-wlasnosc-gruntu.png?width=800&as=jpg&quality=90">
+				</figure>
+				<div class="content">
+
+					<p>Ze względu na decyzję szefa UODO, uzyskanie informacji o właścicielu danego terenu
+														jest bardzo utrudnione. Serwisy takie jak Geoportal dostarczają jedynie podstawowych
+														danych o działce, bez informacji umożliwiających sprawną identyfikację właściciela
+														gruntu. W związku z tym konieczne może być
+						<em>skorzystanie z niestandardowych metod</em>.</p>
+					<p></p>
+					<p>Na początek sprawdź, czy teren nie należy do wspólnoty mieszkaniowej lub miasta.
+														Jeśli pracujesz nad np. przystankiem prawdopodobnie jest to teren miejski.</p>
+
+					<p>
+						<em>Tereny miejskie</em>
+					</p>
+
+					<p>Jeśli działka należy do miasta, należy skierować wniosek o ustawienie słupków
+														do urzędu miasta lub gminy. Pismo adresuje się do prezydenta lub wójta – urząd
+														przekaże Twój wniosek do odpowiedniego wydziału.</p>
+
+					<p>
+						<em>Inny zarządca — wspólnoty, spółdzielnie mieszkaniowe, instytucje...</em>
+					</p>
+
+					<p>Patoparkingi przy osiedlach i obiektach handlowych często znajdują się na
+														terenach należących do wspólnot lub innych zarządców. Wbrew pozorom, taka
+														sytuacja może być korzystna – prosty e-mail do wspólnoty często okazuje się
+														skuteczny, po 2–3 miesiącach miejsce może zostać zabezpieczone.</p>
+
+					<p>Nazwę danego zarządcy (np. spółdzielni) możesz znaleźć na tabliczkach
+														informacyjnych, pieczątkach, harmonogramach wywozu odpadów, w grupach osiedlowych,
+														pytając mieszkańców lub w dowolny inny sposób.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="howto" id="Warszawa">
+			<h3 class="title">Warszawa: skorzystaj z aplikacji lub serwisu 19115</h3>
+			<div class="card">
+				<figure>
+					<img src="/img/how-19115.png?width=800&as=jpg&quality=90">
+				</figure>
+				<div class="content">
+					<p>Warszawa umożliwia składanie wniosków o ustawienie słupków za pośrednictwem miejskiej aplikacji 19115. Na podstawie dotychczasowych doświadczeń warszawskich użytkowników możesz spodziewać się trzech możliwych scenariuszy.</p>
+
+					<ul>
+						<li>Wniosek zostaje przekazany do odpowiedniego wydziału, jeśli teren należy do miasta (np. ZDM) lub instytucji państwowej (np. GDDKiA).</li>
+						<li>Wniosek trafia do zarządcy danego terenu, np. wspólnoty mieszkaniowej.</li>
+						<li>Otrzymujesz informację, że wniosek nie został przekazany, ale dowiadujesz się, kto jest zarządcą gruntu.</li>
+					</ul>
+
+					<p>Nawet w najgorszym przypadku aplikacja rozwiązuje podstawowy problem związany ze słupkami, czyli umożliwia ustalenie właściciela terenu.</p>
+
+					<p>Korzystanie z aplikacji lub serwisu może być nieco utrudnione ze względu na ich złożoność i mało intuicyjny podział (zwłaszcza dla początkujących). Poniżej przedstawiamy krótki przewodnik, jak wysłać wniosek przez 19115:</p>
+
+					<ul>
+						<li>przejdź do serwisu www lub pobierz aplikację (iOS, Android),</li>
+						<li>wybierz kategorię: drogi, zmiana organizacji ruchu,</li>
+						<li>wskaż dokładne miejsce zgłoszenia na mapie,</li>
+						<li>czego dotyczy problem: montaż nowych słupków... — podaj jak najwięcej informacji i dołącz zdjęcia dokumentujące problem,</li>
+						<li>podaj swój email, żeby móc śledzić losy zgłoszenia i otrzymać odpowiedź.</li>
+					</ul>
+
+					<p>
+						<em>Naprawa słupków 19115</em>
+					</p>
+
+					<p>Aplikacji bądź serwisu możesz użyć również w celu zgłoszenia uszkodzonych słupków:</p>
+
+					<ul>
+						<li>kategoria: drogi,</li>
+						<li>uszkodzenie barierki, słupka, znaku,</li>
+						<li>wskaż miejsce na mapie,</li>
+						<li>podaj szczegóły i zdjęcia.</li>
+					</ul>
+
+					<p>Miasto przeważnie bardzo sprawnie reaguje na te zgłoszenia.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="howto" id="zrób-to-sam">
+			<h3 class="title">Zrób to sam</h3>
+			<div class="card">
+				<figure>
+					<img src="/img/how-zrob-to-sam.jpg?width=800&as=jpg&quality=90">
+				</figure>
+				<div class="content"></div>
+			</div>
+		</div>
+    </div>
+{% endblock %}
