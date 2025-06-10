@@ -36,6 +36,18 @@ export function error(msg) {
 }
 
 /**
+ * @param {string} msg
+ */
+export function warning(msg) {
+    const toast = document.getElementById("toast")
+    if (!toast) return
+    // @ts-ignore
+    toast.innerHTML = msg
+    toast.classList.add('warning')
+    show(toast, 6000)
+}
+
+/**
  * @param {HTMLElement} toast
  * @param {number} ms
  */

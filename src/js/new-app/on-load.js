@@ -1,5 +1,9 @@
 import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
+import { bindSoftCommentValidation } from "../lib/validation";
+
+import $ from "jquery"
+
 
 export const initHandlers = (map) => {
   $("#msisdn").on("change", function () {
@@ -35,6 +39,8 @@ export const initHandlers = (map) => {
 
   // initial validation on load
   validateExtensions()
+
+  bindSoftCommentValidation()
 
   if (window.File && window.FileReader && window.FormData) {
     $(document).on("change", ".image-upload input", function (e) {

@@ -181,7 +181,7 @@
         </fieldset>
 
         <fieldset>
-        <legend class="section">Oświadczenia</legend>
+        <legend class="section" id="statements">Oświadczenia</legend>
 {% set witness = true %}
 {% if app.statements is not defined or not app.statements.witness %}
     {% set witness = false %}

@@ -12,7 +12,7 @@ export function validateForm() {
     ret = checkCommentvalue() && ret;
   }
   if (!ret) {
-    $(window).scrollTop($(".error").offset().top - 100);
+    $(window).scrollTop($(".error").first().offset()?.top || 100 - 100);
   }
   $("#form-submit").removeClass("disabled");
   return ret;

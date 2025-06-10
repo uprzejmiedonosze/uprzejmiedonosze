@@ -1,6 +1,6 @@
 import $ from "jquery"
 import { DateTime } from "luxon"
-import { error } from "./toast"
+import { error, warning } from "./toast"
 
 export const checkAddress = function () {
   const textAddress = ($("#lokalizacja")?.val() + "").trim()
@@ -30,7 +30,7 @@ export const checkValue = function (item, minLength) {
   return false
 }
 
-export const checkValueRe = function(item, regex) {
+export const checkValueRe = function (item, regex) {
   if (item.val().trim().match(regex))
     return true
   item.addClass("error")
@@ -47,9 +47,33 @@ export const checkCommentvalue = function () {
   return false
 }
 
+export function bindSoftCommentValidation() {
+  $('#comment')
+    .on('focusout', function () {
+      // @ts-ignore
+      const comment = this.value ?? ''
+      // @ts-ignore
+      const witnessChecked = document.getElementById('witness')?.checked
+      if (witnessChecked) return
+      const driver = comment.search(/(?:^|[^A-Za-z0-9_])kieruj\w*/i) >= 0
+      let warningMsg = null
+      if (driver)
+        warningMsg = 'Wspominasz kierowcę w komentarzu.'
+      const witness = comment.search(/(?:^|[^A-Za-z0-9_])[sś]wiadk\w*/i) >= 0
+      if (witness)
+        warningMsg = 'Używasz słowa „świadek” w komentarzu.'
+      const mr = comment.search(/(?:^|[^A-Za-z0-9_])pani?/i) >= 0
+      if (mr)
+        warningMsg = 'Używasz słowa „pan/i” w komentarzu.'
+      if (warningMsg) {
+        warning(`<p>${warningMsg}</p><a href="#statements">Sprawdź opcję „świadek momentu parkowania”</a>`)
+      }
+    })
+}
+
 export const checkDateTimeValue = function () {
   const dt = DateTime.fromISO($('#datetime')?.val() + "")
-  if(dt > DateTime.now()) {
+  if (dt > DateTime.now()) {
     $('#datetime').addClass("error")
     error("Data nie może być z przyszłości")
     return false
