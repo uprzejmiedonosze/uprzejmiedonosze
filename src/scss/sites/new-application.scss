@@ -281,7 +281,7 @@ div.error img {
     display: block;
     background-image: url('https://uprzejmiedonosze.net/img/map-circle.png');
     left: calc(50% - 32px);
-    top: calc(200px/2 - 32px);
+    bottom: calc(50% - 32px);
     pointer-events: none;
     user-select: none;
   }
