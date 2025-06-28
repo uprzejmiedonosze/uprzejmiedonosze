@@ -3500,5 +3500,13 @@
       "55-095 Długołęka"
     ],
     "email": "maksymilian.nowinski@wroclaw.wr.policja.gov.pl"
+  },
+  "Kęty": {
+    "address": [
+      "Straż Miejska Kęty",
+      "ul. Jana Kilińskiego 1",
+      "32-650 Kęty"
+    ],
+    "email": "sm@kety.pl"
   }
 }
