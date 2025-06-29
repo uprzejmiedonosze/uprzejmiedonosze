@@ -273,6 +273,8 @@ div.error img {
     }
   }
 
+  #map { position: relative; }
+
   #mapCenter {
     z-index: 5;
     position: absolute;
