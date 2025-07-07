@@ -78,10 +78,10 @@ export const checkDateTimeValue = function () {
     error("Data nie może być z przyszłości")
     return false
   }
-  const eightMonthsAgo = DateTime.now().minus({ months: 10 })
-  if (dt < eightMonthsAgo) {
+  const sevenMonthsAgo = DateTime.now().minus({ months: 7 })
+  if (dt < sevenMonthsAgo) {
     $('#datetime').addClass("error")
-    error("Wykroczenie starsze niż 10 miesięcy. SM/Policja nie zdąży zareagować!")
+    error("Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!")
     return false
   }
   return dt.isValid
