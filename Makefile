@@ -59,7 +59,7 @@ TAG_NAME             := $(shell echo $(GIT_BRANCH)_$(DATE))
 .DEFAULT_GOAL        := help
 
 
-dev: ## Refresh src files in Docker image
+dev: check-local-configs ## Refresh src files in Docker image
 	@$(MAKE) --warn-undefined-variables dev-sequential -j
 
 dev-sequential: HOST := $(DEV_HOST)
@@ -68,6 +68,17 @@ dev-sequential: export_minimal
 	@echo "==> Refreshing sources"
 	@cp localhost-firebase-adminsdk.json $(EXPORT)
 	@$(RSYNC) -r vendor $(EXPORT)
+
+.PHONY: check-local-configs
+check-local-configs:
+	@if [ ! -f config.php ]; then \
+		echo "Error: config.php is missing. Please refer to README.md for instructions on how to create it."; \
+		exit 1; \
+	fi
+	@if [ ! -f localhost-firebase-adminsdk.json ]; then \
+		echo "Error: localhost-firebase-adminsdk.json is missing. Please refer to README.md for instructions on how to create it."; \
+		exit 1; \
+	fi
 
 dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
@@ -372,7 +383,7 @@ lint-php:
 
 .PHONY: test-phpunit
 .ONESHELL: test-phpunit
-test-phpunit: MEMCACHED := $(shell curl localhost:11211 2>&1 | grep -c Fail || true)
+test-phpunit: MEMCACHED := $(shell curl -m3 localhost:11211 2>&1 | grep -c Fail || true)
 test-phpunit: $(PUBLIC)/api/config/sm.json $(PUBLIC)/api/config/stop-agresji.json $(PUBLIC)/api/config/police-stations.pjson \
 	$(PUBLIC)/api/config/police-stations.pjson process-php minify-config $(EXPORT)/config.php $(EXPORT)/config.env.php
 	@echo "==> Testing phpunit"

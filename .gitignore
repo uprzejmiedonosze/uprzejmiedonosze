@@ -2,7 +2,7 @@
 **/*-wal
 **/*.log
 **/.DS_Store
-*uprzejmiedonosze.net-firebase-adminsdk.json
+*-firebase-adminsdk.json
 .branch-env
 .cache
 .parcel-cache
