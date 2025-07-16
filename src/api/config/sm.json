@@ -3508,5 +3508,13 @@
       "32-650 Kęty"
     ],
     "email": "sm@kety.pl"
+  },
+  "gmina Jedlińsk": {
+    "address": [
+      "Komisariat Policji w Jedlińsku",
+      "ul. Warszawska 4",
+      "26-660 Jedlińsk"
+    ],
+    "email": "kp.jedlinsk@ra.policja.gov.pl"
   }
 }
