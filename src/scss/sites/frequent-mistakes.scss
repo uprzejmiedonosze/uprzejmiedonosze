@@ -1,0 +1,34 @@
+.czesto-popelniane-bledy {
+  .cards {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    align-items: stretch;
+  }
+
+  .cards figure {
+    flex: 1;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cards img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .cards figcaption {
+    background-color: #1d1d1d;
+    padding: 0.75rem;
+    margin: 0;
+    font-size: 0.9rem;
+    width: 100%;
+    box-sizing: border-box;
+    flex-grow: 1;
+    /* overrides for general.scss */
+    border-radius: 0px;
+    position: static;
+  }
+}
