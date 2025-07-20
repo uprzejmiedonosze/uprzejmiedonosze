@@ -1,16 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const cardsContainer = document.querySelector('.czesto-popelniane-bledy .cards');
-  if (!cardsContainer) return;
+  const cardsContainers = document.querySelectorAll('.czesto-popelniane-bledy .cards');
+  if (cardsContainers.length===0) return;
 
-  const arrowRight = cardsContainer.querySelector('.right');
-  const arrowLeft = cardsContainer.querySelector('.left');
-  const figures = cardsContainer.querySelectorAll('figure');
-
-  if (!arrowRight || !arrowLeft || figures.length === 0) return;
-  
-  function scrollTo(index) {
-    const figure = figures[index];
-    if (!figure) return;
+  function scrollTo(figure) {
     figure.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
@@ -18,8 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function setClasses(){
-    if (cardsContainer.scrollLeft > cardsContainer.scrollWidth * 0.3) {
+  function setClasses(ev) {
+    const arrowLeft = ev.target.querySelector(".left");
+    const arrowRight = ev.target.querySelector(".right");
+    if (ev.target.scrollLeft > ev.target.scrollWidth * 0.3) {
       arrowLeft.classList.remove('hidden');
       arrowRight.classList.add('hidden');
     } else {
@@ -28,14 +22,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  setClasses();
+  cardsContainers.forEach(container => {
+    setClasses({ target: container });
+    container.addEventListener("scroll", setClasses);
 
-  cardsContainer.addEventListener("scroll", setClasses);
+    container.querySelector(".right").addEventListener("click", (ev) => {
+     scrollTo(container.querySelectorAll("figure")[1]);
+    });
+    container.querySelector(".left").addEventListener("click", (ev) => {
+     scrollTo(container.querySelectorAll("figure")[0]);
+    });
+  });
 
-  arrowRight.addEventListener("click", () => {
-    scrollTo(1);
-  });
-  arrowLeft.addEventListener("click", () => {
-    scrollTo(0);
-  });
 });
