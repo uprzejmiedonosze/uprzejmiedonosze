@@ -25,6 +25,7 @@ import "./sites/public-info";
 import "./sites/how";
 import "./sites/ask-for-status"
 import "./sites/menu"
+import "./sites/frequent-mistakes"
 import makeDialog from "./lib/dialog";
 
 $('.menu-button.right').on('click', function() {
