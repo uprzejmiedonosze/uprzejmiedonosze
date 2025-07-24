@@ -137,6 +137,12 @@ div.error img {
     }
   }
 
+  .image-upload.dragover {
+    border: 2px dashed variables.$primaryColor;
+    background: #f0f8ff;
+    box-shadow: 0 0 0 2px variables.$primaryColor inset;
+  }
+
   .contextImageSection img {
     background-image: url(data-url:../img/cameraContext.png);
   }
