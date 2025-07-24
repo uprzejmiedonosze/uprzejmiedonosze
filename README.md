@@ -17,7 +17,7 @@ To start you have to:
 ## Cloning
 
 ```
-$ git clone git@bitbucket.org:uprzejmiedonosze/uprzejmiedonosze.git
+$ git clone git@github.com:uprzejmiedonosze/uprzejmiedonosze.git
 ```
 
 ## External services setup
