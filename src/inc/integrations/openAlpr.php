@@ -101,5 +101,6 @@ function get_alpr_cli($imagePath) {
 
 function store_alpr_budget_cache($used, $total): void {
     $budgetConsumed = (float)$used / (float)$total;
+    logger("OpenAlpr $used / $total", true);
     \cache\set(Type::AlprBudgetConsumed,  "", $budgetConsumed);
 }
