@@ -65,6 +65,11 @@ div.error img {
     }
   }
 
+  .imageContainer.image-upload.thirdImageSection {
+    border: 2px solid variables.$primaryColor;
+    border-radius: .8em;
+  }
+
   .plate {
     position: relative;
   
@@ -135,6 +140,12 @@ div.error img {
       background-position-y: 30px;
       height: 100%;  
     }
+  }
+
+  .image-upload.dragover {
+    border: 2px dashed variables.$primaryColor;
+    background: #f0f8ff;
+    box-shadow: 0 0 0 2px variables.$primaryColor inset;
   }
 
   .contextImageSection img {
