@@ -279,7 +279,8 @@ class StaticPagesHandler extends AbstractHandler {
             'zwrot-za-przesluchanie',
             'patronite',
             'naklejki-robisz-to-zle',
-            'zazalenie-na-brak-mandatu'
+            'zazalenie-na-brak-mandatu',
+            'czesto-popelniane-bledy'
         ];
         $route = $args['route'];
 
