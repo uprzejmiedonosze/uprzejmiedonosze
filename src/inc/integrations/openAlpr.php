@@ -73,11 +73,8 @@ function get_alpr(&$imageBytes){
     logger("  get_alpr");
     $imageHash = sha1($imageBytes);
 	$apiInstance = new \Swagger\Client\Api\DefaultApi();
-    $secretKey = (intval(date('s')) % 2)? // mixing two API keys
-        OPEN_ALPR_SECRET_1:
-        OPEN_ALPR_SECRET_2;
 
-    $alpr = $apiInstance->recognizeBytes($imageBytes, $secretKey,
+    $alpr = $apiInstance->recognizeBytes($imageBytes, OPEN_ALPR_SECRET_1,
         "eu", // country
         1, // recognize_vehicle
         "", // state
