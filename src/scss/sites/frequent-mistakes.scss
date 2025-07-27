@@ -29,8 +29,8 @@
   .arrow {
     @media (max-width: variables.$width-break) {
       position: absolute;
-      width: 2rem;
-      height: 2rem;
+      width: 3.125rem;
+      height: 3.125rem;
       top: 50%;
       transform: translateY(-50%);
       background-size: contain;
@@ -45,7 +45,7 @@
       }
       
       &.left {
-        right: -1rem;
+        right: -0.5rem;
         background-image: url('../img/arrow-left.svg');
       }
       
@@ -69,10 +69,13 @@
 
     @media (max-width: variables.$width-break) {
       flex: none;
-      width: calc(100vw - 2rem);
+      width: calc(100vw - 3rem);
       min-width: 0;
       overflow: hidden;
       scroll-snap-align: start;
+    }
+    @media (min-width: variables.$width-break) {
+      border-radius: 5px;
     }
   }
 

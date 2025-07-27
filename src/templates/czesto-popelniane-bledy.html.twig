@@ -6,7 +6,7 @@
   {% set rightButton = 'menuStart' %}
 {% endif %}
 {# SITEMAP-PRIORITY:0.7 #}
-
+{% set redesignClass = 'rd25' %}
 {% set title = 'Często popełniane błedy' %}
 {% set shortTitle = 'Często popełniane błędy' %}
 {% set description = 'Lista i opis najczęściej popełnienych błędów, wraz z informacją na czym polegają i jak ich unikać.' %}
@@ -22,12 +22,13 @@
   <p>Błędów nie robi tylko ten, kto nic nie robi. Warto jednak ich unikać, bo wydłużają one czas procesowania zgłoszeń, albo powodują <a href='/przesluchanie.html'>wezwania w celu uzupełnienia zgłoszeń</a>.</p>
   <p>Przeczytaj i zobacz jakie błędy są najczęściej popełniane oraz co zrobić aby ich nie powtórzyć.</p>
 
-  <h4>Spis treści:</h4>
+  <h3>Spis treści:</h3>
   <ul>
     <li>{{ _self.link('zebra', 'Zebra to nie zawsze przejście dla pieszych.') }}</li>
     <li>{{ _self.link('za-przejsciem', 'Czasami można parkować bezpośrednio za przejściem dla pieszych.') }}</li>
     <li>{{ _self.link('centra-handlowe', 'Parkowanie pod centrami handlowymi.') }}</li>
     <li>{{ _self.link('znak-na-zdjeciu', 'Pamiętaj o zdjęciu z widocznym znakiem.') }}</li>
+    <li>{{ _self.link('zblizenie-na-zielen', 'Przy niszczeniu zieleni dołącz zbliżenie.') }}</li>
     <li>{{ _self.link('strona-znaku', 'Niektóre znaki obowiazują tylko po jednej stronie.') }}</li>
   </ul>
     
@@ -37,12 +38,12 @@
 
   <div class="cards">
     <figure>
-      <img src="/img/agenda-parkingowa-media-4.jpeg" alt="Zdjęcie przejścia dla pieszych z widocznym znakiem poziomym (zebrą) oraz pionowym.">
-      <figcaption>Widoczny znak D-6 - to jest przejście dla pieszych</figcaption>
+      <img src="/img/fm-przejscie-sugerowane.jpg" alt="Zdjęcie przejścia dla pieszych z widocznym znakiem poziomym (zebrą) oraz pionowym.">
+      <figcaption>Tzw. sugerowane przejście dla pieszych, bez znaków poziomych, w świetle prawa nim nie jest.</figcaption>
     </figure>
     <figure>
-      <img src="/img/agenda-parkingowa-media-1.jpeg" alt="Zdjęcie pasów na drodze (tzw. zebry) bez znaku pionowego">
-      <figcaption>Tzw. sugerowane przejście dla pieszych.</figcaption>
+      <img src="/img/fm-przejscie-wyznaczone.jpg" alt="Zdjęcie pasów na drodze (tzw. zebry) bez znaku pionowego">
+      <figcaption>Widoczny znak D-6 oznacza przejście dla pieszych. Tu obowiazują wymogi minimalnej odległości parkowania.</figcaption>
     </figure>
     <div class="arrow right"></div>
     <div class="arrow left"></div>
@@ -55,12 +56,12 @@
  
   <div class="cards">
     <figure>
-      <img src="/img/agenda-parkingowa-media-1.jpeg" alt="ALT przykladu">
-      <figcaption>Droga jest dwukierunkowa - tu nie wolno parkować.</figcaption>
+      <img src="/img/fm-za-przejsciem-dwukierunkowa.jpg" alt="Zdjęcie pojazdu zaparkowanego za przejściem na drodze dwukierunkowej.">
+      <figcaption>Parkowanie mniej niż 10 metrów od przejścia na drodze dwukierunkowej to wykroczenie.</figcaption>
     </figure>
     <figure>
-      <img src="/img/agenda-parkingowa-media-4.jpeg" alt="ALT przykladu">
-      <figcaption>Parkowanie za tym przejściem jest dozwolone.</figcaption>
+      <img src="/img/fm-za-przejsciem-jednokierunkowa.jpg" alt="Zdjęcie drogi jednokierunkowej z wyznaczonym przejściem, za którym stoją pojazdy.">
+      <figcaption>Na drodze jednokierunkowej parkowanie bezpośrednio za przejściem jest dozwolone.</figcaption>
     </figure>
     <div class="arrow right"></div>
     <div class="arrow left"></div>
@@ -69,12 +70,13 @@
   
   <h3 id="centra-handlowe">Pod marketami mogą nie obowiązywać przepisy o ruchu drogowym.</h3>
   <p>Parkingi pod marketami mogą być traktowane jako teren prywatny, na którym parkowanie jest regulowane wyłącznie regulaminem zarządcy terenu. Place podlegające PoRD przy wjeździe są oznacza tabliczką "Strefa Ruchu".</p>
+  <p>To samo dotyczy osiedli mieszkaniowych, gdzie droga należy do wspólnoty. Jeśli na wjeździe nie ma znaku "Strefa Ruchu" albo "Strefa Zamieszkania", to przepisy dotyczące parkowania nie obowiązują na ich terenie.</p>
   <p>Wyjątek stanowią miejsca dla Osób z Niepełnosprawnością (OzN). Te - gdy są prawidłowo oznakowane - obowiązuja wszędzie.</p>
 
   <div class="cards">
     <figure>
-      <img src="/img/agenda-parkingowa-media-1.jpeg" alt="ALT przykladu">
-      <figcaption>OPIS przykladu</figcaption>
+      <img src="/img/fm-droga-wewnetrzna-bez-strefy.jpg" alt="Pojazd zaparkowany bezpośrednio przy pasach i skrzyżowaniu na terenie marketu">
+      <figcaption>Na terenie prywatnym bez odpowiedniego oznakowania nie obowiązują przepisy dotyczące parkowania.</figcaption>
     </figure>
     <figure>
       <img src="/img/agenda-parkingowa-media-4.jpeg" alt="ALT przykladu">
@@ -84,14 +86,60 @@
     <div class="arrow left"></div>
   </div>
 
-  <h3 id="znak-na-zdjeciu">Pamiętaj o zdjęciu z widocznym znakiem</h3>
+  <h3 id="znak-na-zdjeciu">Pamiętaj o zdjęciu z widocznym znakiem.</h3>
 
   <p>Pamiętaj aby dokumentować nie tylko źle zaparkowany pojazd, ale też znak który uzasadnia dane wykroczenie.</p>
   <p>Idealne jest zdjęcie pokazujące znak na tle nieprawidłowo zaparkowanego pojazdu, ale gdy nie jest to możliwe, to w większości przypadków wystarczy niezależne zdjęcie znaku.</p>
+
+  <div class="cards">
+    <figure>
+      <img src="/img/fm-znak-niewidoczny.jpg" alt="Zdjęcie pojazdu stojącego za jakimś znakiem. Na zdjęciu nie widać jaki to znak.">
+      <figcaption>Brak znaku w zgłoszeniu może oznaczać konieczność złożenia dodatkowych zeznań.</figcaption>
+    </figure>
+    <figure>
+      <img src="/img/fm-znak-widoczny.jpg" alt="Zdjęcie pojazdu stojącego za znakiem B-36 zakaz postoju i zatrzymywania wraz z tabliczką oznaczającą odholowywanie pojazdów.">
+      <figcaption>Prawidłowe zgłoszenie powinno zawierać wyraźne zdjęcie znaku.</figcaption>
+    </figure>
+    <div class="arrow right"></div>
+    <div class="arrow left"></div>
+  </div>
+
   <p>Pamiętaj, że większość znaków {{ _self.link('strona-znaku', 'obowiązuje tylko po tej stronie, po której jest ustawiona') }}.</p>
 
 
+  <h3 id="zblizenie-na-zielen">Przy niszczeniu zieleni dołącz zbliżenie.</h3>
+
+  <p>Czasami funkcjonariusze obsługujący zgłoszenia wymagają wyraźnego dowodu na niszczenie zieleni. 
+  Żeby uniknąć niepotrzenbych formalności, postaraj się dołączyć jedno zdjęcie wyraźnie pokazujące
+  niszczoną zieleń.</p>
+
+  <div class="cards">
+    <figure>
+      <img src="/img/fm-zielen-1.jpg" alt="Zdjęcie pojazdu stojącego na krawędzi krawężnika, nad terenem zielonym.">
+      <figcaption>Zdjęcie pokazujące niszczenie trawnika w niedostatecznie dokładny sposób.</figcaption>
+    </figure>
+    <figure>
+      <img src="/img/fm-zielen-2.jpg" alt="Zdjęcie pojazdu stojącego bardzo wyraźnie na trawniku.">
+      <figcaption>Zbliżenie na koło stojące na trawniku przeważnie rozwiewa wątpliwości.</figcaption>
+    </figure>
+    <div class="arrow right"></div>
+    <div class="arrow left"></div>
+  </div>
+
   <h3 id="strona-znaku">Strona znaku ma znaczenie</h3>
   <p>Znaki takie jak B-35 (<a href='/przepisy.html#b-35'>zakaz postoju</a>), B-36 (<a href='/przepisy.html#b-36'>zakaz zatrzymywania i postoju</a>) obowiazują tylko po tej stronie drogi, przy której zostały ustawione.</p>
+
+  <div class="cards">
+    <figure>
+      <img src="/img/fm-strona-wlasciwa.jpg" alt="Zdjęcie pojazdu stojącego za znakiem B-36, oba po tej samej stronie drogi.">
+      <figcaption>Parkowanie po stronie znaku B-36 jest wykroczeniem.</figcaption>
+    </figure>
+    <figure>
+      <img src="/img/fm-zielen-2.jpg" alt="Zdjęcie pojazdu stojącego bardzo wyraźnie na trawniku.">
+      <figcaption>Zbliżenie na koło stojące na trawniku przeważnie rozwiewa wątpliwości.</figcaption>
+    </figure>
+    <div class="arrow right"></div>
+    <div class="arrow left"></div>
+  </div>
 
 {% endblock %}

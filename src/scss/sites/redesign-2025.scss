@@ -1,0 +1,22 @@
+/* contains rules used in 2025 redesign
+   designed to be gradually rolled out on whole website,
+   and then merged with main stylesheet */
+
+@use "../lib/variables";
+
+/* master class that triggers redesigned rules */
+
+.rd25 {
+  /* headers should be bold */
+  h3 {
+    font-weight: bold;
+  }
+
+  @media (max-width: variables.$width-break) {
+    /* mobile lists should have spacing between them */
+    ul>li {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+

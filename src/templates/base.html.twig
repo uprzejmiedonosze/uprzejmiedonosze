@@ -53,7 +53,7 @@
     <body class="index">
         <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
         {% include('header.html.twig') %}
-            <div data-role="main" class="ui-content {{ mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
+            <div data-role="main" class="ui-content {{ mainClass ?? '' }} {{ redesignClass ?? '' }} {% if dialog %}dialog{% endif %}">
         {% block main %}{% endblock %}
             </div> <!-- main -->
             <div id="toast"></div>
