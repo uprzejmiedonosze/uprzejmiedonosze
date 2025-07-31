@@ -273,6 +273,15 @@ div.error img {
     }
   }
 
+  .smInfoHint {
+    font-size: 90%;
+    padding: 1em;
+    a {
+      font-weight: 400;
+      text-decoration: none;
+    }
+  }
+
   .locationPickerClass {
     width: 100%;
     height: 200px;

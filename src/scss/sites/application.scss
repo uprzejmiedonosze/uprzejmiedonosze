@@ -122,3 +122,24 @@ b.lightWarning {
   padding: 0.1em 0.5em;
   border-radius: 5px;
 }
+
+.plate-detection-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 123, 255, 0.92);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  animation: plateDetectPulse 1.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes plateDetectPulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
