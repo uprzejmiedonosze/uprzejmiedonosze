@@ -3548,5 +3548,13 @@
       "74-100 Gryfino"
     ],
     "email": "sm@sianow.pl"
+  },
+  "Czosnów": {
+    "address": [
+      "Komisariat Policji w Czosnowie",
+      "ul. Władysława Lercha 1",
+      "05-152 Czosnów"
+    ],
+    "email": "kp-czosnow.kancelaria@ksp.policja.gov.pl"
   }
 }
