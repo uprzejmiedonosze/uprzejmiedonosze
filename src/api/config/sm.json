@@ -3556,5 +3556,13 @@
       "05-152 Czosnów"
     ],
     "email": "kp-czosnow.kancelaria@ksp.policja.gov.pl"
+  },
+  "Krynica-Zdrój": {
+    "address": [
+      "Straż Miejska Krynica-Zdrój",
+      "ul. Józefa Ignacego Kraszewskiego 7",
+      "33-380 Krynica-Zdrój"
+    ],
+    "email": "krynica@umkrynica.pl"
   }
 }
