@@ -3564,5 +3564,29 @@
       "33-380 Krynica-Zdrój"
     ],
     "email": "krynica@umkrynica.pl"
+  },
+  "gmina Krokowa": {
+    "address": [
+      "Komisariat Policji w Krokowej",
+      "ul. Żwirowa 4, Minkowice",
+      "84-110 Krokowa"
+    ],
+    "email": "komendant.krokowa@gd.policja.gov.pl"
+  },
+  "powiat bydgoski": {
+    "address": [
+      "Komenda Miejska Policji w Bydgoszczy",
+      "ul. Jana Karola Chodkiewicza 32",
+      "85-667 Bydgoszcz"
+    ],
+    "email": "naczelnik-wrd-bydgoszcz@bg.policja.gov.pl"
+  },
+  "Łapy": {
+    "address": [
+      "Komisariat Policji w Łapach",
+      "ul. Główna 5",
+      "18-100 Łapy"
+    ],
+    "email": "dyzurny.kp-lapy@bk.policja.gov.pl"
   }
 }
