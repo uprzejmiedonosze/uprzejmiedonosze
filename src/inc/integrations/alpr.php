@@ -43,10 +43,14 @@ function _use_openAlpr(&$imageBytes): bool {
     }
 
     $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
+    if ($budgetConsumed === false) {
+        logger('use plateRec as OpenAlpr budget is unknown!', true);
+        return false;
+    }
     $budgetConsumed = floor($budgetConsumed*100);
 
     if ($budgetConsumed == 100) {
-        logger('use plateRec as OpenAlpr budget is consumed');
+        logger('use plateRec as OpenAlpr budget is consumed', true);
         return false;
     }
 
