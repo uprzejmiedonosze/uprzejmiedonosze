@@ -22,4 +22,3 @@ src/config.php
 src/tensor
 testy
 vendor/**
-/generator
