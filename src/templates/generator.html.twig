@@ -12,313 +12,310 @@
 {% endblock %}
 {% block main %}
 
-    <style>
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .topics-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .topic-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
-        }
-        .topic-item input[type="checkbox"] {
-            width: auto;
-        }
-        .topic-item label {
-            margin: 0;
-            font-weight: normal;
-            flex-grow: 1;
-        }
-        .topic-desc {
-            font-size: 0.85em;
-            color: #666;
-            margin-top: 2px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        input[type="text"], 
-        select, 
-        textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        #output {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            min-height: 200px;
-            background-color: white;
-            white-space: pre-wrap;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .status {
-            margin-top: 10px;
-            font-style: italic;
-            color: #7f8c8d;
-        }
-    </style>
-    <h1>Uprzejmy generator pism</h1>
-    
-    <div class="form-group">
-        <label>Wybierz od 1 do 3 tematów:</label>
-        <div id="topicsContainer" class="topics-container">
-            <div class="loading">Ładowanie tematów...</div>
-        </div>
-        <div id="topicError" style="color: red; display: none;">Wybierz od 1 do 3 tematów</div>
-    </div>
-    
-    <div class="form-group">
-        <label for="formType">Typ pisma:</label>
-        <select id="formType" disabled>
-            <option value="">Ładowanie typów pism...</option>
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label for="target">Adresat:</label>
-        <select id="target" disabled>
-            <option value="">Najpierw wybierz typ pisma</option>
-        </select>
-    </div>
-    
-    <button id="generateBtn" class="button cta">Generuj pismo</button>
-    <div class="status" id="status">Gotowy do generowania</div>
-    
-    <div id="output"></div>
+<style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .topics-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .topic-desc {
+        font-size: 0.85em;
+        color: #666;
+        margin-top: 2px;
+    }
+    input[type="text"], 
+    select, 
+    textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    #output {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-height: 200px;
+        background-color: white;
+        white-space: pre-wrap;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .status {
+        margin-top: 10px;
+        font-style: italic;
+        color: #7f8c8d;
+    }
+</style>
+<h1>Uprzejmy generator pism</h1>
+<div class="warning-header">
+    {% if isPatron %}
+    <h4>Narzędzie jest w fazie testowej</h4>
+    <p>Nie wysyłaj jeszcze wygenerowanych pism. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.pl">szymon@uprzejmiedonosze.pl</a>.
+    Pamiętaj, że generowanie każdego wniosku kosztuje (od kilku do kilkudziesięciu groszy, w zależności od ustawień, które tuninguję).
+    Staraj się nie przekroczyć 10 prób.</p>
+    {% else %}
+    <h4>Narzędzie jest w fazie testowej dostępnej tylko dla Patronów i Patronek</h4>
+    <p>Po fazie zamkniętych testów zostanie udostępnione wszystkim użytkownikom Uprzejmy Donoszę.</p>
+    {% endif %}
+</div>
 
-    <script>
-        // Global variables
-        let topicsData = [];
-        let formTypesData = {};
-        let targetsData = {};
+<div class="form-group">
+    <label>Wybierz od 1 do 3 tematów:</label>
+    <div id="topicsContainer" class="topics-container">
+        <div class="loading">Ładowanie tematów...</div>
+    </div>
+    <div id="topicError" style="color: red; display: none;">Wybierz od 1 do 3 tematów</div>
+</div>
+
+<div class="form-group">
+    <label for="formType">Typ pisma:</label>
+    <select id="formType" disabled>
+        <option value="">Ładowanie typów pism...</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="target">Adresat:</label>
+    <select id="target" disabled>
+        <option value="">Najpierw wybierz typ pisma</option>
+    </select>
+</div>
+
+{% if isPatron %}
+<button id="generateBtn" class="button cta">Generuj pismo</button>
+{% else %}
+<button id="generateBtn" class="button disabled">Generuj pismo</button>
+{% endif %}
+<div class="status" id="status">Gotowy do generowania</div>
+
+<div id="output"></div>
+
+<script>
+    // Global variables
+    let topicsData = [];
+    let formTypesData = {};
+    let targetsData = {};
+    
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Load topics
+            const topicsResponse = await fetch('/generator/topics');
+            topicsData = await topicsResponse.json();
+            renderTopics();
+            
+            // Load form types
+            const formTypesResponse = await fetch('/generator/form_types');
+            formTypesData = await formTypesResponse.json();
+            renderFormTypes();
+            
+            // Load targets
+            const targetsResponse = await fetch('/generator/targets');
+            targetsData = await targetsResponse.json();
+            
+        } catch (error) {
+            console.error('Error initializing data:', error);
+            alert('Wystąpił błąd podczas ładowania danych. Odśwież stronę i spróbuj ponownie.');
+        }
+    });
+    
+    // Render topics checkboxes
+    function renderTopics() {
+        const container = document.getElementById('topicsContainer');
+        container.innerHTML = '';
         
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                // Load topics
-                const topicsResponse = await fetch('/generator/topics');
-                topicsData = await topicsResponse.json();
-                renderTopics();
-                
-                // Load form types
-                const formTypesResponse = await fetch('/generator/form_types');
-                formTypesData = await formTypesResponse.json();
-                renderFormTypes();
-                
-                // Load targets
-                const targetsResponse = await fetch('/generator/targets');
-                targetsData = await targetsResponse.json();
-                
-            } catch (error) {
-                console.error('Error initializing data:', error);
-                alert('Wystąpił błąd podczas ładowania danych. Odśwież stronę i spróbuj ponownie.');
-            }
+        Object.entries(topicsData).forEach(([id, topic]) => {
+            const topicDiv = document.createElement('div');
+            topicDiv.className = 'topic-item';
+            topicDiv.innerHTML = `
+                <input type="checkbox" id="topic-${id}" value="${id}" onchange="validateTopics()">
+                <label for="topic-${id}" class="checkbox" >
+                    ${topic.title}
+                </label>
+            `;
+            container.appendChild(topicDiv);
+        });
+    }
+    
+    // Render form types dropdown
+    function renderFormTypes() {
+        const select = document.getElementById('formType');
+        select.innerHTML = '<option value="">Wybierz typ pisma</option>';
+        
+        Object.entries(formTypesData).forEach(([id, data]) => {
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = data || id;
+            select.appendChild(option);
         });
         
-        // Render topics checkboxes
-        function renderTopics() {
-            const container = document.getElementById('topicsContainer');
-            container.innerHTML = '';
+        select.disabled = false;
+        select.addEventListener('change', renderTargets);
+    }
+    
+    // Render targets based on selected form type
+    function renderTargets() {
+        const formType = document.getElementById('formType').value;
+        const targetSelect = document.getElementById('target');
+        
+        targetSelect.innerHTML = '<option value="">Wybierz adresata</option>';
+        targetSelect.disabled = true;
+        
+        if (!formType) return;
+        
+        // Filter targets that support the selected form type
+        const availableTargets = Object.entries(targetsData)
+            .filter(([_, target]) => target.forms.includes(formType))
+            .sort((a, b) => a[1].title.localeCompare(b[1].title));
+        
+        availableTargets.forEach(([id, target]) => {
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = id; //target.title;
+            targetSelect.appendChild(option);
+        });
+        
+        targetSelect.disabled = false;
+    }
+    
+    // Validate that 1-3 topics are selected
+    function validateTopics() {
+        const selectedTopics = document.querySelectorAll('#topicsContainer input[type="checkbox"]:checked');
+        const errorElement = document.getElementById('topicError');
+        const btn = document.getElementById('generateBtn');
+        
+        if (selectedTopics.length === 0 || selectedTopics.length > 3) {
+            errorElement.style.display = 'block';
+            btn.classList.add('disabled')
+            return false;
+        }
+        
+        errorElement.style.display = 'none';
+        btn.classList.remove('disabled')
+        return true;
+    }
+    
+    // Get selected topic IDs
+    function getSelectedTopicIds() {
+        return Array.from(document.querySelectorAll('#topicsContainer input[type="checkbox"]:checked'))
+            .map(checkbox => checkbox.value);
+    }
+    
+    // Generate button click handler
+    document.getElementById('generateBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('generateBtn');
+        const output = document.getElementById('output');
+        const status = document.getElementById('status');
+        
+        // Validate form
+        if (!validateTopics()) {
+            return;
+        }
+        
+        const topicIds = getSelectedTopicIds();
+        const formType = document.getElementById('formType').value;
+        const target = document.getElementById('target').value;
+        
+        // Validate required fields
+        if (!formType) {
+            alert('Proszę wybrać typ pisma');
+            return;
+        }
+        
+        if (!target) {
+            alert('Proszę wybrać adresata');
+            return;
+        }
+                    
+        // Clear previous output
+        output.textContent = '';
+        status.textContent = 'Generowanie pisma...';
+        
+        try {
+            // Build URL with query parameters
+            const params = new URLSearchParams();
+            params.append('topics', JSON.stringify(topicIds));
+            params.append('form_type', formType);
+            params.append('target', target);
             
-            Object.entries(topicsData).forEach(([id, topic]) => {
-                const topicDiv = document.createElement('div');
-                topicDiv.className = 'topic-item';
-                topicDiv.innerHTML = `
-                    <input type="checkbox" id="topic-${id}" value="${id}" onchange="validateTopics()">
-                    <label for="topic-${id}">
-                        ${topic.title}
-                    </label>
-                `;
-                container.appendChild(topicDiv);
+            btn.classList.add('disabled')
+            const response = await fetch(`/generator/stream?${params.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/event-stream'
+                }
             });
-        }
-        
-        // Render form types dropdown
-        function renderFormTypes() {
-            const select = document.getElementById('formType');
-            select.innerHTML = '<option value="">Wybierz typ pisma</option>';
             
-            Object.entries(formTypesData).forEach(([id, data]) => {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = data || id;
-                select.appendChild(option);
-            });
-            
-            select.disabled = false;
-            select.addEventListener('change', renderTargets);
-        }
-        
-        // Render targets based on selected form type
-        function renderTargets() {
-            const formType = document.getElementById('formType').value;
-            const targetSelect = document.getElementById('target');
-            
-            targetSelect.innerHTML = '<option value="">Wybierz adresata</option>';
-            targetSelect.disabled = true;
-            
-            if (!formType) return;
-            
-            // Filter targets that support the selected form type
-            const availableTargets = Object.entries(targetsData)
-                .filter(([_, target]) => target.forms.includes(formType))
-                .sort((a, b) => a[1].title.localeCompare(b[1].title));
-            
-            availableTargets.forEach(([id, target]) => {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = id; //target.title;
-                targetSelect.appendChild(option);
-            });
-            
-            targetSelect.disabled = false;
-        }
-        
-        // Validate that 1-3 topics are selected
-        function validateTopics() {
-            const selectedTopics = document.querySelectorAll('#topicsContainer input[type="checkbox"]:checked');
-            const errorElement = document.getElementById('topicError');
-            
-            if (selectedTopics.length === 0 || selectedTopics.length > 3) {
-                errorElement.style.display = 'block';
-                return false;
+            // Check if response is OK
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`Błąd serwera: ${response.status} - ${error}`);
             }
             
-            errorElement.style.display = 'none';
-            return true;
-        }
-        
-        // Get selected topic IDs
-        function getSelectedTopicIds() {
-            return Array.from(document.querySelectorAll('#topicsContainer input[type="checkbox"]:checked'))
-                .map(checkbox => checkbox.value);
-        }
-        
-        // Generate button click handler
-        document.getElementById('generateBtn').addEventListener('click', async () => {
-            const btn = document.getElementById('generateBtn');
-            const output = document.getElementById('output');
-            const status = document.getElementById('status');
+            // Process the stream as text
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = '';
             
-            // Validate form
-            if (!validateTopics()) {
-                return;
-            }
-            
-            const topicIds = getSelectedTopicIds();
-            const formType = document.getElementById('formType').value;
-            const target = document.getElementById('target').value;
-            
-            // Validate required fields
-            if (!formType) {
-                alert('Proszę wybrać typ pisma');
-                return;
-            }
-            
-            if (!target) {
-                alert('Proszę wybrać adresata');
-                return;
-            }
-                        
-            // Clear previous output
-            output.textContent = '';
-            status.textContent = 'Generowanie pisma...';
-            btn.disabled = true;
-            
-            try {
-                // Build URL with query parameters
-                const params = new URLSearchParams();
-                params.append('topics', JSON.stringify(topicIds));
-                params.append('form_type', formType);
-                params.append('target', target);
+            while (true) {
+                const { done, value } = await reader.read();
                 
-                const response = await fetch(`/generator/stream?${params.toString()}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'text/event-stream'
-                    }
-                });
-                
-                // Check if response is OK
-                if (!response.ok) {
-                    const error = await response.text();
-                    throw new Error(`Błąd serwera: ${response.status} - ${error}`);
+                if (done) {
+                    status.textContent = 'Zakończono generowanie';
+                    break;
                 }
                 
-                // Process the stream as text
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = '';
+                // Decode the chunk
+                const chunk = decoder.decode(value, { stream: true });
+                buffer += chunk;
                 
-                while (true) {
-                    const { done, value } = await reader.read();
+                // Process complete events (they end with double newline)
+                const events = buffer.split('\n\n');
+                buffer = events.pop() || ''; // Keep incomplete event in buffer
+                
+                for (const event of events) {
+                    if (!event.startsWith('data: ')) continue;
                     
-                    if (done) {
+                    const eventData = event.slice(6).trim();
+                    
+                    // Check for done signal
+                    if (eventData === '[DONE]') {
                         status.textContent = 'Zakończono generowanie';
-                        break;
+                        continue;
                     }
                     
-                    // Decode the chunk
-                    const chunk = decoder.decode(value, { stream: true });
-                    buffer += chunk;
-                    
-                    // Process complete events (they end with double newline)
-                    const events = buffer.split('\n\n');
-                    buffer = events.pop() || ''; // Keep incomplete event in buffer
-                    
-                    for (const event of events) {
-                        if (!event.startsWith('data: ')) continue;
+                    try {
+                        const data = JSON.parse(eventData);
                         
-                        const eventData = event.slice(6).trim();
-                        
-                        // Check for done signal
-                        if (eventData === '[DONE]') {
-                            status.textContent = 'Zakończono generowanie';
-                            continue;
+                        if (data.error) {
+                            throw new Error(data.error);
                         }
                         
-                        try {
-                            const data = JSON.parse(eventData);
-                            
-                            if (data.error) {
-                                throw new Error(data.error);
-                            }
-                            
-                            if (data.content) {
-                                output.textContent += data.content;
-                                // Auto-scroll to bottom
-                                output.scrollTop = output.scrollHeight;
-                            }
-                        } catch (e) {
-                            console.error('Error parsing event:', e);
+                        if (data.content) {
+                            output.textContent += data.content;
+                            // Auto-scroll to bottom
+                            output.scrollTop = output.scrollHeight;
                         }
+                    } catch (e) {
+                        console.error('Error parsing event:', e);
                     }
                 }
-                
-            } catch (error) {
-                console.error('Error:', error);
-                status.textContent = `Błąd: ${error.message}`;
-            } finally {
-                btn.disabled = false;
             }
-        });
-    </script>
+            
+        } catch (error) {
+            console.error('Error:', error);
+            status.textContent = `Błąd: ${error.message}`;
+        } finally {
+            btn.classList.remove('disabled')
+        }
+    });
+</script>
 
 
 {% endblock %}

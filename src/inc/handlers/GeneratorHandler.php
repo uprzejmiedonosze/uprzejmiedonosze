@@ -10,6 +10,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class GeneratorHandler extends AbstractHandler {
     public function generator(Request $request, Response $response): Response {
-        return AbstractHandler::renderHtml($request, $response, 'generator');
+        $user = $request->getAttribute('user');
+        $isPatron = $user->isFormerPatron() || $user->isPatron() || $user->isAdmin();
+        return AbstractHandler::renderHtml($request, $response, 'generator', ['isPatron' => $isPatron]);
     }
 }
