@@ -17,6 +17,7 @@ MODEL = "gpt-5-mini"
 MODEL = "gpt-5-nano"
 MODEL = "gpt-5"
 MODEL = "gpt-3.5-turbo"
+MODEL = "gpt-5-mini"
 
 PRICES_PER_1M = {
     "gpt-5-nano":        {"prompt":  0.05, "completion":  0.40},
@@ -84,7 +85,6 @@ Podpisz dokument jako:
 
 
 def generate_complaint_stream(topics: List[str], form_type: str, target: str, name:str, city:str) -> tuple[Generator[str, None, None], float]:
-
     system_prompt, content_prompt = __get_prompt(topics, form_type, target, name, city)
     
     # Estimate price (roughly 1 token ~ 4 characters for English, a bit less for Polish)
@@ -115,11 +115,11 @@ def generate_complaint_stream(topics: List[str], form_type: str, target: str, na
 
     return response_generator(), estimated_price
 
-def generate_complaint(topics: List[str], form_type: str, target: str) -> (str, float):
-    system_prompt, content_prompt = __get_prompt(topics, form_type, target)
+def generate_complaint(topics: List[str], form_type: str, target: str, name:str, city:str, model:str) -> (str, float):
+    system_prompt, content_prompt = __get_prompt(topics, form_type, target, name, city)
     
     response = client.chat.completions.create(
-        model=MODEL,
+        model=model,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": content_prompt}
