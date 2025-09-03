@@ -87,6 +87,15 @@ $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());
 
+$app->group('/generator', function (RouteCollectorProxy $group) {        
+    $group->get('/stream', ApiAiHandler::class . ':stream');
+    $group->get('/topics', ApiAiHandler::class . ':getTopics');
+    $group->get('/form_types', ApiAiHandler::class . ':getForms');
+    $group->get('/targets', ApiAiHandler::class . ':getTargets');
+})  ->add(new RegisteredMiddleware())
+    ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
+
 $app->group('', function (RouteCollectorProxy $group) { // Application
     //$group->any('/start.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
     //$group->any('/nowe-zgloszenie.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
@@ -111,9 +120,13 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
     $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStatsFull');
     $group->get('/recydywa-{plateId}-partial.html', StaticPagesHandler::class . ':carStatsPartial');
     //$group->get('/top100.html', StaticPagesHandler::class . ':top100');
-
 })  ->add(new HtmlMiddleware())
     ->add(new RegisteredMiddleware());
+
+$app->group('', function (RouteCollectorProxy $group) { // Generator
+    $group->get('/generator.html', GeneratorHandler::class . ':generator');
+})  ->add(new HtmlMiddleware())
+    ->add(new RegisteredMiddleware());    
 
 $app->group('', function (RouteCollectorProxy $group) { // user register
     $group->get('/register.html', UserHandler::class . ':register');

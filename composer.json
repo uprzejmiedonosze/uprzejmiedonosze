@@ -20,7 +20,8 @@
         "symfony/http-client": "^7.1",
         "symfony/psr-http-message-bridge": "^7.1",
         "slowmove/simple-php-queue": "^0.4.0",
-        "phpoffice/phpspreadsheet": "^4.0"
+        "phpoffice/phpspreadsheet": "^4.0",
+        "openai-php/client": "^0.16.0"
     },
     "require-dev": {
         "sserbin/twig-linter": "@dev",
