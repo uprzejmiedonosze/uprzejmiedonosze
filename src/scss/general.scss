@@ -429,3 +429,14 @@ figure {
         }
     }
 }
+
+hr {
+  height: 1px;
+  background-color: #e5e5e5;
+  border: none;
+  margin: 2em 0;
+}
+
+hr+h3 {
+    margin-top: 0;
+}
