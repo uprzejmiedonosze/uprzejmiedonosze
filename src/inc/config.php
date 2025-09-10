@@ -1,5 +1,6 @@
 <?PHP
 require_once(__DIR__ . '/dataclasses/ConfigClass.php');
+require_once(__DIR__ . '/store/JsonStore.php');
 
 const LATEST_TERMS_UPDATE = '2024-03-26';
 
@@ -7,44 +8,13 @@ const DT_FORMAT = 'Y-m-d\TH:i:s';
 const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
 const DT_FORMAT_LONG = 'Y-m-d\TH:i:s.u';
 
-const CONFIG_DIR = __DIR__ . '/../public/api/config';
-
-const CATEGORIES_CONFIG = CONFIG_DIR . '/categories.json';
-$categories = fopen(CATEGORIES_CONFIG, "r") or die("Unable to open config file: " . CATEGORIES_CONFIG);
-$CATEGORIES = (array) new ConfigClass(fread($categories, filesize(CATEGORIES_CONFIG)), 'Category');
-fclose($categories);
-
-const EXTENSIONS_CONFIG = CONFIG_DIR . '/extensions.json';
-$extensions = fopen(EXTENSIONS_CONFIG, "r") or die("Unable to open config file: " . EXTENSIONS_CONFIG);
-$EXTENSIONS = (array) new ConfigClass(fread($extensions, filesize(EXTENSIONS_CONFIG)), 'Extension');
-fclose($extensions);
-
-const SM_CONFIG = CONFIG_DIR . '/sm.json';
-$smAddressess = fopen(SM_CONFIG, "r") or die("Unable to open config file: " . SM_CONFIG);
-$SM_ADDRESSES = (array) new ConfigClass(fread($smAddressess, filesize(SM_CONFIG)), 'SM');
-fclose($smAddressess);
-
-const STATUSES_CONFIG = CONFIG_DIR . '/statuses.json';
-$st = fopen(STATUSES_CONFIG, "r") or die("Unable to open config file: " . STATUSES_CONFIG);
-$STATUSES = (array) new ConfigClass(fread($st, filesize(STATUSES_CONFIG)), 'Status');
-fclose($st);
-
-const SA_CONFIG = CONFIG_DIR . '/stop-agresji.json';
-$stopAgresji = fopen(SA_CONFIG, "r") or die("Unable to open config file: " . SA_CONFIG);
-$STOP_AGRESJI = (array) new ConfigClass(fread($stopAgresji, filesize(SA_CONFIG)), 'StopAgresji');
-fclose($stopAgresji);
-
-const SA_LEVELS = CONFIG_DIR . '/levels.json';
-$levels = fopen(SA_LEVELS, "r") or die("Unable to open config file: " . SA_LEVELS);
-$LEVELS = (array) new ConfigClass(fread($levels, filesize(SA_LEVELS)), 'Level');
-fclose($levels);
-
-// I'm lazy, no specific class for that
-const SA_BADGES = CONFIG_DIR . '/badges.json';
-$badges = fopen(SA_BADGES, "r") or die("Unable to open config file: " . SA_BADGES);
-$badgesStr = fread($badges, filesize(SA_BADGES));
-$BADGES = json_decode($badgesStr, true);
-fclose($badges);
+$CATEGORIES = \json\get('categories.json', 'Category');
+$EXTENSIONS = \json\get('extensions.json', 'Extension');
+$SM_ADDRESSES = \json\get('sm.json', 'SM');
+$STATUSES = \json\get('statuses.json', 'Status');
+$STOP_AGRESJI = \json\get('stop-agresji.json', 'StopAgresji');
+$LEVELS = \json\get('levels.json', 'Level');
+$BADGES = \json\get('badges.json');
 
 if (file_exists(__DIR__ . '/../config.prod.php'))
     require(__DIR__ . '/../config.prod.php');
