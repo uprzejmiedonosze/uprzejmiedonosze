@@ -194,4 +194,29 @@ class ApiAiHandler extends \AbstractHandler {
         global $TARGETS;        
         return $this->renderJson($response, $TARGETS);
     }
+
+    public function getParlamentary(Request $request, Response $response, array $args): Response {
+        $mps = \json\get('parlamentary.json');
+        $districts = \json\get('electoral-districts.json');
+
+        $params = $request->getQueryParams();
+        $voivodeship = $this->getParam($params, 'v', 0);
+        $city = $this->getParam($params, 'c', 0);
+    
+        foreach ($mps as $key => $mp) {
+            $mps[$key]['cities'] = $districts[$mp['district']]['cities'];
+            $mps[$key]['voivodeship'] = $districts[$mp['district']]['voivodeship'];
+
+            if ($voivodeship > 0 && $mps[$key]['voivodeship'] != $voivodeship) {
+                unset($mps[$key]);
+                continue;
+            }
+            if ($city > 0 && !in_array($city, $mps[$key]['cities'])) {
+                unset($mps[$key]);
+                continue;
+            }
+        }
+
+        return $this->renderJson($response, $mps);
+    }
 }
