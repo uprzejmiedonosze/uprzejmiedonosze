@@ -1,458 +1,3034 @@
 {
-	"Adamczyk Andrzej": { "party": "PiS", "email": "Andrzej.Adamczyk@sejm.pl", "district": "13" },
-	"Adamowicz Piotr": { "party": "KO", "email": "Piotr.Adamowicz@sejm.pl", "district": "25" },
-	"Andzel Waldemar": { "party": "PiS", "email": "Waldemar.Andzel@sejm.pl", "district": "32" },
-	"Arciszewska-Mielewczyk Dorota": { "party": "PiS", "email": "Dorota.Arciszewska-Mielewczyk@sejm.pl", "district": "26" },
-	"Ardanowski Jan Krzysztof": { "party": "Republikanie", "email": "Jan.Ardanowski@sejm.pl", "district": "5" },
-	"Arent Iwona Ewa": { "party": "PiS", "email": "Iwona.Arent@sejm.pl", "district": "35" },
-	"Ast Marek": { "party": "PiS", "email": "Marek.Ast@sejm.pl", "district": "8" },
-	"Augustyn Urszula": { "party": "KO", "email": "Urszula.Augustyn@sejm.pl", "district": "15" },
-	"Babinetz Piotr": { "party": "PiS", "email": "Piotr.Babinetz@sejm.pl", "district": "22" },
-	"Baluch Anna": { "party": "PiS", "email": "Anna.Baluch@sejm.pl", "district": "6" },
-	"Bartosik Ryszard": { "party": "PiS", "email": "Ryszard.Bartosik@sejm.pl", "district": "37" },
-	"Bartoszewski Władysław": { "party": "PSL-TD", "email": "Wladyslaw.Bartoszewski@sejm.pl", "district": "19" },
-	"Bartuś Barbara": { "party": "PiS", "email": "Barbara.Bartus@sejm.pl", "district": "14" },
-	"Bejda Paweł": { "party": "PSL-TD", "email": "Pawel.Bejda@sejm.pl", "district": "11" },
-	"Berkowicz Konrad": { "party": "Konfederacja", "email": "Konrad.Berkowicz@sejm.pl", "district": "13" },
-	"Bielawska Sylwia": { "party": "KO", "email": "Sylwia.Bielawska@sejm.pl", "district": "2" },
-	"Biernacki Marek": { "party": "PSL-TD", "email": "Marek.Biernacki@sejm.pl", "district": "26" },
-	"Błaszczak Mariusz": { "party": "PiS", "email": "Mariusz.Blaszczak@sejm.pl", "district": "20" },
-	"Bliźniuk Paweł": { "party": "KO", "email": "Pawel.Blizniuk@sejm.pl", "district": "9" },
-	"Bochenek Mateusz": { "party": "KO", "email": "Mateusz.Bochenek@sejm.pl", "district": "32" },
-	"Bochenek Rafał": { "party": "PiS", "email": "Rafal.Bochenek@sejm.pl", "district": "12" },
-	"Bodnar Izabela": { "party": "niezrzeszona", "email": "Izabela.Bodnar@sejm.pl", "district": "3" },
-	"Bogucki Jacek": { "party": "PiS", "email": "Jacek.Bogucki@sejm.pl", "district": "24" },
-	"Bojarski Krzysztof": { "party": "KO", "email": "Krzysztof.Bojarski@sejm.pl", "district": "6" },
-	"Borowiak Joanna": { "party": "PiS", "email": "Joanna.Borowiak@sejm.pl", "district": "5" },
-	"Bortniczuk Kamil": { "party": "PiS", "email": "Kamil.Bortniczuk@sejm.pl", "district": "16" },
-	"Borys Piotr": { "party": "KO", "email": "Piotr.Borys@sejm.pl", "district": "1" },
-	"Borys-Szopa Bożena": { "party": "PiS", "email": "Bozena.Borys-Szopa@sejm.pl", "district": "29" },
-	"Bosacki Marcin": { "party": "KO", "email": "Marcin.Bosacki@sejm.pl", "district": "39" },
-	"Bosak Karina Anna": { "party": "Konfederacja", "email": "Karina.Bosak@sejm.pl", "district": "20" },
-	"Bosak Krzysztof": { "party": "Konfederacja", "email": "Krzysztof.Bosak@sejm.pl", "district": "24" },
-	"Buczyńska Agnieszka": { "party": "Polska2050-TD", "email": "Agnieszka.Buczynska@sejm.pl", "district": "25" },
-	"Burkiewicz Elżbieta": { "party": "PSL-TD", "email": "Elzbieta.Burkiewicz@sejm.pl", "district": "23" },
-	"Burzyńska Lidia": { "party": "PiS", "email": "Lidia.Burzynska@sejm.pl", "district": "28" },
-	"Chmielewski Marek Jan": { "party": "KO", "email": "Marek.Chmielewski@sejm.pl", "district": "2" },
-	"Chmielowiec Zbigniew": { "party": "PiS", "email": "Zbigniew.Chmielowiec@sejm.pl", "district": "23" },
-	"Chojecki Artur": { "party": "PiS", "email": "Artur.Chojecki@sejm.pl", "district": "35" },
-	"Choma Kazimierz Bogusław": { "party": "PiS", "email": "Kazimierz.Choma@sejm.pl", "district": "6" },
-	"Chorosińska Dominika": { "party": "PiS", "email": "Dominika.Chorosinska@sejm.pl", "district": "20" },
-	"Chrzan Tadeusz": { "party": "PiS", "email": "Tadeusz.Chrzan@sejm.pl", "district": "22" },
-	"Chybicka Alicja": { "party": "KO", "email": "Alicja.Chybicka@sejm.pl", "district": "3" },
-	"Cicholska Anna Ewa": { "party": "PiS", "email": "Anna.Cicholska@sejm.pl", "district": "16" },
-	"Cichoń Janusz": { "party": "KO", "email": "Janusz.Cichon@sejm.pl", "district": "35" },
-	"Ciecióra Krzysztof": { "party": "PiS", "email": "Krzysztof.Cieciora@sejm.pl", "district": "10" },
-	"Cieślak Michał": { "party": "PiS", "email": "Michal.Cieslak@sejm.pl", "district": "33" },
-	"Cieszyński Janusz": { "party": "PiS", "email": "Janusz.Cieszynski@sejm.pl", "district": "35" },
-	"Cwalina-Śliwowska Żaneta": { "party": "PSL-TD", "email": "Zaneta.Cwalina-Sliwowska@sejm.pl", "district": "18" },
-	"Ćwik Sławomir": { "party": "Polska2050-TD", "email": "Slawomir.Cwik@sejm.pl", "district": "7" },
-	"Czarnecki Krzysztof": { "party": "PiS", "email": "Krzysztof.Czarnecki@sejm.pl", "district": "38" },
-	"Czarnecki Witold Wojciech": { "party": "PiS", "email": "Witold.Czarnecki@sejm.pl", "district": "37" },
-	"Czarnek Przemysław": { "party": "PiS", "email": "Przemyslaw.Czarnek@sejm.pl", "district": "6" },
-	"Czartoryski Arkadiusz": { "party": "PiS", "email": "Arkadiusz.Czartoryski@sejm.pl", "district": "18" },
-	"Czarzasty Włodzimierz": { "party": "Lewica", "email": "Wlodzimierz.Czarzasty@sejm.pl", "district": "32" },
-	"Czechak Lidia": { "party": "PiS", "email": "Lidia.Czechak@sejm.pl", "district": "36" },
-	"Czerniak Jacek": { "party": "Lewica", "email": "Jacek.Czerniak@sejm.pl", "district": "6" },
-	"Czernow Zofia": { "party": "KO", "email": "Zofia.Czernow@sejm.pl", "district": "1" },
-	"Czerwińska Anita": { "party": "PiS", "email": "Anita.Czerwinska@sejm.pl", "district": "20" },
-	"Czochara Katarzyna": { "party": "PiS", "email": "Katarzyna.Czochara@sejm.pl", "district": "21" },
-	"Dąbrowska-Banaszek Anna": { "party": "PiS", "email": "Anna.Dabrowska-Banaszek@sejm.pl", "district": "7" },
-	"Dajczak Władysław": { "party": "PiS", "email": "Wladyslaw.Dajczak@sejm.pl", "district": "8" },
-	"Dolata Zbigniew": { "party": "PiS", "email": "Zbigniew.Dolata@sejm.pl", "district": "37" },
-	"Dolniak Barbara": { "party": "KO", "email": "Barbara.Dolniak@sejm.pl", "district": "32" },
-	"Domański Andrzej": { "party": "KO", "email": "Andrzej.Domanski@sejm.pl", "district": "19" },
-	"Dorywalski Bartłomiej": { "party": "PiS", "email": "Bartlomiej.Dorywalski@sejm.pl", "district": "33" },
-	"Dowhan Robert": { "party": "KO", "email": "Robert.Dowhan@sejm.pl", "district": "8" },
-	"Drabek Przemysław": { "party": "PiS", "email": "Przemyslaw.Drabek@sejm.pl", "district": "27" },
-	"Duda Elżbieta": { "party": "PiS", "email": "Elzbieta.Duda@sejm.pl", "district": "13" },
-	"Dziedzic Adam": { "party": "PSL-TD", "email": "Adam.Dziedzic@sejm.pl", "district": "23" },
-	"Dziedziczak Jan Michał": { "party": "PiS", "email": "Jan.Dziedziczak@sejm.pl", "district": "36" },
-	"Dziemianowicz-Bąk Agnieszka": { "party": "Lewica", "email": "Agnieszka.Dziemianowicz-Bak@sejm.pl", "district": "26" },
-	"Filiks Magdalena": { "party": "KO", "email": "Magdalena.Filiks@sejm.pl", "district": "41" },
-	"Filipek-Sobczak Magdalena": { "party": "PiS", "email": "Magdalena.Filipek-Sobczak@sejm.pl", "district": "6" },
-	"Fogiel Radosław": { "party": "PiS", "email": "Radoslaw.Fogiel@sejm.pl", "district": "17" },
-	"Foltyn Bronisław": { "party": "Konfederacja", "email": "Bronislaw.Foltyn@sejm.pl", "district": "27" },
-	"Fritz Roman": { "party": "Konfederacja", "email": "Roman.Fritz@sejm.pl", "district": "30" },
-	"Frydrych Joanna": { "party": "KO", "email": "Joanna.Frydrych@sejm.pl", "district": "22" },
-	"Frysztak Konrad": { "party": "KO", "email": "Konrad.Frysztak@sejm.pl", "district": "17" },
-	"Gabriel Patryk": { "party": "KO", "email": "Patryk.Gabriel@sejm.pl", "district": "25" },
-	"Gadowski Krzysztof": { "party": "KO", "email": "Krzysztof.Gadowski@sejm.pl", "district": "30" },
-	"Gajewska Aleksandra": { "party": "KO", "email": "Aleksandra.Gajewska@sejm.pl", "district": "19" },
-	"Gajewska Kinga": { "party": "KO", "email": "Kinga.Gajewska@sejm.pl", "district": "20" },
-	"Gapińska Elżbieta": { "party": "KO", "email": "Elzbieta.Gapinska@sejm.pl", "district": "16" },
-	"Gawkowski Krzysztof": { "party": "Lewica", "email": "Krzysztof.Gawkowski@sejm.pl", "district": "4" },
-	"Gawlik Zdzisław": { "party": "KO", "email": "Zdzislaw.Gawlik@sejm.pl", "district": "23" },
-	"Gawron Andrzej": { "party": "PiS", "email": "Andrzej.Gawron@sejm.pl", "district": "28" },
-	"Gaża Grzegorz": { "party": "PiS", "email": "Grzegorz.Gaza@sejm.pl", "district": "27" },
-	"Gelert Elżbieta": { "party": "KO", "email": "Elzbieta.Gelert@sejm.pl", "district": "34" },
-	"Gembicka Anna": { "party": "PiS", "email": "Anna.Gembicka@sejm.pl", "district": "5" },
-	"Gierada Artur Daniel": { "party": "KO", "email": "Artur.Gierada@sejm.pl", "district": "33" },
-	"Giertych Roman": { "party": "KO", "email": "Roman.Giertych@sejm.pl", "district": "33" },
-	"Giziński Włodzisław": { "party": "KO", "email": "Wlodzislaw.Gizinski@sejm.pl", "district": "4" },
-	"Giżyński Szymon": { "party": "PiS", "email": "Szymon.Gizynski@sejm.pl", "district": "28" },
-	"Gliński Piotr": { "party": "PiS", "email": "Piotr.Glinski@sejm.pl", "district": "19" },
-	"Głogowski Tomasz": { "party": "KO", "email": "Tomasz.Glogowski@sejm.pl", "district": "29" },
-	"Głowski Piotr": { "party": "KO", "email": "Piotr.Glowski@sejm.pl", "district": "38" },
-	"Golbik Marta": { "party": "KO", "email": "Marta.Golbik@sejm.pl", "district": "29" },
-	"Golińska Małgorzata": { "party": "PiS", "email": "Malgorzata.Golinska@sejm.pl", "district": "40" },
-	"Gołojuch Kazimierz": { "party": "PiS", "email": "Kazimierz.Golojuch@sejm.pl", "district": "23" },
-	"Gomoła Adam": { "party": "niezrzeszony", "email": "Adam.Gomola@sejm.pl", "district": "21" },
-	"Gontarz Robert": { "party": "PiS", "email": "Robert.Gontarz@sejm.pl", "district": "34" },
-	"Gorczyca Stanisław": { "party": "KO", "email": "Stanislaw.Gorczyca@sejm.pl", "district": "34" },
-	"Górnikiewicz Piotr": { "party": "Polska2050-TD", "email": "Piotr.Gornikiewicz@sejm.pl", "district": "15" },
-	"Górska Agnieszka": { "party": "PiS", "email": "Agnieszka.Gorska@sejm.pl", "district": "17" },
-	"Gosek Mariusz": { "party": "PiS", "email": "Mariusz.Gosek@sejm.pl", "district": "33" },
-	"Gosek-Popiołek Daria": { "party": "Lewica", "email": "Daria.Gosek-Popiolek@sejm.pl", "district": "13" },
-	"Grabczuk Krzysztof": { "party": "KO", "email": "Krzysztof.Grabczuk@sejm.pl", "district": "7" },
-	"Grabiec Jan": { "party": "KO", "email": "Jan.Grabiec@sejm.pl", "district": "20" },
-	"Grabowski Marcin": { "party": "PiS", "email": "Marcin.Grabowski@sejm.pl", "district": "18" },
-	"Gramatyka Michał": { "party": "Polska2050-TD", "email": "Michal.Gramatyka@sejm.pl", "district": "31" },
-	"Gróbarczyk Marek": { "party": "PiS", "email": "Marek.Grobarczyk@sejm.pl", "district": "41" },
-	"Gromadzka Małgorzata": { "party": "KO", "email": "Malgorzata.Gromadzka@sejm.pl", "district": "7" },
-	"Grygorcewicz Barbara": { "party": "KO", "email": "Barbara.Grygorcewicz@sejm.pl", "district": "40" },
-	"Grzyb Andrzej": { "party": "PSL-TD", "email": "Andrzej.Grzyb@sejm.pl", "district": "36" },
-	"Gut-Mostowy Andrzej": { "party": "PiS", "email": "Andrzej.Gut-Mostowy@sejm.pl", "district": "14" },
-	"Gwiazdowski Kazimierz": { "party": "PiS", "email": "Kazimierz.Gwiazdowski@sejm.pl", "district": "24" },
-	"Gwóźdź Marcin": { "party": "PiS", "email": "Marcin.Gwozdz@sejm.pl", "district": "2" },
-	"Gzik Marek": { "party": "KO", "email": "Marek.Gzik@sejm.pl", "district": "29" },
-	"Habura Krzysztof": { "party": "KO", "email": "Krzysztof.Habura@sejm.pl", "district": "11" },
-	"Hanajczyk Agnieszka": { "party": "KO", "email": "Agnieszka.Hanajczyk@sejm.pl", "district": "11" },
-	"Hartwich Iwona": { "party": "KO", "email": "Iwona.Hartwich@sejm.pl", "district": "5" },
-	"Hennig-Kloska Paulina": { "party": "Polska2050-TD", "email": "Paulina.Hennig-Kloska@sejm.pl", "district": "37" },
-	"Hoc Czesław": { "party": "PiS", "email": "Czeslaw.Hoc@sejm.pl", "district": "40" },
-	"Hoffmann Zbigniew": { "party": "PiS", "email": "Zbigniew.Hoffmann@sejm.pl", "district": "37" },
-	"Hok Marek Tomasz": { "party": "KO", "email": "Marek.Hok@sejm.pl", "district": "40" },
-	"Hołownia Bożenna": { "party": "Polska2050-TD", "email": "Bozenna.Holownia@sejm.pl", "district": "19" },
-	"Hołownia Szymon": { "party": "Polska2050-TD", "email": "Szymon.Holownia@sejm.pl", "district": "24" },
-	"Horała Marcin": { "party": "PiS", "email": "Marcin.Horala@sejm.pl", "district": "26" },
-	"Horbatowski Łukasz": { "party": "KO", "email": "Lukasz.Horbatowski@sejm.pl", "district": "1" },
-	"Hreniak Paweł": { "party": "PiS", "email": "Pawel.Hreniak@sejm.pl", "district": "3" },
-	"Jabłoński Paweł": { "party": "PiS", "email": "Pawel.Jablonski@sejm.pl", "district": "30" },
-	"Jachira Klaudia": { "party": "KO", "email": "Klaudia.Jachira@sejm.pl", "district": "19" },
-	"Jagła Robert": { "party": "KO", "email": "Robert.Jagla@sejm.pl", "district": "2" },
-	"Jakubiak Marek": { "party": "Republikanie", "email": "Marek.Jakubiak@sejm.pl", "district": "19" },
-	"Janyska Maria Małgorzata": { "party": "KO", "email": "Maria.Janyska@sejm.pl", "district": "38" },
-	"Jaros Michał": { "party": "KO", "email": "Michal.Jaros@sejm.pl", "district": "3" },
-	"Jaśkowiec Dominik": { "party": "KO", "email": "Dominik.Jaskowiec@sejm.pl", "district": "13" },
-	"Jaskulski Patryk": { "party": "KO", "email": "Patryk.Jaskulski@sejm.pl", "district": "41" },
-	"Jazłowiecka Danuta": { "party": "KO", "email": "Danuta.Jazlowiecka@sejm.pl", "district": "21" },
-	"Józefaciuk Marcin": { "party": "KO", "email": "Marcin.Jozefaciuk@sejm.pl", "district": "9" },
-	"Kaczmarczyk Norbert Jakub": { "party": "PiS", "email": "Norbert.Kaczmarczyk@sejm.pl", "district": "15" },
-	"Kaczyński Filip": { "party": "PiS", "email": "Filip.Kaczynski@sejm.pl", "district": "12" },
-	"Kaczyński Jarosław": { "party": "PiS", "email": "Jaroslaw.Kaczynski@sejm.pl", "district": "33" },
-	"Kaleta Piotr": { "party": "PiS", "email": "Piotr.Kaleta@sejm.pl", "district": "36" },
-	"Kaleta Sebastian": { "party": "PiS", "email": "Sebastian.Kaleta@sejm.pl", "district": "19" },
-	"Kałużny Mariusz": { "party": "PiS", "email": "Mariusz.Kaluzny@sejm.pl", "district": "5" },
-	"Kandyba Piotr": { "party": "KO", "email": "Piotr.Kandyba@sejm.pl", "district": "20" },
-	"Kanthak Jan": { "party": "PiS", "email": "Jan.Kanthak@sejm.pl", "district": "6" },
-	"Kapinos Fryderyk Sylwester": { "party": "PiS", "email": "Fryderyk.Kapinos@sejm.pl", "district": "23" },
-	"Karnowski Jacek": { "party": "KO", "email": "Jacek.Karnowski@sejm.pl", "district": "25" },
-	"Karolewska Iwona": { "party": "KO", "email": "Iwona.Karolewska@sejm.pl", "district": "4" },
-	"Kasprzyk Rafał": { "party": "Polska2050-TD", "email": "Rafal.Kasprzyk@sejm.pl", "district": "33" },
-	"Kiepura Henryk": { "party": "PSL-TD", "email": "Henryk.Kiepura@sejm.pl", "district": "28" },
-	"Kierzek-Koperska Katarzyna": { "party": "KO", "email": "Katarzyna.Kierzek-Koperska@sejm.pl", "district": "39" },
-	"Klimczak Dariusz": { "party": "PSL-TD", "email": "Dariusz.Klimczak@sejm.pl", "district": "10" },
-	"Kłopotek Agnieszka Maria": { "party": "PSL-TD", "email": "Agnieszka.Klopotek@sejm.pl", "district": "4" },
-	"Kluzik-Rostkowska Joanna": { "party": "KO", "email": "Joanna.Kluzik-Rostkowska@sejm.pl", "district": "17" },
-	"Kmita Łukasz": { "party": "PiS", "email": "Lukasz.Kmita@sejm.pl", "district": "12" },
-	"Koc Maria": { "party": "PiS", "email": "Maria.Koc@sejm.pl", "district": "18" },
-	"Kołodziej Ewa": { "party": "KO", "email": "Ewa.Kolodziej@sejm.pl", "district": "31" },
-	"Kołodziejczak Magdalena Małgorzata": { "party": "KO", "email": "Magdalena.Kolodziejczak@sejm.pl", "district": "25" },
-	"Kołodziejczak Michał": { "party": "KO", "email": "Michal.Kolodziejczak@sejm.pl", "district": "37" },
-	"Komarewicz Rafał": { "party": "Polska2050-TD", "email": "Rafal.Komarewicz@sejm.pl", "district": "13" },
-	"Konieczny Maciej": { "party": "Razem", "email": "Maciej.Konieczny@sejm.pl", "district": "31" },
-	"Konwiński Zbigniew": { "party": "KO", "email": "Zbigniew.Konwinski@sejm.pl", "district": "26" },
-	"Kosiniak-Kamysz Władysław": { "party": "PSL-TD", "email": "Wladyslaw.Kosiniak-Kamysz@sejm.pl", "district": "15" },
-	"Kostuś Tomasz": { "party": "KO", "email": "Tomasz.Kostus@sejm.pl", "district": "21" },
-	"Kosztowniak Andrzej": { "party": "PiS", "email": "Andrzej.Kosztowniak@sejm.pl", "district": "17" },
-	"Koszutska Urszula": { "party": "KO", "email": "Urszula.Koszutska@sejm.pl", "district": "31" },
-	"Kot Aleksandra": { "party": "KO", "email": "Aleksandra.Kot@sejm.pl", "district": "13" },
-	"Kotula Katarzyna": { "party": "Lewica", "email": "Katarzyna.Kotula@sejm.pl", "district": "25" },
-	"Kowal Paweł": { "party": "KO", "email": "Pawel.Kowal@sejm.pl", "district": "23" },
-	"Kowal Piotr": { "party": "Lewica", "email": "Piotr.Kowal@sejm.pl", "district": "5" },
-	"Kowalczyk Henryk": { "party": "PiS", "email": "Henryk.Kowalczyk@sejm.pl", "district": "18" },
-	"Kowalski Janusz": { "party": "PiS", "email": "Janusz.Kowalski@sejm.pl", "district": "21" },
-	"Kowalski Michał": { "party": "PiS", "email": "Michal.Kowalski@sejm.pl", "district": "26" },
-	"Kownacki Bartosz Józef": { "party": "PiS", "email": "Bartosz.Kownacki@sejm.pl", "district": "4" },
-	"Koźlakiewicz Maria Joanna": { "party": "KO", "email": "Maria.Kozlakiewicz@sejm.pl", "district": "16" },
-	"Kozłowska Iwona Maria": { "party": "KO", "email": "Iwona.Kozlowska@sejm.pl", "district": "4" },
-	"Krajewski Jarosław": { "party": "PiS", "email": "Jaroslaw.Krajewski@sejm.pl", "district": "19" },
-	"Krajewski Stefan": { "party": "PSL-TD", "email": "Stefan.Krajewski@sejm.pl", "district": "24" },
-	"Krajewski Wiesław": { "party": "PiS", "email": "Wieslaw.Krajewski@sejm.pl", "district": "15" },
-	"Krasulski Leonard": { "party": "PiS", "email": "Leonard.Krasulski@sejm.pl", "district": "34" },
-	"Krawczyk Iwona Małgorzata": { "party": "KO", "email": "Iwona.Krawczyk@sejm.pl", "district": "1" },
-	"Krawczyk Michał": { "party": "KO", "email": "Michal.Krawczyk@sejm.pl", "district": "6" },
-	"Król Piotr": { "party": "PiS", "email": "Piotr.Krol@sejm.pl", "district": "4" },
-	"Król Wojciech": { "party": "KO", "email": "Wojciech.Krol@sejm.pl", "district": "31" },
-	"Królak Katarzyna": { "party": "KO", "email": "Katarzyna.Krolak@sejm.pl", "district": "34" },
-	"Kropiwnicki Robert": { "party": "KO", "email": "Robert.Kropiwnicki@sejm.pl", "district": "1" },
-	"Krupka Anna": { "party": "PiS", "email": "Anna.Krupka@sejm.pl", "district": "33" },
-	"Kryj Andrzej": { "party": "PiS", "email": "Andrzej.Kryj@sejm.pl", "district": "33" },
-	"Krystian Mariusz": { "party": "PiS", "email": "Mariusz.Krystian@sejm.pl", "district": "12" },
-	"Krząkała Marek": { "party": "KO", "email": "Marek.Krzakala@sejm.pl", "district": "30" },
-	"Krzemiński Adam": { "party": "KO", "email": "Adam.Krzeminski@sejm.pl", "district": "16" },
-	"Krzywonos-Strycharska Henryka": { "party": "KO", "email": "Henryka.Krzywonos-Strycharska@sejm.pl", "district": "26" },
-	"Kubów Krzysztof": { "party": "PiS", "email": "Krzysztof.Kubow@sejm.pl", "district": "1" },
-	"Kucharska-Dziedzic Anita": { "party": "Lewica", "email": "Anita.Kucharska-Dziedzic@sejm.pl", "district": "8" },
-	"Kuchciński Marek": { "party": "PiS", "email": "Marek.Kuchcinski@sejm.pl", "district": "22" },
-	"Kukiz Paweł": { "party": "Republikanie", "email": "Pawel.Kukiz@sejm.pl", "district": "21" },
-	"Kulasek Marcin": { "party": "Lewica", "email": "Marcin.Kulasek@sejm.pl", "district": "35" },
-	"Kulpa Wioletta Maria": { "party": "PiS", "email": "Wioletta.Kulpa@sejm.pl", "district": "16" },
-	"Kurowska Maria": { "party": "PiS", "email": "Maria.Kurowska@sejm.pl", "district": "22" },
-	"Kurowski Władysław": { "party": "PiS", "email": "Wladyslaw.Kurowski@sejm.pl", "district": "12" },
-	"Kuźmiuk Zbigniew Krzysztof": { "party": "PiS", "email": "Zbigniew.Kuzmiuk@sejm.pl", "district": "17" },
-	"Kwiecień Anna": { "party": "PiS", "email": "Anna.Kwiecien@sejm.pl", "district": "17" },
-	"Lachowicz Piotr": { "party": "KO", "email": "Piotr.Lachowicz@sejm.pl", "district": "14" },
-	"Łącki Artur Jarosław": { "party": "KO", "email": "Artur.Lacki@sejm.pl", "district": "41" },
-	"Lamczyk Stanisław": { "party": "KO", "email": "Stanislaw.Lamczyk@sejm.pl", "district": "26" },
-	"Lasek Maciej": { "party": "KO", "email": "Maciej.Lasek@sejm.pl", "district": "20" },
-	"Lenartowicz Gabriela": { "party": "KO", "email": "Gabriela.Lenartowicz@sejm.pl", "district": "30" },
-	"Leniart Ewa": { "party": "PiS", "email": "Ewa.Leniart@sejm.pl", "district": "23" },
-	"Leo Aleksandra": { "party": "Polska2050-TD", "email": "Aleksandra.Leo@sejm.pl", "district": "2" },
-	"Łepkowska-Gołaś Alicja": { "party": "KO", "email": "Alicja.Lepkowska-Golas@sejm.pl", "district": "24" },
-	"Leszczyna Izabela": { "party": "KO", "email": "Izabela.Leszczyna@sejm.pl", "district": "28" },
-	"Lichocka Joanna": { "party": "PiS", "email": "Joanna.Lichocka@sejm.pl", "district": "11" },
-	"Lipiec Krzysztof": { "party": "PiS", "email": "Krzysztof.Lipiec@sejm.pl", "district": "33" },
-	"Lisowska Bożena": { "party": "KO", "email": "Bożena.Lisowska@sejm.pl", "district": "6" },
-	"Litewka Łukasz": { "party": "Lewica", "email": "Lukasz.Litewka@sejm.pl", "district": "32" },
-	"Łoboda Dorota": { "party": "KO", "email": "Dorota.Loboda@sejm.pl", "district": "19" },
-	"Lorek Grzegorz": { "party": "PiS", "email": "Grzegorz.Lorek@sejm.pl", "district": "10" },
-	"Łośko Magdalena": { "party": "KO", "email": "Magdalena.Losko@sejm.pl", "district": "4" },
-	"Lubczyk Radosław": { "party": "PSL-TD", "email": "Radoslaw.Lubczyk@sejm.pl", "district": "40" },
-	"Lubnauer Katarzyna Anna": { "party": "KO", "email": "Katarzyna.Lubnauer@sejm.pl", "district": "19" },
-	"Luboński Adam": { "party": "Polska2050-TD", "email": "Adam.Lubonski@sejm.pl", "district": "38" },
-	"Łuczak Alicja": { "party": "KO", "email": "Alicja.Luczak@sejm.pl", "district": "36" },
-	"Łuczak Krystian": { "party": "KO", "email": "Krystian.Luczak@sejm.pl", "district": "5" },
-	"Łukaszewicz Sebastian": { "party": "PiS", "email": "Sebastian.Lukaszewicz@sejm.pl", "district": "24" },
-	"Machałek Marzena Anna": { "party": "PiS", "email": "Marzena.Machalek@sejm.pl", "district": "1" },
-	"Macierewicz Antoni": { "party": "PiS", "email": "Antoni.Macierewicz@sejm.pl", "district": "10" },
-	"Macko Grzegorz": { "party": "PiS", "email": "Grzegorz.Macko@sejm.pl", "district": "2" },
-	"Małecki Maciej": { "party": "PiS", "email": "Maciej.Malecki@sejm.pl", "district": "16" },
-	"Malik Ewa": { "party": "PiS", "email": "Ewa.Malik@sejm.pl", "district": "32" },
-	"Maliszewski Mirosław": { "party": "PSL-TD", "email": "Miroslaw.Maliszewski@sejm.pl", "district": "17" },
-	"Marchewka Arkadiusz": { "party": "KO", "email": "Arkadiusz.Marchewka@sejm.pl", "district": "41" },
-	"Marek Dorota": { "party": "KO", "email": "Dorota.Marek@sejm.pl", "district": "13" },
-	"Masełko Paweł": { "party": "KO", "email": "Pawel.Maselko@sejm.pl", "district": "21" },
-	"Matecki Dariusz": { "party": "PiS", "email": "Dariusz.Matecki@sejm.pl", "district": "41" },
-	"Materna Jerzy": { "party": "PiS", "email": "Jerzy.Materna@sejm.pl", "district": "8" },
-	"Matusiak Grzegorz": { "party": "PiS", "email": "Grzegorz.Matusiak@sejm.pl", "district": "30" },
-	"Matusik-Lipiec Katarzyna": { "party": "KO", "email": "Katarzyna.Matusik-Lipiec@sejm.pl", "district": "13" },
-	"Matuszewski Marek": { "party": "PiS", "email": "Marek.Matuszewski@sejm.pl", "district": "11" },
-	"Matysiak Paulina": { "party": "Razem", "email": "Paulina.Matysiak@sejm.pl", "district": "11" },
-	"Mejza Łukasz": { "party": "PiS", "email": "Lukasz.Mejza@sejm.pl", "district": "8" },
-	"Mentzen Sławomir": { "party": "Konfederacja", "email": "Slawomir.Mentzen@sejm.pl", "district": "19" },
-	"Meysztowicz Jerzy": { "party": "KO", "email": "Jerzy.Meysztowicz@sejm.pl", "district": "13" },
-	"Mieszkowski Krzysztof": { "party": "KO", "email": "Krzysztof.Mieszkowski@sejm.pl", "district": "3" },
-	"Milczanowska Anna": { "party": "PiS", "email": "Anna.Milczanowska@sejm.pl", "district": "10" },
-	"Milewski Daniel": { "party": "PiS", "email": "Daniel.Milewski@sejm.pl", "district": "18" },
-	"Morawiecki Mateusz": { "party": "PiS", "email": "Mateusz.Morawiecki@sejm.pl", "district": "31" },
-	"Mosiński Jan": { "party": "PiS", "email": "Jan.Mosinski@sejm.pl", "district": "36" },
-	"Moskal Michał": { "party": "PiS", "email": "Michal.Moskal@sejm.pl", "district": "6" },
-	"Mroczek Czesław": { "party": "KO", "email": "Czeslaw.Mroczek@sejm.pl", "district": "18" },
-	"Mrówczyński Aleksander Mikołaj": { "party": "PiS", "email": "Aleksander.Mrowczynski@sejm.pl", "district": "26" },
-	"Mucha Joanna": { "party": "Polska2050-TD", "email": "Joanna.Mucha@sejm.pl", "district": "6" },
-	"Mulawa Krzysztof": { "party": "Konfederacja", "email": "Krzysztof.Mulawa@sejm.pl", "district": "18" },
-	"Myrcha Arkadiusz": { "party": "KO", "email": "Arkadiusz.Myrcha@sejm.pl", "district": "5" },
-	"Napieralski Grzegorz": { "party": "KO", "email": "Grzegorz.Napieralski@sejm.pl", "district": "41" },
-	"Niedziela Dorota": { "party": "KO", "email": "Dorota.Niedziela@sejm.pl", "district": "12" },
-	"Niedźwiedzki Jacek": { "party": "KO", "email": "Jacek.Niedzwiedzki@sejm.pl", "district": "24" },
-	"Niemczyk Małgorzata": { "party": "KO", "email": "Malgorzata.Niemczyk@sejm.pl", "district": "9" },
-	"Niezgodzka Jolanta": { "party": "KO", "email": "Jolanta.Niezgodzka@sejm.pl", "district": "3" },
-	"Nitras Sławomir": { "party": "KO", "email": "Slawomir.Nitras@sejm.pl", "district": "41" },
-	"Nowacka Barbara": { "party": "KO", "email": "Barbara.Nowacka@sejm.pl", "district": "26" },
-	"Nowak Maja Ewa": { "party": "Polska2050-TD", "email": "Maja.Nowak@sejm.pl", "district": "8" },
-	"Nowak Tomasz Piotr": { "party": "KO", "email": "Tomasz.Nowak@sejm.pl", "district": "37" },
-	"Nowicka Wanda": { "party": "Lewica", "email": "Wanda.Nowicka@sejm.pl", "district": "29" },
-	"Nowogórska Urszula": { "party": "PSL-TD", "email": "Urszula.Nowogorska@sejm.pl", "district": "14" },
-	"Ociepa Marcin": { "party": "PiS", "email": "Marcin.Ociepa@sejm.pl", "district": "21" },
-	"Okła-Drewnowicz Marzena": { "party": "KO", "email": "Marzena.Okla-Drewnowicz@sejm.pl", "district": "33" },
-	"Okuła Barbara": { "party": "Polska2050-TD", "email": "Barbara.Okula@sejm.pl", "district": "24" },
-	"Oliwiecka Barbara": { "party": "Polska2050-TD", "email": "Barbara.Oliwiecka@sejm.pl", "district": "36" },
-	"Olko Dorota": { "party": "Lewica", "email": "Dorota.Olko@sejm.pl", "district": "19" },
-	"Olszewski Paweł": { "party": "KO", "email": "Pawel.Olszewski@sejm.pl", "district": "4" },
-	"Orliński Mirosław Adam": { "party": "PSL-TD", "email": "Miroslaw.Orlinski@sejm.pl", "district": "16" },
-	"Osmalak Łukasz": { "party": "Polska2050-TD", "email": "Lukasz.Osmalak@sejm.pl", "district": "30" },
-	"Osos Katarzyna": { "party": "KO", "email": "Katarzyna.Osos@sejm.pl", "district": "8" },
-	"Osuch Jacek": { "party": "PiS", "email": "Jacek.Osuch@sejm.pl", "district": "13" },
-	"Paluch Anna": { "party": "PiS", "email": "Anna.Paluch@sejm.pl", "district": "14" },
-	"Pamuła Teresa": { "party": "PiS", "email": "Teresa.Pamula@sejm.pl", "district": "22" },
-	"Papke Paweł": { "party": "KO", "email": "Pawel.Papke@sejm.pl", "district": "35" },
-	"Pasławska Urszula": { "party": "PSL-TD", "email": "Urszula.Paslawska@sejm.pl", "district": "35" },
-	"Paszyk Krzysztof": { "party": "PSL-TD", "email": "Krzysztof.Paszyk@sejm.pl", "district": "38" },
-	"Pawliczak Karolina": { "party": "KO", "email": "Karolina.Pawliczak@sejm.pl", "district": "36" },
-	"Pawłowska Monika": { "party": "PiS", "email": "Monika.Pawlowska@sejm.pl", "district": "7" },
-	"Pejo Bartłomiej": { "party": "Konfederacja", "email": "Bartlomiej.Pejo@sejm.pl", "district": "6" },
-	"Pępek Małgorzata": { "party": "KO", "email": "Malgorzata.Pepek@sejm.pl", "district": "27" },
-	"Petru Ryszard": { "party": "Polska2050-TD", "email": "Ryszard.Petru@sejm.pl", "district": "19" },
-	"Piątkowski Krzysztof": { "party": "KO", "email": "Krzysztof.Piatkowski@sejm.pl", "district": "9" },
-	"Piecha Bolesław": { "party": "PiS", "email": "Boleslaw.Piecha@sejm.pl", "district": "30" },
-	"Piechowiak Grzegorz": { "party": "PiS", "email": "Grzegorz.Piechowiak@sejm.pl", "district": "38" },
-	"Pieczarka Anna": { "party": "PiS", "email": "Anna.Pieczarka@sejm.pl", "district": "15" },
-	"Piekarska Katarzyna Maria": { "party": "KO", "email": "Katarzyna.Piekarska@sejm.pl", "district": "19" },
-	"Pietrykowski Norbert": { "party": "Polska2050-TD", "email": "Norbert.Pietrykowski@sejm.pl", "district": "4" },
-	"Pietrzczyk Lucjan Marek": { "party": "KO", "email": "Lucjan.Pietrzczyk@sejm.pl", "district": "33" },
-	"Piontkowski Dariusz": { "party": "PiS", "email": "Dariusz.Piontkowski@sejm.pl", "district": "24" },
-	"Płaczek Grzegorz": { "party": "Konfederacja", "email": "Grzegorz.Placzek@sejm.pl", "district": "31" },
-	"Płażyński Kacper": { "party": "PiS", "email": "Kacper.Plazynski@sejm.pl", "district": "25" },
-	"Plocke Kazimierz": { "party": "KO", "email": "Kazimierz.Plocke@sejm.pl", "district": "26" },
-	"Pogoda Szymon": { "party": "PiS", "email": "Szymon.Pogoda@sejm.pl", "district": "1" },
-	"Polaczek Jerzy": { "party": "PiS", "email": "Jerzy.Polaczek@sejm.pl", "district": "31" },
-	"Polak Elżbieta Anna": { "party": "KO", "email": "Elzbieta.Polak@sejm.pl", "district": "8" },
-	"Polak Piotr": { "party": "PiS", "email": "Piotr.Polak@sejm.pl", "district": "11" },
-	"Połuboczek Michał": { "party": "Konfederacja", "email": "Michal.Poluboczek@sejm.pl", "district": "23" },
-	"Pomaska Agnieszka": { "party": "KO", "email": "Agnieszka.Pomaska@sejm.pl", "district": "25" },
-	"Popielarz Mariusz": { "party": "KO", "email": "Mariusz.Popielarz@sejm.pl", "district": "18" },
-	"Porzucek Marcin": { "party": "PiS", "email": "Marcin.Porzucek@sejm.pl", "district": "38" },
-	"Puda Grzegorz": { "party": "PiS", "email": "Grzegorz.Puda@sejm.pl", "district": "27" },
-	"Pyrzyk Michał": { "party": "PSL-TD", "email": "Michal.Pyrzyk@sejm.pl", "district": "37" },
-	"Rak Renata": { "party": "KO", "email": "Renata.Rak@sejm.pl", "district": "40" },
-	"Raś Ireneusz": { "party": "PSL-TD", "email": "Ireneusz.Ras@sejm.pl", "district": "13" },
-	"Rau Zbigniew": { "party": "PiS", "email": "Zbigniew.Rau@sejm.pl", "district": "9" },
-	"Roguska Magdalena": { "party": "KO", "email": "Magdalena.Roguska@sejm.pl", "district": "19" },
-	"Romanowski Marcin": { "party": "PiS", "email": "Marcin.Romanowski@sejm.pl", "district": "7" },
-	"Romanowski Rafał": { "party": "PiS", "email": "Rafal.Romanowski@sejm.pl", "district": "16" },
-	"Romowicz Bartosz": { "party": "Polska2050-TD", "email": "Bartosz.Romowicz@sejm.pl", "district": "22" },
-	"Rosa Monika": { "party": "KO", "email": "Monika.Rosa@sejm.pl", "district": "31" },
-	"Różyński Wiesław": { "party": "PSL-TD", "email": "Wieslaw.Rozynski@sejm.pl", "district": "7" },
-	"Rusecka Urszula": { "party": "PiS", "email": "Urszula.Rusecka@sejm.pl", "district": "15" },
-	"Rutnicki Jakub": { "party": "KO", "email": "Jakub.Rutnicki@sejm.pl", "district": "38" },
-	"Rychlik Paweł": { "party": "PiS", "email": "Pawel.Rychlik@sejm.pl", "district": "11" },
-	"Rząsa Marek": { "party": "KO", "email": "Marek.Rzasa@sejm.pl", "district": "22" },
-	"Rzepa Jarosław": { "party": "PSL-TD", "email": "Jaroslaw.Rzepa@sejm.pl", "district": "41" },
-	"Sachajko Jarosław": { "party": "Republikanie", "email": "Jaroslaw.Sachajko@sejm.pl", "district": "7" },
-	"Sałek Paweł": { "party": "PiS", "email": "Pawel.Salek@sejm.pl", "district": "10" },
-	"Samborski Tadeusz": { "party": "PSL-TD", "email": "Tadeusz.Samborski@sejm.pl", "district": "1" },
-	"Sasin Jacek": { "party": "PiS", "email": "Jacek.Sasin@sejm.pl", "district": "24" },
-	"Sawicki Marek": { "party": "PSL-TD", "email": "Marek.Sawicki@sejm.pl", "district": "18" },
-	"Schädler Ewa": { "party": "Polska2050-TD", "email": "Ewa.Schädler@sejm.pl", "district": "39" },
-	"Schmidt Anna": { "party": "PiS", "email": "Anna.Schmidt@sejm.pl", "district": "22" },
-	"Schreiber Łukasz": { "party": "PiS", "email": "Lukasz.Schreiber@sejm.pl", "district": "4" },
-	"Ściebiorowski Łukasz": { "party": "KO", "email": "Lukasz.Sciebiorowski@sejm.pl", "district": "31" },
-	"Ścigaj Agnieszka": { "party": "PiS", "email": "Agnieszka.Scigaj@sejm.pl", "district": "13" },
-	"Sellin Jarosław": { "party": "PiS", "email": "Jaroslaw.Sellin@sejm.pl", "district": "25" },
-	"Semeniuk-Patkowska Olga Ewa": { "party": "PiS", "email": "Olga.Semeniuk-Patkowska@sejm.pl", "district": "35" },
-	"Siarka Edward": { "party": "PiS", "email": "Edward.Siarka@sejm.pl", "district": "14" },
-	"Sibińska Krystyna": { "party": "KO", "email": "Krystyna.Sibinska@sejm.pl", "district": "8" },
-	"Siekierski Czesław": { "party": "PSL-TD", "email": "Czeslaw.Siekierski@sejm.pl", "district": "33" },
-	"Siemaszko Rafał": { "party": "KO", "email": "Rafal.Siemaszko@sejm.pl", "district": "26" },
-	"Siemoniak Tomasz": { "party": "KO", "email": "Tomasz.Siemoniak@sejm.pl", "district": "21" },
-	"Sikora Arkadiusz": { "party": "Lewica", "email": "Arkadiusz.Sikora@sejm.pl", "district": "1" },
-	"Skalik Włodzimierz": { "party": "Konfederacja", "email": "Wlodzimierz.Skalik@sejm.pl", "district": "21" },
-	"Skonieczka Marcin": { "party": "Polska2050-TD", "email": "Marcin.Skonieczka@sejm.pl", "district": "5" },
-	"Skowrońska Krystyna": { "party": "KO", "email": "Krystyna.Skowronska@sejm.pl", "district": "23" },
-	"Skwarek Sławomir": { "party": "PiS", "email": "Slawomir.Skwarek@sejm.pl", "district": "6" },
-	"Śliwka Andrzej": { "party": "PiS", "email": "Andrzej.sliwka@sejm.pl", "district": "34" },
-	"Śliz Paweł": { "party": "Polska2050-TD", "email": "Pawel.Sliz@sejm.pl", "district": "12" },
-	"Sługocki Waldemar": { "party": "KO", "email": "Waldemar.Slugocki@sejm.pl", "district": "8" },
-	"Smarduch Weronika": { "party": "KO", "email": "Weronika.Smarduch@sejm.pl", "district": "14" },
-	"Smolarz Henryk": { "party": "PSL-TD", "email": "Henryk.Smolarz@sejm.pl", "district": "6" },
-	"Smoliński Kazimierz": { "party": "PiS", "email": "Kazimierz.Smolinski@sejm.pl", "district": "25" },
-	"Sobolak Anna": { "party": "KO", "email": "Anna.Sobolak@sejm.pl", "district": "3" },
-	"Sobolewski Krzysztof": { "party": "PiS", "email": "Krzysztof.Sobolewski@sejm.pl", "district": "23" },
-	"Soin Agnieszka Anna": { "party": "PiS", "email": "Agnieszka.Soin@sejm.pl", "district": "3" },
-	"Sójka Katarzyna": { "party": "PiS", "email": "Katarzyna.Sojka@sejm.pl", "district": "36" },
-	"Sosnowski Zbigniew": { "party": "PSL-TD", "email": "Zbigniew.Sosnowski@sejm.pl", "district": "5" },
-	"Sowa Marek": { "party": "KO", "email": "Marek.Sowa@sejm.pl", "district": "12" },
-	"Sroka Magdalena": { "party": "PSL-TD", "email": "Magdalena.Sroka@sejm.pl", "district": "25" },
-	"Stachowiak-Różecka Mirosława": { "party": "PiS", "email": "Miroslawa.Stachowiak-Rozecka@sejm.pl", "district": "3" },
-	"Stachowicz Katarzyna": { "party": "KO", "email": "Katarzyna.Stachowicz@sejm.pl", "district": "32" },
-	"Stefaniuk Dariusz": { "party": "PiS", "email": "Dariusz.Stefaniuk@sejm.pl", "district": "7" },
-	"Sterczewski Franciszek": { "party": "KO", "email": "Franciszek.Sterczewski@sejm.pl", "district": "39" },
-	"Stożek Marta": { "party": "Razem", "email": "Marta.Stozek@sejm.pl", "district": "3" },
-	"Strach Piotr Paweł": { "party": "Polska2050-TD", "email": "Piotr.Strach@sejm.pl", "district": "29" },
-	"Suchoń Mirosław": { "party": "Polska2050-TD", "email": "Miroslaw.Suchon@sejm.pl", "district": "27" },
-	"Suski Marek": { "party": "PiS", "email": "Marek.Suski@sejm.pl", "district": "17" },
-	"Suski Paweł": { "party": "KO", "email": "Pawel.Suski@sejm.pl", "district": "40" },
-	"Świat Jacek": { "party": "PiS", "email": "Jacek.Swiat@sejm.pl", "district": "3" },
-	"Szałabawka Artur": { "party": "PiS", "email": "Artur.Szalabawka@sejm.pl", "district": "41" },
-	"Szarama Wojciech": { "party": "PiS", "email": "Wojciech.Szarama@sejm.pl", "district": "29" },
-	"Szczepański Wiesław": { "party": "Lewica", "email": "Wieslaw.Szczepanski@sejm.pl", "district": "36" },
-	"Szczucki Krzysztof": { "party": "PiS", "email": "Krzysztof.Szczucki@sejm.pl", "district": "5" },
-	"Szczurek-Żelazko Józefa": { "party": "PiS", "email": "Jozefa.Szczurek-Zelazko@sejm.pl", "district": "15" },
-	"Szejna Andrzej": { "party": "Lewica", "email": "Andrzej.Szejna@sejm.pl", "district": "33" },
-	"Szewiński Andrzej": { "party": "KO", "email": "Andrzej.Szewinski@sejm.pl", "district": "28" },
-	"Szłapka Adam": { "party": "KO", "email": "Adam.Szlapka@sejm.pl", "district": "39" },
-	"Szopiński Henryk": { "party": "KO", "email": "Henryk.Szopinski@sejm.pl", "district": "38" },
-	"Szrot Paweł": { "party": "PiS", "email": "Pawel.Szrot@sejm.pl", "district": "4" },
-	"Szumilas Krystyna": { "party": "KO", "email": "Krystyna.Szumilas@sejm.pl", "district": "29" },
-	"Szwed Stanisław": { "party": "PiS", "email": "Stanislaw.Szwed@sejm.pl", "district": "27" },
-	"Szymanowska Ewa": { "party": "Polska2050-TD", "email": "Ewa.Szymanowska@sejm.pl", "district": "9" },
-	"Szymański Krzysztof": { "party": "Konfederacja", "email": "Krzysztof.Szymanski@sejm.pl", "district": "26" },
-	"Szymański Tomasz": { "party": "KO", "email": "Tomasz.Szymanski@sejm.pl", "district": "5" },
-	"Szynkowski vel Sęk Szymon": { "party": "PiS", "email": "Szymon.SzynkowskiVelSek@sejm.pl", "district": "39" },
-	"Tajner Apoloniusz": { "party": "KO", "email": "Apoloniusz.Tajner@sejm.pl", "district": "27" },
-	"Tchórzewski Krzysztof": { "party": "PiS", "email": "Krzysztof.Tchorzewski@sejm.pl", "district": "18" },
-	"Telus Robert": { "party": "PiS", "email": "Robert.Telus@sejm.pl", "district": "10" },
-	"Terlecki Ryszard": { "party": "PiS", "email": "Ryszard.Terlecki@sejm.pl", "district": "14" },
-	"Tomaszewski Tadeusz": { "party": "Lewica", "email": "Tadeusz.Tomaszewski@sejm.pl", "district": "37" },
-	"Tomaszewski Włodzimierz": { "party": "PiS", "email": "Wlodzimierz.Tomaszewski@sejm.pl", "district": "9" },
-	"Tomczak Jacek": { "party": "PSL-TD", "email": "Jacek.Tomczak@sejm.pl", "district": "39" },
-	"Tomczak Wioleta": { "party": "Polska2050-TD", "email": "Wioleta.Tomczak@sejm.pl", "district": "26" },
-	"Tomczyk Cezary": { "party": "KO", "email": "Cezary.Tomczyk@sejm.pl", "district": "11" },
-	"Tomczykiewicz Maciej": { "party": "KO", "email": "Maciej.Tomczykiewicz@sejm.pl", "district": "27" },
-	"Tomczyszyn Stanisław": { "party": "PSL-TD", "email": "Stanislaw.Tomczyszyn@sejm.pl", "district": "8" },
-	"Tracz Małgorzata": { "party": "KO", "email": "Malgorzata.Tracz@sejm.pl", "district": "3" },
-	"Trela Tomasz": { "party": "Lewica", "email": "Tomasz.Trela@sejm.pl", "district": "9" },
-	"Truskolaski Krzysztof": { "party": "KO", "email": "Krzysztof.Truskolaski@sejm.pl", "district": "24" },
-	"Tuduj Krzysztof": { "party": "Konfederacja", "email": "Krzysztof.Tuduj@sejm.pl", "district": "3" },
-	"Tułajew Sylwester": { "party": "PiS", "email": "Sylwester.Tulajew@sejm.pl", "district": "6" },
-	"Tumanowicz Witold": { "party": "Konfederacja", "email": "Witold.Tumanowicz@sejm.pl", "district": "7" },
-	"Tusk Donald": { "party": "KO", "email": "Donald.Tusk@sejm.pl", "district": "19" },
-	"Ueberhan Katarzyna": { "party": "Lewica", "email": "Katarzyna.Ueberhan@sejm.pl", "district": "39" },
-	"Urbaniak Jarosław": { "party": "KO", "email": "Jaroslaw.Urbaniak@sejm.pl", "district": "36" },
-	"Uruski Piotr": { "party": "PiS", "email": "Piotr.Uruski@sejm.pl", "district": "22" },
-	"Uściński Piotr": { "party": "PiS", "email": "Piotr.Uscinski@sejm.pl", "district": "20" },
-	"Uznańska-Wiśniewska Aleksandra Karolina": { "party": "KO", "email": "Aleksandra.Uznanska-Wisniewska@sejm.pl", "district": "9" },
-	"Wałęsa Jarosław": { "party": "KO", "email": "Jaroslaw.Walesa@sejm.pl", "district": "25" },
-	"Warchoł Marcin": { "party": "PiS", "email": "Marcin.Warchol@sejm.pl", "district": "23" },
-	"Wardzała Robert": { "party": "KO", "email": "Robert.Wardzala@sejm.pl", "district": "15" },
-	"Warwas Robert": { "party": "PiS", "email": "Robert.Warwas@sejm.pl", "district": "32" },
-	"Warzecha Jan": { "party": "PiS", "email": "Jan.Warzecha@sejm.pl", "district": "23" },
-	"Wassermann Małgorzata": { "party": "PiS", "email": "Malgorzata.Wassermann@sejm.pl", "district": "13" },
-	"Wawer Michał": { "party": "Konfederacja", "email": "Michal.Wawer@sejm.pl", "district": "33" },
-	"Weber Rafał": { "party": "PiS", "email": "Rafal.Weber@sejm.pl", "district": "23" },
-	"Wesoły Marek": { "party": "PiS", "email": "Marek.Wesoly@sejm.pl", "district": "31" },
-	"Wicha Joanna": { "party": "Lewica", "email": "Joanna.Wicha@sejm.pl", "district": "20" },
-	"Wicher Patryk": { "party": "PiS", "email": "Patryk.Wicher@sejm.pl", "district": "14" },
-	"Wieczorek Dariusz": { "party": "Lewica", "email": "Dariusz.Wieczorek@sejm.pl", "district": "41" },
-	"Wieczorek Jarosław Wiesław": { "party": "PiS", "email": "Jaroslaw.Wieczorek@sejm.pl", "district": "29" },
-	"Wielichowska Monika": { "party": "KO", "email": "Monika.Wielichowska@sejm.pl", "district": "2" },
-	"Wilk Ryszard": { "party": "Konfederacja", "email": "Ryszard.Wilk@sejm.pl", "district": "14" },
-	"Wilk Teresa": { "party": "PiS", "email": "Teresa.Wilk@sejm.pl", "district": "34" },
-	"Wipler Przemysław": { "party": "Konfederacja", "email": "Przemyslaw.Wipler@sejm.pl", "district": "5" },
-	"Witczak Adrian": { "party": "KO", "email": "Adrian.Witczak@sejm.pl", "district": "10" },
-	"Witczak Mariusz": { "party": "KO", "email": "Mariusz.Witczak@sejm.pl", "district": "36" },
-	"Witek Elżbieta": { "party": "PiS", "email": "Elzbieta.Witek@sejm.pl", "district": "1" },
-	"Witek Przemysław": { "party": "KO", "email": "Przemyslaw.Witek@sejm.pl", "district": "28" },
-	"Wnuk Kamil": { "party": "Polska2050-TD", "email": "Kamil.Wnuk@sejm.pl", "district": "32" },
-	"Wojciechowska Anna": { "party": "KO", "email": "Anna.Wojciechowska@sejm.pl", "district": "35" },
-	"Wojciechowska van Heukelom Agnieszka": { "party": "PiS", "email": "Agnieszka.WojciechowskavanHeukelom@sejm.pl", "district": "9" },
-	"Wójcik Michał": { "party": "PiS", "email": "Michal.Wojcik@sejm.pl", "district": "31" },
-	"Wojtyszek Agata": { "party": "PiS", "email": "Agata.Wojtyszek@sejm.pl", "district": "33" },
-	"Wołoszański Bogusław": { "party": "KO", "email": "Boguslaw.Woloszanski@sejm.pl", "district": "10" },
-	"Woś Michał": { "party": "PiS", "email": "Michal.Wos@sejm.pl", "district": "30" },
-	"Woźniak Grzegorz": { "party": "PiS", "email": "Grzegorz.Wozniak@sejm.pl", "district": "18" },
-	"Woźniak Tadeusz": { "party": "PiS", "email": "Tadeusz.Wozniak@sejm.pl", "district": "11" },
-	"Wróbel Maciej": { "party": "KO", "email": "Maciej.Wrobel@sejm.pl", "district": "35" },
-	"Wróblewski Bartłomiej": { "party": "PiS", "email": "Bartlomiej.Wroblewski@sejm.pl", "district": "39" },
-	"Zalewski Paweł": { "party": "Polska2050-TD", "email": "Pawel.Zalewski@sejm.pl", "district": "20" },
-	"Zandberg Adrian": { "party": "Razem", "email": "Adrian.Zandberg@sejm.pl", "district": "19" },
-	"Zapałowski Andrzej Tomasz": { "party": "Konfederacja", "email": "Andrzej.Zapalowski@sejm.pl", "district": "22" },
-	"Zawieja Bartosz": { "party": "KO", "email": "Bartosz.Zawieja@sejm.pl", "district": "39" },
-	"Zawiślak Sławomir": { "party": "Konfederacja", "email": "Slawomir.Zawislak@sejm.pl", "district": "7" },
-	"Zawisza Marcelina": { "party": "Razem", "email": "Marcelina.Zawisza@sejm.pl", "district": "21" },
-	"Żelazowska Bożena": { "party": "PSL-TD", "email": "Bozena.Zelazowska@sejm.pl", "district": "20" },
-	"Zembaczyński Witold": { "party": "KO", "email": "Witold.Zembaczynski@sejm.pl", "district": "21" },
-	"Zgorzelski Piotr": { "party": "PSL-TD", "email": "Piotr.Zgorzelski@sejm.pl", "district": "16" },
-	"Zięba-Gzik Jolanta": { "party": "PSL-TD", "email": "Jolanta.Zieba-Gzik@sejm.pl", "district": "11" },
-	"Ziejewski Zbigniew": { "party": "PSL-TD", "email": "Zbigniew.Ziejewski@sejm.pl", "district": "34" },
-	"Zielińska Urszula Sara": { "party": "KO", "email": "Urszula.Zielinska@sejm.pl", "district": "19" },
-	"Zieliński Jarosław": { "party": "PiS", "email": "Jaroslaw.Zielinski@sejm.pl", "district": "24" },
-	"Zieliński Tomasz": { "party": "PiS", "email": "Tomasz.Zielinski@sejm.pl", "district": "7" },
-	"Zimoch Tomasz": { "party": "niezrzeszony", "email": "Tomasz.Zimoch@sejm.pl", "district": "3" },
-	"Ziobro Zbigniew": { "party": "PiS", "email": "Zbigniew.Ziobro@sejm.pl", "district": "23" },
-	"Zubowski Wojciech Michał": { "party": "PiS", "email": "Wojciech.Zubowski@sejm.pl", "district": "1" },
-	"Żukowska Anna Maria": { "party": "Lewica", "email": "Anna.Zukowska@sejm.pl", "district": "19" },
-	"Zyska Ireneusz": { "party": "PiS", "email": "Ireneusz.Zyska@sejm.pl", "district": "2" }
+  "Adamczyk Andrzej": {
+    "party": "PiS",
+    "official": "Andrzej.Adamczyk@sejm.pl",
+    "district": "13",
+    "email": "adamczyk@biuroposelskie.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2149"
+  },
+  "Adamowicz Piotr": {
+    "party": "KO",
+    "official": "Piotr.Adamowicz@sejm.pl",
+    "district": "25",
+    "profile": "https://mamprawowiedziec.pl/polityk/59389"
+  },
+  "Andzel Waldemar": {
+    "party": "PiS",
+    "official": "Waldemar.Andzel@sejm.pl",
+    "district": "32",
+    "profile": "https://mamprawowiedziec.pl/polityk/2152"
+  },
+  "Arciszewska-Mielewczyk Dorota": {
+    "party": "PiS",
+    "official": "Dorota.Arciszewska-Mielewczyk@sejm.pl",
+    "district": "26",
+    "email": "dorota@arciszewska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/22392"
+  },
+  "Ardanowski Jan Krzysztof": {
+    "party": "Republikanie",
+    "official": "Jan.Ardanowski@sejm.pl",
+    "district": "5",
+    "email": "jkardanowski@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30943"
+  },
+  "Arent Iwona Ewa": {
+    "party": "PiS",
+    "official": "Iwona.Arent@sejm.pl",
+    "district": "35",
+    "profile": "https://mamprawowiedziec.pl/polityk/2153"
+  },
+  "Ast Marek": {
+    "party": "PiS",
+    "official": "Marek.Ast@sejm.pl",
+    "district": "8",
+    "email": "biuromarkaasta@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2157"
+  },
+  "Augustyn Urszula": {
+    "party": "KO",
+    "official": "Urszula.Augustyn@sejm.pl",
+    "district": "15",
+    "profile": "https://mamprawowiedziec.pl/polityk/2158"
+  },
+  "Babinetz Piotr": {
+    "party": "PiS",
+    "official": "Piotr.Babinetz@sejm.pl",
+    "district": "22",
+    "email": "biuroposelskie@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2161"
+  },
+  "Baluch Anna": {
+    "party": "PiS",
+    "official": "Anna.Baluch@sejm.pl",
+    "district": "6",
+    "email": "biuro.annabaluch@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74332"
+  },
+  "Bartosik Ryszard": {
+    "party": "PiS",
+    "official": "Ryszard.Bartosik@sejm.pl",
+    "district": "37",
+    "email": "ryszardbartosik@interia.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/54718"
+  },
+  "Bartoszewski Władysław": {
+    "party": "PSL-TD",
+    "official": "Wladyslaw.Bartoszewski@sejm.pl",
+    "district": "19",
+    "email": "bartoszewski.biuroposelskie@hotmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/56323"
+  },
+  "Bartuś Barbara": {
+    "party": "PiS",
+    "official": "Barbara.Bartus@sejm.pl",
+    "district": "14",
+    "profile": "https://mamprawowiedziec.pl/polityk/2164"
+  },
+  "Bejda Paweł": {
+    "party": "PSL-TD",
+    "official": "Pawel.Bejda@sejm.pl",
+    "district": "11",
+    "email": "pawelbejda@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/49989"
+  },
+  "Berkowicz Konrad": {
+    "party": "Konfederacja",
+    "official": "Konrad.Berkowicz@sejm.pl",
+    "district": "13",
+    "profile": "https://mamprawowiedziec.pl/polityk/41800"
+  },
+  "Bielawska Sylwia": {
+    "party": "KO",
+    "official": "Sylwia.Bielawska@sejm.pl",
+    "district": "2",
+    "email": "biuro@sylwiabielawska.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/70940"
+  },
+  "Biernacki Marek": {
+    "party": "PSL-TD",
+    "official": "Marek.Biernacki@sejm.pl",
+    "district": "26",
+    "profile": "https://mamprawowiedziec.pl/polityk/2167"
+  },
+  "Błaszczak Mariusz": {
+    "party": "PiS",
+    "official": "Mariusz.Blaszczak@sejm.pl",
+    "district": "20",
+    "email": "mariusz.blaszczak@poczta.fm",
+    "profile": "https://mamprawowiedziec.pl/polityk/2169"
+  },
+  "Bliźniuk Paweł": {
+    "party": "KO",
+    "official": "Pawel.Blizniuk@sejm.pl",
+    "district": "9",
+    "profile": "https://mamprawowiedziec.pl/polityk/71081"
+  },
+  "Bochenek Mateusz": {
+    "party": "KO",
+    "official": "Mateusz.Bochenek@sejm.pl",
+    "district": "32",
+    "profile": "https://mamprawowiedziec.pl/polityk/60001"
+  },
+  "Bochenek Rafał": {
+    "party": "PiS",
+    "official": "Rafal.Bochenek@sejm.pl",
+    "district": "12",
+    "profile": "https://mamprawowiedziec.pl/polityk/57932"
+  },
+  "Bodnar Izabela": {
+    "party": "niezrzeszona",
+    "official": "Izabela.Bodnar@sejm.pl",
+    "district": "3",
+    "profile": "https://mamprawowiedziec.pl/polityk/75085"
+  },
+  "Bogucki Jacek": {
+    "party": "PiS",
+    "official": "Jacek.Bogucki@sejm.pl",
+    "district": "24",
+    "profile": "https://mamprawowiedziec.pl/polityk/2172"
+  },
+  "Bojarski Krzysztof": {
+    "party": "KO",
+    "official": "Krzysztof.Bojarski@sejm.pl",
+    "district": "6",
+    "profile": "https://mamprawowiedziec.pl/polityk/49114"
+  },
+  "Borowiak Joanna": {
+    "party": "PiS",
+    "official": "Joanna.Borowiak@sejm.pl",
+    "district": "5",
+    "email": "biuroposelskie.joannyborowiak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/48964"
+  },
+  "Bortniczuk Kamil": {
+    "party": "PiS",
+    "official": "Kamil.Bortniczuk@sejm.pl",
+    "district": "16",
+    "email": "poselbortniczuk.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/51854"
+  },
+  "Borys Piotr": {
+    "party": "KO",
+    "official": "Piotr.Borys@sejm.pl",
+    "district": "1",
+    "email": "lubin.biuro@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/29003"
+  },
+  "Borys-Szopa Bożena": {
+    "party": "PiS",
+    "official": "Bozena.Borys-Szopa@sejm.pl",
+    "district": "29",
+    "email": "biuro.warszawska.katowice@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/53627"
+  },
+  "Bosacki Marcin": {
+    "party": "KO",
+    "official": "Marcin.Bosacki@sejm.pl",
+    "district": "39",
+    "email": "biuro@marcinbosacki.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56339"
+  },
+  "Bosak Karina Anna": {
+    "party": "Konfederacja",
+    "official": "Karina.Bosak@sejm.pl",
+    "district": "20",
+    "profile": "https://mamprawowiedziec.pl/polityk/72064"
+  },
+  "Bosak Krzysztof": {
+    "party": "Konfederacja",
+    "official": "Krzysztof.Bosak@sejm.pl",
+    "district": "24",
+    "profile": "https://mamprawowiedziec.pl/polityk/41286"
+  },
+  "Buczyńska Agnieszka": {
+    "party": "Polska2050-TD",
+    "official": "Agnieszka.Buczynska@sejm.pl",
+    "district": "25",
+    "email": "biuro@abuczynska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75569"
+  },
+  "Burkiewicz Elżbieta": {
+    "party": "PSL-TD",
+    "official": "Elzbieta.Burkiewicz@sejm.pl",
+    "district": "23",
+    "email": "elzbieta.burkiewicz@polska2050.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75515"
+  },
+  "Burzyńska Lidia": {
+    "party": "PiS",
+    "official": "Lidia.Burzynska@sejm.pl",
+    "district": "28",
+    "profile": "https://mamprawowiedziec.pl/polityk/53254"
+  },
+  "Chmielewski Marek Jan": {
+    "party": "KO",
+    "official": "Marek.Chmielewski@sejm.pl",
+    "district": "2",
+    "email": "biuroposelskie.chmielewski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/70938"
+  },
+  "Chmielowiec Zbigniew": {
+    "party": "PiS",
+    "official": "Zbigniew.Chmielowiec@sejm.pl",
+    "district": "23",
+    "profile": "https://mamprawowiedziec.pl/polityk/2191"
+  },
+  "Chojecki Artur": {
+    "party": "PiS",
+    "official": "Artur.Chojecki@sejm.pl",
+    "district": "35",
+    "profile": "https://mamprawowiedziec.pl/polityk/74770"
+  },
+  "Choma Kazimierz Bogusław": {
+    "party": "PiS",
+    "official": "Kazimierz.Choma@sejm.pl",
+    "district": "6",
+    "email": "biuro.kazimierzchoma@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57355"
+  },
+  "Chorosińska Dominika": {
+    "party": "PiS",
+    "official": "Dominika.Chorosinska@sejm.pl",
+    "district": "20",
+    "profile": "https://mamprawowiedziec.pl/polityk/56274"
+  },
+  "Chrzan Tadeusz": {
+    "party": "PiS",
+    "official": "Tadeusz.Chrzan@sejm.pl",
+    "district": "22",
+    "profile": "https://mamprawowiedziec.pl/polityk/59063"
+  },
+  "Chybicka Alicja": {
+    "party": "KO",
+    "official": "Alicja.Chybicka@sejm.pl",
+    "district": "3",
+    "email": "biuro@alicjachybicka.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31051"
+  },
+  "Cicholska Anna Ewa": {
+    "party": "PiS",
+    "official": "Anna.Cicholska@sejm.pl",
+    "district": "16",
+    "email": "biuro.annacicholska@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/50876"
+  },
+  "Cichoń Janusz": {
+    "party": "KO",
+    "official": "Janusz.Cichon@sejm.pl",
+    "district": "35",
+    "email": "januszcichon@januszcichon.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2193"
+  },
+  "Ciecióra Krzysztof": {
+    "party": "PiS",
+    "official": "Krzysztof.Cieciora@sejm.pl",
+    "district": "10",
+    "email": "cieciorakrzysztof@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/57763"
+  },
+  "Cieślak Michał": {
+    "party": "PiS",
+    "official": "Michal.Cieslak@sejm.pl",
+    "district": "33",
+    "email": "biuro.michal.cieslak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/53984"
+  },
+  "Cieszyński Janusz": {
+    "party": "PiS",
+    "official": "Janusz.Cieszynski@sejm.pl",
+    "district": "35",
+    "profile": "https://mamprawowiedziec.pl/polityk/74769"
+  },
+  "Cwalina-Śliwowska Żaneta": {
+    "party": "PSL-TD",
+    "official": "Zaneta.Cwalina-Sliwowska@sejm.pl",
+    "district": "18",
+    "email": "zaneta.cwalina.sliwowska.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/75392"
+  },
+  "Ćwik Sławomir": {
+    "party": "Polska2050-TD",
+    "official": "Slawomir.Cwik@sejm.pl",
+    "district": "7",
+    "profile": "https://mamprawowiedziec.pl/polityk/49322"
+  },
+  "Czarnecki Krzysztof": {
+    "party": "PiS",
+    "official": "Krzysztof.Czarnecki@sejm.pl",
+    "district": "38",
+    "profile": "https://mamprawowiedziec.pl/polityk/74803"
+  },
+  "Czarnecki Witold Wojciech": {
+    "party": "PiS",
+    "official": "Witold.Czarnecki@sejm.pl",
+    "district": "37"
+  },
+  "Czarnek Przemysław": {
+    "party": "PiS",
+    "official": "Przemyslaw.Czarnek@sejm.pl",
+    "district": "6",
+    "email": "kontakt@czarnek.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57351"
+  },
+  "Czartoryski Arkadiusz": {
+    "party": "PiS",
+    "official": "Arkadiusz.Czartoryski@sejm.pl",
+    "district": "18",
+    "email": "arekczartoryski@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2198"
+  },
+  "Czarzasty Włodzimierz": {
+    "party": "Lewica",
+    "official": "Wlodzimierz.Czarzasty@sejm.pl",
+    "district": "32",
+    "email": "wlodzimierz@czarzasty.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/50768"
+  },
+  "Czechak Lidia": {
+    "party": "PiS",
+    "official": "Lidia.Czechak@sejm.pl",
+    "district": "36",
+    "profile": "https://mamprawowiedziec.pl/polityk/74785"
+  },
+  "Czerniak Jacek": {
+    "party": "Lewica",
+    "official": "Jacek.Czerniak@sejm.pl",
+    "district": "6",
+    "email": "czerniakjacek@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30937"
+  },
+  "Czernow Zofia": {
+    "party": "KO",
+    "official": "Zofia.Czernow@sejm.pl",
+    "district": "1",
+    "profile": "https://mamprawowiedziec.pl/polityk/30952"
+  },
+  "Czerwińska Anita": {
+    "party": "PiS",
+    "official": "Anita.Czerwinska@sejm.pl",
+    "district": "20",
+    "profile": "https://mamprawowiedziec.pl/polityk/51669"
+  },
+  "Czochara Katarzyna": {
+    "party": "PiS",
+    "official": "Katarzyna.Czochara@sejm.pl",
+    "district": "21",
+    "email": "kczochara.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/41947"
+  },
+  "Dąbrowska-Banaszek Anna": {
+    "party": "PiS",
+    "official": "Anna.Dabrowska-Banaszek@sejm.pl",
+    "district": "7",
+    "email": "biuro@dabrowska-banaszek.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57501"
+  },
+  "Dajczak Władysław": {
+    "party": "PiS",
+    "official": "Wladyslaw.Dajczak@sejm.pl",
+    "district": "8",
+    "email": "dajczak@vp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/22407"
+  },
+  "Dolata Zbigniew": {
+    "party": "PiS",
+    "official": "Zbigniew.Dolata@sejm.pl",
+    "district": "37",
+    "email": "zbigniewdolata@poczta.onet.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/74805"
+  },
+  "Dolniak Barbara": {
+    "party": "KO",
+    "official": "Barbara.Dolniak@sejm.pl",
+    "district": "32",
+    "email": "biurob.dolniak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/53729"
+  },
+  "Domański Andrzej": {
+    "party": "KO",
+    "official": "Andrzej.Domanski@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/71249"
+  },
+  "Dorywalski Bartłomiej": {
+    "party": "PiS",
+    "official": "Bartlomiej.Dorywalski@sejm.pl",
+    "district": "33",
+    "email": "biuro.dorywalski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74753"
+  },
+  "Dowhan Robert": {
+    "party": "KO",
+    "official": "Robert.Dowhan@sejm.pl",
+    "district": "8",
+    "email": "senator@dowhan.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31055"
+  },
+  "Drabek Przemysław": {
+    "party": "PiS",
+    "official": "Przemyslaw.Drabek@sejm.pl",
+    "district": "27",
+    "email": "kontakt@przemyslawdrabek.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56007"
+  },
+  "Duda Elżbieta": {
+    "party": "PiS",
+    "official": "Elzbieta.Duda@sejm.pl",
+    "district": "13",
+    "email": "biuro@elzbietaduda.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/50394"
+  },
+  "Dziedzic Adam": {
+    "party": "PSL-TD",
+    "official": "Adam.Dziedzic@sejm.pl",
+    "district": "23",
+    "profile": "https://mamprawowiedziec.pl/polityk/75514"
+  },
+  "Dziedziczak Jan Michał": {
+    "party": "PiS",
+    "official": "Jan.Dziedziczak@sejm.pl",
+    "district": "36",
+    "email": "jan@dziedziczak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2220"
+  },
+  "Dziemianowicz-Bąk Agnieszka": {
+    "party": "Lewica",
+    "official": "Agnieszka.Dziemianowicz-Bak@sejm.pl",
+    "district": "26",
+    "email": "kontakt@dziemianowicz-bak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57020"
+  },
+  "Filiks Magdalena": {
+    "party": "KO",
+    "official": "Magdalena.Filiks@sejm.pl",
+    "district": "41",
+    "profile": "https://mamprawowiedziec.pl/polityk/60809"
+  },
+  "Filipek-Sobczak Magdalena": {
+    "party": "PiS",
+    "official": "Magdalena.Filipek-Sobczak@sejm.pl",
+    "district": "6",
+    "profile": "https://mamprawowiedziec.pl/polityk/57353"
+  },
+  "Fogiel Radosław": {
+    "party": "PiS",
+    "official": "Radoslaw.Fogiel@sejm.pl",
+    "district": "17",
+    "email": "rfogiel@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/51022"
+  },
+  "Foltyn Bronisław": {
+    "party": "Konfederacja",
+    "official": "Bronislaw.Foltyn@sejm.pl",
+    "district": "27",
+    "email": "biuro@bronislawfoltyn.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/72231"
+  },
+  "Fritz Roman": {
+    "party": "Konfederacja",
+    "official": "Roman.Fritz@sejm.pl",
+    "district": "30",
+    "email": "kancelaria.fritz@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/72279"
+  },
+  "Frydrych Joanna": {
+    "party": "KO",
+    "official": "Joanna.Frydrych@sejm.pl",
+    "district": "22",
+    "email": "biuro.joannafrydrych@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/52016"
+  },
+  "Frysztak Konrad": {
+    "party": "KO",
+    "official": "Konrad.Frysztak@sejm.pl",
+    "district": "17",
+    "email": "biuro@frysztak.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/58382"
+  },
+  "Gabriel Patryk": {
+    "party": "KO",
+    "official": "Patryk.Gabriel@sejm.pl",
+    "district": "25",
+    "email": "biuro@patrykgabriel.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71381"
+  },
+  "Gadowski Krzysztof": {
+    "party": "KO",
+    "official": "Krzysztof.Gadowski@sejm.pl",
+    "district": "30",
+    "email": "biur@gadowski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2228"
+  },
+  "Gajewska Aleksandra": {
+    "party": "KO",
+    "official": "Aleksandra.Gajewska@sejm.pl",
+    "district": "19",
+    "email": "biuro@jasnezegajewska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/42870"
+  },
+  "Gajewska Kinga": {
+    "party": "KO",
+    "official": "Kinga.Gajewska@sejm.pl",
+    "district": "20",
+    "email": "kontakt@kingagajewska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/41298"
+  },
+  "Gapińska Elżbieta": {
+    "party": "KO",
+    "official": "Elzbieta.Gapinska@sejm.pl",
+    "district": "16",
+    "email": "e.gapinska@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30957"
+  },
+  "Gawkowski Krzysztof": {
+    "party": "Lewica",
+    "official": "Krzysztof.Gawkowski@sejm.pl",
+    "district": "4",
+    "email": "biuro.sejm@gawkowski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/48630"
+  },
+  "Gawlik Zdzisław": {
+    "party": "KO",
+    "official": "Zdzislaw.Gawlik@sejm.pl",
+    "district": "23",
+    "email": "info@zdzislawgawlik.com.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/52259"
+  },
+  "Gawron Andrzej": {
+    "party": "PiS",
+    "official": "Andrzej.Gawron@sejm.pl",
+    "district": "28",
+    "profile": "https://mamprawowiedziec.pl/polityk/53256"
+  },
+  "Gaża Grzegorz": {
+    "party": "PiS",
+    "official": "Grzegorz.Gaza@sejm.pl",
+    "district": "27",
+    "email": "grzegorz.gaza.sejm@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74652"
+  },
+  "Gelert Elżbieta": {
+    "party": "KO",
+    "official": "Elzbieta.Gelert@sejm.pl",
+    "district": "34",
+    "email": "elblagwsejmie@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/30959"
+  },
+  "Gembicka Anna": {
+    "party": "PiS",
+    "official": "Anna.Gembicka@sejm.pl",
+    "district": "5",
+    "email": "kontakt@annagembicka.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57218"
+  },
+  "Gierada Artur Daniel": {
+    "party": "KO",
+    "official": "Artur.Gierada@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/2026"
+  },
+  "Giertych Roman": {
+    "party": "KO",
+    "official": "Roman.Giertych@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/55648"
+  },
+  "Giziński Włodzisław": {
+    "party": "KO",
+    "official": "Wlodzislaw.Gizinski@sejm.pl",
+    "district": "4",
+    "profile": "https://mamprawowiedziec.pl/polityk/70975"
+  },
+  "Giżyński Szymon": {
+    "party": "PiS",
+    "official": "Szymon.Gizynski@sejm.pl",
+    "district": "28",
+    "profile": "https://mamprawowiedziec.pl/polityk/2030"
+  },
+  "Gliński Piotr": {
+    "party": "PiS",
+    "official": "Piotr.Glinski@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/49732"
+  },
+  "Głogowski Tomasz": {
+    "party": "KO",
+    "official": "Tomasz.Glogowski@sejm.pl",
+    "district": "29",
+    "email": "biuro@glogowski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30965"
+  },
+  "Głowski Piotr": {
+    "party": "KO",
+    "official": "Piotr.Glowski@sejm.pl",
+    "district": "38",
+    "email": "prezydent@um.pila.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/22412"
+  },
+  "Golbik Marta": {
+    "party": "KO",
+    "official": "Marta.Golbik@sejm.pl",
+    "district": "29",
+    "email": "marta.golbik@nowoczesna.org",
+    "profile": "https://mamprawowiedziec.pl/polityk/53335"
+  },
+  "Golińska Małgorzata": {
+    "party": "PiS",
+    "official": "Malgorzata.Golinska@sejm.pl",
+    "district": "40",
+    "email": "golinska.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/55122"
+  },
+  "Gołojuch Kazimierz": {
+    "party": "PiS",
+    "official": "Kazimierz.Golojuch@sejm.pl",
+    "district": "23",
+    "email": "biuro@kazimierzgolojuch.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2035"
+  },
+  "Gomoła Adam": {
+    "party": "niezrzeszony",
+    "official": "Adam.Gomola@sejm.pl",
+    "district": "21",
+    "email": "biuro@adamgomola.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75471"
+  },
+  "Gontarz Robert": {
+    "party": "PiS",
+    "official": "Robert.Gontarz@sejm.pl",
+    "district": "34",
+    "email": "g@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/74756"
+  },
+  "Gorczyca Stanisław": {
+    "party": "KO",
+    "official": "Stanislaw.Gorczyca@sejm.pl",
+    "district": "34",
+    "email": "poczta@stanislawgorczyca.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/22414"
+  },
+  "Górnikiewicz Piotr": {
+    "party": "Polska2050-TD",
+    "official": "Piotr.Gornikiewicz@sejm.pl",
+    "district": "15",
+    "email": "biuro@gornikiewicz.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/50616"
+  },
+  "Górska Agnieszka": {
+    "party": "PiS",
+    "official": "Agnieszka.Gorska@sejm.pl",
+    "district": "17",
+    "email": "owiec@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/41356"
+  },
+  "Gosek Mariusz": {
+    "party": "PiS",
+    "official": "Mariusz.Gosek@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/60163"
+  },
+  "Gosek-Popiołek Daria": {
+    "party": "Lewica",
+    "official": "Daria.Gosek-Popiolek@sejm.pl",
+    "district": "13",
+    "profile": "https://mamprawowiedziec.pl/polityk/55885"
+  },
+  "Grabczuk Krzysztof": {
+    "party": "KO",
+    "official": "Krzysztof.Grabczuk@sejm.pl",
+    "district": "7",
+    "profile": "https://mamprawowiedziec.pl/polityk/41638"
+  },
+  "Grabiec Jan": {
+    "party": "KO",
+    "official": "Jan.Grabiec@sejm.pl",
+    "district": "20",
+    "email": "biuro@jgrabiec.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/51647"
+  },
+  "Grabowski Marcin": {
+    "party": "PiS",
+    "official": "Marcin.Grabowski@sejm.pl",
+    "district": "18",
+    "profile": "https://mamprawowiedziec.pl/polityk/74479"
+  },
+  "Gramatyka Michał": {
+    "party": "Polska2050-TD",
+    "official": "Michal.Gramatyka@sejm.pl",
+    "district": "31",
+    "email": "biuro@gramatyka.info",
+    "profile": "https://mamprawowiedziec.pl/polityk/59906"
+  },
+  "Gróbarczyk Marek": {
+    "party": "PiS",
+    "official": "Marek.Grobarczyk@sejm.pl",
+    "district": "41",
+    "email": "biuro@marekgrobarczyk.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/29451"
+  },
+  "Gromadzka Małgorzata": {
+    "party": "KO",
+    "official": "Malgorzata.Gromadzka@sejm.pl",
+    "district": "7",
+    "profile": "https://mamprawowiedziec.pl/polityk/71038"
+  },
+  "Grygorcewicz Barbara": {
+    "party": "KO",
+    "official": "Barbara.Grygorcewicz@sejm.pl",
+    "district": "40",
+    "profile": "https://mamprawowiedziec.pl/polityk/71618"
+  },
+  "Grzyb Andrzej": {
+    "party": "PSL-TD",
+    "official": "Andrzej.Grzyb@sejm.pl",
+    "district": "36",
+    "email": "office@andrzejgrzyb.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/2049"
+  },
+  "Gut-Mostowy Andrzej": {
+    "party": "PiS",
+    "official": "Andrzej.Gut-Mostowy@sejm.pl",
+    "district": "14",
+    "email": "biuro@mostowy.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2050"
+  },
+  "Gwiazdowski Kazimierz": {
+    "party": "PiS",
+    "official": "Kazimierz.Gwiazdowski@sejm.pl",
+    "district": "24",
+    "email": "poselgwiazdowski.sekretariat@op.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2052"
+  },
+  "Gwóźdź Marcin": {
+    "party": "PiS",
+    "official": "Marcin.Gwozdz@sejm.pl",
+    "district": "2",
+    "email": "biurozabkowice@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/56885"
+  },
+  "Gzik Marek": {
+    "party": "KO",
+    "official": "Marek.Gzik@sejm.pl",
+    "district": "29",
+    "profile": "https://mamprawowiedziec.pl/polityk/71443"
+  },
+  "Habura Krzysztof": {
+    "party": "KO",
+    "official": "Krzysztof.Habura@sejm.pl",
+    "district": "11",
+    "profile": "https://mamprawowiedziec.pl/polityk/71110"
+  },
+  "Hanajczyk Agnieszka": {
+    "party": "KO",
+    "official": "Agnieszka.Hanajczyk@sejm.pl",
+    "district": "11",
+    "email": "agnieszka-hanajczyk@o2.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2054"
+  },
+  "Hartwich Iwona": {
+    "party": "KO",
+    "official": "Iwona.Hartwich@sejm.pl",
+    "district": "5",
+    "profile": "https://mamprawowiedziec.pl/polityk/57152"
+  },
+  "Hennig-Kloska Paulina": {
+    "party": "Polska2050-TD",
+    "official": "Paulina.Hennig-Kloska@sejm.pl",
+    "district": "37",
+    "email": "hennigkloska.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/60505"
+  },
+  "Hoc Czesław": {
+    "party": "PiS",
+    "official": "Czeslaw.Hoc@sejm.pl",
+    "district": "40",
+    "email": "biuro@czeslawhoc.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2056"
+  },
+  "Hoffmann Zbigniew": {
+    "party": "PiS",
+    "official": "Zbigniew.Hoffmann@sejm.pl",
+    "district": "37",
+    "email": "biuro.zbigniewhoffmann@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/54986"
+  },
+  "Hok Marek Tomasz": {
+    "party": "KO",
+    "official": "Marek.Hok@sejm.pl",
+    "district": "40"
+  },
+  "Hołownia Bożenna": {
+    "party": "Polska2050-TD",
+    "official": "Bozenna.Holownia@sejm.pl",
+    "district": "19",
+    "email": "biuro@bholownia-poslanka.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/81147"
+  },
+  "Hołownia Szymon": {
+    "party": "Polska2050-TD",
+    "official": "Szymon.Holownia@sejm.pl",
+    "district": "24",
+    "email": "szymon@szymonholownia.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/61192"
+  },
+  "Horała Marcin": {
+    "party": "PiS",
+    "official": "Marcin.Horala@sejm.pl",
+    "district": "26",
+    "email": "biuro@horala.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/52996"
+  },
+  "Horbatowski Łukasz": {
+    "party": "KO",
+    "official": "Lukasz.Horbatowski@sejm.pl",
+    "district": "1",
+    "email": "biuro.posla.horbatowskiego@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/70918"
+  },
+  "Hreniak Paweł": {
+    "party": "PiS",
+    "official": "Pawel.Hreniak@sejm.pl",
+    "district": "3",
+    "email": "biuro.hreniak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/55553"
+  },
+  "Jabłoński Paweł": {
+    "party": "PiS",
+    "official": "Pawel.Jablonski@sejm.pl",
+    "district": "30",
+    "email": "biuro.pjablonski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74689"
+  },
+  "Jachira Klaudia": {
+    "party": "KO",
+    "official": "Klaudia.Jachira@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/48455"
+  },
+  "Jagła Robert": {
+    "party": "KO",
+    "official": "Robert.Jagla@sejm.pl",
+    "district": "2",
+    "profile": "https://mamprawowiedziec.pl/polityk/70939"
+  },
+  "Jakubiak Marek": {
+    "party": "Republikanie",
+    "official": "Marek.Jakubiak@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/50889"
+  },
+  "Janyska Maria Małgorzata": {
+    "party": "KO",
+    "official": "Maria.Janyska@sejm.pl",
+    "district": "38",
+    "email": "biuro@mjanyska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30970"
+  },
+  "Jaros Michał": {
+    "party": "KO",
+    "official": "Michal.Jaros@sejm.pl",
+    "district": "3",
+    "profile": "https://mamprawowiedziec.pl/polityk/2067"
+  },
+  "Jaśkowiec Dominik": {
+    "party": "KO",
+    "official": "Dominik.Jaskowiec@sejm.pl",
+    "district": "13",
+    "email": "biuro@jaskowiec.krakow.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71148"
+  },
+  "Jaskulski Patryk": {
+    "party": "KO",
+    "official": "Patryk.Jaskulski@sejm.pl",
+    "district": "41",
+    "email": "biuro@patrykjaskulski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71641"
+  },
+  "Jazłowiecka Danuta": {
+    "party": "KO",
+    "official": "Danuta.Jazlowiecka@sejm.pl",
+    "district": "21",
+    "profile": "https://mamprawowiedziec.pl/polityk/2070"
+  },
+  "Józefaciuk Marcin": {
+    "party": "KO",
+    "official": "Marcin.Jozefaciuk@sejm.pl",
+    "district": "9",
+    "email": "biuroposelskie.mj@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/71084"
+  },
+  "Kaczmarczyk Norbert Jakub": {
+    "party": "PiS",
+    "official": "Norbert.Kaczmarczyk@sejm.pl",
+    "district": "15",
+    "email": "biuroposelskiekaczmarczyk@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/50750"
+  },
+  "Kaczyński Filip": {
+    "party": "PiS",
+    "official": "Filip.Kaczynski@sejm.pl",
+    "district": "12",
+    "email": "biuroposelskie.kaczynski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/40677"
+  },
+  "Kaczyński Jarosław": {
+    "party": "PiS",
+    "official": "Jaroslaw.Kaczynski@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/2073"
+  },
+  "Kaleta Piotr": {
+    "party": "PiS",
+    "official": "Piotr.Kaleta@sejm.pl",
+    "district": "36",
+    "email": "kaleta.piotr@poczta.fm",
+    "profile": "https://mamprawowiedziec.pl/polityk/22425"
+  },
+  "Kaleta Sebastian": {
+    "party": "PiS",
+    "official": "Sebastian.Kaleta@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/56273"
+  },
+  "Kałużny Mariusz": {
+    "party": "PiS",
+    "official": "Mariusz.Kaluzny@sejm.pl",
+    "district": "5",
+    "profile": "https://mamprawowiedziec.pl/polityk/41166"
+  },
+  "Kandyba Piotr": {
+    "party": "KO",
+    "official": "Piotr.Kandyba@sejm.pl",
+    "district": "20",
+    "profile": "https://mamprawowiedziec.pl/polityk/51593"
+  },
+  "Kanthak Jan": {
+    "party": "PiS",
+    "official": "Jan.Kanthak@sejm.pl",
+    "district": "6",
+    "email": "jkanthak@jankanthak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57367"
+  },
+  "Kapinos Fryderyk Sylwester": {
+    "party": "PiS",
+    "official": "Fryderyk.Kapinos@sejm.pl",
+    "district": "23",
+    "profile": "https://mamprawowiedziec.pl/polityk/55862"
+  },
+  "Karnowski Jacek": {
+    "party": "KO",
+    "official": "Jacek.Karnowski@sejm.pl",
+    "district": "25",
+    "email": "jk@jacekkarnowski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30861"
+  },
+  "Karolewska Iwona": {
+    "party": "KO",
+    "official": "Iwona.Karolewska@sejm.pl",
+    "district": "4",
+    "email": "karolewska.iwona@outlook.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/70976"
+  },
+  "Kasprzyk Rafał": {
+    "party": "Polska2050-TD",
+    "official": "Rafal.Kasprzyk@sejm.pl",
+    "district": "33",
+    "email": "biuro@rkasprzyk.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/75717"
+  },
+  "Kiepura Henryk": {
+    "party": "PSL-TD",
+    "official": "Henryk.Kiepura@sejm.pl",
+    "district": "28",
+    "email": "biuro.henrykkiepura@interia.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/53241"
+  },
+  "Kierzek-Koperska Katarzyna": {
+    "party": "KO",
+    "official": "Katarzyna.Kierzek-Koperska@sejm.pl",
+    "district": "39",
+    "email": "kontakt@katarzynakierzekkoperska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71604"
+  },
+  "Klimczak Dariusz": {
+    "party": "PSL-TD",
+    "official": "Dariusz.Klimczak@sejm.pl",
+    "district": "10",
+    "email": "posel.klimczak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/49844"
+  },
+  "Kłopotek Agnieszka Maria": {
+    "party": "PSL-TD",
+    "official": "Agnieszka.Klopotek@sejm.pl",
+    "district": "4",
+    "email": "biuro.bydgoszcz@psl.org.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56309"
+  },
+  "Kluzik-Rostkowska Joanna": {
+    "party": "KO",
+    "official": "Joanna.Kluzik-Rostkowska@sejm.pl",
+    "district": "17",
+    "profile": "https://mamprawowiedziec.pl/polityk/2095"
+  },
+  "Kmita Łukasz": {
+    "party": "PiS",
+    "official": "Lukasz.Kmita@sejm.pl",
+    "district": "12",
+    "email": "biuro.lukaszkmita@outlook.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74399"
+  },
+  "Koc Maria": {
+    "party": "PiS",
+    "official": "Maria.Koc@sejm.pl",
+    "district": "18",
+    "profile": "https://mamprawowiedziec.pl/polityk/40597"
+  },
+  "Kołodziej Ewa": {
+    "party": "KO",
+    "official": "Ewa.Kolodziej@sejm.pl",
+    "district": "31",
+    "profile": "https://mamprawowiedziec.pl/polityk/30978"
+  },
+  "Kołodziejczak Magdalena Małgorzata": {
+    "party": "KO",
+    "official": "Magdalena.Kolodziejczak@sejm.pl",
+    "district": "25",
+    "email": "biuro@kolodziejczakmagdalena.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71380"
+  },
+  "Kołodziejczak Michał": {
+    "party": "KO",
+    "official": "Michal.Kolodziejczak@sejm.pl",
+    "district": "37",
+    "email": "biuro@michalkolodziejczak.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/71573"
+  },
+  "Komarewicz Rafał": {
+    "party": "Polska2050-TD",
+    "official": "Rafal.Komarewicz@sejm.pl",
+    "district": "13",
+    "email": "biuroposelskie@komarewicz.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/60947"
+  },
+  "Konieczny Maciej": {
+    "party": "Razem",
+    "official": "Maciej.Konieczny@sejm.pl",
+    "district": "31",
+    "email": "m.konieczny@partiarazem.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/41309"
+  },
+  "Konwiński Zbigniew": {
+    "party": "KO",
+    "official": "Zbigniew.Konwinski@sejm.pl",
+    "district": "26",
+    "profile": "https://mamprawowiedziec.pl/polityk/2105"
+  },
+  "Kosiniak-Kamysz Władysław": {
+    "party": "PSL-TD",
+    "official": "Wladyslaw.Kosiniak-Kamysz@sejm.pl",
+    "district": "15",
+    "email": "marczykz@poczta.onet.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/41704"
+  },
+  "Kostuś Tomasz": {
+    "party": "KO",
+    "official": "Tomasz.Kostus@sejm.pl",
+    "district": "21",
+    "email": "poselkostus@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/51804"
+  },
+  "Kosztowniak Andrzej": {
+    "party": "PiS",
+    "official": "Andrzej.Kosztowniak@sejm.pl",
+    "district": "17",
+    "email": "kontakt@kosztowniak.radom.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30850"
+  },
+  "Koszutska Urszula": {
+    "party": "KO",
+    "official": "Urszula.Koszutska@sejm.pl",
+    "district": "31",
+    "email": "biuro.poselskie@koszutska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71469"
+  },
+  "Kot Aleksandra": {
+    "party": "KO",
+    "official": "Aleksandra.Kot@sejm.pl",
+    "district": "13",
+    "profile": "https://mamprawowiedziec.pl/polityk/71154"
+  },
+  "Kotula Katarzyna": {
+    "party": "Lewica",
+    "official": "Katarzyna.Kotula@sejm.pl",
+    "district": "25",
+    "email": "biuro@katarzynakotula.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56564"
+  },
+  "Kowal Paweł": {
+    "party": "KO",
+    "official": "Pawel.Kowal@sejm.pl",
+    "district": "23",
+    "email": "biuro@pawelkowal.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2113"
+  },
+  "Kowal Piotr": {
+    "party": "Lewica",
+    "official": "Piotr.Kowal@sejm.pl",
+    "district": "5",
+    "profile": "https://mamprawowiedziec.pl/polityk/72672"
+  },
+  "Kowalczyk Henryk": {
+    "party": "PiS",
+    "official": "Henryk.Kowalczyk@sejm.pl",
+    "district": "18",
+    "profile": "https://mamprawowiedziec.pl/polityk/2114"
+  },
+  "Kowalski Janusz": {
+    "party": "PiS",
+    "official": "Janusz.Kowalski@sejm.pl",
+    "district": "21",
+    "email": "kontakt@januszkowalski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/58951"
+  },
+  "Kowalski Michał": {
+    "party": "PiS",
+    "official": "Michal.Kowalski@sejm.pl",
+    "district": "26",
+    "email": "biuro@michalkowalski.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/74633"
+  },
+  "Kownacki Bartosz Józef": {
+    "party": "PiS",
+    "official": "Bartosz.Kownacki@sejm.pl",
+    "district": "4",
+    "email": "bpkownacki@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30979"
+  },
+  "Koźlakiewicz Maria Joanna": {
+    "party": "KO",
+    "official": "Maria.Kozlakiewicz@sejm.pl",
+    "district": "16",
+    "email": "biuro@mariakozlakiewicz.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71201"
+  },
+  "Kozłowska Iwona Maria": {
+    "party": "KO",
+    "official": "Iwona.Kozlowska@sejm.pl",
+    "district": "4",
+    "email": "bydgoszcz@iwonakozlowska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30980"
+  },
+  "Krajewski Jarosław": {
+    "party": "PiS",
+    "official": "Jaroslaw.Krajewski@sejm.pl",
+    "district": "19",
+    "email": "koszykowabiuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/41269"
+  },
+  "Krajewski Stefan": {
+    "party": "PSL-TD",
+    "official": "Stefan.Krajewski@sejm.pl",
+    "district": "24",
+    "email": "skrajewski.psl@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/52547"
+  },
+  "Krajewski Wiesław": {
+    "party": "PiS",
+    "official": "Wieslaw.Krajewski@sejm.pl",
+    "district": "15",
+    "email": "biuro.poselskie@wkrajewski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/50720"
+  },
+  "Krasulski Leonard": {
+    "party": "PiS",
+    "official": "Leonard.Krasulski@sejm.pl",
+    "district": "34",
+    "email": "biuro-elblag@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2123"
+  },
+  "Krawczyk Iwona Małgorzata": {
+    "party": "KO",
+    "official": "Iwona.Krawczyk@sejm.pl",
+    "district": "1",
+    "email": "biuroposelskie.iwonakrawczyk@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/48187"
+  },
+  "Krawczyk Michał": {
+    "party": "KO",
+    "official": "Michal.Krawczyk@sejm.pl",
+    "district": "6",
+    "email": "biuro@michalkrawczyk.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/41492"
+  },
+  "Król Piotr": {
+    "party": "PiS",
+    "official": "Piotr.Krol@sejm.pl",
+    "district": "4",
+    "email": "biurokrola@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/40588"
+  },
+  "Król Wojciech": {
+    "party": "KO",
+    "official": "Wojciech.Krol@sejm.pl",
+    "district": "31",
+    "email": "biuro@wojciech-krol.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/53587"
+  },
+  "Królak Katarzyna": {
+    "party": "KO",
+    "official": "Katarzyna.Krolak@sejm.pl",
+    "district": "34",
+    "profile": "https://mamprawowiedziec.pl/polityk/60259"
+  },
+  "Kropiwnicki Robert": {
+    "party": "KO",
+    "official": "Robert.Kropiwnicki@sejm.pl",
+    "district": "1",
+    "profile": "https://mamprawowiedziec.pl/polityk/30786"
+  },
+  "Krupka Anna": {
+    "party": "PiS",
+    "official": "Anna.Krupka@sejm.pl",
+    "district": "33",
+    "email": "krupka.kielce@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/53983"
+  },
+  "Kryj Andrzej": {
+    "party": "PiS",
+    "official": "Andrzej.Kryj@sejm.pl",
+    "district": "33",
+    "email": "biurokryj@onet.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/53988"
+  },
+  "Krystian Mariusz": {
+    "party": "PiS",
+    "official": "Mariusz.Krystian@sejm.pl",
+    "district": "12",
+    "profile": "https://mamprawowiedziec.pl/polityk/50202"
+  },
+  "Krząkała Marek": {
+    "party": "KO",
+    "official": "Marek.Krzakala@sejm.pl",
+    "district": "30",
+    "profile": "https://mamprawowiedziec.pl/polityk/2127"
+  },
+  "Krzemiński Adam": {
+    "party": "KO",
+    "official": "Adam.Krzeminski@sejm.pl",
+    "district": "16",
+    "email": "biuroposelskie.adamkrzeminski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/41383"
+  },
+  "Krzywonos-Strycharska Henryka": {
+    "party": "KO",
+    "official": "Henryka.Krzywonos-Strycharska@sejm.pl",
+    "district": "26",
+    "email": "biuro.krzywonos@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/41027"
+  },
+  "Kubów Krzysztof": {
+    "party": "PiS",
+    "official": "Krzysztof.Kubow@sejm.pl",
+    "district": "1",
+    "email": "biuro.kubow@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/48229"
+  },
+  "Kucharska-Dziedzic Anita": {
+    "party": "Lewica",
+    "official": "Anita.Kucharska-Dziedzic@sejm.pl",
+    "district": "8",
+    "email": "biuro@kucharska-dziedzic.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/55983"
+  },
+  "Kuchciński Marek": {
+    "party": "PiS",
+    "official": "Marek.Kuchcinski@sejm.pl",
+    "district": "22",
+    "email": "biuro@marekkuchcinski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2130"
+  },
+  "Kukiz Paweł": {
+    "party": "Republikanie",
+    "official": "Pawel.Kukiz@sejm.pl",
+    "district": "21",
+    "profile": "https://mamprawowiedziec.pl/polityk/40647"
+  },
+  "Kulasek Marcin": {
+    "party": "Lewica",
+    "official": "Marcin.Kulasek@sejm.pl",
+    "district": "35",
+    "email": "biuro@marcinkulasek.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/73223"
+  },
+  "Kulpa Wioletta Maria": {
+    "party": "PiS",
+    "official": "Wioletta.Kulpa@sejm.pl",
+    "district": "16",
+    "email": "kontakt@wiolettakulpa.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56169"
+  },
+  "Kurowska Maria": {
+    "party": "PiS",
+    "official": "Maria.Kurowska@sejm.pl",
+    "district": "22",
+    "profile": "https://mamprawowiedziec.pl/polityk/56292"
+  },
+  "Kurowski Władysław": {
+    "party": "PiS",
+    "official": "Wladyslaw.Kurowski@sejm.pl",
+    "district": "12",
+    "email": "biuro@poselkurowski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57933"
+  },
+  "Kuźmiuk Zbigniew Krzysztof": {
+    "party": "PiS",
+    "official": "Zbigniew.Kuzmiuk@sejm.pl",
+    "district": "17",
+    "email": "zbigniew.kuzmiuk@europarl.europa.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/30984"
+  },
+  "Kwiecień Anna": {
+    "party": "PiS",
+    "official": "Anna.Kwiecien@sejm.pl",
+    "district": "17",
+    "email": "biuroposelskieak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/51021"
+  },
+  "Lachowicz Piotr": {
+    "party": "KO",
+    "official": "Piotr.Lachowicz@sejm.pl",
+    "district": "14",
+    "email": "biuro@piotrlachowicz.com.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71169"
+  },
+  "Łącki Artur Jarosław": {
+    "party": "KO",
+    "official": "Artur.Lacki@sejm.pl",
+    "district": "41",
+    "email": "arturlacki_biuroposelskie@o2.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/42048"
+  },
+  "Lamczyk Stanisław": {
+    "party": "KO",
+    "official": "Stanislaw.Lamczyk@sejm.pl",
+    "district": "26",
+    "email": "posel.stanislaw.lamczyk@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2138"
+  },
+  "Lasek Maciej": {
+    "party": "KO",
+    "official": "Maciej.Lasek@sejm.pl",
+    "district": "20",
+    "email": "maciej.lasek.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/58776"
+  },
+  "Lenartowicz Gabriela": {
+    "party": "KO",
+    "official": "Gabriela.Lenartowicz@sejm.pl",
+    "district": "30",
+    "profile": "https://mamprawowiedziec.pl/polityk/55475"
+  },
+  "Leniart Ewa": {
+    "party": "PiS",
+    "official": "Ewa.Leniart@sejm.pl",
+    "district": "23",
+    "email": "biuro.eleniart@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56288"
+  },
+  "Leo Aleksandra": {
+    "party": "Polska2050-TD",
+    "official": "Aleksandra.Leo@sejm.pl",
+    "district": "2",
+    "email": "aleksandra.leo@polska2050.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75069"
+  },
+  "Łepkowska-Gołaś Alicja": {
+    "party": "KO",
+    "official": "Alicja.Lepkowska-Golas@sejm.pl",
+    "district": "24",
+    "email": "alicja.lepkowska.golas@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/59236"
+  },
+  "Leszczyna Izabela": {
+    "party": "KO",
+    "official": "Izabela.Leszczyna@sejm.pl",
+    "district": "28",
+    "profile": "https://mamprawowiedziec.pl/polityk/2141"
+  },
+  "Lichocka Joanna": {
+    "party": "PiS",
+    "official": "Joanna.Lichocka@sejm.pl",
+    "district": "11",
+    "email": "biuroposelskiejoannylichockiej@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/54537"
+  },
+  "Lipiec Krzysztof": {
+    "party": "PiS",
+    "official": "Krzysztof.Lipiec@sejm.pl",
+    "district": "33",
+    "email": "listy@krzysztof-lipiec.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2142"
+  },
+  "Lisowska Bożena": {
+    "party": "KO",
+    "official": "Bożena.Lisowska@sejm.pl",
+    "district": "6",
+    "profile": "https://mamprawowiedziec.pl/polityk/56343"
+  },
+  "Litewka Łukasz": {
+    "party": "Lewica",
+    "official": "Lukasz.Litewka@sejm.pl",
+    "district": "32",
+    "email": "bp.lukaszlitewka@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/73179"
+  },
+  "Łoboda Dorota": {
+    "party": "KO",
+    "official": "Dorota.Loboda@sejm.pl",
+    "district": "19",
+    "email": "biuro@dorotaloboda.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/58632"
+  },
+  "Lorek Grzegorz": {
+    "party": "PiS",
+    "official": "Grzegorz.Lorek@sejm.pl",
+    "district": "10",
+    "email": "biuropiotrkow@interia.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/49863"
+  },
+  "Łośko Magdalena": {
+    "party": "KO",
+    "official": "Magdalena.Losko@sejm.pl",
+    "district": "4",
+    "profile": "https://mamprawowiedziec.pl/polityk/57052"
+  },
+  "Lubczyk Radosław": {
+    "party": "PSL-TD",
+    "official": "Radoslaw.Lubczyk@sejm.pl",
+    "district": "40",
+    "profile": "https://mamprawowiedziec.pl/polityk/55068"
+  },
+  "Lubnauer Katarzyna Anna": {
+    "party": "KO",
+    "official": "Katarzyna.Lubnauer@sejm.pl",
+    "district": "19",
+    "email": "biuro.lubnauer@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/49668"
+  },
+  "Luboński Adam": {
+    "party": "Polska2050-TD",
+    "official": "Adam.Lubonski@sejm.pl",
+    "district": "38",
+    "email": "a.lubonski.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/75817"
+  },
+  "Łuczak Alicja": {
+    "party": "KO",
+    "official": "Alicja.Luczak@sejm.pl",
+    "district": "36",
+    "email": "biuro@alicjaluczak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71553"
+  },
+  "Łuczak Krystian": {
+    "party": "KO",
+    "official": "Krystian.Luczak@sejm.pl",
+    "district": "5",
+    "profile": "https://mamprawowiedziec.pl/polityk/70992"
+  },
+  "Łukaszewicz Sebastian": {
+    "party": "PiS",
+    "official": "Sebastian.Lukaszewicz@sejm.pl",
+    "district": "24",
+    "profile": "https://mamprawowiedziec.pl/polityk/74609"
+  },
+  "Machałek Marzena Anna": {
+    "party": "PiS",
+    "official": "Marzena.Machalek@sejm.pl",
+    "district": "1",
+    "email": "marzena.machalek@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2244"
+  },
+  "Macierewicz Antoni": {
+    "party": "PiS",
+    "official": "Antoni.Macierewicz@sejm.pl",
+    "district": "10",
+    "email": "biuro@macierewicz.org",
+    "profile": "https://mamprawowiedziec.pl/polityk/2246"
+  },
+  "Macko Grzegorz": {
+    "party": "PiS",
+    "official": "Grzegorz.Macko@sejm.pl",
+    "district": "2",
+    "profile": "https://mamprawowiedziec.pl/polityk/74258"
+  },
+  "Małecki Maciej": {
+    "party": "PiS",
+    "official": "Maciej.Malecki@sejm.pl",
+    "district": "16",
+    "email": "biuro@maciejmalecki.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30990"
+  },
+  "Malik Ewa": {
+    "party": "PiS",
+    "official": "Ewa.Malik@sejm.pl",
+    "district": "32",
+    "profile": "https://mamprawowiedziec.pl/polityk/2247"
+  },
+  "Maliszewski Mirosław": {
+    "party": "PSL-TD",
+    "official": "Miroslaw.Maliszewski@sejm.pl",
+    "district": "17",
+    "profile": "https://mamprawowiedziec.pl/polityk/2248"
+  },
+  "Marchewka Arkadiusz": {
+    "party": "KO",
+    "official": "Arkadiusz.Marchewka@sejm.pl",
+    "district": "41",
+    "profile": "https://mamprawowiedziec.pl/polityk/55237"
+  },
+  "Marek Dorota": {
+    "party": "KO",
+    "official": "Dorota.Marek@sejm.pl",
+    "district": "13",
+    "email": "biuro.dorotamarek@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/57956"
+  },
+  "Masełko Paweł": {
+    "party": "KO",
+    "official": "Pawel.Maselko@sejm.pl",
+    "district": "21",
+    "profile": "https://mamprawowiedziec.pl/polityk/71294"
+  },
+  "Matecki Dariusz": {
+    "party": "PiS",
+    "official": "Dariusz.Matecki@sejm.pl",
+    "district": "41",
+    "email": "kontakt@dariuszmatecki.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/60868"
+  },
+  "Materna Jerzy": {
+    "party": "PiS",
+    "official": "Jerzy.Materna@sejm.pl",
+    "district": "8",
+    "email": "biurposjem@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2255"
+  },
+  "Matusiak Grzegorz": {
+    "party": "PiS",
+    "official": "Grzegorz.Matusiak@sejm.pl",
+    "district": "30",
+    "profile": "https://mamprawowiedziec.pl/polityk/30993"
+  },
+  "Matusik-Lipiec Katarzyna": {
+    "party": "KO",
+    "official": "Katarzyna.Matusik-Lipiec@sejm.pl",
+    "district": "13",
+    "email": "biuro@matusik-lipiec.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71147"
+  },
+  "Matuszewski Marek": {
+    "party": "PiS",
+    "official": "Marek.Matuszewski@sejm.pl",
+    "district": "11",
+    "profile": "https://mamprawowiedziec.pl/polityk/2258"
+  },
+  "Matysiak Paulina": {
+    "party": "Razem",
+    "official": "Paulina.Matysiak@sejm.pl",
+    "district": "11",
+    "email": "biuro@paulinamatysiak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56368"
+  },
+  "Mejza Łukasz": {
+    "party": "PiS",
+    "official": "Lukasz.Mejza@sejm.pl",
+    "district": "8",
+    "email": "lukasz.mejza@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/57604"
+  },
+  "Mentzen Sławomir": {
+    "party": "Konfederacja",
+    "official": "Slawomir.Mentzen@sejm.pl",
+    "district": "19",
+    "email": "biuroposelskie@mentzen.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/55932"
+  },
+  "Meysztowicz Jerzy": {
+    "party": "KO",
+    "official": "Jerzy.Meysztowicz@sejm.pl",
+    "district": "13",
+    "profile": "https://mamprawowiedziec.pl/polityk/50301"
+  },
+  "Mieszkowski Krzysztof": {
+    "party": "KO",
+    "official": "Krzysztof.Mieszkowski@sejm.pl",
+    "district": "3",
+    "email": "kmieszkowski.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/48450"
+  },
+  "Milczanowska Anna": {
+    "party": "PiS",
+    "official": "Anna.Milczanowska@sejm.pl",
+    "district": "10",
+    "email": "biuroposelskieam@o2.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/30851"
+  },
+  "Milewski Daniel": {
+    "party": "PiS",
+    "official": "Daniel.Milewski@sejm.pl",
+    "district": "18",
+    "email": "biuro@danielmilewski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/51207"
+  },
+  "Morawiecki Mateusz": {
+    "party": "PiS",
+    "official": "Mateusz.Morawiecki@sejm.pl",
+    "district": "31",
+    "email": "biuro@mateuszmorawiecki.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/55852"
+  },
+  "Mosiński Jan": {
+    "party": "PiS",
+    "official": "Jan.Mosinski@sejm.pl",
+    "district": "36",
+    "email": "jan.mosinski.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/54538"
+  },
+  "Moskal Michał": {
+    "party": "PiS",
+    "official": "Michal.Moskal@sejm.pl",
+    "district": "6",
+    "email": "biuro@michalmoskal.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/74313"
+  },
+  "Mroczek Czesław": {
+    "party": "KO",
+    "official": "Czeslaw.Mroczek@sejm.pl",
+    "district": "18",
+    "email": "biuro@czeslawmroczek.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2272"
+  },
+  "Mrówczyński Aleksander Mikołaj": {
+    "party": "PiS",
+    "official": "Aleksander.Mrowczynski@sejm.pl",
+    "district": "26",
+    "email": "biuro@aleksandermrowczynski.org",
+    "profile": "https://mamprawowiedziec.pl/polityk/52999"
+  },
+  "Mucha Joanna": {
+    "party": "Polska2050-TD",
+    "official": "Joanna.Mucha@sejm.pl",
+    "district": "6",
+    "email": "biuro@joannamucha.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2274"
+  },
+  "Mulawa Krzysztof": {
+    "party": "Konfederacja",
+    "official": "Krzysztof.Mulawa@sejm.pl",
+    "district": "18",
+    "profile": "https://mamprawowiedziec.pl/polityk/58530"
+  },
+  "Myrcha Arkadiusz": {
+    "party": "KO",
+    "official": "Arkadiusz.Myrcha@sejm.pl",
+    "district": "5",
+    "email": "kontakt@arkadiuszmyrcha.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/48907"
+  },
+  "Napieralski Grzegorz": {
+    "party": "KO",
+    "official": "Grzegorz.Napieralski@sejm.pl",
+    "district": "41",
+    "email": "biuronapieralski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2279"
+  },
+  "Niedziela Dorota": {
+    "party": "KO",
+    "official": "Dorota.Niedziela@sejm.pl",
+    "district": "12",
+    "email": "biuro@dorotaniedziela.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/30998"
+  },
+  "Niedźwiedzki Jacek": {
+    "party": "KO",
+    "official": "Jacek.Niedzwiedzki@sejm.pl",
+    "district": "24",
+    "profile": "https://mamprawowiedziec.pl/polityk/71356"
+  },
+  "Niemczyk Małgorzata": {
+    "party": "KO",
+    "official": "Malgorzata.Niemczyk@sejm.pl",
+    "district": "9",
+    "email": "biuro.niemczyk@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/30999"
+  },
+  "Niezgodzka Jolanta": {
+    "party": "KO",
+    "official": "Jolanta.Niezgodzka@sejm.pl",
+    "district": "3",
+    "email": "jolaniezgodzka@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/70957"
+  },
+  "Nitras Sławomir": {
+    "party": "KO",
+    "official": "Slawomir.Nitras@sejm.pl",
+    "district": "41",
+    "profile": "https://mamprawowiedziec.pl/polityk/2283"
+  },
+  "Nowacka Barbara": {
+    "party": "KO",
+    "official": "Barbara.Nowacka@sejm.pl",
+    "district": "26",
+    "email": "kontakt@barbaranowacka.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/41664"
+  },
+  "Nowak Maja Ewa": {
+    "party": "Polska2050-TD",
+    "official": "Maja.Nowak@sejm.pl",
+    "district": "8",
+    "email": "biuro.tomasz.nowak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2286"
+  },
+  "Nowak Tomasz Piotr": {
+    "party": "KO",
+    "official": "Tomasz.Nowak@sejm.pl",
+    "district": "37"
+  },
+  "Nowicka Wanda": {
+    "party": "Lewica",
+    "official": "Wanda.Nowicka@sejm.pl",
+    "district": "29",
+    "email": "wandanowicka@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/30897"
+  },
+  "Nowogórska Urszula": {
+    "party": "PSL-TD",
+    "official": "Urszula.Nowogorska@sejm.pl",
+    "district": "14",
+    "email": "urszula@nowogorska.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/58155"
+  },
+  "Ociepa Marcin": {
+    "party": "PiS",
+    "official": "Marcin.Ociepa@sejm.pl",
+    "district": "21",
+    "profile": "https://mamprawowiedziec.pl/polityk/55679"
+  },
+  "Okła-Drewnowicz Marzena": {
+    "party": "KO",
+    "official": "Marzena.Okla-Drewnowicz@sejm.pl",
+    "district": "33",
+    "email": "marzena@okla-drewnowicz.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2289"
+  },
+  "Okuła Barbara": {
+    "party": "Polska2050-TD",
+    "official": "Barbara.Okula@sejm.pl",
+    "district": "24",
+    "email": "biuro@okulabarbara.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75544"
+  },
+  "Oliwiecka Barbara": {
+    "party": "Polska2050-TD",
+    "official": "Barbara.Oliwiecka@sejm.pl",
+    "district": "36",
+    "email": "biuro@barbaraoliwiecka.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/54474"
+  },
+  "Olko Dorota": {
+    "party": "Lewica",
+    "official": "Dorota.Olko@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/72919"
+  },
+  "Olszewski Paweł": {
+    "party": "KO",
+    "official": "Pawel.Olszewski@sejm.pl",
+    "district": "4",
+    "profile": "https://mamprawowiedziec.pl/polityk/2294"
+  },
+  "Orliński Mirosław Adam": {
+    "party": "PSL-TD",
+    "official": "Miroslaw.Orlinski@sejm.pl",
+    "district": "16",
+    "profile": "https://mamprawowiedziec.pl/polityk/50855"
+  },
+  "Osmalak Łukasz": {
+    "party": "Polska2050-TD",
+    "official": "Lukasz.Osmalak@sejm.pl",
+    "district": "30",
+    "email": "lukasz.osmalak@polska2050.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75662"
+  },
+  "Osos Katarzyna": {
+    "party": "KO",
+    "official": "Katarzyna.Osos@sejm.pl",
+    "district": "8",
+    "profile": "https://mamprawowiedziec.pl/polityk/49537"
+  },
+  "Osuch Jacek": {
+    "party": "PiS",
+    "official": "Jacek.Osuch@sejm.pl",
+    "district": "13",
+    "email": "biuro.posla@op.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2300"
+  },
+  "Paluch Anna": {
+    "party": "PiS",
+    "official": "Anna.Paluch@sejm.pl",
+    "district": "14",
+    "profile": "https://mamprawowiedziec.pl/polityk/2306"
+  },
+  "Pamuła Teresa": {
+    "party": "PiS",
+    "official": "Teresa.Pamula@sejm.pl",
+    "district": "22",
+    "email": "pamulabiuro@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56290"
+  },
+  "Papke Paweł": {
+    "party": "KO",
+    "official": "Pawel.Papke@sejm.pl",
+    "district": "35",
+    "profile": "https://mamprawowiedziec.pl/polityk/31001"
+  },
+  "Pasławska Urszula": {
+    "party": "PSL-TD",
+    "official": "Urszula.Paslawska@sejm.pl",
+    "district": "35",
+    "email": "paslawska.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/40642"
+  },
+  "Paszyk Krzysztof": {
+    "party": "PSL-TD",
+    "official": "Krzysztof.Paszyk@sejm.pl",
+    "district": "38",
+    "email": "biuro.krzysztof.paszyk@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/54822"
+  },
+  "Pawliczak Karolina": {
+    "party": "KO",
+    "official": "Karolina.Pawliczak@sejm.pl",
+    "district": "36",
+    "email": "biuro@karolinapawliczak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56074"
+  },
+  "Pawłowska Monika": {
+    "party": "PiS",
+    "official": "Monika.Pawlowska@sejm.pl",
+    "district": "7",
+    "email": "biuro@monikapawlowska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56520"
+  },
+  "Pejo Bartłomiej": {
+    "party": "Konfederacja",
+    "official": "Bartlomiej.Pejo@sejm.pl",
+    "district": "6",
+    "email": "biuro@pejo.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71760"
+  },
+  "Pępek Małgorzata": {
+    "party": "KO",
+    "official": "Malgorzata.Pepek@sejm.pl",
+    "district": "27",
+    "email": "malgorzatapepek.biuro@poczta.onet.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31003"
+  },
+  "Petru Ryszard": {
+    "party": "Polska2050-TD",
+    "official": "Ryszard.Petru@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/51317"
+  },
+  "Piątkowski Krzysztof": {
+    "party": "KO",
+    "official": "Krzysztof.Piatkowski@sejm.pl",
+    "district": "9",
+    "email": "biuroposelskie.kp@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/57635"
+  },
+  "Piecha Bolesław": {
+    "party": "PiS",
+    "official": "Boleslaw.Piecha@sejm.pl",
+    "district": "30",
+    "email": "biuropiecha@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2310"
+  },
+  "Piechowiak Grzegorz": {
+    "party": "PiS",
+    "official": "Grzegorz.Piechowiak@sejm.pl",
+    "district": "38",
+    "email": "biuro@grzegorzpiechowiak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/54842"
+  },
+  "Pieczarka Anna": {
+    "party": "PiS",
+    "official": "Anna.Pieczarka@sejm.pl",
+    "district": "15",
+    "email": "kontakt@annapieczarka.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/58258"
+  },
+  "Piekarska Katarzyna Maria": {
+    "party": "KO",
+    "official": "Katarzyna.Piekarska@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/51284"
+  },
+  "Pietrykowski Norbert": {
+    "party": "Polska2050-TD",
+    "official": "Norbert.Pietrykowski@sejm.pl",
+    "district": "4",
+    "profile": "https://mamprawowiedziec.pl/polityk/75111"
+  },
+  "Pietrzczyk Lucjan Marek": {
+    "party": "KO",
+    "official": "Lucjan.Pietrzczyk@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/31004"
+  },
+  "Piontkowski Dariusz": {
+    "party": "PiS",
+    "official": "Dariusz.Piontkowski@sejm.pl",
+    "district": "24",
+    "profile": "https://mamprawowiedziec.pl/polityk/31005"
+  },
+  "Płaczek Grzegorz": {
+    "party": "Konfederacja",
+    "official": "Grzegorz.Placzek@sejm.pl",
+    "district": "31",
+    "profile": "https://mamprawowiedziec.pl/polityk/72297"
+  },
+  "Płażyński Kacper": {
+    "party": "PiS",
+    "official": "Kacper.Plazynski@sejm.pl",
+    "district": "25",
+    "email": "kacperplazynskibiuroposla@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/56045"
+  },
+  "Plocke Kazimierz": {
+    "party": "KO",
+    "official": "Kazimierz.Plocke@sejm.pl",
+    "district": "26",
+    "email": "kazimierz@plocke.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2321"
+  },
+  "Pogoda Szymon": {
+    "party": "PiS",
+    "official": "Szymon.Pogoda@sejm.pl",
+    "district": "1",
+    "email": "pogoda.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/56801"
+  },
+  "Polaczek Jerzy": {
+    "party": "PiS",
+    "official": "Jerzy.Polaczek@sejm.pl",
+    "district": "31",
+    "profile": "https://mamprawowiedziec.pl/polityk/2324"
+  },
+  "Polak Elżbieta Anna": {
+    "party": "KO",
+    "official": "Elzbieta.Polak@sejm.pl",
+    "district": "8",
+    "profile": "https://mamprawowiedziec.pl/polityk/71060"
+  },
+  "Polak Piotr": {
+    "party": "PiS",
+    "official": "Piotr.Polak@sejm.pl",
+    "district": "11",
+    "profile": "https://mamprawowiedziec.pl/polityk/2326"
+  },
+  "Połuboczek Michał": {
+    "party": "Konfederacja",
+    "official": "Michal.Poluboczek@sejm.pl",
+    "district": "23",
+    "email": "michal.poluboczek@sejm.gov.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/72129"
+  },
+  "Pomaska Agnieszka": {
+    "party": "KO",
+    "official": "Agnieszka.Pomaska@sejm.pl",
+    "district": "25",
+    "email": "agnieszka@pomaska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/25994"
+  },
+  "Popielarz Mariusz": {
+    "party": "KO",
+    "official": "Mariusz.Popielarz@sejm.pl",
+    "district": "18",
+    "profile": "https://mamprawowiedziec.pl/polityk/71229"
+  },
+  "Porzucek Marcin": {
+    "party": "PiS",
+    "official": "Marcin.Porzucek@sejm.pl",
+    "district": "38",
+    "email": "biuro@marcinporzucek.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/74822"
+  },
+  "Puda Grzegorz": {
+    "party": "PiS",
+    "official": "Grzegorz.Puda@sejm.pl",
+    "district": "27",
+    "profile": "https://mamprawowiedziec.pl/polityk/53150"
+  },
+  "Pyrzyk Michał": {
+    "party": "PSL-TD",
+    "official": "Michal.Pyrzyk@sejm.pl",
+    "district": "37",
+    "email": "biuro.mpyrzyk@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/60555"
+  },
+  "Rak Renata": {
+    "party": "KO",
+    "official": "Renata.Rak@sejm.pl",
+    "district": "40",
+    "profile": "https://mamprawowiedziec.pl/polityk/71619"
+  },
+  "Raś Ireneusz": {
+    "party": "PSL-TD",
+    "official": "Ireneusz.Ras@sejm.pl",
+    "district": "13",
+    "email": "kontakt@ireneuszras.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2340"
+  },
+  "Rau Zbigniew": {
+    "party": "PiS",
+    "official": "Zbigniew.Rau@sejm.pl",
+    "district": "9",
+    "email": "biurozbigniewrau@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/57685"
+  },
+  "Roguska Magdalena": {
+    "party": "KO",
+    "official": "Magdalena.Roguska@sejm.pl",
+    "district": "19",
+    "email": "biuro@magdalenaroguska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71272"
+  },
+  "Romanowski Marcin": {
+    "party": "PiS",
+    "official": "Marcin.Romanowski@sejm.pl",
+    "district": "7",
+    "email": "biuro.poselskie@marcinromanowski.com.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/74334"
+  },
+  "Romanowski Rafał": {
+    "party": "PiS",
+    "official": "Rafal.Romanowski@sejm.pl",
+    "district": "16",
+    "email": "biuro@rafalromanowski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56276"
+  },
+  "Romowicz Bartosz": {
+    "party": "Polska2050-TD",
+    "official": "Bartosz.Romowicz@sejm.pl",
+    "district": "22",
+    "email": "biuro@romowicz.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/60984"
+  },
+  "Rosa Monika": {
+    "party": "KO",
+    "official": "Monika.Rosa@sejm.pl",
+    "district": "31",
+    "email": "biuro.rosa@nowoczesna.org",
+    "profile": "https://mamprawowiedziec.pl/polityk/53549"
+  },
+  "Różyński Wiesław": {
+    "party": "PSL-TD",
+    "official": "Wieslaw.Rozynski@sejm.pl",
+    "district": "7",
+    "profile": "https://mamprawowiedziec.pl/polityk/49384"
+  },
+  "Rusecka Urszula": {
+    "party": "PiS",
+    "official": "Urszula.Rusecka@sejm.pl",
+    "district": "15",
+    "email": "biuro@urszularusecka.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/40675"
+  },
+  "Rutnicki Jakub": {
+    "party": "KO",
+    "official": "Jakub.Rutnicki@sejm.pl",
+    "district": "38",
+    "email": "biuro@jakubrutnicki.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2351"
+  },
+  "Rychlik Paweł": {
+    "party": "PiS",
+    "official": "Pawel.Rychlik@sejm.pl",
+    "district": "11",
+    "profile": "https://mamprawowiedziec.pl/polityk/50016"
+  },
+  "Rząsa Marek": {
+    "party": "KO",
+    "official": "Marek.Rzasa@sejm.pl",
+    "district": "22",
+    "email": "marek.rzasa@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/25995"
+  },
+  "Rzepa Jarosław": {
+    "party": "PSL-TD",
+    "official": "Jaroslaw.Rzepa@sejm.pl",
+    "district": "41",
+    "email": "kontakt@jaroslawrzepa.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/42025"
+  },
+  "Sachajko Jarosław": {
+    "party": "Republikanie",
+    "official": "Jaroslaw.Sachajko@sejm.pl",
+    "district": "7",
+    "email": "posel.jaroslaw.sachajko@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/49428"
+  },
+  "Sałek Paweł": {
+    "party": "PiS",
+    "official": "Pawel.Salek@sejm.pl",
+    "district": "10",
+    "email": "pawelsalek.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/57760"
+  },
+  "Samborski Tadeusz": {
+    "party": "PSL-TD",
+    "official": "Tadeusz.Samborski@sejm.pl",
+    "district": "1",
+    "profile": "https://mamprawowiedziec.pl/polityk/48206"
+  },
+  "Sasin Jacek": {
+    "party": "PiS",
+    "official": "Jacek.Sasin@sejm.pl",
+    "district": "24",
+    "profile": "https://mamprawowiedziec.pl/polityk/31011"
+  },
+  "Sawicki Marek": {
+    "party": "PSL-TD",
+    "official": "Marek.Sawicki@sejm.pl",
+    "district": "18",
+    "profile": "https://mamprawowiedziec.pl/polityk/2360"
+  },
+  "Schädler Ewa": {
+    "party": "Polska2050-TD",
+    "official": "Ewa.Schädler@sejm.pl",
+    "district": "39",
+    "email": "ewa.schaedler.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/75834"
+  },
+  "Schmidt Anna": {
+    "party": "PiS",
+    "official": "Anna.Schmidt@sejm.pl",
+    "district": "22",
+    "email": "biuro_jaroslaw@annaschmidt.info",
+    "profile": "https://mamprawowiedziec.pl/polityk/52055"
+  },
+  "Schreiber Łukasz": {
+    "party": "PiS",
+    "official": "Lukasz.Schreiber@sejm.pl",
+    "district": "4",
+    "email": "biuro.schreiber@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/48756"
+  },
+  "Ściebiorowski Łukasz": {
+    "party": "KO",
+    "official": "Lukasz.Sciebiorowski@sejm.pl",
+    "district": "31",
+    "profile": "https://mamprawowiedziec.pl/polityk/71470"
+  },
+  "Ścigaj Agnieszka": {
+    "party": "PiS",
+    "official": "Agnieszka.Scigaj@sejm.pl",
+    "district": "13",
+    "email": "agnieszka.scigaj@op.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/50437"
+  },
+  "Sellin Jarosław": {
+    "party": "PiS",
+    "official": "Jaroslaw.Sellin@sejm.pl",
+    "district": "25",
+    "email": "biuro@sellin.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2364"
+  },
+  "Semeniuk-Patkowska Olga Ewa": {
+    "party": "PiS",
+    "official": "Olga.Semeniuk-Patkowska@sejm.pl",
+    "district": "35",
+    "email": "semeniuk.patkowska@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74772"
+  },
+  "Siarka Edward": {
+    "party": "PiS",
+    "official": "Edward.Siarka@sejm.pl",
+    "district": "14",
+    "profile": "https://mamprawowiedziec.pl/polityk/2366"
+  },
+  "Sibińska Krystyna": {
+    "party": "KO",
+    "official": "Krystyna.Sibinska@sejm.pl",
+    "district": "8",
+    "email": "sibinska.krystyna@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/31013"
+  },
+  "Siekierski Czesław": {
+    "party": "PSL-TD",
+    "official": "Czeslaw.Siekierski@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/29439"
+  },
+  "Siemaszko Rafał": {
+    "party": "KO",
+    "official": "Rafal.Siemaszko@sejm.pl",
+    "district": "26",
+    "email": "biuro@rafalsiemaszko.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71400"
+  },
+  "Siemoniak Tomasz": {
+    "party": "KO",
+    "official": "Tomasz.Siemoniak@sejm.pl",
+    "district": "21",
+    "email": "biuro@tomaszsiemoniak.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/40670"
+  },
+  "Sikora Arkadiusz": {
+    "party": "Lewica",
+    "official": "Arkadiusz.Sikora@sejm.pl",
+    "district": "1",
+    "email": "biuro@arkadiuszsikora.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/72600"
+  },
+  "Skalik Włodzimierz": {
+    "party": "Konfederacja",
+    "official": "Wlodzimierz.Skalik@sejm.pl",
+    "district": "21",
+    "profile": "https://mamprawowiedziec.pl/polityk/56240"
+  },
+  "Skonieczka Marcin": {
+    "party": "Polska2050-TD",
+    "official": "Marcin.Skonieczka@sejm.pl",
+    "district": "5",
+    "email": "biuro@skonieczka.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57170"
+  },
+  "Skowrońska Krystyna": {
+    "party": "KO",
+    "official": "Krystyna.Skowronska@sejm.pl",
+    "district": "23",
+    "profile": "https://mamprawowiedziec.pl/polityk/2373"
+  },
+  "Skwarek Sławomir": {
+    "party": "PiS",
+    "official": "Slawomir.Skwarek@sejm.pl",
+    "district": "6",
+    "profile": "https://mamprawowiedziec.pl/polityk/49170"
+  },
+  "Śliwka Andrzej": {
+    "party": "PiS",
+    "official": "Andrzej.sliwka@sejm.pl",
+    "district": "34",
+    "email": "kontakt.andrzejsliwka@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74755"
+  },
+  "Śliz Paweł": {
+    "party": "Polska2050-TD",
+    "official": "Pawel.Sliz@sejm.pl",
+    "district": "12",
+    "email": "biuroposelskie@pawelsliz.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75285"
+  },
+  "Sługocki Waldemar": {
+    "party": "KO",
+    "official": "Waldemar.Slugocki@sejm.pl",
+    "district": "8",
+    "email": "kontakt@waldemarslugocki.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31014"
+  },
+  "Smarduch Weronika": {
+    "party": "KO",
+    "official": "Weronika.Smarduch@sejm.pl",
+    "district": "14",
+    "email": "biuro.smarduch@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/71168"
+  },
+  "Smolarz Henryk": {
+    "party": "PSL-TD",
+    "official": "Henryk.Smolarz@sejm.pl",
+    "district": "6",
+    "profile": "https://mamprawowiedziec.pl/polityk/31015"
+  },
+  "Smoliński Kazimierz": {
+    "party": "PiS",
+    "official": "Kazimierz.Smolinski@sejm.pl",
+    "district": "25",
+    "email": "biuro@kazimierzsmolinski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/29856"
+  },
+  "Sobolak Anna": {
+    "party": "KO",
+    "official": "Anna.Sobolak@sejm.pl",
+    "district": "3",
+    "email": "biuro@annasobolak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/70952"
+  },
+  "Sobolewski Krzysztof": {
+    "party": "PiS",
+    "official": "Krzysztof.Sobolewski@sejm.pl",
+    "district": "23",
+    "profile": "https://mamprawowiedziec.pl/polityk/45639"
+  },
+  "Soin Agnieszka Anna": {
+    "party": "PiS",
+    "official": "Agnieszka.Soin@sejm.pl",
+    "district": "3",
+    "profile": "https://mamprawowiedziec.pl/polityk/48546"
+  },
+  "Sójka Katarzyna": {
+    "party": "PiS",
+    "official": "Katarzyna.Sojka@sejm.pl",
+    "district": "36",
+    "email": "sojka.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/60473"
+  },
+  "Sosnowski Zbigniew": {
+    "party": "PSL-TD",
+    "official": "Zbigniew.Sosnowski@sejm.pl",
+    "district": "5",
+    "email": "zbigniewsosnowski3@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31016"
+  },
+  "Sowa Marek": {
+    "party": "KO",
+    "official": "Marek.Sowa@sejm.pl",
+    "district": "12",
+    "email": "biuro@mareksowa.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/50164"
+  },
+  "Sroka Magdalena": {
+    "party": "PSL-TD",
+    "official": "Magdalena.Sroka@sejm.pl",
+    "district": "25",
+    "email": "biuro.magdalenasroka@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/59547"
+  },
+  "Stachowiak-Różecka Mirosława": {
+    "party": "PiS",
+    "official": "Miroslawa.Stachowiak-Rozecka@sejm.pl",
+    "district": "3",
+    "profile": "https://mamprawowiedziec.pl/polityk/48543"
+  },
+  "Stachowicz Katarzyna": {
+    "party": "KO",
+    "official": "Katarzyna.Stachowicz@sejm.pl",
+    "district": "32",
+    "profile": "https://mamprawowiedziec.pl/polityk/81535"
+  },
+  "Stefaniuk Dariusz": {
+    "party": "PiS",
+    "official": "Dariusz.Stefaniuk@sejm.pl",
+    "district": "7",
+    "profile": "https://mamprawowiedziec.pl/polityk/40605"
+  },
+  "Sterczewski Franciszek": {
+    "party": "KO",
+    "official": "Franciszek.Sterczewski@sejm.pl",
+    "district": "39",
+    "email": "ahoj@franeksterczewski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/60684"
+  },
+  "Stożek Marta": {
+    "party": "Razem",
+    "official": "Marta.Stozek@sejm.pl",
+    "district": "3",
+    "email": "kontakt@martastozek.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56999"
+  },
+  "Strach Piotr Paweł": {
+    "party": "Polska2050-TD",
+    "official": "Piotr.Strach@sejm.pl",
+    "district": "29",
+    "email": "biuroposelskieps@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/59728"
+  },
+  "Suchoń Mirosław": {
+    "party": "Polska2050-TD",
+    "official": "Miroslaw.Suchon@sejm.pl",
+    "district": "27",
+    "email": "biuro@suchon.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/53087"
+  },
+  "Suski Marek": {
+    "party": "PiS",
+    "official": "Marek.Suski@sejm.pl",
+    "district": "17",
+    "email": "bpms@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2391"
+  },
+  "Suski Paweł": {
+    "party": "KO",
+    "official": "Pawel.Suski@sejm.pl",
+    "district": "40",
+    "email": "poselwalcz@o2.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71620"
+  },
+  "Świat Jacek": {
+    "party": "PiS",
+    "official": "Jacek.Swiat@sejm.pl",
+    "district": "3",
+    "profile": "https://mamprawowiedziec.pl/polityk/31023"
+  },
+  "Szałabawka Artur": {
+    "party": "PiS",
+    "official": "Artur.Szalabawka@sejm.pl",
+    "district": "41",
+    "email": "biuroarturszalabawka@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/55273"
+  },
+  "Szarama Wojciech": {
+    "party": "PiS",
+    "official": "Wojciech.Szarama@sejm.pl",
+    "district": "29",
+    "profile": "https://mamprawowiedziec.pl/polityk/74673"
+  },
+  "Szczepański Wiesław": {
+    "party": "Lewica",
+    "official": "Wieslaw.Szczepanski@sejm.pl",
+    "district": "36",
+    "email": "biuro.szczepanski@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2395"
+  },
+  "Szczucki Krzysztof": {
+    "party": "PiS",
+    "official": "Krzysztof.Szczucki@sejm.pl",
+    "district": "5",
+    "email": "torun@krzysztofszczucki.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/74291"
+  },
+  "Szczurek-Żelazko Józefa": {
+    "party": "PiS",
+    "official": "Jozefa.Szczurek-Zelazko@sejm.pl",
+    "district": "15",
+    "profile": "https://mamprawowiedziec.pl/polityk/50722"
+  },
+  "Szejna Andrzej": {
+    "party": "Lewica",
+    "official": "Andrzej.Szejna@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/73180"
+  },
+  "Szewiński Andrzej": {
+    "party": "KO",
+    "official": "Andrzej.Szewinski@sejm.pl",
+    "district": "28",
+    "profile": "https://mamprawowiedziec.pl/polityk/22475"
+  },
+  "Szłapka Adam": {
+    "party": "KO",
+    "official": "Adam.Szlapka@sejm.pl",
+    "district": "39",
+    "profile": "https://mamprawowiedziec.pl/polityk/54460"
+  },
+  "Szopiński Henryk": {
+    "party": "KO",
+    "official": "Henryk.Szopinski@sejm.pl",
+    "district": "38",
+    "profile": "https://mamprawowiedziec.pl/polityk/71590"
+  },
+  "Szrot Paweł": {
+    "party": "PiS",
+    "official": "Pawel.Szrot@sejm.pl",
+    "district": "4",
+    "email": "biuropawelszrot@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74280"
+  },
+  "Szumilas Krystyna": {
+    "party": "KO",
+    "official": "Krystyna.Szumilas@sejm.pl",
+    "district": "29",
+    "email": "biuro@szumilas.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2404"
+  },
+  "Szwed Stanisław": {
+    "party": "PiS",
+    "official": "Stanislaw.Szwed@sejm.pl",
+    "district": "27",
+    "email": "stanislawszwed.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2405"
+  },
+  "Szymanowska Ewa": {
+    "party": "Polska2050-TD",
+    "official": "Ewa.Szymanowska@sejm.pl",
+    "district": "9",
+    "email": "biuro@ewaszymanowska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75228"
+  },
+  "Szymański Krzysztof": {
+    "party": "Konfederacja",
+    "official": "Krzysztof.Szymanski@sejm.pl",
+    "district": "26",
+    "profile": "https://mamprawowiedziec.pl/polityk/72204"
+  },
+  "Szymański Tomasz": {
+    "party": "KO",
+    "official": "Tomasz.Szymanski@sejm.pl",
+    "district": "5",
+    "email": "kontakt@tomaszszymanski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31021"
+  },
+  "Szynkowski vel Sęk Szymon": {
+    "party": "PiS",
+    "official": "Szymon.SzynkowskiVelSek@sejm.pl",
+    "district": "39",
+    "email": "szymonszynkowski@onet.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/54987"
+  },
+  "Tajner Apoloniusz": {
+    "party": "KO",
+    "official": "Apoloniusz.Tajner@sejm.pl",
+    "district": "27",
+    "email": "kontakt@tajner.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/71416"
+  },
+  "Tchórzewski Krzysztof": {
+    "party": "PiS",
+    "official": "Krzysztof.Tchorzewski@sejm.pl",
+    "district": "18",
+    "profile": "https://mamprawowiedziec.pl/polityk/2411"
+  },
+  "Telus Robert": {
+    "party": "PiS",
+    "official": "Robert.Telus@sejm.pl",
+    "district": "10",
+    "email": "telusrobert.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2412"
+  },
+  "Terlecki Ryszard": {
+    "party": "PiS",
+    "official": "Ryszard.Terlecki@sejm.pl",
+    "district": "14",
+    "email": "biuro.terlecki@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2413"
+  },
+  "Tomaszewski Tadeusz": {
+    "party": "Lewica",
+    "official": "Tadeusz.Tomaszewski@sejm.pl",
+    "district": "37",
+    "profile": "https://mamprawowiedziec.pl/polityk/2418"
+  },
+  "Tomaszewski Włodzimierz": {
+    "party": "PiS",
+    "official": "Wlodzimierz.Tomaszewski@sejm.pl",
+    "district": "9",
+    "email": "biuro.w.tomaszewski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/57698"
+  },
+  "Tomczak Jacek": {
+    "party": "PSL-TD",
+    "official": "Jacek.Tomczak@sejm.pl",
+    "district": "39",
+    "email": "biuro.jacektomczak@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2419"
+  },
+  "Tomczak Wioleta": {
+    "party": "Polska2050-TD",
+    "official": "Wioleta.Tomczak@sejm.pl",
+    "district": "26",
+    "email": "biuro@wioletatomczak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75593"
+  },
+  "Tomczyk Cezary": {
+    "party": "KO",
+    "official": "Cezary.Tomczyk@sejm.pl",
+    "district": "11",
+    "profile": "https://mamprawowiedziec.pl/polityk/2420"
+  },
+  "Tomczykiewicz Maciej": {
+    "party": "KO",
+    "official": "Maciej.Tomczykiewicz@sejm.pl",
+    "district": "27",
+    "profile": "https://mamprawowiedziec.pl/polityk/59596"
+  },
+  "Tomczyszyn Stanisław": {
+    "party": "PSL-TD",
+    "official": "Stanislaw.Tomczyszyn@sejm.pl",
+    "district": "8",
+    "email": "bp.s.tomczyszyn@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/49558"
+  },
+  "Tracz Małgorzata": {
+    "party": "KO",
+    "official": "Malgorzata.Tracz@sejm.pl",
+    "district": "3",
+    "profile": "https://mamprawowiedziec.pl/polityk/48394"
+  },
+  "Trela Tomasz": {
+    "party": "Lewica",
+    "official": "Tomasz.Trela@sejm.pl",
+    "district": "9",
+    "profile": "https://mamprawowiedziec.pl/polityk/57699"
+  },
+  "Truskolaski Krzysztof": {
+    "party": "KO",
+    "official": "Krzysztof.Truskolaski@sejm.pl",
+    "district": "24",
+    "profile": "https://mamprawowiedziec.pl/polityk/52465"
+  },
+  "Tuduj Krzysztof": {
+    "party": "Konfederacja",
+    "official": "Krzysztof.Tuduj@sejm.pl",
+    "district": "3",
+    "profile": "https://mamprawowiedziec.pl/polityk/56251"
+  },
+  "Tułajew Sylwester": {
+    "party": "PiS",
+    "official": "Sylwester.Tulajew@sejm.pl",
+    "district": "6",
+    "email": "tulajew.biuro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/49163"
+  },
+  "Tumanowicz Witold": {
+    "party": "Konfederacja",
+    "official": "Witold.Tumanowicz@sejm.pl",
+    "district": "7",
+    "profile": "https://mamprawowiedziec.pl/polityk/51492"
+  },
+  "Tusk Donald": {
+    "party": "KO",
+    "official": "Donald.Tusk@sejm.pl",
+    "district": "19",
+    "email": "biuro@donaldtusk.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2422"
+  },
+  "Ueberhan Katarzyna": {
+    "party": "Lewica",
+    "official": "Katarzyna.Ueberhan@sejm.pl",
+    "district": "39",
+    "email": "biuro.poselskie@ueberhan.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/54884"
+  },
+  "Urbaniak Jarosław": {
+    "party": "KO",
+    "official": "Jaroslaw.Urbaniak@sejm.pl",
+    "district": "36",
+    "email": "poczta@jaroslawurbaniak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2428"
+  },
+  "Uruski Piotr": {
+    "party": "PiS",
+    "official": "Piotr.Uruski@sejm.pl",
+    "district": "22",
+    "email": "piotr.uruski@gov.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/52056"
+  },
+  "Uściński Piotr": {
+    "party": "PiS",
+    "official": "Piotr.Uscinski@sejm.pl",
+    "district": "20",
+    "email": "biuro@uscinski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/41272"
+  },
+  "Uznańska-Wiśniewska Aleksandra Karolina": {
+    "party": "KO",
+    "official": "Aleksandra.Uznanska-Wisniewska@sejm.pl",
+    "district": "9",
+    "profile": "https://mamprawowiedziec.pl/polityk/71079"
+  },
+  "Wałęsa Jarosław": {
+    "party": "KO",
+    "official": "Jaroslaw.Walesa@sejm.pl",
+    "district": "25",
+    "email": "jaroslawwalesa@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2431"
+  },
+  "Warchoł Marcin": {
+    "party": "PiS",
+    "official": "Marcin.Warchol@sejm.pl",
+    "district": "23",
+    "email": "biuro.mwarchol@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/59172"
+  },
+  "Wardzała Robert": {
+    "party": "KO",
+    "official": "Robert.Wardzala@sejm.pl",
+    "district": "15",
+    "email": "kontakt@robertwardzala.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31029"
+  },
+  "Warwas Robert": {
+    "party": "PiS",
+    "official": "Robert.Warwas@sejm.pl",
+    "district": "32",
+    "email": "biuro.dabrowagornicza@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/53791"
+  },
+  "Warzecha Jan": {
+    "party": "PiS",
+    "official": "Jan.Warzecha@sejm.pl",
+    "district": "23",
+    "email": "biuro@janwarzecha.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/29862"
+  },
+  "Wassermann Małgorzata": {
+    "party": "PiS",
+    "official": "Malgorzata.Wassermann@sejm.pl",
+    "district": "13",
+    "email": "biuro@mwassermann.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/50391"
+  },
+  "Wawer Michał": {
+    "party": "Konfederacja",
+    "official": "Michal.Wawer@sejm.pl",
+    "district": "33",
+    "profile": "https://mamprawowiedziec.pl/polityk/72336"
+  },
+  "Weber Rafał": {
+    "party": "PiS",
+    "official": "Rafal.Weber@sejm.pl",
+    "district": "23",
+    "email": "biuroposelskie@vp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/52333"
+  },
+  "Wesoły Marek": {
+    "party": "PiS",
+    "official": "Marek.Wesoly@sejm.pl",
+    "district": "31",
+    "email": "kontakt@marekwesoly.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56189"
+  },
+  "Wicha Joanna": {
+    "party": "Lewica",
+    "official": "Joanna.Wicha@sejm.pl",
+    "district": "20",
+    "email": "joanna.wicha2023@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/72949"
+  },
+  "Wicher Patryk": {
+    "party": "PiS",
+    "official": "Patryk.Wicher@sejm.pl",
+    "district": "14",
+    "email": "biuro.patrykwicher@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/58186"
+  },
+  "Wieczorek Dariusz": {
+    "party": "Lewica",
+    "official": "Dariusz.Wieczorek@sejm.pl",
+    "district": "41",
+    "profile": "https://mamprawowiedziec.pl/polityk/74672",
+    "email": "kontakt@jaroslawwieczorek.pl"
+  },
+  "Wieczorek Jarosław Wiesław": {
+    "party": "PiS",
+    "official": "Jaroslaw.Wieczorek@sejm.pl",
+    "district": "29"
+  },
+  "Wielichowska Monika": {
+    "party": "KO",
+    "official": "Monika.Wielichowska@sejm.pl",
+    "district": "2",
+    "profile": "https://mamprawowiedziec.pl/polityk/2439"
+  },
+  "Wilk Ryszard": {
+    "party": "Konfederacja",
+    "official": "Ryszard.Wilk@sejm.pl",
+    "district": "14",
+    "profile": "https://mamprawowiedziec.pl/polityk/58143"
+  },
+  "Wilk Teresa": {
+    "party": "PiS",
+    "official": "Teresa.Wilk@sejm.pl",
+    "district": "34",
+    "email": "biuro.teresawilk@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/74754"
+  },
+  "Wipler Przemysław": {
+    "party": "Konfederacja",
+    "official": "Przemyslaw.Wipler@sejm.pl",
+    "district": "5",
+    "email": "biuro@wipler.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71734"
+  },
+  "Witczak Adrian": {
+    "party": "KO",
+    "official": "Adrian.Witczak@sejm.pl",
+    "district": "10",
+    "email": "kontakt@adrianwitczak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71094"
+  },
+  "Witczak Mariusz": {
+    "party": "KO",
+    "official": "Mariusz.Witczak@sejm.pl",
+    "district": "36",
+    "email": "kalisz.platforma@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/71556"
+  },
+  "Witek Elżbieta": {
+    "party": "PiS",
+    "official": "Elzbieta.Witek@sejm.pl",
+    "district": "1",
+    "email": "biuro.ew@wp.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2444"
+  },
+  "Witek Przemysław": {
+    "party": "KO",
+    "official": "Przemyslaw.Witek@sejm.pl",
+    "district": "28",
+    "email": "biuro.przemyslawwitek@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/71434"
+  },
+  "Wnuk Kamil": {
+    "party": "Polska2050-TD",
+    "official": "Kamil.Wnuk@sejm.pl",
+    "district": "32",
+    "email": "biuro@kamilwnuk.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/75700"
+  },
+  "Wojciechowska Anna": {
+    "party": "KO",
+    "official": "Anna.Wojciechowska@sejm.pl",
+    "district": "35",
+    "email": "biuro@annawojciechowska.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/49037"
+  },
+  "Wojciechowska van Heukelom Agnieszka": {
+    "party": "PiS",
+    "official": "Agnieszka.WojciechowskavanHeukelom@sejm.pl",
+    "district": "9",
+    "profile": "https://mamprawowiedziec.pl/polityk/49754"
+  },
+  "Wójcik Michał": {
+    "party": "PiS",
+    "official": "Michal.Wojcik@sejm.pl",
+    "district": "31",
+    "email": "biuro@michalwojcik.eu",
+    "profile": "https://mamprawowiedziec.pl/polityk/53628"
+  },
+  "Wojtyszek Agata": {
+    "party": "PiS",
+    "official": "Agata.Wojtyszek@sejm.pl",
+    "district": "33",
+    "email": "wojtyszek.agata@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/60162"
+  },
+  "Wołoszański Bogusław": {
+    "party": "KO",
+    "official": "Boguslaw.Woloszanski@sejm.pl",
+    "district": "10",
+    "profile": "https://mamprawowiedziec.pl/polityk/71092"
+  },
+  "Woś Michał": {
+    "party": "PiS",
+    "official": "Michal.Wos@sejm.pl",
+    "district": "30",
+    "profile": "https://mamprawowiedziec.pl/polityk/56734"
+  },
+  "Woźniak Grzegorz": {
+    "party": "PiS",
+    "official": "Grzegorz.Wozniak@sejm.pl",
+    "district": "18",
+    "email": "biuro@grzegorzwozniak.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31034"
+  },
+  "Woźniak Tadeusz": {
+    "party": "PiS",
+    "official": "Tadeusz.Wozniak@sejm.pl",
+    "district": "11",
+    "profile": "https://mamprawowiedziec.pl/polityk/2453"
+  },
+  "Wróbel Maciej": {
+    "party": "KO",
+    "official": "Maciej.Wrobel@sejm.pl",
+    "district": "35",
+    "email": "kontakt@maciejwrobel.mazury.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71552"
+  },
+  "Wróblewski Bartłomiej": {
+    "party": "PiS",
+    "official": "Bartlomiej.Wroblewski@sejm.pl",
+    "district": "39",
+    "email": "biuro@bartlomiejwroblewski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/54992"
+  },
+  "Zalewski Paweł": {
+    "party": "Polska2050-TD",
+    "official": "Pawel.Zalewski@sejm.pl",
+    "district": "20",
+    "profile": "https://mamprawowiedziec.pl/polityk/2463"
+  },
+  "Zandberg Adrian": {
+    "party": "Razem",
+    "official": "Adrian.Zandberg@sejm.pl",
+    "district": "19",
+    "profile": "https://mamprawowiedziec.pl/polityk/51357"
+  },
+  "Zapałowski Andrzej Tomasz": {
+    "party": "Konfederacja",
+    "official": "Andrzej.Zapalowski@sejm.pl",
+    "district": "22",
+    "profile": "https://mamprawowiedziec.pl/polityk/52071"
+  },
+  "Zawieja Bartosz": {
+    "party": "KO",
+    "official": "Bartosz.Zawieja@sejm.pl",
+    "district": "39",
+    "email": "kontakt@zawiejabartosz.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/71605"
+  },
+  "Zawiślak Sławomir": {
+    "party": "Konfederacja",
+    "official": "Slawomir.Zawislak@sejm.pl",
+    "district": "7",
+    "profile": "https://mamprawowiedziec.pl/polityk/2467"
+  },
+  "Zawisza Marcelina": {
+    "party": "Razem",
+    "official": "Marcelina.Zawisza@sejm.pl",
+    "district": "21",
+    "email": "biuro@marcelinazawisza.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/41881"
+  },
+  "Żelazowska Bożena": {
+    "party": "PSL-TD",
+    "official": "Bozena.Zelazowska@sejm.pl",
+    "district": "20",
+    "profile": "https://mamprawowiedziec.pl/polityk/58815"
+  },
+  "Zembaczyński Witold": {
+    "party": "KO",
+    "official": "Witold.Zembaczynski@sejm.pl",
+    "district": "21",
+    "email": "kontakt@zembaczynski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/51772"
+  },
+  "Zgorzelski Piotr": {
+    "party": "PSL-TD",
+    "official": "Piotr.Zgorzelski@sejm.pl",
+    "district": "16",
+    "email": "biuroposelskie@piotrzgorzelski.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/31035"
+  },
+  "Zięba-Gzik Jolanta": {
+    "party": "PSL-TD",
+    "official": "Jolanta.Zieba-Gzik@sejm.pl",
+    "district": "11",
+    "email": "biuro@ziebagzik.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57815"
+  },
+  "Ziejewski Zbigniew": {
+    "party": "PSL-TD",
+    "official": "Zbigniew.Ziejewski@sejm.pl",
+    "district": "34",
+    "email": "zbigniewziejewski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/54201"
+  },
+  "Zielińska Urszula Sara": {
+    "party": "KO",
+    "official": "Urszula.Zielinska@sejm.pl",
+    "district": "19",
+    "email": "ula.zielinska@partiazieloni.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/56320"
+  },
+  "Zieliński Jarosław": {
+    "party": "PiS",
+    "official": "Jaroslaw.Zielinski@sejm.pl",
+    "district": "24",
+    "email": "zielinski.bialystok@interia.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/2474"
+  },
+  "Zieliński Tomasz": {
+    "party": "PiS",
+    "official": "Tomasz.Zielinski@sejm.pl",
+    "district": "7",
+    "email": "biuro.tzielinski@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/49403"
+  },
+  "Zimoch Tomasz": {
+    "party": "niezrzeszony",
+    "official": "Tomasz.Zimoch@sejm.pl",
+    "district": "3",
+    "email": "info@tomekzimoch.pl",
+    "profile": "https://mamprawowiedziec.pl/polityk/57634"
+  },
+  "Ziobro Zbigniew": {
+    "party": "PiS",
+    "official": "Zbigniew.Ziobro@sejm.pl",
+    "district": "23",
+    "email": "kontakt.ziobro@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/2478"
+  },
+  "Zubowski Wojciech Michał": {
+    "party": "PiS",
+    "official": "Wojciech.Zubowski@sejm.pl",
+    "district": "1",
+    "email": "biurowojciechazubowskiego@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/31041"
+  },
+  "Żukowska Anna Maria": {
+    "party": "Lewica",
+    "official": "Anna.Zukowska@sejm.pl",
+    "district": "19",
+    "email": "anna.maria.zukowska.lewica@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/58743"
+  },
+  "Zyska Ireneusz": {
+    "party": "PiS",
+    "official": "Ireneusz.Zyska@sejm.pl",
+    "district": "2",
+    "email": "biuroposelskie.zyska@gmail.com",
+    "profile": "https://mamprawowiedziec.pl/polityk/48378"
+  }
 }
