@@ -1,0 +1,587 @@
+{
+  "1": {
+    "cities": [
+      "Jelenia Góra",
+      "Legnica",
+      "powiat bolesławiecki",
+      "powiat głogowski",
+      "powiat jaworski",
+      "powiat karkonoski",
+      "powiat kamiennogórski",
+      "powiat legnicki",
+      "powiat lubański",
+      "powiat lubiński",
+      "powiat lwówecki",
+      "powiat polkowicki",
+      "powiat zgorzelecki",
+      "powiat złotoryjski"
+    ],
+    "voivodeship": "dolnośląskie"
+  },
+  "2": {
+    "cities": [
+      "Wałbrzych",
+      "powiat dzierżoniowski",
+      "powiat kłodzki",
+      "powiat świdnicki",
+      "powiat wałbrzyski",
+      "powiat ząbkowicki"
+    ],
+    "voivodeship": "dolnośląskie"
+  },
+  "3": {
+    "cities": [
+      "Wrocław",
+      "powiat górowski",
+      "powiat milicki",
+      "powiat oleśnicki",
+      "powiat oławski",
+      "powiat strzeliński",
+      "powiat średzki",
+      "powiat trzebnicki",
+      "powiat wołowski",
+      "powiat wrocławski"
+    ],
+    "voivodeship": "dolnośląskie"
+  },
+  "4": {
+    "cities": [
+      "Bydgoszcz",
+      "powiat bydgoski",
+      "powiat inowrocławski",
+      "powiat mogileński",
+      "powiat nakielski",
+      "powiat sępoleński",
+      "powiat świecki",
+      "powiat tucholski",
+      "powiat żniński"
+    ],
+    "voivodeship": "kujawsko-pomorskie"
+  },
+  "5": {
+    "cities": [
+      "Grudziądz",
+      "Toruń",
+      "Włocławek",
+      "powiat aleksandrowski",
+      "powiat brodnicki",
+      "powiat chełmiński",
+      "powiat golubsko-dobrzyński",
+      "powiat grudziądzki",
+      "powiat lipnowski",
+      "powiat radziejowski",
+      "powiat rypiński",
+      "powiat toruński",
+      "powiat wąbrzeski",
+      "powiat włocławski"
+    ],
+    "voivodeship": "kujawsko-pomorskie"
+  },
+  "6": {
+    "cities": [
+      "Lublin",
+      "powiat janowski",
+      "powiat kraśnicki",
+      "powiat lubartowski",
+      "powiat lubelski",
+      "powiat łęczyński",
+      "powiat łukowski",
+      "powiat opolski",
+      "powiat puławski",
+      "powiat rycki",
+      "powiat świdnicki"
+    ],
+    "voivodeship": "lubelskie"
+  },
+  "7": {
+    "cities": [
+      "Biała Podlaska",
+      "Chełm",
+      "Zamość",
+      "powiat bialski",
+      "powiat biłgorajski",
+      "powiat chełmski",
+      "powiat hrubieszowski",
+      "powiat krasnostawski",
+      "powiat parczewski",
+      "powiat radzyński",
+      "powiat tomaszowski",
+      "powiat włodawski",
+      "powiat zamojski"
+    ],
+    "voivodeship": "lubelskie"
+  },
+  "8": {
+    "cities": [
+      "Gorzów Wielkopolski",
+      "Zielona Góra",
+      "powiat gorzowski",
+      "powiat krośnieński",
+      "powiat międzyrzecki",
+      "powiat nowosolski",
+      "powiat słubicki",
+      "powiat strzelecko-drezdenecki",
+      "powiat sulęciński",
+      "powiat świebodziński",
+      "powiat wschowski",
+      "powiat zielonogórski",
+      "powiat żagański",
+      "powiat żarski"
+    ],
+    "voivodeship": "lubuskie"
+  },
+  "9": {
+    "cities": [
+      "Łódź",
+      "powiat brzeziński",
+      "powiat łódzki wschodni"
+    ],
+    "voivodeship": "łódzkie"
+  },
+  "10": {
+    "cities": [
+      "Piotrków Trybunalski",
+      "Skierniewice",
+      "powiat bełchatowski",
+      "powiat opoczyński",
+      "powiat piotrkowski",
+      "powiat radomszczański",
+      "powiat rawski",
+      "powiat skierniewicki",
+      "powiat tomaszowski"
+    ],
+    "voivodeship": "łódzkie"
+  },
+  "11": {
+    "cities": [
+      "powiat kutnowski",
+      "powiat łaski",
+      "powiat łęczycki",
+      "powiat łowicki",
+      "powiat pabianicki",
+      "powiat pajęczański",
+      "powiat poddębicki",
+      "powiat sieradzki",
+      "powiat wieluński",
+      "powiat wieruszowski",
+      "powiat zduńskowolski",
+      "powiat zgierski"
+    ],
+    "voivodeship": "łódzkie"
+  },
+  "12": {
+    "cities": [
+      "powiat chrzanowski",
+      "powiat myślenicki",
+      "powiat oświęcimski",
+      "powiat suski",
+      "powiat wadowicki"
+    ],
+    "voivodeship": "małopolskie"
+  },
+  "13": {
+    "cities": [
+      "Kraków",
+      "powiat krakowski",
+      "powiat miechowski",
+      "powiat olkuski"
+    ],
+    "voivodeship": "małopolskie"
+  },
+  "14": {
+    "cities": [
+      "Nowy Sącz",
+      "powiat gorlicki",
+      "powiat limanowski",
+      "powiat nowosądecki",
+      "powiat nowotarski",
+      "powiat tatrzański"
+    ],
+    "voivodeship": "małopolskie"
+  },
+  "15": {
+    "cities": [
+      "Tarnów",
+      "powiat bocheński",
+      "powiat brzeski",
+      "powiat dąbrowski",
+      "powiat proszowicki",
+      "powiat tarnowski",
+      "powiat wielicki"
+    ],
+    "voivodeship": "małopolskie"
+  },
+  "16": {
+    "cities": [
+      "Płock",
+      "powiat ciechanowski",
+      "powiat gostyniński",
+      "powiat mławski",
+      "powiat płocki",
+      "powiat płoński",
+      "powiat przasnyski",
+      "powiat sierpecki",
+      "powiat sochaczewski",
+      "powiat żuromiński",
+      "powiat żyrardowski"
+    ],
+    "voivodeship": "mazowieckie"
+  },
+  "17": {
+    "cities": [
+      "Radom",
+      "powiat białobrzeski",
+      "powiat grójecki",
+      "powiat kozienicki",
+      "powiat lipski",
+      "powiat przysuski",
+      "powiat radomski",
+      "powiat szydłowiecki",
+      "powiat zwoleński"
+    ],
+    "voivodeship": "mazowieckie"
+  },
+  "18": {
+    "cities": [
+      "Ostrołęka",
+      "Siedlce",
+      "powiat garwoliński",
+      "powiat łosicki",
+      "powiat makowski",
+      "powiat miński",
+      "powiat ostrołęcki",
+      "powiat ostrowski",
+      "powiat pułtuski",
+      "powiat siedlecki",
+      "powiat sokołowski",
+      "powiat węgrowski",
+      "powiat wyszkowski"
+    ],
+    "voivodeship": "mazowieckie"
+  },
+  "19": {
+    "cities": [
+      "Warszawa"
+    ],
+    "voivodeship": "mazowieckie"
+  },
+  "20": {
+    "cities": [
+      "powiat grodziski",
+      "powiat legionowski",
+      "powiat nowodworski",
+      "powiat otwocki",
+      "powiat piaseczyński",
+      "powiat pruszkowski",
+      "powiat warszawski zachodni",
+      "powiat wołomiński"
+    ],
+    "voivodeship": "mazowieckie"
+  },
+  "21": {
+    "cities": [
+      "Opole",
+      "powiat brzeski",
+      "powiat głubczycki",
+      "powiat kędzierzyńsko-kozielski",
+      "powiat kluczborski",
+      "powiat krapkowicki",
+      "powiat namysłowski",
+      "powiat nyski",
+      "powiat oleski",
+      "powiat opolski",
+      "powiat prudnicki",
+      "powiat strzelecki"
+    ],
+    "voivodeship": "opolskie"
+  },
+  "22": {
+    "cities": [
+      "Krosno",
+      "Przemyśl",
+      "powiat bieszczadzki",
+      "powiat brzozowski",
+      "powiat jarosławski",
+      "powiat jasielski",
+      "powiat krośnieński",
+      "powiat leski",
+      "powiat lubaczowski",
+      "powiat przemyski",
+      "powiat przeworski",
+      "powiat sanocki"
+    ],
+    "voivodeship": "podkarpackie"
+  },
+  "23": {
+    "cities": [
+      "Rzeszów",
+      "Tarnobrzeg",
+      "powiat dębicki",
+      "powiat kolbuszowski",
+      "powiat leżajski",
+      "powiat łańcucki",
+      "powiat mielecki",
+      "powiat niżański",
+      "powiat ropczycko-sędziszowski",
+      "powiat rzeszowski",
+      "powiat stalowowolski",
+      "powiat strzyżowski",
+      "powiat tarnobrzeski"
+    ],
+    "voivodeship": "podkarpackie"
+  },
+  "24": {
+    "cities": [
+      "Białystok",
+      "Suwałki",
+      "Łomża",
+      "powiat białostocki",
+      "powiat sokólski",
+      "powiat augustowski",
+      "powiat wysokomazowiecki",
+      "powiat bielski",
+      "powiat łomżyński",
+      "powiat grajewski",
+      "powiat siemiatycki",
+      "powiat zambrowski",
+      "powiat hajnowski",
+      "powiat moniecki",
+      "powiat kolneński",
+      "powiat suwalski",
+      "powiat sejneński"
+    ],
+    "voivodeship": "podlaskie"
+  },
+  "25": {
+    "cities": [
+      "Gdańsk",
+      "Sopot",
+      "powiat gdański",
+      "powiat kwidzyński",
+      "powiat malborski",
+      "powiat nowodworski",
+      "powiat starogardzki",
+      "powiat sztumski",
+      "powiat tczewski"
+    ],
+    "voivodeship": "pomorskie"
+  },
+  "26": {
+    "cities": [
+      "Gdynia",
+      "Słupsk",
+      "powiat bytowski",
+      "powiat chojnicki",
+      "powiat człuchowski",
+      "powiat kartuski",
+      "powiat kościerski",
+      "powiat lęborski",
+      "powiat pucki",
+      "powiat słupski",
+      "powiat wejherowski"
+    ],
+    "voivodeship": "pomorskie"
+  },
+  "27": {
+    "cities": [
+      "Bielsko-Biała",
+      "powiat bielski",
+      "powiat cieszyński",
+      "powiat pszczyński",
+      "powiat żywiecki"
+    ],
+    "voivodeship": "śląskie"
+  },
+  "28": {
+    "cities": [
+      "Częstochowa",
+      "powiat częstochowski",
+      "powiat kłobucki",
+      "powiat lubliniecki",
+      "powiat myszkowski"
+    ],
+    "voivodeship": "śląskie"
+  },
+  "29": {
+    "cities": [
+      "Bytom",
+      "Gliwice",
+      "Zabrze",
+      "powiat gliwicki",
+      "powiat tarnogórski"
+    ],
+    "voivodeship": "śląskie"
+  },
+  "30": {
+    "cities": [
+      "Jastrzębie-Zdrój",
+      "Rybnik",
+      "Żory",
+      "powiat mikołowski",
+      "powiat raciborski",
+      "powiat rybnicki",
+      "powiat wodzisławski"
+    ],
+    "voivodeship": "śląskie"
+  },
+  "31": {
+    "cities": [
+      "Chorzów",
+      "Katowice",
+      "Mysłowice",
+      "Piekary Śląskie",
+      "Ruda Śląska",
+      "Siemianowice Śląskie",
+      "Świętochłowice",
+      "Tychy",
+      "powiat bieruńsko-lędziński"
+    ],
+    "voivodeship": "śląskie"
+  },
+  "32": {
+    "cities": [
+      "Dąbrowa Górnicza",
+      "Jaworzno",
+      "Sosnowiec",
+      "powiat będziński",
+      "powiat zawierciański"
+    ],
+    "voivodeship": "śląskie"
+  },
+  "33": {
+    "cities": [
+      "Kielce",
+      "powiat buski",
+      "powiat jędrzejowski",
+      "powiat kazimierski",
+      "powiat kielecki",
+      "powiat konecki",
+      "powiat opatowski",
+      "powiat ostrowiecki",
+      "powiat pińczowski",
+      "powiat sandomierski",
+      "powiat skarżyski",
+      "powiat starachowicki",
+      "powiat staszowski",
+      "powiat włoszczowski"
+    ],
+    "voivodeship": "świętokrzyskie"
+  },
+  "34": {
+    "cities": [
+      "Elbląg",
+      "powiat bartoszycki",
+      "powiat braniewski",
+      "powiat działdowski",
+      "powiat elbląski",
+      "powiat iławski",
+      "powiat lidzbarski",
+      "powiat nowomiejski",
+      "powiat ostródzki"
+    ],
+    "voivodeship": "warmińsko-mazurskie"
+  },
+  "35": {
+    "cities": [
+      "Olsztyn",
+      "powiat ełcki",
+      "powiat giżycki",
+      "powiat gołdapski",
+      "powiat kętrzyński",
+      "powiat mrągowski",
+      "powiat nidzicki",
+      "powiat olecki",
+      "powiat olsztyński",
+      "powiat piski",
+      "powiat szczycieński",
+      "powiat węgorzewski"
+    ],
+    "voivodeship": "warmińsko-mazurskie"
+  },
+  "36": {
+    "cities": [
+      "Kalisz",
+      "Leszno",
+      "powiat gostyński",
+      "powiat jarociński",
+      "powiat kaliski",
+      "powiat kępiński",
+      "powiat kościański",
+      "powiat krotoszyński",
+      "powiat leszczyński",
+      "powiat ostrowski",
+      "powiat ostrzeszowski",
+      "powiat pleszewski",
+      "powiat rawicki"
+    ],
+    "voivodeship": "wielkopolskie"
+  },
+  "37": {
+    "cities": [
+      "Konin",
+      "powiat gnieźnieński",
+      "powiat kolski",
+      "powiat koniński",
+      "powiat słupecki",
+      "powiat średzki",
+      "powiat śremski",
+      "powiat turecki",
+      "powiat wrzesiński"
+    ],
+    "voivodeship": "wielkopolskie"
+  },
+  "38": {
+    "cities": [
+      "powiat chodzieski",
+      "powiat czarnkowsko-trzcianecki",
+      "powiat grodziski",
+      "powiat międzychodzki",
+      "powiat nowotomyski",
+      "powiat obornicki",
+      "powiat pilski",
+      "powiat szamotulski",
+      "powiat wągrowiecki",
+      "powiat wolsztyński",
+      "powiat złotowski"
+    ],
+    "voivodeship": "wielkopolskie"
+  },
+  "39": {
+    "cities": [
+      "Poznań",
+      "powiat poznański"
+    ],
+    "voivodeship": "wielkopolskie"
+  },
+  "40": {
+    "cities": [
+      "Koszalin",
+      "powiat białogardzki",
+      "powiat choszczeński",
+      "powiat drawski",
+      "powiat kołobrzeski",
+      "powiat koszaliński",
+      "powiat sławieński",
+      "powiat szczecinecki",
+      "powiat świdwiński",
+      "powiat wałecki"
+    ],
+    "voivodeship": "zachodniopomorskie"
+  },
+  "41": {
+    "cities": [
+      "Szczecin",
+      "Świnoujście",
+      "powiat goleniowski",
+      "powiat gryficki",
+      "powiat gryfiński",
+      "powiat kamieński",
+      "powiat łobeski",
+      "powiat myśliborski",
+      "powiat policki",
+      "powiat pyrzycki",
+      "powiat stargardzki"
+    ],
+    "voivodeship": "zachodniopomorskie"
+  }
+}
