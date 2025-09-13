@@ -55,6 +55,8 @@ To obtain new credentials:
 - `OPENALPR_SECRET_x` - <https://www.openalpr.com/>, $40/month starter plan.
 - `MAPBOX_API_TOKEN` - after registering at <http://mapbox.com/>. Free tier available.
 - `GOOGLE_MAPS_API_TOKEN` - optional, fallback geolocation, to be obtained at https://console.cloud.google.com/ on the already-created firebase project.
+- `OPENAI_API_KEY` - optional, required for /generator.html, to be obtained at <https://platform.openai.com/>.
+- `OPENAI_PROJECT` - same as above, to be obtained at <https://platform.openai.com/settings/organization/projects>. You may also need to verify your account at <https://platform.openai.com/settings/organization/general>.
 
 
 ## Running the app for the first time

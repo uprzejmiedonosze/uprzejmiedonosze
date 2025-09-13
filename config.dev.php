@@ -5,6 +5,9 @@ define('OPEN_ALPR_SECRET_2', 'contact author');
 define('MAPBOX_API_TOKEN', 'contact author');
 define('GOOGLE_MAPS_API_TOKEN', 'contact author');
 
+define('OPENAI_API_KEY', 'see README.md');
+define('OPENAI_PROJECT', 'proj_SOMEID');
+
 define('MAILER_FROM', 'u@dka.email');
 
 define('CRYPTO_KEY', '7700bcc0327517849e966dd169791439');
