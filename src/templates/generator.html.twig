@@ -13,6 +13,20 @@
 {% block main %}
 
 <style>
+fieldset>label {
+ display: flex;
+ align-items: center;
+ border: 1px solid #eee;
+ margin-bottom: 1em;
+ padding: 0.5em;
+}
+fieldset>label>input {
+ flex-shrink: 0;
+ margin: 0 8px 0 0;
+ align-self: center;
+ display: flex !important;
+ width: 1em;
+}
     .form-group {
         margin-bottom: 15px;
     }
@@ -52,8 +66,14 @@
         color: #7f8c8d;
     }
 </style>
-<h1>Uprzejmy generator pism</h1>
-<div class="warning-header">
+
+
+<div id='generator'>
+  <header>
+    <p>Krok 1 z 4</p>
+  </header>
+  <section id="step-0">
+    <h2>Uprzejmy generator pism</h2>
     {% if isPatron %}
     <h4>Narzędzie jest w fazie testowej</h4>
     <p>Nie wysyłaj jeszcze wygenerowanych pism. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
@@ -63,38 +83,54 @@
     <h4>Narzędzie jest w fazie testowej dostępnej tylko dla Patronów i Patronek</h4>
     <p>Po fazie zamkniętych testów zostanie udostępnione wszystkim użytkownikom Uprzejmie Donoszę.</p>
     {% endif %}
-</div>
-
-<div class="form-group">
-    <label>Wybierz od 1 do 3 tematów:</label>
-    <div id="topicsContainer" class="topics-container">
-        <div class="loading">Ładowanie tematów...</div>
-    </div>
+    <nav>
+        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
+    </nav>
+  </section>
+  <section id="step-1">
+    <h2>Co Cię najbardziej wkurza w pato parkowaniu?</h2>
+    <p>Wybierz do 3 opcji.</p>
     <div id="topicError" style="color: red; display: none;">Wybierz od 1 do 3 tematów</div>
+    <fieldset id="fs-topics">
+    </fieldset>
+    <nav>
+        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
+    </nav>
+  </section>
+
+  <section id="step-2">
+    <h2>Wybierz typ pisma</h2>
+    <fieldset>
+
+      <label for="formType">Typ pisma:
+      <select id="formType" disabled>
+          <option value="">Ładowanie typów pism...</option>
+      </select></label>
+
+      <label for="target">Adresat:
+      <select id="target" disabled>
+          <option value="">Najpierw wybierz typ pisma</option>
+      </select></label>
+    </fieldset>
+    <nav>
+    </nav>
+
+    {% if isPatron %}
+    <button id="generateButton" class="button cta">Generuj pismo</button>
+    {% else %}
+    <button id="generateButton" class="button disabled">Generuj pismo</button>
+    {% endif %}
+    
+  </section>
+
+  <section id="step-3">
+    <div class="status" id="status">Gotowy do generowania</div>
+
+    <div id="output"></div>
+  </section>
 </div>
 
-<div class="form-group">
-    <label for="formType">Typ pisma:</label>
-    <select id="formType" disabled>
-        <option value="">Ładowanie typów pism...</option>
-    </select>
-</div>
 
-<div class="form-group">
-    <label for="target">Adresat:</label>
-    <select id="target" disabled>
-        <option value="">Najpierw wybierz typ pisma</option>
-    </select>
-</div>
-
-{% if isPatron %}
-<button id="generateButton" class="button cta">Generuj pismo</button>
-{% else %}
-<button id="generateButton" class="button disabled" disabled>Generuj pismo</button>
-{% endif %}
-<div class="status" id="status">Gotowy do generowania</div>
-
-<div id="output"></div>
 
 <script>
     // Global variables
@@ -127,20 +163,14 @@
     
     // Render topics checkboxes
     function renderTopics() {
-        const container = document.getElementById('topicsContainer');
-        container.innerHTML = '';
-        
-        Object.entries(topicsData).forEach(([id, topic]) => {
-            const topicDiv = document.createElement('div');
-            topicDiv.className = 'topic-item';
-            topicDiv.innerHTML = `
-                <input type="checkbox" id="topic-${id}" value="${id}" onchange="validateTopics()">
-                <label for="topic-${id}" class="checkbox" >
-                    ${topic.title}
-                </label>
-            `;
-            container.appendChild(topicDiv);
-        });
+        const container = document.getElementById('fs-topics');
+
+        container.innerHTML = Object.entries(topicsData).map(([id, topic]) => `
+            <label>
+              <input type="checkbox" name='topics[]' value="${id}" onchange="validateTopics()">
+              ${topic.title}
+            </label>
+        `).join('');
     }
     
     // Render form types dropdown
@@ -186,7 +216,7 @@
     
     // Validate that 1-3 topics are selected
     function validateTopics() {
-        const selectedTopics = document.querySelectorAll('#topicsContainer input[type="checkbox"]:checked');
+        const selectedTopics = document.querySelectorAll('fieldset#fs-topics input[type="checkbox"]:checked');
         const errorElement = document.getElementById('topicError');
         const button = document.getElementById('generateButton');
         
