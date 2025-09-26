@@ -65,14 +65,21 @@ fieldset>label>input {
         font-style: italic;
         color: #7f8c8d;
     }
+    #generator>section {
+        display: none;
+    }
+    #generator>section.active {
+        display: block !important;
+    }
 </style>
 
 
 <div id='generator'>
   <header>
-    <p>Krok 1 z 4</p>
+    <p id="step-indicator">Krok 1 z 4</p>
   </header>
-  <section id="step-0">
+
+  <section id="step-0" class="step-section active">
     <h2>Uprzejmy generator pism</h2>
     {% if isPatron %}
     <h4>Narzędzie jest w fazie testowej</h4>
@@ -87,7 +94,8 @@ fieldset>label>input {
         <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
     </nav>
   </section>
-  <section id="step-1">
+
+  <section id="step-1" class="step-section">
     <h2>Co Cię najbardziej wkurza w pato parkowaniu?</h2>
     <p>Wybierz do 3 opcji.</p>
     <div id="topicError" style="color: red; display: none;">Wybierz od 1 do 3 tematów</div>
@@ -98,7 +106,7 @@ fieldset>label>input {
     </nav>
   </section>
 
-  <section id="step-2">
+  <section id="step-2" class="step-section">
     <h2>Wybierz typ pisma</h2>
     <fieldset>
 
@@ -113,20 +121,21 @@ fieldset>label>input {
       </select></label>
     </fieldset>
     <nav>
+        {% if isPatron %}
+        <button id="generateButton" class="button cta">Generuj pismo</button>
+        {% else %}
+        <button id="generateButton" class="button disabled">Generuj pismo</button>
+        {% endif %}
     </nav>
-
-    {% if isPatron %}
-    <button id="generateButton" class="button cta">Generuj pismo</button>
-    {% else %}
-    <button id="generateButton" class="button disabled">Generuj pismo</button>
-    {% endif %}
-    
   </section>
 
-  <section id="step-3">
+  <section id="step-3" class="step-section">
+    <h2>Wygenerowane pismo</h2>
     <div class="status" id="status">Gotowy do generowania</div>
-
     <div id="output"></div>
+    <nav>
+        <button class="button" type="button" data-action="restart">Generuj kolejne pismo</button>
+    </nav>
   </section>
 </div>
 
@@ -137,7 +146,75 @@ fieldset>label>input {
     let topicsData = [];
     let formTypesData = {};
     let targetsData = {};
+    let currentStep = 0;
+    const totalSteps = 4;
+
+    function showStep(stepNumber) {
+        document.querySelectorAll('#generator>section').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        const currentSection = document.getElementById(`step-${stepNumber}`);
+        if (currentSection) {
+            currentSection.classList.add('active');
+        }
+
+        document.getElementById('step-indicator').textContent = `Krok ${stepNumber + 1} z ${totalSteps}`;
+
+        currentStep = stepNumber;
+    }
+
+    function nextStep() {
+        if (currentStep < totalSteps - 1) {
+            // Validate current step before proceeding
+            if (validateCurrentStep()) {
+                showStep(currentStep + 1);
+            }
+        }
+    }
+
+    function validateCurrentStep() {
+        switch(currentStep) {
+            case 0:
+                return true; // No validation needed for intro step
+            case 1:
+                return validateTopics();
+            case 2:
+                return validateForm();
+            default:
+                return true;
+        }
+    }
+
+    function validateForm() {
+        const formType = document.getElementById('formType').value;
+        const target = document.getElementById('target').value;
+
+        if (!formType) {
+            alert('Proszę wybrać typ pisma');
+            return false;
+        }
+
+        if (!target) {
+            alert('Proszę wybrać adresata');
+            return false;
+        }
+
+        return true;
+    }
     
+    function restartWizard() {
+        // Reset form
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.getElementById('formType').value = '';
+        document.getElementById('target').value = '';
+        document.getElementById('output').textContent = '';
+        document.getElementById('status').textContent = 'Gotowy do generowania';
+
+        // Go back to step 1 (skip intro)
+        showStep(1);
+    }
+
     // Initialize the page
     document.addEventListener('DOMContentLoaded', async () => {
         try {
@@ -145,16 +222,24 @@ fieldset>label>input {
             const topicsResponse = await fetch('/generator/topics');
             topicsData = await topicsResponse.json();
             renderTopics();
-            
+
             // Load form types
             const formTypesResponse = await fetch('/generator/form_types');
             formTypesData = await formTypesResponse.json();
             renderFormTypes();
-            
+
             // Load targets
             const targetsResponse = await fetch('/generator/targets');
             targetsData = await targetsResponse.json();
-            
+
+            // Add event listeners for navigation buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.dataset.action === 'next') {
+                    nextStep();
+                } else if (e.target.dataset.action === 'restart') {
+                    restartWizard();
+                }
+            });
         } catch (error) {
             console.error('Error initializing data:', error);
             alert('Wystąpił błąd podczas ładowania danych. Odśwież stronę i spróbuj ponownie.');
@@ -218,22 +303,19 @@ fieldset>label>input {
     function validateTopics() {
         const selectedTopics = document.querySelectorAll('fieldset#fs-topics input[type="checkbox"]:checked');
         const errorElement = document.getElementById('topicError');
-        const button = document.getElementById('generateButton');
         
         if (selectedTopics.length === 0 || selectedTopics.length > 3) {
             errorElement.style.display = 'block';
-            button.classList.add('disabled')
             return false;
         }
         
         errorElement.style.display = 'none';
-        button.classList.remove('disabled')
         return true;
     }
     
     // Get selected topic IDs
     function getSelectedTopicIds() {
-        return Array.from(document.querySelectorAll('#topicsContainer input[type="checkbox"]:checked'))
+        return Array.from(document.querySelectorAll('#fs-topics input[type="checkbox"]:checked'))
             .map(checkbox => checkbox.value);
     }
     
@@ -244,27 +326,17 @@ fieldset>label>input {
         const status = document.getElementById('status');
         
         // Validate form
-        if (!validateTopics()) {
+        if (!validateForm()) {
             return;
         }
         
         const topicIds = getSelectedTopicIds();
         const formType = document.getElementById('formType').value;
         const target = document.getElementById('target').value;
-        
-        // Validate required fields
-        if (!formType) {
-            alert('Proszę wybrać typ pisma');
-            return;
-        }
-        
-        if (!target) {
-            alert('Proszę wybrać adresata');
-            return;
-        }
                     
-        // Clear previous output
+        // Clear previous output and move to results step
         output.textContent = '';
+        showStep(3);
         
         try {
             // Build URL with query parameters
@@ -359,7 +431,7 @@ fieldset>label>input {
                         if (data.error) {
                             throw new Error(data.error);
                         }
-                        
+
                         if (data.content) {
                             output.textContent += data.content;
                             // Auto-scroll to bottom
