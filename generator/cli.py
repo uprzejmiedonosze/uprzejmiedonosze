@@ -26,8 +26,8 @@ def main() -> None:
         print("\n")
 
         models = [
-            "gpt-5-nano",
             "gpt-5-mini",
+            "gemini-2.5-flash",
         ]
 
         

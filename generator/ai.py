@@ -1,10 +1,19 @@
 import os
 from openai import OpenAI
+import google.generativeai as genai
 
 # Initialize the OpenAI client
 client = OpenAI()
 
-# Verify API key is set
+# Initialize Gemini client
+if os.getenv('GOOGLE_API_KEY'):
+    genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
+else:
+    print("\n\033[93mOstrzeżenie: Nie znaleziono klucza API Google. Gemini nie będzie dostępny.\033[0m")
+    print("Możesz ustawić klucz API w terminalu komendą:")
+    print("export GOOGLE_API_KEY='twój-klucz-api'\n")
+
+# Verify OpenAI API key is set
 if not os.getenv('OPENAI_API_KEY'):
     print("\n\033[91mBłąd: Nie znaleziono klucza API OpenAI. Proszę upewnić się, że zmienna środowiskowa OPENAI_API_KEY jest ustawiona.\033[0m")
     print("Możesz ustawić klucz API w terminalu komendą:")
@@ -31,6 +40,7 @@ PRICES_PER_1M = {
     "gpt-4o":            {"prompt":  2.50, "completion": 10.00},
     "chatgpt-4o-latest": {"prompt":  5.00, "completion": 15.00},
     "gpt-image-1":       {"prompt": 10.00, "completion": 40.00},
+    "gemini-2.5-flash":  {"prompt":  0.075, "completion": 0.30},
 }
 
 def __get_prompt(topics: List[str], form_type: str, target: str, name:str, city:str) -> (str, str):
@@ -118,6 +128,12 @@ def generate_complaint_stream(topics: List[str], form_type: str, target: str, na
 def generate_complaint(topics: List[str], form_type: str, target: str, name:str, city:str, model:str) -> (str, float, float):
     system_prompt, content_prompt = __get_prompt(topics, form_type, target, name, city)
     
+    if model.startswith('gemini-'):
+        return __generate_with_gemini(system_prompt, content_prompt, model)
+    else:
+        return __generate_with_openai(system_prompt, content_prompt, model)
+
+def __generate_with_openai(system_prompt: str, content_prompt: str, model: str) -> (str, float, float):
     response = client.chat.completions.create(
         model=model,
         messages=[
@@ -131,6 +147,23 @@ def generate_complaint(topics: List[str], form_type: str, target: str, name:str,
     price = get_price(response.usage, model)
     estimation = get_estimation(system_prompt, content_prompt, content, model)
     return content, price, estimation
+
+def __generate_with_gemini(system_prompt: str, content_prompt: str, model: str) -> (str, float, float):
+    try:
+        gemini_model = genai.GenerativeModel(model)
+        
+        # Combine system and user prompts for Gemini
+        full_prompt = f"{system_prompt}\n\n{content_prompt}"
+        
+        response = gemini_model.generate_content(full_prompt)
+        content = response.text
+        
+        # Gemini doesn't provide usage info in the same way, so we estimate
+        estimation = get_estimation(system_prompt, content_prompt, content, model)
+        
+        return content, estimation, estimation
+    except Exception as e:
+        raise Exception(f"Błąd podczas generowania z Gemini: {str(e)}")
 
 def get_estimation(system_prompt: str, content_prompt: str, response: str, model: str) -> float:
     def count_tokens(text: str) -> int:

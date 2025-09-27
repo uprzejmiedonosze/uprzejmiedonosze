@@ -1,4 +1,6 @@
-<?php namespace generator;
+<?php
+
+namespace generator;
 
 require_once(__DIR__ . '/AbstractHandler.php');
 require_once(__DIR__ . '/../data.php');
@@ -40,7 +42,7 @@ class ApiAiHandler extends \AbstractHandler {
         } else {
             $data = $request->getParsedBody();
         }
-        
+
         // Validate input
         $required = ['topics', 'form_type', 'target'];
         $missing = [];
@@ -49,14 +51,14 @@ class ApiAiHandler extends \AbstractHandler {
                 $missing[] = $field;
             }
         }
-        
+
         if (!empty($missing)) {
             return $this->jsonResponse($response, [
                 'error' => 'Missing required fields',
                 'missing' => $missing
             ], 400);
         }
-        
+
         $user = $request->getAttribute('user');
         $isPatron = $user->isFormerPatron() || $user->isPatron() || $user->isAdmin();
         if (!$isPatron) {
@@ -74,13 +76,13 @@ class ApiAiHandler extends \AbstractHandler {
             $city = $user->data->address;
 
             $petition = Petition::withData($topics, $formType, $target, $name, $city);
-            
+
             $systemPrompt = $petition->generateSystemPrompt();
             $contentPrompt = $petition->generateContentPrompt();
             \generator\set($petition);
-            
+
             $client = \OpenAI::client(apiKey: OPENAI_API_KEY, project: $this->project);
-            
+
             $stream = $client->chat()->createStreamed([
                 'model' => $this->model,
                 'messages' => [
@@ -94,23 +96,23 @@ class ApiAiHandler extends \AbstractHandler {
             if (ob_get_level() > 0) {
                 ob_end_flush();
             }
-            
+
             // Create a custom stream handler
-            $streamHandler = function() use ($stream, $petition, $systemPrompt, $contentPrompt, $target) {
+            $streamHandler = function () use ($stream, $petition, $systemPrompt, $contentPrompt, $target) {
                 global $TARGETS;
                 // Start output buffering
                 if (ob_get_level() > 0) {
                     ob_end_clean();
                 }
-                
+
                 // Set headers for streaming
                 header('Content-Type: text/event-stream');
                 header('Cache-Control: no-cache');
                 header('X-Accel-Buffering: no');
                 header('Connection: keep-alive');
-                
+
                 $completion = '';
-                
+
                 #$this->printAndFlush($TARGETS[$target]['formal']);
                 // Process the stream
                 foreach ($stream as $chunk) {
@@ -120,7 +122,7 @@ class ApiAiHandler extends \AbstractHandler {
                         $this->printAndFlush(json_encode(['content' => $content]));
                     }
                 }
-                
+
                 // Send done signal
                 $this->printAndFlush('[DONE]');
 
@@ -130,14 +132,13 @@ class ApiAiHandler extends \AbstractHandler {
 
                 exit;
             };
-            
+
             // Execute the stream handler
             $streamHandler();
-            
+
             // This return is a fallback in case output buffering is disabled
             return $response->withHeader('Content-Type', 'text/plain')
-                           ->withStatus(200);
-
+                ->withStatus(200);
         } catch (\Exception $e) {
             return $this->jsonResponse($response, [
                 'error' => 'Failed to stream content',
@@ -169,7 +170,7 @@ class ApiAiHandler extends \AbstractHandler {
 
         return ($inputTokens * $pricing['prompt'] + $outputTokens * $pricing['completion']) / 1_000_000;
     }
-        
+
 
     /**
      * Get available topics
@@ -191,7 +192,7 @@ class ApiAiHandler extends \AbstractHandler {
      * Get available targets
      */
     public function getTargets(Request $request, Response $response, array $args): Response {
-        global $TARGETS;        
+        global $TARGETS;
         return $this->renderJson($response, $TARGETS);
     }
 
@@ -203,11 +204,26 @@ class ApiAiHandler extends \AbstractHandler {
         return array_unique($cities);
     }
 
+    private static function changeNameOrder(string $key): string {
+        $parts = explode(' ', trim($key));
+        $count = count($parts);
+        switch ($count) {
+            case 2:
+                return $parts[1] . ' ' . $parts[0];
+            case 3:
+                return $parts[1] . ' ' . $parts[2] . ' ' . $parts[0];
+            case 4:
+                return $parts[3] . ' ' . $parts[0] . ' ' . $parts[1] . ' ' . $parts[2];
+            default:
+                return $key;
+        }
+    }
+
     private static function getUserDistrict(\user\User $user, array $districts) {
         if (!$user) return null;
 
         $unqueCities = self::uniqueCities($districts);
-        
+
         $address = $user->data->address;
         if ($address) {
             $split = explode(',', $address);
@@ -249,11 +265,19 @@ class ApiAiHandler extends \AbstractHandler {
             }
 
             $mps[$key]['nearby'] = null;
-            if ($city) 
+            if ($city)
                 $mps[$key]['nearby'] = in_array($city, $cities);
+            $mps[$key]['name'] = $this->changeNameOrder($key);
+            $mps[$key]['sex'] = \user\User::_guessSex($mps[$key]['name']);
+
+            $mps[$key]['formal'] = "Szanowna Pani\n{$mps[$key]['name']}\nPosłanka na Sejm";
+            if ($mps[$key]['sex'] == 'm')
+                $mps[$key]['formal'] = "Szanowy Pan\n{$mps[$key]['name']}\nPoseł na Sejm";
+
+            
         }
 
-        return $this->renderJson($response, $mps);   
+        return $this->renderJson($response, $mps);
     }
 
     public function getParlamentary(Request $request, Response $response, array $args): Response {
@@ -269,7 +293,7 @@ class ApiAiHandler extends \AbstractHandler {
         if ($filterByUser != 0 && $user) {
             $city = self::getUserDistrict($user, $districts);
         }
-    
+
         foreach ($mps as $key => $mp) {
             $mps[$key]['cities'] = $districts[$mp['district']]['cities'];
             $mps[$key]['voivodeship'] = $districts[$mp['district']]['voivodeship'];
