@@ -8,17 +8,18 @@
 
 {% extends "base.html.twig" %}
 {% block footer %}
-<footer></footer>
 {% endblock %}
 {% block main %}
 
 <style>
+#generator>section>fieldset { margin-top: 0.5em; }
 fieldset>label {
  display: flex;
  align-items: center;
  border: 1px solid #eee;
  margin-bottom: 1em;
  padding: 0.5em;
+ border-radius: 0.75em;
 }
 fieldset>label>input {
  flex-shrink: 0;
@@ -74,17 +75,22 @@ fieldset>label>input {
     #generator>header { display: flex; align-items: center; min-height: 2em; }
     #generator>header>a { display: none; }
     #generator>header>span { position: absolute; left: 50%; transform: translateX(-50%); }
+    /* these are unlike rest of website */
+    #generator>section>div,
+    #generator>section>h1 { text-align: center; }
+    #generator>section>nav { margin-top: 1em; border-top: 1px solid #e7e7e7; padding-top: 1em; }
+    #generator>section>nav>button { width: 85%; }
 </style>
 
 
-<div id='generator'>
+<div id='generator' class='rd25'>
   <header>
     <a data-action="prev">&lt; Wróc</a>
     <span>Krok 1 z 4</span>
   </header>
 
   <section id="step-0" class="step-section active">
-    <h2>Uprzejmy generator pism</h2>
+    <h1>Uprzejmy generator pism</h1>
     {% if isPatron %}
     <h4>Narzędzie jest w fazie testowej</h4>
     <p>Nie wysyłaj jeszcze wygenerowanych pism. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
@@ -100,9 +106,8 @@ fieldset>label>input {
   </section>
 
   <section id="step-1" class="step-section">
-    <h2>Co Cię najbardziej wkurza w pato parkowaniu?</h2>
-    <p>Wybierz do 3 opcji.</p>
-    <div id="topicError" style="color: red; display: none;">Wybierz od 1 do 3 tematów</div>
+    <h1>Co Cię najbardziej wkurza w pato parkowaniu?</h1>
+    <div id="topicError">Wybierz do 3 opcji.</div>
     <fieldset id="fs-topics">
     </fieldset>
     <nav>
@@ -111,7 +116,7 @@ fieldset>label>input {
   </section>
 
   <section id="step-2" class="step-section">
-    <h2>Wybierz typ pisma</h2>
+    <h1>Wybierz typ pisma</h1>
     <fieldset>
 
       <label for="formType">Typ pisma:
@@ -134,7 +139,7 @@ fieldset>label>input {
   </section>
 
   <section id="step-3" class="step-section">
-    <h2>Wygenerowane pismo</h2>
+    <h1>Wygenerowane pismo</h1>
     <div class="status" id="status">Gotowy do generowania</div>
     <div id="output"></div>
     <nav>
@@ -322,11 +327,11 @@ fieldset>label>input {
         const errorElement = document.getElementById('topicError');
         
         if (selectedTopics.length === 0 || selectedTopics.length > 3) {
-            errorElement.style.display = 'block';
+            errorElement.style.color = 'red';
             return false;
         }
         
-        errorElement.style.display = 'none';
+        errorElement.style.color = '';
         return true;
     }
     
