@@ -89,7 +89,7 @@ fieldset>label>input {
     <span>Krok 1 z 4</span>
   </header>
 
-  <section id="step-0" class="step-section active">
+  <section id="step-0" class="active">
     <h1>Uprzejmy generator pism</h1>
     {% if isPatron %}
     <h4>Narzędzie jest w fazie testowej</h4>
@@ -105,7 +105,7 @@ fieldset>label>input {
     </nav>
   </section>
 
-  <section id="step-1" class="step-section">
+  <section id="step-1">
     <h1>Co Cię najbardziej wkurza w pato parkowaniu?</h1>
     <div id="topicError">Wybierz do 3 opcji.</div>
     <fieldset id="fs-topics">
@@ -115,7 +115,7 @@ fieldset>label>input {
     </nav>
   </section>
 
-  <section id="step-2" class="step-section">
+  <section id="step-2">
     <h1>Wybierz charakter pisma</h1>
     <p>Jakiego tonu chcesz użyć w swojej wiadomości?</p>
     <fieldset id='fs-types'>
@@ -124,7 +124,7 @@ fieldset>label>input {
         <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
     </nav>
   </section>
-  <section id="step-3" class="step-section">
+  <section id="step-3">
     <h1>Wybierz adresata</h1>
     <fieldset>
       <label for="target">Adresat:
@@ -141,7 +141,7 @@ fieldset>label>input {
     </nav>
   </section>
 
-  <section id="step-4" class="step-section">
+  <section id="step-4">
     <h1>Wygenerowane pismo</h1>
     <div class="status" id="status">Gotowy do generowania</div>
     <div id="output"></div>
