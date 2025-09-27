@@ -116,14 +116,17 @@ fieldset>label>input {
   </section>
 
   <section id="step-2" class="step-section">
-    <h1>Wybierz typ pisma</h1>
+    <h1>Wybierz charakter pisma</h1>
+    <p>Jakiego tonu chcesz użyć w swojej wiadomości?</p>
+    <fieldset id='fs-types'>
+    </fieldset>
+    <nav>
+        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
+    </nav>
+  </section>
+  <section id="step-3" class="step-section">
+    <h1>Wybierz adresata</h1>
     <fieldset>
-
-      <label for="formType">Typ pisma:
-      <select id="formType" disabled>
-          <option value="">Ładowanie typów pism...</option>
-      </select></label>
-
       <label for="target">Adresat:
       <select id="target" disabled>
           <option value="">Najpierw wybierz typ pisma</option>
@@ -138,7 +141,7 @@ fieldset>label>input {
     </nav>
   </section>
 
-  <section id="step-3" class="step-section">
+  <section id="step-4" class="step-section">
     <h1>Wygenerowane pismo</h1>
     <div class="status" id="status">Gotowy do generowania</div>
     <div id="output"></div>
@@ -156,7 +159,7 @@ fieldset>label>input {
     let formTypesData = {};
     let targetsData = {};
     let currentStep = 0;
-    const totalSteps = 4;
+    const totalSteps = document.querySelectorAll("#generator>section").length;
 
     function showStep(stepNumber) {
         document.querySelectorAll('#generator>section').forEach(section => {
@@ -199,7 +202,7 @@ fieldset>label>input {
                 return true; // No validation needed for intro step
             case 1:
                 return validateTopics();
-            case 2:
+            case 3:
                 return validateForm();
             default:
                 return true;
@@ -207,7 +210,7 @@ fieldset>label>input {
     }
 
     function validateForm() {
-        const formType = document.getElementById('formType').value;
+        const formType = document.querySelector('input[name="formType"]:checked')?.value;
         const target = document.getElementById('target').value;
 
         if (!formType) {
@@ -226,7 +229,7 @@ fieldset>label>input {
     function restartWizard() {
         // Reset form
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        document.getElementById('formType').value = '';
+        document.querySelectorAll('input[name="formType"]').forEach(radio => radio.checked = false);
         document.getElementById('target').value = '';
         document.getElementById('output').textContent = '';
         document.getElementById('status').textContent = 'Gotowy do generowania';
@@ -280,25 +283,21 @@ fieldset>label>input {
         `).join('');
     }
     
-    // Render form types dropdown
+    // Render form types radio buttons
     function renderFormTypes() {
-        const select = document.getElementById('formType');
-        select.innerHTML = '<option value="">Wybierz typ pisma</option>';
-        
-        Object.entries(formTypesData).forEach(([id, data]) => {
-            const option = document.createElement('option');
-            option.value = id;
-            option.textContent = data || id;
-            select.appendChild(option);
-        });
-        
-        select.disabled = false;
-        select.addEventListener('change', renderTargets);
+        const container = document.getElementById('fs-types');
+
+        container.innerHTML = Object.entries(formTypesData).map(([id, data], index) => `
+            <label>
+              <input type="radio" name="formType" value="${id}" onchange="renderTargets()" ${index === 0 ? 'checked' : ''}>
+              ${data || id}
+            </label>
+        `).join('');
     }
     
     // Render targets based on selected form type
     function renderTargets() {
-        const formType = document.getElementById('formType').value;
+        const formType = document.querySelector('input[name="formType"]:checked')?.value;
         const targetSelect = document.getElementById('target');
         
         targetSelect.innerHTML = '<option value="">Wybierz adresata</option>';
@@ -353,7 +352,7 @@ fieldset>label>input {
         }
         
         const topicIds = getSelectedTopicIds();
-        const formType = document.getElementById('formType').value;
+        const formType = document.querySelector('input[name="formType"]:checked')?.value;
         const target = document.getElementById('target').value;
                     
         // Clear previous output and move to results step
