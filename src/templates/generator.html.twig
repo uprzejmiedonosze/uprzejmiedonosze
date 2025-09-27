@@ -121,28 +121,38 @@ fieldset>label>input {
     <fieldset id='fs-types'>
     </fieldset>
     <nav>
-        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
+        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>dalej</button>
     </nav>
   </section>
   <section id="step-3">
-    <h1>Wybierz adresata</h1>
+    <h1>wybierz adresata</h1>
     <fieldset id='fs-targets'>
     </fieldset>
     <nav>
-        {% if isPatron %}
-        <button id="generateButton" class="button cta">Generuj pismo</button>
-        {% else %}
-        <button id="generateButton" class="button disabled">Generuj pismo</button>
-        {% endif %}
+        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>dalej</button>
     </nav>
   </section>
 
   <section id="step-4">
+    <h1>wybierz adresata</h1>
+    <fieldset id='fs-recipients'>
+    </fieldset>
+    <nav>
+        {% if isPatron %}
+        <button data-action="generate" class="button cta">generuj pismo</button>
+        {% else %}
+        <button class="button disabled">generuj pismo</button>
+        {% endif %}
+    </nav>
+  </section>
+
+
+  <section id="step-5">
     <h1>Wygenerowane pismo</h1>
     <div class="status" id="status">Gotowy do generowania</div>
     <div id="output"></div>
     <nav>
-        <button class="button" type="button" data-action="restart">Generuj kolejne pismo</button>
+        <button class="button" id='generateButton' type="button" data-action="restart">Generuj kolejne pismo</button>
     </nav>
   </section>
 </div>
@@ -261,6 +271,8 @@ fieldset>label>input {
                     prevStep();
                 } else if (e.target.dataset.action === 'restart') {
                     restartWizard();
+                } else if (e.target.dataset.action === 'generate') {
+                    generate();
                 }
             });
         } catch (error) {
@@ -312,10 +324,35 @@ fieldset>label>input {
 
         container.innerHTML = availableTargets.map(([id, target]) => `
             <label>
-              <input type="radio" name="target" value="${id}">
+              <input type="radio" name="target" data-recipient="${target.recipient || ''}" onchange="checkRecipient()" value="${id}">
               ${id}
             </label>
         `).join('');
+
+        return true;
+    }
+
+    // check recipient and possible next steps
+    function checkRecipient() {
+        const selectedTarget = document.querySelector('input[name="target"]:checked');
+        const selectedTargetValue = selectedTarget?.value;
+        const selectedTargetRecipient = selectedTarget?.dataset?.recipient;
+        const actionButton = document.querySelector('#generator>section#step-3>nav>button');
+
+        if (selectedTargetRecipient) {    // we know who is the recipient
+          actionButton.innerHTML = 'Generuj';
+          actionButton.dataset.action = 'generate';
+          actionButton.disabled = false;
+          actionButton.classList.remove('disabled');
+        } else if (selectedTargetValue) { // we need to perform additional selection
+          actionButton.innerHTML = 'Dalej';
+          actionButton.dataset.action = 'next';
+          actionButton.disabled = false;
+          actionButton.classList.remove('disabled');
+        } else {                          // fallback
+          actionButton.disabled = true;
+          actionButton.classList.add('disabled');
+        }
 
         return true;
     }
@@ -341,7 +378,7 @@ fieldset>label>input {
     }
     
     // Generate button click handler
-    document.getElementById('generateButton').addEventListener('click', async () => {
+    async function generate(){
         const button = document.getElementById('generateButton');
         const output = document.getElementById('output');
         const status = document.getElementById('status');
@@ -357,7 +394,7 @@ fieldset>label>input {
                     
         // Clear previous output and move to results step
         output.textContent = '';
-        showStep(3);
+        showStep(5);
         
         try {
             // Build URL with query parameters
@@ -475,7 +512,7 @@ fieldset>label>input {
         } finally {
             button.classList.remove('disabled')
         }
-    });
+    };
 </script>
 
 
