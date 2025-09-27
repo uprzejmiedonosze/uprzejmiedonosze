@@ -71,12 +71,16 @@ fieldset>label>input {
     #generator>section.active {
         display: block !important;
     }
+    #generator>header { display: flex; align-items: center; min-height: 2em; }
+    #generator>header>a { display: none; }
+    #generator>header>span { position: absolute; left: 50%; transform: translateX(-50%); }
 </style>
 
 
 <div id='generator'>
   <header>
-    <p id="step-indicator">Krok 1 z 4</p>
+    <a data-action="prev">&lt; Wróc</a>
+    <span>Krok 1 z 4</span>
   </header>
 
   <section id="step-0" class="step-section active">
@@ -159,9 +163,20 @@ fieldset>label>input {
             currentSection.classList.add('active');
         }
 
-        document.getElementById('step-indicator').textContent = `Krok ${stepNumber + 1} z ${totalSteps}`;
+        document.querySelector('#generator>header>span').textContent = `Krok ${stepNumber + 1} z ${totalSteps}`;
+        if (stepNumber>0) {
+          document.querySelector('#generator>header>a').style.display='block';
+        } else {
+          document.querySelector('#generator>header>a').style.display='none';
+        }
 
         currentStep = stepNumber;
+    }
+
+    function prevStep() {
+        if (currentStep > 0) {
+          showStep(currentStep-1);
+        }
     }
 
     function nextStep() {
@@ -236,6 +251,8 @@ fieldset>label>input {
             document.addEventListener('click', (e) => {
                 if (e.target.dataset.action === 'next') {
                     nextStep();
+                } else if (e.target.dataset.action === 'prev') {
+                    prevStep();
                 } else if (e.target.dataset.action === 'restart') {
                     restartWizard();
                 }
