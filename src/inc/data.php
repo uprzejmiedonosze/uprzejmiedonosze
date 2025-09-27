@@ -161,28 +161,36 @@ $TARGETS = [
     "Premier" => [
         "title" => "Premiera",
         "forms" => ["email", "complaint", "proposal"],
-        "formal" => "Szanowny Pan\nDonald Tusk\nPrezes Rady Ministrów\nAl. Ujazdowskie 1/3\n00-583 Warszawa"
+        "formal" => "Szanowny Pan\nDonald Tusk\nPrezes Rady Ministrów\nAl. Ujazdowskie 1/3\n00-583 Warszawa",
+        "recipient" => "kontakt@kprm.gov.pl"
     ],
     "Minister" => [
         "title" => "Ministra Infrastruktury",
         "forms" => ["email", "complaint", "proposal"],
-        "formal" => "Szanowny Pan\nDariusz Klimczak\nMinister Infrastruktury\nAl. Ujazdowskie 1/3\n00-583 Warszawa"
+        "formal" => "Szanowny Pan\nDariusz Klimczak\nMinister Infrastruktury\nAl. Ujazdowskie 1/3\n00-583 Warszawa",
+        "recipient" => "sekretariatDKlimczaka@mi.gov.pl"
     ],
     "RPO" => [
         "title" => "Rzecznika Praw Obywatelskich",
         "forms" => ["email", "complaint"],
-        "formal" => "Szanowny Pan\ndr hab. Marcin Wiącek\nRzecznik Praw Obywatelskich\nal. Solidarności 77\n00-090 Warszawa"
+        "formal" => "Szanowny Pan\ndr hab. Marcin Wiącek\nRzecznik Praw Obywatelskich\nal. Solidarności 77\n00-090 Warszawa",
+        "recipient" => "biurorzecznika@brpo.gov.pl"
     ],
-    "Członek_INF" => [
-        "title" => "Członka Sejmowej Komisji Infrastruktury",
+    "Posłanka/Poseł" => [
+        "title" => "Posła/Posłanki",
         "forms" => ["email", "complaint", "proposal"],
-        "formal" => "Szanowny Pan/Szanowna Pani\n____ _____\nPoseł/Posłanka na Sejm\nKancelaria Sejmu\nul. Wiejska 4/6/8\n00-902 Warszawa"
+        "formal" => "szanowny pan/szanowna pani\n____ _____\nposeł/posłanka na sejm\nkancelaria sejmu\nul. wiejska 4/6/8\n00-902 warszawa"
     ],
-    "Komisja_PET" => [
-        "title" => "Parlamentarnej Komisji Wniosków i Petycji",
-        "forms" => ["proposal"],
-        "formal" => "Parlamentarna Komisja Wniosków i Petycji\nSejm Rzeczpospolitej Polskiej\nul. Wiejska 4/6/8\n00-902 Warszawa"
-    ]#,
+    #"Członek_INF" => [
+    #    "title" => "Członka Sejmowej Komisji Infrastruktury",
+    #    "forms" => ["email", "complaint", "proposal"],
+    #    "formal" => "szanowny pan/szanowna pani\n____ _____\nposeł/posłanka na sejm\nkancelaria sejmu\nul. wiejska 4/6/8\n00-902 warszawa"
+    #],
+    #"Komisja_PET" => [
+    #    "title" => "Parlamentarnej Komisji Wniosków i Petycji",
+    #    "forms" => ["proposal"],
+    #    "formal" => "Parlamentarna Komisja Wniosków i Petycji\nSejm Rzeczpospolitej Polskiej\nul. Wiejska 4/6/8\n00-902 Warszawa"
+    #]#,
     #"Prezydent(ka) miasta" => [
     #    "title" => "Prezydenta/Prezydentki miasta",
     #    "forms" => ["email", "complaint"],
