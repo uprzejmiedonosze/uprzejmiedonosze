@@ -78,15 +78,18 @@ fieldset>label>input {
     /* these are unlike rest of website */
     #generator>section>div,
     #generator>section>h1 { text-align: center; }
-    #generator>section>nav { margin-top: 1em; border-top: 1px solid #e7e7e7; padding-top: 1em; }
-    #generator>section>nav>button { width: 85%; }
+    #generator>section>nav { margin-top: 1em; border-top: 1px solid #e7e7e7; padding-top: 1em; text-align: center; }
+    #generator>section>nav>button,
+    #generator>section>nav>a { width: 85%; margin-top: 0.25em; margin-bottom: 0.25em; }
+
+    #generator>section>div#output { text-align: left; font-family: 'Red Hat Display'; }
 </style>
 
 
 <div id='generator' class='rd25'>
   <header>
     <a data-action="prev">&lt; Wróc</a>
-    <span>Krok 1 z 4</span>
+    <span></span>
   </header>
 
   <section id="step-0" class="active">
@@ -152,7 +155,10 @@ fieldset>label>input {
     <div class="status" id="status">Gotowy do generowania</div>
     <div id="output"></div>
     <nav>
-        <button class="button" id='generateButton' type="button" data-action="restart">Generuj kolejne pismo</button>
+        <a class="button cta" id='mailtoButton' href="#" style="display: none;">Wyślij przez domyślny klient e-mail</a>
+        <a class="button cta" id='gmailButton' href="#" target="_blank" style="display: none;">Wyślij przez GMail</a>
+        <br />
+        <a class="button" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</button>
     </nav>
   </section>
 </div>
@@ -241,6 +247,11 @@ fieldset>label>input {
         document.querySelectorAll('input[name="target"]').forEach(radio => radio.checked = false);
         document.getElementById('output').textContent = '';
         document.getElementById('status').textContent = 'Gotowy do generowania';
+  
+        document.getElementById('mailtoButton').href = '#';
+        document.getElementById('mailtoButton').style.display = 'none';
+        document.getElementById('gmailButton').href = '#';
+        document.getElementById('gmailButton').style.display = 'none';
 
         // Go back to step 1 (skip intro)
         showStep(1);
@@ -249,6 +260,7 @@ fieldset>label>input {
     // Initialize the page
     document.addEventListener('DOMContentLoaded', async () => {
         try {
+            showStep(0);
             // Load topics
             const topicsResponse = await fetch('/generator/topics');
             topicsData = await topicsResponse.json();
@@ -317,9 +329,10 @@ fieldset>label>input {
             return;
         }
 
-        // Filter targets that support the selected form type
+        // Filter targets that support the selected form type and have recipient defined
         const availableTargets = Object.entries(targetsData)
             .filter(([_, target]) => target.forms.includes(formType))
+            .filter(([_, target]) => target.recipient)   // @FIXME implement proper recipient selection in separate for those cases
             .sort((a, b) => a[1].title.localeCompare(b[1].title));
 
         container.innerHTML = availableTargets.map(([id, target]) => `
@@ -500,7 +513,10 @@ fieldset>label>input {
                     }
                 }
             }
-            
+
+            // Show and populate email links after successful generation
+            populateEmailLinks();
+
         } catch (error) {
             console.error('Error:', error);
             const parsed = JSON.parse(error.message);
@@ -513,6 +529,29 @@ fieldset>label>input {
             button.classList.remove('disabled')
         }
     };
+
+    // Function to populate email links with recipient and content
+    function populateEmailLinks() {
+        const selectedTarget = document.querySelector('input[name="target"]:checked');
+        const recipient = selectedTarget?.dataset?.recipient;
+        const content = document.getElementById('output').textContent;
+
+        if (!recipient || !content) {
+            return;
+        }
+
+        const subject = 'Pismo w sprawie parkowania';
+
+        // Populate mailto link
+        const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
+        document.getElementById('mailtoButton').href = mailtoUrl;
+        document.getElementById('mailtoButton').style.display = 'inline-block';
+
+        // Populate Gmail link
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
+        document.getElementById('gmailButton').href = gmailUrl;
+        document.getElementById('gmailButton').style.display = 'inline-block';
+    }
 </script>
 
 
