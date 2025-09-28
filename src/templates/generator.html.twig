@@ -73,7 +73,7 @@ fieldset>label>input {
         display: block !important;
     }
     #generator>header { display: flex; align-items: center; min-height: 2em; }
-    #generator>header>a { display: none; }
+    #generator>header>a { display: none; cursor: pointer; }
     #generator>header>span { position: absolute; left: 50%; transform: translateX(-50%); }
     /* these are unlike rest of website */
     #generator>section>div,
@@ -83,6 +83,14 @@ fieldset>label>input {
     #generator>section>nav>a { width: 85%; margin-top: 0.25em; margin-bottom: 0.25em; }
 
     #generator>section>div#output { text-align: left; font-family: 'Red Hat Display'; }
+
+    #gmailButton img {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 0.5em;
+        vertical-align: middle;
+    }
+
 </style>
 
 
@@ -150,12 +158,12 @@ fieldset>label>input {
   </section>
 
   <section id="step-5">
-    <h1>Wygenerowane pismo</h1>
+    <h1>Generowanie pisma</h1>
     <div class="status" id="status">Gotowy do generowania</div>
     <div id="output"></div>
     <nav>
         <a class="button cta" id='mailtoButton' href="#" style="display: none;">Wyślij przez domyślny klient e-mail</a>
-        <a class="button cta" id='gmailButton' href="#" target="_blank" style="display: none;">Wyślij przez GMail</a>
+        <a class="button cta" id='gmailButton' href="#" target="_blank" style="display: none;"><img src="/img/gmail.png" alt='' />Wyślij przez GMail</a>
         <br />
         <a class="button" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</a>
     </nav>
@@ -183,7 +191,9 @@ fieldset>label>input {
         }
 
         document.querySelector('#generator>header>span').textContent = `Krok ${stepNumber + 1} z ${totalSteps}`;
-        if (stepNumber>0) {
+        if (stepNumber+1==totalSteps) {
+          document.querySelector('#generator>header>a').style.display='none';
+        } else if (stepNumber>0) {
           document.querySelector('#generator>header>a').style.display='block';
         } else {
           document.querySelector('#generator>header>a').style.display='none';
@@ -251,6 +261,8 @@ fieldset>label>input {
         document.getElementById('mailtoButton').style.display = 'none';
         document.getElementById('gmailButton').href = '#';
         document.getElementById('gmailButton').style.display = 'none';
+
+        document.querySelector("section#step-5>h1").innerHTML='Generowanie pisma';
 
         // Go back to step 1 (skip intro)
         showStep(1);
@@ -425,7 +437,9 @@ fieldset>label>input {
                 'Szukam absurdalnych przykładów dla urozmaicenia pisma...',
                 'Sprawdzam co w temacie ma do powiedzenia NIK...',
                 'Czytam decyzję NSA z 2018 roku...',
-                'Patrzę na możliwe rozwiązania...'
+                'Patrzę na możliwe rozwiązania...',
+                'Sprawdzam statystyki drogowe...',
+                'Weryfikuję najczęstsze zgłoszenia...'
             ].sort(() => Math.random() - 0.5);
             
             let countdown = 40;
@@ -512,6 +526,8 @@ fieldset>label>input {
                     }
                 }
             }
+
+            document.querySelector("section#step-5>h1").innerHTML='Wygenerowane pismo';
 
             // Show and populate email links after successful generation
             populateEmailLinks();
