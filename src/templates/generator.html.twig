@@ -149,7 +149,6 @@ fieldset>label>input {
     </nav>
   </section>
 
-
   <section id="step-5">
     <h1>Wygenerowane pismo</h1>
     <div class="status" id="status">Gotowy do generowania</div>
@@ -158,7 +157,7 @@ fieldset>label>input {
         <a class="button cta" id='mailtoButton' href="#" style="display: none;">Wyślij przez domyślny klient e-mail</a>
         <a class="button cta" id='gmailButton' href="#" target="_blank" style="display: none;">Wyślij przez GMail</a>
         <br />
-        <a class="button" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</button>
+        <a class="button" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</a>
     </nav>
   </section>
 </div>
@@ -534,13 +533,25 @@ fieldset>label>input {
     function populateEmailLinks() {
         const selectedTarget = document.querySelector('input[name="target"]:checked');
         const recipient = selectedTarget?.dataset?.recipient;
-        const content = document.getElementById('output').textContent;
+        let content = document.getElementById('output').textContent;
 
         if (!recipient || !content) {
             return;
         }
 
-        const subject = 'Pismo w sprawie parkowania';
+        let subject = 'Pismo w sprawie parkowania';
+
+        // Check if content starts with "Temat: " and extract subject
+        if (content.startsWith('Temat: ')) {
+            const lines = content.split('\n');
+            const firstLine = lines[0];
+
+            // Extract subject from the first line (remove "Temat: " prefix)
+            subject = firstLine.substring(7); // "Temat: ".length = 7
+
+            // Remove the first line from content
+            content = lines.slice(1).join('\n').trim();
+        }
 
         // Populate mailto link
         const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
