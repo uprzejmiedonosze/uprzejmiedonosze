@@ -79,7 +79,6 @@ fieldset>label>input {
     #generator>section>div,
     #generator>section>h1 { text-align: center; }
     #generator>section>nav { margin-top: 1em; border-top: 1px solid #e7e7e7; padding-top: 1em; text-align: center; }
-    #generator>section>nav>button,
     #generator>section>nav>a { width: 85%; margin-top: 0.25em; margin-bottom: 0.25em; }
 
     #generator>section>div#output { text-align: left; font-family: 'Red Hat Display'; }
@@ -96,7 +95,7 @@ fieldset>label>input {
 
 <div id='generator' class='rd25'>
   <header>
-    <a data-action="prev">&lt; Wróc</a>
+    <a data-action="prev">&lt; Wróć</a>
     <span></span>
   </header>
 
@@ -112,7 +111,7 @@ fieldset>label>input {
     <p>Po fazie zamkniętych testów zostanie udostępnione wszystkim użytkownikom Uprzejmie Donoszę.</p>
     {% endif %}
     <nav>
-        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
+        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
     </nav>
   </section>
 
@@ -122,7 +121,7 @@ fieldset>label>input {
     <fieldset id="fs-topics">
     </fieldset>
     <nav>
-        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>Dalej</button>
+        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
     </nav>
   </section>
 
@@ -132,7 +131,7 @@ fieldset>label>input {
     <fieldset id='fs-types'>
     </fieldset>
     <nav>
-        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>dalej</button>
+        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
     </nav>
   </section>
   <section id="step-3">
@@ -140,7 +139,7 @@ fieldset>label>input {
     <fieldset id='fs-targets'>
     </fieldset>
     <nav>
-        <button class="button" type="button" data-action="next" {% if not isPatron %}disabled{% endif %}>dalej</button>
+        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" type="button" data-action="next">Dalej</a>
     </nav>
   </section>
 
@@ -150,9 +149,9 @@ fieldset>label>input {
     </fieldset>
     <nav>
         {% if isPatron %}
-        <button data-action="generate" class="button cta">generuj pismo</button>
+        <a href='#' data-action="generate" class="button cta">Generuj pismo</a>
         {% else %}
-        <button class="button disabled">generuj pismo</button>
+        <a href='#' class="button cta disabled">Generuj pismo</a>
         {% endif %}
     </nav>
   </section>
@@ -288,7 +287,9 @@ fieldset>label>input {
 
             // Add event listeners for navigation buttons
             document.addEventListener('click', (e) => {
-                if (e.target.dataset.action === 'next') {
+                if (e.target.classList.contains('disabled')) {
+                  return false;
+                } else if (e.target.dataset.action === 'next') {
                     nextStep();
                 } else if (e.target.dataset.action === 'prev') {
                     prevStep();
@@ -361,7 +362,7 @@ fieldset>label>input {
         const selectedTarget = document.querySelector('input[name="target"]:checked');
         const selectedTargetValue = selectedTarget?.value;
         const selectedTargetRecipient = selectedTarget?.dataset?.recipient;
-        const actionButton = document.querySelector('#generator>section#step-3>nav>button');
+        const actionButton = document.querySelector('#generator>section#step-3>nav>a');
 
         if (selectedTargetRecipient) {    // we know who is the recipient
           actionButton.innerHTML = 'Generuj';
