@@ -1,173 +1,90 @@
 {% set leftButton = '' %}
 {% set rightButton = '' %}
 
+{% set redesignClass = 'rd25' %}
 {% set title = 'Generator' %}
-{% set shortTitle = 'Generator' %}
-{% set description = 'Generator' %}
-{% set mainClass = 'how' %}
+{% set shortTitle = 'Generator Uprzejmych Pism' %}
+{% set description = 'Wkurza Cię pato parkowanie? Przekaż swoją frustrację i napisz mail do decydentów korzystając z naszego generatora.' %}
+{% set mainClass = 'generator' %}
 
 {% extends "base.html.twig" %}
 {% block footer %}
 {% endblock %}
 {% block main %}
 
-<style>
-#generator>section>fieldset { margin-top: 0.5em; }
-fieldset>label {
- display: flex;
- align-items: center;
- border: 1px solid #eee;
- margin-bottom: 1em;
- padding: 0.5em;
- border-radius: 0.75em;
-}
-fieldset>label>input {
- flex-shrink: 0;
- margin: 0 8px 0 0;
- align-self: center;
- display: flex !important;
- width: 1em;
-}
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .topics-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-    .topic-desc {
-        font-size: 0.85em;
-        color: #666;
-        margin-top: 2px;
-    }
-    input[type="text"], 
-    select, 
-    textarea {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 16px;
-    }
-    #output {
-        margin-top: 20px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        min-height: 200px;
-        background-color: white;
-        white-space: pre-wrap;
-        font-family: 'Courier New', Courier, monospace;
-    }
-    .status {
-        margin-top: 10px;
-        font-style: italic;
-        color: #7f8c8d;
-    }
-    #generator>section {
-        display: none;
-    }
-    #generator>section.active {
-        display: block !important;
-    }
-    #generator>header { display: flex; align-items: center; min-height: 2em; }
-    #generator>header>a { display: none; cursor: pointer; }
-    #generator>header>span { position: absolute; left: 50%; transform: translateX(-50%); }
-    /* these are unlike rest of website */
-    #generator>section>div,
-    #generator>section>h1 { text-align: center; }
-    #generator>section>nav { margin-top: 1em; border-top: 1px solid #e7e7e7; padding-top: 1em; text-align: center; }
-    #generator>section>nav>a { width: 85%; margin-top: 0.25em; margin-bottom: 0.25em; }
+<header>
+  <a data-action="prev">&lt; Wróć</a>
+  <span></span>
+</header>
 
-    #generator>section>div#output { text-align: left; font-family: 'Red Hat Display'; }
+<section id="step-0" class="active">
+  <h1>Uprzejmy generator pism</h1>
+  {% if isPatron %}
+  <h4>Narzędzie jest w fazie testowej</h4>
+  <p>Nie wysyłaj jeszcze wygenerowanych pism. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
+  Pamiętaj, że generowanie każdego wniosku kosztuje (od kilku do kilkudziesięciu groszy, w zależności od ustawień, które tuninguję).
+  Staraj się nie przekroczyć 10 prób.</p>
+  {% else %}
+  <h4>Narzędzie jest w fazie testowej dostępnej tylko dla Patronów i Patronek</h4>
+  <p>Po fazie zamkniętych testów zostanie udostępnione wszystkim użytkownikom Uprzejmie Donoszę.</p>
+  {% endif %}
+  <nav>
+      <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
+  </nav>
+</section>
 
-    #gmailButton img {
-        width: 1.2em;
-        height: 1.2em;
-        margin-right: 0.5em;
-        vertical-align: middle;
-    }
+<section id="step-1">
+  <h1>Co Cię najbardziej wkurza w pato parkowaniu?</h1>
+  <div id="topicError">Wybierz do 3 opcji.</div>
+  <fieldset id="fs-topics">
+  </fieldset>
+  <nav>
+      <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
+  </nav>
+</section>
 
-</style>
+<section id="step-2">
+  <h1>Wybierz charakter pisma</h1>
+  <p>Jakiego tonu chcesz użyć w swojej wiadomości?</p>
+  <fieldset id='fs-types'>
+  </fieldset>
+  <nav>
+      <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
+  </nav>
+</section>
+<section id="step-3">
+  <h1>wybierz adresata</h1>
+  <fieldset id='fs-targets'>
+  </fieldset>
+  <nav>
+      <a href='#' class="button {% if not isPatron %}disabled{% endif %}" type="button" data-action="next">Dalej</a>
+  </nav>
+</section>
 
+<section id="step-4">
+  <h1>wybierz adresata</h1>
+  <fieldset id='fs-recipients'>
+  </fieldset>
+  <nav>
+      {% if isPatron %}
+      <a href='#' data-action="generate" class="button cta">Generuj pismo</a>
+      {% else %}
+      <a href='#' class="button cta disabled">Generuj pismo</a>
+      {% endif %}
+  </nav>
+</section>
 
-<div id='generator' class='rd25'>
-  <header>
-    <a data-action="prev">&lt; Wróć</a>
-    <span></span>
-  </header>
-
-  <section id="step-0" class="active">
-    <h1>Uprzejmy generator pism</h1>
-    {% if isPatron %}
-    <h4>Narzędzie jest w fazie testowej</h4>
-    <p>Nie wysyłaj jeszcze wygenerowanych pism. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
-    Pamiętaj, że generowanie każdego wniosku kosztuje (od kilku do kilkudziesięciu groszy, w zależności od ustawień, które tuninguję).
-    Staraj się nie przekroczyć 10 prób.</p>
-    {% else %}
-    <h4>Narzędzie jest w fazie testowej dostępnej tylko dla Patronów i Patronek</h4>
-    <p>Po fazie zamkniętych testów zostanie udostępnione wszystkim użytkownikom Uprzejmie Donoszę.</p>
-    {% endif %}
-    <nav>
-        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
-    </nav>
-  </section>
-
-  <section id="step-1">
-    <h1>Co Cię najbardziej wkurza w pato parkowaniu?</h1>
-    <div id="topicError">Wybierz do 3 opcji.</div>
-    <fieldset id="fs-topics">
-    </fieldset>
-    <nav>
-        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
-    </nav>
-  </section>
-
-  <section id="step-2">
-    <h1>Wybierz charakter pisma</h1>
-    <p>Jakiego tonu chcesz użyć w swojej wiadomości?</p>
-    <fieldset id='fs-types'>
-    </fieldset>
-    <nav>
-        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
-    </nav>
-  </section>
-  <section id="step-3">
-    <h1>wybierz adresata</h1>
-    <fieldset id='fs-targets'>
-    </fieldset>
-    <nav>
-        <a href='#' class="button {% if not isPatron %}disabled{% endif %}" type="button" data-action="next">Dalej</a>
-    </nav>
-  </section>
-
-  <section id="step-4">
-    <h1>wybierz adresata</h1>
-    <fieldset id='fs-recipients'>
-    </fieldset>
-    <nav>
-        {% if isPatron %}
-        <a href='#' data-action="generate" class="button cta">Generuj pismo</a>
-        {% else %}
-        <a href='#' class="button cta disabled">Generuj pismo</a>
-        {% endif %}
-    </nav>
-  </section>
-
-  <section id="step-5">
-    <h1>Generowanie pisma</h1>
-    <div class="status" id="status">Gotowy do generowania</div>
-    <div id="output"></div>
-    <nav>
-        <a class="button cta" id='mailtoButton' href="#" style="display: none;">Wyślij przez domyślny klient e-mail</a>
-        <a class="button cta" id='gmailButton' href="#" target="_blank" style="display: none;"><img src="/img/gmail.png" alt='' />Wyślij przez GMail</a>
-        <br />
-        <a class="button" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</a>
-    </nav>
-  </section>
-</div>
+<section id="step-5">
+  <h1>Generowanie pisma</h1>
+  <div class="status" id="status">Gotowy do generowania</div>
+  <div id="output"></div>
+  <nav>
+      <a class="button cta" id='mailtoButton' href="#" style="display: none;">Wyślij przez domyślny klient e-mail</a>
+      <a class="button cta" id='gmailButton' href="#" target="_blank" style="display: none;"><img src="/img/gmail.png" alt='' />Wyślij przez GMail</a>
+      <br />
+      <a class="button" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</a>
+  </nav>
+</section>
 
 
 
@@ -177,10 +94,10 @@ fieldset>label>input {
     let formTypesData = {};
     let targetsData = {};
     let currentStep = 0;
-    const totalSteps = document.querySelectorAll("#generator>section").length;
+    const totalSteps = document.querySelectorAll(".generator>section").length;
 
     function showStep(stepNumber) {
-        document.querySelectorAll('#generator>section').forEach(section => {
+        document.querySelectorAll('.generator>section').forEach(section => {
             section.classList.remove('active');
         });
 
@@ -189,13 +106,13 @@ fieldset>label>input {
             currentSection.classList.add('active');
         }
 
-        document.querySelector('#generator>header>span').textContent = `Krok ${stepNumber + 1} z ${totalSteps}`;
+        document.querySelector('.generator>header>span').textContent = `Krok ${stepNumber + 1} z ${totalSteps}`;
         if (stepNumber+1==totalSteps) {
-          document.querySelector('#generator>header>a').style.display='none';
+          document.querySelector('.generator>header>a').style.display='none';
         } else if (stepNumber>0) {
-          document.querySelector('#generator>header>a').style.display='block';
+          document.querySelector('.generator>header>a').style.display='block';
         } else {
-          document.querySelector('#generator>header>a').style.display='none';
+          document.querySelector('.generator>header>a').style.display='none';
         }
 
         currentStep = stepNumber;
@@ -362,7 +279,7 @@ fieldset>label>input {
         const selectedTarget = document.querySelector('input[name="target"]:checked');
         const selectedTargetValue = selectedTarget?.value;
         const selectedTargetRecipient = selectedTarget?.dataset?.recipient;
-        const actionButton = document.querySelector('#generator>section#step-3>nav>a');
+        const actionButton = document.querySelector('.generator>section#step-3>nav>a');
 
         if (selectedTargetRecipient) {    // we know who is the recipient
           actionButton.innerHTML = 'Generuj';
