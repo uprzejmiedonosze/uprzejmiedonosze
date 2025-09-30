@@ -1,36 +1,67 @@
 .generator {
-    header { display: flex; align-items: center; min-height: 2em; }
-    header>a { display: none; cursor: pointer; }
-    header>span { position: absolute; left: 50%; transform: translateX(-50%); }
+    header {
+        display: flex;
+        align-items: center;
+        min-height: 2em;
+    }
+
+    header>a {
+        display: none;
+        cursor: pointer;
+    }
+
+    header>span {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
     section {
         display: none;
     }
+
     section.active {
         display: block !important;
     }
 
-    section>fieldset { margin-top: 0.5em; }
-    section>fieldset>label {
-     display: flex;
-     align-items: center;
-     border: 1px solid #eee;
-     margin-bottom: 1em;
-     padding: 0.5em;
-     border-radius: 0.75em;
+    section>fieldset {
+        margin-top: 0.5em;
     }
+
+    section>fieldset>label {
+        display: flex;
+        align-items: center;
+        border: 1px solid #eee;
+        margin-bottom: 1em;
+        padding: 0.5em;
+        border-radius: 0.75em;
+    }
+
     section>fieldset>label>input {
-     flex-shrink: 0;
-     margin: 0 8px 0 0;
-     align-self: center;
-     display: flex !important;
-     width: 1em;
+        flex-shrink: 0;
+        margin: 0 8px 0 0;
+        align-self: center;
+        display: flex !important;
+        width: 1em;
     }
 
     section>div,
-    section>h1 { text-align: center; }
-    section>nav { margin-top: 1em; border-top: 1px solid #e7e7e7; padding-top: 1em; text-align: center; }
-    section>nav>a { width: 85%; margin-top: 0.25em; margin-bottom: 0.25em; }
+    section>h1 {
+        text-align: center;
+    }
+
+    section>nav {
+        margin-top: 1em;
+        border-top: 1px solid #e7e7e7;
+        padding-top: 1em;
+        text-align: center;
+    }
+
+    section>nav>a {
+        width: 85%;
+        margin-top: 0.25em;
+        margin-bottom: 0.25em;
+    }
 
     section>div.status {
         margin-top: 10px;
@@ -39,15 +70,15 @@
     }
 
     section>div#output {
-      text-align: left;
-      font-family: 'Red Hat Display';
-      margin-top: 20px;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      min-height: 200px;
-      background-color: white;
-      white-space: pre-wrap;
+        text-align: left;
+        font-family: 'Red Hat Display';
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-height: 200px;
+        background-color: white;
+        white-space: pre-wrap;
     }
 
     #gmailButton>img {
