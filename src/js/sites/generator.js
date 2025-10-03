@@ -29,7 +29,7 @@ function showStep(stepNumber) {
         if (stepNumberSpan) {
             stepNumberSpan.style.display = 'none';
         }
-        if ([1, 2, 3, 4, 5].includes(stepNumber)) {
+        if ([1, 2, 3, 4].includes(stepNumber)) {
             header.style.display = 'flex';
             if (stepNumberSpan) {
                 stepNumberSpan.style.display = 'inline';
