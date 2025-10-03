@@ -168,9 +168,9 @@ EOD
 
 
 $FORMS = [
-    "email" => "krótki, dosadny email",
-    "complaint" => "formalną, koncentrującą się na opisie problemu skargę",
-    "proposal" => "formalny wniosek, zawierający propozycje rozwiązań prawnych"
+    "email" => "krótki, dosadny email opisujący problem",
+    "complaint" => "formalna skarga, koncentrującą się na problemie",
+    "proposal" => "formalny wniosek, zawierający także propozycje rozwiązań"
 ];
 
 $TARGETS = [
