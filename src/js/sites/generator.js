@@ -284,14 +284,16 @@ async function generate() {
 
         // Add time fillers for the countdown
         const timeFillers = [
-            'Rozpoczynam generowanie...',
+            'Analizuję doświadczenia użytkowników Uprzejmie Donoszę...',
+            'Czytam decyzję NSA z 2018 roku...',
             'Czytam Miejską Agendę Parkingową...',
             'Czytam Przepisy o Ruchu Drogowym...',
-            'Szukam absurdalnych przykładów dla urozmaicenia pisma...',
-            'Sprawdzam co w temacie ma do powiedzenia NIK...',
-            'Czytam decyzję NSA z 2018 roku...',
+            'Czytam wyroki sądów...',
+            'Oglądam filmy Konfitury...',
             'Patrzę na możliwe rozwiązania...',
-            'Sprawdzam statystyki drogowe...',
+            'Sprawdzam co w temacie ma do powiedzenia NIK...',
+            'Sprawdzam statystyki wypadków drogowych...',
+            'Szukam absurdalnych przykładów dla urozmaicenia pisma...',
             'Weryfikuję najczęstsze zgłoszenia...'
         ].sort(() => Math.random() - 0.5);
 
