@@ -268,7 +268,7 @@ async function generate() {
     const target = document.querySelector('input[name="target"]:checked')?.value;
 
     // Clear previous output and move to results step
-    output.textContent = '';
+    output.textContent = targetsData[target].formal + "\n\n"
     showStep(5);
 
     try {
