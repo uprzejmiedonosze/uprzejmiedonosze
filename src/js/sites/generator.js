@@ -204,7 +204,7 @@ const renderTargets = () => {
     container.innerHTML = availableTargets.map(([id, target]) => `
             <label>
               <input type="radio" name="target" data-recipient="${target.recipient || ''}" onchange="window.checkRecipient()" value="${id}">
-              ${id}
+              ${target.title}
             </label>
         `).join('');
 
