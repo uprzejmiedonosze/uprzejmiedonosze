@@ -192,21 +192,21 @@ $TARGETS = [
         "formal" => "Szanowny Pan\ndr hab. Marcin Wiącek\nRzecznik Praw Obywatelskich\nal. Solidarności 77\n00-090 Warszawa",
         "recipient" => "biurorzecznika@brpo.gov.pl"
     ],
-    "Posłanka/Poseł" => [
-        "title" => "Posła/Posłanki",
-        "forms" => ["email", "complaint", "proposal"],
-        "formal" => "szanowny pan/szanowna pani\n____ _____\nposeł/posłanka na sejm\nkancelaria sejmu\nul. wiejska 4/6/8\n00-902 warszawa"
-    ],
-    #"Członek_INF" => [
-    #    "title" => "Członka Sejmowej Komisji Infrastruktury",
+    #"Posłanka/Poseł" => [
+    #    "title" => "Posła/Posłanki",
     #    "forms" => ["email", "complaint", "proposal"],
     #    "formal" => "szanowny pan/szanowna pani\n____ _____\nposeł/posłanka na sejm\nkancelaria sejmu\nul. wiejska 4/6/8\n00-902 warszawa"
     #],
-    #"Komisja_PET" => [
-    #    "title" => "Parlamentarnej Komisji Wniosków i Petycji",
-    #    "forms" => ["proposal"],
-    #    "formal" => "Parlamentarna Komisja Wniosków i Petycji\nSejm Rzeczpospolitej Polskiej\nul. Wiejska 4/6/8\n00-902 Warszawa"
-    #]#,
+    "Członek_INF" => [
+        "title" => "Członka Sejmowej Komisji Infrastruktury",
+        "forms" => ["email", "complaint", "proposal"],
+        "formal" => "szanowny pan/szanowna pani\n____ _____\nposeł/posłanka na sejm\nkancelaria sejmu\nul. wiejska 4/6/8\n00-902 warszawa"
+    ],
+    "Komisja_PET" => [
+        "title" => "Parlamentarnej Komisji Wniosków i Petycji",
+        "forms" => ["proposal"],
+        "formal" => "Parlamentarna Komisja Wniosków i Petycji\nSejm Rzeczpospolitej Polskiej\nul. Wiejska 4/6/8\n00-902 Warszawa"
+    ]#,
     #"Prezydent(ka) miasta" => [
     #    "title" => "Prezydenta/Prezydentki miasta",
     #    "forms" => ["email", "complaint"],
