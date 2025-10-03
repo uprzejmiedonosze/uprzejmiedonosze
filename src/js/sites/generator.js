@@ -15,7 +15,9 @@ function showStep(stepNumber) {
         currentSection.classList.add('active');
     }
 
-    document.querySelector('.generator>header>span').textContent = `Krok ${stepNumber + 1} z ${totalSteps}`;
+    if (stepNumber >= 1)
+        document.querySelector('.generator>header>span').textContent = `Krok ${stepNumber} z ${totalSteps - 1}`;
+    else document.querySelector('.generator>header>span').textContent = ''
     if (stepNumber + 1 == totalSteps) {
         document.querySelector('.generator>header>a').style.display = 'none';
     } else if (stepNumber > 0) {
@@ -218,26 +220,29 @@ const checkRecipient = () => {
 
 window.checkRecipient = checkRecipient;
 
-function setButtonState(step, enable) {
-    const buttons = document.querySelectorAll(`#step-${step} a.button`);
+function setButtonState(step, enable, text) {
+    const button = document.querySelector(`#step-${step} a.button`);
+    if (text && button)
+        button.text = text
     if (enable)
-        return buttons.removeClass('disabled')
-    buttons.addClass('disabled')
+        return button?.classList.remove('disabled')
+    button?.classList.add('disabled')
 }
 
 // Validate that 1-3 topics are selected
 const validateTopics = () => {
     const selectedTopics = document.querySelectorAll('fieldset#fs-topics input[type="checkbox"]:checked');
-    const errorElement = document.getElementById('topicError');
 
-    if (selectedTopics.length === 0 || selectedTopics.length > 3) {
-        errorElement.style.color = 'red';
-        setButtonState(1, false)
+    if (selectedTopics.length === 0) {
+        setButtonState(1, false, 'Wybierz opcję')
+        return false;
+    }
+        if (selectedTopics.length > 3) {
+        setButtonState(1, false, 'Wybierz do 3 opcji')
         return false;
     }
 
-    errorElement.style.color = '';
-    setButtonState(1, true)
+    setButtonState(1, true, 'Dalej')
     return true;
 }
 
