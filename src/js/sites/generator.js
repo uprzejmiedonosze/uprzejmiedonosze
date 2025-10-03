@@ -405,8 +405,11 @@ async function generate() {
 
                     if (data.content && output) {
                         output.textContent += data.content;
-                        // Auto-scroll to bottom
-                        output.scrollTop = output.scrollHeight;
+                        // Auto-scroll page to bottom
+                        window.scrollTo({
+                            top: Math.max(document.body.scrollHeight, document.documentElement.scrollHeight),
+                            behavior: 'smooth'
+                        });
                     }
                 } catch (e) {
                     console.error('Error parsing event:', e);
