@@ -97,14 +97,14 @@ function restartWizard() {
     const stepHeader = document.querySelector("section#step-5>h1");
 
     if (outputElement) outputElement.textContent = '';
-    if (statusElement) statusElement.textContent = 'Gotowy do generowania';
+    if (statusElement) statusElement.textContent = 'Gotowy do pisania';
 
     if (mailtoButton) {
         mailtoButton.href = '#';
         mailtoButton.style.display = 'none';
     }
 
-    if (stepHeader) stepHeader.innerHTML = 'Generowanie pisma';
+    if (stepHeader) stepHeader.innerHTML = 'Tworzenie pisma';
 
     // Go back to step 1 (skip intro)
     showStep(1);
@@ -373,7 +373,7 @@ async function generate() {
             const { done, value } = await reader.read();
 
             if (done) {
-                if (status) status.textContent = 'Zakończono generowanie';
+                if (status) status.textContent = 'Gotowe do wysłania';
                 break;
             }
 
@@ -392,7 +392,7 @@ async function generate() {
 
                 // Check for done signal
                 if (eventData === '[DONE]') {
-                    if (status) status.textContent = 'Zakończono generowanie';
+                    if (status) status.textContent = 'Gotowe do wysłania';
                     continue;
                 }
 
@@ -418,7 +418,7 @@ async function generate() {
         }
 
         const stepHeader = /** @type {HTMLElement} */ (document.querySelector("section#step-5>h1"));
-        if (stepHeader) stepHeader.innerHTML = 'Wygenerowane pismo';
+        if (stepHeader) stepHeader.innerHTML = 'Twoje pismo';
 
         // Show and populate email links after successful generation
         populateEmailLinks();

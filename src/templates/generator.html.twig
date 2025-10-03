@@ -2,9 +2,9 @@
 {% set rightButton = '' %}
 
 {% set redesignClass = 'rd25' %}
-{% set title = 'Generator' %}
-{% set shortTitle = 'Generator Uprzejmych Pism' %}
-{% set description = 'Wkurza Cię pato parkowanie? Przekaż swoją frustrację i napisz mail do decydentów korzystając z naszego generatora.' %}
+{% set title = 'Kreator skarg i wniosków' %}
+{% set shortTitle = 'Kreator skarg i wniosków' %}
+{% set description = 'Wkurza Cię pato parkowanie? Przekaż swoją frustrację i napisz mail do decydentów korzystając z naszego narzędzia.' %}
 {% set mainClass = 'generator' %}
 
 {% extends "base.html.twig" %}
@@ -19,9 +19,9 @@
 </header>
 
 <section id="step-0" class="active">
-  <h1>Uprzejmy generator pism</h1>
+  <h1>Napisz z nami pismo do polityka</h1>
   <h4>Narzędzie jest w fazie testowej</h4>
-  <p>Nie wysyłaj jeszcze wygenerowanych pism. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
+  <p>Nie wysyłaj jeszcze pism napisanych przez to narzędzie. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
   Pamiętaj, że generowanie każdego wniosku kosztuje (od kilku do kilkudziesięciu groszy, w zależności od ustawień, które tuninguję).
   Staraj się nie przekroczyć 10 prób.</p>
   <nav>
@@ -56,17 +56,17 @@
 </section>
 
 <section id="step-4">
-  <h1>wybierz adresata</h1>
+  <h1>Wybierz adresata</h1>
   <fieldset id='fs-recipients'>
   </fieldset>
   <nav>
-      <a href='#' data-action="generate" class="button cta">Generuj pismo</a>
+      <a href='#' data-action="generate" class="button cta">Dalej</a>
   </nav>
 </section>
 
 <section id="step-5">
-  <h1>Generowanie pisma</h1>
-  <div class="status" id="status">Gotowy do generowania</div>
+  <h1>Tworzenie pisma</h1>
+  <div class="status" id="status">Gotowy do pisania</div>
   <div id="output"></div>
   <nav>
       <a class="button cta" id='mailtoButton' href="#" target="_blank" rel="external" style="display: none;">Wyślij przez domyślny klient e-mail</a>
@@ -74,7 +74,7 @@
         class="button light small">Skopiuj tekst</a>
 
       <br />
-      <a class="button small" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</a>
+      <a class="button small" id='generateButton' href="#" data-action="restart">Napisz kolejne pismo</a>
   </nav>
 </section>
 
