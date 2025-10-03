@@ -1,13 +1,8 @@
 .generator {
   header {
-    display: flex;
+    display: none;
     align-items: center;
     min-height: 2em;
-
-    &>a {
-      display: none;
-      cursor: pointer;
-    }
 
     &>span {
       position: absolute;

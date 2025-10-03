@@ -5,43 +5,49 @@ let targetsData = {};
 let currentStep = 0;
 const totalSteps = document.querySelectorAll(".generator>section").length;
 
+/**
+ * @param {number} stepNumber
+ */
 function showStep(stepNumber) {
     document.querySelectorAll('.generator>section').forEach(section => {
         section.classList.remove('active');
     });
 
     const currentSection = document.getElementById(`step-${stepNumber}`);
-    if (currentSection) {
-        currentSection.classList.add('active');
+    if (currentSection)
+        currentSection.classList.add('active')
+
+
+    const stepNumberSpan = /** @type {HTMLSpanElement} */ (document.querySelector('.generator>header>span'))
+    if (stepNumberSpan) {
+        stepNumberSpan.textContent = `Krok ${stepNumber} z ${totalSteps - 1}`;
     }
 
-    if (stepNumber >= 1)
-        document.querySelector('.generator>header>span').textContent = `Krok ${stepNumber} z ${totalSteps - 1}`;
-    else document.querySelector('.generator>header>span').textContent = ''
-    if (stepNumber + 1 == totalSteps) {
-        document.querySelector('.generator>header>a').style.display = 'none';
-    } else if (stepNumber > 0) {
-        document.querySelector('.generator>header>a').style.display = 'block';
-    } else {
-        document.querySelector('.generator>header>a').style.display = 'none';
+    const header = /** @type {HTMLElement} */ (document.querySelector('.generator>header'))
+    if (header) {
+        header.style.display = 'none';
+        if (stepNumberSpan) {
+            stepNumberSpan.style.display = 'none';
+        }
+        if ([1, 2, 3, 4, 5].includes(stepNumber)) {
+            header.style.display = 'flex';
+            if (stepNumberSpan) {
+                stepNumberSpan.style.display = 'inline';
+            }
+        }
     }
-
-    currentStep = stepNumber;
+    currentStep = stepNumber
 }
 
 function prevStep() {
-    if (currentStep > 0) {
-        showStep(currentStep - 1);
-    }
+    if (currentStep > 0)
+        showStep(currentStep - 1)
 }
 
 function nextStep() {
-    if (currentStep < totalSteps - 1) {
-        // Validate current step before proceeding
-        if (validateCurrentStep()) {
-            showStep(currentStep + 1);
-        }
-    }
+    if (currentStep < totalSteps - 1)
+        if (validateCurrentStep())
+            showStep(currentStep + 1)
 }
 
 function validateCurrentStep() {
@@ -60,8 +66,10 @@ function validateCurrentStep() {
 }
 
 function validateForm() {
-    const formType = document.querySelector('input[name="formType"]:checked')?.value;
-    const target = document.querySelector('input[name="target"]:checked')?.value;
+    const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
+    const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
+    const formType = formTypeElement?.value;
+    const target = targetElement?.value;
 
     if (!formType) {
         alert('Proszę wybrać typ pisma');
@@ -80,16 +88,23 @@ function validateForm() {
 
 function restartWizard() {
     // Reset form
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-    document.querySelectorAll('input[name="formType"]').forEach(radio => radio.checked = false);
-    document.querySelectorAll('input[name="target"]').forEach(radio => radio.checked = false);
-    document.getElementById('output').textContent = '';
-    document.getElementById('status').textContent = 'Gotowy do generowania';
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => /** @type {HTMLInputElement} */(cb).checked = false);
+    document.querySelectorAll('input[name="formType"]').forEach(radio => /** @type {HTMLInputElement} */(radio).checked = false);
+    document.querySelectorAll('input[name="target"]').forEach(radio => /** @type {HTMLInputElement} */(radio).checked = false);
+    const outputElement = document.getElementById('output');
+    const statusElement = document.getElementById('status');
+    const mailtoButton = /** @type {HTMLAnchorElement} */ (document.getElementById('mailtoButton'));
+    const stepHeader = document.querySelector("section#step-5>h1");
 
-    document.getElementById('mailtoButton').href = '#';
-    document.getElementById('mailtoButton').style.display = 'none';
+    if (outputElement) outputElement.textContent = '';
+    if (statusElement) statusElement.textContent = 'Gotowy do generowania';
 
-    document.querySelector("section#step-5>h1").innerHTML = 'Generowanie pisma';
+    if (mailtoButton) {
+        mailtoButton.href = '#';
+        mailtoButton.style.display = 'none';
+    }
+
+    if (stepHeader) stepHeader.innerHTML = 'Generowanie pisma';
 
     // Go back to step 1 (skip intro)
     showStep(1);
@@ -118,15 +133,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Add event listeners for navigation buttons
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('disabled')) {
+            const target = /** @type {HTMLElement} */ (e.target);
+            if (!target) return;
+
+            if (target.classList.contains('disabled')) {
                 return false;
-            } else if (e.target.dataset.action === 'next') {
+            } else if (target.dataset.action === 'next') {
                 nextStep();
-            } else if (e.target.dataset.action === 'prev') {
+            } else if (target.dataset.action === 'prev') {
                 prevStep();
-            } else if (e.target.dataset.action === 'restart') {
+            } else if (target.dataset.action === 'restart') {
                 restartWizard();
-            } else if (e.target.dataset.action === 'generate') {
+            } else if (target.dataset.action === 'generate') {
                 generate();
             }
         });
@@ -139,6 +157,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Render topics checkboxes
 function renderTopics() {
     const container = document.getElementById('fs-topics');
+    if (!container) return;
+
     container.innerHTML = Object.entries(topicsData).map(([id, topic]) => `
             <label>
               <input type="checkbox" name='topics[]' value="${id}" onchange="window.validateTopics()">
@@ -152,6 +172,7 @@ function renderTopics() {
 // Render form types radio buttons
 function renderFormTypes() {
     const container = document.getElementById('fs-types');
+    if (!container) return;
 
     container.innerHTML = Object.entries(formTypesData).map(([id, data], index) => `
             <label>
@@ -161,10 +182,11 @@ function renderFormTypes() {
         `).join('');
 }
 
-// Render targets based on selected form type
 const renderTargets = () => {
-    const formType = document.querySelector('input[name="formType"]:checked')?.value;
+    const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
+    const formType = formTypeElement?.value;
     const container = document.getElementById('fs-targets');
+    if (!container) return;
 
     container.innerHTML = '';
 
@@ -189,14 +211,16 @@ const renderTargets = () => {
     return true;
 }
 
-window.renderTargets = renderTargets;
+/** @type {any} */ (window).renderTargets = renderTargets;
 
 // check recipient and possible next steps
 const checkRecipient = () => {
-    const selectedTarget = document.querySelector('input[name="target"]:checked');
+    const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
     const selectedTargetValue = selectedTarget?.value;
     const selectedTargetRecipient = selectedTarget?.dataset?.recipient;
-    const actionButton = document.querySelector('.generator>section#step-3>nav>a');
+    const actionButton = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-3>nav>a'));
+
+    if (!actionButton) return true;
 
     if (selectedTargetRecipient) {    // we know who is the recipient
         actionButton.innerHTML = 'Generuj';
@@ -216,12 +240,17 @@ const checkRecipient = () => {
     return true;
 }
 
-window.checkRecipient = checkRecipient;
+/** @type {any} */ (window).checkRecipient = checkRecipient;
 
+/**
+ * @param {number} step
+ * @param {boolean} enable
+ * @param {string} [text]
+ */
 function setButtonState(step, enable, text) {
-    const button = document.querySelector(`#step-${step} a.button`);
+    const button = /** @type {HTMLElement} */ (document.querySelector(`#step-${step} a.button`));
     if (text && button)
-        button.text = text
+        button.textContent = text
     if (enable)
         return button?.classList.remove('disabled')
     button?.classList.add('disabled')
@@ -235,7 +264,7 @@ const validateTopics = () => {
         setButtonState(1, false, 'Wybierz opcję')
         return false;
     }
-        if (selectedTopics.length > 3) {
+    if (selectedTopics.length > 3) {
         setButtonState(1, false, 'Wybierz do 3 opcji')
         return false;
     }
@@ -244,19 +273,19 @@ const validateTopics = () => {
     return true;
 }
 
-window.validateTopics =  validateTopics;
+/** @type {any} */ (window).validateTopics = validateTopics;
 
 // Get selected topic IDs
 function getSelectedTopicIds() {
     return Array.from(document.querySelectorAll('#fs-topics input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
+        .map(checkbox => /** @type {HTMLInputElement} */(checkbox).value);
 }
 
 // Generate button click handler
 async function generate() {
-    const button = document.getElementById('generateButton');
-    const output = document.getElementById('output');
-    const status = document.getElementById('status');
+    const button = /** @type {HTMLButtonElement} */ (document.getElementById('generateButton'));
+    const output = /** @type {HTMLElement} */ (document.getElementById('output'));
+    const status = /** @type {HTMLElement} */ (document.getElementById('status'));
 
     // Validate form
     if (!validateForm()) {
@@ -264,21 +293,25 @@ async function generate() {
     }
 
     const topicIds = getSelectedTopicIds();
-    const formType = document.querySelector('input[name="formType"]:checked')?.value;
-    const target = document.querySelector('input[name="target"]:checked')?.value;
+    const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
+    const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
+    const formType = formTypeElement?.value;
+    const target = targetElement?.value;
 
     // Clear previous output and move to results step
-    output.textContent = targetsData[target].formal + "\n\n"
+    if (output && target) {
+        output.textContent = targetsData[target].formal + "\n\n";
+    }
     showStep(5);
 
     try {
         // Build URL with query parameters
         const params = new URLSearchParams();
         params.append('topics', JSON.stringify(topicIds));
-        params.append('form_type', formType);
-        params.append('target', target);
+        if (formType) params.append('form_type', formType);
+        if (target) params.append('target', target);
 
-        button.classList.add('disabled')
+        if (button) button.classList.add('disabled');
 
         // Add time fillers for the countdown
         const timeFillers = [
@@ -307,7 +340,7 @@ async function generate() {
                 }
                 countdown--;
                 const filler = timeFillers[Math.floor(timeFillers.length * (countdown / 40))];
-                status.textContent = `${filler} (${countdown}s)`;
+                if (status) status.textContent = `${filler} (${countdown}s)`;
             }, 1000);
         };
 
@@ -331,6 +364,7 @@ async function generate() {
         if (countdownInterval) clearInterval(countdownInterval);
 
         // Process the stream as text
+        if (!response.body) throw new Error('No response body');
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
@@ -339,7 +373,7 @@ async function generate() {
             const { done, value } = await reader.read();
 
             if (done) {
-                status.textContent = 'Zakończono generowanie';
+                if (status) status.textContent = 'Zakończono generowanie';
                 break;
             }
 
@@ -358,7 +392,7 @@ async function generate() {
 
                 // Check for done signal
                 if (eventData === '[DONE]') {
-                    status.textContent = 'Zakończono generowanie';
+                    if (status) status.textContent = 'Zakończono generowanie';
                     continue;
                 }
 
@@ -369,7 +403,7 @@ async function generate() {
                         throw new Error(data.error);
                     }
 
-                    if (data.content) {
+                    if (data.content && output) {
                         output.textContent += data.content;
                         // Auto-scroll to bottom
                         output.scrollTop = output.scrollHeight;
@@ -380,40 +414,48 @@ async function generate() {
             }
         }
 
-        document.querySelector("section#step-5>h1").innerHTML = 'Wygenerowane pismo';
+        const stepHeader = /** @type {HTMLElement} */ (document.querySelector("section#step-5>h1"));
+        if (stepHeader) stepHeader.innerHTML = 'Wygenerowane pismo';
 
         // Show and populate email links after successful generation
         populateEmailLinks();
 
     } catch (error) {
         console.error('Error:', error);
-        const parsed = JSON.parse(error.message);
-        if (parsed.error) {
-            status.textContent = `Błąd: ${parsed.error}`;
-        } else {
-            status.textContent = `Błąd: ${error.message}`;
+        try {
+            const parsed = JSON.parse(error.message);
+            if (parsed.error && status) {
+                status.textContent = `Błąd: ${parsed.error}`;
+            } else if (status) {
+                status.textContent = `Błąd: ${error.message}`;
+            }
+        } catch {
+            if (status) status.textContent = `Błąd: ${error.message}`;
         }
     } finally {
-        button.classList.remove('disabled')
+        if (button) button.classList.remove('disabled');
     }
 };
 
-// Function to populate email links with recipient and content
 function populateEmailLinks() {
-    const selectedTarget = document.querySelector('input[name="target"]:checked');
-    const recipient = selectedTarget?.dataset?.recipient;
-    let content = document.getElementById('output').textContent;
+    const mailtoButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('mailtoButton'))
+    if (!mailtoButton)
+        return console.error('Missing mailtoButton')
 
-    if (!recipient || !content) {
-        return;
-    }
+    const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'))
+    const recipient = selectedTarget?.dataset?.recipient;
+    if (!recipient)
+        return console.error('Missing recipient')
+
+    const content = document?.getElementById('output')?.textContent;
+    if (!content)
+        return console.error('Missing content')
 
     const searchForSubject = /Temat: (.*)/.exec(content)
-    const subject = searchForSubject?.pop() || 'Pismo w sprawie przepisów związanych z parkowaniem';
+    const subject = searchForSubject?.pop() || 'Pismo w sprawie przepisów związanych z parkowaniem'
 
-    // Populate mailto link
-    const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
-    document.getElementById('mailtoButton').href = mailtoUrl;
-    document.getElementById('mailtoButton').style.display = 'inline-block';
+    const mailtoUrl = `mailto:${recipient}?bcc=miejska@agendaparkingowa.pl&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`
+    mailtoButton.href = mailtoUrl
+    mailtoButton.style.display = 'inline-block'
 }
 
