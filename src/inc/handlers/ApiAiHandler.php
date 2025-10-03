@@ -60,13 +60,6 @@ class ApiAiHandler extends \AbstractHandler {
         }
 
         $user = $request->getAttribute('user');
-        $isPatron = $user->isFormerPatron() || $user->isPatron() || $user->isAdmin();
-        if (!$isPatron) {
-            return $this->jsonResponse($response, [
-                'error' => 'You must be a patron to use this feature',
-                'missing' => ['patron']
-            ], 403);
-        }
 
         try {
             $topics = (array)$data['topics'];

@@ -20,17 +20,12 @@
 
 <section id="step-0" class="active">
   <h1>Uprzejmy generator pism</h1>
-  {% if isPatron %}
   <h4>Narzędzie jest w fazie testowej</h4>
   <p>Nie wysyłaj jeszcze wygenerowanych pism. Będę zobowiązany za feedback na adres <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.
   Pamiętaj, że generowanie każdego wniosku kosztuje (od kilku do kilkudziesięciu groszy, w zależności od ustawień, które tuninguję).
   Staraj się nie przekroczyć 10 prób.</p>
-  {% else %}
-  <h4>Narzędzie jest w fazie testowej dostępnej tylko dla Patronów i Patronek</h4>
-  <p>Po fazie zamkniętych testów zostanie udostępnione wszystkim użytkownikom Uprzejmie Donoszę.</p>
-  {% endif %}
   <nav>
-      <a href='#' class="button {% if not isPatron %}disabled{% endif %}" data-action="next">Dalej</a>
+      <a href='#' class="button" data-action="next">Dalej</a>
   </nav>
 </section>
 
@@ -65,11 +60,7 @@
   <fieldset id='fs-recipients'>
   </fieldset>
   <nav>
-      {% if isPatron %}
       <a href='#' data-action="generate" class="button cta">Generuj pismo</a>
-      {% else %}
-      <a href='#' class="button cta disabled">Generuj pismo</a>
-      {% endif %}
   </nav>
 </section>
 
