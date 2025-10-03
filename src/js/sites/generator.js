@@ -88,8 +88,6 @@ function restartWizard() {
 
     document.getElementById('mailtoButton').href = '#';
     document.getElementById('mailtoButton').style.display = 'none';
-    document.getElementById('gmailButton').href = '#';
-    document.getElementById('gmailButton').style.display = 'none';
 
     document.querySelector("section#step-5>h1").innerHTML = 'Generowanie pisma';
 
@@ -410,28 +408,12 @@ function populateEmailLinks() {
         return;
     }
 
-    let subject = 'Pismo w sprawie parkowania';
-
-    // Check if content starts with "Temat: " and extract subject
-    if (content.startsWith('Temat: ')) {
-        const lines = content.split('\n');
-        const firstLine = lines[0];
-
-        // Extract subject from the first line (remove "Temat: " prefix)
-        subject = firstLine.substring(7); // "Temat: ".length = 7
-
-        // Remove the first line from content
-        content = lines.slice(1).join('\n').trim();
-    }
+    const searchForSubject = /Temat: (.*)/.exec(content)
+    const subject = searchForSubject?.pop() || 'Pismo w sprawie przepisów związanych z parkowaniem';
 
     // Populate mailto link
     const mailtoUrl = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
     document.getElementById('mailtoButton').href = mailtoUrl;
     document.getElementById('mailtoButton').style.display = 'inline-block';
-
-    // Populate Gmail link
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipient)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`;
-    document.getElementById('gmailButton').href = gmailUrl;
-    document.getElementById('gmailButton').style.display = 'inline-block';
 }
 

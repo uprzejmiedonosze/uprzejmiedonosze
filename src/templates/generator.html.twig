@@ -79,8 +79,10 @@
   <div class="status" id="status">Gotowy do generowania</div>
   <div id="output"></div>
   <nav>
-      <a class="button cta" id='mailtoButton' href="#" style="display: none;">Wyślij przez domyślny klient e-mail</a>
-      <a class="button cta" id='gmailButton' href="#" target="_blank" style="display: none;"><img src="/img/gmail.png" alt='' />Wyślij przez GMail</a>
+      <a class="button cta" id='mailtoButton' href="#" target="_blank" rel="external" style="display: none;">Wyślij przez domyślny klient e-mail</a>
+      <a id="copyBtn" onclick="copyToClipboard('#output')"
+        class="button light small">Skopiuj tekst</a>
+
       <br />
       <a class="button" id='generateButton' href="#" data-action="restart">Generuj kolejne pismo</a>
   </nav>
