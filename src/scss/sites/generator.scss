@@ -1,30 +1,30 @@
 .generator {
-    header {
-        display: flex;
-        align-items: center;
-        min-height: 2em;
+  header {
+    display: flex;
+    align-items: center;
+    min-height: 2em;
 
     &>a {
-        display: none;
-        cursor: pointer;
+      display: none;
+      cursor: pointer;
     }
 
     &>span {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
     }
-    }
+  }
 
-    section {
-        display: none;
+  section {
+    display: none;
 
     &.active {
-        display: block !important;
+      display: block !important;
     }
 
     &>fieldset {
-        margin-top: 0.5em;
+      margin-top: 0.5em;
 
       &>label {
         display: flex;
@@ -46,57 +46,89 @@
 
 
         &>input {
-        flex-shrink: 0;
-        margin: 0 8px 0 0;
-        align-self: center;
-        display: flex !important;
-        width: 1em;
+          flex-shrink: 0;
+          margin: 0 8px 0 0;
+          align-self: center;
+          display: flex !important;
+          width: 1em;
         }
       }
     }
 
     &>div,
     &>h1 {
-        text-align: center;
+      text-align: center;
     }
 
     &>nav {
-        margin-top: 1em;
-        border-top: 1px solid #e7e7e7;
-        padding-top: 1em;
-        text-align: center;
+      margin-top: 1em;
+      border-top: 1px solid #e7e7e7;
+      padding-top: 1em;
+      text-align: center;
 
       &>a {
         width: 85%;
         margin-top: 0.25em;
         margin-bottom: 0.25em;
-    }
+      }
     }
 
 
 
     &>div.status {
-        margin-top: 10px;
-        font-style: italic;
-        color: #7f8c8d;
+      margin-top: 10px;
+      font-style: italic;
+      color: #7f8c8d;
     }
 
-    section>div#output {
-        text-align: left;
-        font-family: 'Red Hat Display';
-        margin-top: 20px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        min-height: 200px;
-        background-color: white;
-        white-space: pre-wrap;
-    }
+    $paper-bg: #fbf6eb;
+    $paper-width: 760px;
+    $paper-padding: 28px 36px;
+    $paper-radius: 8px;
+    $paper-shadow: 0 12px 30px rgba(0,0,0,0.12);
 
-    #gmailButton>img {
-        width: 1.2em;
-        height: 1.2em;
-        margin-right: 0.5em;
-        vertical-align: middle;
+
+    &>div#output {
+      // kartka
+      width: 100%;
+      max-width: $paper-width;
+      padding: $paper-padding;
+      background-color: $paper-bg;
+      border-radius: $paper-radius;
+      box-shadow: $paper-shadow;
+      position: relative;
+      font-size: 18px;
+      color: #222;
+      line-height: 28px;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-align: left;
+      white-space: pre-wrap;
+      margin-top: 20px;
+
+      border: 1px solid rgba(0,0,0,0.04);
+      transform-origin: center;
+      transform: rotate(-0.25deg);
+
+      &::after {
+        content: "";
+        position: absolute;
+        right: -12px;
+        top: 10px;
+        width: 24px;
+        height: calc(100% - 20px);
+        pointer-events: none;
+        background-image: radial-gradient(circle at 6px 6px, rgba(0,0,0,0.03) 0 2px, transparent 3px);
+        opacity: 0.45;
+        transform: rotate(0.5deg);
+      }
     }
+  }
+
+  #gmailButton>img {
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.5em;
+    vertical-align: middle;
+  }
 }
