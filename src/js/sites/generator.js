@@ -139,11 +139,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Render topics checkboxes
 function renderTopics() {
     const container = document.getElementById('fs-topics');
-
     container.innerHTML = Object.entries(topicsData).map(([id, topic]) => `
             <label>
               <input type="checkbox" name='topics[]' value="${id}" onchange="window.validateTopics()">
-              ${topic.title}
+              <div><b>${topic.title}</b>
+              <p>${topic.ext}</p>
+              </div>
             </label>
         `).join('');
 }
