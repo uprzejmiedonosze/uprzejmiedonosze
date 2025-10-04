@@ -21,6 +21,12 @@
       display: block !important;
     }
 
+    #step-5 {
+      &__nav {
+        visibility: hidden;
+      }
+    }
+
     &>fieldset {
       margin-top: 0.5em;
 

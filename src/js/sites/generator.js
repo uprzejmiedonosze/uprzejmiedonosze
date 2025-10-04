@@ -72,14 +72,12 @@ function validateForm() {
     const target = targetElement?.value;
 
     if (!formType) {
-        alert('Proszę wybrać typ pisma');
-        setButtonState(3, false)
+        setButtonState(2, false, 'Wybierz ton pisma')
         return false;
     }
 
     if (!target) {
-        alert('Proszę wybrać adresata');
-        setButtonState(3, true)
+        setButtonState(3, true, 'Wskaż adresata pisma')
         return false;
     }
 
@@ -91,19 +89,19 @@ function restartWizard() {
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => /** @type {HTMLInputElement} */(cb).checked = false);
     document.querySelectorAll('input[name="formType"]').forEach(radio => /** @type {HTMLInputElement} */(radio).checked = false);
     document.querySelectorAll('input[name="target"]').forEach(radio => /** @type {HTMLInputElement} */(radio).checked = false);
-    const outputElement = document.getElementById('output');
-    const statusElement = document.getElementById('status');
     const mailtoButton = /** @type {HTMLAnchorElement} */ (document.getElementById('mailtoButton'));
-    const stepHeader = document.querySelector("section#step-5>h1");
-
+    mailtoButton.href = '#';    
+    
+    const step5nav = /** @type {HTMLElement} */ (document?.getElementById('step-5__nav'))
+    step5nav.style.visibility = 'hidden';
+    
+    const outputElement = document.getElementById('output');
     if (outputElement) outputElement.textContent = '';
+
+    const statusElement = document.getElementById('status');
     if (statusElement) statusElement.textContent = 'Gotowy do pisania';
 
-    if (mailtoButton) {
-        mailtoButton.href = '#';
-        mailtoButton.style.display = 'none';
-    }
-
+    const stepHeader = document.querySelector("section#step-5>h1");
     if (stepHeader) stepHeader.innerHTML = 'Tworzenie pisma';
 
     // Go back to step 1 (skip intro)
@@ -176,7 +174,7 @@ function renderFormTypes() {
 
     container.innerHTML = Object.entries(formTypesData).map(([id, data], index) => `
             <label>
-              <input type="radio" name="formType" value="${id}" onchange="window.renderTargets()" ${index === 0 ? 'checked' : ''}>
+              <input type="radio" name="formType" value="${id}" onchange="window.renderTargets()">
               ${data || id}
             </label>
         `).join('');
@@ -190,10 +188,10 @@ const renderTargets = () => {
 
     container.innerHTML = '';
 
-    if (!formType) {
-        container.innerHTML = '<p>Najpierw wybierz typ pisma</p>';
-        return;
-    }
+    if (!formType)
+        return setButtonState(2, false, 'Wybierz ton pisma');    
+
+    setButtonState(2, true, 'Dalej');
 
     // Filter targets that support the selected form type and have recipient defined
     const availableTargets = Object.entries(targetsData)
@@ -223,7 +221,7 @@ const checkRecipient = () => {
     if (!actionButton) return true;
 
     if (selectedTargetRecipient) {    // we know who is the recipient
-        actionButton.innerHTML = 'Generuj';
+        actionButton.innerHTML = 'Dalej';
         actionButton.dataset.action = 'generate';
         actionButton.disabled = false;
         actionButton.classList.remove('disabled');
@@ -418,7 +416,7 @@ async function generate() {
         }
 
         const stepHeader = /** @type {HTMLElement} */ (document.querySelector("section#step-5>h1"));
-        if (stepHeader) stepHeader.innerHTML = 'Twoje pismo';
+        if (stepHeader) stepHeader.innerHTML = 'Twoje pismo do ' + targetsData[target].title;
 
         // Show and populate email links after successful generation
         populateEmailLinks();
@@ -459,6 +457,8 @@ function populateEmailLinks() {
 
     const mailtoUrl = `mailto:${recipient}?bcc=miejska@agendaparkingowa.pl&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`
     mailtoButton.href = mailtoUrl
-    mailtoButton.style.display = 'inline-block'
+
+    const step5nav = /** @type {HTMLElement} */ (document?.getElementById('step-5__nav'))
+    step5nav.style.visibility = 'visible';
 }
 

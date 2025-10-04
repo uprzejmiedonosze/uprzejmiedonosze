@@ -43,7 +43,7 @@
   <fieldset id='fs-types'>
   </fieldset>
   <nav>
-      <a href='#' class="button" data-action="next">Dalej</a>
+      <a href='#' class="button disabled" data-action="next">Dalej</a>
   </nav>
 </section>
 <section id="step-3">
@@ -68,8 +68,8 @@
   <h1>Tworzenie pisma</h1>
   <div class="status" id="status">Gotowy do pisania</div>
   <div id="output"></div>
-  <nav>
-      <a class="button cta" id='mailtoButton' href="#" target="_blank" rel="external" style="display: none;">Wyślij przez domyślny klient e-mail</a>
+  <nav id="step-5__nav">
+      <a class="button cta" id='mailtoButton' href="#" target="_blank" rel="external">Wyślij przez domyślny klient e-mail</a>
       <a id="copyBtn" onclick="copyToClipboard('#output')"
         class="button light small">Skopiuj tekst</a>
 
