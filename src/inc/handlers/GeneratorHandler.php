@@ -12,4 +12,8 @@ class GeneratorHandler extends AbstractHandler {
     public function generator(Request $request, Response $response): Response {
         return AbstractHandler::renderHtml($request, $response, 'generator');
     }
+
+    public function landing(Request $request, Response $response): Response {
+        return AbstractHandler::renderHtml($request, $response, 'generator-landing');
+    }
 }
