@@ -65,10 +65,8 @@ class ApiAiHandler extends \AbstractHandler {
             $topics = (array)$data['topics'];
             $formType = $data['form_type'];
             $target = $data['target'];
-            $name = $user->data->name;
-            $city = $user->data->address;
 
-            $petition = Petition::withData($topics, $formType, $target, $name, $city);
+            $petition = Petition::withData($topics, $formType, $target, $user);
 
             $systemPrompt = $petition->generateSystemPrompt();
             $contentPrompt = $petition->generateContentPrompt();

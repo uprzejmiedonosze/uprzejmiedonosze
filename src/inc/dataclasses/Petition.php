@@ -7,6 +7,7 @@ require_once(__DIR__ . '/JSONObject.php');
 class Petition extends \JSONObject {
     protected const USE_ARRAY_FLOW = true;
     public string $id;
+    public string $email;
     public array $topics;
     public string $formType;
     public string $target;
@@ -16,6 +17,7 @@ class Petition extends \JSONObject {
     public string $text;
     public string $systemPrompt;
     public string $contentPrompt;
+    public string $sex;
 
     private function __construct() {
     }
@@ -29,19 +31,20 @@ class Petition extends \JSONObject {
     public static function withData(
         array $topics,
         string $formType,
-        string $target,
-        string $name,
-        string $city
+        string $target, 
+        \user\user $user
     ) {
 
         $instance = new self();
 
+        $instance->email = $user->getEmail();
         $instance->id = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(12))), 0, 12);
         $instance->added = date(DT_FORMAT);
         $instance->topics = $topics;
         $instance->formType = $formType;
         $instance->target = $target;
         $instance->status = 'draft';
+        $instance->sex = $user->guessSex()['żeńskiego'];
 
         return $instance;
     }
@@ -97,7 +100,7 @@ Napisz $formText do $targetTitle w sprawie wadliwych przepisów regulujących pa
 
 1. Używaj przykładów i propozycji podanych poniżej. Nie wymyślaj własnych propozycji.
 2. Nie stosuj formatowania markdown albo ikon. Czysty tekst.
-3. Pisz w pierwszej osobie liczby pojedynczej.
+3. Pisz w pierwszej osobie liczby pojedynczej rodzaju {$this->sex}.
 4. Pisz w stylu oficjalnym, ale nie przesadnie formalnym.
 5. Nie pisz adresata w mailu (np. "Szanowny $targetTitle"). Sam go dopiszę.
 6. Napisz tytuł wiadomości w pierszej linijce, w formacie "Temat: ...". Potem pusta linia o treść pisma.
