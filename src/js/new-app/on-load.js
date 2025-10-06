@@ -2,8 +2,6 @@ import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
 import { bindSoftCommentValidation } from "../lib/validation";
 
-import { error } from "../lib/toast";
-
 // Constants for section class names
 const THIRD_IMAGE_SECTION_CLASS = 'thirdImageSection';
 

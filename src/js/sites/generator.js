@@ -1,4 +1,5 @@
-// Global variables
+import { error as errorToast } from "../lib/toast";
+
 let topicsData = [];
 let formTypesData = {};
 let targetsData = {};
@@ -420,16 +421,17 @@ async function generate() {
         populateEmailLinks();
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error(error)
+        
         try {
             const parsed = JSON.parse(error.message);
             if (parsed.error && status) {
-                status.textContent = `Błąd: ${parsed.error}`;
+                errorToast(`Błąd: ${parsed.error}`)
             } else if (status) {
-                status.textContent = `Błąd: ${error.message}`;
+                errorToast(`Błąd: ${error.message}`)
             }
         } catch {
-            if (status) status.textContent = `Błąd: ${error.message}`;
+            if (status) errorToast(`Błąd: ${error.message}`)
         }
     } finally {
         if (button) button.classList.remove('disabled');
