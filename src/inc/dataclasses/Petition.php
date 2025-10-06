@@ -10,8 +10,6 @@ class Petition extends \JSONObject {
     public array $topics;
     public string $formType;
     public string $target;
-    public string $name;
-    public string $city;
     public string $added;
     public float $price;
     public string $status;
@@ -43,8 +41,6 @@ class Petition extends \JSONObject {
         $instance->topics = $topics;
         $instance->formType = $formType;
         $instance->target = $target;
-        $instance->name = $name;
-        $instance->city = $city;
         $instance->status = 'draft';
 
         return $instance;
@@ -105,9 +101,7 @@ Napisz $formText do $targetTitle w sprawie wadliwych przepisów regulujących pa
 4. Pisz w stylu oficjalnym, ale nie przesadnie formalnym.
 5. Nie pisz adresata w mailu (np. "Szanowny $targetTitle"). Sam go dopiszę.
 6. Napisz tytuł wiadomości w pierszej linijce, w formacie "Temat: ...". Potem pusta linia o treść pisma.
-7. Podpisz dokument jako:
-{$this->name}
-{$this->city}
+7. Nie podpisuj tego dokumentu - sam to uzupełnię. Nie pisz także placeholdera typu [mieszkaniec] itp.
 
 # Tematy do uwzględnienia
 

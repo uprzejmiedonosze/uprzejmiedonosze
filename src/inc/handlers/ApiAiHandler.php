@@ -91,9 +91,7 @@ class ApiAiHandler extends \AbstractHandler {
             }
 
             // Create a custom stream handler
-            $streamHandler = function () use ($stream, $petition, $systemPrompt, $contentPrompt, $target) {
-                global $TARGETS;
-                // Start output buffering
+            $streamHandler = function () use ($stream, $petition, $systemPrompt, $contentPrompt, $user) {
                 if (ob_get_level() > 0) {
                     ob_end_clean();
                 }
@@ -106,7 +104,6 @@ class ApiAiHandler extends \AbstractHandler {
 
                 $completion = '';
 
-                #$this->printAndFlush($TARGETS[$target]['formal']);
                 // Process the stream
                 foreach ($stream as $chunk) {
                     $content = $chunk->choices[0]->delta->content ?? '';
@@ -115,6 +112,12 @@ class ApiAiHandler extends \AbstractHandler {
                         $this->printAndFlush(json_encode(['content' => $content]));
                     }
                 }
+                $name = $user->data->name;
+                $city = $user->data->address;
+
+                $this->printAndFlush(json_encode(['content' => "\n"]));
+                $this->printAndFlush(json_encode(['content' => "\n$name"]));
+                $this->printAndFlush(json_encode(['content' => "\n$city\n"]));
 
                 // Send done signal
                 $this->printAndFlush('[DONE]');
