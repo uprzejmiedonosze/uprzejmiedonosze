@@ -1,0 +1,45 @@
+{% set leftButton = '' %}
+{% set rightButton = '' %}
+
+{% set redesignClass = 'rd25' %}
+{% set title = 'Kreator skarg i wniosków' %}
+{% set shortTitle = 'Kreator skarg i wniosków' %}
+{% set description = 'Wkurza Cię pato parkowanie? Przekaż swoją frustrację i napisz mail do decydentów korzystając z naszego narzędzia.' %}
+{% set mainClass = 'generator-landing' %}
+
+{% extends "base.html.twig" %}
+{% block footer %}
+<footer></footer>
+{% endblock %}
+{% block main %}
+
+<h2>Kreator pism do polityków</h2>
+
+<p>Przekształć frustrację parkingową w <b>realne działanie</b>.</p>
+
+<ul class="main-page-stats">
+    <li><b>Tylko 3 minuty:</b> Szybko wybierz problem, adresata i rodzaj pisma.</li>
+    <li><em>100% Unikalne Pisma:</em> napiszami Ci spersonalizowany tekst, by Twój głos był słyszalny i skuteczny.</li>
+    <li><em>Zacznij Działać Teraz!</em> Wyślij pismo i przyczynij się do lepszej polityki parkingowej.</li>
+</ul>
+
+{% if not general.isLoggedIn %}
+<h4>Ważna Informacja: Dane Kontaktowe</h4>
+<p>
+    Do wysłania oficjalnego pisma wymagane będzie podanie adresu e-mail oraz
+    adresu kontaktowego <span class="encrypted"></span>. Twoje dane służą
+    wyłącznie do celu wysyłki pisma i nie są wykorzystywane do celów
+    marketingowych. Dowiedz się więcej o
+      <a target="_blank" href="/polityka-prywatnosci.html#encryption">polityce prywatności</a>
+    oraz <a target="_blank" href="/bezpieczenstwo.html">bezpieczeństwie twoich danych</a>.
+</p>
+{% endif %}
+
+<a href="/generator.html"
+    class="button">
+        Dalej
+</a>
+<p></p>
+
+
+{% endblock %}

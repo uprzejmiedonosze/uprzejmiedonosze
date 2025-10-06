@@ -2,7 +2,7 @@
 let topicsData = [];
 let formTypesData = {};
 let targetsData = {};
-let currentStep = 0;
+let currentStep = 1;
 const totalSteps = document.querySelectorAll(".generator>section").length;
 
 /**
@@ -29,7 +29,7 @@ function showStep(stepNumber) {
         if (stepNumberSpan) {
             stepNumberSpan.style.display = 'none';
         }
-        if ([1, 2, 3, 4].includes(stepNumber)) {
+        if ([2, 3, 4].includes(stepNumber)) {
             header.style.display = 'flex';
             if (stepNumberSpan) {
                 stepNumberSpan.style.display = 'inline';
@@ -40,7 +40,7 @@ function showStep(stepNumber) {
 }
 
 function prevStep() {
-    if (currentStep > 0)
+    if (currentStep > 1)
         showStep(currentStep - 1)
 }
 
@@ -52,8 +52,6 @@ function nextStep() {
 
 function validateCurrentStep() {
     switch (currentStep) {
-        case 0:
-            return true; // No validation needed for intro step
         case 1:
             return validateTopics();
         case 2:
@@ -104,7 +102,7 @@ function restartWizard() {
     const stepHeader = document.querySelector("section#step-5>h1");
     if (stepHeader) stepHeader.innerHTML = 'Tworzenie pisma';
 
-    // Go back to step 1 (skip intro)
+    // Go back to step 1
     showStep(1);
 }
 
@@ -114,7 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
     try {
-        showStep(0);
+        showStep(1);
         // Load topics
         const topicsResponse = await fetch('/generator/topics');
         topicsData = await topicsResponse.json();

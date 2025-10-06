@@ -126,7 +126,10 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
     ->add(new RegisteredMiddleware());
 
 $app->group('', function (RouteCollectorProxy $group) { // Generator
-    $group->get('/napisz-pismo-do-polityka.html', GeneratorHandler::class . ':generator');
+    $group->get('/napisz-pismo-do-polityka.html', GeneratorHandler::class . ':landing');
+})  ->add(new HtmlMiddleware());
+
+$app->group('', function (RouteCollectorProxy $group) { // Generator
     $group->get('/generator.html', GeneratorHandler::class . ':generator');
 })  ->add(new HtmlMiddleware())
     ->add(new RegisteredMiddleware());    
