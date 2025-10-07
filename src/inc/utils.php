@@ -111,4 +111,30 @@ function num(int $value, array $numerals) {
     else if ((($t1 < 10 || $t1 > 20) && $t0 >= 2 && $t0 <= 4) && $numerals[2])
         $vo[] = $numerals[2];
     return join(" ", $vo);
-};
+}
+
+function getDomainFromEmail(string $email) {
+    $email = trim($email);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) return null;
+    return strtolower(substr(strrchr($email, "@"), 1));
+}
+
+function domainUsesGoogleMail(string $domain) {
+    if (!checkdnsrr($domain, "MX")) return false;
+    $mxhosts = [];
+    @getmxrr($domain, $mxhosts);
+    foreach ($mxhosts as $host) {
+        $host = strtolower(rtrim($host, '.'));
+        if (strpos($host, '.google.com') !== false) return true;
+    }
+
+    // Optional: check TXT/SPF for include:_spf.google.com
+    $txts = dns_get_record($domain, DNS_TXT);
+    foreach ($txts as $t) {
+        if (isset($t['txt']) && stripos($t['txt'], 'include:_spf.google.com') !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}

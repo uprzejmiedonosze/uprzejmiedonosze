@@ -1,10 +1,11 @@
-import { error as errorToast } from "../lib/toast";
+import { error as errorToast } from "./lib/toast";
 
 let topicsData = [];
 let formTypesData = {};
 let targetsData = {};
 let currentStep = 1;
 const totalSteps = document.querySelectorAll(".generator>section").length;
+const currentScript = document.currentScript;
 
 /**
  * @param {number} stepNumber
@@ -455,10 +456,36 @@ function populateEmailLinks() {
     const searchForSubject = /Temat: (.*)/.exec(content)
     const subject = searchForSubject?.pop() || 'Pismo w sprawie przepisów związanych z parkowaniem'
 
-    const mailtoUrl = `mailto:${recipient}?bcc=miejska@agendaparkingowa.pl&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(content)}`
-    mailtoButton.href = mailtoUrl
+    
+    const loggedInToGmail = currentScript?.getAttribute("data-user-isgmail") == '1'
+    if (loggedInToGmail) {
+        mailtoButton.href = getGmailUrl(recipient, subject, content)
+        mailtoButton.text = 'Wyślij przez Gmaila'
+
+    } else {
+        mailtoButton.href = getEmailUrl(recipient, subject, content)
+        mailtoButton.text = 'Wyślij domyślnym klientem poczty'
+    }
 
     const step5nav = /** @type {HTMLElement} */ (document?.getElementById('step-5__nav'))
     step5nav.style.visibility = 'visible';
+}
+
+function getGmailUrl(recipient, subject, content) {
+    const bcc = "miejska@agendaparkingowa.pl";
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+      recipient
+    )}&bcc=${encodeURIComponent(bcc)}&su=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(content)}`
+}
+
+function getEmailUrl(recipient, subject, content) {
+    const bcc = "miejska@agendaparkingowa.pl";
+    return `mailto:${encodeURIComponent(
+      recipient
+    )}?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(
+      subject
+    )}&body=${encodeURIComponent(content)}`
 }
 
