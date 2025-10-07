@@ -441,8 +441,10 @@ async function generate() {
 
 function populateEmailLinks() {
     const mailtoButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('mailtoButton'))
-    if (!mailtoButton)
-        return console.error('Missing mailtoButton')
+    const gmailtoButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('gmailtoButton'))
+    if (!mailtoButton || !gmailtoButton)
+        return console.error('Missing mailtoButton or gmailtoButton')
+    
 
     const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'))
     const recipient = selectedTarget?.dataset?.recipient;
@@ -456,16 +458,14 @@ function populateEmailLinks() {
     const searchForSubject = /Temat: (.*)/.exec(content)
     const subject = searchForSubject?.pop() || 'Pismo w sprawie przepisów związanych z parkowaniem'
 
-    
     const loggedInToGmail = currentScript?.getAttribute("data-user-isgmail") == '1'
     if (loggedInToGmail) {
-        mailtoButton.href = getGmailUrl(recipient, subject, content)
-        mailtoButton.text = 'Wyślij przez Gmaila'
-
+        gmailtoButton.classList.add('cta')
     } else {
-        mailtoButton.href = getEmailUrl(recipient, subject, content)
-        mailtoButton.text = 'Wyślij domyślnym klientem poczty'
+        mailtoButton.classList.add('cta')
     }
+    mailtoButton.href = getEmailUrl(recipient, subject, content)
+    gmailtoButton.href = getGmailUrl(recipient, subject, content)
 
     const step5nav = /** @type {HTMLElement} */ (document?.getElementById('step-5__nav'))
     step5nav.style.visibility = 'visible';

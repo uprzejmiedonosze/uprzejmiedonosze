@@ -23,7 +23,7 @@
   <fieldset id="fs-topics">
   </fieldset>
   <nav>
-      <a href='#' class="button disabled" data-action="next">Wybierz opcję</a>
+      <a href='#' class="button disabled" data-action="next">Wybierz do 3 opcji</a>
   </nav>
 </section>
 
@@ -58,12 +58,11 @@
   <div class="status" id="status">Gotowy do pisania</div>
   <div id="output"></div>
   <nav id="step-5__nav">
-      <a class="button cta" id='mailtoButton' href="#" target="_blank" rel="external">Wyślij przez domyślny klient e-mail</a>
-      <a id="copyBtn" onclick="copyToClipboard('#output')"
-        class="button light small">Skopiuj tekst</a>
+      <a class="button fit-content inline light" id='mailtoButton' href="#" target="_blank" rel="external">Wyślij e-mail</a>
+      <a class="button fit-content inline light" id='gmailtoButton' href="#" target="_blank" rel="external">Wyślij przez Gmaila</a>
+      <a class="button fit-content inline light" id="copyBtn" onclick="copyToClipboard('#output')" >Skopiuj tekst</a>
 
-      <br />
-      <a class="button small" id='generateButton' href="#" data-action="restart">Napisz kolejne pismo</a>
+      <a class="button last light" id='generateButton' href="#" data-action="restart">Napisz kolejne pismo</a>
   </nav>
 </section>
 
