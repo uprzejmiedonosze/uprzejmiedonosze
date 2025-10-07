@@ -1,5 +1,7 @@
 .generator-landing {
-  ul, p {
+
+  ul,
+  p {
     font-size: 120%;
   }
 }
@@ -15,6 +17,7 @@
       left: 50%;
       transform: translateX(-50%);
     }
+
     &>a {
       cursor: pointer;
     }
@@ -47,9 +50,11 @@
         div {
           padding-left: 0.5em;
         }
+
         b {
           font-weight: 600;
         }
+
         p {
           margin: 0.2em 0;
         }
@@ -84,18 +89,66 @@
     }
 
 
+    // Progress bar loader
+      .status {
+        font-size: 16px;
+        font-weight: 500;
+        color: #2c3e50;
+        margin-bottom: 12px;
+        min-height: 20px;
+      }
 
-    &>div.status {
-      margin-top: 10px;
-      font-style: italic;
-      color: #7f8c8d;
+      .progress {
+        width: 100%;
+        height: 12px;
+        background-color: #ecf0f1;
+        border-radius: 6px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 0%;
+          background: linear-gradient(90deg, #3498db, #2980b9);
+          border-radius: 6px;
+          transition: width 0.4s ease-out;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        &.active::before {
+          animation: progressPulse 1.5s ease-in-out infinite;
+        }
+
+        // Dla JavaScript - ustawienie szerokości przez CSS custom property
+        &[style*="--progress"] {
+          &::before {
+            width: var(--progress, 0%);
+          }
+        }
+      }
+
+    @keyframes progressPulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
     }
 
     $paper-bg: #fbf6eb;
     $paper-width: 760px;
     $paper-padding: 28px 36px;
     $paper-radius: 8px;
-    $paper-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    $paper-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
 
 
     &>div#output {
@@ -116,7 +169,7 @@
       white-space: pre-wrap;
       margin-top: 20px;
 
-      border: 1px solid rgba(0,0,0,0.04);
+      border: 1px solid rgba(0, 0, 0, 0.04);
       transform-origin: center;
       transform: rotate(-0.25deg);
 
@@ -128,7 +181,7 @@
         width: 24px;
         height: calc(100% - 20px);
         pointer-events: none;
-        background-image: radial-gradient(circle at 6px 6px, rgba(0,0,0,0.03) 0 2px, transparent 3px);
+        background-image: radial-gradient(circle at 6px 6px, rgba(0, 0, 0, 0.03) 0 2px, transparent 3px);
         opacity: 0.45;
         transform: rotate(0.5deg);
       }

@@ -90,11 +90,11 @@ function restartWizard() {
     document.querySelectorAll('input[name="formType"]').forEach(radio => /** @type {HTMLInputElement} */(radio).checked = false);
     document.querySelectorAll('input[name="target"]').forEach(radio => /** @type {HTMLInputElement} */(radio).checked = false);
     const mailtoButton = /** @type {HTMLAnchorElement} */ (document.getElementById('mailtoButton'));
-    mailtoButton.href = '#';    
-    
+    mailtoButton.href = '#';
+
     const step5nav = /** @type {HTMLElement} */ (document?.getElementById('step-5__nav'))
     step5nav.style.visibility = 'hidden';
-    
+
     const outputElement = document.getElementById('output');
     if (outputElement) outputElement.textContent = '';
 
@@ -189,7 +189,7 @@ const renderTargets = () => {
     container.innerHTML = '';
 
     if (!formType)
-        return setButtonState(2, false, 'Wybierz ton pisma');    
+        return setButtonState(2, false, 'Wybierz ton pisma');
 
     setButtonState(2, true, 'Dalej');
 
@@ -293,6 +293,7 @@ async function generate() {
     const topicIds = getSelectedTopicIds();
     const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
     const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
+    const progressBar = /** @type {HTMLInputElement} */ document.getElementById('progress');
     const formType = formTypeElement?.value;
     const target = targetElement?.value;
 
@@ -326,19 +327,23 @@ async function generate() {
             'Weryfikuję najczęstsze zgłoszenia...'
         ].sort(() => Math.random() - 0.5);
 
-        let countdown = 40;
+        let counter = 0;
+        const waitingTime = 40;
         let countdownInterval;
 
         // Start countdown
         const startCountdown = () => {
             countdownInterval = setInterval(() => {
-                if (countdown <= 0) {
+                if (counter >= waitingTime) {
                     clearInterval(countdownInterval);
                     return;
                 }
-                countdown--;
-                const filler = timeFillers[Math.floor(timeFillers.length * (countdown / 40))];
-                if (status) status.textContent = `${filler} (${countdown}s)`;
+                counter++;
+                const filler = timeFillers[Math.floor(timeFillers.length * (counter / (waitingTime+1)))];
+                if (status) status.textContent = `${filler}`;
+
+                
+                progressBar?.style.setProperty('--progress', Math.round(100 * counter / waitingTime) + '%');
             }, 1000);
         };
 
@@ -423,7 +428,7 @@ async function generate() {
 
     } catch (error) {
         console.error(error)
-        
+
         try {
             const parsed = JSON.parse(error.message);
             if (parsed.error && status) {
@@ -444,7 +449,7 @@ function populateEmailLinks() {
     const gmailtoButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('gmailtoButton'))
     if (!mailtoButton || !gmailtoButton)
         return console.error('Missing mailtoButton or gmailtoButton')
-    
+
 
     const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'))
     const recipient = selectedTarget?.dataset?.recipient;
@@ -474,18 +479,18 @@ function populateEmailLinks() {
 function getGmailUrl(recipient, subject, content) {
     const bcc = "miejska@agendaparkingowa.pl";
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
-      recipient
+        recipient
     )}&bcc=${encodeURIComponent(bcc)}&su=${encodeURIComponent(
-      subject
+        subject
     )}&body=${encodeURIComponent(content)}`
 }
 
 function getEmailUrl(recipient, subject, content) {
     const bcc = "miejska@agendaparkingowa.pl";
     return `mailto:${encodeURIComponent(
-      recipient
+        recipient
     )}?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(
-      subject
+        subject
     )}&body=${encodeURIComponent(content)}`
 }
 
