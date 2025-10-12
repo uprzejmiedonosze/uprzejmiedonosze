@@ -199,7 +199,7 @@ $TARGETS = [
     #    "selector" => "parlamentary"
     #],
     "Członek_INF" => [
-        "title" => "Członka Sejmowej Komisji Infrastruktury",
+        "title" => "Członka/ini Sejmowej Komisji Infrastruktury",
         "forms" => ["email", "complaint", "proposal"],
         "formal" => "szanowny pan/szanowna pani\n____ _____\nposeł/posłanka na sejm\nkancelaria sejmu\nul. wiejska 4/6/8\n00-902 warszawa",
         "selector" => "infrastructure_committee_member"

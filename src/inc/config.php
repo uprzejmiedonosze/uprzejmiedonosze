@@ -63,7 +63,8 @@ const SEXSTRINGS = Array (
         "musiala" => "musiał(a)",
         "Patronka" => "Patronką(em)",
         "żeńskiego" => "męskiego",
-        "mogla" => "mógł/mogła"
+        "mogla" => "mógł/mogła",
+        "mieszkanka" => "mieszkańcem i obywatelem zirytowanym"
     ],
     'm' => [
         "bylam" => "byłem",
@@ -75,7 +76,8 @@ const SEXSTRINGS = Array (
         "musiala" => "musiał",
         "Patronka" => "Patronem",
         "żeńskiego" => "męskiego",
-        "mogla" => "mógł"
+        "mogla" => "mógł",
+        "mieszkanka" => "mieszkańcem i obywatelem zirytowanym"
     ],
     'f' => [
         "bylam" => "byłam",
@@ -87,7 +89,8 @@ const SEXSTRINGS = Array (
         "musiala" => "musiała",
         "Patronka" => "Patronką",
         "żeńskiego" => "żeńskiego",
-        "mogla" => "mogła"
+        "mogla" => "mogła",
+        "mieszkanka" => "mieszkanką i obywatelką zirytowaną"
     ]
 );
 

@@ -237,6 +237,10 @@ class User extends \JSONObject{
         return 'f';
     }
 
+    public function getSexIdentifier() {
+        return User::_guessSex($this->data->name);
+    }
+
     /**
      * Returns user name in a 'filename' safe format.
      */

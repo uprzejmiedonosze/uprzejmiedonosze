@@ -47,7 +47,7 @@ class Petition extends \JSONObject {
         $instance->target = $target;
         $instance->recipient = $recipient;
         $instance->status = 'draft';
-        $instance->sex = $user->guessSex()['żeńskiego'];
+        $instance->sex = $user->getSexIdentifier();
 
         return $instance;
     }
@@ -59,27 +59,16 @@ class Petition extends \JSONObject {
     }
 
     public function generateSystemPrompt(): string {
-        $this->systemPrompt = "Jesteś mieszkańcem i obywatelem zirytowanym powszechnym łamaniem przepisów związanych z parkowaniem przez kierowców";
+        $sex = SEXSTRINGS[$this->sex];
+        $this->systemPrompt = "Jesteś {$sex['mieszkanka']} powszechnym łamaniem przepisów związanych z parkowaniem przez kierowców";
         return $this->systemPrompt;
     }
 
-    private static function changeNameOrder(string $key): string {
-        $parts = explode(' ', trim($key));
-        $count = count($parts);
-        switch ($count) {
-            case 2:
-                return $parts[1] . ' ' . $parts[0];
-            case 3:
-                return $parts[1] . ' ' . $parts[2] . ' ' . $parts[0];
-            case 4:
-                return $parts[3] . ' ' . $parts[0] . ' ' . $parts[1] . ' ' . $parts[2];
-            default:
-                return $key;
-        }
-    }
 
     public function generateContentPrompt(): string {
         global $TOPICS, $TARGETS, $FORMS, $INTRO;
+
+        $sex = SEXSTRINGS[$this->sex];
 
         $topicsStr = "";
         foreach ($this->topics as $topicId) {
@@ -112,9 +101,10 @@ class Petition extends \JSONObject {
           // this should be already validated, but let's check anyway
           $mps = \json\get('parlamentary.json');
           if (isset($mps[$this->recipient])) {
-            $name = $this->changeNameOrder($this->recipient);
-            $additionalRecipientData = $additionalRecipientData . "Odbiorcą pisma będzie ".$name.".\n";
-            $additionalRecipientData = $additionalRecipientData . "Płeć odbiorcy (m/f/?): ".\user\User::_guessSex($name).".\n";
+            $targetTitle = 'Członka Sejmowej Komisji Infrastruktury (mężczyzna)';
+            $name = ApiAiHandler::changeNameOrder($this->recipient);
+            if (\user\User::_guessSex($name) == 'f')
+                $targetTitle = 'Członkini Sejmowej Komisji Infrastruktury (kobieta)';
           };
         };
         $intro = $this->formType !== 'email' ? "# Pozostałe\n\nMożesz użyć także tych materiałów:\n\n{$INTRO}" : "";
@@ -130,7 +120,7 @@ $additionalRecipientData
 
 1. Używaj przykładów i propozycji podanych poniżej. Nie wymyślaj własnych propozycji.
 2. Nie stosuj formatowania markdown albo ikon. Czysty tekst.
-3. Pisz w pierwszej osobie liczby pojedynczej rodzaju {$this->sex}.
+3. Pisz w pierwszej osobie liczby pojedynczej rodzaju {$sex['żeńskiego']}.
 4. Pisz w stylu oficjalnym, ale nie przesadnie formalnym.
 5. Nie pisz adresata w mailu (np. "Szanowny $targetTitle"). Sam go dopiszę.
 6. Napisz tytuł wiadomości w pierszej linijce, w formacie "Temat: ...". Potem pusta linia o treść pisma.

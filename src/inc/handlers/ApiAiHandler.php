@@ -211,7 +211,7 @@ class ApiAiHandler extends \AbstractHandler {
         return array_unique($cities);
     }
 
-    private static function changeNameOrder(string $key): string {
+    public static function changeNameOrder(string $key): string {
         $parts = explode(' ', trim($key));
         $count = count($parts);
         switch ($count) {
@@ -293,11 +293,15 @@ class ApiAiHandler extends \AbstractHandler {
             $mps[$key]['name'] = $this->changeNameOrder($key);
             $mps[$key]['sex'] = \user\User::_guessSex($mps[$key]['name']);
 
-            $mps[$key]['formal'] = "Szanowna Pani\n{$mps[$key]['name']}\nPosłanka na Sejm";
-            if ($mps[$key]['sex'] == 'm')
-                $mps[$key]['formal'] = "Szanowy Pan\n{$mps[$key]['name']}\nPoseł na Sejm";
+            if (isset($mps[$key]['email'])) {
+                $mps[$key]['email'] = $mps[$key]['email'] . "," . $mps[$key]['official'];
+            } else {
+                $mps[$key]['email'] = $mps[$key]['official'];
+            }
 
-            
+            $mps[$key]['formal'] = "Szanowna Pani\n{$mps[$key]['name']}\nSejm Rzeczypospolitej Polskiej";
+            if ($mps[$key]['sex'] == 'm')
+                $mps[$key]['formal'] = "Szanowy Pan\n{$mps[$key]['name']}\nSejm Rzeczypospolitej Polskiej";
         }
 
         return $this->renderJson($response, $mps);
