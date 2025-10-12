@@ -46,6 +46,12 @@
 
 <section id="step-4" class="hidden">
   <h1>Wybierz adresata</h1>
+
+  <label class='s4_filter'>
+    <input name='s4_filter[]' value='vovoideship_match' type='checkbox' onchange="window.fetchRecipients()" />
+    Pokaż tylko z mojego województwa
+  </label>
+
   <fieldset id='fs-recipients'>
   </fieldset>
   <div class="loader"></div>

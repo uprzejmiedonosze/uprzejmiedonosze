@@ -148,6 +148,30 @@ async function fetchRecipients() {
       return prevStep();
     };
 
+    // check if vovoideship_match filter should be shown
+    const vovoideshipsValues = [...new Set(Object.values(recipientsData).map(r => r.vovoideship_match))];
+    const filterLabel = document.querySelector('.s4_filter');
+    if (filterLabel) {
+        if (vovoideshipsValues.length >= 2) {
+            filterLabel.style.display = '';
+        } else {
+            filterLabel.style.display = 'none';
+        }
+    }
+
+    // get selected filters
+    const selectedFilters = Array.from(document.querySelectorAll('input[name="s4_filter[]"]:checked'))
+        .map(checkbox => checkbox.value);
+
+    // function to check if recipient matches selected filters
+    const recipientMatchesFilters = (recipient) => {
+        if (selectedFilters.length === 0) return true; // no filters selected, show all
+
+        return selectedFilters.every(filter => {
+            return recipient[filter] === true;
+        });
+    };
+
     // political parties
     const politicalParties = [...new Set(Object.values(recipientsData).map(r => r.party))];
 
@@ -155,21 +179,28 @@ async function fetchRecipients() {
 
     // render
     for (const party of politicalParties) {
-      rendered += `<h4>${politicalPartyExpanedNames[party] || party}</h4>`;
-      rendered += Object.entries(recipientsData)
-        .filter(([name, recipient]) => recipient.party === party)
-        .map(([name, recipient]) => `
+      // get filtered recipients for this party
+      const partyRecipients = Object.entries(recipientsData)
+        .filter(([name, recipient]) => recipient.party === party && recipientMatchesFilters(recipient));
+
+      // only render party header if there are matching recipients
+      if (partyRecipients.length > 0) {
+        rendered += `<h4>${politicalPartyExpanedNames[party] || party}</h4>`;
+        rendered += partyRecipients.map(([name, recipient]) => `
               <label>
-                <input type="radio" name='recipient' 
+                <input type="radio" name='recipient'
                     value="${name}" onchange="window.checkRecipient()" />
                 ${name}
               </label>
         `).join('');
+      }
     };
 
     fieldContainer.innerHTML = rendered;
     loader.classList.add('hidden');
 }
+
+/** @type {any} */ (window).fetchRecipients = fetchRecipients;
 
 // check recipient and possible next steps
 const checkRecipient = () => {
