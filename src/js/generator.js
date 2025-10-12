@@ -9,12 +9,21 @@ let totalSteps = document.querySelectorAll(".generator>section:not(.hidden)").le
 const currentScript = document.currentScript;
 
 const politicalPartyExpanedNames = {
-  'PiS': 'Prawo i Sprawiedliwosć',
-  'KO': 'Koalicja Obywatelska',
-  'Polska2050-TD': 'Polska 2050 - Trzecia Droga',
-  'PSL-TD': 'Polskie Stronnictwo Ludowe - Trzecia Droga',
-  // these don't need expansion: Lewica, Razem, Konfederacja
+    'PiS': 'Prawo i Sprawiedliwosć',
+    'KO': 'Koalicja Obywatelska',
+    'Polska2050-TD': 'Polska 2050 - Trzecia Droga',
+    'PSL-TD': 'Polskie Stronnictwo Ludowe - Trzecia Droga',
+    // these don't need expansion: Lewica, Razem, Konfederacja
 };
+
+/**
+ * @param {HTMLElement|null} element
+ * @pararam {boolean} show
+ */
+function showHideElement(element, show=true) {
+    if (element)
+        element.style.setProperty('display', (show ? '': 'none'))
+}
 
 /**
  * @param {number} stepNumber
@@ -35,22 +44,14 @@ function showStep(stepNumber) {
     }
 
     const header = /** @type {HTMLElement} */ (document.querySelector('.generator>header'))
-    if (header) {
-        header.style.display = 'none';
-        if (stepNumberSpan) {
-            stepNumberSpan.style.display = 'none';
-        }
-        if ([1, 2, 3, 4].includes(stepNumber)) {
-            header.style.display = 'flex';
-            if (stepNumberSpan) {
-                stepNumberSpan.style.display = 'inline';
-            }
-        }
-    }
+    const show = ([1, 2, 3, 4].includes(stepNumber))
+    showHideElement(header, show)
+    showHideElement(stepNumberSpan, show)
+
     currentStep = stepNumber
 
-    if (currentStep==4)
-      fetchRecipients()
+    if (currentStep == 4)
+        fetchRecipients()
 }
 
 function prevStep() {
@@ -118,6 +119,13 @@ function restartWizard() {
     const stepHeader = document.querySelector("section#step-5>h1");
     if (stepHeader) stepHeader.innerHTML = 'Tworzenie pisma';
 
+    
+    showHideElement(document.getElementById('status'))
+
+    const progress = document.getElementById('progress')
+    showHideElement(progress)
+    progress?.style.setProperty('--progress', '0%');
+
     // Go back to step 1
     showStep(1);
 }
@@ -125,38 +133,34 @@ function restartWizard() {
 async function fetchRecipients() {
     // show loader
     const loader = document.querySelector(".generator>section#step-4>div.loader");
-    loader.classList.remove('hidden');
+    loader?.classList.remove('hidden');
     const fieldContainer = document.querySelector(".generator>section#step-4>fieldset");
-    document.querySelector('.generator>section#step-4>nav>a').classList.add('disabled');
+    document.querySelector('.generator>section#step-4>nav>a')?.classList.add('disabled');
     if (!fieldContainer) return prevStep();
-    fieldContainer.innerHTML='';
+    fieldContainer.innerHTML = '';
 
     // check the selector type
     const recipient_selector = document.querySelector(".generator>section#step-3>fieldset input:checked")?.dataset?.recipient;
 
     /* these need to match selectors in inc/data.php */
-    if (recipient_selector=="selector:infrastructure_committee_member") {
-      const recipientsResponse = await fetch('/generator/suggested_parlamentary');
-      recipientsData = await recipientsResponse.json();
-    /* waiting for implementation
-    } else if (recipient_selector=="selector:parlamentary") {
-      const recipientsResponse = await fetch('/generator/parlamentary');
-      recipientsData = await recipientsResponse.json(); 
-    */
+    if (recipient_selector == "selector:infrastructure_committee_member") {
+        const recipientsResponse = await fetch('/generator/suggested_parlamentary');
+        recipientsData = await recipientsResponse.json();
+        /* waiting for implementation
+        } else if (recipient_selector=="selector:parlamentary") {
+          const recipientsResponse = await fetch('/generator/parlamentary');
+          recipientsData = await recipientsResponse.json(); 
+        */
     } else {
-      // welp, let's go back
-      return prevStep();
+        // welp, let's go back
+        return prevStep();
     };
 
     // check if vovoideship_match filter should be shown
     const vovoideshipsValues = [...new Set(Object.values(recipientsData).map(r => r.vovoideship_match))];
-    const filterLabel = document.querySelector('.s4_filter');
+    const filterLabel = /** @type {HTMLElement} */ (document.querySelector('.s4_filter'));
     if (filterLabel) {
-        if (vovoideshipsValues.length >= 2) {
-            filterLabel.style.display = '';
-        } else {
-            filterLabel.style.display = 'none';
-        }
+        showHideElement(filterLabel, vovoideshipsValues.length >= 2)
     }
 
     // get selected filters
@@ -175,29 +179,29 @@ async function fetchRecipients() {
     // political parties
     const politicalParties = [...new Set(Object.values(recipientsData).map(r => r.party))];
 
-    let rendered='';
+    let rendered = '';
 
     // render
     for (const party of politicalParties) {
-      // get filtered recipients for this party
-      const partyRecipients = Object.entries(recipientsData)
-        .filter(([name, recipient]) => recipient.party === party && recipientMatchesFilters(recipient));
+        // get filtered recipients for this party
+        const partyRecipients = Object.entries(recipientsData)
+            .filter(([name, recipient]) => recipient.party === party && recipientMatchesFilters(recipient));
 
-      // only render party header if there are matching recipients
-      if (partyRecipients.length > 0) {
-        rendered += `<h4>${politicalPartyExpanedNames[party] || party}</h4>`;
-        rendered += partyRecipients.map(([name, recipient]) => `
+        // only render party header if there are matching recipients
+        if (partyRecipients.length > 0) {
+            rendered += `<h4>${politicalPartyExpanedNames[party] || party}</h4>`;
+            rendered += partyRecipients.map(([name, recipient]) => `
               <label>
                 <input type="radio" name='recipient'
                     value="${name}" onchange="window.checkRecipient()" />
-                ${name}
+                ${recipient.name}
               </label>
         `).join('');
-      }
+        }
     };
 
     fieldContainer.innerHTML = rendered;
-    loader.classList.add('hidden');
+    loader?.classList.add('hidden');
 }
 
 /** @type {any} */ (window).fetchRecipients = fetchRecipients;
@@ -338,13 +342,13 @@ const checkTarget = () => {
     if (!actionButton) return true;
 
     if (selectedTargetRecipient && selectedTargetRecipient.startsWith("selector:")) { // we need additional step to select the recipient
-        document.querySelector(".generator>section#step-4").classList.remove("hidden");
+        document.querySelector(".generator>section#step-4")?.classList.remove("hidden");
         actionButton.innerHTML = 'Dalej';
         actionButton.dataset.action = 'next';
         actionButton.disabled = false;
         actionButton.classList.remove('disabled');
     } else if (selectedTargetRecipient) {    // we know who is the recipient
-        document.querySelector(".generator>section#step-4").classList.add("hidden");
+        document.querySelector(".generator>section#step-4")?.classList.add("hidden");
         actionButton.innerHTML = 'Dalej';
         actionButton.dataset.action = 'generate';
         actionButton.disabled = false;
@@ -423,12 +427,12 @@ async function generate() {
     // Clear previous output and move to results step
     // start with formal salutation
     if (recipient && recipientsData[recipient]) {
-      output.textContent = recipientsData[recipient].formal + "\n\n";
+        output.textContent = recipientsData[recipient].formal + "\n\n";
     } else if (target && recipientsData[target]) {
-      output.textContent = targetsData[target].formal + "\n\n";
+        output.textContent = targetsData[target].formal + "\n\n";
     } else {
-      // should not happen
-      output.textContent = "";
+        // should not happen
+        output.textContent = "";
     }
     showStep(5);
 
@@ -469,10 +473,10 @@ async function generate() {
                     return;
                 }
                 counter++;
-                const filler = timeFillers[Math.floor(timeFillers.length * (counter / (waitingTime+1)))];
+                const filler = timeFillers[Math.floor(timeFillers.length * (counter / (waitingTime + 1)))];
                 if (status) status.textContent = `${filler}`;
 
-                
+
                 progressBar?.style.setProperty('--progress', Math.round(100 * counter / waitingTime) + '%');
             }, 1000);
         };
@@ -551,10 +555,9 @@ async function generate() {
 
         const stepHeader = /** @type {HTMLElement} */ (document.querySelector("section#step-5>h1"));
         if (stepHeader) stepHeader.innerHTML = 'Twoje pismo do ' + targetsData[target].title;
-        status?.style.setProperty('display', 'none')
-        progressBar?.style.setProperty('display', 'none')
+        showHideElement(status, false)
+        showHideElement(progressBar, false)
 
-        
         populateDeliveryLinks();
 
     } catch (error) {
@@ -586,18 +589,16 @@ function populateDeliveryLinks() {
     const recipientElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="recipient"]:checked'));
     const target = targetElement?.value;
     const recipient = (targetElement?.dataset?.recipient?.startsWith('selector:') && recipientElement?.value);
-    
+
     if (!target)
         return errorToast('Missing target')
-    
+
     let recipient_action
     if (recipient && recipientsData[recipient]?.email)
-      recipient_action = recipientsData[recipient].email;
-    else if (recipient && recipientsData[recipient]?.official)
-      recipient_action = recipientsData[recipient].official;
+        recipient_action = recipientsData[recipient].email;
     else if (targetElement?.dataset?.recipient)
-      recipient_action = targetElement.dataset.recipient;
-    
+        recipient_action = targetElement.dataset.recipient;
+
     if (!recipient_action)
         return errorToast('Missing target')
 
@@ -608,9 +609,12 @@ function populateDeliveryLinks() {
     const searchForSubject = /Temat: (.*)/.exec(content)
     const subject = searchForSubject?.pop() || 'Pismo w sprawie przepisów związanych z parkowaniem'
 
-    if (recipient_action.search('@') > 0) {
-        formButton?.style.setProperty('display', 'none')
+    const emailDelivery = recipient_action.search('@') > 0
+    showHideElement(formButton, !emailDelivery)
+    showHideElement(mailtoButton, emailDelivery)
+    showHideElement(gmailtoButton, emailDelivery)
 
+    if (emailDelivery) {
         const loggedInToGmail = currentScript?.getAttribute("data-user-isgmail") == '1'
         if (loggedInToGmail) {
             gmailtoButton.classList.add('cta')
@@ -620,9 +624,6 @@ function populateDeliveryLinks() {
         mailtoButton.href = getEmailUrl(recipient_action, subject, content)
         gmailtoButton.href = getGmailUrl(recipient_action, subject, content)
     } else {
-        mailtoButton?.style.setProperty('display', 'none')
-        gmailtoButton?.style.setProperty('display', 'none')
-
         formButton.href = recipient_action
     }
 
