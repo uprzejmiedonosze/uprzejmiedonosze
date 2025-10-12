@@ -3,9 +3,18 @@ import { error as errorToast } from "./lib/toast";
 let topicsData = [];
 let formTypesData = {};
 let targetsData = {};
+let recipientsData = {};
 let currentStep = 1;
-const totalSteps = document.querySelectorAll(".generator>section").length;
+let totalSteps = document.querySelectorAll(".generator>section:not(.hidden)").length;
 const currentScript = document.currentScript;
+
+const politicalPartyExpanedNames = {
+  'PiS': 'Prawo i Sprawiedliwosć',
+  'KO': 'Koalicja Obywatelska',
+  'Polska2050-TD': 'Polska 2050 - Trzecia Droga',
+  'PSL-TD': 'Polskie Stronnictwo Ludowe - Trzecia Droga',
+  // these don't need expansion: Lewica, Razem, Konfederacja
+};
 
 /**
  * @param {number} stepNumber
@@ -39,6 +48,9 @@ function showStep(stepNumber) {
         }
     }
     currentStep = stepNumber
+
+    if (currentStep==4)
+      fetchRecipients()
 }
 
 function prevStep() {
@@ -109,6 +121,78 @@ function restartWizard() {
     // Go back to step 1
     showStep(1);
 }
+
+async function fetchRecipients() {
+    // show loader
+    const loader = document.querySelector(".generator>section#step-4>div.loader");
+    loader.classList.remove('hidden');
+    const fieldContainer = document.querySelector(".generator>section#step-4>fieldset");
+    document.querySelector('.generator>section#step-4>nav>a').classList.add('disabled');
+    if (!fieldContainer) return prevStep();
+    fieldContainer.innerHTML='';
+
+    // check the selector type
+    const recipient_selector = document.querySelector(".generator>section#step-3>fieldset input:checked")?.dataset?.recipient;
+
+    /* these need to match selectors in inc/data.php */
+    if (recipient_selector=="selector:infrastructure_committee_member") {
+      const recipientsResponse = await fetch('/generator/suggested_parlamentary');
+      recipientsData = await recipientsResponse.json();
+    /* waiting for implementation
+    } else if (recipient_selector=="selector:parlamentary") {
+      const recipientsResponse = await fetch('/generator/parlamentary');
+      recipientsData = await recipientsResponse.json(); 
+    */
+    } else {
+      // welp, let's go back
+      return prevStep();
+    };
+
+    // political parties
+    const politicalParties = [...new Set(Object.values(recipientsData).map(r => r.party))];
+
+    let rendered='';
+
+    // render
+    for (const party of politicalParties) {
+      rendered += `<h4>${politicalPartyExpanedNames[party] || party}</h4>`;
+      rendered += Object.entries(recipientsData)
+        .filter(([name, recipient]) => recipient.party === party)
+        .map(([name, recipient]) => `
+              <label>
+                <input type="radio" name='recipient' 
+                    value="${name}" onchange="window.checkRecipient()" />
+                ${name}
+              </label>
+        `).join('');
+    };
+
+    fieldContainer.innerHTML = rendered;
+    loader.classList.add('hidden');
+}
+
+// check recipient and possible next steps
+const checkRecipient = () => {
+    const selectedRecipient = /** @type {HTMLInputElement} */ (document.querySelector('input[name="recipient"]:checked'));
+    const selectedRecipientValue = selectedRecipient?.value;
+
+    const actionButton = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-4>nav>a'));
+
+    if (!actionButton) return true;
+
+    if (selectedRecipient) {    // we know who is the recipient
+        actionButton.innerHTML = 'Dalej';
+        actionButton.dataset.action = 'generate';
+        actionButton.disabled = false;
+        actionButton.classList.remove('disabled');
+    } else {
+        actionButton.disabled = true;
+        actionButton.classList.add('disabled');
+    }
+    return true;
+}
+
+/** @type {any} */ (window).checkRecipient = checkRecipient;
 
 document.addEventListener('DOMContentLoaded', async () => {
     const generatorContainer = document.querySelectorAll('.generator');
@@ -198,12 +282,11 @@ const renderTargets = () => {
     // Filter targets that support the selected form type and have recipient defined
     const availableTargets = Object.entries(targetsData)
         .filter(([_, target]) => target.forms.includes(formType))
-        .filter(([_, target]) => target.email || target.form)   // @FIXME implement proper recipient selection in separate for those cases
         .sort(() => Math.random() - 0.5);
 
     container.innerHTML = availableTargets.map(([id, target]) => `
             <label>
-              <input type="radio" name="target" data-recipient="${target.email || target.form}" onchange="window.checkRecipient()" value="${id}">
+              <input type="radio" name="target" data-recipient="${target.email || target.form || (target.selector && "selector:" + target.selector)}" onchange="window.checkTarget()" value="${id}">
               ${target.title}
             </label>
         `).join('');
@@ -214,33 +297,38 @@ const renderTargets = () => {
 /** @type {any} */ (window).renderTargets = renderTargets;
 
 // check recipient and possible next steps
-const checkRecipient = () => {
+const checkTarget = () => {
     const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
     const selectedTargetValue = selectedTarget?.value;
     const selectedTargetRecipient = selectedTarget?.dataset?.recipient;
+
     const actionButton = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-3>nav>a'));
 
     if (!actionButton) return true;
 
-    if (selectedTargetRecipient) {    // we know who is the recipient
-        actionButton.innerHTML = 'Dalej';
-        actionButton.dataset.action = 'generate';
-        actionButton.disabled = false;
-        actionButton.classList.remove('disabled');
-    } else if (selectedTargetValue) { // we need to perform additional selection
+    if (selectedTargetRecipient && selectedTargetRecipient.startsWith("selector:")) { // we need additional step to select the recipient
+        document.querySelector(".generator>section#step-4").classList.remove("hidden");
         actionButton.innerHTML = 'Dalej';
         actionButton.dataset.action = 'next';
+        actionButton.disabled = false;
+        actionButton.classList.remove('disabled');
+    } else if (selectedTargetRecipient) {    // we know who is the recipient
+        document.querySelector(".generator>section#step-4").classList.add("hidden");
+        actionButton.innerHTML = 'Dalej';
+        actionButton.dataset.action = 'generate';
         actionButton.disabled = false;
         actionButton.classList.remove('disabled');
     } else {                          // fallback
         actionButton.disabled = true;
         actionButton.classList.add('disabled');
     }
+    totalSteps = document.querySelectorAll(".generator>section:not(.hidden)").length;
+    showStep(currentStep); // refresh the step number after manipulating the optional step
 
     return true;
 }
 
-/** @type {any} */ (window).checkRecipient = checkRecipient;
+/** @type {any} */ (window).checkTarget = checkTarget;
 
 /**
  * @param {number} step
@@ -288,20 +376,28 @@ async function generate() {
     const status = /** @type {HTMLElement} */ (document.getElementById('status'));
 
     // Validate form
-    if (!validateForm()) {
+    if (!validateForm() || !output) {
         return;
     }
 
     const topicIds = getSelectedTopicIds();
     const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
     const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
+    const recipientElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="recipient"]:checked'));
     const progressBar = /** @type {HTMLInputElement} */ document.getElementById('progress');
     const formType = formTypeElement?.value;
     const target = targetElement?.value;
+    const recipient = (targetElement?.dataset?.recipient?.startsWith('selector:') && recipientElement?.value);
 
     // Clear previous output and move to results step
-    if (output && target) {
-        output.textContent = targetsData[target].formal + "\n\n";
+    // start with formal salutation
+    if (recipient && recipientsData[recipient]) {
+      output.textContent = recipientsData[recipient].formal + "\n\n";
+    } else if (target && recipientsData[target]) {
+      output.textContent = targetsData[target].formal + "\n\n";
+    } else {
+      // should not happen
+      output.textContent = "";
     }
     showStep(5);
 
@@ -454,10 +550,24 @@ function populateDeliveryLinks() {
     if (!mailtoButton || !gmailtoButton)
         return errorToast('Missing mailtoButton or gmailtoButton')
 
-    const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'))
-    const recipient = selectedTarget?.dataset?.recipient;
-    if (!recipient)
-        return errorToast('Missing recipient')
+    const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
+    const recipientElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="recipient"]:checked'));
+    const target = targetElement?.value;
+    const recipient = (targetElement?.dataset?.recipient?.startsWith('selector:') && recipientElement?.value);
+    
+    if (!target)
+        return errorToast('Missing target')
+    
+    let recipient_action
+    if (recipient && recipientsData[recipient]?.email)
+      recipient_action = recipientsData[recipient].email;
+    else if (recipient && recipientsData[recipient]?.official)
+      recipient_action = recipientsData[recipient].official;
+    else if (targetElement?.dataset?.recipient)
+      recipient_action = targetElement.dataset.recipient;
+    
+    if (!recipient_action)
+        return errorToast('Missing target')
 
     const content = document?.getElementById('output')?.textContent;
     if (!content)
@@ -466,7 +576,7 @@ function populateDeliveryLinks() {
     const searchForSubject = /Temat: (.*)/.exec(content)
     const subject = searchForSubject?.pop() || 'Pismo w sprawie przepisów związanych z parkowaniem'
 
-    if (recipient.search('@') > 0) {
+    if (recipient_action.search('@') > 0) {
         formButton?.style.setProperty('display', 'none')
 
         const loggedInToGmail = currentScript?.getAttribute("data-user-isgmail") == '1'
@@ -475,13 +585,13 @@ function populateDeliveryLinks() {
         } else {
             mailtoButton.classList.add('cta')
         }
-        mailtoButton.href = getEmailUrl(recipient, subject, content)
-        gmailtoButton.href = getGmailUrl(recipient, subject, content)
+        mailtoButton.href = getEmailUrl(recipient_action, subject, content)
+        gmailtoButton.href = getGmailUrl(recipient_action, subject, content)
     } else {
         mailtoButton?.style.setProperty('display', 'none')
         gmailtoButton?.style.setProperty('display', 'none')
 
-        formButton.href = recipient
+        formButton.href = recipient_action
     }
 
     const step5nav = /** @type {HTMLElement} */ (document?.getElementById('step-5__nav'))
