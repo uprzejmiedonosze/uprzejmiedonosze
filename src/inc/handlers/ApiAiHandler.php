@@ -38,7 +38,8 @@ class ApiAiHandler extends \AbstractHandler {
             $data = [
                 'topics' => json_decode($queryParams['topics'] ?? '[]', true),
                 'form_type' => $queryParams['form_type'] ?? '',
-                'target' => $queryParams['target'] ?? ''
+                'target' => $queryParams['target'] ?? '',
+                'recipient' => $queryParams['recipient'] ?? ''
             ];
         } else {
             $data = $request->getParsedBody();
@@ -60,14 +61,25 @@ class ApiAiHandler extends \AbstractHandler {
             ], 400);
         }
 
+        // $data['recipient'] may contain a more specific recipient than $data['target']
+        if (!empty($data['recipient'])) {
+          $mps = \json\get('parlamentary.json');
+          if (!isset($mps[$data['recipient']])) {
+            return $this->jsonResponse($response, [
+                'error' => 'Incorrent parameters passed'
+            ], 400);
+          };
+        }
+
         $user = $request->getAttribute('user');
 
         try {
             $topics = (array)$data['topics'];
             $formType = $data['form_type'];
             $target = $data['target'];
+            $recipient = $data['recipient'];
 
-            $petition = Petition::withData($topics, $formType, $target, $user);
+            $petition = Petition::withData($topics, $formType, $target, $recipient, $user);
 
             $systemPrompt = $petition->generateSystemPrompt();
             $contentPrompt = $petition->generateContentPrompt();

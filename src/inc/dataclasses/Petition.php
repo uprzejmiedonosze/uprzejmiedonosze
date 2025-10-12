@@ -11,6 +11,7 @@ class Petition extends \JSONObject {
     public array $topics;
     public string $formType;
     public string $target;
+    public string $recipient;
     public string $added;
     public float $price;
     public string $status;
@@ -32,6 +33,7 @@ class Petition extends \JSONObject {
         array $topics,
         string $formType,
         string $target, 
+        string $recipient,
         \user\user $user
     ) {
 
@@ -43,6 +45,7 @@ class Petition extends \JSONObject {
         $instance->topics = $topics;
         $instance->formType = $formType;
         $instance->target = $target;
+        $instance->recipient = $recipient;
         $instance->status = 'draft';
         $instance->sex = $user->guessSex()['żeńskiego'];
 
@@ -58,6 +61,21 @@ class Petition extends \JSONObject {
     public function generateSystemPrompt(): string {
         $this->systemPrompt = "Jesteś mieszkańcem i obywatelem zirytowanym powszechnym łamaniem przepisów związanych z parkowaniem przez kierowców";
         return $this->systemPrompt;
+    }
+
+    private static function changeNameOrder(string $key): string {
+        $parts = explode(' ', trim($key));
+        $count = count($parts);
+        switch ($count) {
+            case 2:
+                return $parts[1] . ' ' . $parts[0];
+            case 3:
+                return $parts[1] . ' ' . $parts[2] . ' ' . $parts[0];
+            case 4:
+                return $parts[3] . ' ' . $parts[0] . ' ' . $parts[1] . ' ' . $parts[2];
+            default:
+                return $key;
+        }
     }
 
     public function generateContentPrompt(): string {
@@ -86,8 +104,19 @@ class Petition extends \JSONObject {
 
         $topicsStr = trim($topicsStr);
 
-
         $targetTitle = $TARGETS[$this->target]['title'] ?? $this->target;
+ 
+        // do we know more about the recipient?
+        $additionalRecipientData = "";
+        if (!empty($this->recipient)) {
+          // this should be already validated, but let's check anyway
+          $mps = \json\get('parlamentary.json');
+          if (isset($mps[$this->recipient])) {
+            $name = $this->changeNameOrder($this->recipient);
+            $additionalRecipientData = $additionalRecipientData . "Odbiorcą pisma będzie ".$name.".\n";
+            $additionalRecipientData = $additionalRecipientData . "Płeć odbiorcy (m/f/?): ".\user\User::_guessSex($name).".\n";
+          };
+        };
         $intro = $this->formType !== 'email' ? "# Pozostałe\n\nMożesz użyć także tych materiałów:\n\n{$INTRO}" : "";
 
         $formText = $FORMS[$this->formType] ?? $this->formType;
@@ -95,6 +124,7 @@ class Petition extends \JSONObject {
 # Zadanie
 
 Napisz $formText do $targetTitle w sprawie wadliwych przepisów regulujących parkowanie w Polsce.
+$additionalRecipientData
 
 # Uwagi ogólne
 

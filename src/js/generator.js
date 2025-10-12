@@ -407,6 +407,7 @@ async function generate() {
         params.append('topics', JSON.stringify(topicIds));
         if (formType) params.append('form_type', formType);
         if (target) params.append('target', target);
+        if (recipient) params.append('recipient', recipient);
 
         if (button) button.classList.add('disabled');
 
