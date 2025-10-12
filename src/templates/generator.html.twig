@@ -22,7 +22,7 @@
   <h1>Co Cię wkurza w pato parkowaniu?</h1>
   <fieldset id="fs-topics">
   </fieldset>
-  <nav>
+  <nav class="sticky">
       <a href='#' class="button disabled" data-action="next">Wybierz do 3 opcji</a>
   </nav>
 </section>
@@ -31,7 +31,7 @@
   <h1>W jakim tonie chcesz napisać?</h1>
   <fieldset id='fs-types'>
   </fieldset>
-  <nav>
+  <nav class="sticky">
       <a href='#' class="button disabled" data-action="next">Dalej</a>
   </nav>
 </section>
@@ -39,13 +39,13 @@
   <h1>Do kogo chcesz napisać?</h1>
   <fieldset id='fs-targets'>
   </fieldset>
-  <nav>
+  <nav class="sticky">
       <a href='#' class="button disabled" data-action="next">Dalej</a>
   </nav>
 </section>
 
-<section id="step-4" class="hidden">
-  <h1>Wybierz adresata</h1>
+<section id="step-4" class="hidden select-parlamentary">
+  <h1>Wybierz posła/posłankę</h1>
 
   <label class='s4_filter'>
     <input name='s4_filter[]' value='vovoideship_match' type='checkbox' onchange="window.fetchRecipients()" />
@@ -55,7 +55,7 @@
   <fieldset id='fs-recipients'>
   </fieldset>
   <div class="loader"></div>
-  <nav>
+  <nav class="sticky">
       <a href='#' class="button disabled" data-action="generate">Dalej</a>
   </nav>
 </section>

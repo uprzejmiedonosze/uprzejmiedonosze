@@ -186,7 +186,14 @@
 
     &>nav {
       text-align: center;
-      margin-top: 2em;
+      &.sticky {
+        background-color: #fff;
+        margin-top: 1em;
+        padding: 1em 0;
+        position: sticky;
+        bottom: 0;
+        box-shadow: 0 0 1em 0.5em white;
+      }
     }
 
     // Progress bar loader
