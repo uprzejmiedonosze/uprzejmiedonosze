@@ -67,6 +67,7 @@
     <div class="progress" id="progress"></div>
   </div>
   <div id="output"></div>
+  <div id="output-shadow" class="hidden"></div>
   <div>
     <p>
       <b>Będziesz {{ config.sex.mogla }} przeczytać i ew. poprawić swoje pismo przed wysłaniem.</b>
@@ -76,7 +77,7 @@
       <a class="button fit-content inline light" id='mailtoButton' href="#" target="_blank" rel="external">Wyślij e-mail</a>
       <a class="button fit-content inline light" id='gmailtoButton' href="#" target="_blank" rel="external">Wyślij przez Gmaila</a>
       <a class="button fit-content inline light cta" id='openFormButton' href="#" target="_blank" rel="external">Otwórz formularz</a>
-      <a class="button fit-content inline light" id="copyBtn" onclick="copyToClipboard('#output')" >Skopiuj pismo</a>
+      <a class="button fit-content inline light" id="copyBtn" onclick="copyToClipboard('#output-shadow')" >Skopiuj pismo</a>
       <a class="button link" id='generateButton' href="#" data-action="restart">Napisz kolejne pismo</a>
 
       {% if not isPatron %}

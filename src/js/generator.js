@@ -590,6 +590,9 @@ function populateDeliveryLinks() {
     const target = targetElement?.value;
     const recipient = (targetElement?.dataset?.recipient?.startsWith('selector:') && recipientElement?.value);
 
+    const output = /** @type {HTMLDivElement} */ document?.getElementById('output')
+    const outputShadow = /** @type {HTMLDivElement} */ document?.getElementById('output-shadow')
+
     if (!target)
         return errorToast('Missing target')
 
@@ -602,7 +605,9 @@ function populateDeliveryLinks() {
     if (!recipient_action)
         return errorToast('Missing target')
 
-    const content = document?.getElementById('output')?.textContent;
+    let content = output?.textContent;
+    if (outputShadow)
+        outputShadow.textContent = content || ''
     if (!content)
         return errorToast('Missing content')
 
@@ -615,6 +620,12 @@ function populateDeliveryLinks() {
     showHideElement(gmailtoButton, emailDelivery)
 
     if (emailDelivery) {
+        if (outputShadow) {
+            content = content.replace(/\n?\s*\n?^Temat:.*$/m, '')
+            outputShadow.textContent =
+                "Wyślij wiadomość na adres: " + recipient_action + "\n" +
+                "Temat: " + subject + "\n\n" + content
+        }
         const loggedInToGmail = currentScript?.getAttribute("data-user-isgmail") == '1'
         if (loggedInToGmail) {
             gmailtoButton.classList.add('cta')
