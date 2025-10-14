@@ -428,7 +428,7 @@ async function generate() {
     // start with formal salutation
     if (recipient && recipientsData[recipient]) {
         output.textContent = recipientsData[recipient].formal + "\n\n";
-    } else if (target && recipientsData[target]) {
+    } else if (target && targetsData[target]) {
         output.textContent = targetsData[target].formal + "\n\n";
     } else {
         // should not happen
