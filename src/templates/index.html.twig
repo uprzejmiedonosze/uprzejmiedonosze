@@ -20,7 +20,7 @@
     {% for levelId,levelDef in levels %}
     <div class="hero {% if general.stats.level == levelId %}active{% endif %}">
         <img src="{{ levelDef.img }}">
-        <p>{{ levelDef.desc }}</p>
+        <p>{{ config.sex[levelDef.desc] }}</p>
     </div>
     {% endfor %}
 </div>

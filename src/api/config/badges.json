@@ -1,31 +1,31 @@
 {
     "green": {
         "img": "img/badge-green.png",
-        "name": "Obrońca zieleni",
+        "name": "Obrończyni zieleni",
         "desc": "Odznaka przyznawana po pięciu mandatach za parkowanie na zieleni",
         "categories": [6]
     },
     "zebra": {
         "img": "img/badge-zebra.png",
-        "name": "Obrońca przejść dla pieszych",
+        "name": "Obrończyni przejść dla pieszych",
         "desc": "Odznaka przyznawana po pięciu mandatach za parkowanie przed przejściem dla pieszych",
         "categories": [5]
     },
     "bus": {
         "img": "img/badge-bus.png",
-        "name": "Obrońca przystanków",
+        "name": "Obrończyni przystanków",
         "desc": "Odznaka przyznawana po pięciu mandatach za parkowanie na przystanku lub blokowanie dostępu do pojazdu komunikacji zbiorowej",
         "categories": [2, 23]
     },
     "bike": {
         "img": "img/badge-bike.png",
-        "name": "Obrońca DDRek",
+        "name": "Obrończyni DDRek",
         "desc": "Odznaka przyznawana po pięciu mandatach za parkowanie na drodze dla rowerów",
         "categories": [21, 9, 20]
     },
     "patron": {
         "img": "img/badge-patron.png",
-        "name": "Patron",
+        "name": "Patronka",
         "desc": "Odznaka przyznawana za wspieranie serwisu na <a target=\"_blank\" rel=\"external\" href=\"/patronite.html\">Patronite</a>",
         "categories": []
     },
