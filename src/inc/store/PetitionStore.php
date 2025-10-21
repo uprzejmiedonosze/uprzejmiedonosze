@@ -15,6 +15,21 @@ function set(Petition $petition) {
     \store\set(TABLE, $petition->id, json_encode($petition));
 }
 
+function getByUser(\user\User $user) {
+    $sql = <<<SQL
+    select value
+    from petition
+    where json_extract(value, '$.status') = 'generated'
+        and json_extract(value, '$.email') = :email
+SQL;
+    $stmt = \store\prepare($sql);
+    $stmt->bindValue(':email', $user->getEmail());
+    $stmt->execute();
+    $petitions = $stmt->fetchAll(\PDO::FETCH_FUNC,
+        fn($json) => Petition::withJson($json));
+    return $petitions;
+}
+
 function getTargetStats() {
     $sql = <<<SQL
     select json_extract(value, '$.target'),

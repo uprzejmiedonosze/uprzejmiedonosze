@@ -309,6 +309,11 @@ class User extends \JSONObject{
         if ($this->isFormerPatron()) {
             array_push($badges, 'former_patron');
         }
+
+        $petitions = \generator\getByUser($this);
+        if ($petitions) {
+            array_push($badges, 'writer');
+        }
         return $badges;
     }
 

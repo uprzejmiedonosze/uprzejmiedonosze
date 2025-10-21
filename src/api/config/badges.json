@@ -28,5 +28,11 @@
         "name": "Patron",
         "desc": "Odznaka przyznawana za wspieranie serwisu na <a target=\"_blank\" rel=\"external\" href=\"/patronite.html\">Patronite</a>",
         "categories": []
+    },
+    "writer": {
+        "img": "img/badge-writer.png",
+        "name": "Pisarka",
+        "desc": "Odznaka przyznawana za <a target=\"_blank\" href=\"/napisz-pismo-do-polityka.html\">napisanie pisma do polityka</a>",
+        "categories": []
     }
 }

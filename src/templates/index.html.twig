@@ -88,9 +88,9 @@
             <img src="{{ badge.img }}">
             <p>
             {% if former_patron %}
-                Były patron ☹︎
+                {{ config.sex['Była patronka'] }} ☹︎
             {% else %}
-                {{ badge.name }}
+                {{ config.sex[badge.name] }}
             {% endif %}
             </p>
         </div>
