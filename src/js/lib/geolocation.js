@@ -117,7 +117,6 @@ async function latLngToAddress(lat, lng, from) {
 
   $addressHint.text("Podaj adres lub wskaż go na mapie")
   $addressHint.removeClass("hint")
-  setSM()
 
   const geoError = () => {
     $input.removeClass()
@@ -158,6 +157,7 @@ async function latLngToAddress(lat, lng, from) {
     nominatim = await getNominatim(lat, lng)
   } catch (_e) {
     running = false
+    setSM()
     return
   }
 
