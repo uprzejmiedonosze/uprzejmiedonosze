@@ -1,9 +1,3 @@
-import $ from "jquery";
-// @ts-ignore
-window.$ = $;
-// @ts-ignore
-window.jQuery = $;
-
 import "lazysizes";
 
 import "./lib/nodeListExt";
@@ -28,21 +22,27 @@ import "./sites/menu"
 import "./sites/frequent-mistakes"
 import makeDialog from "./lib/dialog";
 
-$('.menu-button.right').on('click', function() {
-    $(this).addClass('disabled');
-})
-$('.button.cta').on('click', function() {
-    $(this).addClass('disabled');
-})
-
-$("textarea").each(function () {
-    this.style.height = this.scrollHeight + "px";
-    this.style.overflowY = "hidden";
-}).on("input", function () {
-    this.style.height = "auto";
-    this.style.height = this.scrollHeight + "px";
+document.querySelectorAll('.menu-button.right').forEach(button => {
+    button.addEventListener('click', function() {
+        this.classList.add('disabled');
+    })
 })
 
+document.querySelectorAll('.button.cta').forEach(button => {
+    button.addEventListener('click', function() {
+        this.classList.add('disabled');
+    })
+})
+
+document.querySelectorAll("textarea").forEach(textarea => {
+    textarea.style.height = textarea.scrollHeight + "px";
+    textarea.style.overflowY = "hidden";
+    
+    textarea.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+    })
+})
 
 document.addEventListener("DOMContentLoaded", () => {
     makeDialog()

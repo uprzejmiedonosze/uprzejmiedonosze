@@ -1,5 +1,3 @@
-import $ from "jquery"
-
 import mapboxgl from 'mapbox-gl'
 import Api from './Api'
 import { error } from "./toast"
@@ -9,9 +7,10 @@ let stopAgresji = false
 
 export function initMaps(lastLocation, _stopAgresji) {
   stopAgresji = _stopAgresji ?? false
-  const $input = $("#lokalizacja")
-  $input.removeClass()
-  $input.addClass("clock")
+  const input = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
+  if (input) {
+    input.className = "clock"
+  }
 
   let center = [19.480311, 52.069321]
   if (lastLocation) {
@@ -59,7 +58,7 @@ export function initMaps(lastLocation, _stopAgresji) {
   map.dragRotate.disable()
   map.touchZoomRotate.disableRotation()
 
-  if($input?.val()?.trim()?.length == 0)
+  if (input && (!input.value || input.value.trim().length == 0))
     setAddressByLatLng(center[1], center[0], 'init');
 
   map.on('moveend', updateAddressDebounce)
@@ -79,75 +78,86 @@ function updateAddressDebounce() {
 
 export function setAddressByLatLng(lat, lng, from) {
   geoLoading()
-  const $address = $("#address")
+  const address = /** @type {HTMLInputElement} */ (document.getElementById("address"))
 
   if (from === "picture" && map)
     map.setCenter([lng, lat])
 
-  $address.val(JSON.stringify({}))
+  if (address) address.value = JSON.stringify({})
   latLngToAddress(lat, lng, from)
 }
 
 function geoLoading(from) {
-  const $input = $("#lokalizacja")
-  $input.removeClass()
-  $input.addClass("clock")
+  const input = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
+  const formSubmit = document.getElementById("form-submit")
+  
+  if (input) {
+    input.className = "clock"
+  }
 
-  $("#form-submit").addClass("disabled");
-  if (from == "picture") {
-    $input.attr("placeholder", "(pobieram adres ze zdjęcia...)")
-  } else {
-    $input.attr("placeholder", "(pobieram adres z mapy...)")
+  if (formSubmit) formSubmit.classList.add("disabled")
+  
+  if (input) {
+    if (from == "picture") {
+      input.placeholder = "(pobieram adres ze zdjęcia...)"
+    } else {
+      input.placeholder = "(pobieram adres z mapy...)"
+    }
   }
 }
 
 function setSM(sm, hint) {
-  const $sm = $("#smInfo")
-  const $smHint = $("#smInfoHint")
+  const smInfo = document.getElementById("smInfo")
+  const smHint = document.getElementById("smInfoHint")
 
   sm = sm ? `Rejon: ${sm}`: ''
-  $sm.text(sm)
-  $smHint.html(hint ?? '')
+  if (smInfo) smInfo.textContent = sm
+  if (smHint) smHint.innerHTML = hint ?? ''
 }
 
 async function latLngToAddress(lat, lng, from) {
-  const $addressHint = $("#addressHint")
-  const $address = $("#address")
-  const $input = $("#lokalizacja")
+  const addressHint = document.getElementById("addressHint")
+  const address = /** @type {HTMLInputElement} */ (document.getElementById("address"))
+  const input = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
 
-  $addressHint.text("Podaj adres lub wskaż go na mapie")
-  $addressHint.removeClass("hint")
+  if (addressHint) {
+    addressHint.textContent = "Podaj adres lub wskaż go na mapie"
+    addressHint.classList.remove("hint")
+  }
 
   const geoError = () => {
-    $input.removeClass()
-    $input.addClass("alert")
+    if (input) {
+      input.className = "alert"
+    }
     setSM()
   }
 
-  const geoSuccess = (address) => {
-    $address.val(JSON.stringify(address))
-    $input.val(address?.address || '')
-    $input.removeClass()
-    if (!address?.address?.match(/.+,.+/)) {
-      $input.removeClass()
-      $input.addClass("error")
+  const geoSuccess = (addressData) => {
+    if (address) address.value = JSON.stringify(addressData)
+    if (input) {
+      input.value = addressData?.address || ''
+      input.className = ""
+      if (!addressData?.address?.match(/.+,.+/)) {
+        input.classList.add("error")
+      }
     }
     if (from == "picture") {
-      $addressHint.text("Sprawdź automatycznie pobrany adres")
-      $input.addClass("hint")
+      if (addressHint) addressHint.textContent = "Sprawdź automatycznie pobrany adres"
+      if (input) input.classList.add("hint")
     }
-    $("#form-submit").removeClass("disabled");
+    const formSubmit = document.getElementById("form-submit")
+    if (formSubmit) formSubmit.classList.remove("disabled")
   }
 
-  let address = {
+  let addressData = {
     lat,
     lng
   }
 
   try {
     const mapbox = await getMapBox(lat, lng)
-    address = {...address, ...mapbox.address}
-    geoSuccess(address)
+    addressData = {...addressData, ...mapbox.address}
+    geoSuccess(addressData)
   } catch (_e) {
     geoError()
   }
@@ -161,15 +171,15 @@ async function latLngToAddress(lat, lng, from) {
     return
   }
 
-  address.address = address.address || nominatim.address.address
-  address.city = address.city || nominatim.address.city
-  address.voivodeship = address.voivodeship || nominatim.address?.voivodeship
-  address.postcode = address.postcode || nominatim.address?.postcode
-  address.municipality = nominatim.address?.municipality
-  address.county = nominatim.address?.county
-  address.district = nominatim.address?.district
+  addressData.address = addressData.address || nominatim.address.address
+  addressData.city = addressData.city || nominatim.address.city
+  addressData.voivodeship = addressData.voivodeship || nominatim.address?.voivodeship
+  addressData.postcode = addressData.postcode || nominatim.address?.postcode
+  addressData.municipality = nominatim.address?.municipality
+  addressData.county = nominatim.address?.county
+  addressData.district = nominatim.address?.district
   
-  geoSuccess(address)
+  geoSuccess(addressData)
 
   if (stopAgresji) {
     setSM(nominatim.sa.address[0], nominatim.sa.hint ?? '')

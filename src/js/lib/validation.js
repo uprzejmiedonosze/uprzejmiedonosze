@@ -1,10 +1,12 @@
-import $ from "jquery"
 import { DateTime } from "luxon"
 import { error, warning } from "./toast"
 
 export const checkAddress = function () {
-  const textAddress = ($("#lokalizacja")?.val() + "").trim()
-  const jsonAddress = $("#address")?.val() + ""
+  const lokalizacjaInput = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
+  const addressInput = /** @type {HTMLInputElement} */ (document.getElementById("address"))
+  
+  const textAddress = (lokalizacjaInput?.value || "").trim()
+  const jsonAddress = addressInput?.value || ""
 
   var ret = textAddress.length > 10;
   var address = JSON.parse(jsonAddress)
@@ -12,48 +14,54 @@ export const checkAddress = function () {
   ret = address.lat > 0 && ret
   ret = address.lng > 0 && ret
   if (!ret && textAddress.length > 0) {
-    $("#addressHint").text(
-      "Podaj adres lub wskaż go na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej"
-    );
-    $("#addressHint").addClass("hint");
+    const addressHint = document.getElementById("addressHint")
+    if (addressHint) {
+      addressHint.textContent = "Podaj adres lub wskaż go na mapie. Ew. uwagi dotyczące lokalizacji napisz w polu komentarz poniżej"
+      addressHint.classList.add("hint")
+    }
   }
 
-  !ret && $("#lokalizacja").addClass("error");
+  if (!ret && lokalizacjaInput) lokalizacjaInput.classList.add("error")
   return ret;
 };
 
 export const checkValue = function (item, minLength) {
-  const len = item.val().trim().length
+  if (!item) return false
+  const len = item.value.trim().length
   if (len > minLength)
     return true
-  item.addClass("error")
+  item.classList.add("error")
   return false
 }
 
 export const checkValueRe = function (item, regex) {
-  if (item.val().trim().match(regex))
+  if (!item) return false
+  if (item.value.trim().match(regex))
     return true
-  item.addClass("error")
+  item.classList.add("error")
   return false
 }
 
 export const checkCommentvalue = function () {
-  let comment = ($("#comment")?.val() + "")?.trim()
+  const commentInput = /** @type {HTMLTextAreaElement} */ (document.getElementById("comment"))
+  if (!commentInput) return false
+  
+  let comment = (commentInput.value || "").trim()
   comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/ig, '').trim()
   if (comment.length > 10)
     return true
-  $("#comment").addClass("error")
-  $("#comment").attr("placeholder", "Podaj rodzaj wykroczenia z listy poniżej, albo opisz je w tym polu")
+  commentInput.classList.add("error")
+  commentInput.placeholder = "Podaj rodzaj wykroczenia z listy poniżej, albo opisz je w tym polu"
   return false
 }
 
 export function bindSoftCommentValidation() {
-  $('#comment')
-    .on('focusout', function () {
-      // @ts-ignore
+  const commentInput = /** @type {HTMLTextAreaElement} */ (document.getElementById('comment'))
+  if (commentInput) {
+    commentInput.addEventListener('focusout', function () {
       const comment = this.value ?? ''
-      // @ts-ignore
-      const witnessChecked = document.getElementById('witness')?.checked
+      const witnessElement = /** @type {HTMLInputElement} */ (document.getElementById('witness'))
+      const witnessChecked = witnessElement?.checked
       if (witnessChecked) return
       const driver = comment.search(/(?:^|[^A-Za-z0-9_])kier\w*/i) >= 0
       let warningMsg = null
@@ -69,18 +77,20 @@ export function bindSoftCommentValidation() {
         warning(`<p>${warningMsg}</p><a href="#statements">Sprawdź opcję „świadek momentu parkowania”</a>`)
       }
     })
+  }
 }
 
 export const checkDateTimeValue = function () {
-  const dt = DateTime.fromISO($('#datetime')?.val() + "")
+  const datetimeInput = /** @type {HTMLInputElement} */ (document.getElementById('datetime'))
+  const dt = DateTime.fromISO(datetimeInput?.value || "")
   if (dt > DateTime.now()) {
-    $('#datetime').addClass("error")
+    if (datetimeInput) datetimeInput.classList.add("error")
     error("Data nie może być z przyszłości")
     return false
   }
   const sevenMonthsAgo = DateTime.now().minus({ months: 7 })
   if (dt < sevenMonthsAgo) {
-    $('#datetime').addClass("error")
+    if (datetimeInput) datetimeInput.classList.add("error")
     error("Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!")
     return false
   }

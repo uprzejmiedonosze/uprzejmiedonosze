@@ -1,4 +1,4 @@
-import $ from "jquery"
+
 
 import { updateCounters } from "../lib/status";
 import { setStatus } from "../lib/status"
@@ -33,9 +33,17 @@ document.addEventListener("DOMContentLoaded", (event) => {
   displayAllAppsBtn?.addEventListener("click", displayAllAppsHandler)
 
   // close „recydywa” dialong on Esc
-  const $recydywa = $('#recydywa')
-  $(document).on('keyup', e => e.key === "Escape" && $recydywa.hide())
-  $recydywa.on('click', _e => $recydywa.hide())
+  const recydywaElement = document.getElementById('recydywa')
+  if (recydywaElement) {
+    document.addEventListener('keyup', e => {
+      if (e.key === "Escape") {
+        recydywaElement.style.display = 'none'
+      }
+    })
+    recydywaElement.addEventListener('click', _e => {
+      recydywaElement.style.display = 'none'
+    })
+  }
   
   updateCounters()
 })
@@ -47,19 +55,28 @@ function filterAppsHandler() {
 function filterApps(target) {
     if (target.classList.contains('active')) {
       target.classList.remove("active")
-      $("div.application:not(.archived)").show()
+      document.querySelectorAll("div.application:not(.archived)").forEach(el => {
+        /** @type {HTMLElement} */ (el).style.display = 'block'
+      })
       return
     }
-    $("div.application").hide();
-    $("div.application." + target.id).show();
-    $(".status-filter a").removeClass("active");
+    document.querySelectorAll("div.application").forEach(el => {
+      /** @type {HTMLElement} */ (el).style.display = 'none'
+    })
+    document.querySelectorAll("div.application." + target.id).forEach(el => {
+      /** @type {HTMLElement} */ (el).style.display = 'block'
+    })
+    document.querySelectorAll(".status-filter a").forEach(el => el.classList.remove("active"))
     target.classList.add("active")
 }
 
 
 function displayAllAppsHandler() {
-  $("div.displayAllApps").hide();
-  $("div.application:not(.archived)").show();
+  const displayAllApps = document.querySelector("div.displayAllApps")
+  if (displayAllApps) /** @type {HTMLElement} */ (displayAllApps).style.display = 'none'
+  document.querySelectorAll("div.application:not(.archived)").forEach(el => {
+    /** @type {HTMLElement} */ (el).style.display = 'block'
+  })
   triggerFilter('apps')
 }
 
@@ -103,41 +120,45 @@ export async function appClicked(target) {
 
   makeDropdown()
 
-  $('a.send-application').on('click', async function () {
-    const appId = $(this).data('appid')
-    sendApplication(appId)
+  document.querySelectorAll('a.send-application').forEach(link => {
+    link.addEventListener('click', async function () {
+      const appId = this.dataset.appid
+      sendApplication(appId)
+    })
   })
 
-  $('a.recydywa-seemore').on('click', async function () {
-    const plateId = $(this).data('plateid')
-    const $recydywa = $('#recydywa')
-    const $recydywaContent = $('#recydywa .popup-content')
-    $recydywaContent.html('<div class="loader"></div>')
-    $recydywa.show()
-    const api = new Api(`/recydywa-${plateId}-partial.html`)
-    const recydywa = await api.getHtml()
-    $recydywaContent.html(recydywa)
+  document.querySelectorAll('a.recydywa-seemore').forEach(link => {
+    link.addEventListener('click', async function () {
+      const plateId = this.dataset.plateid
+      const recydywaElement = document.getElementById('recydywa')
+      const recydywaContent = document.querySelector('#recydywa .popup-content')
+      if (recydywaContent) recydywaContent.innerHTML = '<div class="loader"></div>'
+      if (recydywaElement) recydywaElement.style.display = 'block'
+      const api = new Api(`/recydywa-${plateId}-partial.html`)
+      const recydywa = await api.getHtml()
+      if (recydywaContent) recydywaContent.innerHTML = recydywa
+    })
   })
 
-  $('.app-field-editable')
-    .on('focusout', async function() {
+  document.querySelectorAll('.app-field-editable').forEach(field => {
+    field.addEventListener('focusout', async function() {
       const initialValue = this.dataset.initialValue ?? ''
       const newValue = this.value ?? ''
       if (initialValue === newValue) {
         return;
       }
-      var $target = $(this)
+
 
       const body = {
         [this.name]: newValue
       };
 
-      $target.attr('readonly', "true")
+      this.setAttribute('readonly', "true")
       try {
         const api = new Api(`/api/app/${appId}/fields`)
         const reply = await api.patch(body)
-        $target.removeAttr('readonly')
-        $target.removeClass("error")
+        this.removeAttribute('readonly')
+        this.classList.remove("error")
         this.setAttribute("data-initial-value", newValue)
 
         if (reply.suggestStatusChange) {
@@ -146,13 +167,19 @@ export async function appClicked(target) {
           }
         }
 
-        const app = $(`#${appId}`)
-        const oldFilterText = app.attr('data-filtertext') ?? ''
-        if (initialValue.length>5) app.attr('data-filtertext', oldFilterText.replace(initialValue, newValue))
-        else app.attr('data-filtertext', oldFilterText + newValue)
+        const app = document.getElementById(appId)
+        if (app) {
+          const oldFilterText = app.getAttribute('data-filtertext') ?? ''
+          if (initialValue.length>5) {
+            app.setAttribute('data-filtertext', oldFilterText.replace(initialValue, newValue))
+          } else {
+            app.setAttribute('data-filtertext', oldFilterText + newValue)
+          }
+        }
       } catch(e) {
-        $target.removeAttr('readonly')
-        $target.addClass("error")
+        this.removeAttribute('readonly')
+        this.classList.add("error")
       }
     })
+  })
 }

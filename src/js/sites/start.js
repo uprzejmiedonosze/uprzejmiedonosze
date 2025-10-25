@@ -1,7 +1,5 @@
-import $ from "jquery"
-
 document.addEventListener("DOMContentLoaded", () => {
-  if (!$(".start-page").length) return;
+  if (!document.querySelector(".start-page")) return;
   // @ts-ignore
   (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "start" });
 });

@@ -1,5 +1,3 @@
-import $ from "jquery"
-
 import * as Sentry from "@sentry/browser";
 
 import { updateStatus } from "./status";
@@ -9,10 +7,11 @@ import Api from './Api'
 import { appClicked, closeAllApps } from "../sites/my-apps";
 
 async function sendApplication(/** @type {string} */ appId) {
-  const $whatNext = $(".whatNext")
-  const $afterSend = $(".afterSend")
+  const whatNext = document.querySelector(".whatNext")
+  const afterSend = document.querySelector(".afterSend")
 
-  $(`#${appId} .status-confirmed-waiting`).addClass("disabled")
+  const statusElement = document.querySelector(`#${appId} .status-confirmed-waiting`)
+  if (statusElement) statusElement.classList.add("disabled")
 
   message("Wysyłam...")
 
@@ -24,11 +23,11 @@ async function sendApplication(/** @type {string} */ appId) {
 
     updateStatus(appId, msg.status)
     toast("Wysłane")
-    if ($(".dziekujemy").length) {
-      $whatNext.hide();
-      $afterSend.show();
+    if (document.querySelector(".dziekujemy")) {
+      if (whatNext) /** @type {HTMLElement} */ (whatNext).style.display = 'none'
+      if (afterSend) /** @type {HTMLElement} */ (afterSend).style.display = 'block'
     }
-    if ($('.my-applications').length) {
+    if (document.querySelector('.my-applications')) {
       closeAllApps()
       appClicked(document.getElementById(appId))
     }
@@ -36,11 +35,15 @@ async function sendApplication(/** @type {string} */ appId) {
     (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" })
   } catch (e) {
     error(e.message)
-    $whatNext.hide()
+    if (whatNext) /** @type {HTMLElement} */ (whatNext).style.display = 'none'
     Sentry.captureException(e, {
       extra: e.message
     })
-    $afterSend.text('Błąd: ' + e.message).show().addClass('error')
+    if (afterSend) {
+      afterSend.textContent = 'Błąd: ' + e.message;
+      /** @type {HTMLElement} */ (afterSend).style.display = 'block'
+      afterSend.classList.add('error')
+    }
     // @ts-ignore
     if (typeof ga == 'function')
       // @ts-ignore
@@ -53,7 +56,9 @@ async function sendApplication(/** @type {string} */ appId) {
 }
 
 export function showButtons() {
-  $('.button.disabled').removeClass("disabled")
+  document.querySelectorAll('.button.disabled').forEach(button => {
+    button.classList.remove("disabled")
+  })
 }
 
 export default sendApplication

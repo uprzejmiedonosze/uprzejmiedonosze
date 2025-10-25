@@ -1,5 +1,3 @@
-import $ from "jquery"
-
 import Api from './Api'
 
 const statuses = require("../../api/config/statuses.json");
@@ -40,44 +38,79 @@ window.setStatus = setStatus;
 
 export function updateStatus(appId, status) {
   const statusDef = statuses[status]
-  const $popup = $("#changeStatus" + appId)
-  const $application = $("#" + appId)
-  $popup.find("li a").parent().hide()
+  const popup = document.getElementById("changeStatus" + appId)
+  const application = document.getElementById(appId)
+  
+  if (popup) {
+    const links = popup.querySelectorAll("li a")
+    links.forEach(link => {
+      const parent = /** @type {HTMLElement} */ (link.parentElement)
+      if (parent) parent.style.display = 'none'
+    })
 
   statusDef.allowed.forEach(function (allowed) {
-    $popup.find("a." + allowed).parent().show()
+      const allowedLink = popup.querySelector("a." + allowed)
+      if (allowedLink && allowedLink.parentElement) {
+        /** @type {HTMLElement} */ (allowedLink.parentElement).style.display = 'block'
+      }
   });
+  }
 
+  if (application) {
   const allClasses = Object.keys(statuses).join(" ")
-  $application.removeClass(allClasses)
-  $application.addClass(status)
-  $application.find('div.status-dot').removeClass(allClasses)
-  $application.find('div.status-dot').addClass(status)
-  $application.find(".application-details-list > .status-dot > b").text(statusDef.name.toUpperCase());
-  $application.find(".top-line > .status-dot > b").text(statusDef.name.toUpperCase());
+    application.classList.remove(...allClasses.split(' '))
+    application.classList.add(status)
+    
+    const statusDots = application.querySelectorAll('div.status-dot')
+    statusDots.forEach(dot => {
+      dot.classList.remove(...allClasses.split(' '))
+      dot.classList.add(status)
+    })
+    
+    const detailsStatusText = application.querySelector(".application-details-list > .status-dot > b")
+    if (detailsStatusText) {
+      detailsStatusText.textContent = statusDef.name.toUpperCase()
+    }
+    
+    const topLineStatusText = application.querySelector(".top-line > .status-dot > b")
+    if (topLineStatusText) {
+      topLineStatusText.textContent = statusDef.name.toUpperCase()
+    }
+  }
 
   updateCounters();
 }
 
 export function updateCounters() {
-  $(".status-filter li").each(function (_idx, item) {
-    const count = $("div.application." + item.children[0].id).length;
-    // @ts-ignore
-    item.children[1].innerText = count;
+  const statusFilterItems = document.querySelectorAll(".status-filter li")
+  statusFilterItems.forEach((item) => {
+    const firstChild = item.children[0]
+    if (firstChild && firstChild.id) {
+      const count = document.querySelectorAll("div.application." + firstChild.id).length;
+      const secondChild = item.children[1]
+      if (secondChild) {
+        secondChild.textContent = count.toString();
+      }
     if (count == 0) {
-      $(item).hide();
+        /** @type {HTMLElement} */ (item).style.display = 'none';
     } else {
-      $(item).show();
+        /** @type {HTMLElement} */ (item).style.display = 'block';
+      }
     }
   });
 
-  const $sendMenu = $("li.wysylka a span")
-  if ($('.dziekujemy').length) { // send on thank page
-    $sendMenu.text(parseInt($sendMenu.text()) - 1)
+  const sendMenu = document.querySelector("li.wysylka a span")
+  if (sendMenu) {
+    if (document.querySelector('.dziekujemy')) { // send on thank page
+      const currentCount = parseInt(sendMenu.textContent || '0')
+      sendMenu.textContent = (currentCount - 1).toString()
   } else {
-    $sendMenu.text($("div.application.confirmed").length);
+      const confirmedApps = document.querySelectorAll("div.application.confirmed")
+      sendMenu.textContent = confirmedApps.length.toString();
   }
-  if (parseInt($sendMenu.text()) <= 0) {
-    $sendMenu.parent().hide()
+    if (parseInt(sendMenu.textContent || '0') <= 0) {
+      const parent = /** @type {HTMLElement} */ (sendMenu.parentElement)
+      if (parent) parent.style.display = 'none'
+    }
   }
 }

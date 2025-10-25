@@ -1,4 +1,3 @@
-import $ from "jquery"
 import heic2any from "heic2any"
 import ExifReader from 'exifreader'
 
@@ -33,9 +32,11 @@ export async function checkFile(file, id) {
   imageToResize.addEventListener("load", async () => {
     try {
       const resizedImage = resizeImage(imageToResize)
-      $(`#${id}Preview`)
-        .css('opacity', 0.3)
-        .attr('src', resizedImage)
+      const previewElement = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
+      if (previewElement) {
+        previewElement.style.opacity = '0.3'
+        previewElement.src = resizedImage
+      }
 
       if (id === "carImage") {
         const exif = await ExifReader.load(file)
@@ -46,8 +47,11 @@ export async function checkFile(file, id) {
         if (lat) setAddressByLatLng(lat, lng, "picture")
         else noGeoDataInImage()
 
-        $("#plateImage").attr("src", "");
-        $("#plateImage").hide();
+        const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
+        if (plateImage) {
+          plateImage.src = ""
+          plateImage.style.display = 'none'
+        }
         await sendFile(resizedImage, id, {
           dateTime,
           dtFromPicture: !!dateTime,
@@ -71,13 +75,26 @@ export async function checkFile(file, id) {
  * @param {'contextImage' | 'carImage' | 'thirdImage'} id
  */
 function uploadStarted(id) {
-  $(`.${id}Section`).removeClass("error");
-  $(`.${id}Section img`).hide();
-  $(`.${id}Section .loader`).show().addClass("l");
+  const section = document.querySelector(`.${id}Section`)
+  if (section) {
+    section.classList.remove("error")
+    const img = section.querySelector('img')
+    const loader = section.querySelector('.loader')
+    if (img) img.style.display = 'none'
+    if (loader) {
+      loader.style.display = 'block'
+      loader.classList.add("l")
+    }
+  }
+  
   if (id == "carImage") {
-    $("#recydywa").hide()
-    $("#plateId").removeClass()
-    $('.plate-box').hide()
+    const recydywa = document.getElementById("recydywa")
+    const plateId = document.getElementById("plateId")
+    const plateBox = document.querySelector('.plate-box')
+    
+    if (recydywa) recydywa.style.display = 'none'
+    if (plateId) plateId.className = ''
+    if (plateBox) plateBox.style.display = 'none'
   }
   uploadInProgress++;
   checkUploadInProgress();
@@ -89,11 +106,13 @@ function uploadFinished() {
 }
 
 function checkUploadInProgress() {
+  const formSubmit = document.getElementById("form-submit")
   if (uploadInProgress <= 0) {
     uploadInProgress = 0;
-    return $("#form-submit").removeClass("disabled");
+    if (formSubmit) formSubmit.classList.remove("disabled")
+    return
   }
-  $("#form-submit").addClass("disabled");
+  if (formSubmit) formSubmit.classList.add("disabled")
 }
 
 /**
@@ -102,9 +121,17 @@ function checkUploadInProgress() {
  * @param {string} errorMsg
  */
 function imageError(id, errorMsg) {
-  $(`.${id}Section .loader`).hide()
-  $(`.${id}Section`).addClass("error")
-  $(`#${id}Preview`).attr('src', 'img/fff-1.png').css('opacity', 1).show()
+  const section = document.querySelector(`.${id}Section`)
+  const loader = document.querySelector(`.${id}Section .loader`)
+  const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
+  
+  if (loader) loader.style.display = 'none'
+  if (section) section.classList.add("error")
+  if (preview) {
+    preview.src = 'img/fff-1.png'
+    preview.style.opacity = '1'
+    preview.style.display = 'block'
+  }
   if (errorMsg) error(errorMsg)
   uploadFinished()
 }
@@ -180,21 +207,18 @@ function resizeImage(imgToResize) {
 }
 
 function noGeoDataInImage() {
+  const addressHint = document.getElementById("addressHint")
+  if (!addressHint) return
+  
   if (isIOS()) {
-    $("#addressHint").text(
-      "Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć"
-    );
+    addressHint.textContent = "Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć"
   } else if (/Chrome/.test(navigator.userAgent) &&
     /Android/.test(navigator.userAgent)) {
-    $("#addressHint").html(
-      'Przeglądarka Chrome na Androidzie zapewne usunęła znaczniki geolokalizacji, <a href="/aplikacja.html">zainstaluj Firefox-a</a>.'
-    );
+    addressHint.innerHTML = 'Przeglądarka Chrome na Androidzie zapewne usunęła znaczniki geolokalizacji, <a href="/aplikacja.html">zainstaluj Firefox-a</a>.'
   } else {
-    $("#addressHint").html(
-      'Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" target="_blank" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.'
-    );
+    addressHint.innerHTML = 'Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" target="_blank" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.'
   }
-  $("#addressHint").addClass("hint");
+  addressHint.classList.add("hint")
 }
 
 /**
@@ -206,9 +230,11 @@ function noGeoDataInImage() {
 export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   if (!vehicleBox.width) return
 
-  const $carImagePreview = $('img#carImagePreview')
-  const trimBoxWidth = $carImagePreview.width() // trim box width
-  const trimBoxHeight = 200 //$carImagePreview.height() // trim box height
+  const carImagePreview = /** @type {HTMLImageElement} */ (document.querySelector('img#carImagePreview'))
+  if (!carImagePreview) return
+  
+  const trimBoxWidth = carImagePreview.offsetWidth // trim box width
+  const trimBoxHeight = 200 // trim box height
   const ratio = trimBoxWidth / imageWidth // scaling factor of rendered image
 
   const middleOfCar = parseInt(vehicleBox.y) + parseInt(vehicleBox.height) / 2
@@ -217,17 +243,18 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   if (offsetY > trimBoxHeight / 2)
     offsetY = trimBoxHeight / 2 - 5
 
-  $carImagePreview.css('object-position', `0% -${offsetY}px`)
-  $carImagePreview.css("height", "100%")
+  carImagePreview.style.objectPosition = `0% -${offsetY}px`
+  carImagePreview.style.height = "100%"
 
-
-  const $plateBox = $('.plate-box')
-  $plateBox.css('left', 100 * vehicleBox.x / imageWidth + '%')
-  $plateBox.css('width', 100 * vehicleBox.width / imageWidth + '%')
-  $plateBox.css('top', vehicleBox.y * ratio - offsetY + 'px')
-  $plateBox.css('height', vehicleBox.height * ratio + 'px')
-  $plateBox.css('border', '2px solid #e9c200')
-  $plateBox.show()
+  const plateBox = /** @type {HTMLElement} */ (document.querySelector('.plate-box'))
+  if (plateBox) {
+    plateBox.style.left = 100 * vehicleBox.x / imageWidth + '%'
+    plateBox.style.width = 100 * vehicleBox.width / imageWidth + '%'
+    plateBox.style.top = vehicleBox.y * ratio - offsetY + 'px'
+    plateBox.style.height = vehicleBox.height * ratio + 'px'
+    plateBox.style.border = '2px solid #e9c200'
+    plateBox.style.display = 'block'
+  }
 }
 
 /**
@@ -236,7 +263,8 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
  * @param {*} imageMetadata 
  */
 async function sendFile(fileData, id, imageMetadata={}) {
-  const appId = $(".new-application #applicationId").val()
+  const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
+  const appId = appIdElement?.value
   var data = {
     image_data: fileData,
     pictureType: id
@@ -251,55 +279,58 @@ async function sendFile(fileData, id, imageMetadata={}) {
     showThirdImage(true)
   }
 
-  const $comment = $("#comment")
-  const $plateImage = $("#plateImage")
-  const $plateHint = $("#plateHint")
-  const $plateId = $("#plateId")
+  const comment = /** @type {HTMLTextAreaElement} */ (document.getElementById("comment"))
+  const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
+  const plateHint = document.getElementById("plateHint")
+  const plateId = /** @type {HTMLInputElement} */ (document.getElementById("plateId"))
 
 
   try {
     const api = new Api(`/api/app/${appId}/image`)
     const app = await api.post(data)
     if (app.carImage || app.contextImage || app.thirdImage) {
-  
-      $(`.${id}Section .loader`).removeClass("l")
-      $(`#${id}Preview`)
-        .css("height", "100%")
-        .css("opacity", 1)
-        .attr("src", app[id].thumb + "?v=" + Math.random().toString())
+      const loader = document.querySelector(`.${id}Section .loader`)
+      const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
+      
+      if (loader) loader.classList.remove("l")
+      if (preview) {
+        preview.style.height = "100%"
+        preview.style.opacity = "1"
+        preview.src = app[id].thumb + "?v=" + Math.random().toString()
+      }
     }
 
     if (id == "carImage" && app.carInfo) {
-      $('.plate-box').css('border', 'none')
+      const plateBox = /** @type {HTMLElement} */ (document.querySelector('.plate-box'))
+      if (plateBox) plateBox.style.border = 'none'
 
       if (app.carInfo.plateId) {
-        $plateId.val(app.carInfo.plateId);
+        if (plateId) plateId.value = app.carInfo.plateId
         repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
         updateRecydywa(appId)
 
         if (app.carInfo.brand) {
-          if (($comment?.val() + "").trim().length == 0) {
+          if (comment && (comment.value + "").trim().length == 0) {
             if (app.carInfo.brandConfidence > 90) {
-              $comment.val(
-                "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
-              );
+              comment.value = "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
             }
             if (app.carInfo.brandConfidence > 98) {
-              $comment.val("Pojazd marki " + app.carInfo.brand + ".");
+              comment.value = "Pojazd marki " + app.carInfo.brand + "."
             }
           }
         }
-        $plateHint.removeClass().addClass("hint").text(
-          "Sprawdź automatycznie pobrany numer rejestracyjny"
-        );
+        if (plateHint) {
+          plateHint.className = "hint"
+          plateHint.textContent = "Sprawdź automatycznie pobrany numer rejestracyjny"
+        }
       }
       if (app.carInfo.plateImage) {
-        $plateImage.attr(
-          "src",
-          app.carInfo.plateImage + "?v=" + Math.random().toString()
-        ).show();
+        if (plateImage) {
+          plateImage.src = app.carInfo.plateImage + "?v=" + Math.random().toString()
+          plateImage.style.display = 'block'
+        }
       } else {
-        $plateImage.hide();
+        if (plateImage) plateImage.style.display = 'none'
       }
     }
     uploadFinished()
@@ -309,7 +340,8 @@ async function sendFile(fileData, id, imageMetadata={}) {
 }
 
 export async function removeFile(id) {
-  const appId = $(".new-application #applicationId").val()
+  const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
+  const appId = appIdElement?.value
   const api = new Api(`/api/app/${appId}/image/${id}`)
   try {
     await api.delete()
@@ -321,11 +353,22 @@ export async function removeFile(id) {
 }
 
 function showThirdImage(show) {
+  const thirdImageSections = document.querySelectorAll(".thirdImageSection")
+  const thirdImageButtons = document.querySelectorAll(".thirdImageSection.imageButton")
+  
   if (show) {
-    $(".thirdImageSection").show()
-    $(".thirdImageSection.imageButton").hide()
+    thirdImageSections.forEach(section => {
+      /** @type {HTMLElement} */ (section).style.display = 'block'
+    })
+    thirdImageButtons.forEach(button => {
+      /** @type {HTMLElement} */ (button).style.display = 'none'
+    })
   } else {
-    $(".thirdImageSection").hide()
-    $(".thirdImageSection.imageButton").show()
+    thirdImageSections.forEach(section => {
+      /** @type {HTMLElement} */ (section).style.display = 'none'
+    })
+    thirdImageButtons.forEach(button => {
+      /** @type {HTMLElement} */ (button).style.display = 'block'
+    })
   }
 }

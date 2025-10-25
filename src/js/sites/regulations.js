@@ -1,11 +1,11 @@
-import $ from "jquery"
-
-$(function () {
-  if (!$(".przepisy").length) return;
+document.addEventListener("DOMContentLoaded", () => {
+  if (!document.querySelector(".przepisy")) return;
   const hash = window.location.hash;
-  if ($(hash).length) {
+  if (!hash) return
+  const hashElement = document.querySelector(hash);
+  if (hashElement) {
     setTimeout(function () {
-      $("html, body").animate({ scrollTop: $(hash).offset().top });
+      hashElement.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   }
 });

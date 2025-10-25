@@ -1,10 +1,10 @@
-import $ from "jquery"
-
 function copyToClipboard(selector) {
     selector = selector || 'dd#copy'
-    var txt = $(selector).text().trim()
+    const element = document.querySelector(selector)
+    const txt = element ? element.textContent.trim() : ''
     navigator.clipboard.writeText(txt)
-    $('a#copyBtn').text('Tekst skopiowany')
+    const copyBtn = document.querySelector('a#copyBtn')
+    if (copyBtn) copyBtn.textContent = 'Tekst skopiowany'
   }
 
 

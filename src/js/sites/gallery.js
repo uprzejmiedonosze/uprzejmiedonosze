@@ -1,54 +1,62 @@
-import $ from "jquery"
+async function tumblr() {
+  try {
+    const response = await fetch("https://galeria.uprzejmiedonosze.net/api/read/json?num=30");
+    const text = await response.text();
+    // Remove JSONP callback wrapper
+    const jsonText = text.replace(/^[^{]*/, '').replace(/[^}]*$/, '');
+    const data = JSON.parse(jsonText);
+    
+    data.posts.forEach(function (post) {
+      var postHtml = "";
 
-function tumblr() {
-  $.getJSON(
-    "https://galeria.uprzejmiedonosze.net/api/read/json?num=30&callback=?",
-    function (data) {
-      $.each(data.posts, function (_i, _posts) {
-        var post = "";
+      switch (post.type) {
+        case "regular":
+          if (post["regular-title"]) {
+            postHtml += "<h3>" + post["regular-title"] + "</h3>";
+          }
+          postHtml += "<p>" + post["regular-body"] + "</p>";
+          break;
+        case "link":
+          postHtml =
+            "<h3><a href='" +
+            post["link-url"] +
+            "'>" +
+            post["link-text"] +
+            "</a></h3>";
+          break;
+        case "quote":
+          postHtml = post["quote-text"];
+          break;
+        case "photo":
+          postHtml =
+            '<div class="galleryItem"><a href=\'' +
+            post["url-with-slug"] +
+            "'><img src='" +
+            post["photo-url-500"] +
+            "'></a>";
+          if (post["photo-caption"]) {
+            postHtml += "<p>" + post["photo-caption"] + "</p>";
+          }
+          postHtml += "</li>";
+          break;
+      }
 
-        switch (this.type) {
-          case "regular":
-            if (this["regular-title"]) {
-              post += "<h3>" + this["regular-title"] + "</h3>";
-            }
-            post += "<p>" + this["regular-body"] + "</p>";
-            break;
-          case "link":
-            post =
-              "<h3><a href='" +
-              this["link-url"] +
-              "'>" +
-              this["link-text"] +
-              "</a></h3>";
-            break;
-          case "quote":
-            post = this["quote-text"];
-            break;
-          case "photo":
-            post =
-              '<div class="galleryItem"><a href=\'' +
-              this["url-with-slug"] +
-              "'><img src='" +
-              this["photo-url-500"] +
-              "'></a>";
-            if (this["photo-caption"]) {
-              post += "<p>" + this["photo-caption"] + "</p>";
-            }
-            post += "</li>";
-            break;
-        }
-
-        $("div.loader").hide();
-        $("div.tumblr_posts").append(post);
-      });
-    }
-  );
+      const loader = document.querySelector("div.loader");
+      if (loader) loader.style.display = 'none';
+      
+      const tumblrPosts = document.querySelector("div.tumblr_posts");
+      if (tumblrPosts) {
+        tumblrPosts.insertAdjacentHTML('beforeend', postHtml);
+      }
+    });
+  } catch (error) {
+    console.error('Error loading gallery:', error);
+  }
 }
 
-if ($(".gallery").length) {
-  $(document).ready(function () {
-    if ($("div.tumblr_posts").length > 0) {
+if (document.querySelector(".gallery")) {
+  document.addEventListener("DOMContentLoaded", function () {
+    if (document.querySelector("div.tumblr_posts")) {
       tumblr();
     }
   });

@@ -1,28 +1,39 @@
-import $ from "jquery"
 import { checkAddress, checkValue, checkCommentvalue, checkDateTimeValue } from "../lib/validation";
 
 export function validateForm() {
-  $("#form-submit").addClass("disabled");
-  var ret = checkValue($("#plateId"), 3);
+  const formSubmit = document.getElementById("form-submit")
+  if (formSubmit) formSubmit.classList.add("disabled")
+  
+  const plateIdInput = /** @type {HTMLInputElement} */ (document.getElementById("plateId"))
+  var ret = checkValue(plateIdInput, 3);
   ret = checkDateTimeValue() && ret;
   ret = checkAddress() && ret;
   ret = checkImages() && ret;
-  if ($("#0").is(":checked")) {
+  
+  const categoryZero = /** @type {HTMLInputElement} */ (document.getElementById("0"))
+  if (categoryZero && categoryZero.checked) {
     // if category == 0 then comment is mandatory
     ret = checkCommentvalue() && ret;
   }
+  
   if (!ret) {
-    $(window).scrollTop($(".error").first().offset()?.top || 100 - 100);
+    const errorElement = document.querySelector(".error")
+    if (errorElement) {
+      errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
   }
-  $("#form-submit").removeClass("disabled");
+  
+  if (formSubmit) formSubmit.classList.remove("disabled")
   return ret;
 }
 
 function checkImages() {
   let success = true;
   ['contextImage', 'carImage'].forEach(img => {
-    if ($(`.${img}Section img`)?.attr('src')?.startsWith('img/')) {
-      $(`.${img}Section`).addClass("error");
+    const imgElement = document.querySelector(`.${img}Section img`)
+    const sectionElement = document.querySelector(`.${img}Section`)
+    if (imgElement && imgElement.getAttribute('src')?.startsWith('img/')) {
+      if (sectionElement) sectionElement.classList.add("error")
       success = false;
     }
   })

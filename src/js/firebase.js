@@ -1,5 +1,3 @@
-import $ from "jquery"
-
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, EmailAuthProvider } from "firebase/auth";
 import * as firebaseui from 'firebaseui';
@@ -128,8 +126,11 @@ function setError(error) {
             error = error.message
         else error = JSON.stringify(error);
     }
-    $("p.error").text(error);
-    $("footer h4").text("błąd logowania");
+    const errorElement = document.querySelector("p.error");
+    if (errorElement) errorElement.textContent = error;
+    
+    const footerElement = document.querySelector("footer h4");
+    if (footerElement) footerElement.textContent = "błąd logowania";
 }
 
 function finishLogin(signInSuccessUrl) {

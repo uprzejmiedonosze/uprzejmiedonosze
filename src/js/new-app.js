@@ -1,5 +1,3 @@
-import $ from "jquery"
-
 import * as Sentry from "@sentry/browser"
 import { initMaps } from "./lib/geolocation";
 import { initHandlers } from "./new-app/on-load";
@@ -9,7 +7,7 @@ import { updateRecydywa } from "./new-app/recydywa";
 const currentScript = document.currentScript;
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (!$(".new-application").length) return;
+  if (!document.querySelector(".new-application")) return;
 
   const map = initMaps(currentScript?.getAttribute("last-location"), currentScript?.getAttribute("stop-agresji"))
   initHandlers(map)
@@ -25,16 +23,21 @@ document.addEventListener("DOMContentLoaded", () => {
       width: currentScript.getAttribute("data-vehiclebox-width"),
       height: currentScript.getAttribute("data-vehiclebox-height")
     }
-    const imageWidth = currentScript?.getAttribute("data-image-width") || 0
-    const imageHeight = currentScript?.getAttribute("data-image-height")
+    const imageWidthAttr = currentScript?.getAttribute("data-image-width")
+    const imageWidth = imageWidthAttr ? parseInt(imageWidthAttr) : 0
+    const imageHeightAttr = currentScript?.getAttribute("data-image-height")
+    const imageHeight = imageHeightAttr ? parseInt(imageHeightAttr) : 0
     repositionCarImage(vehicleBox, imageWidth, imageHeight)
   }
 
-  Sentry.setTag("appId", $(".new-application #applicationId").val()?.toString());
+  const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
+  const appId = appIdElement?.value?.toString()
 
-  const plateId = $("#plateId")?.val()
+  Sentry.setTag("appId", appId);
+
+  const plateIdElement = /** @type {HTMLInputElement} */ (document.getElementById("plateId"))
+  const plateId = plateIdElement?.value
   if (plateId) {
-    const appId = $(".new-application #applicationId").val();
     updateRecydywa(appId);
   }
 

@@ -1,12 +1,10 @@
-import $ from "jquery"
-
 import Highcharts from "highcharts";
 import Data from "highcharts/modules/data";
 
 Data(Highcharts);
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (!$(".statystyki").length) return;
+  if (!document.querySelector(".statystyki")) return;
 
   Highcharts.setOptions({
     lang: {
@@ -124,7 +122,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  const barWidth = $("#statsByYear").width() / 26;
+  const statsByYearElement = document.getElementById("statsByYear");
+  const barWidth = statsByYearElement ? statsByYearElement.offsetWidth / 26 : 20;
 
   Highcharts.chart("statsByYear", {
     data: {

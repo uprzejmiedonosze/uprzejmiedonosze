@@ -1,4 +1,3 @@
-import $ from "jquery"
 import { DateTime } from "luxon";
 
 export function setDateTime(dateTime, fromPicture = true) {
@@ -12,23 +11,38 @@ export function setDateTime(dateTime, fromPicture = true) {
       fromPicture = false
     }
   }
+  
+  const dateHint = document.getElementById("dateHint")
+  const datetimeInput = /** @type {HTMLInputElement} */ (document.getElementById("datetime"))
+  const changeDatetimeLink = document.querySelector("a.changeDatetime")
+  const dtFromPictureInput = /** @type {HTMLInputElement} */ (document.getElementById("dtFromPicture"))
+  
   if (fromPicture) {
     if (dateTime !== "") {
-      $("#dateHint").text("Data i godzina pobrana ze zdjęcia");
-      $("#dateHint").addClass("hint");
-      $("#datetime").attr('readonly', 'true');
+      if (dateHint) {
+        dateHint.textContent = "Data i godzina pobrana ze zdjęcia"
+        dateHint.classList.add("hint")
+      }
+      if (datetimeInput) datetimeInput.setAttribute('readonly', 'true')
     }
-    $("a.changeDatetime").show();
+    if (changeDatetimeLink) /** @type {HTMLElement} */ (changeDatetimeLink).style.display = 'block'
   } else {
-    $("#dateHint").text("Podaj datę i godzinę zgłoszenia");
-    $("#dateHint").addClass("hint");
-    $("#datetime").removeAttr('readonly')
-    $("a.changeDatetime").hide();
+    if (dateHint) {
+      dateHint.textContent = "Podaj datę i godzinę zgłoszenia"
+      dateHint.classList.add("hint")
+    }
+    if (datetimeInput) datetimeInput.removeAttribute('readonly')
+    if (changeDatetimeLink) /** @type {HTMLElement} */ (changeDatetimeLink).style.display = 'none'
   }
-  $("#dtFromPicture").val(fromPicture ? 1 : 0);
+  
+  if (dtFromPictureInput) dtFromPictureInput.value = fromPicture ? '1' : '0'
+  
   if (dt) {
     const formattedDt = dt.toFormat("yyyy-LL-dd'T'HH:mm");
-    $("#datetime").val(formattedDt).removeClass("error");
+    if (datetimeInput) {
+      datetimeInput.value = formattedDt
+      datetimeInput.classList.remove("error")
+    }
     return formattedDt;
   }
   return null

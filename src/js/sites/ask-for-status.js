@@ -1,24 +1,25 @@
-import $ from "jquery"
-
 document.addEventListener("DOMContentLoaded", () => {
-    if (!$(".ask-for-status").length) return;
+    if (!document.querySelector(".ask-for-status")) return;
   
-    $('h3 > a').on('click', e => {
-        const link = e.currentTarget
-        if (!link) return
-        try {
-            const apps = link?.parentElement?.nextElementSibling
-            const type = "text/html";
-            const blob = new Blob([apps.innerHTML], {type});
-            const data = [new ClipboardItem({[type]: blob})];
-            navigator.clipboard.write(data).then(() => {
-                apps.style.opacity = '0.4'
-                $(link).addClass('visited')
-                setTimeout(() => apps.style.opacity = '1', 80)
-            })
-        } catch(_e) {
-            $(link).addClass('error')
-        }
+    document.querySelectorAll('h3 > a').forEach(link => {
+        link.addEventListener('click', e => {
+            const target = /** @type {HTMLElement} */ (e.currentTarget)
+            if (!target || !target.parentElement) return
+            try {
+                const apps = /** @type {HTMLElement} */ (target.parentElement.nextElementSibling)
+                if (!apps) return
+                const type = "text/html";
+                const blob = new Blob([apps.innerHTML], {type});
+                const data = [new ClipboardItem({[type]: blob})];
+                navigator.clipboard.write(data).then(() => {
+                    apps.style.opacity = '0.4'
+                    target.classList.add('visited')
+                    setTimeout(() => apps.style.opacity = '1', 80)
+                })
+            } catch(_e) {
+                target.classList.add('error')
+            }
+        })
     })
   });
   

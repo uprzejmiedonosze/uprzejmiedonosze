@@ -1,18 +1,22 @@
-import $ from "jquery"
 import { filterable } from "../lib/filterable"
 
-$(function () {
+document.addEventListener("DOMContentLoaded", () => {
   scrollTo(window.location.hash)
 })
 
 function scrollTo(hash) {
-  const $hash = $(hash)
+  if (!hash) return
+  const hashElement = document.querySelector(hash)
+  if (!hashElement) return
+  
   window.location.hash = hash
-  const scrollTop = (($hash.offset() ?? {}).top ?? 0) - 60
-  if (scrollTop > 0)
-    $("html, body").animate({scrollTop})
-  $('.howto').removeClass('highlight')
-  $hash.addClass('highlight')
+  const elementTop = hashElement.getBoundingClientRect().top + window.pageYOffset - 60
+  if (elementTop > 0) {
+    window.scrollTo({ top: elementTop, behavior: 'smooth' })
+  }
+  
+  document.querySelectorAll('.howto').forEach(el => el.classList.remove('highlight'))
+  hashElement.classList.add('highlight')
 }
 
 // @ts-ignore
