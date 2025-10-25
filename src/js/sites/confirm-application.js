@@ -8,7 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "potwierdz" });
+  (typeof umami == 'object') && umami.track("set-status", {
+    appId
+  });
 
   setTimeout(function () {
     const confirmButton = document.querySelector("a.confirm-send-button")
@@ -27,7 +29,7 @@ function confirmApplication() {
   const saveButton = document.querySelector('.confirm-save-button')
   if (saveButton) {
     saveButton.classList.add('disabled')
-}
+  }
 }
 
 // @ts-ignore

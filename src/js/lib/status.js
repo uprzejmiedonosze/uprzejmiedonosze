@@ -26,11 +26,10 @@ export async function setStatus(appId, status) {
   }
 
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", {
-    eventCategory: "js",
-    eventAction: "setStatus",
-    eventLabel: status
+  (typeof umami == 'object') && umami.track("set-status", {
+    appId, status
   });
+
 }
 
 // @ts-ignore
@@ -48,16 +47,16 @@ export function updateStatus(appId, status) {
       if (parent) parent.style.display = 'none'
     })
 
-  statusDef.allowed.forEach(function (allowed) {
+    statusDef.allowed.forEach(function (allowed) {
       const allowedLink = popup.querySelector("a." + allowed)
       if (allowedLink && allowedLink.parentElement) {
         /** @type {HTMLElement} */ (allowedLink.parentElement).style.display = 'block'
       }
-  });
+    });
   }
 
   if (application) {
-  const allClasses = Object.keys(statuses).join(" ")
+    const allClasses = Object.keys(statuses).join(" ")
     application.classList.remove(...allClasses.split(' '))
     application.classList.add(status)
     
@@ -91,9 +90,9 @@ export function updateCounters() {
       if (secondChild) {
         secondChild.textContent = count.toString();
       }
-    if (count == 0) {
+      if (count == 0) {
         /** @type {HTMLElement} */ (item).style.display = 'none';
-    } else {
+      } else {
         /** @type {HTMLElement} */ (item).style.display = 'block';
       }
     }
@@ -104,10 +103,10 @@ export function updateCounters() {
     if (document.querySelector('.dziekujemy')) { // send on thank page
       const currentCount = parseInt(sendMenu.textContent || '0')
       sendMenu.textContent = (currentCount - 1).toString()
-  } else {
+    } else {
       const confirmedApps = document.querySelectorAll("div.application.confirmed")
       sendMenu.textContent = confirmedApps.length.toString();
-  }
+    }
     if (parseInt(sendMenu.textContent || '0') <= 0) {
       const parent = /** @type {HTMLElement} */ (sendMenu.parentElement)
       if (parent) parent.style.display = 'none'

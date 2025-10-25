@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const imageHeight = imageHeightAttr ? parseInt(imageHeightAttr) : 0
     repositionCarImage(vehicleBox, imageWidth, imageHeight)
   }
-
+  
   const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
   const appId = appIdElement?.value?.toString()
 
@@ -42,8 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", {
-    eventCategory: "pageshow",
-    eventAction: "nowe-zgloszenie"
+  (typeof umami == 'object') && umami.track("new-app", {
+    "appId": appId
   });
 });

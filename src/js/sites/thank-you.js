@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "dziekujemy" });
-
+  (typeof umami == 'object') && umami.track("start", {
+    appId
+  });
 });
