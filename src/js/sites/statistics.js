@@ -1,12 +1,9 @@
-import $ from "jquery"
-
 import Highcharts from "highcharts";
-import Data from "highcharts/modules/data";
-
-Data(Highcharts);
+import "highcharts/modules/data";
+import "highcharts/modules/accessibility";
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (!$(".statystyki").length) return;
+  if (!document.querySelector('.statystyki')) return;
 
   Highcharts.setOptions({
     lang: {
@@ -70,6 +67,47 @@ document.addEventListener("DOMContentLoaded", function () {
     ]
   });
 
+  // DRY: Shared chart config objects and helpers
+  const transparentBackground = { backgroundColor: "transparent" };
+  const sharedEvents = {
+    load() { this.showLoading('Pobieram dane...'); },
+    redraw() { this.hideLoading(); }
+  };
+  const sharedTooltip = { shared: true, crosshairs: true };
+  const sharedXAxis = { tickWidth: 0, gridLineWidth: 1 };
+  const sharedResponsive = {
+    rules: [{
+      condition: { maxWidth: 600 },
+      chartOptions: {
+        chart: { spacingTop: 24, height: 340 },
+        yAxis: { labels: { align: 'left', x: 0, y: -2 }, title: { text: '' } },
+        subtitle: { text: null },
+        credits: { enabled: false }
+      }
+    }]
+  };
+  const areaSplinePlotOptions = {
+    areaspline: {
+      fillColor: {
+        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+        stops: [
+          [0, "#009C7F"],
+          [1, "#FFFFFF"]
+        ]
+      }
+    }
+  };
+  const columnPlotOptions = (barWidth) => ({
+    column: {
+      grouping: false,
+      shadow: false,
+      borderWidth: 0
+    },
+    series: {
+      pointWidth: barWidth
+    }
+  });
+
   Highcharts.chart("statsByDay", {
     data: {
       csvURL: window.location.origin + "/stats/statsByDay.csv?sessionless",
@@ -77,54 +115,17 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     chart: {
       type: "areaspline",
-      backgroundColor: "transparent",
-      events: {
-        load() {
-          const chart = this;
-          chart.showLoading('Pobieram dane...')
-        },
-        redraw() {
-          const chart = this;
-          chart.hideLoading()
-        }
-      }
+      ...transparentBackground,
+      events: sharedEvents
     },
-    plotOptions: {
-      areaspline: {
-        fillColor: {
-          linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-          stops: [
-            [0, "#009C7F"],
-            [1, "#FFFFFF"]
-          ]
-        }
-      }
-    },
-    xAxis: {
-      tickInterval: 7 * 24 * 3600 * 1000, // one day
-      tickWidth: 0,
-      gridLineWidth: 1
-    },
-    series: [
-      {
-        name: "Nowe zgłoszenia",
-        lineWidth: 5,
-        color: "#009C7F"
-      },
-      {
-        name: "Nowi użytkownicy",
-        lineWidth: 3,
-        type: "spline",
-        color: "#e9c200"
-      }
-    ],
-    tooltip: {
-      shared: true,
-      crosshairs: true
-    }
+    plotOptions: areaSplinePlotOptions,
+    xAxis: sharedXAxis,
+    tooltip: sharedTooltip,
+    responsive: sharedResponsive
   });
 
-  const barWidth = $("#statsByYear").width() / 26;
+  const statsByYearElem = document.getElementById("statsByYear");
+  const barWidth = statsByYearElem ? statsByYearElem.offsetWidth / 26 : 20;
 
   Highcharts.chart("statsByYear", {
     data: {
@@ -134,50 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
     chart: {
       type: "column",
       plotBackgroundColor: null,
-      backgroundColor: "transparent",
-      events: {
-        load() {
-          const chart = this;
-          chart.showLoading('Pobieram dane...')
-        },
-        redraw() {
-          const chart = this;
-          chart.hideLoading()
-        }
-      }
-
+      ...transparentBackground,
+      events: sharedEvents
     },
-    plotOptions: {
-      column: {
-        grouping: false,
-        shadow: false,
-        borderWidth: 0
-      },
-      series: {
-        pointWidth: barWidth
-      }
-    },
-    xAxis: {
-      tickWidth: 0,
-      gridLineWidth: 1
-    },
-    series: [
-      {
-        name: "Nowe zgłoszenia",
-        color: "#009C7F"
-      },
-      {
-        name: "Nowi użytkownicy",
-        color: "#e9c200",
-        pointPadding: 0.4,
-        pointPlacement: 0.2,
-        pointWidth: barWidth * 0.7
-      }
-    ],
-    tooltip: {
-      shared: true,
-      crosshairs: true
-    }
+    plotOptions: columnPlotOptions(barWidth),
+    xAxis: sharedXAxis,
+    tooltip: sharedTooltip,
+    responsive: sharedResponsive
   });
 
   // Make monochrome colors
@@ -247,4 +211,16 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   });
+
+  // Suppress Highcharts warning #15 in the console (warn only)
+  const originalWarn = console.warn;
+  console.warn = function(...args) {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes('Highcharts warning #15')
+    ) {
+      return; // Suppress warning #15
+    }
+    originalWarn.apply(console, args);
+  };
 });
