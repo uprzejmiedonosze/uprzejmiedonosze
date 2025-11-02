@@ -52,8 +52,8 @@ export function initMaps(lastLocation, _stopAgresji) {
 
   map.addControl(new mapboxgl.GeolocateControl({
     positionOptions: { enableHighAccuracy: true },
-    trackUserLocation: true,
-    showUserHeading: true
+    trackUserLocation: false,
+    showUserHeading: false
   }), 'top-left')
 
   map.dragRotate.disable()

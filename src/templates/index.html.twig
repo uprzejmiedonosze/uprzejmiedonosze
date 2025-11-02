@@ -20,7 +20,7 @@
     {% for levelId,levelDef in levels %}
     <div class="hero {% if general.stats.level == levelId %}active{% endif %}">
         <img src="{{ levelDef.img }}">
-        <p>{{ levelDef.desc }}</p>
+        <p>{{ config.sex[levelDef.desc] }}</p>
     </div>
     {% endfor %}
 </div>
@@ -88,9 +88,9 @@
             <img src="{{ badge.img }}">
             <p>
             {% if former_patron %}
-                Były patron ☹︎
+                {{ config.sex['Była patronka'] }} ☹︎
             {% else %}
-                {{ badge.name }}
+                {{ config.sex[badge.name] }}
             {% endif %}
             </p>
         </div>

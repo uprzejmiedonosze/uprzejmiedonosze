@@ -2,14 +2,14 @@
     "0": {
         "img": "img/level-0.png",
         "points": 0,
-        "desc": "Wkurzony",
+        "desc": "Wkurzona",
         "letter": "a",
         "introMsg": "Zaczynasz swoją walkę z patoparkowaniem. Ciekawe, który kierowca tak Cię wkurzył, że trafiłaś/eś tutaj. Twój poziom użytkownika w Uprzejmie Donoszę nazywa się <strong>wkurzony, ale walczący</strong>. Przeskoczysz do następnego poziomu, gdy zgłoszeni przez Ciebie kierowcy dostaną pierwszy punkt karny."
     },
     "1": {
         "img": "img/level-1.png",
         "points": 1,
-        "desc": "Początkujący",
+        "desc": "Początkująca",
         "letter": "b",
         "introMsg": "Jesteś <strong>początkujący, ale mający nadzieję na zmiany</strong>. Przeskoczysz do następnego poziomu, gdy „twoi” kierowcy uzbierają łącznie pięć punktów."
     },
@@ -23,14 +23,14 @@
     "3": {
         "img": "img/level-3.png",
         "points": 50,
-        "desc": "Ekspert",
+        "desc": "Ekspertka",
         "letter": "d",
         "introMsg": "Jesteś <strong>ekspertem</strong> – wow! Przeskoczysz do następnego poziomu, gdy „twoi” kierowcy uzbierają łącznie 200 punktów."
     },
     "4": {
         "img": "img/level-4.png",
         "points": 200,
-        "desc": "Hurtownik",
+        "desc": "Hurtowniczka",
         "letter": "e",
         "introMsg": "Jesteś <strong>hurtownikiem</strong>! Znajdujesz się w elitarnym, kilkunastoosobowym gronie użytkowników Uprzejmie Donoszę."
     }

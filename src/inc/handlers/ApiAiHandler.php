@@ -13,9 +13,13 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 
 class ApiAiHandler extends \AbstractHandler {
-    //private string $model = 'gpt-3.5-turbo'; //'gpt-5-nano'; // 'gpt-5-mini':
-    private string $model = 'gpt-5-mini';
+    private string $model;
     private string $project = \OPENAI_PROJECT;
+
+    public function __construct() {
+        // 'gpt-3.5-turbo' 'gpt-5-nano' 'gpt-5-mini':
+        $this->model = isProd() ? 'gpt-5-mini' : 'gpt-3.5-turbo';
+    }
 
     protected function jsonResponse(Response $response, $data = null, int $status = 200): Response {
         $payload = [
@@ -66,12 +70,12 @@ class ApiAiHandler extends \AbstractHandler {
 
         // $data['recipient'] may contain a more specific recipient than $data['target']
         if (!empty($data['recipient'])) {
-          $mps = \json\get('parlamentary.json');
-          if (!isset($mps[$data['recipient']])) {
-            return $this->jsonResponse($response, [
-                'error' => 'Incorrent parameters passed'
-            ], 400);
-          };
+            $mps = \json\get('parlamentary.json');
+            if (!isset($mps[$data['recipient']])) {
+                return $this->jsonResponse($response, [
+                    'error' => 'Incorrent parameters passed'
+                ], 400);
+            };
         }
 
         $user = $request->getAttribute('user');
@@ -209,7 +213,7 @@ class ApiAiHandler extends \AbstractHandler {
 
         $stats = \generator\getTargetStats();
         foreach ($TARGETS as $key => $target) {
-           $TARGETS[$key]['petitionCount'] = $stats[$key] ?? 0;
+            $TARGETS[$key]['petitionCount'] = $stats[$key] ?? 0;
         }
         return $this->renderJson($response, $TARGETS);
     }
@@ -385,7 +389,7 @@ class ApiAiHandler extends \AbstractHandler {
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
         $transport = Transport::fromDsn(MAILER_DSN);
-        $mailer = new Mailer($transport);    
-        $mailer->send($message);    
+        $mailer = new Mailer($transport);
+        $mailer->send($message);
     }
 }
