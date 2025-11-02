@@ -1,0 +1,39 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+{# SITEMAP-PRIORITY:0.8 #}
+
+{% set title = 'Szablony pism' %}
+{% set shortTitle = 'Szablony pism' %}
+{% set description = 'Gotowe szablony pism urzędowych dotyczących nielegalnego parkowania' %}
+{% set mainClass = 'letter-templates' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<h2>{{ shortTitle }}</h2>
+
+<p>
+  Poniżej znajdziesz gotowe szablony pism, które możesz wykorzystać w komunikacji
+  z urzędami, Strażą Miejską, Policją lub innymi instytucjami w sprawach związanych z
+  nielegalnym parkowaniem.
+</p>
+
+<h3>Dostępne szablony</h3>
+
+<ul class="letter-templates-list">
+  <li>
+    <a href="/szablony-pism/zapytanie-o-efekty-interwencji.html">
+      <strong>Zapytanie o efekty interwencji</strong><br>
+      <small>Sprawdź co służby zrobiły po twoim zgłoszeniu</small>
+    </a>
+  </li>
+  <li>
+    <a href="/szablony-pism/zazalenie-przyklad.html">
+      <strong>Zażalenie</strong><br>
+      <small>Gdy nie zgadzasz się z decyzją urzędu</small>
+    </a>
+  </li>
+</ul>
+
+
+{% endblock %}
