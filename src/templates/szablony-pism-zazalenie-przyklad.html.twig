@@ -1,0 +1,115 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+
+{% set shortTitle = 'Zażalenie' %}
+{% set title = shortTitle ~ ' (szablon pisma)' %}
+{% set description = 'Gotowy szablon zażalenia na decyzję urzędu' %}
+{% set mainClass = 'letter-template' %}
+
+{% extends "base.html.twig" %}
+{% block main %}
+
+<div class="breadcrumb">
+  <a href="{{ breadcrumb.parentUrl }}">{{ breadcrumb.parentTitle }}</a> &raquo; {{ shortTitle }}
+</div>
+
+<h2>{{ shortTitle }}</h2>
+
+<p>
+  Szablon zażalenia możesz wykorzystać, gdy nie zgadzasz się z decyzją
+  lub działaniem urzędu w sprawie dotyczącej nielegalnego parkowania.
+</p>
+
+<h3>Kiedy używać tego szablonu?</h3>
+<ul>
+  <li>Gdy straż miejska odmówiła interwencji bez uzasadnienia</li>
+  <li>Gdy postępowanie zostało umorzone mimo oczywistego wykroczenia</li>
+  <li>Gdy urząd nie odpowiedział na twoje pismo w terminie</li>
+</ul>
+
+<h3>Przykład 1</h3>
+
+<div class='letter-content'>
+Zgodnie z art. 56a k.p.w. wnoszę zażalenie na niewniesienie wniosku o ukaranie w sprawie parkowania za znakiem B-36 (zakaz zatrzymywania się, art. 46. 4 prd) kierowcy pojazdu ___ w dniu 8.08.2024 o 18:37 w Szczecinie przy alei Wojska Polskiego 38 (RSOW ___).
+Zgodnie z informacją o czynnościach wyjaśniających wobec wskazanych zdarzeń, KP Szczecin-Śródmieście nie znalazł znamion wykroczenia.
+Na początku tego odcinka alei Wojska Polskiego znajduje się znak B-36 (umieszczony po tej samej stronie drogi pasa jezdni, co parkujący samochód). Wykroczenie to jest więc bezsprzeczne.
+W identycznej sprawie nr. ____ z 19.01.2024 kierowca pojazdu nr „____” zaparkowanego w dokładnie tym samym miejscu został ukarany mandatem karnym.
+W konsekwencji proszę o ukaranie sprawcy wykroczenia.
+</div>
+
+
+<h3>Przykład 2</h3>
+
+<div class='letter-content'>
+Zgodnie z art. 56a k.p.w. wnoszę zażalenie na niewniesienie wniosku o ukaranie w sprawie jazdy po przejściu dla pieszych kierowcy pojazdu ____ w dniach 24.11.2023 oraz 13.01.2024 w Szczecinie przy alei Piastów 74 (RSOW ____, L.dz. ____).
+Zgodnie z informacją o czynnościach wyjaśniających wobec wskazanych zdarzeń, KP Szczecin-Niebuszewo nie znalazł znamion wykroczenia polegającego na naruszeniu warunków zatrzymania na chodniku.
+Zwracam uwagę, że w obydwu zgłoszeniach wskazywałem na złamanie art. 26. 3.3. p.r.d. tj. zakazu jazdu po przejściu dla pieszych. Z dostarczonego przeze materiału wynika jednoznacznie, że kierowca pojazdu ____ musiał przejechać przez przejście dla pieszych.
+W analogicznej sprawie prowadzonej przez KP Szczecin-Śródmieście (RSOW ____, L.dz. WP ____) słusznie przyjęto, że legalny wjazd na teren prywatnej działki przy Bałuki 24 nie jest możliwy bez naruszenia przepisów.
+Odmowa ukarania sprawcy takiego postępowania wskazywałaby, że albo Policja wierzy w teleportację, albo przyznaje, że zakaz jazdy po chodniku jest martwym przepisem.
+W konsekwencji proszę o ukaranie sprawcy wykroczeń.
+</div>
+
+<h3>Przykład 3</h3>
+<div class='letter-content'>
+Zgodnie z art. 56a k.p.w. wnoszę zażalenie na niewniesienie wniosku o ukaranie za jazdę wzdłuż chodnika i przejścia dla pieszych (art. 26. 3.3 prd) na pl. Grunwaldzkim 4 w Szczecinie kierowcy pojazdu ____ w dniu 12.09.2024 (RSOW ____).
+Zgodnie z informacją o czynnościach wyjaśniających wobec wskazanych zdarzeń, KP Szczecin-Niebuszewo ukarała kierującego pojazdem za naruszenie warunków zatrzymania na chodniku. Za czynność tę przewidziano mandat w wysokości zaledwie 100 zł.
+Kierowca tego pojazdu dokonał szeregu wykroczeń, niszcząc infrastrukturę i narażając pieszych na niebezpieczeństwo. Manewrowanie ciężarówką po chodniku i przejściu dla pieszych jest skrajną nieodpowiedzialnością. Złamane przepisy, które udokumentowałem na filmie to:
+1/ Jazda wzdłuż chodnika i przejścia dla pieszych (art. 26. 3.3 prd)
+2/ Zatrzymanie się z dala od krawędzi jezdni (art. 47. 2 prd)
+3/ Zatrzymanie na drodze dla pieszych pojazdu o dmc powyżej 2,5 t (art. 47. 1 prd)
+4/ Używanie słów nieprzyzwoitych (art. 141 kw)
+W konsekwencji proszę o adekwatne ukaranie sprawcy wykroczenia.
+</div>
+
+<h3>Przykład 4</h3>
+<div class='letter-content'>
+Zgodnie z art. 56a k.p.w. wnoszę zażalenie na niewniesienie wniosku o ukaranie w sprawie parkowania z dala od krawędzi jezdni (art. 47. 2 prd) kierowcy pojazdu ____ w dniu 17.07.2024 o 17:12 w Szczecinie przy ul. Bogusława X 51.(RSOW ____).
+Zgodnie z informacją o czynnościach wyjaśniających wobec wskazanych zdarzeń, KP Szczecin-Śródmieście nie znalazł znamion wykroczenia.
+Jeśli jazda po tzw. „deptaku Bogusława” o godzinie 17 nie jest wykroczeniem, to oznaczałoby to faktyczną legalizację dowolnego parkowania w tym miejscu przez całą dobę.
+Dodam, że w analogicznej sprawach nr ____ oraz RSOW ____ ukarali Państwo sprawcę wykroczenia mandatem karnym.
+W konsekwencji proszę o ukaranie sprawcy wykroczenia.
+</div>
+
+<h3>Przykład 5</h3>
+<div class='letter-content'>
+ZAŻALENIE na postanowienie Prokuratury Rejonowej Szczecin-Niebuszewo o umorzeniu
+Na podstawie art. 306 § 1 k.p.k. wnoszę zażalenie na postanowienie Prokuratury Rejonowej Szczecin-Niebuszewo z dnia ____ r. o umorzeniu dochodzenia w sprawie narażenia mnie na niebezpieczeństwo ciężkiego uszczerbku na zdrowiu przez kierowcę pojazdu o numerze rejestracyjnym ____.
+Składam je w imieniu własnym, jako pokrzywdzony, zamieszkały w ____ pod adresem ____, w terminie 7 dni od doręczenia mi zaskarżonego postanowienia.
+UZASADNIENIE
+Do postanowieniu o umorzeniu nie załączono uzasadnienia. Wskazano jedynie możliwość „uzyskania najważniejszych powodów rozstrzygnięcia ustnie”. Niestety postanowienie nie daje żadnych możliwości nawiązania kontaktu z prowadzącym sprawę post. ______ a jego dane kontaktowe nie są dostępne na stronach Zachodniopomorskiej Policji. W konsekwencji nie znam powodów postanowienia o umorzeniu.
+Stan faktyczny
+W dniu 18 marca 2025 r. ok. godz. 13:00 w Szczecinie przy ul. ____ zostałem z premedytacją staranowany samochodem marki Opel, nr rej. ____. Sprawca, pomimo zakazu wjazdu (administrowanego przez TBS i wspólnotę mieszkaniową, potwierdzonego znakiem drogowym), potrącił mnie, a następnie przewiózł na masce kilkadziesiąt metrów. Stojąc w prześwicie bramowym nie miałem możliwości ucieczki. Materiał filmowy jasno pokazuje, że pojazd mieści się w bramie z bardzo wąskim zapasem.
+W tej sytuacji mogłem:
+1/ uciekać w głąb bramy ryzykując najechanie na mnie od tyłu;
+2/ wskoczyć na maskę pojazdu ryzykując upadkiem pod pojazd lub zgnieceniem kończyn o ściany prześwitu bramowego.
+Dzięki instynktownej reakcji uniknąłem obrażeń, jednak czyn ten jednoznacznie narażał mnie na bezpośrednie niebezpieczeństwo utraty życia lub ciężkiego uszczerbku na zdrowiu – zgodnie z treścią art. 160 § 1 k.k.
+Nie wezwałem Policji, lecz niezwłocznie złożyłem zawiadomienie o przestępstwie do Prokuratury Rejonowej w Szczecinie. Załącznikiem do zawiadomienia było oryginalne nagranie wideo dokumentujące zachowanie sprawcy:
+____
+Uniemożliwiając kierowcy popełnienie wykroczenia nie mogłem mieć świadomości, że zdecyduje się na świadome najechanie na mnie. Owszem, przed zdarzeniem kierowca był wulgarny ale nie agresywny fizycznie.
+Zwracam uwagę, że ze względu na konstrukcję przepisów w momencie wjechania na teren prywatny (jakim jest podwórze kamienicy ___) przestają obowiązywać przepisy o ruchu drogowym. Tj. kierowca, któremu uda się zamienić to podwórze w prywatny parking nie popełnia żadnego wykroczenia. Mimo postępowania niezgodnie z wolą wspólnoty mieszkaniowej i znaków drogowych przed wjazdem.
+Mając świadomość tego faktu wspólnota zablokowała fizycznie wjazd na teren posesji. Niestety któryś z mieszkańców usunął tę blokadę (także wbrew woli wspólnoty).
+Powyższe oznacza, że jedynym sposobem na wyegzekwowanie zakazu wjazdu na ten teren jest fizyczne uniemożliwienia wjechanie na niego pojazdem mechanicznym. Gdybym pozwolił kierowcy wjechać na ten teren a następnie wezwał Straż Miejską lub Policję to nie podjęliby oni żadnych czynności (zweryfikowałem to w praktyce).
+Z tego powodu moja decyzja o fizycznym zablokowaniu przejazdu była racjonalna. 
+Jak widać na nagraniu próbowałem uniemożliwić kierowcy wjazd za pomocą infrastruktury (drzwi bramowych). Niestety ta próba nie powiodła się.
+Zarzut naruszenia prawa
+Zaskarżam umorzenie dochodzenia z uwagi na błędną kwalifikację prawną – organ prowadzący uznał, że „czyn nie zawiera znamion czynu zabronionego” (art. 17 § 1 pkt 2 k.p.k.), podczas gdy spełnione są przesłanki przestępstwa z art. 160 § 1 k.k. Polega ono na narażeniu innej osoby na bezpośrednie niebezpieczeństwo ciężkiego uszczerbku na zdrowiu.
+Żądanie
+1/ Wnoszę o uchylenie zaskarżonego postanowienia o umorzeniu dochodzenia.  
+2/ Zobowiązanie Prokuratora Rejonowego w Szczecinie do kontynuacji postępowania
+3/ Informowanie mnie na podany adres e-mail/telefon o wszelkich czynnościach podjętych w sprawie.
+</div>
+
+
+<h3>Wskazówki</h3>
+<ul>
+  <li>Masz ograniczony czas na złożenie zażalenia.</li>
+  <li>Zażalenie jest pismem procesowym, w związku z czym formalnie należy je złożyć pisemnie, w jednostce, albo za pomocą listu poleconego za potwierdzeniem nadania. Niektóre urzędy akceptują zażalenia wysłane przez e-doręcznie lub ePUAP, ale nie wszystkie.</li>
+  <li>Zażalenie składasz do organu nadrzędnego nad tym, który wydał decyzję, ale poprzez organ który wydał decyzję. Oni są adresatem pisma.</li>
+  <li>Dołącz wszystkie dostępne dowody (zdjęcia, korespondencję)</li>
+</ul>
+
+<p>
+  <a href="{{ breadcrumb.parentUrl }}" class="button inline">« Powrót do listy szablonów</a>
+</p>
+
+{% endblock %}
