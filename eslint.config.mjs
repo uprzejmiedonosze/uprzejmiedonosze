@@ -17,7 +17,6 @@ const compat = new FlatCompat({
 });
 
 export default [...fixupConfigRules(compat.extends(
-    "jquery",
     "eslint:recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -32,7 +31,6 @@ export default [...fixupConfigRules(compat.extends(
     languageOptions: {
         globals: {
             ...globals.browser,
-            ...globals.jquery,
             ...cypress.environments.globals.globals,
             "cypress/globals": true
         },
