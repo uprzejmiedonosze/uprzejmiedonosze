@@ -10,6 +10,7 @@
 {% set title = 'Raport o działaniach Straży Miejskiej w 2024 roku' %}
 {% set shortTitle = 'Straż Miejska w 2024 - raport' %}
 {% set description = 'Kompleksowa analiza działań straży miejskich w Polsce. Mandaty, pouczenia, efektywność - dane których nie znajdziesz nigdzie indziej' %} 
+{% set mainClass = 'raport' %}
 
 {% extends "base.html.twig" %}
 {% block main %}
@@ -18,7 +19,7 @@
     <a href="#{{ target }}">{{ name }}</a>
   {% endmacro link %}
 
-  <h2>Raport o działaniach Straży Miejskiej w 2024 roku</h2>
+  <h1>Raport o działaniach Straży Miejskiej w 2024 roku</h1>
   <p>Fakty, liczby i mity o pracy Straży Miejskiej.</p>
   <p>
     <strong>Sneak peek przed publikacją!</strong> Prezentowane tu dane są częścią aktualnie tworzonej pracy naukowej o funkcjonowaniu straży miejskich w Polsce. Stopniowo odkrywamy wybrane fragmenty analiz przed oficjalną publikacją. Dane pochodzą z <a href='#metodologia'>oficjalnych źródeł</a>. Pełny raport już wkrótce!
@@ -30,15 +31,15 @@
       <li><a href='#mandaty-a-budzet'>Mandaty a budżet</a></li>
       <li><a href='#pouczenia'>Pouczenia</a></li>
       <li><a href='#efektywnosc'>Efektywność</a></li>
-      <li class='off'><a href='#konie'>Konie w słuzbie</a></li>
-      <li class='off'><a href='#etaty'>Etaty i wynagrodzenia</a></li>
-      <li class='off'><a href='#blokady'>Blokada, mandat czy holowanie?</a></li>
+      <li class='locked'><a href='#konie'>Konie w słuzbie</a></li>
+      <li class='locked'><a href='#etaty'>Etaty i wynagrodzenia</a></li>
+      <li class='locked'><a href='#blokady'>Blokada, mandat czy holowanie?</a></li>
       <li><a href='#metodologia'>Metodologia</a></li>
     </ul>
   </nav>
 
   <section id="mandaty">
-    <h3>Wystawianie mandatów to NIE jest lukratywny biznes</h3>
+    <h2>Wystawianie mandatów to NIE jest lukratywny biznes</h2>
     <div class="stat-highlight">
       <div class="stat-number">7%</div>
       <div class="stat-label">Przeciętny udział mandatów w budżecie straży miejskiej</div>
@@ -55,7 +56,7 @@
     </div>
 
     <div class="key-insights">
-      <h4>Kluczowe wnioski</h3>
+      <h3>Kluczowe wnioski</h3>
       <ul>
         <li>Poznań wystawił mandaty na najwyższą kwotę, ale to tylko 20% ich budżetu</li>
         <li>W 15 miastach mandaty stanowią mniej niż 5% budżetu</li>
@@ -66,7 +67,7 @@
   </section>
 
   <section id="pouczenia">
-    <h3>Straż Miejska uwielbia pouczenia</h3>
+    <h2>Straż Miejska uwielbia pouczenia</h2>
 
     <div class="stat-highlight">
       <div class="stat-number">70%</div>
@@ -86,16 +87,15 @@
     <div class="key-insights">
       <h3>Kluczowe wnioski</h3>
       <ul>
-        <li>Łódź to mistrz pouczeń - 70% interwencji kończy się na rozmowie</li>
-        <li>Średnia dla Polski to około 45% pouczeń</li>
-        <li>Najmniej pouczeń wystawia Poznań - tylko 25%</li>
-        <li>To pokazuje, że straż miejska ma przede wszystkim funkcję edukacyjną</li>
+        <li>Łódź to mistrz pouczeń. Aż 70% interwencji kończy się na rozmowie.</li>
+        <li>Średnia dla Polski to około 45% pouczeń.</li>
+        <li>Najmniej pouczeń wystawia Poznań: tylko 25%.</li>
       </ul>
     </div>
   </section>
 
   <section id="efektywnosc">
-    <h3>Efektywność Straży Miejskich w Polsce</h3>
+    <h2>Efektywność Straży Miejskich w Polsce</h2>
 
     <div class="stat-highlight">
       <div class="stat-number">1.2</div>
@@ -109,13 +109,13 @@
     </p>
 
     <div class="chart-container">
-      <canvas id="efektywnoscChart"></canvas>
+      <canvas></canvas>
     </div>
 
     <div class="key-insights">
       <h3>Kluczowe wnioski</h3>
       <ul>
-        <li>Poznań: 1.2 mandatu/dzień na strażnika - lider efektywności</li>
+        <li>Poznań to lider efektyności: 1.2 mandatu/dzień na strażnika.</li>
         <li>Średnia krajowa: 0.6 mandatu/dzień na strażnika</li>
         <li>Warszawa: 0.4 mandatu/dzień - najniższa efektywność</li>
         <li>Kontrolerzy SPP: 200 kar/dzień - to 166x więcej niż strażnik!</li>
@@ -124,64 +124,58 @@
   </section>
 
   <section class="locked" id="konie">
-    <div class="locked-content">
+    <div>
       <div class="lock-icon">🔒</div>
-      <h3>Liczba koni na służbie</h3>
+      <h2>Liczba koni na służbie</h2>
       <p>Ta sekcja będzie dostępna wkrótce</p>
       <span class="coming-soon">GRUDZIEŃ 2025</span>
     </div>
   </section>
 
   <section class="locked" id="etaty">
-    <div class="locked-content">
+    <div>
       <div class="lock-icon">🔒</div>
-      <h3>Etaty w Straży</h3>
+      <h2>Etaty w Straży</h2>
       <p>Dane o liczbie strażników, medianie wynagrodzeń i wakatach</p>
       <span class="coming-soon">STYCZEŃ 2026</span>
     </div>
   </section>
 
   <section class="locked" id="blokady">
-    <div class="locked-content">
+    <div>
       <div class="lock-icon">🔒</div>
-      <h3>Blokady i holowanie</h3>
+      <h2>Blokady i holowanie</h2>
       <p>Statystyki dotyczące blokad kół i holowania pojazdów</p>
       <span class="coming-soon">LUTY 2026</span>
     </div>
   </section>
 
   <section id="metodologia">
-    <h3>Metodologia</h3>
+    <h2>Metodologia</h2>
 
     <p>
       Raport powstał na podstawie szczegółowej analizy danych publicznych o funkcjonowaniu straży miejskich
       w największych polskich miastach. Poniżej przedstawiamy metodologię zbierania i analizy danych.
     </p>
 
-    <h4>Źródła danych</h4>
+    <h3>Źródła i zakres danych</h3>
     <ul>
+      <li>Badane dane pochodzą z całego 2024 roku.</li>
+      <li><strong>Zakres terytorialny:</strong> 18 miast wojewódzkich w Polsce</li>
       <li>Dane pochodzą z Biuletynów Informacji Publicznej (BIP) jednostek samorządu terytorialnego</li>
       <li>Informacje uzyskane w ramach wniosków o dostęp do informacji publicznej (ustawa z dnia 6 września 2001 r.)</li>
       <li>Oficjalne raporty roczne straży miejskich za rok 2024</li>
       <li>Dane budżetowe miast wojewódzkich publikowane w systemach informacji finansowej JST</li>
     </ul>
 
-    <h4>Zakres badania</h3>
-    <ul>
-      <li><strong>Okres:</strong> dane dotyczą roku 2024 (styczeń - grudzień)</li>
-      <li><strong>Zakres terytorialny:</strong> 18 miast wojewódzkich w Polsce</li>
-      <li><strong>Analizowane wskaźniki:</strong> liczba mandatów, wartość mandatów, liczba pouczeń,
-        liczba interwencji, liczba etatów, budżety straży miejskich</li>
-    </ul>
-
-    <h4>Metodyka analizy</h4>
+    <h3>Metodyka analizy</h3>
     <ul>
       <li>Dane zostały znormalizowane w celu umożliwienia porównań między miastami o różnej wielkości</li>
       <li>Wartości procentowe zaokrąglone do jednego miejsca po przecinku</li>
       <li>Średnie krajowe liczone jako średnie arytmetyczne z 18 analizowanych miast</li>
     </ul>
 
-    <h4>Ograniczenia</h4>
+    <h3>Ograniczenia</h3>
     <ul>
       <li>Część danych została zebrana w ramach pracy naukowej i na podstawie umowy z autorami
         nie może być w pełni opublikowana do czasu zakończenia pracy.</li>
@@ -191,7 +185,7 @@
       <li>Raport przedstawia sneak peek - pełne dane zostaną opublikowane po zakończeniu pracy naukowej.</li>
     </ul>
 
-    <h4>Współpraca i autorstwo</h4>
+    <h3>Współpraca i autorstwo</h3>
     <p>
       Dane zostały zebrane i przeanalizowane we współpracy z zespołem badawczym prowadzącym pracę naukową
       na temat funkcjonowania straży miejskich w Polsce. Prezentowane tutaj informacje stanowią fragment
@@ -203,5 +197,63 @@
       "Raport: Straż Miejska w Polsce 2024, <a href='https://uprzejmiedonosze.net/raport-o-strazy-miejskiej-2024.html'>https://uprzejmiedonosze.net/raport-o-strazy-miejskiej-2024.html</a>.
     </p>
   </section>
+
+<style type='text/css'>
+
+.raport>nav>ul>li.locked>a::after {
+  content: " 🔒";
+}
+.raport>section {
+  border-top: 2px solid #ddd;
+  margin-top: 3em;
+  padding-top: 1em;
+}
+
+.raport>section.locked {
+  border: 2px dashed #e2e8f0;
+  background: #fafafa;
+  position: relative;
+  overflow: hidden;
+  color: #718096;
+}
+
+.raport>section.locked>div {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.raport>section.locked>div>.lock-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+
+.raport>section>.stat-highlight {
+  background: #3182ce;
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin: 20px 0;
+  text-align: center;
+}
+.raport>section>.stat-highlight>.stat-number {
+  font-size: 3em;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.raport>section>.stat-highlight>.stat-label {
+  font-size: 1.2em;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.raport>section>.key-insights {
+  background: #fef5e7;
+  border-top: 4px solid #f39c12;
+  padding: 0px 20px 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+</style>
 
 {% endblock %}
