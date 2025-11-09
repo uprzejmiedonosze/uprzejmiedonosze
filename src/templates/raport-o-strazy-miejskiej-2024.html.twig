@@ -15,7 +15,7 @@
 {% block main %}
 
   {% macro link(target, name) %}
-        <a href="#{{ target }}">{{ name }}</a>
+    <a href="#{{ target }}">{{ name }}</a>
   {% endmacro link %}
 
   <h2>Raport o działaniach Straży Miejskiej w 2024 roku</h2>
@@ -40,171 +40,168 @@
   <section id="mandaty">
     <h3>Wystawianie mandatów to NIE jest lukratywny biznes</h3>
     <div class="stat-highlight">
-       <div class="stat-number">7%</div>
-       <div class="stat-label">Przeciętny udział mandatów w budżecie straży miejskiej</div>
+      <div class="stat-number">7%</div>
+      <div class="stat-label">Przeciętny udział mandatów w budżecie straży miejskiej</div>
     </div>
 
     <p>
-        Wbrew powszechnym opiniom, wystawianie mandatów nie jest źródłem dochodów dla straży miejskich. 
-        Nawet w Poznaniu, gdzie wystawiono mandaty na najwyższą kwotę w 2024 roku, stanowiło to zaledwie 
-        <strong>20% budżetu</strong>. Dla większości miast to ledwie kilka procent.
-    </p>    
+      Wbrew powszechnym opiniom, wystawianie mandatów nie jest źródłem dochodów dla straży miejskich.
+      Nawet w Poznaniu, gdzie wystawiono mandaty na najwyższą kwotę w 2024 roku, stanowiło to zaledwie
+      <strong>20% budżetu</strong>. Dla większości miast to ledwie kilka procent.
+    </p>
 
-     <div class="chart-container">
-          <canvas id="mandatyChart"></canvas>
-      </div>
+    <div class="chart-container">
+      <canvas id="mandatyChart"></canvas>
+    </div>
 
-      <div class="key-insights">
-          <h4>Kluczowe wnioski</h3>
-          <ul>
-              <li>Poznań wystawił mandaty na najwyższą kwotę, ale to tylko 20% ich budżetu</li>
-              <li>W 15 miastach mandaty stanowią mniej niż 5% budżetu</li>
-              <li>Wystawianie mandatów jest kosztem dla społeczeństwa, nie źródłem przychodu</li>
-              <li>Kwoty mandatów nie były waloryzowane od 20 lat!</li>
-          </ul>
-      </div>
+    <div class="key-insights">
+      <h4>Kluczowe wnioski</h3>
+      <ul>
+        <li>Poznań wystawił mandaty na najwyższą kwotę, ale to tylko 20% ich budżetu</li>
+        <li>W 15 miastach mandaty stanowią mniej niż 5% budżetu</li>
+        <li>Wystawianie mandatów jest kosztem dla społeczeństwa, nie źródłem przychodu</li>
+        <li>Kwoty mandatów nie były waloryzowane od 20 lat!</li>
+      </ul>
+    </div>
   </section>
 
-        <section id="pouczenia">
-            <h3>Straż Miejska uwielbia pouczenia</h3>
-            
-            <div class="stat-highlight">
-                <div class="stat-number">70%</div>
-                <div class="stat-label">Działań straży w Łodzi kończy się pouczeniem</div>
-            </div>
+  <section id="pouczenia">
+    <h3>Straż Miejska uwielbia pouczenia</h3>
 
-            <p>
-                Pouczenie to najpopularniejsza forma reakcji straży miejskiej na wykroczenia. 
-                W niektórych miastach aż 7 na 10 interwencji kończy się rozmową i pouczeniem, 
-                bez wystawiania mandatu.
-            </p>
+    <div class="stat-highlight">
+      <div class="stat-number">70%</div>
+      <div class="stat-label">Działań straży w Łodzi kończy się pouczeniem</div>
+    </div>
 
-            <div class="chart-container">
-                <canvas id="pouczeniaChart"></canvas>
-            </div>
+    <p>
+      Pouczenie to najpopularniejsza forma reakcji straży miejskiej na wykroczenia.
+      W niektórych miastach aż 7 na 10 interwencji kończy się rozmową i pouczeniem,
+      bez wystawiania mandatu.
+    </p>
 
-            <div class="key-insights">
-                <h3>Kluczowe wnioski</h3>
-                <ul>
-                    <li>Łódź to mistrz pouczeń - 70% interwencji kończy się na rozmowie</li>
-                    <li>Średnia dla Polski to około 45% pouczeń</li>
-                    <li>Najmniej pouczeń wystawia Poznań - tylko 25%</li>
-                    <li>To pokazuje, że straż miejska ma przede wszystkim funkcję edukacyjną</li>
-                </ul>
-            </div>
-        </section>
+    <div class="chart-container">
+      <canvas id="pouczeniaChart"></canvas>
+    </div>
 
-        <section id="efektywnosc">
-            <h3>Efektywność Straży Miejskich w Polsce</h3>
-            
-            <div class="stat-highlight">
-                <div class="stat-number">1.2</div>
-                <div class="stat-label">Mandaty na dobę na strażnika w Poznaniu</div>
-            </div>
+    <div class="key-insights">
+      <h3>Kluczowe wnioski</h3>
+      <ul>
+        <li>Łódź to mistrz pouczeń - 70% interwencji kończy się na rozmowie</li>
+        <li>Średnia dla Polski to około 45% pouczeń</li>
+        <li>Najmniej pouczeń wystawia Poznań - tylko 25%</li>
+        <li>To pokazuje, że straż miejska ma przede wszystkim funkcję edukacyjną</li>
+      </ul>
+    </div>
+  </section>
 
-            <p>
-                Przeciętny strażnik w Poznaniu wystawia 1.2 mandatu dziennie - to najwyższy wynik w Polsce. 
-                Dla porównania, kontrolerzy Strefy Płatnego Parkowania są w stanie wystawić nawet 
-                <strong>200 kar dziennie</strong>. Różnica jest ogromna!
-            </p>
+  <section id="efektywnosc">
+    <h3>Efektywność Straży Miejskich w Polsce</h3>
 
-            <div class="chart-container">
-                <canvas id="efektywnoscChart"></canvas>
-            </div>
+    <div class="stat-highlight">
+      <div class="stat-number">1.2</div>
+      <div class="stat-label">Mandaty na dobę na strażnika w Poznaniu</div>
+    </div>
 
-            <div class="key-insights">
-                <h3>Kluczowe wnioski</h3>
-                <ul>
-                    <li>Poznań: 1.2 mandatu/dzień na strażnika - lider efektywności</li>
-                    <li>Średnia krajowa: 0.6 mandatu/dzień na strażnika</li>
-                    <li>Warszawa: 0.4 mandatu/dzień - najniższa efektywność</li>
-                    <li>Kontrolerzy SPP: 200 kar/dzień - to 166x więcej niż strażnik!</li>
-                </ul>
-            </div>
-        </section>
-  
-        <section class="locked" id="konie">
-            <div class="locked-content">
-                <div class="lock-icon">🔒</div>
-                <h3>Liczba koni na służbie</h3>
-                <p>Ta sekcja będzie dostępna wkrótce</p>
-                <span class="coming-soon">GRUDZIEŃ 2025</span>
-            </div>
-        </section>
+    <p>
+      Przeciętny strażnik w Poznaniu wystawia 1.2 mandatu dziennie - to najwyższy wynik w Polsce.
+      Dla porównania, kontrolerzy Strefy Płatnego Parkowania są w stanie wystawić nawet
+      <strong>200 kar dziennie</strong>. Różnica jest ogromna!
+    </p>
 
-        <section class="locked" id="etaty">
-            <div class="locked-content">
-                <div class="lock-icon">🔒</div>
-                <h3>Etaty w Straży</h3>
-                <p>Dane o liczbie strażników, medianie wynagrodzeń i wakatach</p>
-                <span class="coming-soon">STYCZEŃ 2026</span>
-            </div>
-        </section>
+    <div class="chart-container">
+      <canvas id="efektywnoscChart"></canvas>
+    </div>
 
-        <section class="locked" id="blokady">
-            <div class="locked-content">
-                <div class="lock-icon">🔒</div>
-                <h3>Blokady i holowanie</h3>
-                <p>Statystyki dotyczące blokad kół i holowania pojazdów</p>
-                <span class="coming-soon">LUTY 2026</span>
-            </div>
-        </section>
+    <div class="key-insights">
+      <h3>Kluczowe wnioski</h3>
+      <ul>
+        <li>Poznań: 1.2 mandatu/dzień na strażnika - lider efektywności</li>
+        <li>Średnia krajowa: 0.6 mandatu/dzień na strażnika</li>
+        <li>Warszawa: 0.4 mandatu/dzień - najniższa efektywność</li>
+        <li>Kontrolerzy SPP: 200 kar/dzień - to 166x więcej niż strażnik!</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="locked" id="konie">
+    <div class="locked-content">
+      <div class="lock-icon">🔒</div>
+      <h3>Liczba koni na służbie</h3>
+      <p>Ta sekcja będzie dostępna wkrótce</p>
+      <span class="coming-soon">GRUDZIEŃ 2025</span>
+    </div>
+  </section>
+
+  <section class="locked" id="etaty">
+    <div class="locked-content">
+      <div class="lock-icon">🔒</div>
+      <h3>Etaty w Straży</h3>
+      <p>Dane o liczbie strażników, medianie wynagrodzeń i wakatach</p>
+      <span class="coming-soon">STYCZEŃ 2026</span>
+    </div>
+  </section>
+
+  <section class="locked" id="blokady">
+    <div class="locked-content">
+      <div class="lock-icon">🔒</div>
+      <h3>Blokady i holowanie</h3>
+      <p>Statystyki dotyczące blokad kół i holowania pojazdów</p>
+      <span class="coming-soon">LUTY 2026</span>
+    </div>
+  </section>
 
   <section id="metodologia">
-
     <h3>Metodologia</h3>
 
-            <p>
-                Raport powstał na podstawie szczegółowej analizy danych publicznych o funkcjonowaniu straży miejskich 
-                w największych polskich miastach. Poniżej przedstawiamy metodologię zbierania i analizy danych.
-            </p>
+    <p>
+      Raport powstał na podstawie szczegółowej analizy danych publicznych o funkcjonowaniu straży miejskich
+      w największych polskich miastach. Poniżej przedstawiamy metodologię zbierania i analizy danych.
+    </p>
 
-            <h4>Źródła danych</h4>
-            <ul>
-                <li>Dane pochodzą z Biuletynów Informacji Publicznej (BIP) jednostek samorządu terytorialnego</li>
-                <li>Informacje uzyskane w ramach wniosków o dostęp do informacji publicznej (ustawa z dnia 6 września 2001 r.)</li>
-                <li>Oficjalne raporty roczne straży miejskich za rok 2024</li>
-                <li>Dane budżetowe miast wojewódzkich publikowane w systemach informacji finansowej JST</li>
-            </ul>
+    <h4>Źródła danych</h4>
+    <ul>
+      <li>Dane pochodzą z Biuletynów Informacji Publicznej (BIP) jednostek samorządu terytorialnego</li>
+      <li>Informacje uzyskane w ramach wniosków o dostęp do informacji publicznej (ustawa z dnia 6 września 2001 r.)</li>
+      <li>Oficjalne raporty roczne straży miejskich za rok 2024</li>
+      <li>Dane budżetowe miast wojewódzkich publikowane w systemach informacji finansowej JST</li>
+    </ul>
 
-            <h4>Zakres badania</h3>
-            <ul>
-                <li><strong>Okres:</strong> dane dotyczą roku 2024 (styczeń - grudzień)</li>
-                <li><strong>Zakres terytorialny:</strong> 18 miast wojewódzkich w Polsce</li>
-                <li><strong>Analizowane wskaźniki:</strong> liczba mandatów, wartość mandatów, liczba pouczeń, 
-                    liczba interwencji, liczba etatów, budżety straży miejskich</li>
-            </ul>
+    <h4>Zakres badania</h3>
+    <ul>
+      <li><strong>Okres:</strong> dane dotyczą roku 2024 (styczeń - grudzień)</li>
+      <li><strong>Zakres terytorialny:</strong> 18 miast wojewódzkich w Polsce</li>
+      <li><strong>Analizowane wskaźniki:</strong> liczba mandatów, wartość mandatów, liczba pouczeń,
+        liczba interwencji, liczba etatów, budżety straży miejskich</li>
+    </ul>
 
-            <h4>Metodyka analizy</h4>
-            <ul>
-                <li>Dane zostały znormalizowane w celu umożliwienia porównań między miastami o różnej wielkości</li>
-                <li>Wartości procentowe zaokrąglone do jednego miejsca po przecinku</li>
-                <li>Średnie krajowe liczone jako średnie arytmetyczne z 18 analizowanych miast</li>
-            </ul>
+    <h4>Metodyka analizy</h4>
+    <ul>
+      <li>Dane zostały znormalizowane w celu umożliwienia porównań między miastami o różnej wielkości</li>
+      <li>Wartości procentowe zaokrąglone do jednego miejsca po przecinku</li>
+      <li>Średnie krajowe liczone jako średnie arytmetyczne z 18 analizowanych miast</li>
+    </ul>
 
-            <h4>Ograniczenia</h4>
-            <ul>
-                <li>Część danych została zebrana w ramach pracy naukowej i na podstawie umowy z autorami 
-                    nie może być w pełni opublikowana do czasu zakończenia pracy.</li>
-                <li>Nie wszystkie miasta publikują dane w identycznym formacie, co może wpływać na porównywalność.</li>
-                <li>Niektóre miasta nie udzieliły pełnych odpowiedzi na wnioski o informację publiczną.</li>
-                <li>Dane dotyczą wyłącznie miast wojewódzkich i nie reprezentują całego kraju.</li>
-                <li>Raport przedstawia sneak peek - pełne dane zostaną opublikowane po zakończeniu pracy naukowej.</li>
-            </ul>
+    <h4>Ograniczenia</h4>
+    <ul>
+      <li>Część danych została zebrana w ramach pracy naukowej i na podstawie umowy z autorami
+        nie może być w pełni opublikowana do czasu zakończenia pracy.</li>
+      <li>Nie wszystkie miasta publikują dane w identycznym formacie, co może wpływać na porównywalność.</li>
+      <li>Niektóre miasta nie udzieliły pełnych odpowiedzi na wnioski o informację publiczną.</li>
+      <li>Dane dotyczą wyłącznie miast wojewódzkich i nie reprezentują całego kraju.</li>
+      <li>Raport przedstawia sneak peek - pełne dane zostaną opublikowane po zakończeniu pracy naukowej.</li>
+    </ul>
 
-            <h4>Współpraca i autorstwo</h4>
-            <p>
-                Dane zostały zebrane i przeanalizowane we współpracy z zespołem badawczym prowadzącym pracę naukową 
-                na temat funkcjonowania straży miejskich w Polsce. Prezentowane tutaj informacje stanowią fragment 
-                szerszego badania i zostały udostępnione za zgodą autorów.
-            </p>
+    <h4>Współpraca i autorstwo</h4>
+    <p>
+      Dane zostały zebrane i przeanalizowane we współpracy z zespołem badawczym prowadzącym pracę naukową
+      na temat funkcjonowania straży miejskich w Polsce. Prezentowane tutaj informacje stanowią fragment
+      szerszego badania i zostały udostępnione za zgodą autorów.
+    </p>
 
-            <p>
-                <strong>Cytowanie:</strong> Przy wykorzystaniu danych prosimy o podanie źródła jako 
-                "Raport: Straż Miejska w Polsce 2024, <a href='https://uprzejmiedonosze.net/raport-o-strazy-miejskiej-2024.html'>https://uprzejmiedonosze.net/raport-o-strazy-miejskiej-2024.html</a>.
-            </p>
-
+    <p>
+      <strong>Cytowanie:</strong> Przy wykorzystaniu danych prosimy o podanie źródła jako
+      "Raport: Straż Miejska w Polsce 2024, <a href='https://uprzejmiedonosze.net/raport-o-strazy-miejskiej-2024.html'>https://uprzejmiedonosze.net/raport-o-strazy-miejskiej-2024.html</a>.
+    </p>
   </section>
-  
 
 {% endblock %}
