@@ -280,7 +280,8 @@ class StaticPagesHandler extends AbstractHandler {
             'patronite',
             'naklejki-robisz-to-zle',
             'zazalenie-na-brak-mandatu',
-            'czesto-popelniane-bledy'
+            'czesto-popelniane-bledy',
+            'raport-o-strazy-miejskiej-2024'
         ];
         $route = $args['route'];
 
