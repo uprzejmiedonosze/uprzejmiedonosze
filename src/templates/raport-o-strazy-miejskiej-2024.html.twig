@@ -28,7 +28,7 @@
 
   <nav>
     <ul>
-      <li><a href='#mandaty-a-budzet'>Mandaty a budżet</a></li>
+      <li><a href='#mandaty'>Mandaty a budżet</a></li>
       <li><a href='#pouczenia'>Pouczenia</a></li>
       <li><a href='#efektywnosc'>Efektywność</a></li>
       <li class='locked'><a href='#konie'>Konie w słuzbie</a></li>
@@ -51,9 +51,7 @@
       <strong>20% budżetu</strong>. Dla większości miast to ledwie kilka procent.
     </p>
 
-    <div class="chart-container">
-      <canvas id="mandatyChart"></canvas>
-    </div>
+    <div class="chart"></div>
 
     <div class="key-insights">
       <h3>Kluczowe wnioski</h3>
@@ -80,9 +78,7 @@
       bez wystawiania mandatu.
     </p>
 
-    <div class="chart-container">
-      <canvas id="pouczeniaChart"></canvas>
-    </div>
+    <div class="chart"></div>
 
     <div class="key-insights">
       <h3>Kluczowe wnioski</h3>
@@ -108,9 +104,7 @@
       <strong>200 kar dziennie</strong>. Różnica jest ogromna!
     </p>
 
-    <div class="chart-container">
-      <canvas></canvas>
-    </div>
+    <div class="chart"></div>
 
     <div class="key-insights">
       <h3>Kluczowe wnioski</h3>
@@ -199,7 +193,27 @@
   </section>
 
 <style type='text/css'>
-
+.raport>nav {
+  position: sticky;
+  top: 60px;
+  background-color: white;
+  z-index: 100;
+}
+.raport>nav>ul {
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.raport>nav>ul>li {
+  white-space: nowrap;
+  padding: 0.5em;
+  display: inline-block;
+}
+.raport>nav>ul>li:hover { 
+  background: aliceblue;
+}
+.raport>nav>ul>li.active {
+  background: lightblue;
+}
 .raport>nav>ul>li.locked>a::after {
   content: " 🔒";
 }
@@ -207,6 +221,7 @@
   border-top: 2px solid #ddd;
   margin-top: 3em;
   padding-top: 1em;
+  scroll-margin-top: 120px;
 }
 
 .raport>section.locked {
@@ -255,5 +270,203 @@
   margin: 20px 0;
 }
 </style>
+
+<!-- @TODO @FIXME replace with highcharts from bundle -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+// menu observer
+const sections = document.querySelectorAll('section[id]');
+const navItems = document.querySelectorAll('nav>ul>li');
+
+const observer = new IntersectionObserver((entries) => {
+  navItems.forEach(item => item.classList.remove('active'));
+  
+  for (const section of sections) {
+    if (entries.some(entry => entry.target === section && entry.isIntersecting)) {
+      const activeLink = document.querySelector(`nav a[href="#${section.id}"]`);
+      if (activeLink && activeLink.parentElement) {
+        activeLink.parentElement.classList.add('active');
+      }
+      break;
+    }
+  }
+}, { threshold: 0.5 });
+
+sections.forEach(section => observer.observe(section));
+
+// charts
+document.addEventListener('DOMContentLoaded', function() {
+  // Charts
+  // Mandaty jako % budżetu
+  Highcharts.chart(document.querySelector('#mandaty .chart'), {
+    chart: {
+      type: 'column',
+      backgroundColor: 'transparent'
+    },
+    title: {
+      text: 'Udział mandatów w budżecie straży miejskiej',
+      style: {
+        fontSize: '16px',
+        fontWeight: 'bold'
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    },
+    xAxis: {
+      categories: ['Poznań', 'Kraków', 'Warszawa', 'Wrocław', 'Łódź', 'Średnia PL'],
+      tickWidth: 0,
+      gridLineWidth: 1
+    },
+    yAxis: {
+      min: 0,
+      max: 25,
+      title: {
+        text: null
+      },
+      labels: {
+        format: '{value}%'
+      }
+    },
+    tooltip: {
+      valueSuffix: '%'
+    },
+    plotOptions: {
+      column: {
+        borderWidth: 2,
+        borderColor: '#3182ce'
+      }
+    },
+    series: [{
+      name: 'Mandaty jako % budżetu',
+      data: [
+        { y: 20, color: 'rgba(49, 130, 206, 0.8)' },
+        { y: 12, color: 'rgba(49, 130, 206, 0.7)' },
+        { y: 8, color: 'rgba(49, 130, 206, 0.6)' },
+        { y: 7, color: 'rgba(49, 130, 206, 0.5)' },
+        { y: 5, color: 'rgba(49, 130, 206, 0.4)' },
+        { y: 7, color: 'rgba(243, 156, 18, 0.8)' }
+      ]
+    }]
+  });
+
+  // Pouczenia
+  Highcharts.chart(document.querySelector('#pouczenia .chart'), {
+    chart: {
+      type: 'bar',
+      backgroundColor: 'transparent'
+    },
+    title: {
+      text: 'Procent interwencji zakończonych pouczeniem',
+      style: {
+        fontSize: '16px',
+        fontWeight: 'bold'
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    },
+    xAxis: {
+      categories: ['Łódź', 'Szczecin', 'Wrocław', 'Średnia PL', 'Warszawa', 'Kraków', 'Poznań'],
+      title: {
+        text: null
+      }
+    },
+    yAxis: {
+      min: 0,
+      max: 80,
+      title: {
+        text: null
+      },
+      labels: {
+        format: '{value}%'
+      }
+    },
+    tooltip: {
+      valueSuffix: '%'
+    },
+    plotOptions: {
+      bar: {
+        color: 'rgba(49, 130, 206, 0.7)',
+        borderWidth: 2,
+        borderColor: 'rgba(49, 130, 206, 1)'
+      }
+    },
+    series: [{
+      name: '% interwencji zakończonych pouczeniem',
+      data: [70, 55, 50, 45, 40, 30, 25]
+    }]
+  });
+
+  // Efektywność strażników
+  Highcharts.chart(document.querySelector('#efektywnosc .chart'), {
+    chart: {
+      type: 'column',
+      backgroundColor: 'transparent'
+    },
+    title: {
+      text: 'Mandaty/kary wystawione dziennie przez jedną osobę',
+      style: {
+        fontSize: '16px',
+        fontWeight: 'bold'
+      }
+    },
+    credits: {
+      enabled: false
+    },
+    legend: {
+      enabled: false
+    },
+    xAxis: {
+      categories: ['Poznań', 'Kraków', 'Łódź', 'Średnia PL', 'Wrocław', 'Warszawa', 'Kontroler SPP'],
+      tickWidth: 0,
+      gridLineWidth: 1
+    },
+    yAxis: {
+      type: 'logarithmic',
+      min: 0.1,
+      title: {
+        text: null
+      },
+      labels: {
+        formatter: function() {
+          const value = this.value;
+          if ([0.4, 0.6, 1, 10, 100, 200].includes(value)) {
+            return value;
+          }
+          return '';
+        }
+      }
+    },
+    tooltip: {
+      headerFormat: '<b>{point.x}</b><br/>',
+      pointFormat: '{series.name}: {point.y}'
+    },
+    plotOptions: {
+      column: {
+        borderWidth: 2
+      }
+    },
+    series: [{
+      name: 'Mandatów na dobę na osobę',
+      data: [
+        { y: 1.2, color: 'rgba(49, 130, 206, 0.8)', borderColor: 'rgba(49, 130, 206, 1)' },
+        { y: 0.8, color: 'rgba(49, 130, 206, 0.7)', borderColor: 'rgba(49, 130, 206, 1)' },
+        { y: 0.7, color: 'rgba(49, 130, 206, 0.6)', borderColor: 'rgba(49, 130, 206, 1)' },
+        { y: 0.6, color: 'rgba(243, 156, 18, 0.8)', borderColor: 'rgba(243, 156, 18, 1)' },
+        { y: 0.5, color: 'rgba(49, 130, 206, 0.5)', borderColor: 'rgba(49, 130, 206, 1)' },
+        { y: 0.4, color: 'rgba(49, 130, 206, 0.4)', borderColor: 'rgba(49, 130, 206, 1)' },
+        { y: 200, color: 'rgba(231, 76, 60, 0.8)', borderColor: 'rgba(231, 76, 60, 1)' }
+      ]
+    }]
+  });
+});
+</script>
 
 {% endblock %}
