@@ -16,12 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
     showButtons()
   }
 
-  const appIdElement = /** @type {HTMLInputElement} */ (document.getElementById('applicationId'))
-  const appId = appIdElement?.value
+  //const appId = document.getElementById('applicationId')?.value
 
   // @ts-ignore
-  (typeof umami == 'object') && umami.track("start", {
-    appId
-  });
+  //(typeof umami == 'object') && umami.track("start", {
+//    appId
+ // });
 
 });
