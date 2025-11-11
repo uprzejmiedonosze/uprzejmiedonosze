@@ -33,14 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
   Sentry.setTag("appId", $(".new-application #applicationId").val()?.toString());
 
   const plateId = $("#plateId")?.val()
+  const appId = $(".new-application #applicationId").val();
   if (plateId) {
-    const appId = $(".new-application #applicationId").val();
     updateRecydywa(appId);
   }
 
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", {
-    eventCategory: "pageshow",
-    eventAction: "nowe-zgloszenie"
+  (typeof umami == 'object') && umami.track("new-app", {
+    "appId": appId
   });
 });

@@ -15,7 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     showButtons()
   }
+
+  const appIdElement = /** @type {HTMLInputElement} */ (document.getElementById('applicationId'))
+  const appId = appIdElement?.value
+
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "dziekujemy" });
+  (typeof umami == 'object') && umami.track("start", {
+    appId
+  });
 
 });

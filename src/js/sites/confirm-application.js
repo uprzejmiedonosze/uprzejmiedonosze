@@ -2,8 +2,17 @@ import $ from "jquery"
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!$(".confirm-application").length) return;
+
+  const appIdElement = document.getElementById("applicationId")
+  let appId = null
+  if (appIdElement && 'value' in appIdElement) {
+    appId = appIdElement.value
+  }
+
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", { eventCategory: "pageshow", eventAction: "potwierdz" });
+  (typeof umami == 'object') && umami.track("set-status", {
+    appId
+  });
 
   setTimeout(function () {
     $("a.confirm-send-button").removeClass('disabled')

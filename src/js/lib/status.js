@@ -28,10 +28,8 @@ export async function setStatus(appId, status) {
   }
 
   // @ts-ignore
-  (typeof ga == 'function') && ga("send", "event", {
-    eventCategory: "js",
-    eventAction: "setStatus",
-    eventLabel: status
+  (typeof umami == 'object') && umami.track("set-status", {
+    appId, status
   });
 }
 
