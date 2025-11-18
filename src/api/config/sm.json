@@ -2860,13 +2860,22 @@
   "gmina Chełmek": {
     "parent": "Oświęcim"
   },
-  "Murowana Goślina": {
+  "Murowana Goślina zlikwidowana": {
     "address": [
       "Straż Miejska w Murowanej Goślinie",
       "ul. Gen. T. Kutrzeby 3",
       "62-095 Murowana Goślina"
     ],
-    "email": "straz.miejska@murowana-goslina.pl"
+    "email": "straz.miejska@murowana-goslina.pl",
+    "active": false
+  },
+  "Murowana Goślina": {
+    "address": [
+      "Komisariat Policji w Murowanej Goślinie",
+      "ul. Mostowa 6",
+      "62-095 Murowana Goślina"
+    ],
+    "email": "dyzurny.murowana-goslina@po.policja.gov.pl"
   },
   "gmina Murowana Goślina": {
     "parent": "Murowana Goślina"
