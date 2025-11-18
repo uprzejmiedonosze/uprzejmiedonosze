@@ -444,6 +444,16 @@
     "voivodeship": "Dolnośląskie",
     "city": "Wrocław"
   },
+  "Kalisz-miasto": {
+    "address": [
+      "Komenda Miejska Policji w Kaliszu",
+      "ul. Kordeckiego 36",
+      "62-800 Kalisz"
+    ],
+    "email": "dyzurny.kalisz@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Kalisz"
+  },
   "Poznań-miasto": {
     "address": [
       "Komenda Miejska Policji w Poznaniu",
@@ -536,10 +546,3 @@
     "hint": "Nie udało się się dobrać wojewódzkiego #stopagresji, więc kierujemy wysyłkę na Stołeczną Komendę Policji."
   }
 }
-
-
-
-
-
-
-
