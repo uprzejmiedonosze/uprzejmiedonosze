@@ -3679,5 +3679,13 @@
       "78-500 Drawsko Pomorskie"
     ],
     "email": "sm@drawsko.pl"
+  },
+  "Wieluń": {
+    "address": [
+      "Straż Miejska w Wieluniu",
+      "pl. Kazimierza Wielkiego 1",
+      "98-300 Wieluń"
+    ],
+    "email": "sekretariat@um.wielun.pl"
   }
 }
