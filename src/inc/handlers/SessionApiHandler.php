@@ -21,6 +21,11 @@ class SessionApiHandler extends AbstractHandler {
             throw new HttpNotFoundException($request, "Nie posiadasz zgłoszenia o ID {$app->id}");
     }
 
+    public function validateUser(Request $request, Response $response, $args): Response {
+        $user = $request->getAttribute('user');
+        return $this->renderJson($response, $user);
+    }
+
     public function deleteImage(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $imageId = $args['image'];
