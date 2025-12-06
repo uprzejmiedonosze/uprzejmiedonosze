@@ -21,12 +21,25 @@ class SessionApiHandler extends AbstractHandler {
             throw new HttpNotFoundException($request, "Nie posiadasz zgłoszenia o ID {$app->id}");
     }
 
+    /**
+     * Validates user session - BACKEND ONLY endpoint
+     * Security measures:
+     * 1. Requires X-API-Key header for authentication
+     * 2. Session ID passed via X-Session-ID header (not in body)
+     * 3. No CORS headers (SecureApiMiddleware)
+     * 
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function validateUser(Request $request, Response $response, $args): Response {
-        $params = (array)$request->getParsedBody();
-        $sessionId = $this->getParam($params, 'sessionId', -1);
-
-        if ($sessionId == -1)
-            throw new MissingParamException("sessionId");
+        $apiKey = $request->getHeaderLine('X-API-Key');
+        if (empty($apiKey) || $apiKey !== BACKEND_API_KEY) {
+            throw new HttpForbiddenException($request, "Invalid or missing API key");
+        }
+        
+        $sessionId = $request->getHeaderLine('X-Session-ID');
+        if (empty($sessionId)) {
+            throw new MissingParamException("X-Session-ID header");
+        }
         
         $currentSessionId = session_id();
         

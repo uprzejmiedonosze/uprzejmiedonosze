@@ -13,3 +13,5 @@ define('MAILER_FROM', 'u@dka.email');
 define('CRYPTO_KEY', '7700bcc0327517849e966dd169791439');
 define('CRYPTO_IV', '330adc20ed7dcf8561ff4869dd434b85');
 define('CRYPTO_TAG', '190181339ab13a971415e977b736053f');
+
+define('BACKEND_API_KEY', 'dev-secret-key-change-in-production');

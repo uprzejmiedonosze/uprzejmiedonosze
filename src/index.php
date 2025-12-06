@@ -75,7 +75,7 @@ $app->post('/api/verify-token', SessionApiHandler::class . ':verifyToken')
     ->add(new JsonBodyParser());
 
 $app->post('/user/validate', SessionApiHandler::class . ':validateUser')
-    ->add(new JsonMiddleware())
+    ->add(new SecureApiMiddleware())
     ->add(new JsonBodyParser());
 
 $app->group('/api', function (RouteCollectorProxy $group) { // JSON API

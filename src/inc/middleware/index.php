@@ -11,3 +11,4 @@ require(__DIR__ . '/HtmlErrorRenderer.php');
 require(__DIR__ . '/JsonBodyParser.php');
 require(__DIR__ . '/JsonErrorRenderer.php');
 require(__DIR__ . '/JpegMiddleware.php');
+require(__DIR__ . '/SecureApiMiddleware.php');
