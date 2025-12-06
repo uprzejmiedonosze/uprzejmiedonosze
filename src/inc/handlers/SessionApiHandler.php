@@ -22,8 +22,53 @@ class SessionApiHandler extends AbstractHandler {
     }
 
     public function validateUser(Request $request, Response $response, $args): Response {
-        $user = $request->getAttribute('user');
-        return $this->renderJson($response, $user);
+        $params = (array)$request->getParsedBody();
+        $sessionId = $this->getParam($params, 'sessionId', -1);
+
+        if ($sessionId == -1)
+            throw new MissingParamException("sessionId");
+        
+        $currentSessionId = session_id();
+        
+        session_write_close();
+        
+        try {
+            session_id($sessionId);
+            session_start();
+            
+            $isValid = isset($_SESSION['user_id'])
+                && isset($_SESSION['user_email'])
+                && stripos($_SESSION['user_email'], '@') !== false;
+            
+            if ($isValid) {
+                try {
+                    $user = \user\get($_SESSION['user_email']);
+                    $isRegistered = $user->isRegistered();
+                } catch (Exception) {
+                    $isRegistered = false;
+                }
+                $userData = [
+                    'valid' => true,
+                    'user_id' => $_SESSION['user_id'],
+                    'user_email' => $_SESSION['user_email'],
+                    'user_name' => $_SESSION['user_name'] ?? '',
+                    'user_picture' => $_SESSION['user_picture'] ?? '',
+                    'isRegistered' => $isRegistered
+                ];
+            } else {
+                $userData = ['valid' => false];
+            }
+            
+            session_write_close();
+            
+        } finally {
+            if ($currentSessionId) {
+                session_id($currentSessionId);
+                session_start();
+            }
+        }
+        
+        return $this->renderJson($response, $userData);
     }
 
     public function deleteImage(Request $request, Response $response, $args): Response {
