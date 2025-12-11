@@ -70,7 +70,6 @@ dev-sequential: HOST := $(DEV_HOST)
 dev-sequential: HTTPS := http
 dev-sequential: export_minimal
 	@echo "==> Refreshing sources"
-	@cp localhost-firebase-adminsdk.json $(EXPORT)
 	@$(RSYNC) -r vendor $(EXPORT)
 
 .PHONY: check-local-configs
@@ -79,14 +78,10 @@ check-local-configs:
 		echo "Error: config.php is missing. Please refer to README.md for instructions on how to create it."; \
 		exit 1; \
 	fi
-	@if [ ! -f localhost-firebase-adminsdk.json ]; then \
-		echo "Error: localhost-firebase-adminsdk.json is missing. Please refer to README.md for instructions on how to create it."; \
-		exit 1; \
-	fi
 
 dev-run: HOST := $(DEV_HOST)
 dev-run: HTTPS := http
-dev-run: $(DIRS) dev ## Building and running Docker image
+dev-run: $(DIRS) dev ## Building and running Docker image (with Firebase emulator)
 	@echo "==> Building docker"
 	@make --warn-undefined-variables --directory docker build
 	@echo "==> Running docker image"
@@ -319,6 +314,10 @@ api: minify-config
 	@[ ! -L src/public ] && ln -s export/public src || true
 	@[ ! -L inc ] && ln -s src/inc . || true
 	@php -S localhost:8080 -t src/api/rest
+
+.PHONY: emulator-ui
+emulator-ui: ## Open Firebase emulator UI in browser
+	@open http://localhost:4000
 
 .PHONY: check-branch
 check-branch: ## Detects environment and active branch changes

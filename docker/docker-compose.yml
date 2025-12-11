@@ -1,4 +1,15 @@
 services:
+  firebase-emulator:
+    image: firebase-emulator
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.firebase
+    container_name: firebase-emulator
+    ports:
+      - 9099:9099
+      - 4000:4000
+    restart: always
+
   webapp:
     image: webapp
     build:
@@ -10,5 +21,8 @@ services:
     working_dir: /var/www/localhost/webapp
     volumes:
       - ../export:/var/www/localhost/webapp
+    depends_on:
+      - firebase-emulator
     environment:
         WATCHPACK_POLLING: "true"
+        FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
