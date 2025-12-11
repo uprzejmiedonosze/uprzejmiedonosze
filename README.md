@@ -9,9 +9,11 @@ To start you have to:
 3. Have `GIT` installed
 4. Have `PHP>=8.2` and `composer` installed
 5. Have `node 18.*` installed
-5. Have `rsync`, `curl`, `make`, `sed`, `jq` and `md5sum` available
+6. Have `rsync`, `curl`, `make`, `sed`, `jq`, `md5sum` and `sponge` available
+7. (Optional) Have `firebase-tools` installed for Firebase emulator: `npm install -g firebase-tools`
 
 (for `md5sum` on OSX you can either `brew install md5sha1sum` or add `alias md5sum='md5 -r'` to your `.bashrc`)
+(for `sponge` on OSX run `brew install moreutils`)
 
 
 ## Cloning
@@ -28,7 +30,20 @@ To run the app you will need to set up a few external services:
 - Google Maps API is required as a fallback geolocation.
 - ALPR credentials are required if you want automated plate recognition to work.
 
-As a bare minimum you should configure at least Firebase credentials.
+### Firebase Authentication
+
+You have two options for Firebase setup:
+
+**Option 1: Firebase Emulator (Recommended for development)**
+
+No Firebase account or credentials needed. Uses Firebase Local Emulator Suite.
+
+1. Install Firebase CLI: `npm install -g firebase-tools`
+2. Start emulator: `make emulator-start` (in separate terminal)
+3. Access emulator UI at http://localhost:4000
+4. Proceed with "Running the app for the first time" below
+
+**Option 2: Real Firebase Project**
 
 You can either create these must-have accounts by yourself OR ask the
 maintainer to send you credentials and Firebase config.
@@ -69,8 +84,23 @@ $ composer update
 $ npm install
 ```
 
+**If using Firebase Emulator (Option 1 - Auto-start):**
 
-Now compile the app, build a Docker image, and run it simply by:
+```
+$ USE_EMULATOR=1 make dev-run
+```
+
+This automatically starts the Firebase emulator and then builds/runs Docker.
+
+**If using Firebase Emulator (Option 2 - Manual):**
+
+Start the emulator in a separate terminal (keep it running):
+
+```
+$ make emulator-start
+```
+
+**Then compile and run the app:**
 
 ```
 $ make dev-run
@@ -87,6 +117,12 @@ To refresh the sources on the docker image make:
 ```
 $ make dev
 ```
+
+**Emulator commands:**
+- `USE_EMULATOR=1 make dev-run` - Auto-start emulator + Docker (recommended)
+- `make emulator-start` - Start Firebase Auth emulator manually (port 9099)
+- `make emulator-stop` - Stop Firebase emulator
+- `make emulator-ui` - Open emulator UI at http://localhost:4000
 
 ## Comments
 

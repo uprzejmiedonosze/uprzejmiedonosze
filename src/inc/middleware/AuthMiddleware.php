@@ -40,38 +40,43 @@ class AuthMiddleware implements MiddlewareInterface {
         if (!$jwt) {
             throw new HttpBadRequestException($request, 'Token not found in request');
         }
-    
-        $keys  = $this->getPublicKeys($request);
-        
-        @list($headersB64, $payloadB64, $sig) = explode('.', $jwt);
-        $decoded = json_decode(base64_decode($headersB64), true);
-        if (!isset($decoded['kid']))
-            throw new HttpBadRequestException($request, 'Wrong `kid` in JWT header');
 
-        $key = $keys[$decoded['kid']];
-        
-        try {
-            $decodedToken = JWT::decode($jwt, new Key($key, $algorithm));
-        } catch (InvalidArgumentException $e) {
-            throw new HttpBadRequestException($request, $e->getMessage(), $e);
-        } catch (DomainException // provided algorithm is unsupported OR provided key is invalid
-            | SignatureInvalidException // provided JWT signature verification failed.
-            | BeforeValidException // provided JWT is trying to be used before "nbf" claim OR before "iat" claim
-            | ExpiredException // provided JWT is trying to be used after "exp" claim.
-            | UnexpectedValueException // provided JWT is malformed OR is missing an algorithm / using an unsupported algorithm OR algorithm does not match provided key OR key ID in key/key-array is empty or invalid.
-            $e) {
+        $usingEmulator = !empty(getenv('FIREBASE_AUTH_EMULATOR_HOST'));
 
-            if ($e instanceof ExpiredException && isDev()) {
-                $user = Array(
-                    'user_email' => $decodedToken->email,
-                    'user_name' => $decodedToken->name
-                );
-                $request = $request->withAttribute('firebaseUser', $user);
-                return $handler->handle($request);
+        if (!$usingEmulator) {
+            $keys  = $this->getPublicKeys($request);
+
+            @list($headersB64, $payloadB64, $sig) = explode('.', $jwt);
+            $decoded = json_decode(base64_decode($headersB64), true);
+            if (!isset($decoded['kid']))
+                throw new HttpBadRequestException($request, 'Wrong `kid` in JWT header');
+
+            $key = $keys[$decoded['kid']];
+
+            try {
+                $decodedToken = JWT::decode($jwt, new Key($key, $algorithm));
+            } catch (InvalidArgumentException $e) {
+                throw new HttpBadRequestException($request, $e->getMessage(), $e);
+            } catch (DomainException // provided algorithm is unsupported OR provided key is invalid
+                | SignatureInvalidException // provided JWT signature verification failed.
+                | BeforeValidException // provided JWT is trying to be used before "nbf" claim OR before "iat" claim
+                | ExpiredException // provided JWT is trying to be used after "exp" claim.
+                | UnexpectedValueException // provided JWT is malformed OR is missing an algorithm / using an unsupported algorithm OR algorithm does not match provided key OR key ID in key/key-array is empty or invalid.
+                $e) {
+
+                if ($e instanceof ExpiredException && isDev()) {
+                    $user = Array(
+                        'user_email' => $decodedToken->email,
+                        'user_name' => $decodedToken->name
+                    );
+                    $request = $request->withAttribute('firebaseUser', $user);
+                    return $handler->handle($request);
+                }
+
+                throw new HttpForbiddenException($request, $e->getMessage(), $e);
             }
-            
-            throw new HttpForbiddenException($request, $e->getMessage(), $e);
-        }    
+        }
+
         $user = $this->verifyToken($jwt, $request);
         $request = $request->withAttribute('firebaseUser', $user);
         return $handler->handle($request);
@@ -80,6 +85,25 @@ class AuthMiddleware implements MiddlewareInterface {
     private function verifyToken($token, $request){
         // $firebaseUser = \cache\get($token);
         //if ($firebaseUser) return json_decode($firebaseUser, true);
+
+        $usingEmulator = !empty(getenv('FIREBASE_AUTH_EMULATOR_HOST'));
+
+        if ($usingEmulator) {
+            @list($headersB64, $payloadB64, $sig) = explode('.', $token);
+            $payload = json_decode(base64_decode($payloadB64), true);
+
+            if (!$payload || !isset($payload['email'])) {
+                throw new HttpForbiddenException($request, 'Invalid emulator token');
+            }
+
+            return Array(
+                'user_email' => (isDev()) ? 'e@nieradka.net' : $payload['email'],
+                'user_name' => $payload['name'] ?? '',
+                'user_picture' => $payload['picture'] ?? '',
+                'user_id' => $payload['user_id'] ?? $payload['sub'] ?? '',
+                'token' => $token
+            );
+        }
 
         $factory = (new Factory)->withServiceAccount(__DIR__ . '/../../' . HOST . '-firebase-adminsdk.json');
         $auth = $factory->createAuth();

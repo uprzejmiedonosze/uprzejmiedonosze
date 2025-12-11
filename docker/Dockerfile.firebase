@@ -1,0 +1,16 @@
+FROM node:20-alpine
+
+# Install firebase-tools globally
+RUN npm install -g firebase-tools
+
+# Create working directory
+WORKDIR /firebase
+
+# Copy firebase configuration
+COPY src/firebase.json /firebase/firebase.json
+
+# Expose Auth emulator and UI ports
+EXPOSE 9099 4000
+
+# Start only Auth emulator (binds to 0.0.0.0 by default in container)
+CMD ["firebase", "emulators:start", "--only", "auth", "--project", "demo-project"]

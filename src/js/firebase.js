@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, EmailAuthProvider } from "firebase/auth";
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, EmailAuthProvider, connectAuthEmulator } from "firebase/auth";
 import * as firebaseui from 'firebaseui';
 
 import Api from './lib/Api'
@@ -10,8 +10,12 @@ addEventListener("load", () => initLogin(currentScript));
 let firebaseAuth = null;
 
 function getFirebaseAuth() {
-    if(!firebaseAuth)
+    if(!firebaseAuth) {
         firebaseAuth = getAuth(initializeApp(getFirebaseConfig()))
+        if (document.location.hostname === 'localhost' || document.location.hostname === '127.0.0.1') {
+            connectAuthEmulator(firebaseAuth, "http://127.0.0.1:9099", { disableWarnings: true });
+        }
+    }
     return firebaseAuth
 }
 
