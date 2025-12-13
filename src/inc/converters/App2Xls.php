@@ -34,7 +34,7 @@ function appsToXlsx(array $apps, string $name) {
         $sheet->getCell(__coordinate(1, $rowNum))->getHyperlink()->setUrl(HTTPS . '://' . HOST . '/ud-' . $app->id . '.html');
         $sheet->setCellValue(__coordinate(2, $rowNum), $app->getStatus()->name);
         $sheet->setCellValue(__coordinate(3, $rowNum), $app->getDate("d.MM.y H:mm"));
-        $sheet->setCellValue(__coordinate(4, $rowNum), $app->getShortAddress());
+        $sheet->setCellValue(__coordinate(4, $rowNum), $app->getAddress());
         $sheet->getCell(__coordinate(4, $rowNum))->getHyperlink()->setUrl($app->getMapUrl());
         $sheet->setCellValue(__coordinate(5, $rowNum), $app->carInfo->plateId);
         $sheet->setCellValue(__coordinate(6, $rowNum), $app->getCategory()->formal);

@@ -537,12 +537,16 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     public function getShortAddress(): string {
-        $shortStreetAddress = preg_replace('/\D.*\s(\w{3,}\s(\w{1,3}\s)?\w{3,}\s(\w{1,3}\s)?[\/\w\d]+,\s.+)/iu', '$1', $this->address->address);
+        $shortStreetAddress = $this->getAddress();
         if (str_ends_with($this->user->address, $this->address->city ?? 'none')) {
             $re = '/,\s' . ($this->address->city ?? 'none') . '$/';
             return preg_replace($re, '', $shortStreetAddress);
         }
         return $shortStreetAddress;
+    }
+
+    public function getAddress(): string {
+        return preg_replace('/\D.*\s(\w{3,}\s(\w{1,3}\s)?\w{3,}\s(\w{1,3}\s)?[\/\w\d]+,\s.+)/iu', '$1', $this->address->address);
     }
 
     public function addComment(string $source, string $comment, ?string $status=null){
