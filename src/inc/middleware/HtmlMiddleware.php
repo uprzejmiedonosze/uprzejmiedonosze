@@ -63,11 +63,16 @@ class HtmlMiddleware implements MiddlewareInterface {
         $request = $request->withAttribute('parameters', $parameters);
 
         $response = $handler->handle($request);
-        return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
+
+        $allowedOrigin = getCorsOrigin($request);
+        if ($allowedOrigin) {
+            $response = $response
+                ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)
                 ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST')
-                ->withHeader('Access-Control-Allow-Credentials', 'true')
-                ->withHeader('Content-Type', 'text/html; charset=UTF-8');
+                ->withHeader('Access-Control-Allow-Credentials', 'true');
+        }
+
+        return $response->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
 }

@@ -66,13 +66,17 @@ $app->options('/{routes:.+}', function ($request, $response) {
 
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
-    return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
+
+    $allowedOrigin = getCorsOrigin($request);
+    if ($allowedOrigin) {
+        $response = $response
+            ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH')
-            ->withHeader('Access-Control-Allow-Credentials', 'true')
-            ->withHeader('Content-Type', 'application/json')
-            ->withHeader('Content-Type', 'application/json; charset=UTF-8');
+            ->withHeader('Access-Control-Allow-Credentials', 'true');
+    }
+
+    return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
 $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER

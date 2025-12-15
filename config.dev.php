@@ -15,3 +15,4 @@ define('CRYPTO_IV', '330adc20ed7dcf8561ff4869dd434b85');
 define('CRYPTO_TAG', '190181339ab13a971415e977b736053f');
 
 define('BACKEND_API_KEY', 'dev-secret-key-change-in-production');
+define('CORS_ALLOWED_DOMAIN', 'localhost'); // includes subdomains
