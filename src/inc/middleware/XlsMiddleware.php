@@ -10,10 +10,16 @@ class XlsMiddleware implements MiddlewareInterface {
         logger(static::class . ": {$request->getUri()->getPath()}");
         $request = $request->withAttribute('content', 'xlsx');
         $response = $handler->handle($request);
-        return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            ->withHeader('Access-Control-Allow-Methods', 'GET')
-            ->withHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        $allowedOrigin = getCorsOrigin($request);
+        if ($allowedOrigin) {
+            $response = $response
+                ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)
+                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+                ->withHeader('Access-Control-Allow-Methods', 'GET')
+                ->withHeader('Access-Control-Allow-Credentials', 'true');
+        }
+
+        return $response->withHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     }
 }
