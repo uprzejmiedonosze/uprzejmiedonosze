@@ -12,5 +12,8 @@ COPY src/firebase.json /firebase/firebase.json
 # Expose Auth emulator and UI ports
 EXPOSE 9099 4000
 
-# Start only Auth emulator (binds to 0.0.0.0 by default in container)
+# Bind emulator to all interfaces for Docker accessibility
+ENV FIREBASE_EMULATOR_HUB_HOST=0.0.0.0
+
+# Start only Auth emulator
 CMD ["firebase", "emulators:start", "--only", "auth", "--project", "demo-project"]
