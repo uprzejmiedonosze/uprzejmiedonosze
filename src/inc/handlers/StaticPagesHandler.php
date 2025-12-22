@@ -274,7 +274,6 @@ class StaticPagesHandler extends AbstractHandler {
             'przepisy',
             'robtodobrze',
             'statystyki',
-            'szablony-pism',
             'wniosek-odpowiedz1',
             'wniosek-rpo',
             'zwrot-za-przesluchanie',
@@ -289,34 +288,11 @@ class StaticPagesHandler extends AbstractHandler {
         if (!in_array($route, $ROUTES)) {
             throw new HttpNotFoundException($request);
         }
-
+    
         try {
             return AbstractHandler::renderHtml($request, $response, $route);
         } catch (\Twig\Error\LoaderError $error) {
             return AbstractHandler::renderHtml($request, $response, "404");
         }
-    }
-
-    public function letterTemplate(Request $request, Response $response, $args) {
-        $subpage = $args['subpage'];
-
-        // sanitize
-        if (!preg_match('/^[a-z0-9\-_]+$/i', $subpage)) {
-            throw new HttpNotFoundException($request);
-        }
-
-        $templateName = "szablony-pism-{$subpage}";
-        $templatePath = __DIR__ . "/../../templates/{$templateName}.html.twig";
-
-        if (!file_exists($templatePath)) {
-            throw new HttpNotFoundException($request);
-        }
-
-        return AbstractHandler::renderHtml($request, $response, $templateName, [
-            'breadcrumb' => [
-                'parentTitle' => 'Szablony pism',
-                'parentUrl' => '/szablony-pism.html'
-            ]
-        ]);
     }
 }
