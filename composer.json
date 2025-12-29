@@ -1,7 +1,7 @@
 {
     "require": {
         "php": "^8.2",
-        "kreait/firebase-php": "^7.9",
+        "kreait/firebase-php": "^7.23",
         "twig/twig": "^3.0",
         "tumblr/tumblr": "^0.4",
         "sentry/sdk": "^4",
@@ -24,7 +24,7 @@
         "openai-php/client": "^0.16.0"
     },
     "require-dev": {
-        "sserbin/twig-linter": "@dev",
+        "sserbin/twig-linter": "^3.1",
         "pdepend/pdepend": "^2.15",
         "phpmd/phpmd": "^2.13",
         "symfony/config": "^6.4",
