@@ -31,7 +31,9 @@ EOD,
             "Mamy w Polsce strefy nieuczciwego parkowania, w których najbardziej opłaca się parkować... poza miejscami do parkowania"
         ],
         "law" => <<<EOD
-Postuluję czytelne i sprawiedliwe rozwiązanie: stoisz na wyznaczonym miejscu – płacisz za postój w strefie. Stoisz w strefie poza miejscem wyznaczonym – płacisz opłatę dodatkową zgodnie z regulaminem. Należy zauważyć, że kontroler strefy nie musi podejmować decyzji o tym, czy pojazd stoi zgodnie z przepisami czy nie. Musi jedynie ustalić, czy znajduje się on na wyznaczonym miejscu, czy poza nim (co już obecnie należy do jego obowiązków).
+Absolutnym minimum jest doprowadzenie do sytuacji, w której postój niezgodny z przepisany jest droższy, niż postój w strefie. Teraz jest na odwrót.
+
+Pustuluję jednak czytelne i sprawiedliwe rozwiązanie: stoisz na wyznaczonym miejscu – płacisz za postój w strefie. Stoisz w strefie poza miejscem wyznaczonym – płacisz opłatę dodatkową zgodnie z regulaminem. Należy zauważyć, że kontroler strefy nie musi podejmować decyzji o tym, czy pojazd stoi zgodnie z przepisami czy nie. Musi jedynie ustalić, czy znajduje się on na wyznaczonym miejscu, czy poza nim (co już obecnie należy do jego obowiązków).
 
 Oczywiście w sytuacji, w której kierowca poza postojem na miejscu niewyznaczonym np. stwarza zagrożenie w ruchu, naraża się inne rodzaje odpowiedzialności, np. usunięcie pojazdu z drogi na koszt właściciela.
 
@@ -185,6 +187,12 @@ $TARGETS = [
         "forms" => ["email", "complaint", "proposal"],
         "formal" => "Szanowny Pan\nDariusz Klimczak\nMinister Infrastruktury\nAl. Ujazdowskie 1/3\n00-583 Warszawa",
         "email" => "sekretariatDKlimczaka@mi.gov.pl"
+    ],
+    "MSWiA" => [
+        "title" => "Ministera Spraw Wewnętrznych i Administracji",
+        "forms" => ["email", "complaint", "proposal"],
+        "formal" => "Szanowny Pan\nMarcin Kierwiński\nMinister Spraw Wewnętrznych i Administracji\nul. Stefana Batorego 5\n02-591 Warszawa",
+        "email" => "kontakt@mswia.gov.pl"
     ],
     "RPO" => [
         "title" => "Rzecznika Praw Obywatelskich",
