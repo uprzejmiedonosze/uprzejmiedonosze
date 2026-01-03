@@ -31,7 +31,7 @@ EOD,
             "Mamy w Polsce strefy nieuczciwego parkowania, w których najbardziej opłaca się parkować... poza miejscami do parkowania"
         ],
         "law" => <<<EOD
-Absolutnym minimum jest doprowadzenie do sytuacji, w której postój niezgodny z przepisany jest droższy, niż postój w strefie. Teraz jest na odwrót.
+Absolutnym minimum jest doprowadzenie do sytuacji, w której postój niezgodny z przepisany jest droższy, niż prawidłowy postój w strefie. Teraz jest na odwrót.
 
 Pustuluję jednak czytelne i sprawiedliwe rozwiązanie: stoisz na wyznaczonym miejscu – płacisz za postój w strefie. Stoisz w strefie poza miejscem wyznaczonym – płacisz opłatę dodatkową zgodnie z regulaminem. Należy zauważyć, że kontroler strefy nie musi podejmować decyzji o tym, czy pojazd stoi zgodnie z przepisami czy nie. Musi jedynie ustalić, czy znajduje się on na wyznaczonym miejscu, czy poza nim (co już obecnie należy do jego obowiązków).
 
