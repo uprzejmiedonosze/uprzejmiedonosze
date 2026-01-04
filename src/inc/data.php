@@ -24,11 +24,14 @@ Należy zauważyć, że zgodnie z art. 13 ustawy o drogach publicznych, w razie 
 Strefy Płatnego Parkowania w Polsce zaczęły powstawać w 1994 roku na bazie rozporządzenia rady ministrów. Już wtedy definiowało możliwość pobierania opłaty w strefie za „parkowanie pojazdów w wyznaczonym miejscu”. Treść tego rozporządzenia została w 2003 roku przeniesiona do ustawy o drogach publicznych. Przez następne 20 lat gminy pobierały opłaty w całym obszarze strefy, a wojewódzkie sądy administracyjne twierdziły, że „jeżeli pojazd zostanie zaparkowany na drodze publicznej, ale w miejscu nieprzeznaczonym do parkowania, to korzystający nadal ma obowiązek uiszczenia opłaty za parkowanie”. Sytuację zmieniła uchwała Naczelnego Sądu Administracyjnego z 9 października 2017 r., która jednoznacznie wskazała, że opłatę w strefie można pobierać wyłącznie na miejscach wyznaczonych znakiem pionowym i poziomym.
 EOD,
         "examples" => [
-            "Przepisy tworzą zachęty ekonomiczne do nielegalnego parkowania.",
+            "Kierowca parkujący na trawniku w SPP otrzymuje darmowy postój, podczas gdy uczciwy obywatel płaci za miejsce wyznaczone.",
+            "Mamy w Polsce strefy nieuczciwego parkowania, w których najbardziej opłaca się parkować... poza miejscami do parkowania",
             "Nieuczciwy kierowca za tydzień parkowania na przystanku być może zapłaci 100 zł mandatu, uczciwy kierowca musi zapłacić wielokrotnie więcej.",
-            "Wadliwe przepisy skutkują niszczeniem zieleni i infrastruktury.",
+            "Obecny system karze za uczciwość – opłata za 8h parkowania bywa wyższa niż teoretyczny mandat, który i tak rzadko jest wystawiany.",
+            "Przepisy tworzą zachęty ekonomiczne do nielegalnego parkowania.",
             "Przez wadliwe przepisy poslskie miasta toną w słupkach.",
-            "Mamy w Polsce strefy nieuczciwego parkowania, w których najbardziej opłaca się parkować... poza miejscami do parkowania"
+            "Samorządy są bezsilne, bo Ministerstwo Infrastruktury odmawia zmiany definicji opłat, zasłaniając się kompetencjami MSWiA.",
+            "Wadliwe przepisy skutkują niszczeniem zieleni i infrastruktury."
         ],
         "law" => <<<EOD
 Absolutnym minimum jest doprowadzenie do sytuacji, w której postój niezgodny z przepisany jest droższy, niż prawidłowy postój w strefie. Teraz jest na odwrót.
@@ -52,11 +55,15 @@ Ten anachroniczny przepis utrwala u użytkowników dróg mylne przekonanie o mo�
 Przepisy sprzed półwiecza nie przystają też do obowiązujących przepisów techniczno-budowlanych, które definiują „Szerokość chodnika powinna być nie mniejsza niż 1,80 m)”.
 EOD,
         "examples" => [
-            "Szkodliwy mit o „pozostawieniu półtora metra” jako jedynym warunku prawidłowego parkowania.",
+            "Art. 47 PRD to relikt z czasów, gdy liczba aut w Polsce była marginalna, dziś służy do dewastacji miast.",
             "Lasy znaków i słupków próbujących regulować chaos parkingowy.",
+            "Ministerstwo Infrastruktury ignoruje własne standardy techniczne, pozwalając na parkowanie na chodnikach wbrew zasadom projektowania bezpiecznej przestrzeni.",
             "Nieczytelny i niespójny stan prawny regulujący społecznie ważnie obszar.",
-            "W Polsce nadal budujemy chodniko-parkingi bazując na przepisach sprzed 60 lat.",
-            "Samorządy wydają miliony na infrastrukturę dla pieszych, której nie sposób uchronić przed zniszczeniem."
+            "Obecne przepisy zmuszają pieszych do slalomu między zderzakami na ich własnej drodze.",
+            "Pieszy z wózkiem jest obywatelem drugiej kategorii wobec 2,5-tonowego SUV-a na chodniku.",
+            "Samorządy wydają miliony na infrastrukturę dla pieszych, której nie sposób uchronić przed zniszczeniem.",
+            "Szkodliwy mit o „pozostawieniu półtora metra” jako jedynym warunku prawidłowego parkowania.",
+            "W Polsce nadal budujemy chodniko-parkingi bazując na przepisach sprzed 60 lat."
         ],
         "law" => <<<EOD
 Postuluję możliwość postoju pojazdu w całości na chodniku wyłącznie w miejscach przeznaczonych (infrastrukturą lub znakami).
@@ -77,7 +84,7 @@ Brak waloryzacji grzywien nakładanych w drodze mandatów karnych za wykroczenia
 Prowadzi to do szeregu absurdów, np. jazda wzdłuż chodnika podlega karze grzywny w wysokości 1 500 złotych. Natomiast parkowanie z dala od krawędzi jezdni, które wymaga jazdy wzdłuż chodnika, nadal karane jest kwotą 100 zł. Mandat za nieprawidłowe parkowanie jest niższy od opłaty dodatkowej za złamanie regulaminu parkowania w strefie płatnego parkowania. Mandat za nieprawidłowe parkowanie również jest wielokrotnie niższy niż kara finansowa za jazdę bez biletu w środku komunikacji zbiorowej (np. 550 w Katowicach oraz 400 zł w Szczecinie).
 EOD,
         "examples" => [
-            "Pensja minimalna wzrosła w tym czasie z 800 zł do 4 666 zł.",
+            "Pensja minimalna wzrosła w tym czasie z 800 zł do 4 806 zł.",
             "Kara za przejazd autobusem „na gapę” to nawet 550 zł, za nielegalne parkowanie 100 zł.",
             "Mandat za rzucenie papierka na chodnik to 500 zł, porzucenie na nim auta to mandat 100 zł.",
             "Przestarzały taryfikator powoduje faktyczną depenalizację patoparkowania.",
@@ -98,11 +105,14 @@ Przepisy o ruchu drogowym nie zawierają słów „zieleń” lub „trawa”. P
 To jednak tylko część problemu. Konieczność korzystania z kodeksu wykroczeń uniemożliwia strażnikom miejskim założenie blokady na tak zaparkowany pojazd ani nałożenia punktów karnych. Co więcej, nie ma wtedy zastosowania art. 96/3 kodeksu wykroczeń, który umożliwia ukarania właściciela pojazdu za niewskazanie sprawcy wykroczenia.
 EOD,
         "examples" => [   
-            "Brak możliwości założenia blokady na auto kierowcy niszczącego zieleń.",
-            "Brak możliwości przyznania punktów karnych dla osób niszczących przyrodę samochodem.",
             "Brak możliwości odholowania auta kierowcy stojącego na trawie.",
+            "Brak możliwości przyznania punktów karnych dla osób niszczących przyrodę samochodem.",
+            "Brak możliwości założenia blokady na auto kierowcy niszczącego zieleń.",
+            "Każdy klepisko w mieście było kiedyś trawnikiem, który zginął pod kołami aut.",
             "Konieczne są nadzwyczajne środki i determinacja strażników miejskich, żeby nałożyć jakąkolwiek karę dla sprawców niszczenia zieleni.",
-            "Teren przeznaczony na zieleń, który zostanie zdewastowany przez kierowców całkowicie traci ochronę prawną. Zniszczony trawik staje się legalnym parkingiem."
+            "Parkowanie na trawie jest w Polsce 'legalne przez zaniechanie' ustawodawcy.",
+            "Teren przeznaczony na zieleń, który zostanie zdewastowany przez kierowców całkowicie traci ochronę prawną. Zniszczony trawik staje się legalnym parkingiem.",
+            "Teren przeznaczony na zieleń, który zostanie zdewastowany przez kierowców całkowicie traci ochronę prawną."
         ],
         "law" => <<<EOD
 Najprostsze rozwiązanie, polegające na wprowadzeniu zakazu parkowania na „zieleni lub terenie przeznaczonym na zieleń” spowodowałoby w mojej ocenie masowe „utwardzanie” istniejących terenów zielonych, które do tej pory służyły jako legalne lub nielegalne miejsca postojowe.
@@ -154,9 +164,12 @@ Ten stan prawny funkcjonuje w ramach powszechnego zjawiska nieprawidłowego park
 
 EOD,
         "examples" => [
-            "Przepisy nie pozwalają usuwać pojazdów z dróg pożarowych.",
-            "Słynne „betonowe auto z Łodzi” nie zostało odholowane przez łódzką SM właśnie z powodu wadliwych przepisów.",
-            "Aktywista, który postawił Skodę Felicję na tzw. placu Pięciu Rogów w Warszawie był bezkarny właśnie dlatego, że nie było żadnych podstaw do odholowania jego pojazdu."
+            "Aktywista, który postawił Skodę Felicję na tzw. placu Pięciu Rogów w Warszawie był bezkarny właśnie dlatego, że nie było żadnych podstaw do odholowania jego pojazdu.",
+            "Obecny tryb art. 130a PRD chroni mienie sprawcy bardziej niż bezpieczeństwo innych uczestników ruchu.",
+            "Państwo polskie wykazuje skrajną niezdolność do usuwania wraków i aut patoparkujących z kluczowych arterii pieszych.",
+            "Pojazd zasłaniający widoczność przy przejściu powinien znikać z drogi natychmiast, bez dyskusji o 'stopniu zagrożenia'.",
+            "Przepisy nie pozwalają usuwać pojazdów z dróg pożarowych, o ile 'nie utrudniają ruchu' w danej sekundzie.",
+            "Słynne „betonowe auto z Łodzi” nie zostało odholowane przez łódzką SM właśnie z powodu wadliwych przepisów."
         ],
         "law" => <<<EOD
 Proponuję, aby w ustawie prawo o ruchu drogowym art. 130a w ust. 1 pkt 1 przyjął postać:
