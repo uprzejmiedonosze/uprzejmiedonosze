@@ -202,7 +202,7 @@ $TARGETS = [
         "email" => "sekretariatDKlimczaka@mi.gov.pl"
     ],
     "MSWiA" => [
-        "title" => "Ministera Spraw Wewnętrznych i Administracji",
+        "title" => "Ministra Spraw Wewnętrznych i Administracji",
         "forms" => ["email", "complaint", "proposal"],
         "formal" => "Szanowny Pan\nMarcin Kierwiński\nMinister Spraw Wewnętrznych i Administracji\nul. Stefana Batorego 5\n02-591 Warszawa",
         "email" => "kontakt@mswia.gov.pl"
