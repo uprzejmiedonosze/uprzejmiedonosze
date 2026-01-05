@@ -81,6 +81,8 @@ Obecnie obowiązujące grzywny za wykroczenia związane z parkowaniem nie zosta�
 
 Brak waloryzacji grzywien nakładanych w drodze mandatów karnych za wykroczenia związane z postojem pojazdów spowodował faktyczną depenalizację tych wykroczeń.
 
+W sprawie dwukrotnie wypowiadało się MSWiA w odpowiedzi na interpelacje poselskie nr 2900 z 2024 r. i nr 7123 z 2025. w opinii resortu spraw wewnętrznych i administracji należy uznać za słuszną argumentację Państwa Posłów w zakresie potrzeby dokonania stosownej korekty rozporządzenia Prezesa Rady Ministrów w sprawie wysokości grzywien nakładanych w drodze mandatów karnych za wybrane rodzaje wykroczeń w obszarze zatrzymania i postoju”.
+
 Prowadzi to do szeregu absurdów, np. jazda wzdłuż chodnika podlega karze grzywny w wysokości 1 500 złotych. Natomiast parkowanie z dala od krawędzi jezdni, które wymaga jazdy wzdłuż chodnika, nadal karane jest kwotą 100 zł. Mandat za nieprawidłowe parkowanie jest niższy od opłaty dodatkowej za złamanie regulaminu parkowania w strefie płatnego parkowania. Mandat za nieprawidłowe parkowanie również jest wielokrotnie niższy niż kara finansowa za jazdę bez biletu w środku komunikacji zbiorowej (np. 550 w Katowicach oraz 400 zł w Szczecinie).
 EOD,
         "examples" => [
