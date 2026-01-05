@@ -24,7 +24,7 @@ class DocHandler extends AbstractHandler {
             $target = $TARGETS[$petition->target]['formal'] . "\n\n";
         }
 
-        $signature = "\n\n{$user->data->name}\n{$user->data->city}";
+        $signature = "\n\n{$user->data->name}\n{$user->data->address}";
 
         $doc = \generator\Petition2Doc($petition, $target, $signature);
         return AbstractHandler::renderDoc($response, $doc, $user->getSanitizedName().".docx");
