@@ -145,7 +145,7 @@ class ApiAiHandler extends \AbstractHandler {
                 $this->sendPetition($petition);
                 $this->printAndFlush(json_encode(['toast' => "Wysłaliśmy Ci kopię tego pisma"]));
                 // Send done signal
-                $this->printAndFlush('[DONE]');
+                $this->printAndFlush("[DONE] id={$petition->id}");
 
                 exit;
             };
@@ -282,10 +282,10 @@ class ApiAiHandler extends \AbstractHandler {
         return null;
     }
 
-    public function getSuggestedParlamentary(Request $request, Response $response, array $args): Response {
+    public static function __getParlamentary(\user\User $user): array {
         $mps = \json\get('parlamentary.json');
         $districts = \json\get('electoral-districts.json');
-        $user = $request->getAttribute('user');
+        
         $city = null;
         if ($user) {
             $city = self::getUserDistrict($user, $districts);
@@ -307,7 +307,7 @@ class ApiAiHandler extends \AbstractHandler {
             $mps[$key]['vovoideship_match'] = null;
             if ($voivodeship)
                 $mps[$key]['vovoideship_match'] = $districts[$mp['district']]['voivodeship'] == $voivodeship;
-            $mps[$key]['name'] = $this->changeNameOrder($key);
+            $mps[$key]['name'] = ApiAiHandler::changeNameOrder($key);
             $mps[$key]['sex'] = \user\User::_guessSex($mps[$key]['name']);
 
             if (isset($mps[$key]['email'])) {
@@ -322,7 +322,12 @@ class ApiAiHandler extends \AbstractHandler {
 
             $mps[$key]['petitionCount'] = $stats[$key] ?? 0;
         }
+        return $mps;
+    }
 
+    public function getSuggestedParlamentary(Request $request, Response $response, array $args): Response {
+        $user = $request->getAttribute('user');
+        $mps = $this::__getParlamentary($user);
         return $this->renderJson($response, $mps);
     }
 

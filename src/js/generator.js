@@ -7,7 +7,6 @@ let targetsData = {};
 let recipientsData = {};
 let currentStep = 1;
 let totalSteps = document.querySelectorAll(".generator>section:not(.hidden)").length;
-const currentScript = document.currentScript;
 
 const politicalPartyExpanedNames = {
     'PiS': 'Prawo i Sprawiedliwosć',
@@ -509,6 +508,7 @@ async function generate() {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
+        let petitionId = "";
 
         while (true) {
             const { done, value } = await reader.read();
@@ -532,7 +532,9 @@ async function generate() {
                 const eventData = event.slice(6).trim();
 
                 // Check for done signal
-                if (eventData === '[DONE]') {
+                if (eventData.startsWith('[DONE]')) {
+                    const idMatch = eventData.match(/id=([a-zA-Z0-9]+)/);
+                    petitionId = idMatch ? idMatch[1] : '';
                     if (status) status.textContent = 'Gotowe do wysłania';
                     continue;
                 }
@@ -567,7 +569,7 @@ async function generate() {
         showHideElement(status, false)
         showHideElement(progressBar, false)
 
-        populateDeliveryLinks();
+        populateDeliveryLinks(petitionId);
 
     } catch (error) {
         console.error(error)
@@ -587,12 +589,13 @@ async function generate() {
     }
 };
 
-function populateDeliveryLinks() {
+function populateDeliveryLinks(petitionId) {
     const mailtoButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('mailtoButton'))
-    const gmailtoButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('gmailtoButton'))
     const formButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('openFormButton'))
-    if (!mailtoButton || !gmailtoButton)
-        return errorToast('Missing mailtoButton or gmailtoButton')
+    const getDocxButton = /** @type {HTMLAnchorElement} */ (document?.getElementById('getDocx'))
+    
+    if (!mailtoButton)
+        return errorToast('Missing mailtoButton')
 
     const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
     const recipientElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="recipient"]:checked'));
@@ -626,23 +629,15 @@ function populateDeliveryLinks() {
     const emailDelivery = recipient_action.search('@') > 0
     showHideElement(formButton, !emailDelivery)
     showHideElement(mailtoButton, emailDelivery)
-    showHideElement(gmailtoButton, emailDelivery)
+
+    getDocxButton.href = `/petition/${petitionId}.docx`;
 
     if (emailDelivery) {
         if (outputShadow) {
             content = content.replace(/\n?\s*\n?^Temat:.*$/m, '')
-            outputShadow.textContent =
-                "Wyślij wiadomość na adres: " + recipient_action + "\n" +
-                "Temat: " + subject + "\n\n" + content
         }
-        const loggedInToGmail = currentScript?.getAttribute("data-user-isgmail") == '1'
-        if (loggedInToGmail) {
-            gmailtoButton.classList.add('cta')
-        } else {
-            mailtoButton.classList.add('cta')
-        }
-        mailtoButton.href = getEmailUrl(recipient_action, subject, content)
-        gmailtoButton.href = getGmailUrl(recipient_action, subject, content)
+        mailtoButton.classList.add('cta')
+        mailtoButton.href = getEmailUrl(recipient_action, subject)
     } else {
         formButton.href = recipient_action
     }
@@ -651,21 +646,12 @@ function populateDeliveryLinks() {
     step5nav.style.visibility = 'visible';
 }
 
-function getGmailUrl(recipient, subject, content) {
-    const bcc = "miejska@agendaparkingowa.pl";
-    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
-        recipient
-    )}&bcc=${encodeURIComponent(bcc)}&su=${encodeURIComponent(
-        subject
-    )}&body=${encodeURIComponent(content)}`
-}
-
-function getEmailUrl(recipient, subject, content) {
+function getEmailUrl(recipient, subject) {
     const bcc = "miejska@agendaparkingowa.pl";
     return `mailto:${encodeURIComponent(
         recipient
     )}?bcc=${encodeURIComponent(bcc)}&subject=${encodeURIComponent(
         subject
-    )}&body=${encodeURIComponent(content)}`
+    )}`
 }
 

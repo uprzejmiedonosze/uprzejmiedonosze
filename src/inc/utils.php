@@ -119,7 +119,7 @@ function getDomainFromEmail(string $email) {
     return strtolower(substr(strrchr($email, "@"), 1));
 }
 
-function domainUsesGoogleMail(string $domain) {
+function __domainUsesGoogleMail(string $domain) { // unused
     if (!checkdnsrr($domain, "MX")) return false;
     $mxhosts = [];
     @getmxrr($domain, $mxhosts);
