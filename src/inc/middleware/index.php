@@ -4,6 +4,7 @@ require(__DIR__ . '/AuthMiddleware.php');
 require(__DIR__ . '/CsvMiddleware.php');
 require(__DIR__ . '/HtmlMiddleware.php');
 require(__DIR__ . '/XlsMiddleware.php');
+require(__DIR__ . '/DocMiddleware.php');
 require(__DIR__ . '/JsonMiddleware.php');
 require(__DIR__ . '/PdfMiddleware.php');
 require(__DIR__ . '/SessionMiddleware.php');

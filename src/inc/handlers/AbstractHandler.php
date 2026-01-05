@@ -63,6 +63,12 @@ abstract class AbstractHandler {
         return $response;
     }
 
+    public static function renderDoc(Response $response, $content, $filename): Response {
+        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
+        $response->getBody()->write($content);
+        return $response;
+    }
+
     /**
      * @SuppressWarnings(PHPMD.MissingImport)
      */
