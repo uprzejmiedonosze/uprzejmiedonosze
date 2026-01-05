@@ -158,6 +158,8 @@ Zgodnie z przepisami o ruchu drogowym (art. 130a), pojazd jest usuwany z drogi n
 
 Problem ten dosadnie zreferował Bartłomiej Zieliński, pierwszy zastępca komendant stołecznej straży miejskiej w Polsce na posiedzeniu Parlamentarnego Zespołu Bezpieczeństwa Ruchu Drogowego w dniu 16 października 2024. Wskazał on, że straż miejska w Warszawie przed usunięciem pojazdu zaparkowanego np. przed przejściem dla pieszych, czeka na sytuację „rzeczywistego zagrożenia”, tj. na sytuację, w której przed przejściem znajduje się pieszy a na drodze pojazd. Dopiero tak udokumentowana sytuacja jest w opinii warszawskich sądów wystarczającą przesłanką do usunięcia pojazdu.
 
+W polskich miastach wojewódzkich usuwa się z drogi na podstawie z art. 130a średnio zaledwie 3,5 samochodu na dobę (dane za 2024). To zatrważająco mało zważywszy na skalę zjawiska.
+
 W praktyce oznacza to brak możliwości usunięcia pojazdów ograniczających swobodę poruszania się pieszych.
 
 W obecnym stanie prawnym istnieje szereg wypadków, w których nieprawidłowo zaparkowany pojazd powoduje realne zagrożenie życia i zdrowia ludzi albo mienia w wielkich rozmiarach, a organy państwa nie dysponują żadnym środkiem prawnym w celu fizycznego przywrócenia stanu zgodności z prawem. Stan taki – skrajnej niezdolności Państwa do działania wywołanej barierą prawną – narusza art. 2 Konstytucji RP w zakresie, w jakim wymaga on, aby system prawa tworzył spójne i wykonalne normy prawne, umożliwiające funkcjonowanie Państwa i ochronę wartości takich jak życie i zdrowie człowieka.
