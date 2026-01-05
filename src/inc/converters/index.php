@@ -12,4 +12,5 @@ function checkUserFoder(string $userNumber): string{
 require(__DIR__ . '/App2Pdf.php');
 require(__DIR__ . '/App2Zip.php');
 require(__DIR__ . '/App2Xls.php');
+require(__DIR__ . '/Petition2Doc.php');
 

@@ -13,12 +13,9 @@ class GeneratorHandler extends AbstractHandler {
 
         $user = $request->getAttribute('user');
         $email = $user->getEmail();
-        $domain = getDomainFromEmail($email);
-        $isGmail = domainUsesGoogleMail($domain) ? '1': '0';
         $mainPageStats = \global_stats\mainPage(useCache: true);
 
         return AbstractHandler::renderHtml($request, $response, 'generator', [
-            'isGmail' => $isGmail,
             'isPatron' => $user->isPatron(),
             'config' => [
                 'stats' => $mainPageStats

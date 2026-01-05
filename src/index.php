@@ -102,6 +102,10 @@ $app->group('/generator', function (RouteCollectorProxy $group) {
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());
 
+$app->get('/petition/{petitionId}.docx', DocHandler::class . ':doc')
+    ->add(new RegisteredMiddleware())
+    ->add(new DocMiddleware());
+
 $app->group('', function (RouteCollectorProxy $group) { // Application
     //$group->any('/start.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
     //$group->any('/nowe-zgloszenie.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
