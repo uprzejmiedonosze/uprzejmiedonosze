@@ -25,6 +25,7 @@
 <ul>
   <li>{{ _self.link('email', 'E-mail/Uprzejmie Donoszę') }} – stosuj w pojedynczych przypadkach.</li>
   <li>{{ _self.link('telefon', 'Telefon') }} – używaj, kiedy walczysz z całymi nielegalnymi parkingami.</li>
+  <li>{{ _self.link('zglosparkowanie', 'Zgłoś Parkowanie') }} – używaj, żeby zmusić Policję do zajęcia się parkowaniem.</li>
   <li>{{ _self.link('kmz', 'Krajowa Mapa Zagrożeń') }} – patoparkingi lub powtarzające się nielegalne parkowanie.</li>
   <li>{{ _self.link('policja', 'Stop Agresji Drogowej') }} – kiedy masz film z jeżdżenia po chodniku lub przejściu dla pieszych.</li>
   <li>{{ _self.link('slupki2', 'Wniosek o uzupełnienie słupków') }} – stosuj do uzupełnienia zniszczonej infrastruktury.</li>
@@ -96,6 +97,32 @@
           Koniecznie <a href="/dostep-do-informacji-publicznej.html">sprawdzaj efekty pracy SM</a>!
         </p>
         <a href="tel:986" rel="external" class="button inline cta">Zadzwoń pod 986</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="howto" id="zglosparkowanie">
+    <h3 class="title">ZgłosParkowanie.pl</h3>
+    <div class="card">
+      <figure>
+        <img src="/img/how-zglosparkowanie.png?width=800&as=jpg&quality=90">
+      </figure>
+      <div class="content">
+        <p>
+          <em>Kiedy stosować:</em> w podobnych sytuacjach jak {{ _self.link('telefon', '#telefon') }}
+          czyli na całych patoparkingach, w przypadku pojazdów na zagranicznych
+          numerach rejestracyjnych lub gdy wiadomo, że auto jeszcze trochę postoi.
+        </p>
+        <p>
+          <em>Anonimowość:</em> Wzywając patroli Policji jesteś {{ config.sex.anonimowa ?? 'anonimowa/y' }}.
+          Możesz jednak mieć problem z uzyskaniem informacji o efektach inwerwencji.
+          Zobacz <a href="https://zglosparkowanie.pl/faq.html" rel="external" target="_blank">FAQ serwisu</a>.
+        </p>
+        <p>
+          <em>Skuteczność:</em> Zależna od miasta. W uproszczeniu: im większe miasto tym większa
+          szansa na reakcję Policji.
+        </p>
+        <a href="https://zglosparkowanie.pl/" rel="external" target="_blank" class="button inline cta">ZgłośParkowanie.pl</a>
       </div>
     </div>
   </div>
