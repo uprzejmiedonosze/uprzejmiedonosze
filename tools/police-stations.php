@@ -19,7 +19,7 @@ function transform($polygonsFile, $policeStationsFile) {
 
     $polygons = Array();
     $file = fopen($polygonsFile, "r");
-    while (([$definition, $name] = fgetcsv($file)) !== FALSE) {
+    while (([$definition, $name] = fgetcsv($file, 0, ",", "\"", "\\")) !== FALSE) {
         preg_match('/^([A-Z]+)\s\(\(?([\d,.\s]+)\)\)?/', $definition, $matches);
         if(count($matches) < 3) continue;
         if(!array_key_exists($name, $policeStations)) {
