@@ -464,6 +464,16 @@
     "voivodeship": "Wielkopolskie",
     "city": "Poznań"
   },
+  "Poznań-nowe-miasto": {
+    "address": [
+      "Komisariat Policji Poznań - Nowe Miasto",
+      "ul. Polanka 24",
+      "61-131 Poznań"
+    ],
+    "email": "dyzurny.poznan-nowe-miasto@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Poznań"
+  },
   "Rzeszów-miasto": {
     "address": [
       "Komenda Miejska Policji w Rzeszowie",
