@@ -15,7 +15,6 @@ class User extends \JSONObject{
 
     /**
      * Creates a new User or initiate it from JSON.
-     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function __construct($json=null, bool $dontDecode=false){
@@ -39,6 +38,10 @@ class User extends \JSONObject{
         $this->data->shareRecydywa = true;
         $this->data->sex = '?';
         $this->appsCount = 0;
+    }
+
+    public static function withJson($json, bool $dontDecode=false): User {
+        return new User($json, $dontDecode);
     }
 
     public static function withFirebaseUser($firebaseUser) {
