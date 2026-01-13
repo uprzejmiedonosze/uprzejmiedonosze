@@ -195,6 +195,10 @@ class User extends \JSONObject{
     function confirmTerms() {
         $this->data->termsConfirmation = date(DT_FORMAT);
         $this->updated = date(DT_FORMAT);
+        if (isset($this->removalWarningSent))
+            unset($this->removalWarningSent);
+        if (isset($this->removal2ndWarningSent))
+            unset($this->removal2ndWarningSent);
     }
 
     function checkTermsConfirmation() {
