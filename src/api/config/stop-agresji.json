@@ -464,7 +464,7 @@
     "voivodeship": "Wielkopolskie",
     "city": "Poznań"
   },
-  "Poznań-nowe-miasto": {
+  "Poznań-Nowe-Miasto": {
     "address": [
       "Komisariat Policji Poznań - Nowe Miasto",
       "ul. Polanka 24",
@@ -475,7 +475,57 @@
     "voivodeship": "Wielkopolskie",
     "city": "Poznań"
   },
-  "Rzeszów-miasto": {
+  "Poznań-Wilda": {
+    "address": [
+      "Komisariat Policji Poznań - Wilda",
+      "ul. Dezyderego Chłapowskiego 12",
+      "61-504 Poznań"
+    ],
+    "email": "dyzurny.poznan-wilda@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Poznań"
+  },
+  "Poznań-Grunwald": {
+    "address": [
+      "Komisariat Policji Poznań - Grunwald",
+      "ul. Rycerska 2",
+      "60-346 Poznań"
+    ],
+    "email": "dyzurny.poznan-grunwald@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Poznań"
+  },
+  "Poznań-Jeżyce": {
+    "address": [
+      "Komisariat Policji Poznań - Jeżyce",
+      "ul. Kochanowskiego 16",
+      "60-846 Poznań"
+    ],
+    "email": "dyzurny.poznan-jezyce@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Poznań"
+  },
+  "Poznań-Północ": {
+    "address": [
+      "Komisariat Policji Poznań - Północ",
+      "os.Jana III Sobieskiego 115",
+      "60-688 Poznań"
+    ],
+    "email": "dyzurny.poznan-polnoc@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Poznań"
+  },
+  "Poznań-Stare-Miasto": {
+    "address": [
+      "Komisariat Policji Poznań - Stare Miasto",
+      "Al. Marcinkowskiego 31",
+      "61-745 Poznań"
+    ],
+    "email": "dyzurny.poznan-stare-miasto@po.policja.gov.pl",
+    "voivodeship": "Wielkopolskie",
+    "city": "Poznań"
+  },
+"Rzeszów-miasto": {
     "address": [
       "Komenda Miejska Policji w Rzeszowie",
       "ul. Jagiellońska 13",
