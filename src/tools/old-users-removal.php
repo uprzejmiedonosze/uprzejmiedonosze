@@ -99,7 +99,7 @@ function __remove(\user\User $user) {
     $text = "
 Cześć,
 
-Dwa miesiące temu wysłaliśmy Ci informację o usunięciu twojego konta na Uprzejmie Donoszę ze względu na długą nieaktywność. Potem ostatnie ostrzeżenie. To email jest już tylko potwierdzeniem, że usunęliśmy twoje konto z serwisu. Co to oznacza?
+Dwa miesiące temu wysłaliśmy Ci informację o planowaniu usunięciu Twojego konta na Uprzejmie Donoszę ze względu na długą nieaktywność. Potem ostatnie ostrzeżenie. Ten email jest już tylko potwierdzeniem, że usunęliśmy już Twoje konto z serwisu. Co to oznacza?
 
 1. Na naszych serwerach nie ma twoich danych osobowych ani szczegółów wykonanych przez Ciebie zgłoszeń (np. zdjęć).
 2. Kolejna próba zalogowania się stworzy nowe konto z czystą historią.
