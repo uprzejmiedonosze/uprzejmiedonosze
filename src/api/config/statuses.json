@@ -75,7 +75,7 @@
     "name": "Mandat",
     "action": "Kierowca dostał mandat",
     "recydywa": "Kierowca tego pojazdu został ukarany mandatem",
-    "allowed": ["confirmed-instructed", "confirmed-ignored", "archived"],
+    "allowed": ["confirmed-instructed", "confirmed-ignored", "confirmed-sm", "archived"],
     "comment": "Kierowca został ukarany mandatem",
     "editable": false,
     "sendable": false
@@ -84,7 +84,7 @@
     "name": "Pouczenie",
     "action": "Kierowca został pouczony",
     "recydywa": "Kierowca tego pojazdu został pouczony",
-    "allowed": ["confirmed-fined", "confirmed-ignored", "archived"],
+    "allowed": ["confirmed-fined", "confirmed-ignored", "confirmed-complaint", "confirmed-sm", "archived"],
     "comment": "Kierowca został pouczony",
     "editable": false,
     "sendable": false
@@ -93,7 +93,7 @@
     "name": "Zignorowane",
     "action": "Nie ukarano ani nie pouczono kierowcy",
     "recydywa": "Kierowca tego pojazdu popełnił wykroczenie, ale nie został niestety ukarany",
-    "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-complaint", "archived"],
+    "allowed": ["confirmed-fined", "confirmed-instructed", "confirmed-complaint", "confirmed-sm", "archived"],
     "comment": "Zgłoszenie zostało zignorowane, SM/Policja nie ustaliła sprawcy albo nie doszukała się znamion wykroczenia",
     "editable": false,
     "sendable": false
