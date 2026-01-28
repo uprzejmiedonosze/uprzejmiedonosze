@@ -10,7 +10,12 @@ function queue(): Queue
     global $queue;
     if ($queue)
         return $queue;
-    $queue = new Queue(StorageType::SQLITE, DB_FILENAME);
+
+    $queueFile = dirname(DB_FILENAME) . '/queue.sqlite';
+    $pdo = new \PDO('sqlite:' . $queueFile);
+    $pdo->exec("CREATE TABLE IF NOT EXISTS queue (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT);");
+
+    $queue = new Queue(StorageType::SQLITE, $queueFile);
     return $queue;
 }
 
