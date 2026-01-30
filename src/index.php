@@ -10,6 +10,7 @@ require_once(__DIR__ . '/../inc/config.php');
  */
 function resetSession() {
     session_unset();
+    session_start();
     session_regenerate_id(true);
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';
 }
