@@ -112,7 +112,7 @@ function lastTicket(array $recydywa): string {
         $by = $lastTicket->owner ? 'Np. twoje zgłoszenie' : 'Np. zgłoszenie innej osoby';
     }
     
-    $number = $lastTicket->number . ($lastTicket->externalId ? " ($lastTicket->externalId)" : '');
+    $number = $lastTicket->number . ($lastTicket->externalId ? " (" . strtoupper($lastTicket->externalId ) . ")" : '');
     $date = formatDateTime($lastTicket->date, 'd.MM.y');
     
     $sm = $lastTicket->stopAgresji ? $STOP_AGRESJI[$lastTicket->smCity] : $SM_ADDRESSES[$lastTicket->smCity];

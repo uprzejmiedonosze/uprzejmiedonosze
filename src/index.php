@@ -19,6 +19,10 @@ if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
     ini_set("session.gc_maxlifetime", $timeout);
     ini_set("session.cookie_lifetime", $timeout);
 
+    ini_set("session.cookie_httponly", "1");
+    ini_set("session.cookie_secure", isProd() ? "1" : "0");
+    ini_set("session.cookie_samesite", "Lax");
+
     set_error_handler(fn($errno, $errstr) => logger($errstr), E_WARNING);
     session_start();
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';

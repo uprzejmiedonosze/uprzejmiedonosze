@@ -8,9 +8,35 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
+<h4>Sobota, 31 stycznia 2026</h4>
+<ul>
+    <li>Zmiana adresu nadawcy dla SM Swarzędz (której komendant zablokował adres UD...).</li>
+</ul>
+<h4>Środa, 28 stycznia 2026</h4>
+<ul>
+    <li>Możliwość zmiany statusu na „potwierdzone” ze statusu „mandat”, „pouczenie” lub „zignorowane”.</li>
+    <li>Możliwość zmiany statusu na „zażalone” ze statusu „pouczenie”.</li>
+    <li>Zmiana adresu SM Dąbrowa Górnicza.</li>
+    <li>Poprawka błędu dostępu do bazy danych przy długich zapytaniach (dotyczyło głownie osób z ponad 1000 zgłoszeń).</li>
+    <li>Aktualizacja bibliotek Javascript.</li>
+</ul>
+<h4>Czwartek, 22 stycznia 2026</h4>
+<ul>
+    <li>Zgłaszanie na policję w Poznaniu skutkuje wysłaniem wiadomości bezpośrednio do dzielnicowego komisariatu (dzięki <a href="https://github.com/KrzysiuJarzyna" rel="external" target="_blank">Krzysztof</a>).</li>
+    <li>Ułatwienia dla programistów Uprzejmie Donoszę (dzięki <a href="https://github.com/Automaat" rel="external" target="_blank">Marcin</a>).</li>
+    <li>Aktualizacja bibliotek Javascript.</li>
+</ul>
+<h4>Sobota, 17 stycznia 2026</h4>
+<ul>
+    <li>Zmiana sposobu dostawy w SM Poznań z API na email. Niestety API UM Poznań stało się bardzo niestabilne.</li>
+</ul>
+<h4>Piątek, 16 stycznia 2026</h4>
+<ul>
+    <li>Zabezpieczenia komunikacji frontend-backend (Access-Control-Allow-Origin, secure cookies), dzięki <a href="https://github.com/lpiob" rel="external" target="_blank">Łukasz</a>.</li>
+</ul>
 <h4>Sobota, 10 stycznia 2026</h4>
 <ul>
-    <li>Nowa sekcja w poradniku <a href="/jak-zglosic-nielegalne-parkowanie.html#zglosparkowanie">Zgloś Parkowanie</a>.</li>
+    <li>Nowa sekcja w poradniku <a href="/jak-zglosic-nielegalne-parkowanie.html#zglosparkowanie">Zgłoś Parkowanie</a>.</li>
 </ul>
 <h4>Poniedziałek, 5 stycznia 2026</h4>
 <ul>
@@ -63,7 +89,7 @@
 <ul>
     <li>Poprawka adresu email SM Złocieniec.</li>
 </ul>
-<h4>Piątek, 21 listopada 2025</h4>
+<h4 class="milestone">Piątek, 21 listopada 2025</h4>
 <ul>
     <li>Nowo dodane straże miejskie i gminne: Płońsk, Żuromin, Nowe Miasto, Nasielsk, Chełmno, Chełmża, Lipno,
     Mogilno, Mrocza, Rypin, Biłgoraj, Krasnystaw, Kraśnik, Włodawa, Bytom Odrzański, Czerwieńsk, Gorzów Wlkp.,
@@ -93,10 +119,10 @@
 <ul>
     <li>Przywrócenie wersji z jQuery (po sygnałach o problemach z wysyłką zgłoszeń).</li>
 </ul>
-<h4>Niedziela, 9 listopada 2025</h4>
+<h4 class="milestone">Niedziela, 9 listopada 2025</h4>
 <ul>
-    <li>Uprzejmie Donoszę jest oficjalnie wolne od bilioteki jQuery.</li>
-    <li>Od 15 listopada nie można już pisać emaili do premiera – generator kieruje na formularz.</li>
+    <li>Uprzejmie Donoszę jest oficjalnie wolne od biblioteki jQuery.</li>
+    <li>Od 15 listopada nie można już pisać e-maili do premiera – generator kieruje na formularz.</li>
     <li>Aktualizacja testów automatycznych.</li>
 </ul>
 <h4>Czwartek, 23 października 2025</h4>
@@ -142,7 +168,7 @@
 </ul>
 <h4>Czwartek, 25 września 2025</h4>
 <ul>
-    <li>Link do <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">Miejskiej Agendy Parkingowej</a> w każdym wysłanym emailu.</li>
+    <li>Link do <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">Miejskiej Agendy Parkingowej</a> w każdym wysłanym e-mailu.</li>
     <li>Nie sugeruję kontaktu za pomocą e-Doręczeń Policji (i tak i tak to zignorują, bo mogą).</li>
     <li>Aktualizacja strony <a href="/czesto-popelniane-bledy.html">Często popełniane błędy</a>.</li>
     <li>KPP Myślenice i Nowy Dwór Gdańsk.</li>
@@ -158,7 +184,7 @@
     <li>Aktualizacja bibliotek.</li>
     <li>Zmiany w generatorze (użycie droższego modelu do generowania pism).</li>
 </ul>
-<h4>Środa, 3 września 2025</h4>
+<h4 class="milestone">Środa, 3 września 2025</h4>
 <ul>
     <li>Aktualizacja bibliotek.</li>
     <li><a href="/napisz-pismo-do-polityka.html">Generator pism do polityków</a> (w zamkniętej fazie testowej).</li>
@@ -195,7 +221,7 @@
     <li>Zmiana adresu Komisariatu Policji Jedlińsk.</li>
     <li>KPP w Gryfinie.</li>
 </ul>
-<h4>Sobota, 2 sierpnia 2025</h4>
+<h4 class="milestone">Sobota, 2 sierpnia 2025</h4>
 <ul>
     <li>Nowa strona <a href="/czesto-popelniane-bledy.html">Często popełniane błędy</a> (dzięki 
     <a href="https://github.com/lpiob" rel="external" target="_blank">Łukasz</a>).</li>

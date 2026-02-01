@@ -2,7 +2,7 @@
 	"Insert a changelog entry": {
 		"prefix": "changelog-entry",
 		"body": [
-			"<h4>$CURRENT_DAY_NAME, $CURRENT_DATE $CURRENT_MONTH_NAME $CURRENT_YEAR</h4>"
+			"<h4>${1|Poniedziałek,Wtorek,Środa,Czwartek,Piątek,Sobota,Niedziela|}, $CURRENT_DATE ${2|stycznia,lutego,marca,kwietnia,maja,czerwca,lipca,sierpnia,września,października,listopada,grudnia|} $CURRENT_YEAR</h4>"
 			"<ul>"
 			"    <li>.</li>"
 			"</ul>"

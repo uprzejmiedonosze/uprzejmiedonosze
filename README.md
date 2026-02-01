@@ -9,9 +9,10 @@ To start you have to:
 3. Have `GIT` installed
 4. Have `PHP>=8.2` and `composer` installed
 5. Have `node 18.*` installed
-5. Have `rsync`, `curl`, `make`, `sed`, `jq` and `md5sum` available
+6. Have `rsync`, `curl`, `make`, `sed`, `jq`, `md5sum` and `sponge` available
 
 (for `md5sum` on OSX you can either `brew install md5sha1sum` or add `alias md5sum='md5 -r'` to your `.bashrc`)
+(for `sponge` on OSX run `brew install moreutils`)
 
 
 ## Cloning
@@ -28,7 +29,15 @@ To run the app you will need to set up a few external services:
 - Google Maps API is required as a fallback geolocation.
 - ALPR credentials are required if you want automated plate recognition to work.
 
-As a bare minimum you should configure at least Firebase credentials.
+### Firebase Authentication
+
+You have two options for Firebase setup:
+
+**Option 1: Firebase Emulator (Recommended for development)**
+
+This is the default mode that will start with `make dev-run` and will activate when accessing test environment on localhost.
+
+**Option 2: Real Firebase Project**
 
 You can either create these must-have accounts by yourself OR ask the
 maintainer to send you credentials and Firebase config.
@@ -69,7 +78,6 @@ $ composer update
 $ npm install
 ```
 
-
 Now compile the app, build a Docker image, and run it simply by:
 
 ```
@@ -87,6 +95,9 @@ To refresh the sources on the docker image make:
 ```
 $ make dev
 ```
+
+**Firebase Emulator:**
+- `make emulator-ui` - Open emulator UI at http://localhost:4000
 
 ## Comments
 

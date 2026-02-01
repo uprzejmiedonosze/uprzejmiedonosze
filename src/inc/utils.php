@@ -138,3 +138,36 @@ function __domainUsesGoogleMail(string $domain) { // unused
 
     return false;
 }
+
+/**
+ * Get the appropriate CORS origin header value based on request origin
+ * Supports exact domain match and wildcard subdomain matching (*.domain.com)
+ *
+ * @param \Psr\Http\Message\ServerRequestInterface $request The PSR-7 request object
+ * @return string|null The allowed origin, or null if origin not allowed
+ */
+function getCorsOrigin(\Psr\Http\Message\ServerRequestInterface $request): ?string {
+    $origin = $request->getHeaderLine('Origin');
+
+    if (empty($origin))
+        return null;
+
+    $parsedOrigin = parse_url($origin);
+    if (!isset($parsedOrigin['host']))
+        return null;
+
+    $originHost = $parsedOrigin['host'];
+    $allowedDomain = CORS_ALLOWED_DOMAIN;
+
+    if ($originHost === $allowedDomain)
+        return $origin;
+
+    if (str_ends_with($originHost, '.' . $allowedDomain))
+        return $origin;
+
+    // failsafe to allow localhost and 127.0.0.1
+    if (isDev() && ($originHost === 'localhost' || $originHost === '127.0.0.1'))
+        return $origin;
+
+    return null;
+}

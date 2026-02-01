@@ -422,8 +422,7 @@
       "60-734 Poznań"
     ],
     "email": "sm@um.poznan.pl",
-    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>poznan.pl/api</b> udostępnianą przez Urząd Miasta Poznania.",
-    "api": "Poznan"
+    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie."
   },
   "Poznań-Jeżyce": {
     "parent": "Poznań"
@@ -1013,7 +1012,7 @@
       "ul. Graniczna 21",
       "41-300 Dąbrowa Górnicza"
     ],
-    "email": "dyzsm@dabrowa-gornicza.pl"
+    "email": "interwencja@sm.dg.pl"
   },
   "Będzin": {
     "address": [
@@ -2789,6 +2788,7 @@
       "62-020 Swarzędz"
     ],
     "email": "straz.miejska@swarzedz.pl",
+    "api": "MailGunAlter",
     "hint": "Autor odbył mało sympatyczną wymianę korespondencji z komendantem SM Swarzędz i wróży dobrej współpracy z tą jednostką."
   },
   "gmina Swarzędz": {
