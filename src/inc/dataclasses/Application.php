@@ -585,20 +585,51 @@ class Application extends JSONObject implements \JsonSerializable {
         if(!isset($this->extensions) || count($this->extensions) == 0) {
             return '';
         }
-        if ($this->category == 0)
-            $text = 'Pojazd';
-        else
-            $text = 'Dodatkowo pojazd';
+        $simpleExtensions = [];
+        $sentenceExtensions = [];
 
-        $extCount = count($this->extensions);
         foreach($this->extensions as $extension){
-            $text .= ' ';
-            $text .= $EXTENSIONS[$extension]->title;
-            if (--$extCount > 0) {
-                $text .= ' oraz';
+            if (!isset($EXTENSIONS[$extension])) {
+                continue;
             }
+            // Avoid duplicating the main category in the summary text.
+            if ((string)$extension === (string)$this->category) {
+                continue;
+            }
+
+            $summary = $EXTENSIONS[$extension]->summary ?? null;
+            if (!empty($summary)) {
+                $sentenceExtensions[] = trim($summary);
+                continue;
+            }
+
+            $simpleExtensions[] = $EXTENSIONS[$extension]->title;
         }
-        return "$text.";
+
+        $parts = [];
+
+        if (count($simpleExtensions) > 0) {
+            if ($this->category == 0)
+                $text = 'Pojazd';
+            else
+                $text = 'Dodatkowo pojazd';
+
+            $extCount = count($simpleExtensions);
+            foreach($simpleExtensions as $title){
+                $text .= ' ';
+                $text .= $title;
+                if (--$extCount > 0) {
+                    $text .= ' oraz';
+                }
+            }
+            $parts[] = "$text.";
+        }
+
+        foreach ($sentenceExtensions as $sentence) {
+            $parts[] = str_ends_with($sentence, '.') ? $sentence : ($sentence . '.');
+        }
+
+        return trim(implode(' ', $parts));
     }
 
     public function getExternalId(): string
