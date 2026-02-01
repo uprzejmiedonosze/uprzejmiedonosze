@@ -4464,5 +4464,13 @@
       "98-220 Zduńska Wola"
     ],
     "email": "straz_miejska@zdunskawola.pl"
+  },
+  "Brody": {
+    "address": [
+      "Komisariat Policji w Brodach",
+      "ul. Starachowicka 14",
+      "27-230 Brody"
+    ],
+    "email": "brody@ki.policja.gov.pl"
   }
 }
