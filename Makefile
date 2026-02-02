@@ -198,6 +198,9 @@ $(EXPORT)/public/api/config/sm.json: src/api/config/sm.json $(EXPORT)/public/api
 $(EXPORT)/public/api/config/stop-agresji.json: src/api/config/stop-agresji.json $(EXPORT)/public/api/config; $(call echo-processing,$< with node)
 	@node ./tools/sm-parser.js $< $@	
 
+$(EXPORT)/public/api/config/badges.json: src/api/config/badges.json src/api/config/categories.json $(EXPORT)/public/api/config; $(call echo-processing,$< with node)
+	@node ./tools/badges-validator.js $< $@
+
 $(EXPORT)/public/api/config/%.json: src/api/config/%.json $(EXPORT)/public/api/config; $(call echo-processing,$<)
 	@jq -c . < $< > $@
 

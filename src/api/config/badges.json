@@ -3,7 +3,7 @@
         "img": "img/badge-green.png",
         "name": "Obrończyni zieleni",
         "desc": "Odznaka przyznawana po pięciu mandatach za parkowanie na zieleni",
-        "categories": [6]
+        "categories": [6, 25]
     },
     "zebra": {
         "img": "img/badge-zebra.png",
