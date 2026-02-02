@@ -9,6 +9,7 @@ import * as Sentry from "@sentry/browser";
 import { error } from "../lib/toast";
 import isIOS from "../lib/isIOS";
 import { updateRecydywa } from "./recydywa";
+import { setOcrVehicleInfo, triggerVehicleInfoEnrichment } from "./vehicle-info";
 
 var uploadInProgress = 0;
 
@@ -308,8 +309,10 @@ async function sendFile(fileData, id, imageMetadata={}) {
         if (plateId) plateId.value = app.carInfo.plateId
         repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
         updateRecydywa(appId)
+        triggerVehicleInfoEnrichment(app.carInfo.plateId)
 
         if (app.carInfo.brand) {
+          setOcrVehicleInfo({ brand: app.carInfo.brand })
           if (comment && (comment.value + "").trim().length == 0) {
             if (app.carInfo.brandConfidence > 90) {
               comment.value = "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
