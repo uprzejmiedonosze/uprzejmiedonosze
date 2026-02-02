@@ -3,6 +3,7 @@ import { initMaps } from "./lib/geolocation";
 import { initHandlers } from "./new-app/on-load";
 import { removeFile, repositionCarImage } from "./new-app/images";
 import { updateRecydywa } from "./new-app/recydywa";
+import { initVehicleInfoEnrichment } from "./new-app/vehicle-info";
 
 const currentScript = document.currentScript;
 
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const map = initMaps(currentScript?.getAttribute("last-location"), currentScript?.getAttribute("stop-agresji"))
   initHandlers(map)
+  initVehicleInfoEnrichment();
 
   document.querySelector('.button.remove')?.addEventListener('click', function () {
     removeFile('thirdImage')
