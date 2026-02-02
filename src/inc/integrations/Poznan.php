@@ -6,13 +6,21 @@ use app\Application;
  * @SuppressWarnings(PHPMD.MissingImport)
  */
 class Poznan extends CityAPI {
+    /*
+     * FixMyCity (Poznań) delivery:
+     * - Best-effort API first; if it fails, we fall back to email to avoid losing reports.
+     */
+    private function apiUrl(): string {
+        if (isProd()) {
+            return "https://www.poznan.pl/mim/api/submit.html?service=fixmycity";
+        }
+        return "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
+    }
+
     function send(Application $application){
         parent::checkApplication($application);
 
-        $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
-        if(isProd()){
-            $url = "https://www.poznan.pl/mim/api/submit.html?service=fixmycity";
-        }
+        $url = $this->apiUrl();
         $data = array(
             'lat' => $application->address->lat,
             'lon' => $application->address->lng,
@@ -37,27 +45,42 @@ class Poznan extends CityAPI {
             $application = \app\get($application->id); // get the latest version of the application
             $application->setStatus('confirmed-waiting');
             $application->sent = new JSONObject();
-    
-            $output = parent::curlShellSend($url, $data, $application);
-    
-            if(isset($output['response']['error_msg'])){
-                $application->setStatus('sending-failed', true);
-                unset($application->sent);
+
+            logger("SMMP_DEBUG delivery_start appId={$application->id} number={$application->number} method=POST url={$url}", true);
+
+            try {
+                $output = parent::curlShellSend($url, $data, $application);
+
+                unset($application->sent->curl_raw, $application->sent->curl_http_status);
+
+                if(isset($output['response']['error_msg'])){
+                    throw new Exception($output['response']['error_msg'], 500);
+                }
+
+                $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
+
+                $application->setStatus('confirmed-sm');
+                $application->addComment($application->guessSMData()->getName(), $reply);
+                $application->sent->date = date(DT_FORMAT);
+                $application->sent->reply = $reply;
+                $application->sent->subject = $application->getEmailSubject();
+                $application->sent->to = "fixmycity";
+                $application->sent->method = "Poznan";
+
                 \app\save($application);
-                throw new Exception($output['response']['error_msg'], 500);
+
+                logger("SMMP_DEBUG delivery_method appId={$application->id} method=api", true);
+            } catch (\Throwable $e) {
+                $httpStatus = $application->sent->curl_http_status ?? 'unknown';
+                $reason = $httpStatus !== 'unknown' ? "http_status={$httpStatus}" : "error=" . $e->getMessage();
+                logger("SMMP_DEBUG delivery_failure appId={$application->id} {$reason}", true);
+                logger("SMMP_DEBUG fallback_to_email appId={$application->id}", true);
+
+                $mail = new Mail();
+                $application = $mail->send($application);
+
+                logger("SMMP_DEBUG delivery_method appId={$application->id} method=email_fallback", true);
             }
-    
-            $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
-    
-            $application->setStatus('confirmed-sm');
-            $application->addComment($application->guessSMData()->getName(), $reply);
-            $application->sent->date = date(DT_FORMAT);
-            $application->sent->reply = $reply;
-            $application->sent->subject = $application->getEmailSubject();
-            $application->sent->to = "fixmycity";
-            $application->sent->method = "Poznan";
-    
-            \app\save($application);
         } finally {
             \semaphore\release($application->id, "sendPoznan");
         }

@@ -63,19 +63,35 @@ abstract class CityAPI {
             . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
             . "--header 'Content-Type: multipart/form-data' "
             . "--max-time 30 "
+            . "--write-out '\nHTTPSTATUS:%{http_code}' "
             . "--form 'json={$json}' "
             . '--form uz_file=@\\"' . $contextImage . '\\" '
             . '--form uz_file_0=@\\"' . $carImage . '\\" '
             . $thirdImageForm;
         
-        $response = exec("$curl 2>&1", $retArr, $retVal);
+        exec("$curl 2>&1", $retArr, $retVal);
+        $rawOutput = implode("\n", $retArr);
+        $httpStatus = null;
+        $response = $rawOutput;
+        if (str_contains($rawOutput, 'HTTPSTATUS:')) {
+            [$response, $statusPart] = explode('HTTPSTATUS:', $rawOutput, 2);
+            $httpStatus = (int) trim($statusPart);
+            $response = rtrim($response);
+        }
+
+        $application->sent->curl_http_status = $httpStatus;
+        $application->sent->curl_raw = $response;
 
         if($retVal !== 0){
             $error = "Błąd komunikacji z API {$application->address->city}: retVal=$retVal, response=$response";
         }
 
+        if(!is_null($httpStatus) && $httpStatus >= 400){
+            $error = "Błąd komunikacji z API {$application->address->city}: http_status=$httpStatus, response=$response";
+        }
+
         $json = json_decode($response, true);
-        if(!json_last_error() === JSON_ERROR_NONE){
+        if(json_last_error() !== JSON_ERROR_NONE){
             $error = "Błąd komunikacji z API {$application->address->city}: json_last_error=" . json_last_error_msg();
         }
 
