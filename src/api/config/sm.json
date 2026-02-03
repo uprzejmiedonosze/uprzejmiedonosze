@@ -423,7 +423,7 @@
     ],
     "email": "sm@um.poznan.pl",
     "api": "Poznan",
-    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie."
+    "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie oraz jako jedyna umożliwia wysłanie zgłoszeń bezpośrednio z poziomu Uprzejmie Donoszę. Integracja z SM Poznań jest możliwa dzięki wykorzystaniu platformy <b>Smart City Poznań/api</b>. W razie problemów z dostępnością platformy wysyłany jest mail.",
   },
   "Poznań-Jeżyce": {
     "parent": "Poznań"
