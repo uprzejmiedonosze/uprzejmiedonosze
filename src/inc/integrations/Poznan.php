@@ -8,7 +8,7 @@ use app\Application;
 class Poznan extends CityAPI {
     /*
      * FixMyCity (Poznań) delivery:
-     * - Best-effort API first; if it fails, we fall back to email to avoid losing reports.
+     * - Best-effort API first; if it fails, we fall back to email.
      */
     private function apiUrl(): string {
         if (isProd()) {
@@ -46,8 +46,6 @@ class Poznan extends CityAPI {
             $application->setStatus('confirmed-waiting');
             $application->sent = new JSONObject();
 
-            logger("SMMP_DEBUG delivery_start appId={$application->id} number={$application->number} method=POST url={$url}", true);
-
             try {
                 $output = parent::curlShellSend($url, $data, $application);
 
@@ -68,18 +66,13 @@ class Poznan extends CityAPI {
                 $application->sent->method = "Poznan";
 
                 \app\save($application);
-
-                logger("SMMP_DEBUG delivery_method appId={$application->id} method=api", true);
             } catch (\Throwable $e) {
                 $httpStatus = $application->sent->curl_http_status ?? 'unknown';
                 $reason = $httpStatus !== 'unknown' ? "http_status={$httpStatus}" : "error=" . $e->getMessage();
-                logger("SMMP_DEBUG delivery_failure appId={$application->id} {$reason}", true);
-                logger("SMMP_DEBUG fallback_to_email appId={$application->id}", true);
+                logger("SMMP_DEBUG delivery_failure appId={$application->id} {$reason} fallback=email method=email_fallback", true);
 
                 $mail = new Mail();
                 $application = $mail->send($application);
-
-                logger("SMMP_DEBUG delivery_method appId={$application->id} method=email_fallback", true);
             }
         } finally {
             \semaphore\release($application->id, "sendPoznan");
