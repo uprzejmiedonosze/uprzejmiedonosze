@@ -9,6 +9,7 @@ import { appClicked, closeAllApps } from "../sites/my-apps";
 async function sendApplication(/** @type {string} */ appId) {
   const whatNext = document.querySelector(".whatNext")
   const afterSend = document.querySelector(".afterSend")
+  const fallbackMessage = document.querySelector(".fallback-message")
 
   // Use getElementById to avoid issues with IDs starting with numbers
   const appElement = document.getElementById(appId)
@@ -30,6 +31,12 @@ async function sendApplication(/** @type {string} */ appId) {
     if (document.querySelector(".dziekujemy")) {
       if (whatNext) /** @type {HTMLElement} */ (whatNext).style.display = 'none'
       if (afterSend) /** @type {HTMLElement} */ (afterSend).style.display = 'block'
+      if (fallbackMessage && msg?.fallback_message) {
+        fallbackMessage.textContent = msg.fallback_message
+        fallbackMessage.style.display = 'block'
+      } else if (fallbackMessage) {
+        fallbackMessage.style.display = 'none'
+      }
     }
     if (document.querySelector('.my-applications')) {
       closeAllApps()
