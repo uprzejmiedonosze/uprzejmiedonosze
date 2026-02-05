@@ -62,7 +62,7 @@ abstract class CityAPI {
         $curl = "curl -s --location --request POST '$url' "
             . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
             . "--header 'Content-Type: multipart/form-data' "
-            . "--max-time 30 "
+            . "--max-time 25 "
             . "--write-out '\nHTTPSTATUS:%{http_code}' "
             . "--form 'json={$json}' "
             . '--form uz_file=@\\"' . $contextImage . '\\" '
@@ -83,7 +83,11 @@ abstract class CityAPI {
         $application->sent->curl_raw = $response;
 
         if($retVal !== 0){
-            $error = "Błąd komunikacji z API {$application->address->city}: retVal=$retVal, response=$response";
+            if ($retVal === 28) {
+                $error = "Błąd komunikacji z API {$application->address->city}: timeout";
+            } else {
+                $error = "Błąd komunikacji z API {$application->address->city}: retVal=$retVal, response=$response";
+            }
         }
 
         if(!is_null($httpStatus) && $httpStatus >= 400){

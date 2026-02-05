@@ -10,6 +10,7 @@ async function sendApplication(/** @type {string} */ appId) {
   const whatNext = document.querySelector(".whatNext")
   const afterSend = document.querySelector(".afterSend")
   const fallbackMessage = document.querySelector(".fallback-message")
+  const slowMessageDelayMs = 12000
 
   // Use getElementById to avoid issues with IDs starting with numbers
   const appElement = document.getElementById(appId)
@@ -17,10 +18,17 @@ async function sendApplication(/** @type {string} */ appId) {
   if (statusElement) statusElement.classList.add("disabled")
 
   message("Wysyłam...")
+  let slowMessageTimeoutId
+  let requestFinished = false
+  slowMessageTimeoutId = setTimeout(() => {
+    if (requestFinished) return
+    message("Wysyłka trwa dłużej niż zwykle. Proszę o chwilę cierpliwości...")
+  }, slowMessageDelayMs)
 
   try {
     const api = new Api(`/api/app/${appId}/send`)
     const msg = await api.patch()
+    requestFinished = true
     if (msg.status == 'redirect') {
       location.href = '/brak-sm.html?id=' + appId
       return
@@ -45,6 +53,7 @@ async function sendApplication(/** @type {string} */ appId) {
     // @ts-ignore
     (typeof ga == 'function') && ga("send", "event", { eventCategory: "js", eventAction: "sendViaAPI" })
   } catch (e) {
+    requestFinished = true
     error(e.message)
     if (whatNext) /** @type {HTMLElement} */ (whatNext).style.display = 'none'
     Sentry.captureException(e, {
@@ -64,6 +73,9 @@ async function sendApplication(/** @type {string} */ appId) {
       })
     throw e // Re-throw to allow caller to handle
   } finally {
+    if (slowMessageTimeoutId) {
+      clearTimeout(slowMessageTimeoutId)
+    }
     showButtons()
   }
 }
