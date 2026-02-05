@@ -103,8 +103,8 @@ function applyVehicleInfo(vehicle) {
 
   if (brand && model && commentElement) {
     const identification = year
-        ? `${brand} ${model} (${year} r.)`
-        : `${brand} ${model}`;
+        ? `Pojazd marki ${brand} ${model} z roku ${year}.`
+        : `Pojazd marki ${brand} ${model}.`;
     appendAutoComment(commentElement, identification);
   }
 
