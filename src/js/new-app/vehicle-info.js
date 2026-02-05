@@ -96,15 +96,8 @@ function applyVehicleInfo(vehicle) {
   const brand = rawBrand ? toTitleCase(rawBrand) : null;
   const model = rawModel ? rawModel.toString().trim() : null;
 
-  const year =
-      vehicle.productionYear != null
-          ? parseInt(vehicle.productionYear, 10)
-          : null;
-
   if (brand && model && commentElement) {
-    const identification = year
-        ? `Pojazd marki ${brand} ${model} z roku ${year}.`
-        : `Pojazd marki ${brand} ${model}.`;
+    const identification = `Pojazd marki ${brand} ${model}.`;
     appendAutoComment(commentElement, identification);
   }
 
