@@ -3,14 +3,20 @@ document.addEventListener("DOMContentLoaded", () => {
   
     document.querySelectorAll('h3 > a').forEach(link => {
         link.addEventListener('click', e => {
+            e.preventDefault();
             const target = /** @type {HTMLElement} */ (e.currentTarget)
             if (!target || !target.parentElement) return
             try {
                 const apps = /** @type {HTMLElement} */ (target.parentElement.nextElementSibling)
                 if (!apps) return
-                const type = "text/html";
-                const blob = new Blob([apps.innerHTML], {type});
-                const data = [new ClipboardItem({[type]: blob})];
+                const htmlBlob = new Blob([apps.innerHTML], {type: "text/html"});
+                const textBlob = new Blob([apps.innerText], {type: "text/plain"});
+                const data = [
+                  new ClipboardItem({
+                    "text/html": htmlBlob,
+                    "text/plain": textBlob
+                  })
+                ];
                 navigator.clipboard.write(data).then(() => {
                     apps.style.opacity = '0.4'
                     target.classList.add('visited')
