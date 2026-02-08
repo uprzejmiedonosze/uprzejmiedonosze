@@ -5,6 +5,21 @@
 {% set shortTitle = 'Zapytaj o status' %}
 {% set mainClass = 'ask-for-status' %}
 
+{% macro group_footer(user) %}
+            </ul>
+            <p>Zgodnie z wyrokiem NSA z 15 maja 2024 r. (III OSK 4312/21)
+                informacja o sposobie ukarania nieokreślonej osoby jest informacją publiczną, a jej
+                ujawnienie nie może prowadzić do naruszenia prawa do prywatności.</p>
+            <p>Wnoszę o przesłanie wskazanej informacji za pośrednictwem poczty elektronicznej na adres {{ user.getEmail -}}
+                {%- if user.data.edelivery is defined and user.data.edelivery is not empty -%}
+                    {{- " lub za pomocą e-doręczenia na adres " ~ user.data.edelivery -}}
+                {%- endif -%}.
+            </p>
+            <p>Z góry dziękuję za przekazane informacje,</p>
+            <p>-- <br>{{ user.data.name }}<br></p>
+        </div>
+{% endmacro %}
+
 {% extends "base.html.twig" %}
 {% block footer %}
 <footer></footer>
@@ -34,20 +49,12 @@
 
     {% set address = 'unset' %}
     {% for app in applications %}
+        {% if address != app.sent.to and not loop.first %}
+          {{ _self.group_footer(user) }}
+        {% endif %}
+
         {% if address != app.sent.to %}
             {% set address = app.sent.to %}
-            {% if not loop.first %}
-                </ul>
-
-                <p>Zgodnie z wyrokiem NSA z 15 maja 2024 r. (III OSK 4312/21)
-                    informacja o sposobie ukarania nieokreślonej osoby jest informacją publiczną, a jej
-                    ujawnienie nie może prowadzić do naruszenia prawa do prywatności.</p>
-                <p>Wnoszę o przesłanie wskazanej informacji za pośrednictwem poczty elektronicznej na adres 
-                    {{ user.getEmail }}.</p>
-                <p>Z góry dziękuję za przekazane informacje,</p>
-                <p>-- <br>{{ user.data.name }}<br></p>
-            </div>
-            {% endif %}
             <h3>{{ app.guessSMData.getShortName }} <a href="#">(skopiuj tekst)</a></h3>
             <div class="panel">
                 <p>Dzień dobry,</p>
@@ -60,9 +67,10 @@
                     wniesienia wniosku o ukaranie.</p>
                 <ul>
         {% endif %}
+
         {% include('_application-ask.html.twig') %}
     {% endfor %}
-    </ul></div>
+    {{ _self.group_footer(user) }}
 
     
 {% endif %}
