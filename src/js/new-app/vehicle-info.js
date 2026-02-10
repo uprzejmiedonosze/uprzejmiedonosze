@@ -2,30 +2,62 @@ import * as Sentry from "@sentry/browser";
 
 const VEHICLE_INFO_API = "https://parkowanie.zbiorkom.live/{plateId}";
 
+/** @type {NodeJS.Timeout | null} */
 let debounceTimer = null;
+/** @type {String | null} */
 let ocrBrand = null;
+/** @type {String | null} */
 let ocrModel = null;
+/** @type {String} */
 let lastPlate = "";
 const autoLines = new Set();
 
-function normalizePlateId(value) {
-  if (!value) return "";
-  return value.toString().toUpperCase().replace(/\s+/g, "");
+
+/**
+ * @param {string} plateId
+ */
+function normalizePlateId(plateId) {
+  if (!plateId) return "";
+  return plateId.toString().toUpperCase().replace(/\s+/g, "");
 }
 
+/**
+ * @param {string} plateId
+ */
 function buildVehicleInfoUrl(plateId) {
   if (!plateId) return null;
   return VEHICLE_INFO_API.replace("{plateId}", encodeURIComponent(plateId));
 }
 
-function toTitleCase(text) {
-  return text
-      .toLowerCase()
-      .split(" ")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+/**
+ * @param {string} text
+ * @returns {string}
+ */
+function formatBrandNames(text) {
+    if (!text) return "";
+
+    let titleCased = text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+
+    /** * @type {Record<string, string>} */
+    const corrections = {
+        "Bmw": "BMW",
+        // "Mercedes-Benz": "Mercedes-Benz",
+        // "Alfa-Romeo": "Alfa-Romeo",
+        // "Land-Rover": "Land-Rover",
+        "Fso": "FSO",
+        "Ssangyong": "SsangYong"
+    };
+
+    /** @type {RegExp} */
+    const pattern = new RegExp(Object.keys(corrections).join('|'), 'g');
+
+    return titleCased.replace(pattern, matched => corrections[matched]);
 }
 
+/**
+ * @param {HTMLTextAreaElement} commentElement
+ * @param {string} text
+ */
 function appendAutoComment(commentElement, text) {
   if (!commentElement || !text) return;
 
@@ -40,6 +72,9 @@ function appendAutoComment(commentElement, text) {
   autoLines.add(line);
 }
 
+/**
+ * @param {HTMLInputElement | null} commentElement
+ */
 function clearAutoVehicleComments(commentElement) {
   if (!commentElement) return;
 
@@ -56,6 +91,9 @@ function clearAutoVehicleComments(commentElement) {
   autoLines.clear();
 }
 
+/**
+ * @param {any[]} value
+ */
 function getMinGrossVehicleWeight(value) {
   if (Array.isArray(value)) {
     const nums = value
@@ -68,10 +106,17 @@ function getMinGrossVehicleWeight(value) {
   return Number.isFinite(num) && num > 0 ? num : null;
 }
 
+/**
+ * @param {number} weightKg
+ */
 function formatGrossWeightInTons(weightKg) {
   return (weightKg / 1000).toFixed(2).replace(".", ",");
 }
 
+/**
+ * @param {unknown} error
+ * @param {string} context
+ */
 function logVehicleInfoError(error, context) {
   try {
     Sentry.captureException(error, {
@@ -82,6 +127,9 @@ function logVehicleInfoError(error, context) {
   }
 }
 
+/**
+ * @param {{ brand: any; model: any; productionYear?: any; grossVehicleWeight: any; isHeavyVehicle: any; vehicleType: any; }} vehicle
+ */
 function applyVehicleInfo(vehicle) {
   if (!vehicle || typeof vehicle !== "object") return;
 
@@ -93,7 +141,7 @@ function applyVehicleInfo(vehicle) {
   const rawBrand = vehicle.brand || ocrBrand;
   const rawModel = vehicle.model || ocrModel;
 
-  const brand = rawBrand ? toTitleCase(rawBrand) : null;
+  const brand = rawBrand ? formatBrandNames(rawBrand) : null;
   const model = rawModel ? rawModel.toString().trim() : null;
 
   if (brand && model && commentElement) {
@@ -151,6 +199,9 @@ function applyVehicleInfo(vehicle) {
   }
 }
 
+/**
+ * @param {string} plateId
+ */
 async function fetchVehicleInfo(plateId) {
   const normalizedPlate = normalizePlateId(plateId);
   if (!normalizedPlate) return;
@@ -194,6 +245,7 @@ export function initVehicleInfoEnrichment() {
 
     debounceTimer = setTimeout(() => {
       const normalized = normalizePlateId(plateIdInput.value);
+      /** @type {HTMLInputElement|null} */
       const commentElement = document.getElementById("comment");
       const weightWarning = document.getElementById("vehicleWeightWarning");
 
@@ -216,8 +268,12 @@ export function initVehicleInfoEnrichment() {
   plateIdInput.addEventListener("change", scheduleLookup);
 }
 
+/**
+ * @param {string} plateId
+ */
 export function triggerVehicleInfoEnrichment(plateId) {
   const normalized = normalizePlateId(plateId);
+  /** @type {HTMLInputElement|null} */
   const commentElement = document.getElementById("comment");
   const weightWarning = document.getElementById("vehicleWeightWarning");
 
@@ -228,7 +284,10 @@ export function triggerVehicleInfoEnrichment(plateId) {
   fetchVehicleInfo(normalized);
 }
 
-export function setOcrVehicleInfo(info = {}) {
-  if (info.brand) ocrBrand = info.brand;
-  if (info.model) ocrModel = info.model;
+/**
+ * @param {{ brand: string | null; model: string | null; } | null} info
+ */
+export function setOcrVehicleInfo(info = null) {
+  if (info?.brand) ocrBrand = info.brand;
+  if (info?.model) ocrModel = info.model;
 }
