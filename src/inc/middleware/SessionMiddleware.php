@@ -46,7 +46,12 @@ abstract class SessionMiddleware implements MiddlewareInterface {
     public function preprocess(Request $request, RequestHandler $handler): Array {
         $path = $request->getUri()->getPath();
         logger("SessionMiddleware: $path");
-        if ($path == '/login.html' || $path == '/logout.html') {
+        if ($path == '/logout.html') {
+            resetSession();
+        } elseif ($path == '/login.html' && !$this->isLoggedIn()) {
+            // Login page: only reset an anonymous session (e.g. a stale token).
+            // If the user is already logged in and opens /login.html in a new tab,
+            // do NOT destroy their active session.
             resetSession();
         }
 

@@ -180,7 +180,12 @@ class SessionApiHandler extends AbstractHandler {
     public function verifyToken(Request $request, Response $response): Response {
         $firebaseUser = $request->getAttribute('firebaseUser');
 
-        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] !== $firebaseUser['user_id']) {
+        // Session collision: the session contains a user_id belonging to a DIFFERENT user.
+        // Do not reset when the session is empty (user_id not set) — that is a normal
+        // first login. Do not reset when user_id matches either — that may be a
+        // concurrent request from the same user (race condition).
+        $sessionUserId = $_SESSION['user_id'] ?? null;
+        if ($sessionUserId !== null && $sessionUserId !== $firebaseUser['user_id']) {
             $errorMsg = "Session collision! {$_SESSION['user_email']} != {$firebaseUser['user_email']}";
             logger($errorMsg, true);
             resetSession();
