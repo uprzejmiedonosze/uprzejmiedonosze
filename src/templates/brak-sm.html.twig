@@ -1,18 +1,18 @@
 {% set leftButton = 'menu' %}
 {% set rightButton = 'menuStart' %}
 
-{% set title = 'Brak danych Straży Miejskiej' %}
+{% set title = 'Brak straży miejskiej' %}
 {% set shortTitle = 'Brak SM' %}
 {% set description = 'Co zrobić, jeśli brakuje twojego miasta w Uprzejmie Donoszę' %}
 
-{% set emailSubject = 'Brak danych SM' %}
+{% set emailSubject = 'Brak straży miejskiej' %}
 {% set emailBody = '' %}
 
 {% if appCity %}
-{% set emailSubject = 'Brak danych SM dla miejscowości ' ~ appCity %}
+{% set emailSubject = 'Brak straży miejskiej w miejscowości ' ~ appCity %}
 {% set emailBody = 'Dzień dobry,
 
-Proszę o dodanie Straży Miejskiej ' ~ appCity ~ ':
+Proszę o dodanie komendy policji w miejscowości ' ~ appCity ~ ':
 
 Ulica: (uzupełnij proszę)
 Kod pocztowy: XX-XXX ' ~ appCity ~ '
@@ -29,17 +29,16 @@ Dane techniczne zgłoszenia:
 
 {% extends "base.html.twig" %}
 {% block main %}
-<h2>Brak danych Straży Miejskiej {{ appCity }}</h2>
+<h2>Brak straży miejskiej w miejscowości {{ appCity }}</h2>
 
-<p>Uprzejmie Donoszę przygotowuje dla Ciebie gotowe pismo do właściwej Straży Miejskiej oraz
-automatycznie wysyła gotowy plik zgłoszenia na adres skrzynki SM. Dlatego konieczne jest
-zarejestrowanie danych Straży Miejskiej w twoim mieście.</p>
+<p>Uprzejmie Donoszę przygotowuje dla Ciebie gotowe pismo do właściwej straży miejskiej oraz
+automatycznie wysyła gotowy plik zgłoszenia na adres skrzynki SM. Niestety w {{ appCity }}
+nie została powołana straż miejska. Dlatego koniecznie jest wskazanie odpowiedniego 
+komisariatu Policji.</p>
 
-<p>Napisz na do <a rel="external" target="_blank" href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}">autora</a>.
+<p>Napisz do <a rel="external" target="_blank" href="mailto:szymon@uprzejmiedonosze.net?subject={{ emailSubject|escape('url') }}&body={{ emailBody|escape('url') }}">autora</a>.
     Aby dodać twoje miasto do bazy Uprzejmie Donoszę potrzebujemy adresu siedziby
-    oraz adres e-mail Straży Miejskiej.
+    oraz adres e-mail najbliższego komisariatu.
 </p>
 
-<p>Jeśli w twoim mieście nie ma Straży Miejskiej (albo gminnej), to poszukaj właściwego
-komisariatu Policji i podaj nam te dane.</p>
 {% endblock %}
