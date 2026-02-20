@@ -186,10 +186,10 @@ class SessionApiHandler extends AbstractHandler {
         // concurrent request from the same user (race condition).
         $sessionUserId = $_SESSION['user_id'] ?? null;
         if ($sessionUserId !== null && $sessionUserId !== $firebaseUser['user_id']) {
-            $errorMsg = "Session collision! {$_SESSION['user_email']} != {$firebaseUser['user_email']}";
-            logger($errorMsg, true);
+            // This is expected when users switch accounts without logging out.
+            // The SessionMiddleware no longer resets sessions on /login.html if already logged in.
+            logger("Session user switch: {$_SESSION['user_email']} -> {$firebaseUser['user_email']}", true);
             resetSession();
-            \Sentry\captureException(new Exception($errorMsg));
         }
 
         $_SESSION['user_email'] = $firebaseUser['user_email'];
