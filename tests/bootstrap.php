@@ -13,7 +13,7 @@ $GLOBALS['cache'] = $cache;
 $_SERVER['HTTP_USER_AGENT'] = 'PHPUnit';
 $_SESSION = [];
 
-function exception_error_handler(int $errno, string $errstr, string $errfile = null, int $errline) {
+function exception_error_handler(int $errno, string $errstr, ?string $errfile = null, int $errline) {
     throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
 set_error_handler(exception_error_handler(...));
