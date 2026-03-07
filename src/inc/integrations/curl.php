@@ -2,8 +2,10 @@
 
 function request(string $url, array $params, string $vendor, array|null $headers=[]): array|null {
     $ch = curl_init($url . http_build_query($params));
+    logger($url . http_build_query($params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_REFERER, "https://uprzejmiedonosze.net");
+    #curl_setopt($ch, CURLOPT_REFERER, "https://agendaparkingowa.pl");
+    curl_setopt($ch, CURLOPT_USERAGENT, "UprzejmieDonosze/1.0");
 
     array_push($headers, "Accept-Language: pl");
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -18,7 +20,7 @@ function request(string $url, array $params, string $vendor, array|null $headers
     curl_close($ch);
 
     $json = json_decode($output, true);
-    if (!json_last_error() === JSON_ERROR_NONE) {
+    if (json_last_error() !== JSON_ERROR_NONE) {
         logger("Parsowanie JSON z $vendor " . $output . " " . json_last_error_msg());
         throw new \Exception("Bełkotliwa odpowiedź z serwerów $vendor: $output", 500);
     }
