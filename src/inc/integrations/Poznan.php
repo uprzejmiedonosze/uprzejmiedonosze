@@ -6,13 +6,39 @@ use app\Application;
  * @SuppressWarnings(PHPMD.MissingImport)
  */
 class Poznan extends CityAPI {
+    /*
+     * FixMyCity (Poznań) delivery:
+     * - Best-effort API first; if it fails, we fall back to email.
+     */
+    private function fallbackMessage(string $reason): string {
+        $code = null;
+        if (preg_match('/HTTP\\s*(\\d{3})/i', $reason, $matches)) {
+            $code = $matches[1];
+        }
+        if ($code) {
+            return "Z powodu problemu z API (kod {$code}) zgłoszenie wysłano e‑mailem.";
+        }
+        $lower = strtolower($reason);
+        if (str_contains($lower, 'timeout')) {
+            return "Z powodu przekroczenia czasu odpowiedzi API zgłoszenie wysłano e‑mailem.";
+        }
+        if (str_contains($lower, 'auth')) {
+            return "Z powodu problemu z uwierzytelnieniem API zgłoszenie wysłano e‑mailem.";
+        }
+        return "Z powodu problemu z API zgłoszenie wysłano e‑mailem.";
+    }
+
+    private function apiUrl(): string {
+        if (isProd()) {
+            return "https://www.poznan.pl/mim/api/submit.html?service=fixmycity";
+        }
+        return "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
+    }
+
     function send(Application $application){
         parent::checkApplication($application);
 
-        $url = "https://www.poznan.pl/mimtest/api/submit.html?service=fixmycity";
-        if(isProd()){
-            $url = "https://www.poznan.pl/mim/api/submit.html?service=fixmycity";
-        }
+        $url = $this->apiUrl();
         $data = array(
             'lat' => $application->address->lat,
             'lon' => $application->address->lng,
@@ -35,29 +61,46 @@ class Poznan extends CityAPI {
         try {
             \semaphore\acquire($application->id, "sendPoznan");
             $application = \app\get($application->id); // get the latest version of the application
-            $application->setStatus('confirmed-waiting');
             $application->sent = new JSONObject();
-    
-            $output = parent::curlShellSend($url, $data, $application);
-    
-            if(isset($output['response']['error_msg'])){
-                $application->setStatus('sending-failed', true);
-                unset($application->sent);
+            $application->setStatus('sending');
+
+            try {
+                $output = parent::curlShellSend($url, $data, $application);
+
+                unset($application->sent->curl_raw, $application->sent->curl_http_status);
+
+                if(isset($output['response']['error_msg'])){
+                    throw new Exception($output['response']['error_msg'], 500);
+                }
+
+                $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
+
+                $application->setStatus('confirmed-sm');
+                $application->addComment($application->guessSMData()->getName(), $reply);
+                $application->sent->date = date(DT_FORMAT);
+                $application->sent->reply = $reply;
+                $application->sent->subject = $application->getEmailSubject();
+                $application->sent->to = "fixmycity";
+                $application->sent->method = "Poznan";
+
                 \app\save($application);
-                throw new Exception($output['response']['error_msg'], 500);
+            } catch (\Throwable $e) {
+                $httpStatus = $application->sent->curl_http_status ?? 'unknown';
+                if ($httpStatus !== 'unknown') {
+                    $fallbackReason = "API returned HTTP " . (int)$httpStatus;
+                } else {
+                    $fallbackReason = $e->getMessage();
+                }
+                logger("SMMP_DEBUG delivery_failure appId={$application->id} reason=\"{$fallbackReason}\" fallback=email method=email", true);
+
+                $application->setStatus('confirmed', true);
+                $mail = new Mail();
+                $application = $mail->send($application);
+                if (isset($application->sent)) {
+                    $application->sent->fallback_message = $this->fallbackMessage($fallbackReason);
+                }
+                \app\save($application);
             }
-    
-            $reply = "{$output['response']['msg']} (instancja: {$output['response']['instance']}, id: {$output['response']['id']})";
-    
-            $application->setStatus('confirmed-sm');
-            $application->addComment($application->guessSMData()->getName(), $reply);
-            $application->sent->date = date(DT_FORMAT);
-            $application->sent->reply = $reply;
-            $application->sent->subject = $application->getEmailSubject();
-            $application->sent->to = "fixmycity";
-            $application->sent->method = "Poznan";
-    
-            \app\save($application);
         } finally {
             \semaphore\release($application->id, "sendPoznan");
         }

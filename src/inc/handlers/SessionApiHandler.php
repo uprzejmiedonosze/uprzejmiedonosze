@@ -168,9 +168,13 @@ class SessionApiHandler extends AbstractHandler {
                 "status" => "redirect"
             ));
         }
-        return $this->renderJson($response, array(
+        $payload = array(
             "status" => $application->status
-        ));
+        );
+        if (isset($application->sent->fallback_message)) {
+            $payload["fallback_message"] = $application->sent->fallback_message;
+        }
+        return $this->renderJson($response, $payload);
     }
 
     /**

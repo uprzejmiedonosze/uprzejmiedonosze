@@ -12,7 +12,7 @@ class SMTest extends TestCase
         $sm = new \SM($this->getData('poznań'));
         self::assertEquals('Straż Miejska Miasta Poznania \\\\ ul. Głogowska 26 \\\\ 60-734 Poznań', $sm->getLatexAddress());
         self::assertEquals('SM Miasta Poznania', $sm->getShortName());
-        //self::assertTrue($sm->hasAPI());
+        self::assertTrue($sm->hasAPI());
         self::assertFalse($sm->isPolice());
     }
 
