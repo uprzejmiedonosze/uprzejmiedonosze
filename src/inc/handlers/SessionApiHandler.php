@@ -96,8 +96,12 @@ class SessionApiHandler extends AbstractHandler {
     }
 
     private function removeImageFile(Application $app, string $imageId): Application {
-        $rmFile = function($fileName) {
-            @unlink(ROOT . $fileName);
+        $rmFile = function(string $fileName): void {
+            $allowedBase = realpath(ROOT . 'cdn2');
+            $file = realpath(ROOT . $fileName);
+            if ($file && $allowedBase && str_starts_with($file, $allowedBase . '/')) {
+                @unlink($file);
+            }
             \storage\delete($fileName);
         };
 
