@@ -47,7 +47,7 @@ function getFirebaseConfig() {
     const hostName = document.location.hostname
     if (hostName.includes('staging'))
         return {
-            apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI",
+            apiKey: "AIzaSyDXgjibECwejzudsm3YBQh3O5ponz7ArtI", // nosemgrep: generic.secrets.security.detected-generic-api-key.detected-generic-api-key
             authDomain: "auth-staging.uprzejmiedonosze.net",
             databaseURL: "https://uprzejmiedonosze-1494607701827.firebaseio.com",
             projectId: "uprzejmiedonosze-1494607701827",
