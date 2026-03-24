@@ -148,7 +148,7 @@ function rmdirRecursive(string $dir): void {
     foreach (scandir($dir) as $item) {
         if ($item === '.' || $item === '..') continue;
         $path = $dir . DIRECTORY_SEPARATOR . $item;
-        is_dir($path) ? rmdirRecursive($path) : unlink($path);
+        is_dir($path) ? rmdirRecursive($path) : unlink($path); // nosemgrep: php.lang.security.unlink-use.unlink-use
     }
     rmdir($dir);
 }

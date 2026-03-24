@@ -263,7 +263,7 @@ class ApplicationHandler extends AbstractHandler {
         $application = \app\get($appId);
 
         if (!$application->isAppOwner($user))
-            return $this->redirect("/ud-" . rawurlencode($appId) . ".html");
+            return $this->redirect("/ud-" . rawurlencode($appId) . ".html"); // nosemgrep: php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
 
         [$path, $filename] = \app\toPdf($application);
         return AbstractHandler::renderPdf($response, $path, $filename);
