@@ -2,7 +2,7 @@
 Cypress.Commands.add("login", () => {
   cy.session('user' + Date.now(), () => {
     cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0') // dev -> docker
-    cy.setCookie('UDSESSIONID', 'a3mkn84383b0v5mh6ctsg2dog0230ssdik8n75ap') // staging
+    cy.setCookie('UDSESSIONID', 'e5m50thn5hri9pffoli2feqqgnevjg2vbpb2q7ir') // staging
   }, {
     cacheAcrossSpecs: true
   })
@@ -12,16 +12,16 @@ Cypress.Commands.add("login", () => {
 Cypress.Commands.add("uploadFile", (selector, fileUrl, type = "") => cy.get(selector)
   .then((subject) => cy.fixture(fileUrl, "base64")
     .then(Cypress.Blob.base64StringToBlob)
-      .then((blob) => cy.window()
-        .then((win) => {
-          const el = subject[0];
-          const nameSegments = fileUrl.split("/");
-          const name = nameSegments[nameSegments.length - 1];
-          const testFile = new win.File([blob], name, { type });
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(testFile);
-          el.files = dataTransfer.files;
-          return cy.wrap(subject).trigger('change', { force: true });
+    .then((blob) => cy.window()
+      .then((win) => {
+        const el = subject[0];
+        const nameSegments = fileUrl.split("/");
+        const name = nameSegments[nameSegments.length - 1];
+        const testFile = new win.File([blob], name, { type });
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(testFile);
+        el.files = dataTransfer.files;
+        return cy.wrap(subject).trigger('change', { force: true });
       })
     )
   )
@@ -34,7 +34,7 @@ Cypress.Commands.add("sendApp", () => {
   cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
 })
 
-Cypress.Commands.add("uploadOKImages", (carImage='img_p.jpg') => {
+Cypress.Commands.add("uploadOKImages", (carImage = 'img_p.jpg') => {
   cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg', 'image/jpeg')
 
   cy.intercept('POST', '/api/app/**/image').as("image")
@@ -62,7 +62,7 @@ Cypress.Commands.add("uploadWrongImages", () => {
 
 Cypress.Commands.add("setAppCategory", (categories) => {
   const firstNonDefaultCategoryId = Object.entries(categories).filter(c => c[1].law)[0][0]
-  cy.get(`input#${firstNonDefaultCategoryId}`).click({force: true})
+  cy.get(`input#${firstNonDefaultCategoryId}`).click({ force: true })
 })
 
 Cypress.Commands.add("loadConfig", () => {
@@ -90,14 +90,14 @@ Cypress.Commands.add("loadConfig", () => {
 });
 
 Cypress.Commands.add("initDB", () => {
-  if (Cypress.env('DOCKER'))
+  if (Cypress.expose('DOCKER'))
     return cy.exec('docker exec webapp sqlite3 /var/www/localhost/db/store.sqlite -init /var/www/localhost/webapp/sql/init_registered.sql')
 
   cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_registered.sql"')
 })
 
 Cypress.Commands.add("cleanDB", () => {
-  if (Cypress.env('DOCKER'))
+  if (Cypress.expose('DOCKER'))
     return cy.exec('docker exec webapp sqlite3 /var/www/localhost/db/store.sqlite -init /var/www/localhost/webapp/sql/init_empty.sql')
 
   cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_empty.sql"')
@@ -112,5 +112,5 @@ Cypress.Commands.add("goToNewAppScreen", () => {
 Cypress.Commands.add("goToNewAppScreenWithoutTermsScreen", () => {
   cy.visit('/')
   cy.get('label.menu > .button-toggle').click()
-  cy.contains('Nowe zgłoszenie').click({force: true})
+  cy.contains('Nowe zgłoszenie').click({ force: true })
 })

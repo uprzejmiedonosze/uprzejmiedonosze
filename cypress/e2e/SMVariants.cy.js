@@ -32,7 +32,7 @@ describe('API:automated (Poznań)', () => {
 
     it('checks my apps screen', function () {
         cy.get('label.menu > .button-toggle').click()
-        cy.contains('Moje zgłoszenia').click({force: true})
+        cy.contains('Moje zgłoszenia').click({ force: true })
         cy.contains(this.config.address.poznan).click()
         cy.contains(this.sm['poznań'].address[0].replace('Straż Miejska', 'SM'))
         cy.contains('POTWIERDZONE')
@@ -60,7 +60,7 @@ describe('API:Mail (Wrocław)', () => {
         // @ts-ignore
         cy.uploadOKImages('wroclaw.jpg')
         cy.wait(1000)
-        cy.get('.mapboxgl-ctrl-zoom-out').click({force: true})
+        cy.get('.mapboxgl-ctrl-zoom-out').click({ force: true })
         // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
@@ -77,7 +77,7 @@ describe('API:Mail (Wrocław)', () => {
 
     it('checks my apps screen', function () {
         cy.get('label.menu > .button-toggle').click()
-        cy.contains('Moje zgłoszenia').click({force: true})
+        cy.contains('Moje zgłoszenia').click({ force: true })
         cy.contains(this.config.address.wroclaw.replace('Plac Generała ', '')).click()
 
         cy.contains('WYSŁANE')
@@ -120,7 +120,7 @@ describe('Missing SM (Poniatowa)', () => {
 
     it('checks my apps screen', function () {
         cy.get('label.menu > .button-toggle').click()
-        cy.contains('Moje zgłoszenia').click({force: true})
+        cy.contains('Moje zgłoszenia').click({ force: true })
         cy.contains(this.config.address.poniatowa).click()
         cy.contains('Wyślij zgłoszenie')
         cy.contains('edytuj')
@@ -131,7 +131,7 @@ describe('Missing SM (Poniatowa)', () => {
 
     it('checks send apps screen', function () {
         cy.get('label.menu > .button-toggle').click()
-        cy.contains('Do wysłania').click({force: true})
+        cy.contains('Do wysłania').click({ force: true })
 
         cy.contains('Masz zgłoszenia czekające na wysłanie')
 
@@ -141,7 +141,7 @@ describe('Missing SM (Poniatowa)', () => {
         cy.wait('@appDetails')
 
         cy.contains('Wyślij zgłoszenie').click()
-        
-        cy.contains('Brak danych Straży Miejskiej Poniatowa')
+
+        cy.contains('Brak straży miejskiej w miejscowości Poniatowa')
     })
 })
