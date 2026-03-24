@@ -131,7 +131,6 @@ function nextNumber(): int{
 
 function points(User $user): Array{
     $userEmail = $user->getEmail();
-    $email = \SQLite3::escapeString($userEmail);
 
     $sql = <<<SQL
         select
@@ -144,9 +143,9 @@ function points(User $user): Array{
         order by 1;
     SQL;
     $stmt = \store\prepare($sql);
-    $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':email', $userEmail);
     $stmt->execute();
-    
+
     $ret = $stmt->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_GROUP);
     $ret = array_map(function ($item) { return $item[0]; }, $ret);
 
@@ -191,8 +190,6 @@ function stats(bool $useCache, User $user): Array{
 }
 
 function _countAppsByStatus(string $userEmail): Array{
-    $email = \SQLite3::escapeString($userEmail);
-
     $sql = <<<SQL
         select json_extract(value, '$.status') as status,
             count(key) as cnt
@@ -202,9 +199,9 @@ function _countAppsByStatus(string $userEmail): Array{
     SQL;
 
     $stmt = \store\prepare($sql);
-    $stmt->bindValue(':email', $email);
+    $stmt->bindValue(':email', $userEmail);
     $stmt->execute();
-    
+
     $ret = $stmt->fetchAll(\PDO::FETCH_COLUMN|\PDO::FETCH_GROUP);
     return array_map(function ($status) { return $status[0]; }, $ret);
 }

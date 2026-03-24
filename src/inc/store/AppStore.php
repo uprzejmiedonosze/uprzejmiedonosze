@@ -140,9 +140,6 @@ function byPlate(string $plateId): array|null {
         return $cache;
     }
 
-    $plateId = \SQLite3::escapeString($plateId);
-    $cleanPlateId = \SQLite3::escapeString($cleanPlateId);
-
     $sql = <<<SQL
         select value, email
         from applications 
