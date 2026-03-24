@@ -2,7 +2,6 @@
 
 function request(string $url, array $params, string $vendor, array|null $headers=[]): array|null {
     $ch = curl_init($url . http_build_query($params));
-    logger($url . http_build_query($params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     #curl_setopt($ch, CURLOPT_REFERER, "https://agendaparkingowa.pl");
     curl_setopt($ch, CURLOPT_USERAGENT, "UprzejmieDonosze/1.0");
