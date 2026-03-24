@@ -57,29 +57,39 @@ abstract class CityAPI {
         $carImage     = "$root/{$application->carImage->url}";
         $json = json_encode($data);
 
-        $thirdImageForm = '';
+        $postFields = [
+            'json'      => $json,
+            'uz_file'   => new \CURLFile($contextImage),
+            'uz_file_0' => new \CURLFile($carImage),
+        ];
+
         if (isset($application->thirdImage->url)) {
             $thirdImage = "$root/{$application->thirdImage->url}";
-            $thirdImageForm = '--form uz_file_1=@\\"' . $thirdImage . '\\" ';
+            $postFields['uz_file_1'] = new \CURLFile($thirdImage);
         }
 
-        $curl = "curl -s --location --request POST '$url' "
-            . "--header 'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=' "
-            . "--header 'Content-Type: multipart/form-data' "
-            . "--max-time 30 "
-            . "--form 'json={$json}' "
-            . '--form uz_file=@\\"' . $contextImage . '\\" '
-            . '--form uz_file_0=@\\"' . $carImage . '\\" '
-            . $thirdImageForm;
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => $postFields,
+            CURLOPT_HTTPHEADER     => [
+                'Authorization: Basic c3p5bW9uQG5pZXJhZGthLm5ldDplaUYmb29xdWVlN0Y=',
+            ],
+            CURLOPT_TIMEOUT        => 30,
+            CURLOPT_FOLLOWLOCATION => true,
+        ]);
 
-        $response = exec("$curl 2>&1", $retArr, $retVal);
+        $response = curl_exec($ch);
+        $retVal   = curl_errno($ch);
+        curl_close($ch);
 
-        if($retVal !== 0){
+        if ($retVal !== 0) {
             $error = "Błąd komunikacji z API {$application->address->city}: retVal=$retVal, response=$response";
         }
 
         $json = json_decode($response, true);
-        if(!json_last_error() === JSON_ERROR_NONE){
+        if (!json_last_error() === JSON_ERROR_NONE) {
             $error = "Błąd komunikacji z API {$application->address->city}: json_last_error=" . json_last_error_msg();
         }
 
@@ -87,9 +97,8 @@ abstract class CityAPI {
             $error = "Błąd komunikacji z API {$application->address->city}: empty-json, response=" . print_r($response, true);
         }
 
-        if(isset($error)){
+        if (isset($error)) {
             logger($response, true);
-            logger($curl, true);
             throw new Exception($error, 500);
         }
 
