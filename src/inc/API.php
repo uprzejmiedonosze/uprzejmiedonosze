@@ -179,12 +179,35 @@ function saveImgAndThumb($application, $imageBytes, $type) {
 
     $fileName     = ROOT . "$baseFileName,$type.jpg";
     $thumbName    = ROOT . "$baseFileName,$type,t.jpg";
+
+    $rawBytes = base64_decode($imageBytes);
+    $info = getimagesizefromstring($rawBytes);
+    if ($info === false) {
+        throw new Exception("Przesłany plik nie jest obrazkiem", 400);
+    }
+
+    if ($info['mime'] === 'image/png') {
+        $src = imagecreatefromstring($rawBytes);
+        if ($src === false) {
+            throw new Exception("Nie można otworzyć pliku PNG", 400);
+        }
+        $dst = imagecreatetruecolor(imagesx($src), imagesy($src));
+        imagefill($dst, 0, 0, imagecolorallocate($dst, 255, 255, 255));
+        imagecopy($dst, $src, 0, 0, 0, 0, imagesx($src), imagesy($src));
+        imagedestroy($src);
+        ob_start();
+        imagejpeg($dst, null, 92);
+        $rawBytes = ob_get_clean();
+        imagedestroy($dst);
+    } elseif ($info['mime'] !== 'image/jpeg') {
+        throw new Exception("Nieobsługiwany format obrazka: {$info['mime']}", 415);
+    }
+
     $ifp = fopen($fileName, 'wb');
     if ($ifp === false) {
         throw new Exception("Can't open $fileName for write", 500);
     }
-
-    if (fwrite($ifp, base64_decode($imageBytes)) === false) {
+    if (fwrite($ifp, $rawBytes) === false) {
         throw new Exception("Can't write to $fileName", 500);
     }
     fclose($ifp);
