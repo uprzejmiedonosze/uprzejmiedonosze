@@ -10,3 +10,4 @@ update-dates:
 	@for img in $(IMAGES); do \
 		exiftool -overwrite_original -DateTimeOriginal="$(THREE_MONTHS_AGO) 19:48:10.206566" "$$img"; \
 	done
+	@echo "$(THREE_MONTHS_AGO) 19:48:10.206566"
