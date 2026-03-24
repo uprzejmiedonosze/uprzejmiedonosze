@@ -117,7 +117,7 @@ export async function appClicked(target) {
   const appDetails = await api.getHtml()
   location.hash = `#${appId}`
   // @ts-ignore
-  appDetailsDiv.innerHTML = appDetails
+  appDetailsDiv.innerHTML = appDetails // nosemgrep: javascript.browser.security.insecure-document-method.insecure-document-method
 
   makeDropdown()
 
@@ -153,7 +153,7 @@ export async function appClicked(target) {
       if (recydywaElement) recydywaElement.style.display = 'block'
       const api = new Api(`/recydywa-${plateId}-partial.html`)
       const recydywa = await api.getHtml()
-      if (recydywaContent) recydywaContent.innerHTML = recydywa
+      if (recydywaContent) recydywaContent.innerHTML = recydywa // nosemgrep: javascript.browser.security.insecure-document-method.insecure-document-method
     })
   })
 

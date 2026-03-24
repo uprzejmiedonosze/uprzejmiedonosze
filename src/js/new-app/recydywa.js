@@ -36,7 +36,7 @@ export async function updateRecydywa(appId) {
     if (recydywa.lastTicket && details) {
         /** @type {HTMLElement} */ (details).style.visibility = "visible"
         const lastTicketElement = details.querySelector('.recydywa-lastTicket')
-        if (lastTicketElement) lastTicketElement.innerHTML = recydywa.lastTicket
+        if (lastTicketElement) lastTicketElement.textContent = recydywa.lastTicket
     }
 
     if (onlyme) {
@@ -88,7 +88,12 @@ export async function updateRecydywa(appId) {
     if (recydywa.isPresentInGallery && details) {
         const galleryLinkElement = details.querySelector('.recydywa-galleryLink')
         if (galleryLinkElement) {
-            galleryLinkElement.innerHTML = `<a target="_blank" href="https://galeria.uprzejmiedonosze.net/tagged/${recydywa.plateId}">zobacz galerię</a>`
+            const a = document.createElement('a')
+            a.target = '_blank'
+            a.href = `https://galeria.uprzejmiedonosze.net/tagged/${encodeURIComponent(recydywa.plateId)}`
+            a.textContent = 'zobacz galerię'
+            galleryLinkElement.innerHTML = ''
+            galleryLinkElement.appendChild(a)
         }
     }
 }
