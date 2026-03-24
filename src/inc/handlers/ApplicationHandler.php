@@ -263,7 +263,7 @@ class ApplicationHandler extends AbstractHandler {
         $application = \app\get($appId);
 
         if (!$application->isAppOwner($user))
-            return $this->redirect("/ud-$appId.html");
+            return $this->redirect("/ud-" . rawurlencode($appId) . ".html");
 
         [$path, $filename] = \app\toPdf($application);
         return AbstractHandler::renderPdf($response, $path, $filename);
@@ -289,7 +289,7 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function shipment(Request $request, Response $response): Response {
-        return $this->redirect('/moje-zgloszenia.html?update&q=' . urlencode('wysyłka'));
+        return $this->redirect('/moje-zgloszenia.html?update&q=' . urlencode('wysyłka')); // nosemgrep: php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
     }
 
     public function askForStatus(Request $request, Response $response) {
