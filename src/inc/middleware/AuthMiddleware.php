@@ -64,15 +64,6 @@ class AuthMiddleware implements MiddlewareInterface {
                 | UnexpectedValueException // provided JWT is malformed OR is missing an algorithm / using an unsupported algorithm OR algorithm does not match provided key OR key ID in key/key-array is empty or invalid.
                 $e) {
 
-                if ($e instanceof ExpiredException && isDev()) {
-                    $user = Array(
-                        'user_email' => $decodedToken->email,
-                        'user_name' => $decodedToken->name
-                    );
-                    $request = $request->withAttribute('firebaseUser', $user);
-                    return $handler->handle($request);
-                }
-
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
             }
         }
