@@ -12,7 +12,7 @@ on:
 permissions:
   contents: read
   security-events: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   # Fast dependency scanning - runs on PRs
@@ -140,3 +140,17 @@ jobs:
 
       - name: npm security audit
         run: npm audit --audit-level=moderate
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+
+      - uses: anthropics/claude-code-security-review@main
+        with:
+          comment-pr: true
+          claude-api-key: ${{ secrets.CLAUDE_API_KEY }}
+
