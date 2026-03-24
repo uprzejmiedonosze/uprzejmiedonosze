@@ -100,7 +100,7 @@ class SessionApiHandler extends AbstractHandler {
             $allowedBase = realpath(ROOT . 'cdn2');
             $file = realpath(ROOT . $fileName);
             if ($file && $allowedBase && str_starts_with($file, $allowedBase . '/')) {
-                @unlink($file);
+                @unlink($file); // nosemgrep: php.lang.security.unlink-use.unlink-use
             }
             \storage\delete($fileName);
         };
