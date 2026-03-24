@@ -55,7 +55,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
         $video->save($format, $input->getArgument('output'));
 
         if ($input->getOption('remove-input-file')) {
-            unlink($filename);
+            unlink($filename); // nosemgrep: php.lang.security.unlink-use.unlink-use
         }
 
         return SingleCommandApplication::SUCCESS;

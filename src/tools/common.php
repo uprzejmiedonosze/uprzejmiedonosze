@@ -43,9 +43,7 @@ function removeUser($email, $dryRun=true){
     if(file_exists($cdn2UserFolder) && filetype($cdn2UserFolder) == 'dir'){
         echo "Kasuję folder użytkownika\n";
         if(!$dryRun){
-            $cmd = sprintf("rm -rf %s", escapeshellarg($cdn2UserFolder));
-            exec($cmd, $output);
-            unset($output);
+            rmdirRecursive($cdn2UserFolder);
         }
     }
 
@@ -115,8 +113,13 @@ function removeApplication($app, $dryRun){
 }
 
 function removeFile($fileName, $dryRun){
-    $file = __DIR__ . "/../../$fileName";
-    if(!isset($file) || empty($fileName)){
+    if(!isset($fileName) || empty($fileName)){
+        return;
+    }
+    $allowedBase = realpath(__DIR__ . '/../../cdn2');
+    $file = realpath(__DIR__ . "/../../$fileName");
+    if (!$file || !$allowedBase || !str_starts_with($file, $allowedBase . DIRECTORY_SEPARATOR)) {
+        echo " ! '$fileName' poza dozwolonym katalogiem cdn2\n";
         return;
     }
     if(file_exists($file)){
@@ -139,6 +142,15 @@ function removeFile($fileName, $dryRun){
             echo " - $fileName (nie istnieje lokalnie, do usunięcia z S3)\n";
         }
     }
+}
+
+function rmdirRecursive(string $dir): void {
+    foreach (scandir($dir) as $item) {
+        if ($item === '.' || $item === '..') continue;
+        $path = $dir . DIRECTORY_SEPARATOR . $item;
+        is_dir($path) ? rmdirRecursive($path) : unlink($path);
+    }
+    rmdir($dir);
 }
 
 /**
