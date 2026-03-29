@@ -4488,5 +4488,16 @@
       "56-416 Twardogóra"
     ],
     "email": "dzielnicowy.twardogora1@olesnica.wr.policja.gov.pl"
+  },
+  "gmina Knurów": {
+    "address": [
+      "Komisariat Policji w Knurowie",
+      "ul. Dworcowa 1a",
+      "44-190 Knurów"
+    ],
+    "email": "knurow@gliwice.ka.policja.gov.pl"
+  },
+  "gmina Gierałtowice": {
+    "parent": "gmina Knurów"
   }
 }
