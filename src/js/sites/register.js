@@ -5,7 +5,7 @@ const addressElement = /** @type {HTMLInputElement} */ (document.getElementById(
 const edeliveryElement = /** @type {HTMLInputElement} */ (document.getElementById("edelivery"))
 
 function validateRegisterForm() {
-  let ret = checkValueRe(nameElement, /^(\S{2,5}\s)?\S{3,20}\s[\S -]{3,40}$/i)
+  let ret = checkValueRe(nameElement, /^(\S{2,5}\s)?\S{2,20}\s[\S -]{3,40}$/i)
   const addressCheck = checkValueRe(addressElement, /^.{3,50}\d.{3,40}\D$/i)
   ret = addressCheck && ret
   ret = checkValueRe(edeliveryElement, /(^[A-Z]{2}:[A-Z]{2}-(\d{5}-){2}[A-Z]{5}-\d{2})$|^$/i) && ret
