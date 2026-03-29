@@ -4499,5 +4499,13 @@
   },
   "gmina Gierałtowice": {
     "parent": "gmina Knurów"
+  },
+  "powiat wejherowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Wejherowie",
+      "ul. Dworcowa 14",
+      "84-200 Wejherowo"
+    ],
+    "email": "komenda.wejherowo@gd.policja.gov.pl"
   }
 }
