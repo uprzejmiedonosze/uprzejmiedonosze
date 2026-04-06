@@ -16,3 +16,11 @@ define('CRYPTO_TAG', '190181339ab13a971415e977b736053f');
 
 define('BACKEND_API_KEY', 'dev-secret-key-change-in-production');
 define('CORS_ALLOWED_DOMAIN', 'localhost'); // includes subdomains
+
+// S3-compatible object storage (Hetzner) — only active in production (isProd()).
+// Not needed in dev/staging, but constants must be defined.
+define('S3_KEY',      '');
+define('S3_SECRET',   '');
+define('S3_BUCKET',   '');
+define('S3_ENDPOINT', 'https://fsn1.your-objectstorage.com');
+define('S3_REGION',   'eu-central-1');

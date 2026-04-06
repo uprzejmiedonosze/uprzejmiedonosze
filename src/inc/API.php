@@ -158,6 +158,26 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
     }
 
     \app\save($application);
+
+    // Upload all generated files to S3 and remove local copies in production.
+    // This runs after ALPR, which requires local file access.
+    if (\storage\isEnabled()) {
+        $filesToSync = [
+            "$baseFileName,$type.jpg",
+            "$baseFileName,$type,t.jpg",
+        ];
+        if (isset($application->carInfo->plateImage)) {
+            $filesToSync[] = $application->carInfo->plateImage;
+        }
+        foreach ($filesToSync as $key) {
+            $localPath = ROOT . $key;
+            if (file_exists($localPath)) {
+                \storage\upload($localPath, $key);
+                unlink($localPath);
+            }
+        }
+    }
+
     \semaphore\release($application->id, "uploadImage:$pictureType");
     return $application;
 }

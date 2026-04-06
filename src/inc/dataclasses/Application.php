@@ -486,6 +486,11 @@ class Application extends JSONObject implements \JsonSerializable {
         }
         fclose($ifp);
 
+        if (\storage\isEnabled()) {
+            \storage\upload($fileName, "$baseFileName,ma.png");
+            unlink($fileName);
+        }
+
         $this->address->mapImage = "$baseFileName,ma.png";
         \app\save($this);
         return "$baseFileName,ma.png";

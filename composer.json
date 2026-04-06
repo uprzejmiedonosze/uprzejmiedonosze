@@ -23,7 +23,8 @@
         "slowmove/simple-php-queue": "^0.4.0",
         "phpoffice/phpspreadsheet": "^5.1",
         "openai-php/client": "^0.16.0",
-        "phpoffice/phpword": "^1.4"
+        "phpoffice/phpword": "^1.4",
+        "aws/aws-sdk-php": "^3.0"
     },
     "require-dev": {
         "sserbin/twig-linter": "^3.1",
