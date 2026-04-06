@@ -18,9 +18,8 @@ $consumer = function (string $appId): void {
       return;
     }
 
-    $imageKey = $app->contextImage->url;
-    \storage\ensure_local($imageKey);
-    $url = "http://localhost:2000/detect/" . ROOT . $imageKey;
+    $app->ensureLocal();
+    $url = "http://localhost:2000/detect/" . ROOT . $app->contextImage->url;
     $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
 
     try {
@@ -38,7 +37,7 @@ $consumer = function (string $appId): void {
     } finally {
       \app\save($app);
       \semaphore\release($appId, "face-detect-consumer");
-      \storage\release_local($imageKey);
+      $app->releaseLocal();
       logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null), true);
     }
     logger("Detected faces in $appId: " . ($faces->count ?? 0)); 

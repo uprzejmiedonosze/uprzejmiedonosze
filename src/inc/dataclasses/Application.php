@@ -667,4 +667,54 @@ class Application extends JSONObject implements \JsonSerializable {
     public function sentViaAPI(): bool {
         return ($this->sent->method ?? false) == 'Poznan';
     }
+
+    /**
+     * Returns all S3/CDN keys (relative paths) that belong to this application.
+     */
+    public function getImageKeys(): array {
+        $keys = [];
+        foreach (['carImage', 'contextImage', 'thirdImage'] as $imgType) {
+            if (isset($this->$imgType->url))   $keys[] = $this->$imgType->url;
+            if (isset($this->$imgType->thumb)) $keys[] = $this->$imgType->thumb;
+        }
+        if (isset($this->address->mapImage))   $keys[] = $this->address->mapImage;
+        if (isset($this->carInfo->plateImage)) $keys[] = $this->carInfo->plateImage;
+        return $keys;
+    }
+
+    /**
+     * Downloads any missing image files from S3 to their canonical local paths (ROOT.$key).
+     * No-op when S3 storage is not enabled.
+     */
+    public function ensureLocal(): void {
+        foreach ($this->getImageKeys() as $key) {
+            \storage\ensure_local($key);
+        }
+    }
+
+    /**
+     * Removes locally cached copies that were fetched via ensureLocal().
+     * No-op when S3 storage is not enabled.
+     */
+    public function releaseLocal(): void {
+        foreach ($this->getImageKeys() as $key) {
+            \storage\release_local($key);
+        }
+    }
+
+    /**
+     * Uploads all locally present image files to S3 and removes the local copies.
+     * Files already absent locally (e.g. previously synced) are silently skipped.
+     * No-op when S3 storage is not enabled.
+     */
+    public function syncToS3(): void {
+        if (!\storage\isEnabled()) return;
+        foreach ($this->getImageKeys() as $key) {
+            $localPath = ROOT . $key;
+            if (file_exists($localPath)) {
+                \storage\upload($localPath, $key);
+                unlink($localPath);
+            }
+        }
+    }
 }

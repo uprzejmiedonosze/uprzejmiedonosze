@@ -7,12 +7,7 @@ function toZip(Application &$application): array{
     $filename = $application->getAppFilename('.zip', 'Zdjecia_');
     $fullPath = "$baseDir/$filename";
 
-    $imageKeys = array_filter([
-        $application->contextImage->url,
-        $application->carImage->url,
-        $application->thirdImage->url ?? null,
-    ]);
-    foreach ($imageKeys as $key) \storage\ensure_local($key);
+    $application->ensureLocal();
 
     try {
         $zip = new \ZipArchive;
@@ -29,7 +24,7 @@ function toZip(Application &$application): array{
                 $application->getAppFilename('c.jpg'));
         $zip->close();
     } finally {
-        foreach ($imageKeys as $key) \storage\release_local($key);
+        $application->releaseLocal();
     }
 
     return [$fullPath, $filename];
