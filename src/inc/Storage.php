@@ -64,6 +64,28 @@ function download(string $key, string $localPath): bool {
 }
 
 /**
+ * Ensures a file is available at ROOT.$key by downloading it from S3 if missing.
+ * No-op when S3 is not enabled or the file already exists locally.
+ */
+function ensure_local(string $key): void {
+    if (!isEnabled()) return;
+    $localPath = ROOT . $key;
+    if (file_exists($localPath)) return;
+    $dir = dirname($localPath);
+    if (!is_dir($dir)) mkdir($dir, 0755, true);
+    download($key, $localPath);
+}
+
+/**
+ * Removes a locally cached file that was fetched via ensure_local().
+ * No-op when S3 is not enabled.
+ */
+function release_local(string $key): void {
+    if (!isEnabled()) return;
+    @unlink(ROOT . $key);
+}
+
+/**
  * Deletes an S3 object. Silently ignores missing keys.
  */
 function delete(string $key): void {
