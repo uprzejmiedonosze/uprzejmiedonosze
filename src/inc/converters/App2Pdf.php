@@ -59,10 +59,20 @@ function _tex2pdf(array|Application $application, string $destFile) {
     global $EXTENSIONS;
     $user = \user\current();
     $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
+
+    // In production images live on S3, not on the local filesystem.
+    // Download the thumbnails pdflatex needs into a temporary directory.
+    $tmpImagesRoot = null;
+    if (\storage\isEnabled()) {
+        $tmpImagesRoot = sys_get_temp_dir() . '/ud-pdf-' . $application->id . '-' . uniqid();
+        mkdir($tmpImagesRoot, 0700, true);
+        _downloadImagesForPdf($application, $tmpImagesRoot);
+    }
+
     $params = [
         'BASE_URL' => BASE_URL,
         'app' => $application,
-        'root' => realpath(ROOT),
+        'root' => $tmpImagesRoot ?? realpath(ROOT),
         'categories' => $CATEGORIES,
         'extensions' => $EXTENSIONS,
         'config' => [
@@ -81,6 +91,10 @@ function _tex2pdf(array|Application $application, string $destFile) {
     @unlink($aux_f);
     @unlink($out_f);
 
+    if ($tmpImagesRoot) {
+        _rmdir_recursive($tmpImagesRoot);
+    }
+
     if(!file_exists($pdf_f)) {
         @unlink($file);
         throw new \Exception("Błąd generowania pliku PDF.");
@@ -88,7 +102,48 @@ function _tex2pdf(array|Application $application, string $destFile) {
 
     @unlink($log_f);
     @unlink($tex_f);
-    
+
     rename($pdf_f, $destFile);
     @unlink($file);
+}
+
+/**
+ * Downloads from S3 the image files that pdflatex needs (thumbnails,
+ * map image, plate crop) into $tmpRoot, preserving the cdn2/…/… path
+ * structure so that the Twig template can reference them via `root`.
+ */
+function _downloadImagesForPdf(Application $application, string $tmpRoot): void {
+    $keys = [];
+
+    foreach (['carImage', 'contextImage', 'thirdImage'] as $imgType) {
+        if (isset($application->$imgType->thumb)) {
+            $keys[] = $application->$imgType->thumb;
+        }
+    }
+
+    if ($application->isMapImageInCDN()) {
+        $keys[] = $application->address->mapImage;
+    }
+
+    if ($application->shouldIncludePlateImage() && isset($application->carInfo->plateImage)) {
+        $keys[] = $application->carInfo->plateImage;
+    }
+
+    foreach ($keys as $key) {
+        $localPath = $tmpRoot . '/' . $key;
+        $dir = dirname($localPath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0700, true);
+        }
+        \storage\download($key, $localPath);
+    }
+}
+
+function _rmdir_recursive(string $dir): void {
+    if (!is_dir($dir)) return;
+    foreach (array_diff(scandir($dir), ['.', '..']) as $entry) {
+        $path = "$dir/$entry";
+        is_dir($path) ? _rmdir_recursive($path) : unlink($path);
+    }
+    rmdir($dir);
 }
