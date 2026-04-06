@@ -49,8 +49,17 @@ abstract class CityAPI {
      */
     function curlShellSend(string $url, &$data, Application &$application){
         $root = realpath(ROOT);
+
+        $imageKeys = array_filter([
+            $application->contextImage->url,
+            $application->carImage->url,
+            $application->thirdImage->url ?? null,
+        ]);
+        foreach ($imageKeys as $key) \storage\ensure_local($key);
+
+        try {
         $contextImage = "$root/{$application->contextImage->url}";
-        $carImage = "$root/{$application->carImage->url}";
+        $carImage     = "$root/{$application->carImage->url}";
         $json = json_encode($data);
 
         $thirdImageForm = '';
@@ -67,7 +76,7 @@ abstract class CityAPI {
             . '--form uz_file=@\\"' . $contextImage . '\\" '
             . '--form uz_file_0=@\\"' . $carImage . '\\" '
             . $thirdImageForm;
-        
+
         $response = exec("$curl 2>&1", $retArr, $retVal);
 
         if($retVal !== 0){
@@ -91,6 +100,9 @@ abstract class CityAPI {
 
         $application->sent->curl = $json;
         return $json;
+        } finally {
+            foreach ($imageKeys as $key) \storage\release_local($key);
+        }
     }
 
 }

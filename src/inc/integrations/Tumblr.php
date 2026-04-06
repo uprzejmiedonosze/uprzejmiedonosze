@@ -17,6 +17,7 @@ function addToTumblr(Application $app): stdClass|array {
     $description = $app->getCategory()->getFormal()
         . " "
         . $app->getExtensionsText();
+    \storage\ensure_local($app->contextImage->url);
     $data = array(
         'type' => 'photo',
         'caption' => "**{$app->carInfo->plateId}** $recydywa — {$description}"
@@ -29,7 +30,9 @@ function addToTumblr(Application $app): stdClass|array {
         'date' => $app->date
     );
 
-    return $client->createPost($blogName, $data);
+    $result = $client->createPost($blogName, $data);
+    \storage\release_local($app->contextImage->url);
+    return $result;
 }
 
 function addToGallery(\app\Application $app): \app\Application {

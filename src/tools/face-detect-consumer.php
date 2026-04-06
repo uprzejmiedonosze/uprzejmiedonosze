@@ -19,15 +19,8 @@ $consumer = function (string $appId): void {
     }
 
     $imageKey = $app->contextImage->url;
-    $tmpFile = null;
-    if (\storage\isEnabled()) {
-        $tmpFile = tempnam(sys_get_temp_dir(), 'ud-face-') . '.jpg';
-        \storage\download($imageKey, $tmpFile);
-        $filename = $tmpFile;
-    } else {
-        $filename = ROOT . $imageKey;
-    }
-    $url = "http://localhost:2000/detect/$filename";
+    \storage\ensure_local($imageKey);
+    $url = "http://localhost:2000/detect/" . ROOT . $imageKey;
     $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
 
     try {
@@ -45,7 +38,7 @@ $consumer = function (string $appId): void {
     } finally {
       \app\save($app);
       \semaphore\release($appId, "face-detect-consumer");
-      if ($tmpFile && file_exists($tmpFile)) unlink($tmpFile);
+      \storage\release_local($imageKey);
       logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null), true);
     }
     logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
