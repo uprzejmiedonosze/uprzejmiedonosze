@@ -115,6 +115,7 @@ function removeFile($fileName, $dryRun){
     echo " - usuwam '$fileName'\n";
     if(!$dryRun){
         unlink($file);
+        \storage\delete($fileName);
     }
 }
 
