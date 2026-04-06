@@ -60,9 +60,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
     $user = \user\current();
     $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
 
-    if (\storage\isEnabled()) {
-        _ensureImagesLocal($application);
-    }
+    $application->ensureLocal();
 
     $params = [
         'BASE_URL' => BASE_URL,
@@ -86,9 +84,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
     @unlink($aux_f);
     @unlink($out_f);
 
-    if (\storage\isEnabled()) {
-        _releaseLocalImages($application);
-    }
+    $application->releaseLocal();
 
     if(!file_exists($pdf_f)) {
         @unlink($file);
@@ -102,26 +98,3 @@ function _tex2pdf(array|Application $application, string $destFile) {
     @unlink($file);
 }
 
-function _pdfImageKeys(Application $application): array {
-    $keys = [];
-    foreach (['carImage', 'contextImage', 'thirdImage'] as $imgType) {
-        if (isset($application->$imgType->thumb)) $keys[] = $application->$imgType->thumb;
-    }
-    if ($application->isMapImageInCDN()) $keys[] = $application->address->mapImage;
-    if ($application->shouldIncludePlateImage() && isset($application->carInfo->plateImage)) {
-        $keys[] = $application->carInfo->plateImage;
-    }
-    return $keys;
-}
-
-function _ensureImagesLocal(Application $application): void {
-    foreach (_pdfImageKeys($application) as $key) {
-        \storage\ensure_local($key);
-    }
-}
-
-function _releaseLocalImages(Application $application): void {
-    foreach (_pdfImageKeys($application) as $key) {
-        \storage\release_local($key);
-    }
-}

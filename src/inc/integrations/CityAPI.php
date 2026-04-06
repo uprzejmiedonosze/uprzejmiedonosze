@@ -50,12 +50,7 @@ abstract class CityAPI {
     function curlShellSend(string $url, &$data, Application &$application){
         $root = realpath(ROOT);
 
-        $imageKeys = array_filter([
-            $application->contextImage->url,
-            $application->carImage->url,
-            $application->thirdImage->url ?? null,
-        ]);
-        foreach ($imageKeys as $key) \storage\ensure_local($key);
+        $application->ensureLocal();
 
         try {
         $contextImage = "$root/{$application->contextImage->url}";
@@ -101,7 +96,7 @@ abstract class CityAPI {
         $application->sent->curl = $json;
         return $json;
         } finally {
-            foreach ($imageKeys as $key) \storage\release_local($key);
+            $application->releaseLocal();
         }
     }
 
