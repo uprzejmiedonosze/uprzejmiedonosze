@@ -104,17 +104,17 @@ function removeFile($fileName, $dryRun){
     if(!isset($file) || empty($fileName)){
         return;
     }
-    if(!file_exists($file)){
-        echo " ! plik '$fileName' nie istnieje\n";
-        return;
+    if(file_exists($file)){
+        if(filetype($file) !== 'file'){
+            echo " ! '$fileName' nie jest plikiem\n";
+            return;
+        }
+        echo " - usuwam '$fileName'\n";
+        if(!$dryRun) unlink($file);
+    } else {
+        echo " ! plik '$fileName' nie istnieje lokalnie\n";
     }
-    if(filetype($file) !== 'file'){
-        echo " ! '$fileName' nie jest plikiem\n";
-        return;
-    }
-    echo " - usuwam '$fileName'\n";
     if(!$dryRun){
-        unlink($file);
         \storage\delete($fileName);
     }
 }
