@@ -12,12 +12,12 @@ function client(): S3Client {
     if ($client === null) {
         $client = new S3Client([
             'version'                 => 'latest',
-            'region'                  => S3_REGION,
-            'endpoint'                => S3_ENDPOINT,
+            'region'                  => \S3_REGION,
+            'endpoint'                => \S3_ENDPOINT,
             'use_path_style_endpoint' => false,
             'credentials'             => [
-                'key'    => S3_KEY,
-                'secret' => S3_SECRET,
+                'key'    => \S3_KEY,
+                'secret' => \S3_SECRET,
             ],
         ]);
     }
@@ -32,7 +32,7 @@ function upload(string $localPath, string $key): void {
     if (!isEnabled() || !file_exists($localPath)) return;
     try {
         client()->putObject([
-            'Bucket'      => S3_BUCKET,
+            'Bucket'      => \S3_BUCKET,
             'Key'         => $key,
             'SourceFile'  => $localPath,
             'ACL'         => 'public-read',
@@ -52,7 +52,7 @@ function download(string $key, string $localPath): bool {
     if (!isEnabled()) return false;
     try {
         client()->getObject([
-            'Bucket' => S3_BUCKET,
+            'Bucket' => \S3_BUCKET,
             'Key'    => $key,
             'SaveAs' => $localPath,
         ]);
@@ -92,7 +92,7 @@ function delete(string $key): void {
     if (!isEnabled()) return;
     try {
         client()->deleteObject([
-            'Bucket' => S3_BUCKET,
+            'Bucket' => \S3_BUCKET,
             'Key'    => $key,
         ]);
     } catch (AwsException $e) {
