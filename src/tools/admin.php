@@ -434,7 +434,7 @@ function migrateGalleryImages(bool $dryRun=true): void {
             echo "  - {$app->id} ({$app->contextImage->thumb})\n";
             if (!$dryRun) {
                 $app->generateGalleryImages();
-                \app\save($app);
+                \app\markGalleryReady($app->id, $app->carInfo->plateId ?? null);
             }
         }
 

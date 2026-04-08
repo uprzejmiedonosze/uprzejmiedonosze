@@ -53,6 +53,7 @@ function addToGallery(\app\Application $app): \app\Application {
 
     if (!($app->contextImage->galleryReady ?? false)) {
         $app->generateGalleryImages();
+        \app\markGalleryReady($app->id, $app->carInfo->plateId ?? null);
     }
 
     $app->addComment("admin", "Zdjęcie dodane do galerii.");

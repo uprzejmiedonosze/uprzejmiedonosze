@@ -53,6 +53,25 @@ function save(Application $application): Application{
     return $application;
 }
 
+/**
+ * Marks contextImage->galleryReady = true directly in the stored JSON,
+ * bypassing encode()/decode() entirely. Safe to call in any session context
+ * since it never touches encrypted fields.
+ */
+function markGalleryReady(string $appId, string $plateId = null): void {
+    $sql = "UPDATE " . TABLE . "
+            SET value = json_set(value, '$.contextImage.galleryReady', json('true'))
+            WHERE key = :key";
+    $stmt = \store\prepare($sql);
+    $stmt->bindParam(':key', $appId, \PDO::PARAM_STR);
+    $stmt->execute();
+
+    if ($plateId) {
+        $cleanPlateId = \recydywa\cleanPlateId($plateId);
+        \cache\delete(Type::AppsByPlate, $cleanPlateId);
+    }
+}
+
 function checkId(string $appId): bool {
     $json = \store\get(TABLE, $appId);
     return is_string($json);

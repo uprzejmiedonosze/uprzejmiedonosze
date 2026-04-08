@@ -636,7 +636,7 @@ class Application extends JSONObject implements \JsonSerializable {
         if ($thumb && \storage\isEnabled()) {
             if (!($this->contextImage->galleryReady ?? false)) {
                 $this->generateGalleryImages();
-                \app\save($this);
+                \app\markGalleryReady($this->id, $this->carInfo->plateId ?? null);
             }
             $path = ($this->showImage ?? false) ? $thumb : "{$thumb}?pixelate";
             return 'cdn2/gallery/' . \crypto\encode($path, CRYPTO_KEY, CRYPTO_IV) . '.jpg';
