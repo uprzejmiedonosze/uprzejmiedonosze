@@ -102,9 +102,10 @@ function removeApplication($app, $dryRun){
         removeFile($app->carInfo->plateImage, $dryRun);
     }
     // address is encrypted when loaded without owner session, so we derive
-    // the map image path directly from unencrypted fields instead of $app->address->mapImage
-    $mapImageKey = \storage\cdnPrefix() . '/' . $app->getUserNumber() . '/' . $app->id . ',ma.png';
-    removeFile($mapImageKey, $dryRun);
+    // the map image path from contextImage->url: cdn2stg/2/4mYJ5a2bkuDR,co.jpg → cdn2stg/2/4mYJ5a2bkuDR,ma.png
+    if (isset($app->contextImage->url)) {
+        removeFile(strstr($app->contextImage->url, ',', true) . ',ma.png', $dryRun);
+    }
 
     echo " zgłoszenie oraz jego pliki usunięte;\n\n";
     if($dryRun){
