@@ -14,7 +14,8 @@ $consumer = function (string $appId): void {
     $app = \app\get($appId);
     if (isset($app->faces->count)) {
       logger("Faces already detected in $appId");
-      addToGallery($app);
+      $app = addToGallery($app);
+      \app\save($app);
       return;
     }
 
