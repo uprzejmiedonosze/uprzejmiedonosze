@@ -51,6 +51,10 @@ function addToGallery(\app\Application $app): \app\Application {
 
     logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
 
+    if (!($app->contextImage->galleryReady ?? false)) {
+        $app->generateGalleryImages();
+    }
+
     $app->addComment("admin", "Zdjęcie dodane do galerii.");
     return $app;
 }
