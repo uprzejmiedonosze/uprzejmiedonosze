@@ -9,7 +9,7 @@ use user\User;
 
 class ApplicationTest extends TestCase
 {
-    private $appJson = '{"date":"2019-03-31T13:06:23","id":"66610107-29dd-4392-8bae-83c71426d844","added":"2019-04-14T13:22:48","user":{"email":"e@nieradka.net","name":"Ud Developer","exposeData":false,"msisdn":"","address":"Rynek 99-120, Pi\u0105tek"},"status":"confirmed","category":8,"statements":{"witness":false},"statusHistory":{"2019-04-14T13:27:05":{"old":"draft","new":"ready"},"2019-04-14T13:27:11":{"old":"ready","new":"confirmed"}},"contextImage":{"url":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811.jpg","thumb":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811,t.jpg"},"carImage":{"url":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12.jpg","thumb":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,t.jpg"},"carInfo":{"plateId":"ZS2450C","plateIdFromImage":"ZS2450C","brand":"Audi","plateImage":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,p.jpg","recydywa":0},"dtFromPicture":true,"address":{"address":"aleja Papie\u017ca Jana Paw\u0142a II 36, Szczecin","city":"Szczecin","voivodeship":"zachodniopomorskie","lat":53.43474358333333,"lng":14.545931694444445},"smCity":"szczecin","userComment":"","number":"UD\/2\/2","comments":[],"extensions":[],"seq":2,"inexactHour":true,"version":"2.3.0"}';
+    private $appJson = '{"date":"2019-03-31T13:06:23","id":"66610107-29dd-4392-8bae-83c71426d844","added":"2019-04-14T13:22:48","user":{"email":"e@nieradka.net","name":"Ud Developer","number":2,"exposeData":false,"msisdn":"","address":"Rynek 99-120, Pi\u0105tek"},"status":"confirmed","category":8,"statements":{"witness":false},"statusHistory":{"2019-04-14T13:27:05":{"old":"draft","new":"ready"},"2019-04-14T13:27:11":{"old":"ready","new":"confirmed"}},"contextImage":{"url":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811.jpg","thumb":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811,t.jpg"},"carImage":{"url":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12.jpg","thumb":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,t.jpg"},"carInfo":{"plateId":"ZS2450C","plateIdFromImage":"ZS2450C","brand":"Audi","plateImage":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,p.jpg","recydywa":0},"dtFromPicture":true,"address":{"address":"aleja Papie\u017ca Jana Paw\u0142a II 36, Szczecin","city":"Szczecin","voivodeship":"zachodniopomorskie","lat":53.43474358333333,"lng":14.545931694444445},"smCity":"szczecin","userComment":"","number":"UD\/2\/2","comments":[],"extensions":[],"seq":2,"inexactHour":true,"version":"2.3.0"}';
     private $email = 'e@nieradka.net';
 
     private function assertThrowsException(\Closure $closure, string $exception, ?string $message = null)
@@ -202,6 +202,87 @@ class ApplicationTest extends TestCase
         $this->assertIsString($app->address);
         $this->assertIsString($app->encrypted);
     }
+
+    // ── S3 / Storage ─────────────────────────────────────────────────────────
+
+    public function testGetImageKeysReturnsUrlAndThumb(): void
+    {
+        $app  = Application::withJson($this->appJson, $this->email);
+        $keys = $app->getImageKeys();
+
+        // contextImage
+        $this->assertContains('cdn/ce883f8d-2f8d-4048-8725-76a2777b2811.jpg',   $keys);
+        $this->assertContains('cdn/ce883f8d-2f8d-4048-8725-76a2777b2811,t.jpg', $keys);
+        // carImage
+        $this->assertContains('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12.jpg',   $keys);
+        $this->assertContains('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,t.jpg', $keys);
+        // plateImage
+        $this->assertContains('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,p.jpg', $keys);
+        // no thirdImage, no mapImage in this fixture
+        $this->assertCount(5, $keys);
+    }
+
+    public function testGetImageKeysEmptyWhenNoImages(): void
+    {
+        $app = Application::withUser(new User());
+        $this->assertEmpty($app->getImageKeys());
+    }
+
+    /**
+     * generateGalleryImages() returns early when contextImage->thumb is absent.
+     * No file-system or S3 access happens, and galleryReady stays unset.
+     */
+    public function testGenerateGalleryImagesIsNoOpWhenNoThumb(): void
+    {
+        $app = Application::withUser(new User()); // no contextImage at all
+        $app->generateGalleryImages();
+        $this->assertNull($app->contextImage->galleryReady ?? null);
+    }
+
+    /**
+     * getSafeImageUrl() returns the CDN gallery URL when galleryReady=true.
+     * Skips generateGalleryImages() so no S3 call is made.
+     */
+    public function testGetSafeImageUrlReturnsCdnGalleryUrlWhenGalleryReady(): void
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $app->contextImage->galleryReady = true;
+        $app->showImage = true;
+
+        $url = $app->getSafeImageUrl();
+        $this->assertStringStartsWith(\storage\cdnPrefix() . '/gallery/', $url);
+        $this->assertStringEndsWith('.jpg', $url);
+    }
+
+    /**
+     * getSafeImageUrl() returns a pixelated CDN gallery URL when showImage=false.
+     */
+    public function testGetSafeImageUrlReturnsCdnPixelatedWhenShowImageFalse(): void
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $app->contextImage->galleryReady = true;
+        $app->showImage = false;
+
+        $url = $app->getSafeImageUrl();
+        $decoded = \crypto\decode(
+            str_replace([\storage\cdnPrefix() . '/gallery/', '.jpg'], '', $url),
+            CRYPTO_KEY, CRYPTO_IV
+        );
+        $this->assertStringContainsString('pixelate', $decoded);
+    }
+
+    /**
+     * getSafeImageUrl() falls back to /img-*.php when contextImage is absent.
+     */
+    public function testGetSafeImageUrlFallbackWhenNoContextImage(): void
+    {
+        $app = Application::withUser(new User());
+        $url = $app->getSafeImageUrl();
+        $this->assertStringStartsWith('img-', $url);
+        $this->assertStringEndsWith('.php?sessionless', $url);
+    }
+
+    // ── GuessSM ──────────────────────────────────────────────────────────────
 
     public function testGuessSM()
     {
