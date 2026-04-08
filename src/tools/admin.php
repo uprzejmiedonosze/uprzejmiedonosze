@@ -101,9 +101,10 @@ function removeApplication($app, $dryRun){
     if(isset($app->carInfo) && isset($app->carInfo->plateImage)){
         removeFile($app->carInfo->plateImage, $dryRun);
     }
-    if(isset($app->address) && isset($app->address->mapImage)){
-        removeFile($app->address->mapImage, $dryRun);
-    }
+    // address is encrypted when loaded without owner session, so we derive
+    // the map image path directly from unencrypted fields instead of $app->address->mapImage
+    $mapImageKey = \storage\cdnPrefix() . '/' . $app->getUserNumber() . '/' . $app->id . ',ma.png';
+    removeFile($mapImageKey, $dryRun);
 
     echo " zgłoszenie oraz jego pliki usunięte;\n\n";
     if($dryRun){
