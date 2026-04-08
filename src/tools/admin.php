@@ -401,10 +401,53 @@ function processWebhooks(): void {
 }
 
 
+/**
+ * Generates gallery images (clear + pixelated) for all applications that have
+ * a contextImage but no galleryReady flag yet. Safe to run multiple times.
+ */
+function migrateGalleryImages(bool $dryRun=true): void {
+    global $interrupt;
+
+    $batch = 1;
+    do {
+        if ($interrupt) exit;
+        echo "\nBatch $batch — szukam zgłoszeń bez gallery...\n";
+
+        $sql = <<<SQL
+            SELECT key, email, value
+            FROM applications
+            WHERE json_extract(value, '$.contextImage.thumb') IS NOT NULL
+              AND json_extract(value, '$.contextImage.galleryReady') IS NULL
+            LIMIT 1000;
+        SQL;
+
+        $stmt = \store\prepare($sql);
+        $stmt->execute();
+
+        $apps = [];
+        while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+            $apps[$row[0]] = Application::withJson($row[1], $row[2]);
+        }
+
+        foreach ($apps as $app) {
+            if ($interrupt) exit;
+            echo "  - {$app->id} ({$app->contextImage->thumb})\n";
+            if (!$dryRun) {
+                $app->generateGalleryImages();
+                \app\save($app);
+            }
+        }
+
+        echo "  Batch $batch: przetworzono " . count($apps) . " zgłoszeń.\n";
+        $batch++;
+    } while (count($apps) > 0);
+}
+
 //removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
 //removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
 //upgradeAllUsers(false);
 //refreshRecydywa();
 //upgradeAllApps('2.5.2', false);
+//migrateGalleryImages(dryRun:false);
 
 //processWebhooks();

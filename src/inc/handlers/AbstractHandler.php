@@ -29,13 +29,17 @@ abstract class AbstractHandler {
         $response = $response->withHeader('Content-disposition', "inline");
         $response = $response->withStatus(200);
 
-        $fullImagePath = ROOT . $path;
-        if (strpos($path, '?pixelate') !== false) {
-            $fullImagePath = str_replace('?pixelate', '', $fullImagePath);
-            $image = AbstractHandler::pixelate($fullImagePath);
-        } else {
-            $image = file_get_contents($fullImagePath);
-        }
+        $pixelate  = strpos($path, '?pixelate') !== false;
+        $cleanPath = str_replace('?pixelate', '', $path);
+
+        \storage\ensure_local($cleanPath);
+
+        $fullImagePath = ROOT . $cleanPath;
+        $image = $pixelate
+            ? AbstractHandler::pixelate($fullImagePath)
+            : file_get_contents($fullImagePath);
+
+        \storage\release_local($cleanPath);
 
         $response->getBody()->write($image);
         return $response;

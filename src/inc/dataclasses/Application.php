@@ -631,13 +631,67 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     public function getSafeImageUrl(): string {
-        $imageFileName = $this->contextImage->thumb ?? 'img/fff-1.png';
+        $thumb = $this->contextImage->thumb ?? null;
 
-        $pixelate = !($this->showImage ?? false);
-        if ($pixelate)
-            $imageFileName .= '?pixelate';
-        $image = \crypto\encode($imageFileName, CRYPTO_KEY, CRYPTO_IV);
-        return "img-$image.php?sessionless";
+        if ($thumb && \storage\isEnabled()) {
+            if (!($this->contextImage->galleryReady ?? false)) {
+                $this->generateGalleryImages();
+                \app\save($this);
+            }
+            $path = ($this->showImage ?? false) ? $thumb : "{$thumb}?pixelate";
+            return 'cdn2/gallery/' . \crypto\encode($path, CRYPTO_KEY, CRYPTO_IV) . '.jpg';
+        }
+
+        // Fallback: /img-*.php (dev/staging lub przed migracją)
+        $imageFileName = $thumb ?? 'img/fff-1.png';
+        if (!($this->showImage ?? false)) $imageFileName .= '?pixelate';
+        return 'img-' . \crypto\encode($imageFileName, CRYPTO_KEY, CRYPTO_IV) . '.php?sessionless';
+    }
+
+    /**
+     * Generates clear and pixelated gallery thumbnails and uploads them to S3.
+     * The gallery key is crypto\encode of the thumb path (with or without ?pixelate),
+     * so it is identical to the hash already embedded in published /img-*.php URLs.
+     * Sets contextImage->galleryReady = true when done.
+     *
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    public function generateGalleryImages(): void {
+        if (!isset($this->contextImage->thumb) || !\storage\isEnabled()) return;
+
+        $thumb = $this->contextImage->thumb;
+        $thumbPath = ROOT . $thumb;
+
+        $needsRelease = !file_exists($thumbPath);
+        if ($needsRelease) {
+            \storage\ensure_local($thumb);
+        }
+
+        $galleryDir = ROOT . 'cdn2/gallery/';
+        if (!is_dir($galleryDir)) mkdir($galleryDir, 0755, true);
+
+        // Clear version — copy of the thumbnail
+        $clearKey  = \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV);
+        $clearPath = "{$galleryDir}{$clearKey}.jpg";
+        copy($thumbPath, $clearPath);
+        \storage\upload($clearPath, "cdn2/gallery/{$clearKey}.jpg");
+        @unlink($clearPath);
+
+        // Pixelated version
+        $pxKey  = \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV);
+        $pxPath = "{$galleryDir}{$pxKey}.jpg";
+        $src = imagecreatefromjpeg($thumbPath);
+        imagefilter($src, IMG_FILTER_PIXELATE, 10, true);
+        imagejpeg($src, $pxPath, 85);
+        imagedestroy($src);
+        \storage\upload($pxPath, "cdn2/gallery/{$pxKey}.jpg");
+        @unlink($pxPath);
+
+        if ($needsRelease) {
+            \storage\release_local($thumb);
+        }
+
+        $this->contextImage->galleryReady = true;
     }
 
     public function canImageBeShown(User|null $whoIsWathing, bool|null $canShareRecydywa=null): bool {
