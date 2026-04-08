@@ -157,6 +157,10 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
         throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($application->id)", 400);
     }
 
+    if ($pictureType === 'contextImage') {
+        $application->generateGalleryImages();
+    }
+
     \app\save($application);
 
     // Upload all generated files to S3 and remove local copies in production.
