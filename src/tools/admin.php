@@ -39,7 +39,7 @@ function removeUser($email, $dryRun=true){
         removeApplication($app, $dryRun);
     }
 
-    $cdn2UserFolder = __DIR__ . "/../../cdn2/{$user->number}/";
+    $cdn2UserFolder = ROOT . \storage\cdnPrefix() . "/{$user->number}/";
     if(file_exists($cdn2UserFolder) && filetype($cdn2UserFolder) == 'dir'){
         echo "Kasuję folder użytkownika\n";
         if(!$dryRun){

@@ -179,7 +179,7 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
  *   $prefix
  */
 function saveImgAndThumb($application, $imageBytes, $type) {
-    $baseDir = 'cdn2/' . $application->getUserNumber();
+    $baseDir = \storage\cdnPrefix() . '/' . $application->getUserNumber();
     $baseFileName = $baseDir . '/' . $application->id;
 
     if (!file_exists(ROOT . $baseDir)) {
