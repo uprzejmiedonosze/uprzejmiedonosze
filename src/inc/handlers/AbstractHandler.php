@@ -38,7 +38,7 @@ abstract class AbstractHandler {
                 $app = \app\get($m[1]);
                 if (!($app->contextImage->galleryReady ?? false)) {
                     $app->generateGalleryImages();
-                    \app\save($app);
+                    \app\markGalleryReady($app->id, $app->carInfo->plateId ?? null);
                 }
                 $galleryKey = \crypto\encode($path, CRYPTO_KEY, CRYPTO_IV);
                 return $response
