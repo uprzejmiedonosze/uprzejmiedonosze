@@ -436,7 +436,7 @@ function migrateGalleryImages(bool $dryRun=true): void {
         echo "\nBatch $batch — szukam zgłoszeń bez gallery...\n";
 
         $sql = <<<SQL
-            SELECT key, email, value
+            SELECT key, value, email
             FROM applications
             WHERE json_extract(value, '$.contextImage.thumb') IS NOT NULL
               AND json_extract(value, '$.contextImage.galleryReady') IS NULL
@@ -456,7 +456,11 @@ function migrateGalleryImages(bool $dryRun=true): void {
             echo "  - {$app->id} ({$app->contextImage->thumb})\n";
             if (!$dryRun) {
                 $app->generateGalleryImages();
-                \app\markGalleryReady($app->id, $app->carInfo->plateId ?? null);
+                if ($app->contextImage->galleryReady ?? false) {
+                    \app\markGalleryReady($app->id, $app->carInfo->plateId ?? null);
+                } else {
+                    echo "  ! skipped (storage not enabled or generation failed)\n";
+                }
             }
         }
 

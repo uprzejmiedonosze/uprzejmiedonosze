@@ -74,6 +74,7 @@ function download(string $key, string $localPath): bool {
 /**
  * Ensures a file is available at ROOT.$key by downloading it from S3 if missing.
  * No-op when S3 is not enabled or the file already exists locally.
+ * Throws \RuntimeException if the download fails.
  */
 function ensure_local(string $key): void {
     if (!isEnabled()) return;
@@ -81,7 +82,9 @@ function ensure_local(string $key): void {
     if (file_exists($localPath)) return;
     $dir = dirname($localPath);
     if (!is_dir($dir)) mkdir($dir, 0755, true);
-    download($key, $localPath);
+    if (!download($key, $localPath)) {
+        throw new \RuntimeException("S3 ensure_local failed: could not download '$key'");
+    }
 }
 
 /**
