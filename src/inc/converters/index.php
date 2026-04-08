@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../include.php');
 
 function checkUserFoder(string $userNumber): string{
-    $baseDir = ROOT . "cdn2/$userNumber";
+    $baseDir = ROOT . \storage\cdnPrefix() . "/$userNumber";
     if(!file_exists($baseDir))
         mkdir($baseDir, 0755, true);
     return $baseDir;

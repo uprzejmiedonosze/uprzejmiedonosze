@@ -4,7 +4,15 @@ use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
 function isEnabled(): bool {
-    return isProd();
+    return \isProd() || \isStaging();
+}
+
+/**
+ * CDN path prefix for this environment.
+ * prod → "cdn2", staging → "cdn2stg", dev → "cdn2dev"
+ */
+function cdnPrefix(): string {
+    return 'cdn2' . \environmentSuffix();
 }
 
 function client(): S3Client {

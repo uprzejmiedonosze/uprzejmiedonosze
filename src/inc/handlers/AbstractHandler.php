@@ -33,7 +33,8 @@ abstract class AbstractHandler {
         // For contextImage thumbnails in S3 mode: lazy-generate gallery files and
         // permanently redirect to the CDN. The gallery filename IS the crypto hash
         // already embedded in this URL, so no extra encoding is needed.
-        if (\storage\isEnabled() && preg_match('#^cdn2/\d+/([^,]+),co,t\.jpg$#', $cleanPath, $m)) {
+        $cdnPrefix = \storage\cdnPrefix();
+        if (\storage\isEnabled() && preg_match('#^' . preg_quote($cdnPrefix, '#') . '/\d+/([^,]+),co,t\.jpg$#', $cleanPath, $m)) {
             try {
                 $app = \app\get($m[1]);
                 if (!($app->contextImage->galleryReady ?? false)) {
@@ -43,7 +44,7 @@ abstract class AbstractHandler {
                 $galleryKey = \crypto\encode($path, CRYPTO_KEY, CRYPTO_IV);
                 return $response
                     ->withStatus(301)
-                    ->withHeader('Location', '/cdn2/gallery/' . $galleryKey . '.jpg');
+                    ->withHeader('Location', '/' . $cdnPrefix . '/gallery/' . $galleryKey . '.jpg');
             } catch (\Exception $e) {
                 logger("Gallery lazy gen failed for {$m[1]}: " . $e->getMessage(), true);
                 // fall through to normal serve

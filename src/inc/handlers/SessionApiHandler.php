@@ -103,6 +103,14 @@ class SessionApiHandler extends AbstractHandler {
 
         isset($app->$imageId->url) && $rmFile($app->$imageId->url);
         isset($app->$imageId->thumb) && $rmFile($app->$imageId->thumb);
+
+        if ($imageId === 'contextImage' && ($app->contextImage->galleryReady ?? false)) {
+            $thumb     = $app->contextImage->thumb;
+            $prefix    = \storage\cdnPrefix();
+            \storage\delete($prefix . '/gallery/' . \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV) . '.jpg');
+            \storage\delete($prefix . '/gallery/' . \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV) . '.jpg');
+        }
+
         unset($app->$imageId);
         return $app;
     }

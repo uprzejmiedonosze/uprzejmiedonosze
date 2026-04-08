@@ -463,7 +463,7 @@ class Application extends JSONObject implements \JsonSerializable {
             return $this->address->mapImage;
         }
 
-        $baseDir = 'cdn2/' . $this->getUserNumber();
+        $baseDir = \storage\cdnPrefix() . '/' . $this->getUserNumber();
         if(!file_exists(ROOT . $baseDir)){
             mkdir(ROOT . $baseDir, 0755, true);
         }
@@ -639,7 +639,7 @@ class Application extends JSONObject implements \JsonSerializable {
                 \app\markGalleryReady($this->id, $this->carInfo->plateId ?? null);
             }
             $path = ($this->showImage ?? false) ? $thumb : "{$thumb}?pixelate";
-            return 'cdn2/gallery/' . \crypto\encode($path, CRYPTO_KEY, CRYPTO_IV) . '.jpg';
+            return \storage\cdnPrefix() . '/gallery/' . \crypto\encode($path, CRYPTO_KEY, CRYPTO_IV) . '.jpg';
         }
 
         // Fallback: /img-*.php (dev/staging lub przed migracją)
@@ -667,14 +667,15 @@ class Application extends JSONObject implements \JsonSerializable {
             \storage\ensure_local($thumb);
         }
 
-        $galleryDir = ROOT . 'cdn2/gallery/';
+        $cdnPrefix  = \storage\cdnPrefix();
+        $galleryDir = ROOT . $cdnPrefix . '/gallery/';
         if (!is_dir($galleryDir)) mkdir($galleryDir, 0755, true);
 
         // Clear version — copy of the thumbnail
         $clearKey  = \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV);
         $clearPath = "{$galleryDir}{$clearKey}.jpg";
         copy($thumbPath, $clearPath);
-        \storage\upload($clearPath, "cdn2/gallery/{$clearKey}.jpg");
+        \storage\upload($clearPath, "{$cdnPrefix}/gallery/{$clearKey}.jpg");
         @unlink($clearPath);
 
         // Pixelated version
@@ -684,7 +685,7 @@ class Application extends JSONObject implements \JsonSerializable {
         imagefilter($src, IMG_FILTER_PIXELATE, 10, true);
         imagejpeg($src, $pxPath, 85);
         imagedestroy($src);
-        \storage\upload($pxPath, "cdn2/gallery/{$pxKey}.jpg");
+        \storage\upload($pxPath, "{$cdnPrefix}/gallery/{$pxKey}.jpg");
         @unlink($pxPath);
 
         if ($needsRelease) {
