@@ -34,7 +34,7 @@ function rmZip(Application &$application): void{
     $userNumber = $application->getUserNumber();
     $baseDir = checkUserFoder($userNumber);
 
-    $filename = $application->getAppFilename('.zip');
+    $filename = $application->getAppFilename('.zip', 'Zdjecia_');
     $fullPath = "$baseDir/$filename";
 
     if (file_exists($fullPath)) {
