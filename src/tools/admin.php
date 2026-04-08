@@ -87,9 +87,22 @@ function removeApplication($app, $dryRun){
     if(isset($app->contextImage)){
         removeFile($app->contextImage->url, $dryRun);
         removeFile($app->contextImage->thumb, $dryRun);
+        if ($app->contextImage->galleryReady ?? false) {
+            $thumb  = $app->contextImage->thumb;
+            $prefix = \storage\cdnPrefix();
+            removeFile($prefix . '/gallery/' . \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV) . '.jpg', $dryRun);
+            removeFile($prefix . '/gallery/' . \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV) . '.jpg', $dryRun);
+        }
+    }
+    if(isset($app->thirdImage)){
+        removeFile($app->thirdImage->url, $dryRun);
+        removeFile($app->thirdImage->thumb, $dryRun);
     }
     if(isset($app->carInfo) && isset($app->carInfo->plateImage)){
         removeFile($app->carInfo->plateImage, $dryRun);
+    }
+    if(isset($app->address) && isset($app->address->mapImage)){
+        removeFile($app->address->mapImage, $dryRun);
     }
 
     echo " zgłoszenie oraz jego pliki usunięte;\n\n";
@@ -109,13 +122,20 @@ function removeFile($fileName, $dryRun){
             echo " ! '$fileName' nie jest plikiem\n";
             return;
         }
-        echo " - usuwam '$fileName'\n";
-        if(!$dryRun) unlink($file);
+        if(!$dryRun) {
+            unlink($file);
+            \storage\delete($fileName);
+            echo " - $fileName usunięty lokalnie, usunięty z S3\n";
+        } else {
+            echo " - $fileName (do usunięcia lokalnie + S3)\n";
+        }
     } else {
-        echo " ! plik '$fileName' nie istnieje lokalnie\n";
-    }
-    if(!$dryRun){
-        \storage\delete($fileName);
+        if(!$dryRun) {
+            \storage\delete($fileName);
+            echo " - $fileName nie istniał lokalnie, usunięty z S3\n";
+        } else {
+            echo " - $fileName (nie istnieje lokalnie, do usunięcia z S3)\n";
+        }
     }
 }
 
