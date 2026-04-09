@@ -128,6 +128,22 @@ function exists(string $key): bool {
 }
 
 /**
+ * Returns the ContentLength of an S3 object, or null if missing / S3 not enabled.
+ */
+function remote_size(string $key): ?int {
+    if (!isEnabled()) return null;
+    try {
+        $result = client()->headObject([
+            'Bucket' => \S3_BUCKET,
+            'Key'    => $key,
+        ]);
+        return (int) $result['ContentLength'];
+    } catch (AwsException $e) {
+        return null;
+    }
+}
+
+/**
  * Deletes an S3 object. Silently ignores missing keys.
  */
 function delete(string $key): void {

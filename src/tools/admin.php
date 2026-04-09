@@ -469,6 +469,56 @@ function migrateGalleryImages(bool $dryRun=true): void {
     } while (count($apps) > 0);
 }
 
+/**
+ * Removes local CDN files that are already on S3 with a matching size.
+ * Files missing from S3 or with a size mismatch are reported but left intact.
+ *
+ * Usage: purgeLocalFiles(dryRun:false);
+ */
+function purgeLocalFiles(bool $dryRun=true): void {
+    $cdnDir = ROOT . \storage\cdnPrefix();
+    if (!is_dir($cdnDir)) {
+        echo "Katalog $cdnDir nie istnieje — brak plików lokalnych.\n";
+        return;
+    }
+
+    $deleted = $missing = $mismatch = $skipped = 0;
+
+    $iter = new \RecursiveIteratorIterator(
+        new \RecursiveDirectoryIterator($cdnDir, \FilesystemIterator::SKIP_DOTS)
+    );
+
+    foreach ($iter as $file) {
+        if (!$file->isFile()) continue;
+
+        // Compute S3 key relative to ROOT (e.g. "cdn2/15742/abc,ca.jpg")
+        $localPath = $file->getPathname();
+        $key = ltrim(substr($localPath, strlen(ROOT)), '/');
+
+        $localSize  = $file->getSize();
+        $remoteSize = \storage\remote_size($key);
+
+        if ($remoteSize === null) {
+            echo " ? $key — brak na S3 (lokalnie: $localSize B)\n";
+            $missing++;
+        } elseif ($remoteSize !== $localSize) {
+            echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B)\n";
+            $mismatch++;
+        } else {
+            if ($dryRun) {
+                echo " - $key ($localSize B) — do usunięcia\n";
+            } else {
+                unlink($localPath);
+                echo " - $key ($localSize B) — usunięty\n";
+            }
+            $deleted++;
+        }
+    }
+
+    echo "\nPodsumowanie:";
+    echo " usunięto=$deleted, brak_na_S3=$missing, niezgodny_rozmiar=$mismatch\n";
+}
+
 //removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
 //removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
 //upgradeAllUsers(false);
