@@ -749,7 +749,7 @@ class Application extends JSONObject implements \JsonSerializable {
 
     /**
      * Removes locally cached copies that were fetched via ensureLocal().
-     * No-op when S3 storage is not enabled.
+     * No-op when S3 storage is not enabled or the file is not yet present on S3.
      */
     public function releaseLocal(): void {
         foreach ($this->getImageKeys() as $key) {

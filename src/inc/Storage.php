@@ -54,7 +54,8 @@ function upload(string $localPath, string $key): void {
 
 /**
  * Downloads an S3 object to a local path.
- * Returns true on success, false if the object is missing or on error.
+ * Returns true on success, false if S3 is not enabled.
+ * Throws AwsException on failure (caller gets the full error).
  */
 function download(string $key, string $localPath): bool {
     if (!isEnabled()) return false;
@@ -67,14 +68,15 @@ function download(string $key, string $localPath): bool {
         return true;
     } catch (AwsException $e) {
         logger("S3 download failed for $key: " . $e->getMessage(), true);
-        return false;
+        throw $e;
     }
 }
 
 /**
  * Ensures a file is available at ROOT.$key by downloading it from S3 if missing.
  * No-op when S3 is not enabled or the file already exists locally.
- * Throws \RuntimeException if the download fails.
+ * Retries up to 3 times (2 s gaps) to handle S3 propagation delays.
+ * Throws \RuntimeException wrapping the last AwsException on permanent failure.
  */
 function ensure_local(string $key): void {
     if (!isEnabled()) return;
@@ -82,9 +84,21 @@ function ensure_local(string $key): void {
     if (file_exists($localPath)) return;
     $dir = dirname($localPath);
     if (!is_dir($dir)) mkdir($dir, 0755, true);
-    if (!download($key, $localPath)) {
-        throw new \RuntimeException("S3 ensure_local failed: could not download '$key'");
+    $lastException = null;
+    for ($attempt = 1; $attempt <= 3; $attempt++) {
+        try {
+            download($key, $localPath);
+            return;
+        } catch (AwsException $e) {
+            $lastException = $e;
+            if ($attempt < 3) sleep(1);
+        }
     }
+    throw new \RuntimeException(
+        "S3 ensure_local failed after 3 attempts: '$key': " . $lastException->getMessage(),
+        0,
+        $lastException
+    );
 }
 
 /**
@@ -93,7 +107,24 @@ function ensure_local(string $key): void {
  */
 function release_local(string $key): void {
     if (!isEnabled()) return;
+    if (!exists($key)) return;
     @unlink(ROOT . $key);
+}
+
+/**
+ * Returns true if the S3 object exists, false otherwise (including when S3 is disabled).
+ */
+function exists(string $key): bool {
+    if (!isEnabled()) return false;
+    try {
+        client()->headObject([
+            'Bucket' => \S3_BUCKET,
+            'Key'    => $key,
+        ]);
+        return true;
+    } catch (AwsException $e) {
+        return false;
+    }
 }
 
 /**
