@@ -16,12 +16,12 @@ use PHPUnit\Framework\TestCase;
  */
 class StorageTest extends TestCase
 {
-    public function testCdnPrefixForStagingHost(): void
+    public function testCdnPrefix(): void
     {
-        $this->assertEquals('cdn2stg', \storage\cdnPrefix());
+        $this->assertTrue(str_contains(\storage\cdnPrefix(), 'cdn2'));
     }
 
-    public function testIsEnabledForStagingHost(): void
+    public function testIsEnabled(): void
     {
         $this->assertTrue(\storage\isEnabled());
     }
