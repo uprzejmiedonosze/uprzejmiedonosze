@@ -1,0 +1,9 @@
+[Unit]
+Description=Run ud-cleanup daily at 02:00
+
+[Timer]
+OnCalendar=*-*-* 02:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

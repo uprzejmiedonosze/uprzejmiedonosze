@@ -359,6 +359,11 @@ init-db-staging:
 init-db-dev:
 	@docker exec webapp sqlite3 /var/www/localhost/db/store.sqlite -init /var/www/localhost/webapp/sql/init_empty.sql
 
+.PHONY: install-timer
+install-timer: ## Install ud-cleanup systemd timer on production (run once after first deploy)
+	@scp docker/ud-cleanup.service docker/ud-cleanup.timer $(HOSTING):/etc/systemd/system/
+	@ssh $(HOSTING) "systemctl daemon-reload && systemctl enable --now ud-cleanup.timer && systemctl list-timers ud-cleanup.timer"
+
 # defines
 
 define last-tag

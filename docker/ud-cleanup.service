@@ -1,0 +1,10 @@
+[Unit]
+Description=Uprzejmie Donosze — cleanup stale draft/ready applications
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/php /var/www/uprzejmiedonosze.net/tools/cleanup.php
+StandardOutput=journal
+StandardError=journal

@@ -541,11 +541,3 @@ function purgeLocalFiles(bool $dryRun=true): void {
     echo " usunięto=$deleted, pominięto=$skipped, brak_na_S3=$missing, niezgodny_rozmiar=$mismatch\n";
 }
 
-//removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
-//removeAppsByStatus(olderThan:30, status:'ready', dryRun:false);
-//upgradeAllUsers(false);
-//refreshRecydywa();
-//upgradeAllApps('2.5.2', false);
-//migrateGalleryImages(dryRun:false);
-
-//processWebhooks();
