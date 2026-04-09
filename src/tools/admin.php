@@ -471,6 +471,8 @@ function migrateGalleryImages(bool $dryRun=true): void {
 
 /**
  * Removes local CDN files that are already on S3 with a matching size.
+ * Files belonging to applications in draft/ready/confirmed status are skipped
+ * (they may be actively edited and not yet fully synced).
  * Files missing from S3 or with a size mismatch are reported but left intact.
  *
  * Usage: purgeLocalFiles(dryRun:false);
@@ -481,6 +483,16 @@ function purgeLocalFiles(bool $dryRun=true): void {
         echo "Katalog $cdnDir nie istnieje — brak plików lokalnych.\n";
         return;
     }
+
+    // Collect IDs of applications that are actively being worked on.
+    $stmt = \store\prepare(<<<SQL
+        SELECT key FROM applications
+        WHERE json_extract(value, '$.status') IN ('draft', 'ready', 'confirmed')
+    SQL);
+    $stmt->execute();
+    $activeIds = array_column($stmt->fetchAll(\PDO::FETCH_NUM), 0);
+    $activeIds = array_flip($activeIds); // for O(1) lookup
+    echo "Pomijam pliki należące do " . count($activeIds) . " aktywnych zgłoszeń (draft/ready/confirmed).\n\n";
 
     $deleted = $missing = $mismatch = $skipped = 0;
 
@@ -494,6 +506,16 @@ function purgeLocalFiles(bool $dryRun=true): void {
         // Compute S3 key relative to ROOT (e.g. "cdn2/15742/abc,ca.jpg")
         $localPath = $file->getPathname();
         $key = ltrim(substr($localPath, strlen(ROOT)), '/');
+
+        // Extract app ID: filename up to first comma (e.g. "abc" from "abc,ca.jpg")
+        $basename = $file->getBasename();
+        $appId = strstr($basename, ',', before_needle: true) ?: $basename;
+
+        if (isset($activeIds[$appId])) {
+            echo " ~ $key — pominięty (aktywne zgłoszenie)\n";
+            $skipped++;
+            continue;
+        }
 
         $localSize  = $file->getSize();
         $remoteSize = \storage\remote_size($key);
@@ -516,7 +538,7 @@ function purgeLocalFiles(bool $dryRun=true): void {
     }
 
     echo "\nPodsumowanie:";
-    echo " usunięto=$deleted, brak_na_S3=$missing, niezgodny_rozmiar=$mismatch\n";
+    echo " usunięto=$deleted, pominięto=$skipped, brak_na_S3=$missing, niezgodny_rozmiar=$mismatch\n";
 }
 
 //removeAppsByStatus(olderThan:10, status:'draft', dryRun:false);
