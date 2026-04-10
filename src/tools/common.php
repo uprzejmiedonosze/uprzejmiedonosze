@@ -547,3 +547,65 @@ function purgeLocalFiles(bool $dryRun=true): void {
     echo " usunięto=$deleted, wysłano_do_S3=$missing, pominięto=$skipped, niezgodny_rozmiar=$mismatch\n";
 }
 
+/**
+ * Compares local CDN volume with S3. Never deletes anything.
+ * - file local, brak na S3  → wysyła do S3 i raportuje
+ * - plik lokalny OK         → cicho pomija
+ * - rozmiar niezgodny       → raportuje
+ * Applications in draft/ready/confirmed status are skipped.
+ *
+ * Usage: checkS3();
+ */
+function checkS3(): void {
+    $cdnDir = ROOT . \storage\cdnPrefix();
+    if (!is_dir($cdnDir)) {
+        echo "Katalog $cdnDir nie istnieje — brak plików lokalnych.\n";
+        return;
+    }
+
+    $stmt = \store\prepare(<<<SQL
+        SELECT key FROM applications
+        WHERE json_extract(value, '$.status') IN ('draft', 'ready', 'confirmed')
+    SQL);
+    $stmt->execute();
+    $activeIds = array_flip(array_column($stmt->fetchAll(\PDO::FETCH_NUM), 0));
+    echo "Pomijam pliki należące do " . count($activeIds) . " aktywnych zgłoszeń (draft/ready/confirmed).\n\n";
+
+    $uploaded = $mismatch = $skipped = $ok = 0;
+
+    $iter = new \RecursiveIteratorIterator(
+        new \RecursiveDirectoryIterator($cdnDir, \FilesystemIterator::SKIP_DOTS)
+    );
+
+    foreach ($iter as $file) {
+        if (!$file->isFile()) continue;
+
+        $localPath = $file->getPathname();
+        $key       = ltrim(substr($localPath, strlen(ROOT)), '/');
+        $basename  = $file->getBasename();
+        $appId     = strstr($basename, ',', before_needle: true) ?: $basename;
+
+        if (isset($activeIds[$appId])) {
+            $skipped++;
+            continue;
+        }
+
+        $localSize  = $file->getSize();
+        $remoteSize = \storage\remote_size($key);
+
+        if ($remoteSize === null) {
+            \storage\upload($localPath, $key);
+            echo " ^ $key ($localSize B) — brakowało na S3, wysłany\n";
+            $uploaded++;
+        } elseif ($remoteSize !== $localSize) {
+            echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B)\n";
+            $mismatch++;
+        } else {
+            $ok++;
+        }
+    }
+
+    echo "\nPodsumowanie:";
+    echo " ok=$ok, wysłano_do_S3=$uploaded, niezgodny_rozmiar=$mismatch, pominięto=$skipped\n";
+}
+

@@ -11,4 +11,5 @@ require_once(__DIR__ . '/common.php');
 //upgradeAllApps('2.5.2', dryRun:true);
 //migrateGalleryImages(dryRun:true);
 //purgeLocalFiles(dryRun:true);
+//checkS3();
 //processWebhooks();
