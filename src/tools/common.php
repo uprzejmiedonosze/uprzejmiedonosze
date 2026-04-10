@@ -473,7 +473,8 @@ function migrateGalleryImages(bool $dryRun=true): void {
  * Removes local CDN files that are already on S3 with a matching size.
  * Files belonging to applications in draft/ready/confirmed status are skipped
  * (they may be actively edited and not yet fully synced).
- * Files missing from S3 or with a size mismatch are reported but left intact.
+ * Files missing from S3 are uploaded first, then removed locally.
+ * Files with a size mismatch are reported but left intact.
  *
  * Usage: purgeLocalFiles(dryRun:false);
  */
@@ -521,7 +522,12 @@ function purgeLocalFiles(bool $dryRun=true): void {
         $remoteSize = \storage\remote_size($key);
 
         if ($remoteSize === null) {
-            echo " ? $key — brak na S3 (lokalnie: $localSize B)\n";
+            if ($dryRun) {
+                echo " ^ $key — brak na S3, do wysłania\n";
+            } else {
+                \storage\upload($localPath, $key);
+                echo " ^ $key ($localSize B) — wysłany do S3\n";
+            }
             $missing++;
         } elseif ($remoteSize !== $localSize) {
             echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B)\n";
@@ -538,6 +544,6 @@ function purgeLocalFiles(bool $dryRun=true): void {
     }
 
     echo "\nPodsumowanie:";
-    echo " usunięto=$deleted, pominięto=$skipped, brak_na_S3=$missing, niezgodny_rozmiar=$mismatch\n";
+    echo " usunięto=$deleted, wysłano_do_S3=$missing, pominięto=$skipped, niezgodny_rozmiar=$mismatch\n";
 }
 
