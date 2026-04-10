@@ -585,7 +585,7 @@ function checkS3(): void {
         $basename  = $file->getBasename();
         $appId     = strstr($basename, ',', before_needle: true) ?: $basename;
 
-        if (isset($activeIds[$appId])) {
+        if (isset($activeIds[$appId]) || $file->getExtension() === 'pdf') {
             $skipped++;
             continue;
         }
