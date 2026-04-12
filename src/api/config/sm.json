@@ -740,6 +740,9 @@
     "email": "ksm@um.gorzow.pl",
     "hint": "Niestety SM Gorzów wzywa na przesłuchanie w każdej sprawie."
   },
+  "Gorzów Wlkp.": {
+    "parent": "Gorzów Wielkopolski"
+  },
   "Stronie Śląskie": {
     "address": [
       "Straż Miejska w Stroniu Śląskim",
@@ -3825,14 +3828,6 @@
     ],
     "email": "strazmiejska@czerwiensk.pl"
   },
-  "Gorzów Wlkp.": {
-    "address": [
-      "Straż Miejska w Gorzowie Wlkp.",
-      "ul. Myśliborska 34",
-      "66-400 Gorzów Wlkp."
-    ],
-    "email": "ksm@strazgorzow.pl"
-  },
   "Gubin": {
     "address": [
       "Straż Miejska w Gubinie",
@@ -4507,5 +4502,13 @@
       "84-200 Wejherowo"
     ],
     "email": "komenda.wejherowo@gd.policja.gov.pl"
+  },
+  "powiat gorzowski": {
+    "address": [
+      "Komenda Miejska Policji w Gorzowie Wlkp.",
+      "ul. Stefana Wyszyńskiego 122",
+      "66-400 Gorzów Wielkopolski"
+    ],
+    "email": "dyzurny.kmp_gorzow@go.policja.gov.pl"
   }
 }
