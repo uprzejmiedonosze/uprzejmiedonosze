@@ -221,6 +221,11 @@ function saveImgAndThumb($application, $imageBytes, $type) {
     }
     fclose($ifp);
 
+    $fullSize = getimagesize($fileName);
+    if ($fullSize[0] > 1600 || $fullSize[1] > 1600) {
+        imagejpeg(resize_image($fileName, 1600, 1600, false), $fileName, 95);
+    }
+
     if (!imagejpeg(resize_image($fileName, 600, 600, false), $thumbName)) {
         logger("Wasn't able to write $fileName as thumb to $thumbName.", true);
     }

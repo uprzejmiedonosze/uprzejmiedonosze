@@ -176,8 +176,8 @@ function resizeImage(imgToResize) {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
-  const MAX_WIDTH = 1200;
-  const MAX_HEIGHT = 1200;
+  const MAX_WIDTH = 1600;
+  const MAX_HEIGHT = 1600;
   let canvasWidth = imgToResize.width;
   let canvasHeight = imgToResize.height;
 
