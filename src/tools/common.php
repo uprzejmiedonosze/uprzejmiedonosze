@@ -184,15 +184,20 @@ function cleanupStuckSendingApps($olderThanMinutes = 10, $dryRun = true) {
     foreach ($apps as $app) {
         if ($interrupt) exit;
         
-        $sentDate = isset($app->sent->date) ? strtotime($app->sent->date) : null;
-        if (!$sentDate) {
-            // If it's 'sending' but has no sent date, it might have failed extremely early.
-            // We use 'added' date as fallback if available.
-            $sentDate = isset($app->added) ? strtotime($app->added) : null;
+        $lastStatusChange = null;
+        if (isset($app->statusHistory) && !empty((array)$app->statusHistory)) {
+            $timestamps = array_keys((array)$app->statusHistory);
+            rsort($timestamps);
+            $lastStatusChange = strtotime($timestamps[0]);
         }
 
-        if ($sentDate && $sentDate < $threshold) {
-            echo " - Markowanie zgłoszenia {$app->id} jako 'sending-failed' (z dnia " . date('Y-m-d H:i:s', $sentDate) . ")\n";
+        if (!$lastStatusChange) {
+            // Fallback to 'added' if statusHistory is missing or empty
+            $lastStatusChange = isset($app->added) ? strtotime($app->added) : null;
+        }
+
+        if ($lastStatusChange && $lastStatusChange < $threshold) {
+            echo " - Markowanie zgłoszenia {$app->id} jako 'sending-failed' (ostatnia zmiana statusu: " . date('Y-m-d H:i:s', $lastStatusChange) . ")\n";
             if (!$dryRun) {
                 $app->setStatus('sending-failed', true);
                 unset($app->sent);
