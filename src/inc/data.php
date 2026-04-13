@@ -31,7 +31,10 @@ EOD,
             "Przepisy tworzą zachęty ekonomiczne do nielegalnego parkowania.",
             "Przez wadliwe przepisy poslskie miasta toną w słupkach.",
             "Samorządy są bezsilne, bo Ministerstwo Infrastruktury odmawia zmiany definicji opłat, zasłaniając się kompetencjami MSWiA.",
-            "Wadliwe przepisy skutkują niszczeniem zieleni i infrastruktury."
+            "Wadliwe przepisy skutkują niszczeniem zieleni i infrastruktury.",
+            "Łączne opłaty dodatkowe w strefach płatnego parkowania przekroczyły 134 mln zł rocznie, podczas gdy mandaty za nielegalne parkowanie wyniosły zaledwie 42 mln zł – samorządy trzykrotnie surowiej karzą tych, którzy parkują legalnie. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)",
+            "W Opolu kierowcy parkujący niezgodnie z przepisami są traktowani prawie 9 razy łagodniej niż ci, którzy spóźnili się z opłatą parkingową. To najgorszy wynik w Polsce. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)",
+            "Gorzów Wielkopolski jest jedynym miastem wojewódzkim w Polsce, gdzie mandaty za nielegalne parkowanie przewyższają opłaty dodatkowe z SPP – wszędzie indziej system działa na odwrót. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)"
         ],
         "law" => <<<EOD
 Absolutnym minimum jest doprowadzenie do sytuacji, w której postój niezgodny z przepisany jest droższy, niż prawidłowy postój w strefie. Teraz jest na odwrót.
@@ -90,7 +93,10 @@ EOD,
             "Kara za przejazd autobusem „na gapę” to nawet 550 zł, za nielegalne parkowanie 100 zł.",
             "Mandat za rzucenie papierka na chodnik to 500 zł, porzucenie na nim auta to mandat 100 zł.",
             "Przestarzały taryfikator powoduje faktyczną depenalizację patoparkowania.",
-            "Waloryzacja taryfikatora za przekraczenia prędkości spowodowała faktyczną zmianę w zachowaniu kierowców."
+            "Waloryzacja taryfikatora za przekraczenia prędkości spowodowała faktyczną zmianę w zachowaniu kierowców.",
+            "Wystawienie jednego mandatu kosztuje budżet publiczny średnio ponad 1 700 zł – kilkanaście razy więcej niż jego nominalna wartość. Dla straży miejskiej w Zielonej Górze to aż 6 994 zł za jeden mandat. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)",
+            "Straże miejskie pokrywają z mandatów średnio zaledwie 8,2% własnego budżetu – reszta pochodzi z kieszeni podatnika, a nie z kar dla łamiących przepisy. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)",
+            "Najlepsza straż miejska w Polsce wystawia niecały jeden mandat dziennie na strażnika. Dla większości – jeden mandat co dwa dni. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)"
         ],
         "law" => <<<EOD
 Proponuję waloryzację wszystkich pozycji w sekcji K („Zatrzymanie i postój”) o 300% – czyli wyraźnie poniżej wskaźnika wzrostu pensji minimalnej. Równocześnie postuluję uzupełnienie art. 38 § 2 Kodeksu wykroczeń („Recydywa wielokrotna”) o art. 97 („Naruszenie przepisów o bezpieczeństwie lub porządku w ruchu drogowym”).
@@ -142,8 +148,10 @@ EOD,
             "Recydywiści łamania przepisów ruchu drogowego masowo nie płącą mandatów.",
             "Patent „na obcokrajowca” jest powszechnie stosowanym sposobem na uniknięcie mandatu i punktów karnych.",
             "Wystawienie stuzłotowego mandatu za nielegalne parkowanie wymaga kilkunastu godzin pracy strażnika miejskiego.",
-            "Procedura mandatowa jest uciążliwe dla służb i faktycznie chcących zapłacić mandat. Równocześnie pozstawia wiele furtek dla osób świadomie łamiących przepisy."
-        
+            "Procedura mandatowa jest uciążliwe dla służb i faktycznie chcących zapłacić mandat. Równocześnie pozstawia wiele furtek dla osób świadomie łamiących przepisy.",
+            "76% mandatów straży miejskich dotyczy przepisów ruchu drogowego, a niemal wszystkie z nich to mandaty za parkowanie – straż miejska jest de facto strażą parkingową. (raport NIK o straży gminnej/miejskiej z 2016 roku)",
+            "Prawdopodobieństwo otrzymania mandatu za nielegalne parkowanie w Polsce wynosi ułamki procenta. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)",
+            "W Polsce jest 407 formacji straży miejskiej/gminnej. Żadna z nich nie zbliża się do jednego mandatu parkingowego na strażnika dziennie. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)"
         ],
         "law" => <<<EOD
 Rozwiązaniem problemu jest domyślne karanie właściciela pojazdu. Podobnie jak ma to miejsce w przypadku nakładania opłat dodatkowych w strefie płatnego parkowania. Oczywiście właściciel pojazdu powinien móc skutecznie zwolnić się z obowiązku uiszczenia mandatu pod warunkiem doręczenia organowi dowodu potwierdzającego korzystanie z pojazdu przez osobę trzecią w postaci pisemnego oświadczenia osoby kierującej pojazdem, zawierającego jej dane.
@@ -173,7 +181,9 @@ EOD,
             "Państwo polskie wykazuje skrajną niezdolność do usuwania wraków i aut patoparkujących z kluczowych arterii pieszych.",
             "Pojazd zasłaniający widoczność przy przejściu powinien znikać z drogi natychmiast, bez dyskusji o 'stopniu zagrożenia'.",
             "Przepisy nie pozwalają usuwać pojazdów z dróg pożarowych, o ile 'nie utrudniają ruchu' w danej sekundzie.",
-            "Słynne „betonowe auto z Łodzi” nie zostało odholowane przez łódzką SM właśnie z powodu wadliwych przepisów."
+            "Słynne „betonowe auto z Łodzi” nie zostało odholowane przez łódzką SM właśnie z powodu wadliwych przepisów.",
+            "Warszawa odpowiada za ponad 64% wszystkich odholowań w miastach wojewódzkich. Rzeszów i Zielona Góra w 2024 roku nie odholowały żadnego pojazdu. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)",
+            "Zaledwie 0,8% holowań dotyczy pojazdów stwarzających zagrożenie – jedynej kategorii, która obejmuje auta zasłaniające przejścia dla pieszych. (Ranking Straży Miejskich, agendaparkingowa.pl/ranking-sm.html)"
         ],
         "law" => <<<EOD
 Proponuję, aby w ustawie prawo o ruchu drogowym art. 130a w ust. 1 pkt 1 przyjął postać:
