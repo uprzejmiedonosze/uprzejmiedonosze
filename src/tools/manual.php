@@ -13,3 +13,4 @@ require_once(__DIR__ . '/common.php');
 //purgeLocalFiles(dryRun:true);
 //checkS3();
 //processWebhooks();
+//cleanupStuckSendingApps(10, true);
