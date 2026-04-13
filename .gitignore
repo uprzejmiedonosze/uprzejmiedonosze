@@ -23,4 +23,4 @@ src/tensor
 testy
 vendor/**
 .sentryclirc
-.claude/*
+.claude/settings.local.json
