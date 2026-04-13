@@ -64,6 +64,13 @@ class MailGun extends CityAPI {
         try {
             \semaphore\acquire($application->id, "sendMailGun");
             $application = \app\get($application->id); // get the latest version of the application
+            parent::checkApplication($application);
+
+            [$fileatt, $fileattname] = \app\toPdf($application);
+            $message->attachFromPath($fileatt, $fileattname);
+            [$fileatt, $fileattname] = \app\toZip($application);
+            $message->attachFromPath($fileatt, $fileattname);
+
             $application->setStatus('sending');
             $application->sent = new JSONObject();
             $application->sent->date = date(DT_FORMAT);
@@ -74,11 +81,6 @@ class MailGun extends CityAPI {
             $application->sent->body = parent::formatEmail($application, false);
             $application->sent->method = "MailGun";
             \app\save($application);
-
-            [$fileatt, $fileattname] = \app\toPdf($application);
-            $message->attachFromPath($fileatt, $fileattname);
-            [$fileatt, $fileattname] = \app\toZip($application);
-            $message->attachFromPath($fileatt, $fileattname);
 
             if (!isDev()) {
                 if ($this->alternate) {
@@ -94,12 +96,15 @@ class MailGun extends CityAPI {
                 logger("Marking app {$application->id} as confirmed-waiting (sent)");
                 \app\save($application);
             }
-        } catch (Exception $error) {
+        } catch (\Throwable $error) {
             logger("Sending email {$application->id} with MailGun, exception: " . $error->getMessage(), true);
             $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);
-            throw new Exception($error->getMessage(), 500, $error);
+            if ($error instanceof \Exception) {
+                throw $error;
+            }
+            throw new \Exception($error->getMessage(), 500, $error);
         } finally {
             \semaphore\release($application->id, "sendMailGun");
             \app\rmPdf($application);

@@ -172,6 +172,37 @@ function removeAppsByStatus($olderThan, $status, $dryRun){ // days
 }
 
 /**
+ * Marks stuck sending apps as failed
+ */
+function cleanupStuckSendingApps($olderThanMinutes = 10, $dryRun = true) {
+    global $interrupt;
+    echo "Szukam zgłoszeń utkniętych w statusie 'sending' (starszych niż $olderThanMinutes min)...\n";
+    $apps = getAllApplicationsByStatus('sending');
+
+    $threshold = time() - ($olderThanMinutes * 60);
+
+    foreach ($apps as $app) {
+        if ($interrupt) exit;
+        
+        $sentDate = isset($app->sent->date) ? strtotime($app->sent->date) : null;
+        if (!$sentDate) {
+            // If it's 'sending' but has no sent date, it might have failed extremely early.
+            // We use 'added' date as fallback if available.
+            $sentDate = isset($app->added) ? strtotime($app->added) : null;
+        }
+
+        if ($sentDate && $sentDate < $threshold) {
+            echo " - Markowanie zgłoszenia {$app->id} jako 'sending-failed' (z dnia " . date('Y-m-d H:i:s', $sentDate) . ")\n";
+            if (!$dryRun) {
+                $app->setStatus('sending-failed', true);
+                unset($app->sent);
+                \app\save($app);
+            }
+        }
+    }
+}
+
+/**
  * Returns all applications by status.
  */
 function getAllApplicationsByStatus($status){
