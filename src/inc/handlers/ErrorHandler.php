@@ -19,7 +19,7 @@ function getCustomErrorHandler(App $app): callable {
         $msg = $exception->getMessage() . " [$email], " . trimAbsolutePaths($exception->getFile())
             . ':' . $exception->getLine();
 
-        if (isProd() && $status != 404) \Sentry\captureException($exception);
+        if (isProd() && $status >= 500) \Sentry\captureException($exception);
         logger($msg, $status != 404);
         logger(trimAbsolutePaths($exception->getTraceAsString()));
         
