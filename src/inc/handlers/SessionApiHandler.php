@@ -178,6 +178,10 @@ class SessionApiHandler extends AbstractHandler {
             return $this->renderJson($response, array(
                 "status" => "redirect"
             ));
+        } catch (NotSendableException $e) {
+            return $this->renderJson($response->withStatus(409), array(
+                "error" => $e->getMessage()
+            ));
         }
         return $this->renderJson($response, array(
             "status" => $application->status

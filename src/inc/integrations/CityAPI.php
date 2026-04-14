@@ -10,7 +10,7 @@ abstract class CityAPI {
         global $STATUSES;
         $status = $STATUSES[$application->status];
         if(!$status->sendable){
-            throw new Exception("Nie mogę wysłać zgłoszenia '{$application->number}' w statusie '{$status->name}'", 403);
+            throw new NotSendableException("Nie mogę wysłać zgłoszenia '{$application->number}' w statusie '{$status->name}'");
         }
         if(!$application->guessSMData(true)->api){
             throw new MissingSMException("Nie mogę wysłać zgłoszenia '{$application->number}' – brak przypisanej straży miejskiej");

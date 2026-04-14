@@ -39,3 +39,9 @@ class MissingSMException extends Exception {
         parent::__construct($msg, 307);
     }
 }
+
+class NotSendableException extends Exception {
+    public function __construct(string $msg) {
+        parent::__construct($msg, 409);
+    }
+}
