@@ -84,12 +84,15 @@ function ensure_local(string $key): void {
     if (file_exists($localPath)) return;
     $dir = dirname($localPath);
     if (!is_dir($dir)) mkdir($dir, 0755, true);
+    $tmpPath = $localPath . '.tmp.' . getmypid();
     $lastException = null;
     for ($attempt = 1; $attempt <= 3; $attempt++) {
         try {
-            download($key, $localPath);
+            download($key, $tmpPath);
+            rename($tmpPath, $localPath);
             return;
         } catch (AwsException $e) {
+            @unlink($tmpPath);
             $lastException = $e;
             if ($attempt < 3) sleep(1);
         }
