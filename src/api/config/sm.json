@@ -4511,5 +4511,13 @@
       "66-400 Gorzów Wielkopolski"
     ],
     "email": "dyzurny.kmp_gorzow@go.policja.gov.pl"
+  },
+  "powiat chrzanowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Chrzanowie",
+      "ul. Jordana 7",
+      "32-500 Chrzanów"
+    ],
+    "email": "prezydialny@chrzanow.policja.gov.pl"
   }
 }
