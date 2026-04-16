@@ -1,0 +1,10 @@
+[Unit]
+Description=Uprzejmie Donosze — remove inactive user accounts
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/old-users-removal.php
+StandardOutput=journal
+StandardError=journal
