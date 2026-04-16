@@ -3,6 +3,7 @@
 require(__DIR__ . '/../../vendor/autoload.php');
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/store/Admin.php');
+require_once(__DIR__ . '/common.php');
 
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Mailer;
@@ -17,7 +18,7 @@ function sendWarning() {
     $candidates = getInactiveUsers();
 
     foreach ($candidates as $user) {
-        print("\nsendWarning" . $user->getEmail());
+        print("\nsendWarning " . $user->getEmail());
         __sendWarning($user);
     }
 }
@@ -26,7 +27,7 @@ function send2ndWarning() {
     $candidates = getWarnedUsers();
 
     foreach ($candidates as $user) {
-        print("\nsend2ndWarning" . $user->getEmail());
+        print("\nsend2ndWarning " . $user->getEmail());
         __send2ndWarning($user);
     }
 }
@@ -35,28 +36,28 @@ function removeUsers() {
     $users = getUsersToRemove();
 
     foreach ($users as $user) {
-        print("\nremoveUsers" . $user->getEmail());
+        print("\nremoveUsers " . $user->getEmail());
         __remove($user);
     }
-
-
 }
 
 function __sendWarning(\user\User $user) {
-    $subject = "Twoje konto w Uprzejmie Donoszę zostanie usunięte po 2 latach nieaktywności";
-    $text = "
-Cześć,
+    $subject = "Twoje konto w Uprzejmie Donoszę zostanie usunięte z powodu nieaktywności";
+    $text = "Cześć,
 
-Twoje ostatnie zgłoszenie nieprawidłowego parkowania ma ponad dwa lata. Nie chcemy przechowywać twoich danych w nieskończoność, dlatego po tak długiej nieaktywności twoje konto zostanie usunięte.
+Twoje ostatnie zgłoszenie nieprawidłowego parkowania w aplikacji Uprzejmie Donoszę ma ponad rok. Zgodnie z naszą polityką bezpieczeństwa, konta nieaktywne przez ponad 12 miesięcy są usuwane.
 
-Jeśli chcesz temu zapobiec musisz w przeciągu najbliższego miesiąca potwierdzić aktualny regulamin na stronie https://uprzejmiedonosze.net/register.html?update
+Jeśli chcesz zachować swoje konto, potwierdź aktualny regulamin w ciągu najbliższych 2 miesięcy:
+https://uprzejmiedonosze.net/register.html?update
 
-Jeśli masz obawy o bezpieczeństwo swojego konta, to przeczytaj koniecznie to jak szyfrujemy wrażliwe dane na stronie:
+Jeśli nie podejmiesz żadnej akcji, Twoje konto zostanie trwale usunięte — wraz ze wszystkimi zgłoszeniami i zdjęciami.
 
-...
+Jeśli masz pytania dotyczące bezpieczeństwa swoich danych, zapraszam do zapoznania się z naszą polityką prywatności:
+https://uprzejmiedonosze.net/bezpieczenstwo.html
 
+Pozdrawiam,
 Szymon Nieradka
-    ";
+uprzejmiedonosze.net";
 
     __sendEmail($user, $subject, $text);
     $user->removalWarningSent = date(DT_FORMAT);
@@ -65,27 +66,21 @@ Szymon Nieradka
 
 
 function __send2ndWarning(\user\User $user) {
-    $dryRun = removeUser($user->getEmail(), dryRun:true);
-    $subject = "Twoje konto w Uprzejmie Donoszę zostanie usunięte za 2 tygodnie";
-    $text = "
-Cześć,
+    $subject = "Ostatnie ostrzeżenie — Twoje konto w Uprzejmie Donoszę zostanie usunięte za 2 tygodnie";
+    $text = "Cześć,
 
-Dwa miesiące temu wysłaliśmy Ci informację o usunięciu twojego konta na Uprzejmie Donoszę ze względu na długą nieaktywność. To jest ostatnie ostrzeżenie przed usunięciem konta.
+Dwa miesiące temu poinformowaliśmy Cię o planowanym usunięciu Twojego konta w Uprzejmie Donoszę z powodu nieaktywności. To jest ostatnie przypomnienie.
 
-Jeśli chcesz temu zapobiec musisz w przeciągu najbliższych 2 tygodni potwierdzić aktualny regulamin na stronie https://uprzejmiedonosze.net/register.html?update
+Jeśli chcesz zachować konto, potwierdź aktualny regulamin w ciągu najbliższych 2 tygodni:
+https://uprzejmiedonosze.net/register.html?update
 
-Usunięcie konta będzie oznaczać, że:
+Po usunięciu konta:
+1. Twoje dane osobowe, zgłoszenia i zdjęcia zostaną trwale usunięte z naszych serwerów.
+2. Ewentualna ponowna rejestracja utworzy nowe konto z czystą historią.
 
-1. Na naszych serwerach nie będzie twoich danych osobowych ani szczegółów wykonanych przez Ciebie zgłoszeń (np. zdjęć).
-2. Kolejna próba zalogowania się stworzy nowe konto z czystą historią.
-
-Pełen zapis plików oraz danych jakie zostaną usunięte za dwa tygodnie znajduje się na końcu wiadomości.
-
+Pozdrawiam,
 Szymon Nieradka
-
-Symulacja usunięcia konta:
-$dryRun
-    ";
+uprzejmiedonosze.net";
 
     __sendEmail($user, $subject, $text);
     $user->removal2ndWarningSent = date(DT_FORMAT);
@@ -93,23 +88,21 @@ $dryRun
 }
 
 function __remove(\user\User $user) {
-    $removalLog = removeUser($user->getEmail(), dryRun:false);
+    removeUser($user->getEmail(), dryRun:false);
 
     $subject = "Twoje konto w Uprzejmie Donoszę zostało usunięte";
-    $text = "
-Cześć,
+    $text = "Cześć,
 
-Dwa miesiące temu wysłaliśmy Ci informację o planowaniu usunięciu Twojego konta na Uprzejmie Donoszę ze względu na długą nieaktywność. Potem ostatnie ostrzeżenie. Ten email jest już tylko potwierdzeniem, że usunęliśmy już Twoje konto z serwisu. Co to oznacza?
+Zgodnie z wcześniejszymi informacjami, Twoje konto w serwisie Uprzejmie Donoszę zostało usunięte z powodu długiej nieaktywności.
 
-1. Na naszych serwerach nie ma twoich danych osobowych ani szczegółów wykonanych przez Ciebie zgłoszeń (np. zdjęć).
-2. Kolejna próba zalogowania się stworzy nowe konto z czystą historią.
+Co to oznacza:
+1. Twoje dane osobowe, zgłoszenia i zdjęcia zostały usunięte z naszych serwerów.
+2. Kompletne usunięcie danych z backupów i logów nastąpi w ciągu 14 dni (okres retencji).
+3. Jeśli chcesz, możesz założyć nowe konto logując się ponownie na uprzejmiedonosze.net.
 
-Pełen zapis plików oraz danych jakie zostały usunięte na końcu wiadomości. Kompletne usunięcie twoich danych, w tym logów, backupów oraz kopii wiadomości email nastąpi w przeciągu kolejnych dwóch tygodni (retencja danych).
-
+Pozdrawiam,
 Szymon Nieradka
-
-$removalLog
-    ";
+uprzejmiedonosze.net";
 
     __sendEmail($user, $subject, $text);
 }
@@ -130,14 +123,6 @@ function __sendEmail(\user\User $user, $subject, $text) {
     $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", "removal-warning-{$user->number}");
     $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
 
-    $transport = Transport::fromDsn(MAILER_DSN);
-
-    // @TODO
-    echo "\nSubject: $subject\n";
-    echo "To: {$user->getEmail()}\n";
-    echo "From: " . MAILER_FROM . "\n";
-    echo $text;
-    
-    //$mailer = new Mailer($transport);
-    //$mailer->send($message);
+    $mailer = new Mailer(Transport::fromDsn(MAILER_DSN));
+    $mailer->send($message);
 }

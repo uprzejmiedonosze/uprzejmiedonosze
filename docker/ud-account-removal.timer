@@ -1,0 +1,9 @@
+[Unit]
+Description=Run ud-account-removal daily at 20:15
+
+[Timer]
+OnCalendar=*-*-* 20:15:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
