@@ -10,38 +10,47 @@ use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Address;
 
-sendWarning();
-send2ndWarning();
-removeUsers();
+$dryRun = in_array('--dry-run', $argv ?? []);
 
-function sendWarning() {
+if ($dryRun) {
+    print("\n=== DRY RUN — brak zmian w bazie ani wysyłki maili ===\n");
+}
+
+sendWarning($dryRun);
+send2ndWarning($dryRun);
+removeUsers($dryRun);
+
+function sendWarning(bool $dryRun) {
     $candidates = getInactiveUsers();
+    print("\n[sendWarning] kandydatów: " . count($candidates));
 
     foreach ($candidates as $user) {
         print("\nsendWarning " . $user->getEmail());
-        __sendWarning($user);
+        __sendWarning($user, $dryRun);
     }
 }
 
-function send2ndWarning() {
+function send2ndWarning(bool $dryRun) {
     $candidates = getWarnedUsers();
+    print("\n[send2ndWarning] kandydatów: " . count($candidates));
 
     foreach ($candidates as $user) {
         print("\nsend2ndWarning " . $user->getEmail());
-        __send2ndWarning($user);
+        __send2ndWarning($user, $dryRun);
     }
 }
 
-function removeUsers() {
+function removeUsers(bool $dryRun) {
     $users = getUsersToRemove();
+    print("\n[removeUsers] kandydatów: " . count($users));
 
     foreach ($users as $user) {
         print("\nremoveUsers " . $user->getEmail());
-        __remove($user);
+        __remove($user, $dryRun);
     }
 }
 
-function __sendWarning(\user\User $user) {
+function __sendWarning(\user\User $user, bool $dryRun) {
     $subject = "Twoje konto w Uprzejmie Donoszę zostanie usunięte z powodu nieaktywności";
     $text = "Cześć,
 
@@ -59,13 +68,15 @@ Pozdrawiam,
 Szymon Nieradka
 uprzejmiedonosze.net";
 
-    __sendEmail($user, $subject, $text);
-    $user->removalWarningSent = date(DT_FORMAT);
-    \user\save($user, dontDecode:true);
+    __sendEmail($user, $subject, $text, $dryRun);
+    if (!$dryRun) {
+        $user->removalWarningSent = date(DT_FORMAT);
+        \user\save($user, dontDecode:true);
+    }
 }
 
 
-function __send2ndWarning(\user\User $user) {
+function __send2ndWarning(\user\User $user, bool $dryRun) {
     $subject = "Ostatnie ostrzeżenie — Twoje konto w Uprzejmie Donoszę zostanie usunięte za 2 tygodnie";
     $text = "Cześć,
 
@@ -82,16 +93,19 @@ Pozdrawiam,
 Szymon Nieradka
 uprzejmiedonosze.net";
 
-    __sendEmail($user, $subject, $text);
-    $user->removal2ndWarningSent = date(DT_FORMAT);
-    \user\save($user, dontDecode:true);
+    __sendEmail($user, $subject, $text, $dryRun);
+    if (!$dryRun) {
+        $user->removal2ndWarningSent = date(DT_FORMAT);
+        \user\save($user, dontDecode:true);
+    }
 }
 
-function __remove(\user\User $user) {
-    removeUser($user->getEmail(), dryRun:false);
+function __remove(\user\User $user, bool $dryRun) {
+    removeUser($user->getEmail(), dryRun:$dryRun);
 
-    $subject = "Twoje konto w Uprzejmie Donoszę zostało usunięte";
-    $text = "Cześć,
+    if (!$dryRun) {
+        $subject = "Twoje konto w Uprzejmie Donoszę zostało usunięte";
+        $text = "Cześć,
 
 Zgodnie z wcześniejszymi informacjami, Twoje konto w serwisie Uprzejmie Donoszę zostało usunięte z powodu długiej nieaktywności.
 
@@ -104,10 +118,11 @@ Pozdrawiam,
 Szymon Nieradka
 uprzejmiedonosze.net";
 
-    __sendEmail($user, $subject, $text);
+        __sendEmail($user, $subject, $text, $dryRun);
+    }
 }
 
-function __sendEmail(\user\User $user, $subject, $text) {
+function __sendEmail(\user\User $user, $subject, $text, bool $dryRun) {
 
     $message = (new Email());
     $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
@@ -122,6 +137,11 @@ function __sendEmail(\user\User $user, $subject, $text) {
     $message->getHeaders()->addTextHeader("References", "removal-warning-{$user->number}@dka.email");
     $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", "removal-warning-{$user->number}");
     $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
+
+    if ($dryRun) {
+        print("\n  [email] To: {$user->getEmail()} | Subject: $subject\n");
+        return;
+    }
 
     $mailer = new Mailer(Transport::fromDsn(MAILER_DSN));
     $mailer->send($message);

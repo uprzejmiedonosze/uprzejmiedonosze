@@ -21,6 +21,7 @@ function getInactiveUsers(): array {
             and (json_extract(users.value, '$.updated') is null
                 or json_extract(users.value, '$.updated') < date('now', '$INACTIVITY'))
             and json_extract(users.value, '$.deleted') is null
+        order by apps.old_app asc
         limit $BATCH_SIZE
     SQL;
 
