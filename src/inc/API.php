@@ -200,26 +200,23 @@ function saveImgAndThumb($application, $imageBytes, $type) {
         if ($src === false) {
             throw new Exception("Nie można otworzyć pliku PNG", 400);
         }
-        $dst = imagecreatetruecolor(imagesx($src), imagesy($src));
-        imagefill($dst, 0, 0, imagecolorallocate($dst, 255, 255, 255));
-        imagecopy($dst, $src, 0, 0, 0, 0, imagesx($src), imagesy($src));
+        $img = imagecreatetruecolor(imagesx($src), imagesy($src));
+        imagefill($img, 0, 0, imagecolorallocate($img, 255, 255, 255));
+        imagecopy($img, $src, 0, 0, 0, 0, imagesx($src), imagesy($src));
         imagedestroy($src);
-        ob_start();
-        imagejpeg($dst, null, 92);
-        $rawBytes = ob_get_clean();
-        imagedestroy($dst);
-    } elseif ($info['mime'] !== 'image/jpeg') {
+    } elseif ($info['mime'] === 'image/jpeg') {
+        $img = imagecreatefromstring($rawBytes);
+        if ($img === false) {
+            throw new Exception("Nie można otworzyć pliku JPEG", 400);
+        }
+    } else {
         throw new Exception("Nieobsługiwany format obrazka: {$info['mime']}", 415);
     }
 
-    $ifp = fopen($fileName, 'wb');
-    if ($ifp === false) {
-        throw new Exception("Can't open $fileName for write", 500);
-    }
-    if (fwrite($ifp, $rawBytes) === false) {
+    if (!imagejpeg($img, $fileName, 85)) {
         throw new Exception("Can't write to $fileName", 500);
     }
-    fclose($ifp);
+    imagedestroy($img);
 
     $fullSize = getimagesize($fileName);
     if ($fullSize[0] > 1600 || $fullSize[1] > 1600) {
