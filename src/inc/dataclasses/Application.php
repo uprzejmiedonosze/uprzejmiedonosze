@@ -682,6 +682,10 @@ class Application extends JSONObject implements \JsonSerializable {
         $pxKey  = \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV);
         $pxPath = "{$galleryDir}{$pxKey}.jpg";
         $src = imagecreatefromjpeg($thumbPath);
+        if ($src === false) {
+            if ($needsRelease) \storage\release_local($thumb);
+            return;
+        }
         imagefilter($src, IMG_FILTER_PIXELATE, 10, true);
         imagejpeg($src, $pxPath, 85);
         imagedestroy($src);
