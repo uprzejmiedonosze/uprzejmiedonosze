@@ -1,0 +1,10 @@
+[Unit]
+Description=Uprzejmie Donosze — refresh statistics cache
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/refresh-stats.php
+StandardOutput=journal
+StandardError=journal
