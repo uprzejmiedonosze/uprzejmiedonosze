@@ -3,7 +3,7 @@
 $INACTIVITY = '-12 months';
 $WARNING = '-2 months';
 $LAST_WARNING = '-14 days';
-$BATCH_SIZE = 50;
+$BATCH_SIZE = 200;
 
 function getInactiveUsers(): array {
     global $INACTIVITY, $BATCH_SIZE;
