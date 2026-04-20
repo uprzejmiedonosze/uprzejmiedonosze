@@ -54,7 +54,7 @@ decode_jwt() {
     echo "$payload" | tr '_-' '/+' | openssl enc -d -base64 | jq -r .email
 }
 
-HOST="localhost:8080"
+HOST="${API_HOST:-localhost:8080}"
 EMAIL=$(decode_jwt "$JWT")
 
 if [ $ENV = 'staging' ]; then
