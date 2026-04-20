@@ -6,6 +6,6 @@ Type=oneshot
 User=www-data
 Group=www-data
 ExecStart=/usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/refresh-stats.php uprzejmiedonosze.net
-ExecStart=/usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/refresh-stats.php shadow.uprzejmiedonosze.net
+ExecStart=/usr/bin/php /var/www/shadow.uprzejmiedonosze.net/webapp/tools/refresh-stats.php shadow.uprzejmiedonosze.net
 StandardOutput=journal
 StandardError=journal
