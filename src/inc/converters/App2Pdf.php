@@ -12,7 +12,9 @@ function toPdf(Application &$application): array{
 
     $filename = $application->getAppFilename('.pdf');
     $pdf = "$baseDir/$appId.pdf";
-    _tex2pdf($application, $pdf);
+    if (!file_exists($pdf)) {
+        _tex2pdf($application, $pdf);
+    }
 
     return [$pdf, $filename];
 }

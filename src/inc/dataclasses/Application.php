@@ -743,12 +743,34 @@ class Application extends JSONObject implements \JsonSerializable {
 
     /**
      * Downloads any missing image files from S3 to their canonical local paths (ROOT.$key).
+     * Validates magic bytes after download; retries once if the file is corrupt.
      * No-op when S3 storage is not enabled.
      */
     public function ensureLocal(): void {
         foreach ($this->getImageKeys() as $key) {
             \storage\ensure_local($key);
+            $localPath = ROOT . $key;
+            if (!file_exists($localPath)) continue;
+            if (!self::isValidImageHeader($localPath, $key)) {
+                @unlink($localPath);
+                \storage\download($key, $localPath);
+                if (!self::isValidImageHeader($localPath, $key)) {
+                    throw new \RuntimeException("Uszkodzony plik obrazu po ponownym pobraniu: $key");
+                }
+            }
         }
+    }
+
+    private static function isValidImageHeader(string $localPath, string $key): bool {
+        $fh = fopen($localPath, 'rb');
+        if ($fh === false) return false;
+        $magic = fread($fh, 4);
+        fclose($fh);
+        return match(strtolower(pathinfo($key, PATHINFO_EXTENSION))) {
+            'jpg', 'jpeg' => str_starts_with($magic, "\xFF\xD8\xFF"),
+            'png'         => str_starts_with($magic, "\x89PNG"),
+            default       => true,
+        };
     }
 
     /**
