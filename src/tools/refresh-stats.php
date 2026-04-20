@@ -1,20 +1,4 @@
 <?php
-/**
- * CLI Tool to refresh statistics cache bypassing web server timeouts.
- */
-
-// Ensure HOST is defined for correct Memcached keys based on CLI arguments
-if (!defined('HOST')) {
-    if (php_sapi_name() !== 'cli') {
-        die("This script must be run from the command line.\n");
-    }
-
-    $host = isset($argv[1]) ? $argv[1] : null;
-    if (!$host || !str_ends_with($host, 'uprzejmiedonosze.net')) {
-        die("Error: Please provide a valid domain ending in 'uprzejmiedonosze.net' as the first argument.\nUsage: php " . basename(__FILE__) . " <domain>\n");
-    }
-    define('HOST', $host);
-}
 
 require_once(__DIR__ . '/../inc/include.php');
 require_once(__DIR__ . '/../inc/integrations/curl.php');
