@@ -17,6 +17,7 @@ if (!defined('HOST')) {
 }
 
 require_once(__DIR__ . '/../inc/include.php');
+require_once(__DIR__ . '/../inc/integrations/curl.php');
 require_once(__DIR__ . '/../inc/store/GlobalStats.php');
 
 if (php_sapi_name() !== 'cli') {

@@ -1,6 +1,5 @@
 <?PHP namespace patronite;
 
-require_once(__DIR__ . '/../integrations/curl.php');
 
 use cache\Type;
 
