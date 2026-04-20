@@ -1,3 +1,15 @@
+# Uprzejmie Donoszę
+
+**Uprzejmie Donoszę** ("Politely Report") — a Polish civic reporting platform for citizens to file parking violations and traffic safety complaints to appropriate authorities (city guards, police departments).
+
+**Uprzejmie Donoszę** — polski serwis obywatelski umożliwiający zgłaszanie naruszeń przepisów (głównie nielegalnego parkowania) do straży miejskiej lub policji. Upraszcza proces tworzenia poprawnego zgłoszenia wraz ze zdjęciami i lokalizacją oraz ułatwia przesłanie go do odpowiednich służb.
+
+Stack: PHP 8.2+ (Slim 4), Twig templates, Vanilla JS (ES modules), SCSS, SQLite, Firebase Auth, Parcel 2 bundler, Docker/nginx.
+
+More information: [uprzejmiedonosze.net](https://uprzejmiedonosze.net/)
+
+---
+
 # How to start
 
 ## Prerequisites
@@ -8,8 +20,9 @@ To start you have to:
 2. Have `Docker` CE installed
 3. Have `GIT` installed
 4. Have `PHP>=8.2` and `composer` installed
-5. Have `node 18.*` installed
-6. Have `rsync`, `curl`, `make`, `sed`, `jq`, `md5sum` and `sponge` available
+5. Have `node 20.*` installed
+6. Have `mise` installed
+7. Have `rsync`, `curl`, `make`, `sed`, `jq`, `md5sum` and `sponge` available
 
 (for `md5sum` on OSX you can either `brew install md5sha1sum` or add `alias md5sum='md5 -r'` to your `.bashrc`)
 (for `sponge` on OSX run `brew install moreutils`)
@@ -70,12 +83,11 @@ To obtain new credentials:
 
 ## Running the app for the first time
 
-Enter the repository folder and download PHP dependencies.
+Enter the repository folder and install dependencies.
 
 ```
 $ cd uprzejmiedonosze
-$ composer update
-$ npm install
+$ make install
 ```
 
 Now compile the app, build a Docker image, and run it simply by:
