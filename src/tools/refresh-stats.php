@@ -3,9 +3,10 @@
  * CLI Tool to refresh statistics cache bypassing web server timeouts.
  */
 
-// Ensure HOST is defined for correct Memcached keys
+// Ensure HOST is defined for correct Memcached keys based on CLI arguments
 if (!defined('HOST')) {
-    define('HOST', 'uprzejmiedonosze.net');
+    $host = isset($argv[1]) ? $argv[1] : 'uprzejmiedonosze.net';
+    define('HOST', $host);
 }
 
 require_once(__DIR__ . '/../inc/include.php');
