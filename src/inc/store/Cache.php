@@ -26,18 +26,8 @@ namespace cache {
         case Patronite;
     }
 
-    const _KEY_MAPPPING = array(
-        'OpenAlpr' => '_alpr-',
-        'Platerecognizer' => '_platerecognizer-',
-        'Recydywa' => 'recydywa-',
-        'Nominatim' => 'nominatim-v1 ',
-        'GoogleMaps' => 'google-maps-v2 ',
-        'MapBox' => 'mapbox-v1 ',
-        'UserStats' => 'stats3-'
-    );
-
     function key(Type $type, ?string $key): string {
-        return  HOST . '-' . (_KEY_MAPPPING[$type->name] ?? $type->name) . ($key ?? '');
+        return  HOST . '-' . $type->name . '-' . ($key ?? '');
     }
 
     function get(Type $type, ?string $key=""): mixed {

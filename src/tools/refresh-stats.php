@@ -18,6 +18,7 @@ if (php_sapi_name() !== 'cli') {
 echo "--- Statystyki: Start odświeżania --- " . date('Y-m-d H:i:s') . "\n";
 
 $tasks = [
+    'mainPage'        => fn() => \global_stats\mainPage(useCache: false),
     'appsByDay'       => fn() => \global_stats\appsByDay(useCache: false),
     'statsByDay'      => fn() => \global_stats\statsByDay(useCache: false),
     'statsByYear'     => fn() => \global_stats\statsByYear(useCache: false),
