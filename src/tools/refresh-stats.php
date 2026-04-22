@@ -28,6 +28,8 @@ foreach ($tasks as $name => $task) {
     } catch (\Exception $e) {
         echo "BŁĄD: " . $e->getMessage() . "\n";
     }
+    echo "Oczekiwanie 60s na zwolnienie zasobów dyskowych...\n";
+    sleep(60);
 }
 
 echo "--- Gotowe --- " . date('Y-m-d H:i:s') . "\n";
