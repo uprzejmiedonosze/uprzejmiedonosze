@@ -6,12 +6,12 @@
 <div class="images-slider">
     <div class="imageContainer">
         <a target="_blank" href="/ud-{{ app.id }}.html">
-            <img src="{{ app.contextImage.thumb }}?v={{ app.getRevision }}">
+            {% if app.contextImage.thumb ?? false %}<img src="{{ app.contextImage.thumb }}?v={{ app.getRevision }}">{% endif %}
         </a>
     </div>
     <div class="imageContainer">
         <a target="_blank" href="/ud-{{ app.id }}.html">
-            <img src="{{ app.carImage.thumb }}?v={{ app.getRevision }}">
+            {% if app.carImage.thumb ?? false %}<img src="{{ app.carImage.thumb }}?v={{ app.getRevision }}">{% endif %}
         </a>
     </div>
     {% if app.thirdImage ?? false %}

@@ -65,10 +65,14 @@ Z poważaniem
 {\it Proszę o kontakt na mój adres {% if app.user.edelivery ?? false %}e-Doręczeń{% else %}e-mail{% endif %}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.}
 
 \vspace{\stretch{3}}\noindent
+{% if app.contextImage ?? false %}
 \href{{ contextImageUrl }}
     {\includegraphics[width={{ imageWidth }}\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true,valign=t]{{ contextImage }} }
+{% endif %}
+{% if app.carImage ?? false %}
 \href{{ carImageUrl }}
     {\includegraphics[width={{ imageWidth }}\textwidth,height=0.5\textwidth,clip=true,keepaspectratio=true,valign=t]{{ carImage }} }
+{% endif %}
 {% if not areAllImagesVertical %}
 
 \vspace{0.3cm}\noindent
@@ -93,3 +97,4 @@ Z poważaniem
 \noindent\adjustbox{valign=T}{\qrcode[nolink,height=0.2\textwidth,level=Q,valign=t]{{qrUrl|raw}}}
     
 \vspace{\stretch{1}}
+
