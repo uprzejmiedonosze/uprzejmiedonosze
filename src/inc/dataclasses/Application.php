@@ -488,7 +488,7 @@ class Application extends JSONObject implements \JsonSerializable {
 
         if (\storage\isEnabled()) {
             \storage\upload($fileName, "$baseFileName,ma.png");
-            unlink($fileName);
+            @unlink($fileName);
         }
 
         $this->address->mapImage = "$baseFileName,ma.png";
@@ -794,7 +794,7 @@ class Application extends JSONObject implements \JsonSerializable {
             $localPath = ROOT . $key;
             if (file_exists($localPath)) {
                 \storage\upload($localPath, $key);
-                unlink($localPath);
+                @unlink($localPath);
             }
         }
     }
