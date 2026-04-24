@@ -148,7 +148,17 @@ class SessionApiHandler extends AbstractHandler {
 
         $videoFile = $uploadedFiles['video'];
         if ($videoFile->getError() !== UPLOAD_ERR_OK) {
-            throw new \Exception("Błąd wysyłania pliku: " . $videoFile->getError());
+            $msg = match($videoFile->getError()) {
+                UPLOAD_ERR_INI_SIZE   => "Plik jest za duży (limit serwera PHP).",
+                UPLOAD_ERR_FORM_SIZE  => "Plik jest za duży (limit formularza).",
+                UPLOAD_ERR_PARTIAL    => "Plik został wysłany tylko częściowo.",
+                UPLOAD_ERR_NO_FILE    => "Nie wysłano żadnego pliku.",
+                UPLOAD_ERR_NO_TMP_DIR => "Brak folderu tymczasowego na serwerze.",
+                UPLOAD_ERR_CANT_WRITE => "Błąd zapisu pliku na dysk.",
+                UPLOAD_ERR_EXTENSION  => "Rozszerzenie PHP zatrzymało wysyłanie pliku.",
+                default               => "Nieznany błąd wysyłania: " . $videoFile->getError(),
+            };
+            throw new \Exception($msg);
         }
 
         $application = \app\get($appId);
