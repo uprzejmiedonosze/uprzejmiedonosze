@@ -733,7 +733,7 @@ class Application extends JSONObject implements \JsonSerializable {
     /**
      * Returns all S3/CDN keys (relative paths) that belong to this application.
      */
-    public function getImageKeys(): array {
+    public function getImageKeys(bool $includeVideo = false): array {
         $keys = [];
         foreach (['carImage', 'contextImage', 'thirdImage'] as $imgType) {
             if (isset($this->$imgType->url))   $keys[] = $this->$imgType->url;
@@ -741,6 +741,7 @@ class Application extends JSONObject implements \JsonSerializable {
         }
         if (isset($this->address->mapImage))   $keys[] = $this->address->mapImage;
         if (isset($this->carInfo->plateImage)) $keys[] = $this->carInfo->plateImage;
+        if ($includeVideo && isset($this->videoUrl)) $keys[] = $this->videoUrl;
         return $keys;
     }
 
@@ -749,8 +750,8 @@ class Application extends JSONObject implements \JsonSerializable {
      * Validates magic bytes after download; retries once if the file is corrupt.
      * No-op when S3 storage is not enabled.
      */
-    public function ensureLocal(): void {
-        foreach ($this->getImageKeys() as $key) {
+    public function ensureLocal(bool $includeVideo = false): void {
+        foreach ($this->getImageKeys($includeVideo) as $key) {
             \storage\ensure_local($key);
             $localPath = ROOT . $key;
             if (!file_exists($localPath)) continue;
@@ -769,9 +770,11 @@ class Application extends JSONObject implements \JsonSerializable {
         if ($fh === false) return false;
         $magic = fread($fh, 4);
         fclose($fh);
-        return match(strtolower(pathinfo($key, PATHINFO_EXTENSION))) {
+        $ext = strtolower(pathinfo($key, PATHINFO_EXTENSION));
+        return match($ext) {
             'jpg', 'jpeg' => str_starts_with($magic, "\xFF\xD8\xFF"),
             'png'         => str_starts_with($magic, "\x89PNG"),
+            'mp4'         => str_contains($magic, "ftyp"),
             default       => true,
         };
     }
@@ -780,8 +783,8 @@ class Application extends JSONObject implements \JsonSerializable {
      * Removes locally cached copies that were fetched via ensureLocal().
      * No-op when S3 storage is not enabled or the file is not yet present on S3.
      */
-    public function releaseLocal(): void {
-        foreach ($this->getImageKeys() as $key) {
+    public function releaseLocal(bool $includeVideo = false): void {
+        foreach ($this->getImageKeys($includeVideo) as $key) {
             \storage\release_local($key);
         }
     }
@@ -793,7 +796,7 @@ class Application extends JSONObject implements \JsonSerializable {
      */
     public function syncToS3(): void {
         if (!\storage\isEnabled()) return;
-        foreach ($this->getImageKeys() as $key) {
+        foreach ($this->getImageKeys(true) as $key) {
             $localPath = ROOT . $key;
             if (file_exists($localPath)) {
                 if (\storage\upload($localPath, $key)) {

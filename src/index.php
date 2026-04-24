@@ -84,6 +84,7 @@ $app->post('/user/validate', SessionApiHandler::class . ':validateUser')
 
 $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
+    $group->post('/app/{appId}/video', SessionApiHandler::class . ':video');
     $group->delete('/app/{appId}/image/{image}', SessionApiHandler::class . ':deleteImage');
     $group->patch('/app/{appId}/status/{status}', SessionApiHandler::class . ':setStatus');
     $group->patch('/app/{appId}/fields', SessionApiHandler::class . ':setFields');

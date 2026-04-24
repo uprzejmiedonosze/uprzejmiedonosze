@@ -22,6 +22,15 @@ export async function checkFile(file, id) {
   if (!file) return
 
   uploadStarted(id);
+
+  if (file.type.startsWith('video/')) {
+    if (id !== 'thirdImage') {
+      return imageError(id, "Wideo może być dodane tylko jako trzeci załącznik.");
+    }
+    await sendVideoFile(file, id);
+    return;
+  }
+
   if (!/^image\//i.test(file.type)) {
     console.error(file.type)
     return imageError(id, `Zdjęcie o niepoprawnym type ${file.type}`);
@@ -125,10 +134,11 @@ function imageError(id, errorMsg) {
   const section = document.querySelector(`.${id}Section`)
   const loader = document.querySelector(`.${id}Section .loader`)
   const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
-  
+  const videoStatus = document.getElementById("videoProcessingStatus")
+
   if (loader) loader.style.display = 'none'
-  if (section) section.classList.add("error")
-  if (preview) {
+  if (videoStatus) videoStatus.style.display = 'none'
+  if (section) section.classList.add("error")  if (preview) {
     preview.src = 'img/fff-1.png'
     preview.style.opacity = '1'
     preview.style.display = 'block'
@@ -373,5 +383,81 @@ function showThirdImage(show) {
     thirdImageButtons.forEach(button => {
       /** @type {HTMLElement} */ (button).style.display = 'block'
     })
+  }
+}
+
+/**
+ * @param {File} fileData 
+ * @param {'thirdImage'} id 
+ */
+async function sendVideoFile(fileData, id) {
+  const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
+  const appId = appIdElement?.value
+  const videoStatus = document.getElementById("videoProcessingStatus")
+  const loader = document.querySelector(`.${id}Section .loader`)
+  const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
+
+  if (id == "thirdImage") {
+    showThirdImage(true)
+  }
+
+  if (videoStatus) {
+    videoStatus.style.display = 'block'
+    videoStatus.textContent = "Wgrywanie wideo..."
+  }
+
+  try {
+    const formData = new FormData()
+    formData.append('video', fileData)
+
+    // Using native fetch for multipart/form-data
+    const response = await fetch(`/api/app/${appId}/video`, {
+      method: 'POST',
+      body: formData
+    })
+
+    if (!response.ok) {
+      throw new Error(`Błąd wgrywania wideo: ${response.statusText}`)
+    }
+
+    if (videoStatus) {
+      videoStatus.textContent = "Trwa przetwarzanie wideo..."
+    }
+
+    // Polling for status
+    let attempts = 0
+    const maxAttempts = 60 // 5 minutes (60 * 5s)
+    const poll = async () => {
+      attempts++
+      try {
+        const api = new Api(`/api/app/${appId}`)
+        const app = await api.get()
+        
+        if (app.videoUrl && app.thirdImage) {
+          if (videoStatus) videoStatus.style.display = 'none'
+          if (loader) loader.classList.remove("l")
+          if (preview) {
+            preview.style.height = "100%"
+            preview.style.opacity = "1"
+            preview.src = app[id].thumb + "?v=" + Math.random().toString()
+          }
+          uploadFinished()
+          return
+        }
+
+        if (attempts >= maxAttempts) {
+          throw new Error("Przekroczono czas oczekiwania na przetworzenie wideo.")
+        }
+
+        setTimeout(poll, 5000)
+      } catch (err) {
+        imageError(id, err.toString())
+      }
+    }
+
+    setTimeout(poll, 5000)
+
+  } catch (err) {
+    imageError(id, err.toString())
   }
 }

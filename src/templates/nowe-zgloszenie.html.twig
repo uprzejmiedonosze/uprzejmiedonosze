@@ -54,9 +54,9 @@
             {% set thirdImage = (app.thirdImage.thumb ?? false) %}
             <div class="imageButton image-upload thirdImageSection"
                 {% if thirdImage %}style="display: none"{% endif %}>
-                <label class="button inverse">+ Dodaj trzecie zdjęcie (opcjonalnie)
-                <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="thirdImage"
-                        title="Zdjęcie przedstawiające kontekst"
+                <label class="button inverse">+ Dodaj trzecie zdjęcie lub wideo (opcjonalnie)
+                <input type="file" accept="image/jpeg, image/png, image/heic, video/mp4, video/quicktime, video/webm, .dummy" id="thirdImage"
+                        title="Zdjęcie lub wideo przedstawiające kontekst"
                         value="{{ app.thirdImage.url ?? '' }}" />
                 </label>
             </div>
@@ -65,6 +65,7 @@
                 <label>
                     <a class="button remove" href="#">X</a>
                     <div class="loader l" style="display: none;"></div>
+                    <div id="videoProcessingStatus" style="display: none; padding: 10px; font-weight: bold;">Trwa przetwarzanie wideo...</div>
                     <img id="thirdImagePreview" src="{{ app.thirdImage.thumb ?? 'img/fff-1.png' }}"/>
                 </label>
             </div>

@@ -138,6 +138,44 @@ class SessionApiHandler extends AbstractHandler {
         return $this->renderJson($response, $application);
     }
 
+    public function video(Request $request, Response $response, $args): Response {
+        $appId = $args['appId'];
+        $uploadedFiles = $request->getUploadedFiles();
+        
+        if (empty($uploadedFiles['video'])) {
+            throw new \app\MissingParamException("video");
+        }
+
+        $videoFile = $uploadedFiles['video'];
+        if ($videoFile->getError() !== UPLOAD_ERR_OK) {
+            throw new \Exception("Błąd wysyłania pliku: " . $videoFile->getError());
+        }
+
+        $application = \app\get($appId);
+        $this->checkEditable($request, $application);
+        $this->checkOwnership($request, $application);
+
+        $userNumber = $application->getUserNumber();
+        $baseDir = \storage\cdnPrefix() . '/' . $userNumber;
+        if(!file_exists(ROOT . $baseDir)){
+            mkdir(ROOT . $baseDir, 0755, true);
+        }
+
+        $ext = pathinfo($videoFile->getClientFilename(), PATHINFO_EXTENSION);
+        $tempKey = "{$baseDir}/{$appId},video_tmp.{$ext}";
+        $tempPath = ROOT . $tempKey;
+        
+        $videoFile->moveTo($tempPath);
+
+        \queue\produce(json_encode([
+            'type' => 'video',
+            'appId' => $appId,
+            'tempKey' => $tempKey
+        ]));
+
+        return $response->withStatus(202);
+    }
+
     public function setStatus(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $status = $args['status'];

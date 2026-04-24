@@ -7,7 +7,7 @@ function toZip(Application &$application): array{
     $filename = $application->getAppFilename('.zip', 'Zdjecia_');
     $fullPath = "$baseDir/$filename";
 
-    $application->ensureLocal();
+    $application->ensureLocal(true);
 
     try {
         $zip = new \ZipArchive;
@@ -22,9 +22,15 @@ function toZip(Application &$application): array{
         if (isset($application->thirdImage->url))
             $zip->addFile(ROOT . $application->thirdImage->url,
                 $application->getAppFilename('c.jpg'));
+
+        if (isset($application->videoUrl)) {
+            $ext = pathinfo($application->videoUrl, PATHINFO_EXTENSION);
+            $zip->addFile(ROOT . $application->videoUrl,
+                $application->getAppFilename('.' . $ext, 'Zdjecia_video'));
+        }
         $zip->close();
     } finally {
-        $application->releaseLocal();
+        $application->releaseLocal(true);
     }
 
     return [$fullPath, $filename];

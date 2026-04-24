@@ -12,6 +12,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
         php-fpm php-sqlite3 php-curl php-zip \
         php-opcache php-mbstring php-gd \
         php-memcache php-memcached php-intl \
+        ffmpeg \
         lmodern texlive-lang-polish \
         texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
@@ -32,6 +33,8 @@ COPY www.conf     /etc/php/8.2/fpm/pool.d/
 COPY init.sh      /root/
 
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.2/fpm/php.ini && \
+    sed -i -e "s/upload_max_filesize = .*/upload_max_filesize = 105M/" /etc/php/8.2/fpm/php.ini && \
+    sed -i -e "s/post_max_size = .*/post_max_size = 105M/" /etc/php/8.2/fpm/php.ini && \
     update-rc.d php8.2-fpm defaults && \
     update-rc.d memcached defaults && \
     ln -s /var/www/localhost/webapp/vendor /var/www/localhost

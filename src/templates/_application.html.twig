@@ -106,7 +106,11 @@
                 </a>
             </div>
             <dialog id="popup3" class="fullscreen">
-                <img src="{{ app.thirdImage.url }}?v={{ app.getRevision }}">
+                {% if app.videoUrl ?? false %}
+                    <video controls width="100%" src="{{ app.videoUrl }}?v={{ app.getRevision }}"></video>
+                {% else %}
+                    <img src="{{ app.thirdImage.url }}?v={{ app.getRevision }}">
+                {% endif %}
             </dialog>
         {% else %}
             <div></div>            
