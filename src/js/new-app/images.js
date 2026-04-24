@@ -138,7 +138,8 @@ function imageError(id, errorMsg) {
 
   if (loader) loader.style.display = 'none'
   if (videoStatus) videoStatus.style.display = 'none'
-  if (section) section.classList.add("error")  if (preview) {
+  if (section) section.classList.add("error")
+  if (preview) {
     preview.src = 'img/fff-1.png'
     preview.style.opacity = '1'
     preview.style.display = 'block'
