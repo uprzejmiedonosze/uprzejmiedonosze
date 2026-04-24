@@ -21,6 +21,13 @@ class SessionApiHandler extends AbstractHandler {
             throw new HttpNotFoundException($request, "Nie posiadasz zgłoszenia o ID {$app->id}");
     }
 
+    public function getApplication(Request $request, Response $response, $args): Response {
+        $appId = $args['appId'];
+        $application = \app\get($appId);
+        $this->checkOwnership($request, $application);
+        return $this->renderJson($response, $application);
+    }
+
     /**
      * Validates user session - BACKEND ONLY endpoint
      * Security measures:
@@ -180,8 +187,9 @@ class SessionApiHandler extends AbstractHandler {
         \queue\produce(json_encode([
             'type' => 'video',
             'appId' => $appId,
-            'tempKey' => $tempKey
-        ]));
+            'tempKey' => $tempKey,
+            'baseDir' => $baseDir
+        ]), 'queue');
 
         return $response->withStatus(202);
     }

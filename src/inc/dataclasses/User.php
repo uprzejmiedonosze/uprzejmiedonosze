@@ -79,7 +79,7 @@ class User extends \JSONObject{
         if (!($this->encrypted ?? false))
             return;
 
-        if (is_null($_SESSION['user_id']))
+        if (!isset($_SESSION['user_id']) || is_null($_SESSION['user_id']))
             throw new \Exception("User data is encrypted, but no user_id is set");
 
         $decode = fn(&$value) => $value && ($value = \crypto\decode($value, $_SESSION['user_id'], $this->number . $this->data->email));

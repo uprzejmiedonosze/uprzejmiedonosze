@@ -1,13 +1,13 @@
 [Unit]
-Description=Face detect queue consumer service.
+Description=Face detect and video processing queue consumer service.
 Wants=network.target network-online.target
 After=network.target network-online.target
-AssertFileIsExecutable=/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.sh
+AssertFileIsExecutable=/var/www/uprzejmiedonosze.net/webapp/tools/queue-worker.sh
 StartLimitIntervalSec=0
 
 [Service]
 Type=simple
-ExecStart=/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.sh
+ExecStart=/var/www/uprzejmiedonosze.net/webapp/tools/queue-worker.sh
 User=www-data
 Group=www-data
 WorkingDirectory=/var/www/uprzejmiedonosze.net/webapp/tools/

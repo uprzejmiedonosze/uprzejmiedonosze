@@ -53,8 +53,9 @@ function current(): User{
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function currentEmail(): string{
-    if(!empty($_SESSION['user_email'])){
-        return $_SESSION['user_email'];
+    $session = $_SESSION ?? [];
+    if(!empty($session['user_email'])){
+        return $session['user_email'];
     }
     throw new \Exception("Próba pobrania danych niezalogowanego użytkownika");
 }

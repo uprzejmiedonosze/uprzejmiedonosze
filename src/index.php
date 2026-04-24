@@ -83,6 +83,7 @@ $app->post('/user/validate', SessionApiHandler::class . ':validateUser')
     ->add(new JsonBodyParser());
 
 $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
+    $group->get('/app/{appId}', SessionApiHandler::class . ':getApplication');
     $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
     $group->post('/app/{appId}/video', SessionApiHandler::class . ':video');
     $group->delete('/app/{appId}/image/{image}', SessionApiHandler::class . ':deleteImage');

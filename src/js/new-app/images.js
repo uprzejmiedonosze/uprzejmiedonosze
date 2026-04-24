@@ -432,7 +432,7 @@ async function sendVideoFile(fileData, id) {
       attempts++
       try {
         const api = new Api(`/api/app/${appId}`)
-        const app = await api.get()
+        const app = await api.getJson()
         
         if (app.videoUrl && app.thirdImage) {
           if (videoStatus) videoStatus.style.display = 'none'
