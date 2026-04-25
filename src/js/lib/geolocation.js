@@ -35,7 +35,7 @@ export function initMaps(lastLocation, _stopAgresji) {
     dragRotate: false
   }
   
-  mapboxgl.accessToken = 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw'; // nosemgrep: generic.secrets.security.detected-jwt-token.detected-jwt-token
+  mapboxgl.accessToken = 'pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw';
   try {
     map = new mapboxgl.Map(mapOptions)
   } catch(e) {
@@ -112,7 +112,7 @@ function setSM(sm, hint) {
 
   sm = sm ? `Rejon: ${sm}`: ''
   if (smInfo) smInfo.textContent = sm
-  if (smHint) smHint.innerHTML = hint ?? '' // nosemgrep: javascript.browser.security.insecure-document-method.insecure-document-method
+  if (smHint) smHint.innerHTML = hint ?? ''
 }
 
 async function latLngToAddress(lat, lng, from) {

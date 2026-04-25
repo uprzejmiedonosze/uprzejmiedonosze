@@ -74,7 +74,7 @@ export function bindSoftCommentValidation() {
       if (mr)
         warningMsg = 'Używasz słowa „pan/i” w komentarzu.'
       if (warningMsg) {
-        warning(warningMsg, 'Sprawdź opcję „świadek momentu parkowania”', '#statements')
+        warning(`<p>${warningMsg}</p><a href="#statements">Sprawdź opcję „świadek momentu parkowania”</a>`)
       }
     })
   }
