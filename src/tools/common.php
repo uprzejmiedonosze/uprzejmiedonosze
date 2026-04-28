@@ -573,8 +573,11 @@ function purgeLocalFiles(bool $dryRun=true): void {
             if ($dryRun) {
                 echo " ^ $key — brak na S3, do wysłania\n";
             } else {
-                \storage\upload($localPath, $key);
-                echo " ^ $key ($localSize B) — wysłany do S3\n";
+                if (\storage\upload($localPath, $key)) {
+                    echo " ^ $key ($localSize B) — wysłany do S3\n";
+                } else {
+                    echo " ! $key ($localSize B) — błąd wysyłania do S3\n";
+                }
             }
             $missing++;
         } elseif ($remoteSize !== $localSize) {
@@ -642,9 +645,12 @@ function checkS3(): void {
         $remoteSize = \storage\remote_size($key);
 
         if ($remoteSize === null) {
-            \storage\upload($localPath, $key);
-            echo " ^ $key ($localSize B) — brakowało na S3, wysłany\n";
-            $uploaded++;
+            if (\storage\upload($localPath, $key)) {
+                echo " ^ $key ($localSize B) — brakowało na S3, wysłany\n";
+                $uploaded++;
+            } else {
+                echo " ! $key ($localSize B) — błąd wysyłania do S3\n";
+            }
         } elseif ($remoteSize !== $localSize) {
             echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B)\n";
             $mismatch++;

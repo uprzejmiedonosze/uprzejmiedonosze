@@ -36,8 +36,8 @@ function client(): S3Client {
  * Uploads a local file to S3 with public-read ACL.
  * $key is the S3 object key, e.g. "cdn2/12/abc,ca.jpg".
  */
-function upload(string $localPath, string $key): void {
-    if (!isEnabled() || !file_exists($localPath)) return;
+function upload(string $localPath, string $key): bool {
+    if (!isEnabled() || !file_exists($localPath)) return false;
     try {
         client()->putObject([
             'Bucket'      => \S3_BUCKET,
@@ -46,9 +46,10 @@ function upload(string $localPath, string $key): void {
             'ACL'         => 'public-read',
             'ContentType' => mime_content_type($localPath) ?: 'application/octet-stream',
         ]);
+        return true;
     } catch (AwsException $e) {
         logger("S3 upload failed for $key: " . $e->getMessage(), true);
-        throw $e;
+        return false;
     }
 }
 

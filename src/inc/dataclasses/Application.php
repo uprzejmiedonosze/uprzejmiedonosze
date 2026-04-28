@@ -487,8 +487,9 @@ class Application extends JSONObject implements \JsonSerializable {
         fclose($ifp);
 
         if (\storage\isEnabled()) {
-            \storage\upload($fileName, "$baseFileName,ma.png");
-            @unlink($fileName);
+            if (\storage\upload($fileName, "$baseFileName,ma.png")) {
+                @unlink($fileName);
+            }
         }
 
         $this->address->mapImage = "$baseFileName,ma.png";
@@ -675,8 +676,9 @@ class Application extends JSONObject implements \JsonSerializable {
         $clearKey  = \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV);
         $clearPath = "{$galleryDir}{$clearKey}.jpg";
         copy($thumbPath, $clearPath);
-        \storage\upload($clearPath, "{$cdnPrefix}/gallery/{$clearKey}.jpg");
-        @unlink($clearPath);
+        if (\storage\upload($clearPath, "{$cdnPrefix}/gallery/{$clearKey}.jpg")) {
+            @unlink($clearPath);
+        }
 
         // Pixelated version
         $pxKey  = \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV);
@@ -689,8 +691,9 @@ class Application extends JSONObject implements \JsonSerializable {
         imagefilter($src, IMG_FILTER_PIXELATE, 10, true);
         imagejpeg($src, $pxPath, 85);
         imagedestroy($src);
-        \storage\upload($pxPath, "{$cdnPrefix}/gallery/{$pxKey}.jpg");
-        @unlink($pxPath);
+        if (\storage\upload($pxPath, "{$cdnPrefix}/gallery/{$pxKey}.jpg")) {
+            @unlink($pxPath);
+        }
 
         if ($needsRelease) {
             \storage\release_local($thumb);
@@ -793,8 +796,9 @@ class Application extends JSONObject implements \JsonSerializable {
         foreach ($this->getImageKeys() as $key) {
             $localPath = ROOT . $key;
             if (file_exists($localPath)) {
-                \storage\upload($localPath, $key);
-                @unlink($localPath);
+                if (\storage\upload($localPath, $key)) {
+                    @unlink($localPath);
+                }
             }
         }
     }
