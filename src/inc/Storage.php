@@ -101,7 +101,7 @@ function ensure_local(string $key): void {
             @unlink($tmpPath);
             $lastException = $e;
             if ($attempt < $maxAttempts) {
-                // Exponential backoff: 1s, 4s, 9s, 16s
+                // Exponential backoff: 1s, 4s (attempt * attempt seconds, last attempt skips)
                 sleep($attempt * $attempt);
             }
         }

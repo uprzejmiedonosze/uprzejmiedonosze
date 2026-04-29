@@ -9,23 +9,19 @@ function toZip(Application &$application): array{
 
     $application->ensureLocal();
 
-    try {
-        $zip = new \ZipArchive;
-        if ($zip->open($fullPath, \ZIPARCHIVE::CREATE | \ZIPARCHIVE::OVERWRITE) !== TRUE) {
-            throw new \Exception("Błąd tworzenia archiwum ZIP.");
-        }
-        $zip->addFile(ROOT . $application->contextImage->url,
-            $application->getAppFilename('a.jpg'));
-        $zip->addFile(ROOT . $application->carImage->url,
-            $application->getAppFilename('b.jpg'));
-
-        if (isset($application->thirdImage->url))
-            $zip->addFile(ROOT . $application->thirdImage->url,
-                $application->getAppFilename('c.jpg'));
-        $zip->close();
-    } catch (\Exception $e) {
-        throw $e;
+    $zip = new \ZipArchive;
+    if ($zip->open($fullPath, \ZIPARCHIVE::CREATE | \ZIPARCHIVE::OVERWRITE) !== TRUE) {
+        throw new \Exception("Błąd tworzenia archiwum ZIP.");
     }
+    $zip->addFile(ROOT . $application->contextImage->url,
+        $application->getAppFilename('a.jpg'));
+    $zip->addFile(ROOT . $application->carImage->url,
+        $application->getAppFilename('b.jpg'));
+
+    if (isset($application->thirdImage->url))
+        $zip->addFile(ROOT . $application->thirdImage->url,
+            $application->getAppFilename('c.jpg'));
+    $zip->close();
 
     return [$fullPath, $filename];
 }

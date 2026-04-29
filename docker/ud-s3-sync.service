@@ -8,3 +8,6 @@ Group=www-data
 ExecStart=/usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/s3-sync.php
 StandardOutput=journal
 StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

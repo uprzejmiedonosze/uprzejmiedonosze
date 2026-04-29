@@ -780,9 +780,10 @@ class Application extends JSONObject implements \JsonSerializable {
         if (!\semaphore\tryAcquire($semKey)) return;
 
         try {
-            // carImage->url is like "cdn2/123/abc,ca.jpg". 
+            // carImage->url is like "cdn2/123/abc,ca.jpg".
             // strtok gives us "cdn2/123/abc", which is the perfect base for glob.
             $basePath = strtok($this->carImage->url, ',');
+            if (strpbrk($basePath, '*?[') !== false) return;
             $pattern  = ROOT . $basePath . '*';
             $files    = glob($pattern);
 
