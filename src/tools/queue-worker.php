@@ -98,6 +98,22 @@ function processVideo(array $data): void {
         $thumbPath = ROOT . $thumbKey;
         $video->frame(TimeCode::fromSeconds(0))->save($thumbPath);
 
+        $width = 0;
+        $height = 0;
+        if (file_exists($thumbPath)) {
+            list($width, $height) = getimagesize($thumbPath);
+        }
+
+        \semaphore\acquire($appId, "process-video");
+        $app = \app\get($appId);
+        $app->thirdImage = new \JSONObject();
+        $app->thirdImage->thumb = $thumbKey;
+        $app->thirdImage->width = $width;
+        $app->thirdImage->height = $height;
+        \app\save($app);
+        \semaphore\release($appId, "process-video");
+
+
         // 2. Transcode video
         $videoKey = "{$baseDir}/{$appId},v.mp4";
         $videoPath = ROOT . $videoKey;
@@ -122,20 +138,10 @@ function processVideo(array $data): void {
             @unlink($videoPath);
         }
 
-        // 4. Update Application (Direct database update, no decryption needed)
-        $width = 0;
-        $height = 0;
-        if (file_exists($thumbPath)) {
-            list($width, $height) = getimagesize($thumbPath);
-        }
 
         \semaphore\acquire($appId, "process-video");
         $app = \app\get($appId);
-        !$app->thirdImage && $app->thirdImage = \JSONObject();
         $app->thirdImage->url = $videoKey;
-        $app->thirdImage->thumbUrl = $thumbKey;
-        $app->thirdImage->width = $width;
-        $app->thirdImage->height = $height;
         $app->thirdImage->type = 'video';
         \app\save($app);
         \semaphore\release($appId, "process-video");
@@ -143,6 +149,7 @@ function processVideo(array $data): void {
 
     } catch (\Exception $e) {
         logger("ERROR: Failed to process video for $appId: " . $e->getMessage(), true);
+        throw $e;
         
     } finally {
         @unlink($tempPath);

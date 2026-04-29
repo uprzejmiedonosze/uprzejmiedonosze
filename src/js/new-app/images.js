@@ -27,7 +27,7 @@ export async function checkFile(file, id) {
     if (id !== 'thirdImage') {
       return imageError(id, "Wideo może być dodane tylko jako trzeci załącznik.");
     }
-    await sendVideoFile(file, id);
+    await sendVideoFile(file);
     return;
   }
 
@@ -389,18 +389,15 @@ function showThirdImage(show) {
 
 /**
  * @param {File} fileData 
- * @param {'thirdImage'} id 
  */
-async function sendVideoFile(fileData, id) {
+async function sendVideoFile(fileData) {
   const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
   const appId = appIdElement?.value
   const videoStatus = document.getElementById("videoProcessingStatus")
-  const loader = document.querySelector(`.${id}Section .loader`)
-  const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
+  const loader = document.querySelector(`.thirdImageSection .loader`)
+  const preview = /** @type {HTMLImageElement} */ (document.getElementById(`thirdImagePreview`))
 
-  if (id == "thirdImage") {
-    showThirdImage(true)
-  }
+  showThirdImage(true)
 
   if (videoStatus) {
     videoStatus.style.display = 'block'
@@ -418,6 +415,8 @@ async function sendVideoFile(fileData, id) {
     })
 
     if (!response.ok) {
+      if (response.status == 413)
+        throw new Error("Zbyt duży plik")
       throw new Error(`Błąd wgrywania wideo: ${response.statusText}`)
     }
 
@@ -434,14 +433,18 @@ async function sendVideoFile(fileData, id) {
         const api = new Api(`/api/app/${appId}`)
         const app = await api.getJson()
         
-        if (app.videoUrl && app.thirdImage) {
-          if (videoStatus) videoStatus.style.display = 'none'
-          if (loader) loader.classList.remove("l")
+        if (app?.thirdImage?.thumb) {
           if (preview) {
             preview.style.height = "100%"
-            preview.style.opacity = "1"
-            preview.src = app[id].thumb + "?v=" + Math.random().toString()
+            preview.style.opacity = "0.5"
+            preview.src = app.thirdImage.thumb + "?v=" + Math.random().toString()
           }
+        }
+
+        if (app?.thirdImage?.type == 'video') {
+          if (videoStatus) videoStatus.style.display = 'none'
+          if (loader) loader.classList.remove("l")
+          preview.style.opacity = "1"
           uploadFinished()
           return
         }
@@ -452,13 +455,13 @@ async function sendVideoFile(fileData, id) {
 
         setTimeout(poll, 5000)
       } catch (err) {
-        imageError(id, err.toString())
+        imageError('thirdImage', err.toString())
       }
     }
 
     setTimeout(poll, 5000)
 
   } catch (err) {
-    imageError(id, err.toString())
+    imageError('thirdImage', err.toString())
   }
 }
