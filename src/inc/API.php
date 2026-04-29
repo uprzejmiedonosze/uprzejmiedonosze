@@ -163,10 +163,6 @@ function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFrom
 
     \app\save($application);
 
-    // Upload all generated files to S3 and remove local copies in production.
-    // This runs after ALPR, which requires local file access.
-    $application->syncToS3();
-
     \semaphore\release($application->id, "uploadImage:$pictureType");
     return $application;
 }

@@ -52,7 +52,6 @@ abstract class CityAPI {
 
         $application->ensureLocal();
 
-        try {
         $contextImage = "$root/{$application->contextImage->url}";
         $carImage     = "$root/{$application->carImage->url}";
         $json = json_encode($data);
@@ -104,9 +103,6 @@ abstract class CityAPI {
 
         $application->sent->curl = $json;
         return $json;
-        } finally {
-            $application->releaseLocal();
-        }
     }
 
 }

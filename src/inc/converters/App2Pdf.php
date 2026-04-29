@@ -86,8 +86,6 @@ function _tex2pdf(array|Application $application, string $destFile) {
     @unlink($aux_f);
     @unlink($out_f);
 
-    $application->releaseLocal();
-
     if(!file_exists($pdf_f)) {
         @unlink($file);
         throw new \Exception("Błąd generowania pliku PDF.");

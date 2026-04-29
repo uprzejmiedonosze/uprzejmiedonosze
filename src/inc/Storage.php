@@ -27,6 +27,10 @@ function client(): S3Client {
                 'key'    => \S3_KEY,
                 'secret' => \S3_SECRET,
             ],
+            'retries' => [
+                'mode' => 'adaptive',
+                'max_attempts' => 3,
+            ],
         ]);
     }
     return $client;
@@ -87,7 +91,8 @@ function ensure_local(string $key): void {
     if (!is_dir($dir)) mkdir($dir, 0755, true);
     $tmpPath = $localPath . '.tmp.' . getmypid();
     $lastException = null;
-    for ($attempt = 1; $attempt <= 3; $attempt++) {
+    $maxAttempts = 3;
+    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
         try {
             download($key, $tmpPath);
             rename($tmpPath, $localPath);
@@ -95,11 +100,14 @@ function ensure_local(string $key): void {
         } catch (AwsException $e) {
             @unlink($tmpPath);
             $lastException = $e;
-            if ($attempt < 3) sleep(1);
+            if ($attempt < $maxAttempts) {
+                // Exponential backoff: 1s, 4s, 9s, 16s
+                sleep($attempt * $attempt);
+            }
         }
     }
     throw new \RuntimeException(
-        "S3 ensure_local failed after 3 attempts: '$key': " . $lastException->getMessage(),
+        "S3 ensure_local failed after $maxAttempts attempts: '$key': " . $lastException->getMessage(),
         0,
         $lastException
     );

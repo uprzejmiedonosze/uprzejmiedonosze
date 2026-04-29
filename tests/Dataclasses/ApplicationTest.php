@@ -218,8 +218,8 @@ class ApplicationTest extends TestCase
         $this->assertContains('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,t.jpg', $keys);
         // plateImage
         $this->assertContains('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,p.jpg', $keys);
-        // no thirdImage, no mapImage in this fixture
-        $this->assertCount(5, $keys);
+        // no thirdImage
+        $this->assertCount(6, $keys);
     }
 
     public function testGetImageKeysEmptyWhenNoImages(): void

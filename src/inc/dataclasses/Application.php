@@ -486,12 +486,6 @@ class Application extends JSONObject implements \JsonSerializable {
         }
         fclose($ifp);
 
-        if (\storage\isEnabled()) {
-            if (\storage\upload($fileName, "$baseFileName,ma.png")) {
-                @unlink($fileName);
-            }
-        }
-
         $this->address->mapImage = "$baseFileName,ma.png";
         \app\save($this);
         return "$baseFileName,ma.png";
@@ -676,28 +670,17 @@ class Application extends JSONObject implements \JsonSerializable {
         $clearKey  = \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV);
         $clearPath = "{$galleryDir}{$clearKey}.jpg";
         copy($thumbPath, $clearPath);
-        if (\storage\upload($clearPath, "{$cdnPrefix}/gallery/{$clearKey}.jpg")) {
-            @unlink($clearPath);
-        }
 
         // Pixelated version
         $pxKey  = \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV);
         $pxPath = "{$galleryDir}{$pxKey}.jpg";
         $src = imagecreatefromjpeg($thumbPath);
         if ($src === false) {
-            if ($needsRelease) \storage\release_local($thumb);
             return;
         }
         imagefilter($src, IMG_FILTER_PIXELATE, 10, true);
         imagejpeg($src, $pxPath, 85);
         imagedestroy($src);
-        if (\storage\upload($pxPath, "{$cdnPrefix}/gallery/{$pxKey}.jpg")) {
-            @unlink($pxPath);
-        }
-
-        if ($needsRelease) {
-            \storage\release_local($thumb);
-        }
 
         $this->contextImage->galleryReady = true;
     }
@@ -739,7 +722,13 @@ class Application extends JSONObject implements \JsonSerializable {
             if (isset($this->$imgType->url))   $keys[] = $this->$imgType->url;
             if (isset($this->$imgType->thumb)) $keys[] = $this->$imgType->thumb;
         }
-        if (isset($this->address->mapImage))   $keys[] = $this->address->mapImage;
+
+        // mapImage key is always path/to/appId,ma.png
+        // We derive the base path from carImage->url to avoid encrypted user metadata.
+        if (isset($this->carImage->url)) {
+            $keys[] = strtok($this->carImage->url, ',') . ',ma.png';
+        }
+
         if (isset($this->carInfo->plateImage)) $keys[] = $this->carInfo->plateImage;
         return $keys;
     }
@@ -776,30 +765,41 @@ class Application extends JSONObject implements \JsonSerializable {
         };
     }
 
-    /**
-     * Removes locally cached copies that were fetched via ensureLocal().
-     * No-op when S3 storage is not enabled or the file is not yet present on S3.
-     */
-    public function releaseLocal(): void {
-        foreach ($this->getImageKeys() as $key) {
-            \storage\release_local($key);
-        }
-    }
 
     /**
      * Uploads all locally present image files to S3 and removes the local copies.
-     * Files already absent locally (e.g. previously synced) are silently skipped.
+     * Searches for files via filesystem (APP_ID,*) to ensure that even encrypted 
+     * metadata (like mapImage in address) is correctly handled.
      * No-op when S3 storage is not enabled.
      */
     public function syncToS3(): void {
-        if (!\storage\isEnabled()) return;
-        foreach ($this->getImageKeys() as $key) {
-            $localPath = ROOT . $key;
-            if (file_exists($localPath)) {
+        if (!\storage\isEnabled() || !isset($this->carImage->url)) return;
+
+        // Prevent parallel sync for the same app using a non-blocking semaphore.
+        $semKey = "syncToS3:{$this->id}";
+        if (!\semaphore\tryAcquire($semKey)) return;
+
+        try {
+            // carImage->url is like "cdn2/123/abc,ca.jpg". 
+            // strtok gives us "cdn2/123/abc", which is the perfect base for glob.
+            $basePath = strtok($this->carImage->url, ',');
+            $pattern  = ROOT . $basePath . '*';
+            $files    = glob($pattern);
+
+            if ($files === false) return;
+
+            foreach ($files as $localPath) {
+                if (!is_file($localPath)) continue;
+                
+                // Reconstruct S3 key from local path (e.g. "cdn2/123/abc,ma.png")
+                $key = ltrim(substr($localPath, strlen(ROOT)), '/');
+                
                 if (\storage\upload($localPath, $key)) {
                     @unlink($localPath);
                 }
             }
+        } finally {
+            \semaphore\release($semKey, "Application::syncToS3");
         }
     }
 }

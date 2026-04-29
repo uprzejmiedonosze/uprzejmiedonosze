@@ -23,8 +23,8 @@ function toZip(Application &$application): array{
             $zip->addFile(ROOT . $application->thirdImage->url,
                 $application->getAppFilename('c.jpg'));
         $zip->close();
-    } finally {
-        $application->releaseLocal();
+    } catch (\Exception $e) {
+        throw $e;
     }
 
     return [$fullPath, $filename];

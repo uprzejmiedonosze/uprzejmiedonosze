@@ -31,7 +31,6 @@ function addToTumblr(Application $app): stdClass|array {
     );
 
     $result = $client->createPost($blogName, $data);
-    $app->releaseLocal();
     return $result;
 }
 
