@@ -42,30 +42,30 @@ function _use_openAlpr(&$imageBytes): bool {
         return true;
     }
 
-    $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
-    if ($budgetConsumed === false) {
-        logger('use plateRec as OpenAlpr budget is unknown!', true);
+    $user = \user\current();
+    $isPremium = !$user->hasApps() || $user->isPatron();
+
+    if (!$isPremium) {
         return false;
     }
-    $budgetConsumed = floor($budgetConsumed*100);
 
-    if ($budgetConsumed == 100) {
+    $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
+    if ($budgetConsumed === false) {
+        logger('OpenAlpr budget is unknown, allowing use for premium user to refresh cache', true);
+        return true;
+    }
+
+    $budgetConsumedPercent = floor($budgetConsumed*100);
+    if ($budgetConsumedPercent >= 100) {
         logger('use plateRec as OpenAlpr budget is consumed', true);
         return false;
     }
 
-    $user = \user\current();
-
-    if(!$user->hasApps()) {
+    if (!$user->hasApps()) {
         logger('use OpenAlpr if this is User first app', true);
-        return true;
-    }
-
-    if($user->isPatron()) {
+    } elseif ($user->isPatron()) {
         logger('use OpenAlpr for Patrons', true);
-        return true;
     }
 
-    logger("use plateRec budgetConsumed $budgetConsumed%", true);
-    return false;
+    return true;
 }
