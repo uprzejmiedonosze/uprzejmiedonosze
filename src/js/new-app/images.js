@@ -9,7 +9,7 @@ import * as Sentry from "@sentry/browser";
 import { error } from "../lib/toast";
 import isIOS from "../lib/isIOS";
 import { updateRecydywa } from "./recydywa";
-import { setOcrVehicleInfo, triggerVehicleInfoEnrichment } from "./vehicle-info";
+import { setOcrVehicleInfo, triggerVehicleInfoEnrichment, appendAutoComment } from "./vehicle-info";
 
 var uploadInProgress = 0;
 
@@ -314,12 +314,13 @@ async function sendFile(fileData, id, imageMetadata={}) {
         if (app.carInfo.brand) {
           setOcrVehicleInfo({ brand: app.carInfo.brand })
           if (comment && (comment.value + "").trim().length == 0) {
-            if (app.carInfo.brandConfidence > 90) {
-              comment.value = "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
-            }
+            let brandLine = null;
             if (app.carInfo.brandConfidence > 98) {
-              comment.value = "Pojazd marki " + app.carInfo.brand + "."
+              brandLine = "Pojazd marki " + app.carInfo.brand + "."
+            } else if (app.carInfo.brandConfidence > 90) {
+              brandLine = "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
             }
+            if (brandLine) appendAutoComment(comment, brandLine);
           }
         }
         if (plateHint) {

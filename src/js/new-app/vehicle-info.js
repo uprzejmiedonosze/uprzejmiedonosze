@@ -58,7 +58,7 @@ function formatBrandNames(text) {
  * @param {HTMLTextAreaElement} commentElement
  * @param {string} text
  */
-function appendAutoComment(commentElement, text) {
+export function appendAutoComment(commentElement, text) {
   if (!commentElement || !text) return;
 
   const line = text.trim();
@@ -145,6 +145,9 @@ function applyVehicleInfo(vehicle) {
   const model = rawModel ? rawModel.toString().trim() : null;
 
   if (brand && model && commentElement) {
+    if (vehicle.brand) {
+      clearAutoVehicleComments(commentElement);
+    }
     const identification = `Pojazd marki ${brand} ${model}.`;
     appendAutoComment(commentElement, identification);
   }
