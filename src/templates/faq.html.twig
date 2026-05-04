@@ -27,6 +27,7 @@
 		<li>{{ _self.link('to', 'Czy "to" warto zgłaszać?') }}</li>
 		<li>{{ _self.link('swiadek', 'Czy zostanę wezwany na świadka?') }}</li>
 		<li>{{ _self.link('recydywa', 'Czy zgłaszać ten sam pojazd kilka razy?') }}</li>
+		<li>{{ _self.link('kategorie', 'Dlaczego nie mogę zaznaczyć kilku kategorii przy zgłoszeniu?') }}</li>
 		<li>{{ _self.link('teren', 'Jak ustalić zarządcę terenu?') }}</li>
 	</ul>
 
@@ -74,14 +75,30 @@
 	<p>Mandat wystawiany jest za czynność, a nie stan. Oznacza to, że jeśli ktoś zaparkował
 		nieprawidłowo, i stoi tam tydzień, to nie dostanie siedmiu mandatów. Nawet jeśli wyślesz
 		w tym czasie dziesięć zgłoszeń. Zmarnujesz tylko czas strażników.</p>
-	<p>Oczywiście z inną sytuacją mamy do czynienia, gdy ktoś codziennie staje w określonym 
+	<p>Oczywiście z inną sytuacją mamy do czynienia, gdy ktoś codziennie staje w określonym
 		miejscu. Wtedy faktycznie każde zgłoszenie może zakończyć się mandatem. Weź jednak pod uwagę,
 		że od twojego pierwszego zgłoszenia, do momentu w którym kierowca otrzyma wezwanie może minąć
 		miesiąc. Dlatego jeśli masz do czynienia z recydywistą, to postaraj się z nim skontaktować.
 		Włóż kartkę za wycieraczkę. Podejdź kiedy parkuje albo odjeżdża.</p>
-	<p>Jeśli powyższe nie pomoże, to częstotliwość zgłoszeń pozostawiam już twojemu sumieniu. Autor 
+	<p>Jeśli powyższe nie pomoże, to częstotliwość zgłoszeń pozostawiam już twojemu sumieniu. Autor
 		zgłasza recydywistów nie częściej niż raz w tygodniu.</p>
-	
+
+	<h4 id="kategorie">Dlaczego nie mogę zaznaczyć kilku kategorii przy zgłoszeniu?</h4>
+	<p>Dlatego, że nikt nie udowodnił, że SM lub Policja faktycznie zastosuje kumulację kar.
+		Natomiast mamy dziesiątki dowodów na to, że wskazywanie kilku kategorii skutkuje czymś
+		odwrotnym: kierowca dostaje jeden mandat za pozycję, za którą grozi <strong>najmniejszy
+		mandat i najmniej punktów</strong>. Klasyką jest ukaranie mandatem za „parkowanie z dala
+		od krawędzi jezdni" (100 zł + 1 pkt) za jazdę po chodniku.</p>
+	<p>Wybierz jedną kategorię — tę, która jest <strong>najbardziej oczywista</strong> i jednocześnie
+		<strong>najbardziej adekwatna</strong> do sytuacji.</p>
+	<p>Są dwa wyjątki od tej zasady:</p>
+	<ul>
+		<li><strong>Parkowanie na zieleni</strong> — to wykroczenie z odrębnego kodeksu (kodeksu
+		wykroczeń a nie przepisów o ruchu drogowym), więc SM może nałożyć je równolegle z wykroczeniem drogowym.</li>
+		<li><strong>Przekroczenie DMC</strong> — z praktyki wynika, że SM nie zastępuje tym
+			wykroczeniem głównego powodu zgłoszenia, lecz potrafi potraktować je jako dodatkowy zarzut.</li>
+	</ul>
+
 	<h4 id="teren">Jak ustalić zarządcę terenu?</h4>
 	<p>Zapewne prędzej czy później spotkasz się z odmową podjęcia czynności przez SM, ponieważ
 	„teren leży poza pasem ruchu drogowego”. Urząd miasta także może ci odmówić postawienia
@@ -97,7 +114,7 @@
 			wykaz dróg publicznych</a>.</li>
 		<li>W Szczecinie trzeba wejścia na <a href="https://geoportal.szczecin.eu/mapa/" rel="external" target="_blank">
 			geoportal</a>, i zaznaczyć warstwę „mienie gminy – do budżetu obywatelskiego”. Teren zaznaczony na żółto
-			to majątek miasta.</li>	
+			to majątek miasta.</li>
 		<li>W Warszawie jest szczególnie trudno. Własność działki nie przesądza o statusie ulicy.
 			Nawet oznaczenie użytku „dr” na <a href="https://mapa.um.warszawa.pl/" rel="external" target="_blank">mapa.um.warszawa.pl</a>
 			nie przesądza. Publiczne (w rozumieniu prd) są drogi z nadaną kategorią. To się robi w drodze uchwały Rady Miasta.
@@ -148,7 +165,7 @@
 	<p>Moje doświadczenia, poparte informacjami od użytkowników wskazuje na to,
 		że raczej nie. SM może zignorować anonimy. Ale zgłoszenie przygotowane przez
 		Uprzejmie Donoszę ma komplet informacji, w tym kluczowe dane kontaktowe zgłaszającego.</p>
-	<p>Natomiast często nie informują o przyjęciu zgłoszenia oraz rozpoczęciu sprawy. Nie 
+	<p>Natomiast często nie informują o przyjęciu zgłoszenia oraz rozpoczęciu sprawy. Nie
 		krępujcie się pytać i domagać informacji zwrotnej. W korespondencji z SM zawsze warto podawać
 		numer rejestracyjny, datę i adres wykroczenia.</p>
 
@@ -166,7 +183,7 @@
 
 	<p>Możesz też spróbować w <a href="/register.html?update">ustawieniach aplikacji</a> domyślnego odbiorcę
 		zgłoszeń z SM na Policję. To pomaga w części miast.</p>
-	
+
 	<p>Warto oczywiście domagać się <a href="#zwrot">zwrotu za przesłuchanie</a>. To także działa otrzeźwiająco.</p>
 
 	<p>To, co zadziałało w moim wypadku to pokazanie komendantowi, że każda moja wizyta na
@@ -254,14 +271,14 @@ classDef start fill:black,color:white
 	<p>Część SM (oraz komisariatów) odmawia wszczęcia postępowania na podstawie
 		    wysłanej wiadomości e-mail. Nalegają, żeby "dzwonić".</p>
 
-	<p>W takiej sytuacji spróbuj argumentować, że nie prosisz o interwencję, bo całe 
+	<p>W takiej sytuacji spróbuj argumentować, że nie prosisz o interwencję, bo całe
 		    wykroczenie trwa czasem 15 minut i nie dojadą. Jeśli będziesz potrzebował(a) interwencji,
 		    to z radością zadzwonisz. Natomiast tutaj wnosisz o ukarania z pozycji
 		    świadka popełnionego wykroczenia.</p>
 
 	<p>Zachęcam także do wysłania im zgłoszenia z pomocą
 		<a href="/e-doreczenia.html">e-Doręczenia</a>.
-			    Nie mamy jeszcze doświadczeń w tej kwestii bo to bardzo nowe rozwiązanie. Będziesz miał(a) 
+			    Nie mamy jeszcze doświadczeń w tej kwestii bo to bardzo nowe rozwiązanie. Będziesz miał(a)
 			    własne, to koniecznie do mnie napisz!
 	</p>
 
@@ -273,7 +290,7 @@ classDef start fill:black,color:white
 
 	<h4 id="miasta">W jakich miastach działa Uprzejmie Donoszę?</h4>
 	<p>Uprzejmie Donoszę działa wszędzie tam, gdzie istnieje możliwość zgłoszenia
-		wykroczenia za pomocą poczty elektronicznej lub EPUAP. W praktyce oznacza prawie 
+		wykroczenia za pomocą poczty elektronicznej lub EPUAP. W praktyce oznacza prawie
 		każdą miejscowość w Polsce.</p>
 
 	<p>Dla części z miast mam bezpośrednie relacje od zgłaszających. Sprawdź, czego
