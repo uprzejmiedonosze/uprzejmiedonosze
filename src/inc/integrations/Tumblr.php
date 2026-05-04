@@ -40,7 +40,7 @@ function addToGallery(\app\Application $app): \app\Application {
     $alreadyInGallery = isset($app->addedToGallery);
     $plateId = $app->carInfo->plateId;
 
-    logger("addToGallery plate:$plateId faces:$facesCount canImageBeShown:$canImageBeShown alreadyInGallery:$alreadyInGallery", true);
+    logger("addToGallery plate:$plateId faces:$facesCount canImageBeShown:$canImageBeShown alreadyInGallery:$alreadyInGallery");
 
     if ($alreadyInGallery) return $app;
     if ($facesCount > 0) return $app;

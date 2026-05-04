@@ -23,7 +23,7 @@ function get(&$imageBytes, Application &$application, string $baseFileName, stri
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
         else
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
-            
+
     } catch (\Exception $e) {
         logger("Exception on alpr\get, 1st attepmt with _use_openAlpr=$use_openAlpr " . $e->getMessage(), true);
         if ($use_openAlpr) // do the opposite
@@ -62,9 +62,9 @@ function _use_openAlpr(&$imageBytes): bool {
     }
 
     if (!$user->hasApps()) {
-        logger('use OpenAlpr if this is User first app', true);
+        logger('use OpenAlpr if this is User first app');
     } elseif ($user->isPatron()) {
-        logger('use OpenAlpr for Patrons', true);
+        logger('use OpenAlpr for Patrons');
     }
 
     return true;

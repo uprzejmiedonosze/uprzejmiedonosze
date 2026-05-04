@@ -37,9 +37,9 @@ $consumer = function (string $appId): void {
     } finally {
       \app\save($app);
       \semaphore\release($appId, "face-detect-consumer");
-      logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null), true);
+      logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null));
     }
-    logger("Detected faces in $appId: " . ($faces->count ?? 0)); 
+    logger("Detected faces in $appId: " . ($faces->count ?? 0));
     sleep(5);
   } catch (\Exception $e) {
     $plateId = $app->carInfo->plateId ?? '[plateId]';
@@ -51,8 +51,8 @@ $consumer = function (string $appId): void {
     } else {
       logger("ERROR: Failed detect face in $appId ($plateId) $message", true);
     }
-    
-    
+
+
     sleep(30);
   }
 };
