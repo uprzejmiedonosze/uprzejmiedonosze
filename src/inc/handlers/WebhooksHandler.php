@@ -110,6 +110,14 @@ class WebhooksHandler extends AbstractHandler {
             \semaphore\release($appId, 'webhook:' . $recipient);
             \webhook\mark($id);
 
+            if (!$ccToUser) {
+                \telemetry\log('delivery_status', $appId, [
+                    'status' => $mailEvent->status,
+                    'event' => $mailEvent->name,
+                    'reason' => $mailEvent->getReason()
+                ]);
+            }
+
             if ($mailEvent->status == 'failed' && !$ccToUser)
                 (new MailGun())->notifyUser($application,
                     "Nie udało się nam dostarczyć zgłoszenia {$application->getNumber()}",

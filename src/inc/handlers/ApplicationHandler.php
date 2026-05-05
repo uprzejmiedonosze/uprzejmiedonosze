@@ -77,6 +77,7 @@ class ApplicationHandler extends AbstractHandler {
             \app\save($application);
             $_SESSION['newAppId'] = $application->id;
             $edit = false;
+            \telemetry\log('report_started', $application->id);
         }
 
 
@@ -188,6 +189,8 @@ class ApplicationHandler extends AbstractHandler {
 
         $application->setStatus("confirmed");
         $application = \app\save($application); // this also sets app number
+
+        \telemetry\log('report_finished', $application->id);
 
         $user->setLastLocation($application->getLatLng());
         $user->appsCount = $application->seq;

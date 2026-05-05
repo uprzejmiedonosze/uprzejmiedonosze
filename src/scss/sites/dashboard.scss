@@ -1,0 +1,50 @@
+@use '../lib/variables';
+
+.dashboard-header {
+    padding: 20px 20px 0 20px;
+}
+
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.chart-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    h3 {
+        margin-top: 0;
+        color: #333;
+    }
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+        border-bottom: 1px solid #eee;
+    }
+}
+
+.funnel-metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background: #f9f9f9;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.funnel-val {
+    font-weight: bold;
+    color: #009C7F;
+}

@@ -11,3 +11,4 @@ require(__DIR__ . '/Semaphore.php');
 require(__DIR__ . '/Queue.php');
 require(__DIR__ . '/Patronite.php');
 require(__DIR__ . '/PetitionStore.php');
+require(__DIR__ . '/Telemetry.php');

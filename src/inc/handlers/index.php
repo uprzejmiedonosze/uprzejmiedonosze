@@ -12,3 +12,4 @@ require(__DIR__ . '/JpegHandler.php');
 require(__DIR__ . '/WebhooksHandler.php');
 require(__DIR__ . '/ApiAiHandler.php');
 require(__DIR__ . '/GeneratorHandler.php');
+require(__DIR__ . '/AdminDashboardHandler.php');

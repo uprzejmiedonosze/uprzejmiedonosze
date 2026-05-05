@@ -18,6 +18,8 @@ class StaticPagesHandler extends AbstractHandler {
         $params = $request->getQueryParams();
         $useCache = !(array_key_exists('_refresh', $params));
 
+        \telemetry\log('visitor_entry');
+
         $mainPageStats = \global_stats\mainPage(useCache: $useCache);
         return AbstractHandler::renderHtml($request, $response, 'index', [
             'config' => [

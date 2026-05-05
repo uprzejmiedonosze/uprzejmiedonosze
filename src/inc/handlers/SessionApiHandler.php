@@ -135,6 +135,8 @@ class SessionApiHandler extends AbstractHandler {
         $latLng = isset($params['latLng']) ? $params['latLng'] : null;
         $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
 
+        \telemetry\log('report_edited', $appId, ['type' => 'image']);
+
         return $this->renderJson($response, $application);
     }
 
@@ -168,6 +170,8 @@ class SessionApiHandler extends AbstractHandler {
         $hasExternalId = !empty($application->externalId);
         \app\save($application);
 
+        \telemetry\log('report_edited', $appId, ['type' => 'fields']);
+
         return self::renderJson($response, [
             "suggestStatusChange" => $isSent && $hasExternalId
         ]);
@@ -178,6 +182,7 @@ class SessionApiHandler extends AbstractHandler {
         $user = $request->getAttribute('user');
         try {
             $application = sendApplication($appId, $user);
+            \telemetry\log('report_sent', $appId);
         } catch (MissingSMException $e) {
             return $this->renderJson($response, array(
                 "status" => "redirect"
@@ -215,6 +220,9 @@ class SessionApiHandler extends AbstractHandler {
         $_SESSION['user_name'] = $firebaseUser['user_name'];
         $_SESSION['user_picture'] = $firebaseUser['user_picture'];
         $_SESSION['user_id'] = $firebaseUser['user_id'];
+
+        \telemetry\log('user_login');
+
         return $this->renderJson($response, $firebaseUser);
     }
 
