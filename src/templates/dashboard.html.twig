@@ -1,0 +1,106 @@
+{% extends "base.html.twig" %}
+
+{% block headIncludes %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block main %}
+    <div class="dashboard-header">
+        <h1>Dashboard Telemetryczny</h1>
+        <p>Przegląd lejka i statystyk operacyjnych</p>
+    </div>
+
+    <div class="dashboard-container">
+        <!-- 1. Funnel -->
+        <div class="chart-box">
+            <h3>Lejek Konwersji (Unikalne Sesje)</h3>
+            <div class="funnel-metrics">
+                {% for event, val in funnel %}
+                    <div class="funnel-metric">
+                        <span>{{ event|replace({'_': ' '})|capitalize }}</span>
+                        <span class="funnel-val">{{ val }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+            <canvas id="funnelChart" style="margin-top: 20px; max-height: 200px;"></canvas>
+        </div>
+
+        <!-- 2. Daily Growth -->
+        <div class="chart-box">
+            <h3>Wysłane Zgłoszenia (Ostatnie 30 dni)</h3>
+            <canvas id="dailyChart"></canvas>
+        </div>
+
+        <!-- 3. Delivery Status -->
+        <div class="chart-box">
+            <h3>Statusy Dostarczeń (Mailgun)</h3>
+            <canvas id="deliveryChart"></canvas>
+        </div>
+
+        <!-- 4. Top Errors -->
+        <div class="chart-box">
+            <h3>Top 5 Błędów Wysyłki</h3>
+            <table class="stats-table">
+                <thead>
+                    <tr><th>Powód</th><th>Liczba</th></tr>
+                </thead>
+                <tbody>
+                    {% for err in deliveryErrors %}
+                        <tr><td>{{ err.reason ?: 'Nieznany' }}</td><td>{{ err.cnt }}</td></tr>
+                    {% else %}
+                        <tr><td colspan="2">Brak danych o błędach.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Data from PHP
+        const funnelData = {{ funnel|json_encode|raw }};
+        const dailyData = {{ dailyReports|json_encode|raw }};
+        const deliveryData = {{ deliveryStats|json_encode|raw }};
+
+        // Funnel Chart
+        new Chart(document.getElementById('funnelChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(funnelData).map(k => k.replace('_', ' ')),
+                datasets: [{
+                    label: 'Sesje',
+                    data: Object.values(funnelData),
+                    backgroundColor: '#009C7F'
+                }]
+            },
+            options: { indexAxis: 'y', plugins: { legend: { display: false } } }
+        });
+
+        // Daily Chart
+        new Chart(document.getElementById('dailyChart'), {
+            type: 'line',
+            data: {
+                labels: dailyData.map(d => d.day),
+                datasets: [{
+                    label: 'Wysłane',
+                    data: dailyData.map(d => d.cnt),
+                    borderColor: '#009C7F',
+                    tension: 0.1,
+                    fill: true,
+                    backgroundColor: 'rgba(0, 156, 127, 0.1)'
+                }]
+            }
+        });
+
+        // Delivery Chart
+        new Chart(document.getElementById('deliveryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: deliveryData.map(d => d.status),
+                datasets: [{
+                    data: deliveryData.map(d => d.cnt),
+                    backgroundColor: ['#009C7F', '#FFD700', '#FF4500', '#708090']
+                }]
+            }
+        });
+    </script>
+{% endblock %}
