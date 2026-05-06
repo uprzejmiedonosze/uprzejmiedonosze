@@ -220,7 +220,9 @@ function saveImgAndThumb($application, $imageBytes, $type) {
     }
 
     if (!imagejpeg(resize_image($fileName, 600, 600, false), $thumbName)) {
-        logger("Wasn't able to write $fileName as thumb to $thumbName.", true);
+        $msg = "Wasn't able to write $fileName as thumb to $thumbName.";
+        logger($msg, true);
+        \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'API::saveImgAndThumb']);
     }
     return $baseFileName;
 }

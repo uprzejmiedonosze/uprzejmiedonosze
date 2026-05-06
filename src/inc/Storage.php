@@ -52,7 +52,9 @@ function upload(string $localPath, string $key): bool {
         ]);
         return true;
     } catch (AwsException $e) {
-        logger("S3 upload failed for $key: " . $e->getMessage(), true);
+        $msg = "S3 upload failed for $key: " . $e->getMessage();
+        logger($msg, true);
+        \telemetry\log('app_error', null, ['msg' => $msg, 'source' => 'S3::upload']);
         return false;
     }
 }

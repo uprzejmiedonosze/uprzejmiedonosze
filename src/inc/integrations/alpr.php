@@ -25,7 +25,9 @@ function get(&$imageBytes, Application &$application, string $baseFileName, stri
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
 
     } catch (\Exception $e) {
-        logger("Exception on alpr\get, 1st attepmt with _use_openAlpr=$use_openAlpr " . $e->getMessage(), true);
+        $msg = "Exception on alpr\\get, 1st attepmt with _use_openAlpr=$use_openAlpr " . $e->getMessage();
+        logger($msg, true);
+        \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'alpr::get']);
         if ($use_openAlpr) // do the opposite
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
         else

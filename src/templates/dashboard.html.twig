@@ -53,6 +53,23 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- 5. App Errors -->
+        <div class="chart-box">
+            <h3>Top 5 Błędów Aplikacji</h3>
+            <table class="stats-table">
+                <thead>
+                    <tr><th>Błąd</th><th>Liczba</th></tr>
+                </thead>
+                <tbody>
+                    {% for err in appErrors %}
+                        <tr><td>{{ err.msg }}</td><td>{{ err.cnt }}</td></tr>
+                    {% else %}
+                        <tr><td colspan="2">Brak błędów aplikacji.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
