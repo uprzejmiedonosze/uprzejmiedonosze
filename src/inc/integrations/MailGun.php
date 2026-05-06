@@ -97,7 +97,9 @@ class MailGun extends CityAPI {
                 \app\save($application);
             }
         } catch (\Throwable $error) {
-            logger("Sending email {$application->id} with MailGun, exception: " . $error->getMessage(), true);
+            $msg = "Sending email {$application->id} with MailGun, exception: " . $error->getMessage();
+            logger($msg, true);
+            \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'MailGun::send']);
             $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);

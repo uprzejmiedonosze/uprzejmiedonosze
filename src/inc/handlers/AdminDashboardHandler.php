@@ -43,20 +43,28 @@ class AdminDashboardHandler extends AbstractHandler {
 
         // 4. Top delivery errors
         $deliveryErrors = $db->query("
-            SELECT json_extract(data, '$.reason') as reason, COUNT(*) as cnt
-            FROM events
-            WHERE event_name = 'delivery_status'
-            AND json_extract(data, '$.status') IN ('failed', 'problem')
+            SELECT json_extract(data, '$.reason') as reason, COUNT(*) as cnt 
+            FROM events 
+            WHERE event_name = 'delivery_status' 
             GROUP BY reason ORDER BY cnt DESC LIMIT 5
         ")->fetchAll(PDO::FETCH_ASSOC);
 
-        return AbstractHandler::renderHtml($request, $response, 'dashboard', [
+        // 5. Top application errors
+        $appErrors = $db->query("
+            SELECT json_extract(data, '$.msg') as msg, COUNT(*) as cnt 
+            FROM events 
+            WHERE event_name = 'app_error' 
+            GROUP BY msg ORDER BY cnt DESC LIMIT 5
+        ")->fetchAll(PDO::FETCH_ASSOC);
 
+        return AbstractHandler::renderHtml($request, $response, 'dashboard', [
             'title' => 'Admin Dashboard',
             'funnel' => $funnel,
             'dailyReports' => $dailyReports,
             'deliveryStats' => $deliveryStats,
-            'deliveryErrors' => $deliveryErrors
+            'deliveryErrors' => $deliveryErrors,
+            'appErrors' => $appErrors
         ]);
+
     }
 }

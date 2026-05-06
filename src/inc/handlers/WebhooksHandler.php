@@ -75,7 +75,9 @@ class WebhooksHandler extends AbstractHandler {
             
 
             if (!$application->wasSent()) {
-                logger("mailgun webhook error, Application $appId was not sent!", true);
+                $msg = "mailgun webhook error, Application $appId was not sent!";
+                logger($msg, true);
+                \telemetry\log('app_error', $appId, ['msg' => $msg, 'source' => 'WebhooksHandler::mailgun']);
                 return $this->renderJson($response, array(
                     "status" => "failed"
                 ));
