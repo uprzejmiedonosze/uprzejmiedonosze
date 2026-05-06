@@ -161,6 +161,7 @@ class StaticPagesHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function logout(Request $request, Response $response) {
+        \telemetry\log('user_logout');
         unset($_SESSION['token']);
         unset($_SESSION['user_id']);
         unset($_SESSION['user_email']);
