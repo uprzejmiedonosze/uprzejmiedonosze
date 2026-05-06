@@ -31,16 +31,9 @@ foreach ($funnelEvents as $event) {
 
         // 2. Daily stats (last 30 days) for dual-axis chart
         $dailyStats = $db->query("
-            WITH days AS (
-                SELECT date('now', '-' || (n.n) || ' days') as day
-                FROM (
-                    SELECT 0 as n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 
-                    UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
-                    UNION SELECT 10 UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14
-                    UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19
-                    UNION SELECT 20 UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24
-                    UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29
-                ) n
+            WITH days_series AS (
+                SELECT date('now', '-' || n || ' days') as day
+                FROM days
             ),
             entries AS (
                 SELECT substr(timestamp, 1, 10) as day, COUNT(DISTINCT session_id) as cnt
@@ -62,14 +55,47 @@ foreach ($funnelEvents as $event) {
                 IFNULL(e.cnt, 0) as entries,
                 IFNULL(st.cnt, 0) as started,
                 IFNULL(sn.cnt, 0) as sent
-            FROM days d
+            FROM days_series d
             LEFT JOIN entries e ON d.day = e.day
             LEFT JOIN started st ON d.day = st.day
             LEFT JOIN sent sn ON d.day = sn.day
             ORDER BY d.day ASC
         ")->fetchAll(PDO::FETCH_ASSOC);
 
-        // 3. Delivery status distribution
+        // 3. Hourly stats (last 24 hours)
+        $hourlyStats = $db->query("
+            WITH hours_series AS (
+                SELECT strftime('%Y-%m-%d %H:00:00', datetime('now', '-' || n || ' hours')) as hour
+                FROM hours
+            ),
+            entries AS (
+                SELECT strftime('%Y-%m-%d %H:00:00', timestamp) as hour, COUNT(DISTINCT session_id) as cnt
+                FROM events WHERE event_name = 'visitor_entry' AND timestamp >= datetime('now', '-24 hours')
+                GROUP BY hour
+            ),
+            started AS (
+                SELECT strftime('%Y-%m-%d %H:00:00', timestamp) as hour, COUNT(*) as cnt
+                FROM events WHERE event_name = 'report_started' AND timestamp >= datetime('now', '-24 hours')
+                GROUP BY hour
+            ),
+            sent AS (
+                SELECT strftime('%Y-%m-%d %H:00:00', timestamp) as hour, COUNT(*) as cnt
+                FROM events WHERE event_name = 'report_sent' AND timestamp >= datetime('now', '-24 hours')
+                GROUP BY hour
+            )
+            SELECT 
+                h.hour, 
+                IFNULL(e.cnt, 0) as entries,
+                IFNULL(st.cnt, 0) as started,
+                IFNULL(sn.cnt, 0) as sent
+            FROM hours_series h
+            LEFT JOIN entries e ON h.hour = e.hour
+            LEFT JOIN started st ON h.hour = st.hour
+            LEFT JOIN sent sn ON h.hour = sn.hour
+            ORDER BY h.hour ASC
+        ")->fetchAll(PDO::FETCH_ASSOC);
+
+        // 4. Delivery status distribution
 // Or all statuses, but make sure they exist.
 $deliveryStats = $db->query("
     SELECT json_extract(data, '$.status') as status, COUNT(*) as cnt 
@@ -78,7 +104,7 @@ $deliveryStats = $db->query("
     GROUP BY status
 ")->fetchAll(PDO::FETCH_ASSOC);
 
-// 4. Top delivery errors (Only REAL errors, not accepted/delivered messages)
+// 5. Top delivery errors (Only REAL errors, not accepted/delivered messages)
 $deliveryErrors = $db->query("
     SELECT json_extract(data, '$.reason') as reason, COUNT(*) as cnt 
     FROM events 
@@ -88,7 +114,7 @@ $deliveryErrors = $db->query("
 ")->fetchAll(PDO::FETCH_ASSOC);
 
 
-        // 5. Top application errors
+        // 6. Top application errors
         $appErrors = $db->query("
             SELECT json_extract(data, '$.msg') as msg, COUNT(*) as cnt 
             FROM events 
@@ -100,6 +126,7 @@ $deliveryErrors = $db->query("
             'title' => 'Admin Dashboard',
             'funnel' => $funnel,
             'dailyStats' => $dailyStats,
+            'hourlyStats' => $hourlyStats,
             'deliveryStats' => $deliveryStats,
             'deliveryErrors' => $deliveryErrors,
             'appErrors' => $appErrors
