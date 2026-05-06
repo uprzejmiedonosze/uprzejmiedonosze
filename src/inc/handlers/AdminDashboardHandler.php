@@ -29,16 +29,47 @@ foreach ($funnelEvents as $event) {
     $funnel[$funnelLabels[$event]] = (int)$stmt->fetchColumn();
 }
 
-// 2. Daily apps (last 30 days) - based on report_sent, NOT delivery_status
-$dailyReports = $db->query("
-    SELECT substr(timestamp, 1, 10) as day, COUNT(*) as cnt 
-    FROM events 
-    WHERE event_name = 'report_sent' 
-    AND timestamp >= date('now', '-30 days')
-    GROUP BY day ORDER BY day ASC
-")->fetchAll(PDO::FETCH_ASSOC);
+        // 2. Daily stats (last 30 days) for dual-axis chart
+        $dailyStats = $db->query("
+            WITH days AS (
+                SELECT date('now', '-' || (n.n) || ' days') as day
+                FROM (
+                    SELECT 0 as n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 
+                    UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9
+                    UNION SELECT 10 UNION SELECT 11 UNION SELECT 12 UNION SELECT 13 UNION SELECT 14
+                    UNION SELECT 15 UNION SELECT 16 UNION SELECT 17 UNION SELECT 18 UNION SELECT 19
+                    UNION SELECT 20 UNION SELECT 21 UNION SELECT 22 UNION SELECT 23 UNION SELECT 24
+                    UNION SELECT 25 UNION SELECT 26 UNION SELECT 27 UNION SELECT 28 UNION SELECT 29
+                ) n
+            ),
+            entries AS (
+                SELECT substr(timestamp, 1, 10) as day, COUNT(DISTINCT session_id) as cnt
+                FROM events WHERE event_name = 'visitor_entry' AND timestamp >= date('now', '-30 days')
+                GROUP BY day
+            ),
+            started AS (
+                SELECT substr(timestamp, 1, 10) as day, COUNT(*) as cnt
+                FROM events WHERE event_name = 'report_started' AND timestamp >= date('now', '-30 days')
+                GROUP BY day
+            ),
+            sent AS (
+                SELECT substr(timestamp, 1, 10) as day, COUNT(*) as cnt
+                FROM events WHERE event_name = 'report_sent' AND timestamp >= date('now', '-30 days')
+                GROUP BY day
+            )
+            SELECT 
+                d.day, 
+                IFNULL(e.cnt, 0) as entries,
+                IFNULL(st.cnt, 0) as started,
+                IFNULL(sn.cnt, 0) as sent
+            FROM days d
+            LEFT JOIN entries e ON d.day = e.day
+            LEFT JOIN started st ON d.day = st.day
+            LEFT JOIN sent sn ON d.day = sn.day
+            ORDER BY d.day ASC
+        ")->fetchAll(PDO::FETCH_ASSOC);
 
-// 3. Delivery status distribution (Only failed/problem statuses for donut?) 
+        // 3. Delivery status distribution
 // Or all statuses, but make sure they exist.
 $deliveryStats = $db->query("
     SELECT json_extract(data, '$.status') as status, COUNT(*) as cnt 
@@ -68,7 +99,7 @@ $deliveryErrors = $db->query("
         return AbstractHandler::renderHtml($request, $response, 'dashboard', [
             'title' => 'Admin Dashboard',
             'funnel' => $funnel,
-            'dailyReports' => $dailyReports,
+            'dailyStats' => $dailyStats,
             'deliveryStats' => $deliveryStats,
             'deliveryErrors' => $deliveryErrors,
             'appErrors' => $appErrors

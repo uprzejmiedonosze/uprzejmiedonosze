@@ -75,14 +75,14 @@
     <script>
         // Data from PHP
         const funnelData = {{ funnel|json_encode|raw }};
-        const dailyData = {{ dailyReports|json_encode|raw }};
+        const dailyData = {{ dailyStats|json_encode|raw }};
         const deliveryData = {{ deliveryStats|json_encode|raw }};
 
         // Funnel Chart
         new Chart(document.getElementById('funnelChart'), {
             type: 'bar',
             data: {
-                labels: Object.keys(funnelData).map(k => k.replace('_', ' ')),
+                labels: Object.keys(funnelData),
                 datasets: [{
                     label: 'Sesje',
                     data: Object.values(funnelData),
@@ -97,14 +97,53 @@
             type: 'line',
             data: {
                 labels: dailyData.map(d => d.day),
-                datasets: [{
-                    label: 'Wysłane',
-                    data: dailyData.map(d => d.cnt),
-                    borderColor: '#009C7F',
-                    tension: 0.1,
-                    fill: true,
-                    backgroundColor: 'rgba(0, 156, 127, 0.1)'
-                }]
+                datasets: [
+                    {
+                        label: 'Wysłane Aplikacje',
+                        data: dailyData.map(d => d.sent),
+                        borderColor: '#009C7F',
+                        backgroundColor: 'rgba(0, 156, 127, 0.1)',
+                        fill: true,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'App started / Visitor entry (%)',
+                        data: dailyData.map(d => d.entries > 0 ? (d.started / d.entries * 100).toFixed(1) : 0),
+                        borderColor: '#FFD700',
+                        backgroundColor: 'transparent',
+                        borderDash: [5, 5],
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'App sent / App started (%)',
+                        data: dailyData.map(d => d.started > 0 ? (d.sent / d.started * 100).toFixed(1) : 0),
+                        borderColor: '#FF4500',
+                        backgroundColor: 'transparent',
+                        borderDash: [2, 2],
+                        yAxisID: 'y1',
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Liczba aplikacji' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        min: 0,
+                        max: 100,
+                        title: { display: true, text: 'Konwersja (%)' },
+                        grid: { drawOnChartArea: false }
+                    }
+                }
             }
         });
 
