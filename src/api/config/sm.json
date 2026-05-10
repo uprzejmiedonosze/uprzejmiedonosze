@@ -4519,5 +4519,16 @@
       "32-500 Chrzanów"
     ],
     "email": "prezydialny@chrzanow.policja.gov.pl"
+  },
+  "Wągrowiec": {
+    "address": [
+      "Komenda Powiatowa Policji w Wągrowcu",
+      "ul. Taszarowo 11",
+      "62-100 Wągrowiec"
+    ],
+    "email": "dyzurny.wagrowiec@po.policja.gov.pl"
+  },
+  "powiat wągrowiecki": {
+    "parent": "Wągrowiec"
   }
 }
