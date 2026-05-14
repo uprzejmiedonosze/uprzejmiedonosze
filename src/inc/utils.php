@@ -82,6 +82,11 @@ function isIOS(){
     return $iPod || $iPhone || $iPad;
 }
 
+function isAndroid(){
+    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    return (bool)stripos($userAgent, "Android");
+}
+
 function extractAppNumer($appNumber) {
     $number = explode("/", $appNumber);
     return intval($number[2]);

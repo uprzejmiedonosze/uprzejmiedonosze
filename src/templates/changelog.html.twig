@@ -8,6 +8,10 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
+<h4>Środa, 14 maja 2026</h4>
+<ul>
+    <li>Poprawa obsługi zdjęć bez danych GPS: pole adresu jest teraz czyszczone, gdy zdjęcie nie zawiera geolokalizacji — użytkownik musi ręcznie wskazać miejsce na mapie. Zaktualizowano komunikat o braku danych lokalizacji. Na Androidzie formularz nie zawęża wyboru do konkretnych formatów zdjęć, co pozwala systemowi przekazać pełne metadane EXIF. Poprawiono też walidację formatu pliku po stronie przeglądarki.</li>
+</ul>
 <h4>Niedziela, 10 maja 2026</h4>
 <ul>
     <li>Naprawa błędu wysyłania zgłoszeń: plik mapy jest teraz generowany i synchronizowany z S3 przed próbą wysłania e-maila, co eliminuje błędy „brak pliku" przy wysyłce przez MailGun.</li>

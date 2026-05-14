@@ -4,10 +4,9 @@ import ExifReader from 'exifreader'
 import { setAddressByLatLng } from "../lib/geolocation";
 import { setDateTime } from "./set-datetime";
 import Api from '../lib/Api'
-
+import isIOS from "../lib/isIOS"
 import * as Sentry from "@sentry/browser";
 import { error } from "../lib/toast";
-import isIOS from "../lib/isIOS";
 import { updateRecydywa } from "./recydywa";
 import { setOcrVehicleInfo, triggerVehicleInfoEnrichment, appendAutoComment } from "./vehicle-info";
 
@@ -22,9 +21,11 @@ export async function checkFile(file, id) {
   if (!file) return
 
   uploadStarted(id);
-  if (!/^image\//i.test(file.type)) {
-    console.error(file.type)
-    return imageError(id, `Zdjęcie o niepoprawnym type ${file.type}`);
+  if (!/^image\/(jpeg|png|heic|heif|webp)/i.test(file.type)) {
+    return imageError(id, file.type
+      ? `Nieobsługiwany format pliku (${file.type}). Wybierz zdjęcie JPEG, PNG lub HEIC.`
+      : 'Nieobsługiwany format pliku. Wybierz zdjęcie JPEG, PNG lub HEIC.'
+    );
   }
 
   const imageToResize = document.createElement('img')
@@ -87,12 +88,12 @@ function uploadStarted(id) {
       loader.classList.add("l")
     }
   }
-  
+
   if (id == "carImage") {
     const recydywa = document.getElementById("recydywa")
     const plateId = document.getElementById("plateId")
     const plateBox = document.querySelector('.plate-box')
-    
+
     if (recydywa) recydywa.style.display = 'none'
     if (plateId) plateId.className = ''
     if (plateBox) plateBox.style.display = 'none'
@@ -117,15 +118,15 @@ function checkUploadInProgress() {
 }
 
 /**
- * 
- * @param {'contextImage' | 'carImage' | 'thirdImage'} id 
+ *
+ * @param {'contextImage' | 'carImage' | 'thirdImage'} id
  * @param {string} errorMsg
  */
 function imageError(id, errorMsg) {
   const section = document.querySelector(`.${id}Section`)
   const loader = document.querySelector(`.${id}Section .loader`)
   const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
-  
+
   if (loader) loader.style.display = 'none'
   if (section) section.classList.add("error")
   if (preview) {
@@ -214,14 +215,13 @@ function noGeoDataInImage() {
   const address = /** @type {HTMLInputElement} */ (document.getElementById("address"))
   if (address) address.value = ""
 
-  if (isIOS()) {
-    addressHint.textContent = "Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć"
-  } else if (/Chrome/.test(navigator.userAgent) &&
-    /Android/.test(navigator.userAgent)) {
-    addressHint.innerHTML = 'Przeglądarka Chrome na Androidzie zapewne usunęła znaczniki geolokalizacji, <a href="/aplikacja.html">zainstaluj Firefox-a</a>.'
-  } else {
-    addressHint.innerHTML = 'Twoje zdjęcie nie ma znaczników geolokacji, <a rel="external" target="_blank" href="https://www.google.com/search?q=kamera+gps+geotagging">włącz je a będzie Ci znacznie wygodniej</a>.'
-  }
+  let platform = "przeglądarka je usunęła"
+  if (/Android/.test(navigator.userAgent))
+    platform = "Android je usunął"
+  if (isIOS())
+    platform = "IOS je usunął"
+
+  addressHint.innerHTML = `Twoje zdjęcie nie ma znaczników geolokacji LUB ${platform}. Być może musisz zgłaszać na komputerze.`
   addressHint.classList.add("hint")
 }
 
@@ -229,14 +229,14 @@ function noGeoDataInImage() {
  * @param {*} vehicleBox {x, y, width, height} of box in which the car is located
  * @param {number} imageWidth real image file width
  * @param {number} imageHeight real image file height
- * @returns 
+ * @returns
  */
 export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
   if (!vehicleBox.width) return
 
   const carImagePreview = /** @type {HTMLImageElement} */ (document.querySelector('img#carImagePreview'))
   if (!carImagePreview) return
-  
+
   const trimBoxWidth = carImagePreview.offsetWidth // trim box width
   const trimBoxHeight = 200 // trim box height
   const ratio = trimBoxWidth / imageWidth // scaling factor of rendered image
@@ -262,9 +262,9 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
 }
 
 /**
- * @param {*} fileData 
- * @param {'contextImage' | 'carImage' | 'thirdImage'} id 
- * @param {*} imageMetadata 
+ * @param {*} fileData
+ * @param {'contextImage' | 'carImage' | 'thirdImage'} id
+ * @param {*} imageMetadata
  */
 async function sendFile(fileData, id, imageMetadata={}) {
   const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
@@ -295,7 +295,7 @@ async function sendFile(fileData, id, imageMetadata={}) {
     if (app.carImage || app.contextImage || app.thirdImage) {
       const loader = document.querySelector(`.${id}Section .loader`)
       const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
-      
+
       if (loader) loader.classList.remove("l")
       if (preview) {
         preview.style.height = "100%"
@@ -362,7 +362,7 @@ export async function removeFile(id) {
 function showThirdImage(show) {
   const thirdImageSections = document.querySelectorAll(".thirdImageSection")
   const thirdImageButtons = document.querySelectorAll(".thirdImageSection.imageButton")
-  
+
   if (show) {
     thirdImageSections.forEach(section => {
       /** @type {HTMLElement} */ (section).style.display = 'block'
