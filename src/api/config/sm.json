@@ -920,6 +920,14 @@
     "email": "sekretariat@strazmiejska.kielce.pl",
     "hint": "Straż Miejska w Kielcach wzywa na przesłuchanie tylko jeśli zgłoszenie jest niejasne (np. nie widać odległości parkowania od przejścia, nie widać niszczenia zieleni itd.) lub kiedy właściciel samochodu nie przyjmuje mandatu i sprawa ma trafić do sądu."
   },
+  "powiat kielecki": {
+    "address": [
+      "Komenda Miejska Policji w Kielcach",
+      "ul. Wesoła 43",
+      "25-363 Kielce"
+    ],
+    "email": "dyzurny.kmp-kielce@ki.policja.gov.pl"
+  },
   "Lubartów": {
     "address": [
       "Komenda Powiatowa Policji w Lubartowie",
