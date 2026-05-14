@@ -7,24 +7,10 @@
 {% block main %}
     <div class="dashboard-header">
         <h1>Dashboard Telemetryczny</h1>
-        <p>Przegląd lejka i statystyk operacyjnych</p>
+        <p>Przegląd statystyk operacyjnych</p>
     </div>
 
     <div class="dashboard-container">
-        <!-- 1. Funnel -->
-        <div class="chart-box">
-            <h3>Lejek Konwersji (Unikalne Sesje)</h3>
-            <div class="funnel-metrics">
-                {% for event, val in funnel %}
-                    <div class="funnel-metric">
-                        <span>{{ event|replace({'_': ' '})|capitalize }}</span>
-                        <span class="funnel-val">{{ val }}</span>
-                    </div>
-                {% endfor %}
-            </div>
-            <canvas id="funnelChart" style="margin-top: 20px; max-height: 200px;"></canvas>
-        </div>
-
         <!-- 2. Daily Growth -->
         <div class="chart-box">
             <h3>Statystyki (ostatnie 30 dni)</h3>
@@ -40,7 +26,24 @@
         <!-- 3. Delivery Status -->
         <div class="chart-box">
             <h3>Statusy Dostarczeń (Mailgun)</h3>
-            <canvas id="deliveryChart"></canvas>
+            {% set deliveryTotal = 0 %}
+            {% for d in deliveryStats %}{% set deliveryTotal = deliveryTotal + d.cnt %}{% endfor %}
+            <table class="stats-table">
+                <thead>
+                    <tr><th>Status</th><th>Liczba</th><th>%</th></tr>
+                </thead>
+                <tbody>
+                    {% for d in deliveryStats %}
+                        <tr>
+                            <td>{{ d.status ?: 'Nieznany' }}</td>
+                            <td>{{ d.cnt }}</td>
+                            <td>{{ deliveryTotal > 0 ? (d.cnt / deliveryTotal * 100)|round(1) : 0 }}%</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="3">Brak danych o dostarczeniach.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
         <!-- 4. Top Errors -->
@@ -48,13 +51,13 @@
             <h3>Top 5 Błędów Wysyłki</h3>
             <table class="stats-table">
                 <thead>
-                    <tr><th>Powód</th><th>Liczba</th></tr>
+                    <tr><th>Powód</th><th>Liczba</th><th>Ostatnie wystąpienie</th></tr>
                 </thead>
                 <tbody>
                     {% for err in deliveryErrors %}
-                        <tr><td>{{ err.reason ?: 'Nieznany' }}</td><td>{{ err.cnt }}</td></tr>
+                        <tr><td>{{ err.reason ?: 'Nieznany' }}</td><td>{{ err.cnt }}</td><td>{{ err.last_seen ? err.last_seen|slice(0, 16) : '—' }}</td></tr>
                     {% else %}
-                        <tr><td colspan="2">Brak danych o błędach.</td></tr>
+                        <tr><td colspan="3">Brak danych o błędach.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -65,13 +68,13 @@
             <h3>Top 5 Błędów Aplikacji</h3>
             <table class="stats-table">
                 <thead>
-                    <tr><th>Błąd</th><th>Liczba</th></tr>
+                    <tr><th>Błąd</th><th>Liczba</th><th>Ostatnie wystąpienie</th></tr>
                 </thead>
                 <tbody>
                     {% for err in appErrors %}
-                        <tr><td>{{ err.msg }}</td><td>{{ err.cnt }}</td></tr>
+                        <tr><td>{{ err.msg }}</td><td>{{ err.cnt }}</td><td>{{ err.last_seen ? err.last_seen|slice(0, 16) : '—' }}</td></tr>
                     {% else %}
-                        <tr><td colspan="2">Brak błędów aplikacji.</td></tr>
+                        <tr><td colspan="3">Brak błędów aplikacji.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -80,24 +83,8 @@
 
     <script>
         // Data from PHP
-        const funnelData = {{ funnel|json_encode|raw }};
         const dailyData = {{ dailyStats|json_encode|raw }};
         const hourlyData = {{ hourlyStats|json_encode|raw }};
-        const deliveryData = {{ deliveryStats|json_encode|raw }};
-
-        // Funnel Chart
-        new Chart(document.getElementById('funnelChart'), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(funnelData),
-                datasets: [{
-                    label: 'Sesje',
-                    data: Object.values(funnelData),
-                    backgroundColor: '#009C7F'
-                }]
-            },
-            options: { indexAxis: 'y', plugins: { legend: { display: false } } }
-        });
 
         // Daily Chart
         new Chart(document.getElementById('dailyChart'), {
@@ -209,16 +196,5 @@
             }
         });
 
-        // Delivery Chart
-        new Chart(document.getElementById('deliveryChart'), {
-            type: 'doughnut',
-            data: {
-                labels: deliveryData.map(d => d.status),
-                datasets: [{
-                    data: deliveryData.map(d => d.cnt),
-                    backgroundColor: ['#009C7F', '#FFD700', '#FF4500', '#708090']
-                }]
-            }
-        });
-    </script>
+</script>
 {% endblock %}

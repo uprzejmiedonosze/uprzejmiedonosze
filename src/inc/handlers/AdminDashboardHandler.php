@@ -13,22 +13,6 @@ class AdminDashboardHandler extends AbstractHandler {
      */
     public function dashboard(Request $request, Response $response): Response {
         $db = \telemetry\db();
-// 1. Funnel data (Total unique sessions per event type)
-$funnelEvents = ['visitor_entry', 'user_login', 'report_started', 'report_finished', 'report_sent'];
-$funnelLabels = [
-    'visitor_entry' => 'Visitor entry',
-    'user_login' => 'User login',
-    'report_started' => 'App started',
-    'report_finished' => 'App finished',
-    'report_sent' => 'App sent'
-];
-$funnel = [];
-foreach ($funnelEvents as $event) {
-    $stmt = $db->prepare("SELECT COUNT(DISTINCT session_id) FROM events WHERE event_name = ?");
-    $stmt->execute([$event]);
-    $funnel[$funnelLabels[$event]] = (int)$stmt->fetchColumn();
-}
-
         // 2. Daily stats (last 30 days) for dual-axis chart
         $dailyStats = $db->query("
             WITH days_series AS (
@@ -106,9 +90,9 @@ $deliveryStats = $db->query("
 
 // 5. Top delivery errors (Only REAL errors, not accepted/delivered messages)
 $deliveryErrors = $db->query("
-    SELECT json_extract(data, '$.reason') as reason, COUNT(*) as cnt 
-    FROM events 
-    WHERE event_name = 'delivery_status' 
+    SELECT json_extract(data, '$.reason') as reason, COUNT(*) as cnt, MAX(timestamp) as last_seen
+    FROM events
+    WHERE event_name = 'delivery_status'
     AND json_extract(data, '$.status') IN ('failed', 'problem')
     GROUP BY reason ORDER BY cnt DESC LIMIT 5
 ")->fetchAll(PDO::FETCH_ASSOC);
@@ -116,15 +100,14 @@ $deliveryErrors = $db->query("
 
         // 6. Top application errors
         $appErrors = $db->query("
-            SELECT json_extract(data, '$.msg') as msg, COUNT(*) as cnt 
-            FROM events 
-            WHERE event_name = 'app_error' 
+            SELECT json_extract(data, '$.msg') as msg, COUNT(*) as cnt, MAX(timestamp) as last_seen
+            FROM events
+            WHERE event_name = 'app_error'
             GROUP BY msg ORDER BY cnt DESC LIMIT 5
         ")->fetchAll(PDO::FETCH_ASSOC);
 
         return AbstractHandler::renderHtml($request, $response, 'dashboard', [
             'title' => 'Admin Dashboard',
-            'funnel' => $funnel,
             'dailyStats' => $dailyStats,
             'hourlyStats' => $hourlyStats,
             'deliveryStats' => $deliveryStats,
