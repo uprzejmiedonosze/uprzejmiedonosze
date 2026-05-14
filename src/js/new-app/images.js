@@ -210,7 +210,10 @@ function resizeImage(imgToResize) {
 function noGeoDataInImage() {
   const addressHint = document.getElementById("addressHint")
   if (!addressHint) return
-  
+
+  const address = /** @type {HTMLInputElement} */ (document.getElementById("address"))
+  if (address) address.value = ""
+
   if (isIOS()) {
     addressHint.textContent = "Uprzejmie Donoszę na iOS nie jest w stanie pobrać adresu z twoich zdjęć"
   } else if (/Chrome/.test(navigator.userAgent) &&
