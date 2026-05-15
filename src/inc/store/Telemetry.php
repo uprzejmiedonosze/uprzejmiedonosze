@@ -1,5 +1,6 @@
 <?php namespace telemetry;
 
+
 /**
  * Logs a telemetry event directly to Netdata (StatsD).
  * @SuppressWarnings(PHPMD.Superglobals)

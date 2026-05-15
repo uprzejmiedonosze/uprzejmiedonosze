@@ -1,7 +1,7 @@
 <?php namespace store;
 
 if (!defined('DB_FILENAME'))
-    define('DB_FILENAME', __DIR__ . '/../../../db/store.sqlite');
+    define('DB_FILENAME', ROOT . 'db/store.sqlite');
 
 $store = null;
 
