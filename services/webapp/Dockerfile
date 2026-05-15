@@ -11,7 +11,7 @@ RUN curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.or
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     apt-get --no-install-recommends -y install \
         locales vim curl sqlite3 \
-        memcached texlive ca-certificates \
+        texlive ca-certificates \
         php8.4-fpm php8.4-sqlite3 php8.4-curl php8.4-zip \
         php8.4-opcache php8.4-mbstring php8.4-gd \
         php8.4-memcache php8.4-memcached php8.4-intl php8.4-xml \
@@ -45,8 +45,7 @@ COPY services/webapp/www.conf                     /etc/php/8.4/fpm/pool.d/
 COPY services/webapp/init.sh                      /root/
 
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.4/fpm/php.ini && \
-    update-rc.d php8.4-fpm defaults && \
-    update-rc.d memcached defaults
+    update-rc.d php8.4-fpm defaults
 
 EXPOSE 80
 CMD ["/bin/sh", "/root/init.sh"]

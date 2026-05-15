@@ -1,5 +1,4 @@
 #!/bin/sh
-/etc/init.d/memcached start
 /etc/init.d/php8.4-fpm start
 
 su -l www-data -s /bin/bash -c "touch /var/log/uprzejmiedonosze.net/localhost.log"
