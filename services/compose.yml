@@ -23,6 +23,7 @@ services:
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
+      target: webapp
     container_name: webapp
     ports:
       - 80-81:80-81
@@ -79,7 +80,8 @@ services:
     profiles: [prod]
     build:
       context: ..
-      dockerfile: services/face-detect-consumer/Dockerfile
+      dockerfile: services/webapp/Dockerfile
+      target: face-detect-consumer
     restart: always
     network_mode: host
     volumes:
@@ -95,7 +97,8 @@ services:
     profiles: [staging]
     build:
       context: ..
-      dockerfile: services/face-detect-consumer/Dockerfile
+      dockerfile: services/webapp/Dockerfile
+      target: face-detect-consumer
     restart: always
     network_mode: host
     volumes:
