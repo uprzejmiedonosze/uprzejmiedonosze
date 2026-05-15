@@ -7,10 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     appId = appIdElement.value
   }
 
-  // @ts-ignore
-  (typeof umami == 'object') && umami.track("set-status", {
-    appId
-  });
+  _paq.push(['trackEvent', 'Application', 'set-status', appId]);
 
   setTimeout(function () {
     const confirmButton = document.querySelector("a.confirm-send-button")

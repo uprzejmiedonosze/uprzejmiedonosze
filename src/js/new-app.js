@@ -43,8 +43,5 @@ document.addEventListener("DOMContentLoaded", () => {
     updateRecydywa(appId);
   }
 
-  // @ts-ignore
-  (typeof umami == 'object') && umami.track("new-app", {
-    "appId": appId
-  });
+  _paq.push(['trackEvent', 'Application', 'new-app', appId]);
 });
