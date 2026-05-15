@@ -1,0 +1,97 @@
+services:
+
+  # ── DEV ─────────────────────────────────────────────────────────────────
+  firebase-emulator:
+    profiles: [dev]
+    build:
+      context: ..
+      dockerfile: services/webapp/Dockerfile.firebase
+    container_name: firebase-emulator
+    ports:
+      - 9099:9099
+      - 4000:4000
+    restart: always
+
+  webapp:
+    profiles: [dev]
+    build:
+      context: ./webapp
+    container_name: webapp
+    ports:
+      - 80-81:80-81
+    restart: always
+    working_dir: /var/www/localhost/webapp
+    volumes:
+      - ../export:/var/www/localhost/webapp
+    depends_on:
+      - firebase-emulator
+    environment:
+      WATCHPACK_POLLING: "true"
+      FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
+
+  matomo-db:
+    profiles: [dev]
+    image: mariadb:11
+    container_name: matomo-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: matomo
+      MYSQL_USER: matomo
+      MYSQL_PASSWORD: matomo_db_pass
+      MYSQL_ROOT_PASSWORD: matomo_root_pass
+    volumes:
+      - matomo-db-data:/var/lib/mysql
+
+  matomo:
+    profiles: [dev]
+    image: matomo:apache
+    container_name: matomo
+    restart: always
+    depends_on:
+      - matomo-db
+    environment:
+      MATOMO_DATABASE_HOST: matomo-db
+      MATOMO_DATABASE_DBNAME: matomo
+      MATOMO_DATABASE_USERNAME: matomo
+      MATOMO_DATABASE_PASSWORD: matomo_db_pass
+    volumes:
+      - matomo-data:/var/www/html
+
+  # ── FACE SERVICES ────────────────────────────────────────────────────────
+  face-detector:
+    profiles: [staging, prod]
+    build:
+      context: ./face-detector
+    restart: always
+    ports:
+      - "127.0.0.1:2000:2000"
+
+  face-detect-consumer-prod:
+    profiles: [prod]
+    build:
+      context: ./face-detect-consumer
+    restart: always
+    network_mode: host
+    volumes:
+      - /var/www/uprzejmiedonosze.net:/var/www/uprzejmiedonosze.net:rw
+      - /var/log/uprzejmiedonosze.net:/var/log/uprzejmiedonosze.net:rw
+    command: >
+      nice -n 10 php
+      /var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php
+
+  face-detect-consumer-staging:
+    profiles: [staging]
+    build:
+      context: ./face-detect-consumer
+    restart: always
+    network_mode: host
+    volumes:
+      - /var/www/staging.uprzejmiedonosze.net:/var/www/staging.uprzejmiedonosze.net:rw
+      - /var/log/staging.uprzejmiedonosze.net:/var/log/staging.uprzejmiedonosze.net:rw
+    command: >
+      nice -n 10 php
+      /var/www/staging.uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php
+
+volumes:
+  matomo-db-data:
+  matomo-data:
