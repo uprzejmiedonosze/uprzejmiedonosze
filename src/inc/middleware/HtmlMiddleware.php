@@ -29,7 +29,8 @@ class HtmlMiddleware implements MiddlewareInterface {
             'hasApps' => false,
             'galleryCount' => 0,
             'isProd' => isProd(),
-            'isStaging' => isStaging()
+            'isStaging' => isStaging(),
+            'matomoSiteId' => MATOMO_SITE_ID,
         ];
 
         global $STATUSES;

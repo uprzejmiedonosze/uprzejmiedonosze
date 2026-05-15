@@ -25,10 +25,7 @@ export async function setStatus(appId, status) {
     changeStatusButton.classList.remove('disabled')
   }
 
-  // @ts-ignore
-  (typeof umami == 'object') && umami.track("set-status", {
-    appId, status
-  });
+  _paq.push(['trackEvent', 'Application', 'set-status', status]);
 
 }
 
