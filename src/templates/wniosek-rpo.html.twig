@@ -28,7 +28,20 @@
     <meta property="og:type" content="website" />
     <meta property="fb:app_id" content="1299217686854263" />
     <link rel="stylesheet" href="{{ BASE_URL }}css/index.css?{{ CSS_HASH }}" />
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="703cb0b2-e13b-4e79-ac2e-acee3adbb29b"></script>
+    <script>
+        var _paq = window._paq = window._paq || [];
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u = "//matomo.uprzejmiedonosze.net/";
+            _paq.push(['setTrackerUrl', u + 'matomo.php']);
+            _paq.push(['setSiteId', '1']);
+            var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+            g.async = true;
+            g.src = u + 'matomo.js';
+            s.parentNode.insertBefore(g, s);
+        })();
+    </script>
 </head>
 
 <body class="index rpo">

@@ -20,8 +20,5 @@ document.addEventListener("DOMContentLoaded", () => {
     showButtons()
   }
 
-  // @ts-ignore
-  (typeof umami == 'object') && umami.track("start", {
-    appId
-  });
+  _paq.push(['trackEvent', 'Application', 'thank-you', appId]);
 });

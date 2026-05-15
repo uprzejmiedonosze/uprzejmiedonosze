@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
   if (!document.querySelector(".mainPage")) return;
-  // @ts-ignore
-  (typeof umami == 'object') && umami.track("main");
+  _paq.push(['trackEvent', 'Navigation', 'main']);
 });
