@@ -5,7 +5,7 @@ use PDO;
 if (!defined('TELEMETRY_DB')) {
     // In dev it might be in docker/db, in prod it might be elsewhere.
     // Following the pattern from Store.php but pointing to docker/db/ for now as requested.
-    define('TELEMETRY_DB', __DIR__ . '/../../../db/telemetry.sqlite');
+    define('TELEMETRY_DB', ROOT . 'db/telemetry.sqlite');
 }
 
 function db(): PDO {

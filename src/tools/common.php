@@ -116,8 +116,8 @@ function removeFile($fileName, $dryRun){
     if(!isset($fileName) || empty($fileName)){
         return;
     }
-    $allowedBase = realpath(__DIR__ . '/../../cdn2');
-    $file = realpath(__DIR__ . "/../../$fileName");
+    $allowedBase = realpath(ROOT . 'cdn2');
+    $file = realpath(ROOT . $fileName);
     if (!$file || !$allowedBase || !str_starts_with($file, $allowedBase . DIRECTORY_SEPARATOR)) {
         echo " ! '$fileName' poza dozwolonym katalogiem cdn2\n";
         return;

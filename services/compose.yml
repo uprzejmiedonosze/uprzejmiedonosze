@@ -24,23 +24,28 @@ services:
       context: ..
       dockerfile: services/webapp/Dockerfile
       target: webapp
+      args:
+        APP_HOST: localhost
+        APP_HTTPS: http
     container_name: webapp
     ports:
       - 80-81:80-81
     restart: always
     working_dir: /var/www/localhost/webapp
     volumes:
-      - ../export:/var/www/localhost/webapp
+      - ../config.php:/var/www/localhost/webapp/config.php:ro
     depends_on:
       - firebase-emulator
       - memcached
+      - face-detector
     environment:
-      WATCHPACK_POLLING: "true"
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
       MEMCACHED_HOST: "memcached"
+      APP_ROOT: /var/www/localhost/
 
+  # ── PROD only ─────────────────────────────────────────────────────────────
   matomo-db:
-    profiles: [matomo]
+    profiles: [prod]
     image: mariadb:11
     container_name: matomo-db
     restart: always
@@ -53,7 +58,7 @@ services:
       - matomo-db-data:/var/lib/mysql
 
   matomo:
-    profiles: [matomo]
+    profiles: [prod]
     image: matomo:apache
     container_name: matomo
     restart: always
@@ -67,17 +72,20 @@ services:
     volumes:
       - matomo-data:/var/www/html
 
-  # ── FACE SERVICES ────────────────────────────────────────────────────────
+  # ── FACE SERVICES (dev + staging + prod) ─────────────────────────────────
   face-detector:
-    profiles: [staging, prod]
+    profiles: [dev, staging, prod]
     build:
       context: ./face-detector
     restart: always
     ports:
       - "127.0.0.1:2000:2000"
 
-  face-detect-consumer-prod:
-    profiles: [prod]
+  # Single parameterized service — run via:
+  #   docker compose --env-file services/.env.prod    -p prod    --profile prod    up -d
+  #   docker compose --env-file services/.env.staging -p staging --profile staging up -d
+  face-detect-consumer:
+    profiles: [staging, prod]
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
@@ -85,28 +93,11 @@ services:
     restart: always
     network_mode: host
     volumes:
-      - /var/www/uprzejmiedonosze.net/db:/app/db:rw
-      - /var/www/uprzejmiedonosze.net/webapp/config.prod.php:/app/webapp/config.prod.php:ro
-      - /var/log/uprzejmiedonosze.net:/var/log/uprzejmiedonosze.net:rw
+      - ${APP_ROOT}db:/app/db:rw
+      - ${APP_ROOT}webapp/${APP_CONFIG:-config.prod.php}:/app/webapp/${APP_CONFIG:-config.prod.php}:ro
+      - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/${APP_HOST:-uprzejmiedonosze.net}:rw
     environment:
-      APP_HOST: uprzejmiedonosze.net
-      APP_ROOT: /app/
-      MEMCACHED_HOST: localhost
-
-  face-detect-consumer-staging:
-    profiles: [staging]
-    build:
-      context: ..
-      dockerfile: services/webapp/Dockerfile
-      target: face-detect-consumer
-    restart: always
-    network_mode: host
-    volumes:
-      - /var/www/staging.uprzejmiedonosze.net/db:/app/db:rw
-      - /var/www/staging.uprzejmiedonosze.net/webapp/config.php:/app/webapp/config.php:ro
-      - /var/log/staging.uprzejmiedonosze.net:/var/log/staging.uprzejmiedonosze.net:rw
-    environment:
-      APP_HOST: staging.uprzejmiedonosze.net
+      APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
       APP_ROOT: /app/
       MEMCACHED_HOST: localhost
 
