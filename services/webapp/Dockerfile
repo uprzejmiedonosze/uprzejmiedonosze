@@ -1,9 +1,9 @@
 # ── Builder (shared: vendor + JSON configs + PHP source) ─────────────────────
-FROM node:20-bookworm-slim AS builder
+FROM node:22-bookworm-slim AS builder
 
 WORKDIR /build
 
-COPY package.json package-lock.json ./
+COPY .npmrc package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # PHP only for running composer
