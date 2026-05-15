@@ -212,8 +212,11 @@ function noGeoDataInImage() {
   const addressHint = document.getElementById("addressHint")
   if (!addressHint) return
 
-  const address = /** @type {HTMLInputElement} */ (document.getElementById("address"))
-  if (address) address.value = ""
+  const lokalizacja = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
+  if (lokalizacja) {
+    lokalizacja.value = ""
+    lokalizacja.placeholder = "(ustaw mapę na miejsce wykroczenia)"
+  }
 
   let platform = "przeglądarka je usunęła"
   if (/Android/.test(navigator.userAgent))
