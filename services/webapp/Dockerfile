@@ -110,24 +110,21 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
         lmodern texlive-lang-polish \
         texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    mkdir -p /var/www/localhost/db \
-             /var/www/localhost/cdn2 \
-             /var/www/localhost/video \
+    mkdir -p /var/www/uprzejmiedonosze.net/db \
+             /var/www/uprzejmiedonosze.net/cdn2 \
+             /var/www/uprzejmiedonosze.net/video \
              /var/log/uprzejmiedonosze.net \
              /var/cache/uprzejmiedonosze.net && \
-    chown -R www-data:www-data /var/www/localhost && \
+    chown -R www-data:www-data /var/www/uprzejmiedonosze.net && \
     chown www-data:www-data /var/log/uprzejmiedonosze.net /var/cache/uprzejmiedonosze.net
 
-# Code + deps from builder (no volume mount needed for code)
-COPY --from=builder --chown=www-data:www-data /build/export/ /var/www/localhost/webapp/
-COPY --from=builder /build/vendor/              /var/www/localhost/vendor/
+# Code + deps from builder (db/cdn/config come from volume mounts at runtime)
+COPY --from=builder --chown=www-data:www-data /build/export/ /var/www/uprzejmiedonosze.net/webapp/
+COPY --from=builder /build/vendor/              /var/www/uprzejmiedonosze.net/vendor/
 
-# Dev seed data (db, cdn, session fixture)
-COPY --chown=www-data:www-data services/webapp/db      /var/www/localhost/db
-COPY --chown=www-data:www-data services/webapp/cdn     /var/www/localhost/cdn
+# Session fixture + nginx/php-fpm config
 COPY --chown=www-data:www-data services/webapp/sess_php \
         /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
-
 COPY services/webapp/nginx.conf                   /etc/nginx/
 COPY services/webapp/nginx_php_configuration.conf /etc/nginx/
 COPY services/webapp/www.conf                     /etc/php/8.4/fpm/pool.d/
@@ -136,7 +133,8 @@ COPY services/webapp/init.sh                      /root/
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.4/fpm/php.ini && \
     update-rc.d php8.4-fpm defaults
 
-ENV APP_ROOT=/var/www/localhost/
+# Fixed inside every container regardless of profile — host path varies via volume mount
+ENV APP_ROOT=/var/www/uprzejmiedonosze.net/
 EXPOSE 80
 CMD ["/bin/sh", "/root/init.sh"]
 
@@ -153,12 +151,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certifi
         php8.4-xml php8.4-mbstring \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /build/export/inc/               /app/webapp/inc/
-COPY --from=builder /build/export/tools/             /app/webapp/tools/
-COPY --from=builder /build/export/public/api/config/ /app/webapp/public/api/config/
-COPY --from=builder /build/vendor/                   /app/vendor/
+COPY --from=builder /build/export/inc/               /var/www/uprzejmiedonosze.net/webapp/inc/
+COPY --from=builder /build/export/tools/             /var/www/uprzejmiedonosze.net/webapp/tools/
+COPY --from=builder /build/export/public/api/config/ /var/www/uprzejmiedonosze.net/webapp/public/api/config/
+COPY --from=builder /build/vendor/                   /var/www/uprzejmiedonosze.net/vendor/
 
 ENV APP_HOST=uprzejmiedonosze.net
-ENV APP_ROOT=/app/
+ENV APP_ROOT=/var/www/uprzejmiedonosze.net/
 
-CMD ["nice", "-n", "10", "php", "/app/webapp/tools/face-detect-consumer.php"]
+CMD ["nice", "-n", "10", "php", "/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php"]
