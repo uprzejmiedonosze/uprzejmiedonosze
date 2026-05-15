@@ -7,7 +7,7 @@ COPY .npmrc package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # PHP only for running composer
-RUN apt-get update && apt-get install -y --no-install-recommends php-cli curl ca-certificates && \
+RUN apt-get update && apt-get install -y --no-install-recommends php-cli php-zip curl ca-certificates && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/*
 
