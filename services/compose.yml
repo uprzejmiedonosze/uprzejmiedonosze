@@ -43,6 +43,8 @@ services:
       - memcached
       - face-detector
     environment:
+      APP_HOST: localhost
+      APP_HTTPS: http
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
       MEMCACHED_HOST: "memcached"
 
@@ -97,8 +99,7 @@ services:
     network_mode: host
     volumes:
       # APP_DATA_ROOT = host-side server root (varies by env, always /var/www/uprzejmiedonosze.net/ inside)
-      - ${APP_DATA_ROOT}db:/var/www/uprzejmiedonosze.net/db:rw
-      - ${APP_DATA_ROOT}webapp/${APP_CONFIG:-config.prod.php}:/var/www/uprzejmiedonosze.net/webapp/${APP_CONFIG:-config.prod.php}:ro
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}:/var/www/uprzejmiedonosze.net:rw
       - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/${APP_HOST:-uprzejmiedonosze.net}:rw
     environment:
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
