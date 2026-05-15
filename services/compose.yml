@@ -12,6 +12,12 @@ services:
       - 4000:4000
     restart: always
 
+  memcached:
+    profiles: [dev]
+    image: memcached:alpine
+    container_name: memcached
+    restart: always
+
   webapp:
     profiles: [dev]
     build:
@@ -26,9 +32,11 @@ services:
       - ../export:/var/www/localhost/webapp
     depends_on:
       - firebase-emulator
+      - memcached
     environment:
       WATCHPACK_POLLING: "true"
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
+      MEMCACHED_HOST: "memcached"
 
   matomo-db:
     profiles: [matomo]
