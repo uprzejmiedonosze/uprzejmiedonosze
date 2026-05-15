@@ -4,13 +4,17 @@ LABEL net.uprzejmiedonosze=0.2.3
 
 ENV HOME=/root
 
+RUN curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
+        > /etc/apt/sources.list.d/php.list
+
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     apt-get --no-install-recommends -y install \
         locales vim curl sqlite3 \
         memcached texlive ca-certificates \
-        php-fpm php-sqlite3 php-curl php-zip \
-        php-opcache php-mbstring php-gd \
-        php-memcache php-memcached php-intl \
+        php8.4-fpm php8.4-sqlite3 php8.4-curl php8.4-zip \
+        php8.4-opcache php8.4-mbstring php8.4-gd \
+        php8.4-memcached php8.4-intl \
         lmodern texlive-lang-polish \
         texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
@@ -37,11 +41,11 @@ COPY --chown=www-data:www-data services/webapp/cdn      /var/www/localhost/cdn
 COPY --chown=www-data:www-data services/webapp/sess_php /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
 COPY services/webapp/nginx.conf                   /etc/nginx/
 COPY services/webapp/nginx_php_configuration.conf /etc/nginx/
-COPY services/webapp/www.conf                     /etc/php/8.2/fpm/pool.d/
+COPY services/webapp/www.conf                     /etc/php/8.4/fpm/pool.d/
 COPY services/webapp/init.sh                      /root/
 
-RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.2/fpm/php.ini && \
-    update-rc.d php8.2-fpm defaults && \
+RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.4/fpm/php.ini && \
+    update-rc.d php8.4-fpm defaults && \
     update-rc.d memcached defaults
 
 EXPOSE 80
