@@ -78,28 +78,34 @@ services:
   face-detect-consumer-prod:
     profiles: [prod]
     build:
-      context: ./face-detect-consumer
+      context: ..
+      dockerfile: services/face-detect-consumer/Dockerfile
     restart: always
     network_mode: host
     volumes:
-      - /var/www/uprzejmiedonosze.net:/var/www/uprzejmiedonosze.net:rw
+      - /var/www/uprzejmiedonosze.net/db:/app/db:rw
+      - /var/www/uprzejmiedonosze.net/webapp/config.prod.php:/app/webapp/config.prod.php:ro
       - /var/log/uprzejmiedonosze.net:/var/log/uprzejmiedonosze.net:rw
-    command: >
-      nice -n 10 php
-      /var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php
+    environment:
+      APP_HOST: uprzejmiedonosze.net
+      APP_ROOT: /app/
+      MEMCACHED_HOST: localhost
 
   face-detect-consumer-staging:
     profiles: [staging]
     build:
-      context: ./face-detect-consumer
+      context: ..
+      dockerfile: services/face-detect-consumer/Dockerfile
     restart: always
     network_mode: host
     volumes:
-      - /var/www/staging.uprzejmiedonosze.net:/var/www/staging.uprzejmiedonosze.net:rw
+      - /var/www/staging.uprzejmiedonosze.net/db:/app/db:rw
+      - /var/www/staging.uprzejmiedonosze.net/webapp/config.php:/app/webapp/config.php:ro
       - /var/log/staging.uprzejmiedonosze.net:/var/log/staging.uprzejmiedonosze.net:rw
-    command: >
-      nice -n 10 php
-      /var/www/staging.uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php
+    environment:
+      APP_HOST: staging.uprzejmiedonosze.net
+      APP_ROOT: /app/
+      MEMCACHED_HOST: localhost
 
 volumes:
   matomo-db-data:

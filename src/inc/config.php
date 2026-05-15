@@ -22,9 +22,17 @@ if (file_exists(__DIR__ . '/../config.prod.php'))
 else
     require(__DIR__ . '/../config.php');
 
-require(__DIR__ . '/../config.env.php');
-const ROOT = '/var/www/' . HOST . '/';
-const BASE_URL = HTTPS . '://' . HOST . '/';
+if (file_exists(__DIR__ . '/../config.env.php')) {
+    require(__DIR__ . '/../config.env.php');
+} else {
+    define('HOST',      getenv('APP_HOST')  ?: 'uprzejmiedonosze.net');
+    define('HTTPS',     getenv('APP_HTTPS') ?: 'https');
+    define('TWIG_HASH', '');
+    define('CSS_HASH',  '');
+    define('JS_HASH',   '');
+}
+define('ROOT',     getenv('APP_ROOT') ?: '/var/www/' . HOST . '/');
+define('BASE_URL', HTTPS . '://' . HOST . '/');
 
 const ODDZIALY_TERENOWE = array(
     'Śródmieście' => 'warszawa_ot1',
