@@ -8,7 +8,7 @@ WORKDIR /build
 
 # npm (cached until package-lock.json changes)
 COPY .npmrc package.json package-lock.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 # PHP 8.4 + composer (cached until composer.lock changes)
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq && \
