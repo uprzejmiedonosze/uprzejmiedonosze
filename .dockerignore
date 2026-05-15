@@ -1,0 +1,5 @@
+vendor/
+node_modules/
+.git/
+export/
+services/face-detector/.venv/
