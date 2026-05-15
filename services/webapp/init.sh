@@ -5,7 +5,7 @@
 export MEMCACHED_HOST="${MEMCACHED_HOST:-localhost}"
 export FIREBASE_AUTH_EMULATOR_HOST="${FIREBASE_AUTH_EMULATOR_HOST:-}"
 
-/etc/init.d/php8.4-fpm start
+/usr/sbin/php-fpm8.4 --daemonize
 
 # -l (login shell) resets env — use plain su to inherit exported vars
 su www-data -s /bin/sh -c "touch /var/log/uprzejmiedonosze.net/localhost.log"
