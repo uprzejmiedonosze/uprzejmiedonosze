@@ -7,7 +7,12 @@ COPY .npmrc package.json package-lock.json ./
 RUN npm ci --omit=dev
 
 # PHP only for running composer
-RUN apt-get update && apt-get install -y --no-install-recommends php-cli php-zip curl ca-certificates && \
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && \
+    curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
+        > /etc/apt/sources.list.d/php.list && \
+    apt-get update && apt-get install -y --no-install-recommends \
+        php8.4-cli php8.4-zip php8.4-xml php8.4-curl && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/*
 
