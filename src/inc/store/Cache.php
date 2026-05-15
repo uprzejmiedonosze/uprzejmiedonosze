@@ -2,7 +2,7 @@
 
 namespace cache {
     $cache = new \Memcache;
-    $cache->connect('localhost', 11211);
+    $cache->connect(getenv('MEMCACHED_HOST') ?: 'localhost', 11211);
 
     enum Type {
         case OpenAlpr;
