@@ -4,7 +4,7 @@ import { error, warning } from "./toast"
 export const checkAddress = function () {
   const lokalizacjaInput = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
   const addressInput = /** @type {HTMLInputElement} */ (document.getElementById("address"))
-  
+
   const textAddress = (lokalizacjaInput?.value || "").trim()
   const jsonAddress = addressInput?.value || ""
 
@@ -45,7 +45,7 @@ export const checkValueRe = function (item, regex) {
 export const checkCommentvalue = function () {
   const commentInput = /** @type {HTMLTextAreaElement} */ (document.getElementById("comment"))
   if (!commentInput) return false
-  
+
   let comment = (commentInput.value || "").trim()
   comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/ig, '').trim()
   if (comment.length > 10)
@@ -82,6 +82,7 @@ export function bindSoftCommentValidation() {
 
 export const checkDateTimeValue = function () {
   const datetimeInput = /** @type {HTMLInputElement} */ (document.getElementById('datetime'))
+  datetimeInput.classList.remove("error")
   const dt = DateTime.fromISO(datetimeInput?.value || "")
   if (dt > DateTime.now()) {
     if (datetimeInput) datetimeInput.classList.add("error")
@@ -94,5 +95,6 @@ export const checkDateTimeValue = function () {
     error("Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!")
     return false
   }
+  if (!dt.isValid) datetimeInput.classList.add("error")
   return dt.isValid
 }
