@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certifi
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
         > /etc/apt/sources.list.d/php.list && \
     apt-get update && apt-get install -y --no-install-recommends \
-        php8.4-cli php8.4-zip php8.4-xml php8.4-curl && \
+        php8.4-cli php8.4-zip php8.4-xml php8.4-curl php8.4-gd && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/*
 
