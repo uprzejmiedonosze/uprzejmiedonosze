@@ -12,7 +12,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
         php-opcache php-mbstring php-gd \
         php-memcache php-memcached php-intl \
         lmodern texlive-lang-polish \
-        texlive-lang-all texlive-latex-recommended texlive-latex-extra && \
+        texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     mkdir -p /var/www/localhost/db \
              /var/www/localhost/cdn2 \
