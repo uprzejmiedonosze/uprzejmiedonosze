@@ -31,9 +31,13 @@ services:
     ports:
       - 80-81:80-81
     restart: always
-    working_dir: /var/www/localhost/webapp
+    working_dir: /var/www/uprzejmiedonosze.net/webapp
     volumes:
-      - ../config.php:/var/www/localhost/webapp/config.php:ro
+      # Dev server root — mirrors prod server layout inside container
+      - ../export:/var/www/uprzejmiedonosze.net/webapp
+      - ../vendor:/var/www/uprzejmiedonosze.net/vendor
+      - ./devroot/db:/var/www/uprzejmiedonosze.net/db
+      - ../config.php:/var/www/uprzejmiedonosze.net/webapp/config.php:ro
     depends_on:
       - firebase-emulator
       - memcached
@@ -41,7 +45,6 @@ services:
     environment:
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
       MEMCACHED_HOST: "memcached"
-      APP_ROOT: /var/www/localhost/
 
   # ── PROD only ─────────────────────────────────────────────────────────────
   matomo-db:
@@ -93,12 +96,12 @@ services:
     restart: always
     network_mode: host
     volumes:
-      - ${APP_ROOT}db:/app/db:rw
-      - ${APP_ROOT}webapp/${APP_CONFIG:-config.prod.php}:/app/webapp/${APP_CONFIG:-config.prod.php}:ro
+      # APP_DATA_ROOT = host-side server root (varies by env, always /var/www/uprzejmiedonosze.net/ inside)
+      - ${APP_DATA_ROOT}db:/var/www/uprzejmiedonosze.net/db:rw
+      - ${APP_DATA_ROOT}webapp/${APP_CONFIG:-config.prod.php}:/var/www/uprzejmiedonosze.net/webapp/${APP_CONFIG:-config.prod.php}:ro
       - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/${APP_HOST:-uprzejmiedonosze.net}:rw
     environment:
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
-      APP_ROOT: /app/
       MEMCACHED_HOST: localhost
 
 volumes:
