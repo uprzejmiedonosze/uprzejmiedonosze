@@ -15,7 +15,8 @@ services:
   webapp:
     profiles: [dev]
     build:
-      context: ./webapp
+      context: ..
+      dockerfile: services/webapp/Dockerfile
     container_name: webapp
     ports:
       - 80-81:80-81
@@ -23,7 +24,6 @@ services:
     working_dir: /var/www/localhost/webapp
     volumes:
       - ../export:/var/www/localhost/webapp
-      - ../vendor:/var/www/localhost/webapp/vendor
     depends_on:
       - firebase-emulator
     environment:
