@@ -9,10 +9,10 @@ function isEnabled(): bool {
 
 /**
  * CDN path prefix for this environment.
- * prod → "cdn2", staging → "cdn2stg", dev → "cdn2dev"
+ * staging → "cdn2stg", everything else (dev + prod) → "cdn2"
  */
 function cdnPrefix(): string {
-    return 'cdn2' . \environmentSuffix();
+    return \isStaging() ? 'cdn2stg' : 'cdn2';
 }
 
 function client(): S3Client {

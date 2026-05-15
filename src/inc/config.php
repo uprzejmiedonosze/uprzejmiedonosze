@@ -22,15 +22,23 @@ if (file_exists(__DIR__ . '/../config.prod.php'))
 else
     require(__DIR__ . '/../config.php');
 
-if (file_exists(__DIR__ . '/../config.env.php')) {
-    require(__DIR__ . '/../config.env.php');
-} else {
-    define('HOST',      getenv('APP_HOST')  ?: 'uprzejmiedonosze.net');
+$_appHost = getenv('APP_HOST');
+if ($_appHost) {
+    define('HOST',      $_appHost);
     define('HTTPS',     getenv('APP_HTTPS') ?: 'https');
     define('TWIG_HASH', '');
     define('CSS_HASH',  '');
     define('JS_HASH',   '');
+} elseif (file_exists(__DIR__ . '/../config.env.php')) {
+    require(__DIR__ . '/../config.env.php');
+} else {
+    define('HOST',      'uprzejmiedonosze.net');
+    define('HTTPS',     'https');
+    define('TWIG_HASH', '');
+    define('CSS_HASH',  '');
+    define('JS_HASH',   '');
 }
+unset($_appHost);
 define('ROOT',     getenv('APP_ROOT') ?: '/var/www/' . HOST . '/');
 define('BASE_URL', HTTPS . '://' . HOST . '/');
 
