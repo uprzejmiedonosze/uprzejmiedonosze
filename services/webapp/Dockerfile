@@ -14,7 +14,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
         memcached texlive ca-certificates \
         php8.4-fpm php8.4-sqlite3 php8.4-curl php8.4-zip \
         php8.4-opcache php8.4-mbstring php8.4-gd \
-        php8.4-memcached php8.4-intl php8.4-xml \
+        php8.4-memcache php8.4-memcached php8.4-intl php8.4-xml \
         lmodern texlive-lang-polish \
         texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
