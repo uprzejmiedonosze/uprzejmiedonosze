@@ -23,6 +23,7 @@ services:
     working_dir: /var/www/localhost/webapp
     volumes:
       - ../export:/var/www/localhost/webapp
+      - ../vendor:/var/www/localhost/webapp/vendor
     depends_on:
       - firebase-emulator
     environment:
@@ -30,7 +31,7 @@ services:
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
 
   matomo-db:
-    profiles: [dev]
+    profiles: [matomo]
     image: mariadb:11
     container_name: matomo-db
     restart: always
@@ -43,7 +44,7 @@ services:
       - matomo-db-data:/var/lib/mysql
 
   matomo:
-    profiles: [dev]
+    profiles: [matomo]
     image: matomo:apache
     container_name: matomo
     restart: always
