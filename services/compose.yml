@@ -2,6 +2,7 @@
 # Staging/prod: vars come from --env-file substitution (services/.env.staging / .env.prod).
 # Dev: loaded directly into the webapp container via env_file: .env.dev.
 x-app-env: &app-env
+  APP_ENV: ${APP_ENV:-prod}
   SMTP_HOST: ${SMTP_HOST:-}
   SMTP_USER: ${SMTP_USER:-}
   EMAIL_SENDER: ${EMAIL_SENDER:-}
