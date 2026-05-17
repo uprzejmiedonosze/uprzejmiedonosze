@@ -25,3 +25,6 @@ vendor/**
 .sentryclirc
 .claude/settings.local.json
 .antigravitycli
+services/.env.dev
+services/.env.staging
+services/.env.prod
