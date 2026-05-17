@@ -460,7 +460,10 @@ class Application extends JSONObject implements \JsonSerializable {
         $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lngLat)/$lngLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
 
         if($this->hasNumber() && isset($this->address->mapImage)){
-            return $this->address->mapImage;
+            if (file_exists(ROOT . $this->address->mapImage)) {
+                return $this->address->mapImage;
+            }
+            // Plik nie istnieje lokalnie (np. po syncToS3 bez uploadu mapy) — regeneruj niżej.
         }
 
         $baseDir = \storage\cdnPrefix() . '/' . $this->getUserNumber();
@@ -486,6 +489,7 @@ class Application extends JSONObject implements \JsonSerializable {
         }
         fclose($ifp);
 
+        \storage\upload($fileName, "$baseFileName,ma.png");
         $this->address->mapImage = "$baseFileName,ma.png";
         \app\save($this);
         return "$baseFileName,ma.png";
@@ -723,9 +727,9 @@ class Application extends JSONObject implements \JsonSerializable {
             if (isset($this->$imgType->thumb)) $keys[] = $this->$imgType->thumb;
         }
 
-        // mapImage key is always path/to/appId,ma.png
-        // We derive the base path from carImage->url to avoid encrypted user metadata.
-        if (isset($this->carImage->url)) {
+        // Derived from carImage->url to avoid encrypted address metadata.
+        // Only include when address->lat is accessible — encrypted addresses have no map.
+        if (isset($this->carImage->url) && isset($this->address->lat)) {
             $keys[] = strtok($this->carImage->url, ',') . ',ma.png';
         }
 

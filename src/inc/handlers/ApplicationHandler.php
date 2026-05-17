@@ -98,7 +98,8 @@ class ApplicationHandler extends AbstractHandler {
             'app' => $application,
             'dtMin' => $dtMin,
             'dt' => $edit ? $dt : '',
-            'dtMax' => $dtMax
+            'dtMax' => $dtMax,
+            'isAndroid' => isAndroid()
         ]);
     }
 

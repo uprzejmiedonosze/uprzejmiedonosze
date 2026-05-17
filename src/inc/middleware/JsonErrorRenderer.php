@@ -12,9 +12,17 @@ class JsonErrorRenderer implements ErrorRendererInterface {
 }
 
 function exceptionToErrorJson($exception): string {
+    $code = $exception->getCode();
+    if ($exception instanceof HttpException) {
+        $code = $exception->getCode();
+    }
+    if (!is_int($code) || $code < 100 || $code > 599) {
+        $code = 500;
+    }
+
     $response = Array(
         "error" => $exception->getMessage(),
-        "status" => $exception->getCode()
+        "status" => $code
     );
 
     if ($exception instanceof HttpException)

@@ -13,7 +13,13 @@ function getCustomErrorHandler(App $app): callable {
         bool $logErrorDetails,
         ?LoggerInterface $logger = null
     ) use ($app) {
-        $status = $exception->getCode() ? : 500;
+        $status = $exception->getCode();
+        if ($exception instanceof HttpException) {
+            $status = $exception->getCode();
+        }
+        if (!is_int($status) || $status < 100 || $status > 599) {
+            $status = 500;
+        }
 
         $email = $_SESSION['user_email'] ?? 'niezalogowany';
         $msg = $exception->getMessage() . " [$email], " . trimAbsolutePaths($exception->getFile())

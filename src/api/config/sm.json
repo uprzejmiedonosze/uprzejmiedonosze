@@ -920,6 +920,14 @@
     "email": "sekretariat@strazmiejska.kielce.pl",
     "hint": "Straż Miejska w Kielcach wzywa na przesłuchanie tylko jeśli zgłoszenie jest niejasne (np. nie widać odległości parkowania od przejścia, nie widać niszczenia zieleni itd.) lub kiedy właściciel samochodu nie przyjmuje mandatu i sprawa ma trafić do sądu."
   },
+  "powiat kielecki": {
+    "address": [
+      "Komenda Miejska Policji w Kielcach",
+      "ul. Wesoła 43",
+      "25-363 Kielce"
+    ],
+    "email": "dyzurny.kmp-kielce@ki.policja.gov.pl"
+  },
   "Lubartów": {
     "address": [
       "Komenda Powiatowa Policji w Lubartowie",
@@ -2176,6 +2184,14 @@
       "62-200 Gniezno"
     ],
     "email": "dyzurnystrazmiejska@gniezno.eu"
+  },
+  "powiat gnieźnieński": {
+    "address": [
+      "Komenda Powiatowa Policji w Gnieźnie",
+      "ul. Jana Pawła II 2",
+      "62-200 Gniezno"
+    ],
+    "email": "dyzurny.gniezno@po.policja.gov.pl"
   },
   "Kłodzko": {
     "address": [
@@ -4519,5 +4535,16 @@
       "32-500 Chrzanów"
     ],
     "email": "prezydialny@chrzanow.policja.gov.pl"
+  },
+  "Wągrowiec": {
+    "address": [
+      "Komenda Powiatowa Policji w Wągrowcu",
+      "ul. Taszarowo 11",
+      "62-100 Wągrowiec"
+    ],
+    "email": "dyzurny.wagrowiec@po.policja.gov.pl"
+  },
+  "powiat wągrowiecki": {
+    "parent": "Wągrowiec"
   }
 }

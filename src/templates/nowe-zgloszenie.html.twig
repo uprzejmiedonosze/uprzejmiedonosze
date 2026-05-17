@@ -38,7 +38,7 @@
             <div class="imageContainer image-upload carImageSection button inverse">
                 <label>
                     <b>{{ categories[app.category].carImageHint }}</b>
-                    <input type="file" accept="image/jpeg, image/png, image/heic, .dummy" id="carImage" multiple
+                    <input type="file" {% if not isAndroid %}accept="image/jpeg, image/png, image/heic, .dummy"{% endif %} id="carImage" multiple
                         title="{{ categories[app.category].carImageHint }}"
                         value="{{ app.carImage.url ?? '' }}" />
                     <div class="loader l" style="display: none;"></div>

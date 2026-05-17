@@ -50,7 +50,14 @@ $jsonErrorHandler = function (
 ) use ($app) {
     $payload = exceptionToErrorJson($exception);
     $response = $app->getResponseFactory()->createResponse();
-    $response = $response->withStatus($exception->getCode());
+    $code = $exception->getCode();
+    if ($exception instanceof HttpException) {
+        $code = $exception->getCode();
+    }
+    if (!is_int($code) || $code < 100 || $code > 599) {
+        $code = 500;
+    }
+    $response = $response->withStatus($code);
     $response->getBody()->write($payload);
     return $response;
 };

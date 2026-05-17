@@ -62,6 +62,7 @@ function _tex2pdf(array|Application $application, string $destFile) {
     $user = \user\current();
     $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
 
+    $application->getMapImage();
     $application->ensureLocal();
 
     $params = [
