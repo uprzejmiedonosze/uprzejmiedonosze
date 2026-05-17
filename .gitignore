@@ -24,3 +24,6 @@ testy
 vendor/**
 .sentryclirc
 .claude/settings.local.json
+services/.env.dev
+services/.env.staging
+services/.env.prod

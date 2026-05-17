@@ -1,0 +1,6 @@
+# min hour dom month dow  command
+0   2    *   *     *    /usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/cleanup.php
+15  20   *   *     *    /usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/old-users-removal.php
+0   5    *   *     *    /usr/bin/nice -n 19 /usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/refresh-stats.php
+40  23   *   *     *    /usr/bin/nice -n 19 /usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/refresh-stats.php
+0   4    *   *     *    /usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/s3-sync.php

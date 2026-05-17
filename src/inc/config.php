@@ -16,10 +16,42 @@ $STOP_AGRESJI = \json\get('stop-agresji.json', 'StopAgresji');
 $LEVELS = \json\get('levels.json', 'Level');
 $BADGES = \json\get('badges.json');
 
-if (file_exists(__DIR__ . '/../config.prod.php'))
-    require(__DIR__ . '/../config.prod.php');
-else
-    require(__DIR__ . '/../config.php');
+define('SMTP_HOST',    getenv('SMTP_HOST')    ?: '');
+define('SMTP_USER',    getenv('SMTP_USER')    ?: '');
+define('EMAIL_SENDER', getenv('EMAIL_SENDER') ?: '');
+define('SMTP_PASS',    getenv('SMTP_PASS')    ?: '');
+define('SMTP_GMAIL',   getenv('SMTP_GMAIL')   ?: '');
+
+define('PLATERECOGNIZER_SECRET', getenv('PLATERECOGNIZER_SECRET') ?: '');
+define('OPEN_ALPR_SECRET_1',     getenv('OPEN_ALPR_SECRET_1')     ?: '');
+define('OPEN_ALPR_SECRET_2',     getenv('OPEN_ALPR_SECRET_2')     ?: '');
+define('MAPBOX_API_TOKEN',       getenv('MAPBOX_API_TOKEN')       ?: '');
+define('GOOGLE_MAPS_API_TOKEN',  getenv('GOOGLE_MAPS_API_TOKEN')  ?: '');
+define('PATRONITE_TOKEN',        getenv('PATRONITE_TOKEN')        ?: '');
+
+define('MAILER_DSN',            getenv('MAILER_DSN')            ?: '');
+define('MAILER_FROM',           getenv('MAILER_FROM')           ?: '');
+define('MAILER_WEBHOOK_SECRET', getenv('MAILER_WEBHOOK_SECRET') ?: '');
+define('MAILER_DSN_ALTER',      getenv('MAILER_DSN_ALTER')      ?: '');
+define('MAILER_FROM_ALTER',     getenv('MAILER_FROM_ALTER')     ?: '');
+
+define('CRYPTO_KEY', getenv('CRYPTO_KEY') ?: '');
+define('CRYPTO_IV',  getenv('CRYPTO_IV')  ?: '');
+define('CRYPTO_TAG', getenv('CRYPTO_TAG') ?: '');
+
+define('OPENAI_API_KEY',  getenv('OPENAI_API_KEY')  ?: '');
+define('GOOGLE_API_KEY',  getenv('GOOGLE_API_KEY')  ?: '');
+define('OPENAI_PROJECT',  getenv('OPENAI_PROJECT')  ?: '');
+
+define('MATOMO_SITE_ID',     (int)(getenv('MATOMO_SITE_ID') ?: 1));
+define('BACKEND_API_KEY',    getenv('BACKEND_API_KEY')    ?: '');
+define('CORS_ALLOWED_DOMAIN', getenv('CORS_ALLOWED_DOMAIN') ?: '');
+
+define('S3_KEY',      getenv('S3_KEY')      ?: '');
+define('S3_SECRET',   getenv('S3_SECRET')   ?: '');
+define('S3_BUCKET',   getenv('S3_BUCKET')   ?: '');
+define('S3_ENDPOINT', getenv('S3_ENDPOINT') ?: '');
+define('S3_REGION',   getenv('S3_REGION')   ?: '');
 
 $_appHost = getenv('APP_HOST');
 if ($_appHost) {
@@ -28,7 +60,7 @@ if ($_appHost) {
     define('TWIG_HASH', '');
     define('CSS_HASH',  '');
     define('JS_HASH',   '');
-} elseif (file_exists(__DIR__ . '/../config.env.php')) {
+} elseif (is_file(__DIR__ . '/../config.env.php')) {
     require(__DIR__ . '/../config.env.php');
 } else {
     define('HOST',      'uprzejmiedonosze.net');
