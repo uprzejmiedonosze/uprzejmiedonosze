@@ -1,3 +1,38 @@
+# App secrets and environment-specific config — passed to all PHP-running services.
+# Staging/prod: vars come from --env-file substitution (services/.env.staging / .env.prod).
+# Dev: loaded directly into the webapp container via env_file: .env.dev.
+x-app-env: &app-env
+  SMTP_HOST: ${SMTP_HOST:-}
+  SMTP_USER: ${SMTP_USER:-}
+  EMAIL_SENDER: ${EMAIL_SENDER:-}
+  SMTP_PASS: ${SMTP_PASS:-}
+  SMTP_GMAIL: ${SMTP_GMAIL:-}
+  PLATERECOGNIZER_SECRET: ${PLATERECOGNIZER_SECRET:-}
+  OPEN_ALPR_SECRET_1: ${OPEN_ALPR_SECRET_1:-}
+  OPEN_ALPR_SECRET_2: ${OPEN_ALPR_SECRET_2:-}
+  MAPBOX_API_TOKEN: ${MAPBOX_API_TOKEN:-}
+  GOOGLE_MAPS_API_TOKEN: ${GOOGLE_MAPS_API_TOKEN:-}
+  PATRONITE_TOKEN: ${PATRONITE_TOKEN:-}
+  MAILER_DSN: ${MAILER_DSN:-}
+  MAILER_FROM: ${MAILER_FROM:-}
+  MAILER_WEBHOOK_SECRET: ${MAILER_WEBHOOK_SECRET:-}
+  MAILER_DSN_ALTER: ${MAILER_DSN_ALTER:-}
+  MAILER_FROM_ALTER: ${MAILER_FROM_ALTER:-}
+  CRYPTO_KEY: ${CRYPTO_KEY:-}
+  CRYPTO_IV: ${CRYPTO_IV:-}
+  CRYPTO_TAG: ${CRYPTO_TAG:-}
+  OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+  GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+  OPENAI_PROJECT: ${OPENAI_PROJECT:-}
+  MATOMO_SITE_ID: ${MATOMO_SITE_ID:-1}
+  BACKEND_API_KEY: ${BACKEND_API_KEY:-}
+  CORS_ALLOWED_DOMAIN: ${CORS_ALLOWED_DOMAIN:-}
+  S3_KEY: ${S3_KEY:-}
+  S3_SECRET: ${S3_SECRET:-}
+  S3_BUCKET: ${S3_BUCKET:-}
+  S3_ENDPOINT: ${S3_ENDPOINT:-}
+  S3_REGION: ${S3_REGION:-}
+
 services:
 
   # ── DEV ─────────────────────────────────────────────────────────────────
@@ -12,11 +47,32 @@ services:
       - 4000:4000
     restart: always
 
-  memcached:
+  builder:
     profiles: [dev]
-    image: memcached:alpine
-    container_name: memcached
-    restart: always
+    build:
+      context: ..
+      dockerfile: services/webapp/Dockerfile
+      target: builder
+      args:
+        APP_HOST: localhost
+        APP_HTTPS: http
+    container_name: builder
+    volumes:
+      - ../src:/build/src:ro
+      - ../src/scss/lib:/build/src/scss/lib   # rw: generated variables.env.scss
+      - ../tools:/build/tools:ro
+      - ../export:/build/export
+      - ./webapp/watch.sh:/watch.sh:ro
+    environment:
+      APP_HOST: localhost
+      APP_HTTPS: http
+    command: ["sh", "/watch.sh"]
+    healthcheck:
+      test: ["CMD", "test", "-f", "/build/export/public/index.php"]
+      interval: 2s
+      timeout: 3s
+      retries: 90
+      start_period: 10s
 
   webapp:
     profiles: [dev]
@@ -33,20 +89,54 @@ services:
     restart: always
     working_dir: /var/www/uprzejmiedonosze.net/webapp
     volumes:
-      # Dev server root — mirrors prod server layout inside container
       - ../export:/var/www/uprzejmiedonosze.net/webapp
-      - ../vendor:/var/www/uprzejmiedonosze.net/vendor
       - ./devroot/db:/var/www/uprzejmiedonosze.net/db
-      - ../config.php:/var/www/uprzejmiedonosze.net/webapp/config.php:ro
+    env_file:
+      - .env.dev
     depends_on:
-      - firebase-emulator
-      - memcached
-      - face-detector
+      builder:
+        condition: service_healthy
+      firebase-emulator:
+        condition: service_started
+      memcached:
+        condition: service_started
+      face-detector:
+        condition: service_started
     environment:
       APP_HOST: localhost
       APP_HTTPS: http
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
       MEMCACHED_HOST: "memcached"
+
+  # ── STAGING + PROD ────────────────────────────────────────────────────────
+  # Run via:
+  #   docker compose --env-file services/.env.staging -p staging --profile staging up -d
+  #   docker compose --env-file services/.env.prod    -p prod    --profile prod    up -d
+  webapp-srv:
+    profiles: [staging, prod]
+    build:
+      context: ..
+      dockerfile: services/webapp/Dockerfile
+      target: webapp
+      args:
+        APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
+        APP_HTTPS: ${APP_HTTPS:-https}
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:80"
+    restart: always
+    volumes:
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}db:/var/www/uprzejmiedonosze.net/db:rw
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2stg:/var/www/uprzejmiedonosze.net/cdn2stg:rw
+      - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/uprzejmiedonosze.net:rw
+    depends_on:
+      - memcached
+      - face-detector
+    environment:
+      <<: *app-env
+      APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
+      APP_HTTPS: ${APP_HTTPS:-https}
+      MEMCACHED_HOST: memcached
 
   # ── PROD only ─────────────────────────────────────────────────────────────
   matomo-db:
@@ -77,7 +167,15 @@ services:
     volumes:
       - matomo-data:/var/www/html
 
-  # ── FACE SERVICES (dev + staging + prod) ─────────────────────────────────
+  # ── SHARED: dev + staging + prod ─────────────────────────────────────────
+  memcached:
+    profiles: [dev, staging, prod]
+    image: memcached:alpine
+    restart: always
+    ports:
+      # Bound to localhost so face-detect-consumer (host network) can reach it
+      - "127.0.0.1:11211:11211"
+
   face-detector:
     profiles: [dev, staging, prod]
     build:
@@ -86,24 +184,46 @@ services:
     ports:
       - "127.0.0.1:2000:2000"
 
-  # Single parameterized service — run via:
-  #   docker compose --env-file services/.env.prod    -p prod    --profile prod    up -d
-  #   docker compose --env-file services/.env.staging -p staging --profile staging up -d
+  # face-detect-consumer and worker-cron share the worker image (code baked in from builder).
+  # Only runtime data is mounted: db/, cdn2*, logs. Config comes from environment vars.
   face-detect-consumer:
     profiles: [staging, prod]
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
-      target: face-detect-consumer
+      target: worker
     restart: always
-    network_mode: host
+    network_mode: host   # reaches face-detector (localhost:2000) and memcached (localhost:11211)
     volumes:
-      # APP_DATA_ROOT = host-side server root (varies by env, always /var/www/uprzejmiedonosze.net/ inside)
-      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}:/var/www/uprzejmiedonosze.net:rw
-      - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/${APP_HOST:-uprzejmiedonosze.net}:rw
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}db:/var/www/uprzejmiedonosze.net/db:rw
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2stg:/var/www/uprzejmiedonosze.net/cdn2stg:rw
+      - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/uprzejmiedonosze.net:rw
     environment:
+      <<: *app-env
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
       MEMCACHED_HOST: localhost
+    command: ["nice", "-n", "10", "php", "/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php"]
+
+  worker-cron:
+    profiles: [staging, prod]
+    build:
+      context: ..
+      dockerfile: services/webapp/Dockerfile
+      target: worker
+    restart: always
+    volumes:
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}db:/var/www/uprzejmiedonosze.net/db:rw
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw
+      - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2stg:/var/www/uprzejmiedonosze.net/cdn2stg:rw
+      - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/uprzejmiedonosze.net:rw
+    depends_on:
+      - memcached
+    environment:
+      <<: *app-env
+      APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
+      MEMCACHED_HOST: memcached
+    command: ["supercronic", "/etc/crontab"]
 
 volumes:
   matomo-db-data:

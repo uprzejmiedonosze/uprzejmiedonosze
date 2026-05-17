@@ -5,7 +5,7 @@ use Slowmove\SimplePhpQueue\Storage\StorageType;
 
 $queue = null;
 
-function queue(): Queue 
+function queue(): Queue
 {
     global $queue;
     if ($queue)

@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpng16-16 libjpeg62-turbo libwebp7 libtiff6 libopenjp2-7 && \
     rm -rf /var/lib/apt/lists/*
 COPY --from=builder /install /usr/local
+ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY main.py .
 COPY src/ ./src/

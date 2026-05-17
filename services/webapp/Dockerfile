@@ -11,7 +11,7 @@ COPY .npmrc package.json package-lock.json ./
 RUN npm ci
 
 # PHP 8.4 + composer (cached until composer.lock changes)
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq && \
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq inotify-tools && \
     curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
         > /etc/apt/sources.list.d/php.list && \
@@ -131,6 +131,7 @@ COPY services/webapp/www.conf                     /etc/php/8.4/fpm/pool.d/
 COPY services/webapp/init.sh                      /root/
 
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" /etc/php/8.4/fpm/php.ini && \
+    sed -i -e "s|.*error_log.*|error_log = /dev/stderr|" /etc/php/8.4/fpm/php-fpm.conf && \
     update-rc.d php8.4-fpm defaults
 
 # Fixed inside every container regardless of profile — host path varies via volume mount
@@ -138,25 +139,30 @@ ENV APP_ROOT=/var/www/uprzejmiedonosze.net/
 EXPOSE 80
 CMD ["/bin/sh", "/root/init.sh"]
 
-# ── face-detect-consumer (staging / prod) ────────────────────────────────────
-FROM debian:bookworm-slim AS face-detect-consumer
+# ── Worker (PHP CLI — face-detect-consumer daemon + cron jobs) ────────────────
+FROM debian:bookworm-slim AS worker
+
+ARG TARGETARCH=amd64
 
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && \
     curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
         > /etc/apt/sources.list.d/php.list && \
     apt-get update && apt-get install -y --no-install-recommends \
-        php8.4-cli php8.4-sqlite3 php8.4-curl \
+        php8.4-cli php8.4-sqlite3 php8.4-curl php8.4-gd \
         php8.4-memcache php8.4-memcached \
         php8.4-xml php8.4-mbstring \
     && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSLo /usr/local/bin/supercronic \
+    "https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-${TARGETARCH}" && \
+    chmod +x /usr/local/bin/supercronic
 
 COPY --from=builder /build/export/inc/               /var/www/uprzejmiedonosze.net/webapp/inc/
 COPY --from=builder /build/export/tools/             /var/www/uprzejmiedonosze.net/webapp/tools/
 COPY --from=builder /build/export/public/api/config/ /var/www/uprzejmiedonosze.net/webapp/public/api/config/
 COPY --from=builder /build/vendor/                   /var/www/uprzejmiedonosze.net/vendor/
+COPY services/webapp/crontab                         /etc/crontab
 
-ENV APP_HOST=uprzejmiedonosze.net
 ENV APP_ROOT=/var/www/uprzejmiedonosze.net/
-
-CMD ["nice", "-n", "10", "php", "/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php"]
+USER www-data
