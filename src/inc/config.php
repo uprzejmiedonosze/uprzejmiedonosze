@@ -90,10 +90,10 @@ const ODDZIALY_TERENOWE = array(
     'Bielany' => 'warszawa_ot5',
     'Żoliborz' => 'warszawa_ot5',
 
-    'Targówek' => 'warszawa_ot6',    
+    'Targówek' => 'warszawa_ot6',
     'Białołęka' => 'warszawa_ot6',
     'Praga-Północ' => 'warszawa_ot6',
-    
+
     'Wawer' => 'warszawa_ot7',
     'Praga-Południe' => 'warszawa_ot7',
     'Wesoła' => 'warszawa_ot7',

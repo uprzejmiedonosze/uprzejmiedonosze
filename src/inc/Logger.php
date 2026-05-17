@@ -1,11 +1,11 @@
 <?PHP
 
 function isProd(): bool {
-    return HOST == 'uprzejmiedonosze.net' || HOST == 'shadow.uprzejmiedonosze.net';
+    return getenv('APP_ENV') === 'prod';
 }
 
 function isStaging(): bool {
-    return HOST == 'staging.uprzejmiedonosze.net';
+    return getenv('APP_ENV') === 'staging';
 }
 
 function isDev(): bool {
@@ -55,10 +55,10 @@ function logger(string|object|array|null $msg, $force = null): string {
         $location = trimAbsolutePaths($location);
 
         send_syslog("$ip $user $location \"$msg\"", debug:!$force);
-        error_log("$time $user $location\t$msg\n", 3, "/var/log/uprzejmiedonosze.net/" . HOST . ".log");
+        error_log("$time $user $location\t$msg\n", 3, 'php://stderr');
         if ($force) {
             $e = new Exception();
-            error_log(trimAbsolutePaths(removeVendor($e->getTraceAsString())), 3, "/var/log/uprzejmiedonosze.net/" . HOST . ".log");
+            error_log(trimAbsolutePaths(removeVendor($e->getTraceAsString())), 3, 'php://stderr');
         }
     }
         

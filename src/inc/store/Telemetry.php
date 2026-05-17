@@ -2,16 +2,10 @@
 
 use PDO;
 
-if (!defined('TELEMETRY_DB')) {
-    // In dev it might be in docker/db, in prod it might be elsewhere.
-    // Following the pattern from Store.php but pointing to docker/db/ for now as requested.
-    define('TELEMETRY_DB', ROOT . 'db/telemetry.sqlite');
-}
-
 function db(): PDO {
     static $db = null;
     if ($db === null) {
-        $db = new \PDO('sqlite:' . TELEMETRY_DB);
+        $db = new \PDO('sqlite:' . ROOT . 'db/telemetry.sqlite');
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $db->exec("PRAGMA journal_mode = WAL;");
         $db->exec("PRAGMA synchronous = OFF;");
