@@ -6,44 +6,45 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Uprzejmie Donosze** ("Politely Report") — a Polish civic reporting platform for citizens to file parking violations and traffic safety complaints to appropriate authorities (city guards, police departments).
 
-Stack: PHP 8.2+ (Slim 4), Twig templates, Vanilla JS (ES modules), SCSS, SQLite, Firebase Auth, Parcel 2 bundler, Docker/nginx.
+Stack: PHP 8.4 (Slim 4), Twig templates, Vanilla JS (ES modules), SCSS, SQLite, Firebase Auth, Parcel 2 bundler, Docker/nginx.
 
 ## Commands
 
 ```bash
-# Install dependencies
-make install            # npm install + mise install + composer install
-
-# Local development
-make dev-run            # Build Docker image and start with Firebase emulator (first time)
-make dev                # Refresh sources in running Docker (day-to-day)
-make api                # Run PHP API server locally on :8080 (without Docker)
-
-# Build
-make css                # Compile SCSS → export/public/css/
-make js                 # Bundle JS → export/public/js/
-make minify             # Full build: js, css, php, twig, config
+# Local development (all build steps run inside Docker)
+make dev                # docker compose --profile dev up --build (full dev stack)
+make emulator-ui        # Open Firebase emulator UI at http://localhost:4000
+make init-db-dev        # Initialize dev SQLite database (run once)
 
 # Tests
-make test-phpunit       # Run PHPUnit tests
-make cypress-local      # Run Cypress E2E tests against local Docker
-make lint-twig          # Lint Twig templates
-make lint-php           # phpmd static analysis on PHP
+make test               # Run PHPUnit inside the webapp container
+make cypress-local      # Run Cypress E2E tests against local dev environment
 
-# Deployment
-make staging            # Deploy to staging.uprzejmiedonosze.net
-make prod               # Deploy to production (requires main branch + clean git + cypress passing)
-make quickfix           # Quick hotfix to production
-
-# Utilities
-make clean              # Remove export/, .parcel-cache/, generated env files
+# Release
+make sentry-release     # Tag prod release + upload JS source maps to Sentry
 make log-from-last-prod # Commits since last production release
 make diff-from-last-prod # Diff since last production release
+
+# Cleanup
+make clean              # Remove export/, .parcel-cache/
+make init-db-staging    # Initialize staging SQLite database (via SSH)
+```
+
+**Docker Compose — direct commands:**
+```bash
+# Dev
+docker compose -f services/compose.yml --env-file services/.env.dev -p dev --profile dev up --build
+
+# Staging (on server)
+docker compose -f services/compose.yml --env-file services/.env.staging -p staging --profile staging up --build -d
+
+# Prod (on server)
+docker compose -f services/compose.yml --env-file services/.env.prod -p prod --profile prod up --build -d
 ```
 
 **Running a single PHPUnit test:**
 ```bash
-./vendor/bin/phpunit --filter TestClassName tests/
+docker exec webapp ./vendor/phpunit/phpunit/phpunit --filter TestClassName tests/
 ```
 
 **Running a single Cypress test:**
@@ -53,16 +54,39 @@ CYPRESS_BASE_URL=http://127.0.0.1 ./node_modules/.bin/cypress run --spec "cypres
 
 ## Architecture
 
+### Docker Services
+
+All services are defined in `services/compose.yml` with three profiles:
+
+| Service | dev | staging | prod | Role |
+|---------|:---:|:-------:|:----:|------|
+| `firebase-emulator` | ✓ | | | Firebase Auth emulator |
+| `builder` | ✓ | | | Watches src/, runs parcel + inotifywait |
+| `webapp` | ✓ | | | nginx + PHP-FPM (code from builder volume) |
+| `webapp-srv` | | ✓ | ✓ | nginx + PHP-FPM (code baked in image) |
+| `memcached` | ✓ | ✓ | ✓ | Cache |
+| `face-detector` | | ✓ | ✓ | Python face detection API |
+| `face-detect-consumer` | | ✓ | ✓ | PHP daemon — processes face detect queue |
+| `worker-cron` | | ✓ | ✓ | supercronic — cleanup, stats, s3-sync |
+| `matomo` + `matomo-db` | | | ✓ | Analytics |
+
 ### Build Pipeline
 
-All source lives in `src/`, built artifacts go to `export/` (never edit export directly):
+All source lives in `src/`, built artifacts go to `export/` (never edit export directly).
 
-- `src/scss/index.scss` → Parcel → `export/public/css/index.css`
-- `src/js/*.js` → Parcel → `export/public/js/*.js`
-- `src/inc/` → copied + linted → `export/inc/`
-- `src/templates/` → copied → `export/templates/`
-- `src/api/config/*.json` → jq minified → `export/public/api/config/`
-- Cache-busting hashes (`CSS_HASH`, `JS_HASH`, `TWIG_HASH`) are computed from file contents and injected into `src/config.env.php` at build time.
+**Dev**: The `builder` container mounts `src/` read-only and `export/` read-write. `watch.sh` runs an initial build then watches for file changes via `inotifywait` (PHP/Twig/JSON) and `parcel watch` (CSS/JS).
+
+**Staging/prod**: `build.sh` runs inside the Docker builder stage during `docker build`. No local tools needed.
+
+Build steps in `services/webapp/build.sh`:
+- `config.env.php` — HOST, CSS/JS/TWIG hashes
+- PHP/Twig/SQL/JSON copy and processing
+- Parcel — CSS, JS, Images (with custom namer: no content hashes, preserves subdirs)
+- Sitemap from Twig `SITEMAP-PRIORITY` annotations
+- Twig lint + PHP syntax check (`php -l`) + phpmd 3.x
+- fail2ban page generation
+- PHPUnit tests (with memcached running, secrets from `.env.dev`)
+- `composer install --no-dev` to strip dev deps before final image
 
 ### PHP Backend
 
@@ -70,40 +94,75 @@ Entry point: `src/api/rest/index.php` (REST API) and `src/index.php` (web routes
 
 Request flow: **Slim routes → Middleware stack → Handlers → Store/Integrations**
 
-- `src/inc/handlers/` — one handler per feature area (ApplicationHandler, SessionApiHandler, ApiAiHandler, StaticPagesHandler, etc.)
-- `src/inc/middleware/` — AuthMiddleware (Firebase JWT), SessionMiddleware, content-type middlewares (PdfMiddleware, CsvMiddleware, XlsMiddleware, JsonBodyParser)
+- `src/inc/handlers/` — one handler per feature area
+- `src/inc/middleware/` — AuthMiddleware (Firebase JWT), SessionMiddleware, content-type middlewares
 - `src/inc/store/` — data persistence layer (SQLite via JsonStore and direct DB queries)
-- `src/inc/dataclasses/` — typed data models (Application, User, Category, SM, Petition, etc.)
-- `src/inc/integrations/` — external services: Mail (Mailgun/Google), Geolocation (Google Maps/Nominatim), ALPR plate recognition (OpenALPR, PlateRecognizer), OpenAI
-- `config.php` — local secrets/config (not committed); `config.dev.php` / `config.prod.php` for env overrides
+- `src/inc/dataclasses/` — typed data models (Application, User, Category, SM, etc.)
+- `src/inc/integrations/` — external services: Mail (Mailgun), Geolocation (Google Maps/Nominatim), ALPR plate recognition (OpenALPR, PlateRecognizer), OpenAI
+
+### Configuration
+
+Secrets and environment-specific config come from env files (all gitignored):
+
+| File | Used by | Contents |
+|------|---------|----------|
+| `services/.env.dev` | dev Docker containers, builder tests | All app secrets (SMTP, S3, Crypto, APIs) |
+| `services/.env.staging` | staging server Docker | Staging-specific values |
+| `services/.env.prod` | prod server Docker | Prod-specific values |
+
+PHP reads all config via `getenv()` — no `config.php` file required. Key constants:
+- `APP_ENV` — environment detection (`prod`/`staging`/`dev`)
+- `APP_HOST` — hostname for URLs and CDN paths
+- `APP_ROOT` — server root (`/var/www/uprzejmiedonosze.net/`)
+- `CRYPTO_KEY/IV/TAG` — encryption
+- `S3_KEY/SECRET/BUCKET/ENDPOINT/REGION` — Hetzner Object Storage
+- `MEMCACHED_HOST` — memcached hostname
 
 ### Frontend
 
-Module-based vanilla JS — each page has its own entry file in `src/js/sites/`. Shared utilities in `src/js/lib/` (including `Api.js`, the central HTTP client).
+Module-based vanilla JS — each page has its own entry file in `src/js/`. Shared utilities in `src/js/lib/`.
 
-Firebase Authentication handles login (Google + email). The Firebase project switches between emulator (dev) and real project (staging/prod) via build-time config.
+Firebase Authentication handles login (Google + email/password). Dev profile uses the Firebase Emulator (auto-started in Docker).
 
 ### Configuration Files
 
 Key JSON configs in `src/api/config/`:
-- `categories.json` — report categories/types
+- `categories.json` — report categories
 - `sm.json` — city guard stations (processed by `tools/sm-parser.js`)
 - `stop-agresji.json` — police stations (processed by `tools/sm-parser.js`)
-- `police-stations.csv` → converted to `police-stations.pjson` via `tools/police-stations.php`
+- `police-stations.csv` → `police-stations.pjson` via `tools/police-stations.php`
 - `badges.json` — validated by `tools/badges-validator.js`
 
 ### Database
 
-SQLite at `docker/db/store.sqlite` (dev) or server path (staging/prod). Schema in `src/sql/base_schema.sql`; migrations as `src/sql/migration_*.sql`.
+SQLite at `services/devroot/db/store.sqlite` (dev, mounted as a volume) or `/var/www/[host]/db/store.sqlite` (staging/prod, mounted from server filesystem).
+
+Schema: `src/sql/base_schema.sql`; migrations: `src/sql/migration_*.sql`.
+
+PHPUnit tests use `services/devroot/db/store.sqlite` as a fixture (via `TEST_DB` env var in bootstrap).
+
+### CDN / Image Storage
+
+- **Dev**: images saved to container's internal `/var/www/uprzejmiedonosze.net/cdn2/` (lost on restart — acceptable)
+- **Staging**: `cdn2stg/` directory on server, synced to Hetzner S3 by `worker-cron`
+- **Prod**: `cdn2/` directory on server, synced to S3
+
+CDN prefix logic: `isStaging() ? 'cdn2stg' : 'cdn2'` — controlled by `APP_ENV`.
+
+### Logging
+
+PHP errors and `logger()` calls go to `php://stderr` → captured by `docker logs webapp`. No separate log files needed in development.
+
+For production: nginx access/error logs are written to `/var/log/uprzejmiedonosze.net/` (volume-mounted from host).
 
 ### Environments
 
-| Target | HOST | Notes |
-|--------|------|-------|
-| dev | localhost | Firebase emulator, Docker |
-| staging | staging.uprzejmiedonosze.net | Real Firebase |
-| prod | uprzejmiedonosze.net | Requires `main` branch + clean git + Cypress |
-
-Before `make dev`, ensure `config.php` exists (local secrets file; see `config.dev.php` as reference).
-
-After switching branches or environments, run `make clean` first — the build system detects env/branch changes via `.branch-env` and will error if they mismatch.
+| | dev | staging | prod |
+|---|---|---|---|
+| Host | `localhost` | `staging.uprzejmiedonosze.net` | `uprzejmiedonosze.net` |
+| APP_ENV | `dev` | `staging` | `prod` |
+| webapp port | 80 | 8081 (localhost) | 8080 (localhost) |
+| Firebase | Emulator | Real project | Real project |
+| Sentry | off | off | on |
+| S3 | off | on | on |
+| CDN prefix | `cdn2` | `cdn2stg` | `cdn2` |
