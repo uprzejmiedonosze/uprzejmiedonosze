@@ -90,15 +90,15 @@ Cypress.Commands.add("loadConfig", () => {
 });
 
 Cypress.Commands.add("initDB", () => {
-  if (Cypress.expose('DOCKER'))
-    return cy.exec('docker exec webapp sqlite3 /var/www/localhost/db/store.sqlite -init /var/www/localhost/webapp/sql/init_registered.sql')
+  if (Cypress.env('DOCKER'))
+    return cy.exec('docker exec webapp sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite -init /var/www/uprzejmiedonosze.net/webapp/sql/init_registered.sql')
 
   cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_registered.sql"')
 })
 
 Cypress.Commands.add("cleanDB", () => {
-  if (Cypress.expose('DOCKER'))
-    return cy.exec('docker exec webapp sqlite3 /var/www/localhost/db/store.sqlite -init /var/www/localhost/webapp/sql/init_empty.sql')
+  if (Cypress.env('DOCKER'))
+    return cy.exec('docker exec webapp sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite -init /var/www/uprzejmiedonosze.net/webapp/sql/init_empty.sql')
 
   cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_empty.sql"')
 })
