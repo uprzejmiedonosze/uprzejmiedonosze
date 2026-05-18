@@ -19,7 +19,8 @@ $consumer = function (string $appId): void {
       return;
     }
 
-    $url = "http://localhost:2000/detect/" . BASE_URL . $app->contextImage->url;
+    $faceDetectorUrl = getenv('FACE_DETECTOR_URL') ?: 'http://localhost:2000';
+    $url = "$faceDetectorUrl/detect/" . BASE_URL . $app->contextImage->url;
     $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
 
     try {
