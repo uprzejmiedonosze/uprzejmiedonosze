@@ -16,7 +16,7 @@ TAG_NAME   := $(shell echo $(GIT_BRANCH)_$(DATE))
 clean: ## Remove local build artifacts
 	@echo "==> Cleaning"
 	@rm -rf export
-	@rm -f src/config.env.php src/scss/lib/variables.env.scss
+	@rm -f src/config.env.php
 	@rm -rf .parcel-cache/
 
 # ── Database init ─────────────────────────────────────────────────────────────
@@ -81,6 +81,15 @@ sentry-release: ## Create Sentry release and upload JS source maps
 		--project ud-js ./export/public/js
 
 # ── Dev convenience ───────────────────────────────────────────────────────────
+
+.PHONY: dev
+dev:
+	@docker compose \
+        -f services/compose.yml \
+        --env-file services/.env.dev \
+        -p $@ \
+        --profile $@ \
+        up --build
 
 .PHONY: emulator-ui
 emulator-ui: ## Open Firebase emulator UI in browser

@@ -16,7 +16,7 @@ class WebhooksHandler extends AbstractHandler {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function mailgun(Request $request, Response $response): Response {        
+    public function mailgun(Request $request, Response $response): Response {
         $event = $request->getParsedBody();
         $id = $event['event-data']['id'] ?? null;
         if (!$id) {
@@ -34,11 +34,11 @@ class WebhooksHandler extends AbstractHandler {
                 "status" => "ignored"
             ));
         }
-        
+
         $payload = $event['event-data'];
         $appId = $payload['user-variables']['appid'];
         $recipient = $payload['recipient'];
-        
+
         if(($payload['user-variables']['environment'] ?? 'prod') !== environment()) {
             \webhook\mark($id, 'other environment, ignoring');
             return $this->renderJson($response, array(
@@ -72,7 +72,7 @@ class WebhooksHandler extends AbstractHandler {
                     "status" => "ignored"
                 ));
             }
-            
+
 
             if (!$application->wasSent()) {
                 $msg = "mailgun webhook error, Application $appId was not sent!";

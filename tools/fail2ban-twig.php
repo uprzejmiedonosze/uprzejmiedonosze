@@ -14,7 +14,10 @@ echo $twig->render('fail2ban.html.twig', [
         'uri' => '/',
         'isProd' => true,
         'isStaging' => false,
-        'isLoggedIn' => false
+        'isLoggedIn' => false,
+        'matomoSiteId' => MATOMO_SITE_ID,
+        'stats' => null,
+        'userName' => null,
     ],
     'config' => [
         'menu' => null

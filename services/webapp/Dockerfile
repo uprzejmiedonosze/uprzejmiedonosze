@@ -11,25 +11,43 @@ COPY .npmrc package.json package-lock.json ./
 RUN npm ci
 
 # PHP 8.4 + composer (cached until composer.lock changes)
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq inotify-tools libxml2-utils && \
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq inotify-tools && \
     curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
         > /etc/apt/sources.list.d/php.list && \
     apt-get update && apt-get install -y --no-install-recommends \
-        php8.4-cli php8.4-zip php8.4-xml php8.4-curl php8.4-gd php8.4-sqlite3 && \
+        php8.4-cli php8.4-zip php8.4-xml php8.4-curl php8.4-gd php8.4-sqlite3 \
+        php8.4-memcache php8.4-mbstring php8.4-intl \
+        memcached && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/*
 
 COPY composer.json composer.lock ./
 COPY openalpr/ ./openalpr/
-RUN composer install --no-dev --no-interaction --no-progress --no-scripts
+RUN composer install --no-interaction --no-progress --no-scripts
 
 # Source + build script (changes frequently — after slow cached steps)
+COPY .parcelrc               ./.parcelrc
+COPY phpunit.xml             ./phpunit.xml
+COPY tests/                  ./tests/
 COPY src/                    ./src/
 COPY tools/                  ./tools/
 COPY services/webapp/build.sh ./build.sh
+COPY services/devroot/db/store.sqlite /tmp/test-db.sqlite
+# .env.dev is gitignored — must exist locally for tests to have secrets + crypto keys
+COPY services/.env.dev        ./services/.env.dev
 
-RUN if [ "${APP_HOST}" = "localhost" ]; then mkdir -p export; else sh build.sh; fi
+# Always create the full export/ tree so COPY --from=builder succeeds in all profiles.
+# For dev, these directories stay empty (overridden by volume mounts at runtime).
+# For staging/prod, build.sh fills them.
+RUN mkdir -p \
+    export/public/api/config export/public/api/rest export/public/img \
+    export/public/css export/public/js \
+    export/inc/integrations export/inc/middleware export/inc/handlers \
+    export/inc/dataclasses export/inc/store export/inc/converters \
+    export/templates export/tools export/sql
+
+RUN [ "${APP_HOST}" = "localhost" ] || sh build.sh
 
 # ── Webapp ────────────────────────────────────────────────────────────────────
 FROM nginx:1.27.3-bookworm AS webapp

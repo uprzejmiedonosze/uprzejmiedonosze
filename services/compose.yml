@@ -59,8 +59,8 @@ services:
         APP_HTTPS: http
     container_name: builder
     volumes:
+      - ../.parcelrc:/build/.parcelrc:ro
       - ../src:/build/src:ro
-      - ../src/scss/lib:/build/src/scss/lib   # rw: generated variables.env.scss
       - ../tools:/build/tools:ro
       - ../export:/build/export
       - ./webapp/watch.sh:/watch.sh:ro
