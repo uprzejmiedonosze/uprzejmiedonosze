@@ -27,7 +27,9 @@ function getCustomErrorHandler(App $app): callable {
 
         if (isProd() && $status >= 500 && $status !== 503) \Sentry\captureException($exception);
         logger($msg, $status != 404 && $status != 503);
-        logger(trimAbsolutePaths($exception->getTraceAsString()));
+        if ($status !== 404) {
+            logger(trimAbsolutePaths($exception->getTraceAsString()));
+        }
         
         $httpException = $exception;
         if (!($exception instanceof HttpException)) {
