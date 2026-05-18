@@ -101,8 +101,6 @@ services:
         condition: service_started
       memcached:
         condition: service_started
-      face-detector:
-        condition: service_started
     environment:
       APP_HOST: localhost
       APP_HTTPS: http
@@ -173,17 +171,12 @@ services:
     profiles: [dev, staging, prod]
     image: memcached:alpine
     restart: always
-    ports:
-      # Bound to localhost so face-detect-consumer (host network) can reach it
-      - "127.0.0.1:11211:11211"
 
   face-detector:
-    profiles: [dev, staging, prod]
+    profiles: [staging, prod]
     build:
       context: ./face-detector
     restart: always
-    ports:
-      - "127.0.0.1:2000:2000"
 
   # face-detect-consumer and worker-cron share the worker image (code baked in from builder).
   # Only runtime data is mounted: db/, cdn2*, logs. Config comes from environment vars.
@@ -194,7 +187,9 @@ services:
       dockerfile: services/webapp/Dockerfile
       target: worker
     restart: always
-    network_mode: host   # reaches face-detector (localhost:2000) and memcached (localhost:11211)
+    depends_on:
+      - memcached
+      - face-detector
     volumes:
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}db:/var/www/uprzejmiedonosze.net/db:rw
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw
@@ -203,7 +198,8 @@ services:
     environment:
       <<: *app-env
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
-      MEMCACHED_HOST: localhost
+      MEMCACHED_HOST: memcached
+      FACE_DETECTOR_URL: http://face-detector:2000
     command: ["nice", "-n", "10", "php", "/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php"]
 
   worker-cron:

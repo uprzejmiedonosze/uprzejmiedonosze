@@ -11,12 +11,12 @@ COPY .npmrc package.json package-lock.json ./
 RUN npm ci
 
 # PHP 8.4 + composer (cached until composer.lock changes)
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq inotify-tools && \
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq inotify-tools libxml2-utils && \
     curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
         > /etc/apt/sources.list.d/php.list && \
     apt-get update && apt-get install -y --no-install-recommends \
-        php8.4-cli php8.4-zip php8.4-xml php8.4-curl php8.4-gd && \
+        php8.4-cli php8.4-zip php8.4-xml php8.4-curl php8.4-gd php8.4-sqlite3 && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/*
 
@@ -24,71 +24,12 @@ COPY composer.json composer.lock ./
 COPY openalpr/ ./openalpr/
 RUN composer install --no-dev --no-interaction --no-progress --no-scripts
 
-# Source (changes frequently — after slow steps)
-COPY src/   ./src/
-COPY tools/ ./tools/
+# Source + build script (changes frequently — after slow cached steps)
+COPY src/                    ./src/
+COPY tools/                  ./tools/
+COPY services/webapp/build.sh ./build.sh
 
-# Output directories (matching Makefile DIRS)
-RUN mkdir -p \
-    export/public/api/config export/public/api/rest export/public/img \
-    export/public/css export/public/js \
-    export/inc/integrations export/inc/middleware export/inc/handlers \
-    export/inc/dataclasses export/inc/store export/inc/converters \
-    export/templates export/tools export/sql
-
-# ── Hashes — computed from SOURCE files before building, matching Makefile:
-#   CSS_HASH  = cat src/scss/**/*.scss | md5sum
-#   JS_HASH   = cat src/js/**/*.js src/api/config/*.json | md5sum
-#   TWIG_HASH = cat src/templates/*.twig | md5sum   (top-level only)
-RUN CSS_HASH=$(find src/scss -name '*.scss' | sort | xargs cat | md5sum | cut -b1-8) && \
-    JS_HASH=$(cat $(find src/js -name '*.js' | sort) $(find src/api/config -name '*.json' | sort) | md5sum | cut -b1-8) && \
-    TWIG_HASH=$(cat src/templates/*.twig | md5sum | cut -b1-8) && \
-    printf '<?php\ndefine("HOST", "%s");\ndefine("TWIG_HASH", "%s");\ndefine("CSS_HASH", "%s");\ndefine("JS_HASH", "%s");\ndefine("HTTPS", "%s");\n' \
-        "${APP_HOST}" "${TWIG_HASH}" "${CSS_HASH}" "${JS_HASH}" "${APP_HTTPS}" \
-    > export/config.env.php
-
-# ── PHP / static files (copy, no linting — lint runs only in prod Makefile)
-RUN cp -r src/inc/.      export/inc/ && \
-    cp -r src/tools       export/ && \
-    cp -r src/sql         export/ && \
-    cp -r src/templates/. export/templates/ && \
-    cp src/index.php src/favicon.ico src/robots.txt src/ads.txt export/public/ && \
-    cp src/manifest.json  export/public/ && \
-    cp src/api/rest/index.php export/public/api/rest/ && \
-    find src/api -maxdepth 1 -name '*.html' -exec cp {} export/public/api/ \;
-
-# ── JSON configs — order matters: node scripts first, then jq for remaining files
-#   sm.json / stop-agresji.json: restructured by sm-parser (parent resolution, lowercase keys)
-#   badges.json: validated against categories.json, then output
-#   *.json (rest): minified with jq -c .
-RUN node tools/sm-parser.js src/api/config/sm.json           export/public/api/config/sm.json && \
-    node tools/sm-parser.js src/api/config/stop-agresji.json export/public/api/config/stop-agresji.json && \
-    node tools/badges-validator.js src/api/config/badges.json export/public/api/config/badges.json && \
-    for f in src/api/config/*.json; do \
-        name=$(basename "$f"); \
-        [ ! -f "export/public/api/config/$name" ] && jq -c . "$f" > "export/public/api/config/$name" || true; \
-    done
-
-# ── Police stations: CSV + processed stop-agresji.json → pjson (PHP transform)
-RUN php tools/police-stations.php \
-        src/api/config/police-stations.csv \
-        export/public/api/config/stop-agresji.json \
-    > export/public/api/config/police-stations.pjson
-
-# ── CSS: generate HOST-specific scss variables, then Parcel build
-RUN HOST=${APP_HOST} node src/scss/env.js > src/scss/lib/variables.env.scss && \
-    node_modules/.bin/parcel build --no-cache --dist-dir export/public/css src/scss/index.scss
-
-# ── JS: one Parcel invocation per source file (matches Makefile pattern rule)
-RUN for f in src/js/*.js; do \
-        node_modules/.bin/parcel build --no-cache --dist-dir export/public/js/ "$f"; \
-    done
-
-# ── Images: copy src/img (Makefile uses Parcel on images-index.html,
-#   but also runs sponge to modify source — we skip the source mutation
-#   and copy all images directly, which is equivalent for dev builds)
-RUN cp src/images-index.html export/ && \
-    [ -d src/img ] && cp -r src/img/. export/public/img/ || true
+RUN if [ "${APP_HOST}" = "localhost" ]; then mkdir -p export; else sh build.sh; fi
 
 # ── Webapp ────────────────────────────────────────────────────────────────────
 FROM nginx:1.27.3-bookworm AS webapp
