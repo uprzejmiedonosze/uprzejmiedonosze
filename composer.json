@@ -28,8 +28,8 @@
     },
     "require-dev": {
         "sserbin/twig-linter": "^3.1",
-        "pdepend/pdepend": "^2.15",
-        "phpmd/phpmd": "^2.13",
+        "pdepend/pdepend": "3.x-dev",
+        "phpmd/phpmd": "3.x-dev",
         "symfony/config": "^6.4",
         "phpunit/phpunit": "^11.5"
     },

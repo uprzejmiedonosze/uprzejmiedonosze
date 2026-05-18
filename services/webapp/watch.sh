@@ -57,9 +57,6 @@ build_config_env
 build_static
 build_json
 
-mkdir -p src/scss/lib
-HOST=$APP_HOST node src/scss/env.js > src/scss/lib/variables.env.scss
-
 node_modules/.bin/parcel build --dist-dir export/public/css src/scss/index.scss
 for f in src/js/*.js; do
     node_modules/.bin/parcel build --dist-dir export/public/js/ "$f"

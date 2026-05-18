@@ -1,6 +1,6 @@
 <?php
 
-define('DB_FILENAME', __DIR__ . '/../docker/db/store.sqlite');
+define('DB_FILENAME', getenv('TEST_DB') ?: __DIR__ . '/../services/devroot/db/store.sqlite');
 
 require(__DIR__ . '/../export/inc/include.php');
 require(__DIR__ . '/../export/inc/Twig.php');

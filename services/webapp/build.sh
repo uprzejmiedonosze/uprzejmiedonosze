@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -x
 # Full project build — run inside Docker builder stage (WORKDIR /build).
 # APP_HOST and APP_HTTPS are passed as environment variables from Docker build args.
 set -e
@@ -75,7 +75,6 @@ done
 # ── Images ────────────────────────────────────────────────────────────────────
 # Collect all /img/... references from Twig templates and merge into
 # images-index.html (replicates Makefile's sponge step), then parcel build.
-# --no-source-maps for non-dev (matches Makefile PARCEL_BUILD_CMD).
 
 log "Images (parcel)"
 { cat src/images-index.html
@@ -84,12 +83,7 @@ log "Images (parcel)"
 } | sort | uniq > /tmp/images-index.html
 mv /tmp/images-index.html src/images-index.html
 
-if [ "$APP_HOST" = "localhost" ]; then
-    node_modules/.bin/parcel build --no-cache --dist-dir export/public/img src/images-index.html
-else
-    node_modules/.bin/parcel build --no-cache --no-source-maps --dist-dir export/public/img src/images-index.html
-fi
-cp src/images-index.html export/images-index.html
+node_modules/.bin/parcel build --no-cache --no-source-maps --dist-dir export/public/img src/images-index.html
 
 # ── Sitemap ───────────────────────────────────────────────────────────────────
 
@@ -107,19 +101,25 @@ log "sitemap.xml"
           "$APP_HTTPS" "$APP_HOST" "$URL" "$MOD_DATE" "$PRIO"
   done
   printf '</urlset>\n'
-} | xmllint --format - > export/public/sitemap.xml
+} > export/public/sitemap.xml
 
 # ── Lint ──────────────────────────────────────────────────────────────────────
+
+log "PHP syntax (php -l)"
+find src/inc src/tools src/api -name '*.php' | xargs -P4 -n1 php -l > /dev/null
 
 log "Twig lint"
 ./vendor/bin/twig-linter lint --no-interaction --quiet src/templates/*.twig
 
-if [ "$APP_HOST" != "localhost" ]; then
-    log "PHP lint (phpmd, non-dev only)"
-    ./vendor/phpmd/phpmd/src/bin/phpmd src/inc text \
-        cleancode,codesize,controversial,design,naming,unusedcode \
-        --ignore-errors-on-exit
-fi
+# ── Test/PHP environment setup ────────────────────────────────────────────────
+# Needed by fail2ban-twig.php (Cache.php → Memcache) and phpunit.
+
+log "Starting memcached + loading .env.dev"
+memcached -d -u root -m 64 -p 11211
+sleep 0.3
+while IFS= read -r line; do
+    case "$line" in ''|'#'*) continue ;; *=*) export "$line" ;; esac
+done < services/.env.dev
 
 # ── PHP runtime layout ────────────────────────────────────────────────────────
 # PHP code uses ROOT . 'webapp/public/api/config/' etc. Mirror the production
@@ -140,11 +140,15 @@ APP_ROOT=/var/www/$APP_HOST/ APP_HOST=$APP_HOST APP_HTTPS=$APP_HTTPS APP_ENV=dev
 # ── Tests ─────────────────────────────────────────────────────────────────────
 
 log "Tests (phpunit)"
-php -r "
-    \$db = new PDO('sqlite:/var/www/$APP_HOST/db/store.sqlite');
-    \$db->exec(file_get_contents('export/sql/init_empty.sql'));
-"
-APP_ROOT=/var/www/$APP_HOST/ APP_ENV=dev APP_HOST=$APP_HOST MEMCACHED_HOST=localhost \
+cp /tmp/test-db.sqlite /var/www/$APP_HOST/db/store.sqlite
+TEST_DB=/var/www/$APP_HOST/db/store.sqlite \
+APP_ROOT=/var/www/$APP_HOST/ APP_ENV=staging APP_HOST=$APP_HOST MEMCACHED_HOST=localhost \
     ./vendor/phpunit/phpunit/phpunit --display-deprecations tests
+
+# ── Strip dev dependencies from vendor ────────────────────────────────────────
+# Linting and tests needed dev-deps above; production images should not have them.
+
+log "composer install --no-dev (strip dev deps)"
+composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 
 log "Build complete."
