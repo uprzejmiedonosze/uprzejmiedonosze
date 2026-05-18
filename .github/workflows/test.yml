@@ -68,6 +68,7 @@ jobs:
           sudo ln -s ${{ github.workspace }}/export  /var/www/localhost/webapp
           sudo ln -s ${{ github.workspace }}/vendor  /var/www/localhost/vendor
           sudo cp services/devroot/db/store.sqlite /var/www/localhost/db/store.sqlite
+          sudo chown -R $USER /var/www/localhost/
 
       - name: Run PHPUnit tests
         env:
