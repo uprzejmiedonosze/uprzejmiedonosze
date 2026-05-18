@@ -1,4 +1,4 @@
-import os
+import re
 import cv2
 import dlib
 import numpy as np
@@ -9,32 +9,36 @@ from .face import Face
 
 detector = dlib.cnn_face_detection_model_v1('./models/mmod_human_face_detector.dat')
 
+_LOG_MAX = 300
 
-def read_image(filename: str):
-    if filename.startswith('http://') or filename.startswith('https://'):
-        try:
-            response = httpx.get(filename, follow_redirects=True, timeout=10.0)
-            response.raise_for_status()
-        except httpx.HTTPStatusError as e:
-            detail = f"HTTP {e.response.status_code} fetching '{filename}'"
-            logger.error(detail)
-            raise HTTPException(status_code=502, detail=detail) from e
-        except Exception as e:
-            logger.error(e)
-            raise HTTPException(status_code=502, detail=repr(e)) from e
-        nparr = np.frombuffer(response.content, np.uint8)
-        image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-        if image is None:
-            detail = f"Could not decode image from '{filename}'"
-            logger.error(detail)
-            raise HTTPException(status_code=422, detail=detail)
-        return image
 
-    if not os.path.isfile(filename):
-        detail = f"File '{filename}' not found"
+def _sanitize(value: str) -> str:
+    """Strip newlines and limit length to prevent log injection."""
+    return re.sub(r'[\r\n]', ' ', str(value))[:_LOG_MAX]
+
+
+def read_image(url: str):
+    if not (url.startswith('https://') or url.startswith('http://')):
+        raise HTTPException(status_code=400, detail="Only http(s):// URLs are supported")
+
+    try:
+        response = httpx.get(url, follow_redirects=True, timeout=10.0)
+        response.raise_for_status()
+    except httpx.HTTPStatusError as e:
+        detail = f"HTTP {e.response.status_code} fetching '{_sanitize(url)}'"
         logger.error(detail)
-        raise HTTPException(status_code=404, detail=detail)
-    return cv2.imread(filename)
+        raise HTTPException(status_code=502, detail=detail) from e
+    except Exception as e:
+        logger.error(_sanitize(repr(e)))
+        raise HTTPException(status_code=502, detail=repr(e)) from e
+
+    nparr = np.frombuffer(response.content, np.uint8)
+    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if image is None:
+        detail = f"Could not decode image from '{_sanitize(url)}'"
+        logger.error(detail)
+        raise HTTPException(status_code=422, detail=detail)
+    return image
 
 
 def scan_image(image: cv2.typing.MatLike):
@@ -47,7 +51,7 @@ def scan_image(image: cv2.typing.MatLike):
 
     rgb_small_frame = image[:, :, ::-1]
     faces = detector(rgb_small_frame, 1)
-    
+
     faces_array = []
     for f in faces:
         faces_array.append(Face(f.rect, resize))

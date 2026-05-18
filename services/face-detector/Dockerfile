@@ -17,5 +17,6 @@ WORKDIR /app
 COPY main.py .
 COPY src/ ./src/
 COPY models/ ./models/
+USER nobody
 CMD ["nice", "-n", "10", "uvicorn", "main:app", \
      "--host", "0.0.0.0", "--port", "2000", "--workers", "1", "--no-use-colors"]
