@@ -4,7 +4,7 @@
 
 **Uprzejmie Donoszę** — polski serwis obywatelski umożliwiający zgłaszanie naruszeń przepisów (głównie nielegalnego parkowania) do straży miejskiej lub policji. Upraszcza proces tworzenia poprawnego zgłoszenia wraz ze zdjęciami i lokalizacją oraz ułatwia przesłanie go do odpowiednich służb.
 
-Stack: PHP 8.2+ (Slim 4), Twig templates, Vanilla JS (ES modules), SCSS, SQLite, Firebase Auth, Parcel 2 bundler, Docker/nginx.
+Stack: PHP 8.4 (Slim 4), Twig templates, Vanilla JS (ES modules), SCSS, SQLite, Firebase Auth, Parcel 2 bundler, Docker/nginx.
 
 More information: [uprzejmiedonosze.net](https://uprzejmiedonosze.net/)
 
@@ -14,134 +14,130 @@ More information: [uprzejmiedonosze.net](https://uprzejmiedonosze.net/)
 
 ## Prerequisites
 
-To start you have to:
-
-1. Have Posix compatible OS (Linux / OSX)
-2. Have `Docker` CE installed
-3. Have `GIT` installed
-4. Have `PHP>=8.2` and `composer` installed
-5. Have `node 20.*` installed
-6. Have `mise` installed
-7. Have `rsync`, `curl`, `make`, `sed`, `jq`, `md5sum` and `sponge` available
-
-(for `md5sum` on OSX you can either `brew install md5sha1sum` or add `alias md5sum='md5 -r'` to your `.bashrc`)
-(for `sponge` on OSX run `brew install moreutils`)
-
+- **Docker** (CE or Desktop) — the only required local tool; all build steps run inside containers
+- **Git**
 
 ## Cloning
 
-```
-$ git clone git@github.com:uprzejmiedonosze/uprzejmiedonosze.git
-```
-
-## External services setup
-
-To run the app you will need to set up a few external services:
-- Google Firebase setup is required to log into your local environment.
-- MapBox API is required to render map contents.
-- Google Maps API is required as a fallback geolocation.
-- ALPR credentials are required if you want automated plate recognition to work.
-
-### Firebase Authentication
-
-You have two options for Firebase setup:
-
-**Option 1: Firebase Emulator (Recommended for development)**
-
-This is the default mode that will start with `make dev-run` and will activate when accessing test environment on localhost.
-
-**Option 2: Real Firebase Project**
-
-You can either create these must-have accounts by yourself OR ask the
-maintainer to send you credentials and Firebase config.
-
-### Google Firebase
-
-1. Create a new project in [Firebase Console](https://console.firebase.google.com/)
-2. Configure Authentication in `Build > Authentication` tab. Enable Email/Password and
-   Google sign-in providers.A
-3. (optional) configure custom domain in `Authentication > Settings > Authorised domains`.
-4. Visit your project settings and add an Web app (`</>` icon). No hosting is required.
-5. Copy the generated `firebaseConfig` and place it in `getFirebaseConfig()` in `src/js/firebase.js`. 
-6. Visit the `Service accounts > Firebase Admin SDK` tab and press `Generate new private key`. Put the downloaded key in `localhost-firebase-adminsdk.json` file.
-7. Visit the `Sign-in method > google > Web SDK configuration > Web Client ID`. Copy the Client ID and put it in `getClientId()` function in `src/js/firebase.js`.
-
-### Other credentials
-
-Create a new `config.php` from a `config.dev.php` template. 
-
-These are optional. Application will run without them, but won't be able to read license plates or render map contents.
-
-To obtain new credentials:
-- `PLATERECOGNIZER_SECRET` - after registering at <https://platerecognizer.com/>. Free 2500 lookups per month.
-- `OPENALPR_SECRET_x` - <https://www.openalpr.com/>, $40/month starter plan.
-- `MAPBOX_API_TOKEN` - after registering at <http://mapbox.com/>. Free tier available.
-- `GOOGLE_MAPS_API_TOKEN` - optional, fallback geolocation, to be obtained at https://console.cloud.google.com/ on the already-created firebase project.
-- `OPENAI_API_KEY` - optional, required for /generator.html, to be obtained at <https://platform.openai.com/>.
-- `OPENAI_PROJECT` - same as above, to be obtained at <https://platform.openai.com/settings/organization/projects>. You may also need to verify your account at <https://platform.openai.com/settings/organization/general>.
-
-
-## Running the app for the first time
-
-Enter the repository folder and install dependencies.
-
-```
-$ cd uprzejmiedonosze
-$ make install
+```bash
+git clone git@github.com:uprzejmiedonosze/uprzejmiedonosze.git
+cd uprzejmiedonosze
 ```
 
-Now compile the app, build a Docker image, and run it simply by:
+## Local secrets setup
 
-```
-$ make dev-run
-```
+Create `services/.env.dev` (gitignored) with your dev credentials. Use the structure below — all values are required for full functionality, but the app will start without optional ones:
 
-If there is no error in the terminal, you should be able to run:
+```bash
+# Mandatory for encryption / sessions
+CRYPTO_KEY=...
+CRYPTO_IV=...
+CRYPTO_TAG=...
 
-```
-$ open http://127.0.0.1
-```
-
-To refresh the sources on the docker image make:
-
-```
-$ make dev
+# Firebase, Maps, ALPR, Mail, etc. (optional — app runs without them)
+MAPBOX_API_TOKEN=...
+GOOGLE_MAPS_API_TOKEN=...
+# ... see AGENTS.md for the full list
 ```
 
-**Firebase Emulator:**
-- `make emulator-ui` - Open emulator UI at http://localhost:4000
+Ask the maintainer for a pre-filled `services/.env.dev` if you're joining the project.
 
-## Comments
+## Firebase setup
 
-Docker image has three folders installed. Two of them are copied after each docker image build:
+The dev profile starts a **Firebase Auth Emulator** automatically — no real Firebase project needed for local development. The emulator UI is available at `http://localhost:4000`.
 
-`db` – database file with pre-filled data with one user and two applications
+If you need a real Firebase project (for staging/prod), see the maintainer.
 
-`cdn2` – new CDN schema (each user has its own folder)
+## Running
 
-On the other hand folder `export` created after `make dev-run` (and updated after `make dev`) is a mounted volume inside the docker image (under `/var/www/uprzejmiedonosze.net/webapp`).
-
-There is an ugly hack in `/src/inc/firebase.php` which maps all logged-in users into one (pre-filled) account `e@nieradka.net`. This means that if you log in to your dev environment using your Google account you will still be active as `e@nieradka.net` having two applications ready.
-
-Every time you restart your Docker container all the data will be wiped out.
-
-## Working with sources
-
-1. Play with sources
-2. Run `make dev`
-3. Refresh website
-
-## Troubleshooting 
-
-Looking for logs? Run:
-
-```
-$ make -C docker shell
-docker# tail /var/log/uprzejmiedonosze.net/error.log # nginx debug log (very verbose)
-docker# tail /var/log/uprzejmiedonosze.net/access.log # nginx access log (not very useful)
-docker# tail /var/log/uprzejmiedonosze.net/localhost.log # application log (quite useful)
+```bash
+make dev
 ```
 
-Use `logger()` function to write to `/var/log/uprzejmiedonosze.net/localhost.log`.
+This is equivalent to:
 
-Want to copy files from Docker image to host or vice versa? Use hosts `export` director as a proxy. Whatever you put there, it will be available inside the Docker image under `/var/www/uprzejmiedonosze.net/webapp`. It works both directions.
+```bash
+docker compose -f services/compose.yml --env-file services/.env.dev -p dev --profile dev up --build
+```
+
+The first run takes a few minutes (builds Docker images, compiles CSS/JS). Subsequent runs are fast thanks to Docker layer cache.
+
+Once running, open:
+```
+http://localhost
+```
+
+The Firebase emulator maps all logins to the pre-filled test account `e@nieradka.net`.
+
+## Day-to-day development
+
+**Edit PHP/Twig/SQL/JSON files** — the `builder` container watches `src/` with `inotifywait` and copies changes automatically. Reload the browser.
+
+**Edit SCSS/JS** — Parcel watch rebuilds CSS/JS automatically (typically <2s with cache). Reload the browser.
+
+**Open Firebase emulator UI:**
+```bash
+make emulator-ui
+```
+
+**View logs:**
+```bash
+docker logs webapp          # nginx + PHP-FPM (stderr)
+docker logs builder         # build output, watch events
+```
+
+**Open a shell in the web container:**
+```bash
+docker exec -it webapp bash
+```
+
+**Run PHPUnit tests:**
+```bash
+make test
+```
+
+## Project structure
+
+```
+services/
+├── compose.yml              # All Docker services (profiles: dev / staging / prod)
+├── .env.dev                 # Local secrets (gitignored, create manually)
+├── face-detector/           # Python face detection service
+├── webapp/
+│   ├── Dockerfile           # builder + webapp + worker stages
+│   ├── build.sh             # Full build script (runs inside Docker)
+│   ├── watch.sh             # Dev watch loop (inotifywait + parcel watch)
+│   ├── nginx.conf           # nginx configuration
+│   └── crontab              # supercronic schedule for worker-cron
+└── devroot/
+    └── db/                  # Dev SQLite databases (mounted into container)
+
+src/                         # All source files (never edit export/ directly)
+export/                      # Built artifacts (gitignored, populated by builder)
+```
+
+## Troubleshooting
+
+**Build logs (verbose):**
+```bash
+docker logs builder --follow
+```
+
+**PHP errors:**
+```bash
+docker logs webapp 2>&1 | grep -i error
+```
+
+**Reset dev data:**
+```bash
+# Restart the webapp container (data in devroot/db/ persists between restarts)
+docker compose -f services/compose.yml --profile dev restart webapp
+
+# Wipe devroot DB (restores to committed fixture state)
+git restore services/devroot/db/
+```
+
+**Init dev database from scratch:**
+```bash
+make init-db-dev
+```
