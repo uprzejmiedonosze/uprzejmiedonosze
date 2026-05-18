@@ -145,12 +145,12 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v4.2.2
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 2
 
-      - uses: anthropics/claude-code-security-review@main
+      - uses: anthropics/claude-code-security-review@0c6a49f1fa56a1d472575da86a94dbc1edb78eda # main 2025-05-16
         with:
           comment-pr: true
           claude-api-key: ${{ secrets.CLAUDE_API_KEY }}

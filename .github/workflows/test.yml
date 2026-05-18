@@ -18,26 +18,66 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v4.2.2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1 # v2
         with:
           php-version: '8.4'
+          extensions: memcache, sqlite3, intl, mbstring, curl, pdo_sqlite
 
-      - name: Setup mise
-        uses: jdx/mise-action@146a28175021df8ca24f8ee1828cc2a60f980bd5 # v3.5.1
+      - name: Setup Node.js
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v4.2.0
         with:
-          experimental: true
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: make install
+        run: |
+          composer install --no-interaction --no-progress
+          npm ci
 
-      - name: Setup config for tests
-        run: cp config.dev.php config.php
+      - name: Build (PHP + JSON — skip CSS/JS for tests)
+        run: |
+          mkdir -p \
+            export/public/api/config export/public/img \
+            export/inc/integrations export/inc/middleware export/inc/handlers \
+            export/inc/dataclasses export/inc/store export/inc/converters \
+            export/templates export/tools export/sql
+          printf '<?php\ndefine("HOST","localhost");\ndefine("TWIG_HASH","ci");\ndefine("CSS_HASH","ci");\ndefine("JS_HASH","ci");\ndefine("HTTPS","http");\n' \
+            > export/config.env.php
+          cp -r src/inc/.       export/inc/
+          cp -r src/templates/. export/templates/
+          cp -r src/tools/.     export/tools/
+          cp -r src/sql/.       export/sql/
+          node tools/sm-parser.js src/api/config/sm.json           export/public/api/config/sm.json
+          node tools/sm-parser.js src/api/config/stop-agresji.json export/public/api/config/stop-agresji.json
+          node tools/badges-validator.js src/api/config/badges.json export/public/api/config/badges.json
+          for f in src/api/config/*.json; do
+            name=$(basename "$f")
+            [ ! -f "export/public/api/config/$name" ] && jq -c . "$f" > "export/public/api/config/$name" || true
+          done
+          php tools/police-stations.php \
+            src/api/config/police-stations.csv \
+            export/public/api/config/stop-agresji.json \
+            > export/public/api/config/police-stations.pjson
 
-      - name: Create log directory
-        run: sudo mkdir -p /var/log/uprzejmiedonosze.net && sudo chmod 777 /var/log/uprzejmiedonosze.net
+      - name: Prepare test environment
+        run: |
+          sudo mkdir -p /var/www/localhost/db
+          sudo ln -s ${{ github.workspace }}/export  /var/www/localhost/webapp
+          sudo ln -s ${{ github.workspace }}/vendor  /var/www/localhost/vendor
+          sudo cp services/devroot/db/store.sqlite /var/www/localhost/db/store.sqlite
 
       - name: Run PHPUnit tests
-        run: make test-phpunit
+        env:
+          APP_ENV: staging
+          APP_HOST: localhost
+          APP_ROOT: /var/www/localhost/
+          APP_HTTPS: http
+          MEMCACHED_HOST: 127.0.0.1
+          TEST_DB: /var/www/localhost/db/store.sqlite
+          CRYPTO_KEY: ${{ secrets.CRYPTO_KEY }}
+          CRYPTO_IV: ${{ secrets.CRYPTO_IV }}
+          CRYPTO_TAG: ${{ secrets.CRYPTO_TAG }}
+        run: ./vendor/phpunit/phpunit/phpunit --display-deprecations tests
