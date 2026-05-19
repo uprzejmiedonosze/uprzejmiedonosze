@@ -212,7 +212,6 @@ function cleanupStuckSendingApps($olderThanMinutes = 10, $dryRun = true) {
             echo " - Markowanie zgłoszenia {$app->id} jako 'sending-failed' (ostatnia zmiana statusu: " . date('Y-m-d H:i:s', $lastStatusChange) . ")\n";
             if (!$dryRun) {
                 $app->setStatus('sending-failed', true);
-                unset($app->sent);
                 \app\save($app);
             }
         }

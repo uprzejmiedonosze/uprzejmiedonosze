@@ -78,6 +78,12 @@ class WebhooksHandler extends AbstractHandler {
                 $msg = "mailgun webhook error, Application $appId was not sent!";
                 logger($msg, true);
                 \telemetry\log('app_error', $appId, ['msg' => $msg, 'source' => 'WebhooksHandler::mailgun']);
+                if ($mailEvent->status == 'failed' && $application->email !== $recipient) {
+                    (new MailGun())->notifyUser($application,
+                        "Nie udało się nam dostarczyć zgłoszenia {$application->getNumber()}",
+                        $mailEvent->getReason(),
+                        $recipient);
+                }
                 return $this->renderJson($response, array(
                     "status" => "failed"
                 ));
@@ -102,8 +108,10 @@ class WebhooksHandler extends AbstractHandler {
                     $application->setStatus('sending', true);
                 if ($mailEvent->status == 'problem')
                     $application->setStatus('sending-problem', true);
-                if ($mailEvent->status == 'failed')
+                if ($mailEvent->status == 'failed') {
                     $application->setStatus('sending-failed', true);
+                    unset($application->sent);
+                }
                 if ($mailEvent->status == 'delivered')
                     $application->setStatus('confirmed-waiting', true);
             }

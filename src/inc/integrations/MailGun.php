@@ -42,14 +42,14 @@ class MailGun extends CityAPI {
         } else {
             $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
         }
-        
+
         $message->to($to);
         $message->subject($subject);
         $message->cc(new Address($application->email, $application->user->name));
         $message->bcc(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
         $message->text(parent::formatEmail($application, true));
         $message->replyTo(new Address($application->email, $application->user->name));
-        
+
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
@@ -88,8 +88,8 @@ class MailGun extends CityAPI {
                 } else {
                     $transport = Transport::fromDsn(MAILER_DSN);
                 }
-                $mailer = new Mailer($transport);    
-                $mailer->send($message);    
+                $mailer = new Mailer($transport);
+                $mailer->send($message);
             } else {
                 logger("Sending app {$application->id} with MailGun");
                 $application->setStatus('confirmed-waiting');
@@ -123,14 +123,14 @@ class MailGun extends CityAPI {
             'recipient' => $recipient
         ]);
         $transport = Transport::fromDsn(MAILER_DSN);
-        $mailer = new Mailer($transport); 
+        $mailer = new Mailer($transport);
         $message = (new Email());
         $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
         $message->to(new Address($application->email));
         $message->cc(new Address('ud@uprzejmiedonosze.net', 'Uprzejmie Donoszę'));
         $message->subject($subject);
         $message->text($messageBody);
-        
+
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
         $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
