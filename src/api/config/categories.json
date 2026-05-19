@@ -1,10 +1,10 @@
 {
     "4": {
         "title": "Zastawienie chodnika",
-        "short": "Pojazd utrudniał ruch pieszych lub zostawił mniej niż 1,5m na przejście",
-        "formal": "Pojazd zastawiał chodnik (mniej niż 1,5 m, art. 47. 1 prd).",
+        "short": "Pojazd zostawił mniej niż 1,5m na przejście",
+        "formal": "Pojazd zaparkowany na chodniku w sposób mogący utrudnić ruch pieszych (mniej niż 1,5 m, art 97 KW w zw. z art. 47. 1 PRD).",
         "informal": "Zastawienie chodnika",
-        "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd utrudnia im ruch (i jest to przynajmniej 1,5m) ma zastosowanie ten przepis.</p>",
+        "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli pojazd pozostawił mniej niż 1,5m szerokości chodnika pozostawionego dla pieszych, ma zastosowanie ten przepis. W miarę możliwości podaj w komentarzu szerokość całego chodnika lub chodnika pozostawionego dla pieszych (np na podstawie liczby kostek brukowych).</p>",
         "law": "art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość drogi dla pieszych jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
         "price": "100 zł (1 pkt)",
         "points": 1,
@@ -13,6 +13,21 @@
         "carImageHint": "Dodaj zdjęcie całego pojazdu z przodu lub z tyłu.",
         "stopAgresjiOnly": false,
         "order": 0
+    },
+    "26": {
+        "title": "Zastawienie chodnika z utrudnianiem ruchu",
+        "short": "Pojazd zostawił mniej niż 1,5m na przejście i utrudniał ruch pieszych",
+        "formal": "Pojazd zaparkowany na chodniku w sposób utrudniający mi ruch (art 90 par. 2 KW w zw. z art. 47. 1 PRD).",
+        "informal": "Zastawienie chodnika z utrudnianiem ruchu",
+        "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli pojazd pozostawił mniej niż 1,5m szerokości chodnika pozostawionego dla pieszych i utrudniał ci ruch możesz skorzystać z tej kategorii. W miarę możliwości podaj w komentarzu szerokość całego chodnika lub chodnika pozostawionego dla pieszych (np na podstawie liczby kostek brukowych).</p>",
+        "law": "art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość drogi dla pieszych jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
+        "price": "500 zł (8 pkt)",
+        "points": 8,
+        "mandate": 500,
+        "contextImageHint": "Dodaj zdjęcie z widocznym utrudnianiem ruchu pieszych",
+        "carImageHint": "Dodaj zdjęcie całego pojazdu z przodu lub z tyłu.",
+        "stopAgresjiOnly": false,
+        "order": 1
     },
     "25": {
         "title": "Zieleń",
@@ -27,7 +42,7 @@
         "contextImageHint": "Dodaj zdjęcie zniszczonej zieleni i przynajmniej fragment pojazdu.",
         "carImageHint": "Dodaj zdjęcie całego pojazdu z przodu lub z tyłu, z widoczną zielenią.",
         "stopAgresjiOnly": false,
-        "order": 1
+        "order": 2
     },
     "14": {
         "title": "Zakaz zatrzymywania się",
