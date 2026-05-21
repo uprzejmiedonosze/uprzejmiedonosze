@@ -4546,5 +4546,16 @@
   },
   "powiat wągrowiecki": {
     "parent": "Wągrowiec"
+  },
+  "Kłobuck": {
+    "address": [
+      "Komenda Powiatowa Policji w Kłobucku",
+      "ul. Bohaterów Bitwy pod Mokrą 5",
+      "42-100 Kłobuck"
+    ],
+    "email": "dyzurny@klobuck.ka.policja.gov.pl"
+  },
+  "powiat kłobucki": {
+    "parent": "Kłobuck"
   }
 }
