@@ -1,7 +1,11 @@
 # tools
-RSYNC       := rsync
-RSYNC_FLAGS := --human-readable --recursive --delete --exclude 'vendor/bin/*'
-HOSTING     := nieradka.net
+RSYNC         := rsync
+RSYNC_FLAGS   := --human-readable --recursive --delete --exclude 'vendor/bin/*'
+HOSTING       := nieradka.net
+STAGING_HOST  := workflow.nieradka.net
+STAGING_PATH  := /opt/staging.uprzejmiedonosze.net
+RSYNC_STAGING := --human-readable --recursive --delete \
+    --exclude-from=.dockerignore
 CYPRESS     := ./node_modules/.bin/cypress
 CYPRESS_KEY := 8a0db00f-b36c-4530-9c82-422b0be32b5b
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
@@ -28,8 +32,8 @@ init-db-dev: ## Initialize dev SQLite database (run once)
 
 .PHONY: init-db-staging
 init-db-staging: ## Initialize staging SQLite database (run once on server)
-	@ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite \
-		< /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_empty.sql"
+	@ssh $(STAGING_HOST) "sqlite3 $(STAGING_PATH)/db/store.sqlite \
+		< $(STAGING_PATH)/webapp/sql/init_empty.sql"
 
 # Linting and unit tests run in the Docker builder stage (services/webapp/Dockerfile).
 # Use these targets to run them on demand against a running container.
@@ -79,6 +83,17 @@ sentry-release: ## Create Sentry release and upload JS source maps
 	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js \
 		./node_modules/.bin/sentry-cli sourcemaps upload --org uprzejmie-donosze \
 		--project ud-js ./export/public/js
+
+# ── Staging deployment ────────────────────────────────────────────────────────
+
+.PHONY: staging
+staging: ## Sync code to staging server and rebuild Docker containers
+	@echo "==> Syncing code to $(STAGING_HOST):$(STAGING_PATH)"
+	@$(RSYNC) $(RSYNC_STAGING) . $(STAGING_HOST):$(STAGING_PATH)/
+	@echo "==> Rebuilding and restarting staging containers"
+	#@ssh $(STAGING_HOST) "cd $(STAGING_PATH) && \
+		BUILDKIT_PROGRESS=plain docker compose -f services/compose.yml --env-file services/.env.staging \
+		-p staging --profile staging up -d --build"
 
 # ── Dev convenience ───────────────────────────────────────────────────────────
 

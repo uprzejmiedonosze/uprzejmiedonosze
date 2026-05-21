@@ -3,3 +3,13 @@ node_modules/
 .git/
 export/
 services/face-detector/.venv/
+*.md
+cypress
+cypress.config.js
+eslint.config.mjs
+generator
+*firebase-adminsdk.json
+Makefile
+marketing
+node_modules
+vendor
