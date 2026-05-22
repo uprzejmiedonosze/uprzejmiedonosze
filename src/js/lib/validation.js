@@ -51,7 +51,7 @@ export const checkCommentvalue = function () {
   if (comment.length > 10)
     return true
   commentInput.classList.add("error")
-  commentInput.placeholder = "Podaj rodzaj wykroczenia z listy poniżej, albo opisz je w tym polu"
+  commentInput.placeholder = "Wybierz rodzaj wykroczenia z listy poniżej, albo opisz je w tym polu"
   return false
 }
 

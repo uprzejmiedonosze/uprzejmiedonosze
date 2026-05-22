@@ -54,7 +54,7 @@ div.error img {
     height: 200px!important;
     padding: .4em;
     overflow: hidden;
-    margin: inherit; 
+    margin: inherit;
 
     img {
       object-fit: cover;
@@ -72,14 +72,14 @@ div.error img {
 
   .plate {
     position: relative;
-  
+
     img#plateImage {
       position: absolute;
       top: 0em;
       left: 11em;
     }
   }
-  
+
   .price-list {
     font-size: 80%;
     font-weight: 400;
@@ -147,7 +147,7 @@ div.error img {
       background-repeat: no-repeat;
       background-position-x: 50%;
       background-position-y: 30px;
-      height: 100%;  
+      height: 100%;
     }
   }
 
@@ -215,7 +215,7 @@ div.error img {
       left: 3px;
       width: 22px;
     }
-  
+
     img {
       width: 100px;
       height: 100px;
@@ -229,7 +229,7 @@ div.error img {
         margin-top: 0;
         font-weight: 700;
       }
-  
+
       .category-short {
         font-size: 90%;
         margin-top: 0;
@@ -346,8 +346,6 @@ div.error img {
 
   .category-hint {
     padding: 0.7em;
-    display: flex;
-    align-items: center;
   }
 
   .category-group {
