@@ -47,7 +47,7 @@ describe('Generator pism - walidacja kroków', () => {
         cy.get('#fs-topics input[type="checkbox"]').should('have.length.greaterThan', 0)
 
         // Sprawdza walidację - brak wyboru
-        cy.get('#step-1 a.button').should('contain', 'Wybierz do 3 opcji').and('have.class', 'disabled')
+        cy.get('#step-1 a.button').should('contain', 'Wybierz do 2 opcji').and('have.class', 'disabled')
 
         // Wybiera jeden temat
         cy.get('#fs-topics label').first().click()
@@ -55,39 +55,42 @@ describe('Generator pism - walidacja kroków', () => {
 
         // Sprawdza walidację - za dużo opcji
         cy.get('#fs-topics label').click({ multiple: true })
-        cy.get('#step-1 a.button').should('contain', 'Wybierz do 3 opcji').and('have.class', 'disabled')
+        cy.get('#step-1 a.button').should('contain', 'Wybierz do 2 opcji').and('have.class', 'disabled')
     })
 
-    it('sprawdza krok 2 - wybór tonu pisma', () => {
+    it('sprawdza krok 2 - wybór adresata', () => {
         // Przechodzi do kroku 2
         cy.get('#fs-topics label').first().click()
         cy.get('#step-1 a.button').click()
 
         cy.contains('Krok 2 z')
-        cy.get('#fs-types').should('be.visible')
-        cy.get('#fs-types input[type="radio"]').should('have.length.greaterThan', 0)
-
-        // Wybiera ton pisma
-        cy.get('#fs-types label').first().click()
-        cy.get('#step-2 a.button').should('contain', 'Dalej').and('not.have.class', 'disabled')
-    })
-
-    it('sprawdza krok 3 - wybór adresata', () => {
-        // Przechodzi do kroku 3
-        cy.get('#fs-topics label').first().click()
-        cy.get('#step-1 a.button').click()
-        cy.get('#fs-types label').first().click()
-        cy.get('#step-2 a.button').click()
-
-        cy.contains('Krok 3 z')
         cy.get('#fs-targets').should('be.visible')
         cy.get('#fs-targets input[type="radio"]').should('have.length.greaterThan', 0)
 
         // Sprawdza walidację - brak wyboru
-        cy.get('#step-3 a.button').should('contain', 'Dalej').and('have.class', 'disabled')
+        cy.get('#step-2 a.button').should('have.class', 'disabled')
 
         // Wybiera adresata
         cy.get('#fs-targets label').first().click()
+        cy.get('#step-2 a.button').should('contain', 'Dalej').and('not.have.class', 'disabled')
+    })
+
+    it('sprawdza krok 3 - wybór tonu pisma', () => {
+        // Przechodzi do kroku 3
+        cy.get('#fs-topics label').first().click()
+        cy.get('#step-1 a.button').click()
+        cy.get('#fs-targets label').first().click()
+        cy.get('#step-2 a.button').click()
+
+        cy.contains('Krok 3 z')
+        cy.get('#fs-types').should('be.visible')
+        cy.get('#fs-types input[type="radio"]').should('have.length.greaterThan', 0)
+
+        // Sprawdza walidację - brak wyboru
+        cy.get('#step-3 a.button').should('have.class', 'disabled')
+
+        // Wybiera ton pisma
+        cy.get('#fs-types label').first().click()
         cy.get('#step-3 a.button').should('not.have.class', 'disabled')
     })
 
@@ -141,12 +144,22 @@ describe('Generator pism - obsługa błędów', () => {
         cy.visit('/generator.html')
         cy.wait(1000)
 
-        // Przechodzi przez kroki
+        // Krok 1 - wybór tematu
         cy.get('#fs-topics label').first().click()
         cy.get('#step-1 a.button').click()
-        cy.get('#fs-types label').first().click()
+
+        // Krok 2 - wybór adresata z bezpośrednim emailem (nie selector)
+        cy.get('#fs-targets input[type="radio"]').each(($radio) => {
+            const recipient = $radio.attr('data-recipient')
+            if (recipient && !recipient.startsWith('selector:')) {
+                cy.wrap($radio).parent('label').click()
+                return false // przerywa pętlę
+            }
+        })
         cy.get('#step-2 a.button').click()
-        cy.get('#fs-targets label').first().click()
+
+        // Krok 3 - wybór tonu pisma
+        cy.get('#fs-types label').first().click()
 
         // Przechwytuje żądanie generowania i zwraca błąd
         cy.intercept('GET', '/generator/stream*', { statusCode: 500, body: '{"error": "Test error"}' }).as('generateError')
@@ -170,12 +183,11 @@ describe('Generator pism - różne typy adresatów', () => {
     })
 
     it('sprawdza adresata z bezpośrednim emailem', () => {
+        // Krok 1
         cy.get('#fs-topics label').first().click()
         cy.get('#step-1 a.button').click()
-        cy.get('#fs-types label').first().click()
-        cy.get('#step-2 a.button').click()
 
-        // Szuka adresata z bezpośrednim emailem (nie selector)
+        // Krok 2 - szuka adresata z bezpośrednim emailem (nie selector)
         cy.get('#fs-targets input[type="radio"]').each(($radio) => {
             const recipient = $radio.attr('data-recipient')
             if (recipient && recipient.includes('@') && !recipient.startsWith('selector:')) {
@@ -183,17 +195,19 @@ describe('Generator pism - różne typy adresatów', () => {
                 return false // przerywa pętlę
             }
         })
+        cy.get('#step-2 a.button').click()
 
-        cy.get('#step-3 a.button').should('contain', 'Dalej')
+        // Krok 3 - wybór tonu pisma
+        cy.get('#fs-types label').first().click()
+        cy.get('#step-3 a.button').should('contain', 'Dalej').and('not.have.class', 'disabled')
     })
 
     it('sprawdza adresata z selektorem', () => {
+        // Krok 1
         cy.get('#fs-topics label').first().click()
         cy.get('#step-1 a.button').click()
-        cy.get('#fs-types label').first().click()
-        cy.get('#step-2 a.button').click()
 
-        // Szuka adresata z selektorem
+        // Krok 2 - szuka adresata z selektorem
         cy.get('#fs-targets input[type="radio"]').each(($radio) => {
             const recipient = $radio.attr('data-recipient')
             if (recipient && recipient.startsWith('selector:')) {
@@ -201,8 +215,11 @@ describe('Generator pism - różne typy adresatów', () => {
                 return false // przerywa pętlę
             }
         })
+        cy.get('#step-2 a.button').click()
 
-        cy.get('#step-3 a.button').should('contain', 'Dalej')
+        // Krok 3 - wybór tonu pisma
+        cy.get('#fs-types label').first().click()
+        cy.get('#step-3 a.button').should('contain', 'Dalej').and('not.have.class', 'disabled')
         cy.get('#step-3 a.button').click()
 
         // Sprawdza czy pojawił się krok 4
@@ -212,14 +229,16 @@ describe('Generator pism - różne typy adresatów', () => {
     })
 
     it('sprawdza Rzecznika Praw Obywatelskich - formularz', () => {
-        // Przechodzi przez pierwsze kroki
+        // Krok 1
         cy.get('#fs-topics label').first().click()
         cy.get('#step-1 a.button').click()
-        cy.get('#fs-types label').first().click()
+
+        // Krok 2 - wybiera Rzecznika Praw Obywatelskich
+        cy.contains('Rzecznika Praw Obywatelskich').click()
         cy.get('#step-2 a.button').click()
 
-        // Wybiera Rzecznika Praw Obywatelskich
-        cy.contains('Rzecznika Praw Obywatelskich').click()
+        // Krok 3 - wybór tonu pisma
+        cy.get('#fs-types label').first().click()
         cy.get('#step-3 a.button').click()
 
         // Generowanie pisma
@@ -234,14 +253,16 @@ describe('Generator pism - różne typy adresatów', () => {
     })
 
     it('sprawdza Członka Sejmowej Komisji Infrastruktury - Paulina Matysiak', () => {
-        // Przechodzi przez pierwsze kroki
+        // Krok 1
         cy.get('#fs-topics label').first().click()
         cy.get('#step-1 a.button').click()
-        cy.get('#fs-types label').first().click()
+
+        // Krok 2 - wybiera Członka/ini Sejmowej Komisji Infrastruktury
+        cy.contains('Członka/ini Sejmowej Komisji Infrastruktury').click()
         cy.get('#step-2 a.button').click()
 
-        // Wybiera Członka/ini Sejmowej Komisji Infrastruktury
-        cy.contains('Członka/ini Sejmowej Komisji Infrastruktury').click()
+        // Krok 3 - wybór tonu pisma
+        cy.get('#fs-types label').first().click()
         cy.get('#step-3 a.button').click()
 
         // Sprawdza czy jest krok 4 z 4

@@ -23,21 +23,21 @@
   <fieldset id="fs-topics">
   </fieldset>
   <nav class="sticky">
-      <a href='#' class="button disabled" data-action="next">Wybierz do 3 opcji</a>
+      <a href='#' class="button disabled" data-action="next">Wybierz do 2 opcji</a>
   </nav>
 </section>
 
 <section id="step-2">
-  <h1>W jakim tonie chcesz napisać?</h1>
-  <fieldset id='fs-types'>
+  <h1>Do kogo chcesz napisać?</h1>
+  <fieldset id='fs-targets'>
   </fieldset>
   <nav class="sticky">
       <a href='#' class="button disabled" data-action="next">Dalej</a>
   </nav>
 </section>
 <section id="step-3">
-  <h1>Do kogo chcesz napisać?</h1>
-  <fieldset id='fs-targets'>
+  <h1>W jakim tonie chcesz napisać?</h1>
+  <fieldset id='fs-types'>
   </fieldset>
   <nav class="sticky">
       <a href='#' class="button disabled" data-action="next">Dalej</a>
@@ -50,6 +50,10 @@
   <label class='s4_filter'>
     <input name='s4_filter[]' value='vovoideship_match' type='checkbox' onchange="window.fetchRecipients()" />
     Pokaż tylko z mojego województwa
+  </label>
+  <label class='s4_filter_district hidden'>
+    <input name='s4_filter[]' value='district_match' type='checkbox' onchange="window.fetchRecipients()" />
+    Pokaż tylko z mojego okręgu wyborczego
   </label>
 
   <fieldset id='fs-recipients'>

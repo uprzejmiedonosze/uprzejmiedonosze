@@ -156,8 +156,25 @@
           text-transform: uppercase;
         }
 
+        mark {
+          background-color: #d4edda;
+          color: #155724;
+          border-radius: 0.3em;
+          padding: 0.1em 0.4em;
+          font-size: 0.75em;
+          font-weight: 600;
+          text-transform: none;
+          vertical-align: middle;
+        }
+
         p {
           margin: 0.2em 0;
+
+          &.note {
+            font-style: normal;
+            color: #856404;
+            font-size: 0.85em;
+          }
         }
 
 

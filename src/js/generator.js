@@ -72,30 +72,36 @@ function validateCurrentStep() {
         case 1:
             return validateTopics();
         case 2:
-            return renderTargets();
+            return validateTargetSelected();
         case 3:
-            return validateForm();
+            return validateFormTypeSelected();
         default:
             return true;
     }
 }
 
-function validateForm() {
-    const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
+function validateTargetSelected() {
     const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
-    const formType = formTypeElement?.value;
-    const target = targetElement?.value;
+    if (!targetElement) return false;
+    return true;
+}
 
-    if (!formType) {
-        setButtonState(2, false, 'Wybierz ton pisma')
+function validateFormTypeSelected() {
+    const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
+    if (!formTypeElement) {
+        setButtonState(3, false, 'Wybierz ton pisma');
         return false;
     }
+    setButtonState(3, true, 'Dalej');
+    return true;
+}
 
-    if (!target) {
-        setButtonState(3, true, 'Wskaż adresata pisma')
-        return false;
-    }
+/** @type {any} */ (window).validateFormTypeSelected = validateFormTypeSelected;
 
+function validateForm() {
+    const formType = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'))?.value;
+    const target = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'))?.value;
+    if (!formType || !target) return false;
     return true;
 }
 
@@ -140,17 +146,15 @@ async function fetchRecipients() {
     fieldContainer.innerHTML = '';
 
     // check the selector type
-    const recipient_selector = document.querySelector(".generator>section#step-3>fieldset input:checked")?.dataset?.recipient;
+    const recipient_selector = document.querySelector('input[name="target"]:checked')?.dataset?.recipient;
 
     /* these need to match selectors in inc/data.php */
     if (recipient_selector == "selector:infrastructure_committee_member") {
         const recipientsResponse = await fetch('/generator/suggested_parlamentary');
         recipientsData = await recipientsResponse.json();
-        /* waiting for implementation
-        } else if (recipient_selector=="selector:parlamentary") {
-          const recipientsResponse = await fetch('/generator/parlamentary');
-          recipientsData = await recipientsResponse.json(); 
-        */
+    } else if (recipient_selector == "selector:parlamentary") {
+        const recipientsResponse = await fetch('/generator/all_parlamentary');
+        recipientsData = await recipientsResponse.json();
     } else {
         // welp, let's go back
         return prevStep();
@@ -161,6 +165,13 @@ async function fetchRecipients() {
     const filterLabel = /** @type {HTMLElement} */ (document.querySelector('.s4_filter'));
     if (filterLabel) {
         showHideElement(filterLabel, vovoideshipsValues.length >= 2)
+    }
+
+    // check if district_match filter should be shown
+    const districtValues = [...new Set(Object.values(recipientsData).map(r => r.district_match))];
+    const districtFilterLabel = /** @type {HTMLElement} */ (document.querySelector('.s4_filter_district'));
+    if (districtFilterLabel) {
+        showHideElement(districtFilterLabel, districtValues.includes(true));
     }
 
     // get selected filters
@@ -249,6 +260,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Load targets
         const targetsResponse = await fetch('/generator/targets');
         targetsData = await targetsResponse.json();
+        renderTargets();
 
         // Add event listeners for navigation buttons
         document.addEventListener('click', (e) => {
@@ -289,42 +301,47 @@ function renderTopics() {
         `).join('');
 }
 
-// Render form types radio buttons
+// Render form types radio buttons, filtered by selected target's allowed forms
 function renderFormTypes() {
     const container = document.getElementById('fs-types');
     if (!container) return;
 
-    container.innerHTML = Object.entries(formTypesData).map(([id, data], index) => `
+    const targetElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
+    const allowedForms = targetElement ? (targetsData[targetElement.value]?.forms ?? Object.keys(formTypesData)) : Object.keys(formTypesData);
+
+    container.innerHTML = Object.entries(formTypesData)
+        .filter(([id]) => allowedForms.includes(id))
+        .map(([id, data]) => `
             <label>
-              <input type="radio" name="formType" value="${id}" onchange="window.renderTargets()">
+              <input type="radio" name="formType" value="${id}" onchange="window.validateFormTypeSelected()">
               ${data || id}
             </label>
         `).join('');
+
+    validateFormTypeSelected();
 }
 
 const renderTargets = () => {
-    const formTypeElement = /** @type {HTMLInputElement} */ (document.querySelector('input[name="formType"]:checked'));
-    const formType = formTypeElement?.value;
     const container = document.getElementById('fs-targets');
     if (!container) return;
 
     container.innerHTML = '';
 
-    if (!formType)
-        return setButtonState(2, false, 'Wybierz ton pisma');
-
-    setButtonState(2, true, 'Dalej');
-
-    // Filter targets that support the selected form type and have recipient defined
-    const availableTargets = Object.entries(targetsData)
-        .filter(([_, target]) => target.forms.includes(formType))
-        .sort(() => Math.random() - 0.5);
+    const [pinnedTargets, unpinnedTargets] = Object.entries(targetsData)
+        .reduce((acc, entry) => {
+            acc[entry[1].badge ? 0 : 1].push(entry);
+            return acc;
+        }, [[], []]);
+    unpinnedTargets.sort(() => Math.random() - 0.5);
+    const availableTargets = [...pinnedTargets, ...unpinnedTargets];
 
     container.innerHTML = availableTargets.map(([id, target]) => `
             <label>
               <input type="radio" name="target" data-recipient="${target.email || target.form || (target.selector && "selector:" + target.selector)}" onchange="window.checkTarget()" value="${id}">
-              <div><b>${target.title}</b>
-              <p><i>${target.petitionCount ? ('(' + num(target.petitionCount, ['wysłanych pism)', 'wysłane pismo)', 'wysłane pisma)'])) : '' }</i></p>
+              <div>
+                <b>${target.title}</b>${target.badge ? ` <mark>${target.badge}</mark>` : ''}
+                ${target.note ? `<p class="note">${target.note}</p>` : ''}
+                <p><i>${target.petitionCount ? ('(' + num(target.petitionCount, ['wysłanych pism)', 'wysłane pismo)', 'wysłane pisma)'])) : '' }</i></p>
               </div>
             </label>
         `).join('');
@@ -337,31 +354,40 @@ const renderTargets = () => {
 // check recipient and possible next steps
 const checkTarget = () => {
     const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
-    const selectedTargetValue = selectedTarget?.value;
     const selectedTargetRecipient = selectedTarget?.dataset?.recipient;
 
-    const actionButton = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-3>nav>a'));
+    const step2Button = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-2>nav>a'));
+    const step3Button = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-3>nav>a'));
 
-    if (!actionButton) return true;
-
-    if (selectedTargetRecipient && selectedTargetRecipient.startsWith("selector:")) { // we need additional step to select the recipient
-        document.querySelector(".generator>section#step-4")?.classList.remove("hidden");
-        actionButton.innerHTML = 'Dalej';
-        actionButton.dataset.action = 'next';
-        actionButton.disabled = false;
-        actionButton.classList.remove('disabled');
-    } else if (selectedTargetRecipient) {    // we know who is the recipient
-        document.querySelector(".generator>section#step-4")?.classList.add("hidden");
-        actionButton.innerHTML = 'Dalej';
-        actionButton.dataset.action = 'generate';
-        actionButton.disabled = false;
-        actionButton.classList.remove('disabled');
-    } else {                          // fallback
-        actionButton.disabled = true;
-        actionButton.classList.add('disabled');
+    // step-2 button: enable when any target is selected
+    if (step2Button) {
+        if (selectedTargetRecipient) {
+            step2Button.innerHTML = 'Dalej';
+            step2Button.dataset.action = 'next';
+            step2Button.disabled = false;
+            step2Button.classList.remove('disabled');
+        } else {
+            step2Button.disabled = true;
+            step2Button.classList.add('disabled');
+        }
     }
+
+    // step-3 button action: generate directly or go to step-4 (selector)
+    if (step3Button) {
+        if (selectedTargetRecipient?.startsWith("selector:")) {
+            document.querySelector(".generator>section#step-4")?.classList.remove("hidden");
+            step3Button.dataset.action = 'next';
+        } else {
+            document.querySelector(".generator>section#step-4")?.classList.add("hidden");
+            step3Button.dataset.action = 'generate';
+        }
+    }
+
     totalSteps = document.querySelectorAll(".generator>section:not(.hidden)").length;
-    showStep(currentStep); // refresh the step number after manipulating the optional step
+    showStep(currentStep);
+
+    // re-render form types filtered by the newly selected target
+    renderFormTypes();
 
     return true;
 }
@@ -390,8 +416,8 @@ const validateTopics = () => {
         setButtonState(1, false, 'Wybierz opcję')
         return false;
     }
-    if (selectedTopics.length > 3) {
-        setButtonState(1, false, 'Wybierz do 3 opcji')
+    if (selectedTopics.length > 2) {
+        setButtonState(1, false, 'Wybierz do 2 opcji')
         return false;
     }
 

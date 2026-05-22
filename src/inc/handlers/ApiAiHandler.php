@@ -282,10 +282,10 @@ class ApiAiHandler extends \AbstractHandler {
         return null;
     }
 
-    public static function __getParlamentary(\user\User $user): array {
+    public static function __getParlamentary(\user\User $user, bool $onlyWithCommittees = true): array {
         $mps = \json\get('parlamentary.json');
         $districts = \json\get('electoral-districts.json');
-        
+
         $city = null;
         if ($user) {
             $city = self::getUserDistrict($user, $districts);
@@ -296,7 +296,7 @@ class ApiAiHandler extends \AbstractHandler {
         foreach ($mps as $key => $mp) {
             $cities = $districts[$mp['district']]['cities'];
 
-            if (!array_key_exists('committees', $mps[$key])) { # || !array_key_exists('INF', $mps[$key]['committees'])) {
+            if ($onlyWithCommittees && !array_key_exists('committees', $mps[$key])) {
                 unset($mps[$key]);
                 continue;
             }
@@ -328,6 +328,12 @@ class ApiAiHandler extends \AbstractHandler {
     public function getSuggestedParlamentary(Request $request, Response $response, array $args): Response {
         $user = $request->getAttribute('user');
         $mps = $this::__getParlamentary($user);
+        return $this->renderJson($response, $mps);
+    }
+
+    public function getAllParlamentaryForSelector(Request $request, Response $response, array $args): Response {
+        $user = $request->getAttribute('user');
+        $mps = $this::__getParlamentary($user, false);
         return $this->renderJson($response, $mps);
     }
 

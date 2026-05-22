@@ -203,6 +203,13 @@ $FORMS = [
 ];
 
 $TARGETS = [
+    "Poseł_Posłanka" => [
+        "title" => "Posła/Posłanki",
+        "forms" => ["email", "complaint", "proposal"],
+        "formal" => "Szanowny Pan/Szanowna Pani\n____ _____\nPoseł/Posłanka na Sejm\nKancelaria Sejmu\nul. Wiejska 4/6/8\n00-902 Warszawa",
+        "selector" => "parlamentary",
+        "badge" => "Nowa opcja"
+    ],
     "Premier" => [
         "title" => "Premiera",
         "forms" => ["email", "complaint", "proposal"],
@@ -213,13 +220,15 @@ $TARGETS = [
         "title" => "Ministra Infrastruktury",
         "forms" => ["email", "complaint", "proposal"],
         "formal" => "Szanowny Pan\nDariusz Klimczak\nMinister Infrastruktury\nAl. Ujazdowskie 1/3\n00-583 Warszawa",
-        "email" => "sekretariatDKlimczaka@mi.gov.pl"
+        "email" => "sekretariatDKlimczaka@mi.gov.pl",
+        "note" => "Na ten moment nie polecany – zdążyli się utwardzić"
     ],
     "MSWiA" => [
         "title" => "Ministra Spraw Wewnętrznych i Administracji",
         "forms" => ["email", "complaint", "proposal"],
         "formal" => "Szanowny Pan\nMarcin Kierwiński\nMinister Spraw Wewnętrznych i Administracji\nul. Stefana Batorego 5\n02-591 Warszawa",
-        "email" => "kontakt@mswia.gov.pl"
+        "email" => "kontakt@mswia.gov.pl",
+        "note" => "Na ten moment nie polecany – zdążyli się utwardzić"
     ],
     "RPO" => [
         "title" => "Rzecznika Praw Obywatelskich",
@@ -227,12 +236,6 @@ $TARGETS = [
         "formal" => "Szanowny Pan\ndr hab. Marcin Wiącek\nRzecznik Praw Obywatelskich\nal. Solidarności 77\n00-090 Warszawa",
         "form" => "https://formularze.brpo.gov.pl/formularz_wniosek_ogolny"
     ],
-    #"Posłanka/Poseł" => [
-    #    "title" => "Posła/Posłanki",
-    #    "forms" => ["email", "complaint", "proposal"],
-    #    "formal" => "szanowny pan/szanowna pani\n____ _____\nposeł/posłanka na sejm\nkancelaria sejmu\nul. wiejska 4/6/8\n00-902 warszawa",
-    #    "selector" => "parlamentary"
-    #],
     "Członek_INF" => [
         "title" => "Członka/ini Sejmowej Komisji Infrastruktury",
         "forms" => ["email", "complaint", "proposal"],
