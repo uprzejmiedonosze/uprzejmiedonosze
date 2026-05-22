@@ -128,45 +128,110 @@
 
         <fieldset>
         <legend>Wybierz rodzaj wykroczenia</legend>
-        <div class="grid" id="category">
-        {% set i = 0 %}
-        {% for catId,categoryDef in categories %}
-        {% if categoryDef.title %}
-            <div>
-                <input type="radio" {% if catId == app.category %}checked="checked"{% endif %}
-                    name="category" value="{{ catId }}" id="{{ catId }}"
-                    data-contextImage-hint="{{ categoryDef.contextImageHint }}"
-                    data-carImage-hint="{{ categoryDef.carImageHint }}">
-                <label for="{{ catId }}" class="radio no-bullet">
-                    <div>
-                        <img src="/img/{{ catId }}.jpg?ref">
-                        {% if categoryDef.points > 1 %}
-                        <span class="points-badge">{{ categoryDef.points }}</span>
-                        {% endif %}
-                    </div>
-                    <div>
-                        <p class="category-title">{% if catId == 0 %}<i>{% endif %}{{ categoryDef.title }}{% if catId == 0 %}</i>{% endif %}</p>
-                        <p class="category-short">{{ categoryDef.short }}</p>
-                        {% if catId != 0 %}
-                        <p class="price-list">Mandat {% if categoryDef.mandate > 100 %}~{% endif %}{{ categoryDef.mandate }} zł</p>
-                        {% endif %}
-                    </div>
-                </label>
-                <a href="#category-popup-{{ catId }}" data-rel="popup" data-transition="pop" class="category-popup">więcej...</a>
-                <dialog data-role="popup" id="category-popup-{{ catId }}">
-                    <p>{{ categoryDef.desc|raw }}</p>
-                    {% if categoryDef.price %}
-                    <p class="price-list">Mandat: {{ categoryDef.price }}</p>
-                    {% endif %}
-                    <p class="category-law">{{ categoryDef.law }}</p>
-                </dialog>
+        <div id="category">
+
+        {% if config.edit %}
+            {% set selectedCatGroups = categories[app.category] is defined and categories[app.category].groups is defined ? (categories[app.category].groups|cast_to_array) : [] %}
+            {% set showAll = (0 not in selectedCatGroups) %}
+        {% else %}
+            {% set showAll = false %}
+        {% endif %}
+
+        {# --- Najczęstsze wykroczenia (zawsze widoczne) --- #}
+        <div class="category-group">
+            <h4>Najczęstsze wykroczenia</h4>
+            <div class="grid">
+            {% for catId, catDef in categories %}
+            {% if catDef.title is not null and catDef.groups is defined and 0 in (catDef.groups|cast_to_array) %}
+                <div>
+                    <input type="radio" {% if catId == app.category and not showAll %}checked="checked"{% endif %}
+                        name="category" value="{{ catId }}" id="top-{{ catId }}"
+                        data-contextImage-hint="{{ catDef.contextImageHint }}"
+                        data-carImage-hint="{{ catDef.carImageHint }}">
+                    <label for="top-{{ catId }}" class="radio no-bullet">
+                        <div>
+                            <img src="/img/{{ catId }}.jpg?ref">
+                            {% if catDef.points > 1 %}
+                            <span class="points-badge">{{ catDef.points }}</span>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <p class="category-title">{{ catDef.title }}</p>
+                            <p class="category-short">{{ catDef.short }}</p>
+                            <p class="price-list">Mandat {% if catDef.mandate > 100 %}~{% endif %}{{ catDef.mandate }} zł</p>
+                        </div>
+                    </label>
+                    <a href="#category-popup-{{ catId }}" data-rel="popup" data-transition="pop" class="category-popup">więcej...</a>
+                </div>
+            {% endif %}
+            {% endfor %}
             </div>
-        {% set i = i + 1 %}
+            <p id="showAllCategoriesWrapper" {% if showAll %}style="display:none"{% endif %}>
+                <button type="button" id="showAllCategories" class="button light">Pokaż wszystkie</button>
+            </p>
+        </div>
+
+        {# --- Wszystkie kategorie podzielone na grupy --- #}
+        <div id="allCategories" {% if not showAll %}style="display:none"{% endif %}>
+        {% for groupId, groupDef in categoryGroups %}
+        {% if groupId != 0 %}
+            <div class="category-group">
+                <h4>{{ groupDef.name }}</h4>
+                <div class="grid">
+                {% for catId, catDef in categories %}
+                {% if catDef.title is not null and catDef.groups is defined and groupId in (catDef.groups|cast_to_array) %}
+                    {% set catInTopGroup = 0 in (catDef.groups|cast_to_array) %}
+                    <div>
+                        <input type="radio" {% if catId == app.category and (showAll or not catInTopGroup) %}checked="checked"{% endif %}
+                            name="category" value="{{ catId }}" id="{{ catId }}"
+                            data-contextImage-hint="{{ catDef.contextImageHint }}"
+                            data-carImage-hint="{{ catDef.carImageHint }}">
+                        <label for="{{ catId }}" class="radio no-bullet">
+                            <div>
+                                <img src="/img/{{ catId }}.jpg?ref">
+                                {% if catDef.points > 1 %}
+                                <span class="points-badge">{{ catDef.points }}</span>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <p class="category-title">{% if catId == 0 %}<i>{% endif %}{{ catDef.title }}{% if catId == 0 %}</i>{% endif %}</p>
+                                <p class="category-short">{{ catDef.short }}</p>
+                                {% if catId != 0 %}
+                                <p class="price-list">Mandat {% if catDef.mandate > 100 %}~{% endif %}{{ catDef.mandate }} zł</p>
+                                {% endif %}
+                            </div>
+                        </label>
+                        <a href="#category-popup-{{ catId }}" data-rel="popup" data-transition="pop" class="category-popup">więcej...</a>
+                    </div>
+                {% endif %}
+                {% endfor %}
+                {% if groupId == 5 %}
+                <div class="category-hint">
+                    <p>Masz wątpliwości którą kategorię wybrać? Przeczytaj
+                        <a href="/przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.
+                    </p>
+                </div>
+                {% endif %}
+                </div>
+            </div>
         {% endif %}
         {% endfor %}
-            <p style="clear: both;">Masz wątpliwości którą kategorię wybrać? Przeczytaj
-            <a href="/przepisy.html?dialog" close-btn="none" data-transition="pop">nasz poradnik</a>.</p>
         </div>
+
+        {# --- Dialogi (poza ukrytymi sekcjami) --- #}
+        {% for catId, catDef in categories %}
+        {% if catDef.title is not null %}
+        <dialog data-role="popup" id="category-popup-{{ catId }}">
+            <p>{{ catDef.desc|raw }}</p>
+            {% if catDef.price %}
+            <p class="price-list">Mandat: {{ catDef.price }}</p>
+            {% endif %}
+            <p class="category-law">{{ catDef.law }}</p>
+        </dialog>
+        {% endif %}
+        {% endfor %}
+
+</div>
         </fieldset>
 
         <fieldset class="grid" id="extensions">

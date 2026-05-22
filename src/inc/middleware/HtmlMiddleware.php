@@ -38,6 +38,9 @@ class HtmlMiddleware implements MiddlewareInterface {
         global $CATEGORIES;
         $parameters['categories'] = $CATEGORIES;
 
+        global $CATEGORY_GROUPS;
+        $parameters['categoryGroups'] = $CATEGORY_GROUPS;
+
         global $EXTENSIONS;
         $parameters['extensions'] = $EXTENSIONS;
 

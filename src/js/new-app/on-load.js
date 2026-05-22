@@ -6,6 +6,8 @@ import { bindSoftCommentValidation } from "../lib/validation";
 const THIRD_IMAGE_SECTION_CLASS = 'thirdImageSection';
 
 export const initHandlers = (map) => {
+  initCategoryGroups();
+
   // Combined change handler for multiple fields
   ["msisdn", "plateId", "comment", "datetime", "category"].forEach(id => {
     const el = document.getElementById(id);
@@ -146,6 +148,14 @@ export const initHandlers = (map) => {
   });
 };
 
+
+function initCategoryGroups() {
+  document.getElementById('showAllCategories')?.addEventListener('click', function () {
+    document.getElementById('allCategories').style.display = '';
+    const wrapper = document.getElementById('showAllCategoriesWrapper');
+    if (wrapper) wrapper.style.display = 'none';
+  });
+}
 
 function validateExtensions() {
   // @ts-ignore

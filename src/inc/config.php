@@ -9,6 +9,7 @@ const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
 const DT_FORMAT_LONG = 'Y-m-d\TH:i:s.u';
 
 $CATEGORIES = \json\get('categories.json', 'Category');
+$CATEGORY_GROUPS = \json\get('category-groups.json');
 $EXTENSIONS = \json\get('extensions.json', 'Extension');
 $SM_ADDRESSES = \json\get('sm.json', 'SM');
 $STATUSES = \json\get('statuses.json', 'Status');
