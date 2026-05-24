@@ -14,7 +14,15 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
 
     $application->alpr = 'openalpr';
     if(!$carInfo){
-        $carInfo = get_alpr($imageBytes);
+        try {
+            $carInfo = get_alpr($imageBytes);
+        } catch (\Swagger\Client\ApiException $e) {
+            if ($e->getCode() == 402) {
+                logger("OpenALPR API returned 402 Payment Required - marking budget as consumed", true);
+                \cache\set(Type::AlprBudgetConsumed, "", 1.0);
+            }
+            throw $e;
+        }
     }
 
     if(isset($carInfo) && count($carInfo["results"])){
