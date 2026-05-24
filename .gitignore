@@ -24,3 +24,4 @@ testy
 vendor/**
 .sentryclirc
 .claude/settings.local.json
+.antigravitycli
