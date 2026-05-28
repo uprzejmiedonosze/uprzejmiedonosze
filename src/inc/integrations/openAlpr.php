@@ -18,7 +18,7 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
             $carInfo = get_alpr($imageBytes);
         } catch (\Swagger\Client\ApiException $e) {
             if ($e->getCode() == 402) {
-                logger("OpenALPR API returned 402 Payment Required - marking budget as consumed", true);
+                logger("OpenALPR API returned 402 Payment Required - marking budget as consumed");
                 \cache\set(Type::AlprBudgetConsumed, "", 1.0);
             }
             throw $e;

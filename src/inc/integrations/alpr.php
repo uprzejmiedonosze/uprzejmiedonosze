@@ -26,8 +26,15 @@ function get(&$imageBytes, Application &$application, string $baseFileName, stri
 
     } catch (\Exception $e) {
         $msg = "Exception on alpr\\get, 1st attepmt with _use_openAlpr=$use_openAlpr " . $e->getMessage();
-        logger($msg, true);
-        \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'alpr::get']);
+
+        $isAlprOverBudged = $use_openAlpr && $e instanceof \Swagger\Client\ApiException && $e->getCode() == 402;
+        if (!$isAlprOverBudged) {
+            logger($msg, true);
+            \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'alpr::get']);
+        } else {
+            logger($msg);
+        }
+
         if ($use_openAlpr) // do the opposite
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);
         else
