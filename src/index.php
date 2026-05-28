@@ -111,10 +111,7 @@ $app->get('/petition/{petitionId}.docx', DocHandler::class . ':doc')
     ->add(new RegisteredMiddleware())
     ->add(new DocMiddleware());
 
-$app->group('/admin', function (RouteCollectorProxy $group) {
-    $group->get('/dashboard.html', AdminDashboardHandler::class . ':dashboard');
-})  ->add(new HtmlMiddleware())
-    ->add(new AdminMiddleware());
+
 
 $app->group('', function (RouteCollectorProxy $group) { // Application
     //$group->any('/start.html', function () { return AbstractHandler::redirect('/maintenance.html'); });

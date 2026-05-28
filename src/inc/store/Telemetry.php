@@ -1,43 +1,40 @@
 <?php namespace telemetry;
 
-use PDO;
-
-if (!defined('TELEMETRY_DB')) {
-    // In dev it might be in docker/db, in prod it might be elsewhere.
-    // Following the pattern from Store.php but pointing to docker/db/ for now as requested.
-    define('TELEMETRY_DB', __DIR__ . '/../../../db/telemetry.sqlite');
-}
-
-function db(): PDO {
-    static $db = null;
-    if ($db === null) {
-        $db = new \PDO('sqlite:' . TELEMETRY_DB);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $db->exec("PRAGMA journal_mode = WAL;");
-        $db->exec("PRAGMA synchronous = OFF;");
-    }
-    return $db;
-}
-
 /**
- * Logs a telemetry event.
- * user_id is hashed using SHA256 of the user's email.
+ * Logs a telemetry event directly to Netdata (StatsD).
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function log(string $eventName, ?string $appId = null, array $data = []): void {
     try {
-        $email = $_SESSION['user_email'] ?? null;
-        $userId = $email ? hash('sha256', $email) : null;
-        $sessionId = session_id();
+        // Netdata wbudowany serwer StatsD domyślnie nasłuchuje na 127.0.0.1:8125 UDP
+        $sock = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+        if (!$sock) {
+            return;
+        }
 
-        $stmt = db()->prepare("INSERT INTO events (event_name, user_id, session_id, app_id, data) VALUES (?, ?, ?, ?, ?)");
-        $stmt->execute([
-            $eventName,
-            $userId,
-            $sessionId,
-            $appId,
-            $data ? json_encode($data) : null
-        ]);
+        // Ustandaryzowana nazwa metryki, np. uprzejmiedonosze.visitor_entry
+        $metricName = "uprzejmiedonosze." . str_replace('-', '_', $eventName);
+        
+        // Zliczanie podstawowych eventów
+        $message = "{$metricName}:1|c";
+        socket_sendto($sock, $message, strlen($message), 0, '127.0.0.1', 8125);
+
+        // Zliczanie statusów (np. delivery_status.failed)
+        if (isset($data['status'])) {
+            $statusMetric = $metricName . "." . $data['status'];
+            $msgStatus = "{$statusMetric}:1|c";
+            socket_sendto($sock, $msgStatus, strlen($msgStatus), 0, '127.0.0.1', 8125);
+        }
+
+        // Zliczanie źródeł błędów (np. app_error.API_saveImgAndThumb)
+        if ($eventName === 'app_error' && isset($data['source'])) {
+            $sourceMetric = $metricName . "." . str_replace([':', '\\', ' '], '_', $data['source']);
+            $msgSource = "{$sourceMetric}:1|c";
+            socket_sendto($sock, $msgSource, strlen($msgSource), 0, '127.0.0.1', 8125);
+        }
+
+        socket_close($sock);
+
     } catch (\Exception $e) {
         // We don't want telemetry to break the app
         if (function_exists('logger')) {
