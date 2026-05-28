@@ -27,7 +27,7 @@ function GoogleMaps($lat, $lng) {
     if ($json['status'] == 'ZERO_RESULTS') {
         throw new \Exception("Brak wyników z serwerów Google Maps dla $lat,$lng: " . json_encode($json), 404);
     }
-    throw new \Exception("Niepoprawna odpowiedź z serwerów Google Maps: " . json_encode($json), 500);
+    throw new \Exception("Niepoprawna odpowiedź z serwerów Google Maps.", 503);
 }
 
 function Nominatim(float $lat, float $lng): array {

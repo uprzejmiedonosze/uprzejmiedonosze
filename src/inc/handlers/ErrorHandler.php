@@ -25,8 +25,8 @@ function getCustomErrorHandler(App $app): callable {
         $msg = $exception->getMessage() . " [$email], " . trimAbsolutePaths($exception->getFile())
             . ':' . $exception->getLine();
 
-        if (isProd() && $status >= 500) \Sentry\captureException($exception);
-        logger($msg, $status != 404);
+        if (isProd() && $status >= 500 && $status !== 503) \Sentry\captureException($exception);
+        logger($msg, $status != 404 && $status != 503);
         logger(trimAbsolutePaths($exception->getTraceAsString()));
         
         $httpException = $exception;
