@@ -1240,6 +1240,9 @@
     ],
     "email": "dyzurny@ksm.polkowice.pl"
   },
+  "gmina Polkowice": {
+    "parent": "Polkowice"
+  },
   "Staszów": {
     "address": [
       "Straż Miejska w Staszowie",
