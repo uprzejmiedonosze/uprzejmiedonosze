@@ -50,11 +50,10 @@ function upload(string $localPath, string $key): bool {
             'ACL'         => 'public-read',
             'ContentType' => mime_content_type($localPath) ?: 'application/octet-stream',
         ]);
+        \telemetry\log('s3_put', null, ['status' => 'success']);
         return true;
     } catch (AwsException $e) {
-        $msg = "S3 upload failed for $key: " . $e->getMessage();
-        logger($msg, true);
-        \telemetry\log('app_error', null, ['msg' => $msg, 'source' => 'S3::upload']);
+        \telemetry\log('s3_put', null, ['status' => 'failed']);
         return false;
     }
 }
@@ -72,9 +71,11 @@ function download(string $key, string $localPath): bool {
             'Key'    => $key,
             'SaveAs' => $localPath,
         ]);
+        \telemetry\log('s3_get', null, ['status' => 'success']);
         return true;
     } catch (AwsException $e) {
         logger("S3 download failed for $key: " . $e->getMessage(), true);
+        \telemetry\log('s3_get', null, ['status' => 'failed']);
         throw $e;
     }
 }
