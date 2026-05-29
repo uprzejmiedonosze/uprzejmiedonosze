@@ -15,3 +15,4 @@ echo date('Y-m-d H:i:s') . " — S3 sync start\n";
 purgeLocalFiles(dryRun: false);
 
 echo date('Y-m-d H:i:s') . " — S3 sync done\n";
+\telemetry\log('cron_s3_sync', null, ['status' => 'success']);

@@ -9,3 +9,4 @@ removeAppsByStatus(olderThan: 30, status: 'ready', dryRun: false);
 cleanupStuckSendingApps(olderThanMinutes: 10, dryRun: false);
 
 echo date('Y-m-d H:i:s') . " — cleanup done\n";
+\telemetry\log('cron_cleanup', null, ['status' => 'success']);

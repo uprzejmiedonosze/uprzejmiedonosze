@@ -17,10 +17,14 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
         try {
             $carInfo = get_alpr($imageBytes);
         } catch (\Swagger\Client\ApiException $e) {
+            \telemetry\log('api_openalpr', null, ['status' => 'error']);
             if ($e->getCode() == 402) {
                 logger("OpenALPR API returned 402 Payment Required - marking budget as consumed");
                 \cache\set(Type::AlprBudgetConsumed, "", 1.0);
             }
+            throw $e;
+        } catch (\Throwable $e) {
+            \telemetry\log('api_openalpr', null, ['status' => 'error']);
             throw $e;
         }
     }
@@ -82,16 +86,22 @@ function get_alpr(&$imageBytes){
     $imageHash = sha1($imageBytes);
 	$apiInstance = new \Swagger\Client\Api\DefaultApi();
 
-    $alpr = $apiInstance->recognizeBytes($imageBytes, OPEN_ALPR_SECRET_1,
-        "eu", // country
-        1, // recognize_vehicle
-        "", // state
-        0, // return_image
-        1, // topn
-        "" // prewarp
-    );
-    \cache\alpr\set(Type::OpenAlpr, $imageHash, $alpr);
-    return $alpr;
+    try {
+        $alpr = $apiInstance->recognizeBytes($imageBytes, OPEN_ALPR_SECRET_1,
+            "eu", // country
+            1, // recognize_vehicle
+            "", // state
+            0, // return_image
+            1, // topn
+            "" // prewarp
+        );
+        \telemetry\log('api_openalpr', null, ['status' => 'success']);
+        \cache\alpr\set(Type::OpenAlpr, $imageHash, $alpr);
+        return $alpr;
+    } catch (\Throwable $e) {
+        \telemetry\log('api_openalpr', null, ['status' => 'error']);
+        throw $e;
+    }
 }
 
 function get_alpr_cli($imagePath) {

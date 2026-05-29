@@ -20,6 +20,9 @@ sendWarning($dryRun);
 send2ndWarning($dryRun);
 removeUsers($dryRun);
 
+if (!$dryRun) {
+    \telemetry\log('cron_old_users_removal', null, ['status' => 'success']);
+}
 function sendWarning(bool $dryRun) {
     $candidates = getInactiveUsers();
     print("\n[sendWarning] kandydatów: " . count($candidates));

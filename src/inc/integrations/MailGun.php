@@ -96,7 +96,9 @@ class MailGun extends CityAPI {
                 logger("Marking app {$application->id} as confirmed-waiting (sent)");
                 \app\save($application);
             }
+            \telemetry\log('api_email', null, ['status' => 'success']);
         } catch (\Throwable $error) {
+            \telemetry\log('api_email', null, ['status' => 'error']);
             $msg = "Sending email {$application->id} with MailGun, exception: " . $error->getMessage();
             logger($msg, true);
             \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'MailGun::send']);
@@ -144,7 +146,9 @@ class MailGun extends CityAPI {
 
         try {
             $mailer->send($message);
+            \telemetry\log('api_email', null, ['status' => 'success']);
         } catch (TransportExceptionInterface $error) {
+            \telemetry\log('api_email', null, ['status' => 'error']);
             throw new Exception($error, 500);
         }
     }

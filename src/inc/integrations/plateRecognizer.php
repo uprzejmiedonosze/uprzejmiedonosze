@@ -95,10 +95,12 @@ function platerecognizerRequest($method, $data=null) {
         $error = curl_error($chi);
         curl_close($chi);
         logger("Nie udało się pobrać danych platerecognizer: $error");
+        \telemetry\log('api_platerecognizer', null, ['status' => 'error']);
         throw new \Exception("Nie udało się pobrać odpowiedzi z serwerów platerecognizer: $error", 500);
     }
     curl_close($chi);
 
+    \telemetry\log('api_platerecognizer', null, ['status' => 'success']);
     return json_decode($result, true);
 }
 

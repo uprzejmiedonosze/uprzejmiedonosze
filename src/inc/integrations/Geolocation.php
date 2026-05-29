@@ -22,8 +22,10 @@ function GoogleMaps($lat, $lng) {
     if ($json['status'] == 'OK' && $json['results']) {
         $result = $json['results'][0];
         \cache\geo\set(Type::GoogleMaps, "$lat,$lng", $result);
+        \telemetry\log('api_googlemaps', null, ['status' => 'success']);
         return $result;
     }
+    \telemetry\log('api_googlemaps', null, ['status' => 'error']);
     if ($json['status'] == 'ZERO_RESULTS') {
         throw new \Exception("Brak wyników z serwerów Google Maps dla $lat,$lng: " . json_encode($json), 404);
     }
@@ -42,11 +44,20 @@ function Nominatim(float $lat, float $lng): array {
     $url = "https://nominatim.openstreetmap.org/reverse?";
 
     $json = \cache\geo\get(Type::Nominatim, "$lat,$lng");
-    if (!$json) $json = \curl\request($url, $params, "Nominatim");
+    if (!$json) {
+        try {
+            $json = \curl\request($url, $params, "Nominatim");
+        } catch (\Throwable $e) {
+            \telemetry\log('api_nominatim', null, ['status' => 'error']);
+            throw $e;
+        }
+    }
 
     if (!$json || !isset($json['address'])) {
+        \telemetry\log('api_nominatim', null, ['status' => 'error']);
         throw new \Exception("Brak wyników z serwerów OpenStreetMap dla $lat,$lng " . json_encode($json), 404);
     }
+    \telemetry\log('api_nominatim', null, ['status' => 'success']);
 
     $address = $json['address'];
 
@@ -108,11 +119,18 @@ function MapBox(float $lat, float $lng): array {
         "access_token" => MAPBOX_API_TOKEN
     );
     $url = "https://api.mapbox.com/search/geocode/v6/reverse?";
-    $json = \curl\request($url, $params, "MapBox");
+    try {
+        $json = \curl\request($url, $params, "MapBox");
+    } catch (\Throwable $e) {
+        \telemetry\log('api_mapbox', null, ['status' => 'error']);
+        throw $e;
+    }
 
     if (!$json || !isset($json['features']) || sizeof($json['features']) == 0) {
+        \telemetry\log('api_mapbox', null, ['status' => 'error']);
         throw new \Exception("Brak wyników z serwerów MapBox dla $lat,$lng " . json_encode($json), 404);
     }
+    \telemetry\log('api_mapbox', null, ['status' => 'success']);
     $properties = reset($json['features'])['properties'];
     $properties['address'] = array();
     array_walk($properties['context'], function ($val, $key) use (&$properties) {

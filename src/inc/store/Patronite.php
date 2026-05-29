@@ -39,11 +39,17 @@ enum PatronieStatus:string {
 
 function __get(PatronieStatus $status):array {
     if (!defined("\\PATRONITE_TOKEN")) return [];
-    $result = \curl\request("https://patronite.pl/author-api/patrons/{$status->value}?with_notes=yes",
-        [], "Patronite", array(
-            "Authorization: token " . \PATRONITE_TOKEN,
-            "Content-Type: application/json"
-        ));
+    try {
+        $result = \curl\request("https://patronite.pl/author-api/patrons/{$status->value}?with_notes=yes",
+            [], "Patronite", array(
+                "Authorization: token " . \PATRONITE_TOKEN,
+                "Content-Type: application/json"
+            ));
+        \telemetry\log('api_patronite', null, ['status' => 'success']);
+    } catch (\Throwable $e) {
+        \telemetry\log('api_patronite', null, ['status' => 'error']);
+        throw $e;
+    }
     if (!($result['results']??null)) return [];
 
     $output = array();
