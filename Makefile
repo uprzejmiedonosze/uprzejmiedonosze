@@ -100,16 +100,19 @@ sentry-release: ## Create Sentry release and upload JS source maps
 
 .PHONY: build-export
 build-export: ## Build export/ and vendor/ via Docker builder (prod config)
-	@echo "==> Building Docker builder (APP_HOST=$(PROD_HOST))"
-	@docker build \
+	@echo "==> Building Docker builder (from services/.env.prod)"
+	@set -a && . ./services/.env.prod && set +a && \
+	docker build \
 		--target builder \
-		--build-arg APP_HOST=$(PROD_HOST) \
+		--build-arg APP_HOST \
+		--build-arg APP_HTTPS \
 		-f services/webapp/Dockerfile \
 		-t $(BUILDER_IMAGE) .
 	@echo "==> Extracting export/ and vendor/"
+	@docker rm -f $(BUILDER_CTR) 2>/dev/null || true
 	@docker create --name $(BUILDER_CTR) $(BUILDER_IMAGE)
-	@docker cp $(BUILDER_CTR):/var/www/uprzejmiedonosze.net/export ./export
-	@docker cp $(BUILDER_CTR):/var/www/uprzejmiedonosze.net/vendor ./vendor
+	@docker cp $(BUILDER_CTR):/build/export ./export
+	@docker cp $(BUILDER_CTR):/build/vendor ./vendor
 	@docker rm $(BUILDER_CTR)
 	@docker rmi $(BUILDER_IMAGE)
 
@@ -120,6 +123,7 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	$(sentry-inject)
 	@$(RSYNC) $(RSYNC_FLAGS) export/* $(HOSTING):/var/www/$(HOST)/webapp
 	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
+	@$(RSYNC) --human-readable services/.env.prod $(HOSTING):/var/www/$(HOST)/.env.prod
 	@$(MAKE) sentry-release
 	@$(MAKE) clean
 

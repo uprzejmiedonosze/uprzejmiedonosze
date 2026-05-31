@@ -17,6 +17,20 @@ $STOP_AGRESJI = \json\get('stop-agresji.json', 'StopAgresji');
 $LEVELS = \json\get('levels.json', 'Level');
 $BADGES = \json\get('badges.json');
 
+if (!getenv('APP_ENV')) {
+    // Non-Docker deployment (quickfix rsync): load secrets from .env file on disk
+    $envFile = ROOT . '.env.prod';
+    if (!is_file($envFile)) $envFile = ROOT . '.env.dev';
+    if (is_file($envFile)) {
+        foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+            if ($line[0] === '#' || !str_contains($line, '=')) continue;
+            [$k, $v] = explode('=', $line, 2);
+            putenv(trim($k) . '=' . trim($v));
+        }
+    }
+    unset($envFile, $line, $k, $v);
+}
+
 define('SMTP_HOST',    getenv('SMTP_HOST')    ?: '');
 define('SMTP_USER',    getenv('SMTP_USER')    ?: '');
 define('EMAIL_SENDER', getenv('EMAIL_SENDER') ?: '');
