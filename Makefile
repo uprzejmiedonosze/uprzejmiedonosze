@@ -10,7 +10,10 @@ CYPRESS     := ./node_modules/.bin/cypress
 CYPRESS_KEY := 8a0db00f-b36c-4530-9c82-422b0be32b5b
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DATE       := $(shell date '+%Y-%m-%d')
-TAG_NAME   := $(shell echo $(GIT_BRANCH)_$(DATE))
+TAG_NAME      := $(shell echo $(GIT_BRANCH)_$(DATE))
+PROD_HOST     := uprzejmiedonosze.net
+BUILDER_IMAGE := ud-builder-prod
+BUILDER_CTR   := ud-builder-prod-tmp
 
 .DEFAULT_GOAL := help
 
@@ -62,6 +65,15 @@ check-branch-main: ## Check that current branch is main
 	@test "$(shell LC_ALL=en_US git status | grep 'origin/main' | wc -l)" -eq 1 \
 		|| ( echo "Not on branch main." && exit 1 )
 
+.PHONY: confirmation
+confirmation:
+	@tput setaf 160 && \
+		echo "\nPRODUCTION QUICKFIX!!" && \
+		tput sgr0 && \
+		echo "\nAre you sure[yes/N]" && \
+		read ans && \
+		[ $${ans:-N} = yes ]
+
 .PHONY: log-from-last-prod
 log-from-last-prod: ## Commits since last prod release
 	@git log --color --pretty=format:"%cn %ci %s" HEAD...$(call last-tag)
@@ -83,6 +95,33 @@ sentry-release: ## Create Sentry release and upload JS source maps
 	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js \
 		./node_modules/.bin/sentry-cli sourcemaps upload --org uprzejmie-donosze \
 		--project ud-js ./export/public/js
+
+# ── Prod build & deployment ───────────────────────────────────────────────────
+
+.PHONY: build-export
+build-export: ## Build export/ and vendor/ via Docker builder (prod config)
+	@echo "==> Building Docker builder (APP_HOST=$(PROD_HOST))"
+	@docker build \
+		--target builder \
+		--build-arg APP_HOST=$(PROD_HOST) \
+		-f services/webapp/Dockerfile \
+		-t $(BUILDER_IMAGE) .
+	@echo "==> Extracting export/ and vendor/"
+	@docker create --name $(BUILDER_CTR) $(BUILDER_IMAGE)
+	@docker cp $(BUILDER_CTR):/var/www/uprzejmiedonosze.net/export ./export
+	@docker cp $(BUILDER_CTR):/var/www/uprzejmiedonosze.net/vendor ./vendor
+	@docker rm $(BUILDER_CTR)
+	@docker rmi $(BUILDER_IMAGE)
+
+.PHONY: quickfix
+quickfix: HOST := $(PROD_HOST)
+quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation clean build-export ## Quickfix on production (Docker build)
+	@echo "==> Deploying to $(HOST)"
+	$(sentry-inject)
+	@$(RSYNC) $(RSYNC_FLAGS) export/* $(HOSTING):/var/www/$(HOST)/webapp
+	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
+	@$(MAKE) sentry-release
+	@$(MAKE) clean
 
 # ── Staging deployment ────────────────────────────────────────────────────────
 
@@ -120,4 +159,9 @@ help:
 
 define last-tag
 $(shell git show-ref --tags | grep tags/prod_main | tail -n 1 | cut -d" " -f 1)
+endef
+
+define sentry-inject
+@./node_modules/.bin/sentry-cli sourcemaps inject \
+    --org uprzejmie-donosze --project ud-js ./export/public/js
 endef
