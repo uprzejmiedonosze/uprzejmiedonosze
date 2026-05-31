@@ -115,6 +115,7 @@ build-export: ## Build export/ and vendor/ via Docker builder (prod config)
 	@docker cp $(BUILDER_CTR):/build/vendor ./vendor
 	@docker rm $(BUILDER_CTR)
 	@docker rmi $(BUILDER_IMAGE)
+	@php -r '$$d=[];foreach(file("services/.env.prod",FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES) as $$l){if($$l[0]==="#"||!str_contains($$l,"="))continue;[$$k,$$v]=explode("=",$$l,2);$$k=trim($$k);$$v=trim($$v);if(str_starts_with($$k,"APP_"))continue;$$d[]="define(".var_export($$k,true).", ".var_export($$v,true).");";}echo "<?php\n".implode("\n",$$d)."\n";' > export/config.prod.php
 
 .PHONY: quickfix
 quickfix: HOST := $(PROD_HOST)
