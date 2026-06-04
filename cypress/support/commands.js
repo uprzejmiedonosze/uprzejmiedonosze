@@ -31,7 +31,7 @@ Cypress.Commands.add("sendApp", () => {
   cy.intercept('PATCH', '/api/app/**').as("send")
   cy.contains('Wyślij do').click()
   cy.wait("@send")
-  cy.get('.afterSend', { timeout: 30000 }).should('be.visible')
+  cy.url().should('include', 'dziekujemy')
 })
 
 Cypress.Commands.add("uploadOKImages", (carImage = 'img_p.jpg') => {

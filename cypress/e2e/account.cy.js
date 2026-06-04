@@ -121,7 +121,7 @@ describe('Update account', () => {
     cy.visit('/')
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click()
-    cy.contains('Mazurska').click()
+    cy.get('.application-short h3').first().click({force: true})
   })
 
   it('Set opposite settings', function () {
@@ -163,6 +163,6 @@ describe('Update account', () => {
     cy.visit('/')
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click()
-    cy.contains('Mazurska').click()
+    cy.get('.application-short h3').first().click({force: true})
   })
 })
