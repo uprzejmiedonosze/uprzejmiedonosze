@@ -8,10 +8,9 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
-<h4>Niedziela, 31 maja 2026</h4>
+<h4>Czwartek, 4 czerwca 2026</h4>
 <ul>
-    <li>Dodano target `quickfix` do Makefile: budowanie paczki produkcyjnej (export/ i vendor/) odbywa się teraz przez Docker builder zamiast lokalnego środowiska.</li>
-    <li>Wdrożenie produkcyjne (quickfix): konfiguracja sekretów czytana z pliku .env zamiast config.prod.php — jednolite źródło prawdy dla deploymentów Docker i rsync.</li>
+    <li>Migracja infrastruktury serwerowej do środowiska kontenerowego (Docker): aplikacja webowa, detektor tablic rejestracyjnych, worker oraz Memcached działają teraz jako osobne usługi — zwiększa to stabilność, izolację środowisk i powtarzalność wdrożeń. Aktualizacja PHP do wersji 8.4.</li>
 </ul>
 <h4>Piątek, 29 maja 2026</h4>
 <ul>
