@@ -1,3 +1,5 @@
+name: ${APP_ENV:-dev}
+
 # App secrets and environment-specific config — passed to all PHP-running services.
 # Staging/prod: vars come from --env-file substitution (services/.env.staging / .env.prod).
 # Dev: loaded directly into the webapp container via env_file: .env.dev.
