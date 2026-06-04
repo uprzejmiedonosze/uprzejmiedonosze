@@ -162,13 +162,15 @@ describe('Static pages logged in', function() {
     })
 
     it('/', function () {
+        // Names/descs in JSON are feminine; derive sex-invariant stem for m/f/? variants on page
+        const sexStem = (s) => {
+            const obrMatch = s.match(/^Obrończyni\s+(.+)/)
+            if (obrMatch) return obrMatch[1]
+            return s.replace(/czka$/, '').replace(/ka$/, '').replace(/a$/, '')
+        }
         cy.contains('Cześć Tester,')
-        Object.values(this.levels).forEach(level => {
-            cy.contains(level.desc)
-        })
-        Object.values(this.badges).forEach(badge => {
-            cy.contains(badge.name)
-        })
+        Object.values(this.levels).forEach(level => cy.contains(new RegExp(sexStem(level.desc))))
+        Object.values(this.badges).forEach(badge => cy.contains(new RegExp(sexStem(badge.name))))
         cy.get('.badge').should('not.have.class', 'active')
         cy.contains('wkurzony, ale walczący')
     })
@@ -185,7 +187,7 @@ describe('Static pages logged in', function() {
     it('/menu » patronite', () => {
         cy.get('label.menu > .button-toggle').click()
         cy.contains('Zostań Patronem').click()
-        cy.contains('ponad 8000 zgłoszeń')
+        cy.contains('ponad 16 000 zgłoszeń')
     })
 
 })
