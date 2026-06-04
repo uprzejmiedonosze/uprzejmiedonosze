@@ -22,7 +22,7 @@ src/tensor
 testy
 vendor/**
 .sentryclirc
-.claude/settings.local.json
+.claude
 .antigravitycli
 services/.env.dev
 services/.env.staging
