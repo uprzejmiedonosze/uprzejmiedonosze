@@ -11,10 +11,12 @@ CYPRESS_KEY := 8a0db00f-b36c-4530-9c82-422b0be32b5b
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DATE       := $(shell date '+%Y-%m-%d')
 TAG_NAME      := $(shell echo $(GIT_BRANCH)_$(DATE))
-PROD_HOST     := uprzejmiedonosze.net
-SHADOW_HOST   := shadow.uprzejmiedonosze.net
-BUILD_HOST    ?= $(PROD_HOST)
-BUILDER_IMAGE := ud-builder-prod
+PROD_HOST         := uprzejmiedonosze.net
+SHADOW_HOST       := shadow.uprzejmiedonosze.net
+STAGING_APP_HOST  := staging.uprzejmiedonosze.net
+BUILD_HOST        ?= $(PROD_HOST)
+BUILD_ENV_FILE    ?= services/.env.prod
+BUILDER_IMAGE     := ud-builder-prod
 BUILDER_CTR   := ud-builder-prod-tmp
 
 .DEFAULT_GOAL := help
@@ -103,7 +105,7 @@ sentry-release: ## Create Sentry release and upload JS source maps
 .PHONY: build-export
 build-export: ## Build export/ and vendor/ via Docker builder (prod config)
 	@echo "==> Building Docker builder (HOST=$(BUILD_HOST))"
-	@set -a && . ./services/.env.prod && APP_HOST=$(BUILD_HOST) && set +a && \
+	@set -a && . ./$(BUILD_ENV_FILE) && APP_HOST=$(BUILD_HOST) && set +a && \
 	docker build \
 		--target builder \
 		--build-arg APP_HOST \
@@ -118,7 +120,18 @@ build-export: ## Build export/ and vendor/ via Docker builder (prod config)
 	@docker cp $(BUILDER_CTR):/build/vendor ./vendor
 	@docker rm $(BUILDER_CTR)
 	@docker rmi $(BUILDER_IMAGE)
-	@php tools/gen-config-prod.php
+	@php tools/gen-config-prod.php $(BUILD_ENV_FILE)
+
+.PHONY: old-staging
+old-staging: HOST          := $(STAGING_APP_HOST)
+old-staging: BUILD_HOST    := $(STAGING_APP_HOST)
+old-staging: BUILD_ENV_FILE := services/.env.staging
+old-staging: clean build-export ## Deploy to staging server via Docker build + rsync (no checks, no sentry)
+	@echo "==> Deploying to $(HOST)"
+	@$(RSYNC) $(RSYNC_FLAGS) export/* $(STAGING_HOST):$(STAGING_PATH)/webapp
+	@$(RSYNC) $(RSYNC_FLAGS) vendor   $(STAGING_HOST):$(STAGING_PATH)/vendor
+	@$(RSYNC) --human-readable services/.env.staging $(STAGING_HOST):$(STAGING_PATH)/.env.staging
+	@$(MAKE) clean
 
 .PHONY: shadow
 shadow: HOST      := $(SHADOW_HOST)
