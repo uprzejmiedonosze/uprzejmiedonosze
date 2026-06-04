@@ -113,6 +113,7 @@ build-export: ## Build export/ and vendor/ via Docker builder (prod config)
 	@echo "==> Extracting export/ and vendor/"
 	@docker rm -f $(BUILDER_CTR) 2>/dev/null || true
 	@docker create --name $(BUILDER_CTR) $(BUILDER_IMAGE)
+	@rm -rf export vendor
 	@docker cp $(BUILDER_CTR):/build/export ./export
 	@docker cp $(BUILDER_CTR):/build/vendor ./vendor
 	@docker rm $(BUILDER_CTR)
