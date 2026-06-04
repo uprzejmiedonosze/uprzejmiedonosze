@@ -11,8 +11,7 @@ function queue(): Queue
     if ($queue)
         return $queue;
 
-    $queueFile = 'sqlite:' . ROOT . '/queue.sqlite';
-    echo("queueFile=$queueFile");
+    $queueFile = 'sqlite:' . ROOT . 'db/queue.sqlite';
     $pdo = new \PDO($queueFile);
     $pdo->exec("CREATE TABLE IF NOT EXISTS queue (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT);");
 
