@@ -11,11 +11,11 @@ function queue(): Queue
     if ($queue)
         return $queue;
 
-    $queueFile = 'sqlite:' . ROOT . 'db/queue.sqlite';
-    $pdo = new \PDO($queueFile);
+    $queuePath = ROOT . 'db/queue.sqlite';
+    $pdo = new \PDO('sqlite:' . $queuePath);
     $pdo->exec("CREATE TABLE IF NOT EXISTS queue (id INTEGER PRIMARY KEY AUTOINCREMENT, data TEXT);");
 
-    $queue = new Queue(StorageType::SQLITE, $queueFile);
+    $queue = new Queue(StorageType::SQLITE, $queuePath);
     return $queue;
 }
 
