@@ -78,11 +78,6 @@ describe('Create account', () => {
 })
 
 describe('Update account', () => {
-  before(() => {
-    // @ts-ignore
-    cy.login()
-  })
-
   beforeEach(() => {
     // @ts-ignore
     cy.loadConfig()
