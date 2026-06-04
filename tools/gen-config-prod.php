@@ -14,7 +14,10 @@ foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
     [$k, $v] = explode('=', $line, 2);
     $k = trim($k);
     $v = trim($v);
-    if (str_starts_with($k, 'APP_')) continue;
+    if (str_starts_with($k, 'APP_')) {
+        $defines[] = 'putenv(' . var_export("$k=$v", true) . ');';
+        continue;
+    }
     $defines[] = 'define(' . var_export($k, true) . ', ' . var_export($v, true) . ');';
 }
 
