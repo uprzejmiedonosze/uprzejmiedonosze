@@ -5,7 +5,7 @@ function checkAppData(config, confirmationScreen=false) {
         address = address.replace(", Szczecin", "")
         date = config.carImage.dateOnConfirmation
     }
-    cy.contains(config.carImage.plateId)
+    cy.contains(config.detectedPlateId || config.carImage.plateId)
     cy.contains(date)
     cy.contains(address)
     cy.contains(config.user.name)
@@ -171,13 +171,15 @@ describe('Create application', () => {
         const firstExtension = extensions[0]
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
+        cy.get('#plateId').invoke('val').as('detectedPlateId')
         cy.get('#form-submit', { timeout: 10000 }).click()
+        cy.url().should('include', 'potwierdz')
     })
 
     it('checks confirmation screen', function () {
         const extensions = Object.entries(this.extensions).filter((e) => !e[1].disabled)
         cy.contains('Wystąpił błąd').should('not.exist')
-        checkAppData(this.config, true)
+        checkAppData({...this.config, detectedPlateId: this.detectedPlateId}, true)
         const firstExtension = extensions[0]
         cy.contains(firstExtension[1].title)
     })
@@ -193,14 +195,14 @@ describe('Create application', () => {
         cy.visit('/moje-zgloszenia.html')
         cy.location('pathname').should('include', '/moje-zgloszenia.html');
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.application-short.sending h3')
+        cy.get('.application-short:not(.draft):not(.ready):not(.confirmed) h3')
             .should('be.visible').click()
         cy.wait('@appDetails')
     })
 
     it('checks application screen', function () {
         cy.get('.images-slider a:first').invoke('removeAttr', 'target').click({force: true})
-        checkAppData(this.config)
+        checkAppData({...this.config, detectedPlateId: this.detectedPlateId})
         cy.contains('Nieaktualne dane?')
         cy.contains('Zapisanie wersji roboczej')
     })
@@ -225,12 +227,14 @@ describe('Edit application', () => {
         // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
+        cy.get('#plateId').invoke('val').as('detectedPlateId')
         cy.get('#form-submit', { timeout: 10000 }).click()
+        cy.url().should('include', 'potwierdz')
     })
 
     it('checks confirmation screen', function () {
         cy.contains('Wystąpił błąd').should('not.exist')
-        checkAppData(this.config, true)
+        checkAppData({...this.config, detectedPlateId: this.detectedPlateId}, true)
     })
 
     it('checks edit', function() {
@@ -252,10 +256,11 @@ describe('Edit application', () => {
 
     it('checks altered application', function(){
         cy.get('#form-submit').click()
+        cy.url().should('include', 'potwierdz')
         cy.contains('Wystąpił błąd').should('not.exist')
 
-        cy.contains(this.config.carImage.plateId)
-        cy.contains(this.config.carImage.dateISOAltered2)
+        cy.contains(this.detectedPlateId || this.config.carImage.plateId)
+        cy.contains(this.config.carImage.dateHumanAltered2)
         cy.contains(this.config.address.szczecin.replace(", Szczecin", ""))
         cy.contains(this.config.user.name)
         cy.contains(this.config.user.email)
@@ -275,7 +280,7 @@ describe('Edit application', () => {
         cy.visit('/moje-zgloszenia.html')
         cy.location('pathname').should('include', '/moje-zgloszenia.html');
         cy.intercept('GET', 'short-**-partial.html').as('appDetails')
-        cy.get('.application-short.sending h3:first')
+        cy.get('.application-short:not(.draft):not(.ready):not(.confirmed) h3:first')
             .should('be.visible').click()
         cy.wait('@appDetails')
         cy.contains(this.config.address.szczecin)
