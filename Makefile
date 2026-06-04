@@ -53,7 +53,7 @@ test: ## Run phpunit tests in the webapp container
 
 .PHONY: cypress-local
 cypress-local: ## Run Cypress tests against local dev environment
-	@CYPRESS_BASE_URL=http://127.0.0.1 $(CYPRESS) run --e2e --env DOCKER=1
+	@CYPRESS_BASE_URL=http://127.0.0.1 CYPRESS_DOCKER=1 $(CYPRESS) run --e2e
 
 # ── Git / release helpers ─────────────────────────────────────────────────────
 
@@ -131,7 +131,6 @@ old-staging: clean build-export ## Deploy to staging server via Docker build + r
 	@$(RSYNC) $(RSYNC_FLAGS) export/* $(STAGING_HOST):$(STAGING_PATH)/webapp
 	@$(RSYNC) $(RSYNC_FLAGS) vendor   $(STAGING_HOST):$(STAGING_PATH)/vendor
 	@$(RSYNC) --human-readable services/.env.staging $(STAGING_HOST):$(STAGING_PATH)/.env.staging
-	@$(MAKE) clean
 
 .PHONY: shadow
 shadow: HOST      := $(SHADOW_HOST)

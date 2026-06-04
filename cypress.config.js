@@ -5,9 +5,7 @@ const cypressFailFast = require('cypress-fail-fast/plugin');
 module.exports = defineConfig({
   projectId: "ttzx1f",
   allowCypressEnv: false,
-  expose: {
-    DOCKER: process.env.CYPRESS_DOCKER === 'true' || process.env.CYPRESS_DOCKER === '1',
-  },
+  DOCKER: process.env.CYPRESS_DOCKER === 'true' || process.env.CYPRESS_DOCKER === '1',
 
   e2e: {
     setupNodeEvents(on, config) {
