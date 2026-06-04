@@ -12,6 +12,8 @@ GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DATE       := $(shell date '+%Y-%m-%d')
 TAG_NAME      := $(shell echo $(GIT_BRANCH)_$(DATE))
 PROD_HOST     := uprzejmiedonosze.net
+SHADOW_HOST   := shadow.uprzejmiedonosze.net
+BUILD_HOST    ?= $(PROD_HOST)
 BUILDER_IMAGE := ud-builder-prod
 BUILDER_CTR   := ud-builder-prod-tmp
 
@@ -100,8 +102,8 @@ sentry-release: ## Create Sentry release and upload JS source maps
 
 .PHONY: build-export
 build-export: ## Build export/ and vendor/ via Docker builder (prod config)
-	@echo "==> Building Docker builder (from services/.env.prod)"
-	@set -a && . ./services/.env.prod && set +a && \
+	@echo "==> Building Docker builder (HOST=$(BUILD_HOST))"
+	@set -a && . ./services/.env.prod && APP_HOST=$(BUILD_HOST) && set +a && \
 	docker build \
 		--target builder \
 		--build-arg APP_HOST \
@@ -116,6 +118,16 @@ build-export: ## Build export/ and vendor/ via Docker builder (prod config)
 	@docker rm $(BUILDER_CTR)
 	@docker rmi $(BUILDER_IMAGE)
 	@php -r '$$d=[];foreach(file("services/.env.prod",FILE_IGNORE_NEW_LINES|FILE_SKIP_EMPTY_LINES) as $$l){if($$l[0]==="#"||!str_contains($$l,"="))continue;[$$k,$$v]=explode("=",$$l,2);$$k=trim($$k);$$v=trim($$v);if(str_starts_with($$k,"APP_"))continue;$$d[]="define(".var_export($$k,true).", ".var_export($$v,true).");";}echo "<?php\n".implode("\n",$$d)."\n";' > export/config.prod.php
+
+.PHONY: shadow
+shadow: HOST      := $(SHADOW_HOST)
+shadow: BUILD_HOST := $(SHADOW_HOST)
+shadow: clean build-export ## Deploy to shadow server (no branch/clean checks, no sentry)
+	@echo "==> Deploying to $(HOST)"
+	@$(RSYNC) $(RSYNC_FLAGS) export/* $(HOSTING):/var/www/$(HOST)/webapp
+	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
+	@$(RSYNC) --human-readable services/.env.prod $(HOSTING):/var/www/$(HOST)/.env.prod
+	@$(MAKE) clean
 
 .PHONY: quickfix
 quickfix: HOST := $(PROD_HOST)
