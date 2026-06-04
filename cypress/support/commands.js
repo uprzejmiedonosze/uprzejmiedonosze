@@ -2,7 +2,7 @@
 Cypress.Commands.add("login", () => {
   cy.session('user' + Date.now(), () => {
     cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0') // dev -> docker
-    cy.setCookie('UDSESSIONID', 'e5m50thn5hri9pffoli2feqqgnevjg2vbpb2q7ir') // staging
+    cy.setCookie('UDSESSIONID', '4ql346r0u72e66jml6dq72bo0fofk40n30cfc8lh') // staging
   }, {
     cacheAcrossSpecs: true
   })
@@ -90,14 +90,14 @@ Cypress.Commands.add("loadConfig", () => {
 });
 
 Cypress.Commands.add("initDB", () => {
-  if (Cypress.env('DOCKER'))
+  if (Cypress.config('DOCKER'))
     return cy.exec('docker exec webapp sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite -init /var/www/uprzejmiedonosze.net/webapp/sql/init_registered.sql')
 
   cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_registered.sql"')
 })
 
 Cypress.Commands.add("cleanDB", () => {
-  if (Cypress.env('DOCKER'))
+  if (Cypress.config('DOCKER'))
     return cy.exec('docker exec webapp sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite -init /var/www/uprzejmiedonosze.net/webapp/sql/init_empty.sql')
 
   cy.exec('ssh nieradka.net "sqlite3 /var/www/staging.uprzejmiedonosze.net/db/store.sqlite < /var/www/staging.uprzejmiedonosze.net/webapp/sql/init_empty.sql"')
