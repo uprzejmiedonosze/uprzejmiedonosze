@@ -4586,5 +4586,13 @@
   },
   "Międzyrzecze Dolne": {
     "parent": "Jasienica"
+  },
+  "gmina Górno": {
+    "address": [
+      "Komisariat Policji w Daleszycach",
+      "ul. Sienkiewicza 35",
+      "26-021 Daleszyce"
+    ],
+    "email": "daleszyce@ki.policja.gov.pl"
   }
 }
