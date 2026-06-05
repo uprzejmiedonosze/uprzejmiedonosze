@@ -4561,5 +4561,16 @@
   },
   "powiat kłobucki": {
     "parent": "Kłobuck"
+  },
+  "Strzelin": {
+    "address": [
+      "Straż Miejska w Strzelinie",
+      "ul. Bolka I Świdnickiego 23",
+      "57-100 Strzelin"
+    ],
+    "email": "strazmiejska@strzelin.pl"
+  },
+  "gmina Strzelin": {
+    "parent": "Strzelin"
   }
 }
