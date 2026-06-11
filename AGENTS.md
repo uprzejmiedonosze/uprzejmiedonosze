@@ -166,3 +166,12 @@ For production: nginx access/error logs are written to `/var/log/uprzejmiedonosz
 | Sentry | off | off | on |
 | S3 | off | on | on |
 | CDN prefix | `cdn2` | `cdn2stg` | `cdn2` |
+
+## Agent Workflows & Tips
+
+- **Fetching App IDs:** You can find the internal Application ID for a ticket number (e.g., `UD/X/Y`) by querying the SQLite database on the production server via SSH:
+  `ssh nieradka.net "sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite \"select key from applications where json_extract(value, '$.number') = upper('UD/X/Y') limit 1\""`
+- **Checking Geo Units:** You can check the administrative unit (powiat, gmina) and assigned law enforcement unit by coordinates via the staging API:
+  `curl -s -H "Cookie: UDSESSIONID=<VALUE>" "https://staging.uprzejmiedonosze.net/api/geo/LAT,LON/n"` (The cookie value can be found in `cypress/support/commands.js`).
+- **City Guards vs Police Priority:** When configuring units in `sm.json`, note that City Guards (Straż Miejska) have priority over Police. A single key should represent one specific formation. If a municipality needs to be redirected to Police because there is no City Guard for that specific area, create a separate key for the Police station (e.g., "Komisariat Policji w ...") and map the municipality (`parent`) to it, while preserving any existing City Guard entries for the main city.
+- **Investigating Logs with Papertrail:** You can use the `papertrail` CLI tool to investigate application logs. For example, once you fetch the Application ID (e.g., `DGwu66uMCYBb`), you can query its logs: `papertrail DGwu66uMCYBb`. You can also extend the search window: `papertrail --min-time 'yesterday' DGwu66uMCYBb`. To trace a user's full session and actions (like checking which geo coordinates they queried, e.g., `/api/geo/...`), you can filter by their IP address found in the initial logs: `papertrail 37.30.44.131 geo`.

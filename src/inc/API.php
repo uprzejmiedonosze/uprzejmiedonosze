@@ -87,9 +87,14 @@ function updateApplication(
  * Sets application status.
  */
 function setStatus(string $status, string $appId, User $user): Application {
-    $application = \app\get($appId);
-    $application->setStatus($status);
-    \app\save($application);
+    \semaphore\acquire($appId, "setStatus");
+    try {
+        $application = \app\get($appId);
+        $application->setStatus($status);
+        \app\save($application);
+    } finally {
+        \semaphore\release($appId, "setStatus");
+    }
     $stats = \user\stats(false, $user); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
@@ -124,47 +129,49 @@ function sendApplication(string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
-    \semaphore\acquire($application->id, "uploadImage:$pictureType");
+function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
+    \semaphore\acquire($appId, "uploadImage:$pictureType");
+    try {
+        $application = \app\get($appId);
 
-    $type = substr($pictureType, 0, 2);
-    $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
+        $type = substr($pictureType, 0, 2);
+        $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
 
-    $fileName = ROOT . "$baseFileName,$type.jpg";
-    list($width, $height) = getimagesize($fileName);
+        $fileName = ROOT . "$baseFileName,$type.jpg";
+        list($width, $height) = getimagesize($fileName);
 
-    if ($pictureType == 'carImage') {
-        if (!empty($dateTime)) $application->date = $dateTime;
-        if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
-        if (!empty($latLng)) $application->setLatLng($latLng);
-        \alpr\get($imageBytes, $application, $baseFileName, $type);
-        $application->carImage->width = $width;
-        $application->carImage->height = $height;
-    } else if ($pictureType == 'contextImage') {
-        $application->contextImage = new stdClass();
-        $application->contextImage->url = "$baseFileName,$type.jpg";
-        $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
-        $application->contextImage->width = $width;
-        $application->contextImage->height = $height;
-    } else if ($pictureType == 'thirdImage') {
-        $application->thirdImage = new stdClass();
-        $application->thirdImage->url = "$baseFileName,$type.jpg";
-        $application->thirdImage->thumb = "$baseFileName,$type,t.jpg";
-        $application->thirdImage->width = $width;
-        $application->thirdImage->height = $height;
-    } else {
-        \semaphore\release($application->id, "uploadImage:$pictureType");
-        throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($application->id)", 400);
+        if ($pictureType == 'carImage') {
+            if (!empty($dateTime)) $application->date = $dateTime;
+            if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
+            if (!empty($latLng)) $application->setLatLng($latLng);
+            \alpr\get($imageBytes, $application, $baseFileName, $type);
+            $application->carImage->width = $width;
+            $application->carImage->height = $height;
+        } else if ($pictureType == 'contextImage') {
+            $application->contextImage = new stdClass();
+            $application->contextImage->url = "$baseFileName,$type.jpg";
+            $application->contextImage->thumb = "$baseFileName,$type,t.jpg";
+            $application->contextImage->width = $width;
+            $application->contextImage->height = $height;
+        } else if ($pictureType == 'thirdImage') {
+            $application->thirdImage = new stdClass();
+            $application->thirdImage->url = "$baseFileName,$type.jpg";
+            $application->thirdImage->thumb = "$baseFileName,$type,t.jpg";
+            $application->thirdImage->width = $width;
+            $application->thirdImage->height = $height;
+        } else {
+            throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($appId)", 400);
+        }
+
+        if ($pictureType === 'contextImage') {
+            $application->generateGalleryImages();
+        }
+
+        \app\save($application);
+        return $application;
+    } finally {
+        \semaphore\release($appId, "uploadImage:$pictureType");
     }
-
-    if ($pictureType === 'contextImage') {
-        $application->generateGalleryImages();
-    }
-
-    \app\save($application);
-
-    \semaphore\release($application->id, "uploadImage:$pictureType");
-    return $application;
 }
 
 /**
