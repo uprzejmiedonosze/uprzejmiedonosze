@@ -414,7 +414,7 @@ function processWebhook(string $id): void {
     }
     
 
-    if (!$application->wasSent()) {
+    if (!isset($application->sent) || in_array($application->status, ['draft', 'ready', 'confirmed'])) {
         logger("mailgun webhook error, Application $appId was not sent!", true);
         $application->sent = new \JSONObject();
         $application->sent->date = date(DT_FORMAT);
