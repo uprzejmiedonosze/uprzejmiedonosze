@@ -63,6 +63,7 @@ services:
     volumes:
       - ../.parcelrc:/build/.parcelrc:ro
       - ../src:/build/src:ro
+      - ../tests:/build/tests:ro
       - ../tools:/build/tools:ro
       - ../export:/build/export
       - ./webapp/watch.sh:/watch.sh:ro

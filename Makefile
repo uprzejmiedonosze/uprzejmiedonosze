@@ -48,8 +48,8 @@ init-db-staging: ## Initialize staging SQLite database (run once on server)
 # ── Testing ───────────────────────────────────────────────────────────────────
 
 .PHONY: test
-test: ## Run phpunit tests in the webapp container
-	@docker exec webapp ./vendor/phpunit/phpunit/phpunit --display-deprecations tests
+test: ## Run phpunit tests in the builder container
+	@docker exec --env-file services/.env.dev -e APP_ENV=staging -e MEMCACHED_HOST=memcached -e TEST_DB=/tmp/run-test-db.sqlite builder sh -c "cp /tmp/test-db.sqlite /tmp/run-test-db.sqlite && ./vendor/bin/phpunit --display-deprecations tests"
 
 .PHONY: cypress-local
 cypress-local: ## Run Cypress tests against local dev environment
