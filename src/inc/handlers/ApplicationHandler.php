@@ -127,30 +127,35 @@ class ApplicationHandler extends AbstractHandler {
 
         $user = $request->getAttribute('user');
 
-        $application = \app\get($appId);
-        global $STATUSES;
-        $status = $STATUSES[$application->status];
-        if (!$status->editable) {
-            logger("Ponowny POST na /potwierdz.html dla zgłoszenia {$application->number} w statusie {$status->name}");
-            return $this->redirect("/ud-$appId.html");
-        }
+        \semaphore\acquire($appId, "confirm");
         try {
-            $application = updateApplication(
-                $application,
-                $datetime,
-                $dtFromPicture,
-                $category,
-                $fullAddress,
-                $plateId,
-                $comment,
-                $witness,
-                $extensions,
-                $user,
-            );
-        } catch (ForbiddenException $e) {
-            throw new HttpForbiddenException($request, $e->getMessage(), $e);
-        } catch (Exception $e) {
-            return $this->redirect('/moje-zgloszenia.html');
+            $application = \app\get($appId);
+            global $STATUSES;
+            $status = $STATUSES[$application->status];
+            if (!$status->editable) {
+                logger("Ponowny POST na /potwierdz.html dla zgłoszenia {$application->number} w statusie {$status->name}");
+                return $this->redirect("/ud-$appId.html");
+            }
+            try {
+                $application = updateApplication(
+                    $application,
+                    $datetime,
+                    $dtFromPicture,
+                    $category,
+                    $fullAddress,
+                    $plateId,
+                    $comment,
+                    $witness,
+                    $extensions,
+                    $user,
+                );
+            } catch (ForbiddenException $e) {
+                throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            } catch (Exception $e) {
+                return $this->redirect('/moje-zgloszenia.html');
+            }
+        } finally {
+            \semaphore\release($appId, "confirm");
         }
 
         return AbstractHandler::renderHtml($request, $response, 'potwierdz', [
@@ -177,19 +182,24 @@ class ApplicationHandler extends AbstractHandler {
         }
 
         unset($_SESSION['newAppId']);
-        $application = \app\get($appId);
-        $status = $STATUSES[$application->status];
-        if(!$status->editable) {
-            logger("Ponowny POST na /dziekujemy.html dla zgłoszenia {$application->number} w statusie {$status->name}");
-            return $this->redirect("/ud-$appId.html");
-        }
-        
         $user = $request->getAttribute('user');
 
-        $edited = $application->hasNumber();
+        \semaphore\acquire($appId, "finish");
+        try {
+            $application = \app\get($appId);
+            $status = $STATUSES[$application->status];
+            if(!$status->editable) {
+                logger("Ponowny POST na /dziekujemy.html dla zgłoszenia {$application->number} w statusie {$status->name}");
+                return $this->redirect("/ud-$appId.html");
+            }
 
-        $application->setStatus("confirmed");
-        $application = \app\save($application); // this also sets app number
+            $edited = $application->hasNumber();
+
+            $application->setStatus("confirmed");
+            $application = \app\save($application); // this also sets app number
+        } finally {
+            \semaphore\release($appId, "finish");
+        }
 
         \telemetry\log('report_finished', $application->id);
 

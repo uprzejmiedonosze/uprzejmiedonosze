@@ -252,16 +252,22 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $fullAddress->district = $district;
     
         $user = $request->getAttribute('user');
-        $application = \app\get($appId);
         
+        \semaphore\acquire($appId, "restUpdate");
         try {
-            $application = updateApplication($application, $datetime, $dtFromPicture, $category, $fullAddress,
-                $plateId, $comment, $witness, $extensions, $user);
-        } catch (Exception $e) {
-            throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            $application = \app\get($appId);
+            
+            try {
+                $application = updateApplication($application, $datetime, $dtFromPicture, $category, $fullAddress,
+                    $plateId, $comment, $witness, $extensions, $user);
+            } catch (Exception $e) {
+                throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            }
+            unset($application->browser);
+            $response->getBody()->write(json_encode($application));
+        } finally {
+            \semaphore\release($appId, "restUpdate");
         }
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
         return $response;
     })  ->add(new AppMiddleware());
 
@@ -311,8 +317,8 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         if (!in_array($ext, ['png', 'jpeg', 'jpg']))
             throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
         
-        $application = $request->getAttribute('application');
-        $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+        $appId = $request->getAttribute('application')->id;
+        $application = uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
         unset($application->browser);
         $response->getBody()->write(json_encode($application));
         return $response;

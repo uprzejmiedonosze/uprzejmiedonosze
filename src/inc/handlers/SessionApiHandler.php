@@ -87,11 +87,16 @@ class SessionApiHandler extends AbstractHandler {
     public function deleteImage(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $imageId = $args['image'];
-        $application = \app\get($appId);
-        $this->checkEditable($request, $application);
-        $this->checkOwnership($request, $application);
-        $application = $this->removeImageFile($application, $imageId);
-        \app\save($application);
+        \semaphore\acquire($appId, "deleteImage");
+        try {
+            $application = \app\get($appId);
+            $this->checkEditable($request, $application);
+            $this->checkOwnership($request, $application);
+            $application = $this->removeImageFile($application, $imageId);
+            \app\save($application);
+        } finally {
+            \semaphore\release($appId, "deleteImage");
+        }
         return $this->renderJson($response, $application);
     }
 
@@ -133,7 +138,7 @@ class SessionApiHandler extends AbstractHandler {
         $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;
         $dtFromPicture = isset($params['dtFromPicture']) ? $params['dtFromPicture'] == 'true' : null;
         $latLng = isset($params['latLng']) ? $params['latLng'] : null;
-        $application = uploadImage($application, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+        $application = uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
 
         \telemetry\log('report_edited', $appId, ['type' => 'image']);
 
@@ -154,21 +159,26 @@ class SessionApiHandler extends AbstractHandler {
     public function setFields(Request $request, Response $response, array $args): Response
     {
         $appId = $args['appId'];
-        $application = \app\get($appId);
-        $this->checkOwnership($request, $application);
+        \semaphore\acquire($appId, "setFields");
+        try {
+            $application = \app\get($appId);
+            $this->checkOwnership($request, $application);
 
-        $fields = json_decode($request->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
-        foreach ($fields as $field => $value) {
-            match ($field) {
-                'externalId' => $application->externalId = $value,
-                'privateComment' => $application->privateComment = $value,
-                default => throw new HttpForbiddenException($request, 'Pole ' . $field . ' nie może być edytowane'),
-            };
+            $fields = json_decode($request->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
+            foreach ($fields as $field => $value) {
+                match ($field) {
+                    'externalId' => $application->externalId = $value,
+                    'privateComment' => $application->privateComment = $value,
+                    default => throw new HttpForbiddenException($request, 'Pole ' . $field . ' nie może być edytowane'),
+                };
+            }
+
+            $isSent = in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE']);
+            $hasExternalId = !empty($application->externalId);
+            \app\save($application);
+        } finally {
+            \semaphore\release($appId, "setFields");
         }
-
-        $isSent = in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE']);
-        $hasExternalId = !empty($application->externalId);
-        \app\save($application);
 
         \telemetry\log('report_edited', $appId, ['type' => 'fields']);
 
