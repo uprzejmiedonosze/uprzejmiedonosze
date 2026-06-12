@@ -1,11 +1,11 @@
 {
-    "4": {
+    "26": {
         "title": "Zastawienie chodnika",
-        "short": "Pojazd utrudniał ruch pieszych lub zostawił mniej niż 1,5m na przejście",
-        "formal": "Pojazd zastawiał chodnik (mniej niż 1,5 m, art. 47. 1 prd).",
+        "short": "Pojazd utrudniał ruch pieszych lub zostawił mniej niż 1,5m na przejście chodnikiem",
+        "formal": "Pojazd był zaparkowany częściowo na drodze dla pieszych bez pozostawienia 1.5 metrowego przejścia dla pieszych chodnikiem (art. 47. 1 prd).",
         "informal": "Zastawienie chodnika",
-        "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd utrudnia im ruch (i jest to przynajmniej 1,5m) ma zastosowanie ten przepis.</p>",
-        "law": "art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość drogi dla pieszych jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
+        "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd utrudnia im ruch (lub jest mniejsza niż 1,5m) ma zastosowanie ten przepis.</p>",
+        "law": "art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że: na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju; szerokość chodnika jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
         "price": "100 zł (1 pkt)",
         "points": 1,
         "mandate": 100,
@@ -391,6 +391,20 @@
         "price": "do 1000 zł (0... pkt)",
         "points": 0,
         "mandate": 500,
+        "contextImageHint": "",
+        "carImageHint": "",
+        "stopAgresjiOnly": false
+    },
+    "4": {
+        "title": null,
+        "short": "Pojazd utrudniał ruch pieszych lub zostawił mniej niż 1,5m na przejście",
+        "formal": "Pojazd zastawiał chodnik (mniej niż 1,5 m, art. 47. 1 prd).",
+        "informal": "Zastawienie chodnika",
+        "desc": "<p>Sprawdź najpierw, czy nie ma oznaczeń pionowych ani poziomych a samochód stoi przy krawędzi jezdni. Dopiero wtedy, jeśli szerokość chodnika pozostawionego dla pieszych jest taka, że pojazd utrudnia im ruch (i jest to przynajmniej 1,5m) ma zastosowanie ten przepis.</p>",
+        "law": "art. 47. 1. Dopuszcza się zatrzymanie lub postój na drodze dla pieszych kołami jednego boku lub przedniej osi pojazdu samochodowego o dopuszczalnej masie całkowitej nieprzekraczającej 2,5 t, pod warunkiem, że na danym odcinku jezdni nie obowiązuje zakaz zatrzymania lub postoju, szerokość drogi dla pieszych jest nie mniejsza niż 1,5 m i nie utrudni ruchu pieszych [...]",
+        "price": "100 zł (1 pkt)",
+        "points": 1,
+        "mandate": 100,
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
