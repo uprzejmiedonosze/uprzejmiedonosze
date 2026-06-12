@@ -4594,5 +4594,157 @@
       "26-021 Daleszyce"
     ],
     "email": "daleszyce@ki.policja.gov.pl"
+  },
+  "powiat bartoszycki": {
+    "address": [
+      "Komenda Powiatowa Policji w Bartoszycach",
+      "ul. Wyszyńskiego 28",
+      "11-200 Bartoszyce"
+    ],
+    "email": "komendant@bartoszyce.ol.policja.gov.pl"
+  },
+  "powiat braniewski": {
+    "address": [
+      "Komenda Powiatowa Policji w Braniewie",
+      "ul. Moniuszki 11A",
+      "14-500 Braniewo"
+    ],
+    "email": "dyzurny@braniewo.ol.policja.gov.pl"
+  },
+  "powiat działdowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Działdowie",
+      "ul. Grunwaldzka 8",
+      "13-200 Działdowo"
+    ],
+    "email": "komendant@dzialdowo.ol.policja.gov.pl"
+  },
+  "powiat ełcki": {
+    "address": [
+      "Komenda Powiatowa Policji w Ełku",
+      "ul. Chopina 10",
+      "19-300 Ełk"
+    ],
+    "email": "dyzurny@elk.ol.policja.gov.pl"
+  },
+  "powiat giżycki": {
+    "address": [
+      "Komenda Powiatowa Policji w Giżycku",
+      "ul. 1-go Maja 26",
+      "11-500 Giżycko"
+    ],
+    "email": "komendant@gizycko.ol.policja.gov.pl"
+  },
+  "powiat gołdapski": {
+    "address": [
+      "Komenda Powiatowa Policji w Gołdapi",
+      "ul. 11-go Listopada 1",
+      "19-500 Gołdap"
+    ],
+    "email": "dyzurny@goldap.ol.policja.gov.pl"
+  },
+  "powiat iławski": {
+    "address": [
+      "Komenda Powiatowa Policji w Iławie",
+      "ul. Wiejska 4",
+      "14-202 Iława"
+    ],
+    "email": "komendant@ilawa.ol.policja.gov.pl"
+  },
+  "powiat kętrzyński": {
+    "address": [
+      "Komenda Powiatowa Policji w Kętrzynie",
+      "ul. Wojska Polskiego 5",
+      "11-400 Kętrzyn"
+    ],
+    "email": "komendant@ketrzyn.ol.policja.gov.pl"
+  },
+  "powiat lidzbarski": {
+    "address": [
+      "Komenda Powiatowa Policji w Lidzbarku Warmińskim",
+      "ul. Warmińska 8",
+      "11-100 Lidzbark Warmiński"
+    ],
+    "email": "dyzurny@lidzbark-warm.ol.policja.gov.pl"
+  },
+  "powiat mrągowski": {
+    "address": [
+      "Komenda Powiatowa Policji w Mrągowie",
+      "ul. Wolności 2",
+      "11-700 Mrągowo"
+    ],
+    "email": "komendant@mragowo.ol.policja.gov.pl"
+  },
+  "powiat nidzicki": {
+    "address": [
+      "Komenda Powiatowa Policji w Nidzicy",
+      "ul. Mickiewicza 17",
+      "13-100 Nidzica"
+    ],
+    "email": "komendant@nidzica.ol.policja.gov.pl"
+  },
+  "powiat nowomiejski": {
+    "address": [
+      "Komenda Powiatowa Policji w Nowym Mieście Lubawskim",
+      "ul. Grunwaldzka 6",
+      "13-300 Nowe Miasto Lubawskie"
+    ],
+    "email": "komendant@nml.ol.policja.gov.pl"
+  },
+  "powiat olecki": {
+    "address": [
+      "Komenda Powiatowa Policji w Olecku",
+      "ul. Zamkowa 1",
+      "19-400 Olecko"
+    ],
+    "email": "komendant@olecko.ol.policja.gov.pl"
+  },
+  "powiat ostródzki": {
+    "address": [
+      "Komenda Powiatowa Policji w Ostródzie",
+      "ul. Handlowa 6",
+      "14-100 Ostróda"
+    ],
+    "email": "komendant@ostroda.ol.policja.gov.pl"
+  },
+  "powiat piski": {
+    "address": [
+      "Komenda Powiatowa Policji w Piszu",
+      "ul. Armii Krajowej 1",
+      "12-200 Pisz"
+    ],
+    "email": "komendant@pisz.ol.policja.gov.pl"
+  },
+  "powiat szczycieński": {
+    "address": [
+      "Komenda Powiatowa Policji w Szczytnie",
+      "ul. Piłsudskiego 39",
+      "12-100 Szczytno"
+    ],
+    "email": "komendant@szczytno.ol.policja.gov.pl"
+  },
+  "powiat węgorzewski": {
+    "address": [
+      "Komenda Powiatowa Policji w Węgorzewie",
+      "ul. Jana Pawła II 39",
+      "11-600 Węgorzewo"
+    ],
+    "email": "dyzurny@wegorzewo.ol.policja.gov.pl"
+  },
+  "powiat olsztyński": {
+    "address": [
+      "Komenda Miejska Policji w Olsztynie",
+      "ul. Partyzantów 23",
+      "10-526 Olsztyn"
+    ],
+    "email": "komendant@olsztyn.ol.policja.gov.pl"
+  },
+  "powiat elbląski": {
+    "address": [
+      "Komenda Miejska Policji w Elblągu",
+      "ul. Tysiąclecia 3",
+      "82-300 Elbląg"
+    ],
+    "email": "dyzurny@elblag.ol.policja.gov.pl"
   }
 }
