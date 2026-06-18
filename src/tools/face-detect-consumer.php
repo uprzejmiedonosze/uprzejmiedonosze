@@ -11,35 +11,41 @@ logger("Starting face-blur-consumer...", true);
 
 $consumer = function (string $appId): void {
   try {
-    $app = \app\get($appId);
-    if (isset($app->faces->count)) {
-      logger("Faces already detected in $appId");
-      $app = addToGallery($app);
-      \app\save($app);
-      return;
-    }
-
     $faceDetectorUrl = getenv('FACE_DETECTOR_URL') ?: 'http://localhost:2000';
-    $url = "$faceDetectorUrl/detect/" . BASE_URL . $app->contextImage->url;
-    $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
+    $app = \app\get($appId);
+
+    $faces = null;
+    if (!isset($app->faces->count)) {
+      $url = "$faceDetectorUrl/detect/" . BASE_URL . $app->contextImage->url;
+
+      // We fetch the faces BEFORE acquiring the lock to avoid blocking other processes
+      // if the face detection is slow.
+      $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
+    }
 
     try {
       \semaphore\acquire($appId, "face-detect-consumer");
       $app = \app\get($appId);
-      $app->faces = $faces;
-      $facesCount = $faces->count ?? 0;
-
-      if ($facesCount == 0) {
-        logger("no facces, adding to gallery $appId");
+      
+      if (isset($app->faces->count)) {
+        logger("Faces already detected in $appId");
         $app = addToGallery($app);
       } else {
-        $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");
+        $app->faces = $faces;
+        $facesCount = $faces->count ?? 0;
+
+        if ($facesCount == 0) {
+          logger("no facces, adding to gallery $appId");
+          $app = addToGallery($app);
+        } else {
+          $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");
+        }
       }
-    } finally {
       \app\save($app);
+    } finally {
       \semaphore\release($appId, "face-detect-consumer");
-      logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null));
     }
+    logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null));
     logger("Detected faces in $appId: " . ($faces->count ?? 0));
     sleep(5);
   } catch (\Exception $e) {

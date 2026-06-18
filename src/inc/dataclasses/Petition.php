@@ -23,7 +23,7 @@ class Petition extends \JSONObject {
     private function __construct() {
     }
 
-    public static function withJson(string $json = null) {
+    public static function withJson(?string $json = null) {
         $instance = new self();
         $instance->__fromJson($json);
         return $instance;

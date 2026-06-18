@@ -4,7 +4,7 @@ use \Exception as Exception;
 
 class MissingParamException extends Exception {
     private string $param;
-    public function __construct(string $param, string $msg=null, Exception $parent=null) {
+    public function __construct(string $param, ?string $msg=null, ?Exception $parent=null) {
         $this->param = $param;
         if (is_null($msg))
             $msg = "Brak wymaganego parametru '$param'";

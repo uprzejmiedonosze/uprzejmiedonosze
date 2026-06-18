@@ -64,7 +64,7 @@ function save(Application $application): Application{
  * bypassing encode()/decode() entirely. Safe to call in any session context
  * since it never touches encrypted fields.
  */
-function markGalleryReady(string $appId, string $plateId = null): void {
+function markGalleryReady(string $appId, ?string $plateId = null): void {
     $sql = "UPDATE " . TABLE . "
             SET value = json_set(value, '$.contextImage.galleryReady', json('true'))
             WHERE key = :key";
