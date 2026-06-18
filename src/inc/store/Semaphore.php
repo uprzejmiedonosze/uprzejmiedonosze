@@ -19,3 +19,12 @@ function tryAcquire(string $semKey): bool {
 function release(string $semKey, string $source): void {
     \cache\delete(type:\cache\Type::Semaphore, key:$semKey);
 }
+
+function withLock(string $semKey, string $source, callable $fn): mixed {
+    acquire($semKey, $source);
+    try {
+        return $fn();
+    } finally {
+        release($semKey, $source);
+    }
+}

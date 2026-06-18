@@ -127,8 +127,10 @@ class ApplicationHandler extends AbstractHandler {
 
         $user = $request->getAttribute('user');
 
-        \semaphore\acquire($appId, "confirm");
-        try {
+        $application = \semaphore\withLock($appId, "confirm", function () use (
+            $appId, $request, $datetime, $dtFromPicture, $category, $fullAddress,
+            $plateId, $comment, $witness, $extensions, $user
+        ) {
             $application = \app\get($appId);
             global $STATUSES;
             $status = $STATUSES[$application->status];
@@ -137,7 +139,7 @@ class ApplicationHandler extends AbstractHandler {
                 return $this->redirect("/ud-$appId.html");
             }
             try {
-                $application = updateApplication(
+                return updateApplication(
                     $application,
                     $datetime,
                     $dtFromPicture,
@@ -154,8 +156,10 @@ class ApplicationHandler extends AbstractHandler {
             } catch (Exception $e) {
                 return $this->redirect('/moje-zgloszenia.html');
             }
-        } finally {
-            \semaphore\release($appId, "confirm");
+        });
+
+        if ($application instanceof Response) {
+            return $application;
         }
 
         return AbstractHandler::renderHtml($request, $response, 'potwierdz', [
@@ -184,8 +188,7 @@ class ApplicationHandler extends AbstractHandler {
         unset($_SESSION['newAppId']);
         $user = $request->getAttribute('user');
 
-        \semaphore\acquire($appId, "finish");
-        try {
+        $result = \semaphore\withLock($appId, "finish", function () use ($appId, $STATUSES) {
             $application = \app\get($appId);
             $status = $STATUSES[$application->status];
             if(!$status->editable) {
@@ -197,9 +200,13 @@ class ApplicationHandler extends AbstractHandler {
 
             $application->setStatus("confirmed");
             $application = \app\save($application); // this also sets app number
-        } finally {
-            \semaphore\release($appId, "finish");
+            return [$application, $edited];
+        });
+
+        if ($result instanceof Response) {
+            return $result;
         }
+        [$application, $edited] = $result;
 
         \telemetry\log('report_finished', $application->id);
 

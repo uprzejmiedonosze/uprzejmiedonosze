@@ -87,14 +87,11 @@ function updateApplication(
  * Sets application status.
  */
 function setStatus(string $status, string $appId, User $user): Application {
-    \semaphore\acquire($appId, "setStatus");
-    try {
+    $application = \semaphore\withLock($appId, "setStatus", function () use ($appId, $status) {
         $application = \app\get($appId);
         $application->setStatus($status);
-        \app\save($application);
-    } finally {
-        \semaphore\release($appId, "setStatus");
-    }
+        return \app\save($application);
+    });
     $stats = \user\stats(false, $user); // update cache
 
     $patronite = $status == 'confirmed-fined' && $application->seq % 5 == 1;
@@ -130,8 +127,7 @@ function sendApplication(string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, ?callable $validate = null) {
-    \semaphore\acquire($appId, "uploadImage:$pictureType");
-    try {
+    return \semaphore\withLock($appId, "uploadImage:$pictureType", function () use ($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, $validate) {
         $application = \app\get($appId);
         if ($validate) $validate($application);
 
@@ -170,9 +166,7 @@ function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFro
 
         \app\save($application);
         return $application;
-    } finally {
-        \semaphore\release($appId, "uploadImage:$pictureType");
-    }
+    });
 }
 
 /**

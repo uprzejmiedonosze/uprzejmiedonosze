@@ -15,15 +15,13 @@ $apps = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
 $fixed = 0;
 foreach ($apps as $appId) {
-    \semaphore\acquire($appId, "fix-hanging-apps");
-    try {
-        $app = \app\get($appId);
-    } catch (\Exception $e) {
-        \semaphore\release($appId, "fix-hanging-apps");
-        continue;
-    }
+    $wasFixed = \semaphore\withLock($appId, "fix-hanging-apps", function () use ($appId) {
+        try {
+            $app = \app\get($appId);
+        } catch (\Exception $e) {
+            return false;
+        }
 
-    try {
         $isBroken = false;
         
         // 1. Sprawdźmy pole sent
@@ -73,11 +71,11 @@ foreach ($apps as $appId) {
             }
 
             \app\save($app);
-            $fixed++;
+            return true;
         }
-    } finally {
-        \semaphore\release($appId, "fix-hanging-apps");
-    }
+        return false;
+    });
+    if ($wasFixed) $fixed++;
 }
 
 echo "Zakończono. Naprawiono $fixed zgłoszeń.\n";
