@@ -96,8 +96,8 @@ class StaticPagesHandler extends AbstractHandler {
         $user = $request->getAttribute('user');
     
         return AbstractHandler::renderHtml($request, $response, "zgloszenie", [
-            'title' => "Zgłoszenie {$application->number} z dnia {$application->getDate()}",
-            'shortTitle' => "Zgłoszenie {$application->number}",
+            'title' => "Zgłoszenie {$application->getNumber()} z dnia {$application->getDate()}",
+            'shortTitle' => "Zgłoszenie {$application->getNumber()}",
             'image' => $application->contextImage->thumb,
             'description' => "Samochód o nr. rejestracyjnym {$application->carInfo->plateId}. " .
                 $application->getCategory()->getInformal(),
