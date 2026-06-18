@@ -40,7 +40,7 @@ function removeVendor(string $backtrace): string {
 function logger(string|object|array|null $msg, $force = null): string {
     $DT_FORMAT = 'Y-m-d\TH:i:s';
     $time = date($DT_FORMAT);
-    if (($_SERVER['HTTP_USER_AGENT'] ?? '') === 'PHPUnit') return $time;
+    if (defined('PHPUNIT_RUNNING')) return $time;
     $ip = $_SERVER['REMOTE_ADDR'] ?? '';
     if (is_null($msg))
         $msg = 'null';

@@ -35,10 +35,10 @@ foreach ($apps as $appId) {
         $lastWebhookStatus = null;
         if (isset($app->comments)) {
             foreach ($app->comments as $comment) {
-                if (isset($comment->author) && $comment->author === 'mailer') {
-                    $lastWebhookStatus = $comment->type ?? null; // formatComment adds type as third arg (status)
+                if (isset($comment->source) && $comment->source === 'mailer') {
+                    $lastWebhookStatus = $comment->status ?? null; // addComment stores mailEvent status as 3rd arg
                 }
-                if (strpos(strtolower($comment->text), 'mailgun webhook error') !== false) {
+                if (isset($comment->comment) && strpos(strtolower($comment->comment), 'mailgun webhook error') !== false) {
                     $isBroken = true;
                 }
             }
@@ -65,7 +65,7 @@ foreach ($apps as $appId) {
             if (isset($app->comments)) {
                 $newComments = [];
                 foreach ($app->comments as $comment) {
-                    if (strpos(strtolower($comment->text), 'mailgun webhook error') === false) {
+                    if (!isset($comment->comment) || strpos(strtolower($comment->comment), 'mailgun webhook error') === false) {
                         $newComments[] = $comment;
                     }
                 }

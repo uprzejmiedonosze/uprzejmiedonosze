@@ -1,5 +1,6 @@
 <?php
 
+define('PHPUNIT_RUNNING', true);
 define('DB_FILENAME', getenv('TEST_DB') ?: __DIR__ . '/../services/devroot/db/store.sqlite');
 
 require(__DIR__ . '/../export/inc/include.php');

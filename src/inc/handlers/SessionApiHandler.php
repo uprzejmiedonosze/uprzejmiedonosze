@@ -131,14 +131,15 @@ class SessionApiHandler extends AbstractHandler {
         $imageBytes = explode( ',', $this->getParam($params, 'image_data'))[1];
         $pictureType = $this->getParam($params, 'pictureType');
 
-        $application = \app\get($appId);
-        $this->checkEditable($request, $application);
-        $this->checkOwnership($request, $application);
-
         $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;
         $dtFromPicture = isset($params['dtFromPicture']) ? $params['dtFromPicture'] == 'true' : null;
         $latLng = isset($params['latLng']) ? $params['latLng'] : null;
-        $application = uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+        $application = uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng,
+            function (Application $application) use ($request) {
+                $this->checkEditable($request, $application);
+                $this->checkOwnership($request, $application);
+            }
+        );
 
         \telemetry\log('report_edited', $appId, ['type' => 'image']);
 
