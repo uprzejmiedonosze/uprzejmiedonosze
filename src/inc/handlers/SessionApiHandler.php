@@ -87,16 +87,13 @@ class SessionApiHandler extends AbstractHandler {
     public function deleteImage(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $imageId = $args['image'];
-        \semaphore\acquire($appId, "deleteImage");
-        try {
+        $application = \semaphore\withLock($appId, "deleteImage", function () use ($appId, $request, $imageId) {
             $application = \app\get($appId);
             $this->checkEditable($request, $application);
             $this->checkOwnership($request, $application);
             $application = $this->removeImageFile($application, $imageId);
-            \app\save($application);
-        } finally {
-            \semaphore\release($appId, "deleteImage");
-        }
+            return \app\save($application);
+        });
         return $this->renderJson($response, $application);
     }
 
@@ -160,8 +157,7 @@ class SessionApiHandler extends AbstractHandler {
     public function setFields(Request $request, Response $response, array $args): Response
     {
         $appId = $args['appId'];
-        \semaphore\acquire($appId, "setFields");
-        try {
+        [$isSent, $hasExternalId] = \semaphore\withLock($appId, "setFields", function () use ($appId, $request) {
             $application = \app\get($appId);
             $this->checkOwnership($request, $application);
 
@@ -177,9 +173,8 @@ class SessionApiHandler extends AbstractHandler {
             $isSent = in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE']);
             $hasExternalId = !empty($application->externalId);
             \app\save($application);
-        } finally {
-            \semaphore\release($appId, "setFields");
-        }
+            return [$isSent, $hasExternalId];
+        });
 
         \telemetry\log('report_edited', $appId, ['type' => 'fields']);
 

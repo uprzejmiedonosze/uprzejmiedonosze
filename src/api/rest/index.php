@@ -253,10 +253,12 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
     
         $user = $request->getAttribute('user');
         
-        \semaphore\acquire($appId, "restUpdate");
-        try {
+        \semaphore\withLock($appId, "restUpdate", function () use (
+            $appId, $request, $response, $datetime, $dtFromPicture, $category, $fullAddress,
+            $plateId, $comment, $witness, $extensions, $user
+        ) {
             $application = \app\get($appId);
-            
+
             try {
                 $application = updateApplication($application, $datetime, $dtFromPicture, $category, $fullAddress,
                     $plateId, $comment, $witness, $extensions, $user);
@@ -265,9 +267,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
             }
             unset($application->browser);
             $response->getBody()->write(json_encode($application));
-        } finally {
-            \semaphore\release($appId, "restUpdate");
-        }
+        });
         return $response;
     })  ->add(new AppMiddleware());
 
