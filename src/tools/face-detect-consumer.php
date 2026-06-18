@@ -13,11 +13,15 @@ $consumer = function (string $appId): void {
   try {
     $faceDetectorUrl = getenv('FACE_DETECTOR_URL') ?: 'http://localhost:2000';
     $app = \app\get($appId);
-    $url = "$faceDetectorUrl/detect/" . BASE_URL . $app->contextImage->url;
-    
-    // We fetch the faces BEFORE acquiring the lock to avoid blocking other processes
-    // if the face detection is slow. 
-    $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
+
+    $faces = null;
+    if (!isset($app->faces->count)) {
+      $url = "$faceDetectorUrl/detect/" . BASE_URL . $app->contextImage->url;
+
+      // We fetch the faces BEFORE acquiring the lock to avoid blocking other processes
+      // if the face detection is slow.
+      $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
+    }
 
     try {
       \semaphore\acquire($appId, "face-detect-consumer");

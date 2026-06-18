@@ -129,10 +129,11 @@ function sendApplication(string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng) {
+function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, ?callable $validate = null) {
     \semaphore\acquire($appId, "uploadImage:$pictureType");
     try {
         $application = \app\get($appId);
+        if ($validate) $validate($application);
 
         $type = substr($pictureType, 0, 2);
         $baseFileName = saveImgAndThumb($application, $imageBytes, $type);
