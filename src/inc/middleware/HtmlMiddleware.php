@@ -51,6 +51,9 @@ class HtmlMiddleware implements MiddlewareInterface {
         global $BADGES;
         $parameters['badges'] = $BADGES;
 
+        global $FOOTER_LINKS;
+        $parameters['footerLinks'] = $FOOTER_LINKS;
+
         $parameters['email_status'] = EMAIL_STATUS;
         return $parameters;
     }
@@ -63,6 +66,7 @@ class HtmlMiddleware implements MiddlewareInterface {
         $parameters = HtmlMiddleware::getDefaultParameters(
             isset($queryParams['dialog'])
         );
+        $parameters['general']['isAppPage'] = $request->getAttribute('isAppPage', false);
 
         $request = $request->withAttribute('parameters', $parameters);
 

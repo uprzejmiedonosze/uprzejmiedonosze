@@ -117,6 +117,7 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
     //$group->any('/start.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
     //$group->any('/nowe-zgloszenie.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
 
+    $group->get('/app', StaticPagesHandler::class . ':app');
     $group->get('/start.html', ApplicationHandler::class . ':start');
     $group->get('/nowe-zgloszenie.html', ApplicationHandler::class . ':newApplication');
 

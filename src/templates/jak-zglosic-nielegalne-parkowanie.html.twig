@@ -11,17 +11,18 @@
 {% set shortTitle = 'Poradnik: jak zgłaszać' %}
 {% set description = 'Gdzie i jak zgłosić nielegalne parkowanie samochodu?' %}
 {% set mainClass = 'how' %}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
-{% block main %}
-
-<h2>{{ shortTitle }}</h2>
 
 {% macro link(target, name) %}
 <a href="#{{ target }}" onclick="window._scrollToHowTo('#{{ target }}')">{{ name }}</a>
 {% endmacro link %}
 
-<h3 class="howto">Dostępne metody</h3>
+{% block sidebar %}
+<aside class="mpr-sidebar">
+<details open>
+<summary>Dostępne metody</summary>
 <ul>
   <li>{{ _self.link('email', 'E-mail/Uprzejmie Donoszę') }} – stosuj w pojedynczych przypadkach.</li>
   <li>{{ _self.link('telefon', 'Telefon') }} – używaj, kiedy walczysz z całymi nielegalnymi parkingami.</li>
@@ -32,6 +33,13 @@
   <li>{{ _self.link('slupki', 'Wniosek o nowe słupki') }} – ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</li>
   <li>{{ _self.link('naklejki', 'Naklejki/mazak') }} – gdy zawiodły inne środki, na recydywę i „obcokrajowców”.</li>
 </ul>
+</details>
+</aside>
+{% endblock %}
+
+{% block main %}
+
+<h2>{{ shortTitle }}</h2>
 
 <div class="howtos">
   <div class="howto" id="email">
@@ -160,7 +168,7 @@
     <h3 class="title">Na Stop Agresji Drogowej</h3>
     <div class="card">
       <figure>
-        <img src="/img/how-sa.png?width=800&as=jpg&quality=90">
+        <img class="move-top" src="/img/how-sa.png?width=800&as=jpg&quality=90">
       </figure>
       <div class="content">
         <p>
@@ -233,7 +241,7 @@
     <h3 class="title">Składając wniosek o nowe słupki</h3>
     <div class="card">
       <figure>
-        <img src="/img/how-stick2.jpg?width=800&as=png&quality=90">
+        <img class="move-top" src="/img/how-stick2.jpg?width=800&as=png&quality=90">
       </figure>
       <div class="content">
         <p>
@@ -267,7 +275,7 @@
     <h3 class="title">Naklejki/mazaki</h3>
     <div class="card">
       <figure>
-        <img src="/img/mazak.jpg?width=800">
+        <img class="move-top" src="/img/mazak.jpg?width=800">
       </figure>
       <div class="content">
         <p>

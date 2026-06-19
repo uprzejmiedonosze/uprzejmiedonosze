@@ -1,0 +1,491 @@
+/* PoC redesign of the logged-out homepage content ("Urban Integrity" design,
+   see /redesign/DESIGN.md and /redesign/code.html). Scoped to .rd25 .main-page-redesign
+   so it cannot leak into other pages or the logged-in dashboard. */
+
+$mpr-primary: #006953;
+$mpr-primary-container: #008469;
+$mpr-on-primary-container: #f5fff9;
+$mpr-secondary: #b41f00;
+$mpr-secondary-container: #da3615;
+$mpr-on-secondary-container: #fffbff;
+$mpr-tertiary: #745b00;
+$mpr-tertiary-container: #d0a600;
+$mpr-on-tertiary-container: #4f3d00;
+$mpr-surface: #fcf9f8;
+$mpr-surface-container-low: #f6f3f2;
+$mpr-surface-container: #f0eded;
+$mpr-surface-container-lowest: #ffffff;
+$mpr-on-surface: #1c1b1b;
+$mpr-on-surface-variant: #3d4944;
+$mpr-outline-variant: #bccac3;
+
+$mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.html */
+
+.rd25 .main-page-redesign {
+  font-family: "Inter", sans-serif;
+  color: $mpr-on-surface;
+
+  h1, h2, h3 {
+    font-family: "Work Sans", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: $mpr-primary;
+  }
+
+  .mpr-section {
+    padding: 2.5rem 1em;
+  }
+
+  /* break out of .ui-content's max-width so the tinted band spans the
+     full viewport, not just the centered content column */
+  .mpr-section-tinted {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    background: $mpr-surface-container-low;
+  }
+
+  .mpr-section-title {
+    text-align: center;
+    margin: 0 0 1.5rem;
+    font-size: 1.75rem;
+  }
+
+  /* Hero */
+  .mpr-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 75em;
+    margin: 0 auto;
+    padding: 2rem 1em;
+
+    @media (min-width: $mpr-break) {
+      flex-direction: row;
+      align-items: center;
+      padding: 3rem 1.5em;
+    }
+  }
+
+  .mpr-hero-copy {
+    flex: 1;
+
+    h2 {
+      font-size: 1.875rem;
+      line-height: 1.2;
+      margin: 0 0 0.75rem;
+
+      @media (min-width: $mpr-break) {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  .mpr-lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: $mpr-on-surface-variant;
+    max-width: 32em;
+  }
+
+  .mpr-cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .mpr-hero-media {
+    flex: 1;
+
+    .video {
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    video {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  /* Buttons */
+  .mpr-button {
+    display: inline-block;
+    text-decoration: none;
+    font-family: "Work Sans", sans-serif;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border: 2px solid transparent;
+  }
+
+  .mpr-button-primary {
+    background: $mpr-primary;
+    color: #fff;
+  }
+
+  .mpr-button-secondary {
+    background: $mpr-surface-container;
+    border-color: $mpr-outline-variant;
+    color: $mpr-on-surface;
+  }
+
+  .mpr-button-outline {
+    display: block;
+    margin-top: 1rem;
+    background: $mpr-surface-container;
+    border-color: $mpr-outline-variant;
+    color: $mpr-on-surface;
+  }
+
+  /* Card grids (benefits + support) */
+  .mpr-cards {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 75em;
+    margin: 0 auto;
+  }
+
+  .mpr-cards-3 {
+    grid-template-columns: 1fr;
+
+    @media (min-width: $mpr-break) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .mpr-card {
+    background: $mpr-surface-container-lowest;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid $mpr-primary;
+
+    h3 {
+      font-size: 1.25rem;
+      margin: 0.75rem 0 0.5rem;
+    }
+
+    p {
+      color: $mpr-on-surface-variant;
+      margin: 0;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 0.75rem;
+      font-weight: 700;
+    }
+  }
+
+  .mpr-card-secondary {
+    border-top-color: $mpr-secondary;
+  }
+
+  .mpr-card-tertiary {
+    border-top-color: $mpr-tertiary-container;
+  }
+
+  .mpr-card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: $mpr-primary-container;
+    color: $mpr-on-primary-container;
+  }
+
+  .mpr-card-secondary .mpr-card-icon {
+    background: $mpr-secondary-container;
+    color: $mpr-on-secondary-container;
+  }
+
+  .mpr-card-tertiary .mpr-card-icon {
+    background: $mpr-tertiary-container;
+    color: $mpr-on-tertiary-container;
+  }
+
+  .mpr-support-card {
+    border-top: none;
+    text-align: center;
+  }
+
+  .mpr-icon-primary {
+    background: $mpr-primary;
+    color: #fff;
+  }
+
+  .mpr-icon-secondary {
+    background: $mpr-secondary;
+    color: #fff;
+  }
+
+  .mpr-icon-tertiary {
+    background: $mpr-tertiary-container;
+    color: $mpr-on-tertiary-container;
+  }
+
+  /* Mini-FAQ */
+  .mpr-faq {
+    max-width: 40em;
+    margin: 0 auto;
+  }
+
+  .mpr-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .mpr-faq-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $mpr-surface-container-lowest;
+    border: 1px solid $mpr-outline-variant;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: $mpr-on-surface;
+  }
+
+  .mpr-faq-more {
+    justify-content: center;
+    color: $mpr-primary;
+  }
+
+  /* Mission */
+  .mpr-mission {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 75em;
+    margin: 0 auto;
+
+    @media (min-width: $mpr-break) {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+
+  .mpr-mission-photo {
+    flex: 0 0 auto;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 1rem;
+    background: $mpr-surface-container;
+    color: $mpr-on-surface-variant;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+
+    @media (min-width: $mpr-break) {
+      width: 16em;
+    }
+  }
+
+  .mpr-mission-copy {
+    flex: 1;
+
+    > h2 {
+      font-size: 1.75rem;
+      margin: 0 0 1.5rem;
+    }
+  }
+
+  .mpr-mission-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .mpr-mission-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    .material-symbols-outlined {
+      flex: 0 0 auto;
+      color: $mpr-primary;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin: 0 0 0.25rem;
+    }
+
+    p {
+      margin: 0;
+      color: $mpr-on-surface-variant;
+    }
+  }
+}
+
+/* the legacy layout caps content at 800px; widen it to match the homepage
+   container for every page that opts into the redesign (static pages by
+   default, see base.html.twig). Mobile keeps the legacy fixed header, so it
+   still needs the original top margin to clear it; only the desktop nav
+   (static, in-flow) lets us drop it. */
+body.rd25 {
+  background: $mpr-surface;
+  overflow-x: hidden;
+}
+
+.ui-content.rd25 {
+  max-width: 75em;
+  border-width: 0;
+  background: transparent;
+
+  @media (min-width: $mpr-break) {
+    margin-top: 0;
+  }
+}
+
+/* the footer's inner grid is capped at the legacy 800px content width;
+   widen it to match on redesigned pages so it doesn't look narrower than
+   the rest of the page. */
+footer.rd25 .grid3 {
+  max-width: 75em;
+}
+
+/* Redesigned header: on desktop, swap the legacy fixed teal bar + hamburger
+   for a plain top nav (mobile keeps the existing hamburger header as-is,
+   since the new design has no mobile nav of its own). Scoped to the
+   logged-out homepage only via the .rd25-header class set in header.html.twig. */
+body > div > header.rd25-header {
+  @media (min-width: $mpr-break) {
+    position: static;
+    height: auto;
+    background: $mpr-surface-container-lowest;
+    color: $mpr-on-surface;
+    border-bottom: 1px solid $mpr-outline-variant;
+
+    > *:not(.mpr-navbar) {
+      display: none;
+    }
+  }
+}
+
+.mpr-navbar {
+  display: none;
+
+  @media (min-width: $mpr-break) {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    max-width: 75em;
+    margin: 0 auto;
+    padding: 1rem 1.5em;
+    font-family: "Work Sans", sans-serif;
+  }
+}
+
+.mpr-navbar-logo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: $mpr-primary;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mpr-navbar-links {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+
+  a {
+    color: $mpr-on-surface-variant;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+}
+
+.mpr-navbar-cta {
+  background: $mpr-primary;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+}
+
+/* Two-column article + sidebar shell (base.html.twig), Medium-style: a
+   narrower, more readable text column with a persistent sidebar (e.g. a
+   page's table of contents) docked to the right. Only takes effect when a
+   template both opts into the redesign (.rd25) and sets hasSidebar=true /
+   overrides the sidebar block — otherwise it's a no-op single column. */
+.rd25 .mpr-layout--sidebar {
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: $mpr-break) {
+    display: grid;
+    grid-template-columns: 1fr 18em;
+    align-items: start;
+    gap: 3rem;
+    max-width: 75em;
+    margin: 0 auto;
+  }
+}
+
+.rd25 .mpr-sidebar {
+  /* on mobile the TOC is more useful up top (jump to a section) than after
+     the whole article; on desktop it sits in its natural DOM order (right
+     column) since grid-template-columns already places it there */
+  order: -1;
+  margin: 0 0 1.5rem;
+
+  @media (min-width: $mpr-break) {
+    order: 0;
+    margin: 0;
+  }
+
+  details {
+    background: $mpr-surface-container-lowest;
+    border: 1px solid $mpr-outline-variant;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
+
+  summary {
+    font-family: "Work Sans", sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  ul {
+    margin: 0.75rem 0 0;
+    padding-left: 1.25rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  @media (min-width: $mpr-break) {
+    summary {
+      cursor: default;
+      pointer-events: none;
+      list-style: none;
+    }
+
+    summary::-webkit-details-marker,
+    summary::marker {
+      display: none;
+    }
+  }
+}

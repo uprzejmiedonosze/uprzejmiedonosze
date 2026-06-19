@@ -108,6 +108,7 @@ class RegisteredMiddleware extends SessionMiddleware {
         if($checkLoggedIn) return $checkLoggedIn;
         $checkRegistered = SessionMiddleware::checkRegistered($request);
         if($checkRegistered) return $checkRegistered;
+        $request = $request->withAttribute('isAppPage', true);
         return $handler->handle($request);
     }
 }

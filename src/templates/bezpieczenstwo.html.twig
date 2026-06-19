@@ -2,9 +2,15 @@
 {% set shortTitle = 'Bezpieczeństwo UD' %}
 {% set description = title %}
 {% set mainClass = 'polityka' %}
+{% set hasSidebar = true %}
 {# SITEMAP-PRIORITY:0.4 #}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'project', 'current': 'bezpieczenstwo'} %}
+{% endblock %}
+
 {% block main %}
 
 <h2>Bezpieczeństwo danych w serwisie Uprzejmie Donoszę</h2>

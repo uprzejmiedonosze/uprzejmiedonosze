@@ -10,46 +10,51 @@
 {% set title = 'Najczęściej zadawane pytania' %}
 {% set shortTitle = 'FAQ' %}
 {% set description = 'Najczęściej zadawane pytania' %}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
+
+{% macro link(target, name) %}
+    <a href="#{{ target }}">{{ name }}</a>
+{% endmacro link %}
+
+{% block sidebar %}
+<aside class="mpr-sidebar">
+<details open>
+<summary>Spis treści</summary>
+<p><strong>Korzystanie z Uprzejmie Donoszę</strong></p>
+<ul>
+	<li>{{ _self.link('telefon', 'Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?') }}</li>
+	<li>{{ _self.link('to', 'Czy "to" warto zgłaszać?') }}</li>
+	<li>{{ _self.link('swiadek', 'Czy zostanę wezwany na świadka?') }}</li>
+	<li>{{ _self.link('recydywa', 'Czy zgłaszać ten sam pojazd kilka razy?') }}</li>
+	<li>{{ _self.link('kategorie', 'Dlaczego nie mogę zaznaczyć kilku kategorii przy zgłoszeniu?') }}</li>
+	<li>{{ _self.link('teren', 'Jak ustalić zarządcę terenu?') }}</li>
+</ul>
+<p><strong>Pytania techniczne</strong></p>
+<ul>
+	<li>{{ _self.link('aplikacja', 'Gdzie mogę pobrać aplikację?') }}</li>
+	<li>{{ _self.link('3zdjęcie', 'Czy można dodać więcej zdjęć lub film?') }}</li>
+	<li>{{ _self.link('edycja', 'Czy mogę poprawić wysłane zgłoszenie?') }}</li>
+	<li>{{ _self.link('bug', 'Co zrobić, jeśli coś nie działa?') }}</li>
+</ul>
+<p><strong>Pytania związane ze współpracą ze Strażą Miejską</strong></p>
+<ul>
+	<li>{{ _self.link('zignorowac', 'Czy SM zdarza się zignorować zgłoszenia?') }}</li>
+	<li>{{ _self.link('przesluchanie', 'SM/Policja wzywa mnie do każdego zgłoszenia. Co robić?') }}</li>
+	<li>{{ _self.link('zwrot', 'Czy mogę uzyskać zwrot pieniędzy za przesłuchanie?') }}</li>
+	<li>{{ _self.link('kpw', 'Jak wygląda postępowania mandatowe?') }}</li>
+	<li>{{ _self.link('telefon2', 'SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?') }}</li>
+	<li>{{ _self.link('zazalenie', 'Jak odwołać się od decyzji SM/Policji?') }}</li>
+	<li>{{ _self.link('miasta', 'W jakich miastach działa Uprzejmie Donoszę?') }}</li>
+</ul>
+</details>
+</aside>
+{% endblock %}
+
 {% block main %}
 
-	{% macro link(target, name) %}
-        <a href="#{{ target }}">{{ name }}</a>
-    {% endmacro link %}
-
 	<h2>Najczęściej zadawane pytania</h2>
-
-
-	<h4>Korzystanie z Uprzejmie Donoszę</h4>
-	<ul>
-		<li>{{ _self.link('telefon', 'Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?') }}</li>
-		<li>{{ _self.link('to', 'Czy "to" warto zgłaszać?') }}</li>
-		<li>{{ _self.link('swiadek', 'Czy zostanę wezwany na świadka?') }}</li>
-		<li>{{ _self.link('recydywa', 'Czy zgłaszać ten sam pojazd kilka razy?') }}</li>
-		<li>{{ _self.link('kategorie', 'Dlaczego nie mogę zaznaczyć kilku kategorii przy zgłoszeniu?') }}</li>
-		<li>{{ _self.link('teren', 'Jak ustalić zarządcę terenu?') }}</li>
-	</ul>
-
-	<h4>Pytania techniczne</h4>
-	<ul>
-		<li>{{ _self.link('aplikacja', 'Gdzie mogę pobrać aplikację?') }}</li>
-		<li>{{ _self.link('3zdjęcie', 'Czy można dodać więcej zdjęć lub film?') }}</li>
-		<li>{{ _self.link('edycja', 'Czy mogę poprawić wysłane zgłoszenie?') }}</li>
-		<li>{{ _self.link('bug', 'Co zrobić, jeśli coś nie działa?') }}</li>
-	</ul>
-
-	<h4>Pytania związane ze współpracą ze Strażą Miejską</h4>
-	<ul>
-		<li>{{ _self.link('zignorowac', 'Czy SM zdarza się zignorować zgłoszenia?') }}</li>
-		<li>{{ _self.link('przesluchanie', 'SM/Policja wzywa mnie do każdego zgłoszenia. Co robić?') }}</li>
-		<li>{{ _self.link('zwrot', 'Czy mogę uzyskać zwrot pieniędzy za przesłuchanie?') }}</li>
-		<li>{{ _self.link('kpw', 'Jak wygląda postępowania mandatowe?') }}</li>
-		<li>{{ _self.link('telefon2', 'SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?') }}</li>
-		<li>{{ _self.link('zazalenie', 'Jak odwołać się od decyzji SM/Policji?') }}</li>
-		<li>{{ _self.link('miasta', 'W jakich miastach działa Uprzejmie Donoszę?') }}</li>
-	</ul>
-
 
 	<h3>Korzystanie z Uprzejmie Donoszę</h3>
 	<h4 id="telefon">Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?</h4>
