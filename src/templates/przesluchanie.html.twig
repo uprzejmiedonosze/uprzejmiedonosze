@@ -10,8 +10,16 @@
 {% set title = 'Czy straż miejska wezwie mnie na przesłuchanie?' %}
 {% set shortTitle = 'Przesłuchanie w SM' %}
 {% set description = 'Czy straż miejska wezwie mnie na przesłuchanie?' %}
+{% set hasSidebar = not dialog %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% if not dialog %}
+{% include '_related-links.html.twig' with {'column': 'know', 'current': 'przesluchanie'} %}
+{% endif %}
+{% endblock %}
+
 {% block main %}
 
 <h2>Czy straż miejska wezwie mnie na przesłuchanie?</h2>

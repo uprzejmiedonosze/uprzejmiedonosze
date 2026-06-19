@@ -18,6 +18,50 @@ $STOP_AGRESJI = \json\get('stop-agresji.json', 'StopAgresji');
 $LEVELS = \json\get('levels.json', 'Level');
 $BADGES = \json\get('badges.json');
 
+// Footer link columns, also reused to build each static page's "Przeczytaj
+// także" sidebar (see _related-links.html.twig). 'key' must match the page's
+// own explicit `current` value passed to that include; external links are
+// shown in the footer but skipped from "Przeczytaj także".
+$FOOTER_LINKS = [
+    'know' => [
+        'title' => 'Warto wiedzieć',
+        'items' => [
+            ['key' => 'jak-zglosic-nielegalne-parkowanie', 'href' => '/jak-zglosic-nielegalne-parkowanie.html', 'label' => 'Poradnik „jak zgłaszać”'],
+            ['key' => 'przesluchanie', 'href' => '/przesluchanie.html', 'label' => 'Wizyta na komisariacie'],
+            ['key' => 'zwrot-za-przesluchanie', 'href' => '/zwrot-za-przesluchanie.html', 'label' => 'Zwrot środków za przesłuchanie'],
+            ['key' => 'dostep-do-informacji-publicznej', 'href' => '/dostep-do-informacji-publicznej.html', 'label' => 'Jak sprawdzić efekty pracy SM?'],
+            ['key' => 'faq', 'href' => '/faq.html', 'label' => 'Najczęstsze pytania'],
+            ['key' => 'e-doreczenia', 'href' => '/e-doreczenia.html', 'label' => 'e-Doręczenia'],
+            ['key' => 'zazalenie-na-brak-mandatu', 'href' => '/zazalenie-na-brak-mandatu.html', 'label' => 'Zażalenie na brak mandatu'],
+            ['key' => 'przepisy', 'href' => '/przepisy.html', 'label' => 'Przepisy zw. z parkowaniem'],
+        ],
+    ],
+    'support' => [
+        'title' => 'Warto wspierać',
+        'items' => [
+            ['key' => 'patronite', 'href' => '/patronite.html', 'label' => 'Patronite'],
+            ['key' => null, 'href' => 'https://agendaparkingowa.pl/', 'label' => 'Agenda Parkingowa', 'external' => true],
+            ['key' => null, 'href' => 'https://www.change.org/Rowne-Prawa-Dla-Pieszych-i-Kierowcow', 'label' => 'Podpisz wniosek do RPO', 'external' => true],
+            ['key' => null, 'href' => 'https://www.facebook.com/groups/patologiaparkingowa/', 'label' => 'Grupa wsparcia na FB', 'external' => true],
+            ['key' => null, 'href' => 'https://suppi.pl/uprzejmiedonosze', 'label' => 'Jednorazowa wpłata', 'external' => true],
+            ['key' => 'naklejki-robisz-to-zle', 'href' => '/naklejki-robisz-to-zle.html', 'label' => 'Kup naklejki'],
+        ],
+    ],
+    'project' => [
+        'title' => 'O projekcie',
+        'items' => [
+            ['key' => null, 'href' => 'https://patronite.pl/uprzejmiedonosze/posts', 'label' => 'Comiesięczna aktualizacja', 'external' => true],
+            ['key' => null, 'href' => 'https://x.com/SzymonNieradka', 'label' => 'Codzienne aktualizacje', 'external' => true],
+            ['key' => 'changelog', 'href' => '/changelog.html', 'label' => 'Historia zmian'],
+            ['key' => 'projekt', 'href' => '/projekt.html', 'label' => 'Dla programistów'],
+            ['key' => 'regulamin', 'href' => '/regulamin.html', 'label' => 'Regulamin'],
+            ['key' => 'polityka-prywatnosci', 'href' => '/polityka-prywatnosci.html', 'label' => 'Polityka prywatności'],
+            ['key' => 'bezpieczenstwo', 'href' => '/bezpieczenstwo.html', 'label' => 'Bezpieczeństwo'],
+            ['key' => 'kontakt', 'href' => '/kontakt.html', 'label' => 'Kontakt'],
+        ],
+    ],
+];
+
 $_appEnv = getenv('APP_ENV');
 $_configDev = __DIR__ . '/../config.dev.php';
 // Dev bootstrap: config.dev.php defines fixture keys, Mailpit DSN, etc.

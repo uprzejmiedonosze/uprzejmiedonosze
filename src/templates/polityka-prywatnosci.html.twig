@@ -9,8 +9,16 @@
 {% set shortTitle = 'Polityka prywatności UD' %}
 {% set description = title %}
 {% set mainClass = 'polityka' %}
+{% set hasSidebar = not dialog %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% if not dialog %}
+{% include '_related-links.html.twig' with {'column': 'project', 'current': 'polityka-prywatnosci'} %}
+{% endif %}
+{% endblock %}
+
 {% block main %}
 
 <h2>Polityka prywatności serwisu Uprzejmie Donoszę</h2>

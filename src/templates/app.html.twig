@@ -1,0 +1,161 @@
+{% set leftButton = 'menu' %}
+{% set rightButton = 'menuStart' %}
+{# SITEMAP-PRIORITY:0.1 #}
+
+{% set mainClass = 'app' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+<h3 class="introHeader">Cześć {{ general.userName }},</h3>
+<p>
+    {{ levels[general.stats.level].introMsg | raw }}
+</p>
+<div class="heros">
+    {% for levelId,levelDef in levels %}
+    <div class="hero {% if general.stats.level == levelId %}active{% endif %}">
+        <img src="{{ levelDef.img }}">
+        <p>{{ config.sex[levelDef.desc] }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<p>Twoje statystyki:</p>
+<fieldset class="gauges">
+
+    {% set active = general.stats.active ?? 0 %}
+    {% set fined = general.stats['confirmed-fined'] ?? 0 %}
+    {% set instructed = general.stats['confirmed-instructed'] ?? 0 %}
+    <div class="gauge">
+        {% if active > 0 %}
+        <a href="/moje-zgloszenia.html">
+            <h3>{{ active|number_format(0, ',', ' ') }}</h3>
+            <p>Aktywne zgłoszenia</p>
+        </a>
+        {% else %}
+        <h3><a href="/nowe-zgloszenie.html">Stwórz pierwsze</a></h3>
+        <p>Aktywne zgłoszenia</p>
+        {% endif %}
+
+    </div>
+    <div class="gauge">
+        {% if fined > 0 %}
+        <a href="/moje-zgloszenia.html#confirmed-fined">
+            <h3>{{ fined|number_format(0, ',', ' ') }}</h3>
+            <p>Mandaty</p>
+        </a>
+        {% else %}
+        <h3>0</h3>
+        <p>Mandaty</p>
+        {% endif %}
+    </div>
+    <div class="gauge">
+        {% if instructed > 0 %}
+        <a href="/moje-zgloszenia.html#confirmed-instructed">
+            <h3>{{ instructed|number_format(0, ',', ' ') }}</h3>
+            <p>Pouczenia</p>
+        </a>
+        {% else %}
+        <h3>0</h3>
+        <p>Pouczenia</p>
+        {% endif %}
+    </div>
+    <div class="gauge">
+        <h3>{{ (general.stats.points ?? 0)|number_format(0, ',', ' ') }}</h3>
+        <p>Punkty karne</p>
+    </div>
+    <div class="gauge">
+        <h3>{{ (general.stats.mandates ?? 0)|number_format(0, ',', ' ') }} zł</h3>
+        <p>Kwota mandatów</p>
+    </div>
+</fieldset>
+
+<p>Twoje odznaki:</p>
+
+<fieldset class="badges">
+    {% for badgeId,badge in badges %}
+    {% set former_patron = (badgeId == 'patron' and 'former_patron' in general.stats.badges) %}
+    <dialog data-role="popup" id="popup-badge-{{ badgeId }}">
+        <p>{{ badge.desc|raw }}</p>
+    </dialog>
+    <a href="#popup-badge-{{ badgeId }}" data-rel="popup">
+        <div class="badge {% if badgeId in general.stats.badges %}active{% endif %} {% if former_patron %}former_patron{% endif %}">
+            <img src="{{ badge.img }}">
+            <p>
+            {% if former_patron %}
+                {{ config.sex['Była patronka'] }} ☹︎
+            {% else %}
+                {{ config.sex[badge.name] }}
+            {% endif %}
+            </p>
+        </div>
+    </a>
+    {% endfor %}
+</fieldset>
+
+
+<h3>Nie chcesz „donosić”? Dowiedz się, co możesz zrobić</h3>
+
+<p>Napisz <a href="/napisz-pismo-do-polityka.html">pismo do polityka</a> w trzy minuty
+    i przełóż swoją frustrację w realne działania.</p>
+
+<p>Zapoznaj się z
+    <a href="https://agendaparkingowa.pl/"
+        target="_blank"
+        rel="external">Miejską Agendą Parkingową</a>
+    i dowiedz się jak niewielkie
+    zmiany w przepisach mogą sprawić, że Uprzejmie Donoszę nie będzie potrzebne.
+</p>
+
+<div class="images-slider">
+    <div class="imageContainer">
+        <a href="https://agendaparkingowa.pl/"
+            target="_blank"
+            rel="external">
+            <img src="/img/agenda-parkingowa-media-1.webp?width=250"
+                data-src="/img/agenda-parkingowa-media-1.jpeg"
+                class="lazyload" />
+        </a>
+    </div>
+    <div class="imageContainer">
+        <a href="https://agendaparkingowa.pl/"
+            target="_blank"
+            rel="external">
+            <img src="/img/agenda-parkingowa-media-4.webp?width=250"
+                data-src="/img/agenda-parkingowa-media-4.jpeg"
+                class="lazyload" />
+        </a>
+    </div>
+</div>
+
+{% if 'patron' in general.stats.badges %}
+
+<p>Zachęcam też do poparcia mojego
+    <a href="https://www.change.org/Rowne-Prawa-Dla-Pieszych-i-Kierowcow/"
+        target="_blank"
+        rel="external">wniosku do Rzecznika Praw Obywatelskich</a>.
+</p>
+
+{% else %}
+
+<p>Możesz też wesprzeć Uprzejmie Donoszę i Agendę Parkingową na Patronite.
+    Chciałbym poświęcić więcej czasu swojej misji odzyskania przestrzeni dla
+    pieszych. Twoje wsparcie bardzo mi w tym pomoże.
+</p>
+
+<a href="/patronite.html"
+    class="patronite button">
+    Dołącz do {{ config.stats.patrons }} Patronek i Patronów!
+</a>
+
+<p>
+    Nie chcesz subskrybcji?
+    <a href="https://suppi.pl/uprzejmiedonosze"
+        target="_blank"
+        rel="external">Suppi pozwala na jednorazową wpłatę niewielkiej kwoty</a>
+    (za którą z góry dziękuję).
+</p>
+{% endif %}
+
+{% endblock %}

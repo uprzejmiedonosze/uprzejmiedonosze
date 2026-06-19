@@ -1,0 +1,21 @@
+{# Renders a "Przeczytaj także" sidebar from one footerLinks column (incl.
+   external links shown there), skipping only the current page. Usage:
+   {% set hasSidebar = true %}
+   {% block sidebar %}
+       {% include '_related-links.html.twig' with {'column': 'know', 'current': 'faq'} %}
+   {% endblock %} #}
+{% set relatedColumn = footerLinks[column] ?? null %}
+{% if relatedColumn %}
+<aside class="mpr-sidebar">
+<details open>
+<summary>Przeczytaj także</summary>
+<ul>
+    {% for item in relatedColumn.items %}
+        {% if item.key != current %}
+        <li><a href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
+</details>
+</aside>
+{% endif %}

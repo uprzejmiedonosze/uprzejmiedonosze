@@ -4,8 +4,14 @@
 {% set title = 'Historia zmian' %}
 
 {# SITEMAP-PRIORITY:0.2 #}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'project', 'current': 'changelog'} %}
+{% endblock %}
+
 {% block main %}
 <h2>Historia zmian</h2>
 <h4>Poniedziałek, 6 lipca 2026</h4>

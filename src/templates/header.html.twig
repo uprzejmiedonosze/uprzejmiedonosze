@@ -1,5 +1,6 @@
+{% set isRedesignedHeader = (redesignClass ?? '') == 'rd25' %}
 {% block header %}
-<header>
+<header{% if isRedesignedHeader %} class="rd25-header"{% endif %}>
     <h1>
         <a href="{{ general.uri }}">{{ shortTitle ?? title }}
         {% if general.isStaging %}
@@ -10,6 +11,17 @@
         {% endif %}
         </a>
     </h1>
+    {% if isRedesignedHeader %}
+    <div class="mpr-navbar">
+        <a class="mpr-navbar-logo" href="/">Uprzejmie Donoszę</a>
+        <nav class="mpr-navbar-links">
+            <a href="/jak-zglosic-nielegalne-parkowanie.html">Poradnik</a>
+            <a href="/patronite.html">Misja</a>
+            <a href="/kontakt.html">Kontakt</a>
+        </nav>
+        <a class="mpr-navbar-cta" href="/nowe-zgloszenie.html">Aplikacja</a>
+    </div>
+    {% endif %}
     {% block menu %}
     {% include('_menu.html.twig') %}
     {% endblock %}

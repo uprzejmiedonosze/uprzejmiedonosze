@@ -4,8 +4,14 @@
 {% set title = 'Zwrot środków za przesłuchanie' %}
 {% set shortTitle = 'Zwrot środków' %}
 {% set mainClass = 'faq' %}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'know', 'current': 'zwrot-za-przesluchanie'} %}
+{% endblock %}
+
 {% block main %}
 {# SITEMAP-PRIORITY:0.6 #}
 

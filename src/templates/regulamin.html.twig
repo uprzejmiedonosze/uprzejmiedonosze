@@ -8,8 +8,16 @@
 {% set title = 'Regulamin Uprzejmie Donoszę' %}
 {% set shortTitle = 'Regulamin' %}
 {% set description = title %}
+{% set hasSidebar = not dialog %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% if not dialog %}
+{% include '_related-links.html.twig' with {'column': 'project', 'current': 'regulamin'} %}
+{% endif %}
+{% endblock %}
+
 {% block main %}
 
 <h2>Regulamin serwisu Uprzejmie Donoszę</h2>

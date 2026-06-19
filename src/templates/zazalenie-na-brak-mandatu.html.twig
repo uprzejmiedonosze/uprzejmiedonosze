@@ -2,8 +2,13 @@
 {% set rightButton = 'menuStart' %}
 
 {% set title = 'Zażalenie na brak mandatu' %}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'know', 'current': 'zazalenie-na-brak-mandatu'} %}
+{% endblock %}
 
 {% block main %}
 

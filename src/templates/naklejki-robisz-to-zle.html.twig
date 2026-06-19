@@ -7,6 +7,12 @@
 
 {% extends "base.html.twig" %}
 {% set mainClass = 'mainPage' %}
+{% set hasSidebar = true %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'support', 'current': 'naklejki-robisz-to-zle'} %}
+{% endblock %}
+
 {% block main %}
 
 <h2>Naklejki ROBISZ TO ŹLE</h2>

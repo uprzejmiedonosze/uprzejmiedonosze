@@ -5,8 +5,13 @@
 {% set title = 'Jak sprawdzić co zrobiła SM w odpowiedzi na twoje zgłoszenie' %}
 {% set shortTitle = 'Dzwoń do SM jak szeryf' %}
 {% set mainClass = 'public' %}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'know', 'current': 'dostep-do-informacji-publicznej'} %}
+{% endblock %}
 
 {% block main %}
 

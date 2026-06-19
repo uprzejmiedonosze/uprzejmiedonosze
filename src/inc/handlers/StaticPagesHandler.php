@@ -28,6 +28,15 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    function app(Request $request, Response $response): Response {
+        $mainPageStats = \global_stats\mainPage();
+        return AbstractHandler::renderHtml($request, $response, 'app', [
+            'config' => [
+                'stats' => $mainPageStats
+            ]
+        ]);
+    }
+
     function rules(Request $request, Response $response): Response {
         return AbstractHandler::renderHtml($request, $response, 'regulamin', [
             'latestTermUpdate' => LATEST_TERMS_UPDATE

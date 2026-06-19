@@ -8,6 +8,11 @@
     {% set title = 'Uprzejmie Donoszę' %}
 {% endif %}
 
+{# Static (OptionalUserMiddleware) pages default to the wide redesigned
+   layout; app pages (RegisteredMiddleware) keep the old menu/width unless
+   a template explicitly opts in by setting redesignClass itself. #}
+{% set redesignClass = redesignClass ?? ((general.isAppPage ?? false) ? '' : 'rd25') %}
+
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -67,61 +72,31 @@
 
         {% block headIncludes %}{% endblock %}
     </head>
-    <body class="index">
+    <body class="index {{ redesignClass ?? '' }}">
         <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
         {% include('header.html.twig') %}
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {{ redesignClass ?? '' }} {% if dialog %}dialog{% endif %}">
+        <div class="mpr-layout{% if hasSidebar ?? false %} mpr-layout--sidebar{% endif %}">
+            <div class="mpr-article">
         {% block main %}{% endblock %}
+            </div>
+        {% block sidebar %}{% endblock %}
+        </div>
             </div> <!-- main -->
             <div id="toast"></div>
         {% block footer %}
             {% if not dialog %}
-            <footer data-role="footer">
+            <footer data-role="footer" class="{{ redesignClass ?? '' }}">
 
                 <div class="grid3">
+                    {% for columnKey, column in footerLinks ?? [] %}
                     <div>
-                        <div class="header">Warto wiedzieć</div>
-                        <a href="/jak-zglosic-nielegalne-parkowanie.html">Poradnik „jak zgłaszać”</a>
-                        <a href="/przesluchanie.html">Wizyta na komisariacie</a>
-                        <a href="/zwrot-za-przesluchanie.html">Zwrot środków za przesłuchanie</a>
-                        <a href="/dostep-do-informacji-publicznej.html">Jak sprawdzić efekty pracy SM?</a>
-                        <a href="/faq.html">Najczęstsze pytania</a>
-                        <a href="/e-doreczenia.html">e-Doręczenia</a>
-                        <a href="/zazalenie-na-brak-mandatu.html">Zażalenie na brak mandatu</a>
-                        <a href="/przepisy.html">Przepisy zw. z parkowaniem</a>
+                        <div class="header">{{ column.title }}</div>
+                        {% for item in column.items %}
+                        <a href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a>
+                        {% endfor %}
                     </div>
-                    <div>
-                        <div class="header">Warto wspierać</div>
-                        <a href="/patronite.html">Patronite</a>
-                        <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">
-                            Agenda Parkingowa
-                        </a>
-                        <a rel="external" target="_blank" href="https://www.change.org/Rowne-Prawa-Dla-Pieszych-i-Kierowcow">
-                            Podpisz wniosek do RPO
-                        </a>
-                        <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">
-                            Grupa wsparcia na FB
-                        </a>
-                        <a href="https://suppi.pl/uprzejmiedonosze"
-                            target="_blank"
-                            rel="external">Jednorazowa wpłata</a>
-                        <a href="/naklejki-robisz-to-zle.html">Kup naklejki</a>
-                    </div>
-                    <div>
-                        <div class="header">O projekcie</div>
-                        <a href="https://patronite.pl/uprzejmiedonosze/posts" target="_blank" rel="external">
-                            Comiesięczna aktualizacja
-                        </a>
-                        <a href="https://x.com/SzymonNieradka" target="_blank" rel="external">
-                            Codzienne aktualizacje
-                        </a>
-                        <a href="/changelog.html">Historia zmian</a>
-                        <a href="/projekt.html">Dla programistów</a>
-                        <a href="/regulamin.html">Regulamin</a>
-                        <a href="/polityka-prywatnosci.html">Polityka prywatności</a>
-                        <a href="/bezpieczenstwo.html">Bezpieczeństwo</a>
-                        <a href="/kontakt.html">Kontakt</a>
-                    </div>
+                    {% endfor %}
                 </div>
             </footer> <!-- footer -->
             {% endif %}

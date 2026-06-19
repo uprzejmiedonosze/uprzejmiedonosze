@@ -9,10 +9,18 @@
 {% set title = 'Przepisy związane z parkowaniem' %}
 {% set shortTitle = 'Przepisy' %}
 {% set description = title %}
+{% set hasSidebar = not dialog %}
 
 {# SITEMAP-PRIORITY:0.9 #}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% if not dialog %}
+{% include '_related-links.html.twig' with {'column': 'know', 'current': 'przepisy'} %}
+{% endif %}
+{% endblock %}
+
 {% block main %}
 
 <h2>Można, czy nie można?</h2>

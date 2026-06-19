@@ -4,8 +4,13 @@
 
 {% set title = 'e-Doręczenia – co wiemy' %}
 {% set shortTitle = 'e-Doręczenia' %}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'know', 'current': 'e-doreczenia'} %}
+{% endblock %}
 
 {% block main %}
 

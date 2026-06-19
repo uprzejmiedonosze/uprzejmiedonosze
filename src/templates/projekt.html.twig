@@ -3,8 +3,14 @@
 
 {% set title = 'O projekcie' %}
 {% set description = 'O projekcie Uprzejmie Donoszę' %}
+{% set hasSidebar = true %}
 
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_related-links.html.twig' with {'column': 'project', 'current': 'projekt'} %}
+{% endblock %}
+
 {% block main %}
 
 <h2>Jesteś programistą/grafikiem?</h2>
