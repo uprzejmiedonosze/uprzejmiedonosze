@@ -24,6 +24,13 @@ class WebhooksHandler extends AbstractHandler {
             throw new HttpForbiddenException($request, 'Missing event id.');
         }
 
+        if (\webhook\isProcessed($id)) {
+            return $this->renderJson($response, array(
+                "type" => "duplicate",
+                "status" => "ignored"
+            ));
+        }
+
         \webhook\add($id, $event);
         try {
             $this->verify($request);

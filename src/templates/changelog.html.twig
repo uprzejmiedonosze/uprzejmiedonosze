@@ -8,6 +8,10 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
+<h4>Piątek, 19 czerwca 2026</h4>
+<ul>
+    <li>Naprawiono powtarzające się błędy przy odbieraniu webhooków od dostawcy email (Mailgun): zduplikowane powiadomienia o tym samym zdarzeniu są teraz ignorowane, co eliminuje fałszywe komunikaty o niewysłanych zgłoszeniach i powtórne maile o problemach z dostarczeniem.</li>
+</ul>
 <h4>Czwartek, 18 czerwca 2026</h4>
 <ul>
     <li>Naprawa testów jednostkowych (make test) oraz dostosowanie kodu do poprawnych sygnatur typów w nowszych wersjach PHP (poprawki deprecation w PHP 8.4).</li>

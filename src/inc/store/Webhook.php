@@ -24,6 +24,11 @@ function get(string $id): ?array {
     return json_decode(\store\get(TABLE, $id), true);
 }
 
+function isProcessed(string $id): bool {
+    $event = get($id);
+    return ($event['processed'] ?? false) === true;
+}
+
 function getUnprocessed(): array {
     $sql = <<<SQL
         select key
