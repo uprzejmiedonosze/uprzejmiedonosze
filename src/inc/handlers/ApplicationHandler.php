@@ -121,6 +121,12 @@ class ApplicationHandler extends AbstractHandler {
         $extensions = $this->getParam($params, 'extensions', []); // "6,7", "6", "", missing
         $extensions = array_filter($extensions);
 
+        // optional: ad hoc SM/Policja choice for this application; null means "use account default"
+        $stopAgresji = $params['stopAgresji'] ?? null;
+        if ($stopAgresji !== null) {
+            $stopAgresji = $stopAgresji === 'SA';
+        }
+
         $fullAddress = json_decode($this->getParam($params, 'address'));
         $fullAddress->addressGPS = $fullAddress->address;
         $fullAddress->address = $this->getParam($params, 'lokalizacja');
@@ -129,7 +135,7 @@ class ApplicationHandler extends AbstractHandler {
 
         $application = \semaphore\withLock($appId, "confirm", function () use (
             $appId, $request, $datetime, $dtFromPicture, $category, $fullAddress,
-            $plateId, $comment, $witness, $extensions, $user
+            $plateId, $comment, $witness, $extensions, $user, $stopAgresji
         ) {
             $application = \app\get($appId);
             global $STATUSES;
@@ -150,6 +156,7 @@ class ApplicationHandler extends AbstractHandler {
                     $witness,
                     $extensions,
                     $user,
+                    $stopAgresji,
                 );
             } catch (ForbiddenException $e) {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
