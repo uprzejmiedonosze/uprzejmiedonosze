@@ -4,6 +4,7 @@ import { error } from "./toast"
 
 let map // represents mapboxgl.Map
 let stopAgresji = false
+let lastNominatim = null
 
 export function initMaps(lastLocation, _stopAgresji) {
   stopAgresji = _stopAgresji ?? false
@@ -106,13 +107,38 @@ function geoLoading(from) {
   }
 }
 
-function setSM(sm, hint) {
-  const smInfo = document.getElementById("smInfo")
-  const smHint = document.getElementById("smInfoHint")
+const UNIT_FALLBACK_NAME = {
+  sm: 'Straż Miejska',
+  sa: 'Policja'
+}
 
-  sm = sm ? `Rejon: ${sm}`: ''
-  if (smInfo) smInfo.textContent = sm
-  if (smHint) smHint.innerHTML = hint ?? ''
+function setUnitLabel(unit, name, hint) {
+  const nameEl = document.getElementById(`unit-${unit}-name`)
+  const hintEl = document.getElementById(`unit-${unit}-hint`)
+  if (nameEl) nameEl.textContent = name ? `Rejon: ${name}` : UNIT_FALLBACK_NAME[unit]
+  if (hintEl) hintEl.innerHTML = hint ?? ''
+}
+
+function clearUnitLabels() {
+  setUnitLabel('sm', '', '')
+  setUnitLabel('sa', '', '')
+}
+
+// Shows the actual unit name on both options, but only the currently
+// selected option gets its extra hint (e.g. "no SM known for this city").
+function renderSM() {
+  if (!lastNominatim) return
+  const smName = lastNominatim.sm?.email ? lastNominatim.sm.address[0] : ''
+  const saName = lastNominatim.sa?.address?.[0] ?? ''
+  setUnitLabel('sm', smName, !stopAgresji ? (lastNominatim.sm?.hint ?? '') : '')
+  setUnitLabel('sa', saName, stopAgresji ? (lastNominatim.sa?.hint ?? '') : '')
+}
+
+// Lets the new-application form switch SM/Policja ad hoc without re-fetching
+// the address (both variants are already present in the cached nominatim response).
+export function setStopAgresji(value) {
+  stopAgresji = value
+  renderSM()
 }
 
 async function latLngToAddress(lat, lng, from) {
@@ -129,7 +155,7 @@ async function latLngToAddress(lat, lng, from) {
     if (input) {
       input.className = "alert"
     }
-    setSM()
+    clearUnitLabels()
   }
 
   const geoSuccess = (addressData) => {
@@ -165,9 +191,11 @@ async function latLngToAddress(lat, lng, from) {
   let nominatim = {}
   try {
     nominatim = await getNominatim(lat, lng)
+    lastNominatim = nominatim
   } catch (_e) {
     running = false
-    setSM()
+    lastNominatim = null
+    clearUnitLabels()
     return
   }
 
@@ -181,11 +209,7 @@ async function latLngToAddress(lat, lng, from) {
   
   geoSuccess(addressData)
 
-  if (stopAgresji) {
-    setSM(nominatim.sa.address[0], nominatim.sa.hint ?? '')
-  } else if (nominatim.sm?.email) {
-    setSM(nominatim.sm.address[0], nominatim.sm.hint ?? '')
-  }
+  renderSM()
   running = false
 }
 

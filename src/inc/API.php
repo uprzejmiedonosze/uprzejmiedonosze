@@ -24,6 +24,7 @@ function updateApplication(
     $witness,
     $extensions,
     User $user,
+    ?bool $stopAgresji = null,
 ): Application {
 
     if ($application->email !== $user->getEmail()) {
@@ -53,13 +54,19 @@ function updateApplication(
 
     $application->updateUserData($user);
 
+    if ($stopAgresji !== null) {
+        $application->stopAgresji = $stopAgresji;
+    }
+
     /** @var \SM|\StopAgresji $sm */
     $sm = $application->guessSMData(true); // stores sm city inside the object
 
     /** @var array<int, Category> $CATEGORIES */
     global $CATEGORIES;
+    $application->stopAgresjiForced = false;
     if ($CATEGORIES[$category]->isStopAgresjiOnly() && !$sm->isPolice()) {
         $application->stopAgresji = true;
+        $application->stopAgresjiForced = true;
         $application->guessSMData(true);
     }
 

@@ -4,7 +4,7 @@
 {% set shortTitle = '' %}
 {% set mainClass = 'confirm-application' %}
 {% set sm = app.guessSMData() %}
-{% set forcedPolice = app.stopAgresji and not user.stopAgresji %}
+{% set forcedPolice = app.stopAgresjiForced ?? false %}
 {% set smName = sm.getName %}
 {% if forcedPolice %}
 {% set smName = '<b class="lightWarning">' ~ sm.getName ~ '</b>' %}
