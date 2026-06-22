@@ -297,39 +297,30 @@ class Application extends JSONObject implements \JsonSerializable {
      * @SuppressWarnings(CamelCaseVariableName)
      */
     public function guessSMData(bool $update=false): \SM {
-        global $SM_ADDRESSES;
-        global $STOP_AGRESJI;
-
         $smCity = $this->smCity ?? null;
-        
+
         // don't update, smCity is set
         if (!$update && $smCity) {
-            if ($this->stopAgresji())
-                return $STOP_AGRESJI[$this->smCity];
-            return $SM_ADDRESSES[$this->smCity];
+            return \SM::resolve($this->smCity, $this->stopAgresji());
         }
 
         // smCity is set, should update but it is not possible as the app is encrypted
         if ($this->isEncrypted() && $smCity) {
-            if ($this->stopAgresji())
-                return $STOP_AGRESJI[$this->smCity];
-            return $SM_ADDRESSES[$this->smCity];
+            return \SM::resolve($this->smCity, $this->stopAgresji());
         }
 
         // can't update
         if (!$this->address) {
-            if ($this->stopAgresji())
-                return $STOP_AGRESJI[$smCity ?? 'default'];
-            return $SM_ADDRESSES[$smCity ?? '_nieznane'];
+            return \SM::resolve($smCity ?? ($this->stopAgresji() ? 'default' : '_nieznane'), $this->stopAgresji());
         }
 
         // can update
         if ($this->stopAgresji()) {
             $this->smCity = \StopAgresji::guess($this->address);
-            return $STOP_AGRESJI[$this->smCity];
+            return \SM::resolve($this->smCity, true);
         }
         $this->smCity = \SM::guess($this->address);
-        return $SM_ADDRESSES[$this->smCity];
+        return \SM::resolve($this->smCity, false);
     }
 
     public function hasAPI(): bool{

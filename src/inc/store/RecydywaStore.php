@@ -101,8 +101,6 @@ function lastTicket(array $recydywa): string {
     $lastTicket = end($recydywa);
 
     global $STATUSES;
-    global $SM_ADDRESSES;
-    global $STOP_AGRESJI;
 
     if (isset($STATUSES[$lastTicket->status]->recydywa)) {
         $penalty = $STATUSES[$lastTicket->status]->recydywa . '. ';
@@ -115,7 +113,7 @@ function lastTicket(array $recydywa): string {
     $number = $lastTicket->number . ($lastTicket->externalId ? " (" . strtoupper($lastTicket->externalId ) . ")" : '');
     $date = formatDateTime($lastTicket->date, 'd.MM.y');
     
-    $sm = $lastTicket->stopAgresji ? $STOP_AGRESJI[$lastTicket->smCity] : $SM_ADDRESSES[$lastTicket->smCity];
+    $sm = \SM::resolve($lastTicket->smCity, $lastTicket->stopAgresji);
     $smShort = $sm->getShortName();
 
     return "$penalty$by wykroczenia z dnia $date numer $number wysłane do $smShort.";

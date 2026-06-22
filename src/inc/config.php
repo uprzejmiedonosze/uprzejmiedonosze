@@ -12,6 +12,7 @@ $CATEGORIES = \json\get('categories.json', 'Category');
 $CATEGORY_GROUPS = \json\get('category-groups.json');
 $EXTENSIONS = \json\get('extensions.json', 'Extension');
 $SM_ADDRESSES = \json\get('sm.json', 'SM');
+$POLICJA_ADDRESSES = \json\get('policja.json', 'Policja');
 $STATUSES = \json\get('statuses.json', 'Status');
 $STOP_AGRESJI = \json\get('stop-agresji.json', 'StopAgresji');
 $LEVELS = \json\get('levels.json', 'Level');

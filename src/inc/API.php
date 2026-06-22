@@ -56,6 +56,11 @@ function updateApplication(
 
     if ($stopAgresji !== null) {
         $application->stopAgresji = $stopAgresji;
+        // Persist a deliberate ad hoc choice to the account, so it's remembered
+        // for future reports. Must happen before the stopAgresjiOnly forced
+        // override below, so a forced flip never leaks into the saved preference.
+        $user->setStopAgresjiPreference($stopAgresji);
+        \user\save($user);
     }
 
     /** @var \SM|\StopAgresji $sm */

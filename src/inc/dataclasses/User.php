@@ -171,7 +171,7 @@ class User extends \JSONObject{
         ));
     }
 
-    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, bool $stopAgresji, bool $shareRecydywa){
+    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
@@ -269,6 +269,14 @@ class User extends \JSONObject{
 
     public function stopAgresji() {
         return $this->data->stopAgresji ?? false;
+    }
+
+    /**
+     * Trwale zapisuje preferencję SM/Policja na koncie (np. po świadomym
+     * wyborze ad hoc na ekranie nowego zgłoszenia).
+     */
+    public function setStopAgresjiPreference(bool $stopAgresji): void {
+        $this->data->stopAgresji = $stopAgresji;
     }
 
     public function autoSend() {

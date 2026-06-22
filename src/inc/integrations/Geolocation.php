@@ -88,9 +88,6 @@ function Nominatim(float $lat, float $lng): array {
 
     $address['address'] = trim(($address['road'] ?? '') . " " . ($address['house_number'] ?? '')) . ", " . ($address['city'] ?? '');
 
-    global $SM_ADDRESSES;
-    global $STOP_AGRESJI;
-
     $address['lat'] = $lat; // needed by StopAgresji::guess()
     $address['lng'] = $lng; // needed by StopAgresji::guess()
 
@@ -98,8 +95,8 @@ function Nominatim(float $lat, float $lng): array {
 
     return array(
         'address' => $address,
-        'sm' => $SM_ADDRESSES[\SM::guess((object)$address)],
-        'sa' => $STOP_AGRESJI[\StopAgresji::guess((object)$address)]
+        'sm' => \SM::resolve(\SM::guess((object)$address), false),
+        'sa' => \SM::resolve(\StopAgresji::guess((object)$address), true)
     );
 }
 

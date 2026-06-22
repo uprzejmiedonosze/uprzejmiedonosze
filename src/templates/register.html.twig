@@ -51,18 +51,6 @@
     <h3>Ustawienia</h3>
 
     <fieldset class="grid">
-        <legend for="stopAgresji">Chcę wysyłać swoje zgłoszenia</legend>
-        <input type="radio" name="stopAgresji" id="stopAgresji-SM" value="SM" {% if not user.stopAgresji %}checked="checked"{% endif %}>
-        <label for="stopAgresji-SM" class="radio">
-            do Straży Miejskiej/Gminnej właściwej dla miejscowości zgłoszenia (domyślnie)
-        </label>
-        <input type="radio" name="stopAgresji" id="stopAgresji-SA" value="SA" {% if user.stopAgresji %}checked="checked"{% endif %}>
-        <label for="stopAgresji-SA" class="radio">
-            na komendę Policji właściwą dla województwa zgłoszenia
-        </label>
-    </fieldset>
-
-    <fieldset class="grid">
         <legend for="shareRecydywa">Chcę pozwalać na prezentowanie moich zdjęć w galerii recydywistów parkowania</legend>
         <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>
         <label for="shareRecydywa-Y" class="radio">

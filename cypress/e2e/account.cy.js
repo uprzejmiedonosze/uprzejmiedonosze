@@ -16,7 +16,7 @@ describe('Create account', () => {
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click({force: true})
     cy.contains('Dane konta')
-    cy.contains('Chcę wysyłać swoje zgłoszenia').should('exist')
+    cy.contains('Chcę pozwalać na prezentowanie').should('exist')
 
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Moje zgłoszenia').click({force: true})
@@ -89,10 +89,9 @@ describe('Update account', () => {
     cy.contains('Edycja konta').click({force: true})
     cy.contains('Zaktualizuj konto')
     cy.contains('Chcę pozwalać na prezentowanie')
-    cy.contains('Chcę wysyłać swoje zgłoszenia')
-    cy.contains('na komendę')
-
-    cy.get('#stopAgresji-SM').should('be.checked')
+    // SM/Policja is no longer asked at registration/account-edit time —
+    // only via the ad hoc toggle on the new-application screen.
+    cy.contains('Chcę wysyłać swoje zgłoszenia').should('not.exist')
   })
 
   it('New app, default settings', function () {
@@ -122,19 +121,27 @@ describe('Update account', () => {
   it('Set opposite settings', function () {
     cy.visit('/')
     cy.get('label.menu > .button-toggle').click()
-    cy.contains('Edycja konta').click({force: true})
+    cy.contains('Nowe zgłoszenie').click()
+    // @ts-ignore
+    cy.uploadOKImages()
+    // @ts-ignore
+    cy.setAppCategory(this.categories)
+    cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
 
-    cy.get('#stopAgresji-SA').check({force: true})
+    cy.get('#unit-sm').should('be.checked')
+    cy.get('#unit-sa').check({force: true})
 
-    cy.contains('Potwierdź').click()
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Edycja konta').click({force: true})
+    cy.get('#form-submit').click()
 
-    cy.get('#stopAgresji-SA').should('be.checked')
+    cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
+    cy.contains('KP Szczecin Niebuszewo')
+    // @ts-ignore
+    cy.sendApp()
+
+    cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
   })
 
-  it('New app, opposite settings', function () {
+  it('New app, opposite settings (preference persisted)', function () {
     cy.visit('/')
     cy.get('label.menu > .button-toggle').click()
     cy.contains('Nowe zgłoszenie').click()
@@ -146,6 +153,10 @@ describe('Update account', () => {
     // @ts-ignore
     cy.setAppCategory(this.categories)
     cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
+
+    // the choice made in the previous test was persisted to the account
+    cy.get('#unit-sa').should('be.checked')
+
     cy.get('#form-submit').click()
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
