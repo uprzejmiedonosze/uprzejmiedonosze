@@ -8,6 +8,10 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
+<h4>Poniedziałek, 22 czerwca 2026</h4>
+<ul>
+    <li>Naprawiono brakujące oznaczanie webhooków Mailgun jako przetworzonych w przypadku błędu "Application was not sent", co powodowało, że powtórne dostarczenie tego samego zdarzenia przez Mailgun nie było wykrywane jako duplikat i wciąż wywoływało fałszywe komunikaty oraz powtórne maile o problemach z dostarczeniem.</li>
+</ul>
 <h4>Piątek, 19 czerwca 2026</h4>
 <ul>
     <li>Naprawiono powtarzające się błędy przy odbieraniu webhooków od dostawcy email (Mailgun): zduplikowane powiadomienia o tym samym zdarzeniu są teraz ignorowane, co eliminuje fałszywe komunikaty o niewysłanych zgłoszeniach i powtórne maile o problemach z dostarczeniem.</li>

@@ -91,6 +91,7 @@ class WebhooksHandler extends AbstractHandler {
                         $mailEvent->getReason(),
                         $recipient);
                 }
+                \webhook\mark($id, 'app not sent');
                 return $this->renderJson($response, array(
                     "status" => "failed"
                 ));
