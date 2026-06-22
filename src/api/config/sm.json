@@ -2147,7 +2147,8 @@
       "ul. Regis 2",
       "32-700 Bochnia"
     ],
-    "email": "straz@um.bochnia.pl"
+    "email": "straz@um.bochnia.pl",
+    "api": "MailGunAlter"
   },
   "Nowy Dwór Gdański": {
     "address": [
