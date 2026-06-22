@@ -116,7 +116,9 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $address = getParam($params, 'address');
         $msisdn = getParam($params, 'msisdn', '');
         $edelivery = $this->getParam($params, 'edelivery', '');
-        $stopAgresji = getParam($params, 'stopAgresji', 'SM') == 'SA';
+        // No default -> leaves any previously saved preference untouched if absent.
+        $stopAgresjiRaw = $params['stopAgresji'] ?? null;
+        $stopAgresji = $stopAgresjiRaw === null ? null : ($stopAgresjiRaw === 'SA');
         $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
     
         /** @var \user\User $user */

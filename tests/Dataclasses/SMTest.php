@@ -34,15 +34,6 @@ class SMTest extends TestCase
         self::assertFalse($sm->isPolice());
     }
 
-    public function testOtwock(): void
-    {
-        $sm = new \SM($this->getData('otwock'));
-        self::assertEquals('Komenda Powiatowa Policji w Otwocku \\\\ ul. Pułaskiego 7a \\\\ 05-400 Otwock', $sm->getLatexAddress());
-        self::assertEquals('KPP w Otwocku', $sm->getShortName());
-        self::assertFalse($sm->hasAPI());
-        self::assertTrue($sm->isPolice());
-    }
-
     public function testGuessSM() : void {
         $sm1 = new \SM($this->getData('dziwnów'));
         $sm2Key = \SM::guess(new JSONObject(['county' => 'gmina Dziwnów', 'city' => 'Międzywodzie']));

@@ -38,6 +38,7 @@ build_static() {
 
 build_json() {
     node tools/sm-parser.js src/api/config/sm.json           export/public/api/config/sm.json
+    node tools/sm-parser.js src/api/config/policja.json      export/public/api/config/policja.json
     node tools/sm-parser.js src/api/config/stop-agresji.json export/public/api/config/stop-agresji.json
     node tools/badges-validator.js src/api/config/badges.json export/public/api/config/badges.json
     for f in src/api/config/*.json; do
@@ -46,7 +47,7 @@ build_json() {
     done
     php tools/police-stations.php \
         src/api/config/police-stations.csv \
-        export/public/api/config/stop-agresji.json \
+        export/public/api/config/policja.json \
         > export/public/api/config/police-stations.pjson
 }
 
