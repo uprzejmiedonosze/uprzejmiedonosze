@@ -17,7 +17,7 @@ Wykonaj poniższe kroki **w tej kolejności**. Zatrzymaj się i zgłoś błąd, 
 
 ### Krok 1 — Testy
 
-Uruchom `make test-phpunit`. Jeśli testy nie przejdą, zatrzymaj się i opisz błąd. Nie wykonuj kolejnych kroków.
+Uruchom `make test`. Jeśli testy nie przejdą, zatrzymaj się i opisz błąd. Nie wykonuj kolejnych kroków.
 
 ### Krok 2 — Ustal zakres zmian
 

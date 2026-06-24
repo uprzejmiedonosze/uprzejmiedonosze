@@ -18,7 +18,7 @@ class DocHandler extends AbstractHandler {
         }
 
         if (!empty($petition->recipient)) {
-            $mps = \generator\ApiAiHandler::__getParlamentary($user);
+            $mps = \generator\ApiAiHandler::__getParlamentary($user, false);
             $target = $mps[$petition->recipient]['formal'] . "\n\n";
         } else {
             $target = $TARGETS[$petition->target]['formal'] . "\n\n";
