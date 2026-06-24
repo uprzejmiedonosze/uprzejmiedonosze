@@ -72,8 +72,8 @@ Cypress.Commands.add("loadConfig", () => {
   cy.fixture('../../export/public/api/config/sm.json').then(function (sm) {
     this.sm = sm;
   })
-  cy.fixture('../../export/public/api/config/policja.json').then(function (policja) {
-    this.policja = policja;
+  cy.fixture('../../export/public/api/config/police.json').then(function (police) {
+    this.police = police;
   })
   cy.fixture('../../export/public/api/config/statuses.json').then(function (statuses) {
     this.statuses = statuses;

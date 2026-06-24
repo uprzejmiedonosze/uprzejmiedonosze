@@ -300,8 +300,8 @@ class ApplicationTest extends TestCase
         // Test with stopAgresji
         $app->stopAgresji = true;
         $smData = $app->guessSMData(true);
-        // Specific local police unit (Policja), not the voivodeship-level StopAgresji fallback.
-        $this->assertInstanceOf(\Policja::class, $smData);
+        // Specific local police unit (Police), not the voivodeship-level StopAgresji fallback.
+        $this->assertInstanceOf(\Police::class, $smData);
         $this->assertEquals('KP Szczecin Niebuszewo', $smData->getShortName());
         $this->assertFalse($smData->hasAPI());
         $this->assertTrue($smData->automated());
