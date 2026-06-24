@@ -80,7 +80,7 @@ class SM extends JSONObject {
 
     /**
      * Szuka jednostki na każdym poziomie najpierw w $SM_ADDRESSES, a jeśli nie
-     * znajdzie, także w $POLICJA_ADDRESSES (gminy bez SM mają tam podstawiony
+     * znajdzie, także w $POLICE_ADDRESSES (gminy bez SM mają tam podstawiony
      * lokalny komisariat) — dopiero potem przechodzi do kolejnego poziomu.
      * To zachowuje dokładnie dawną semantykę "pierwsze trafienie wygrywa, w
      * kolejności poziomów", z czasów gdy obie kategorie żyły w jednym pliku.
@@ -89,18 +89,18 @@ class SM extends JSONObject {
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function guess(object $address): ?string { // straż miejska
-        global $SM_ADDRESSES, $POLICJA_ADDRESSES;
+        global $SM_ADDRESSES, $POLICE_ADDRESSES;
 
         // post code level
         if(isset($address->postcode)) {
             $postcode = $address->postcode;
-            if(array_key_exists($postcode, $SM_ADDRESSES) || array_key_exists($postcode, $POLICJA_ADDRESSES))
+            if(array_key_exists($postcode, $SM_ADDRESSES) || array_key_exists($postcode, $POLICE_ADDRESSES))
                 return $postcode;
         }
 
         // city level
         $city = trimstr2lower($address->city ?? '');
-        if(array_key_exists($city, $SM_ADDRESSES) || array_key_exists($city, $POLICJA_ADDRESSES)){
+        if(array_key_exists($city, $SM_ADDRESSES) || array_key_exists($city, $POLICE_ADDRESSES)){
             $smCity = $city;
             if($city == 'warszawa' && isset($address->district)){
                 if(array_key_exists($address->district, ODDZIALY_TERENOWE)){
@@ -113,19 +113,19 @@ class SM extends JSONObject {
         // county level | gmina
         if(isset($address->county)) {
             $county = trimstr2lower($address->county);
-            if(array_key_exists($county, $SM_ADDRESSES) || array_key_exists($county, $POLICJA_ADDRESSES))
+            if(array_key_exists($county, $SM_ADDRESSES) || array_key_exists($county, $POLICE_ADDRESSES))
                 return $county;
 
             // guessed county level (remove 'gmina ' from county name)
             $county = str_replace('gmina ', '', $county);
-            if(array_key_exists($county, $SM_ADDRESSES) || array_key_exists($county, $POLICJA_ADDRESSES))
+            if(array_key_exists($county, $SM_ADDRESSES) || array_key_exists($county, $POLICE_ADDRESSES))
                 return $county;
         }
 
         // municipality level | powiat
         if(isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
-            if(array_key_exists($municipality, $SM_ADDRESSES) || array_key_exists($municipality, $POLICJA_ADDRESSES))
+            if(array_key_exists($municipality, $SM_ADDRESSES) || array_key_exists($municipality, $POLICE_ADDRESSES))
                 return $municipality;
         }
         return '_nieznane';
@@ -133,14 +133,14 @@ class SM extends JSONObject {
 
     /**
      * Rozwiązuje zbuforowany klucz `smCity` na obiekt jednostki. Klucz mógł
-     * historycznie powstać przed podziałem sm.json/policja.json/stop-agresji.json
+     * historycznie powstać przed podziałem sm.json/police.json/stop-agresji.json
      * na trzy pliki, więc sprawdza alternatywny plik jako fallback.
      */
     public static function resolve(string $key, bool $stopAgresji): \SM {
-        global $SM_ADDRESSES, $POLICJA_ADDRESSES, $STOP_AGRESJI;
+        global $SM_ADDRESSES, $POLICE_ADDRESSES, $STOP_AGRESJI;
         if ($stopAgresji) {
-            return $POLICJA_ADDRESSES[$key] ?? $STOP_AGRESJI[$key] ?? $STOP_AGRESJI['default'];
+            return $POLICE_ADDRESSES[$key] ?? $STOP_AGRESJI[$key] ?? $STOP_AGRESJI['default'];
         }
-        return $SM_ADDRESSES[$key] ?? $POLICJA_ADDRESSES[$key] ?? $SM_ADDRESSES['_nieznane'];
+        return $SM_ADDRESSES[$key] ?? $POLICE_ADDRESSES[$key] ?? $SM_ADDRESSES['_nieznane'];
     }
 }

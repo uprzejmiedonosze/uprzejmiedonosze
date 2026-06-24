@@ -8,9 +8,9 @@ require_once(__DIR__ . '/PoliceStationAreas.php');
  * substitute for Straż Miejska, or as a specific local unit for #stopagresji
  * reports (before falling back to the voivodeship-level StopAgresji entry).
  */
-class Policja extends SM {
+class Police extends SM {
     public function getCity(): string {
-        return "Policja " . $this->city;
+        return "Police " . $this->city;
     }
 
     public function isPolice(): bool {
@@ -25,7 +25,7 @@ class Policja extends SM {
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public static function guess(object $address): ?string {
-        global $POLICJA_ADDRESSES;
+        global $POLICE_ADDRESSES;
 
         $city = trimstr2lower($address->city ?? '');
 
@@ -37,36 +37,36 @@ class Policja extends SM {
             if ($byCoords) return $byCoords;
         }
 
-        if (array_key_exists("$city-miasto", $POLICJA_ADDRESSES))
+        if (array_key_exists("$city-miasto", $POLICE_ADDRESSES))
             return "$city-miasto";
 
         // post code level
         if (isset($address->postcode)) {
             $postcode = $address->postcode;
-            if (array_key_exists($postcode, $POLICJA_ADDRESSES))
+            if (array_key_exists($postcode, $POLICE_ADDRESSES))
                 return $postcode;
         }
 
         // city level
-        if (array_key_exists($city, $POLICJA_ADDRESSES))
+        if (array_key_exists($city, $POLICE_ADDRESSES))
             return $city;
 
         // county level | gmina
         if (isset($address->county)) {
             $county = trimstr2lower($address->county);
-            if (array_key_exists($county, $POLICJA_ADDRESSES))
+            if (array_key_exists($county, $POLICE_ADDRESSES))
                 return $county;
 
             // guessed county level (remove 'gmina ' from county name)
             $county = str_replace('gmina ', '', $county);
-            if (array_key_exists($county, $POLICJA_ADDRESSES))
+            if (array_key_exists($county, $POLICE_ADDRESSES))
                 return $county;
         }
 
         // municipality level | powiat
         if (isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
-            if (array_key_exists($municipality, $POLICJA_ADDRESSES))
+            if (array_key_exists($municipality, $POLICE_ADDRESSES))
                 return $municipality;
         }
 

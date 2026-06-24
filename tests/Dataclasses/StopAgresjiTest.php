@@ -15,9 +15,9 @@ class StopAgresjiTest extends TestCase
         self::assertTrue($sm->isPolice());
     }
 
-    public function testGuessPrefersSpecificPolicjaUnitOverVoivodeship(): void
+    public function testGuessPrefersSpecificPoliceUnitOverVoivodeship(): void
     {
-        // Otwock has a specific Policja entry (no voivodeship-level match needed)
+        // Otwock has a specific Police entry (no voivodeship-level match needed)
         $key = \StopAgresji::guess(new \JSONObject(['county' => 'Otwock', 'city' => '__']));
         self::assertEquals('otwock', $key);
     }

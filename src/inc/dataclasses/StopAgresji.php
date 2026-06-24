@@ -1,7 +1,7 @@
 <?PHP
 
 require_once(__DIR__ . '/SM.php');
-require_once(__DIR__ . '/Policja.php');
+require_once(__DIR__ . '/Police.php');
 
 class StopAgresji extends SM {
   public function unknown(): bool {
@@ -17,7 +17,7 @@ class StopAgresji extends SM {
   }
 
   /**
-   * Najpierw próbuje znaleźć konkretny komisariat Policji (Policja::guess()).
+   * Najpierw próbuje znaleźć konkretny komisariat Policji (Police::guess()).
    * Jeśli nic nie znajdzie, spada na poziom wojewódzki (gwarantowany fallback).
    * @SuppressWarnings(PHPMD.MissingImport)
    * @SuppressWarnings(PHPMD.CamelCaseVariableName)
@@ -25,11 +25,11 @@ class StopAgresji extends SM {
   public static function guess(object $address): string  { // stop agresji
     global $STOP_AGRESJI;
 
-    if ($key = \Policja::guess($address))
+    if ($key = \Police::guess($address))
       return $key;
 
     // a handful of city-level aliases (e.g. Warszawa) live directly in
-    // stop-agresji.json rather than policja.json, so Policja::guess() alone
+    // stop-agresji.json rather than police.json, so Police::guess() alone
     // can't find them.
     $city = trimstr2lower($address->city ?? '');
     if (array_key_exists("$city-miasto", $STOP_AGRESJI))
