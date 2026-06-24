@@ -1,6 +1,6 @@
 import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
-import { bindSoftCommentValidation } from "../lib/validation";
+import { bindSoftCommentValidation, bindSidewalkDrivingWitnessWarning } from "../lib/validation";
 
 // Constants for section class names
 const THIRD_IMAGE_SECTION_CLASS = 'thirdImageSection';
@@ -35,6 +35,7 @@ export const initHandlers = (map) => {
   validateExtensions();
 
   bindSoftCommentValidation();
+  bindSidewalkDrivingWitnessWarning();
 
   // File input change handler (event delegation)
   document.addEventListener("change", function (e) {

@@ -80,6 +80,23 @@ export function bindSoftCommentValidation() {
   }
 }
 
+export function bindSidewalkDrivingWitnessWarning() {
+  const witnessElement = /** @type {HTMLInputElement} */ (document.getElementById('witness'))
+  const categoryInputs = document.querySelectorAll('input[name="category"]')
+  if (!witnessElement || categoryInputs.length === 0) return
+
+  const warnIfNeeded = () => {
+    const selectedCategory = document?.querySelector('input[name="category"]:checked')?.value || '0'
+    if (selectedCategory === '18' && !witnessElement.checked) {
+      warning('<p>Wybrałeś/wybrałaś „Jazda po chodniku”. Policja często wymaga, aby zgłaszający był świadkiem tego zdarzenia.</p><a href="#statements">Zaznacz opcję „świadek momentu parkowania”</a>')
+    }
+  }
+
+  categoryInputs.forEach(input => input.addEventListener('change', warnIfNeeded))
+  witnessElement.addEventListener('change', warnIfNeeded)
+  warnIfNeeded()
+}
+
 export const checkDateTimeValue = function () {
   const datetimeInput = /** @type {HTMLInputElement} */ (document.getElementById('datetime'))
   datetimeInput.classList.remove("error")
