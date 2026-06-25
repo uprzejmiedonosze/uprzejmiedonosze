@@ -37,9 +37,7 @@ build_static() {
 }
 
 build_json() {
-    node tools/sm-parser.js src/api/config/sm.json           export/public/api/config/sm.json
-    node tools/sm-parser.js src/api/config/police.json       export/public/api/config/police.json
-    node tools/sm-parser.js src/api/config/stop-agresji.json export/public/api/config/stop-agresji.json
+    node tools/sm-parser.js src/api/config export/public/api/config
     node tools/badges-validator.js src/api/config/badges.json export/public/api/config/badges.json
     for f in src/api/config/*.json; do
         name=$(basename "$f")
