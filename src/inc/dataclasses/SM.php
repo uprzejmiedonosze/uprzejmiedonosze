@@ -79,6 +79,18 @@ class SM extends JSONObject {
     }
 
     /**
+     * Sprawdza, czy klucz istnieje w którejkolwiek z podanych tabel.
+     * Współdzielone przez SM::guess() i Police::guess() - różnią się tylko
+     * zestawem tabel przeszukiwanych na każdym poziomie szczegółowości.
+     */
+    protected static function matchesAnyTable(string $key, array ...$tables): bool {
+        foreach ($tables as $table) {
+            if (array_key_exists($key, $table)) return true;
+        }
+        return false;
+    }
+
+    /**
      * Szuka jednostki na każdym poziomie najpierw w $SM_ADDRESSES, a jeśli nie
      * znajdzie, także w $POLICE_ADDRESSES (gminy bez SM mają tam podstawiony
      * lokalny komisariat) — dopiero potem przechodzi do kolejnego poziomu.
@@ -94,13 +106,13 @@ class SM extends JSONObject {
         // post code level
         if(isset($address->postcode)) {
             $postcode = $address->postcode;
-            if(array_key_exists($postcode, $SM_ADDRESSES) || array_key_exists($postcode, $POLICE_ADDRESSES))
+            if(self::matchesAnyTable($postcode, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $postcode;
         }
 
         // city level
         $city = trimstr2lower($address->city ?? '');
-        if(array_key_exists($city, $SM_ADDRESSES) || array_key_exists($city, $POLICE_ADDRESSES)){
+        if(self::matchesAnyTable($city, $SM_ADDRESSES, $POLICE_ADDRESSES)){
             $smCity = $city;
             if($city == 'warszawa' && isset($address->district)){
                 if(array_key_exists($address->district, ODDZIALY_TERENOWE)){
@@ -113,19 +125,19 @@ class SM extends JSONObject {
         // county level | gmina
         if(isset($address->county)) {
             $county = trimstr2lower($address->county);
-            if(array_key_exists($county, $SM_ADDRESSES) || array_key_exists($county, $POLICE_ADDRESSES))
+            if(self::matchesAnyTable($county, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $county;
 
             // guessed county level (remove 'gmina ' from county name)
             $county = str_replace('gmina ', '', $county);
-            if(array_key_exists($county, $SM_ADDRESSES) || array_key_exists($county, $POLICE_ADDRESSES))
+            if(self::matchesAnyTable($county, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $county;
         }
 
         // municipality level | powiat
         if(isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
-            if(array_key_exists($municipality, $SM_ADDRESSES) || array_key_exists($municipality, $POLICE_ADDRESSES))
+            if(self::matchesAnyTable($municipality, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $municipality;
         }
         return '_nieznane';

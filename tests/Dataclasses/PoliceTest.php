@@ -13,7 +13,7 @@ class PoliceTest extends TestCase
         self::assertEquals('KPP w Otwocku', $police->getShortName());
         self::assertFalse($police->hasAPI());
         self::assertTrue($police->isPolice());
-        self::assertEquals('Police Otwock', $police->getCity());
+        self::assertEquals('Policja Otwock', $police->getCity());
     }
 
     public function testGuessByCoordinates(): void

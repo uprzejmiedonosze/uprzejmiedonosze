@@ -10,7 +10,7 @@ require_once(__DIR__ . '/PoliceStationAreas.php');
  */
 class Police extends SM {
     public function getCity(): string {
-        return "Police " . $this->city;
+        return "Policja " . $this->city;
     }
 
     public function isPolice(): bool {
@@ -43,30 +43,30 @@ class Police extends SM {
         // post code level
         if (isset($address->postcode)) {
             $postcode = $address->postcode;
-            if (array_key_exists($postcode, $POLICE_ADDRESSES))
+            if (self::matchesAnyTable($postcode, $POLICE_ADDRESSES))
                 return $postcode;
         }
 
         // city level
-        if (array_key_exists($city, $POLICE_ADDRESSES))
+        if (self::matchesAnyTable($city, $POLICE_ADDRESSES))
             return $city;
 
         // county level | gmina
         if (isset($address->county)) {
             $county = trimstr2lower($address->county);
-            if (array_key_exists($county, $POLICE_ADDRESSES))
+            if (self::matchesAnyTable($county, $POLICE_ADDRESSES))
                 return $county;
 
             // guessed county level (remove 'gmina ' from county name)
             $county = str_replace('gmina ', '', $county);
-            if (array_key_exists($county, $POLICE_ADDRESSES))
+            if (self::matchesAnyTable($county, $POLICE_ADDRESSES))
                 return $county;
         }
 
         // municipality level | powiat
         if (isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
-            if (array_key_exists($municipality, $POLICE_ADDRESSES))
+            if (self::matchesAnyTable($municipality, $POLICE_ADDRESSES))
                 return $municipality;
         }
 
