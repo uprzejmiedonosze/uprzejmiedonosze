@@ -66,7 +66,7 @@ class SM extends JSONObject {
 
     public function isPolice(): bool
     {
-        return str_contains($this->getEmail() ?? '', 'policja');
+        return false;
     }
 
     /**
