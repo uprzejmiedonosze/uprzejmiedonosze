@@ -400,12 +400,7 @@
         "hint": "Komenda w Strzelcach Opolskich przyjmuje zgłoszenia i nie wzywa na przesłuchania z automatu. Wzywa tylko, jeżeli w zgłoszeniu są błędy, albo sprawca nie przyznał się. Ogólnie wezwania są rzadkością, 2-3 wezwania na sto zgłoszeń."
     },
     "Ożarowice": {
-        "address": [
-            "Komenda Powiatowa Policji w Tarnowskich Górach",
-            "ul. Bytomska 6",
-            "42-600 Tarnowskie Góry"
-        ],
-        "email": "dyzurny@tarnowskie-gory.ka.policja.gov.pl"
+        "parent": "powiat tarnogórski"
     },
     "Prószków": {
         "address": [
@@ -1561,5 +1556,349 @@
         "email": "dyzurny@trzebnica.wr.policja.gov.pl",
         "voivodeship": "Dolnośląskie",
         "city": "Trzebnica"
+    },
+    "powiat bytomski": {
+        "address": [
+            "Komenda Miejska Policji w Bytomiu",
+            "ul. Powstańców Warszawskich 74",
+            "41-902 Bytom"
+        ],
+        "email": "komendant@bytom.ka.policja.gov.pl"
+    },
+    "powiat chorzowski": {
+        "address": [
+            "Komenda Miejska Policji w Chorzowie",
+            "ul. Legnicka 1",
+            "41-503 Chorzów"
+        ],
+        "email": "komendant@chorzow.ka.policja.gov.pl"
+    },
+    "powiat częstochowski": {
+        "address": [
+            "Komenda Miejska Policji w Częstochowie",
+            "ul. Popiełuszki 5",
+            "42-200 Częstochowa"
+        ],
+        "email": "komendant@czestochowa.ka.policja.gov.pl"
+    },
+    "powiat dąbrowski": {
+        "address": [
+            "Komenda Miejska Policji w Dąbrowie Górniczej",
+            "Al. Piłsudskiego 11",
+            "41-300 Dąbrowa Górnicza"
+        ],
+        "email": "komendant@dabrowa.ka.policja.gov.pl"
+    },
+    "powiat gliwicki": {
+        "address": [
+            "Komenda Miejska Policji w Gliwicach",
+            "ul. Powstańców Warszawy 10-12",
+            "44-100 Gliwice"
+        ],
+        "email": "komendant@gliwice.ka.policja.gov.pl"
+    },
+    "powiat jastrzębski": {
+        "address": [
+            "Komenda Miejska Policji w Jastrzębiu-Zdroju",
+            "ul. Śląska 12",
+            "44-335 Jastrzębie-Zdrój"
+        ],
+        "email": "komendant@jastrzebie.ka.policja.gov.pl"
+    },
+    "powiat jaworznicki": {
+        "address": [
+            "Komenda Miejska Policji w Jaworznie",
+            "ul. Narutowicza 1",
+            "43-600 Jaworzno"
+        ],
+        "email": "komendant@jaworzno.ka.policja.gov.pl"
+    },
+    "powiat mysłowicki": {
+        "address": [
+            "Komenda Miejska Policji w Mysłowicach",
+            "ul. Starokościelna 2",
+            "41-400 Mysłowice"
+        ],
+        "email": "komendant@myslowice.ka.policja.gov.pl"
+    },
+    "powiat piekarski": {
+        "address": [
+            "Komenda Miejska Policji w Piekarach Śląskich",
+            "ul. Kalwaryjska 62",
+            "41-940 Piekary Śląskie"
+        ],
+        "email": "komendant@piekary.ka.policja.gov.pl"
+    },
+    "powiat rudzki": {
+        "address": [
+            "Komenda Miejska Policji w Rudzie Śląskiej",
+            "ul. Hallera 9",
+            "41-709 Ruda Śląska"
+        ],
+        "email": "komendant@ruda.ka.policja.gov.pl"
+    },
+    "powiat rybnicki": {
+        "address": [
+            "Komenda Miejska Policji w Rybniku",
+            "Pl. Armii Krajowej 5",
+            "44-200 Rybnik"
+        ],
+        "email": "komendant@rybnik.ka.policja.gov.pl"
+    },
+    "powiat siemianowicki": {
+        "address": [
+            "Komenda Miejska Policji w Siemianowicach Śląskich",
+            "ul. Jana Pawła II 16",
+            "41-100 Siemianowice Śląskie"
+        ],
+        "email": "komendant@siemianowice.ka.policja.gov.pl"
+    },
+    "powiat sosnowiecki": {
+        "address": [
+            "Komenda Miejska Policji w Sosnowcu",
+            "ul. Janowskiego 16",
+            "41-200 Sosnowiec"
+        ],
+        "email": "komendant@sosnowiec.ka.policja.gov.pl"
+    },
+    "powiat świętochłowicki": {
+        "address": [
+            "Komenda Miejska Policji w Świętochłowicach",
+            "ul. Wojska Polskiego 16c",
+            "41-600 Świętochłowice"
+        ],
+        "email": "komendant@swietochlowice.ka.policja.gov.pl"
+    },
+    "powiat tyski": {
+        "address": [
+            "Komenda Miejska Policji w Tychach",
+            "Al. Bielska 46",
+            "43-100 Tychy"
+        ],
+        "email": "komendant@tychy.ka.policja.gov.pl"
+    },
+    "powiat zabrski": {
+        "address": [
+            "Komenda Miejska Policji w Zabrzu",
+            "ul. 1-go Maja 10",
+            "41-800 Zabrze"
+        ],
+        "email": "komendant@zabrze.ka.policja.gov.pl"
+    },
+    "powiat będziński": {
+        "address": [
+            "Komenda Powiatowa Policji w Będzinie",
+            "ul. Generała Józefa Bema 1",
+            "42-500 Będzin"
+        ],
+        "email": "komendant@bedzin.ka.policja.gov.pl"
+    },
+    "powiat cieszyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Cieszynie",
+            "ul. Wojska Polskiego 2",
+            "43-400 Cieszyn"
+        ],
+        "email": "komendant@cieszyn.ka.policja.gov.pl"
+    },
+    "powiat lubliniecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Lublińcu",
+            "ul. Oświęcimska 6",
+            "42-700 Lubliniec"
+        ],
+        "email": "komendant@lubliniec.ka.policja.gov.pl"
+    },
+    "powiat myszkowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Myszkowie",
+            "ul. Kościuszki 105",
+            "42-300 Myszków"
+        ],
+        "email": "komendant@myszkow.ka.policja.gov.pl"
+    },
+    "powiat pszczyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Pszczynie",
+            "ul. Bogedaina 18",
+            "43-200 Pszczyna"
+        ],
+        "email": "komendant@pszczyna.ka.policja.gov.pl"
+    },
+    "powiat raciborski": {
+        "address": [
+            "Komenda Powiatowa Policji w Raciborzu",
+            "ul. Bosacka 42",
+            "47-400 Racibórz"
+        ],
+        "email": "komendant@raciborz.ka.policja.gov.pl"
+    },
+    "powiat wodzisławski": {
+        "address": [
+            "Komenda Powiatowa Policji w Wodzisławiu Śląskim",
+            "ul. Kokoszycka 180b",
+            "44-313 Wodzisław Śląski"
+        ],
+        "email": "komendant@wodzislaw.ka.policja.gov.pl"
+    },
+    "powiat zawierciański": {
+        "address": [
+            "Komenda Powiatowa Policji w Zawierciu",
+            "ul. Kasprowicza 9",
+            "42-400 Zawiercie"
+        ],
+        "email": "komendant@zawiercie.ka.policja.gov.pl"
+    },
+    "powiat żywiecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Żywcu",
+            "Al. Piłsudskiego 52",
+            "34-300 Żywiec"
+        ],
+        "email": "komendant@zywiec.ka.policja.gov.pl"
+    },
+    "powiat tarnogórski": {
+        "address": [
+            "Komenda Powiatowa Policji w Tarnowskich Górach",
+            "ul. Bytomska 6",
+            "42-600 Tarnowskie Góry"
+        ],
+        "email": "dyzurny@tarnowskie-gory.ka.policja.gov.pl"
+    },
+    "powiat bolesławiecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Bolesławcu",
+            "ul. Modłowa 3",
+            "59-700 Bolesławiec"
+        ],
+        "email": "dyzurny@boleslawiec.wr.policja.gov.pl"
+    },
+    "powiat dzierżoniowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Dzierżoniowie",
+            "ul. Ząbkowicka 57",
+            "58-200 Dzierżoniów"
+        ],
+        "email": "dyzurny@dzierzoniow.wr.policja.gov.pl"
+    },
+    "powiat górowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Górze",
+            "ul. Podwale 26",
+            "56-200 Góra"
+        ],
+        "email": "dyzurny@gora.wr.policja.gov.pl"
+    },
+    "powiat jaworski": {
+        "address": [
+            "Komenda Powiatowa Policji w Jaworze",
+            "ul. Armii Krajowej 2",
+            "59-400 Jawor"
+        ],
+        "email": "dyzurny@jawor.wr.policja.gov.pl"
+    },
+    "powiat kamiennogórski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kamiennej Górze",
+            "ul. Lubawska 6",
+            "58-400 Kamienna Góra"
+        ],
+        "email": "dyzurny@kamienna-gora.wr.policja.gov.pl"
+    },
+    "powiat kłodzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Kłodzku",
+            "pl. Chopina 2",
+            "57-300 Kłodzko"
+        ],
+        "email": "dyzurny@klodzko.wr.policja.gov.pl"
+    },
+    "powiat lubański": {
+        "address": [
+            "Komenda Powiatowa Policji w Lubaniu",
+            "ul. Sikorskiego 4",
+            "59-800 Lubań"
+        ],
+        "email": "dyzurny@luban.wr.policja.gov.pl"
+    },
+    "powiat lubiński": {
+        "address": [
+            "Komenda Powiatowa Policji w Lubinie",
+            "ul. Traugutta 3",
+            "59-300 Lubin"
+        ],
+        "email": "dyzurny@lubin.wr.policja.gov.pl"
+    },
+    "powiat lwówecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Lwówku Śląskim",
+            "ul. Jana Pawła II 12",
+            "59-600 Lwówek Śląski"
+        ],
+        "email": "dyzurny@lwowek-slaski.wr.policja.gov.pl"
+    },
+    "powiat milicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Miliczu",
+            "ul. Kościuszki 4",
+            "56-300 Milicz"
+        ],
+        "email": "dyzurny@milicz.wr.policja.gov.pl"
+    },
+    "powiat oławski": {
+        "address": [
+            "Komenda Powiatowa Policji w Oławie",
+            "ul. Kopernika 1",
+            "55-200 Oława"
+        ],
+        "email": "dyzurny@olawa.wr.policja.gov.pl"
+    },
+    "powiat polkowicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Polkowicach",
+            "ul. Legnicka 15",
+            "59-100 Polkowice"
+        ],
+        "email": "dyzurny@polkowice.wr.policja.gov.pl"
+    },
+    "powiat strzeliński": {
+        "address": [
+            "Komenda Powiatowa Policji w Strzelinie",
+            "ul. Wolności 15",
+            "57-100 Strzelin"
+        ],
+        "email": "dyzurny@strzelin.wr.policja.gov.pl"
+    },
+    "powiat średzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Środzie Śląskiej",
+            "ul. Św. Andrzeja 2",
+            "55-300 Środa Śląska"
+        ],
+        "email": "dyzurny@sroda-slaska.wr.policja.gov.pl"
+    },
+    "powiat świdnicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Świdnicy",
+            "ul. Jagiellońska 23",
+            "58-100 Świdnica"
+        ],
+        "email": "dyzurny@swidnica.wr.policja.gov.pl"
+    },
+    "powiat ząbkowicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Ząbkowicach Śląskich",
+            "ul. Niepodległości 10",
+            "57-200 Ząbkowice Śląskie"
+        ],
+        "email": "dyzurny@zabkowice-slaskie.wr.policja.gov.pl"
+    },
+    "powiat złotoryjski": {
+        "address": [
+            "Komenda Powiatowa Policji w Złotoryi",
+            "ul. Kościuszki 5",
+            "59-500 Złotoryja"
+        ],
+        "email": "dyzurny@zlotoryja.wr.policja.gov.pl"
     }
 }
