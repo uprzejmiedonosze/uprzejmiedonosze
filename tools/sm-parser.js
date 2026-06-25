@@ -53,6 +53,25 @@ if(email.length) console.error('email problem', email)
 const api = smArray.filter(([_e, v]) => ! ['MailGun', 'Poznan', 'Mail', 'MailGunAlter'].includes(v.api))
 if(api.length) console.error('api problem', api)
 
-if ((zip.length + email.length + api.length) != 0) process.exit(1)
+const isSm = input.endsWith('sm.json')
+const isPolice = input.endsWith('police.json')
+
+const straz = isSm
+	? smArray.filter(([_e, v]) => !/Straż\w* (Miejsk|Gminn)\w*/i.test(v.address.join(' ')))
+	: []
+if(straz.length) console.error('straz phrase problem:', straz)
+
+const smPolicja = isSm
+	? smArray.filter(([_e, v]) => v.address.join(' ').toLowerCase().includes('policja')
+		|| (v.email && v.email.toLowerCase().includes('policja')))
+	: []
+if(smPolicja.length) console.error('sm policja problem:', smPolicja)
+
+const policjaEmail = isPolice
+	? smArray.filter(([_e, v]) => !v.email || !v.email.toLowerCase().includes('policja'))
+	: []
+if(policjaEmail.length) console.error('policja email problem:', policjaEmail)
+
+if ((zip.length + email.length + api.length + straz.length + smPolicja.length + policjaEmail.length) != 0) process.exit(1)
 
 fs.writeFileSync(output, JSON.stringify(sm))
