@@ -1,11 +1,12 @@
 ---
-description: Uruchom testy, uzupełnij changelog, zrób commit i push
-allowed-tools: Bash(date:*), Bash(make:*), Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*), Bash(head:*), Read, Edit
+description: Uruchom testy, zrób commit, a na branchu main uzupełnij changelog i wykonaj push
+allowed-tools: Bash(date:*), Bash(make:*), Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*), Bash(git branch:*), Bash(head:*), Read, Edit
 ---
 
 ## Kontekst
 
 - Dzisiejsza data: !`date '+%A, %-d %B %Y' | LC_TIME=pl_PL.UTF-8 date -f - '+%A, %-d %B %Y' 2>/dev/null || LC_ALL=pl_PL.UTF-8 date '+%A, %-d %B %Y'`
+- Aktualny branch: !`git branch --show-current`
 - Status repozytorium: !`git status`
 - Staged diff: !`git diff --staged`
 - Unstaged diff (jeśli nic nie jest staged): !`git diff`
@@ -19,15 +20,19 @@ Wykonaj poniższe kroki **w tej kolejności**. Zatrzymaj się i zgłoś błąd, 
 
 Uruchom `make test`. Jeśli testy nie przejdą, zatrzymaj się i opisz błąd. Nie wykonuj kolejnych kroków.
 
-### Krok 2 — Ustal zakres zmian
+### Krok 2 — Ustal zakres zmian i branch
 
 Sprawdź `git status`:
 - Jeśli są staged pliki → commit obejmuje wyłącznie staged pliki (użyj `git diff --staged` do analizy zmian).
 - Jeśli nic nie jest staged → commit obejmie wszystkie zmienione/nieśledzone pliki (użyj `git diff` do analizy zmian). W takim razie przed commitem zastosuj `git add` dla wszystkich zmienionych plików.
 
-Nie commituj pliku `src/templates/changelog.html.twig` osobno — trafi do tego samego commita co pozostałe zmiany.
+Sprawdź aktualny branch (`git branch --show-current`):
+- Jeśli to **`main`** → wykonaj Krok 3 (changelog) i Krok 5 (push).
+- Jeśli to **inny branch** → **pomiń Krok 3 i Krok 5** w całości: nie zmieniaj `changelog.html.twig` i nie wykonuj `git push`. Commit zostaje lokalnie na branchu.
 
-### Krok 3 — Changelog
+Nie commituj pliku `src/templates/changelog.html.twig` osobno — gdy go aktualizujesz (czyli na `main`), trafia do tego samego commita co pozostałe zmiany.
+
+### Krok 3 — Changelog (tylko na branchu `main`)
 
 Przeczytaj `src/templates/changelog.html.twig` i zaktualizuj go:
 
@@ -39,8 +44,8 @@ Treść wpisu: krótki opis po polsku tego, co zmieniają pliki objęte commitem
 
 ### Krok 4 — Commit
 
-Zrób commit (staged pliki + `src/templates/changelog.html.twig`). Opis commita po angielsku, zgodny z konwencją obecną w `git log --oneline -10`.
+Zrób commit (staged pliki + `src/templates/changelog.html.twig`, jeśli był aktualizowany w Kroku 3). Opis commita po angielsku, zgodny z konwencją obecną w `git log --oneline -10`.
 
-### Krok 5 — Push
+### Krok 5 — Push (tylko na branchu `main`)
 
-Wykonaj `git push`.
+Jeśli jesteś na `main`, wykonaj `git push`. Na innym branchu nie wykonuj push — zakończ na commicie.
