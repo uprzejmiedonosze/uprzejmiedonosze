@@ -58,7 +58,7 @@ jobs:
           done
           php tools/police-stations.php \
             src/api/config/police-stations.csv \
-            export/public/api/config/stop-agresji.json \
+            export/public/api/config/police.json \
             > export/public/api/config/police-stations.pjson
 
       - name: Prepare test environment
