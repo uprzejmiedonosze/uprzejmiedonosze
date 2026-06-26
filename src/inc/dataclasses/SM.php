@@ -43,9 +43,13 @@ class SM extends JSONObject {
         return strtr($this->address[0], [
             'Straż Miejska' => 'SM',
             'Straż Gminna' => 'SG',
+            'Referat Oskarżycieli Publicznych' => 'ROP SM',
+            'Oddział Terenowy' => 'OT',
             'Komenda Powiatowa Policji' => 'KPP',
             'Komenda Powiatowa' => 'KPP',
+            'Komenda Miejska Policji' => 'KMP',
             'Komenda Miejska' => 'KMP',
+            'Komenda Stołeczna Policji' => 'KSP',
             'Komisariat Policji' => 'KP',
             'Posterunek Policji' => 'PP',
             'Komenda Wojewódzka Policji' => 'KWP'
