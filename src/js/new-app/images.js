@@ -1,4 +1,3 @@
-import { heicTo } from "heic-to"
 import ExifReader from 'exifreader'
 
 import { setAddressByLatLng } from "../lib/geolocation";
@@ -34,9 +33,7 @@ export async function checkFile(file, id) {
     imageToResize.src = await imageToDataUri(file)
   } catch (err) {
     imageError(id, err.message || String(err))
-    Sentry.captureException(err, {
-      extra: Object.prototype.toString.call(file)
-    })
+    Sentry.captureException(err, { extra: { fileType: file.type } })
     return
   }
 
@@ -165,14 +162,13 @@ function getDateTimeFromExif(exif) {
 }
 
 async function isHeicFile(file) {
-  if (/hei/i.test(file.type)) return true
+  if (/hei(c|f)/i.test(file.type)) return true
   if (file.size < 12) return false
   const buf = await file.slice(4, 12).arrayBuffer()
   const brand = String.fromCharCode(...new Uint8Array(buf))
-  return brand.startsWith('ftyp') && /hei|mif1|msf1/.test(brand)
+  return brand.startsWith('ftyp') && /hei[cfx]|mif1|msf1/.test(brand)
 }
 
-/** Safari/WebKit decodes HEIC via the OS; libheif in heic-to can't handle all iOS 18+ variants. */
 async function heicToObjectUrl(file) {
   if (typeof createImageBitmap === 'function') {
     try {
@@ -190,12 +186,13 @@ async function heicToObjectUrl(file) {
         canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', 0.95)
       )
       return URL.createObjectURL(blob)
-    } catch {
-      // Chrome/Firefox or unsupported variant — fall through to WASM decoder
+    } catch (err) {
+      Sentry.captureException(err, { extra: { heicDecoder: 'native' } })
     }
   }
 
-  const blob = await heicTo({ blob: file, type: "image/jpeg", quality: 0.95 })
+  const { heicTo } = await import('heic-to')
+  const blob = await heicTo({ blob: file, type: 'image/jpeg', quality: 0.95 })
   return URL.createObjectURL(blob)
 }
 
