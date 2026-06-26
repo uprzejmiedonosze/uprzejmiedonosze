@@ -1,4 +1,4 @@
-import heic2any from "heic2any"
+import { heicTo } from "heic-to"
 import ExifReader from 'exifreader'
 
 import { setAddressByLatLng } from "../lib/geolocation";
@@ -30,7 +30,19 @@ export async function checkFile(file, id) {
 
   const imageToResize = document.createElement('img')
 
-  imageToResize.src = await imageToDataUri(file)
+  try {
+    imageToResize.src = await imageToDataUri(file)
+  } catch (err) {
+    imageError(id, err.message || String(err))
+    Sentry.captureException(err, {
+      extra: Object.prototype.toString.call(file)
+    })
+    return
+  }
+
+  imageToResize.addEventListener("error", () => {
+    imageError(id, 'Nie można wczytać zdjęcia')
+  })
   imageToResize.addEventListener("load", async () => {
     try {
       const resizedImage = resizeImage(imageToResize)
@@ -152,10 +164,44 @@ function getDateTimeFromExif(exif) {
   return dateTime?.description
 }
 
+async function isHeicFile(file) {
+  if (/hei/i.test(file.type)) return true
+  if (file.size < 12) return false
+  const buf = await file.slice(4, 12).arrayBuffer()
+  const brand = String.fromCharCode(...new Uint8Array(buf))
+  return brand.startsWith('ftyp') && /hei|mif1|msf1/.test(brand)
+}
+
+/** Safari/WebKit decodes HEIC via the OS; libheif in heic-to can't handle all iOS 18+ variants. */
+async function heicToObjectUrl(file) {
+  if (typeof createImageBitmap === 'function') {
+    try {
+      const bitmap = await createImageBitmap(file)
+      const canvas = document.createElement('canvas')
+      canvas.width = bitmap.width
+      canvas.height = bitmap.height
+      const ctx = canvas.getContext('2d')
+      if (!ctx) throw new Error('Canvas not supported')
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(bitmap, 0, 0)
+      bitmap.close()
+      const blob = await new Promise((resolve, reject) =>
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', 0.95)
+      )
+      return URL.createObjectURL(blob)
+    } catch {
+      // Chrome/Firefox or unsupported variant — fall through to WASM decoder
+    }
+  }
+
+  const blob = await heicTo({ blob: file, type: "image/jpeg", quality: 0.95 })
+  return URL.createObjectURL(blob)
+}
+
 async function imageToDataUri(img) {
-  if (img.type.includes('hei')) {
-    const blob = await heic2any({ blob: img, toType: "image/jpeg" })
-    return URL.createObjectURL(blob)
+  if (await isHeicFile(img)) {
+    return heicToObjectUrl(img)
   } else {
     return await pngToDataUri(img)
   }
