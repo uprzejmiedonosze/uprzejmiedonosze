@@ -126,7 +126,6 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
     $group->post('/dziekujemy.html', ApplicationHandler::class . ':finish');
     $group->get('/dziekujemy.html', function () { return AbstractHandler::redirect('/moje-zgloszenia.html'); });
 
-    $group->get('/brak-sm.html', ApplicationHandler::class . ':missingSM');
     $group->get('/moje-zgloszenia.html', ApplicationHandler::class . ':myApps');
     $group->get('/my-apps-partial.html', ApplicationHandler::class . ':myAppsPartial');
     $group->get('/short-{appId}-partial.html', ApplicationHandler::class . ':applicationShortHtml');

@@ -5,6 +5,9 @@ import { error } from "./toast"
 let map // represents mapboxgl.Map
 let stopAgresji = false
 let lastNominatim = null
+let smUnknown = false
+
+export function isSMUnknown() { return smUnknown }
 
 export function initMaps(lastLocation, _stopAgresji) {
   stopAgresji = _stopAgresji ?? false
@@ -124,14 +127,20 @@ function clearUnitLabels() {
   setUnitLabel('sa', '', '')
 }
 
-// Shows the actual unit name on both options, but only the currently
-// selected option gets its extra hint (e.g. "no SM known for this city").
+// Shows the actual unit name on both options; disables SM radio when no SM
+// exists for this location and switches to Police automatically.
 function renderSM() {
   if (!lastNominatim) return
-  const smName = lastNominatim.sm?.email ? lastNominatim.sm.address[0] : ''
+  smUnknown = !lastNominatim.sm?.email
+  const smName = smUnknown ? '' : lastNominatim.sm.address[0]
   const saName = lastNominatim.sa?.address?.[0] ?? ''
-  setUnitLabel('sm', smName, !stopAgresji ? (lastNominatim.sm?.hint ?? '') : '')
+  const city = lastNominatim.address?.city ?? ''
+  const smHint = smUnknown
+    ? `W miejscowości ${city} nie powołano SM`
+    : (!stopAgresji ? (lastNominatim.sm?.hint ?? '') : '')
+  setUnitLabel('sm', smName, smHint)
   setUnitLabel('sa', saName, stopAgresji ? (lastNominatim.sa?.hint ?? '') : '')
+  document.dispatchEvent(new CustomEvent('geo:smUpdate'))
 }
 
 // Lets the new-application form switch SM/Policja ad hoc without re-fetching
@@ -195,7 +204,9 @@ async function latLngToAddress(lat, lng, from) {
   } catch (_e) {
     running = false
     lastNominatim = null
+    smUnknown = false
     clearUnitLabels()
+    document.dispatchEvent(new CustomEvent('geo:smUpdate'))
     return
   }
 
