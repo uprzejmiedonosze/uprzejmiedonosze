@@ -189,10 +189,6 @@ class SessionApiHandler extends AbstractHandler {
         try {
             $application = sendApplication($appId, $user);
             \telemetry\log('report_sent', $appId);
-        } catch (MissingSMException $e) {
-            return $this->renderJson($response, array(
-                "status" => "redirect"
-            ));
         } catch (NotSendableException $e) {
             return $this->renderJson($response->withStatus(409), array(
                 "error" => $e->getMessage()

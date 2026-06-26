@@ -4,11 +4,7 @@
 {% set shortTitle = '' %}
 {% set mainClass = 'confirm-application' %}
 {% set sm = app.guessSMData() %}
-{% set forcedPolice = app.stopAgresjiForced ?? false %}
 {% set smName = sm.getName %}
-{% if forcedPolice %}
-{% set smName = '<b class="lightWarning">' ~ sm.getName ~ '</b>' %}
-{% endif %}
 
 {% if not app.automatedSM %}
 {% set rightButton = 'newAppSave' %}
@@ -33,12 +29,6 @@
 </p>
 {% endif %}
 
-{% if forcedPolice %}
-<p><b class="forcedPoliceInfo lightWarning">
-        Straż Miejska nie ma uprawnień do karania wykroczenie tej kategorii.
-        Uprzejmie zmieniliśmy adresata na {{ sm.getShortName }}.
-    </b></p>
-{% endif %}
 
 <div class="application">
     <div class="grid">

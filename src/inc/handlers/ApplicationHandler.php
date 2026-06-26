@@ -238,30 +238,6 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
-    public function missingSM(Request $request, Response $response): Response {
-        $params = $request->getQueryParams();
-        $appId = $this->getParam($params, 'id', -1);
-        $appCity = '';
-        $appNumber = '';
-        $address = '';
-        if ($appId !== -1) {
-            try {
-                $app = \app\get($appId);
-                $appCity = $app->address->city;
-                $appNumber = $app->number;
-                $address = $app->getMapUrl();
-            } catch (Exception $e) {
-            }
-        }
-
-        return AbstractHandler::renderHtml($request, $response, 'brak-sm', [
-            'appCity' => $appCity,
-            'appNumber' => $appNumber,
-            'appId' => $appId,
-            'address' => $address
-        ]);
-    }
-
     public function myApps(Request $request, Response $response): Response {
         $user = $request->getAttribute('user');
         $params = $request->getQueryParams();

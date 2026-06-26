@@ -1,7 +1,7 @@
 import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
 import { bindSoftCommentValidation } from "../lib/validation";
-import { setStopAgresji } from "../lib/geolocation";
+import { setStopAgresji, isSMUnknown } from "../lib/geolocation";
 
 // Constants for section class names
 const THIRD_IMAGE_SECTION_CLASS = 'thirdImageSection';
@@ -110,6 +110,11 @@ export const initHandlers = (map) => {
   }
 
 
+  document.addEventListener('geo:smUpdate', () => {
+    const selectedCategory = document.querySelector('input[name="category"]:checked');
+    syncUnitToggleWithCategory(selectedCategory);
+  });
+
   const formSubmit = document.getElementById("form-submit");
   if (formSubmit) {
     formSubmit.addEventListener("click", function () {
@@ -183,10 +188,11 @@ function syncUnitToggleWithCategory(categoryRadio) {
   const saRadio = /** @type {HTMLInputElement} */ (document.getElementById('unit-sa'));
   if (!smRadio || !saRadio) return;
 
-  const policeOnly = categoryRadio.getAttribute('data-stop-agresji-only') === '1';
+  const policeOnly = categoryRadio?.getAttribute('data-stop-agresji-only') === '1';
+  const smDisabled = policeOnly || isSMUnknown();
 
-  if (policeOnly) {
-    if (!rememberedUnitChoice) {
+  if (smDisabled) {
+    if (policeOnly && !rememberedUnitChoice) {
       rememberedUnitChoice = smRadio.checked ? 'SM' : 'SA';
     }
     smRadio.disabled = true;
