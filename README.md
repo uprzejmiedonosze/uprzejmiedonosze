@@ -26,15 +26,17 @@ cd uprzejmiedonosze
 
 ## Local secrets setup
 
-Create `services/.env.dev` (gitignored) with your dev credentials. Use the structure below — all values are required for full functionality, but the app will start without optional ones:
+Dev defaults (crypto keys, mail sender, Mailpit DSN, etc.) live in **`config.dev.php`** at the repo root — loaded automatically in Docker dev.
+
+Create `services/.env.dev` (gitignored) only for overrides or extra secrets not in `config.dev.php`:
 
 ```bash
-# Mandatory for encryption / sessions
+# Mandatory for encryption / sessions (if not in config.dev.php)
 CRYPTO_KEY=...
 CRYPTO_IV=...
 CRYPTO_TAG=...
 
-# Firebase, Maps, ALPR, Mail, etc. (optional — app runs without them)
+# Firebase, Maps, ALPR, etc. (optional — app runs without them)
 MAPBOX_API_TOKEN=...
 GOOGLE_MAPS_API_TOKEN=...
 # ... see AGENTS.md for the full list
@@ -47,6 +49,12 @@ Ask the maintainer for a pre-filled `services/.env.dev` if you're joining the pr
 The dev profile starts a **Firebase Auth Emulator** automatically — no real Firebase project needed for local development. The emulator UI is available at `http://localhost:4000`.
 
 If you need a real Firebase project (for staging/prod), see the maintainer.
+
+## Email preview (Mailpit)
+
+The dev profile also starts **Mailpit** — outgoing mail is captured locally instead of hitting Mailgun. After sending a report, open the inbox at `http://localhost:8025` to preview the message body and PDF/ZIP attachments.
+
+Configured via `MAILER_DSN` in `config.dev.php` (`smtp://mailpit:1025`). Without a DSN, dev keeps the old dry-run behaviour (status updates, no message captured).
 
 ## Running
 
@@ -78,6 +86,11 @@ The Firebase emulator maps all logins to the pre-filled test account `e@nieradka
 **Open Firebase emulator UI:**
 ```bash
 make emulator-ui
+```
+
+**Open Mailpit (local email inbox):**
+```bash
+make mailpit-ui
 ```
 
 **View logs:**

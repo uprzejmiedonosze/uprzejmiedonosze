@@ -179,6 +179,10 @@ dev:
 emulator-ui: ## Open Firebase emulator UI in browser
 	@open http://localhost:4000
 
+.PHONY: mailpit-ui
+mailpit-ui: ## Open Mailpit inbox in browser
+	@open http://localhost:8025
+
 # ── Help ──────────────────────────────────────────────────────────────────────
 
 .PHONY: help

@@ -18,47 +18,52 @@ $STOP_AGRESJI = \json\get('stop-agresji.json', 'StopAgresji');
 $LEVELS = \json\get('levels.json', 'Level');
 $BADGES = \json\get('badges.json');
 
-if (!getenv('APP_ENV') && is_file(__DIR__ . '/../config.prod.php')) {
+$_appEnv = getenv('APP_ENV');
+$_configDev = __DIR__ . '/../config.dev.php';
+if ($_appEnv !== 'prod' && $_appEnv !== 'staging' && is_file($_configDev)) {
+    require $_configDev;
+} elseif (!getenv('APP_ENV') && is_file(__DIR__ . '/../config.prod.php')) {
     // Non-Docker deployment (quickfix rsync): config.prod.php generated from .env.prod at build time
     require __DIR__ . '/../config.prod.php';
-} else {
-define('SMTP_HOST',    getenv('SMTP_HOST')    ?: '');
-define('SMTP_USER',    getenv('SMTP_USER')    ?: '');
-define('EMAIL_SENDER', getenv('EMAIL_SENDER') ?: '');
-define('SMTP_PASS',    getenv('SMTP_PASS')    ?: '');
-define('SMTP_GMAIL',   getenv('SMTP_GMAIL')   ?: '');
-
-define('PLATERECOGNIZER_SECRET', getenv('PLATERECOGNIZER_SECRET') ?: '');
-define('OPEN_ALPR_SECRET_1',     getenv('OPEN_ALPR_SECRET_1')     ?: '');
-define('OPEN_ALPR_SECRET_2',     getenv('OPEN_ALPR_SECRET_2')     ?: '');
-define('MAPBOX_API_TOKEN',       getenv('MAPBOX_API_TOKEN')       ?: '');
-define('GOOGLE_MAPS_API_TOKEN',  getenv('GOOGLE_MAPS_API_TOKEN')  ?: '');
-define('PATRONITE_TOKEN',        getenv('PATRONITE_TOKEN')        ?: '');
-
-define('MAILER_DSN',            getenv('MAILER_DSN')            ?: '');
-define('MAILER_FROM',           getenv('MAILER_FROM')           ?: '');
-define('MAILER_WEBHOOK_SECRET', getenv('MAILER_WEBHOOK_SECRET') ?: '');
-define('MAILER_DSN_ALTER',      getenv('MAILER_DSN_ALTER')      ?: '');
-define('MAILER_FROM_ALTER',     getenv('MAILER_FROM_ALTER')     ?: '');
-
-define('CRYPTO_KEY', getenv('CRYPTO_KEY') ?: '');
-define('CRYPTO_IV',  getenv('CRYPTO_IV')  ?: '');
-define('CRYPTO_TAG', getenv('CRYPTO_TAG') ?: '');
-
-define('OPENAI_API_KEY',  getenv('OPENAI_API_KEY')  ?: '');
-define('GOOGLE_API_KEY',  getenv('GOOGLE_API_KEY')  ?: '');
-define('OPENAI_PROJECT',  getenv('OPENAI_PROJECT')  ?: '');
-
-define('MATOMO_SITE_ID',     (int)(getenv('MATOMO_SITE_ID') ?: 1));
-define('BACKEND_API_KEY',    getenv('BACKEND_API_KEY')    ?: '');
-define('CORS_ALLOWED_DOMAIN', getenv('CORS_ALLOWED_DOMAIN') ?: '');
-
-define('S3_KEY',      getenv('S3_KEY')      ?: '');
-define('S3_SECRET',   getenv('S3_SECRET')   ?: '');
-define('S3_BUCKET',   getenv('S3_BUCKET')   ?: '');
-define('S3_ENDPOINT', getenv('S3_ENDPOINT') ?: '');
-define('S3_REGION',   getenv('S3_REGION')   ?: '');
 }
+
+if (!defined('SMTP_HOST'))    define('SMTP_HOST',    getenv('SMTP_HOST')    ?: '');
+if (!defined('SMTP_USER'))    define('SMTP_USER',    getenv('SMTP_USER')    ?: '');
+if (!defined('EMAIL_SENDER')) define('EMAIL_SENDER', getenv('EMAIL_SENDER') ?: '');
+if (!defined('SMTP_PASS'))    define('SMTP_PASS',    getenv('SMTP_PASS')    ?: '');
+if (!defined('SMTP_GMAIL'))   define('SMTP_GMAIL',   getenv('SMTP_GMAIL')   ?: '');
+
+if (!defined('PLATERECOGNIZER_SECRET')) define('PLATERECOGNIZER_SECRET', getenv('PLATERECOGNIZER_SECRET') ?: '');
+if (!defined('OPEN_ALPR_SECRET_1'))     define('OPEN_ALPR_SECRET_1',     getenv('OPEN_ALPR_SECRET_1')     ?: '');
+if (!defined('OPEN_ALPR_SECRET_2'))     define('OPEN_ALPR_SECRET_2',     getenv('OPEN_ALPR_SECRET_2')     ?: '');
+if (!defined('MAPBOX_API_TOKEN'))       define('MAPBOX_API_TOKEN',       getenv('MAPBOX_API_TOKEN')       ?: '');
+if (!defined('GOOGLE_MAPS_API_TOKEN'))  define('GOOGLE_MAPS_API_TOKEN',  getenv('GOOGLE_MAPS_API_TOKEN')  ?: '');
+if (!defined('PATRONITE_TOKEN'))        define('PATRONITE_TOKEN',        getenv('PATRONITE_TOKEN')        ?: '');
+
+if (!defined('MAILER_DSN'))            define('MAILER_DSN',            getenv('MAILER_DSN')            ?: '');
+if (!defined('MAILER_FROM'))           define('MAILER_FROM',           getenv('MAILER_FROM')           ?: '');
+if (!defined('MAILER_WEBHOOK_SECRET')) define('MAILER_WEBHOOK_SECRET', getenv('MAILER_WEBHOOK_SECRET') ?: '');
+if (!defined('MAILER_DSN_ALTER'))      define('MAILER_DSN_ALTER',      getenv('MAILER_DSN_ALTER')      ?: '');
+if (!defined('MAILER_FROM_ALTER'))     define('MAILER_FROM_ALTER',     getenv('MAILER_FROM_ALTER')     ?: '');
+
+if (!defined('CRYPTO_KEY')) define('CRYPTO_KEY', getenv('CRYPTO_KEY') ?: '');
+if (!defined('CRYPTO_IV'))  define('CRYPTO_IV',  getenv('CRYPTO_IV')  ?: '');
+if (!defined('CRYPTO_TAG')) define('CRYPTO_TAG', getenv('CRYPTO_TAG') ?: '');
+
+if (!defined('OPENAI_API_KEY')) define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: '');
+if (!defined('GOOGLE_API_KEY')) define('GOOGLE_API_KEY', getenv('GOOGLE_API_KEY') ?: '');
+if (!defined('OPENAI_PROJECT')) define('OPENAI_PROJECT', getenv('OPENAI_PROJECT') ?: '');
+
+if (!defined('MATOMO_SITE_ID'))     define('MATOMO_SITE_ID',     (int)(getenv('MATOMO_SITE_ID') ?: 1));
+if (!defined('BACKEND_API_KEY'))    define('BACKEND_API_KEY',    getenv('BACKEND_API_KEY')    ?: '');
+if (!defined('CORS_ALLOWED_DOMAIN')) define('CORS_ALLOWED_DOMAIN', getenv('CORS_ALLOWED_DOMAIN') ?: '');
+
+if (!defined('S3_KEY'))      define('S3_KEY',      getenv('S3_KEY')      ?: '');
+if (!defined('S3_SECRET'))   define('S3_SECRET',   getenv('S3_SECRET')   ?: '');
+if (!defined('S3_BUCKET'))   define('S3_BUCKET',   getenv('S3_BUCKET')   ?: '');
+if (!defined('S3_ENDPOINT')) define('S3_ENDPOINT', getenv('S3_ENDPOINT') ?: '');
+if (!defined('S3_REGION'))   define('S3_REGION',   getenv('S3_REGION')   ?: '');
+unset($_appEnv, $_configDev);
 
 $_appHost = getenv('APP_HOST');
 if ($_appHost) {

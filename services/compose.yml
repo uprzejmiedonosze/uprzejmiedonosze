@@ -50,6 +50,15 @@ services:
       - 4000:4000
     restart: always
 
+  mailpit:
+    profiles: [dev]
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    ports:
+      - 8025:8025
+      - 1025:1025
+    restart: always
+
   builder:
     profiles: [dev]
     build:
@@ -94,6 +103,7 @@ services:
     working_dir: /var/www/uprzejmiedonosze.net/webapp
     volumes:
       - ../export:/var/www/uprzejmiedonosze.net/webapp
+      - ../config.dev.php:/var/www/uprzejmiedonosze.net/webapp/config.dev.php:ro
       - ./devroot/db:/var/www/uprzejmiedonosze.net/db
     env_file:
       - .env.dev
@@ -101,6 +111,8 @@ services:
       builder:
         condition: service_healthy
       firebase-emulator:
+        condition: service_started
+      mailpit:
         condition: service_started
       memcached:
         condition: service_started

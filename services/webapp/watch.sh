@@ -21,6 +21,7 @@ build_config_env() {
     printf '<?php\ndefine("HOST", "%s");\ndefine("TWIG_HASH", "%s");\ndefine("CSS_HASH", "%s");\ndefine("JS_HASH", "%s");\ndefine("HTTPS", "%s");\n' \
         "$APP_HOST" "$TWIG_HASH" "$CSS_HASH" "$JS_HASH" "$APP_HTTPS" \
         > export/config.env.php
+    [ -f config.dev.php ] && cp config.dev.php export/config.dev.php
 }
 
 build_static() {
