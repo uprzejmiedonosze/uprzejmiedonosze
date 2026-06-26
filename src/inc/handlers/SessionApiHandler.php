@@ -11,8 +11,8 @@ use Slim\Exception\HttpNotFoundException;
 
 class SessionApiHandler extends AbstractHandler {
 
-    /** Client caps uploads at 1600×1600 JPEG; 2MB covers Q0.95 at that size. */
-    private const MAX_IMAGE_UPLOAD_BYTES = 2_097_152;
+    /** Hard limit: client caps uploads at 1600×1600 JPEG Q0.85, which stays under 1MB. */
+    private const MAX_IMAGE_UPLOAD_BYTES = 1_048_576;
 
     private function checkEditable(Request $request, Application $app) {
         if (!$app->isEditable())
@@ -137,13 +137,14 @@ class SessionApiHandler extends AbstractHandler {
         if ($upload->getError() !== UPLOAD_ERR_OK) {
             throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
         }
+        $tooLarge = "Zbyt duże zdjęcie (>" . (self::MAX_IMAGE_UPLOAD_BYTES >> 20) . "MB)";
         // Reject by declared size before buffering the stream into memory.
         if ($upload->getSize() > self::MAX_IMAGE_UPLOAD_BYTES) {
-            throw new Exception("Zbyt duże zdjęcie (>2MB)", 400);
+            throw new Exception($tooLarge, 400);
         }
         $imageBytes = $upload->getStream()->getContents();
         if (strlen($imageBytes) > self::MAX_IMAGE_UPLOAD_BYTES) {
-            throw new Exception("Zbyt duże zdjęcie (>2MB)", 400);
+            throw new Exception($tooLarge, 400);
         }
 
         $pictureType = $this->getParam($params, 'pictureType');

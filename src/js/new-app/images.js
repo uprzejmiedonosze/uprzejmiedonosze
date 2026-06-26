@@ -9,8 +9,9 @@ import { error } from "../lib/toast";
 import { updateRecydywa } from "./recydywa";
 import { setOcrVehicleInfo, triggerVehicleInfoEnrichment, appendAutoComment } from "./vehicle-info";
 
-// Matches saveImgAndThumb full-size re-encode quality in API.php (95).
-const JPEG_QUALITY = 0.95
+// Matches the JPEG quality used by saveImgAndThumb in API.php (85);
+// keeps a resized 1600px upload around ~1 MB.
+const JPEG_QUALITY = 0.85
 const MAX_IMAGE_DIM = 1600
 
 var uploadInProgress = 0;
