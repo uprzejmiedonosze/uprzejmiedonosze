@@ -45,11 +45,11 @@ export async function checkFile(file, id) {
   })
   imageToResize.addEventListener("load", async () => {
     try {
-      const resizedImage = resizeImage(imageToResize)
+      const resizedImage = await resizeImage(imageToResize)
       const previewElement = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
       if (previewElement) {
         previewElement.style.opacity = '0.3'
-        previewElement.src = resizedImage
+        previewElement.src = URL.createObjectURL(resizedImage)
       }
 
       if (id === "carImage") {
@@ -251,7 +251,13 @@ function resizeImage(imgToResize) {
     canvasWidth,
     canvasHeight
   );
-  return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      blob => blob ? resolve(blob) : reject(new Error('Nie udało się przetworzyć zdjęcia')),
+      'image/jpeg',
+      JPEG_QUALITY
+    )
+  })
 }
 
 function noGeoDataInImage() {
@@ -311,22 +317,21 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
 }
 
 /**
- * @param {*} fileData
+ * @param {Blob} fileData
  * @param {'contextImage' | 'carImage' | 'thirdImage'} id
  * @param {*} imageMetadata
  */
 async function sendFile(fileData, id, imageMetadata={}) {
   const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
   const appId = appIdElement?.value
-  var data = {
-    image_data: fileData,
-    pictureType: id
-  }
+  const data = new FormData()
+  data.append('image', fileData, 'image.jpg')
+  data.append('pictureType', id)
 
   if (id == "carImage") {
-    imageMetadata.dateTime && (data.dateTime = imageMetadata.dateTime)
-    imageMetadata.dtFromPicture && (data.dtFromPicture = imageMetadata.dtFromPicture)
-    imageMetadata.latLng && (data.latLng = imageMetadata.latLng)
+    imageMetadata.dateTime && data.append('dateTime', imageMetadata.dateTime)
+    imageMetadata.dtFromPicture && data.append('dtFromPicture', 'true')
+    imageMetadata.latLng && data.append('latLng', imageMetadata.latLng)
   }
   if (id == "thirdImage") {
     showThirdImage(true)
@@ -340,7 +345,7 @@ async function sendFile(fileData, id, imageMetadata={}) {
 
   try {
     const api = new Api(`/api/app/${appId}/image`)
-    const app = await api.post(data)
+    const app = await api.postForm(data)
     if (app.carImage || app.contextImage || app.thirdImage) {
       const loader = document.querySelector(`.${id}Section .loader`)
       const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))

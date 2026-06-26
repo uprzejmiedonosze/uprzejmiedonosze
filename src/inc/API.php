@@ -199,7 +199,7 @@ function saveImgAndThumb($application, $imageBytes, $type) {
     $fileName     = ROOT . "$baseFileName,$type.jpg";
     $thumbName    = ROOT . "$baseFileName,$type,t.jpg";
 
-    $rawBytes = base64_decode($imageBytes);
+    $rawBytes = $imageBytes;
     $info = getimagesizefromstring($rawBytes);
     if ($info === false) {
         throw new Exception("Przesłany plik nie jest obrazkiem", 400);

@@ -56,7 +56,7 @@ function get_platerecognizer(&$imageBytes) {
     }
 
     $data = array(
-        'upload' => $imageBytes,
+        'upload' => base64_encode($imageBytes),
         'regions' => 'pl',
         'mmc' => true
     );

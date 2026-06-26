@@ -124,8 +124,21 @@ class SessionApiHandler extends AbstractHandler {
     public function image(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
+        $uploadedFiles = $request->getUploadedFiles();
 
-        $imageBytes = explode( ',', $this->getParam($params, 'image_data'))[1];
+        if (isset($uploadedFiles['image'])) {
+            $upload = $uploadedFiles['image'];
+            if ($upload->getError() !== UPLOAD_ERR_OK) {
+                throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
+            }
+            $imageBytes = $upload->getStream()->getContents();
+        } else {
+            $imageBytes = base64_decode(explode(',', $this->getParam($params, 'image_data'))[1], true);
+            if ($imageBytes === false) {
+                throw new Exception("Nieprawidłowe dane obrazka", 400);
+            }
+        }
+
         $pictureType = $this->getParam($params, 'pictureType');
 
         $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;
