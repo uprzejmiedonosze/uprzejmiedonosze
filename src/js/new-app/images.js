@@ -266,13 +266,8 @@ async function prepareUploadBlob(file) {
     return { blob, previewUrl: URL.createObjectURL(blob) }
   }
 
-  if (/^image\/jpe?g$/i.test(file.type)) {
-    const { width, height } = await getImageDimensions(file)
-    if (fitsMaxDimensions(width, height)) {
-      return { blob: file, previewUrl: URL.createObjectURL(file) }
-    }
-  }
-
+  // Always decode non-HEIC images through the canvas so EXIF orientation is
+  // baked into the pixels — the server (GD) strips the EXIF tag on re-encode.
   const blob = await resizeBlob(file)
   return { blob, previewUrl: URL.createObjectURL(blob) }
 }
