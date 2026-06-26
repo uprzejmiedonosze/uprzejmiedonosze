@@ -35,6 +35,8 @@ input[type=checkbox] {
         &::after {
             display: none;
         }
+
+        padding-left: 0.7em;
     }
 
     &::before,

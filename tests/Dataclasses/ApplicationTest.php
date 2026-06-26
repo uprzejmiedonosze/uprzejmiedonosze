@@ -44,7 +44,7 @@ class ApplicationTest extends TestCase
     {
         $app = Application::withUser(new User());
         $this->assertTrue($app->user->shareRecydywa);
-        $this->assertFalse($app->stopAgresji);
+        $this->assertTrue($app->stopAgresji); // new user defaults to Police
         $this->assertEquals(0, $app->category);
         $this->assertEquals(12, strlen($app->id));
     }

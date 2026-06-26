@@ -69,14 +69,18 @@ for f in src/js/*.js; do
     node_modules/.bin/parcel watch --no-hmr --dist-dir export/public/js/ "$f" &
 done
 
-# ── inotifywait: PHP / Twig / SQL / JSON ─────────────────────────────────────
-inotifywait -r -q -m -e close_write,moved_to,create --polling \
-    --format '%w%f' \
-    src/inc src/templates src/tools src/sql src/api \
-| while IFS= read -r changed; do
-    log "Changed: $changed"
-    case "$changed" in
-        src/api/config/*) build_json   ;;
-        *)                build_static ;;
-    esac
+# ── Poll loop: PHP / Twig / SQL / JSON ───────────────────────────────────────
+# inotify events from the macOS host don't propagate reliably through Docker
+# bind mounts; find -newer gives reliable 1-second polling instead.
+touch /tmp/watch-marker
+while true; do
+    sleep 1
+    find src/inc src/templates src/tools src/sql src/api \
+        -newer /tmp/watch-marker -type f 2>/dev/null > /tmp/watch-changed
+    touch /tmp/watch-marker
+    if [ -s /tmp/watch-changed ]; then
+        log "Changed: $(head -1 /tmp/watch-changed)"
+        grep -q  'src/api/config/' /tmp/watch-changed && build_json
+        grep -qv 'src/api/config/' /tmp/watch-changed && build_static
+    fi
 done

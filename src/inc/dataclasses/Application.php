@@ -365,7 +365,7 @@ class Application extends JSONObject implements \JsonSerializable {
             return $status;
         if (!$this->guessSMData()->isPolice())
             return $status;
-        if (str_ends_with($status->action, 'w SM')) {
+        if (str_ends_with($status->action ?? '', 'w SM')) {
             $status->comment = str_replace('w SM', 'na Policji', $status->comment);
             $status->action = str_replace('w SM', 'na Policji', $status->action);
         }
