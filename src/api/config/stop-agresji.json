@@ -146,16 +146,6 @@
         "voivodeship": "Zachodniopomorskie",
         "hint": "Wstępne relacje ze współpracy z #stopagresji w woj. Zachodniopomorskim są pozytywne. Masz jakieś doświadczenia – napisz do nas."
     },
-    "Warszawa-miasto": {
-        "address": [
-            "Komenda Stołeczna Policji",
-            "ul. Nowolipie 2",
-            "00-150 Warszawa"
-        ],
-        "email": "stopagresjidrogowej@ksp.policja.gov.pl",
-        "voivodeship": "Mazowieckie",
-        "city": "Warszawa"
-    },
     "default": {
         "address": [
             "Komenda Stołeczna Policji",

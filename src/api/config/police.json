@@ -3,7 +3,7 @@
         "parent": "Kąty Wrocławskie"
     },
     "Karczew": {
-        "parent": "Otwock"
+        "parent": "powiat otwocki"
     },
     "Podzamcze": {
         "parent": "Ogrodzieniec"
@@ -12,28 +12,28 @@
         "parent": "Wieliszew"
     },
     "Spalice": {
-        "parent": "Oleśnica"
+        "parent": "powiat oleśnicki"
     },
     "Julianów": {
-        "parent": "Jelonki"
+        "parent": "powiat piaseczyński"
     },
     "Zawadzkie": {
-        "parent": "Strzelce Opolskie"
+        "parent": "powiat strzelecki"
     },
     "Kolonowskie": {
-        "parent": "Strzelce Opolskie"
+        "parent": "powiat strzelecki"
     },
     "Leśnica": {
-        "parent": "Strzelce Opolskie"
+        "parent": "powiat strzelecki"
     },
     "Jemielnica": {
-        "parent": "Strzelce Opolskie"
+        "parent": "powiat strzelecki"
     },
     "Izbicko": {
-        "parent": "Strzelce Opolskie"
+        "parent": "powiat strzelecki"
     },
     "Szczepanek": {
-        "parent": "Strzelce Opolskie"
+        "parent": "powiat strzelecki"
     },
     "Górowo Iławeckie": {
         "address": [
@@ -44,12 +44,7 @@
         "email": "dzielnicowy.gorowoilaweckie1@ol.policja.gov.pl"
     },
     "Nowy Targ": {
-        "address": [
-            "Komenda Powiatowa Policji w Nowym Targu",
-            "ul. Konfederacji Tatrzańskiej 1a",
-            "34-400 Nowy Targ"
-        ],
-        "email": "dyzurni@nowy-targ.policja.gov.pl"
+        "parent": "powiat nowotarski"
     },
     "powiat pruszkowski": {
         "address": [
@@ -68,20 +63,17 @@
         "email": "kpbelzyce.kmplublin@lu.policja.gov.pl"
     },
     "gmina Suchy Dąb": {
-        "address": [
-            "Komenda Powiatowa Policji w Pruszczu Gdańskim",
-            "ul. Wita Stwosza 4",
-            "83-000 Pruszcz Gdański"
-        ],
-        "email": "dyzurny.pruszcz-gd@gd.policja.gov.pl"
+        "parent": "powiat gdański"
     },
-    "Żory": {
+    "Żory-miasto": {
         "address": [
             "Komenda Miejska Policji w Żorach",
             "ul. Wodzisławska 3",
             "44-240 Żory"
         ],
-        "email": "komendant@zory.ka.policja.gov.pl"
+        "email": "komendant@zory.ka.policja.gov.pl",
+        "voivodeship": "Śląskie",
+        "city": "Żory"
     },
     "Piastów": {
         "address": [
@@ -91,29 +83,11 @@
         ],
         "email": "dyzurny.kp-piastow@ksp.policja.gov.pl"
     },
-    "powiat kielecki": {
-        "address": [
-            "Komenda Miejska Policji w Kielcach",
-            "ul. Wesoła 43",
-            "25-363 Kielce"
-        ],
-        "email": "dyzurny.kmp-kielce@ki.policja.gov.pl"
-    },
     "Lubartów": {
-        "address": [
-            "Komenda Powiatowa Policji w Lubartowie",
-            "ul. Lubelska 57a",
-            "21-100 Lubartów"
-        ],
-        "email": "dyzurni.kpplubartow@lu.policja.gov.pl"
+        "parent": "powiat lubartowski"
     },
     "Łańcut": {
-        "address": [
-            "Komenda Powiatowa Policji w Łańcucie",
-            "ul. Traugutta 13A",
-            "37-100 Łańcut"
-        ],
-        "email": "lancut@rz.policja.gov.pl"
+        "parent": "powiat łańcucki"
     },
     "Kąty Wrocławskie": {
         "address": [
@@ -132,21 +106,11 @@
         "email": "dzielnicowy.katy-wroclawskie2@wroclaw.wr.policja.gov.pl"
     },
     "Sędławki": {
-        "address": [
-            "Komenda Powiatowa Policji w Bartoszycach",
-            "ul. Warszawska 9",
-            "11-200 Bartoszyce"
-        ],
-        "email": "komendant@bartoszyce.ol.policja.gov.pl",
+        "parent": "powiat bartoszycki",
         "hint": "Gmina Sędławki jest obsługiwana przez komendą Policji w Bartoszycach."
     },
     "Żukowo": {
-        "address": [
-            "Komenda Powiatowa Policji w Kartuzach",
-            "ul. Sambora 41",
-            "83-300 Kartuzy"
-        ],
-        "email": "komenda.kartuzy@gd.policja.gov.pl",
+        "parent": "powiat kartuski",
         "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach."
     },
     "Kobierzyce": {
@@ -166,28 +130,13 @@
         "email": "dzielnicowy.wiskitki@ra.policja.gov.pl"
     },
     "Jarocin": {
-        "address": [
-            "Komenda Powiatowa Policji w Jarocinie",
-            "ul. Bohaterów Jarocina 15",
-            "63-200 Jarocin"
-        ],
-        "email": "policja@jarocin.policja.gov.pl"
+        "parent": "powiat jarociński"
     },
     "Zgorzelec": {
-        "address": [
-            "Komenda Powiatowa Policji w Zgorzelcu",
-            "ul. Bohaterów II Armii Wojska Polskiego 12",
-            "59-900 Zgorzelec"
-        ],
-        "email": "kpp@zgorzelec.wr.policja.gov.pl"
+        "parent": "powiat zgorzelecki"
     },
     "Bożnów": {
-        "address": [
-            "Komenda Powiatowa Policji w Żaganiu",
-            "ul. Nowogródzka 1",
-            "68-100 Żagań"
-        ],
-        "email": "dzielnicowy.zagan7@go.policja.gov.pl"
+        "parent": "powiat żagański"
     },
     "Radzymin": {
         "address": [
@@ -198,12 +147,7 @@
         "email": "dzielnicowy.radzymin2@ksp.policja.gov.pl"
     },
     "Otwock": {
-        "address": [
-            "Komenda Powiatowa Policji w Otwocku",
-            "ul. Pułaskiego 7a",
-            "05-400 Otwock"
-        ],
-        "email": "dyzurny.otwock@ksp.policja.gov.pl"
+        "parent": "powiat otwocki"
     },
     "Zielonka": {
         "address": [
@@ -212,14 +156,6 @@
             "05-220 Zielonka"
         ],
         "email": "komendant.kp-zielonka@ksp.policja.gov.pl"
-    },
-    "powiat siedlecki": {
-        "address": [
-            "Komenda Miejska Policji w Siedlcach",
-            "ul. Staromiejska 66",
-            "08-110 Siedlce"
-        ],
-        "email": "kmpsiedlce@ra.policja.gov.pl"
     },
     "Podkowa Leśna": {
         "address": [
@@ -285,38 +221,20 @@
         ],
         "email": "dzielnicowy.mrocza3@bg.policja.gov.pl"
     },
-    "powiat Płocki": {
-        "address": [
-            "Komenda Miejska Policji w Płocku",
-            "al. Kilińskiego 8",
-            "09-400 Płock"
-        ],
-        "email": "kmpplock@ra.policja.gov.pl"
-    },
     "Nowy Duninów": {
-        "parent": "powiat Płocki"
+        "parent": "Płock-miasto"
     },
     "gmina Słupno": {
-        "parent": "powiat Płocki"
+        "parent": "Płock-miasto"
     },
     "Soczewka": {
-        "parent": "powiat Płocki"
+        "parent": "Płock-miasto"
     },
     "Człuchów": {
-        "address": [
-            "Komenda Powiatowa Policji w Człuchowie",
-            "ul. Kasztanowa 17",
-            "77-300 Człuchów"
-        ],
-        "email": "sekretariat.czluchow@gd.policja.gov.pl"
+        "parent": "powiat człuchowski"
     },
     "Turek": {
-        "address": [
-            "Komenda Powiatowa Policji w Turku",
-            "ul. Legionów Polskich 3",
-            "62-700 Turek"
-        ],
-        "email": "dyzurny.turek@po.policja.gov.pl"
+        "parent": "powiat turecki"
     },
     "Wieliszew": {
         "address": [
@@ -327,12 +245,7 @@
         "email": "dzielnicowy.wieliszew14@ksp.policja.gov.pl"
     },
     "Wołów": {
-        "address": [
-            "Komenda Powiatowa Policji w Wołowie",
-            "ul. Piłsudskiego 23",
-            "56-100 Wołów"
-        ],
-        "email": "kpp@wolow.wr.policja.gov.pl"
+        "parent": "powiat wołowski"
     },
     "Drzewica": {
         "address": [
@@ -351,28 +264,13 @@
         "email": "sekretariat.goleniow@sc.policja.gov.pl"
     },
     "Oleśnica": {
-        "address": [
-            "Komenda Powiatowa Policji w Oleśnicy",
-            "ul. Generała Józefa Hallera 3",
-            "56-400 Oleśnica"
-        ],
-        "email": "dyzurny@olesnica.wr.policja.gov.pl"
+        "parent": "powiat oleśnicki"
     },
     "Głogów": {
-        "address": [
-            "Komenda Powiatowa Policji w Głogowie",
-            "ul. Obrońców Pokoju 17",
-            "67-200 Głogów"
-        ],
-        "email": "kpp@glogow.wr.policja.gov.pl"
+        "parent": "powiat głogowski"
     },
     "Chodzież": {
-        "address": [
-            "Komenda Powiatowa Policji w Chodzieży",
-            "ul. Wiosny Ludów 14",
-            "64-800 Chodzież"
-        ],
-        "email": "dyzurny.chodziez@po.policja.gov.pl"
+        "parent": "powiat chodzieski"
     },
     "powiat gnieźnieński": {
         "address": [
@@ -383,20 +281,10 @@
         "email": "dyzurny.gniezno@po.policja.gov.pl"
     },
     "Jelonki": {
-        "address": [
-            "Komenda Powiatowa Policji w Piasecznie",
-            "ul. Kościelna 3",
-            "05-500 Piaseczno"
-        ],
-        "email": "dyzurny.piaseczno@ksp.policja.gov.pl"
+        "parent": "powiat piaseczyński"
     },
     "Strzelce Opolskie": {
-        "address": [
-            "Komenda Powiatowa Policji w Strzelcach Opolskich",
-            "ul. Piłsudskiego 3",
-            "47-100 Strzelce Opolskie"
-        ],
-        "email": "dyzurny.st@op.policja.gov.pl",
+        "parent": "powiat strzelecki",
         "hint": "Komenda w Strzelcach Opolskich przyjmuje zgłoszenia i nie wzywa na przesłuchania z automatu. Wzywa tylko, jeżeli w zgłoszeniu są błędy, albo sprawca nie przyznał się. Ogólnie wezwania są rzadkością, 2-3 wezwania na sto zgłoszeń."
     },
     "Ożarowice": {
@@ -427,12 +315,7 @@
         "email": "komendant.pobiedziska@po.policja.gov.pl"
     },
     "Zambrów": {
-        "address": [
-            "Komenda Powiatowa Policji w Zambrowie",
-            "al. Wojska Polskiego 4a",
-            "18-300 Zambrów"
-        ],
-        "email": "kpp@zambrow.bk.policja.gov.pl"
+        "parent": "powiat zambrowski"
     },
     "Głuszyca": {
         "address": [
@@ -498,12 +381,7 @@
         "email": "dzielnicowy.mogilany4@kpp-krakow.policja.gov.pl"
     },
     "Rawicz": {
-        "address": [
-            "Komenda Powiatowa Policji w Rawiczu",
-            "ul. Sienkiewicza 23",
-            "63-900 Rawicz"
-        ],
-        "email": "dyzurny.rawicz@po.policja.gov.pl"
+        "parent": "powiat rawicki"
     },
     "Kurów": {
         "address": [
@@ -544,20 +422,10 @@
         "parent": "Radków"
     },
     "Gostynin": {
-        "address": [
-            "Komenda Powiatowa Policji w Gostyninie",
-            "ul. 3 Maja 17",
-            "09-500 Gostynin"
-        ],
-        "email": "kppgostynin@ra.policja.gov.pl"
+        "parent": "powiat gostyniński"
     },
     "Stalowa Wola": {
-        "address": [
-            "Komenda Powiatowa Policji w Stalowej Woli",
-            "ul. Popiełuszki 24",
-            "37-450 Stalowa Wola"
-        ],
-        "email": "stalowa-wola@rz.policja.gov.pl"
+        "parent": "powiat stalowowolski"
     },
     "Wysoka": {
         "address": [
@@ -595,20 +463,10 @@
         "email": "dzielnicowy.damnica31@gd.policja.gov.pl"
     },
     "Kaźmierz": {
-        "address": [
-            "Komenda Powiatowa Policji w Szamotułach",
-            "ul. Polna 3",
-            "64-500 Szamotuły"
-        ],
-        "email": "dyzurny.szamotuly@po.policja.gov.pl"
+        "parent": "powiat szamotulski"
     },
     "Sochaczew": {
-        "address": [
-            "Komenda Powiatowa Policji w Sochaczewie",
-            "ul. 1 Maja 10",
-            "96-500 Sochaczew"
-        ],
-        "email": "kppsochaczew@ra.policja.gov.pl",
+        "parent": "powiat sochaczewski",
         "hint": "Pierwsze doświadczenia (10.2024) pozytywne. Nie wzywają na przesłuchanie. Informują o zakończeniu sprawy."
     },
     "powiat łódzki wschodni": {
@@ -655,12 +513,7 @@
         "email": "kpp@limanowa.policja.gov.pl"
     },
     "Mrągowo": {
-        "address": [
-            "Komenda Powiatowa Policji w Mrągowie",
-            "ul. Wolności 2",
-            "11-700 Mrągowo"
-        ],
-        "email": "komendant@mragowo.ol.policja.gov.pl"
+        "parent": "powiat mrągowski"
     },
     "Sępopol": {
         "address": [
@@ -735,12 +588,7 @@
         "email": "dzielnicowy.szczawnica5@nowy-targ.policja.gov.pl"
     },
     "Łuków": {
-        "address": [
-            "Komenda Powiatowa Policji w Łukowie",
-            "ul. Międzyrzecka 9",
-            "21-400 Łuków"
-        ],
-        "email": "kpp.lukow@lu.policja.gov.pl"
+        "parent": "powiat łukowski"
     },
     "gmina Długołęka": {
         "address": [
@@ -781,14 +629,6 @@
             "84-110 Krokowa"
         ],
         "email": "komendant.krokowa@gd.policja.gov.pl"
-    },
-    "powiat bydgoski": {
-        "address": [
-            "Komenda Miejska Policji w Bydgoszczy",
-            "ul. Jana Karola Chodkiewicza 32",
-            "85-667 Bydgoszcz"
-        ],
-        "email": "naczelnik-wrd-bydgoszcz@bg.policja.gov.pl"
     },
     "Łapy": {
         "address": [
@@ -846,22 +686,16 @@
         ],
         "email": "komenda.ndg@gd.policja.gov.pl"
     },
-    "powiat lubelski": {
+    "Lublin-miasto": {
         "address": [
             "Komenda Miejska Policji w Lublinie",
             "ul. Północna 3",
             "20-064 Lublin"
         ],
         "email": "komendant.kmplublin@lu.policja.gov.pl",
-        "hint": "Komenda Miejsca w Lublinie wzywa na przesłuchanie. Poza tym doświadczenia są przeważająco pozytywne."
-    },
-    "powiat rzeszowski": {
-        "address": [
-            "Komenda Miejska Policji w Rzeszowie",
-            "ul. Jagiellońska 13",
-            "35-959 Rzeszów"
-        ],
-        "email": "dyzurny.rzeszow@rz.policja.gov.pl"
+        "hint": "Komenda Miejsca w Lublinie wzywa na przesłuchanie. Poza tym doświadczenia są przeważająco pozytywne.",
+        "voivodeship": "Lubelskie",
+        "city": "Lublin"
     },
     "Brody": {
         "address": [
@@ -906,14 +740,6 @@
         ],
         "email": "komenda.wejherowo@gd.policja.gov.pl"
     },
-    "powiat gorzowski": {
-        "address": [
-            "Komenda Miejska Policji w Gorzowie Wlkp.",
-            "ul. Stefana Wyszyńskiego 122",
-            "66-400 Gorzów Wielkopolski"
-        ],
-        "email": "dyzurny.kmp_gorzow@go.policja.gov.pl"
-    },
     "powiat chrzanowski": {
         "address": [
             "Komenda Powiatowa Policji w Chrzanowie",
@@ -923,6 +749,9 @@
         "email": "prezydialny@chrzanow.policja.gov.pl"
     },
     "Wągrowiec": {
+        "parent": "powiat wągrowiecki"
+    },
+    "powiat wągrowiecki": {
         "address": [
             "Komenda Powiatowa Policji w Wągrowcu",
             "ul. Taszarowo 11",
@@ -930,19 +759,16 @@
         ],
         "email": "dyzurny.wagrowiec@po.policja.gov.pl"
     },
-    "powiat wągrowiecki": {
-        "parent": "Wągrowiec"
-    },
     "Kłobuck": {
+        "parent": "powiat kłobucki"
+    },
+    "powiat kłobucki": {
         "address": [
             "Komenda Powiatowa Policji w Kłobucku",
             "ul. Bohaterów Bitwy pod Mokrą 5",
             "42-100 Kłobuck"
         ],
         "email": "dyzurny@klobuck.ka.policja.gov.pl"
-    },
-    "powiat kłobucki": {
-        "parent": "Kłobuck"
     },
     "Jasienica": {
         "address": [
@@ -1102,21 +928,25 @@
         ],
         "email": "dyzurny@wegorzewo.ol.policja.gov.pl"
     },
-    "powiat olsztyński": {
+    "Olsztyn-miasto": {
         "address": [
             "Komenda Miejska Policji w Olsztynie",
             "ul. Partyzantów 23",
             "10-526 Olsztyn"
         ],
-        "email": "komendant@olsztyn.ol.policja.gov.pl"
+        "email": "komendant@olsztyn.ol.policja.gov.pl",
+        "voivodeship": "Warmińsko-Mazurskie",
+        "city": "Olsztyn"
     },
-    "powiat elbląski": {
+    "Elbląg-miasto": {
         "address": [
             "Komenda Miejska Policji w Elblągu",
             "ul. Tysiąclecia 3",
             "82-300 Elbląg"
         ],
-        "email": "dyzurny@elblag.ol.policja.gov.pl"
+        "email": "dyzurny@elblag.ol.policja.gov.pl",
+        "voivodeship": "Warmińsko-Mazurskie",
+        "city": "Elbląg"
     },
     "Lublin-Miasto": {
         "address": [
@@ -1508,14 +1338,7 @@
         "city": "Rzeszów"
     },
     "Stargard-miasto": {
-        "address": [
-            "Komenda Powiatowa Policji w Stargardzie",
-            "ul. Warszawska 29",
-            "73-110 Stargard"
-        ],
-        "email": "sekretariat.stargard@sc.policja.gov.pl",
-        "voivodeship": "Zachodniopomorskie",
-        "city": "Stargard"
+        "parent": "powiat stargardzki"
     },
     "gmina Zielonki": {
         "address": [
@@ -1528,14 +1351,7 @@
         "city": "Zielonki"
     },
     "Jarosław-miasto": {
-        "address": [
-            "Komenda Powiatowa Policji w Jarosławiu",
-            "ul. Poniatowskiego 50",
-            "37-500 Jarosław"
-        ],
-        "email": "jaroslaw@rz.policja.gov.pl",
-        "voivodeship": "Podkarpackie",
-        "city": "Jarosław"
+        "parent": "powiat jarosławski"
     },
     "powiat jarosławski": {
         "address": [
@@ -1557,7 +1373,7 @@
         "voivodeship": "Dolnośląskie",
         "city": "Trzebnica"
     },
-    "powiat bytomski": {
+    "Bytom-miasto": {
         "address": [
             "Komenda Miejska Policji w Bytomiu",
             "ul. Powstańców Warszawskich 74",
@@ -1565,7 +1381,7 @@
         ],
         "email": "komendant@bytom.ka.policja.gov.pl"
     },
-    "powiat chorzowski": {
+    "Chorzów-miasto": {
         "address": [
             "Komenda Miejska Policji w Chorzowie",
             "ul. Legnicka 1",
@@ -1573,31 +1389,35 @@
         ],
         "email": "komendant@chorzow.ka.policja.gov.pl"
     },
-    "powiat częstochowski": {
+    "Częstochowa-miasto": {
         "address": [
             "Komenda Miejska Policji w Częstochowie",
             "ul. Popiełuszki 5",
             "42-200 Częstochowa"
         ],
-        "email": "komendant@czestochowa.ka.policja.gov.pl"
+        "email": "komendant@czestochowa.ka.policja.gov.pl",
+        "voivodeship": "Śląskie",
+        "city": "Częstochowa"
     },
     "powiat dąbrowski": {
         "address": [
-            "Komenda Miejska Policji w Dąbrowie Górniczej",
-            "Al. Piłsudskiego 11",
-            "41-300 Dąbrowa Górnicza"
+            "Komenda Powiatowa Policji w Dąbrowie Tarnowskiej",
+            "ul. Berka Joselewicza 4",
+            "33-200 Dąbrowa Tarnowska"
         ],
-        "email": "komendant@dabrowa.ka.policja.gov.pl"
+        "email": "komendant@dabrowa-tarnowska.policja.gov.pl"
     },
-    "powiat gliwicki": {
+    "Gliwice-miasto": {
         "address": [
             "Komenda Miejska Policji w Gliwicach",
             "ul. Powstańców Warszawy 10-12",
             "44-100 Gliwice"
         ],
-        "email": "komendant@gliwice.ka.policja.gov.pl"
+        "email": "komendant@gliwice.ka.policja.gov.pl",
+        "voivodeship": "Śląskie",
+        "city": "Gliwice"
     },
-    "powiat jastrzębski": {
+    "Jastrzębie-Zdrój-miasto": {
         "address": [
             "Komenda Miejska Policji w Jastrzębiu-Zdroju",
             "ul. Śląska 12",
@@ -1605,7 +1425,7 @@
         ],
         "email": "komendant@jastrzebie.ka.policja.gov.pl"
     },
-    "powiat jaworznicki": {
+    "Jaworzno-miasto": {
         "address": [
             "Komenda Miejska Policji w Jaworznie",
             "ul. Narutowicza 1",
@@ -1613,7 +1433,7 @@
         ],
         "email": "komendant@jaworzno.ka.policja.gov.pl"
     },
-    "powiat mysłowicki": {
+    "Mysłowice-miasto": {
         "address": [
             "Komenda Miejska Policji w Mysłowicach",
             "ul. Starokościelna 2",
@@ -1621,7 +1441,7 @@
         ],
         "email": "komendant@myslowice.ka.policja.gov.pl"
     },
-    "powiat piekarski": {
+    "Piekary Śląskie-miasto": {
         "address": [
             "Komenda Miejska Policji w Piekarach Śląskich",
             "ul. Kalwaryjska 62",
@@ -1629,7 +1449,7 @@
         ],
         "email": "komendant@piekary.ka.policja.gov.pl"
     },
-    "powiat rudzki": {
+    "Ruda Śląska-miasto": {
         "address": [
             "Komenda Miejska Policji w Rudzie Śląskiej",
             "ul. Hallera 9",
@@ -1637,15 +1457,17 @@
         ],
         "email": "komendant@ruda.ka.policja.gov.pl"
     },
-    "powiat rybnicki": {
+    "Rybnik-miasto": {
         "address": [
             "Komenda Miejska Policji w Rybniku",
             "Pl. Armii Krajowej 5",
             "44-200 Rybnik"
         ],
-        "email": "komendant@rybnik.ka.policja.gov.pl"
+        "email": "komendant@rybnik.ka.policja.gov.pl",
+        "voivodeship": "Śląskie",
+        "city": "Rybnik"
     },
-    "powiat siemianowicki": {
+    "Siemianowice Śląskie-miasto": {
         "address": [
             "Komenda Miejska Policji w Siemianowicach Śląskich",
             "ul. Jana Pawła II 16",
@@ -1653,7 +1475,7 @@
         ],
         "email": "komendant@siemianowice.ka.policja.gov.pl"
     },
-    "powiat sosnowiecki": {
+    "Sosnowiec-miasto": {
         "address": [
             "Komenda Miejska Policji w Sosnowcu",
             "ul. Janowskiego 16",
@@ -1661,7 +1483,7 @@
         ],
         "email": "komendant@sosnowiec.ka.policja.gov.pl"
     },
-    "powiat świętochłowicki": {
+    "Świętochłowice-miasto": {
         "address": [
             "Komenda Miejska Policji w Świętochłowicach",
             "ul. Wojska Polskiego 16c",
@@ -1669,7 +1491,7 @@
         ],
         "email": "komendant@swietochlowice.ka.policja.gov.pl"
     },
-    "powiat tyski": {
+    "Tychy-miasto": {
         "address": [
             "Komenda Miejska Policji w Tychach",
             "Al. Bielska 46",
@@ -1677,7 +1499,7 @@
         ],
         "email": "komendant@tychy.ka.policja.gov.pl"
     },
-    "powiat zabrski": {
+    "Zabrze-miasto": {
         "address": [
             "Komenda Miejska Policji w Zabrzu",
             "ul. 1-go Maja 10",
@@ -1900,5 +1722,2022 @@
             "59-500 Złotoryja"
         ],
         "email": "dyzurny@zlotoryja.wr.policja.gov.pl"
+    },
+    "Zielona Góra-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Zielonej Górze",
+            "ul. Partyzantów 40",
+            "65-332 Zielona Góra"
+        ],
+        "email": "dyzurny.kmp_zgora@go.policja.gov.pl",
+        "voivodeship": "Lubuskie",
+        "city": "Zielona Góra"
+    },
+    "powiat krośnieński": {
+        "address": [
+            "Komenda Powiatowa Policji w Krośnie Odrzańskim",
+            "ul. Sienkiewicza 22",
+            "66-600 Krosno Odrzańskie"
+        ],
+        "email": "dyzurny.kpp_krosno@go.policja.gov.pl"
+    },
+    "powiat międzyrzecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Międzyrzeczu",
+            "ul. Pięciu Świętych Braci Międzyrzeckich 1",
+            "66-300 Międzyrzecz"
+        ],
+        "email": "dyzurny.kpp_miedzyrzecz@go.policja.gov.pl"
+    },
+    "powiat nowosolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Nowej Soli",
+            "ul. Północna 2",
+            "67-100 Nowa Sól"
+        ],
+        "email": "dyzurny.kpp_nowasol@go.policja.gov.pl"
+    },
+    "powiat słubicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Słubicach",
+            "ul. Kazimierza Wielkiego 1",
+            "69-100 Słubice"
+        ],
+        "email": "sekretariat.kpp_slubice@go.policja.gov.pl"
+    },
+    "powiat strzelecko-drezdenecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Strzelcach Krajeńskich",
+            "ul. Brzozowa 1",
+            "66-500 Strzelce Krajeńskie"
+        ],
+        "email": "dyzurny.kpp_strzelce@go.policja.gov.pl"
+    },
+    "powiat sulęciński": {
+        "address": [
+            "Komenda Powiatowa Policji w Sulęcinie",
+            "ul. Szpitalna 4",
+            "69-200 Sulęcin"
+        ],
+        "email": "dyzurny.kpp_sulecin@go.policja.gov.pl"
+    },
+    "powiat świebodziński": {
+        "address": [
+            "Komenda Powiatowa Policji w Świebodzinie",
+            "ul. Zielona 2",
+            "66-200 Świebodzin"
+        ],
+        "email": "dyzurny.kpp_swiebodzin@go.policja.gov.pl"
+    },
+    "powiat wschowski": {
+        "address": [
+            "Komenda Powiatowa Policji we Wschowie",
+            "ul. Kazimierza Wielkiego 12",
+            "67-400 Wschowa"
+        ],
+        "email": "dyzurny.kpp_wschowa@go.policja.gov.pl"
+    },
+    "powiat żagański": {
+        "address": [
+            "Komenda Powiatowa Policji w Żaganiu",
+            "ul. Nowogródzka 1",
+            "68-100 Żagań"
+        ],
+        "email": "dyzurny.kpp_zagan@go.policja.gov.pl"
+    },
+    "powiat żarski": {
+        "address": [
+            "Komenda Powiatowa Policji w Żarach",
+            "ul. Legionistów 3",
+            "68-200 Żary"
+        ],
+        "email": "dyzurny.kpp_zary@go.policja.gov.pl"
+    },
+    "Radom-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Radomiu",
+            "ul. 11 Listopada 37/59",
+            "26-600 Radom"
+        ],
+        "email": "kmpradom@ra.policja.gov.pl",
+        "voivodeship": "Mazowieckie",
+        "city": "Radom"
+    },
+    "Ostrołęka-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Ostrołęce",
+            "ul. Janusza Korczaka 16",
+            "07-409 Ostrołęka"
+        ],
+        "email": "kmpostroleka@ra.policja.gov.pl",
+        "voivodeship": "Mazowieckie",
+        "city": "Ostrołęka"
+    },
+    "powiat białobrzeski": {
+        "address": [
+            "Komenda Powiatowa Policji w Białobrzegach",
+            "ul. Żeromskiego 23",
+            "26-800 Białobrzegi"
+        ],
+        "email": "kppbialobrzegi@ra.policja.gov.pl"
+    },
+    "powiat ciechanowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Ciechanowie",
+            "ul. 11 Pułku Ułanów Legionowych 25",
+            "06-400 Ciechanów"
+        ],
+        "email": "kppciechanow@ra.policja.gov.pl"
+    },
+    "powiat grójecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Grójcu",
+            "ul. Brzozowa 108",
+            "05-600 Grójec"
+        ],
+        "email": "kppgrojec@ra.policja.gov.pl"
+    },
+    "powiat kozienicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Kozienicach",
+            "ul. Radomska 1",
+            "26-900 Kozienice"
+        ],
+        "email": "kppkozienice@ra.policja.gov.pl"
+    },
+    "powiat lipski": {
+        "address": [
+            "Komenda Powiatowa Policji w Lipsku",
+            "ul. Spacerowa 31A",
+            "27-300 Lipsko"
+        ],
+        "email": "kpplipsko@ra.policja.gov.pl"
+    },
+    "powiat łosicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Łosicach",
+            "ul. Kolejowa 6",
+            "08-200 Łosice"
+        ],
+        "email": "kpplosice@ra.policja.gov.pl"
+    },
+    "powiat makowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Makowie Mazowieckim",
+            "ul. Łąkowa 3",
+            "06-200 Maków Mazowiecki"
+        ],
+        "email": "kppmakowmaz@ra.policja.gov.pl"
+    },
+    "powiat mławski": {
+        "address": [
+            "Komenda Powiatowa Policji w Mławie",
+            "ul. Sienkiewicza 2",
+            "06-500 Mława"
+        ],
+        "email": "kppmlawa@ra.policja.gov.pl"
+    },
+    "powiat ostrowski mazowiecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Ostrowi Mazowieckiej",
+            "ul. Płk. Karola Piłata 12",
+            "07-300 Ostrów Mazowiecka"
+        ],
+        "email": "kppostrowmaz@ra.policja.gov.pl"
+    },
+    "powiat płoński": {
+        "address": [
+            "Komenda Powiatowa Policji w Płońsku",
+            "ul. 1-go Maja 3",
+            "09-100 Płońsk"
+        ],
+        "email": "kppplonsk@ra.policja.gov.pl"
+    },
+    "powiat przasnyski": {
+        "address": [
+            "Komenda Powiatowa Policji w Przasnyszu",
+            "ul. Świerkowa 5",
+            "06-300 Przasnysz"
+        ],
+        "email": "kppprzasnysz@ra.policja.gov.pl"
+    },
+    "powiat przysuski": {
+        "address": [
+            "Komenda Powiatowa Policji w Przysusze",
+            "Pl. 3-go Maja 8",
+            "26-400 Przysucha"
+        ],
+        "email": "kppprzysucha@ra.policja.gov.pl"
+    },
+    "powiat pułtuski": {
+        "address": [
+            "Komenda Powiatowa Policji w Pułtusku",
+            "ul. Marii Skłodowskiej-Curie 3",
+            "06-100 Pułtusk"
+        ],
+        "email": "kpppultusk@ra.policja.gov.pl"
+    },
+    "powiat sokołowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Sokołowie Podlaskim",
+            "ul. Wolności 50",
+            "08-300 Sokołów Podlaski"
+        ],
+        "email": "kppsokolowpodl@ra.policja.gov.pl"
+    },
+    "powiat węgrowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Węgrowie",
+            "ul. Józefa Piłsudskiego 6",
+            "07-100 Węgrów"
+        ],
+        "email": "kppwegrow@ra.policja.gov.pl"
+    },
+    "powiat wyszkowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Wyszkowie",
+            "ul. Kościuszki 13",
+            "07-200 Wyszków"
+        ],
+        "email": "dyzurny.kppwyszkow@ra.policja.gov.pl"
+    },
+    "powiat zwoleński": {
+        "address": [
+            "Komenda Powiatowa Policji w Zwoleniu",
+            "ul. Batalionów Chłopskich 14",
+            "26-700 Zwoleń"
+        ],
+        "email": "kppzwolen@ra.policja.gov.pl"
+    },
+    "powiat żuromiński": {
+        "address": [
+            "Komenda Powiatowa Policji w Żurominie",
+            "ul. Warszawska 8",
+            "09-300 Żuromin"
+        ],
+        "email": "kppzuromin@ra.policja.gov.pl"
+    },
+    "powiat brzeski": {
+        "address": [
+            "Komenda Powiatowa Policji w Brzegu",
+            "ul. Robotnicza 10",
+            "49-300 Brzeg"
+        ],
+        "email": "dyzurny.br@op.policja.gov.pl"
+    },
+    "powiat głubczycki": {
+        "address": [
+            "Komenda Powiatowa Policji w Głubczycach",
+            "ul. B. Chrobrego 6",
+            "48-100 Głubczyce"
+        ],
+        "email": "dyzurny.gl@op.policja.gov.pl"
+    },
+    "powiat kędzierzyńsko-kozielski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kędzierzynie-Koźlu",
+            "ul. Wojska Polskiego 18",
+            "47-220 Kędzierzyn-Koźle"
+        ],
+        "email": "dyzurny.kk@op.policja.gov.pl"
+    },
+    "powiat kluczborski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kluczborku",
+            "ul. Katowicka 16",
+            "46-200 Kluczbork"
+        ],
+        "email": "dyzurny.kl@op.policja.gov.pl"
+    },
+    "powiat krapkowicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Krapkowicach",
+            "ul. Opolska 101",
+            "47-300 Krapkowice"
+        ],
+        "email": "dyzurny.kr@op.policja.gov.pl"
+    },
+    "powiat namysłowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Namysłowie",
+            "ul. Piłsudskiego 4",
+            "46-100 Namysłów"
+        ],
+        "email": "dyzurny.na@op.policja.gov.pl"
+    },
+    "powiat nyski": {
+        "address": [
+            "Komenda Powiatowa Policji w Nysie",
+            "ul. Armii Krajowej 11",
+            "48-300 Nysa"
+        ],
+        "email": "dyzurny.ny@op.policja.gov.pl"
+    },
+    "powiat oleski": {
+        "address": [
+            "Komenda Powiatowa Policji w Oleśnie",
+            "ul. Klonowa 1a",
+            "46-300 Olesno"
+        ],
+        "email": "dyzurny.ol@op.policja.gov.pl"
+    },
+    "powiat prudnicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Prudniku",
+            "ul. Skowrońskiego 39",
+            "48-200 Prudnik"
+        ],
+        "email": "prudnik112@op.policja.gov.pl"
+    },
+    "Toruń-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Toruniu",
+            "ul. Grudziądzka 17",
+            "87-100 Toruń"
+        ],
+        "email": "dyzurny-torun@bg.policja.gov.pl",
+        "voivodeship": "Kujawsko-Pomorskie",
+        "city": "Toruń"
+    },
+    "Włocławek-miasto": {
+        "address": [
+            "Komenda Miejska Policji we Włocławku",
+            "ul. Okrężna 25",
+            "87-800 Włocławek"
+        ],
+        "email": "dyzurny-wloclawek@bg.policja.gov.pl",
+        "voivodeship": "Kujawsko-Pomorskie",
+        "city": "Włocławek"
+    },
+    "Grudziądz-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Grudziądzu",
+            "ul. Chełmińska 111",
+            "86-300 Grudziądz"
+        ],
+        "email": "dyzurny-grudziadz@bg.policja.gov.pl",
+        "voivodeship": "Kujawsko-Pomorskie",
+        "city": "Grudziądz"
+    },
+    "powiat aleksandrowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Aleksandrowie Kujawskim",
+            "ul. Wojska Polskiego 15",
+            "87-700 Aleksandrów Kujawski"
+        ],
+        "email": "dyzurny-aleksandrow@bg.policja.gov.pl"
+    },
+    "powiat brodnicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Brodnicy",
+            "ul. Zamkowa 13",
+            "87-300 Brodnica"
+        ],
+        "email": "dyzurny-brodnica@bg.policja.gov.pl"
+    },
+    "powiat chełmiński": {
+        "address": [
+            "Komenda Powiatowa Policji w Chełmnie",
+            "ul. Świętojerska 5",
+            "86-200 Chełmno"
+        ],
+        "email": "dyzurny-chelmno@bg.policja.gov.pl"
+    },
+    "powiat golubsko-dobrzyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Golubiu-Dobrzyniu",
+            "ul. Marszałka Józefa Piłsudskiego 19",
+            "87-400 Golub-Dobrzyń"
+        ],
+        "email": "golub-dobrzyn@bg.policja.gov.pl"
+    },
+    "powiat inowrocławski": {
+        "address": [
+            "Komenda Powiatowa Policji w Inowrocławiu",
+            "ul. Toruńska 13-15",
+            "88-100 Inowrocław"
+        ],
+        "email": "inowroclaw@bg.policja.gov.pl"
+    },
+    "powiat lipnowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Lipnie",
+            "ul. Platanowa 1",
+            "87-600 Lipno"
+        ],
+        "email": "dyzurny-lipno@bg.policja.gov.pl"
+    },
+    "powiat mogileński": {
+        "address": [
+            "Komenda Powiatowa Policji w Mogilnie",
+            "ul. Rynek 6",
+            "88-300 Mogilno"
+        ],
+        "email": "mogilno@bg.policja.gov.pl"
+    },
+    "powiat nakielski": {
+        "address": [
+            "Komenda Powiatowa Policji w Nakle nad Notecią",
+            "ul. Pocztowa 11",
+            "89-100 Nakło nad Notecią"
+        ],
+        "email": "dyzurny-naklo@bg.policja.gov.pl"
+    },
+    "powiat radziejowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Radziejowie",
+            "ul. Kościuszki 31",
+            "88-200 Radziejów"
+        ],
+        "email": "dyzurny-radziejow@bg.policja.gov.pl"
+    },
+    "powiat rypiński": {
+        "address": [
+            "Komenda Powiatowa Policji w Rypinie",
+            "ul. Sportowa 35",
+            "87-500 Rypin"
+        ],
+        "email": "dyzurny-rypin@bg.policja.gov.pl"
+    },
+    "powiat sępoleński": {
+        "address": [
+            "Komenda Powiatowa Policji w Sępólnie Krajeńskim",
+            "ul. Kościuszki 8",
+            "89-400 Sępólno Krajeńskie"
+        ],
+        "email": "dyzurny-sepolno@bg.policja.gov.pl"
+    },
+    "powiat świecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Świeciu",
+            "ul. Wojska Polskiego 153",
+            "86-100 Świecie"
+        ],
+        "email": "dyzurny-swiecie@bg.policja.gov.pl"
+    },
+    "powiat tucholski": {
+        "address": [
+            "Komenda Powiatowa Policji w Tucholi",
+            "ul. Dworcowa 17A",
+            "89-500 Tuchola"
+        ],
+        "email": "dyzurny-tuchola@bg.policja.gov.pl"
+    },
+    "powiat wąbrzeski": {
+        "address": [
+            "Komenda Powiatowa Policji w Wąbrzeźnie",
+            "ul. Wolności 28",
+            "87-200 Wąbrzeźno"
+        ],
+        "email": "epuap-wabrzezno@bg.policja.gov.pl"
+    },
+    "powiat żniński": {
+        "address": [
+            "Komenda Powiatowa Policji w Żninie",
+            "ul. Plac Wolności 4",
+            "88-400 Żnin"
+        ],
+        "email": "komendant-znin@bg.policja.gov.pl"
+    },
+    "Łódź-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Łodzi",
+            "ul. Sienkiewicza 28/30",
+            "90-114 Łódź"
+        ],
+        "email": "komendant@lodz.ld.policja.gov.pl",
+        "voivodeship": "Łódzkie",
+        "city": "Łódź"
+    },
+    "Piotrków Trybunalski-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Piotrkowie Trybunalskim",
+            "ul. Szkolna 30/38",
+            "97-300 Piotrków Trybunalski"
+        ],
+        "email": "komendant@piotrkow-trybunalski.ld.policja.gov.pl",
+        "voivodeship": "Łódzkie",
+        "city": "Piotrków Trybunalski"
+    },
+    "Skierniewice-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Skierniewicach",
+            "ul. Jana III Sobieskiego 69",
+            "96-100 Skierniewice"
+        ],
+        "email": "dyzurny@skierniewice.ld.policja.gov.pl",
+        "voivodeship": "Łódzkie",
+        "city": "Skierniewice"
+    },
+    "powiat kutnowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kutnie",
+            "ul. Toruńska 14",
+            "99-300 Kutno"
+        ],
+        "email": "dyzurny@kutno.ld.policja.gov.pl"
+    },
+    "powiat łowicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Łowiczu",
+            "ul. Bonifraterska 12/14",
+            "99-400 Łowicz"
+        ],
+        "email": "dyzurny@lowicz.ld.policja.gov.pl"
+    },
+    "powiat sieradzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Sieradzu",
+            "ul. Sikorskiego 2",
+            "98-200 Sieradz"
+        ],
+        "email": "komendant@sieradz.ld.policja.gov.pl"
+    },
+    "powiat tomaszowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Tomaszowie Mazowieckim",
+            "ul. Wandy Panfil 44",
+            "97-200 Tomaszów Mazowiecki"
+        ],
+        "email": "komendant@tomaszow-mazowiecki.ld.policja.gov.pl"
+    },
+    "Biała Podlaska-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Białej Podlaskiej",
+            "Plac Wojska Polskiego 23",
+            "21-500 Biała Podlaska"
+        ],
+        "email": "kmpbialapodlaska@lu.policja.gov.pl",
+        "voivodeship": "Lubelskie",
+        "city": "Biała Podlaska"
+    },
+    "Chełm-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Chełmie",
+            "ul. Żwirki i Wigury 20",
+            "22-100 Chełm"
+        ],
+        "email": "komendant.kmpchelm@lu.policja.gov.pl",
+        "voivodeship": "Lubelskie",
+        "city": "Chełm"
+    },
+    "Zamość-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Zamościu",
+            "ul. Prymasa Stefana Wyszyńskiego 2",
+            "22-400 Zamość"
+        ],
+        "email": "kmp.zamosc@lu.policja.gov.pl",
+        "voivodeship": "Lubelskie",
+        "city": "Zamość"
+    },
+    "Nowy Sącz-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Nowym Sączu",
+            "ul. Artura Grottgera 50",
+            "33-300 Nowy Sącz"
+        ],
+        "email": "dyzurni@nowy-sacz.policja.gov.pl",
+        "voivodeship": "Małopolskie",
+        "city": "Nowy Sącz"
+    },
+    "Krosno-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Krośnie",
+            "ul. Lwowska 28",
+            "38-400 Krosno"
+        ],
+        "email": "kmp.krosno@rz.policja.gov.pl",
+        "voivodeship": "Podkarpackie",
+        "city": "Krosno"
+    },
+    "Przemyśl-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Przemyślu",
+            "ul. Bohaterów Getta 1",
+            "37-700 Przemyśl"
+        ],
+        "email": "kmp.przemysl@rz.policja.gov.pl",
+        "voivodeship": "Podkarpackie",
+        "city": "Przemyśl"
+    },
+    "Tarnobrzeg-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Tarnobrzegu",
+            "ul. 1 Maja 2",
+            "39-400 Tarnobrzeg"
+        ],
+        "email": "kmp.tarnobrzeg@rz.policja.gov.pl",
+        "voivodeship": "Podkarpackie",
+        "city": "Tarnobrzeg"
+    },
+    "Łomża-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Łomży",
+            "ul. Wojska Polskiego 9",
+            "18-400 Łomża"
+        ],
+        "email": "kmp@lomza.bk.policja.gov.pl",
+        "voivodeship": "Podlaskie",
+        "city": "Łomża"
+    },
+    "Suwałki-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Suwałkach",
+            "ul. Pułaskiego 26",
+            "16-400 Suwałki"
+        ],
+        "email": "kmp@suwalki.bk.policja.gov.pl",
+        "voivodeship": "Podlaskie",
+        "city": "Suwałki"
+    },
+    "Słupsk-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Słupsku",
+            "Al. 3 Maja 1",
+            "76-200 Słupsk"
+        ],
+        "email": "komenda.slupsk@gd.policja.gov.pl",
+        "voivodeship": "Pomorskie",
+        "city": "Słupsk"
+    },
+    "Kielce-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Kielcach",
+            "ul. Wesoła 43",
+            "25-363 Kielce"
+        ],
+        "email": "dyzurny.kmp-kielce@ki.policja.gov.pl",
+        "voivodeship": "Świętokrzyskie",
+        "city": "Kielce"
+    },
+    "powiat buski": {
+        "address": [
+            "Komenda Powiatowa Policji w Busku-Zdroju",
+            "al. Mickiewicza 19",
+            "28-100 Busko-Zdrój"
+        ],
+        "email": "busko@ki.policja.gov.pl"
+    },
+    "powiat jędrzejowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Jędrzejowie",
+            "ul. 11-go Listopada 78",
+            "28-300 Jędrzejów"
+        ],
+        "email": "jedrzejow@ki.policja.gov.pl"
+    },
+    "powiat kazimierski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kazimierzy Wielkiej",
+            "Al. Parkowa 1",
+            "28-500 Kazimierza Wielka"
+        ],
+        "email": "kazimierza@ki.policja.gov.pl"
+    },
+    "powiat konecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Końskich",
+            "ul. Łazienna 12",
+            "26-200 Końskie"
+        ],
+        "email": "konskie@ki.policja.gov.pl"
+    },
+    "powiat opatowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Opatowie",
+            "ul. Sienkiewicza 30",
+            "27-500 Opatów"
+        ],
+        "email": "opatow@ki.policja.gov.pl"
+    },
+    "powiat ostrowiecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Ostrowcu Świętokrzyskim",
+            "ul. Aleja 3 Maja 9",
+            "27-400 Ostrowiec Świętokrzyski"
+        ],
+        "email": "sekretariat.ostrowiec@ki.policja.gov.pl"
+    },
+    "powiat pińczowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Pińczowie",
+            "ul. Floriańska 4",
+            "28-400 Pińczów"
+        ],
+        "email": "pinczow@ki.policja.gov.pl"
+    },
+    "powiat sandomierski": {
+        "address": [
+            "Komenda Powiatowa Policji w Sandomierzu",
+            "ul. Mickiewicza 30",
+            "27-600 Sandomierz"
+        ],
+        "email": "sandomierz@ki.policja.gov.pl"
+    },
+    "powiat staszowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Staszowie",
+            "ul. Armii Krajowej 10",
+            "28-200 Staszów"
+        ],
+        "email": "staszow@ki.policja.gov.pl"
+    },
+    "powiat włoszczowski": {
+        "address": [
+            "Komenda Powiatowa Policji we Włoszczowej",
+            "ul. Świeża 18",
+            "29-100 Włoszczowa"
+        ],
+        "email": "wloszczowa@ki.policja.gov.pl"
+    },
+    "Konin-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Koninie",
+            "ul. Przemysłowa 2",
+            "62-510 Konin"
+        ],
+        "email": "dyzurny.konin@po.policja.gov.pl",
+        "voivodeship": "Wielkopolskie",
+        "city": "Konin"
+    },
+    "Leszno-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Lesznie",
+            "ul. 17 Stycznia 8",
+            "64-100 Leszno"
+        ],
+        "email": "dyzurny.leszno@po.policja.gov.pl",
+        "voivodeship": "Wielkopolskie",
+        "city": "Leszno"
+    },
+    "powiat brzeziński": {
+        "address": [
+            "Komenda Powiatowa Policji w Brzezinach",
+            "ul. Konstytucji 3 Maja 5",
+            "95-060 Brzeziny"
+        ],
+        "email": "komendant@brzeziny.ld.policja.gov.pl"
+    },
+    "powiat łęczycki": {
+        "address": [
+            "Komenda Powiatowa Policji w Łęczycy",
+            "ul. Ozorkowskie Przedmieście 4",
+            "99-100 Łęczyca"
+        ],
+        "email": "dyzurny@leczyca.ld.policja.gov.pl"
+    },
+    "powiat opoczyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Opocznie",
+            "Al. Dąbrówki 1",
+            "26-300 Opoczno"
+        ],
+        "email": "dyzurny@opoczno.ld.policja.gov.pl"
+    },
+    "powiat wieluński": {
+        "address": [
+            "Komenda Powiatowa Policji w Wieluniu",
+            "ul. Warszawska 22a",
+            "98-300 Wieluń"
+        ],
+        "email": "komendant@wielun.ld.policja.gov.pl"
+    },
+    "powiat zgierski": {
+        "address": [
+            "Komenda Powiatowa Policji w Zgierzu",
+            "ul. Długa 58/60",
+            "95-100 Zgierz"
+        ],
+        "email": "dyzurny@zgierz.ld.policja.gov.pl"
+    },
+    "powiat pabianicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Pabianicach",
+            "ul. Żeromskiego 18",
+            "95-200 Pabianice"
+        ],
+        "email": "komendant@pabianice.ld.policja.gov.pl"
+    },
+    "powiat rawski": {
+        "address": [
+            "Komenda Powiatowa Policji w Rawie Mazowieckiej",
+            "ul. Tadeusza Kościuszki 23",
+            "96-200 Rawa Mazowiecka"
+        ],
+        "email": "dyzurny@rawa-mazowiecka.ld.policja.gov.pl"
+    },
+    "powiat poddębicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Poddębicach",
+            "ul. Targowa 22",
+            "99-200 Poddębice"
+        ],
+        "email": "komendant@poddebice.ld.policja.gov.pl"
+    },
+    "powiat pajęczański": {
+        "address": [
+            "Komenda Powiatowa Policji w Pajęcznie",
+            "ul. 1 Maja 52",
+            "98-330 Pajęczno"
+        ],
+        "email": "komendant@pajeczno.ld.policja.gov.pl"
+    },
+    "powiat wieruszowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Wieruszowie",
+            "ul. Kuźnicka 28a",
+            "98-400 Wieruszów"
+        ],
+        "email": "komendant@wieruszow.ld.policja.gov.pl"
+    },
+    "powiat biłgorajski": {
+        "address": [
+            "Komenda Powiatowa Policji w Biłgoraju",
+            "ul. Polna 1",
+            "23-400 Biłgoraj"
+        ],
+        "email": "komendant.kppbilgoraj@lu.policja.gov.pl"
+    },
+    "powiat puławski": {
+        "address": [
+            "Komenda Powiatowa Policji w Puławach",
+            "ul. Wojska Polskiego 6",
+            "24-100 Puławy"
+        ],
+        "email": "dyzurni.kpppulawy@lu.policja.gov.pl"
+    },
+    "powiat kraśnicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Kraśniku",
+            "ul. Lubelska 83",
+            "23-200 Kraśnik"
+        ],
+        "email": "komendant.kppkrasnik@lu.policja.gov.pl"
+    },
+    "powiat świdnicki lubelski": {
+        "address": [
+            "Komenda Powiatowa Policji w Świdniku",
+            "ul. Warsztatowa 4",
+            "21-040 Świdnik"
+        ],
+        "email": "dyzurni.kppswidnik@lu.policja.gov.pl"
+    },
+    "powiat hrubieszowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Hrubieszowie",
+            "ul. Narutowicza 20",
+            "22-500 Hrubieszów"
+        ],
+        "email": "policja.kpphrubieszow@lu.policja.gov.pl"
+    },
+    "powiat janowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Janowie Lubelskim",
+            "ul. Jana Zamoyskiego 92",
+            "23-300 Janów Lubelski"
+        ],
+        "email": "sekretariat.kppjanowlubelski@lu.policja.gov.pl"
+    },
+    "powiat krasnostawski": {
+        "address": [
+            "Komenda Powiatowa Policji w Krasnymstawie",
+            "ul. Okrzei 11",
+            "22-300 Krasnystaw"
+        ],
+        "email": "kppkrasnystaw@lu.policja.gov.pl"
+    },
+    "powiat łęczyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Łęcznej",
+            "ul. Księży Wrześniewskich 10",
+            "21-010 Łęczna"
+        ],
+        "email": "komendant.kppleczna@lu.policja.gov.pl"
+    },
+    "powiat parczewski": {
+        "address": [
+            "Komenda Powiatowa Policji w Parczewie",
+            "ul. Wojska Polskiego 4",
+            "21-200 Parczew"
+        ],
+        "email": "kpp.parczew@lu.policja.gov.pl"
+    },
+    "powiat radzyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Radzyniu Podlaskim",
+            "ul. Warszawska 100a",
+            "21-300 Radzyń Podlaski"
+        ],
+        "email": "komendant.kppradzynpodlaski@lu.policja.gov.pl"
+    },
+    "powiat tomaszowski lubelski": {
+        "address": [
+            "Komenda Powiatowa Policji w Tomaszowie Lubelskim",
+            "ul. Stefana Żeromskiego 4",
+            "22-600 Tomaszów Lubelski"
+        ],
+        "email": "komendant.kpptomaszowlubelski@lu.policja.gov.pl"
+    },
+    "powiat włodawski": {
+        "address": [
+            "Komenda Powiatowa Policji we Włodawie",
+            "al. Józefa Piłsudskiego 51",
+            "22-200 Włodawa"
+        ],
+        "email": "kppwlodawa@lu.policja.gov.pl"
+    },
+    "powiat rycki": {
+        "address": [
+            "Komenda Powiatowa Policji w Rykach",
+            "ul. Dolna 2",
+            "08-500 Ryki"
+        ],
+        "email": "dyzurni.kppryki@lu.policja.gov.pl"
+    },
+    "powiat bocheński": {
+        "address": [
+            "Komenda Powiatowa Policji w Bochni",
+            "ul. Krakowska 39",
+            "32-700 Bochnia"
+        ],
+        "email": "komendant@bochnia.policja.gov.pl"
+    },
+    "powiat olkuski": {
+        "address": [
+            "Komenda Powiatowa Policji w Olkuszu",
+            "ul. Jana Pawła II 32",
+            "32-300 Olkusz"
+        ],
+        "email": "sekretariat.komendanta@olkusz.policja.gov.pl"
+    },
+    "powiat gorlicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Gorlicach",
+            "ul. 11. Listopada 56",
+            "38-300 Gorlice"
+        ],
+        "email": "komendant@gorlice.policja.gov.pl"
+    },
+    "powiat wadowicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Wadowicach",
+            "ul. Marszałka Józefa Piłsudskiego 37",
+            "34-100 Wadowice"
+        ],
+        "email": "komendant@wadowice.policja.gov.pl"
+    },
+    "powiat tatrzański": {
+        "address": [
+            "Komenda Powiatowa Policji w Zakopanem",
+            "ul. Jagiellońska 32",
+            "34-500 Zakopane"
+        ],
+        "email": "kpp@zakopane.policja.gov.pl"
+    },
+    "powiat wielicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Wieliczce",
+            "ul. Jedynaka 30a",
+            "32-020 Wieliczka"
+        ],
+        "email": "sekretariat@wieliczka.policja.gov.pl"
+    },
+    "powiat proszowicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Proszowicach",
+            "ul. Wolności 2",
+            "32-100 Proszowice"
+        ],
+        "email": "kpp@proszowice.policja.gov.pl"
+    },
+    "powiat brzozowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Brzozowie",
+            "ul. Witosa 9",
+            "36-200 Brzozów"
+        ],
+        "email": "brzozow@rz.policja.gov.pl"
+    },
+    "powiat dębicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Dębicy",
+            "ul. Chłodnicka 20",
+            "39-200 Dębica"
+        ],
+        "email": "debica@rz.policja.gov.pl"
+    },
+    "powiat kolbuszowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kolbuszowej",
+            "ul. Plac Wolności 1",
+            "36-100 Kolbuszowa"
+        ],
+        "email": "kolbuszowa@rz.policja.gov.pl"
+    },
+    "powiat lubaczowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Lubaczowie",
+            "ul. Słowackiego 14",
+            "37-600 Lubaczów"
+        ],
+        "email": "lubaczow@rz.policja.gov.pl"
+    },
+    "powiat leżajski": {
+        "address": [
+            "Komenda Powiatowa Policji w Leżajsku",
+            "ul. Marii Curie-Skłodowskiej 2",
+            "37-300 Leżajsk"
+        ],
+        "email": "lezajsk@rz.policja.gov.pl"
+    },
+    "powiat augustowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Augustowie",
+            "ul. Brzostowskiego 6",
+            "16-300 Augustów"
+        ],
+        "email": "kpp@augustow.bk.policja.gov.pl"
+    },
+    "powiat bielski podlaski": {
+        "address": [
+            "Komenda Powiatowa Policji w Bielsku Podlaskim",
+            "ul. Mikołaja Kopernika 7",
+            "17-100 Bielsk Podlaski"
+        ],
+        "email": "kpp@bielsk-podl.bk.policja.gov.pl"
+    },
+    "powiat grajewski": {
+        "address": [
+            "Komenda Powiatowa Policji w Grajewie",
+            "ul. Wojska Polskiego 74A",
+            "19-200 Grajewo"
+        ],
+        "email": "kpp@grajewo.bk.policja.gov.pl"
+    },
+    "powiat hajnowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Hajnówce",
+            "ul. Armii Krajowej 1",
+            "17-200 Hajnówka"
+        ],
+        "email": "kpp@hajnowka.bk.policja.gov.pl"
+    },
+    "powiat kolneński": {
+        "address": [
+            "Komenda Powiatowa Policji w Kolnie",
+            "ul. Wojska Polskiego 29",
+            "18-500 Kolno"
+        ],
+        "email": "kpp@kolno.bk.policja.gov.pl"
+    },
+    "powiat sejneński": {
+        "address": [
+            "Komenda Powiatowa Policji w Sejnach",
+            "ul. 1 Maja 13",
+            "16-500 Sejny"
+        ],
+        "email": "komendant.kpp@sejny.bk.policja.gov.pl"
+    },
+    "powiat siemiatycki": {
+        "address": [
+            "Komenda Powiatowa Policji w Siemiatyczach",
+            "ul. Zielona 3",
+            "17-300 Siemiatycze"
+        ],
+        "email": "kpp@siemiatycze.bk.policja.gov.pl"
+    },
+    "powiat sokólski": {
+        "address": [
+            "Komenda Powiatowa Policji w Sokółce",
+            "ul. Białostocka 69b",
+            "16-100 Sokółka"
+        ],
+        "email": "komendant.kpp@sokolka.bk.policja.gov.pl"
+    },
+    "powiat bytowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Bytowie",
+            "ul. Styp-Rekowskiego 2",
+            "77-100 Bytów"
+        ],
+        "email": "kppbytow@gd.policja.gov.pl"
+    },
+    "powiat chojnicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Chojnicach",
+            "ul. Warszawska 13",
+            "89-600 Chojnice"
+        ],
+        "email": "komenda.chojnice@gd.policja.gov.pl"
+    },
+    "powiat kościerski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kościerzynie",
+            "ul. Zgromadzenia Księży Zmartwychwstańców 2",
+            "83-400 Kościerzyna"
+        ],
+        "email": "dyzurny.koscierzyna@gd.policja.gov.pl"
+    },
+    "powiat lęborski": {
+        "address": [
+            "Komenda Powiatowa Policji w Lęborku",
+            "ul. Toruńska 5",
+            "84-300 Lębork"
+        ],
+        "email": "komenda.lebork@gd.policja.gov.pl"
+    },
+    "powiat pucki": {
+        "address": [
+            "Komenda Powiatowa Policji w Pucku",
+            "ul. Dworcowa 5",
+            "84-100 Puck"
+        ],
+        "email": "dyzurny.puck@gd.policja.gov.pl"
+    },
+    "powiat sztumski": {
+        "address": [
+            "Komenda Powiatowa Policji w Sztumie",
+            "ul. Sienkiewicza 7",
+            "82-400 Sztum"
+        ],
+        "email": "dyzurny.sztum@gd.policja.gov.pl"
+    },
+    "powiat tczewski": {
+        "address": [
+            "Komenda Powiatowa Policji w Tczewie",
+            "ul. Kasprowicza 2",
+            "83-110 Tczew"
+        ],
+        "email": "komenda.tczew@gd.policja.gov.pl"
+    },
+    "powiat choszczeński": {
+        "address": [
+            "Komenda Powiatowa Policji w Choszcznie",
+            "ul. Bohaterów Warszawy 7c",
+            "73-200 Choszczno"
+        ],
+        "email": "sekretariat.choszczno@sc.policja.gov.pl"
+    },
+    "powiat goleniowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Goleniowie",
+            "ul. Maszewska 9",
+            "72-100 Goleniów"
+        ],
+        "email": "sekretariat.goleniow@sc.policja.gov.pl"
+    },
+    "powiat łobeski": {
+        "address": [
+            "Komenda Powiatowa Policji w Łobzie",
+            "ul. Wojska Polskiego 2",
+            "73-150 Łobez"
+        ],
+        "email": "dyzurny.lobez@sc.policja.gov.pl"
+    },
+    "powiat myśliborski": {
+        "address": [
+            "Komenda Powiatowa Policji w Myśliborzu",
+            "ul. Łużycka 21a",
+            "74-300 Myślibórz"
+        ],
+        "email": "kppmysliborz@sc.policja.gov.pl"
+    },
+    "powiat pyrzycki": {
+        "address": [
+            "Komenda Powiatowa Policji w Pyrzycach",
+            "ul. Młodych Techników 4",
+            "74-200 Pyrzyce"
+        ],
+        "email": "sekretariat.pyrzyce@sc.policja.gov.pl"
+    },
+    "powiat sławieński": {
+        "address": [
+            "Komenda Powiatowa Policji w Sławnie",
+            "ul. Polanowska 45D",
+            "76-100 Sławno"
+        ],
+        "email": "dyzurny.slawno@sc.policja.gov.pl"
+    },
+    "powiat szczecinecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Szczecinku",
+            "ul. Polna 25",
+            "78-400 Szczecinek"
+        ],
+        "email": "sekretariat.szczecinek@sc.policja.gov.pl"
+    },
+    "powiat świdwiński": {
+        "address": [
+            "Komenda Powiatowa Policji w Świdwinie",
+            "ul. Królowej Jadwigi 2",
+            "78-300 Świdwin"
+        ],
+        "email": "sekretariat.swidwin@sc.policja.gov.pl"
+    },
+    "powiat wałecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Wałczu",
+            "al. Zdobywców Wału Pomorskiego 90A",
+            "78-600 Wałcz"
+        ],
+        "email": "sekretariat.walcz@sc.policja.gov.pl"
+    },
+    "Świnoujście-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Świnoujściu",
+            "ul. Krzywoustego 2a",
+            "72-600 Świnoujście"
+        ],
+        "email": "sekretariat.swinoujscie@sc.policja.gov.pl",
+        "voivodeship": "Zachodniopomorskie",
+        "city": "Świnoujście"
+    },
+    "powiat czarnkowsko-trzcianecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Czarnkowie",
+            "ul. Kościuszki 89",
+            "64-700 Czarnków"
+        ],
+        "email": "dyzurny.czarnkow@po.policja.gov.pl"
+    },
+    "powiat kolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kole",
+            "ul. Sienkiewicza 14",
+            "62-600 Koło"
+        ],
+        "email": "dyzurny.kolo@po.policja.gov.pl"
+    },
+    "powiat krotoszyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Krotoszynie",
+            "ul. Zdunowska 38a",
+            "63-700 Krotoszyn"
+        ],
+        "email": "dyzurny.krotoszyn@po.policja.gov.pl"
+    },
+    "powiat ostrowski wielkopolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Ostrowie Wielkopolskim",
+            "ul. Odolanowska 19",
+            "63-400 Ostrów Wielkopolski"
+        ],
+        "email": "dyzurny.ostrow-wlkp@po.policja.gov.pl"
+    },
+    "powiat ostrzeszowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Ostrzeszowie",
+            "ul. Zamkowa 27",
+            "63-500 Ostrzeszów"
+        ],
+        "email": "dyzurny.ostrzeszow@po.policja.gov.pl"
+    },
+    "powiat pleszewski": {
+        "address": [
+            "Komenda Powiatowa Policji w Pleszewie",
+            "ul. Kochanowskiego 6",
+            "63-300 Pleszew"
+        ],
+        "email": "dyzurny.pleszew@po.policja.gov.pl"
+    },
+    "powiat złotowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Złotowie",
+            "al. Piasta 49",
+            "77-400 Złotów"
+        ],
+        "email": "dyzurny.zlotow@po.policja.gov.pl"
+    },
+    "powiat kościański": {
+        "address": [
+            "Komenda Powiatowa Policji w Kościanie",
+            "ul. ks. Józefa Surzyńskiego 31",
+            "64-000 Kościan"
+        ],
+        "email": "dyzurny.koscian@po.policja.gov.pl"
+    },
+    "powiat sanocki": {
+        "address": [
+            "Komenda Powiatowa Policji w Sanoku",
+            "ul. Witkiewicza 3",
+            "38-500 Sanok"
+        ],
+        "email": "sanok@rz.policja.gov.pl"
+    },
+    "powiat leski": {
+        "address": [
+            "Komenda Powiatowa Policji w Lesku",
+            "ul. Przemysłowa 24",
+            "38-600 Lesko"
+        ],
+        "email": "lesko@rz.policja.gov.pl"
+    },
+    "powiat bieszczadzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Ustrzykach Dolnych",
+            "ul. 29 Listopada 33",
+            "38-700 Ustrzyki Dolne"
+        ],
+        "email": "ustrzyki-dolne@rz.policja.gov.pl"
+    },
+    "powiat ropczycko-sędziszowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Ropczycach",
+            "ul. Piłsudskiego 22",
+            "39-100 Ropczyce"
+        ],
+        "email": "ropczyce@rz.policja.gov.pl"
+    },
+    "powiat jasielski": {
+        "address": [
+            "Komenda Powiatowa Policji w Jaśle",
+            "ul. Tadeusza Sroczyńskiego 7",
+            "38-200 Jasło"
+        ],
+        "email": "jaslo@rz.policja.gov.pl"
+    },
+    "powiat mielecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Mielcu",
+            "ul. Wyspiańskiego 8",
+            "39-300 Mielec"
+        ],
+        "email": "mielec@rz.policja.gov.pl"
+    },
+    "powiat przeworski": {
+        "address": [
+            "Komenda Powiatowa Policji w Przeworsku",
+            "ul. Stepkiewicza 1",
+            "37-200 Przeworsk"
+        ],
+        "email": "przeworsk@rz.policja.gov.pl"
+    },
+    "powiat malborski": {
+        "address": [
+            "Komenda Powiatowa Policji w Malborku",
+            "ul. Gen. de Gaulle'a 3",
+            "82-200 Malbork"
+        ],
+        "email": "komenda.malbork@gd.policja.gov.pl"
+    },
+    "powiat gostyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Gostyniu",
+            "ul. Wrocławska 44",
+            "63-800 Gostyń"
+        ],
+        "email": "dyzurny.gostyn@po.policja.gov.pl"
+    },
+    "powiat nowotomyski": {
+        "address": [
+            "Komenda Powiatowa Policji w Nowym Tomyślu",
+            "ul. Tysiąclecia 3a",
+            "64-300 Nowy Tomyśl"
+        ],
+        "email": "dyzurny.nowy-tomysl@po.policja.gov.pl"
+    },
+    "powiat obornicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Obornikach",
+            "ul. Piłsudskiego 54",
+            "64-600 Oborniki"
+        ],
+        "email": "dyzurny.oborniki@po.policja.gov.pl"
+    },
+    "powiat słupecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Słupcy",
+            "ul. Poznańska 13",
+            "62-400 Słupca"
+        ],
+        "email": "dyzurny.slupca@po.policja.gov.pl"
+    },
+    "powiat średzki wielkopolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Środzie Wlkp.",
+            "ul. Harcerska 22",
+            "63-000 Środa Wlkp."
+        ],
+        "email": "dyzurny.sroda-wlkp@po.policja.gov.pl"
+    },
+    "powiat grodziski wielkopolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Grodzisku Wielkopolskim",
+            "ul. Drzymały 13",
+            "62-065 Grodzisk Wielkopolski"
+        ],
+        "email": "dyzurny.grodzisk-wlkp@po.policja.gov.pl"
+    },
+    "powiat międzychodzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Międzychodzie",
+            "ul. Sikorskiego 22a",
+            "64-400 Międzychód"
+        ],
+        "email": "dyzurny.miedzychod@po.policja.gov.pl"
+    },
+    "powiat kępiński": {
+        "address": [
+            "Komenda Powiatowa Policji w Kępnie",
+            "ul. Jaśminowa 16, Chojęcin-Szum",
+            "63-600 Kępno"
+        ],
+        "email": "dyzurny.kepno@po.policja.gov.pl"
+    },
+    "powiat śremski": {
+        "address": [
+            "Komenda Powiatowa Policji w Śremie",
+            "ul. Adama Mickiewicza 15",
+            "63-100 Śrem"
+        ],
+        "email": "dyzurny.srem@po.policja.gov.pl"
+    },
+    "powiat bełchatowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Bełchatowie",
+            "ul. 1-go Maja 7",
+            "97-400 Bełchatów"
+        ],
+        "email": "komendant@belchatow.ld.policja.gov.pl"
+    },
+    "powiat łaski": {
+        "address": [
+            "Komenda Powiatowa Policji w Łasku",
+            "ul. 9 Maja 32/36",
+            "98-100 Łask"
+        ],
+        "email": "komendant@lask.ld.policja.gov.pl"
+    },
+    "powiat radomszczański": {
+        "address": [
+            "Komenda Powiatowa Policji w Radomsku",
+            "ul. Piłsudskiego 56",
+            "97-500 Radomsko"
+        ],
+        "email": "komendant@radomsko.ld.policja.gov.pl"
+    },
+    "powiat zduńskowolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Zduńskiej Woli",
+            "ul. Spacerowa 27",
+            "98-220 Zduńska Wola"
+        ],
+        "email": "komendant@zdunska-wola.ld.policja.gov.pl"
+    },
+    "powiat skarżyski": {
+        "address": [
+            "Komenda Powiatowa Policji w Skarżysku-Kamiennej",
+            "ul. Szydłowiecka 22",
+            "26-110 Skarżysko-Kamienna"
+        ],
+        "email": "skarzysko@ki.policja.gov.pl"
+    },
+    "powiat starachowicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Starachowicach",
+            "al. Armii Krajowej 27",
+            "27-200 Starachowice"
+        ],
+        "email": "starachowice@ki.policja.gov.pl"
+    },
+    "powiat opolski lubelski": {
+        "address": [
+            "Komenda Powiatowa Policji w Opolu Lubelskim",
+            "ul. Morwowa 4",
+            "24-300 Opole Lubelskie"
+        ],
+        "email": "dyzurni.kppopolelubelskie@lu.policja.gov.pl"
+    },
+    "powiat kwidzyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Kwidzynie",
+            "ul. Kościuszki 30",
+            "82-500 Kwidzyn"
+        ],
+        "email": "komenda.kwidzyn@gd.policja.gov.pl"
+    },
+    "powiat kołobrzeski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kołobrzegu",
+            "ul. Kilińskiego 20",
+            "78-100 Kołobrzeg"
+        ],
+        "email": "sekretariat.kolobrzeg@sc.policja.gov.pl"
+    },
+    "powiat białogardzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Białogardzie",
+            "ul. Kołobrzeska 45",
+            "78-200 Białogard"
+        ],
+        "email": "kpp.bialogard@sc.policja.gov.pl"
+    },
+    "powiat gryficki": {
+        "address": [
+            "Komenda Powiatowa Policji w Gryficach",
+            "ul. Mickiewicza 19",
+            "72-300 Gryfice"
+        ],
+        "email": "gryfice@sc.policja.gov.pl"
+    },
+    "powiat policki": {
+        "address": [
+            "Komenda Powiatowa Policji w Policach",
+            "ul. Kasprowicza 3",
+            "72-010 Police"
+        ],
+        "email": "sekretariat.police@sc.policja.gov.pl"
+    },
+    "powiat oświęcimski": {
+        "address": [
+            "Komenda Powiatowa Policji w Oświęcimiu",
+            "ul. Wyspiańskiego 2",
+            "32-602 Oświęcim"
+        ],
+        "email": "komendant@oswiecim.policja.gov.pl"
+    },
+    "powiat miechowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Miechowie",
+            "ul. Bolesława Prusa 3",
+            "32-200 Miechów"
+        ],
+        "email": "kpp@miechow.policja.gov.pl"
+    },
+    "powiat suski": {
+        "address": [
+            "Komenda Powiatowa Policji w Suchej Beskidzkiej",
+            "ul. Mickiewicza 42",
+            "34-200 Sucha Beskidzka"
+        ],
+        "email": "sekretariat@sucha-beskidzka.policja.gov.pl"
+    },
+    "Tarnów-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Tarnowie",
+            "ul. Traugutta 4",
+            "33-100 Tarnów"
+        ],
+        "email": "kmp@tarnow.policja.gov.pl",
+        "voivodeship": "Małopolskie",
+        "city": "Tarnów"
+    },
+    "Białystok-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Białymstoku",
+            "ul. Gen. Józefa Bema 4",
+            "15-369 Białystok"
+        ],
+        "email": "kmp@bialystok.bk.policja.gov.pl",
+        "voivodeship": "Podlaskie",
+        "city": "Białystok"
+    },
+    "powiat starogardzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Starogardzie Gdańskim",
+            "ul. Bohaterów Getta 2",
+            "83-200 Starogard Gdański"
+        ],
+        "email": "komenda.starogard@gd.policja.gov.pl"
+    },
+    "powiat moniecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Mońkach",
+            "Al. Niepodległości 7",
+            "19-100 Mońki"
+        ],
+        "email": "komendant.kpp@monki.bk.policja.gov.pl"
+    },
+    "powiat wysokomazowiecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Wysokiem Mazowieckiem",
+            "ul. Ludowa 13",
+            "18-200 Wysokie Mazowieckie"
+        ],
+        "email": "kpp@wysokie-maz.bk.policja.gov.pl"
+    },
+    "powiat drawski": {
+        "address": [
+            "Komenda Powiatowa Policji w Drawsku Pomorskim",
+            "ul. Obrońców Westerplatte 3",
+            "78-500 Drawsko Pomorskie"
+        ],
+        "email": "dyzurny.drawsko@sc.policja.gov.pl"
+    },
+    "powiat kamieński": {
+        "address": [
+            "Komenda Powiatowa Policji w Kamieniu Pomorskim",
+            "ul. Żwirki i Wigury 2",
+            "72-400 Kamień Pomorski"
+        ],
+        "email": "dyzurny.kamien@sc.policja.gov.pl"
+    },
+    "powiat pilski": {
+        "address": [
+            "Komenda Powiatowa Policji w Pile",
+            "ul. Bydgoska 117",
+            "64-920 Piła"
+        ],
+        "email": "dyzurny.pila@po.policja.gov.pl"
+    },
+    "powiat sierpecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Sierpcu",
+            "ul. Kilińskiego 24C",
+            "09-200 Sierpc"
+        ],
+        "email": "kppsierpc@ra.policja.gov.pl"
+    },
+    "powiat zambrowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Zambrowie",
+            "al. Wojska Polskiego 4a",
+            "18-300 Zambrów"
+        ],
+        "email": "kpp@zambrow.bk.policja.gov.pl"
+    },
+    "Bydgoszcz-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Bydgoszczy",
+            "ul. Jana Karola Chodkiewicza 32",
+            "85-667 Bydgoszcz"
+        ],
+        "email": "dyzurny-bydgoszcz@bg.policja.gov.pl",
+        "voivodeship": "Kujawsko-Pomorskie",
+        "city": "Bydgoszcz"
+    },
+    "powiat brzeski małopolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Brzesku",
+            "ul. Szczepanowska 53",
+            "32-800 Brzesko"
+        ],
+        "email": "sekretariat@brzesko.policja.gov.pl"
+    },
+    "powiat stargardzki": {
+        "address": [
+            "Komenda Powiatowa Policji w Stargardzie",
+            "ul. Warszawska 29",
+            "73-110 Stargard"
+        ],
+        "email": "sekretariat.stargard@sc.policja.gov.pl"
+    },
+    "powiat lubartowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Lubartowie",
+            "ul. Lubelska 57a",
+            "21-100 Lubartów"
+        ],
+        "email": "dyzurni.kpplubartow@lu.policja.gov.pl"
+    },
+    "powiat łukowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Łukowie",
+            "ul. Międzyrzecka 9",
+            "21-400 Łuków"
+        ],
+        "email": "kpp.lukow@lu.policja.gov.pl"
+    },
+    "powiat łańcucki": {
+        "address": [
+            "Komenda Powiatowa Policji w Łańcucie",
+            "ul. Traugutta 13A",
+            "37-100 Łańcut"
+        ],
+        "email": "lancut@rz.policja.gov.pl"
+    },
+    "powiat stalowowolski": {
+        "address": [
+            "Komenda Powiatowa Policji w Stalowej Woli",
+            "ul. Popiełuszki 24",
+            "37-450 Stalowa Wola"
+        ],
+        "email": "stalowa-wola@rz.policja.gov.pl"
+    },
+    "Płock-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Płocku",
+            "Al. Kilińskiego 8",
+            "09-400 Płock"
+        ],
+        "email": "kmpplock@ra.policja.gov.pl",
+        "voivodeship": "Mazowieckie",
+        "city": "Płock"
+    },
+    "Siedlce-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Siedlcach",
+            "ul. Starowiejska 66",
+            "08-110 Siedlce"
+        ],
+        "email": "kmpsiedlce@ra.policja.gov.pl",
+        "voivodeship": "Mazowieckie",
+        "city": "Siedlce"
+    },
+    "Gorzów Wielkopolski-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Gorzowie Wielkopolskim",
+            "ul. Kardynała Stefana Wyszyńskiego 122",
+            "66-400 Gorzów Wielkopolski"
+        ],
+        "email": "sekretariat.kmp_gorzow@go.policja.gov.pl",
+        "voivodeship": "Lubuskie",
+        "city": "Gorzów Wielkopolski"
+    },
+    "powiat strzelecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Strzelcach Opolskich",
+            "ul. Piłsudskiego 3",
+            "47-100 Strzelce Opolskie"
+        ],
+        "email": "dyzurny.st@op.policja.gov.pl"
+    },
+    "powiat szamotulski": {
+        "address": [
+            "Komenda Powiatowa Policji w Szamotułach",
+            "ul. Polna 3",
+            "64-500 Szamotuły"
+        ],
+        "email": "dyzurny.szamotuly@po.policja.gov.pl"
+    },
+    "powiat kartuski": {
+        "address": [
+            "Komenda Powiatowa Policji w Kartuzach",
+            "ul. Sambora 41",
+            "83-300 Kartuzy"
+        ],
+        "email": "komenda.kartuzy@gd.policja.gov.pl"
+    },
+    "powiat gdański": {
+        "address": [
+            "Komenda Powiatowa Policji w Pruszczu Gdańskim",
+            "ul. Wita Stwosza 4",
+            "83-000 Pruszcz Gdański"
+        ],
+        "email": "dyzurny.pruszcz-gd@gd.policja.gov.pl"
+    },
+    "powiat chodzieski": {
+        "address": [
+            "Komenda Powiatowa Policji w Chodzieży",
+            "ul. Wiosny Ludów 14",
+            "64-800 Chodzież"
+        ],
+        "email": "dyzurny.chodziez@po.policja.gov.pl"
+    },
+    "powiat człuchowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Człuchowie",
+            "ul. Kasztanowa 17",
+            "77-300 Człuchów"
+        ],
+        "email": "sekretariat.czluchow@gd.policja.gov.pl"
+    },
+    "powiat gostyniński": {
+        "address": [
+            "Komenda Powiatowa Policji w Gostyninie",
+            "ul. 3 Maja 17",
+            "09-500 Gostynin"
+        ],
+        "email": "kppgostynin@ra.policja.gov.pl"
+    },
+    "powiat głogowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Głogowie",
+            "ul. Obrońców Pokoju 17",
+            "67-200 Głogów"
+        ],
+        "email": "kpp@glogow.wr.policja.gov.pl"
+    },
+    "powiat jarociński": {
+        "address": [
+            "Komenda Powiatowa Policji w Jarocinie",
+            "ul. Bohaterów Jarocina 15",
+            "63-200 Jarocin"
+        ],
+        "email": "policja@jarocin.policja.gov.pl"
+    },
+    "powiat piaseczyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Piasecznie",
+            "ul. Kościelna 3",
+            "05-500 Piaseczno"
+        ],
+        "email": "dyzurny.piaseczno@ksp.policja.gov.pl"
+    },
+    "powiat nowotarski": {
+        "address": [
+            "Komenda Powiatowa Policji w Nowym Targu",
+            "ul. Konfederacji Tatrzańskiej 1a",
+            "34-400 Nowy Targ"
+        ],
+        "email": "dyzurni@nowy-targ.policja.gov.pl"
+    },
+    "powiat oleśnicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Oleśnicy",
+            "ul. Generała Józefa Hallera 3",
+            "56-400 Oleśnica"
+        ],
+        "email": "dyzurny@olesnica.wr.policja.gov.pl"
+    },
+    "powiat otwocki": {
+        "address": [
+            "Komenda Powiatowa Policji w Otwocku",
+            "ul. Pułaskiego 7a",
+            "05-400 Otwock"
+        ],
+        "email": "dyzurny.otwock@ksp.policja.gov.pl"
+    },
+    "powiat rawicki": {
+        "address": [
+            "Komenda Powiatowa Policji w Rawiczu",
+            "ul. Sienkiewicza 23",
+            "63-900 Rawicz"
+        ],
+        "email": "dyzurny.rawicz@po.policja.gov.pl"
+    },
+    "powiat sochaczewski": {
+        "address": [
+            "Komenda Powiatowa Policji w Sochaczewie",
+            "ul. 1 Maja 10",
+            "96-500 Sochaczew"
+        ],
+        "email": "kppsochaczew@ra.policja.gov.pl",
+        "hint": "Pierwsze doświadczenia (10.2024) pozytywne. Nie wzywają na przesłuchanie. Informują o zakończeniu sprawy."
+    },
+    "powiat turecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Turku",
+            "ul. Legionów Polskich 3",
+            "62-700 Turek"
+        ],
+        "email": "dyzurny.turek@po.policja.gov.pl"
+    },
+    "powiat wołowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Wołowie",
+            "ul. Piłsudskiego 23",
+            "56-100 Wołów"
+        ],
+        "email": "kpp@wolow.wr.policja.gov.pl"
+    },
+    "powiat zgorzelecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Zgorzelcu",
+            "ul. Bohaterów II Armii Wojska Polskiego 12",
+            "59-900 Zgorzelec"
+        ],
+        "email": "kpp@zgorzelec.wr.policja.gov.pl"
+    },
+    "Jelenia Góra-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Jeleniej Górze",
+            "ul. Nowowiejska 43",
+            "58-500 Jelenia Góra"
+        ],
+        "email": "dyzurny@jelenia-gora.wr.policja.gov.pl",
+        "voivodeship": "Województwo Dolnośląskie",
+        "city": "Jelenia Góra"
+    },
+    "powiat karkonoski": {
+        "parent": "Jelenia Góra-miasto"
+    },
+    "Legnica-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Legnicy",
+            "ul. Asnyka 3-5",
+            "59-220 Legnica"
+        ],
+        "email": "dyzurny@legnica.wr.policja.gov.pl",
+        "voivodeship": "Województwo Dolnośląskie",
+        "city": "Legnica"
+    },
+    "powiat legnicki": {
+        "parent": "Legnica-miasto"
+    },
+    "Wałbrzych-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Wałbrzychu",
+            "ul. Mazowiecka 2",
+            "58-300 Wałbrzych"
+        ],
+        "email": "dyzurny@walbrzych.wr.policja.gov.pl",
+        "voivodeship": "Województwo Dolnośląskie",
+        "city": "Wałbrzych"
+    },
+    "powiat wałbrzyski": {
+        "parent": "Wałbrzych-miasto"
+    },
+    "Warszawa-miasto": {
+        "address": [
+            "Komenda Stołeczna Policji",
+            "ul. Nowolipie 2",
+            "00-150 Warszawa"
+        ],
+        "email": "dyzurny.ssk@ksp.policja.gov.pl",
+        "voivodeship": "Województwo Mazowieckie",
+        "city": "Warszawa"
+    },
+    "powiat grodziski mazowiecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Grodzisku Mazowieckim",
+            "ul. Bartniaka 19",
+            "05-825 Grodzisk Mazowiecki"
+        ],
+        "email": "kancelaria.kpp-grodzisk@ksp.policja.gov.pl"
+    },
+    "powiat legionowski": {
+        "address": [
+            "Komenda Powiatowa Policji w Legionowie",
+            "ul. Jagiellońska 26B",
+            "05-120 Legionowo"
+        ],
+        "email": "kancelaria.kpp-legionowo@ksp.policja.gov.pl"
+    },
+    "powiat miński": {
+        "address": [
+            "Komenda Powiatowa Policji w Mińsku Mazowieckim",
+            "ul. Łupińskiego 42",
+            "05-300 Mińsk Mazowiecki"
+        ],
+        "email": "kancelaria.kpp-minsk@ksp.policja.gov.pl"
+    },
+    "powiat nowodworski mazowiecki": {
+        "address": [
+            "Komenda Powiatowa Policji w Nowym Dworze Mazowieckim",
+            "ul. Paderewskiego 3",
+            "05-100 Nowy Dwór Mazowiecki"
+        ],
+        "email": "kancelaria.kpp-ndm@ksp.policja.gov.pl"
+    },
+    "powiat warszawski zachodni": {
+        "address": [
+            "Komenda Powiatowa Policji dla Powiatu Warszawskiego Zachodniego",
+            "ul. Warszawska 276",
+            "05-082 Stare Babice"
+        ],
+        "email": "dyzurny.zachod@ksp.policja.gov.pl"
+    },
+    "powiat wołomiński": {
+        "address": [
+            "Komenda Powiatowa Policji w Wołominie",
+            "ul. Wileńska 43a",
+            "05-200 Wołomin"
+        ],
+        "email": "dyzurny.wolomin@ksp.policja.gov.pl"
+    },
+    "powiat wolsztyński": {
+        "address": [
+            "Komenda Powiatowa Policji w Wolsztynie",
+            "ul. Dworcowa 1",
+            "64-200 Wolsztyn"
+        ],
+        "email": "dyzurny.wolsztyn@po.policja.gov.pl"
+    },
+    "powiat wrzesiński": {
+        "address": [
+            "Komenda Powiatowa Policji we Wrześni",
+            "ul. Szkolna 23",
+            "62-300 Września"
+        ],
+        "email": "dyzurny.wrzesnia@po.policja.gov.pl"
+    },
+    "Dąbrowa Górnicza-miasto": {
+        "address": [
+            "Komenda Miejska Policji w Dąbrowie Górniczej",
+            "al. Józefa Piłsudskiego 11",
+            "41-300 Dąbrowa Górnicza"
+        ],
+        "email": "dyzurny@dabrowa.ka.policja.gov.pl",
+        "voivodeship": "Województwo Śląskie",
+        "city": "Dąbrowa Górnicza"
+    },
+    "powiat bydgoski": {
+        "parent": "Bydgoszcz-miasto"
+    },
+    "powiat gorzowski": {
+        "parent": "Gorzów Wielkopolski-miasto"
+    },
+    "powiat kielecki": {
+        "parent": "Kielce-miasto"
+    },
+    "powiat lubelski": {
+        "parent": "Lublin-miasto"
+    },
+    "powiat olsztyński": {
+        "parent": "Olsztyn-miasto"
+    },
+    "powiat Płocki": {
+        "parent": "Płock-miasto"
+    },
+    "powiat rzeszowski": {
+        "parent": "Rzeszów-miasto"
+    },
+    "powiat siedlecki": {
+        "parent": "Siedlce-miasto"
+    },
+    "Żory": {
+        "parent": "Żory-miasto"
     }
 }
