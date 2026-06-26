@@ -11,6 +11,7 @@ import { setOcrVehicleInfo, triggerVehicleInfoEnrichment, appendAutoComment } fr
 
 // Matches saveImgAndThumb full-size re-encode quality in API.php (95).
 const JPEG_QUALITY = 0.95
+const MAX_IMAGE_DIM = 1600
 
 var uploadInProgress = 0;
 
@@ -30,58 +31,46 @@ export async function checkFile(file, id) {
     );
   }
 
-  const imageToResize = document.createElement('img')
-
+  let previewUrl = null
   try {
-    imageToResize.src = await imageToDataUri(file)
-  } catch (err) {
-    imageError(id, err.message || String(err))
-    Sentry.captureException(err, { extra: { fileType: file.type } })
-    return
-  }
+    const prepared = await prepareUploadBlob(file)
+    previewUrl = prepared.previewUrl
 
-  imageToResize.addEventListener("error", () => {
-    imageError(id, 'Nie można wczytać zdjęcia')
-  })
-  imageToResize.addEventListener("load", async () => {
-    try {
-      const resizedImage = await resizeImage(imageToResize)
-      const previewElement = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
-      if (previewElement) {
-        previewElement.style.opacity = '0.3'
-        previewElement.src = URL.createObjectURL(resizedImage)
-      }
-
-      if (id === "carImage") {
-        const exif = await ExifReader.load(file)
-        const [lat, lng] = readGeoDataFromExif(exif)
-        let dateTime = getDateTimeFromExif(exif)
-
-        dateTime = setDateTime(dateTime, !!dateTime)
-        if (lat) setAddressByLatLng(lat, lng, "picture")
-        else noGeoDataInImage()
-
-        const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
-        if (plateImage) {
-          plateImage.src = ""
-          plateImage.style.display = 'none'
-        }
-        await sendFile(resizedImage, id, {
-          dateTime,
-          dtFromPicture: !!dateTime,
-          latLng: `${lat},${lng}`
-        });
-      } else {
-        await sendFile(resizedImage, id);
-      }
-
-    } catch (err) {
-      imageError(id, err.message);
-      Sentry.captureException(err, {
-        extra: Object.prototype.toString.call(file)
-      });
+    const previewElement = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
+    if (previewElement) {
+      previewElement.style.opacity = '0.3'
+      previewElement.src = previewUrl
     }
-  })
+
+    if (id === "carImage") {
+      const exif = await ExifReader.load(file)
+      const [lat, lng] = readGeoDataFromExif(exif)
+      let dateTime = getDateTimeFromExif(exif)
+
+      dateTime = setDateTime(dateTime, !!dateTime)
+      if (lat) setAddressByLatLng(lat, lng, "picture")
+      else noGeoDataInImage()
+
+      const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
+      if (plateImage) {
+        plateImage.src = ""
+        plateImage.style.display = 'none'
+      }
+      await sendFile(prepared.blob, id, {
+        dateTime,
+        dtFromPicture: !!dateTime,
+        latLng: `${lat},${lng}`
+      }, previewUrl);
+    } else {
+      await sendFile(prepared.blob, id, {}, previewUrl);
+    }
+  } catch (err) {
+    revokeObjectUrl(previewUrl)
+    imageError(id, err.message || String(err));
+    Sentry.captureException(err, {
+      extra: { fileType: file.type }
+    });
+  }
 
 }
 
@@ -172,7 +161,41 @@ async function isHeicFile(file) {
   return brand.startsWith('ftyp') && /hei[cfx]|mif1|msf1/.test(brand)
 }
 
-async function heicToObjectUrl(file) {
+function revokeObjectUrl(url) {
+  if (url?.startsWith('blob:')) URL.revokeObjectURL(url)
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = document.createElement('img')
+    img.onload = () => resolve(img)
+    img.onerror = () => reject(new Error('Nie można wczytać zdjęcia'))
+    img.src = src
+  })
+}
+
+async function getImageDimensions(fileOrBlob) {
+  if (typeof createImageBitmap === 'function') {
+    const bitmap = await createImageBitmap(fileOrBlob)
+    const dimensions = { width: bitmap.width, height: bitmap.height }
+    bitmap.close()
+    return dimensions
+  }
+
+  const url = URL.createObjectURL(fileOrBlob)
+  try {
+    const img = await loadImage(url)
+    return { width: img.width, height: img.height }
+  } finally {
+    revokeObjectUrl(url)
+  }
+}
+
+function fitsMaxDimensions(width, height) {
+  return width <= MAX_IMAGE_DIM && height <= MAX_IMAGE_DIM
+}
+
+async function heicToJpegBlob(file) {
   if (typeof createImageBitmap === 'function') {
     try {
       const bitmap = await createImageBitmap(file)
@@ -185,59 +208,82 @@ async function heicToObjectUrl(file) {
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       ctx.drawImage(bitmap, 0, 0)
       bitmap.close()
-      const blob = await new Promise((resolve, reject) =>
+      return new Promise((resolve, reject) =>
         canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', JPEG_QUALITY)
       )
-      return URL.createObjectURL(blob)
     } catch (err) {
       Sentry.captureException(err, { extra: { heicDecoder: 'native' } })
     }
   }
 
   const { heicTo } = await import('heic-to')
-  const blob = await heicTo({ blob: file, type: 'image/jpeg', quality: JPEG_QUALITY })
-  return URL.createObjectURL(blob)
+  return heicTo({ blob: file, type: 'image/jpeg', quality: JPEG_QUALITY })
 }
 
-async function imageToDataUri(img) {
-  if (await isHeicFile(img)) {
-    return heicToObjectUrl(img)
-  } else {
-    return await pngToDataUri(img)
+/** @returns {Promise<{ blob: Blob, previewUrl: string }>} */
+async function prepareUploadBlob(file) {
+  if (await isHeicFile(file)) {
+    const jpegBlob = await heicToJpegBlob(file)
+    const { width, height } = await getImageDimensions(jpegBlob)
+    if (fitsMaxDimensions(width, height)) {
+      return { blob: jpegBlob, previewUrl: URL.createObjectURL(jpegBlob) }
+    }
+
+    const blob = await resizeBlob(jpegBlob)
+    return { blob, previewUrl: URL.createObjectURL(blob) }
+  }
+
+  if (/^image\/jpe?g$/i.test(file.type)) {
+    const { width, height } = await getImageDimensions(file)
+    if (fitsMaxDimensions(width, height)) {
+      return { blob: file, previewUrl: URL.createObjectURL(file) }
+    }
+  }
+
+  const blob = await resizeBlob(file)
+  return { blob, previewUrl: URL.createObjectURL(blob) }
+}
+
+async function resizeBlob(fileOrBlob) {
+  if (typeof createImageBitmap === 'function') {
+    try {
+      const bitmap = await createImageBitmap(fileOrBlob)
+      try {
+        return await resizeSource(bitmap)
+      } finally {
+        bitmap.close()
+      }
+    } catch (err) {
+      Sentry.captureException(err, { extra: { resizeDecoder: 'bitmap' } })
+    }
+  }
+
+  const decodeUrl = URL.createObjectURL(fileOrBlob)
+  try {
+    const img = await loadImage(decodeUrl)
+    return await resizeSource(img)
+  } finally {
+    revokeObjectUrl(decodeUrl)
   }
 }
 
-function pngToDataUri(field) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-
-    reader.addEventListener("load", () => {
-      resolve(reader.result);
-    });
-
-    reader.readAsDataURL(field);
-  });
-}
-
-function resizeImage(imgToResize) {
+/** @param {CanvasImageSource & { width: number, height: number }} source */
+function resizeSource(source) {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
-  const MAX_WIDTH = 1600;
-  const MAX_HEIGHT = 1600;
-  let canvasWidth = imgToResize.width;
-  let canvasHeight = imgToResize.height;
+  let canvasWidth = source.width;
+  let canvasHeight = source.height;
 
-  // Add the resizing logic
   if (canvasWidth > canvasHeight) {
-    if (canvasWidth > MAX_WIDTH) {
-      canvasHeight *= MAX_WIDTH / canvasWidth;
-      canvasWidth = MAX_WIDTH;
+    if (canvasWidth > MAX_IMAGE_DIM) {
+      canvasHeight *= MAX_IMAGE_DIM / canvasWidth;
+      canvasWidth = MAX_IMAGE_DIM;
     }
   } else {
-    if (canvasHeight > MAX_HEIGHT) {
-      canvasWidth *= MAX_HEIGHT / canvasHeight;
-      canvasHeight = MAX_HEIGHT;
+    if (canvasHeight > MAX_IMAGE_DIM) {
+      canvasWidth *= MAX_IMAGE_DIM / canvasHeight;
+      canvasHeight = MAX_IMAGE_DIM;
     }
   }
 
@@ -245,7 +291,7 @@ function resizeImage(imgToResize) {
   canvas.height = canvasHeight;
 
   context?.drawImage(
-    imgToResize,
+    source,
     0,
     0,
     canvasWidth,
@@ -320,8 +366,9 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
  * @param {Blob} fileData
  * @param {'contextImage' | 'carImage' | 'thirdImage'} id
  * @param {*} imageMetadata
+ * @param {string|null} previewUrl
  */
-async function sendFile(fileData, id, imageMetadata={}) {
+async function sendFile(fileData, id, imageMetadata={}, previewUrl=null) {
   const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
   const appId = appIdElement?.value
   const data = new FormData()
@@ -397,6 +444,8 @@ async function sendFile(fileData, id, imageMetadata={}) {
     uploadFinished()
   } catch (err) {
     imageError(id, err.toString())
+  } finally {
+    revokeObjectUrl(previewUrl)
   }
 }
 
