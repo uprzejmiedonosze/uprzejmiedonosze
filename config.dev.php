@@ -1,4 +1,6 @@
 <?php
+// Dev bootstrap — committed fixture config (pairs with services/devroot/db/store.sqlite).
+// Loaded in Docker dev via compose mount; copied to export/ by watch.sh as a fallback.
 define('PLATERECOGNIZER_SECRET', 'contact author');
 define('OPEN_ALPR_SECRET_1', 'contact author');
 define('OPEN_ALPR_SECRET_2', 'contact author');

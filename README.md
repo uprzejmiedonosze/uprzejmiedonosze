@@ -24,19 +24,18 @@ git clone git@github.com:uprzejmiedonosze/uprzejmiedonosze.git
 cd uprzejmiedonosze
 ```
 
-## Local secrets setup
+## Local config
 
-Dev defaults (crypto keys, mail sender, Mailpit DSN, etc.) live in **`config.dev.php`** at the repo root — loaded automatically in Docker dev.
+**`config.dev.php`** (repo root, committed) is the dev bootstrap: fixture crypto keys
+(matching `services/devroot/db/store.sqlite`), Mailpit/mail defaults, and API placeholders.
+After clone, `make dev` is enough — no extra setup required.
 
-Create `services/.env.dev` (gitignored) only for overrides or extra secrets not in `config.dev.php`:
+Docker mounts this file into the webapp. Constants from the file take precedence; Docker env
+vars (from optional `services/.env.dev`) only apply to settings **not** already defined there.
+
+Optional **`services/.env.dev`** (gitignored) — only if you need real third-party tokens, e.g.:
 
 ```bash
-# Mandatory for encryption / sessions (if not in config.dev.php)
-CRYPTO_KEY=...
-CRYPTO_IV=...
-CRYPTO_TAG=...
-
-# Firebase, Maps, ALPR, etc. (optional — app runs without them)
 MAPBOX_API_TOKEN=...
 GOOGLE_MAPS_API_TOKEN=...
 # ... see AGENTS.md for the full list
@@ -54,7 +53,7 @@ If you need a real Firebase project (for staging/prod), see the maintainer.
 
 The dev profile also starts **Mailpit** — outgoing mail is captured locally instead of hitting Mailgun. After sending a report, open the inbox at `http://localhost:8025` to preview the message body and PDF/ZIP attachments.
 
-Configured via `MAILER_DSN` in `config.dev.php` (`smtp://mailpit:1025`). Without a DSN, dev keeps the old dry-run behaviour (status updates, no message captured).
+Configured via `MAILER_DSN` in `config.dev.php` (`smtp://mailpit:1025`). If the DSN is missing, dev falls back to dry-run (status updates, no message captured).
 
 ## Running
 
@@ -65,8 +64,10 @@ make dev
 This is equivalent to:
 
 ```bash
-docker compose -f services/compose.yml --env-file services/.env.dev -p dev --profile dev up --build
+docker compose -f services/compose.yml -p dev --profile dev up --build
 ```
+
+(`services/.env.dev` is optional — see [Local config](#local-config).)
 
 The first run takes a few minutes (builds Docker images, compiles CSS/JS). Subsequent runs are fast thanks to Docker layer cache.
 
@@ -114,7 +115,7 @@ make test
 ```
 services/
 ├── compose.yml              # All Docker services (profiles: dev / staging / prod)
-├── .env.dev                 # Local secrets (gitignored, create manually)
+├── .env.dev                 # Optional extra secrets (gitignored)
 ├── face-detector/           # Python face detection service
 ├── webapp/
 │   ├── Dockerfile           # builder + webapp + worker stages
@@ -127,6 +128,7 @@ services/
 
 src/                         # All source files (never edit export/ directly)
 export/                      # Built artifacts (gitignored, populated by builder)
+config.dev.php               # Committed dev bootstrap (crypto fixture, Mailpit, etc.)
 ```
 
 ## Troubleshooting

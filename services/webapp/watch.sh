@@ -21,7 +21,7 @@ build_config_env() {
     printf '<?php\ndefine("HOST", "%s");\ndefine("TWIG_HASH", "%s");\ndefine("CSS_HASH", "%s");\ndefine("JS_HASH", "%s");\ndefine("HTTPS", "%s");\n' \
         "$APP_HOST" "$TWIG_HASH" "$CSS_HASH" "$JS_HASH" "$APP_HTTPS" \
         > export/config.env.php
-    [ -f config.dev.php ] && cp config.dev.php export/config.dev.php
+    [ -f config.dev.php ] && cp config.dev.php export/config.dev.php  # fallback if compose mount absent
 }
 
 build_static() {
@@ -35,7 +35,7 @@ build_static() {
     find src/api -maxdepth 1 -name '*.html' -exec cp {} export/public/api/ \;
     cp src/images-index.html export/
     [ -d src/img ] && cp -r src/img/. export/public/img/ || true
-    [ -f config.dev.php ] && cp config.dev.php export/config.dev.php
+    [ -f config.dev.php ] && cp config.dev.php export/config.dev.php  # fallback if compose mount absent
 }
 
 build_json() {

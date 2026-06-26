@@ -170,7 +170,7 @@ staging: ## Sync code to staging server and rebuild Docker containers
 dev:
 	@docker compose \
         -f services/compose.yml \
-        --env-file services/.env.dev \
+        $(if $(wildcard services/.env.dev),--env-file services/.env.dev,) \
         -p $@ \
         --profile $@ \
         up --build
