@@ -9,6 +9,9 @@ import { error } from "../lib/toast";
 import { updateRecydywa } from "./recydywa";
 import { setOcrVehicleInfo, triggerVehicleInfoEnrichment, appendAutoComment } from "./vehicle-info";
 
+// Matches saveImgAndThumb full-size re-encode quality in API.php (95).
+const JPEG_QUALITY = 0.95
+
 var uploadInProgress = 0;
 
 /**
@@ -183,7 +186,7 @@ async function heicToObjectUrl(file) {
       ctx.drawImage(bitmap, 0, 0)
       bitmap.close()
       const blob = await new Promise((resolve, reject) =>
-        canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', 0.95)
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', JPEG_QUALITY)
       )
       return URL.createObjectURL(blob)
     } catch (err) {
@@ -192,7 +195,7 @@ async function heicToObjectUrl(file) {
   }
 
   const { heicTo } = await import('heic-to')
-  const blob = await heicTo({ blob: file, type: 'image/jpeg', quality: 0.95 })
+  const blob = await heicTo({ blob: file, type: 'image/jpeg', quality: JPEG_QUALITY })
   return URL.createObjectURL(blob)
 }
 
@@ -248,7 +251,7 @@ function resizeImage(imgToResize) {
     canvasWidth,
     canvasHeight
   );
-  return canvas.toDataURL("image/jpeg", 0.95);
+  return canvas.toDataURL("image/jpeg", JPEG_QUALITY);
 }
 
 function noGeoDataInImage() {
