@@ -70,7 +70,7 @@ for f in src/js/*.js; do
 done
 
 # ── inotifywait: PHP / Twig / SQL / JSON ─────────────────────────────────────
-inotifywait -r -q -m -e close_write,moved_to,create \
+inotifywait -r -q -m -e close_write,moved_to,create --polling \
     --format '%w%f' \
     src/inc src/templates src/tools src/sql src/api \
 | while IFS= read -r changed; do
