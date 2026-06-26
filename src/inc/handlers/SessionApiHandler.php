@@ -137,6 +137,10 @@ class SessionApiHandler extends AbstractHandler {
         if ($upload->getError() !== UPLOAD_ERR_OK) {
             throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
         }
+        // Reject by declared size before buffering the stream into memory.
+        if ($upload->getSize() > self::MAX_IMAGE_UPLOAD_BYTES) {
+            throw new Exception("Zbyt duże zdjęcie (>2MB)", 400);
+        }
         $imageBytes = $upload->getStream()->getContents();
         if (strlen($imageBytes) > self::MAX_IMAGE_UPLOAD_BYTES) {
             throw new Exception("Zbyt duże zdjęcie (>2MB)", 400);

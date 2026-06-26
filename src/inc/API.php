@@ -223,7 +223,7 @@ function saveImgAndThumb($application, $imageBytes, $type) {
         throw new Exception("Nieobsługiwany format obrazka: {$info['mime']}", 415);
     }
 
-    if (!imagejpeg($img, $fileName, 85)) {
+    if (!imagejpeg($img, $fileName, 95)) {
         throw new Exception("Can't write to $fileName", 500);
     }
     imagedestroy($img);

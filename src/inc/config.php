@@ -20,7 +20,10 @@ $BADGES = \json\get('badges.json');
 
 $_appEnv = getenv('APP_ENV');
 $_configDev = __DIR__ . '/../config.dev.php';
-if ($_appEnv !== 'prod' && $_appEnv !== 'staging' && is_file($_configDev)) {
+// Dev bootstrap: config.dev.php defines fixture keys, Mailpit DSN, etc.
+// getenv() below only fills constants the file did not set (cannot override defines).
+// Opt-in on APP_ENV=dev only — an unset APP_ENV must never pull in dev config.
+if ($_appEnv === 'dev' && is_file($_configDev)) {
     require $_configDev;
 } elseif (!getenv('APP_ENV') && is_file(__DIR__ . '/../config.prod.php')) {
     // Non-Docker deployment (quickfix rsync): config.prod.php generated from .env.prod at build time

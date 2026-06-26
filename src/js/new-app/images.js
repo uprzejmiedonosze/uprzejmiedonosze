@@ -174,57 +174,90 @@ function loadImage(src) {
   })
 }
 
-async function getImageDimensions(fileOrBlob) {
+/**
+ * Decodes fileOrBlob with EXIF orientation applied and passes the source to fn.
+ * Prefers createImageBitmap, falling back to an <img> element (e.g. no bitmap
+ * support, or a decode error). Always closes/revokes the decoded source.
+ * @template T
+ * @param {Blob} fileOrBlob
+ * @param {(source: CanvasImageSource & { width: number, height: number }) => T | Promise<T>} fn
+ * @param {Record<string, unknown>} [sentryExtra]
+ * @returns {Promise<T>}
+ */
+async function withDecodedImage(fileOrBlob, fn, sentryExtra = {}) {
   if (typeof createImageBitmap === 'function') {
-    const bitmap = await createImageBitmap(fileOrBlob)
-    const dimensions = { width: bitmap.width, height: bitmap.height }
-    bitmap.close()
-    return dimensions
+    try {
+      const bitmap = await createImageBitmap(fileOrBlob, { imageOrientation: 'from-image' })
+      try {
+        return await fn(bitmap)
+      } finally {
+        bitmap.close()
+      }
+    } catch (err) {
+      Sentry.captureException(err, { extra: { decoder: 'bitmap', ...sentryExtra } })
+    }
   }
 
   const url = URL.createObjectURL(fileOrBlob)
   try {
     const img = await loadImage(url)
-    return { width: img.width, height: img.height }
+    return await fn(img)
   } finally {
     revokeObjectUrl(url)
   }
+}
+
+async function getImageDimensions(fileOrBlob) {
+  return withDecodedImage(
+    fileOrBlob,
+    source => ({ width: source.width, height: source.height }),
+    { op: 'dimensions' }
+  )
 }
 
 function fitsMaxDimensions(width, height) {
   return width <= MAX_IMAGE_DIM && height <= MAX_IMAGE_DIM
 }
 
+/**
+ * Converts a HEIC file to a JPEG blob. The native path also returns the decoded
+ * dimensions so the caller can skip a redundant decode; the heic-to fallback
+ * reports null dimensions (caller resolves them separately).
+ * @returns {Promise<{ blob: Blob, width: number|null, height: number|null }>}
+ */
 async function heicToJpegBlob(file) {
   if (typeof createImageBitmap === 'function') {
     try {
-      const bitmap = await createImageBitmap(file)
+      const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+      const { width, height } = bitmap
       const canvas = document.createElement('canvas')
-      canvas.width = bitmap.width
-      canvas.height = bitmap.height
+      canvas.width = width
+      canvas.height = height
       const ctx = canvas.getContext('2d')
       if (!ctx) throw new Error('Canvas not supported')
       ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.fillRect(0, 0, width, height)
       ctx.drawImage(bitmap, 0, 0)
       bitmap.close()
-      return new Promise((resolve, reject) =>
+      const blob = await new Promise((resolve, reject) =>
         canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', JPEG_QUALITY)
       )
+      return { blob, width, height }
     } catch (err) {
       Sentry.captureException(err, { extra: { heicDecoder: 'native' } })
     }
   }
 
   const { heicTo } = await import('heic-to')
-  return heicTo({ blob: file, type: 'image/jpeg', quality: JPEG_QUALITY })
+  const blob = await heicTo({ blob: file, type: 'image/jpeg', quality: JPEG_QUALITY })
+  return { blob, width: null, height: null }
 }
 
 /** @returns {Promise<{ blob: Blob, previewUrl: string }>} */
 async function prepareUploadBlob(file) {
   if (await isHeicFile(file)) {
-    const jpegBlob = await heicToJpegBlob(file)
-    const { width, height } = await getImageDimensions(jpegBlob)
+    let { blob: jpegBlob, width, height } = await heicToJpegBlob(file)
+    if (width == null) ({ width, height } = await getImageDimensions(jpegBlob))
     if (fitsMaxDimensions(width, height)) {
       return { blob: jpegBlob, previewUrl: URL.createObjectURL(jpegBlob) }
     }
@@ -245,26 +278,7 @@ async function prepareUploadBlob(file) {
 }
 
 async function resizeBlob(fileOrBlob) {
-  if (typeof createImageBitmap === 'function') {
-    try {
-      const bitmap = await createImageBitmap(fileOrBlob)
-      try {
-        return await resizeSource(bitmap)
-      } finally {
-        bitmap.close()
-      }
-    } catch (err) {
-      Sentry.captureException(err, { extra: { resizeDecoder: 'bitmap' } })
-    }
-  }
-
-  const decodeUrl = URL.createObjectURL(fileOrBlob)
-  try {
-    const img = await loadImage(decodeUrl)
-    return await resizeSource(img)
-  } finally {
-    revokeObjectUrl(decodeUrl)
-  }
+  return withDecodedImage(fileOrBlob, resizeSource, { op: 'resize' })
 }
 
 /** @param {CanvasImageSource & { width: number, height: number }} source */
