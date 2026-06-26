@@ -452,6 +452,7 @@ function processWebhook(string $id): void {
     $application = \app\save($application);
     \webhook\mark($id);
     \semaphore\release($appId, "webhook:" . $mailEvent->name);
+    $application->syncToS3();
 
     if ($mailEvent->status == 'failed' && !$ccToUser)
         (new \MailGun())->notifyUser($application,

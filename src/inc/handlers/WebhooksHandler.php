@@ -127,6 +127,7 @@ class WebhooksHandler extends AbstractHandler {
             $application = \app\save($application);
             \semaphore\release($appId, 'webhook:' . $recipient);
             \webhook\mark($id);
+            $application->syncToS3();
 
             if (!$ccToUser) {
                 \telemetry\log('delivery_status', $appId, [

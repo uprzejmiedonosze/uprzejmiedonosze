@@ -89,6 +89,7 @@ class Mail extends CityAPI {
             \app\rmZip($application);
         }
 
+        $application->syncToS3();
         return $application;
     }
 }

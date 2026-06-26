@@ -8,6 +8,10 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
+<h4>Sobota, 27 czerwca 2026</h4>
+<ul>
+    <li>Naprawiono błąd powodujący timeout semaforów podczas równoczesnego przetwarzania webhooków Mailgun dla tego samego zgłoszenia: synchronizacja plików z S3 odbywa się teraz po zwolnieniu blokady, a nie w jej trakcie.</li>
+</ul>
 <h4>Piątek, 26 czerwca 2026</h4>
 <ul>
     <li>Dopisanie do bazy UD <b>wszystkich</b> komend miejskich i powiatowych w Polsce.</li>

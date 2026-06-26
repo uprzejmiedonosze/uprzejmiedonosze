@@ -71,6 +71,7 @@ foreach ($apps as $appId) {
             }
 
             \app\save($app);
+            $app->syncToS3();
             return true;
         }
         return false;

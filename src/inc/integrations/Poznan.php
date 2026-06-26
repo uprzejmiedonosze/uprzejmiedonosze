@@ -62,6 +62,7 @@ class Poznan extends CityAPI {
             \semaphore\release($application->id, "sendPoznan");
         }
 
+        $application->syncToS3();
         return $application;
     }
 }

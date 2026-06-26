@@ -51,11 +51,6 @@ function save(Application $application): Application{
         \cache\delete(type::AppsByPlate, $cleanPlateId);
     }
 
-    // Move files to S3 and free up local disk space once the delivery process is finished.
-    if (in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE', 'confirmed-sm'])) {
-        $application->syncToS3();
-    }
-
     return $application;
 }
 
