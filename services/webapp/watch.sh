@@ -35,6 +35,7 @@ build_static() {
     find src/api -maxdepth 1 -name '*.html' -exec cp {} export/public/api/ \;
     cp src/images-index.html export/
     [ -d src/img ] && cp -r src/img/. export/public/img/ || true
+    [ -f config.dev.php ] && cp config.dev.php export/config.dev.php
 }
 
 build_json() {

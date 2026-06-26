@@ -75,6 +75,7 @@ services:
       - ../tests:/build/tests:ro
       - ../tools:/build/tools:ro
       - ../export:/build/export
+      - ../config.dev.php:/build/config.dev.php:ro
       - ./webapp/watch.sh:/watch.sh:ro
     environment:
       APP_HOST: localhost
@@ -106,7 +107,8 @@ services:
       - ../config.dev.php:/var/www/uprzejmiedonosze.net/webapp/config.dev.php:ro
       - ./devroot/db:/var/www/uprzejmiedonosze.net/db
     env_file:
-      - .env.dev
+      - path: .env.dev
+        required: false
     depends_on:
       builder:
         condition: service_healthy
