@@ -118,7 +118,7 @@ const UNIT_FALLBACK_NAME = {
 function setUnitLabel(unit, name, hint) {
   const nameEl = document.getElementById(`unit-${unit}-name`)
   const hintEl = document.getElementById(`unit-${unit}-hint`)
-  if (nameEl) nameEl.textContent = name ? `Rejon: ${name}` : UNIT_FALLBACK_NAME[unit]
+  if (nameEl) nameEl.textContent = name ? `${name}` : UNIT_FALLBACK_NAME[unit]
   if (hintEl) hintEl.innerHTML = hint ?? ''
 }
 
@@ -129,25 +129,27 @@ function clearUnitLabels() {
 
 // Shows the actual unit name on both options; disables SM radio when no SM
 // exists for this location and switches to Police automatically.
-function renderSM() {
+// fromGeo=true fires geo:smUpdate so on-load.js can re-evaluate radio state;
+// omit it when called from setStopAgresji (user toggle) to avoid recursion.
+function renderSM(fromGeo = false) {
   if (!lastNominatim) return
   smUnknown = !lastNominatim.sm?.email
-  const smName = smUnknown ? '' : lastNominatim.sm.address[0]
-  const saName = lastNominatim.sa?.address?.[0] ?? ''
+  const smName = smUnknown ? '' : lastNominatim.sm.short
+  const saName = lastNominatim.sa?.short ?? ''
   const city = lastNominatim.address?.city ?? ''
   const smHint = smUnknown
     ? `W miejscowości ${city} nie powołano SM`
     : (!stopAgresji ? (lastNominatim.sm?.hint ?? '') : '')
   setUnitLabel('sm', smName, smHint)
   setUnitLabel('sa', saName, stopAgresji ? (lastNominatim.sa?.hint ?? '') : '')
-  document.dispatchEvent(new CustomEvent('geo:smUpdate'))
+  if (fromGeo) document.dispatchEvent(new CustomEvent('geo:smUpdate'))
 }
 
 // Lets the new-application form switch SM/Policja ad hoc without re-fetching
 // the address (both variants are already present in the cached nominatim response).
 export function setStopAgresji(value) {
   stopAgresji = value
-  renderSM()
+  renderSM() // fromGeo=false: labels only, no geo:smUpdate
 }
 
 async function latLngToAddress(lat, lng, from) {
@@ -220,7 +222,7 @@ async function latLngToAddress(lat, lng, from) {
   
   geoSuccess(addressData)
 
-  renderSM()
+  renderSM(true) // fromGeo=true: also fires geo:smUpdate
   running = false
 }
 

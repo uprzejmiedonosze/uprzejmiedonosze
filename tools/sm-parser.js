@@ -12,6 +12,27 @@ Object.prototype.clone = function() {
 	return JSON.parse(JSON.stringify(this))
 }
 
+function getShortName(address0) {
+	const replacements = [
+		['Referat Oskarżycieli Publicznych', 'ROP SM'],
+		['Komenda Wojewódzka Policji', 'KWP'],
+		['Komenda Stołeczna Policji', 'KSP'],
+		['Komenda Powiatowa Policji', 'KPP'],
+		['Komenda Miejska Policji', 'KMP'],
+		['Komenda Powiatowa', 'KPP'],
+		['Komenda Miejska', 'KMP'],
+		['Komisariat Policji', 'KP'],
+		['Posterunek Policji', 'PP'],
+		['Oddział Terenowy', 'OT'],
+		['Straż Miejska', 'SM'],
+		['Straż Gminna', 'SG'],
+	]
+	for (const [from, to] of replacements) {
+		if (address0.includes(from)) return address0.replace(from, to)
+	}
+	return address0
+}
+
 function processFile(fileName) {
 	const inputPath = path.join(inDir, fileName)
 	const outputPath = path.join(outDir, fileName)
@@ -43,6 +64,7 @@ function processFile(fileName) {
 			if (!sm[e].hint) sm[e].hint = 'Masz doświadczenia we współpracy z tą jednostką? <a href="mailto:szymon@uprzejmiedonosze.net" target="_blank">Podziel się</a>.'
 			if (!sm[e].api) sm[e].api = 'MailGun'
 			if (!sm[e].city) sm[e].city = e
+			sm[e].short = getShortName(sm[e].address[0])
 			if (e.toLowerCase() !== e) {
 				sm[e.toLowerCase()] = sm[e].clone()
 				delete sm[e]
