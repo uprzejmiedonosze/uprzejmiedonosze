@@ -20,7 +20,7 @@ class SMTest extends TestCase
     {
         $sm = new \SM($this->getData('warszawa_ot1'));
         self::assertEquals('I Oddział Terenowy \\\ Straży Miejskiej m.st. Warszawy \\\ ul. Sołtyka 8/10 \\\ 01-163 Warszawa', $sm->getLatexAddress());
-        self::assertEquals('I Oddział Terenowy', $sm->getShortName());
+        self::assertEquals('I OT', $sm->getShortName());
         self::assertFalse($sm->hasAPI());
         self::assertFalse($sm->isPolice());
     }

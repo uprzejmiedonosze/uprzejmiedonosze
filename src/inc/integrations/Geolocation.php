@@ -93,9 +93,11 @@ function Nominatim(float $lat, float $lng): array {
 
     \cache\geo\set(Type::Nominatim, "$lat,$lng", $json);
 
+    global $SM_ADDRESSES;
+    $smKey = \SM::guess((object)$address);
     return array(
         'address' => $address,
-        'sm' => \SM::resolve(\SM::guess((object)$address), false),
+        'sm' => $SM_ADDRESSES[$smKey] ?? $SM_ADDRESSES['_nieznane'],
         'sa' => \SM::resolve(\StopAgresji::guess((object)$address), true)
     );
 }
