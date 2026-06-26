@@ -1,12 +1,18 @@
 import { checkFile } from "./images";
 import { validateForm } from "./validate-form";
 import { bindSoftCommentValidation } from "../lib/validation";
+import { setStopAgresji, isSMUnknown } from "../lib/geolocation";
 
 // Constants for section class names
 const THIRD_IMAGE_SECTION_CLASS = 'thirdImageSection';
 
+// Remembers the user's manual SM/Policja choice while it's temporarily
+// forced to Policja by a stopAgresjiOnly category, so it can be restored.
+let rememberedUnitChoice = null;
+
 export const initHandlers = (map) => {
   initCategoryGroups();
+  initUnitToggle();
 
   // Combined change handler for multiple fields
   ["msisdn", "plateId", "comment", "datetime", "category"].forEach(id => {
@@ -26,6 +32,7 @@ export const initHandlers = (map) => {
           const carLabel = document.querySelector(".carImageSection label b");
           if (carLabel) carLabel.textContent = e.target.getAttribute("data-carImage-hint");
           validateExtensions();
+          syncUnitToggleWithCategory(e.target);
         }
       });
     }
@@ -103,6 +110,11 @@ export const initHandlers = (map) => {
   }
 
 
+  document.addEventListener('geo:smUpdate', () => {
+    const selectedCategory = document.querySelector('input[name="category"]:checked');
+    syncUnitToggleWithCategory(selectedCategory);
+  });
+
   const formSubmit = document.getElementById("form-submit");
   if (formSubmit) {
     formSubmit.addEventListener("click", function () {
@@ -155,6 +167,50 @@ function initCategoryGroups() {
     const wrapper = document.getElementById('showAllCategoriesWrapper');
     if (wrapper) wrapper.style.display = 'none';
   });
+}
+
+function initUnitToggle() {
+  const unitRadios = document.querySelectorAll('input[name="stopAgresji"]');
+  unitRadios.forEach(radio => {
+    radio.addEventListener('change', function () {
+      if (!this.checked) return;
+      rememberedUnitChoice = this.value;
+      setStopAgresji(this.value === 'SA');
+    });
+  });
+
+  const selectedCategory = document.querySelector('input[name="category"]:checked');
+  if (selectedCategory) syncUnitToggleWithCategory(selectedCategory);
+}
+
+function syncUnitToggleWithCategory(categoryRadio) {
+  const smRadio = /** @type {HTMLInputElement} */ (document.getElementById('unit-sm'));
+  const saRadio = /** @type {HTMLInputElement} */ (document.getElementById('unit-sa'));
+  if (!smRadio || !saRadio) return;
+
+  const policeOnly = categoryRadio?.getAttribute('data-stop-agresji-only') === '1';
+  const smDisabled = policeOnly || isSMUnknown();
+
+  if (smDisabled) {
+    if (policeOnly && !rememberedUnitChoice) {
+      rememberedUnitChoice = smRadio.checked ? 'SM' : 'SA';
+    }
+    smRadio.disabled = true;
+    if (!saRadio.checked) {
+      saRadio.checked = true;
+      setStopAgresji(true);
+    }
+  } else {
+    smRadio.disabled = false;
+    saRadio.disabled = false;
+    if (rememberedUnitChoice) {
+      const restoreToPolice = rememberedUnitChoice === 'SA';
+      smRadio.checked = !restoreToPolice;
+      saRadio.checked = restoreToPolice;
+      setStopAgresji(restoreToPolice);
+      rememberedUnitChoice = null;
+    }
+  }
 }
 
 function validateExtensions() {

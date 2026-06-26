@@ -1,7 +1,7 @@
 <?PHP
 
 require_once(__DIR__ . '/SM.php');
-require_once(__DIR__ . '/PoliceStationAreas.php');
+require_once(__DIR__ . '/Police.php');
 
 class StopAgresji extends SM {
   public function unknown(): bool {
@@ -17,31 +17,25 @@ class StopAgresji extends SM {
   }
 
   /**
+   * Najpierw próbuje znaleźć konkretny komisariat Policji (Police::guess()).
+   * Jeśli nic nie znajdzie, spada na poziom wojewódzki (gwarantowany fallback).
    * @SuppressWarnings(PHPMD.MissingImport)
    * @SuppressWarnings(PHPMD.CamelCaseVariableName)
    */
   public static function guess(object $address): string  { // stop agresji
     global $STOP_AGRESJI;
 
-    $voivodeship = trimstr2lower(@$address->voivodeship);
-    $city = trimstr2lower($address->city);
+    if ($key = \Police::guess($address))
+      return $key;
 
-    // this is a complex algorithm and runs on two cities at the moment
-    // it's better to run it only when needed
-    if (in_array($city, ['szczecin', 'kraków', 'poznań']) && $address->lat && $address->lng) {
-      $policeStationAreas = new \PoliceStationAreas;
-      return $policeStationAreas->guess($address->lat, $address->lng) ?? "$city-miasto";
-    }
-
+    // a handful of city-level aliases (e.g. Warszawa) live directly in
+    // stop-agresji.json rather than police.json, so Police::guess() alone
+    // can't find them.
+    $city = trimstr2lower($address->city ?? '');
     if (array_key_exists("$city-miasto", $STOP_AGRESJI))
       return "$city-miasto";
 
-    if(isset($address->county)) {
-      $county = trimstr2lower($address->county);
-      if(array_key_exists($county, $STOP_AGRESJI))
-          return $county;
-    }
-
+    $voivodeship = trimstr2lower($address->voivodeship ?? '');
     if (array_key_exists($voivodeship, $STOP_AGRESJI))
       return $voivodeship;
 

@@ -15,6 +15,33 @@ class StopAgresjiTest extends TestCase
         self::assertTrue($sm->isPolice());
     }
 
+    public function testGuessPrefersSpecificPoliceUnitOverVoivodeship(): void
+    {
+        // Otwock has a specific Police entry (no voivodeship-level match needed)
+        $key = \StopAgresji::guess(new \JSONObject(['county' => 'Otwock', 'city' => '__']));
+        self::assertEquals('otwock', $key);
+    }
+
+    public function testGuessFallsBackToVoivodeshipWhenNoSpecificUnit(): void
+    {
+        $key = \StopAgresji::guess(new \JSONObject([
+            'city' => '__nonexistent__',
+            'county' => '__nonexistent__',
+            'voivodeship' => 'Dolnośląskie',
+        ]));
+        self::assertEquals('dolnośląskie', $key);
+    }
+
+    public function testGuessFallsBackToDefaultWhenNothingMatches(): void
+    {
+        $key = \StopAgresji::guess(new \JSONObject([
+            'city' => '__nonexistent__',
+            'county' => '__nonexistent__',
+            'voivodeship' => '__nonexistent__',
+        ]));
+        self::assertEquals('default', $key);
+    }
+
     private function getData(string $city): array
     {
         return json_decode(file_get_contents(__DIR__ . '/../../export/public/api/config/stop-agresji.json'), true)[$city];

@@ -99,22 +99,33 @@
                 </div>
             </div>
             <div>
-                <label for="lokalizacja" id="addressHint" style="display: inline;" >Podaj adres lub wskaż go na mapie</label>
-                    <div id="map">
-                        <a id="resizeMap" class="ui-button-resizeMap ui-icon-arrowsout"></a>
-                        <div id="locationPicker" class="locationPickerClass"></div>
-                        <span id="mapCenter"></span>
-                    </div>
-            </div>
-            <div>
+                <label for="lokalizacja" id="addressHint" style="display: inline;" >Podaj2 adres lub wskaż go na mapie</label>
+                <div id="map">
+                    <a id="resizeMap" class="ui-button-resizeMap ui-icon-arrowsout"></a>
+                    <div id="locationPicker" class="locationPickerClass"></div>
+                    <span id="mapCenter"></span>
+                </div>
                 <div class="combo">
                     <input type="text" maxlength="70" required id="lokalizacja" name="lokalizacja"
                         placeholder="(wskaż lokalizację na mapie)" data-type="geo"
                         value="{{ app.address.address ?? '' }}" />
                 </div>
-                <div>
-                    <div id="smInfo"></div>
-                    <div id="smInfoHint"></div>
+            </div>
+            <div>
+                <label for="unitToggle">Wybierz adresata: policja czy straż miejska?</label>
+                <div id="unitToggle" class="grid">
+                    <input type="radio" name="stopAgresji" id="unit-sa" value="SA"
+                        {% if app.stopAgresji %}checked="checked"{% endif %}>
+                    <label for="unit-sa" class="radio no-bullet">
+                        <span id="unit-sa-name">Policja</span>
+                        <span id="unit-sa-hint" class="unit-hint"></span>
+                    </label>
+                    <input type="radio" name="stopAgresji" id="unit-sm" value="SM"
+                        {% if not app.stopAgresji %}checked="checked"{% endif %}>
+                    <label for="unit-sm" class="radio no-bullet">
+                        <span id="unit-sm-name">Straż Miejska</span>
+                        <span id="unit-sm-hint" class="unit-hint"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -147,7 +158,8 @@
                     <input type="radio" {% if catId == app.category and not showAll %}checked="checked"{% endif %}
                         name="category" value="{{ catId }}" id="top-{{ catId }}"
                         data-contextImage-hint="{{ catDef.contextImageHint }}"
-                        data-carImage-hint="{{ catDef.carImageHint }}">
+                        data-carImage-hint="{{ catDef.carImageHint }}"
+                        data-stop-agresji-only="{{ catDef.stopAgresjiOnly ? '1' : '0' }}">
                     <label for="top-{{ catId }}" class="radio no-bullet">
                         <div>
                             <img src="/img/{{ catId }}.jpg?ref">
@@ -185,7 +197,8 @@
                         <input type="radio" {% if catId == app.category and (showAll or not catInTopGroup) %}checked="checked"{% endif %}
                             name="category" value="{{ catId }}" id="{{ catId }}"
                             data-contextImage-hint="{{ catDef.contextImageHint }}"
-                            data-carImage-hint="{{ catDef.carImageHint }}">
+                            data-carImage-hint="{{ catDef.carImageHint }}"
+                            data-stop-agresji-only="{{ catDef.stopAgresjiOnly ? '1' : '0' }}">
                         <label for="{{ catId }}" class="radio no-bullet">
                             <div>
                                 <img src="/img/{{ catId }}.jpg?ref">

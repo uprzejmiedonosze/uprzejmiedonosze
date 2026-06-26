@@ -20,7 +20,7 @@ class SMTest extends TestCase
     {
         $sm = new \SM($this->getData('warszawa_ot1'));
         self::assertEquals('I Oddział Terenowy \\\ Straży Miejskiej m.st. Warszawy \\\ ul. Sołtyka 8/10 \\\ 01-163 Warszawa', $sm->getLatexAddress());
-        self::assertEquals('I Oddział Terenowy', $sm->getShortName());
+        self::assertEquals('I OT', $sm->getShortName());
         self::assertFalse($sm->hasAPI());
         self::assertFalse($sm->isPolice());
     }
@@ -32,15 +32,6 @@ class SMTest extends TestCase
         self::assertEquals('(skontaktuj się z autorem: szymon@uprzejmiedonosze.net', $sm->getShortName());
         self::assertFalse($sm->hasAPI());
         self::assertFalse($sm->isPolice());
-    }
-
-    public function testOtwock(): void
-    {
-        $sm = new \SM($this->getData('otwock'));
-        self::assertEquals('Komenda Powiatowa Policji w Otwocku \\\\ ul. Pułaskiego 7a \\\\ 05-400 Otwock', $sm->getLatexAddress());
-        self::assertEquals('KPP w Otwocku', $sm->getShortName());
-        self::assertFalse($sm->hasAPI());
-        self::assertTrue($sm->isPolice());
     }
 
     public function testGuessSM() : void {

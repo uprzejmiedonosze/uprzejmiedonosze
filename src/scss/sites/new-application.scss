@@ -272,9 +272,10 @@ div.error img {
     }
   }
 
-  #smInfoHint {
+  .unit-hint {
+    display: block;
     font-size: 90%;
-    padding: 1em;
+    padding-top: 0.3em;
 
     a {
       font-weight: 400;

@@ -24,6 +24,7 @@ function updateApplication(
     $witness,
     $extensions,
     User $user,
+    ?bool $stopAgresji = null,
 ): Application {
 
     if ($application->email !== $user->getEmail()) {
@@ -53,13 +54,24 @@ function updateApplication(
 
     $application->updateUserData($user);
 
+    if ($stopAgresji !== null) {
+        $application->stopAgresji = $stopAgresji;
+        // Persist a deliberate ad hoc choice to the account, so it's remembered
+        // for future reports. Must happen before the stopAgresjiOnly forced
+        // override below, so a forced flip never leaks into the saved preference.
+        $user->setStopAgresjiPreference($stopAgresji);
+        \user\save($user);
+    }
+
     /** @var \SM|\StopAgresji $sm */
     $sm = $application->guessSMData(true); // stores sm city inside the object
 
     /** @var array<int, Category> $CATEGORIES */
     global $CATEGORIES;
+    $application->stopAgresjiForced = false;
     if ($CATEGORIES[$category]->isStopAgresjiOnly() && !$sm->isPolice()) {
         $application->stopAgresji = true;
+        $application->stopAgresjiForced = true;
         $application->guessSMData(true);
     }
 

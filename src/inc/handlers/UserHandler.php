@@ -29,7 +29,11 @@ class UserHandler extends AbstractHandler {
         $msisdn = $this->getParam($params, 'msisdn', '');
         $edelivery = $this->getParam($params, 'edelivery', '');
 
-        $stopAgresji = $this->getParam($params, 'stopAgresji', 'SM') == 'SA';
+        // Field no longer present in the registration/edit-profile form (the only
+        // place to set this is the ad hoc toggle on the new-application screen) —
+        // pass null so updateUserData() leaves any previously saved preference untouched.
+        $stopAgresjiRaw = $params['stopAgresji'] ?? null;
+        $stopAgresji = $stopAgresjiRaw === null ? null : ($stopAgresjiRaw === 'SA');
         $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
 
         /** @var \user\User $user */

@@ -44,7 +44,7 @@ class ApplicationTest extends TestCase
     {
         $app = Application::withUser(new User());
         $this->assertTrue($app->user->shareRecydywa);
-        $this->assertFalse($app->stopAgresji);
+        $this->assertTrue($app->stopAgresji); // new user defaults to Police
         $this->assertEquals(0, $app->category);
         $this->assertEquals(12, strlen($app->id));
     }
@@ -300,7 +300,8 @@ class ApplicationTest extends TestCase
         // Test with stopAgresji
         $app->stopAgresji = true;
         $smData = $app->guessSMData(true);
-        $this->assertInstanceOf(\StopAgresji::class, $smData);
+        // Specific local police unit (Police), not the voivodeship-level StopAgresji fallback.
+        $this->assertInstanceOf(\Police::class, $smData);
         $this->assertEquals('KP Szczecin Niebuszewo', $smData->getShortName());
         $this->assertFalse($smData->hasAPI());
         $this->assertTrue($smData->automated());

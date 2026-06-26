@@ -43,9 +43,13 @@ class SM extends JSONObject {
         return strtr($this->address[0], [
             'Straż Miejska' => 'SM',
             'Straż Gminna' => 'SG',
+            'Referat Oskarżycieli Publicznych' => 'ROP SM',
+            'Oddział Terenowy' => 'OT',
             'Komenda Powiatowa Policji' => 'KPP',
             'Komenda Powiatowa' => 'KPP',
+            'Komenda Miejska Policji' => 'KMP',
             'Komenda Miejska' => 'KMP',
+            'Komenda Stołeczna Policji' => 'KSP',
             'Komisariat Policji' => 'KP',
             'Posterunek Policji' => 'PP',
             'Komenda Wojewódzka Policji' => 'KWP'
@@ -66,7 +70,7 @@ class SM extends JSONObject {
 
     public function isPolice(): bool
     {
-        return str_contains($this->getEmail() ?? '', 'policja');
+        return false;
     }
 
     /**
@@ -79,23 +83,40 @@ class SM extends JSONObject {
     }
 
     /**
+     * Sprawdza, czy klucz istnieje w którejkolwiek z podanych tabel.
+     * Współdzielone przez SM::guess() i Police::guess() - różnią się tylko
+     * zestawem tabel przeszukiwanych na każdym poziomie szczegółowości.
+     */
+    protected static function matchesAnyTable(string $key, array ...$tables): bool {
+        foreach ($tables as $table) {
+            if (array_key_exists($key, $table)) return true;
+        }
+        return false;
+    }
+
+    /**
+     * Szuka jednostki na każdym poziomie najpierw w $SM_ADDRESSES, a jeśli nie
+     * znajdzie, także w $POLICE_ADDRESSES (gminy bez SM mają tam podstawiony
+     * lokalny komisariat) — dopiero potem przechodzi do kolejnego poziomu.
+     * To zachowuje dokładnie dawną semantykę "pierwsze trafienie wygrywa, w
+     * kolejności poziomów", z czasów gdy obie kategorie żyły w jednym pliku.
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * @SuppressWarnings(PHPMD.ErrorControlOperator)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public static function guess(object $address): string { // straż miejska
-        global $SM_ADDRESSES;
+    public static function guess(object $address): ?string { // straż miejska
+        global $SM_ADDRESSES, $POLICE_ADDRESSES;
 
         // post code level
         if(isset($address->postcode)) {
             $postcode = $address->postcode;
-            if(array_key_exists($postcode, $SM_ADDRESSES))
+            if(self::matchesAnyTable($postcode, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $postcode;
         }
 
         // city level
         $city = trimstr2lower($address->city ?? '');
-        if(array_key_exists($city, $SM_ADDRESSES)){
+        if(self::matchesAnyTable($city, $SM_ADDRESSES, $POLICE_ADDRESSES)){
             $smCity = $city;
             if($city == 'warszawa' && isset($address->district)){
                 if(array_key_exists($address->district, ODDZIALY_TERENOWE)){
@@ -108,21 +129,34 @@ class SM extends JSONObject {
         // county level | gmina
         if(isset($address->county)) {
             $county = trimstr2lower($address->county);
-            if(array_key_exists($county, $SM_ADDRESSES))
+            if(self::matchesAnyTable($county, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $county;
 
             // guessed county level (remove 'gmina ' from county name)
             $county = str_replace('gmina ', '', $county);
-            if(array_key_exists($county, $SM_ADDRESSES))
+            if(self::matchesAnyTable($county, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $county;
         }
 
         // municipality level | powiat
         if(isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
-            if(array_key_exists($municipality, $SM_ADDRESSES))
+            if(self::matchesAnyTable($municipality, $SM_ADDRESSES, $POLICE_ADDRESSES))
                 return $municipality;
         }
         return '_nieznane';
+    }
+
+    /**
+     * Rozwiązuje zbuforowany klucz `smCity` na obiekt jednostki. Klucz mógł
+     * historycznie powstać przed podziałem sm.json/police.json/stop-agresji.json
+     * na trzy pliki, więc sprawdza alternatywny plik jako fallback.
+     */
+    public static function resolve(string $key, bool $stopAgresji): \SM {
+        global $SM_ADDRESSES, $POLICE_ADDRESSES, $STOP_AGRESJI;
+        if ($stopAgresji) {
+            return $POLICE_ADDRESSES[$key] ?? $STOP_AGRESJI[$key] ?? $STOP_AGRESJI['default'];
+        }
+        return $SM_ADDRESSES[$key] ?? $POLICE_ADDRESSES[$key] ?? $SM_ADDRESSES['_nieznane'];
     }
 }
