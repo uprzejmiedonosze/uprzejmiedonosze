@@ -35,7 +35,7 @@ class StopAgresji extends SM {
     if (array_key_exists("$city-miasto", $STOP_AGRESJI))
       return "$city-miasto";
 
-    $voivodeship = trimstr2lower(@$address->voivodeship);
+    $voivodeship = trimstr2lower($address->voivodeship ?? '');
     if (array_key_exists($voivodeship, $STOP_AGRESJI))
       return $voivodeship;
 

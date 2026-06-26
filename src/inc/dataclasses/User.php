@@ -34,7 +34,7 @@ class User extends \JSONObject{
         $this->data = new stdClass();
         $this->data->email = $_SESSION['user_email'] ?? '';
         $this->data->name  = capitalizeName($_SESSION['user_name'] ?? '');
-        $this->data->stopAgresji = false;
+        $this->data->stopAgresji = true;
         $this->data->shareRecydywa = true;
         $this->data->sex = '?';
         $this->appsCount = 0;

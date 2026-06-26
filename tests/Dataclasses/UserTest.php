@@ -132,10 +132,10 @@ class UserTest extends TestCase
     public function testStopAgresji()
     {
         $user = new User();
-        $this->assertFalse($user->stopAgresji());
+        $this->assertTrue($user->stopAgresji());  // new accounts default to Police
 
-        $user->data->stopAgresji = true;
-        $this->assertTrue($user->stopAgresji());
+        $user->data->stopAgresji = false;
+        $this->assertFalse($user->stopAgresji());
     }
 
     public function testAutoSend()
