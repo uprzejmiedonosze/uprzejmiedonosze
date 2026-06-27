@@ -87,7 +87,7 @@ function get_alpr(&$imageBytes){
 	$apiInstance = new \Swagger\Client\Api\DefaultApi();
 
     try {
-        $alpr = $apiInstance->recognizeBytes($imageBytes, OPEN_ALPR_SECRET_1,
+        $alpr = $apiInstance->recognizeBytes(base64_encode($imageBytes), OPEN_ALPR_SECRET_1,
             "eu", // country
             1, // recognize_vehicle
             "", // state

@@ -31,6 +31,18 @@ export default class Api {
   async post(data, headers={}) {
     return await this.#postOrPatch(data, 'POST', headers)
   }
+
+  async postForm(data, headers={}) {
+    const response = await fetch(this.url, {
+      headers: {
+        'Accept': 'application/json',
+        ...headers
+      },
+      method: 'POST',
+      body: data
+    })
+    return await this.#parseResponse(response)
+  }
   
   async patch(data, headers={}) {
     return await this.#postOrPatch(data, 'PATCH', headers)
