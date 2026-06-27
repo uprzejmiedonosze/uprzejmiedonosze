@@ -250,14 +250,14 @@ class Application extends JSONObject implements \JsonSerializable {
         global $STATUSES;
 
         if(!array_key_exists($status, $STATUSES)){
-            throw new Exception("Odmawiam ustawienia statusu na '$status'");
+            throw new Exception("Nieznany status '$status'");
         }
         if($status == $this->status){
             logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}");
             return;
         }elseif(!in_array($status, $this->getStatus()->allowed)){
             if (!$force)
-                throw new Exception("Odmawiam zmiany statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
+                throw new Exception("Niedozwolona zmiana statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
         }
         if(!isset($this->statusHistory))
             $this->statusHistory = [];
@@ -413,6 +413,10 @@ class Application extends JSONObject implements \JsonSerializable {
 
     public function getLatexSafeComment(){
         return $this->getLatexSafe($this->userComment);
+    }
+
+    public function getLatexSafePlateId() {
+        return $this->getLatexSafe($this->carInfo->plateId ?? '');
     }
 
     public function getLatexSafeAddress() {
@@ -688,7 +692,7 @@ class Application extends JSONObject implements \JsonSerializable {
         $showImage = $showImage || $this->statements->gallery;
         
         // hide photos with faces
-        $showImage = $showImage && ($app->faces->count ?? 0) == 0;
+        $showImage = $showImage && ($this->faces->count ?? 0) == 0;
 
         // app owner can always see his photos
         $showImage = $showImage || $this->isAppOwner($whoIsWathing);

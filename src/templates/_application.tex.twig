@@ -32,7 +32,7 @@
 \end{center}
 
 W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }}
-świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym\texttt{ {{ app.carInfo.plateId }} }w~okolicy adresu
+świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym\texttt{ {{ app.getLatexSafePlateId|raw }} }w~okolicy adresu
 \href{{ mapUrl|raw -}}{ {{ app.getLatexSafeAddress|raw -}} }\footnote{\noindent
 Adres oraz zdjęcia można ,,kliknąć'' aby uzyskać więcej informacji.}.
 {{ app.getCategory.formal }} 

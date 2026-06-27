@@ -4,10 +4,10 @@ namespace UprzejmieDonosze\Tests\Dataclasses;
 
 use Exception;
 use MissingParamException;
-use PHPUnit\Framework\TestCase;
 use user\User;
+use UprzejmieDonosze\Tests\DatabaseTestCase;
 
-class UserTest extends TestCase
+class UserTest extends DatabaseTestCase
 {
     public function testIsRegistered()
     {

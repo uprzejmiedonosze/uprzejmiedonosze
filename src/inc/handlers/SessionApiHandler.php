@@ -32,7 +32,7 @@ class SessionApiHandler extends AbstractHandler {
      */
     public function validateUser(Request $request, Response $response, $args): Response {
         $apiKey = $request->getHeaderLine('X-API-Key');
-        if (empty($apiKey) || $apiKey !== BACKEND_API_KEY) {
+        if (empty($apiKey) || !hash_equals((string) BACKEND_API_KEY, $apiKey)) {
             throw new HttpForbiddenException($request, "Invalid or missing API key");
         }
         
@@ -147,8 +147,11 @@ class SessionApiHandler extends AbstractHandler {
         $appId = $args['appId'];
         $status = $args['status'];
         $user = $request->getAttribute('user');
-        $application = setStatus($status, $appId, $user);
-        $this->checkOwnership($request, $application);
+        try {
+            $application = setStatus($status, $appId, $user);
+        } catch (ForbiddenException $e) {
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
+        }
         return $this->renderJson($response, array(
             "status" => "OK",
             "patronite" => $application->patronite
@@ -164,7 +167,7 @@ class SessionApiHandler extends AbstractHandler {
             $fields = json_decode($request->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
             foreach ($fields as $field => $value) {
                 match ($field) {
-                    'externalId' => $application->externalId = $value,
+                    'externalId' => $application->externalId = mb_substr(trim((string) $value), 0, 100),
                     'privateComment' => $application->privateComment = $value,
                     default => throw new HttpForbiddenException($request, 'Pole ' . $field . ' nie może być edytowane'),
                 };
@@ -189,6 +192,8 @@ class SessionApiHandler extends AbstractHandler {
         try {
             $application = sendApplication($appId, $user);
             \telemetry\log('report_sent', $appId);
+        } catch (ForbiddenException $e) {
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
         } catch (NotSendableException $e) {
             return $this->renderJson($response->withStatus(409), array(
                 "error" => $e->getMessage()

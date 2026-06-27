@@ -199,9 +199,8 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
     });
 
     $group->get('/{appId}', function (Request $request, Response $response) {
-        $user = $request->getAttribute('user');
         $application = $request->getAttribute('application');
-    
+
         $twig = initBareTwig();
         $user = \user\current();
         $sex = ($user)? $user->getSex(): SEXSTRINGS['?'];
@@ -211,16 +210,12 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
                 'sex' => $sex
             ]
         ]);
-    
+
         $application->formattedText = json_decode($appJson);
-    
-        if ($application->email !== $user->getEmail()) {
-            $application->user = '';
-        }
-    
+
         $response->getBody()->write(json_encode($application));
         return $response;
-    })  ->add(new AppMiddleware(failOnWrongOwnership: false));
+    })  ->add(new AppMiddleware());
 
     $group->post('/{appId}', function (Request $request, Response $response, $args) {
         $appId = $args['appId'];

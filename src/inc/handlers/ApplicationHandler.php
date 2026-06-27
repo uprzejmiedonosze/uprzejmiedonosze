@@ -6,6 +6,7 @@ use app\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpNotFoundException;
 
 /**
  * @SuppressWarnings(PHPMD.StaticAccess)
@@ -195,8 +196,11 @@ class ApplicationHandler extends AbstractHandler {
         unset($_SESSION['newAppId']);
         $user = $request->getAttribute('user');
 
-        $result = \semaphore\withLock($appId, "finish", function () use ($appId, $STATUSES) {
+        $result = \semaphore\withLock($appId, "finish", function () use ($appId, $STATUSES, $user, $request) {
             $application = \app\get($appId);
+            if (!$application->isAppOwner($user)) {
+                throw new HttpNotFoundException($request, "Nie posiadasz zgłoszenia o ID {$appId}");
+            }
             $status = $STATUSES[$application->status];
             if(!$status->editable) {
                 logger("Ponowny POST na /dziekujemy.html dla zgłoszenia {$application->number} w statusie {$status->name}");
@@ -307,8 +311,12 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function applicationShortHtml(Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
         $appId = $args['appId'];
         $application = \app\get($appId);
+
+        if (!$application->isAppOwner($user))
+            throw new HttpNotFoundException($request, "Nie posiadasz zgłoszenia o ID {$appId}");
 
         return AbstractHandler::renderHtml($request, $response, '_application-short-details', [
             'appActionButtons' => true,

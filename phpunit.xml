@@ -5,6 +5,8 @@
   beStrictAboutOutputDuringTests="true"
   failOnRisky="true"
   failOnWarning="true"
+  executionOrder="random"
+  resolveDependencies="true"
   bootstrap="tests/bootstrap.php"
   cacheDirectory=".phpunit.cache">
   <php>

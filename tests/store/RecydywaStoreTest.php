@@ -2,20 +2,21 @@
 
 namespace UprzejmieDonosze\Tests\Store;
 
-require_once __DIR__ . '/../../export/inc/store/index.php';
 require_once __DIR__ . '/../../export/inc/integrations/Tumblr.php';
 
 use app\Application;
-use PHPUnit\Framework\TestCase;
 use user\User;
+use UprzejmieDonosze\Tests\DatabaseTestCase;
 
-class RecydywaStoreTest extends TestCase
+class RecydywaStoreTest extends DatabaseTestCase
 {
     private function getApp(): Application
     {
         $appJson = '{"date":"2019-03-31T13:06:23","id":"66610107-29dd-4392-8bae-83c71426d844","added":"2019-04-14T13:22:48","user":{"email":"e@nieradka.net","name":"Ud Developer","exposeData":false,"msisdn":"","address":"Rynek 99-120, Pi\u0105tek"},"status":"confirmed","category":8,"statusHistory":{"2019-04-14T13:27:05":{"old":"draft","new":"ready"},"2019-04-14T13:27:11":{"old":"ready","new":"confirmed"}},"contextImage":{"url":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811.jpg","thumb":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811,t.jpg"},"carImage":{"url":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12.jpg","thumb":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,t.jpg"},"carInfo":{"plateId":"ZS2450C","plateIdFromImage":"ZS2450C","brand":"Audi","plateImage":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,p.jpg","recydywa":0},"dtFromPicture":true,"address":{"address":"aleja Papie\u017ca Jana Paw\u0142a II 36, Szczecin","city":"Szczecin","voivodeship":"zachodniopomorskie","lat":53.43474358333333,"lng":14.545931694444445},"smCity":"szczecin","userComment":"","number":"UD\/2\/2","comments":[],"extensions":[],"seq":2,"inexactHour":true,"version":"2.3.0"}';
         $email = 'e@nieradka.net';
+        // Session is reset per test by DatabaseTestCase, so set up our own.
         $_SESSION['user_email'] = $email;
+        $_SESSION['user_id'] = 1;
         $app = Application::withJson($appJson, $email);
         $app->initStatements();
         $app->setStatus('sending');
@@ -63,6 +64,24 @@ class RecydywaStoreTest extends TestCase
         self::assertIsObject($detailed);
         self::assertIsArray($detailed->apps);
         self::assertEquals(1, count($detailed->apps));
+    }
+
+    public function testLastTicketEscapesMaliciousExternalId(): void
+    {
+        $apps = [new \JSONObject([
+            'status' => 'confirmed-fined',
+            'externalId' => '<img src=x onerror=alert(document.cookie)>',
+            'owner' => true,
+            'smCity' => 'szczecin',
+            'stopAgresji' => false,
+            'date' => '2019-03-31T13:06:23',
+            'number' => 'UD/2/2',
+            'addedToGallery' => null,
+        ])];
+
+        $html = \recydywa\lastTicket($apps);
+
+        self::assertStringContainsString('UD/2/2 (&lt;IMG SRC=X ONERROR=ALERT(DOCUMENT.COOKIE)&gt;)', $html);
     }
 
     public function testAddToGallery(): void

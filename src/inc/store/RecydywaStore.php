@@ -110,7 +110,10 @@ function lastTicket(array $recydywa): string {
         $by = $lastTicket->owner ? 'Np. twoje zgłoszenie' : 'Np. zgłoszenie innej osoby';
     }
     
-    $number = $lastTicket->number . ($lastTicket->externalId ? " (" . strtoupper($lastTicket->externalId ) . ")" : '');
+    $externalIdSuffix = $lastTicket->externalId
+        ? " (" . htmlspecialchars(strtoupper((string) $lastTicket->externalId), ENT_QUOTES) . ")"
+        : '';
+    $number = htmlspecialchars((string) $lastTicket->number, ENT_QUOTES) . $externalIdSuffix;
     $date = formatDateTime($lastTicket->date, 'd.MM.y');
     
     $sm = \SM::resolve($lastTicket->smCity, $lastTicket->stopAgresji);

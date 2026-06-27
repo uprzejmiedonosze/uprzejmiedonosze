@@ -2,12 +2,12 @@
 
 namespace UprzejmieDonosze\Tests\Dataclasses;
 
-use PHPUnit\Framework\TestCase;
 use app\Application;
 use Error;
 use user\User;
+use UprzejmieDonosze\Tests\DatabaseTestCase;
 
-class ApplicationTest extends TestCase
+class ApplicationTest extends DatabaseTestCase
 {
     private $appJson = '{"date":"2019-03-31T13:06:23","id":"66610107-29dd-4392-8bae-83c71426d844","added":"2019-04-14T13:22:48","user":{"email":"e@nieradka.net","name":"Ud Developer","number":2,"exposeData":false,"msisdn":"","address":"Rynek 99-120, Pi\u0105tek"},"status":"confirmed","category":8,"statements":{"witness":false},"statusHistory":{"2019-04-14T13:27:05":{"old":"draft","new":"ready"},"2019-04-14T13:27:11":{"old":"ready","new":"confirmed"}},"contextImage":{"url":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811.jpg","thumb":"cdn\/ce883f8d-2f8d-4048-8725-76a2777b2811,t.jpg"},"carImage":{"url":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12.jpg","thumb":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,t.jpg"},"carInfo":{"plateId":"ZS2450C","plateIdFromImage":"ZS2450C","brand":"Audi","plateImage":"cdn\/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,p.jpg","recydywa":0},"dtFromPicture":true,"address":{"address":"aleja Papie\u017ca Jana Paw\u0142a II 36, Szczecin","city":"Szczecin","voivodeship":"zachodniopomorskie","lat":53.43474358333333,"lng":14.545931694444445},"smCity":"szczecin","userComment":"","number":"UD\/2\/2","comments":[],"extensions":[],"seq":2,"inexactHour":true,"version":"2.3.0"}';
     private $email = 'e@nieradka.net';
@@ -86,12 +86,12 @@ class ApplicationTest extends TestCase
 
         $this->assertThrowsException(function() use ($app) {
             $app->setStatus('submitted');
-        }, \Exception::class, "Odmawiam ustawienia statusu na 'submitted'");
+        }, \Exception::class, "Nieznany status 'submitted'");
         $this->assertEquals(1, sizeof($app->statusHistory));
 
         $this->assertThrowsException(function() use ($app) {
             $app->setStatus('sending');
-        }, \Exception::class, "Odmawiam zmiany statusu z 'ready' na 'sending' dla zgłoszenia '{$app->id}'");
+        }, \Exception::class, "Niedozwolona zmiana statusu z 'ready' na 'sending' dla zgłoszenia '{$app->id}'");
         $this->assertEquals(1, sizeof($app->statusHistory));
     }
 
@@ -148,6 +148,24 @@ class ApplicationTest extends TestCase
         $this->assertEquals(1, $app->getRevision());
     }
 
+    // ── LaTeX escaping of plateId in the PDF template ─────────────────────────
+
+    public function testGetLatexSafePlateIdNeutralisesInjection()
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $app->carInfo->plateId = '}\input{/etc/passwd}';
+
+        $this->assertEquals('\} input\{/etc/passwd\}', $app->getLatexSafePlateId());
+    }
+
+    public function testGetLatexSafePlateIdPreservesNormalPlate()
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $app->carInfo->plateId = 'ZS2450C';
+
+        $this->assertEquals('ZS2450C', $app->getLatexSafePlateId());
+    }
+
     public function testIsAppOwner()
     {
         $_SESSION['user_email'] = 'test1@example.com';
@@ -159,6 +177,32 @@ class ApplicationTest extends TestCase
 
         $_SESSION['user_email'] = 'test2@example.com';
         $this->assertFalse($app->isAppOwner(new User()));
+    }
+
+    // ── Face-hiding privacy gate (regression for the $app/$this typo) ──────────
+
+    public function testCanImageBeShownHidesPhotosWithFacesFromNonOwners()
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $app->statements->gallery = false; // sharing comes from $canShareRecydywa below
+
+        // A non-owner viewer.
+        $_SESSION['user_email'] = 'attacker@example.com';
+        $viewer = new User();
+        $this->assertFalse($app->isAppOwner($viewer));
+
+        // A shared photo that contains a detected face must NOT be shown to a non-owner.
+        $app->faces = (object) ['count' => 1];
+        $this->assertFalse($app->canImageBeShown($viewer, true));
+
+        // The same shared photo without faces IS shown.
+        $app->faces = (object) ['count' => 0];
+        $this->assertTrue($app->canImageBeShown($viewer, true));
+
+        // The owner always sees their own photo, even with faces.
+        $app->faces = (object) ['count' => 1];
+        $_SESSION['user_email'] = $this->email;
+        $this->assertTrue($app->canImageBeShown(new User(), true));
     }
 
     public function testEncode()

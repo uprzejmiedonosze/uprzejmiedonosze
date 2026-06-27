@@ -28,7 +28,7 @@ function updateApplication(
 ): Application {
 
     if ($application->email !== $user->getEmail()) {
-        throw new ForbiddenException("Odmawiam aktualizacji zgłoszenia '{$application->id}' przez '{$user->getEmail()}'");
+        throw new ForbiddenException("Nie posiadasz zgłoszenia o ID {$application->id}");
     }
 
     if (!$application->isEditable()) {
@@ -99,8 +99,11 @@ function updateApplication(
  * Sets application status.
  */
 function setStatus(string $status, string $appId, User $user): Application {
-    $application = \semaphore\withLock($appId, "setStatus", function () use ($appId, $status) {
+    $application = \semaphore\withLock($appId, "setStatus", function () use ($appId, $status, $user) {
         $application = \app\get($appId);
+        if (!$application->isAppOwner($user)) {
+            throw new ForbiddenException("Nie posiadasz zgłoszenia o ID {$appId}");
+        }
         $application->setStatus($status);
         return \app\save($application);
     });
@@ -123,6 +126,9 @@ function setStatus(string $status, string $appId, User $user): Application {
  */
 function sendApplication(string $appId, User $user): Application {
     $application = \app\get($appId);
+    if (!$application->isAppOwner($user)) {
+        throw new ForbiddenException("Nie posiadasz zgłoszenia o ID {$appId}");
+    }
     CityAPI::checkApplication($application);
     $sm = $application->guessSMData();
     $api = new $sm->api;
