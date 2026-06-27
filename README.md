@@ -24,17 +24,18 @@ git clone git@github.com:uprzejmiedonosze/uprzejmiedonosze.git
 cd uprzejmiedonosze
 ```
 
-## Local secrets setup
+## Local config
 
-Create `services/.env.dev` (gitignored) with your dev credentials. Use the structure below — all values are required for full functionality, but the app will start without optional ones:
+**`config.dev.php`** (repo root, committed) is the dev bootstrap: fixture crypto keys
+(matching `services/devroot/db/store.sqlite`), Mailpit/mail defaults, and API placeholders.
+After clone, `make dev` is enough — no extra setup required.
+
+Docker mounts this file into the webapp. Constants from the file take precedence; Docker env
+vars (from optional `services/.env.dev`) only apply to settings **not** already defined there.
+
+Optional **`services/.env.dev`** (gitignored) — only if you need real third-party tokens, e.g.:
 
 ```bash
-# Mandatory for encryption / sessions
-CRYPTO_KEY=...
-CRYPTO_IV=...
-CRYPTO_TAG=...
-
-# Firebase, Maps, ALPR, Mail, etc. (optional — app runs without them)
 MAPBOX_API_TOKEN=...
 GOOGLE_MAPS_API_TOKEN=...
 # ... see AGENTS.md for the full list
@@ -48,6 +49,12 @@ The dev profile starts a **Firebase Auth Emulator** automatically — no real Fi
 
 If you need a real Firebase project (for staging/prod), see the maintainer.
 
+## Email preview (Mailpit)
+
+The dev profile also starts **Mailpit** — outgoing mail is captured locally instead of hitting Mailgun. After sending a report, open the inbox at `http://localhost:8025` to preview the message body and PDF/ZIP attachments.
+
+Configured via `MAILER_DSN` in `config.dev.php` (`smtp://mailpit:1025`). If the DSN is missing, dev falls back to dry-run (status updates, no message captured).
+
 ## Running
 
 ```bash
@@ -57,8 +64,10 @@ make dev
 This is equivalent to:
 
 ```bash
-docker compose -f services/compose.yml --env-file services/.env.dev -p dev --profile dev up --build
+docker compose -f services/compose.yml -p dev --profile dev up --build
 ```
+
+(`services/.env.dev` is optional — see [Local config](#local-config).)
 
 The first run takes a few minutes (builds Docker images, compiles CSS/JS). Subsequent runs are fast thanks to Docker layer cache.
 
@@ -78,6 +87,11 @@ The Firebase emulator maps all logins to the pre-filled test account `e@nieradka
 **Open Firebase emulator UI:**
 ```bash
 make emulator-ui
+```
+
+**Open Mailpit (local email inbox):**
+```bash
+make mailpit-ui
 ```
 
 **View logs:**
@@ -101,7 +115,7 @@ make test
 ```
 services/
 ├── compose.yml              # All Docker services (profiles: dev / staging / prod)
-├── .env.dev                 # Local secrets (gitignored, create manually)
+├── .env.dev                 # Optional extra secrets (gitignored)
 ├── face-detector/           # Python face detection service
 ├── webapp/
 │   ├── Dockerfile           # builder + webapp + worker stages
@@ -114,6 +128,7 @@ services/
 
 src/                         # All source files (never edit export/ directly)
 export/                      # Built artifacts (gitignored, populated by builder)
+config.dev.php               # Committed dev bootstrap (crypto fixture, Mailpit, etc.)
 ```
 
 ## Troubleshooting

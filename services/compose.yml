@@ -1,8 +1,8 @@
 name: ${APP_ENV:-dev}
 
-# App secrets and environment-specific config — passed to all PHP-running services.
-# Staging/prod: vars come from --env-file substitution (services/.env.staging / .env.prod).
-# Dev: loaded directly into the webapp container via env_file: .env.dev.
+# App secrets and environment-specific config.
+# Staging/prod: vars from --env-file (services/.env.staging / .env.prod) via x-app-env.
+# Dev: committed config.dev.php (mounted into webapp/builder) + optional services/.env.dev for extras.
 x-app-env: &app-env
   APP_ENV: ${APP_ENV:-prod}
   SMTP_HOST: ${SMTP_HOST:-}
@@ -50,6 +50,37 @@ services:
       - 4000:4000
     restart: always
 
+  mailpit:
+    profiles: [dev]
+    image: axllent/mailpit:latest
+    container_name: mailpit
+    ports:
+      - 8025:8025
+      - 1025:1025
+    restart: always
+
+  # Relays Firebase Auth Emulator OOB links (sign-in/reset) into Mailpit, since
+  # the emulator never sends real email. Gives dev a prod-like sign-in flow:
+  # the message lands in http://localhost:8025 with a clickable link.
+  firebase-mail-bridge:
+    profiles: [dev]
+    image: python:3-alpine
+    container_name: firebase-mail-bridge
+    restart: always
+    volumes:
+      - ./firebase-mail-bridge/bridge.py:/bridge.py:ro
+    environment:
+      EMULATOR_HOST: "firebase-emulator:9099"
+      FIREBASE_PROJECT: "demo-project"
+      BRIDGE_SMTP_HOST: "mailpit"
+      BRIDGE_SMTP_PORT: "1025"
+    command: ["python", "/bridge.py"]
+    depends_on:
+      firebase-emulator:
+        condition: service_started
+      mailpit:
+        condition: service_started
+
   builder:
     profiles: [dev]
     build:
@@ -66,6 +97,7 @@ services:
       - ../tests:/build/tests:ro
       - ../tools:/build/tools:ro
       - ../export:/build/export
+      - ../config.dev.php:/build/config.dev.php:ro
       - ./webapp/watch.sh:/watch.sh:ro
     environment:
       APP_HOST: localhost
@@ -94,17 +126,22 @@ services:
     working_dir: /var/www/uprzejmiedonosze.net/webapp
     volumes:
       - ../export:/var/www/uprzejmiedonosze.net/webapp
+      - ../config.dev.php:/var/www/uprzejmiedonosze.net/webapp/config.dev.php:ro
       - ./devroot/db:/var/www/uprzejmiedonosze.net/db
     env_file:
-      - .env.dev
+      - path: .env.dev
+        required: false
     depends_on:
       builder:
         condition: service_healthy
       firebase-emulator:
         condition: service_started
+      mailpit:
+        condition: service_started
       memcached:
         condition: service_started
     environment:
+      APP_ENV: dev
       APP_HOST: localhost
       APP_HTTPS: http
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
