@@ -10,6 +10,11 @@ use \Exception as Exception;
 use user\User;
 use cache\Type;
 
+// Must match MAX_IMAGE_DIM / JPEG_QUALITY on the client (src/js/new-app/images.js):
+// the browser already resizes to these before upload; the server re-enforces them.
+const MAX_IMAGE_DIM = 1600;
+const JPEG_QUALITY = 85;
+
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
@@ -199,7 +204,7 @@ function saveImgAndThumb($application, $imageBytes, $type) {
     $fileName     = ROOT . "$baseFileName,$type.jpg";
     $thumbName    = ROOT . "$baseFileName,$type,t.jpg";
 
-    $rawBytes = base64_decode($imageBytes);
+    $rawBytes = $imageBytes;
     $info = getimagesizefromstring($rawBytes);
     if ($info === false) {
         throw new Exception("Przesłany plik nie jest obrazkiem", 400);
@@ -223,14 +228,14 @@ function saveImgAndThumb($application, $imageBytes, $type) {
         throw new Exception("Nieobsługiwany format obrazka: {$info['mime']}", 415);
     }
 
-    if (!imagejpeg($img, $fileName, 85)) {
+    if (!imagejpeg($img, $fileName, JPEG_QUALITY)) {
         throw new Exception("Can't write to $fileName", 500);
     }
     imagedestroy($img);
 
     $fullSize = getimagesize($fileName);
-    if ($fullSize[0] > 1600 || $fullSize[1] > 1600) {
-        imagejpeg(resize_image($fileName, 1600, 1600, false), $fileName, 95);
+    if ($fullSize[0] > MAX_IMAGE_DIM || $fullSize[1] > MAX_IMAGE_DIM) {
+        imagejpeg(resize_image($fileName, MAX_IMAGE_DIM, MAX_IMAGE_DIM, false), $fileName, JPEG_QUALITY);
     }
 
     if (!imagejpeg(resize_image($fileName, 600, 600, false), $thumbName)) {

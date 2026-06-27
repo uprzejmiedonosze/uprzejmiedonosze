@@ -11,6 +11,9 @@ use Slim\Exception\HttpNotFoundException;
 
 class SessionApiHandler extends AbstractHandler {
 
+    /** Hard limit: client caps uploads at 1600×1600 JPEG Q0.85, which stays under 1MB. */
+    private const MAX_IMAGE_UPLOAD_BYTES = 1_048_576;
+
     private function checkEditable(Request $request, Application $app) {
         if (!$app->isEditable())
             throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
@@ -124,8 +127,26 @@ class SessionApiHandler extends AbstractHandler {
     public function image(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
+        $uploadedFiles = $request->getUploadedFiles();
 
-        $imageBytes = explode( ',', $this->getParam($params, 'image_data'))[1];
+        if (!isset($uploadedFiles['image'])) {
+            throw new Exception("Brak pliku obrazka", 400);
+        }
+
+        $upload = $uploadedFiles['image'];
+        if ($upload->getError() !== UPLOAD_ERR_OK) {
+            throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
+        }
+        $tooLarge = "Zbyt duże zdjęcie (>" . (self::MAX_IMAGE_UPLOAD_BYTES >> 20) . "MB)";
+        // Reject by declared size before buffering the stream into memory.
+        if ($upload->getSize() > self::MAX_IMAGE_UPLOAD_BYTES) {
+            throw new Exception($tooLarge, 400);
+        }
+        $imageBytes = $upload->getStream()->getContents();
+        if (strlen($imageBytes) > self::MAX_IMAGE_UPLOAD_BYTES) {
+            throw new Exception($tooLarge, 400);
+        }
+
         $pictureType = $this->getParam($params, 'pictureType');
 
         $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;

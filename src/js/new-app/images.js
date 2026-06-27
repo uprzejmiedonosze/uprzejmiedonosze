@@ -1,4 +1,3 @@
-import heic2any from "heic2any"
 import ExifReader from 'exifreader'
 
 import { setAddressByLatLng } from "../lib/geolocation";
@@ -9,6 +8,11 @@ import * as Sentry from "@sentry/browser";
 import { error } from "../lib/toast";
 import { updateRecydywa } from "./recydywa";
 import { setOcrVehicleInfo, triggerVehicleInfoEnrichment, appendAutoComment } from "./vehicle-info";
+
+// Matches the JPEG quality used by saveImgAndThumb in API.php (85);
+// keeps a resized 1600px upload around ~1 MB.
+const JPEG_QUALITY = 0.85
+const MAX_IMAGE_DIM = 1600
 
 var uploadInProgress = 0;
 
@@ -28,48 +32,46 @@ export async function checkFile(file, id) {
     );
   }
 
-  const imageToResize = document.createElement('img')
+  let previewUrl = null
+  try {
+    const prepared = await prepareUploadBlob(file)
+    previewUrl = prepared.previewUrl
 
-  imageToResize.src = await imageToDataUri(file)
-  imageToResize.addEventListener("load", async () => {
-    try {
-      const resizedImage = resizeImage(imageToResize)
-      const previewElement = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
-      if (previewElement) {
-        previewElement.style.opacity = '0.3'
-        previewElement.src = resizedImage
-      }
-
-      if (id === "carImage") {
-        const exif = await ExifReader.load(file)
-        const [lat, lng] = readGeoDataFromExif(exif)
-        let dateTime = getDateTimeFromExif(exif)
-
-        dateTime = setDateTime(dateTime, !!dateTime)
-        if (lat) setAddressByLatLng(lat, lng, "picture")
-        else noGeoDataInImage()
-
-        const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
-        if (plateImage) {
-          plateImage.src = ""
-          plateImage.style.display = 'none'
-        }
-        await sendFile(resizedImage, id, {
-          dateTime,
-          dtFromPicture: !!dateTime,
-          latLng: `${lat},${lng}`
-        });
-      } else {
-        await sendFile(resizedImage, id);
-      }
-
-    } catch (err) {
-      imageError(id, err.message);
-      Sentry.captureException(err, {
-        extra: Object.prototype.toString.call(file)
-      });
+    const previewElement = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
+    if (previewElement) {
+      previewElement.style.opacity = '0.3'
+      previewElement.src = previewUrl
     }
-  })
+
+    if (id === "carImage") {
+      const exif = await ExifReader.load(file)
+      const [lat, lng] = readGeoDataFromExif(exif)
+      let dateTime = getDateTimeFromExif(exif)
+
+      dateTime = setDateTime(dateTime, !!dateTime)
+      if (lat) setAddressByLatLng(lat, lng, "picture")
+      else noGeoDataInImage()
+
+      const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
+      if (plateImage) {
+        plateImage.src = ""
+        plateImage.style.display = 'none'
+      }
+      await sendFile(prepared.blob, id, {
+        dateTime,
+        dtFromPicture: !!dateTime,
+        latLng: `${lat},${lng}`
+      }, previewUrl);
+    } else {
+      await sendFile(prepared.blob, id, {}, previewUrl);
+    }
+  } catch (err) {
+    revokeObjectUrl(previewUrl)
+    imageError(id, err.message || String(err));
+    Sentry.captureException(err, {
+      extra: { fileType: file.type }
+    });
+  }
 
 }
 
@@ -152,46 +154,146 @@ function getDateTimeFromExif(exif) {
   return dateTime?.description
 }
 
-async function imageToDataUri(img) {
-  if (img.type.includes('hei')) {
-    const blob = await heic2any({ blob: img, toType: "image/jpeg" })
-    return URL.createObjectURL(blob)
-  } else {
-    return await pngToDataUri(img)
+async function isHeicFile(file) {
+  if (/hei(c|f)/i.test(file.type)) return true
+  if (file.size < 12) return false
+  const buf = await file.slice(4, 12).arrayBuffer()
+  const brand = String.fromCharCode(...new Uint8Array(buf))
+  return brand.startsWith('ftyp') && /hei[cfx]|mif1|msf1/.test(brand)
+}
+
+function revokeObjectUrl(url) {
+  if (url?.startsWith('blob:')) URL.revokeObjectURL(url)
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = document.createElement('img')
+    img.onload = () => resolve(img)
+    img.onerror = () => reject(new Error('Nie można wczytać zdjęcia'))
+    img.src = src
+  })
+}
+
+/**
+ * Decodes fileOrBlob with EXIF orientation applied and passes the source to fn.
+ * Prefers createImageBitmap, falling back to an <img> element (e.g. no bitmap
+ * support, or a decode error). Always closes/revokes the decoded source.
+ * @template T
+ * @param {Blob} fileOrBlob
+ * @param {(source: CanvasImageSource & { width: number, height: number }) => T | Promise<T>} fn
+ * @param {Record<string, unknown>} [sentryExtra]
+ * @returns {Promise<T>}
+ */
+async function withDecodedImage(fileOrBlob, fn, sentryExtra = {}) {
+  if (typeof createImageBitmap === 'function') {
+    try {
+      const bitmap = await createImageBitmap(fileOrBlob, { imageOrientation: 'from-image' })
+      try {
+        return await fn(bitmap)
+      } finally {
+        bitmap.close()
+      }
+    } catch (err) {
+      Sentry.captureException(err, { extra: { decoder: 'bitmap', ...sentryExtra } })
+    }
+  }
+
+  const url = URL.createObjectURL(fileOrBlob)
+  try {
+    const img = await loadImage(url)
+    return await fn(img)
+  } finally {
+    revokeObjectUrl(url)
   }
 }
 
-function pngToDataUri(field) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-
-    reader.addEventListener("load", () => {
-      resolve(reader.result);
-    });
-
-    reader.readAsDataURL(field);
-  });
+async function getImageDimensions(fileOrBlob) {
+  return withDecodedImage(
+    fileOrBlob,
+    source => ({ width: source.width, height: source.height }),
+    { op: 'dimensions' }
+  )
 }
 
-function resizeImage(imgToResize) {
+function fitsMaxDimensions(width, height) {
+  return width <= MAX_IMAGE_DIM && height <= MAX_IMAGE_DIM
+}
+
+/**
+ * Converts a HEIC file to a JPEG blob. The native path also returns the decoded
+ * dimensions so the caller can skip a redundant decode; the heic-to fallback
+ * reports null dimensions (caller resolves them separately).
+ * @returns {Promise<{ blob: Blob, width: number|null, height: number|null }>}
+ */
+async function heicToJpegBlob(file) {
+  if (typeof createImageBitmap === 'function') {
+    try {
+      const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
+      const { width, height } = bitmap
+      const canvas = document.createElement('canvas')
+      canvas.width = width
+      canvas.height = height
+      const ctx = canvas.getContext('2d')
+      if (!ctx) throw new Error('Canvas not supported')
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(0, 0, width, height)
+      ctx.drawImage(bitmap, 0, 0)
+      bitmap.close()
+      const blob = await new Promise((resolve, reject) =>
+        canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', JPEG_QUALITY)
+      )
+      return { blob, width, height }
+    } catch (err) {
+      Sentry.captureException(err, { extra: { heicDecoder: 'native' } })
+    }
+  }
+
+  const { heicTo } = await import('heic-to')
+  const blob = await heicTo({ blob: file, type: 'image/jpeg', quality: JPEG_QUALITY })
+  return { blob, width: null, height: null }
+}
+
+/** @returns {Promise<{ blob: Blob, previewUrl: string }>} */
+async function prepareUploadBlob(file) {
+  if (await isHeicFile(file)) {
+    let { blob: jpegBlob, width, height } = await heicToJpegBlob(file)
+    if (width == null) ({ width, height } = await getImageDimensions(jpegBlob))
+    if (fitsMaxDimensions(width, height)) {
+      return { blob: jpegBlob, previewUrl: URL.createObjectURL(jpegBlob) }
+    }
+
+    const blob = await resizeBlob(jpegBlob)
+    return { blob, previewUrl: URL.createObjectURL(blob) }
+  }
+
+  // Always decode non-HEIC images through the canvas so EXIF orientation is
+  // baked into the pixels — the server (GD) strips the EXIF tag on re-encode.
+  const blob = await resizeBlob(file)
+  return { blob, previewUrl: URL.createObjectURL(blob) }
+}
+
+async function resizeBlob(fileOrBlob) {
+  return withDecodedImage(fileOrBlob, resizeSource, { op: 'resize' })
+}
+
+/** @param {CanvasImageSource & { width: number, height: number }} source */
+function resizeSource(source) {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
 
-  const MAX_WIDTH = 1600;
-  const MAX_HEIGHT = 1600;
-  let canvasWidth = imgToResize.width;
-  let canvasHeight = imgToResize.height;
+  let canvasWidth = source.width;
+  let canvasHeight = source.height;
 
-  // Add the resizing logic
   if (canvasWidth > canvasHeight) {
-    if (canvasWidth > MAX_WIDTH) {
-      canvasHeight *= MAX_WIDTH / canvasWidth;
-      canvasWidth = MAX_WIDTH;
+    if (canvasWidth > MAX_IMAGE_DIM) {
+      canvasHeight *= MAX_IMAGE_DIM / canvasWidth;
+      canvasWidth = MAX_IMAGE_DIM;
     }
   } else {
-    if (canvasHeight > MAX_HEIGHT) {
-      canvasWidth *= MAX_HEIGHT / canvasHeight;
-      canvasHeight = MAX_HEIGHT;
+    if (canvasHeight > MAX_IMAGE_DIM) {
+      canvasWidth *= MAX_IMAGE_DIM / canvasHeight;
+      canvasHeight = MAX_IMAGE_DIM;
     }
   }
 
@@ -199,13 +301,19 @@ function resizeImage(imgToResize) {
   canvas.height = canvasHeight;
 
   context?.drawImage(
-    imgToResize,
+    source,
     0,
     0,
     canvasWidth,
     canvasHeight
   );
-  return canvas.toDataURL("image/jpeg", 0.95);
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      blob => blob ? resolve(blob) : reject(new Error('Nie udało się przetworzyć zdjęcia')),
+      'image/jpeg',
+      JPEG_QUALITY
+    )
+  })
 }
 
 function noGeoDataInImage() {
@@ -265,22 +373,22 @@ export function repositionCarImage(vehicleBox, imageWidth, imageHeight) {
 }
 
 /**
- * @param {*} fileData
+ * @param {Blob} fileData
  * @param {'contextImage' | 'carImage' | 'thirdImage'} id
  * @param {*} imageMetadata
+ * @param {string|null} previewUrl
  */
-async function sendFile(fileData, id, imageMetadata={}) {
+async function sendFile(fileData, id, imageMetadata={}, previewUrl=null) {
   const appIdElement = /** @type {HTMLInputElement} */ (document.querySelector(".new-application #applicationId"))
   const appId = appIdElement?.value
-  var data = {
-    image_data: fileData,
-    pictureType: id
-  }
+  const data = new FormData()
+  data.append('image', fileData, 'image.jpg')
+  data.append('pictureType', id)
 
   if (id == "carImage") {
-    imageMetadata.dateTime && (data.dateTime = imageMetadata.dateTime)
-    imageMetadata.dtFromPicture && (data.dtFromPicture = imageMetadata.dtFromPicture)
-    imageMetadata.latLng && (data.latLng = imageMetadata.latLng)
+    imageMetadata.dateTime && data.append('dateTime', imageMetadata.dateTime)
+    imageMetadata.dtFromPicture && data.append('dtFromPicture', 'true')
+    imageMetadata.latLng && data.append('latLng', imageMetadata.latLng)
   }
   if (id == "thirdImage") {
     showThirdImage(true)
@@ -294,7 +402,7 @@ async function sendFile(fileData, id, imageMetadata={}) {
 
   try {
     const api = new Api(`/api/app/${appId}/image`)
-    const app = await api.post(data)
+    const app = await api.postForm(data)
     if (app.carImage || app.contextImage || app.thirdImage) {
       const loader = document.querySelector(`.${id}Section .loader`)
       const preview = /** @type {HTMLImageElement} */ (document.getElementById(`${id}Preview`))
@@ -346,6 +454,8 @@ async function sendFile(fileData, id, imageMetadata={}) {
     uploadFinished()
   } catch (err) {
     imageError(id, err.toString())
+  } finally {
+    revokeObjectUrl(previewUrl)
   }
 }
 

@@ -320,7 +320,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
             throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
         
         $appId = $request->getAttribute('application')->id;
-        $application = uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng);
+        $application = uploadImage($appId, $pictureType, base64_decode($imageBytes, true), $dateTime, $dtFromPicture, $latLng);
         unset($application->browser);
         $response->getBody()->write(json_encode($application));
         return $response;
