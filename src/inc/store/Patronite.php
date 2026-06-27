@@ -38,7 +38,7 @@ enum PatronieStatus:string {
 
 
 function __get(PatronieStatus $status):array {
-    if (!defined("\\PATRONITE_TOKEN")) return [];
+    if (!defined("\\PATRONITE_TOKEN") || !\PATRONITE_TOKEN) return [];
     try {
         $result = \curl\request("https://patronite.pl/author-api/patrons/{$status->value}?with_notes=yes",
             [], "Patronite", array(

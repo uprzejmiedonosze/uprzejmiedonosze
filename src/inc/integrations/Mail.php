@@ -28,10 +28,6 @@ class Mail extends CityAPI {
             $to = $application->guessSMData()->email;
         }
 
-        $transport = Transport::fromDsn(SMTP_GMAIL . '://' . SMTP_USER . ':' . rawurlencode(SMTP_PASS) . '@' . SMTP_HOST);
-        
-        $mailer = new Mailer($transport);
-
         $subject = $application->getEmailSubject();
 
         $message = (new Email());
@@ -75,8 +71,16 @@ class Mail extends CityAPI {
             [$fileatt, $fileattname] = \app\toZip($application);
             $message->attachFromPath($fileatt, $fileattname);
 
-            if (!isDev())
+            $dryRun = isDev() && !MAILER_DSN;
+            if (!$dryRun) {
+                if (isDev()) {
+                    $transport = Transport::fromDsn(MAILER_DSN);
+                } else {
+                    $transport = Transport::fromDsn(SMTP_GMAIL . '://' . SMTP_USER . ':' . rawurlencode(SMTP_PASS) . '@' . SMTP_HOST);
+                }
+                $mailer = new Mailer($transport);
                 $mailer->send($message);
+            }
 
         } catch (TransportExceptionInterface $error) {
             $application->setStatus('sending-failed', true);
@@ -89,6 +93,7 @@ class Mail extends CityAPI {
             \app\rmZip($application);
         }
 
+        $application->syncToS3();
         return $application;
     }
 }

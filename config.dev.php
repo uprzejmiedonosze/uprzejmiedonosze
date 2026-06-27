@@ -1,4 +1,6 @@
 <?php
+// Dev bootstrap — committed fixture config (pairs with services/devroot/db/store.sqlite).
+// Loaded in Docker dev via compose mount; copied to export/ by watch.sh as a fallback.
 define('PLATERECOGNIZER_SECRET', 'contact author');
 define('OPEN_ALPR_SECRET_1', 'contact author');
 define('OPEN_ALPR_SECRET_2', 'contact author');
@@ -9,6 +11,10 @@ define('OPENAI_API_KEY', 'see README.md');
 define('OPENAI_PROJECT', 'proj_SOMEID');
 
 define('MAILER_FROM', 'u@dka.email');
+define('MAILER_FROM_ALTER', 'u@dka.email');
+define('EMAIL_SENDER', 'u@dka.email');
+define('MAILER_DSN', 'smtp://mailpit:1025');
+define('MAILER_DSN_ALTER', 'smtp://mailpit:1025');
 
 define('CRYPTO_KEY', '7700bcc0327517849e966dd169791439');
 define('CRYPTO_IV', '330adc20ed7dcf8561ff4869dd434b85');

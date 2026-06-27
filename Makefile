@@ -170,7 +170,7 @@ staging: ## Sync code to staging server and rebuild Docker containers
 dev:
 	@docker compose \
         -f services/compose.yml \
-        --env-file services/.env.dev \
+        $(if $(wildcard services/.env.dev),--env-file services/.env.dev,) \
         -p $@ \
         --profile $@ \
         up --build
@@ -178,6 +178,10 @@ dev:
 .PHONY: emulator-ui
 emulator-ui: ## Open Firebase emulator UI in browser
 	@open http://localhost:4000
+
+.PHONY: mailpit-ui
+mailpit-ui: ## Open Mailpit inbox in browser
+	@open http://localhost:8025
 
 # ── Help ──────────────────────────────────────────────────────────────────────
 

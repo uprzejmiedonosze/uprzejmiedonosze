@@ -82,16 +82,16 @@ class MailGun extends CityAPI {
             $application->sent->method = "MailGun";
             \app\save($application);
 
-            if (!isDev()) {
-                if ($this->alternate) {
-                    $transport = Transport::fromDsn(MAILER_DSN_ALTER);
-                } else {
-                    $transport = Transport::fromDsn(MAILER_DSN);
-                }
+            $dsn = $this->alternate ? MAILER_DSN_ALTER : MAILER_DSN;
+            $dryRun = isDev() && $dsn === '';
+            if (!$dryRun) {
+                $transport = Transport::fromDsn($dsn);
                 $mailer = new Mailer($transport);
                 $mailer->send($message);
-            } else {
-                logger("Sending app {$application->id} with MailGun");
+            }
+
+            if (isDev()) {
+                logger("Sending app {$application->id} with MailGun" . ($dryRun ? ' (dry-run)' : ''));
                 $application->setStatus('confirmed-waiting');
                 logger("Marking app {$application->id} as confirmed-waiting (sent)");
                 \app\save($application);
