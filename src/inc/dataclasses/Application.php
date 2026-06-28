@@ -419,6 +419,14 @@ class Application extends JSONObject implements \JsonSerializable {
         return $this->getLatexSafe($this->address->address);
     }
 
+    public function getLatexSafeUserName() {
+        return $this->getLatexSafe($this->user->name);
+    }
+
+    public function getLatexSafePlateId() {
+        return $this->getLatexSafe($this->carInfo->plateId);
+    }
+
     public function getJSONSafeComment(){
         // Remove HTML entities
         $string = preg_replace('/&[a-zA-Z]+;/iu', '', $this->userComment);
