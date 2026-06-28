@@ -250,14 +250,14 @@ class Application extends JSONObject implements \JsonSerializable {
         global $STATUSES;
 
         if(!array_key_exists($status, $STATUSES)){
-            throw new Exception("Odmawiam ustawienia statusu na '$status'");
+            throw new Exception("Nieznany status '$status'");
         }
         if($status == $this->status){
             logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}");
             return;
         }elseif(!in_array($status, $this->getStatus()->allowed)){
             if (!$force)
-                throw new Exception("Odmawiam zmiany statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
+                throw new Exception("Niedozwolona zmiana statusu z '{$this->status}' na '$status' dla zgłoszenia '{$this->id}'");
         }
         if(!isset($this->statusHistory))
             $this->statusHistory = [];
