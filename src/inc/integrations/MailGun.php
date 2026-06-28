@@ -53,10 +53,10 @@ class MailGun extends CityAPI {
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:userid", $application->getUserNumber());
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
-        $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
+        $message->getHeaders()->addTextHeader("v:isprod", isProd() ? '1' : '0');
         $message->getHeaders()->addTextHeader("v:environment", environment());
         $message->getHeaders()->addTextHeader("o:tag", $application->address->city ?? '-no-city');
-        $message->getHeaders()->addTextHeader("o:testmode", isDev());
+        $message->getHeaders()->addTextHeader("o:testmode", isDev() ? 'yes' : 'no');
         $message->getHeaders()->addTextHeader("References", $application->id . "@dka.email");
         $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", $application->id);
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
@@ -135,11 +135,11 @@ class MailGun extends CityAPI {
 
         $message->getHeaders()->addTextHeader("v:appid", $application->id);
         $message->getHeaders()->addTextHeader("v:appnumber", $application->getNumber());
-        $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
+        $message->getHeaders()->addTextHeader("v:isprod", isProd() ? '1' : '0');
         $message->getHeaders()->addTextHeader("v:environment", environment());
-        $message->getHeaders()->addTextHeader("v:nofitication", true);
+        $message->getHeaders()->addTextHeader("v:nofitication", '1');
         $message->getHeaders()->addTextHeader("o:tag", $application->smCity ?? '-no-city');
-        $message->getHeaders()->addTextHeader("o:testmode", isDev());
+        $message->getHeaders()->addTextHeader("o:testmode", isDev() ? 'yes' : 'no');
         $message->getHeaders()->addTextHeader("References", $application->id . "@dka.email");
         $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", $application->id);
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
