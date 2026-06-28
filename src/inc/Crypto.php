@@ -35,7 +35,8 @@ function __openssl_decrypt(
         iv:  __initVector($salt)
     );
     if ($ret === false) {
-        throw new DecodingException("Decryption failed $salt $uuid");
+        $uidFp = substr(hash('sha256', 'crypto-log:' . $uuid), 0, 8);
+        throw new DecodingException("Decryption failed for $salt (uid#$uidFp)");
     }
     return $ret;
 }
