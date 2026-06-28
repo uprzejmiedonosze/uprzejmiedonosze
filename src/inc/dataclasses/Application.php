@@ -471,11 +471,9 @@ class Application extends JSONObject implements \JsonSerializable {
         }
 
         $image = @file_get_contents($mapsUrl);
-        if($image === false){
-            return $mapsUrl;
-        }
-
-        if(fputs($ifp, $image) === false){
+        if($image === false || fputs($ifp, $image) === false){
+            fclose($ifp);
+            @unlink($fileName); // nosemgrep: php.lang.security.unlink-use.unlink-use
             return $mapsUrl;
         }
         fclose($ifp);
