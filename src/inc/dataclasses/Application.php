@@ -688,7 +688,7 @@ class Application extends JSONObject implements \JsonSerializable {
         $showImage = $showImage || $this->statements->gallery;
         
         // hide photos with faces
-        $showImage = $showImage && ($app->faces->count ?? 0) == 0;
+        $showImage = $showImage && ($this->faces->count ?? 0) == 0;
 
         // app owner can always see his photos
         $showImage = $showImage || $this->isAppOwner($whoIsWathing);
