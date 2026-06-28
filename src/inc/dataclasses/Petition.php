@@ -34,7 +34,7 @@ class Petition extends \JSONObject {
         string $formType,
         string $target, 
         string $recipient,
-        \user\user $user
+        \user\User $user
     ) {
 
         $instance = new self();

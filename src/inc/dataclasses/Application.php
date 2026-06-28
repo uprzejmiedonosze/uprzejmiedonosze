@@ -328,7 +328,7 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     public function automatedSM(){
-        return (boolean)$this->guessSMData()->automated();
+        return (bool)$this->guessSMData()->automated();
     }
 
     public function unknownSM(){
