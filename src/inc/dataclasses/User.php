@@ -137,7 +137,7 @@ class User extends \JSONObject{
         curl_close($ch);
     
         $json = @json_decode($output, true);
-        if(!json_last_error() === JSON_ERROR_NONE){
+        if(json_last_error() !== JSON_ERROR_NONE){
             logger("Parsowanie JSON z MapBox API " . $output . " " . json_last_error_msg());
             return null;
         }

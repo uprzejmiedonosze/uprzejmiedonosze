@@ -108,7 +108,7 @@ function get_alpr_cli($imagePath) {
     logger("  get_alpr_cli");
     $response = shell_exec("alpr --country eu --topn 1 --json " . escapeshellarg(ROOT . $imagePath) . " 2>/dev/null"); // nosemgrep: php.lang.security.exec-use.exec-use
     $json = json_decode($response, true);
-    if(!json_last_error() === JSON_ERROR_NONE){
+    if(json_last_error() !== JSON_ERROR_NONE){
         return null;
     }
     return $json;
