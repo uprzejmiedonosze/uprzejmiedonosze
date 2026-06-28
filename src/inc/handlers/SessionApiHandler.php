@@ -35,7 +35,7 @@ class SessionApiHandler extends AbstractHandler {
      */
     public function validateUser(Request $request, Response $response, $args): Response {
         $apiKey = $request->getHeaderLine('X-API-Key');
-        if (empty($apiKey) || $apiKey !== BACKEND_API_KEY) {
+        if (empty($apiKey) || !hash_equals(BACKEND_API_KEY, $apiKey)) {
             throw new HttpForbiddenException($request, "Invalid or missing API key");
         }
         
