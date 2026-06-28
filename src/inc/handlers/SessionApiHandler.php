@@ -129,20 +129,27 @@ class SessionApiHandler extends AbstractHandler {
         $params = (array)$request->getParsedBody();
         $uploadedFiles = $request->getUploadedFiles();
 
-        if (!isset($uploadedFiles['image'])) {
+        $tooLarge = "Zbyt duże zdjęcie (>" . (self::MAX_IMAGE_UPLOAD_BYTES >> 20) . "MB)";
+        if (isset($uploadedFiles['image'])) {
+            $upload = $uploadedFiles['image'];
+            if ($upload->getError() !== UPLOAD_ERR_OK) {
+                throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
+            }
+            // Reject by declared size before buffering the stream into memory.
+            if ($upload->getSize() > self::MAX_IMAGE_UPLOAD_BYTES) {
+                throw new Exception($tooLarge, 400);
+            }
+            $imageBytes = $upload->getStream()->getContents();
+        } elseif (isset($params['image_data'])) {
+            // Backward compat: old JS client sent base64 data URI in image_data field.
+            $parts = explode(',', $params['image_data'], 2);
+            $imageBytes = base64_decode(count($parts) === 2 ? $parts[1] : $parts[0], true);
+            if ($imageBytes === false || strlen($imageBytes) === 0) {
+                throw new Exception("Brak pliku obrazka", 400);
+            }
+        } else {
             throw new Exception("Brak pliku obrazka", 400);
         }
-
-        $upload = $uploadedFiles['image'];
-        if ($upload->getError() !== UPLOAD_ERR_OK) {
-            throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
-        }
-        $tooLarge = "Zbyt duże zdjęcie (>" . (self::MAX_IMAGE_UPLOAD_BYTES >> 20) . "MB)";
-        // Reject by declared size before buffering the stream into memory.
-        if ($upload->getSize() > self::MAX_IMAGE_UPLOAD_BYTES) {
-            throw new Exception($tooLarge, 400);
-        }
-        $imageBytes = $upload->getStream()->getContents();
         if (strlen($imageBytes) > self::MAX_IMAGE_UPLOAD_BYTES) {
             throw new Exception($tooLarge, 400);
         }
