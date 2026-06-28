@@ -162,7 +162,7 @@ function byPlate(string $plateId): array|null {
 }
 
 function byNumber($number, $apiToken){
-    if($apiToken !== API_TOKEN){
+    if(!hash_equals(API_TOKEN, $apiToken)){
         throw new \Exception('Dostęp zabroniony');
     }
     $sql = <<<SQL
