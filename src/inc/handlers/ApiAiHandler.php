@@ -395,9 +395,9 @@ class ApiAiHandler extends \AbstractHandler {
         $message->subject($subject);
         $message->text($text);
 
-        $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
+        $message->getHeaders()->addTextHeader("v:isprod", isProd() ? '1' : '0');
         $message->getHeaders()->addTextHeader("v:environment", environment());
-        $message->getHeaders()->addTextHeader("o:testmode", isDev());
+        $message->getHeaders()->addTextHeader("o:testmode", isDev() ? 'yes' : 'no');
         $message->getHeaders()->addTextHeader("References", "petition-{$petition->id}@dka.email");
         $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", "petition-{$petition->id}");
         $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
