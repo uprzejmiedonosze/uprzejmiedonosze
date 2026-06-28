@@ -11,7 +11,7 @@
 \begin{description} 
     \item[Dnia:] {{ date ?? '\\dottedLine{2}' }}
     \item[Dotyczy przesłuchania świadka:] {\it {{ app.getLatexSafeUserName|raw }} }
-    \item[Miejsce zamieszkania świadka:] {\it {{ app.user.address }} }
+    \item[Miejsce zamieszkania świadka:] {\it {{ app.getLatexSafeUserAddress|raw }} }
     \item[Dane ustalono na podstawie:]
         {{ user.data.idtype ?? 'dokumentu tożsamości' }} {{ user.data.idnumber ?? '\\dottedLine{2}' }} 
 \end{description}

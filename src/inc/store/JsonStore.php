@@ -9,7 +9,7 @@ function get(string $filename, ?string $className = null) {
     $configPath = CONFIG_DIR . '/' . $filename;
     $file = @fopen($configPath, "r");
     if ($file === false) {
-        throw new \Exception("Nie udało się otworzyć pliku konfiguracyjnego", 500);
+        throw new \Exception("Nie udało się otworzyć pliku konfiguracyjnego: $configPath", 500);
     }
     $contents = fread($file, filesize($configPath));
     fclose($file); 
