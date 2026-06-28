@@ -231,19 +231,22 @@ async function heicToJpegBlob(file) {
     try {
       const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
       const { width, height } = bitmap
-      const canvas = document.createElement('canvas')
-      canvas.width = width
-      canvas.height = height
-      const ctx = canvas.getContext('2d')
-      if (!ctx) throw new Error('Canvas not supported')
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, 0, width, height)
-      ctx.drawImage(bitmap, 0, 0)
-      bitmap.close()
-      const blob = await new Promise((resolve, reject) =>
-        canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', JPEG_QUALITY)
-      )
-      return { blob, width, height }
+      try {
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) throw new Error('Canvas not supported')
+        ctx.fillStyle = '#ffffff'
+        ctx.fillRect(0, 0, width, height)
+        ctx.drawImage(bitmap, 0, 0)
+        const blob = await new Promise((resolve, reject) =>
+          canvas.toBlob(b => b ? resolve(b) : reject(new Error('Conversion failed')), 'image/jpeg', JPEG_QUALITY)
+        )
+        return { blob, width, height }
+      } finally {
+        bitmap.close()
+      }
     } catch (err) {
       Sentry.captureException(err, { extra: { heicDecoder: 'native' } })
     }
