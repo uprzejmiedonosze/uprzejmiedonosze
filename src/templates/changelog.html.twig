@@ -8,12 +8,16 @@
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Historia zmian</h2>
+<h4>Niedziela, 28 czerwca 2026</h4>
+<ul>
+   <li>Poprawa błędu wgrywania plików HEIC na najnoweszych wersjach iOS (dzięki <a href="https://github.com/Pacu2" target="_blank" rel="external">Pacu2</a></li>
+</ul>
 <h4>Sobota, 27 czerwca 2026</h4>
 <ul>
     <li>Naprawiono błąd powodujący timeout semaforów podczas równoczesnego przetwarzania webhooków Mailgun dla tego samego zgłoszenia: synchronizacja plików z S3 odbywa się teraz po zwolnieniu blokady, a nie w jej trakcie.</li>
     <li>Naprawiono błąd konfiguracji CI: skrypt weryfikujący obszary komisariatów był uruchamiany z nieprawidłowym plikiem danych.</li>
 </ul>
-<h4>Piątek, 26 czerwca 2026</h4>
+<h4 class="milestone">Piątek, 26 czerwca 2026</h4>
 <ul>
     <li>Dopisanie do bazy UD <b>wszystkich</b> komend miejskich i powiatowych w Polsce.</li>
     <li>Poprawka adresu email SM w Kołobrzegu.</li>
