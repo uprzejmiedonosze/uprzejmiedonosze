@@ -88,7 +88,7 @@ abstract class CityAPI {
         }
 
         $json = json_decode($response, true);
-        if (!json_last_error() === JSON_ERROR_NONE) {
+        if (json_last_error() !== JSON_ERROR_NONE) {
             $error = "Błąd komunikacji z API {$application->address->city}: json_last_error=" . json_last_error_msg();
         }
 
