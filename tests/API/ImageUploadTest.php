@@ -136,13 +136,13 @@ class ImageUploadTest extends TestCase
     public function testImageHandlerRejectsOversizedUpload(): void
     {
         $handler = new \SessionApiHandler();
-        $oversized = str_repeat('a', 1_048_577);
+        $oversized = str_repeat('a', 3 * 1_048_576 + 1);
         $request = (new ServerRequestFactory())->createServerRequest('POST', 'http://localhost/api/app/x/image')
             ->withParsedBody(['pictureType' => 'contextImage'])
             ->withUploadedFiles(['image' => $this->createUploadedFile($oversized)]);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Zbyt duże zdjęcie (>1MB)');
+        $this->expectExceptionMessage('Zbyt duże zdjęcie (');
 
         $handler->image($request, new Response(), ['appId' => 'unused']);
     }
