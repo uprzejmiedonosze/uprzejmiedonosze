@@ -499,7 +499,7 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     public function getLastName(){
-        return preg_split('/^[^\s]+\s/', $this->user->name)[1];
+        return preg_split('/^[^\s]+\s/', $this->user->name)[1] ?? '';
     }
 
     private function getLngLat(): string|null {
