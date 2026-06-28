@@ -11,8 +11,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class SessionApiHandler extends AbstractHandler {
 
-    /** Hard limit: client caps uploads at 1600×1600 JPEG Q0.85, which stays under 1MB. */
-    private const MAX_IMAGE_UPLOAD_BYTES = 1_048_576;
+    private const MAX_IMAGE_UPLOAD_BYTES = 2 * 1_048_576;
 
     private function checkEditable(Request $request, Application $app) {
         if (!$app->isEditable())
@@ -129,7 +128,7 @@ class SessionApiHandler extends AbstractHandler {
         $params = (array)$request->getParsedBody();
         $uploadedFiles = $request->getUploadedFiles();
 
-        $tooLarge = "Zbyt duże zdjęcie (>" . (self::MAX_IMAGE_UPLOAD_BYTES >> 20) . "MB)";
+        $limitMb = self::MAX_IMAGE_UPLOAD_BYTES / 1_048_576;
         if (isset($uploadedFiles['image'])) {
             $upload = $uploadedFiles['image'];
             if ($upload->getError() !== UPLOAD_ERR_OK) {
@@ -137,7 +136,8 @@ class SessionApiHandler extends AbstractHandler {
             }
             // Reject by declared size before buffering the stream into memory.
             if ($upload->getSize() > self::MAX_IMAGE_UPLOAD_BYTES) {
-                throw new Exception($tooLarge, 400);
+                $actualMb = round($upload->getSize() / 1_048_576, 1);
+                throw new Exception("Zbyt duże zdjęcie ({$actualMb}MB > {$limitMb}MB)", 400);
             }
             $imageBytes = $upload->getStream()->getContents();
         } elseif (isset($params['image_data'])) {
@@ -150,8 +150,10 @@ class SessionApiHandler extends AbstractHandler {
         } else {
             throw new Exception("Brak pliku obrazka", 400);
         }
-        if (strlen($imageBytes) > self::MAX_IMAGE_UPLOAD_BYTES) {
-            throw new Exception($tooLarge, 400);
+        $actualBytes = strlen($imageBytes);
+        if ($actualBytes > self::MAX_IMAGE_UPLOAD_BYTES) {
+            $actualMb = round($actualBytes / 1_048_576, 1);
+            throw new Exception("Zbyt duże zdjęcie ({$actualMb}MB > {$limitMb}MB)", 400);
         }
 
         $pictureType = $this->getParam($params, 'pictureType');
