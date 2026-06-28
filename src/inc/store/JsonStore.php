@@ -7,7 +7,10 @@ use \ConfigClass;
 
 function get(string $filename, ?string $className = null) {
     $configPath = CONFIG_DIR . '/' . $filename;
-    $file = fopen($configPath, "r") or die("Unable to open config file: " . $configPath);
+    $file = @fopen($configPath, "r");
+    if ($file === false) {
+        throw new \Exception("Nie udało się otworzyć pliku konfiguracyjnego", 500);
+    }
     $contents = fread($file, filesize($configPath));
     fclose($file); 
     if ($className === null)

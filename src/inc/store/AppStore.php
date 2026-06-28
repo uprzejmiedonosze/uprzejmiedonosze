@@ -177,6 +177,9 @@ SQL;
     $stmt->execute();
 
     $row = $stmt->fetch(\PDO::FETCH_NUM);
+    if (!$row) {
+        throw new \Exception("Nie znaleziono zgłoszenia o numerze $number", 404);
+    }
 
     return Application::withJson($row[0], $row[1]);
 }
