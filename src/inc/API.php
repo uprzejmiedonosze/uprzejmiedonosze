@@ -33,7 +33,7 @@ function updateApplication(
 ): Application {
 
     if ($application->email !== $user->getEmail()) {
-        throw new ForbiddenException("Odmawiam aktualizacji zgłoszenia '{$application->id}' przez '{$user->getEmail()}'");
+        throw new ForbiddenException("Nie posiadasz zgłoszenia o ID {$application->id}");
     }
 
     if (!$application->isEditable()) {

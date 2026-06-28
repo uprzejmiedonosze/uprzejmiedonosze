@@ -86,12 +86,12 @@ class ApplicationTest extends TestCase
 
         $this->assertThrowsException(function() use ($app) {
             $app->setStatus('submitted');
-        }, \Exception::class, "Odmawiam ustawienia statusu na 'submitted'");
+        }, \Exception::class, "Nieznany status 'submitted'");
         $this->assertEquals(1, sizeof($app->statusHistory));
 
         $this->assertThrowsException(function() use ($app) {
             $app->setStatus('sending');
-        }, \Exception::class, "Odmawiam zmiany statusu z 'ready' na 'sending' dla zgłoszenia '{$app->id}'");
+        }, \Exception::class, "Niedozwolona zmiana statusu z 'ready' na 'sending' dla zgłoszenia '{$app->id}'");
         $this->assertEquals(1, sizeof($app->statusHistory));
     }
 

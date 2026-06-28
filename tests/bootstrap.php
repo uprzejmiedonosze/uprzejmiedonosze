@@ -5,12 +5,15 @@ define('DB_FILENAME', getenv('TEST_DB') ?: __DIR__ . '/../services/devroot/db/st
 
 require(__DIR__ . '/../export/inc/include.php');
 require(__DIR__ . '/../export/inc/Twig.php');
+require_once(__DIR__ . '/DatabaseTestCase.php');
 
 $GLOBALS['STATUSES'] = $STATUSES;
 $GLOBALS['SM_ADDRESSES'] = $SM_ADDRESSES;
 $GLOBALS['POLICE_ADDRESSES'] = $POLICE_ADDRESSES;
 $GLOBALS['STOP_AGRESJI'] = $STOP_AGRESJI;
 $GLOBALS['CATEGORIES'] = $CATEGORIES;
+$GLOBALS['LEVELS'] = $LEVELS;
+$GLOBALS['BADGES'] = $BADGES;
 $GLOBALS['cache'] = $cache;
 $_SERVER['HTTP_USER_AGENT'] = 'PHPUnit';
 $_SESSION = [];
