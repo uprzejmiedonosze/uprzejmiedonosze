@@ -82,11 +82,14 @@ class Mail extends CityAPI {
                 $mailer->send($message);
             }
 
-        } catch (TransportExceptionInterface $error) {
+        } catch (\Throwable $error) {
             $application->setStatus('sending-failed', true);
             unset($application->sent);
             \app\save($application);
-            throw new Exception($error->getMessage(), 500, $error);
+            if ($error instanceof \Exception) {
+                throw $error;
+            }
+            throw new \Exception($error->getMessage(), 500, $error);
         } finally {
             \semaphore\release($application->id, "sendMail");
             \app\rmPdf($application);
