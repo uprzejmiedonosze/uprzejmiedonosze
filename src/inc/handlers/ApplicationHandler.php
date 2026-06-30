@@ -309,9 +309,10 @@ class ApplicationHandler extends AbstractHandler {
     public function applicationShortHtml(Request $request, Response $response, $args) {
         $appId = $args['appId'];
         $application = \app\get($appId);
+        $user = $request->getAttribute('user');
 
         return AbstractHandler::renderHtml($request, $response, '_application-short-details', [
-            'appActionButtons' => true,
+            'appActionButtons' => $application->isAppOwner($user),
             'app' => $application
         ]);
     }
