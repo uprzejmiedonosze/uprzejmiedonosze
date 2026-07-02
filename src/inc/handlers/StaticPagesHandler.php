@@ -41,7 +41,7 @@ class StaticPagesHandler extends AbstractHandler {
      */
     function faq(Request $request, Response $response) {
         global $SM_ADDRESSES;
-        $smNames = array_map(function ($sm) { return $sm->city; }, $SM_ADDRESSES);
+        $smNames = array_map(function ($sm) { return $sm->city; }, array_filter($SM_ADDRESSES, fn($sm) => $sm->active));
         $collator = new Collator('pl_PL');
         $collator->sort($smNames);
         $smNames = array_unique($smNames, SORT_LOCALE_STRING);
@@ -58,6 +58,7 @@ class StaticPagesHandler extends AbstractHandler {
         global $SM_ADDRESSES;
         $SMHints = array();
         foreach ($SM_ADDRESSES as $sm) {
+            if(!$sm->active) continue;
             if($sm->hint){
                 if(str_starts_with($sm->hint, 'Masz doświadczenia we współpracy'))
                     continue;

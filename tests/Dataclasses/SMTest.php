@@ -34,6 +34,19 @@ class SMTest extends TestCase
         self::assertFalse($sm->isPolice());
     }
 
+    public function testInactiveSMSkippedByGuessButKeptByResolve() : void {
+        $naleczow = new \SM($this->getData('nałęczów'));
+        self::assertFalse($naleczow->active);
+
+        $guessedKey = \SM::guess(new JSONObject(['county' => 'gmina Nałęczów', 'municipality' => 'powiat puławski', 'city' => 'Nałęczów']));
+        self::assertEquals('powiat puławski', $guessedKey);
+
+        $resolved = \SM::resolve('nałęczów', false);
+        self::assertEquals($naleczow->getEmail(), $resolved->getEmail());
+        self::assertEquals($naleczow->getLatexAddress(), $resolved->getLatexAddress());
+        self::assertFalse($resolved->active);
+    }
+
     public function testGuessSM() : void {
         $sm1 = new \SM($this->getData('dziwnów'));
         $sm2Key = \SM::guess(new JSONObject(['county' => 'gmina Dziwnów', 'city' => 'Międzywodzie']));

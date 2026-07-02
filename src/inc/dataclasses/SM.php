@@ -14,6 +14,7 @@ class SM extends JSONObject {
     public ?string $city;
     public ?string $hint;
     public ?string $api;
+    public bool $active = true;
 
     public function getAddress(): array {
         return $this->address;
@@ -86,10 +87,13 @@ class SM extends JSONObject {
      * Sprawdza, czy klucz istnieje w którejkolwiek z podanych tabel.
      * Współdzielone przez SM::guess() i Police::guess() - różnią się tylko
      * zestawem tabel przeszukiwanych na każdym poziomie szczegółowości.
+     * Wpisy z active === false są tu pomijane (nowe zgłoszenia nie mają
+     * trafiać do zlikwidowanych jednostek), w przeciwieństwie do SM::resolve(),
+     * które zwraca je bez zmian dla już zapisanych smCity.
      */
     protected static function matchesAnyTable(string $key, array ...$tables): bool {
         foreach ($tables as $table) {
-            if (array_key_exists($key, $table)) return true;
+            if (array_key_exists($key, $table) && $table[$key]->active) return true;
         }
         return false;
     }

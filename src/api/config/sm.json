@@ -1496,7 +1496,9 @@
             "al. Lipowa 3",
             "24-150 Nałęczów"
         ],
-        "email": "sm@naleczow.pl"
+        "email": "sm@naleczow.pl",
+        "active": false,
+        "hint": "Straż Miejska w Nałęczowie została zlikwidowana. Zgłoszenia z terenu gminy Nałęczów przyjmuje obecnie Komenda Powiatowa Policji w Puławach."
     },
     "Opatów": {
         "address": [
