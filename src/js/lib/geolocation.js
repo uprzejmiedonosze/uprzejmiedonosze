@@ -111,20 +111,28 @@ function geoLoading(from) {
 }
 
 const UNIT_FALLBACK_NAME = {
-  sm: 'Straż Miejska',
+  sm: 'Straż miejska',
+  sg: 'Straż gminna',
   sa: 'Policja'
 }
 
-function setUnitLabel(unit, name, hint) {
+function unitKind(unit) {
+  const joined = (unit?.address ?? []).join(' ')
+  if (/Straż\w* Miejsk\w*/i.test(joined)) return UNIT_FALLBACK_NAME.sm
+  if (/Straż\w* Gminn\w*/i.test(joined)) return  UNIT_FALLBACK_NAME.sg
+  return 'Policja'
+}
+
+function setUnitLabel(unit, name, hint, kind) {
   const nameEl = document.getElementById(`unit-${unit}-name`)
   const hintEl = document.getElementById(`unit-${unit}-hint`)
-  if (nameEl) nameEl.textContent = name ? `${name}` : UNIT_FALLBACK_NAME[unit]
-  if (hintEl) hintEl.innerHTML = hint ?? ''
+  if (nameEl) nameEl.textContent = kind ?? UNIT_FALLBACK_NAME[unit]
+  if (hintEl) hintEl.innerHTML = (name ? name + ': ' : '') + (hint ?? '')
 }
 
 function clearUnitLabels() {
-  setUnitLabel('sm', '', '')
-  setUnitLabel('sa', '', '')
+  setUnitLabel('sm', '', '', null)
+  setUnitLabel('sa', '', '', null)
 }
 
 // Shows the actual unit name on both options; disables SM radio when no SM
@@ -139,9 +147,9 @@ function renderSM(fromGeo = false) {
   const city = lastNominatim.address?.city ?? ''
   const smHint = smUnknown
     ? `W miejscowości ${city} nie powołano SM`
-    : (!stopAgresji ? (lastNominatim.sm?.hint ?? '') : '')
-  setUnitLabel('sm', smName, smHint)
-  setUnitLabel('sa', saName, stopAgresji ? (lastNominatim.sa?.hint ?? '') : '')
+    : (lastNominatim.sm?.hint ?? '')
+  setUnitLabel('sm', smName, smHint, smUnknown ? null : unitKind(lastNominatim.sm))
+  setUnitLabel('sa', saName, lastNominatim.sa?.hint ?? '', 'Policja')
   if (fromGeo) document.dispatchEvent(new CustomEvent('geo:smUpdate'))
 }
 

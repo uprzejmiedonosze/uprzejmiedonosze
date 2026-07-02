@@ -107,11 +107,11 @@
     },
     "Sędławki": {
         "parent": "powiat bartoszycki",
-        "hint": "Gmina Sędławki jest obsługiwana przez komendą Policji w Bartoszycach."
+        "hint": "Zgłoszenia z tej gminy trafiają do komendy w Bartoszycach."
     },
     "Żukowo": {
         "parent": "powiat kartuski",
-        "hint": "Miejscowość Żukowo obsługuje Komenda Powiatowa Policji w Kartuzach."
+        "hint": "Zgłoszenia z tej miejscowości trafiają do komendy w Kartuzach."
     },
     "Kobierzyce": {
         "address": [
@@ -285,7 +285,7 @@
     },
     "Strzelce Opolskie": {
         "parent": "powiat strzelecki",
-        "hint": "Komenda w Strzelcach Opolskich przyjmuje zgłoszenia i nie wzywa na przesłuchania z automatu. Wzywa tylko, jeżeli w zgłoszeniu są błędy, albo sprawca nie przyznał się. Ogólnie wezwania są rzadkością, 2-3 wezwania na sto zgłoszeń."
+        "hint": "Nie wzywają na przesłuchanie z automatu — tylko gdy zgłoszenie ma błędy albo sprawca się nie przyzna. Wezwania to rzadkość, 2-3 na sto zgłoszeń."
     },
     "Ożarowice": {
         "parent": "powiat tarnogórski"
@@ -467,7 +467,7 @@
     },
     "Sochaczew": {
         "parent": "powiat sochaczewski",
-        "hint": "Pierwsze doświadczenia (10.2024) pozytywne. Nie wzywają na przesłuchanie. Informują o zakończeniu sprawy."
+        "hint": "Pierwsze doświadczenia (10.2024) pozytywne — nie wzywają na przesłuchanie i informują o zakończeniu sprawy."
     },
     "powiat łódzki wschodni": {
         "address": [
@@ -693,7 +693,7 @@
             "20-064 Lublin"
         ],
         "email": "komendant.kmplublin@lu.policja.gov.pl",
-        "hint": "Komenda Miejsca w Lublinie wzywa na przesłuchanie. Poza tym doświadczenia są przeważająco pozytywne.",
+        "hint": "Wzywają na przesłuchanie, ale poza tym doświadczenia są w większości pozytywne.",
         "voivodeship": "Lubelskie",
         "city": "Lublin"
     },
@@ -955,7 +955,7 @@
             "20-064 Lublin"
         ],
         "email": "komendant.kmplublin@lu.policja.gov.pl",
-        "hint": "Komenda Miejsca w Lublinie wzywa na przesłuchanie. Poza tym doświadczenia są przeważająco pozytywne.",
+        "hint": "Wzywają na przesłuchanie, ale poza tym doświadczenia są w większości pozytywne.",
         "voivodeship": "Lubelskie"
     },
     "Kraków-miasto": {
@@ -1165,7 +1165,7 @@
         "email": "rd@mikolow.ka.policja.gov.pl",
         "voivodeship": "Śląskie",
         "city": "Mikołów",
-        "hint": "KPP w Mikołowie niestety wzywa na przesłuchanie twierdząc, że obecnie można manipulować zdjęciami..."
+        "hint": "Wzywają na przesłuchanie, twierdząc, że zdjęcia można zmanipulować."
     },
     "Szczecin-Niebuszewo": {
         "address": [
@@ -1175,7 +1175,7 @@
         ],
         "email": "sekretariat.niebuszewo@sc.policja.gov.pl",
         "voivodeship": "Zachodniopomorskie",
-        "hint": "Komisariat Niebuszewo w Szczecinie nie wzywa na przesłuchanie, i dość wybiórczo informuje o zakończeniu sprawy. Ale faktycznie je obrabia!"
+        "hint": "Nie wzywają na przesłuchanie, choć wybiórczo informują o zakończeniu sprawy — sprawy faktycznie są obrabiane."
     },
     "Szczecin-Pogodno": {
         "address": [
@@ -1185,7 +1185,7 @@
         ],
         "email": "sekretariat.pogodno@sc.policja.gov.pl",
         "voivodeship": "Zachodniopomorskie",
-        "hint": "Komisariat Pogodno w Szczecinie nie tylko nie wzywa na przesłuchanie, to zdaje się obrabiać zgłoszenia w miesiąc/dwa!"
+        "hint": "Nie wzywają na przesłuchanie i zdają się obrabiać zgłoszenia w miesiąc-dwa."
     },
     "Szczecin-Śródmieście": {
         "address": [
@@ -1195,7 +1195,7 @@
         ],
         "email": "sekretariat.srodmiescie@sc.policja.gov.pl",
         "voivodeship": "Zachodniopomorskie",
-        "hint": "Komisariat Śródmieście w Szczecinie niestety wzywa na przesłuchanie, ale działa całkiem sprawnie."
+        "hint": "Wzywają na przesłuchanie, ale działają całkiem sprawnie."
     },
     "Szczecin-Dąbie": {
         "address": [
@@ -1205,7 +1205,7 @@
         ],
         "email": "sekretariat.dabie@sc.policja.gov.pl",
         "voivodeship": "Zachodniopomorskie",
-        "hint": "Komisariat Dąbie w Szczecinie zazwyczaj (ale nie zawsze) wzywa na przesłuchanie."
+        "hint": "Zazwyczaj (ale nie zawsze) wzywają na przesłuchanie."
     },
     "Szczecin-Nad-Odrą": {
         "address": [
@@ -1273,7 +1273,7 @@
             "61-131 Poznań"
         ],
         "email": "dyzurny.poznan-nowe-miasto@po.policja.gov.pl",
-        "hint": "Relacje ze współpracy z KP Nowe Miasto są w większości pozytywne. Większość zgłoszeń jest rozpatrywana bez wzywania świadka, a zgłaszający otrzymuje pisemną informację o sposobie ukarania sprawcy. Zdarzają się jednak przypadki, w których policjanci wymagają złożenia zeznań do protokołu.",
+        "hint": "Doświadczenia w większości pozytywne. Zwykle nie wzywają świadka i informują pisemnie o ukaraniu sprawcy, choć czasem proszą o zeznania do protokołu.",
         "voivodeship": "Wielkopolskie",
         "city": "Poznań"
     },
@@ -3365,7 +3365,8 @@
         ],
         "email": "dyzurny-bydgoszcz@bg.policja.gov.pl",
         "voivodeship": "Kujawsko-Pomorskie",
-        "city": "Bydgoszcz"
+        "city": "Bydgoszcz",
+        "hint": "Zwykle kończy się pouczeniem lub niewskazaniem sprawcy. Potwierdzenie zakończenia przychodzi mailem. Na komisariacie bałagan — dokumenty leżą na wierzchu."
     },
     "powiat brzeski małopolski": {
         "address": [
@@ -3564,7 +3565,7 @@
             "96-500 Sochaczew"
         ],
         "email": "kppsochaczew@ra.policja.gov.pl",
-        "hint": "Pierwsze doświadczenia (10.2024) pozytywne. Nie wzywają na przesłuchanie. Informują o zakończeniu sprawy."
+        "hint": "Pierwsze doświadczenia (10.2024) pozytywne — nie wzywają na przesłuchanie i informują o zakończeniu sprawy."
     },
     "powiat turecki": {
         "address": [

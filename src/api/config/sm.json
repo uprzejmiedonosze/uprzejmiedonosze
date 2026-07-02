@@ -18,7 +18,7 @@
         ],
         "email": "ot1@strazmiejska.waw.pl",
         "city": "Warszawa",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "warszawa_ot2": {
         "address": [
@@ -29,7 +29,7 @@
         ],
         "email": "ot2@strazmiejska.waw.pl",
         "city": "Warszawa",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "warszawa_ot3": {
         "address": [
@@ -40,7 +40,7 @@
         ],
         "email": "ot3@strazmiejska.waw.pl",
         "city": "Warszawa",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "warszawa_ot4": {
         "address": [
@@ -51,7 +51,7 @@
         ],
         "email": "ot4@strazmiejska.waw.pl",
         "city": "Warszawa",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "Bielany": {
         "parent": "warszawa_ot5"
@@ -65,7 +65,7 @@
         ],
         "email": "ot5@strazmiejska.waw.pl",
         "city": "Warszawa",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "warszawa_ot6": {
         "address": [
@@ -76,7 +76,7 @@
         ],
         "email": "ot6@strazmiejska.waw.pl",
         "city": "Warszawa",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "warszawa_ot7": {
         "address": [
@@ -87,7 +87,7 @@
         ],
         "email": "ot7.zgloszenia@strazmiejska.waw.pl",
         "city": "Warszawa",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "Wrocław-Psie Pole": {
         "parent": "Wrocław"
@@ -288,7 +288,7 @@
             "71-241 Szczecin"
         ],
         "email": "zgloszenia@sm.szczecin.pl",
-        "hint": "Niestety SM Szczecin wzywa na przesłuchanie do każdego zgłoszenia. Autor wymienił do tej pory kilkadziesiąt stron dokumentów z SM oraz skierował skargę do Urzędu Miasta Szczecin w tej sprawie. Na ten moment bez skutku."
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu. Skarga do Urzędu Miasta w tej sprawie jak dotąd nie przyniosła zmiany."
     },
     "Warszawa": {
         "address": [
@@ -298,7 +298,7 @@
             "01-170 Warszawa"
         ],
         "email": "csk@strazmiejska.waw.pl",
-        "hint": "SM Warszawa domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "Warsaw": {
         "parent": "Warszawa",
@@ -311,7 +311,7 @@
             "50-421 Wrocław"
         ],
         "email": "straz@smwroclaw.pl",
-        "hint": "<p>SM Wrocław domyślnie nie wzywa świadka na przesłuchanie. Jeżeli okoliczności czynu nie budzą wątpliwości, w pierwszej kolejności wzywany jest właściciel pojazdu. Ustalany jest sprawca, a jeżeli przyzna się do winy, nakładany jest mandat. Jeżeli jednak sprawca nie poczuwa się do winy, bądź odmawia przyjęcia grzywny, a także w sytuacji, gdy okoliczności czynu budzą wątpliwości, to przesłuchanie świadka jest obligatoryjne.</p>",
+        "hint": "Domyślnie nie wzywają świadka — najpierw wzywają właściciela pojazdu. Przesłuchanie jest obowiązkowe, gdy sprawca się nie przyzna do winy lub odmówi mandatu.",
         "api": "MailGunAlter"
     },
     "Kraków": {
@@ -322,7 +322,7 @@
         ],
         "email": "smkrak@strazmiejska.krakow.pl",
         "api": "MailGunAlter",
-        "hint": "Najnowsze (01.2024) doniesienia wskazują na to, że SM Kraków wzywa obligatoryjnie na przesłuchanie do pierwszego zgłoszenia. Ale warto iść, bo jest miło i szybko. A potem już z górki."
+        "hint": "Wzywają obligatoryjnie na przesłuchanie przy pierwszym zgłoszeniu. Warto iść — jest miło i szybko, a kolejne zgłoszenia idą już bez wezwania."
     },
     "Kraków-Podgórze": {
         "parent": "Kraków"
@@ -340,7 +340,7 @@
             "81-244 Gdynia"
         ],
         "email": "straz_miejska@gdynia.pl",
-        "hint": "SM Gdynia domyślnie nie wzywa świadka na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane na świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia lub zebrany materiał dowodowy budzi wątpliwości. Zdarzają się wyjątki, ale są one bardzo rzadkie."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje wykroczenie lub materiał dowodowy budzi wątpliwości."
     },
     "Białystok": {
         "address": [
@@ -357,7 +357,7 @@
             "90-521 Łódź"
         ],
         "email": "oskarzyciele@strazmiejska.lodz.pl",
-        "hint": "Wg informacji pozyskanych w SM Łódź, w przypadku braku naocznego potwierdzenia wykroczenia przez strażników, SM może wezwać do złożenia oświadczenie ustnie lub przesłania go na piśmie. Powyższe jednak z pewnością nie obowiązuje dla Oddziału Łódź-Polesie, które wzywa z automatu na przesłuchanie do każdego zgłoszenia."
+        "hint": "Bez naocznego potwierdzenia wykroczenia mogą poprosić o oświadczenie ustnie lub pisemnie. Wyjątek: Oddział Łódź-Polesie zawsze wzywa na przesłuchanie."
     },
     "Łódź-Śródmieście": {
         "parent": "Łódź"
@@ -378,7 +378,7 @@
             "80-724 Gdańsk"
         ],
         "email": "sm@gdansk.gda.pl",
-        "hint": "SM Gdańsk domyślnie nie wzywa na przesłuchanie. Osoby składające zawiadomienie o wykroczeniu są wzywane na świadka dopiero w sytuacji, gdy ustalony sprawca zaneguje popełnienie wykroczenia, lub zebrany materiał dowodowy budzi wątpliwości."
+        "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "Poznań": {
         "address": [
@@ -387,7 +387,7 @@
             "60-734 Poznań"
         ],
         "email": "zgloszenia@smmp.pl",
-        "hint": "SM Poznań domyślnie nie wzywa świadka na przesłuchanie."
+        "hint": "Domyślnie nie wzywają świadka na przesłuchanie."
     },
     "Poznań-Jeżyce": {
         "parent": "Poznań"
@@ -408,7 +408,7 @@
             "87-100 Toruń"
         ],
         "email": "sm@um.torun.pl",
-        "hint": "Najnowsze informacje (styczeń 2024): SM przyjmuje zgłoszenie wysłane przez Uprzejmie Donoszę (czyli emailem). Niestety należy spodziewać się wezwania na przesłuchanie."
+        "hint": "Przyjmują zgłoszenia wysłane przez Uprzejmie Donoszę emailem, ale zwykle trzeba się liczyć z wezwaniem na przesłuchanie."
     },
     "Bydgoszcz": {
         "address": [
@@ -417,7 +417,7 @@
             "85-662 Bydgoszcz"
         ],
         "email": "sekretariat@strazmiejska.bydgoszcz.pl",
-        "hint": "Dostajemy pozytywne opisy doświadczeń z SM Bydgoszcz. Nie wzywają na przesłuchanie. Wystawiają mandaty w miesiąc."
+        "hint": "Pozytywne doświadczenia zgłaszających. Nie wzywają na przesłuchanie i wystawiają mandaty w ciągu miesiąca."
     },
     "Katowice": {
         "address": [
@@ -426,7 +426,7 @@
             "40-051 Katowice"
         ],
         "email": "interwencje@katowice.eu",
-        "hint": "Niestety SM Katowice wzywa na przesłuchanie do każdego zgłoszenia."
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu."
     },
     "Tczew": {
         "address": [
@@ -498,7 +498,7 @@
             "ul. Dworcowa 2-4-6-8",
             "58-100 Świdnica"
         ],
-        "hint": "Na ten moment zgłaszający są wzywanie do wszystkich spraw. Ale (!) chodzą plotki, że w przypadku spraw nie budzących wątpliwości praktyka ta zostanie zaniechana. Czekam na aktualizację.",
+        "hint": "Obecnie wzywają do każdej sprawy. Podobno w sprawach niebudzących wątpliwości ma się to niedługo zmienić — czekamy na potwierdzenie.",
         "email": "strazmiejska@sm.swidnica.pl"
     },
     "Karlino": {
@@ -524,7 +524,7 @@
             "35-064 Rzeszów"
         ],
         "email": "komenda@sm.erzeszow.pl",
-        "hint": "SM Rzeszów wzywa do każdego zgłoszenia, dbając, żeby każde przesłuchanie odbywało się innego dnia co uprzykrza życia świadkowi."
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu, zwykle każde w innym terminie, co bywa uciążliwe."
     },
     "Łosice": {
         "address": [
@@ -621,7 +621,7 @@
             "20-117 Lublin"
         ],
         "email": "sekretariat@986.pl",
-        "hint": "Niestety SM Lublin wzywa na przesłuchanie do każdego zgłoszenia. Ale (co miłe) informuje o zakończeniu sprawy mailem."
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu, ale informują mailem o zakończeniu sprawy."
     },
     "Leszno": {
         "address": [
@@ -654,7 +654,7 @@
             "44-121 Gliwice"
         ],
         "email": "dyzurny@smgliwice.pl",
-        "hint": "Niestety SM Gliwice wzywa na przesłuchanie do każdego zgłoszenia."
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu."
     },
     "Wodzisław Śląski": {
         "address": [
@@ -679,7 +679,7 @@
             "66-400 Gorzów Wielkopolski"
         ],
         "email": "ksm@um.gorzow.pl",
-        "hint": "Niestety SM Gorzów wzywa na przesłuchanie w każdej sprawie."
+        "hint": "Wzywają na przesłuchanie w każdej sprawie."
     },
     "Gorzów Wlkp.": {
         "parent": "Gorzów Wielkopolski"
@@ -715,7 +715,7 @@
             "81-704 Sopot"
         ],
         "email": "wykroczenia@um.sopot.pl",
-        "hint": "Niestety SM Sopot wzywa na przesłuchanie do każdego zgłoszenia."
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu."
     },
     "Kościelisko": {
         "address": [
@@ -786,7 +786,7 @@
             "43-190 Mikołów"
         ],
         "email": "bsm1@mikolow.eu",
-        "hint": "SM w Mikołowie niestety wzywa na przesłuchanie."
+        "hint": "Wzywają na przesłuchanie."
     },
     "Świętochłowice": {
         "address": [
@@ -827,7 +827,7 @@
             "25-024 Kielce"
         ],
         "email": "sekretariat@strazmiejska.kielce.pl",
-        "hint": "Straż Miejska w Kielcach wzywa na przesłuchanie tylko jeśli zgłoszenie jest niejasne (np. nie widać odległości parkowania od przejścia, nie widać niszczenia zieleni itd.) lub kiedy właściciel samochodu nie przyjmuje mandatu i sprawa ma trafić do sądu."
+        "hint": "Wzywają na przesłuchanie tylko przy niejasnych zgłoszeniach (np. brak widocznej odległości parkowania) albo gdy sprawa trafia do sądu."
     },
     "Czechowice-Dziedzice": {
         "address": [
@@ -852,7 +852,7 @@
             "41-500 Chorzów"
         ],
         "email": "sm@chorzow.eu",
-        "hint": "SM Chorzów wzywa do sporządzenia protokołu dla każdego zgłoszenia."
+        "hint": "Wzywają do sporządzenia protokołu przy każdym zgłoszeniu."
     },
     "Nysa": {
         "address": [
@@ -925,7 +925,7 @@
             "26-600 Radom"
         ],
         "email": "sekretariat@strazmiejska.radom.pl",
-        "hint": "Niestety SM Radom odmawia wszczynania postępowań na podstawie zgłoszeń przez e-mail. Twierdzą, że trzeba przyjść osobiście i złożyć zawiadomienie. Jestem z użytkowników UD walczy o zmianę tego bezprawnego podejścia."
+        "hint": "Odmawiają wszczęcia postępowania na podstawie zgłoszeń mailowych — wymagają osobistego stawiennictwa. Trwają starania o zmianę tej praktyki."
     },
     "Siechnice": {
         "address": [
@@ -934,7 +934,7 @@
             "55-010 Święta Katarzyna"
         ],
         "email": "strazmiejska@umsiechnice.pl",
-        "hint": "Niestety SM w Siechnicach wzywa na przesłuchanie do każdego zgłoszenia."
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu."
     },
     "Radwanice": {
         "parent": "Siechnice"
@@ -1049,7 +1049,7 @@
             "41-902 Bytom"
         ],
         "email": "dyzurny@strazmiejska.bytom.pl",
-        "hint": "Mamy pozytywne sygnały ze współpracy z SM w Bytomiu."
+        "hint": "Pozytywne doświadczenia we współpracy."
     },
     "Czeladź": {
         "address": [
@@ -1101,7 +1101,7 @@
             "75-007 Koszalin"
         ],
         "email": "straz.miejska@um.koszalin.pl",
-        "hint": "SM Koszalin domyślnie nie wzywa na przesłuchanie do każdej sprawy."
+        "hint": "Domyślnie nie wzywają na przesłuchanie."
     },
     "Goleniów": {
         "address": [
@@ -1126,7 +1126,7 @@
             "47-303 Krapkowice"
         ],
         "email": "strazmiejska@krapkowice.pl",
-        "hint": "SM przyjmuje zgłoszenia e-mailowe, ale wzywa każdego zgłaszającego na przesłuchanie."
+        "hint": "Przyjmują zgłoszenia mailowe, ale wzywają na przesłuchanie przy każdym z nich."
     },
     "Jastrzębie-Zdrój": {
         "address": [
@@ -1143,7 +1143,7 @@
             "42-600 Tarnowskie Góry"
         ],
         "email": "strazmiejska@um.tgory.pl",
-        "hint": "SM w Tarnowskich Górach niestety wzywa na przesłuchanie do każdego zgłoszenia i aktywnie zniechęca do współpracy"
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu i aktywnie zniechęcają do współpracy."
     },
     "Żyrardów": {
         "address": [
@@ -1219,7 +1219,7 @@
             "45-072 Opole"
         ],
         "email": "dyzurny@strazmiejska.opole.pl",
-        "hint": "SM Opole nie wzywa zgłaszających na przesłuchanie. Wzywany jest sprawca. Dopiero gdy sprawca zaprzeczy, że dokonał wykroczenia wzywany jest zgłaszający."
+        "hint": "Nie wzywają na przesłuchanie od razu — najpierw wzywany jest sprawca. Dopiero gdy zaprzeczy winie, może przyjść wezwanie do zgłaszającego."
     },
     "Piła": {
         "address": [
@@ -1365,7 +1365,7 @@
             "05-850 Ożarów Mazowiecki"
         ],
         "email": "strazmiejska@ozarow-mazowiecki.pl",
-        "hint": "SM Ożarów Mazowiecki wystawia pouczenia i mandaty, nie wzywa na przesłuchania. O zakończeniu sprawy informuje dopiero na wniosek o informację publiczną. Czas rozpatrywania bywa różny."
+        "hint": "Wystawiają pouczenia i mandaty, nie wzywają na przesłuchania. O zakończeniu sprawy informują dopiero na wniosek o informację publiczną."
     },
     "gmina Ożarów Mazowiecki": {
         "parent": "Ożarów Mazowiecki"
@@ -1498,7 +1498,7 @@
         ],
         "email": "sm@naleczow.pl",
         "active": false,
-        "hint": "Straż Miejska w Nałęczowie została zlikwidowana. Zgłoszenia z terenu gminy Nałęczów przyjmuje obecnie Komenda Powiatowa Policji w Puławach."
+        "hint": "Jednostka została zlikwidowana. Zgłoszenia z gminy Nałęczów przyjmuje teraz Komenda Powiatowa Policji w Puławach."
     },
     "Opatów": {
         "address": [
@@ -1709,7 +1709,7 @@
             "14-300 Morąg"
         ],
         "email": "smmorag@wp.pl",
-        "hint": "Wstępne informacje są dość pesymistyczne. Komendant twierdzi, że e-mail może nie wystarczyć do zgłoszenia."
+        "hint": "Wstępne informacje są pesymistyczne — komendant twierdzi, że samo zgłoszenie mailem może nie wystarczyć."
     },
     "Pyskowice": {
         "address": [
@@ -1718,7 +1718,7 @@
             "44-120 Pyskowice"
         ],
         "email": "sm@pyskowice.pl",
-        "hint": "Niestety SM Pyskowice wzywa każdego zgłaszającego na przesłuchanie."
+        "hint": "Wzywają na przesłuchanie każdego zgłaszającego."
     },
     "Lębork": {
         "address": [
@@ -2243,7 +2243,7 @@
         ],
         "email": "straz.miejska@swarzedz.pl",
         "api": "MailGunAlter",
-        "hint": "Autor odbył mało sympatyczną wymianę korespondencji z komendantem SM Swarzędz i wróży dobrej współpracy z tą jednostką."
+        "hint": "Niezbyt przyjemna wymiana korespondencji z komendantem nie wróży dobrze dalszej współpracy."
     },
     "gmina Swarzędz": {
         "parent": "Swarzędz"
@@ -2398,7 +2398,7 @@
             "37-700 Przemyśl"
         ],
         "email": "administracja@smprzemysl.pl",
-        "hint": "Niestety SM Przemyśl wzywa na przesłuchanie w każdej sprawie."
+        "hint": "Wzywają na przesłuchanie w każdej sprawie."
     },
     "Ostrzeszów": {
         "address": [
@@ -2566,7 +2566,7 @@
             "97-300 Piotrków Trybunalski"
         ],
         "email": "komenda@strazmiejska.piotrkow.pl",
-        "hint": "Niestety SM Piotrków Trybunalski wymaga osobistego stawiennictwa w komendzie – nie wszczyna postępowania na podstawie zgłoszeń wysłanych e-mailem."
+        "hint": "Wymagają osobistego stawiennictwa w komendzie — nie wszczynają postępowania na podstawie zgłoszeń mailowych."
     },
     "Świnoujście": {
         "address": [

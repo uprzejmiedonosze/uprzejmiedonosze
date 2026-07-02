@@ -46,15 +46,6 @@ function processFile(fileName) {
 			const orig = sm[e].clone()
 			sm[e] = sm[v.parent].clone()
 			if (orig.hint) sm[e].hint = orig.hint
-			else {
-				var city = e
-				if (city.startsWith('gmina') || city.startsWith('powiat')) {
-					city = city.replace('gmina', 'Gminę')
-					city = city.replace('powiat', 'Powiat')
-				} else city = `${e}`
-				sm[e].hint = `${city} obsługuje ${sm[e].address[0]}`
-					+ ( (sm[e].hint) ? `: ${sm[e].hint}` : '')
-			}
 			if (orig.city) sm[e].city = orig.city
 		})
 
