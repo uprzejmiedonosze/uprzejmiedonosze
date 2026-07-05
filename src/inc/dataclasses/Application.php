@@ -462,39 +462,47 @@ class Application extends JSONObject implements \JsonSerializable {
         $lngLat = $this->getLngLat();
         $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lngLat)/$lngLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
 
-        if($this->hasNumber() && isset($this->address->mapImage)){
-            if (file_exists(ROOT . $this->address->mapImage)) {
-                return $this->address->mapImage;
+        // Shares syncToS3()'s lock key: without it, syncToS3() can glob-upload
+        // and delete this same local file (or read it mid-(re)write) while
+        // this method is concurrently checking/regenerating it.
+        return \semaphore\withLock("syncToS3:{$this->id}", "Application::getMapImage", function() use ($mapsUrl) {
+            if($this->hasNumber() && isset($this->address->mapImage)){
+                if (file_exists(ROOT . $this->address->mapImage)) {
+                    return $this->address->mapImage;
+                }
+                // Plik nie istnieje lokalnie (np. po syncToS3 bez uploadu mapy) — regeneruj niżej.
             }
-            // Plik nie istnieje lokalnie (np. po syncToS3 bez uploadu mapy) — regeneruj niżej.
-        }
 
-        $baseDir = \storage\cdnPrefix() . '/' . $this->getUserNumber();
-        if(!file_exists(ROOT . $baseDir)){
-            mkdir(ROOT . $baseDir, 0755, true);
-        }
-        $baseFileName = $baseDir . '/' . $this->id;
+            $baseDir = \storage\cdnPrefix() . '/' . $this->getUserNumber();
+            if(!file_exists(ROOT . $baseDir)){
+                mkdir(ROOT . $baseDir, 0755, true);
+            }
+            $baseFileName = $baseDir . '/' . $this->id;
 
-        $fileName     = ROOT . "$baseFileName,ma.png";
+            $fileName     = ROOT . "$baseFileName,ma.png";
 
-        $ifp = @fopen($fileName, 'wb');
-        if($ifp === false){
-            return $mapsUrl;
-        }
+            $ifp = @fopen($fileName, 'wb');
+            if($ifp === false){
+                return $mapsUrl;
+            }
 
-        $image = @file_get_contents($mapsUrl);
-        if($image === false || fputs($ifp, $image) === false){
+            $image = @file_get_contents($mapsUrl);
+            if($image === false || fputs($ifp, $image) === false){
+                fclose($ifp);
+                @unlink($fileName); // nosemgrep: php.lang.security.unlink-use.unlink-use
+                return $mapsUrl;
+            }
             fclose($ifp);
-            @unlink($fileName); // nosemgrep: php.lang.security.unlink-use.unlink-use
-            return $mapsUrl;
-        }
-        fclose($ifp);
 
-        if (\storage\upload($fileName, "$baseFileName,ma.png")) {
+            // Save regardless of upload() success: the local file is what
+            // retrieval actually relies on first (local -> B2 -> S3), and
+            // this flag is only ever read back by this same fast path above
+            // via file_exists() — it never gates a remote-only lookup.
+            \storage\upload($fileName, "$baseFileName,ma.png");
             $this->address->mapImage = "$baseFileName,ma.png";
             \app\save($this);
-        }
-        return "$baseFileName,ma.png";
+            return "$baseFileName,ma.png";
+        });
     }
 
     public function isMapImageInCDN() {
