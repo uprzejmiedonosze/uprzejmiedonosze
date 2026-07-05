@@ -61,6 +61,12 @@ if (!defined('MATOMO_SITE_ID'))     define('MATOMO_SITE_ID',     (int)(getenv('M
 if (!defined('BACKEND_API_KEY'))    define('BACKEND_API_KEY',    getenv('BACKEND_API_KEY')    ?: '');
 if (!defined('CORS_ALLOWED_DOMAIN')) define('CORS_ALLOWED_DOMAIN', getenv('CORS_ALLOWED_DOMAIN') ?: '');
 
+if (!defined('B2_KEY'))      define('B2_KEY',      getenv('B2_KEY')      ?: '');
+if (!defined('B2_SECRET'))   define('B2_SECRET',   getenv('B2_SECRET')   ?: '');
+if (!defined('B2_BUCKET'))   define('B2_BUCKET',   getenv('B2_BUCKET')   ?: '');
+if (!defined('B2_ENDPOINT')) define('B2_ENDPOINT', getenv('B2_ENDPOINT') ?: '');
+if (!defined('B2_REGION'))   define('B2_REGION',   getenv('B2_REGION')   ?: '');
+
 if (!defined('S3_KEY'))      define('S3_KEY',      getenv('S3_KEY')      ?: '');
 if (!defined('S3_SECRET'))   define('S3_SECRET',   getenv('S3_SECRET')   ?: '');
 if (!defined('S3_BUCKET'))   define('S3_BUCKET',   getenv('S3_BUCKET')   ?: '');

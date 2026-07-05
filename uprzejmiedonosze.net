@@ -1,0 +1,170 @@
+server {
+	listen 80;
+	listen 443 ssl;
+	http2 on;
+
+	server_name uprzejmiedonosze.net staging.uprzejmiedonosze.net shadow.uprzejmiedonosze.net www.uprzejmiedonosze.net;
+
+	if ($host = 'www.uprzejmiedonosze.net') {
+		return 301 https://uprzejmiedonosze.net$request_uri;
+	}
+
+	if ($scheme = http) {
+		return 301 https://$host$request_uri;
+	}
+	etag on;
+	gzip on;
+	gzip_static on;
+	gzip_comp_level 2;
+	gzip_http_version 1.1;
+	gzip_vary on;
+	gzip_disable "msie6";
+	gzip_proxied no-cache no-store private expired auth;
+	gzip_min_length 1000;
+	fastcgi_buffers 16 16k;
+	fastcgi_buffer_size 32k;
+
+	ssl_certificate /var/lib/dehydrated/certs/uprzejmiedonosze.net/fullchain.pem;
+	ssl_certificate_key /var/lib/dehydrated/certs/uprzejmiedonosze.net/privkey.pem;
+
+	root /var/www/$host/webapp/public;
+	index index.php;
+
+	include snippets/letsencrypt-acme-challenge.conf;
+	include snippets/ssl-params.conf;	
+
+	error_log /var/log/nginx/uprzejmiedonosze/error.log warn;
+	access_log /var/log/nginx/uprzejmiedonosze/access.log ext;
+	include snippets/syslog.conf;
+	access_log syslog:server=unix:/dev/log,facility=local1,tag=uprzejmiedonosze,nohostname,severity=info papertrail;
+
+
+	location /.well-known/traffic-advice {
+		types { } default_type "application/trafficadvice+json; charset=utf-8";
+		alias /var/www/.well-known/traffic-advice;
+		allow all;
+	}
+
+	set $CDN_ROOT "/var/www/$host";
+
+	location ^~ /cdn2/ {
+		try_files $uri @b2;
+		access_log off;
+		expires max;
+		root $CDN_ROOT;
+	}
+
+	location ^~ /cdn2stg/ {
+		try_files $uri @b2;
+		root $CDN_ROOT;
+		expires   max;
+		access_log off;
+	}
+
+	location @b2 {
+		proxy_intercept_errors on;
+		error_page 404 = @s3;
+		proxy_pass         https://uprzejmiedonosze.s3.eu-central-003.backblazeb2.com;
+		proxy_set_header   Host uprzejmiedonosze.s3.eu-central-003.backblazeb2.com;
+		proxy_http_version 1.1;
+		proxy_set_header   Connection "";
+		expires            max;
+		access_log         off;
+		add_header         Cache-Control "public, immutable";
+	}
+
+	location @s3 {
+		proxy_pass         https://ud-cdn.nbg1.your-objectstorage.com;
+		proxy_set_header   Host ud-cdn.nbg1.your-objectstorage.com;
+		proxy_http_version 1.1;
+		proxy_set_header   Connection "";
+		expires            max;
+		access_log         off;
+		add_header         Cache-Control "public, immutable";
+	}
+
+	location ^~ /img/ {
+		try_files $uri =404;
+		access_log off;
+	}
+
+	location ~ ^/api/rest {
+		try_files $uri $uri/ /api/rest/index.php$is_args$args;
+		alias /var/www/$host/webapp/public/;
+
+		location ~ \.php$ {
+			fastcgi_split_path_info ^(.+\.php)(/.+)$;
+			include fastcgi_params;
+			fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+			fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+			fastcgi_read_timeout 120s;
+			fastcgi_index index.php;
+			fastcgi_pass php;
+		}
+	}
+
+	location = /apple-touch-icon-120x120.png {
+		return 301 /img/apple-touch-icon-120x120.png;
+	}
+
+	location = /apple-touch-icon.png {
+		return 301 /img/apple-touch-icon.png;
+	}
+
+	location = /apple-touch-icon-120x120-precomposed.png {
+		return 301 /img/apple-touch-icon-120x120.png;
+	}
+
+	location = /apple-touch-icon-precomposed.png {
+		return 301 /img/apple-touch-icon.png;
+	}
+
+	error_page 404 /404.html;
+	location ~* /img-.*\.php$ {
+		try_files $uri /index.php$is_args$args;
+		expires 30d;
+		add_header Pragma public;
+		add_header Cache-Control "public";
+		log_not_found off;
+	}
+
+	location ~ \.php$ {
+		try_files $uri =404;
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		include fastcgi_params;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+		fastcgi_index index.php;
+		fastcgi_read_timeout 120s;
+		fastcgi_pass php;
+	}
+
+	location ^~ /wiki/ {
+		proxy_pass https://wiki.uprzejmiedonosze.net;
+
+		# Ustawienia niezbędne, gdy backend (Caddy) używa HTTPS
+		proxy_ssl_server_name on;
+		proxy_ssl_name wiki.uprzejmiedonosze.net;
+
+		# Nagłówki, żeby Caddy wiedziało, że to żądanie proxy
+		proxy_set_header Host wiki.uprzejmiedonosze.net;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		#proxy_set_header X-Forwarded-Base /wiki/;
+
+		proxy_redirect off;
+	}
+	location = /wiki {
+		return 301 $scheme://$host/wiki/;
+	}
+
+	include snippets/restrictions.conf;
+
+	location / {
+		try_files $uri /index.php$is_args$args;
+	}
+
+
+}
+
