@@ -1,6 +1,6 @@
 <?PHP namespace storage;
 
-use Aws\S3\S3Client;
+use store\S3;
 use Aws\Exception\AwsException;
 
 function isEnabled(): bool {
@@ -15,75 +15,75 @@ function cdnPrefix(): string {
     return \isStaging() ? 'cdn2stg' : 'cdn2';
 }
 
-function client(): S3Client {
+/**
+ * Primary backend — all new uploads go here, and reads try this first.
+ * Pass $override (e.g. in tests, with a mocked Aws handler) to replace the
+ * cached instance.
+ */
+function b2(?S3 $override = null): S3 {
     static $client = null;
+    if ($override !== null) $client = $override;
     if ($client === null) {
-        $client = new S3Client([
-            'version'                 => 'latest',
-            'region'                  => \S3_REGION,
-            'endpoint'                => \S3_ENDPOINT,
-            'use_path_style_endpoint' => false,
-            'credentials'             => [
-                'key'    => \S3_KEY,
-                'secret' => \S3_SECRET,
-            ],
-            'retries' => [
-                'mode' => 'adaptive',
-                'max_attempts' => 3,
-            ],
-        ]);
+        $client = new S3(\B2_BUCKET, \B2_KEY, \B2_SECRET, \B2_ENDPOINT, \B2_REGION);
     }
     return $client;
 }
 
 /**
- * Uploads a local file to S3 with public-read ACL.
- * $key is the S3 object key, e.g. "cdn2/12/abc,ca.jpg".
+ * Legacy Hetzner backend — read-only fallback during the B2 migration window.
+ * Remove once s3_get_fallback telemetry shows zero hits and Hetzner is decommissioned.
  */
-function upload(string $localPath, string $key): bool {
-    if (!isEnabled() || !file_exists($localPath)) return false;
-    try {
-        client()->putObject([
-            'Bucket'      => \S3_BUCKET,
-            'Key'         => $key,
-            'SourceFile'  => $localPath,
-            'ACL'         => 'public-read',
-            'ContentType' => mime_content_type($localPath) ?: 'application/octet-stream',
-        ]);
-        \telemetry\log('s3_put', null, ['status' => 'success']);
-        return true;
-    } catch (AwsException $e) {
-        \telemetry\log('s3_put', null, ['status' => 'failed']);
-        return false;
+function s3(?S3 $override = null): S3 {
+    static $client = null;
+    if ($override !== null) $client = $override;
+    if ($client === null) {
+        $client = new S3(\S3_BUCKET, \S3_KEY, \S3_SECRET, \S3_ENDPOINT, \S3_REGION);
     }
+    return $client;
 }
 
 /**
- * Downloads an S3 object to a local path.
- * Returns true on success, false if S3 is not enabled.
- * Throws AwsException on failure (caller gets the full error).
+ * Uploads a local file to B2 with public-read ACL. New files only ever go
+ * to B2 — Hetzner is being orphaned, not written to anymore.
+ * $key is the object key, e.g. "cdn2/12/abc,ca.jpg".
+ */
+function upload(string $localPath, string $key): bool {
+    if (!isEnabled() || !file_exists($localPath)) return false;
+    $ok = b2()->upload($localPath, $key);
+    \telemetry\log('b2_put', null, ['status' => $ok ? 'success' : 'failed']);
+    return $ok;
+}
+
+/**
+ * Downloads an object to a local path, trying B2 first and falling back to
+ * Hetzner S3 for content that hasn't been migrated yet.
+ * Returns true on success, false if storage is not enabled.
+ * Throws AwsException on total failure (caller gets the full error).
  */
 function download(string $key, string $localPath): bool {
     if (!isEnabled()) return false;
     try {
-        client()->getObject([
-            'Bucket' => \S3_BUCKET,
-            'Key'    => $key,
-            'SaveAs' => $localPath,
-        ]);
-        \telemetry\log('s3_get', null, ['status' => 'success']);
+        b2()->download($key, $localPath);
+        \telemetry\log('b2_get', null, ['status' => 'success']);
         return true;
     } catch (AwsException $e) {
-        logger("S3 download failed for $key: " . $e->getMessage(), true);
-        \telemetry\log('s3_get', null, ['status' => 'failed']);
-        throw $e;
+        try {
+            s3()->download($key, $localPath);
+            \telemetry\log('s3_get_fallback', null, ['status' => 'success']);
+            return true;
+        } catch (AwsException $e2) {
+            logger("B2/S3 download failed for $key: " . $e2->getMessage(), true);
+            \telemetry\log('b2_get', null, ['status' => 'failed']);
+            throw $e2;
+        }
     }
 }
 
 /**
- * Ensures a file is available at ROOT.$key by downloading it from S3 if missing.
- * No-op when S3 is not enabled or the file already exists locally.
- * Retries up to 3 times (2 s gaps) to handle S3 propagation delays.
+ * Ensures a file is available at ROOT.$key by downloading it (B2, falling
+ * back to Hetzner S3) if missing.
+ * No-op when storage is not enabled or the file already exists locally.
+ * Retries up to 3 times (2 s gaps) to handle propagation delays.
  * Throws \RuntimeException wrapping the last AwsException on permanent failure.
  */
 function ensure_local(string $key): void {
@@ -110,7 +110,7 @@ function ensure_local(string $key): void {
         }
     }
     throw new \RuntimeException(
-        "S3 ensure_local failed after $maxAttempts attempts: '$key': " . $lastException->getMessage(),
+        "B2/S3 ensure_local failed after $maxAttempts attempts: '$key': " . $lastException->getMessage(),
         0,
         $lastException
     );
@@ -118,7 +118,7 @@ function ensure_local(string $key): void {
 
 /**
  * Removes a locally cached file that was fetched via ensure_local().
- * No-op when S3 is not enabled.
+ * No-op when storage is not enabled.
  */
 function release_local(string $key): void {
     if (!isEnabled()) return;
@@ -127,48 +127,45 @@ function release_local(string $key): void {
 }
 
 /**
- * Returns true if the S3 object exists, false otherwise (including when S3 is disabled).
+ * Returns true if the object exists in B2 or (as fallback) Hetzner S3.
  */
 function exists(string $key): bool {
     if (!isEnabled()) return false;
-    try {
-        client()->headObject([
-            'Bucket' => \S3_BUCKET,
-            'Key'    => $key,
-        ]);
+    if (b2()->exists($key)) {
+        \telemetry\log('b2_get', null, ['status' => 'success']);
         return true;
-    } catch (AwsException $e) {
-        return false;
     }
+    if (s3()->exists($key)) {
+        \telemetry\log('s3_get_fallback', null, ['status' => 'success']);
+        return true;
+    }
+    return false;
 }
 
 /**
- * Returns the ContentLength of an S3 object, or null if missing / S3 not enabled.
+ * Returns the ContentLength of the object — checks B2 first, then Hetzner
+ * S3 as fallback — or null if missing from both / storage not enabled.
  */
 function remote_size(string $key): ?int {
     if (!isEnabled()) return null;
-    try {
-        $result = client()->headObject([
-            'Bucket' => \S3_BUCKET,
-            'Key'    => $key,
-        ]);
-        return (int) $result['ContentLength'];
-    } catch (AwsException $e) {
-        return null;
+    $size = b2()->remoteSize($key);
+    if ($size !== null) {
+        \telemetry\log('b2_get', null, ['status' => 'success']);
+        return $size;
     }
+    $size = s3()->remoteSize($key);
+    if ($size !== null) {
+        \telemetry\log('s3_get_fallback', null, ['status' => 'success']);
+    }
+    return $size;
 }
 
 /**
- * Deletes an S3 object. Silently ignores missing keys.
+ * Deletes the object from both B2 and Hetzner S3 — it may exist on either
+ * during the migration window. Silently ignores missing keys on both.
  */
 function delete(string $key): void {
     if (!isEnabled()) return;
-    try {
-        client()->deleteObject([
-            'Bucket' => \S3_BUCKET,
-            'Key'    => $key,
-        ]);
-    } catch (AwsException $e) {
-        logger("S3 delete failed for $key: " . $e->getMessage(), true);
-    }
+    b2()->delete($key);
+    s3()->delete($key);
 }

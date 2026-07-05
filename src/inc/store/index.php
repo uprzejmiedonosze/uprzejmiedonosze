@@ -12,3 +12,4 @@ require(__DIR__ . '/Queue.php');
 require(__DIR__ . '/Patronite.php');
 require(__DIR__ . '/PetitionStore.php');
 require(__DIR__ . '/Telemetry.php');
+require(__DIR__ . '/S3.php');
