@@ -678,7 +678,7 @@
         ],
         "email": "dyzurni@myslenice.policja.gov.pl"
     },
-    "powiat nowodworski": {
+    "powiat nowodworski pomorskie": {
         "address": [
             "Komenda Powiatowa Policji w Nowym Dworze Gdańskim",
             "ul. Kościuszki 10",
@@ -1691,7 +1691,7 @@
         ],
         "email": "dyzurny@strzelin.wr.policja.gov.pl"
     },
-    "powiat średzki": {
+    "powiat średzki dolnośląskie": {
         "address": [
             "Komenda Powiatowa Policji w Środzie Śląskiej",
             "ul. Św. Andrzeja 2",
@@ -1699,7 +1699,7 @@
         ],
         "email": "dyzurny@sroda-slaska.wr.policja.gov.pl"
     },
-    "powiat świdnicki": {
+    "powiat świdnicki dolnośląskie": {
         "address": [
             "Komenda Powiatowa Policji w Świdnicy",
             "ul. Jagiellońska 23",
@@ -1897,7 +1897,7 @@
         ],
         "email": "kppmlawa@ra.policja.gov.pl"
     },
-    "powiat ostrowski mazowiecki": {
+    "powiat ostrowski mazowieckie": {
         "address": [
             "Komenda Powiatowa Policji w Ostrowi Mazowieckiej",
             "ul. Płk. Karola Piłata 12",
@@ -1977,7 +1977,7 @@
         ],
         "email": "kppzuromin@ra.policja.gov.pl"
     },
-    "powiat brzeski": {
+    "powiat brzeski opolskie": {
         "address": [
             "Komenda Powiatowa Policji w Brzegu",
             "ul. Robotnicza 10",
@@ -2253,7 +2253,7 @@
         ],
         "email": "komendant@sieradz.ld.policja.gov.pl"
     },
-    "powiat tomaszowski": {
+    "powiat tomaszowski łódzkie": {
         "address": [
             "Komenda Powiatowa Policji w Tomaszowie Mazowieckim",
             "ul. Wandy Panfil 44",
@@ -2575,7 +2575,7 @@
         ],
         "email": "komendant.kppkrasnik@lu.policja.gov.pl"
     },
-    "powiat świdnicki lubelski": {
+    "powiat świdnicki lubelskie": {
         "address": [
             "Komenda Powiatowa Policji w Świdniku",
             "ul. Warsztatowa 4",
@@ -2631,7 +2631,7 @@
         ],
         "email": "komendant.kppradzynpodlaski@lu.policja.gov.pl"
     },
-    "powiat tomaszowski lubelski": {
+    "powiat tomaszowski lubelskie": {
         "address": [
             "Komenda Powiatowa Policji w Tomaszowie Lubelskim",
             "ul. Stefana Żeromskiego 4",
@@ -2759,7 +2759,7 @@
         ],
         "email": "kpp@augustow.bk.policja.gov.pl"
     },
-    "powiat bielski podlaski": {
+    "powiat bielski podlaskie": {
         "address": [
             "Komenda Powiatowa Policji w Bielsku Podlaskim",
             "ul. Mikołaja Kopernika 7",
@@ -2977,7 +2977,7 @@
         ],
         "email": "dyzurny.krotoszyn@po.policja.gov.pl"
     },
-    "powiat ostrowski wielkopolski": {
+    "powiat ostrowski wielkopolskie": {
         "address": [
             "Komenda Powiatowa Policji w Ostrowie Wielkopolskim",
             "ul. Odolanowska 19",
@@ -3113,7 +3113,7 @@
         ],
         "email": "dyzurny.slupca@po.policja.gov.pl"
     },
-    "powiat średzki wielkopolski": {
+    "powiat średzki wielkopolskie": {
         "address": [
             "Komenda Powiatowa Policji w Środzie Wlkp.",
             "ul. Harcerska 22",
@@ -3121,7 +3121,7 @@
         ],
         "email": "dyzurny.sroda-wlkp@po.policja.gov.pl"
     },
-    "powiat grodziski wielkopolski": {
+    "powiat grodziski wielkopolskie": {
         "address": [
             "Komenda Powiatowa Policji w Grodzisku Wielkopolskim",
             "ul. Drzymały 13",
@@ -3201,7 +3201,7 @@
         ],
         "email": "starachowice@ki.policja.gov.pl"
     },
-    "powiat opolski lubelski": {
+    "powiat opolski lubelskie": {
         "address": [
             "Komenda Powiatowa Policji w Opolu Lubelskim",
             "ul. Morwowa 4",
@@ -3368,7 +3368,7 @@
         "city": "Bydgoszcz",
         "hint": "Zwykle kończy się pouczeniem lub niewskazaniem sprawcy. Potwierdzenie zakończenia przychodzi mailem. Na komisariacie bałagan — dokumenty leżą na wierzchu."
     },
-    "powiat brzeski małopolski": {
+    "powiat brzeski małopolskie": {
         "address": [
             "Komenda Powiatowa Policji w Brzesku",
             "ul. Szczepanowska 53",
@@ -3640,7 +3640,7 @@
         "voivodeship": "Województwo Mazowieckie",
         "city": "Warszawa"
     },
-    "powiat grodziski mazowiecki": {
+    "powiat grodziski mazowieckie": {
         "address": [
             "Komenda Powiatowa Policji w Grodzisku Mazowieckim",
             "ul. Bartniaka 19",
@@ -3664,7 +3664,7 @@
         ],
         "email": "kancelaria.kpp-minsk@ksp.policja.gov.pl"
     },
-    "powiat nowodworski mazowiecki": {
+    "powiat nowodworski mazowieckie": {
         "address": [
             "Komenda Powiatowa Policji w Nowym Dworze Mazowieckim",
             "ul. Paderewskiego 3",

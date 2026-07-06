@@ -66,8 +66,9 @@ class Police extends SM {
         // municipality level | powiat
         if (isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
-            if (self::matchesAnyTable($municipality, $POLICE_ADDRESSES))
-                return $municipality;
+            $voivodeship = isset($address->voivodeship) ? trimstr2lower($address->voivodeship) : null;
+            if ($key = self::matchesPowiatTable($municipality, $voivodeship, $POLICE_ADDRESSES))
+                return $key;
         }
 
         return null;

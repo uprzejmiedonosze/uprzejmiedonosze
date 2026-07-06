@@ -99,6 +99,21 @@ class SM extends JSONObject {
     }
 
     /**
+     * Dopasowuje powiat, próbując najpierw klucza "$municipality $voivodeship"
+     * (kilkanaście powiatów ma tę samą nazwę w dwóch województwach, np.
+     * "powiat średzki wielkopolskie" i "powiat średzki dolnośląskie" - patrz
+     * git log tych kluczy w police.json), a dopiero potem samej nazwy powiatu.
+     */
+    protected static function matchesPowiatTable(string $municipality, ?string $voivodeship, array ...$tables): ?string {
+        if ($voivodeship !== null) {
+            $composite = "$municipality $voivodeship";
+            if (self::matchesAnyTable($composite, ...$tables)) return $composite;
+        }
+        if (self::matchesAnyTable($municipality, ...$tables)) return $municipality;
+        return null;
+    }
+
+    /**
      * Szuka jednostki na każdym poziomie najpierw w $SM_ADDRESSES, a jeśli nie
      * znajdzie, także w $POLICE_ADDRESSES (gminy bez SM mają tam podstawiony
      * lokalny komisariat) — dopiero potem przechodzi do kolejnego poziomu.
@@ -145,8 +160,9 @@ class SM extends JSONObject {
         // municipality level | powiat
         if(isset($address->municipality)) {
             $municipality = trimstr2lower($address->municipality);
-            if(self::matchesAnyTable($municipality, $SM_ADDRESSES, $POLICE_ADDRESSES))
-                return $municipality;
+            $voivodeship = isset($address->voivodeship) ? trimstr2lower($address->voivodeship) : null;
+            if($key = self::matchesPowiatTable($municipality, $voivodeship, $SM_ADDRESSES, $POLICE_ADDRESSES))
+                return $key;
         }
         return '_nieznane';
     }
