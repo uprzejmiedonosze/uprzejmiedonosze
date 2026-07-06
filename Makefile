@@ -171,7 +171,7 @@ dev:
 	@docker compose \
         -f services/compose.yml \
         $(if $(wildcard services/.env.dev),--env-file services/.env.dev,) \
-        -p $@ \
+        -p uprzejmiedonosze-$@ \
         --profile $@ \
         up --build
 

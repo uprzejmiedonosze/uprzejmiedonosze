@@ -1,4 +1,4 @@
-name: ${APP_ENV:-dev}
+name: ${APP_ENV:-uprzejmiedonosze-dev}
 
 # App secrets and environment-specific config.
 # Staging/prod: vars from --env-file (services/.env.staging / .env.prod) via x-app-env.

@@ -3223,7 +3223,8 @@
             "ul. Kilińskiego 20",
             "78-100 Kołobrzeg"
         ],
-        "email": "sekretariat.kolobrzeg@sc.policja.gov.pl"
+        "email": "sekretariat.kolobrzeg@sc.policja.gov.pl",
+        "hint": "Nie wzywają na przesłuchanie, choć zdarzył się telefon z naciskiem by przyjść na komendę bez wezwania. Mimo poważnych wykroczeń zwykle kończy się pouczeniem."
     },
     "powiat białogardzki": {
         "address": [
@@ -3291,7 +3292,8 @@
         ],
         "email": "kmp@bialystok.bk.policja.gov.pl",
         "voivodeship": "Podlaskie",
-        "city": "Białystok"
+        "city": "Białystok",
+        "hint": "Wzywają na przesłuchanie przy każdym zgłoszeniu, tłumacząc koniecznością zeznań na wypadek sprawy sądowej — choć sprawy rzadko tam trafiają, zwykle kończąc się pouczeniem."
     },
     "powiat starogardzki": {
         "address": [
