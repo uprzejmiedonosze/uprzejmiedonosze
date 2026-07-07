@@ -87,7 +87,7 @@ services:
         condition: service_started
 
   builder:
-    profiles: [dev]
+    profiles: [dev, test]
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
@@ -213,7 +213,7 @@ services:
 
   # ── SHARED: dev + staging + prod ─────────────────────────────────────────
   memcached:
-    profiles: [dev, staging, prod]
+    profiles: [dev, staging, prod, test]
     image: memcached:alpine
     restart: always
 

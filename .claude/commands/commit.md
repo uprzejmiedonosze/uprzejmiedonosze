@@ -1,6 +1,6 @@
 ---
 description: Uruchom testy, zrób commit, a na branchu main uzupełnij changelog i wykonaj push
-allowed-tools: Bash(date:*), Bash(make:*), Bash(docker:*), Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*), Bash(git branch:*), Bash(head:*), Read, Edit
+allowed-tools: Bash(date:*), Bash(make:*), Bash(git status:*), Bash(git diff:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(git log:*), Bash(git branch:*), Bash(head:*), Read, Edit
 ---
 
 ## Kontekst
@@ -11,8 +11,6 @@ allowed-tools: Bash(date:*), Bash(make:*), Bash(docker:*), Bash(git status:*), B
 - Staged diff: !`git diff --staged`
 - Unstaged diff (jeśli nic nie jest staged): !`git diff`
 - Górna część changelogu (pierwsze 30 linii po nagłówkach): !`head -40 src/templates/changelog.html.twig`
-- Status kontenera builder: !`docker ps -a --filter "name=builder" --format '{{.Status}}'`
-- Status kontenera dev-memcached-1: !`docker ps -a --filter "name=dev-memcached-1" --format '{{.Status}}'`
 
 ## Twoje zadanie
 
@@ -20,14 +18,7 @@ Wykonaj poniższe kroki **w tej kolejności**. Zatrzymaj się i zgłoś błąd, 
 
 ### Krok 1 — Kontenery i testy
 
-Testy (`make test`) wymagają działających kontenerów `builder` i `dev-memcached-1`.
-
-Dla każdego z nich osobno:
-- Sprawdź jego status (patrz odpowiednia linia w Kontekście, lub `docker ps -a --filter "name=<nazwa>"`).
-- Jeśli kontener **nie działa** → uruchom go (`docker start <nazwa>`) i zapamiętaj, że to Ty go uruchomiłeś — trzeba go będzie wyłączyć w Kroku 6.
-- Jeśli kontener **już działał** → nie ruszaj go na końcu.
-
-Następnie uruchom `make test`. Jeśli testy nie przejdą, zatrzymaj się i opisz błąd — ale mimo to wykonaj Krok 6 (wyłączenie kontenerów, które sam uruchomiłeś), zanim zakończysz.
+Uruchom `make test`. Jeśli testy nie przejdą, zatrzymaj się i opisz błąd.
 
 ### Krok 2 — Ustal zakres zmian i branch
 
@@ -59,8 +50,3 @@ Zrób commit (staged pliki + `src/templates/changelog.html.twig`, jeśli był ak
 
 Jeśli jesteś na `main`, wykonaj `git push`. Na innym branchu nie wykonuj push — zakończ na commicie.
 
-### Krok 6 — Wyłącz kontenery (te, które sam uruchomiłeś w Kroku 1)
-
-Dla każdego z kontenerów (`builder`, `dev-memcached-1`), które w Kroku 1 sam uruchomiłeś (czyli wcześniej nie działały), wyłącz go teraz (`docker stop <nazwa>`). Kontenery, które działały już przed Krokiem 1, zostaw włączone.
-
-Ten krok wykonaj zawsze na końcu, niezależnie od tego, czy wcześniejsze kroki zakończyły się sukcesem, czy zatrzymały się na błędzie.
