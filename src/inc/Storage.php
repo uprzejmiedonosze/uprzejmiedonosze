@@ -161,11 +161,11 @@ function remote_size(string $key): ?int {
 }
 
 /**
- * Deletes the object from both B2 and Hetzner S3 — it may exist on either
- * during the migration window. Silently ignores missing keys on both.
+ * Deletes the object from B2. Hetzner S3 is a read-only fallback during the
+ * migration window — never written to or deleted from. Silently ignores
+ * missing keys.
  */
 function delete(string $key): void {
     if (!isEnabled()) return;
     b2()->delete($key);
-    s3()->delete($key);
 }

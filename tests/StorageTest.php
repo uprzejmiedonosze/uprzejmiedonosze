@@ -86,4 +86,21 @@ class StorageTest extends TestCase
         $this->assertCount(0, $b2Handler);
         $this->assertCount(0, $s3Handler);
     }
+
+    /**
+     * delete() must only touch B2 — Hetzner S3 is a read-only fallback and
+     * must never be written to or deleted from.
+     */
+    public function testDeleteOnlyTouchesB2NeverS3(): void
+    {
+        $b2Handler = new MockHandler([new Result([])]);
+        $s3Handler = new MockHandler(); // left empty — must never be called
+
+        \storage\b2(new S3('b2-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $b2Handler]));
+        \storage\s3(new S3('s3-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $s3Handler]));
+
+        \storage\delete('cdn2stg/test/x.jpg');
+        $this->assertCount(0, $b2Handler);
+        $this->assertCount(0, $s3Handler); // started empty and stayed empty — never invoked
+    }
 }
