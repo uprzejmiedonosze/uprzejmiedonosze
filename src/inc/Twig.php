@@ -29,8 +29,26 @@ class TwigExtension extends AbstractExtension {
 
     public function getFilters() {
         return [
-            new TwigFilter('cast_to_array', array($this, 'castToArray'))
+            new TwigFilter('cast_to_array', array($this, 'castToArray')),
+            new TwigFilter('asset_url', array($this, 'assetUrl'))
         ];
+    }
+
+    /**
+     * Application image url/thumb fields (and the 'img/...' placeholder
+     * fallbacks) are stored as bare storage keys, e.g. "cdn2/12/abc,ca.jpg" -
+     * no leading slash, since that's also the S3 object key and local
+     * filesystem path relative to ROOT. Rendered directly as <img src>,
+     * a relative path resolves against the current page URL rather than
+     * the site root, breaking on any page not one path segment deep
+     * (e.g. /app/list). This makes it web-root-absolute for display.
+     */
+    public function assetUrl(?string $path): ?string {
+        if ($path === null || $path === '') return $path;
+        if (str_starts_with($path, '/') || str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+        return '/' . $path;
     }
 
     public function castToArray($object) {

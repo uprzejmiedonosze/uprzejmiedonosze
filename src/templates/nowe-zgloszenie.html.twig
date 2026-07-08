@@ -37,7 +37,7 @@
                         title="{{ categories[app.category].contextImageHint }}"
                         value="{{ app.contextImage.url ?? '' }}" />
                     <div class="loader l" style="display: none;"></div>
-                    <img id="contextImagePreview" src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}"/>
+                    <img id="contextImagePreview" src="{{ (app.contextImage.thumb ?? 'img/fff-1.png')|asset_url }}"/>
                 </label>
             </div>
             <div class="imageContainer image-upload carImageSection button inverse">
@@ -47,7 +47,7 @@
                         title="{{ categories[app.category].carImageHint }}"
                         value="{{ app.carImage.url ?? '' }}" />
                     <div class="loader l" style="display: none;"></div>
-                    <img id="carImagePreview" src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}"/>
+                    <img id="carImagePreview" src="{{ (app.carImage.thumb ?? 'img/fff-1.png')|asset_url }}"/>
                 </label>
                 <div class="recydywa recydywa-overlay">
                     <span class="recydywa-title">Recydywa</span>
@@ -70,7 +70,7 @@
                 <label>
                     <a class="button remove" href="#">X</a>
                     <div class="loader l" style="display: none;"></div>
-                    <img id="thirdImagePreview" src="{{ app.thirdImage.thumb ?? 'img/fff-1.png' }}"/>
+                    <img id="thirdImagePreview" src="{{ (app.thirdImage.thumb ?? 'img/fff-1.png')|asset_url }}"/>
                 </label>
             </div>
             <div class="recydywa recydywa-details">

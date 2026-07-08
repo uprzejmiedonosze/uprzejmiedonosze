@@ -45,15 +45,15 @@
         <div>
             <span class="floating-box">{{ app.getShortAddress }}</span>
             {% if app.address.lat is defined %}
-            <img class="mapImage" src="{{ app.getMapImage }}?v={{ app.getRevision }}">
+            <img class="mapImage" src="{{ app.getMapImage|asset_url }}?v={{ app.getRevision }}">
             {% endif %}
         </div>
         <div>
             <span class="floating-box">{{ app.getDate("H'<sup>'mm'</sup>' eeee, d MMMM y")|raw }}</span>
-            <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" />
+            <img src="{{ (app.contextImage.thumb ?? 'img/fff-1.png')|asset_url }}?v={{ app.getRevision }}" />
         </div>
         <div>
-            <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}" id="carImage"/>
+            <img src="{{ (app.carImage.thumb ?? 'img/fff-1.png')|asset_url }}?v={{ app.getRevision }}" id="carImage"/>
             {% if vehicleBox and app.shouldIncludePlateImage %}
 
             {% set imageWidth = app.carImage.width ?? 1200 %}
@@ -74,7 +74,7 @@
         </div>
         <div>
             {% if app.thirdImage ?? false %}
-            <img src="{{ app.thirdImage.thumb }}?v={{ app.getRevision }}" />
+            <img src="{{ app.thirdImage.thumb|asset_url }}?v={{ app.getRevision }}" />
             {% endif %}
         </div>
         <div class="sender-data">
