@@ -76,7 +76,7 @@
 {% if app.address.lat is defined %}
             <a href="{{ app.getMapUrl() }}"
                target="_blank">
-                <img class="mapImage" src="{{ app.getMapImage }}?v={{ app.getRevision }}">
+                <img class="mapImage" src="{{ app.getMapImage|asset_url }}?v={{ app.getRevision }}">
             </a>
 {% endif %}
         </div>
@@ -84,29 +84,29 @@
     <div class="grid">
         <div class="imageContainer">
             <a href="#popup1" data-rel="popup">
-                <img src="{{ app.contextImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}"/>
+                <img src="{{ (app.contextImage.thumb ?? 'img/fff-1.png')|asset_url }}?v={{ app.getRevision }}"/>
             </a>
         </div>
         <div class="imageContainer">
             <a href="#popup2" data-rel="popup">
-                <img src="{{ app.carImage.thumb ?? 'img/fff-1.png' }}?v={{ app.getRevision }}"/> 
+                <img src="{{ (app.carImage.thumb ?? 'img/fff-1.png')|asset_url }}?v={{ app.getRevision }}"/>
             </a>
         </div>
         <dialog id="popup1" class="fullscreen">
-            <img src="{{ app.contextImage.url ??  'img/fff-1.png' }}?v={{ app.getRevision }}">
+            <img src="{{ (app.contextImage.url ?? 'img/fff-1.png')|asset_url }}?v={{ app.getRevision }}">
         </dialog>
         <dialog id="popup2" class="fullscreen">
-            <img src="{{ app.carImage.url ?? 'img/fff-1.png' }}?v={{ app.getRevision }}">
+            <img src="{{ (app.carImage.url ?? 'img/fff-1.png')|asset_url }}?v={{ app.getRevision }}">
         </dialog>
 
         {% if app.thirdImage ?? false %}
             <div class="imageContainer">
                 <a href="#popup3" data-rel="popup">
-                    <img src="{{ app.thirdImage.thumb }}?v={{ app.getRevision }}"/> 
+                    <img src="{{ app.thirdImage.thumb|asset_url }}?v={{ app.getRevision }}"/>
                 </a>
             </div>
             <dialog id="popup3" class="fullscreen">
-                <img src="{{ app.thirdImage.url }}?v={{ app.getRevision }}">
+                <img src="{{ app.thirdImage.url|asset_url }}?v={{ app.getRevision }}">
             </dialog>
         {% else %}
             <div></div>            

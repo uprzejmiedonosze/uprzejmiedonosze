@@ -132,7 +132,7 @@ function imageError(id, errorMsg) {
   if (loader) loader.style.display = 'none'
   if (section) section.classList.add("error")
   if (preview) {
-    preview.src = 'img/fff-1.png'
+    preview.src = '/img/fff-1.png'
     preview.style.opacity = '1'
     preview.style.display = 'block'
   }
@@ -164,6 +164,15 @@ async function isHeicFile(file) {
 
 function revokeObjectUrl(url) {
   if (url?.startsWith('blob:')) URL.revokeObjectURL(url)
+}
+
+// API responses carry bare storage keys (e.g. "cdn2/123/abc,ca.jpg" - same
+// string used as the S3 object key), not web-root-relative paths. Mirrors
+// the asset_url Twig filter (src/inc/Twig.php) used for the server-rendered
+// equivalents of these same images.
+function assetUrl(path) {
+  if (!path || /^(\/|https?:\/\/)/.test(path)) return path
+  return '/' + path
 }
 
 function loadImage(src) {
@@ -414,7 +423,7 @@ async function sendFile(fileData, id, imageMetadata={}, previewUrl=null) {
       if (preview) {
         preview.style.height = "100%"
         preview.style.opacity = "1"
-        preview.src = app[id].thumb + "?v=" + Math.random().toString()
+        preview.src = assetUrl(app[id].thumb) + "?v=" + Math.random().toString()
       }
     }
 
@@ -447,7 +456,7 @@ async function sendFile(fileData, id, imageMetadata={}, previewUrl=null) {
       }
       if (app.carInfo.plateImage) {
         if (plateImage) {
-          plateImage.src = app.carInfo.plateImage + "?v=" + Math.random().toString()
+          plateImage.src = assetUrl(app.carInfo.plateImage) + "?v=" + Math.random().toString()
           plateImage.style.display = 'block'
         }
       } else {

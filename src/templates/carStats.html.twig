@@ -40,7 +40,7 @@
                 </div>
             </h3>
             <figure>
-                <img src="{{ app.getSafeImageUrl }}">
+                <img src="{{ app.getSafeImageUrl|asset_url }}">
                 {% if app.isAppOwner and app.faces.count ?? 0 > 0 %}
                     <span class="blured-hint">Zostanie nałożony blur: widoczna twarz</span>
                 {% elseif app.faces.count ?? 0 > 0 %}
