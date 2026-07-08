@@ -3,8 +3,23 @@
 {# SITEMAP-PRIORITY:0.1 #}
 
 {% set mainClass = 'app' %}
+{% set hasSidebar = true %}
+{% set hideNavbarLinks = true %}
+{% set navbarCtaHref = '/app/new' %}
+{% set navbarCtaLabel = 'Nowe zgłoszenie' %}
 
 {% extends "base.html.twig" %}
+
+{% block footer %}{% endblock %}
+
+{% block sidebar %}
+<aside class="mpr-sidebar mpr-sidebar--toc">
+<details open>
+<summary>Menu</summary>
+{% include('_app-menu.html.twig') %}
+</details>
+</aside>
+{% endblock %}
 
 {% block main %}
 
@@ -29,19 +44,19 @@
     {% set instructed = general.stats['confirmed-instructed'] ?? 0 %}
     <div class="gauge">
         {% if active > 0 %}
-        <a href="/moje-zgloszenia.html">
+        <a href="/app/list">
             <h3>{{ active|number_format(0, ',', ' ') }}</h3>
             <p>Aktywne zgłoszenia</p>
         </a>
         {% else %}
-        <h3><a href="/nowe-zgloszenie.html">Stwórz pierwsze</a></h3>
+        <h3><a href="/app/new">Stwórz pierwsze</a></h3>
         <p>Aktywne zgłoszenia</p>
         {% endif %}
 
     </div>
     <div class="gauge">
         {% if fined > 0 %}
-        <a href="/moje-zgloszenia.html#confirmed-fined">
+        <a href="/app/list#confirmed-fined">
             <h3>{{ fined|number_format(0, ',', ' ') }}</h3>
             <p>Mandaty</p>
         </a>
@@ -52,7 +67,7 @@
     </div>
     <div class="gauge">
         {% if instructed > 0 %}
-        <a href="/moje-zgloszenia.html#confirmed-instructed">
+        <a href="/app/list#confirmed-instructed">
             <h3>{{ instructed|number_format(0, ',', ' ') }}</h3>
             <p>Pouczenia</p>
         </a>

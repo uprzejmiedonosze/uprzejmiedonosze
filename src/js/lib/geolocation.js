@@ -93,13 +93,13 @@ export function setAddressByLatLng(lat, lng, from) {
 
 function geoLoading(from) {
   const input = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
-  const formSubmit = document.getElementById("form-submit")
-  
+  const formSubmits = document.querySelectorAll(".js-new-app-submit")
+
   if (input) {
     input.className = "clock"
   }
 
-  if (formSubmit) formSubmit.classList.add("disabled")
+  formSubmits.forEach(btn => btn.classList.add("disabled"))
   
   if (input) {
     if (from == "picture") {
@@ -190,8 +190,7 @@ async function latLngToAddress(lat, lng, from) {
       if (addressHint) addressHint.textContent = "Sprawdź automatycznie pobrany adres"
       if (input) input.classList.add("hint")
     }
-    const formSubmit = document.getElementById("form-submit")
-    if (formSubmit) formSubmit.classList.remove("disabled")
+    document.querySelectorAll(".js-new-app-submit").forEach(btn => btn.classList.remove("disabled"))
   }
 
   let addressData = {

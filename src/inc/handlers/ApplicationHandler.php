@@ -29,7 +29,7 @@ class ApplicationHandler extends AbstractHandler {
         $params = $request->getQueryParams();
         if (isset($params['cleanup'])) {
             unset($_SESSION['newAppId']);
-            return $this->redirect('/nowe-zgloszenie.html');
+            return $this->redirect('/app/new');
         }
 
         $user = $request->getAttribute('user');
@@ -40,7 +40,7 @@ class ApplicationHandler extends AbstractHandler {
         }
 
         if (!$user->checkTermsConfirmation()) {
-            return $this->redirect('/start.html');
+            return $this->redirect('/app/start');
         }
 
         if (isset($params['edit'])) {
@@ -108,7 +108,7 @@ class ApplicationHandler extends AbstractHandler {
 
         $appId = $this->getParam($params, 'applicationId', -1);
         if ($appId == -1) {
-            return $this->redirect('/nowe-zgloszenie.html');
+            return $this->redirect('/app/new');
         }
 
         $plateId = $this->getParam($params, 'plateId');
@@ -161,7 +161,7 @@ class ApplicationHandler extends AbstractHandler {
             } catch (ForbiddenException $e) {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
             } catch (Exception $e) {
-                return $this->redirect('/moje-zgloszenia.html');
+                return $this->redirect('/app/list');
             }
         });
 
@@ -189,7 +189,7 @@ class ApplicationHandler extends AbstractHandler {
         $appId = $this->getParam($params, 'applicationId', -1);
 
         if (!isset($_SESSION['newAppId']) || $appId == -1) {
-            return $this->redirect('/moje-zgloszenia.html');
+            return $this->redirect('/app/list');
         }
 
         unset($_SESSION['newAppId']);
@@ -293,7 +293,7 @@ class ApplicationHandler extends AbstractHandler {
     }
 
     public function shipment(Request $request, Response $response): Response {
-        return $this->redirect('/moje-zgloszenia.html?update&q=' . urlencode('wysyłka')); // nosemgrep: php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
+        return $this->redirect('/app/list?update&q=' . urlencode('wysyłka')); // nosemgrep: php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
     }
 
     public function askForStatus(Request $request, Response $response) {

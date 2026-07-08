@@ -60,7 +60,7 @@ function __sendWarning(\user\User $user, bool $dryRun) {
 Twoje ostatnie zgłoszenie nieprawidłowego parkowania w aplikacji Uprzejmie Donoszę ma ponad rok. Zgodnie z naszą polityką bezpieczeństwa, konta nieaktywne przez ponad 12 miesięcy są usuwane.
 
 Jeśli chcesz zachować swoje konto, potwierdź aktualny regulamin w ciągu najbliższych 2 miesięcy:
-https://uprzejmiedonosze.net/register.html?update
+https://uprzejmiedonosze.net/app/account?update
 
 Jeśli nie podejmiesz żadnej akcji, Twoje konto zostanie trwale usunięte — wraz ze wszystkimi zgłoszeniami i zdjęciami.
 
@@ -86,7 +86,7 @@ function __send2ndWarning(\user\User $user, bool $dryRun) {
 Dwa miesiące temu poinformowaliśmy Cię o planowanym usunięciu Twojego konta w Uprzejmie Donoszę z powodu nieaktywności. To jest ostatnie przypomnienie.
 
 Jeśli chcesz zachować konto, potwierdź aktualny regulamin w ciągu najbliższych 2 tygodni:
-https://uprzejmiedonosze.net/register.html?update
+https://uprzejmiedonosze.net/app/account?update
 
 Po usunięciu konta:
 1. Twoje dane osobowe, zgłoszenia i zdjęcia zostaną trwale usunięte z naszych serwerów.

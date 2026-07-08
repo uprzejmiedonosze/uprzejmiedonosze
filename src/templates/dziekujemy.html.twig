@@ -29,7 +29,7 @@ Z poważaniem
     zostało zaktualizowane{% else %}zostało zarejestrowane pod numerem
     <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>{% endif %}.
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
-    <a href="/moje-zgloszenia.html">liście swoich zgłoszeń</a>.</p>
+    <a href="/app/list">liście swoich zgłoszeń</a>.</p>
 
 {% if app.automatedSM %}
 <div class="whatNext">
@@ -123,11 +123,11 @@ Z poważaniem
 <input type="hidden" name="applicationId" id="applicationId" value="{{ app.id }}"/>
 <input type="hidden" name="automatedSM" id="automatedSM" value="{{ app.automatedSM }}"/>
 
-<a href="/moje-zgloszenia.html" class="button light disabled last">
+<a href="/app/list" class="button light disabled last">
     Moje zgłoszenia
 </a>
 
-<a href="/nowe-zgloszenie.html" class="button disabled">
+<a href="/app/new" class="button disabled">
     Jeszcze raz
 </a>
 

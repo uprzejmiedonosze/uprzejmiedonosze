@@ -110,13 +110,13 @@ function uploadFinished() {
 }
 
 function checkUploadInProgress() {
-  const formSubmit = document.getElementById("form-submit")
+  const formSubmits = document.querySelectorAll(".js-new-app-submit")
   if (uploadInProgress <= 0) {
     uploadInProgress = 0;
-    if (formSubmit) formSubmit.classList.remove("disabled")
+    formSubmits.forEach(btn => btn.classList.remove("disabled"))
     return
   }
-  if (formSubmit) formSubmit.classList.add("disabled")
+  formSubmits.forEach(btn => btn.classList.add("disabled"))
 }
 
 /**

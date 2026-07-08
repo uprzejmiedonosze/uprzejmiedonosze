@@ -20,7 +20,7 @@ function getFirebaseAuth() {
 }
 
 function initLogin(currentScript) {
-    const signInSuccessUrl = currentScript?.getAttribute("signInSuccessUrl") ?? encodeURIComponent('/moje-zgloszenia.html');
+    const signInSuccessUrl = currentScript?.getAttribute("signInSuccessUrl") ?? encodeURIComponent('/app/list');
 
     if (currentScript?.getAttribute("login-redirect")) {
         finishLogin(signInSuccessUrl)

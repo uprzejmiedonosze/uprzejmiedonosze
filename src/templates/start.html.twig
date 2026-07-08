@@ -2,6 +2,9 @@
 
 {% set title = 'Start' %}
 {% set mainClass = 'start-page' %}
+{% set focusLayout = true %}
+{% set hideNavbarLinks = true %}
+{% set hideNavbarCta = true %}
 
 {% extends "base.html.twig" %}
 {% block footer %}
@@ -38,7 +41,7 @@
         <a href="/polityka-prywatnosci.html?dialog">polityka prywatności</a> Uprzejmie Donoszę.</p>
 </div>
 
-<a href="/nowe-zgloszenie.html?TermsConfirmation" class="button cta last">
+<a href="/app/new?TermsConfirmation" class="button cta last">
     Wyrażam zgodę na regulamin
 </a>
 

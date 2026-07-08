@@ -20,7 +20,7 @@
 {% endmacro link %}
 
 {% block sidebar %}
-<aside class="mpr-sidebar">
+<aside class="mpr-sidebar mpr-sidebar--toc">
 <details open>
 <summary>Dostępne metody</summary>
 <ul>
@@ -74,9 +74,9 @@
           rejestracyjnych.
         </p>
         {% if general.isLoggedIn %}
-        <a href="/nowe-zgloszenie.html" class="button inline cta">Stwórz nowe zgłoszenie</a>
+        <a href="/app/new" class="button inline cta">Stwórz nowe zgłoszenie</a>
         {% else %}
-        <a href="/nowe-zgloszenie.html" class="button inline cta">Załóż konto</a>
+        <a href="/app/new" class="button inline cta">Załóż konto</a>
         {% endif %}
       </div>
     </div>
@@ -197,7 +197,7 @@
           <em>Skuteczność:</em> niestety, jeśli pojazd jest na zagranicznych numerach
           rejestracyjnych to szanse na to, że policja podejmie działanie są niewielkie.
         </p>
-        <a href="/nowe-zgloszenie.html" class="button inline cta">Zgłoś na policję</a>
+        <a href="/app/new" class="button inline cta">Zgłoś na policję</a>
       </div>
     </div>
   </div>
