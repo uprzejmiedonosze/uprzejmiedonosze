@@ -115,16 +115,16 @@ export const initHandlers = (map) => {
     syncUnitToggleWithCategory(selectedCategory);
   });
 
-  const formSubmit = document.getElementById("form-submit");
-  if (formSubmit) {
+  const formSubmits = document.querySelectorAll(".js-new-app-submit");
+  formSubmits.forEach(formSubmit => {
     formSubmit.addEventListener("click", function () {
       const form = document.getElementById("form");
       if (validateForm()) {
-        formSubmit.classList.add('disabled');
+        formSubmits.forEach(btn => btn.classList.add('disabled'));
         if (form) form.submit();
       }
     });
-  }
+  });
 
   document.querySelectorAll("a.changeDatetime").forEach(link => {
     link.addEventListener("click", function () {

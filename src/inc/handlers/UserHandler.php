@@ -13,14 +13,14 @@ class UserHandler extends AbstractHandler {
         $user = $request->getAttribute('user');
         $params = $request->getQueryParams();
         return AbstractHandler::renderHtml($request, $response, 'register', [
-            'signInSuccessUrl' => $this->getParam($params, 'next', '/start.html'),
+            'signInSuccessUrl' => $this->getParam($params, 'next', '/app/start'),
             'user' => $user
         ]);
     }
 
     public function finish(Request $request): Response {
         $params = (array)$request->getParsedBody();
-        $signInSuccessUrl = $this->getParam($params, 'next', '/start.html');
+        $signInSuccessUrl = $this->getParam($params, 'next', '/app/start');
         $name = capitalizeName($this->getParam($params, 'name'));
 
         $address = $this->getParam($params, 'address');

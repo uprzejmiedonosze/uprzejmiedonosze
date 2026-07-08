@@ -67,7 +67,7 @@
                 {% if app.user.edelivery ?? false %}e-Doręczenia: <span class="edelivery">{{ app.user.edelivery ?? '' }}</span>{% endif %}
             {% if config.confirmationScreen is not defined %}
                 <br />
-                <small>Nieaktualne dane? Popraw je na <a href="/register.html?update">stronie rejestracji</a>
+                <small>Nieaktualne dane? Popraw je na <a href="/app/account?update">stronie rejestracji</a>
                 zanim stworzysz nowe zgłoszenie.</small>
             {% endif %}
         {% endif %}

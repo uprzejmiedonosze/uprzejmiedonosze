@@ -36,7 +36,7 @@ abstract class SessionMiddleware implements MiddlewareInterface {
         if (!$isRegistered) {
             if ($request->getAttribute('content') == 'json')
                 throw new HttpForbiddenException($request, "User not registered");
-            return AbstractHandler::redirect("/register.html?next=$destination");
+            return AbstractHandler::redirect("/app/account?next=$destination");
         }
         return null;
     }
@@ -108,7 +108,6 @@ class RegisteredMiddleware extends SessionMiddleware {
         if($checkLoggedIn) return $checkLoggedIn;
         $checkRegistered = SessionMiddleware::checkRegistered($request);
         if($checkRegistered) return $checkRegistered;
-        $request = $request->withAttribute('isAppPage', true);
         return $handler->handle($request);
     }
 }

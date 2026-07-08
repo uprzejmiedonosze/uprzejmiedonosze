@@ -158,7 +158,7 @@ class StaticPagesHandler extends AbstractHandler {
 
     public function loginOK(Request $request, Response $response): Response {
         $params = $request->getQueryParams();
-        $next = $this->getParam($params, 'next', '/start.html');
+        $next = $this->getParam($params, 'next', '/app/start');
         
         return AbstractHandler::renderHtml($request, $response, 'login-ok', [
             'config' => [

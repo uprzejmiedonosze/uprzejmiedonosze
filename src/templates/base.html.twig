@@ -8,10 +8,9 @@
     {% set title = 'Uprzejmie Donoszę' %}
 {% endif %}
 
-{# Static (OptionalUserMiddleware) pages default to the wide redesigned
-   layout; app pages (RegisteredMiddleware) keep the old menu/width unless
-   a template explicitly opts in by setting redesignClass itself. #}
-{% set redesignClass = redesignClass ?? ((general.isAppPage ?? false) ? '' : 'rd25') %}
+{# Every page defaults to the redesigned header/width now; a template can
+   still opt out by setting redesignClass = '' itself before extending. #}
+{% set redesignClass = redesignClass ?? 'rd25' %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -76,7 +75,7 @@
         <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
         {% include('header.html.twig') %}
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {{ redesignClass ?? '' }} {% if dialog %}dialog{% endif %}">
-        <div class="mpr-layout{% if hasSidebar ?? false %} mpr-layout--sidebar{% endif %}">
+        <div class="mpr-layout{% if hasSidebar ?? false %} mpr-layout--sidebar{% elseif focusLayout ?? false %} mpr-layout--focus{% endif %}">
             <div class="mpr-article">
         {% block main %}{% endblock %}
             </div>

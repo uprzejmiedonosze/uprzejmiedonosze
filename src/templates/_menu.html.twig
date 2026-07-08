@@ -17,12 +17,12 @@
 
 
 {% if rightButton ?? '' == 'menuStart' %}
-    <a href="/nowe-zgloszenie.html" class="menu-button right">
+    <a href="/app/new" class="menu-button right">
         Zgłoś
     </a>
 {% endif %}
 {% if rightButton ?? '' == 'newAppNext' %}
-    <a id="form-submit" class="menu-button right">Dalej</a>
+    <a id="form-submit" class="menu-button right js-new-app-submit">Dalej</a>
 {% endif %}
 {% if rightButton ?? '' == 'newAppSave' %}
     <a onclick="confirmApplication()"
@@ -39,10 +39,10 @@
             {% endif %}
         </a>
 {% if general.isLoggedIn %}
-        <a {{ active(config.menu, 'nowe-zgloszenie')|raw }} href="/nowe-zgloszenie.html">
+        <a {{ active(config.menu, 'nowe-zgloszenie')|raw }} href="/app/new">
             Nowe zgłoszenie
         </a>
-        <a {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/moje-zgloszenia.html">
+        <a {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/app/list">
             Moje zgłoszenia
             <span class="menu-count">{{ general.stats.active ?? 0 }}</span>
         </a>
@@ -61,12 +61,12 @@
 		</a>
 	{% endif %}
 
-        <a {{ active(config.menu, 'register')|raw }} href="/register.html?update">
+        <a {{ active(config.menu, 'register')|raw }} href="/app/account?update">
             Edycja konta
         </a>
 
 {% else %} {# not logged in #}
-        <a class="cta" href="/nowe-zgloszenie.html">
+        <a class="cta" href="/app/new">
             Spróbuj!
         </a>
 {% endif %}
@@ -127,7 +127,7 @@
             Wyloguj się
         </a>
 {% else %}
-	    <a href="/start.html">
+	    <a href="/app/start">
             Zaloguj/zarejestruj się
         </a>
 {% endif %}

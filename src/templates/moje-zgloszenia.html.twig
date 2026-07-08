@@ -3,11 +3,35 @@
 
 {% set title = 'Moje zgłoszenia' %}
 {% set mainClass = 'my-applications' %}
+{% set hasSidebar = true %}
+{% set hideNavbarLinks = true %}
+{% set navbarCtaHref = '/app/new' %}
+{% set navbarCtaLabel = 'Nowe zgłoszenie' %}
 
 {% extends "base.html.twig" %}
 {% block footer %}
 <footer></footer>
 {% endblock %}
+
+{% block sidebar %}
+<aside class="mpr-sidebar mpr-sidebar--toc">
+<details open>
+<summary>Menu</summary>
+{% include('_app-menu.html.twig') %}
+</details>
+{% if applications|length > 0 %}
+<details open>
+<summary>Filtruj</summary>
+<ul class="status-filter">
+{% for key,val in statuses %}
+    <li class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|upper }}</a> <span class="li-count"></span></li>
+{% endfor %}
+</ul>
+</details>
+{% endif %}
+</aside>
+{% endblock %}
+
 {% block main %}
 
 <h2>Przeglądaj swoje zgłoszenia</h2>
@@ -17,7 +41,7 @@
 
 {% if applications|length == 0 %}
     <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
-    <a href="/nowe-zgloszenie.html" class="button cta last">Stwórz nowe</a>
+    <a href="/app/new" class="button cta last">Stwórz nowe</a>
 {% else %}
     <p>Wybierz zgłoszenie poniżej, żeby zobaczyć jego szczegóły, zmienić mu status lub dodać komentarz.</p>
 
@@ -36,11 +60,6 @@
     <form autocomplete="off">
         <input autocomplete="false" data-type="filterable" type="text" id="apps"
             placeholder="Adres, numer rej. lub zgłoszenia, data, komentarz" value="{{ query }}">
-        <ul class="status-filter">
-        {% for key,val in statuses %}
-            <li class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|upper }}</a> <span class="li-count"></span></li>
-        {% endfor %}
-        </ul>
     </form>
     
     <dialog data-role="popup" id="patronite">

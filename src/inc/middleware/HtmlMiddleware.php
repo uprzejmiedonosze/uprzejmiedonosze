@@ -66,7 +66,6 @@ class HtmlMiddleware implements MiddlewareInterface {
         $parameters = HtmlMiddleware::getDefaultParameters(
             isset($queryParams['dialog'])
         );
-        $parameters['general']['isAppPage'] = $request->getAttribute('isAppPage', false);
 
         $request = $request->withAttribute('parameters', $parameters);
 

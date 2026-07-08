@@ -1,12 +1,26 @@
 {% set leftButton = 'menu' %}
 
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
+{% set hasSidebar = true %}
+{% set hideNavbarLinks = true %}
+{% set navbarCtaHref = '/app/new' %}
+{% set navbarCtaLabel = 'Nowe zgłoszenie' %}
 
 {% extends "base.html.twig" %}
 {% block footer %}{% endblock %}
+
+{% block sidebar %}
+<aside class="mpr-sidebar mpr-sidebar--toc">
+<details open>
+<summary>Menu</summary>
+{% include('_app-menu.html.twig') %}
+</details>
+</aside>
+{% endblock %}
+
 {% block main %}
 
-<form action="/register-ok.html?next={{ signInSuccessUrl ?? 'start.html' }}" id="register-form" method="post">
+<form action="/register-ok.html?next={{ signInSuccessUrl ?? '/app/start' }}" id="register-form" method="post">
     <h3>Dane konta</h3>
     <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres e-mail oraz adres korespondencyjny.
         Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
