@@ -48,14 +48,14 @@
         </a>
 
     {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
-		<a {{ active(config.menu, 'wysylka')|raw }} href="/wysylka.html">
+		<a {{ active(config.menu, 'wysylka')|raw }} href="/app/send">
             Do wysłania
 			<span class="menu-count">{{ general.stats.confirmed ?? 0 }}</span>
 		</a>
     {% endif %}
 
 	{% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
-		<a {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/zapytaj-o-status.html?update">
+		<a {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/app/ask-for-status?update">
             Zapytaj o status
 			<span class="menu-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span>
 		</a>

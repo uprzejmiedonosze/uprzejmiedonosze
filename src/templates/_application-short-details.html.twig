@@ -66,7 +66,7 @@
                     Wyślij zgłoszenie
                 </a>
             {% elseif wysylka is not defined %}
-                <a href="/wysylka.html?city={{ app.guessSMData.key|url_encode }}"
+                <a href="/app/send?city={{ app.guessSMData.key|url_encode }}"
                 class="button inline cta confirmed-waiting">
                     Wyślij zgłoszenie
                 </a>

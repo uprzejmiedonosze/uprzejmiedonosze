@@ -123,22 +123,34 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
     $group->get('/app/new', ApplicationHandler::class . ':newApplication');
     $group->get('/nowe-zgloszenie.html', function ($request) { return AbstractHandler::redirect('/app/new' . (($qs = $request->getUri()->getQuery()) ? "?$qs" : '')); });
 
+    // POST target kept at both URLs (a redirect can't carry a POST body/method
+    // reliably) so old cached form actions keep working; GET is just the
+    // refresh/back-button safety net, same as before the rename.
+    $group->post('/app/confirm', ApplicationHandler::class . ':confirm');
     $group->post('/potwierdz.html', ApplicationHandler::class . ':confirm');
+    $group->get('/app/confirm', function () { return AbstractHandler::redirect('/app/list'); });
     $group->get('/potwierdz.html', function () { return AbstractHandler::redirect('/app/list'); });
 
+    $group->post('/app/done', ApplicationHandler::class . ':finish');
     $group->post('/dziekujemy.html', ApplicationHandler::class . ':finish');
+    $group->get('/app/done', function () { return AbstractHandler::redirect('/app/list'); });
     $group->get('/dziekujemy.html', function () { return AbstractHandler::redirect('/app/list'); });
 
     $group->get('/app/list', ApplicationHandler::class . ':myApps');
     $group->get('/moje-zgloszenia.html', function () { return AbstractHandler::redirect('/app/list'); });
-    $group->get('/my-apps-partial.html', ApplicationHandler::class . ':myAppsPartial');
-    $group->get('/short-{appId}-partial.html', ApplicationHandler::class . ':applicationShortHtml');
-    $group->get('/wysylka.html', ApplicationHandler::class . ':shipment');
+    $group->get('/app/partial', ApplicationHandler::class . ':myAppsPartial');
+    $group->get('/my-apps-partial.html', function ($request) { return AbstractHandler::redirect('/app/partial' . (($qs = $request->getUri()->getQuery()) ? "?$qs" : '')); });
+    $group->get('/app/partial/{appId}', ApplicationHandler::class . ':applicationShortHtml');
+    $group->get('/short-{appId}-partial.html', function ($request, $response, $args) { return AbstractHandler::redirect('/app/partial/' . $args['appId']); });
+    $group->get('/app/send', ApplicationHandler::class . ':shipment');
+    $group->get('/wysylka.html', function ($request) { return AbstractHandler::redirect('/app/send' . (($qs = $request->getUri()->getQuery()) ? "?$qs" : '')); });
 
-    $group->get('/zapytaj-o-status.html', ApplicationHandler::class . ':askForStatus');
+    $group->get('/app/ask-for-status', ApplicationHandler::class . ':askForStatus');
+    $group->get('/zapytaj-o-status.html', function ($request) { return AbstractHandler::redirect('/app/ask-for-status' . (($qs = $request->getUri()->getQuery()) ? "?$qs" : '')); });
 
     $group->get('/tablica-rejestracyjna-{plateId}.html', StaticPagesHandler::class . ':carStatsFull');
-    $group->get('/recydywa-{plateId}-partial.html', StaticPagesHandler::class . ':carStatsPartial');
+    $group->get('/app/recydywa/partial/{plateId}', StaticPagesHandler::class . ':carStatsPartial');
+    $group->get('/recydywa-{plateId}-partial.html', function ($request, $response, $args) { return AbstractHandler::redirect('/app/recydywa/partial/' . $args['plateId']); });
     //$group->get('/top100.html', StaticPagesHandler::class . ':top100');
 })  ->add(new HtmlMiddleware())
     ->add(new RegisteredMiddleware());
@@ -155,7 +167,9 @@ $app->group('', function (RouteCollectorProxy $group) { // Generator
 $app->group('', function (RouteCollectorProxy $group) { // user register
     $group->get('/app/account', UserHandler::class . ':register');
     $group->get('/register.html', function ($request) { return AbstractHandler::redirect('/app/account' . (($qs = $request->getUri()->getQuery()) ? "?$qs" : '')); });
+    $group->post('/app/register-ok', UserHandler::class . ':finish');
     $group->post('/register-ok.html', UserHandler::class . ':finish');
+    $group->get('/app/register-ok', function () { return AbstractHandler::redirect('/app/account'); });
     $group->get('/register-ok.html', function () { return AbstractHandler::redirect('/app/account'); });
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware());

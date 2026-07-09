@@ -113,7 +113,7 @@ export async function appClicked(target) {
   // @ts-ignore
   appDetailsDiv.innerHTML = '<div class="loader"></div>'
 
-  const api = new Api(`/short-${appId}-partial.html`)
+  const api = new Api(`/app/partial/${appId}`)
   const appDetails = await api.getHtml()
   location.hash = `#${appId}`
   // @ts-ignore
@@ -151,7 +151,7 @@ export async function appClicked(target) {
       const recydywaContent = document.querySelector('#recydywa .popup-content')
       if (recydywaContent) recydywaContent.innerHTML = '<div class="loader"></div>'
       if (recydywaElement) recydywaElement.style.display = 'block'
-      const api = new Api(`/recydywa-${plateId}-partial.html`)
+      const api = new Api(`/app/recydywa/partial/${plateId}`)
       const recydywa = await api.getHtml()
       if (recydywaContent) recydywaContent.innerHTML = recydywa
     })
