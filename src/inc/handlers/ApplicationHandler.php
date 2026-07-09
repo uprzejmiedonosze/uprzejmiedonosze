@@ -141,7 +141,7 @@ class ApplicationHandler extends AbstractHandler {
             global $STATUSES;
             $status = $STATUSES[$application->status];
             if (!$status->editable) {
-                logger("Ponowny POST na /potwierdz.html dla zgłoszenia {$application->number} w statusie {$status->name}");
+                logger("Ponowny POST na /app/confirm dla zgłoszenia {$application->number} w statusie {$status->name}");
                 return $this->redirect("/ud-$appId.html");
             }
             try {
@@ -199,7 +199,7 @@ class ApplicationHandler extends AbstractHandler {
             $application = \app\get($appId);
             $status = $STATUSES[$application->status];
             if(!$status->editable) {
-                logger("Ponowny POST na /dziekujemy.html dla zgłoszenia {$application->number} w statusie {$status->name}");
+                logger("Ponowny POST na /app/done dla zgłoszenia {$application->number} w statusie {$status->name}");
                 return $this->redirect("/ud-$appId.html");
             }
 

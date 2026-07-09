@@ -3,11 +3,11 @@
     <li><a href="/app/list">Moje zgłoszenia
         <span class="badge">{{ general.stats.active ?? 0 }}</span></a></li>
     {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
-    <li><a href="/wysylka.html">Do wysłania
+    <li><a href="/app/send">Do wysłania
         <span class="badge">{{ general.stats.confirmed }}</span></a></li>
     {% endif %}
     {% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
-    <li><a href="/zapytaj-o-status.html?update">Zapytaj o status
+    <li><a href="/app/ask-for-status?update">Zapytaj o status
         <span class="badge">{{ general.stats['confirmed-waiting'] }}</span></a></li>
     {% endif %}
     <li><a href="/app/account?update">Edycja konta</a></li>
