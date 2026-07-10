@@ -6,7 +6,7 @@
 {% extends "base.html.twig" %}
 
 {% block headIncludes %}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@600;700&family=Inter:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 {% endblock %}
 
 {% block main %}
@@ -14,44 +14,88 @@
 <div class="main-page-redesign">
 
     <section class="mpr-hero">
-        <div class="mpr-hero-copy">
-            <h2>Pomagamy walczyć z nielegalnym parkowaniem!</h2>
-            <p class="mpr-lead">
-                Denerwuje Cię wieczny bałagan na chodnikach, ścieżkach i drogach?
-                Dołącz do ponad <strong>{{ (config.stats.users / 1000) | round(0) }} tysięcy</strong>
-                osób działających na rzecz uzywalnienia polskich miast.
-            </p>
-            <div class="mpr-cta-row">
-                <a href="/app" class="mpr-button mpr-button-primary">
-                    Przejdź do aplikacji
-                </a>
-                <a href="#jak-to-dziala" class="mpr-button mpr-button-secondary">
-                    Jak to działa?
-                </a>
+        <div class="mpr-hero-inner">
+            <div class="mpr-hero-copy">
+                <div class="mpr-hero-badge">
+                    {{ config.stats.apps|number_format(0, ',', ' ') }} zgłoszeń wysłanych i liczymy dalej
+                </div>
+                <h1>Pomagamy walczyć z&nbsp;<em>nielegalnym parkowaniem</em></h1>
+                <p class="mpr-lead">
+                    Widzisz auto na chodniku, pasach albo trawniku? Zrób dwa zdjęcia &ndash;
+                    wygenerujemy prawidłowe zgłoszenie i wyślemy je do właściwej straży
+                    miejskiej w niecałą minutę.
+                </p>
+                <div class="mpr-cta-row">
+                    <a href="/app/new" class="mpr-button mpr-button-primary">
+                        Zgłoś nieprawidłowe parkowanie
+                    </a>
+                    <a href="#jak-to-dziala" class="mpr-button mpr-button-secondary">
+                        Zobacz, jak to działa
+                    </a>
+                </div>
+            </div>
+
+            <div class="mpr-hero-visual">
+                <div class="mpr-hero-visual-frame">
+                    <img src="/img/hero.jpg?width=1200&as=jpg&quality=85" alt="">
+                </div>
+                <div class="mpr-hero-card mpr-hero-card-report">
+                    <div class="mpr-hero-card-label">
+                        <span>NOWE ZGŁOSZENIE</span>
+                        <span>Wysłane</span>
+                    </div>
+                    <div class="mpr-hero-card-plate">
+                        <span class="mpr-hero-card-plate-pl">PL</span>
+                        <span class="mpr-hero-card-plate-number">WE1CF48</span>
+                    </div>
+                    <div class="mpr-hero-card-address">Henryka Pobożnego 11, Szczecin</div>
+                    <div class="mpr-hero-card-reason">Pojazd jechał wzdłuż chodnika</div>
+                    <div class="mpr-hero-card-sent">
+                        <span>Wysłano do</span>
+                        <strong>👮‍♀️ KP Szczecin Niebuszewo</strong>
+                    </div>
+                </div>
+                <div class="mpr-hero-card mpr-hero-card-stat">
+                    <strong>58 s</strong>
+                    <span>czas zgłoszenia</span>
+                </div>
             </div>
         </div>
-        <div class="mpr-hero-media" id="jak-to-dziala">
-            <div class="video video-landscape">
-                <video controls poster="img/ud-intro-desktop.png?width=800">
-                    <source src="/img/video/ud-intro-desktop.mp4" type="video/mp4" />
-                    <source src="/img/video/ud-intro-desktop.webm" type="video/webm" />
-                    <source src="/img/video/ud-intro-desktop.ogv" type="video/ogg" />
-                    <p>
-                        Twoja przeglądarka nie wspiera odtwarzania plików wideo.
-                        <a href="/img/video/ud-intro-desktop.mp4">Pobierz film</a>.
-                    </p>
-                </video>
+    </section>
+
+    <section class="mpr-trust-band">
+        <div>
+            <strong>{{ config.stats.apps|number_format(0, ',', ' ') }}</strong>
+            <span>wysłanych zgłoszeń</span>
+        </div>
+        <div>
+            <strong>{{ config.stats.users|number_format(0, ',', ' ') }}</strong>
+            <span>aktywnych użytkowników</span>
+        </div>
+        <div>
+            <strong>{{ config.stats.sm }}</strong>
+            <span>obsługiwanych miejscowości</span>
+        </div>
+    </section>
+
+    <section class="mpr-section" id="jak-to-dziala">
+        <h2 class="mpr-section-title">Jak to działa</h2>
+        <p style="text-align:center;color:#6b7871;margin:-0.5rem 0 2rem">Trzy kroki. Bez formularzy, bez znajomości przepisów.</p>
+        <div class="mpr-steps">
+            <div class="mpr-step">
+                <div class="mpr-step-number">1</div>
+                <h3>Zrób zdjęcia</h3>
+                <p>Sfotografuj pojazd i wykroczenie. Wystarczą dwa ujęcia z telefonu.</p>
             </div>
-            <div class="video video-portrait">
-                <video controls poster="/img/ud-intro-mobile.png?width=720">
-                    <source src="/img/video/ud-intro-mobile.mp4" type="video/mp4" />
-                    <source src="/img/video/ud-intro-mobile.webm" type="video/webm" />
-                    <source src="/img/video/ud-intro-mobile.ogv" type="video/ogg" />
-                    <p>
-                        Twoja przeglądarka nie wspiera odtwarzania plików wideo.
-                        <a href="/img/video/ud-intro-mobile.mp4">Pobierz film</a>.
-                    </p>
-                </video>
+            <div class="mpr-step">
+                <div class="mpr-step-number">2</div>
+                <h3>Sprawdź dane</h3>
+                <p>Automatycznie odczytamy tablicę rejestracyjną i ustalimy adres zdarzenia.</p>
+            </div>
+            <div class="mpr-step">
+                <div class="mpr-step-number">3</div>
+                <h3>Wyślij zgłoszenie</h3>
+                <p>Trafi do właściwego oddziału straży miejskiej. Ty dostaniesz potwierdzenie.</p>
             </div>
         </div>
     </section>
@@ -83,6 +127,51 @@
         </div>
     </section>
 
+    <section class="mpr-section">
+        <h2 class="mpr-section-title">Dlaczego Uprzejmie Donoszę</h2>
+        <div class="mpr-checklist">
+            <div class="mpr-checklist-item">
+                <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>Generujemy prawidłowe i kompletne zgłoszenie</span>
+            </div>
+            <div class="mpr-checklist-item">
+                <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>Wysyłamy do właściwego oddziału SM w {{ config.stats.sm }} miejscowościach</span>
+            </div>
+            <div class="mpr-checklist-item">
+                <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>Twoje dane osobowe są bezpiecznie zaszyfrowane</span>
+            </div>
+            <div class="mpr-checklist-item">
+                <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>Całość zajmuje dosłownie minutę</span>
+            </div>
+            <div class="mpr-checklist-item">
+                <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>Ułatwiamy życie Tobie i służbom</span>
+            </div>
+            <div class="mpr-checklist-item">
+                <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span>Walczymy o zmianę przepisów</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="mpr-section" id="zabijmy-aplikacje">
+        <h2 class="mpr-section-title">Nie chcesz „donosić”?</h2>
+        <p style="text-align:center;color:#6b7871;margin:-0.5rem 0 2rem">Możesz działać u źródła. Zobacz, co jeszcze możesz zrobić.</p>
+        <div class="mpr-cards mpr-cards-2">
+            <a href="/napisz-pismo-do-polityka.html" class="mpr-link-card">
+                <div class="mpr-link-card-title">Napisz pismo do polityka &rarr;</div>
+                <p>W trzy minuty przełóż swoją frustrację w realne działanie.</p>
+            </a>
+            <a href="https://agendaparkingowa.pl/" target="_blank" rel="external" class="mpr-link-card">
+                <div class="mpr-link-card-title">Miejska Agenda Parkingowa &rarr;</div>
+                <p>Cztery zmiany w przepisach, po których donoszenie nie będzie potrzebne.</p>
+            </a>
+        </div>
+    </section>
+
     <section class="mpr-section mpr-faq">
         <h2 class="mpr-section-title">FAQ</h2>
         <div class="mpr-faq-list">
@@ -101,41 +190,6 @@
             <a class="mpr-faq-item mpr-faq-more" href="/faq.html">
                 Mam inne pytania?
             </a>
-        </div>
-    </section>
-
-    <section class="mpr-section mpr-mission" id="zabijmy-aplikacje">
-        <div class="mpr-mission-photo">SN</div>
-        <div class="mpr-mission-copy">
-            <h2>Co oprócz aplikacji? Zabijmy razem aplikację</h2>
-            <div class="mpr-mission-items">
-                <div class="mpr-mission-item">
-                    <span class="material-symbols-outlined">gavel</span>
-                    <div>
-                        <h3>Działania prawne</h3>
-                        <p>Napisz <a href="/napisz-pismo-do-polityka.html">pismo do polityka</a>
-                            w trzy minuty i przełóż swoją frustrację w realne działania. Wspieramy
-                            też <a href="https://agendaparkingowa.pl/" target="_blank" rel="external">Miejską
-                            Agendę Parkingową</a>, by zmieniać przepisy systemowo.</p>
-                    </div>
-                </div>
-                <div class="mpr-mission-item">
-                    <span class="material-symbols-outlined">campaign</span>
-                    <div>
-                        <h3>Działania medialne, nagłaśnianie, prowokacje &ndash; robię szum</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Treść do
-                            uzupełnienia &ndash; opis działań medialnych i nagłaśniających.</p>
-                    </div>
-                </div>
-                <div class="mpr-mission-item">
-                    <span class="material-symbols-outlined">forum</span>
-                    <div>
-                        <h3>Działania internetowe, stop cham</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Treść do
-                            uzupełnienia &ndash; opis działań internetowych.</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 

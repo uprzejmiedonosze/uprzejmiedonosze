@@ -1,32 +1,58 @@
-/* PoC redesign of the logged-out homepage content ("Urban Integrity" design,
-   see /redesign/DESIGN.md and /redesign/code.html). Scoped to .rd25 .main-page-redesign
-   so it cannot leak into other pages or the logged-in dashboard. */
+/* Redesign of the logged-out homepage content, per the Claude Design
+   "Redesign social-tech application" project (Strona główna variant 1A).
+   Scoped to .rd25 .main-page-redesign so it cannot leak into other pages or
+   the logged-in dashboard. Card-icon variants (primary/secondary/tertiary)
+   all resolve to the same green tone by design - the new brand direction is
+   "tylko zieleń" (green only), so those classes stay for template
+   compatibility but no longer carry distinct hues. */
 
-$mpr-primary: #006953;
-$mpr-primary-container: #008469;
-$mpr-on-primary-container: #f5fff9;
-$mpr-secondary: #b41f00;
-$mpr-secondary-container: #da3615;
-$mpr-on-secondary-container: #fffbff;
-$mpr-tertiary: #745b00;
-$mpr-tertiary-container: #d0a600;
-$mpr-on-tertiary-container: #4f3d00;
-$mpr-surface: #fcf9f8;
-$mpr-surface-container-low: #f6f3f2;
-$mpr-surface-container: #f0eded;
+$mpr-primary: #0d7a55;
+$mpr-primary-dark: #0a5c40;
+$mpr-primary-container: #e7f2ec;
+$mpr-on-primary-container: #0d7a55;
+$mpr-secondary: $mpr-primary;
+$mpr-secondary-container: $mpr-primary-container;
+$mpr-on-secondary-container: $mpr-on-primary-container;
+$mpr-tertiary: $mpr-primary;
+$mpr-tertiary-container: $mpr-primary-container;
+$mpr-on-tertiary-container: $mpr-on-primary-container;
+$mpr-surface: #ffffff;
+$mpr-surface-container-low: #f5f8f5;
+$mpr-surface-container: #eceae4;
 $mpr-surface-container-lowest: #ffffff;
-$mpr-on-surface: #1c1b1b;
-$mpr-on-surface-variant: #3d4944;
-$mpr-outline-variant: #bccac3;
+$mpr-on-surface: #16241d;
+$mpr-on-surface-variant: #465a50;
+$mpr-outline-variant: #e6e3dc;
+$mpr-hairline: #eeece6;
+
+/* CTA accent (primary buttons, nav "Zgłoś" pill) - distinct from the brand
+   green, used for the single most important action per screen */
+$mpr-accent: #E2C439;
+$mpr-on-accent: #16241d;
+
+$mpr-heading: #0f2118;
+$mpr-muted: #6b7871;
+$mpr-footer-bg: #12251c;
+$mpr-footer-text: #cddbd2;
 
 $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.html */
 
 .rd25 .main-page-redesign {
-  font-family: "Inter", sans-serif;
+  font-family: "Public Sans", sans-serif;
   color: $mpr-on-surface;
 
+  /* general.scss sets `* { font-family: "Public Sans" }` sitewide - a
+     universal selector directly matches every descendant, which beats
+     inheritance regardless of specificity. That's harmless for plain body
+     text (same value either way), but any element that should inherit a
+     more specific ancestor font instead (e.g. an <em> inside a
+     Bricolage-styled h1) would silently ignore it without this reset. */
+  * {
+    font-family: inherit;
+  }
+
   h1, h2, h3 {
-    font-family: "Work Sans", sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
     font-weight: 700;
     letter-spacing: -0.01em;
   }
@@ -55,55 +81,353 @@ $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.ht
     font-size: 1.75rem;
   }
 
-  /* Hero */
+  /* Hero: a single centered column (badge, headline, lead, CTAs), with a
+     hero visual + floating stat cards below - matches the Claude Design
+     mockup, which is centered rather than the old two-column layout. */
   .mpr-hero {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    max-width: 75em;
-    margin: 0 auto;
-    padding: 2rem 1em;
+    /* break out to full viewport width (same trick as .mpr-section-tinted
+       below) so the gradient reaches the true edges on wide screens - safe
+       because .mpr-hero-inner below re-centers the actual content at a
+       max-width, so it doesn't stretch edge to edge just because this
+       wrapper does. */
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    padding: 3rem 1em 0;
+    text-align: center;
+    background: radial-gradient(120% 70% at 50% -10%, $mpr-primary-container 0%, $mpr-surface-container-low 44%, $mpr-surface 76%);
 
     @media (min-width: $mpr-break) {
-      flex-direction: row;
-      align-items: center;
-      padding: 3rem 1.5em;
+      padding: 4.5rem 1.5em;
     }
   }
 
-  .mpr-hero-copy {
-    flex: 1;
+  /* Two columns on desktop: text left, hero visual right. Mobile stays a
+     single centered column (text-align:center is set on .mpr-hero above
+     and inherited here). */
+  .mpr-hero-inner {
+    max-width: 75em;
+    margin: 0 auto;
 
-    h2 {
-      font-size: 1.875rem;
-      line-height: 1.2;
-      margin: 0 0 0.75rem;
+    @media (min-width: $mpr-break) {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 3rem;
+      text-align: left;
+    }
+  }
 
-      @media (min-width: $mpr-break) {
-        font-size: 2.5rem;
-      }
+  .mpr-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: $mpr-primary-dark;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+    border: 1px solid $mpr-outline-variant;
+    box-shadow: 0 8px 20px -12px rgba(13, 122, 85, .45);
+
+    &::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: $mpr-primary;
+      display: inline-block;
+    }
+  }
+
+  .mpr-hero-copy h1 {
+    font-weight: 800;
+    font-size: 2.25rem;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 auto;
+    max-width: 20em;
+    color: $mpr-heading;
+
+    @media (min-width: $mpr-break) {
+      font-size: 3.25rem;
+      margin: 0;
+      max-width: none;
+    }
+
+    em {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-weight: 800;
+      font-style: normal;
+      color: $mpr-primary;
     }
   }
 
   .mpr-lead {
-    font-size: 1.125rem;
-    line-height: 1.6;
+    font-size: 1.05rem;
+    line-height: 1.55;
     color: $mpr-on-surface-variant;
-    max-width: 32em;
+    max-width: 34em;
+    margin: 1.4rem auto 0;
+
+    @media (min-width: $mpr-break) {
+      font-size: 1.15rem;
+      max-width: 30em;
+      margin: 1.4rem 0 0;
+    }
   }
 
   .mpr-cta-row {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.75rem;
-    margin-top: 1rem;
+    margin-top: 1.75rem;
+
+    @media (min-width: $mpr-break) {
+      justify-content: flex-start;
+    }
   }
 
-  .mpr-hero-media {
-    flex: 1;
+  /* Hero visual: product shot with two floating "screenshots" of the app
+     in use, per the mockup */
+  .mpr-hero-visual {
+    position: relative;
+    max-width: 58em;
+    margin: 3rem auto 0;
+
+    @media (min-width: $mpr-break) {
+      max-width: none;
+      margin: 0;
+    }
+  }
+
+  .mpr-hero-visual-frame {
+    height: 220px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid $mpr-outline-variant;
+    box-shadow: 0 30px 60px -30px rgba(15, 40, 25, .4);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    @media (min-width: $mpr-break) {
+      height: 480px;
+    }
+  }
+
+  .mpr-hero-card {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid $mpr-outline-variant;
+    box-shadow: 0 24px 48px -20px rgba(15, 40, 25, .45);
+    padding: 16px;
+    text-align: left;
+
+    @media (min-width: $mpr-break) {
+      display: block;
+    }
+  }
+
+  .mpr-hero-card-report {
+    right: -1.25rem;
+    top: 1.5rem;
+    width: 15em;
+
+    .mpr-hero-card-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+
+      span:first-child {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: $mpr-muted;
+        letter-spacing: .06em;
+      }
+
+      span:last-child {
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: $mpr-primary-dark;
+        background: $mpr-primary-container;
+        padding: 3px 10px;
+        border-radius: 999px;
+      }
+    }
+
+    .mpr-hero-card-plate {
+      display: inline-flex;
+      align-items: center;
+      border: 2px solid $mpr-heading;
+      border-radius: 7px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .mpr-hero-card-plate-pl {
+      background: #123a8f;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: 7px 5px;
+    }
+
+    .mpr-hero-card-plate-number {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: .06em;
+      color: $mpr-heading;
+      padding: 0px 10px;
+    }
+
+    .mpr-hero-card-address {
+      font-size: 0.9rem;
+      color: $mpr-on-surface-variant;
+      font-weight: 500;
+    }
+
+    .mpr-hero-card-reason {
+      font-size: 0.8rem;
+      color: $mpr-muted;
+      margin-top: 2px;
+    }
+
+    .mpr-hero-card-sent {
+      gap: 2px;
+      font-size: 0.8rem;
+
+      span {
+        color: $mpr-muted;
+      }
+
+      strong {
+        font-weight: 600;
+        color: $mpr-on-surface;
+      }
+    }
+  }
+
+  .mpr-hero-card-stat {
+    left: -1.25rem;
+    top: 1.5rem;
+    background: $mpr-primary;
+    border: none;
+    color: #fff;
+    padding: 14px 20px;
+
+    strong {
+      display: block;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-size: 1.75rem;
+      line-height: 1;
+    }
+
+    span {
+      display: block;
+      font-size: 0.75rem;
+      color: $mpr-primary-container;
+      margin-top: 3px;
+    }
+  }
+
+  /* Trust numbers band */
+  .mpr-trust-band {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 75em;
+    margin: 0 auto;
+    border-top: 1px solid $mpr-hairline;
+    border-bottom: 1px solid $mpr-hairline;
+
+    > div {
+      padding: 1.5rem 1em;
+      text-align: center;
+      border-right: 1px solid $mpr-hairline;
+
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    strong {
+      display: block;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: $mpr-primary;
+      letter-spacing: -0.01em;
+
+      @media (min-width: $mpr-break) {
+        font-size: 2.25rem;
+      }
+    }
+
+    span {
+      display: block;
+      font-size: 0.85rem;
+      color: $mpr-muted;
+      margin-top: 4px;
+    }
+  }
+
+  /* Numbered steps ("Jak to działa") */
+  .mpr-steps {
+    display: grid;
+    gap: 1.75rem;
+    max-width: 75em;
+    margin: 0 auto;
+
+    @media (min-width: $mpr-break) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .mpr-step-number {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: $mpr-primary;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.875rem;
+    background: $mpr-primary-container;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mpr-step h3 {
+    font-size: 1.2rem;
+    margin: 1.1rem 0 0.4rem;
+  }
+
+  .mpr-step p {
+    color: $mpr-on-surface-variant;
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  /* Demo recording section */
+  .mpr-demo {
+    max-width: 60em;
+    margin: 2.5rem auto 0;
 
     .video {
-      border-radius: 1rem;
+      border-radius: 1.125rem;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
@@ -114,35 +438,67 @@ $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.ht
     }
   }
 
-  /* Buttons */
-  .mpr-button {
-    display: inline-block;
-    text-decoration: none;
-    font-family: "Work Sans", sans-serif;
-    font-weight: 700;
-    text-align: center;
-    border-radius: 0.5rem;
-    padding: 0.875rem 1.75rem;
-    border: 2px solid transparent;
+  /* Checklist ("Dlaczego Uprzejmie Donoszę") */
+  .mpr-checklist {
+    display: grid;
+    gap: 0.9rem 2.5rem;
+    max-width: 52em;
+    margin: 0 auto;
+
+    @media (min-width: $mpr-break) {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
-  .mpr-button-primary {
+  .mpr-checklist-item {
+    display: flex;
+    gap: 0.875rem;
+    align-items: flex-start;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .mpr-check-icon {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
     background: $mpr-primary;
-    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .mpr-button-secondary {
-    background: $mpr-surface-container;
-    border-color: $mpr-outline-variant;
-    color: $mpr-on-surface;
+  /* "Nie chcesz donosić" link cards */
+  .mpr-cards-2 {
+    grid-template-columns: 1fr;
+    max-width: 56em;
+
+    @media (min-width: $mpr-break) {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
-  .mpr-button-outline {
+  .mpr-link-card {
     display: block;
-    margin-top: 1rem;
-    background: $mpr-surface-container;
-    border-color: $mpr-outline-variant;
-    color: $mpr-on-surface;
+    padding: 1.75rem;
+    border: 1px solid $mpr-outline-variant;
+    border-radius: 1.125rem;
+    background: #fff;
+
+    .mpr-link-card-title {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: $mpr-primary;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: $mpr-on-surface-variant;
+      margin: 0.6rem 0 0;
+    }
   }
 
   /* Card grids (benefits + support) */
@@ -263,74 +619,44 @@ $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.ht
     justify-content: center;
     color: $mpr-primary;
   }
+}
 
-  /* Mission */
-  .mpr-mission {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    max-width: 75em;
-    margin: 0 auto;
+/* Buttons: shared across every rd25 page (homepage, dashboard, poradnik,
+   ...), not just the homepage - moved out of .main-page-redesign's scope. */
+.rd25 .mpr-button {
+  display: inline-block;
+  text-decoration: none;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-weight: 700;
+  text-align: center;
+  border-radius: 0.875rem;
+  padding: 0.875rem 1.75rem;
+  border: 2px solid transparent;
+}
 
-    @media (min-width: $mpr-break) {
-      flex-direction: row;
-      align-items: flex-start;
-    }
-  }
+/* .mpr-button.mpr-button-* (not just .mpr-button-*) so these beat the
+   homepage's generic `.main-page-redesign a { color: $mpr-primary }` link
+   color - both selectors match a `<a class="mpr-button mpr-button-primary">`
+   but a plain two-class selector loses to a class+element one on
+   specificity, which was silently turning CTA text green. */
+.rd25 .mpr-button.mpr-button-primary {
+  background: $mpr-accent;
+  color: $mpr-on-accent;
+  box-shadow: 0 16px 32px -14px rgba(226, 196, 57, .75);
+}
 
-  .mpr-mission-photo {
-    flex: 0 0 auto;
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 1rem;
-    background: $mpr-surface-container;
-    color: $mpr-on-surface-variant;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    font-weight: 700;
+.rd25 .mpr-button.mpr-button-secondary {
+  background: #fff;
+  border-color: $mpr-outline-variant;
+  color: $mpr-on-surface;
+}
 
-    @media (min-width: $mpr-break) {
-      width: 16em;
-    }
-  }
-
-  .mpr-mission-copy {
-    flex: 1;
-
-    > h2 {
-      font-size: 1.75rem;
-      margin: 0 0 1.5rem;
-    }
-  }
-
-  .mpr-mission-items {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .mpr-mission-item {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-
-    .material-symbols-outlined {
-      flex: 0 0 auto;
-      color: $mpr-primary;
-    }
-
-    h3 {
-      font-size: 1.1rem;
-      margin: 0 0 0.25rem;
-    }
-
-    p {
-      margin: 0;
-      color: $mpr-on-surface-variant;
-    }
-  }
+.rd25 .mpr-button.mpr-button-outline {
+  display: block;
+  margin-top: 1rem;
+  background: #fff;
+  border-color: $mpr-outline-variant;
+  color: $mpr-on-surface;
 }
 
 /* the legacy layout caps content at 800px; widen it to match the homepage
@@ -349,7 +675,15 @@ body.rd25 {
   background: transparent;
 
   @media (min-width: $mpr-break) {
+    /* general.scss's base .ui-content still has a 50px top margin (to
+       clear the legacy fixed mobile header) and 1em/2em side padding
+       (its own reading-width gutter) - desktop's header is static now (no
+       fixed bar to clear) and full-bleed sections (.mpr-hero,
+       .mpr-section-tinted) need to reach the true viewport edge, which
+       that inherited padding was preventing. Content pages get their own
+       gutter back via .rd25 .mpr-layout below. */
     margin-top: 0;
+    padding: 0;
   }
 }
 
@@ -361,16 +695,31 @@ footer.rd25 .grid3 {
 }
 
 /* Redesigned header: on desktop, swap the legacy fixed teal bar + hamburger
-   for a plain top nav (mobile keeps the existing hamburger header as-is,
-   since the new design has no mobile nav of its own). Scoped to the
-   logged-out homepage only via the .rd25-header class set in header.html.twig. */
+   for a plain top nav. On mobile, the hamburger header stays functionally
+   (still the only mobile nav entry point) but is reskinned from the legacy
+   teal bar to match the new design's white header + dark wordmark - a
+   cosmetic override scoped to .rd25-header only, so the shared
+   variables.$primaryColor used by unrelated legacy chrome (buttons, tabs,
+   forms) is untouched. */
 body > div > header.rd25-header {
+  background-color: $mpr-surface-container-lowest;
+  color: $mpr-on-surface;
+  border-bottom: 1px solid $mpr-outline-variant;
+
+  h1 a {
+    color: $mpr-primary;
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+
+  /* harmonize the hamburger toggle's own teal square with the new white
+     header - it keeps its function untouched, just the accent color */
+  .button-toggle {
+    background: $mpr-primary;
+  }
+
   @media (min-width: $mpr-break) {
     position: static;
     height: auto;
-    background: $mpr-surface-container-lowest;
-    color: $mpr-on-surface;
-    border-bottom: 1px solid $mpr-outline-variant;
 
     > *:not(.mpr-navbar) {
       display: none;
@@ -388,11 +737,16 @@ body > div > header.rd25-header {
     max-width: 75em;
     margin: 0 auto;
     padding: 1rem 1.5em;
-    font-family: "Work Sans", sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
   }
 }
 
 .mpr-navbar-logo {
+  /* .mpr-navbar sets font-family on itself, but general.scss's
+     `* { font-family: "Public Sans" }` directly matches this element too
+     and beats inherited values regardless of specificity - restate it
+     explicitly rather than relying on inheritance from the parent. */
+  font-family: "Bricolage Grotesque", sans-serif;
   font-weight: 700;
   font-size: 1.1rem;
   color: $mpr-primary;
@@ -403,7 +757,9 @@ body > div > header.rd25-header {
 .mpr-navbar-links {
   display: flex;
   gap: 1.5rem;
-  flex: 1;
+  /* pushed to the right edge (logo stays left) - not flex:1, which would
+     grow the links block leftward instead of moving it */
+  margin-left: auto;
 
   a {
     color: $mpr-on-surface-variant;
@@ -414,20 +770,37 @@ body > div > header.rd25-header {
 }
 
 .mpr-navbar-cta {
-  background: $mpr-primary;
-  color: #fff;
+  background: $mpr-accent;
+  color: $mpr-on-accent;
   text-decoration: none;
   font-weight: 700;
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
   white-space: nowrap;
-  /* normally pushed right by .mpr-navbar-links' flex:1; margin-left: auto
-     keeps it pinned to the right edge even when links are hidden (/app) */
+  /* .mpr-navbar-links already has its own margin-left:auto, but this page
+     may hide links entirely (hideNavbarLinks, e.g. /app) - keep this too so
+     the CTA still pins to the right edge with no links sibling before it */
   margin-left: auto;
   /* also used as a plain JS action button with no href (e.g. /app/new's
      "Dalej") - browsers only show a pointer cursor on <a> by default when
      an href is present, so make it explicit here */
   cursor: pointer;
+}
+
+/* .mpr-layout (base.html.twig) is always present regardless of variant -
+   give every non-homepage page back the horizontal gutter that used to
+   come from .ui-content's own padding (now zeroed above so the homepage's
+   full-bleed sections can reach the true viewport edge). The homepage
+   manages its own section-level padding instead (.mpr-hero, .mpr-section),
+   so it's excluded here to avoid double-padding. */
+.rd25 .mpr-layout {
+  @media (min-width: $mpr-break) {
+    padding: 0 2em;
+  }
+
+  &:has(.main-page-redesign) {
+    padding: 0;
+  }
 }
 
 /* Two-column article + sidebar shell (base.html.twig), Medium-style: a
@@ -486,7 +859,7 @@ body > div > header.rd25-header {
   }
 
   summary {
-    font-family: "Work Sans", sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
     font-weight: 700;
     cursor: pointer;
   }

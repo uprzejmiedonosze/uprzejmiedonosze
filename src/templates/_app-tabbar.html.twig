@@ -1,0 +1,23 @@
+{# Bottom mobile tab bar for the /app/* section (Claude Design dashboard
+   mockup). Purely additive to the existing hamburger menu - the hamburger
+   still carries the full nav (incl. logout, kontakt, poradnik), this just
+   adds quick access to the 4 primary destinations. Rendered from
+   base.html.twig when a template sets {% set showAppNav = true %}. #}
+<nav class="app-tabbar">
+    <a href="/app" class="{% if config.menu == 'app' %}active{% endif %}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1v-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <span>Start</span>
+    </a>
+    <a href="/app/new" class="{% if config.menu == 'nowe-zgloszenie' %}active{% endif %}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Nowe</span>
+    </a>
+    <a href="/app/list" class="{% if config.menu == 'moje-zgloszenia' %}active{% endif %}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16l-7-4-7 4V4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <span>Zgłoszenia</span>
+    </a>
+    <a href="/app/account?update" class="{% if config.menu == 'register' %}active{% endif %}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.4" stroke="currentColor" stroke-width="2"/><path d="M5 20c1.4-4 4.2-6 7-6s5.6 2 7 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Konto</span>
+    </a>
+</nav>

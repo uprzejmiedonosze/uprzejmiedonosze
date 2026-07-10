@@ -20,26 +20,32 @@
 {% endmacro link %}
 
 {% block sidebar %}
-<aside class="mpr-sidebar mpr-sidebar--toc">
-<details open>
-<summary>Dostępne metody</summary>
-<ul>
-  <li>{{ _self.link('email', 'E-mail/Uprzejmie Donoszę') }} – stosuj w pojedynczych przypadkach.</li>
-  <li>{{ _self.link('telefon', 'Telefon') }} – używaj, kiedy walczysz z całymi nielegalnymi parkingami.</li>
-  <li>{{ _self.link('zglosparkowanie', 'Zgłoś Parkowanie') }} – używaj, żeby zmusić Policję do zajęcia się parkowaniem.</li>
-  <li>{{ _self.link('kmz', 'Krajowa Mapa Zagrożeń') }} – patoparkingi lub powtarzające się nielegalne parkowanie.</li>
-  <li>{{ _self.link('policja', 'Stop Agresji Drogowej') }} – kiedy masz film z jeżdżenia po chodniku lub przejściu dla pieszych.</li>
-  <li>{{ _self.link('slupki2', 'Wniosek o uzupełnienie słupków') }} – stosuj do uzupełnienia zniszczonej infrastruktury.</li>
-  <li>{{ _self.link('slupki', 'Wniosek o nowe słupki') }} – ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</li>
-  <li>{{ _self.link('naklejki', 'Naklejki/mazak') }} – gdy zawiodły inne środki, na recydywę i „obcokrajowców”.</li>
-</ul>
-</details>
-</aside>
+<div class="how-sidebar-stack">
+{% include '_related-links.html.twig' with {'column': 'know', 'current': 'jak-zglosic-nielegalne-parkowanie'} %}
+<a href="/app/new" class="mpr-button mpr-button-primary how-sidebar-cta">Zgłoś nieprawidłowe parkowanie &rarr;</a>
+</div>
 {% endblock %}
 
 {% block main %}
 
-<h2>{{ shortTitle }}</h2>
+<div class="how-title">
+  <div class="how-eyebrow">Poradnik</div>
+  <h2>Jak zgłaszać nieprawidłowe parkowanie</h2>
+  <p class="how-lead">Metod jest kilka &ndash; od zdjęcia wysłanego przez Uprzejmie Donoszę, przez telefon
+    do straży miejskiej, po wniosek o nowe słupki. Wybierz tę, która pasuje do sytuacji.</p>
+</div>
+
+<h3 class="how-methods-title">Dostępne metody</h3>
+<div class="how-methods">
+  <div class="how-methods-row">{{ _self.link('email', 'E-mail/Uprzejmie Donoszę') }} <span>stosuj w pojedynczych przypadkach.</span></div>
+  <div class="how-methods-row">{{ _self.link('telefon', 'Telefon') }} <span>używaj, kiedy walczysz z całymi nielegalnymi parkingami.</span></div>
+  <div class="how-methods-row">{{ _self.link('zglosparkowanie', 'Zgłoś Parkowanie') }} <span>używaj, żeby zmusić Policję do zajęcia się parkowaniem.</span></div>
+  <div class="how-methods-row">{{ _self.link('kmz', 'Krajowa Mapa Zagrożeń') }} <span>patoparkingi lub powtarzające się nielegalne parkowanie.</span></div>
+  <div class="how-methods-row">{{ _self.link('policja', 'Stop Agresji Drogowej') }} <span>kiedy masz film z jeżdżenia po chodniku lub przejściu dla pieszych.</span></div>
+  <div class="how-methods-row">{{ _self.link('slupki2', 'Wniosek o uzupełnienie słupków') }} <span>stosuj do uzupełnienia zniszczonej infrastruktury.</span></div>
+  <div class="how-methods-row">{{ _self.link('slupki', 'Wniosek o nowe słupki') }} <span>ostateczne rozwiązanie, kiedy wszystko inne zawiedzie.</span></div>
+  <div class="how-methods-row">{{ _self.link('naklejki', 'Naklejki/mazak') }} <span>gdy zawiodły inne środki, na recydywę i „obcokrajowców”.</span></div>
+</div>
 
 <div class="howtos">
   <div class="howto" id="email">
