@@ -247,5 +247,269 @@ div[data-role="collapsibleset"] {
       background-color: white;
     }
   }
-    
+
+}
+
+/* Dashboard (/app), Claude Design mockup: greeting, rank stepper, stats
+   grid, badges grid. Scoped to .app (the ui-content class set by
+   app.html.twig's mainClass) so it can't leak into other /app/* pages that
+   share the sidebar shell but keep their own existing layout. */
+.app {
+  font-family: "Public Sans", system-ui, sans-serif;
+
+  .dashboard-intro h1 {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 800;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    color: #0f2118;
+  }
+
+  .dashboard-intro p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #465a50;
+    max-width: 40em;
+
+    strong {
+      color: #0d7a55;
+    }
+  }
+
+  .dashboard-section {
+    margin-top: 2.5rem;
+  }
+
+  .dashboard-eyebrow {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: .05em;
+    color: #6b7871;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  /* Rank stepper */
+  .rank-stepper {
+    display: flex;
+    align-items: flex-start;
+    overflow-x: auto;
+  }
+
+  .rank-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 3.5rem;
+
+    span {
+      font-size: 0.8rem;
+      color: #5a675f;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    &.active {
+      .rank-dot {
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-top: -0.25rem;
+        font-size: 1.1rem;
+        box-shadow: 0 0 0 4px #e7f2ec;
+      }
+
+      span {
+        color: #0d7a55;
+        font-weight: 700;
+      }
+    }
+  }
+
+  .rank-dot {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #fff;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: #0d7a55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .rank-connector {
+    height: 2px;
+    background: #0d7a55;
+    flex: 0 0 1.25rem;
+    margin-top: 1.125rem;
+
+    @media (min-width: variables.$width-break) {
+      flex: 1;
+    }
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+
+    @media (min-width: variables.$width-break) {
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+  }
+
+  .stat-card {
+    background: #fff;
+    border: 1px solid #e6e3dc;
+    border-radius: 14px;
+    padding: 16px 14px;
+
+    a {
+      display: block;
+    }
+
+    strong {
+      display: block;
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #0f2118;
+      white-space: nowrap;
+    }
+
+    span {
+      display: block;
+      font-size: 0.8rem;
+      color: #6b7871;
+      margin-top: 4px;
+    }
+  }
+
+  .stat-card-highlight {
+    grid-column: span 2;
+    background: #0d7a55;
+    border-color: #0d7a55;
+
+    strong, span {
+      color: #fff;
+    }
+
+    span {
+      color: #bfe0d0;
+    }
+
+    @media (min-width: variables.$width-break) {
+      grid-column: span 1;
+    }
+  }
+
+  /* Badges grid */
+  .badges-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+
+    @media (min-width: variables.$width-break) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
+  .badge-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+
+    span {
+      font-size: 0.75rem;
+      color: #3a4842;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+  }
+
+  .badge-circle {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: #f2f0ea;
+    border: 1px solid #e2ded3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: .55;
+
+    img {
+      width: 60%;
+      height: 60%;
+      object-fit: contain;
+    }
+
+    &.active {
+      background: #e7f2ec;
+      border-color: #cfe6da;
+      opacity: 1;
+    }
+
+    &.former_patron {
+      opacity: .55;
+    }
+  }
+}
+
+/* Mobile bottom tab bar for the /app/* section (base.html.twig, gated by
+   showAppNav). Desktop keeps the sidebar nav instead - no tab bar there,
+   matching the dashboard mockup. */
+.app-tabbar {
+  display: none;
+}
+
+@media (max-width: variables.$width-break) {
+  body:has(.app-tabbar) {
+    /* keep content from being hidden behind the fixed bar */
+    padding-bottom: 4.5rem;
+  }
+
+  .app-tabbar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, .95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid #eeece6;
+    padding: 10px 6px calc(env(safe-area-inset-bottom, 0px) + 10px);
+
+    a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #8a9690;
+      text-decoration: none;
+
+      span {
+        font-size: 10.5px;
+        font-weight: 600;
+        font-family: "Public Sans", sans-serif;
+      }
+
+      &.active {
+        color: #0d7a55;
+      }
+    }
+  }
 }

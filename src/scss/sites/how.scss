@@ -1,9 +1,113 @@
+@use "../lib/variables";
+
 .how {
+  font-family: "Public Sans", system-ui, sans-serif;
+
   ul {
     li + li {
       margin-top: 10px;
-    }  
+    }
   }
+
+  h2, h3 {
+    font-family: "Bricolage Grotesque", sans-serif;
+  }
+
+  .how-title {
+    margin-bottom: 2rem;
+
+    h2 {
+      font-weight: 800;
+      font-size: 1.75rem;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.75rem;
+      color: #0f2118;
+
+      @media (min-width: variables.$width-break) {
+        font-size: 2.5rem;
+      }
+    }
+  }
+
+  .how-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #e7f2ec;
+    color: #0a5c40;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 6px 13px;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+
+  .how-lead {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #465a50;
+    margin: 0;
+    max-width: 42em;
+
+    @media (min-width: variables.$width-break) {
+      font-size: 1.15rem;
+    }
+  }
+
+  .how-methods-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.5rem;
+    color: #0f2118;
+  }
+
+  .how-methods {
+    border-top: 1px solid #eeece6;
+    margin-bottom: 2.5rem;
+  }
+
+  .how-methods-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 2px;
+    border-bottom: 1px solid #eeece6;
+
+    a {
+      font-weight: 700;
+    }
+
+    span {
+      font-size: 0.9rem;
+      color: #5a675f;
+    }
+
+    @media (min-width: variables.$width-break) {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 20px;
+
+      a {
+        flex: 0 0 auto;
+        min-width: 15em;
+      }
+    }
+  }
+
+  .how-sidebar-stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .how-sidebar-cta {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
   .howtos {
     .howto {
       margin-top: 3em;
@@ -20,6 +124,7 @@
           position: relative;
           max-height: 300px;
           margin: 0;
+          border-radius: 16px;
           overflow: hidden;
 
           img {
@@ -43,6 +148,17 @@
           em {
             font-weight: 700;
             font-style: normal;
+          }
+
+          /* Paragraphs led by a bold label ("Kiedy stosować:",
+             "Anonimowość:", ...) get pulled out as tinted callout boxes,
+             matching the Claude Design mockup - purely a CSS treatment,
+             the markup itself is untouched. */
+          p:has(> em:first-child) {
+            background: #f5f8f5;
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin: 1rem 0;
           }
         }
       }

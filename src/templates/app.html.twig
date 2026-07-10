@@ -7,6 +7,7 @@
 {% set hideNavbarLinks = true %}
 {% set navbarCtaHref = '/app/new' %}
 {% set navbarCtaLabel = 'Nowe zgłoszenie' %}
+{% set showAppNav = true %}
 
 {% extends "base.html.twig" %}
 
@@ -23,92 +24,98 @@
 
 {% block main %}
 
-<h3 class="introHeader">Cześć {{ general.userName }},</h3>
-<p>
-    {{ levels[general.stats.level].introMsg | raw }}
-</p>
-<div class="heros">
-    {% for levelId,levelDef in levels %}
-    <div class="hero {% if general.stats.level == levelId %}active{% endif %}">
-        <img src="{{ levelDef.img }}">
-        <p>{{ config.sex[levelDef.desc] }}</p>
-    </div>
-    {% endfor %}
+<div class="dashboard-intro">
+    <h1>Cześć {{ general.userName }},</h1>
+    <p>{{ levels[general.stats.level].introMsg | raw }}</p>
 </div>
 
-<p>Twoje statystyki:</p>
-<fieldset class="gauges">
+<section class="dashboard-section">
+    <div class="dashboard-eyebrow">Twoja ranga</div>
+    <div class="rank-stepper">
+        {% for levelId,levelDef in levels %}
+        {% if not loop.first %}<div class="rank-connector"></div>{% endif %}
+        <div class="rank-step {% if general.stats.level == levelId %}active{% endif %}">
+            <div class="rank-dot">{{ loop.index }}</div>
+            <span>{{ config.sex[levelDef.desc] }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</section>
 
-    {% set active = general.stats.active ?? 0 %}
-    {% set fined = general.stats['confirmed-fined'] ?? 0 %}
-    {% set instructed = general.stats['confirmed-instructed'] ?? 0 %}
-    <div class="gauge">
-        {% if active > 0 %}
-        <a href="/app/list">
-            <h3>{{ active|number_format(0, ',', ' ') }}</h3>
-            <p>Aktywne zgłoszenia</p>
-        </a>
-        {% else %}
-        <h3><a href="/app/new">Stwórz pierwsze</a></h3>
-        <p>Aktywne zgłoszenia</p>
-        {% endif %}
+<section class="dashboard-section">
+    <div class="dashboard-eyebrow">Twoje statystyki</div>
+    <div class="stats-grid">
 
+        {% set active = general.stats.active ?? 0 %}
+        {% set fined = general.stats['confirmed-fined'] ?? 0 %}
+        {% set instructed = general.stats['confirmed-instructed'] ?? 0 %}
+        <div class="stat-card">
+            {% if active > 0 %}
+            <a href="/app/list">
+                <strong>{{ active|number_format(0, ',', ' ') }}</strong>
+                <span>Aktywne zgłoszenia</span>
+            </a>
+            {% else %}
+            <strong><a href="/app/new">Stwórz pierwsze</a></strong>
+            <span>Aktywne zgłoszenia</span>
+            {% endif %}
+        </div>
+        <div class="stat-card">
+            {% if fined > 0 %}
+            <a href="/app/list#confirmed-fined">
+                <strong>{{ fined|number_format(0, ',', ' ') }}</strong>
+                <span>Mandaty</span>
+            </a>
+            {% else %}
+            <strong>0</strong>
+            <span>Mandaty</span>
+            {% endif %}
+        </div>
+        <div class="stat-card">
+            {% if instructed > 0 %}
+            <a href="/app/list#confirmed-instructed">
+                <strong>{{ instructed|number_format(0, ',', ' ') }}</strong>
+                <span>Pouczenia</span>
+            </a>
+            {% else %}
+            <strong>0</strong>
+            <span>Pouczenia</span>
+            {% endif %}
+        </div>
+        <div class="stat-card">
+            <strong>{{ (general.stats.points ?? 0)|number_format(0, ',', ' ') }}</strong>
+            <span>Punkty karne</span>
+        </div>
+        <div class="stat-card stat-card-highlight">
+            <strong>{{ (general.stats.mandates ?? 0)|number_format(0, ',', ' ') }} zł</strong>
+            <span>Kwota mandatów</span>
+        </div>
     </div>
-    <div class="gauge">
-        {% if fined > 0 %}
-        <a href="/app/list#confirmed-fined">
-            <h3>{{ fined|number_format(0, ',', ' ') }}</h3>
-            <p>Mandaty</p>
-        </a>
-        {% else %}
-        <h3>0</h3>
-        <p>Mandaty</p>
-        {% endif %}
-    </div>
-    <div class="gauge">
-        {% if instructed > 0 %}
-        <a href="/app/list#confirmed-instructed">
-            <h3>{{ instructed|number_format(0, ',', ' ') }}</h3>
-            <p>Pouczenia</p>
-        </a>
-        {% else %}
-        <h3>0</h3>
-        <p>Pouczenia</p>
-        {% endif %}
-    </div>
-    <div class="gauge">
-        <h3>{{ (general.stats.points ?? 0)|number_format(0, ',', ' ') }}</h3>
-        <p>Punkty karne</p>
-    </div>
-    <div class="gauge">
-        <h3>{{ (general.stats.mandates ?? 0)|number_format(0, ',', ' ') }} zł</h3>
-        <p>Kwota mandatów</p>
-    </div>
-</fieldset>
+</section>
 
-<p>Twoje odznaki:</p>
-
-<fieldset class="badges">
-    {% for badgeId,badge in badges %}
-    {% set former_patron = (badgeId == 'patron' and 'former_patron' in general.stats.badges) %}
-    <dialog data-role="popup" id="popup-badge-{{ badgeId }}">
-        <p>{{ badge.desc|raw }}</p>
-    </dialog>
-    <a href="#popup-badge-{{ badgeId }}" data-rel="popup">
-        <div class="badge {% if badgeId in general.stats.badges %}active{% endif %} {% if former_patron %}former_patron{% endif %}">
-            <img src="{{ badge.img }}">
-            <p>
+<section class="dashboard-section">
+    <div class="dashboard-eyebrow">Twoje odznaki</div>
+    <div class="badges-grid">
+        {% for badgeId,badge in badges %}
+        {% set former_patron = (badgeId == 'patron' and 'former_patron' in general.stats.badges) %}
+        <dialog data-role="popup" id="popup-badge-{{ badgeId }}">
+            <p>{{ badge.desc|raw }}</p>
+        </dialog>
+        <a href="#popup-badge-{{ badgeId }}" data-rel="popup" class="badge-item">
+            <div class="badge-circle {% if badgeId in general.stats.badges %}active{% endif %} {% if former_patron %}former_patron{% endif %}">
+                <img src="{{ badge.img }}">
+            </div>
+            <span>
             {% if former_patron %}
                 {{ config.sex['Była patronka'] }} ☹︎
             {% else %}
                 {{ config.sex[badge.name] }}
             {% endif %}
-            </p>
-        </div>
-    </a>
-    {% endfor %}
-</fieldset>
-
+            </span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
 
 <h3>Nie chcesz „donosić”? Dowiedz się, co możesz zrobić</h3>
 
