@@ -1,23 +1,9 @@
-{% set leftButton = 'menu' %}
-
+{% set layout = 'app' %}
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
-{% set hasSidebar = true %}
-{% set hideNavbarLinks = true %}
 {% set navbarCtaHref = '/app/new' %}
 {% set navbarCtaLabel = 'Nowe zgłoszenie' %}
-{% set showAppNav = general.isLoggedIn %}
 
 {% extends "base.html.twig" %}
-{% block footer %}{% endblock %}
-
-{% block sidebar %}
-<aside class="mpr-sidebar mpr-sidebar--toc">
-<details open>
-<summary>Menu</summary>
-{% include('_app-menu.html.twig') %}
-</details>
-</aside>
-{% endblock %}
 
 {% block main %}
 

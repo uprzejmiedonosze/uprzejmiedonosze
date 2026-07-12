@@ -1,4 +1,10 @@
+// Fundament redesignu: tokeny → typografia → warstwa kompatybilności
+// (variables) → layout, przed komponentami.
+@use 'lib/tokens';
+@use 'lib/typography';
 @use 'lib/variables';
+@use 'lib/layout';
+
 @use 'lib/badge.scss';
 @use 'lib/button.scss';
 @use 'lib/checkbox.scss';
@@ -38,7 +44,6 @@
 @use 'sites/frequent-mistakes';
 @use 'sites/generator';
 
-@use 'sites/redesign-2025';
 @use 'sites/main-redesign';
 
 fieldset {

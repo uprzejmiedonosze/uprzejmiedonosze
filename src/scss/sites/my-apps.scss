@@ -273,7 +273,7 @@ div[data-role="collapsibleset"] {
     max-width: 40em;
 
     strong {
-      color: #0d7a55;
+      color: variables.$primaryColor;
     }
   }
 
@@ -296,6 +296,12 @@ div[data-role="collapsibleset"] {
     display: flex;
     align-items: flex-start;
     overflow-x: auto;
+    /* setting overflow-x alone makes the browser compute overflow-y as
+       auto too (can't mix auto/visible on the two axes) - without this
+       padding, the active dot's negative margin-top plus its box-shadow
+       ring poke above the row's own top edge and get clipped, since the
+       scrollport can't be scrolled to a negative offset to reveal them. */
+    padding: 0.5rem 0 0;
   }
 
   .rank-step {
@@ -323,7 +329,7 @@ div[data-role="collapsibleset"] {
       }
 
       span {
-        color: #0d7a55;
+        color: variables.$primaryColor;
         font-weight: 700;
       }
     }
@@ -337,7 +343,7 @@ div[data-role="collapsibleset"] {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 50%;
-    background: #0d7a55;
+    background: variables.$primaryColor;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -346,7 +352,7 @@ div[data-role="collapsibleset"] {
 
   .rank-connector {
     height: 2px;
-    background: #0d7a55;
+    background: variables.$primaryColor;
     flex: 0 0 1.25rem;
     margin-top: 1.125rem;
 
@@ -373,8 +379,14 @@ div[data-role="collapsibleset"] {
     border-radius: 14px;
     padding: 16px 14px;
 
+    /* the "Stwórz pierwsze" empty-state link puts its text directly inside
+       the <a> (unlike the populated state, where strong/span wrap it and
+       already set their own color) - without this it falls back to the
+       browser's default blue/visited-purple link style. */
     a {
       display: block;
+      color: inherit;
+      text-decoration: none;
     }
 
     strong {
@@ -396,8 +408,8 @@ div[data-role="collapsibleset"] {
 
   .stat-card-highlight {
     grid-column: span 2;
-    background: #0d7a55;
-    border-color: #0d7a55;
+    background: variables.$primaryColor;
+    border-color: variables.$primaryColor;
 
     strong, span {
       color: #fff;
@@ -429,6 +441,8 @@ div[data-role="collapsibleset"] {
     align-items: center;
     gap: 8px;
     text-align: center;
+    color: inherit;
+    text-decoration: none;
 
     span {
       font-size: 0.75rem;
@@ -447,22 +461,23 @@ div[data-role="collapsibleset"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: .55;
+    color: #8a8478;
 
-    img {
-      width: 60%;
-      height: 60%;
-      object-fit: contain;
+    svg {
+      width: 46%;
+      height: 46%;
     }
 
     &.active {
       background: #e7f2ec;
       border-color: #cfe6da;
-      opacity: 1;
+      color: variables.$primaryColor;
     }
 
     &.former_patron {
-      opacity: .55;
+      background: #f2f0ea;
+      border-color: #e2ded3;
+      color: #8a8478;
     }
   }
 }
@@ -508,7 +523,7 @@ div[data-role="collapsibleset"] {
       }
 
       &.active {
-        color: #0d7a55;
+        color: variables.$primaryColor;
       }
     }
   }

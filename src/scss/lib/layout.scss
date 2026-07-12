@@ -1,0 +1,299 @@
+// ---------------------------------------------------------------------------
+// Layout — prymitywy współdzielone przez cały serwis:
+//  * kontener 75em wyśrodkowany (szerokość serwisu na desktopie),
+//  * full-bleed dla teł pod headerem na całą szerokość viewportu (założenie #4),
+//  * szkielety artykuł+sidebar / focus przeniesione z sites/main-redesign.scss.
+// `as *` — pozwala odwoływać się do tokenów bez prefiksu w przeniesionym kodzie.
+// ---------------------------------------------------------------------------
+
+@use "tokens" as *;
+
+// Wyśrodkowany kontener treści (75em) z bocznym gutterem. border-box, żeby
+// gutter mieścił się w 75em — dzięki temu KAŻDA kolumna treści (navbar,
+// sekcje homepage, .mpr-layout) wyrównuje się do tej samej krawędzi.
+@mixin container($gutter: $mpr-gutter) {
+    box-sizing: border-box;
+    max-width: $mpr-max-width;
+    margin-inline: auto;
+    padding-inline: $gutter;
+}
+
+// Wyjście poza kontener na całą szerokość viewportu — tło (np. HERO, pasy
+// tinted) sięga krawędzi ekranu, a treść wewnątrz i tak jest re-centrowana
+// własnym kontenerem. `calc(50% - 50vw)` trzyma element w normalnym flow
+// (bez position/left) i nie generuje poziomego scrolla przy pasku przewijania.
+@mixin full-bleed {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+}
+
+.mpr-container {
+    @include container;
+}
+
+.mpr-fullbleed {
+    @include full-bleed;
+}
+
+// --- Szkielety stron (base.html.twig) --------------------------------------
+
+// .mpr-layout jest zawsze obecny niezależnie od wariantu — oddaje stronom
+// (poza homepage) boczny gutter, który wcześniej dawał padding .ui-content
+// (teraz wyzerowany, żeby full-bleed homepage sięgał krawędzi). Homepage
+// zarządza własnym paddingiem sekcji, więc jest tu wykluczony.
+.rd25 .mpr-layout {
+    @media (min-width: $mpr-break) {
+        padding: 0 $mpr-gutter;
+    }
+
+    &:has(.main-page-redesign) {
+        padding: 0;
+    }
+}
+
+// Dwie kolumny: artykuł + sidebar (styl medium). Aktywne tylko gdy szablon
+// włącza redesign i ustawia hasSidebar / nadpisuje blok sidebar.
+.rd25 .mpr-layout--sidebar {
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+
+    @media (min-width: $mpr-break) {
+        display: grid;
+        grid-template-columns: 1fr 18em;
+        align-items: start;
+        gap: 3rem;
+        max-width: $mpr-max-width;
+        margin: 0 auto;
+        padding-top: 3rem;
+    }
+}
+
+// "focus": jednokolumnowe strony o szerokości sidebar-layoutu, ale z
+// artykułem wyśrodkowanym w komfortowej mierze czytania.
+.rd25 .mpr-layout--focus {
+    @media (min-width: $mpr-break) {
+        max-width: $mpr-max-width;
+        margin: 0 auto;
+
+        .mpr-article {
+            max-width: 40em;
+            margin: 0 auto;
+        }
+    }
+}
+
+.rd25 .mpr-sidebar {
+    // na mobile TOC jest użyteczniejszy nad treścią; na desktopie siada w
+    // naturalnej kolejności DOM (prawa kolumna) przez grid-template-columns
+    order: -1;
+    margin: 0 0 1.5rem;
+
+    @media (min-width: $mpr-break) {
+        order: 0;
+        margin: 0;
+    }
+
+    details {
+        background: $mpr-surface-container-lowest;
+        border: 1px solid $mpr-outline-variant;
+        border-radius: 0.75rem;
+        padding: 1rem 1.25rem;
+    }
+
+    summary {
+        font-family: $font-display;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    // tylko panele "Przeczytaj także" — .mpr-sidebar--toc stylizuje listę
+    // przez .mpr-menu-list (własny margines/padding dla aktywnej pigułki).
+    &:not(.mpr-sidebar--toc) {
+        ul {
+            margin: 0.75rem 0 0;
+            padding-left: 1.25rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        ul a {
+            color: $mpr-primary;
+            font-weight: 600;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    @media (min-width: $mpr-break) {
+        summary {
+            cursor: default;
+            pointer-events: none;
+            list-style: none;
+        }
+
+        summary::-webkit-details-marker,
+        summary::marker {
+            display: none;
+        }
+    }
+}
+
+// Każdy panel sidebara podąża za artykułem podczas scrolla (sticky w obrębie
+// swojej kolumny grid).
+.rd25 .mpr-sidebar {
+    @media (min-width: $mpr-break) {
+        position: sticky;
+        top: 2rem;
+    }
+}
+
+// poradnik: box + CTA pod nim (.how-sidebar-stack) sticky jako jedna całość,
+// żeby przycisk nie wyjeżdżał spod przypiętego boxa.
+.rd25 .how-sidebar-stack {
+    @media (min-width: $mpr-break) {
+        position: sticky;
+        top: 2rem;
+
+        .mpr-sidebar {
+            position: static;
+        }
+    }
+}
+
+// Nawigacja dashboardu (nie TOC strony): bez punktorów, odstępy jak w starym
+// hamburgerze. Scope na samą listę, żeby dzieliła <aside> z innymi listami
+// (np. filtr statusów moje-zgloszenia).
+.rd25 .mpr-menu-list {
+    margin: 0.5rem 0 0;
+    padding-left: 0;
+    list-style: none;
+
+    li {
+        margin-bottom: 0;
+    }
+
+    // margin/padding znoszą się (oba 1.25rem), więc tekst siada bez wcięcia,
+    // a tło .active może wykrwawić się na pełną szerokość karty.
+    a {
+        display: block;
+        margin: 0 -1.25rem;
+        padding: 0.875rem 1.25rem;
+        border-radius: 0.75rem;
+        color: $mpr-on-surface;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .badge {
+        background: $mpr-primary-container;
+        border-color: transparent;
+        color: $mpr-primary-dark;
+        font-weight: 700;
+    }
+
+    a.active {
+        background: $mpr-primary-container;
+        color: $mpr-primary-dark;
+    }
+
+    .menu-item-divider {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid $mpr-outline-variant;
+
+        a {
+            color: $mpr-on-surface-variant;
+            font-weight: 500;
+        }
+    }
+}
+
+// "MENU" — mała, uppercase etykieta zamiast pogrubionego nagłówka TOC/related.
+.rd25 .mpr-sidebar--toc:has(.mpr-menu-list) summary {
+    font-family: $font-body;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: $mpr-muted;
+}
+
+// filtr statusów moje-zgloszenia przeniesiony do sidebara: wymuś jedną kolumnę
+// (my-apps.scss zakłada szeroką kolumnę artykułu, nie 18em rail).
+.rd25 .mpr-sidebar .status-filter {
+    columns: 1 !important;
+}
+
+// Czytelność desktopu: tekst artykułu z bazy pikselowej, nagłówki na foncie
+// display. Dotyczy każdego artykułu (nie tylko poradnika).
+.rd25 .mpr-article {
+    h2 {
+        font-family: $font-display;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        color: $mpr-heading;
+        font-size: 1.75rem;
+    }
+
+    @media (min-width: $mpr-break) {
+        font-size: 18px;
+        line-height: 1.65;
+
+        h2 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 1.375rem;
+            line-height: 1.3;
+        }
+
+        p {
+            margin: 1.2em 0;
+        }
+    }
+}
+
+// TOC strony (poradnik, faq) dokuje po lewej jak nav rail; panele "Przeczytaj
+// także" zostają po prawej w domyślnej kolejności DOM.
+.rd25 .mpr-layout--sidebar:has(.mpr-sidebar--toc) {
+    @media (min-width: $mpr-break) {
+        grid-template-columns: 18em 1fr;
+    }
+}
+
+.rd25 .mpr-sidebar--toc {
+    @media (min-width: $mpr-break) {
+        order: -1;
+    }
+}
+
+// --- Rail nawigacji sekcji /app: desktop-only -------------------------------
+// Nawigacja app-menu w railu jest tylko na desktopie; na mobile niesie ją
+// hamburger (_site-menu w overlayu — jedno źródło menu). Dzięki temu znika
+// dawny duplikat: inline app-menu + overlay. Panele niebędące nawigacją
+// (np. filtr statusów `.status-filter` w moje-zgloszenia) zostają na mobile.
+.rd25 .mpr-sidebar--app .mpr-sidebar-nav {
+    display: none;
+}
+// rail, który poza ukrytą nawigacją nie ma innych paneli, chowamy w całości,
+// żeby nie zostawiać pustej kolumny / odstępu nad treścią.
+.rd25 .mpr-sidebar--app:not(:has(.status-filter)) {
+    display: none;
+}
+
+@media (min-width: $mpr-break) {
+    .rd25 .mpr-sidebar--app .mpr-sidebar-nav {
+        display: block;
+    }
+    .rd25 .mpr-sidebar--app:not(:has(.status-filter)) {
+        display: block;
+    }
+}

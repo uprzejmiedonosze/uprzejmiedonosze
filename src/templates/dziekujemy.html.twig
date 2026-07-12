@@ -1,4 +1,4 @@
-{% set leftButton = 'menu' %}
+{% set layout = 'focus' %}
 
 {% set sm = app.guessSMData() %}
 
@@ -20,7 +20,6 @@ Z poważaniem
 {% set emailSubject = 'Brak SM ' ~ app.address.city %}
 
 {% extends "base.html.twig" %}
-{% block footer %}{% endblock %}
 {% block main %}
 {% if appsCount == 1 %}
 <h2>To twoje pierwsze zgłoszenie, przeczytaj to uważnie</h2>

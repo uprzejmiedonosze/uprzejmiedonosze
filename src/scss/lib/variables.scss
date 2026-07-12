@@ -1,8 +1,12 @@
 @use "sass:map";
 @use 'variables.env.scss';
+@use "tokens";
 
-$primaryColor: var(--color);
-$secondaryColor: #e9c200;
+// Brand przepięty na tokeny redesignu (zieleń/żółć) — legacy komponenty i
+// jeszcze niemigrowane strony dostają nowy brand automatycznie, bez override.
+// Zieleń jest stała; env.js steruje już tylko wskaźnikiem środowiska.
+$primaryColor: tokens.$mpr-primary;
+$secondaryColor: tokens.$mpr-accent;
 
 $draft: #FFFFFF;
 $draft-stroke: #FFFFFF;
@@ -30,7 +34,11 @@ $archived: #FFFFFF;
 $archived-stroke: #A2A2A2;
 
 
-$width-break: 35em;
+// Deprecated alias — ujednolicone z tokens.$mpr-break (48em). Jeden kanoniczny
+// próg desktop/mobile w całym serwisie; usuwa martwą strefę 35–48em (m.in.
+// tabbar w my-apps.scss przełączał się przy 35em, header/sidebar przy 48em).
+// Docelowo migrować użycia bezpośrednio na tokens.$mpr-break i usunąć alias.
+$width-break: tokens.$mpr-break;
 
 $content-width: 800px;
 

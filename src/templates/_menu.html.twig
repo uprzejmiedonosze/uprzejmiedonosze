@@ -1,3 +1,8 @@
+{# Szkielet overlaya nawigacji na mobile (menu.scss: #toggle / #courtain /
+   slide-over .nav). Przyciski akcji (back / Zgłoś / Dalej / Zapisz) renderują
+   się zawsze; pełna nawigacja (.nav) tylko gdy preset ma menu (showMenu) —
+   dzięki temu focus/auth/system nie niosą martwego overlaya. Treść nawigacji
+   pochodzi z jednego źródła: _site-menu.html.twig. #}
 <input id="toggle" type="checkbox">
 
 <div id="courtain"></div>
@@ -29,108 +34,16 @@
         class="menu-button right confirm-save-button">Zapisz!</a>
 {% endif %}
 </div>
+{% if showMenu ?? false %}
 <div class="container">
     <nav class="nav" data-role-menu>
-        <a tabindex="0" href="{{ general.isLoggedIn ? '/app' : '/' }}" class="first">
-            {% if general.isLoggedIn %}
-                Start
-            {% else %}
-                Strona główna
-            {% endif %}
-        </a>
-{% if general.isLoggedIn %}
-        <a {{ active(config.menu, 'nowe-zgloszenie')|raw }} href="/app/new">
-            Nowe zgłoszenie
-        </a>
-        <a {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/app/list">
-            Moje zgłoszenia
-            <span class="menu-count">{{ general.stats.active ?? 0 }}</span>
-        </a>
-
-    {% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
-		<a {{ active(config.menu, 'wysylka')|raw }} href="/app/send">
-            Do wysłania
-			<span class="menu-count">{{ general.stats.confirmed ?? 0 }}</span>
-		</a>
+    {# na mobile overlay = to samo co desktopowy sidebar: sekcja /app niesie
+       app-menu, strony treściowe pełną nawigację serwisu #}
+    {% if layout == 'app' %}
+        {% include '_app-menu.html.twig' %}
+    {% else %}
+        {% include '_site-menu.html.twig' %}
     {% endif %}
-
-	{% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
-		<a {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/app/ask-for-status?update">
-            Zapytaj o status
-			<span class="menu-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span>
-		</a>
-	{% endif %}
-
-        <a {{ active(config.menu, 'register')|raw }} href="/app/account?update">
-            Edycja konta
-        </a>
-
-{% else %} {# not logged in #}
-        <a class="cta" href="/app/new">
-            Spróbuj!
-        </a>
-{% endif %}
-
-        <div class="spacer">
-        </div>
-
-        <a {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }} href="/jak-zglosic-nielegalne-parkowanie.html">
-            Poradnik „Jak zgłaszać”
-        </a>
-        <a {{ active(config.menu, 'naklejki-robisz-to-zle')|raw }} href="/naklejki-robisz-to-zle.html">
-            Naklejki i mazaki
-        </a>
-        <a {{ active(config.menu, 'przepisy')|raw }} href="/przepisy.html">
-            Przepisy
-        </a>
-        <a {{ active(config.menu, 'faq')|raw }} href="/faq.html">
-            FAQ
-        </a>
-        <a {{ active(config.menu, 'czesto-popelniane-bledy')|raw }} href="/czesto-popelniane-bledy.html">
-            Często popełniane błędy
-        </a>
-        <a {{ active(config.menu, 'przesluchanie')|raw }} href="/przesluchanie.html">
-            Wizyta w SM
-        </a>
-        <a {{ active(config.menu, 'statystyki')|raw }} href="/statystyki.html">
-            Statystyki
-        </a>
-
-        <div class="spacer">
-        </div>
-
-{% if general.isLoggedIn %}
-    	<a {{ active(config.menu, 'patronite')|raw }} href="/patronite.html">
-            Zostań {{ config.sex['Patronką'] }}
-        </a>
-{% endif %}
-
-        <a {{ active(config.menu, 'kontakt')|raw }} href="/kontakt.html">
-            Kontakt
-        </a>
-        <a target="_blank" href="/napisz-pismo-do-polityka.html">
-            Napisz pismo do polityka <span class="menu-count">nowość!</span>
-        </a>
-        <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">
-            Agenda Parkingowa
-        </a>
-        <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">
-            Grupa wsparcia na FB</a>
-
-        <a {{ active(config.menu, 'galeria')|raw }} href="/galeria.html">
-            Galeria recydywistów
-        </a>
-
-<div class="spacer"></div>
-{% if general.isLoggedIn %}
-        <a href="/logout.html">
-            Wyloguj się
-        </a>
-{% else %}
-	    <a href="/app/start">
-            Zaloguj/zarejestruj się
-        </a>
-{% endif %}
-
     </nav>
 </div>
+{% endif %}

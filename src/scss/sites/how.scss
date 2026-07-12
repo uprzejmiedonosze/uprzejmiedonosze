@@ -16,16 +16,12 @@
   .how-title {
     margin-bottom: 2rem;
 
+    /* font/size/weight/color now live on the shared .rd25 .mpr-article h2
+       rule (main-redesign.scss) so every article heading matches this one -
+       only the tighter bottom margin (hugging the lead paragraph right
+       below) stays page-specific here. */
     h2 {
-      font-weight: 800;
-      font-size: 1.75rem;
-      letter-spacing: -0.02em;
       margin: 0 0 0.75rem;
-      color: #0f2118;
-
-      @media (min-width: variables.$width-break) {
-        font-size: 2.5rem;
-      }
     }
   }
 
@@ -78,6 +74,12 @@
 
     a {
       font-weight: 700;
+      color: #0a5c40;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     span {

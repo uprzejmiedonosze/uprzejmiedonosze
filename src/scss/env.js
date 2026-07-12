@@ -1,12 +1,13 @@
 const host = process.env.HOST || 'uprzejmiedonosze.net'
 
-let color = '#0088bb' // dev+staging
+// Marka (zieleń) jest stała we wszystkich środowiskach — patrz lib/tokens.scss.
+// env.js steruje już tylko dyskretnym wskaźnikiem środowiska: kolorem kropki
+// w headerze na dev/staging (ukrytym na produkcji).
+let tint = '#0088bb' // dev + staging
 
 if (host === 'uprzejmiedonosze.net')
-    color = '#009C7F'
-if (host === 'shadow.uprzejmiedonosze.net')
-    color = '#ff4081'
+    tint = 'transparent' // prod: wskaźnik ukryty
 
 console.log(`:root {
-  --color: ${color};
-};\n`)
+  --env-tint: ${tint};
+}\n`)

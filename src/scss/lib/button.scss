@@ -1,4 +1,5 @@
 @use "variables";
+@use "tokens";
 
 .base-button {
     -webkit-background-clip: padding;
@@ -48,7 +49,7 @@
 
 .button {
     @extend .base-button;
-    border-radius: 16vmin;
+    border-radius: tokens.$mpr-radius-button;
 }
 
 .button, .base-button {
@@ -63,7 +64,7 @@
         background-color: #fff;
         color: variables.$primaryColor!important;
         border: 2px solid variables.$primaryColor;
-        border-radius: .8em;
+        border-radius: tokens.$mpr-radius-sm;
     }
 
     &.light {
@@ -114,4 +115,41 @@
         color: #000 !important;
     }
 
+}
+
+// --- Przyciski redesignu (.mpr-button) -------------------------------------
+// Współdzielone przez każdą stronę rd25 (homepage, dashboard, poradnik...),
+// przeniesione z sites/main-redesign.scss. Zachowany prefiks .mpr-*.
+.rd25 .mpr-button {
+    display: inline-block;
+    text-decoration: none;
+    font-family: tokens.$font-display;
+    font-weight: 700;
+    text-align: center;
+    border-radius: tokens.$mpr-radius-button;
+    padding: 0.875rem 1.75rem;
+    border: 2px solid transparent;
+}
+
+// .mpr-button.mpr-button-* (podwójna klasa) bije homepage'owe
+// `.main-page-redesign a { color: primary }` na specyficzności — inaczej
+// tekst CTA robił się zielony.
+.rd25 .mpr-button.mpr-button-primary {
+    background: tokens.$mpr-accent;
+    color: tokens.$mpr-on-accent;
+    box-shadow: 0 16px 32px -14px rgba(226, 196, 57, .75);
+}
+
+.rd25 .mpr-button.mpr-button-secondary {
+    background: #fff;
+    border-color: tokens.$mpr-outline-variant;
+    color: tokens.$mpr-on-surface;
+}
+
+.rd25 .mpr-button.mpr-button-outline {
+    display: block;
+    margin-top: 1rem;
+    background: #fff;
+    border-color: tokens.$mpr-outline-variant;
+    color: tokens.$mpr-on-surface;
 }

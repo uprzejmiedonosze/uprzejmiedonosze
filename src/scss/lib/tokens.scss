@@ -1,0 +1,76 @@
+// ---------------------------------------------------------------------------
+// Design tokens — jedyne źródło prawdy dla palety, typografii i layoutu
+// redesignu (rd25). Referencja: projekt Claude Design
+// (Bricolage Grotesque + Public Sans, zieleń / krem / żółć).
+//
+// Zieleń marki jest STAŁA we wszystkich środowiskach (nie env-driven) —
+// env.js steruje już tylko dyskretnym wskaźnikiem środowiska (--env-tint).
+// ---------------------------------------------------------------------------
+
+// --- Kolory marki ----------------------------------------------------------
+$mpr-primary: #0d7a55;
+$mpr-primary-dark: #0a5c40;
+$mpr-primary-bright: #12935f;
+$mpr-primary-container: #e7f2ec;
+$mpr-primary-outline: #cfe6da;
+$mpr-on-primary-container: $mpr-primary;
+
+// aliasy zachowane dla homepage'owych kart (secondary/tertiary == primary)
+$mpr-secondary: $mpr-primary;
+$mpr-secondary-container: $mpr-primary-container;
+$mpr-on-secondary-container: $mpr-on-primary-container;
+$mpr-tertiary: $mpr-primary;
+$mpr-tertiary-container: $mpr-primary-container;
+$mpr-on-tertiary-container: $mpr-on-primary-container;
+
+// --- Akcent CTA (najważniejsza akcja na ekranie) ---------------------------
+$mpr-accent: #E2C439;
+$mpr-on-accent: #16241d;
+
+// --- Powierzchnie ----------------------------------------------------------
+$mpr-surface: #ffffff;
+$mpr-surface-low: #f5f8f5;
+$mpr-surface-cream: #eceae4;
+// alias zgodny ze starymi nazwami z main-redesign.scss
+$mpr-surface-container-low: $mpr-surface-low;
+$mpr-surface-container: $mpr-surface-cream;
+$mpr-surface-container-lowest: $mpr-surface;
+
+// --- Tekst -----------------------------------------------------------------
+$mpr-on-surface: #16241d;
+$mpr-on-surface-variant: #465a50;
+$mpr-heading: #0f2118;
+$mpr-muted: #6b7871;
+
+// --- Linie -----------------------------------------------------------------
+$mpr-outline-variant: #e6e3dc;
+$mpr-hairline: #eeece6;
+
+// --- Stopka ----------------------------------------------------------------
+$mpr-footer-bg: #12251c;
+$mpr-footer-text: #cddbd2;
+
+// --- Zastosowania chirurgiczne (poza regułą palety/2-3 fonty) --------------
+$mpr-plate-blue: #123a8f; // niebieski pasek EU na makiecie tablicy
+
+// --- Typografia ------------------------------------------------------------
+$font-display: "Bricolage Grotesque", sans-serif; // nagłówki / display
+$font-body: "Public Sans", system-ui, sans-serif; // tekst / UI
+$font-plate: monospace; // chirurgiczne: realna tablica rejestracyjna
+
+// --- Promienie -------------------------------------------------------------
+$mpr-radius-pill: 999px;
+$mpr-radius-button: 14px;
+$mpr-radius-card: 18px;
+$mpr-radius-sm: 8px;
+
+// --- Cienie ----------------------------------------------------------------
+$mpr-shadow-card: 0 4px 20px rgba(0, 0, 0, 0.05);
+$mpr-shadow-float: 0 24px 48px -20px rgba(15, 40, 25, .45);
+$mpr-shadow-hero: 0 30px 80px -30px rgba(20, 40, 30, .35);
+
+// --- Layout ----------------------------------------------------------------
+$mpr-max-width: 75em; // szerokość serwisu na desktopie (założenie #4)
+$mpr-gutter: 2em; // boczny gutter desktop
+$mpr-gutter-mobile: 1.25em; // boczny gutter mobile
+$mpr-break: 48em; // 768px — jeden kanoniczny breakpoint redesignu

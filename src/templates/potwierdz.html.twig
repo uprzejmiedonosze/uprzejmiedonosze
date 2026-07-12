@@ -1,3 +1,4 @@
+{% set layout = 'focus' %}
 {% set leftButton = 'menuBack' %}
 
 {% set title = '' %}
@@ -11,9 +12,6 @@
 {% endif %}
 
 {% extends "base.html.twig" %}
-{% block footer %}
-<footer></footer>
-{% endblock %}
 {% block main %}
 
 {% if app.automatedSM %}
