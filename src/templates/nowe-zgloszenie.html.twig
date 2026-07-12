@@ -1,19 +1,14 @@
-{% set leftButton = 'menu' %}
-
+{% set layout = 'focus' %}
 {% set title = 'Nowe zgłoszenie' %}
 {% set mainClass = 'new-application' %}
 {% set rightButton = 'newAppNext' %}
-{% set focusLayout = true %}
-{% set hideNavbarLinks = true %}
+{# proces potrzebuje akcyjnego CTA „Dalej" w navbarze mimo presetu focus #}
+{% set hideNavbarCta = false %}
 {% set navbarCtaAction = true %}
 {% set navbarCtaClass = 'js-new-app-submit' %}
 {% set navbarCtaLabel = 'Dalej' %}
-{% set showAppNav = general.isLoggedIn %}
 
 {% extends "base.html.twig" %}
-{% block footer %}
-<footer></footer>
-{% endblock %}
 {% block main %}
 
 <form action="/app/confirm?id={{ app.id }}" id="form" method="post">

@@ -1,0 +1,106 @@
+{# Jedno źródło pełnej nawigacji serwisu. Renderowane w overlayu hamburgera
+   (_menu.html.twig) na mobile dla presetów main/static/public/app. Dla
+   zalogowanych zawiera skróty do sekcji /app, więc pokrywa też nawigację
+   aplikacji — desktopowy rail app-menu i górne mpr-navbar-links to celowo
+   węższe, kuratorowane podzbiory, nie duplikaty. Wrapper <nav class="nav">
+   dostarcza _menu.html.twig. #}
+    <a tabindex="0" href="{{ general.isLoggedIn ? '/app' : '/' }}" class="first">
+        {% if general.isLoggedIn %}
+            Start
+        {% else %}
+            Strona główna
+        {% endif %}
+    </a>
+{% if general.isLoggedIn %}
+    <a {{ active(config.menu, 'nowe-zgloszenie')|raw }} href="/app/new">
+        Nowe zgłoszenie
+    </a>
+    <a {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/app/list">
+        Moje zgłoszenia
+        <span class="menu-count">{{ general.stats.active ?? 0 }}</span>
+    </a>
+
+{% if general.stats.confirmed is defined and general.stats.confirmed > 0 %}
+    <a {{ active(config.menu, 'wysylka')|raw }} href="/app/send">
+        Do wysłania
+        <span class="menu-count">{{ general.stats.confirmed ?? 0 }}</span>
+    </a>
+{% endif %}
+
+{% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
+    <a {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/app/ask-for-status?update">
+        Zapytaj o status
+        <span class="menu-count">{{ general.stats['confirmed-waiting'] ?? 0 }}</span>
+    </a>
+{% endif %}
+
+    <a {{ active(config.menu, 'register')|raw }} href="/app/account?update">
+        Edycja konta
+    </a>
+
+{% else %} {# not logged in #}
+    <a class="cta" href="/app/new">
+        Spróbuj!
+    </a>
+{% endif %}
+
+    <div class="spacer">
+    </div>
+
+    <a {{ active(config.menu, 'jak-zglosic-nielegalne-parkowanie')|raw }} href="/jak-zglosic-nielegalne-parkowanie.html">
+        Poradnik „Jak zgłaszać”
+    </a>
+    <a {{ active(config.menu, 'naklejki-robisz-to-zle')|raw }} href="/naklejki-robisz-to-zle.html">
+        Naklejki i mazaki
+    </a>
+    <a {{ active(config.menu, 'przepisy')|raw }} href="/przepisy.html">
+        Przepisy
+    </a>
+    <a {{ active(config.menu, 'faq')|raw }} href="/faq.html">
+        FAQ
+    </a>
+    <a {{ active(config.menu, 'czesto-popelniane-bledy')|raw }} href="/czesto-popelniane-bledy.html">
+        Często popełniane błędy
+    </a>
+    <a {{ active(config.menu, 'przesluchanie')|raw }} href="/przesluchanie.html">
+        Wizyta w SM
+    </a>
+    <a {{ active(config.menu, 'statystyki')|raw }} href="/statystyki.html">
+        Statystyki
+    </a>
+
+    <div class="spacer">
+    </div>
+
+{% if general.isLoggedIn %}
+    <a {{ active(config.menu, 'patronite')|raw }} href="/patronite.html">
+        Zostań {{ config.sex['Patronką'] }}
+    </a>
+{% endif %}
+
+    <a {{ active(config.menu, 'kontakt')|raw }} href="/kontakt.html">
+        Kontakt
+    </a>
+    <a target="_blank" href="/napisz-pismo-do-polityka.html">
+        Napisz pismo do polityka <span class="menu-count">nowość!</span>
+    </a>
+    <a rel="external" target="_blank" href="https://agendaparkingowa.pl/">
+        Agenda Parkingowa
+    </a>
+    <a rel="external" target="_blank" href="https://www.facebook.com/groups/patologiaparkingowa/">
+        Grupa wsparcia na FB</a>
+
+    <a {{ active(config.menu, 'galeria')|raw }} href="/galeria.html">
+        Galeria recydywistów
+    </a>
+
+<div class="spacer"></div>
+{% if general.isLoggedIn %}
+    <a href="/logout.html">
+        Wyloguj się
+    </a>
+{% else %}
+    <a href="/app/start">
+        Zaloguj/zarejestruj się
+    </a>
+{% endif %}

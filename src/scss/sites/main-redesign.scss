@@ -1,41 +1,13 @@
-/* Redesign of the logged-out homepage content, per the Claude Design
-   "Redesign social-tech application" project (Strona główna variant 1A).
-   Scoped to .rd25 .main-page-redesign so it cannot leak into other pages or
-   the logged-in dashboard. Card-icon variants (primary/secondary/tertiary)
-   all resolve to the same green tone by design - the new brand direction is
-   "tylko zieleń" (green only), so those classes stay for template
-   compatibility but no longer carry distinct hues. */
+// ---------------------------------------------------------------------------
+// Homepage (index.html.twig, .main-page-redesign) — biblioteka komponentów
+// specyficznych dla strony głównej: hero, trust-band, steps, checklist, cards,
+// mini-FAQ. Tokeny, layout (kontener/full-bleed/szkielety), przyciski, header
+// i stopka przeniesione do lib/* — patrz lib/tokens, lib/layout, lib/button,
+// lib/header, lib/footer.
+// `as *` — bare $mpr-* / $mpr-break z tokenów.
+// ---------------------------------------------------------------------------
 
-$mpr-primary: #0d7a55;
-$mpr-primary-dark: #0a5c40;
-$mpr-primary-container: #e7f2ec;
-$mpr-on-primary-container: #0d7a55;
-$mpr-secondary: $mpr-primary;
-$mpr-secondary-container: $mpr-primary-container;
-$mpr-on-secondary-container: $mpr-on-primary-container;
-$mpr-tertiary: $mpr-primary;
-$mpr-tertiary-container: $mpr-primary-container;
-$mpr-on-tertiary-container: $mpr-on-primary-container;
-$mpr-surface: #ffffff;
-$mpr-surface-container-low: #f5f8f5;
-$mpr-surface-container: #eceae4;
-$mpr-surface-container-lowest: #ffffff;
-$mpr-on-surface: #16241d;
-$mpr-on-surface-variant: #465a50;
-$mpr-outline-variant: #e6e3dc;
-$mpr-hairline: #eeece6;
-
-/* CTA accent (primary buttons, nav "Zgłoś" pill) - distinct from the brand
-   green, used for the single most important action per screen */
-$mpr-accent: #E2C439;
-$mpr-on-accent: #16241d;
-
-$mpr-heading: #0f2118;
-$mpr-muted: #6b7871;
-$mpr-footer-bg: #12251c;
-$mpr-footer-text: #cddbd2;
-
-$mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.html */
+@use "../lib/tokens" as *;
 
 .rd25 .main-page-redesign {
   font-family: "Public Sans", sans-serif;
@@ -59,6 +31,20 @@ $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.ht
 
   a {
     color: $mpr-primary;
+  }
+
+  /* Wyrównanie do headera: pełnoszerokie sekcje (75em) dostają na desktopie
+     ten sam boczny gutter co .mpr-navbar / .mpr-layout (border-box), żeby ich
+     treść nie wystawała poza kolumnę headera. Węższe, wyśrodkowane bloki
+     (checklist, faq, demo) nie potrzebują tego — są i tak inset. */
+  @media (min-width: $mpr-break) {
+    .mpr-hero-inner,
+    .mpr-trust-band,
+    .mpr-steps,
+    .mpr-cards {
+      box-sizing: border-box;
+      padding-inline: $mpr-gutter;
+    }
   }
 
   .mpr-section {
@@ -99,7 +85,9 @@ $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.ht
     background: radial-gradient(120% 70% at 50% -10%, $mpr-primary-container 0%, $mpr-surface-container-low 44%, $mpr-surface 76%);
 
     @media (min-width: $mpr-break) {
-      padding: 4.5rem 1.5em;
+      // gutter poziomy oddaje .mpr-hero-inner (border-box, 75em) — tu tylko
+      // odstęp pionowy, żeby treść hero wyrównała się do navbara.
+      padding: 4.5rem 0;
     }
   }
 
@@ -277,7 +265,7 @@ $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.ht
     }
 
     .mpr-hero-card-plate-pl {
-      background: #123a8f;
+      background: $mpr-plate-blue;
       color: #fff;
       font-size: 0.65rem;
       font-weight: 700;
@@ -618,344 +606,5 @@ $mpr-break: 48em; /* 768px, matches the Tailwind "md" breakpoint used in code.ht
   .mpr-faq-more {
     justify-content: center;
     color: $mpr-primary;
-  }
-}
-
-/* Buttons: shared across every rd25 page (homepage, dashboard, poradnik,
-   ...), not just the homepage - moved out of .main-page-redesign's scope. */
-.rd25 .mpr-button {
-  display: inline-block;
-  text-decoration: none;
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-weight: 700;
-  text-align: center;
-  border-radius: 0.875rem;
-  padding: 0.875rem 1.75rem;
-  border: 2px solid transparent;
-}
-
-/* .mpr-button.mpr-button-* (not just .mpr-button-*) so these beat the
-   homepage's generic `.main-page-redesign a { color: $mpr-primary }` link
-   color - both selectors match a `<a class="mpr-button mpr-button-primary">`
-   but a plain two-class selector loses to a class+element one on
-   specificity, which was silently turning CTA text green. */
-.rd25 .mpr-button.mpr-button-primary {
-  background: $mpr-accent;
-  color: $mpr-on-accent;
-  box-shadow: 0 16px 32px -14px rgba(226, 196, 57, .75);
-}
-
-.rd25 .mpr-button.mpr-button-secondary {
-  background: #fff;
-  border-color: $mpr-outline-variant;
-  color: $mpr-on-surface;
-}
-
-.rd25 .mpr-button.mpr-button-outline {
-  display: block;
-  margin-top: 1rem;
-  background: #fff;
-  border-color: $mpr-outline-variant;
-  color: $mpr-on-surface;
-}
-
-/* the legacy layout caps content at 800px; widen it to match the homepage
-   container for every page that opts into the redesign (static pages by
-   default, see base.html.twig). Mobile keeps the legacy fixed header, so it
-   still needs the original top margin to clear it; only the desktop nav
-   (static, in-flow) lets us drop it. */
-body.rd25 {
-  background: $mpr-surface;
-  overflow-x: hidden;
-}
-
-.ui-content.rd25 {
-  max-width: 75em;
-  border-width: 0;
-  background: transparent;
-
-  @media (min-width: $mpr-break) {
-    /* general.scss's base .ui-content still has a 50px top margin (to
-       clear the legacy fixed mobile header) and 1em/2em side padding
-       (its own reading-width gutter) - desktop's header is static now (no
-       fixed bar to clear) and full-bleed sections (.mpr-hero,
-       .mpr-section-tinted) need to reach the true viewport edge, which
-       that inherited padding was preventing. Content pages get their own
-       gutter back via .rd25 .mpr-layout below. */
-    margin-top: 0;
-    padding: 0;
-  }
-}
-
-/* the footer's inner grid is capped at the legacy 800px content width;
-   widen it to match on redesigned pages so it doesn't look narrower than
-   the rest of the page. */
-footer.rd25 .grid3 {
-  max-width: 75em;
-}
-
-/* Redesigned header: on desktop, swap the legacy fixed teal bar + hamburger
-   for a plain top nav. On mobile, the hamburger header stays functionally
-   (still the only mobile nav entry point) but is reskinned from the legacy
-   teal bar to match the new design's white header + dark wordmark - a
-   cosmetic override scoped to .rd25-header only, so the shared
-   variables.$primaryColor used by unrelated legacy chrome (buttons, tabs,
-   forms) is untouched. */
-body > div > header.rd25-header {
-  background-color: $mpr-surface-container-lowest;
-  color: $mpr-on-surface;
-  border-bottom: 1px solid $mpr-outline-variant;
-
-  h1 a {
-    color: $mpr-primary;
-    font-family: "Bricolage Grotesque", sans-serif;
-  }
-
-  /* harmonize the hamburger toggle's own teal square with the new white
-     header - it keeps its function untouched, just the accent color */
-  .button-toggle {
-    background: $mpr-primary;
-  }
-
-  @media (min-width: $mpr-break) {
-    position: static;
-    height: auto;
-
-    > *:not(.mpr-navbar) {
-      display: none;
-    }
-  }
-}
-
-.mpr-navbar {
-  display: none;
-
-  @media (min-width: $mpr-break) {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    max-width: 75em;
-    margin: 0 auto;
-    padding: 1rem 1.5em;
-    font-family: "Bricolage Grotesque", sans-serif;
-  }
-}
-
-.mpr-navbar-logo {
-  /* .mpr-navbar sets font-family on itself, but general.scss's
-     `* { font-family: "Public Sans" }` directly matches this element too
-     and beats inherited values regardless of specificity - restate it
-     explicitly rather than relying on inheritance from the parent. */
-  font-family: "Bricolage Grotesque", sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: $mpr-primary;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.mpr-navbar-links {
-  display: flex;
-  gap: 1.5rem;
-  /* pushed to the right edge (logo stays left) - not flex:1, which would
-     grow the links block leftward instead of moving it */
-  margin-left: auto;
-
-  a {
-    color: $mpr-on-surface-variant;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-  }
-}
-
-.mpr-navbar-cta {
-  background: $mpr-accent;
-  color: $mpr-on-accent;
-  text-decoration: none;
-  font-weight: 700;
-  padding: 0.65rem 1.25rem;
-  border-radius: 999px;
-  white-space: nowrap;
-  /* .mpr-navbar-links already has its own margin-left:auto, but this page
-     may hide links entirely (hideNavbarLinks, e.g. /app) - keep this too so
-     the CTA still pins to the right edge with no links sibling before it */
-  margin-left: auto;
-  /* also used as a plain JS action button with no href (e.g. /app/new's
-     "Dalej") - browsers only show a pointer cursor on <a> by default when
-     an href is present, so make it explicit here */
-  cursor: pointer;
-}
-
-/* .mpr-layout (base.html.twig) is always present regardless of variant -
-   give every non-homepage page back the horizontal gutter that used to
-   come from .ui-content's own padding (now zeroed above so the homepage's
-   full-bleed sections can reach the true viewport edge). The homepage
-   manages its own section-level padding instead (.mpr-hero, .mpr-section),
-   so it's excluded here to avoid double-padding. */
-.rd25 .mpr-layout {
-  @media (min-width: $mpr-break) {
-    padding: 0 2em;
-  }
-
-  &:has(.main-page-redesign) {
-    padding: 0;
-  }
-}
-
-/* Two-column article + sidebar shell (base.html.twig), Medium-style: a
-   narrower, more readable text column with a persistent sidebar (e.g. a
-   page's table of contents) docked to the right. Only takes effect when a
-   template both opts into the redesign (.rd25) and sets hasSidebar=true /
-   overrides the sidebar block — otherwise it's a no-op single column. */
-.rd25 .mpr-layout--sidebar {
-  display: flex;
-  flex-direction: column;
-
-  @media (min-width: $mpr-break) {
-    display: grid;
-    grid-template-columns: 1fr 18em;
-    align-items: start;
-    gap: 3rem;
-    max-width: 75em;
-    margin: 0 auto;
-  }
-}
-
-/* "focus-layout": single-column pages that should match the sidebar
-   layout's outer width (e.g. /app/start, /app/new, /generator.html)
-   without an actual sidebar: the outer column matches
-   .mpr-layout--sidebar's 75em, but the article itself is centered within
-   it at a comfortable reading measure instead of stretching edge to edge. */
-.rd25 .mpr-layout--focus {
-  @media (min-width: $mpr-break) {
-    max-width: 75em;
-    margin: 0 auto;
-
-    .mpr-article {
-      max-width: 40em;
-      margin: 0 auto;
-    }
-  }
-}
-
-.rd25 .mpr-sidebar {
-  /* on mobile the TOC is more useful up top (jump to a section) than after
-     the whole article; on desktop it sits in its natural DOM order (right
-     column) since grid-template-columns already places it there */
-  order: -1;
-  margin: 0 0 1.5rem;
-
-  @media (min-width: $mpr-break) {
-    order: 0;
-    margin: 0;
-  }
-
-  details {
-    background: $mpr-surface-container-lowest;
-    border: 1px solid $mpr-outline-variant;
-    border-radius: 0.75rem;
-    padding: 1rem 1.25rem;
-  }
-
-  summary {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-weight: 700;
-    cursor: pointer;
-  }
-
-  ul {
-    margin: 0.75rem 0 0;
-    padding-left: 1.25rem;
-  }
-
-  li {
-    margin-bottom: 0.5rem;
-  }
-
-  @media (min-width: $mpr-break) {
-    summary {
-      cursor: default;
-      pointer-events: none;
-      list-style: none;
-    }
-
-    summary::-webkit-details-marker,
-    summary::marker {
-      display: none;
-    }
-  }
-}
-
-/* App dashboard's own nav (as opposed to a page's TOC): unbulleted, spaced
-   like the original hamburger nav (src/scss/lib/menu.scss's nav.nav > a)
-   rather than the TOC's indented list. Scoped to the list itself (not the
-   whole .mpr-sidebar) so it can share an <aside> with other, differently
-   styled lists - e.g. moje-zgloszenia's status filter. */
-.rd25 .mpr-menu-list {
-  margin: 0.5rem 0 0;
-  padding-left: 0;
-  list-style: none;
-
-  li {
-    margin-bottom: 0;
-  }
-
-  a {
-    display: block;
-    padding: 0.875rem 0;
-  }
-}
-
-/* moje-zgloszenia's status filter, relocated into the sidebar: force it to
-   the single column it already collapses to on narrow phone widths - the
-   my-apps.scss multi-column layout (2-3 columns past 35em) assumes it's
-   still in the wide article column, not an 18em sidebar rail. */
-.rd25 .mpr-sidebar .status-filter {
-  columns: 1 !important;
-}
-
-/* Desktop readability: article body text is set from a fixed pixel base
-   (not scaled off .mpr-article's own font-size) so it doesn't drift if a
-   heading's em-based size (general.scss) is later changed. Mobile keeps the
-   existing sizes since narrow columns don't have the long-line problem. */
-.rd25 .mpr-article {
-  @media (min-width: $mpr-break) {
-    font-size: 18px;
-    line-height: 1.65;
-
-    h2 {
-      font-size: 2rem;
-      line-height: 1.2;
-    }
-
-    h3 {
-      font-size: 1.375rem;
-      line-height: 1.3;
-    }
-
-    /* margin on both sides (not bottom-only) so it collapses against
-       non-p siblings too (buttons, headings, etc.) - bottom-only left
-       zero-margin elements like .button pressed straight up against the
-       next paragraph */
-    p {
-      margin: 1.2em 0;
-    }
-  }
-}
-
-/* A page's own table of contents (jak-zglosic-nielegalne-parkowanie, faq)
-   reads as in-page navigation, so it docks to the left of the article like a
-   nav rail; "Przeczytaj także" panels (_related-links.html.twig) are
-   read-next suggestions and stay on the right in their default DOM order. */
-.rd25 .mpr-layout--sidebar:has(.mpr-sidebar--toc) {
-  @media (min-width: $mpr-break) {
-    grid-template-columns: 18em 1fr;
-  }
-}
-
-.rd25 .mpr-sidebar--toc {
-  @media (min-width: $mpr-break) {
-    order: -1;
   }
 }

@@ -1,25 +1,12 @@
-{% set leftButton = 'menu' %}
-{% set rightButton = 'menuStart' %}
-
+{% set layout = 'app' %}
 {% set title = 'Moje zgłoszenia' %}
 {% set mainClass = 'my-applications' %}
-{% set hasSidebar = true %}
-{% set hideNavbarLinks = true %}
 {% set navbarCtaHref = '/app/new' %}
 {% set navbarCtaLabel = 'Nowe zgłoszenie' %}
-{% set showAppNav = general.isLoggedIn %}
 
 {% extends "base.html.twig" %}
-{% block footer %}
-<footer></footer>
-{% endblock %}
 
-{% block sidebar %}
-<aside class="mpr-sidebar mpr-sidebar--toc">
-<details open>
-<summary>Menu</summary>
-{% include('_app-menu.html.twig') %}
-</details>
+{% block sidebar_extra %}
 {% if applications|length > 0 %}
 <details open>
 <summary>Filtruj</summary>
@@ -30,7 +17,6 @@
 </ul>
 </details>
 {% endif %}
-</aside>
 {% endblock %}
 
 {% block main %}

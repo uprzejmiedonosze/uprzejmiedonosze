@@ -1,0 +1,78 @@
+// ---------------------------------------------------------------------------
+// Typografia — 2 fonty (Bricolage Grotesque display + Public Sans body).
+// Link Google Fonts ładowany w base.html.twig. Font tablicy rejestracyjnej
+// (monospace) to zastosowanie chirurgiczne, poza tą regułą.
+//
+// Globalna skala przeniesiona tu z general.scss + reguły headingów z
+// redesign-2025.scss.
+// ---------------------------------------------------------------------------
+
+@use "tokens";
+
+// Uwaga: selektor uniwersalny bezpośrednio dopasowuje każdy element i bije
+// dziedziczenie niezależnie od specyficzności — komponenty które chcą
+// display font (nagłówki) muszą go zadeklarować u siebie (patrz mixin heading).
+* {
+    font-family: tokens.$font-body;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body,
+a,
+p,
+i,
+input,
+textarea,
+select {
+    line-height: 1.4;
+}
+
+// projekt celowo nie pogrubia <strong>/<b> (zachowane z general.scss)
+strong,
+b {
+    font-weight: 400;
+}
+
+small {
+    font-size: 0.8em;
+}
+
+@mixin heading {
+    font-family: tokens.$font-display;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: tokens.$mpr-heading;
+}
+
+// Globalne nagłówki na foncie display — każda strona (także jeszcze
+// niemigrowane body) dostaje markowe nagłówki. Strony redesignu
+// (.main-page-redesign, .mpr-article) doprecyzowują rozmiary u siebie.
+h1,
+h2,
+h3 {
+    @include heading;
+}
+
+h2 {
+    font-size: 2em;
+    margin: 0.5em 0;
+}
+
+h3 {
+    font-size: 1.3em;
+    margin: 1em 0 0.2em;
+}
+
+h4 {
+    font-size: 1em;
+    font-weight: 700;
+}
+
+// listy na mobile dostają odstęp (przeniesione z redesign-2025.scss)
+@media (max-width: tokens.$mpr-break) {
+    ul > li {
+        margin-bottom: 0.5rem;
+    }
+}

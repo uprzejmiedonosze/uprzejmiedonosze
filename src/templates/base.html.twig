@@ -12,6 +12,39 @@
    still opt out by setting redesignClass = '' itself before extending. #}
 {% set redesignClass = redesignClass ?? 'rd25' %}
 
+{# ---------------------------------------------------------------------------
+   Layout presets. Każda strona deklaruje tylko `{% set layout = '...' %}`,
+   a wszystkie flagi layoutu wyprowadzamy z jednego presetu. Per-page override
+   nadal wygrywa (dzięki `??`), więc wyjątki są możliwe bez łamania systemu.
+     links  – linki nawigacyjne w górnym navbarze (desktop)
+     cta    – przycisk CTA w navbarze
+     sidebar– boczna kolumna (rail na desktopie / menu)
+     focus  – wycentrowana, jednokolumnowa treść (proces)
+     tabbar – dolny pasek zakładek (sekcja /app na mobile)
+     menu   – hamburger z nawigacją na mobile
+     footer – stopka serwisu
+   --------------------------------------------------------------------------- #}
+{% set layout = layout ?? 'static' %}
+{% set _presets = {
+    'main':   {links: true,  cta: true,  sidebar: false, focus: false, tabbar: false, menu: true,  footer: true},
+    'static': {links: true,  cta: true,  sidebar: false, focus: false, tabbar: false, menu: true,  footer: true},
+    'app':    {links: false, cta: true,  sidebar: true,  focus: false, tabbar: true,  menu: true,  footer: false},
+    'focus':  {links: false, cta: false, sidebar: false, focus: true,  tabbar: false, menu: false, footer: false},
+    'auth':   {links: false, cta: false, sidebar: false, focus: true,  tabbar: false, menu: false, footer: false},
+    'system': {links: false, cta: false, sidebar: false, focus: true,  tabbar: false, menu: false, footer: false},
+    'public': {links: true,  cta: true,  sidebar: false, focus: false, tabbar: false, menu: true,  footer: true},
+} %}
+{% set _p = _presets[layout] ?? _presets['static'] %}
+{% set hideNavbarLinks = hideNavbarLinks ?? (not _p.links) %}
+{% set hideNavbarCta   = hideNavbarCta   ?? (not _p.cta) %}
+{% set hasSidebar      = hasSidebar      ?? _p.sidebar %}
+{% set focusLayout     = focusLayout     ?? _p.focus %}
+{% set showAppNav      = showAppNav      ?? _p.tabbar %}
+{% set showMenu        = showMenu        ?? _p.menu %}
+{# hamburger (menu.scss) renderowany przez _menu.html.twig gdy leftButton == 'menu' #}
+{% set leftButton      = leftButton      ?? (showMenu ? 'menu' : '') %}
+{% set _showFooter     = (_p.footer and not dialog) %}
+
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -75,7 +108,7 @@
 
         {% block headIncludes %}{% endblock %}
     </head>
-    <body class="index {{ redesignClass ?? '' }}">
+    <body class="index {{ mainClass ?? '' }} {{ redesignClass ?? '' }}">
         <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
         {% include('header.html.twig') %}
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {{ redesignClass ?? '' }} {% if dialog %}dialog{% endif %}">
@@ -83,7 +116,22 @@
             <div class="mpr-article">
         {% block main %}{% endblock %}
             </div>
-        {% block sidebar %}{% endblock %}
+        {% block sidebar %}
+            {# domyślny rail sekcji /app: nawigacja app-menu (desktop) + opcjonalne
+               panele strony (np. filtr statusów) w bloku sidebar_extra. Na mobile
+               nawigację niesie hamburger (_site-menu, jedno źródło), więc
+               .mpr-sidebar-nav chowamy — patrz layout.scss. Strony static/main
+               nadpisują cały blok sidebar własnym TOC/related. #}
+            {% if hasSidebar and layout == 'app' %}
+            <aside class="mpr-sidebar mpr-sidebar--toc mpr-sidebar--app">
+                <details class="mpr-sidebar-nav" open>
+                    <summary>Menu</summary>
+                    {% include('_app-menu.html.twig') %}
+                </details>
+                {% block sidebar_extra %}{% endblock %}
+            </aside>
+            {% endif %}
+        {% endblock %}
         </div>
             </div> <!-- main -->
             <div id="toast"></div>
@@ -91,7 +139,7 @@
         {% include('_app-tabbar.html.twig') %}
         {% endif %}
         {% block footer %}
-            {% if not dialog %}
+            {% if _showFooter %}
             <footer data-role="footer" class="{{ redesignClass ?? '' }}">
 
                 <div class="grid3">
