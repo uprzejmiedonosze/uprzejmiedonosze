@@ -250,6 +250,15 @@ div[data-role="collapsibleset"] {
 
 }
 
+/* Dashboard sits on a full-width tinted surface (mockup Image 7) so the white
+   cards (menu rail, stat/link cards, badges) read as elevated. The tint rides
+   on <body> — set by app.html.twig's mainClass="app" — so it reaches both
+   edges of the viewport; the header keeps its own white background
+   (header.scss). $mpr-surface itself is #fff (card colour), hence the literal. */
+body.app {
+  background-color: #f4f3ef;
+}
+
 /* Dashboard (/app), Claude Design mockup: greeting, rank stepper, stats
    grid, badges grid. Scoped to .app (the ui-content class set by
    app.html.twig's mainClass) so it can't leak into other /app/* pages that
@@ -478,6 +487,55 @@ div[data-role="collapsibleset"] {
       background: #f2f0ea;
       border-color: #e2ded3;
       color: #8a8478;
+    }
+  }
+
+  /* "Nie chcesz donosić" — link cards (mockup Image 3) plus the Patronite /
+     Suppi (or, for patrons, RPO) tiles. Mirrors the home page's .mpr-link-card
+     look but scoped to the dashboard's own palette/typography. */
+  .dashboard-section-lead {
+    color: #6b7871;
+    font-size: 0.95rem;
+    margin: -0.5rem 0 1rem;
+  }
+
+  .support-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+
+    @media (min-width: variables.$width-break) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .support-card {
+    display: block;
+    background: #fff;
+    border: 1px solid #e6e3dc;
+    border-radius: 14px;
+    padding: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow .15s ease, transform .15s ease;
+
+    &:hover {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .06);
+      transform: translateY(-2px);
+    }
+
+    .support-card-title {
+      font-family: "Bricolage Grotesque", sans-serif;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: variables.$primaryColor;
+    }
+
+    p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #5a675f;
+      margin: 0.5rem 0 0;
     }
   }
 }

@@ -113,67 +113,35 @@
     </div>
 </section>
 
-<h3>Nie chcesz „donosić”? Dowiedz się, co możesz zrobić</h3>
-
-<p>Napisz <a href="/napisz-pismo-do-polityka.html">pismo do polityka</a> w trzy minuty
-    i przełóż swoją frustrację w realne działania.</p>
-
-<p>Zapoznaj się z
-    <a href="https://agendaparkingowa.pl/"
-        target="_blank"
-        rel="external">Miejską Agendą Parkingową</a>
-    i dowiedz się jak niewielkie
-    zmiany w przepisach mogą sprawić, że Uprzejmie Donoszę nie będzie potrzebne.
-</p>
-
-<div class="images-slider">
-    <div class="imageContainer">
-        <a href="https://agendaparkingowa.pl/"
-            target="_blank"
-            rel="external">
-            <img src="/img/agenda-parkingowa-media-1.webp?width=250"
-                data-src="/img/agenda-parkingowa-media-1.jpeg"
-                class="lazyload" />
+<section class="dashboard-section">
+    <div class="dashboard-eyebrow">Nie chcesz „donosić”?</div>
+    <p class="dashboard-section-lead">Dowiedz się, co jeszcze możesz zrobić.</p>
+    <div class="support-grid">
+        <a href="/napisz-pismo-do-polityka.html" class="support-card">
+            <div class="support-card-title">Napisz pismo do polityka <span aria-hidden="true">&rarr;</span></div>
+            <p>W trzy minuty przełóż swoją frustrację w realne działanie.</p>
         </a>
-    </div>
-    <div class="imageContainer">
-        <a href="https://agendaparkingowa.pl/"
-            target="_blank"
-            rel="external">
-            <img src="/img/agenda-parkingowa-media-4.webp?width=250"
-                data-src="/img/agenda-parkingowa-media-4.jpeg"
-                class="lazyload" />
+        <a href="https://agendaparkingowa.pl/" target="_blank" rel="external" class="support-card">
+            <div class="support-card-title">Miejska Agenda Parkingowa <span aria-hidden="true">&#8599;</span></div>
+            <p>Poznaj zmiany w przepisach, po których Uprzejmie Donoszę nie będzie potrzebne.</p>
         </a>
+
+    {% if 'patron' in general.stats.badges %}
+        <a href="https://www.change.org/Rowne-Prawa-Dla-Pieszych-i-Kierowcow/" target="_blank" rel="external" class="support-card">
+            <div class="support-card-title">Wniosek do RPO <span aria-hidden="true">&#8599;</span></div>
+            <p>Poprzyj mój wniosek do Rzecznika Praw Obywatelskich o równe prawa dla pieszych i kierowców.</p>
+        </a>
+    {% else %}
+        <a href="/patronite.html" class="support-card">
+            <div class="support-card-title">Patronite <span aria-hidden="true">&rarr;</span></div>
+            <p>Utrzymanie serwerów kosztuje. Dołącz do {{ config.stats.patrons }} Patronek i Patronów i pomóż nam działać stabilnie.</p>
+        </a>
+        <a href="https://suppi.pl/uprzejmiedonosze" target="_blank" rel="external" class="support-card">
+            <div class="support-card-title">Suppi <span aria-hidden="true">&#8599;</span></div>
+            <p>Nie chcesz subskrypcji? Postaw nam kawę jednorazową, niewielką wpłatą.</p>
+        </a>
+    {% endif %}
     </div>
-</div>
-
-{% if 'patron' in general.stats.badges %}
-
-<p>Zachęcam też do poparcia mojego
-    <a href="https://www.change.org/Rowne-Prawa-Dla-Pieszych-i-Kierowcow/"
-        target="_blank"
-        rel="external">wniosku do Rzecznika Praw Obywatelskich</a>.
-</p>
-
-{% else %}
-
-<p>Możesz też wesprzeć Uprzejmie Donoszę i Agendę Parkingową na Patronite.
-    Chciałbym poświęcić więcej czasu swojej misji odzyskania przestrzeni dla
-    pieszych. Twoje wsparcie bardzo mi w tym pomoże.
-</p>
-
-<a href="/patronite.html"
-    class="patronite button">
-    Dołącz do {{ config.stats.patrons }} Patronek i Patronów!
-</a>
-
-<p>
-    Nie chcesz subskrybcji?
-    <a href="https://suppi.pl/uprzejmiedonosze"
-        target="_blank"
-        rel="external">Suppi pozwala na jednorazową wpłatę niewielkiej kwoty</a>
-    (za którą z góry dziękuję).
-</p>
-{% endif %}
+</section>
 
 {% endblock %}

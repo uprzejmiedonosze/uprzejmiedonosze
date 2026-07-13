@@ -1,5 +1,4 @@
 <ul class="mpr-menu-list">
-    <li><a {{ active(config.menu, 'app')|raw }} href="/app">Start</a></li>
     <li><a {{ active(config.menu, 'nowe-zgloszenie')|raw }} href="/app/new">Nowe zgłoszenie</a></li>
     <li><a {{ active(config.menu, 'moje-zgloszenia')|raw }} href="/app/list">Moje zgłoszenia
         <span class="badge">{{ general.stats.active ?? 0 }}</span></a></li>

@@ -9,6 +9,15 @@
 
 @use "../lib/tokens" as *;
 
+// Homepage: własny padding boczny trzymają same sekcje (.mpr-section itd.), a
+// hero/tinted robią full-bleed (width:100vw; left:50%; margin-left:-50vw).
+// Domyślny 1em padding .ui-content na mobile przesuwał punkt zerowy tej
+// matematyki, przez co cały layout był o 1em szerszy niż viewport i zjechany
+// w prawo — dla strony głównej zerujemy go (na desktopie i tak jest 0).
+.ui-content.mainPage {
+    padding: 0;
+}
+
 .rd25 .main-page-redesign {
   font-family: "Public Sans", sans-serif;
   color: $mpr-on-surface;
@@ -76,7 +85,7 @@
        because .mpr-hero-inner below re-centers the actual content at a
        max-width, so it doesn't stretch edge to edge just because this
        wrapper does. */
-    width: 100vw;
+    width: calc(100vw - 2rem);
     position: relative;
     left: 50%;
     margin-left: -50vw;
@@ -213,7 +222,6 @@
   }
 
   .mpr-hero-card {
-    display: none;
     position: absolute;
     background: #fff;
     border-radius: 16px;
@@ -221,16 +229,16 @@
     box-shadow: 0 24px 48px -20px rgba(15, 40, 25, .45);
     padding: 16px;
     text-align: left;
-
-    @media (min-width: $mpr-break) {
-      display: block;
-    }
   }
 
   .mpr-hero-card-report {
     right: -1.25rem;
     top: 1.5rem;
     width: 15em;
+    display: none;
+    @media (min-width: $mpr-break) {
+      display: block;
+    }
 
     .mpr-hero-card-label {
       display: flex;
@@ -473,6 +481,7 @@
     border: 1px solid $mpr-outline-variant;
     border-radius: 1.125rem;
     background: #fff;
+    text-decoration: none;
 
     .mpr-link-card-title {
       font-family: "Bricolage Grotesque", sans-serif;
@@ -606,5 +615,10 @@
   .mpr-faq-more {
     justify-content: center;
     color: $mpr-primary;
+  }
+
+  .mpr-faq-chevron {
+    flex-shrink: 0;
+    color: $mpr-muted;
   }
 }

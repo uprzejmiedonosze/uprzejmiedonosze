@@ -149,8 +149,9 @@ label.menu {
     right: 0;
     color: black!important;
     background-color: variables.$secondaryColor;
-    border: 10px solid variables.$primaryColor;
+    border: none;
     padding: 8px 1em;
+    margin: 5px 10px;
 }
 
 .button-toggle {
@@ -212,7 +213,11 @@ label.menu {
 // app-menu (mpr-menu-list) renderowane w overlayu hamburgera na stronach /app:
 // to samo źródło co desktopowy rail. .nav daje biały slide-over; tu nadajemy
 // liście oddech i odsuwamy ją od górnej krawędzi (nav przykrywa fixed header).
-.nav > .mpr-menu-list {
+// Poza /app tą samą rolę pełni przejęty sidebar strony (mpr-sidebar / poradnikowy
+// how-sidebar-stack, wstrzyknięty przez base:sidebarNav) — ten sam odstęp.
+.nav > .mpr-menu-list,
+.nav > .mpr-sidebar,
+.nav > .how-sidebar-stack {
     margin: 0;
     padding: calc(#{variables.$headerHeight} + 0.5rem) 1.5rem 1.5rem;
 }

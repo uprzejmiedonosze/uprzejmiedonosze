@@ -1,8 +1,9 @@
 {# Szkielet overlaya nawigacji na mobile (menu.scss: #toggle / #courtain /
    slide-over .nav). Przyciski akcji (back / Zgłoś / Dalej / Zapisz) renderują
    się zawsze; pełna nawigacja (.nav) tylko gdy preset ma menu (showMenu) —
-   dzięki temu focus/auth/system nie niosą martwego overlaya. Treść nawigacji
-   pochodzi z jednego źródła: _site-menu.html.twig. #}
+   dzięki temu focus/auth/system nie niosą martwego overlaya. Treść overlaya to
+   menu strony: _app-menu (/app), przejęty sidebar (strony treściowe) albo
+   publiczna nawigacja headera (_public-nav) — nigdy legacy _site-menu. #}
 <input id="toggle" type="checkbox">
 
 <div id="courtain"></div>
@@ -38,11 +39,19 @@
 <div class="container">
     <nav class="nav" data-role-menu>
     {# na mobile overlay = to samo co desktopowy sidebar: sekcja /app niesie
-       app-menu, strony treściowe pełną nawigację serwisu #}
+       app-menu, strony treściowe przejmują własny sidebar (TOC / „Przeczytaj
+       także”, złapany do sidebarNav w base). Dopiero gdy strona nie ma sidebara
+       (np. homepage) spadamy na publiczną nawigację headera. #}
     {% if layout == 'app' %}
         {% include '_app-menu.html.twig' %}
+    {% elseif (sidebarNav ?? '')|trim is not empty %}
+        {{ sidebarNav|raw }}
     {% else %}
-        {% include '_site-menu.html.twig' %}
+        {# Strona bez sidebara (np. główna): overlay = mobilna wersja headera,
+           czyli CTA „Aplikacja” + te same linki co .mpr-navbar-links. Żadnego
+           legacy _site-menu z długą listą. #}
+        <a href="{{ navbarCtaHref ?? '/app' }}" class="first">{{ navbarCtaLabel ?? 'Aplikacja' }}</a>
+        {% include '_public-nav.html.twig' %}
     {% endif %}
     </nav>
 </div>

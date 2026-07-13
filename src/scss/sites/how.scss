@@ -3,12 +3,6 @@
 .how {
   font-family: "Public Sans", system-ui, sans-serif;
 
-  ul {
-    li + li {
-      margin-top: 10px;
-    }
-  }
-
   h2, h3 {
     font-family: "Bricolage Grotesque", sans-serif;
   }
@@ -150,17 +144,6 @@
           em {
             font-weight: 700;
             font-style: normal;
-          }
-
-          /* Paragraphs led by a bold label ("Kiedy stosować:",
-             "Anonimowość:", ...) get pulled out as tinted callout boxes,
-             matching the Claude Design mockup - purely a CSS treatment,
-             the markup itself is untouched. */
-          p:has(> em:first-child) {
-            background: #f5f8f5;
-            border-radius: 16px;
-            padding: 18px 22px;
-            margin: 1rem 0;
           }
         }
       }

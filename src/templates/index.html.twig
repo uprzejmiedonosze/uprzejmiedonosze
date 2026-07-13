@@ -4,10 +4,6 @@
 
 {% extends "base.html.twig" %}
 
-{% block headIncludes %}
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
-{% endblock %}
-
 {% block main %}
 
 <div class="main-page-redesign">
@@ -99,33 +95,6 @@
         </div>
     </section>
 
-    <section class="mpr-section mpr-section-tinted">
-        <h2 class="mpr-section-title">Poznaj aplikację UD</h2>
-        <div class="mpr-cards mpr-cards-3">
-            <div class="mpr-card mpr-card-primary">
-                <span class="material-symbols-outlined mpr-card-icon">receipt_long</span>
-                <h3>Wygodne automatyczne generowanie i wysyłka</h3>
-                <p>System sam generuje odpowiednie pisma i formularze na podstawie zdjęć i lokalizacji.
-                    Nie musisz znać paragrafów.</p>
-                <a href="/jak-zglosic-nielegalne-parkowanie.html">Czytaj dalej</a>
-            </div>
-            <div class="mpr-card mpr-card-secondary">
-                <span class="material-symbols-outlined mpr-card-icon">local_police</span>
-                <h3>W pełni poprawne i kompletne zgłoszenie</h3>
-                <p>Zgłoszenie trafia do właściwego oddziału Straży Miejskiej lub Policji,
-                    zgodnie z obowiązującymi przepisami.</p>
-                <a href="/przepisy.html">Czytaj dalej</a>
-            </div>
-            <div class="mpr-card mpr-card-tertiary">
-                <span class="material-symbols-outlined mpr-card-icon">public</span>
-                <h3>Ogólnopolski zasięg &ndash; jesteśmy w ponad {{ config.stats.sm }} miejscowościach</h3>
-                <p>Wysyłamy zgłoszenia do właściwych służb w całej Polsce, ułatwiając życie
-                    Tobie i służbom.</p>
-                <a href="/statystyki.html">Czytaj dalej</a>
-            </div>
-        </div>
-    </section>
-
     <section class="mpr-section">
         <h2 class="mpr-section-title">Dlaczego Uprzejmie Donoszę</h2>
         <div class="mpr-checklist">
@@ -176,15 +145,15 @@
         <div class="mpr-faq-list">
             <a class="mpr-faq-item" href="/faq.html">
                 Czy będę anonimowy?
-                <span class="material-symbols-outlined">expand_more</span>
+                <svg class="mpr-faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
             <a class="mpr-faq-item" href="/faq.html#swiadek">
                 Czy będę wzywany do złożenia zeznań?
-                <span class="material-symbols-outlined">expand_more</span>
+                <svg class="mpr-faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
             <a class="mpr-faq-item" href="#zabijmy-aplikacje">
                 Czy są inne sposoby?
-                <span class="material-symbols-outlined">expand_more</span>
+                <svg class="mpr-faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
             <a class="mpr-faq-item mpr-faq-more" href="/faq.html">
                 Mam inne pytania?
@@ -196,21 +165,27 @@
         <h2 class="mpr-section-title">Chcesz nas wspomóc?</h2>
         <div class="mpr-cards mpr-cards-3">
             <div class="mpr-card mpr-support-card">
-                <span class="material-symbols-outlined mpr-card-icon mpr-icon-tertiary">volunteer_activism</span>
+                <span class="mpr-card-icon mpr-icon-tertiary">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.35-7-9.5A3.5 3.5 0 0 1 12 7a3.5 3.5 0 0 1 7 3.5C19 15.65 12 20 12 20z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
                 <h3>Patronite</h3>
                 <p>Utrzymanie serwerów kosztuje. Dołącz do {{ config.stats.patrons }} Patronek
                     i Patronów i pomóż nam działać stabilnie.</p>
                 <a href="/patronite.html" class="mpr-button mpr-button-outline">Wspieram</a>
             </div>
             <div class="mpr-card mpr-support-card">
-                <span class="material-symbols-outlined mpr-card-icon mpr-icon-secondary">campaign</span>
+                <span class="mpr-card-icon mpr-icon-secondary">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l7 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg>
+                </span>
                 <h3>Rozgłos</h3>
                 <p>Powiedz znajomym. Im nas więcej, tym większa presja na służby.</p>
                 <a href="https://www.facebook.com/groups/patologiaparkingowa/" target="_blank" rel="external"
                     class="mpr-button mpr-button-outline">Udostępnij</a>
             </div>
             <div class="mpr-card mpr-support-card">
-                <span class="material-symbols-outlined mpr-card-icon mpr-icon-primary">code</span>
+                <span class="mpr-card-icon mpr-icon-primary">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/></svg>
+                </span>
                 <h3>Programiści</h3>
                 <p>Jesteśmy open-source. Dołącz do nas na GitHubie i pomóż rozwijać aplikację.</p>
                 <a href="https://github.com/uprzejmiedonosze/uprzejmiedonosze/" target="_blank" rel="external"
