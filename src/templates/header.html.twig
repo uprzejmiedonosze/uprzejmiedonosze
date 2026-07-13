@@ -14,19 +14,19 @@
     {% if isRedesignedHeader %}
     <div class="mpr-navbar">
         <a class="mpr-navbar-logo" href="/">Uprzejmie Donoszę</a>
-        {% if not (hideNavbarLinks ?? false) %}
+        {% if not (hideNavbarLinks ?? false) or not (hideNavbarCta ?? false) %}
         <nav class="mpr-navbar-links">
-            <a href="/jak-zglosic-nielegalne-parkowanie.html">Poradnik</a>
-            <a href="/patronite.html">Misja</a>
-            <a href="/kontakt.html">Kontakt</a>
+            {% if not (hideNavbarLinks ?? false) or not (hideNavbarCta ?? false) %}
+            {% include '_public-nav.html.twig' %}
+            {% endif %}
+            {% if not (hideNavbarCta ?? false) %}
+            {% if navbarCtaAction ?? false %}
+            <a class="mpr-navbar-cta {{ navbarCtaClass ?? '' }}">{{ navbarCtaLabel ?? 'Aplikacja' }}</a>
+            {% else %}
+            <a class="mpr-navbar-cta" href="{{ navbarCtaHref ?? '/app' }}">{{ navbarCtaLabel ?? 'Aplikacja' }}</a>
+            {% endif %}
+            {% endif %}
         </nav>
-        {% endif %}
-        {% if not (hideNavbarCta ?? false) %}
-        {% if navbarCtaAction ?? false %}
-        <a class="mpr-navbar-cta {{ navbarCtaClass ?? '' }}">{{ navbarCtaLabel ?? 'Aplikacja' }}</a>
-        {% else %}
-        <a class="mpr-navbar-cta" href="{{ navbarCtaHref ?? '/app' }}">{{ navbarCtaLabel ?? 'Aplikacja' }}</a>
-        {% endif %}
         {% endif %}
     </div>
     {% endif %}

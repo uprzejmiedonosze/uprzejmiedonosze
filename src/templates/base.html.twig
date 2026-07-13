@@ -45,6 +45,14 @@
 {% set leftButton      = leftButton      ?? (showMenu ? 'menu' : '') %}
 {% set _showFooter     = (_p.footer and not dialog) %}
 
+{# Poza /app hamburger przejmuje treść sidebara strony (spis treści /
+   „Przeczytaj także”) zamiast pełnej, legacy nawigacji serwisu — analogicznie
+   do tego, jak /app niesie w overlayu ten sam _app-menu co desktopowy rail.
+   Blok `sidebar` renderujemy do zmiennej TU, bo tylko base ma do niego dostęp
+   (zagnieżdżony _menu.html.twig już nie). Pusto (np. homepage bez sidebara) =>
+   _menu.html.twig spada na publiczną nawigację headera (_public-nav). #}
+{% set sidebarNav %}{% if layout != 'app' %}{{ block('sidebar') }}{% endif %}{% endset %}
+
 <!DOCTYPE html>
 <html lang="pl">
     <head>
@@ -119,7 +127,7 @@
         {% block sidebar %}
             {# domyślny rail sekcji /app: nawigacja app-menu (desktop) + opcjonalne
                panele strony (np. filtr statusów) w bloku sidebar_extra. Na mobile
-               nawigację niesie hamburger (_site-menu, jedno źródło), więc
+               nawigację niesie hamburger (_app-menu, to samo źródło), więc
                .mpr-sidebar-nav chowamy — patrz layout.scss. Strony static/main
                nadpisują cały blok sidebar własnym TOC/related. #}
             {% if hasSidebar and layout == 'app' %}

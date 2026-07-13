@@ -1,4 +1,4 @@
-{% set layout = 'app' %}
+{% set layout = (update ?? false) ? 'app' : 'focus' %}
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
 {% set navbarCtaHref = '/app/new' %}
 {% set navbarCtaLabel = 'Nowe zgłoszenie' %}

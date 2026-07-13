@@ -127,6 +127,10 @@
             &:hover {
                 text-decoration: underline;
             }
+
+            &.current {
+                font-weight: 600!important;
+            }
         }
     }
 
@@ -150,6 +154,18 @@
     @media (min-width: $mpr-break) {
         position: sticky;
         top: 2rem;
+    }
+}
+
+// Poza /app treść sidebara (spis treści / „Przeczytaj także”) na mobile żyje
+// w overlayu hamburgera (base.html.twig: sidebarNav → _menu.html.twig), więc
+// jej inline kopii NAD ARTYKUŁEM nie dublujemy. Scope na `.mpr-layout`, żeby
+// dotyczyło tylko kopii inline — bliźniaczy sidebar wstrzyknięty do overlaya
+// żyje w `.nav` (poza .mpr-layout) i musi zostać widoczny. Rail sekcji /app
+// (.mpr-sidebar--app, np. filtr statusów moje-zgloszenia) ma własne reguły.
+.rd25 .mpr-layout .mpr-sidebar:not(.mpr-sidebar--app) {
+    @media (max-width: $mpr-break) {
+        display: none;
     }
 }
 
@@ -277,7 +293,7 @@
 
 // --- Rail nawigacji sekcji /app: desktop-only -------------------------------
 // Nawigacja app-menu w railu jest tylko na desktopie; na mobile niesie ją
-// hamburger (_site-menu w overlayu — jedno źródło menu). Dzięki temu znika
+// hamburger (_app-menu w overlayu — to samo źródło menu). Dzięki temu znika
 // dawny duplikat: inline app-menu + overlay. Panele niebędące nawigacją
 // (np. filtr statusów `.status-filter` w moje-zgloszenia) zostają na mobile.
 .rd25 .mpr-sidebar--app .mpr-sidebar-nav {

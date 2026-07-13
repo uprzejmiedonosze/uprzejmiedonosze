@@ -22,7 +22,7 @@ body {
 
     @media (min-width: tokens.$mpr-break) {
         margin-top: 0;
-        padding: 0;
+        padding: 0 0 1em 0;
     }
 }
 

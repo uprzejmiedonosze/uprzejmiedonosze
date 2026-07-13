@@ -89,8 +89,8 @@ body > div > header {
 .mpr-navbar-links {
     display: flex;
     gap: 1.5rem;
-    // dosunięte do prawej (logo zostaje po lewej)
     margin-left: auto;
+    align-items: center;
 
     a {
         color: tokens.$mpr-on-surface-variant;

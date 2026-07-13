@@ -11,9 +11,7 @@
 <summary>Przeczytaj także</summary>
 <ul>
     {% for item in relatedColumn.items %}
-        {% if item.key != current %}
-        <li><a href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a></li>
-        {% endif %}
+        <li><a {% if item.key == current %}class="current"{% endif %} href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a></li>
     {% endfor %}
 </ul>
 </details>

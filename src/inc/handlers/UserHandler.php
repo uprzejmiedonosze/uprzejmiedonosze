@@ -14,6 +14,10 @@ class UserHandler extends AbstractHandler {
         $params = $request->getQueryParams();
         return AbstractHandler::renderHtml($request, $response, 'register', [
             'signInSuccessUrl' => $this->getParam($params, 'next', '/app/start'),
+            // Nowa rejestracja idzie w trybie „focus” (onboarding bez menu),
+            // a edycja istniejącego konta (link „Edycja konta” niesie ?update)
+            // w normalnym trybie „app”.
+            'update' => isset($params['update']),
             'user' => $user
         ]);
     }
