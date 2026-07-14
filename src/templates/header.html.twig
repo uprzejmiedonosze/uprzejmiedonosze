@@ -16,7 +16,7 @@
         <a class="mpr-navbar-logo" href="/">Uprzejmie Donoszę</a>
         {% if not (hideNavbarLinks ?? false) or not (hideNavbarCta ?? false) %}
         <nav class="mpr-navbar-links">
-            {% if not (hideNavbarLinks ?? false) or not (hideNavbarCta ?? false) %}
+            {% if not (hideNavbarLinks ?? false) %}
             {% include '_public-nav.html.twig' %}
             {% endif %}
             {% if not (hideNavbarCta ?? false) %}

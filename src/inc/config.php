@@ -27,29 +27,40 @@ $FOOTER_LINKS = [
         'title' => 'Warto wiedzieć',
         'items' => [
             ['key' => 'jak-zglosic-nielegalne-parkowanie', 'href' => '/jak-zglosic-nielegalne-parkowanie.html', 'label' => 'Poradnik „jak zgłaszać”'],
+            ['key' => 'czesto-popelniane-bledy', 'href' => '/czesto-popelniane-bledy.html', 'label' => 'Często popełniane błędy'],
+            ['key' => 'faq', 'href' => '/faq.html', 'label' => 'Najczęstsze pytania'],
+            ['key' => 'przepisy', 'href' => '/przepisy.html', 'label' => 'Przepisy zw. z parkowaniem'],
+            ['key' => 'mandat', 'href' => '/mandat.html', 'label' => 'Mandat społeczny'],
             ['key' => 'przesluchanie', 'href' => '/przesluchanie.html', 'label' => 'Wizyta na komisariacie'],
             ['key' => 'zwrot-za-przesluchanie', 'href' => '/zwrot-za-przesluchanie.html', 'label' => 'Zwrot środków za przesłuchanie'],
-            ['key' => 'dostep-do-informacji-publicznej', 'href' => '/dostep-do-informacji-publicznej.html', 'label' => 'Jak sprawdzić efekty pracy SM?'],
-            ['key' => 'faq', 'href' => '/faq.html', 'label' => 'Najczęstsze pytania'],
-            ['key' => 'e-doreczenia', 'href' => '/e-doreczenia.html', 'label' => 'e-Doręczenia'],
             ['key' => 'zazalenie-na-brak-mandatu', 'href' => '/zazalenie-na-brak-mandatu.html', 'label' => 'Zażalenie na brak mandatu'],
-            ['key' => 'przepisy', 'href' => '/przepisy.html', 'label' => 'Przepisy zw. z parkowaniem'],
+            ['key' => 'wniosek-odpowiedz1', 'href' => '/wniosek-odpowiedz1.html', 'label' => 'Odpowiedź na pismo'],
+            ['key' => 'dostep-do-informacji-publicznej', 'href' => '/dostep-do-informacji-publicznej.html', 'label' => 'Jak sprawdzić efekty pracy SM?'],
+            ['key' => 'e-doreczenia', 'href' => '/e-doreczenia.html', 'label' => 'e-Doręczenia'],
+            ['key' => 'epuap', 'href' => '/epuap.html', 'label' => 'Wysyłka przez ePUAP'],
+            ['key' => 'jak-zlozyc-wniosek-o-slupki', 'href' => '/jak-zlozyc-wniosek-o-slupki.html', 'label' => 'Wniosek o słupki'],
         ],
     ],
     'support' => [
         'title' => 'Warto wspierać',
         'items' => [
+            ['key' => 'napisz-pismo-do-polityka', 'href' => '/napisz-pismo-do-polityka.html', 'label' => 'Napisz pismo do polityka'],
             ['key' => 'patronite', 'href' => '/patronite.html', 'label' => 'Patronite'],
             ['key' => null, 'href' => 'https://agendaparkingowa.pl/', 'label' => 'Agenda Parkingowa', 'external' => true],
             ['key' => null, 'href' => 'https://www.change.org/Rowne-Prawa-Dla-Pieszych-i-Kierowcow', 'label' => 'Podpisz wniosek do RPO', 'external' => true],
+            ['key' => 'wniosek-rpo', 'href' => '/wniosek-rpo.html', 'label' => 'Wniosek do RPO'],
             ['key' => null, 'href' => 'https://www.facebook.com/groups/patologiaparkingowa/', 'label' => 'Grupa wsparcia na FB', 'external' => true],
             ['key' => null, 'href' => 'https://suppi.pl/uprzejmiedonosze', 'label' => 'Jednorazowa wpłata', 'external' => true],
             ['key' => 'naklejki-robisz-to-zle', 'href' => '/naklejki-robisz-to-zle.html', 'label' => 'Kup naklejki'],
+            ['key' => 'robtodobrze', 'href' => '/robtodobrze.html', 'label' => 'Rób to dobrze'],
         ],
     ],
     'project' => [
         'title' => 'O projekcie',
         'items' => [
+            ['key' => 'aplikacja', 'href' => '/aplikacja.html', 'label' => 'Aplikacja mobilna'],
+            ['key' => 'statystyki', 'href' => '/statystyki.html', 'label' => 'Statystyki'],
+            ['key' => 'galeria', 'href' => '/galeria.html', 'label' => 'Galeria recydywistów'],
             ['key' => null, 'href' => 'https://patronite.pl/uprzejmiedonosze/posts', 'label' => 'Comiesięczna aktualizacja', 'external' => true],
             ['key' => null, 'href' => 'https://x.com/SzymonNieradka', 'label' => 'Codzienne aktualizacje', 'external' => true],
             ['key' => 'changelog', 'href' => '/changelog.html', 'label' => 'Historia zmian'],
@@ -59,6 +70,19 @@ $FOOTER_LINKS = [
             ['key' => 'bezpieczenstwo', 'href' => '/bezpieczenstwo.html', 'label' => 'Bezpieczeństwo'],
             ['key' => 'kontakt', 'href' => '/kontakt.html', 'label' => 'Kontakt'],
         ],
+    ],
+];
+
+// Sekcja WIKI — tylko w sidebarze nawigacyjnym (_sidebar.html.twig), celowo poza
+// $FOOTER_LINKS, więc stopka jej nie renderuje. Same linki zewnętrzne (wiki.uprzejmiedonosze).
+$WIKI_LINKS = [
+    'title' => 'Wiki',
+    'items' => [
+        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/', 'label' => 'Wiki', 'external' => true],
+        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/start', 'label' => 'Niezbędnik', 'external' => true],
+        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/wzory_pism/start', 'label' => 'Wzory pism', 'external' => true],
+        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/jak_sprawdzic_wlasnosc_dzialki', 'label' => 'Własność działki', 'external' => true],
+        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/pytania', 'label' => 'Listy', 'external' => true],
     ],
 ];
 

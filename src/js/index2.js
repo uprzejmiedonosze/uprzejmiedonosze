@@ -20,6 +20,7 @@ import "./sites/how";
 import "./sites/ask-for-status"
 import "./sites/menu"
 import "./sites/frequent-mistakes"
+import "./lib/sidebar"
 import makeDialog from "./lib/dialog";
 
 document.querySelectorAll('.menu-button.right').forEach(button => {

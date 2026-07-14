@@ -4,7 +4,13 @@
 
 {% set title = 'Wysyłka przez EPUAP' %}
 
+{% set hasSidebar = true %}
+
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_sidebar.html.twig' with {'current': 'epuap'} %}
+{% endblock %}
 
 {% block main %}
 

@@ -5,7 +5,13 @@
 {% set title = 'Uprzejmie Donoszę jako aplikacja' %}
 {% set shortTitle = 'UD jako aplikacja' %}
 
+{% set hasSidebar = true %}
+
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_sidebar.html.twig' with {'current': 'aplikacja'} %}
+{% endblock %}
 
 {% block main %}
 
