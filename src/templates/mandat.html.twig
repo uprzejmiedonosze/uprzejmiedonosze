@@ -5,7 +5,13 @@
 {% set shortTitle = 'Mandat' %}
 {% set description = 'Mandat społeczny do zostawienia za wycieraczką' %}
 
+{% set hasSidebar = true %}
+
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_sidebar.html.twig' with {'current': 'mandat'} %}
+{% endblock %}
 {% block main %}
 <h2>Mandat społeczny "Robisz to Źle"</h2>
 

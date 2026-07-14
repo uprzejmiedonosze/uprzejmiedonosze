@@ -1,0 +1,22 @@
+{# Sidebar nawigacyjny: 4 zwijane sekcje (akordeon) — pełna nawigacja serwisu na
+   każdej stronie treściowej. Sekcja zawierająca bieżącą stronę jest rozwinięta,
+   pozostałe zwinięte; JS (js/lib/sidebar.js) pilnuje, by naraz otwarta była jedna.
+   Bieżąca strona (item.key == current) dostaje class="current" (pogrubienie).
+   WIKI celowo spoza $FOOTER_LINKS (nie trafia do stopki) — patrz config.php.
+   Użycie: {% include '_sidebar.html.twig' with {'current': '<klucz-strony>'} %} #}
+{% set sections = [footerLinks.know, footerLinks.support, footerLinks.project, wikiLinks] %}
+<aside class="mpr-sidebar mpr-sidebar--nav">
+{% for section in sections %}
+    {% set keys = section.items|map(item => item.key) %}
+    {% set isOpen = (current is defined and current is not empty and current in keys)
+                    or (loop.first and (current is not defined or current is empty)) %}
+    <details class="mpr-sidebar-section"{{ isOpen ? ' open' : '' }}>
+        <summary>{{ section.title }}</summary>
+        <ul>
+        {% for item in section.items %}
+            <li><a {% if current is defined and item.key == current %}class="current" {% endif %}href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a></li>
+        {% endfor %}
+        </ul>
+    </details>
+{% endfor %}
+</aside>

@@ -3,7 +3,13 @@
 
 {% set title = 'Rób to dobrze' %}
 
+{% set hasSidebar = true %}
+
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_sidebar.html.twig' with {'current': 'robtodobrze'} %}
+{% endblock %}
 
 {% block main %}
 

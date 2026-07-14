@@ -11,7 +11,15 @@
 {% set shortTitle = 'Często popełniane błędy' %}
 {% set description = 'Lista i opis najczęściej popełnianych błędów, wraz z informacją na czym polegają i jak ich unikać.' %}
 
+{% set hasSidebar = not dialog %}
+
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% if not dialog %}
+{% include '_sidebar.html.twig' with {'current': 'czesto-popelniane-bledy'} %}
+{% endif %}
+{% endblock %}
 {% block main %}
 
   {% macro link(target, name) %}

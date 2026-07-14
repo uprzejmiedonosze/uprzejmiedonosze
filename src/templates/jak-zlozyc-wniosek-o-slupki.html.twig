@@ -12,7 +12,15 @@
 {% set description = 'Jak złożyć wniosek o postawienie słupków utrudniających nielegalne parkowanie samochodu?' %}
 {% set mainClass = 'how' %}
 
+{% set hasSidebar = not dialog %}
+
 {% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% if not dialog %}
+{% include '_sidebar.html.twig' with {'current': 'jak-zlozyc-wniosek-o-slupki'} %}
+{% endif %}
+{% endblock %}
 {% block main %}
 
 	<h2>{{ shortTitle }}</h2>

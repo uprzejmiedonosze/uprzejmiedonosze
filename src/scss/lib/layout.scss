@@ -157,6 +157,90 @@
     }
 }
 
+// Sidebar nawigacyjny (_sidebar.html.twig): akordeon 4 sekcji. Inaczej niż panel
+// „Przeczytaj także” / TOC — sekcje są ZWIJANE na każdym viewportcie (znosimy
+// desktopowe pointer-events:none dla summary), a JS (js/lib/sidebar.js) pilnuje,
+// by naraz otwarta była jedna. Aside = jedna karta; sekcje w środku bez własnych
+// ramek, rozdzielone linią.
+.rd25 .mpr-sidebar--nav {
+    background: $mpr-surface-container-lowest;
+    border: 1px solid $mpr-outline-variant;
+    border-radius: 0.75rem;
+    padding: 0.25rem 0;
+
+    details {
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        padding: 0;
+    }
+
+    .mpr-sidebar-section + .mpr-sidebar-section {
+        border-top: 1px solid $mpr-outline-variant;
+    }
+
+    summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 0.85rem 1.25rem;
+        cursor: pointer;
+        pointer-events: auto;
+        list-style: none;
+        font-family: $font-body;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: $mpr-muted;
+
+        &::-webkit-details-marker { display: none; }
+        &::marker { content: ""; }
+
+        // chevron (rotacja przy [open])
+        &::after {
+            content: "";
+            width: 0.5rem;
+            height: 0.5rem;
+            border-right: 2px solid currentColor;
+            border-bottom: 2px solid currentColor;
+            transform: rotate(-45deg);
+            transition: transform 0.15s ease;
+            flex-shrink: 0;
+        }
+    }
+
+    details[open] > summary::after {
+        transform: rotate(45deg);
+    }
+
+    ul {
+        margin: 0 0 0.6rem;
+        padding: 0 1.25rem;
+        list-style: none;
+    }
+
+    li {
+        margin-bottom: 0.4rem;
+    }
+
+    ul a {
+        color: $mpr-on-surface;
+        font-weight: 500;
+        text-decoration: none;
+
+        &:hover {
+            color: $mpr-primary;
+        }
+
+        &.current {
+            font-weight: 800;
+            color: $mpr-primary-dark;
+        }
+    }
+}
+
 // Poza /app treść sidebara (spis treści / „Przeczytaj także”) na mobile żyje
 // w overlayu hamburgera (base.html.twig: sidebarNav → _menu.html.twig), więc
 // jej inline kopii NAD ARTYKUŁEM nie dublujemy. Scope na `.mpr-layout`, żeby
