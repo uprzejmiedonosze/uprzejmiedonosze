@@ -21,6 +21,15 @@ use Slim\Psr7\Response as ResponseObject;
 class OAuthHandler extends AbstractHandler {
 
     public function authorize(Request $request, Response $response) {
+        $params = $request->getQueryParams();
+        // Returning from login: the original query was passed as a single
+        // URL-safe blob (?req=...), because the app's login `next` round-trip
+        // truncates a URL that contains '&' separators. Restore it.
+        if (!empty($params['req'])) {
+            parse_str(self::b64urlDecode($params['req']), $params);
+            $request = $request->withQueryParams($params);
+        }
+
         $server = \oauth\authorizationServer();
         try {
             $authRequest = $server->validateAuthorizationRequest($request);
@@ -28,12 +37,11 @@ class OAuthHandler extends AbstractHandler {
             return $e->generateHttpResponse($response);
         }
 
-        // Not logged in: bounce through Firebase login, preserving the FULL
-        // authorize URL (LoggedInMiddleware would drop the query string).
+        // Not logged in: bounce through Firebase login. Pass the request as one
+        // blob param so it survives the login flow's next-handling intact.
         if (!$request->getAttribute('isLoggedIn')) {
-            $uri = $request->getUri();
-            $full = $uri->getPath() . ($uri->getQuery() ? '?' . $uri->getQuery() : '');
-            return AbstractHandler::redirect('/login.html?next=' . urlencode($full));
+            $next = '/oauth/authorize?req=' . self::b64urlEncode(http_build_query($params));
+            return AbstractHandler::redirect('/login.html?next=' . urlencode($next));
         }
 
         $csrf = bin2hex(random_bytes(16));
@@ -48,10 +56,18 @@ class OAuthHandler extends AbstractHandler {
             'oauth' => [
                 'clientName' => $authRequest->getClient()->getName(),
                 'scopes' => $scopeLabels,
-                'query' => $request->getUri()->getQuery(),
+                'query' => http_build_query($params),
                 'csrf' => $csrf,
             ],
         ]);
+    }
+
+    private static function b64urlEncode(string $value): string {
+        return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
+    }
+
+    private static function b64urlDecode(string $value): string {
+        return (string) base64_decode(strtr($value, '-_', '+/'));
     }
 
     public function consent(Request $request, Response $response) {
