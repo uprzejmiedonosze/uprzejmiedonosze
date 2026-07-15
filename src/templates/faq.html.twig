@@ -26,7 +26,7 @@
 <ul>
 	<li>{{ _self.link('telefon', 'Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?') }}</li>
 	<li>{{ _self.link('to', 'Czy "to" warto zgłaszać?') }}</li>
-	<li>{{ _self.link('anonimowosc', 'Czy będę ' . config.sex.swiadoma . '?') }}</li>
+	<li>{{ _self.link('anonimowosc', 'Czy będę ' ~ (config.sex.anonimowa ?? 'anonimowa/y') ~ '?') }}</li>
 	<li>{{ _self.link('swiadek', 'Czy zostanę wezwany na świadka?') }}</li>
 	<li>{{ _self.link('recydywa', 'Czy zgłaszać ten sam pojazd kilka razy?') }}</li>
 	<li>{{ _self.link('kategorie', 'Dlaczego nie mogę zaznaczyć kilku kategorii przy zgłoszeniu?') }}</li>
@@ -72,7 +72,7 @@
 		twoje zgłoszenie Straż miejska musi poświęcić kilka godzin swojej pracy.
 		I wtedy zastanów się, czy przypadek, który chcesz zgłosić jest warty tego wysiłku.</p>
 
-	<h4 id="anonimowosc">Czy zostanę wezwany na świadka?</h4>
+	<h4 id="anonimowosc">Czy będę {{ config.sex.anonimowa ?? 'anonimowa/y' }}?</h4>
 	<p>Sprawca wykroczenia ma prawo poznać jedynie twoje imię i nazwisko. Twój adres
 		zamieszkania jest chroniony. Poradnik z różnymi formami zgłaszania wykroczeń
 		z uwzględnieniem anonimowości znajdziesz w
@@ -81,7 +81,7 @@
 		<a href="/bezpieczenstwo.html">bezpieczeństwo</a>.
 	</p>
 
-	<h4 id="swiadek">Czy zostanę wezwany na świadka?</h4>
+	<h4 id="swiadek">Czy zostanę {{ config.sex.wezwana }} na świadka?</h4>
 	<p>To zależy od miasta w którym zgłaszasz. Dowiedz się więcej na stronie
 		<a href="/przesluchanie.html">Czy straż miejska wezwie mnie na przesłuchanie?</a>
 	</p>
