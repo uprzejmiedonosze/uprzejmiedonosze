@@ -52,6 +52,7 @@
   @media (min-width: $mpr-break) {
     .mpr-hero-inner,
     .mpr-trust-band,
+    .mpr-steps,
     .mpr-cards {
       box-sizing: border-box;
       padding-inline: $mpr-gutter;
@@ -67,6 +68,12 @@
   .mpr-section-tinted {
     @include layout.full-bleed;
     background: $mpr-surface-container-low;
+  }
+
+  /* "Dlaczego Uprzejmie Donoszę" — jasny pasek na całą szerokość */
+  .mpr-section-why {
+    @include layout.full-bleed;
+    background: #F6F8F5;
   }
 
   .mpr-section-title {
@@ -381,6 +388,43 @@
       margin-top: 4px;
       overflow-wrap: break-word;
     }
+  }
+
+  /* Numbered steps ("Jak to działa") */
+  .mpr-steps {
+    display: grid;
+    gap: 1.75rem;
+    max-width: 75em;
+    margin: 0 auto;
+
+    @media (min-width: $mpr-break) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .mpr-step-number {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: $mpr-primary;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.875rem;
+    background: $mpr-primary-container;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mpr-step h3 {
+    font-size: 1.2rem;
+    margin: 1.1rem 0 0.4rem;
+  }
+
+  .mpr-step p {
+    color: $mpr-on-surface-variant;
+    margin: 0;
+    line-height: 1.55;
   }
 
   /* "Zobacz UD w akcji" — auto-cycling demo: interactive steps on the left,
