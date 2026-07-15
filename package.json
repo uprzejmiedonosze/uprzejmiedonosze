@@ -7,7 +7,6 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
     "@sentry/browser": "^10.39.0",
-    "@sentry/tracing": "^7.120.4",
     "exif-js": "^2.3.0",
     "exifreader": "^4.36.2",
     "firebase": "^12.9.0",

@@ -1,4 +1,5 @@
 {% set layout = (update ?? false) ? 'app' : 'focus' %}
+{% set appShell = true %}{# tło sekcji /app także w wariancie focus (rejestracja) #}
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
 {% set navbarCtaHref = '/app/new' %}
 {% set navbarCtaLabel = 'Nowe zgłoszenie' %}
@@ -8,7 +9,7 @@
 {% block main %}
 
 <form action="/app/register-ok?next={{ signInSuccessUrl ?? '/app/start' }}" id="register-form" method="post">
-    <h3>Dane konta</h3>
+    <h2>Dane konta</h2>
     <p>Aby dokonać zgłoszenia musisz podać swoje imię, nazwisko, adres e-mail oraz adres korespondencyjny.
         Jest to minimalny zestaw informacji jakich wymaga SM do przyjęcia zgłoszenia.</p>
     <p>
@@ -67,4 +68,12 @@
         Potwierdź
     </a>
 </form>
+
+{# Na mobile /app nie ma już burgera (tabbar zastępuje nawigację), więc wylogowanie
+   mieszka tu. Na desktopie tę akcję niesie sidebar _app-menu — stąd tylko mobile. #}
+{% if update ?? false %}
+<p class="app-mobile-only app-account-logout">
+    <a href="/logout.html">Wyloguj się</a>
+</p>
+{% endif %}
 {% endblock %}

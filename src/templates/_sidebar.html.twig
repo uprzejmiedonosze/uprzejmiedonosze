@@ -1,20 +1,28 @@
-{# Sidebar nawigacyjny: 4 zwijane sekcje (akordeon) — pełna nawigacja serwisu na
+{# Sidebar nawigacyjny: zwijane sekcje (akordeon) — pełna nawigacja serwisu na
    każdej stronie treściowej. Sekcja zawierająca bieżącą stronę jest rozwinięta,
    pozostałe zwinięte; JS (js/lib/sidebar.js) pilnuje, by naraz otwarta była jedna.
    Bieżąca strona (item.key == current) dostaje class="current" (pogrubienie).
-   WIKI celowo spoza $FOOTER_LINKS (nie trafia do stopki) — patrz config.php.
    Użycie: {% include '_sidebar.html.twig' with {'current': '<klucz-strony>'} %} #}
-{% set sections = [footerLinks.know, footerLinks.support, footerLinks.project, wikiLinks] %}
+{% set sections = [footerLinks.know, footerLinks.support, footerLinks.project] %}
+{# Klucz bieżącej strony: jawny `current` (include’y na desktopie) albo — gdy go
+   brak (render centralny w overlayu hamburgera) — dopasowanie po adresie:
+   item.href == ścieżka general.uri (bez query stringu). #}
+{% set resolvedCurrent = current ?? '' %}
+{% if resolvedCurrent is empty %}
+    {% set path = (general.uri ?? '')|split('?')|first %}
+    {% set matched = sections|reduce((acc, s) => acc|merge(s.items), [])|filter(i => i.key is not null and i.href == path) %}
+    {% set resolvedCurrent = (matched|length) > 0 ? (matched|first).key : '' %}
+{% endif %}
 <aside class="mpr-sidebar mpr-sidebar--nav">
 {% for section in sections %}
     {% set keys = section.items|map(item => item.key) %}
-    {% set isOpen = (current is defined and current is not empty and current in keys)
-                    or (loop.first and (current is not defined or current is empty)) %}
+    {% set isOpen = (resolvedCurrent is not empty and resolvedCurrent in keys)
+                    or (loop.first and resolvedCurrent is empty) %}
     <details class="mpr-sidebar-section"{{ isOpen ? ' open' : '' }}>
         <summary>{{ section.title }}</summary>
         <ul>
         {% for item in section.items %}
-            <li><a {% if current is defined and item.key == current %}class="current" {% endif %}href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a></li>
+            <li><a {% if resolvedCurrent is not empty and item.key == resolvedCurrent %}class="current" {% endif %}href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a></li>
         {% endfor %}
         </ul>
     </details>

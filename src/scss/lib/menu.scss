@@ -1,4 +1,5 @@
 @use "variables";
+@use "tokens";
 @use "button";
 @use "badge";
 
@@ -91,18 +92,16 @@ nav.nav > a, nav.nav > .spacer {
     }
 
     &.first {
+        display: flex;
+        align-items: center;
         background-color: variables.$primaryColor;
         color: white !important;
         font-weight: 700;
         height: variables.$headerHeight;
-        padding-top: 16px;
+        padding: 0 14px;
         &:hover {
             color: white !important;
         }
-    }
-
-    &.first + a {
-        padding-top: 22px;
     }
 
     &:hover {
@@ -141,17 +140,51 @@ label.menu {
 .menu-button.left {
     @extend .menu-button;
     left: 0;
-    margin: 5px 25px 25px 10px;
+    // Lekki, bezramkowy „← wróć/popraw" (nagłówek /app/new, /app/confirm) —
+    // sama strzałka + tekst, wyśrodkowany w pionie nagłówka. Bez tła/obrysu/cienia
+    // dziedziczonych z .button.
+    top: calc(#{variables.$headerHeight} / 2);
+    transform: translateY(-50%);
+    margin: 0 25px 0 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    color: tokens.$mpr-primary !important;
+    font-weight: 600;
+
+    &::before {
+        content: "←";
+        font-size: 1.05em;
+        line-height: 1;
+    }
+
+    &:hover {
+        color: tokens.$mpr-primary-dark !important;
+    }
+
+    &:active {
+        transform: translateY(calc(-50% + 2px));
+    }
 }
 
 .menu-button.right {
     @extend .menu-button;
     right: 0;
+    // pigułka CTA („Dalej"/„Zapisz!") wyśrodkowana w pionie nagłówka
+    top: calc(#{variables.$headerHeight} / 2);
+    transform: translateY(-50%);
     color: black!important;
     background-color: variables.$secondaryColor;
     border: none;
     padding: 8px 1em;
-    margin: 5px 10px;
+    margin: 0 10px;
+
+    &:active {
+        transform: translateY(calc(-50% + 2px));
+    }
 }
 
 .button-toggle {
@@ -210,14 +243,24 @@ label.menu {
 
 }
 
-// app-menu (mpr-menu-list) renderowane w overlayu hamburgera na stronach /app:
-// to samo źródło co desktopowy rail. .nav daje biały slide-over; tu nadajemy
-// liście oddech i odsuwamy ją od górnej krawędzi (nav przykrywa fixed header).
-// Poza /app tą samą rolę pełni przejęty sidebar strony (mpr-sidebar / poradnikowy
-// how-sidebar-stack, wstrzyknięty przez base:sidebarNav) — ten sam odstęp.
-.nav > .mpr-menu-list,
-.nav > .mpr-sidebar,
-.nav > .how-sidebar-stack {
+// Publiczny overlay hamburgera (menu jednolite na wszystkich stronach): pasek
+// CTA „Aplikacja" (.first) u góry + accordion nawigacji serwisu (.mpr-sidebar--nav).
+// Pasek .first zajmuje strefę nagłówka, więc accordion nie potrzebuje offsetu pod
+// fixed-headerem. Accordion WYPEŁNIA panel: bez ramki/karty (którą ma inline na
+// desktopie), edge-to-edge — wewnętrzny padding niosą już summary/ul.
+.nav > .mpr-sidebar--nav {
     margin: 0;
-    padding: calc(#{variables.$headerHeight} + 0.5rem) 1.5rem 1.5rem;
+    padding: 0.5rem 0 1.5rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+
+// „Strona główna" — pozycja nad accordionem (między CTA „Aplikacja" a sekcją
+// „Warto wiedzieć"), wyrównana do lewego wcięcia nagłówków sekcji accordionu.
+.nav > .mpr-menu-home {
+    display: block;
+    padding: 0.85rem 1.25rem;
+    font-weight: 600;
+    text-decoration: none;
 }

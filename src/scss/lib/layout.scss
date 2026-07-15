@@ -266,11 +266,15 @@
     }
 }
 
-// Nawigacja dashboardu (nie TOC strony): bez punktorów, odstępy jak w starym
-// hamburgerze. Scope na samą listę, żeby dzieliła <aside> z innymi listami
-// (np. filtr statusów moje-zgloszenia).
+// Nawigacja dashboardu (mockup „Dashboard.dc.html" → boczny <nav> „Menu"):
+// pozycje to inset pigułki (padding 11/12, radius 10) rozdzielone gapem 4px —
+// tło aktywnej/hover NIE wykrwawia się na krawędź karty (jest wcięte w jej
+// padding). Scope na samą listę, żeby dzieliła <aside> z innymi listami.
 .rd25 .mpr-menu-list {
-    margin: 0.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
     padding-left: 0;
     list-style: none;
 
@@ -278,56 +282,70 @@
         margin-bottom: 0;
     }
 
-    // margin/padding znoszą się (oba 1.25rem), więc tekst siada bez wcięcia,
-    // a tło .active może wykrwawić się na pełną szerokość karty.
     a {
-        display: block;
-        margin: 0 -1.25rem;
-        padding: 0.875rem 1.25rem;
-        border-radius: 0.75rem;
-        color: $mpr-on-surface;
-        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 11px 12px;
+        border-radius: 10px;
+        color: #25332b; // mockup: tekst pozycji nieaktywnej
+        font-weight: 500;
+        font-size: 15.5px;
         text-decoration: none;
     }
 
+    // pigułka licznika (mockup): wypełniony zielony badge (radius 999px, pionowy
+    // padding) — nadpisuje ciasny bazowy .badge (padding: 0 .48em, radius 20px,
+    // top: -1px).
     .badge {
+        margin-left: 0.5em;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: $mpr-primary-dark;
         background: $mpr-primary-container;
         border-color: transparent;
-        color: $mpr-primary-dark;
-        font-weight: 700;
+        top: 0;
     }
 
     a.active {
         background: $mpr-primary-container;
-        color: $mpr-primary-dark;
+        color: $mpr-primary;
+        font-weight: 600;
+
+        // na aktywnej pozycji tło pigułki licznika == tło wiersza (oba
+        // $mpr-primary-container), więc badge by zniknął — biały fill trzyma
+        // licznik widoczny (mockup nie ma pozycji aktywnej z liczbą).
+        .badge {
+            background: #fff;
+        }
     }
 
     .menu-item-divider {
-        margin-top: 0.75rem;
-        padding-top: 0.75rem;
-        border-top: 1px solid $mpr-outline-variant;
+        margin-top: 6px;
+        padding-top: 12px;
+        border-top: 1px solid #eeece6; // mockup: separator nad „Wyloguj się"
 
         a {
-            color: $mpr-on-surface-variant;
+            color: $mpr-muted;
             font-weight: 500;
         }
     }
 }
 
-// "MENU" — mała, uppercase etykieta zamiast pogrubionego nagłówka TOC/related.
+// "MENU" — mała, uppercase etykieta (mockup: Bricolage Grotesque 13px/.06em,
+// 14px odstępu do pierwszej pozycji) zamiast pogrubionego nagłówka TOC/related.
 .rd25 .mpr-sidebar--toc:has(.mpr-menu-list) summary {
-    font-family: $font-body;
+    font-family: $font-display;
     font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
+    font-size: 13px;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: $mpr-muted;
-}
-
-// filtr statusów moje-zgloszenia przeniesiony do sidebara: wymuś jedną kolumnę
-// (my-apps.scss zakłada szeroką kolumnę artykułu, nie 18em rail).
-.rd25 .mpr-sidebar .status-filter {
-    columns: 1 !important;
+    margin-bottom: 14px;
 }
 
 // Czytelność desktopu: tekst artykułu z bazy pikselowej, nagłówki na foncie
@@ -376,24 +394,21 @@
 }
 
 // --- Rail nawigacji sekcji /app: desktop-only -------------------------------
-// Nawigacja app-menu w railu jest tylko na desktopie; na mobile niesie ją
-// hamburger (_app-menu w overlayu — to samo źródło menu). Dzięki temu znika
-// dawny duplikat: inline app-menu + overlay. Panele niebędące nawigacją
-// (np. filtr statusów `.status-filter` w moje-zgloszenia) zostają na mobile.
-.rd25 .mpr-sidebar--app .mpr-sidebar-nav {
+// Rail (nawigacja app-menu) pokazujemy tylko na desktopie; na mobile niesie ją
+// hamburger (_app-menu w overlayu — to samo źródło menu), a filtr statusów
+// moje-zgloszenia żyje teraz w kolumnie artykułu nad listą (nie w railu).
+// Chowamy cały aside, żeby nie zostawiać pustej kolumny / odstępu nad treścią.
+.rd25 .mpr-sidebar--app {
     display: none;
-}
-// rail, który poza ukrytą nawigacją nie ma innych paneli, chowamy w całości,
-// żeby nie zostawiać pustej kolumny / odstępu nad treścią.
-.rd25 .mpr-sidebar--app:not(:has(.status-filter)) {
-    display: none;
-}
 
-@media (min-width: $mpr-break) {
-    .rd25 .mpr-sidebar--app .mpr-sidebar-nav {
+    @media (min-width: $mpr-break) {
         display: block;
     }
-    .rd25 .mpr-sidebar--app:not(:has(.status-filter)) {
-        display: block;
+
+    // karta menu (mockup): większy promień i padding niż domyślny panel TOC
+    // (.mpr-sidebar details = radius .75rem / padding 1rem 1.25rem).
+    details {
+        border-radius: 18px;
+        padding: 26px;
     }
 }

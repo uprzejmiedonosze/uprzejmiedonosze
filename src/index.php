@@ -118,6 +118,7 @@ $app->group('', function (RouteCollectorProxy $group) { // Application
     //$group->any('/nowe-zgloszenie.html', function () { return AbstractHandler::redirect('/maintenance.html'); });
 
     $group->get('/app', StaticPagesHandler::class . ':app');
+    $group->get('/app/', function () { return AbstractHandler::redirect('/app'); });
     $group->get('/app/start', ApplicationHandler::class . ':start');
     $group->get('/start.html', function () { return AbstractHandler::redirect('/app/start'); });
     $group->get('/app/new', ApplicationHandler::class . ':newApplication');
@@ -182,8 +183,15 @@ $app->group('/.well-known', function (RouteCollectorProxy $group) { // user regi
 $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/', StaticPagesHandler::class . ':root');
 
+    // Kanoniczny adres zgłoszenia: /app/{appId} (widok „app" dla właściciela,
+    // „focus" dla osoby postronnej — patrz zgloszenie.html.twig). Dostępny
+    // publicznie (OptionalUserMiddleware tej grupy), bo to też link do
+    // udostępniania. appId to losowy 12-znakowy ciąg base64url, więc nie koliduje
+    // ze statycznymi trasami /app/* (te i tak mają w FastRoute pierwszeństwo).
+    $group->get('/app/{appId}', StaticPagesHandler::class . ':applicationHtml');
+    // Stare, publiczne adresy → trwałe przekierowanie na kanoniczny /app/{appId}.
     $group->get('/zgloszenie.html', StaticPagesHandler::class . ':applicationRedirect');
-    $group->get('/ud-{appId}.html', StaticPagesHandler::class . ':applicationHtml');
+    $group->get('/ud-{appId}.html', function ($request, $response, $args) { return AbstractHandler::redirect('/app/' . $args['appId'], 301); });
 
     $group->get('/login.html', StaticPagesHandler::class . ':login');
     $group->get('/login-ok.html', StaticPagesHandler::class . ':loginOK');
@@ -195,6 +203,19 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/faq.html', StaticPagesHandler::class . ':faq');
     $group->get('/przesluchanie.html', StaticPagesHandler::class . ':hearing');
     $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
+
+    // Strony przeniesione do wiki — trwałe przekierowanie (301). Statyczne trasy
+    // mają w FastRoute pierwszeństwo przed wzorcem /{route}.html poniżej.
+    $wikiRedirects = [
+        '/przepisy.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/przepisy_i_kategorie_zgloszen',
+        '/e-doreczenia.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/wysylka_przez_e-doreczenia',
+        '/epuap.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/wysylka_przez_epuap',
+        '/zwrot-za-przesluchanie.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/zwrot_srodkow_za_przesluchanie',
+        '/zazalenie-na-brak-mandatu.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/jak_napisac_zazalenie_na_decyzje_strazy_miejskiej_lub_policji',
+    ];
+    foreach ($wikiRedirects as $from => $to) {
+        $group->get($from, function () use ($to) { return AbstractHandler::redirect($to, 301); });
+    }
 
     $group->get('/{route}.html', StaticPagesHandler::class . ':default');
 

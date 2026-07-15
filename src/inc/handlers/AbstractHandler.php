@@ -6,9 +6,9 @@ use Slim\Psr7\Response as ResponseObject;
 use Slim\Views\Twig;
 
 abstract class AbstractHandler {
-    public static function redirect(string $newLocation): Response {
-        logger(static::class . ":redirect to $newLocation");
-        $response = new ResponseObject(302);
+    public static function redirect(string $newLocation, int $status = 302): Response {
+        logger(static::class . ":redirect ($status) to $newLocation");
+        $response = new ResponseObject($status);
         $response = $response->withHeader('Location', $newLocation);
         return $response;
     }

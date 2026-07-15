@@ -6,24 +6,20 @@
 
 {% extends "base.html.twig" %}
 
-{% block sidebar_extra %}
-{% if applications|length > 0 %}
-<details open>
-<summary>Filtruj</summary>
-<ul class="status-filter">
-{% for key,val in statuses %}
-    <li class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|upper }}</a> <span class="li-count"></span></li>
-{% endfor %}
-</ul>
-</details>
-{% endif %}
-{% endblock %}
-
 {% block main %}
 
 <h2>Przeglądaj swoje zgłoszenia</h2>
 {% if countChanged > 0 %}
 <p><b>(zmieniliśmy status {{ countChanged }} zgłoszeń)</b></p>
+{% endif %}
+
+{# Na mobile /app nie ma już burgera — „Zapytaj o status" (dla zgłoszeń czekających
+   na odpowiedź) mieszka tu. Na desktopie niesie ją sidebar _app-menu, stąd mobile-only. #}
+{% if general.stats['confirmed-waiting'] is defined and general.stats['confirmed-waiting'] > 0 %}
+<p class="app-mobile-only">
+    <a href="/app/ask-for-status?update" class="button light">Zapytaj o status
+        ({{ general.stats['confirmed-waiting'] }})</a>
+</p>
 {% endif %}
 
 {% if applications|length == 0 %}
@@ -47,6 +43,11 @@
     <form autocomplete="off">
         <input autocomplete="false" data-type="filterable" type="text" id="apps"
             placeholder="Adres, numer rej. lub zgłoszenia, data, komentarz" value="{{ query }}">
+        <ul class="status-filter">
+        {% for key,val in statuses %}
+            <li class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|upper }}</a> <span class="li-count"></span></li>
+        {% endfor %}
+        </ul>
     </form>
     
     <dialog data-role="popup" id="patronite">

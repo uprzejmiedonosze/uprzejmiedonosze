@@ -5,18 +5,18 @@
 
 <div class="images-slider">
     <div class="imageContainer">
-        <a target="_blank" href="/ud-{{ app.id }}.html">
+        <a target="_blank" href="/app/{{ app.id }}">
             {% if app.contextImage.thumb ?? false %}<img src="{{ app.contextImage.thumb|asset_url }}?v={{ app.getRevision }}">{% endif %}
         </a>
     </div>
     <div class="imageContainer">
-        <a target="_blank" href="/ud-{{ app.id }}.html">
+        <a target="_blank" href="/app/{{ app.id }}">
             {% if app.carImage.thumb ?? false %}<img src="{{ app.carImage.thumb|asset_url }}?v={{ app.getRevision }}">{% endif %}
         </a>
     </div>
     {% if app.thirdImage ?? false %}
     <div class="imageContainer thirdImage">
-        <a target="_blank" href="/ud-{{ app.id }}.html">
+        <a target="_blank" href="/app/{{ app.id }}">
             <img src="{{ app.thirdImage.thumb|asset_url }}?v={{ app.getRevision }}">
         </a>
     </div>

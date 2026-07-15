@@ -250,12 +250,14 @@ div[data-role="collapsibleset"] {
 
 }
 
-/* Dashboard sits on a full-width tinted surface (mockup Image 7) so the white
-   cards (menu rail, stat/link cards, badges) read as elevated. The tint rides
-   on <body> — set by app.html.twig's mainClass="app" — so it reaches both
-   edges of the viewport; the header keeps its own white background
-   (header.scss). $mpr-surface itself is #fff (card colour), hence the literal. */
-body.app {
+/* The whole /app section sits on a full-width tinted surface (mockup Image 7)
+   so the white cards (menu rail, stat/link cards, list rows, badges) read as
+   elevated. The tint rides on <body> — set by base.html.twig's `app-shell`
+   class on every layout=='app' page (dashboard, list, ask-for-status, account)
+   — so it reaches both edges of the viewport and every app page shares one
+   background; the header keeps its own white background (header.scss).
+   $mpr-surface itself is #fff (card colour), hence the literal. */
+body.app-shell {
   background-color: #f4f3ef;
 }
 
@@ -547,10 +549,39 @@ body.app {
   display: none;
 }
 
+/* Akcje mobilne sekcji /app (wyloguj, zapytaj o status) — na desktopie ukryte,
+   bo niesie je sidebar _app-menu; pokazywane w media query poniżej. */
+.app-mobile-only {
+  display: none;
+}
+
+.app-account-logout {
+  margin-top: 2rem;
+  text-align: center;
+
+  a {
+    color: #8a9690;
+    text-decoration: underline;
+  }
+}
+
 @media (max-width: variables.$width-break) {
-  body:has(.app-tabbar) {
-    /* keep content from being hidden behind the fixed bar */
-    padding-bottom: 4.5rem;
+  /* Reserve space for the fixed bar on .ui-page, NOT body: this is a jQuery
+     Mobile shell where .ui-page is position:absolute (index.scss) and its
+     content — not body — defines the scroll height, so padding on body has no
+     effect. The bar's own height includes env(safe-area-inset-bottom) (home
+     indicator), so the reservation adds the same inset or content stays
+     clipped by it. */
+  .ui-page:has(.app-tabbar) {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Akcje przeniesione z usuniętego burgera /app (wyloguj → /app/account,
+     zapytaj o status → /app/list). Tylko mobile — na desktopie niesie je
+     sidebar _app-menu, więc domyślnie ukryte (patrz reguła .app-mobile-only
+     poza media query). */
+  .app-mobile-only {
+    display: block;
   }
 
   .app-tabbar {

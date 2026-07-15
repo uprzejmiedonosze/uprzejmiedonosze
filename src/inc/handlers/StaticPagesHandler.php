@@ -96,7 +96,7 @@ class StaticPagesHandler extends AbstractHandler {
     public function applicationRedirect(Request $request) {
         $params = $request->getQueryParams();
         $appId = $this->getParam($params, 'id');
-        return AbstractHandler::redirect("/ud-$appId.html");
+        return AbstractHandler::redirect("/app/$appId", 301);
     }
 
     public function applicationHtml(Request $request, Response $response, $args) {
