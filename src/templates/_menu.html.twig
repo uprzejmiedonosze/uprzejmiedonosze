@@ -38,21 +38,13 @@
 {% if showMenu ?? false %}
 <div class="container">
     <nav class="nav" data-role-menu>
-    {# na mobile overlay = to samo co desktopowy sidebar: sekcja /app niesie
-       app-menu, strony treściowe przejmują własny sidebar (TOC / „Przeczytaj
-       także”, złapany do sidebarNav w base). Dopiero gdy strona nie ma sidebara
-       (np. homepage) spadamy na publiczną nawigację headera. #}
-    {% if layout == 'app' %}
-        {% include '_app-menu.html.twig' %}
-    {% elseif (sidebarNav ?? '')|trim is not empty %}
-        {{ sidebarNav|raw }}
-    {% else %}
-        {# Strona bez sidebara (np. główna): overlay = mobilna wersja headera,
-           czyli CTA „Aplikacja” + te same linki co .mpr-navbar-links. Żadnego
-           legacy _site-menu z długą listą. #}
+    {# Publiczny burger na mobile: zawsze CTA „Aplikacja” + accordion nawigacji
+       serwisu (_sidebar.html.twig) — jedno spójne menu na każdej stronie,
+       niezależnie od sidebara danej strony. Sekcja /app nie renderuje tego
+       overlaya (preset layout=app ma menu:false), więc nie ma tu gałęzi app. #}
         <a href="{{ navbarCtaHref ?? '/app' }}" class="first">{{ navbarCtaLabel ?? 'Aplikacja' }}</a>
-        {% include '_public-nav.html.twig' %}
-    {% endif %}
+        <a href="/" class="mpr-menu-home">Strona główna</a>
+        {% include '_sidebar.html.twig' %}
     </nav>
 </div>
 {% endif %}

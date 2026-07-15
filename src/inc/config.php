@@ -29,15 +29,13 @@ $FOOTER_LINKS = [
             ['key' => 'jak-zglosic-nielegalne-parkowanie', 'href' => '/jak-zglosic-nielegalne-parkowanie.html', 'label' => 'Poradnik „jak zgłaszać”'],
             ['key' => 'czesto-popelniane-bledy', 'href' => '/czesto-popelniane-bledy.html', 'label' => 'Często popełniane błędy'],
             ['key' => 'faq', 'href' => '/faq.html', 'label' => 'Najczęstsze pytania'],
-            ['key' => 'przepisy', 'href' => '/przepisy.html', 'label' => 'Przepisy zw. z parkowaniem'],
-            ['key' => 'mandat', 'href' => '/mandat.html', 'label' => 'Mandat społeczny'],
+            ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/przepisy_i_kategorie_zgloszen', 'label' => 'Przepisy zw. z parkowaniem', 'external' => true],
             ['key' => 'przesluchanie', 'href' => '/przesluchanie.html', 'label' => 'Wizyta na komisariacie'],
-            ['key' => 'zwrot-za-przesluchanie', 'href' => '/zwrot-za-przesluchanie.html', 'label' => 'Zwrot środków za przesłuchanie'],
-            ['key' => 'zazalenie-na-brak-mandatu', 'href' => '/zazalenie-na-brak-mandatu.html', 'label' => 'Zażalenie na brak mandatu'],
-            ['key' => 'wniosek-odpowiedz1', 'href' => '/wniosek-odpowiedz1.html', 'label' => 'Odpowiedź na pismo'],
+            ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/zwrot_srodkow_za_przesluchanie', 'label' => 'Zwrot środków za przesłuchanie', 'external' => true],
+            ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/jak_napisac_zazalenie_na_decyzje_strazy_miejskiej_lub_policji', 'label' => 'Zażalenie na brak mandatu', 'external' => true],
             ['key' => 'dostep-do-informacji-publicznej', 'href' => '/dostep-do-informacji-publicznej.html', 'label' => 'Jak sprawdzić efekty pracy SM?'],
-            ['key' => 'e-doreczenia', 'href' => '/e-doreczenia.html', 'label' => 'e-Doręczenia'],
-            ['key' => 'epuap', 'href' => '/epuap.html', 'label' => 'Wysyłka przez ePUAP'],
+            ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/wysylka_przez_e-doreczenia', 'label' => 'e-Doręczenia', 'external' => true],
+            ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/wysylka_przez_epuap', 'label' => 'Wysyłka przez ePUAP', 'external' => true],
             ['key' => 'jak-zlozyc-wniosek-o-slupki', 'href' => '/jak-zlozyc-wniosek-o-slupki.html', 'label' => 'Wniosek o słupki'],
         ],
     ],
@@ -70,19 +68,6 @@ $FOOTER_LINKS = [
             ['key' => 'bezpieczenstwo', 'href' => '/bezpieczenstwo.html', 'label' => 'Bezpieczeństwo'],
             ['key' => 'kontakt', 'href' => '/kontakt.html', 'label' => 'Kontakt'],
         ],
-    ],
-];
-
-// Sekcja WIKI — tylko w sidebarze nawigacyjnym (_sidebar.html.twig), celowo poza
-// $FOOTER_LINKS, więc stopka jej nie renderuje. Same linki zewnętrzne (wiki.uprzejmiedonosze).
-$WIKI_LINKS = [
-    'title' => 'Wiki',
-    'items' => [
-        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/', 'label' => 'Wiki', 'external' => true],
-        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/start', 'label' => 'Niezbędnik', 'external' => true],
-        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/wzory_pism/start', 'label' => 'Wzory pism', 'external' => true],
-        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/niezbednik/jak_sprawdzic_wlasnosc_dzialki', 'label' => 'Własność działki', 'external' => true],
-        ['key' => null, 'href' => 'https://uprzejmiedonosze.net/wiki/pytania', 'label' => 'Listy', 'external' => true],
     ],
 ];
 

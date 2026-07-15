@@ -1,4 +1,8 @@
-{% set layout = 'public' %}
+{# Właściciel ogląda własne zgłoszenie w normalnym widoku aplikacji (menu,
+   tabbar, tło /app); osoba postronna — w czystym widoku „focus". #}
+{% set layout = config.isAppOwner ? 'app' : 'focus' %}
+{% set navbarCtaHref = '/app/new' %}
+{% set navbarCtaLabel = 'Nowe zgłoszenie' %}
 {% if dialog %}
     {% set leftButton = 'menuBack' %}
     {% set rightButton = '' %}

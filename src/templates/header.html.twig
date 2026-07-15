@@ -3,17 +3,26 @@
 <header{% if isRedesignedHeader %} class="rd25-header"{% endif %}>
     <h1>
         <a href="{{ general.uri }}">{{ shortTitle ?? title }}
+        {# znacznik środowiska tylko przy niepustym tytule — inaczej np. /app/confirm
+           (pusty title/shortTitle) pokazywałby w nagłówku samo „[DEV]" #}
+        {% if (shortTitle ?? title)|trim is not empty %}
         {% if general.isStaging %}
             <sup>[STG]</sup>
         {% elseif general.isProd %}
         {% else %}
             <sup>[DEV]</sup>
         {% endif %}
+        {% endif %}
         </a>
     </h1>
     {% if isRedesignedHeader %}
     <div class="mpr-navbar">
+        {% if navbarBack ?? false %}
+        {# app/confirm: zamiast logo przycisk cofający o krok (history -1) #}
+        <a class="mpr-navbar-logo mpr-navbar-back" href="javascript:history.back()" data-rel="back">{{ navbarBack }}</a>
+        {% else %}
         <a class="mpr-navbar-logo" href="/">Uprzejmie Donoszę</a>
+        {% endif %}
         {% if not (hideNavbarLinks ?? false) or not (hideNavbarCta ?? false) %}
         <nav class="mpr-navbar-links">
             {% if not (hideNavbarLinks ?? false) %}

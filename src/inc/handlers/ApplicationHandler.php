@@ -142,7 +142,7 @@ class ApplicationHandler extends AbstractHandler {
             $status = $STATUSES[$application->status];
             if (!$status->editable) {
                 logger("Ponowny POST na /app/confirm dla zgłoszenia {$application->number} w statusie {$status->name}");
-                return $this->redirect("/ud-$appId.html");
+                return $this->redirect("/app/$appId");
             }
             try {
                 return updateApplication(
@@ -200,7 +200,7 @@ class ApplicationHandler extends AbstractHandler {
             $status = $STATUSES[$application->status];
             if(!$status->editable) {
                 logger("Ponowny POST na /app/done dla zgłoszenia {$application->number} w statusie {$status->name}");
-                return $this->redirect("/ud-$appId.html");
+                return $this->redirect("/app/$appId");
             }
 
             $edited = $application->hasNumber();
@@ -267,7 +267,7 @@ class ApplicationHandler extends AbstractHandler {
         $application = \app\get($appId);
 
         if (!$application->isAppOwner($user))
-            return $this->redirect("/ud-" . rawurlencode($appId) . ".html"); // nosemgrep: php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
+            return $this->redirect("/app/" . rawurlencode($appId)); // nosemgrep: php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
 
         [$path, $filename] = \app\toPdf($application);
         return AbstractHandler::renderPdf($response, $path, $filename);

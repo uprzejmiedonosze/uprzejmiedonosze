@@ -1,4 +1,5 @@
 {% set layout = 'focus' %}
+{% set appShell = true %}{# tło sekcji /app (base.html.twig → body.app-shell) #}
 
 {% set sm = app.guessSMData() %}
 
@@ -24,9 +25,9 @@ Z poważaniem
 {% if appsCount == 1 %}
 <h2>To twoje pierwsze zgłoszenie, przeczytaj to uważnie</h2>
 {% endif %}
-<p>Twoje zgłoszenie {% if edited %}numer <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>
+<p>Twoje zgłoszenie {% if edited %}numer <a href="/app/{{ app.id }}">{{ app.number }}</a>
     zostało zaktualizowane{% else %}zostało zarejestrowane pod numerem
-    <a href="/ud-{{ app.id }}.html">{{ app.number }}</a>{% endif %}.
+    <a href="/app/{{ app.id }}">{{ app.number }}</a>{% endif %}.
     Wszystkie swoje zgłoszenia możesz zawsze zobaczyć na
     <a href="/app/list">liście swoich zgłoszeń</a>.</p>
 

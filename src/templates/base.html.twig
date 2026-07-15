@@ -28,7 +28,7 @@
 {% set _presets = {
     'main':   {links: true,  cta: true,  sidebar: false, focus: false, tabbar: false, menu: true,  footer: true},
     'static': {links: true,  cta: true,  sidebar: false, focus: false, tabbar: false, menu: true,  footer: true},
-    'app':    {links: false, cta: true,  sidebar: true,  focus: false, tabbar: true,  menu: true,  footer: false},
+    'app':    {links: false, cta: true,  sidebar: true,  focus: false, tabbar: true,  menu: false, footer: false},
     'focus':  {links: false, cta: false, sidebar: false, focus: true,  tabbar: false, menu: false, footer: false},
     'auth':   {links: false, cta: false, sidebar: false, focus: true,  tabbar: false, menu: false, footer: false},
     'system': {links: false, cta: false, sidebar: false, focus: true,  tabbar: false, menu: false, footer: false},
@@ -116,7 +116,7 @@
 
         {% block headIncludes %}{% endblock %}
     </head>
-    <body class="index {{ mainClass ?? '' }} {{ redesignClass ?? '' }}">
+    <body class="index {{ mainClass ?? '' }} {{ redesignClass ?? '' }}{% if layout == 'app' or (appShell ?? false) %} app-shell{% endif %}">
         <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
         {% include('header.html.twig') %}
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {{ redesignClass ?? '' }} {% if dialog %}dialog{% endif %}">

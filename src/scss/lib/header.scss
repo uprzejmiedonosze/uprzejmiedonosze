@@ -7,7 +7,7 @@
 //
 // Mobile: biały pasek fixed z hamburgerem (menu.scss) i wyśrodkowanym logo.
 // Desktop (>= $mpr-break): pasek statyczny, widoczny tylko .mpr-navbar.
-body > div > header {
+body>div>header {
     position: fixed;
     width: 100%;
     z-index: 2;
@@ -50,7 +50,7 @@ body > div > header {
         position: static;
         height: auto;
 
-        > *:not(.mpr-navbar) {
+        >*:not(.mpr-navbar) {
             display: none;
         }
     }
@@ -86,6 +86,30 @@ body > div > header {
     white-space: nowrap;
 }
 
+// app/confirm: „Popraw" zamiast logo — pigułkowy przycisk cofający (history -1),
+// ze strzałką w lewo. Zielony jak logo, ale wyraźnie klikalny.
+.mpr-navbar-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border: 1px solid tokens.$mpr-outline-variant;
+    border-radius: tokens.$mpr-radius-pill;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &::before {
+        content: "←";
+        font-size: 1.05em;
+        line-height: 1;
+    }
+
+    &:hover {
+        background: tokens.$mpr-surface-container-low;
+        color: tokens.$mpr-primary;
+    }
+}
+
 .mpr-navbar-links {
     display: flex;
     gap: 1.5rem;
@@ -98,19 +122,20 @@ body > div > header {
         font-weight: 600;
         font-size: 0.95rem;
     }
-}
 
-.mpr-navbar-cta {
-    background: tokens.$mpr-accent;
-    color: tokens.$mpr-on-accent;
-    text-decoration: none;
-    font-weight: 700;
-    padding: 0.65rem 1.25rem;
-    border-radius: tokens.$mpr-radius-pill;
-    white-space: nowrap;
-    // strona może ukryć linki (hideNavbarLinks, np. /app) — zachowaj auto,
-    // żeby CTA i tak przypięło się do prawej bez sąsiada-linków.
-    margin-left: auto;
-    // używane też jako czysty przycisk JS bez href (np. "Dalej" w /app/new)
-    cursor: pointer;
+    a.mpr-navbar-cta {
+        background: tokens.$mpr-accent;
+        color: tokens.$mpr-on-accent!important;
+        text-decoration: none;
+        font-weight: 700;
+        padding: 0.65rem 1.25rem;
+        border-radius: tokens.$mpr-radius-pill;
+        white-space: nowrap;
+        // strona może ukryć linki (hideNavbarLinks, np. /app) — zachowaj auto,
+        // żeby CTA i tak przypięło się do prawej bez sąsiada-linków.
+        margin-left: auto;
+        // używane też jako czysty przycisk JS bez href (np. "Dalej" w /app/new)
+        cursor: pointer;
+    }
+
 }

@@ -54,9 +54,6 @@ class HtmlMiddleware implements MiddlewareInterface {
         global $FOOTER_LINKS;
         $parameters['footerLinks'] = $FOOTER_LINKS;
 
-        global $WIKI_LINKS;
-        $parameters['wikiLinks'] = $WIKI_LINKS;
-
         $parameters['email_status'] = EMAIL_STATUS;
         return $parameters;
     }
