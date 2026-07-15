@@ -31,8 +31,7 @@ describe('API:automated (Poznań)', () => {
     })
 
     it('checks my apps screen', function () {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Moje zgłoszenia').click({ force: true })
+        cy.appMenu('Moje zgłoszenia')
         cy.contains(this.config.address.poznan).click()
         cy.contains(this.sm['poznań'].address[0].replace('Straż Miejska', 'SM'))
         cy.contains('POTWIERDZONE')
@@ -76,8 +75,7 @@ describe('API:Mail (Wrocław)', () => {
     })
 
     it('checks my apps screen', function () {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Moje zgłoszenia').click({ force: true })
+        cy.appMenu('Moje zgłoszenia')
         cy.contains(this.config.address.wroclaw.replace('Plac Generała ', '')).click()
 
         cy.contains('WYSŁANE')
@@ -122,8 +120,7 @@ describe('Police-only (Poniatowa, brak SM)', () => {
     })
 
     it('checks my apps screen', function () {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Moje zgłoszenia').click({ force: true })
+        cy.appMenu('Moje zgłoszenia')
         cy.contains(this.config.address.poniatowa).click()
         cy.contains('WYSŁANE')
         cy.contains('ZMIEŃ').click()

@@ -8,8 +8,7 @@ describe('Generator pism - strona główna', () => {
 
     it('sprawdza dostęp do kreatora pism z menu', () => {
         cy.visit('/')
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Napisz pismo do polityka').invoke('removeAttr', 'target').click()
+        cy.footerLink('Napisz pismo do polityka')
         cy.location('pathname').should('include', '/napisz-pismo-do-polityka.html')
     })
 
