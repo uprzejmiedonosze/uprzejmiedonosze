@@ -2,6 +2,7 @@
 
 namespace mcp;
 
+use Mcp\Schema\ToolAnnotations;
 use Mcp\Server;
 
 /**
@@ -18,25 +19,42 @@ function buildServer(): Server {
             'Odczyt Twoich zgłoszeń w serwisie Uprzejmie Donoszę.'
         )
         ->setInstructions(
-            'Use list_reports to browse the signed-in user\'s reports (zgłoszenia) '
-            . 'and get_report to fetch a single report by id. Read-only.'
+            'Browse the signed-in user\'s reports (zgłoszenia) with list_reports, '
+            . 'fetch one with get_report, and record the authority\'s response with '
+            . 'update_report_status.'
         )
         ->setSession(new McpMemcacheSessionStore())
         ->addTool(
             [$tools, 'listReports'],
             'list_reports',
-            description: 'List the signed-in user\'s reports (zgłoszenia), newest first.'
+            description: 'List the signed-in user\'s reports (zgłoszenia), newest first.',
+            annotations: new ToolAnnotations(
+                readOnlyHint: true,
+                idempotentHint: true,
+                openWorldHint: false
+            )
         )
         ->addTool(
             [$tools, 'getReport'],
             'get_report',
-            description: 'Fetch one of the signed-in user\'s reports by its id.'
+            description: 'Fetch one of the signed-in user\'s reports by its id.',
+            annotations: new ToolAnnotations(
+                readOnlyHint: true,
+                idempotentHint: true,
+                openWorldHint: false
+            )
         )
         ->addTool(
             [$tools, 'updateReportStatus'],
             'update_report_status',
             description: 'Update the status of one of the signed-in user\'s reports, e.g. to '
-                . 'record the authority\'s response. Requires the reports:status:write scope.'
+                . 'record the authority\'s response. Requires the reports:status:write scope.',
+            annotations: new ToolAnnotations(
+                readOnlyHint: false,
+                destructiveHint: false,
+                idempotentHint: true,
+                openWorldHint: false
+            )
         )
         ->build();
 }
