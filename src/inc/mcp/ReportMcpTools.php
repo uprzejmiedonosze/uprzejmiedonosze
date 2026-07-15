@@ -3,10 +3,23 @@
 namespace mcp;
 
 /**
- * Read-only MCP tools over a user's own reports (zgłoszenia). They call the
- * domain/store functions directly. The authenticated user comes from
- * {@see McpIdentity}, set by the entry-point middleware before the SDK
- * dispatches the tool call.
+ * Statuses an MCP client may set via update_report_status — the outcomes a
+ * user records after a report has been sent (the authority's response). The
+ * domain layer still validates the transition is allowed from the report's
+ * current status. Values match src/api/config/statuses.json.
+ */
+enum ReportStatus: string {
+    case ConfirmedSm = 'confirmed-sm';                 // przyjęte przez SM/policję
+    case ConfirmedFined = 'confirmed-fined';           // kierowca dostał mandat
+    case ConfirmedInstructed = 'confirmed-instructed'; // pouczenie
+    case ConfirmedIgnored = 'confirmed-ignored';       // zgłoszenie zignorowane
+    case Archived = 'archived';                        // zarchiwizowane
+}
+
+/**
+ * MCP tools over a user's own reports (zgłoszenia). They call the domain/store
+ * functions directly. The authenticated user comes from {@see McpIdentity},
+ * set by the entry-point middleware before the SDK dispatches the tool call.
  */
 final class ReportMcpTools {
 
@@ -50,13 +63,11 @@ final class ReportMcpTools {
      * record the authority's response. The transition must be allowed for the
      * report's current status (enforced by the domain layer).
      *
-     * @param string $reportId The report id.
-     * @param string $status   The new status id, e.g. 'confirmed-sm',
-     *                          'confirmed-fined', 'confirmed-instructed',
-     *                          'confirmed-ignored' or 'archived'.
+     * @param string       $reportId The report id.
+     * @param ReportStatus $status   The outcome to record.
      * @return array The updated report.
      */
-    public function updateReportStatus(string $reportId, string $status): array {
+    public function updateReportStatus(string $reportId, ReportStatus $status): array {
         McpIdentity::requireScope('reports:status:write');
         $user = McpIdentity::currentUser();
 
@@ -66,7 +77,7 @@ final class ReportMcpTools {
         }
 
         try {
-            $application = \setStatus($status, $reportId, $user);
+            $application = \setStatus($status->value, $reportId, $user);
         } catch (\Throwable $e) {
             throw new \RuntimeException($e->getMessage());
         }
