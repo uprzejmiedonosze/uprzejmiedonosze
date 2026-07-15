@@ -38,6 +38,8 @@ cp -r src/sql/.       export/sql/
 cp src/index.php src/favicon.ico src/robots.txt src/ads.txt export/public/
 cp src/manifest.json  export/public/
 cp src/api/rest/index.php export/public/api/rest/
+mkdir -p export/public/api/mcp
+cp src/api/mcp/index.php export/public/api/mcp/
 find src/api -maxdepth 1 -name '*.html' -exec cp {} export/public/api/ \;
 
 # ── JSON configs ──────────────────────────────────────────────────────────────
