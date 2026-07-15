@@ -12,6 +12,28 @@ use Mcp\Server;
 function buildServer(): Server {
     $tools = new ReportMcpTools();
 
+    // Output schemas: advertise a report's `status` as an enum of every known
+    // status (derived from statuses.json so it stays in sync). Other fields
+    // pass through via additionalProperties.
+    global $STATUSES;
+    $reportSchema = [
+        'type' => 'object',
+        'properties' => [
+            'id' => ['type' => 'string'],
+            'status' => [
+                'type' => 'string',
+                'enum' => array_keys($STATUSES ?? []),
+                'description' => 'Current report status.',
+            ],
+        ],
+        'additionalProperties' => true,
+    ];
+    $listSchema = [
+        'type' => 'object',
+        'properties' => ['reports' => ['type' => 'array', 'items' => $reportSchema]],
+        'additionalProperties' => true,
+    ];
+
     return Server::builder()
         ->setServerInfo(
             'Uprzejmie Donoszę',
@@ -32,7 +54,8 @@ function buildServer(): Server {
                 readOnlyHint: true,
                 idempotentHint: true,
                 openWorldHint: false
-            )
+            ),
+            outputSchema: $listSchema
         )
         ->addTool(
             [$tools, 'getReport'],
@@ -42,7 +65,8 @@ function buildServer(): Server {
                 readOnlyHint: true,
                 idempotentHint: true,
                 openWorldHint: false
-            )
+            ),
+            outputSchema: $reportSchema
         )
         ->addTool(
             [$tools, 'updateReportStatus'],
@@ -54,7 +78,8 @@ function buildServer(): Server {
                 destructiveHint: false,
                 idempotentHint: true,
                 openWorldHint: false
-            )
+            ),
+            outputSchema: $reportSchema
         )
         ->build();
 }
