@@ -11,22 +11,22 @@ describe('Static pages no session', function() {
     })
 
     it('/', () => {
-        cy.contains('Zgłoś nieprawidłowe parkowanie!')
-        cy.contains('Suppi')
-
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Zaloguj')
-        cy.contains('zarejestruj')
+        cy.contains('Zgłoś nieprawidłowe parkowanie')
+        // Desktopowa nawigacja headera + CTA aplikacji (zamiast dawnego menu).
+        cy.get('.mpr-navbar-links').contains('Poradnik')
+        cy.get('.mpr-navbar-cta').contains('Aplikacja')
+        // Stopka niesie pełną nawigację serwisu.
+        cy.get('footer').contains('Regulamin')
     })
 
     it('/ » regulamin', () => {
-        cy.contains('Regulamin').click()
+        cy.footerLink('Regulamin')
         cy.contains('anonimowe dane statystyczne')
         cy.contains('Aktualizacja 2024-03-26')
     })
 
     it('/ » historia', () => {
-        cy.contains('Historia zmian').click()
+        cy.footerLink('Historia zmian')
         cy.contains('Poniedziałek, 13 lipca 2020')
         cy.contains(', 0').should('not.exist')
 
@@ -34,7 +34,7 @@ describe('Static pages no session', function() {
             'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'
         ]
-        
+
         months.forEach(month => {
             cy.contains(month).should('not.exist')
         })
@@ -52,96 +52,71 @@ describe('Static pages no session', function() {
     })
 
     it('/ » dla programistów', () => {
-        cy.contains('Dla programistów').click()
+        cy.footerLink('Dla programistów')
         cy.contains('Jesteś programistą')
     })
 
     it('/ » polityka prywatności', () => {
-        cy.contains('Polityka prywatności').click()
+        cy.footerLink('Polityka prywatności')
         cy.contains('szymon@uprzejmiedonosze.net')
     })
 
     it('/ » bezpieczeństwo', () => {
-        cy.contains('Bezpieczeństwo').click()
+        cy.footerLink('Bezpieczeństwo')
         cy.contains('zero-knowledge security')
     })
 
     it('/ » naklejki', () => {
-        cy.contains('Kup naklejki').click()
+        cy.footerLink('Kup naklejki')
         cy.contains('naklejki ROBISZ TO ŹLE')
     })
 
-    it('/ » zażalenie', () => {
-        cy.contains('Zażalenie na brak mandatu').click()
-        cy.contains('Masz zaledwie 7 dni')
-    })
-
-    it('/ » e-doręczenie', () => {
-        cy.contains('e-Doręczenia').click()
-        cy.contains('Wskaż odpowiednią jednostkę.')
-    })
-
     it('/ » jak sprawdzić SM', () => {
-        cy.contains('Jak sprawdzić efekty pracy SM?').click()
+        cy.footerLink('Jak sprawdzić efekty pracy SM?')
         cy.contains('Ścieżka dostępu do informacji Sieci Obywatelskiej Watchdog')
     })
 
-    it('/menu » kontakt', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Kontakt').click()
+    it('/ » kontakt', () => {
+        cy.footerLink('Kontakt')
         cy.contains('Grupa wsparcia na Facebooku')
     })
 
-    it('/menu » Jak zgłaszać', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Jak zgłaszać').click()
+    it('/ » Jak zgłaszać', () => {
+        cy.footerLink('Poradnik „jak zgłaszać”')
         cy.contains('przez Uprzejmie Donoszę')
     })
 
-    it('/menu » Jak zgłaszać » dzwoń jak szeryf', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Jak zgłaszać').click()
+    it('/ » Jak zgłaszać » dzwoń jak szeryf', () => {
+        cy.footerLink('Poradnik „jak zgłaszać”')
         cy.contains('na całych patoparkingach').click()
         cy.contains('sprawdzaj efekty pracy SM').click()
         cy.contains('Proszę o przekazanie ww.')
     })
 
-    it('/menu » przepisy', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Przepisy').click()
-        cy.contains('Pojazd może być usunięty z drogi na koszt właściciela')
-    })
-
-    it('/menu » faq', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('FAQ').click()
-        cy.contains('Konstantynów Łódzki')
+    it('/ » faq', () => {
+        cy.footerLink('Najczęstsze pytania')
         cy.contains('Szczecin')
     })
 
-    it('/menu » faq » aplikacja', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('FAQ').click()
+    it('/ » faq » aplikacja', () => {
+        cy.footerLink('Najczęstsze pytania')
         cy.contains('wygodny skrót').click()
         cy.contains('Zainstaluj przeglądarkę')
     })
 
-    it('/menu » przesłuchanie', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Wizyta w SM').click()
+    it('/ » przesłuchanie', () => {
+        cy.footerLink('Wizyta na komisariacie')
         cy.contains('Czy straż miejska wezwie mnie na przesłuchanie?')
     })
 
-    it('/menu » przesłuchanie » zwrot', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Wizyta w SM').click()
+    it('/ » przesłuchanie » zwrot', () => {
+        cy.footerLink('Wizyta na komisariacie')
         cy.contains('jak zniechęcić SM').click()
         cy.contains('Nieznany jest przypadek przekonania SM')
     })
 
-    it('/menu » Statystyki', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Statystyki').click()
+    it('/ » Statystyki', () => {
+        cy.footerLink('Statystyki')
         cy.contains('Nowe zgłoszenia oraz nowi użytkownicy')
     })
 
@@ -161,7 +136,10 @@ describe('Static pages logged in', function() {
         cy.visit('/')
     })
 
-    it('/', function () {
+    it('/app', function () {
+        // Gamifikacja (poziomy/odznaki, powitanie) żyje teraz na dashboardzie /app,
+        // nie na marketingowej stronie głównej.
+        cy.visit('/app')
         // Names/descs in JSON are feminine; derive sex-invariant stem for m/f/? variants on page
         const sexStem = (s) => {
             const obrMatch = s.match(/^Obrończyni\s+(.+)/)
@@ -175,18 +153,16 @@ describe('Static pages logged in', function() {
         cy.contains('wkurzony, ale walczący')
     })
 
-    it('/menu » Jak zgłaszać » dzwoń jak szeryf', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Jak zgłaszać').click()
+    it('/ » Jak zgłaszać » dzwoń jak szeryf', () => {
+        cy.footerLink('Poradnik „jak zgłaszać”')
         cy.contains('na całych patoparkingach').click()
         cy.contains('sprawdzaj efekty pracy SM').click()
         cy.contains('Proszę o przekazanie ww.')
         cy.contains('adres poczty elektronicznej: e@nieradka.net.')
     })
 
-    it('/menu » patronite', () => {
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Zostań Patronem').click()
+    it('/ » patronite', () => {
+        cy.footerLink('Patronite')
         cy.contains('ponad 16 000 zgłoszeń')
     })
 

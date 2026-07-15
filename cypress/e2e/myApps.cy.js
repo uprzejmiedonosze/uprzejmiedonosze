@@ -21,9 +21,7 @@ describe('Empty my apps', () => {
     })
 
     it('gets to my apps screen', () => {
-        cy.visit('/')
-        cy.get('label.menu > .button-toggle').click()
-        cy.contains('Moje zgłoszenia').click()
+        cy.appMenu('Moje zgłoszenia')
     })
 
     it('checks my apps screen', () => {

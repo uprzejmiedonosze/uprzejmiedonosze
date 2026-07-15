@@ -113,7 +113,22 @@ Cypress.Commands.add("goToNewAppScreen", () => {
 })
 
 Cypress.Commands.add("goToNewAppScreenWithoutTermsScreen", () => {
-  cy.visit('/')
-  cy.get('label.menu > .button-toggle').click()
-  cy.contains('Nowe zgłoszenie').click({ force: true })
+  cy.appMenu('Nowe zgłoszenie')
+})
+
+// Public-site navigation. Po redesignie hamburger menu jest ukryte na desktopie
+// (Cypress renderuje w 1000px, powyżej breakpointu 768px), więc pozycje menu
+// przenieśliśmy do stopki — obecnej na każdej stronie static/main. Klikamy link
+// w <footer> (usuwając target, by zewnętrzne linki nie otwierały nowej karty).
+Cypress.Commands.add("footerLink", (label) => {
+  cy.get('footer').contains('a', label).invoke('removeAttr', 'target').click()
+})
+
+// /app navigation. Sekcja /app ma własny sidebar (.mpr-sidebar--app) widoczny na
+// desktopie na każdej stronie /app/* — to on zastępuje dawne menu hamburgera dla
+// zalogowanego, zarejestrowanego użytkownika. Wchodzimy na dashboard i klikamy
+// pozycję w tym sidebarze.
+Cypress.Commands.add("appMenu", (label) => {
+  cy.visit('/app')
+  cy.get('.mpr-sidebar--app').contains('a', label).click({ force: true })
 })

@@ -12,21 +12,18 @@ describe('Create account', () => {
   })
 
   it('Check if account is not active before registration', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click({force: true})
+    // Niezarejestrowany użytkownik: ekran rejestracji (layout focus, bez sidebara
+    // i menu), więc do ekranów /app wchodzimy bezpośrednio po adresie.
+    cy.visit('/app/new')
     cy.contains('Dane konta')
     cy.contains('Chcę pozwalać na prezentowanie').should('exist')
 
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Moje zgłoszenia').click({force: true})
+    cy.visit('/app/list')
     cy.contains('Dane konta')
   })
 
   it('Check registration form validation', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click({force: true})
+    cy.visit('/app/new')
     cy.contains('Dane konta')
 
     cy.contains('Potwierdź').click()
@@ -50,9 +47,7 @@ describe('Create account', () => {
   })
 
   it('Register', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click({force: true})
+    cy.visit('/app/new')
     cy.contains('Dane konta')
 
     cy.get('#name').clear().type(this.config.user.name)
@@ -63,16 +58,13 @@ describe('Create account', () => {
   })
 
   it('Check terms screen', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click({force: true})
+    cy.visit('/app/new')
     cy.contains('Dane konta').should('not.exist')
 
     cy.contains('Regulamin')
 
     cy.contains('Wyrażam zgodę na regulamin').click()
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click({force: true})
+    cy.visit('/app/new')
     cy.contains('Regulamin').should('not.exist')
   })
 })
@@ -84,9 +76,7 @@ describe('Update account', () => {
   })
 
   it('Check default', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Edycja konta').click({force: true})
+    cy.visit('/app/account?update')
     cy.contains('Zaktualizuj konto')
     cy.contains('Chcę pozwalać na prezentowanie')
     // SM/Policja is no longer asked at registration/account-edit time —
@@ -95,9 +85,7 @@ describe('Update account', () => {
   })
 
   it('New app, default settings', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click()
+    cy.visit('/app/new')
     // @ts-ignore
     cy.uploadOKImages()
     // @ts-ignore
@@ -112,16 +100,12 @@ describe('Update account', () => {
 
     cy.contains('To twoje pierwsze zgłoszenie')
 
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Moje zgłoszenia').click()
+    cy.visit('/app/list')
     cy.get('.application-short h3').first().click({force: true})
   })
 
   it('Set opposite settings', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click()
+    cy.visit('/app/new')
     // @ts-ignore
     cy.uploadOKImages()
     // @ts-ignore
@@ -142,9 +126,7 @@ describe('Update account', () => {
   })
 
   it('New app, opposite settings (preference persisted)', function () {
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Nowe zgłoszenie').click()
+    cy.visit('/app/new')
     // @ts-ignore
     cy.uploadOKImages()
     Object.entries(this.categories)
@@ -166,9 +148,7 @@ describe('Update account', () => {
 
     cy.contains('To twoje pierwsze zgłoszenie').should('not.exist')
 
-    cy.visit('/')
-    cy.get('label.menu > .button-toggle').click()
-    cy.contains('Moje zgłoszenia').click()
+    cy.visit('/app/list')
     cy.get('.application-short h3').first().click({force: true})
   })
 })
