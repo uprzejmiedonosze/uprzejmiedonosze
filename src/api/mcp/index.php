@@ -18,8 +18,12 @@ require(INC_DIR . '/middleware/JsonErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
 require(INC_DIR . '/middleware/UserMiddleware.php');
 
+require(INC_DIR . '/oauth/Entities.php');
+require(INC_DIR . '/oauth/Repositories.php');
+
 require(INC_DIR . '/mcp/McpIdentity.php');
 require(INC_DIR . '/mcp/McpMemcacheSessionStore.php');
+require(INC_DIR . '/mcp/McpAuthMiddleware.php');
 require(INC_DIR . '/mcp/ReportMcpTools.php');
 require(INC_DIR . '/mcp/McpServerFactory.php');
 
@@ -71,6 +75,7 @@ class McpSessionMiddleware implements MiddlewareInterface {
 class McpIdentityMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
         \mcp\McpIdentity::set($request->getAttribute('user'));
+        \mcp\McpIdentity::setScopes($request->getAttribute('mcpScopes', []));
         return $handler->handle($request);
     }
 }
@@ -91,6 +96,6 @@ $app->map(['POST', 'GET', 'DELETE'], '/mcp', $mcpHandler)
     ->add(new McpIdentityMiddleware())
     ->add(new UserMiddleware(createIfNonExists: false))
     ->add(new McpSessionMiddleware())
-    ->add(new AuthMiddleware());
+    ->add(new McpAuthMiddleware());
 
 $app->run();

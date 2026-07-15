@@ -19,6 +19,7 @@ final class ReportMcpTools {
      * @return array List of report summaries, newest first.
      */
     public function listReports(string $status = 'all', int $limit = 50): array {
+        McpIdentity::requireScope('reports:read');
         $user = McpIdentity::currentUser();
         $apps = \user\apps($user, $status, '%', $limit, 0);
         // Normalise the domain objects to plain arrays for structured MCP output.
@@ -32,6 +33,7 @@ final class ReportMcpTools {
      * @return array The report as a structured object.
      */
     public function getReport(string $reportId): array {
+        McpIdentity::requireScope('reports:read');
         $user = McpIdentity::currentUser();
         $application = \app\get($reportId);
 

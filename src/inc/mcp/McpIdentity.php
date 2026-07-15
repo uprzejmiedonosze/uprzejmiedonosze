@@ -15,6 +15,8 @@ use user\User;
  */
 final class McpIdentity {
     private static ?User $user = null;
+    /** @var string[] */
+    private static array $scopes = [];
 
     public static function set(User $user): void {
         self::$user = $user;
@@ -25,5 +27,16 @@ final class McpIdentity {
             throw new \RuntimeException('MCP tool invoked without an authenticated user');
         }
         return self::$user;
+    }
+
+    /** @param string[] $scopes */
+    public static function setScopes(array $scopes): void {
+        self::$scopes = $scopes;
+    }
+
+    public static function requireScope(string $scope): void {
+        if (!in_array($scope, self::$scopes, true)) {
+            throw new \RuntimeException("This action requires the '$scope' OAuth scope");
+        }
     }
 }

@@ -14,14 +14,15 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 
 /**
- * The single source of truth for OAuth scopes: identifier => human-readable
- * label (shown on the consent screen). To add a scope, add one entry here;
- * validation, the well-known metadata, and the consent UI all read from it.
- * Enforcement of a scope on a specific tool is done where that tool runs.
+ * The single source of truth for OAuth scopes: machine identifier => label
+ * shown on the (Polish) consent screen. The identifiers are API constants and
+ * appear in the metadata's scopes_supported; the labels are user-facing. To
+ * add a scope, add one entry here; validation, metadata, and the consent UI
+ * all read from it. Enforcement on a specific tool is done where that tool runs.
  */
 const SCOPES = [
-    'reports:read'         => 'Read your reports',
-    'reports:status:write' => 'Update the status of your reports',
+    'reports:read'         => 'Odczyt Twoich zgłoszeń',
+    'reports:status:write' => 'Zmiana statusu Twoich zgłoszeń',
 ];
 
 /** Opaque tokens are stored only as SHA-256 hashes. */
@@ -43,6 +44,34 @@ function emailForUid(?string $uid): ?string {
     $stmt->execute([':u' => $uid]);
     $email = $stmt->fetch(\PDO::FETCH_COLUMN);
     return $email ?: null;
+}
+
+/**
+ * Validate an opaque MCP access token for the resource server. Returns
+ * [uid, email, scopes] for a live token bound to the MCP resource, else null
+ * (the caller then falls back to the Firebase-bearer path).
+ */
+function validateAccessToken(string $token): ?array {
+    $stmt = \store\prepare(
+        'SELECT user_id, user_email, scopes, resource, revoked, expires_at
+         FROM oauth_access_tokens WHERE token_hash = :h'
+    );
+    $stmt->execute([':h' => tokenHash($token)]);
+    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+    if (!$row || (int) $row['revoked'] === 1) {
+        return null;
+    }
+    if (strtotime($row['expires_at']) < time()) {
+        return null;
+    }
+    if ($row['resource'] !== mcpResource()) {
+        return null;
+    }
+    return [
+        'uid' => $row['user_id'],
+        'email' => $row['user_email'],
+        'scopes' => array_values(array_filter(explode(' ', (string) $row['scopes']))),
+    ];
 }
 
 class ClientRepository implements ClientRepositoryInterface {
