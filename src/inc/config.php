@@ -198,7 +198,8 @@ const SEXSTRINGS = Array (
         "Początkująca" => "Początkujący",
         "Ekspertka" => "Ekspert",
         "Hurtowniczka" => "Hurtownik",
-        "Pro" => "Pro"
+        "Pro" => "Pro",
+        "wezwana" => "wezwana"
     ],
     'm' => [
         "bylam" => "byłem",
@@ -223,7 +224,8 @@ const SEXSTRINGS = Array (
         "Początkująca" => "Początkujący",
         "Ekspertka" => "Ekspert",
         "Hurtowniczka" => "Hurtownik",
-        "Pro" => "Pro"
+        "Pro" => "Pro",
+        "wezwana" => "wezwany"
     ],
     'f' => [
         "bylam" => "byłam",
@@ -248,7 +250,8 @@ const SEXSTRINGS = Array (
         "Początkująca" => "Początkująca",
         "Ekspertka" => "Ekspertka",
         "Hurtowniczka" => "Hurtowniczka",
-        "Pro" => "Pro"
+        "Pro" => "Pro",
+        "wezwana" => "wezwana"
     ]
 );
 

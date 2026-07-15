@@ -151,7 +151,7 @@
             </div>
             <div class="mpr-checklist-item">
                 <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-                <span>Wysyłamy do właściwego oddziału SM w {{ config.stats.sm }} miejscowościach</span>
+                <span>Wysyłamy do właściwego oddziału SM/Policji w całej Polsce</span>
             </div>
             <div class="mpr-checklist-item">
                 <span class="mpr-check-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -192,7 +192,7 @@
         <div class="mpr-faq-list">
             <details class="mpr-faq-item">
                 <summary>
-                    Czy będę anonimowy?
+                    Czy będę {{ config.sex.anonimowa }}?
                     <svg class="mpr-faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </summary>
                 <div class="mpr-faq-answer">
@@ -206,7 +206,7 @@
             </details>
             <details class="mpr-faq-item">
                 <summary>
-                    Czy będę wezwany do złożenia zeznań?
+                    Czy będę {{ config.sex.wezwana }} do złożenia zeznań?
                     <svg class="mpr-faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </summary>
                 <div class="mpr-faq-answer">
@@ -225,7 +225,7 @@
                 </div>
             </details>
             <a class="mpr-faq-item mpr-faq-more" href="/faq.html">
-                Mam inne pytania?
+                Masz inne pytania?
             </a>
         </div>
     </section>
