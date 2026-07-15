@@ -74,6 +74,37 @@ function validateAccessToken(string $token): ?array {
     ];
 }
 
+/**
+ * Active connections (authorized clients) for a user, for the connected-apps
+ * page: one row per client the user still has a live access token for.
+ */
+function connectionsForUser(string $userId): array {
+    $stmt = \store\prepare(
+        "SELECT t.client_id,
+                COALESCE(c.name, t.client_id) AS client_name,
+                group_concat(DISTINCT t.scopes) AS scopes,
+                min(t.created_at) AS since
+         FROM oauth_access_tokens t
+         LEFT JOIN oauth_clients c ON c.client_id = t.client_id
+         WHERE t.user_id = :u AND t.revoked = 0
+         GROUP BY t.client_id
+         ORDER BY since DESC"
+    );
+    $stmt->execute([':u' => $userId]);
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+}
+
+/**
+ * Revoke a whole connection: every access and refresh token issued to this
+ * client for this user. Takes effect immediately (opaque tokens).
+ */
+function revokeConnection(string $clientId, string $userId): void {
+    foreach (['oauth_access_tokens', 'oauth_refresh_tokens'] as $table) {
+        $stmt = \store\prepare("UPDATE $table SET revoked = 1 WHERE client_id = :c AND user_id = :u");
+        $stmt->execute([':c' => $clientId, ':u' => $userId]);
+    }
+}
+
 class ClientRepository implements ClientRepositoryInterface {
     public function getClientEntity(string $clientIdentifier): ?ClientEntityInterface {
         $stmt = \store\prepare(

@@ -157,6 +157,9 @@
                         {% for item in column.items %}
                         <a href="{{ item.href }}"{% if item.external ?? false %} rel="external" target="_blank"{% endif %}>{{ item.label }}</a>
                         {% endfor %}
+                        {% if columnKey == 'project' and general.isLoggedIn %}
+                        <a href="/polaczone-aplikacje.html">Połączone aplikacje</a>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>

@@ -186,6 +186,12 @@ $app->group('/oauth', function (RouteCollectorProxy $group) { // OAuth consent (
 })  ->add(new HtmlMiddleware())
     ->add(new OptionalUserMiddleware());
 
+$app->group('', function (RouteCollectorProxy $group) { // Connected applications (browser)
+    $group->get('/polaczone-aplikacje.html', OAuthHandler::class . ':connectedApps');
+    $group->post('/polaczone-aplikacje.html', OAuthHandler::class . ':revokeConnection');
+})  ->add(new HtmlMiddleware())
+    ->add(new LoggedInMiddleware());
+
 $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/', StaticPagesHandler::class . ':root');
 
