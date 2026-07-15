@@ -34,6 +34,8 @@ build_static() {
     cp src/api/rest/index.php export/public/api/rest/
     mkdir -p export/public/api/mcp
     cp src/api/mcp/index.php export/public/api/mcp/
+    mkdir -p export/public/api/oauth
+    cp src/api/oauth/index.php export/public/api/oauth/
     find src/api -maxdepth 1 -name '*.html' -exec cp {} export/public/api/ \;
     cp src/images-index.html export/
     [ -d src/img ] && cp -r src/img/. export/public/img/ || true

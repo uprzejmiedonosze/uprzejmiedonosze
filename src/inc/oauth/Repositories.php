@@ -13,7 +13,16 @@ use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 
-const ALLOWED_SCOPES = ['reports:read', 'reports:status:write'];
+/**
+ * The single source of truth for OAuth scopes: identifier => human-readable
+ * label (shown on the consent screen). To add a scope, add one entry here;
+ * validation, the well-known metadata, and the consent UI all read from it.
+ * Enforcement of a scope on a specific tool is done where that tool runs.
+ */
+const SCOPES = [
+    'reports:read'         => 'Read your reports',
+    'reports:status:write' => 'Update the status of your reports',
+];
 
 /** Opaque tokens are stored only as SHA-256 hashes. */
 function tokenHash(string $token): string {
@@ -59,7 +68,7 @@ class ClientRepository implements ClientRepositoryInterface {
 
 class ScopeRepository implements ScopeRepositoryInterface {
     public function getScopeEntityByIdentifier(string $identifier): ?ScopeEntityInterface {
-        return in_array($identifier, ALLOWED_SCOPES, true) ? new ScopeEntity($identifier) : null;
+        return array_key_exists($identifier, SCOPES) ? new ScopeEntity($identifier) : null;
     }
 
     public function finalizeScopes(
@@ -71,7 +80,7 @@ class ScopeRepository implements ScopeRepositoryInterface {
     ): array {
         return array_values(array_filter(
             $scopes,
-            fn ($scope) => in_array($scope->getIdentifier(), ALLOWED_SCOPES, true)
+            fn ($scope) => array_key_exists($scope->getIdentifier(), SCOPES)
         ));
     }
 }
