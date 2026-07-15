@@ -32,5 +32,11 @@ function buildServer(): Server {
             'get_report',
             description: 'Fetch one of the signed-in user\'s reports by its id.'
         )
+        ->addTool(
+            [$tools, 'updateReportStatus'],
+            'update_report_status',
+            description: 'Update the status of one of the signed-in user\'s reports, e.g. to '
+                . 'record the authority\'s response. Requires the reports:status:write scope.'
+        )
         ->build();
 }
