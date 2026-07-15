@@ -34,6 +34,25 @@ function buildServer(): Server {
         'additionalProperties' => true,
     ];
 
+    // Input filter for list_reports: the two special values plus any status.
+    $listInputSchema = [
+        'type' => 'object',
+        'properties' => [
+            'status' => [
+                'type' => 'string',
+                'enum' => array_merge(['all', 'allWithDrafts'], array_keys($STATUSES ?? [])),
+                'default' => 'all',
+                'description' => 'Which reports to return: "all" (excludes drafts), '
+                    . '"allWithDrafts", or a specific status id.',
+            ],
+            'limit' => [
+                'type' => 'integer',
+                'default' => 50,
+                'description' => 'Maximum number of reports to return.',
+            ],
+        ],
+    ];
+
     return Server::builder()
         ->setServerInfo(
             'Uprzejmie Donoszę',
@@ -55,6 +74,7 @@ function buildServer(): Server {
                 idempotentHint: true,
                 openWorldHint: false
             ),
+            inputSchema: $listInputSchema,
             outputSchema: $listSchema
         )
         ->addTool(
