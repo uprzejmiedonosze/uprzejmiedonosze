@@ -43,21 +43,8 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.MissingImport)
-     * @SuppressWarnings(PHPMD.ShortVariable)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
     function faq(Request $request, Response $response) {
-        global $SM_ADDRESSES;
-        $smNames = array_map(function ($sm) { return $sm->city; }, array_filter($SM_ADDRESSES, fn($sm) => $sm->active));
-        $collator = new Collator('pl_PL');
-        $collator->sort($smNames);
-        $smNames = array_unique($smNames, SORT_LOCALE_STRING);
-
-        return AbstractHandler::renderHtml($request, $response, 'faq', [
-            'smAddresses' => implode(', ', $smNames)
-        ]);
+        return AbstractHandler::renderHtml($request, $response, 'faq');
     }
 
     /**
