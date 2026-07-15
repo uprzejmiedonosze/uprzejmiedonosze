@@ -23,6 +23,10 @@
 // własnym kontenerem. `calc(50% - 50vw)` trzyma element w normalnym flow
 // (bez position/left) i nie generuje poziomego scrolla przy pasku przewijania.
 @mixin full-bleed {
+    // border-box: elementy full-bleed mają zwykle własny poziomy padding —
+    // bez tego ich szerokość to 100vw + padding, co wypycha stronę poza
+    // viewport i generuje poziomy scroll na mobile.
+    box-sizing: border-box;
     width: 100vw;
     margin-inline: calc(50% - 50vw);
 }
