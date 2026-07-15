@@ -90,4 +90,39 @@ class OAuthHandler extends AbstractHandler {
             return $e->generateHttpResponse($response);
         }
     }
+
+    /** Settings page: the OAuth clients the user has connected via MCP. */
+    public function connectedApps(Request $request, Response $response) {
+        $connections = array_map(function ($row) {
+            $ids = array_values(array_filter(explode(' ', str_replace(',', ' ', (string) $row['scopes']))));
+            $row['scopeLabels'] = array_values(array_unique(array_map(
+                fn ($id) => \oauth\SCOPES[$id] ?? $id,
+                $ids
+            )));
+            return $row;
+        }, \oauth\connectionsForUser($_SESSION['user_id']));
+
+        $csrf = bin2hex(random_bytes(16));
+        $_SESSION['oauth_csrf'] = $csrf;
+
+        return AbstractHandler::renderHtml($request, $response, 'polaczone-aplikacje', [
+            'connections' => $connections,
+            'csrf' => $csrf,
+        ]);
+    }
+
+    /** Revoke a whole connection (all tokens for one client) for this user. */
+    public function revokeConnection(Request $request, Response $response) {
+        $body = (array) $request->getParsedBody();
+        if (empty($_SESSION['oauth_csrf']) || !hash_equals($_SESSION['oauth_csrf'], (string) ($body['csrf'] ?? ''))) {
+            throw new HttpForbiddenException($request, 'Invalid CSRF token');
+        }
+        unset($_SESSION['oauth_csrf']);
+
+        $clientId = (string) ($body['client_id'] ?? '');
+        if ($clientId !== '') {
+            \oauth\revokeConnection($clientId, $_SESSION['user_id']);
+        }
+        return AbstractHandler::redirect('/polaczone-aplikacje.html');
+    }
 }
