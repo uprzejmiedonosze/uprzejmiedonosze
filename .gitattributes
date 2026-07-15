@@ -1,0 +1,4 @@
+# Shell scripts must keep LF line endings regardless of a contributor's
+# core.autocrlf setting — dash/sh chokes on CRLF ("set: Illegal option -"),
+# which silently breaks the Docker build scripts (watch.sh, build.sh, init.sh).
+*.sh text eol=lf
