@@ -60,11 +60,11 @@
 
     <section class="mpr-trust-band">
         <div>
-            <strong>{{ config.stats.apps|number_format(0, ',', ' ') }}</strong>
+            <strong>{{ (config.stats.apps / 1000)|round|number_format(0, ',', ' ') }} tys.</strong>
             <span>wysłanych zgłoszeń</span>
         </div>
         <div>
-            <strong>{{ config.stats.users|number_format(0, ',', ' ') }}</strong>
+            <strong>{{ (config.stats.users / 1000)|round|number_format(0, ',', ' ') }} tys.</strong>
             <span>aktywnych użytkowników</span>
         </div>
         <div>
@@ -73,24 +73,49 @@
         </div>
     </section>
 
-    <section class="mpr-section" id="jak-to-dziala">
-        <h2 class="mpr-section-title">Jak to działa</h2>
-        <p style="text-align:center;color:#6b7871;margin:-0.5rem 0 2rem">Trzy kroki. Bez formularzy, bez znajomości przepisów.</p>
-        <div class="mpr-steps">
-            <div class="mpr-step">
-                <div class="mpr-step-number">1</div>
-                <h3>Zrób zdjęcia</h3>
-                <p>Sfotografuj pojazd i wykroczenie. Wystarczą dwa ujęcia z telefonu.</p>
+    <section class="mpr-demo-section" id="jak-to-dziala">
+        <div class="mpr-demo-head">
+            <h2 class="mpr-section-title">Zobacz UD w akcji</h2>
+            <p class="mpr-demo-sub">Rzeczywiste kroki tworzenia zgłoszenia &ndash; od zdjęcia po wysyłkę.</p>
+        </div>
+        <div class="mpr-demo-inner" data-demo>
+            <div class="mpr-demo-steps">
+                <button type="button" class="mpr-demo-step is-active" data-demo-step="0">
+                    <div class="mpr-demo-step-head">
+                        <span class="mpr-demo-step-num">1</span>
+                        <span class="mpr-demo-step-label">Dodaj zdjęcia</span>
+                    </div>
+                    <div class="mpr-demo-progress"><span class="mpr-demo-progress-bar"></span></div>
+                </button>
+                <button type="button" class="mpr-demo-step" data-demo-step="1">
+                    <div class="mpr-demo-step-head">
+                        <span class="mpr-demo-step-num">2</span>
+                        <span class="mpr-demo-step-label">Sprawdź dane</span>
+                    </div>
+                    <div class="mpr-demo-progress"><span class="mpr-demo-progress-bar"></span></div>
+                </button>
+                <button type="button" class="mpr-demo-step" data-demo-step="2">
+                    <div class="mpr-demo-step-head">
+                        <span class="mpr-demo-step-num">3</span>
+                        <span class="mpr-demo-step-label">Wyślij zgłoszenie</span>
+                    </div>
+                    <div class="mpr-demo-progress"><span class="mpr-demo-progress-bar"></span></div>
+                </button>
+                <p class="mpr-demo-caption" data-demo-caption>Fotografujesz wykroczenie i cały pojazd &ndash; aplikacja prowadzi Cię krok po kroku.</p>
             </div>
-            <div class="mpr-step">
-                <div class="mpr-step-number">2</div>
-                <h3>Sprawdź dane</h3>
-                <p>Automatycznie odczytamy tablicę rejestracyjną i ustalimy adres zdarzenia.</p>
-            </div>
-            <div class="mpr-step">
-                <div class="mpr-step-number">3</div>
-                <h3>Wyślij zgłoszenie</h3>
-                <p>Trafi do właściwego oddziału straży miejskiej. Ty dostaniesz potwierdzenie.</p>
+
+            <div class="mpr-demo-phone">
+                <div class="mpr-demo-phone-frame">
+                    <div class="mpr-demo-shot is-active" data-demo-shot="0">
+                        <img src="/img/demo-1.png?width=720&as=webp&quality=82" alt="Dodawanie zdjęć do zgłoszenia" loading="lazy">
+                    </div>
+                    <div class="mpr-demo-shot" data-demo-shot="1">
+                        <img src="/img/demo-2.png?width=720&as=webp&quality=82" alt="Weryfikacja danych zgłoszenia" loading="lazy">
+                    </div>
+                    <div class="mpr-demo-shot" data-demo-shot="2">
+                        <img src="/img/demo-3.png?width=720&as=webp&quality=82" alt="Wysyłanie zgłoszenia do straży miejskiej" loading="lazy">
+                    </div>
+                </div>
             </div>
         </div>
     </section>

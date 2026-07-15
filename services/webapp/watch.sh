@@ -58,7 +58,7 @@ build_config_env
 build_static
 build_json
 
-node_modules/.bin/parcel build --dist-dir export/public/css src/scss/index.scss
+node_modules/.bin/parcel build --dist-dir export/public/css src/scss/index3.scss
 for f in src/js/*.js; do
     node_modules/.bin/parcel build --dist-dir export/public/js/ "$f"
 done
@@ -66,7 +66,7 @@ done
 log "Initial build done. Watching for changes..."
 
 # ── Parcel watch: CSS + JS (inkrementalny, w tle) ────────────────────────────
-node_modules/.bin/parcel watch --no-hmr --dist-dir export/public/css src/scss/index.scss &
+node_modules/.bin/parcel watch --no-hmr --dist-dir export/public/css src/scss/index3.scss &
 for f in src/js/*.js; do
     node_modules/.bin/parcel watch --no-hmr --dist-dir export/public/js/ "$f" &
 done

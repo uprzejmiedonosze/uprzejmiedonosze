@@ -8,12 +8,15 @@
 // ---------------------------------------------------------------------------
 
 @use "../lib/tokens" as *;
+@use "../lib/layout" as layout;
 
 // Homepage: własny padding boczny trzymają same sekcje (.mpr-section itd.), a
-// hero/tinted robią full-bleed (width:100vw; left:50%; margin-left:-50vw).
-// Domyślny 1em padding .ui-content na mobile przesuwał punkt zerowy tej
-// matematyki, przez co cały layout był o 1em szerszy niż viewport i zjechany
-// w prawo — dla strony głównej zerujemy go (na desktopie i tak jest 0).
+// hero/tinted robią full-bleed przez mixin layout.full-bleed
+// (width:100vw; margin-inline: calc(50% - 50vw)) — wersja bez position/left,
+// która nie generuje poziomego scrolla. Domyślny 1em padding .ui-content na
+// mobile przesuwał punkt zerowy tej matematyki, przez co cały layout był o 1em
+// szerszy niż viewport i zjechany w prawo — dla strony głównej zerujemy go
+// (na desktopie i tak jest 0).
 .ui-content.mainPage {
     padding: 0;
 }
@@ -49,7 +52,6 @@
   @media (min-width: $mpr-break) {
     .mpr-hero-inner,
     .mpr-trust-band,
-    .mpr-steps,
     .mpr-cards {
       box-sizing: border-box;
       padding-inline: $mpr-gutter;
@@ -63,10 +65,7 @@
   /* break out of .ui-content's max-width so the tinted band spans the
      full viewport, not just the centered content column */
   .mpr-section-tinted {
-    width: 100vw;
-    position: relative;
-    left: 50%;
-    margin-left: -50vw;
+    @include layout.full-bleed;
     background: $mpr-surface-container-low;
   }
 
@@ -80,15 +79,14 @@
      hero visual + floating stat cards below - matches the Claude Design
      mockup, which is centered rather than the old two-column layout. */
   .mpr-hero {
-    /* break out to full viewport width (same trick as .mpr-section-tinted
+    /* break out to full viewport width (same mixin as .mpr-section-tinted
        below) so the gradient reaches the true edges on wide screens - safe
        because .mpr-hero-inner below re-centers the actual content at a
        max-width, so it doesn't stretch edge to edge just because this
-       wrapper does. */
-    width: calc(100vw - 2rem);
+       wrapper does. position:relative zostaje — to containing block dla
+       pływających kart .mpr-hero-card (position:absolute). */
+    @include layout.full-bleed;
     position: relative;
-    left: 50%;
-    margin-left: -50vw;
     padding: 3rem 1em 0;
     text-align: center;
     background: radial-gradient(120% 70% at 50% -10%, $mpr-primary-container 0%, $mpr-surface-container-low 44%, $mpr-surface 76%);
@@ -343,7 +341,11 @@
   /* Trust numbers band */
   .mpr-trust-band {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    // minmax(0, 1fr) zamiast 1fr: domyślne 1fr ma min-width:auto (=min-content),
+    // więc na mobile najdłuższe słowo etykiety ("obsługiwanych") rozpychało trzy
+    // stałe kolumny ponad szerokość viewportu → poziomy scroll. minmax(0,…)
+    // zdejmuje ten próg, kolumny dzielą szerokość równo, a tekst się zawija.
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     max-width: 75em;
     margin: 0 auto;
     border-top: 1px solid $mpr-hairline;
@@ -377,60 +379,179 @@
       font-size: 0.85rem;
       color: $mpr-muted;
       margin-top: 4px;
+      overflow-wrap: break-word;
     }
   }
 
-  /* Numbered steps ("Jak to działa") */
-  .mpr-steps {
-    display: grid;
-    gap: 1.75rem;
-    max-width: 75em;
-    margin: 0 auto;
+  /* "Zobacz UD w akcji" — auto-cycling demo: interactive steps on the left,
+     phone screenshot on the right. Dark full-bleed band. */
+  .mpr-demo-section {
+    @include layout.full-bleed;
+    background: $mpr-heading;
+    color: #fff;
+    padding: 3rem 1.25em 3.5rem;
 
     @media (min-width: $mpr-break) {
-      grid-template-columns: repeat(3, 1fr);
+      padding: 4.5rem 2em;
     }
   }
 
-  .mpr-step-number {
+  .mpr-demo-head {
+    text-align: center;
+
+    .mpr-section-title {
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+  }
+
+  .mpr-demo-sub {
+    color: #a8bdb0;
+    margin: 0 auto;
+    max-width: 30em;
+    font-size: 1.05rem;
+  }
+
+  .mpr-demo-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 62em;
+    margin: 2.5rem auto 0;
+
+    @media (min-width: $mpr-break) {
+      flex-direction: row;
+      align-items: center;
+      gap: 3.5rem;
+    }
+  }
+
+  .mpr-demo-steps {
+    width: 100%;
+    max-width: 24em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+
+    @media (min-width: $mpr-break) {
+      flex: 0 0 22.5em;
+    }
+  }
+
+  .mpr-demo-step {
+    all: unset;
+    cursor: pointer;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.875rem;
+    background: rgba(255, 255, 255, 0.04);
+    transition: background 0.2s ease;
+
+    &.is-active {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  .mpr-demo-step-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mpr-demo-step-num {
+    flex: 0 0 auto;
     font-family: "Bricolage Grotesque", sans-serif;
     font-weight: 700;
-    font-size: 1.1rem;
-    color: $mpr-primary;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.875rem;
-    background: $mpr-primary-container;
+    font-size: 0.875rem;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #a8bdb0;
+    background: rgba(255, 255, 255, 0.08);
+    transition: color 0.2s ease, background 0.2s ease;
+
+    .mpr-demo-step.is-active & {
+      color: $mpr-heading;
+      background: $mpr-accent;
+    }
   }
 
-  .mpr-step h3 {
-    font-size: 1.2rem;
-    margin: 1.1rem 0 0.4rem;
+  .mpr-demo-step-label {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #a8bdb0;
+    transition: color 0.2s ease;
+
+    .mpr-demo-step.is-active & {
+      color: #fff;
+    }
   }
 
-  .mpr-step p {
-    color: $mpr-on-surface-variant;
-    margin: 0;
-    line-height: 1.55;
+  .mpr-demo-progress {
+    height: 3px;
+    margin-left: 2.5rem;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 99px;
+    overflow: hidden;
   }
 
-  /* Demo recording section */
-  .mpr-demo {
-    max-width: 60em;
-    margin: 2.5rem auto 0;
+  .mpr-demo-progress-bar {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: $mpr-accent;
+    border-radius: 99px;
+  }
 
-    .video {
-      border-radius: 1.125rem;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  .mpr-demo-caption {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #cddbd2;
+    margin: 0.875rem 1.25rem 0;
+  }
+
+  .mpr-demo-phone {
+    flex: 0 0 auto;
+  }
+
+  .mpr-demo-phone-frame {
+    position: relative;
+    width: 17.5rem;
+    max-width: 78vw;
+    aspect-ratio: 1080 / 2254;
+    border-radius: 2.25rem;
+    background: #0a130d;
+    padding: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 30px 60px -25px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+  }
+
+  .mpr-demo-shot {
+    position: absolute;
+    inset: 0.5rem;
+    border-radius: 1.85rem;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+
+    &.is-active {
+      opacity: 1;
     }
 
-    video {
+    img {
       width: 100%;
       display: block;
+      /* crop the screenshot's status bar, matching the design mockup */
+      transform: translateY(-6.1%);
     }
   }
 
