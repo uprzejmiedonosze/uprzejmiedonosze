@@ -31,7 +31,10 @@ $errorHandler->forceContentType('application/json');
 $errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::class);
 
 $app->get('/.well-known/oauth-authorization-server', \oauth\authorizationServerMetadata(...));
+// Both the RFC 9728 resource-path form and the bare form, since MCP clients
+// probe either.
 $app->get('/.well-known/oauth-protected-resource/mcp', \oauth\protectedResourceMetadata(...));
+$app->get('/.well-known/oauth-protected-resource', \oauth\protectedResourceMetadata(...));
 $app->post('/oauth/register', \oauth\register(...));
 $app->post('/oauth/token', \oauth\token(...));
 $app->post('/oauth/revoke', \oauth\revoke(...));
