@@ -29,14 +29,15 @@ final class ReportMcpTools {
      * @param string $status Filter: 'all' (default, excludes drafts), a concrete
      *                        status id (e.g. 'confirmed-waiting'), or 'allWithDrafts'.
      * @param int    $limit  Maximum number of reports to return (default 50).
-     * @return array List of report summaries, newest first.
+     * @return array{reports: array} The reports, newest first.
      */
     public function listReports(string $status = 'all', int $limit = 50): array {
         McpIdentity::requireScope('reports:read');
         $user = McpIdentity::currentUser();
         $apps = \user\apps($user, $status, '%', $limit, 0);
-        // Normalise the domain objects to plain arrays for structured MCP output.
-        return json_decode(json_encode($apps), true) ?? [];
+        // Wrap in an object: MCP structuredContent must be an object, not an
+        // array. Normalise the domain objects to plain arrays too.
+        return ['reports' => json_decode(json_encode($apps), true) ?? []];
     }
 
     /**
