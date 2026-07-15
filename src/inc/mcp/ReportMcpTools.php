@@ -44,4 +44,33 @@ final class ReportMcpTools {
 
         return json_decode(json_encode($application), true) ?? [];
     }
+
+    /**
+     * Update the status of one of the signed-in user's reports — e.g. to
+     * record the authority's response. The transition must be allowed for the
+     * report's current status (enforced by the domain layer).
+     *
+     * @param string $reportId The report id.
+     * @param string $status   The new status id, e.g. 'confirmed-sm',
+     *                          'confirmed-fined', 'confirmed-instructed',
+     *                          'confirmed-ignored' or 'archived'.
+     * @return array The updated report.
+     */
+    public function updateReportStatus(string $reportId, string $status): array {
+        McpIdentity::requireScope('reports:status:write');
+        $user = McpIdentity::currentUser();
+
+        $application = \app\get($reportId);
+        if (!$application || $application->email !== $user->getEmail()) {
+            throw new \RuntimeException("Report '$reportId' not found");
+        }
+
+        try {
+            $application = \setStatus($status, $reportId, $user);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException($e->getMessage());
+        }
+
+        return json_decode(json_encode($application), true) ?? [];
+    }
 }

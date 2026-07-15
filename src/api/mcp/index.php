@@ -28,6 +28,7 @@ require(INC_DIR . '/mcp/ReportMcpTools.php');
 require(INC_DIR . '/mcp/McpServerFactory.php');
 
 use Mcp\Server\Transport\StreamableHttpTransport;
+use Mcp\Server\Transport\Http\Middleware\DnsRebindingProtectionMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
@@ -82,9 +83,16 @@ class McpIdentityMiddleware implements MiddlewareInterface {
 
 $mcpHandler = function (Request $request, Response $response) {
     $server = \mcp\buildServer();
-    // Default transport middleware (CORS + DNS-rebinding to localhost) is fine
-    // for local development; production hardening lands with the OAuth work.
-    return $server->run(new StreamableHttpTransport($request));
+    // The SDK's DNS-rebinding allowlist defaults to localhost only, which would
+    // reject real remote clients. Widen it to the deployment host; keep the
+    // other default transport middleware (CORS, protocol-version).
+    $middleware = array_map(
+        fn ($m) => $m instanceof DnsRebindingProtectionMiddleware
+            ? new DnsRebindingProtectionMiddleware(['localhost', '127.0.0.1', '[::1]', HOST])
+            : $m,
+        StreamableHttpTransport::defaultMiddleware()
+    );
+    return $server->run(new StreamableHttpTransport($request, middleware: $middleware));
 };
 
 // CORS preflight must not require authorization.
