@@ -567,7 +567,7 @@ body.app-shell {
 
 @media (max-width: variables.$width-break) {
   /* Reserve space for the fixed bar on .ui-page, NOT body: this is a jQuery
-     Mobile shell where .ui-page is position:absolute (index.scss) and its
+     Mobile shell where .ui-page is position:absolute (index3.scss) and its
      content — not body — defines the scroll height, so padding on body has no
      effect. The bar's own height includes env(safe-area-inset-bottom) (home
      indicator), so the reservation adds the same inset or content stays

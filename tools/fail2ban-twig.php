@@ -9,6 +9,7 @@ echo $twig->render('fail2ban.html.twig', [
     'BASE_URL' => BASE_URL,
     'CSS_HASH' => CSS_HASH,
     'JS_HASH' => JS_HASH,
+    'footerLinks' => $FOOTER_LINKS,
     'dialog' => false,
     'general' => [
         'uri' => '/',

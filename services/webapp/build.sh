@@ -62,7 +62,7 @@ php tools/police-stations.php \
 
 log "CSS (parcel)"
 HOST=$APP_HOST node src/scss/env.js > src/scss/lib/variables.env.scss
-node_modules/.bin/parcel build --no-cache --dist-dir export/public/css src/scss/index.scss
+node_modules/.bin/parcel build --no-cache --dist-dir export/public/css src/scss/index3.scss
 
 # ── JS ────────────────────────────────────────────────────────────────────────
 
