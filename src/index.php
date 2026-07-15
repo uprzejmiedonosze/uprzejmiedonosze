@@ -180,6 +180,12 @@ $app->group('/.well-known', function (RouteCollectorProxy $group) { // user regi
     $group->get('/assetlinks.json', StaticPagesHandler::class . ':assetlinks');
 })   ->add(new JsonMiddleware());
 
+$app->group('/oauth', function (RouteCollectorProxy $group) { // OAuth consent (browser)
+    $group->get('/authorize', OAuthHandler::class . ':authorize');
+    $group->post('/authorize', OAuthHandler::class . ':consent');
+})  ->add(new HtmlMiddleware())
+    ->add(new OptionalUserMiddleware());
+
 $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/', StaticPagesHandler::class . ':root');
 

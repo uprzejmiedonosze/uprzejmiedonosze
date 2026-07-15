@@ -1,0 +1,25 @@
+{% set leftButton = 'menu' %}
+
+{% set title = 'Autoryzacja aplikacji' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+<div class="ui-body ui-body-a oauth-consent">
+    <h2>{{ oauth.clientName }}</h2>
+    <p>Aplikacja <strong>{{ oauth.clientName }}</strong> prosi o dostęp do Twojego
+       konta w serwisie Uprzejmie Donoszę i będzie mogła:</p>
+    <ul>
+        {% for scope in oauth.scopes %}
+            <li>{{ scope }}</li>
+        {% endfor %}
+    </ul>
+    <p>Dostęp możesz w każdej chwili cofnąć w ustawieniach konta.</p>
+
+    <form method="post" action="{{ BASE_URL }}oauth/authorize?{{ oauth.query }}">
+        <input type="hidden" name="csrf" value="{{ oauth.csrf }}">
+        <button type="submit" name="decision" value="approve" class="button cta">Zezwól</button>
+        <button type="submit" name="decision" value="deny" class="button">Odmów</button>
+    </form>
+</div>
+{% endblock %}
