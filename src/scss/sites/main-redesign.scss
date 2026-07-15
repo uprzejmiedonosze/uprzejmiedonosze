@@ -765,16 +765,44 @@
   }
 
   .mpr-faq-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     background: $mpr-surface-container-lowest;
     border: 1px solid $mpr-outline-variant;
     border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  /* The clickable row: a <summary> inside a <details class="mpr-faq-item">,
+     or the plain <a class="mpr-faq-item mpr-faq-more"> "more" link. */
+  .mpr-faq-item > summary,
+  a.mpr-faq-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
     padding: 1rem 1.25rem;
     font-weight: 600;
     text-decoration: none;
     color: $mpr-on-surface;
+    cursor: pointer;
+    list-style: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .mpr-faq-answer {
+    padding: 0 1.25rem 1.1rem;
+
+    p {
+      margin: 0;
+      color: $mpr-on-surface-variant;
+      line-height: 1.6;
+    }
+
+    a {
+      color: $mpr-primary;
+    }
   }
 
   .mpr-faq-more {
@@ -785,5 +813,10 @@
   .mpr-faq-chevron {
     flex-shrink: 0;
     color: $mpr-muted;
+    transition: transform 0.2s ease;
+
+    details[open] > summary & {
+      transform: rotate(180deg);
+    }
   }
 }
