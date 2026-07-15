@@ -106,6 +106,9 @@ if (!defined('CRYPTO_KEY')) define('CRYPTO_KEY', getenv('CRYPTO_KEY') ?: '');
 if (!defined('CRYPTO_IV'))  define('CRYPTO_IV',  getenv('CRYPTO_IV')  ?: '');
 if (!defined('CRYPTO_TAG')) define('CRYPTO_TAG', getenv('CRYPTO_TAG') ?: '');
 
+if (!defined('OAUTH_PRIVATE_KEY'))    define('OAUTH_PRIVATE_KEY',    getenv('OAUTH_PRIVATE_KEY')    ?: '');
+if (!defined('OAUTH_ENCRYPTION_KEY')) define('OAUTH_ENCRYPTION_KEY', getenv('OAUTH_ENCRYPTION_KEY') ?: '');
+
 if (!defined('OPENAI_API_KEY')) define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: '');
 if (!defined('GOOGLE_API_KEY')) define('GOOGLE_API_KEY', getenv('GOOGLE_API_KEY') ?: '');
 if (!defined('OPENAI_PROJECT')) define('OPENAI_PROJECT', getenv('OPENAI_PROJECT') ?: '');
