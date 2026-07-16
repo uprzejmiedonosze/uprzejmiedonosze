@@ -97,7 +97,7 @@
                     <input class="required" type="text" id="plateId" name="plateId"
                         placeholder="(numer rej.)" value="{{ app.carInfo.plateId ?? '' }}"
                         autocomplete="off" />
-                    <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}"
+                    <img id="plateImage" src="{{ (app.carInfo.plateImage ?? '')|asset_url }}"
                         {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
                 </div>
             </div>

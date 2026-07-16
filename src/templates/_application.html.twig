@@ -114,7 +114,7 @@
 
         <div>
         {% if app.shouldIncludePlateImage %}
-            <img id="plateImage" src="{{ app.carInfo.plateImage ?? '' }}?v={{ app.getRevision }}"/>
+            <img id="plateImage" src="{{ (app.carInfo.plateImage ?? '')|asset_url }}?v={{ app.getRevision }}"/>
         {% endif %}
         </div>
     </div>
