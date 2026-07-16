@@ -764,7 +764,8 @@
             "ul. Krótka 4",
             "83-000 Pruszcz Gdański"
         ],
-        "email": "strazmiejska@pruszcz-gdanski.pl"
+        "email": "strazmiejska@pruszcz-gdanski.pl",
+        "hint": "Wymagają zdjęcia tabliczki znaku strefy zamieszkania razem z widokiem na pojazd, inaczej proszą o uzupełnienie."
     },
     "Rotmanka": {
         "parent": "gmina Pruszcz Gdański"

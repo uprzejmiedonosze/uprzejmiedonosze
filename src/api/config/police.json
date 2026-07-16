@@ -1102,7 +1102,8 @@
         ],
         "email": "wrd.op@op.policja.gov.pl",
         "voivodeship": "Opolskie",
-        "city": "Opole"
+        "city": "Opole",
+        "hint": "Sami informują listownie o zakończeniu sprawy, i robią to sprawnie. Niestety większość zgłoszeń kończy się pouczeniem."
     },
     "Gdańsk-miasto": {
         "address": [
@@ -1214,7 +1215,8 @@
             "71-710 Szczecin"
         ],
         "email": "sekretariat.nadodra@sc.policja.gov.pl",
-        "voivodeship": "Zachodniopomorskie"
+        "voivodeship": "Zachodniopomorskie",
+        "hint": "Policjant zadzwonił przed spotkaniem, aby ustalić dogodny termin, na miejscu okazał zdjęcie kierującego z bazy policyjnej do potwierdzenia tożsamości, a po zakończeniu sprawy zadzwonił, by poinformować o wyniku."
     },
     "Szczecin-miasto": {
         "address": [
