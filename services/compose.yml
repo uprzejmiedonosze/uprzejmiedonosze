@@ -54,6 +54,9 @@ services:
       - 9099:9099
       - 4000:4000
     restart: always
+    # Run under an init so the Java/Node emulator reaps children and stops
+    # cleanly; without it the container often wedges ("cannot stop") on WSL.
+    init: true
 
   mailpit:
     profiles: [dev]
