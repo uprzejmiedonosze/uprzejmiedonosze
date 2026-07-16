@@ -115,6 +115,7 @@ PHP reads all config via `getenv()` — no `config.php` file required. Key const
 - `APP_HOST` — hostname for URLs and CDN paths
 - `APP_ROOT` — server root (`/var/www/uprzejmiedonosze.net/`)
 - `CRYPTO_KEY/IV/TAG` — encryption
+- `OAUTH_PRIVATE_KEY` — RSA private key (PEM) for the OAuth provider; `OAUTH_ENCRYPTION_KEY` — base64 32-byte key
 - `S3_KEY/SECRET/BUCKET/ENDPOINT/REGION` — Hetzner Object Storage
 - `MEMCACHED_HOST` — memcached hostname
 
