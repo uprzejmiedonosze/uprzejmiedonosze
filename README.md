@@ -110,6 +110,42 @@ docker exec -it webapp bash
 make test
 ```
 
+## MCP server
+
+The app exposes a [Model Context Protocol](https://modelcontextprotocol.io) server at
+**`POST /mcp`** (Streamable HTTP), so AI assistants (ChatGPT, Claude, MCP Inspector) can
+read and update the signed-in user's reports.
+
+**Connecting** — a client only needs the URL `https://<host>/mcp`:
+
+1. It discovers the OAuth endpoints via `/.well-known/oauth-protected-resource` and
+   `/.well-known/oauth-authorization-server`.
+2. It registers itself via Dynamic Client Registration (`POST /oauth/register`).
+3. The user is sent to `/oauth/authorize`, signs in with the **existing Firebase login**,
+   and approves a consent screen.
+4. The client gets an opaque access token (+ refresh token) and calls `/mcp` with it.
+
+Users review and revoke connected clients at **`/polaczone-aplikacje.html`**.
+
+**Tools & scopes:**
+
+| Tool | Scope | Purpose |
+|------|-------|---------|
+| `list_reports` | `reports:read` | list the user's reports |
+| `get_report` | `reports:read` | fetch one report by id |
+| `update_report_status` | `reports:status:write` | record the authority's response |
+
+Tokens are **opaque** (stored hashed, instantly revocable, audience-bound to `/mcp`);
+access tokens live 1h, refresh tokens 30d (sliding). Code: `src/api/mcp/` (server),
+`src/api/oauth/` + `src/inc/oauth/` (OAuth provider), `src/inc/mcp/` (tools). See
+[API.md](API.md) for the endpoints.
+
+**Testing locally** — with `make dev` running, point
+[MCP Inspector](https://github.com/modelcontextprotocol/inspector) at `http://localhost/mcp`
+and sign in through the Firebase emulator. Use **Google** sign-in: the email-link option
+opens a new browser tab, which breaks Inspector's per-tab OAuth state. In dev the login is
+pinned to one fixture identity (`e@nieradka.net`), regardless of which emulator account you use.
+
 ## Project structure
 
 ```

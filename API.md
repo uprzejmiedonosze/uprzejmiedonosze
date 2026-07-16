@@ -141,3 +141,54 @@ Valid `{name}` values:
   * `statuses`
   * `stop-agresji`
   * `terms`
+
+## MCP server (Model Context Protocol)
+
+### POST `/mcp`
+
+Streamable HTTP MCP endpoint. Requires an OAuth 2.1 bearer access token (see below); on a
+missing/invalid token it returns `401` with a `WWW-Authenticate: Bearer resource_metadata="…"`
+header pointing at the protected-resource metadata.
+
+Tools:
+
+  * `list_reports` — scope `reports:read`. Params: `status` (enum: `all`, `allWithDrafts`, or a
+    specific status id; default `all`), `limit` (default 50). Returns `{ "reports": [...] }`.
+  * `get_report` — scope `reports:read`. Param: `reportId`.
+  * `update_report_status` — scope `reports:status:write`. Params: `reportId`, `status` (enum of
+    recordable outcomes: `confirmed-sm`, `confirmed-fined`, `confirmed-instructed`,
+    `confirmed-ignored`, `archived`). The transition is validated by the domain layer.
+
+## OAuth 2.1 provider
+
+Authorization-code grant with PKCE (S256), refresh tokens, and Dynamic Client Registration.
+Tokens are opaque (stored as SHA-256 hashes), audience-bound to the `/mcp` resource. Scopes:
+`reports:read`, `reports:status:write`. The consent step reuses the existing Firebase login.
+
+### GET `/.well-known/oauth-authorization-server`
+
+RFC 8414 authorization-server metadata.
+
+### GET `/.well-known/oauth-protected-resource` and `/.well-known/oauth-protected-resource/mcp`
+
+RFC 9728 protected-resource metadata (served at both the bare and resource-suffixed paths).
+
+### POST `/oauth/register`
+
+RFC 7591 Dynamic Client Registration. Public clients only (no secret). JSON body:
+
+  * `redirect_uris` (required, array; matched exactly at authorization)
+  * `client_name` (optional)
+
+### GET/POST `/oauth/authorize`
+
+Authorization endpoint. Unauthenticated users are sent through the Firebase login, then a
+consent screen; approval redirects back to the client's `redirect_uri` with `code` + `state`.
+
+### POST `/oauth/token`
+
+Token endpoint. Grant types: `authorization_code`, `refresh_token`.
+
+### POST `/oauth/revoke`
+
+RFC 7009 token revocation.
