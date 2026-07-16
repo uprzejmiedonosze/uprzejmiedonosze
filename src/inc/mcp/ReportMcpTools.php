@@ -34,7 +34,7 @@ final class ReportMcpTools {
     public function listReports(string $status = 'all', int $limit = 50): array {
         McpIdentity::requireScope('reports:read');
         $user = McpIdentity::currentUser();
-        $apps = \user\apps($user, $status, '%', $limit, 0);
+        $apps = \user\apps($user, $status, 'all', $limit, 0);
         // Wrap in an object: MCP structuredContent must be an object, not an
         // array. Normalise the domain objects to plain arrays too.
         return ['reports' => json_decode(json_encode($apps), true) ?? []];
