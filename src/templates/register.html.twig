@@ -1,5 +1,9 @@
-{% set layout = (update ?? false) ? 'app' : 'focus' %}
-{% set appShell = true %}{# tło sekcji /app także w wariancie focus (rejestracja) #}
+{# Zarejestrowany użytkownik (edycja konta) dostaje pełny widok /app z menu i
+   tabbarem. Pierwsza rejestracja (onboarding, user jeszcze niezarejestrowany)
+   idzie w trybie „focus" — tabbar/sidebar prowadziłyby do stron wymagających
+   rejestracji, więc byłyby ślepą uliczką. #}
+{% set layout = user.isRegistered ? 'app' : 'focus' %}
+{% set appShell = true %}{# tło sekcji /app także w wariancie focus (onboarding) #}
 {% set title = user.isRegistered ? 'Zaktualizuj konto' : 'Zarejestruj się' %}
 {% set navbarCtaHref = '/app/new' %}
 {% set navbarCtaLabel = 'Nowe zgłoszenie' %}
@@ -71,7 +75,7 @@
 
 {# Na mobile /app nie ma już burgera (tabbar zastępuje nawigację), więc wylogowanie
    mieszka tu. Na desktopie tę akcję niesie sidebar _app-menu — stąd tylko mobile. #}
-{% if update ?? false %}
+{% if user.isRegistered %}
 <p class="app-mobile-only app-account-logout">
     <a href="/logout.html">Wyloguj się</a>
 </p>

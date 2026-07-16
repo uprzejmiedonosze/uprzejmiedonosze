@@ -1,6 +1,7 @@
-{# Właściciel ogląda własne zgłoszenie w normalnym widoku aplikacji (menu,
-   tabbar, tło /app); osoba postronna — w czystym widoku „focus". #}
-{% set layout = config.isAppOwner ? 'app' : 'focus' %}
+{# Zalogowany użytkownik (właściciel lub ktoś przeglądający udostępniony link)
+   ogląda zgłoszenie w normalnym widoku aplikacji (menu, tabbar, tło /app);
+   niezalogowana osoba postronna — w czystym widoku „focus". #}
+{% set layout = general.isLoggedIn ? 'app' : 'focus' %}
 {% set navbarCtaHref = '/app/new' %}
 {% set navbarCtaLabel = 'Nowe zgłoszenie' %}
 {% if dialog %}
