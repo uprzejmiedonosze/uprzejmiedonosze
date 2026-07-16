@@ -170,8 +170,8 @@ describe('Create application', () => {
         cy.get(`input#ex${firstExtension[0]}`).click({force: true})
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#plateId').invoke('val').as('detectedPlateId')
-        cy.get('#form-submit', { timeout: 10000 }).click()
-        cy.url().should('include', 'potwierdz')
+        cy.get('.mpr-navbar-cta.js-new-app-submit', { timeout: 10000 }).click()
+        cy.url().should('include', 'app/confirm')
     })
 
     it('checks confirmation screen', function () {
@@ -190,9 +190,9 @@ describe('Create application', () => {
     })
 
     it('checks application list screen', function () {
-        cy.visit('/moje-zgloszenia.html')
-        cy.location('pathname').should('include', '/moje-zgloszenia.html');
-        cy.intercept('GET', 'short-**-partial.html').as('appDetails')
+        cy.visit('/app/list')
+        cy.location('pathname').should('include', '/app/list');
+        cy.intercept('GET', '/app/partial/*').as('appDetails')
         cy.get('.application-short:not(.draft):not(.ready):not(.confirmed) h3')
             .should('be.visible').click()
         cy.wait('@appDetails')
@@ -226,8 +226,8 @@ describe('Edit application', () => {
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#plateId').invoke('val').as('detectedPlateId')
-        cy.get('#form-submit', { timeout: 10000 }).click()
-        cy.url().should('include', 'potwierdz')
+        cy.get('.mpr-navbar-cta.js-new-app-submit', { timeout: 10000 }).click()
+        cy.url().should('include', 'app/confirm')
     })
 
     it('checks confirmation screen', function () {
@@ -236,7 +236,9 @@ describe('Edit application', () => {
     })
 
     it('checks edit', function() {
-        cy.contains('Edytuj').click()
+        // „Edytuj" na ekranie potwierdzenia zastąpione przyciskiem „Popraw"
+        // (desktop: navbarBack, history.back() → formularz w trybie edycji).
+        cy.contains('Popraw').click()
         cy.contains('Edytujesz zgłoszenie')
     })
 
@@ -253,8 +255,8 @@ describe('Edit application', () => {
     })
 
     it('checks altered application', function(){
-        cy.get('#form-submit').click()
-        cy.url().should('include', 'potwierdz')
+        cy.get('.mpr-navbar-cta.js-new-app-submit').click()
+        cy.url().should('include', 'app/confirm')
         cy.contains('Wystąpił błąd').should('not.exist')
 
         cy.contains(this.detectedPlateId || this.config.carImage.plateId)
@@ -275,9 +277,9 @@ describe('Edit application', () => {
     })
 
     it('checks application list screen', function () {
-        cy.visit('/moje-zgloszenia.html')
-        cy.location('pathname').should('include', '/moje-zgloszenia.html');
-        cy.intercept('GET', 'short-**-partial.html').as('appDetails')
+        cy.visit('/app/list')
+        cy.location('pathname').should('include', '/app/list');
+        cy.intercept('GET', '/app/partial/*').as('appDetails')
         cy.get('.application-short:not(.draft):not(.ready):not(.confirmed) h3:first')
             .should('be.visible').click()
         cy.wait('@appDetails')
