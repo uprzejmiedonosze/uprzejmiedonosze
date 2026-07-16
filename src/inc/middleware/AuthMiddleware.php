@@ -91,7 +91,13 @@ class AuthMiddleware implements MiddlewareInterface {
                 'user_email' => (isDev()) ? 'e@nieradka.net' : $payload['email'],
                 'user_name' => $payload['name'] ?? '',
                 'user_picture' => $payload['picture'] ?? '',
-                'user_id' => $payload['user_id'] ?? $payload['sub'] ?? '',
+                // Dev already pins the email to one account; pin the uid too, so
+                // every emulator account/session maps to the same identity. The
+                // in-memory emulator assigns a fresh uid per account/restart, and
+                // user data is encrypted per-uid, so without this a re-login
+                // (or switching Google vs email-link) fails to decrypt existing
+                // data. In prod the real Firebase uid is stable per user.
+                'user_id' => (isDev()) ? 'dev-user' : ($payload['user_id'] ?? $payload['sub'] ?? ''),
                 'token' => $token
             );
         }
