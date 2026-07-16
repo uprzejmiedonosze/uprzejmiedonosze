@@ -14,6 +14,18 @@
 
 {% block main %}
 <h2>Historia zmian</h2>
+<h4 class="milestone">Czwartek, 16 lipca 2026</h4>
+<ul>
+    <li><b>Nowa odsłona graficzna całego serwisu.</b> Przeprojektowaliśmy stronę główną, strony informacyjne oraz panel zalogowanego użytkownika — spójny i czytelniejszy układ, nowe logo w nagłówku i wyraźnie lepsze działanie na telefonach.</li>
+    <li>Nowa strona główna: sekcja powitalna, karty korzyści, kroki „jak to działa”, interaktywne demo „Zobacz UD w akcji” (automatycznie przewijane kroki ze zrzutami z aplikacji, z poszanowaniem ustawienia ograniczenia animacji) oraz odświeżone sekcje o misji i wspieraniu projektu.</li>
+    <li>Panel zgłoszeń przeniesiony pod nowy adres <a href="/app">/app</a>: odświeżone karty statystyk, na telefonie dolny pasek nawigacji, a na komputerze boczne menu widoczne przez cały czas korzystania z aplikacji.</li>
+    <li>Uporządkowaliśmy adresy wewnątrz aplikacji — tworzenie zgłoszenia, lista zgłoszeń, edycja konta itd. mają teraz adresy w postaci <b>/app/…</b>. Stare linki i zakładki nadal działają (są automatycznie przekierowywane), a link do udostępnianego zgłoszenia ma teraz krótszą, docelową postać <b>/app/{id}</b> (stare adresy <b>ud-…​.html</b> przekierowują do niej trwale).</li>
+    <li>Nowa nawigacja boczna na stronach informacyjnych: jedno rozwijane menu ze wszystkimi działami (Warto wiedzieć / Warto wspierać / O projekcie / Wiki) zamiast dawnej listy „Przeczytaj także”. Uporządkowaliśmy też nawigację mobilną i menu pod ikoną „hamburgera”.</li>
+    <li>Część stron poradnikowych (przepisy i kategorie zgłoszeń, e-Doręczenia, ePUAP, zwrot środków za przesłuchanie, zażalenie na brak mandatu) przeniesiono do <a href="https://uprzejmiedonosze.net/wiki/niezbednik/przepisy_i_kategorie_zgloszen" target="_blank" rel="external">Uprzejmego WIKI</a> — dotychczasowe adresy przekierowują do nowych artykułów.</li>
+    <li>FAQ: dodano wyjaśnienie dotyczące anonimowości zgłoszeń, usunięto nieaktualną listę miast.</li>
+    <li>Przyspieszenie ładowania stron: lżejsze i poprawnie serwowane obrazki (zrzuty demo w formacie WebP, mocno zmniejszone zdjęcia w poradniku), rezygnacja z zewnętrznych fontów oraz czcionki ikon na rzecz wbudowanej grafiki (SVG).</li>
+    <li>Aktualizacja bibliotek PHP i JavaScript, w tym poprawki bezpieczeństwa.</li>
+</ul>
 <h4>Poniedziałek, 6 lipca 2026</h4>
 <ul>
     <li>Zmiana miejsca przechowywania obrazków z Hetzner S3 na Backblaze B2.</li>
