@@ -34,6 +34,9 @@
     <a onclick="confirmApplication()"
         class="menu-button right confirm-save-button">Zapisz!</a>
 {% endif %}
+{% if rightButton ?? '' == 'app' %}
+    <a href="{{ navbarCtaHref ?? '/app' }}" class="menu-button right">{{ navbarCtaLabel ?? 'Aplikacja' }}</a>
+{% endif %}
 </div>
 {% if showMenu ?? false %}
 <div class="container">
