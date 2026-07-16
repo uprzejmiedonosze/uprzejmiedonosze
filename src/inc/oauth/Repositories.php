@@ -2,6 +2,8 @@
 
 namespace oauth;
 
+use Defuse\Crypto\Crypto;
+use Defuse\Crypto\Exception\CryptoException;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -33,6 +35,23 @@ function tokenHash(string $token): string {
 /** The resource (audience) every MCP token is bound to. */
 function mcpResource(): string {
     return BASE_URL . 'mcp';
+}
+
+/**
+ * Recover the identifier of a league-issued refresh token, for /oauth/revoke.
+ * Unlike access tokens, refresh tokens aren't opaque: league encrypts a JSON
+ * payload (see BearerTokenResponse) with OAUTH_ENCRYPTION_KEY. A token that
+ * isn't one of ours — e.g. an access token presented to the same endpoint —
+ * simply fails to decrypt, so this returns null rather than throwing.
+ */
+function decryptRefreshTokenId(string $token): ?string {
+    try {
+        $payload = json_decode(Crypto::decryptWithPassword($token, OAUTH_ENCRYPTION_KEY), true);
+    } catch (CryptoException $e) {
+        return null;
+    }
+    $id = is_array($payload) ? ($payload['refresh_token_id'] ?? null) : null;
+    return is_string($id) ? $id : null;
 }
 
 /** Resolve a Firebase uid to its email (populated at consent time). */

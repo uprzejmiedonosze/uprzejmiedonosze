@@ -91,14 +91,21 @@ function token(Request $request, Response $response): Response {
 }
 
 /**
- * RFC 7009 token revocation. Handles opaque access tokens (hash lookup).
- * Always returns 200 per the spec, even for an unknown token. Refresh-token
- * / whole-connection revocation is done from the connected-apps page.
+ * RFC 7009 token revocation. The presented token may be either an opaque
+ * access token (hash lookup) or a league-encrypted refresh token (decrypted
+ * to recover its id); whichever it isn't is a harmless no-op. Always returns
+ * 200 per the spec, even for an unknown token. Whole-connection revocation
+ * (all tokens for a client) is done from the connected-apps page.
  */
 function revoke(Request $request, Response $response): Response {
     $token = (string) (((array) $request->getParsedBody())['token'] ?? '');
     if ($token !== '') {
         (new AccessTokenRepository())->revokeAccessToken($token);
+
+        $refreshTokenId = decryptRefreshTokenId($token);
+        if ($refreshTokenId !== null) {
+            (new RefreshTokenRepository())->revokeRefreshToken($refreshTokenId);
+        }
     }
     return $response->withStatus(200);
 }
