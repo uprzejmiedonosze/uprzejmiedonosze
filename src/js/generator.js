@@ -6,7 +6,7 @@ let formTypesData = {};
 let targetsData = {};
 let recipientsData = {};
 let currentStep = 1;
-let totalSteps = document.querySelectorAll(".generator>section:not(.hidden)").length;
+let totalSteps = document.querySelectorAll(".generator section:not(.hidden)").length;
 
 const politicalPartyExpanedNames = {
     'PiS': 'Prawo i Sprawiedliwosć',
@@ -29,7 +29,7 @@ function showHideElement(element, show=true) {
  * @param {number} stepNumber
  */
 function showStep(stepNumber) {
-    document.querySelectorAll('.generator>section').forEach(section => {
+    document.querySelectorAll('.generator section').forEach(section => {
         section.classList.remove('active');
     });
 
@@ -38,12 +38,12 @@ function showStep(stepNumber) {
         currentSection.classList.add('active')
 
 
-    const stepNumberSpan = /** @type {HTMLSpanElement} */ (document.querySelector('.generator>header>span'))
+    const stepNumberSpan = /** @type {HTMLSpanElement} */ (document.querySelector('.generator header>span'))
     if (stepNumberSpan) {
         stepNumberSpan.textContent = `Krok ${stepNumber} z ${totalSteps - 1}`;
     }
 
-    const header = /** @type {HTMLElement} */ (document.querySelector('.generator>header'))
+    const header = /** @type {HTMLElement} */ (document.querySelector('.generator header'))
     const show = ([1, 2, 3, 4].includes(stepNumber))
     showHideElement(header, show)
     showHideElement(stepNumberSpan, show)
@@ -138,10 +138,10 @@ function restartWizard() {
 
 async function fetchRecipients() {
     // show loader
-    const loader = document.querySelector(".generator>section#step-4>div.loader");
+    const loader = document.querySelector(".generator section#step-4>div.loader");
     loader?.classList.remove('hidden');
-    const fieldContainer = document.querySelector(".generator>section#step-4>fieldset");
-    document.querySelector('.generator>section#step-4>nav>a')?.classList.add('disabled');
+    const fieldContainer = document.querySelector(".generator section#step-4>fieldset");
+    document.querySelector('.generator section#step-4>nav>a')?.classList.add('disabled');
     if (!fieldContainer) return prevStep();
     fieldContainer.innerHTML = '';
 
@@ -222,7 +222,7 @@ const checkRecipient = () => {
     const selectedRecipient = /** @type {HTMLInputElement} */ (document.querySelector('input[name="recipient"]:checked'));
     const selectedRecipientValue = selectedRecipient?.value;
 
-    const actionButton = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-4>nav>a'));
+    const actionButton = /** @type {HTMLButtonElement} */ (document.querySelector('.generator section#step-4>nav>a'));
 
     if (!actionButton) return true;
 
@@ -356,8 +356,8 @@ const checkTarget = () => {
     const selectedTarget = /** @type {HTMLInputElement} */ (document.querySelector('input[name="target"]:checked'));
     const selectedTargetRecipient = selectedTarget?.dataset?.recipient;
 
-    const step2Button = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-2>nav>a'));
-    const step3Button = /** @type {HTMLButtonElement} */ (document.querySelector('.generator>section#step-3>nav>a'));
+    const step2Button = /** @type {HTMLButtonElement} */ (document.querySelector('.generator section#step-2>nav>a'));
+    const step3Button = /** @type {HTMLButtonElement} */ (document.querySelector('.generator section#step-3>nav>a'));
 
     // step-2 button: enable when any target is selected
     if (step2Button) {
@@ -375,15 +375,15 @@ const checkTarget = () => {
     // step-3 button action: generate directly or go to step-4 (selector)
     if (step3Button) {
         if (selectedTargetRecipient?.startsWith("selector:")) {
-            document.querySelector(".generator>section#step-4")?.classList.remove("hidden");
+            document.querySelector(".generator section#step-4")?.classList.remove("hidden");
             step3Button.dataset.action = 'next';
         } else {
-            document.querySelector(".generator>section#step-4")?.classList.add("hidden");
+            document.querySelector(".generator section#step-4")?.classList.add("hidden");
             step3Button.dataset.action = 'generate';
         }
     }
 
-    totalSteps = document.querySelectorAll(".generator>section:not(.hidden)").length;
+    totalSteps = document.querySelectorAll(".generator section:not(.hidden)").length;
     showStep(currentStep);
 
     // re-render form types filtered by the newly selected target

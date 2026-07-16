@@ -19,7 +19,7 @@ describe('API:automated (Poznań)', () => {
         // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
-        cy.get('#form-submit').click()
+        cy.get('.mpr-navbar-cta.js-new-app-submit').click()
         // @ts-ignore
         cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
@@ -63,7 +63,7 @@ describe('API:Mail (Wrocław)', () => {
         // @ts-ignore
         cy.setAppCategory(this.categories)
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
-        cy.get('#form-submit').click()
+        cy.get('.mpr-navbar-cta.js-new-app-submit').click()
         // @ts-ignore
         cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')
@@ -108,7 +108,7 @@ describe('Police-only (Poniatowa, brak SM)', () => {
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('#unit-sm').should('be.disabled')
         cy.get('#unit-sa').should('be.checked')
-        cy.get('#form-submit', { timeout: 5000 }).click()
+        cy.get('.mpr-navbar-cta.js-new-app-submit', { timeout: 5000 }).click()
         // @ts-ignore
         cy.sendApp()
         cy.contains('Wystąpił błąd').should('not.exist')

@@ -31,15 +31,21 @@ Cypress.Commands.add("sendApp", () => {
   cy.intercept('PATCH', '/api/app/**').as("send")
   cy.contains('Wyślij do').click()
   cy.wait("@send")
-  cy.url().should('include', 'dziekujemy')
+  cy.url().should('include', 'app/done')
 })
 
 Cypress.Commands.add("uploadOKImages", (carImage = 'img_p.jpg') => {
-  cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg', 'image/jpeg')
-
   cy.intercept('POST', '/api/app/**/image').as("image")
   cy.intercept('GET', '/api/geo/**/m').as("mapbox")
   cy.intercept('GET', '/api/geo/**/n').as("nominantim")
+
+  // Czekamy aż zdjęcie kontekstowe faktycznie się zapisze (src → cdn) zanim
+  // wgramy kolejne. Bez tego zgłoszenie mogło trafić do potwierdzenia bez
+  // zdjęcia kontekstowego — w edycji formularz pokazywał wtedy placeholder,
+  // a walidacja (checkImages) słusznie blokowała „Dalej".
+  cy.uploadFile('input[type=file]#contextImage', 'img_c.jpg', 'image/jpeg')
+  cy.wait('@image')
+  cy.get('.contextImageSection img', { timeout: 12000 }).should('have.attr', 'src').should('include', 'cdn')
 
   cy.uploadFile('input[type=file]#carImage', carImage,
     'image/jpeg')
@@ -108,8 +114,15 @@ Cypress.Commands.add("cleanDB", () => {
 
 Cypress.Commands.add("goToNewAppScreen", () => {
   cy.goToNewAppScreenWithoutTermsScreen()
-  cy.contains('Pełen regulamin oraz polityka prywatności Uprzejmie Donoszę')
-  cy.contains('Wyrażam zgodę na regulamin').click()
+  // /app/new przekierowuje na /app/start (ekran zgody) tylko, gdy regulamin nie
+  // jest jeszcze zaakceptowany — na staging zależy to od stanu DB/cache. Helper
+  // ma jedynie dojść do formularza, więc zgodę klikamy warunkowo (osobny test
+  // samego ekranu zgody żyje w account.cy.js).
+  cy.location('pathname').then((path) => {
+    if (path.includes('/app/start')) {
+      cy.contains('Wyrażam zgodę na regulamin').click()
+    }
+  })
 })
 
 Cypress.Commands.add("goToNewAppScreenWithoutTermsScreen", () => {

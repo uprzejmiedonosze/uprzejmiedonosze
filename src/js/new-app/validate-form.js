@@ -32,7 +32,11 @@ function checkImages() {
   ['contextImage', 'carImage'].forEach(img => {
     const imgElement = document.querySelector(`.${img}Section img`)
     const sectionElement = document.querySelector(`.${img}Section`)
-    if (imgElement && imgElement.getAttribute('src')?.startsWith('img/')) {
+    // Placeholder (brak wgranego zdjęcia) to asset spod img/ — po przejściu na
+    // asset_url renderuje się z wiodącym ukośnikiem (/img/fff-1.png), więc
+    // sprawdzamy oba warianty, inaczej ramka .error nigdy się nie pojawia.
+    const src = imgElement?.getAttribute('src') || ''
+    if (imgElement && (src.startsWith('img/') || src.startsWith('/img/'))) {
       if (sectionElement) sectionElement.classList.add("error")
       success = false;
     }

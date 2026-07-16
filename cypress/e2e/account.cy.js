@@ -91,10 +91,11 @@ describe('Update account', () => {
     // @ts-ignore
     cy.setAppCategory(this.categories)
     cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
-    cy.get('#form-submit').click()
+    cy.get('.mpr-navbar-cta.js-new-app-submit').click()
 
     cy.contains('zostanie za chwilę wysłane')
-    cy.contains(this.sm.szczecin.address[0])
+    // Dla Szczecina domyślnym adresatem jest teraz Policja (SM Szczecin oflagowana).
+    cy.contains('KP Szczecin Niebuszewo')
     // @ts-ignore
     cy.sendApp()
 
@@ -112,13 +113,14 @@ describe('Update account', () => {
     cy.setAppCategory(this.categories)
     cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
 
-    cy.get('#unit-sm').should('be.checked')
-    cy.get('#unit-sa').check({force: true})
+    // Domyślnie Policja (#unit-sa); przełączamy na przeciwne — Straż Miejską (#unit-sm).
+    cy.get('#unit-sa').should('be.checked')
+    cy.get('#unit-sm').check({force: true})
 
-    cy.get('#form-submit').click()
+    cy.get('.mpr-navbar-cta.js-new-app-submit').click()
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
-    cy.contains('KP Szczecin Niebuszewo')
+    cy.contains(this.sm.szczecin.address[0])
     // @ts-ignore
     cy.sendApp()
 
@@ -137,12 +139,12 @@ describe('Update account', () => {
     cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
 
     // the choice made in the previous test was persisted to the account
-    cy.get('#unit-sa').should('be.checked')
+    cy.get('#unit-sm').should('be.checked')
 
-    cy.get('#form-submit').click()
+    cy.get('.mpr-navbar-cta.js-new-app-submit').click()
 
     cy.contains('Równocześnie proszę o niezamieszczanie w protokole danych dotyczących mojego miejsca zamieszkania, nr. telefonu i adresu e-mail.').should('not.exist')
-    cy.contains('KP Szczecin Niebuszewo')
+    cy.contains(this.sm.szczecin.address[0])
     // @ts-ignore
     cy.sendApp()
 

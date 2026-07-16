@@ -245,10 +245,9 @@ describe('Generator pism - różne typy adresatów', () => {
         cy.get('#output', { timeout: 60000 }).should('not.be.empty')
         cy.contains('Gotowe do wysłania', { timeout: 60000 })
 
-        // Sprawdza czy jest przycisk "Otwórz formularz"
+        // Adresat formularzowy (RPO): pokazuje się „Otwórz formularz", nie „Otwórz maila".
         cy.get('#openFormButton').should('be.visible')
         cy.get('#mailtoButton').should('not.be.visible')
-        cy.get('#gmailtoButton').should('not.be.visible')
     })
 
     it('sprawdza Członka Sejmowej Komisji Infrastruktury - Paulina Matysiak', () => {
@@ -277,9 +276,8 @@ describe('Generator pism - różne typy adresatów', () => {
         cy.get('#output', { timeout: 60000 }).should('not.be.empty')
         cy.contains('Gotowe do wysłania', { timeout: 60000 })
 
-        // Sprawdza czy jest przycisk "Wyślij przez Gmaila" z klasą "cta"
-        cy.get('#gmailtoButton').should('be.visible').and('have.class', 'cta')
-        cy.get('#mailtoButton').should('be.visible')
+        // Adresat mailowy (poseł/posłanka): „Otwórz maila" jest głównym CTA, brak „Otwórz formularz".
+        cy.get('#mailtoButton').should('be.visible').and('have.class', 'cta')
         cy.get('#openFormButton').should('not.be.visible')
     })
 })
