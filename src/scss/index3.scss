@@ -91,9 +91,9 @@ body {
 }
 
 input, textarea {
-    background: transparent none;
+    background: white;
     border-radius: 5px;
-    border: 1px solid variables.$primaryColor;
+    border: 1px solid #ede9df;
     box-sizing: border-box;
     color: variables.$primaryColor;
     display: block;

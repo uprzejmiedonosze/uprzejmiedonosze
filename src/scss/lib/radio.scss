@@ -13,7 +13,7 @@ input[type=checkbox] {
 }
 
 .radio {
-    border: 3px solid transparent;
+    border: 3px solid #ede9df;
     border-radius: 5px;
     cursor: pointer;
     display: block;
@@ -24,7 +24,7 @@ input[type=checkbox] {
     text-align: left;
     user-select: none;
 
-    background-color: #F9F9F9;
+    background-color: #fff;
 
     &:hover {
         color: variables.$primaryColor;
