@@ -38,6 +38,16 @@ body>div>header {
             transform: translate(-50%, -50%);
             left: 50%;
             text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+
+            // sygnet UD wyśrodkowany w mobilnym pasku
+            img {
+                height: 34px;
+                width: auto;
+                display: block;
+            }
         }
     }
 
@@ -84,6 +94,15 @@ body>div>header {
     color: tokens.$mpr-primary;
     text-decoration: none;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+
+    // pełny logotyp UD zamiast napisu na desktopie
+    img {
+        height: 1.75rem;
+        width: auto;
+        display: block;
+    }
 }
 
 // app/confirm: „Popraw" zamiast logo — pigułkowy przycisk cofający (history -1),
