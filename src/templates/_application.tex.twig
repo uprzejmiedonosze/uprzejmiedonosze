@@ -6,11 +6,11 @@
 \vspace{\stretch{3}}\noindent
 {\large {{ app.guessSMData().getLatexAddress() }} }
 
-{% set contextImage = '{' ~ root ~ '/' ~ app.contextImage.thumb ~ '}' %}
-{% set contextImageUrl = '{' ~ BASE_URL ~ app.contextImage.url ~ '?download}' %}
+{% set contextImage = '{' ~ root ~ '/' ~ (app.contextImage.thumb ?? '') ~ '}' %}
+{% set contextImageUrl = '{' ~ BASE_URL ~ (app.contextImage.url ?? '') ~ '?download}' %}
 
-{% set carImage     = '{' ~ root ~ '/' ~ app.carImage.thumb ~ '}' %}
-{% set carImageUrl     = '{' ~ BASE_URL ~ app.carImage.url ~ '?download}' %}
+{% set carImage     = '{' ~ root ~ '/' ~ (app.carImage.thumb ?? '') ~ '}' %}
+{% set carImageUrl     = '{' ~ BASE_URL ~ (app.carImage.url ?? '') ~ '?download}' %}
 
 {% set thirdImage     = '{' ~ root ~ '/' ~ (app.thirdImage.thumb ?? '')~ '}' %}
 {% set thirdImageUrl     = '{' ~ BASE_URL ~ (app.thirdImage.url ?? '') ~ '?download}' %}
