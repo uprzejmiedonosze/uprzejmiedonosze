@@ -188,17 +188,18 @@ div.error img {
     }
 
     a.category-popup {
-      bottom: -6px;
+      bottom: -8px;
       font-size: 80%;
       font-weight: 400;
       padding: 6px 10px;
       position: absolute;
-      right: 3px;
+      right: 2px;
       text-transform: uppercase;
       text-decoration: none;
       z-index: 2;
-      background-color: aliceblue;
-      border-radius: 20px;
+      background-color: #ede9df;
+      border-radius: 18px 0 18px 0;
+      color: #333;
     }
   }
 

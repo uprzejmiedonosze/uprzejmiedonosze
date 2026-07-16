@@ -1,11 +1,10 @@
-{% set layout = 'focus' %}
-{% set appShell = true %}{# tło sekcji /app (base.html.twig → body.app-shell) #}
+{% set layout = 'app' %}
 {% set title = 'Nowe zgłoszenie' %}
 {% set mainClass = 'new-application' %}
 {% set leftButton = 'menuBack' %}
 {% set leftButtonText = 'wróć' %}{# nagłówek: lekki „← wróć" (history -1), jak „← popraw" na /app/confirm #}
 {% set rightButton = 'newAppNext' %}
-{# proces potrzebuje akcyjnego CTA „Dalej" w navbarze mimo presetu focus #}
+{# proces zastępuje domyślne CTA sekcji /app akcyjnym „Dalej" (submit formularza) #}
 {% set hideNavbarCta = false %}
 {% set navbarCtaAction = true %}
 {% set navbarCtaClass = 'js-new-app-submit' %}

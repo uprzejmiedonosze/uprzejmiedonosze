@@ -7,7 +7,9 @@
     padding-inline-start: 0;
     columns: 2;
     list-style: none;
-    padding-top: 9px;
+    padding: 9px;
+    background-color: white;
+    border-radius: 5px;
 
     li {
       display: none;
@@ -223,7 +225,7 @@ div[data-role="collapsibleset"] {
   .application {
     border-radius: .8em;
     margin-bottom: .5em;
-    background-color: #f6f6f6;
+    background-color: #fff;
     border: 1px solid #ddd;
 
     h3 {
