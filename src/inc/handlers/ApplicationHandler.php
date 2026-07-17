@@ -160,6 +160,9 @@ class ApplicationHandler extends AbstractHandler {
                 );
             } catch (ForbiddenException $e) {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            } catch (NotSendableException $e) {
+                logger("Brak wymaganych zdjęć przy /app/confirm dla zgłoszenia $appId, cofam na /app/new");
+                return $this->redirect('/app/new');
             } catch (Exception $e) {
                 return $this->redirect('/app/list');
             }

@@ -513,6 +513,10 @@ class Application extends JSONObject implements \JsonSerializable {
         return isset($this->number);
     }
 
+    public function hasRequiredImages(): bool {
+        return isset($this->contextImage->url) && isset($this->carImage->url);
+    }
+
     public function getFirstName(){
         return preg_split('/\s/', $this->user->name)[0];
     }

@@ -12,6 +12,9 @@ abstract class CityAPI {
         if(!$status->sendable){
             throw new NotSendableException("Nie mogę wysłać zgłoszenia '{$application->number}' w statusie '{$status->name}'");
         }
+        if(!$application->hasRequiredImages()){
+            throw new NotSendableException("Nie mogę wysłać zgłoszenia '{$application->number}' – brak wymaganych zdjęć");
+        }
         if(!$application->guessSMData(true)->api){
             throw new MissingSMException("Nie mogę wysłać zgłoszenia '{$application->number}' – brak przypisanej straży miejskiej");
         }

@@ -40,6 +40,10 @@ function updateApplication(
         throw new ForbiddenException("Zgłoszenie '{$application->id}' w stanie '{$application->status}' nie może być aktualizowane");
     }
 
+    if (!$application->hasRequiredImages()) {
+        throw new NotSendableException("Zgłoszenie '{$application->id}' nie posiada wymaganych zdjęć");
+    }
+
     $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
     $application->dtFromPicture = (bool) $dtFromPicture;
 
