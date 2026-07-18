@@ -106,7 +106,10 @@ if (!defined('CRYPTO_KEY')) define('CRYPTO_KEY', getenv('CRYPTO_KEY') ?: '');
 if (!defined('CRYPTO_IV'))  define('CRYPTO_IV',  getenv('CRYPTO_IV')  ?: '');
 if (!defined('CRYPTO_TAG')) define('CRYPTO_TAG', getenv('CRYPTO_TAG') ?: '');
 
-if (!defined('OAUTH_PRIVATE_KEY'))    define('OAUTH_PRIVATE_KEY',    getenv('OAUTH_PRIVATE_KEY')    ?: '');
+// Stored as a single-line env var with literal \n escapes (real embedded
+// newlines aren't reliably preserved across every deploy path — env files,
+// shells, secret managers), so decode them back into a real PEM here.
+if (!defined('OAUTH_PRIVATE_KEY'))    define('OAUTH_PRIVATE_KEY',    str_replace('\n', "\n", getenv('OAUTH_PRIVATE_KEY') ?: ''));
 if (!defined('OAUTH_ENCRYPTION_KEY')) define('OAUTH_ENCRYPTION_KEY', getenv('OAUTH_ENCRYPTION_KEY') ?: '');
 
 if (!defined('OPENAI_API_KEY')) define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: '');
