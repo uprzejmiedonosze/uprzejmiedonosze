@@ -132,7 +132,7 @@ old-staging: BUILD_ENV_FILE := services/.env.staging
 old-staging: clean build-export ## Deploy to staging server via Docker build + rsync (no checks, no sentry)
 	@echo "==> Deploying to $(HOST)"
 	@$(RSYNC) $(RSYNC_FLAGS) export/* $(HOSTING):/var/www/$(HOST)/webapp
-	@$(RSYNC) $(RSYNC_FLAGS) vendor   $(HOSTING):/var/www/$(HOST)/vendor
+	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
 	@$(RSYNC) --human-readable services/.env.staging $(HOSTING):/var/www/$(HOST)/.env.staging
 
 .PHONY: shadow
