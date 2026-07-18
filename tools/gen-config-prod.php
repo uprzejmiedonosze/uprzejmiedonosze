@@ -8,12 +8,26 @@
 $envFile    = $argv[1] ?? 'services/.env.prod';
 $outputFile = $argv[2] ?? 'export/config.prod.php';
 
+// Strips one layer of matching quotes, same as a shell/dotenv would: a
+// double-quoted value decodes \n escapes (needed for PEM keys, which must be
+// stored on one line — see OAUTH_PRIVATE_KEY); a single-quoted value is kept
+// literal; unquoted values pass through unchanged.
+function dotenvValue(string $v): string {
+    if (strlen($v) >= 2 && $v[0] === '"' && $v[-1] === '"') {
+        return str_replace('\n', "\n", substr($v, 1, -1));
+    }
+    if (strlen($v) >= 2 && $v[0] === "'" && $v[-1] === "'") {
+        return substr($v, 1, -1);
+    }
+    return $v;
+}
+
 $defines = [];
 foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
     if ($line[0] === '#' || !str_contains($line, '=')) continue;
     [$k, $v] = explode('=', $line, 2);
     $k = trim($k);
-    $v = trim($v);
+    $v = dotenvValue(trim($v));
     if (str_starts_with($k, 'APP_')) {
         $defines[] = 'putenv(' . var_export("$k=$v", true) . ');';
         continue;
