@@ -114,7 +114,9 @@ make test
 
 The app exposes a [Model Context Protocol](https://modelcontextprotocol.io) server at
 **`POST /mcp`** (Streamable HTTP), so AI assistants (ChatGPT, Claude, MCP Inspector) can
-read and update the signed-in user's reports.
+read and update the signed-in user's reports. **`GET /mcp`** is a different, human-facing
+page (main app, session + Twig): connect instructions for anyone, plus the signed-in user's
+connected apps (with a revoke action) if they have any.
 
 **Connecting** — a client only needs the URL `https://<host>/mcp`:
 
@@ -125,7 +127,7 @@ read and update the signed-in user's reports.
    and approves a consent screen.
 4. The client gets an opaque access token (+ refresh token) and calls `/mcp` with it.
 
-Users review and revoke connected clients at **`/polaczone-aplikacje.html`**.
+Users review and revoke connected clients at **`/mcp`** (`/polaczone-aplikacje.html` redirects there).
 
 **Tools & scopes:**
 

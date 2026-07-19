@@ -61,6 +61,7 @@ $FOOTER_LINKS = [
             ['key' => 'galeria', 'href' => '/galeria.html', 'label' => 'Galeria recydywistów'],
             ['key' => null, 'href' => 'https://patronite.pl/uprzejmiedonosze/posts', 'label' => 'Comiesięczna aktualizacja', 'external' => true],
             ['key' => null, 'href' => 'https://x.com/SzymonNieradka', 'label' => 'Codzienne aktualizacje', 'external' => true],
+            ['key' => 'mcp', 'href' => '/mcp', 'label' => 'Asystent AI/MCP'],
             ['key' => 'changelog', 'href' => '/changelog.html', 'label' => 'Historia zmian'],
             ['key' => 'projekt', 'href' => '/projekt.html', 'label' => 'Dla programistów'],
             ['key' => 'regulamin', 'href' => '/regulamin.html', 'label' => 'Regulamin'],

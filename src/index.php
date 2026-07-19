@@ -186,9 +186,15 @@ $app->group('/oauth', function (RouteCollectorProxy $group) { // OAuth consent (
 })  ->add(new HtmlMiddleware())
     ->add(new OptionalUserMiddleware());
 
-$app->group('', function (RouteCollectorProxy $group) { // Connected applications (browser)
-    $group->get('/polaczone-aplikacje.html', OAuthHandler::class . ':connectedApps');
-    $group->post('/polaczone-aplikacje.html', OAuthHandler::class . ':revokeConnection');
+$app->group('', function (RouteCollectorProxy $group) { // MCP info page (browser, optional login)
+    $group->get('/mcp', OAuthHandler::class . ':mcpInfo');
+    // Old URL: redirect for everyone, logged in or not — must not require login itself.
+    $group->get('/polaczone-aplikacje.html', function () { return AbstractHandler::redirect('/mcp', 301); });
+})  ->add(new HtmlMiddleware())
+    ->add(new OptionalUserMiddleware());
+
+$app->group('', function (RouteCollectorProxy $group) { // Revoke action (browser)
+    $group->post('/mcp/revoke', OAuthHandler::class . ':revokeConnection');
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware());
 

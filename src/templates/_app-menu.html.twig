@@ -11,6 +11,7 @@
     <li><a {{ active(config.menu, 'zapytaj-o-status')|raw }} href="/app/ask-for-status?update">Zapytaj o status
         <span class="badge">{{ general.stats['confirmed-waiting'] }}</span></a></li>
     {% endif %}
+    <li><a {{ active(config.menu, 'mcp')|raw }} href="/mcp">Asystent AI/MCP</a></li>
     <li><a {{ active(config.menu, 'register')|raw }} href="/app/account?update">Edycja konta</a></li>
     <li class="menu-item-divider"><a href="/logout.html">Wyloguj się</a></li>
 </ul>

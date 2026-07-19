@@ -107,21 +107,27 @@ class OAuthHandler extends AbstractHandler {
         }
     }
 
-    /** Settings page: the OAuth clients the user has connected via MCP. */
-    public function connectedApps(Request $request, Response $response) {
-        $connections = array_map(function ($row) {
-            $ids = array_values(array_filter(explode(' ', str_replace(',', ' ', (string) $row['scopes']))));
-            $row['scopeLabels'] = array_values(array_unique(array_map(
-                fn ($id) => \oauth\SCOPES[$id] ?? $id,
-                $ids
-            )));
-            return $row;
-        }, \oauth\connectionsForUser($_SESSION['user_id']));
+    /** MCP landing page: connect instructions, plus the user's connected apps if logged in. */
+    public function mcpInfo(Request $request, Response $response) {
+        $connections = [];
+        if ($request->getAttribute('isLoggedIn')) {
+            $connections = array_map(function ($row) {
+                $ids = array_values(array_filter(explode(' ', str_replace(',', ' ', (string) $row['scopes']))));
+                $row['scopeLabels'] = array_values(array_unique(array_map(
+                    fn ($id) => \oauth\SCOPES[$id] ?? $id,
+                    $ids
+                )));
+                return $row;
+            }, \oauth\connectionsForUser($_SESSION['user_id']));
+        }
 
-        $csrf = bin2hex(random_bytes(16));
-        $_SESSION['oauth_csrf'] = $csrf;
+        $csrf = null;
+        if ($connections) {
+            $csrf = bin2hex(random_bytes(16));
+            $_SESSION['oauth_csrf'] = $csrf;
+        }
 
-        return AbstractHandler::renderHtml($request, $response, 'polaczone-aplikacje', [
+        return AbstractHandler::renderHtml($request, $response, 'mcp', [
             'connections' => $connections,
             'csrf' => $csrf,
         ]);
@@ -139,6 +145,6 @@ class OAuthHandler extends AbstractHandler {
         if ($clientId !== '') {
             \oauth\revokeConnection($clientId, $_SESSION['user_id']);
         }
-        return AbstractHandler::redirect('/polaczone-aplikacje.html');
+        return AbstractHandler::redirect('/mcp');
     }
 }

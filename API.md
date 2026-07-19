@@ -144,6 +144,12 @@ Valid `{name}` values:
 
 ## MCP server (Model Context Protocol)
 
+### GET `/mcp`
+
+Human-facing landing page (browser, routed to the main app — see the `$mcp_index` nginx map).
+Anonymous or logged-in-with-no-connections: connect instructions only. Logged in with connected
+apps: the list (with a revoke action at `POST /mcp/revoke`) followed by the same instructions.
+
 ### POST `/mcp`
 
 Streamable HTTP MCP endpoint. Requires an OAuth 2.1 bearer access token (see below); on a
