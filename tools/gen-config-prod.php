@@ -28,6 +28,11 @@ foreach (file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
     [$k, $v] = explode('=', $line, 2);
     $k = trim($k);
     $v = dotenvValue(trim($v));
+    // Host and scheme are baked into config.env.php from the Docker build args
+    // (per deploy target: prod/shadow/staging). Re-exporting the .env.prod
+    // values here would override them via getenv() in config.php, making a
+    // shadow deploy identify as production (and blanking the asset hashes).
+    if ($k === 'APP_HOST' || $k === 'APP_HTTPS') continue;
     if (str_starts_with($k, 'APP_')) {
         $defines[] = 'putenv(' . var_export("$k=$v", true) . ');';
         continue;
