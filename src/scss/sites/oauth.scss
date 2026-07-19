@@ -1,0 +1,14 @@
+@use "../lib/button";
+
+// Odmów (secondary, ghost) po lewej, Zezwól (cta, wypełniony) po prawej —
+// konwencja ekranów zgody: akcja domyślna/zachęcana wyróżniona i na końcu.
+.oauth-consent-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1.5em;
+
+    .button {
+        flex: 0 0 auto;
+    }
+}

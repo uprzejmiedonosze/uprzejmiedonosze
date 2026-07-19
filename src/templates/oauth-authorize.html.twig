@@ -1,4 +1,4 @@
-{% set leftButton = 'menu' %}
+{% set layout = 'auth' %}
 
 {% set title = 'Autoryzacja aplikacji' %}
 
@@ -16,10 +16,10 @@
     </ul>
     <p>Dostęp możesz w każdej chwili cofnąć w ustawieniach konta.</p>
 
-    <form method="post" action="{{ BASE_URL }}oauth/authorize?{{ oauth.query }}">
+    <form method="post" action="{{ BASE_URL }}oauth/authorize?{{ oauth.query }}" class="oauth-consent-actions">
         <input type="hidden" name="csrf" value="{{ oauth.csrf }}">
+        <button type="submit" name="decision" value="deny" class="button inverse">Odmów</button>
         <button type="submit" name="decision" value="approve" class="button cta">Zezwól</button>
-        <button type="submit" name="decision" value="deny" class="button">Odmów</button>
     </form>
 </div>
 {% endblock %}
