@@ -13,6 +13,7 @@ enum ReportStatus: string {
     case ConfirmedFined = 'confirmed-fined';           // kierowca dostał mandat
     case ConfirmedInstructed = 'confirmed-instructed'; // pouczenie
     case ConfirmedIgnored = 'confirmed-ignored';       // zgłoszenie zignorowane
+    case ConfirmedComplaint = 'confirmed-complaint';   // złożone zażalenie
     case Archived = 'archived';                        // zarchiwizowane
 }
 
