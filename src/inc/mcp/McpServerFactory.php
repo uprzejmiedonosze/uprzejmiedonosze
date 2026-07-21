@@ -51,6 +51,27 @@ function buildServer(): Server {
                 'description' => 'Maximum number of reports to return.',
             ],
         ],
+        'additionalProperties' => false,
+    ];
+
+    // Input for update_report_status. additionalProperties:false so unknown
+    // fields (e.g. a `comment`/`note` the client hoped to persist) are rejected
+    // rather than silently accepted and dropped — this tool only sets status.
+    $updateInputSchema = [
+        'type' => 'object',
+        'properties' => [
+            'reportId' => [
+                'type' => 'string',
+                'description' => 'The report id.',
+            ],
+            'status' => [
+                'type' => 'string',
+                'enum' => array_column(ReportStatus::cases(), 'value'),
+                'description' => 'The outcome to record.',
+            ],
+        ],
+        'required' => ['reportId', 'status'],
+        'additionalProperties' => false,
     ];
 
     return Server::builder()
@@ -99,6 +120,7 @@ function buildServer(): Server {
                 idempotentHint: true,
                 openWorldHint: false
             ),
+            inputSchema: $updateInputSchema,
             outputSchema: $reportSchema
         )
         ->build();
