@@ -156,10 +156,18 @@ Streamable HTTP MCP endpoint. Requires an OAuth 2.1 bearer access token (see bel
 missing/invalid token it returns `401` with a `WWW-Authenticate: Bearer resource_metadata="…"`
 header pointing at the protected-resource metadata.
 
+The server is **read + record-outcome only**: it lists/reads reports and records the
+authority's response. Creating reports, editing their content, saving free-text notes, and
+fetching binary assets (images/PDF/ZIP) are intentionally out of scope for now. Tools reject
+unknown arguments (`additionalProperties: false`) rather than silently dropping them, and
+domain failures come back as readable tool errors (e.g. an illegal status transition or an
+unknown report id), not opaque internal errors.
+
 Tools:
 
   * `list_reports` — scope `reports:read`. Params: `status` (enum: `all`, `allWithDrafts`, or a
     specific status id; default `all`), `limit` (default 50). Returns `{ "reports": [...] }`.
+    `all` returns sent reports and **excludes drafts**; use `allWithDrafts` to include drafts.
   * `get_report` — scope `reports:read`. Param: `reportId`.
   * `update_report_status` — scope `reports:status:write`. Params: `reportId`, `status` (enum of
     recordable outcomes: `confirmed-sm`, `confirmed-fined`, `confirmed-instructed`,
