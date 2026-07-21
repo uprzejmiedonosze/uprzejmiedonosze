@@ -2,9 +2,6 @@
 
 date_default_timezone_set('Europe/Warsaw');
 
-// Machine-to-machine OAuth endpoints: sessionless, JSON/form.
-$DISABLE_SESSION = true;
-
 const INC_DIR = __DIR__ . '/../../../inc';
 
 require_once(INC_DIR . '/Logger.php');

@@ -2,10 +2,6 @@
 
 date_default_timezone_set('Europe/Warsaw');
 
-// MCP speaks its own JSON-RPC protocol over a raw request body — run sessionless,
-// like the REST API, so PHP sessions never touch the request.
-$DISABLE_SESSION = true;
-
 const INC_DIR = __DIR__ . '/../../../inc';
 
 require_once(INC_DIR . '/Logger.php');
