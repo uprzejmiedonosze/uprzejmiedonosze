@@ -36,7 +36,7 @@ final class McpIdentity {
 
     public static function requireScope(string $scope): void {
         if (!in_array($scope, self::$scopes, true)) {
-            throw new \RuntimeException("This action requires the '$scope' OAuth scope");
+            throw new \Mcp\Exception\ToolCallException("This action requires the '$scope' OAuth scope");
         }
     }
 }

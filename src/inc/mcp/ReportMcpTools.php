@@ -53,7 +53,7 @@ final class ReportMcpTools {
 
         // Ownership is by email throughout the app (see src/inc/API.php).
         if (!$application || $application->email !== $user->getEmail()) {
-            throw new \RuntimeException("Report '$reportId' not found");
+            throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found");
         }
 
         return json_decode(json_encode($application), true) ?? [];
@@ -74,13 +74,16 @@ final class ReportMcpTools {
 
         $application = \app\get($reportId);
         if (!$application || $application->email !== $user->getEmail()) {
-            throw new \RuntimeException("Report '$reportId' not found");
+            throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found");
         }
 
         try {
             $application = \setStatus($status->value, $reportId, $user);
         } catch (\Throwable $e) {
-            throw new \RuntimeException($e->getMessage());
+            // Surface the domain reason (e.g. an illegal status transition) to the
+            // client instead of an opaque -32603; ToolCallException is returned as
+            // a tool error result with the message.
+            throw new \Mcp\Exception\ToolCallException($e->getMessage(), 0, $e);
         }
 
         return json_decode(json_encode($application), true) ?? [];
