@@ -253,6 +253,10 @@ class StaticPagesHandler extends AbstractHandler {
         return $this->renderJson($response, json_decode('[]'));
     }
 
+    public function misja(Request $request, Response $response) {
+        return $this->default($request, $response, ['route' => 'patronite']);
+    }
+
     /**
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */

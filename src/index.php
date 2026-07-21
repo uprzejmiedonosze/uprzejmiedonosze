@@ -204,6 +204,8 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/przesluchanie.html', StaticPagesHandler::class . ':hearing');
     $group->get('/galeria.html', StaticPagesHandler::class . ':gallery');
 
+    $group->get('/misja.html', StaticPagesHandler::class . ':misja');
+
     // Strony przeniesione do wiki — trwałe przekierowanie (301). Statyczne trasy
     // mają w FastRoute pierwszeństwo przed wzorcem /{route}.html poniżej.
     $wikiRedirects = [
