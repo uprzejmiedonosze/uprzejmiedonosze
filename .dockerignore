@@ -5,8 +5,13 @@ export/
 services/face-detector/.venv/
 *.md
 cypress
-devtools
 generator
+tools/node_modules
+tools/package.json
+tools/package-lock.json
+tools/.npmrc
+tools/cypress.config.js
+tools/eslint.config.mjs
 *firebase-adminsdk.json
 Makefile
 marketing

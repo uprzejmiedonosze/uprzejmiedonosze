@@ -7,9 +7,10 @@ ARG APP_HTTPS=http
 WORKDIR /build
 
 # npm (cached until package-lock.json changes)
-# Cypress/ESLint live in devtools/ (a separate npm project, see Makefile
+# Cypress/ESLint live in tools/ (a separate npm project, see Makefile
 # cypress-local) — this package.json only lists runtime + build-time deps,
-# so npm ci here never touches them.
+# so npm ci here never touches them. tools/node_modules itself is excluded
+# from the build context below (.dockerignore).
 COPY .npmrc package.json package-lock.json ./
 RUN npm ci
 
