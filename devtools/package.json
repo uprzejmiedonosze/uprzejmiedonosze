@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "uprzejmiedonosze-devtools",
+  "description": "Local-only dev tooling (Cypress e2e, ESLint) — never installed in the Docker builder image.",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "engineStrict": true,
+  "devDependencies": {
+    "@eslint/compat": "^2.0.2",
+    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/js": "^10.0.1",
+    "@types/cypress": "^0.1.6",
+    "@types/jest": "^30.0.0",
+    "cypress": "^15.10.0",
+    "cypress-fail-fast": "^7.1.1",
+    "eslint": "^10.0.1",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-plugin-cypress": "^6.1.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.3.0"
+  }
+}

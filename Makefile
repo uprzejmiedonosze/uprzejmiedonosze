@@ -56,7 +56,8 @@ test: ## Run phpunit tests in the builder container
 
 .PHONY: cypress-local
 cypress-local: ## Run Cypress tests against local dev environment
-	@CYPRESS_BASE_URL=http://127.0.0.1 CYPRESS_DOCKER=1 $(CYPRESS) run --e2e
+	@[ -d devtools/node_modules ] || (cd devtools && npm install)
+	@cd devtools && CYPRESS_BASE_URL=http://127.0.0.1 CYPRESS_DOCKER=1 $(CYPRESS) run --e2e
 
 # ── Git / release helpers ─────────────────────────────────────────────────────
 

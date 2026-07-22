@@ -5,8 +5,7 @@ export/
 services/face-detector/.venv/
 *.md
 cypress
-cypress.config.js
-eslint.config.mjs
+devtools
 generator
 *firebase-adminsdk.json
 Makefile

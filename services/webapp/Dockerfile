@@ -7,8 +7,11 @@ ARG APP_HTTPS=http
 WORKDIR /build
 
 # npm (cached until package-lock.json changes)
+# Cypress/ESLint live in devtools/ (a separate npm project, see Makefile
+# cypress-local) — this package.json only lists runtime + build-time deps,
+# so npm ci here never touches them.
 COPY .npmrc package.json package-lock.json ./
-RUN CYPRESS_INSTALL_BINARY=0 npm ci
+RUN npm ci
 
 # PHP 8.4 + composer (cached until composer.lock changes)
 RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq inotify-tools && \
