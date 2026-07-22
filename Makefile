@@ -56,8 +56,8 @@ test: ## Run phpunit tests in the builder container
 
 .PHONY: cypress-local
 cypress-local: ## Run Cypress tests against local dev environment
-	@[ -d devtools/node_modules ] || (cd devtools && npm install)
-	@cd devtools && CYPRESS_BASE_URL=http://127.0.0.1 CYPRESS_DOCKER=1 $(CYPRESS) run --e2e
+	@[ -d tools/node_modules ] || (cd tools && npm install)
+	@cd tools && CYPRESS_BASE_URL=http://127.0.0.1 CYPRESS_DOCKER=1 $(CYPRESS) run --e2e
 
 # ── Git / release helpers ─────────────────────────────────────────────────────
 
@@ -88,7 +88,7 @@ log-from-last-prod: ## Commits since last prod release
 
 .PHONY: diff-from-last-prod
 diff-from-last-prod: ## Diff since last prod release
-	@git diff --histogram --color-words $(call last-tag) -- . ':(exclude)package-lock.json'
+	@git diff --histogram --color-words $(call last-tag) -- . ':(exclude)package-lock.json' ':(exclude)tools/package-lock.json'
 
 .PHONY: sentry-release
 sentry-release: ## Create Sentry release and upload JS source maps

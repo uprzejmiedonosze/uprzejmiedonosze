@@ -1,7 +1,7 @@
 {
   "private": true,
-  "name": "uprzejmiedonosze-devtools",
-  "description": "Local-only dev tooling (Cypress e2e, ESLint) — never installed in the Docker builder image.",
+  "name": "uprzejmiedonosze-tools",
+  "description": "Local-only dev tooling (Cypress e2e, ESLint) — excluded from the Docker builder image via .dockerignore.",
   "engines": {
     "node": ">=20.0.0"
   },

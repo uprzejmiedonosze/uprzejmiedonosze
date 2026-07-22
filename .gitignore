@@ -17,7 +17,7 @@
 /src/config.env.php
 export/**
 node_modules/*
-devtools/node_modules/*
+tools/node_modules/*
 src/config.php
 src/tensor
 testy

@@ -7,9 +7,10 @@ module.exports = defineConfig({
   allowCypressEnv: false,
   DOCKER: process.env.CYPRESS_DOCKER === 'true' || process.env.CYPRESS_DOCKER === '1',
 
-  // This config file lives in devtools/ (a separate npm project, kept out of
-  // the Docker builder image), while the actual specs/fixtures stay in the
-  // top-level cypress/ folder — hence the ../cypress paths below.
+  // This config (and its package.json/node_modules) lives in tools/ as its
+  // own npm project — excluded from the Docker builder image via
+  // .dockerignore — while the actual specs/fixtures stay in the top-level
+  // cypress/ folder, hence the ../cypress paths below.
   fixturesFolder: "../cypress/fixtures",
   screenshotsFolder: "../cypress/screenshots",
   videosFolder: "../cypress/videos",
