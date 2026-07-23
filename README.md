@@ -137,9 +137,12 @@ Users review and revoke connected clients at **`/mcp`** (`/polaczone-aplikacje.h
 | `get_report` | `reports:read` | fetch one report by id |
 | `update_report_status` | `reports:status:write` | record the authority's response |
 | `set_report_notes` | `reports:notes:write` | save a private case number / note (never sent to authorities) |
+| `list_categories` | `reports:read` | list the violation categories |
+| `create_report_draft` | `reports:create` | create a pre-filled **draft** for the user to finish + send |
 
-Creating reports, editing the report content sent to authorities, and downloading binary assets
-(images/PDF/ZIP) are out of scope for now.
+The server never sends reports itself — `create_report_draft` returns an `editUrl` the user opens
+to add the required photos and send. Editing already-sent content and downloading binary assets
+(PDF/ZIP) are out of scope for now.
 
 Tokens are **opaque** (stored hashed, instantly revocable, audience-bound to `/mcp`);
 access tokens live 1h, refresh tokens 30d (sliding). Code: `src/api/mcp/` (server),

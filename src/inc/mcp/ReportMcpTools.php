@@ -70,14 +70,7 @@ final class ReportMcpTools {
 
         $category = $CATEGORIES[$application->category] ?? null;
         if ($category) {
-            $report['categoryInfo'] = [
-                'id' => $application->category,
-                'title' => $category->getTitle(),
-                'formal' => $category->getFormal(),
-                'law' => $category->getLaw(),
-                'fine' => $category->getMandate(),          // "mandat" — fine amount in PLN
-                'demeritPoints' => $category->getPoints(),  // "punkty karne"
-            ];
+            $report['categoryInfo'] = self::categorySummary((int) $application->category, $category);
         }
 
         // Expand the recipient authority: `smCity` is only a key (e.g. "Szczecin"),
@@ -95,6 +88,22 @@ final class ReportMcpTools {
         }
 
         return $report;
+    }
+
+    /**
+     * The public shape of a violation category, shared by categoryInfo (on a
+     * report) and list_categories. `fine`/`demeritPoints` are English-friendly
+     * names for the Polish "mandat" (PLN) / "punkty karne".
+     */
+    private static function categorySummary(int $id, \Category $category): array {
+        return [
+            'id' => $id,
+            'title' => $category->getTitle(),
+            'formal' => $category->getFormal(),
+            'law' => $category->getLaw(),
+            'fine' => $category->getMandate(),
+            'demeritPoints' => $category->getPoints(),
+        ];
     }
 
     /**
@@ -175,5 +184,172 @@ final class ReportMcpTools {
         });
 
         return $this->enrich($updated);
+    }
+
+    /**
+     * List the violation categories (id + title, formal wording, legal basis,
+     * fine and demerit points) so the caller can pick one for create_report_draft
+     * or interpret a report's `category` number.
+     *
+     * @return array{categories: array} The categories.
+     */
+    public function listCategories(): array {
+        McpIdentity::requireScope('reports:read');
+        global $CATEGORIES;
+
+        $categories = [];
+        foreach (($CATEGORIES ?? []) as $id => $category) {
+            $categories[] = self::categorySummary((int) $id, $category);
+        }
+
+        return ['categories' => $categories];
+    }
+
+    /**
+     * Create a new DRAFT report for the signed-in user, pre-filled from whatever
+     * the caller can supply. The draft stays in the 'draft' status: a human must
+     * open the returned editUrl to add the required photos and send it — MCP
+     * cannot send a report. Up to three optional images (base64 data URIs) are
+     * run through the same processing pipeline as the web upload.
+     *
+     * @param int|null    $category    Violation category id (see list_categories).
+     * @param string|null $plateId     Licence plate.
+     * @param string|null $description Free-text description of the violation.
+     * @param string|null $address     Street address of the violation.
+     * @param float|null  $lat         Latitude.
+     * @param float|null  $lng         Longitude.
+     * @param string|null $datetime     When it happened (ISO 8601).
+     * @param string|null $carImage     Optional vehicle/plate photo (base64 data URI); runs plate recognition.
+     * @param string|null $contextImage Optional wider-scene photo (base64 data URI).
+     * @param string|null $thirdImage   Optional third photo (base64 data URI).
+     * @return array{report: array, editUrl: string} The draft and the URL to finish it.
+     */
+    public function createReportDraft(
+        ?int $category = null,
+        ?string $plateId = null,
+        ?string $description = null,
+        ?string $address = null,
+        ?float $lat = null,
+        ?float $lng = null,
+        ?string $datetime = null,
+        ?string $carImage = null,
+        ?string $contextImage = null,
+        ?string $thirdImage = null
+    ): array {
+        McpIdentity::requireScope('reports:create');
+        $user = McpIdentity::currentUser();
+
+        global $CATEGORIES;
+        if ($category !== null && !isset($CATEGORIES[$category])) {
+            throw new \Mcp\Exception\ToolCallException(
+                "Unknown category id $category — call list_categories for valid ids."
+            );
+        }
+        // Decode/validate every supplied image up front (keyed by the pipeline's
+        // picture-type name) so a bad one doesn't leave an orphaned draft behind.
+        $images = [];
+        foreach (['carImage' => $carImage, 'contextImage' => $contextImage, 'thirdImage' => $thirdImage] as $slot => $dataUri) {
+            if ($dataUri !== null) {
+                $images[$slot] = self::decodeImageDataUri($dataUri);
+            }
+        }
+
+        // withUser records the creating client's User-Agent; a programmatic MCP
+        // client may not send one, and the entry point turns the resulting
+        // undefined-key warning into an error. Default it so headerless clients
+        // can still create a draft.
+        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
+            $_SERVER['HTTP_USER_AGENT'] = 'MCP';
+        }
+
+        $draft = \app\Application::withUser($user);
+        // A fresh draft has no history/comments/extensions yet; initialise them
+        // so the stored record round-trips cleanly on re-read (Application::
+        // withJson normalises these to arrays).
+        $draft->statusHistory = [];
+        $draft->comments = [];
+        $draft->extensions = [];
+        if ($category !== null) {
+            $draft->category = $category;
+        }
+        if ($plateId !== null) {
+            $carInfo = new \stdClass();
+            $carInfo->plateId = strtoupper(\cleanWhiteChars($plateId));
+            $draft->carInfo = $carInfo;
+        }
+        if ($description !== null) {
+            $draft->userComment = \capitalizeSentence($description);
+        }
+        if ($address !== null) {
+            $draft->address->address = $address;
+        }
+        if ($lat !== null) {
+            $draft->address->lat = $lat;
+        }
+        if ($lng !== null) {
+            $draft->address->lng = $lng;
+        }
+        if ($datetime !== null) {
+            try {
+                $draft->date = (new \DateTime($datetime))->format(\DT_FORMAT);
+            } catch (\Throwable $e) {
+                throw new \Mcp\Exception\ToolCallException(
+                    "Invalid datetime '$datetime' — use ISO 8601, e.g. 2026-01-08T14:30:00."
+                );
+            }
+        }
+        \app\save($draft);
+
+        if ($images) {
+            // Reuse the web upload pipeline (resize, thumbnail, and plate
+            // recognition for carImage) so MCP-supplied photos are processed
+            // identically to the web.
+            foreach ($images as $pictureType => $bytes) {
+                \uploadImage($draft->id, $pictureType, $bytes, $draft->date ?? null, false, null);
+            }
+            $draft = \app\get($draft->id);
+            // carImage's plate recognition resets carInfo; re-apply the caller's
+            // explicit plate so it wins over ALPR (preserving the other
+            // recognised fields).
+            if ($plateId !== null && isset($images['carImage'])) {
+                if (!isset($draft->carInfo)) {
+                    $draft->carInfo = new \stdClass();
+                }
+                $draft->carInfo->plateId = strtoupper(\cleanWhiteChars($plateId));
+                \app\save($draft);
+            }
+        }
+
+        return [
+            'report' => json_decode(json_encode($draft), true) ?? [],
+            'editUrl' => \BASE_URL . 'app/new?edit=' . $draft->id,
+        ];
+    }
+
+    // Matches SessionApiHandler::MAX_IMAGE_UPLOAD_BYTES (the web upload cap).
+    private const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+
+    /** Decode a base64 image data URI to raw bytes, or fail with a readable error. */
+    private static function decodeImageDataUri(string $dataUri): string {
+        if (!preg_match('#^data:image/[a-z.+-]+;base64,#i', $dataUri, $matches)) {
+            throw new \Mcp\Exception\ToolCallException(
+                'image must be a base64 data URI, e.g. "data:image/jpeg;base64,...".'
+            );
+        }
+        $bytes = base64_decode(substr($dataUri, strlen($matches[0])), true);
+        if ($bytes === false || $bytes === '') {
+            throw new \Mcp\Exception\ToolCallException('image is not valid base64 data.');
+        }
+        if (strlen($bytes) > self::MAX_IMAGE_BYTES) {
+            throw new \Mcp\Exception\ToolCallException('image is too large (max 2 MB).');
+        }
+        // Only JPEG/PNG are handled by the upload pipeline. Validate here (before
+        // any draft is created) so an unsupported type is a readable tool error
+        // rather than an orphaned draft + opaque internal error later.
+        $info = @getimagesizefromstring($bytes);
+        if ($info === false || !in_array($info['mime'] ?? '', ['image/jpeg', 'image/png'], true)) {
+            throw new \Mcp\Exception\ToolCallException('image must be a JPEG or PNG.');
+        }
+        return $bytes;
     }
 }
