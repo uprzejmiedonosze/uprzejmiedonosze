@@ -109,6 +109,29 @@ function buildServer(): Server {
         'additionalProperties' => false,
     ];
 
+    // Input for set_report_notes. Both annotations are private to the user and
+    // never sent to the authorities; at least one must be provided.
+    $notesInputSchema = [
+        'type' => 'object',
+        'properties' => [
+            'reportId' => [
+                'type' => 'string',
+                'description' => 'The report id.',
+            ],
+            'caseNumber' => [
+                'type' => 'string',
+                'description' => 'Authority (city guard / police) case number, e.g. "RSOW 123/24". '
+                    . 'Private to the user; not sent to anyone.',
+            ],
+            'privateNote' => [
+                'type' => 'string',
+                'description' => 'A free-text private note. Private to the user; not sent to anyone.',
+            ],
+        ],
+        'required' => ['reportId'],
+        'additionalProperties' => false,
+    ];
+
     return Server::builder()
         ->setServerInfo(
             'Uprzejmie Donoszę',
@@ -117,8 +140,9 @@ function buildServer(): Server {
         )
         ->setInstructions(
             'Browse the signed-in user\'s reports (zgłoszenia) with list_reports, '
-            . 'fetch one with get_report, and record the authority\'s response with '
-            . 'update_report_status. Each report has a `status` id (see the legend below) '
+            . 'fetch one with get_report, record the authority\'s response with '
+            . 'update_report_status, and save a private case number or note with '
+            . 'set_report_notes. Each report has a `status` id (see the legend below) '
             . 'and a categoryInfo object (the violation type, its formal wording and legal '
             . 'basis). Use the Polish status labels when talking to the user, and only set a '
             . 'status the current one is allowed to move to.'
@@ -160,6 +184,21 @@ function buildServer(): Server {
                 openWorldHint: false
             ),
             inputSchema: $updateInputSchema,
+            outputSchema: $reportSchema
+        )
+        ->addTool(
+            [$tools, 'setReportNotes'],
+            'set_report_notes',
+            description: 'Set private annotations on one of the signed-in user\'s reports: the '
+                . 'authority case number and/or a free-text note. Both are private to the user '
+                . 'and never sent to anyone. Requires the reports:notes:write scope.',
+            annotations: new ToolAnnotations(
+                readOnlyHint: false,
+                destructiveHint: false,
+                idempotentHint: true,
+                openWorldHint: false
+            ),
+            inputSchema: $notesInputSchema,
             outputSchema: $reportSchema
         )
         ->build();

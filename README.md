@@ -136,10 +136,10 @@ Users review and revoke connected clients at **`/mcp`** (`/polaczone-aplikacje.h
 | `list_reports` | `reports:read` | list the user's reports (`all` excludes drafts; `allWithDrafts` includes them) |
 | `get_report` | `reports:read` | fetch one report by id |
 | `update_report_status` | `reports:status:write` | record the authority's response |
+| `set_report_notes` | `reports:notes:write` | save a private case number / note (never sent to authorities) |
 
-The surface is deliberately **read + record-outcome only** — creating reports, editing their
-content, saving free-text notes, and downloading binary assets (images/PDF/ZIP) are out of
-scope for now.
+Creating reports, editing the report content sent to authorities, and downloading binary assets
+(images/PDF/ZIP) are out of scope for now.
 
 Tokens are **opaque** (stored hashed, instantly revocable, audience-bound to `/mcp`);
 access tokens live 1h, refresh tokens 30d (sliding). Code: `src/api/mcp/` (server),

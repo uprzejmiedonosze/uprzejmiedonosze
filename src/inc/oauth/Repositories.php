@@ -25,6 +25,7 @@ use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 const SCOPES = [
     'reports:read'         => 'Odczyt Twoich zgłoszeń',
     'reports:status:write' => 'Zmiana statusu Twoich zgłoszeń',
+    'reports:notes:write'  => 'Zapisywanie notatek i numeru sprawy w Twoich zgłoszeniach',
 ];
 
 /** Opaque tokens are stored only as SHA-256 hashes. */
