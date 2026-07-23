@@ -284,4 +284,112 @@ class ReportMcpToolsTest extends DatabaseTestCase
         $this->expectExceptionMessage("Report 'does-not-exist' not found");
         (new ReportMcpTools())->setReportNotes('does-not-exist', 'RSOW 1/24');
     }
+
+    public function testListCategoriesRequiresReadScope(): void
+    {
+        $this->actAs('a@b.com', []);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("requires the 'reports:read' OAuth scope");
+        (new ReportMcpTools())->listCategories();
+    }
+
+    public function testListCategoriesReturnsCatalog(): void
+    {
+        $this->actAs('cat-reader@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->listCategories();
+
+        self::assertArrayHasKey('categories', $result);
+        self::assertNotEmpty($result['categories']);
+        $first = $result['categories'][0];
+        foreach (['id', 'title', 'formal', 'law', 'fine', 'demeritPoints'] as $key) {
+            self::assertArrayHasKey($key, $first);
+        }
+        self::assertIsInt($first['id']);
+    }
+
+    public function testCreateReportDraftRequiresCreateScope(): void
+    {
+        // Neither read nor status:write may create.
+        $this->actAs('a@b.com', ['reports:read', 'reports:status:write']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("requires the 'reports:create' OAuth scope");
+        (new ReportMcpTools())->createReportDraft(category: 8);
+    }
+
+    public function testCreateReportDraftCreatesPrefilledDraft(): void
+    {
+        $this->actAs('creator@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            category: 8,
+            plateId: 'zs 1234a',
+            description: 'auto na chodniku',
+            address: 'Mazurska 43, Szczecin',
+            lat: 53.43,
+            lng: 14.55,
+            datetime: '2026-01-08T14:30:00'
+        );
+
+        $report = $result['report'];
+        self::assertSame('draft', $report['status']);
+        self::assertSame(8, $report['category']);
+        self::assertSame('ZS 1234A', $report['carInfo']['plateId'], 'plate is whitespace-cleaned + upper-cased (same as the web)');
+        self::assertStringContainsString('chodniku', $report['userComment']);
+        self::assertSame('Mazurska 43, Szczecin', $report['address']['address']);
+        self::assertSame('2026-01-08T14:30:00', $report['date']);
+        self::assertStringContainsString('app/new?edit=' . $report['id'], $result['editUrl']);
+        // Persisted as a draft the human can still edit.
+        self::assertSame('draft', \app\get($report['id'])->status);
+    }
+
+    public function testCreateReportDraftRejectsUnknownCategory(): void
+    {
+        $this->actAs('creator2@example.com', ['reports:create']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unknown category id');
+        (new ReportMcpTools())->createReportDraft(category: 999999);
+    }
+
+    public function testCreateReportDraftRejectsInvalidImageDataUri(): void
+    {
+        $this->actAs('creator3@example.com', ['reports:create']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('base64 data URI');
+        (new ReportMcpTools())->createReportDraft(description: 'x', contextImage: 'not-a-data-uri');
+    }
+
+    public function testCreateReportDraftRejectsOversizedImage(): void
+    {
+        $this->actAs('creator4@example.com', ['reports:create']);
+
+        // > 2 MB decoded — rejected before any draft is created.
+        $oversized = 'data:image/jpeg;base64,' . base64_encode(str_repeat('a', 2 * 1024 * 1024 + 1));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('too large');
+        (new ReportMcpTools())->createReportDraft(contextImage: $oversized);
+    }
+
+    public function testCreateReportDraftRejectsUnsupportedImageType(): void
+    {
+        $this->actAs('creator5@example.com', ['reports:create']);
+
+        // A valid GIF (right size, valid base64) but not a JPEG/PNG the pipeline
+        // handles — rejected up front, before any draft is created.
+        $gd = imagecreatetruecolor(10, 10);
+        ob_start();
+        imagegif($gd);
+        $gif = ob_get_clean();
+        imagedestroy($gd);
+        $dataUri = 'data:image/gif;base64,' . base64_encode($gif);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('JPEG or PNG');
+        (new ReportMcpTools())->createReportDraft(contextImage: $dataUri);
+    }
 }

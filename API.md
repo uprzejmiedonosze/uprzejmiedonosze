@@ -157,12 +157,12 @@ missing/invalid token it returns `401` with a `WWW-Authenticate: Bearer resource
 header pointing at the protected-resource metadata.
 
 The server lets an assistant read reports, record the authority's response
-(`update_report_status`), and save a report's **private** annotations — the case number and a
-private note (`set_report_notes`). Creating reports, editing the report content that is sent to
-authorities, and fetching binary assets (images/PDF/ZIP) are intentionally out of scope for now.
-Tools reject unknown arguments (`additionalProperties: false`) rather than silently dropping them,
-and domain failures come back as readable tool errors (e.g. an illegal status transition or an
-unknown report id), not opaque internal errors.
+(`update_report_status`), save a report's **private** annotations — the case number and a
+private note (`set_report_notes`) — and create pre-filled **drafts** (`create_report_draft`) for
+the user to finish and send themselves. It cannot send reports, edit already-sent content, or
+fetch binary assets (images/PDF/ZIP). Tools reject unknown arguments (`additionalProperties:
+false`) rather than silently dropping them, and domain failures come back as readable tool errors
+(e.g. an illegal status transition or an unknown report id), not opaque internal errors.
 
 Tools:
 
@@ -177,6 +177,14 @@ Tools:
   * `set_report_notes` — scope `reports:notes:write`. Params: `reportId`, and at least one of
     `caseNumber` (authority case number) / `privateNote`. Both are private to the user and are
     never sent to the authorities; each given value overwrites the current one.
+  * `list_categories` — scope `reports:read`. No params. Returns `{ "categories": [...] }`, each
+    with `id`, `title`, `formal`, `law`, `fine` (PLN), `demeritPoints`.
+  * `create_report_draft` — scope `reports:create`. All params optional: `category` (id, from
+    `list_categories`), `plateId`, `description`, `address`, `lat`, `lng`, `datetime` (ISO 8601),
+    and up to three images — `carImage`, `contextImage`, `thirdImage` — each a base64 data URI
+    (JPEG/PNG, ≤ 2 MB, no URL fetching). Creates a `draft` and returns `{ report, editUrl }`; the
+    user opens `editUrl` to add the required photos and send. The server never sends the report
+    itself.
 
 Every returned report expands its category into `categoryInfo` (`id`, `title`, `formal` wording,
 `law`, `fine` in PLN, `demeritPoints`) alongside the raw `category` number, and its recipient
@@ -191,8 +199,8 @@ clients use mainly for validation).
 
 Authorization-code grant with PKCE (S256), refresh tokens, and Dynamic Client Registration.
 Tokens are opaque (stored as SHA-256 hashes), audience-bound to the `/mcp` resource. Scopes:
-`reports:read`, `reports:status:write`, `reports:notes:write`. The consent step reuses the
-existing Firebase login.
+`reports:read`, `reports:status:write`, `reports:notes:write`, `reports:create`. The consent step
+reuses the existing Firebase login.
 
 ### GET `/.well-known/oauth-authorization-server`
 

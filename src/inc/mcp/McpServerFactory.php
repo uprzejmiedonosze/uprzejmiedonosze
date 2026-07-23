@@ -15,7 +15,7 @@ function buildServer(): Server {
     // Output schema: `status` is an enum of every known status (from
     // statuses.json); other fields pass through via additionalProperties.
     // Per-status meaning + transitions are in the server instructions, not here.
-    global $STATUSES;
+    global $STATUSES, $CATEGORIES;
     $reportSchema = [
         'type' => 'object',
         'properties' => [
@@ -132,6 +132,48 @@ function buildServer(): Server {
         'additionalProperties' => false,
     ];
 
+    $categoriesOutputSchema = [
+        'type' => 'object',
+        'properties' => ['categories' => ['type' => 'array', 'items' => ['type' => 'object']]],
+        'additionalProperties' => true,
+    ];
+
+    // Input for create_report_draft — every field optional (an empty draft is
+    // valid); the human completes it via the returned editUrl.
+    $createInputSchema = [
+        'type' => 'object',
+        'properties' => [
+            'category' => [
+                'type' => 'integer',
+                // Valid ids come from categories.json (data, not code), so the
+                // enum is generated dynamically — no static list to drift.
+                'enum' => array_keys($CATEGORIES ?? []),
+                'description' => 'Violation category id (see list_categories).',
+            ],
+            'plateId' => ['type' => 'string', 'description' => 'Licence plate, e.g. "ZS1234A".'],
+            'description' => ['type' => 'string', 'description' => 'Free-text description of the violation.'],
+            'address' => ['type' => 'string', 'description' => 'Street address where it happened.'],
+            'lat' => ['type' => 'number', 'description' => 'Latitude.'],
+            'lng' => ['type' => 'number', 'description' => 'Longitude.'],
+            'datetime' => ['type' => 'string', 'description' => 'When it happened, ISO 8601 local time (e.g. 2026-01-08T14:30:00); any timezone offset is ignored.'],
+            'carImage' => ['type' => 'string', 'description' => 'Optional vehicle/plate photo as a base64 data URI (JPEG/PNG, ≤ 2 MB); runs plate recognition.'],
+            'contextImage' => ['type' => 'string', 'description' => 'Optional wider-scene photo as a base64 data URI (JPEG/PNG, ≤ 2 MB).'],
+            'thirdImage' => ['type' => 'string', 'description' => 'Optional third photo as a base64 data URI (JPEG/PNG, ≤ 2 MB).'],
+        ],
+        'additionalProperties' => false,
+    ];
+    $createOutputSchema = [
+        'type' => 'object',
+        'properties' => [
+            'report' => ['type' => 'object'],
+            'editUrl' => [
+                'type' => 'string',
+                'description' => 'Open this to add the required photos and send the report.',
+            ],
+        ],
+        'additionalProperties' => true,
+    ];
+
     return Server::builder()
         ->setServerInfo(
             'Uprzejmie Donoszę',
@@ -142,10 +184,13 @@ function buildServer(): Server {
             'Browse the signed-in user\'s reports (zgłoszenia) with list_reports, '
             . 'fetch one with get_report, record the authority\'s response with '
             . 'update_report_status, and save a private case number or note with '
-            . 'set_report_notes. Each report has a `status` id (see the legend below) '
-            . 'and a categoryInfo object (the violation type, its formal wording and legal '
-            . 'basis). Use the Polish status labels when talking to the user, and only set a '
-            . 'status the current one is allowed to move to.'
+            . 'set_report_notes. Use list_categories to see the violation types, and '
+            . 'create_report_draft to start a new report — it creates a draft the user must '
+            . 'open (editUrl) to add photos and send; the server cannot send reports itself. '
+            . 'Each report has a `status` id (see the legend below) and a categoryInfo object '
+            . '(the violation type, its formal wording and legal basis). Use the Polish status '
+            . 'labels when talking to the user, and only set a status the current one is '
+            . 'allowed to move to.'
             . "\n\nStatus legend (id — label — meaning; allowed transitions):\n" . $statusLegend
         )
         ->setSession(new McpMemcacheSessionStore())
@@ -200,6 +245,36 @@ function buildServer(): Server {
             ),
             inputSchema: $notesInputSchema,
             outputSchema: $reportSchema
+        )
+        ->addTool(
+            [$tools, 'listCategories'],
+            'list_categories',
+            description: 'List the violation categories (id, title, formal wording, legal basis, '
+                . 'fine, demerit points) — pick one for create_report_draft or to interpret a '
+                . 'report\'s category number.',
+            annotations: new ToolAnnotations(
+                readOnlyHint: true,
+                idempotentHint: true,
+                openWorldHint: false
+            ),
+            outputSchema: $categoriesOutputSchema
+        )
+        ->addTool(
+            [$tools, 'createReportDraft'],
+            'create_report_draft',
+            description: 'Create a new DRAFT report for the signed-in user, pre-filled from the '
+                . 'given fields. The draft is NOT sent: a human must open the returned editUrl to '
+                . 'add the required photos and send it. Requires the reports:create scope.',
+            annotations: new ToolAnnotations(
+                readOnlyHint: false,
+                destructiveHint: false,
+                idempotentHint: false,
+                // A car image is run through plate recognition, which calls an
+                // external ALPR service — an open-world interaction.
+                openWorldHint: true
+            ),
+            inputSchema: $createInputSchema,
+            outputSchema: $createOutputSchema
         )
         ->build();
 }
