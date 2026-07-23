@@ -169,6 +169,18 @@ class ReportMcpToolsTest extends DatabaseTestCase
         (new ReportMcpTools())->getReport($app->id);
     }
 
+    public function testGetReportRejectsUnknownReport(): void
+    {
+        // \app\get throws for an unknown id; the tool must still surface a clean
+        // "not found" (ToolCallException extends RuntimeException), not an opaque
+        // internal error.
+        $this->actAs('a@b.com', ['reports:read']);
+
+        $this->expectException(\Mcp\Exception\ToolCallException::class);
+        $this->expectExceptionMessage("Report 'does-not-exist' not found");
+        (new ReportMcpTools())->getReport('does-not-exist');
+    }
+
     public function testUpdateReportStatusRequiresWriteScope(): void
     {
         $app = $this->makeApp('mcp-update-scope', 'confirmed-waiting', 'a@b.com');
@@ -201,6 +213,15 @@ class ReportMcpToolsTest extends DatabaseTestCase
         (new ReportMcpTools())->updateReportStatus($app->id, ReportStatus::Archived);
 
         self::assertSame('confirmed-waiting', \app\get('mcp-update-other')->status, 'the report must be untouched');
+    }
+
+    public function testUpdateReportStatusRejectsUnknownReport(): void
+    {
+        $this->actAs('a@b.com', ['reports:status:write']);
+
+        $this->expectException(\Mcp\Exception\ToolCallException::class);
+        $this->expectExceptionMessage("Report 'does-not-exist' not found");
+        (new ReportMcpTools())->updateReportStatus('does-not-exist', ReportStatus::Archived);
     }
 
     public function testUpdateReportStatusRejectsDisallowedTransition(): void
