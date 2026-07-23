@@ -213,4 +213,75 @@ class ReportMcpToolsTest extends DatabaseTestCase
         $this->expectException(RuntimeException::class);
         (new ReportMcpTools())->updateReportStatus($app->id, ReportStatus::Archived);
     }
+
+    public function testSetReportNotesRequiresNotesScope(): void
+    {
+        $app = $this->makeApp('mcp-notes-scope', 'confirmed-waiting', 'a@b.com');
+        // reports:status:write must not be enough to write notes.
+        $this->actAs('a@b.com', ['reports:read', 'reports:status:write']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("requires the 'reports:notes:write' OAuth scope");
+        (new ReportMcpTools())->setReportNotes($app->id, 'RSOW 1/24');
+    }
+
+    public function testSetReportNotesRequiresAtLeastOneField(): void
+    {
+        $app = $this->makeApp('mcp-notes-empty', 'confirmed-waiting', 'owner6@example.com');
+        $this->actAs('owner6@example.com', ['reports:notes:write']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('caseNumber and/or privateNote');
+        (new ReportMcpTools())->setReportNotes($app->id);
+    }
+
+    public function testSetReportNotesUpdatesOwnReport(): void
+    {
+        $app = $this->makeApp('mcp-notes-own', 'confirmed-waiting', 'owner7@example.com');
+        $this->actAs('owner7@example.com', ['reports:notes:write']);
+
+        $result = (new ReportMcpTools())->setReportNotes($app->id, 'RSOW 42/24', 'zadzwonić w środę');
+
+        // Return value reflects the update.
+        self::assertSame('RSOW 42/24', $result['externalId']);
+        self::assertSame('zadzwonić w środę', $result['privateComment']);
+        // externalId is stored in plaintext, so persistence is verifiable directly.
+        self::assertSame('RSOW 42/24', \app\get('mcp-notes-own')->externalId);
+    }
+
+    public function testSetReportNotesOnlyCaseNumberLeavesNoteUntouched(): void
+    {
+        $app = $this->makeApp('mcp-notes-partial', 'confirmed-waiting', 'owner8@example.com');
+        $this->actAs('owner8@example.com', ['reports:notes:write']);
+
+        $result = (new ReportMcpTools())->setReportNotes($app->id, 'RSOW 7/24');
+
+        self::assertSame('RSOW 7/24', $result['externalId']);
+        // An empty note stays at its default and is omitted from the serialised
+        // report (Application::jsonSerialize drops empty externalId/privateComment).
+        self::assertSame('', $result['privateComment'] ?? '', 'note must be left as-is when only caseNumber is given');
+    }
+
+    public function testSetReportNotesRejectsAnotherUsersReport(): void
+    {
+        $app = $this->makeApp('mcp-notes-other', 'confirmed-waiting', 'victim3@example.com');
+        $this->actAs('attacker3@example.com', ['reports:notes:write']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Report 'mcp-notes-other' not found");
+        (new ReportMcpTools())->setReportNotes($app->id, 'RSOW 9/24');
+
+        self::assertSame('', \app\get('mcp-notes-other')->externalId, 'the report must be untouched');
+    }
+
+    public function testSetReportNotesRejectsUnknownReport(): void
+    {
+        // \app\get throws for an unknown id; the tool must still surface a clean
+        // "not found" tool error, not an opaque internal exception.
+        $this->actAs('owner9@example.com', ['reports:notes:write']);
+
+        $this->expectException(\Mcp\Exception\ToolCallException::class);
+        $this->expectExceptionMessage("Report 'does-not-exist' not found");
+        (new ReportMcpTools())->setReportNotes('does-not-exist', 'RSOW 1/24');
+    }
 }

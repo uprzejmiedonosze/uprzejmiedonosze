@@ -126,4 +126,54 @@ final class ReportMcpTools {
 
         return $this->enrich($application);
     }
+
+    /**
+     * Set the private annotations on one of the signed-in user's reports: the
+     * authority case number and/or a free-text note. Both are private to the
+     * user and are never sent to the authorities (they mirror the "NUMER SPRAWY"
+     * and "UWAGI" fields). At least one must be provided; each given value
+     * overwrites the current one.
+     *
+     * @param string      $reportId    The report id.
+     * @param string|null $caseNumber  Authority (SM/Police) case number, e.g. "RSOW 123/24".
+     * @param string|null $privateNote Free-text private note.
+     * @return array The updated report.
+     */
+    public function setReportNotes(string $reportId, ?string $caseNumber = null, ?string $privateNote = null): array {
+        McpIdentity::requireScope('reports:notes:write');
+        $user = McpIdentity::currentUser();
+
+        if ($caseNumber === null && $privateNote === null) {
+            throw new \Mcp\Exception\ToolCallException('Provide caseNumber and/or privateNote.');
+        }
+
+        $updated = \semaphore\withLock($reportId, 'mcpSetNotes', function () use ($reportId, $user, $caseNumber, $privateNote) {
+            // \app\get throws (rather than returning null) for an unknown id;
+            // surface it as a readable "not found" instead of an opaque error.
+            // ($e is chained as the previous exception for server-side logs; the
+            // client only ever sees this ToolCallException's own message.)
+            try {
+                $application = \app\get($reportId);
+            } catch (\Throwable $e) {
+                throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found", 0, $e);
+            }
+            // Intentional, not a mistake: a report that exists but belongs to
+            // someone else is reported as "not found" (not "forbidden") so we
+            // never confirm that another user's report exists. Ownership is by
+            // email, matching get_report / update_report_status and the app's
+            // other ownership checks.
+            if ($application->email !== $user->getEmail()) {
+                throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found");
+            }
+            if ($caseNumber !== null) {
+                $application->externalId = $caseNumber;
+            }
+            if ($privateNote !== null) {
+                $application->privateComment = $privateNote;
+            }
+            return \app\save($application);
+        });
+
+        return $this->enrich($updated);
+    }
 }
