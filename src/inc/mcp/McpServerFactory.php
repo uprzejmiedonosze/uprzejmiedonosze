@@ -12,9 +12,9 @@ use Mcp\Server;
 function buildServer(): Server {
     $tools = new ReportMcpTools();
 
-    // Output schemas: advertise a report's `status` as an enum of every known
-    // status (derived from statuses.json so it stays in sync). Other fields
-    // pass through via additionalProperties.
+    // Output schema: `status` is an enum of every known status (from
+    // statuses.json); other fields pass through via additionalProperties.
+    // Per-status meaning + transitions are in the server instructions, not here.
     global $STATUSES;
     $reportSchema = [
         'type' => 'object',
@@ -23,7 +23,14 @@ function buildServer(): Server {
             'status' => [
                 'type' => 'string',
                 'enum' => array_keys($STATUSES ?? []),
-                'description' => 'Current report status.',
+                'description' => 'Current report status id; see the status legend in the '
+                    . 'server instructions for what each id means and its allowed transitions.',
+            ],
+            // This report's category, expanded in the returned data by enrich().
+            'categoryInfo' => [
+                'type' => 'object',
+                'description' => 'The violation category: title, formal wording, legal '
+                    . 'basis (law), fine amount in PLN and demerit points.',
             ],
         ],
         'additionalProperties' => true,
@@ -54,6 +61,28 @@ function buildServer(): Server {
         'additionalProperties' => false,
     ];
 
+    // Full status legend (id — label — meaning; allowed transitions) for the
+    // server instructions, and a recordable-outcomes list for the update tool.
+    // Both derive from statuses.json so they stay in sync with the domain.
+    $recordable = array_column(ReportStatus::cases(), 'value');
+    $meanings = array_map(function ($id) use ($STATUSES) {
+        $status = $STATUSES[$id] ?? null;
+        $label = $status?->name ?? $id;
+        $meaning = $status?->action ?? ($status?->comment ?? '');
+        return "$id — $label" . ($meaning !== '' ? " ($meaning)" : '');
+    }, $recordable);
+    $statusLegend = implode("\n", array_map(function ($id, $status) {
+        $label = $status->name ?? $id;
+        $meaning = $status->action ?? ($status->comment ?? '');
+        $next = implode(', ', array_values($status->allowed ?? []));
+        return "- $id — $label" . ($meaning !== '' ? " ($meaning)" : '')
+            . ($next !== '' ? "; may become: $next" : '');
+    }, array_keys($STATUSES ?? []), array_values($STATUSES ?? [])));
+    $statusDescription = 'The outcome to record. A report can only move to certain statuses '
+        . 'from its current one (see the status legend in the server instructions); an invalid '
+        . 'transition is rejected with an explanatory error. '
+        . 'Values: ' . implode('; ', $meanings) . '.';
+
     // Input for update_report_status. additionalProperties:false so unknown
     // fields (e.g. a `comment`/`note` the client hoped to persist) are rejected
     // rather than silently accepted and dropped — this tool only sets status.
@@ -66,8 +95,8 @@ function buildServer(): Server {
             ],
             'status' => [
                 'type' => 'string',
-                'enum' => array_column(ReportStatus::cases(), 'value'),
-                'description' => 'The outcome to record.',
+                'enum' => $recordable,
+                'description' => $statusDescription,
             ],
         ],
         'required' => ['reportId', 'status'],
@@ -83,7 +112,11 @@ function buildServer(): Server {
         ->setInstructions(
             'Browse the signed-in user\'s reports (zgłoszenia) with list_reports, '
             . 'fetch one with get_report, and record the authority\'s response with '
-            . 'update_report_status.'
+            . 'update_report_status. Each report has a `status` id (see the legend below) '
+            . 'and a categoryInfo object (the violation type, its formal wording and legal '
+            . 'basis). Use the Polish status labels when talking to the user, and only set a '
+            . 'status the current one is allowed to move to.'
+            . "\n\nStatus legend (id — label — meaning; allowed transitions):\n" . $statusLegend
         )
         ->setSession(new McpMemcacheSessionStore())
         ->addTool(

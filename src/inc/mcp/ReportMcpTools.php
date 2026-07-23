@@ -38,7 +38,7 @@ final class ReportMcpTools {
         $apps = \user\apps($user, $status, 'all', $limit, 0);
         // Wrap in an object: MCP structuredContent must be an object, not an
         // array. Normalise the domain objects to plain arrays too.
-        return ['reports' => json_decode(json_encode($apps), true) ?? []];
+        return ['reports' => array_map([$this, 'enrich'], $apps)];
     }
 
     /**
@@ -57,7 +57,30 @@ final class ReportMcpTools {
             throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found");
         }
 
-        return json_decode(json_encode($application), true) ?? [];
+        return $this->enrich($application);
+    }
+
+    /**
+     * Serialise a report to a plain array and expand its category into
+     * categoryInfo (title, formal wording, legal basis, penalty).
+     */
+    private function enrich(\app\Application $application): array {
+        global $CATEGORIES;
+        $report = json_decode(json_encode($application), true) ?? [];
+
+        $category = $CATEGORIES[$application->category] ?? null;
+        if ($category) {
+            $report['categoryInfo'] = [
+                'id' => $application->category,
+                'title' => $category->getTitle(),
+                'formal' => $category->getFormal(),
+                'law' => $category->getLaw(),
+                'fine' => $category->getMandate(),          // "mandat" — fine amount in PLN
+                'demeritPoints' => $category->getPoints(),  // "punkty karne"
+            ];
+        }
+
+        return $report;
     }
 
     /**
@@ -87,6 +110,6 @@ final class ReportMcpTools {
             throw new \Mcp\Exception\ToolCallException($e->getMessage(), 0, $e);
         }
 
-        return json_decode(json_encode($application), true) ?? [];
+        return $this->enrich($application);
     }
 }

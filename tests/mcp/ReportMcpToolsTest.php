@@ -108,6 +108,40 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertSame('confirmed-waiting', $result['status']);
     }
 
+    public function testGetReportExpandsCategoryAndOmitsStatusInfo(): void
+    {
+        // The fixture uses category 8. get_report should expand it into
+        // categoryInfo; status semantics live in the server instructions, so
+        // no per-report statusInfo object is added.
+        $app = $this->makeApp('mcp-get-cat', 'confirmed-waiting', 'owner-cat@example.com');
+        $this->actAs('owner-cat@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->getReport($app->id);
+
+        self::assertArrayHasKey('categoryInfo', $result);
+        self::assertSame(8, $result['categoryInfo']['id']);
+        self::assertNotEmpty($result['categoryInfo']['title']);
+        self::assertArrayHasKey('law', $result['categoryInfo']);
+        // English-friendly names for the Polish "mandat" (fine) and "punkty karne".
+        self::assertArrayHasKey('fine', $result['categoryInfo']);
+        self::assertArrayHasKey('demeritPoints', $result['categoryInfo']);
+        self::assertArrayNotHasKey('mandate', $result['categoryInfo']);
+        self::assertArrayNotHasKey('statusInfo', $result);
+        self::assertSame(8, $result['category'], 'raw category number kept');
+    }
+
+    public function testListReportsExpandCategoryInfo(): void
+    {
+        $this->makeApp('mcp-list-cat', 'confirmed-waiting', 'owner-lc@example.com');
+        $this->actAs('owner-lc@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->listReports();
+
+        self::assertNotEmpty($result['reports']);
+        self::assertArrayHasKey('categoryInfo', $result['reports'][0]);
+        self::assertArrayNotHasKey('statusInfo', $result['reports'][0]);
+    }
+
     public function testGetReportRejectsAnotherUsersReport(): void
     {
         $app = $this->makeApp('mcp-get-other', 'confirmed-waiting', 'victim@example.com');
