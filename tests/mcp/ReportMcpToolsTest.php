@@ -142,6 +142,23 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertArrayNotHasKey('statusInfo', $result['reports'][0]);
     }
 
+    public function testGetReportExpandsRecipientInfo(): void
+    {
+        // The fixture's smCity "szczecin" (keys are lower-cased on load) resolves
+        // to the real Straż Miejska w Szczecinie unit; the report isn't
+        // stopAgresji, so it routes to the city guard (not police).
+        $this->makeApp('mcp-recipient', 'confirmed-waiting', 'owner-rec@example.com');
+        $this->actAs('owner-rec@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->getReport('mcp-recipient');
+
+        self::assertArrayHasKey('recipientInfo', $result);
+        self::assertStringContainsString('Szczecin', $result['recipientInfo']['name']);
+        self::assertSame('zgloszenia@sm.szczecin.pl', $result['recipientInfo']['email']);
+        self::assertFalse($result['recipientInfo']['isPolice']);
+        self::assertIsArray($result['recipientInfo']['address']);
+    }
+
     public function testGetReportRejectsAnotherUsersReport(): void
     {
         $app = $this->makeApp('mcp-get-other', 'confirmed-waiting', 'victim@example.com');

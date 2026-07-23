@@ -175,11 +175,13 @@ Tools:
     domain layer.
 
 Every returned report expands its category into `categoryInfo` (`id`, `title`, `formal` wording,
-`law`, `fine` in PLN, `demeritPoints`) alongside the raw `category` number. Status semantics are **not**
-repeated per report: the meaning of each `status` id and its allowed transitions are provided
-once, as a legend in the server `instructions` (generated from `statuses.json`). This keeps list
-responses lean and puts static enum documentation where clients reliably surface it to the model
-(instructions), rather than in the output schema (which clients use mainly for validation).
+`law`, `fine` in PLN, `demeritPoints`) alongside the raw `category` number, and its recipient
+authority into `recipientInfo` (`name`, `address`, `email`, `isPolice`) — resolved from the raw
+`smCity` key. Status semantics are **not** repeated per report: the meaning of each `status` id
+and its allowed transitions are provided once, as a legend in the server `instructions` (generated
+from `statuses.json`). This keeps list responses lean and puts static enum documentation where
+clients reliably surface it to the model (instructions), rather than in the output schema (which
+clients use mainly for validation).
 
 ## OAuth 2.1 provider
 

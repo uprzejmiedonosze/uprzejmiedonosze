@@ -32,6 +32,12 @@ function buildServer(): Server {
                 'description' => 'The violation category: title, formal wording, legal '
                     . 'basis (law), fine amount in PLN and demerit points.',
             ],
+            // The recipient authority, resolved from smCity by enrich().
+            'recipientInfo' => [
+                'type' => 'object',
+                'description' => 'The authority the report is addressed to (resolved from '
+                    . 'smCity): name, address, email, and whether it is police.',
+            ],
         ],
         'additionalProperties' => true,
     ];

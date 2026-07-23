@@ -80,6 +80,20 @@ final class ReportMcpTools {
             ];
         }
 
+        // Expand the recipient authority: `smCity` is only a key (e.g. "Szczecin"),
+        // so resolve it to the unit the report is addressed to — name, address,
+        // email, and whether it's police. Only once a recipient has been resolved
+        // (a geocoded/sent report has smCity set).
+        if (!empty($application->smCity)) {
+            $sm = $application->guessSMData();
+            $report['recipientInfo'] = [
+                'name' => $sm->getName(),
+                'address' => $sm->getAddress(),
+                'email' => $sm->getEmail(),
+                'isPolice' => $sm->isPolice(),
+            ];
+        }
+
         return $report;
     }
 
