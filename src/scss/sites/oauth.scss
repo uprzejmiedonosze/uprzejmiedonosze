@@ -1,14 +1,57 @@
 @use "../lib/button";
+@use "../lib/variables";
 
-// Odmów (secondary, ghost) po lewej, Zezwól (cta, wypełniony) po prawej —
+.oauth-consent {
+    // The scope toggles stack full-width; each `.checkbox` label is the visible,
+    // clickable box (its native input is hidden — see lib/radio.scss).
+    .oauth-scopes {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6em;
+        margin: 1.5em 0;
+    }
+
+    // The site-wide pattern hides the native checkbox with `display:none`, which
+    // drops it from the tab order and the accessibility tree. On a consent
+    // screen the scope toggles ARE the security decision, so keep the input
+    // focusable and screen-reader-exposed (visually hidden, not display:none)
+    // and surface keyboard focus on the styled label.
+    input[type="checkbox"] {
+        // Override the global `display:none` (which would keep it unfocusable);
+        // clip it visually instead so it stays in the tab order + a11y tree.
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        margin: 0;
+    }
+    input[type="checkbox"]:focus-visible + .checkbox {
+        outline: 2px solid variables.$primaryColor;
+        outline-offset: 2px;
+    }
+
+    .oauth-consent-note {
+        margin: 1.5em 0 0;
+        font-size: 0.9rem;
+        opacity: 0.75;
+    }
+}
+
+// Odmów (secondary, ghost) po lewej, Zezwól (primary, wypełniony) po prawej —
 // konwencja ekranów zgody: akcja domyślna/zachęcana wyróżniona i na końcu.
+// Duże przyciski (.mpr-button) jak CTA na stronie głównej.
 .oauth-consent-actions {
     display: flex;
-    justify-content: center;
-    gap: 1em;
-    margin-top: 1.5em;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.75em;
+    margin-top: 2em;
 
-    .button {
-        flex: 0 0 auto;
+    // .mpr-button is designed for <a>; on our <button>s pin the font (no global
+    // button font reset) and the pointer cursor so they match the hero CTAs.
+    .mpr-button {
+        font-size: 1rem;
+        cursor: pointer;
     }
 }

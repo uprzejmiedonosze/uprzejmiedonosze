@@ -47,15 +47,20 @@ class OAuthHandler extends AbstractHandler {
         $csrf = bin2hex(random_bytes(16));
         $_SESSION['oauth_csrf'] = $csrf;
 
-        $scopeLabels = array_map(
-            fn ($scope) => \oauth\SCOPES[$scope->getIdentifier()] ?? $scope->getIdentifier(),
+        // Pass id + label so the consent screen can render one checkbox per
+        // scope (each checked by default) and let the user grant a subset.
+        $scopes = array_map(
+            fn ($scope) => [
+                'id' => $scope->getIdentifier(),
+                'label' => \oauth\SCOPES[$scope->getIdentifier()] ?? $scope->getIdentifier(),
+            ],
             $authRequest->getScopes()
         );
 
         return AbstractHandler::renderHtml($request, $response, 'oauth-authorize', [
             'oauth' => [
                 'clientName' => $authRequest->getClient()->getName(),
-                'scopes' => $scopeLabels,
+                'scopes' => $scopes,
                 'query' => http_build_query($params),
                 'csrf' => $csrf,
             ],
@@ -97,8 +102,20 @@ class OAuthHandler extends AbstractHandler {
                 ':t' => date('c'),
             ]);
 
+        // Downscope to the scopes the user actually ticked (each requested scope
+        // is a checkbox, checked by default). Granting nothing is treated as a
+        // denial rather than issuing a useless empty-scope token.
+        $checked = array_filter((array) ($body['scopes'] ?? []), 'is_string');
+        $granted = array_values(array_filter(
+            $authRequest->getScopes(),
+            fn ($scope) => in_array($scope->getIdentifier(), $checked, true)
+        ));
+        $authRequest->setScopes($granted);
+
         $authRequest->setUser(new \oauth\UserEntity($_SESSION['user_id']));
-        $authRequest->setAuthorizationApproved(($body['decision'] ?? '') === 'approve');
+        $authRequest->setAuthorizationApproved(
+            ($body['decision'] ?? '') === 'approve' && count($granted) > 0
+        );
 
         try {
             return $server->completeAuthorizationRequest($authRequest, new ResponseObject());

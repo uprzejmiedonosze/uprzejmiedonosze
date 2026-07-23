@@ -198,6 +198,9 @@ RFC 7591 Dynamic Client Registration. Public clients only (no secret). JSON body
 
 Authorization endpoint. Unauthenticated users are sent through the Firebase login, then a
 consent screen; approval redirects back to the client's `redirect_uri` with `code` + `state`.
+The consent screen lists each requested scope as a checkbox (checked by default); the user may
+uncheck some to grant only a subset, and the issued token carries only the granted scopes.
+Unchecking everything (or denying) redirects back with `error=access_denied`.
 
 ### POST `/oauth/token`
 
