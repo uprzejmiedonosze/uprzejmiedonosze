@@ -50,10 +50,16 @@ final class ReportMcpTools {
     public function getReport(string $reportId): array {
         McpIdentity::requireScope('reports:read');
         $user = McpIdentity::currentUser();
-        $application = \app\get($reportId);
 
-        // Ownership is by email throughout the app (see src/inc/API.php).
-        if (!$application || $application->email !== $user->getEmail()) {
+        // \app\get throws (rather than returning null) for an unknown id; surface
+        // it — and a wrong-owner report — as the same readable "not found", so we
+        // never confirm another user's report exists. Ownership is by email.
+        try {
+            $application = \app\get($reportId);
+        } catch (\Throwable $e) {
+            throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found", 0, $e);
+        }
+        if ($application->email !== $user->getEmail()) {
             throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found");
         }
 
@@ -73,8 +79,14 @@ final class ReportMcpTools {
         McpIdentity::requireScope('reports:status:write');
         $user = McpIdentity::currentUser();
 
-        $application = \app\get($reportId);
-        if (!$application || $application->email !== $user->getEmail()) {
+        // \app\get throws for an unknown id; report it (and a wrong-owner report)
+        // as a readable "not found" rather than an opaque internal error.
+        try {
+            $application = \app\get($reportId);
+        } catch (\Throwable $e) {
+            throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found", 0, $e);
+        }
+        if ($application->email !== $user->getEmail()) {
             throw new \Mcp\Exception\ToolCallException("Report '$reportId' not found");
         }
 
