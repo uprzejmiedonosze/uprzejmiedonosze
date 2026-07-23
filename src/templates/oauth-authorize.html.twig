@@ -6,20 +6,24 @@
 
 {% block main %}
 <div class="ui-body ui-body-a oauth-consent">
-    <h2>{{ oauth.clientName }}</h2>
+    <h2>Przyznaj uprawnienia</h2>
     <p>Aplikacja <strong>{{ oauth.clientName }}</strong> prosi o dostęp do Twojego
-       konta w serwisie Uprzejmie Donoszę i będzie mogła:</p>
-    <ul>
-        {% for scope in oauth.scopes %}
-            <li>{{ scope }}</li>
-        {% endfor %}
-    </ul>
-    <p>Dostęp możesz w każdej chwili cofnąć w ustawieniach konta.</p>
+       konta w serwisie Uprzejmie Donoszę. Zaznacz uprawnienia, których chcesz udzielić:</p>
 
-    <form method="post" action="{{ BASE_URL }}oauth/authorize?{{ oauth.query }}" class="oauth-consent-actions">
+    <form method="post" action="{{ BASE_URL }}oauth/authorize?{{ oauth.query }}" class="oauth-consent-form">
         <input type="hidden" name="csrf" value="{{ oauth.csrf }}">
-        <button type="submit" name="decision" value="deny" class="button inverse">Odmów</button>
-        <button type="submit" name="decision" value="approve" class="button cta">Zezwól</button>
+        <div class="oauth-scopes">
+            {% for scope in oauth.scopes %}
+                {% set fieldId = 'scope-' ~ loop.index %}
+                <input type="checkbox" name="scopes[]" value="{{ scope.id }}" id="{{ fieldId }}" checked>
+                <label for="{{ fieldId }}" class="checkbox">{{ scope.label }}</label>
+            {% endfor %}
+        </div>
+        <p class="oauth-consent-note">Dostęp możesz w każdej chwili cofnąć w ustawieniach konta.</p>
+        <div class="oauth-consent-actions">
+            <button type="submit" name="decision" value="deny" class="mpr-button mpr-button-secondary">Odmów</button>
+            <button type="submit" name="decision" value="approve" class="mpr-button mpr-button-primary">Zezwól</button>
+        </div>
     </form>
 </div>
 {% endblock %}
