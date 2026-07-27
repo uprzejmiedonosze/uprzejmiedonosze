@@ -116,7 +116,7 @@ PHP reads all config via `getenv()` — no `config.php` file required. Key const
 - `APP_ROOT` — server root (`/var/www/uprzejmiedonosze.net/`)
 - `CRYPTO_KEY/IV/TAG` — encryption
 - `OAUTH_PRIVATE_KEY` — RSA private key (PEM) for the OAuth provider; `OAUTH_ENCRYPTION_KEY` — base64 32-byte key
-- `S3_KEY/SECRET/BUCKET/ENDPOINT/REGION` — Hetzner Object Storage
+- `B2_KEY/SECRET/BUCKET/ENDPOINT/REGION` — Backblaze B2 object storage
 - `MEMCACHED_HOST` — memcached hostname
 
 ### Frontend
@@ -145,8 +145,8 @@ PHPUnit tests use `services/devroot/db/store.sqlite` as a fixture (via `TEST_DB`
 ### CDN / Image Storage
 
 - **Dev**: images saved to container's internal `/var/www/uprzejmiedonosze.net/cdn2/` (lost on restart — acceptable)
-- **Staging**: `cdn2stg/` directory on server, synced to Hetzner S3 by `worker-cron`
-- **Prod**: `cdn2/` directory on server, synced to S3
+- **Staging**: `cdn2stg/` directory on server, synced to Backblaze B2
+- **Prod**: `cdn2/` directory on server, synced to Backblaze B2
 
 CDN prefix logic: `isStaging() ? 'cdn2stg' : 'cdn2'` — controlled by `APP_ENV`.
 

@@ -23,19 +23,13 @@ define('CRYPTO_TAG', '190181339ab13a971415e977b736053f');
 define('BACKEND_API_KEY', 'dev-secret-key-change-in-production');
 define('CORS_ALLOWED_DOMAIN', 'localhost'); // includes subdomains
 
-// S3-compatible object storage (B2 primary, Hetzner fallback) — only active
-// in production/staging (isEnabled()). Not needed in dev, but constants must be defined.
+// S3-compatible object storage (Backblaze B2) — only active in
+// production/staging (isEnabled()). Not needed in dev, but constants must be defined.
 define('B2_KEY',      '');
 define('B2_SECRET',   '');
 define('B2_BUCKET',   '');
 define('B2_ENDPOINT', 'https://s3.eu-central-003.backblazeb2.com');
 define('B2_REGION',   'eu-central-003');
-
-define('S3_KEY',      '');
-define('S3_SECRET',   '');
-define('S3_BUCKET',   '');
-define('S3_ENDPOINT', 'https://fsn1.your-objectstorage.com');
-define('S3_REGION',   'eu-central-1');
 
 // MCP OAuth 2.1 provider (dev fixtures). league needs an internal keypair +
 // encryption key; access tokens are opaque so no public JWKS is exposed.

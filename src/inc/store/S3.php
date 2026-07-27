@@ -4,9 +4,9 @@ use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
 /**
- * Thin wrapper around a single S3-compatible backend (Hetzner Object Storage,
- * Backblaze B2's S3-compatible API, etc). Knows nothing about which provider
- * it talks to or which backend is "primary" — that policy lives in Storage.php.
+ * Thin wrapper around a single S3-compatible backend (Backblaze B2's
+ * S3-compatible API). Knows nothing about which provider it talks to —
+ * that policy lives in Storage.php.
  */
 class S3 {
     private S3Client $client;

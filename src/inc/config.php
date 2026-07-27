@@ -126,12 +126,6 @@ if (!defined('B2_SECRET'))   define('B2_SECRET',   getenv('B2_SECRET')   ?: '');
 if (!defined('B2_BUCKET'))   define('B2_BUCKET',   getenv('B2_BUCKET')   ?: '');
 if (!defined('B2_ENDPOINT')) define('B2_ENDPOINT', getenv('B2_ENDPOINT') ?: '');
 if (!defined('B2_REGION'))   define('B2_REGION',   getenv('B2_REGION')   ?: '');
-
-if (!defined('S3_KEY'))      define('S3_KEY',      getenv('S3_KEY')      ?: '');
-if (!defined('S3_SECRET'))   define('S3_SECRET',   getenv('S3_SECRET')   ?: '');
-if (!defined('S3_BUCKET'))   define('S3_BUCKET',   getenv('S3_BUCKET')   ?: '');
-if (!defined('S3_ENDPOINT')) define('S3_ENDPOINT', getenv('S3_ENDPOINT') ?: '');
-if (!defined('S3_REGION'))   define('S3_REGION',   getenv('S3_REGION')   ?: '');
 unset($_appEnv, $_configDev);
 
 $_appHost = getenv('APP_HOST');
