@@ -24,130 +24,136 @@ class WebhooksHandler extends AbstractHandler {
             throw new HttpForbiddenException($request, 'Missing event id.');
         }
 
-        if (\webhook\isProcessed($id)) {
-            return $this->renderJson($response, array(
-                "type" => "duplicate",
-                "status" => "ignored"
-            ));
-        }
-
-        \webhook\add($id, $event);
+        \semaphore\acquire('webhook-event:' . $id, 'WebhooksHandler::mailgun');
         try {
-            $this->verify($request);
-        } catch (RejectSilentlyWebhookException $e) {
-            \webhook\mark($id, $e->getMessage());
-            return $this->renderJson($response, array(
-                "type" => $e->getMessage(),
-                "status" => "ignored"
-            ));
-        }
-
-        $payload = $event['event-data'];
-        $appId = $payload['user-variables']['appid'];
-        $recipient = $payload['recipient'];
-
-        if(($payload['user-variables']['environment'] ?? 'prod') !== environment()) {
-            \webhook\mark($id, 'other environment, ignoring');
-            return $this->renderJson($response, array(
-                "type" => "other-env",
-                "status" => "ignored"
-            ));
-        }
-
-        if(isset($payload['user-variables']['nofitication'])) {
-            // this is a notification triggered by an email sent by this webhook
-            // so I have to ignore it not to trigger an endless loop
-            \webhook\mark($id, 'this is notification, ignoring');
-            return $this->renderJson($response, array(
-                "type" => "notification",
-                "status" => "ignored"
-            ));
-        }
-        $mailEvent = new MailEvent($payload);
-
-        try {
-            \semaphore\acquire($appId, 'webhook:' . $recipient);
-
-            try {
-                $application = \app\get($appId);
-            } catch (Exception $e) {
-                if (isProd())
-                    throw $e;
-                \webhook\mark($id, 'app already removed, ignoring');
+            if (\webhook\isProcessed($id)) {
                 return $this->renderJson($response, array(
-                    "type" => "app-removed",
+                    "type" => "duplicate",
                     "status" => "ignored"
                 ));
             }
 
+            \webhook\add($id, $event);
+            try {
+                $this->verify($request);
+            } catch (RejectSilentlyWebhookException $e) {
+                \webhook\mark($id, $e->getMessage());
+                return $this->renderJson($response, array(
+                    "type" => $e->getMessage(),
+                    "status" => "ignored"
+                ));
+            }
 
-            if (!$application->wasSent()) {
-                $msg = "mailgun webhook error, Application $appId was not sent!";
-                logger($msg, true);
-                \telemetry\log('app_error', $appId, ['msg' => $msg, 'source' => 'WebhooksHandler::mailgun']);
-                if ($mailEvent->status == 'failed' && $application->email !== $recipient) {
+            $payload = $event['event-data'];
+            $appId = $payload['user-variables']['appid'];
+            $recipient = $payload['recipient'];
+
+            if(($payload['user-variables']['environment'] ?? 'prod') !== environment()) {
+                \webhook\mark($id, 'other environment, ignoring');
+                return $this->renderJson($response, array(
+                    "type" => "other-env",
+                    "status" => "ignored"
+                ));
+            }
+
+            if(isset($payload['user-variables']['nofitication'])) {
+                // this is a notification triggered by an email sent by this webhook
+                // so I have to ignore it not to trigger an endless loop
+                \webhook\mark($id, 'this is notification, ignoring');
+                return $this->renderJson($response, array(
+                    "type" => "notification",
+                    "status" => "ignored"
+                ));
+            }
+            $mailEvent = new MailEvent($payload);
+
+            try {
+                \semaphore\acquire($appId, 'webhook:' . $recipient);
+
+                try {
+                    $application = \app\get($appId);
+                } catch (Exception $e) {
+                    if (isProd())
+                        throw $e;
+                    \webhook\mark($id, 'app already removed, ignoring');
+                    return $this->renderJson($response, array(
+                        "type" => "app-removed",
+                        "status" => "ignored"
+                    ));
+                }
+
+
+                if (!$application->wasSent()) {
+                    $msg = "mailgun webhook error, Application $appId was not sent! "
+                        . "event={$mailEvent->name} recipient={$mailEvent->recipient} eventId=$id";
+                    logger($msg, true);
+                    \telemetry\log('app_error', $appId, ['msg' => $msg, 'source' => 'WebhooksHandler::mailgun']);
+                    if ($mailEvent->status == 'failed' && $application->email !== $recipient) {
+                        (new MailGun())->notifyUser($application,
+                            "Nie udało się nam dostarczyć zgłoszenia {$application->getNumber()}",
+                            $mailEvent->getReason(),
+                            $recipient);
+                    }
+                    \webhook\mark($id, 'app not sent');
+                    return $this->renderJson($response, array(
+                        "status" => "failed"
+                    ));
+                }
+
+                $comment = $mailEvent->formatComment($application->email);
+                if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
+                $ccToUser = $application->email == $recipient;
+
+                if ($recipient == MAILER_FROM) {
+                    // this is BCC to Uprzejmie Donoszę, ignore it
+                    \webhook\mark($id, 'bcc to ud@, ignoring');
+                    return $this->renderJson($response, array(
+                        "type" => "bcc",
+                        "status" => "ignored"
+                    ));
+                }
+
+                if (!$ccToUser) {
+                    // set sent status to accepted only if empty
+                    if ($mailEvent->status == 'accepted' && $application->status == 'confirmed')
+                        $application->setStatus('sending', true);
+                    if ($mailEvent->status == 'problem')
+                        $application->setStatus('sending-problem', true);
+                    if ($mailEvent->status == 'failed') {
+                        $application->setStatus('sending-failed', true);
+                        unset($application->sent);
+                    }
+                    if ($mailEvent->status == 'delivered')
+                        $application->setStatus('confirmed-waiting', true);
+                }
+
+                $application = \app\save($application);
+                \semaphore\release($appId, 'webhook:' . $recipient);
+                \webhook\mark($id);
+                $application->syncToS3();
+
+                if (!$ccToUser) {
+                    \telemetry\log('delivery_status', $appId, [
+                        'status' => $mailEvent->status,
+                        'event' => $mailEvent->name,
+                        'reason' => $mailEvent->getReason()
+                    ]);
+                }
+
+                if ($mailEvent->status == 'failed' && !$ccToUser)
                     (new MailGun())->notifyUser($application,
                         "Nie udało się nam dostarczyć zgłoszenia {$application->getNumber()}",
                         $mailEvent->getReason(),
                         $recipient);
-                }
-                \webhook\mark($id, 'app not sent');
+
                 return $this->renderJson($response, array(
-                    "status" => "failed"
+                    "status" => "OK"
                 ));
+            } finally {
+                \semaphore\release($appId, 'webhook:' . $recipient);
             }
-
-            $comment = $mailEvent->formatComment($application->email);
-            if ($comment) $application->addComment("mailer", $comment, $mailEvent->status);
-            $ccToUser = $application->email == $recipient;
-
-            if ($recipient == MAILER_FROM) {
-                // this is BCC to Uprzejmie Donoszę, ignore it
-                \webhook\mark($id, 'bcc to ud@, ignoring');
-                return $this->renderJson($response, array(
-                    "type" => "bcc",
-                    "status" => "ignored"
-                ));
-            }
-
-            if (!$ccToUser) {
-                // set sent status to accepted only if empty
-                if ($mailEvent->status == 'accepted' && $application->status == 'confirmed')
-                    $application->setStatus('sending', true);
-                if ($mailEvent->status == 'problem')
-                    $application->setStatus('sending-problem', true);
-                if ($mailEvent->status == 'failed') {
-                    $application->setStatus('sending-failed', true);
-                    unset($application->sent);
-                }
-                if ($mailEvent->status == 'delivered')
-                    $application->setStatus('confirmed-waiting', true);
-            }
-
-            $application = \app\save($application);
-            \semaphore\release($appId, 'webhook:' . $recipient);
-            \webhook\mark($id);
-            $application->syncToS3();
-
-            if (!$ccToUser) {
-                \telemetry\log('delivery_status', $appId, [
-                    'status' => $mailEvent->status,
-                    'event' => $mailEvent->name,
-                    'reason' => $mailEvent->getReason()
-                ]);
-            }
-
-            if ($mailEvent->status == 'failed' && !$ccToUser)
-                (new MailGun())->notifyUser($application,
-                    "Nie udało się nam dostarczyć zgłoszenia {$application->getNumber()}",
-                    $mailEvent->getReason(),
-                    $recipient);
-
-            return $this->renderJson($response, array(
-                "status" => "OK"
-            ));
         } finally {
-            \semaphore\release($appId, 'webhook:' . $recipient);
+            \semaphore\release('webhook-event:' . $id, 'WebhooksHandler::mailgun');
         }
     }
 
