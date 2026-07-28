@@ -14,7 +14,7 @@ abstract class AbstractHandler {
     }
 
     public static function renderJson(Response $response, object|array $object): Response {
-        $response->getBody()->write(json_encode($object));
+        $response->getBody()->write(json_encode($object, JSON_INVALID_UTF8_SUBSTITUTE));
         return $response;
     }
 
