@@ -121,7 +121,6 @@ class WebhooksHandler extends AbstractHandler {
                         $application->setStatus('sending-problem', true);
                     if ($mailEvent->status == 'failed') {
                         $application->setStatus('sending-failed', true);
-                        unset($application->sent);
                     }
                     if ($mailEvent->status == 'delivered')
                         $application->setStatus('confirmed-waiting', true);
