@@ -2243,7 +2243,8 @@
             "ul. Konopnickiej 14",
             "99-100 Łęczyca"
         ],
-        "email": "straz@leczyca.info.pl"
+        "email": "straz@leczyca.info.pl",
+        "hint": "Pierwsze relacja to brak reakcji na zgłoszenie. Ale po skardze na bezczynność wystawili mandaty, nie pouczenia."
     },
     "Swarzędz": {
         "address": [
@@ -2600,7 +2601,8 @@
             "ul. Chrobrego 10",
             "76-032 Mielno"
         ],
-        "email": "sm@gmina.mielno.pl"
+        "email": "sm@gmina.mielno.pl",
+        "hint": "Egzekwowanie przepisów parkingowych sprawia wrażenie pozorowanego — wezwania za wycieraczką zdarzają się średnio raz w miesiącu."
     },
     "Dziwnów": {
         "address": [

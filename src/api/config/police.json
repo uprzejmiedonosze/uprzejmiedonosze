@@ -1103,7 +1103,7 @@
         "email": "wrd.op@op.policja.gov.pl",
         "voivodeship": "Opolskie",
         "city": "Opole",
-        "hint": "Sami informują listownie o zakończeniu sprawy, i robią to sprawnie. Niestety większość zgłoszeń kończy się pouczeniem."
+        "hint": "Nie wzywają na przesłuchanie. Sami informują listownie o zakończeniu sprawy, i robią to sprawnie. Niestety większość zgłoszeń kończy się pouczeniem."
     },
     "Gdańsk-miasto": {
         "address": [
@@ -1246,6 +1246,7 @@
         ],
         "email": "dyzurny@wroclaw.wr.policja.gov.pl",
         "voivodeship": "Dolnośląskie",
+        "hint": "Często wzywają świadka na komendę mimo jednoznacznych zdjęć, tłumacząc to ryzykiem podważenia zgłoszenia przez sąd bez zeznań. Na wezwaniu jest podany konkretny termin i godzina stawiennictwa.",
         "city": "Wrocław"
     },
     "Kalisz-miasto": {
@@ -2209,7 +2210,8 @@
         ],
         "email": "komendant@lodz.ld.policja.gov.pl",
         "voivodeship": "Łódzkie",
-        "city": "Łódź"
+        "city": "Łódź",
+        "hint": "Wzywają na przesłuchanie (ok. miesiąc od zgłoszenia), ale sama wizyta przebiega profesjonalnie i sprawnie."
     },
     "Piotrków Trybunalski-miasto": {
         "address": [
