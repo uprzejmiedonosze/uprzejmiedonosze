@@ -458,6 +458,24 @@ class Application extends JSONObject implements \JsonSerializable {
         if(!isset($this->address) || !isset($this->address->lat)){
             return null;
         }
+
+        if($this->hasNumber() && isset($this->address->mapImage) && file_exists(ROOT . $this->address->mapImage)){
+            return $this->address->mapImage;
+        }
+        // Plik nie istnieje lokalnie (np. po syncToS3 bez uploadu mapy) — regeneruj.
+
+        return $this->regenerateMapImage();
+    }
+
+    /**
+     * Pobiera nową mapę statyczną z Mapboksa i wgrywa ją do B2, nadpisując
+     * $this->address->mapImage. Zwraca nowy klucz albo null, gdy pobranie/upload
+     * się nie powiodło (np. Mapbox niedostępny) — w takim wypadku wywołujący
+     * powinien potraktować mapę jako niedostępną, nie jako błąd krytyczny.
+     * Public: wywoływana też z src/tools/backfill-map-images.php.
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
+     */
+    public function regenerateMapImage(): ?string {
         $iconEncodedUrl = urlencode('https://uprzejmiedonosze.net/img/map-circle.png');
         $lngLat = $this->getLngLat();
         $mapsUrl = "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/url-$iconEncodedUrl($lngLat)/$lngLat,16,0/380x200?access_token=pk.eyJ1IjoidXByemVqbWllZG9ub3N6ZXQiLCJhIjoiY2xxc2VkbWU3NGthZzJrcnExOWxocGx3bSJ9.r1y7A6C--2S2psvKDJcpZw&_=1";
@@ -465,14 +483,7 @@ class Application extends JSONObject implements \JsonSerializable {
         // Shares syncToS3()'s lock key: without it, syncToS3() can glob-upload
         // and delete this same local file (or read it mid-(re)write) while
         // this method is concurrently checking/regenerating it.
-        return \semaphore\withLock("syncToS3:{$this->id}", "Application::getMapImage", function() use ($mapsUrl) {
-            if($this->hasNumber() && isset($this->address->mapImage)){
-                if (file_exists(ROOT . $this->address->mapImage)) {
-                    return $this->address->mapImage;
-                }
-                // Plik nie istnieje lokalnie (np. po syncToS3 bez uploadu mapy) — regeneruj niżej.
-            }
-
+        return \semaphore\withLock("syncToS3:{$this->id}", "Application::regenerateMapImage", function() use ($mapsUrl) {
             $baseDir = \storage\cdnPrefix() . '/' . $this->getUserNumber();
             if(!file_exists(ROOT . $baseDir)){
                 mkdir(ROOT . $baseDir, 0755, true);
@@ -483,22 +494,21 @@ class Application extends JSONObject implements \JsonSerializable {
 
             $ifp = @fopen($fileName, 'wb');
             if($ifp === false){
-                return $mapsUrl;
+                return null;
             }
 
             $image = @file_get_contents($mapsUrl);
             if($image === false || fputs($ifp, $image) === false){
                 fclose($ifp);
                 @unlink($fileName); // nosemgrep: php.lang.security.unlink-use.unlink-use
-                return $mapsUrl;
+                return null;
             }
             fclose($ifp);
 
-            // Save regardless of upload() success: the local file is what
-            // retrieval actually relies on first (local -> B2 -> S3), and
-            // this flag is only ever read back by this same fast path above
-            // via file_exists() — it never gates a remote-only lookup.
-            \storage\upload($fileName, "$baseFileName,ma.png");
+            if(!\storage\upload($fileName, "$baseFileName,ma.png")){
+                return null;
+            }
+
             $this->address->mapImage = "$baseFileName,ma.png";
             \app\save($this);
             return "$baseFileName,ma.png";
@@ -733,6 +743,8 @@ class Application extends JSONObject implements \JsonSerializable {
 
     /**
      * Returns all S3/CDN keys (relative paths) that belong to this application.
+     * Excludes the map image — see getMapImageKey(); a missing map is not
+     * fatal and is handled separately in ensureLocal().
      */
     public function getImageKeys(): array {
         $keys = [];
@@ -741,20 +753,30 @@ class Application extends JSONObject implements \JsonSerializable {
             if (isset($this->$imgType->thumb)) $keys[] = $this->$imgType->thumb;
         }
 
-        // Derived from carImage->url to avoid encrypted address metadata.
-        // Only include when address->lat is accessible — encrypted addresses have no map.
-        if (isset($this->carImage->url) && isset($this->address->lat)) {
-            $keys[] = strtok($this->carImage->url, ',') . ',ma.png';
-        }
-
         if (isset($this->carInfo->plateImage)) $keys[] = $this->carInfo->plateImage;
         return $keys;
+    }
+
+    /**
+     * Derived S3/CDN key for the map screenshot, or null when there's no
+     * carImage/address.lat to derive it from (encrypted addresses have no map).
+     */
+    public function getMapImageKey(): ?string {
+        if (isset($this->carImage->url) && isset($this->address->lat)) {
+            return strtok($this->carImage->url, ',') . ',ma.png';
+        }
+        return null;
     }
 
     /**
      * Downloads any missing image files from S3 to their canonical local paths (ROOT.$key).
      * Validates magic bytes after download; retries once if the file is corrupt.
      * No-op when S3 storage is not enabled.
+     *
+     * The map image is best-effort: if its B2 object is missing, it's
+     * regenerated from Mapbox; if that also fails, address->mapImage is
+     * cleared and generation continues without it. Unlike the required
+     * images above, a missing map never blocks the caller (PDF/ZIP/email).
      */
     public function ensureLocal(): void {
         foreach ($this->getImageKeys() as $key) {
@@ -767,6 +789,19 @@ class Application extends JSONObject implements \JsonSerializable {
                 if (!self::isValidImageHeader($localPath, $key)) {
                     throw new \RuntimeException("Uszkodzony plik obrazu po ponownym pobraniu: $key");
                 }
+            }
+        }
+
+        $mapKey = $this->getMapImageKey();
+        if ($mapKey === null) return;
+        try {
+            \storage\ensure_local($mapKey);
+        } catch (\Throwable $e) {
+            logger("Mapa niedostępna w B2 dla {$this->id} ('$mapKey'), próba regeneracji: " . $e->getMessage(), true);
+            if ($this->regenerateMapImage() === null) {
+                logger("Nie udało się zregenerować mapy dla {$this->id} — kontynuuję bez mapy.", true);
+                unset($this->address->mapImage);
+                \app\save($this);
             }
         }
     }

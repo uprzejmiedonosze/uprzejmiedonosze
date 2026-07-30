@@ -81,6 +81,10 @@ function ensure_local(string $key): void {
         } catch (AwsException $e) {
             @unlink($tmpPath);
             $lastException = $e;
+            if ($e->getAwsErrorCode() === 'NoSuchKey') {
+                // Permanent — the object doesn't exist, retrying won't change that.
+                break;
+            }
             if ($attempt < $maxAttempts) {
                 // Exponential backoff: 1s, 4s (attempt * attempt seconds, last attempt skips)
                 sleep($attempt * $attempt);

@@ -218,14 +218,26 @@ class ApplicationTest extends DatabaseTestCase
         $this->assertContains('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,t.jpg', $keys);
         // plateImage
         $this->assertContains('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12,p.jpg', $keys);
-        // no thirdImage
-        $this->assertCount(6, $keys);
+        // no thirdImage, no map (map key is optional — see getMapImageKey())
+        $this->assertCount(5, $keys);
     }
 
     public function testGetImageKeysEmptyWhenNoImages(): void
     {
         $app = Application::withUser(new User());
         $this->assertEmpty($app->getImageKeys());
+    }
+
+    public function testGetMapImageKeyDerivedFromCarImage(): void
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $this->assertSame('cdn/d74a29f5-9cde-4370-a8f0-fcc1dc9bcd12.jpg,ma.png', $app->getMapImageKey());
+    }
+
+    public function testGetMapImageKeyNullWithoutAddressLat(): void
+    {
+        $app = Application::withUser(new User());
+        $this->assertNull($app->getMapImageKey());
     }
 
     /**
