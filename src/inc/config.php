@@ -117,7 +117,7 @@ if (!defined('OPENAI_API_KEY')) define('OPENAI_API_KEY', getenv('OPENAI_API_KEY'
 if (!defined('GOOGLE_API_KEY')) define('GOOGLE_API_KEY', getenv('GOOGLE_API_KEY') ?: '');
 if (!defined('OPENAI_PROJECT')) define('OPENAI_PROJECT', getenv('OPENAI_PROJECT') ?: '');
 
-if (!defined('MATOMO_SITE_ID'))     define('MATOMO_SITE_ID',     (int)(getenv('MATOMO_SITE_ID') ?: 1));
+if (!defined('MATOMO_SITE_ID'))     define('MATOMO_SITE_ID',     (int)(getenv('MATOMO_SITE_ID') ?: 2));
 if (!defined('BACKEND_API_KEY'))    define('BACKEND_API_KEY',    getenv('BACKEND_API_KEY')    ?: '');
 if (!defined('CORS_ALLOWED_DOMAIN')) define('CORS_ALLOWED_DOMAIN', getenv('CORS_ALLOWED_DOMAIN') ?: '');
 

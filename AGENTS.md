@@ -68,7 +68,8 @@ All services are defined in `services/compose.yml` with three profiles:
 | `face-detector` | | ✓ | ✓ | Python face detection API |
 | `face-detect-consumer` | | ✓ | ✓ | PHP daemon — processes face detect queue |
 | `worker-cron` | | ✓ | ✓ | supercronic — cleanup, stats, s3-sync |
-| `matomo` + `matomo-db` | | | ✓ | Analytics |
+
+Analytics is tracked via an external, centrally-hosted Matomo instance (`matomo.nieradka.com`), not a service in this compose file.
 
 ### Build Pipeline
 
