@@ -34,6 +34,20 @@ function log(string $eventName, ?string $appId = null, array $data = []): void {
             socket_sendto($sock, $msgSource, strlen($msgSource), 0, '127.0.0.1', 8125);
         }
 
+        // Zliczanie dostawców przy retry/błędzie API (np. api_retry.PlateRecognizer)
+        if (($eventName === 'api_retry' || $eventName === 'api_error') && isset($data['vendor'])) {
+            $vendorMetric = $metricName . "." . str_replace([':', '\\', ' '], '_', $data['vendor']);
+            $msgVendor = "{$vendorMetric}:1|c";
+            socket_sendto($sock, $msgVendor, strlen($msgVendor), 0, '127.0.0.1', 8125);
+        }
+
+        // Zliczanie typu edycji zgłoszenia (np. report_edited.image)
+        if ($eventName === 'report_edited' && isset($data['type'])) {
+            $typeMetric = $metricName . "." . str_replace([':', '\\', ' '], '_', $data['type']);
+            $msgType = "{$typeMetric}:1|c";
+            socket_sendto($sock, $msgType, strlen($msgType), 0, '127.0.0.1', 8125);
+        }
+
         socket_close($sock);
 
     } catch (\Exception $e) {
