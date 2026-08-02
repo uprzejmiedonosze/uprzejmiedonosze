@@ -116,12 +116,19 @@ function removeFile($fileName, $dryRun){
     if(!isset($fileName) || empty($fileName)){
         return;
     }
+    // Validate the containing directory, not the file itself: files are routinely
+    // absent locally (syncToS3() uploads to B2 and unlinks the local copy), so
+    // realpath() on $fileName would return false and reject every already-synced file.
     $allowedBase = realpath(ROOT . 'cdn2');
-    $file = realpath(ROOT . $fileName);
-    if (!$file || !$allowedBase || !str_starts_with($file, $allowedBase . DIRECTORY_SEPARATOR)) {
+    $dir  = realpath(ROOT . dirname($fileName));
+    $base = basename($fileName);
+    $valid = $dir && $allowedBase && $base !== '' && $base !== '.' && $base !== '..'
+        && str_starts_with($dir . DIRECTORY_SEPARATOR, $allowedBase . DIRECTORY_SEPARATOR);
+    if (!$valid) {
         echo " ! '$fileName' poza dozwolonym katalogiem cdn2\n";
         return;
     }
+    $file = $dir . DIRECTORY_SEPARATOR . $base;
     if(file_exists($file)){
         if(filetype($file) !== 'file'){
             echo " ! '$fileName' nie jest plikiem\n";
