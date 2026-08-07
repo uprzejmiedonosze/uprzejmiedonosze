@@ -162,7 +162,10 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     plotOptions: {
       column: {
+        // grouping:false keeps every stack drawn at the same x, so the users
+        // bar stays overlaid on the reports bar instead of sitting beside it.
         grouping: false,
+        stacking: "normal",
         shadow: false,
         borderWidth: 0
       },
@@ -170,18 +173,31 @@ document.addEventListener("DOMContentLoaded", function () {
         pointWidth: barWidth
       }
     },
+    // Two report series share a bar, so colour alone no longer identifies them.
+    legend: {
+      enabled: true
+    },
     xAxis: {
       tickWidth: 0,
       gridLineWidth: 1
     },
     series: [
       {
-        name: "Nowe zgłoszenia",
-        color: "#009C7F"
+        name: "Zgłoszenia – SM",
+        color: "#009C7F",
+        stack: "apps"
+      },
+      {
+        name: "Zgłoszenia – policja",
+        color: "#1F63B8",
+        stack: "apps"
       },
       {
         name: "Nowi użytkownicy",
         color: "#e9c200",
+        // own stack, so it stays a separate overlaid bar rather than piling
+        // on top of the reports total
+        stack: "users",
         pointPadding: 0.4,
         pointPlacement: 0.2,
         pointWidth: barWidth * 0.7
