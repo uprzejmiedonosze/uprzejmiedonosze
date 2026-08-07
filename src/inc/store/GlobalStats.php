@@ -71,23 +71,56 @@ function statsByDay(bool $useCache=true){
 }
 
 /**
- * Returns number of new applications (by creation month)
- * in last year.
+ * Returns number of new applications (by creation month) in last year,
+ * split into the ones addressed to Straż Miejska and the ones addressed
+ * to Policja, plus the number of new users.
+ *
+ * Rows are [month, smCnt, policeCnt, usersCnt]; smCnt + policeCnt is the
+ * same total this function used to return as a single column.
+ *
+ * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  */
 function statsByYear(bool $useCache=true){
 
-    $stats = \cache\get(Type::GlobalStats, "statsByYear");
+    // Cache key is versioned because the row shape changed: an entry written by
+    // the previous single-column version would feed the user count into the
+    // Policja series until it expired.
+    $stats = \cache\get(Type::GlobalStats, "statsByYear2");
     if($useCache && $stats){
         return $stats;
     }
 
+    global $SM_ADDRESSES, $POLICE_ADDRESSES;
+
+    // A report only ever stores the lowercased unit key (Application::smCity),
+    // so the recipient has to be derived the way SM::resolve() derives it at
+    // render time: #stopagresji always goes to Policja, otherwise sm.json wins
+    // over police.json for the handful of keys present in both, and anything
+    // unresolvable falls back to the SM side ($SM_ADDRESSES['_nieznane']).
+    // Folding that together, a report is Policja iff stopAgresji is set or its
+    // key is police-only -- which is the single list the query needs.
+    $policeOnly = array_values(array_diff(
+        array_keys($POLICE_ADDRESSES),
+        array_keys($SM_ADDRESSES)
+    ));
+
     $sql = <<<SQL
-        with a as (
-            select substr(json_extract(value, '$.added'), 1, 7) as 'month',
-                count(key) as cnt
-            from applications
-            where json_extract(value, '$.status') not in ('draft', 'ready')
-                and json_extract(value, '$.added') >= date('now', '-24 months')
+        with police_keys as (
+            select p.value as k from json_each(:policeKeys) p
+        ), classified as (
+            select substr(json_extract(app.value, '$.added'), 1, 7) as 'month',
+                case when coalesce(json_extract(app.value, '$.stopAgresji'), 0)
+                        or lower(coalesce(json_extract(app.value, '$.smCity'), ''))
+                            in (select k from police_keys)
+                     then 1 else 0 end as is_police
+            from applications app
+            where json_extract(app.value, '$.status') not in ('draft', 'ready')
+                and json_extract(app.value, '$.added') >= date('now', '-24 months')
+        ), a as (
+            select month,
+                sum(1 - is_police) as sm_cnt,
+                sum(is_police) as police_cnt
+            from classified
             group by 1
         ), u as (
             select substr(json_extract(value, '$.added'), 1, 7) as 'month',
@@ -97,7 +130,8 @@ function statsByYear(bool $useCache=true){
             group by 1
         )
         select a.month,
-            a.cnt as acnt,
+            a.sm_cnt as smcnt,
+            a.police_cnt as pcnt,
             u.cnt as ucnt
         from a
         left outer join u on a.month = u.month
@@ -105,8 +139,10 @@ function statsByYear(bool $useCache=true){
         limit 24;
     SQL;
 
-    $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::GlobalStats, 'statsByYear', $stats);
+    $stmt = \store\prepare($sql);
+    $stmt->execute([':policeKeys' => json_encode($policeOnly)]);
+    $stats = $stmt->fetchAll(\PDO::FETCH_NUM);
+    \cache\set(Type::GlobalStats, 'statsByYear2', $stats);
     return $stats;
 }
 

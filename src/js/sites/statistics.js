@@ -162,13 +162,23 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     plotOptions: {
       column: {
+        // grouping:false keeps every stack drawn at the same x, so the users
+        // bar stays overlaid on the reports bar instead of sitting beside it.
         grouping: false,
+        stacking: "normal",
         shadow: false,
-        borderWidth: 0
+        // 2px of surface between the SM and Policja segments so the split
+        // reads as two marks rather than one bar with a colour change.
+        borderWidth: 2,
+        borderColor: "#ffffff"
       },
       series: {
         pointWidth: barWidth
       }
+    },
+    // Two report series share a bar, so colour alone no longer identifies them.
+    legend: {
+      enabled: true
     },
     xAxis: {
       tickWidth: 0,
@@ -176,12 +186,21 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     series: [
       {
-        name: "Nowe zgłoszenia",
-        color: "#009C7F"
+        name: "Zgłoszenia – Straż Miejska",
+        color: "#009C7F",
+        stack: "apps"
+      },
+      {
+        name: "Zgłoszenia – Policja",
+        color: "#1F63B8",
+        stack: "apps"
       },
       {
         name: "Nowi użytkownicy",
         color: "#e9c200",
+        // own stack, so it stays a separate overlaid bar rather than piling
+        // on top of the reports total
+        stack: "users",
         pointPadding: 0.4,
         pointPlacement: 0.2,
         pointWidth: barWidth * 0.7
@@ -199,6 +218,13 @@ document.addEventListener("DOMContentLoaded", function () {
         chartOptions: {
           chart: {
             height: 250
+          },
+          plotOptions: {
+            // bars get narrow here, so a 2px separator would eat too much of
+            // the smaller segment
+            column: {
+              borderWidth: 1
+            }
           }
         }
       }]
