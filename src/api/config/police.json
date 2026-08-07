@@ -3645,7 +3645,8 @@
         ],
         "email": "dyzurny.ssk@ksp.policja.gov.pl",
         "voivodeship": "Województwo Mazowieckie",
-        "city": "Warszawa"
+        "city": "Warszawa",
+        "hint": "WRD wzywa na świadka. Sprawy o niszczenie zieleni idą sprawnie, mandaty wystawiają."
     },
     "powiat grodziski mazowieckie": {
         "address": [
