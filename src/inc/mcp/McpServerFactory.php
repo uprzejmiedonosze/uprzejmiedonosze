@@ -6,10 +6,6 @@ use Mcp\Schema\ToolAnnotations;
 use Mcp\Server;
 
 /**
- * Builds the MCP server. Tools are registered explicitly (no attribute
- * discovery) so the exposed surface is always the list below.
- */
-/**
  * "id — display name" pairs for every category, for the category enum's
  * description. Display names alone are ambiguous (duplicates exist, and 8
  * categories lack a `title`), so the int id stays the machine identifier —
@@ -212,16 +208,24 @@ function buildServer(): Server {
     $createOutputSchema = [
         'type' => 'object',
         'properties' => [
-            'report' => ['type' => 'object'],
-            'destination' => [
-                'type' => 'string',
-                'enum' => ['police', 'sm'],
-                'description' => 'The authority the draft will be addressed to.',
-            ],
-            'destinationOptions' => [
+            'report' => [
                 'type' => 'object',
-                'description' => 'When the address could be geocoded: both recipient options '
-                    . '(sm / police) the web editor would show, pre-resolved.',
+                'properties' => [
+                    // The authority the draft is addressed to, and — when the
+                    // address could be geocoded — both recipient options the web
+                    // editor would show, pre-resolved.
+                    'destination' => [
+                        'type' => 'string',
+                        'enum' => ['police', 'sm'],
+                        'description' => 'The authority the draft will be addressed to.',
+                    ],
+                    'destinationOptions' => [
+                        'type' => 'object',
+                        'description' => 'When the address could be geocoded: both recipient options '
+                            . '(sm / police) the web editor would show, pre-resolved.',
+                    ],
+                ],
+                'additionalProperties' => true,
             ],
             'editUrl' => [
                 'type' => 'string',

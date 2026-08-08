@@ -185,7 +185,8 @@ Tools:
     `police` — the authority the draft is addressed to; defaults to the user's saved preference),
     `plateId`, `description`, `address`, `lat`, `lng`, `datetime` (ISO 8601), and up to three
     images — `carImage`, `contextImage`, `thirdImage` — each a base64 data URI (JPEG/PNG, ≤ 2 MB,
-    no URL fetching). Creates a `draft` and returns `{ report, editUrl, destination }`; the
+    no URL fetching). Creates a `draft` and returns `{ report, editUrl }` — the report carries the
+    chosen `destination` (`sm`/`police`); the
     user opens `editUrl` to review the draft (adding anything that wasn't supplied) and send. The
     server never sends the report itself.
 
