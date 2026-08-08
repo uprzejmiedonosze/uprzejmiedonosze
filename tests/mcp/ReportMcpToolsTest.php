@@ -333,6 +333,11 @@ class ReportMcpToolsTest extends DatabaseTestCase
             self::assertArrayHasKey($key, $first);
         }
         self::assertIsInt($first['id']);
+        // Same stable order as the create_report_draft category enum.
+        $ids = array_column($result['categories'], 'id');
+        $sorted = $ids;
+        sort($sorted);
+        self::assertSame($sorted, $ids, 'categories must come in ascending id order');
     }
 
     public function testCreateReportDraftRequiresCreateScope(): void

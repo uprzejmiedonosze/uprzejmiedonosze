@@ -141,8 +141,11 @@ Users review and revoke connected clients at **`/mcp`** (`/polaczone-aplikacje.h
 | `create_report_draft` | `reports:create` | create a pre-filled **draft** for the user to finish + send |
 
 The server never sends reports itself — `create_report_draft` returns an `editUrl` the user opens
-to add the required photos and send. Editing already-sent content and downloading binary assets
-(PDF/ZIP) are out of scope for now.
+to review the draft (and add any photos that weren't supplied) and send. The draft can be
+pre-filled with the category, plate, description, coordinates, destination (city guard / police),
+and up to three photos (base64 data URIs); given coordinates (or GPS embedded in the car photo),
+the address is reverse-geocoded like the web form does and the recipient unit is resolved.
+Editing already-sent content and downloading binary assets (PDF/ZIP) are out of scope for now.
 
 Tokens are **opaque** (stored hashed, instantly revocable, audience-bound to `/mcp`);
 access tokens live 1h, refresh tokens 30d (sliding). Code: `src/api/mcp/` (server),
