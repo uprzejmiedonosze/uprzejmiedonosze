@@ -187,7 +187,7 @@ function exifGps(string $imageBytes): ?array {
     } catch (\Throwable $e) {
         return null;
     } finally {
-        @unlink($tmp);
+        @unlink($tmp); // nosemgrep: php.lang.security.unlink-use.unlink-use — $tmp is a tempnam() path, not user input
     }
     if (!is_array($exif) || !isset($exif['GPS'])) {
         return null;
