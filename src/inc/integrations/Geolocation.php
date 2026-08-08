@@ -161,3 +161,72 @@ function normalizeGeo(float|string $geo): string {
 function normalizeLatLng(float|string $lat, float|string $lng): string {
     return normalizeGeo($lat) . "," . normalizeGeo($lng);
 }
+
+/**
+ * Reads GPS coordinates [lat, lng] from a JPEG/PNG's EXIF headers — the
+ * server-side mirror of the web client's client-side EXIF GPS extraction
+ * (src/js/new-app/images.js). Returns null when the image carries no GPS
+ * data, or when the exif extension isn't available.
+ */
+function exifGps(string $imageBytes): ?array {
+    if (!function_exists('exif_read_data')) {
+        logger('exifGps: PHP exif extension not available');
+        return null;
+    }
+    // exif_read_data() only accepts a path; stage the raw bytes (the GD
+    // pipeline strips EXIF on re-encode, so it must be read pre-upload).
+    $tmp = tempnam(sys_get_temp_dir(), 'ud-exif');
+    if ($tmp === false) {
+        return null;
+    }
+    try {
+        if (file_put_contents($tmp, $imageBytes) === false) {
+            return null;
+        }
+        $exif = @\exif_read_data($tmp, 'GPS', true, false);
+    } catch (\Throwable $e) {
+        return null;
+    } finally {
+        @unlink($tmp);
+    }
+    if (!is_array($exif) || !isset($exif['GPS'])) {
+        return null;
+    }
+
+    $lat = exifGpsComponent($exif['GPS']['GPSLatitude'] ?? null, $exif['GPS']['GPSLatitudeRef'] ?? null, true);
+    $lng = exifGpsComponent($exif['GPS']['GPSLongitude'] ?? null, $exif['GPS']['GPSLongitudeRef'] ?? null, false);
+    if ($lat === null || $lng === null) {
+        return null;
+    }
+    return [$lat, $lng];
+}
+
+function exifGpsComponent($components, $ref, bool $isLat): ?float {
+    if (!is_array($components) || count($components) < 3) {
+        return null;
+    }
+    $degrees = exifRational($components[0] ?? null);
+    $minutes = exifRational($components[1] ?? null);
+    $seconds = exifRational($components[2] ?? null);
+    if ($degrees === null || $minutes === null || $seconds === null) {
+        return null;
+    }
+    $value = $degrees + $minutes / 60 + $seconds / 3600;
+    $negative = $isLat ? strtoupper((string)$ref) === 'S' : strtoupper((string)$ref) === 'W';
+    return $negative ? -$value : $value;
+}
+
+function exifRational($component): ?float {
+    if (is_array($component)) {
+        $num = $component[0] ?? null;
+        $den = $component[1] ?? null;
+    } elseif (is_string($component) && str_contains($component, '/')) {
+        [$num, $den] = explode('/', $component, 2);
+    } else {
+        return is_numeric($component) ? (float)$component : null;
+    }
+    if (!is_numeric($num) || !is_numeric($den) || (float)$den == 0) {
+        return null;
+    }
+    return (float)$num / (float)$den;
+}

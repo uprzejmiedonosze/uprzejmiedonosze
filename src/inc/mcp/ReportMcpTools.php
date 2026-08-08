@@ -93,6 +93,13 @@ final class ReportMcpTools {
             ];
         }
 
+        // A fresh draft's address starts as an empty object; keep it object-shaped
+        // in the output (an empty PHP array would re-encode as a list `[]`, which
+        // is the inconsistent shape the first MCP release shipped).
+        if (empty($report['address'])) {
+            $report['address'] = new \stdClass();
+        }
+
         return $report;
     }
 
@@ -220,14 +227,23 @@ final class ReportMcpTools {
     /**
      * Create a new DRAFT report for the signed-in user, pre-filled from whatever
      * the caller can supply. The draft stays in the 'draft' status: a human must
-     * open the returned editUrl to add the required photos and send it — MCP
-     * cannot send a report. Up to three optional images (base64 data URIs) are
-     * run through the same processing pipeline as the web upload.
+     * open the returned editUrl to review it and send — MCP cannot send a report.
+     * Up to three optional images (base64 data URIs) are run through the same
+     * processing pipeline as the web upload.
+     *
+     * Location mirrors the web form: coordinates are the source of truth. When
+     * lat/lng are supplied (or read from the car photo's EXIF GPS), the address
+     * is reverse-geocoded via Nominatim (same endpoint the web uses) to fill the
+     * structured fields and resolve the recipient unit; a caller-supplied address
+     * string is kept as the display address. A bare address string without
+     * coordinates is stored as-is (the web never forward-geocodes).
      *
      * @param int|null    $category    Violation category id (see list_categories).
+     * @param string|null $destination "police" or "sm" — the authority the draft is
+     *                                 addressed to; defaults to the user's saved preference.
      * @param string|null $plateId     Licence plate.
      * @param string|null $description Free-text description of the violation.
-     * @param string|null $address     Street address of the violation.
+     * @param string|null $address     Display address of the violation.
      * @param float|null  $lat         Latitude.
      * @param float|null  $lng         Longitude.
      * @param string|null $datetime     When it happened (ISO 8601).
@@ -238,6 +254,7 @@ final class ReportMcpTools {
      */
     public function createReportDraft(
         ?int $category = null,
+        ?string $destination = null,
         ?string $plateId = null,
         ?string $description = null,
         ?string $address = null,
@@ -255,6 +272,11 @@ final class ReportMcpTools {
         if ($category !== null && !isset($CATEGORIES[$category])) {
             throw new \Mcp\Exception\ToolCallException(
                 "Unknown category id $category — call list_categories for valid ids."
+            );
+        }
+        if ($destination !== null && !in_array($destination, ['police', 'sm'], true)) {
+            throw new \Mcp\Exception\ToolCallException(
+                "Invalid destination '$destination' — use 'police' or 'sm'."
             );
         }
         // Decode/validate every supplied image up front (keyed by the pipeline's
@@ -284,6 +306,13 @@ final class ReportMcpTools {
         if ($category !== null) {
             $draft->category = $category;
         }
+        if ($destination !== null) {
+            // Mirror the web editor's SM/Policja radio: "police" = stopAgresji.
+            $draft->stopAgresji = ($destination === 'police');
+        }
+        // Whether the SM/Policja choice was forced by the category (see below);
+        // always present in the serialised draft, like API::updateApplication.
+        $draft->stopAgresjiForced = false;
         if ($plateId !== null) {
             $carInfo = new \stdClass();
             $carInfo->plateId = strtoupper(\cleanWhiteChars($plateId));
@@ -310,6 +339,57 @@ final class ReportMcpTools {
                 );
             }
         }
+
+        // ── Location, mirroring the web form ──────────────────────────────────
+        // The web derives coordinates from the map click or the photo's EXIF GPS
+        // and only then reverse-geocodes. Do the same here; geocoding failure is
+        // non-fatal (the caller's data alone is kept, like the web's geo fallback).
+        $geocoded = null;
+        if (($lat === null || $lng === null) && isset($images['carImage'])) {
+            $gps = \geo\exifGps($images['carImage']);
+            if ($gps !== null) {
+                $lat ??= $gps[0];
+                $lng ??= $gps[1];
+                $draft->address->lat = $lat;
+                $draft->address->lng = $lng;
+            }
+        }
+        if ($lat !== null && $lng !== null) {
+            $nominatim = $this->reverseGeocode($lat, $lng);
+            if ($nominatim !== null) {
+                $geocoded = $nominatim;
+                $addr = $nominatim['address'] ?? [];
+                foreach (['city', 'voivodeship', 'postcode', 'county', 'municipality', 'district'] as $field) {
+                    if (!empty($addr[$field])) {
+                        $draft->address->{$field} = $addr[$field];
+                    }
+                }
+                // The caller's string (if any) stays the display address; the
+                // geocoded string is kept separately — mirrors the web's
+                // lokalizacja vs addressGPS split (ApplicationHandler::confirm).
+                if (empty($draft->address->address) && !empty($addr['address'])) {
+                    $draft->address->address = $addr['address'];
+                }
+                if (!empty($addr['address'])) {
+                    $draft->address->addressGPS = $addr['address'];
+                }
+            }
+        }
+
+        // Resolve the recipient authority like the web does at confirm time.
+        // Needs a structured address (city etc.), so only after geocoding.
+        $resolvedUnit = null;
+        if (!empty($draft->address->city)) {
+            $resolvedUnit = $draft->guessSMData(true); // stores smCity
+            // stopAgresjiOnly categories force the report to the police, exactly
+            // like API::updateApplication (the editor disables the SM radio).
+            if ($category !== null && $CATEGORIES[$category]->isStopAgresjiOnly() && !$resolvedUnit->isPolice()) {
+                $draft->stopAgresji = true;
+                $draft->stopAgresjiForced = true;
+                $resolvedUnit = $draft->guessSMData(true);
+            }
+        }
+
         \app\save($draft);
 
         if ($images) {
@@ -335,14 +415,77 @@ final class ReportMcpTools {
             }
         }
 
+        $report = $this->enrich($draft);
+        $report['destination'] = $draft->stopAgresji() ? 'police' : 'sm';
+        // Only advertise a recipient once a real unit was resolved; an unknown
+        // unit means the draft needs a proper address before it can be routed.
+        $sm = $draft->guessSMData();
+        if ($sm->unknown()) {
+            unset($report['recipientInfo']);
+        }
+        if ($geocoded !== null) {
+            // Both radio options the web editor shows, pre-resolved.
+            $report['destinationOptions'] = self::destinationOptions($geocoded);
+        }
+
         return [
-            'report' => json_decode(json_encode($draft), true) ?? [],
+            'report' => $report,
             'editUrl' => \BASE_URL . 'app/new?edit=' . $draft->id,
         ];
     }
 
     // Matches SessionApiHandler::MAX_IMAGE_UPLOAD_BYTES (the web upload cap).
     private const MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+
+    /**
+     * Reverse geocoder override for tests (Nominatim is a plain function and
+     * cannot be stubbed). Defaults to \geo\Nominatim — the same endpoint the
+     * web form calls. Returns the Nominatim response shape:
+     * ['address' => [...], 'sm' => \SM, 'sa' => \SM], or null on failure.
+     *
+     * @var callable(float,float): array|null
+     */
+    private static $reverseGeocoder = null;
+
+    public static function setReverseGeocoder(?callable $geocoder): void {
+        self::$reverseGeocoder = $geocoder;
+    }
+
+    private function reverseGeocode(float $lat, float $lng): ?array {
+        try {
+            $result = self::$reverseGeocoder !== null
+                ? call_user_func(self::$reverseGeocoder, $lat, $lng)
+                : \geo\Nominatim($lat, $lng);
+            return is_array($result) ? $result : null;
+        } catch (\Throwable $e) {
+            // Non-fatal: keep whatever the caller supplied; the web's geo
+            // endpoints also degrade without blocking the report.
+            logger("MCP create_report_draft: geocoding failed for $lat,$lng: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Both recipient options the web editor shows (SM and Policja radios),
+     * pre-resolved from the geocoded address.
+     */
+    private static function destinationOptions(array $nominatim): array {
+        $summarize = function (?\SM $unit): ?array {
+            if (!$unit || $unit->unknown()) {
+                return null;
+            }
+            return [
+                'name' => $unit->getName(),
+                'address' => $unit->getAddress(),
+                'email' => $unit->getEmail(),
+                'isPolice' => $unit->isPolice(),
+            ];
+        };
+        return [
+            'sm' => $summarize($nominatim['sm'] ?? null),
+            'police' => $summarize($nominatim['sa'] ?? null),
+        ];
+    }
 
     /** Decode a base64 image data URI to raw bytes, or fail with a readable error. */
     private static function decodeImageDataUri(string $dataUri): string {

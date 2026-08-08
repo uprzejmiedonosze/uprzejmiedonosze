@@ -375,6 +375,171 @@ class ReportMcpToolsTest extends DatabaseTestCase
         (new ReportMcpTools())->createReportDraft(category: 999999);
     }
 
+    public function testCreateReportDraftWithoutLocationKeepsObjectShapedAddress(): void
+    {
+        $this->actAs('creator-noloc@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(category: 8);
+
+        // The fresh draft's address is an empty object — never a list — so the
+        // MCP structuredContent keeps the consistent `{}` shape.
+        self::assertSame('{}', json_encode($result['report']['address']));
+        // No coordinates → no recipient to resolve (unknown unit, hidden).
+        self::assertArrayNotHasKey('recipientInfo', $result['report']);
+        self::assertArrayNotHasKey('destinationOptions', $result['report']);
+        // Mirrors the web: a fresh User defaults to Policja (User::$data->
+        // stopAgresji = true), which is the preference inherited here.
+        self::assertSame('police', $result['report']['destination'], 'defaults to the user preference');
+    }
+
+    public function testCreateReportDraftReverseGeocodesCoordinates(): void
+    {
+        ReportMcpTools::setReverseGeocoder(function (float $lat, float $lng) {
+            self::assertSame(53.43, $lat);
+            self::assertSame(14.55, $lng);
+            return [
+                'address' => [
+                    'address' => 'Mazurska 43, Szczecin',
+                    'road' => 'Mazurska',
+                    'house_number' => '43',
+                    'city' => 'Szczecin',
+                    'voivodeship' => 'zachodniopomorskie',
+                    'postcode' => '70-000',
+                    'county' => 'Szczecin',
+                    'municipality' => 'Szczecin',
+                ],
+                'sm' => new \SM(json_encode([
+                    'address' => ['Straż Miejska w Szczecinie', 'ul. Mariacka 1, 70-546 Szczecin'],
+                    'email' => 'zgloszenia@sm.szczecin.pl',
+                    'city' => 'Szczecin',
+                    'hint' => null,
+                    'api' => null,
+                    'active' => true,
+                ])),
+                'sa' => new \Police(json_encode([
+                    'address' => ['Komenda Miejska Policji w Szczecinie', 'pl. Stefana Batorego 4, 70-207 Szczecin'],
+                    'email' => 'kmp.szczecin@sc.policja.gov.pl',
+                    'city' => 'Szczecin',
+                    'hint' => null,
+                    'api' => null,
+                    'active' => true,
+                ])),
+            ];
+        });
+        $this->actAs('creator-geo@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            category: 8,
+            destination: 'sm',
+            address: 'Mazurska 43, Szczecin',
+            lat: 53.43,
+            lng: 14.55
+        );
+
+        $report = $result['report'];
+        // The caller's string stays the display address; the geocoded full string
+        // lands in addressGPS — mirrors the web's lokalizacja vs addressGPS split.
+        self::assertSame('Mazurska 43, Szczecin', $report['address']['address']);
+        self::assertSame('Mazurska 43, Szczecin', $report['address']['addressGPS']);
+        self::assertSame('Szczecin', $report['address']['city']);
+        self::assertSame('zachodniopomorskie', $report['address']['voivodeship']);
+        self::assertSame('70-000', $report['address']['postcode']);
+        // The coordinates resolve a real recipient (Straż Miejska), stored as smCity.
+        self::assertSame('sm', $report['destination']);
+        self::assertSame('zgloszenia@sm.szczecin.pl', $report['recipientInfo']['email']);
+        self::assertFalse($report['recipientInfo']['isPolice']);
+        self::assertSame('szczecin', \app\get($report['id'])->smCity);
+        // Both editor radio options, pre-resolved from the geocoded address.
+        self::assertSame('zgloszenia@sm.szczecin.pl', $report['destinationOptions']['sm']['email']);
+        self::assertTrue($report['destinationOptions']['police']['isPolice']);
+        self::assertSame('kmp.szczecin@sc.policja.gov.pl', $report['destinationOptions']['police']['email']);
+    }
+
+    public function testCreateReportDraftWithAddressOnlySkipsGeocoding(): void
+    {
+        $geocoderCalled = false;
+        ReportMcpTools::setReverseGeocoder(function () use (&$geocoderCalled) {
+            $geocoderCalled = true;
+            return null;
+        });
+        $this->actAs('creator-addr@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(address: 'Mazurska 43, Szczecin');
+
+        // The web never forward-geocodes a bare address string; neither may MCP.
+        self::assertFalse($geocoderCalled, 'no coordinates → no reverse geocoding');
+        self::assertSame('Mazurska 43, Szczecin', $result['report']['address']['address']);
+        self::assertArrayNotHasKey('lat', $result['report']['address']);
+        self::assertArrayNotHasKey('recipientInfo', $result['report'], 'no coordinates → no recipient resolved');
+    }
+
+    public function testCreateReportDraftWithDestinationPoliceRoutesToPolice(): void
+    {
+        $this->actAs('creator-dst@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(category: 8, destination: 'police');
+
+        $report = $result['report'];
+        self::assertSame('police', $report['destination']);
+        self::assertTrue(\app\get($report['id'])->stopAgresji(), 'destination police is stored as stopAgresji, like the web radio');
+        // No coordinates → no address to resolve a concrete unit from (smCity is
+        // only stored once a structured address exists), so no recipientInfo yet.
+        self::assertArrayNotHasKey('recipientInfo', $report);
+        self::assertFalse($report['stopAgresjiForced'], 'a voluntary police choice is not category-forced');
+    }
+
+    public function testCreateReportDraftRejectsInvalidDestination(): void
+    {
+        $this->actAs('creator-dst2@example.com', ['reports:create']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Invalid destination 'poliza' — use 'police' or 'sm'.");
+        (new ReportMcpTools())->createReportDraft(destination: 'poliza');
+    }
+
+    public function testCreateReportDraftForcesPoliceForStopAgresjiOnlyCategory(): void
+    {
+        // Category 18 ("Jazda po chodniku") is stopAgresjiOnly: the editor
+        // disables the SM radio and the report must go to the police, even
+        // though the caller asked for the city guard and the coordinates
+        // resolve an SM unit.
+        ReportMcpTools::setReverseGeocoder(fn (): array => [
+            'address' => [
+                'address' => 'Mazurska 43, Szczecin',
+                'city' => 'Szczecin',
+                'voivodeship' => 'zachodniopomorskie',
+                'postcode' => '70-000',
+                'county' => 'Szczecin',
+                'municipality' => 'Szczecin',
+            ],
+            'sm' => new \SM(json_encode([
+                'address' => ['Straż Miejska w Szczecinie', 'ul. Mariacka 1, 70-546 Szczecin'],
+                'email' => 'zgloszenia@sm.szczecin.pl',
+                'city' => 'Szczecin',
+                'hint' => null,
+                'api' => null,
+                'active' => true,
+            ])),
+            'sa' => null,
+        ]);
+        $this->actAs('creator-forced@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            category: 18,
+            destination: 'sm',
+            address: 'Mazurska 43, Szczecin',
+            lat: 53.43,
+            lng: 14.55
+        );
+
+        $report = $result['report'];
+        self::assertSame('police', $report['destination'], 'stopAgresjiOnly categories always go to the police');
+        self::assertTrue($report['stopAgresjiForced'], 'the flip is flagged as category-forced, like the web');
+        self::assertTrue(\app\get($report['id'])->stopAgresji());
+        self::assertNull($report['destinationOptions']['police'], 'a missing police unit degrades to null, not an error');
+        self::assertSame('zgloszenia@sm.szczecin.pl', $report['destinationOptions']['sm']['email']);
+    }
+
     public function testCreateReportDraftRejectsInvalidImageDataUri(): void
     {
         $this->actAs('creator3@example.com', ['reports:create']);

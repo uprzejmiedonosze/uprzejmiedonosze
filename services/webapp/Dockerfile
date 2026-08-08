@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certifi
         > /etc/apt/sources.list.d/php.list && \
     apt-get update && apt-get install -y --no-install-recommends \
         php8.4-cli php8.4-zip php8.4-xml php8.4-curl php8.4-gd php8.4-sqlite3 \
-        php8.4-memcache php8.4-mbstring php8.4-intl \
+        php8.4-memcache php8.4-mbstring php8.4-intl php8.4-exif \
         memcached && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/*
@@ -70,6 +70,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
         php8.4-fpm php8.4-sqlite3 php8.4-curl php8.4-zip \
         php8.4-opcache php8.4-mbstring php8.4-gd \
         php8.4-memcache php8.4-memcached php8.4-intl php8.4-xml \
+        php8.4-exif \
         lmodern texlive-lang-polish \
         texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
