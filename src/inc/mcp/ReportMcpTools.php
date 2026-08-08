@@ -206,6 +206,38 @@ final class ReportMcpTools {
     }
 
     /**
+     * The extensions the web editor actually offers — entries from
+     * extensions.json with `disabled` unset/false, keyed by id.
+     *
+     * @param array<string, \Extension> $extensions
+     * @return array<string, string> id => extension title
+     */
+    public static function allowedExtensions(array $extensions): array {
+        $allowed = [];
+        foreach ($extensions as $id => $ext) {
+            if (!($ext->disabled ?? false)) {
+                $allowed[$id] = $ext->title ?? '';
+            }
+        }
+        ksort($allowed, SORT_NUMERIC);
+        return $allowed;
+    }
+
+    /**
+     * "11 — …, 25 — …" list of allowed extensions for schema descriptions
+     * and error messages.
+     *
+     * @param array<string, string> $allowed id => title
+     */
+    public static function extensionNameList(array $allowed): string {
+        $parts = [];
+        foreach ($allowed as $id => $title) {
+            $parts[] = "$id — $title";
+        }
+        return implode(', ', $parts);
+    }
+
+    /**
      * List the violation categories (id + title, formal wording, legal basis,
      * fine and demerit points) so the caller can pick one for create_report_draft
      * or interpret a report's `category` number.
@@ -239,6 +271,8 @@ final class ReportMcpTools {
      * coordinates is stored as-is (the web never forward-geocodes).
      *
      * @param int|null    $category    Violation category id (see list_categories).
+     * @param int[]|null  $extensions  Additional category ids stacked on the primary category.
+     * @param bool|null   $witness     Whether the reporter witnessed the moment of parking.
      * @param string|null $destination "police" or "sm" — the authority the draft is
      *                                 addressed to; defaults to the user's saved preference.
      * @param string|null $plateId     Licence plate.
@@ -254,6 +288,8 @@ final class ReportMcpTools {
      */
     public function createReportDraft(
         ?int $category = null,
+        ?array $extensions = null,
+        ?bool $witness = null,
         ?string $destination = null,
         ?string $plateId = null,
         ?string $description = null,
@@ -268,11 +304,35 @@ final class ReportMcpTools {
         McpIdentity::requireScope('reports:create');
         $user = McpIdentity::currentUser();
 
-        global $CATEGORIES;
+        global $CATEGORIES, $EXTENSIONS;
         if ($category !== null && !isset($CATEGORIES[$category])) {
             throw new \Mcp\Exception\ToolCallException(
                 "Unknown category id $category — call list_categories for valid ids."
             );
+        }
+        if ($extensions !== null) {
+            // Mirror the web editor, which only offers the extensions from
+            // extensions.json (disabled ones are hidden): no arbitrary category
+            // ids, no duplicates, no stacking the primary category on itself.
+            $allowed = self::allowedExtensions($EXTENSIONS ?? []);
+            $seen = [];
+            foreach ($extensions as $extId) {
+                if (!isset($allowed[$extId])) {
+                    throw new \Mcp\Exception\ToolCallException(
+                        "Unknown extension category id $extId — valid extensions: "
+                        . self::extensionNameList($allowed) . '.'
+                    );
+                }
+                if ($category !== null && (int)$extId === $category) {
+                    throw new \Mcp\Exception\ToolCallException(
+                        "Extension id $extId is the report's primary category — pick another extension."
+                    );
+                }
+                if (in_array((int)$extId, $seen, true)) {
+                    throw new \Mcp\Exception\ToolCallException("Duplicate extension id $extId.");
+                }
+                $seen[] = (int)$extId;
+            }
         }
         if ($destination !== null && !in_array($destination, ['police', 'sm'], true)) {
             throw new \Mcp\Exception\ToolCallException(
@@ -305,6 +365,14 @@ final class ReportMcpTools {
         $draft->extensions = [];
         if ($category !== null) {
             $draft->category = $category;
+        }
+        if ($extensions !== null) {
+            // int-cast like the web flow (API::updateApplication) so "11" and 11 agree.
+            $draft->extensions = array_map('intval', $extensions);
+        }
+        if ($witness !== null) {
+            $draft->initStatements();
+            $draft->statements->witness = $witness;
         }
         if ($destination !== null) {
             // Mirror the web editor's SM/Policja radio: "police" = stopAgresji.

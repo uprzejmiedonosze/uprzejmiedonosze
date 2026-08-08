@@ -15,7 +15,7 @@ function buildServer(): Server {
     // Output schema: `status` is an enum of every known status (from
     // statuses.json); other fields pass through via additionalProperties.
     // Per-status meaning + transitions are in the server instructions, not here.
-    global $STATUSES, $CATEGORIES;
+    global $STATUSES, $CATEGORIES, $EXTENSIONS;
     $reportSchema = [
         'type' => 'object',
         'properties' => [
@@ -150,6 +150,28 @@ function buildServer(): Server {
                 'enum' => array_keys($CATEGORIES ?? []),
                 'description' => 'Violation category id (see list_categories).',
             ],
+            'extensions' => [
+                'type' => 'array',
+                'items' => [
+                    'type' => 'integer',
+                    'enum' => array_map('intval', array_keys(ReportMcpTools::allowedExtensions($EXTENSIONS ?? []))),
+                ],
+                'description' => 'Additional violations stacked on the primary category — the same '
+                    . 'set the web editor offers: '
+                    . ReportMcpTools::extensionNameList(ReportMcpTools::allowedExtensions($EXTENSIONS ?? [])),
+            ],
+            'witness' => [
+                'type' => 'boolean',
+                'description' => 'Whether the reporter witnessed the moment of parking itself '
+                    . '(the web form\'s witness checkbox). When false, the sent text states the '
+                    . 'reporter was not a witness of the parking moment.',
+            ],
+            'destination' => [
+                'type' => 'string',
+                'enum' => ['police', 'sm'],
+                'description' => 'The authority the draft is addressed to: the local city guard '
+                    . '(sm) or the police (police). Defaults to the user\'s saved preference.',
+            ],
             'plateId' => ['type' => 'string', 'description' => 'Licence plate, e.g. "ZS1234A".'],
             'description' => ['type' => 'string', 'description' => 'Free-text description of the violation.'],
             'address' => ['type' => 'string', 'description' => 'Street address where it happened.'],
@@ -166,6 +188,16 @@ function buildServer(): Server {
         'type' => 'object',
         'properties' => [
             'report' => ['type' => 'object'],
+            'destination' => [
+                'type' => 'string',
+                'enum' => ['police', 'sm'],
+                'description' => 'The authority the draft will be addressed to.',
+            ],
+            'destinationOptions' => [
+                'type' => 'object',
+                'description' => 'When the address could be geocoded: both recipient options '
+                    . '(sm / police) the web editor would show, pre-resolved.',
+            ],
             'editUrl' => [
                 'type' => 'string',
                 'description' => 'Open this to add the required photos and send the report.',
