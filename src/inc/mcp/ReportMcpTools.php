@@ -100,6 +100,16 @@ final class ReportMcpTools {
             $report['address'] = new \stdClass();
         }
 
+        // The notes tool accepts caseNumber/privateNote (set_report_notes) but the
+        // report stores them as externalId/privateComment. Mirror the public names
+        // here (when non-empty) so reads round-trip with writes; the internal keys
+        // stay for backwards compatibility.
+        foreach (['externalId' => 'caseNumber', 'privateComment' => 'privateNote'] as $internal => $public) {
+            if (isset($report[$internal]) && $report[$internal] !== '') {
+                $report[$public] = $report[$internal];
+            }
+        }
+
         return $report;
     }
 
