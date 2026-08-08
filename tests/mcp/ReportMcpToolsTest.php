@@ -50,6 +50,66 @@ class ReportMcpToolsTest extends DatabaseTestCase
         return $user;
     }
 
+    /** A minimal JPEG with a GPS-bearing EXIF APP1 segment (same fixture as ExifGpsTest). */
+    private function jpegWithExifGps(float $lat, float $lng): string
+    {
+        $img = imagecreatetruecolor(8, 8);
+        ob_start();
+        imagejpeg($img, null, 90);
+        $jpeg = ob_get_clean();
+        imagedestroy($img);
+
+        return "\xFF\xD8" . $this->exifApp1($lat, $lng) . substr($jpeg, 2);
+    }
+
+    private function exifApp1(float $lat, float $lng): string
+    {
+        $latParts = $this->rationalize($lat);
+        $lngParts = $this->rationalize($lng);
+
+        // GPS IFD at offset 26 of the TIFF block: 8-byte header + 18-byte IFD0.
+        $gpsIfd = pack('v', 4) // entry count
+            . $this->exifEntry(0x0001, 2, 2, "N\x00\x00\x00")    // GPSLatitudeRef
+            . $this->exifEntry(0x0002, 5, 3, pack('V', 80))      // GPSLatitude → 3 rationals at 80
+            . $this->exifEntry(0x0003, 2, 2, "E\x00\x00\x00")    // GPSLongitudeRef
+            . $this->exifEntry(0x0004, 5, 3, pack('V', 104))     // GPSLongitude → 3 rationals at 104
+            . pack('V', 0);                                      // next IFD pointer
+
+        $rationals = '';
+        foreach ($latParts as [$num, $den]) {
+            $rationals .= pack('VV', $num, $den);
+        }
+        foreach ($lngParts as [$num, $den]) {
+            $rationals .= pack('VV', $num, $den);
+        }
+
+        // IFD0 at offset 8: a single GPSInfo pointer (tag 0x8825) to offset 26.
+        $ifd0 = pack('v', 1)
+            . $this->exifEntry(0x8825, 4, 1, pack('V', 26))
+            . pack('V', 0);
+
+        $tiff = 'II' . pack('v', 42) . pack('V', 8) . $ifd0 . $gpsIfd . $rationals;
+        $app1 = "Exif\x00\x00" . $tiff;
+        // JPEG marker lengths are big-endian (the TIFF block itself is 'II' LE).
+        return "\xFF\xE1" . pack('n', strlen($app1) + 2) . $app1;
+    }
+
+    /** A 4-byte IFD entry value (all values used here fit inline or are offsets). */
+    private function exifEntry(int $tag, int $type, int $count, string $value): string
+    {
+        return pack('vvV', $tag, $type, $count) . $value;
+    }
+
+    /** D°M'S as unsigned 32-bit rationals. */
+    private function rationalize(float $value): array
+    {
+        $deg = (int) floor($value);
+        $min = (int) floor(($value - $deg) * 60);
+        $sec = ($value - $deg - $min / 60) * 3600;
+        $secNum = (int) round($sec * 1000);
+        return [[$deg, 1], [$min, 1], [$secNum, 1000]];
+    }
+
     public function testListReportsRequiresReadScope(): void
     {
         $this->actAs('a@b.com', []);
@@ -525,10 +585,12 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertSame('zgloszenia@sm.szczecin.pl', $report['recipientInfo']['email']);
         self::assertFalse($report['recipientInfo']['isPolice']);
         self::assertSame('szczecin', \app\get($report['id'])->smCity);
-        // Both editor radio options, pre-resolved from the geocoded address.
+        // Both editor radio options, pre-resolved from the geocoded address via
+        // the same guess/resolve path that stores smCity (never the Nominatim
+        // mock's own sm/sa), so options can't diverge from the real recipient.
         self::assertSame('zgloszenia@sm.szczecin.pl', $report['destinationOptions']['sm']['email']);
         self::assertTrue($report['destinationOptions']['police']['isPolice']);
-        self::assertSame('kmp.szczecin@sc.policja.gov.pl', $report['destinationOptions']['police']['email']);
+        self::assertSame('sekretariat.srodmiescie@sc.policja.gov.pl', $report['destinationOptions']['police']['email']);
     }
 
     public function testCreateReportDraftWithAddressOnlySkipsGeocoding(): void
@@ -612,8 +674,56 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertSame('police', $report['destination'], 'stopAgresjiOnly categories always go to the police');
         self::assertTrue($report['stopAgresjiForced'], 'the flip is flagged as category-forced, like the web');
         self::assertTrue(\app\get($report['id'])->stopAgresji());
-        self::assertNull($report['destinationOptions']['police'], 'a missing police unit degrades to null, not an error');
+        // The police option resolves from the geocoded address itself — the mock's
+        // 'sa' => null only means Nominatim had no unit, not that the address can't
+        // be routed to the police (the station covering the coordinates wins).
+        self::assertSame('sekretariat.srodmiescie@sc.policja.gov.pl', $report['destinationOptions']['police']['email']);
         self::assertSame('zgloszenia@sm.szczecin.pl', $report['destinationOptions']['sm']['email']);
+    }
+
+    public function testCreateReportDraftForcesPoliceForStopAgresjiOnlyCategoryWithoutLocation(): void
+    {
+        $this->actAs('creator-forced2@example.com', ['reports:create']);
+
+        // No coordinates and no address: the unit can't be resolved, but a
+        // stopAgresjiOnly report can never go to the city guard — the draft
+        // must default to the police just like the editor's disabled radio.
+        $result = (new ReportMcpTools())->createReportDraft(category: 18, destination: 'sm');
+
+        $report = $result['report'];
+        self::assertSame('police', $report['destination']);
+        self::assertTrue($report['stopAgresjiForced']);
+        self::assertTrue(\app\get($report['id'])->stopAgresji());
+        self::assertArrayNotHasKey('destinationOptions', $report, 'no geocoded address → no pre-resolved options');
+    }
+
+    public function testCreateReportDraftNeverMixesSingleCoordinateWithExifGps(): void
+    {
+        $geocoderCalled = false;
+        ReportMcpTools::setReverseGeocoder(function () use (&$geocoderCalled) {
+            $geocoderCalled = true;
+            return null;
+        });
+        // uploadImage resolves the user's number from the store — persist the
+        // identity like a real registered user would have (plain json; the
+        // session-based encryption isn't active in tests).
+        $user = $this->actAs('creator-exif2@example.com', ['reports:create']);
+        $user->number = 900001;
+        \user\save($user, true);
+
+        // The caller supplies only the latitude; the photo carries GPS. The
+        // draft must keep exactly the caller's coordinate — never a pair of
+        // caller's lat + photo's lng that would reverse-geocode a wrong point.
+        $result = (new ReportMcpTools())->createReportDraft(
+            lat: 53.43,
+            carImage: 'data:image/jpeg;base64,' . base64_encode($this->jpegWithExifGps(50.06, 19.94))
+        );
+
+        $report = $result['report'];
+        self::assertSame(53.43, $report['address']['lat']);
+        self::assertArrayNotHasKey('lng', $report['address']);
+        self::assertFalse($geocoderCalled, 'a single coordinate must not be paired with EXIF GPS');
+        self::assertArrayNotHasKey('destinationOptions', $report);
     }
 
     public function testCreateReportDraftRejectsInvalidImageDataUri(): void

@@ -437,11 +437,13 @@ final class ReportMcpTools {
         // and only then reverse-geocodes. Do the same here; geocoding failure is
         // non-fatal (the caller's data alone is kept, like the web's geo fallback).
         $geocoded = null;
-        if (($lat === null || $lng === null) && isset($images['carImage'])) {
+        // EXIF GPS only fills a fully missing pair — never one half, or the
+        // caller's coordinate would be silently paired with the photo's other one.
+        if ($lat === null && $lng === null && isset($images['carImage'])) {
             $gps = \geo\exifGps($images['carImage']);
             if ($gps !== null) {
-                $lat ??= $gps[0];
-                $lng ??= $gps[1];
+                $lat = $gps[0];
+                $lng = $gps[1];
                 $draft->address->lat = $lat;
                 $draft->address->lng = $lng;
             }
@@ -473,11 +475,15 @@ final class ReportMcpTools {
         $resolvedUnit = null;
         if (!empty($draft->address->city)) {
             $resolvedUnit = $draft->guessSMData(true); // stores smCity
-            // stopAgresjiOnly categories force the report to the police, exactly
-            // like API::updateApplication (the editor disables the SM radio).
-            if ($category !== null && $CATEGORIES[$category]->isStopAgresjiOnly() && !$resolvedUnit->isPolice()) {
-                $draft->stopAgresji = true;
-                $draft->stopAgresjiForced = true;
+        }
+        // stopAgresjiOnly categories force the report to the police, exactly
+        // like API::updateApplication (the editor disables the SM radio).
+        // Enforced even when the address couldn't be resolved: such a report
+        // can never go to the city guard, so it must default to the police.
+        if ($category !== null && $CATEGORIES[$category]->isStopAgresjiOnly() && (!$resolvedUnit || !$resolvedUnit->isPolice())) {
+            $draft->stopAgresji = true;
+            $draft->stopAgresjiForced = true;
+            if (!empty($draft->address->city)) {
                 $resolvedUnit = $draft->guessSMData(true);
             }
         }
@@ -517,7 +523,7 @@ final class ReportMcpTools {
         }
         if ($geocoded !== null) {
             // Both radio options the web editor shows, pre-resolved.
-            $report['destinationOptions'] = self::destinationOptions($geocoded);
+            $report['destinationOptions'] = self::destinationOptions($draft);
         }
 
         return [
@@ -559,11 +565,14 @@ final class ReportMcpTools {
 
     /**
      * Both recipient options the web editor shows (SM and Policja radios),
-     * pre-resolved from the geocoded address.
+     * pre-resolved from the draft's geocoded address via the same guess/
+     * resolve path guessSMData() uses for the stored smCity — so the options
+     * can never diverge from the recipient the report would actually get.
      */
-    private static function destinationOptions(array $nominatim): array {
-        $summarize = function (?\SM $unit): ?array {
-            if (!$unit || $unit->unknown()) {
+    private static function destinationOptions(\app\Application $draft): array {
+        $summarize = function (string $key, bool $police): ?array {
+            $unit = \SM::resolve($key, $police);
+            if ($unit->unknown()) {
                 return null;
             }
             return [
@@ -574,8 +583,8 @@ final class ReportMcpTools {
             ];
         };
         return [
-            'sm' => $summarize($nominatim['sm'] ?? null),
-            'police' => $summarize($nominatim['sa'] ?? null),
+            'sm' => $summarize(\SM::guess($draft->address), false),
+            'police' => $summarize(\StopAgresji::guess($draft->address), true),
         ];
     }
 
