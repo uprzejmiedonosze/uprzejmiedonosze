@@ -317,7 +317,10 @@ final class ReportMcpTools {
             // recognition for carImage) so MCP-supplied photos are processed
             // identically to the web.
             foreach ($images as $pictureType => $bytes) {
-                \uploadImage($draft->id, $pictureType, $bytes, $draft->date ?? null, false, null);
+                // Pass the MCP identity so ALPR provider selection (premium/
+                // patron routing) matches the web; \user\current() would see a
+                // sessionless guest cached at module load.
+                \uploadImage($draft->id, $pictureType, $bytes, $draft->date ?? null, false, null, null, $user);
             }
             $draft = \app\get($draft->id);
             // carImage's plate recognition resets carInfo; re-apply the caller's

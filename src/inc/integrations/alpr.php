@@ -3,6 +3,7 @@
 use app\Application;
 use stdClass;
 use cache\Type;
+use user\User;
 
 require(__DIR__ . '/openAlpr.php');
 require(__DIR__ . '/plateRecognizer.php');
@@ -10,14 +11,14 @@ require(__DIR__ . '/plateRecognizer.php');
 /**
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function get(&$imageBytes, Application &$application, string $baseFileName, string $type) {
+function get(&$imageBytes, Application &$application, string $baseFileName, string $type, ?User $user = null) {
     $application->carImage = new stdClass();
     $application->carImage->url = "$baseFileName,$type.jpg";
     $application->carImage->thumb = "$baseFileName,$type,t.jpg";
 
     $application->carInfo = new stdClass();
 
-    $use_openAlpr = _use_openAlpr($imageBytes);
+    $use_openAlpr = _use_openAlpr($imageBytes, $user);
     try {
         if ($use_openAlpr)
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
@@ -42,7 +43,7 @@ function get(&$imageBytes, Application &$application, string $baseFileName, stri
     }
 }
 
-function _use_openAlpr(&$imageBytes): bool {
+function _use_openAlpr(&$imageBytes, ?User $user = null): bool {
     $imageHash = sha1($imageBytes);
     $cache = \cache\alpr\get(Type::OpenAlpr, $imageHash);
 
@@ -51,7 +52,11 @@ function _use_openAlpr(&$imageBytes): bool {
         return true;
     }
 
-    $user = \user\current();
+    // Explicit user wins (e.g. the MCP identity); otherwise fall back to the
+    // session user. \user\current() is cached at module load, which in a
+    // sessionless MCP request predates the session bridge — passing the real
+    // user keeps premium/patron routing identical to the web.
+    $user = $user ?? \user\current();
     $isPremium = !$user->hasApps() || $user->isPatron();
 
     if (!$isPremium) {

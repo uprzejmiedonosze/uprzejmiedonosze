@@ -144,11 +144,15 @@ function sendApplication(string $appId, User $user): Application {
  * Saves uploaded image + automatically create thumbnail + read plate data
  * for `carImage`.
  *
+ * @param callable|null $validate
+ * @param User|null     $user     Overrides the session user used for ALPR
+ *                                provider selection (e.g. the MCP identity).
+ *
  * @SuppressWarnings(PHPMD.Superglobals)
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, ?callable $validate = null) {
-    return \semaphore\withLock($appId, "uploadImage:$pictureType", function () use ($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, $validate) {
+function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, ?callable $validate = null, ?User $user = null) {
+    return \semaphore\withLock($appId, "uploadImage:$pictureType", function () use ($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, $validate, $user) {
         $application = \app\get($appId);
         if ($validate) $validate($application);
 
@@ -162,7 +166,7 @@ function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFro
             if (!empty($dateTime)) $application->date = $dateTime;
             if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
             if (!empty($latLng)) $application->setLatLng($latLng);
-            \alpr\get($imageBytes, $application, $baseFileName, $type);
+            \alpr\get($imageBytes, $application, $baseFileName, $type, $user);
             $application->carImage->width = $width;
             $application->carImage->height = $height;
         } else if ($pictureType == 'contextImage') {
