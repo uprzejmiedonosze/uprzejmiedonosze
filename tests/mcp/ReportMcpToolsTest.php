@@ -266,6 +266,9 @@ class ReportMcpToolsTest extends DatabaseTestCase
         // Return value reflects the update.
         self::assertSame('RSOW 42/24', $result['externalId']);
         self::assertSame('zadzwonić w środę', $result['privateComment']);
+        // The public names used by set_report_notes' input round-trip in the output.
+        self::assertSame('RSOW 42/24', $result['caseNumber']);
+        self::assertSame('zadzwonić w środę', $result['privateNote']);
         // externalId is stored in plaintext, so persistence is verifiable directly.
         self::assertSame('RSOW 42/24', \app\get('mcp-notes-own')->externalId);
     }
@@ -278,9 +281,11 @@ class ReportMcpToolsTest extends DatabaseTestCase
         $result = (new ReportMcpTools())->setReportNotes($app->id, 'RSOW 7/24');
 
         self::assertSame('RSOW 7/24', $result['externalId']);
+        self::assertSame('RSOW 7/24', $result['caseNumber']);
         // An empty note stays at its default and is omitted from the serialised
         // report (Application::jsonSerialize drops empty externalId/privateComment).
         self::assertSame('', $result['privateComment'] ?? '', 'note must be left as-is when only caseNumber is given');
+        self::assertArrayNotHasKey('privateNote', $result, 'empty note must not add a privateNote key');
     }
 
     public function testSetReportNotesRejectsAnotherUsersReport(): void
