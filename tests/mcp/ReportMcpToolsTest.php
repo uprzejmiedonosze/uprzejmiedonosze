@@ -375,6 +375,72 @@ class ReportMcpToolsTest extends DatabaseTestCase
         (new ReportMcpTools())->createReportDraft(category: 999999);
     }
 
+    public function testCreateReportDraftStoresExtensionsAndWitness(): void
+    {
+        $this->actAs('creator-ext@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            category: 16,
+            extensions: [11, '25'],
+            witness: true
+        );
+
+        $report = $result['report'];
+        self::assertSame([11, 25], $report['extensions'], 'extension ids are int-cast like the web flow');
+        self::assertTrue($report['statements']['witness']);
+        $saved = \app\get($report['id']);
+        self::assertSame([11, 25], $saved->extensions, 'extensions persist to the draft');
+        self::assertTrue($saved->statements->witness, 'witness persists to the draft');
+    }
+
+    public function testCreateReportDraftRejectsUnknownExtension(): void
+    {
+        $this->actAs('creator-ext2@example.com', ['reports:create']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unknown extension category id');
+        (new ReportMcpTools())->createReportDraft(category: 16, extensions: [999999]);
+    }
+
+    public function testCreateReportDraftRejectsValidCategoryThatIsNotAnOfferedExtension(): void
+    {
+        $this->actAs('creator-ext4@example.com', ['reports:create']);
+
+        // 8 is a valid category but not one of the extensions.json entries the
+        // web editor offers — the MCP tool must mirror that closed set.
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Unknown extension category id 8 — valid extensions: 11');
+        (new ReportMcpTools())->createReportDraft(category: 16, extensions: [8]);
+    }
+
+    public function testCreateReportDraftRejectsPrimaryCategoryAsExtension(): void
+    {
+        $this->actAs('creator-ext5@example.com', ['reports:create']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("Extension id 11 is the report's primary category");
+        (new ReportMcpTools())->createReportDraft(category: 11, extensions: [11]);
+    }
+
+    public function testCreateReportDraftRejectsDuplicateExtensions(): void
+    {
+        $this->actAs('creator-ext6@example.com', ['reports:create']);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Duplicate extension id 25');
+        (new ReportMcpTools())->createReportDraft(category: 16, extensions: [25, '25']);
+    }
+
+    public function testCreateReportDraftLeavesWitnessFalseWhenOmitted(): void
+    {
+        $this->actAs('creator-ext3@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(category: 8);
+
+        // Mirrors the web default (checkbox unchecked): not a witness of the moment itself.
+        self::assertFalse($result['report']['statements']['witness']);
+    }
+
     public function testCreateReportDraftWithoutLocationKeepsObjectShapedAddress(): void
     {
         $this->actAs('creator-noloc@example.com', ['reports:create']);
