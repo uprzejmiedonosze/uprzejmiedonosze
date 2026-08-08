@@ -180,11 +180,25 @@ Tools:
   * `list_categories` — scope `reports:read`. No params. Returns `{ "categories": [...] }`, each
     with `id`, `title`, `formal`, `law`, `fine` (PLN), `demeritPoints`.
   * `create_report_draft` — scope `reports:create`. All params optional: `category` (id, from
-    `list_categories`), `plateId`, `description`, `address`, `lat`, `lng`, `datetime` (ISO 8601),
-    and up to three images — `carImage`, `contextImage`, `thirdImage` — each a base64 data URI
-    (JPEG/PNG, ≤ 2 MB, no URL fetching). Creates a `draft` and returns `{ report, editUrl }`; the
-    user opens `editUrl` to add the required photos and send. The server never sends the report
-    itself.
+    `list_categories`), `extensions` (additional category ids stacked on the primary one),
+    `witness` (whether the reporter witnessed the moment of parking), `destination` (`sm` or
+    `police` — the authority the draft is addressed to; defaults to the user's saved preference),
+    `plateId`, `description`, `address`, `lat`, `lng`, `datetime` (ISO 8601), and up to three
+    images — `carImage`, `contextImage`, `thirdImage` — each a base64 data URI (JPEG/PNG, ≤ 2 MB,
+    no URL fetching). Creates a `draft` and returns `{ report, editUrl, destination }`; the
+    user opens `editUrl` to review the draft (adding anything that wasn't supplied) and send. The
+    server never sends the report itself.
+
+    Location mirrors the web form: coordinates are the source of truth. When `lat`/`lng` are given
+    (or absent but readable from the `carImage`'s EXIF GPS), the address is reverse-geocoded via
+    Nominatim — the same endpoint the web uses — to fill the structured fields (`city`,
+    `voivodeship`, `postcode`, `county`, `municipality`, `district`), resolve the recipient unit
+    (`recipientInfo` + stored `smCity`), and pre-resolve both editor radio options into
+    `destinationOptions` (`sm`/`police` with `name`, `address`, `email`, `isPolice`). A
+    caller-supplied `address` string is kept as the display address (the geocoded full string goes
+    to `addressGPS`); a bare address string without coordinates is stored as-is — the web never
+    forward-geocodes, and neither does MCP. Geocoding failure is non-fatal: the caller's data alone
+    is kept. A fresh draft's empty `address` stays an object (`{}`), never a list.
 
 Every returned report expands its category into `categoryInfo` (`id`, `title`, `formal` wording,
 `law`, `fine` in PLN, `demeritPoints`) alongside the raw `category` number, and its recipient

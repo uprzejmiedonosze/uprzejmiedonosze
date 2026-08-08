@@ -9,6 +9,24 @@ use Mcp\Server;
  * Builds the MCP server. Tools are registered explicitly (no attribute
  * discovery) so the exposed surface is always the list below.
  */
+/**
+ * "id — display name" pairs for every category, for the category enum's
+ * description. Display names alone are ambiguous (duplicates exist, and 8
+ * categories lack a `title`), so the int id stays the machine identifier —
+ * but pairing each enum value with its name makes the dropdown readable.
+ *
+ * @param array<int, \Category> $categories
+ */
+function categoryNameList(array $categories): string {
+    $pairs = [];
+    foreach (ReportMcpTools::sortedCategoryIds($categories) as $id) {
+        $category = $categories[$id];
+        $name = $category->getTitle() ?: $category->getInformal();
+        $pairs[] = "$id — $name";
+    }
+    return implode(', ', $pairs);
+}
+
 function buildServer(): Server {
     $tools = new ReportMcpTools();
 
@@ -147,8 +165,15 @@ function buildServer(): Server {
                 'type' => 'integer',
                 // Valid ids come from categories.json (data, not code), so the
                 // enum is generated dynamically — no static list to drift.
-                'enum' => array_keys($CATEGORIES ?? []),
-                'description' => 'Violation category id (see list_categories).',
+                // Keys are JSON strings ("8", "18"…), sorted numerically so the
+                // enum and its description read in the same stable order as
+                // list_categories — then cast to match the declared integer
+                // type (a string-typed enum would be rejected/ignored by JSON
+                // Schema validators).
+                'enum' => array_map('intval', ReportMcpTools::sortedCategoryIds($CATEGORIES ?? [])),
+                'description' => 'Violation category id — the violation type: '
+                    . categoryNameList($CATEGORIES ?? [])
+                    . '. See list_categories for the full definitions.',
             ],
             'extensions' => [
                 'type' => 'array',
@@ -200,7 +225,8 @@ function buildServer(): Server {
             ],
             'editUrl' => [
                 'type' => 'string',
-                'description' => 'Open this to add the required photos and send the report.',
+                'description' => 'Open this to review the draft, add anything that is missing '
+                    . '(e.g. photos), and send the report.',
             ],
         ],
         'additionalProperties' => true,
@@ -218,7 +244,9 @@ function buildServer(): Server {
             . 'update_report_status, and save a private case number or note with '
             . 'set_report_notes. Use list_categories to see the violation types, and '
             . 'create_report_draft to start a new report — it creates a draft the user must '
-            . 'open (editUrl) to add photos and send; the server cannot send reports itself. '
+            . 'open (editUrl) to review and send; the server cannot send reports itself. '
+            . 'Photos may be supplied via the API and are processed like web uploads; '
+            . 'anything missing the user adds in the editor. '
             . 'Each report has a `status` id (see the legend below) and a categoryInfo object '
             . '(the violation type, its formal wording and legal basis). Use the Polish status '
             . 'labels when talking to the user, and only set a status the current one is '
@@ -295,8 +323,9 @@ function buildServer(): Server {
             [$tools, 'createReportDraft'],
             'create_report_draft',
             description: 'Create a new DRAFT report for the signed-in user, pre-filled from the '
-                . 'given fields. The draft is NOT sent: a human must open the returned editUrl to '
-                . 'add the required photos and send it. Requires the reports:create scope.',
+                . 'given fields. The draft is NOT sent automatically: a human must open the '
+                . 'returned editUrl to review it (and add any photos that weren\'t supplied) '
+                . 'before sending. Requires the reports:create scope.',
             annotations: new ToolAnnotations(
                 readOnlyHint: false,
                 destructiveHint: false,

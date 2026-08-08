@@ -216,6 +216,19 @@ final class ReportMcpTools {
     }
 
     /**
+     * Category ids in ascending numeric order — the canonical order for the
+     * category enum, its description, and list_categories.
+     *
+     * @param array<int|string, \Category> $categories
+     * @return list<string>
+     */
+    public static function sortedCategoryIds(array $categories): array {
+        $ids = array_keys($categories);
+        sort($ids, SORT_NUMERIC);
+        return $ids;
+    }
+
+    /**
      * The extensions the web editor actually offers — entries from
      * extensions.json with `disabled` unset/false, keyed by id.
      *
@@ -259,8 +272,9 @@ final class ReportMcpTools {
         global $CATEGORIES;
 
         $categories = [];
-        foreach (($CATEGORIES ?? []) as $id => $category) {
-            $categories[] = self::categorySummary((int) $id, $category);
+        // Same ascending-id order as the create_report_draft category enum.
+        foreach (self::sortedCategoryIds($CATEGORIES ?? []) as $id) {
+            $categories[] = self::categorySummary((int) $id, $CATEGORIES[$id]);
         }
 
         return ['categories' => $categories];
