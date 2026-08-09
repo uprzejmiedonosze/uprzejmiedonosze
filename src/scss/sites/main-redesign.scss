@@ -9,6 +9,7 @@
 
 @use "../lib/tokens" as *;
 @use "../lib/layout" as layout;
+@use "../lib/variables";
 
 // Homepage: własny padding boczny trzymają same sekcje (.mpr-section itd.), a
 // hero/tinted robią full-bleed przez mixin layout.full-bleed
@@ -679,6 +680,18 @@
     }
   }
 
+  .mpr-cards-4 {
+    grid-template-columns: 1fr;
+
+    @media (min-width: $mpr-break) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 68em) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
   .mpr-card {
     background: $mpr-surface-container-lowest;
     border-radius: 1rem;
@@ -718,6 +731,7 @@
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 50%;
+    overflow: hidden;
     background: $mpr-primary-container;
     color: $mpr-on-primary-container;
   }
@@ -737,19 +751,29 @@
     text-align: center;
   }
 
-  .mpr-icon-primary {
+  .mpr-icon {
     background: $mpr-primary;
     color: #fff;
-  }
 
-  .mpr-icon-secondary {
-    background: $mpr-secondary;
-    color: #fff;
-  }
+    &-patronite {
+      background-color: variables.$patroniteColor!important;
+    }
 
-  .mpr-icon-tertiary {
-    background: $mpr-tertiary-container;
-    color: $mpr-on-tertiary-container;
+    &-github {
+      background-color: black;
+    }
+
+    &-zf {
+      background-color: #2c4e34;
+
+      img {
+        width: 60%;
+        height: 60%;
+        object-fit: contain;
+        display: block;
+      }
+    }
+
   }
 
   /* Mini-FAQ */

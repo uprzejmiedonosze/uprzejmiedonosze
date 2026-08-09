@@ -51,6 +51,7 @@ $FOOTER_LINKS = [
             ['key' => null, 'href' => 'https://suppi.pl/uprzejmiedonosze', 'label' => 'Jednorazowa wpłata', 'external' => true],
             ['key' => 'naklejki-robisz-to-zle', 'href' => '/naklejki-robisz-to-zle.html', 'label' => 'Kup naklejki'],
             ['key' => 'robtodobrze', 'href' => '/robtodobrze.html', 'label' => 'Rób to dobrze'],
+            ['key' => 'zenfeed', 'href' => '/zenfeed.html', 'label' => 'ZenFeed — nasz drugi projekt'],
         ],
     ],
     'project' => [

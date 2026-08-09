@@ -61,6 +61,11 @@ describe('Static pages no session', function() {
         cy.contains('szymon@uprzejmiedonosze.net')
     })
 
+    it('/ » zenfeed', () => {
+        cy.footerLink('ZenFeed — nasz drugi projekt')
+        cy.contains('ZenFeed')
+    })
+
     it('/ » bezpieczeństwo', () => {
         cy.footerLink('Bezpieczeństwo')
         cy.contains('zero-knowledge security')

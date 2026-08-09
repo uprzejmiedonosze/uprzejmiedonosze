@@ -1,0 +1,132 @@
+{# SITEMAP-PRIORITY:0.6 #}
+{% set layout = 'main' %}
+{% set rightButton = 'app' %}
+
+{% set title = 'ZenFeed — nasze narzędzie do moderacji hejtu' %}
+{% set shortTitle = 'ZenFeed' %}
+{% set description = 'ZenFeed to nasz drugi projekt: automatycznie kasuje hejt w komentarzach na Facebooku i Instagramie. Wyrósł z tego samego problemu, co Uprzejmie Donoszę.' %}
+{% set image = 'img/zenfeed-og.png' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+
+<div class="main-page-redesign zenfeed-page">
+
+    <section class="mpr-hero">
+        <div class="mpr-hero-inner">
+            <div class="mpr-hero-copy">
+                <h1>Hejt w komentarzach? <em>Znamy to z autopsji.</em></h1>
+                <p class="mpr-lead">
+                    ZenFeed to nasz drugi projekt &ndash; narzędzie, które automatycznie
+                    czyta i kasuje toksyczne komentarze na Facebooku i Instagramie,
+                    zanim zdążysz je przeczytać.
+                </p>
+                <div class="mpr-cta-row">
+                    <a href="https://zenfeed.eu" target="_blank" rel="external" class="mpr-button mpr-button-primary">
+                        Zobacz ZenFeed
+                    </a>
+                    <a href="#skad-sie-wzial" class="mpr-button mpr-button-secondary">
+                        Skąd się wziął?
+                    </a>
+                </div>
+            </div>
+
+            <div class="mpr-hero-visual">
+                <div class="mpr-hero-visual-frame">
+                    <img src="/img/zenfeed-zen-on.png?width=1200&quality=85" alt="">
+                </div>
+                <div class="mpr-hero-card mpr-hero-card-stat">
+                    <strong>~3 s</strong>
+                    <span>czas reakcji na komentarz</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mpr-trust-band">
+        <div>
+            <strong>50 tys.</strong>
+            <span>komentarzy analizowanych miesięcznie</span>
+        </div>
+        <div>
+            <strong>10 tys.</strong>
+            <span>z nich kasowanych jako hejt</span>
+        </div>
+        <div>
+            <strong>~3 s</strong>
+            <span>zanim komentarz zniknie</span>
+        </div>
+    </section>
+    <section class="mpr-section" id="skad-sie-wzial">
+        <h2 class="mpr-section-title">Skąd się wziął ZenFeed</h2>
+        <div class="mpr-checklist" style="grid-template-columns:1fr;max-width:44em">
+            <p>
+                Ten sam problem, który znamy z komentarzy pod Uprzejmie Donoszę,
+                widzieliśmy też na dużo większą skalę na kanałach
+                <a href="https://www.facebook.com/stopchamszczecin" target="_blank" rel="external">Stop Cham</a> i
+                <a href="https://www.facebook.com/konfiturak" target="_blank" rel="external">Konfitura</a>.
+                Miesięcznie ląduje tam ok. 50 tysięcy komentarzy, a mniej więcej co
+                piąty (ok. 10 tysięcy) trzeba usunąć &ndash; wyzwiska, groźby, wulgarne personalne wycieczki.
+                Ręczna moderacja przy takiej skali po prostu nie działa:
+                zajmuje cały dzień i wykańcza osobę, która ją robi.
+            </p>
+            <p>
+                Zbudowaliśmy automat, który czyta kontekst zamiast listy
+                zakazanych słów &ndash; łapie sarkazm i zawoalowaną agresję, których nie
+                złapie prosty filtr. Dziś ZenFeed jest osobnym produktem,
+                z hostingiem w Unii Europejskiej, zgodnym z RODO i bez
+                wysyłania treści komentarzy do zewnętrznych API AI.
+            </p>
+        </div>
+    </section>
+
+    <section class="mpr-section">
+        <h2 class="mpr-section-title">Dla kogo</h2>
+        <div class="mpr-cards mpr-cards-3">
+            <div class="mpr-card">
+                <span class="mpr-card-icon mpr-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.35-7-9.5A3.5 3.5 0 0 1 12 7a3.5 3.5 0 0 1 7 3.5C19 15.65 12 20 12 20z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <h3>NGO i niezależne media</h3>
+                <p>Dla organizacji pozarządowych i niezależnych mediów ZenFeed działa bezpłatnie, z widocznym creditem „Powered by ZenFeed”.</p>
+            </div>
+            <div class="mpr-card">
+                <span class="mpr-card-icon mpr-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4"/><path d="M16 8l4 4-4 4"/></svg>
+                </span>
+                <h3>Aktywistki, aktywiści, osoby publiczne</h3>
+                <p>Im głośniej mówisz, tym więcej hejtu zbierasz pod postami. ZenFeed zdejmuje z Ciebie tę część.</p>
+            </div>
+            <div class="mpr-card">
+                <span class="mpr-card-icon mpr-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l7 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M17 9a4 4 0 0 1 0 6"/></svg>
+                </span>
+                <h3>Firmy</h3>
+                <p>Twoja firma jest celem ataków? ZenFeed pozwoli usuwać nienawiść z twoich sociali (nie, to nie cenzura)</p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="mpr-section mpr-section-tinted">
+        <h2 class="mpr-section-title">Wypróbuj ZenFeed</h2>
+        <p style="text-align:center;color:#6b7871;margin:-0.5rem 0 2rem">
+            Plan darmowy wystarcza na pierwsze 1000 komentarzy miesięcznie.
+            Płatne plany i pełny cennik znajdziesz na stronie ZenFeed.
+        </p>
+        <div class="mpr-cards mpr-cards-2">
+            <a href="https://zenfeed.eu" target="_blank" rel="external" class="mpr-link-card">
+                <div class="mpr-link-card-title">Korzystaj bezpłatnie &rarr;</div>
+                <p>Podłącz swoją stronę na Facebooku w dwa kliknięcia i zobacz ZenFeed w akcji.</p>
+            </a>
+            <a href="https://zenfeed.eu/ngo" target="_blank" rel="external" class="mpr-link-card">
+                <div class="mpr-link-card-title">Prowadzisz NGO? &rarr;</div>
+                <p>Sprawdź darmowy program dla organizacji pozarządowych i niezależnych mediów.</p>
+            </a>
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+// Landing /zenfeed.html — reużywa cały system main-redesign (.mpr-*), tylko
+// przemalowuje akcenty na zieleń marki ZenFeed. Rejestrowane po
+// sites/main-redesign w index3.scss, żeby te reguły nadpisywały bazowe.
+//
+// main-redesign.scss zagnieżdża wszystko pod `.rd25 .main-page-redesign`
+// (3 klasy specyficzności). Bare `.zenfeed-page ...` (2 klasy) więc przegrywa
+// z tamtymi regułami mimo późniejszej kolejności w index3.scss — CSS liczy
+// specyficzność przed kolejnością. Dlatego tu też zaczynamy od
+// `.rd25 .main-page-redesign.zenfeed-page`, żeby dorównać lub przebić bazę.
+
+@use "../lib/tokens" as *;
+
+.rd25 .main-page-redesign.zenfeed-page {
+  $zen: #316342;
+
+  .mpr-hero-logo {
+    max-width: 200px;
+    margin: 0 auto 1.25rem;
+    display: block;
+  }
+
+  /* Ilustracja zen_on jest portretowa (541×737) — bazowa .mpr-hero-visual-frame
+     zakłada poziomą ramkę na zdjęcie (object-fit:cover, stały wysoki box,
+     obwódka, cień), co przy tej grafice obcinało twarz/nogi i wyglądało jak
+     w oprawionej karcie. Tu: mniejszy, wyśrodkowany obrazek bez ramki, cały
+     widoczny (object-fit:contain, wysokość dopasowana do treści). */
+  .mpr-hero-visual {
+    max-width: 16em;
+    margin: 2rem auto 0;
+
+    @media (min-width: $mpr-break) {
+      max-width: 18em;
+      margin: 0 auto;
+    }
+  }
+
+  .mpr-hero-visual-frame {
+    height: auto;
+    border: none;
+    box-shadow: none;
+    background: none;
+    border-radius: 0;
+
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    @media (min-width: $mpr-break) {
+      height: auto;
+    }
+  }
+
+
+
+  .mpr-check-icon {
+    background: $zen;
+  }
+
+  .mpr-link-card .mpr-link-card-title {
+    color: $zen;
+  }
+
+  .mpr-card {
+    border-top-color: $zen;
+
+    h3 {
+      color: $zen;
+    }
+  }
+}

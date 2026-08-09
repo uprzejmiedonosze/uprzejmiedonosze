@@ -284,7 +284,8 @@ class StaticPagesHandler extends AbstractHandler {
             'patronite',
             'naklejki-robisz-to-zle',
             'zazalenie-na-brak-mandatu',
-            'czesto-popelniane-bledy'
+            'czesto-popelniane-bledy',
+            'zenfeed'
         ];
         $route = $args['route'];
 
