@@ -513,6 +513,16 @@ final class ReportMcpTools {
             }
         }
 
+        // ── Vehicle-info enrichment (zbiorkom), mirroring the web editor ─────
+        // The web fills make/model/DMC client-side (src/js/new-app/
+        // vehicle-info.js) whenever a plate is known; the server-side ALPR
+        // pipeline only supplies brand/color. Replicate the editor's lookup
+        // here so an MCP-created draft carries the same auto lines in its
+        // description. Non-fatal: no data keeps whatever was supplied.
+        if ($this->enrichVehicleInfoFromPlate($draft)) {
+            $draft = \app\get($draft->id);
+        }
+
         $report = $this->enrich($draft);
         $report['destination'] = $draft->stopAgresji() ? 'police' : 'sm';
         // Only advertise a recipient once a real unit was resolved; an unknown
@@ -586,6 +596,142 @@ final class ReportMcpTools {
             'sm' => $summarize(\SM::guess($draft->address), false),
             'police' => $summarize(\StopAgresji::guess($draft->address), true),
         ];
+    }
+
+    /**
+     * Vehicle-info fetcher override for tests (the zbiorkom endpoint is a plain
+     * HTTP call and cannot be stubbed). Defaults to the live zbiorkom.live API
+     * the web editor calls. Returns the decoded JSON as an array, or null on
+     * failure.
+     *
+     * @var callable(string): array|null
+     */
+    private static $vehicleInfoFetcher = null;
+
+    public static function setVehicleInfoFetcher(?callable $fetcher): void {
+        self::$vehicleInfoFetcher = $fetcher;
+    }
+
+    /**
+     * Looks the draft's plate up at parkowanie.zbiorkom.live and appends the
+     * same description lines the web editor would (brand + model, and the
+     * gross-weight warning) — deduplicated against the existing description.
+     * Returns whether anything was appended.
+     */
+    private function enrichVehicleInfoFromPlate(\app\Application $draft): bool {
+        $plate = $draft->carInfo->plateId ?? null;
+        if ($plate === null) {
+            return false;
+        }
+        // Same normalization the editor applies (vehicle-info.js normalizePlateId):
+        // uppercase, no whitespace at all (cleanWhiteChars only collapses it).
+        $plate = strtoupper(\cleanWhiteChars($plate));
+        $plate = str_replace(' ', '', $plate);
+        if (mb_strlen($plate) < 5) {
+            return false;
+        }
+
+        $data = null;
+        if (self::$vehicleInfoFetcher !== null) {
+            $data = call_user_func(self::$vehicleInfoFetcher, $plate);
+        } else {
+            try {
+                $data = \curl\request('https://parkowanie.zbiorkom.live/' . rawurlencode($plate), [], 'Zbiorkom');
+            } catch (\Throwable $e) {
+                logger("MCP create_report_draft: zbiorkom lookup failed for $plate: " . $e->getMessage());
+                return false;
+            }
+        }
+        if (!is_array($data) || isset($data['error'])) {
+            return false;
+        }
+
+        $lines = [];
+
+        // Brand + model line (zbiorkom wins over the ALPR brand, like the
+        // editor's `vehicle.brand || ocrBrand`).
+        $brand = $data['brand'] ?? null;
+        $model = $data['model'] ?? null;
+        if ($brand !== null && $model !== null) {
+            $lines[] = 'Pojazd marki '
+                . self::formatBrandName((string) $brand)
+                . ' '
+                . trim((string) $model)
+                . '.';
+        } elseif ($draft->carInfo->brand ?? null) {
+            // Editor fallback (images.js): OCR brand only, and only into an
+            // empty description — mirrors `comment.value.length == 0`.
+            $confidence = (float) ($draft->carInfo->brandConfidence ?? 0);
+            if (trim($draft->userComment ?? '') === '' && $confidence > 90) {
+                $lines[] = $confidence > 98
+                    ? 'Pojazd marki ' . $draft->carInfo->brand . '.'
+                    : 'Pojazd prawdopodobnie marki ' . $draft->carInfo->brand . '.';
+            }
+        }
+
+        // Gross-weight lines (heavy trucks get the full classification note).
+        $gross = self::minGrossVehicleWeight($data['vehicleInfo']['grossVehicleWeight'] ?? null);
+        if (($data['isHeavyVehicle'] ?? false) === true && ($data['vehicleType'] ?? null) === 'TRUCK') {
+            $lines[] = 'Pojazd jest sklasyfikowany jako ciężarowy.';
+            if ($gross !== null) {
+                $lines[] = 'Dopuszczalna masa całkowita wg danych producenta wynosi minimum '
+                    . self::formatGrossWeightInTons($gross) . ' t.';
+            }
+            $lines[] = 'Może to mieć istotne znaczenie przy kwalifikacji wykroczenia.';
+        } elseif ($gross !== null && $gross > 2500) {
+            $lines[] = 'Dopuszczalna masa całkowita wg danych producenta wynosi minimum '
+                . self::formatGrossWeightInTons($gross) . ' t.';
+        }
+
+        if (!$lines) {
+            return false;
+        }
+
+        // Same dedupe the editor's appendAutoComment does: keep the caller's
+        // text, add only lines that aren't already there.
+        $comment = (string) ($draft->userComment ?? '');
+        $existing = explode("\n", $comment);
+        $added = false;
+        foreach ($lines as $line) {
+            if (in_array($line, $existing, true)) {
+                continue;
+            }
+            $comment = trim($comment);
+            $comment = ($comment === '' ? '' : $comment . "\n") . $line;
+            $added = true;
+        }
+        if ($added) {
+            $draft->userComment = $comment;
+            \app\save($draft);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Title-cases every word like the editor's formatBrandNames, then applies
+     * the shared acronym corrections (BMW, FSO, SsangYong, …).
+     */
+    private static function formatBrandName(string $brand): string {
+        return \fixCapitalizedBrandNames(mb_convert_case(trim($brand), MB_CASE_TITLE, 'UTF-8'));
+    }
+
+    /**
+     * The editor's getMinGrossVehicleWeight: the smallest positive value of a
+     * weight or weight array, in kg.
+     */
+    private static function minGrossVehicleWeight($value): ?float {
+        if (is_array($value)) {
+            $nums = array_values(array_filter(array_map('floatval', $value), fn (float $n): bool => $n > 0));
+            return $nums ? min($nums) : null;
+        }
+        $num = is_numeric($value) ? (float) $value : null;
+        return $num !== null && $num > 0 ? $num : null;
+    }
+
+    /** The editor's formatGrossWeightInTons: kg → "2,60". */
+    private static function formatGrossWeightInTons(float $weightKg): string {
+        return str_replace('.', ',', sprintf('%.2f', $weightKg / 1000));
     }
 
     /** Decode a base64 image data URI to raw bytes, or fail with a readable error. */

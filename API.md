@@ -201,6 +201,12 @@ Tools:
     forward-geocodes, and neither does MCP. Geocoding failure is non-fatal: the caller's data alone
     is kept. A fresh draft's empty `address` stays an object (`{}`), never a list.
 
+    When a plate is known (the `plateId` param or ALPR recognition of the `carImage`), the draft's
+    description is enriched like the web editor does: the make/model line (`Pojazd marki …`) and —
+    when available — the gross-weight note are looked up at parkowanie.zbiorkom.live and appended
+    (deduplicated), so a draft created via MCP carries the same vehicle info a web draft would. The
+    lookup is non-fatal: no data keeps the description as supplied.
+
 Every returned report expands its category into `categoryInfo` (`id`, `title`, `formal` wording,
 `law`, `fine` in PLN, `demeritPoints`) alongside the raw `category` number, and its recipient
 authority into `recipientInfo` (`name`, `address`, `email`, `isPolice`) — resolved from the raw
