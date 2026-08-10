@@ -53,6 +53,10 @@ class CreateReportDraftImageTest extends TestCase
         McpIdentity::set($user);
         McpIdentity::setScopes(['reports:create']);
 
+        // Hermetic: the plate triggers the zbiorkom enrichment — stub it so the
+        // test never depends on the live endpoint.
+        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
+
         $result = (new ReportMcpTools())->createReportDraft(
             plateId: 'zs 1234a',
             description: 'auto na chodniku',

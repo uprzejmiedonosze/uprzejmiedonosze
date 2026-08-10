@@ -412,6 +412,9 @@ class ReportMcpToolsTest extends DatabaseTestCase
 
     public function testCreateReportDraftCreatesPrefilledDraft(): void
     {
+        // Hermetic: the plate triggers the zbiorkom enrichment — stub it so the
+        // test never depends on the live endpoint.
+        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
         $this->actAs('creator@example.com', ['reports:create']);
 
         $result = (new ReportMcpTools())->createReportDraft(
@@ -704,6 +707,9 @@ class ReportMcpToolsTest extends DatabaseTestCase
             $geocoderCalled = true;
             return null;
         });
+        // Hermetic: this test uploads a real image (ALPR may populate a plate),
+        // so stub the zbiorkom lookup rather than hitting the live endpoint.
+        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
         // uploadImage resolves the user's number from the store — persist the
         // identity like a real registered user would have (plain json; the
         // session-based encryption isn't active in tests).
@@ -724,6 +730,77 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertArrayNotHasKey('lng', $report['address']);
         self::assertFalse($geocoderCalled, 'a single coordinate must not be paired with EXIF GPS');
         self::assertArrayNotHasKey('destinationOptions', $report);
+    }
+
+    public function testCreateReportDraftAppendsZbiorkomBrandModelAndWeightLines(): void
+    {
+        ReportMcpTools::setVehicleInfoFetcher(function (string $plate) {
+            self::assertSame('WA12345', $plate, 'the fetcher gets the normalized plate');
+            return [
+                'brand' => 'fiat',
+                'model' => 'Punto',
+                'vehicleInfo' => ['grossVehicleWeight' => 2600],
+            ];
+        });
+        $this->actAs('creator-zbiorkom@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            plateId: 'wa 12345',
+            description: 'Parkuje na chodniku'
+        );
+
+        $lines = explode("\n", $result['report']['userComment']);
+        self::assertSame('Parkuje na chodniku.', $lines[0], 'caller text is kept (capitalized like the web)');
+        self::assertContains('Pojazd marki Fiat Punto.', $lines);
+        self::assertContains('Dopuszczalna masa całkowita wg danych producenta wynosi minimum 2,60 t.', $lines);
+    }
+
+    public function testCreateReportDraftAppendsHeavyTruckLines(): void
+    {
+        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => [
+            'brand' => 'Volvo',
+            'model' => 'FH',
+            'isHeavyVehicle' => true,
+            'vehicleType' => 'TRUCK',
+            'vehicleInfo' => ['grossVehicleWeight' => 18000],
+        ]);
+        $this->actAs('creator-zbiorkom2@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(plateId: 'GDA12345');
+
+        $lines = explode("\n", $result['report']['userComment']);
+        self::assertContains('Pojazd marki Volvo FH.', $lines);
+        self::assertContains('Pojazd jest sklasyfikowany jako ciężarowy.', $lines);
+        self::assertContains('Dopuszczalna masa całkowita wg danych producenta wynosi minimum 18,00 t.', $lines);
+        self::assertContains('Może to mieć istotne znaczenie przy kwalifikacji wykroczenia.', $lines);
+    }
+
+    public function testCreateReportDraftIgnoresZbiorkomMissAndDeduplicates(): void
+    {
+        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
+        $this->actAs('creator-zbiorkom3@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            plateId: 'WA99999',
+            description: 'Pojazd marki BMW X5.'
+        );
+
+        self::assertSame('Pojazd marki BMW X5.', $result['report']['userComment'], 'a miss changes nothing');
+    }
+
+    public function testCreateReportDraftSkipsEnrichmentWithoutPlate(): void
+    {
+        $called = false;
+        ReportMcpTools::setVehicleInfoFetcher(function () use (&$called) {
+            $called = true;
+            return null;
+        });
+        $this->actAs('creator-zbiorkom4@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(description: 'Bez rejestracji');
+
+        self::assertFalse($called, 'no plate → no zbiorkom lookup');
+        self::assertSame('Bez rejestracji.', $result['report']['userComment']);
     }
 
     public function testCreateReportDraftRejectsInvalidImageDataUri(): void
