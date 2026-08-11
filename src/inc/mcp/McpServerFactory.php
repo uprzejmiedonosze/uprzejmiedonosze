@@ -30,9 +30,24 @@ function buildServer(): Server {
     // statuses.json); other fields pass through via additionalProperties.
     // Per-status meaning + transitions are in the server instructions, not here.
     global $STATUSES, $CATEGORIES, $EXTENSIONS;
+    // Reused by the extensions enum and description below. buildServer() is
+    // constructed for every MCP request, so avoid filtering/sorting it twice.
+    $allowedExtensions = ReportMcpTools::allowedExtensions($EXTENSIONS ?? []);
     $reportSchema = [
         'type' => 'object',
         'properties' => [
+            // Both fields are added by enrich(), keeping all report-returning
+            // tools consistent with create_report_draft.
+            'destination' => [
+                'type' => 'string',
+                'enum' => ['police', 'sm'],
+                'description' => 'The authority the report is (or will be) addressed to.',
+            ],
+            'destinationOptions' => [
+                'type' => 'object',
+                'description' => 'Once a recipient has been resolved: both options (sm / police) '
+                    . 'the web editor would show, pre-resolved.',
+            ],
             'id' => ['type' => 'string'],
             'status' => [
                 'type' => 'string',
@@ -175,11 +190,11 @@ function buildServer(): Server {
                 'type' => 'array',
                 'items' => [
                     'type' => 'integer',
-                    'enum' => array_map('intval', array_keys(ReportMcpTools::allowedExtensions($EXTENSIONS ?? []))),
+                    'enum' => array_map('intval', array_keys($allowedExtensions)),
                 ],
                 'description' => 'Additional violations stacked on the primary category — the same '
                     . 'set the web editor offers: '
-                    . ReportMcpTools::extensionNameList(ReportMcpTools::allowedExtensions($EXTENSIONS ?? [])),
+                    . ReportMcpTools::extensionNameList($allowedExtensions),
             ],
             'witness' => [
                 'type' => 'boolean',
@@ -208,25 +223,7 @@ function buildServer(): Server {
     $createOutputSchema = [
         'type' => 'object',
         'properties' => [
-            'report' => [
-                'type' => 'object',
-                'properties' => [
-                    // The authority the draft is addressed to, and — when the
-                    // address could be geocoded — both recipient options the web
-                    // editor would show, pre-resolved.
-                    'destination' => [
-                        'type' => 'string',
-                        'enum' => ['police', 'sm'],
-                        'description' => 'The authority the draft will be addressed to.',
-                    ],
-                    'destinationOptions' => [
-                        'type' => 'object',
-                        'description' => 'When the address could be geocoded: both recipient options '
-                            . '(sm / police) the web editor would show, pre-resolved.',
-                    ],
-                ],
-                'additionalProperties' => true,
-            ],
+            'report' => $reportSchema,
             'editUrl' => [
                 'type' => 'string',
                 'description' => 'Open this to review the draft, add anything that is missing '

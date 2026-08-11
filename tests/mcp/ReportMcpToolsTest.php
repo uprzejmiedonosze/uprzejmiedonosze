@@ -30,6 +30,15 @@ class ReportMcpToolsTest extends DatabaseTestCase
         McpIdentity::setScopes([]);
     }
 
+    protected function tearDown(): void
+    {
+        // Test overrides are static and shared with CreateReportDraftImageTest;
+        // reset them so test order cannot select a stale stub or a live API.
+        ReportMcpTools::setReverseGeocoder(null);
+        ReportMcpTools::setVehicleInfoFetcher(null);
+        parent::tearDown();
+    }
+
     private function makeApp(string $id, string $status, string $email): Application
     {
         $data = json_decode(self::APP_JSON_TEMPLATE, true);
@@ -200,6 +209,8 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertNotEmpty($result['reports']);
         self::assertArrayHasKey('categoryInfo', $result['reports'][0]);
         self::assertArrayNotHasKey('statusInfo', $result['reports'][0]);
+        self::assertSame('sm', $result['reports'][0]['destination']);
+        self::assertArrayHasKey('destinationOptions', $result['reports'][0]);
     }
 
     public function testGetReportExpandsRecipientInfo(): void
@@ -217,6 +228,11 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertSame('zgloszenia@sm.szczecin.pl', $result['recipientInfo']['email']);
         self::assertFalse($result['recipientInfo']['isPolice']);
         self::assertIsArray($result['recipientInfo']['address']);
+        // Destination fields must survive a fresh get_report call, not only the
+        // immediate create_report_draft response.
+        self::assertSame('sm', $result['destination']);
+        self::assertSame('zgloszenia@sm.szczecin.pl', $result['destinationOptions']['sm']['email']);
+        self::assertTrue($result['destinationOptions']['police']['isPolice']);
     }
 
     public function testGetReportRejectsAnotherUsersReport(): void

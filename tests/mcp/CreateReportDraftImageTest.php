@@ -30,6 +30,9 @@ class CreateReportDraftImageTest extends TestCase
         }
         $this->pathsToRemove = [];
         $_SESSION = [];
+        // Shared static test override; never leak it into another test class.
+        ReportMcpTools::setVehicleInfoFetcher(null);
+        parent::tearDown();
     }
 
     private function makeJpegDataUri(int $width = 120, int $height = 90): string
