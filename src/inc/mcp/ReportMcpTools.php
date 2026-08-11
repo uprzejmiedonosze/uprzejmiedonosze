@@ -91,7 +91,12 @@ final class ReportMcpTools {
                 'email' => $sm->getEmail(),
                 'isPolice' => $sm->isPolice(),
             ];
+            // Expose both choices the editor would currently offer whenever the
+            // report already has a resolved recipient. Keeping this in enrich()
+            // makes create/list/get/update responses use the same public shape.
+            $report['destinationOptions'] = self::destinationOptions($application);
         }
+        $report['destination'] = $application->stopAgresji() ? 'police' : 'sm';
 
         // A fresh draft's address starts as an empty object; keep it object-shaped
         // in the output (an empty PHP array would re-encode as a list `[]`, which
@@ -436,7 +441,6 @@ final class ReportMcpTools {
         // The web derives coordinates from the map click or the photo's EXIF GPS
         // and only then reverse-geocodes. Do the same here; geocoding failure is
         // non-fatal (the caller's data alone is kept, like the web's geo fallback).
-        $geocoded = null;
         // EXIF GPS only fills a fully missing pair — never one half, or the
         // caller's coordinate would be silently paired with the photo's other one.
         if ($lat === null && $lng === null && isset($images['carImage'])) {
@@ -451,7 +455,6 @@ final class ReportMcpTools {
         if ($lat !== null && $lng !== null) {
             $nominatim = $this->reverseGeocode($lat, $lng);
             if ($nominatim !== null) {
-                $geocoded = $nominatim;
                 $addr = $nominatim['address'] ?? [];
                 foreach (['city', 'voivodeship', 'postcode', 'county', 'municipality', 'district'] as $field) {
                     if (!empty($addr[$field])) {
@@ -524,16 +527,11 @@ final class ReportMcpTools {
         }
 
         $report = $this->enrich($draft);
-        $report['destination'] = $draft->stopAgresji() ? 'police' : 'sm';
         // Only advertise a recipient once a real unit was resolved; an unknown
         // unit means the draft needs a proper address before it can be routed.
         $sm = $draft->guessSMData();
         if ($sm->unknown()) {
             unset($report['recipientInfo']);
-        }
-        if ($geocoded !== null) {
-            // Both radio options the web editor shows, pre-resolved.
-            $report['destinationOptions'] = self::destinationOptions($draft);
         }
 
         return [
@@ -579,7 +577,7 @@ final class ReportMcpTools {
      * resolve path guessSMData() uses for the stored smCity — so the options
      * can never diverge from the recipient the report would actually get.
      */
-    private static function destinationOptions(\app\Application $draft): array {
+    private static function destinationOptions(\app\Application $application): array {
         $summarize = function (string $key, bool $police): ?array {
             $unit = \SM::resolve($key, $police);
             if ($unit->unknown()) {
@@ -593,8 +591,8 @@ final class ReportMcpTools {
             ];
         };
         return [
-            'sm' => $summarize(\SM::guess($draft->address), false),
-            'police' => $summarize(\StopAgresji::guess($draft->address), true),
+            'sm' => $summarize(\SM::guess($application->address), false),
+            'police' => $summarize(\StopAgresji::guess($application->address), true),
         ];
     }
 
