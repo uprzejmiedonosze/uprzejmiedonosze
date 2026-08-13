@@ -162,6 +162,11 @@
     "email": "biuroposelskie.joannyborowiak@gmail.com",
     "profile": "https://mamprawowiedziec.pl/polityk/48964"
   },
+  "Borowiec Bożena": {
+    "party": "Lewica",
+    "official": "Bozena.Borowiec@sejm.pl",
+    "district": "32"
+  },
   "Bortniczuk Kamil": {
     "party": "PiS",
     "official": "Kamil.Bortniczuk@sejm.pl",
@@ -1449,13 +1454,6 @@
     "official": "Bożena.Lisowska@sejm.pl",
     "district": "6",
     "profile": "https://mamprawowiedziec.pl/polityk/56343"
-  },
-  "Litewka Łukasz": {
-    "party": "Lewica",
-    "official": "Lukasz.Litewka@sejm.pl",
-    "district": "32",
-    "email": "bp.lukaszlitewka@gmail.com",
-    "profile": "https://mamprawowiedziec.pl/polityk/73179"
   },
   "Łoboda Dorota": {
     "party": "KO",

@@ -233,7 +233,7 @@ $TARGETS = [
     "RPO" => [
         "title" => "Rzecznika Praw Obywatelskich",
         "forms" => ["email", "complaint"],
-        "formal" => "Szanowny Pan\ndr hab. Marcin Wiącek\nRzecznik Praw Obywatelskich\nal. Solidarności 77\n00-090 Warszawa",
+        "formal" => "Szanowna Pani\nSylwia Gregorczyk-Abram\nRzecznik Praw Obywatelskich\nal. Solidarności 77\n00-090 Warszawa",
         "form" => "https://formularze.brpo.gov.pl/formularz_wniosek_ogolny"
     ],
     "Członek_INF" => [
