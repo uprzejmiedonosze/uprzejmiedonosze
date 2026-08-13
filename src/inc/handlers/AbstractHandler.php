@@ -129,6 +129,7 @@ abstract class AbstractHandler {
         if($user) {
             $parameters['config']['userNumber'] = $user->getNumber();
             $parameters['general']['userName'] = $user->getFirstName();
+            $parameters['general']['hasApps'] = $user->hasApps();
             // force update cache if ?update GET param is set
             $parameters['general']['stats'] = \user\stats(!isset($params['update']), $user);
         }
