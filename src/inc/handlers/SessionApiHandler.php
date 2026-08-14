@@ -11,7 +11,7 @@ use Slim\Exception\HttpNotFoundException;
 
 class SessionApiHandler extends AbstractHandler {
 
-    private const MAX_IMAGE_UPLOAD_BYTES = 2 * 1_048_576;
+    private const MAX_IMAGE_UPLOAD_BYTES = 3 * 1_048_576;
 
     private function checkEditable(Request $request, Application $app) {
         if (!$app->isEditable())
