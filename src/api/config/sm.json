@@ -379,6 +379,7 @@
             "80-724 Gdańsk"
         ],
         "email": "sm@gdansk.gda.pl",
+        "api": "MailGunAlter",
         "hint": "Domyślnie nie wzywają na przesłuchanie. Możesz dostać wezwanie, gdy sprawca zaneguje popełnienie wykroczenia lub materiał dowodowy budzi wątpliwości."
     },
     "Poznań": {
