@@ -79,26 +79,16 @@
 
 <section class="dashboard-section">
     <div class="dashboard-eyebrow">Twoje odznaki</div>
-    {# flat-illustration badge SVGs (src/img/badges/) - full color, don't
-       tint with currentColor, unlike the dashboard's other line icons. #}
-    {% set badgeIcons = {
-        'green': '/img/badges/green.svg',
-        'zebra': '/img/badges/zebra.svg',
-        'bus': '/img/badges/bus.svg',
-        'bike': '/img/badges/bike.svg',
-        'patron': '/img/badges/patron.svg',
-        'writer': '/img/badges/writer.svg'
-    } %}
     <div class="badges-grid">
         {% for badgeId,badge in badges %}
         {% set former_patron = (badgeId == 'patron' and 'former_patron' in general.stats.badges) %}
         <dialog data-role="popup" id="popup-badge-{{ badgeId }}" class="badge-popup">
-            {% if badgeIcons[badgeId] is defined %}<img src="{{ badgeIcons[badgeId] }}" alt="" class="badge-popup-icon">{% endif %}
+            {% if badge.img is defined %}<img src="/{{ badge.img }}" alt="" class="badge-popup-icon">{% endif %}
             <p>{{ badge.desc|raw }}</p>
         </dialog>
         <a href="#popup-badge-{{ badgeId }}" data-rel="popup" class="badge-item">
             <div class="badge-circle {% if badgeId in general.stats.badges %}active{% endif %} {% if former_patron %}former_patron{% endif %}">
-                {% if badgeIcons[badgeId] is defined %}<img src="{{ badgeIcons[badgeId] }}" alt="">{% endif %}
+                {% if badge.img is defined %}<img src="/{{ badge.img }}" alt="">{% endif %}
             </div>
             <span>
             {% if former_patron %}
