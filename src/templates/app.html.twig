@@ -79,27 +79,26 @@
 
 <section class="dashboard-section">
     <div class="dashboard-eyebrow">Twoje odznaki</div>
-    {# inline line-icon SVGs from the Claude Design mockup (Dashboard.dc.html)
-       - badges.json's badge.img points at the old flat-illustration PNGs
-       (used elsewhere by the API/emails), so this replaces just the
-       dashboard's own rendering rather than the shared assets. #}
+    {# flat-illustration badge SVGs (src/img/badges/) - full color, don't
+       tint with currentColor, unlike the dashboard's other line icons. #}
     {% set badgeIcons = {
-        'green': '<svg viewBox="0 0 24 24" fill="none"><path d="M7 20V13Q7 7 5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 20V11Q12 5 12 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 20V13Q17 7 19 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
-        'zebra': '<svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="6.5" x2="20" y2="6.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="11.2" x2="20" y2="11.2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="15.9" x2="20" y2="15.9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="20.6" x2="20" y2="20.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
-        'bus': '<svg viewBox="0 0 24 24" fill="none"><rect x="5" y="6" width="14" height="10" rx="3" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="19" r="1.4" fill="currentColor"/><circle cx="15.5" cy="19" r="1.4" fill="currentColor"/></svg>',
-        'bike': '<svg viewBox="0 0 24 24" fill="none"><circle cx="6" cy="17" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="17" r="3" stroke="currentColor" stroke-width="2"/><path d="M6 17l4-7h3M10 10l3 7h5M13 10l5 7M9 6h2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        'patron': '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="5" stroke="currentColor" stroke-width="2"/><path d="M9 12.5L7 21l5-3 5 3-2-8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-        'writer': '<svg viewBox="0 0 24 24" fill="none"><path d="M5 19l1-4L15.5 5.5a1.5 1.5 0 012 2L8 17l-3 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+        'green': '/img/badges/green.svg',
+        'zebra': '/img/badges/zebra.svg',
+        'bus': '/img/badges/bus.svg',
+        'bike': '/img/badges/bike.svg',
+        'patron': '/img/badges/patron.svg',
+        'writer': '/img/badges/writer.svg'
     } %}
     <div class="badges-grid">
         {% for badgeId,badge in badges %}
         {% set former_patron = (badgeId == 'patron' and 'former_patron' in general.stats.badges) %}
-        <dialog data-role="popup" id="popup-badge-{{ badgeId }}">
+        <dialog data-role="popup" id="popup-badge-{{ badgeId }}" class="badge-popup">
+            {% if badgeIcons[badgeId] is defined %}<img src="{{ badgeIcons[badgeId] }}" alt="" class="badge-popup-icon">{% endif %}
             <p>{{ badge.desc|raw }}</p>
         </dialog>
         <a href="#popup-badge-{{ badgeId }}" data-rel="popup" class="badge-item">
             <div class="badge-circle {% if badgeId in general.stats.badges %}active{% endif %} {% if former_patron %}former_patron{% endif %}">
-                {{ (badgeIcons[badgeId] ?? '')|raw }}
+                {% if badgeIcons[badgeId] is defined %}<img src="{{ badgeIcons[badgeId] }}" alt="">{% endif %}
             </div>
             <span>
             {% if former_patron %}
