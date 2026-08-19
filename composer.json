@@ -26,7 +26,8 @@
         "phpoffice/phpword": "^1.4",
         "aws/aws-sdk-php": "^3.0",
         "mcp/sdk": "^0.7",
-        "league/oauth2-server": "^9.4"
+        "league/oauth2-server": "^9.4",
+        "lbuchs/webauthn": "^2.2"
     },
     "require-dev": {
         "sserbin/twig-linter": "^3.1",
