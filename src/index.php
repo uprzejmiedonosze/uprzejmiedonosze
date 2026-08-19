@@ -82,6 +82,28 @@ $app->post('/user/validate', SessionApiHandler::class . ':validateUser')
     ->add(new SecureApiMiddleware())
     ->add(new JsonBodyParser());
 
+// Passkey login: anonymous. Verifies a WebAuthn assertion and returns a
+// short-lived Firebase custom token; the browser exchanges it for an ID
+// token and posts that to /api/verify-token, which stays the only
+// session-creating endpoint (see AuthMiddleware/SessionApiHandler above).
+$app->group('/api/passkey', function (RouteCollectorProxy $group) {
+    $group->post('/login-options', PasskeyHandler::class . ':loginOptions');
+    $group->post('/login-verify', PasskeyHandler::class . ':loginVerify');
+})  ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
+
+// Passkey management: session required. Passkeys are only an additional
+// method for existing accounts — there is no account creation here.
+$app->group('/api/passkey', function (RouteCollectorProxy $group) {
+    $group->post('/register-options', PasskeyHandler::class . ':registerOptions');
+    $group->post('/register-verify', PasskeyHandler::class . ':registerVerify');
+    $group->get('/list', PasskeyHandler::class . ':listPasskeys');
+    $group->delete('/{credentialId}', PasskeyHandler::class . ':remove');
+    $group->post('/prompt-dismiss', PasskeyHandler::class . ':dismissPrompt');
+})  ->add(new LoggedInMiddleware())
+    ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
+
 $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     $group->post('/app/{appId}/image', SessionApiHandler::class . ':image');
     $group->delete('/app/{appId}/image/{image}', SessionApiHandler::class . ':deleteImage');

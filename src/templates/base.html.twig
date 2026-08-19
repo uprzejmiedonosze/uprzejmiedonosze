@@ -127,6 +127,7 @@
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {{ redesignClass ?? '' }} {% if dialog %}dialog{% endif %}">
         <div class="mpr-layout{% if hasSidebar ?? false %} mpr-layout--sidebar{% elseif focusLayout ?? false %} mpr-layout--focus{% endif %}">
             <div class="mpr-article">
+        {% if general.suggestPasskey ?? false %}{% include('_passkey-prompt.html.twig') %}{% endif %}
         {% block main %}{% endblock %}
             </div>
         {% block sidebar %}

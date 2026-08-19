@@ -16,7 +16,7 @@ class HtmlMiddleware implements MiddlewareInterface {
      */
     public static function getDefaultParameters(bool $isDialog=false): array {
         $isLoggedIn = SessionMiddleware::isLoggedIn();
-        
+
         $parameters = Array();
         $parameters['config'] = [
             'menu' => ''
@@ -31,6 +31,7 @@ class HtmlMiddleware implements MiddlewareInterface {
             'isProd' => isProd(),
             'isStaging' => isStaging(),
             'matomoSiteId' => MATOMO_SITE_ID,
+            'suggestPasskey' => self::suggestPasskey($isLoggedIn),
         ];
 
         global $STATUSES;
@@ -56,6 +57,24 @@ class HtmlMiddleware implements MiddlewareInterface {
 
         $parameters['email_status'] = EMAIL_STATUS;
         return $parameters;
+    }
+
+    /**
+     * Whether to show the "add a passkey" prompt: logged in, account
+     * registered, no passkey yet, and not previously dismissed. Actual
+     * browser support is checked client-side (server can't know it).
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private static function suggestPasskey(bool $isLoggedIn): bool {
+        if (!$isLoggedIn) return false;
+        try {
+            $user = \user\current();
+            if (!$user->isRegistered() || ($user->data->passkeyPromptDismissed ?? false)) return false;
+            return \passkey\countForEmail($_SESSION['user_email']) === 0;
+        } catch (\Exception $e) {
+            logger('suggestPasskey failed: ' . $e->getMessage(), true);
+            return false;
+        }
     }
 
     public function process(Request $request, RequestHandler $handler): Response {

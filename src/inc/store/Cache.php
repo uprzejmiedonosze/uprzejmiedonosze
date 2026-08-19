@@ -24,6 +24,8 @@ namespace cache {
         case Semaphore;
 
         case Patronite;
+
+        case Passkey;
     }
 
     function key(Type $type, ?string $key): string {
@@ -48,6 +50,24 @@ namespace cache {
     function delete(Type $type, ?string $key): void {
         global $cache;
         $cache->delete(key($type, $key));
+    }
+
+    function increment(Type $type, ?string $key, int $value = 1): int|false {
+        global $cache;
+        return $cache->increment(key($type, $key), $value);
+    }
+}
+
+namespace cache\throttle {
+    /**
+     * Simple fixed-window counter, e.g. to rate limit unauthenticated
+     * endpoints (there is no application-level rate limiting elsewhere).
+     * Returns true while the caller is still within budget.
+     */
+    function attempt(\cache\Type $type, string $bucket, int $max, int $windowSeconds): bool {
+        $added = \cache\add($type, $bucket, 0, 0, $windowSeconds);
+        $count = $added ? 1 : \cache\increment($type, $bucket);
+        return $count !== false && $count <= $max;
     }
 }
 

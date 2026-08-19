@@ -10,3 +10,37 @@
 .firebaseui-info-bar {
     z-index: 4;
 }
+
+#passkey-login {
+    text-align: center;
+
+    #passkey-login-button {
+        @extend .button;
+        max-width: 220px;
+    }
+
+    .passkey-hint {
+        font-size: .85em;
+        opacity: .7;
+        margin: .5em 0 0;
+    }
+}
+
+.passkey-separator {
+    align-items: center;
+    display: flex;
+    margin: 1.2em 0;
+    text-align: center;
+
+    &::before, &::after {
+        border-top: 1px solid rgba(0, 0, 0, .15);
+        content: '';
+        flex: 1;
+    }
+
+    span {
+        color: rgba(0, 0, 0, .5);
+        font-size: .85em;
+        padding: 0 .8em;
+    }
+}

@@ -18,7 +18,8 @@ class UserHandler extends AbstractHandler {
             // a edycja istniejącego konta (link „Edycja konta” niesie ?update)
             // w normalnym trybie „app”.
             'update' => isset($params['update']),
-            'user' => $user
+            'user' => $user,
+            'passkeys' => $user->isRegistered() ? \passkey\forEmail($user->getEmail()) : []
         ]);
     }
 

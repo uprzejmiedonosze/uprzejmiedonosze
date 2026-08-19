@@ -24,6 +24,13 @@
 
 <h4 id="login-hint">{% if config.logout %}(wylogowuję){% endif %}{{ config.error ?? '' }}</h4>
 <div class="ui-body ui-body-a">
+    {% if not config.logout %}
+    <div id="passkey-login" hidden>
+        <button type="button" id="passkey-login-button" class="button">Zaloguj passkeyem</button>
+        <p class="passkey-hint">Odblokuj odciskiem palca, twarzą lub kodem PIN.</p>
+    </div>
+    <div class="passkey-separator"><span>albo</span></div>
+    {% endif %}
     <div id="firebaseui-auth-container"></div>
 </div>
 
