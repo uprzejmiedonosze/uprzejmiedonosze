@@ -74,23 +74,27 @@
 </form>
 
 {% if user.isRegistered %}
-<section id="passkeys-section">
-    <h3>Passkeye</h3>
+{# Same .connected-app(s) classes as /mcp's "Połączone aplikacje" — same
+   kind of list (per-item card + a plain .button destructive action), so it
+   stays visually aligned with that page (and picks up any future styling
+   of those classes automatically). #}
+<section id="passkeys-section" class="connected-apps">
+    <h2>Passkeye</h2>
     <p>Zaloguj się odciskiem palca, twarzą lub kodem PIN — bez hasła i bez sprawdzania poczty.</p>
 
-    <ul id="passkeys-list">
+    <div id="passkeys-list">
         {% for passkey in passkeys %}
-        <li data-id="{{ passkey.credential_id }}">
-            <span class="passkey-label">{{ passkey.label }}</span>
-            <span class="passkey-meta">dodano {{ passkey.created_at|date('d.m.Y') }}{% if passkey.last_used_at %}, ostatnio użyto {{ passkey.last_used_at|date('d.m.Y') }}{% endif %}</span>
-            <button type="button" class="passkey-remove" data-id="{{ passkey.credential_id }}">Usuń</button>
-        </li>
+        <div class="connected-app" data-id="{{ passkey.credential_id }}">
+            <h3>{{ passkey.label }}</h3>
+            <p class="muted">dodano {{ passkey.created_at|date('d.m.Y') }}{% if passkey.last_used_at %}, ostatnio użyto {{ passkey.last_used_at|date('d.m.Y') }}{% endif %}</p>
+            <button type="button" class="button small passkey-remove" data-id="{{ passkey.credential_id }}">Usuń</button>
+        </div>
         {% else %}
-        <li class="passkeys-empty">Nie masz jeszcze żadnego passkeya.</li>
+        <p class="passkeys-empty muted">Nie masz jeszcze żadnego passkeya.</p>
         {% endfor %}
-    </ul>
+    </div>
 
-    <button type="button" id="passkey-add" hidden>Dodaj passkey</button>
+    <button type="button" id="passkey-add" class="button" hidden>Dodaj passkey</button>
 </section>
 {% endif %}
 
