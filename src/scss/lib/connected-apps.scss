@@ -1,0 +1,38 @@
+// Shared by /mcp's "Połączone aplikacje" list and /app/account's passkey
+// list — both are a real <ul>/<li>, with each item's own children laid out
+// inline (name, meta text, action) on a single row.
+.connected-apps-list {
+    list-style: disc;
+    margin: 1em 0;
+    padding-left: 1.2em;
+
+    li.connected-app {
+        margin-bottom: .6em;
+
+        > *:not(.connected-app-scopes) {
+            display: inline-block;
+            padding: 0 1em;
+            vertical-align: middle;
+        }
+
+        .connected-app-name {
+            font-weight: 700;
+        }
+
+        .connected-app-meta {
+            color: rgba(0, 0, 0, .55);
+            font-size: .9em;
+        }
+
+        .connected-app-scopes {
+            display: block;
+            font-size: .85em;
+            margin: .3em 0 0 1.2em;
+        }
+
+        &.passkeys-empty {
+            list-style: none;
+            opacity: .7;
+        }
+    }
+}
