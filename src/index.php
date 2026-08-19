@@ -99,7 +99,6 @@ $app->group('/api/passkey', function (RouteCollectorProxy $group) {
     $group->post('/register-verify', PasskeyHandler::class . ':registerVerify');
     $group->get('/list', PasskeyHandler::class . ':listPasskeys');
     $group->delete('/{credentialId}', PasskeyHandler::class . ':remove');
-    $group->post('/prompt-dismiss', PasskeyHandler::class . ':dismissPrompt');
 })  ->add(new LoggedInMiddleware())
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());

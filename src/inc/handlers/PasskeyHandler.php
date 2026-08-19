@@ -109,14 +109,6 @@ class PasskeyHandler extends AbstractHandler {
         return $this->renderJson($response, ['status' => 'OK']);
     }
 
-    public function dismissPrompt(Request $request, Response $response): Response {
-        $user = \user\current();
-        $user->data->passkeyPromptDismissed = date(DT_FORMAT);
-        \user\save($user);
-        \telemetry\log('passkey_prompt_dismissed');
-        return $this->renderJson($response, ['status' => 'OK']);
-    }
-
     // ---- Login (anonymous) -------------------------------------------------
 
     public function loginOptions(Request $request, Response $response): Response {

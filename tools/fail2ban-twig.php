@@ -19,7 +19,6 @@ echo $twig->render('fail2ban.html.twig', [
         'matomoSiteId' => MATOMO_SITE_ID,
         'stats' => null,
         'userName' => null,
-        'suggestPasskey' => false,
     ],
     'config' => [
         'menu' => null
