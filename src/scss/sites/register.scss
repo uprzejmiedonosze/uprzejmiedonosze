@@ -4,45 +4,9 @@
   }
 }
 
+// Deliberately no card/list styling here — .connected-app(s) is the same
+// (currently bare) class /mcp's "Połączone aplikacje" uses, so this section
+// stays visually aligned with that page as-is.
 #passkeys-section {
   margin-top: 2em;
-
-  #passkeys-list {
-    list-style: none;
-    margin: 0 0 1em;
-    padding: 0;
-
-    li {
-      align-items: center;
-      border-bottom: 1px solid rgba(0, 0, 0, .1);
-      display: flex;
-      flex-wrap: wrap;
-      gap: .3em 1em;
-      padding: .7em 0;
-
-      &.passkeys-empty {
-        border-bottom: none;
-        opacity: .7;
-      }
-    }
-
-    .passkey-label {
-      font-weight: 700;
-    }
-
-    .passkey-meta {
-      color: rgba(0, 0, 0, .55);
-      flex: 1;
-      font-size: .85em;
-    }
-
-    .passkey-remove {
-      background: none;
-      border: none;
-      color: #b3261e;
-      cursor: pointer;
-      font-size: .9em;
-      text-decoration: underline;
-    }
-  }
 }

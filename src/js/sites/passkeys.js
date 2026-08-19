@@ -7,16 +7,17 @@ function renderList(section, passkeys) {
   if (!list) return
 
   if (!passkeys.length) {
-    list.innerHTML = '<li class="passkeys-empty">Nie masz jeszcze żadnego passkeya.</li>'
+    list.innerHTML = '<p class="passkeys-empty muted">Nie masz jeszcze żadnego passkeya.</p>'
     return
   }
 
+  // Same .connected-app markup as /mcp's "Połączone aplikacje" list.
   list.innerHTML = passkeys.map(pk => `
-    <li data-id="${pk.credential_id}">
-      <span class="passkey-label">${pk.label}</span>
-      <span class="passkey-meta">dodano ${formatDate(pk.created_at)}${pk.last_used_at ? `, ostatnio użyto ${formatDate(pk.last_used_at)}` : ''}</span>
-      <button type="button" class="passkey-remove" data-id="${pk.credential_id}">Usuń</button>
-    </li>
+    <div class="connected-app" data-id="${pk.credential_id}">
+      <h3>${pk.label}</h3>
+      <p class="muted">dodano ${formatDate(pk.created_at)}${pk.last_used_at ? `, ostatnio użyto ${formatDate(pk.last_used_at)}` : ''}</p>
+      <button type="button" class="button small passkey-remove" data-id="${pk.credential_id}">Usuń</button>
+    </div>
   `).join('')
 }
 
@@ -29,11 +30,11 @@ function formatDate(iso) {
 async function removePasskey(section, credentialId) {
   if (!window.confirm('Usunąć ten passkey?')) return
   await new Api(`/api/passkey/${encodeURIComponent(credentialId)}`).delete()
-  const li = section.querySelector(`li[data-id="${credentialId}"]`)
-  li?.remove()
+  const item = section.querySelector(`.connected-app[data-id="${credentialId}"]`)
+  item?.remove()
   const list = section.querySelector('#passkeys-list')
-  if (list && !list.querySelector('li[data-id]')) {
-    list.innerHTML = '<li class="passkeys-empty">Nie masz jeszcze żadnego passkeya.</li>'
+  if (list && !list.querySelector('.connected-app[data-id]')) {
+    list.innerHTML = '<p class="passkeys-empty muted">Nie masz jeszcze żadnego passkeya.</p>'
   }
   message('Passkey usunięty.')
 }
