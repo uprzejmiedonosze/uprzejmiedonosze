@@ -33,10 +33,11 @@
     <input type="text" id="passkey-conditional-input" name="username" autocomplete="username webauthn"
            tabindex="-1" aria-hidden="true" class="passkey-conditional-input" />
     <div id="passkey-login" hidden>
-        <button type="button" id="passkey-login-button" class="button">Zaloguj passkeyem</button>
-        <p class="passkey-hint">Odblokuj odciskiem palca, twarzą lub kodem PIN.</p>
+        <button type="button" id="passkey-login-button" class="button">
+            <img src="/img/icons/fingerprint-white.svg" alt="" width="22" height="22">
+            <span>Zaloguj urządzeniem</span>
+        </button>
     </div>
-    <div class="passkey-separator"><span>albo</span></div>
     {% endif %}
     <div id="firebaseui-auth-container"></div>
 </div>

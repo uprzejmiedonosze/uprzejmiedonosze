@@ -28,33 +28,26 @@
 #passkey-login {
     text-align: center;
 
+    // Matches firebaseui's own idp buttons: same max-width/min-height/
+    // padding/icon size/shadow, icon+label laid out the same way, so the
+    // three buttons read as equivalent options.
     #passkey-login-button {
         @extend .button;
-        max-width: 220px;
-    }
+        align-items: center;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+        display: flex;
+        font-size: 14px;
+        font-weight: 500;
+        gap: 16px;
+        width: 220px;
+        min-height: 40px;
+        padding: 8px 16px;
+        text-align: left;
 
-    .passkey-hint {
-        font-size: .85em;
-        opacity: .7;
-        margin: .5em 0 0;
-    }
-}
-
-.passkey-separator {
-    align-items: center;
-    display: flex;
-    margin: 1.2em 0;
-    text-align: center;
-
-    &::before, &::after {
-        border-top: 1px solid rgba(0, 0, 0, .15);
-        content: '';
-        flex: 1;
-    }
-
-    span {
-        color: rgba(0, 0, 0, .5);
-        font-size: .85em;
-        padding: 0 .8em;
+        img {
+            flex: none;
+            height: 22px;
+            width: 22px;
+        }
     }
 }
