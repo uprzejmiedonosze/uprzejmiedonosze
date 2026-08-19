@@ -7,17 +7,17 @@ function renderList(section, passkeys) {
   if (!list) return
 
   if (!passkeys.length) {
-    list.innerHTML = '<p class="passkeys-empty muted">Nie masz jeszcze żadnego passkeya.</p>'
+    list.innerHTML = '<li class="passkeys-empty muted">Nie masz jeszcze żadnego passkeya.</li>'
     return
   }
 
   // Same .connected-app markup as /mcp's "Połączone aplikacje" list.
   list.innerHTML = passkeys.map(pk => `
-    <div class="connected-app" data-id="${pk.credential_id}">
-      <h3>${pk.label}</h3>
-      <p class="muted">dodano ${formatDate(pk.created_at)}${pk.last_used_at ? `, ostatnio użyto ${formatDate(pk.last_used_at)}` : ''}</p>
+    <li class="connected-app" data-id="${pk.credential_id}">
+      <span class="connected-app-name">${pk.label}</span>
+      <span class="connected-app-meta">dodano ${formatDate(pk.created_at)}${pk.last_used_at ? `, ostatnio użyto ${formatDate(pk.last_used_at)}` : ''}</span>
       <button type="button" class="button small passkey-remove" data-id="${pk.credential_id}">Usuń</button>
-    </div>
+    </li>
   `).join('')
 }
 
@@ -34,7 +34,7 @@ async function removePasskey(section, credentialId) {
   item?.remove()
   const list = section.querySelector('#passkeys-list')
   if (list && !list.querySelector('.connected-app[data-id]')) {
-    list.innerHTML = '<p class="passkeys-empty muted">Nie masz jeszcze żadnego passkeya.</p>'
+    list.innerHTML = '<li class="passkeys-empty muted">Nie masz jeszcze żadnego passkeya.</li>'
   }
   message('Passkey usunięty.')
 }
