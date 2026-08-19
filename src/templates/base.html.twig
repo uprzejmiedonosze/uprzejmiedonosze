@@ -114,7 +114,12 @@
         </script>
 
 
-        {% block headIncludes %}{% endblock %}
+        {% block headIncludes %}
+        {% if not general.isLoggedIn and layout != 'auth' and not dialog %}
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <script src="/js/google-one-tap.js?{{ JS_HASH }}"></script>
+        {% endif %}
+        {% endblock %}
     </head>
     <body class="index {{ mainClass ?? '' }} {{ redesignClass ?? '' }}{% if layout == 'app' or (appShell ?? false) %} app-shell{% endif %}">
         <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
