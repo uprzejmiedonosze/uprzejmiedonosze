@@ -170,5 +170,12 @@ function initPasskeyLogin(signInSuccessUrl) {
                 if (isCancelled(error)) return
                 setError(error)
             })
+
+        // firebaseui doesn't render an email input until the user picks
+        // "email" as a sign-in method — too late for the browser to show a
+        // conditional-UI passkey suggestion on page load. Focusing this
+        // dedicated (visually hidden) proxy input is what makes the native
+        // suggestion pop up automatically, without any click.
+        document.getElementById('passkey-conditional-input')?.focus()
     })
 }

@@ -25,6 +25,13 @@
 <h4 id="login-hint">{% if config.logout %}(wylogowuję){% endif %}{{ config.error ?? '' }}</h4>
 <div class="ui-body ui-body-a">
     {% if not config.logout %}
+    {# Not display:none/hidden — must stay focusable so the browser can attach
+       its native passkey-autofill suggestion to it. firebaseui doesn't render
+       its own email input until the user picks "email" as a method, which is
+       too late for conditional UI to trigger on page load; this proxy input
+       exists purely so there's something to focus for that. #}
+    <input type="text" id="passkey-conditional-input" name="username" autocomplete="username webauthn"
+           tabindex="-1" aria-hidden="true" class="passkey-conditional-input" />
     <div id="passkey-login" hidden>
         <button type="button" id="passkey-login-button" class="button">Zaloguj passkeyem</button>
         <p class="passkey-hint">Odblokuj odciskiem palca, twarzą lub kodem PIN.</p>

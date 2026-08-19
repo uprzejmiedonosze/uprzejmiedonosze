@@ -11,6 +11,20 @@
     z-index: 4;
 }
 
+// Must stay focusable (no display:none / visibility:hidden) — it's the
+// anchor the browser attaches its native passkey-autofill dropdown to.
+.passkey-conditional-input {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
 #passkey-login {
     text-align: center;
 
