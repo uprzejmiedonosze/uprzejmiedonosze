@@ -78,8 +78,9 @@
    kind of list (per-item card + a plain .button destructive action), so it
    stays visually aligned with that page (and picks up any future styling
    of those classes automatically). #}
+<hr>
 <section id="passkeys-section" class="connected-apps">
-    <h2>Passkeye</h2>
+    <h3>Passkeye</h3>
     <p>Zaloguj się odciskiem palca, twarzą lub kodem PIN — bez hasła i bez sprawdzania poczty.</p>
 
     <ul id="passkeys-list" class="connected-apps-list">
@@ -102,7 +103,10 @@
    mieszka tu. Na desktopie tę akcję niesie sidebar _app-menu — stąd tylko mobile. #}
 {% if user.isRegistered %}
 <p class="app-mobile-only app-account-logout">
+   <hr>
     <a href="/logout.html">Wyloguj się</a>
 </p>
 {% endif %}
+
+
 {% endblock %}
