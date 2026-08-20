@@ -1,0 +1,14 @@
+.mcp-url-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 1em;
+    background: white;
+    border-radius: 0.75rem;
+    padding: 1em 2em;
+
+    code {
+        flex: 1 1 auto;
+        word-break: break-all;
+    }
+}

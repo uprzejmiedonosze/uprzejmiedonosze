@@ -22,8 +22,26 @@
 
 {% block main %}
 <div class="ui-body ui-body-a connected-apps">
+    <h2>Połącz asystenta AI przez MCP</h2>
+    <p>Serwis udostępnia serwer <a href="https://modelcontextprotocol.io" rel="external" target="_blank">Model Context Protocol</a>
+       pod adresem <code>{{ BASE_URL }}mcp</code> — dzięki niemu asystent AI (np. Claude, ChatGPT) może
+       w Twoim imieniu przeglądać Twoje zgłoszenia i zapisywać odpowiedzi straży miejskiej/policji.</p>
+    <p>Wystarczy podać klientowi sam adres:</p>
+    <div class="mcp-url-box">
+        <code id="mcpUrl">{{ BASE_URL }}mcp</code>
+        <a id="mcpCopyBtn" class="button light small" onclick="copyMcpUrl()">Skopiuj</a>
+    </div>
+    <ol>
+        <li>Klient sam odnajdzie sposób logowania (OAuth) i się zarejestruje.</li>
+        <li>Zalogujesz się tak jak zwykle w serwisie — to samo konto, ten sam login przez Firebase.</li>
+        <li>Zatwierdzisz dostęp na ekranie zgody — od tej chwili aplikacja pojawi się na liście połączonych aplikacji poniżej.</li>
+    </ol>
+    <p>Sprawdzone m.in. z: <strong>Claude</strong>, <strong>ChatGPT</strong> oraz
+       <a href="https://github.com/modelcontextprotocol/inspector" rel="external" target="_blank">MCP Inspector</a>
+       (do testów deweloperskich).</p>
+
     {% if connections is not empty %}
-        <h2>Połączone aplikacje</h2>
+        <h3>Połączone aplikacje</h3>
         <p>Aplikacje, którym zezwolono na dostęp do Twojego konta przez MCP:</p>
         {% for conn in connections %}
             <div class="connected-app">
@@ -43,25 +61,23 @@
         {% endfor %}
     {% endif %}
 
-    <h2>Połącz asystenta AI przez MCP</h2>
-    <p>Serwis udostępnia serwer <a href="https://modelcontextprotocol.io" rel="external" target="_blank">Model Context Protocol</a>
-       pod adresem <code>{{ BASE_URL }}mcp</code> — dzięki niemu asystent AI (np. Claude, ChatGPT) może
-       w Twoim imieniu przeglądać Twoje zgłoszenia i zapisywać odpowiedzi straży miejskiej/policji.</p>
-    <p>Wystarczy podać klientowi sam adres <code>{{ BASE_URL }}mcp</code>:</p>
-    <ol>
-        <li>Klient sam odnajdzie sposób logowania (OAuth) i się zarejestruje.</li>
-        <li>Zalogujesz się tak jak zwykle w serwisie — to samo konto, ten sam login przez Firebase.</li>
-        <li>Zatwierdzisz dostęp na ekranie zgody — od tej chwili aplikacja pojawi się na liście połączonych aplikacji powyżej.</li>
-    </ol>
-    <p>Sprawdzone m.in. z: <strong>Claude</strong>, <strong>ChatGPT</strong> oraz
-       <a href="https://github.com/modelcontextprotocol/inspector" rel="external" target="_blank">MCP Inspector</a>
-       (do testów deweloperskich).</p>
-
     <h3>Dostępne narzędzia</h3>
     <ul>
         <li><code>list_reports</code> — lista Twoich zgłoszeń</li>
         <li><code>get_report</code> — szczegóły jednego zgłoszenia</li>
         <li><code>update_report_status</code> — zapisanie odpowiedzi straży miejskiej/policji</li>
+        <li><code>set_report_notes</code> — prywatna notatka i numer sprawy przy zgłoszeniu</li>
+        <li><code>list_categories</code> — lista rodzajów wykroczeń</li>
+        <li><code>create_report_draft</code> — utworzenie szkicu nowego zgłoszenia</li>
     </ul>
 </div>
+
+<script>
+function copyMcpUrl() {
+    var el = document.getElementById('mcpUrl')
+    navigator.clipboard.writeText(el.textContent.trim())
+    var btn = document.getElementById('mcpCopyBtn')
+    if (btn) btn.textContent = 'Skopiowano'
+}
+</script>
 {% endblock %}
