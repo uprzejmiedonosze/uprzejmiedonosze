@@ -102,8 +102,8 @@
 {# Na mobile /app nie ma już burgera (tabbar zastępuje nawigację), więc wylogowanie
    mieszka tu. Na desktopie tę akcję niesie sidebar _app-menu — stąd tylko mobile. #}
 {% if user.isRegistered %}
+<hr class="app-mobile-only">
 <p class="app-mobile-only app-account-logout">
-   <hr>
     <a href="/logout.html">Wyloguj się</a>
 </p>
 {% endif %}
