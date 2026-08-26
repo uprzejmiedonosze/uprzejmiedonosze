@@ -6,6 +6,12 @@
 // it registers a shutdown handler and POSIX signal handlers meant for a long-running CLI
 // job, and pulls in WebhooksHandler.php for unrelated tooling.
 
+// \oauth\revokeAllForEmail() below isn't loaded by the general bootstrap (src/inc/oauth/
+// is only pulled in by the specific handlers/endpoints that need the League OAuth server
+// classes) — this file uses it unconditionally, so it has to require it itself rather than
+// assume a caller (CLI tools, this handler) already did.
+require_once(__DIR__ . '/oauth/Repositories.php');
+
 use app\Application;
 use user\User;
 
