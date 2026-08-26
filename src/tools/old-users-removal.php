@@ -4,11 +4,7 @@ require(__DIR__ . '/../../vendor/autoload.php');
 require(__DIR__ . '/../inc/include.php');
 require(__DIR__ . '/../inc/store/Admin.php');
 require_once(__DIR__ . '/common.php');
-
-use Symfony\Component\Mailer\Transport;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Mime\Address;
+require_once(__DIR__ . '/../inc/UserRemoval.php');
 
 $dryRun = in_array('--dry-run', $argv ?? []);
 
@@ -67,11 +63,9 @@ Jeśli nie podejmiesz żadnej akcji, Twoje konto zostanie trwale usunięte — w
 Jeśli masz pytania dotyczące bezpieczeństwa swoich danych, zapraszam do zapoznania się z naszą polityką prywatności:
 https://uprzejmiedonosze.net/bezpieczenstwo.html
 
-Pozdrawiam,
-Szymon Nieradka
-uprzejmiedonosze.net";
+" . SIGNATURE;
 
-    __sendEmail($user, $subject, $text, $dryRun);
+    sendRemovalEmail($user, $subject, $text, $dryRun, "removal-warning-{$user->number}");
     if (!$dryRun) {
         $user->removalWarningSent = date(DT_FORMAT);
         \user\save($user, dontDecode:true);
@@ -92,11 +86,9 @@ Po usunięciu konta:
 1. Twoje dane osobowe, zgłoszenia i zdjęcia zostaną trwale usunięte z naszych serwerów.
 2. Ewentualna ponowna rejestracja utworzy nowe konto z czystą historią.
 
-Pozdrawiam,
-Szymon Nieradka
-uprzejmiedonosze.net";
+" . SIGNATURE;
 
-    __sendEmail($user, $subject, $text, $dryRun);
+    sendRemovalEmail($user, $subject, $text, $dryRun, "removal-warning-{$user->number}");
     if (!$dryRun) {
         $user->removal2ndWarningSent = date(DT_FORMAT);
         \user\save($user, dontDecode:true);
@@ -107,45 +99,6 @@ function __remove(\user\User $user, bool $dryRun) {
     removeUser($user->getEmail(), dryRun:$dryRun);
 
     if (!$dryRun) {
-        $subject = "Twoje konto w Uprzejmie Donoszę zostało usunięte";
-        $text = "Cześć,
-
-Zgodnie z wcześniejszymi informacjami, Twoje konto w serwisie Uprzejmie Donoszę zostało usunięte z powodu długiej nieaktywności.
-
-Co to oznacza:
-1. Twoje dane osobowe, zgłoszenia i zdjęcia zostały usunięte z naszych serwerów.
-2. Kompletne usunięcie danych z backupów i logów nastąpi w ciągu 14 dni (okres retencji).
-3. Jeśli chcesz, możesz założyć nowe konto logując się ponownie na uprzejmiedonosze.net.
-
-Pozdrawiam,
-Szymon Nieradka
-uprzejmiedonosze.net";
-
-        __sendEmail($user, $subject, $text, $dryRun);
+        farewellEmail($user, selfService: false, dryRun: $dryRun);
     }
-}
-
-function __sendEmail(\user\User $user, $subject, $text, bool $dryRun) {
-
-    $message = (new Email());
-    $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
-    $message->to($user->getEmail());
-
-    $message->subject($subject);
-    $message->text($text);
-
-    $message->getHeaders()->addTextHeader("v:isprod", isProd() ? 1 : 0);
-    $message->getHeaders()->addTextHeader("v:environment", environment());
-    $message->getHeaders()->addTextHeader("o:testmode", isDev());
-    $message->getHeaders()->addTextHeader("References", "removal-warning-{$user->number}@dka.email");
-    $message->getHeaders()->addTextHeader("X-Entity-Ref-ID", "removal-warning-{$user->number}");
-    $message->getHeaders()->addTextHeader('content-transfer-encoding', 'quoted-printable');
-
-    if ($dryRun) {
-        print("\n  [email] To: {$user->getEmail()} | Subject: $subject\n");
-        return;
-    }
-
-    $mailer = new Mailer(Transport::fromDsn(MAILER_DSN));
-    $mailer->send($message);
 }

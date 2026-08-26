@@ -126,6 +126,29 @@ function revokeConnection(string $clientId, string $userId): void {
     }
 }
 
+/**
+ * Removes every OAuth trace of a user by email — the uid -> email map plus
+ * all access/refresh tokens issued under it. Used on account deletion (both
+ * the retention cron and self-service), where the account itself is going
+ * away rather than just one client connection.
+ */
+function revokeAllForEmail(string $email): void {
+    $stmt = \store\prepare('SELECT user_id FROM oauth_users WHERE user_email = :e');
+    $stmt->execute([':e' => $email]);
+    $userIds = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+    $stmt = \store\prepare('DELETE FROM oauth_access_tokens WHERE user_email = :e');
+    $stmt->execute([':e' => $email]);
+
+    foreach ($userIds as $userId) {
+        $stmt = \store\prepare('DELETE FROM oauth_refresh_tokens WHERE user_id = :u');
+        $stmt->execute([':u' => $userId]);
+    }
+
+    $stmt = \store\prepare('DELETE FROM oauth_users WHERE user_email = :e');
+    $stmt->execute([':e' => $email]);
+}
+
 class ClientRepository implements ClientRepositoryInterface {
     public function getClientEntity(string $clientIdentifier): ?ClientEntityInterface {
         $stmt = \store\prepare(

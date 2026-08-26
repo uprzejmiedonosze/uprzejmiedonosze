@@ -97,16 +97,42 @@
 
     <button type="button" id="passkey-add" class="button" hidden>Dodaj passkey</button>
 </section>
-{% endif %}
 
 {# Na mobile /app nie ma już burgera (tabbar zastępuje nawigację), więc wylogowanie
    mieszka tu. Na desktopie tę akcję niesie sidebar _app-menu — stąd tylko mobile. #}
-{% if user.isRegistered %}
 <hr class="app-mobile-only">
 <p class="app-mobile-only app-account-logout">
     <a href="/logout.html">Wyloguj się</a>
 </p>
-{% endif %}
 
+<hr>
+<section id="danger-zone">
+    <h3>Strefa niebezpieczna</h3>
+    <p>Skasowanie konta jest nieodwracalne.</p>
+    {% if deleteError %}
+    <p class="error">Wpisany adres e-mail nie zgadza się z adresem Twojego konta. Spróbuj ponownie.</p>
+    {% endif %}
+    <p class="app-account-delete">
+        <a data-rel="popup" href="#delete-account-popup">Skasuj konto</a>
+    </p>
+</section>
+
+<dialog data-role="popup" id="delete-account-popup">
+    <form method="post" action="/app/delete-account" id="delete-account-form">
+        <input type="hidden" name="csrf" value="{{ deleteCsrf }}">
+        <h3>Skasuj konto</h3>
+        <p>Co to oznacza:</p>
+        <ol>
+            <li>Twoje dane osobowe, zgłoszenia i zdjęcia zostaną usunięte z naszych serwerów.</li>
+            <li>Kompletne usunięcie danych z backupów i logów nastąpi w ciągu 14 dni (okres retencji).</li>
+            <li>Jeśli chcesz, będziesz mógł/mogła założyć nowe konto, logując się ponownie na uprzejmiedonosze.net.</li>
+        </ol>
+        <label for="delete-account-email">Aby potwierdzić, wpisz swój adres e-mail: <b>{{ user.data.email }}</b></label>
+        <input type="email" id="delete-account-email" name="email" autocomplete="off"
+               data-expected="{{ user.data.email }}">
+        <button type="submit" id="delete-account-submit" class="button" disabled>Skasuj konto</button>
+    </form>
+</dialog>
+{% endif %}
 
 {% endblock %}

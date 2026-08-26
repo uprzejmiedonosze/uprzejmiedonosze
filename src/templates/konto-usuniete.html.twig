@@ -1,0 +1,17 @@
+{% set layout = 'auth' %}
+{% set title = 'Konto usunięte' %}
+
+{% extends "base.html.twig" %}
+
+{% block main %}
+<div class="ui-body ui-body-a">
+    <h2>Twoje konto zostało usunięte</h2>
+    <p>Twoje dane osobowe, zgłoszenia i zdjęcia zostały usunięte z naszych serwerów.
+        Kompletne usunięcie danych z backupów i logów nastąpi w ciągu 14 dni.
+        Wysłaliśmy potwierdzenie na Twój adres e-mail.</p>
+    <p>Jeśli zmienisz zdanie, możesz w każdej chwili założyć nowe konto, logując
+        się ponownie na uprzejmiedonosze.net.</p>
+
+    <a href="/" class="button cta last">Strona główna</a>
+</div>
+{% endblock %}

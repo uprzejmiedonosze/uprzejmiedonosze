@@ -193,6 +193,7 @@ $app->group('', function (RouteCollectorProxy $group) { // user register
     $group->post('/register-ok.html', UserHandler::class . ':finish');
     $group->get('/app/register-ok', function () { return AbstractHandler::redirect('/app/account'); });
     $group->get('/register-ok.html', function () { return AbstractHandler::redirect('/app/account'); });
+    $group->post('/app/delete-account', UserHandler::class . ':deleteAccount');
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware());
 
@@ -235,6 +236,7 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/login.html', StaticPagesHandler::class . ':login');
     $group->get('/login-ok.html', StaticPagesHandler::class . ':loginOK');
     $group->get('/logout.html', StaticPagesHandler::class . ':logout');
+    $group->get('/konto-usuniete.html', StaticPagesHandler::class . ':accountDeleted');
 
     $group->get('/dostep-do-informacji-publicznej.html', StaticPagesHandler::class . ':publicInfo');
 

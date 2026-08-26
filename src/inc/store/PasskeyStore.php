@@ -131,3 +131,11 @@ function touch(string $credentialId, int $signCount): void {
     );
     $stmt->execute([':c' => $signCount, ':t' => date('c'), ':id' => $credentialId]);
 }
+
+/** Removes every passkey (and the opaque handle) belonging to $email — used on account deletion. */
+function removeAllForEmail(string $email): void {
+    $stmt = \store\prepare('DELETE FROM ' . TABLE . ' WHERE user_email = :e');
+    $stmt->execute([':e' => $email]);
+    $stmt = \store\prepare('DELETE FROM ' . USERS_TABLE . ' WHERE user_email = :e');
+    $stmt->execute([':e' => $email]);
+}

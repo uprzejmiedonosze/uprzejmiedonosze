@@ -10,3 +10,60 @@
 #passkeys-section {
   margin-top: 2em;
 }
+
+// $sending-problem/toast's .error share this accent — reused here so a
+// destructive account action reads consistently with the rest of the site.
+$dangerColor: #FF640A;
+
+#danger-zone {
+  margin-top: 2em;
+
+  h3 {
+    color: $dangerColor;
+  }
+
+  p.error {
+    color: $dangerColor;
+    font-weight: 700;
+  }
+}
+
+// Small, understated trigger — same shape as .app-account-logout ("Wyloguj się"),
+// not a big call-to-action button, just tinted to signal it's destructive.
+.app-account-delete {
+  a {
+    color: $dangerColor;
+    text-decoration: underline;
+  }
+}
+
+#delete-account-popup {
+  max-width: 30em;
+
+  ol {
+    padding-left: 1.2em;
+  }
+
+  label {
+    display: block;
+    margin-top: 1em;
+  }
+
+  input[type="email"] {
+    width: 100%;
+  }
+
+  button[type="submit"] {
+    margin-top: 1em;
+
+    &:disabled {
+      background-color: #C5C5C5 !important;
+      color: #757575 !important;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled) {
+      background-color: $dangerColor;
+    }
+  }
+}

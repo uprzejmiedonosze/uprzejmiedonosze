@@ -169,6 +169,10 @@ class StaticPagesHandler extends AbstractHandler {
         ]);
     }
 
+    public function accountDeleted(Request $request, Response $response): Response {
+        return AbstractHandler::renderHtml($request, $response, 'konto-usuniete');
+    }
+
     public function carStatsPartial(Request $request, Response $response, $args) {
         $request = $request->withAttribute('partial', true);
         return $this->carStats($request, $response, $args);

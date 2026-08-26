@@ -12,6 +12,7 @@ import "./sites/gallery";
 import "./sites/my-apps";
 import "./sites/register";
 import "./sites/passkeys";
+import "./sites/delete-account";
 import "./sites/regulations";
 import "./sites/start";
 import "./sites/statistics";

@@ -3,6 +3,7 @@
 require_once(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
 require_once(__DIR__ . '/../inc/handlers/WebhooksHandler.php');
+require_once(__DIR__ . '/../inc/UserRemoval.php'); // removeUser/removeApplication/removeFile/rmdirRecursive
 
 use app\Application;
 use recydywa\Recydywa;
@@ -22,143 +23,9 @@ declare(ticks = 1); // Allow posix signal handling
 pcntl_signal(SIGINT, "\\admin\\shutdown");
 pcntl_signal(SIGTERM, "\\admin\\shutdown");
 
-/**
- * Removes user by given $email
- */
-function removeUser($email, $dryRun=true){
-    if(!isset($email)){
-        throw new \Exception("No email provided\n");
-    }
-
-    $email = \SQLite3::escapeString($email);
-    $user = \user\get($email, dontDecode:true);
-    $apps = \user\apps($user, 'allWithDrafts');
-
-    echo "Usuwam wszystkie zgłoszenia użytkownika '$email'\n";
-    foreach($apps as $app){
-        removeApplication($app, $dryRun);
-    }
-
-    $cdn2UserFolder = ROOT . \storage\cdnPrefix() . "/{$user->number}/";
-    if(file_exists($cdn2UserFolder) && filetype($cdn2UserFolder) == 'dir'){
-        echo "Kasuję folder użytkownika\n";
-        if(!$dryRun){
-            rmdirRecursive($cdn2UserFolder);
-        }
-    }
-
-    echo "Zamazuję dane użytkownika w bazie\n";
-    if($dryRun){
-        return;
-    }
-    // adding empty user under a different key
-    $time = date(DT_FORMAT);
-    $user->data->name = 'DELETED';
-    $user->data->msisdn = 'DELETED';
-    $user->data->edelivery = 'DELETED';
-    $user->data->address = 'DELETED';
-    $user->data->email = md5($email . $time);
-    $user->emailMD5 = md5($email);
-
-    $user->deleted = $time;
-    $_SESSION['user_id'] = 'fake';
-    \user\save($user, dontDecode:true);
-
-    // removing old user
-    \store\delete('users', $email);
-}
-
-/**
- * Removes application
- */
-function removeApplication($app, $dryRun){
-    global $STATUSES;
-    $added = (isset($app->added))? " dodane {$app->added}": "";
-    $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
-    $status = $STATUSES[$app->status]->name;
-    $email = (isset($app->email))? " użytkownika {$app->email}": " użytkownika @anonim";
-    echo "Usuwam zgłoszenie numer $number [$status]$email$added\n";
-    if(isset($app->carImage)){
-        removeFile($app->carImage->url, $dryRun);
-        removeFile($app->carImage->thumb, $dryRun);
-    }
-    if(isset($app->contextImage)){
-        removeFile($app->contextImage->url, $dryRun);
-        removeFile($app->contextImage->thumb, $dryRun);
-        if ($app->contextImage->galleryReady ?? false) {
-            $thumb  = $app->contextImage->thumb;
-            $prefix = \storage\cdnPrefix();
-            removeFile($prefix . '/gallery/' . \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV) . '.jpg', $dryRun);
-            removeFile($prefix . '/gallery/' . \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV) . '.jpg', $dryRun);
-        }
-    }
-    if(isset($app->thirdImage)){
-        removeFile($app->thirdImage->url, $dryRun);
-        removeFile($app->thirdImage->thumb, $dryRun);
-    }
-    if(isset($app->carInfo) && isset($app->carInfo->plateImage)){
-        removeFile($app->carInfo->plateImage, $dryRun);
-    }
-    // address is encrypted when loaded without owner session, so we derive
-    // the map image path from contextImage->url: cdn2stg/2/4mYJ5a2bkuDR,co.jpg → cdn2stg/2/4mYJ5a2bkuDR,ma.png
-    if (isset($app->contextImage->url)) {
-        removeFile(strstr($app->contextImage->url, ',', true) . ',ma.png', $dryRun);
-    }
-
-    echo " zgłoszenie oraz jego pliki usunięte;\n\n";
-    if($dryRun){
-        return;
-    }
-    \store\delete('applications', $app->id);
-}
-
-function removeFile($fileName, $dryRun){
-    if(!isset($fileName) || empty($fileName)){
-        return;
-    }
-    // Validate the containing directory, not the file itself: files are routinely
-    // absent locally (syncToS3() uploads to B2 and unlinks the local copy), so
-    // realpath() on $fileName would return false and reject every already-synced file.
-    $allowedBase = realpath(ROOT . 'cdn2');
-    $dir  = realpath(ROOT . dirname($fileName));
-    $base = basename($fileName);
-    $valid = $dir && $allowedBase && $base !== '' && $base !== '.' && $base !== '..'
-        && str_starts_with($dir . DIRECTORY_SEPARATOR, $allowedBase . DIRECTORY_SEPARATOR);
-    if (!$valid) {
-        echo " ! '$fileName' poza dozwolonym katalogiem cdn2\n";
-        return;
-    }
-    $file = $dir . DIRECTORY_SEPARATOR . $base;
-    if(file_exists($file)){
-        if(filetype($file) !== 'file'){
-            echo " ! '$fileName' nie jest plikiem\n";
-            return;
-        }
-        if(!$dryRun) {
-            unlink($file);
-            \storage\delete($fileName);
-            echo " - $fileName usunięty lokalnie, usunięty z S3\n";
-        } else {
-            echo " - $fileName (do usunięcia lokalnie + S3)\n";
-        }
-    } else {
-        if(!$dryRun) {
-            \storage\delete($fileName);
-            echo " - $fileName nie istniał lokalnie, usunięty z S3\n";
-        } else {
-            echo " - $fileName (nie istnieje lokalnie, do usunięcia z S3)\n";
-        }
-    }
-}
-
-function rmdirRecursive(string $dir): void {
-    foreach (scandir($dir) as $item) {
-        if ($item === '.' || $item === '..') continue;
-        $path = $dir . DIRECTORY_SEPARATOR . $item;
-        is_dir($path) ? rmdirRecursive($path) : unlink($path); // nosemgrep: php.lang.security.unlink-use.unlink-use
-    }
-    rmdir($dir);
-}
+// removeUser/removeApplication/removeFile/rmdirRecursive moved to
+// src/inc/UserRemoval.php (namespace admin, same as this file) so they can also be
+// require()'d from a web request — see that file for why.
 
 /**
  * Generic function to remove apps by status
