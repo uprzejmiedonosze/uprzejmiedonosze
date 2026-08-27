@@ -18,10 +18,6 @@ $dangerColor: #FF640A;
 #danger-zone {
   margin-top: 2em;
 
-  h3 {
-    color: $dangerColor;
-  }
-
   p.error {
     color: $dangerColor;
     font-weight: 700;

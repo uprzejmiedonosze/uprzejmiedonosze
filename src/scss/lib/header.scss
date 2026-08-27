@@ -42,18 +42,11 @@ body>div>header {
             align-items: center;
             gap: 0.3rem;
 
-            // sygnet obok napisu "UD" wyśrodkowanych w mobilnym pasku
+            // logo wyśrodkowane w mobilnym pasku
             img {
                 height: 34px;
                 width: auto;
                 display: block;
-            }
-
-            // typography.scss ustawia `* { font-weight: 400 }` bezpośrednio na
-            // tym spanie i bije dziedziczone 700 z `a` — wymuszamy jawnie
-            // (patrz analogiczny komentarz przy .mpr-navbar-logo).
-            span {
-                font-weight: 700;
             }
         }
     }

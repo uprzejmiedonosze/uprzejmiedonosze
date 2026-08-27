@@ -2,11 +2,10 @@
 {% block header %}
 <header{% if isRedesignedHeader %} class="rd25-header"{% endif %}>
     <h1>
-        {# Mobile: wyśrodkowany sygnet + napis "UD" jako link do strony głównej
+        {# Mobile: wyśrodkowane logo jako link do strony głównej
            (na desktopie <h1> jest ukryte — patrz header.scss). #}
         <a href="/" aria-label="Uprzejmie Donoszę — strona główna">
-            <img src="/img/ud-sygnet.svg" alt="Uprzejmie Donoszę" width="97" height="86">
-            <span>UD</span>
+            <img src="/img/ud-logo-mobile.svg" alt="Uprzejmie Donoszę" width="211" height="85">
         {% if general.isStaging %}<sup>[STG]</sup>{% elseif general.isProd %}{% else %}<sup>[DEV]</sup>{% endif %}
         </a>
     </h1>
