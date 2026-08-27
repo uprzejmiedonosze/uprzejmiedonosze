@@ -1,8 +1,7 @@
 # tools
 RSYNC         := rsync
 RSYNC_FLAGS   := --human-readable --recursive --delete --exclude 'vendor/bin/*'
-HOSTING       := nieradka.net
-STAGING_HOST  := workflow.nieradka.net
+HOSTING       := uprzejmiedonosze.net
 STAGING_PATH  := /opt/staging.uprzejmiedonosze.net
 RSYNC_STAGING := --human-readable --recursive --delete \
     --exclude-from=.dockerignore
@@ -39,7 +38,7 @@ init-db-dev: ## Initialize dev SQLite database (run once)
 
 .PHONY: init-db-staging
 init-db-staging: ## Initialize staging SQLite database (run once on server)
-	@ssh $(STAGING_HOST) "sqlite3 $(STAGING_PATH)/db/store.sqlite \
+	@ssh $(HOSTING) "sqlite3 $(STAGING_PATH)/db/store.sqlite \
 		< $(STAGING_PATH)/webapp/sql/init_empty.sql"
 
 # Linting and unit tests run in the Docker builder stage (services/webapp/Dockerfile).
@@ -156,17 +155,6 @@ quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation cle
 	@$(RSYNC) --human-readable services/.env.prod $(HOSTING):/var/www/$(HOST)/.env.prod
 	@$(MAKE) sentry-release
 	@$(MAKE) clean
-
-# ── Staging deployment ────────────────────────────────────────────────────────
-
-.PHONY: staging
-staging: ## Sync code to staging server and rebuild Docker containers
-	@echo "==> Syncing code to $(STAGING_HOST):$(STAGING_PATH)"
-	@$(RSYNC) $(RSYNC_STAGING) . $(STAGING_HOST):$(STAGING_PATH)/
-	@echo "==> Rebuilding and restarting staging containers"
-	#@ssh $(STAGING_HOST) "cd $(STAGING_PATH) && \
-		BUILDKIT_PROGRESS=plain docker compose -f services/compose.yml --env-file services/.env.staging \
-		-p staging --profile staging up -d --build"
 
 # ── Dev convenience ───────────────────────────────────────────────────────────
 
