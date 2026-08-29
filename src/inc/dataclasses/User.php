@@ -171,14 +171,14 @@ class User extends \JSONObject{
         ));
     }
 
-    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa){
+    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa, string $sex = '?'){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
         $this->data->name = capitalizeName($name);
         if (!preg_match("/^(\S{2,5}\s)?\S{2,20}\s[\S -]{3,40}$/i", $this->data->name))
             throw new \MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");        
-        $this->guessSex();
+        $this->data->sex = in_array($sex, ['m', 'f', '?']) ? $sex : User::_guessSex($this->data->name);
 
         $this->data->address = str_replace(', Polska', '', cleanWhiteChars($address));
         if (!preg_match("/^.{3,50}\d.{3,40}$/i", $this->data->address))
