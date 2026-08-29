@@ -225,7 +225,7 @@ class User extends \JSONObject{
      * Returns (lazy-loaded) sex-strings for this user.
      */
     function getSex() {
-        if(($this->data->sex ?? '?') == '?')
+        if(!is_string($this->data->sex ?? null) || !array_key_exists($this->data->sex, SEXSTRINGS))
             return $this->guessSex();
         return SEXSTRINGS[$this->data->sex];
     }
