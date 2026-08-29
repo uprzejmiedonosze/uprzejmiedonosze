@@ -27,6 +27,16 @@
         placeholder="(twoje imię i nazwisko)" data-type="encrypted"
         value="{{ user.data.name }}" />
 
+    <label>Płeć — wpływa na formy gramatyczne w generowanych pismach</label>
+    <fieldset class="grid static3">
+        <input type="radio" name="sex" id="sex-m" value="m" {% if user.data.sex == 'm' %}checked="checked"{% endif %} required>
+        <label for="sex-m" class="radio">mężczyzna</label>
+        <input type="radio" name="sex" id="sex-f" value="f" {% if user.data.sex == 'f' %}checked="checked"{% endif %}>
+        <label for="sex-f" class="radio">kobieta</label>
+        <input type="radio" name="sex" id="sex-x" value="?" {% if user.data.sex != 'm' and user.data.sex != 'f' %}checked="checked"{% endif %}>
+        <label for="sex-x" class="radio">nieokreślona</label>
+    </fieldset>
+
     <label for="email">E-mail został pobrany automatycznie w trakcie logowania</label>
     <input disabled type="email" required maxlength="30" id="email" name="email"
         placeholder="(twój email)"
