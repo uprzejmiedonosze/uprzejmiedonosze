@@ -4,6 +4,22 @@ const nameElement = /** @type {HTMLInputElement} */ (document.getElementById("na
 const addressElement = /** @type {HTMLInputElement} */ (document.getElementById("address"))
 const edeliveryElement = /** @type {HTMLInputElement} */ (document.getElementById("edelivery"))
 
+async function autoDetectSex() {
+  if (!nameElement || !nameElement.value.trim()) {
+    const radio = /** @type {HTMLInputElement|null} */ (document.getElementById('sex-x'))
+    if (radio) radio.checked = true
+    return
+  }
+  try {
+    const res = await fetch(`/api/guess-sex?name=${encodeURIComponent(nameElement.value)}`)
+    const { sex } = await res.json()
+    if (sex === 'm' || sex === 'f') {
+      const radio = /** @type {HTMLInputElement|null} */ (document.getElementById('sex-' + sex))
+      if (radio) radio.checked = true
+    }
+  } catch {}
+}
+
 function validateRegisterForm() {
   let ret = checkValueRe(nameElement, /^(\S{2,5}\s)?\S{2,20}\s[\S -]{3,40}$/i)
   const addressCheck = checkValueRe(addressElement, /^.{3,50}\d.{3,40}\D$/i)
@@ -31,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!document.querySelector(".register")) return;
 
   if (nameElement) {
+    nameElement.addEventListener("input", autoDetectSex);
     nameElement.addEventListener("change", function () {
       nameElement.classList.remove("error");
     });
