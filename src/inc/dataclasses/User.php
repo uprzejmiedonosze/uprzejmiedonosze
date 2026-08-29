@@ -238,12 +238,8 @@ class User extends \JSONObject{
         if(count($names) < 1){
             return '?';
         }
-        if($names[0] == 'kuba'
-            || $names[0] == 'kosma'
-            || $names[0] == 'barnaba'
-            || $names[0] == 'olsza'
-            || substr($names[0], -1) != 'a')
-        {
+        $maleExceptions = ['kuba', 'kosma', 'barnaba', 'olsza'];
+        if (in_array($names[0], $maleExceptions, true) || substr($names[0], -1) != 'a') {
             return 'm';
         }
         return 'f';
