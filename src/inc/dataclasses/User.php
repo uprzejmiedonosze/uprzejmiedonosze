@@ -241,6 +241,7 @@ class User extends \JSONObject{
         if($names[0] == 'kuba'
             || $names[0] == 'kosma'
             || $names[0] == 'barnaba'
+            || $names[0] == 'olsza'
             || substr($names[0], -1) != 'a')
         {
             return 'm';
