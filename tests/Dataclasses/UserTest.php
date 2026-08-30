@@ -204,7 +204,7 @@ class UserTest extends DatabaseTestCase
         $this->assertEquals('m', User::_guessSex('Olsza test'));
     }
 
-    public function testGuessSexFemaleExceptionsNotEndingWithA()
+    public function testGuessSexStaticFemaleExceptions()
     {
         $this->assertEquals('f', User::_guessSex('Noemi Nowak'));
         $this->assertEquals('f', User::_guessSex('Nel Kowalska'));
