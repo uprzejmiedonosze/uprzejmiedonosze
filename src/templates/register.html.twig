@@ -28,7 +28,7 @@
         value="{{ user.data.name }}" />
 
     <label>Płeć — wpływa na formy gramatyczne w generowanych pismach</label>
-    <fieldset class="grid static3">
+    <fieldset class="grid static3" data-sex="{{ user.data.sex ?? '?' }}">
         <input type="radio" name="sex" id="sex-m" value="m" {% if user.data.sex == 'm' %}checked="checked"{% endif %} required>
         <label for="sex-m" class="radio">mężczyzna</label>
         <input type="radio" name="sex" id="sex-f" value="f" {% if user.data.sex == 'f' %}checked="checked"{% endif %}>

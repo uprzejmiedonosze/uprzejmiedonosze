@@ -5,6 +5,8 @@ const addressElement = /** @type {HTMLInputElement} */ (document.getElementById(
 const edeliveryElement = /** @type {HTMLInputElement} */ (document.getElementById("edelivery"))
 
 async function autoDetectSex() {
+  const sexFieldset = /** @type {HTMLFieldSetElement|null} */ (document.querySelector('fieldset[data-sex]'))
+  if (sexFieldset?.dataset.sex !== '?') return
   if (!nameElement || !nameElement.value.trim()) {
     const radio = /** @type {HTMLInputElement|null} */ (document.getElementById('sex-x'))
     if (radio) radio.checked = true
