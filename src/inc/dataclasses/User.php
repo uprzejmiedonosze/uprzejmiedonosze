@@ -23,8 +23,8 @@ class User extends \JSONObject{
             parent::__construct($json);
             if (!$dontDecode) {
                 $this->decode();
-                if (!isset($this->data->sex)) {
-                    $this->guessSex();
+                if (!isset($this->data->sex) || !is_string($this->data->sex) || !array_key_exists($this->data->sex, SEXSTRINGS)) {
+                    $this->data->sex = User::_guessSex($this->data->name);
                 }
             }
             return;
