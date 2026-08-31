@@ -171,7 +171,7 @@ class User extends \JSONObject{
         ));
     }
 
-    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa, string $sex = '?'){
+    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa, ?string $sex = null){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
