@@ -4,7 +4,9 @@ const nameElement = /** @type {HTMLInputElement} */ (document.getElementById("na
 const addressElement = /** @type {HTMLInputElement} */ (document.getElementById("address"))
 const edeliveryElement = /** @type {HTMLInputElement} */ (document.getElementById("edelivery"))
 
+let userPickedSex = false
 async function autoDetectSex() {
+  if (userPickedSex) return
   const sexFieldset = /** @type {HTMLFieldSetElement|null} */ (document.querySelector('fieldset[data-sex]'))
   if (sexFieldset?.dataset.sex !== '?') return
   if (!nameElement || !nameElement.value.trim()) {
@@ -47,6 +49,9 @@ function validateRegisterForm() {
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!document.querySelector(".register")) return;
+  document.querySelectorAll('input[name="sex"]').forEach(el => {
+    el.addEventListener("change", () => { userPickedSex = true })
+  })
 
   if (nameElement) {
     nameElement.addEventListener("input", autoDetectSex);
