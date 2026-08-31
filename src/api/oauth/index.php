@@ -48,9 +48,9 @@ $errorHandler->registerErrorRenderer('application/json', JsonErrorRenderer::clas
 
 $preflight = fn (Request $request, Response $response) => $response;
 
+// Both the bare and resource-path forms, since MCP clients probe either.
+$app->get('/.well-known/oauth-authorization-server/mcp', \oauth\authorizationServerMetadata(...));
 $app->get('/.well-known/oauth-authorization-server', \oauth\authorizationServerMetadata(...));
-// Both the RFC 9728 resource-path form and the bare form, since MCP clients
-// probe either.
 $app->get('/.well-known/oauth-protected-resource/mcp', \oauth\protectedResourceMetadata(...));
 $app->get('/.well-known/oauth-protected-resource', \oauth\protectedResourceMetadata(...));
 $app->post('/oauth/register', \oauth\register(...));
@@ -61,6 +61,7 @@ $app->post('/oauth/revoke', \oauth\revoke(...));
 // Registered per-path rather than as a `/{routes:.+}` catch-all: a wildcard
 // would URI-match any unknown path too, turning what should be a 404 into a
 // 405 for every bot/scanner probing bogus paths under this app.
+$app->options('/.well-known/oauth-authorization-server/mcp', $preflight);
 $app->options('/.well-known/oauth-authorization-server', $preflight);
 $app->options('/.well-known/oauth-protected-resource/mcp', $preflight);
 $app->options('/.well-known/oauth-protected-resource', $preflight);
