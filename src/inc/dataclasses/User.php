@@ -235,7 +235,7 @@ class User extends \JSONObject{
      */
     public static function _guessSex(string $name): string {
         $names = preg_split('/\s+/', trimstr2lower($name));
-        if(count($names) < 1){
+        if(count($names) < 1 || $names[0] === ''){
             return '?';
         }
         $maleExceptions = ['kuba', 'kosma', 'barnaba', 'olsza'];
