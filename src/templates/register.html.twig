@@ -27,8 +27,8 @@
         placeholder="(twoje imię i nazwisko)" data-type="encrypted"
         value="{{ user.data.name }}" />
 
-    <label>Płeć — wpływa na formy gramatyczne w generowanych pismach</label>
     <fieldset class="grid static3" data-sex="{{ user.data.sex ?? '?' }}">
+        <legend>Płeć — wpływa na formy gramatyczne w generowanych pismach</legend>
         <input type="radio" name="sex" id="sex-m" value="m" {% if user.data.sex == 'm' %}checked="checked"{% endif %} required>
         <label for="sex-m" class="radio">mężczyzna</label>
         <input type="radio" name="sex" id="sex-f" value="f" {% if user.data.sex == 'f' %}checked="checked"{% endif %}>
