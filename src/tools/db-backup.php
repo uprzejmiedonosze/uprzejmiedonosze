@@ -14,13 +14,17 @@ if (!file_exists($dbPath)) {
 }
 
 $tmpPath = "/tmp/store-backup-" . date('Y-m-d') . ".sqlite";
+@unlink($tmpPath);
 
 echo "Backup: $dbPath → $tmpPath\n";
-$db = new \SQLite3($dbPath);
-$backupResult = $db->backup($tmpPath);
+$db = new \SQLite3($dbPath, SQLITE3_OPEN_READONLY);
+$dest = new \SQLite3($tmpPath);
+$backupResult = $db->backup($dest);
+$dest->close();
 $db->close();
 
-if (!$backupResult || !file_exists($tmpPath)) {
+if (!$backupResult) {
+    @unlink($tmpPath);
     echo "ERROR: SQLite backup failed\n";
     \telemetry\log('cron_db_backup', null, ['status' => 'failed']);
     exit(1);
