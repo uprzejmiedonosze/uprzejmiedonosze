@@ -122,11 +122,33 @@ class S3 {
     public function uploadMultipartPrivate(string $localPath, string $key): bool {
         try {
             $this->client->upload($this->bucket, $key, fopen($localPath, 'rb'), null, [
-                'params' => ['ContentType' => mime_content_type($localPath) ?: 'application/octet-stream'],
+                'params'     => ['ContentType' => mime_content_type($localPath) ?: 'application/octet-stream'],
+                'concurrency' => 3,
             ]);
             return true;
-        } catch (AwsException $e) {
+        } catch (\Throwable $e) {
+            $this->abortFailedMultipart($key, $e);
             return false;
+        }
+    }
+
+    private function abortFailedMultipart(string $key, \Throwable $e): void {
+        if (!$e instanceof \Aws\S3\Exception\S3MultipartUploadException) {
+            return;
+        }
+        $id = $e->getState()->getId();
+        if (empty($id['UploadId'])) {
+            return;
+        }
+        try {
+            $this->client->abortMultipartUpload([
+                'Bucket'   => $this->bucket,
+                'Key'      => $key,
+                'UploadId' => $id['UploadId'],
+            ]);
+            logger('Aborted failed B2 multipart upload ' . $id['UploadId'] . ' for ' . $key);
+        } catch (\Throwable $ignore) {
+            // best-effort cleanup; B2 eventually prunes orphaned uploads
         }
     }
 

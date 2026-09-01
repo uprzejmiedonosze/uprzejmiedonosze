@@ -151,13 +151,21 @@ function backupDb(
         return true;
     }
 
-    $ok = $client->uploadMultipartPrivate($agePath, $b2Key);
+    $ok = false;
+    for ($attempt = 1; $attempt <= 3 && !$ok; $attempt++) {
+        $ok = $client->uploadMultipartPrivate($agePath, $b2Key);
+        if (!$ok && $attempt < 3) {
+            $backoff = $attempt * 5;
+            echo "  Upload failed (attempt $attempt/3) — retrying in {$backoff}s\n";
+            \usleep($backoff * 1000000);
+        }
+    }
     @unlink($tmpPath);
     @unlink($gzPath);
     @unlink($agePath);
 
     if (!$ok) {
-        echo "  ERROR: B2 upload failed for $b2Key\n";
+        echo "  ERROR: B2 upload failed for $b2Key after 3 attempts\n";
         return false;
     }
 

@@ -141,4 +141,34 @@ class StorageTest extends TestCase
         $this->assertTrue($ok);
         $this->assertCount(0, $b2Handler);
     }
+
+    /**
+     * When a part fails during multipart upload, the dangling upload must be
+     * aborted and the method must return false (not throw).
+     */
+    public function testUploadMultipartPrivateAbortsOnPartFailure(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'ud-test');
+        file_put_contents($tmp, str_repeat('x', 17 * 1024 * 1024));
+
+        $handler = new MockHandler([
+            new Result(['UploadId' => 'TEST-UPLOAD-ID']),                                   // CreateMultipartUpload
+            new \Aws\Exception\AwsException('upload part failed', new \Aws\Command('UploadPart')), // Part 1 fails
+            new Result(['ETag' => '"etag-1"']),                                             // Part 2 OK
+            new Result(['ETag' => '"etag-2"']),                                             // Part 3 OK
+            new Result(['ETag' => '"etag-3"']),                                             // Part 4 OK
+            new Result(['ETag' => '"etag-4"']),                                             // unused
+            new Result([]),                                                                 // AbortMultipartUpload
+        ]);
+
+        $s3 = new S3('backup-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $handler]);
+        $ok = $s3->uploadMultipartPrivate($tmp, 'db/store-2026-01-01-daily.sql.gz.age');
+
+        unlink($tmp);
+
+        $this->assertFalse($ok);
+        $abortCmd = $handler->getLastCommand();
+        $this->assertSame('AbortMultipartUpload', $abortCmd->getName());
+        $this->assertSame('TEST-UPLOAD-ID', $abortCmd['UploadId']);
+    }
 }
