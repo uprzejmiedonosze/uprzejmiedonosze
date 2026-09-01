@@ -122,4 +122,23 @@ class StorageTest extends TestCase
         $s3 = new S3('backup-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $b2Handler]);
         $this->assertSame([], $s3->listObjects('db/store-'));
     }
+
+    /**
+     * S3::uploadMultipartPrivate() resolves without ACL. Small files go
+     * through the SDK's single PutObject fast path, so one mock response
+     * is enough.
+     */
+    public function testUploadMultipartPrivateWithoutAcl(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'ud-test');
+        file_put_contents($tmp, str_repeat('x', 4096));
+        $b2Handler = new MockHandler([new Result([])]);
+
+        $s3 = new S3('backup-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $b2Handler]);
+        $ok = $s3->uploadMultipartPrivate($tmp, 'db/store-2026-01-01-daily.sql.gz');
+        unlink($tmp);
+
+        $this->assertTrue($ok);
+        $this->assertCount(0, $b2Handler);
+    }
 }

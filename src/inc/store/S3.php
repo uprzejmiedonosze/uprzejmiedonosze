@@ -115,6 +115,22 @@ class S3 {
     }
 
     /**
+     * Uploads a local file without ACL via the SDK's upload() helper, which
+     * transparently switches to a multipart upload for large files (B2 single
+     * PUT is limited to ~5 GB). Use for big backups.
+     */
+    public function uploadMultipartPrivate(string $localPath, string $key): bool {
+        try {
+            $this->client->upload($this->bucket, $key, fopen($localPath, 'rb'), null, [
+                'params' => ['ContentType' => mime_content_type($localPath) ?: 'application/octet-stream'],
+            ]);
+            return true;
+        } catch (AwsException $e) {
+            return false;
+        }
+    }
+
+    /**
      * Lists object keys matching a prefix. Returns an array of key strings.
      */
     public function listObjects(string $prefix): array {

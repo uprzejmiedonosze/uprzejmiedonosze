@@ -127,6 +127,11 @@ if (!defined('B2_SECRET'))   define('B2_SECRET',   getenv('B2_SECRET')   ?: '');
 if (!defined('B2_BUCKET'))   define('B2_BUCKET',   getenv('B2_BUCKET')   ?: '');
 if (!defined('B2_ENDPOINT')) define('B2_ENDPOINT', getenv('B2_ENDPOINT') ?: '');
 if (!defined('B2_REGION'))   define('B2_REGION',   getenv('B2_REGION')   ?: '');
+// DB backups go to a separate B2 bucket with its own application key.
+// Docker: via env vars; bare-metal (config.prod.php): generated defines.
+if (!defined('BACKUP_B2_KEY'))    define('BACKUP_B2_KEY',    getenv('BACKUP_B2_KEY')    ?: '');
+if (!defined('BACKUP_B2_SECRET')) define('BACKUP_B2_SECRET', getenv('BACKUP_B2_SECRET') ?: '');
+if (!defined('BACKUP_B2_BUCKET')) define('BACKUP_B2_BUCKET', getenv('BACKUP_B2_BUCKET') ?: '');
 unset($_appEnv, $_configDev);
 
 $_appHost = getenv('APP_HOST');
