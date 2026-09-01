@@ -97,6 +97,43 @@ class S3 {
     }
 
     /**
+     * Uploads a local file without ACL (private by default on B2).
+     * Use for backups or any non-public objects.
+     */
+    public function uploadPrivate(string $localPath, string $key): bool {
+        try {
+            $this->client->putObject([
+                'Bucket'      => $this->bucket,
+                'Key'         => $key,
+                'SourceFile'  => $localPath,
+                'ContentType' => mime_content_type($localPath) ?: 'application/octet-stream',
+            ]);
+            return true;
+        } catch (AwsException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Lists object keys matching a prefix. Returns an array of key strings.
+     */
+    public function listObjects(string $prefix): array {
+        try {
+            $keys = [];
+            $iterator = $this->client->getIterator('ListObjects', [
+                'Bucket' => $this->bucket,
+                'Prefix' => $prefix,
+            ]);
+            foreach ($iterator as $object) {
+                $keys[] = $object['Key'];
+            }
+            return $keys;
+        } catch (AwsException $e) {
+            return [];
+        }
+    }
+
+    /**
      * Deletes an object. Silently ignores missing keys.
      */
     public function delete(string $key): void {

@@ -5,3 +5,4 @@
 40  23   *   *     *    /usr/bin/nice -n 19 /usr/bin/php8.4 /var/www/uprzejmiedonosze.net/webapp/tools/refresh-stats.php
 0   4    *   *     *    /usr/bin/php8.4 /var/www/uprzejmiedonosze.net/webapp/tools/s3-sync.php
 30  3    *   *     *    /usr/bin/php8.4 /var/www/uprzejmiedonosze.net/webapp/tools/oauth-cleanup.php
+0   1    *   *     *    /usr/bin/php8.4 /var/www/uprzejmiedonosze.net/webapp/tools/db-backup.php

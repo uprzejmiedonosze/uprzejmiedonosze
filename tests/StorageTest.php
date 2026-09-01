@@ -74,4 +74,52 @@ class StorageTest extends TestCase
         \storage\delete('cdn2stg/test/x.jpg');
         $this->assertCount(0, $b2Handler);
     }
+
+    /**
+     * S3::uploadPrivate() must not require an ACL (backups are private).
+     * Assert it resolves against the mock handler with a known key.
+     */
+    public function testUploadPrivateWithoutAcl(): void
+    {
+        $tmp = tempnam(sys_get_temp_dir(), 'ud-test');
+        file_put_contents($tmp, 'backup-content');
+        $b2Handler = new MockHandler([new Result([])]);
+
+        $s3 = new S3('backup-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $b2Handler]);
+        $ok = $s3->uploadPrivate($tmp, 'db/store-2026-01-01-daily.sql.gz');
+        unlink($tmp);
+
+        $this->assertTrue($ok);
+        $this->assertCount(0, $b2Handler);
+    }
+
+    /**
+     * S3::listObjects() must return keys for a prefix.
+     */
+    public function testListObjectsReturnsKeys(): void
+    {
+        $b2Handler = new MockHandler([
+            new Result(['Contents' => [
+                ['Key' => 'db/store-2026-01-01-daily.sql.gz'],
+                ['Key' => 'db/store-2026-01-08-daily.sql.gz'],
+            ]]),
+        ]);
+
+        $s3 = new S3('backup-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $b2Handler]);
+        $keys = $s3->listObjects('db/store-');
+
+        $this->assertCount(2, $keys);
+        $this->assertContains('db/store-2026-01-01-daily.sql.gz', $keys);
+    }
+
+    /**
+     * S3::listObjects() must return an empty array on error (not throw).
+     */
+    public function testListObjectsReturnsEmptyOnError(): void
+    {
+        $b2Handler = new MockHandler([new \Aws\Exception\AwsException('boom', new \Aws\Command('ListObjects'))]);
+
+        $s3 = new S3('backup-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $b2Handler]);
+        $this->assertSame([], $s3->listObjects('db/store-'));
+    }
 }
