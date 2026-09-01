@@ -9,6 +9,21 @@ $prefix = 'uprzejmiedonosze-db/';
 
 echo date('Y-m-d H:i:s') . " — uprzejmiedonosze-db-backup start\n";
 
+// Serialize runs: never two backups at once. Holding the lock makes the
+// startup sweep safe to delete every lingering temp file unconditionally.
+$lockPath = '/tmp/uprzejmiedonosze-db-backup.lock';
+$lockFh = fopen($lockPath, 'w');
+if (!$lockFh || !flock($lockFh, LOCK_EX | LOCK_NB)) {
+    echo "WARNING: another backup run is already in progress — skipping\n";
+    exit(0);
+}
+register_shutdown_function(static function () use ($lockFh): void {
+    if (is_resource($lockFh)) {
+        flock($lockFh, LOCK_UN);
+        fclose($lockFh);
+    }
+});
+
 sweepStaleTempFiles();
 
 $backupBucket = \BACKUP_B2_BUCKET ?: '';
@@ -171,22 +186,17 @@ function backupDb(
 }
 
 /**
- * Removes temp files left behind by interrupted runs (e.g. killed while
- * uploading a multi-GB file). Only touches files matching our naming pattern
- * that are at least an hour old, so a concurrently-running backup is never
- * affected; the current run's files are always removed by backupDb() itself.
+ * Removes leftover temp files from interrupted runs (e.g. SIGKILL/power loss).
+ * Called only while holding the run lock, so no other instance can be
+ * mid-write — every matching file is garbage worth deleting. The current
+ * run's files are always removed by backupDb() itself.
  */
 function sweepStaleTempFiles(): void {
     $pattern = '/^([a-z0-9-]+)-backup-(19|20)\d{2}-\d{2}-\d{2}\.sqlite(\.gz)?(\.age)?$/';
-    $staleBefore = time() - 3600;
 
     foreach (glob('/tmp/*.sqlite*') ?: [] as $path) {
         $name = basename($path);
         if (!preg_match($pattern, $name)) {
-            continue;
-        }
-        $mtime = filemtime($path);
-        if ($mtime === false || $mtime > $staleBefore) {
             continue;
         }
         $size = filesize($path) ?: 0;
