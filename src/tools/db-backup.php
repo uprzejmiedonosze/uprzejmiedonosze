@@ -44,6 +44,14 @@ if (!$backupBucket) {
     exit(0);
 }
 
+$recipient = \AGE_RECIPIENT ?: '';
+if (!$recipient) {
+    echo "ERROR: AGE_RECIPIENT not set — refusing to upload an unencrypted backup\n";
+    @unlink($tmpPath);
+    \telemetry\log('cron_db_backup', null, ['status' => 'failed']);
+    exit(1);
+}
+
 $client = new S3(
     $backupBucket,
     \BACKUP_B2_KEY,
@@ -55,7 +63,7 @@ $client = new S3(
 $date = date('Y-m-d');
 $isSunday = date('w') === '0';
 $suffix = $isSunday ? 'weekly' : 'daily';
-$b2Key = $prefix . "store-{$date}-{$suffix}.sql.gz";
+$b2Key = $prefix . "store-{$date}-{$suffix}.sql.gz.age";
 
 echo "Compressing: $b2Key\n";
 
@@ -71,20 +79,55 @@ while (!feof($src)) {
 fclose($src);
 gzclose($dst);
 
-$finalSize = filesize($gzPath);
-echo "Compressed: " . number_format($finalSize) . " bytes\n";
+echo "Compressed: " . number_format(filesize($gzPath)) . " bytes\n";
+
+echo "Encrypting with age\n";
+$agePath = $gzPath . '.age';
+@unlink($agePath);
+$encCmd = 'age -r ' . escapeshellarg($recipient)
+    . ' --output=' . escapeshellarg($agePath)
+    . ' ' . escapeshellarg($gzPath);
+$encOut = '';
+$encCode = -1;
+runCommand($encCmd, $encOut, $encCode);
+if ($encCode !== 0 || !is_file($agePath)) {
+    @unlink($tmpPath);
+    @unlink($gzPath);
+    @unlink($agePath);
+    echo "ERROR: age encryption failed: $encOut\n";
+    \telemetry\log('cron_db_backup', null, ['status' => 'failed']);
+    exit(1);
+}
+
+// Sanity check: age files always start with the version header.
+$ageFh = fopen($agePath, 'rb');
+$ageHeader = fread($ageFh, 22);
+fclose($ageFh);
+if ($ageHeader !== "age-encryption.org/v1\n") {
+    @unlink($tmpPath);
+    @unlink($gzPath);
+    @unlink($agePath);
+    echo "ERROR: age output is missing the v1 header — aborting\n";
+    \telemetry\log('cron_db_backup', null, ['status' => 'failed']);
+    exit(1);
+}
+
+$finalSize = filesize($agePath);
+echo "Encrypted: " . number_format($finalSize) . " bytes\n";
 
 if ($dryRun) {
     echo "DRY-RUN: skipping upload and retention cleanup\n";
     @unlink($tmpPath);
     @unlink($gzPath);
+    @unlink($agePath);
     \telemetry\log('cron_db_backup', null, ['status' => 'dry_run']);
     exit(0);
 }
 
-$ok = $client->uploadMultipartPrivate($gzPath, $b2Key);
+$ok = $client->uploadMultipartPrivate($agePath, $b2Key);
 @unlink($tmpPath);
 @unlink($gzPath);
+@unlink($agePath);
 
 if (!$ok) {
     echo "ERROR: B2 upload failed\n";
@@ -105,7 +148,7 @@ usort($allKeys, 'strcmp');
 
 $weeklyDates = [];
 foreach ($allKeys as $key) {
-    if (preg_match('/store-(\d{4}-\d{2}-\d{2})-weekly\.sql\.gz$/', $key, $m)) {
+    if (preg_match('/store-(\d{4}-\d{2}-\d{2})-weekly\.sql\.gz(\.age)?$/', $key, $m)) {
         $weeklyDates[$key] = $m[1];
     }
 }
@@ -113,14 +156,14 @@ arsort($weeklyDates);
 $keepWeekly = array_slice(array_keys($weeklyDates), 0, 4);
 
 foreach ($allKeys as $key) {
-    if (preg_match('/store-(\d{4}-\d{2}-\d{2})-daily\.sql\.gz$/', $key, $m)) {
+    if (preg_match('/store-(\d{4}-\d{2}-\d{2})-daily\.sql\.gz(\.age)?$/', $key, $m)) {
         $fileDate = \DateTime::createFromFormat('Y-m-d', $m[1]);
         if ($fileDate < $dailyThreshold) {
             echo "  Deleting old daily: $key\n";
             $client->delete($key);
             $deleted++;
         }
-    } elseif (preg_match('/store-(\d{4}-\d{2}-\d{2})-weekly\.sql\.gz$/', $key, $m)) {
+    } elseif (preg_match('/store-(\d{4}-\d{2}-\d{2})-weekly\.sql\.gz(\.age)?$/', $key, $m)) {
         if (!in_array($key, $keepWeekly, true)) {
             $fileDate = \DateTime::createFromFormat('Y-m-d', $m[1]);
             if ($fileDate < $weeklyThreshold) {
@@ -135,3 +178,27 @@ foreach ($allKeys as $key) {
 echo "Deleted $deleted old backup(s)\n";
 echo date('Y-m-d H:i:s') . " — uprzejmiedonosze-db-backup done\n";
 \telemetry\log('cron_db_backup', null, ['status' => 'success']);
+
+/**
+ * Runs an external command, capturing combined output and exit code.
+ */
+function runCommand(string $cmd, string &$output, int &$exitCode): void {
+    $descriptors = [
+        0 => ['pipe', 'r'],
+        1 => ['pipe', 'w'],
+        2 => ['pipe', 'w'],
+    ];
+    $proc = proc_open($cmd, $descriptors, $pipes);
+    if (!is_resource($proc)) {
+        $exitCode = -1;
+        $output = 'proc_open failed';
+        return;
+    }
+    fclose($pipes[0]);
+    $stdout = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+    $stderr = stream_get_contents($pipes[2]);
+    fclose($pipes[2]);
+    $exitCode = proc_close($proc);
+    $output = trim($stdout . "\n" . $stderr);
+}

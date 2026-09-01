@@ -132,6 +132,8 @@ if (!defined('B2_REGION'))   define('B2_REGION',   getenv('B2_REGION')   ?: '');
 if (!defined('BACKUP_B2_KEY'))    define('BACKUP_B2_KEY',    getenv('BACKUP_B2_KEY')    ?: '');
 if (!defined('BACKUP_B2_SECRET')) define('BACKUP_B2_SECRET', getenv('BACKUP_B2_SECRET') ?: '');
 if (!defined('BACKUP_B2_BUCKET')) define('BACKUP_B2_BUCKET', getenv('BACKUP_B2_BUCKET') ?: '');
+// Public age (X25519) recipient for encrypting DB backups. Private key stays offline.
+if (!defined('AGE_RECIPIENT'))    define('AGE_RECIPIENT',    getenv('AGE_RECIPIENT')    ?: '');
 unset($_appEnv, $_configDev);
 
 $_appHost = getenv('APP_HOST');
