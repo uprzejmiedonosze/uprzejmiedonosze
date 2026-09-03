@@ -62,7 +62,7 @@ Z poważaniem
     {% endif -%}
 }
 
-{\it Proszę o kontakt na mój adres {% if app.user.edelivery ?? false %}e-Doręczeń{% else %}e-mail{% endif %}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.}
+{\it Proszę o kontakt na mój adres {% if (app.user.edelivery ?? false) and (not app.guessSMData.isPolice)%}e-Doręczeń{% else %}e-mail{% endif %}, a w szczególności niewysyłanie listów poleconych za potwierdzeniem odbioru.}
 
 \vspace{\stretch{3}}\noindent
 {% if app.contextImage ?? false %}
