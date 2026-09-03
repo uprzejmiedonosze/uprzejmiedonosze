@@ -52,9 +52,12 @@ class UserHandler extends AbstractHandler {
         $stopAgresji = $stopAgresjiRaw === null ? null : ($stopAgresjiRaw === 'SA');
         $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
 
+        $sex = $this->getParam($params, 'sex', '?');
+        if (!in_array($sex, ['m', 'f', '?'])) $sex = '?';
+
         /** @var \user\User $user */
         $user = $request->getAttribute('user');
-        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa);
+        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa, $sex);
         \user\save($user);
 
         return AbstractHandler::redirect($signInSuccessUrl);

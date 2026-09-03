@@ -4,6 +4,26 @@ const nameElement = /** @type {HTMLInputElement} */ (document.getElementById("na
 const addressElement = /** @type {HTMLInputElement} */ (document.getElementById("address"))
 const edeliveryElement = /** @type {HTMLInputElement} */ (document.getElementById("edelivery"))
 
+let userPickedSex = false
+async function autoDetectSex() {
+  if (userPickedSex) return
+  const sexFieldset = /** @type {HTMLFieldSetElement|null} */ (document.querySelector('fieldset[data-sex]'))
+  if (sexFieldset?.dataset.sex !== '?') return
+  if (!nameElement || !nameElement.value.trim()) {
+    const radio = /** @type {HTMLInputElement|null} */ (document.getElementById('sex-x'))
+    if (radio) radio.checked = true
+    return
+  }
+  try {
+    const res = await fetch(`/api/guess-sex?name=${encodeURIComponent(nameElement.value)}`)
+    const { sex } = await res.json()
+    if (sex === 'm' || sex === 'f') {
+      const radio = /** @type {HTMLInputElement|null} */ (document.getElementById('sex-' + sex))
+      if (radio) radio.checked = true
+    }
+  } catch {}
+}
+
 function validateRegisterForm() {
   let ret = checkValueRe(nameElement, /^(\S{2,5}\s)?\S{2,20}\s[\S -]{3,40}$/i)
   const addressCheck = checkValueRe(addressElement, /^.{3,50}\d.{3,40}\D$/i)
@@ -29,8 +49,12 @@ function validateRegisterForm() {
 
 document.addEventListener("DOMContentLoaded", () => {
   if (!document.querySelector(".register")) return;
+  document.querySelectorAll('input[name="sex"]').forEach(el => {
+    el.addEventListener("change", () => { userPickedSex = true })
+  })
 
   if (nameElement) {
+    nameElement.addEventListener("input", autoDetectSex);
     nameElement.addEventListener("change", function () {
       nameElement.classList.remove("error");
     });
