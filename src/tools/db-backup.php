@@ -6,12 +6,24 @@ use store\S3;
 
 $dryRun = in_array('--dry-run', $argv, true);
 $prefix = 'uprzejmiedonosze-db/';
+$tmpDir = '/mnt/hotbackup';
+
+if (!is_dir($tmpDir) && !@mkdir($tmpDir, 0700, true)) {
+    echo "ERROR: backup temp dir $tmpDir does not exist and could not be created\n";
+    \telemetry\log('cron_db_backup', null, ['status' => 'failed']);
+    exit(1);
+}
+if (!is_writable($tmpDir)) {
+    echo "ERROR: backup temp dir $tmpDir is not writable\n";
+    \telemetry\log('cron_db_backup', null, ['status' => 'failed']);
+    exit(1);
+}
 
 echo date('Y-m-d H:i:s') . " — uprzejmiedonosze-db-backup start\n";
 
 // Serialize runs: never two backups at once. Holding the lock makes the
 // startup sweep safe to delete every lingering temp file unconditionally.
-$lockPath = '/tmp/uprzejmiedonosze-db-backup.lock';
+$lockPath = "$tmpDir/uprzejmiedonosze-db-backup.lock";
 $lockFh = fopen($lockPath, 'w');
 if (!$lockFh || !flock($lockFh, LOCK_EX | LOCK_NB)) {
     echo "WARNING: another backup run is already in progress — skipping\n";
@@ -24,7 +36,7 @@ register_shutdown_function(static function () use ($lockFh): void {
     }
 });
 
-sweepStaleTempFiles();
+sweepStaleTempFiles($tmpDir);
 
 $backupBucket = \BACKUP_B2_BUCKET ?: '';
 if (!$backupBucket) {
@@ -64,7 +76,7 @@ $okAll = true;
 foreach ($dbs as $dbPath) {
     $base = basename($dbPath, '.sqlite');
     echo "\n== $base ==\n";
-    if (backupDb($dbPath, $base, $client, $prefix, $date, $suffix, $dryRun) !== true) {
+    if (backupDb($dbPath, $base, $client, $prefix, $date, $suffix, $dryRun, $tmpDir) !== true) {
         $okAll = false;
     }
 }
@@ -91,13 +103,14 @@ function backupDb(
     string $date,
     string $suffix,
     bool $dryRun,
+    string $tmpDir,
 ): bool {
     if (!is_file($dbPath)) {
         echo "  ERROR: DB not found at $dbPath\n";
         return false;
     }
 
-    $tmpPath = "/tmp/{$base}-backup-{$date}.sqlite";
+    $tmpPath = "$tmpDir/{$base}-backup-{$date}.sqlite";
     $gzPath  = $tmpPath . '.gz';
     $agePath = $gzPath . '.age';
 
@@ -191,10 +204,10 @@ function backupDb(
  * mid-write — every matching file is garbage worth deleting. The current
  * run's files are always removed by backupDb() itself.
  */
-function sweepStaleTempFiles(): void {
+function sweepStaleTempFiles(string $tmpDir): void {
     $pattern = '/^([a-z0-9-]+)-backup-(19|20)\d{2}-\d{2}-\d{2}\.sqlite(\.gz)?(\.age)?$/';
 
-    foreach (glob('/tmp/*.sqlite*') ?: [] as $path) {
+    foreach (glob("$tmpDir/*.sqlite*") ?: [] as $path) {
         $name = basename($path);
         if (!preg_match($pattern, $name)) {
             continue;
