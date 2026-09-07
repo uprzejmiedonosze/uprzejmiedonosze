@@ -59,7 +59,33 @@ class SMTest extends TestCase
 
         self::assertEquals($byCity->getEmail(), $byCounty->getEmail());
         self::assertEquals($byCity->getEmail(), $byReference->getEmail());
-        
+    }
+
+    /**
+     * Wieś Józefów w gminie Ożarów Mazowiecki koliduje nazwą z miastem
+     * Józefów (powiat otwocki). Klucz kodu pocztowego "05-860" (patrz
+     * GitHub issue #120) ma wyprzedzać dopasowanie po nazwie miasta.
+     */
+    public function testGuessByPostcodeBeforeCityName() : void {
+        $smOzarow = new \SM($this->getData('ożarów mazowiecki'));
+
+        $village = \SM::guess(new JSONObject([
+            'postcode' => '05-860',
+            'county' => 'gmina Ożarów Mazowiecki',
+            'municipality' => 'powiat warszawski zachodni',
+            'voivodeship' => 'mazowieckie',
+            'city' => 'Józefów'
+        ]));
+        self::assertEquals('05-860', $village);
+        self::assertEquals($smOzarow->getEmail(), (new \SM($this->getData($village)))->getEmail());
+
+        $city = \SM::guess(new JSONObject([
+            'postcode' => '05-420',
+            'county' => 'gmina Józefów',
+            'city' => 'Józefów'
+        ]));
+        self::assertEquals('józefów', $city);
+        self::assertEquals('straz.miejska@jozefow.pl', (new \SM($this->getData($city)))->getEmail());
     }
 
     private function getData(string $city): array
