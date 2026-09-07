@@ -9,6 +9,11 @@ Odblokuj proszę mój adres IP: __IP__
 ' %}
 
 
+{# Preset 'auth': bez navbar links/CTA, bez hamburgera i bez Google One-Tap
+   (base.html.twig pomija one-tap dla layout == 'auth'). Bananięty adres IP
+   nie powinien widzieć nawigacji ani być zachęcany do logowania. #}
+{% set layout = 'auth' %}
+
 {% extends "base.html.twig" %}
 {% block main %}
 <h2>Zostałaś/eś zablokowany</h2>
