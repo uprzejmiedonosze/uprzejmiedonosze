@@ -8,6 +8,7 @@
 .parcel-cache
 .phpunit.cache
 .ud-*
+.opencode
 /config.php
 /config.prod.php
 /cypress/screenshots
