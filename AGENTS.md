@@ -173,7 +173,7 @@ For production: nginx access/error logs are written to `/var/log/uprzejmiedonosz
 
 - **NEVER use `sudo`** (or any require-password root escalation). If something genuinely needs root, stop and ask the user to run it — never attempt `sudo` yourself. This applies equally to **remote hosts over SSH** — including `sudo -n`; it counts as sudo. If a file/command needs root there, report what you need and let the user run it.
 - **Fetching App IDs:** You can find the internal Application ID for a ticket number (e.g., `UD/X/Y`) by querying the SQLite database on the production server via SSH:
-  `ssh nieradka.net "sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite \"select key from applications where json_extract(value, '$.number') = upper('UD/X/Y') limit 1\""`
+  `ssh uprzejmiedonosze.net "sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite \"select key from applications where json_extract(value, '$.number') = upper('UD/X/Y') limit 1\""`
 - **Checking Geo Units:** You can check the administrative unit (powiat, gmina) and assigned law enforcement unit by coordinates via the staging API:
   `curl -s -H "Cookie: UDSESSIONID=<VALUE>" "https://staging.uprzejmiedonosze.net/api/geo/LAT,LON/n"` (The cookie value can be found in `cypress/support/commands.js`).
 - **City Guards vs Police Priority:** When configuring units in `sm.json`, note that City Guards (Straż Miejska) have priority over Police. A single key should represent one specific formation. If a municipality needs to be redirected to Police because there is no City Guard for that specific area, create a separate key for the Police station (e.g., "Komisariat Policji w ...") and map the municipality (`parent`) to it, while preserving any existing City Guard entries for the main city.

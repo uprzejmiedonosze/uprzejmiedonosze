@@ -1,7 +1,7 @@
 
 RSYNC       := rsync
 RSYNC_FLAGS := --human-readable --recursive --delete --exclude '__pycache__' --exclude '.venv'
-HOSTING     := nieradka.net
+HOSTING     := uprzejmiedonosze.net
 COMPOSE     := docker compose -f ../compose.yml
 
 # Deploy via Docker (build on server)

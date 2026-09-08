@@ -6,7 +6,7 @@ use store\S3;
 
 $dryRun = in_array('--dry-run', $argv, true);
 $prefix = 'uprzejmiedonosze-db/';
-$tmpDir = '/mnt/hotbackup';
+$tmpDir = '/mnt/hotbackup/tmp';
 
 if (!is_dir($tmpDir) && !@mkdir($tmpDir, 0700, true)) {
     echo "ERROR: backup temp dir $tmpDir does not exist and could not be created\n";

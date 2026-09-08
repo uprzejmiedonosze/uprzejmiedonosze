@@ -234,7 +234,7 @@ services:
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2stg:/var/www/uprzejmiedonosze.net/cdn2stg:rw
       - /var/log/${APP_HOST:-uprzejmiedonosze.net}:/var/log/uprzejmiedonosze.net:rw
-      - ${BACKUP_TMP_ROOT:-/mnt/hotbackup}:/mnt/hotbackup:rw
+      - ${BACKUP_TMP_ROOT:-/mnt/hotbackup/tmp}:/mnt/hotbackup/tmp:rw
     depends_on:
       - memcached
     environment:

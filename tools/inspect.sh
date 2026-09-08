@@ -25,7 +25,7 @@ function is_appId() {
 }
 
 function get_app_key_by_id() {
-	ssh nieradka.net "${SQL} \"select key from applications where json_extract(value, '$.number') = upper('$1') \""
+	ssh uprzejmiedonosze.net "${SQL} \"select key from applications where json_extract(value, '$.number') = upper('$1') \""
 }
 
 is_app_key "$1" && APPKEY=$1
@@ -33,7 +33,7 @@ is_appId "$1" && APPKEY=$(get_app_key_by_id "$1")
 
 if [ ${APPKEY+x} ]; then
 	echo "Checking application id ${APPKEY}:";
-	ssh nieradka.net "${SQL} \"select value from applications where key = '${APPKEY}'\"" | jq 'walk(if type == "string" then .[:100] else . end)'
+	ssh uprzejmiedonosze.net "${SQL} \"select value from applications where key = '${APPKEY}'\"" | jq 'walk(if type == "string" then .[:100] else . end)'
 	print_app_url "${APPKEY}"
 	exit 0
 fi
@@ -43,7 +43,7 @@ if [[ ${PARAM} =~ @ ]]; then
 	WHERE2="email = '${PARAM}'"
 elif [[ ${PARAM} =~ [0-9] ]]; then
 	echo "Apps with plate id ${PARAM}:"
-	for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.email'), plateId from applications where plateId = '${PARAM}' order by json_extract(value, '$.added') desc limit 100 \""); do
+	for key in $(ssh uprzejmiedonosze.net "${SQL} \"select key, json_extract(value, '$.email'), plateId from applications where plateId = '${PARAM}' order by json_extract(value, '$.added') desc limit 100 \""); do
 		print_app_url "${key%%|*}" "(${key#*|})"
 	done
 	exit 0
@@ -53,12 +53,12 @@ else
 fi
 
 echo "Checking user ${PARAM}:";
-ssh nieradka.net "${SQL} \"select value from users where ${WHERE1} \"" | jq 'walk(if type == "string" then .[:100] else . end)'
+ssh uprzejmiedonosze.net "${SQL} \"select value from users where ${WHERE1} \"" | jq 'walk(if type == "string" then .[:100] else . end)'
 echo "Stats:"
-ssh nieradka.net "${SQL} \"select value from applications where ${WHERE2} \"" | jq -r '.status' | sort | uniq -c | sort -nr
+ssh uprzejmiedonosze.net "${SQL} \"select value from applications where ${WHERE2} \"" | jq -r '.status' | sort | uniq -c | sort -nr
 
 echo "Last 10 applications:"
-for key in $(ssh nieradka.net "${SQL} \"select key, json_extract(value, '$.status') from applications where ${WHERE2} and json_extract(value, '$.status') != 'draft' order by json_extract(value, '$.added') desc limit 10 \""); do
+for key in $(ssh uprzejmiedonosze.net "${SQL} \"select key, json_extract(value, '$.status') from applications where ${WHERE2} and json_extract(value, '$.status') != 'draft' order by json_extract(value, '$.added') desc limit 10 \""); do
 	print_app_url "${key%|*}" "[${key#*|}]"
 done
 exit 0
