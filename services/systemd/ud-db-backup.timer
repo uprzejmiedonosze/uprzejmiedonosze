@@ -1,0 +1,9 @@
+[Unit]
+Description=Run ud-db-backup daily at 01:00
+
+[Timer]
+OnCalendar=*-*-* 01:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
