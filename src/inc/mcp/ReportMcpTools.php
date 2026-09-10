@@ -297,7 +297,9 @@ final class ReportMcpTools {
      * is reverse-geocoded via Nominatim (same endpoint the web uses) to fill the
      * structured fields and resolve the recipient unit; a caller-supplied address
      * string is kept as the display address. A bare address string without
-     * coordinates is stored as-is (the web never forward-geocodes).
+     * coordinates is forward-geocoded (Nominatim search) to obtain them, so the
+     * editor's map can center on it; when that lookup fails the string alone is
+     * stored as-is and the user positions the pin by hand.
      *
      * @param int|null    $category    Violation category id (see list_categories).
      * @param int[]|null  $extensions  Additional category ids stacked on the primary category.
@@ -452,6 +454,23 @@ final class ReportMcpTools {
                 $draft->address->lng = $lng;
             }
         }
+        // A bare address string without coordinates is forward-geocoded so the
+        // editor can center its map and resolve the recipient. Either missing
+        // half is filled from the lookup (a lone coordinate is unusable on its
+        // own); lookup failure is non-fatal and keeps the display string alone.
+        if (($lat === null || $lng === null) && $address !== null) {
+            $coords = $this->forwardGeocode($address);
+            if ($coords !== null) {
+                if ($lat === null) {
+                    $lat = $coords[0];
+                    $draft->address->lat = $lat;
+                }
+                if ($lng === null) {
+                    $lng = $coords[1];
+                    $draft->address->lng = $lng;
+                }
+            }
+        }
         if ($lat !== null && $lng !== null) {
             $nominatim = $this->reverseGeocode($lat, $lng);
             if ($nominatim !== null) {
@@ -567,6 +586,40 @@ final class ReportMcpTools {
             // Non-fatal: keep whatever the caller supplied; the web's geo
             // endpoints also degrade without blocking the report.
             logger("MCP create_report_draft: geocoding failed for $lat,$lng: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * Forward-geocoder override for tests (Nominatim search is a plain
+     * function and cannot be stubbed). Defaults to \geo\NominatimSearch.
+     * Returns [lat, lng] or null when nothing was found.
+     *
+     * @var callable(string): array|null
+     */
+    private static $forwardGeocoder = null;
+
+    public static function setForwardGeocoder(?callable $geocoder): void {
+        self::$forwardGeocoder = $geocoder;
+    }
+
+    /** @return array{0: float, 1: float}|null */
+    private function forwardGeocode(string $address): ?array {
+        try {
+            $result = self::$forwardGeocoder !== null
+                ? call_user_func(self::$forwardGeocoder, $address)
+                : \geo\NominatimSearch($address);
+            if (is_array($result) && isset($result['lat'], $result['lng'])) {
+                return [(float)$result['lat'], (float)$result['lng']];
+            }
+            if (is_array($result) && isset($result[0], $result[1])) {
+                return [(float)$result[0], (float)$result[1]];
+            }
+            return null;
+        } catch (\Throwable $e) {
+            // Non-fatal: keep the caller's display string alone; the user
+            // positions the pin by hand in the editor.
+            logger("MCP create_report_draft: forward-geocoding failed for '$address': " . $e->getMessage());
             return null;
         }
     }

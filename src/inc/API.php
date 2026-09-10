@@ -166,7 +166,17 @@ function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFro
             if (!empty($dateTime)) $application->date = $dateTime;
             if (!empty($dtFromPicture)) $application->dtFromPicture = $dtFromPicture;
             if (!empty($latLng)) $application->setLatLng($latLng);
-            \alpr\get($imageBytes, $application, $baseFileName, $type, $user);
+            // ALPR measures its plate/vehicle boxes on the bytes it receives
+            // but the crop is cut from the stored file — so it must see the
+            // stored (≤1600px) bytes, not the original upload. The web uploads
+            // pre-resized images so both are identical there; direct/API
+            // uploads (up to 2 MB, any dimensions) would otherwise shift every
+            // box by the downscale ratio.
+            $alprBytes = @file_get_contents($fileName);
+            if ($alprBytes === false) {
+                $alprBytes = $imageBytes;
+            }
+            \alpr\get($alprBytes, $application, $baseFileName, $type, $user);
             $application->carImage->width = $width;
             $application->carImage->height = $height;
         } else if ($pictureType == 'contextImage') {

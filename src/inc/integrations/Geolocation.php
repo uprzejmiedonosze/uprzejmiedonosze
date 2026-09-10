@@ -102,6 +102,52 @@ function Nominatim(float $lat, float $lng): array {
     );
 }
 
+/**
+ * Forward-geocodes a free-text address to [lat, lng] via Nominatim search
+ * (country-restricted to Poland). Returns null when nothing unambiguous is
+ * found — callers should treat that as "display string only", never as an
+ * error. Only the coordinates are returned; feed them back into Nominatim()
+ * for the structured address fields.
+ */
+function NominatimSearch(string $query): ?array {
+    $query = trim($query);
+    if ($query === '') {
+        return null;
+    }
+    $cacheKey = 'search:' . mb_strtolower($query);
+    $cached = \cache\geo\get(Type::Nominatim, $cacheKey);
+    if ($cached) {
+        return $cached;
+    }
+
+    $params = array(
+        "q" => $query,
+        "format" => 'jsonv2',
+        "addressdetails" => 0,
+        "countrycodes" => 'pl',
+        "limit" => 1
+    );
+    $url = "https://nominatim.openstreetmap.org/search?";
+
+    try {
+        $json = \curl\request($url, $params, "Nominatim");
+    } catch (\Throwable $e) {
+        \telemetry\log('api_nominatim', null, ['status' => 'error']);
+        throw $e;
+    }
+
+    $first = is_array($json) ? reset($json) : false;
+    if (!$first || !isset($first['lat'], $first['lon'])) {
+        \telemetry\log('api_nominatim', null, ['status' => 'error']);
+        return null;
+    }
+    \telemetry\log('api_nominatim', null, ['status' => 'success']);
+
+    $result = ['lat' => (float)$first['lat'], 'lng' => (float)$first['lon']];
+    \cache\geo\set(Type::Nominatim, $cacheKey, $result);
+    return $result;
+}
+
 function MapBox(float $lat, float $lng): array {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);

@@ -64,10 +64,31 @@ export function initMaps(lastLocation, _stopAgresji) {
 
   if (input && (!input.value || input.value.trim().length == 0))
     setAddressByLatLng(center[1], center[0], 'init');
+  else {
+    // Drafts pre-filled with coordinates (e.g. created via MCP/API) already
+    // show an address string, so the check above would skip the lookup — but
+    // the recipient units and hint still need it. Keep the existing text.
+    const stored = parseStoredAddress()
+    if (stored) setAddressByLatLng(stored.lat, stored.lng, 'init-keep-text');
+  }
 
   map.on('moveend', updateAddressDebounce)
 
   return map
+}
+
+// Coordinates already stored in the hidden #address JSON (server-side drafts
+// carry them even when the display input is pre-filled).
+function parseStoredAddress() {
+  try {
+    const raw = /** @type {HTMLInputElement} */ (document.getElementById("address"))?.value
+    if (!raw) return null
+    const stored = JSON.parse(raw)
+    const lat = parseFloat(stored?.lat)
+    const lng = parseFloat(stored?.lng)
+    if (!isNaN(lat) && !isNaN(lng)) return { lat, lng }
+  } catch (_e) { /* not JSON yet — fall through */ }
+  return null
 }
 
 let timeout
@@ -180,9 +201,11 @@ async function latLngToAddress(lat, lng, from) {
   const geoSuccess = (addressData) => {
     if (address) address.value = JSON.stringify(addressData)
     if (input) {
-      input.value = addressData?.address || ''
+      // 'init-keep-text' refreshes units/hints for pre-filled drafts without
+      // clobbering the stored display address.
+      if (from !== 'init-keep-text') input.value = addressData?.address || ''
       input.className = ""
-      if (!addressData?.address?.match(/.+,.+/)) {
+      if (!input.value.match(/.+,.+/)) {
         input.classList.add("error")
       }
     }

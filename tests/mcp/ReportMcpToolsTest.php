@@ -35,6 +35,7 @@ class ReportMcpToolsTest extends DatabaseTestCase
         // Test overrides are static and shared with CreateReportDraftImageTest;
         // reset them so test order cannot select a stale stub or a live API.
         ReportMcpTools::setReverseGeocoder(null);
+        ReportMcpTools::setForwardGeocoder(null);
         ReportMcpTools::setVehicleInfoFetcher(null);
         parent::tearDown();
     }
@@ -612,19 +613,76 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertSame('sekretariat.srodmiescie@sc.policja.gov.pl', $report['destinationOptions']['police']['email']);
     }
 
-    public function testCreateReportDraftWithAddressOnlySkipsGeocoding(): void
+    public function testCreateReportDraftWithAddressOnlyForwardGeocodes(): void
     {
-        $geocoderCalled = false;
-        ReportMcpTools::setReverseGeocoder(function () use (&$geocoderCalled) {
-            $geocoderCalled = true;
-            return null;
+        ReportMcpTools::setForwardGeocoder(function (string $query) {
+            self::assertSame('Mazurska 43, Szczecin', $query);
+            return ['lat' => 53.43, 'lng' => 14.55];
+        });
+        ReportMcpTools::setReverseGeocoder(function (float $lat, float $lng) {
+            self::assertSame(53.43, $lat);
+            self::assertSame(14.55, $lng);
+            return [
+                'address' => [
+                    'address' => 'Mazurska 43, Szczecin',
+                    'city' => 'Szczecin',
+                    'voivodeship' => 'zachodniopomorskie',
+                    'postcode' => '70-000',
+                    'county' => 'Szczecin',
+                    'municipality' => 'Szczecin',
+                ],
+                'sm' => new \SM(json_encode([
+                    'address' => ['Straż Miejska w Szczecinie', 'ul. Mariacka 1, 70-546 Szczecin'],
+                    'email' => 'zgloszenia@sm.szczecin.pl',
+                    'city' => 'Szczecin',
+                    'hint' => null,
+                    'api' => null,
+                    'active' => true,
+                ])),
+                'sa' => new \Police(json_encode([
+                    'address' => ['Komenda Miejska Policji w Szczecinie', 'pl. Stefana Batorego 4, 70-207 Szczecin'],
+                    'email' => 'sekretariat.srodmiescie@sc.policja.gov.pl',
+                    'city' => 'Szczecin',
+                    'hint' => null,
+                    'api' => null,
+                    'active' => true,
+                ])),
+            ];
         });
         $this->actAs('creator-addr@example.com', ['reports:create']);
 
+        $result = (new ReportMcpTools())->createReportDraft(
+            destination: 'sm',
+            address: 'Mazurska 43, Szczecin'
+        );
+
+        // The bare string is forward-geocoded so the editor's map can center
+        // on it; the caller's string stays the display address while the
+        // lookup fills coordinates, structured fields and the recipient.
+        $report = $result['report'];
+        self::assertSame('Mazurska 43, Szczecin', $report['address']['address']);
+        self::assertSame(53.43, $report['address']['lat']);
+        self::assertSame(14.55, $report['address']['lng']);
+        self::assertSame('Szczecin', $report['address']['city']);
+        self::assertSame('zgloszenia@sm.szczecin.pl', $report['recipientInfo']['email']);
+        self::assertSame('szczecin', \app\get($report['id'])->smCity);
+    }
+
+    public function testCreateReportDraftWithUnresolvableAddressKeepsDisplayString(): void
+    {
+        $reverseCalled = false;
+        ReportMcpTools::setForwardGeocoder(fn (string $query): ?array => null);
+        ReportMcpTools::setReverseGeocoder(function () use (&$reverseCalled) {
+            $reverseCalled = true;
+            return null;
+        });
+        $this->actAs('creator-addr2@example.com', ['reports:create']);
+
         $result = (new ReportMcpTools())->createReportDraft(address: 'Mazurska 43, Szczecin');
 
-        // The web never forward-geocodes a bare address string; neither may MCP.
-        self::assertFalse($geocoderCalled, 'no coordinates → no reverse geocoding');
+        // Forward lookup failure is non-fatal: the display string alone is
+        // kept and the user positions the pin by hand in the editor.
+        self::assertFalse($reverseCalled, 'no coordinates → no reverse geocoding');
         self::assertSame('Mazurska 43, Szczecin', $result['report']['address']['address']);
         self::assertArrayNotHasKey('lat', $result['report']['address']);
         self::assertArrayNotHasKey('recipientInfo', $result['report'], 'no coordinates → no recipient resolved');
