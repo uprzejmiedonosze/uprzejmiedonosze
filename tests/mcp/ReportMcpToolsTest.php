@@ -40,11 +40,15 @@ class ReportMcpToolsTest extends DatabaseTestCase
         parent::tearDown();
     }
 
-    private function makeApp(string $id, string $status, string $email): Application
+    private function makeApp(string $id, string $status, string $email, ?string $plateId = null): Application
     {
         $data = json_decode(self::APP_JSON_TEMPLATE, true);
         $data['id'] = $id;
         $data['status'] = $status;
+        if ($plateId !== null) {
+            $data['carInfo']['plateId'] = $plateId;
+            unset($data['carInfo']['plateIdFromImage']);
+        }
         $app = Application::withJson(json_encode($data), $email);
         $app->initStatements();
         \app\save($app);
@@ -256,6 +260,124 @@ class ReportMcpToolsTest extends DatabaseTestCase
         $this->expectException(\Mcp\Exception\ToolCallException::class);
         $this->expectExceptionMessage("Report 'does-not-exist' not found");
         (new ReportMcpTools())->getReport('does-not-exist');
+    }
+
+    public function testCheckPlateRequiresReadScope(): void
+    {
+        $this->actAs('a@b.com', []);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("requires the 'reports:read' OAuth scope");
+        (new ReportMcpTools())->checkPlate('CP0000A');
+    }
+
+    public function testCheckPlateWithNoReportsReturnsZeroCounts(): void
+    {
+        $this->actAs('a@b.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->checkPlate('CP0000B');
+
+        self::assertSame('CP0000B', $result['plateId']);
+        self::assertSame(0, $result['appsCnt']);
+        self::assertSame(0, $result['usersCnt']);
+        self::assertFalse($result['sharedHistory']);
+        self::assertSame([], $result['reports']);
+    }
+
+    public function testCheckPlateSingleOwnReportIsListedBelowSharedThreshold(): void
+    {
+        $app = $this->makeApp('mcp-plate-own', 'confirmed-waiting', 'owner-plate@example.com', 'CP0001C');
+        $this->actAs('owner-plate@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->checkPlate('CP0001C');
+
+        self::assertSame(1, $result['appsCnt']);
+        self::assertSame(1, $result['usersCnt']);
+        self::assertFalse($result['sharedHistory']);
+        self::assertCount(1, $result['reports']);
+        $entry = $result['reports'][0];
+        self::assertTrue($entry['isOwn']);
+        self::assertSame('mcp-plate-own', $entry['reportId']);
+        self::assertSame($app->number, $entry['number']);
+        self::assertSame('confirmed-waiting', $entry['status']);
+        self::assertArrayHasKey('categoryInfo', $entry);
+        self::assertArrayHasKey('recipient', $entry);
+    }
+
+    public function testCheckPlateSingleOtherUsersReportIsHiddenBelowSharedThreshold(): void
+    {
+        $this->makeApp('mcp-plate-other', 'confirmed-waiting', 'victim-plate@example.com', 'CP0002D');
+        $this->actAs('someone-else@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->checkPlate('CP0002D');
+
+        // Counts reflect everyone's reports (same info the report-creation flow
+        // already shows), but below the shared-history threshold the history
+        // itself is limited to the caller's own matching reports — there are none.
+        self::assertSame(1, $result['appsCnt']);
+        self::assertSame(1, $result['usersCnt']);
+        self::assertFalse($result['sharedHistory']);
+        self::assertSame([], $result['reports']);
+    }
+
+    public function testCheckPlateSharedHistoryIncludesOtherUsersWithoutIdentifyingInfo(): void
+    {
+        $own = $this->makeApp('mcp-plate-mine', 'confirmed-waiting', 'me@example.com', 'CP0003E');
+        $this->makeApp('mcp-plate-theirs', 'confirmed-fined', 'them@example.com', 'CP0003E');
+        $this->actAs('me@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->checkPlate('CP0003E');
+
+        self::assertSame(2, $result['appsCnt']);
+        self::assertSame(2, $result['usersCnt']);
+        self::assertTrue($result['sharedHistory']);
+        self::assertCount(2, $result['reports']);
+
+        $byId = [];
+        foreach ($result['reports'] as $entry) {
+            $byId[$entry['isOwn'] ? 'own' : 'other'] = $entry;
+        }
+
+        self::assertSame('mcp-plate-mine', $byId['own']['reportId']);
+        self::assertSame($own->number, $byId['own']['number']);
+
+        // The other user's report is visible (date/status/category/recipient)
+        // but carries none of the identifying fields — no reportId, number,
+        // caseNumber or email.
+        self::assertArrayNotHasKey('reportId', $byId['other']);
+        self::assertArrayNotHasKey('number', $byId['other']);
+        self::assertArrayNotHasKey('caseNumber', $byId['other']);
+        self::assertArrayNotHasKey('email', $byId['other']);
+        self::assertSame('confirmed-fined', $byId['other']['status']);
+    }
+
+    public function testCheckPlateNormalizesWhitespaceAndCase(): void
+    {
+        $this->makeApp('mcp-plate-norm', 'confirmed-waiting', 'norm@example.com', 'CP0004F');
+        $this->actAs('norm@example.com', ['reports:read']);
+
+        $result = (new ReportMcpTools())->checkPlate(' cp 0004f ');
+
+        self::assertSame('CP0004F', $result['plateId']);
+        self::assertSame(1, $result['appsCnt']);
+    }
+
+    public function testCheckPlateHasNoSideEffects(): void
+    {
+        // Unlike \recydywa\get()/update(), check_plate must never write a
+        // cached recydywa row or re-queue matching reports for review — it
+        // only reads via \app\byPlate().
+        $this->makeApp('mcp-plate-a', 'confirmed-waiting', 'a@example.com', 'CP0005G');
+        $this->makeApp('mcp-plate-b', 'confirmed-fined', 'b@example.com', 'CP0005G');
+        $this->actAs('a@example.com', ['reports:read']);
+
+        $countBefore = (int) \store\store()->query('SELECT COUNT(*) FROM applications')->fetchColumn();
+        (new ReportMcpTools())->checkPlate('CP0005G');
+        $countAfter = (int) \store\store()->query('SELECT COUNT(*) FROM applications')->fetchColumn();
+
+        self::assertSame($countBefore, $countAfter);
+        // \Memcache::get() returns false, not null, on a miss.
+        self::assertFalse(\cache\get(\cache\Type::Recydywa, 'CP0005G'));
     }
 
     public function testUpdateReportStatusRequiresWriteScope(): void

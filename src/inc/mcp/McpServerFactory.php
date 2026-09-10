@@ -96,6 +96,65 @@ function buildServer(): Server {
         'additionalProperties' => false,
     ];
 
+    // check_plate: a plain plate string in, counts (+ history once shared) out.
+    $checkPlateInputSchema = [
+        'type' => 'object',
+        'properties' => [
+            'plateId' => [
+                'type' => 'string',
+                'description' => 'The licence plate to check, e.g. "WA12345".',
+            ],
+        ],
+        'required' => ['plateId'],
+        'additionalProperties' => false,
+    ];
+    $checkPlateOutputSchema = [
+        'type' => 'object',
+        'properties' => [
+            'plateId' => ['type' => 'string'],
+            'appsCnt' => [
+                'type' => 'integer',
+                'description' => 'Number of reports (any user) filed for this plate.',
+            ],
+            'usersCnt' => [
+                'type' => 'integer',
+                'description' => 'Number of distinct users who filed a report for this plate.',
+            ],
+            'sharedHistory' => [
+                'type' => 'boolean',
+                'description' => 'True once the plate has at least 2 reports from at least 2 '
+                    . 'different users — the same threshold the public plate page uses before '
+                    . 'showing other users\' reports. When false, `reports` only lists the '
+                    . 'current user\'s own reports for this plate, even though appsCnt/usersCnt '
+                    . 'reflect everyone.',
+            ],
+            'reports' => [
+                'type' => 'array',
+                'items' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'date' => ['type' => 'string'],
+                        'status' => ['type' => 'string', 'enum' => array_keys($STATUSES ?? [])],
+                        'statusLabel' => ['type' => 'string'],
+                        'categoryInfo' => ['type' => 'object'],
+                        'recipient' => ['type' => 'object'],
+                        'isOwn' => [
+                            'type' => 'boolean',
+                            'description' => 'True for the current user\'s own report; other '
+                                . 'users\' reports never carry reportId/number/caseNumber or '
+                                . 'any identifying info.',
+                        ],
+                        'reportId' => ['type' => 'string'],
+                        'number' => ['type' => 'string'],
+                        'caseNumber' => ['type' => 'string'],
+                    ],
+                    'additionalProperties' => true,
+                ],
+            ],
+        ],
+        'additionalProperties' => false,
+    ];
+
     // Full status legend (id — label — meaning; allowed transitions) for the
     // server instructions, and a recordable-outcomes list for the update tool.
     // Both derive from statuses.json so they stay in sync with the domain.
@@ -251,7 +310,10 @@ function buildServer(): Server {
             . 'Each report has a `status` id (see the legend below) and a categoryInfo object '
             . '(the violation type, its formal wording and legal basis). Use the Polish status '
             . 'labels when talking to the user, and only set a status the current one is '
-            . 'allowed to move to.'
+            . 'allowed to move to. '
+            . 'To check whether a plate has been reported before — without creating anything — '
+            . 'use check_plate rather than create_report_draft; below its sharedHistory '
+            . 'threshold it only shows the current user\'s own matching reports.'
             . "\n\nStatus legend (id — label — meaning; allowed transitions):\n" . $statusLegend
         )
         ->setSession(new McpMemcacheSessionStore())
@@ -277,6 +339,22 @@ function buildServer(): Server {
                 openWorldHint: false
             ),
             outputSchema: $reportSchema
+        )
+        ->addTool(
+            [$tools, 'checkPlate'],
+            'check_plate',
+            description: 'Check how many times a licence plate has been reported, without '
+                . 'creating a draft or report as a side effect. Always returns appsCnt/usersCnt; '
+                . 'the per-report history is only included once the plate is shared by at least '
+                . '2 users across at least 2 reports (sharedHistory) — below that, only the '
+                . 'signed-in user\'s own matching reports are listed.',
+            annotations: new ToolAnnotations(
+                readOnlyHint: true,
+                idempotentHint: true,
+                openWorldHint: false
+            ),
+            inputSchema: $checkPlateInputSchema,
+            outputSchema: $checkPlateOutputSchema
         )
         ->addTool(
             [$tools, 'updateReportStatus'],

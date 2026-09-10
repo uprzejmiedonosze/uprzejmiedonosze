@@ -158,7 +158,8 @@ header pointing at the protected-resource metadata.
 
 The server lets an assistant read reports, record the authority's response
 (`update_report_status`), save a report's **private** annotations — the case number and a
-private note (`set_report_notes`) — and create pre-filled **drafts** (`create_report_draft`) for
+private note (`set_report_notes`) — check whether a plate has been reported before without
+creating anything (`check_plate`), and create pre-filled **drafts** (`create_report_draft`) for
 the user to finish and send themselves. It cannot send reports, edit already-sent content, or
 fetch binary assets (images/PDF/ZIP). Tools reject unknown arguments (`additionalProperties:
 false`) rather than silently dropping them, and domain failures come back as readable tool errors
@@ -170,6 +171,15 @@ Tools:
     specific status id; default `all`), `limit` (default 50). Returns `{ "reports": [...] }`.
     `all` returns sent reports and **excludes drafts**; use `allWithDrafts` to include drafts.
   * `get_report` — scope `reports:read`. Param: `reportId`.
+  * `check_plate` — scope `reports:read`. Param: `plateId`. Returns
+    `{ plateId, appsCnt, usersCnt, sharedHistory, reports: [...] }` without creating a draft or
+    report. `appsCnt`/`usersCnt` always reflect every user's reports for the plate. `reports`
+    only lists other users' reports once the plate has `sharedHistory: true` (at least 2 reports
+    from at least 2 different users — the same threshold the public plate page uses); below that
+    it lists only the signed-in user's own matching reports. Each entry has `date`, `status`,
+    `statusLabel`, `categoryInfo`, `recipient` (`name`/`shortName`/`isPolice`), and `isOwn`; only
+    the caller's own entries additionally carry `reportId`, `number`, and (when set and not
+    encrypted) `caseNumber`. No email addresses or images are ever included.
   * `update_report_status` — scope `reports:status:write`. Params: `reportId`, `status` (enum of
     recordable outcomes: `confirmed-sm`, `confirmed-fined`, `confirmed-instructed`,
     `confirmed-ignored`, `confirmed-complaint`, `archived`). The transition is validated by the
