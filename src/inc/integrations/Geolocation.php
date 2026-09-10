@@ -108,16 +108,20 @@ function Nominatim(float $lat, float $lng): array {
  * found — callers should treat that as "display string only", never as an
  * error. Only the coordinates are returned; feed them back into Nominatim()
  * for the structured address fields.
+ *
+ * Requires a locality in the query (a comma, e.g. "street, city") — a bare
+ * street/number without a city is exactly the ambiguous case Nominatim will
+ * happily match to the wrong town, so it's rejected before ever calling out.
  */
 function NominatimSearch(string $query): ?array {
     $query = trim($query);
-    if ($query === '') {
+    if ($query === '' || !str_contains($query, ',')) {
         return null;
     }
     $cacheKey = 'search:' . mb_strtolower($query);
     $cached = \cache\geo\get(Type::Nominatim, $cacheKey);
     if ($cached) {
-        return $cached;
+        return $cached['miss'] ?? false ? null : $cached;
     }
 
     $params = array(
@@ -138,7 +142,11 @@ function NominatimSearch(string $query): ?array {
 
     $first = is_array($json) ? reset($json) : false;
     if (!$first || !isset($first['lat'], $first['lon'])) {
-        \telemetry\log('api_nominatim', null, ['status' => 'error']);
+        // Not an API error — Nominatim answered fine, it just found nothing.
+        // Cache the miss (shorter TTL than a hit) so a typo'd or unmappable
+        // address doesn't re-hit the API on every retry.
+        \telemetry\log('api_nominatim', null, ['status' => 'not_found']);
+        \cache\set(Type::Nominatim, $cacheKey, ['miss' => true], MEMCACHE_COMPRESSED, 6 * 60 * 60);
         return null;
     }
     \telemetry\log('api_nominatim', null, ['status' => 'success']);

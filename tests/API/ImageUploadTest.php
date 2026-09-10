@@ -85,6 +85,33 @@ class ImageUploadTest extends TestCase
         $this->assertSame('image/jpeg', mime_content_type($thumbPath));
     }
 
+    /**
+     * ALPR crops the plate from the *stored* file (`ROOT."$base,$type.jpg"`)
+     * but measures its boxes on the bytes handed to it (see
+     * API.php::uploadImage's carImage branch), so the two must agree in
+     * scale. This pins the invariant that fix relies on: an oversized upload
+     * (e.g. a direct/API upload above the web's pre-resize) ends up stored
+     * at ≤ MAX_IMAGE_DIM, not at its original size.
+     */
+    public function testSaveImgAndThumbDownscalesOversizedImageToMaxDim(): void
+    {
+        $user = $this->createSavedUser('img-oversized-test@example.com');
+        $app = Application::withUser($user);
+        $jpeg = $this->makeJpegBytes(2400, 1800);
+        $type = 'co';
+
+        $baseFileName = saveImgAndThumb($app, $jpeg, $type);
+        $this->trackOutputFiles($baseFileName, $type);
+
+        $fullPath = ROOT . "$baseFileName,$type.jpg";
+        [$storedWidth, $storedHeight] = getimagesize($fullPath);
+
+        $this->assertLessThanOrEqual(1600, $storedWidth);
+        $this->assertLessThanOrEqual(1600, $storedHeight);
+        // Aspect ratio preserved, not just capped.
+        $this->assertEqualsWithDelta(2400 / 1800, $storedWidth / $storedHeight, 0.01);
+    }
+
     public function testSaveImgAndThumbRejectsInvalidBytes(): void
     {
         $user = $this->createSavedUser('img-invalid-test@example.com');

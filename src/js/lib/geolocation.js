@@ -205,7 +205,10 @@ async function latLngToAddress(lat, lng, from) {
       // clobbering the stored display address.
       if (from !== 'init-keep-text') input.value = addressData?.address || ''
       input.className = ""
-      if (!input.value.match(/.+,.+/)) {
+      // Validity is about whether geocoding actually resolved a real address,
+      // not about the displayed text — a caller-supplied display string (e.g.
+      // from MCP) may legitimately omit the ", city" shape.
+      if (!addressData?.address?.match(/.+,.+/)) {
         input.classList.add("error")
       }
     }
