@@ -1,0 +1,12 @@
+[Unit]
+Description=Uprzejmie Donosze — purge expired/revoked OAuth codes and tokens
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+ExecStart=/usr/bin/php /var/www/uprzejmiedonosze.net/webapp/tools/oauth-cleanup.php
+StandardOutput=journal
+StandardError=journal
+Nice=19
+IOSchedulingClass=idle

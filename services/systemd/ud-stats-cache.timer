@@ -1,0 +1,10 @@
+[Unit]
+Description=Run ud-stats-cache at 05:00 and 23:40
+
+[Timer]
+OnCalendar=*-*-* 05:00:00
+OnCalendar=*-*-* 23:40:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
