@@ -17,5 +17,19 @@
         "price": "100 zł",
         "stopAgresjiOnly": false,
         "title": "znajdował się na chodniku mając ponad 2,5 t DMC"
+    },
+    "14": {
+        "law": "art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania wskazany znakami drogowymi.",
+        "price": "do 300 zł",
+        "stopAgresjiOnly": false,
+        "title": "naruszał zakaz zatrzymywania",
+        "summary": "Dodatkowo pojazd został zatrzymany w miejscu objętym zakazem zatrzymywania się (znak B-36)."
+    },
+    "24": {
+        "law": "art. 46. 4. Kierujący pojazdem jest obowiązany stosować sposób zatrzymania lub postoju wskazany znakami drogowymi.",
+        "price": "do 300 zł",
+        "stopAgresjiOnly": false,
+        "title": "naruszał zakaz postoju",
+        "summary": "Dodatkowo pojazd był zaparkowany za znakiem B-35, pozostając w postoju ponad dopuszczony oznakowaniem czas postoju."
     }
 }
