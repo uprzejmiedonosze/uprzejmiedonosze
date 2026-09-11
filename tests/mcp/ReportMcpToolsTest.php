@@ -554,6 +554,9 @@ class ReportMcpToolsTest extends DatabaseTestCase
         // Hermetic: the plate triggers the zbiorkom enrichment — stub it so the
         // test never depends on the live endpoint.
         ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
+        // Hermetic: address+lat/lng together now cross-check via forward geocoding
+        // (issue #121) — stub it agreeing with the given coordinates.
+        ReportMcpTools::setForwardGeocoder(fn (string $query): array => ['lat' => 53.43, 'lng' => 14.55]);
         $this->actAs('creator@example.com', ['reports:create']);
 
         $result = (new ReportMcpTools())->createReportDraft(
@@ -672,6 +675,9 @@ class ReportMcpToolsTest extends DatabaseTestCase
 
     public function testCreateReportDraftReverseGeocodesCoordinates(): void
     {
+        // Hermetic: address+lat/lng together cross-check via forward geocoding
+        // (issue #121) — stub it agreeing with the given coordinates.
+        ReportMcpTools::setForwardGeocoder(fn (string $query): array => ['lat' => 53.43, 'lng' => 14.55]);
         ReportMcpTools::setReverseGeocoder(function (float $lat, float $lng) {
             self::assertSame(53.43, $lat);
             self::assertSame(14.55, $lng);
@@ -810,6 +816,80 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertArrayNotHasKey('recipientInfo', $result['report'], 'no coordinates → no recipient resolved');
     }
 
+    public function testCreateReportDraftRejectsAddressFarFromCoordinates(): void
+    {
+        // The address forward-geocodes to Rynek; the given coordinates are for
+        // Rybacka, ~2 km away — a caller-supplied mismatch (issue #121).
+        ReportMcpTools::setForwardGeocoder(fn (string $query): array => ['lat' => 51.1122, 'lng' => 17.0327]);
+        $reverseCalled = false;
+        ReportMcpTools::setReverseGeocoder(function () use (&$reverseCalled) {
+            $reverseCalled = true;
+            return null;
+        });
+        $user = $this->actAs('creator-mismatch@example.com', ['reports:create']);
+
+        try {
+            (new ReportMcpTools())->createReportDraft(
+                address: 'Rynek, Wrocław',
+                lat: 51.1024,
+                lng: 17.0537
+            );
+            self::fail('Expected a ToolCallException for mismatched address/coordinates.');
+        } catch (\Mcp\Exception\ToolCallException $e) {
+            self::assertStringContainsString('Rynek, Wrocław', $e->getMessage());
+            self::assertStringContainsString('km', $e->getMessage());
+        }
+
+        self::assertFalse($reverseCalled, 'the mismatch is caught before any geocoding/draft creation');
+        self::assertEmpty(\user\apps($user, 'allWithDrafts', 'all', 50, 0), 'no draft should be left behind');
+    }
+
+    public function testCreateReportDraftAllowsAddressNearCoordinates(): void
+    {
+        // Forward geocode lands a couple hundred meters from the given
+        // coordinates — well within the same-street tolerance.
+        ReportMcpTools::setForwardGeocoder(fn (string $query): array => ['lat' => 53.4310, 'lng' => 14.5520]);
+        ReportMcpTools::setReverseGeocoder(fn (): array => [
+            'address' => ['address' => 'Mazurska 43, Szczecin', 'city' => 'Szczecin'],
+            'sm' => null,
+            'sa' => null,
+        ]);
+        $this->actAs('creator-nearby@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            address: 'Mazurska 43, Szczecin',
+            lat: 53.43,
+            lng: 14.55
+        );
+
+        // Within tolerance: today's split still applies — caller's string stays
+        // the display address, geocoded string lands in addressGPS.
+        self::assertSame('Mazurska 43, Szczecin', $result['report']['address']['address']);
+        self::assertSame('Mazurska 43, Szczecin', $result['report']['address']['addressGPS']);
+    }
+
+    public function testCreateReportDraftSkipsMismatchCheckWhenAddressUngeocodable(): void
+    {
+        // No locality in the address → forwardGeocode returns null (nothing to
+        // compare against) → the coordinates are trusted as given, no error.
+        ReportMcpTools::setForwardGeocoder(fn (string $query): ?array => null);
+        ReportMcpTools::setReverseGeocoder(fn (): array => [
+            'address' => ['address' => 'Mazurska 43, Szczecin', 'city' => 'Szczecin'],
+            'sm' => null,
+            'sa' => null,
+        ]);
+        $this->actAs('creator-ungeocodable@example.com', ['reports:create']);
+
+        $result = (new ReportMcpTools())->createReportDraft(
+            address: 'Mazurska 43', // no locality
+            lat: 53.43,
+            lng: 14.55
+        );
+
+        self::assertSame('Mazurska 43', $result['report']['address']['address']);
+        self::assertSame(53.43, $result['report']['address']['lat']);
+    }
+
     public function testCreateReportDraftWithDestinationPoliceRoutesToPolice(): void
     {
         $this->actAs('creator-dst@example.com', ['reports:create']);
@@ -840,6 +920,9 @@ class ReportMcpToolsTest extends DatabaseTestCase
         // disables the SM radio and the report must go to the police, even
         // though the caller asked for the city guard and the coordinates
         // resolve an SM unit.
+        // Hermetic: address+lat/lng together cross-check via forward geocoding
+        // (issue #121) — stub it agreeing with the given coordinates.
+        ReportMcpTools::setForwardGeocoder(fn (string $query): array => ['lat' => 53.43, 'lng' => 14.55]);
         ReportMcpTools::setReverseGeocoder(fn (): array => [
             'address' => [
                 'address' => 'Mazurska 43, Szczecin',

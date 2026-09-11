@@ -200,16 +200,23 @@ Tools:
     user opens `editUrl` to review the draft (adding anything that wasn't supplied) and send. The
     server never sends the report itself.
 
-    Location mirrors the web form: coordinates are the source of truth. When `lat`/`lng` are given
-    (or absent but readable from the `carImage`'s EXIF GPS), the address is reverse-geocoded via
-    Nominatim — the same endpoint the web uses — to fill the structured fields (`city`,
-    `voivodeship`, `postcode`, `county`, `municipality`, `district`), resolve the recipient unit
-    (`recipientInfo` + stored `smCity`), and pre-resolve both editor radio options into
-    `destinationOptions` (`sm`/`police` with `name`, `address`, `email`, `isPolice`). A
-    caller-supplied `address` string is kept as the display address (the geocoded full string goes
-    to `addressGPS`); a bare address string without coordinates is stored as-is — the web never
-    forward-geocodes, and neither does MCP. Geocoding failure is non-fatal: the caller's data alone
-    is kept. A fresh draft's empty `address` stays an object (`{}`), never a list.
+    Location precedence, mirroring the web form: (1) explicit `lat`/`lng` win for the pin; (2) the
+    `carImage`'s EXIF GPS fills them only when both are entirely omitted; (3) a bare `address`
+    string is forward-geocoded (Nominatim search, requires a locality — "street, city") to obtain
+    whichever of `lat`/`lng` is still missing, so the editor's map can center on it. Once
+    coordinates are known (from any of the above), they're reverse-geocoded via Nominatim to fill
+    the structured fields (`city`, `voivodeship`, `postcode`, `county`, `municipality`, `district`),
+    resolve the recipient unit (`recipientInfo` + stored `smCity`), and pre-resolve both editor
+    radio options into `destinationOptions` (`sm`/`police` with `name`, `address`, `email`,
+    `isPolice`). A caller-supplied `address` string is kept as the display address (the geocoded
+    full string goes to `addressGPS`). Geocoding failure is non-fatal: the caller's data alone is
+    kept. A fresh draft's empty `address` stays an object (`{}`), never a list.
+
+    Supplying both `address` and `lat`/`lng` that resolve to places more than ~500 m apart is
+    rejected with a tool error instead of silently keeping the address text while the pin and
+    recipient follow the coordinates — send one or the other. A conflict can only be detected when
+    the address is itself geocodable; an unmappable or locality-less address is not compared and
+    the coordinates are used as given.
 
     When a plate is known (the `plateId` param or ALPR recognition of the `carImage`), the draft's
     description is enriched like the web editor does: the make/model line (`Pojazd marki …`) and —

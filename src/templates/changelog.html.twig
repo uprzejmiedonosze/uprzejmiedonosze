@@ -14,6 +14,14 @@
 
 {% block main %}
 <h2>Historia zmian</h2>
+<h4>Piątek, 11 września 2026</h4>
+<ul>
+   <li>Narzędzie MCP <code>create_report_draft</code> odrzuca teraz sprzeczne dane
+   lokalizacji — gdy podany adres i współrzędne wskazują różne miejsca (ponad
+   500 m od siebie), zamiast tworzyć szkic z niespójnym adresem i pinezką.
+   Doprecyzowano też w opisie narzędzia, w jakiej kolejności ustalana jest
+   lokalizacja (współrzędne, potem EXIF ze zdjęcia, potem adres).</li>
+</ul>
 <h4>Czwartek, 10 września 2026</h4>
 <ul>
    <li>Szkice utworzone samym adresem (np. przez MCP) są teraz automatycznie

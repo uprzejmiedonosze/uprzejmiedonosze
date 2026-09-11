@@ -386,6 +386,14 @@ final class ReportMcpTools {
      * editor's map can center on it; when that lookup fails the string alone is
      * stored as-is and the user positions the pin by hand.
      *
+     * Location precedence when several sources are given: (1) explicit lat/lng
+     * always win for the pin; (2) the car photo's EXIF GPS is used only when
+     * BOTH lat and lng are omitted entirely; (3) address is forward-geocoded
+     * only for whichever of lat/lng is still missing after that. Supplying both
+     * an address and lat/lng that resolve to places more than ~500 m apart is
+     * rejected with a tool error rather than silently keeping the address text
+     * while the pin/recipient follow the coordinates — send one or the other.
+     *
      * @param int|null    $category    Violation category id (see list_categories).
      * @param int[]|null  $extensions  Additional category ids stacked on the primary category.
      * @param bool|null   $witness     Whether the reporter witnessed the moment of parking.
@@ -525,6 +533,13 @@ final class ReportMcpTools {
         }
 
         // ── Location, mirroring the web form ──────────────────────────────────
+        // A caller supplying both an address string and coordinates for a
+        // different place would otherwise leave a mismatched pair (display
+        // text vs. pin/recipient) with no indication anything is wrong; catch
+        // it up front, before any draft is written.
+        if ($address !== null && $lat !== null && $lng !== null) {
+            $this->assertAddressMatchesCoordinates($address, $lat, $lng);
+        }
         // The web derives coordinates from the map click or the photo's EXIF GPS
         // and only then reverse-geocodes. Do the same here; geocoding failure is
         // non-fatal (the caller's data alone is kept, like the web's geo fallback).
@@ -707,6 +722,37 @@ final class ReportMcpTools {
             logger("MCP create_report_draft: forward-geocoding failed for '$address': " . $e->getMessage());
             return null;
         }
+    }
+
+    // Beyond this, a caller-supplied address and caller-supplied coordinates
+    // are treated as pointing at different places, not the same street
+    // (forward geocoding without a house number can land mid-street).
+    private const MAX_ADDRESS_COORD_DISTANCE_M = 500;
+
+    /**
+     * Rejects a create_report_draft call whose `address` and `lat`/`lng`
+     * disagree about where the violation happened, instead of silently
+     * keeping the caller's address text while the pin, structured fields,
+     * and recipient all follow the coordinates (the mismatch reported in
+     * issue #121). Forward-geocoding failure (unmappable or missing-locality
+     * address) is non-fatal here too — there is nothing to compare against,
+     * so the coordinates are trusted as given.
+     */
+    private function assertAddressMatchesCoordinates(string $address, float $lat, float $lng): void {
+        $coords = $this->forwardGeocode($address);
+        if ($coords === null) {
+            return;
+        }
+        $distance = \geo\distanceMeters($lat, $lng, $coords[0], $coords[1]);
+        if ($distance <= self::MAX_ADDRESS_COORD_DISTANCE_M) {
+            return;
+        }
+        $roundedKm = round($distance / 1000, 1);
+        throw new \Mcp\Exception\ToolCallException(
+            "address '$address' and the given lat/lng ($lat, $lng) appear to be about {$roundedKm} km "
+            . "apart — they look like different places. Send either address alone (it will be "
+            . "forward-geocoded) or lat/lng alone (they will be reverse-geocoded), not a mismatched pair."
+        );
     }
 
     /**

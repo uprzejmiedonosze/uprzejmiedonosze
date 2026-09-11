@@ -269,11 +269,20 @@ function buildServer(): Server {
             ],
             'plateId' => ['type' => 'string', 'description' => 'Licence plate, e.g. "ZS1234A".'],
             'description' => ['type' => 'string', 'description' => 'Free-text description of the violation.'],
-            'address' => ['type' => 'string', 'description' => 'Street address where it happened.'],
-            'lat' => ['type' => 'number', 'description' => 'Latitude.'],
-            'lng' => ['type' => 'number', 'description' => 'Longitude.'],
+            'address' => ['type' => 'string', 'description' => 'Street address where it happened, kept as the '
+                . 'display address. If lat/lng are also given they must resolve to roughly the same place '
+                . '(within ~500 m) or the call is rejected — send address alone, or lat/lng alone, not a '
+                . 'mismatched pair. Address-only is forward-geocoded to obtain the pin, and needs a locality '
+                . '("street, city"); a bare street without a city cannot be geocoded.'],
+            'lat' => ['type' => 'number', 'description' => 'Latitude. Location precedence: explicit lat/lng '
+                . '(if both given) beat the car photo\'s EXIF GPS (used only when lat and lng are both omitted), '
+                . 'which beats forward-geocoding address. Coordinates drive the pin, the structured address '
+                . 'fields (city/district/postcode/…), and the resolved recipient authority.'],
+            'lng' => ['type' => 'number', 'description' => 'Longitude. See lat for location precedence.'],
             'datetime' => ['type' => 'string', 'description' => 'When it happened, ISO 8601 local time (e.g. 2026-01-08T14:30:00); any timezone offset is ignored.'],
-            'carImage' => ['type' => 'string', 'description' => 'Optional vehicle/plate photo as a base64 data URI (JPEG/PNG, ≤ 2 MB); runs plate recognition.'],
+            'carImage' => ['type' => 'string', 'description' => 'Optional vehicle/plate photo as a base64 data URI '
+                . '(JPEG/PNG, ≤ 2 MB); runs plate recognition. Its EXIF GPS location is also used to fill in '
+                . 'lat/lng, but only when both are otherwise omitted — see lat.'],
             'contextImage' => ['type' => 'string', 'description' => 'Optional wider-scene photo as a base64 data URI (JPEG/PNG, ≤ 2 MB).'],
             'thirdImage' => ['type' => 'string', 'description' => 'Optional third photo as a base64 data URI (JPEG/PNG, ≤ 2 MB).'],
         ],
