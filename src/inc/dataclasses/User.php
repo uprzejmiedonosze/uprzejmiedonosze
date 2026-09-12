@@ -23,8 +23,8 @@ class User extends \JSONObject{
             parent::__construct($json);
             if (!$dontDecode) {
                 $this->decode();
-                if (!isset($this->data->sex)) {
-                    $this->guessSex();
+                if (!isset($this->data->sex) || !is_string($this->data->sex) || !array_key_exists($this->data->sex, SEXSTRINGS)) {
+                    $this->data->sex = User::_guessSex($this->data->name);
                 }
             }
             return;
@@ -171,14 +171,14 @@ class User extends \JSONObject{
         ));
     }
 
-    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa){
+    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa, ?string $sex = null){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
         $this->data->name = capitalizeName($name);
         if (!preg_match("/^(\S{2,5}\s)?\S{2,20}\s[\S -]{3,40}$/i", $this->data->name))
-            throw new \MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");        
-        $this->guessSex();
+            throw new \MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");
+        $this->data->sex = in_array($sex, ['m', 'f', '?']) ? $sex : User::_guessSex($this->data->name);
 
         $this->data->address = str_replace(', Polska', '', cleanWhiteChars($address));
         if (!preg_match("/^.{3,50}\d.{3,40}$/i", $this->data->address))
@@ -225,7 +225,7 @@ class User extends \JSONObject{
      * Returns (lazy-loaded) sex-strings for this user.
      */
     function getSex() {
-        if(($this->data->sex ?? '?') == '?')
+        if(!is_string($this->data->sex ?? null) || !array_key_exists($this->data->sex, SEXSTRINGS))
             return $this->guessSex();
         return SEXSTRINGS[$this->data->sex];
     }
@@ -235,18 +235,25 @@ class User extends \JSONObject{
      */
     public static function _guessSex(string $name): string {
         $names = preg_split('/\s+/', trimstr2lower($name));
-        if(count($names) < 1){
+        if(count($names) < 1 || $names[0] === ''){
             return '?';
         }
         $maleExceptions = ['kuba', 'kosma', 'barnaba', 'olsza'];
-        if (in_array($names[0], $maleExceptions, true) || substr($names[0], -1) != 'a') {
+        $femaleExceptions = ['noemi', 'nel', 'karmen'];
+        if (in_array($names[0], $maleExceptions, true)) {
+            return 'm';
+        }
+        if (in_array($names[0], $femaleExceptions, true)) {
+            return 'f';
+        }
+        if (substr($names[0], -1) != 'a') {
             return 'm';
         }
         return 'f';
     }
 
     public function getSexIdentifier() {
-        return User::_guessSex($this->data->name);
+        return $this->data->sex ?? User::_guessSex($this->data->name);
     }
 
     /**
