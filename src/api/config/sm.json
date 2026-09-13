@@ -1528,7 +1528,8 @@
             "ul. Młyńska 15",
             "62-052 Komorniki"
         ],
-        "email": "strazgminna@komorniki.pl"
+        "email": "strazgminna@komorniki.pl",
+        "hint": "Nie wzywają świadków na przesłuchanie, ale sprawy ciągną się długo. Nie informują o postępach ani nie wysyłają wiadomości z sygnaturą sprawy — działają raczej telefonicznie."
     },
     "gmina Komorniki": {
         "parent": "Komorniki"

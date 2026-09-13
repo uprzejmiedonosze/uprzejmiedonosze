@@ -393,10 +393,13 @@ function migrateGalleryImages(bool $dryRun=true): void {
 
 /**
  * Removes local CDN files that are already on S3 with a matching size.
- * Files belonging to applications in draft/ready/confirmed status are skipped
+ * Files belonging to applications in draft/ready status are skipped
  * (they may be actively edited and not yet fully synced).
- * Files missing from S3 are uploaded first, then removed locally.
- * Files with a size mismatch are reported but left intact.
+ * Files missing from S3 are uploaded first, then removed on a later run
+ * once the sizes match. Files with a size mismatch are re-uploaded from
+ * the local copy (unless the local file is empty) and likewise removed
+ * on a later run; empty local files are reported but left intact to
+ * avoid overwriting good S3 objects.
  *
  * Usage: purgeLocalFiles(dryRun:false);
  */
@@ -410,14 +413,14 @@ function purgeLocalFiles(bool $dryRun=true): void {
     // Collect IDs of applications that are actively being worked on.
     $stmt = \store\prepare(<<<SQL
         SELECT key FROM applications
-        WHERE json_extract(value, '$.status') IN ('draft', 'ready', 'confirmed')
+        WHERE json_extract(value, '$.status') IN ('draft', 'ready')
     SQL);
     $stmt->execute();
     $activeIds = array_column($stmt->fetchAll(\PDO::FETCH_NUM), 0);
     $activeIds = array_flip($activeIds); // for O(1) lookup
-    echo "Pomijam pliki należące do " . count($activeIds) . " aktywnych zgłoszeń (draft/ready/confirmed).\n\n";
+    echo "Pomijam pliki należące do " . count($activeIds) . " aktywnych zgłoszeń (draft/ready).\n\n";
 
-    $deleted = $missing = $mismatch = $skipped = 0;
+    $deleted = $missing = $mismatch = $skipped = $reuploaded = 0;
 
     $iter = new \RecursiveIteratorIterator(
         new \RecursiveDirectoryIterator($cdnDir, \FilesystemIterator::SKIP_DOTS)
@@ -430,9 +433,11 @@ function purgeLocalFiles(bool $dryRun=true): void {
         $localPath = $file->getPathname();
         $key = ltrim(substr($localPath, strlen(ROOT)), '/');
 
-        // Extract app ID: filename up to first comma (e.g. "abc" from "abc,ca.jpg")
+        // Extract app ID: filename up to first comma (e.g. "abc" from "abc,ca.jpg").
+        // Files without a comma (e.g. "<appId>.pdf") use the basename without extension.
         $basename = $file->getBasename();
-        $appId = strstr($basename, ',', before_needle: true) ?: $basename;
+        $appId = strstr($basename, ',', before_needle: true)
+            ?: pathinfo($basename, PATHINFO_FILENAME);
 
         if (isset($activeIds[$appId])) {
             echo " ~ $key — pominięty (aktywne zgłoszenie)\n";
@@ -444,7 +449,10 @@ function purgeLocalFiles(bool $dryRun=true): void {
         $remoteSize = \storage\remote_size($key);
 
         if ($remoteSize === null) {
-            if ($dryRun) {
+            if ($localSize === 0) {
+                echo " ! $key — pusty plik lokalny, nie wysyłam do S3\n";
+                $mismatch++;
+            } elseif ($dryRun) {
                 echo " ^ $key — brak na S3, do wysłania\n";
             } else {
                 if (\storage\upload($localPath, $key)) {
@@ -455,8 +463,19 @@ function purgeLocalFiles(bool $dryRun=true): void {
             }
             $missing++;
         } elseif ($remoteSize !== $localSize) {
-            echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B)\n";
-            $mismatch++;
+            if ($localSize === 0) {
+                echo " ! $key — pusty plik lokalny, nie nadpisuję S3 (S3: $remoteSize B)\n";
+                $mismatch++;
+            } elseif ($dryRun) {
+                echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B), do ponownego wysłania\n";
+                $mismatch++;
+            } elseif (\storage\upload($localPath, $key)) {
+                echo " ^ $key ($localSize B, było S3: $remoteSize B) — wysłany ponownie do S3\n";
+                $reuploaded++;
+            } else {
+                echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B), błąd wysyłania\n";
+                $mismatch++;
+            }
         } else {
             if ($dryRun) {
                 echo " - $key ($localSize B) — do usunięcia\n";
@@ -469,15 +488,15 @@ function purgeLocalFiles(bool $dryRun=true): void {
     }
 
     echo "\nPodsumowanie:";
-    echo " usunięto=$deleted, wysłano_do_S3=$missing, pominięto=$skipped, niezgodny_rozmiar=$mismatch\n";
+    echo " usunięto=$deleted, wysłano_do_S3=$missing, wysłano_ponownie=$reuploaded, pominięto=$skipped, niezgodny_rozmiar=$mismatch\n";
 }
 
 /**
  * Compares local CDN volume with S3. Never deletes anything.
  * - file local, brak na S3  → wysyła do S3 i raportuje
  * - plik lokalny OK         → cicho pomija
- * - rozmiar niezgodny       → raportuje
- * Applications in draft/ready/confirmed status are skipped.
+ * - rozmiar niezgodny       → wysyła ponownie lokalną kopię (o ile nie jest pusta) i raportuje
+ * Applications in draft/ready status are skipped.
  *
  * Usage: checkS3();
  */
@@ -490,13 +509,13 @@ function checkS3(): void {
 
     $stmt = \store\prepare(<<<SQL
         SELECT key FROM applications
-        WHERE json_extract(value, '$.status') IN ('draft', 'ready', 'confirmed')
+        WHERE json_extract(value, '$.status') IN ('draft', 'ready')
     SQL);
     $stmt->execute();
     $activeIds = array_flip(array_column($stmt->fetchAll(\PDO::FETCH_NUM), 0));
-    echo "Pomijam pliki należące do " . count($activeIds) . " aktywnych zgłoszeń (draft/ready/confirmed).\n\n";
+    echo "Pomijam pliki należące do " . count($activeIds) . " aktywnych zgłoszeń (draft/ready).\n\n";
 
-    $uploaded = $mismatch = $skipped = $ok = 0;
+    $uploaded = $mismatch = $skipped = $ok = $reuploaded = 0;
 
     $iter = new \RecursiveIteratorIterator(
         new \RecursiveDirectoryIterator($cdnDir, \FilesystemIterator::SKIP_DOTS)
@@ -508,9 +527,10 @@ function checkS3(): void {
         $localPath = $file->getPathname();
         $key       = ltrim(substr($localPath, strlen(ROOT)), '/');
         $basename  = $file->getBasename();
-        $appId     = strstr($basename, ',', before_needle: true) ?: $basename;
+        $appId     = strstr($basename, ',', before_needle: true)
+            ?: pathinfo($basename, PATHINFO_FILENAME);
 
-        if (isset($activeIds[$appId]) || $file->getExtension() === 'pdf') {
+        if (isset($activeIds[$appId])) {
             $skipped++;
             continue;
         }
@@ -519,21 +539,32 @@ function checkS3(): void {
         $remoteSize = \storage\remote_size($key);
 
         if ($remoteSize === null) {
-            if (\storage\upload($localPath, $key)) {
+            if ($localSize === 0) {
+                echo " ! $key — pusty plik lokalny, nie wysyłam do S3\n";
+                $mismatch++;
+            } elseif (\storage\upload($localPath, $key)) {
                 echo " ^ $key ($localSize B) — brakowało na S3, wysłany\n";
                 $uploaded++;
             } else {
                 echo " ! $key ($localSize B) — błąd wysyłania do S3\n";
             }
         } elseif ($remoteSize !== $localSize) {
-            echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B)\n";
-            $mismatch++;
+            if ($localSize === 0) {
+                echo " ! $key — pusty plik lokalny, nie nadpisuję S3 (S3: $remoteSize B)\n";
+                $mismatch++;
+            } elseif (\storage\upload($localPath, $key)) {
+                echo " ^ $key ($localSize B, było S3: $remoteSize B) — rozmiar niezgodny, wysłany ponownie\n";
+                $reuploaded++;
+            } else {
+                echo " ! $key — rozmiar niezgodny (lokalnie: $localSize B, S3: $remoteSize B), błąd wysyłania\n";
+                $mismatch++;
+            }
         } else {
             $ok++;
         }
     }
 
     echo "\nPodsumowanie:";
-    echo " ok=$ok, wysłano_do_S3=$uploaded, niezgodny_rozmiar=$mismatch, pominięto=$skipped\n";
+    echo " ok=$ok, wysłano_do_S3=$uploaded, wysłano_ponownie=$reuploaded, niezgodny_rozmiar=$mismatch, pominięto=$skipped\n";
 }
 

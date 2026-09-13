@@ -23,8 +23,8 @@ function rmPdf(Application &$application): void{
     $userNumber = $application->getUserNumber();
     $baseDir = checkUserFoder($userNumber);
 
-    $filename = $application->getAppFilename('.pdf');
-    $pdf = "$baseDir/$filename";
+    $appId = $application->id;
+    $pdf = "$baseDir/$appId.pdf";
 
     if (file_exists($pdf)) {
         unlink($pdf);
