@@ -111,6 +111,55 @@ Reverse geocoding using Nominatim API.
 
 Reverse geocoding using MapBox API.
 
+## Vision endpoints
+
+Requires authorization, registration and confirmed terms (same as Application endpoints).
+Rate-limited per user (`VISION_RATE_MAX` per `VISION_RATE_WINDOW`, default 60/hour) — exceeding
+it returns 429.
+
+### POST `/api/rest/vision/candidate`
+
+LLM analysis of one report candidate's photos for the UD Pro mobile app: role classification
+(context/car/third/unusable), violation markers, and license-plate OCR with an automatic
+retry-crop (unreadable plate) and a second-opinion bbox verification, all done server-side
+(see `src/inc/integrations/Vision.php`) — the client never talks to the LLM provider directly.
+
+POST body (JSON):
+
+  * `reportId` (optional string) — for logging/correlation only.
+  * `photos` (required array, max `VISION_MAX_PHOTOS`, default 12) — each:
+    * `photoId` (required string) — opaque client id, echoed back.
+    * `photo_index` (required int) — must be a contiguous `0..n-1` set across the request.
+    * `image` (required string) — `data:image/jpeg;base64,...` or `data:image/png;base64,...`,
+      max `VISION_MAX_PHOTO_BYTES` decoded bytes per photo (default 800kB), max
+      `VISION_MAX_TOTAL_BYTES` decoded bytes total (default 6MB).
+
+Response (200, JSON):
+
+```jsonc
+{
+  "reportId": "R014", "schema": 5, "model": "gpt-4o-mini",
+  "photos": [{
+    "photo_index": 0, "photoId": "ph_abc123", "role": "context|car|third|unusable",
+    "quality": 0.0,
+    "car":   { "present": true, "bbox": [0,0,0,0], "desc": null },
+    "plate": { "readable": true, "text": "ZS228FC", "bbox": [0,0,0,0],
+               "from_crop": true, "plate_check": "unverified-box" },
+    "markers": ["sidewalk_parking"], "suggested_category": 26, "category_confidence": 0.8,
+    "plate_verified": true
+  }],
+  "usage": { "prompt_tokens": 0, "completion_tokens": 0, "calls": 0, "cost_usd": 0.0 },
+  "warnings": []
+}
+```
+
+`from_crop`/`plate_check`/`plate_verified` are only present when applicable. `schema` mirrors
+`SCHEMA` in the app's `src/lib/vision.ts` — the app gates its local analysis cache on it and
+should treat a mismatch as "uncacheable, but usable".
+
+Errors: 400 (bad body/size/indices), 415 (unsupported image format), 429 (rate limit), 502
+(model/upstream failed after internal retries).
+
 ## Configuration endpoints
 
 No authorization needed.

@@ -9,6 +9,7 @@ use Slim\Exception\HttpException;
 use Slim\Exception\HttpForbiddenException;
 use Slim\Exception\HttpInternalServerErrorException;
 use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpTooManyRequestsException;
 use Slim\Factory\AppFactory;
 use Slim\Routing\RouteCollectorProxy;
 
@@ -27,6 +28,7 @@ require(INC_DIR . '/middleware/TokenSessionMiddleware.php');
 require(INC_DIR . '/middleware/UserMiddleware.php');
 require(INC_DIR . '/middleware/AppMiddleware.php');
 require(INC_DIR . '/Twig.php');
+require(INC_DIR . '/integrations/Vision.php');
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -404,6 +406,47 @@ $app->group('/api/rest/recydywa', function (RouteCollectorProxy $group) { // REC
         } catch (\InvalidArgumentException $e) {
             throw new HttpBadRequestException($request, $e->getMessage(), $e);
         }
+
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    });
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
+    ->add(new AuthMiddleware());
+
+$app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISION
+    // Analiza wizyjna (LLM) zdjęć jednego kandydata zgłoszenia dla appki UD Pro: role/markery/
+    // tablica w jednym żądaniu (backend robi wewnętrznie retry-crop nieczytelnej tablicy +
+    // weryfikację bbox drugą opinią) — patrz src/inc/integrations/Vision.php.
+    $group->post('/candidate', function (Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        $email = $user->getEmail();
+
+        if (!\cache\throttle\attempt(\cache\Type::Vision, 'candidate-' . $email, VISION_RATE_MAX, VISION_RATE_WINDOW)) {
+            \telemetry\log('vision_rate_limited', null, ['status' => 'error']);
+            throw new HttpTooManyRequestsException($request,
+                'Limit analiz wizyjnych wyczerpany (' . VISION_RATE_MAX . '/h). Spróbuj później.');
+        }
+
+        $params = (array)$request->getParsedBody();
+        $reportId = getParam($params, 'reportId', '');
+
+        try {
+            $items = \vision\decodeCandidatePhotos($params['photos'] ?? null);
+        } catch (\vision\VisionRequestException $e) {
+            throw new HttpException($request, $e->getMessage(), $e->httpStatus);
+        }
+
+        try {
+            $result = \vision\analyzeCandidate($items, $email, $reportId ?: null);
+        } catch (\vision\VisionException $e) {
+            throw new HttpException($request, $e->getMessage(), 502);
+        }
+        $result['reportId'] = $reportId;
+        $result['schema'] = \vision\VISION_SCHEMA;
+        $result['model'] = OPENAI_VISION_MODEL;
 
         $response->getBody()->write(json_encode($result));
         return $response;

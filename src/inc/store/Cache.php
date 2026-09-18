@@ -26,6 +26,8 @@ namespace cache {
         case Patronite;
 
         case Passkey;
+
+        case Vision;
     }
 
     function key(Type $type, ?string $key): string {

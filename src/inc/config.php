@@ -118,6 +118,23 @@ if (!defined('OPENAI_API_KEY')) define('OPENAI_API_KEY', getenv('OPENAI_API_KEY'
 if (!defined('GOOGLE_API_KEY')) define('GOOGLE_API_KEY', getenv('GOOGLE_API_KEY') ?: '');
 if (!defined('OPENAI_PROJECT')) define('OPENAI_PROJECT', getenv('OPENAI_PROJECT') ?: '');
 
+// Analiza wizyjna zdjęć (src/inc/integrations/Vision.php) dla mobilnej appki UD Pro —
+// multimodalny model OpenAI zamiast klienckiego OpenRouter (klucz nie może żyć w bundlu appki).
+if (!defined('OPENAI_VISION_MODEL'))            define('OPENAI_VISION_MODEL',            getenv('OPENAI_VISION_MODEL') ?: 'gpt-4o-mini');
+if (!defined('OPENAI_VISION_MAX_TOKENS'))       define('OPENAI_VISION_MAX_TOKENS',       (int)(getenv('OPENAI_VISION_MAX_TOKENS') ?: 8000));
+if (!defined('OPENAI_VISION_CROP_MAX_TOKENS'))  define('OPENAI_VISION_CROP_MAX_TOKENS',  (int)(getenv('OPENAI_VISION_CROP_MAX_TOKENS') ?: 1000));
+if (!defined('OPENAI_VISION_TIMEOUT'))          define('OPENAI_VISION_TIMEOUT',          (int)(getenv('OPENAI_VISION_TIMEOUT') ?: 90));
+if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',           getenv('OPENAI_VISION_DETAIL') ?: 'low');
+// 'low' na OpenAI = twardy downsample do 512px — za mało do odczytu tablicy z crop-a.
+if (!defined('OPENAI_VISION_CROP_DETAIL'))      define('OPENAI_VISION_CROP_DETAIL',      getenv('OPENAI_VISION_CROP_DETAIL') ?: 'high');
+
+// Rate-limit analizy wizyjnej per użytkownik (\cache\throttle\attempt, jak PasskeyHandler).
+if (!defined('VISION_RATE_MAX'))     define('VISION_RATE_MAX',     (int)(getenv('VISION_RATE_MAX') ?: 60));
+if (!defined('VISION_RATE_WINDOW'))  define('VISION_RATE_WINDOW',  (int)(getenv('VISION_RATE_WINDOW') ?: 3600));
+if (!defined('VISION_MAX_PHOTOS'))         define('VISION_MAX_PHOTOS',         (int)(getenv('VISION_MAX_PHOTOS') ?: 12));
+if (!defined('VISION_MAX_PHOTO_BYTES'))    define('VISION_MAX_PHOTO_BYTES',    (int)(getenv('VISION_MAX_PHOTO_BYTES') ?: 800000));
+if (!defined('VISION_MAX_TOTAL_BYTES'))    define('VISION_MAX_TOTAL_BYTES',    (int)(getenv('VISION_MAX_TOTAL_BYTES') ?: 6000000));
+
 if (!defined('MATOMO_SITE_ID'))     define('MATOMO_SITE_ID',     (int)(getenv('MATOMO_SITE_ID') ?: 2));
 if (!defined('BACKEND_API_KEY'))    define('BACKEND_API_KEY',    getenv('BACKEND_API_KEY')    ?: '');
 if (!defined('CORS_ALLOWED_DOMAIN')) define('CORS_ALLOWED_DOMAIN', getenv('CORS_ALLOWED_DOMAIN') ?: '');
