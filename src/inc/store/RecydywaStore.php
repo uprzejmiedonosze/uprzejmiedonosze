@@ -198,3 +198,102 @@ function top100(\user\User $whoIsWathing): array {
 function cleanPlateId(string $plateId): string {
     return substr(preg_replace('/\s+/', '', trim(strtoupper($plateId))), 0, 8);
 }
+
+/**
+ * Look up how many times a plate has been reported, without creating a
+ * draft/report as a side effect. Mirrors the visibility rule of the public
+ * `/tablica-rejestracyjna-{plateId}.html` page: the per-report history is
+ * only included once the plate is shared by at least two users across at
+ * least two reports (`sharedHistory`); below that threshold only the
+ * current user's own reports for the plate (if any) are listed, alongside
+ * the raw counts. Shared by the MCP `check_plate` tool and the REST
+ * `/api/rest/recydywa/{plateId}` endpoint — keep both call sites here so
+ * they can never drift apart.
+ *
+ * @return array{plateId: string, appsCnt: int, usersCnt: int,
+ *               sharedHistory: bool, reports: array}
+ */
+function checkPlate(string $plateId, string $currentUserEmail): array {
+    $cleanPlateId = cleanPlateId($plateId);
+    if ($cleanPlateId === '') {
+        throw new \InvalidArgumentException('plateId must not be empty');
+    }
+
+    // \app\byPlate() is the same lookup carStats() (the web page) uses; it
+    // excludes drafts/archived/etc. Deliberately not \recydywa\get() — its
+    // cache-miss fallback re-queues every matching report for review, a
+    // side effect this read-only lookup must not trigger.
+    $apps = \app\byPlate($cleanPlateId) ?? [];
+    $recydywa = Recydywa::withApps($apps);
+    $sharedHistory = $recydywa->appsCnt >= 2 && $recydywa->usersCnt >= 2;
+
+    $visible = $sharedHistory
+        ? $apps
+        : array_filter($apps, fn ($app) => $app->email === $currentUserEmail);
+
+    return [
+        'plateId' => $cleanPlateId,
+        'appsCnt' => $recydywa->appsCnt,
+        'usersCnt' => $recydywa->usersCnt,
+        'sharedHistory' => $sharedHistory,
+        'reports' => array_values(array_map(
+            fn ($app) => plateHistoryEntry($app, $app->email === $currentUserEmail),
+            $visible
+        )),
+    ];
+}
+
+/**
+ * One entry of checkPlate's `reports`: the shared, non-identifying facts
+ * about a report (date, status, category, recipient) plus — only for the
+ * current user's own reports — the ids/notes an owner is allowed to see.
+ * Never includes the reporter's email or images.
+ */
+function plateHistoryEntry(\app\Application $application, bool $isOwn): array {
+    global $CATEGORIES;
+
+    $sm = $application->guessSMData();
+    $entry = [
+        'date' => $application->date,
+        'status' => $application->status,
+        'statusLabel' => $application->getStatus()->name ?? $application->status,
+        'recipient' => [
+            'name' => $sm->getName(),
+            'shortName' => $sm->getShortName(),
+            'isPolice' => $sm->isPolice(),
+        ],
+        'isOwn' => $isOwn,
+    ];
+
+    $category = $CATEGORIES[$application->category] ?? null;
+    if ($category) {
+        $entry['categoryInfo'] = categorySummary((int) $application->category, $category);
+    }
+
+    if ($isOwn) {
+        $entry['reportId'] = $application->id;
+        $entry['number'] = $application->number ?? '';
+        if (!empty($application->externalId) && !$application->isEncrypted()) {
+            $entry['caseNumber'] = $application->externalId;
+        }
+    }
+
+    return $entry;
+}
+
+/**
+ * The public shape of a violation category (id, title, formal wording,
+ * legal basis, penalty) — same fields as ReportMcpTools::categorySummary,
+ * kept as a separate copy here so this store has no dependency on the mcp
+ * namespace.
+ */
+function categorySummary(int $id, \Category $category): array {
+    return [
+        'id' => $id,
+        'title' => $category->getTitle(),
+        'formal' => $category->getFormal(),
+        'law' => $category->getLaw(),
+        'fine' => $category->getMandate(),
+        'demeritPoints' => $category->getPoints(),
+    ];
+}

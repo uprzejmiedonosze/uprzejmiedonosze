@@ -89,66 +89,9 @@ final class ReportMcpTools {
             throw new \Mcp\Exception\ToolCallException("plateId must not be empty");
         }
 
-        // \app\byPlate() is the same lookup carStats() (the web page) uses; it
-        // excludes drafts/archived/etc. Deliberately not \recydywa\get() —
-        // its cache-miss fallback re-queues every matching report for review,
-        // a side effect this read-only tool must not trigger.
-        $apps = \app\byPlate($cleanPlateId) ?? [];
-        $recydywa = \recydywa\Recydywa::withApps($apps);
-        $sharedHistory = $recydywa->appsCnt >= 2 && $recydywa->usersCnt >= 2;
-
-        $visible = $sharedHistory
-            ? $apps
-            : array_filter($apps, fn ($app) => $app->email === $user->getEmail());
-
-        return [
-            'plateId' => $cleanPlateId,
-            'appsCnt' => $recydywa->appsCnt,
-            'usersCnt' => $recydywa->usersCnt,
-            'sharedHistory' => $sharedHistory,
-            'reports' => array_values(array_map(
-                fn ($app) => $this->plateHistoryEntry($app, $app->email === $user->getEmail()),
-                $visible
-            )),
-        ];
-    }
-
-    /**
-     * One entry of check_plate's `reports`: the shared, non-identifying
-     * facts about a report (date, status, category, recipient) plus —
-     * only for the current user's own reports — the ids/notes an owner
-     * is allowed to see. Never includes the reporter's email or images.
-     */
-    private function plateHistoryEntry(\app\Application $application, bool $isOwn): array {
-        global $CATEGORIES;
-
-        $sm = $application->guessSMData();
-        $entry = [
-            'date' => $application->date,
-            'status' => $application->status,
-            'statusLabel' => $application->getStatus()->name ?? $application->status,
-            'recipient' => [
-                'name' => $sm->getName(),
-                'shortName' => $sm->getShortName(),
-                'isPolice' => $sm->isPolice(),
-            ],
-            'isOwn' => $isOwn,
-        ];
-
-        $category = $CATEGORIES[$application->category] ?? null;
-        if ($category) {
-            $entry['categoryInfo'] = self::categorySummary((int) $application->category, $category);
-        }
-
-        if ($isOwn) {
-            $entry['reportId'] = $application->id;
-            $entry['number'] = $application->number ?? '';
-            if (!empty($application->externalId) && !$application->isEncrypted()) {
-                $entry['caseNumber'] = $application->externalId;
-            }
-        }
-
-        return $entry;
+        // Shared with the REST /api/rest/recydywa/{plateId} endpoint
+        // (RecydywaStore::checkPlate) so the two call sites can't drift apart.
+        return \recydywa\checkPlate($cleanPlateId, $user->getEmail());
     }
 
     /**

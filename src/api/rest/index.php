@@ -23,6 +23,7 @@ require(INC_DIR . '/API.php');
 require(INC_DIR . '/middleware/JsonBodyParser.php');
 require(INC_DIR . '/middleware/JsonErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
+require(INC_DIR . '/middleware/TokenSessionMiddleware.php');
 require(INC_DIR . '/middleware/UserMiddleware.php');
 require(INC_DIR . '/middleware/AppMiddleware.php');
 require(INC_DIR . '/Twig.php');
@@ -91,12 +92,14 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         return $response;
     })  ->add(new AddStatsMiddleware())
         ->add(new UserMiddleware(createIfNonExists: false))
+        ->add(new TokenSessionMiddleware())
         ->add(new AuthMiddleware());
     
     $group->patch('/', function (Request $request, Response $response) {
         return $response;
     })  ->add(new AddStatsMiddleware())
         ->add(new UserMiddleware(createIfNonExists: true))
+        ->add(new TokenSessionMiddleware())
         ->add(new AuthMiddleware());
     
     $group->patch('/confirm-terms', function (Request $request, Response $response) {
@@ -108,6 +111,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
     })  ->add(new RegisteredMiddleware())
         ->add(new AddStatsMiddleware())
         ->add(new UserMiddleware(createIfNonExists: false))
+        ->add(new TokenSessionMiddleware())
         ->add(new AuthMiddleware());
     
     $group->post('/', function (Request $request, Response $response) {
@@ -131,6 +135,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         return $response;
     })  ->add(new AddStatsMiddleware())
         ->add(new UserMiddleware(createIfNonExists: false))
+        ->add(new TokenSessionMiddleware())
         ->add(new AuthMiddleware());
     
     
@@ -148,6 +153,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         return $response;
     })  ->add(new RegisteredMiddleware())
         ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
         ->add(new AuthMiddleware());
     
 }); 
@@ -344,6 +350,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
 })  ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
     ->add(new AuthMiddleware());
 
 $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
@@ -381,6 +388,30 @@ $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
 })  ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
+    ->add(new AuthMiddleware());
+
+$app->group('/api/rest/recydywa', function (RouteCollectorProxy $group) { // RECYDYWA
+    // Same lookup as the MCP check_plate tool (\recydywa\checkPlate, shared in
+    // RecydywaStore.php) — counts + history for a plate, without the
+    // \recydywa\get()/update() side effect of re-queuing matching reports.
+    $group->get('/{plateId}', function (Request $request, Response $response, $args) {
+        $plateId = $args['plateId'];
+        $user = $request->getAttribute('user');
+
+        try {
+            $result = \recydywa\checkPlate($plateId, $user->getEmail());
+        } catch (\InvalidArgumentException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        }
+
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    });
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
     ->add(new AuthMiddleware());
 
 // OTHER
