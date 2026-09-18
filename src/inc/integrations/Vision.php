@@ -459,10 +459,12 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
     }
 
     $cost = visionCostUsd($usage);
+    // force=true: logger() jest cichy na produkcji bez tego – koszt trzeba widzieć zawsze,
+    // nie tylko na dev/staging.
     logger(sprintf(
-        'vision %s: %d photos, %d calls, %d/%d tokens, $%.5f (%s)',
-        $reportId ?? '?', count($photos), $usage['calls'], $usage['prompt_tokens'], $usage['completion_tokens'], $cost, $userEmail
-    ));
+        'vision cost: %s photos=%d calls=%d prompt_tokens=%d completion_tokens=%d cost_usd=%.5f model=%s user=%s',
+        $reportId ?? '?', count($photos), $usage['calls'], $usage['prompt_tokens'], $usage['completion_tokens'], $cost, OPENAI_VISION_MODEL, $userEmail
+    ), true);
 
     return [
         'photos' => array_values($result),
