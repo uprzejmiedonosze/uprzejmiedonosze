@@ -116,6 +116,13 @@ $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());
 
+$app->get('/api/guess-sex', function ($request, $response) {
+    $name = (string) ($request->getQueryParams()['name'] ?? '');
+    $sex = \user\User::_guessSex($name);
+    $response->getBody()->write(json_encode(['sex' => $sex]));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 $app->group('/generator', function (RouteCollectorProxy $group) {        
     $group->get('/stream', \generator\ApiAiHandler::class . ':stream');
     $group->get('/topics', \generator\ApiAiHandler::class . ':getTopics');

@@ -181,4 +181,33 @@ class UserTest extends DatabaseTestCase
         $this->expectExceptionMessage("User data is encrypted, but no user_id is set");
         new User($encoded);
     }
+
+    public function testGuessSexStaticMale()
+    {
+        $this->assertEquals('m', User::_guessSex('Jan Kowalski'));
+        $this->assertEquals('m', User::_guessSex('Piotr Nowak'));
+        $this->assertEquals('m', User::_guessSex('Adam'));
+    }
+
+    public function testGuessSexStaticFemale()
+    {
+        $this->assertEquals('f', User::_guessSex('Anna Kowalska'));
+        $this->assertEquals('f', User::_guessSex('Maria Wojna'));
+        $this->assertEquals('f', User::_guessSex('Joanna Doe'));
+    }
+
+    public function testGuessSexStaticMaleExceptions()
+    {
+        $this->assertEquals('m', User::_guessSex('Kuba Nowak'));
+        $this->assertEquals('m', User::_guessSex('Kosma test'));
+        $this->assertEquals('m', User::_guessSex('Barnaba test'));
+        $this->assertEquals('m', User::_guessSex('Olsza test'));
+    }
+
+    public function testGuessSexStaticFemaleExceptions()
+    {
+        $this->assertEquals('f', User::_guessSex('Noemi Nowak'));
+        $this->assertEquals('f', User::_guessSex('Nel Kowalska'));
+        $this->assertEquals('f', User::_guessSex('Karmen Dąbrowska'));
+    }
 }
