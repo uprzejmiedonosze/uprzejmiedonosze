@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../export/inc/integrations/Vision.php';
 use OpenAI\Responses\Chat\CreateResponse;
 use OpenAI\Testing\ClientFake;
 use PHPUnit\Framework\TestCase;
+use vision\PlateRecognizerClient;
 use vision\VisionClient;
 use vision\VisionException;
 use vision\VisionNetworkException;
@@ -14,9 +15,19 @@ use vision\VisionRequestException;
 
 class VisionTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Domyślnie "ALPR nic nie znalazł" - testy niezwiązane z applyAlprPlate() (czyli
+        // wszystkie poza tymi z prefiksem testAnalyzeCandidateHybridPr*) nie trafiają w sieć
+        // i dostają graceful fallback na odczyt modelu, dokładnie jak produkcyjny kod przewiduje.
+        PlateRecognizerClient::set(fn (string $bytes) => ['results' => []]);
+    }
+
     protected function tearDown(): void
     {
         VisionClient::set(null); // nigdy nie zostawiaj override'u dla innego testu
+        PlateRecognizerClient::set(null);
         parent::tearDown();
     }
 
@@ -175,38 +186,45 @@ class VisionTest extends TestCase
         $this->assertSame(['p0', 'p1'], array_column($items, 'photoId'));
     }
 
-    // --- cropJpeg (GD unit) --------------------------------------------------
-
-    public function testCropJpegProducesExpectedDimensionsAndMime(): void {
-        $bytes = self::jpeg(400, 300);
-        $out = \vision\cropJpeg($bytes, 100, 100, 200, 150, 1000);
-        $this->assertNotNull($out);
-        $info = getimagesizefromstring($out);
-        $this->assertSame('image/jpeg', $info['mime']);
-        $this->assertSame(200, $info[0]);
-        $this->assertSame(150, $info[1]);
+    public function testPixelBoxToVisionSpaceConvertsValidPixels(): void {
+        // 10%..90% z 200x150 -> 100..900 / 100..900 w 0..1000
+        $this->assertSame([100, 100, 900, 900], \vision\pixelBoxToVisionSpace([20, 15, 180, 135], 200, 150));
+        $this->assertNull(\vision\pixelBoxToVisionSpace(null, 200, 150));
     }
 
-    public function testCropJpegDownscalesToMaxSide(): void {
-        $bytes = self::jpeg(2000, 1000);
-        $out = \vision\cropJpeg($bytes, 0, 0, 2000, 1000, 500);
-        $info = getimagesizefromstring($out);
-        $this->assertLessThanOrEqual(500, max($info[0], $info[1]));
-    }
+    public function testPixelBoxToVisionSpaceLeavesMalformedForValidator(): void {
+        // Nie-numeryczne elementy nie mogą rzucać TypeError (500 z pominięciem rundy
+        // naprawy) ani cicho znikać w null (null bbox jest dozwolony) — walidacja ma je
+        // wyłapać jako "zly bbox" i dać modelowi szansę naprawy.
+        $bad = ['left', 'top', 100, 100];
+        $this->assertSame($bad, \vision\pixelBoxToVisionSpace($bad, 200, 150));
+        $three = [10, 20, 30];
+        $this->assertSame($three, \vision\pixelBoxToVisionSpace($three, 200, 150));
 
-    public function testCropJpegRejectsDegenerateBox(): void {
-        $this->assertNull(\vision\cropJpeg(self::jpeg(), 0, 0, 2, 2, 100));
+        $photos = [['photo_index' => 0, 'car' => ['bbox' => $bad], 'plate' => ['bbox' => null]]];
+        \vision\applyPixelBoxes($photos, [0 => ['w' => 200, 'h' => 150]]); // nie rzuca
+        $this->assertSame($bad, $photos[0]['car']['bbox']);
+        $errs = \vision\validateVisionPhoto(array_merge(
+            ['photo_index' => 0, 'role' => 'car', 'quality' => 0.8, 'markers' => []],
+            ['car' => ['present' => true, 'bbox' => $photos[0]['car']['bbox']], 'plate' => ['readable' => false, 'text' => null, 'bbox' => null]],
+        ), 0);
+        $this->assertContains('zly bbox car', $errs);
     }
 
     // --- analyzeCandidate pipeline (ClientFake) ------------------------------
 
-    private function fakePhotoJson(int $index, string $role = 'context', bool $plateReadable = false, ?string $plateText = null): array {
+    // Bbox tu jest w PIKSELACH zdjęcia $w x $h (kontrakt promptu od schema v6 — patrz
+    // visionPrompt()/pixelBoxToVisionSpace()), domyślnie zgodnych z self::jpeg()'s 200x150.
+    // Wartości dobrane tak, by po konwersji z powrotem do 0..1000 dać dokładnie [100,100,900,900]
+    // (auto) i [400,700,600,780] (tablica) - te same liczby, którymi posługiwały się testy przed
+    // schema v6, więc assercje na tekst/kształt odpowiedzi nie muszą się zmieniać.
+    private function fakePhotoJson(int $index, string $role = 'context', bool $plateReadable = false, ?string $plateText = null, int $w = 200, int $h = 150): array {
         return [
             'photo_index' => $index,
             'role' => $role,
             'quality' => 0.8,
-            'car' => ['present' => $role === 'car', 'bbox' => $role === 'car' ? [100, 100, 900, 900] : null, 'desc' => null],
-            'plate' => ['readable' => $plateReadable, 'text' => $plateText, 'bbox' => $plateReadable ? [400, 700, 600, 780] : null],
+            'car' => ['present' => $role === 'car', 'bbox' => $role === 'car' ? [(int)round(0.1 * $w), (int)round(0.1 * $h), (int)round(0.9 * $w), (int)round(0.9 * $h)] : null, 'desc' => null],
+            'plate' => ['readable' => $plateReadable, 'text' => $plateText, 'bbox' => $plateReadable ? [(int)round(0.4 * $w), (int)round(0.7 * $h), (int)round(0.6 * $w), (int)round(0.78 * $h)] : null],
             'markers' => $role === 'context' ? ['sidewalk_parking'] : [],
             'suggested_category' => 26,
             'category_confidence' => 0.7,
@@ -301,44 +319,119 @@ class VisionTest extends TestCase
         \vision\analyzeCandidate([['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]], 'user@example.com');
     }
 
-    public function testAnalyzeCandidateRetryCropFillsUnreadablePlate(): void {
+    public function testAnalyzeCandidateHybridPrFillsPlateFromAlprForCarRole(): void {
         $fake = new ClientFake([
-            // 1) głowna analiza: auto bez czytelnej tablicy
+            // model: auto bez czytelnej tablicy
             CreateResponse::fake(['choices' => [['message' => ['content' =>
-                self::photosJson([$this->fakePhotoJson(0, 'car', false, null)]),
+                self::photosJson([$this->fakePhotoJson(0, 'car', false, null, 400, 300)]),
             ]]]]),
-            // 2) retry-crop: odczytuje tablicę
-            CreateResponse::fake(['choices' => [['message' => ['content' => '{"readable":true,"text":"ZS 228FC"}']]]]),
-            // 3) verifyPlateBox: potwierdza
-            CreateResponse::fake(['choices' => [['message' => ['content' => '{"text":"ZS228FC","bbox":[100,100,900,300]}']]]]),
         ]);
         VisionClient::set($fake);
+        PlateRecognizerClient::set(fn (string $bytes) => ['results' => [[
+            'plate' => 'zs228fc', 'score' => 0.9,
+            'box' => ['xmin' => 40, 'ymin' => 30, 'xmax' => 360, 'ymax' => 270], // 10%..90% z 400x300
+            'vehicle' => ['box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 400, 'ymax' => 300]],
+        ]]]);
 
         $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg(400, 300)]];
         $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R004');
 
         $p = $result['photos'][0];
-        $this->assertTrue($p['plate']['from_crop']);
+        $this->assertTrue($p['plate']['readable']);
         $this->assertSame('ZS228FC', $p['plate']['text']);
+        $this->assertSame([100, 100, 900, 900], $p['plate']['bbox']); // 0..1000, konwersja z pikseli
         $this->assertTrue($p['plate_verified']);
+        $this->assertSame([0, 0, 1000, 1000], $p['car']['bbox']); // vehicle.box na cały kadr
+        $this->assertSame('ZS228FC', $p['plate_debug']['alpr']['text']);
+        $this->assertNull($p['plate_debug']['model']['text']); // model sam nie odczytał tablicy
     }
 
-    public function testAnalyzeCandidateVerifyPlateBoxMismatch(): void {
+    public function testAnalyzeCandidateHybridPrIgnoresLowScoreAlpr(): void {
         $fake = new ClientFake([
             CreateResponse::fake(['choices' => [['message' => ['content' =>
                 self::photosJson([$this->fakePhotoJson(0, 'car', true, 'ZS 228FC')]),
             ]]]]),
-            // verify crop zwraca inna tablice -> mismatch
-            CreateResponse::fake(['choices' => [['message' => ['content' => '{"text":"WZ1234A","bbox":[0,0,100,100]}']]]]),
         ]);
         VisionClient::set($fake);
+        PlateRecognizerClient::set(fn (string $bytes) => ['results' => [[
+            'plate' => 'WRONG1', 'score' => 0.1, // poniżej ALPR_MIN_SCORE
+            'box' => ['xmin' => 80, 'ymin' => 105, 'xmax' => 120, 'ymax' => 117],
+            'vehicle' => ['box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 200, 'ymax' => 150]],
+        ]]]);
 
-        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg(400, 300)]];
-        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R005');
+        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]];
+        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R010');
 
         $p = $result['photos'][0];
-        $this->assertSame('unverified-box', $p['plate']['plate_check']);
+        $this->assertSame('ZS228FC', $p['plate']['text']); // zostaje odczyt modelu
         $this->assertArrayNotHasKey('plate_verified', $p);
+        $this->assertNotEmpty($result['warnings']); // niski score odnotowany
+    }
+
+    public function testAnalyzeCandidateHybridPrFlagsAlprPlateOutsideCar(): void {
+        $fake = new ClientFake([
+            CreateResponse::fake(['choices' => [['message' => ['content' =>
+                self::photosJson([$this->fakePhotoJson(0, 'car', false, null, 400, 300)]),
+            ]]]]),
+        ]);
+        VisionClient::set($fake);
+        PlateRecognizerClient::set(fn (string $bytes) => ['results' => [[
+            'plate' => 'zs228fc', 'score' => 0.9,
+            // tablica poza boxem auta z ALPR, ale w obrębie auta modelu (200,150,300,200
+            // na 400x300) — po fladze wraca auto modelu i niezmiennik znowu zachodzi
+            'box' => ['xmin' => 200, 'ymin' => 150, 'xmax' => 300, 'ymax' => 200],
+            'vehicle' => ['box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 100, 'ymax' => 75]],
+        ]]]);
+
+        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg(400, 300)]];
+        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R011');
+
+        $p = $result['photos'][0];
+        $this->assertSame('ZS228FC', $p['plate']['text']); // tekst ALPR zostaje
+        $this->assertSame('unverified-box', $p['plate_check']); // ale rozjazd jest oflagowany
+        $this->assertSame([], \vision\validateVisionPhoto($p, 0)); // po przywróceniu auta modelu — czysto
+        $this->assertNotEmpty($result['warnings']);
+    }
+
+    public function testAnalyzeCandidateHybridPrDoesNotOverrideThirdRole(): void {
+        $fake = new ClientFake([
+            CreateResponse::fake(['choices' => [['message' => ['content' =>
+                self::photosJson([$this->fakePhotoJson(0, 'third', true, 'AAA1111')]),
+            ]]]]),
+        ]);
+        VisionClient::set($fake);
+        $calls = 0;
+        PlateRecognizerClient::set(function (string $bytes) use (&$calls) {
+            $calls++;
+            return ['results' => []];
+        });
+
+        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]];
+        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R008');
+
+        $this->assertSame(0, $calls); // 'third' nie wywołuje ALPR w ogóle
+        $p = $result['photos'][0];
+        $this->assertSame('AAA1111', $p['plate']['text']); // zostaje odczyt modelu
+        $this->assertArrayNotHasKey('plate_debug', $p);
+    }
+
+    public function testAnalyzeCandidateHybridPrFallsBackToModelWhenAlprFindsNothing(): void {
+        $fake = new ClientFake([
+            CreateResponse::fake(['choices' => [['message' => ['content' =>
+                self::photosJson([$this->fakePhotoJson(0, 'car', true, 'ZS 228FC')]),
+            ]]]]),
+        ]);
+        VisionClient::set($fake);
+        PlateRecognizerClient::set(fn (string $bytes) => ['results' => []]); // ALPR nic nie znalazł
+
+        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]];
+        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R009');
+
+        $p = $result['photos'][0];
+        $this->assertSame('ZS228FC', $p['plate']['text']); // zostaje odczyt modelu (znormalizowany)
+        $this->assertArrayNotHasKey('plate_verified', $p);
+        $this->assertNull($p['plate_debug']['alpr']);
+        $this->assertSame('ZS228FC', $p['plate_debug']['model']['text']);
     }
 
     public function testAnalyzeCandidateSplitsLargeCandidateOnNetworkError(): void {

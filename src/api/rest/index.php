@@ -418,8 +418,8 @@ $app->group('/api/rest/recydywa', function (RouteCollectorProxy $group) { // REC
 
 $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISION
     // Analiza wizyjna (LLM) zdjęć jednego kandydata zgłoszenia dla appki UD Pro: role/markery/
-    // tablica w jednym żądaniu (backend robi wewnętrznie retry-crop nieczytelnej tablicy +
-    // weryfikację bbox drugą opinią) — patrz src/inc/integrations/Vision.php.
+    // tablica w jednym żądaniu (tablica/bbox auta z ALPR gdy score >= ALPR_MIN_SCORE,
+    // wpp. zostaje odczyt modelu) — patrz src/inc/integrations/Vision.php.
     $group->post('/candidate', function (Request $request, Response $response) {
         $user = $request->getAttribute('user');
         $email = $user->getEmail();

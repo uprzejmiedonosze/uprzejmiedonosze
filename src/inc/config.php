@@ -120,13 +120,15 @@ if (!defined('OPENAI_PROJECT')) define('OPENAI_PROJECT', getenv('OPENAI_PROJECT'
 
 // Analiza wizyjna zdjęć (src/inc/integrations/Vision.php) dla mobilnej appki UD Pro —
 // multimodalny model OpenAI zamiast klienckiego OpenRouter (klucz nie może żyć w bundlu appki).
-if (!defined('OPENAI_VISION_MODEL'))            define('OPENAI_VISION_MODEL',            getenv('OPENAI_VISION_MODEL') ?: 'gpt-4o-mini');
+// gpt-5-nano + detail:'high' — wyłonione batchową ewaluacją (uprzejmiedonosze-pro/tests/eval,
+// patrz tests/results/report.md tamże): 'low' i tak downsample'uje twardo do ~512px, a tańszy
+// gpt-5-nano z lepszym promptem (bbox w pikselach, patrz visionPrompt()) bije gpt-4o-mini/low na
+// każdej metryce. Tablica/bbox auta odtąd z ALPR (patrz applyAlprPlate() w Vision.php), nie
+// z retry-crop LLM — stąd brak tu już OPENAI_VISION_CROP_*.
+if (!defined('OPENAI_VISION_MODEL'))            define('OPENAI_VISION_MODEL',            getenv('OPENAI_VISION_MODEL') ?: 'gpt-5-nano');
 if (!defined('OPENAI_VISION_MAX_TOKENS'))       define('OPENAI_VISION_MAX_TOKENS',       (int)(getenv('OPENAI_VISION_MAX_TOKENS') ?: 8000));
-if (!defined('OPENAI_VISION_CROP_MAX_TOKENS'))  define('OPENAI_VISION_CROP_MAX_TOKENS',  (int)(getenv('OPENAI_VISION_CROP_MAX_TOKENS') ?: 1000));
 if (!defined('OPENAI_VISION_TIMEOUT'))          define('OPENAI_VISION_TIMEOUT',          (int)(getenv('OPENAI_VISION_TIMEOUT') ?: 90));
-if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',           getenv('OPENAI_VISION_DETAIL') ?: 'low');
-// 'low' na OpenAI = twardy downsample do 512px — za mało do odczytu tablicy z crop-a.
-if (!defined('OPENAI_VISION_CROP_DETAIL'))      define('OPENAI_VISION_CROP_DETAIL',      getenv('OPENAI_VISION_CROP_DETAIL') ?: 'high');
+if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',           getenv('OPENAI_VISION_DETAIL') ?: 'high');
 
 // Rate-limit analizy wizyjnej per użytkownik (\cache\throttle\attempt, jak PasskeyHandler).
 if (!defined('VISION_RATE_MAX'))     define('VISION_RATE_MAX',     (int)(getenv('VISION_RATE_MAX') ?: 60));

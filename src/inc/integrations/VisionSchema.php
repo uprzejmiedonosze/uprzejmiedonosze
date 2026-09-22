@@ -8,7 +8,12 @@
 // zostać zsynchronizowane ręcznie (brak wspólnego repo) — każda zmiana promptu/markerów/walidacji
 // tu MUSI być powtórzona tam (i odwrotnie), i musi podbić VISION_SCHEMA.
 
-const VISION_SCHEMA = 5; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
+const VISION_SCHEMA = 6; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
+
+// Minimalny score PlateRecognizer (0..1), poniżej którego wynik ALPR jest ignorowany
+// (zostaje odczyt modelu) — patrz applyAlprPlate() w Vision.php. Bez progu odczyt ALPR
+// o niskiej pewności nadpisywałby poprawny odczyt modelu i tak dostawał plate_verified.
+const ALPR_MIN_SCORE = 0.3;
 
 const ROLES = ['context', 'car', 'third', 'unusable'];
 
@@ -26,8 +31,20 @@ const MARKERS = [
 // klienta. Backend zwraca markers[] + suggested_category (podpowiedź modelu), appka liczy
 // categoryId dokładnie jak dziś.
 
-function visionPrompt(): string {
+// $dims: photo_index (int, 0-based w tym chunku) => ['w'=>float,'h'=>float], wymiary PIKSELOWE
+// wysłanej miniatury (nie 0..1000!). Model ma zwracać bboxy w tych realnych pikselach — testy
+// batchowe (uprzejmiedonosze-pro/tests/eval, wariant promptu "v2-pixels") pokazały, że to daje
+// wyraźnie lepsze IoU niż każenie modelowi samemu normalizować do 0..1000. Konwersja z powrotem
+// do 0..1000 dzieje się zaraz po sparsowaniu odpowiedzi, patrz pixelBoxToVisionSpace() niżej i
+// applyPixelBoxes() w Vision.php — dalej w pipeline (walidacja, appka) nic o pikselach nie wie.
+function visionPrompt(array $dims): string {
+    $dimsStr = implode('; ', array_map(
+        fn ($idx, $d) => "photo_index $idx: {$d['w']}x{$d['h']}px",
+        array_keys($dims),
+        $dims,
+    ));
     return 'You analyze N photos of one parked car (same report, chronological order). '
+        . "Image pixel dimensions (width x height): $dimsStr. "
         . 'Return a JSON object {"photos":[...]}, one entry per photo in input order, each:'."\n"
         . '{"photo_index":i, "role":"context|car|third|unusable", "quality":0..1,'."\n"
         . ' "car":{"present":bool, "bbox":[x1,y1,x2,y2]|null, "desc":str|null},'."\n"
@@ -36,13 +53,44 @@ function visionPrompt(): string {
         . 'Roles: context = wide shot showing the violation setting (sign, crossing, stop, markings); '
         . 'car = vehicle dominates the frame, plate potentially readable; '
         . 'third = supplementary (second angle, sign close-up, extra evidence); '
-        . 'unusable = blurred/dark/no car. bboxes in 0..1000 relative coords of the whole image. '
+        . 'unusable = blurred/dark/no car. '
+        . 'BBOX FORMAT: bbox is [x1,y1,x2,y2] in ACTUAL PIXELS of that specific photo (use the pixel '
+        . 'dimensions given above for that photo_index) — x1=LEFT, y1=TOP, x2=RIGHT, y2=BOTTOM, '
+        . 'top-left corner first, bottom-right corner second. Do NOT normalize to 0..1000 or 0..1 — '
+        . 'use the real pixel coordinates of the image as given. '
         . 'The plate bbox must tightly enclose the plate characters themselves, '
         . 'not the bumper, grille or road around it. '
         . 'markers only from: ' . implode(',', MARKERS) . '. '
         . 'suggested_category: best matching Polish parking-violation category id 0..26 '
         . '(2 bus stop, 3 intersection, 5 crosswalk, 13 disabled bay, 14 B-36 sign, 26 sidewalk). '
         . 'Polish plates like ZS1234A. JSON only, no prose.';
+}
+
+// Konwersja bbox modelu (piksele rzeczywiste zdjęcia $w x $h) -> 0..1000, kontrakt reszty
+// pipeline'u (validBox/validateVisionPhoto niżej, appka). null -> null. Zniekształcone
+// wejście nie-null (nie tablica, zła liczba elementów, element nie-numeryczny, zerowe
+// wymiary) jest zwracane BEZ ZMIAN, żeby walidacja (validBox -> "zly bbox") je wyłapała
+// i model dostał szansę naprawy — konwersja do null by je po cichu połykała (null bbox
+// jest dozwolony), a dzielenie surowych wartości rzucałoby TypeError zamiast rundy naprawy.
+function pixelBoxToVisionSpace($box, float $w, float $h): mixed {
+    if ($box === null) return null;
+    if (!is_array($box) || count($box) !== 4 || $w <= 0 || $h <= 0) return $box;
+    foreach ($box as $v) {
+        if (!is_numeric($v)) return $box;
+    }
+    return [
+        (int)round($box[0] / $w * 1000),
+        (int)round($box[1] / $h * 1000),
+        (int)round($box[2] / $w * 1000),
+        (int)round($box[3] / $h * 1000),
+    ];
+}
+
+// Jak pixelBoxToVisionSpace, ale wejście w kształcie PlateRecognizer (xmin/ymin/xmax/ymax),
+// używane przez applyAlprPlate() w Vision.php.
+function alprBoxToVisionSpace(array $box, float $w, float $h): ?array {
+    if ($w <= 0 || $h <= 0) return null;
+    return pixelBoxToVisionSpace([$box['xmin'] ?? 0, $box['ymin'] ?? 0, $box['xmax'] ?? 0, $box['ymax'] ?? 0], $w, $h);
 }
 
 // Tablica w formie kluczowej (bez spacji, jak norm_plate): ^[A-Z0-9]{4,8}$ + litera i cyfra.

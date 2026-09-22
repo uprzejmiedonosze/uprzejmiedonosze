@@ -2,17 +2,20 @@
 
 require_once(__DIR__ . '/VisionSchema.php');
 require_once(__DIR__ . '/../data.php'); // $MODEL_PRICING (koszt), jak ApiAiHandler.php
+require_once(__DIR__ . '/plateRecognizer.php'); // \alpr\get_platerecognizer() — tablica/bbox auta, patrz applyAlprPlate()
 
-// Faza 4 + 6: batch wizyjny na kandydata + weryfikacja bbox cropem. Port src/api/vision.ts
+// Faza 4 + 6: batch wizyjny na kandydata + tablica/bbox auta z ALPR. Port src/api/vision.ts
 // (repo uprzejmiedonosze-pro), teraz po stronie serwera (klucz OpenAI nie może żyć w bundlu
 // appki, i tak łatwiej chronić quotę per użytkownik). Retry sieciowy (3 próby, backoff 2s;
 // tylko rate-limit i HTTP 5xx), fallback paczek po 3 przy dużym kandydacie, jedna runda naprawy
 // na nie-JSON i jedna na błędy walidacji. Głośny błąd (VisionException) zamiast zgadywania.
 //
-// Różnica względem appki: appka crop'owała do weryfikacji tablicy z ORYGINALNEGO zdjęcia z
-// aparatu; tu crop pochodzi z tego samego ~1600-2000px obrazu co główna analiza (jedyny upload
-// per zdjęcie — patrz plan). Dlatego OPENAI_VISION_CROP_DETAIL='high' (nie 'low' jak dla
-// głównej analizy) – OpenAI 'low' downsample'uje twardo do 512px, za mało do OCR tablicy.
+// Tablicę/bbox auta czytał dawniej sam LLM (retry-crop nieczytelnej tablicy + druga opinia na
+// weryfikację bbox) — batchowa ewaluacja (uprzejmiedonosze-pro/tests/eval, wariant pipeline'u
+// "hybrid-pr") pokazała, że wyspecjalizowany ALPR (PlateRecognizer, już używany w klasycznym
+// uploadzie zgłoszeń — src/inc/integrations/plateRecognizer.php) jest zauważalnie dokładniejszy
+// (IoU tablicy 0.9+ vs 0.5-0.6 samego LLM) i tańszy (bez dodatkowych wywołań OpenAI). Stosowany
+// TYLKO dla zdjęć z rolą 'car' (nie 'third') — patrz applyAlprPlate().
 
 class VisionException extends \RuntimeException {}
 
@@ -32,7 +35,7 @@ final class VisionRequestException extends \RuntimeException {
 /**
  * Dekoduje i waliduje body REST-owego POST /api/rest/vision/candidate (parametr `photos`):
  * kontrakt, limity rozmiaru, mime. Normalizuje PNG->JPEG (jak saveImgAndThumb w API.php), więc
- * dalszy pipeline (crop, imgPart) ma jeden format. Zwraca list<array{photoId,photo_index,bytes}>.
+ * dalszy pipeline (imgPart) ma jeden format. Zwraca list<array{photoId,photo_index,bytes}>.
  * @throws VisionRequestException z gotowym statusem HTTP (400/415)
  */
 function decodeCandidatePhotos($photosParam): array {
@@ -137,6 +140,21 @@ final class VisionClient {
     }
 }
 
+// Test seam analogiczny do VisionClient, dla \alpr\get_platerecognizer() — patrz applyAlprPlate().
+final class PlateRecognizerClient {
+    /** @var (callable(string): array)|null */
+    private static $override = null;
+
+    public static function set(?callable $fn): void {
+        self::$override = $fn;
+    }
+
+    public static function call(string $bytes): array {
+        if (self::$override !== null) return (self::$override)($bytes);
+        return \alpr\get_platerecognizer($bytes);
+    }
+}
+
 /**
  * Jedno wywołanie chat/completions z retry na rate-limit/5xx (3 próby, backoff 2s*attempt).
  * Sumuje tokeny do $usage (referencja: 'calls','prompt_tokens','completion_tokens').
@@ -197,6 +215,19 @@ function parsePhotos(string $raw): array {
     return array_values($photos);
 }
 
+// Mapuje car.bbox/plate.bbox z pikseli modelu (patrz visionPrompt()) do 0..1000 przez
+// pixelBoxToVisionSpace(). Wołane po KAŻDYM parsePhotos() w analyzeChunk() (główny parse + po
+// obu rundach naprawy) — walidacja i cała reszta pipeline'u dalej widzi tylko 0..1000.
+function applyPixelBoxes(array &$photos, array $dims): void {
+    foreach ($photos as &$p) {
+        $d = $dims[$p['photo_index'] ?? null] ?? null;
+        if (!$d) continue;
+        if (isset($p['car']['bbox'])) $p['car']['bbox'] = pixelBoxToVisionSpace($p['car']['bbox'], $d['w'], $d['h']);
+        if (isset($p['plate']['bbox'])) $p['plate']['bbox'] = pixelBoxToVisionSpace($p['plate']['bbox'], $d['w'], $d['h']);
+    }
+    unset($p);
+}
+
 /** @param list<array{photoId:string,photo_index:int,bytes:string}> $items */
 function analyzeChunk(array $items, array &$usage): array {
     $idx = array_map(fn ($i) => $i['photo_index'], $items);
@@ -205,19 +236,27 @@ function analyzeChunk(array $items, array &$usage): array {
         ? ' These are photos ' . $idx[0] . '..' . end($idx) . ' of the same report; use exactly these photo_index values.'
         : '';
 
-    $content = [['type' => 'text', 'text' => visionPrompt() . $note]];
+    $dims = [];
+    foreach ($items as $it) {
+        $size = imageSize($it['bytes']);
+        if ($size) $dims[$it['photo_index']] = $size;
+    }
+
+    $content = [['type' => 'text', 'text' => visionPrompt($dims) . $note]];
     foreach ($items as $it) $content[] = imgPart($it['bytes'], OPENAI_VISION_DETAIL);
     $history = [['role' => 'user', 'content' => $content]];
 
     $raw = chat($history, OPENAI_VISION_MAX_TOKENS, $usage);
     try {
         $photos = parsePhotos($raw);
+        applyPixelBoxes($photos, $dims);
     } catch (VisionException $e) {
         // jedna próba naprawy: model odpowiedział prozą
         $history[] = ['role' => 'assistant', 'content' => $raw];
         $history[] = ['role' => 'user', 'content' => 'That was not valid JSON. Repeat the answer as raw JSON only: no prose, no markdown fences, no commentary.'];
         $raw = chat($history, OPENAI_VISION_MAX_TOKENS, $usage);
         $photos = parsePhotos($raw); // tu już głośno przy porażce
+        applyPixelBoxes($photos, $dims);
     }
 
     $want = $idx; sort($want);
@@ -232,11 +271,21 @@ function analyzeChunk(array $items, array &$usage): array {
         foreach (validateVisionPhoto($p, $idx[$k]) as $e) $errs[] = "zdj.{$idx[$k]}: $e";
     }
     if ($errs) {
-        // jedna próba naprawy: odeślij błędy
+        // jedna próba naprawy: odeślij błędy + przypomnij kontrakt pikseli (gdy model
+        // przysłał 0..1000 zamiast pikseli, konwersja daje >1000 i "zly bbox" — bez tego
+        // zdania model powtórzyłby błąd, paląc rundę naprawy i kończąc 502).
+        $dimsHint = implode('; ', array_map(
+            fn ($idx, $d) => "photo_index $idx: {$d['w']}x{$d['h']}px",
+            array_keys($dims),
+            $dims,
+        ));
         $history[] = ['role' => 'assistant', 'content' => $raw];
-        $history[] = ['role' => 'user', 'content' => 'Your JSON has errors: ' . implode('; ', $errs) . '. Return the FULL corrected JSON object again. JSON only.'];
+        $history[] = ['role' => 'user', 'content' => 'Your JSON has errors: ' . implode('; ', $errs)
+            . '. Reminder: bbox is [x1,y1,x2,y2] in ACTUAL PIXELS of that photo (dimensions: ' . $dimsHint
+            . ') — do NOT normalize to 0..1000 or 0..1. Return the FULL corrected JSON object again. JSON only.'];
         $raw = chat($history, OPENAI_VISION_MAX_TOKENS, $usage);
         $photos = parsePhotos($raw);
+        applyPixelBoxes($photos, $dims);
         usort($photos, fn ($a, $b) => ($a['photo_index'] ?? 0) <=> ($b['photo_index'] ?? 0));
     }
     $errs = [];
@@ -256,144 +305,76 @@ function imageSize(string $bytes): ?array {
     return ['w' => (float)$info[0], 'h' => (float)$info[1]];
 }
 
-/**
- * GD crop bytes-in/bytes-out. $x/$y/$w/$h w pikselach (nie 0..1000). Skaluje do $maxSide gdy
- * dłuższy bok przekracza limit. null gdy box zdegenerowany albo dane nie do zdekodowania.
- */
-function cropJpeg(string $bytes, float $x, float $y, float $w, float $h, int $maxSide): ?string {
-    if ($w < 10 || $h < 10) return null;
-    $src = @imagecreatefromstring($bytes);
-    if (!$src) return null;
-
-    $W = imagesx($src);
-    $H = imagesy($src);
-    $ix = max(0, min($W - 1, (int)round($x)));
-    $iy = max(0, min($H - 1, (int)round($y)));
-    $iw = max(1, min($W - $ix, (int)round($w)));
-    $ih = max(1, min($H - $iy, (int)round($h)));
-
-    $cropped = imagecrop($src, ['x' => $ix, 'y' => $iy, 'width' => $iw, 'height' => $ih]);
-    imagedestroy($src);
-    if ($cropped === false) return null;
-
-    $cw = imagesx($cropped);
-    $ch = imagesy($cropped);
-    $out = $cropped;
-    if (max($cw, $ch) > $maxSide) {
-        $scale = $maxSide / max($cw, $ch);
-        $nw = max(1, (int)round($cw * $scale));
-        $nh = max(1, (int)round($ch * $scale));
-        $resized = imagecreatetruecolor($nw, $nh);
-        imagecopyresampled($resized, $cropped, 0, 0, 0, 0, $nw, $nh, $cw, $ch);
-        imagedestroy($cropped);
-        $out = $resized;
-    }
-
-    ob_start();
-    imagejpeg($out, null, 80);
-    $jpeg = ob_get_clean();
-    imagedestroy($out);
-    return $jpeg ?: null;
+// Najlepszy wynik PlateRecognizer (najwyższy score), jak get_car_info_platerecognizer()
+// w plateRecognizer.php. null gdy brak wyników.
+function bestAlprResult(array $resp): ?array {
+    $results = $resp['results'] ?? [];
+    if (!is_array($results) || !count($results)) return null;
+    usort($results, fn ($a, $b) => ($b['score'] ?? 0) <=> ($a['score'] ?? 0));
+    return $results[0];
 }
 
-// Retry: auto bez czytelnej tablicy (quality >= 0.3) - crop car+10% marginesu, tylko odczyt.
-function retryPlateCrop(string $bytes, array $photo, array &$usage, array &$warnings): ?string {
-    $car = $photo['car'] ?? null;
-    if (!($car['present'] ?? false) || !validBox($car['bbox'] ?? null)) return null;
-    try {
-        $size = imageSize($bytes);
-        if (!$size) return null;
-        $W = $size['w']; $H = $size['h'];
-        [$x1, $y1, $x2, $y2] = array_map(fn ($v) => $v / 1000, $car['bbox']);
-        $mx = ($x2 - $x1) * 0.1;
-        $my = ($y2 - $y1) * 0.1;
-        $bx = max(0, ($x1 - $mx) * $W);
-        $by = max(0, ($y1 - $my) * $H);
-        $bw = min($W, ($x2 + $mx) * $W) - $bx;
-        $bh = min($H, ($y2 + $my) * $H) - $by;
-        $crop = cropJpeg($bytes, $bx, $by, $bw, $bh, 1600);
-        if (!$crop) return null;
+// Tablica + bbox auta z ALPR (PlateRecognizer), TYLKO dla role==='car' — patrz applyAlprPlate()
+// caller w analyzeCandidate(). Zawsze zapisuje plate_debug (model vs ALPR + score, TYMCZASOWE
+// do wglądu w appce — usunąć razem z UI po stronie klienta przy kolejnym podbiciu VISION_SCHEMA,
+// appka nieznany klucz ignoruje). Nadpisuje plate/car modelu tylko gdy ALPR zwróci parsowalną
+// tablicę ze score >= ALPR_MIN_SCORE; wpp. graceful fallback (plate_debug.alpr=null gdy ALPR
+// nic nie znalazł, albo wpis + warning gdy score za niski) bez plate_verified.
+function applyAlprPlate(string $bytes, array &$photo, array &$warnings): void {
+    $modelPlate = $photo['plate'] ?? ['readable' => false, 'text' => null, 'bbox' => null];
+    $modelCar = $photo['car'] ?? ['present' => false, 'bbox' => null, 'desc' => null];
 
-        $raw = chat([[
-            'role' => 'user',
-            'content' => [
-                ['type' => 'text', 'text' => 'This is a crop of a car. Read its Polish licence plate. Return JSON {"readable":bool, "text":str|null} only.'],
-                imgPart($crop, OPENAI_VISION_CROP_DETAIL),
-            ],
-        ]], OPENAI_VISION_CROP_MAX_TOKENS, $usage, 2);
-        $r = extractJson($raw);
-        if (!($r['parsed']['readable'] ?? false)) return null;
-        return normPlateKey($r['parsed']['text'] ?? null);
+    $best = null;
+    try {
+        $best = bestAlprResult(PlateRecognizerClient::call($bytes));
     } catch (\Throwable $e) {
-        $msg = 'retry crop: ' . substr($e->getMessage(), 0, 150);
+        $msg = 'platerecognizer: ' . substr($e->getMessage(), 0, 150);
         logger("vision $msg");
         $warnings[] = "zdj.{$photo['photo_index']}: $msg";
-        return null;
     }
-}
 
-// Weryfikacja pozycji tablicy drugą opinią. Crop bazuje na CAR.bbox (pewny), nigdy na
-// plate.bbox (podejrzany o przesunięcie). Zwraca ['status'=>ok|mismatch|skip, 'bbox'=>...].
-function verifyPlateBox(string $bytes, array $photo, array &$usage, array &$warnings): array {
-    $plate = $photo['plate'] ?? [];
-    if (!($plate['readable'] ?? false) || ($photo['plate_verified'] ?? false)) {
-        return ['status' => 'skip', 'bbox' => null];
-    }
-    $expected = $plate['text'] ?? null;
-    $car = $photo['car'] ?? [];
-    try {
-        $size = imageSize($bytes);
-        if (!$size) return ['status' => 'skip', 'bbox' => null];
-        $W = $size['w']; $H = $size['h'];
-
-        if (($car['present'] ?? false) && validBox($car['bbox'] ?? null)) {
-            [$x1, $y1, $x2, $y2] = array_map(fn ($v) => $v / 1000, $car['bbox']);
-            $m = 0.1;
-        } elseif (validBox($plate['bbox'] ?? null)) {
-            [$x1, $y1, $x2, $y2] = array_map(fn ($v) => $v / 1000, $plate['bbox']);
-            $m = 1.5;
-        } else {
-            return ['status' => 'skip', 'bbox' => null];
-        }
-        $mx = ($x2 - $x1) * $m;
-        $my = ($y2 - $y1) * $m;
-        $bx = max(0, ($x1 - $mx) * $W);
-        $by = max(0, ($y1 - $my) * $H);
-        $bw = min($W, ($x2 + $mx) * $W) - $bx;
-        $bh = min($H, ($y2 + $my) * $H) - $by;
-        $crop = cropJpeg($bytes, $bx, $by, $bw, $bh, 1000);
-        if (!$crop) return ['status' => 'skip', 'bbox' => null];
-
-        $raw = chat([[
-            'role' => 'user',
-            'content' => [
-                ['type' => 'text', 'text' => 'This crop shows a car (front). Find its Polish licence plate. Return JSON {"text": plate characters or null, "bbox": [x1,y1,x2,y2] tight around the plate characters in 0..1000 coords of THIS crop, or null if no plate visible}. JSON only.'],
-                imgPart($crop, OPENAI_VISION_CROP_DETAIL),
-            ],
-        ]], OPENAI_VISION_CROP_MAX_TOKENS, $usage, 2);
-        $r = extractJson($raw);
-        $parsed = $r['parsed'];
-        if (!$parsed) return ['status' => 'skip', 'bbox' => null];
-        $text = normPlateKey($parsed['text'] ?? null);
-        $fb = $parsed['bbox'] ?? null;
-        if ($text !== $expected || !is_array($fb) || count($fb) !== 4) {
-            return ['status' => 'mismatch', 'bbox' => null];
-        }
-        [$fx1, $fy1, $fx2, $fy2] = array_map(fn ($v) => $v / 1000, $fb);
-        return [
-            'status' => 'ok',
-            'bbox' => [
-                (int)round((($bx + $fx1 * $bw) / $W) * 1000),
-                (int)round((($by + $fy1 * $bh) / $H) * 1000),
-                (int)round((($bx + $fx2 * $bw) / $W) * 1000),
-                (int)round((($by + $fy2 * $bh) / $H) * 1000),
-            ],
+    if (!$best) {
+        $photo['plate_debug'] = [
+            'model' => ['text' => $modelPlate['text'] ?? null, 'bbox' => $modelPlate['bbox'] ?? null],
+            'alpr' => null,
         ];
-    } catch (\Throwable $e) {
-        $msg = 'verify crop: ' . substr($e->getMessage(), 0, 150);
-        logger("vision $msg");
-        $warnings[] = "zdj.{$photo['photo_index']}: $msg";
-        return ['status' => 'skip', 'bbox' => null];
+        return;
+    }
+
+    $size = imageSize($bytes);
+    $alprText = normPlateKey($best['plate'] ?? null);
+    $alprPlateBbox = ($size && isset($best['box'])) ? alprBoxToVisionSpace($best['box'], $size['w'], $size['h']) : null;
+    $alprCarBbox = ($size && isset($best['vehicle']['box'])) ? alprBoxToVisionSpace($best['vehicle']['box'], $size['w'], $size['h']) : null;
+
+    $photo['plate_debug'] = [
+        'model' => ['text' => $modelPlate['text'] ?? null, 'bbox' => $modelPlate['bbox'] ?? null],
+        'alpr' => ['text' => $alprText, 'bbox' => $alprPlateBbox, 'score' => $best['score'] ?? null],
+    ];
+
+    // Próg pewności: słaby odczyt ALPR nie nadpisuje (być może poprawnego) odczytu modelu
+    // ani nie dostaje plate_verified — zostaje graceful fallback jak przy braku wyniku.
+    if ($alprText !== null && ($best['score'] ?? 0) >= ALPR_MIN_SCORE) {
+        $photo['plate'] = ['readable' => true, 'text' => $alprText, 'bbox' => $alprPlateBbox];
+        // plate_verified = ALPR (score >= ALPR_MIN_SCORE) dostarczył parsowalną tablicę;
+        // NIE jest to już konsensus dwóch opinii jak w dawnym pipeline'ie LLM.
+        $photo['plate_verified'] = true;
+        if ($alprCarBbox) {
+            $photo['car'] = ['present' => true, 'bbox' => $alprCarBbox, 'desc' => $modelCar['desc'] ?? null];
+        }
+        // applyAlprPlate() działa PO walidacji (analyzeChunk), więc nadpisane boxy muszą
+        // ponownie przejść niezmiennik "tablica w aucie" — inaczej odpowiedź API łamałaby
+        // gwarancję schematu (np. ALPR znalazł tablicę, ale nie vehicle.box, a modelowy
+        // bbox auta nie obejmuje boxu ALPR). Przy rozjechaniu: wracamy do auta modelu
+        // i sygnalizujemy to flagą plate_check zamiast cichej podmiany.
+        $cb = $photo['car']['bbox'] ?? null;
+        $pb = $photo['plate']['bbox'] ?? null;
+        if (validBox($cb) && validBox($pb) && !plateInsideCar($cb, $pb)) {
+            $photo['car'] = $modelCar;
+            $photo['plate_check'] = 'unverified-box';
+            $warnings[] = "zdj.{$photo['photo_index']}: bbox ALPR poza autem — zostawiam auto modelu (plate_check=unverified-box)";
+        }
+    } elseif ($alprText !== null) {
+        $warnings[] = "zdj.{$photo['photo_index']}: niski score ALPR (" . ($best['score'] ?? '?') . ") — zostawiam odczyt modelu";
     }
 }
 
@@ -431,23 +412,11 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
         foreach ($result as &$p) {
             $src = $byIndex[$p['photo_index']] ?? null;
             if (!$src) continue;
-
-            $role = $p['role'] ?? null;
-            $plate = $p['plate'] ?? [];
-            $quality = $p['quality'] ?? 0;
-            if ($role === 'car' && !($plate['readable'] ?? false) && $quality >= 0.3) {
-                $text = retryPlateCrop($src['bytes'], $p, $usage, $warnings);
-                if ($text !== null) {
-                    $p['plate'] = ['readable' => true, 'text' => $text, 'bbox' => null, 'from_crop' => true];
-                }
-            }
-
-            $v = verifyPlateBox($src['bytes'], $p, $usage, $warnings);
-            if ($v['status'] === 'ok') {
-                $p['plate']['bbox'] = $v['bbox'];
-                $p['plate_verified'] = true;
-            } elseif ($v['status'] === 'mismatch') {
-                $p['plate']['plate_check'] = 'unverified-box';
+            // Tylko 'car' — 'third' (drugi kąt/znak z boku) zwykle nie ma dobrego kadru na
+            // tablicę/całe auto, a ALPR na złym kadrze tylko dokłada szum. Świadome zawężenie
+            // względem harnessu testowego, który stosował to też do 'third'.
+            if (($p['role'] ?? null) === 'car') {
+                applyAlprPlate($src['bytes'], $p, $warnings);
             }
         }
         unset($p);
