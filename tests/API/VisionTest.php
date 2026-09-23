@@ -68,11 +68,16 @@ class VisionTest extends TestCase
         $this->assertSame([], \vision\validateVisionPhoto($p, 0));
     }
 
-    public function testValidateVisionPhotoCatchesBadPlateFormat(): void {
+    public function testValidateVisionPhotoAllowsBadPlateFormat(): void {
+        // Zły format (readable:true, tekst nie przechodzi normPlateKey) NIE jest błędem walidacji
+        // — inaczej cały kandydat padałby wyjątkiem, zanim applyAlprPlate() (Vision.php) dostanie
+        // szansę poprawić odczyt z ALPR (realny przypadek: model czytał "ZOJKBRO" zamiast
+        // "Z0JKBRO", polska tablica nie odróżnia wizualnie 0 od O). normalizeVisionPhoto()
+        // (osobny test niżej) łagodnie zejdzie do readable:false.
         $p = ['photo_index' => 0, 'role' => 'car', 'quality' => 0.5,
               'car' => ['present' => false, 'bbox' => null], 'plate' => ['readable' => true, 'text' => 'AB', 'bbox' => null], 'markers' => []];
         $errs = \vision\validateVisionPhoto($p, 0);
-        $this->assertNotEmpty(array_filter($errs, fn ($e) => str_contains($e, 'nieczytelny format tablicy')));
+        $this->assertEmpty(array_filter($errs, fn ($e) => str_contains($e, 'nieczytelny format tablicy')));
     }
 
     public function testValidateVisionPhotoCatchesPlateOutsideCar(): void {
@@ -85,11 +90,19 @@ class VisionTest extends TestCase
         $this->assertContains('tablica poza autem', \vision\validateVisionPhoto($p, 0));
     }
 
-    public function testValidateVisionPhotoCatchesWrongIndexAndUnknownMarker(): void {
+    public function testValidateVisionPhotoCatchesWrongIndexButIgnoresUnknownMarker(): void {
+        // Nieznany marker NIE jest błędem walidacji (patrz normalizeVisionPhoto — cicho
+        // odfiltrowany) — najczęstszy dotąd powód porażki całego kandydata mimo poprawnej reszty.
         $p = ['photo_index' => 5, 'role' => 'context', 'quality' => 0.5, 'markers' => ['nope_not_a_marker']];
         $errs = \vision\validateVisionPhoto($p, 0);
         $this->assertContains('zly photo_index', $errs);
-        $this->assertContains('nieznany marker', $errs);
+        $this->assertEmpty(array_filter($errs, fn ($e) => str_contains($e, 'marker')));
+    }
+
+    public function testNormalizeVisionPhotoDropsUnknownMarkersKeepsKnownOnes(): void {
+        $p = ['plate' => ['readable' => false, 'text' => null, 'bbox' => null], 'markers' => ['roundabout_sign', ' sidewalk_parking ', 'zebra_crossing', 123]];
+        \vision\normalizeVisionPhoto($p);
+        $this->assertSame(['sidewalk_parking', 'zebra_crossing'], $p['markers']);
     }
 
     public function testNormalizeVisionPhotoFlipsUnreadableOnBadFormat(): void {
@@ -192,6 +205,16 @@ class VisionTest extends TestCase
         $this->assertNull(\vision\pixelBoxToVisionSpace(null, 200, 150));
     }
 
+    public function testPixelBoxToVisionSpaceClampsOvershootToImageEdge(): void {
+        // Realny przypadek (lokalny CLI, kandydat R005, model gpt-5-nano): duży, dominujący
+        // obiekt blisko krawędzi, y2=1320px na obrazie 1205px wysokości (10% za krawędzią) —
+        // nie błąd formatu, model powtarzał to samo przekroczenie nawet po rundzie naprawy.
+        // Przycięcie do 0..1000 zamiast twardego odrzucenia jako "zly bbox".
+        $this->assertSame([131, 656, 938, 1000], \vision\pixelBoxToVisionSpace([210, 790, 1500, 1320], 1600, 1205));
+        // Ujemna/za duża współrzędna też się przycina, nie tylko lekki poślizg.
+        $this->assertSame([0, 0, 1000, 1000], \vision\pixelBoxToVisionSpace([-50, -10, 5000, 9999], 1600, 1205));
+    }
+
     public function testPixelBoxToVisionSpaceLeavesMalformedForValidator(): void {
         // Nie-numeryczne elementy nie mogą rzucać TypeError (500 z pominięciem rundy
         // naprawy) ani cicho znikać w null (null bbox jest dozwolony) — walidacja ma je
@@ -287,9 +310,12 @@ class VisionTest extends TestCase
     }
 
     public function testAnalyzeCandidateRepairsValidationErrors(): void {
+        // Nieznany marker już NIE wyzwala naprawy (cicho odfiltrowany, patrz
+        // testNormalizeVisionPhotoDropsUnknownMarkersKeepsKnownOnes) — używamy tu innego, wciąż
+        // twardego błędu walidacji (quality poza 0..1), żeby sprawdzić samą rundę naprawy.
         $fake = new ClientFake([
             CreateResponse::fake(['choices' => [['message' => ['content' =>
-                self::photosJson([['photo_index' => 0, 'role' => 'context', 'quality' => 0.5, 'markers' => ['not_a_real_marker']]]),
+                self::photosJson([['photo_index' => 0, 'role' => 'context', 'quality' => 5, 'markers' => []]]),
             ]]]]),
             CreateResponse::fake(['choices' => [['message' => ['content' =>
                 self::photosJson([$this->fakePhotoJson(0, 'context')]),
@@ -303,12 +329,13 @@ class VisionTest extends TestCase
 
         $fake->chat()->assertSent(function (string $method, array $params) {
             $msgs = $params['messages'];
-            return count($msgs) === 3 && str_contains($msgs[2]['content'], 'nieznany marker');
+            return count($msgs) === 3 && str_contains($msgs[2]['content'], 'zly quality');
         });
     }
 
     public function testAnalyzeCandidateThrowsAfterBothRepairsFail(): void {
-        $bad = self::photosJson([['photo_index' => 0, 'role' => 'context', 'quality' => 0.5, 'markers' => ['not_a_real_marker']]]);
+        // Nieznany marker już nie jest błędem (patrz wyżej) — quality poza 0..1 wciąż jest.
+        $bad = self::photosJson([['photo_index' => 0, 'role' => 'context', 'quality' => 5, 'markers' => []]]);
         $fake = new ClientFake([
             CreateResponse::fake(['choices' => [['message' => ['content' => $bad]]]]),
             CreateResponse::fake(['choices' => [['message' => ['content' => $bad]]]]),
@@ -432,6 +459,32 @@ class VisionTest extends TestCase
         $this->assertArrayNotHasKey('plate_verified', $p);
         $this->assertNull($p['plate_debug']['alpr']);
         $this->assertSame('ZS228FC', $p['plate_debug']['model']['text']);
+    }
+
+    public function testAnalyzeCandidateHybridPrRescuesBadFormatPlateViaAlpr(): void {
+        // Realny przypadek: polska tablica gdzie font nie odróżnia 0 od O. Model konsekwentnie
+        // czyta "ZOJKBRO" (same litery, zły format wg normPlateKey — bez cyfry), ale to już NIE
+        // jest błąd walidacji (patrz komentarz w validateVisionPhoto()) — normalizeVisionPhoto()
+        // łagodnie zejdzie do readable:false, a applyAlprPlate() dla role==='car' i tak dostaje
+        // szansę poprawić odczyt z ALPR ("Z0JKBRO", 97.6% pewności w prawdziwym API).
+        $fake = new ClientFake([
+            CreateResponse::fake(['choices' => [['message' => ['content' =>
+                self::photosJson([$this->fakePhotoJson(0, 'car', true, 'ZOJKBRO')]),
+            ]]]]),
+        ]);
+        VisionClient::set($fake);
+        PlateRecognizerClient::set(fn (string $bytes) => ['results' => [[
+            'plate' => 'z0jkbro', 'score' => 0.976,
+            'box' => ['xmin' => 20, 'ymin' => 15, 'xmax' => 180, 'ymax' => 135],
+        ]]]);
+
+        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]];
+        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R010');
+
+        $p = $result['photos'][0];
+        $this->assertTrue($p['plate']['readable']);
+        $this->assertSame('Z0JKBRO', $p['plate']['text']); // z ALPR, nie z (błędnego) odczytu modelu
+        $this->assertTrue($p['plate_verified']);
     }
 
     public function testAnalyzeCandidateSplitsLargeCandidateOnNetworkError(): void {

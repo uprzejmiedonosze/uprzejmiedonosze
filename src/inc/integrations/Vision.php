@@ -162,15 +162,31 @@ final class PlateRecognizerClient {
  */
 function chat(array $messages, int $maxTokens, array &$usage, int $tries = 3): string {
     $lastErr = null;
+    // Rodzina "reasoning" (gpt-5*, o1*, o3*, o4*) ma inny kontrakt niż klasyczne modele czatu
+    // (gpt-4o-mini itd.), zweryfikowane bezpośrednio na API OpenAI:
+    // - max_completion_tokens zamiast max_tokens (max_tokens -> HTTP 400 "Unsupported parameter")
+    // - temperature tylko domyślna (1); jawne 0 -> HTTP 400 "Unsupported value"
+    // - reasoning_effort:'minimal' ogranicza niewidoczne "myślenie" (completion_tokens_details.
+    //   reasoning_tokens) — bez tego przy niskim maxTokens model potrafi zużyć CAŁY budżet na
+    //   reasoning i zwrócić puste content (finish_reason=length, content=""). 'low' zamiast
+    //   'minimal': cross-photo spójność ról (dokładnie jedno "car" na pojazd) wymaga porównania
+    //   wszystkich zdjęć w grupie ze sobą, budżet (8000) ma na to zapas.
+    $isReasoningModel = (bool)preg_match('/^(gpt-5|o1|o3|o4)/', OPENAI_VISION_MODEL);
+    $params = [
+        'model' => OPENAI_VISION_MODEL,
+        'response_format' => ['type' => 'json_object'],
+        'messages' => $messages,
+    ];
+    if ($isReasoningModel) {
+        $params['max_completion_tokens'] = $maxTokens;
+        $params['reasoning_effort'] = 'low';
+    } else {
+        $params['temperature'] = 0;
+        $params['max_tokens'] = $maxTokens;
+    }
     for ($attempt = 0; $attempt < $tries; $attempt++) {
         try {
-            $resp = VisionClient::get()->chat()->create([
-                'model' => OPENAI_VISION_MODEL,
-                'temperature' => 0,
-                'max_tokens' => $maxTokens,
-                'response_format' => ['type' => 'json_object'],
-                'messages' => $messages,
-            ]);
+            $resp = VisionClient::get()->chat()->create($params);
             $usage['calls'] = ($usage['calls'] ?? 0) + 1;
             $usage['prompt_tokens'] = ($usage['prompt_tokens'] ?? 0) + ($resp->usage->promptTokens ?? 0);
             $usage['completion_tokens'] = ($usage['completion_tokens'] ?? 0) + ($resp->usage->completionTokens ?? 0);
