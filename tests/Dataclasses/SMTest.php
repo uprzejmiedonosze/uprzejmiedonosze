@@ -88,6 +88,35 @@ class SMTest extends TestCase
         self::assertEquals('straz.miejska@jozefow.pl', (new \SM($this->getData($city)))->getEmail());
     }
 
+    /**
+     * Wieś Łęczyca w gminie Komorniki koliduje nazwą z miastem Łęczyca
+     * (woj. łódzkie). Klucz kodu pocztowego "62-051" ma wyprzedzać
+     * dopasowanie po nazwie miasta (analogicznie do "05-860" z issue #120).
+     */
+    public function testGuessLeczycaNearPoznanGoesToKomorniki() : void {
+        $smKomorniki = new \SM($this->getData('komorniki'));
+
+        $village = \SM::guess(new JSONObject([
+            'postcode' => '62-051',
+            'county' => 'gmina Komorniki',
+            'municipality' => 'powiat poznański',
+            'voivodeship' => 'wielkopolskie',
+            'city' => 'Łęczyca'
+        ]));
+        self::assertEquals('62-051', $village);
+        self::assertEquals($smKomorniki->getEmail(), (new \SM($this->getData($village)))->getEmail());
+
+        $city = \SM::guess(new JSONObject([
+            'postcode' => '99-100',
+            'county' => 'gmina Łęczyca',
+            'municipality' => 'powiat łęczycki',
+            'voivodeship' => 'łódzkie',
+            'city' => 'Łęczyca'
+        ]));
+        self::assertEquals('łęczyca', $city);
+        self::assertEquals('straz@leczyca.info.pl', (new \SM($this->getData($city)))->getEmail());
+    }
+
     private function getData(string $city): array
     {
         return json_decode(file_get_contents(__DIR__ . '/../../export/public/api/config/sm.json'), true)[$city];
