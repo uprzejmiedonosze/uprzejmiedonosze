@@ -1,5 +1,14 @@
 name: ${APP_ENV:-uprzejmiedonosze-dev}
 
+networks:
+  # Only webapp-srv joins this — it's the only service that needs public
+  # HTTPS routing (../edge's Traefik). worker-cron/face-detect-consumer/
+  # face-detector stay on the default project network, reached by service
+  # name as today. Created externally by ../edge (see its CLAUDE.md); this
+  # project never creates or owns it.
+  edge:
+    external: true
+
 # App secrets and environment-specific config.
 # Staging/prod: vars from --env-file (services/.env.staging / .env.prod) via x-app-env.
 # Dev: committed config.dev.php (mounted into webapp/builder) + optional services/.env.dev for extras.
@@ -162,6 +171,7 @@ services:
   #   docker compose --env-file services/.env.prod    -p prod    --profile prod    up -d
   webapp-srv:
     profiles: [staging, prod]
+    image: ${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}/webapp:${IMAGE_TAG:-latest}
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
@@ -169,9 +179,46 @@ services:
       args:
         APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
         APP_HTTPS: ${APP_HTTPS:-https}
+    # 127.0.0.1:${APP_PORT} is test-only (curl'd directly before the ../edge
+    # cutover, see the plan) — public traffic arrives via Traefik on the
+    # `edge` network, wired below through labels. Set APP_PORT=18080 (prod)
+    # / 18081 (staging) in the respective .env.* — the old default 8080
+    # collides with edge's own Traefik dashboard port on the same host.
     ports:
-      - "127.0.0.1:${APP_PORT:-8080}:80"
+      - "127.0.0.1:${APP_PORT:-18080}:80"
     restart: always
+    networks:
+      - default
+      - edge
+    # List form, not mapping form: compose only interpolates ${...} inside a
+    # label's *value*, never inside a mapping *key* — with the map form
+    # below, `traefik.http.routers.ud-${APP_ENV:-prod}...:` would keep the
+    # literal, unexpanded string "ud-${APP_ENV:-prod}" as the router name for
+    # BOTH profiles, colliding staging with prod on the same Traefik instance
+    # (confirmed via `docker compose config` while writing this). List form
+    # holds the whole "key=value" as one scalar, so interpolation runs over
+    # both halves before the `=` split.
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=edge"
+      # ${APP_ENV} (prod/staging) namespaces the router so both profiles can
+      # run on the same host without colliding. www redirect is prod-only
+      # (staging/shadow never had a www. alias) — TRAEFIK_EXTRA_HOST_RULE
+      # (.env.prod) appends ` || Host(\`www.uprzejmiedonosze.net\`)`, backed
+      # by a redirect-www@file middleware (see ../edge/traefik/dynamic.local).
+      # TRAEFIK_EXTRA_MIDDLEWARES (.env.staging) points at a geoblock
+      # middleware instead. Both default to empty — no extra host / no
+      # middlewares — until those per-host files exist (Faza 1).
+      - "traefik.http.routers.ud-${APP_ENV:-prod}.rule=Host(`${APP_HOST:-uprzejmiedonosze.net}`)${TRAEFIK_EXTRA_HOST_RULE:-}"
+      - "traefik.http.routers.ud-${APP_ENV:-prod}.entrypoints=websecure"
+      - "traefik.http.routers.ud-${APP_ENV:-prod}.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.ud-${APP_ENV:-prod}.middlewares=${TRAEFIK_EXTRA_MIDDLEWARES:-}"
+      - "traefik.http.services.ud-${APP_ENV:-prod}.loadbalancer.server.port=80"
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "unixgram:///dev/log"
+        tag: "{{.Name}}"
     volumes:
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}db:/var/www/uprzejmiedonosze.net/db:rw
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw
@@ -194,19 +241,31 @@ services:
 
   face-detector:
     profiles: [staging, prod]
+    image: ${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}/face-detector:${FACE_DETECTOR_TAG:-latest}
     build:
       context: ./face-detector
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "unixgram:///dev/log"
+        tag: "{{.Name}}"
 
   # face-detect-consumer and worker-cron share the worker image (code baked in from builder).
   # Only runtime data is mounted: db/, cdn2*, logs. Config comes from environment vars.
   face-detect-consumer:
     profiles: [staging, prod]
+    image: ${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}/worker:${IMAGE_TAG:-latest}
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
       target: worker
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "unixgram:///dev/log"
+        tag: "{{.Name}}"
     depends_on:
       - memcached
       - face-detector
@@ -224,11 +283,17 @@ services:
 
   worker-cron:
     profiles: [staging, prod]
+    image: ${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}/worker:${IMAGE_TAG:-latest}
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
       target: worker
     restart: always
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "unixgram:///dev/log"
+        tag: "{{.Name}}"
     volumes:
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}db:/var/www/uprzejmiedonosze.net/db:rw
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw

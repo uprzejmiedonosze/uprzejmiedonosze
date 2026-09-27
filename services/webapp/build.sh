@@ -37,6 +37,8 @@ cp -r src/tools/.     export/tools/
 cp -r src/sql/.       export/sql/
 cp src/index.php src/favicon.ico src/robots.txt src/ads.txt export/public/
 cp src/manifest.json  export/public/
+mkdir -p export/public/.well-known
+cp src/.well-known/traffic-advice src/.well-known/assetlinks.json export/public/.well-known/
 cp src/api/rest/index.php export/public/api/rest/
 mkdir -p export/public/api/mcp
 cp src/api/mcp/index.php export/public/api/mcp/
@@ -74,6 +76,15 @@ log "JS (parcel, one invocation per entry point)"
 for f in src/js/*.js; do
     node_modules/.bin/parcel build --no-cache --dist-dir export/public/js/ "$f"
 done
+
+# Sentry debug-id injection happens here, baked into the image, so the same
+# artifact that ships is the one whose sourcemaps get uploaded (see
+# scripts/sentry-release.sh, invoked from build-push.sh --sentry, which
+# extracts this exact export/public/js from the builder stage afterwards).
+# No network access or auth token needed for `inject` — only the later
+# `sourcemaps upload` does.
+log "Sentry sourcemaps inject"
+node_modules/.bin/sentry-cli sourcemaps inject export/public/js
 
 # ── Images ────────────────────────────────────────────────────────────────────
 # Collect all /img/... references from Twig templates and merge into

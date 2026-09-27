@@ -103,7 +103,47 @@ sentry-release: ## Create Sentry release and upload JS source maps
 		./node_modules/.bin/sentry-cli sourcemaps upload --org uprzejmie-donosze \
 		--project ud-js ./export/public/js
 
-# ── Prod build & deployment ───────────────────────────────────────────────────
+# ── Docker/GHCR deployment (../edge cutover) ──────────────────────────────────
+# Images are built locally and pushed to GHCR (scripts/build-push.sh); the
+# host only pulls (scripts/deploy.sh) — see the migration plan. These targets
+# will replace quickfix/old-staging/shadow/build-export below once the
+# ../edge cutover on uprzejmiedonosze.net is done; both sets coexist until then.
+
+DEPLOY_HOSTING := uprzejmiedonosze.net
+DEPLOY_DIR     := /opt/uprzejmiedonosze
+
+.PHONY: deploy-staging
+deploy-staging: check-git-clean ## Build+push staging images to GHCR, deploy on the host
+	@echo "==> Building and pushing staging images"
+	@bash scripts/build-push.sh staging "$(shell git rev-parse --short HEAD)"
+	@$(RSYNC) --human-readable services/.env.staging $(DEPLOY_HOSTING):$(DEPLOY_DIR)/services/.env.staging
+	@echo "==> Deploying staging on $(DEPLOY_HOSTING)"
+	@ssh $(DEPLOY_HOSTING) 'cd $(DEPLOY_DIR) && bash scripts/deploy.sh staging "$(shell git rev-parse --short HEAD)"'
+	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://staging.uprzejmiedonosze.net/
+
+.PHONY: deploy-prod
+deploy-prod: check-branch-main check-git-clean diff-from-last-prod confirmation ## Build+push prod images to GHCR, deploy on the host, tag+Sentry release
+	@echo "==> Building and pushing prod images (with Sentry release)"
+	@bash scripts/build-push.sh prod "prod_$(TAG_NAME)" --sentry
+	@$(RSYNC) --human-readable services/.env.prod $(DEPLOY_HOSTING):$(DEPLOY_DIR)/services/.env.prod
+	@echo "==> Deploying prod on $(DEPLOY_HOSTING)"
+	@ssh $(DEPLOY_HOSTING) 'cd $(DEPLOY_DIR) && bash scripts/deploy.sh prod "prod_$(TAG_NAME)"'
+	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://uprzejmiedonosze.net/
+	@git tag --force -a "prod_$(TAG_NAME)" -m "prod-release"
+	@git push origin --quiet --force "prod_$(TAG_NAME)"
+
+.PHONY: deploy-healthcheck
+deploy-healthcheck:
+	@status=""; \
+	for i in 1 2 3 4 5; do \
+		status=$$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$(URL)" || echo "000"); \
+		[ "$$status" = "200" ] && break; \
+		sleep 3; \
+	done; \
+	echo "$(URL) HTTP status: $$status"; \
+	[ "$$status" = "200" ] || ( echo "Deploy check failed: $(URL) returned $$status" && exit 1 )
+
+# ── Prod build & deployment (legacy rsync, pre-Docker) ────────────────────────
 
 .PHONY: build-export
 build-export: ## Build export/ and vendor/ via Docker builder (prod config)
