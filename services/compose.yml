@@ -290,6 +290,12 @@ services:
       MEMCACHED_HOST: memcached
       FACE_DETECTOR_URL: http://face-detector:2000
     command: ["nice", "-n", "10", "php", "/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php"]
+    # `nice` execs into `php`, so PHP ends up running as PID 1 here too — same
+    # category of risk as worker-cron's supercronic (see its comment below).
+    # Not empirically confirmed broken for this specific process, but the fix
+    # is free and the failure mode (unreaped zombies / broken signal
+    # handling) is exactly the kind of thing that's silent until it isn't.
+    init: true
 
   worker-cron:
     profiles: [staging, prod]
@@ -317,4 +323,14 @@ services:
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
       MEMCACHED_HOST: memcached
     command: ["supercronic", "/etc/crontab"]
+    # supercronic is not designed to run as PID 1 (its own README says so) —
+    # confirmed empirically (2026-09-27, this host): as PID 1 it attempts its
+    # own zombie-reaping path and immediately fatals with "Failed to fork
+    # exec: no such file or directory" (repro'd even with a trivial one-line
+    # crontab, kernel 6.12.107). Wrapping it in anything that isn't PID 1
+    # (confirmed with `timeout 5 supercronic ...`) fixes it instantly — the
+    # log then reads "process reaping disabled, not pid 1" and it runs fine.
+    # `init: true` gives it Docker's own docker-init/tini as PID 1, which
+    # reaps correctly and disables supercronic's broken internal path.
+    init: true
 
