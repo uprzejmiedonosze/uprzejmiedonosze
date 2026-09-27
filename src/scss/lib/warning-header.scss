@@ -1,3 +1,5 @@
+@use "tokens";
+
 .warning-header {
     background-color: #F8F8F8;
     padding: 1em;
@@ -12,5 +14,14 @@
     }
     h4 {
         margin-top: 0;
+    }
+
+    &.maintenance-banner {
+        background-color: rgba(tokens.$mpr-accent, .25);
+        border-left: 4px solid tokens.$mpr-accent;
+
+        p {
+            margin: 0;
+        }
     }
 }

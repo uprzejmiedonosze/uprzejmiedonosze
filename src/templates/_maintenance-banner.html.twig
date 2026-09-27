@@ -1,0 +1,9 @@
+{% set _mtEnd = '2026-09-28 00:00' %}
+{% if 'now'|date('U') < _mtEnd|date('U') %}
+<div class="warning-header maintenance-banner" role="status">
+    <p><strong>Przerwa techniczna dziś od 22:00.</strong>
+    Przez pewien czas serwis może być niedostępny. Jeśli jesteś w trakcie
+    zgłoszenia — wyślij je przed 22:00 lub wróć po zakończeniu prac.
+    Przepraszamy za utrudnienia.</p>
+</div>
+{% endif %}
