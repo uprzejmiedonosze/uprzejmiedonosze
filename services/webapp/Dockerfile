@@ -98,7 +98,9 @@ RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
         -e "s/^upload_max_filesize.*/upload_max_filesize = 4M/" \
         -e "s/^post_max_size.*/post_max_size = 5M/" \
         -e "s/^session.name.*/session.name = UDSESSIONID/" \
+        -e "s/^session.save_handler.*/session.save_handler = memcached/" \
         /etc/php/8.4/fpm/php.ini && \
+    printf 'session.save_path = "memcached:11211"\n' >> /etc/php/8.4/fpm/php.ini && \
     sed -i -e "s|.*error_log.*|error_log = /dev/stderr|" /etc/php/8.4/fpm/php-fpm.conf && \
     update-rc.d php8.4-fpm defaults
 

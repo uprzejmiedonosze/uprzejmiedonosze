@@ -31,11 +31,30 @@ ENV_FILE="services/.env.${ENV}"
 
 compose=(docker compose -f services/compose.yml --env-file "${ENV_FILE}" -p "${ENV}" --profile "${ENV}")
 
-echo "==> Pulling images (IMAGE_TAG=${IMAGE_TAG})"
-"${compose[@]}" pull
+# Only the services that actually change with every app release — never
+# memcached or face-detector, on purpose:
+#   - memcached holds PHP sessions (session.save_handler=memcached, see
+#     Dockerfile). Its image tag is a floating `memcached:alpine`; pulling
+#     it here would eventually catch an upstream rebuild and recreate the
+#     container, wiping everyone's session. Update it deliberately instead:
+#     docker compose pull memcached && up -d memcached
+#   - face-detector is slow/expensive to build (dlib/cmake — confirmed
+#     2026-09-27: didn't fit in memory under buildx/QEMU, took ~9.5min
+#     natively) and versioned independently via FACE_DETECTOR_TAG, not
+#     IMAGE_TAG. build-push.sh already treats it as opt-in
+#     (--with-face-detector). Update it deliberately: bump FACE_DETECTOR_TAG
+#     in .env.<env>, then docker compose pull face-detector && up -d
+#     face-detector face-detect-consumer
+# Both still start automatically below via `up`'s dependency resolution if
+# they aren't already running (self-healing) — just never recreated, since
+# we never pull a new image for them here.
+APP_SERVICES=(webapp-srv worker-cron face-detect-consumer)
 
-echo "==> Recreating the stack (no build, no compile on this host)"
-"${compose[@]}" up -d --no-build --wait --wait-timeout 180
+echo "==> Pulling images (IMAGE_TAG=${IMAGE_TAG}) — app services only, not memcached/face-detector"
+"${compose[@]}" pull "${APP_SERVICES[@]}"
+
+echo "==> Recreating the app services (no build, no compile on this host)"
+"${compose[@]}" up -d --no-build --wait --wait-timeout 180 "${APP_SERVICES[@]}"
 
 echo "==> Pruning old images (keep last 7 days, never touches running containers)"
 docker image prune -af --filter until=168h
