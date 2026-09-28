@@ -48,10 +48,22 @@ compose=(docker compose -f services/compose.yml --env-file "${ENV_FILE}" -p "${E
 # Both still start automatically below via `up`'s dependency resolution if
 # they aren't already running (self-healing) — just never recreated, since
 # we never pull a new image for them here.
+#
+# `docker compose pull <service>` still follows depends_on and pulls
+# memcached/face-detector too, regardless of naming only the app services —
+# confirmed empirically (2026-09-28, Compose v5.5.1): `--include-deps` is
+# opt-in per the docs, but this version pulls dependencies whether or not
+# it's passed. Sidestep compose's pull entirely and `docker pull` the two
+# actual image references directly instead — this can't touch anything
+# else. `up` below is left on compose (its default --pull=missing policy
+# doesn't refetch what's already local, so it won't touch memcached/
+# face-detector either as long as we never pulled new versions of them).
 APP_SERVICES=(webapp-srv worker-cron face-detect-consumer)
+REGISTRY="${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}"
 
-echo "==> Pulling images (IMAGE_TAG=${IMAGE_TAG}) — app services only, not memcached/face-detector"
-"${compose[@]}" pull "${APP_SERVICES[@]}"
+echo "==> Pulling app images directly (IMAGE_TAG=${IMAGE_TAG}) — not via compose, so memcached/face-detector are never touched"
+docker pull "${REGISTRY}/webapp:${IMAGE_TAG}"
+docker pull "${REGISTRY}/worker:${IMAGE_TAG}"
 
 echo "==> Recreating the app services (no build, no compile on this host)"
 "${compose[@]}" up -d --no-build --wait --wait-timeout 180 "${APP_SERVICES[@]}"
