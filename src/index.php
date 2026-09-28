@@ -9,6 +9,16 @@ require_once(__DIR__ . '/../inc/config.php');
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 function resetSession() {
+    // session_regenerate_id() warns "no active session" if session_start()
+    // silently failed to actually establish one — plausible now that
+    // sessions are memcached-backed (a networked dependency, unlike the
+    // old local-file store) rather than a hard failure: confirmed in
+    // Sentry (UD-PHP-PR, 2026-09-28) landing in the exact few-minute
+    // window of a webapp-srv container recreate. Guard it so a missed
+    // session just gets (re)started instead of throwing.
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        session_start();
+    }
     session_unset();
     session_regenerate_id(true);
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';
