@@ -25,6 +25,18 @@ echo "==> Updating checkout"
 git fetch --prune origin
 git reset --hard "origin/main"
 
+# Re-exec from a fresh process now that the checkout (including this very
+# file) may have just changed under us. Without this, bash keeps executing
+# from the file descriptor it opened at startup — whatever this script's
+# content was BEFORE the git reset above, not after — confirmed
+# empirically (2026-09-28): a deploy.sh change landed in this same commit
+# as `git reset --hard` silently ran with the OLD script logic for the
+# rest of that invocation, because nothing forced a re-read. The guard
+# env var stops this from looping forever on the second pass.
+if [[ -z "${UD_DEPLOY_REEXECED:-}" ]]; then
+  UD_DEPLOY_REEXECED=1 exec bash "${BASH_SOURCE[0]}" "$@"
+fi
+
 export IMAGE_TAG="${ENV}-${TAG}"
 ENV_FILE="services/.env.${ENV}"
 [[ -f "${ENV_FILE}" ]] || { echo "ERROR: ${ENV_FILE} not found" >&2; exit 1; }
