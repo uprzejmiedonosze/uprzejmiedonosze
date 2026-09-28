@@ -56,7 +56,15 @@ function logger(string|object|array|null $msg, $force = null): string {
         $location = trimAbsolutePaths($location);
 
         send_syslog("$ip $user $location \"$msg\"", debug:!$force);
-        error_log("$time $user $location\t$msg\n", 3, 'php://stderr');
+        // Docker's syslog log driver (services/compose.yml) tags the whole
+        // stderr stream as LOG_ERR and stdout as LOG_INFO — it has no
+        // concept of per-line severity. Routine/debug logger() calls
+        // (isStaging()/isDev() tracing, no $force) were all landing on
+        // stderr and showing up as "errors" in Papertrail regardless of
+        // content (confirmed 2026-09-28). Only genuinely forced calls
+        // (used for real error conditions, and the only branch that also
+        // dumps a stack trace below) should be stderr/LOG_ERR.
+        error_log("$time $user $location\t$msg\n", 3, $force ? 'php://stderr' : 'php://stdout');
         if ($force) {
             $e = new Exception();
             error_log(trimAbsolutePaths(removeVendor($e->getTraceAsString())), 3, 'php://stderr');
