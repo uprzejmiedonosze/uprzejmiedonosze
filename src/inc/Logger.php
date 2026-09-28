@@ -61,11 +61,18 @@ function logger(string|object|array|null $msg, $force = null): string {
         // concept of per-line severity. Routine/debug logger() calls
         // (isStaging()/isDev() tracing, no $force) were all landing on
         // stderr and showing up as "errors" in Papertrail regardless of
-        // content (confirmed 2026-09-28). Only genuinely forced calls
-        // (used for real error conditions, and the only branch that also
-        // dumps a stack trace below) should be stderr/LOG_ERR.
+        // content (confirmed 2026-09-28). Only forced calls (used for
+        // real error conditions or things that must stay visible on prod)
+        // go to stderr/LOG_ERR; the stack trace below is separately gated
+        // on environment, not on $force.
         error_log("$time $user $location\t$msg\n", 3, $force ? 'php://stderr' : 'php://stdout');
-        if ($force) {
+        // Stack trace is gated on environment, not $force (2026-09-28
+        // correction) — $force's job is only "show this on prod too", it
+        // was never meant to also control the trace dump. That's how this
+        // behaved before: $force made prod log the line, but the trace
+        // itself only ever showed up on non-prod envs regardless of
+        // $force.
+        if (!isProd()) {
             $e = new Exception();
             error_log(trimAbsolutePaths(removeVendor($e->getTraceAsString())), 3, 'php://stderr');
         }
