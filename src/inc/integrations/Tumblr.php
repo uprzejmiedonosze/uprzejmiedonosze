@@ -4,8 +4,13 @@ use app\Application;
 use Tumblr\API\Client as Tumblr;
 
 function addToTumblr(Application $app): stdClass|array {
-    if (!defined('TUMBLR_CONSUMERKEY')) {
-        logger("Error TUMBLR_CONSUMERKEY not set", true);
+    // config.php now always defines TUMBLR_CONSUMERKEY (getenv() ?: '',
+    // same pattern as every other optional integration secret there) —
+    // !defined() alone would never be true anymore, so check emptiness
+    // instead. Same graceful "skip the real post" behavior for dev/staging
+    // (or prod if the key is ever genuinely unset) as before.
+    if (empty(TUMBLR_CONSUMERKEY)) {
+        logger("TUMBLR_CONSUMERKEY not set, skipping real post");
         return new JSONObject(array("id" => "fake", "state" => "published"));
     }
 

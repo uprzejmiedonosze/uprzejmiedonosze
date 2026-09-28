@@ -97,6 +97,17 @@ if (!defined('OPEN_ALPR_SECRET_2'))     define('OPEN_ALPR_SECRET_2',     getenv(
 if (!defined('MAPBOX_API_TOKEN'))       define('MAPBOX_API_TOKEN',       getenv('MAPBOX_API_TOKEN')       ?: '');
 if (!defined('GOOGLE_MAPS_API_TOKEN'))  define('GOOGLE_MAPS_API_TOKEN',  getenv('GOOGLE_MAPS_API_TOKEN')  ?: '');
 if (!defined('PATRONITE_TOKEN'))        define('PATRONITE_TOKEN',        getenv('PATRONITE_TOKEN')        ?: '');
+// API_TOKEN (AppStore::byNumber) and TUMBLR_* (integrations/Tumblr.php)
+// were only ever defined in the bare-metal-only config.prod.php (a whole
+// parallel secrets file, never in git) — confirmed 2026-09-28. Never
+// migrated here, so byNumber() would fatal on an undefined constant the
+// moment it's called with a non-empty token (silently never hit so far),
+// and addToTumblr() always took its "not set" fallback branch.
+if (!defined('API_TOKEN'))              define('API_TOKEN',              getenv('API_TOKEN')              ?: '');
+if (!defined('TUMBLR_CONSUMERKEY'))     define('TUMBLR_CONSUMERKEY',     getenv('TUMBLR_CONSUMERKEY')     ?: '');
+if (!defined('TUMBLR_CONSUMERSECRET'))  define('TUMBLR_CONSUMERSECRET',  getenv('TUMBLR_CONSUMERSECRET')  ?: '');
+if (!defined('TUMBLR_TOKEN'))           define('TUMBLR_TOKEN',           getenv('TUMBLR_TOKEN')           ?: '');
+if (!defined('TUMBLR_SECRET'))          define('TUMBLR_SECRET',          getenv('TUMBLR_SECRET')          ?: '');
 
 if (!defined('MAILER_DSN'))            define('MAILER_DSN',            getenv('MAILER_DSN')            ?: '');
 if (!defined('MAILER_FROM'))           define('MAILER_FROM',           getenv('MAILER_FROM')           ?: '');

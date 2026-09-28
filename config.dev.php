@@ -23,6 +23,14 @@ define('CRYPTO_TAG', '190181339ab13a971415e977b736053f');
 define('BACKEND_API_KEY', 'dev-secret-key-change-in-production');
 define('CORS_ALLOWED_DOMAIN', 'localhost'); // includes subdomains
 
+define('API_TOKEN', 'dev-secret-key-change-in-production');
+// Left empty on purpose — Tumblr.php's empty(TUMBLR_CONSUMERKEY) check
+// takes the "fake post" fallback branch whenever these aren't set.
+define('TUMBLR_CONSUMERKEY', '');
+define('TUMBLR_CONSUMERSECRET', '');
+define('TUMBLR_TOKEN', '');
+define('TUMBLR_SECRET', '');
+
 // S3-compatible object storage (Backblaze B2) — only active in
 // production/staging (isEnabled()). Not needed in dev, but constants must be defined.
 define('B2_KEY',      '');
