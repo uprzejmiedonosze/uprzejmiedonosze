@@ -7,7 +7,7 @@ require_once(__DIR__ . '/../inc/include.php');
 require_once(__DIR__ . '/../inc/integrations/curl.php');
 require_once(__DIR__ . '/../inc/integrations/Tumblr.php');
 
-logger("Starting face-blur-consumer...", true);
+log_info("Starting face-blur-consumer...", true);
 
 $consumer = function (string $appId): void {
   try {
@@ -28,14 +28,14 @@ $consumer = function (string $appId): void {
       $app = \app\get($appId);
       
       if (isset($app->faces->count)) {
-        logger("Faces already detected in $appId");
+        log_debug("Faces already detected in $appId");
         $app = addToGallery($app);
       } else {
         $app->faces = $faces;
         $facesCount = $faces->count ?? 0;
 
         if ($facesCount == 0) {
-          logger("no facces, adding to gallery $appId");
+          log_debug("no facces, adding to gallery $appId");
           $app = addToGallery($app);
         } else {
           $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");
@@ -45,8 +45,8 @@ $consumer = function (string $appId): void {
     } finally {
       \semaphore\release($appId, "face-detect-consumer");
     }
-    logger("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null));
-    logger("Detected faces in $appId: " . ($faces->count ?? 0));
+    log_debug("app saved, semaphore released $appId: " . json_encode($app->addedToGallery ?? null));
+    log_debug("Detected faces in $appId: " . ($faces->count ?? 0));
     sleep(5);
   } catch (\Exception $e) {
     $plateId = $app->carInfo->plateId ?? '[plateId]';
@@ -54,9 +54,9 @@ $consumer = function (string $appId): void {
     $message = $e->getMessage();
 
     if (strpos($message, 'photo upload limit for today') !== false) {
-      logger("Warning: Tumblr upload limit reached $appId ($plateId)", true);
+      log_info("Warning: Tumblr upload limit reached $appId ($plateId)", true);
     } else {
-      logger("ERROR: Failed detect face in $appId ($plateId) $message", true);
+      log_error("Failed detect face in $appId ($plateId) $message", $e);
     }
 
 

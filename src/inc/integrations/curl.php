@@ -33,14 +33,14 @@ function request(string $url, array $params, string $vendor, array|null $headers
             "error" => $error,
             "url" => $url
         ]);
-        logger("Nie udało się pobrać danych z $vendor po $retries próbach: $error");
+        log_info("Nie udało się pobrać danych z $vendor po $retries próbach: $error", true);
         throw new \Exception("Problem z połączeniem z $vendor. Spróbuj ponownie za chwilę.", 503);
     }
     curl_close($ch);
 
     $json = json_decode($output, true);
     if (json_last_error() !== JSON_ERROR_NONE) {
-        logger("Parsowanie JSON z $vendor " . $output . " " . json_last_error_msg());
+        log_info("Parsowanie JSON z $vendor " . $output . " " . json_last_error_msg(), true);
         throw new \Exception("Niezrozumiała odpowiedź z serwerów $vendor.", 503);
     }
     return $json;

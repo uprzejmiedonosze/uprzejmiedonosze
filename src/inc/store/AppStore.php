@@ -115,7 +115,7 @@ function sent(int $daysAgo=31): array {
 }
 
 function nextNumber(string $email): int{
-    logger("nextNumber $email");
+    log_debug("nextNumber $email");
     $sql = <<<SQL
         select max(json_extract(value, '$.seq'))
         from applications

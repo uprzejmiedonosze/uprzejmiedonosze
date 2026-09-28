@@ -26,9 +26,12 @@ function getCustomErrorHandler(App $app): callable {
             . ':' . $exception->getLine();
 
         if (isProd() && $status >= 500 && $status !== 503) \Sentry\captureException($exception);
-        logger($msg, $status != 404 && $status != 503);
-        if ($status !== 404) {
-            logger(trimAbsolutePaths($exception->getTraceAsString()));
+        if ($status === 404) {
+            log_debug($msg);
+        } elseif ($status >= 500 && $status !== 503) {
+            log_error($msg, $exception);
+        } else {
+            log_info($msg, true);
         }
         
         $httpException = $exception;

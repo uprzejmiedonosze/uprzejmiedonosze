@@ -146,7 +146,7 @@ class S3 {
                 'Key'      => $key,
                 'UploadId' => $id['UploadId'],
             ]);
-            logger('Aborted failed B2 multipart upload ' . $id['UploadId'] . ' for ' . $key);
+            log_info('Aborted failed B2 multipart upload ' . $id['UploadId'] . ' for ' . $key);
         } catch (\Throwable $ignore) {
             // best-effort cleanup; B2 eventually prunes orphaned uploads
         }
@@ -181,7 +181,7 @@ class S3 {
                 'Key'    => $key,
             ]);
         } catch (AwsException $e) {
-            logger("S3-compatible delete failed for '{$this->bucket}/$key': " . $e->getMessage(), true);
+            log_error("S3-compatible delete failed for '{$this->bucket}/$key': " . $e->getMessage(), $e);
         }
     }
 }

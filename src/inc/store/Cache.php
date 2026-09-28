@@ -77,12 +77,12 @@ namespace cache\alpr {
     function get(\cache\Type $type, string $key): mixed {
         $result = \cache\get($type, $key);
         if($result){
-            logger("get_alpr cache-hit $key");
+            log_debug("get_alpr cache-hit $key");
             unset($result['credits_monthly_used']);
             unset($result['credits_monthly_total']);
             return $result;
         }
-        logger("get_alpr cache-miss $key");
+        log_debug("get_alpr cache-miss $key");
         return null;
     }
 
@@ -94,8 +94,8 @@ namespace cache\alpr {
 namespace cache\geo {
     function get(\cache\Type $type, string $key): array|bool {
         $result = \cache\get($type, $key);
-        if ($result) logger("geo cache-hit $key");
-        else logger("geo cache-miss $key");
+        if ($result) log_debug("geo cache-hit $key");
+        else log_debug("geo cache-miss $key");
         return $result;
     }
 

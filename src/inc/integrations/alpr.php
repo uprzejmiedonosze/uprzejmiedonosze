@@ -30,10 +30,10 @@ function get(&$imageBytes, Application &$application, string $baseFileName, stri
 
         $isAlprOverBudged = $use_openAlpr && $e instanceof \Swagger\Client\ApiException && $e->getCode() == 402;
         if (!$isAlprOverBudged) {
-            logger($msg, true);
+            log_error($msg, $e);
             \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'alpr::get']);
         } else {
-            logger($msg);
+            log_info($msg);
         }
 
         if ($use_openAlpr) // do the opposite
@@ -48,7 +48,7 @@ function _use_openAlpr(&$imageBytes, ?User $user = null): bool {
     $cache = \cache\alpr\get(Type::OpenAlpr, $imageHash);
 
     if($cache) {
-        logger('use OpenAlpr cos its cached');
+        log_debug('use OpenAlpr cos its cached');
         return true;
     }
 
@@ -65,20 +65,20 @@ function _use_openAlpr(&$imageBytes, ?User $user = null): bool {
 
     $budgetConsumed = \cache\get(Type::AlprBudgetConsumed);
     if ($budgetConsumed === false) {
-        logger('OpenAlpr budget is unknown, allowing use for premium user to refresh cache', true);
+        log_info('OpenAlpr budget is unknown, allowing use for premium user to refresh cache', true);
         return true;
     }
 
     $budgetConsumedPercent = floor($budgetConsumed*100);
     if ($budgetConsumedPercent >= 100) {
-        logger('use plateRec as OpenAlpr budget is consumed', true);
+        log_info('use plateRec as OpenAlpr budget is consumed', true);
         return false;
     }
 
     if (!$user->hasApps()) {
-        logger('use OpenAlpr if this is User first app');
+        log_debug('use OpenAlpr if this is User first app');
     } elseif ($user->isPatron()) {
-        logger('use OpenAlpr for Patrons');
+        log_debug('use OpenAlpr for Patrons');
     }
 
     return true;

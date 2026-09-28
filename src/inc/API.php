@@ -258,7 +258,7 @@ function saveImgAndThumb($application, $imageBytes, $type) {
 
     if (!imagejpeg(resize_image($fileName, 600, 600, false), $thumbName)) {
         $msg = "Wasn't able to write $fileName as thumb to $thumbName.";
-        logger($msg, true);
+        log_error($msg);
         \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'API::saveImgAndThumb']);
         @unlink($fileName);
         throw new Exception("Nie udało się zapisać miniatury zdjęcia", 500);

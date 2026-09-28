@@ -7,7 +7,7 @@ use Slim\Views\Twig;
 
 abstract class AbstractHandler {
     public static function redirect(string $newLocation, int $status = 302): Response {
-        logger(static::class . ":redirect ($status) to $newLocation");
+        log_debug(static::class . ":redirect ($status) to $newLocation");
         $response = new ResponseObject($status);
         $response = $response->withHeader('Location', $newLocation);
         return $response;
@@ -25,7 +25,7 @@ abstract class AbstractHandler {
     }
 
     public static function renderJpeg(Response $response, $path): Response {
-        logger("renderJpeg: $path");
+        log_debug("renderJpeg: $path");
 
         $pixelate  = strpos($path, '?pixelate') !== false;
         $cleanPath = str_replace('?pixelate', '', $path);
@@ -46,7 +46,7 @@ abstract class AbstractHandler {
                     ->withStatus(301)
                     ->withHeader('Location', '/' . $cdnPrefix . '/gallery/' . $galleryKey . '.jpg');
             } catch (\Exception $e) {
-                logger("Gallery lazy gen failed for {$m[1]}: " . $e->getMessage(), true);
+                log_error("Gallery lazy gen failed for {$m[1]}: " . $e->getMessage(), $e);
                 // fall through to normal serve
             }
         }

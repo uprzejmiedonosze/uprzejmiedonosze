@@ -7,7 +7,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 class JsonMiddleware implements MiddlewareInterface {
     public function process(Request $request, RequestHandler $handler): Response {
-        //logger(static::class . ": {$request->getUri()->getPath()}");
+        //log_debug(static::class . ": {$request->getUri()->getPath()}");
         $request = $request->withAttribute('content', 'json');
         $response = $handler->handle($request);
 

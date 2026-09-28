@@ -8,7 +8,7 @@ use \cache\Type;
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
-    logger("get_car_info_alpr $baseFileName");
+    log_debug("get_car_info_alpr $baseFileName");
     $imageHash = sha1($imageBytes);
     $carInfo = \cache\alpr\get(Type::OpenAlpr, $imageHash);
 
@@ -19,7 +19,7 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
         } catch (\Swagger\Client\ApiException $e) {
             \telemetry\log('api_openalpr', null, ['status' => 'error']);
             if ($e->getCode() == 402) {
-                logger("OpenALPR API returned 402 Payment Required - marking budget as consumed");
+                log_info("OpenALPR API returned 402 Payment Required - marking budget as consumed");
                 \cache\set(Type::AlprBudgetConsumed, "", 1.0);
             }
             throw $e;
@@ -82,7 +82,7 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
  * @SuppressWarnings(PHPMD.MissingImport)
  */
 function get_alpr(&$imageBytes){
-    logger("  get_alpr");
+    log_debug("  get_alpr");
     $imageHash = sha1($imageBytes);
 	$apiInstance = new \Swagger\Client\Api\DefaultApi();
 
@@ -105,7 +105,7 @@ function get_alpr(&$imageBytes){
 }
 
 function get_alpr_cli($imagePath) {
-    logger("  get_alpr_cli");
+    log_debug("  get_alpr_cli");
     $response = shell_exec("alpr --country eu --topn 1 --json " . escapeshellarg(ROOT . $imagePath) . " 2>/dev/null"); // nosemgrep: php.lang.security.exec-use.exec-use
     $json = json_decode($response, true);
     if(json_last_error() !== JSON_ERROR_NONE){
@@ -116,6 +116,6 @@ function get_alpr_cli($imagePath) {
 
 function store_alpr_budget_cache($used, $total): void {
     $budgetConsumed = (float)$used / (float)$total;
-    logger("OpenAlpr $used / $total", true);
+    log_info("OpenAlpr $used / $total", true);
     \cache\set(Type::AlprBudgetConsumed,  "", $budgetConsumed);
 }

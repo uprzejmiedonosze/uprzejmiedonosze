@@ -628,7 +628,7 @@ final class ReportMcpTools {
         } catch (\Throwable $e) {
             // Non-fatal: keep whatever the caller supplied; the web's geo
             // endpoints also degrade without blocking the report.
-            logger("MCP create_report_draft: geocoding failed for $lat,$lng: " . $e->getMessage());
+            log_info("MCP create_report_draft: geocoding failed for $lat,$lng: " . $e->getMessage());
             return null;
         }
     }
@@ -662,7 +662,7 @@ final class ReportMcpTools {
         } catch (\Throwable $e) {
             // Non-fatal: keep the caller's display string alone; the user
             // positions the pin by hand in the editor.
-            logger("MCP create_report_draft: forward-geocoding failed for '$address': " . $e->getMessage());
+            log_info("MCP create_report_draft: forward-geocoding failed for '$address': " . $e->getMessage());
             return null;
         }
     }
@@ -763,7 +763,7 @@ final class ReportMcpTools {
             try {
                 $data = \curl\request('https://parkowanie.zbiorkom.live/' . rawurlencode($plate), [], 'Zbiorkom');
             } catch (\Throwable $e) {
-                logger("MCP create_report_draft: zbiorkom lookup failed for $plate: " . $e->getMessage());
+                log_info("MCP create_report_draft: zbiorkom lookup failed for $plate: " . $e->getMessage());
                 return false;
             }
         }

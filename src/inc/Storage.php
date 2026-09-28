@@ -52,7 +52,7 @@ function download(string $key, string $localPath): bool {
         \telemetry\log('b2_get', null, ['status' => 'success']);
         return true;
     } catch (AwsException $e) {
-        logger("B2 download failed for $key: " . $e->getMessage(), true);
+        log_error("B2 download failed for $key: " . $e->getMessage(), $e);
         \telemetry\log('b2_get', null, ['status' => 'failed']);
         throw $e;
     }

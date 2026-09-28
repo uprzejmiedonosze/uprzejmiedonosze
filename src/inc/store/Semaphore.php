@@ -6,11 +6,7 @@ function acquire(string $semKey, string $source): void {
     $limit = SEMAPHORE_WAIT+10;
     while (!tryAcquire($semKey)) {
         sleep(1);
-        // $force=true restored (2026-09-28 correction) — it's meant to
-        // make this visible on prod too, that part was correct. What
-        // shouldn't be prod-only-ish is the STACK TRACE dump, which is
-        // now gated on environment inside logger() itself, not on $force.
-        logger("Awaiting semaphore $semKey from $source", true);
+        log_info("Awaiting semaphore $semKey from $source", true);
         if ($limit-- < 0)
             throw new \Exception("Error semaphore $semKey is locked.");
     }

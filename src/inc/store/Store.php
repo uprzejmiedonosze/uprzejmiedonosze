@@ -32,7 +32,7 @@ function dump(\PDOStatement $stmt)
     if(isStaging()) {
         ob_start();
         $stmt->debugDumpParams();
-        logger(ob_get_clean(), true);
+        log_debug(ob_get_clean());
     }
 }
 

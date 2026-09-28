@@ -56,7 +56,7 @@ class User extends \JSONObject{
      */
     function encode(): string {
         if ($_SESSION['user_id'] == null) {
-            logger("Can't encode user without user_id ({$this->data->email})", true);
+            log_error("Can't encode user without user_id ({$this->data->email})");
             return json_encode($this);
         }
         $clone = new User(json_encode($this));
@@ -130,7 +130,7 @@ class User extends \JSONObject{
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $output = curl_exec($ch);
         if(curl_errno($ch)){
-            logger("Nie udało się pobrać danych latlng: " . curl_error($ch));
+            log_info("Nie udało się pobrać danych latlng: " . curl_error($ch));
             curl_close($ch);
             return null;
         }
@@ -138,7 +138,7 @@ class User extends \JSONObject{
     
         $json = @json_decode($output, true);
         if(json_last_error() !== JSON_ERROR_NONE){
-            logger("Parsowanie JSON z MapBox API " . $output . " " . json_last_error_msg());
+            log_info("Parsowanie JSON z MapBox API " . $output . " " . json_last_error_msg());
             return null;
         }
         @$latlng = $json['features'][0]['center'];

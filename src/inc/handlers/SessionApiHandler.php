@@ -244,7 +244,7 @@ class SessionApiHandler extends AbstractHandler {
         if ($sessionUserId !== null && $sessionUserId !== $firebaseUser['user_id']) {
             // This is expected when users switch accounts without logging out.
             // The SessionMiddleware no longer resets sessions on /login.html if already logged in.
-            logger("Session user switch: {$_SESSION['user_email']} -> {$firebaseUser['user_email']}", true);
+            log_info("Session user switch: {$_SESSION['user_email']} -> {$firebaseUser['user_email']}", true);
             resetSession();
         }
 

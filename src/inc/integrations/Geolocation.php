@@ -239,7 +239,7 @@ function normalizeLatLng(float|string $lat, float|string $lng): string {
  */
 function exifGps(string $imageBytes): ?array {
     if (!function_exists('exif_read_data')) {
-        logger('exifGps: PHP exif extension not available');
+        log_info('exifGps: PHP exif extension not available');
         return null;
     }
     // exif_read_data() only accepts a path; stage the raw bytes (the GD

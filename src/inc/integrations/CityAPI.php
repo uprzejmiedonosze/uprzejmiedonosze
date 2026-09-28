@@ -100,7 +100,7 @@ abstract class CityAPI {
         }
 
         if (isset($error)) {
-            logger($response, true);
+            log_error($error . " response=" . print_r($response, true));
             throw new Exception($error, 500);
         }
 

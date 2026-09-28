@@ -169,13 +169,13 @@ function rmdirRecursive(string $dir): void {
 }
 
 // CLI (old-users-removal.php) prints progress straight to stdout; a web request must not
-// leak the same lines into its HTML response, so it goes through logger() instead.
+// leak the same lines into its HTML response, so it goes through log_info() instead.
 function __log(string $message): void {
     if (PHP_SAPI === 'cli') {
         print("\n$message");
         return;
     }
-    logger($message);
+    log_info($message);
 }
 
 /**

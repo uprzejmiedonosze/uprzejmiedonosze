@@ -33,7 +33,7 @@ if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
     ini_set("session.cookie_secure", isProd() ? "1" : "0");
     ini_set("session.cookie_samesite", "Lax");
 
-    set_error_handler(fn($errno, $errstr) => logger($errstr), E_WARNING);
+    set_error_handler(fn($errno, $errstr) => log_info($errstr), E_WARNING);
     session_start();
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';
     restore_error_handler();
@@ -274,7 +274,7 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
 
     $group->map(['GET', 'POST', 'PATCH'], '/{routes:.+}', function ($request) {
         $path = $request->getUri()->getPath();
-        logger("not-found $path");
+        log_debug("not-found $path");
         throw new HttpNotFoundException($request);
     });
 })  ->add(new HtmlMiddleware())

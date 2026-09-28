@@ -141,7 +141,7 @@ class ApplicationHandler extends AbstractHandler {
             global $STATUSES;
             $status = $STATUSES[$application->status];
             if (!$status->editable) {
-                logger("Ponowny POST na /app/confirm dla zgłoszenia {$application->number} w statusie {$status->name}");
+                log_info("Ponowny POST na /app/confirm dla zgłoszenia {$application->number} w statusie {$status->name}");
                 return $this->redirect("/app/$appId");
             }
             try {
@@ -161,7 +161,7 @@ class ApplicationHandler extends AbstractHandler {
             } catch (ForbiddenException $e) {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
             } catch (NotSendableException $e) {
-                logger("Brak wymaganych zdjęć przy /app/confirm dla zgłoszenia $appId, cofam na /app/new");
+                log_info("Brak wymaganych zdjęć przy /app/confirm dla zgłoszenia $appId, cofam na /app/new");
                 return $this->redirect('/app/new');
             } catch (Exception $e) {
                 return $this->redirect('/app/list');
@@ -202,7 +202,7 @@ class ApplicationHandler extends AbstractHandler {
             $application = \app\get($appId);
             $status = $STATUSES[$application->status];
             if(!$status->editable) {
-                logger("Ponowny POST na /app/done dla zgłoszenia {$application->number} w statusie {$status->name}");
+                log_info("Ponowny POST na /app/done dla zgłoszenia {$application->number} w statusie {$status->name}");
                 return $this->redirect("/app/$appId");
             }
 

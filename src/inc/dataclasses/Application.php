@@ -85,7 +85,7 @@ class Application extends JSONObject implements \JsonSerializable {
         // other user opened
         $encrypted = \crypto\passphrase($_SESSION['user_id'] . $this->id . $this->added);
         if ($encrypted != $this->encrypted) {
-            logger("Can't decode application ({$this->id}) with wrong passphrase");
+            log_info("Can't decode application ({$this->id}) with wrong passphrase");
             return;
         }
 
@@ -253,7 +253,7 @@ class Application extends JSONObject implements \JsonSerializable {
             throw new Exception("Nieznany status '$status'");
         }
         if($status == $this->status){
-            logger("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}");
+            log_info("Zmiana statusu na ten sam ($status) dla zgłoszenia {$this->id}");
             return;
         }elseif(!in_array($status, $this->getStatus()->allowed)){
             if (!$force)
@@ -797,9 +797,9 @@ class Application extends JSONObject implements \JsonSerializable {
         try {
             \storage\ensure_local($mapKey);
         } catch (\Throwable $e) {
-            logger("Mapa niedostępna w B2 dla {$this->id} ('$mapKey'), próba regeneracji: " . $e->getMessage(), true);
+            log_info("Mapa niedostępna w B2 dla {$this->id} ('$mapKey'), próba regeneracji: " . $e->getMessage(), true);
             if ($this->regenerateMapImage() === null) {
-                logger("Nie udało się zregenerować mapy dla {$this->id} — kontynuuję bez mapy.", true);
+                log_error("Nie udało się zregenerować mapy dla {$this->id} — kontynuuję bez mapy.");
                 unset($this->address->mapImage);
                 \app\save($this);
             }

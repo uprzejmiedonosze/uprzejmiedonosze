@@ -52,8 +52,8 @@ function log(string $eventName, ?string $appId = null, array $data = []): void {
 
     } catch (\Exception $e) {
         // We don't want telemetry to break the app
-        if (function_exists('logger')) {
-            logger("Telemetry error: " . $e->getMessage());
+        if (function_exists('log_info')) {
+            log_info("Telemetry error: " . $e->getMessage());
         } else {
             error_log("Telemetry error: " . $e->getMessage());
         }

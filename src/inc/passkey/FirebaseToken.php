@@ -35,7 +35,7 @@ function resolveUid(string $email, ?string $fallbackUid = null): string {
             $auth = (new Factory)->withServiceAccount(serviceAccountPath())->createAuth();
             return $auth->getUserByEmail($email)->uid;
         } catch (\Throwable $e) {
-            logger("passkey: resolveUid($email) lookup failed: {$e->getMessage()}");
+            log_info("passkey: resolveUid($email) lookup failed: {$e->getMessage()}");
         }
     }
     if ($fallbackUid) {

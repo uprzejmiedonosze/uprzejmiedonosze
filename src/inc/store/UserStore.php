@@ -125,7 +125,7 @@ function nextNumber(): int{
         return 1;
 
     $number = intval($ret[0]);
-    logger("nextUserNumber $number + 1");
+    log_debug("nextUserNumber $number + 1");
     return $number + 1;
 }
 

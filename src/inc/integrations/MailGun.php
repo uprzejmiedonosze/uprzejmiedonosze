@@ -91,16 +91,16 @@ class MailGun extends CityAPI {
             }
 
             if (isDev()) {
-                logger("Sending app {$application->id} with MailGun" . ($dryRun ? ' (dry-run)' : ''));
+                log_debug("Sending app {$application->id} with MailGun" . ($dryRun ? ' (dry-run)' : ''));
                 $application->setStatus('confirmed-waiting');
-                logger("Marking app {$application->id} as confirmed-waiting (sent)");
+                log_debug("Marking app {$application->id} as confirmed-waiting (sent)");
                 \app\save($application);
             }
             \telemetry\log('api_email', null, ['status' => 'success']);
         } catch (\Throwable $error) {
             \telemetry\log('api_email', null, ['status' => 'error']);
             $msg = "Sending email {$application->id} with MailGun, exception: " . $error->getMessage();
-            logger($msg, true);
+            log_error($msg, $error);
             \telemetry\log('app_error', $application->id, ['msg' => $msg, 'source' => 'MailGun::send']);
             $application->setStatus('sending-failed', true);
             unset($application->sent);

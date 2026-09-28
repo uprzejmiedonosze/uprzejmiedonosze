@@ -20,7 +20,7 @@ class WebhooksHandler extends AbstractHandler {
         $event = $request->getParsedBody();
         $id = $event['event-data']['id'] ?? null;
         if (!$id) {
-            logger($event, true);
+            log_info($event, true);
             throw new HttpForbiddenException($request, 'Missing event id.');
         }
 
@@ -86,7 +86,7 @@ class WebhooksHandler extends AbstractHandler {
                 if (!$application->wasSent()) {
                     $msg = "mailgun webhook error, Application $appId was not sent! "
                         . "event={$mailEvent->name} recipient={$mailEvent->recipient} eventId=$id";
-                    logger($msg, true);
+                    log_error($msg);
                     \telemetry\log('app_error', $appId, ['msg' => $msg, 'source' => 'WebhooksHandler::mailgun']);
                     if ($mailEvent->status == 'failed' && $application->email !== $recipient) {
                         (new MailGun())->notifyUser($application,
@@ -216,7 +216,7 @@ class MailEvent { // MailgunPayloadConverter
             $this->status = 'problem';
         }
 
-        logger("MailEvent {$this->name} <{$this->recipient}>");
+        log_debug("MailEvent {$this->name} <{$this->recipient}>");
     }
 
     public function formatComment(string $author): ?string {

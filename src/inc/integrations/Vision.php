@@ -345,7 +345,7 @@ function applyAlprPlate(string $bytes, array &$photo, array &$warnings): void {
         $best = bestAlprResult(PlateRecognizerClient::call($bytes));
     } catch (\Throwable $e) {
         $msg = 'platerecognizer: ' . substr($e->getMessage(), 0, 150);
-        logger("vision $msg");
+        log_info("vision $msg");
         $warnings[] = "zdj.{$photo['photo_index']}: $msg";
     }
 
@@ -409,7 +409,7 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
             $result = analyzeChunk($photos, $usage);
         } catch (VisionNetworkException $e) {
             if (count($photos) <= 3) throw $e;
-            logger("vision {$reportId}: duzy kandydat (" . count($photos) . " zdjec), dziele na paczki po 3: " . $e->getMessage());
+            log_info("vision {$reportId}: duzy kandydat (" . count($photos) . " zdjec), dziele na paczki po 3: " . $e->getMessage());
             $result = [];
             for ($s = 0; $s < count($photos); $s += 3) {
                 $pack = array_slice($photos, $s, 3);
@@ -444,9 +444,9 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
     }
 
     $cost = visionCostUsd($usage);
-    // force=true: logger() jest cichy na produkcji bez tego – koszt trzeba widzieć zawsze,
+    // force=true: log_info() jest cichy na produkcji bez tego – koszt trzeba widzieć zawsze,
     // nie tylko na dev/staging.
-    logger(sprintf(
+    log_info(sprintf(
         'vision cost: %s photos=%d calls=%d prompt_tokens=%d completion_tokens=%d cost_usd=%.5f model=%s user=%s',
         $reportId ?? '?', count($photos), $usage['calls'], $usage['prompt_tokens'], $usage['completion_tokens'], $cost, OPENAI_VISION_MODEL, $userEmail
     ), true);

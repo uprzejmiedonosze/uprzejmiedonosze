@@ -10,7 +10,7 @@ function addToTumblr(Application $app): stdClass|array {
     // instead. Same graceful "skip the real post" behavior for dev/staging
     // (or prod if the key is ever genuinely unset) as before.
     if (empty(TUMBLR_CONSUMERKEY)) {
-        logger("TUMBLR_CONSUMERKEY not set, skipping real post");
+        log_debug("TUMBLR_CONSUMERKEY not set, skipping real post");
         return new JSONObject(array("id" => "fake", "state" => "published"));
     }
 
@@ -45,7 +45,7 @@ function addToGallery(\app\Application $app): \app\Application {
     $alreadyInGallery = isset($app->addedToGallery);
     $plateId = $app->carInfo->plateId;
 
-    logger("addToGallery plate:$plateId faces:$facesCount canImageBeShown:$canImageBeShown alreadyInGallery:$alreadyInGallery");
+    log_debug("addToGallery plate:$plateId faces:$facesCount canImageBeShown:$canImageBeShown alreadyInGallery:$alreadyInGallery");
 
     if ($alreadyInGallery) return $app;
     if ($facesCount > 0) return $app;
@@ -53,7 +53,7 @@ function addToGallery(\app\Application $app): \app\Application {
 
     $app->addedToGallery = \addToTumblr($app);
 
-    logger("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
+    log_info("https://galeria.uprzejmiedonosze.net/post/" . $app->addedToGallery->id, true);
 
     if (!($app->contextImage->galleryReady ?? false)) {
         $app->generateGalleryImages();

@@ -289,7 +289,7 @@ function processWebhook(string $id): void {
     
 
     if (!$application->wasSent()) {
-        logger("mailgun webhook error, Application $appId was not sent!", true);
+        log_error("mailgun webhook error, Application $appId was not sent!");
         $application->sent = new \JSONObject();
         $application->sent->date = date(DT_FORMAT);
         $application->sent->subject = $payload['message']['headers']['subject'];
