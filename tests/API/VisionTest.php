@@ -249,8 +249,6 @@ class VisionTest extends TestCase
             'car' => ['present' => $role === 'car', 'bbox' => $role === 'car' ? [(int)round(0.1 * $w), (int)round(0.1 * $h), (int)round(0.9 * $w), (int)round(0.9 * $h)] : null, 'desc' => null],
             'plate' => ['readable' => $plateReadable, 'text' => $plateText, 'bbox' => $plateReadable ? [(int)round(0.4 * $w), (int)round(0.7 * $h), (int)round(0.6 * $w), (int)round(0.78 * $h)] : null],
             'markers' => $role === 'context' ? ['sidewalk_parking'] : [],
-            'suggested_category' => 26,
-            'category_confidence' => 0.7,
         ];
     }
 

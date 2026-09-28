@@ -94,7 +94,7 @@ foreach ($manifest['candidates'] as $cand) {
         $plateStr = ($plate['readable'] ?? false) ? ($plate['text'] ?? '?') : '—';
         $verified = ($p['plate_verified'] ?? false) ? '✓' : (($plate['plate_check'] ?? null) === 'unverified-box' ? '?' : ' ');
         printf(
-            "  [%d] %-9s q=%.2f plate=%-9s%s bbox_car=%s bbox_plate=%s markers=%s kat=%s\n",
+            "  [%d] %-9s q=%.2f plate=%-9s%s bbox_car=%s bbox_plate=%s markers=%s\n",
             $p['photo_index'],
             $p['role'],
             $p['quality'] ?? 0,
@@ -103,7 +103,6 @@ foreach ($manifest['candidates'] as $cand) {
             json_encode($p['car']['bbox'] ?? null),
             json_encode($plate['bbox'] ?? null),
             implode(',', $p['markers'] ?? []),
-            $p['suggested_category'] ?? '?',
         );
         if (!empty($p['plate_debug'])) {
             $d = $p['plate_debug'];

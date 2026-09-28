@@ -8,7 +8,7 @@
 // zostać zsynchronizowane ręcznie (brak wspólnego repo) — każda zmiana promptu/markerów/walidacji
 // tu MUSI być powtórzona tam (i odwrotnie), i musi podbić VISION_SCHEMA.
 
-const VISION_SCHEMA = 6; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
+const VISION_SCHEMA = 7; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
 
 // Minimalny score PlateRecognizer (0..1), poniżej którego wynik ALPR jest ignorowany
 // (zostaje odczyt modelu) — patrz applyAlprPlate() w Vision.php. Bez progu odczyt ALPR
@@ -17,19 +17,22 @@ const ALPR_MIN_SCORE = 0.3;
 
 const ROLES = ['context', 'car', 'third', 'unusable'];
 
+// SCHEMA 7: usunięto suggested_category/category_confidence (model już nie zgaduje kategorii —
+// to wciąż liczy appka deterministycznie z markers[], patrz CATEGORY_RULES w vision.ts) oraz
+// markery numerowanych znaków drogowych (bus_stop_sign, b36_sign, b35_sign, d18_sign, t30_plate,
+// vertical_sign_mismatch) — model już ich nie szuka, zostają tylko fizyczne cechy sceny.
 const MARKERS = [
-    'bus_stop_sign', 'bus_bay', 'public_transport_access', 'zebra_crossing',
+    'bus_bay', 'public_transport_access', 'zebra_crossing',
     'intersection', 'tram_crossing', 'island_15m', 'sidewalk_parking',
-    'narrow_passage', 'deep_sidewalk', 'heavy_vehicle', 'b36_sign',
-    'b35_sign', 'd18_sign', 't30_plate', 'road_markings',
-    'vertical_sign_mismatch', 'bike_lane', 'greenery', 'disabled_bay',
+    'narrow_passage', 'deep_sidewalk', 'heavy_vehicle',
+    'road_markings', 'bike_lane', 'greenery', 'disabled_bay',
     'residential_zone',
 ];
 
 // CATEGORY_RULES/ruleCategory z src/lib/vision.ts (appka) CELOWO NIE są tu portowane: to czyste
 // post-processing nad markers[], bez LLM i bez sekretu, i tak zostaje w compose.ts po stronie
-// klienta. Backend zwraca markers[] + suggested_category (podpowiedź modelu), appka liczy
-// categoryId dokładnie jak dziś.
+// klienta. Backend zwraca TYLKO markers[] (model nie zgaduje kategorii — SCHEMA 7 usunęła
+// suggested_category/category_confidence z kontraktu), appka liczy categoryId dokładnie jak dziś.
 
 // $dims: photo_index (int, 0-based w tym chunku) => ['w'=>float,'h'=>float], wymiary PIKSELOWE
 // wysłanej miniatury (nie 0..1000!). Model ma zwracać bboxy w tych realnych pikselach — testy
@@ -59,7 +62,7 @@ function visionPrompt(array $dims): string {
         . '{"photo_index":i, "role":"context|car|third|unusable", "quality":0..1,'."\n"
         . ' "car":{"present":bool, "bbox":[x1,y1,x2,y2]|null, "desc":str|null},'."\n"
         . ' "plate":{"readable":bool, "text":str|null, "bbox":[x1,y1,x2,y2]|null},'."\n"
-        . ' "markers":[...], "suggested_category":int, "category_confidence":0..1}'."\n"
+        . ' "markers":[...]}'."\n"
         . 'Roles — assign THOUGHTFULLY, do not default every clear car photo to "car": '
         . 'context = wide/establishing shot showing the violation SETTING (traffic signs, road '
         . 'markings, crossing, stop line, wide street view) — the plate does not need to be visible '
@@ -89,8 +92,6 @@ function visionPrompt(array $dims): string {
         . 'The plate bbox must tightly enclose the plate characters themselves, '
         . 'not the bumper, grille or road around it. '
         . 'markers only from: ' . implode(',', MARKERS) . '. '
-        . 'suggested_category: best matching Polish parking-violation category id 0..26 '
-        . '(2 bus stop, 3 intersection, 5 crosswalk, 13 disabled bay, 14 B-36 sign, 26 sidewalk). '
         . 'Polish plates like ZS1234A. JSON only, no prose.';
 }
 
