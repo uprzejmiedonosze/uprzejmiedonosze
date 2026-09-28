@@ -58,15 +58,34 @@ compose=(docker compose -f services/compose.yml --env-file "${ENV_FILE}" -p "${E
 # else. `up` below is left on compose (its default --pull=missing policy
 # doesn't refetch what's already local, so it won't touch memcached/
 # face-detector either as long as we never pulled new versions of them).
-APP_SERVICES=(webapp-srv worker-cron face-detect-consumer)
 REGISTRY="${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}"
+
+# staging is deliberately a bare app — no face-detect-consumer, no
+# face-detector, no worker-cron (2026-09-28, explicit request). It still
+# needs memcached (sessions — session.save_handler=memcached, see
+# Dockerfile), so that's named explicitly alongside webapp-srv; --no-deps
+# stops `up` from also pulling in face-detector as webapp-srv's declared
+# (but functionally unused by webapp-srv itself) dependency. worker image
+# is only pulled for envs that actually run something from it.
+case "$ENV" in
+  prod)
+    APP_SERVICES=(webapp-srv worker-cron face-detect-consumer)
+    UP_FLAGS=()
+    PULL_WORKER=1
+    ;;
+  staging)
+    APP_SERVICES=(webapp-srv memcached)
+    UP_FLAGS=(--no-deps)
+    PULL_WORKER=0
+    ;;
+esac
 
 echo "==> Pulling app images directly (IMAGE_TAG=${IMAGE_TAG}) — not via compose, so memcached/face-detector are never touched"
 docker pull "${REGISTRY}/webapp:${IMAGE_TAG}"
-docker pull "${REGISTRY}/worker:${IMAGE_TAG}"
+[[ "${PULL_WORKER}" == "1" ]] && docker pull "${REGISTRY}/worker:${IMAGE_TAG}"
 
 echo "==> Recreating the app services (no build, no compile on this host)"
-"${compose[@]}" up -d --no-build --wait --wait-timeout 180 "${APP_SERVICES[@]}"
+"${compose[@]}" up -d --no-build --wait --wait-timeout 180 "${UP_FLAGS[@]}" "${APP_SERVICES[@]}"
 
 echo "==> Pruning old images (keep last 7 days, never touches running containers)"
 docker image prune -af --filter until=168h
