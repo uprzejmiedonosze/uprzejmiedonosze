@@ -21,19 +21,19 @@ script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 repo_root=$(cd -- "${script_dir}/.." && pwd)
 cd "${repo_root}"
 
-echo "==> Updating checkout"
-git fetch --prune origin
-git reset --hard "origin/main"
-
-# Re-exec from a fresh process now that the checkout (including this very
-# file) may have just changed under us. Without this, bash keeps executing
-# from the file descriptor it opened at startup — whatever this script's
-# content was BEFORE the git reset above, not after — confirmed
-# empirically (2026-09-28): a deploy.sh change landed in this same commit
-# as `git reset --hard` silently ran with the OLD script logic for the
-# rest of that invocation, because nothing forced a re-read. The guard
-# env var stops this from looping forever on the second pass.
+# Re-exec from a fresh process right after updating the checkout (which
+# may include this very file). Without this, bash keeps executing from the
+# file descriptor it opened at startup — whatever this script's content
+# was BEFORE the git reset, not after — confirmed empirically
+# (2026-09-28): a deploy.sh change landed in this same commit as
+# `git reset --hard` and silently ran with the OLD script logic for the
+# rest of that invocation, because nothing forced a re-read. The guard env
+# var both stops this from looping forever on the second pass AND skips
+# redoing the fetch/reset then (already current from the first pass).
 if [[ -z "${UD_DEPLOY_REEXECED:-}" ]]; then
+  echo "==> Updating checkout"
+  git fetch --prune origin
+  git reset --hard "origin/main"
   UD_DEPLOY_REEXECED=1 exec bash "${BASH_SOURCE[0]}" "$@"
 fi
 
