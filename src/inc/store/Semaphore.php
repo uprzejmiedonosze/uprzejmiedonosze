@@ -6,7 +6,13 @@ function acquire(string $semKey, string $source): void {
     $limit = SEMAPHORE_WAIT+10;
     while (!tryAcquire($semKey)) {
         sleep(1);
-        logger("Awaiting semaphore $semKey from $source", true);
+        // Not $force — this is routine contention (e.g. Mailgun retrying
+        // the same webhook), expected to happen occasionally, not an
+        // error. $force=true here (as it used to be) makes logger() run
+        // unconditionally regardless of isProd() and dump a stack trace on
+        // every 1s retry — confirmed 2026-09-28 spamming prod logs with
+        // traces for something staging-only was showing before.
+        logger("Awaiting semaphore $semKey from $source");
         if ($limit-- < 0)
             throw new \Exception("Error semaphore $semKey is locked.");
     }
