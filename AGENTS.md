@@ -71,6 +71,8 @@ All services are defined in `services/compose.yml` with three profiles:
 
 Analytics is tracked via an external, centrally-hosted Matomo instance (`matomo.nieradka.com`), not a service in this compose file.
 
+`/wiki` on prod is a separate project, `../wiki.uprzejmiedonosze` (a DokuWiki fork), not a service in this compose file either — it's its own container on the shared `edge` Traefik network on the same host, routed by a higher-priority `PathPrefix(/wiki)` router so it wins over `webapp-srv`'s `Host(uprzejmiedonosze.net)` router for that path. See its own `CLAUDE.md`.
+
 ### Build Pipeline
 
 All source lives in `src/`, built artifacts go to `export/` (never edit export directly).
