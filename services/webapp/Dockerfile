@@ -94,6 +94,13 @@ COPY services/webapp/nginx_php_configuration.conf /etc/nginx/
 COPY services/webapp/www.conf                     /etc/php/8.4/fpm/pool.d/
 COPY services/webapp/init.sh                      /root/
 
+# The php-fpm.conf error_log below is the FPM *master's own* operational
+# log (startup/shutdown, worker respawns) — with catch_workers_output=yes
+# (www.conf) it also captures stray stdout/stderr writes from app code that
+# don't go through Logger.php's syslog transport. It stays on stderr
+# (real PHP errors are correctly ERROR there); app-level severity is instead
+# carried by Logger.php writing syslog datagrams directly, bypassing this
+# entirely (see AGENTS.md § Logging).
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
         -e "s/^upload_max_filesize.*/upload_max_filesize = 4M/" \
         -e "s/^post_max_size.*/post_max_size = 5M/" \

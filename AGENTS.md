@@ -153,9 +153,15 @@ CDN prefix logic: `isStaging() ? 'cdn2stg' : 'cdn2'` — controlled by `APP_ENV`
 
 ### Logging
 
-PHP errors and `logger()` calls go to `php://stderr` → captured by `docker logs webapp`. No separate log files needed in development.
+App code logs via three functions in `src/inc/Logger.php`: `log_debug($msg)` (non-prod only), `log_info($msg, $force = false)` (dev/staging always, prod only with `$force`), `log_error($msg, ?\Throwable $e = null)` (always, with a stack trace).
 
-For production: nginx access/error logs are written to `/var/log/uprzejmiedonosze.net/` (volume-mounted from host).
+**dev/test**: no journald socket is mounted, so every call falls back to `error_log(..., 'php://stderr')` — readable via `docker logs builder`/`docker logs webapp`.
+
+**staging/prod**: `webapp-srv`, `face-detect-consumer`, `worker-cron` bind-mount the host's `/run/systemd/journal` (`services/compose.yml`). `Logger.php` sends each log line there as its own syslog datagram over a Unix datagram socket (`stream_socket_client('udg://...')`), with a real PRI (`facility<<3 | severity`) — journald/rsyslog forward that to Papertrail with the correct severity already attached, tagged with `LOG_IDENT` (e.g. `staging-webapp-srv`). nginx's `error_log` does the same (`syslog:server=unix:/run/systemd/journal/dev-log,...`, generated into `/etc/nginx/error_log.conf` by `init.sh` depending on whether that socket exists); `access_log` stays on stdout.
+
+This exists because of a dead end that's worth knowing about if you're touching this again: writing app logs to `php://stdout` vs `php://stderr` and relying on Docker's `logging: driver: syslog` to turn that into severity **does not work** here. php-fpm's `catch_workers_output = yes` (`services/webapp/www.conf`) merges every worker's stdout *and* stderr into FPM's own single `error_log` destination (`/dev/stderr`, set in the Dockerfile) before Docker ever sees two separate streams — so every app log line, regardless of what PHP stream it targeted, ends up on the container's stderr and gets tagged `ERROR` in Papertrail. Confirmed empirically on staging 2026-09-28. `catch_workers_output` can't just be turned off either — without it, stray `stdout`/`stderr` writes from app code go to `/dev/null` per the FastCGI spec. Sending real syslog datagrams straight to journald sidesteps FPM's stream handling entirely.
+
+php-fpm's own operational log (`error_log` in `php-fpm.conf`, master start/stop, worker respawns — not app-level logging) stays on `/dev/stderr` as-is; those are genuinely error-level FPM internals.
 
 ### Environments
 
