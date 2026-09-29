@@ -137,6 +137,10 @@ COPY services/webapp/init.sh                      /root/
 # (real PHP errors are correctly ERROR there); app-level severity is instead
 # carried by Logger.php writing syslog datagrams directly, bypassing this
 # entirely (see AGENTS.md § Logging).
+# log_level is raised from the default 'notice' to 'warning' to drop the
+# routine "child N exited"/"child N started" respawn pairs from pm.max_requests
+# (regular, expected churn — not a signal worth a Papertrail line), while
+# keeping real fpm problems (e.g. "server reached pm.max_children") visible.
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
         -e "s/^upload_max_filesize.*/upload_max_filesize = 4M/" \
         -e "s/^post_max_size.*/post_max_size = 5M/" \
@@ -144,7 +148,9 @@ RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
         -e "s/^session.save_handler.*/session.save_handler = memcached/" \
         /etc/php/8.4/fpm/php.ini && \
     printf 'session.save_path = "memcached:11211"\n' >> /etc/php/8.4/fpm/php.ini && \
-    sed -i -e "s|.*error_log.*|error_log = /dev/stderr|" /etc/php/8.4/fpm/php-fpm.conf && \
+    sed -i -e "s|.*error_log.*|error_log = /dev/stderr|" \
+        -e "s|^;log_level.*|log_level = warning|" \
+        /etc/php/8.4/fpm/php-fpm.conf && \
     update-rc.d php8.4-fpm defaults
 
 # Fixed inside every container regardless of profile — host path varies via volume mount
