@@ -79,6 +79,8 @@ All source lives in `src/`, built artifacts go to `export/` (never edit export d
 
 **Staging/prod**: `build.sh` runs inside the Docker builder stage during `docker build`. No local tools needed.
 
+`services/webapp/Dockerfile`'s `builder`/`webapp`/`worker` stages all `FROM` a shared `php-base` stage (`debian:bookworm-slim` + the Sury PHP repo + the PHP extensions all three need) instead of three different official images (`node:*`, `nginx:*`, `debian:*`) as before — that let BuildKit actually share cache across them, and dropped `nginx:*-bookworm`'s unused dynamic modules (image-filter's codec libs, geoip, njs, xslt — confirmed unused via grep on `nginx.conf`). `webapp` installs plain `nginx` from nginx.org's own apt repo (pinned via `Pin-Priority`, not Debian's — Debian bookworm's `nginx`/`nginx-light` packages are pinned to an old 1.22.1 and conflict once nginx.org's repo is also configured), and `builder` installs Node.js via NodeSource instead of the official node image. Stage-specific extensions (`php8.4-cli`, `-fpm`, `-opcache`, `-memcached`) stay per-stage.
+
 Build steps in `services/webapp/build.sh`:
 - `config.env.php` — HOST, CSS/JS/TWIG hashes
 - PHP/Twig/SQL/JSON copy and processing

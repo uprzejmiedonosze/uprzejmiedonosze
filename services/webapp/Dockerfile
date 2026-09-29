@@ -1,10 +1,53 @@
+# ── Shared PHP 8.4 base for builder/webapp/worker ────────────────────────────
+# All three stages below FROM this one instead of three different official
+# images (node:*, nginx:*, debian:*) as before. That mattered for two
+# reasons, confirmed empirically while writing this:
+#   - BuildKit can only share cached layers between stages that share an
+#     ancestor. Three different upstream images meant the near-identical
+#     `apt-get install php8.4-*` in each stage was computed three times,
+#     even within the same `docker build`.
+#   - `nginx:1.27.3-bookworm` alone was ~197MB vs ~97MB for
+#     `debian:bookworm-slim` — almost entirely nginx dynamic modules we
+#     don't use (image-filter pulls in a full image-codec library stack:
+#     libgd3/libjpeg/libpng/libwebp/libtiff/libheif/libavif; plus geoip,
+#     njs, xslt) and curl/ca-certificates/gettext-base for the official
+#     image's docker-entrypoint.sh, which we don't use either (own
+#     init.sh below). The actual nginx binary + modules are ~9.6MB.
+FROM debian:bookworm-slim AS php-base
+
+# Packages every stage needs: the PHP extensions common to builder, webapp
+# AND worker. Stage-specific extensions (php8.4-cli, -fpm, -opcache,
+# -memcached) are installed per stage below, not here — see the Dockerfile
+# history / AGENTS.md for exactly which stage needs which, confirmed
+# against the pre-refactor per-stage package lists so this is a pure
+# de-duplication, not a behavior change.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        curl ca-certificates && \
+    curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
+        > /etc/apt/sources.list.d/php.list && \
+    apt-get update && apt-get install -y --no-install-recommends \
+        php8.4-sqlite3 php8.4-curl php8.4-gd php8.4-memcache \
+        php8.4-mbstring php8.4-intl php8.4-exif php8.4-xml php8.4-zip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # ── Builder (shared: vendor + full export) ───────────────────────────────────
-FROM node:22-bookworm-slim AS builder
+FROM php-base AS builder
 
 ARG APP_HOST=localhost
 ARG APP_HTTPS=http
 
 WORKDIR /build
+
+# Node.js (NodeSource — same upstream binaries the official node image ships,
+# installed on the shared base instead of starting from a separate image)
+# + the extensions/tools only the builder needs (cached until this layer's
+# inputs change, same as before).
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y --no-install-recommends \
+        nodejs jq inotify-tools memcached php8.4-cli && \
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    rm -rf /var/lib/apt/lists/*
 
 # npm (cached until package-lock.json changes)
 # Cypress/ESLint live in tools/ (a separate npm project, see Makefile
@@ -13,18 +56,6 @@ WORKDIR /build
 # from the build context below (.dockerignore).
 COPY .npmrc package.json package-lock.json ./
 RUN npm ci
-
-# PHP 8.4 + composer (cached until composer.lock changes)
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates jq inotify-tools && \
-    curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
-        > /etc/apt/sources.list.d/php.list && \
-    apt-get update && apt-get install -y --no-install-recommends \
-        php8.4-cli php8.4-zip php8.4-xml php8.4-curl php8.4-gd php8.4-sqlite3 \
-        php8.4-memcache php8.4-mbstring php8.4-intl php8.4-exif \
-        memcached && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    rm -rf /var/lib/apt/lists/*
 
 COPY composer.json composer.lock ./
 COPY openalpr/ ./openalpr/
@@ -54,23 +85,28 @@ RUN mkdir -p \
 RUN [ "${APP_HOST}" = "localhost" ] || sh build.sh
 
 # ── Webapp ────────────────────────────────────────────────────────────────────
-FROM nginx:1.27.3-bookworm AS webapp
+FROM php-base AS webapp
 
 LABEL net.uprzejmiedonosze=0.2.3
 ENV HOME=/root
 
-RUN curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
-        > /etc/apt/sources.list.d/php.list
+# nginx from nginx.org (not Debian's bookworm package, which is 1.22.1 —
+# stays on the same fast-moving mainline this image tracked before). gnupg
+# is only needed to import this one key; dropped again below along with the
+# rest of the apt cache. Pin-Priority makes apt prefer this repo's `nginx`
+# over Debian's own same-named package now that both are configured.
+RUN apt-get update && apt-get install -y --no-install-recommends gnupg && \
+    curl -sSL https://nginx.org/keys/nginx_signing.key | gpg --dearmor -o /usr/share/keyrings/nginx.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/nginx.gpg] https://nginx.org/packages/debian/ bookworm nginx" \
+        > /etc/apt/sources.list.d/nginx.list && \
+    printf 'Package: *\nPin: origin nginx.org\nPin-Priority: 900\n' > /etc/apt/preferences.d/nginx
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     apt-get --no-install-recommends -y install \
+        nginx \
         locales vim curl sqlite3 \
         texlive ca-certificates \
-        php8.4-fpm php8.4-sqlite3 php8.4-curl php8.4-zip \
-        php8.4-opcache php8.4-mbstring php8.4-gd \
-        php8.4-memcache php8.4-memcached php8.4-intl php8.4-xml \
-        php8.4-exif \
+        php8.4-fpm php8.4-zip php8.4-opcache php8.4-memcached \
         lmodern texlive-lang-polish \
         texlive-latex-recommended texlive-latex-extra && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
@@ -117,21 +153,13 @@ EXPOSE 80
 CMD ["/bin/sh", "/root/init.sh"]
 
 # ── Worker (PHP CLI — face-detect-consumer daemon + cron jobs) ────────────────
-FROM debian:bookworm-slim AS worker
+FROM php-base AS worker
 
 ARG TARGETARCH=amd64
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates && \
-    curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ bookworm main" \
-        > /etc/apt/sources.list.d/php.list && \
-    apt-get update && apt-get install -y --no-install-recommends \
-        php8.4-cli php8.4-sqlite3 php8.4-curl php8.4-gd \
-        php8.4-memcache php8.4-memcached \
-        php8.4-xml php8.4-mbstring \
-        php8.4-intl php8.4-exif php8.4-zip \
-        age \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        php8.4-cli php8.4-memcached age && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSLo /usr/local/bin/supercronic \
     "https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-${TARGETARCH}" && \
