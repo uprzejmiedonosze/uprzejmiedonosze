@@ -117,6 +117,13 @@ function removeApplication($app, $dryRun){
     if($dryRun){
         return;
     }
+    if (isset($app->carInfo->plateId)) {
+        // Otherwise the recydywa count/cache for this plate (both memcached and the
+        // persisted `recydywa` table fallback, neither of which expires) keeps counting
+        // this application forever — confirmed stale on prod for WU7146R after an account
+        // deletion removed 5 of its 6 reports (2026-09-29).
+        \recydywa\delete($app->carInfo->plateId);
+    }
     \store\delete('applications', $app->id);
 }
 
