@@ -340,7 +340,18 @@ services:
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
       MEMCACHED_HOST: memcached
       LOG_IDENT: ${APP_ENV:-prod}-worker-cron
-    command: ["supercronic", "/etc/crontab"]
+    # Without -split-logs, supercronic routes ALL of its own logging to
+    # stderr regardless of level — with `logging: driver: syslog` below,
+    # Docker's syslog driver maps stream→priority (stdout→info, stderr→err),
+    # so every line, including plain "starting"/"job succeeded" ones, was
+    # showing up in Papertrail tagged ERROR (confirmed 2026-09-29).
+    # -split-logs makes supercronic route by level instead: info to stdout,
+    # real failures (non-zero exit, panics) stay on stderr — unlike a
+    # blanket `2>&1`, this doesn't also hide genuine job failures as INFO.
+    # Unrelated to app-level errors, which Logger.php already sends with a
+    # real PRI straight to journald (see "Logging" above), bypassing
+    # Docker's stream capture entirely.
+    command: ["supercronic", "-split-logs", "/etc/crontab"]
     # supercronic is not designed to run as PID 1 (its own README says so) —
     # confirmed empirically (2026-09-27, this host): as PID 1 it attempts its
     # own zombie-reaping path and immediately fatals with "Failed to fork
