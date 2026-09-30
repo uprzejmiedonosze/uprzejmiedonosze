@@ -148,6 +148,20 @@ RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
         -e "s/^session.save_handler.*/session.save_handler = memcached/" \
         /etc/php/8.4/fpm/php.ini && \
     printf 'session.save_path = "memcached:11211"\n' >> /etc/php/8.4/fpm/php.ini && \
+    # Defaults (sess_lock_wait_min/max = 1000/2000us, sess_lock_retries = 5)
+    # give a losing request only a few ms of exponential backoff before it
+    # gives up and proceeds with an empty $_SESSION — surfaces as a spurious
+    # "User not logged in" 403 when a slow handler (e.g. image upload + ALPR,
+    # 1-2s) is holding the lock (confirmed via Papertrail 2026-09-29). Widening
+    # the wait budget so a concurrent request actually waits out a slow
+    # handler instead: min unchanged (no extra latency in the common
+    # uncontended case), max raised to 100ms and retries to 30, giving ~2.5s
+    # of worst-case total backoff — comfortably past the slowest handlers seen
+    # so far. Alternative to (and replaces) releasing the lock early via
+    # session_write_close() in SessionMiddleware, which was reverted
+    # (2026-09-30) after it broke report submission — something past
+    # preprocess() does write to $_SESSION after all.
+    printf 'memcached.sess_lock_wait_min = 1000\nmemcached.sess_lock_wait_max = 100000\nmemcached.sess_lock_retries = 30\n' >> /etc/php/8.4/fpm/php.ini && \
     sed -i -e "s|.*error_log.*|error_log = /dev/stderr|" \
         -e "s|^;log_level.*|log_level = warning|" \
         /etc/php/8.4/fpm/php-fpm.conf && \
