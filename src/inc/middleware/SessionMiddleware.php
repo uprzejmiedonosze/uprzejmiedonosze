@@ -67,25 +67,7 @@ abstract class SessionMiddleware implements MiddlewareInterface {
             $isRegistered = $user->isRegistered();
             $request = $request->withAttribute('isRegistered', $isRegistered);
         }
-
-        // Nothing past this point (any handler behind LoggedInMiddleware/
-        // RegisteredMiddleware/ModeratorMiddleware/OptionalUserMiddleware) ever
-        // writes to $_SESSION — the only writes are at bootstrap (index.php,
-        // before routing) and in TokenSessionMiddleware (the separate,
-        // sessionless REST/MCP token path, not used by these routes). So it's
-        // safe to release the memcached-backed session lock here rather than
-        // holding it for the handler's full duration. Otherwise a slow handler
-        // (e.g. image upload + ALPR, 1-2s) starves out concurrent requests for
-        // the same session: PHP's memcached session lock retry budget
-        // (memcached.sess_lock_retries/sess_lock_wait_*) is a handful of
-        // milliseconds, so a losing request silently proceeds with an empty
-        // $_SESSION instead of waiting — surfacing as a spurious "User not
-        // logged in" 403 (confirmed via Papertrail 2026-09-29: e.g. a
-        // concurrent /api/geo/.../n racing against /api/app/.../image).
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            session_write_close();
-        }
-
+        
         return [$request, $handler];
     }
 }
