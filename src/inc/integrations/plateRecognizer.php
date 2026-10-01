@@ -3,6 +3,44 @@
 use cache\Type;
 use \JSONObject as JSONObject;
 
+// Różnica score poniżej tego progu = ALPR sam jest "niezdecydowany" (mieści się w szumie
+// silnika OCR) — patrz bestAlprResult() niżej. Dobrane empirycznie na 1000 losowych wpisach
+// Platerecognizer z cache produkcyjnego (2026-10-01): mediana scoreGap przy "mniejszy pojazd
+// wygrywa score'em" to 0.001 (czysty szum), krzywa "ile decyzji się zmienia" spłaszcza się
+// koło 0.08-0.10 (band=0.05 -> 21.7% wpisów wielowynikowych, band=0.10 -> 23.9%, band=0.30 ->
+// 25.5% - powyżej 0.10 praktycznie nic już się nie zmienia, populacja "spornych" przypadków
+// kończy się twardo przy gap≈0.18).
+const ALPR_SCORE_TIE_BAND = 0.1;
+
+// Pole bboxa pojazdu (px²) — proxy na "jak blisko autora zdjęcia jest ten pojazd": fotografowane
+// auto jest zwykle znacznie bliżej (i przez to większe w kadrze) niż przypadkowy samochód
+// widoczny w tle/na boku.
+function vehicleArea(array $r): float {
+    $b = $r['vehicle']['box'] ?? null;
+    if (!$b) return 0.0;
+    return max(0, $b['xmax'] - $b['xmin']) * max(0, $b['ymax'] - $b['ymin']);
+}
+
+// Najlepszy wynik PlateRecognizer. Przy realnej różnicy pewności odczytu (>= ALPR_SCORE_TIE_BAND)
+// wygrywa score. W paśmie remisu — zaobserwowane w praktyce: Skoda na pierwszym planie
+// score=0.996, inne auto w tle score=1.000, różnica mieści się w szumie silnika OCR — rozstrzyga
+// WIELKOŚĆ pojazdu w kadrze: większy pojazd = bliżej autora zdjęcia = większa szansa, że to o
+// NIEGO chodzi (fotografujący podchodzi do zgłaszanego auta, nie do tła). Używane przez obie
+// ścieżki (web: get_car_info_platerecognizer() niżej; mobile: applyAlprPlate() w Vision.php) —
+// jedna definicja "najlepszego wyniku", żeby się nie rozjeżdżały.
+function bestAlprResult(array $resp): ?array {
+    $results = $resp['results'] ?? [];
+    if (!is_array($results) || !count($results)) return null;
+    usort($results, function ($a, $b) {
+        $scoreA = $a['score'] ?? 0;
+        $scoreB = $b['score'] ?? 0;
+        if (abs($scoreA - $scoreB) < ALPR_SCORE_TIE_BAND) {
+            return vehicleArea($b) <=> vehicleArea($a);
+        }
+        return $scoreB <=> $scoreA;
+    });
+    return $results[0];
+}
 
 /**
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
@@ -11,16 +49,8 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
     $carInfo = get_platerecognizer($imageBytes);
     $application->alpr = 'platerecognizer';
 
-    if(isset($carInfo) && isset($carInfo["results"]) && count($carInfo["results"])){
-
-        $result = (Array)$carInfo['results'];
-        usort($result, function ($left, $right){
-            if($left['score'] > $right['score']) return -1;
-            if($left['score'] < $right['score']) return 1;
-            return 0;
-        });
-
-        $result = $result[0];
+    $result = bestAlprResult($carInfo ?? []);
+    if ($result) {
         $box = $result['box'];
 
         $imp = imagecreatefromjpeg(ROOT . "$baseFileName,$type.jpg");

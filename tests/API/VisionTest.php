@@ -430,7 +430,31 @@ class VisionTest extends TestCase
         $this->assertSame('ZS228FC', $p['plate_debug']['alpr']['text']);
     }
 
-    public function testAnalyzeCandidateHybridPrDoesNotOverrideThirdRole(): void {
+    // Liczby 1:1 z realnego przypadku odzyskanego z cache na stagingu (2026-09-28): Skoda na
+    // pierwszym planie score=0.996/pole=470615px², inne auto w tle score=1.000/pole=109277px².
+    // Różnica score (0.004) mieści się w paśmie remisu (ALPR_SCORE_TIE_BAND=0.1) — powinien
+    // wygrać większy pojazd (bliżej autora zdjęcia = bardziej prawdopodobny fotografowany pojazd).
+    // Próg 0.1 dobrany empirycznie na 1000 losowych wpisach z cache produkcyjnego (2026-10-01) —
+    // patrz komentarz przy ALPR_SCORE_TIE_BAND w plateRecognizer.php.
+    public function testBestAlprResultPrefersLargerVehicleWithinScoreTieBand(): void {
+        $skoda = ['plate' => 'zs4200u', 'score' => 0.996, 'vehicle' => ['box' => ['xmin' => 458, 'ymin' => 209, 'xmax' => 1153, 'ymax' => 886]]];
+        $bmw = ['plate' => 'zs993ly', 'score' => 1.0, 'vehicle' => ['box' => ['xmin' => 177, 'ymin' => 229, 'xmax' => 646, 'ymax' => 462]]];
+
+        $best = \alpr\bestAlprResult(['results' => [$skoda, $bmw]]);
+        $this->assertSame('zs4200u', $best['plate']); // mimo niższego score — większy pojazd w kadrze
+
+        // Poza pasmem remisu (różnica wyraźnie > 0.1) wygrywa czysty score, niezależnie od wielkości.
+        $bmwConfident = $bmw;
+        $bmwConfident['score'] = 1.0;
+        $skodaUnsure = $skoda;
+        $skodaUnsure['score'] = 0.80; // różnica 0.2, wyraźnie poza ALPR_SCORE_TIE_BAND
+        $best2 = \alpr\bestAlprResult(['results' => [$skodaUnsure, $bmwConfident]]);
+        $this->assertSame('zs993ly', $best2['plate']);
+    }
+
+    // SCHEMA 8: ALPR leci też dla 'third' (i 'context'), a odpowiedź niesie WSZYSTKIE odczyty —
+    // appka przydziela z nich role, bo model myli 'third' z innym pojazdem (realny przypadek R001).
+    public function testAnalyzeCandidateHybridPrRunsAlprForThirdRoleAndExposesAllDetections(): void {
         $fake = new ClientFake([
             CreateResponse::fake(['choices' => [['message' => ['content' =>
                 self::photosJson([$this->fakePhotoJson(0, 'third', true, 'AAA1111')]),
@@ -440,16 +464,45 @@ class VisionTest extends TestCase
         $calls = 0;
         PlateRecognizerClient::set(function (string $bytes) use (&$calls) {
             $calls++;
+            return ['results' => [
+                ['plate' => 'aaa1111', 'score' => 0.9,
+                    'box' => ['xmin' => 80, 'ymin' => 105, 'xmax' => 120, 'ymax' => 117],
+                    'vehicle' => ['box' => ['xmin' => 20, 'ymin' => 15, 'xmax' => 180, 'ymax' => 135]]],
+                ['plate' => '45tw', 'score' => 0.9, // częściowy odczyt auta w rogu kadru
+                    'box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 20, 'ymax' => 10],
+                    'vehicle' => ['box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 40, 'ymax' => 30]]],
+            ]];
+        });
+
+        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]]; // 200x150
+        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R008');
+
+        $this->assertSame(1, $calls);
+        $p = $result['photos'][0];
+        $this->assertSame('AAA1111', $p['plate']['text']);
+        $this->assertSame(['AAA1111', '45TW'], array_column($p['alpr_all'], 'text'));
+        $this->assertSame(0.64, $p['alpr_all'][0]['vehicle_area']); // 160*120 / 200*150
+        $this->assertSame(0.04, $p['alpr_all'][1]['vehicle_area']); // 40*30 / 200*150
+        $this->assertSame([0, 0, 200, 200], $p['alpr_all'][1]['vehicle_bbox']); // 0..1000
+    }
+
+    public function testAnalyzeCandidateHybridPrSkipsAlprForUnusable(): void {
+        $fake = new ClientFake([
+            CreateResponse::fake(['choices' => [['message' => ['content' =>
+                self::photosJson([$this->fakePhotoJson(0, 'unusable')]),
+            ]]]]),
+        ]);
+        VisionClient::set($fake);
+        $calls = 0;
+        PlateRecognizerClient::set(function (string $bytes) use (&$calls) {
+            $calls++;
             return ['results' => []];
         });
 
-        $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]];
-        $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R008');
+        $result = \vision\analyzeCandidate([['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg()]], 'user@example.com', 'R012');
 
-        $this->assertSame(0, $calls); // 'third' nie wywołuje ALPR w ogóle
-        $p = $result['photos'][0];
-        $this->assertSame('AAA1111', $p['plate']['text']); // zostaje odczyt modelu
-        $this->assertArrayNotHasKey('plate_debug', $p);
+        $this->assertSame(0, $calls);
+        $this->assertArrayNotHasKey('alpr_all', $result['photos'][0]);
     }
 
     public function testAnalyzeCandidateHybridPrFallsBackToModelWhenAlprFindsNothing(): void {

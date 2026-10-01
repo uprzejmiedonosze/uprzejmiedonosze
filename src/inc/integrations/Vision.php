@@ -321,28 +321,48 @@ function imageSize(string $bytes): ?array {
     return ['w' => (float)$info[0], 'h' => (float)$info[1]];
 }
 
-// Najlepszy wynik PlateRecognizer (najwyższy score), jak get_car_info_platerecognizer()
-// w plateRecognizer.php. null gdy brak wyników.
-function bestAlprResult(array $resp): ?array {
-    $results = $resp['results'] ?? [];
-    if (!is_array($results) || !count($results)) return null;
-    usort($results, fn ($a, $b) => ($b['score'] ?? 0) <=> ($a['score'] ?? 0));
-    return $results[0];
+// Wszystkie odczyty ALPR ze zdjęcia (nie tylko najlepszy): tekst, bbox tablicy i pojazdu w 0..1000
+// oraz pole pojazdu jako ułamek kadru. Appka (compose.ts) przydziela z tego role deterministycznie:
+// car = zdjęcie, na którym pojazd z daną tablicą jest największy; kontekst = inne zdjęcie, na którym
+// ten pojazd też widać (może być wspólny dla kilku tablic). Model (gpt-5-nano) tego porównania
+// między zdjęciami nie robi wiarygodnie mimo instrukcji w prompcie.
+function alprDetections(array $resp, ?array $size): array {
+    $out = [];
+    foreach ($resp['results'] ?? [] as $r) {
+        $text = normPlateKey($r['plate'] ?? null);
+        if ($text === null) continue;
+        $area = null;
+        if ($size && isset($r['vehicle']['box'])) {
+            $area = round(\alpr\vehicleArea($r) / ($size['w'] * $size['h']), 4);
+        }
+        $out[] = [
+            'text' => $text,
+            'score' => $r['score'] ?? null,
+            'plate_bbox' => ($size && isset($r['box'])) ? alprBoxToVisionSpace($r['box'], $size['w'], $size['h']) : null,
+            'vehicle_bbox' => ($size && isset($r['vehicle']['box'])) ? alprBoxToVisionSpace($r['vehicle']['box'], $size['w'], $size['h']) : null,
+            'vehicle_area' => $area,
+        ];
+    }
+    return $out;
 }
 
-// Tablica + bbox auta z ALPR (PlateRecognizer), TYLKO dla role==='car' — patrz applyAlprPlate()
-// caller w analyzeCandidate(). Zawsze zapisuje plate_debug (model vs ALPR + score, TYMCZASOWE
-// do wglądu w appce — usunąć razem z UI po stronie klienta przy kolejnym podbiciu VISION_SCHEMA,
-// appka nieznany klucz ignoruje). Nadpisuje plate/car modelu tylko gdy ALPR zwróci parsowalną
-// tablicę ze score >= ALPR_MIN_SCORE; wpp. graceful fallback (plate_debug.alpr=null gdy ALPR
-// nic nie znalazł, albo wpis + warning gdy score za niski) bez plate_verified.
+// Tablica + bbox auta z ALPR (PlateRecognizer) dla każdego zdjęcia poza 'unusable' — patrz
+// caller w analyzeCandidate(). Zawsze zapisuje alpr_all (patrz alprDetections()) i plate_debug
+// (model vs ALPR + score, TYMCZASOWE do wglądu w appce — usunąć razem z UI po stronie klienta
+// przy kolejnym podbiciu VISION_SCHEMA, appka nieznany klucz ignoruje). Nadpisuje plate/car
+// modelu tylko gdy ALPR zwróci parsowalną tablicę ze score >= ALPR_MIN_SCORE; wpp. graceful
+// fallback (plate_debug.alpr=null gdy ALPR nic nie znalazł, albo wpis + warning gdy score za
+// niski) bez plate_verified.
 function applyAlprPlate(string $bytes, array &$photo, array &$warnings): void {
     $modelPlate = $photo['plate'] ?? ['readable' => false, 'text' => null, 'bbox' => null];
     $modelCar = $photo['car'] ?? ['present' => false, 'bbox' => null, 'desc' => null];
 
     $best = null;
+    $photo['alpr_all'] = [];
     try {
-        $best = bestAlprResult(PlateRecognizerClient::call($bytes));
+        $resp = PlateRecognizerClient::call($bytes);
+        $photo['alpr_all'] = alprDetections($resp, imageSize($bytes));
+        $best = \alpr\bestAlprResult($resp);
     } catch (\Throwable $e) {
         $msg = 'platerecognizer: ' . substr($e->getMessage(), 0, 150);
         log_info("vision $msg");
@@ -444,10 +464,10 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
         foreach ($result as &$p) {
             $src = $byIndex[$p['photo_index']] ?? null;
             if (!$src) continue;
-            // Tylko 'car' — 'third' (drugi kąt/znak z boku) zwykle nie ma dobrego kadru na
-            // tablicę/całe auto, a ALPR na złym kadrze tylko dokłada szum. Świadome zawężenie
-            // względem harnessu testowego, który stosował to też do 'third'.
-            if (($p['role'] ?? null) === 'car') {
+            // Każde zdjęcie poza 'unusable': role od modelu bywają błędne (dwa 'car' dla tego
+            // samego auta, 'third' dla innego pojazdu), więc appka przydziela je sama na podstawie
+            // alpr_all — potrzebuje odczytów ze wszystkich zdjęć, nie tylko z tego oznaczonego 'car'.
+            if (($p['role'] ?? null) !== 'unusable') {
                 applyAlprPlate($src['bytes'], $p, $warnings);
             }
         }

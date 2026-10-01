@@ -8,7 +8,9 @@
 // zostać zsynchronizowane ręcznie (brak wspólnego repo) — każda zmiana promptu/markerów/walidacji
 // tu MUSI być powtórzona tam (i odwrotnie), i musi podbić VISION_SCHEMA.
 
-const VISION_SCHEMA = 7; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
+const VISION_SCHEMA = 8; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
+// SCHEMA 8: ALPR na każdym zdjęciu poza 'unusable' + pole alpr_all (wszystkie odczyty) — appka
+// przydziela role context/car/third deterministycznie, patrz alprDetections() w Vision.php.
 
 // Minimalny score PlateRecognizer (0..1), poniżej którego wynik ALPR jest ignorowany
 // (zostaje odczyt modelu) — patrz applyAlprPlate() w Vision.php. Bez progu odczyt ALPR
