@@ -382,12 +382,28 @@ function applyAlprPlate(string $bytes, array &$photo, array &$warnings): void {
         // gwarancję schematu (np. ALPR znalazł tablicę, ale nie vehicle.box, a modelowy
         // bbox auta nie obejmuje boxu ALPR). Przy rozjechaniu: wracamy do auta modelu
         // i sygnalizujemy to flagą plate_check zamiast cichej podmiany.
-        $cb = $photo['car']['bbox'] ?? null;
+        //
+        // UWAGA: sprawdzamy względem $modelCar['bbox'] (zapisanego na początku funkcji),
+        // NIE $photo['car']['bbox'] — ten ostatni mógł już zostać nadpisany bboxem
+        // pojazdu z ALPR dwie linijki wyżej. PlateRecognizer zwraca tablicę+pojazd jako
+        // spójną parę z JEDNEJ detekcji, więc porównanie z WŁASNYM vehicle.box ALPR jest
+        // tautologią i nigdy nie wykryje błędu — zaobserwowane w praktyce: dwa auta w
+        // kadrze (jedno na pierwszym planie, drugie w tle), ALPR trafił tablicą w auto
+        // z tła zamiast w to, które model wskazał jako fotografowany pojazd, a ten check
+        // (porównujący ALPR z ALPR) przepuszczał to bez ostrzeżenia.
+        $cb = $modelCar['bbox'] ?? null;
         $pb = $photo['plate']['bbox'] ?? null;
         if (validBox($cb) && validBox($pb) && !plateInsideCar($cb, $pb)) {
+            // Cofamy CAŁĄ parę (auto + tablica) do odczytu modelu, nie tylko auto: zostawienie
+            // tablicy ALPR (wskazującej na INNY pojazd) obok przywróconego auta modelu łamałoby
+            // dokładnie ten sam niezmiennik "tablica w aucie", który ten blok ma pilnować —
+            // modelowa para była już poprawna (przeszła walidację w analyzeChunk) PRZED tym, jak
+            // applyAlprPlate() ją nadpisała, więc jest to bezpieczny punkt powrotu.
             $photo['car'] = $modelCar;
+            $photo['plate'] = $modelPlate;
+            $photo['plate_verified'] = false;
             $photo['plate_check'] = 'unverified-box';
-            $warnings[] = "zdj.{$photo['photo_index']}: bbox ALPR poza autem — zostawiam auto modelu (plate_check=unverified-box)";
+            $warnings[] = "zdj.{$photo['photo_index']}: bbox ALPR poza autem modelu — zostawiam odczyt modelu (plate_check=unverified-box)";
         }
     } elseif ($alprText !== null) {
         $warnings[] = "zdj.{$photo['photo_index']}: niski score ALPR (" . ($best['score'] ?? '?') . ") — zostawiam odczyt modelu";

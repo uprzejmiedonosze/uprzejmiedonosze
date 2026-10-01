@@ -393,6 +393,11 @@ class VisionTest extends TestCase
         $this->assertNotEmpty($result['warnings']); // niski score odnotowany
     }
 
+    // Regresja na realny bug (2026-10): dwa auta w kadrze, ALPR trafił tablicą+pojazdem
+    // w INNY samochód niż ten, który model wskazał jako fotografowany (role=car, bbox
+    // 10%..90% z 400x300 = [40,30,360,270]) — plate+vehicle z ALPR są ze sobą spójne (ta
+    // sama detekcja z PlateRecognizera), więc musi być sprawdzane względem bboxa MODELU,
+    // nie bboxa ALPR (który jest trywialnie "spójny sam ze sobą" i nigdy by tego nie złapał).
     public function testAnalyzeCandidateHybridPrFlagsAlprPlateOutsideCar(): void {
         $fake = new ClientFake([
             CreateResponse::fake(['choices' => [['message' => ['content' =>
@@ -402,20 +407,27 @@ class VisionTest extends TestCase
         VisionClient::set($fake);
         PlateRecognizerClient::set(fn (string $bytes) => ['results' => [[
             'plate' => 'zs228fc', 'score' => 0.9,
-            // tablica poza boxem auta z ALPR, ale w obrębie auta modelu (200,150,300,200
-            // na 400x300) — po fladze wraca auto modelu i niezmiennik znowu zachodzi
-            'box' => ['xmin' => 200, 'ymin' => 150, 'xmax' => 300, 'ymax' => 200],
-            'vehicle' => ['box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 100, 'ymax' => 75]],
+            // Inne, małe auto w rogu kadru (poza bboxem auta z modelu [40,30,360,270]) —
+            // ALPR trafił w jego tablicę zamiast w fotografowany pojazd.
+            'box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 30, 'ymax' => 20],
+            'vehicle' => ['box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 40, 'ymax' => 25]],
         ]]]);
 
         $photos = [['photoId' => 'a', 'photo_index' => 0, 'bytes' => self::jpeg(400, 300)]];
         $result = \vision\analyzeCandidate($photos, 'user@example.com', 'R011');
 
         $p = $result['photos'][0];
-        $this->assertSame('ZS228FC', $p['plate']['text']); // tekst ALPR zostaje
-        $this->assertSame('unverified-box', $p['plate_check']); // ale rozjazd jest oflagowany
-        $this->assertSame([], \vision\validateVisionPhoto($p, 0)); // po przywróceniu auta modelu — czysto
+        // Cała para (auto + tablica) wraca do odczytu modelu — tu akurat model nie odczytał
+        // żadnej tablicy (fakePhotoJson(..., plateReadable:false)), więc zostaje nieczytelna.
+        // Zostawienie samej tablicy ALPR obok przywróconego auta modelu łamałoby niezmiennik
+        // "tablica w aucie" (ta tablica geometrycznie leży w INNYM aucie) — patrz asercja niżej.
+        $this->assertFalse($p['plate']['readable']);
+        $this->assertFalse($p['plate_verified']);
+        $this->assertSame('unverified-box', $p['plate_check']); // rozjazd jest oflagowany
+        $this->assertSame([], \vision\validateVisionPhoto($p, 0)); // po przywróceniu pary modelu — czysto
         $this->assertNotEmpty($result['warnings']);
+        // Mimo odrzucenia, surowy odczyt ALPR zostaje w plate_debug (do wglądu/debugowania).
+        $this->assertSame('ZS228FC', $p['plate_debug']['alpr']['text']);
     }
 
     public function testAnalyzeCandidateHybridPrDoesNotOverrideThirdRole(): void {
