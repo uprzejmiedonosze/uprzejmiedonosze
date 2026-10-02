@@ -15,7 +15,8 @@ require_once(__DIR__ . '/plateRecognizer.php'); // \alpr\get_platerecognizer() �
 // "hybrid-pr") pokazała, że wyspecjalizowany ALPR (PlateRecognizer, już używany w klasycznym
 // uploadzie zgłoszeń — src/inc/integrations/plateRecognizer.php) jest zauważalnie dokładniejszy
 // (IoU tablicy 0.9+ vs 0.5-0.6 samego LLM) i tańszy (bez dodatkowych wywołań OpenAI). Stosowany
-// TYLKO dla zdjęć z rolą 'car' (nie 'third') — patrz applyAlprPlate().
+// dla każdego zdjęcia poza 'unusable' i nadrzędny wobec modelu także co do położenia auta — patrz
+// applyAlprPlate().
 
 class VisionException extends \RuntimeException {}
 
@@ -245,7 +246,7 @@ function applyPixelBoxes(array &$photos, array $dims): void {
 }
 
 /** @param list<array{photoId:string,photo_index:int,bytes:string}> $items */
-function analyzeChunk(array $items, array &$usage): array {
+function analyzeChunk(array $items, array &$usage, array &$warnings = []): array {
     $idx = array_map(fn ($i) => $i['photo_index'], $items);
     $n = count($items);
     $note = ($n > 1 || $idx[0] !== 0)
@@ -268,6 +269,7 @@ function analyzeChunk(array $items, array &$usage): array {
         applyPixelBoxes($photos, $dims);
     } catch (VisionException $e) {
         // jedna próba naprawy: model odpowiedział prozą
+        $warnings[] = 'naprawa: model nie zwrócił JSON (' . $e->getMessage() . ')';
         $history[] = ['role' => 'assistant', 'content' => $raw];
         $history[] = ['role' => 'user', 'content' => 'That was not valid JSON. Repeat the answer as raw JSON only: no prose, no markdown fences, no commentary.'];
         $raw = chat($history, OPENAI_VISION_MAX_TOKENS, $usage);
@@ -287,6 +289,7 @@ function analyzeChunk(array $items, array &$usage): array {
         foreach (validateVisionPhoto($p, $idx[$k]) as $e) $errs[] = "zdj.{$idx[$k]}: $e";
     }
     if ($errs) {
+        $warnings[] = 'naprawa walidacji: ' . implode('; ', $errs);
         // jedna próba naprawy: odeślij błędy + przypomnij kontrakt pikseli (gdy model
         // przysłał 0..1000 zamiast pikseli, konwersja daje >1000 i "zly bbox" — bez tego
         // zdania model powtórzyłby błąd, paląc rundę naprawy i kończąc 502).
@@ -394,37 +397,16 @@ function applyAlprPlate(string $bytes, array &$photo, array &$warnings): void {
         // plate_verified = ALPR (score >= ALPR_MIN_SCORE) dostarczył parsowalną tablicę;
         // NIE jest to już konsensus dwóch opinii jak w dawnym pipeline'ie LLM.
         $photo['plate_verified'] = true;
-        if ($alprCarBbox) {
-            $photo['car'] = ['present' => true, 'bbox' => $alprCarBbox, 'desc' => $modelCar['desc'] ?? null];
-        }
-        // applyAlprPlate() działa PO walidacji (analyzeChunk), więc nadpisane boxy muszą
-        // ponownie przejść niezmiennik "tablica w aucie" — inaczej odpowiedź API łamałaby
-        // gwarancję schematu (np. ALPR znalazł tablicę, ale nie vehicle.box, a modelowy
-        // bbox auta nie obejmuje boxu ALPR). Przy rozjechaniu: wracamy do auta modelu
-        // i sygnalizujemy to flagą plate_check zamiast cichej podmiany.
-        //
-        // UWAGA: sprawdzamy względem $modelCar['bbox'] (zapisanego na początku funkcji),
-        // NIE $photo['car']['bbox'] — ten ostatni mógł już zostać nadpisany bboxem
-        // pojazdu z ALPR dwie linijki wyżej. PlateRecognizer zwraca tablicę+pojazd jako
-        // spójną parę z JEDNEJ detekcji, więc porównanie z WŁASNYM vehicle.box ALPR jest
-        // tautologią i nigdy nie wykryje błędu — zaobserwowane w praktyce: dwa auta w
-        // kadrze (jedno na pierwszym planie, drugie w tle), ALPR trafił tablicą w auto
-        // z tła zamiast w to, które model wskazał jako fotografowany pojazd, a ten check
-        // (porównujący ALPR z ALPR) przepuszczał to bez ostrzeżenia.
-        $cb = $modelCar['bbox'] ?? null;
-        $pb = $photo['plate']['bbox'] ?? null;
-        if (validBox($cb) && validBox($pb) && !plateInsideCar($cb, $pb)) {
-            // Cofamy CAŁĄ parę (auto + tablica) do odczytu modelu, nie tylko auto: zostawienie
-            // tablicy ALPR (wskazującej na INNY pojazd) obok przywróconego auta modelu łamałoby
-            // dokładnie ten sam niezmiennik "tablica w aucie", który ten blok ma pilnować —
-            // modelowa para była już poprawna (przeszła walidację w analyzeChunk) PRZED tym, jak
-            // applyAlprPlate() ją nadpisała, więc jest to bezpieczny punkt powrotu.
-            $photo['car'] = $modelCar;
-            $photo['plate'] = $modelPlate;
-            $photo['plate_verified'] = false;
-            $photo['plate_check'] = 'unverified-box';
-            $warnings[] = "zdj.{$photo['photo_index']}: bbox ALPR poza autem modelu — zostawiam odczyt modelu (plate_check=unverified-box)";
-        }
+        // Auto też z ALPR (ta sama detekcja co tablica, więc niezmiennik "tablica w aucie" zachodzi
+        // sam). ALPR wykrywa pojazdy lepiej niż model, więc obszar wskazany przez model ani nie
+        // ogranicza, ani nie weryfikuje odczytu — model myli się w obie strony (raz wskazuje auto
+        // z pierwszego planu, gdy ALPR trafił w tło, raz auto z tła — R003, 2026-10-02). Wyboru
+        // między kilkoma autami w kadrze dokonuje bestAlprResult() (score + wielkość pojazdu).
+        // Opis auta od modelu przenosimy tylko, gdy jego auto obejmuje tablicę ALPR — inaczej
+        // opisuje inny pojazd.
+        $mb = $modelCar['bbox'] ?? null;
+        $sameCar = validBox($mb) && validBox($alprPlateBbox) && plateInsideCar($mb, $alprPlateBbox);
+        $photo['car'] = ['present' => true, 'bbox' => $alprCarBbox, 'desc' => $sameCar ? ($modelCar['desc'] ?? null) : null];
     } elseif ($alprText !== null) {
         $warnings[] = "zdj.{$photo['photo_index']}: niski score ALPR (" . ($best['score'] ?? '?') . ") — zostawiam odczyt modelu";
     }
@@ -442,14 +424,14 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
 
     try {
         try {
-            $result = analyzeChunk($photos, $usage);
+            $result = analyzeChunk($photos, $usage, $warnings);
         } catch (VisionNetworkException $e) {
             if (count($photos) <= 3) throw $e;
             log_info("vision {$reportId}: duzy kandydat (" . count($photos) . " zdjec), dziele na paczki po 3: " . $e->getMessage());
             $result = [];
             for ($s = 0; $s < count($photos); $s += 3) {
                 $pack = array_slice($photos, $s, 3);
-                $result = array_merge($result, analyzeChunk($pack, $usage));
+                $result = array_merge($result, analyzeChunk($pack, $usage, $warnings));
             }
             usort($result, fn ($a, $b) => ($a['photo_index'] ?? 0) <=> ($b['photo_index'] ?? 0));
         }
