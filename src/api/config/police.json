@@ -1135,7 +1135,8 @@
         ],
         "email": "komenda.sopot@gd.policja.gov.pl",
         "voivodeship": "Pomorskie",
-        "city": "Sopot"
+        "city": "Sopot",
+        "hint": "Przy odpowiedniej fotodokumentacji nie wzywają na przesłuchanie zgłaszającego, wystawiają mandaty karne sprawcom, sprawnie prowadzą sprawy (zatrudnili wielu wykroczeniowców pracujących zza biurka)."
     },
     "Bielsko-Biała-miasto": {
         "address": [
