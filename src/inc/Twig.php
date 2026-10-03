@@ -61,7 +61,18 @@ function _twigConfig(): array {
         'debug' => !isProd(),
         'cache' => isProd() ? new FilesystemCache('/var/cache/uprzejmiedonosze.net/twig-' . HOST . '-' .TWIG_HASH, FilesystemCache::FORCE_BYTECODE_INVALIDATION) : false,
         'strict_variables' => true,
-        'auto_reload' => true
+        'auto_reload' => true,
+        // Render via generators instead of the ob_start(callback) buffer.
+        // The non-yield prod path wraps every render in an output buffer with
+        // a display-handler callback (Template::render()); an ob_* call made
+        // while the engine is inside that handler is an uncatchable fatal
+        // ("ob_get_clean(): Cannot use output buffering in output buffering
+        // display handlers", Sentry UD-PHP-PQ, first seen 2026-09-28, always on
+        // multi-second /app/list renders). Yield mode uses no output buffering
+        // at all, eliminating the whole class — and is the only mode left in
+        // Twig 4. All templates verified to render byte-identically in both
+        // modes (2026-10-02).
+        'use_yield' => true,
     ];
 }
 
