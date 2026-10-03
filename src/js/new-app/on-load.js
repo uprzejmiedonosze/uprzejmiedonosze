@@ -5,6 +5,8 @@ import { setStopAgresji, isSMUnknown } from "../lib/geolocation";
 
 // Constants for section class names
 const THIRD_IMAGE_SECTION_CLASS = 'thirdImageSection';
+const STOPPING_EXTENSION_ID = '14';
+const PARKING_EXTENSION_ID = '24';
 
 // Remembers the user's manual SM/Policja choice while it's temporarily
 // forced to Policja by a stopAgresjiOnly category, so it can be restored.
@@ -40,6 +42,24 @@ export const initHandlers = (map) => {
 
   // initial validation on load
   validateExtensions();
+
+  const extensionsFieldset = document.getElementById('extensions');
+  if (extensionsFieldset) {
+    extensionsFieldset.addEventListener('change', function (e) {
+      const target = e.target;
+      if (target && target.matches && target.matches('input[type="checkbox"]')) {
+        if (target.id === `ex${STOPPING_EXTENSION_ID}` && target.checked) {
+          const parking = document.getElementById(`ex${PARKING_EXTENSION_ID}`);
+          if (parking) parking.checked = false;
+        }
+        if (target.id === `ex${PARKING_EXTENSION_ID}` && target.checked) {
+          const stopping = document.getElementById(`ex${STOPPING_EXTENSION_ID}`);
+          if (stopping) stopping.checked = false;
+        }
+        validateExtensions();
+      }
+    });
+  }
 
   bindSoftCommentValidation();
 
@@ -219,8 +239,10 @@ function validateExtensions() {
 
   const $extensions = document?.getElementById('extensions')
   const $labels = [... ($extensions?.querySelectorAll('label') || [])]
+  const $inputs = [... ($extensions?.querySelectorAll('input[type="checkbox"]') || [])]
 
   $labels.forEach(e => e.classList.remove('disabled'))
+  $inputs.forEach(e => { e.disabled = false })
 
   // Cache selectors to avoid repeated DOM queries
   const matchingExtensionSelector = `#ex${selectedCategory}`;
@@ -231,7 +253,40 @@ function validateExtensions() {
   if (matchingExtension) {
     // @ts-ignore
     matchingExtension.checked = false
+    matchingExtension.disabled = true
     matchingExtensionLabel?.classList.add('disabled')
+  }
+
+  const stoppingExtension = document.getElementById(`ex${STOPPING_EXTENSION_ID}`);
+  const parkingExtension = document.getElementById(`ex${PARKING_EXTENSION_ID}`);
+
+  if (stoppingExtension && parkingExtension) {
+    if (selectedCategory === STOPPING_EXTENSION_ID || selectedCategory === PARKING_EXTENSION_ID) {
+      stoppingExtension.checked = false;
+      parkingExtension.checked = false;
+      stoppingExtension.disabled = true;
+      parkingExtension.disabled = true;
+      document.querySelector(`label[for="ex${STOPPING_EXTENSION_ID}"]`)?.classList.add('disabled');
+      document.querySelector(`label[for="ex${PARKING_EXTENSION_ID}"]`)?.classList.add('disabled');
+    }
+
+    // Enforce mutual exclusion between "zakaz zatrzymywania" and "zakaz postoju".
+    if (stoppingExtension.checked && parkingExtension.checked) {
+      parkingExtension.checked = false;
+    }
+
+    const stoppingChecked = stoppingExtension.checked;
+    const parkingChecked = parkingExtension.checked;
+
+    if (stoppingChecked) {
+      parkingExtension.disabled = true;
+      document.querySelector(`label[for="ex${PARKING_EXTENSION_ID}"]`)?.classList.add('disabled');
+    }
+
+    if (parkingChecked) {
+      stoppingExtension.disabled = true;
+      document.querySelector(`label[for="ex${STOPPING_EXTENSION_ID}"]`)?.classList.add('disabled');
+    }
   }
 
   if (selectedCategory !== '0')
