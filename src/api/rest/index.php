@@ -29,6 +29,7 @@ require(INC_DIR . '/middleware/UserMiddleware.php');
 require(INC_DIR . '/middleware/AppMiddleware.php');
 require(INC_DIR . '/Twig.php');
 require(INC_DIR . '/integrations/Vision.php');
+require_once(INC_DIR . '/UserRemoval.php');
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -121,11 +122,11 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $name = getParam($params, 'name');
         $address = getParam($params, 'address');
         $msisdn = getParam($params, 'msisdn', '');
-        $edelivery = $this->getParam($params, 'edelivery', '');
+        $edelivery = getParam($params, 'edelivery', '');
         // No default -> leaves any previously saved preference untouched if absent.
         $stopAgresjiRaw = $params['stopAgresji'] ?? null;
         $stopAgresji = $stopAgresjiRaw === null ? null : ($stopAgresjiRaw === 'SA');
-        $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
+        $shareRecydywa = getParam($params, 'shareRecydywa', 'Y') == 'Y';
     
         /** @var \user\User $user */
         $user = $request->getAttribute('user');
@@ -141,6 +142,58 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         ->add(new AuthMiddleware());
     
     
+    // Dashboard (web /app) with texts already localized for the user's sex – see dashboardData().
+    $group->get('/dashboard', function (Request $request, Response $response) {
+        $response->getBody()->write(json_encode(dashboardData($request->getAttribute('user'))));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    // Passkeys (web /app/account): list + remove. Adding one needs WebAuthn in a native app
+    // (RP/origin association), so registration stays on the web for now.
+    $group->get('/passkeys', function (Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        $rows = array_map(fn($p) => [
+            'id' => $p['credential_id'],
+            'label' => $p['label'],
+            'createdAt' => $p['created_at'],
+            'lastUsedAt' => $p['last_used_at'],
+        ], \passkey\forEmail($user->getEmail()));
+        $response->getBody()->write(json_encode(['passkeys' => $rows]));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    $group->delete('/passkeys/{credentialId}', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        if (!\passkey\remove($args['credentialId'], $user->getEmail()))
+            throw new HttpNotFoundException($request, 'Nie znaleziono passkeya');
+        \telemetry\log('passkey_removed');
+        $response->getBody()->write(json_encode(['status' => 'OK']));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    // Self-service account deletion; the e-mail must be retyped (same as the web form, minus CSRF –
+    // a Bearer token isn't sent automatically by browsers).
+    $group->delete('/', function (Request $request, Response $response) {
+        $params = (array)$request->getParsedBody();
+        $user = $request->getAttribute('user');
+        if (!\admin\selfDelete($user, (string)($params['email'] ?? '')))
+            throw new HttpException($request, 'Wpisany adres e-mail nie zgadza się z adresem Twojego konta', 422);
+        $response->getBody()->write(json_encode(['status' => 'OK']));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
     $group->get('/apps', function (Request $request, Response $response) {
         $params = $request->getQueryParams();
         $status = getParam($params, 'status', 'all');
@@ -151,7 +204,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $user = $request->getAttribute('user');
         $apps = \user\apps($user, $status, $search, $limit, $offset);
         
-        $response->getBody()->write(json_encode($apps));
+        $response->getBody()->write(json_encode(array_map('applicationToRest', $apps)));
         return $response;
     })  ->add(new RegisteredMiddleware())
         ->add(new UserMiddleware())
@@ -162,7 +215,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
 
 $app->group('/api/rest/config', function (RouteCollectorProxy $group) { // CONFIG
     $CONFIG_FILES = Array(
-        'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', 'terms');
+        'badges', 'categories', 'category-groups', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', 'terms');
     
     $group->get('/', function (Request $request, Response $response) use ($CONFIG_FILES) {
         $response->getBody()->write(json_encode($CONFIG_FILES));
@@ -201,8 +254,8 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $user = $request->getAttribute('user');
         $application = Application::withUser($user);
         \app\save($application);
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        \telemetry\log('report_started', $application->id); // like the web /app/new
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     });
 
@@ -226,57 +279,62 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
             $application->user = '';
         }
     
-        $response->getBody()->write(json_encode($application));
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     })  ->add(new AppMiddleware(failOnWrongOwnership: false));
 
     $group->post('/{appId}', function (Request $request, Response $response, $args) {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
-    
+
         $plateId = getParam($params, 'plateId');
-        $address = getParam($params, 'address'); // Mazurska 37, Szczecin
-        $city = getParam($params, 'city');
-        $voivodeship = getParam($params, 'voivodeship');
-        $district = getParam($params, 'district');
+        $address = getParam($params, 'address'); // Mazurska 37, Szczecin (displayed address; web: `lokalizacja`)
         $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
-    
+
         $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
-    
-        $lat = getParam($params, 'lat');
-        $lng = getParam($params, 'lng');
+
         $comment = getParam($params, 'comment', '');
         $category = intval(getParam($params, 'category'));
-    
-        $witness = getParam($params, 'witness');
-    
-        $extensions = getParam($params, 'extensions', ''); // "6,7", "6", "", missing
-        $extensions = array_filter(explode(',', $extensions));
-    
+
+        // JSON `true`/`false` as well as "1"/"on"/"true" (HTML-form style) – a bare "false" string must not be truthy.
+        $witness = filter_var($params['witness'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        // "6,7" (legacy) or [6, 7]
+        $extensions = $params['extensions'] ?? '';
+        $extensions = array_filter(is_array($extensions) ? $extensions : explode(',', (string)$extensions));
+
+        // optional: ad hoc Policja/SM choice ('SA' | 'SM' or bool); null = keep the account default
+        $stopAgresji = $params['stopAgresji'] ?? null;
+        if ($stopAgresji !== null)
+            $stopAgresji = is_bool($stopAgresji) ? $stopAgresji : ($stopAgresji === 'SA');
+
+        // Same shape as the web form's hidden `address` JSON (ApplicationHandler::confirm):
+        // `address` = what the user sees, `addressGPS` = what the geocoder returned.
         $fullAddress = new JSONObject();
         $fullAddress->address = $address;
-        $fullAddress->city = $city;
-        $fullAddress->voivodeship = $voivodeship;
-        $fullAddress->lat = $lat;
-        $fullAddress->lng = $lng;
-        $fullAddress->district = $district;
-    
+        $fullAddress->addressGPS = $params['addressGPS'] ?? null;
+        foreach (['city', 'voivodeship', 'district', 'county', 'municipality', 'postcode', 'lat', 'lng'] as $field)
+            $fullAddress->$field = $params[$field] ?? null;
+
         $user = $request->getAttribute('user');
         
         \semaphore\withLock($appId, "restUpdate", function () use (
             $appId, $request, $response, $datetime, $dtFromPicture, $category, $fullAddress,
-            $plateId, $comment, $witness, $extensions, $user
+            $plateId, $comment, $witness, $extensions, $user, $stopAgresji
         ) {
             $application = \app\get($appId);
 
             try {
                 $application = updateApplication($application, $datetime, $dtFromPicture, $category, $fullAddress,
-                    $plateId, $comment, $witness, $extensions, $user);
+                    $plateId, $comment, $witness, $extensions, $user, $stopAgresji);
+            } catch (ValidationException $e) {
+                throw new HttpException($request, $e->getMessage(), 422, $e); // JsonErrorRenderer adds `field`
+            } catch (NotSendableException $e) {
+                throw new HttpException($request, $e->getMessage(), 409, $e);
             } catch (Exception $e) {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
             }
-            unset($application->browser);
-            $response->getBody()->write(json_encode($application));
+            $response->getBody()->write(json_encode(applicationToRest($application)));
         });
         return $response;
     })  ->add(new AppMiddleware());
@@ -290,47 +348,90 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         } catch (Exception $e) {
             throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
         }
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     })  ->add(new AppMiddleware());
 
 
     $group->post('/{appId}/image', function (Request $request, Response $response) {
-        $params = (array)$request->getParsedBody();
-    
-        $imageUri = getParam($params, 'carImage', -1);
-        $pictureType = 'carImage';
-        if ($imageUri == -1) {
-            $imageUri = getParam($params, 'contextImage');
-            $pictureType = 'contextImage';
+        $application = $request->getAttribute('application');
+        $user = $request->getAttribute('user');
+
+        try {
+            $up = imageUploadFromRequest($request); // same contract as the cookie API /api/app/{id}/image
+            $application = uploadImage($application->id, $up['pictureType'], $up['bytes'], $up['dateTime'],
+                $up['dtFromPicture'], $up['latLng'],
+                function (Application $app) use ($request) {
+                    if (!$app->isEditable())
+                        throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
+                },
+                $user);
+        } catch (MissingParamException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
         }
-    
-        list($type, $imageBytes) = explode(',', $imageUri);
-        
-        // valid only for $pictureType == 'carImage'
-        $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
-        $lat = getParam($params, 'lat', '');
-        $lng = getParam($params, 'lng', '');
-        $latLng = null;
-        if ($lat && $lng) $latLng = \geo\normalizeLatLng($lat, $lng);
-        $dtFromPicture = !!$dateTime;
-    
-        $imagemime = getimagesize($imageUri);
-        if (empty($imagemime['mime']) || strpos($imagemime['mime'], 'image/') !== 0)
-            throw new HttpBadRequestException($request, "Przekazany plik nie jest obrazkiem");
-    
-        if (strlen(rtrim($imageBytes, '=')) * 0.75 > 500000)
-            throw new HttpBadRequestException($request, "Zbyt duże zdjęcie (>500kb)");
-    
-        $ext = substr($imagemime['mime'], 6);
-        if (!in_array($ext, ['png', 'jpeg', 'jpg']))
-            throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
-        
-        $appId = $request->getAttribute('application')->id;
-        $application = uploadImage($appId, $pictureType, base64_decode($imageBytes, true), $dateTime, $dtFromPicture, $latLng);
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        \telemetry\log('report_edited', $application->id, ['type' => 'image']);
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    $group->delete('/{appId}/image/{image}', function (Request $request, Response $response, $args) {
+        $appId = $args['appId'];
+        $user = $request->getAttribute('user');
+        $application = \semaphore\withLock($appId, "deleteImage", function () use ($appId, $args, $request, $user) {
+            $application = \app\get($appId);
+            if ($application->email !== $user->getEmail())
+                throw new HttpForbiddenException($request, "Nie posiadasz zgłoszenia o ID $appId");
+            if (!$application->isEditable())
+                throw new HttpForbiddenException($request, "Zgłoszenie $appId nie może być edytowane");
+            return \app\save(removeApplicationImage($application, $args['image'])); // shared with cookie API
+        });
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    // "Potwierdź" (+ optional send) in one call – see finishApplication() in API.php.
+    $group->post('/{appId}/finish', function (Request $request, Response $response, $args) {
+        $appId = $args['appId'];
+        $params = (array)$request->getParsedBody();
+        $send = filter_var($params['send'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $user = $request->getAttribute('user');
+
+        try {
+            $result = finishApplication($appId, $user);
+        } catch (ValidationException $e) {
+            throw new HttpException($request, $e->getMessage(), 422, $e);
+        } catch (Exception $e) {
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
+        }
+        $application = $result['application'];
+
+        // sendMode: sent | manual (no automated channel for this SM/Policja – finish on the web) |
+        //           failed (automated channel exists but sending failed; report stays `confirmed`) | not_requested
+        $sendMode = 'not_requested';
+        $sendError = null;
+        if ($send) {
+            if (!$application->guessSMData()->automated()) {
+                $sendMode = 'manual';
+            } else {
+                try {
+                    $application = sendApplication($appId, $user);
+                    \telemetry\log('report_sent', $appId);
+                    $sendMode = 'sent';
+                } catch (Exception $e) {
+                    $sendMode = 'failed';
+                    $sendError = $e->getMessage();
+                }
+            }
+        }
+
+        $response->getBody()->write(json_encode([
+            'app' => applicationToRest($application),
+            'edited' => $result['edited'],
+            'appsCount' => $result['appsCount'],
+            'isPatron' => $result['isPatron'],
+            'sendMode' => $sendMode,
+            'sendError' => $sendError,
+        ]));
         return $response;
     })  ->add(new AppMiddleware());
 
@@ -344,8 +445,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         }
     
         $application = sendApplication($appId, $user);
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     })  ->add(new AppMiddleware());
 
@@ -356,6 +456,31 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
     ->add(new AuthMiddleware());
 
 $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
+    // Address text → coordinates + structured address (+ SM/Policja hints) in one call, so a typed
+    // address ("Ulica 10, Miasto" – the comma is required) gets the same data as a GPS point.
+    // Forward geocoding is shared with MCP create_report_draft (\geo\NominatimSearch).
+    $group->get('/search', function (Request $request, Response $response) {
+        $q = trim((string)($request->getQueryParams()['q'] ?? ''));
+        if ($q === '')
+            throw new HttpBadRequestException($request, "Brak wymaganego parametru 'q'");
+        try {
+            $coords = \geo\NominatimSearch($q);
+        } catch (Exception $e) {
+            throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
+        }
+        if (!is_array($coords))
+            throw new HttpNotFoundException($request, "Nie znaleziono adresu '$q' (format: „Ulica 10, Miasto”)");
+        $lat = (float)($coords['lat'] ?? $coords[0]);
+        $lng = (float)($coords['lng'] ?? $coords[1]);
+        try {
+            $result = \geo\Nominatim($lat, $lng);
+        } catch (Exception $e) {
+            throw new HttpNotFoundException($request, $e->getMessage(), $e);
+        }
+        $response->getBody()->write(json_encode(['lat' => $lat, 'lng' => $lng] + $result));
+        return $response;
+    });
+
     $group->get('/{lat},{lng}/g', function (Request $request, Response $response, $args) {
         $lat = $args['lat'];
         $lng = $args['lng'];
@@ -408,6 +533,19 @@ $app->group('/api/rest/recydywa', function (RouteCollectorProxy $group) { // REC
         }
 
         $response->getBody()->write(json_encode($result));
+        return $response;
+    });
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
+    ->add(new AuthMiddleware());
+
+$app->group('/api/rest/vehicle', function (RouteCollectorProxy $group) { // VEHICLE
+    // Editor preview of what \vehicle_info\refresh stores on save: make/model and the weight warning ({} when unknown).
+    $group->get('/{plateId}', function (Request $request, Response $response, $args) {
+        $info = \vehicle_info\lookup($args['plateId']);
+        $response->getBody()->write(json_encode($info ?? new \stdClass()));
         return $response;
     });
 })  ->add(new TermsConfirmedMiddleware())
