@@ -8,7 +8,7 @@ Requires authorization.
 
 ### GET `/api/rest/user/`
 
-Returns current user data.
+Returns current user data, `stats` and `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`).
 
 ### PATCH `/api/rest/user/`
 
