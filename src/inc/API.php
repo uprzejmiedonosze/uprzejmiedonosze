@@ -541,7 +541,7 @@ function finishApplication(string $appId, User $user): array {
  * Everything the dashboard (web /app, app.html.twig) shows, already localized for the user's sex
  * (levels/badges texts via sexify() and SEXSTRINGS) so API clients just render it.
  *
- * @return array{name: string, stats: array, introMsg: string, levels: list<array>, badges: list<array>}
+ * @return array{name: string, stats: array, introMsg: string, levels: list<array>, rank: array, badges: list<array>}
  */
 function dashboardData(User $user): array {
     global $LEVELS, $BADGES;
@@ -553,6 +553,24 @@ function dashboardData(User $user): array {
     $levels = [];
     foreach ($LEVELS as $id => $level)
         $levels[] = ['id' => (string)$id, 'desc' => $sex[$level->desc] ?? $level->desc, 'active' => (string)$id === $levelId];
+
+    // Rank as "N of M" plus what is missing for the next one (levels.json `points` = threshold of the
+    // drivers' penalty points collected by the user's reports), so clients don't need the level table.
+    $ids = array_map('strval', array_keys($LEVELS));
+    $pos = max(0, array_search($levelId, $ids, true) ?: 0);
+    $points = (int)($stats['points'] ?? 0);
+    $nextLevel = isset($ids[$pos + 1]) ? $LEVELS[$ids[$pos + 1]] ?? $LEVELS[(int)$ids[$pos + 1]] : null;
+    $rank = [
+        'index' => $pos + 1,
+        'total' => count($ids),
+        'desc' => $levels[$pos]['desc'] ?? '',
+        'points' => $points,
+        'next' => $nextLevel ? [
+            'desc' => $sex[$nextLevel->desc] ?? $nextLevel->desc,
+            'points' => $nextLevel->points,
+            'missing' => max(0, $nextLevel->points - $points),
+        ] : null,
+    ];
 
     $badges = [];
     foreach ($BADGES as $id => $badge) {
@@ -572,6 +590,7 @@ function dashboardData(User $user): array {
         'stats' => $stats,
         'introMsg' => sexify($LEVELS[$levelId]->introMsg ?? '', $sex),
         'levels' => $levels,
+        'rank' => $rank,
         'badges' => $badges,
     ];
 }
