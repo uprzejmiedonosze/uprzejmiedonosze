@@ -11,8 +11,6 @@ use Slim\Exception\HttpNotFoundException;
 
 class SessionApiHandler extends AbstractHandler {
 
-    private const MAX_IMAGE_UPLOAD_BYTES = 3 * 1_048_576;
-
     private function checkEditable(Request $request, Application $app) {
         if (!$app->isEditable())
             throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
@@ -93,75 +91,16 @@ class SessionApiHandler extends AbstractHandler {
             $application = \app\get($appId);
             $this->checkEditable($request, $application);
             $this->checkOwnership($request, $application);
-            $application = $this->removeImageFile($application, $imageId);
+            $application = removeApplicationImage($application, $imageId);
             return \app\save($application);
         });
         return $this->renderJson($response, $application);
     }
 
-    private function removeImageFile(Application $app, string $imageId): Application {
-        $rmFile = function(string $fileName): void {
-            $allowedBase = realpath(ROOT . 'cdn2');
-            $file = realpath(ROOT . $fileName);
-            if ($file && $allowedBase && str_starts_with($file, $allowedBase . '/')) {
-                @unlink($file); // nosemgrep: php.lang.security.unlink-use.unlink-use
-            }
-            \storage\delete($fileName);
-        };
-
-        isset($app->$imageId->url) && $rmFile($app->$imageId->url);
-        isset($app->$imageId->thumb) && $rmFile($app->$imageId->thumb);
-
-        if ($imageId === 'contextImage' && ($app->contextImage->galleryReady ?? false)) {
-            $thumb     = $app->contextImage->thumb;
-            $prefix    = \storage\cdnPrefix();
-            \storage\delete($prefix . '/gallery/' . \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV) . '.jpg');
-            \storage\delete($prefix . '/gallery/' . \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV) . '.jpg');
-        }
-
-        unset($app->$imageId);
-        return $app;
-    }
-
     public function image(Request $request, Response $response, $args): Response {
         $appId = $args['appId'];
-        $params = (array)$request->getParsedBody();
-        $uploadedFiles = $request->getUploadedFiles();
-
-        $limitMb = self::MAX_IMAGE_UPLOAD_BYTES / 1_048_576;
-        if (isset($uploadedFiles['image'])) {
-            $upload = $uploadedFiles['image'];
-            if ($upload->getError() !== UPLOAD_ERR_OK) {
-                throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
-            }
-            // Reject by declared size before buffering the stream into memory.
-            if ($upload->getSize() > self::MAX_IMAGE_UPLOAD_BYTES) {
-                $actualMb = round($upload->getSize() / 1_048_576, 1);
-                throw new Exception("Zbyt duże zdjęcie ({$actualMb}MB > {$limitMb}MB)", 400);
-            }
-            $imageBytes = $upload->getStream()->getContents();
-        } elseif (isset($params['image_data'])) {
-            // Backward compat: old JS client sent base64 data URI in image_data field.
-            $parts = explode(',', $params['image_data'], 2);
-            $imageBytes = base64_decode(count($parts) === 2 ? $parts[1] : $parts[0], true);
-            if ($imageBytes === false || strlen($imageBytes) === 0) {
-                throw new Exception("Brak pliku obrazka", 400);
-            }
-        } else {
-            throw new Exception("Brak pliku obrazka", 400);
-        }
-        $actualBytes = strlen($imageBytes);
-        if ($actualBytes > self::MAX_IMAGE_UPLOAD_BYTES) {
-            $actualMb = round($actualBytes / 1_048_576, 1);
-            throw new Exception("Zbyt duże zdjęcie ({$actualMb}MB > {$limitMb}MB)", 400);
-        }
-
-        $pictureType = $this->getParam($params, 'pictureType');
-
-        $dateTime = isset($params['dateTime']) ? $params['dateTime'] : null;
-        $dtFromPicture = isset($params['dtFromPicture']) ? $params['dtFromPicture'] == 'true' : null;
-        $latLng = isset($params['latLng']) ? $params['latLng'] : null;
-        $application = uploadImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng,
+        $up = imageUploadFromRequest($request); // shared with POST /api/rest/app/{id}/image
+        $application = uploadImage($appId, $up['pictureType'], $up['bytes'], $up['dateTime'], $up['dtFromPicture'], $up['latLng'],
             function (Application $application) use ($request) {
                 $this->checkEditable($request, $application);
                 $this->checkOwnership($request, $application);

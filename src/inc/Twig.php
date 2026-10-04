@@ -30,7 +30,8 @@ class TwigExtension extends AbstractExtension {
     public function getFilters() {
         return [
             new TwigFilter('cast_to_array', array($this, 'castToArray')),
-            new TwigFilter('asset_url', array($this, 'assetUrl'))
+            new TwigFilter('asset_url', array($this, 'assetUrl')),
+            new TwigFilter('sexify', fn(string $text, array $sex) => \sexify($text, $sex))
         ];
     }
 

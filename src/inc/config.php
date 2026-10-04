@@ -237,7 +237,15 @@ const SEXSTRINGS = Array (
         "Hurtowniczka" => "Hurtownik",
         "Pro" => "Pro",
         "wezwana" => "wezwana",
-        "zmieniłeś" => "zmieniłaś/eś"
+        "zmieniłeś" => "zmieniłaś/eś",
+        "trafilas" => "trafiłaś/eś",
+        "wkurzony" => "wkurzony/a",
+        "walczacy" => "walczący/a",
+        "poczatkujacy" => "początkujący/a",
+        "majacy" => "mający/a",
+        "profesjonalista" => "profesjonalistą/ką",
+        "ekspert" => "ekspertem/ką",
+        "hurtownik" => "hurtownikiem/hurtowniczką"
     ],
     'm' => [
         "bylam" => "byłem",
@@ -264,7 +272,15 @@ const SEXSTRINGS = Array (
         "Hurtowniczka" => "Hurtownik",
         "Pro" => "Pro",
         "wezwana" => "wezwany",
-        "zmieniłeś" => "zmieniłeś"
+        "zmieniłeś" => "zmieniłeś",
+        "trafilas" => "trafiłeś",
+        "wkurzony" => "wkurzony",
+        "walczacy" => "walczący",
+        "poczatkujacy" => "początkujący",
+        "majacy" => "mający",
+        "profesjonalista" => "profesjonalistą",
+        "ekspert" => "ekspertem",
+        "hurtownik" => "hurtownikiem"
     ],
     'f' => [
         "bylam" => "byłam",
@@ -291,7 +307,15 @@ const SEXSTRINGS = Array (
         "Hurtowniczka" => "Hurtowniczka",
         "Pro" => "Pro",
         "wezwana" => "wezwana",
-        "zmieniłeś" => "zmieniłaś"
+        "zmieniłeś" => "zmieniłaś",
+        "trafilas" => "trafiłaś",
+        "wkurzony" => "wkurzona",
+        "walczacy" => "walcząca",
+        "poczatkujacy" => "początkująca",
+        "majacy" => "mająca",
+        "profesjonalista" => "profesjonalistką",
+        "ekspert" => "ekspertką",
+        "hurtownik" => "hurtowniczką"
     ]
 );
 
