@@ -60,6 +60,11 @@ class DashboardTest extends DatabaseTestCase
         $this->assertSame('Obrońca zieleni', $d['badges'][0]['name']);
         $this->assertCount(5, $d['levels']);
         $this->assertTrue($d['levels'][0]['active']); // a fresh user is at level 0
+        $this->assertSame(1, $d['rank']['index']);
+        $this->assertSame(5, $d['rank']['total']);
+        $this->assertSame('Wkurzony', $d['rank']['desc']);
+        $this->assertSame('Początkujący', $d['rank']['next']['desc']);
+        $this->assertSame(1, $d['rank']['next']['missing']); // level 1 starts at 1 penalty point
     }
 
     public function testSelfDeleteRequiresMatchingEmail(): void
