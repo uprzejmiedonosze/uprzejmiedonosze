@@ -543,10 +543,10 @@ function finishApplication(string $appId, User $user): array {
  *
  * @return array{name: string, stats: array, introMsg: string, levels: list<array>, rank: array, badges: list<array>}
  */
-function dashboardData(User $user): array {
+function dashboardData(User $user, bool $fresh = false): array {
     global $LEVELS, $BADGES;
     $sex = $user->getSex();
-    $stats = \user\stats(true, $user);
+    $stats = \user\stats(!$fresh, $user); // $fresh skips the 24 h stats cache
     $levelId = (string)($stats['level'] ?? 0);
     $earned = $stats['badges'] ?? [];
 

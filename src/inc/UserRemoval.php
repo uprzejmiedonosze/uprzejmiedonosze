@@ -69,6 +69,9 @@ function removeUser($email, $dryRun=true){
     if(!$dryRun){
         \passkey\removeAllForEmail($email);
         \oauth\revokeAllForEmail($email);
+        // Cached stats (24 h) are keyed by e-mail: left behind they would show the deleted account's
+        // counters to whoever signs in with the same address next.
+        \cache\delete(\cache\Type::UserStats, $email);
     }
 
     __log("Zamazuję dane użytkownika w bazie");
