@@ -76,6 +76,7 @@ class AddStatsMiddleware implements MiddlewareInterface {
         $response = $handler->handle($request);
         $user = $request->getAttribute('user');
         $user->stats = \user\stats(true, $user);
+        $user->sexStrings = $user->getSex(); // gendered phrases for clients (web: config.sex), e.g. `bylam` = "byłem"/"byłam"/"byłam/em"
         $request = $request->withAttribute('user', $user);
         $response->getBody()->write(json_encode($user));
         return $response;
