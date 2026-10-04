@@ -8,7 +8,7 @@ Requires authorization.
 
 ### GET `/api/rest/user/`
 
-Returns current user data, `stats` and `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`).
+Returns current user data (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats` and `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`).
 
 ### PATCH `/api/rest/user/`
 
@@ -42,7 +42,7 @@ JSON body: `email` — the account's own e-mail, retyped as confirmation (mismat
 
 Everything the web `/app` dashboard shows, already localized for the user's sex (gendered level and
 badge names, `introMsg`; the `{token}` placeholders in `levels.json` are resolved server-side):
-`{name, stats, introMsg, levels[{id, desc, active}], badges[{id, name, desc, img, earned, former}]}`.
+`{name, stats, introMsg, levels[{id, desc, active}], rank, badges[{id, name, desc, img, earned, former}]}`; stats are always computed fresh (no cache).
 `introMsg` and badge `desc` may contain HTML.
 
 ### GET `/api/rest/user/passkeys`

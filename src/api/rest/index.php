@@ -144,7 +144,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
     
     // Dashboard (web /app) with texts already localized for the user's sex – see dashboardData().
     $group->get('/dashboard', function (Request $request, Response $response) {
-        $response->getBody()->write(json_encode(dashboardData($request->getAttribute('user'))));
+        $response->getBody()->write(json_encode(dashboardData($request->getAttribute('user'), fresh: true)));
         return $response;
     })  ->add(new RegisteredMiddleware())
         ->add(new UserMiddleware())
