@@ -78,6 +78,10 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
     SQL;
     if ($status == 'allWithDrafts') {
         $whereStatus = '';
+    } elseif ($status == 'active') { // what the web list shows by default: everything but archived (and drafts)
+        $whereStatus = <<<SQL
+            and json_extract(value, '$.status') not in ('ready', 'draft', 'archived')
+        SQL;
     } elseif ($status !== 'all') {
         $whereStatus = <<<SQL
             and json_extract(value, '$.status') = :status

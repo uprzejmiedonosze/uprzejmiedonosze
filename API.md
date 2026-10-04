@@ -59,7 +59,7 @@ Returns user's applications (each with `recipient`).
 
 GET params:
 
-  * `status` (optional, default 'all')
+  * `status` (optional, default 'all' = everything except drafts; 'active' = like 'all' without `archived`, the web list default; or a single status)
   * `search` (optional, default '%')
   * `limit` (optional, default 0)
   * `offset` (optional, default 0)
