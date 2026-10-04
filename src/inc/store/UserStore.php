@@ -124,6 +124,10 @@ function appsCursor(User $user, string $status = 'all', string $search = '', int
             $params[":status$i"] = $s;
         }
         $whereStatus = "and json_extract(value, '$.status') in (" . implode(',', $placeholders) . ')';
+    } elseif ($status == 'active') { // what the web list shows by default: everything but archived (and drafts)
+        $whereStatus = <<<SQL
+            and json_extract(value, '$.status') not in ('ready', 'draft', 'archived')
+        SQL;
     } elseif ($status !== 'all') {
         $whereStatus = <<<SQL
             and json_extract(value, '$.status') = :status
