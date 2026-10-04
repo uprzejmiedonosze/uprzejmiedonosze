@@ -5,6 +5,7 @@ require(__DIR__ . '/integrations/Geolocation.php');
 require_once(__DIR__ . '/integrations/VehicleInfo.php');
 
 use app\Application;
+use Psr\Http\Message\ServerRequestInterface;
 use \stdClass as stdClass;
 use \DateTime as DateTime;
 use \Exception as Exception;
@@ -15,6 +16,9 @@ use cache\Type;
 // the browser already resizes to these before upload; the server re-enforces them.
 const MAX_IMAGE_DIM = 1600;
 const JPEG_QUALITY = 85;
+
+/** Image upload cap shared by the cookie (/api/app) and JWT (/api/rest/app) image endpoints. */
+const MAX_IMAGE_UPLOAD_BYTES = 3 * 1_048_576;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -45,7 +49,24 @@ function updateApplication(
         throw new NotSendableException("Zgłoszenie '{$application->id}' nie posiada wymaganych zdjęć");
     }
 
-    $application->date = date_format(new DateTime(preg_replace('/[^T0-9: -]/', '', $date)), DT_FORMAT);
+    // Server-side mirror of the web form checks (src/js/new-app/validate-form.js,
+    // lib/validation.js), so every client (web, REST/mobile) gets the same rules.
+    // The web edit-window (dtMin) is deliberately not enforced: edits of old reports are allowed.
+    if (mb_strlen(cleanWhiteChars((string)$plateId)) < 3)
+        throw new \ValidationException('plateId', 'Podaj numer rejestracyjny (min. 3 znaki)');
+    if (empty(trim((string)($address->address ?? ''))))
+        throw new \ValidationException('address', 'Podaj adres lub wskaż go na mapie');
+    try {
+        $dateParsed = new DateTime(preg_replace('/[^T0-9: -]/', '', (string)$date));
+    } catch (\Exception $e) {
+        throw new \ValidationException('datetime', 'Niepoprawna data i godzina zgłoszenia');
+    }
+    if ($dateParsed > (new DateTime())->modify('+5 minutes'))
+        throw new \ValidationException('datetime', 'Data zgłoszenia nie może być z przyszłości');
+    if ($category === 0 && empty(trim((string)$comment)))
+        throw new \ValidationException('comment', 'Dla kategorii „inne” komentarz jest wymagany');
+
+    $application->date = date_format($dateParsed, DT_FORMAT);
     $application->dtFromPicture = (bool) $dtFromPicture;
 
     $application->category = $category;
@@ -309,4 +330,248 @@ function resize_image($file, $w, $h, $crop = FALSE) {
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
     return $dst;
+}
+
+
+/**
+ * Parses an image upload request — shared by the cookie API
+ * (SessionApiHandler::image, /api/app/{id}/image) and the JWT REST API
+ * (POST /api/rest/app/{id}/image), so both accept exactly the same contract:
+ *
+ *  - multipart `image` file, or `image_data` (base64 data URI, legacy web client),
+ *    or — legacy REST contract — a `carImage` / `contextImage` / `thirdImage`
+ *    data-URI field, whose name doubles as the picture type;
+ *  - `pictureType`: contextImage | carImage | thirdImage (required unless implied by the legacy field);
+ *  - optional (carImage): `dateTime` ("2018-02-02T19:48:10"), `dtFromPicture` ("true"/true),
+ *    `latLng` ("53.4,14.5") or `lat` + `lng`.
+ *
+ * @return array{bytes: string, pictureType: string, dateTime: ?string, dtFromPicture: ?bool, latLng: ?string}
+ * @throws Exception (code 400) on a missing/oversized/undecodable file
+ */
+function imageUploadFromRequest(ServerRequestInterface $request): array {
+    $params = (array)$request->getParsedBody();
+    $uploadedFiles = $request->getUploadedFiles();
+    $limitMb = MAX_IMAGE_UPLOAD_BYTES / 1_048_576;
+
+    $pictureType = $params['pictureType'] ?? null;
+    $bytes = null;
+
+    if (isset($uploadedFiles['image'])) {
+        $upload = $uploadedFiles['image'];
+        if ($upload->getError() !== UPLOAD_ERR_OK) {
+            throw new Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
+        }
+        // Reject by declared size before buffering the stream into memory.
+        if ($upload->getSize() > MAX_IMAGE_UPLOAD_BYTES) {
+            $actualMb = round($upload->getSize() / 1_048_576, 1);
+            throw new Exception("Zbyt duże zdjęcie ({$actualMb}MB > {$limitMb}MB)", 400);
+        }
+        $bytes = $upload->getStream()->getContents();
+    } else {
+        // data-URI: `image_data` (old web client) or a legacy REST field named after the picture type.
+        $dataUri = $params['image_data'] ?? null;
+        if ($dataUri === null) {
+            foreach (['carImage', 'contextImage', 'thirdImage'] as $slot) {
+                if (isset($params[$slot])) {
+                    $dataUri = $params[$slot];
+                    $pictureType ??= $slot;
+                    break;
+                }
+            }
+        }
+        if ($dataUri !== null) {
+            $parts = explode(',', $dataUri, 2);
+            $bytes = base64_decode(count($parts) === 2 ? $parts[1] : $parts[0], true);
+        }
+    }
+
+    if ($bytes === null || $bytes === false || strlen($bytes) === 0) {
+        throw new Exception("Brak pliku obrazka", 400);
+    }
+    if (strlen($bytes) > MAX_IMAGE_UPLOAD_BYTES) {
+        $actualMb = round(strlen($bytes) / 1_048_576, 1);
+        throw new Exception("Zbyt duże zdjęcie ({$actualMb}MB > {$limitMb}MB)", 400);
+    }
+    if ($pictureType === null) {
+        throw new MissingParamException('pictureType');
+    }
+
+    $dateTime = $params['dateTime'] ?? null;
+    $dtFromPicture = isset($params['dtFromPicture'])
+        ? in_array($params['dtFromPicture'], ['true', true, '1', 1], true)
+        : null;
+    // The legacy REST contract implied dtFromPicture from the presence of dateTime.
+    if ($dtFromPicture === null && !empty($dateTime) && !isset($params['pictureType'])) {
+        $dtFromPicture = true;
+    }
+    $latLng = $params['latLng'] ?? null;
+    if ($latLng === null && !empty($params['lat']) && !empty($params['lng'])) {
+        $latLng = \geo\normalizeLatLng($params['lat'], $params['lng']);
+    }
+
+    return [
+        'bytes' => $bytes,
+        'pictureType' => $pictureType,
+        'dateTime' => $dateTime,
+        'dtFromPicture' => $dtFromPicture,
+        'latLng' => $latLng,
+    ];
+}
+
+/**
+ * Removes one image slot (contextImage | carImage | thirdImage) from an
+ * application: files on disk/storage, gallery copies, and the slot itself.
+ * Shared by the cookie API (DELETE /api/app/{id}/image/{image}) and the JWT
+ * REST API (DELETE /api/rest/app/{id}/image/{image}). Does NOT save.
+ */
+function removeApplicationImage(Application $app, string $imageId): Application {
+    if (!in_array($imageId, ['contextImage', 'carImage', 'thirdImage'], true)) {
+        throw new Exception("Nieznany rodzaj zdjęcia '$imageId'", 400);
+    }
+
+    $rmFile = function(string $fileName): void {
+        $allowedBase = realpath(ROOT . 'cdn2');
+        $file = realpath(ROOT . $fileName);
+        if ($file && $allowedBase && str_starts_with($file, $allowedBase . '/')) {
+            @unlink($file); // nosemgrep: php.lang.security.unlink-use.unlink-use
+        }
+        \storage\delete($fileName);
+    };
+
+    isset($app->$imageId->url) && $rmFile($app->$imageId->url);
+    isset($app->$imageId->thumb) && $rmFile($app->$imageId->thumb);
+
+    if ($imageId === 'contextImage' && ($app->contextImage->galleryReady ?? false)) {
+        $thumb     = $app->contextImage->thumb;
+        $prefix    = \storage\cdnPrefix();
+        \storage\delete($prefix . '/gallery/' . \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV) . '.jpg');
+        \storage\delete($prefix . '/gallery/' . \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV) . '.jpg');
+    }
+
+    unset($app->$imageId);
+    return $app;
+}
+
+
+/**
+ * Who the report will go to: shared by every REST response that returns an
+ * application, so clients don't need the SM/Policja resolution logic
+ * (web: _application-short-details.html.twig, nowe-zgloszenie `#unitToggle`).
+ *
+ * @return array{key: ?string, name: string, shortName: string, isPolice: bool, automated: bool, unknown: bool, stopAgresjiForced: bool}|null
+ */
+function recipientData(Application $application): ?array {
+    try {
+        $sm = $application->guessSMData();
+        return [
+            'key' => $application->smCity ?? null,
+            'name' => $sm->getName(),
+            'shortName' => $sm->getShortName(),
+            'isPolice' => $sm->isPolice(),
+            'automated' => $sm->automated(),
+            'unknown' => $sm->unknown(),
+            'stopAgresjiForced' => (bool)($application->stopAgresjiForced ?? false),
+        ];
+    } catch (\Throwable $e) {
+        return null; // never break a listing because of an unresolvable SM
+    }
+}
+
+/** Application as returned by the JWT REST API: raw JSON plus derived fields (`recipient`). */
+function applicationToRest(Application $application): array {
+    $data = $application->jsonSerialize();
+    unset($data['browser']);
+    $data['recipient'] = recipientData($application);
+    return $data;
+}
+
+/**
+ * "Potwierdź" step shared by the web (POST /app/done → ApplicationHandler::finish)
+ * and the REST API (POST /api/rest/app/{id}/finish): status → confirmed (assigns
+ * the report number) plus every side effect the web has always had — telemetry,
+ * last location, apps counter, recidivism queue and stats cache. Doing these only
+ * in one entry point made account/rank/recydywa drift between web and mobile.
+ * Does NOT send the report (see sendApplication()).
+ *
+ * @return array{application: Application, edited: bool, changed: bool, appsCount: int, isPatron: bool}
+ * @throws Exception 403 not an owner, 422 not saved via the confirm step / missing photos
+ */
+function finishApplication(string $appId, User $user): array {
+    $result = \semaphore\withLock($appId, "finish", function () use ($appId, $user) {
+        $application = \app\get($appId);
+        if ($application->email !== $user->getEmail())
+            throw new Exception("Nie posiadasz zgłoszenia o ID $appId", 403);
+        if (!$application->isEditable()) // already finished (double submit)
+            return [$application, false, false];
+        if (!in_array($application->status, ['ready', 'confirmed'], true))
+            throw new \ValidationException('status', "Zgłoszenie '$appId' nie zostało jeszcze zapisane (status '{$application->status}')");
+        if (!$application->hasRequiredImages())
+            throw new \ValidationException('images', "Zgłoszenie '$appId' nie posiada wymaganych zdjęć");
+
+        $edited = $application->hasNumber();
+        $application->setStatus("confirmed");
+        return [\app\save($application), $edited, true]; // save also assigns the number
+    });
+    [$application, $edited, $changed] = $result;
+
+    if (!$changed) {
+        return ['application' => $application, 'edited' => false, 'changed' => false,
+            'appsCount' => (int)$user->appsCount, 'isPatron' => $user->isPatron()];
+    }
+
+    \telemetry\log('report_finished', $application->id);
+
+    $user->setLastLocation($application->getLatLng());
+    $user->appsCount = $application->seq;
+    \user\save($user);
+
+    \recydywa\update($application->carInfo->plateId);
+    \user\stats(false, $user); // update cache
+
+    if ($edited) {
+        $application->address->mapImage = null;
+    }
+
+    return ['application' => $application, 'edited' => $edited, 'changed' => true,
+        'appsCount' => (int)$user->appsCount, 'isPatron' => $user->isPatron()];
+}
+
+
+/**
+ * Everything the dashboard (web /app, app.html.twig) shows, already localized for the user's sex
+ * (levels/badges texts via sexify() and SEXSTRINGS) so API clients just render it.
+ *
+ * @return array{name: string, stats: array, introMsg: string, levels: list<array>, badges: list<array>}
+ */
+function dashboardData(User $user): array {
+    global $LEVELS, $BADGES;
+    $sex = $user->getSex();
+    $stats = \user\stats(true, $user);
+    $levelId = (string)($stats['level'] ?? 0);
+    $earned = $stats['badges'] ?? [];
+
+    $levels = [];
+    foreach ($LEVELS as $id => $level)
+        $levels[] = ['id' => (string)$id, 'desc' => $sex[$level->desc] ?? $level->desc, 'active' => (string)$id === $levelId];
+
+    $badges = [];
+    foreach ($BADGES as $id => $badge) {
+        $former = $id === 'patron' && !in_array('patron', $earned, true) && in_array('former_patron', $earned, true);
+        $badges[] = [
+            'id' => $id,
+            'name' => $former ? $sex['Była patronka'] : ($sex[$badge['name']] ?? $badge['name']),
+            'desc' => $badge['desc'], // may contain links (HTML)
+            'img' => $badge['img'] ?? null,
+            'earned' => in_array($id, $earned, true),
+            'former' => $former,
+        ];
+    }
+
+    return [
+        'name' => $user->getFirstName(),
+        'stats' => $stats,
+        'introMsg' => sexify($LEVELS[$levelId]->introMsg ?? '', $sex),
+        'levels' => $levels,
+        'badges' => $badges,
+    ];
 }

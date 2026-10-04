@@ -16,6 +16,22 @@ use app\Application;
 use user\User;
 
 /**
+ * Self-service "Skasuj konto", shared by the web form (UserHandler::deleteAccount, session + CSRF)
+ * and the REST API (DELETE /api/rest/user/, Bearer token): the user must retype their own e-mail.
+ * Returns false (nothing deleted) when the typed e-mail doesn't match.
+ */
+function selfDelete(User $user, string $typedEmail): bool {
+    $email = $user->getEmail();
+    if (mb_strtolower(trim($typedEmail)) !== mb_strtolower($email))
+        return false;
+
+    removeUser($email, dryRun: false);
+    farewellEmail($user, selfService: true, dryRun: false);
+    \telemetry\log('user_self_deleted');
+    return true;
+}
+
+/**
  * Shared footer for every retention/removal e-mail (warnings + farewell, cron and
  * self-service). Starts with the standard "-- " signature-delimiter (dash-dash-space)
  * mail clients use to strip signatures from quoted replies — the trailing space matters.

@@ -31,9 +31,31 @@ POST params (JSON body):
   * `stopAgresji` (optional, default 'SM', can be 'SA')
   * `shareRecydywa` (optional, default 'Y')
 
+### DELETE `/api/rest/user/`
+
+Self-service account deletion (same as the web "Skasuj konto"): removes reports, photos, passkeys and
+OAuth connections, sends the farewell e-mail. Irreversible.
+
+JSON body: `email` — the account's own e-mail, retyped as confirmation (mismatch → 422).
+
+### GET `/api/rest/user/dashboard`
+
+Everything the web `/app` dashboard shows, already localized for the user's sex (gendered level and
+badge names, `introMsg`; the `{token}` placeholders in `levels.json` are resolved server-side):
+`{name, stats, introMsg, levels[{id, desc, active}], badges[{id, name, desc, img, earned, former}]}`.
+`introMsg` and badge `desc` may contain HTML.
+
+### GET `/api/rest/user/passkeys`
+
+Returns `{passkeys: [{id, label, createdAt, lastUsedAt}]}`.
+
+### DELETE `/api/rest/user/passkeys/{id}`
+
+Removes one of the user's passkeys. (Registering a passkey is only available on the web for now.)
+
 ### GET `/api/rest/user/apps`
 
-Returns user's applications.
+Returns user's applications (each with `recipient`).
 
 GET params:
 
@@ -45,6 +67,13 @@ GET params:
 ## Application endpoints
 
 Requires authorization.
+
+All application endpoints return the application JSON plus a derived `recipient` object
+(`{key, name, shortName, isPolice, automated, unknown, stopAgresjiForced}`) — who the report goes to.
+`GET /api/rest/user/apps` returns `recipient` for every item too. Errors are `{error, status}`;
+validation errors (HTTP 422) also carry `field` (`plateId`, `address`, `datetime`, `comment`,
+`status`, `images`). These endpoints share their implementation (`src/inc/API.php`) with the
+cookie-based web API (`/api/app/*`), so both behave the same.
 
 ### POST `/api/rest/app/new`
 
@@ -58,23 +87,23 @@ Returns application data by id.
 
 ### POST `/api/rest/app/{appId}`
 
-Updates application details.
+Saves the report form (web: "Dalej" → `/app/confirm`); status becomes `ready`. Requires both
+photos to be uploaded already (otherwise 409).
 
-POST params:
+POST params (JSON body):
 
-  * `plateId` 
-  * `address`
-  * `city`
-  * `voivodeship`
-  * `district`
+  * `plateId` — min. 3 characters
+  * `address` — the address shown to the user (web: `lokalizacja`), required
+  * `addressGPS` (optional) — what the geocoder returned
+  * `city`, `voivodeship`, `district`, `county`, `municipality`, `postcode` (optional)
+  * `lat`, `lng` (optional)
   * `dtFromPicture` (1|0)
-  * `datetime`
-  * `lat`
-  * `lng`
-  * `comment` (optional, default '')
+  * `datetime` — not in the future
+  * `comment` (optional, default ''; required for category 0)
   * `category`
-  * `witness`
-  * `extensions` (optional, comma-separated list like "6,7")
+  * `witness` (optional bool, default false)
+  * `extensions` (optional) — array `[6, 7]` or comma-separated string `"6,7"`
+  * `stopAgresji` (optional) — `"SA"` (Policja) / `"SM"`, or bool; remembered as the account default
 
 ### PATCH `/api/rest/app/{appId}/status/{status}`
 
@@ -82,14 +111,38 @@ Changes application status.
 
 ### POST `/api/rest/app/{appId}/image`
 
-Uploads an image to the given app id.
+Uploads one photo (≤ 3 MB, JPEG/PNG; stored ≤ 1600 px). `carImage` runs plate recognition (ALPR)
+and fills `carInfo`. Only editable applications accept uploads.
 
-POST params:
+Preferred contract — `multipart/form-data`:
 
-  * `carImage` OR `contextImage` (image Data URI)
-  * `dateTime` (optional, valid only for `carImage`) application event date and time, in ISO format: "2018-02-02T19:48:10"
-  * `lat` (optional)
-  * `lng` (optional)
+  * `image` — the file
+  * `pictureType` — `contextImage` | `carImage` | `thirdImage`
+  * `dateTime` (optional, `carImage` only) — ISO, e.g. "2018-02-02T19:48:10"
+  * `dtFromPicture` (optional) — `true` when `dateTime` comes from the photo
+  * `latLng` ("53.4,14.5") or `lat` + `lng` (optional, `carImage` only)
+
+Legacy contract (still supported) — JSON/form body with a data URI in `carImage`, `contextImage`
+or `thirdImage` (the field name is the picture type) plus `dateTime`, `lat`, `lng`.
+
+### DELETE `/api/rest/app/{appId}/image/{image}`
+
+Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or drop the optional third one).
+
+### POST `/api/rest/app/{appId}/finish`
+
+"Potwierdź" — the report must have been saved with `POST /api/rest/app/{appId}` (status `ready`).
+Sets status `confirmed` (assigns the report number `UD/x/y`) and performs the same side effects as the
+web `/app/done`: last location, apps counter, recidivism, stats cache. Safe to repeat.
+
+POST params (JSON body):
+
+  * `send` (optional bool, default false) — also send it right away (only when the recipient has an automated channel)
+
+Response: `{ app, edited, appsCount, isPatron, sendMode, sendError }` where `sendMode` is
+`sent` | `manual` (recipient has no automated channel — finish on the web, `/app/send`) |
+`failed` (automated channel exists but sending failed; report stays `confirmed`, see `sendError`) |
+`not_requested`.
 
 ### PATCH `/api/rest/app/{appId}/send`
 
@@ -98,6 +151,12 @@ Sends an email with the application to police/city-guards station.
 ## Geolocation endpoints
 
 Requires authorization.
+
+### GET `/api/rest/geo/search?q=`
+
+Forward geocoding of a typed address (`q` = "Ulica 10, Miasto" — the comma/locality is required).
+Returns `{lat, lng, address, sm, sa}` (same shape as the reverse-geocoding endpoints plus the
+coordinates), or 404 when nothing was found.
 
 ### GET `/api/rest/geo/{lat},{lng}/g`
 
@@ -110,6 +169,17 @@ Reverse geocoding using Nominatim API.
 ### GET `/api/rest/geo/{lat},{lng}/m`
 
 Reverse geocoding using MapBox API.
+
+## Vehicle endpoint
+
+Requires authorization, registration and confirmed terms.
+
+### GET `/api/rest/vehicle/{plateId}`
+
+Editor preview of what the server stores on save (`\vehicle_info\refresh`, parkowanie.info, cached): returns
+`{plateId, brand, model, grossVehicleWeight, isHeavyVehicle, warning}`, or `{}` when the plate is unknown or the
+source is unavailable. The make/model is never written into `comment`: the server renders it after the plate
+("ZS12331 (pojazd marki Volvo XC60)").
 
 ## Vision endpoints
 

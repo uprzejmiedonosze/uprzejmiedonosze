@@ -176,3 +176,17 @@ function getCorsOrigin(\Psr\Http\Message\ServerRequestInterface $request): ?stri
 
     return null;
 }
+
+
+/**
+ * Gender-aware text, the PHP twin of Twig's `config.sex[...]` lookups:
+ *  - `{key}` tokens are replaced with $sex[key] (SEXSTRINGS entry for the user's sex),
+ *  - used by the web (`sexify` Twig filter) and the REST dashboard, so levels.json/badges.json
+ *    keep ONE text with tokens instead of per-gender copies.
+ * Unknown tokens are left untouched (visible, so a missing SEXSTRINGS key is noticed).
+ *
+ * @param array<string,string> $sex
+ */
+function sexify(string $text, array $sex): string {
+    return preg_replace_callback('/\{(\w+)\}/u', fn($m) => $sex[$m[1]] ?? $m[0], $text);
+}

@@ -79,16 +79,9 @@ class UserHandler extends AbstractHandler {
 
         /** @var \user\User $user */
         $user = $request->getAttribute('user');
-        $email = $user->getEmail();
-
-        $typedEmail = mb_strtolower(trim((string) ($body['email'] ?? '')));
-        if ($typedEmail !== mb_strtolower($email)) {
+        if (!\admin\selfDelete($user, (string) ($body['email'] ?? ''))) { // shared with DELETE /api/rest/user/
             return AbstractHandler::redirect('/app/account?update&error=email');
         }
-
-        \admin\removeUser($email, dryRun: false);
-        \admin\farewellEmail($user, selfService: true, dryRun: false);
-        \telemetry\log('user_self_deleted');
 
         // Same session teardown as /logout.html — the account (and its session) is gone.
         unset($_SESSION['token']);
