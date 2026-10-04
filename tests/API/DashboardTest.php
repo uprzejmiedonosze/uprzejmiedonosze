@@ -73,4 +73,21 @@ class DashboardTest extends DatabaseTestCase
         $this->assertFalse(\admin\selfDelete($user, 'ktos-inny@example.com'));
         $this->assertSame('dash-del@example.com', \user\get('dash-del@example.com')->getEmail()); // still there
     }
+
+    public function testFreshBypassesTheStatsCache(): void
+    {
+        $user = $this->userNamed('Jan Kowalski', 'dash-fresh@example.com');
+        $before = dashboardData($user)['stats']['active'] ?? 0; // fills the 24 h cache
+
+        $app = \app\Application::withUser($user);
+        $app->statusHistory = [];
+        $app->comments = [];
+        $app->extensions = [];
+        $app->status = 'confirmed';
+        \app\save($app);
+
+        $this->assertSame($before, dashboardData($user)['stats']['active'] ?? 0, 'cached stats are stale by design');
+        $this->assertSame($before + 1, dashboardData($user, fresh: true)['stats']['active'] ?? 0);
+        $this->assertSame($before + 1, dashboardData($user)['stats']['active'] ?? 0, 'fresh also refreshes the cache');
+    }
 }
