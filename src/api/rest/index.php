@@ -87,7 +87,8 @@ $app->add(function ($request, $handler) {
             ->withHeader('Access-Control-Allow-Credentials', 'true');
     }
 
-    return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
+    // JSON by default; a handler that sets its own type (e.g. the PNG map preview) keeps it
+    return $response->hasHeader('Content-Type') ? $response : $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
 $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
@@ -456,6 +457,21 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
     ->add(new AuthMiddleware());
 
 $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
+    // Static map preview for the report form (Mapbox Static Images through the backend: the token stays
+    // server-side, and the app gets a plain PNG). ?lat=&lng= puts a pin there; without them all of Poland.
+    $group->get('/map', function (Request $request, Response $response) {
+        $q = $request->getQueryParams();
+        $lat = isset($q['lat'], $q['lng']) && is_numeric($q['lat']) && is_numeric($q['lng']) ? (float)$q['lat'] : null;
+        $lng = $lat !== null ? (float)$q['lng'] : null;
+        $png = \geo\staticMap($lat, $lng, (int)($q['w'] ?? 600), (int)($q['h'] ?? 300));
+        if ($png === null)
+            throw new HttpNotFoundException($request, 'Podgląd mapy jest chwilowo niedostępny');
+        $response->getBody()->write($png);
+        return $response
+            ->withHeader('Content-Type', 'image/png')
+            ->withHeader('Cache-Control', 'private, max-age=86400');
+    });
+
     // Address text → coordinates + structured address (+ SM/Policja hints) in one call, so a typed
     // address ("Ulica 10, Miasto" – the comma is required) gets the same data as a GPS point.
     // Forward geocoding is shared with MCP create_report_draft (\geo\NominatimSearch).

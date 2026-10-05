@@ -152,6 +152,12 @@ Sends an email with the application to police/city-guards station.
 
 Requires authorization.
 
+### GET `/api/rest/geo/map?lat=&lng=&w=&h=`
+
+Static map preview (PNG, Mapbox outdoors style, via the backend) for the report form. With `lat`/`lng` a pin
+is drawn there; without them the map shows all of Poland. `w`/`h` default to 600×300 (max 640). Cached for a
+day (`Cache-Control: private`); 404 when Mapbox is unavailable.
+
 ### GET `/api/rest/geo/search?q=`
 
 Forward geocoding of a typed address (`q` = "Ulica 10, Miasto" — the comma/locality is required).
