@@ -594,3 +594,45 @@ function dashboardData(User $user, bool $fresh = false): array {
         'badges' => $badges,
     ];
 }
+
+/**
+ * What the confirmation step shows before a report is sent/saved (web: potwierdz.html.twig), built from
+ * the same Application methods the template uses so the gendered phrases and the formal text match.
+ * Clients render it as is: formal text, witness statement, short address, recipient and the sender block.
+ *
+ * @return array<string, mixed>
+ */
+function confirmationData(Application $application): array {
+    $sm = $application->guessSMData();
+    $sex = $application->guessUserSex();
+    $witness = (bool)($application->statements->witness ?? false);
+    $bylas = $sex['bylas'];
+    $user = $application->user;
+
+    return [
+        // category formal text + extensions + the user's comment (plain text; the web only turns URLs into links)
+        'body' => trim($application->getCategory()->formal . ' ' . $application->getExtensionsText()
+            . ' ' . ($application->userComment ?? '')),
+        'witness' => $witness
+            ? mb_convert_case($bylas, MB_CASE_TITLE_SIMPLE) . ' świadkiem parkowania.'
+            : "Nie $bylas świadkiem parkowania.",
+        'shortAddress' => $application->getShortAddress(),
+        'plateId' => $application->carInfo->plateId ?? null,
+        // the vehicle frame is only drawn when the plate on the photo is the one the user confirmed
+        'vehicleBox' => ($application->shouldIncludePlateImage() && isset($application->carInfo->vehicleBox->x))
+            ? (array)$application->carInfo->vehicleBox : null,
+        'recipient' => [
+            'name' => $sm->getName(),
+            'shortName' => $sm->getShortName(),
+            'automated' => (bool)$sm->automated(),
+            'unknown' => (bool)$sm->unknown(),
+        ],
+        'sender' => [
+            'name' => $user->name ?? '',
+            'email' => $application->email,
+            'address' => $user->address ?? '',
+            'msisdn' => $user->msisdn ?? '',
+            'edelivery' => $user->edelivery ?? '',
+        ],
+    ];
+}
