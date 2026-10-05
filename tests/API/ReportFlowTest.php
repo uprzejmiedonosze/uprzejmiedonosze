@@ -193,4 +193,32 @@ class ReportFlowTest extends DatabaseTestCase
         }
         $this->assertTrue($data['recipient']['isPolice']); // a fresh user defaults to Policja (see ApplicationTest::testWithUser)
     }
+
+    public function testConfirmationDataMatchesTheWebConfirmationPage(): void
+    {
+        $user = $this->savedUser();
+        $user->data->name = 'Anna Kowalska';
+        \user\save($user);
+        $app = $this->appWithImages($user);
+        $app->user->sex = 'f'; // feminine phrases
+        $app->category = 26;
+        $app->userComment = 'Stoi od rana.';
+        $app->carInfo = new \stdClass();
+        $app->carInfo->plateId = 'ZS12345';
+        $app->address->address = 'Mazurska 37, Szczecin';
+        $app->address->city = 'Szczecin';
+
+        $c = confirmationData($app);
+        $this->assertStringStartsWith('Pojazd był zaparkowany częściowo na drodze dla pieszych', $c['body']);
+        $this->assertStringEndsWith('Stoi od rana.', $c['body']);
+        $this->assertSame('Nie byłaś świadkiem parkowania.', $c['witness']);
+        $this->assertSame('ZS12345', $c['plateId']);
+        $this->assertSame('Anna Kowalska', $c['sender']['name']);
+        $this->assertArrayHasKey('automated', $c['recipient']);
+
+        $app->statements->witness = true;
+        $this->assertSame('Byłaś świadkiem parkowania.', confirmationData($app)['witness']);
+        $app->user->sex = 'm';
+        $this->assertSame('Byłeś świadkiem parkowania.', confirmationData($app)['witness']);
+    }
 }

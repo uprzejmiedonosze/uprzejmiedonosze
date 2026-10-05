@@ -129,6 +129,14 @@ or `thirdImage` (the field name is the picture type) plus `dateTime`, `lat`, `ln
 
 Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or drop the optional third one).
 
+### GET `/api/rest/app/{appId}/confirmation`
+
+Everything the confirmation step shows before sending/saving (web "Sprawdź przed wysłaniem"), built with the
+same methods as the web template so gendered phrases match: `body` (formal text + extensions + comment),
+`witness` ("Nie byłeś/byłaś świadkiem parkowania."), `shortAddress`, `plateId`, `vehicleBox` (pixels, or null when
+the confirmed plate differs from the one read from the photo), `recipient {name, shortName, automated, unknown}`
+and `sender {name, email, address, msisdn, edelivery}`. Owner only.
+
 ### POST `/api/rest/app/{appId}/finish`
 
 "Potwierdź" — the report must have been saved with `POST /api/rest/app/{appId}` (status `ready`).
