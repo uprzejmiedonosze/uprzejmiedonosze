@@ -63,8 +63,10 @@ function updateApplication(
     }
     if ($dateParsed > (new DateTime())->modify('+5 minutes'))
         throw new \ValidationException('datetime', 'Data zgłoszenia nie może być z przyszłości');
-    if ($category === 0 && empty(trim((string)$comment)))
-        throw new \ValidationException('comment', 'Dla kategorii „inne” komentarz jest wymagany');
+    // jak na webie (validation.js checkCommentvalue): automatyczna linia „Pojazd marki XXX.” nie liczy się jako opis
+    $ownComment = trim(preg_replace('/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/i', '', trim((string)$comment)));
+    if ($category === 0 && mb_strlen($ownComment) <= 10)
+        throw new \ValidationException('comment', 'Wybierz rodzaj wykroczenia z listy albo opisz je w polu komentarza');
 
     $application->date = date_format($dateParsed, DT_FORMAT);
     $application->dtFromPicture = (bool) $dtFromPicture;
