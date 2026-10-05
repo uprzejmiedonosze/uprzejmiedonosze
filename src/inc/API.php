@@ -54,8 +54,14 @@ function updateApplication(
     // The web edit-window (dtMin) is deliberately not enforced: edits of old reports are allowed.
     if (mb_strlen(cleanWhiteChars((string)$plateId)) < 3)
         throw new \ValidationException('plateId', 'Podaj numer rejestracyjny (min. 3 znaki)');
-    if (empty(trim((string)($address->address ?? ''))))
+    // jak checkAddress() na webie: tekst adresu > 10 znaków, rozpoznana miejscowość i współrzędne (bez nich nie da się
+    // ustalić SM/Policji ani odbiorcy)
+    if (mb_strlen(trim((string)($address->address ?? ''))) <= 10)
         throw new \ValidationException('address', 'Podaj adres lub wskaż go na mapie');
+    if (mb_strlen(trim((string)($address->city ?? ''))) <= 2
+        || !is_numeric($address->lat ?? null) || !is_numeric($address->lng ?? null)
+        || (float)$address->lat <= 0 || (float)$address->lng <= 0)
+        throw new \ValidationException('address', 'Nie udało się ustalić miejsca zgłoszenia – wskaż je na mapie albo wpisz adres w formacie „Ulica 10, Miasto”');
     try {
         $dateParsed = new DateTime(preg_replace('/[^T0-9: -]/', '', (string)$date));
     } catch (\Exception $e) {
@@ -63,6 +69,10 @@ function updateApplication(
     }
     if ($dateParsed > (new DateTime())->modify('+5 minutes'))
         throw new \ValidationException('datetime', 'Data zgłoszenia nie może być z przyszłości');
+    // jak checkDateTimeValue() na webie: wykroczenie starsze niż 7 miesięcy jest odrzucane, ale nie przy ponownym
+    // zapisie niezmienionej daty (edycja starego zgłoszenia, patrz komentarz wyżej)
+    if ($dateParsed < (new DateTime())->modify('-7 months') && date_format($dateParsed, DT_FORMAT) !== ($application->date ?? null))
+        throw new \ValidationException('datetime', 'Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!');
     // jak na webie (validation.js checkCommentvalue): automatyczna linia „Pojazd marki XXX.” nie liczy się jako opis
     $ownComment = trim(preg_replace('/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/i', '', trim((string)$comment)));
     if ($category === 0 && mb_strlen($ownComment) <= 10)
