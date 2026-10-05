@@ -8,7 +8,7 @@ Requires authorization.
 
 ### GET `/api/rest/user/`
 
-Returns current user data (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats` and `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`).
+Returns current user data, including `lastLocation` (`"lat,lng"` of the last report, otherwise the geocoded home address; absent when neither is known) (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats` and `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`).
 
 ### PATCH `/api/rest/user/`
 

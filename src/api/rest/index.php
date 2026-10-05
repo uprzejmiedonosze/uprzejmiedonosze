@@ -93,6 +93,9 @@ $app->add(function ($request, $handler) {
 
 $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
     $group->get('/', function (Request $request, Response $response) {
+        // `lastLocation` ("lat,lng") = ostatnie zgłoszenie, a gdy go brak – geokodowany adres zamieszkania (jak na webie
+        // w ApplicationHandler); gdy nic nie wiadomo, pole jest nieustawione (klient użyje środka Polski).
+        $request->getAttribute('user')?->getLastLocation();
         return $response;
     })  ->add(new AddStatsMiddleware())
         ->add(new UserMiddleware(createIfNonExists: false))
