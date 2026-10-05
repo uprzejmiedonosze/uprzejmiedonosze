@@ -146,10 +146,17 @@ if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',  
 if (!defined('OPENAI_FACES_MODEL'))             define('OPENAI_FACES_MODEL',             getenv('OPENAI_FACES_MODEL') ?: 'gpt-5-nano');
 if (!defined('GOOGLE_VISION_API_KEY'))          define('GOOGLE_VISION_API_KEY',          getenv('GOOGLE_VISION_API_KEY') ?: '');
 
+// Etap `wip` (POST /api/rest/photos): limit zdjęć wysyłanych przez jednego użytkownika.
+if (!defined('WIP_RATE_MAX'))        define('WIP_RATE_MAX',        (int)(getenv('WIP_RATE_MAX') ?: 60));
+if (!defined('WIP_RATE_WINDOW'))     define('WIP_RATE_WINDOW',     (int)(getenv('WIP_RATE_WINDOW') ?: 3600));
+
 // Rate-limit analizy wizyjnej per użytkownik (\cache\throttle\attempt, jak PasskeyHandler).
 if (!defined('VISION_RATE_MAX'))     define('VISION_RATE_MAX',     (int)(getenv('VISION_RATE_MAX') ?: 60));
 if (!defined('VISION_RATE_WINDOW'))  define('VISION_RATE_WINDOW',  (int)(getenv('VISION_RATE_WINDOW') ?: 3600));
 if (!defined('VISION_MAX_PHOTOS'))         define('VISION_MAX_PHOTOS',         (int)(getenv('VISION_MAX_PHOTOS') ?: 12));
+// Limity muszą się mieścić w zdjęciach z appki mobilnej: ../uprzejmiedonosze-pro/src/lib/resize.ts (szerokość
+// EXPO_PUBLIC_PHOTO_MAX_WIDTH=1600, jakość EXPO_PUBLIC_PHOTO_COMPRESS=0.85). Te dwa limity dotyczą TYLKO starszego wariantu analizy z base64 w body;
+// zdjęcia z etapu `wip` (POST /api/rest/photos, analiza po photoId) podlegają MAX_IMAGE_UPLOAD_BYTES w API.php.
 if (!defined('VISION_MAX_PHOTO_BYTES'))    define('VISION_MAX_PHOTO_BYTES',    (int)(getenv('VISION_MAX_PHOTO_BYTES') ?: 800000));
 if (!defined('VISION_MAX_TOTAL_BYTES'))    define('VISION_MAX_TOTAL_BYTES',    (int)(getenv('VISION_MAX_TOTAL_BYTES') ?: 6000000));
 

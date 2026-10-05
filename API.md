@@ -125,6 +125,22 @@ Preferred contract — `multipart/form-data`:
 Legacy contract (still supported) — JSON/form body with a data URI in `carImage`, `contextImage`
 or `thirdImage` (the field name is the picture type) plus `dateTime`, `lat`, `lng`.
 
+Staged contract (UD Pro mobile) — instead of `image` send `photoId` (from `POST /api/rest/photos`) plus
+`pictureType`. The server takes the bytes from its `wip` storage (no second upload), resizes/crops them and
+reuses the plate recognition result computed once for that photo, so re-assigning the same `photoId` to another
+slot (swapping roles) costs no extra ALPR call. 404 when the `photoId` is unknown, expired or not yours. The staged
+file is kept until the report is confirmed (`/finish`) or `WIP_TTL_HOURS` (24 h) pass.
+
+### POST `/api/rest/photos/`
+
+Stages one photo *before* it belongs to any report (`cdn2/{user}/wip/{photoId}.jpg`, not synced to S3, not publicly
+served). `multipart/form-data`: `image` (JPEG/PNG, ≤ 3 MB), optional `dateTime`, `lat`, `lng` (EXIF read by the client).
+Response `201`: `{ "photoId": "<32 hex>", "width": 1600, "height": 1200 }`. Limited to `WIP_RATE_MAX` per `WIP_RATE_WINDOW`.
+
+### DELETE `/api/rest/photos/{photoId}`
+
+Removes a staged photo (204, or 404 when it does not exist).
+
 ### DELETE `/api/rest/app/{appId}/image/{image}`
 
 Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or drop the optional third one).
@@ -214,9 +230,12 @@ POST body (JSON):
   * `photos` (required array, max `VISION_MAX_PHOTOS`, default 12) — each:
     * `photoId` (required string) — opaque client id, echoed back.
     * `photo_index` (required int) — must be a contiguous `0..n-1` set across the request.
-    * `image` (required string) — `data:image/jpeg;base64,...` or `data:image/png;base64,...`,
+    * `image` (string, optional) — `data:image/jpeg;base64,...` or `data:image/png;base64,...`,
       max `VISION_MAX_PHOTO_BYTES` decoded bytes per photo (default 800kB), max
       `VISION_MAX_TOTAL_BYTES` decoded bytes total (default 6MB).
+      **Omit `image` and pass the `photoId` returned by `POST /api/rest/photos/`** to analyse a staged photo
+      without sending it again: bytes come from the server (404 when unknown/expired) and the plate recognition
+      result is stored with the photo, so ALPR runs once per photo (also reused later by `POST .../image`).
 
 Response (200, JSON):
 

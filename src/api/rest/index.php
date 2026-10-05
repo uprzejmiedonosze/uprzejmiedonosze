@@ -361,6 +361,31 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $application = $request->getAttribute('application');
         $user = $request->getAttribute('user');
 
+        // Zdjęcie już wysłane i przeanalizowane w etapie `wip` (POST /api/rest/photos): przydział do slotu bez ponownego uploadu.
+        $params = (array)$request->getParsedBody();
+        if (!empty($params['photoId'])) {
+            try {
+                $pictureType = $params['pictureType'] ?? null;
+                if ($pictureType === null) throw new MissingParamException('pictureType');
+                $application = assignPhoto($application->id, $pictureType, (string)$params['photoId'], $user,
+                    function (Application $app) use ($request) {
+                        if (!$app->isEditable())
+                            throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
+                    });
+            } catch (MissingParamException $e) {
+                throw new HttpBadRequestException($request, $e->getMessage(), $e);
+            } catch (HttpException $e) {
+                throw $e;
+            } catch (Exception $e) {
+                if ($e->getCode() === 404) throw new HttpNotFoundException($request, $e->getMessage(), $e);
+                if ($e->getCode() === 400) throw new HttpBadRequestException($request, $e->getMessage(), $e);
+                throw $e;
+            }
+            \telemetry\log('report_edited', $application->id, ['type' => 'image', 'source' => 'wip']);
+            $response->getBody()->write(json_encode(applicationToRest($application)));
+            return $response;
+        }
+
         try {
             $up = imageUploadFromRequest($request); // same contract as the cookie API /api/app/{id}/image
             $application = uploadImage($application->id, $up['pictureType'], $up['bytes'], $up['dateTime'],
@@ -459,6 +484,39 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         return $response;
     })  ->add(new AppMiddleware());
 
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
+    ->add(new AuthMiddleware());
+
+// Etap `wip`: zdjęcia wysyłane PRZED powstaniem szkicu zgłoszenia i analizowane po photoId (vision/candidate) – patrz inc/WipPhotos.php.
+$app->group('/api/rest/photos', function (RouteCollectorProxy $group) { // PHOTOS (wip)
+    $group->post('/', function (Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        if (!\cache\throttle\attempt(\cache\Type::Vision, 'wip-' . $user->getEmail(), WIP_RATE_MAX, WIP_RATE_WINDOW))
+            throw new HttpTooManyRequestsException($request, 'Zbyt wiele zdjęć w krótkim czasie. Spróbuj później.');
+        try {
+            $up = imageUploadFromRequest($request, requirePictureType: false);
+            $body = (array)$request->getParsedBody();
+            $staged = \wip\stage($user, $up['bytes'], [
+                'dateTime' => $up['dateTime'],
+                'lat' => $body['lat'] ?? null,
+                'lng' => $body['lng'] ?? null,
+            ]);
+        } catch (Exception $e) {
+            $code = in_array($e->getCode(), [400, 415], true) ? $e->getCode() : 500;
+            throw new HttpException($request, $e->getMessage(), $code, $e);
+        }
+        $response->getBody()->write(json_encode($staged));
+        return $response->withStatus(201);
+    });
+
+    $group->delete('/{photoId}', function (Request $request, Response $response, $args) {
+        if (!\wip\delete($request->getAttribute('user'), $args['photoId']))
+            throw new HttpNotFoundException($request, 'Nie znaleziono zdjęcia');
+        return $response->withStatus(204);
+    });
 })  ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())
@@ -597,7 +655,7 @@ $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISIO
         $reportId = getParam($params, 'reportId', '');
 
         try {
-            $items = \vision\decodeCandidatePhotos($params['photos'] ?? null);
+            $items = \vision\decodeCandidatePhotos($params['photos'] ?? null, $user);
         } catch (\vision\VisionRequestException $e) {
             throw new HttpException($request, $e->getMessage(), $e->httpStatus);
         }

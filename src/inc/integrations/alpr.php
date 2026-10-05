@@ -11,16 +11,25 @@ require_once(__DIR__ . '/plateRecognizer.php');
 /**
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function get(&$imageBytes, Application &$application, string $baseFileName, string $type, ?User $user = null) {
+/**
+ * @param array|null $presetResult gotowy wynik PlateRecognizer dla $imageBytes (np. policzony przy analizie zdjęcia w `wip`)
+ * @param string|null $originalBytes bajty dokładnie tak, jak przysłał klient (przed re-enkodowaniem). Gdy ALPR
+ *        (PlateRecognizer) policzył już to zdjęcie – mobilna analiza `vision/candidate` – wynik z cache jest użyty
+ *        zamiast drugiego wywołania (żaden dostawca ALPR nie jest wołany dwa razy dla tego samego zdjęcia).
+ */
+function get(&$imageBytes, Application &$application, string $baseFileName, string $type, ?User $user = null, ?string $originalBytes = null, ?array $presetResult = null) {
     $application->carImage = new stdClass();
     $application->carImage->url = "$baseFileName,$type.jpg";
     $application->carImage->thumb = "$baseFileName,$type,t.jpg";
 
     $application->carInfo = new stdClass();
 
-    $use_openAlpr = _use_openAlpr($imageBytes, $user);
+    $reused = $presetResult ?? ($originalBytes !== null ? cachedPlateRecognizerScaled($originalBytes, $imageBytes) : null);
+    $use_openAlpr = $reused ? false : _use_openAlpr($imageBytes, $user);
     try {
-        if ($use_openAlpr)
+        if ($reused)
+            get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type, $reused);
+        elseif ($use_openAlpr)
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
         else
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);

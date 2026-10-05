@@ -45,8 +45,8 @@ function bestAlprResult(array $resp): ?array {
 /**
  * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
  */
-function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName, $type) {
-    $carInfo = get_platerecognizer($imageBytes);
+function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName, $type, ?array $carInfo = null) {
+    $carInfo ??= get_platerecognizer($imageBytes);
     $application->alpr = 'platerecognizer';
 
     $result = bestAlprResult($carInfo ?? []);
@@ -72,6 +72,39 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
             $application->carInfo->vehicleBox->height = $vehicleBox['ymax'] - $vehicleBox['ymin'];
         }
     }
+}
+
+/**
+ * Skaluje współrzędne (box tablicy i pojazdu) wyniku PlateRecognizer o podane współczynniki.
+ * Czysta funkcja – używana, gdy wynik policzono dla obrazka o innych wymiarach niż ten zapisany na serwerze.
+ */
+function scalePlateRecognizerResult(array $resp, float $sx, float $sy): array {
+    $scaleBox = function (&$box) use ($sx, $sy): void {
+        if (!is_array($box)) return;
+        foreach (['xmin', 'xmax'] as $k) if (isset($box[$k])) $box[$k] = (int)round($box[$k] * $sx);
+        foreach (['ymin', 'ymax'] as $k) if (isset($box[$k])) $box[$k] = (int)round($box[$k] * $sy);
+    };
+    foreach ($resp['results'] ?? [] as $i => $r) {
+        if (isset($r['box'])) $scaleBox($resp['results'][$i]['box']);
+        if (isset($r['vehicle']['box'])) $scaleBox($resp['results'][$i]['vehicle']['box']);
+    }
+    return $resp;
+}
+
+/**
+ * Wynik PlateRecognizer policzony już dla ORYGINALNIE przesłanych bajtów (cache po sha1) – np. przez analizę
+ * mobilną `POST /vision/candidate`, która woła ALPR dla każdego zdjęcia (Vision.php::applyAlprPlate()) –
+ * przeliczony na wymiary pliku zapisanego na serwerze ($storedBytes: re-enkodowany i ograniczony do MAX_IMAGE_DIM).
+ * Dzięki temu upload nie płaci za drugie wywołanie ALPR dla tego samego zdjęcia. null = brak w cache.
+ */
+function cachedPlateRecognizerScaled(string $originalBytes, string $storedBytes): ?array {
+    $cached = \cache\alpr\get(Type::Platerecognizer, sha1($originalBytes));
+    if (!$cached) return null;
+    $orig = @getimagesizefromstring($originalBytes);
+    $stored = @getimagesizefromstring($storedBytes);
+    if (!$orig || !$stored || !$orig[0] || !$orig[1]) return null;
+    if ($orig[0] === $stored[0] && $orig[1] === $stored[1]) return $cached;
+    return scalePlateRecognizerResult($cached, $stored[0] / $orig[0], $stored[1] / $orig[1]);
 }
 
 function get_platerecognizer(&$imageBytes) {
