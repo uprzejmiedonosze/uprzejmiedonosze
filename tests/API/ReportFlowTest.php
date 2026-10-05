@@ -117,6 +117,10 @@ class ReportFlowTest extends DatabaseTestCase
         $app = $this->appWithImages($user);
         $address = new \JSONObject();
         $address->address = 'Mazurska 37, Szczecin';
+        $address->city = 'Szczecin';
+        $address->lat = 53.43;
+        $address->lng = 14.55;
+        $address->voivodeship = 'zachodniopomorskie';
 
         $cases = [
             'plateId' => ['AB', '2026-09-10T19:43:00', $address, 8, 'x'],
@@ -137,6 +141,52 @@ class ReportFlowTest extends DatabaseTestCase
         $noAddress->address = '  ';
         $this->expectException(\ValidationException::class);
         updateApplication($app, '2026-09-10T19:43:00', true, 8, $noAddress, 'ZS12345', 'x', false, [], $user);
+    }
+
+    /** Adres bez miejscowości/współrzędnych (reverse geocode jeszcze nie wrócił) nie może przejść – web też tego nie puszcza. */
+    public function testUpdateRejectsAddressWithoutCityOrCoordinates(): void
+    {
+        $user = $this->savedUser();
+        $app = $this->appWithImages($user);
+        $make = function (array $over) {
+            $a = new \JSONObject();
+            foreach (['address' => 'Mazurska 37, Szczecin', 'city' => 'Szczecin', 'voivodeship' => 'zachodniopomorskie', 'lat' => 53.43, 'lng' => 14.55] as $k => $v)
+                $a->$k = array_key_exists($k, $over) ? $over[$k] : $v;
+            return $a;
+        };
+        foreach ([['city' => null], ['lat' => null], ['lng' => 0], ['address' => 'Krótki 1']] as $over) {
+            try {
+                updateApplication($app, '2026-09-10T19:43:00', true, 8, $make($over), 'ZS12345', 'x', false, [], $user);
+                $this->fail('expected ValidationException for ' . json_encode($over));
+            } catch (\ValidationException $e) {
+                $this->assertSame('address', $e->getField());
+            }
+        }
+    }
+
+    public function testUpdateRejectsOldDateButKeepsUnchangedOne(): void
+    {
+        $user = $this->savedUser();
+        $app = $this->appWithImages($user);
+        $address = new \JSONObject();
+        $address->address = 'Mazurska 37, Szczecin';
+        $address->city = 'Szczecin';
+        $address->lat = 53.43;
+        $address->lng = 14.55;
+        $address->voivodeship = 'zachodniopomorskie';
+        $old = (new \DateTime())->modify('-8 months')->format('Y-m-d\TH:i:s');
+
+        try {
+            updateApplication($app, $old, true, 8, $address, 'ZS12345', 'x', false, [], $user);
+            $this->fail('a date older than 7 months must be rejected');
+        } catch (\ValidationException $e) {
+            $this->assertSame('datetime', $e->getField());
+        }
+
+        // edycja starego zgłoszenia: ta sama data zapisana ponownie jest dozwolona
+        $app->date = (new \DateTime($old))->format(DT_FORMAT);
+        $saved = updateApplication($app, $old, true, 8, $address, 'ZS12345', 'x', false, [], $user);
+        $this->assertSame($app->date, $saved->date);
     }
 
     public function testFinishRequiresSavedReportAndOwnership(): void
