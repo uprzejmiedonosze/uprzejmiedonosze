@@ -77,6 +77,7 @@ class DashboardTest extends DatabaseTestCase
     public function testFreshBypassesTheStatsCache(): void
     {
         $user = $this->userNamed('Jan Kowalski', 'dash-fresh@example.com');
+        \cache\delete(\cache\Type::UserStats, 'dash-fresh@example.com'); // memcached outlives the rolled-back DB between runs
         $before = dashboardData($user)['stats']['active'] ?? 0; // fills the 24 h cache
 
         $app = \app\Application::withUser($user);
