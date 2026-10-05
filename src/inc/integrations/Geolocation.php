@@ -171,6 +171,40 @@ function distanceMeters(float $lat1, float $lng1, float $lat2, float $lng2): flo
     return $earthRadiusM * $c;
 }
 
+/**
+ * Mapbox Static Images URL for the report form's map preview (same style as the web picker,
+ * outdoors-v12, with a pin when a point is given; without one: all of Poland). Pure → unit-tested.
+ */
+function staticMapUrl(?float $lat, ?float $lng, int $width = 600, int $height = 300): string {
+    $width = max(100, min(640, $width));
+    $height = max(100, min(640, $height));
+    if ($lat !== null && $lng !== null) {
+        $lat = normalizeGeo($lat);
+        $lng = normalizeGeo($lng);
+        $overlay = "pin-l+0d7a55($lng,$lat)/";
+        $view = "$lng,$lat,15,0";
+    } else {
+        $overlay = '';
+        $view = "19.48,52.07,4.8,0"; // centre of Poland (the web picker's default centre)
+    }
+    return "https://api.mapbox.com/styles/v1/mapbox/outdoors-v12/static/{$overlay}{$view}/{$width}x{$height}@2x"
+        . "?logo=false&access_token=" . MAPBOX_API_TOKEN;
+}
+
+/** PNG bytes of staticMapUrl(), or null when Mapbox is unavailable (callers hide the preview). */
+function staticMap(?float $lat, ?float $lng, int $width = 600, int $height = 300): ?string {
+    $ch = curl_init(staticMapUrl($lat, $lng, $width, $height));
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 6, CURLOPT_USERAGENT => "UprzejmieDonosze/1.0"]);
+    $png = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($png === false || $code !== 200) {
+        \telemetry\log('api_mapbox_static', null, ['status' => 'error', 'http' => $code]);
+        return null;
+    }
+    return $png;
+}
+
 function MapBox(float $lat, float $lng): array {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);
