@@ -1,3 +1,6 @@
+{# ?embed ustawia HtmlMiddleware; przy statycznym generowaniu (fail2ban itp.) zmiennej nie ma #}
+{% set embed = embed ?? false %}
+
 {% if shortTitle is not defined %}
     {% set shortTitle = title ?? 'Uprzejmie Donoszę' %}
 {% endif %}
