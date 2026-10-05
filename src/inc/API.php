@@ -12,8 +12,14 @@ use \Exception as Exception;
 use user\User;
 use cache\Type;
 
-// Must match MAX_IMAGE_DIM / JPEG_QUALITY on the client (src/js/new-app/images.js):
-// the browser already resizes to these before upload; the server re-enforces them.
+// Must match MAX_IMAGE_DIM / JPEG_QUALITY on the clients:
+//  - web:    src/js/new-app/images.js (JPEG_QUALITY 0.85, MAX_IMAGE_DIM 1600)
+//  - mobile: ../uprzejmiedonosze-pro/src/lib/resize.ts + EXPO_PUBLIC_PHOTO_MAX_WIDTH / _COMPRESS (src/config.ts,
+//    .env.example); the app uploads ONE downscaled file to POST /api/rest/photos (the `wip` stage, src/inc/WipPhotos.php);
+//    analysis (vision/candidate) and slot assignment (POST /app/{id}/image with photoId) then read it from the server,
+//    and ALPR runs once per photo (result kept next to the file, reused by assignPhoto()).
+// The clients resize before upload; the server re-enforces the limits. Changing a value here? Update the clients too
+// (a 1600px / 0.85 JPEG must stay under MAX_IMAGE_UPLOAD_BYTES; VISION_MAX_* in inc/config.php only limit the legacy base64 analysis).
 const MAX_IMAGE_DIM = 1600;
 const JPEG_QUALITY = 85;
 
@@ -193,7 +199,49 @@ function sendApplication(string $appId, User $user): Application {
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
 function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, ?callable $validate = null, ?User $user = null) {
-    return \semaphore\withLock($appId, "uploadImage:$pictureType", function () use ($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, $validate, $user) {
+    return finalizeImage($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, $validate, $user);
+}
+
+/**
+ * Zdjęcie z etapu `wip` (src/inc/WipPhotos.php) → slot zgłoszenia: skalowanie, miniatura, wycinek tablicy, dane auta.
+ * Bajty czyta z dysku serwera (klient nie wysyła ich drugi raz), a ALPR bierze z sidecara (policzony raz przy analizie albo
+ * tu, gdy zdjęcie nie było analizowane) – kolejne przydziały tego samego zdjęcia (zamiana ról) nie wołają ALPR ponownie.
+ * `wip` zostaje do zakończenia zgłoszenia (finishApplication) albo TTL; id zdjęć zapamiętujemy w `$application->wipPhotos`.
+ */
+function assignPhoto(string $appId, string $pictureType, string $photoId, User $user, ?callable $validate = null) {
+    $photo = \wip\load($user, $photoId);
+    if (!$photo) throw new Exception("Nie znaleziono zdjęcia '$photoId' (wygasło albo nie należy do użytkownika)", 404);
+    if (!in_array($pictureType, ['carImage', 'contextImage', 'thirdImage'], true)) {
+        throw new Exception("Nieznany rodzaj zdjęcia '$pictureType' ($appId)", 400);
+    }
+    $meta = $photo['meta'];
+    $alpr = null;
+    if ($pictureType === 'carImage') {
+        try {
+            $alpr = \wip\alpr($user, $photoId);
+        } catch (\Throwable $e) {
+            log_info("assignPhoto $appId: ALPR niedostępny dla wip $photoId – zwykła ścieżka: " . $e->getMessage());
+        }
+    }
+    $latLng = (isset($meta['lat'], $meta['lng']) && $pictureType === 'carImage') ? \geo\normalizeLatLng($meta['lat'], $meta['lng']) : null;
+    $dateTime = $pictureType === 'carImage' ? ($meta['dateTime'] ?? null) : null;
+    $application = finalizeImage($appId, $pictureType, $photo['bytes'], $dateTime, !empty($dateTime), $latLng, $validate, $user,
+        $alpr, isset($meta['width'], $meta['height']) ? [(int)$meta['width'], (int)$meta['height']] : null);
+
+    return \semaphore\withLock($appId, "wipPhotos", function () use ($appId, $pictureType, $photoId) {
+        $application = \app\get($appId);
+        $application->wipPhotos = (object)array_merge((array)($application->wipPhotos ?? []), [$pictureType => $photoId]);
+        \app\save($application);
+        return $application;
+    });
+}
+
+/**
+ * @param array<string,mixed>|null $alprResult gotowy wynik PlateRecognizer dla $imageBytes (np. z `wip`) – wtedy ALPR nie jest wołany
+ * @param array{0:int,1:int}|null $alprSize wymiary obrazka, dla którego policzono $alprResult (do przeskalowania boxów)
+ */
+function finalizeImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, ?callable $validate = null, ?User $user = null, ?array $alprResult = null, ?array $alprSize = null) {
+    return \semaphore\withLock($appId, "uploadImage:$pictureType", function () use ($appId, $pictureType, $imageBytes, $dateTime, $dtFromPicture, $latLng, $validate, $user, $alprResult, $alprSize) {
         $application = \app\get($appId);
         if ($validate) $validate($application);
 
@@ -217,7 +265,13 @@ function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFro
             if ($alprBytes === false) {
                 $alprBytes = $imageBytes;
             }
-            \alpr\get($alprBytes, $application, $baseFileName, $type, $user);
+            $preset = null;
+            if ($alprResult !== null && $alprSize && $alprSize[0] > 0 && $alprSize[1] > 0) {
+                $preset = ($alprSize[0] === $width && $alprSize[1] === $height)
+                    ? $alprResult
+                    : \alpr\scalePlateRecognizerResult($alprResult, $width / $alprSize[0], $height / $alprSize[1]);
+            }
+            \alpr\get($alprBytes, $application, $baseFileName, $type, $user, $imageBytes, $preset);
             \vehicle_info\refresh($application);
             $application->carImage->width = $width;
             $application->carImage->height = $height;
@@ -360,7 +414,7 @@ function resize_image($file, $w, $h, $crop = FALSE) {
  * @return array{bytes: string, pictureType: string, dateTime: ?string, dtFromPicture: ?bool, latLng: ?string}
  * @throws Exception (code 400) on a missing/oversized/undecodable file
  */
-function imageUploadFromRequest(ServerRequestInterface $request): array {
+function imageUploadFromRequest(ServerRequestInterface $request, bool $requirePictureType = true): array {
     $params = (array)$request->getParsedBody();
     $uploadedFiles = $request->getUploadedFiles();
     $limitMb = MAX_IMAGE_UPLOAD_BYTES / 1_048_576;
@@ -404,7 +458,7 @@ function imageUploadFromRequest(ServerRequestInterface $request): array {
         $actualMb = round(strlen($bytes) / 1_048_576, 1);
         throw new Exception("Zbyt duże zdjęcie ({$actualMb}MB > {$limitMb}MB)", 400);
     }
-    if ($pictureType === null) {
+    if ($pictureType === null && $requirePictureType) {
         throw new MissingParamException('pictureType');
     }
 
@@ -521,6 +575,10 @@ function finishApplication(string $appId, User $user): array {
             throw new \ValidationException('images', "Zgłoszenie '$appId' nie posiada wymaganych zdjęć");
 
         $edited = $application->hasNumber();
+        // zdjęcia z etapu `wip` (assignPhoto) nie są już potrzebne – zgłoszenie ma własne kopie
+        foreach ((array)($application->wipPhotos ?? []) as $wipPhotoId)
+            \wip\delete($user, (string)$wipPhotoId);
+        unset($application->wipPhotos);
         $application->setStatus("confirmed");
         return [\app\save($application), $edited, true]; // save also assigns the number
     });
