@@ -416,3 +416,17 @@
         padding: 26px;
     }
 }
+
+// ?embed (WebView w aplikacji mobilnej): sam artykuł — strony static nadpisują blok
+// sidebar własnym TOC, więc chowamy go tu zamiast w każdym szablonie.
+body.embed {
+    .mpr-sidebar { display: none; }
+
+    .ui-content { padding-top: 0; }
+
+    .mpr-layout {
+        padding: 1rem 16px 2rem;
+        margin: 0;
+        max-width: none;
+    }
+}

@@ -14,14 +14,16 @@ class HtmlMiddleware implements MiddlewareInterface {
     /**
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getDefaultParameters(bool $isDialog=false): array {
+    public static function getDefaultParameters(bool $isDialog=false, bool $isEmbed=false): array {
         $isLoggedIn = SessionMiddleware::isLoggedIn();
 
         $parameters = Array();
         $parameters['config'] = [
             'menu' => ''
         ];
-        $parameters['dialog'] = $isDialog;
+        // ?embed = treść bez headera/menu/sidebara/stopki (WebView w aplikacji mobilnej); implikuje tryb dialog
+        $parameters['embed'] = $isEmbed;
+        $parameters['dialog'] = $isDialog || $isEmbed;
 
         $parameters['general'] = [
             'uri' => $_SERVER['REQUEST_URI'],
@@ -64,7 +66,8 @@ class HtmlMiddleware implements MiddlewareInterface {
         $queryParams = $request->getQueryParams();
 
         $parameters = HtmlMiddleware::getDefaultParameters(
-            isset($queryParams['dialog'])
+            isset($queryParams['dialog']),
+            isset($queryParams['embed'])
         );
 
         $request = $request->withAttribute('parameters', $parameters);
@@ -79,6 +82,9 @@ class HtmlMiddleware implements MiddlewareInterface {
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST')
                 ->withHeader('Access-Control-Allow-Credentials', 'true');
         }
+
+        if ($parameters['embed'])
+            $response = $response->withHeader('X-Robots-Tag', 'noindex');
 
         return $response->withHeader('Content-Type', 'text/html; charset=UTF-8');
     }
