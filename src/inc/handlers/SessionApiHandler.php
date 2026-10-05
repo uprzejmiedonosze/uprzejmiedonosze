@@ -131,12 +131,10 @@ class SessionApiHandler extends AbstractHandler {
             $this->checkOwnership($request, $application);
 
             $fields = json_decode($request->getBody()->getContents(), true, flags: JSON_THROW_ON_ERROR);
-            foreach ($fields as $field => $value) {
-                match ($field) {
-                    'externalId' => $application->externalId = $value,
-                    'privateComment' => $application->privateComment = $value,
-                    default => throw new HttpForbiddenException($request, 'Pole ' . $field . ' nie może być edytowane'),
-                };
+            try {
+                applyEditableFields($application, $fields);
+            } catch (\InvalidArgumentException $e) {
+                throw new HttpForbiddenException($request, $e->getMessage());
             }
 
             $isSent = in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE']);

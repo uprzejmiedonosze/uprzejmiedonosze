@@ -552,6 +552,39 @@ function applicationToRest(Application $application): array {
 }
 
 /**
+ * Pola edytowalne także po wysłaniu zgłoszenia (numer sprawy SM/Policji, prywatne uwagi). Wspólne dla weba
+ * (PATCH /api/app/{id}/fields → SessionApiHandler::setFields) i REST (PATCH /api/rest/app/{id}/fields).
+ * @param array<string,mixed> $fields
+ * @throws \InvalidArgumentException nieznane pole albo wartość inna niż tekst
+ */
+function applyEditableFields(Application $application, array $fields): void {
+    foreach ($fields as $field => $value) {
+        if (!in_array($field, ['externalId', 'privateComment'], true))
+            throw new \InvalidArgumentException("Pole $field nie może być edytowane");
+        if (!is_string($value))
+            throw new \InvalidArgumentException("Pole $field musi być tekstem");
+        $application->$field = $value;
+    }
+}
+
+/**
+ * Zapis pól z applyEditableFields() dla właściciela zgłoszenia (REST). `suggestStatusChange` = zgłoszenie jest wysłane
+ * i dostało numer sprawy – klient może zaproponować zmianę statusu na „potwierdzone” (jak confirm() na webie).
+ * @return array{application: Application, suggestStatusChange: bool}
+ * @throws Exception 403 nie właściciel; \InvalidArgumentException jak wyżej
+ */
+function updateApplicationFields(string $appId, array $fields, User $user): array {
+    return \semaphore\withLock($appId, "setFields", function () use ($appId, $fields, $user) {
+        $application = \app\get($appId);
+        if ($application->email !== $user->getEmail())
+            throw new Exception("Nie posiadasz zgłoszenia o ID $appId", 403);
+        applyEditableFields($application, $fields);
+        $suggest = in_array($application->status, ['confirmed-waiting', 'confirmed-waitingE'], true) && !empty($application->externalId);
+        return ['application' => \app\save($application), 'suggestStatusChange' => $suggest];
+    });
+}
+
+/**
  * "Potwierdź" step shared by the web (POST /app/done → ApplicationHandler::finish)
  * and the REST API (POST /api/rest/app/{id}/finish): status → confirmed (assigns
  * the report number) plus every side effect the web has always had — telemetry,

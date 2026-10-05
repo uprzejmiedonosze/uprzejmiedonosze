@@ -189,6 +189,41 @@ class ReportFlowTest extends DatabaseTestCase
         $this->assertSame($app->date, $saved->date);
     }
 
+    public function testEditableFieldsAreSavedAndSuggestStatusChangeWhenSentWithCaseNumber(): void
+    {
+        $user = $this->savedUser();
+        $app = $this->appWithImages($user);
+
+        $r = updateApplicationFields($app->id, ['privateComment' => 'moja notatka'], $user);
+        $this->assertSame('moja notatka', $r['application']->privateComment);
+        $this->assertFalse($r['suggestStatusChange'], 'szkic nie jest wysłany');
+
+        $app->status = 'confirmed-waiting'; // wysłane, czeka na odpowiedź
+        \app\save($app);
+        $r = updateApplicationFields($app->id, ['externalId' => 'RSOW 123/26'], $user);
+        $this->assertSame('RSOW 123/26', \app\get($app->id)->externalId);
+        $this->assertTrue($r['suggestStatusChange']);
+
+        $this->expectException(\InvalidArgumentException::class);
+        updateApplicationFields($app->id, ['status' => 'archived'], $user);
+    }
+
+    public function testEditableFieldsRejectOtherUsersAndNonStrings(): void
+    {
+        $owner = $this->savedUser();
+        $other = $this->savedUser('someone-else-fields@example.com');
+        $app = $this->appWithImages($owner);
+
+        try {
+            updateApplicationFields($app->id, ['privateComment' => 'x'], $other);
+            $this->fail('cudze zgłoszenie');
+        } catch (\Exception $e) {
+            $this->assertSame(403, $e->getCode());
+        }
+        $this->expectException(\InvalidArgumentException::class);
+        updateApplicationFields($app->id, ['externalId' => ['a']], $owner);
+    }
+
     public function testFinishRequiresSavedReportAndOwnership(): void
     {
         $user = $this->savedUser();

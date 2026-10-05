@@ -357,6 +357,25 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
     })  ->add(new AppMiddleware());
 
 
+    // Numer sprawy SM/Policji i prywatne uwagi – edytowalne także po wysłaniu (web: PATCH /api/app/{id}/fields).
+    $group->patch('/{appId}/fields', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        try {
+            $result = updateApplicationFields($args['appId'], (array)$request->getParsedBody(), $user);
+        } catch (\InvalidArgumentException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        } catch (Exception $e) {
+            if ($e->getCode() === 403) throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            throw $e;
+        }
+        \telemetry\log('report_edited', $args['appId'], ['type' => 'fields']);
+        $response->getBody()->write(json_encode([
+            'app' => applicationToRest($result['application']),
+            'suggestStatusChange' => $result['suggestStatusChange'],
+        ]));
+        return $response;
+    })  ->add(new AppMiddleware());
+
     $group->post('/{appId}/image', function (Request $request, Response $response) {
         $application = $request->getAttribute('application');
         $user = $request->getAttribute('user');

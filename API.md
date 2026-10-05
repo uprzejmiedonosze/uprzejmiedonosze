@@ -141,6 +141,13 @@ Response `201`: `{ "photoId": "<32 hex>", "width": 1600, "height": 1200 }`. Limi
 
 Removes a staged photo (204, or 404 when it does not exist).
 
+### PATCH `/api/rest/app/{appId}/fields`
+
+Edits `externalId` (the SM/Police case number) and/or `privateComment` (private notes, visible only to the owner) — allowed
+at any status, also after sending. JSON body with one or both string fields; unknown fields → 400. Response
+`{ "app": {...}, "suggestStatusChange": true|false }` — `true` when the report is sent and has a case number (the web then
+asks to switch the status to `confirmed-sm`, see `PATCH .../status/{status}`).
+
 ### DELETE `/api/rest/app/{appId}/image/{image}`
 
 Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or drop the optional third one).
