@@ -36,7 +36,9 @@ final class McpMemcacheSessionStore implements SessionStoreInterface {
     }
 
     public function write(Uuid $id, string $data): bool {
-        return $this->memcache->set($this->key($id), $data, 0, $this->ttl);
+        // MEMCACHE_COMPRESSED keeps the serialized session below memcached's
+        // default 1 MB per-object limit (SERVER_ERROR object too large).
+        return $this->memcache->set($this->key($id), $data, \MEMCACHE_COMPRESSED, $this->ttl);
     }
 
     public function destroy(Uuid $id): bool {
