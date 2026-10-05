@@ -390,6 +390,12 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         return $response;
     })  ->add(new AppMiddleware());
 
+    // Data for the confirmation screen shown before finish/send (web: potwierdz.html.twig).
+    $group->get('/{appId}/confirmation', function (Request $request, Response $response) {
+        $response->getBody()->write(json_encode(confirmationData($request->getAttribute('application'))));
+        return $response;
+    })  ->add(new AppMiddleware());
+
     // "Potwierdź" (+ optional send) in one call – see finishApplication() in API.php.
     $group->post('/{appId}/finish', function (Request $request, Response $response, $args) {
         $appId = $args['appId'];
