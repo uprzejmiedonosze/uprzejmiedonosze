@@ -128,7 +128,10 @@ or `thirdImage` (the field name is the picture type) plus `dateTime`, `lat`, `ln
 Staged contract (UD Pro mobile) — instead of `image` send `photoId` (from `POST /api/rest/photos`) plus
 `pictureType`. The server takes the bytes from its `wip` storage (no second upload), resizes/crops them and
 reuses the plate recognition result computed once for that photo, so re-assigning the same `photoId` to another
-slot (swapping roles) costs no extra ALPR call. 404 when the `photoId` is unknown, expired or not yours. The staged
+slot (swapping roles) costs no extra ALPR call.
+Optional `crop: "vehicle"` (with `pictureType: carImage`): the car photo becomes the winning vehicle cut out of the staged
+photo with a 20 % margin on each side (clamped to the frame) — for one photo serving as both context and car. The stored ALPR
+result is shifted to the crop, so ALPR is still called once. 422 (`images`) when no vehicle with a readable plate was found. 404 when the `photoId` is unknown, expired or not yours. The staged
 file is kept until the report is confirmed (`/finish`) or `WIP_TTL_HOURS` (24 h) pass.
 
 ### POST `/api/rest/photos/`
@@ -136,6 +139,15 @@ file is kept until the report is confirmed (`/finish`) or `WIP_TTL_HOURS` (24 h)
 Stages one photo *before* it belongs to any report (`cdn2/{user}/wip/{photoId}.jpg`, not synced to S3, not publicly
 served). `multipart/form-data`: `image` (JPEG/PNG, ≤ 3 MB), optional `dateTime`, `lat`, `lng` (EXIF read by the client).
 Response `201`: `{ "photoId": "<32 hex>", "width": 1600, "height": 1200 }`. Limited to `WIP_RATE_MAX` per `WIP_RATE_WINDOW`.
+
+### GET|POST `/api/rest/photos/{photoId}/alpr`
+
+Plate-recognition readings of a staged photo (PlateRecognizer only — no LLM; computed once per photo and stored with it).
+Response: `{ "photoId", "width", "height", "detections": [{ "text": "ZS12345", "score": 0.97, "plate_bbox": [x1,y1,x2,y2],
+"vehicle_bbox": [...], "vehicle_area": 0.31, "winner": true }] }` — boxes in 0..1000 space, `vehicle_area` = share of the frame,
+`winner` = the reading picked by the server's candidate algorithm (score within a 0.1 tie band, then the larger vehicle).
+The UD Pro app uses all detections to choose which photo is the car and which is context (`src/lib/roles.ts`). 404 when
+the photo does not exist, 502 when ALPR is unavailable.
 
 ### DELETE `/api/rest/photos/{photoId}`
 

@@ -184,6 +184,91 @@ class WipPhotosTest extends DatabaseTestCase
         \vision\decodeCandidatePhotos([['photoId' => str_repeat('c', 32), 'photo_index' => 0]], $user);
     }
 
+    public function testDetectionsListAllReadingsAndMarkTheWinner(): void
+    {
+        $user = $this->user('wip-detections@example.com');
+        $s = \wip\stage($user, $this->jpeg(1000, 500));
+        $this->track($s['photoId'], $user);
+        // auto z tła: mniejsze, ale pewniejsze (0.99); auto z przodu: większe, trochę mniej pewne (0.95) → remis w paśmie 0.1 → wygrywa większe
+        \vision\PlateRecognizerClient::set(function (string $bytes): array {
+            $this->alprCalls++;
+            return ['results' => [
+                ['plate' => 'bg11111', 'score' => 0.99, 'box' => ['xmin' => 10, 'ymin' => 10, 'xmax' => 60, 'ymax' => 30],
+                 'vehicle' => ['box' => ['xmin' => 0, 'ymin' => 0, 'xmax' => 200, 'ymax' => 100]]],
+                ['plate' => 'zs22222', 'score' => 0.95, 'box' => ['xmin' => 400, 'ymin' => 300, 'xmax' => 500, 'ymax' => 340],
+                 'vehicle' => ['box' => ['xmin' => 200, 'ymin' => 100, 'xmax' => 900, 'ymax' => 450]]],
+            ]];
+        });
+
+        $d = \wip\detections($user, $s['photoId']);
+        $this->assertSame([1000, 500], [$d['width'], $d['height']]);
+        $this->assertCount(2, $d['detections']);
+        $this->assertSame(['BG11111', 'ZS22222'], array_column($d['detections'], 'text'));
+        $this->assertSame([false, true], array_column($d['detections'], 'winner'));
+        $this->assertEqualsWithDelta(0.098, $d['detections'][1]['vehicle_area'] ?? 0, 0.5, 'pole pojazdu jako ułamek kadru');
+        \wip\detections($user, $s['photoId']);
+        $this->assertSame(1, $this->alprCalls, 'ALPR raz na zdjęcie');
+        $this->assertNull(\wip\detections($user, str_repeat('d', 32)));
+    }
+
+    public function testVehicleCropBoxAddsMarginAndClampsToTheFrame(): void
+    {
+        $this->assertSame([60, 80, 280, 140], \alpr\vehicleCropBox(['xmin' => 100, 'ymin' => 100, 'xmax' => 300, 'ymax' => 200], 1000, 1000));
+        // przy krawędzi: margines ucięty do kadru
+        $this->assertSame([0, 0, 500, 300], \alpr\vehicleCropBox(['xmin' => 10, 'ymin' => 10, 'xmax' => 480, 'ymax' => 290], 500, 300));
+    }
+
+    public function testTranslateMovesBoxesIntoTheCropAndKeepsOtherFields(): void
+    {
+        $out = \alpr\translatePlateRecognizerResult(['results' => [[
+            'plate' => 'ab1', 'box' => ['xmin' => 100, 'ymin' => 80, 'xmax' => 140, 'ymax' => 90],
+            'vehicle' => ['box' => ['xmin' => 50, 'ymin' => 20, 'xmax' => 300, 'ymax' => 200]],
+        ]]], -40, -10);
+        $this->assertSame(['xmin' => 60, 'ymin' => 70, 'xmax' => 100, 'ymax' => 80], $out['results'][0]['box']);
+        $this->assertSame(['xmin' => 10, 'ymin' => 10, 'xmax' => 260, 'ymax' => 190], $out['results'][0]['vehicle']['box']);
+        $this->assertSame('ab1', $out['results'][0]['plate']);
+    }
+
+    public function testAssignWithVehicleCropSavesTheCarAsACutOutAndCallsAlprOnce(): void
+    {
+        $user = $this->user('wip-crop@example.com');
+        $app = $this->draft($user);
+        $s = \wip\stage($user, $this->jpeg(2000, 1000), ['dateTime' => '2026-09-10T19:43:00', 'lat' => 53.43, 'lng' => 14.55]);
+        $this->track($s['photoId'], $user);
+
+        \wip\detections($user, $s['photoId']); // analiza: 1 wywołanie ALPR
+        $out = assignPhoto($app->id, 'contextImage', $s['photoId'], $user);
+        $out = assignPhoto($app->id, 'carImage', $s['photoId'], $user, null, 'vehicle');
+        $this->assertSame(1, $this->alprCalls, 'kontekst + wycinek auta z jednego zdjęcia = jedno wywołanie ALPR');
+
+        foreach (['carImage', 'contextImage'] as $slot) {
+            $this->paths[] = ROOT . $out->$slot->url;
+            $this->paths[] = ROOT . $out->$slot->thumb;
+        }
+        if (isset($out->carInfo->plateImage)) $this->paths[] = ROOT . $out->carInfo->plateImage;
+
+        // kontekst = całe zdjęcie (2000x1000 → ≤1600), auto = wycinek 2000x940 (box 10–90% x 20–90% +20%, docięty) → ≤1600
+        $this->assertSame(1600, $out->contextImage->width);
+        $this->assertSame([1600, 752], [$out->carImage->width, $out->carImage->height]);
+        $this->assertSame('ZS12345', $out->carInfo->plateId);
+        $this->assertFileExists(ROOT . $out->carInfo->plateImage, 'wycinek tablicy z wycinka auta');
+        $this->assertLessThanOrEqual(1600, $out->carInfo->vehicleBox->x + $out->carInfo->vehicleBox->width);
+        $this->assertSame($s['photoId'], $out->wipPhotos->carImage);
+        $this->assertSame($s['photoId'], $out->wipPhotos->contextImage);
+    }
+
+    public function testAssignWithVehicleCropFailsWithoutAVehicle(): void
+    {
+        $user = $this->user('wip-nocar@example.com');
+        $app = $this->draft($user);
+        $s = \wip\stage($user, $this->jpeg(800, 600));
+        $this->track($s['photoId'], $user);
+        \vision\PlateRecognizerClient::set(fn (string $b): array => ['results' => []]);
+
+        $this->expectException(\ValidationException::class);
+        assignPhoto($app->id, 'carImage', $s['photoId'], $user, null, 'vehicle');
+    }
+
     public function testPurgeOlderThanRemovesOnlyStaleFiles(): void
     {
         $user = $this->user('wip-purge@example.com');
