@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../export/inc/integrations/Vision.php';
 
 use PHPUnit\Framework\TestCase;
 
-/** Upload zdjęcia auta po analizie mobilnej nie woła ALPR drugi raz: wynik z cache jest skalowany do zapisanego pliku. */
+/** Wynik ALPR policzony raz (na zdjęciu `wip`) jest skalowany do wymiarów zapisanego pliku zdjęcia auta (assignPhoto → finalizeImage). */
 class AlprReuseTest extends TestCase
 {
     public function testScalesPlateAndVehicleBoxes(): void
