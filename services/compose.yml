@@ -170,12 +170,13 @@ services:
       FIREBASE_AUTH_EMULATOR_HOST: "firebase-emulator:9099"
       MEMCACHED_HOST: "memcached"
 
-  # ── STAGING + PROD ────────────────────────────────────────────────────────
+  # ── STAGING + PROD + SHADOW ─────────────────────────────────────────────────
   # Run via:
   #   docker compose --env-file services/.env.staging -p staging --profile staging up -d
   #   docker compose --env-file services/.env.prod    -p prod    --profile prod    up -d
+  #   docker compose --env-file services/.env.shadow  -p shadow  --profile shadow  up -d
   webapp-srv:
-    profiles: [staging, prod]
+    profiles: [staging, prod, shadow]
     image: ${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}/webapp:${IMAGE_TAG:-latest}
     build:
       context: ..
@@ -206,19 +207,24 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=edge"
-      # ${APP_ENV} (prod/staging) namespaces the router so both profiles can
-      # run on the same host without colliding. www redirect is prod-only
-      # (staging/shadow never had a www. alias) — TRAEFIK_EXTRA_HOST_RULE
-      # (.env.prod) appends ` || Host(\`www.uprzejmiedonosze.net\`)`, backed
-      # by a redirect-www@file middleware (see ../edge/traefik/dynamic.local).
+      # ${TRAEFIK_ENV} (default ${APP_ENV}: prod/staging) namespaces the router
+      # so multiple projects can run on the same Traefik instance without
+      # colliding. Shadow keeps APP_ENV=prod on purpose (PHP must see a full
+      # prod behavior — isProd() gates real email sending to SM — see
+      # Mail.php), so .env.shadow overrides TRAEFIK_ENV=shadow instead;
+      # nested ${VAR:-${VAR2}} interpolation confirmed working (Compose v5).
+      # www redirect is prod-only (staging/shadow never had a www. alias) —
+      # TRAEFIK_EXTRA_HOST_RULE (.env.prod) appends
+      # ` || Host(\`www.uprzejmiedonosze.net\`)`, backed by a
+      # redirect-www@file middleware (see ../edge/traefik/dynamic.local).
       # TRAEFIK_EXTRA_MIDDLEWARES (.env.staging) points at a geoblock
       # middleware instead. Both default to empty — no extra host / no
       # middlewares — until those per-host files exist (Faza 1).
-      - "traefik.http.routers.ud-${APP_ENV:-prod}.rule=Host(`${APP_HOST:-uprzejmiedonosze.net}`)${TRAEFIK_EXTRA_HOST_RULE:-}"
-      - "traefik.http.routers.ud-${APP_ENV:-prod}.entrypoints=websecure"
-      - "traefik.http.routers.ud-${APP_ENV:-prod}.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.ud-${APP_ENV:-prod}.middlewares=${TRAEFIK_EXTRA_MIDDLEWARES:-}"
-      - "traefik.http.services.ud-${APP_ENV:-prod}.loadbalancer.server.port=80"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.rule=Host(`${APP_HOST:-uprzejmiedonosze.net}`)${TRAEFIK_EXTRA_HOST_RULE:-}"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.entrypoints=websecure"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.middlewares=${TRAEFIK_EXTRA_MIDDLEWARES:-}"
+      - "traefik.http.services.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.loadbalancer.server.port=80"
     logging:
       driver: syslog
       options:
@@ -247,19 +253,26 @@ services:
       # journald restart recreates the socket inode, which would leave a
       # file-level bind mount pointing at a stale, dead inode.
       - /run/systemd/journal:/run/systemd/journal:ro
-    depends_on:
-      - memcached
-      - face-detector
+    # No depends_on: webapp-srv functionally uses neither face-detector
+    # (its declared-but-unused dependency here, see scripts/deploy.sh) nor
+    # memcached's *startup* — and with face-detector left out of the shadow
+    # profile, a depends_on would make the whole shadow project invalid
+    # ("depends on undefined service", Compose rejects at config stage).
+    # Memcached is always named explicitly by scripts/deploy.sh instead;
+    # prod's face-detector still gets started via face-detect-consumer's
+    # own depends_on.
     environment:
       <<: *app-env
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
       APP_HTTPS: ${APP_HTTPS:-https}
       MEMCACHED_HOST: memcached
-      LOG_IDENT: ${APP_ENV:-prod}-webapp-srv
+      LOG_IDENT: ${LOG_IDENT:-${APP_ENV:-prod}-webapp-srv}
 
-  # ── SHARED: dev + staging + prod ─────────────────────────────────────────
+  # ── SHARED: dev + staging + prod + shadow ─────────────────────────────────
+  # Each compose project gets its own memcached (separate container per
+  # project), so shadow's sessions stay isolated from prod's.
   memcached:
-    profiles: [dev, staging, prod, test]
+    profiles: [dev, staging, prod, test, shadow]
     image: memcached:alpine
     restart: always
 

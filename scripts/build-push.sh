@@ -6,10 +6,11 @@
 # on request (its dlib/cmake build is slow under QEMU on arm64).
 #
 # Usage: bash scripts/build-push.sh <env> <tag> [--with-face-detector] [--sentry]
-#   <env>  prod | staging  — selects APP_HOST baked into the image
+#   <env>  prod | staging | shadow  — selects APP_HOST baked into the image
 #          (config.env.php, sitemap, SCSS — see services/webapp/build.sh)
 #   <tag>  image tag. Convention: prod uses the same "prod_<branch>_<date>"
-#          string as `make sentry-release`'s git tag; staging uses the git SHA.
+#          string as `make sentry-release`'s git tag; staging/shadow use the
+#          git SHA.
 #
 #   --with-face-detector  also build+push services/face-detector (rare: only
 #                          needed after changing that directory)
@@ -40,7 +41,10 @@ done
 case "$ENV" in
   prod)    APP_HOST="uprzejmiedonosze.net" ;;
   staging) APP_HOST="staging.uprzejmiedonosze.net" ;;
-  *) echo "env must be 'prod' or 'staging', got: $ENV" >&2; exit 1 ;;
+  # Shadow is a full prod mirror on its own host — APP_ENV stays prod in the
+  # containers (see services/compose.yml), only the baked HOST differs.
+  shadow)  APP_HOST="shadow.uprzejmiedonosze.net" ;;
+  *) echo "env must be 'prod', 'staging' or 'shadow', got: $ENV" >&2; exit 1 ;;
 esac
 APP_HTTPS="https"
 

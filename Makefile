@@ -111,6 +111,7 @@ sentry-release: ## Create Sentry release and upload JS source maps
 
 DEPLOY_HOSTING := uprzejmiedonosze.net
 DEPLOY_DIR     := /opt/uprzejmiedonosze
+DEPLOY_DIR_SHADOW := /opt/uprzejmiedonosze-shadow
 
 .PHONY: deploy-staging
 deploy-staging: check-git-clean ## Build+push staging images to GHCR, deploy on the host
@@ -131,6 +132,15 @@ deploy-prod: check-branch-main check-git-clean diff-from-last-prod confirmation 
 	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://uprzejmiedonosze.net/
 	@git tag --force -a "prod_$(TAG_NAME)" -m "prod-release"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
+
+.PHONY: deploy-shadow
+deploy-shadow: check-git-clean ## Build+push shadow images to GHCR, deploy on the host (bare app, like staging)
+	@echo "==> Building and pushing shadow images"
+	@bash scripts/build-push.sh shadow "$(shell git rev-parse --short HEAD)"
+	@$(RSYNC) --human-readable services/.env.shadow $(DEPLOY_HOSTING):$(DEPLOY_DIR_SHADOW)/services/.env.shadow
+	@echo "==> Deploying shadow on $(DEPLOY_HOSTING)"
+	@ssh $(DEPLOY_HOSTING) 'cd $(DEPLOY_DIR_SHADOW) && bash scripts/deploy.sh shadow "$(shell git rev-parse --short HEAD)"'
+	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://shadow.uprzejmiedonosze.net/
 
 .PHONY: deploy-healthcheck
 deploy-healthcheck:

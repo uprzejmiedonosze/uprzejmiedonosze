@@ -179,6 +179,8 @@ php-fpm's own operational log (`error_log` in `php-fpm.conf`, master start/stop,
 | S3 | off | on | on |
 | CDN prefix | `cdn2` | `cdn2stg` | `cdn2` |
 
+**shadow** (Docker era, added 2026-10-06): a third server deploy target at `/opt/uprzejmiedonosze-shadow` on the host — a full prod mirror (`APP_ENV=prod` inside the containers, so PHP behaves like prod including real email sending), with its own baked `APP_HOST=shadow.uprzejmiedonosze.net`, port 18082, data root `/var/www/shadow.uprzejmiedonosze.net/` (legacy db/cdn2 reused). Bare app like staging (webapp-srv + memcached only — its worker would run s3-sync/db-backup against the prod B2 buckets otherwise). Traefik router is namespaced `ud-shadow` via `TRAEFIK_ENV` in `services/.env.shadow` (nested `${VAR:-${VAR2}}` interpolation); logs use `LOG_IDENT=shadow-webapp-srv`. Deploy with `make deploy-shadow` (tag = git SHA). Replaces the legacy rsync `make shadow` target (dead since the edge cutover).
+
 ## Agent Workflows & Tips
 
 - **NEVER use `sudo`** (or any require-password root escalation). If something genuinely needs root, stop and ask the user to run it — never attempt `sudo` yourself. This applies equally to **remote hosts over SSH** — including `sudo -n`; it counts as sudo. If a file/command needs root there, report what you need and let the user run it.

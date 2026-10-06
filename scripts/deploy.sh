@@ -5,7 +5,7 @@
 # pull mode.
 #
 # Usage: bash scripts/deploy.sh <env> <tag>
-#   <env>  prod | staging
+#   <env>  prod | staging | shadow
 #   <tag>  the tag build-push.sh pushed as, e.g. prod_main_2026-09-27 or a git SHA
 set -euo pipefail
 
@@ -13,8 +13,8 @@ ENV="${1:?usage: deploy.sh <env> <tag>}"
 TAG="${2:?usage: deploy.sh <env> <tag>}"
 
 case "$ENV" in
-  prod|staging) ;;
-  *) echo "env must be 'prod' or 'staging', got: $ENV" >&2; exit 1 ;;
+  prod|staging|shadow) ;;
+  *) echo "env must be 'prod', 'staging' or 'shadow', got: $ENV" >&2; exit 1 ;;
 esac
 
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
@@ -73,19 +73,23 @@ compose=(docker compose -f services/compose.yml --env-file "${ENV_FILE}" -p "${E
 REGISTRY="${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}"
 
 # staging is deliberately a bare app — no face-detect-consumer, no
-# face-detector, no worker-cron (2026-09-28, explicit request). It still
-# needs memcached (sessions — session.save_handler=memcached, see
-# Dockerfile), so that's named explicitly alongside webapp-srv; --no-deps
-# stops `up` from also pulling in face-detector as webapp-srv's declared
-# (but functionally unused by webapp-srv itself) dependency. worker image
-# is only pulled for envs that actually run something from it.
+# face-detector, no worker-cron (2026-09-28, explicit request). shadow is
+# bare for the same reason plus harder ones (2026-10-06): shadow's worker
+# would run s3-sync/db-backup/cleanup against shadow's own data root —
+# s3-sync would push shadow's cdn2 into the PROD B2 bucket (same B2_* as
+# prod), and db-backup would upload shadow's db under the prod backup key.
+# Both envs still need memcached (sessions — session.save_handler=memcached,
+# see Dockerfile), so that's named explicitly alongside webapp-srv;
+# --no-deps stops `up` from also pulling in face-detector as webapp-srv's
+# declared (but functionally unused by webapp-srv itself) dependency.
+# worker image is only pulled for envs that actually run something from it.
 case "$ENV" in
   prod)
     APP_SERVICES=(webapp-srv worker-cron face-detect-consumer)
     UP_FLAGS=()
     PULL_WORKER=1
     ;;
-  staging)
+  staging|shadow)
     APP_SERVICES=(webapp-srv memcached)
     UP_FLAGS=(--no-deps)
     PULL_WORKER=0
