@@ -74,10 +74,11 @@ REGISTRY="${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}"
 
 # staging is deliberately a bare app — no face-detect-consumer, no
 # face-detector, no worker-cron (2026-09-28, explicit request). shadow is
-# bare for the same reason plus harder ones (2026-10-06): shadow's worker
-# would run s3-sync/db-backup/cleanup against shadow's own data root —
-# s3-sync would push shadow's cdn2 into the PROD B2 bucket (same B2_* as
-# prod), and db-backup would upload shadow's db under the prod backup key.
+# bare too (2026-10-06): it shares the PROD db/cdn2 via symlinks
+# (/var/www/shadow.uprzejmiedonosze.net/{db,cdn2} → ../uprzejmiedonosze.net/,
+# since 2020), so shadow's worker would just re-run prod's own cron jobs
+# (cleanup, old-users-removal, s3-sync, db-backup) against the same data —
+# duplicated work racing the real prod worker, zero benefit.
 # Both envs still need memcached (sessions — session.save_handler=memcached,
 # see Dockerfile), so that's named explicitly alongside webapp-srv;
 # --no-deps stops `up` from also pulling in face-detector as webapp-srv's
