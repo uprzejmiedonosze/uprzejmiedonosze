@@ -8,10 +8,13 @@
 // zostać zsynchronizowane ręcznie (brak wspólnego repo) — każda zmiana promptu/markerów/walidacji
 // tu MUSI być powtórzona tam (i odwrotnie), i musi podbić VISION_SCHEMA.
 
-const VISION_SCHEMA = 8; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
+const VISION_SCHEMA = 9; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
 // To też wersja kontraktu REST dla appki: klient wysyła `X-UD-Schema`, a serwer odrzuca (426) klienta o schemacie NIŻSZYM
 // niż VISION_SCHEMA (kompatybilność tylko „w dół”: nowszy klient ze starszym backendem działa). Podbij dopiero PO wdrożeniu
 // buildu z nowym SCHEMA w sklepach (patrz API.md).
+// SCHEMA 9: limit unikalnych przetworzonych zdjęć na użytkownika (store/PhotoQuota.php) — nowy kontrakt REST: HTTP 402
+// z `quota` na POST /photos/{id}/alpr, /app/{id}/image (photoId) i /vision/candidate oraz `photoQuota` w GET /user/dashboard i
+// /photos/{id}/alpr (kształt odpowiedzi vision/candidate bez zmian względem 8).
 // SCHEMA 8: ALPR na każdym zdjęciu poza 'unusable' + pole alpr_all (wszystkie odczyty) — appka
 // przydziela role context/car/third deterministycznie, patrz alprDetections() w Vision.php.
 
