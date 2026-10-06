@@ -142,7 +142,7 @@ function load(User $user, string $photoId): ?array {
 }
 
 /**
- * Wynik PlateRecognizer dla zdjęcia z `wip` – liczony raz i zapisany w sidecarze (kolejne wywołania nie kosztują).
+ * Wynik PlateRecognizer dla zdjęcia z `wip` – liczony raz i zapisany w sidecarze (kolejne wywołania nie kosztują). Nowe zdjęcie zużywa limit (\quota\reserve).
  * Współrzędne w wyniku są w pikselach pliku `wip`. Błąd dostawcy → wyjątek (nic nie zapisujemy, kolejna próba policzy od nowa).
  * @return array<string,mixed>|null null = brak zdjęcia
  */
@@ -151,7 +151,13 @@ function alpr(User $user, string $photoId): ?array {
     if (!$photo) return null;
     if (is_array($photo['meta']['alpr'] ?? null)) return $photo['meta']['alpr'];
 
-    $resp = \vision\PlateRecognizerClient::call($photo['bytes']);
+    $charged = \quota\reserve($user, $photo['bytes']); // limit unikalnych zdjęć; QuotaExceededException → 402
+    try {
+        $resp = \vision\PlateRecognizerClient::call($photo['bytes']);
+    } catch (\Throwable $e) {
+        if ($charged) \quota\release($user, $photo['bytes']);
+        throw $e;
+    }
     $meta = $photo['meta'];
     $meta['alpr'] = $resp;
     writeSidecar($user, $photoId, $meta);

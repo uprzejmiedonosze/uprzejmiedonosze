@@ -318,7 +318,8 @@ final class ReportMcpTools {
      * the caller can supply. The draft stays in the 'draft' status: a human must
      * open the returned editUrl to review it and send — MCP cannot send a report.
      * Up to three optional images (base64 data URIs) are run through the same
-     * processing pipeline as the web upload.
+     * processing pipeline as the web upload. A carImage (plate recognition) consumes the user's rolling
+     * 30-day quota of unique processed photos (see store/PhotoQuota.php); exhausted quota = tool error.
      *
      * Location mirrors the web form: coordinates are the source of truth. When
      * lat/lng are supplied (or read from the car photo's EXIF GPS), the address
@@ -351,7 +352,7 @@ final class ReportMcpTools {
      * @param string|null $carImage     Optional vehicle/plate photo (base64 data URI); runs plate recognition.
      * @param string|null $contextImage Optional wider-scene photo (base64 data URI).
      * @param string|null $thirdImage   Optional third photo (base64 data URI).
-     * @return array{report: array, editUrl: string} The draft and the URL to finish it.
+     * @return array{report: array, editUrl: string, photoQuota: array} The draft, the URL to finish it and the user's photo quota.
      */
     public function createReportDraft(
         ?int $category = null,
@@ -553,6 +554,17 @@ final class ReportMcpTools {
             }
         }
 
+        // Only carImage reaches the paid ALPR; reserve its slot of the user's photo quota BEFORE the draft is
+        // written, so an exhausted quota leaves no orphaned draft (same photo / cached result = free).
+        $charged = false;
+        if (isset($images['carImage'])) {
+            try {
+                $charged = \quota\reserve($user, $images['carImage']);
+            } catch (\quota\QuotaExceededException $e) {
+                throw new \Mcp\Exception\ToolCallException($e->getMessage(), 0, $e);
+            }
+        }
+
         \app\save($draft);
 
         if ($images) {
@@ -563,7 +575,12 @@ final class ReportMcpTools {
                 // Pass the MCP identity so ALPR provider selection (premium/
                 // patron routing) matches the web; \user\current() would see a
                 // sessionless guest cached at module load.
-                \uploadImage($draft->id, $pictureType, $bytes, $draft->date ?? null, false, null, null, $user);
+                try {
+                    \uploadImage($draft->id, $pictureType, $bytes, $draft->date ?? null, false, null, null, $user);
+                } catch (\Throwable $e) {
+                    if ($charged && $pictureType === 'carImage') \quota\release($user, $bytes);
+                    throw $e;
+                }
             }
             $draft = \app\get($draft->id);
             // carImage's plate recognition resets carInfo; re-apply the caller's
@@ -600,6 +617,7 @@ final class ReportMcpTools {
         return [
             'report' => $report,
             'editUrl' => \BASE_URL . 'app/new?edit=' . $draft->id,
+            'photoQuota' => \quota\status($user),
         ];
     }
 

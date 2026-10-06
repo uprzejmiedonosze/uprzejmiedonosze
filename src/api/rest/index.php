@@ -578,7 +578,7 @@ $app->group('/api/rest/photos', function (RouteCollectorProxy $group) { // PHOTO
                 ]);
             }
         } catch (Exception $e) {
-            $code = in_array($e->getCode(), [400, 404, 415], true) ? $e->getCode() : 500;
+            $code = in_array($e->getCode(), [400, 402, 404, 415], true) ? $e->getCode() : 500;
             throw new HttpException($request, $e->getMessage(), $code, $e);
         }
         $response->getBody()->write(json_encode($staged));
@@ -589,10 +589,13 @@ $app->group('/api/rest/photos', function (RouteCollectorProxy $group) { // PHOTO
     $group->map(['GET', 'POST'], '/{photoId}/alpr', function (Request $request, Response $response, $args) {
         try {
             $result = \wip\detections($request->getAttribute('user'), $args['photoId']);
+        } catch (\quota\QuotaExceededException $e) {
+            throw $e; // 402 + `quota` (JsonErrorRenderer)
         } catch (Exception $e) {
             throw new HttpException($request, 'ALPR chwilowo niedostępny: ' . $e->getMessage(), 502, $e);
         }
         if ($result === null) throw new HttpNotFoundException($request, 'Nie znaleziono zdjęcia');
+        $result['photoQuota'] = \quota\status($request->getAttribute('user'));
         $response->getBody()->write(json_encode($result));
         return $response;
     });
@@ -745,10 +748,20 @@ $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISIO
             throw new HttpException($request, $e->getMessage(), $e->httpStatus);
         }
 
+        // Limit unikalnych zdjęć (\quota\reserve → QuotaExceededException = 402): zdjęcia z `wip` policzone już przy /alpr
+        // albo trafione w cache są darmowe; przy błędzie analizy zwracamy to, co zarezerwowaliśmy tutaj.
+        $charged = [];
         try {
+            foreach ($items as $item) {
+                if (\quota\reserve($user, $item['bytes'])) $charged[] = $item['bytes'];
+            }
             $result = \vision\analyzeCandidate($items, $email, $reportId ?: null);
         } catch (\vision\VisionException $e) {
+            foreach ($charged as $bytes) \quota\release($user, $bytes);
             throw new HttpException($request, $e->getMessage(), 502);
+        } catch (\Throwable $e) {
+            foreach ($charged as $bytes) \quota\release($user, $bytes);
+            throw $e;
         }
         $result['reportId'] = $reportId;
         $result['schema'] = \vision\VISION_SCHEMA;

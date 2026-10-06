@@ -8,6 +8,7 @@ removeAppsByStatus(olderThan: 10, status: 'draft', dryRun: false);
 removeAppsByStatus(olderThan: 30, status: 'ready', dryRun: false);
 cleanupStuckSendingApps(olderThanMinutes: 10, dryRun: false);
 echo 'wip: usunięto ' . \wip\purgeOlderThan(\wip\WIP_TTL_HOURS) . " plików starszych niż " . \wip\WIP_TTL_HOURS . "h\n";
+echo 'photo_usage: usunięto ' . \quota\purge() . " wpisów starszych niż " . PHOTO_QUOTA_DAYS . " dni\n";
 
 echo date('Y-m-d H:i:s') . " — cleanup done\n";
 \telemetry\log('cron_cleanup', null, ['status' => 'success']);

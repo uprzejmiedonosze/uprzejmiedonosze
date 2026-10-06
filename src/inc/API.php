@@ -724,6 +724,7 @@ function dashboardData(User $user, bool $fresh = false): array {
         'levels' => $levels,
         'rank' => $rank,
         'badges' => $badges,
+        'photoQuota' => \quota\status($user), // limit unikalnych przetworzonych zdjęć (store/PhotoQuota.php)
     ];
 }
 
