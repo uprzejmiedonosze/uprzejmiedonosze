@@ -33,6 +33,8 @@ function exceptionToErrorJson($exception): string {
         $response["field"] = $exception->getField();
     elseif ($exception->getPrevious() instanceof ValidationException)
         $response["field"] = $exception->getPrevious()->getField();
+    if ($exception instanceof \quota\QuotaExceededException)
+        $response["quota"] = $exception->status;
     if (!isProd()) {
         $response["location"] = $exception->getFile() . ":" . $exception->getLine();
     }

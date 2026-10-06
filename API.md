@@ -161,6 +161,20 @@ Response: `{ "photoId", "width", "height", "detections": [{ "text": "ZS12345", "
 The UD Pro app uses all detections to choose which photo is the car and which is context (`src/lib/roles.ts`). 404 when
 the photo does not exist, 502 when ALPR is unavailable.
 
+### Limit przetworzonych zdjęć (HTTP 402)
+
+Każdy użytkownik ma limit **unikalnych** zdjęć przetworzonych przez płatnych dostawców (ALPR/LLM) w kroczącym oknie
+`PHOTO_QUOTA_DAYS` (30 dni). Liczy się zdjęcie (sha1 bajtów), nie zgłoszenie: ponowne wysłanie tego samego pliku oraz
+zdjęcie, którego wynik leży w cache ALPR, nie zużywają limitu. Wspólna pula dla appki Pro (REST) i MCP (`create_report_draft`,
+tylko `carImage`); web bez zmian. Progi (aktywny patron Patronite wg kwoty): brak patronatu 50, ≥ 10 zł 100, ≥ 25 zł 300,
+≥ 50 zł bez limitu (`config.php`: `PHOTO_QUOTA_FREE`, `PHOTO_QUOTA_TIERS`).
+
+Przekroczenie → **402** `{error, status, quota}` z `POST /photos/{id}/alpr`, `POST /app/{id}/image` (gałąź `photoId`)
+i `POST /vision/candidate`; w MCP – błąd narzędzia z tym samym komunikatem, bez tworzenia szkicu.
+`quota` = `{used, limit|null, remaining|null, windowDays, resetsAt|null (unix), tier}`; ten sam obiekt jako `photoQuota`
+w `GET /user/dashboard`, w odpowiedzi `/photos/{id}/alpr` i w wyniku MCP `create_report_draft`. Błąd dostawcy zwraca
+zarezerwowane miejsce. Migracja: `src/sql/migration_20261006_photo_quota.sql`.
+
 ### DELETE `/api/rest/photos/{photoId}`
 
 Removes a staged photo (204, or 404 when it does not exist).
