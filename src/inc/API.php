@@ -725,6 +725,7 @@ function dashboardData(User $user, bool $fresh = false): array {
         'rank' => $rank,
         'badges' => $badges,
         'photoQuota' => \quota\status($user), // limit unikalnych przetworzonych zdjęć (store/PhotoQuota.php)
+        'sexStrings' => $sex, // odmiana przez płeć (jak `sexStrings` w GET /user/), np. `Patronką` → „Patronem/Patronką”
     ];
 }
 
