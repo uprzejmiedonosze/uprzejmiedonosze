@@ -149,6 +149,11 @@ if (!defined('GOOGLE_VISION_API_KEY'))          define('GOOGLE_VISION_API_KEY', 
 // Etap `wip` (POST /api/rest/photos): limit zdjęć wysyłanych przez jednego użytkownika.
 if (!defined('WIP_RATE_MAX'))        define('WIP_RATE_MAX',        (int)(getenv('WIP_RATE_MAX') ?: 60));
 if (!defined('WIP_RATE_WINDOW'))     define('WIP_RATE_WINDOW',     (int)(getenv('WIP_RATE_WINDOW') ?: 3600));
+// Limit unikalnych przetworzonych zdjęć (ALPR/LLM, bez cache) na użytkownika w kroczącym oknie – patrz store/PhotoQuota.php.
+// Bez patronatu: PHOTO_QUOTA_FREE; aktywny patron: najwyższy próg PHOTO_QUOTA_TIERS (zł/mies. => limit, null = bez limitu).
+if (!defined('PHOTO_QUOTA_DAYS'))    define('PHOTO_QUOTA_DAYS',    (int)(getenv('PHOTO_QUOTA_DAYS') ?: 30));
+if (!defined('PHOTO_QUOTA_FREE'))    define('PHOTO_QUOTA_FREE',    (int)(getenv('PHOTO_QUOTA_FREE') ?: 50));
+if (!defined('PHOTO_QUOTA_TIERS'))   define('PHOTO_QUOTA_TIERS',   [50 => null, 25 => 300, 10 => 100]);
 
 // Rate-limit analizy wizyjnej per użytkownik (\cache\throttle\attempt, jak PasskeyHandler).
 if (!defined('VISION_RATE_MAX'))     define('VISION_RATE_MAX',     (int)(getenv('VISION_RATE_MAX') ?: 60));
