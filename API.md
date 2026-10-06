@@ -2,13 +2,18 @@
 
 *Note: Due to the framework's strict routing (Slim 4), endpoints corresponding to the root of a group **must** include a trailing slash (e.g., `/api/rest/user/` instead of `/api/rest/user`). Missing trailing slashes will result in a 404 Not Found error.*
 
-## Wersja klienta mobilnego (wymuszenie aktualizacji)
+## Kontrakt API a aplikacja mobilna (wymuszenie aktualizacji)
 
-Aplikacja mobilna wysyła w każdym żądaniu `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`. Gdy wersja jest niższa niż `minVersion`
-swojej platformy w `/api/config/app.json`, każdy endpoint `/api/rest/*` odpowiada **426** z `{error, status, minVersion, storeUrl}` –
-klient pokazuje blokujący ekran „Zaktualizuj”. Żądania bez nagłówka (web, MCP) nie są ograniczane. Ten sam plik (publiczny, bez auth)
-aplikacja pobiera przy starcie: `minVersion` = blokada, `latestVersion` = miękka zachęta. **Zmianę łamiącą API wdrażamy w kolejności:**
-nowy build w sklepach → backend z nową zmianą → dopiero podbicie `minVersion`.
+Kontrakt jest wersjonowany numerem `VISION_SCHEMA` (`src/inc/integrations/VisionSchema.php`) = `SCHEMA` w appce (`src/lib/vision.ts`);
+podbijamy go przy każdej zmianie kontraktu. Aplikacja wysyła w każdym żądaniu `X-UD-Schema: <SCHEMA>` (oraz informacyjnie
+`X-UD-Client: pro/<wersja> (<build>; <ios|android>)`). **Kompatybilność jest tylko „w dół”:** klient ze schematem równym lub
+wyższym niż backend działa (nowa appka ze starszym backendem – OK), a klient ze schematem **niższym** niż `VISION_SCHEMA` backendu
+(np. appka 7, backend 8) dostaje na każdym `/api/rest/*` **426** z `{error, status, schema, serverSchema, storeUrl}` i pokazuje
+blokujący ekran „Zaktualizuj”. Żądania bez nagłówka (web, MCP) nie są ograniczane.
+Decyzję podejmuje wyłącznie backend – appka nie porównuje wersji u siebie, tylko reaguje na 426 (pierwsze żądanie po starcie to
+`POST /api/verify-token`, więc blokada pojawia się od razu). `/api/config/app.json` (publiczny) służy już tylko do miękkiej zachęty:
+`latestVersion` (wersja appki, per platforma) i `storeUrl`. **Kolejność wdrożenia zmiany kontraktu:** podbić `SCHEMA` w appce → nowy build
+w sklepach → dopiero potem backend z podbitym `VISION_SCHEMA` (od tej chwili starsze appki są blokowane).
 
 ## User endpoints
 
