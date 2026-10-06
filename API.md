@@ -2,6 +2,14 @@
 
 *Note: Due to the framework's strict routing (Slim 4), endpoints corresponding to the root of a group **must** include a trailing slash (e.g., `/api/rest/user/` instead of `/api/rest/user`). Missing trailing slashes will result in a 404 Not Found error.*
 
+## Wersja klienta mobilnego (wymuszenie aktualizacji)
+
+Aplikacja mobilna wysyła w każdym żądaniu `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`. Gdy wersja jest niższa niż `minVersion`
+swojej platformy w `/api/config/app.json`, każdy endpoint `/api/rest/*` odpowiada **426** z `{error, status, minVersion, storeUrl}` –
+klient pokazuje blokujący ekran „Zaktualizuj”. Żądania bez nagłówka (web, MCP) nie są ograniczane. Ten sam plik (publiczny, bez auth)
+aplikacja pobiera przy starcie: `minVersion` = blokada, `latestVersion` = miękka zachęta. **Zmianę łamiącą API wdrażamy w kolejności:**
+nowy build w sklepach → backend z nową zmianą → dopiero podbicie `minVersion`.
+
 ## User endpoints
 
 Requires authorization.
