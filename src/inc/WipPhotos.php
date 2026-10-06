@@ -128,6 +128,58 @@ function alpr(User $user, string $photoId): ?array {
     return $resp;
 }
 
+/**
+ * Detekcje ALPR zdjęcia w formie dla klienta mobilnego (wybór auta/kontekstu po stronie aplikacji): każdy odczyt z tekstem
+ * tablicy, pewnością, boxami (0..1000) i polem pojazdu (ułamek kadru) + `winner` = odczyt wskazany przez bestAlprResult()
+ * (score z pasmem remisu → większy pojazd). ALPR liczony raz na zdjęcie (sidecar).
+ * @return array{photoId:string,width:int,height:int,detections:list<array<string,mixed>>}|null null = brak zdjęcia
+ */
+function detections(User $user, string $photoId): ?array {
+    $resp = alpr($user, $photoId);
+    if ($resp === null) return null;
+    $meta = readSidecar($user, $photoId);
+    $size = ['w' => (int)($meta['width'] ?? 0), 'h' => (int)($meta['height'] ?? 0)];
+    $best = \alpr\bestAlprResult($resp);
+    $out = [];
+    foreach ($resp['results'] ?? [] as $r) {
+        $d = \vision\alprDetections(['results' => [$r]], $size['w'] > 0 && $size['h'] > 0 ? $size : null)[0] ?? null;
+        if ($d === null) continue; // odczyt bez parsowalnej tablicy
+        $d['winner'] = $best !== null && $r === $best;
+        $out[] = $d;
+    }
+    return ['photoId' => $photoId, 'width' => $size['w'], 'height' => $size['h'], 'detections' => $out];
+}
+
+/**
+ * Wycinek auta dla zdjęcia z `wip`: bajty JPEG fragmentu z boxem zwycięskiego pojazdu +20% i wynik ALPR przesunięty do
+ * współrzędnych wycinka (tylko zwycięzca) – dzięki temu przydział nie woła ALPR drugi raz.
+ * @return array{bytes:string,alpr:array<string,mixed>,size:array{0:int,1:int}}|null null = brak pojazdu / zdjęcia
+ */
+function vehicleCrop(User $user, string $photoId, float $margin = 0.2): ?array {
+    $photo = load($user, $photoId);
+    $resp = $photo ? alpr($user, $photoId) : null;
+    $best = $resp ? \alpr\bestAlprResult($resp) : null;
+    $box = $best['vehicle']['box'] ?? null;
+    if (!$box) return null;
+
+    $w = (int)($photo['meta']['width'] ?? 0);
+    $h = (int)($photo['meta']['height'] ?? 0);
+    if ($w <= 0 || $h <= 0) [$w, $h] = getimagesizefromstring($photo['bytes']);
+    [$x, $y, $cw, $ch] = \alpr\vehicleCropBox($box, $w, $h, $margin);
+
+    $src = @imagecreatefromstring($photo['bytes']);
+    if ($src === false) return null;
+    $cropped = imagecrop($src, ['x' => $x, 'y' => $y, 'width' => $cw, 'height' => $ch]);
+    imagedestroy($src);
+    if ($cropped === false) return null;
+    ob_start();
+    imagejpeg($cropped, null, 90);
+    $bytes = ob_get_clean();
+    imagedestroy($cropped);
+
+    return ['bytes' => $bytes, 'alpr' => \alpr\translatePlateRecognizerResult(['results' => [$best]], -$x, -$y), 'size' => [$cw, $ch]];
+}
+
 function delete(User $user, string $photoId): bool {
     if (!validId($photoId)) return false;
     $existed = is_file(photoPath($user, $photoId));
