@@ -64,7 +64,22 @@ Returns `{passkeys: [{id, label, createdAt, lastUsedAt}]}`.
 
 ### DELETE `/api/rest/user/passkeys/{id}`
 
-Removes one of the user's passkeys. (Registering a passkey is only available on the web for now.)
+Removes one of the user's passkeys.
+
+### POST `/api/rest/user/passkeys/register-options` / `register-verify`
+
+Native app registration (WebAuthn). There is no cookie session, so the challenge travels as `state`:
+`register-options` returns `{options, state}` (`options` = WebAuthn creation options, base64url);
+`register-verify` takes `{state, id, clientDataJSON, attestationObject, transports}` (base64url) and returns
+`{passkeys: [...]}`. `state` is single-use, TTL 120 s. The Android origin (`android:apk-key-hash:<hash>`) must be
+whitelisted in `PASSKEY_ANDROID_KEY_HASHES` (comma-separated, per host); the host must equal `APP_HOST` (RP ID).
+
+### POST `/api/rest/passkey/login-options` / `login-verify` (anonymous)
+
+`login-options` returns `{options, state}` (discoverable credentials, empty `allowCredentials`);
+`login-verify` takes `{state, id, clientDataJSON, authenticatorData, signature, userHandle}` and returns
+`{customToken}` (Firebase custom token, 300 s) – the app exchanges it via `accounts:signInWithCustomToken`
+and then calls `/api/verify-token`.
 
 ### GET `/api/rest/user/apps`
 
