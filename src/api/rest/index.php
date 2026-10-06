@@ -75,29 +75,32 @@ $app->options('/{routes:.+}', function ($request, $response) {
     return $response;
 });
 
-// Wymuszenie aktualizacji aplikacji mobilnej: klient wysyła `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`.
-// Gdy wersja < minVersion z config/app.json dla jego platformy → 426 + storeUrl (app pokazuje ekran „Zaktualizuj”).
-// Brak nagłówka (web, MCP, curl) = bez ograniczeń; błąd konfiguracji też przepuszcza (fail-open).
+// Wymuszenie aktualizacji aplikacji mobilnej wg KONTRAKTU API (nie wersji appki). Klient wysyła `X-UD-Schema: <SCHEMA>` –
+// wersję kontraktu, z którą został zbudowany (ta sama numeracja co VISION_SCHEMA backendu / src/lib/vision.ts w appce).
+// Kompatybilność jest tylko „w dół”: nowszy klient działa ze starszym backendem, ale klient ze schematem NIŻSZYM niż
+// VISION_SCHEMA backendu jest niekompatybilny → 426 + storeUrl (app pokazuje ekran „Zaktualizuj”). Dlatego nowy build
+// z podbitym SCHEMA musi być w sklepach PRZED wdrożeniem backendu z podbitym VISION_SCHEMA.
+// Brak nagłówka (web, MCP, curl) = bez ograniczeń. Platforma (tylko do wyboru storeUrl) z
+// `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`.
 $app->add(function ($request, $handler) use ($app) {
-    $header = $request->getHeaderLine('X-UD-Client');
-    if ($header !== '' && $request->getMethod() !== 'OPTIONS'
-        && preg_match('#^pro/(\d+(?:\.\d+)*) \(\d+; (ios|android)\)$#', $header, $m)) {
+    $schema = $request->getHeaderLine('X-UD-Schema');
+    if ($schema !== '' && ctype_digit($schema) && (int)$schema < \vision\VISION_SCHEMA && $request->getMethod() !== 'OPTIONS') {
+        $cfg = [];
         try {
-            $cfg = \json\get('app.json')[$m[2]] ?? [];
-            $min = $cfg['minVersion'] ?? null;
-            if ($min && version_compare($m[1], $min, '<')) {
-                $response = $app->getResponseFactory()->createResponse(426);
-                $response->getBody()->write(json_encode([
-                    'error' => \json\get('app.json')['message'] ?? 'Wymagana aktualizacja aplikacji.',
-                    'status' => 426,
-                    'minVersion' => $min,
-                    'storeUrl' => $cfg['storeUrl'] ?? null,
-                ], JSON_UNESCAPED_UNICODE));
-                return $response;
-            }
+            $cfg = \json\get('app.json');
         } catch (\Throwable $e) {
-            // fail-open
+            // bez pliku konfiguracji nadal odrzucamy (komunikat/storeUrl zostaną domyślne)
         }
+        $platform = preg_match('#\((?:\d+); (ios|android)\)$#', $request->getHeaderLine('X-UD-Client'), $m) ? $m[1] : 'android';
+        $response = $app->getResponseFactory()->createResponse(426);
+        $response->getBody()->write(json_encode([
+            'error' => $cfg['message'] ?? 'Wymagana aktualizacja aplikacji.',
+            'status' => 426,
+            'schema' => (int)$schema,
+            'serverSchema' => \vision\VISION_SCHEMA,
+            'storeUrl' => $cfg[$platform]['storeUrl'] ?? null,
+        ], JSON_UNESCAPED_UNICODE));
+        return $response;
     }
     return $handler->handle($request);
 });
@@ -109,7 +112,7 @@ $app->add(function ($request, $handler) {
     if ($allowedOrigin) {
         $response = $response
             ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-UD-Client')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-UD-Client, X-UD-Schema')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH')
             ->withHeader('Access-Control-Allow-Credentials', 'true');
     }
