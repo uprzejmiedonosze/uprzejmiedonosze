@@ -180,6 +180,10 @@ i `POST /vision/candidate`; w MCP – błąd narzędzia z tym samym komunikatem,
 w `GET /user/dashboard`, w odpowiedzi `/photos/{id}/alpr` i w wyniku MCP `create_report_draft`. Błąd dostawcy zwraca
 zarezerwowane miejsce. Migracja: `src/sql/migration_20261006_photo_quota.sql`.
 
+### GET `/api/rest/photos/quota`
+
+Zużycie limitu przetworzonych zdjęć użytkownika (obiekt `quota`, patrz wyżej: `{used, limit|null, remaining|null, windowDays, resetsAt|null, tier}`).
+
 ### DELETE `/api/rest/photos/{photoId}`
 
 Removes a staged photo (204, or 404 when it does not exist).
