@@ -92,6 +92,35 @@ function scalePlateRecognizerResult(array $resp, float $sx, float $sy): array {
 }
 
 /**
+ * Prostokąt wycinka auta: box pojazdu z ALPR powiększony o $margin jego szerokości/wysokości z KAŻDEJ strony, docięty do kadru.
+ * @param array{xmin:int|float,ymin:int|float,xmax:int|float,ymax:int|float} $box
+ * @return array{0:int,1:int,2:int,3:int} [x, y, szerokość, wysokość] w pikselach
+ */
+function vehicleCropBox(array $box, int $imageW, int $imageH, float $margin = 0.2): array {
+    $w = max(1, $box['xmax'] - $box['xmin']);
+    $h = max(1, $box['ymax'] - $box['ymin']);
+    $x1 = max(0, (int)floor($box['xmin'] - $margin * $w));
+    $y1 = max(0, (int)floor($box['ymin'] - $margin * $h));
+    $x2 = min($imageW, (int)ceil($box['xmax'] + $margin * $w));
+    $y2 = min($imageH, (int)ceil($box['ymax'] + $margin * $h));
+    return [$x1, $y1, max(1, $x2 - $x1), max(1, $y2 - $y1)];
+}
+
+/** Przesuwa współrzędne (box tablicy i pojazdu) wyniku PlateRecognizer o ($dx, $dy) – po wycięciu fragmentu obrazka. */
+function translatePlateRecognizerResult(array $resp, int $dx, int $dy): array {
+    $move = function (&$box) use ($dx, $dy): void {
+        if (!is_array($box)) return;
+        foreach (['xmin', 'xmax'] as $k) if (isset($box[$k])) $box[$k] = (int)round($box[$k] + $dx);
+        foreach (['ymin', 'ymax'] as $k) if (isset($box[$k])) $box[$k] = (int)round($box[$k] + $dy);
+    };
+    foreach ($resp['results'] ?? [] as $i => $r) {
+        if (isset($r['box'])) $move($resp['results'][$i]['box']);
+        if (isset($r['vehicle']['box'])) $move($resp['results'][$i]['vehicle']['box']);
+    }
+    return $resp;
+}
+
+/**
  * Wynik PlateRecognizer policzony już dla ORYGINALNIE przesłanych bajtów (cache po sha1) – np. przez analizę
  * mobilną `POST /vision/candidate`, która woła ALPR dla każdego zdjęcia (Vision.php::applyAlprPlate()) –
  * przeliczony na wymiary pliku zapisanego na serwerze ($storedBytes: re-enkodowany i ograniczony do MAX_IMAGE_DIM).

@@ -390,7 +390,9 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
                     function (Application $app) use ($request) {
                         if (!$app->isEditable())
                             throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
-                    });
+                    }, isset($params['crop']) ? (string)$params['crop'] : null);
+            } catch (ValidationException $e) {
+                throw new HttpException($request, $e->getMessage(), 422, $e); // JsonErrorRenderer adds `field`
             } catch (MissingParamException $e) {
                 throw new HttpBadRequestException($request, $e->getMessage(), $e);
             } catch (HttpException $e) {
@@ -529,6 +531,18 @@ $app->group('/api/rest/photos', function (RouteCollectorProxy $group) { // PHOTO
         }
         $response->getBody()->write(json_encode($staged));
         return $response->withStatus(201);
+    });
+
+    // Wszystkie odczyty ALPR zdjęcia (raz na zdjęcie, wynik w sidecarze) – aplikacja sama wybiera auto i kontekst (src/lib/roles.ts).
+    $group->map(['GET', 'POST'], '/{photoId}/alpr', function (Request $request, Response $response, $args) {
+        try {
+            $result = \wip\detections($request->getAttribute('user'), $args['photoId']);
+        } catch (Exception $e) {
+            throw new HttpException($request, 'ALPR chwilowo niedostępny: ' . $e->getMessage(), 502, $e);
+        }
+        if ($result === null) throw new HttpNotFoundException($request, 'Nie znaleziono zdjęcia');
+        $response->getBody()->write(json_encode($result));
+        return $response;
     });
 
     $group->delete('/{photoId}', function (Request $request, Response $response, $args) {

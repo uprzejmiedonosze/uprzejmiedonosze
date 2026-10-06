@@ -206,9 +206,11 @@ function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFro
  * Zdjęcie z etapu `wip` (src/inc/WipPhotos.php) → slot zgłoszenia: skalowanie, miniatura, wycinek tablicy, dane auta.
  * Bajty czyta z dysku serwera (klient nie wysyła ich drugi raz), a ALPR bierze z sidecara (policzony raz przy analizie albo
  * tu, gdy zdjęcie nie było analizowane) – kolejne przydziały tego samego zdjęcia (zamiana ról) nie wołają ALPR ponownie.
+ * `$crop = 'vehicle'` (tylko carImage): zamiast całego zdjęcia zapisujemy wycinek zwycięskiego pojazdu z ALPR + 20% marginesu
+ * (jedno zdjęcie = kontekst + auto); wynik ALPR jest przesuwany do współrzędnych wycinka, więc ALPR nadal liczy się raz.
  * `wip` zostaje do zakończenia zgłoszenia (finishApplication) albo TTL; id zdjęć zapamiętujemy w `$application->wipPhotos`.
  */
-function assignPhoto(string $appId, string $pictureType, string $photoId, User $user, ?callable $validate = null) {
+function assignPhoto(string $appId, string $pictureType, string $photoId, User $user, ?callable $validate = null, ?string $crop = null) {
     $photo = \wip\load($user, $photoId);
     if (!$photo) throw new Exception("Nie znaleziono zdjęcia '$photoId' (wygasło albo nie należy do użytkownika)", 404);
     if (!in_array($pictureType, ['carImage', 'contextImage', 'thirdImage'], true)) {
@@ -225,8 +227,15 @@ function assignPhoto(string $appId, string $pictureType, string $photoId, User $
     }
     $latLng = (isset($meta['lat'], $meta['lng']) && $pictureType === 'carImage') ? \geo\normalizeLatLng($meta['lat'], $meta['lng']) : null;
     $dateTime = $pictureType === 'carImage' ? ($meta['dateTime'] ?? null) : null;
-    $application = finalizeImage($appId, $pictureType, $photo['bytes'], $dateTime, !empty($dateTime), $latLng, $validate, $user,
-        $alpr, isset($meta['width'], $meta['height']) ? [(int)$meta['width'], (int)$meta['height']] : null);
+    $bytes = $photo['bytes'];
+    $alprSize = isset($meta['width'], $meta['height']) ? [(int)$meta['width'], (int)$meta['height']] : null;
+    if ($crop === 'vehicle' && $pictureType === 'carImage') {
+        $vehicle = \wip\vehicleCrop($user, $photoId);
+        if (!$vehicle) throw new \ValidationException('images', 'Nie wykryto pojazdu z widoczną tablicą rejestracyjną na tym zdjęciu');
+        [$bytes, $alpr, $alprSize] = [$vehicle['bytes'], $vehicle['alpr'], $vehicle['size']];
+    }
+    $application = finalizeImage($appId, $pictureType, $bytes, $dateTime, !empty($dateTime), $latLng, $validate, $user,
+        $alpr, $alprSize);
 
     return \semaphore\withLock($appId, "wipPhotos", function () use ($appId, $pictureType, $photoId) {
         $application = \app\get($appId);
