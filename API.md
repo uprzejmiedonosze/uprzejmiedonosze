@@ -122,9 +122,6 @@ Preferred contract — `multipart/form-data`:
   * `dtFromPicture` (optional) — `true` when `dateTime` comes from the photo
   * `latLng` ("53.4,14.5") or `lat` + `lng` (optional, `carImage` only)
 
-Legacy contract (still supported) — JSON/form body with a data URI in `carImage`, `contextImage`
-or `thirdImage` (the field name is the picture type) plus `dateTime`, `lat`, `lng`.
-
 Staged contract (UD Pro mobile) — instead of `image` send `photoId` (from `POST /api/rest/photos`) plus
 `pictureType`. The server takes the bytes from its `wip` storage (no second upload), resizes/crops them and
 reuses the plate recognition result computed once for that photo, so re-assigning the same `photoId` to another

@@ -81,13 +81,13 @@ class ReportFlowTest extends DatabaseTestCase
         $this->assertSame(\geo\normalizeLatLng('53.4', '14.5'), $up['latLng']);
     }
 
-    public function testLegacyRestDataUriFieldImpliesPictureType(): void
+    public function testImageDataUriIsAcceptedForTheOlderWebClient(): void
     {
-        $uri = 'data:image/jpeg;base64,' . base64_encode('legacy');
-        $up = imageUploadFromRequest($this->request(['thirdImage' => $uri, 'dateTime' => '2026-09-10T19:43:00']));
-        $this->assertSame('legacy', $up['bytes']);
-        $this->assertSame('thirdImage', $up['pictureType']);
-        $this->assertTrue($up['dtFromPicture']); // legacy contract: implied by dateTime
+        $uri = 'data:image/jpeg;base64,' . base64_encode('older-web');
+        $up = imageUploadFromRequest($this->request(['image_data' => $uri, 'pictureType' => 'contextImage']));
+        $this->assertSame('older-web', $up['bytes']);
+        $this->assertSame('contextImage', $up['pictureType']);
+        $this->assertNull($up['dtFromPicture'], 'bez implikowania z dateTime');
     }
 
     public function testUploadRequiresPictureType(): void

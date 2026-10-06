@@ -155,22 +155,6 @@ function translatePlateRecognizerResult(array $resp, int $dx, int $dy): array {
     return $resp;
 }
 
-/**
- * Wynik PlateRecognizer policzony już dla ORYGINALNIE przesłanych bajtów (cache po sha1) – np. przez analizę
- * mobilną `POST /vision/candidate`, która woła ALPR dla każdego zdjęcia (Vision.php::applyAlprPlate()) –
- * przeliczony na wymiary pliku zapisanego na serwerze ($storedBytes: re-enkodowany i ograniczony do MAX_IMAGE_DIM).
- * Dzięki temu upload nie płaci za drugie wywołanie ALPR dla tego samego zdjęcia. null = brak w cache.
- */
-function cachedPlateRecognizerScaled(string $originalBytes, string $storedBytes): ?array {
-    $cached = \cache\alpr\get(Type::Platerecognizer, sha1($originalBytes));
-    if (!$cached) return null;
-    $orig = @getimagesizefromstring($originalBytes);
-    $stored = @getimagesizefromstring($storedBytes);
-    if (!$orig || !$stored || !$orig[0] || !$orig[1]) return null;
-    if ($orig[0] === $stored[0] && $orig[1] === $stored[1]) return $cached;
-    return scalePlateRecognizerResult($cached, $stored[0] / $orig[0], $stored[1] / $orig[1]);
-}
-
 function get_platerecognizer(&$imageBytes) {
     $imageHash = sha1($imageBytes);
     $result = \cache\alpr\get(Type::Platerecognizer, $imageHash);
