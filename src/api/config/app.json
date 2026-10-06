@@ -1,0 +1,13 @@
+{
+  "message": "Ta wersja aplikacji jest już nieobsługiwana. Zaktualizuj ją, aby dalej korzystać z Uprzejmie Donoszę.",
+  "android": {
+    "minVersion": "1.0.0",
+    "latestVersion": "1.0.0",
+    "storeUrl": "https://play.google.com/store/apps/details?id=net.uprzejmiedonosze.pro"
+  },
+  "ios": {
+    "minVersion": "1.0.0",
+    "latestVersion": "1.0.0",
+    "storeUrl": "https://apps.apple.com/app/uprzejmie-donosze/id0000000000"
+  }
+}
