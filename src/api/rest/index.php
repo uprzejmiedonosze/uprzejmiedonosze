@@ -30,6 +30,7 @@ require(INC_DIR . '/middleware/AppMiddleware.php');
 require(INC_DIR . '/Twig.php');
 require(INC_DIR . '/integrations/Vision.php');
 require_once(INC_DIR . '/UserRemoval.php');
+require_once(INC_DIR . '/handlers/PasskeyHandler.php');
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -185,8 +186,20 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         ->add(new TokenSessionMiddleware())
         ->add(new AuthMiddleware());
 
-    // Passkeys (web /app/account): list + remove. Adding one needs WebAuthn in a native app
-    // (RP/origin association), so registration stays on the web for now.
+    // Passkeys (web /app/account): list + remove + register (native app: challenge travels as `state`,
+    // see PasskeyHandler::isRest). Login lives in the anonymous /api/rest/passkey group below.
+    $group->post('/passkeys/register-options', PasskeyHandler::class . ':registerOptions')
+        ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    $group->post('/passkeys/register-verify', PasskeyHandler::class . ':registerVerify')
+        ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
     $group->get('/passkeys', function (Request $request, Response $response) {
         $user = $request->getAttribute('user');
         $rows = array_map(fn($p) => [
@@ -246,6 +259,13 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         ->add(new AuthMiddleware());
     
 }); 
+
+// Passkey login for the native app: anonymous; returns a Firebase custom token (the app exchanges it for an ID
+// token via identitytoolkit and calls /api/verify-token like any other login).
+$app->group('/api/rest/passkey', function (RouteCollectorProxy $group) {
+    $group->post('/login-options', PasskeyHandler::class . ':loginOptions');
+    $group->post('/login-verify', PasskeyHandler::class . ':loginVerify');
+});
 
 $app->group('/api/rest/config', function (RouteCollectorProxy $group) { // CONFIG
     $CONFIG_FILES = Array(
