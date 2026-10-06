@@ -203,14 +203,46 @@ function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFro
 }
 
 /**
+ * Podmienia wycinek tablicy rejestracyjnej zgłoszenia (`carInfo->plateImage`, widoczny w formularzu, na stronie zgłoszenia i w PDF)
+ * na wycinek przysłany przez klienta – mobilna aplikacja tnie go z oryginału zdjęcia w pełnej rozdzielczości, a serwer ma tylko
+ * kopię ≤1600 px (stąd ~80 px szerokości). Wycinek serwerowy zostaje jako rezerwa, gdy klient niczego nie wyśle.
+ * @throws Exception 403 nie właściciel / niedostępne do edycji, 409 brak zdjęcia auta, 400 to nie obrazek
+ */
+function replacePlateImage(string $appId, string $imageBytes, User $user): Application {
+    return \semaphore\withLock($appId, "plateImage", function () use ($appId, $imageBytes, $user) {
+        $application = \app\get($appId);
+        if ($application->email !== $user->getEmail()) throw new Exception("Nie posiadasz zgłoszenia o ID $appId", 403);
+        if (!$application->isEditable()) throw new Exception("Zgłoszenie $appId nie może być edytowane", 403);
+        if (!isset($application->carImage->url)) throw new Exception('Zgłoszenie nie ma jeszcze zdjęcia auta', 409);
+
+        $img = @imagecreatefromstring($imageBytes);
+        if ($img === false) throw new Exception('Przesłany plik nie jest obrazkiem', 400);
+        $w = imagesx($img);
+        if ($w > 800) { // tablica na dokumencie nie potrzebuje więcej; chroni też przed przypadkowym wysłaniem całego zdjęcia
+            $scaled = imagescale($img, 800);
+            if ($scaled !== false) { imagedestroy($img); $img = $scaled; }
+        }
+        $path = $application->carInfo->plateImage ?? preg_replace('/,ca\.jpg$/', ',ca,p.jpg', $application->carImage->url);
+        if (!imagejpeg($img, ROOT . $path, 92)) { imagedestroy($img); throw new Exception('Nie udało się zapisać wycinka tablicy', 500); }
+        imagedestroy($img);
+
+        $application->carInfo ??= new stdClass();
+        $application->carInfo->plateImage = $path;
+        return \app\save($application);
+    });
+}
+
+/**
  * Zdjęcie z etapu `wip` (src/inc/WipPhotos.php) → slot zgłoszenia: skalowanie, miniatura, wycinek tablicy, dane auta.
  * Bajty czyta z dysku serwera (klient nie wysyła ich drugi raz), a ALPR bierze z sidecara (policzony raz przy analizie albo
  * tu, gdy zdjęcie nie było analizowane) – kolejne przydziały tego samego zdjęcia (zamiana ról) nie wołają ALPR ponownie.
  * `$crop = 'vehicle'` (tylko carImage): zamiast całego zdjęcia zapisujemy wycinek zwycięskiego pojazdu z ALPR + 20% marginesu
  * (jedno zdjęcie = kontekst + auto); wynik ALPR jest przesuwany do współrzędnych wycinka, więc ALPR nadal liczy się raz.
+ * `$plate` (tylko carImage): tablica pojazdu wskazanego przez użytkownika, gdy na zdjęciach są dwa auta – carInfo i wycinek
+ * dotyczą jego odczytu zamiast zwycięzcy zdjęcia (brak takiego odczytu → zwycięzca).
  * `wip` zostaje do zakończenia zgłoszenia (finishApplication) albo TTL; id zdjęć zapamiętujemy w `$application->wipPhotos`.
  */
-function assignPhoto(string $appId, string $pictureType, string $photoId, User $user, ?callable $validate = null, ?string $crop = null) {
+function assignPhoto(string $appId, string $pictureType, string $photoId, User $user, ?callable $validate = null, ?string $crop = null, ?string $plate = null) {
     $photo = \wip\load($user, $photoId);
     if (!$photo) throw new Exception("Nie znaleziono zdjęcia '$photoId' (wygasło albo nie należy do użytkownika)", 404);
     if (!in_array($pictureType, ['carImage', 'contextImage', 'thirdImage'], true)) {
@@ -227,10 +259,11 @@ function assignPhoto(string $appId, string $pictureType, string $photoId, User $
     }
     $latLng = (isset($meta['lat'], $meta['lng']) && $pictureType === 'carImage') ? \geo\normalizeLatLng($meta['lat'], $meta['lng']) : null;
     $dateTime = $pictureType === 'carImage' ? ($meta['dateTime'] ?? null) : null;
+    if ($plate && $pictureType === 'carImage' && $alpr) $alpr = \alpr\onlyPlate($alpr, $plate) ?? $alpr;
     $bytes = $photo['bytes'];
     $alprSize = isset($meta['width'], $meta['height']) ? [(int)$meta['width'], (int)$meta['height']] : null;
     if ($crop === 'vehicle' && $pictureType === 'carImage') {
-        $vehicle = \wip\vehicleCrop($user, $photoId);
+        $vehicle = \wip\vehicleCrop($user, $photoId, 0.2, $plate);
         if (!$vehicle) throw new \ValidationException('images', 'Nie wykryto pojazdu z widoczną tablicą rejestracyjną na tym zdjęciu');
         [$bytes, $alpr, $alprSize] = [$vehicle['bytes'], $vehicle['alpr'], $vehicle['size']];
     }
@@ -400,6 +433,8 @@ function resize_image($file, $w, $h, $crop = FALSE) {
             $newwidth = $w;
         }
     }
+    // jawne (int): GD i tak obcinało ułamki, ale PHP 8.1+ zgłasza dla tego „Implicit conversion from float” (deprecation)
+    [$newwidth, $newheight, $width, $height] = [(int)$newwidth, (int)$newheight, (int)$width, (int)$height];
     $src = imagecreatefromjpeg($file);
     $dst = imagecreatetruecolor($newwidth, $newheight);
     imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);

@@ -257,6 +257,121 @@ class WipPhotosTest extends DatabaseTestCase
         $this->assertSame($s['photoId'], $out->wipPhotos->contextImage);
     }
 
+    private function twoCars(): void
+    {
+        // zwycięzca: duże auto z przodu (BG11111); drugie, wyraźnie odczytane auto z boku kadru (ZS22222)
+        \vision\PlateRecognizerClient::set(function (string $bytes): array {
+            $this->alprCalls++;
+            [$w, $h] = getimagesizefromstring($bytes);
+            $box = fn (float $x1, float $y1, float $x2, float $y2): array => ['xmin' => (int)($w * $x1), 'ymin' => (int)($h * $y1), 'xmax' => (int)($w * $x2), 'ymax' => (int)($h * $y2)];
+            return ['results' => [
+                ['plate' => 'bg11111', 'score' => 0.99, 'box' => $box(0.30, 0.70, 0.40, 0.75), 'vehicle' => ['box' => $box(0.2, 0.3, 0.6, 0.9)]],
+                ['plate' => 'zs22222', 'score' => 0.95, 'box' => $box(0.75, 0.55, 0.80, 0.58), 'vehicle' => ['box' => $box(0.7, 0.4, 0.95, 0.65)]],
+            ]];
+        });
+    }
+
+    public function testOnlyPlateNarrowsTheResultToTheChosenVehicle(): void
+    {
+        $resp = ['results' => [['plate' => 'AB 123'], ['plate' => 'zs-22222']], 'filename' => 'f'];
+        $this->assertSame('zs-22222', \alpr\onlyPlate($resp, 'ZS22222')['results'][0]['plate']);
+        $this->assertCount(1, \alpr\onlyPlate($resp, 'ab123')['results']);
+        $this->assertSame('f', \alpr\onlyPlate($resp, 'ab123')['filename']);
+        $this->assertNull(\alpr\onlyPlate($resp, 'XX9999'));
+    }
+
+    public function testAssignFollowsTheVehicleChosenByTheUser(): void
+    {
+        $user = $this->user('wip-choose@example.com');
+        $app = $this->draft($user);
+        $s = \wip\stage($user, $this->jpeg(1600, 1000));
+        $this->track($s['photoId'], $user);
+        $this->twoCars();
+
+        \wip\detections($user, $s['photoId']);
+        $out = assignPhoto($app->id, 'carImage', $s['photoId'], $user, null, null, 'ZS22222');
+        $this->assertSame('ZS22222', $out->carInfo->plateId, 'wskazane auto zamiast zwycięzcy zdjęcia');
+        $this->assertSame(1, $this->alprCalls);
+
+        $out = assignPhoto($app->id, 'carImage', $s['photoId'], $user, null, 'vehicle', 'ZS22222');
+        foreach (['carImage'] as $slot) { $this->paths[] = ROOT . $out->$slot->url; $this->paths[] = ROOT . $out->$slot->thumb; }
+        if (isset($out->carInfo->plateImage)) $this->paths[] = ROOT . $out->carInfo->plateImage;
+        $this->assertSame('ZS22222', $out->carInfo->plateId);
+        // wycinek = wskazane auto (25% szerokości kadru + marginesy), nie zwycięzca (40%)
+        $this->assertSame(1, $this->alprCalls);
+        $this->assertLessThan(1000, $out->carImage->width);
+
+        $out = assignPhoto($app->id, 'carImage', $s['photoId'], $user, null, null, 'XX0000'); // nieznana tablica → zwycięzca
+        $this->paths[] = ROOT . $out->carImage->url; $this->paths[] = ROOT . $out->carImage->thumb;
+        if (isset($out->carInfo->plateImage)) $this->paths[] = ROOT . $out->carInfo->plateImage;
+        $this->assertSame('BG11111', $out->carInfo->plateId);
+    }
+
+    public function testMapResultToRegionRescalesBoxesToTheCropResolution(): void
+    {
+        // źródło 1600x1000; region = prawa górna ćwiartka kadru [0.5,0,1,0.5] = 800x500 px; wycinek z oryginału ma 2x więcej pikseli (1600x1000)
+        $resp = ['results' => [['plate' => 'zs1', 'score' => 1,
+            'box' => ['xmin' => 1000, 'ymin' => 100, 'xmax' => 1200, 'ymax' => 160],
+            'vehicle' => ['box' => ['xmin' => 900, 'ymin' => 50, 'xmax' => 1500, 'ymax' => 400]]]]];
+        $out = \alpr\mapPlateRecognizerResultToRegion($resp, 1600, 1000, [0.5, 0.0, 1.0, 0.5], 1600, 1000);
+        $this->assertSame(['xmin' => 400, 'ymin' => 200, 'xmax' => 800, 'ymax' => 320], $out['results'][0]['box']);
+        $this->assertSame(['xmin' => 200, 'ymin' => 100, 'xmax' => 1400, 'ymax' => 800], $out['results'][0]['vehicle']['box']);
+    }
+
+    public function testDerivedCropFromOriginalReusesAlprAndInheritsMeta(): void
+    {
+        $user = $this->user('wip-derived@example.com');
+        $src = \wip\stage($user, $this->jpeg(2000, 1000), ['dateTime' => '2026-09-10T19:43:00', 'lat' => 53.43, 'lng' => 14.55]);
+        $this->track($src['photoId'], $user);
+        \wip\detections($user, $src['photoId']); // analiza: jedyne wywołanie ALPR
+
+        // klient tnie z oryginału (np. 4x większego) obszar pojazdu: [0.1,0.2,0.9,0.9] → wycinek 3200x1400 px
+        $d = \wip\stageDerived($user, $this->jpeg(3200, 1400), $src['photoId'], [0.1, 0.2, 0.9, 0.9], 'ZS12345');
+        $this->track($d['photoId'], $user);
+        $this->assertSame([3200, 1400], [$d['width'], $d['height']]);
+        $this->assertSame(1, $this->alprCalls);
+
+        $meta = \wip\load($user, $d['photoId'])['meta'];
+        $this->assertSame($src['photoId'], $meta['derivedFrom']);
+        $this->assertSame(53.43, $meta['lat']);
+        $this->assertSame('2026-09-10T19:43:00', $meta['dateTime']);
+        // box pojazdu = cały wycinek, box tablicy (40–60% x 70–80% źródła) przeliczony na rozdzielczość wycinka
+        $this->assertSame(['xmin' => 0, 'ymin' => 0, 'xmax' => 3200, 'ymax' => 1400], $meta['alpr']['results'][0]['vehicle']['box']);
+        $this->assertSame(['xmin' => 1200, 'ymin' => 1000, 'xmax' => 2000, 'ymax' => 1200], $meta['alpr']['results'][0]['box']);
+
+        $this->expectExceptionCode(400);
+        \wip\stageDerived($user, $this->jpeg(100, 100), $src['photoId'], [0.9, 0.9, 1.2, 1.2]);
+    }
+
+    public function testAssignDerivedCarCropAndReplacePlateImage(): void
+    {
+        $user = $this->user('wip-plate@example.com');
+        $app = $this->draft($user);
+        $src = \wip\stage($user, $this->jpeg(2000, 1000));
+        $this->track($src['photoId'], $user);
+        \wip\detections($user, $src['photoId']);
+        $car = \wip\stageDerived($user, $this->jpeg(1900, 840), $src['photoId'], [0.1, 0.2, 0.9, 0.9]);
+        $this->track($car['photoId'], $user);
+
+        $out = assignPhoto($app->id, 'contextImage', $src['photoId'], $user);
+        $out = assignPhoto($app->id, 'carImage', $car['photoId'], $user);
+        $this->assertSame(1, $this->alprCalls, 'kontekst + wycinek z oryginału = jedno wywołanie ALPR');
+        $this->assertSame('ZS12345', $out->carInfo->plateId);
+        $this->assertSame(1600, $out->carImage->width); // wycinek 1900 px zmniejszony do limitu zapisu
+
+        $before = ROOT . $out->carInfo->plateImage;
+        $this->paths[] = $before; $this->paths[] = ROOT . $out->carImage->url; $this->paths[] = ROOT . $out->carImage->thumb;
+        $this->paths[] = ROOT . $out->contextImage->url; $this->paths[] = ROOT . $out->contextImage->thumb;
+
+        // tablica z oryginału (np. 1200x300 px) – serwer ogranicza do 800 px szerokości i podmienia plik
+        $out = replacePlateImage($app->id, $this->jpeg(1200, 300), $user);
+        $this->assertSame($before, ROOT . $out->carInfo->plateImage);
+        $this->assertSame([800, 200], array_slice(getimagesize($before), 0, 2));
+
+        $this->expectExceptionCode(403);
+        replacePlateImage($app->id, $this->jpeg(10, 10), $this->user('wip-plate-other@example.com'));
+    }
+
     public function testAssignWithVehicleCropFailsWithoutAVehicle(): void
     {
         $user = $this->user('wip-nocar@example.com');
