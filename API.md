@@ -131,7 +131,9 @@ reuses the plate recognition result computed once for that photo, so re-assignin
 slot (swapping roles) costs no extra ALPR call.
 Optional `crop: "vehicle"` (with `pictureType: carImage`): the car photo becomes the winning vehicle cut out of the staged
 photo with a 20 % margin on each side (clamped to the frame) — for one photo serving as both context and car. The stored ALPR
-result is shifted to the crop, so ALPR is still called once. 422 (`images`) when no vehicle with a readable plate was found. 404 when the `photoId` is unknown, expired or not yours. The staged
+result is shifted to the crop, so ALPR is still called once. 422 (`images`) when no vehicle with a readable plate was found.
+Optional `plate` (`carImage` only): plate text of the vehicle the user picked when several cars were detected; `carInfo`, the
+plate crop and the vehicle crop then follow that reading instead of the photo's winner (no such reading → the winner). 404 when the `photoId` is unknown, expired or not yours. The staged
 file is kept until the report is confirmed (`/finish`) or `WIP_TTL_HOURS` (24 h) pass.
 
 ### POST `/api/rest/photos/`
@@ -139,6 +141,11 @@ file is kept until the report is confirmed (`/finish`) or `WIP_TTL_HOURS` (24 h)
 Stages one photo *before* it belongs to any report (`cdn2/{user}/wip/{photoId}.jpg`, not synced to S3, not publicly
 served). `multipart/form-data`: `image` (JPEG/PNG, ≤ 3 MB), optional `dateTime`, `lat`, `lng` (EXIF read by the client).
 Response `201`: `{ "photoId": "<32 hex>", "width": 1600, "height": 1200 }`. Limited to `WIP_RATE_MAX` per `WIP_RATE_WINDOW`.
+
+Optional `derivedFrom` (a `photoId`), `region` (JSON `[x1,y1,x2,y2]`, fractions of the source frame) and `plate`: the uploaded file is a
+full-resolution cut-out of an already analysed photo (the app crops the original from the gallery). No new ALPR call: the source
+photo's reading of the chosen vehicle (`plate`, default the winner) is mapped onto the cut-out and date/GPS are inherited, so
+the result can be assigned like any staged photo. 400 for an invalid region, 404 for an unknown source.
 
 ### GET|POST `/api/rest/photos/{photoId}/alpr`
 
@@ -159,6 +166,12 @@ Edits `externalId` (the SM/Police case number) and/or `privateComment` (private 
 at any status, also after sending. JSON body with one or both string fields; unknown fields → 400. Response
 `{ "app": {...}, "suggestStatusChange": true|false }` — `true` when the report is sent and has a case number (the web then
 asks to switch the status to `confirmed-sm`, see `PATCH .../status/{status}`).
+
+### POST `/api/rest/app/{appId}/plate-image`
+
+Replaces the licence-plate crop (`carInfo.plateImage`, shown in the form, on the report page and in the PDF) with a client-made
+crop. The UD Pro app cuts it from the full-resolution original (the server only has a ≤ 1600 px copy, i.e. ~80 px of plate).
+`multipart/form-data`: `image` (JPEG/PNG, scaled down to 800 px wide). Needs a car photo (409 otherwise); owner only (403).
 
 ### DELETE `/api/rest/app/{appId}/image/{image}`
 
