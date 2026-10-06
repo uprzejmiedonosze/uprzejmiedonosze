@@ -29,7 +29,7 @@ class PhotoQuotaTest extends DatabaseTestCase
     private function user(): User
     {
         $user = new User();
-        $user->email = self::EMAIL;
+        $user->data->email = self::EMAIL; // getEmail() czyta data->email
         return $user;
     }
 

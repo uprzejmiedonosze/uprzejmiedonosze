@@ -63,10 +63,11 @@ function status(User $user): array {
  * @throws QuotaExceededException
  */
 function reserve(User $user, string $imageBytes): bool {
-    if (\alpr\isCached($imageBytes)) return false;
+    $sha1 = sha1($imageBytes);
+    // wynik ALPR już w cache (te same klucze co alpr\get_platerecognizer / _use_openAlpr) → przetworzenie nic nie kosztuje
+    if (\cache\get(Type::Platerecognizer, $sha1) || \cache\get(Type::OpenAlpr, $sha1)) return false;
 
     $email = $user->getEmail();
-    $sha1 = sha1($imageBytes);
     $stmt = \store\prepare('SELECT 1 FROM ' . TABLE . ' WHERE user_email = :e AND sha1 = :h AND created_at > :s');
     $stmt->execute([':e' => $email, ':h' => $sha1, ':s' => windowStart()]);
     if ($stmt->fetchColumn()) return false;

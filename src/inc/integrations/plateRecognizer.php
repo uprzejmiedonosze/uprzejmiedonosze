@@ -155,12 +155,6 @@ function translatePlateRecognizerResult(array $resp, int $dx, int $dy): array {
     return $resp;
 }
 
-/** Czy wynik ALPR tego zdjęcia leży już w cache (wtedy przetworzenie nic nie kosztuje – patrz store/PhotoQuota.php). */
-function isCached(string $imageBytes): bool {
-    $hash = sha1($imageBytes);
-    return (bool)\cache\get(Type::Platerecognizer, $hash) || (bool)\cache\get(Type::OpenAlpr, $hash);
-}
-
 function get_platerecognizer(&$imageBytes) {
     $imageHash = sha1($imageBytes);
     $result = \cache\alpr\get(Type::Platerecognizer, $imageHash);
