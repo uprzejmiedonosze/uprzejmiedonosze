@@ -376,6 +376,23 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         return $response;
     })  ->add(new AppMiddleware());
 
+    // Wycinek tablicy z oryginału zdjęcia (pełna rozdzielczość) zamiast serwerowego z kopii 1600 px – patrz replacePlateImage().
+    $group->post('/{appId}/plate-image', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        try {
+            $up = imageUploadFromRequest($request, requirePictureType: false);
+            $application = replacePlateImage($args['appId'], $up['bytes'], $user);
+        } catch (Exception $e) {
+            $code = $e->getCode();
+            if ($code === 403) throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            if ($code === 409) throw new HttpException($request, $e->getMessage(), 409, $e);
+            if (in_array($code, [400, 415], true)) throw new HttpBadRequestException($request, $e->getMessage(), $e);
+            throw $e;
+        }
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
     $group->post('/{appId}/image', function (Request $request, Response $response) {
         $application = $request->getAttribute('application');
         $user = $request->getAttribute('user');
@@ -390,7 +407,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
                     function (Application $app) use ($request) {
                         if (!$app->isEditable())
                             throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
-                    }, isset($params['crop']) ? (string)$params['crop'] : null);
+                    }, isset($params['crop']) ? (string)$params['crop'] : null, isset($params['plate']) ? (string)$params['plate'] : null);
             } catch (ValidationException $e) {
                 throw new HttpException($request, $e->getMessage(), 422, $e); // JsonErrorRenderer adds `field`
             } catch (MissingParamException $e) {
@@ -520,13 +537,21 @@ $app->group('/api/rest/photos', function (RouteCollectorProxy $group) { // PHOTO
         try {
             $up = imageUploadFromRequest($request, requirePictureType: false);
             $body = (array)$request->getParsedBody();
-            $staged = \wip\stage($user, $up['bytes'], [
-                'dateTime' => $up['dateTime'],
-                'lat' => $body['lat'] ?? null,
-                'lng' => $body['lng'] ?? null,
-            ]);
+            if (!empty($body['derivedFrom'])) {
+                // wycinek z oryginału zdjęcia już przeanalizowanego (ALPR nie jest wołany ponownie) – patrz \wip\stageDerived()
+                $region = json_decode((string)($body['region'] ?? ''), true);
+                if (!is_array($region) || count($region) !== 4) throw new Exception('Brak obszaru wycinka (region)', 400);
+                $staged = \wip\stageDerived($user, $up['bytes'], (string)$body['derivedFrom'], array_values($region),
+                    isset($body['plate']) ? (string)$body['plate'] : null);
+            } else {
+                $staged = \wip\stage($user, $up['bytes'], [
+                    'dateTime' => $up['dateTime'],
+                    'lat' => $body['lat'] ?? null,
+                    'lng' => $body['lng'] ?? null,
+                ]);
+            }
         } catch (Exception $e) {
-            $code = in_array($e->getCode(), [400, 415], true) ? $e->getCode() : 500;
+            $code = in_array($e->getCode(), [400, 404, 415], true) ? $e->getCode() : 500;
             throw new HttpException($request, $e->getMessage(), $code, $e);
         }
         $response->getBody()->write(json_encode($staged));

@@ -87,6 +87,36 @@ function stage(User $user, string $bytes, array $meta = []): array {
     return ['photoId' => $photoId, 'width' => $width, 'height' => $height];
 }
 
+/**
+ * Wycinek zdjęcia z `wip` wykonany przez klienta z ORYGINAŁU (pełna rozdzielczość), np. auto albo tablica z jednego zdjęcia.
+ * Zapisujemy go jak zwykłe zdjęcie `wip`, ale bez nowego wywołania ALPR: odczyt wskazanego pojazdu (`$plate`, domyślnie zwycięzca)
+ * ze zdjęcia źródłowego jest przeliczany na współrzędne wycinka (`$region` = ułamki kadru źródła), a data/GPS są odziedziczone.
+ * @param array{0:float,1:float,2:float,3:float} $region
+ * @return array{photoId:string,width:int,height:int}
+ */
+function stageDerived(User $user, string $bytes, string $sourceId, array $region, ?string $plate = null): array {
+    [$fx1, $fy1, $fx2, $fy2] = array_map('floatval', $region);
+    if ($fx1 < 0 || $fy1 < 0 || $fx2 > 1 || $fy2 > 1 || $fx2 - $fx1 < 0.02 || $fy2 - $fy1 < 0.02)
+        throw new \Exception('Niepoprawny obszar wycinka', 400);
+    $source = load($user, $sourceId);
+    if (!$source) throw new \Exception('Nie znaleziono zdjęcia źródłowego', 404);
+    $resp = alpr($user, $sourceId); // z sidecara źródła – bez nowego wywołania, jeśli już policzony
+    if ($plate && $resp) $resp = \alpr\onlyPlate($resp, $plate) ?? $resp;
+    $best = $resp ? \alpr\bestAlprResult($resp) : null;
+
+    $staged = stage($user, $bytes, [
+        'dateTime' => $source['meta']['dateTime'] ?? null, 'lat' => $source['meta']['lat'] ?? null, 'lng' => $source['meta']['lng'] ?? null,
+    ]);
+    if ($best) {
+        $meta = readSidecar($user, $staged['photoId']);
+        $meta['alpr'] = \alpr\mapPlateRecognizerResultToRegion(['results' => [$best]], (int)$source['meta']['width'], (int)$source['meta']['height'],
+            [$fx1, $fy1, $fx2, $fy2], $staged['width'], $staged['height']);
+        $meta['derivedFrom'] = $sourceId;
+        writeSidecar($user, $staged['photoId'], $meta);
+    }
+    return $staged;
+}
+
 function writeSidecar(User $user, string $photoId, array $data): void {
     file_put_contents(sidecarPath($user, $photoId), json_encode($data));
 }
@@ -151,13 +181,14 @@ function detections(User $user, string $photoId): ?array {
 }
 
 /**
- * Wycinek auta dla zdjęcia z `wip`: bajty JPEG fragmentu z boxem zwycięskiego pojazdu +20% i wynik ALPR przesunięty do
+ * Wycinek auta dla zdjęcia z `wip` (domyślnie zwycięzca, a przy `$plate` – wskazany pojazd): bajty JPEG fragmentu z boxem zwycięskiego pojazdu +20% i wynik ALPR przesunięty do
  * współrzędnych wycinka (tylko zwycięzca) – dzięki temu przydział nie woła ALPR drugi raz.
  * @return array{bytes:string,alpr:array<string,mixed>,size:array{0:int,1:int}}|null null = brak pojazdu / zdjęcia
  */
-function vehicleCrop(User $user, string $photoId, float $margin = 0.2): ?array {
+function vehicleCrop(User $user, string $photoId, float $margin = 0.2, ?string $plate = null): ?array {
     $photo = load($user, $photoId);
     $resp = $photo ? alpr($user, $photoId) : null;
+    if ($resp && $plate) $resp = \alpr\onlyPlate($resp, $plate) ?? $resp; // wskazany przez użytkownika pojazd, jeśli jest na zdjęciu
     $best = $resp ? \alpr\bestAlprResult($resp) : null;
     $box = $best['vehicle']['box'] ?? null;
     if (!$box) return null;

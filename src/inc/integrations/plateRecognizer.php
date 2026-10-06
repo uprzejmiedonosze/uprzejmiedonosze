@@ -92,6 +92,41 @@ function scalePlateRecognizerResult(array $resp, float $sx, float $sy): array {
 }
 
 /**
+ * Wynik PlateRecognizer zawężony do odczytu o danej tablicy (porównanie bez spacji i wielkości liter) – gdy użytkownik wskazał
+ * pojazd, którego dotyczy zgłoszenie, a na zdjęciu zwycięża inne auto. null = na zdjęciu nie ma takiego odczytu.
+ */
+function onlyPlate(array $resp, string $plate): ?array {
+    $key = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $plate));
+    foreach ($resp['results'] ?? [] as $r) {
+        if (strtoupper(preg_replace('/[^A-Za-z0-9]/', '', (string)($r['plate'] ?? ''))) === $key) {
+            return ['results' => [$r]] + $resp;
+        }
+    }
+    return null;
+}
+
+/**
+ * Przenosi współrzędne wyniku PlateRecognizer z obrazka źródłowego ($srcW x $srcH px) na jego wycinek: $region = ułamki kadru
+ * źródła [x1, y1, x2, y2], a wycinek ma $dstW x $dstH px (może mieć inną rozdzielczość niż fragment źródła – np. wycięty z
+ * oryginału zamiast z kopii 1600 px). Dzięki temu ALPR policzony raz na kopii źródłowej opisuje też wycinek w pełnej rozdzielczości.
+ */
+function mapPlateRecognizerResultToRegion(array $resp, int $srcW, int $srcH, array $region, int $dstW, int $dstH): array {
+    [$fx1, $fy1, $fx2, $fy2] = $region;
+    $sx = $dstW / max(1e-9, ($fx2 - $fx1) * $srcW);
+    $sy = $dstH / max(1e-9, ($fy2 - $fy1) * $srcH);
+    $map = function (&$box) use ($fx1, $fy1, $srcW, $srcH, $sx, $sy): void {
+        if (!is_array($box)) return;
+        foreach (['xmin', 'xmax'] as $k) if (isset($box[$k])) $box[$k] = (int)round(($box[$k] - $fx1 * $srcW) * $sx);
+        foreach (['ymin', 'ymax'] as $k) if (isset($box[$k])) $box[$k] = (int)round(($box[$k] - $fy1 * $srcH) * $sy);
+    };
+    foreach ($resp['results'] ?? [] as $i => $r) {
+        if (isset($r['box'])) $map($resp['results'][$i]['box']);
+        if (isset($r['vehicle']['box'])) $map($resp['results'][$i]['vehicle']['box']);
+    }
+    return $resp;
+}
+
+/**
  * Prostokąt wycinka auta: box pojazdu z ALPR powiększony o $margin jego szerokości/wysokości z KAŻDEJ strony, docięty do kadru.
  * @param array{xmin:int|float,ymin:int|float,xmax:int|float,ymax:int|float} $box
  * @return array{0:int,1:int,2:int,3:int} [x, y, szerokość, wysokość] w pikselach
