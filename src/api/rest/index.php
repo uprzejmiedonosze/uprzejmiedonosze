@@ -588,6 +588,12 @@ $app->group('/api/rest/photos', function (RouteCollectorProxy $group) { // PHOTO
         return $response->withStatus(201);
     });
 
+    // Zużycie limitu unikalnych przetworzonych zdjęć (store/PhotoQuota.php) – ekran nowego zgłoszenia pokazuje go bez ładowania pulpitu.
+    $group->get('/quota', function (Request $request, Response $response) {
+        $response->getBody()->write(json_encode(\quota\status($request->getAttribute('user'))));
+        return $response;
+    });
+
     // Wszystkie odczyty ALPR zdjęcia (raz na zdjęcie, wynik w sidecarze) – aplikacja sama wybiera auto i kontekst (src/lib/roles.ts).
     $group->map(['GET', 'POST'], '/{photoId}/alpr', function (Request $request, Response $response, $args) {
         try {
