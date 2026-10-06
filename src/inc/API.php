@@ -19,7 +19,7 @@ use cache\Type;
 //    analysis (vision/candidate) and slot assignment (POST /app/{id}/image with photoId) then read it from the server,
 //    and ALPR runs once per photo (result kept next to the file, reused by assignPhoto()).
 // The clients resize before upload; the server re-enforces the limits. Changing a value here? Update the clients too
-// (a 1600px / 0.85 JPEG must stay under MAX_IMAGE_UPLOAD_BYTES; VISION_MAX_* in inc/config.php only limit the legacy base64 analysis).
+// (a 1600px / 0.85 JPEG must stay under MAX_IMAGE_UPLOAD_BYTES; VISION_MAX_* in inc/config.php only limit the base64 variant of vision/candidate).
 const MAX_IMAGE_DIM = 1600;
 const JPEG_QUALITY = 85;
 
@@ -313,7 +313,7 @@ function finalizeImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtF
                     ? $alprResult
                     : \alpr\scalePlateRecognizerResult($alprResult, $width / $alprSize[0], $height / $alprSize[1]);
             }
-            \alpr\get($alprBytes, $application, $baseFileName, $type, $user, $imageBytes, $preset);
+            \alpr\get($alprBytes, $application, $baseFileName, $type, $user, $preset);
             \vehicle_info\refresh($application);
             $application->carImage->width = $width;
             $application->carImage->height = $height;
@@ -448,10 +448,8 @@ function resize_image($file, $w, $h, $crop = FALSE) {
  * (SessionApiHandler::image, /api/app/{id}/image) and the JWT REST API
  * (POST /api/rest/app/{id}/image), so both accept exactly the same contract:
  *
- *  - multipart `image` file, or `image_data` (base64 data URI, legacy web client),
- *    or — legacy REST contract — a `carImage` / `contextImage` / `thirdImage`
- *    data-URI field, whose name doubles as the picture type;
- *  - `pictureType`: contextImage | carImage | thirdImage (required unless implied by the legacy field);
+ *  - multipart `image` file, or `image_data` (base64 data URI, older web client);
+ *  - `pictureType`: contextImage | carImage | thirdImage;
  *  - optional (carImage): `dateTime` ("2018-02-02T19:48:10"), `dtFromPicture` ("true"/true),
  *    `latLng` ("53.4,14.5") or `lat` + `lng`.
  *
@@ -478,17 +476,8 @@ function imageUploadFromRequest(ServerRequestInterface $request, bool $requirePi
         }
         $bytes = $upload->getStream()->getContents();
     } else {
-        // data-URI: `image_data` (old web client) or a legacy REST field named after the picture type.
+        // data-URI: `image_data` (old web client)
         $dataUri = $params['image_data'] ?? null;
-        if ($dataUri === null) {
-            foreach (['carImage', 'contextImage', 'thirdImage'] as $slot) {
-                if (isset($params[$slot])) {
-                    $dataUri = $params[$slot];
-                    $pictureType ??= $slot;
-                    break;
-                }
-            }
-        }
         if ($dataUri !== null) {
             $parts = explode(',', $dataUri, 2);
             $bytes = base64_decode(count($parts) === 2 ? $parts[1] : $parts[0], true);
@@ -510,10 +499,6 @@ function imageUploadFromRequest(ServerRequestInterface $request, bool $requirePi
     $dtFromPicture = isset($params['dtFromPicture'])
         ? in_array($params['dtFromPicture'], ['true', true, '1', 1], true)
         : null;
-    // The legacy REST contract implied dtFromPicture from the presence of dateTime.
-    if ($dtFromPicture === null && !empty($dateTime) && !isset($params['pictureType'])) {
-        $dtFromPicture = true;
-    }
     $latLng = $params['latLng'] ?? null;
     if ($latLng === null && !empty($params['lat']) && !empty($params['lng'])) {
         $latLng = \geo\normalizeLatLng($params['lat'], $params['lng']);
