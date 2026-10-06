@@ -75,6 +75,33 @@ $app->options('/{routes:.+}', function ($request, $response) {
     return $response;
 });
 
+// Wymuszenie aktualizacji aplikacji mobilnej: klient wysyła `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`.
+// Gdy wersja < minVersion z config/app.json dla jego platformy → 426 + storeUrl (app pokazuje ekran „Zaktualizuj”).
+// Brak nagłówka (web, MCP, curl) = bez ograniczeń; błąd konfiguracji też przepuszcza (fail-open).
+$app->add(function ($request, $handler) use ($app) {
+    $header = $request->getHeaderLine('X-UD-Client');
+    if ($header !== '' && $request->getMethod() !== 'OPTIONS'
+        && preg_match('#^pro/(\d+(?:\.\d+)*) \(\d+; (ios|android)\)$#', $header, $m)) {
+        try {
+            $cfg = \json\get('app.json')[$m[2]] ?? [];
+            $min = $cfg['minVersion'] ?? null;
+            if ($min && version_compare($m[1], $min, '<')) {
+                $response = $app->getResponseFactory()->createResponse(426);
+                $response->getBody()->write(json_encode([
+                    'error' => \json\get('app.json')['message'] ?? 'Wymagana aktualizacja aplikacji.',
+                    'status' => 426,
+                    'minVersion' => $min,
+                    'storeUrl' => $cfg['storeUrl'] ?? null,
+                ], JSON_UNESCAPED_UNICODE));
+                return $response;
+            }
+        } catch (\Throwable $e) {
+            // fail-open
+        }
+    }
+    return $handler->handle($request);
+});
+
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
 
@@ -82,7 +109,7 @@ $app->add(function ($request, $handler) {
     if ($allowedOrigin) {
         $response = $response
             ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-UD-Client')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH')
             ->withHeader('Access-Control-Allow-Credentials', 'true');
     }
