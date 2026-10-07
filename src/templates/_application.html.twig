@@ -76,7 +76,7 @@
 {% if app.address.lat is defined %}
             <a href="{{ app.getMapUrl() }}"
                target="_blank">
-                <img class="mapImage" src="{{ app.getMapImage|asset_url }}?v={{ app.getRevision }}">
+                <img class="mapImage" src="{{ app.getMapImage|asset_url }}?v={{ app.getMapImageVersion|url_encode }}">
             </a>
 {% endif %}
         </div>

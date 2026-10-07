@@ -6,6 +6,7 @@ let map // represents mapboxgl.Map
 let stopAgresji = false
 let lastNominatim = null
 let smUnknown = false
+let defaultPlaceholder = "(wskaż lokalizację na mapie)"
 
 export function isSMUnknown() { return smUnknown }
 
@@ -14,6 +15,7 @@ export function initMaps(lastLocation, _stopAgresji) {
   const input = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
   if (input) {
     input.className = "clock"
+    defaultPlaceholder = input.placeholder || defaultPlaceholder
   }
 
   let center = [19.480311, 52.069321]
@@ -91,18 +93,22 @@ function parseStoredAddress() {
   return null
 }
 
+// Every map move reschedules the lookup for the latest center. Moves made
+// while a previous lookup was still pending used to be dropped, so the stored
+// lat/lng (and the preview map rendered from it) lagged behind the pin.
 let timeout
-let running = false
 function updateAddressDebounce() {
-  if (running) return
-  running = true
-  const { lat, lng } = map.getCenter()  
+  const { lat, lng } = map.getCenter()
   clearTimeout(timeout);
   timeout = setTimeout(setAddressByLatLng.bind(this, lat, lng, 'map'), 1000);
 }
 
+// Incremented per lookup; responses from an older lookup are discarded so a
+// slow request can't overwrite the address of a newer pin position.
+let lookupSeq = 0
+
 export function setAddressByLatLng(lat, lng, from) {
-  geoLoading()
+  geoLoading(from)
   const address = /** @type {HTMLInputElement} */ (document.getElementById("address"))
 
   if (from === "picture" && map)
@@ -182,6 +188,8 @@ export function setStopAgresji(value) {
 }
 
 async function latLngToAddress(lat, lng, from) {
+  const seq = ++lookupSeq
+  const isStale = () => seq !== lookupSeq
   const addressHint = document.getElementById("addressHint")
   const address = /** @type {HTMLInputElement} */ (document.getElementById("address"))
   const input = /** @type {HTMLInputElement} */ (document.getElementById("lokalizacja"))
@@ -194,6 +202,7 @@ async function latLngToAddress(lat, lng, from) {
   const geoError = () => {
     if (input) {
       input.className = "alert"
+      input.placeholder = defaultPlaceholder
     }
     clearUnitLabels()
   }
@@ -204,6 +213,7 @@ async function latLngToAddress(lat, lng, from) {
       // 'init-keep-text' refreshes units/hints for pre-filled drafts without
       // clobbering the stored display address.
       if (from !== 'init-keep-text') input.value = addressData?.address || ''
+      input.placeholder = defaultPlaceholder
       input.className = ""
       // Validity is about whether geocoding actually resolved a real address,
       // not about the displayed text — a caller-supplied display string (e.g.
@@ -226,18 +236,21 @@ async function latLngToAddress(lat, lng, from) {
 
   try {
     const mapbox = await getMapBox(lat, lng)
+    if (isStale()) return
     addressData = {...addressData, ...mapbox.address}
     geoSuccess(addressData)
   } catch (_e) {
+    if (isStale()) return
     geoError()
   }
 
   let nominatim = {}
   try {
     nominatim = await getNominatim(lat, lng)
+    if (isStale()) return
     lastNominatim = nominatim
   } catch (_e) {
-    running = false
+    if (isStale()) return
     lastNominatim = null
     smUnknown = false
     clearUnitLabels()
@@ -256,7 +269,6 @@ async function latLngToAddress(lat, lng, from) {
   geoSuccess(addressData)
 
   renderSM(true) // fromGeo=true: also fires geo:smUpdate
-  running = false
 }
 
 async function getNominatim(lat, lng) {

@@ -515,6 +515,17 @@ class Application extends JSONObject implements \JsonSerializable {
         });
     }
 
+    /**
+     * Cache-buster for the map image URL. The image key (",ma.png") doesn't
+     * change when the location does and /cdn2/ is served with `expires max`,
+     * so the revision alone isn't enough: a draft moved on the map before
+     * re-confirming keeps its status (and revision), and the browser would
+     * keep showing the old map in the preview.
+     */
+    public function getMapImageVersion(): string {
+        return $this->getRevision() . '-' . ($this->getLatLng() ?? '');
+    }
+
     public function isMapImageInCDN() {
         return $this->hasNumber() && isset($this->address->mapImage);
     }

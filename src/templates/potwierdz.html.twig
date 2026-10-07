@@ -46,7 +46,7 @@
         <div>
             <span class="floating-box">{{ app.getShortAddress }}</span>
             {% if app.address.lat is defined %}
-            <img class="mapImage" src="{{ app.getMapImage|asset_url }}?v={{ app.getRevision }}">
+            <img class="mapImage" src="{{ app.getMapImage|asset_url }}?v={{ app.getMapImageVersion|url_encode }}">
             {% endif %}
         </div>
         <div>

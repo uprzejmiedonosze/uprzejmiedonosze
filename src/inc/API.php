@@ -50,6 +50,12 @@ function updateApplication(
     $application->category = $category;
 
     $application->address ??= new stdClass();
+    // A stored map screenshot (numbered apps keep reusing it) would show the
+    // old location once the pin is moved.
+    if (($application->address->lat ?? null) != $address->lat
+        || ($application->address->lng ?? null) != $address->lng) {
+        unset($application->address->mapImage);
+    }
     $application->address->address = $address->address;
     $application->address->addressGPS = $address->addressGPS ?? null;
     $application->address->city = $address->city;
