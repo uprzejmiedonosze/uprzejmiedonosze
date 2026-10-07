@@ -17,7 +17,7 @@ make emulator-ui        # Open Firebase emulator UI at http://localhost:4000
 make init-db-dev        # Initialize dev SQLite database (run once)
 
 # Tests
-make test               # Run PHPUnit inside the webapp container
+make test               # Run PHPUnit in a throwaway builder-test container (works alongside make dev)
 make cypress-local      # Run Cypress E2E tests against local dev environment
 
 # Release

@@ -57,6 +57,15 @@ build_json() {
         > export/public/api/config/police-stations.pjson
 }
 
+# --once: PHP-side build only (no Parcel, no watching) — what PHPUnit needs
+# (`make test`, builder-test service).
+if [ "$1" = "--once" ]; then
+    build_config_env
+    build_static
+    build_json
+    exit 0
+fi
+
 # ── Initial build ─────────────────────────────────────────────────────────────
 log "Starting initial build..."
 

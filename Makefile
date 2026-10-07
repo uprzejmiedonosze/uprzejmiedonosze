@@ -47,11 +47,12 @@ init-db-staging: ## Initialize staging SQLite database (run once on server)
 # ── Testing ───────────────────────────────────────────────────────────────────
 
 .PHONY: test
-test: ## Run phpunit tests in the builder container
+test: ## Run phpunit tests in a throwaway builder-test container (works alongside `make dev`)
 	@docker compose -f services/compose.yml $(if $(wildcard services/.env.dev),--env-file services/.env.dev,) \
-        -p uprzejmiedonosze-$@ --profile $@ up -d --wait
-	@docker exec $(if $(wildcard services/.env.dev),--env-file services/.env.dev,) -e APP_ENV=staging -e MEMCACHED_HOST=memcached -e TEST_DB=/tmp/run-test-db.sqlite builder sh -c "cp /tmp/test-db.sqlite /tmp/run-test-db.sqlite && ./vendor/bin/phpunit --display-deprecations tests"
-	@docker compose -f services/compose.yml -p uprzejmiedonosze-$@ --profile $@ down
+		-p uprzejmiedonosze-$@ --profile $@ run --rm --build builder-test; \
+		status=$$?; \
+		docker compose -f services/compose.yml -p uprzejmiedonosze-$@ --profile $@ down; \
+		exit $$status
 
 .PHONY: cypress-local
 cypress-local: ## Run Cypress tests against local dev environment

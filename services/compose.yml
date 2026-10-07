@@ -105,7 +105,7 @@ services:
         condition: service_started
 
   builder:
-    profiles: [dev, test]
+    profiles: [dev]
     build:
       context: ..
       dockerfile: services/webapp/Dockerfile
@@ -132,6 +132,38 @@ services:
       timeout: 3s
       retries: 90
       start_period: 10s
+
+  # PHPUnit runner for `make test`, independent of the dev stack: no fixed
+  # container_name (so it can run while `make dev` is up) and no ../export
+  # mount (builds its own PHP-only export inside the throwaway container
+  # instead of racing the dev builder's watch.sh over the shared directory).
+  builder-test:
+    profiles: [test]
+    build:
+      context: ..
+      dockerfile: services/webapp/Dockerfile
+      target: builder
+      args:
+        APP_HOST: localhost
+        APP_HTTPS: http
+    volumes:
+      - ../src:/build/src:ro
+      - ../tests:/build/tests:ro
+      - ../tools:/build/tools:ro
+      - ../config.dev.php:/build/config.dev.php:ro
+      - ./webapp/watch.sh:/watch.sh:ro
+    env_file:
+      - path: .env.dev
+        required: false
+    environment:
+      APP_HOST: localhost
+      APP_HTTPS: http
+      APP_ENV: staging
+      MEMCACHED_HOST: memcached
+      TEST_DB: /tmp/run-test-db.sqlite
+    command: ["sh", "-c", "sh /watch.sh --once && cp /tmp/test-db.sqlite $$TEST_DB && ./vendor/bin/phpunit --display-deprecations tests"]
+    depends_on:
+      - memcached
 
   webapp:
     profiles: [dev]
