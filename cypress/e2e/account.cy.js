@@ -77,7 +77,7 @@ describe('Update account', () => {
 
   it('Check default', function () {
     cy.visit('/app/account?update')
-    cy.contains('Zaktualizuj konto')
+    cy.title().should('contain', 'Zaktualizuj konto')
     cy.contains('Chcę pozwalać na prezentowanie')
     // SM/Policja is no longer asked at registration/account-edit time —
     // only via the ad hoc toggle on the new-application screen.

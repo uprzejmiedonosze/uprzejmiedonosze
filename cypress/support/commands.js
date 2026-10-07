@@ -1,8 +1,17 @@
 // @ts-nocheck
+const SESSION_ID = '4ql346r0u72e66jml6dq72bo0fofk40n30cfc8lh'
+
 Cypress.Commands.add("login", () => {
+  // Docker: PHP sessions live in memcached (session.save_handler), so seed the
+  // logged-in session fixture baked into the webapp image under the same id
+  // as staging. Re-seeded on every login, as memcached may have been
+  // restarted/flushed or the session destroyed by a logout.
+  if (Cypress.config('DOCKER'))
+    cy.exec(`docker exec webapp php -r '$m = new Memcached(); $m->addServer(getenv("MEMCACHED_HOST") ?: "memcached", 11211);
+      $m->set("memc.sess.key.${SESSION_ID}", file_get_contents("/var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0")) || exit(1);'`)
+
   cy.session('user' + Date.now(), () => {
-    cy.setCookie('PHPSESSID', '48msfr815nd7f6ujomebqdpil9jueuq0') // dev -> docker
-    cy.setCookie('UDSESSIONID', '4ql346r0u72e66jml6dq72bo0fofk40n30cfc8lh') // staging
+    cy.setCookie('UDSESSIONID', SESSION_ID)
   }, {
     cacheAcrossSpecs: true
   })

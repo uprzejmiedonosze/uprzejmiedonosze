@@ -28,6 +28,7 @@ vendor/**
 .claude
 .antigravitycli
 services/.env.dev
+services/.env.dev.local
 services/.env.staging
 services/.env.prod
 services/.env.shadow

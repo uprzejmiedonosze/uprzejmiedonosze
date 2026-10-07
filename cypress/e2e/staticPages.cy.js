@@ -1,7 +1,6 @@
 describe('Static pages no session', function() {
     before(() => {
         cy.clearCookie('UDSESSIONID')
-        cy.clearCookie('PHPSESSID')
     })
 
     beforeEach(() => {
@@ -130,7 +129,6 @@ describe('Static pages no session', function() {
 describe('Static pages logged in', function() {
     before(() => {
         cy.clearCookie('UDSESSIONID')
-        cy.clearCookie('PHPSESSID')
     })
 
     beforeEach(() => {

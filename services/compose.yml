@@ -154,6 +154,8 @@ services:
     env_file:
       - path: .env.dev
         required: false
+      - path: .env.dev.local  # gitignored local secrets, e.g. ALPR keys
+        required: false
     depends_on:
       builder:
         condition: service_healthy

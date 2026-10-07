@@ -1,10 +1,12 @@
 <?php
 // Dev bootstrap — committed fixture config (pairs with services/devroot/db/store.sqlite).
 // Loaded in Docker dev via compose mount; copied to export/ by watch.sh as a fallback.
-define('PLATERECOGNIZER_SECRET', 'contact author');
-define('OPEN_ALPR_SECRET_1', 'contact author');
-define('OPEN_ALPR_SECRET_2', 'contact author');
-define('MAPBOX_API_TOKEN', 'contact author');
+// Real ALPR/Mapbox keys (e.g. for `make cypress-local`) go to the gitignored
+// services/.env.dev.local — this file is committed and the repo is public.
+define('PLATERECOGNIZER_SECRET', getenv('PLATERECOGNIZER_SECRET') ?: 'contact author');
+define('OPEN_ALPR_SECRET_1', getenv('OPEN_ALPR_SECRET_1') ?: 'contact author');
+define('OPEN_ALPR_SECRET_2', getenv('OPEN_ALPR_SECRET_2') ?: 'contact author');
+define('MAPBOX_API_TOKEN', getenv('MAPBOX_API_TOKEN') ?: 'contact author');
 define('GOOGLE_MAPS_API_TOKEN', 'contact author');
 
 define('OPENAI_API_KEY', 'see README.md');

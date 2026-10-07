@@ -13,13 +13,13 @@
     "carImage": {
         "url": "../../tests/img_p.jpg",
         "plateId": "KWA00913",
-        "dateISO": "2026-01-08T19:48",
-        "dateHuman": "8.01.2026 o godzinie 19:48",
-        "dateOnConfirmation": "1948 czwartek, 8 stycznia 2026",
-        "dateInput": "241220252222",
-        "dateISOAltered": "2025-12-24T22:22",
-        "dateHumanAltered": "24.12.2025 o godzinie 22:22",
-        "dateHumanAltered2": "2222 środa, 24 grudnia 2025"
+        "dateISO": "2026-10-01T19:48",
+        "dateHuman": "1.10.2026 o godzinie 19:48",
+        "dateOnConfirmation": "1948 czwartek, 1 października 2026",
+        "dateInput": "240920262222",
+        "dateISOAltered": "2026-09-24T22:22",
+        "dateHumanAltered": "24.09.2026 o godzinie 22:22",
+        "dateHumanAltered2": "2222 czwartek, 24 września 2026"
     },
     "wrongImage": {
         "url": "../../tests/img_e.jpg"
