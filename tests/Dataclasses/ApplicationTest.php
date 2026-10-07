@@ -25,6 +25,22 @@ class ApplicationTest extends DatabaseTestCase
         }
     }
 
+    public function testGetCategoryFormalDependsOnWitness()
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $app->category = 18;
+
+        $app->statements->witness = true;
+        $this->assertStringStartsWith('Pojazd jechał wzdłuż chodnika', $app->getCategoryFormal());
+
+        $app->statements->witness = false;
+        $this->assertStringStartsWith('Pojazd znajdował się w miejscu, do którego dojazd', $app->getCategoryFormal());
+
+        // categories without a not-witness variant keep their regular wording
+        $app->category = 8;
+        $this->assertEquals($app->getCategory()->getFormal(), $app->getCategoryFormal());
+    }
+
     public function testPrivateConstructor()
     {
         $this->expectException(Error::class);

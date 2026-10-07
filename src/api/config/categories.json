@@ -147,6 +147,7 @@
         "title": "Jazda po chodniku",
         "short": "Pojazd jechał wzdłuż chodnika lub po przejściu dla pieszych",
         "formal": "Pojazd jechał wzdłuż chodnika/przejścia dla pieszych (art. 26. 3.3 prd).",
+        "formalNotWitness": "Pojazd znajdował się w miejscu, do którego dojazd jest możliwy wyłącznie wzdłuż chodnika lub przez przejście dla pieszych (art. 26. 3.3 prd).",
         "informal": "Jazda po chodniku",
         "desc": "<p>Jazda wzdłuż chodnika lub przejścia dla pieszych jest zabroniona. Nie można z tego powodu np. parkować w drugiej linii dojeżdżając do celu wzdłuż chodnika.</p>",
         "law": "art. 26. 3.3. Kierującemu pojazdem zabrania się: jazdy wzdłuż po drodze dla pieszych lub przejściu dla pieszych.",

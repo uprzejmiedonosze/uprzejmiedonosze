@@ -25,6 +25,15 @@ class Category extends JSONObject{
         return $this->formal;
     }
 
+    /**
+     * Formal wording for a report whose author did not witness the violation
+     * itself (e.g. only the effect of driving along a sidewalk). Falls back
+     * to the regular formal wording for categories without a variant.
+     */
+    public function getFormalNotWitness(){
+        return $this->formalNotWitness ?? $this->formal;
+    }
+
     public function getInformal(){
         return $this->informal;
     }

@@ -35,7 +35,7 @@ W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.g
 świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym\texttt{ {{ app.getLatexSafePlateId|raw }} }w~okolicy adresu
 \href{{ mapUrl|raw -}}{ {{ app.getLatexSafeAddress|raw -}} }\footnote{\noindent
 Adres oraz zdjęcia można ,,kliknąć'' aby uzyskać więcej informacji.}.
-{{ app.getCategory.formal }} 
+{{ app.getCategoryFormal }} 
 {{ app.getExtensionsText() -}}
 {{ app.getLatexSafeComment|raw }}
 {% if not (app.statements.witness ?? false) %}

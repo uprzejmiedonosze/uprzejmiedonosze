@@ -43,12 +43,14 @@ build_static() {
 }
 
 build_json() {
+    # Plain copies first, unconditionally (export/ persists between runs, so a
+    # "copy only if missing" check would never pick up edits); sm-parser and
+    # badges-validator then overwrite their own outputs.
+    for f in src/api/config/*.json; do
+        jq -c . "$f" > "export/public/api/config/$(basename "$f")"
+    done
     node tools/sm-parser.js src/api/config export/public/api/config
     node tools/badges-validator.js src/api/config/badges.json export/public/api/config/badges.json
-    for f in src/api/config/*.json; do
-        name=$(basename "$f")
-        [ ! -f "export/public/api/config/$name" ] && jq -c . "$f" > "export/public/api/config/$name" || true
-    done
     php tools/police-stations.php \
         src/api/config/police-stations.csv \
         export/public/api/config/police.json \

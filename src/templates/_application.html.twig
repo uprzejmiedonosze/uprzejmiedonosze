@@ -26,7 +26,7 @@
             pojazdu o nr. rejestracyjnym <b>{{ app.carInfo.plateId ?? '...' }}</b>
             {% if app.getRecydywa.appsCnt ?? 0 > 1 %}<sup>(recydywa {{ app.getRecydywa.appsCnt }})</sup>{% endif %}
             w okolicy adresu <b>{{ app.address.address ?? '[ukryty]' }}</b>.
-            {{ app.getCategory.formal }}
+            {{ app.getCategoryFormal }}
             {{ app.getExtensionsText() }}
             {% if (app.userComment ?? false) and not app.isEncrypted %}
                 {{ app.getAHrefedComment | raw }}

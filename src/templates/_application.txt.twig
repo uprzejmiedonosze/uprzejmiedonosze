@@ -1,7 +1,7 @@
 W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }} {##}
 świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym {{ app.carInfo.plateId }} w okolicy adresu {##}
 {{ app.address.address -}}. {##}
-{{ app.getCategory.formal }} {{ app.getExtensionsText() }} {{ app.getJSONSafeComment|raw }} {##}
+{{ app.getCategoryFormal }} {{ app.getExtensionsText() }} {{ app.getJSONSafeComment|raw }} {##}
 {% if not (app.statements.witness ?? false) -%}
 Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
 {%- endif %} {##}

@@ -37,7 +37,7 @@ function appsToXlsx(array $apps, string $name) {
         $sheet->setCellValue(__coordinate(4, $rowNum), $app->getAddress());
         $sheet->getCell(__coordinate(4, $rowNum))->getHyperlink()->setUrl($app->getMapUrl());
         $sheet->setCellValue(__coordinate(5, $rowNum), $app->carInfo->plateId);
-        $sheet->setCellValue(__coordinate(6, $rowNum), $app->getCategory()->formal);
+        $sheet->setCellValue(__coordinate(6, $rowNum), $app->getCategoryFormal());
         $sheet->setCellValue(__coordinate(8, $rowNum), $app->statements->witness ? "Tak" : "");
         $sheet->setCellValue(__coordinate(7, $rowNum), $app->getExtensionsText());
         $sheet->setCellValue(__coordinate(9, $rowNum), $app->userComment);

@@ -355,6 +355,17 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     /**
+     * Category wording used in the report text, depending on whether
+     * the reporter witnessed the violation.
+     */
+    public function getCategoryFormal(){
+        if ($this->statements->witness ?? false) {
+            return $this->getCategory()->getFormal();
+        }
+        return $this->getCategory()->getFormalNotWitness();
+    }
+
+    /**
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getStatus(){
