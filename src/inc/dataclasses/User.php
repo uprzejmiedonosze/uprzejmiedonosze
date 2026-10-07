@@ -171,14 +171,23 @@ class User extends \JSONObject{
         ));
     }
 
-    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa){
+    /**
+     * $sex: 'm'/'f' explicitly chosen in the account edit form. null (registration
+     * form, REST API) keeps the stored value, re-guessing it from the name only
+     * when there is none yet or the name has changed.
+     */
+    function updateUserData(string $name, string $msisdn, string $address, string $edelivery, ?bool $stopAgresji, bool $shareRecydywa, ?string $sex = null){
         if(isset($this->added))
             $this->updated = date(DT_FORMAT);
 
+        $previousName = $this->data->name ?? null;
         $this->data->name = capitalizeName($name);
         if (!preg_match("/^(\S{2,5}\s)?\S{2,20}\s[\S -]{3,40}$/i", $this->data->name))
-            throw new \MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");        
-        $this->guessSex();
+            throw new \MissingParamException('name', "Podaj pełne imię i nazwisko, bez znaków specjalnych");
+        if (in_array($sex, ['m', 'f'], true))
+            $this->data->sex = $sex;
+        elseif (($this->data->sex ?? '?') == '?' || $previousName !== $this->data->name)
+            $this->guessSex();
 
         $this->data->address = str_replace(', Polska', '', cleanWhiteChars($address));
         if (!preg_match("/^.{3,50}\d.{3,40}$/i", $this->data->address))
@@ -239,13 +248,22 @@ class User extends \JSONObject{
             return '?';
         }
         $maleExceptions = ['kuba', 'kosma', 'barnaba', 'olsza', 'gianluca'];
+        $femaleExceptions = ['noemi', 'nel', 'karmen'];
+        if (in_array($names[0], $femaleExceptions, true)) {
+            return 'f';
+        }
         if (in_array($names[0], $maleExceptions, true) || substr($names[0], -1) != 'a') {
             return 'm';
         }
         return 'f';
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function getSexIdentifier() {
+        if (in_array($this->data->sex ?? null, ['m', 'f'], true))
+            return $this->data->sex;
         return User::_guessSex($this->data->name);
     }
 

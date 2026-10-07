@@ -66,6 +66,40 @@ class UserTest extends DatabaseTestCase
         $this->assertEquals('Ulica 13, Miasto', $user->data->address);
     }
 
+    public function testUpdateUserDataSex()
+    {
+        $user = new User();
+        // registration: no explicit choice, guessed from the name
+        $user->updateUserData('Maria Kowalski', '', 'Ulica 13, Miasto', '', true, true);
+        $this->assertEquals('f', $user->data->sex);
+
+        // account edit: explicit choice wins over the guess
+        $user->updateUserData('Maria Kowalski', '', 'Ulica 13, Miasto', '', true, true, 'm');
+        $this->assertEquals('m', $user->data->sex);
+        $this->assertEquals('m', $user->getSexIdentifier());
+
+        // REST API (no sex param), same name: explicit choice is kept
+        $user->updateUserData('Maria Kowalski', '', 'Ulica 13, Miasto', '', true, true);
+        $this->assertEquals('m', $user->data->sex);
+
+        // ...but a changed name re-guesses it
+        $user->updateUserData('Anna Kowalska', '', 'Ulica 13, Miasto', '', true, true);
+        $this->assertEquals('f', $user->data->sex);
+
+        // garbage is ignored
+        $user->updateUserData('Anna Kowalska', '', 'Ulica 13, Miasto', '', true, true, 'x');
+        $this->assertEquals('f', $user->data->sex);
+    }
+
+    public function testGuessSexExceptions()
+    {
+        $this->assertEquals('m', User::_guessSex('Kuba Nowak'));
+        $this->assertEquals('m', User::_guessSex('Olsza Test'));
+        $this->assertEquals('f', User::_guessSex('Noemi Nowak'));
+        $this->assertEquals('f', User::_guessSex('Nel Kowalska'));
+        $this->assertEquals('f', User::_guessSex('Karmen Dąbrowska'));
+    }
+
 
     public function testConfirmTerms()
     {

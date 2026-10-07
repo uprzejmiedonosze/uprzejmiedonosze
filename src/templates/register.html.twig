@@ -56,6 +56,18 @@
 
     <h3>Ustawienia</h3>
 
+    {# Rejestracja nie pyta o formę gramatyczną — zgadujemy ją z imienia
+       (User::_guessSex). Poprawić można dopiero w edycji konta. #}
+    {% if user.isRegistered %}
+    <fieldset class="grid">
+        <legend>W pismach do służb piszemy w twoim imieniu</legend>
+        <input type="radio" name="sex" id="sex-m" value="m" {% if user.getSexIdentifier != 'f' %}checked="checked"{% endif %}>
+        <label for="sex-m" class="radio">„byłem świadkiem” (forma męska)</label>
+        <input type="radio" name="sex" id="sex-f" value="f" {% if user.getSexIdentifier == 'f' %}checked="checked"{% endif %}>
+        <label for="sex-f" class="radio">„byłam świadkiem” (forma żeńska)</label>
+    </fieldset>
+    {% endif %}
+
     <fieldset class="grid">
         <legend for="shareRecydywa">Chcę pozwalać na prezentowanie moich zdjęć w galerii recydywistów parkowania</legend>
         <input type="radio" name="shareRecydywa" id="shareRecydywa-Y" value="Y" {% if  user.shareRecydywa %}checked="checked"{% endif %}>

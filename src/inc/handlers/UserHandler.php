@@ -51,10 +51,13 @@ class UserHandler extends AbstractHandler {
         $stopAgresjiRaw = $params['stopAgresji'] ?? null;
         $stopAgresji = $stopAgresjiRaw === null ? null : ($stopAgresjiRaw === 'SA');
         $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
+        // Only the account edit form has this field (registration doesn't ask) —
+        // null makes updateUserData() guess it from the name instead.
+        $sex = $params['sex'] ?? null;
 
         /** @var \user\User $user */
         $user = $request->getAttribute('user');
-        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa);
+        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa, $sex);
         \user\save($user);
 
         return AbstractHandler::redirect($signInSuccessUrl);
