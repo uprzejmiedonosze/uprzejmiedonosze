@@ -22,9 +22,7 @@ export const initHandlers = (map) => {
         this.classList.remove("error");
         if (this.id === "plateId") {
           const plateImage = document.getElementById("plateImage");
-          const recydywa = document.getElementById("recydywa");
           if (plateImage) plateImage.style.display = "none";
-          if (recydywa) recydywa.style.display = "none";
         }
         if (this.id === "category") {
           const contextLabel = document.querySelector(".contextImageSection label b");
