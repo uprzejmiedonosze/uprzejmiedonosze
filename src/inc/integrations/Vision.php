@@ -161,7 +161,8 @@ final class PlateRecognizerClient {
  * Sumuje tokeny do $usage (referencja: 'calls','prompt_tokens','completion_tokens').
  * Zwraca surową treść odpowiedzi (string) albo rzuca VisionException.
  */
-function chat(array $messages, int $maxTokens, array &$usage, int $tries = 3): string {
+function chat(array $messages, int $maxTokens, array &$usage, int $tries = 3, ?string $model = null, string $effort = 'low'): string {
+    $model ??= OPENAI_VISION_MODEL;
     $lastErr = null;
     // Rodzina "reasoning" (gpt-5*, o1*, o3*, o4*) ma inny kontrakt niż klasyczne modele czatu
     // (gpt-4o-mini itd.), zweryfikowane bezpośrednio na API OpenAI:
@@ -172,15 +173,15 @@ function chat(array $messages, int $maxTokens, array &$usage, int $tries = 3): s
     //   reasoning i zwrócić puste content (finish_reason=length, content=""). 'low' zamiast
     //   'minimal': cross-photo spójność ról (dokładnie jedno "car" na pojazd) wymaga porównania
     //   wszystkich zdjęć w grupie ze sobą, budżet (8000) ma na to zapas.
-    $isReasoningModel = (bool)preg_match('/^(gpt-5|o1|o3|o4)/', OPENAI_VISION_MODEL);
+    $isReasoningModel = (bool)preg_match('/^(gpt-5|o1|o3|o4)/', $model);
     $params = [
-        'model' => OPENAI_VISION_MODEL,
+        'model' => $model,
         'response_format' => ['type' => 'json_object'],
         'messages' => $messages,
     ];
     if ($isReasoningModel) {
         $params['max_completion_tokens'] = $maxTokens;
-        $params['reasoning_effort'] = 'low';
+        $params['reasoning_effort'] = $effort;
     } else {
         $params['temperature'] = 0;
         $params['max_tokens'] = $maxTokens;
@@ -481,9 +482,9 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
     ];
 }
 
-function visionCostUsd(array $usage): float {
+function visionCostUsd(array $usage, ?string $model = null): float {
     global $MODEL_PRICING;
-    $p = $MODEL_PRICING[OPENAI_VISION_MODEL] ?? null;
+    $p = $MODEL_PRICING[$model ?? OPENAI_VISION_MODEL] ?? null;
     if (!$p) return 0.0;
     return ($usage['prompt_tokens'] * ($p['prompt'] ?? 0) + $usage['completion_tokens'] * ($p['completion'] ?? 0)) / 1_000_000;
 }

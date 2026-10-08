@@ -207,7 +207,8 @@ class StaticPagesHandler extends AbstractHandler {
 
             if($app->showImage) {
                 $imagesCount++;
-                if (!$image) $image = $app->contextImage->thumb;
+                // og:image points at the raw thumb, which is never blurred
+                if (!$image && ($app->faces->count ?? 0) == 0) $image = $app->contextImage->thumb;
             }
         }
 

@@ -141,6 +141,11 @@ if (!defined('OPENAI_VISION_MAX_TOKENS'))       define('OPENAI_VISION_MAX_TOKENS
 if (!defined('OPENAI_VISION_TIMEOUT'))          define('OPENAI_VISION_TIMEOUT',          (int)(getenv('OPENAI_VISION_TIMEOUT') ?: 90));
 if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',           getenv('OPENAI_VISION_DETAIL') ?: 'high');
 
+// Bramka wykrywania twarzy w face-detect-consumer (src/inc/integrations/FaceDetect.php): tylko liczy
+// twarze, bboxy do blura daje Google Vision. Osobny klucz ograniczony do Cloud Vision API.
+if (!defined('OPENAI_FACES_MODEL'))             define('OPENAI_FACES_MODEL',             getenv('OPENAI_FACES_MODEL') ?: 'gpt-5-nano');
+if (!defined('GOOGLE_VISION_API_KEY'))          define('GOOGLE_VISION_API_KEY',          getenv('GOOGLE_VISION_API_KEY') ?: '');
+
 // Rate-limit analizy wizyjnej per użytkownik (\cache\throttle\attempt, jak PasskeyHandler).
 if (!defined('VISION_RATE_MAX'))     define('VISION_RATE_MAX',     (int)(getenv('VISION_RATE_MAX') ?: 60));
 if (!defined('VISION_RATE_WINDOW'))  define('VISION_RATE_WINDOW',  (int)(getenv('VISION_RATE_WINDOW') ?: 3600));

@@ -23,12 +23,15 @@ function addToTumblr(Application $app): stdClass|array {
         . " "
         . $app->getExtensionsText();
     $app->ensureLocal();
+    $image = file_get_contents(ROOT . "{$app->contextImage->url}");
+    if (\faces\hasBoxes($app->faces ?? null))
+        $image = \faces\blur($image, $app->faces->boxes);
     $data = array(
         'type' => 'photo',
         'caption' => "**{$app->carInfo->plateId}** $recydywa — {$description}"
             . "Zgłoszone do {$app->guessSMData()->getShortName()}"
             . "\n\n*-- {$app->getDate("LLLL y")}*",
-        "data64" => base64_encode(file_get_contents(ROOT . "{$app->contextImage->url}")),
+        "data64" => base64_encode($image),
         'format' => 'markdown',
         'tags' => "{$app->carInfo->plateId}, {$app->guessSMData()->getShortName()}",
         'state' => 'published',
@@ -48,7 +51,7 @@ function addToGallery(\app\Application $app): \app\Application {
     log_debug("addToGallery plate:$plateId faces:$facesCount canImageBeShown:$canImageBeShown alreadyInGallery:$alreadyInGallery");
 
     if ($alreadyInGallery) return $app;
-    if ($facesCount > 0) return $app;
+    if ($facesCount > 0 && !\faces\hasBoxes($app->faces ?? null)) return $app;
     if (!$canImageBeShown) return $app;
 
     $app->addedToGallery = \addToTumblr($app);
