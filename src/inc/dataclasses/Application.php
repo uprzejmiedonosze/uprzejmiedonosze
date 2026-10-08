@@ -716,10 +716,14 @@ class Application extends JSONObject implements \JsonSerializable {
         $galleryDir = ROOT . $cdnPrefix . '/gallery/';
         if (!is_dir($galleryDir)) mkdir($galleryDir, 0755, true);
 
-        // Clear version — copy of the thumbnail
+        // Clear version — copy of the thumbnail, with faces blurred if any were located
         $clearKey  = \crypto\encode($thumb, CRYPTO_KEY, CRYPTO_IV);
         $clearPath = "{$galleryDir}{$clearKey}.jpg";
-        copy($thumbPath, $clearPath);
+        if (\faces\hasBoxes($this->faces ?? null)) {
+            file_put_contents($clearPath, \faces\blur(file_get_contents($thumbPath), $this->faces->boxes));
+        } else {
+            copy($thumbPath, $clearPath);
+        }
 
         // Pixelated version
         $pxKey  = \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV);
@@ -742,8 +746,8 @@ class Application extends JSONObject implements \JsonSerializable {
         // or added it to gallery
         $showImage = $showImage || $this->statements->gallery;
         
-        // hide photos with faces
-        $showImage = $showImage && ($this->faces->count ?? 0) == 0;
+        // hide photos with faces, unless the faces were located and blurred
+        $showImage = $showImage && (($this->faces->count ?? 0) == 0 || \faces\hasBoxes($this->faces ?? null));
 
         // app owner can always see his photos
         $showImage = $showImage || $this->isAppOwner($whoIsWathing);

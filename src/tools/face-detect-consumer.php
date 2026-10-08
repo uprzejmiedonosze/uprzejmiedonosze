@@ -4,23 +4,20 @@ use JSONObject;
 
 require_once(__DIR__ . '/../../vendor/autoload.php');
 require_once(__DIR__ . '/../inc/include.php');
-require_once(__DIR__ . '/../inc/integrations/curl.php');
+require_once(__DIR__ . '/../inc/integrations/FaceDetect.php');
 require_once(__DIR__ . '/../inc/integrations/Tumblr.php');
 
 log_info("Starting face-blur-consumer...", true);
 
 $consumer = function (string $appId): void {
   try {
-    $faceDetectorUrl = getenv('FACE_DETECTOR_URL') ?: 'http://localhost:2000';
     $app = \app\get($appId);
 
     $faces = null;
     if (!isset($app->faces->count)) {
-      $url = "$faceDetectorUrl/detect/" . BASE_URL . $app->contextImage->url;
-
       // We fetch the faces BEFORE acquiring the lock to avoid blocking other processes
       // if the face detection is slow.
-      $faces = new \JSONObject(\curl\request($url, [], "FaceRecognition"));
+      $faces = \faces\detect($app);
     }
 
     try {
@@ -37,8 +34,13 @@ $consumer = function (string $appId): void {
         if ($facesCount == 0) {
           log_debug("no facces, adding to gallery $appId");
           $app = addToGallery($app);
+        } elseif (\faces\hasBoxes($faces)) {
+          $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu (zblurowano).");
+          // the clear gallery thumbnail may already exist without the blur — regenerate it
+          if ($app->contextImage->galleryReady ?? false) $app->generateGalleryImages();
+          $app = addToGallery($app);
         } else {
-          $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu.");
+          $app->addComment("admin", "Wykryto " . num($facesCount, ['twarzy', 'twarz', 'twarze']) . " na zdjęciu (zdjęcie ukryte).");
         }
       }
       \app\save($app);

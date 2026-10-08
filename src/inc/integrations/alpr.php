@@ -6,7 +6,7 @@ use cache\Type;
 use user\User;
 
 require(__DIR__ . '/openAlpr.php');
-require(__DIR__ . '/plateRecognizer.php');
+require_once(__DIR__ . '/plateRecognizer.php');
 
 /**
  * @SuppressWarnings(PHPMD.ElseExpression)

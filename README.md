@@ -164,7 +164,6 @@ pinned to one fixture identity (`e@nieradka.net`), regardless of which emulator 
 services/
 ├── compose.yml              # All Docker services (profiles: dev / staging / prod)
 ├── .env.dev                 # Optional extra secrets (gitignored)
-├── face-detector/           # Python face detection service
 ├── webapp/
 │   ├── Dockerfile           # builder + webapp + worker stages
 │   ├── build.sh             # Full build script (runs inside Docker)

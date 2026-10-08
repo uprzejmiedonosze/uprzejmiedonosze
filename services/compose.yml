@@ -2,10 +2,10 @@ name: ${APP_ENV:-uprzejmiedonosze-dev}
 
 networks:
   # Only webapp-srv joins this — it's the only service that needs public
-  # HTTPS routing (../edge's Traefik). worker-cron/face-detect-consumer/
-  # face-detector stay on the default project network, reached by service
-  # name as today. Created externally by ../edge (see its CLAUDE.md); this
-  # project never creates or owns it.
+  # HTTPS routing (../edge's Traefik). worker-cron/face-detect-consumer
+  # stay on the default project network, reached by service name as today.
+  # Created externally by ../edge (see its CLAUDE.md); this project never
+  # creates or owns it.
   edge:
     external: true
 
@@ -42,6 +42,7 @@ x-app-env: &app-env
   OAUTH_ENCRYPTION_KEY: ${OAUTH_ENCRYPTION_KEY:-}
   OPENAI_API_KEY: ${OPENAI_API_KEY:-}
   GOOGLE_API_KEY: ${GOOGLE_API_KEY:-}
+  GOOGLE_VISION_API_KEY: ${GOOGLE_VISION_API_KEY:-}
   OPENAI_PROJECT: ${OPENAI_PROJECT:-}
   MATOMO_SITE_ID: ${MATOMO_SITE_ID:-1}
   BACKEND_API_KEY: ${BACKEND_API_KEY:-}
@@ -287,14 +288,8 @@ services:
       # journald restart recreates the socket inode, which would leave a
       # file-level bind mount pointing at a stale, dead inode.
       - /run/systemd/journal:/run/systemd/journal:ro
-    # No depends_on: webapp-srv functionally uses neither face-detector
-    # (its declared-but-unused dependency here, see scripts/deploy.sh) nor
-    # memcached's *startup* — and with face-detector left out of the shadow
-    # profile, a depends_on would make the whole shadow project invalid
-    # ("depends on undefined service", Compose rejects at config stage).
-    # Memcached is always named explicitly by scripts/deploy.sh instead;
-    # prod's face-detector still gets started via face-detect-consumer's
-    # own depends_on.
+    # No depends_on: webapp-srv doesn't functionally need memcached's
+    # *startup*; scripts/deploy.sh always names memcached explicitly instead.
     environment:
       <<: *app-env
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
@@ -310,19 +305,9 @@ services:
     image: memcached:alpine
     restart: always
 
-  face-detector:
-    profiles: [staging, prod]
-    image: ${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}/face-detector:${FACE_DETECTOR_TAG:-latest}
-    build:
-      context: ./face-detector
-    restart: always
-    logging:
-      driver: syslog
-      options:
-        syslog-address: "unixgram:///dev/log"
-        tag: "{{.Name}}"
-
   # face-detect-consumer and worker-cron share the worker image (code baked in from builder).
+  # face-detect-consumer calls external APIs (OpenAI gpt-5-nano gate + Google Vision bboxes,
+  # see src/inc/integrations/FaceDetect.php) — no local face-detection service anymore.
   # Only runtime data is mounted: db/, cdn2*, logs. Config comes from environment vars.
   face-detect-consumer:
     profiles: [staging, prod]
@@ -339,7 +324,6 @@ services:
         tag: "{{.Name}}"
     depends_on:
       - memcached
-      - face-detector
     volumes:
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}db:/var/www/uprzejmiedonosze.net/db:rw
       - ${APP_DATA_ROOT:-/var/www/uprzejmiedonosze.net/}cdn2:/var/www/uprzejmiedonosze.net/cdn2:rw
@@ -350,7 +334,6 @@ services:
       <<: *app-env
       APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
       MEMCACHED_HOST: memcached
-      FACE_DETECTOR_URL: http://face-detector:2000
       LOG_IDENT: ${APP_ENV:-prod}-face-detect-consumer
     command: ["nice", "-n", "10", "php", "/var/www/uprzejmiedonosze.net/webapp/tools/face-detect-consumer.php"]
     # `nice` execs into `php`, so PHP ends up running as PID 1 here too — same

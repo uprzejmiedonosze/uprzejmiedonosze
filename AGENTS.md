@@ -65,9 +65,10 @@ All services are defined in `services/compose.yml` with three profiles:
 | `webapp` | ✓ | | | nginx + PHP-FPM (code from builder volume) |
 | `webapp-srv` | | ✓ | ✓ | nginx + PHP-FPM (code baked in image) |
 | `memcached` | ✓ | ✓ | ✓ | Cache |
-| `face-detector` | | ✓ | ✓ | Python face detection API |
-| `face-detect-consumer` | | ✓ | ✓ | PHP daemon — processes face detect queue |
+| `face-detect-consumer` | | ✓ | ✓ | PHP daemon — processes face detect queue (external APIs, see below) |
 | `worker-cron` | | ✓ | ✓ | supercronic — cleanup, stats, s3-sync |
+
+Face detection (`face-detect-consumer`, fed by `RecydywaStore::update()` for plates reported by >1 user) uses no local model: `src/inc/integrations/FaceDetect.php` first asks gpt-5-nano (`OPENAI_FACES_MODEL`, detail low) only to *count* faces; only when count > 0 (~0.5% of photos) does it call Google Cloud Vision FACE_DETECTION (`GOOGLE_VISION_API_KEY` — a dedicated key restricted to Cloud Vision API; don't reuse the Maps/Firebase keys) for precise boxes, stored normalized (0..1) in `$app->faces->boxes` with `blurred: true`. `src/inc/FaceBlur.php` then blurs just those regions in the public variants (clear gallery thumbnail, Tumblr upload) — the original `contextImage` is evidence and is never modified. If Google finds nothing or fails, `blurred: false` and the photo stays hidden entirely (as with the old dlib detector, whose historical `faces.count > 0` results also stay hidden).
 
 Analytics is tracked via an external, centrally-hosted Matomo instance (`matomo.nieradka.com`), not a service in this compose file.
 

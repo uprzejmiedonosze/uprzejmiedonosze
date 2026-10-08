@@ -2,18 +2,15 @@
 # Builds the webapp + worker images for one environment (linux/amd64) and
 # pushes them to GHCR, mirroring ../zenfeed.eu/scripts/build-push.sh: images
 # are built locally (Mac, arm64) and the target host only ever pulls, never
-# compiles. face-detector is a separate, env-independent image, built only
-# on request (its dlib/cmake build is slow under QEMU on arm64).
+# compiles.
 #
-# Usage: bash scripts/build-push.sh <env> <tag> [--with-face-detector] [--sentry]
+# Usage: bash scripts/build-push.sh <env> <tag> [--sentry]
 #   <env>  prod | staging | shadow  — selects APP_HOST baked into the image
 #          (config.env.php, sitemap, SCSS — see services/webapp/build.sh)
 #   <tag>  image tag. Convention: prod uses the same "prod_<branch>_<date>"
 #          string as `make sentry-release`'s git tag; staging/shadow use the
 #          git SHA.
 #
-#   --with-face-detector  also build+push services/face-detector (rare: only
-#                          needed after changing that directory)
 #   --sentry               after pushing, extract the builder stage's
 #                          export/public/js (already sourcemap-injected, see
 #                          services/webapp/build.sh) and run the Sentry
@@ -24,15 +21,13 @@
 # Prerequisites (once): docker login ghcr.io (token with write:packages).
 set -euo pipefail
 
-ENV="${1:?usage: build-push.sh <env> <tag> [--with-face-detector] [--sentry]}"
-TAG="${2:?usage: build-push.sh <env> <tag> [--with-face-detector] [--sentry]}"
+ENV="${1:?usage: build-push.sh <env> <tag> [--sentry]}"
+TAG="${2:?usage: build-push.sh <env> <tag> [--sentry]}"
 shift 2
 
-WITH_FACE_DETECTOR=0
 WITH_SENTRY=0
 for arg in "$@"; do
   case "$arg" in
-    --with-face-detector) WITH_FACE_DETECTOR=1 ;;
     --sentry) WITH_SENTRY=1 ;;
     *) echo "Unknown flag: $arg" >&2; exit 1 ;;
   esac
@@ -73,14 +68,6 @@ docker buildx build --platform "${PLATFORM}" \
   -t "${REGISTRY}/worker:${ENV}-${TAG}" --push .
 
 echo "Pushed ${REGISTRY}/{webapp,worker}:${ENV}-${TAG}"
-
-if [[ "${WITH_FACE_DETECTOR}" == "1" ]]; then
-  echo "==> Building ${REGISTRY}/face-detector:${TAG} (${PLATFORM})"
-  docker buildx build --platform "${PLATFORM}" \
-    -f services/face-detector/Dockerfile \
-    -t "${REGISTRY}/face-detector:${TAG}" --push services/face-detector
-  echo "Pushed ${REGISTRY}/face-detector:${TAG}"
-fi
 
 if [[ "${WITH_SENTRY}" == "1" ]]; then
   if [[ "${ENV}" != "prod" ]]; then

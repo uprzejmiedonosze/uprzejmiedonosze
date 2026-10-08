@@ -41,6 +41,24 @@ class ApplicationTest extends DatabaseTestCase
         $this->assertEquals($app->getCategory()->getFormal(), $app->getCategoryFormal());
     }
 
+    public function testCanImageBeShownWithFaces()
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+        $app->statements->gallery = false;
+        $this->assertTrue($app->canImageBeShown(null, canShareRecydywa: true));
+
+        // faces found but not located (old dlib results, Google fallback) — hidden
+        $app->faces = new \JSONObject('{"count":2,"blurred":false}');
+        $this->assertFalse($app->canImageBeShown(null, canShareRecydywa: true));
+        $app->faces = new \JSONObject('{"count":2}');
+        $this->assertFalse($app->canImageBeShown(null, canShareRecydywa: true));
+
+        // faces located and blurred in the public variants — shown
+        $app->faces = new \JSONObject('{"count":1,"blurred":true,"boxes":[{"x":0.1,"y":0.1,"w":0.1,"h":0.1}]}');
+        $this->assertTrue($app->canImageBeShown(null, canShareRecydywa: true));
+        $this->assertFalse($app->canImageBeShown(null, canShareRecydywa: false));
+    }
+
     public function testPrivateConstructor()
     {
         $this->expectException(Error::class);
