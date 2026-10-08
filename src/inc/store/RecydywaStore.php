@@ -81,6 +81,7 @@ function getDetailed(string $plateId): JSONObject {
             'owner' => $app->email == \user\currentEmail(),
             'smCity' => $app->smCity,
             'stopAgresji' => $app->stopAgresji(),
+            'smName' => \SM::resolve($app->smCity, $app->stopAgresji())->getShortName(),
             'date' => $app->date,
             'number' => $app->number,
             'addedToGallery' => $app->addedToGallery->state ?? null)),
@@ -97,18 +98,15 @@ function getDetailed(string $plateId): JSONObject {
 function lastTicket(array $recydywa): string {
     if (!sizeof($recydywa)) return "";
 
-    // for no reason the order of this array is reversed 
-    $lastTicket = end($recydywa);
+    $lastTicket = $recydywa[0];
 
     global $STATUSES;
 
+    $penalty = '';
     if (isset($STATUSES[$lastTicket->status]->recydywa)) {
-        $penalty = $STATUSES[$lastTicket->status]->recydywa . '. ';
-        $by = $lastTicket->owner ? 'Twoje zgłoszenie' : 'Zgłoszenie innej osoby';
-    } else {
-        $penalty = '';
-        $by = $lastTicket->owner ? 'Np. twoje zgłoszenie' : 'Np. zgłoszenie innej osoby';
+        $penalty = ' ' . rtrim($STATUSES[$lastTicket->status]->recydywa, '.') . '.';
     }
+    $by = $lastTicket->owner ? 'twoje zgłoszenie' : 'zgłoszenie innej osoby';
     
     $number = htmlspecialchars($lastTicket->number) . ($lastTicket->externalId ? " (" . htmlspecialchars(strtoupper($lastTicket->externalId)) . ")" : '');
     $date = formatDateTime($lastTicket->date, 'd.MM.y');
@@ -116,7 +114,7 @@ function lastTicket(array $recydywa): string {
     $sm = \SM::resolve($lastTicket->smCity, $lastTicket->stopAgresji);
     $smShort = $sm->getShortName();
 
-    return "$penalty$by wykroczenia z dnia $date numer $number wysłane do $smShort.";
+    return "Najnowsze zgłoszenie: $by wykroczenia z dnia $date numer $number wysłane do $smShort.$penalty";
 }
 
 function isPresentInGallery(array $recydywa): bool {

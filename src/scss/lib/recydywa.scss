@@ -19,6 +19,26 @@
         visibility: hidden;
         padding: 0 1em;
         border-radius: 0.8em;
+
+        .recydywa-sameDay {
+            font-weight: 600;
+            margin: 0.5em 0;
+            padding: 0.4em 0.6em;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 0.4em;
+        }
+
+        .recydywa-actions {
+            margin: 0.5em 0;
+
+            .recydywa-seemore {
+                background-color: #fff;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                color: #000 !important;
+                display: inline-block;
+                cursor: pointer;
+            }
+        }
     }
 
     &.recydywa-list {

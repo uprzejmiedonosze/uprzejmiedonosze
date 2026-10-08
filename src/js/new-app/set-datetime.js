@@ -42,6 +42,7 @@ export function setDateTime(dateTime, fromPicture = true) {
     if (datetimeInput) {
       datetimeInput.value = formattedDt
       datetimeInput.classList.remove("error")
+      datetimeInput.dispatchEvent(new Event("change"))
     }
     return formattedDt;
   }

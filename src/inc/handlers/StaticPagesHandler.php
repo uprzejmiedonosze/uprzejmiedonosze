@@ -195,11 +195,13 @@ class StaticPagesHandler extends AbstractHandler {
 
         $recydywa = Recydywa::withApps($apps);
 
-        if ($recydywa->appsCnt < 2)
-            throw new HttpNotFoundException($request);
-
-        if ($recydywa->usersCnt < 2 && !$partial)
-            throw new HttpNotFoundException($request);
+        if ($partial) {
+            if ($recydywa->appsCnt < 2)
+                throw new HttpNotFoundException($request);
+        } else {
+            if ($recydywa->usersCnt < 2)
+                throw new HttpNotFoundException($request);
+        }
 
         foreach($apps as $app) {
             $app->isAppOwner = $app->isAppOwner($user);
