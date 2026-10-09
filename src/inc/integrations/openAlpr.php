@@ -62,11 +62,8 @@ function get_car_info_alpr(&$imageBytes, &$application, $baseFileName, $type) {
         
         $application->carInfo->plateId = strtoupper($result["plate"]);
         $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
-        $application->carInfo->brand = 
-            @fixCapitalizedBrandNames(ucfirst($result["vehicle"]['make'][0]['name']));
-        $application->carInfo->brandConfidence = @$result["vehicle"]['make'][0]['confidence'];
-        $application->carInfo->color = @ucfirst($result["vehicle"]['color'][0]['name']);
-        $application->carInfo->colorConfidence = @$result["vehicle"]['color'][0]['confidence'];
+        // Make/color guesses are ignored on purpose: the vehicle's make/model
+        // comes only from parkowanie.info (\vehicle_info\refresh).
         if (isset($result['vehicle_region']['x'])) {
             $vehicleBox = $result['vehicle_region'];
             $application->carInfo->vehicleBox = new JSONObject();

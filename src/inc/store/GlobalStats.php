@@ -147,7 +147,8 @@ function statsByYear(bool $useCache=true){
 }
 
 /**
- * Returns number of applications per city.
+ * Returns number of applications per car brand: parkowanie.info's brand
+ * (carInfo.vehicle) or, for historical reports, the old ALPR guess (carInfo.brand).
  */
 function statsByCarBrand(bool $useCache=true){
     $stats = \cache\get(Type::GlobalStats, "statsByCarBrand");
@@ -156,12 +157,12 @@ function statsByCarBrand(bool $useCache=true){
     }
 
     $sql = <<<SQL
-        select json_extract(value, '$.carInfo.brand') as city,
+        select coalesce(json_extract(value, '$.carInfo.vehicle.brand'), json_extract(value, '$.carInfo.brand')) as city,
             count(key) as cnt
         from applications
         where json_extract(value, '$.status') not in ('draft', 'ready')
-            and json_extract(value, '$.carInfo.brand') is not null
-        group by json_extract(value, '$.carInfo.brand')
+            and city is not null
+        group by city
         order by 2 desc
         limit 10
     SQL;

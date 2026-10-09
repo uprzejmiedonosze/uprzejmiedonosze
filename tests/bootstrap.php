@@ -17,6 +17,10 @@ if (!defined('OAUTH_PRIVATE_KEY') && function_exists('openssl_pkey_new')) {
 require(__DIR__ . '/../export/inc/include.php');
 require(__DIR__ . '/../export/inc/Twig.php');
 require_once(__DIR__ . '/DatabaseTestCase.php');
+require_once(__DIR__ . '/../export/inc/integrations/VehicleInfo.php');
+// Hermetic by default: no test may hit parkowanie.info. Tests that need vehicle
+// data install their own fetcher and restore this one in tearDown.
+\vehicle_info\setFetcher(fn (string $plate): ?array => null);
 
 $GLOBALS['STATUSES'] = $STATUSES;
 $GLOBALS['SM_ADDRESSES'] = $SM_ADDRESSES;

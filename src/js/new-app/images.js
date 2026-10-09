@@ -7,7 +7,7 @@ import isIOS from "../lib/isIOS"
 import * as Sentry from "@sentry/browser";
 import { error } from "../lib/toast";
 import { updateRecydywa } from "./recydywa";
-import { setOcrVehicleInfo, triggerVehicleInfoEnrichment, appendAutoComment } from "./vehicle-info";
+import { triggerVehicleInfoEnrichment } from "./vehicle-info";
 
 // Matches the JPEG quality used by saveImgAndThumb in API.php (85);
 // keeps a resized 1600px upload around ~1 MB.
@@ -406,7 +406,6 @@ async function sendFile(fileData, id, imageMetadata={}, previewUrl=null) {
     showThirdImage(true)
   }
 
-  const comment = /** @type {HTMLTextAreaElement} */ (document.getElementById("comment"))
   const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
   const plateHint = document.getElementById("plateHint")
   const plateId = /** @type {HTMLInputElement} */ (document.getElementById("plateId"))
@@ -436,19 +435,6 @@ async function sendFile(fileData, id, imageMetadata={}, previewUrl=null) {
         repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
         updateRecydywa(appId)
         triggerVehicleInfoEnrichment(app.carInfo.plateId)
-
-        if (app.carInfo.brand) {
-          setOcrVehicleInfo({ brand: app.carInfo.brand })
-          if (comment && (comment.value + "").trim().length == 0) {
-            let brandLine = null;
-            if (app.carInfo.brandConfidence > 98) {
-              brandLine = "Pojazd marki " + app.carInfo.brand + "."
-            } else if (app.carInfo.brandConfidence > 90) {
-              brandLine = "Pojazd prawdopodobnie marki " + app.carInfo.brand + "."
-            }
-            if (brandLine) appendAutoComment(comment, brandLine);
-          }
-        }
         if (plateHint) {
           plateHint.className = "hint"
           plateHint.textContent = "Sprawdź automatycznie pobrany numer rejestracyjny"

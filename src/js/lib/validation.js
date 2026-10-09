@@ -46,8 +46,7 @@ export const checkCommentvalue = function () {
   const commentInput = /** @type {HTMLTextAreaElement} */ (document.getElementById("comment"))
   if (!commentInput) return false
 
-  let comment = (commentInput.value || "").trim()
-  comment = comment.replace(/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/ig, '').trim()
+  const comment = (commentInput.value || "").trim()
   if (comment.length > 10)
     return true
   commentInput.classList.add("error")

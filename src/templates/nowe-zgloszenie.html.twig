@@ -100,6 +100,7 @@
                     <img id="plateImage" src="{{ (app.carInfo.plateImage ?? '')|asset_url }}"
                         {% if not app.shouldIncludePlateImage %}style="display: none;"{% endif %}/>
                 </div>
+                <div id="vehicleInfo" class="vehicle-info-warning" style="display: none;"></div>
             </div>
             <div>
                 <label for="lokalizacja" id="addressHint" style="display: inline;" >Podaj adres lub wskaż go na mapie</label>

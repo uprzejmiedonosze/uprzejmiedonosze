@@ -31,7 +31,7 @@ class CreateReportDraftImageTest extends TestCase
         $this->pathsToRemove = [];
         $_SESSION = [];
         // Shared static test override; never leak it into another test class.
-        ReportMcpTools::setVehicleInfoFetcher(null);
+        \vehicle_info\setFetcher(fn (string $plate): ?array => null);
         parent::tearDown();
     }
 
@@ -58,7 +58,7 @@ class CreateReportDraftImageTest extends TestCase
 
         // Hermetic: the plate triggers the zbiorkom enrichment — stub it so the
         // test never depends on the live endpoint.
-        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
+        \vehicle_info\setFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
 
         $result = (new ReportMcpTools())->createReportDraft(
             plateId: 'zs 1234a',

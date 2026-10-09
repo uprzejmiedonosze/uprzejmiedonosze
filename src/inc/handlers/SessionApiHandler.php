@@ -270,6 +270,15 @@ class SessionApiHandler extends AbstractHandler {
         return $this->renderJson($response, $recydywa);
     }
 
+    /**
+     * Editor preview of what \vehicle_info\refresh will store for a plate:
+     * make/model and the DMC warning, or {} when parkowanie.info has nothing.
+     */
+    public function vehicleInfo(Request $request, Response $response, $args): Response {
+        $info = \vehicle_info\lookup($args['plateId']);
+        return $this->renderJson($response, $info ?? new \stdClass());
+    }
+
     public function Nominatim(Request $request, Response $response, $args) {
         extract($args);
         $result = \geo\Nominatim($lat, $lng);

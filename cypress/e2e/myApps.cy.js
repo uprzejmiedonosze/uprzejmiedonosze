@@ -129,7 +129,7 @@ describe('Valid images and location', () => {
         cy.get('input[data-type="geo"]', { timeout: 1000 }).should('not.have.class', 'error').should('not.have.class', 'clock')
         cy.get('.imageContainer').should('not.have.class', 'error')
 
-        cy.get('#comment').should('have.value', 'Pojazd marki Skoda.')
+        cy.get('#comment').should('have.value', '')
 
         cy.get('#plateId').should('have.value', this.config.carImage.plateId)
         cy.get('#plateImage').should('be.visible')

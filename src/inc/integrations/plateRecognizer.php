@@ -62,10 +62,6 @@ function get_car_info_platerecognizer(&$imageBytes, &$application, $baseFileName
         }
         $application->carInfo->plateId = strtoupper($result["plate"]);
         $application->carInfo->plateIdFromImage = strtoupper($result["plate"]);
-        $application->carInfo->brand = null;
-        $application->carInfo->brandConfidence = 0;
-        $application->carInfo->color = null;
-        $application->carInfo->colorConfidence = 0;
 
         if (isset($result['vehicle']['box'])) {
             $vehicleBox = $result['vehicle']['box'];

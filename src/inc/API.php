@@ -2,6 +2,7 @@
 require_once(__DIR__ . '/include.php');
 require(__DIR__ . '/integrations/alpr.php');
 require(__DIR__ . '/integrations/Geolocation.php');
+require_once(__DIR__ . '/integrations/VehicleInfo.php');
 
 use app\Application;
 use \stdClass as stdClass;
@@ -92,6 +93,7 @@ function updateApplication(
 
     $application->carInfo ??= new stdClass();
     $application->carInfo->plateId = strtoupper(cleanWhiteChars($plateId));
+    \vehicle_info\refresh($application);
     $application->userComment = capitalizeSentence($comment);
     $application->initStatements();
     $application->statements->witness = $witness;
@@ -183,6 +185,7 @@ function uploadImage(string $appId, $pictureType, $imageBytes, $dateTime, $dtFro
                 $alprBytes = $imageBytes;
             }
             \alpr\get($alprBytes, $application, $baseFileName, $type, $user);
+            \vehicle_info\refresh($application);
             $application->carImage->width = $width;
             $application->carImage->height = $height;
         } else if ($pictureType == 'contextImage') {

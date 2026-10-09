@@ -438,6 +438,31 @@ class Application extends JSONObject implements \JsonSerializable {
         return $this->getLatexSafe($this->carInfo->plateId);
     }
 
+    /**
+     * "(pojazd marki Volvo XC60)" from parkowanie.info (carInfo.vehicle, see
+     * \vehicle_info\refresh), or "" when unknown or stale for the current plate.
+     */
+    public function getVehicleSuffix(): string {
+        $vehicle = $this->carInfo->vehicle ?? null;
+        if (empty($vehicle->brand)) {
+            return '';
+        }
+        $plate = strtoupper(preg_replace('/\s+/u', '', (string) ($this->carInfo->plateId ?? '')));
+        if (($vehicle->plateId ?? null) !== $plate) {
+            return '';
+        }
+        return '(pojazd marki ' . trim($vehicle->brand . ' ' . ($vehicle->model ?? '')) . ')';
+    }
+
+    /** Plate number followed by the vehicle make/model, e.g. "ZS12331 (pojazd marki Volvo XC60)". */
+    public function getPlateDescription(): string {
+        return trim(($this->carInfo->plateId ?? '') . ' ' . $this->getVehicleSuffix());
+    }
+
+    public function getLatexSafeVehicleSuffix() {
+        return $this->getLatexSafe($this->getVehicleSuffix());
+    }
+
     public function getLatexSafeUserAddress() {
         return $this->getLatexSafe($this->user->address);
     }

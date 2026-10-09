@@ -1,8 +1,11 @@
 <?PHP namespace curl;
 
-function request(string $url, array $params, string $vendor, array|null $headers=[], int $retries = 2): array|null {
+function request(string $url, array $params, string $vendor, array|null $headers=[], int $retries = 2, int $timeout = 0): array|null {
     $ch = curl_init($url . http_build_query($params));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    if ($timeout > 0) {
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+    }
     #curl_setopt($ch, CURLOPT_REFERER, "https://agendaparkingowa.pl");
     curl_setopt($ch, CURLOPT_USERAGENT, "UprzejmieDonosze/1.0");
 

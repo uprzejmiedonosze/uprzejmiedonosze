@@ -36,7 +36,7 @@ class ReportMcpToolsTest extends DatabaseTestCase
         // reset them so test order cannot select a stale stub or a live API.
         ReportMcpTools::setReverseGeocoder(null);
         ReportMcpTools::setForwardGeocoder(null);
-        ReportMcpTools::setVehicleInfoFetcher(null);
+        \vehicle_info\setFetcher(fn (string $plate): ?array => null);
         parent::tearDown();
     }
 
@@ -553,7 +553,7 @@ class ReportMcpToolsTest extends DatabaseTestCase
     {
         // Hermetic: the plate triggers the zbiorkom enrichment — stub it so the
         // test never depends on the live endpoint.
-        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
+        \vehicle_info\setFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
         // Hermetic: address+lat/lng together now cross-check via forward geocoding
         // (issue #121) — stub it agreeing with the given coordinates.
         ReportMcpTools::setForwardGeocoder(fn (string $query): array => ['lat' => 53.43, 'lng' => 14.55]);
@@ -988,7 +988,7 @@ class ReportMcpToolsTest extends DatabaseTestCase
         });
         // Hermetic: this test uploads a real image (ALPR may populate a plate),
         // so stub the zbiorkom lookup rather than hitting the live endpoint.
-        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
+        \vehicle_info\setFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
         // uploadImage resolves the user's number from the store — persist the
         // identity like a real registered user would have (plain json; the
         // session-based encryption isn't active in tests).
@@ -1011,9 +1011,9 @@ class ReportMcpToolsTest extends DatabaseTestCase
         self::assertArrayNotHasKey('destinationOptions', $report);
     }
 
-    public function testCreateReportDraftAppendsZbiorkomBrandModelAndWeightLines(): void
+    public function testCreateReportDraftStoresVehicleInfoWithoutTouchingComment(): void
     {
-        ReportMcpTools::setVehicleInfoFetcher(function (string $plate) {
+        \vehicle_info\setFetcher(function (string $plate) {
             self::assertSame('WA12345', $plate, 'the fetcher gets the normalized plate');
             return [
                 'brand' => 'fiat',
@@ -1028,15 +1028,20 @@ class ReportMcpToolsTest extends DatabaseTestCase
             description: 'Parkuje na chodniku'
         );
 
-        $lines = explode("\n", $result['report']['userComment']);
-        self::assertSame('Parkuje na chodniku.', $lines[0], 'caller text is kept (capitalized like the web)');
-        self::assertContains('Pojazd marki Fiat Punto.', $lines);
-        self::assertContains('Dopuszczalna masa całkowita wg danych producenta wynosi minimum 2,60 t.', $lines);
+        $report = $result['report'];
+        self::assertSame('Parkuje na chodniku.', $report['userComment'], 'the description is the caller\'s alone');
+        self::assertSame('Fiat', $report['carInfo']['vehicle']['brand']);
+        self::assertSame('Punto', $report['carInfo']['vehicle']['model']);
+        self::assertSame(
+            'Dopuszczalna masa całkowita wg danych producenta wynosi minimum 2,60 t. Może to mieć znaczenie przy parkowaniu na chodniku.',
+            $report['carInfo']['vehicle']['warning']
+        );
+        self::assertSame('WA 12345 (pojazd marki Fiat Punto)', \app\get($report['id'])->getPlateDescription());
     }
 
-    public function testCreateReportDraftAppendsHeavyTruckLines(): void
+    public function testCreateReportDraftReportsHeavyTruckWarning(): void
     {
-        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => [
+        \vehicle_info\setFetcher(fn (string $plate): array => [
             'brand' => 'Volvo',
             'model' => 'FH',
             'isHeavyVehicle' => true,
@@ -1047,16 +1052,18 @@ class ReportMcpToolsTest extends DatabaseTestCase
 
         $result = (new ReportMcpTools())->createReportDraft(plateId: 'GDA12345');
 
-        $lines = explode("\n", $result['report']['userComment']);
-        self::assertContains('Pojazd marki Volvo FH.', $lines);
-        self::assertContains('Pojazd jest sklasyfikowany jako ciężarowy.', $lines);
-        self::assertContains('Dopuszczalna masa całkowita wg danych producenta wynosi minimum 18,00 t.', $lines);
-        self::assertContains('Może to mieć istotne znaczenie przy kwalifikacji wykroczenia.', $lines);
+        $vehicle = $result['report']['carInfo']['vehicle'];
+        self::assertTrue($vehicle['isHeavyVehicle']);
+        self::assertSame(
+            'Pojazd jest sklasyfikowany jako ciężarowy. Dopuszczalna masa całkowita wg danych producenta wynosi minimum 18,00 t. Może to mieć istotne znaczenie przy kwalifikacji wykroczenia.',
+            $vehicle['warning']
+        );
+        self::assertEmpty($result['report']['userComment'] ?? null, 'nothing is written into the description');
     }
 
-    public function testCreateReportDraftIgnoresZbiorkomMissAndDeduplicates(): void
+    public function testCreateReportDraftIgnoresZbiorkomMiss(): void
     {
-        ReportMcpTools::setVehicleInfoFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
+        \vehicle_info\setFetcher(fn (string $plate): array => ['error' => 'Vehicle not found']);
         $this->actAs('creator-zbiorkom3@example.com', ['reports:create']);
 
         $result = (new ReportMcpTools())->createReportDraft(
@@ -1065,12 +1072,13 @@ class ReportMcpToolsTest extends DatabaseTestCase
         );
 
         self::assertSame('Pojazd marki BMW X5.', $result['report']['userComment'], 'a miss changes nothing');
+        self::assertArrayNotHasKey('vehicle', $result['report']['carInfo']);
     }
 
     public function testCreateReportDraftSkipsEnrichmentWithoutPlate(): void
     {
         $called = false;
-        ReportMcpTools::setVehicleInfoFetcher(function () use (&$called) {
+        \vehicle_info\setFetcher(function () use (&$called) {
             $called = true;
             return null;
         });

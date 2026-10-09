@@ -120,6 +120,7 @@ $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     $group->patch('/app/{appId}/fields', SessionApiHandler::class . ':setFields');
     $group->patch('/app/{appId}/send', SessionApiHandler::class . ':sendApplication');
     $group->get('/app/{appId}/recydywa', SessionApiHandler::class . ':recydywa');
+    $group->get('/vehicle/{plateId}', SessionApiHandler::class . ':vehicleInfo');
     $group->get('/geo/{lat},{lng}/n', SessionApiHandler::class . ':Nominatim');
     $group->get('/geo/{lat},{lng}/m', SessionApiHandler::class . ':MapBox');
 })  ->add(new RegisteredMiddleware())

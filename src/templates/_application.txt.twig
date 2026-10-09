@@ -1,5 +1,5 @@
 W dniu {{ app.getDate }} {{ app.getDateTimeDivider }} {{ app.getTime }} {{ app.guessUserSex.bylam }} {##}
-świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym {{ app.carInfo.plateId }} w okolicy adresu {##}
+świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym {{ app.getPlateDescription }} w okolicy adresu {##}
 {{ app.address.address -}}. {##}
 {{ app.getCategoryFormal }} {{ app.getExtensionsText() }} {{ app.getJSONSafeComment|raw }} {##}
 {% if not (app.statements.witness ?? false) -%}

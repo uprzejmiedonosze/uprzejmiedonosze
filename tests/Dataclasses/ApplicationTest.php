@@ -41,6 +41,25 @@ class ApplicationTest extends DatabaseTestCase
         $this->assertEquals($app->getCategory()->getFormal(), $app->getCategoryFormal());
     }
 
+    public function testPlateDescriptionIncludesVehicleOnlyForCurrentPlate()
+    {
+        $app = Application::withJson($this->appJson, $this->email);
+
+        // fixture has only an old ALPR brand guess — ignored
+        $this->assertSame('ZS2450C', $app->getPlateDescription());
+
+        $app->carInfo->vehicle = (object) ['plateId' => 'ZS2450C', 'brand' => 'Volvo', 'model' => 'XC60'];
+        $this->assertSame('ZS2450C (pojazd marki Volvo XC60)', $app->getPlateDescription());
+
+        $app->carInfo->vehicle->model = null;
+        $this->assertSame('ZS2450C (pojazd marki Volvo)', $app->getPlateDescription());
+
+        // stale lookup for a previous plate is never rendered
+        $app->carInfo->plateId = 'ZS9999X';
+        $this->assertSame('ZS9999X', $app->getPlateDescription());
+        $this->assertSame('', $app->getVehicleSuffix());
+    }
+
     public function testCanImageBeShownWithFaces()
     {
         $app = Application::withJson($this->appJson, $this->email);

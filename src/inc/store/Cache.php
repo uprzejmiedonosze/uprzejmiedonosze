@@ -28,6 +28,8 @@ namespace cache {
         case Passkey;
 
         case Vision;
+
+        case VehicleInfo;
     }
 
     function key(Type $type, ?string $key): string {
