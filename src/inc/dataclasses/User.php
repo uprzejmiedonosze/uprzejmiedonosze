@@ -47,7 +47,7 @@ class User extends \JSONObject{
     public static function withFirebaseUser($firebaseUser) {
         $instance = new self();
         $instance->data->email = $firebaseUser['user_email'];
-        $instance->data->name = $firebaseUser['user_name'];
+        $instance->data->name = $firebaseUser['user_name'] ?? '';
         return $instance;
     }
 
@@ -242,8 +242,8 @@ class User extends \JSONObject{
     /**
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
-    public static function _guessSex(string $name): string {
-        $names = preg_split('/\s+/', trimstr2lower($name));
+    public static function _guessSex(?string $name): string {
+        $names = preg_split('/\s+/', trimstr2lower((string)$name), -1, PREG_SPLIT_NO_EMPTY);
         if(count($names) < 1){
             return '?';
         }

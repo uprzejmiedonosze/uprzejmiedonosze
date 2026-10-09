@@ -98,6 +98,9 @@ class UserTest extends DatabaseTestCase
         $this->assertEquals('f', User::_guessSex('Noemi Nowak'));
         $this->assertEquals('f', User::_guessSex('Nel Kowalska'));
         $this->assertEquals('f', User::_guessSex('Karmen Dąbrowska'));
+        $this->assertEquals('?', User::_guessSex(null));
+        $this->assertEquals('?', User::_guessSex(''));
+        $this->assertEquals('?', User::_guessSex('   '));
     }
 
 
