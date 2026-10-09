@@ -311,10 +311,32 @@ services:
   # ── SHARED: dev + staging + prod + shadow ─────────────────────────────────
   # Each compose project gets its own memcached (separate container per
   # project), so shadow's sessions stay isolated from prod's.
+  #
+  # memcached is the only copy of every PHP session, so a plain restart
+  # (dockerd upgrade, host reboot, container recreate) used to log out every
+  # user — e.g. the docker-ce apt upgrade on 2026-10-05. Warm restart keeps
+  # them: `-e` keeps the cache in a memory-mapped file on a volume; on
+  # SIGUSR1 (the stop signal below) memcached saves its metadata next to it
+  # and the next start reloads everything. A hard kill (SIGKILL, OOM, host
+  # crash) still starts clean. The image runs as `memcache`, so start as root
+  # only to chown the fresh volume, then drop privileges via -u.
+  # `sleep 1`: memcached rejects the saved state when it restarts within the
+  # same second it stopped ("restart incompatible due to setting for
+  # [stop_time]"), which a plain `docker restart` otherwise hits.
+  # -m 256: the 64 MB default was already fully allocated (total_malloced
+  # 63.96 MB on 2026-10-09) — ~16k mostly-anonymous sessions/day with a
+  # 180-day TTL plus never-expiring ALPR/geo cache entries. The memory file
+  # is exactly -m in size (256 MB on the volume).
   memcached:
     profiles: [dev, staging, prod, test, shadow]
     image: memcached:alpine
     restart: always
+    user: root
+    command: ["sh", "-c", "chown memcache /data && sleep 1 && exec memcached -u memcache -m 256 -e /data/memory_file"]
+    stop_signal: SIGUSR1
+    stop_grace_period: 30s
+    volumes:
+      - memcached-data:/data
 
   # face-detect-consumer and worker-cron share the worker image (code baked in from builder).
   # face-detect-consumer calls external APIs (OpenAI gpt-5-nano gate + Google Vision bboxes,
@@ -404,3 +426,7 @@ services:
     # reaps correctly and disables supercronic's broken internal path.
     init: true
 
+
+volumes:
+  # Warm-restart state of memcached (PHP sessions), see the memcached service.
+  memcached-data:

@@ -10,13 +10,19 @@
 | `builder-test` | test | | | Jednorazowy kontener dla `make test` (bez `container_name`, działa obok `make dev`) |
 | `webapp` | ✓ | | | nginx + PHP-FPM (code from builder volume) |
 | `webapp-srv` | | ✓ | ✓ | nginx + PHP-FPM (code baked in image) |
-| `memcached` | ✓ | ✓ | ✓ | Cache |
+| `memcached` | ✓ | ✓ | ✓ | Cache + jedyny magazyn sesji PHP (warm restart, patrz niżej) |
 | `face-detect-consumer` | | ✓ | ✓ | PHP daemon — kolejka detekcji twarzy (ADR 0003) |
 | `worker-cron` | | ✓ | ✓ | supercronic — cleanup, stats, s3-sync (`webapp/crontab`) |
 
 Poza tym compose: Matomo (`matomo.nieradka.com`, zewnętrzny) oraz `/wiki` na prod — osobny projekt
 `../wiki.uprzejmiedonosze` (DokuWiki) na wspólnej sieci Traefik `edge`, z routerem `PathPrefix(/wiki)`
 o wyższym priorytecie niż `Host(uprzejmiedonosze.net)` z `webapp-srv`. Zobacz jego własny `CLAUDE.md`.
+
+`memcached` to jedyny magazyn sesji PHP (`session.save_handler=memcached`). Działa z warm restartem
+(`-e /data/memory_file` na wolumenie `memcached-data`, `stop_signal: SIGUSR1`), więc łagodny stop/recreate/restart
+dockerd nie wylogowuje użytkowników; sesje traci tylko twardy kill (SIGKILL, OOM, crash hosta). Nie włączaj
+`live-restore` w dockerd — kontenery nie byłyby wtedy łagodnie zatrzymywane przy wyłączaniu hosta. Strojenie locka sesji
+(`memcached.sess_lock_wait_min/max`, w **milisekundach**) jest w `services/webapp/Dockerfile`.
 
 ## Środowiska
 
