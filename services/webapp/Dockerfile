@@ -148,20 +148,26 @@ RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
         -e "s/^session.save_handler.*/session.save_handler = memcached/" \
         /etc/php/8.4/fpm/php.ini && \
     printf 'session.save_path = "memcached:11211"\n' >> /etc/php/8.4/fpm/php.ini && \
-    # Defaults (sess_lock_wait_min/max = 1000/2000us, sess_lock_retries = 5)
-    # give a losing request only a few ms of exponential backoff before it
-    # gives up and proceeds with an empty $_SESSION — surfaces as a spurious
-    # "User not logged in" 403 when a slow handler (e.g. image upload + ALPR,
-    # 1-2s) is holding the lock (confirmed via Papertrail 2026-09-29). Widening
-    # the wait budget so a concurrent request actually waits out a slow
-    # handler instead: min unchanged (no extra latency in the common
-    # uncontended case), max raised to 100ms and retries to 30, giving ~2.5s
-    # of worst-case total backoff — comfortably past the slowest handlers seen
-    # so far. Alternative to (and replaces) releasing the lock early via
-    # session_write_close() in SessionMiddleware, which was reverted
-    # (2026-09-30) after it broke report submission — something past
-    # preprocess() does write to $_SESSION after all.
-    printf 'memcached.sess_lock_wait_min = 1000\nmemcached.sess_lock_wait_max = 100000\nmemcached.sess_lock_retries = 30\n' >> /etc/php/8.4/fpm/php.ini && \
+    # sess_lock_wait_min/max are in MILLISECONDS (php-memcached sleeps
+    # wait*1000 us, doubling up to max). Defaults (150/150 ms, 5 retries)
+    # give a losing request only ~750 ms before it gives up and proceeds
+    # with an empty $_SESSION — a spurious "User not logged in" 403 (or a
+    # redirect to /login.html, whose resetSession() then really wipes the
+    # session) while a slow handler such as image upload + ALPR holds the
+    # lock (Papertrail 2026-09-29).
+    # The previous fix (2026-09-30) set 1000/100000/30 assuming microseconds:
+    # that made every contended request sleep 1, 2, 4, 8, 16 s… so it got
+    # its lock only at 1/3/7/15/31 s regardless of when it was actually
+    # released — visible as spikes at exactly those durations in the access
+    # log, and as 30-60 s parallel image uploads (2026-10-09).
+    # Now: start at 10 ms, cap at 100 ms, 300 retries ≈ 30 s total budget —
+    # a waiter resumes within ≤100 ms of the lock being released, and
+    # gives up around when the lock itself expires anyway
+    # (sess_lock_expire=0 → max_execution_time = 30 s).
+    # Releasing the lock early via session_write_close() in SessionMiddleware
+    # was tried and reverted (2026-09-30): something past preprocess() does
+    # write to $_SESSION.
+    printf 'memcached.sess_lock_wait_min = 10\nmemcached.sess_lock_wait_max = 100\nmemcached.sess_lock_retries = 300\n' >> /etc/php/8.4/fpm/php.ini && \
     sed -i -e "s|.*error_log.*|error_log = /dev/stderr|" \
         -e "s|^;log_level.*|log_level = warning|" \
         /etc/php/8.4/fpm/php-fpm.conf && \
