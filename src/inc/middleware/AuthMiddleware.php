@@ -110,7 +110,7 @@ class AuthMiddleware implements MiddlewareInterface {
             $claims = $verifiedIdToken->claims();
             $firebaseUser = Array(
                 'user_email' => (isDev()) ? 'e@nieradka.net' : $claims->get('email'),
-                'user_name' => $claims->get('name'),
+                'user_name' => $claims->get('name') ?? '',
                 'user_picture' => $claims->get('picture'),
                 'user_id' => $claims->get('user_id'),
                 'token' => $token
