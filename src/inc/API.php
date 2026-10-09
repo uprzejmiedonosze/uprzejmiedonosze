@@ -79,9 +79,7 @@ function updateApplication(
     // zapisie niezmienionej daty (edycja starego zgłoszenia, patrz komentarz wyżej)
     if ($dateParsed < (new DateTime())->modify('-7 months') && date_format($dateParsed, DT_FORMAT) !== ($application->date ?? null))
         throw new \ValidationException('datetime', 'Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!');
-    // jak na webie (validation.js checkCommentvalue): automatyczna linia „Pojazd marki XXX.” nie liczy się jako opis
-    $ownComment = trim(preg_replace('/^Pojazd (prawdopodobnie )?marki \w+[\s-]?\w*\.?/i', '', trim((string)$comment)));
-    if ($category === 0 && mb_strlen($ownComment) <= 10)
+    if ($category === 0 && mb_strlen(trim((string)$comment)) <= 10)
         throw new \ValidationException('comment', 'Wybierz rodzaj wykroczenia z listy albo opisz je w polu komentarza');
 
     $application->date = date_format($dateParsed, DT_FORMAT);
