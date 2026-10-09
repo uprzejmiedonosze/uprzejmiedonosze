@@ -70,7 +70,7 @@ function searchFold(string $text): string {
  */
 function searchText(\app\Application $app): string {
     $fields = [$app->number ?? '', $app->externalId ?? '', $app->address->address ?? '', $app->carInfo->plateId ?? '',
-        $app->carInfo2->plateId ?? '', $app->userComment ?? '', $app->privateComment ?? '', $app->smCity ?? ''];
+        $app->userComment ?? '', $app->privateComment ?? '', $app->smCity ?? ''];
     try {
         $fields[] = $app->getCategory()->getFormal();
     } catch (\Throwable $e) {
