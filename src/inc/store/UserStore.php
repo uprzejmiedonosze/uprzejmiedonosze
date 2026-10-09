@@ -59,6 +59,29 @@ function currentEmail(): string{
     throw new \Exception("Próba pobrania danych niezalogowanego użytkownika");
 }
 
+/** Małe litery bez polskich znaków diakrytycznych: „Wrocław”, „WROCŁAW” i „wroclaw” to to samo wyszukiwanie. */
+function searchFold(string $text): string {
+    return strtr(mb_strtolower($text), ['ą' => 'a', 'ć' => 'c', 'ę' => 'e', 'ł' => 'l', 'ń' => 'n', 'ó' => 'o', 'ś' => 's', 'ź' => 'z', 'ż' => 'z']);
+}
+
+/**
+ * Tekst zgłoszenia, po którym szuka lista („Szukaj”): numer, sygnatura, adres, tablice, komentarze, kategoria i miejscowość SM.
+ * Adres i komentarze są w bazie szyfrowane (Application::encode), więc zgłoszenie musi być już odszyfrowane.
+ */
+function searchText(\app\Application $app): string {
+    $fields = [$app->number ?? '', $app->externalId ?? '', $app->address->address ?? '', $app->carInfo->plateId ?? '',
+        $app->userComment ?? '', $app->privateComment ?? '', $app->smCity ?? ''];
+    try {
+        $fields[] = $app->getCategory()->getFormal();
+    } catch (\Throwable $e) {
+        // nieznana kategoria – reszta pól wystarczy
+    }
+    return searchFold(implode(' ', array_map('strval', $fields)));
+}
+
+/** Najwięcej zgłoszeń zwracanych jednym wyszukiwaniem (zwykłe pobranie 7000+ zgłoszeń potrafiło przekroczyć memory_limit). */
+const SEARCH_MAX_RESULTS = 5000;
+
 function apps(User $user, string $status = 'all', string $search = 'all', int $limit = 0, int $offset = 0): array {
     $userEmail = $user->getEmail();
 
@@ -78,6 +101,10 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
     SQL;
     if ($status == 'allWithDrafts') {
         $whereStatus = '';
+    } elseif ($status == 'active') { // what the web list shows by default: everything but archived (and drafts)
+        $whereStatus = <<<SQL
+            and json_extract(value, '$.status') not in ('ready', 'draft', 'archived')
+        SQL;
     } elseif ($status !== 'all') {
         $whereStatus = <<<SQL
             and json_extract(value, '$.status') = :status
@@ -85,13 +112,16 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
         $params += [':status' => $status];
     }
 
-    $whereSearch = '';
-    if ($search !== 'all') {
-        $whereSearch = <<<SQL
-            and lower(value) like lower(:search)
-        SQL;
-        $params += [':search' => "%$search%"];
+    // Szukanie po odszyfrowanym tekście zgłoszenia w PHP (w bazie adres i komentarze są zaszyfrowane, a Unicode w JSON-ie
+    // escapowany, więc SQL-owe LIKE ich nie widzi): bez rozróżniania wielkości liter i polskich znaków. "%" (domyślna
+    // wartość REST) i pusty tekst = bez filtra. Strona (limit/offset) jest wtedy wycinana po filtrowaniu.
+    $needle = searchFold(trim($search));
+    $searching = $search !== 'all' && $needle !== '' && $needle !== '%';
+    if ($searching) {
+        $limitOffset = '';
+        unset($params[':limit'], $params[':offset']);
     }
+    $whereSearch = '';
 
     $sql = <<<SQL
         select value, email
@@ -107,8 +137,31 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
     $stmt = \store\prepare($sql);
     $stmt->execute($params);
 
-    return $stmt->fetchAll(\PDO::FETCH_FUNC,
-        fn($json, $email) => \app\Application::withJson($json, $email));
+    if (!$searching)
+        return $stmt->fetchAll(\PDO::FETCH_FUNC,
+            fn($json, $email) => \app\Application::withJson($json, $email));
+
+    // Kursor zamiast fetchAll(): w pamięci jest naraz jedno zgłoszenie (konta mają nawet kilkanaście tysięcy, a samo pobranie
+    // 7000 zgłoszeń potrafiło przekroczyć memory_limit). Zatrzymujemy się, gdy mamy `offset + limit` trafień – dalsze strony
+    // dobierają kolejne, a lista nie potrzebuje łącznej liczby wyników. Bez limitu (lub większym) zwracamy najwyżej SEARCH_MAX_RESULTS.
+    $max = $limit > 0 ? min($limit, SEARCH_MAX_RESULTS) : SEARCH_MAX_RESULTS;
+    $apps = [];
+    $matched = 0;
+    $scanned = 0;
+    while ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
+        $app = \app\Application::withJson($row[0], $row[1]);
+        if (!str_contains(searchText($app), $needle)) {
+            if (++$scanned % 500 === 0)
+                gc_collect_cycles(); // obiekty zgłoszeń mają odwołania cykliczne – bez tego zwalniają się dopiero przy GC
+            continue;
+        }
+        if ($matched++ < $offset)
+            continue;
+        $apps[] = $app;
+        if (count($apps) >= $max)
+            break;
+    }
+    return $apps;
 }
 
 

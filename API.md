@@ -2,13 +2,26 @@
 
 *Note: Due to the framework's strict routing (Slim 4), endpoints corresponding to the root of a group **must** include a trailing slash (e.g., `/api/rest/user/` instead of `/api/rest/user`). Missing trailing slashes will result in a 404 Not Found error.*
 
+## Kontrakt API a aplikacja mobilna (wymuszenie aktualizacji)
+
+Kontrakt jest wersjonowany numerem `VISION_SCHEMA` (`src/inc/integrations/VisionSchema.php`) = `SCHEMA` w appce (`src/lib/vision.ts`);
+podbijamy go przy każdej zmianie kontraktu. Aplikacja wysyła w każdym żądaniu `X-UD-Schema: <SCHEMA>` (oraz informacyjnie
+`X-UD-Client: pro/<wersja> (<build>; <ios|android>)`). **Kompatybilność jest tylko „w dół”:** klient ze schematem równym lub
+wyższym niż backend działa (nowa appka ze starszym backendem – OK), a klient ze schematem **niższym** niż `VISION_SCHEMA` backendu
+(np. appka 7, backend 8) dostaje na każdym `/api/rest/*` **426** z `{error, status, schema, serverSchema, storeUrl}` i pokazuje
+blokujący ekran „Zaktualizuj”. Żądania bez nagłówka (web, MCP) nie są ograniczane.
+Decyzję podejmuje wyłącznie backend – appka nie porównuje wersji u siebie, tylko reaguje na 426 (pierwsze żądanie po starcie to
+`POST /api/verify-token`, więc blokada pojawia się od razu). `/api/config/app.json` (publiczny) służy już tylko do miękkiej zachęty:
+`latestVersion` (wersja appki, per platforma) i `storeUrl`. **Kolejność wdrożenia zmiany kontraktu:** podbić `SCHEMA` w appce → nowy build
+w sklepach → dopiero potem backend z podbitym `VISION_SCHEMA` (od tej chwili starsze appki są blokowane).
+
 ## User endpoints
 
 Requires authorization.
 
 ### GET `/api/rest/user/`
 
-Returns current user data.
+Returns current user data, including `lastLocation` (`"lat,lng"` of the last report, otherwise the geocoded home address; absent when neither is known) (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats` and `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`).
 
 ### PATCH `/api/rest/user/`
 
@@ -31,13 +44,50 @@ POST params (JSON body):
   * `stopAgresji` (optional, default 'SM', can be 'SA')
   * `shareRecydywa` (optional, default 'Y')
 
+### DELETE `/api/rest/user/`
+
+Self-service account deletion (same as the web "Skasuj konto"): removes reports, photos, passkeys and
+OAuth connections, sends the farewell e-mail. Irreversible.
+
+JSON body: `email` — the account's own e-mail, retyped as confirmation (mismatch → 422).
+
+### GET `/api/rest/user/dashboard`
+
+Everything the web `/app` dashboard shows, already localized for the user's sex (gendered level and
+badge names, `introMsg`; the `{token}` placeholders in `levels.json` are resolved server-side):
+`{name, stats, introMsg, levels[{id, desc, active}], rank, badges[{id, name, desc, img, earned, former}]}`; stats are always computed fresh (no cache).
+`introMsg` and badge `desc` may contain HTML.
+
+### GET `/api/rest/user/passkeys`
+
+Returns `{passkeys: [{id, label, createdAt, lastUsedAt}]}`.
+
+### DELETE `/api/rest/user/passkeys/{id}`
+
+Removes one of the user's passkeys.
+
+### POST `/api/rest/user/passkeys/register-options` / `register-verify`
+
+Native app registration (WebAuthn). There is no cookie session, so the challenge travels as `state`:
+`register-options` returns `{options, state}` (`options` = WebAuthn creation options, base64url);
+`register-verify` takes `{state, id, clientDataJSON, attestationObject, transports}` (base64url) and returns
+`{passkeys: [...]}`. `state` is single-use, TTL 120 s. The Android origin (`android:apk-key-hash:<hash>`) must be
+whitelisted in `PASSKEY_ANDROID_KEY_HASHES` (comma-separated, per host); the host must equal `APP_HOST` (RP ID).
+
+### POST `/api/rest/passkey/login-options` / `login-verify` (anonymous)
+
+`login-options` returns `{options, state}` (discoverable credentials, empty `allowCredentials`);
+`login-verify` takes `{state, id, clientDataJSON, authenticatorData, signature, userHandle}` and returns
+`{customToken}` (Firebase custom token, 300 s) – the app exchanges it via `accounts:signInWithCustomToken`
+and then calls `/api/verify-token`.
+
 ### GET `/api/rest/user/apps`
 
-Returns user's applications.
+Returns user's applications (each with `recipient`).
 
 GET params:
 
-  * `status` (optional, default 'all')
+  * `status` (optional, default 'all' = everything except drafts; 'active' = like 'all' without `archived`, the web list default; or a single status)
   * `search` (optional, default '%')
   * `limit` (optional, default 0)
   * `offset` (optional, default 0)
@@ -45,6 +95,13 @@ GET params:
 ## Application endpoints
 
 Requires authorization.
+
+All application endpoints return the application JSON plus a derived `recipient` object
+(`{key, name, shortName, isPolice, automated, unknown, stopAgresjiForced}`) — who the report goes to.
+`GET /api/rest/user/apps` returns `recipient` for every item too. Errors are `{error, status}`;
+validation errors (HTTP 422) also carry `field` (`plateId`, `address`, `datetime`, `comment`,
+`status`, `images`). These endpoints share their implementation (`src/inc/API.php`) with the
+cookie-based web API (`/api/app/*`), so both behave the same.
 
 ### POST `/api/rest/app/new`
 
@@ -58,23 +115,23 @@ Returns application data by id.
 
 ### POST `/api/rest/app/{appId}`
 
-Updates application details.
+Saves the report form (web: "Dalej" → `/app/confirm`); status becomes `ready`. Requires both
+photos to be uploaded already (otherwise 409).
 
-POST params:
+POST params (JSON body):
 
-  * `plateId` 
-  * `address`
-  * `city`
-  * `voivodeship`
-  * `district`
+  * `plateId` — min. 3 characters
+  * `address` — the address shown to the user (web: `lokalizacja`), required
+  * `addressGPS` (optional) — what the geocoder returned
+  * `city`, `voivodeship`, `district`, `county`, `municipality`, `postcode` (optional)
+  * `lat`, `lng` (optional)
   * `dtFromPicture` (1|0)
-  * `datetime`
-  * `lat`
-  * `lng`
-  * `comment` (optional, default '')
+  * `datetime` — not in the future
+  * `comment` (optional, default ''; required for category 0)
   * `category`
-  * `witness`
-  * `extensions` (optional, comma-separated list like "6,7")
+  * `witness` (optional bool, default false)
+  * `extensions` (optional) — array `[6, 7]` or comma-separated string `"6,7"`
+  * `stopAgresji` (optional) — `"SA"` (Policja) / `"SM"`, or bool; remembered as the account default
 
 ### PATCH `/api/rest/app/{appId}/status/{status}`
 
@@ -82,14 +139,109 @@ Changes application status.
 
 ### POST `/api/rest/app/{appId}/image`
 
-Uploads an image to the given app id.
+Uploads one photo (≤ 3 MB, JPEG/PNG; stored ≤ 1600 px). `carImage` runs plate recognition (ALPR)
+and fills `carInfo`. Only editable applications accept uploads.
 
-POST params:
+Preferred contract — `multipart/form-data`:
 
-  * `carImage` OR `contextImage` (image Data URI)
-  * `dateTime` (optional, valid only for `carImage`) application event date and time, in ISO format: "2018-02-02T19:48:10"
-  * `lat` (optional)
-  * `lng` (optional)
+  * `image` — the file
+  * `pictureType` — `contextImage` | `carImage` | `thirdImage`
+  * `dateTime` (optional, `carImage` only) — ISO, e.g. "2018-02-02T19:48:10"
+  * `dtFromPicture` (optional) — `true` when `dateTime` comes from the photo
+  * `latLng` ("53.4,14.5") or `lat` + `lng` (optional, `carImage` only)
+
+Staged contract (UD Pro mobile) — instead of `image` send `photoId` (from `POST /api/rest/photos`) plus
+`pictureType`. The server takes the bytes from its `wip` storage (no second upload), resizes/crops them and
+reuses the plate recognition result computed once for that photo, so re-assigning the same `photoId` to another
+slot (swapping roles) costs no extra ALPR call.
+Optional `crop: "vehicle"` (with `pictureType: carImage`): the car photo becomes the winning vehicle cut out of the staged
+photo with a 20 % margin on each side (clamped to the frame) — for one photo serving as both context and car. The stored ALPR
+result is shifted to the crop, so ALPR is still called once. 422 (`images`) when no vehicle with a readable plate was found.
+Optional `plate` (`carImage` only): plate text of the vehicle the user picked when several cars were detected; `carInfo`, the
+plate crop and the vehicle crop then follow that reading instead of the photo's winner (no such reading → the winner). 404 when the `photoId` is unknown, expired or not yours. The staged
+file is kept until the report is confirmed (`/finish`) or `WIP_TTL_HOURS` (24 h) pass.
+
+### POST `/api/rest/photos/`
+
+Stages one photo *before* it belongs to any report (`cdn2/{user}/wip/{photoId}.jpg`, not synced to S3, not publicly
+served). `multipart/form-data`: `image` (JPEG/PNG, ≤ 3 MB), optional `dateTime`, `lat`, `lng` (EXIF read by the client).
+Response `201`: `{ "photoId": "<32 hex>", "width": 1600, "height": 1200 }`. Limited to `WIP_RATE_MAX` per `WIP_RATE_WINDOW`.
+
+Optional `derivedFrom` (a `photoId`), `region` (JSON `[x1,y1,x2,y2]`, fractions of the source frame) and `plate`: the uploaded file is a
+full-resolution cut-out of an already analysed photo (the app crops the original from the gallery). No new ALPR call: the source
+photo's reading of the chosen vehicle (`plate`, default the winner) is mapped onto the cut-out and date/GPS are inherited, so
+the result can be assigned like any staged photo. 400 for an invalid region, 404 for an unknown source.
+
+### GET|POST `/api/rest/photos/{photoId}/alpr`
+
+Plate-recognition readings of a staged photo (PlateRecognizer only — no LLM; computed once per photo and stored with it).
+Response: `{ "photoId", "width", "height", "detections": [{ "text": "ZS12345", "score": 0.97, "plate_bbox": [x1,y1,x2,y2],
+"vehicle_bbox": [...], "vehicle_area": 0.31, "winner": true }] }` — boxes in 0..1000 space, `vehicle_area` = share of the frame,
+`winner` = the reading picked by the server's candidate algorithm (score within a 0.1 tie band, then the larger vehicle).
+The UD Pro app uses all detections to choose which photo is the car and which is context (`src/lib/roles.ts`). 404 when
+the photo does not exist, 502 when ALPR is unavailable.
+
+### Limit przetworzonych zdjęć (HTTP 402)
+
+Każdy użytkownik ma limit **unikalnych** zdjęć przetworzonych przez płatnych dostawców (ALPR/LLM) w kroczącym oknie
+`PHOTO_QUOTA_DAYS` (30 dni). Liczy się zdjęcie (sha1 bajtów), nie zgłoszenie: ponowne wysłanie tego samego pliku oraz
+zdjęcie, którego wynik leży w cache ALPR, nie zużywają limitu. Wspólna pula dla appki Pro (REST) i MCP (`create_report_draft`,
+tylko `carImage`); web bez zmian. Progi (aktywny patron Patronite wg kwoty): brak patronatu 50, ≥ 10 zł 100, ≥ 25 zł 300,
+≥ 50 zł bez limitu (`config.php`: `PHOTO_QUOTA_FREE`, `PHOTO_QUOTA_TIERS`).
+
+Przekroczenie → **402** `{error, status, quota}` z `POST /photos/{id}/alpr`, `POST /app/{id}/image` (gałąź `photoId`)
+i `POST /vision/candidate`; w MCP – błąd narzędzia z tym samym komunikatem, bez tworzenia szkicu.
+`quota` = `{used, limit|null, remaining|null, windowDays, resetsAt|null (unix), tier}`; ten sam obiekt jako `photoQuota`
+w `GET /user/dashboard`, w odpowiedzi `/photos/{id}/alpr` i w wyniku MCP `create_report_draft`. Błąd dostawcy zwraca
+zarezerwowane miejsce. Migracja: `src/sql/migration_20261006_photo_quota.sql`.
+
+### GET `/api/rest/photos/quota`
+
+Zużycie limitu przetworzonych zdjęć użytkownika (obiekt `quota`, patrz wyżej: `{used, limit|null, remaining|null, windowDays, resetsAt|null, tier}`).
+
+### DELETE `/api/rest/photos/{photoId}`
+
+Removes a staged photo (204, or 404 when it does not exist).
+
+### PATCH `/api/rest/app/{appId}/fields`
+
+Edits `externalId` (the SM/Police case number) and/or `privateComment` (private notes, visible only to the owner) — allowed
+at any status, also after sending. JSON body with one or both string fields; unknown fields → 400. Response
+`{ "app": {...}, "suggestStatusChange": true|false }` — `true` when the report is sent and has a case number (the web then
+asks to switch the status to `confirmed-sm`, see `PATCH .../status/{status}`).
+
+### POST `/api/rest/app/{appId}/plate-image`
+
+Replaces the licence-plate crop (`carInfo.plateImage`, shown in the form, on the report page and in the PDF) with a client-made
+crop. The UD Pro app cuts it from the full-resolution original (the server only has a ≤ 1600 px copy, i.e. ~80 px of plate).
+`multipart/form-data`: `image` (JPEG/PNG, scaled down to 800 px wide). Needs a car photo (409 otherwise); owner only (403).
+
+### DELETE `/api/rest/app/{appId}/image/{image}`
+
+Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or drop the optional third one).
+
+### GET `/api/rest/app/{appId}/confirmation`
+
+Everything the confirmation step shows before sending/saving (web "Sprawdź przed wysłaniem"), built with the
+same methods as the web template so gendered phrases match: `body` (formal text + extensions + comment),
+`witness` ("Nie byłeś/byłaś świadkiem parkowania."), `shortAddress`, `plateId`, `vehicleBox` (pixels, or null when
+the confirmed plate differs from the one read from the photo), `recipient {name, shortName, automated, unknown}`
+and `sender {name, email, address, msisdn, edelivery}`. Owner only.
+
+### POST `/api/rest/app/{appId}/finish`
+
+"Potwierdź" — the report must have been saved with `POST /api/rest/app/{appId}` (status `ready`).
+Sets status `confirmed` (assigns the report number `UD/x/y`) and performs the same side effects as the
+web `/app/done`: last location, apps counter, recidivism, stats cache. Safe to repeat.
+
+POST params (JSON body):
+
+  * `send` (optional bool, default false) — also send it right away (only when the recipient has an automated channel)
+
+Response: `{ app, edited, appsCount, isPatron, sendMode, sendError }` where `sendMode` is
+`sent` | `manual` (recipient has no automated channel — finish on the web, `/app/send`) |
+`failed` (automated channel exists but sending failed; report stays `confirmed`, see `sendError`) |
+`not_requested`.
 
 ### PATCH `/api/rest/app/{appId}/send`
 
@@ -98,6 +250,18 @@ Sends an email with the application to police/city-guards station.
 ## Geolocation endpoints
 
 Requires authorization.
+
+### GET `/api/rest/geo/map?lat=&lng=&w=&h=`
+
+Static map preview (PNG, Mapbox outdoors style, via the backend) for the report form. With `lat`/`lng` a pin
+is drawn there; without them the map shows all of Poland. `w`/`h` default to 600×300 (max 640). Cached for a
+day (`Cache-Control: private`); 404 when Mapbox is unavailable.
+
+### GET `/api/rest/geo/search?q=`
+
+Forward geocoding of a typed address (`q` = "Ulica 10, Miasto" — the comma/locality is required).
+Returns `{lat, lng, address, sm, sa}` (same shape as the reverse-geocoding endpoints plus the
+coordinates), or 404 when nothing was found.
 
 ### GET `/api/rest/geo/{lat},{lng}/g`
 
@@ -110,6 +274,17 @@ Reverse geocoding using Nominatim API.
 ### GET `/api/rest/geo/{lat},{lng}/m`
 
 Reverse geocoding using MapBox API.
+
+## Vehicle endpoint
+
+Requires authorization, registration and confirmed terms.
+
+### GET `/api/rest/vehicle/{plateId}`
+
+Editor preview of what the server stores on save (`\vehicle_info\refresh`, parkowanie.info, cached): returns
+`{plateId, brand, model, grossVehicleWeight, isHeavyVehicle, warning}`, or `{}` when the plate is unknown or the
+source is unavailable. The make/model is never written into `comment`: the server renders it after the plate
+("ZS12331 (pojazd marki Volvo XC60)").
 
 ## Vision endpoints
 
@@ -130,9 +305,12 @@ POST body (JSON):
   * `photos` (required array, max `VISION_MAX_PHOTOS`, default 12) — each:
     * `photoId` (required string) — opaque client id, echoed back.
     * `photo_index` (required int) — must be a contiguous `0..n-1` set across the request.
-    * `image` (required string) — `data:image/jpeg;base64,...` or `data:image/png;base64,...`,
+    * `image` (string, optional) — `data:image/jpeg;base64,...` or `data:image/png;base64,...`,
       max `VISION_MAX_PHOTO_BYTES` decoded bytes per photo (default 800kB), max
       `VISION_MAX_TOTAL_BYTES` decoded bytes total (default 6MB).
+      **Omit `image` and pass the `photoId` returned by `POST /api/rest/photos/`** to analyse a staged photo
+      without sending it again: bytes come from the server (404 when unknown/expired) and the plate recognition
+      result is stored with the photo, so ALPR runs once per photo (also reused later by `POST .../image`).
 
 Response (200, JSON):
 

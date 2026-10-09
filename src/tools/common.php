@@ -433,6 +433,10 @@ function purgeLocalFiles(bool $dryRun=true): void {
         $localPath = $file->getPathname();
         $key = ltrim(substr($localPath, strlen(ROOT)), '/');
 
+        // Etap `wip` (src/inc/WipPhotos.php): zdjęcia jeszcze nieprzypisane do zgłoszenia NIE idą do S3 – wygasają same
+        // (cleanup.php); bez tego wyjątku trafiłyby do B2 i zniknęły lokalnie, a analiza/przydział by ich nie znalazły.
+        if (str_contains($key, '/wip/')) continue;
+
         // Extract app ID: filename up to first comma (e.g. "abc" from "abc,ca.jpg").
         // Files without a comma (e.g. "<appId>.pdf") use the basename without extension.
         $basename = $file->getBasename();

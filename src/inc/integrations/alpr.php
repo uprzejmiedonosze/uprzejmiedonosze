@@ -11,16 +11,22 @@ require_once(__DIR__ . '/plateRecognizer.php');
 /**
  * @SuppressWarnings(PHPMD.ElseExpression)
  */
-function get(&$imageBytes, Application &$application, string $baseFileName, string $type, ?User $user = null) {
+/**
+ * @param array|null $presetResult gotowy wynik PlateRecognizer dla $imageBytes (np. policzony przy analizie zdjęcia w `wip`)
+ */
+function get(&$imageBytes, Application &$application, string $baseFileName, string $type, ?User $user = null, ?array $presetResult = null) {
     $application->carImage = new stdClass();
     $application->carImage->url = "$baseFileName,$type.jpg";
     $application->carImage->thumb = "$baseFileName,$type,t.jpg";
 
     $application->carInfo = new stdClass();
 
-    $use_openAlpr = _use_openAlpr($imageBytes, $user);
+    $reused = $presetResult;
+    $use_openAlpr = $reused ? false : _use_openAlpr($imageBytes, $user);
     try {
-        if ($use_openAlpr)
+        if ($reused)
+            get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type, $reused);
+        elseif ($use_openAlpr)
             get_car_info_alpr($imageBytes, $application, $baseFileName, $type);
         else
             get_car_info_platerecognizer($imageBytes, $application, $baseFileName, $type);

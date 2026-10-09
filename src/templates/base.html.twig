@@ -1,3 +1,6 @@
+{# ?embed ustawia HtmlMiddleware; przy statycznym generowaniu (fail2ban itp.) zmiennej nie ma #}
+{% set embed = embed ?? false %}
+
 {% if shortTitle is not defined %}
     {% set shortTitle = title ?? 'Uprzejmie Donoszę' %}
 {% endif %}
@@ -51,7 +54,7 @@
    Blok `sidebar` renderujemy do zmiennej TU, bo tylko base ma do niego dostęp
    (zagnieżdżony _menu.html.twig już nie). Pusto (np. homepage bez sidebara) =>
    _menu.html.twig spada na publiczną nawigację headera (_public-nav). #}
-{% set sidebarNav %}{% if layout != 'app' %}{{ block('sidebar') }}{% endif %}{% endset %}
+{% set sidebarNav %}{% if layout != 'app' and not embed %}{{ block('sidebar') }}{% endif %}{% endset %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -100,7 +103,7 @@
             var _paq = window._paq = window._paq || [];
             _paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
-            {% if general.isProd %}
+            {% if general.isProd and not embed %}
             (function() {
                 var u = "//matomo.nieradka.com/";
                 _paq.push(['setTrackerUrl', u + 'matomo.php']);
@@ -121,13 +124,13 @@
         {% endif %}
         {% endblock %}
     </head>
-    <body class="index {{ mainClass ?? '' }} {{ redesignClass ?? '' }}{% if layout == 'app' or (appShell ?? false) %} app-shell{% endif %}">
+    <body class="index {{ mainClass ?? '' }} {{ redesignClass ?? '' }}{% if embed %} embed{% endif %}{% if layout == 'app' or (appShell ?? false) %} app-shell{% endif %}">
         <div data-role="page" class="ui-page" {{iff(dialog,'data-dialog="true"')}}>
-        {% include('header.html.twig') %}
+        {% if not embed %}{% include('header.html.twig') %}{% endif %}
             <div data-role="main" class="ui-content {{ mainClass ?? '' }} {{ redesignClass ?? '' }} {% if dialog %}dialog{% endif %}">
-        <div class="mpr-layout{% if hasSidebar ?? false %} mpr-layout--sidebar{% elseif focusLayout ?? false %} mpr-layout--focus{% endif %}">
+        <div class="mpr-layout{% if embed %} mpr-layout--focus{% elseif hasSidebar ?? false %} mpr-layout--sidebar{% elseif focusLayout ?? false %} mpr-layout--focus{% endif %}">
             <div class="mpr-article">
-        {% if general.isLoggedIn ?? false %}{% include('_maintenance-banner.html.twig') %}{% endif %}
+        {% if (general.isLoggedIn ?? false) and not embed %}{% include('_maintenance-banner.html.twig') %}{% endif %}
         {% block main %}{% endblock %}
             </div>
         {% block sidebar %}
@@ -149,7 +152,7 @@
         </div>
             </div> <!-- main -->
             <div id="toast"></div>
-        {% if showAppNav ?? false %}
+        {% if (showAppNav ?? false) and not embed %}
         {% include('_app-tabbar.html.twig') %}
         {% endif %}
         {% block footer %}

@@ -160,6 +160,9 @@ class ApplicationHandler extends AbstractHandler {
                 );
             } catch (ForbiddenException $e) {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            } catch (ValidationException $e) {
+                log_info("Walidacja przy /app/confirm dla zgłoszenia $appId: {$e->getMessage()}");
+                return $this->redirect('/app/new');
             } catch (NotSendableException $e) {
                 log_info("Brak wymaganych zdjęć przy /app/confirm dla zgłoszenia $appId, cofam na /app/new");
                 return $this->redirect('/app/new');
@@ -186,7 +189,6 @@ class ApplicationHandler extends AbstractHandler {
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function finish(Request $request, Response $response): Response {
-        global $STATUSES;
         $params = (array)$request->getParsedBody();
 
         $appId = $this->getParam($params, 'applicationId', -1);
@@ -198,39 +200,13 @@ class ApplicationHandler extends AbstractHandler {
         unset($_SESSION['newAppId']);
         $user = $request->getAttribute('user');
 
-        $result = \semaphore\withLock($appId, "finish", function () use ($appId, $STATUSES) {
-            $application = \app\get($appId);
-            $status = $STATUSES[$application->status];
-            if(!$status->editable) {
-                log_info("Ponowny POST na /app/done dla zgłoszenia {$application->number} w statusie {$status->name}");
-                return $this->redirect("/app/$appId");
-            }
-
-            $edited = $application->hasNumber();
-
-            $application->setStatus("confirmed");
-            $application = \app\save($application); // this also sets app number
-            return [$application, $edited];
-        });
-
-        if ($result instanceof Response) {
-            return $result;
+        $result = finishApplication($appId, $user); // shared with POST /api/rest/app/{id}/finish
+        $application = $result['application'];
+        if (!$result['changed']) {
+            log_info("Ponowny POST na /app/done dla zgłoszenia {$application->number} w statusie {$application->getStatus()->name}");
+            return $this->redirect("/app/$appId");
         }
-        [$application, $edited] = $result;
-
-        \telemetry\log('report_finished', $application->id);
-
-        $user->setLastLocation($application->getLatLng());
-        $user->appsCount = $application->seq;
-        \user\save($user);
-
-        \recydywa\update($application->carInfo->plateId);
-
-        \user\stats(false, $user); // update cache
-
-        if ($edited) {
-            $application->address->mapImage = null;
-        }
+        $edited = $result['edited'];
 
         return AbstractHandler::renderHtml($request, $response, 'dziekujemy', [
             'app' => $application,

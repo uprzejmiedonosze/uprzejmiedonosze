@@ -29,6 +29,8 @@ require(INC_DIR . '/middleware/UserMiddleware.php');
 require(INC_DIR . '/middleware/AppMiddleware.php');
 require(INC_DIR . '/Twig.php');
 require(INC_DIR . '/integrations/Vision.php');
+require_once(INC_DIR . '/UserRemoval.php');
+require_once(INC_DIR . '/handlers/PasskeyHandler.php');
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -74,6 +76,36 @@ $app->options('/{routes:.+}', function ($request, $response) {
     return $response;
 });
 
+// Wymuszenie aktualizacji aplikacji mobilnej wg KONTRAKTU API (nie wersji appki). Klient wysyła `X-UD-Schema: <SCHEMA>` –
+// wersję kontraktu, z którą został zbudowany (ta sama numeracja co VISION_SCHEMA backendu / src/lib/vision.ts w appce).
+// Kompatybilność jest tylko „w dół”: nowszy klient działa ze starszym backendem, ale klient ze schematem NIŻSZYM niż
+// VISION_SCHEMA backendu jest niekompatybilny → 426 + storeUrl (app pokazuje ekran „Zaktualizuj”). Dlatego nowy build
+// z podbitym SCHEMA musi być w sklepach PRZED wdrożeniem backendu z podbitym VISION_SCHEMA.
+// Brak nagłówka (web, MCP, curl) = bez ograniczeń. Platforma (tylko do wyboru storeUrl) z
+// `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`.
+$app->add(function ($request, $handler) use ($app) {
+    $schema = $request->getHeaderLine('X-UD-Schema');
+    if ($schema !== '' && ctype_digit($schema) && (int)$schema < \vision\VISION_SCHEMA && $request->getMethod() !== 'OPTIONS') {
+        $cfg = [];
+        try {
+            $cfg = \json\get('app.json');
+        } catch (\Throwable $e) {
+            // bez pliku konfiguracji nadal odrzucamy (komunikat/storeUrl zostaną domyślne)
+        }
+        $platform = preg_match('#\((?:\d+); (ios|android)\)$#', $request->getHeaderLine('X-UD-Client'), $m) ? $m[1] : 'android';
+        $response = $app->getResponseFactory()->createResponse(426);
+        $response->getBody()->write(json_encode([
+            'error' => $cfg['message'] ?? 'Wymagana aktualizacja aplikacji.',
+            'status' => 426,
+            'schema' => (int)$schema,
+            'serverSchema' => \vision\VISION_SCHEMA,
+            'storeUrl' => $cfg[$platform]['storeUrl'] ?? null,
+        ], JSON_UNESCAPED_UNICODE));
+        return $response;
+    }
+    return $handler->handle($request);
+});
+
 $app->add(function ($request, $handler) {
     $response = $handler->handle($request);
 
@@ -81,16 +113,20 @@ $app->add(function ($request, $handler) {
     if ($allowedOrigin) {
         $response = $response
             ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)
-            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-UD-Client, X-UD-Schema')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH')
             ->withHeader('Access-Control-Allow-Credentials', 'true');
     }
 
-    return $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
+    // JSON by default; a handler that sets its own type (e.g. the PNG map preview) keeps it
+    return $response->hasHeader('Content-Type') ? $response : $response->withHeader('Content-Type', 'application/json; charset=UTF-8');
 });
 
 $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
     $group->get('/', function (Request $request, Response $response) {
+        // `lastLocation` ("lat,lng") = ostatnie zgłoszenie, a gdy go brak – geokodowany adres zamieszkania (jak na webie
+        // w ApplicationHandler); gdy nic nie wiadomo, pole jest nieustawione (klient użyje środka Polski).
+        $request->getAttribute('user')?->getLastLocation();
         return $response;
     })  ->add(new AddStatsMiddleware())
         ->add(new UserMiddleware(createIfNonExists: false))
@@ -121,11 +157,11 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $name = getParam($params, 'name');
         $address = getParam($params, 'address');
         $msisdn = getParam($params, 'msisdn', '');
-        $edelivery = $this->getParam($params, 'edelivery', '');
+        $edelivery = getParam($params, 'edelivery', '');
         // No default -> leaves any previously saved preference untouched if absent.
         $stopAgresjiRaw = $params['stopAgresji'] ?? null;
         $stopAgresji = $stopAgresjiRaw === null ? null : ($stopAgresjiRaw === 'SA');
-        $shareRecydywa=$this->getParam($params, 'shareRecydywa', 'Y') == 'Y';
+        $shareRecydywa = getParam($params, 'shareRecydywa', 'Y') == 'Y';
     
         /** @var \user\User $user */
         $user = $request->getAttribute('user');
@@ -141,6 +177,70 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         ->add(new AuthMiddleware());
     
     
+    // Dashboard (web /app) with texts already localized for the user's sex – see dashboardData().
+    $group->get('/dashboard', function (Request $request, Response $response) {
+        $response->getBody()->write(json_encode(dashboardData($request->getAttribute('user'), fresh: true)));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    // Passkeys (web /app/account): list + remove + register (native app: challenge travels as `state`,
+    // see PasskeyHandler::isRest). Login lives in the anonymous /api/rest/passkey group below.
+    $group->post('/passkeys/register-options', PasskeyHandler::class . ':registerOptions')
+        ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    $group->post('/passkeys/register-verify', PasskeyHandler::class . ':registerVerify')
+        ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    $group->get('/passkeys', function (Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        $rows = array_map(fn($p) => [
+            'id' => $p['credential_id'],
+            'label' => $p['label'],
+            'createdAt' => $p['created_at'],
+            'lastUsedAt' => $p['last_used_at'],
+        ], \passkey\forEmail($user->getEmail()));
+        $response->getBody()->write(json_encode(['passkeys' => $rows]));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    $group->delete('/passkeys/{credentialId}', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        if (!\passkey\remove($args['credentialId'], $user->getEmail()))
+            throw new HttpNotFoundException($request, 'Nie znaleziono passkeya');
+        \telemetry\log('passkey_removed');
+        $response->getBody()->write(json_encode(['status' => 'OK']));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
+    // Self-service account deletion; the e-mail must be retyped (same as the web form, minus CSRF –
+    // a Bearer token isn't sent automatically by browsers).
+    $group->delete('/', function (Request $request, Response $response) {
+        $params = (array)$request->getParsedBody();
+        $user = $request->getAttribute('user');
+        if (!\admin\selfDelete($user, (string)($params['email'] ?? '')))
+            throw new HttpException($request, 'Wpisany adres e-mail nie zgadza się z adresem Twojego konta', 422);
+        $response->getBody()->write(json_encode(['status' => 'OK']));
+        return $response;
+    })  ->add(new RegisteredMiddleware())
+        ->add(new UserMiddleware())
+        ->add(new TokenSessionMiddleware())
+        ->add(new AuthMiddleware());
+
     $group->get('/apps', function (Request $request, Response $response) {
         $params = $request->getQueryParams();
         $status = getParam($params, 'status', 'all');
@@ -151,7 +251,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $user = $request->getAttribute('user');
         $apps = \user\apps($user, $status, $search, $limit, $offset);
         
-        $response->getBody()->write(json_encode($apps));
+        $response->getBody()->write(json_encode(array_map('applicationToRest', $apps)));
         return $response;
     })  ->add(new RegisteredMiddleware())
         ->add(new UserMiddleware())
@@ -160,9 +260,16 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
     
 }); 
 
+// Passkey login for the native app: anonymous; returns a Firebase custom token (the app exchanges it for an ID
+// token via identitytoolkit and calls /api/verify-token like any other login).
+$app->group('/api/rest/passkey', function (RouteCollectorProxy $group) {
+    $group->post('/login-options', PasskeyHandler::class . ':loginOptions');
+    $group->post('/login-verify', PasskeyHandler::class . ':loginVerify');
+});
+
 $app->group('/api/rest/config', function (RouteCollectorProxy $group) { // CONFIG
     $CONFIG_FILES = Array(
-        'badges', 'categories', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', 'terms');
+        'badges', 'categories', 'category-groups', 'extensions', 'levels', 'patronite', 'sm', 'statuses', 'stop-agresji', 'terms');
     
     $group->get('/', function (Request $request, Response $response) use ($CONFIG_FILES) {
         $response->getBody()->write(json_encode($CONFIG_FILES));
@@ -201,8 +308,8 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         $user = $request->getAttribute('user');
         $application = Application::withUser($user);
         \app\save($application);
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        \telemetry\log('report_started', $application->id); // like the web /app/new
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     });
 
@@ -226,57 +333,62 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
             $application->user = '';
         }
     
-        $response->getBody()->write(json_encode($application));
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     })  ->add(new AppMiddleware(failOnWrongOwnership: false));
 
     $group->post('/{appId}', function (Request $request, Response $response, $args) {
         $appId = $args['appId'];
         $params = (array)$request->getParsedBody();
-    
+
         $plateId = getParam($params, 'plateId');
-        $address = getParam($params, 'address'); // Mazurska 37, Szczecin
-        $city = getParam($params, 'city');
-        $voivodeship = getParam($params, 'voivodeship');
-        $district = getParam($params, 'district');
+        $address = getParam($params, 'address'); // Mazurska 37, Szczecin (displayed address; web: `lokalizacja`)
         $dtFromPicture = getParam($params, 'dtFromPicture') == 1; // 1|0 - was date and time extracted from picture?
-    
+
         $datetime = getParam($params, 'datetime'); // "2018-02-02T19:48:10"
-    
-        $lat = getParam($params, 'lat');
-        $lng = getParam($params, 'lng');
+
         $comment = getParam($params, 'comment', '');
         $category = intval(getParam($params, 'category'));
-    
-        $witness = getParam($params, 'witness');
-    
-        $extensions = getParam($params, 'extensions', ''); // "6,7", "6", "", missing
-        $extensions = array_filter(explode(',', $extensions));
-    
+
+        // JSON `true`/`false` as well as "1"/"on"/"true" (HTML-form style) – a bare "false" string must not be truthy.
+        $witness = filter_var($params['witness'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        // "6,7" (legacy) or [6, 7]
+        $extensions = $params['extensions'] ?? '';
+        $extensions = array_filter(is_array($extensions) ? $extensions : explode(',', (string)$extensions));
+
+        // optional: ad hoc Policja/SM choice ('SA' | 'SM' or bool); null = keep the account default
+        $stopAgresji = $params['stopAgresji'] ?? null;
+        if ($stopAgresji !== null)
+            $stopAgresji = is_bool($stopAgresji) ? $stopAgresji : ($stopAgresji === 'SA');
+
+        // Same shape as the web form's hidden `address` JSON (ApplicationHandler::confirm):
+        // `address` = what the user sees, `addressGPS` = what the geocoder returned.
         $fullAddress = new JSONObject();
         $fullAddress->address = $address;
-        $fullAddress->city = $city;
-        $fullAddress->voivodeship = $voivodeship;
-        $fullAddress->lat = $lat;
-        $fullAddress->lng = $lng;
-        $fullAddress->district = $district;
-    
+        $fullAddress->addressGPS = $params['addressGPS'] ?? null;
+        foreach (['city', 'voivodeship', 'district', 'county', 'municipality', 'postcode', 'lat', 'lng'] as $field)
+            $fullAddress->$field = $params[$field] ?? null;
+
         $user = $request->getAttribute('user');
         
         \semaphore\withLock($appId, "restUpdate", function () use (
             $appId, $request, $response, $datetime, $dtFromPicture, $category, $fullAddress,
-            $plateId, $comment, $witness, $extensions, $user
+            $plateId, $comment, $witness, $extensions, $user, $stopAgresji
         ) {
             $application = \app\get($appId);
 
             try {
                 $application = updateApplication($application, $datetime, $dtFromPicture, $category, $fullAddress,
-                    $plateId, $comment, $witness, $extensions, $user);
+                    $plateId, $comment, $witness, $extensions, $user, $stopAgresji);
+            } catch (ValidationException $e) {
+                throw new HttpException($request, $e->getMessage(), 422, $e); // JsonErrorRenderer adds `field`
+            } catch (NotSendableException $e) {
+                throw new HttpException($request, $e->getMessage(), 409, $e);
             } catch (Exception $e) {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
             }
-            unset($application->browser);
-            $response->getBody()->write(json_encode($application));
+            $response->getBody()->write(json_encode(applicationToRest($application)));
         });
         return $response;
     })  ->add(new AppMiddleware());
@@ -290,47 +402,159 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         } catch (Exception $e) {
             throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
         }
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     })  ->add(new AppMiddleware());
 
 
-    $group->post('/{appId}/image', function (Request $request, Response $response) {
-        $params = (array)$request->getParsedBody();
-    
-        $imageUri = getParam($params, 'carImage', -1);
-        $pictureType = 'carImage';
-        if ($imageUri == -1) {
-            $imageUri = getParam($params, 'contextImage');
-            $pictureType = 'contextImage';
+    // Numer sprawy SM/Policji i prywatne uwagi – edytowalne także po wysłaniu (web: PATCH /api/app/{id}/fields).
+    $group->patch('/{appId}/fields', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        try {
+            $result = updateApplicationFields($args['appId'], (array)$request->getParsedBody(), $user);
+        } catch (\InvalidArgumentException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        } catch (Exception $e) {
+            if ($e->getCode() === 403) throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            throw $e;
         }
-    
-        list($type, $imageBytes) = explode(',', $imageUri);
-        
-        // valid only for $pictureType == 'carImage'
-        $dateTime = getParam($params, 'dateTime', ''); // date&time of application event, in ISO format: "2018-02-02T19:48:10"
-        $lat = getParam($params, 'lat', '');
-        $lng = getParam($params, 'lng', '');
-        $latLng = null;
-        if ($lat && $lng) $latLng = \geo\normalizeLatLng($lat, $lng);
-        $dtFromPicture = !!$dateTime;
-    
-        $imagemime = getimagesize($imageUri);
-        if (empty($imagemime['mime']) || strpos($imagemime['mime'], 'image/') !== 0)
-            throw new HttpBadRequestException($request, "Przekazany plik nie jest obrazkiem");
-    
-        if (strlen(rtrim($imageBytes, '=')) * 0.75 > 500000)
-            throw new HttpBadRequestException($request, "Zbyt duże zdjęcie (>500kb)");
-    
-        $ext = substr($imagemime['mime'], 6);
-        if (!in_array($ext, ['png', 'jpeg', 'jpg']))
-            throw new HttpException($request, "Niewspierane rozszerzenie $ext", 415);
-        
-        $appId = $request->getAttribute('application')->id;
-        $application = uploadImage($appId, $pictureType, base64_decode($imageBytes, true), $dateTime, $dtFromPicture, $latLng);
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        \telemetry\log('report_edited', $args['appId'], ['type' => 'fields']);
+        $response->getBody()->write(json_encode([
+            'app' => applicationToRest($result['application']),
+            'suggestStatusChange' => $result['suggestStatusChange'],
+        ]));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    // Wycinek tablicy z oryginału zdjęcia (pełna rozdzielczość) zamiast serwerowego z kopii 1600 px – patrz replacePlateImage().
+    $group->post('/{appId}/plate-image', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        try {
+            $up = imageUploadFromRequest($request, requirePictureType: false);
+            $application = replacePlateImage($args['appId'], $up['bytes'], $user);
+        } catch (Exception $e) {
+            $code = $e->getCode();
+            if ($code === 403) throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            if ($code === 409) throw new HttpException($request, $e->getMessage(), 409, $e);
+            if (in_array($code, [400, 415], true)) throw new HttpBadRequestException($request, $e->getMessage(), $e);
+            throw $e;
+        }
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    $group->post('/{appId}/image', function (Request $request, Response $response) {
+        $application = $request->getAttribute('application');
+        $user = $request->getAttribute('user');
+
+        // Zdjęcie już wysłane i przeanalizowane w etapie `wip` (POST /api/rest/photos): przydział do slotu bez ponownego uploadu.
+        $params = (array)$request->getParsedBody();
+        if (!empty($params['photoId'])) {
+            try {
+                $pictureType = $params['pictureType'] ?? null;
+                if ($pictureType === null) throw new MissingParamException('pictureType');
+                $application = assignPhoto($application->id, $pictureType, (string)$params['photoId'], $user,
+                    function (Application $app) use ($request) {
+                        if (!$app->isEditable())
+                            throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
+                    }, isset($params['crop']) ? (string)$params['crop'] : null, isset($params['plate']) ? (string)$params['plate'] : null);
+            } catch (ValidationException $e) {
+                throw new HttpException($request, $e->getMessage(), 422, $e); // JsonErrorRenderer adds `field`
+            } catch (MissingParamException $e) {
+                throw new HttpBadRequestException($request, $e->getMessage(), $e);
+            } catch (HttpException $e) {
+                throw $e;
+            } catch (Exception $e) {
+                if ($e->getCode() === 404) throw new HttpNotFoundException($request, $e->getMessage(), $e);
+                if ($e->getCode() === 400) throw new HttpBadRequestException($request, $e->getMessage(), $e);
+                throw $e;
+            }
+            \telemetry\log('report_edited', $application->id, ['type' => 'image', 'source' => 'wip']);
+            $response->getBody()->write(json_encode(applicationToRest($application)));
+            return $response;
+        }
+
+        try {
+            $up = imageUploadFromRequest($request); // same contract as the cookie API /api/app/{id}/image
+            $application = uploadImage($application->id, $up['pictureType'], $up['bytes'], $up['dateTime'],
+                $up['dtFromPicture'], $up['latLng'],
+                function (Application $app) use ($request) {
+                    if (!$app->isEditable())
+                        throw new HttpForbiddenException($request, "Zgłoszenie {$app->id} nie może być edytowane");
+                },
+                $user);
+        } catch (MissingParamException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        }
+        \telemetry\log('report_edited', $application->id, ['type' => 'image']);
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    $group->delete('/{appId}/image/{image}', function (Request $request, Response $response, $args) {
+        $appId = $args['appId'];
+        $user = $request->getAttribute('user');
+        $application = \semaphore\withLock($appId, "deleteImage", function () use ($appId, $args, $request, $user) {
+            $application = \app\get($appId);
+            if ($application->email !== $user->getEmail())
+                throw new HttpForbiddenException($request, "Nie posiadasz zgłoszenia o ID $appId");
+            if (!$application->isEditable())
+                throw new HttpForbiddenException($request, "Zgłoszenie $appId nie może być edytowane");
+            return \app\save(removeApplicationImage($application, $args['image'])); // shared with cookie API
+        });
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    // Data for the confirmation screen shown before finish/send (web: potwierdz.html.twig).
+    $group->get('/{appId}/confirmation', function (Request $request, Response $response) {
+        $response->getBody()->write(json_encode(confirmationData($request->getAttribute('application'))));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    // "Potwierdź" (+ optional send) in one call – see finishApplication() in API.php.
+    $group->post('/{appId}/finish', function (Request $request, Response $response, $args) {
+        $appId = $args['appId'];
+        $params = (array)$request->getParsedBody();
+        $send = filter_var($params['send'] ?? false, FILTER_VALIDATE_BOOLEAN);
+        $user = $request->getAttribute('user');
+
+        try {
+            $result = finishApplication($appId, $user);
+        } catch (ValidationException $e) {
+            throw new HttpException($request, $e->getMessage(), 422, $e);
+        } catch (Exception $e) {
+            throw new HttpForbiddenException($request, $e->getMessage(), $e);
+        }
+        $application = $result['application'];
+
+        // sendMode: sent | manual (no automated channel for this SM/Policja – finish on the web) |
+        //           failed (automated channel exists but sending failed; report stays `confirmed`) | not_requested
+        $sendMode = 'not_requested';
+        $sendError = null;
+        if ($send) {
+            if (!$application->guessSMData()->automated()) {
+                $sendMode = 'manual';
+            } else {
+                try {
+                    $application = sendApplication($appId, $user);
+                    \telemetry\log('report_sent', $appId);
+                    $sendMode = 'sent';
+                } catch (Exception $e) {
+                    $sendMode = 'failed';
+                    $sendError = $e->getMessage();
+                }
+            }
+        }
+
+        $response->getBody()->write(json_encode([
+            'app' => applicationToRest($application),
+            'edited' => $result['edited'],
+            'appsCount' => $result['appsCount'],
+            'isPatron' => $result['isPatron'],
+            'sendMode' => $sendMode,
+            'sendError' => $sendError,
+        ]));
         return $response;
     })  ->add(new AppMiddleware());
 
@@ -344,8 +568,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         }
     
         $application = sendApplication($appId, $user);
-        unset($application->browser);
-        $response->getBody()->write(json_encode($application));
+        $response->getBody()->write(json_encode(applicationToRest($application)));
         return $response;
     })  ->add(new AppMiddleware());
 
@@ -355,7 +578,109 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
     ->add(new TokenSessionMiddleware())
     ->add(new AuthMiddleware());
 
+// Etap `wip`: zdjęcia wysyłane PRZED powstaniem szkicu zgłoszenia i analizowane po photoId (vision/candidate) – patrz inc/WipPhotos.php.
+$app->group('/api/rest/photos', function (RouteCollectorProxy $group) { // PHOTOS (wip)
+    $group->post('/', function (Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        if (!\cache\throttle\attempt(\cache\Type::Vision, 'wip-' . $user->getEmail(), WIP_RATE_MAX, WIP_RATE_WINDOW))
+            throw new HttpTooManyRequestsException($request, 'Zbyt wiele zdjęć w krótkim czasie. Spróbuj później.');
+        try {
+            $up = imageUploadFromRequest($request, requirePictureType: false);
+            $body = (array)$request->getParsedBody();
+            if (!empty($body['derivedFrom'])) {
+                // wycinek z oryginału zdjęcia już przeanalizowanego (ALPR nie jest wołany ponownie) – patrz \wip\stageDerived()
+                $region = json_decode((string)($body['region'] ?? ''), true);
+                if (!is_array($region) || count($region) !== 4) throw new Exception('Brak obszaru wycinka (region)', 400);
+                $staged = \wip\stageDerived($user, $up['bytes'], (string)$body['derivedFrom'], array_values($region),
+                    isset($body['plate']) ? (string)$body['plate'] : null);
+            } else {
+                $staged = \wip\stage($user, $up['bytes'], [
+                    'dateTime' => $up['dateTime'],
+                    'lat' => $body['lat'] ?? null,
+                    'lng' => $body['lng'] ?? null,
+                ]);
+            }
+        } catch (Exception $e) {
+            $code = in_array($e->getCode(), [400, 402, 404, 415], true) ? $e->getCode() : 500;
+            throw new HttpException($request, $e->getMessage(), $code, $e);
+        }
+        $response->getBody()->write(json_encode($staged));
+        return $response->withStatus(201);
+    });
+
+    // Zużycie limitu unikalnych przetworzonych zdjęć (store/PhotoQuota.php) – ekran nowego zgłoszenia pokazuje go bez ładowania pulpitu.
+    $group->get('/quota', function (Request $request, Response $response) {
+        $response->getBody()->write(json_encode(\quota\status($request->getAttribute('user'))));
+        return $response;
+    });
+
+    // Wszystkie odczyty ALPR zdjęcia (raz na zdjęcie, wynik w sidecarze) – aplikacja sama wybiera auto i kontekst (src/lib/roles.ts).
+    $group->map(['GET', 'POST'], '/{photoId}/alpr', function (Request $request, Response $response, $args) {
+        try {
+            $result = \wip\detections($request->getAttribute('user'), $args['photoId']);
+        } catch (\quota\QuotaExceededException $e) {
+            throw $e; // 402 + `quota` (JsonErrorRenderer)
+        } catch (Exception $e) {
+            throw new HttpException($request, 'ALPR chwilowo niedostępny: ' . $e->getMessage(), 502, $e);
+        }
+        if ($result === null) throw new HttpNotFoundException($request, 'Nie znaleziono zdjęcia');
+        $result['photoQuota'] = \quota\status($request->getAttribute('user'));
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    });
+
+    $group->delete('/{photoId}', function (Request $request, Response $response, $args) {
+        if (!\wip\delete($request->getAttribute('user'), $args['photoId']))
+            throw new HttpNotFoundException($request, 'Nie znaleziono zdjęcia');
+        return $response->withStatus(204);
+    });
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
+    ->add(new AuthMiddleware());
+
 $app->group('/api/rest/geo', function (RouteCollectorProxy $group) { // GEO
+    // Static map preview for the report form (Mapbox Static Images through the backend: the token stays
+    // server-side, and the app gets a plain PNG). ?lat=&lng= puts a pin there; without them all of Poland.
+    $group->get('/map', function (Request $request, Response $response) {
+        $q = $request->getQueryParams();
+        $lat = isset($q['lat'], $q['lng']) && is_numeric($q['lat']) && is_numeric($q['lng']) ? (float)$q['lat'] : null;
+        $lng = $lat !== null ? (float)$q['lng'] : null;
+        $png = \geo\staticMap($lat, $lng, (int)($q['w'] ?? 600), (int)($q['h'] ?? 300));
+        if ($png === null)
+            throw new HttpNotFoundException($request, 'Podgląd mapy jest chwilowo niedostępny');
+        $response->getBody()->write($png);
+        return $response
+            ->withHeader('Content-Type', 'image/png')
+            ->withHeader('Cache-Control', 'private, max-age=86400');
+    });
+
+    // Address text → coordinates + structured address (+ SM/Policja hints) in one call, so a typed
+    // address ("Ulica 10, Miasto" – the comma is required) gets the same data as a GPS point.
+    // Forward geocoding is shared with MCP create_report_draft (\geo\NominatimSearch).
+    $group->get('/search', function (Request $request, Response $response) {
+        $q = trim((string)($request->getQueryParams()['q'] ?? ''));
+        if ($q === '')
+            throw new HttpBadRequestException($request, "Brak wymaganego parametru 'q'");
+        try {
+            $coords = \geo\NominatimSearch($q);
+        } catch (Exception $e) {
+            throw new HttpInternalServerErrorException($request, $e->getMessage(), $e);
+        }
+        if (!is_array($coords))
+            throw new HttpNotFoundException($request, "Nie znaleziono adresu '$q' (format: „Ulica 10, Miasto”)");
+        $lat = (float)($coords['lat'] ?? $coords[0]);
+        $lng = (float)($coords['lng'] ?? $coords[1]);
+        try {
+            $result = \geo\Nominatim($lat, $lng);
+        } catch (Exception $e) {
+            throw new HttpNotFoundException($request, $e->getMessage(), $e);
+        }
+        $response->getBody()->write(json_encode(['lat' => $lat, 'lng' => $lng] + $result));
+        return $response;
+    });
+
     $group->get('/{lat},{lng}/g', function (Request $request, Response $response, $args) {
         $lat = $args['lat'];
         $lng = $args['lng'];
@@ -416,6 +741,19 @@ $app->group('/api/rest/recydywa', function (RouteCollectorProxy $group) { // REC
     ->add(new TokenSessionMiddleware())
     ->add(new AuthMiddleware());
 
+$app->group('/api/rest/vehicle', function (RouteCollectorProxy $group) { // VEHICLE
+    // Editor preview of what \vehicle_info\refresh stores on save: make/model and the weight warning ({} when unknown).
+    $group->get('/{plateId}', function (Request $request, Response $response, $args) {
+        $info = \vehicle_info\lookup($args['plateId']);
+        $response->getBody()->write(json_encode($info ?? new \stdClass()));
+        return $response;
+    });
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
+    ->add(new AuthMiddleware());
+
 $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISION
     // Analiza wizyjna (LLM) zdjęć jednego kandydata zgłoszenia dla appki UD Pro: role/markery/
     // tablica w jednym żądaniu (tablica/bbox auta z ALPR gdy score >= ALPR_MIN_SCORE,
@@ -434,15 +772,25 @@ $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISIO
         $reportId = getParam($params, 'reportId', '');
 
         try {
-            $items = \vision\decodeCandidatePhotos($params['photos'] ?? null);
+            $items = \vision\decodeCandidatePhotos($params['photos'] ?? null, $user);
         } catch (\vision\VisionRequestException $e) {
             throw new HttpException($request, $e->getMessage(), $e->httpStatus);
         }
 
+        // Limit unikalnych zdjęć (\quota\reserve → QuotaExceededException = 402): zdjęcia z `wip` policzone już przy /alpr
+        // albo trafione w cache są darmowe; przy błędzie analizy zwracamy to, co zarezerwowaliśmy tutaj.
+        $charged = [];
         try {
+            foreach ($items as $item) {
+                if (\quota\reserve($user, $item['bytes'])) $charged[] = $item['bytes'];
+            }
             $result = \vision\analyzeCandidate($items, $email, $reportId ?: null);
         } catch (\vision\VisionException $e) {
+            foreach ($charged as $bytes) \quota\release($user, $bytes);
             throw new HttpException($request, $e->getMessage(), 502);
+        } catch (\Throwable $e) {
+            foreach ($charged as $bytes) \quota\release($user, $bytes);
+            throw $e;
         }
         $result['reportId'] = $reportId;
         $result['schema'] = \vision\VISION_SCHEMA;

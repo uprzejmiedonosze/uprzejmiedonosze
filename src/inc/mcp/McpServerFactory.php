@@ -297,6 +297,11 @@ function buildServer(): Server {
                 'description' => 'Open this to review the draft, add anything that is missing '
                     . '(e.g. photos), and send the report.',
             ],
+            'photoQuota' => [
+                'type' => 'object',
+                'description' => 'The user\'s rolling quota of unique processed photos: used, limit '
+                    . '(null = unlimited), remaining, windowDays, resetsAt (unix ts), tier.',
+            ],
         ],
         'additionalProperties' => true,
     ];
@@ -314,7 +319,9 @@ function buildServer(): Server {
             . 'set_report_notes. Use list_categories to see the violation types, and '
             . 'create_report_draft to start a new report — it creates a draft the user must '
             . 'open (editUrl) to review and send; the server cannot send reports itself. '
-            . 'Photos may be supplied via the API and are processed like web uploads; '
+            . 'Photos may be supplied via the API and are processed like web uploads; a carImage '
+            . '(plate recognition) counts against a per-user limit of unique photos per 30 days '
+            . '(re-sending the same photo is free) — when it is exhausted the call fails, so tell the user instead of retrying; '
             . 'anything missing the user adds in the editor. '
             . 'Each report has a `status` id (see the legend below) and a categoryInfo object '
             . '(the violation type, its formal wording and legal basis). Use the Polish status '

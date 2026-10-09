@@ -10,7 +10,7 @@
 
 <div class="dashboard-intro">
     <h1>Cześć {{ general.userName }},</h1>
-    <p>{{ levels[general.stats.level].introMsg | raw }}</p>
+    <p>{{ levels[general.stats.level].introMsg | sexify(config.sex) | raw }}</p>
 </div>
 
 <section class="dashboard-section">

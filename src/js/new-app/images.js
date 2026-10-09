@@ -11,6 +11,9 @@ import { triggerVehicleInfoEnrichment } from "./vehicle-info";
 
 // Matches the JPEG quality used by saveImgAndThumb in API.php (85);
 // keeps a resized 1600px upload around ~1 MB.
+// SYNC (3 places): API.php JPEG_QUALITY / MAX_IMAGE_DIM (server re-enforces them) and the mobile app,
+// ../uprzejmiedonosze-pro/src/lib/resize.ts (EXPO_PUBLIC_PHOTO_MAX_WIDTH / _COMPRESS, currently 1600px / 0.85).
+// If you change these, change the other repo and the Vision limits (VISION_MAX_PHOTO_BYTES in inc/config.php) too.
 const JPEG_QUALITY = 0.85
 const MAX_IMAGE_DIM = 1600
 

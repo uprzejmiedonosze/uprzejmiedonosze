@@ -29,6 +29,12 @@ function exceptionToErrorJson($exception): string {
         $response["description"] = $exception->getDescription();
     if ($exception->getPrevious() instanceof MissingParamException)
         $response["param"] = $exception->getPrevious()->getParam();
+    if ($exception instanceof ValidationException)
+        $response["field"] = $exception->getField();
+    elseif ($exception->getPrevious() instanceof ValidationException)
+        $response["field"] = $exception->getPrevious()->getField();
+    if ($exception instanceof \quota\QuotaExceededException)
+        $response["quota"] = $exception->status;
     if (!isProd()) {
         $response["location"] = $exception->getFile() . ":" . $exception->getLine();
     }

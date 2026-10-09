@@ -36,10 +36,12 @@ final class VisionRequestException extends \RuntimeException {
 /**
  * Dekoduje i waliduje body REST-owego POST /api/rest/vision/candidate (parametr `photos`):
  * kontrakt, limity rozmiaru, mime. Normalizuje PNG->JPEG (jak saveImgAndThumb w API.php), więc
- * dalszy pipeline (imgPart) ma jeden format. Zwraca list<array{photoId,photo_index,bytes}>.
+ * dalszy pipeline (imgPart) ma jeden format. Zwraca list<array{photoId,photo_index,bytes,alpr?}>.
+ * Zdjęcie bez `image` (samo `photoId`) jest czytane z etapu `wip` użytkownika (inc/WipPhotos.php) – bez ponownego przesyłania;
+ * wtedy wpis ma `alpr` = callable zwracający wynik ALPR zapisany w sidecarze (jedno wywołanie ALPR na zdjęcie).
  * @throws VisionRequestException z gotowym statusem HTTP (400/415)
  */
-function decodeCandidatePhotos($photosParam): array {
+function decodeCandidatePhotos($photosParam, ?\user\User $user = null): array {
     if (!is_array($photosParam) || count($photosParam) === 0) {
         throw new VisionRequestException('Brak zdjęć.', 400);
     }
@@ -66,6 +68,13 @@ function decodeCandidatePhotos($photosParam): array {
         }
         $seenIndex[$photoIndex] = true;
 
+        if ($image === null && $user !== null) {
+            $wip = \wip\load($user, $photoId);
+            if (!$wip) throw new VisionRequestException("Nie znaleziono zdjęcia $photoId (wygasło albo nie należy do użytkownika).", 404);
+            $items[] = ['photoId' => $photoId, 'photo_index' => $photoIndex, 'bytes' => $wip['bytes'],
+                'alpr' => fn () => \wip\alpr($user, $photoId)];
+            continue;
+        }
         if (!is_string($image) || !preg_match('#^data:image/(jpeg|jpg|png);base64,#i', $image, $m)) {
             throw new VisionRequestException("Złe zdjęcie $photoId (oczekiwano data:image/jpeg|png;base64,...).", 400);
         }
@@ -357,14 +366,14 @@ function alprDetections(array $resp, ?array $size): array {
 // modelu tylko gdy ALPR zwróci parsowalną tablicę ze score >= ALPR_MIN_SCORE; wpp. graceful
 // fallback (plate_debug.alpr=null gdy ALPR nic nie znalazł, albo wpis + warning gdy score za
 // niski) bez plate_verified.
-function applyAlprPlate(string $bytes, array &$photo, array &$warnings): void {
+function applyAlprPlate(string $bytes, array &$photo, array &$warnings, ?callable $alprResolver = null): void {
     $modelPlate = $photo['plate'] ?? ['readable' => false, 'text' => null, 'bbox' => null];
     $modelCar = $photo['car'] ?? ['present' => false, 'bbox' => null, 'desc' => null];
 
     $best = null;
     $photo['alpr_all'] = [];
     try {
-        $resp = PlateRecognizerClient::call($bytes);
+        $resp = $alprResolver ? $alprResolver() : PlateRecognizerClient::call($bytes);
         $photo['alpr_all'] = alprDetections($resp, imageSize($bytes));
         $best = \alpr\bestAlprResult($resp);
     } catch (\Throwable $e) {
@@ -451,7 +460,7 @@ function analyzeCandidate(array $photos, string $userEmail, ?string $reportId = 
             // samego auta, 'third' dla innego pojazdu), więc appka przydziela je sama na podstawie
             // alpr_all — potrzebuje odczytów ze wszystkich zdjęć, nie tylko z tego oznaczonego 'car'.
             if (($p['role'] ?? null) !== 'unusable') {
-                applyAlprPlate($src['bytes'], $p, $warnings);
+                applyAlprPlate($src['bytes'], $p, $warnings, $src['alpr'] ?? null);
             }
         }
         unset($p);

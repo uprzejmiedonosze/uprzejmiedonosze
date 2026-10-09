@@ -6,8 +6,8 @@
         ,{ "emphasis": "{{ app.getTime }}"}
         ,{ "text": "{{ app.guessUserSex.bylam }} świadkiem wykroczenia kierowcy pojazdu o nr. rejestracyjnym"}
         ,{ "emphasis": "{{ app.carInfo.plateId ?? '...' }}"}
-    {% if app.getRecydywa > 1 %}
-        ,{ "sup": "recydywa {{ app.getRecydywa }}"}
+    {% if app.getRecydywa.appsCnt > 1 %}
+        ,{ "sup": "recydywa {{ app.getRecydywa.appsCnt }}"}
     {% endif %}
     {% if app.getVehicleSuffix %}
         ,{ "text": "{{ app.getVehicleSuffix }}"}

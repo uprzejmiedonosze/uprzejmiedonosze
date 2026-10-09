@@ -146,10 +146,22 @@ if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',  
 if (!defined('OPENAI_FACES_MODEL'))             define('OPENAI_FACES_MODEL',             getenv('OPENAI_FACES_MODEL') ?: 'gpt-5-nano');
 if (!defined('GOOGLE_VISION_API_KEY'))          define('GOOGLE_VISION_API_KEY',          getenv('GOOGLE_VISION_API_KEY') ?: '');
 
+// Etap `wip` (POST /api/rest/photos): limit zdjęć wysyłanych przez jednego użytkownika.
+if (!defined('WIP_RATE_MAX'))        define('WIP_RATE_MAX',        (int)(getenv('WIP_RATE_MAX') ?: 60));
+if (!defined('WIP_RATE_WINDOW'))     define('WIP_RATE_WINDOW',     (int)(getenv('WIP_RATE_WINDOW') ?: 3600));
+// Limit unikalnych przetworzonych zdjęć (ALPR/LLM, bez cache) na użytkownika w kroczącym oknie – patrz store/PhotoQuota.php.
+// Bez patronatu: PHOTO_QUOTA_FREE; aktywny patron: najwyższy próg PHOTO_QUOTA_TIERS (zł/mies. => limit, null = bez limitu).
+if (!defined('PHOTO_QUOTA_DAYS'))    define('PHOTO_QUOTA_DAYS',    (int)(getenv('PHOTO_QUOTA_DAYS') ?: 30));
+if (!defined('PHOTO_QUOTA_FREE'))    define('PHOTO_QUOTA_FREE',    (int)(getenv('PHOTO_QUOTA_FREE') ?: 50));
+if (!defined('PHOTO_QUOTA_TIERS'))   define('PHOTO_QUOTA_TIERS',   [50 => null, 25 => 300, 10 => 100]);
+
 // Rate-limit analizy wizyjnej per użytkownik (\cache\throttle\attempt, jak PasskeyHandler).
 if (!defined('VISION_RATE_MAX'))     define('VISION_RATE_MAX',     (int)(getenv('VISION_RATE_MAX') ?: 60));
 if (!defined('VISION_RATE_WINDOW'))  define('VISION_RATE_WINDOW',  (int)(getenv('VISION_RATE_WINDOW') ?: 3600));
 if (!defined('VISION_MAX_PHOTOS'))         define('VISION_MAX_PHOTOS',         (int)(getenv('VISION_MAX_PHOTOS') ?: 12));
+// Limity muszą się mieścić w zdjęciach z appki mobilnej: ../uprzejmiedonosze-pro/src/lib/resize.ts (szerokość
+// EXPO_PUBLIC_PHOTO_MAX_WIDTH=1600, jakość EXPO_PUBLIC_PHOTO_COMPRESS=0.85). Te dwa limity dotyczą TYLKO starszego wariantu analizy z base64 w body;
+// zdjęcia z etapu `wip` (POST /api/rest/photos, analiza po photoId) podlegają MAX_IMAGE_UPLOAD_BYTES w API.php.
 if (!defined('VISION_MAX_PHOTO_BYTES'))    define('VISION_MAX_PHOTO_BYTES',    (int)(getenv('VISION_MAX_PHOTO_BYTES') ?: 800000));
 if (!defined('VISION_MAX_TOTAL_BYTES'))    define('VISION_MAX_TOTAL_BYTES',    (int)(getenv('VISION_MAX_TOTAL_BYTES') ?: 6000000));
 
@@ -244,7 +256,15 @@ const SEXSTRINGS = Array (
         "Hurtowniczka" => "Hurtownik",
         "Pro" => "Pro",
         "wezwana" => "wezwana",
-        "zmieniłeś" => "zmieniłaś/eś"
+        "zmieniłeś" => "zmieniłaś/eś",
+        "trafilas" => "trafiłaś/eś",
+        "wkurzony" => "wkurzony/a",
+        "walczacy" => "walczący/a",
+        "poczatkujacy" => "początkujący/a",
+        "majacy" => "mający/a",
+        "profesjonalista" => "profesjonalistą/ką",
+        "ekspert" => "ekspertem/ką",
+        "hurtownik" => "hurtownikiem/hurtowniczką"
     ],
     'm' => [
         "bylam" => "byłem",
@@ -271,7 +291,15 @@ const SEXSTRINGS = Array (
         "Hurtowniczka" => "Hurtownik",
         "Pro" => "Pro",
         "wezwana" => "wezwany",
-        "zmieniłeś" => "zmieniłeś"
+        "zmieniłeś" => "zmieniłeś",
+        "trafilas" => "trafiłeś",
+        "wkurzony" => "wkurzony",
+        "walczacy" => "walczący",
+        "poczatkujacy" => "początkujący",
+        "majacy" => "mający",
+        "profesjonalista" => "profesjonalistą",
+        "ekspert" => "ekspertem",
+        "hurtownik" => "hurtownikiem"
     ],
     'f' => [
         "bylam" => "byłam",
@@ -298,7 +326,15 @@ const SEXSTRINGS = Array (
         "Hurtowniczka" => "Hurtowniczka",
         "Pro" => "Pro",
         "wezwana" => "wezwana",
-        "zmieniłeś" => "zmieniłaś"
+        "zmieniłeś" => "zmieniłaś",
+        "trafilas" => "trafiłaś",
+        "wkurzony" => "wkurzona",
+        "walczacy" => "walcząca",
+        "poczatkujacy" => "początkująca",
+        "majacy" => "mająca",
+        "profesjonalista" => "profesjonalistką",
+        "ekspert" => "ekspertką",
+        "hurtownik" => "hurtowniczką"
     ]
 );
 

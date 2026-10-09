@@ -18,7 +18,13 @@ function rpId(): string {
  * only that the assertion/registration is cryptographically sound.
  */
 function webAuthn(): WebAuthn {
-    return new WebAuthn('Uprzejmie Donoszę', rpId(), ['none'], true);
+    $webAuthn = new WebAuthn('Uprzejmie Donoszę', rpId(), ['none'], true);
+    // Native Android app (Credential Manager) sends origin `android:apk-key-hash:<base64url SHA-256 of the
+    // signing cert>`; without a whitelist the library rejects it. Comma-separated, per host (prod: Play app
+    // signing key, shadow: EAS internal key). iOS uses https://<rpId> and needs no entry.
+    $hashes = array_filter(array_map('trim', explode(',', getenv('PASSKEY_ANDROID_KEY_HASHES') ?: '')));
+    if ($hashes) $webAuthn->addAndroidKeyHashes(array_values($hashes));
+    return $webAuthn;
 }
 
 /**
@@ -52,4 +58,39 @@ function takeChallenge(string $type): ByteBuffer {
         throw new \Exception('Sesja logowania wygasła, spróbuj ponownie', 400);
     }
     return new ByteBuffer(base64_decode($raw));
+}
+
+/**
+ * Challenge store for the native app (REST routes have no PHP session/cookie): moves the challenge that
+ * storeChallenge() put in $_SESSION into Memcached under a random `state`, which the client echoes back to
+ * *-verify. Same TTL, single-use, same type tag.
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
+function exportChallenge(): string {
+    $state = rtrim(strtr(base64_encode(random_bytes(24)), '+/', '-_'), '=');
+    \cache\set(\cache\Type::Passkey, 'state-' . $state, [
+        'raw' => $_SESSION['passkey_challenge'] ?? null,
+        'type' => $_SESSION['passkey_challenge_type'] ?? null,
+        'exp' => $_SESSION['passkey_challenge_exp'] ?? 0,
+        'email' => $_SESSION['user_email'] ?? null,
+    ], 0, CHALLENGE_TTL_SECONDS);
+    unset($_SESSION['passkey_challenge'], $_SESSION['passkey_challenge_type'], $_SESSION['passkey_challenge_exp']);
+    return $state;
+}
+
+/**
+ * Inverse of exportChallenge(): restores the challenge into $_SESSION so takeChallenge() works unchanged.
+ * Single-use (deleted on read). For registration the challenge must belong to the same e-mail.
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
+function importChallenge(string $state): void {
+    $key = 'state-' . $state;
+    $data = \cache\get(\cache\Type::Passkey, $key);
+    \cache\delete(\cache\Type::Passkey, $key);
+    if (!is_array($data) || ($data['email'] ?? null) !== ($_SESSION['user_email'] ?? null)) {
+        throw new \Exception('Sesja logowania wygasła, spróbuj ponownie', 400);
+    }
+    $_SESSION['passkey_challenge'] = $data['raw'];
+    $_SESSION['passkey_challenge_type'] = $data['type'];
+    $_SESSION['passkey_challenge_exp'] = $data['exp'];
 }

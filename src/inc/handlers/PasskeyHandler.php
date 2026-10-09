@@ -29,6 +29,11 @@ class PasskeyHandler extends AbstractHandler {
         }
     }
 
+    /** Native app calls (/api/rest/*) have no cookie session: the challenge travels as `state` instead. */
+    private function isRest(Request $request): bool {
+        return str_starts_with($request->getUri()->getPath(), '/api/rest/');
+    }
+
     // ---- Registration (session required) ----------------------------------
 
     public function registerOptions(Request $request, Response $response): Response {
@@ -48,7 +53,7 @@ class PasskeyHandler extends AbstractHandler {
         $args = $webAuthn->getCreateArgs(
             ByteBuffer::fromBase64Url(\passkey\userHandle($email))->getBinaryString(),
             $email,
-            $_SESSION['user_name'] ?: $email,
+            ($_SESSION['user_name'] ?? '') ?: $email,
             60,
             true,   // requireResidentKey -> discoverable credential (usernameless login)
             true,   // requireUserVerification
@@ -56,6 +61,9 @@ class PasskeyHandler extends AbstractHandler {
             $existing
         );
         \passkey\storeChallenge($webAuthn, 'create');
+        if ($this->isRest($request)) {
+            $args = ['options' => $args, 'state' => \passkey\exportChallenge()];
+        }
 
         return $this->renderJson($response, $args);
     }
@@ -69,6 +77,7 @@ class PasskeyHandler extends AbstractHandler {
             throw new HttpTooManyRequestsException($request, 'Zbyt wiele prób, spróbuj później');
         }
 
+        if ($this->isRest($request)) \passkey\importChallenge((string)$this->getParam($body, 'state'));
         $challenge = \passkey\takeChallenge('create');
 
         try {
@@ -123,6 +132,9 @@ class PasskeyHandler extends AbstractHandler {
         // reveal whether a given account has a passkey registered.
         $args = $webAuthn->getGetArgs([], 60, true, true, true, true, true, true);
         \passkey\storeChallenge($webAuthn, 'get');
+        if ($this->isRest($request)) {
+            $args = ['options' => $args, 'state' => \passkey\exportChallenge()];
+        }
 
         return $this->renderJson($response, $args);
     }
@@ -138,6 +150,7 @@ class PasskeyHandler extends AbstractHandler {
         $credentialId = $this->getParam($body, 'id');
         $row = \passkey\byCredentialId($credentialId);
 
+        if ($this->isRest($request)) \passkey\importChallenge((string)$this->getParam($body, 'state'));
         $challenge = \passkey\takeChallenge('get');
 
         if (!$row) {
