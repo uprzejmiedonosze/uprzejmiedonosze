@@ -138,6 +138,14 @@ if (!defined('OPENAI_VISION_MAX_TOKENS'))       define('OPENAI_VISION_MAX_TOKENS
 if (!defined('OPENAI_VISION_TIMEOUT'))          define('OPENAI_VISION_TIMEOUT',          (int)(getenv('OPENAI_VISION_TIMEOUT') ?: 90));
 if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',           getenv('OPENAI_VISION_DETAIL') ?: 'high');
 
+// Rozpoznawanie pism z Policji/SM (src/inc/integrations/LetterVision.php): OCR drobnego druku, pieczątek i zdjęć pod kątem
+// wymaga mocniejszego modelu niż nano z analizy zdjęć zgłoszeń – do potwierdzenia ewaluacją (tools/letter_eval.php).
+if (!defined('OPENAI_LETTER_MODEL'))            define('OPENAI_LETTER_MODEL',            getenv('OPENAI_LETTER_MODEL') ?: 'gpt-5-mini');
+if (!defined('OPENAI_LETTER_MAX_TOKENS'))       define('OPENAI_LETTER_MAX_TOKENS',       (int)(getenv('OPENAI_LETTER_MAX_TOKENS') ?: 12000));
+if (!defined('LETTER_MAX_PAGES'))               define('LETTER_MAX_PAGES',               (int)(getenv('LETTER_MAX_PAGES') ?: 4));
+if (!defined('LETTER_RATE_MAX'))                define('LETTER_RATE_MAX',                (int)(getenv('LETTER_RATE_MAX') ?: 20));
+if (!defined('LETTER_RATE_WINDOW'))             define('LETTER_RATE_WINDOW',             (int)(getenv('LETTER_RATE_WINDOW') ?: 3600));
+
 // Bramka wykrywania twarzy w face-detect-consumer (src/inc/integrations/FaceDetect.php): tylko liczy
 // twarze, bboxy do blura daje Google Vision. Osobny klucz ograniczony do Cloud Vision API.
 if (!defined('OPENAI_FACES_MODEL'))             define('OPENAI_FACES_MODEL',             getenv('OPENAI_FACES_MODEL') ?: 'gpt-5-nano');

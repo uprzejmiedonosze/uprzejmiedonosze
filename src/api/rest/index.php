@@ -21,6 +21,7 @@ set_error_handler("ApiErrorHandler");
 
 require(INC_DIR . '/include.php');
 require(INC_DIR . '/API.php');
+require(INC_DIR . '/LetterProposal.php');
 require(INC_DIR . '/middleware/JsonBodyParser.php');
 require(INC_DIR . '/middleware/JsonErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
@@ -422,6 +423,22 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         return $response;
     })  ->add(new AppMiddleware());
 
+    // Zatwierdzenie propozycji z POST /api/rest/letters/analyze: status + numer sprawy + dopisanie notatki w jednej blokadzie.
+    $group->post('/{appId}/letter/apply', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        try {
+            $application = \letter\applyLetter($args['appId'], (array)$request->getParsedBody(), $user);
+        } catch (\InvalidArgumentException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        } catch (Exception $e) {
+            if ($e->getCode() === 403) throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            if ($e->getCode() === 409) throw new HttpException($request, $e->getMessage(), 409, $e);
+            throw $e;
+        }
+        $response->getBody()->write(json_encode(['app' => applicationToRest($application)]));
+        return $response;
+    })  ->add(new AppMiddleware());
+
     // Wycinek tablicy z oryginału zdjęcia (pełna rozdzielczość) zamiast serwerowego z kopii 1600 px – patrz replacePlateImage().
     $group->post('/{appId}/plate-image', function (Request $request, Response $response, $args) {
         $user = $request->getAttribute('user');
@@ -791,6 +808,38 @@ $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISIO
         $result['reportId'] = $reportId;
         $result['schema'] = \vision\VISION_SCHEMA;
         $result['model'] = OPENAI_VISION_MODEL;
+
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    });
+})  ->add(new TermsConfirmedMiddleware())
+    ->add(new RegisteredMiddleware())
+    ->add(new UserMiddleware())
+    ->add(new TokenSessionMiddleware())
+    ->add(new AuthMiddleware());
+
+$app->group('/api/rest/letters', function (RouteCollectorProxy $group) { // LETTERS
+    // Skan/zdjęcie pisma z Policji lub SM (1–LETTER_MAX_PAGES stron: multipart `images[]`) → OCR, numer sprawy, dopasowane zgłoszenie
+    // i gotowa propozycja edycji (status, numer sprawy, notatka) – patrz inc/LetterProposal.php. Kosztuje kredyty analizy
+    // zdjęć (\quota\reserve, 1 na unikalną stronę); skan nie jest zapisywany.
+    $group->post('/analyze', function (Request $request, Response $response) {
+        $user = $request->getAttribute('user');
+        if (!\cache\throttle\attempt(\cache\Type::Vision, 'letter-' . $user->getEmail(), LETTER_RATE_MAX, LETTER_RATE_WINDOW))
+            throw new HttpTooManyRequestsException($request,
+                'Limit analiz pism wyczerpany (' . LETTER_RATE_MAX . '/h). Spróbuj później.');
+
+        try {
+            $pages = \letter\pagesFromRequest($request);
+        } catch (Exception $e) {
+            $code = in_array($e->getCode(), [400, 415], true) ? $e->getCode() : 500;
+            throw new HttpException($request, $e->getMessage(), $code, $e);
+        }
+
+        try {
+            $result = \letter\analyzeForUser($user, $pages);
+        } catch (\vision\VisionException $e) {
+            throw new HttpException($request, 'Nie udało się odczytać pisma: ' . $e->getMessage(), 502, $e);
+        } // QuotaExceededException → 402 + `quota` (JsonErrorRenderer)
 
         $response->getBody()->write(json_encode($result));
         return $response;

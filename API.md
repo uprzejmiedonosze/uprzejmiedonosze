@@ -340,6 +340,76 @@ should treat a mismatch as "uncacheable, but usable".
 Errors: 400 (bad body/size/indices), 415 (unsupported image format), 429 (rate limit), 502
 (model/upstream failed after internal retries).
 
+## Letters endpoints
+
+Odpowiedzi Policji / Straży Miejskiej na zgłoszenia (mandat, pouczenie, odmowa wniosku o ukaranie, „w toku”, pisma
+zbiorcze): skan → OCR → numer sprawy → dopasowane zgłoszenie → gotowa propozycja edycji. Cała logika po stronie serwera
+(`src/inc/integrations/LetterVision.php`, `src/inc/LetterMatcher.php`, `src/inc/LetterProposal.php`); klient tylko pokazuje
+i zatwierdza. Wymaga autoryzacji, rejestracji i zaakceptowanych warunków. Limit żądań: `LETTER_RATE_MAX` na
+`LETTER_RATE_WINDOW` (domyślnie 20/h) → 429. Analiza **zużywa kredyty analizy zdjęć** (patrz „Limit przetworzonych zdjęć”):
+1 kredyt na unikalną stronę (sha1), ponowne wgranie tego samego skanu jest za darmo, błąd modelu zwraca zarezerwowane miejsce.
+Skan nie jest zapisywany; transkrypt nie jest zwracany klientowi.
+
+### POST `/api/rest/letters/analyze`
+
+`multipart/form-data`: `images[]` (1–`LETTER_MAX_PAGES`, domyślnie 4 pliki JPEG/PNG, każdy do `MAX_IMAGE_UPLOAD_BYTES`) albo
+pojedyncze pole `image`. Jedno zdjęcie może pokazywać kilka pism.
+
+Response (200):
+
+```jsonc
+{
+  "letter": { "kind": "single|bulk|statistical|generic", "authority": "Komisariat Policji II w Krakowie", "date": "2026-09-15" },
+  "cases": [{
+    "index": 0,
+    "case": {                       // co przeczytano w piśmie
+      "ids": { "udNumber": null, "rsow": "201/26", "ersow": null, "ldz": null, "caseMark": null, "mandateNo": null },
+      "plate": "XO8T372", "vehicleMake": "Fiat", "date": "2026-03-06", "time": "08:10",   // date: "--MM-DD" gdy rok nieznany i brak daty pisma
+      "address": { "street": "Przełajowa", "number": "14", "city": "Poznań" },
+      "outcome": "fined|instructed|no_offence|perpetrator_unknown|dismissed_other|in_progress|closed_unspecified|unknown",
+      "reason": "…", "articles": ["art. 97 kw"], "confidence": 0.9
+    },
+    "match": { "level": "match|candidates|none", "appId": "abc…" },   // appId tylko dla level=match
+    "candidates": [{                // do 3, malejąco wg score
+      "appId": "abc…", "number": "UD/5/12", "plate": "XO8T372", "date": "2026-03-06T08:10:00",
+      "address": "Przełajowa 14, Poznań", "status": "confirmed-waiting", "externalId": "",
+      "score": 100,                 // 0–100; ≥80 i bez remisu = „match”, 50–79 = „candidates”
+      "signals": { "plate": "exact|confusable|masked|fuzzy1|fuzzy2", "date": "exact|±1d|±3d|swapped|sameMonth",
+                   "time": "exact|near", "address": "street|streetAndNumber|city", "make": "match",
+                   "ud": "exact", "externalId": "exact", "uniquePlate": true },
+      "proposal": {
+        "set": { "status": "confirmed-fined", "externalId": "RSOW 201/26" },   // null = bez zmiany
+        "append": { "privateComment": "[Pismo z 15.09.2026] …: ukarano mandatem/grzywną; sprawa RSOW 201/26" },
+        "statusBlocked": { "from": "confirmed", "to": "confirmed-fined", "reason": "…" },   // null gdy dozwolone
+        "conflicts": [{ "field": "externalId", "current": "RSOW 999/26", "proposed": "RSOW 201/26" }],
+        "noop": false
+      }
+    }]
+  }],
+  "warnings": [],
+  "usage": { "prompt_tokens": 0, "completion_tokens": 0, "calls": 1, "cost_usd": 0.0 }   // null przy trafieniu w cache
+}
+```
+
+Kolejność sygnałów dopasowania (malejąca waga): numer UD (tylko własny prefiks `UD/<numer użytkownika>/…`) → numer sprawy
+zapisany już w zgłoszeniu (RSOW/eRSOW/L.dz.) → numer rejestracyjny (spacje, mylone znaki 0/O 1/I 8/B 5/S 2/Z, literówka) →
+data (±1–3 dni, zamiana dzień/miesiąc) → adres (odmiana ulicy, literówki). Sprzeczność (inny pojazd, inny dzień) nie
+pozwala na `match`. Status wyznacza serwer z `outcome`: `fined`→`confirmed-fined`, `instructed`→`confirmed-instructed`,
+`no_offence`/`perpetrator_unknown`/`dismissed_other`→`confirmed-ignored`, `in_progress`→`confirmed-sm` (nie cofa statusu
+końcowego), `closed_unspecified`/`unknown`→bez zmiany; przejście musi być dozwolone w `statuses.json`
+(`statusBlocked`). Pismo zbiorcze zwraca wiele `cases`; pisma statystyczne/ogólnikowe – pustą listę.
+
+Errors: 400 (brak pliku/zbyt duży/zbyt wiele stron), 402 (limit zdjęć, `quota`), 415 (zły format), 429, 502 (model nie
+odczytał pisma).
+
+### POST `/api/rest/app/{appId}/letter/apply`
+
+Zatwierdza propozycję z `…/letters/analyze` w jednej blokadzie: ustawia status, numer sprawy i **dopisuje** notatkę do
+`privateComment` (serwer robi odczyt-zmianę-zapis, notatka nie jest duplikowana), dodaje wpis `comments` (`source: "letter"`).
+Body (JSON, wszystkie pola opcjonalne): `status`, `externalId` (≤ 100 znaków), `appendNote` (≤ 2000), `letterSummary`.
+Response (200): `{ "app": <jak GET /app/{id}> }`. Errors: 400 (zły kształt/status), 403 (cudze zgłoszenie), 409 (niedozwolona
+zmiana statusu – nic nie jest zapisane).
+
 ## Configuration endpoints
 
 No authorization needed.
