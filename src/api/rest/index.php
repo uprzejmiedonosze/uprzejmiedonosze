@@ -819,9 +819,9 @@ $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISIO
     ->add(new AuthMiddleware());
 
 $app->group('/api/rest/letters', function (RouteCollectorProxy $group) { // LETTERS
-    // Skan/zdjęcie pisma z Policji lub SM (1–LETTER_MAX_PAGES stron: multipart `images[]`) → OCR, numer sprawy, dopasowane zgłoszenie
+    // Zdjęcie/skan pisma z Policji lub SM (jedno, multipart `image`) → OCR, numer sprawy, dopasowane zgłoszenie
     // i gotowa propozycja edycji (status, numer sprawy, notatka) – patrz inc/LetterProposal.php. Kosztuje kredyty analizy
-    // zdjęć (\quota\reserve, 1 na unikalną stronę); skan nie jest zapisywany.
+    // zdjęć (\quota\reserve, 1 na unikalne zdjęcie); zdjęcie nie jest zapisywane.
     $group->post('/analyze', function (Request $request, Response $response) {
         $user = $request->getAttribute('user');
         if (!\cache\throttle\attempt(\cache\Type::Vision, 'letter-' . $user->getEmail(), LETTER_RATE_MAX, LETTER_RATE_WINDOW))
@@ -829,14 +829,14 @@ $app->group('/api/rest/letters', function (RouteCollectorProxy $group) { // LETT
                 'Limit analiz pism wyczerpany (' . LETTER_RATE_MAX . '/h). Spróbuj później.');
 
         try {
-            $pages = \letter\pagesFromRequest($request);
+            $image = \letter\imageFromRequest($request);
         } catch (Exception $e) {
             $code = in_array($e->getCode(), [400, 415], true) ? $e->getCode() : 500;
             throw new HttpException($request, $e->getMessage(), $code, $e);
         }
 
         try {
-            $result = \letter\analyzeForUser($user, $pages);
+            $result = \letter\analyzeForUser($user, $image);
         } catch (\vision\VisionException $e) {
             throw new HttpException($request, 'Nie udało się odczytać pisma: ' . $e->getMessage(), 502, $e);
         } // QuotaExceededException → 402 + `quota` (JsonErrorRenderer)

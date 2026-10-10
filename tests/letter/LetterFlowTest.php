@@ -66,9 +66,9 @@ class LetterFlowTest extends DatabaseTestCase
         return \app\save($app);
     }
 
-    private static function pages(): array
+    private static function image(): string
     {
-        return [random_bytes(64)]; // unikalny sha1 – własny klucz cache i kredytu w każdym teście
+        return random_bytes(64); // unikalny sha1 – własny klucz cache i kredytu w każdym teście
     }
 
     private static function fakeLetter(array $cases, string $transcript = 'treść pisma'): ClientFake
@@ -100,7 +100,7 @@ class LetterFlowTest extends DatabaseTestCase
             'address' => ['street' => 'Przełajowej', 'number' => '14', 'city' => 'Poznań'],
         ]]));
 
-        $r = analyzeForUser($user, self::pages());
+        $r = analyzeForUser($user, self::image());
 
         $this->assertCount(1, $r['cases']);
         $case = $r['cases'][0];
@@ -121,27 +121,27 @@ class LetterFlowTest extends DatabaseTestCase
         $other = $this->savedUser('letter-other@example.com');
         VisionClient::set(self::fakeLetter([['plate' => 'XO8T372', 'date' => '2026-03-06', 'outcome' => 'instructed']]));
 
-        $r = analyzeForUser($other, self::pages());
+        $r = analyzeForUser($other, self::image());
         $this->assertSame('none', $r['cases'][0]['match']['level']);
         $this->assertSame([], $r['cases'][0]['candidates']);
     }
 
-    public function testAnalysisChargesOneCreditPerPageAndRepeatIsFreeAndCached(): void
+    public function testAnalysisChargesOneCreditAndRepeatIsFreeAndCached(): void
     {
         $user = $this->savedUser();
         $this->sentApp($user, 'confirmed-waiting', 'XO8T372', '2026-03-06T08:10:00', 'Przełajowa 14, Poznań');
         VisionClient::set(self::fakeLetter([['plate' => 'XO8T372', 'date' => '2026-03-06', 'outcome' => 'fined']]));
-        $pages = [random_bytes(64), random_bytes(64)];
+        $image = self::image();
 
         $before = \quota\status($user)['used'];
-        $first = analyzeForUser($user, $pages);
-        $this->assertSame($before + 2, \quota\status($user)['used'], '1 kredyt na unikalną stronę');
+        $first = analyzeForUser($user, $image);
+        $this->assertSame($before + 1, \quota\status($user)['used'], '1 kredyt na zdjęcie');
         $this->assertNotNull($first['usage']);
 
         VisionClient::set(null); // drugi raz model nie może być wołany
-        $second = analyzeForUser($user, $pages);
+        $second = analyzeForUser($user, $image);
         $this->assertNull($second['usage'], 'trafienie w cache');
-        $this->assertSame($before + 2, \quota\status($user)['used'], 'ponowne wgranie nic nie kosztuje');
+        $this->assertSame($before + 1, \quota\status($user)['used'], 'ponowne wgranie nic nie kosztuje');
         $this->assertSame($first['cases'][0]['match'], $second['cases'][0]['match']);
     }
 
@@ -153,7 +153,7 @@ class LetterFlowTest extends DatabaseTestCase
 
         $before = \quota\status($user)['used'];
         try {
-            analyzeForUser($user, self::pages());
+            analyzeForUser($user, self::image());
             $this->fail('oczekiwano VisionException');
         } catch (VisionException) {
         }
@@ -168,7 +168,7 @@ class LetterFlowTest extends DatabaseTestCase
         VisionClient::set(new ClientFake([])); // każde wywołanie modelu rzuciłoby wyjątek
 
         $this->expectException(QuotaExceededException::class);
-        analyzeForUser($user, self::pages());
+        analyzeForUser($user, self::image());
     }
 
     // --- applyLetter ---------------------------------------------------------------

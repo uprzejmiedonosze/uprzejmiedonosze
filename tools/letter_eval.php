@@ -39,7 +39,7 @@ foreach ($expected as $name => $exp) {
 
     $totals['files']++;
     try {
-        $r = \letter\analyzeLetter([$bytes], $model);
+        $r = \letter\analyzeLetter($bytes, $model);
     } catch (\Throwable $e) {
         echo "FAIL  $name: " . $e->getMessage() . "\n";
         continue;

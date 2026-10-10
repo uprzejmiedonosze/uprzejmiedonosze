@@ -27,12 +27,12 @@ function letterPrompt(): string {
     $outcomes = implode('|', OUTCOMES);
     return <<<PROMPT
 You are an OCR and information-extraction engine for Polish official letters (Policja, Straż Miejska) that reply to
-a citizen's report of a parking/traffic offence. The attached images are the pages (or one photo showing several
-letters). Read them carefully and answer with ONE raw JSON object, no prose, no markdown fences.
+a citizen's report of a parking/traffic offence. The attached image is a photo or scan of one letter (or of several
+letters side by side). Read them carefully and answer with ONE raw JSON object, no prose, no markdown fences.
 
 Shape:
 {
-  "transcript": "<full verbatim text of everything legible, all pages, keep line breaks as \\n; use [ZAMAZANE] for blacked-out/redacted parts and [?] for illegible characters>",
+  "transcript": "<full verbatim text of everything legible, keep line breaks as \\n; use [ZAMAZANE] for blacked-out/redacted parts and [?] for illegible characters>",
   "letter": {
     "kind": "single|bulk|statistical|generic",
     "authority": "<issuing unit, e.g. 'Komisariat Policji II w Krakowie'> or null",
@@ -255,18 +255,16 @@ function nullIfBlank(mixed $v): ?string {
 }
 
 /**
- * Punkt wejścia: strony (JPEG) → ['transcript','letter','cases'] + usage + warnings.
- * @param list<string> $jpegPages
+ * Punkt wejścia: zdjęcie pisma (JPEG) → ['transcript','letter','cases'] + usage + warnings.
+ * @param string $jpeg bajty JPEG
  * @return array{transcript:string, letter:array, cases:list<array>, usage:array, warnings:list<string>}
  */
-function analyzeLetter(array $jpegPages, ?string $model = null): array {
+function analyzeLetter(string $jpeg, ?string $model = null): array {
     $model ??= OPENAI_LETTER_MODEL;
     $usage = ['calls' => 0, 'prompt_tokens' => 0, 'completion_tokens' => 0];
     $warnings = [];
 
-    $note = count($jpegPages) > 1 ? ' The ' . count($jpegPages) . ' images are consecutive pages of the same letter(s).' : '';
-    $content = [['type' => 'text', 'text' => letterPrompt() . $note]];
-    foreach ($jpegPages as $bytes) $content[] = \vision\imgPart($bytes, OPENAI_VISION_DETAIL);
+    $content = [['type' => 'text', 'text' => letterPrompt()], \vision\imgPart($jpeg, OPENAI_VISION_DETAIL)];
     $history = [['role' => 'user', 'content' => $content]];
 
     $parse = function (string $raw): array {

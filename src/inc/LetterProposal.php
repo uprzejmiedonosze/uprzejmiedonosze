@@ -138,66 +138,52 @@ function publicCase(array $case): array {
 }
 
 /**
- * Strony pisma z żądania multipart: `images[]` (kilka plików) albo `image` (jeden). JPEG/PNG, PNG → JPEG.
- * @return list<string> bajty JPEG
+ * Zdjęcie pisma z żądania multipart (pole `image`, jeden plik). JPEG/PNG, PNG → JPEG.
+ * @return string bajty JPEG
  * @throws \Exception 400 brak/zbyt duży plik, 415 zły format
  */
-function pagesFromRequest(ServerRequestInterface $request): array {
-    $files = $request->getUploadedFiles();
-    $uploads = [];
-    foreach (['images', 'image'] as $key) {
-        if (!isset($files[$key])) continue;
-        foreach (is_array($files[$key]) ? $files[$key] : [$files[$key]] as $u) $uploads[] = $u;
-    }
-    if (!$uploads) throw new \Exception('Brak pliku obrazka', 400);
-    if (count($uploads) > LETTER_MAX_PAGES) throw new \Exception('Zbyt wiele stron (max ' . LETTER_MAX_PAGES . ')', 400);
+function imageFromRequest(ServerRequestInterface $request): string {
+    $upload = $request->getUploadedFiles()['image'] ?? null;
+    if ($upload === null || is_array($upload)) throw new \Exception('Brak pliku obrazka', 400);
+    if ($upload->getError() !== UPLOAD_ERR_OK) throw new \Exception("Błąd przesyłania pliku (kod {$upload->getError()})", 400);
+    if ($upload->getSize() > \MAX_IMAGE_UPLOAD_BYTES) throw new \Exception('Zbyt duże zdjęcie (max ' . (\MAX_IMAGE_UPLOAD_BYTES / 1_048_576) . 'MB)', 400);
+    $bytes = $upload->getStream()->getContents();
+    if ($bytes === '') throw new \Exception('Brak pliku obrazka', 400);
 
-    $pages = [];
-    foreach ($uploads as $u) {
-        if ($u->getError() !== UPLOAD_ERR_OK) throw new \Exception("Błąd przesyłania pliku (kod {$u->getError()})", 400);
-        if ($u->getSize() > \MAX_IMAGE_UPLOAD_BYTES) throw new \Exception('Zbyt duże zdjęcie (max ' . (\MAX_IMAGE_UPLOAD_BYTES / 1_048_576) . 'MB)', 400);
-        $bytes = $u->getStream()->getContents();
-        if ($bytes === '') throw new \Exception('Brak pliku obrazka', 400);
-        $mime = @getimagesizefromstring($bytes)['mime'] ?? null;
-        if ($mime === 'image/png') {
-            $bytes = \vision\normalizePngToJpeg($bytes) ?? throw new \Exception('Nie można otworzyć pliku PNG', 400);
-        } elseif ($mime !== 'image/jpeg') {
-            throw new \Exception('Nieobsługiwany format obrazka: ' . ($mime ?? 'nieznany'), 415);
-        }
-        $pages[] = $bytes;
-    }
-    return $pages;
+    $info = @getimagesizefromstring($bytes); // false dla pliku, który nie jest obrazem
+    $mime = is_array($info) ? ($info['mime'] ?? null) : null;
+    if ($mime === 'image/png') return \vision\normalizePngToJpeg($bytes) ?? throw new \Exception('Nie można otworzyć pliku PNG', 400);
+    if ($mime !== 'image/jpeg') throw new \Exception('Nieobsługiwany format obrazka: ' . ($mime ?? 'nieznany'), 415);
+    return $bytes;
 }
 
 /**
- * Cały przepływ dla użytkownika: kredyty (1 na unikalną stronę) → OCR/ekstrakcja → dopasowanie → propozycje.
- * Wynik ekstrakcji (bez transkryptu – dane osobowe) jest cache'owany po sha1 stron, więc ponowne wgranie tego samego skanu
- * nic nie kosztuje. Skan nie jest nigdzie zapisywany.
- * @param list<string> $jpegPages
+ * Cały przepływ dla użytkownika: kredyt (1 na unikalne zdjęcie) → OCR/ekstrakcja → dopasowanie → propozycje.
+ * Wynik ekstrakcji (bez transkryptu – dane osobowe) jest cache'owany po sha1 zdjęcia, więc ponowne wgranie tego samego pisma
+ * nic nie kosztuje. Zdjęcie nie jest nigdzie zapisywane.
+ * @param string $jpeg bajty JPEG
  * @throws \quota\QuotaExceededException 402
  * @throws \vision\VisionException błąd modelu (502 w warstwie REST)
  */
-function analyzeForUser(\user\User $user, array $jpegPages): array {
-    $key = sha1($user->getEmail() . '|' . implode('|', array_map('sha1', $jpegPages)));
+function analyzeForUser(\user\User $user, string $jpeg): array {
+    $key = sha1($user->getEmail() . '|' . sha1($jpeg));
     $extracted = \cache\get(\cache\Type::Letter, $key);
     $usage = null;
 
     if (!is_array($extracted)) {
-        $charged = [];
+        $charged = false;
         try {
-            foreach ($jpegPages as $bytes) {
-                if (\quota\reserve($user, $bytes)) $charged[] = $bytes;
-            }
-            $extracted = analyzeLetter($jpegPages);
+            $charged = \quota\reserve($user, $jpeg);
+            $extracted = analyzeLetter($jpeg);
         } catch (\Throwable $e) {
-            foreach ($charged as $bytes) \quota\release($user, $bytes);
+            if ($charged) \quota\release($user, $jpeg);
             \telemetry\log('api_letter', null, ['status' => 'error']);
             throw $e;
         }
         \telemetry\log('api_letter', null, ['status' => 'success']);
         log_info(sprintf(
-            'letter cost: pages=%d calls=%d prompt_tokens=%d completion_tokens=%d cost_usd=%.5f model=%s user=%s',
-            count($jpegPages), $extracted['usage']['calls'], $extracted['usage']['prompt_tokens'],
+            'letter cost: calls=%d prompt_tokens=%d completion_tokens=%d cost_usd=%.5f model=%s user=%s',
+            $extracted['usage']['calls'], $extracted['usage']['prompt_tokens'],
             $extracted['usage']['completion_tokens'], $extracted['usage']['cost_usd'], OPENAI_LETTER_MODEL, $user->getEmail()
         ), true);
         unset($extracted['transcript']);

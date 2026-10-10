@@ -145,7 +145,6 @@ if (!defined('OPENAI_VISION_DETAIL'))           define('OPENAI_VISION_DETAIL',  
 // wymaga mocniejszego modelu niż nano z analizy zdjęć zgłoszeń – do potwierdzenia ewaluacją (tools/letter_eval.php).
 if (!defined('OPENAI_LETTER_MODEL'))            define('OPENAI_LETTER_MODEL',            getenv('OPENAI_LETTER_MODEL') ?: 'gpt-5-mini');
 if (!defined('OPENAI_LETTER_MAX_TOKENS'))       define('OPENAI_LETTER_MAX_TOKENS',       (int)(getenv('OPENAI_LETTER_MAX_TOKENS') ?: 12000));
-if (!defined('LETTER_MAX_PAGES'))               define('LETTER_MAX_PAGES',               (int)(getenv('LETTER_MAX_PAGES') ?: 4));
 if (!defined('LETTER_RATE_MAX'))                define('LETTER_RATE_MAX',                (int)(getenv('LETTER_RATE_MAX') ?: 20));
 if (!defined('LETTER_RATE_WINDOW'))             define('LETTER_RATE_WINDOW',             (int)(getenv('LETTER_RATE_WINDOW') ?: 3600));
 
