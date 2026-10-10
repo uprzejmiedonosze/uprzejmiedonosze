@@ -75,6 +75,7 @@ Rules:
   closed_unspecified = proceedings finished but no result is stated; unknown = cannot tell.
 - Never invent values. Use null when something is missing, redacted or unreadable. Do not guess a plate.
 - Copy plates, numbers and dates exactly as printed; do not "fix" typos in the document.
+- Write Polish letters (ą ć ę ł ń ó ś ź ż) as real UTF-8 characters in every string, never as \\uXXXX escape sequences.
 - If a case date has no year and the letter date is known, still return "--MM-DD" (the server resolves the year).
 PROMPT;
 }
@@ -236,6 +237,17 @@ function normalizeLetter(array $p): array {
     ], $warnings];
 }
 
+/**
+ * Model potrafi zwrócić polskie znaki jako dosłowne „\\u0143” (JSON podwójnie zakodowany – po json_decode zostaje w tekście
+ * ukośnik i „u0143”, co aplikacja pokazywała jako „POZNA\\u0143SKA”). Zamieniamy takie sekwencje (także pary surogatów) na UTF-8
+ * we wszystkich tekstach odpowiedzi.
+ */
+function decodeUnicodeEscapes(mixed $v): mixed {
+    if (is_array($v)) return array_map(fn ($x) => decodeUnicodeEscapes($x), $v);
+    if (!is_string($v) || !str_contains($v, '\\u')) return $v;
+    return preg_replace_callback('/(?:\\\\u[0-9a-fA-F]{4})+/', fn ($m) => json_decode('"' . $m[0] . '"') ?? $m[0], $v);
+}
+
 function nullIfBlank(mixed $v): ?string {
     if (!is_string($v)) return null;
     $v = trim($v);
@@ -262,7 +274,7 @@ function analyzeLetter(array $jpegPages, ?string $model = null): array {
         if ($r['parsed'] === null) {
             throw new \vision\VisionException($r['truncated'] ? 'model uciął JSON' : 'model nie zwrócił JSON: ' . substr($raw, 0, 160));
         }
-        return $r['parsed'];
+        return decodeUnicodeEscapes($r['parsed']);
     };
 
     $raw = \vision\chat($history, OPENAI_LETTER_MAX_TOKENS, $usage, 3, $model, 'low');

@@ -11,6 +11,7 @@ use vision\VisionClient;
 use vision\VisionException;
 
 use function letter\analyzeLetter;
+use function letter\decodeUnicodeEscapes;
 use function letter\extractCaseIds;
 use function letter\normalizeLetter;
 use function letter\resolveYear;
@@ -244,6 +245,39 @@ class LetterVisionTest extends TestCase
         $this->assertSame(1000, $r['usage']['prompt_tokens']);
         $this->assertEqualsWithDelta((1000 * 0.25 + 500 * 2.00) / 1_000_000, $r['usage']['cost_usd'], 1e-9);
         $this->assertSame([], $r['warnings']);
+    }
+
+    public function testLiteralUnicodeEscapesFromTheModelAreDecoded(): void
+    {
+        // model zwrócił JSON podwójnie zakodowany: po json_decode w tekście zostaje dosłowne „\\u0143” (aplikacja pokazywała „POZNA\\u0143SKA”)
+        $answer = [
+            'transcript' => 'Obwiniony zmar\\u0142 przy ul. POZNA\\u0143SKA 21.',
+            'letter' => ['kind' => 'single', 'authority' => 'Stra\\u017c Miejska m.st. Warszawy', 'date' => '2026-07-18'],
+            'cases' => [[
+                'ids' => ['udNumber' => null, 'rsow' => null, 'ersow' => null, 'ldz' => null, 'caseMark' => null, 'mandateNo' => null],
+                'plate' => 'XND30380', 'vehicleMake' => null, 'date' => '2025-07-30', 'time' => '19:24',
+                'address' => ['street' => 'POZNA\\u0143SKA', 'number' => '21', 'city' => 'Warszawa'],
+                'outcome' => 'dismissed_other', 'reason' => 'Obwiniony zmar\\u0142', 'articles' => [], 'confidence' => 0.9,
+            ]],
+        ];
+        $this->assertStringContainsString('\\\\u0143', json_encode($answer), 'sprawdzian: JSON z modelu rzeczywiście ma podwójne kodowanie');
+        VisionClient::set(new ClientFake([self::fakeResponse(json_encode($answer))]));
+
+        $r = analyzeLetter(['x']);
+        $this->assertSame('Straż Miejska m.st. Warszawy', $r['letter']['authority']);
+        $this->assertSame('POZNAŃSKA', $r['cases'][0]['address']['street']);
+        $this->assertSame('Obwiniony zmarł', $r['cases'][0]['reason']);
+        $this->assertStringContainsString('POZNAŃSKA', $r['transcript']);
+        $this->assertStringNotContainsString('\\u', json_encode($r, JSON_UNESCAPED_UNICODE));
+    }
+
+    public function testDecodeUnicodeEscapes(): void
+    {
+        $this->assertSame('zażółć gęślą jaźń', decodeUnicodeEscapes('za\\u017c\\u00f3\\u0142\\u0107 g\\u0119\\u015bl\\u0105 ja\\u017a\\u0144'));
+        $this->assertSame('😀', decodeUnicodeEscapes('\\ud83d\\ude00'), 'para surogatów');
+        $this->assertSame(['a' => ['Ł'], 'b' => 5, 'c' => null], decodeUnicodeEscapes(['a' => ['\\u0141'], 'b' => 5, 'c' => null]));
+        $this->assertSame('już poprawne ąę', decodeUnicodeEscapes('już poprawne ąę'));
+        $this->assertSame('ścieżka C:\\temp\\notes', decodeUnicodeEscapes('ścieżka C:\\temp\\notes'), 'inny ukośnik nie jest ruszany');
     }
 
     public function testAnalyzeLetterRepairsNonJson(): void

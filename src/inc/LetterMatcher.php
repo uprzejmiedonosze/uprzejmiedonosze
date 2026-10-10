@@ -84,7 +84,7 @@ function plateSimilarity(?string $a, ?string $b): array {
 
 /**
  * Data wykroczenia z pisma ('Y-m-d' albo '--m-d' gdy bez roku) vs data zgłoszenia.
- * @return array{0: float, 1: string} kind: exact|±1d|±3d|swapped|sameMonth|none
+ * @return array{0: float, 1: string} kind: exact|±1d|±3d|swapped|otherYear|sameMonth|none
  */
 function dateSimilarity(?string $caseDate, ?string $candidateDate): array {
     if ($caseDate === null || $candidateDate === null || !preg_match('/^(\d{4})-(\d{2})-(\d{2})/', $candidateDate, $c)) return [0.0, 'none'];
@@ -113,6 +113,8 @@ function dateSimilarity(?string $caseDate, ?string $candidateDate): array {
     if ($diff === 1) return [0.8, '±1d'];
     if ($diff <= 3) return [0.5, '±3d'];
     if ($day <= 12 && $month <= 12 && $day !== $month && $cy === $y && $cm === $day && $cd === $month) return [0.55, 'swapped'];
+    // policjanci mylą rok („30.07.2025” zamiast „2026”): ten sam dzień i miesiąc, rok o 1 inny – nie dyskwalifikuje zgłoszenia
+    if ($cm === $month && $cd === $day && abs($cy - $y) === 1) return [0.7, 'otherYear'];
     if ($cy === $y && $cm === $month) return [0.15, 'sameMonth'];
     return [0.0, 'none'];
 }
