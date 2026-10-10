@@ -68,6 +68,35 @@ class LetterMatcherTest extends TestCase
         $this->assertSame('none', dateSimilarity(null, '2026-03-06T08:10:00')[1]);
     }
 
+    public function testWrongYearInTheLetterIsAPartialMatchNotADisqualification(): void
+    {
+        $this->assertSame([0.7, 'otherYear'], dateSimilarity('2025-07-30', '2026-07-30T19:24:00'));
+        $this->assertSame([0.7, 'otherYear'], dateSimilarity('2027-07-30', '2026-07-30T19:24:00'));
+        $this->assertSame('none', dateSimilarity('2024-07-30', '2026-07-30T19:24:00')[1], 'dwa lata różnicy to już inny dzień');
+        $this->assertSame('sameMonth', dateSimilarity('2026-07-12', '2026-07-30T19:24:00')[1]);
+    }
+
+    public function testReportThatMatchesInEverythingButTheYearIsStillFound(): void
+    {
+        // zgłoszenie wpisane „na 100%”, pismo ma rok o 1 inny: dawało 45% („nie znaleziono”), bo brak daty ucinał wynik
+        $cands = [self::cand('1', 'XND30380', '2026-07-30T19:24:00', 'Poznańska 21, Warszawa', ['vehicle' => 'Honda Civic'])];
+        $r = matchCase(self::case([
+            'plate' => 'XND30380', 'date' => '2025-07-30', 'time' => '19:24', 'vehicleMake' => 'Honda',
+            'address' => ['street' => 'POZNAŃSKA', 'number' => '21', 'city' => 'Warszawa'],
+        ]), $cands, 5);
+        $this->assertSame('match', $r['level']);
+        $this->assertGreaterThanOrEqual(80, $r['candidates'][0]['score']);
+        $this->assertSame('otherYear', $r['candidates'][0]['signals']['date']);
+    }
+
+    public function testSamePlateAndPlaceOnADifferentDayStillCannotBeAMatch(): void
+    {
+        // A08: ten sam pojazd w tym samym miejscu 11 dni później to inne zgłoszenie – poprawka roku tego nie psuje
+        $cands = [self::cand('1', 'XO8T372', '2026-03-17T08:05:00', 'Przełajowa 14, Poznań')];
+        $r = matchCase(self::case(['plate' => 'XO8T372', 'date' => '2026-03-06', 'time' => '08:10', 'address' => ['street' => 'Przełajowej', 'number' => '14']]), $cands, 5);
+        $this->assertNotSame('match', $r['level']);
+    }
+
     public function testDateWithoutYearComparesMonthAndDay(): void
     {
         $this->assertSame([1.0, 'exact'], dateSimilarity('--09-16', '2025-09-16T16:09:00'));
