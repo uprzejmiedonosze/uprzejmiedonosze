@@ -28,6 +28,7 @@ namespace cache {
         case Passkey;
 
         case Vision;
+        case Letter;
 
         case VehicleInfo;
     }

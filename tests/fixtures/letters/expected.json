@@ -1,0 +1,240 @@
+{
+  "letter-06": {
+    "kind": "single",
+    "authority": "Straż Miejska m.st. Warszawy",
+    "letterDate": "2026-08-05",
+    "cases": [
+      {
+        "plate": "XE943VU",
+        "date": "2025-04-27",
+        "time": "15:01",
+        "street": "Lipowa",
+        "outcome": "dismissed_other",
+        "ids": {}
+      }
+    ]
+  },
+  "letter-04": {
+    "kind": "bulk",
+    "authority": "Komenda Miejska Policji w Gorzowie Wlkp.",
+    "cases": [
+      {
+        "plate": "XAB12345",
+        "date": "2026-04-29",
+        "outcome": "in_progress",
+        "ids": {
+          "udNumber": "UD/777/1",
+          "rsow": "101/26"
+        }
+      },
+      {
+        "plate": "XB0558Q",
+        "date": "2026-04-29",
+        "outcome": "in_progress",
+        "ids": {
+          "udNumber": "UD/777/7",
+          "rsow": "102/26"
+        }
+      },
+      {
+        "plate": "XC406JN",
+        "date": "2026-04-30",
+        "outcome": "in_progress",
+        "ids": {
+          "udNumber": "UD/777/14",
+          "rsow": "103/26"
+        }
+      },
+      {
+        "plate": "XB5378Q",
+        "date": "2026-05-08",
+        "outcome": "fined",
+        "ids": {
+          "udNumber": "UD/777/20",
+          "rsow": "104/26"
+        }
+      },
+      {
+        "plate": "XB3404N",
+        "date": "2026-05-08",
+        "outcome": "in_progress",
+        "ids": {
+          "udNumber": "UD/777/22",
+          "rsow": "105/26"
+        }
+      },
+      {
+        "plate": "XC389JX",
+        "date": "2026-05-08",
+        "outcome": "in_progress",
+        "ids": {
+          "udNumber": "UD/777/26",
+          "rsow": "106/26"
+        }
+      },
+      {
+        "plate": "XB0558Q",
+        "date": "2026-05-08",
+        "outcome": "in_progress",
+        "ids": {
+          "udNumber": "UD/777/27",
+          "rsow": "107/26"
+        }
+      },
+      {
+        "plate": "XB5378Q",
+        "date": "2026-05-12",
+        "outcome": "fined",
+        "ids": {
+          "udNumber": "UD/777/31",
+          "rsow": "108/26"
+        }
+      },
+      {
+        "plate": "XB86847",
+        "date": "2026-05-13",
+        "outcome": "no_offence",
+        "ids": {
+          "udNumber": "UD/777/33",
+          "rsow": "109/26"
+        }
+      },
+      {
+        "plate": "XJA35672",
+        "date": "2026-05-13",
+        "outcome": "instructed",
+        "ids": {
+          "udNumber": "UD/777/34",
+          "rsow": "110/26"
+        }
+      },
+      {
+        "plate": "XBW7LU5",
+        "date": "2026-05-13",
+        "outcome": "in_progress",
+        "ids": {
+          "udNumber": "UD/777/35",
+          "rsow": "111/26"
+        }
+      }
+    ]
+  },
+  "letter-07": {
+    "kind": "single",
+    "authority": "Komisariat Policji I w Gorzowie Wlkp.",
+    "note": "dwa pisma na jednym obrazie",
+    "cases": [
+      {
+        "plate": null,
+        "date": "2026-09-03",
+        "outcome": "fined",
+        "ids": {
+          "rsow": "201/26",
+          "caseMark": "KP I-3?1/999/26"
+        }
+      },
+      {
+        "plate": "XB3681N",
+        "date": "2026-07-15",
+        "time": "09:37",
+        "street": "Mieszka I",
+        "outcome": "perpetrator_unknown",
+        "ids": {
+          "rsow": "202/26"
+        }
+      }
+    ]
+  },
+  "letter-01": {
+    "kind": "single",
+    "authority": "Komisariat Policji Poznań-Północ",
+    "note": "trzy pisma na jednym obrazie; ten sam nr rej. w pismach 1 i 2",
+    "cases": [
+      {
+        "plate": "XO8T372",
+        "date": "2026-03-06",
+        "time": "08:10",
+        "street": "Przełajowa",
+        "outcome": "instructed",
+        "ids": {}
+      },
+      {
+        "plate": "XO8T372",
+        "date": "2026-03-17",
+        "time": "08:05",
+        "street": "Przełajowa",
+        "outcome": "instructed",
+        "ids": {}
+      },
+      {
+        "plate": "XO9HH81",
+        "date": "2026-03-18",
+        "street": "Przełajowa",
+        "outcome": "instructed",
+        "ids": {}
+      }
+    ]
+  },
+  "letter-03": {
+    "kind": "single",
+    "authority": "Straż Miejska m.st. Warszawy",
+    "cases": [
+      {
+        "plate": null,
+        "date": "2026-04-07",
+        "time": "11:42",
+        "street": "Mordechaja Anielewicza",
+        "outcome": "fined",
+        "ids": {
+          "mandateNo": "DJ 1234567"
+        }
+      }
+    ]
+  },
+  "letter-02": {
+    "kind": "single",
+    "cases": [
+      {
+        "plate": "XBUER23",
+        "date": "--09-16",
+        "time": "16:09",
+        "street": "Lubomirskiego",
+        "city": "Kraków",
+        "outcome": "perpetrator_unknown",
+        "ids": {},
+        "note": "rok pominięty w treści pisma, brak daty pisma – data bez roku (--MM-DD)"
+      }
+    ]
+  },
+  "letter-08": {
+    "kind": "single",
+    "authority": "Komisariat Policji w Milanówku",
+    "letterDate": "2026-09-30",
+    "cases": [
+      {
+        "plate": "XP9211Q",
+        "date": "2025-10-12",
+        "time": "15:35",
+        "street": "Goplańska",
+        "city": "Warszawa",
+        "outcome": "perpetrator_unknown",
+        "ids": {}
+      }
+    ]
+  },
+  "letter-05": {
+    "kind": "single",
+    "authority": "Komisariat Policji II w Krakowie",
+    "cases": [
+      {
+        "plate": "XK4424N",
+        "date": "2026-02-06",
+        "time": "07:55",
+        "street": "Żółkiewskiego",
+        "city": "Kraków",
+        "outcome": "no_offence",
+        "ids": {}
+      }
+    ]
+  }
+}
