@@ -237,7 +237,7 @@ class LetterVisionTest extends TestCase
         $answer = self::modelAnswer(self::transcript($name), self::expected()[$name]);
         VisionClient::set(new ClientFake([self::fakeResponse(json_encode($answer))]));
 
-        $r = analyzeLetter(['jpeg-bytes']);
+        $r = analyzeLetter('jpeg-bytes');
         $this->assertSame('single', $r['letter']['kind']);
         $this->assertSame('XE943VU', $r['cases'][0]['plate']);
         $this->assertSame('dismissed_other', $r['cases'][0]['outcome']);
@@ -263,7 +263,7 @@ class LetterVisionTest extends TestCase
         $this->assertStringContainsString('\\\\u0143', json_encode($answer), 'sprawdzian: JSON z modelu rzeczywiście ma podwójne kodowanie');
         VisionClient::set(new ClientFake([self::fakeResponse(json_encode($answer))]));
 
-        $r = analyzeLetter(['x']);
+        $r = analyzeLetter('x');
         $this->assertSame('Straż Miejska m.st. Warszawy', $r['letter']['authority']);
         $this->assertSame('POZNAŃSKA', $r['cases'][0]['address']['street']);
         $this->assertSame('Obwiniony zmarł', $r['cases'][0]['reason']);
@@ -284,7 +284,7 @@ class LetterVisionTest extends TestCase
     {
         $answer = self::modelAnswer('RSOW 1/26', ['kind' => 'single', 'cases' => [['plate' => 'XO8T372', 'outcome' => 'fined', 'ids' => []]]]);
         VisionClient::set(new ClientFake([self::fakeResponse('Oto wynik: brak JSON'), self::fakeResponse(json_encode($answer))]));
-        $r = analyzeLetter(['x']);
+        $r = analyzeLetter('x');
         $this->assertSame(2, $r['usage']['calls']);
         $this->assertStringContainsString('naprawa', $r['warnings'][0]);
     }
@@ -295,6 +295,6 @@ class LetterVisionTest extends TestCase
         VisionClient::set(new ClientFake([self::fakeResponse($bad), self::fakeResponse($bad)]));
         $this->expectException(VisionException::class);
         $this->expectExceptionMessage('walidacja');
-        analyzeLetter(['x']);
+        analyzeLetter('x');
     }
 }

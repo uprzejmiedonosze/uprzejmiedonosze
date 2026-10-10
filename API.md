@@ -347,13 +347,13 @@ zbiorcze): skan → OCR → numer sprawy → dopasowane zgłoszenie → gotowa p
 (`src/inc/integrations/LetterVision.php`, `src/inc/LetterMatcher.php`, `src/inc/LetterProposal.php`); klient tylko pokazuje
 i zatwierdza. Wymaga autoryzacji, rejestracji i zaakceptowanych warunków. Limit żądań: `LETTER_RATE_MAX` na
 `LETTER_RATE_WINDOW` (domyślnie 20/h) → 429. Analiza **zużywa kredyty analizy zdjęć** (patrz „Limit przetworzonych zdjęć”):
-1 kredyt na unikalną stronę (sha1), ponowne wgranie tego samego skanu jest za darmo, błąd modelu zwraca zarezerwowane miejsce.
+1 kredyt na unikalne zdjęcie (sha1), ponowne wgranie tego samego pisma jest za darmo, błąd modelu zwraca zarezerwowane miejsce.
 Skan nie jest zapisywany; transkrypt nie jest zwracany klientowi.
 
 ### POST `/api/rest/letters/analyze`
 
-`multipart/form-data`: `images[]` (1–`LETTER_MAX_PAGES`, domyślnie 4 pliki JPEG/PNG, każdy do `MAX_IMAGE_UPLOAD_BYTES`) albo
-pojedyncze pole `image`. Jedno zdjęcie może pokazywać kilka pism.
+`multipart/form-data`: jedno pole `image` (JPEG/PNG do `MAX_IMAGE_UPLOAD_BYTES`) – jedno zdjęcie pisma na żądanie, bez
+wielostronicowości. Jedno zdjęcie może pokazywać kilka pism.
 
 Response (200):
 
@@ -399,7 +399,7 @@ pozwala na `match`. Status wyznacza serwer z `outcome`: `fined`→`confirmed-fin
 końcowego), `closed_unspecified`/`unknown`→bez zmiany; przejście musi być dozwolone w `statuses.json`
 (`statusBlocked`). Pismo zbiorcze zwraca wiele `cases`; pisma statystyczne/ogólnikowe – pustą listę.
 
-Errors: 400 (brak pliku/zbyt duży/zbyt wiele stron), 402 (limit zdjęć, `quota`), 415 (zły format), 429, 502 (model nie
+Errors: 400 (brak pliku/zbyt duży), 402 (limit zdjęć, `quota`), 415 (zły format), 429, 502 (model nie
 odczytał pisma).
 
 ### POST `/api/rest/app/{appId}/letter/apply`
