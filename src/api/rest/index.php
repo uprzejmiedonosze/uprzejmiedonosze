@@ -162,11 +162,13 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
         $stopAgresjiRaw = $params['stopAgresji'] ?? null;
         $stopAgresji = $stopAgresjiRaw === null ? null : ($stopAgresjiRaw === 'SA');
         $shareRecydywa = getParam($params, 'shareRecydywa', 'Y') == 'Y';
+        // 'm' | 'f' = explicit grammatical gender (account edit); absent -> kept, or guessed from the name when unset/renamed.
+        $sex = $params['sex'] ?? null;
     
         /** @var \user\User $user */
         $user = $request->getAttribute('user');
     
-        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa);
+        $user->updateUserData($name, $msisdn, $address, $edelivery, $stopAgresji, $shareRecydywa, $sex);
         \user\save($user);
         $user->isRegistered = $user->isRegistered();
         $request = $request->withAttribute('user', $user);

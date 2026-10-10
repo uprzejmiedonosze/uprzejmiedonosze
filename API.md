@@ -21,7 +21,7 @@ Requires authorization.
 
 ### GET `/api/rest/user/`
 
-Returns current user data, including `lastLocation` (`"lat,lng"` of the last report, otherwise the geocoded home address; absent when neither is known) (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats` and `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`).
+Returns current user data, including `lastLocation` (`"lat,lng"` of the last report, otherwise the geocoded home address; absent when neither is known) (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats`, `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`) and `sexIdentifier` (`"m"`/`"f"`: the stored choice, else guessed from the name — what the account edit form preselects).
 
 ### PATCH `/api/rest/user/`
 
@@ -43,6 +43,8 @@ POST params (JSON body):
   * `edelivery` (optional)
   * `stopAgresji` (optional, default 'SM', can be 'SA')
   * `shareRecydywa` (optional, default 'Y')
+  * `sex` (optional, `m`/`f`) — grammatical gender used in the reports ("byłem"/"byłam świadkiem"). Like the web account form: an explicit
+    choice is kept on later saves that omit the field and is re-guessed from the name only when the name changes. Registration should omit it.
 
 ### DELETE `/api/rest/user/`
 
