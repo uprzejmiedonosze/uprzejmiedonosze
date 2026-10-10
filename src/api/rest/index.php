@@ -21,7 +21,7 @@ set_error_handler("ApiErrorHandler");
 
 require(INC_DIR . '/include.php');
 require(INC_DIR . '/API.php');
-require(INC_DIR . '/LetterProposal.php');
+require_once(INC_DIR . '/LetterProposal.php'); // ładuje integrations/Vision.php (require_once) – ten plik niżej też musi być require_once
 require(INC_DIR . '/middleware/JsonBodyParser.php');
 require(INC_DIR . '/middleware/JsonErrorRenderer.php');
 require(INC_DIR . '/middleware/AuthMiddleware.php');
@@ -29,7 +29,7 @@ require(INC_DIR . '/middleware/TokenSessionMiddleware.php');
 require(INC_DIR . '/middleware/UserMiddleware.php');
 require(INC_DIR . '/middleware/AppMiddleware.php');
 require(INC_DIR . '/Twig.php');
-require(INC_DIR . '/integrations/Vision.php');
+require_once(INC_DIR . '/integrations/Vision.php');
 require_once(INC_DIR . '/UserRemoval.php');
 require_once(INC_DIR . '/handlers/PasskeyHandler.php');
 
