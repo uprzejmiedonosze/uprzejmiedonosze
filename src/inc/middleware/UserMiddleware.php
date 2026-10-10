@@ -77,7 +77,8 @@ class AddStatsMiddleware implements MiddlewareInterface {
         $user = $request->getAttribute('user');
         // `?fresh=1` bypasses the 24 h stats cache (clients showing counters, e.g. the report list filter)
         $user->stats = \user\stats(!isset($request->getQueryParams()['fresh']), $user);
-        $user->sexStrings = $user->getSex(); // gendered phrases for clients (web: config.sex), e.g. `bylam` = "byłem"/"byłam"/"byłam/em"
+        $user->sexStrings = $user->getSex();
+        $user->sexIdentifier = $user->getSexIdentifier(); // 'm' | 'f' – effective gender (stored choice, else guessed from the name), for the account edit form // gendered phrases for clients (web: config.sex), e.g. `bylam` = "byłem"/"byłam"/"byłam/em"
         $request = $request->withAttribute('user', $user);
         $response->getBody()->write(json_encode($user));
         return $response;
