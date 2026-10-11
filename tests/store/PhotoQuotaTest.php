@@ -64,6 +64,16 @@ class PhotoQuotaTest extends DatabaseTestCase
         }
     }
 
+    public function testStatusExposesTheTiersTableFromConfig(): void
+    {
+        $this->assertSame(
+            [['minAmount' => 0, 'limit' => 50], ['minAmount' => 10, 'limit' => 100], ['minAmount' => 25, 'limit' => 300], ['minAmount' => 50, 'limit' => null]],
+            \quota\status($this->user())['tiers'],
+            'rosnąco wg kwoty, pierwszy wiersz = bez wsparcia, null = bez limitu'
+        );
+        $this->assertSame(\quota\tiers(), \quota\status($this->user())['tiers']);
+    }
+
     public function testFormerPatronGetsFreeLimit(): void
     {
         $this->setPatron(['amount' => 50, 'active' => false]);

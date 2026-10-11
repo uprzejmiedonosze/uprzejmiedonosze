@@ -40,7 +40,20 @@ function windowStart(): int {
     return time() - PHOTO_QUOTA_DAYS * 86400;
 }
 
-/** @return array{used:int,limit:?int,remaining:?int,windowDays:int,resetsAt:?int,tier:string} */
+/**
+ * Progi limitu rosnąco wg miesięcznej kwoty wsparcia (zł): [['minAmount'=>0,'limit'=>50], ['minAmount'=>10,'limit'=>100], …],
+ * limit null = bez limitu. Jedno źródło prawdy (config.php) także dla tabeli „dlaczego są limity” w aplikacji.
+ * @return list<array{minAmount:int,limit:?int}>
+ */
+function tiers(): array {
+    $tiers = PHOTO_QUOTA_TIERS;
+    ksort($tiers);
+    $out = [['minAmount' => 0, 'limit' => PHOTO_QUOTA_FREE]];
+    foreach ($tiers as $min => $limit) $out[] = ['minAmount' => (int)$min, 'limit' => $limit];
+    return $out;
+}
+
+/** @return array{used:int,limit:?int,remaining:?int,windowDays:int,resetsAt:?int,tier:string,tiers:list<array{minAmount:int,limit:?int}>} */
 function status(User $user): array {
     $stmt = \store\prepare('SELECT COUNT(*), MIN(created_at) FROM ' . TABLE . ' WHERE user_email = :e AND created_at > :s');
     $stmt->execute([':e' => $user->getEmail(), ':s' => windowStart()]);
@@ -53,6 +66,7 @@ function status(User $user): array {
         'windowDays' => PHOTO_QUOTA_DAYS,
         'resetsAt' => $oldest ? (int)$oldest + PHOTO_QUOTA_DAYS * 86400 : null,
         'tier' => $tier,
+        'tiers' => tiers(),
     ];
 }
 
