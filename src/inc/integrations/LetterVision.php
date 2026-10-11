@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/Vision.php'); // \vision\chat(), imgPart(), extractJson() (przez VisionSchema), visionCostUsd()
 require_once(__DIR__ . '/../LetterMatcher.php'); // idFold()
 
-// Rozpoznawanie pism z Policji / Straży Miejskiej (odpowiedzi na zgłoszenia): OCR + ekstrakcja identyfikatorów spraw
+// Rozpoznawanie pism z policji i SM (odpowiedzi na zgłoszenia): OCR + ekstrakcja identyfikatorów spraw
 // przez multimodalny model OpenAI w jednym wywołaniu. Wzorzec jak vision\analyzeChunk(): jedna runda naprawy na nie-JSON
 // i jedna na błędy walidacji, głośny błąd (\vision\VisionException) zamiast zgadywania.
 //
