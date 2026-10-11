@@ -342,7 +342,7 @@ Errors: 400 (bad body/size/indices), 415 (unsupported image format), 429 (rate l
 
 ## Letters endpoints
 
-Odpowiedzi Policji / Straży Miejskiej na zgłoszenia (mandat, pouczenie, odmowa wniosku o ukaranie, „w toku”, pisma
+Odpowiedzi policji i SM na zgłoszenia (mandat, pouczenie, odmowa wniosku o ukaranie, „w toku”, pisma
 zbiorcze): skan → OCR → numer sprawy → dopasowane zgłoszenie → gotowa propozycja edycji. Cała logika po stronie serwera
 (`src/inc/integrations/LetterVision.php`, `src/inc/LetterMatcher.php`, `src/inc/LetterProposal.php`); klient tylko pokazuje
 i zatwierdza. Wymaga autoryzacji, rejestracji i zaakceptowanych warunków. Limit żądań: `LETTER_RATE_MAX` na
