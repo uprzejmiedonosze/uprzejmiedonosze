@@ -193,13 +193,13 @@ tylko `carImage`); web bez zmian. Progi (aktywny patron Patronite wg kwoty): bra
 
 Przekroczenie → **402** `{error, status, quota}` z `POST /photos/{id}/alpr`, `POST /app/{id}/image` (gałąź `photoId`)
 i `POST /vision/candidate`; w MCP – błąd narzędzia z tym samym komunikatem, bez tworzenia szkicu.
-`quota` = `{used, limit|null, remaining|null, windowDays, resetsAt|null (unix), tier}`; ten sam obiekt jako `photoQuota`
+`quota` = `{used, limit|null, remaining|null, windowDays, resetsAt|null (unix), tier, tiers: [{minAmount, limit|null}]}` (`tiers` = progi rosnąco wg miesięcznej kwoty wsparcia w zł, pierwszy `minAmount: 0` = bez wsparcia; źródło tabeli „dlaczego są limity” w appce); ten sam obiekt jako `photoQuota`
 w `GET /user/dashboard`, w odpowiedzi `/photos/{id}/alpr` i w wyniku MCP `create_report_draft`. Błąd dostawcy zwraca
 zarezerwowane miejsce. Migracja: `src/sql/migration_20261006_photo_quota.sql`.
 
 ### GET `/api/rest/photos/quota`
 
-Zużycie limitu przetworzonych zdjęć użytkownika (obiekt `quota`, patrz wyżej: `{used, limit|null, remaining|null, windowDays, resetsAt|null, tier}`).
+Zużycie limitu przetworzonych zdjęć użytkownika (obiekt `quota`, patrz wyżej: `{used, limit|null, remaining|null, windowDays, resetsAt|null, tier, tiers}`).
 
 ### DELETE `/api/rest/photos/{photoId}`
 
