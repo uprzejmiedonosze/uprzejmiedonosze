@@ -52,7 +52,7 @@
     losowym ciągiem znaków.</li>
 </ol>
 
-<h3>II. Retencja danych i usuwanie nieaktywnych kont</h3>
+<h3 id="usuwanie-konta">II. Retencja danych i usuwanie nieaktywnych kont</h3>
 <ol>
     <li>Konta Użytkowników, które nie były aktywne przez ponad 12 miesięcy, są automatycznie
     usuwane wraz ze wszystkimi powiązanymi zgłoszeniami i plikami (zdjęciami).</li>
@@ -212,10 +212,83 @@
         </li>
         <li>system
             <a href="https://sentry.io/" target="_blank" rel="external">Sentry</a> do 
-            rejestrowania potencjalnych błędów po stronie interfejsu użytkownika.
+            rejestrowania potencjalnych błędów po stronie interfejsu użytkownika oraz awarii
+            aplikacji mobilnej. Raporty nie zawierają adresu e-mail ani innych danych
+            identyfikujących Użytkownika, a adresy zapytań są pozbawione parametrów (np. współrzędnych).
         </li>
     </ul>
 </ol>
 
+<h3>VI. Aplikacja mobilna</h3>
+<ol>
+    <li>Aplikacja mobilna „Uprzejmie Donoszę PRO” (iOS i Android) korzysta z tego samego konta,
+    danych i zasad przetwarzania co serwis www. Dane są przesyłane wyłącznie szyfrowanym
+    połączeniem (HTTPS).</li>
+    <li>Aplikacja prosi o dostęp do:
+    <ul>
+        <li>zdjęć w galerii urządzenia (wraz z metadanymi: datą wykonania i lokalizacją zapisaną
+            w zdjęciu) – tylko do zdjęć wybranych przez Użytkownika do zgłoszenia;</li>
+        <li>aparatu – wyłącznie do zrobienia zdjęcia pisma z policji lub straży miejskiej;</li>
+        <li>lokalizacji urządzenia – wyłącznie na żądanie Użytkownika (wskazanie miejsca wykroczenia
+            na mapie) i tylko gdy aplikacja jest otwarta; aplikacja nie śledzi położenia w tle.</li>
+    </ul>
+    Odmowa dostępu nie blokuje pozostałych funkcji aplikacji.</li>
+    <li>Aplikacja nie zawiera reklam, nie śledzi Użytkownika między aplikacjami i nie korzysta
+    z reklamowych identyfikatorów urządzenia.</li>
+    <li>Logowanie odbywa się linkiem wysyłanym na adres e-mail, kontem Google (Android) albo
+    kluczem dostępu (passkey). W przypadku klucza dostępu Administrator przechowuje wyłącznie
+    jego identyfikator i klucz publiczny; klucz prywatny pozostaje na urządzeniu Użytkownika.
+    Dane logowania aplikacja przechowuje w bezpiecznym magazynie urządzenia.</li>
+    <li>Konto można skasować w aplikacji („Konto” → „Skasuj konto”) albo mailowo (patrz punkt II).</li>
+</ol>
+
+<h3>VII. Podmioty przetwarzające dane na zlecenie Administratora</h3>
+<ol>
+    <li>Do obsługi zgłoszeń Administrator korzysta z usług poniższych podmiotów, które przetwarzają
+    dane wyłącznie w celu świadczenia usługi i na polecenie Administratora:
+    <ul>
+        <li>OpenAI – analiza wizyjna zdjęć (wstępne wykrywanie twarzy oraz odczyt treści pism
+            z policji i straży miejskiej;</li>
+        <li>Plate Recognizer i OpenALPR – odczyt numerów rejestracyjnych ze zdjęć;</li>
+        <li>Google Cloud Vision – wyłącznie wykrywanie twarzy na zdjęciach kontekstowych, aby
+            zamazać je w publicznej galerii;</li>
+        <li>OpenStreetMap Nominatim, Google Maps i Mapbox – ustalenie adresu na podstawie współrzędnych
+            oraz wyświetlanie mapy (aplikacja pobiera podkład mapy bezpośrednio od Mapbox, który
+            otrzymuje współrzędne oglądanego obszaru i adres IP urządzenia);</li>
+        <li>parkowanie.zbiorkom.live – marka i dane techniczne pojazdu na podstawie numeru rejestracyjnego;</li>
+        <li>Mailgun – wysyłka wiadomości e-mail ze zgłoszeniem i powiadomień;</li>
+        <li>Backblaze B2 – przechowywanie plików zgłoszeń i kopii zapasowych (centrum danych w Unii Europejskiej);</li>
+        <li>Sentry – raporty błędów i awarii (patrz punkt V).</li>
+    </ul></li>
+    <li>Dane zgłoszeń przetwarzane przez wymienionych dostawców (z wyjątkiem usług pomocniczych
+    wymienionych w punkcie 3) pozostają na serwerach w regionach Unii Europejskiej i Europejskiego
+    Obszaru Gospodarczego; Administrator nie przekazuje ich do państw trzecich.
+    Wyjątkiem jest opisana w punkcie IV podstrona <a href="https://galeria.uprzejmiedonosze.net/">galeria</a>
+    (Tumblr).</li>
+    <li>Usługi pomocnicze: uwierzytelnianie Google Firebase (patrz punkt V) jest usługą o globalnej
+    infrastrukturze – adres e-mail i identyfikator konta mogą być przetwarzane przez Google także poza
+    EOG na podstawie decyzji Komisji Europejskiej o odpowiednim stopniu ochrony (EU-US Data Privacy
+    Framework) lub standardowych klauzul umownych. Podobnie żądania map do Mapbox (punkt 1).</li>
+    <li>Zdjęcia i skany pism trafiają do dostawców AI (OpenAI) dopiero po wyrażeniu przez Użytkownika
+    zgody w aplikacji mobilnej przed pierwszym wyborem zdjęć. Zgodę można w każdej chwili cofnąć
+    w zakładce „Konto”; cofnięcie nie wpływa na zgłoszenia już utworzone.</li>
+    <li>Skan pisma z policji lub straży miejskiej jest przekazywany do odczytu i nie jest przez serwis
+    zapisywany. Zapisywane są wyłącznie dane zatwierdzone przez Użytkownika (status zgłoszenia,
+    numer sprawy, prywatna notatka).</li>
+    <li>Zgłoszenie jest wysyłane do organu (straży miejskiej lub policji) wybranego przez Użytkownika;
+    organ ten przetwarza dane we własnym imieniu i na własnej podstawie prawnej.</li>
+</ol>
+
+<h3>VIII. Dane osób trzecich</h3>
+<ol>
+    <li>Zdjęcia dołączane do zgłoszeń mogą przedstawiać osoby trzecie lub ich pojazdy (numer
+    rejestracyjny, marka, miejsce i czas zdarzenia, czasem wizerunek). Administrator przetwarza
+    te dane w prawnie uzasadnionym interesie (art. 6 ust. 1 lit. f RODO) polegającym na umożliwieniu
+    dokumentowania wykroczeń drogowych i zgłaszania ich właściwym organom.</li>
+    <li>Twarze widoczne na zdjęciach kontekstowych są wykrywane i zamazywane przed publikacją
+    w publicznej galerii.</li>
+    <li>Osoba, której dane dotyczą, może zwrócić się o ich sprostowanie lub usunięcie na adres
+    szymon@uprzejmiedonosze.net.</li>
+</ol>
 
 {% endblock %}
