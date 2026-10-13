@@ -1,22 +1,15 @@
 # tools
-RSYNC         := rsync
-RSYNC_FLAGS   := --human-readable --recursive --delete --exclude 'vendor/bin/*'
-HOSTING       := uprzejmiedonosze.net
-STAGING_PATH  := /opt/staging.uprzejmiedonosze.net
-RSYNC_STAGING := --human-readable --recursive --delete \
-    --exclude-from=.dockerignore
-CYPRESS     := ./node_modules/.bin/cypress
-CYPRESS_KEY := 8a0db00f-b36c-4530-9c82-422b0be32b5b
+RSYNC      := rsync
+CYPRESS    := ./node_modules/.bin/cypress
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DATE       := $(shell date '+%Y-%m-%d')
-TAG_NAME      := $(shell echo $(GIT_BRANCH)_$(DATE))
-PROD_HOST         := uprzejmiedonosze.net
-SHADOW_HOST       := shadow.uprzejmiedonosze.net
-STAGING_APP_HOST  := staging.uprzejmiedonosze.net
-BUILD_HOST        ?= $(PROD_HOST)
-BUILD_ENV_FILE    ?= services/.env.prod
-BUILDER_IMAGE     := ud-builder-prod
-BUILDER_CTR   := ud-builder-prod-tmp
+TAG_NAME   := $(shell echo $(GIT_BRANCH)_$(DATE))
+
+# Docker/GHCR deployment: images are built locally and pushed to GHCR
+# (scripts/build-push.sh); the host only pulls (scripts/deploy.sh).
+DEPLOY_HOSTING    := uprzejmiedonosze.net
+DEPLOY_DIR        := /opt/uprzejmiedonosze
+DEPLOY_DIR_SHADOW := /opt/uprzejmiedonosze-shadow
 
 .DEFAULT_GOAL := help
 
@@ -37,12 +30,11 @@ init-db-dev: ## Initialize dev SQLite database (run once)
 		-init /var/www/uprzejmiedonosze.net/webapp/sql/init_empty.sql
 
 .PHONY: init-db-staging
-init-db-staging: ## Initialize staging SQLite database (run once on server)
-	@ssh $(HOSTING) "sqlite3 $(STAGING_PATH)/db/store.sqlite \
-		< $(STAGING_PATH)/webapp/sql/init_empty.sql"
+init-db-staging: ## Wipe and re-initialize the staging SQLite database (DELETES all staging data)
+	@ssh $(DEPLOY_HOSTING) "docker exec staging-webapp-srv-1 sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite \
+		-init /var/www/uprzejmiedonosze.net/webapp/sql/init_empty.sql"
 
-# Linting and unit tests run in the Docker builder stage (services/webapp/Dockerfile).
-# Use these targets to run them on demand against a running container.
+# Linting and unit tests also run in the Docker builder stage (services/webapp/Dockerfile).
 
 # ── Testing ───────────────────────────────────────────────────────────────────
 
@@ -76,7 +68,7 @@ check-branch-main: ## Check that current branch is main
 .PHONY: confirmation
 confirmation:
 	@tput setaf 160 && \
-		echo "\nPRODUCTION QUICKFIX!!" && \
+		echo "\nPRODUCTION DEPLOY!!" && \
 		tput sgr0 && \
 		echo "\nAre you sure[yes/N]" && \
 		read ans && \
@@ -90,29 +82,7 @@ log-from-last-prod: ## Commits since last prod release
 diff-from-last-prod: ## Diff since last prod release
 	@git diff --histogram --color-words $(call last-tag) -- . ':(exclude)package-lock.json' ':(exclude)tools/package-lock.json'
 
-.PHONY: sentry-release
-sentry-release: ## Create Sentry release and upload JS source maps
-	@git tag --force -a "prod_$(TAG_NAME)" -m "prod-release"
-	@git push origin --quiet --force "prod_$(TAG_NAME)"
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js \
-		./node_modules/.bin/sentry-cli sourcemaps inject ./export/public/js
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js \
-		./node_modules/.bin/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-php \
-		./node_modules/.bin/sentry-cli releases new "prod_$(TAG_NAME)" --finalize
-	@SENTRY_ORG=uprzejmie-donosze SENTRY_PROJECT=ud-js \
-		./node_modules/.bin/sentry-cli sourcemaps upload --org uprzejmie-donosze \
-		--project ud-js ./export/public/js
-
-# ── Docker/GHCR deployment (../edge cutover) ──────────────────────────────────
-# Images are built locally and pushed to GHCR (scripts/build-push.sh); the
-# host only pulls (scripts/deploy.sh) — see the migration plan. These targets
-# will replace quickfix/old-staging/shadow/build-export below once the
-# ../edge cutover on uprzejmiedonosze.net is done; both sets coexist until then.
-
-DEPLOY_HOSTING := uprzejmiedonosze.net
-DEPLOY_DIR     := /opt/uprzejmiedonosze
-DEPLOY_DIR_SHADOW := /opt/uprzejmiedonosze-shadow
+# ── Deployment (Docker images via GHCR) ──────────────────────────────────────
 
 .PHONY: deploy-staging
 deploy-staging: check-git-clean ## Build+push staging images to GHCR, deploy on the host
@@ -154,59 +124,6 @@ deploy-healthcheck:
 	echo "$(URL) HTTP status: $$status"; \
 	[ "$$status" = "200" ] || ( echo "Deploy check failed: $(URL) returned $$status" && exit 1 )
 
-# ── Prod build & deployment (legacy rsync, pre-Docker) ────────────────────────
-
-.PHONY: build-export
-build-export: ## Build export/ and vendor/ via Docker builder (prod config)
-	@echo "==> Building Docker builder (HOST=$(BUILD_HOST))"
-	@set -a && . ./$(BUILD_ENV_FILE) && APP_HOST=$(BUILD_HOST) && set +a && \
-	docker build \
-		--target builder \
-		--build-arg APP_HOST \
-		--build-arg APP_HTTPS \
-		-f services/webapp/Dockerfile \
-		-t $(BUILDER_IMAGE) .
-	@echo "==> Extracting export/ and vendor/"
-	@docker rm -f $(BUILDER_CTR) 2>/dev/null || true
-	@docker create --name $(BUILDER_CTR) $(BUILDER_IMAGE)
-	@rm -rf export vendor
-	@docker cp $(BUILDER_CTR):/build/export ./export
-	@docker cp $(BUILDER_CTR):/build/vendor ./vendor
-	@docker rm $(BUILDER_CTR)
-	@docker rmi $(BUILDER_IMAGE)
-	@php tools/gen-config-prod.php $(BUILD_ENV_FILE)
-
-.PHONY: old-staging
-old-staging: HOST          := $(STAGING_APP_HOST)
-old-staging: BUILD_HOST    := $(STAGING_APP_HOST)
-old-staging: BUILD_ENV_FILE := services/.env.staging
-old-staging: clean build-export ## Deploy to staging server via Docker build + rsync (no checks, no sentry)
-	@echo "==> Deploying to $(HOST)"
-	@$(RSYNC) $(RSYNC_FLAGS) export/* $(HOSTING):/var/www/$(HOST)/webapp
-	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
-	@$(RSYNC) --human-readable services/.env.staging $(HOSTING):/var/www/$(HOST)/.env.staging
-
-.PHONY: shadow
-shadow: HOST      := $(SHADOW_HOST)
-shadow: BUILD_HOST := $(SHADOW_HOST)
-shadow: clean build-export ## Deploy to shadow server (no branch/clean checks, no sentry)
-	@echo "==> Deploying to $(HOST)"
-	@$(RSYNC) $(RSYNC_FLAGS) export/* $(HOSTING):/var/www/$(HOST)/webapp
-	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
-	@$(RSYNC) --human-readable services/.env.prod $(HOSTING):/var/www/$(HOST)/.env.prod
-	@$(MAKE) clean
-
-.PHONY: quickfix
-quickfix: HOST := $(PROD_HOST)
-quickfix: check-branch-main check-git-clean diff-from-last-prod confirmation clean build-export ## Quickfix on production (Docker build)
-	@echo "==> Deploying to $(HOST)"
-	$(sentry-inject)
-	@$(RSYNC) $(RSYNC_FLAGS) export/* $(HOSTING):/var/www/$(HOST)/webapp
-	@$(RSYNC) $(RSYNC_FLAGS) vendor $(HOSTING):/var/www/$(HOST)/
-	@$(RSYNC) --human-readable services/.env.prod $(HOSTING):/var/www/$(HOST)/.env.prod
-	@$(MAKE) sentry-release
-	@$(MAKE) clean
-
 # ── Dev convenience ───────────────────────────────────────────────────────────
 
 .PHONY: dev
@@ -241,9 +158,4 @@ help:
 
 define last-tag
 $(shell git show-ref --tags | grep tags/prod_main | tail -n 1 | cut -d" " -f 1)
-endef
-
-define sentry-inject
-@./node_modules/.bin/sentry-cli sourcemaps inject \
-    --org uprzejmie-donosze --project ud-js ./export/public/js
 endef

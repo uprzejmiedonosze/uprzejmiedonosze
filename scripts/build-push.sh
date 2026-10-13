@@ -8,7 +8,7 @@
 #   <env>  prod | staging | shadow  — selects APP_HOST baked into the image
 #          (config.env.php, sitemap, SCSS — see services/webapp/build.sh)
 #   <tag>  image tag. Convention: prod uses the same "prod_<branch>_<date>"
-#          string as `make sentry-release`'s git tag; staging/shadow use the
+#          string as the git tag `make deploy-prod` creates; staging/shadow use the
 #          git SHA.
 #
 #   --sentry               after pushing, extract the builder stage's

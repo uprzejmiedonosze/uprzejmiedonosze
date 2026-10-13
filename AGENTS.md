@@ -21,13 +21,15 @@ make test               # Run PHPUnit in a throwaway builder-test container (wor
 make cypress-local      # Run Cypress E2E tests against local dev environment
 
 # Release
-make sentry-release     # Tag prod release + upload JS source maps to Sentry
+make deploy-prod        # Build+push prod images, deploy, Sentry release + sourcemaps, git tag
+make deploy-staging     # Build+push staging images and deploy (tag = git SHA)
+make deploy-shadow      # Build+push shadow images and deploy (tag = git SHA)
 make log-from-last-prod # Commits since last production release
 make diff-from-last-prod # Diff since last production release
 
 # Cleanup
 make clean              # Remove export/, .parcel-cache/
-make init-db-staging    # Initialize staging SQLite database (via SSH)
+make init-db-staging    # Wipe + re-initialize staging SQLite database (via SSH, deletes data)
 ```
 
 **Docker Compose — direct commands:**
@@ -180,7 +182,7 @@ php-fpm's own operational log (`error_log` in `php-fpm.conf`, master start/stop,
 | S3 | off | on | on |
 | CDN prefix | `cdn2` | `cdn2stg` | `cdn2` |
 
-**shadow** (Docker era, added 2026-10-06): a third server deploy target at `/opt/uprzejmiedonosze-shadow` on the host — a full prod mirror (`APP_ENV=prod` inside the containers, so PHP behaves like prod including real email sending), with its own baked `APP_HOST=shadow.uprzejmiedonosze.net`, port 18082. It shares the prod data via symlinks (`/var/www/shadow.uprzejmiedonosze.net/{db,cdn2,cdn}` → `../uprzejmiedonosze.net/`, since 2020) — the 5.6 GB WAL-mode `store.sqlite` is the production one, so anything done on shadow mutates prod data. Bare app like staging (webapp-srv + memcached only — its worker would just duplicate prod's cron jobs against the same shared db/cdn2). Traefik router is namespaced `ud-shadow` via `TRAEFIK_ENV` in `services/.env.shadow` (nested `${VAR:-${VAR2}}` interpolation); logs use `LOG_IDENT=shadow-webapp-srv`. Deploy with `make deploy-shadow` (tag = git SHA). Replaces the legacy rsync `make shadow` target (dead since the edge cutover).
+**shadow** (Docker era, added 2026-10-06): a third server deploy target at `/opt/uprzejmiedonosze-shadow` on the host — a full prod mirror (`APP_ENV=prod` inside the containers, so PHP behaves like prod including real email sending), with its own baked `APP_HOST=shadow.uprzejmiedonosze.net`, port 18082. It shares the prod data via symlinks (`/var/www/shadow.uprzejmiedonosze.net/{db,cdn2,cdn}` → `../uprzejmiedonosze.net/`, since 2020) — the 5.6 GB WAL-mode `store.sqlite` is the production one, so anything done on shadow mutates prod data. Bare app like staging (webapp-srv + memcached only — its worker would just duplicate prod's cron jobs against the same shared db/cdn2). Traefik router is namespaced `ud-shadow` via `TRAEFIK_ENV` in `services/.env.shadow` (nested `${VAR:-${VAR2}}` interpolation); logs use `LOG_IDENT=shadow-webapp-srv`. Deploy with `make deploy-shadow` (tag = git SHA).
 
 ## Agent Workflows & Tips
 

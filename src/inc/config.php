@@ -80,9 +80,6 @@ $_configDev = __DIR__ . '/../config.dev.php';
 // Opt-in on APP_ENV=dev only — an unset APP_ENV must never pull in dev config.
 if ($_appEnv === 'dev' && is_file($_configDev)) {
     require $_configDev;
-} elseif (!getenv('APP_ENV') && is_file(__DIR__ . '/../config.prod.php')) {
-    // Non-Docker deployment (quickfix rsync): config.prod.php generated from .env.prod at build time
-    require __DIR__ . '/../config.prod.php';
 }
 
 if (!defined('SMTP_HOST'))    define('SMTP_HOST',    getenv('SMTP_HOST')    ?: '');
@@ -163,7 +160,6 @@ if (!defined('B2_BUCKET'))   define('B2_BUCKET',   getenv('B2_BUCKET')   ?: '');
 if (!defined('B2_ENDPOINT')) define('B2_ENDPOINT', getenv('B2_ENDPOINT') ?: '');
 if (!defined('B2_REGION'))   define('B2_REGION',   getenv('B2_REGION')   ?: '');
 // DB backups go to a separate B2 bucket with its own application key.
-// Docker: via env vars; bare-metal (config.prod.php): generated defines.
 if (!defined('BACKUP_B2_KEY'))    define('BACKUP_B2_KEY',    getenv('BACKUP_B2_KEY')    ?: '');
 if (!defined('BACKUP_B2_SECRET')) define('BACKUP_B2_SECRET', getenv('BACKUP_B2_SECRET') ?: '');
 if (!defined('BACKUP_B2_BUCKET')) define('BACKUP_B2_BUCKET', getenv('BACKUP_B2_BUCKET') ?: '');
