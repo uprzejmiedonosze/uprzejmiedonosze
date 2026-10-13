@@ -2,79 +2,93 @@
 
 namespace app;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use OpenSpout\Common\Entity\Cell;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\XLSX\Options;
+use OpenSpout\Writer\XLSX\Properties;
+use OpenSpout\Writer\XLSX\Writer;
 
-
-const COLUMN_NAMES = array(
-    "Numer",
-    "Status",
-    "Data",
-    "Miejsce",
-    "Nr rej.",
-    "Kategoria",
-    "Dodatki",
-    "Naocznie?",
-    "Uwagi",
-    "Uwagi prywatne",
-    "RSOW",
-    "Wysłano do",
-    "Wysłania dnia"
+// header => column width (in characters; fixed, auto-size would need every row in memory)
+const COLUMNS = array(
+    "Numer" => 14,
+    "Status" => 18,
+    "Data" => 16,
+    "Miejsce" => 40,
+    "Nr rej." => 11,
+    "Kategoria" => 40,
+    "Dodatki" => 30,
+    "Naocznie?" => 10,
+    "Uwagi" => 40,
+    "Uwagi prywatne" => 30,
+    "RSOW" => 16,
+    "Wysłano do" => 30,
+    "Wysłania dnia" => 16,
 );
 
-function appsToXlsx(array $apps, string $name) {
+/**
+ * Streams reports into an XLSX file at $path, one row at a time (OpenSpout),
+ * so memory does not grow with the number of reports — PhpSpreadsheet kept
+ * every cell in memory and ran out of it for accounts with >10k reports.
+ *
+ * @param iterable<Application> $apps e.g. \user\appsCursor()
+ */
+function appsToXlsx(iterable $apps, string $name, string $path): void {
+    $options = new Options();
+    $options->setProperties(new Properties(
+        title: "Zgłoszenia $name",
+        application: 'Uprzejmie Donoszę',
+        creator: 'Uprzejmie Donoszę',
+        lastModifiedBy: 'Uprzejmie Donoszę',
+    ));
+    $col = 1;
+    foreach (COLUMNS as $width)
+        $options->setColumnWidth($width, $col++);
 
-    $spreadsheet = __createEmptySpreadsheet($name);
-    $sheet = $spreadsheet->getActiveSheet();
-
-    $rowNum = 2;
-    foreach ($apps as $app) {
-        $sheet->setCellValue(__coordinate(1, $rowNum), $app->number);
-        $sheet->getCell(__coordinate(1, $rowNum))->getHyperlink()->setUrl(HTTPS . '://' . HOST . '/app/' . $app->id);
-        $sheet->setCellValue(__coordinate(2, $rowNum), $app->getStatus()->name);
-        $sheet->setCellValue(__coordinate(3, $rowNum), $app->getDate("d.MM.y H:mm"));
-        $sheet->setCellValue(__coordinate(4, $rowNum), $app->getAddress());
-        $sheet->getCell(__coordinate(4, $rowNum))->getHyperlink()->setUrl($app->getMapUrl());
-        $sheet->setCellValue(__coordinate(5, $rowNum), $app->carInfo->plateId);
-        $sheet->setCellValue(__coordinate(6, $rowNum), $app->getCategoryFormal());
-        $sheet->setCellValue(__coordinate(8, $rowNum), $app->statements->witness ? "Tak" : "");
-        $sheet->setCellValue(__coordinate(7, $rowNum), $app->getExtensionsText());
-        $sheet->setCellValue(__coordinate(9, $rowNum), $app->userComment);
-        $sheet->setCellValue(__coordinate(10, $rowNum), $app->privateComment);
-        $sheet->setCellValue(__coordinate(11, $rowNum), trimstr2upper($app->externalId));
-        $sheet->setCellValue(__coordinate(12, $rowNum), $app->guessSMData()->getEmail());
-        $sheet->setCellValue(__coordinate(13, $rowNum), $app->getSentDate("d.MM.y H:mm"));
-        $rowNum++;
-        if ($rowNum % 500 === 0) // Free memory every 500 rows
-            gc_collect_cycles();
+    $writer = new Writer($options);
+    $writer->openToFile($path);
+    try {
+        $writer->addRow(Row::fromValues(array_keys(COLUMNS), (new Style())->setFontBold()));
+        foreach ($apps as $app)
+            $writer->addRow(__appRow($app));
+    } finally {
+        $writer->close();
     }
-
-    $colNum = 1;
-    foreach (COLUMN_NAMES as $header) {
-        $sheet->setCellValue(__coordinate($colNum, 1), $header);
-        $sheet->getColumnDimension(Coordinate::stringFromColumnIndex($colNum))->setAutoSize(true);
-        $colNum++;
-    }
-
-    $writer = new Xlsx($spreadsheet);
-    ob_start();
-    $writer->save('php://output');
-    return ob_get_clean();
 }
 
-function __createEmptySpreadsheet(string $name): Spreadsheet {
-    \PhpOffice\PhpSpreadsheet\Settings::setLocale('pl');
-    $spreadsheet = new Spreadsheet();
-
-    $spreadsheet->getProperties()
-        ->setCreator("Uprzejmie Donoszę")
-        ->setTitle("Zgłoszenia $name");
-
-    return $spreadsheet;
+function __appRow(Application $app): Row {
+    return new Row([
+        __link(HTTPS . '://' . HOST . '/app/' . $app->id, $app->number ?? ''),
+        __text($app->getStatus()->name),
+        __text($app->getDate("d.MM.y H:mm")),
+        __link($app->getMapUrl(), $app->getAddress()),
+        __text($app->carInfo->plateId ?? ''),
+        __text($app->getCategoryFormal()),
+        __text($app->getExtensionsText()),
+        __text($app->statements->witness ? "Tak" : ""),
+        __text($app->userComment ?? ''),
+        __text($app->privateComment ?? ''),
+        __text(trimstr2upper($app->externalId ?? '')),
+        __text($app->guessSMData()->getEmail()),
+        __text($app->getSentDate("d.MM.y H:mm")),
+    ]);
 }
 
-function __coordinate(int $colNum, $rowNum): string {
-    $colLetter = Coordinate::stringFromColumnIndex($colNum);
-    return $colLetter . $rowNum;
+/**
+ * Always a plain string cell: Cell::fromValue() would turn user text
+ * starting with "=" (e.g. a comment) into a live formula.
+ */
+function __text(?string $value): Cell {
+    return new Cell\StringCell($value ?? '', null);
+}
+
+/**
+ * Clickable cell. OpenSpout has no hyperlink support, so a HYPERLINK() formula;
+ * Excel caps string literals in formulas at 255 characters.
+ */
+function __link(string $url, string $label): Cell {
+    if ($url === '' || mb_strlen($url) > 255 || mb_strlen($label) > 255)
+        return __text($label);
+    $quote = fn(string $s) => '"' . str_replace('"', '""', $s) . '"';
+    return new Cell\FormulaCell('=HYPERLINK(' . $quote($url) . ',' . $quote($label) . ')', null, $label);
 }

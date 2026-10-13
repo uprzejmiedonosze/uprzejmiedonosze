@@ -84,10 +84,18 @@ abstract class AbstractHandler {
         return $response;
     }
 
-    public static function renderXls(Response $response, $content, $filename): Response {
-        $response = $response->withHeader('Content-disposition', "attachment; filename=$filename");
-        $response->getBody()->write($content);
-        return $response;
+    /**
+     * Streams the XLSX file at $path (not loaded into memory). The file is
+     * unlinked right away — the open handle keeps it readable until sent.
+     */
+    public static function renderXls(Response $response, string $path, string $filename): Response {
+        $handle = fopen($path, 'rb');
+        $size = filesize($path);
+        unlink($path);
+        return $response
+            ->withHeader('Content-disposition', "attachment; filename=$filename")
+            ->withHeader('Content-Length', (string)$size)
+            ->withBody(new \Slim\Psr7\Stream($handle));
     }
 
     public static function renderDoc(Response $response, $content, $filename): Response {

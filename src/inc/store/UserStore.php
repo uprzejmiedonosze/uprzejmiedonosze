@@ -80,18 +80,33 @@ function appsQueryFromParams(array $params): array {
     ];
 }
 
+/** Małe litery bez polskich znaków diakrytycznych: „Wrocław”, „WROCŁAW” i „wroclaw” to to samo wyszukiwanie. */
+function searchFold(string $text): string {
+    return strtr(mb_strtolower($text), ['ą' => 'a', 'ć' => 'c', 'ę' => 'e', 'ł' => 'l', 'ń' => 'n', 'ó' => 'o', 'ś' => 's', 'ź' => 'z', 'ż' => 'z']);
+}
+
 /**
- * The current user's reports, newest first.
+ * The current user's reports, newest first — one page (see appsCursor()).
+ */
+function apps(User $user, string $status = 'all', string $search = '', int $limit = 0, int $offset = 0): array {
+    return iterator_to_array(appsCursor($user, $status, $search, $limit, $offset), false);
+}
+
+/**
+ * Streams the user's reports, newest first, decoding one row at a time —
+ * memory stays bounded by what the caller keeps (a page for the list, nothing
+ * for the XLSX export), even for accounts with >10k reports.
  *
  * $status: 'all' (no drafts), 'allWithDrafts', 'sendable' (every status with
  * "sendable": true in statuses.json) or a concrete status id.
  *
  * $search is matched in PHP against Application::searchText(), because
- * address and comments are stored encrypted. Rows are streamed and decoded
- * one by one until a full page is collected, so memory stays bounded by
- * $limit even for accounts with >10k reports.
+ * address and comments are stored encrypted — case- and Polish-diacritics-
+ * insensitive (searchFold). $limit = 0 means no limit.
+ *
+ * @return \Generator<\app\Application>
  */
-function apps(User $user, string $status = 'all', string $search = '', int $limit = 0, int $offset = 0): array {
+function appsCursor(User $user, string $status = 'all', string $search = '', int $limit = 0, int $offset = 0): \Generator {
     global $STATUSES;
 
     $params = [':email' => $user->getEmail()];
@@ -116,14 +131,16 @@ function apps(User $user, string $status = 'all', string $search = '', int $limi
         $params += [':status' => $status];
     }
 
-    $search = trim($search);
+    $search = searchFold(trim($search));
     if (in_array($search, ['all', '%'], true))
         $search = '';
 
+    // without search the page is cut in SQL; with search only after matching in PHP
     $limitOffset = '';
     if ($limit > 0 && $search === '') {
         $params += [':limit' => $limit, ':offset' => $offset];
         $limitOffset = 'limit :limit offset :offset';
+        $offset = 0;
     }
 
     $sql = <<<SQL
@@ -139,24 +156,24 @@ function apps(User $user, string $status = 'all', string $search = '', int $limi
     $stmt = \store\prepare($sql);
     $stmt->execute($params);
 
-    if ($search === '')
-        return $stmt->fetchAll(\PDO::FETCH_FUNC,
-            fn($json, $email) => \app\Application::withJson($json, $email));
-
-    $apps = [];
-    $skip = $offset;
-    while (($row = $stmt->fetch(\PDO::FETCH_NUM)) !== false) {
-        $app = \app\Application::withJson($row[0], $row[1]);
-        if (mb_stripos($app->searchText(), $search) === false)
-            continue;
-        if ($skip-- > 0)
-            continue;
-        $apps[] = $app;
-        if ($limit > 0 && count($apps) >= $limit)
-            break;
+    $yielded = 0;
+    $scanned = 0;
+    try {
+        while (($row = $stmt->fetch(\PDO::FETCH_NUM)) !== false) {
+            if (++$scanned % 500 === 0)
+                gc_collect_cycles(); // report objects have reference cycles, freed only by GC
+            $app = \app\Application::withJson($row[0], $row[1]);
+            if ($search !== '' && !str_contains(searchFold($app->searchText()), $search))
+                continue;
+            if ($offset-- > 0)
+                continue;
+            yield $app;
+            if ($limit > 0 && ++$yielded >= $limit)
+                break;
+        }
+    } finally {
+        $stmt->closeCursor();
     }
-    $stmt->closeCursor();
-    return $apps;
 }
 
 
