@@ -81,7 +81,8 @@
             "ul. Popiełuszki 24",
             "05-820 Piastów"
         ],
-        "email": "dyzurny.kp-piastow@ksp.policja.gov.pl"
+        "email": "dyzurny.kp-piastow@ksp.policja.gov.pl",
+        "hint": "Doświadczenia (10.2026) pozytywne — jednorazowo wezwali na przesłuchanie, rozmowa przyjazna i ze zrozumieniem. Mandaty za niszczenie zieleni są wystawiane."
     },
     "Lubartów": {
         "parent": "powiat lubartowski"
