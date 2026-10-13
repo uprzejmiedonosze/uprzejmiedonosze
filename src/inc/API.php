@@ -571,6 +571,13 @@ function recipientData(Application $application): ?array {
 }
 
 /** Application as returned by the JWT REST API: raw JSON plus derived fields (`recipient`). */
+/**
+ * Platforma aplikacji mobilnej z nagłówka `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`, null gdy brak/inny.
+ */
+function mobilePlatform(string $udClient): ?string {
+    return preg_match('#\((?:\d+); (ios|android)\)$#', $udClient, $m) ? $m[1] : null;
+}
+
 function applicationToRest(Application $application): array {
     $data = $application->jsonSerialize();
     unset($data['browser']);

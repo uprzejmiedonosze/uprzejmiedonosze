@@ -100,6 +100,16 @@ class ApplicationTest extends DatabaseTestCase
         $this->assertTrue($app->stopAgresji); // new user defaults to Police
         $this->assertEquals(0, $app->category);
         $this->assertEquals(12, strlen($app->id));
+        $this->assertEquals('web', $app->source);
+        $this->assertEquals('mcp', Application::withUser(new User(), 'mcp')->source);
+    }
+
+    public function testMobilePlatform()
+    {
+        $this->assertEquals('ios', mobilePlatform('pro/1.2.3 (45; ios)'));
+        $this->assertEquals('android', mobilePlatform('pro/1.2.3 (45; android)'));
+        $this->assertNull(mobilePlatform(''));
+        $this->assertNull(mobilePlatform('pro/1.2.3 (45; windows)'));
     }
 
     public function testUpdateUserData()
