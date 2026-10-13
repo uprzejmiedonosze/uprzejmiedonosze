@@ -82,10 +82,10 @@ function buildServer(): Server {
         'properties' => [
             'status' => [
                 'type' => 'string',
-                'enum' => array_merge(['all', 'allWithDrafts', 'sendable'], array_keys($STATUSES ?? [])),
+                'enum' => array_merge(['all', 'active', 'allWithDrafts', 'sendable'], array_keys($STATUSES ?? [])),
                 'default' => 'all',
                 'description' => 'Which reports to return: "all" (excludes drafts), '
-                    . '"allWithDrafts", "sendable" (ready to be sent), or a specific status id.',
+                    . '"active" (like all, without archived), "allWithDrafts", "sendable" (ready to be sent), or a specific status id.',
             ],
             'search' => [
                 'type' => 'string',
