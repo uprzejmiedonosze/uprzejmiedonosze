@@ -18,7 +18,7 @@ build_config_env() {
     CSS_HASH=$(find src/scss -name '*.scss' | sort | xargs cat | md5sum | cut -b1-8)
     JS_HASH=$(cat $(find src/js -name '*.js' | sort) $(find src/api/config -name '*.json' | sort) | md5sum | cut -b1-8)
     TWIG_HASH=$(cat src/templates/*.twig | md5sum | cut -b1-8)
-    printf '<?php\ndefine("HOST", "%s");\ndefine("TWIG_HASH", "%s");\ndefine("CSS_HASH", "%s");\ndefine("JS_HASH", "%s");\ndefine("HTTPS", "%s");\n' \
+    printf '<?php\ndefined("HOST") || define("HOST", "%s");\ndefined("TWIG_HASH") || define("TWIG_HASH", "%s");\ndefined("CSS_HASH") || define("CSS_HASH", "%s");\ndefined("JS_HASH") || define("JS_HASH", "%s");\ndefined("HTTPS") || define("HTTPS", "%s");\n' \
         "$APP_HOST" "$TWIG_HASH" "$CSS_HASH" "$JS_HASH" "$APP_HTTPS" \
         > export/config.env.php
     [ -f config.dev.php ] && cp config.dev.php export/config.dev.php  # fallback if compose mount absent

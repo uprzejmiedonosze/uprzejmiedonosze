@@ -171,22 +171,19 @@ if (!defined('BACKUP_B2_BUCKET')) define('BACKUP_B2_BUCKET', getenv('BACKUP_B2_B
 if (!defined('AGE_RECIPIENT'))    define('AGE_RECIPIENT',    getenv('AGE_RECIPIENT')    ?: '');
 unset($_appEnv, $_configDev);
 
+// HOST/HTTPS from env win (Docker sets APP_HOST per environment). Asset hashes
+// always come from the build (config.env.php): without them /js/index3.js?{hash}
+// never changes and browsers keep stale JS/CSS for good (nginx: expires max).
 $_appHost = getenv('APP_HOST');
 if ($_appHost) {
     define('HOST',      $_appHost);
     define('HTTPS',     getenv('APP_HTTPS') ?: 'https');
-    define('TWIG_HASH', '');
-    define('CSS_HASH',  '');
-    define('JS_HASH',   '');
-} elseif (is_file(__DIR__ . '/../config.env.php')) {
-    require(__DIR__ . '/../config.env.php');
-} else {
-    define('HOST',      'uprzejmiedonosze.net');
-    define('HTTPS',     'https');
-    define('TWIG_HASH', '');
-    define('CSS_HASH',  '');
-    define('JS_HASH',   '');
 }
+if (is_file(__DIR__ . '/../config.env.php'))
+    require(__DIR__ . '/../config.env.php'); // defines only what is not defined yet
+foreach (['HOST' => 'uprzejmiedonosze.net', 'HTTPS' => 'https', 'TWIG_HASH' => '', 'CSS_HASH' => '', 'JS_HASH' => ''] as $_name => $_default)
+    if (!defined($_name)) define($_name, $_default);
+unset($_name, $_default);
 unset($_appHost);
 define('ROOT',     getenv('APP_ROOT') ?: '/var/www/' . HOST . '/');
 define('BASE_URL', HTTPS . '://' . HOST . '/');
