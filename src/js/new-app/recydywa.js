@@ -209,8 +209,9 @@ export async function updateRecydywa(appId = null, plateId = null) {
     if (details) {
         const seemoreButton = /** @type {HTMLElement|null} */ (details.querySelector('.recydywa-seemore'))
         if (seemoreButton) {
-            if (uniqueUsers > 1) {
+            if (uniqueUsers > 1 || onlyme) {
                 seemoreButton.setAttribute('data-plateid', recydywa.plateId)
+                seemoreButton.textContent = onlyme ? 'Zobacz swoje zgłoszenia' : 'Zobacz zgłoszenia'
                 seemoreButton.style.display = 'inline-block'
             } else {
                 seemoreButton.style.display = 'none'
