@@ -92,6 +92,14 @@ class UserAppsTest extends DatabaseTestCase
         self::assertSame(['match-1'], $this->ids(\user\apps($this->user(), search: 'odd', limit: 2, offset: 2)));
     }
 
+    public function testSearchSkipsDraftWithoutDate(): void
+    {
+        $this->makeApp('nodate', 1, ['status' => 'draft', 'date' => null]);
+        $this->makeApp('dated', 2);
+
+        self::assertSame(['dated'], $this->ids(\user\apps($this->user(), status: 'allWithDrafts', search: 'UD/2/2')));
+    }
+
     public function testSendableStatusGroup(): void
     {
         $this->makeApp('st-confirmed', 1, ['status' => 'confirmed']);

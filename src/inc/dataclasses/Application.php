@@ -207,7 +207,7 @@ class Application extends JSONObject implements \JsonSerializable {
         return implode(' ', [
             $this->address->address ?? '',
             $this->number ?? '',
-            $this->getDate(),
+            isset($this->date) ? $this->getDate() : '', // drafts may have no date yet
             $this->carInfo->plateId ?? '',
             $this->userComment ?? '',
             $this->getCategory()?->getFormal() ?? '',
