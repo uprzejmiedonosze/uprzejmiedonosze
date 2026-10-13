@@ -93,7 +93,7 @@ $app->add(function ($request, $handler) use ($app) {
         } catch (\Throwable $e) {
             // bez pliku konfiguracji nadal odrzucamy (komunikat/storeUrl zostaną domyślne)
         }
-        $platform = preg_match('#\((?:\d+); (ios|android)\)$#', $request->getHeaderLine('X-UD-Client'), $m) ? $m[1] : 'android';
+        $platform = mobilePlatform($request->getHeaderLine('X-UD-Client')) ?? 'android';
         $response = $app->getResponseFactory()->createResponse(426);
         $response->getBody()->write(json_encode([
             'error' => $cfg['message'] ?? 'Wymagana aktualizacja aplikacji.',
@@ -303,7 +303,7 @@ $app->group('/api/rest/config', function (RouteCollectorProxy $group) { // CONFI
 $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICATION
     $group->post('/new', function (Request $request, Response $response) {
         $user = $request->getAttribute('user');
-        $application = Application::withUser($user);
+        $application = Application::withUser($user, mobilePlatform($request->getHeaderLine('X-UD-Client')) ?? 'web');
         \app\save($application);
         \telemetry\log('report_started', $application->id); // like the web /app/new
         $response->getBody()->write(json_encode(applicationToRest($application)));

@@ -118,9 +118,10 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     /**
+     * @param string $source where the report was created: web, mcp, ios, android
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function withUser(User $user): Application {
+    public static function withUser(User $user, string $source = 'web'): Application {
         $instance = new self();
         $instance->date = null;
         $instance->id = Application::genSafeId($user);
@@ -132,6 +133,8 @@ class Application extends JSONObject implements \JsonSerializable {
         $instance->initStatements();
         $instance->address = new JSONObject();
         /*
+        2.5.5 (2026-10-13)
+          - added $source (web, mcp, ios, android)
         2.5.4 (2025-01-15)
           - "Jestem świadoma odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk."
         2.5.3 (2025-01-11)
@@ -152,8 +155,9 @@ class Application extends JSONObject implements \JsonSerializable {
           - extended address property
         2.1.0
         */
-        $instance->version = '2.5.4';
+        $instance->version = '2.5.5';
         $instance->browser = $_SERVER['HTTP_USER_AGENT'];
+        $instance->source = $source;
         return $instance;
     }
 

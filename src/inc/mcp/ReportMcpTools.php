@@ -436,7 +436,7 @@ final class ReportMcpTools {
             $_SERVER['HTTP_USER_AGENT'] = 'MCP';
         }
 
-        $draft = \app\Application::withUser($user);
+        $draft = \app\Application::withUser($user, 'mcp');
         // A fresh draft has no history/comments/extensions yet; initialise them
         // so the stored record round-trips cleanly on re-read (Application::
         // withJson normalises these to arrays).
