@@ -117,5 +117,8 @@ class UserAppsTest extends DatabaseTestCase
         self::assertSame(\user\APPS_PAGE_MAX, \user\appsQueryFromParams(['limit' => 100000])['limit']);
         self::assertSame(0, \user\appsQueryFromParams(['offset' => -3])['offset']);
         self::assertSame('abc', \user\appsQueryFromParams(['q' => 'abc'])['search']);
+        // MCP list_reports uses a lower cap (response is kept in a memcached session)
+        self::assertSame(100, \user\appsQueryFromParams(['limit' => 1000], 100)['limit']);
+        self::assertSame(50, \user\appsQueryFromParams(['limit' => 50], 100)['limit']);
     }
 }

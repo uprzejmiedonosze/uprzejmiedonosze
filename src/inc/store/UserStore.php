@@ -65,17 +65,17 @@ const APPS_PAGE_MAX = 500;
 /**
  * Parses the list query shared by the web list (/app/list, /app/partial),
  * REST /api/rest/user/apps and the MCP list_reports tool. The page size is
- * always clamped — only internal callers (export, account removal) may call
- * apps() without a limit.
+ * always clamped (to $max) — only internal callers (export, account removal)
+ * may call apps() without a limit.
  *
  * @return array{status: string, search: string, limit: int, offset: int}
  */
-function appsQueryFromParams(array $params): array {
+function appsQueryFromParams(array $params, int $max = APPS_PAGE_MAX): array {
     $limit = (int)($params['limit'] ?? APPS_PAGE_SIZE);
     return [
         'status' => (string)($params['status'] ?? 'all'),
         'search' => (string)($params['search'] ?? $params['q'] ?? ''),
-        'limit'  => $limit > 0 ? min($limit, APPS_PAGE_MAX) : APPS_PAGE_SIZE,
+        'limit'  => min($limit > 0 ? $limit : APPS_PAGE_SIZE, $max),
         'offset' => max(0, (int)($params['offset'] ?? 0)),
     ];
 }

@@ -97,8 +97,8 @@ function buildServer(): Server {
                 'type' => 'integer',
                 'default' => 50,
                 'minimum' => 1,
-                'maximum' => 500,
-                'description' => 'Page size (max 500).',
+                'maximum' => ReportMcpTools::LIST_MAX,
+                'description' => 'Page size (max ' . ReportMcpTools::LIST_MAX . '); page with offset.',
             ],
             'offset' => [
                 'type' => 'integer',

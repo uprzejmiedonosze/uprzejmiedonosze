@@ -25,6 +25,13 @@ enum ReportStatus: string {
 final class ReportMcpTools {
 
     /**
+     * list_reports page cap. Lower than the web/REST one: the MCP SDK keeps the
+     * response in the session (memcached, 1 MB per item) before sending it, and
+     * enriched reports are a few kB each (Sentry UD-PHP-PW/Q2/Q3).
+     */
+    public const LIST_MAX = 100;
+
+    /**
      * List the current user's reports.
      *
      * @param string $status Filter: 'all' (default, excludes drafts), a concrete
@@ -32,7 +39,7 @@ final class ReportMcpTools {
      *                        (ready to be sent) or 'allWithDrafts'.
      * @param string $search Optional text to match: plate, report number, address,
      *                        date (d.mm.yyyy), comments, category or recipient name.
-     * @param int    $limit  Page size (default 50, max 500).
+     * @param int    $limit  Page size (default 50, max LIST_MAX).
      * @param int    $offset Number of matching reports to skip, for paging.
      * @return array{reports: array} The reports, newest first.
      */
@@ -40,7 +47,7 @@ final class ReportMcpTools {
         McpIdentity::requireScope('reports:read');
         $user = McpIdentity::currentUser();
         $apps = \user\apps($user, ...\user\appsQueryFromParams(
-            ['status' => $status, 'search' => $search, 'limit' => $limit, 'offset' => $offset]));
+            ['status' => $status, 'search' => $search, 'limit' => $limit, 'offset' => $offset], self::LIST_MAX));
         // Wrap in an object: MCP structuredContent must be an object, not an
         // array. Normalise the domain objects to plain arrays too.
         return ['reports' => array_map([$this, 'enrich'], $apps)];
