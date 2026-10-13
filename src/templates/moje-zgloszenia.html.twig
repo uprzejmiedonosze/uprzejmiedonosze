@@ -38,10 +38,11 @@
 
 
     <form autocomplete="off">
-        <input autocomplete="false" type="search" id="apps"
+        <input autocomplete="false" data-type="filterable" type="text" id="apps"
             placeholder="Adres, numer rej. lub zgłoszenia, data, komentarz" value="{{ query }}">
         <ul class="status-filter">
-        {% for key,val in statuses %}
+        {# draft/ready never appear on the list (status 'all' skips them) #}
+        {% for key,val in statuses|filter((v, k) => k not in ['draft', 'ready']) %}
             {% set count = general.stats[key] ?? 0 %}
             <li class="status {{key}}" style="display: {{ count > 0 ? 'block' : 'none' }}"><a href="#" id="{{ key }}" {% if key == statusFilter %}class="active"{% endif %}>{{ val.name|upper }}</a> <span class="li-count">{{ count }}</span></li>
         {% endfor %}
