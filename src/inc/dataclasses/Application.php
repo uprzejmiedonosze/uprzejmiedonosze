@@ -197,6 +197,26 @@ class Application extends JSONObject implements \JsonSerializable {
         return formatDateTime($this->date, $pattern);
     }
 
+    /**
+     * Text the "Moje zgłoszenia" search matches against. Built from decoded
+     * fields in PHP (not SQL), because address and comments are stored
+     * encrypted. Recidivism is left out on purpose: it needs a lookup per report.
+     */
+    public function searchText(): string {
+        $sm = isset($this->smCity) ? $this->guessSMData()->getName() : '';
+        return implode(' ', [
+            $this->address->address ?? '',
+            $this->number ?? '',
+            $this->getDate(),
+            $this->carInfo->plateId ?? '',
+            $this->userComment ?? '',
+            $this->getCategory()?->getFormal() ?? '',
+            $sm,
+            $this->externalId ?? '',
+            $this->privateComment ?? '',
+        ]);
+    }
+
     public function getSentDate($pattern="d.MM.y") {
         if (isset($this->sent->date))
             return formatDateTime($this->sent->date, $pattern);

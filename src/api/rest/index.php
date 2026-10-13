@@ -142,14 +142,8 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
     
     
     $group->get('/apps', function (Request $request, Response $response) {
-        $params = $request->getQueryParams();
-        $status = getParam($params, 'status', 'all');
-        $search = getParam($params, 'search', '%');
-        $limit =  getParam($params, 'limit', 0); // 0 == no limit
-        $offset = getParam($params, 'offset', 0);
-    
         $user = $request->getAttribute('user');
-        $apps = \user\apps($user, $status, $search, $limit, $offset);
+        $apps = \user\apps($user, ...\user\appsQueryFromParams($request->getQueryParams()));
         
         $response->getBody()->write(json_encode($apps));
         return $response;

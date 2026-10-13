@@ -9,9 +9,6 @@
 {% block main %}
 
 <h2>Przeglądaj swoje zgłoszenia</h2>
-{% if countChanged > 0 %}
-<p><b>(zmieniliśmy status {{ countChanged }} zgłoszeń)</b></p>
-{% endif %}
 
 {# Na mobile /app nie ma już burgera — „Zapytaj o status" (dla zgłoszeń czekających
    na odpowiedź) mieszka tu. Na desktopie niesie ją sidebar _app-menu, stąd mobile-only. #}
@@ -22,7 +19,7 @@
 </p>
 {% endif %}
 
-{% if applications|length == 0 %}
+{% if applications|length == 0 and query == '' and statusFilter == 'all' %}
     <p>Nie masz jeszcze ani jednego zgłoszenia.</p>
     <a href="/app/new" class="button cta last">Stwórz nowe</a>
 {% else %}
@@ -30,7 +27,7 @@
 
     {% if isAdmin or 'patron' in general.stats.badges %}
     <p><a href="/zgloszenia.xlsx">Pobierz</a> wszystkie zgłoszenia w jednym pliku xls.</p>
-    {% elseif applicationsCount > 50 %}
+    {% elseif general.stats.active ?? 0 > 50 %}
         <p>Dużo zgłoszeń? <a href="/patronite.html">Patroni i Patronki</a> mogą pobierać zgłoszenia w pliku xls.</p>
     {% endif %}
 
@@ -41,11 +38,12 @@
 
 
     <form autocomplete="off">
-        <input autocomplete="false" data-type="filterable" type="text" id="apps"
+        <input autocomplete="false" type="search" id="apps"
             placeholder="Adres, numer rej. lub zgłoszenia, data, komentarz" value="{{ query }}">
         <ul class="status-filter">
         {% for key,val in statuses %}
-            <li class="status {{key}}"><a href="#" id="{{ key }}">{{ val.name|upper }}</a> <span class="li-count"></span></li>
+            {% set count = general.stats[key] ?? 0 %}
+            <li class="status {{key}}" style="display: {{ count > 0 ? 'block' : 'none' }}"><a href="#" id="{{ key }}" {% if key == statusFilter %}class="active"{% endif %}>{{ val.name|upper }}</a> <span class="li-count">{{ count }}</span></li>
         {% endfor %}
         </ul>
     </form>
@@ -65,20 +63,8 @@
         </div>
     </div>
 
-    <div data-role="collapsibleset" data-iconpos="right" data-filter="true" id="apps-list">
-        {% for app in applications %}
-            {% if loop.index0 >= myAppsSize %}
-                {% set hideAppOverLimit = true %}
-            {% endif %}
-            {% include('_application-short.html.twig') %}
-        {% endfor %}
+    <div data-role="collapsibleset" data-iconpos="right" id="apps-list" data-status="{{ statusFilter }}">
+        {% include 'my-apps-partial.html.twig' %}
     </div>
-    {% if myAppsSize < applicationsCount %}
-    <div class="displayAllApps">
-        <a href="#" class="button light last">
-            To tylko {{ myAppsSize }} zgłoszeń, załaduj wszystkie
-        </a>
-    </div>
-    {% endif %}
 {% endif %}
 {% endblock %}

@@ -46,7 +46,7 @@
         </div>
         <div class="stat-card">
             {% if fined > 0 %}
-            <a href="/app/list#confirmed-fined">
+            <a href="/app/list?status=confirmed-fined">
                 <strong>{{ fined|number_format(0, ',', ' ') }}</strong>
                 <span>Mandaty</span>
             </a>
@@ -57,7 +57,7 @@
         </div>
         <div class="stat-card">
             {% if instructed > 0 %}
-            <a href="/app/list#confirmed-instructed">
+            <a href="/app/list?status=confirmed-instructed">
                 <strong>{{ instructed|number_format(0, ',', ' ') }}</strong>
                 <span>Pouczenia</span>
             </a>

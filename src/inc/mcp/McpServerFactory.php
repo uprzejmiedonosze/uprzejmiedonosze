@@ -82,15 +82,29 @@ function buildServer(): Server {
         'properties' => [
             'status' => [
                 'type' => 'string',
-                'enum' => array_merge(['all', 'allWithDrafts'], array_keys($STATUSES ?? [])),
+                'enum' => array_merge(['all', 'allWithDrafts', 'sendable'], array_keys($STATUSES ?? [])),
                 'default' => 'all',
                 'description' => 'Which reports to return: "all" (excludes drafts), '
-                    . '"allWithDrafts", or a specific status id.',
+                    . '"allWithDrafts", "sendable" (ready to be sent), or a specific status id.',
+            ],
+            'search' => [
+                'type' => 'string',
+                'default' => '',
+                'description' => 'Optional text to match (case-insensitive): plate, report '
+                    . 'number, address, date (d.mm.yyyy), comments, category or recipient name.',
             ],
             'limit' => [
                 'type' => 'integer',
                 'default' => 50,
-                'description' => 'Maximum number of reports to return.',
+                'minimum' => 1,
+                'maximum' => 500,
+                'description' => 'Page size (max 500).',
+            ],
+            'offset' => [
+                'type' => 'integer',
+                'default' => 0,
+                'minimum' => 0,
+                'description' => 'Number of matching reports to skip, for paging.',
             ],
         ],
         'additionalProperties' => false,
@@ -329,7 +343,8 @@ function buildServer(): Server {
         ->addTool(
             [$tools, 'listReports'],
             'list_reports',
-            description: 'List the signed-in user\'s reports (zgłoszenia), newest first.',
+            description: 'List the signed-in user\'s reports (zgłoszenia), newest first, '
+                . 'one page at a time (use offset to page; search to find specific ones).',
             annotations: new ToolAnnotations(
                 readOnlyHint: true,
                 idempotentHint: true,

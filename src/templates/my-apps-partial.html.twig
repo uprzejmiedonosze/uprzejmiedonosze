@@ -1,13 +1,11 @@
 {% for app in applications %}
-    {% if loop.index0 >= myAppsSize %}
-        {% set hideAppOverLimit = true %}
-    {% endif %}
     {% include('_application-short.html.twig') %}
+{% else %}
+    {% if offset == 0 %}<p class="no-results">Brak zgłoszeń spełniających kryteria.</p>{% endif %}
 {% endfor %}
 
-{% if myAppsSize < applicationsCount %}
+{% if hasMore %}
     <div class="displayAllApps">
-        <p>To tylko {{ myAppsSize }} najnowszych zgłoszeń.</p>
-        <a href="#" class="button light">Pokaż wszystkie</a>
+        <a href="#" class="button light" data-offset="{{ nextOffset }}">Pokaż więcej</a>
     </div>
 {% endif %}

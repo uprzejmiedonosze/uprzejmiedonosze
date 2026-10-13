@@ -52,6 +52,8 @@ export function updateStatus(appId, status) {
     });
   }
 
+  const oldStatus = Object.keys(statuses).find(s => application?.classList.contains(s))
+
   if (application) {
     const allClasses = Object.keys(statuses).join(" ")
     application.classList.remove(...allClasses.split(' '))
@@ -74,39 +76,27 @@ export function updateStatus(appId, status) {
     }
   }
 
-  updateCounters();
+  updateCounters(oldStatus, status);
 }
 
-export function updateCounters() {
-  const statusFilterItems = document.querySelectorAll(".status-filter li")
-  statusFilterItems.forEach((item) => {
-    const firstChild = item.children[0]
-    if (firstChild && firstChild.id) {
-      const count = document.querySelectorAll("div.application." + firstChild.id).length;
-      const secondChild = item.children[1]
-      if (secondChild) {
-        secondChild.textContent = count.toString();
-      }
-      if (count == 0) {
-        /** @type {HTMLElement} */ (item).style.display = 'none';
-      } else {
-        /** @type {HTMLElement} */ (item).style.display = 'block';
-      }
-    }
-  });
+/**
+ * Status filter counters on /app/list come from server-side stats (the list
+ * itself is paged), so a status change only moves one report between them.
+ * @param {string|undefined} oldStatus
+ * @param {string} newStatus
+ */
+export function updateCounters(oldStatus, newStatus) {
+  if (!oldStatus || oldStatus === newStatus) return
+  bumpCounter(oldStatus, -1)
+  bumpCounter(newStatus, 1)
+}
 
-  const sendMenu = document.querySelector("li.wysylka a span")
-  if (sendMenu) {
-    if (document.querySelector('.dziekujemy')) { // send on thank page
-      const currentCount = parseInt(sendMenu.textContent || '0')
-      sendMenu.textContent = (currentCount - 1).toString()
-    } else {
-      const confirmedApps = document.querySelectorAll("div.application.confirmed")
-      sendMenu.textContent = confirmedApps.length.toString();
-    }
-    if (parseInt(sendMenu.textContent || '0') <= 0) {
-      const parent = /** @type {HTMLElement} */ (sendMenu.parentElement)
-      if (parent) parent.style.display = 'none'
-    }
-  }
+function bumpCounter(status, delta) {
+  const link = document.querySelector(`.status-filter a[id="${status}"]`)
+  const item = /** @type {HTMLElement|null} */ (link?.parentElement)
+  const counter = item?.querySelector('.li-count')
+  if (!item || !counter) return
+  const count = Math.max(0, parseInt(counter.textContent || '0') + delta)
+  counter.textContent = count.toString()
+  item.style.display = count > 0 ? 'block' : 'none'
 }

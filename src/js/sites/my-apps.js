@@ -1,37 +1,39 @@
-
-
-import { updateCounters } from "../lib/status";
 import { setStatus } from "../lib/status"
 import Api from '../lib/Api'
-import { filterable, triggerFilter} from "../lib/filterable";
+import delay from "../lib/delay";
 import makeDropdown from "../lib/dropdown";
 import makeDialog from "../lib/dialog";
 import sendApplication from "../lib/send";
 import { error } from "../lib/toast"
 
-document.addEventListener("DOMContentLoaded", (event) => {
+const PAGE_SIZE = 100
+
+document.addEventListener("DOMContentLoaded", () => {
   const appsList = document.getElementById('apps-list')
   if (!appsList) return
 
-  filterable('apps', 'apps-list')
   makeDialog()
 
-  // app headers clickable
-  const appHeaders = appsList?.getElementsByTagName('h3') || []
-  for (let h3 of appHeaders)
-    h3.addEventListener("click", appClickHandler)
+  // the list is replaced/appended on search, so delegate clicks
+  appsList.addEventListener("click", e => {
+    const target = /** @type {HTMLElement} */ (e.target)
+    const more = target.closest("div.displayAllApps a")
+    if (more) {
+      e.preventDefault()
+      loadMore(/** @type {HTMLElement} */ (more))
+      return
+    }
+    const h3 = target.closest("h3")
+    if (h3 && h3.parentElement?.parentElement === appsList)
+      appClicked(h3.parentElement)
+  })
 
-  // filters
-  const hash = window.location.hash.substring(1)
+  const search = /** @type {HTMLInputElement|null} */ (document.getElementById('apps'))
+  search?.addEventListener("input", delay(() => reloadApps(), 300))
+
   const filters = document.querySelectorAll(".status-filter a") || []
-  for (let filter of filters) {
-      filter.addEventListener("click", filterAppsHandler)
-      if (filter.id == hash) filterApps(filter)
-  }
-
-  // show all apps button
-  const displayAllAppsBtn = document.querySelector("div.displayAllApps a")
-  displayAllAppsBtn?.addEventListener("click", displayAllAppsHandler)
+  for (let filter of filters)
+    filter.addEventListener("click", filterAppsHandler)
 
   // close „recydywa” dialong on Esc
   const recydywaElement = document.getElementById('recydywa')
@@ -45,40 +47,76 @@ document.addEventListener("DOMContentLoaded", (event) => {
       recydywaElement.style.display = 'none'
     })
   }
-  
-  updateCounters()
 })
 
-function filterAppsHandler() {
-  filterApps(this)
+/** @param {Event} e */
+function filterAppsHandler(e) {
+  e.preventDefault()
+  const appsList = document.getElementById('apps-list')
+  if (!appsList) return
+  const target = /** @type {HTMLElement} */ (this)
+  const active = target.classList.contains('active')
+  document.querySelectorAll(".status-filter a").forEach(el => el.classList.remove("active"))
+  if (!active) target.classList.add("active")
+  appsList.dataset.status = active ? 'all' : target.id
+  reloadApps()
 }
 
-function filterApps(target) {
-    if (target.classList.contains('active')) {
-      target.classList.remove("active")
-      document.querySelectorAll("div.application:not(.archived)").forEach(el => {
-        /** @type {HTMLElement} */ (el).style.display = 'block'
-      })
-      return
-    }
-    document.querySelectorAll("div.application").forEach(el => {
-      /** @type {HTMLElement} */ (el).style.display = 'none'
-    })
-    document.querySelectorAll("div.application." + target.id).forEach(el => {
-      /** @type {HTMLElement} */ (el).style.display = 'block'
-    })
-    document.querySelectorAll(".status-filter a").forEach(el => el.classList.remove("active"))
-    target.classList.add("active")
-}
+let lastRequest = 0
 
-
-function displayAllAppsHandler() {
-  const displayAllApps = document.querySelector("div.displayAllApps")
-  if (displayAllApps) /** @type {HTMLElement} */ (displayAllApps).style.display = 'none'
-  document.querySelectorAll("div.application:not(.archived)").forEach(el => {
-    /** @type {HTMLElement} */ (el).style.display = 'block'
+/**
+ * @param {number} offset
+ */
+async function fetchApps(offset) {
+  const appsList = document.getElementById('apps-list')
+  const search = /** @type {HTMLInputElement|null} */ (document.getElementById('apps'))
+  const params = new URLSearchParams({
+    status: appsList?.dataset.status || 'all',
+    search: search?.value.trim() || '',
+    limit: String(PAGE_SIZE),
+    offset: String(offset)
   })
-  triggerFilter('apps')
+  const request = ++lastRequest
+  const html = await new Api(`/app/partial?${params}`).getHtml()
+  // a newer search was started in the meantime
+  if (request !== lastRequest) return null
+
+  // keep the filter on reload
+  const url = new URL(window.location.href)
+  url.search = ''
+  if (params.get('status') !== 'all') url.searchParams.set('status', params.get('status') || '')
+  if (params.get('search')) url.searchParams.set('q', params.get('search') || '')
+  history.replaceState(null, '', url)
+  return html
+}
+
+async function reloadApps() {
+  const appsList = document.getElementById('apps-list')
+  if (!appsList) return
+  appsList.classList.add('loading')
+  try {
+    const html = await fetchApps(0)
+    if (html !== null) appsList.innerHTML = html
+  } catch (e) {
+    error(e.message)
+  } finally {
+    appsList.classList.remove('loading')
+  }
+}
+
+/** @param {HTMLElement} button */
+async function loadMore(button) {
+  const container = button.parentElement
+  button.classList.add('disabled')
+  try {
+    const html = await fetchApps(parseInt(button.dataset.offset || '0'))
+    if (html === null) return
+    container?.insertAdjacentHTML('beforebegin', html)
+    container?.remove()
+  } catch (e) {
+    button.classList.remove('disabled')
+    error(e.message)
+  }
 }
 
 export function closeAllApps() {
@@ -89,10 +127,6 @@ export function closeAllApps() {
     // @ts-ignore
     appDetailsDiv.innerHTML = ""
   }
-}
-
-async function appClickHandler() {
-  appClicked(this.parentElement)
 }
 
 /**
@@ -184,15 +218,6 @@ export async function appClicked(target) {
           }
         }
 
-        const app = document.getElementById(appId)
-        if (app) {
-          const oldFilterText = app.getAttribute('data-filtertext') ?? ''
-          if (initialValue.length>5) {
-            app.setAttribute('data-filtertext', oldFilterText.replace(initialValue, newValue))
-          } else {
-            app.setAttribute('data-filtertext', oldFilterText + newValue)
-          }
-        }
       } catch(e) {
         this.removeAttribute('readonly')
         this.classList.add("error")

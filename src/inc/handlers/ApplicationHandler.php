@@ -243,22 +243,29 @@ class ApplicationHandler extends AbstractHandler {
 
     public function myApps(Request $request, Response $response): Response {
         $user = $request->getAttribute('user');
-        $params = $request->getQueryParams();
+        return AbstractHandler::renderHtml($request, $response, 'moje-zgloszenia',
+            self::appsPage($user, $request->getQueryParams()) + [
+                'appActionButtons' => true,
+                'isAdmin'  => $user->isAdmin(),
+            ]);
+    }
 
-        $query = $this->getParam($params, 'q', '');
-        $applications = \user\apps(user: $user, limit:5000); //, search: $query);
-
-        $countChanged = 0;
-
-        return AbstractHandler::renderHtml($request, $response, 'moje-zgloszenia', [
-            'appActionButtons' => true,
-            'applications' => $applications,
-            'countChanged' => $countChanged,
-            'applicationsCount' => count($applications),
-            'myAppsSize' => 500,
-            'isAdmin'  => $user->isAdmin(),
-            'query' => urldecode($query)
-        ]);
+    /**
+     * One page of the user's reports for the list templates. Fetches one
+     * extra row to tell whether a "Pokaż więcej" button is needed.
+     */
+    private static function appsPage(\user\User $user, array $params): array {
+        $query = \user\appsQueryFromParams($params);
+        $apps = \user\apps($user, $query['status'], $query['search'], $query['limit'] + 1, $query['offset']);
+        $hasMore = count($apps) > $query['limit'];
+        return [
+            'applications' => array_slice($apps, 0, $query['limit']),
+            'hasMore' => $hasMore,
+            'offset' => $query['offset'],
+            'nextOffset' => $query['offset'] + $query['limit'],
+            'query' => $query['search'],
+            'statusFilter' => $query['status'],
+        ];
     }
 
     /**
@@ -278,25 +285,14 @@ class ApplicationHandler extends AbstractHandler {
 
     public function myAppsPartial(Request $request, Response $response): Response {
         $user = $request->getAttribute('user');
-
-        $params = $request->getQueryParams();
-        $status = $this->getParam($params, 'status', 'all');
-        $search = $this->getParam($params, 'search', '%');
-        $limit =  $this->getParam($params, 'limit', 0);
-        $offset = $this->getParam($params, 'offset', 0);
-        
-        $apps = \user\apps($user, $status, $search, $limit, $offset);
-
-        return AbstractHandler::renderHtml($request, $response, 'my-apps-partial', [
-            'appActionButtons' => true,
-            'applications' => $apps,
-            'myAppsSize' => 500,
-            'applicationsCount' => count($apps)
-        ]);
+        return AbstractHandler::renderHtml($request, $response, 'my-apps-partial',
+            self::appsPage($user, $request->getQueryParams()) + [
+                'appActionButtons' => true,
+            ]);
     }
 
     public function shipment(Request $request, Response $response): Response {
-        return $this->redirect('/app/list?update&q=' . urlencode('wysyłka')); // nosemgrep: php.symfony.security.audit.symfony-non-literal-redirect.symfony-non-literal-redirect
+        return $this->redirect('/app/list?update&status=sendable');
     }
 
     public function askForStatus(Request $request, Response $response) {

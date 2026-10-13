@@ -59,25 +59,56 @@ function currentEmail(): string{
     throw new \Exception("Próba pobrania danych niezalogowanego użytkownika");
 }
 
-function apps(User $user, string $status = 'all', string $search = 'all', int $limit = 0, int $offset = 0): array {
-    $userEmail = $user->getEmail();
+const APPS_PAGE_SIZE = 100;
+const APPS_PAGE_MAX = 500;
 
-    $params = [':email' => $userEmail];
-    
-    $limitOffset = '';
-    if ($limit > 0) {
-        $params += [':limit' => $limit];
-        $params += [':offset' => $offset];
-        $limitOffset = <<<SQL
-            limit :limit offset :offset
-        SQL;
-    }
+/**
+ * Parses the list query shared by the web list (/app/list, /app/partial),
+ * REST /api/rest/user/apps and the MCP list_reports tool. The page size is
+ * always clamped — only internal callers (export, account removal) may call
+ * apps() without a limit.
+ *
+ * @return array{status: string, search: string, limit: int, offset: int}
+ */
+function appsQueryFromParams(array $params): array {
+    $limit = (int)($params['limit'] ?? APPS_PAGE_SIZE);
+    return [
+        'status' => (string)($params['status'] ?? 'all'),
+        'search' => (string)($params['search'] ?? $params['q'] ?? ''),
+        'limit'  => $limit > 0 ? min($limit, APPS_PAGE_MAX) : APPS_PAGE_SIZE,
+        'offset' => max(0, (int)($params['offset'] ?? 0)),
+    ];
+}
+
+/**
+ * The current user's reports, newest first.
+ *
+ * $status: 'all' (no drafts), 'allWithDrafts', 'sendable' (every status with
+ * "sendable": true in statuses.json) or a concrete status id.
+ *
+ * $search is matched in PHP against Application::searchText(), because
+ * address and comments are stored encrypted. Rows are streamed and decoded
+ * one by one until a full page is collected, so memory stays bounded by
+ * $limit even for accounts with >10k reports.
+ */
+function apps(User $user, string $status = 'all', string $search = '', int $limit = 0, int $offset = 0): array {
+    global $STATUSES;
+
+    $params = [':email' => $user->getEmail()];
 
     $whereStatus = <<<SQL
         and json_extract(value, '$.status') not in ('ready', 'draft')
     SQL;
     if ($status == 'allWithDrafts') {
         $whereStatus = '';
+    } elseif ($status == 'sendable') {
+        $sendable = array_keys(array_filter($STATUSES, fn($s) => $s->sendable ?? false));
+        $placeholders = [];
+        foreach ($sendable as $i => $s) {
+            $placeholders[] = ":status$i";
+            $params[":status$i"] = $s;
+        }
+        $whereStatus = "and json_extract(value, '$.status') in (" . implode(',', $placeholders) . ')';
     } elseif ($status !== 'all') {
         $whereStatus = <<<SQL
             and json_extract(value, '$.status') = :status
@@ -85,12 +116,14 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
         $params += [':status' => $status];
     }
 
-    $whereSearch = '';
-    if ($search !== 'all') {
-        $whereSearch = <<<SQL
-            and lower(value) like lower(:search)
-        SQL;
-        $params += [':search' => "%$search%"];
+    $search = trim($search);
+    if (in_array($search, ['all', '%'], true))
+        $search = '';
+
+    $limitOffset = '';
+    if ($limit > 0 && $search === '') {
+        $params += [':limit' => $limit, ':offset' => $offset];
+        $limitOffset = 'limit :limit offset :offset';
     }
 
     $sql = <<<SQL
@@ -98,7 +131,6 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
         from applications
         where email = :email
             $whereStatus
-            $whereSearch
         order by json_extract(value, '$.seq') desc,
             json_extract(value, '$.added') desc
         $limitOffset
@@ -107,8 +139,24 @@ function apps(User $user, string $status = 'all', string $search = 'all', int $l
     $stmt = \store\prepare($sql);
     $stmt->execute($params);
 
-    return $stmt->fetchAll(\PDO::FETCH_FUNC,
-        fn($json, $email) => \app\Application::withJson($json, $email));
+    if ($search === '')
+        return $stmt->fetchAll(\PDO::FETCH_FUNC,
+            fn($json, $email) => \app\Application::withJson($json, $email));
+
+    $apps = [];
+    $skip = $offset;
+    while (($row = $stmt->fetch(\PDO::FETCH_NUM)) !== false) {
+        $app = \app\Application::withJson($row[0], $row[1]);
+        if (mb_stripos($app->searchText(), $search) === false)
+            continue;
+        if ($skip-- > 0)
+            continue;
+        $apps[] = $app;
+        if ($limit > 0 && count($apps) >= $limit)
+            break;
+    }
+    $stmt->closeCursor();
+    return $apps;
 }
 
 

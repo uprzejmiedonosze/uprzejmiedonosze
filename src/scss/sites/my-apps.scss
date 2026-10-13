@@ -3,6 +3,11 @@
 @use "../lib/badge";
 
 .my-applications, .car-info {
+  #apps-list.loading {
+    opacity: .5;
+    pointer-events: none;
+  }
+
   ul.status-filter {
     padding-inline-start: 0;
     columns: 2;

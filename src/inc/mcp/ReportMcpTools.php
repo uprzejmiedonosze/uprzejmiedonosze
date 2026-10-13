@@ -28,14 +28,19 @@ final class ReportMcpTools {
      * List the current user's reports.
      *
      * @param string $status Filter: 'all' (default, excludes drafts), a concrete
-     *                        status id (e.g. 'confirmed-waiting'), or 'allWithDrafts'.
-     * @param int    $limit  Maximum number of reports to return (default 50).
+     *                        status id (e.g. 'confirmed-waiting'), 'sendable'
+     *                        (ready to be sent) or 'allWithDrafts'.
+     * @param string $search Optional text to match: plate, report number, address,
+     *                        date (d.mm.yyyy), comments, category or recipient name.
+     * @param int    $limit  Page size (default 50, max 500).
+     * @param int    $offset Number of matching reports to skip, for paging.
      * @return array{reports: array} The reports, newest first.
      */
-    public function listReports(string $status = 'all', int $limit = 50): array {
+    public function listReports(string $status = 'all', string $search = '', int $limit = 50, int $offset = 0): array {
         McpIdentity::requireScope('reports:read');
         $user = McpIdentity::currentUser();
-        $apps = \user\apps($user, $status, 'all', $limit, 0);
+        $apps = \user\apps($user, ...\user\appsQueryFromParams(
+            ['status' => $status, 'search' => $search, 'limit' => $limit, 'offset' => $offset]));
         // Wrap in an object: MCP structuredContent must be an object, not an
         // array. Normalise the domain objects to plain arrays too.
         return ['reports' => array_map([$this, 'enrich'], $apps)];
