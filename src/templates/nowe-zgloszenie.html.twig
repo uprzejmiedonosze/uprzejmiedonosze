@@ -19,6 +19,12 @@
     <input type="hidden" id="address" name="address" value="{{ app.address | json_encode }}" />
 
     <div>
+        {% if formError %}
+        <div class="warning-header form-error" role="alert">
+            <h4>Zgłoszenie nie zostało zapisane</h4>
+            <p>{{ formError }}</p>
+        </div>
+        {% endif %}
         {% if config.edit %}
         <div class="warning-header">
             <h4>Edytujesz zgłoszenie {% if app.number %}numer {{ app.number }}{% endif %}

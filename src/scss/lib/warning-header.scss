@@ -16,6 +16,16 @@
         margin-top: 0;
     }
 
+    // walidacja serwera po /app/confirm lub /app/done (ApplicationHandler::newApplication)
+    &.form-error {
+        background-color: rgba(#FF640A, .12);
+        border-left: 4px solid #FF640A; // jak #toast.error
+
+        p {
+            margin: 0;
+        }
+    }
+
     &.maintenance-banner {
         background-color: rgba(tokens.$mpr-accent, .25);
         border-left: 4px solid tokens.$mpr-accent;
