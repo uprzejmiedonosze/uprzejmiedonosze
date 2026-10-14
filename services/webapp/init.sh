@@ -19,6 +19,15 @@ else
     printf 'error_log /dev/stderr warn;\n' > /etc/nginx/error_log.conf
 fi
 
+# Per-IP rate limiting (zones in nginx.conf). Off in dev: a full Cypress run
+# from one IP exceeds 120 req/min and every later page gets a 429.
+if [ "$APP_ENV" = "dev" ]; then
+    printf '# rate limiting disabled in dev\n' > /etc/nginx/rate_limit.conf
+else
+    printf 'limit_req zone=perip_1s burst=90 nodelay;\nlimit_req zone=perip_5m burst=300 nodelay;\n' \
+        > /etc/nginx/rate_limit.conf
+fi
+
 # Dev only: the bind-mounted SQLite DB is owned by the host user, so on
 # WSL/Linux bind mounts php-fpm (www-data) can't write it ("readonly
 # database"). Make it writable. Harmless on macOS, where the mount is already
