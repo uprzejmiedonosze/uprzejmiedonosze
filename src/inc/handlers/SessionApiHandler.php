@@ -200,10 +200,12 @@ class SessionApiHandler extends AbstractHandler {
         $application = \app\get($appId);
         $this->checkEditable($request, $application);
         $this->checkOwnership($request, $application);
-        if (!isset($application->carInfo->plateId)) {
+        $queryParams = $request->getQueryParams();
+        $plateId = !empty($queryParams['plateId']) ? trim((string)$queryParams['plateId']) : ($application->carInfo->plateId ?? null);
+        if (empty($plateId)) {
             throw new \Exception("Brak numeru rejestracyjnego dla zgłoszenia $appId", 404);
         }
-        $recydywa = \recydywa\getDetailed($application->carInfo->plateId);
+        $recydywa = \recydywa\getDetailed($plateId);
         return $this->renderJson($response, $recydywa);
     }
 

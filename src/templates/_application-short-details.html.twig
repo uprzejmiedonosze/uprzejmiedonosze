@@ -90,7 +90,7 @@
         <a href="#{{ app.id }}" data-rel="popup" data-inline="true" data-mini="true"
             data-plateid="{{ app.carInfo.plateId }}"
             class="button small recydywa-seemore">
-            Zobacz zgłoszenia
+            {{ recydywa.usersCnt == 1 ? 'Zobacz swoje zgłoszenia' : 'Zobacz zgłoszenia' }}
         </a>
     </div>
     {% endif %}

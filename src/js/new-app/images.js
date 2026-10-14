@@ -6,7 +6,7 @@ import Api from '../lib/Api'
 import isIOS from "../lib/isIOS"
 import * as Sentry from "@sentry/browser";
 import { error } from "../lib/toast";
-import { updateRecydywa } from "./recydywa";
+import { clearRecydywa, updateRecydywa } from "./recydywa";
 import { triggerVehicleInfoEnrichment } from "./vehicle-info";
 
 // Matches the JPEG quality used by saveImgAndThumb in API.php (85);
@@ -95,11 +95,10 @@ function uploadStarted(id) {
   }
 
   if (id == "carImage") {
-    const recydywa = document.getElementById("recydywa")
+    clearRecydywa()
     const plateId = document.getElementById("plateId")
     const plateBox = document.querySelector('.plate-box')
 
-    if (recydywa) recydywa.style.display = 'none'
     if (plateId) plateId.className = ''
     if (plateBox) plateBox.style.display = 'none'
   }
@@ -436,7 +435,7 @@ async function sendFile(fileData, id, imageMetadata={}, previewUrl=null) {
       if (app.carInfo.plateId) {
         if (plateId) plateId.value = app.carInfo.plateId
         repositionCarImage(app.carInfo.vehicleBox, app.carImage.width, app.carImage.height)
-        updateRecydywa(appId)
+        updateRecydywa(appId, app.carInfo.plateId)
         triggerVehicleInfoEnrichment(app.carInfo.plateId)
         if (plateHint) {
           plateHint.className = "hint"

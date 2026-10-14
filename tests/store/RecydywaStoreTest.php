@@ -64,6 +64,7 @@ class RecydywaStoreTest extends DatabaseTestCase
         self::assertIsObject($detailed);
         self::assertIsArray($detailed->apps);
         self::assertEquals(1, count($detailed->apps));
+        self::assertStringStartsWith('Najnowsze zgłoszenie:', $detailed->lastTicket);
     }
 
     public function testAddToGallery(): void
