@@ -3,6 +3,7 @@
 namespace UprzejmieDonosze\Tests\API;
 
 require_once __DIR__ . '/../../export/inc/handlers/SessionApiHandler.php';
+require_once __DIR__ . '/../../export/inc/handlers/ApplicationHandler.php';
 
 use app\Application;
 use Aws\MockHandler;
@@ -239,6 +240,24 @@ class ReportFlowTest extends DatabaseTestCase
         $other = $this->savedUser('someone-else@example.com');
         $this->expectExceptionCode(403);
         finishApplication($app->id, $other);
+    }
+
+    public function testWebFinishBacksToTheFormWithMessageOnValidationError(): void
+    {
+        $user = $this->savedUser();
+        $app = $this->appWithImages($user); // still `draft` → finishApplication() throws ValidationException
+        $_SESSION['newAppId'] = $app->id;
+
+        $request = (new ServerRequestFactory())->createServerRequest('POST', 'http://localhost/app/done')
+            ->withParsedBody(['applicationId' => $app->id])
+            ->withAttribute('user', $user);
+        $response = (new \ApplicationHandler())->finish($request, new \Slim\Psr7\Response());
+
+        $this->assertSame(302, $response->getStatusCode());
+        $this->assertSame('/app/new', $response->getHeaderLine('Location'));
+        $this->assertSame($app->id, $_SESSION['newAppId']); // the form reopens THIS report, not a new one
+        $this->assertStringContainsString('nie zostało jeszcze zapisane', $_SESSION['newAppError']);
+        unset($_SESSION['newAppId'], $_SESSION['newAppError']);
     }
 
     public function testFinishConfirmsAssignsNumberAndIsIdempotent(): void

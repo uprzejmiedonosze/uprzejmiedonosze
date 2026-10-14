@@ -34,6 +34,10 @@ class ApplicationHandler extends AbstractHandler {
 
         $user = $request->getAttribute('user');
 
+        // komunikat walidacji serwera z /app/confirm lub /app/done – jednorazowy
+        $formError = $_SESSION['newAppError'] ?? null;
+        unset($_SESSION['newAppError']);
+
         if (isset($params['TermsConfirmation'])) {
             $user->confirmTerms();
             \user\save($user);
@@ -96,6 +100,7 @@ class ApplicationHandler extends AbstractHandler {
                 'lastLocation' => $user->getLastLocation()
             ],
             'app' => $application,
+            'formError' => $formError,
             'dtMin' => $dtMin,
             'dt' => $edit ? $dt : '',
             'dtMax' => $dtMax,
@@ -103,6 +108,9 @@ class ApplicationHandler extends AbstractHandler {
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function confirm(Request $request, Response $response): Response {
         $params = (array)$request->getParsedBody();
 
@@ -162,6 +170,7 @@ class ApplicationHandler extends AbstractHandler {
                 throw new HttpForbiddenException($request, $e->getMessage(), $e);
             } catch (ValidationException $e) {
                 log_info("Walidacja przy /app/confirm dla zgłoszenia $appId: {$e->getMessage()}");
+                $_SESSION['newAppError'] = $e->getMessage(); // pokazywany raz w formularzu (newApplication)
                 return $this->redirect('/app/new');
             } catch (NotSendableException $e) {
                 log_info("Brak wymaganych zdjęć przy /app/confirm dla zgłoszenia $appId, cofam na /app/new");
@@ -200,7 +209,15 @@ class ApplicationHandler extends AbstractHandler {
         unset($_SESSION['newAppId']);
         $user = $request->getAttribute('user');
 
-        $result = finishApplication($appId, $user); // shared with POST /api/rest/app/{id}/finish
+        try {
+            $result = finishApplication($appId, $user); // shared with POST /api/rest/app/{id}/finish
+        } catch (ValidationException $e) {
+            // np. zdjęcie usunięte w innej karcie między /app/confirm a /app/done – wracamy do formularza tego zgłoszenia
+            log_info("Walidacja przy /app/done dla zgłoszenia $appId: {$e->getMessage()}");
+            $_SESSION['newAppId'] = $appId;
+            $_SESSION['newAppError'] = $e->getMessage();
+            return $this->redirect('/app/new');
+        }
         $application = $result['application'];
         if (!$result['changed']) {
             log_info("Ponowny POST na /app/done dla zgłoszenia {$application->number} w statusie {$application->getStatus()->name}");
