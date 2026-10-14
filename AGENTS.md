@@ -19,6 +19,7 @@ make init-db-dev         # initialize dev SQLite database (run once)
 make emulator-ui         # Firebase emulator UI at http://localhost:4000
 make test                # PHPUnit in a throwaway container — ALWAYS use this, never call phpunit directly
 make cypress-local       # Cypress E2E against local dev (or the `cypress` skill)
+make lint-css            # stylelint on src/scss (requires `npm install` in tools/)
 make deploy-staging | deploy-shadow | deploy-prod
 make log-from-last-prod  # commits since last production release
 make diff-from-last-prod
@@ -60,6 +61,9 @@ Single test: `docker exec webapp ./vendor/phpunit/phpunit/phpunit --filter TestC
 - **Logging:** only `log_debug` / `log_info` / `log_error` from `src/inc/Logger.php` (ADR 0002).
 - **Verification:** `make test`; UI changes via `curl` against local docker — the user does visual review.
 - **Commits:** use the `/commit` command (tests → changelog on `main` → commit → push on `main`).
+- **Lint hook:** `.claude/hooks/lint-edited-file.sh` runs after every Write/Edit (stylelint for `src/scss`, `php -l`,
+  twig-linter, JSON validity for `src/api/config`). A blocking message from it means: fix the reported problem now.
+- **Skills** (`.claude/skills/`): `sm-unit` (SM/Police units), `new-migration` (SQLite schema changes), `cypress`.
 - **Keep docs alive:** when you change a convention, a recipe's example file, or make a non-obvious decision, update the
   relevant `AGENTS.md` or add an ADR in the same commit.
 
@@ -75,7 +79,7 @@ Single test: `docker exec webapp ./vendor/phpunit/phpunit/phpunit --filter TestC
 - **App ID from ticket number** (`UD/X/Y`):
   `ssh uprzejmiedonosze.net "sqlite3 /var/www/uprzejmiedonosze.net/db/store.sqlite \"select key from applications where json_extract(value, '$.number') = upper('UD/X/Y') limit 1\""`
 - **Geo unit for coordinates** (powiat, gmina, assigned SM/Police):
-  `curl -s -H "Cookie: UDSESSIONID=<VALUE>" "https://staging.uprzejmiedonosze.net/api/geo/LAT,LON/n"` (cookie in `cypress/support/commands.js`).
+  `curl -s -H "Cookie: UDSESSIONID=<VALUE>" "https://staging.uprzejmiedonosze.net/api/geo/LAT,LON/n"` (`SESSION_ID` in `cypress/support/commands.js`; HTTP 403 = the staging test session expired — see the `sm-unit` skill for a Nominatim fallback).
 - **Logs:** use the `papertrail` skill (SolarWinds API), not the `papertrail` CLI gem (it silently returns only ~the last
   hour). Filter by app ID (e.g. `filter=DGwu66uMCYBb`), then by the user's IP to trace their session (`filter=37.30.44.131 geo`).
 - **SM/Police units:** City Guards have priority over Police; never rename or reuse a unit key — see `src/api/AGENTS.md`

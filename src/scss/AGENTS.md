@@ -34,5 +34,9 @@ Jeden system wizualny: **rd25** (redesign 2025, mockupy w projekcie Claude Desig
 
 ## Weryfikacja
 
+`make lint-css` (stylelint, config `tools/stylelint.config.mjs`). Pliki z listy `LEGACY` w configu dostają tylko
+ostrzeżenia — po migracji pliku na tokeny usuń go z listy; nie dopisuj nowych. Hook Claude Code lintuje każdy
+edytowany plik `.scss` automatycznie.
+
 `npx sass --no-source-map --load-path=src/scss src/scss/index3.scss /dev/null` (składnia), potem `curl` lokalnego dockera.
 Wizualną weryfikację robi użytkownik.

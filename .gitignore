@@ -25,7 +25,11 @@ src/tensor
 testy
 vendor/**
 .sentryclirc
-.claude
+.claude/*
+!.claude/commands/
+!.claude/skills/
+!.claude/hooks/
+!.claude/settings.json
 .antigravitycli
 services/.env.dev
 services/.env.dev.local

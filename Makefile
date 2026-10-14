@@ -46,6 +46,10 @@ test: ## Run phpunit tests in a throwaway builder-test container (works alongsid
 		docker compose -f services/compose.yml -p uprzejmiedonosze-$@ --profile $@ down; \
 		exit $$status
 
+.PHONY: lint-css
+lint-css: ## Stylelint on src/scss (tokens instead of hardcoded colors; legacy files only warn)
+	@tools/node_modules/.bin/stylelint --config tools/stylelint.config.mjs --quiet "src/scss/**/*.scss"
+
 .PHONY: cypress-local
 cypress-local: ## Run Cypress tests against local dev environment
 	@[ -d tools/node_modules ] || (cd tools && npm install)
