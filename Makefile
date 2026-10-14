@@ -59,6 +59,11 @@ cypress-local: ## Run Cypress tests against local dev environment
 	@[ -d tools/node_modules ] || (cd tools && npm install)
 	@cd tools && CYPRESS_BASE_URL=http://127.0.0.1 CYPRESS_DOCKER=1 $(CYPRESS) run --e2e
 
+.PHONY: cypress-staging
+cypress-staging: ## Run Cypress tests against staging (config defaults), in a visible browser
+	@[ -d tools/node_modules ] || (cd tools && npm install)
+	@cd tools && $(CYPRESS) run --e2e --headed
+
 # ── Git / release helpers ─────────────────────────────────────────────────────
 
 .PHONY: check-git-clean
