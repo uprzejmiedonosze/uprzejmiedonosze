@@ -182,6 +182,24 @@ function mainPage(bool $useCache=true): array{
         return $stats;
     }
 
+    // Cache miss: the counts below scan the whole applications table, so under
+    // concurrent crawler hits only one request recomputes, the rest serve the
+    // last known values (no expiry) instead of piling up and timing out.
+    $locked = \semaphore\tryAcquire('mainPageStats');
+    if(!$locked && $useCache){
+        $stale = \cache\get(Type::GlobalStats, "mainPageStale");
+        if($stale)
+            return $stale;
+    }
+    try {
+        return computeMainPage();
+    } finally {
+        if($locked)
+            \semaphore\release('mainPageStats', 'mainPage');
+    }
+}
+
+function computeMainPage(): array{
     global $SM_ADDRESSES;
     $sm = count($SM_ADDRESSES);
 
@@ -202,5 +220,6 @@ function mainPage(bool $useCache=true): array{
 
     $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm, 'patrons' => $patrons);
     \cache\set(Type::GlobalStats, 'mainPage', $stats);
+    \cache\set(Type::GlobalStats, 'mainPageStale', $stats, 0, 0);
     return $stats;
 }
