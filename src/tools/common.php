@@ -444,7 +444,6 @@ function purgeLocalFiles(bool $dryRun=true): void {
             ?: pathinfo($basename, PATHINFO_FILENAME);
 
         if (isset($activeIds[$appId])) {
-            echo " ~ $key — pominięty (aktywne zgłoszenie)\n";
             $skipped++;
             continue;
         }

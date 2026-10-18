@@ -104,7 +104,9 @@ function removeApplication($app, $dryRun){
     $number = (isset($app->number))? "{$app->number} ($app->id)": "($app->id)";
     $status = $STATUSES[$app->status]->name;
     $email = (isset($app->email))? " użytkownika {$app->email}": " użytkownika @anonim";
-    __log("Usuwam zgłoszenie numer $number [$status]$email$added");
+    if ($app->status !== 'draft') {
+        __log("Usuwam zgłoszenie numer $number [$status]$email$added");
+    }
     if(isset($app->carImage)){
         removeFile($app->carImage->url, $dryRun);
         removeFile($app->carImage->thumb, $dryRun);
