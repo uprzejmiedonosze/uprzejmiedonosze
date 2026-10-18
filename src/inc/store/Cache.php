@@ -34,7 +34,7 @@ namespace cache {
     }
 
     function key(Type $type, ?string $key): string {
-        return  HOST . '-' . $type->name . '-' . ($key ?? '');
+        return $type->name . '-' . ($key ?? '');
     }
 
     function get(Type $type, ?string $key=""): mixed {
