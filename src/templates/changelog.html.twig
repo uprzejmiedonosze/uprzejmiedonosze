@@ -14,23 +14,18 @@
 
 {% block main %}
 <h2>Historia zmian</h2>
-<h4>Niedziela, 18 października 2026</h4>
-<ul>
-   <li>Strona główna nie zawiesza się już przy równoległych odwiedzinach po wyczyszczeniu pamięci podręcznej statystyk — tylko jedno żądanie przelicza liczniki, pozostałe widzą ostatnie znane wartości.</li>
-   <li>Mniej szumu w logach zadań cyklicznych: nocne czyszczenie nie raportuje usuwania szkiców, a synchronizacja plików nie wypisuje każdego pominiętego pliku aktywnego zgłoszenia.</li>
-</ul>
 <h4>Środa, 14 października 2026</h4>
 <ul>
    <li>Serwer sprawdza dane zgłoszenia (numer rejestracyjny, adres i współrzędne, datę, opis przy kategorii „inne”) tak samo jak formularz. Jeśli zgłoszenia nie da się zapisać lub potwierdzić, formularz pokazuje przyczynę zamiast po cichu wracać do edycji.</li>
    <li>Opis poziomu użytkownika na stronie konta odmienia się przez płeć.</li>
    <li>Asystenci AI (MCP): zdjęcia pojazdów rozpoznawane przez asystenta liczą się do limitu 50 unikalnych zdjęć na 30 dni (patroni mają wyższy limit lub brak limitu; ponowne wysłanie tego samego zdjęcia go nie zużywa). Lista zgłoszeń przyjmuje filtr „active” (wszystkie bez zarchiwizowanych).</li>
 </ul>
-<h4>Wtorek, 13 października 2026</h4>
+<h4 class="milestone">Wtorek, 13 października 2026</h4>
 <ul>
+   <li>Lista „Moje zgłoszenia” ładuje zgłoszenia po 100 (przycisk „Pokaż więcej”), a wyszukiwanie i filtry statusów działają po stronie serwera — przeszukują wszystkie zgłoszenia, także na kontach z tysiącami zgłoszeń, gdzie strona wcześniej się nie ładowała lub pokazywała tylko 5000 najnowszych. Liczniki przy statusach pokazują pełne liczby zgłoszeń.</li>
    <li>Zaktualizowano adres e-mail Straży Miejskiej we Władysławowie.</li>
    <li>Dodano uwagi o współpracy ze Strażą Miejską w Gdyni po wysłaniu zgłoszenia (czas trwania postępowań, sposób informowania o wyniku).</li>
    <li>Dodano uwagi o współpracy z Komisariatem Policji w Piastowie.</li>
-   <li>Lista „Moje zgłoszenia” ładuje zgłoszenia po 100 (przycisk „Pokaż więcej”), a wyszukiwanie i filtry statusów działają po stronie serwera — przeszukują wszystkie zgłoszenia, także na kontach z tysiącami zgłoszeń, gdzie strona wcześniej się nie ładowała lub pokazywała tylko 5000 najnowszych. Liczniki przy statusach pokazują pełne liczby zgłoszeń.</li>
    <li>Pobieranie wszystkich zgłoszeń w pliku xls działa także na kontach z tysiącami zgłoszeń (wcześniej kończyło się błędem) i jest wielokrotnie szybsze.</li>
    <li>Wyszukiwanie na liście zgłoszeń ignoruje polskie znaki („wroclaw” znajdzie „Wrocław”).</li>
    <li>Asystenci AI (MCP) pobierają listę zgłoszeń stronami po maksymalnie 100 — duże listy powodowały błędy.</li>
@@ -50,7 +45,7 @@
 <ul>
    <li>Nowe wykrywanie twarzy na zdjęciach w galerii recydywy: zamiast ukrywać całe zdjęcie, rozmywamy tylko widoczne twarze (na miniaturze i w galerii na Tumblr). Oryginalne zdjęcie wysyłane do służb pozostaje bez zmian. Rzadziej też zdarzają się fałszywe alarmy, przez które ukrywane były zdjęcia bez żadnych osób.</li>
 </ul>
-<h4>Środa, 7 października 2026</h4>
+<h4 class="milestone">Środa, 7 października 2026</h4>
 <ul>
    <li>Zgłoszenia „Jazda po chodniku” bez oświadczenia o byciu świadkiem mają nowe brzmienie: „Pojazd znajdował się w miejscu, do którego dojazd jest możliwy wyłącznie wzdłuż chodnika lub przez przejście dla pieszych” — zamiast twierdzenia, że pojazd jechał chodnikiem, czego zgłaszający nie widział.</li>
    <li>W edycji konta można teraz wybrać formę gramatyczną („byłem/byłam świadkiem") używaną w pismach do służb — dotąd była zgadywana wyłącznie z imienia. Lepsze rozpoznawanie imion żeńskich nie kończących się na „a" (Noemi, Nel, Karmen).</li>
@@ -78,7 +73,7 @@
 <ul>
    <li>Poprawiono liczbę zgłoszeń widoczną w sekcji „Recydywa": po usunięciu konta użytkownika przestaje ona nieprawidłowo zawyżać licznik dla numerów rejestracyjnych, które zgłaszał.</li>
 </ul>
-<h4>Poniedziałek, 28 września 2026</h4>
+<h4 class="milestone">Poniedziałek, 28 września 2026</h4>
 <ul>
    <li>Migracja całej infrastruktury Uprzejmie Donoszę.</li>
 </ul>
@@ -150,7 +145,7 @@
 <ul>
    <li>Dodano możliwość samodzielnego skasowania konta w ustawieniach konta, potwierdzanego wpisaniem własnego adresu e-mail.</li>
 </ul>
-<h4>Czwartek, 20 sierpnia 2026</h4>
+<h4 class="milestone">Czwartek, 20 sierpnia 2026</h4>
 <ul>
    <li>Dodano logowanie kluczem dostępu (passkey) jako dodatkową metodę zalogowania się.</li>
    <li>Dodano automatyczne logowanie przez Google One Tap dla niezalogowanych odwiedzających.</li>
