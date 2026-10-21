@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "relation": ["delegate_permission/common.get_login_creds"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "net.uprzejmiedonosze.pro",
+      "sha256_cert_fingerprints": [
+        "E3:ED:80:F5:70:AB:61:99:B0:11:14:70:A7:9E:A7:6A:15:76:90:E3:0A:90:DC:D4:48:2F:7D:46:C7:18:44:07"
+      ]
+    }
+  }
+]
