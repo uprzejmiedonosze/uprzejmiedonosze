@@ -79,8 +79,11 @@
             </div>
             <div class="recydywa recydywa-details">
                 <p class="recydywa-header"></p>
-                <p class="recydywa-lastTicket"><p>
-                <p class="recydywa-galleryLink"></p>
+                <p class="recydywa-lastTicket"></p>
+                <p class="recydywa-sameDay" style="display: none;"></p>
+                <p class="recydywa-actions">
+                    <a href="#" class="button small recydywa-seemore" style="display: none;">Zobacz zgłoszenia</a>
+                </p>
                 <p class="recydywa-hint">Liczymy recydywę od dwóch i więcej użytkowników</p>
             </div>
             <div>
@@ -283,6 +286,12 @@
         </fieldset>
     </div> <!-- ui-field-contain -->
 </form>
+
+<div id="recydywa" class="popup-overlay">
+    <div class="ui-content popup-content">
+    </div>
+</div>
+
 <script src="/js/new-app.js?{{ JS_HASH }}"
     last-location="{{ app.getLatLng() ?? config.lastLocation }}"
     stop-agresji="{{ app.stopAgresji }}"

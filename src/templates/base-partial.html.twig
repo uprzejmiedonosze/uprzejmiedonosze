@@ -1,4 +1,4 @@
-<div class="{{ mainClass ?? '' }} {% if dialog %}dialog{% endif %}">
+<div class="{{ mainClass ?? '' }} {% if dialog ?? false %}dialog{% endif %}">
     <div class="close"></div>
     {% block main %}{% endblock %}
 </div>

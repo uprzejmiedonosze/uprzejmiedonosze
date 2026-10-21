@@ -188,18 +188,23 @@ class StaticPagesHandler extends AbstractHandler {
         $partial = $request->getAttribute('partial');
         
         $plateId = $args['plateId'];
-        $apps = \app\byPlate($plateId);
+        $apps = \app\byPlate($plateId) ?? [];
 
         $image = null;
         $imagesCount = 0;
 
         $recydywa = Recydywa::withApps($apps);
 
-        if ($recydywa->appsCnt < 2)
-            throw new HttpNotFoundException($request);
-
-        if ($recydywa->usersCnt < 2 && !$partial)
-            throw new HttpNotFoundException($request);
+        if ($partial) {
+            $isOnlyMe = $user && !empty($apps) && empty(array_filter($apps, fn($app) => !$app->isAppOwner($user)));
+            // Partial view allows inspection for community recidivism (>= 2 users)
+            // or when all reports belong to the current user (even if only 1 report).
+            if ($recydywa->appsCnt < 1 || ($recydywa->usersCnt < 2 && !$isOnlyMe))
+                throw new HttpNotFoundException($request);
+        } else {
+            if ($recydywa->usersCnt < 2)
+                throw new HttpNotFoundException($request);
+        }
 
         foreach($apps as $app) {
             $app->isAppOwner = $app->isAppOwner($user);
