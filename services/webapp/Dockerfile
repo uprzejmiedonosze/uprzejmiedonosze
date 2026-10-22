@@ -21,6 +21,9 @@ FROM debian:bookworm-slim AS php-base
 # history / AGENTS.md for exactly which stage needs which, confirmed
 # against the pre-refactor per-stage package lists so this is a pure
 # de-duplication, not a behavior change.
+# Bump to invalidate the cached apt layer and pull the newest Sury PHP
+# (the layer is otherwise reused from the registry/CI cache indefinitely).
+ARG PHP_REFRESH=2026-10-22
 RUN apt-get update && apt-get install -y --no-install-recommends \
         curl ca-certificates && \
     curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
@@ -33,9 +36,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # ── Builder (shared: vendor + full export) ───────────────────────────────────
 FROM php-base AS builder
-
-ARG APP_HOST=localhost
-ARG APP_HTTPS=http
 
 WORKDIR /build
 
@@ -82,6 +82,11 @@ RUN mkdir -p \
     export/inc/dataclasses export/inc/store export/inc/converters \
     export/templates export/tools export/sql
 
+# Declared here, not at the top of the stage: a changed ARG value invalidates
+# the cache of every RUN after it, so an early ARG made staging/shadow/prod
+# each re-run Node install, npm ci and composer install from scratch.
+ARG APP_HOST=localhost
+ARG APP_HTTPS=http
 RUN [ "${APP_HOST}" = "localhost" ] || sh build.sh
 
 # ── Webapp ────────────────────────────────────────────────────────────────────
