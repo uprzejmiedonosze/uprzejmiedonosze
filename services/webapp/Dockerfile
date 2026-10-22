@@ -147,7 +147,7 @@ RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
         -e "s/^session.name.*/session.name = UDSESSIONID/" \
         -e "s/^session.save_handler.*/session.save_handler = memcached/" \
         /etc/php/8.4/fpm/php.ini && \
-    printf 'session.save_path = "memcached:11211"\n' >> /etc/php/8.4/fpm/php.ini && \
+    printf 'session.save_path = "memcached:11211"\nsession.upload_progress.enabled = 0\n' >> /etc/php/8.4/fpm/php.ini && \
     # sess_lock_wait_min/max are in MILLISECONDS (php-memcached sleeps
     # wait*1000 us, doubling up to max). Defaults (150/150 ms, 5 retries)
     # give a losing request only ~750 ms before it gives up and proceeds
