@@ -327,12 +327,31 @@ services:
   # 63.96 MB on 2026-10-09) — ~16k mostly-anonymous sessions/day with a
   # 180-day TTL plus never-expiring ALPR/geo cache entries. The memory file
   # is exactly -m in size (256 MB on the volume).
+  # A bad metadata file makes memcached segfault on every start (a crash loop:
+  # no sessions, every request 500s). An empty one is left by a save that hit
+  # a full disk (dev, 2026-10-23), so it's dropped up front. memcached deletes
+  # the file once it has loaded it, so if the file is still there and no newer
+  # than the `.loading` marker, the previous start crashed loading it: drop it
+  # and start clean.
   memcached:
     profiles: [dev, staging, prod, test, shadow]
     image: memcached:alpine
     restart: always
     user: root
-    command: ["sh", "-c", "chown memcache /data && sleep 1 && exec memcached -u memcache -m 256 -e /data/memory_file"]
+    command:
+      - sh
+      - -c
+      - |
+        chown memcache /data
+        meta=/data/memory_file.meta
+        [ -s $$meta ] || rm -f $$meta
+        if [ -f $$meta ] && [ -f $$meta.loading ] && [ ! $$meta -nt $$meta.loading ]; then
+          echo "dropping $$meta: the previous start crashed loading it"
+          rm -f $$meta
+        fi
+        [ -f $$meta ] && touch $$meta.loading
+        sleep 1
+        exec memcached -u memcache -m 256 -e /data/memory_file
     stop_signal: SIGUSR1
     stop_grace_period: 30s
     volumes:

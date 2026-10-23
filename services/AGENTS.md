@@ -20,7 +20,9 @@ o wyższym priorytecie niż `Host(uprzejmiedonosze.net)` z `webapp-srv`. Zobacz 
 
 `memcached` to jedyny magazyn sesji PHP (`session.save_handler=memcached`). Działa z warm restartem
 (`-e /data/memory_file` na wolumenie `memcached-data`, `stop_signal: SIGUSR1`), więc łagodny stop/recreate/restart
-dockerd nie wylogowuje użytkowników; sesje traci tylko twardy kill (SIGKILL, OOM, crash hosta). Nie włączaj
+dockerd nie wylogowuje użytkowników; sesje traci tylko twardy kill (SIGKILL, OOM, crash hosta). Uszkodzony lub pusty
+`memory_file.meta` (np. zapis przy pełnym dysku) powoduje segfault przy każdym starcie — komenda startowa w compose
+go wtedy usuwa (marker `.loading`), więc memcached startuje pusty zamiast wpaść w pętlę restartów (każdy request = 500). Nie włączaj
 `live-restore` w dockerd — kontenery nie byłyby wtedy łagodnie zatrzymywane przy wyłączaniu hosta. Strojenie locka sesji
 (`memcached.sess_lock_wait_min/max`, w **milisekundach**) jest w `services/webapp/Dockerfile`.
 
