@@ -83,6 +83,30 @@ class GlobalStatsTest extends DatabaseTestCase
         return [0, 0];
     }
 
+    /**
+     * A request must never run the full-table scans itself -- on a cold cache
+     * it gets nothing and the page degrades, only the cron fills it.
+     */
+    public function testColdCacheReturnsEmptyWithoutComputing(): void
+    {
+        foreach (['mainPage', 'appsByDay', 'statsByDay', 'statsByYear2', 'statsByCarBrand'] as $key) {
+            \cache\delete(\cache\Type::GlobalStats, $key);
+        }
+
+        self::assertNull(\global_stats\mainPage());
+        self::assertSame([], \global_stats\appsByDay());
+        self::assertSame([], \global_stats\statsByDay());
+        self::assertSame([], \global_stats\statsByYear());
+        self::assertSame([], \global_stats\statsByCarBrand());
+        self::assertFalse(\cache\get(\cache\Type::GlobalStats, 'statsByYear2'), 'a read must not fill the cache');
+    }
+
+    public function testCronRefreshIsServedFromCache(): void
+    {
+        $rows = \global_stats\statsByYear(useCache: false);
+        self::assertSame($rows, \global_stats\statsByYear());
+    }
+
     public function testRowShapeIsMonthSmPoliceUsers(): void
     {
         // The shared test database holds no report from the last 24 months, so

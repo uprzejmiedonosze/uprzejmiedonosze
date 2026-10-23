@@ -85,7 +85,7 @@
       <a href="https://suppi.pl/uprzejmiedonosze"
           rel="external" target="_blank"
           class="suppi">Suppi</a>
-      (bez prowizji). Lub <a target="_blank" href="/patronite.html">dołączyć do {{ config.stats.patrons }} Patronek i Patronów</a>.
+      (bez prowizji). Lub <a target="_blank" href="/patronite.html">dołączyć do {% if config.stats %}{{ config.stats.patrons }} {% endif %}Patronek i Patronów</a>.
       </p>
       {% endif %}
   </nav>

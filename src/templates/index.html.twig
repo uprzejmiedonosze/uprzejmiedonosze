@@ -12,9 +12,11 @@
     <section class="mpr-hero">
         <div class="mpr-hero-inner">
             <div class="mpr-hero-copy">
+                {% if config.stats %}
                 <div class="mpr-hero-badge">
                     {{ config.stats.apps|number_format(0, ',', ' ') }} zgłoszeń wysłanych i liczymy dalej
                 </div>
+                {% endif %}
                 <h1>Pomagamy walczyć z&nbsp;<em>nielegalnym parkowaniem</em></h1>
                 <p class="mpr-lead">
                     Widzisz auto na chodniku, pasach albo trawniku? Zrób dwa zdjęcia &ndash;
@@ -59,6 +61,7 @@
         </div>
     </section>
 
+    {% if config.stats %}
     <section class="mpr-trust-band">
         <div>
             <strong>{{ (config.stats.apps / 1000)|round|number_format(0, ',', ' ') }} tys.</strong>
@@ -73,6 +76,7 @@
             <span>obsługiwanych miejscowości</span>
         </div>
     </section>
+    {% endif %}
 
     {% if general.isLoggedIn and general.hasApps %}
         {% include('_support-section.html.twig') %}

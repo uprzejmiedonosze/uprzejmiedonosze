@@ -24,6 +24,11 @@ dockerd nie wylogowuje użytkowników; sesje traci tylko twardy kill (SIGKILL, O
 `live-restore` w dockerd — kontenery nie byłyby wtedy łagodnie zatrzymywane przy wyłączaniu hosta. Strojenie locka sesji
 (`memcached.sess_lock_wait_min/max`, w **milisekundach**) jest w `services/webapp/Dockerfile`.
 
+Statystyki globalne (`src/inc/store/GlobalStats.php`: liczniki strony głównej, wykresy `/statystyki.html`) liczy
+**wyłącznie** `worker-cron` (`tools/refresh-stats.php`: pełny przebieg 5:00 i 23:40, `--missing-only` co godzinę).
+Request tylko czyta memcached — przy braku danych strona główna chowa liczby (+ ostrzeżenie w Sentry), a wykresy są
+puste. staging i shadow nie mają `worker-cron`, więc nie mają tych statystyk.
+
 ## Środowiska
 
 | | dev | staging | prod | shadow |

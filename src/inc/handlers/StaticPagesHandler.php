@@ -15,12 +15,9 @@ use Slim\Exception\HttpNotFoundException;
 class StaticPagesHandler extends AbstractHandler {
 
     function root(Request $request, Response $response): Response {
-        $params = $request->getQueryParams();
-        $useCache = !(array_key_exists('_refresh', $params));
-
         \telemetry\log('visitor_entry');
 
-        $mainPageStats = \global_stats\mainPage(useCache: $useCache);
+        $mainPageStats = \global_stats\mainPage();
         return AbstractHandler::renderHtml($request, $response, 'index', [
             'config' => [
                 'stats' => $mainPageStats

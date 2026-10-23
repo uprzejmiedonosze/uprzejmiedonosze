@@ -2,15 +2,22 @@
 
 use cache\Type;
 
+// Every function here scans the whole applications table (5.6 GB on prod), so
+// only the worker-cron (tools/refresh-stats.php, useCache: false) computes
+// them. A request only ever reads the cache: on a miss (memcached restarted,
+// cron not run yet) it gets empty data instead of piling up full scans.
+// Kept longer than the cron interval so a single failed run doesn't blank the
+// numbers.
+const STATS_TTL = 3 * 24 * 60 * 60;
+
 /**
  * Returns number of new applications (by creation date)
  * during 30 days. 
  */
 function appsByDay(bool $useCache=true){
 
-    $stats = \cache\get(Type::GlobalStats, "appsByDay");
-    if($useCache && $stats){
-        return $stats;
+    if($useCache){
+        return \cache\get(Type::GlobalStats, "appsByDay") ?: [];
     }
 
     $sql = <<<SQL
@@ -24,7 +31,7 @@ function appsByDay(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::GlobalStats, 'appsByDay', $stats);
+    \cache\set(Type::GlobalStats, 'appsByDay', $stats, 0, STATS_TTL);
     return $stats;
 }
 
@@ -34,9 +41,8 @@ function appsByDay(bool $useCache=true){
  */
 function statsByDay(bool $useCache=true){
 
-    $stats = \cache\get(Type::GlobalStats, "statsByDay");
-    if($useCache && $stats){
-        return $stats;
+    if($useCache){
+        return \cache\get(Type::GlobalStats, "statsByDay") ?: [];
     }
 
     $today = (date('H') < 12)? "and json_extract(applications.value, '$.added') < date('now')": "";
@@ -66,7 +72,7 @@ function statsByDay(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::GlobalStats, 'statsByDay', $stats);
+    \cache\set(Type::GlobalStats, 'statsByDay', $stats, 0, STATS_TTL);
     return $stats;
 }
 
@@ -85,9 +91,8 @@ function statsByYear(bool $useCache=true){
     // Cache key is versioned because the row shape changed: an entry written by
     // the previous single-column version would feed the user count into the
     // Policja series until it expired.
-    $stats = \cache\get(Type::GlobalStats, "statsByYear2");
-    if($useCache && $stats){
-        return $stats;
+    if($useCache){
+        return \cache\get(Type::GlobalStats, "statsByYear2") ?: [];
     }
 
     global $SM_ADDRESSES, $POLICE_ADDRESSES;
@@ -142,7 +147,7 @@ function statsByYear(bool $useCache=true){
     $stmt = \store\prepare($sql);
     $stmt->execute([':policeKeys' => json_encode($policeOnly)]);
     $stats = $stmt->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::GlobalStats, 'statsByYear2', $stats);
+    \cache\set(Type::GlobalStats, 'statsByYear2', $stats, 0, STATS_TTL);
     return $stats;
 }
 
@@ -151,9 +156,8 @@ function statsByYear(bool $useCache=true){
  * (carInfo.vehicle) or, for historical reports, the old ALPR guess (carInfo.brand).
  */
 function statsByCarBrand(bool $useCache=true){
-    $stats = \cache\get(Type::GlobalStats, "statsByCarBrand");
-    if($useCache && $stats){
-        return $stats;
+    if($useCache){
+        return \cache\get(Type::GlobalStats, "statsByCarBrand") ?: [];
     }
 
     $sql = <<<SQL
@@ -168,37 +172,36 @@ function statsByCarBrand(bool $useCache=true){
     SQL;
 
     $stats = \store\query($sql)->fetchAll(\PDO::FETCH_NUM);
-    \cache\set(Type::GlobalStats, 'statsByCarBrand', $stats);
+    \cache\set(Type::GlobalStats, 'statsByCarBrand', $stats, 0, STATS_TTL);
     return $stats;
+}
+
+/**
+ * Counters for the main page, or null when the cron hasn't filled the cache
+ * yet -- the page then hides them instead of computing them in the request.
+ */
+function mainPage(bool $useCache=true): ?array{
+    if(!$useCache){
+        return computeMainPage();
+    }
+
+    $stats = \cache\get(Type::GlobalStats, "mainPage");
+    if($stats){
+        return $stats;
+    }
+
+    // Once an hour is enough to notice; every page view would flood Sentry.
+    if(isProd() && \cache\add(Type::GlobalStats, 'mainPageMissingReported', 1, 0, 60 * 60)){
+        \Sentry\captureMessage('Main page stats missing in memcached, run tools/refresh-stats.php',
+            \Sentry\Severity::warning());
+    }
+    return null;
 }
 
 /**
  * @SuppressWarnings(PHPMD.ShortVariable)
  * @SuppressWarnings(PHPMD.CamelCaseVariableName)
  */
-function mainPage(bool $useCache=true): array{
-    $stats = \cache\get(Type::GlobalStats, "mainPage");
-    if($useCache && $stats){
-        return $stats;
-    }
-
-    // Cache miss: the counts below scan the whole applications table, so under
-    // concurrent crawler hits only one request recomputes, the rest serve the
-    // last known values (no expiry) instead of piling up and timing out.
-    $locked = \semaphore\tryAcquire('mainPageStats');
-    if(!$locked && $useCache){
-        $stale = \cache\get(Type::GlobalStats, "mainPageStale");
-        if($stale)
-            return $stale;
-    }
-    try {
-        return computeMainPage();
-    } finally {
-        if($locked)
-            \semaphore\release('mainPageStats', 'mainPage');
-    }
-}
-
 function computeMainPage(): array{
     global $SM_ADDRESSES;
     $sm = count($SM_ADDRESSES);
@@ -219,7 +222,6 @@ function computeMainPage(): array{
     $patrons = count(\patronite\active(useCache:false));
 
     $stats = Array('apps' => $apps, 'users' => $users, 'sm' => $sm, 'patrons' => $patrons);
-    \cache\set(Type::GlobalStats, 'mainPage', $stats);
-    \cache\set(Type::GlobalStats, 'mainPageStale', $stats, 0, 0);
+    \cache\set(Type::GlobalStats, 'mainPage', $stats, 0, STATS_TTL);
     return $stats;
 }

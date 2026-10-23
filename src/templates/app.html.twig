@@ -123,7 +123,7 @@
     {% else %}
         <a href="/patronite.html" class="support-card">
             <div class="support-card-title">Patronite <span aria-hidden="true">&rarr;</span></div>
-            <p>Utrzymanie serwerów kosztuje. Dołącz do {{ config.stats.patrons }} Patronek i Patronów i pomóż nam działać stabilnie.</p>
+            <p>Utrzymanie serwerów kosztuje. Dołącz do {% if config.stats %}{{ config.stats.patrons }} {% endif %}Patronek i Patronów i pomóż nam działać stabilnie.</p>
         </a>
         <a href="https://suppi.pl/uprzejmiedonosze" target="_blank" rel="external" class="support-card">
             <div class="support-card-title">Suppi <span aria-hidden="true">&#8599;</span></div>

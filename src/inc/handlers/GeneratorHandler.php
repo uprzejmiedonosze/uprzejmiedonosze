@@ -13,7 +13,7 @@ class GeneratorHandler extends AbstractHandler {
 
         $user = $request->getAttribute('user');
         $email = $user->getEmail();
-        $mainPageStats = \global_stats\mainPage(useCache: true);
+        $mainPageStats = \global_stats\mainPage();
 
         return AbstractHandler::renderHtml($request, $response, 'generator', [
             'isPatron' => $user->isPatron(),
