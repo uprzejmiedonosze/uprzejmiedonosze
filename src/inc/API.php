@@ -80,7 +80,7 @@ function updateApplication(
     if ($dateParsed < (new DateTime())->modify('-7 months') && date_format($dateParsed, DT_FORMAT) !== ($application->date ?? null))
         throw new \ValidationException('datetime', 'Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!');
     if ($category === 0 && mb_strlen(trim((string)$comment)) <= 10)
-        throw new \ValidationException('comment', 'Wybierz rodzaj wykroczenia z listy albo opisz je w polu komentarza');
+        throw new \ValidationException('comment', 'Wybierz rodzaj wykroczenia z listy albo opisz je w polu komentarza (min. 11 znaków)');
 
     $application->date = date_format($dateParsed, DT_FORMAT);
     $application->dtFromPicture = (bool) $dtFromPicture;

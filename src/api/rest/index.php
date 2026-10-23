@@ -1,5 +1,9 @@
 <?php
 
+// Jak src/index.php i api/mcp: php.ini nie ustawia date.timezone (UTC), a daty zgłoszeń są w czasie lokalnym –
+// bez tego updateApplication() brał zdjęcie sprzed <2 h za „datę z przyszłości”.
+date_default_timezone_set('Europe/Warsaw');
+
 use app\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
