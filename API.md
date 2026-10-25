@@ -15,6 +15,12 @@ Decyzję podejmuje wyłącznie backend – appka nie porównuje wersji u siebie,
 `latestVersion` (wersja appki, per platforma) i `storeUrl`. **Kolejność wdrożenia zmiany kontraktu:** podbić `SCHEMA` w appce → nowy build
 w sklepach → dopiero potem backend z podbitym `VISION_SCHEMA` (od tej chwili starsze appki są blokowane).
 
+## Autoryzacja (`Authorization: Bearer <Firebase ID token>`)
+
+Brak nagłówka albo zły kształt → **400**. Token wygasły, unieważniony, ze złym podpisem albo konta wyłączonego → **401** – klient
+odświeża ID token i ponawia żądanie (appka robi to raz, `authFetch`). **403** oznacza już tylko brak uprawnień przy poprawnym
+tokenie (np. cudze zgłoszenie, konto bez rejestracji/regulaminu).
+
 ## User endpoints
 
 Requires authorization.

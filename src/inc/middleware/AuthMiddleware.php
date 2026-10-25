@@ -7,16 +7,24 @@ use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Exception\Auth\FailedToVerifyToken;
+use Kreait\Firebase\Exception\Auth\RevokedIdToken;
+use Kreait\Firebase\Exception\Auth\UserDisabled;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpForbiddenException;
+use Slim\Exception\HttpUnauthorizedException;
 use Slim\Exception\HttpBadRequestException;
 use Slim\Exception\HttpInternalServerErrorException;
 
 /**
+ * A token that is expired, revoked or otherwise invalid is 401 (re-authenticate: refresh the ID token and
+ * retry – the mobile app does exactly that on 401), not 403 (authenticated, but not allowed). A 403 here
+ * left clients holding a stale token with nothing to react to.
+ *
  * @SuppressWarnings(PHPMD.StaticAccess)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -64,7 +72,7 @@ class AuthMiddleware implements MiddlewareInterface {
                 | UnexpectedValueException // provided JWT is malformed OR is missing an algorithm / using an unsupported algorithm OR algorithm does not match provided key OR key ID in key/key-array is empty or invalid.
                 $e) {
 
-                throw new HttpForbiddenException($request, $e->getMessage(), $e);
+                throw new HttpUnauthorizedException($request, $e->getMessage(), $e);
             }
         }
 
@@ -84,7 +92,7 @@ class AuthMiddleware implements MiddlewareInterface {
             $payload = json_decode(base64_decode($payloadB64), true);
 
             if (!$payload || !isset($payload['email'])) {
-                throw new HttpForbiddenException($request, 'Invalid emulator token');
+                throw new HttpUnauthorizedException($request, 'Invalid emulator token');
             }
 
             return Array(
@@ -117,6 +125,8 @@ class AuthMiddleware implements MiddlewareInterface {
             );
             // \cache\set($token, json_encode($firebaseUser), 0, $claims->get('exp')->getTimestamp() - 60);
             return $firebaseUser;
+        } catch (FailedToVerifyToken | RevokedIdToken | UserDisabled $e) {
+            throw new HttpUnauthorizedException($request, $e->getMessage(), $e);
         } catch (Exception $e) {
             if (isProd()) \Sentry\captureException($e);
             throw new HttpForbiddenException($request, $e->getMessage(), $e);
