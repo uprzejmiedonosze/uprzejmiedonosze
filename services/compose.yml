@@ -271,6 +271,17 @@ services:
       - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.tls.certresolver=letsencrypt"
       - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.middlewares=${TRAEFIK_EXTRA_MIDDLEWARES:-}"
       - "traefik.http.services.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}.loadbalancer.server.port=80"
+      # /webhooks/* bypasses TRAEFIK_EXTRA_MIDDLEWARES: staging's geoblock
+      # (PL/ES only) would otherwise 403 Mailgun's webhook POSTs, which come
+      # from outside those countries (~1.8k/day on staging, 2026-10-26).
+      # Webhook authenticity is checked in the app (MAILER_WEBHOOK_SECRET).
+      # Explicit priority: prod's TRAEFIK_EXTRA_HOST_RULE makes the main
+      # rule longer, and Traefik's default priority is rule length.
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}-webhooks.rule=Host(`${APP_HOST:-uprzejmiedonosze.net}`) && PathPrefix(`/webhooks/`)"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}-webhooks.priority=1000"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}-webhooks.entrypoints=websecure"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}-webhooks.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}-webhooks.service=ud-${TRAEFIK_ENV:-${APP_ENV:-prod}}"
     logging:
       driver: syslog
       options:
