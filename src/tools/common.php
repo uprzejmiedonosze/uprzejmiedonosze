@@ -46,7 +46,6 @@ function removeAppsByStatus($olderThan, $status, $dryRun){ // days
         if ($interrupt) exit;
         if(isset($app->added)){
             if($app->added > $latest){
-                echo "Not removing $app->id from $app->added by {$app->email} as it's still fresh\n";
                 continue;
             }
         }

@@ -134,7 +134,9 @@ function removeApplication($app, $dryRun){
         removeFile(strstr($app->contextImage->url, ',', true) . ',ma.png', $dryRun);
     }
 
-    __log(" zgłoszenie oraz jego pliki usunięte;\n");
+    if ($app->status !== 'draft') {
+        __log(" zgłoszenie oraz jego pliki usunięte;\n");
+    }
     if($dryRun){
         return;
     }
