@@ -14,6 +14,15 @@
 
 {% block main %}
 <h2>Historia zmian</h2>
+<h4 class="milestone">Czwartek, 29 października 2026</h4>
+<ul>
+   <li>Nowe <a href="/wiki">Uprzejme WIKI</a> wbudowane w serwis — zastępuje dotychczasową wiki, wygląda jak reszta strony i korzysta z tego samego logowania. Edytować może każdy zalogowany użytkownik, który wysłał co najmniej jedno zgłoszenie: edytor ma podgląd na żywo i poradnik z gotowymi elementami do wstawienia (ramki z uwagami, wzory pism, schematy), a każda zmiana trafia do historii z porównaniem wersji. Moderatorzy mogą przywrócić wcześniejszą wersję, a lista „Ostatnie zmiany” pokazuje bieżące edycje.</li>
+   <li>Wyszukiwarka w wiki przeszukuje treść wszystkich artykułów i jednostek, ignorując polskie znaki („wroclaw” znajdzie „Wrocław”).</li>
+   <li>Każda straż miejska i komenda Policji, do której wysyłamy zgłoszenia, ma w wiki swoją stronę: adres, e-mail, obsługiwany obszar i uwagi o współpracy pobierane wprost z danych serwisu, a pod nimi notatkę, którą mogą uzupełniać użytkownicy (np. telefon, godziny, doświadczenia).</li>
+   <li>Treść stron <a href="/faq.html">FAQ</a>, <a href="/przesluchanie.html">Przesłuchanie</a> i <a href="/jak-zglosic-nielegalne-parkowanie.html">Poradnik „jak zgłaszać”</a> jest teraz redagowana w wiki — adresy stron się nie zmieniają.</li>
+   <li>Artykuły z dotychczasowej wiki zostały przeniesione (część pod nowymi, krótszymi adresami); stare linki i zakładki przekierowują do nowych stron.</li>
+   <li>Zaktualizowano <a href="/polityka-prywatnosci.html">politykę prywatności</a>: dokładniej opisano, co rozpoznaje automatyczna analiza zdjęć (pojazd, tablica rejestracyjna, rodzaj wykroczenia) i na jakiej podstawie, oraz wymieniono podmioty spoza Europejskiego Obszaru Gospodarczego, którym przekazujemy dane, wraz z podstawą tego przekazania.</li>
+</ul>
 <h4>Poniedziałek, 26 października 2026</h4>
 <ul>
    <li>Zaktualizowano biblioteki serwera, usuwając znane podatności bezpieczeństwa.</li>
@@ -231,7 +240,7 @@
     <li>Panel zgłoszeń przeniesiony pod nowy adres <a href="/app">/app</a>: odświeżone karty statystyk, na telefonie dolny pasek nawigacji, a na komputerze boczne menu widoczne przez cały czas korzystania z aplikacji.</li>
     <li>Uporządkowaliśmy adresy wewnątrz aplikacji — tworzenie zgłoszenia, lista zgłoszeń, edycja konta itd. mają teraz adresy w postaci <b>/app/…</b>. Stare linki i zakładki nadal działają (są automatycznie przekierowywane), a link do udostępnianego zgłoszenia ma teraz krótszą, docelową postać <b>/app/{id}</b> (stare adresy <b>ud-…​.html</b> przekierowują do niej trwale).</li>
     <li>Nowa nawigacja boczna na stronach informacyjnych: jedno rozwijane menu ze wszystkimi działami (Warto wiedzieć / Warto wspierać / O projekcie / Wiki) zamiast dawnej listy „Przeczytaj także”. Uporządkowaliśmy też nawigację mobilną i menu pod ikoną „hamburgera”.</li>
-    <li>Część stron poradnikowych (przepisy i kategorie zgłoszeń, e-Doręczenia, ePUAP, zwrot środków za przesłuchanie, zażalenie na brak mandatu) przeniesiono do <a href="/wiki/niezbednik/przepisy_i_kategorie_zgloszen">Uprzejmego WIKI</a> — dotychczasowe adresy przekierowują do nowych artykułów.</li>
+    <li>Część stron poradnikowych (przepisy i kategorie zgłoszeń, e-Doręczenia, ePUAP, zwrot środków za przesłuchanie, zażalenie na brak mandatu) przeniesiono do <a href="/wiki/prawo/przepisy-i-kategorie">Uprzejmego WIKI</a> — dotychczasowe adresy przekierowują do nowych artykułów.</li>
     <li>FAQ: dodano wyjaśnienie dotyczące anonimowości zgłoszeń, usunięto nieaktualną listę miast.</li>
     <li>Przyspieszenie ładowania stron: lżejsze i poprawnie serwowane obrazki (zrzuty demo w formacie WebP, mocno zmniejszone zdjęcia w poradniku), rezygnacja z zewnętrznych fontów oraz czcionki ikon na rzecz wbudowanej grafiki (SVG).</li>
     <li>Aktualizacja bibliotek PHP i JavaScript, w tym poprawki bezpieczeństwa.</li>

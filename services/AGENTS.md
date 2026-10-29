@@ -20,8 +20,9 @@ o wyższym priorytecie niż `Host(uprzejmiedonosze.net)` z `webapp-srv`. Zobacz 
 Na staging/dev/**shadow** (router DokuWiki pasuje tylko do `Host(uprzejmiedonosze.net)`) `/wiki` obsługuje już wiki
 wbudowane w UD (`WikiHandler`, nginx `location ^~ /wiki`). **Shadow współdzieli `db/` z prod** — pierwsze wejście na
 shadow `/wiki/sluzby` zamraża slugi jednostek w prodowym `wiki.sqlite`, a edycje na shadow lądują w prod.
-Nie deployuj `feat/wiki` na shadow przed decyzją o migracji;
-przełączenie prod = obniżenie/usunięcie routera DokuWiki (plan: `docs/plans/2026-10-28-wiki-w-ud.md`, sekcja 4).
+Nie deployuj wiki na shadow przed wgraniem prodowej `wiki.sqlite`;
+przełączenie prod = `docker compose stop wiki` w projekcie DokuWiki (Traefik usuwa jego router, `/wiki` przejmuje UD;
+rollback = `start`). Plan: `docs/plans/2026-10-29-wiki-wdrozenie.md`.
 
 `memcached` to jedyny magazyn sesji PHP (`session.save_handler=memcached`). Działa z warm restartem
 (`-e /data/memory_file` na wolumenie `memcached-data`, `stop_signal: SIGUSR1`), więc łagodny stop/recreate/restart
