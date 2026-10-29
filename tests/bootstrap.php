@@ -2,9 +2,10 @@
 
 define('PHPUNIT_RUNNING', true);
 define('DB_FILENAME', getenv('TEST_DB') ?: __DIR__ . '/../services/devroot/db/store.sqlite');
-// Wiki has its own database file; tests get a throwaway one (schema applied on first \wiki\db()).
+// Wiki has its own database file; tests get a throwaway one with the current schema.
 define('WIKI_DB_FILENAME', tempnam(sys_get_temp_dir(), 'wiki-test-'));
 register_shutdown_function(fn () => @unlink(WIKI_DB_FILENAME));
+(new PDO('sqlite:' . WIKI_DB_FILENAME))->exec(file_get_contents(__DIR__ . '/../src/sql/wiki_schema.sql'));
 
 // OAuth-server tests (consent, token exchange) need a private + encryption key.
 // The default test profile configures none, so generate ephemeral ones here —

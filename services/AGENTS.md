@@ -19,11 +19,9 @@ Poza tym compose: Matomo (`matomo.nieradka.com`, zewnętrzny) oraz `/wiki` na pr
 o wyższym priorytecie niż `Host(uprzejmiedonosze.net)` z `webapp-srv`. Zobacz jego własny `CLAUDE.md`.
 Na staging/dev/**shadow** (router DokuWiki pasuje tylko do `Host(uprzejmiedonosze.net)`) `/wiki` obsługuje już wiki
 wbudowane w UD (`WikiHandler`, nginx `location ^~ /wiki`). **Shadow współdzieli `db/` z prod** — pierwsze wejście na
-shadow `/wiki/sluzby` tworzy prodowe `wiki.sqlite` i zamraża slugi jednostek, a edycje na shadow lądują w prod.
+shadow `/wiki/sluzby` zamraża slugi jednostek w prodowym `wiki.sqlite`, a edycje na shadow lądują w prod.
 Nie deployuj `feat/wiki` na shadow przed decyzją o migracji;
 przełączenie prod = obniżenie/usunięcie routera DokuWiki (plan: `docs/plans/2026-10-28-wiki-w-ud.md`, sekcja 4).
-Baza `db/wiki.sqlite` powstaje przy pierwszym żądaniu — jeśli zakładasz ją ręcznie (`docker exec` jako root), oddaj
-plik `www-data` (`chown www-data:www-data …/db/wiki.sqlite`), inaczej zapis zwróci błąd.
 
 `memcached` to jedyny magazyn sesji PHP (`session.save_handler=memcached`). Działa z warm restartem
 (`-e /data/memory_file` na wolumenie `memcached-data`, `stop_signal: SIGUSR1`), więc łagodny stop/recreate/restart

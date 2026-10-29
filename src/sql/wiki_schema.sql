@@ -1,5 +1,5 @@
 -- Wiki: osobna baza db/wiki.sqlite (src/inc/store/WikiStore.php), nie store.sqlite.
--- Stosowana automatycznie przez \wiki\db(), gdy PRAGMA user_version = 0. Kolejne zmiany:
+-- Najnowszy schemat (baza testowa: tests/bootstrap.php). Kolejne zmiany:
 -- src/sql/wiki_migration_YYYYMMDD_<slug>.sql, każda podbija user_version.
 
 -- Artykuły i notatki jednostek (path 'sluzby/<slug>'). path zapisywany raz; zmiana = nowy wpis w wiki_redirects.

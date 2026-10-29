@@ -15,7 +15,7 @@ więc treść jest niezaufana. Plan i audyt: `docs/plans/2026-10-28-wiki-w-ud.md
 - **Mermaid** z `securityLevel: 'strict'` (etykiety to treść redaktora); linki zewnętrzne `rel="nofollow ugc"`;
   historia/edycja `noindex`.
 - **Osobna baza `db/wiki.sqlite`** (treść publiczna oddzielona od danych zgłoszeń; backup przez glob `db/*.sqlite`).
-  Schemat stosowany przez `\wiki\db()` przy `user_version = 0`, zmiany — `wiki_migration_*.sql` (skill `new-migration`).
+  Plik bazy zakładany ręcznie (aplikacja go nie tworzy), schemat `wiki_schema.sql`, zmiany — `wiki_migration_*.sql` (skill `new-migration`).
 - **Media to pliki w repo** (`src/img/wiki/`), dodawane przez admina commitem — bez uploadu i bez tabeli.
 - **Jednostki (`/wiki/sluzby`) z konfiguracji**, nie z treści: karta z `sm.json`/`police.json`, edytowalna jest tylko
   notatka (`wiki_pages` `sluzby/<slug>`). Slug zamrażany przy pierwszym użyciu (`wiki_unit_slugs`) — URL nie zmienia
