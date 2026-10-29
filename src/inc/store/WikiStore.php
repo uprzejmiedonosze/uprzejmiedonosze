@@ -22,12 +22,6 @@ function db(): \PDO
     $wikiDb->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     $wikiDb->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
     $wikiDb->exec('PRAGMA foreign_keys = ON');
-    if ((int)$wikiDb->query('PRAGMA user_version')->fetchColumn() === 0) {
-        $schema = __DIR__ . '/../../sql/wiki_schema.sql';
-        if (!is_readable($schema))
-            throw new \RuntimeException("Brak schematu wiki: $schema");
-        $wikiDb->exec(file_get_contents($schema));
-    }
     return $wikiDb;
 }
 

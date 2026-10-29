@@ -75,8 +75,7 @@ function removeUser($email, $dryRun=true){
     }
 
     __log("Anonimizuję autora zmian w wiki");
-    // Treść zostaje; plik może jeszcze nie istnieć (a obraz crona nie ma schematu do jego utworzenia).
-    if(!$dryRun && file_exists(WIKI_DB_FILENAME)){
+    if(!$dryRun){
         \wiki\anonymizeAuthor($email);
     }
 

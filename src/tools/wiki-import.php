@@ -5,7 +5,7 @@
  *
  *   php wiki-import.php <katalog data/ z DokuWiki> [--dry-run] [--show-notes] [--db=<plik .sqlite>]
  *
- * --db: import do wskazanego pliku zamiast db/wiki.sqlite (np. przygotowanie bazy do wgrania na prod).
+ * --db: import do wskazanego pliku (z już założonym schematem) zamiast db/wiki.sqlite.
  *
  * Katalog z kopią data/ (pages/ i media/), np. z:
  *   ssh uprzejmiedonosze.net "cd /opt/wiki && docker compose exec -T wiki tar -C /var/www/html/data -czf - pages media"
