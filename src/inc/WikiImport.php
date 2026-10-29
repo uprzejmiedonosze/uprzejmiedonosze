@@ -65,6 +65,17 @@ const REDIRECT = [
     '' => 'start',
 ];
 
+/**
+ * Błędne stare adresy z ruchem w Google Search Console (literówki w linkach z zewnątrz) → stare id, na które
+ * mają prowadzić. Import zapisuje je jak zwykłe przekierowania.
+ */
+const TYPO_REDIRECTS = [
+    'niezbednik/zwrot_srodkow_za_presluchanie' => 'niezbednik:zwrot_srodkow_za_przesluchanie',
+    'pytania/czy-musze-se-stawic' => 'pytania:czy-musze-sie-stawic',
+    'sluzby/komisariat_policji_wroclaw-grabiszynek' => 'sluzby:dolnoslaskie:komisariat_policji_wroclaw_grabiszynek',
+    'sluzby/malopolskie/straz_miejskiej_w_olkuszu' => 'sluzby:malopolskie:straz_miejska_w_olkuszu',
+];
+
 /** Strony jednostek, których nie ma w mapie z audytu (sluzby_map), dopisane ręcznie; null = usunięta (decyzja 7). */
 const UNIT_PAGES_EXTRA = [
     'sluzby:wielkopolskie:komenda_strazy_gminnej' => ['sm', 'Dopiewo'],
