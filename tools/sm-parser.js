@@ -47,6 +47,8 @@ function processFile(fileName) {
 			sm[e] = sm[v.parent].clone()
 			if (orig.hint) sm[e].hint = orig.hint
 			if (orig.city) sm[e].city = orig.city
+			// klucz jednostki obsługującej tę gminę — wiki (src/inc/Wiki.php, units()) odróżnia nim jednostki od gmin
+			sm[e].parent = v.parent.toLowerCase()
 		})
 
 	Object.entries(sm)

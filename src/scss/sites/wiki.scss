@@ -341,3 +341,70 @@
 
   &__keys code { white-space: nowrap; }
 }
+
+// --- Służby (karta jednostki, lista) -----------------------------------------
+
+.wiki-unit {
+  margin: 1rem 0 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: $mpr-radius-card;
+  background: $mpr-surface;
+  box-shadow: $mpr-shadow-card;
+
+  &__type {
+    margin: 0;
+    font-size: 0.85rem;
+    color: $mpr-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  &__name {
+    margin: 0.25rem 0 0.5rem;
+
+    a { color: inherit; }
+  }
+
+  &__address { font-style: normal; }
+
+  &__hint { color: $mpr-on-surface-variant; }
+
+  &__dissolved {
+    padding: 0.5rem 0.75rem;
+    border-radius: $mpr-radius-sm;
+    background: $mpr-danger-container;
+    color: $mpr-danger;
+  }
+}
+
+.wiki-units {
+  list-style: none;
+  padding: 0;
+  columns: 2 20rem;
+
+  li {
+    break-inside: avoid;
+    padding: 0.3rem 0;
+  }
+
+  &__meta {
+    display: block;
+    font-size: 0.85rem;
+    color: $mpr-muted;
+  }
+
+  &__filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    max-width: 28rem;
+    margin: 1rem 0;
+
+    input {
+      font: inherit;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid $mpr-outline-variant;
+      border-radius: $mpr-radius-sm;
+    }
+  }
+}

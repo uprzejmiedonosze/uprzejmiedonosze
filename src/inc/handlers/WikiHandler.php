@@ -45,6 +45,9 @@ class WikiHandler extends AbstractHandler {
         if (isset($args['path']) && $path === 'start')
             return AbstractHandler::redirect('/wiki', 301);
 
+        if ($path === 'sluzby' || str_starts_with($path, 'sluzby/'))
+            return $this->unitPage($request, $response, $path);
+
         $page = \wiki\isValidPath($path) ? \wiki\getPage($path) : null;
         if (!$page) {
             $target = \wiki\redirectTarget($path);
@@ -67,13 +70,46 @@ class WikiHandler extends AbstractHandler {
         ]);
     }
 
+    /** /wiki/sluzby (lista z konfiguracji) i /wiki/sluzby/<slug> (karta jednostki + edytowalna notatka). */
+    private function unitPage(Request $request, Response $response, string $path): Response {
+        $note = \wiki\getPage($path);
+        $noteHtml = $note ? \wiki\renderForUser($note['body_md'], self::sex($request))->html : null;
+        if ($path === 'sluzby') {
+            return AbstractHandler::renderHtml($request, $response, 'wiki-units', [
+                'wiki' => self::wikiParams($request, $path) + [
+                    'page' => $note ?: ['updated_at' => null],
+                    'note' => $noteHtml,
+                    'units' => \wiki\units(),
+                    'unitTypes' => \wiki\UNIT_TYPES,
+                ],
+            ]);
+        }
+        $entry = \wiki\unitBySlug(substr($path, strlen('sluzby/')));
+        if (!$entry) {
+            $target = \wiki\redirectTarget($path);
+            if ($target)
+                return AbstractHandler::redirect(self::url($target), 301);
+            throw new HttpNotFoundException($request);
+        }
+        return AbstractHandler::renderHtml($request, $response, 'wiki-unit', [
+            'wiki' => self::wikiParams($request, $path) + [
+                'page' => $note ?: ['updated_at' => null, 'title' => $entry['unit']->getName(), 'section' => 'sluzby'],
+                'hasNote' => (bool)$note,
+                'note' => $noteHtml,
+                'card' => \wiki\unitCard($entry),
+                'entry' => $entry,
+            ],
+        ]);
+    }
+
     public function edit(Request $request, Response $response, array $args): Response {
         $path = $args['path'] ?? 'start';
         if (!\wiki\isValidPath($path))
             throw new HttpNotFoundException($request);
         $page = \wiki\getPage($path);
+        $unit = str_starts_with($path, 'sluzby/') ? \wiki\unitBySlug(substr($path, 7)) : null;
         return $this->renderEditor($request, $response, $path, [
-            'title' => $page['title'] ?? '',
+            'title' => $page['title'] ?? ($unit ? $unit['unit']->getName() : ($path === 'sluzby' ? 'Służby' : '')),
             'body' => $page['body_md'] ?? '',
             'summary' => '',
             'baseRev' => $page['current_rev'] ?? '',

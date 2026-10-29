@@ -1,0 +1,30 @@
+{# SITEMAP-PRIORITY:0.3 #}
+{% set title = wiki.entry.unit.getName ~ ' — jak zgłaszać' %}
+{% set shortTitle = wiki.entry.unit.getShortName %}
+{% set description = 'Dane kontaktowe i doświadczenia użytkowników Uprzejmie Donoszę: ' ~ wiki.entry.unit.getName %}
+{% extends "base.html.twig" %}
+
+{% block main %}
+<article class="wiki-page">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a> › <a href="/wiki/sluzby">Służby</a></nav>
+  <h1 class="wiki-page__title">{{ wiki.entry.unit.getName }}</h1>
+  {{ wiki.card|raw }}
+
+  <section class="wiki-unit-note">
+    <h2>Doświadczenia użytkowników</h2>
+    {% if wiki.hasNote %}
+      <div class="wiki-content">{{ wiki.note|raw }}</div>
+    {% else %}
+      <p class="wiki-page__meta">Nikt jeszcze nie opisał współpracy z tą jednostką{% if wiki.canEdit %} — <a href="/wiki/_edit/{{ wiki.path }}" rel="nofollow">dodaj notatkę</a>{% endif %}.
+      Przydają się: telefon dyżurny, godziny pracy, czy wzywają na przesłuchanie, adres e-Doręczeń, jak długo trwa sprawa.</p>
+    {% endif %}
+  </section>
+
+  {% if not embed %}
+  <footer class="wiki-page__footer">
+    {% if wiki.hasNote %}<p class="wiki-page__meta">Ostatnia zmiana notatki: {{ wiki.page.updated_at|date('j.m.Y H:i') }}</p>{% endif %}
+    {% include 'wiki/_actions.html.twig' %}
+  </footer>
+  {% endif %}
+</article>
+{% endblock %}
