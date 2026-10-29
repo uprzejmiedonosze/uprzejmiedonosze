@@ -42,18 +42,7 @@ CREATE TABLE IF NOT EXISTS wiki_unit_slugs (
 );
 CREATE INDEX IF NOT EXISTS wiki_unit_slugs_slug ON wiki_unit_slugs(slug);
 
--- Allowlista mediów: render przyjmuje tylko ![alt](media:<name>). Pliki na B2 pod prefiksem wiki/.
-CREATE TABLE IF NOT EXISTS wiki_media (
-    name         TEXT PRIMARY KEY,
-    b2_key       TEXT NOT NULL,
-    content_type TEXT NOT NULL,
-    bytes        INTEGER NOT NULL,
-    width        INTEGER,
-    height       INTEGER,
-    alt          TEXT NOT NULL DEFAULT '',
-    added_by     TEXT,
-    added_at     TEXT NOT NULL
-);
+-- Media wiki to pliki w repo (src/img/wiki/ → /img/wiki/), dodawane przez admina commitem — bez tabeli i bez uploadu.
 
 CREATE TABLE IF NOT EXISTS wiki_redirects (
     from_path  TEXT PRIMARY KEY,

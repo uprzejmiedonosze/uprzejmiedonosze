@@ -9,7 +9,7 @@
  *    potrzebuje innej liczby dwukropków niż zewnętrzna (`::::howto` … `:::uwaga` … `:::` … `::::`).
  *  - `[[toc]]`, `[[data:sm-hints]]`, `[[jednostka:sm/klucz]]` — blok osadzony w osobnej linii (EMBEDS).
  *  - `## Nagłówek {#kotwica}` — stała kotwica (bez niej generowana z tekstu).
- *  - `![opis](media:nazwa)` — obrazek wyłącznie z allowlisty wiki_media.
+ *  - `![opis](media:nazwa)` — obrazek wyłącznie z biblioteki mediów (pliki src/img/wiki/, mediaFile()).
  *  - `{{sex:klucz}}` — forma rodzajowa z SEXSTRINGS, podstawiana na końcu (personalize), więc HTML da się cache'ować.
  */
 
@@ -45,7 +45,7 @@ const MAX_BODY_BYTES = 200_000;
 
 /**
  * Dyrektywy blokowe → partial + dozwolone atrybuty (typ walidacji). Nazwa spoza tej mapy zostaje zwykłym tekstem.
- * Typy: text (≤ 200 znaków), id (kotwica), url (ścieżka względna, https, tel:, mailto:), media (nazwa z wiki_media).
+ * Typy: text (≤ 200 znaków), id (kotwica), url (ścieżka względna, https, tel:, mailto:), media (nazwa pliku z biblioteki mediów).
  */
 const DIRECTIVES = [
     'uwaga' => ['template' => 'wiki/_directive-note.html.twig', 'attrs' => ['title' => 'text'], 'required' => []],
@@ -119,11 +119,11 @@ final class Renderer
 
     /**
      * @param array<string, callable(string):?string> $embeds rodzaj → html dla `[[rodzaj:arg]]` (null = nieznany arg)
-     * @param ?callable(string):?array $mediaResolver nazwa → wiersz wiki_media (domyślnie \wiki\getMedia)
+     * @param ?callable(string):?array $mediaResolver nazwa → {url,width,height} (domyślnie \wiki\mediaFile)
      */
     public function __construct(private array $embeds = [], private $mediaResolver = null)
     {
-        $this->mediaResolver ??= fn(string $name) => getMedia($name);
+        $this->mediaResolver ??= fn(string $name) => mediaFile($name);
     }
 
     public function render(string $markdown): RenderResult
@@ -208,7 +208,7 @@ final class Renderer
         foreach ($images as $image) {
             $media = $this->resolveMedia($image->getUrl(), 'Obrazek');
             if ($media) {
-                $image->setUrl(mediaUrl($media));
+                $image->setUrl($media['url']);
                 if ($media['width']) $image->data->set('attributes/width', (string)$media['width']);
                 if ($media['height']) $image->data->set('attributes/height', (string)$media['height']);
                 $image->data->set('attributes/loading', 'lazy');
@@ -218,7 +218,7 @@ final class Renderer
         }
     }
 
-    /** `media:nazwa` → wiersz wiki_media; inne źródła i nieznane nazwy to błąd. */
+    /** `media:nazwa` → plik z biblioteki mediów; inne źródła i nieznane nazwy to błąd. */
     public function resolveMedia(string $url, string $what): ?array
     {
         if (!str_starts_with($url, 'media:')) {
@@ -280,7 +280,7 @@ final class Renderer
                 $this->error(":::{$block->name} nie ma atrybutu „{$key}”.");
             } elseif ($type === 'media') {
                 // resolveMedia sam zgłasza błąd
-                if ($media = $this->resolveMedia("media:$value", 'Obrazek')) $valid[$key] = mediaUrl($media);
+                if ($media = $this->resolveMedia("media:$value", 'Obrazek')) $valid[$key] = $media['url'];
             } elseif ($type === 'id') {
                 // validId sam zgłasza błąd
                 if ($this->validId($value)) $valid[$key] = $value;
@@ -305,10 +305,16 @@ function isSafeUrl(string $url): bool
     return (bool)preg_match('#^(tel:[0-9 +-]+|mailto:[^\s@]+@[^\s@]+)$#i', $url);
 }
 
-/** Publiczny URL pliku mediów (prefiks wiki/ w buckecie zdjęć). */
-function mediaUrl(array $media): string
+/** Media wiki: pliki w src/img/wiki/ (→ export/public/img/wiki/, adres /img/wiki/<nazwa>), dodawane przez admina commitem. */
+const MEDIA_DIR = __DIR__ . '/../public/img/wiki';
+
+/** Plik z biblioteki mediów albo null (nieznana nazwa = błąd w podglądzie). @return ?array{url:string,width:?int,height:?int} */
+function mediaFile(string $name): ?array
 {
-    return '/' . ltrim($media['b2_key'], '/');
+    if (!preg_match('/^[a-z0-9][a-z0-9._-]*\.(png|jpe?g|webp|gif)$/', $name) || !is_file(MEDIA_DIR . "/$name"))
+        return null;
+    $size = @getimagesize(MEDIA_DIR . "/$name") ?: [null, null];
+    return ['url' => "/img/wiki/$name", 'width' => $size[0], 'height' => $size[1]];
 }
 
 function renderTemplate(string $template, array $context): string
@@ -565,6 +571,35 @@ function save(\user\User $user, string $path, string $title, string $body, strin
     return $revId;
 }
 
+/**
+ * cleanID z DokuWiki (deaccent = 1): małe litery, polskie znaki bez ogonków, '/' i ' ' → ':' / '_',
+ * reszta niedozwolonych znaków → '_'. Wejście może być ścieżką z URL-a, linkiem z treści albo nazwą pliku.
+ */
+function dokuCleanId(string $id): string
+{
+    $id = rawurldecode(trim($id));
+    $id = mb_strtolower(strtr($id, ['ą' => 'a', 'ć' => 'c', 'ę' => 'e', 'ł' => 'l', 'ń' => 'n', 'ó' => 'o', 'ś' => 's', 'ź' => 'z', 'ż' => 'z',
+        'Ą' => 'a', 'Ć' => 'c', 'Ę' => 'e', 'Ł' => 'l', 'Ń' => 'n', 'Ó' => 'o', 'Ś' => 's', 'Ź' => 'z', 'Ż' => 'z']));
+    $id = str_replace(['/', ';'], ':', $id);
+    $id = preg_replace('/[^a-z0-9:._-]+/', '_', $id);
+    $id = preg_replace('/_+/', '_', $id);
+    $id = preg_replace('/:+/', ':', $id);
+    return trim($id, ':._-');
+}
+
+/** Nazwa pliku w bibliotece wiki dla starego id medium DokuWiki: sam basename (przestrzenie nazw znikają), małe litery. */
+function dokuMediaName(string $mediaId): string
+{
+    $base = basename(str_replace(':', '/', dokuCleanId(preg_replace('/\?.*$/', '', $mediaId))));
+    return preg_replace('/[^a-z0-9._-]/', '-', $base);
+}
+
+/** Ścieżka wiki odpowiadająca staremu id DokuWiki (forma, pod którą zapisane są wiki_redirects). */
+function legacyPath(string $dokuId): string
+{
+    return str_replace(':', '/', dokuCleanId($dokuId));
+}
+
 /** Przywrócenie starszej wersji = nowa rewizja z jej treścią (historia zostaje liniowa). */
 function revert(\user\User $user, int $revId): string
 {
@@ -692,7 +727,7 @@ function guide(): array
         ],
         [
             'title' => 'Obrazki',
-            'intro' => 'Obrazki pochodzą wyłącznie z biblioteki mediów wiki — nie da się wstawić obrazka z innej strony. Potrzebujesz nowego zrzutu ekranu lub zdjęcia? Wyślij plik (PNG, JPEG lub WebP, do 1 MB) przez stronę kontaktu, a administrator doda go do biblioteki i poda nazwę.',
+            'intro' => 'Obrazki pochodzą wyłącznie z biblioteki mediów wiki — nie da się wstawić obrazka z innej strony ani dodać go samodzielnie. Potrzebujesz nowego zrzutu ekranu lub zdjęcia? Wyślij plik (PNG, JPEG lub WebP) przez stronę kontaktu, a administrator doda go do biblioteki i poda nazwę.',
             'examples' => [
                 ['label' => 'Obrazek z biblioteki', 'md' => "![Formularz ePUAP z zaznaczonym polem adresata](media:epuap-adresat.png)", 'render' => false,
                     'note' => 'Zadziała, gdy plik o tej nazwie jest w bibliotece mediów.'],

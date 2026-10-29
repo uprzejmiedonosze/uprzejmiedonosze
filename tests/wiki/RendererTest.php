@@ -9,7 +9,7 @@ use wiki\Renderer;
 class RendererTest extends TestCase
 {
     private const MEDIA = [
-        'ekran.png' => ['name' => 'ekran.png', 'b2_key' => 'wiki/ekran.png', 'width' => 800, 'height' => 600],
+        'ekran.png' => ['url' => '/img/wiki/ekran.png', 'width' => 800, 'height' => 600],
     ];
 
     private function renderer(array $embeds = []): Renderer
@@ -85,7 +85,7 @@ class RendererTest extends TestCase
     public function testMediaImages(): void
     {
         $r = $this->renderer()->render("![Zrzut](media:ekran.png)\n\n![Obcy](https://evil.example/pixel.gif)\n\n![Brak](media:nie-ma.png)\n");
-        $this->assertStringContainsString('src="/wiki/ekran.png"', $r->html);
+        $this->assertStringContainsString('src="/img/wiki/ekran.png"', $r->html);
         $this->assertStringContainsString('width="800"', $r->html);
         $this->assertStringNotContainsString('evil.example', $r->html);
         $this->assertStringNotContainsString('nie-ma.png', $r->html);

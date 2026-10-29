@@ -99,6 +99,10 @@ mv /tmp/images-index.html src/images-index.html
 
 node_modules/.bin/parcel build --no-cache --no-source-maps --dist-dir export/public/img src/images-index.html
 
+# Media wiki (src/inc/Wiki.php mediaFile) — kopiowane bez parcela: nazwy plików są ich identyfikatorami w treści.
+mkdir -p export/public/img/wiki
+cp -r src/img/wiki/. export/public/img/wiki/
+
 # ── Sitemap ───────────────────────────────────────────────────────────────────
 
 log "sitemap.xml"

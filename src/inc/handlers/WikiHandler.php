@@ -15,9 +15,35 @@ use Slim\Exception\HttpNotFoundException;
  */
 class WikiHandler extends AbstractHandler {
 
-    /** URL strony: 'start' to /wiki. */
+    /** URL strony: 'start' to /wiki; cel zaczynający się od '/' (np. '/faq.html') to adres poza wiki. */
     public static function url(string $path): string {
+        if (str_starts_with($path, '/')) return $path;
         return $path === 'start' ? '/wiki' : "/wiki/$path";
+    }
+
+    /**
+     * Stare adresy DokuWiki → 301 na nowe: /wiki/ns/strona, /wiki/ns:Strona, /wiki/doku.php?id=…, /wiki/_export/raw/…,
+     * id z wielkimi literami i ogonkami (normalizacja jak cleanID), obrazki /wiki/_media/… i lib/exe/fetch.php?media=….
+     * null = to nie jest znany stary adres.
+     */
+    private function legacyRedirect(Request $request, string $path): ?Response {
+        $query = $request->getQueryParams();
+        if (in_array($path, ['doku.php', 'lib/exe/fetch.php', 'lib/exe/detail.php'], true))
+            $path = (string)($query['id'] ?? $query['media'] ?? '');
+        if (isset($query['media']) || preg_match('#^_(media|detail)/(.+)$#', $path, $m)) {
+            $name = \wiki\dokuMediaName($m[2] ?? $path);
+            return \wiki\mediaFile($name) ? AbstractHandler::redirect("/img/wiki/$name", 301) : null;
+        }
+        if (preg_match('#^_export/[^/]+/(.+)$#', $path, $m))
+            $path = $m[1];
+        $legacy = \wiki\legacyPath($path);
+        if ($legacy === '' || $legacy === 'start')
+            return AbstractHandler::redirect('/wiki', 301);
+        $target = \wiki\redirectTarget($legacy)
+            ?? (preg_match('#^sluzby/[a-z_]+$#', $legacy) && !\wiki\unitBySlug(substr($legacy, 7)) ? 'sluzby' : null); // listy wojewódzkie
+        if (!$target && $legacy !== $path && (\wiki\getPage($legacy) || ($legacy === 'sluzby' || \wiki\unitBySlug(substr($legacy, 7)))))
+            $target = $legacy;
+        return $target ? AbstractHandler::redirect(self::url($target), 301) : null;
     }
 
     private static function user(Request $request): ?\user\User {
@@ -50,9 +76,9 @@ class WikiHandler extends AbstractHandler {
 
         $page = \wiki\isValidPath($path) ? \wiki\getPage($path) : null;
         if (!$page) {
-            $target = \wiki\redirectTarget($path);
-            if ($target)
-                return AbstractHandler::redirect(self::url($target), 301);
+            $legacy = $this->legacyRedirect($request, $path);
+            if ($legacy)
+                return $legacy;
             if (!\wiki\isValidPath($path) || !\wiki\canEdit(self::user($request)))
                 throw new HttpNotFoundException($request);
             return AbstractHandler::renderHtml($request, $response, 'wiki-missing', [
@@ -86,9 +112,9 @@ class WikiHandler extends AbstractHandler {
         }
         $entry = \wiki\unitBySlug(substr($path, strlen('sluzby/')));
         if (!$entry) {
-            $target = \wiki\redirectTarget($path);
-            if ($target)
-                return AbstractHandler::redirect(self::url($target), 301);
+            $legacy = $this->legacyRedirect($request, $path);
+            if ($legacy)
+                return $legacy;
             throw new HttpNotFoundException($request);
         }
         return AbstractHandler::renderHtml($request, $response, 'wiki-unit', [

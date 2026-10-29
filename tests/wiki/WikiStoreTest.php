@@ -11,7 +11,7 @@ class WikiStoreTest extends WikiTestCase
         $this->assertSame(1, (int)\wiki\db()->query('PRAGMA user_version')->fetchColumn());
         $tables = \wiki\db()->query("SELECT name FROM sqlite_master WHERE type = 'table' AND name LIKE 'wiki_%'")
             ->fetchAll(\PDO::FETCH_COLUMN);
-        foreach (['wiki_pages', 'wiki_revisions', 'wiki_unit_slugs', 'wiki_media', 'wiki_redirects'] as $table)
+        foreach (['wiki_pages', 'wiki_revisions', 'wiki_unit_slugs', 'wiki_redirects'] as $table)
             $this->assertContains($table, $tables);
     }
 
@@ -69,7 +69,6 @@ class WikiStoreTest extends WikiTestCase
     public function testAnonymizeAuthorKeepsContent(): void
     {
         \wiki\savePage('test/anon', 'T', 'treść', '', 'gone@example.com', 'Gone');
-        \wiki\addMedia('test-anon.png', 'wiki/test-anon.png', 'image/png', 10, 1, 1, '', 'gone@example.com');
 
         $this->assertSame(1, \wiki\anonymizeAuthor('gone@example.com'));
 
@@ -79,6 +78,5 @@ class WikiStoreTest extends WikiTestCase
         $rev = \wiki\getRevision((int)$page['current_rev']);
         $this->assertNull($rev['author_email']);
         $this->assertSame(\wiki\DELETED_AUTHOR, $rev['author_name']);
-        $this->assertNull(\wiki\getMedia('test-anon.png')['added_by']);
     }
 }
