@@ -1,10 +1,10 @@
 {# Przyciski edycji/historii strony wiki albo powód, dla którego nie można edytować (\wiki\editBlockedReason). #}
 <div class="wiki-actions">
   {% if wiki.canEdit %}
-    <a href="/wiki/_edit{{ wiki.path == 'start' ? '' : '/' ~ wiki.path }}" class="mpr-button mpr-button-outline" rel="nofollow">Edytuj</a>
+    <a href="/wiki/_edit{{ wiki.path == 'start' ? '' : '/' ~ wiki.path }}" class="wiki-actions__link" rel="nofollow">Edytuj</a>
   {% endif %}
   {% if wiki.page.id is defined %}
-    <a href="/wiki/_history/{{ wiki.path }}" class="mpr-button mpr-button-outline" rel="nofollow">Historia</a>
+    <a href="/wiki/_history/{{ wiki.path }}" class="wiki-actions__link" rel="nofollow">Historia</a>
   {% endif %}
   {% if not wiki.canEdit %}
     <p class="wiki-actions__hint">

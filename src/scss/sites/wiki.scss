@@ -22,21 +22,46 @@
   font-size: 0.9rem;
 }
 
+// <footer> dziedziczy ciemną stopkę serwisu z lib/footer.scss — tu ją zerujemy.
 .wiki-page__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
   margin-top: 3rem;
-  padding-top: 1rem;
-  border-top: 1px solid $mpr-hairline;
+  padding-top: 0.75rem;
+  background: none;
+  color: $mpr-muted;
+  font-size: 0.85rem;
+  font-weight: 400;
+  border-width: 1px 0 0;
+  border-color: $mpr-hairline;
+
+  .wiki-page__meta {
+    margin: 0;
+    font-size: inherit;
+  }
+
+  a { color: $mpr-on-surface-variant; }
 }
 
 .wiki-actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
+  align-items: baseline;
+  gap: 0.25rem 1rem;
+
+  &__link {
+    color: $mpr-on-surface-variant;
+    text-decoration: underline;
+    text-decoration-color: $mpr-hairline;
+    text-underline-offset: 0.2em;
+
+    &:hover { text-decoration-color: currentColor; }
+  }
 
   &__hint {
     margin: 0;
-    color: $mpr-on-surface-variant;
   }
 }
 
