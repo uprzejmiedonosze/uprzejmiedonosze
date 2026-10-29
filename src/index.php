@@ -289,11 +289,11 @@ $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     // Strony przeniesione do wiki — trwałe przekierowanie (301). Statyczne trasy
     // mają w FastRoute pierwszeństwo przed wzorcem /{route}.html poniżej.
     $wikiRedirects = [
-        '/przepisy.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/przepisy_i_kategorie_zgloszen',
-        '/e-doreczenia.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/wysylka_przez_e-doreczenia',
-        '/epuap.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/wysylka_przez_epuap',
-        '/zwrot-za-przesluchanie.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/zwrot_srodkow_za_przesluchanie',
-        '/zazalenie-na-brak-mandatu.html' => 'https://uprzejmiedonosze.net/wiki/niezbednik/jak_napisac_zazalenie_na_decyzje_strazy_miejskiej_lub_policji',
+        '/przepisy.html' => '/wiki/niezbednik/przepisy_i_kategorie_zgloszen',
+        '/e-doreczenia.html' => '/wiki/niezbednik/wysylka_przez_e-doreczenia',
+        '/epuap.html' => '/wiki/niezbednik/wysylka_przez_epuap',
+        '/zwrot-za-przesluchanie.html' => '/wiki/niezbednik/zwrot_srodkow_za_przesluchanie',
+        '/zazalenie-na-brak-mandatu.html' => '/wiki/niezbednik/jak_napisac_zazalenie_na_decyzje_strazy_miejskiej_lub_policji',
     ];
     foreach ($wikiRedirects as $from => $to) {
         $group->get($from, function () use ($to) { return AbstractHandler::redirect($to, 301); });
