@@ -13,9 +13,9 @@
   <p class="wiki-unit__hint">{{ unit.hint|striptags }}</p>
   {% endif %}
   {% if entry.served %}
-  <details class="wiki-unit__served">
-    <summary>Obsługuje także: {{ num(entry.served|length, ['gmin', 'gminę', 'gminy']) }}</summary>
+  <div class="wiki-unit__served">
+    <p class="wiki-unit__served-title">Obsługiwany teren ({{ num(entry.served|length, ['gmin i miejscowości', 'gmina lub miejscowość', 'gminy i miejscowości']) }})</p>
     <p>{{ entry.served|join(', ') }}</p>
-  </details>
+  </div>
   {% endif %}
 </section>
