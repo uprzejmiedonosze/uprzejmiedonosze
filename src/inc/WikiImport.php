@@ -65,6 +65,11 @@ const REDIRECT = [
     '' => 'start',
 ];
 
+/** Anonimizacja przy imporcie (decyzja 4 planu): stare id → [tekst → zamiennik]. */
+const REDACT = [
+    'niezbednik:jak_napisac_zazalenie_na_decyzje_strazy_miejskiej_lub_policji' => ['ZS110CC' => 'ZS00000'],
+];
+
 /**
  * Błędne stare adresy z ruchem w Google Search Console (literówki w linkach z zewnątrz) → stare id, na które
  * mają prowadzić. Import zapisuje je jak zwykłe przekierowania.
