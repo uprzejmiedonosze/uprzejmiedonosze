@@ -1,0 +1,2122 @@
+{
+ "sluzby:dolnoslaskie:komenda_powiatowa_policji_w_glogowie": [
+  "police",
+  "powiat głogowski"
+ ],
+ "sluzby:dolnoslaskie:komenda_powiatowa_policji_w_olesnicy": [
+  "police",
+  "powiat oleśnicki"
+ ],
+ "sluzby:dolnoslaskie:komenda_powiatowa_policji_w_wolowie": [
+  "police",
+  "powiat wołowski"
+ ],
+ "sluzby:dolnoslaskie:komenda_powiatowa_policji_w_zgorzelcu": [
+  "police",
+  "powiat zgorzelecki"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_dlugolece": [
+  "police",
+  "gmina Długołęka"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_dusznikach_zdroju": [
+  "police",
+  "Duszniki-Zdrój"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_gluszycy": [
+  "police",
+  "Głuszyca"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_gluszycy_58340": [
+  "police",
+  "Głuszyca"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_katach_wroclawskich": [
+  "police",
+  "Kąty Wrocławskie"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_kobierzycach": [
+  "police",
+  "Wysoka"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_polanicy_zdroju": [
+  "police",
+  "Polanica-Zdrój"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_smolcu": [
+  "police",
+  "Smolec"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_sobotce": [
+  "police",
+  "gmina Sobótka"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_w_twardogorze": [
+  "police",
+  "Twardogóra"
+ ],
+ "sluzby:dolnoslaskie:komisariat_policji_wroclaw_krzyki": [
+  "police",
+  "Kobierzyce"
+ ],
+ "sluzby:dolnoslaskie:posterunek_policji_w_radkowie": [
+  "police",
+  "Radków"
+ ],
+ "sluzby:dolnoslaskie:straz_gminna_miekinia": [
+  "sm",
+  "Miękinia"
+ ],
+ "sluzby:dolnoslaskie:straz_gminna_w_olawie": [
+  "sm",
+  "Oława"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_lwowek_slaski": [
+  "sm",
+  "Lwówek Śląski"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_nowa_ruda": [
+  "sm",
+  "Nowa Ruda"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_polkowice": [
+  "sm",
+  "Polkowice"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_szczawno_zdroj": [
+  "sm",
+  "Szczawno-Zdrój"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_bielawie": [
+  "sm",
+  "Bielawa"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_boleslawcu": [
+  "sm",
+  "Bolesławiec"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_dzierzoniowie": [
+  "sm",
+  "Dzierżoniów"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_jeleniej_gorze": [
+  "sm",
+  "Jelenia Góra"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_karpaczu": [
+  "sm",
+  "Karpacz"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_klodzku": [
+  "sm",
+  "Kłodzko"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_kudowie_zdroju": [
+  "sm",
+  "Kudowa-Zdrój"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_legnicy": [
+  "sm",
+  "Legnica"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_siechnicach": [
+  "sm",
+  "Siechnice"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_srodzie_slaskiej": [
+  "sm",
+  "Środa Śląska"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_stroniu_slaskim": [
+  "sm",
+  "Stronie Śląskie"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_strzelinie": [
+  "sm",
+  "Strzelin"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_swidnicy": [
+  "sm",
+  "Świdnica"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_swiebodzicach": [
+  "sm",
+  "Świebodzice"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_szklarskiej_porebie": [
+  "sm",
+  "Szklarska Poręba"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_trzebnicy": [
+  "sm",
+  "Trzebnica"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_walbrzychu": [
+  "sm",
+  "Wałbrzych"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_zabkowicach_slaskich": [
+  "sm",
+  "Ząbkowice Śląskie"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_ziebicach": [
+  "sm",
+  "Ziębice"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_w_zlotoryi": [
+  "sm",
+  "Złotoryja"
+ ],
+ "sluzby:dolnoslaskie:straz_miejska_wroclawia": [
+  "sm",
+  "Wrocław"
+ ],
+ "sluzby:kujawsko_pomorskie:komenda_miejska_policji_w_bydgoszczy": [
+  "police",
+  "Bydgoszcz-miasto"
+ ],
+ "sluzby:kujawsko_pomorskie:komisariat_policji_w_kruszwicy": [
+  "police",
+  "Kruszwica"
+ ],
+ "sluzby:kujawsko_pomorskie:komisariat_policji_w_mroczy": [
+  "police",
+  "Matyldzin"
+ ],
+ "sluzby:kujawsko_pomorskie:komisariat_policji_w_solcu_kujawskim": [
+  "police",
+  "Solec Kujawski"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_gminna_w_brodnicy": [
+  "sm",
+  "Brodnica"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_aleksandrow_kujawski": [
+  "sm",
+  "Aleksandrów Kujawski"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_bydgoszczy": [
+  "sm",
+  "Bydgoszcz"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_chelmnie": [
+  "sm",
+  "Chełmno"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_chelmzy": [
+  "sm",
+  "Chełmża"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_grudziadzu": [
+  "sm",
+  "Grudziądz"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_inowroclawiu": [
+  "sm",
+  "Inowrocław"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_lipnie": [
+  "sm",
+  "Lipno"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_mogilnie": [
+  "sm",
+  "Mogilno"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_mroczy": [
+  "sm",
+  "Mrocza"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_nakle_nad_notecia": [
+  "sm",
+  "Nakło nad Notecią"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_rypinie": [
+  "sm",
+  "Rypin"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_swieciu": [
+  "sm",
+  "Świecie"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_toruniu": [
+  "sm",
+  "Toruń"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_w_wabrzeznie": [
+  "sm",
+  "Wąbrzeźno"
+ ],
+ "sluzby:kujawsko_pomorskie:straz_miejska_we_wloclawku": [
+  "sm",
+  "Włocławek"
+ ],
+ "sluzby:lodzkie:komenda_powiatowa_policji_powiatu_lodzkiego_wschodniego": [
+  "police",
+  "powiat łódzki wschodni"
+ ],
+ "sluzby:lodzkie:komisariat_policji_w_aleksandrowie_lodzkim": [
+  "police",
+  "Aleksandrów Łódzki"
+ ],
+ "sluzby:lodzkie:komisariat_policji_w_strykowie": [
+  "police",
+  "Stryków"
+ ],
+ "sluzby:lodzkie:posterunek_policji_w_drzewicy": [
+  "police",
+  "Drzewica"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_belchatowie": [
+  "sm",
+  "Bełchatów"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_konstantynowie_lodzkim": [
+  "sm",
+  "Konstantynów Łódzki"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_kutnie": [
+  "sm",
+  "Kutno"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_leczycy": [
+  "sm",
+  "Łęczyca"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_lodzi": [
+  "sm",
+  "Łódź"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_opocznie": [
+  "sm",
+  "Opoczno"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_pabianicach": [
+  "sm",
+  "Pabianice"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_piotrkowie_trybunalskim": [
+  "sm",
+  "Piotrków Trybunalski"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_rawie_mazowieckiej": [
+  "sm",
+  "Rawa Mazowiecka"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_sieradzu": [
+  "sm",
+  "Sieradz"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_skierniewicach": [
+  "sm",
+  "Skierniewice"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_tomaszowie_mazowieckim": [
+  "sm",
+  "Tomaszów Mazowiecki"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_wieluniu": [
+  "sm",
+  "Wieluń"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_zdunskiej_woli": [
+  "sm",
+  "Zduńska Wola"
+ ],
+ "sluzby:lodzkie:straz_miejska_w_zgierzu": [
+  "sm",
+  "Zgierz"
+ ],
+ "sluzby:lubelskie:komenda_miejska_policji_w_lublinie": [
+  "police",
+  "Lublin-miasto"
+ ],
+ "sluzby:lubelskie:komenda_powiatowa_policji_w_lubartowie": [
+  "police",
+  "powiat lubartowski"
+ ],
+ "sluzby:lubelskie:komenda_powiatowa_policji_w_lukowie": [
+  "police",
+  "powiat łukowski"
+ ],
+ "sluzby:lubelskie:komisariat_policji_w_belzycach": [
+  "police",
+  "Bełżyce"
+ ],
+ "sluzby:lubelskie:komisariat_policji_w_kurowie": [
+  "police",
+  "Kurów"
+ ],
+ "sluzby:lubelskie:straz_miejska_naleczow": [
+  "sm",
+  "Nałęczów"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_bialej_podlaskiej": [
+  "sm",
+  "Biała Podlaska"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_bilgoraju": [
+  "sm",
+  "Biłgoraj"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_chelmie": [
+  "sm",
+  "Chełm"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_hrubieszowie": [
+  "sm",
+  "Hrubieszów"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_krasniku": [
+  "sm",
+  "Kraśnik"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_krasnymstawie": [
+  "sm",
+  "Krasnystaw"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_lublinie": [
+  "sm",
+  "Lublin"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_pulawach": [
+  "sm",
+  "Puławy"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_swidniku": [
+  "sm",
+  "Świdnik"
+ ],
+ "sluzby:lubelskie:straz_miejska_w_zamosciu": [
+  "sm",
+  "Zamość"
+ ],
+ "sluzby:lubelskie:straz_miejska_we_wlodawie": [
+  "sm",
+  "Włodawa"
+ ],
+ "sluzby:lubuskie:komenda_miejska_policji_w_gorzowie_wlkp": [
+  "police",
+  "Gorzów Wielkopolski-miasto"
+ ],
+ "sluzby:lubuskie:komenda_powiatowa_policji_w_zaganiu": [
+  "police",
+  "powiat żagański"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_bytomiu_odrzanskim": [
+  "sm",
+  "Bytom Odrzański"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_czerwiensku": [
+  "sm",
+  "Czerwieńsk"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_gorzowie_wielkopolskim": [
+  "sm",
+  "Gorzów Wielkopolski"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_gubinie": [
+  "sm",
+  "Gubin"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_kostrzynie_nad_odra": [
+  "sm",
+  "Kostrzyn nad Odrą"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_kozuchowie": [
+  "sm",
+  "Kożuchów"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_krosnie_odrzanskim": [
+  "sm",
+  "Krosno Odrzańskie"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_nowej_soli": [
+  "sm",
+  "Nowa Sól"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_nowogrodzie_bobrzanskim": [
+  "sm",
+  "Nowogród Bobrzański"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_slawie": [
+  "sm",
+  "Sława"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_slubicach": [
+  "sm",
+  "Słubice"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_sulechowie": [
+  "sm",
+  "Sulechów"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_zaganiu": [
+  "sm",
+  "Żagań"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_zarach": [
+  "sm",
+  "Żary"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_zbaszynku": [
+  "sm",
+  "Zbąszynek"
+ ],
+ "sluzby:lubuskie:straz_miejska_w_zielonej_gorze": [
+  "sm",
+  "Zielona Góra"
+ ],
+ "sluzby:lubuskie:straz_miejska_we_wschowie": [
+  "sm",
+  "Wschowa"
+ ],
+ "sluzby:malopolskie:komenda_powiatowa_policji_w_chrzanowie": [
+  "police",
+  "powiat chrzanowski"
+ ],
+ "sluzby:malopolskie:komenda_powiatowa_policji_w_limanowej": [
+  "police",
+  "powiat limanowski"
+ ],
+ "sluzby:malopolskie:komenda_powiatowa_policji_w_myslenicach": [
+  "police",
+  "powiat myślenicki"
+ ],
+ "sluzby:malopolskie:komenda_powiatowa_policji_w_nowym_targu": [
+  "police",
+  "powiat nowotarski"
+ ],
+ "sluzby:malopolskie:komisariat_policji_w_bukowinie_tatrzanskiej": [
+  "police",
+  "gmina Bukowina Tatrzańska"
+ ],
+ "sluzby:malopolskie:komisariat_policji_w_nowym_wisniczu": [
+  "police",
+  "Nowy Wiśnicz"
+ ],
+ "sluzby:malopolskie:komisariat_policji_w_swiatnikach_gornych": [
+  "police",
+  "Libertów"
+ ],
+ "sluzby:malopolskie:posterunek_policji_w_kroscienku_nad_dunajcem": [
+  "police",
+  "Krościenko nad Dunajcem"
+ ],
+ "sluzby:malopolskie:straz_gminna_koscielisko": [
+  "sm",
+  "Kościelisko"
+ ],
+ "sluzby:malopolskie:straz_gminna_w_zielonkach": [
+  "sm",
+  "gmina Zielonki"
+ ],
+ "sluzby:malopolskie:straz_miejska_miasta_krakowa": [
+  "sm",
+  "Kraków"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_andrychowie": [
+  "sm",
+  "Andrychów"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_bochni": [
+  "sm",
+  "Bochnia"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_bukownie": [
+  "sm",
+  "Bukowno"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_gorlicach": [
+  "sm",
+  "Gorlice"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_ketach": [
+  "sm",
+  "Kęty"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_koszycach": [
+  "sm",
+  "Koszyce"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_krynicy_zdroju": [
+  "sm",
+  "Krynica-Zdrój"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_krzeszowicach": [
+  "sm",
+  "Krzeszowice"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_limanowej": [
+  "sm",
+  "Limanowa"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_miechowie": [
+  "sm",
+  "Miechów"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_mszanie_dolnej": [
+  "sm",
+  "Mszana Dolna"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_myslenicach": [
+  "sm",
+  "Myślenice"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_niepolomicach": [
+  "sm",
+  "Niepołomice"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_nowym_brzesku": [
+  "sm",
+  "Nowe Brzesko"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_nowym_saczu": [
+  "sm",
+  "Nowy Sącz"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_olkuszu": [
+  "sm",
+  "Olkusz"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_oswiecimiu": [
+  "sm",
+  "Oświęcim"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_proszowicach": [
+  "sm",
+  "Proszowice"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_rabce_zdroju": [
+  "sm",
+  "Rabka-Zdrój"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_skawinie": [
+  "sm",
+  "Skawina"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_slomnikach": [
+  "sm",
+  "Słomniki"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_suchej_beskidzkiej": [
+  "sm",
+  "Sucha Beskidzka"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_szczawnicy": [
+  "sm",
+  "Szczawnica"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_tarnowie": [
+  "sm",
+  "Tarnów"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_wadowicach": [
+  "sm",
+  "Wadowice"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_wieliczce": [
+  "sm",
+  "Wieliczka"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_wolbromiu": [
+  "sm",
+  "Wolbrom"
+ ],
+ "sluzby:malopolskie:straz_miejska_w_zakopanem": [
+  "sm",
+  "Zakopane"
+ ],
+ "sluzby:mazowieckie:i_oddzial_terenowy_strazy_miejskiej_m_st_warszawy": [
+  "sm",
+  "warszawa_ot1"
+ ],
+ "sluzby:mazowieckie:ii_oddzial_terenowy_strazy_miejskiej_m_st_warszawy": [
+  "sm",
+  "warszawa_ot2"
+ ],
+ "sluzby:mazowieckie:iii_oddzial_terenowy_strazy_miejskiej_m_st_warszawy": [
+  "sm",
+  "warszawa_ot3"
+ ],
+ "sluzby:mazowieckie:iv_oddzial_terenowy_strazy_miejskiej_m_st_warszawy": [
+  "sm",
+  "warszawa_ot4"
+ ],
+ "sluzby:mazowieckie:komenda_miejska_policji_w_plocku": [
+  "police",
+  "Płock-miasto"
+ ],
+ "sluzby:mazowieckie:komenda_miejska_policji_w_siedlcach": [
+  "police",
+  "Siedlce-miasto"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_garwolinie": [
+  "police",
+  "powiat garwoliński"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_gostyninie": [
+  "police",
+  "powiat gostyniński"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_otwocku": [
+  "police",
+  "powiat otwocki"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_piasecznie": [
+  "police",
+  "powiat piaseczyński"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_pruszkowie": [
+  "police",
+  "powiat pruszkowski"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_sochaczewie": [
+  "police",
+  "powiat sochaczewski"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_szydlowcu": [
+  "police",
+  "powiat szydłowiecki"
+ ],
+ "sluzby:mazowieckie:komenda_powiatowa_policji_w_zyrardowie": [
+  "police",
+  "powiat żyrardowski"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_czosnowie": [
+  "police",
+  "Czosnów"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_jedlinsku": [
+  "police",
+  "gmina Jedlińsk"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_lesznowoli": [
+  "police",
+  "Lesznowola"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_markach": [
+  "police",
+  "Marki"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_piastowie": [
+  "police",
+  "Piastów"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_radzyminie": [
+  "police",
+  "Radzymin"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_raszynie": [
+  "police",
+  "Raszyn"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_wieliszewie": [
+  "police",
+  "Wieliszew"
+ ],
+ "sluzby:mazowieckie:komisariat_policji_w_zielonce": [
+  "police",
+  "Zielonka"
+ ],
+ "sluzby:mazowieckie:posterunek_policji_w_podkowie_lesnej": [
+  "police",
+  "Podkowa Leśna"
+ ],
+ "sluzby:mazowieckie:posterunek_policji_wiskitki": [
+  "police",
+  "Wiskitki"
+ ],
+ "sluzby:mazowieckie:referat_oskarzycieli_publicznych_straz_miejska_m_st_warszawy": [
+  "sm",
+  "Warszawa"
+ ],
+ "sluzby:mazowieckie:straz_gminna_starych_babicach": [
+  "sm",
+  "Stare Babice"
+ ],
+ "sluzby:mazowieckie:straz_gminna_w_nieporecie": [
+  "sm",
+  "Nieporęt"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_bloniu": [
+  "sm",
+  "Błonie"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_brwinowie": [
+  "sm",
+  "Brwinów"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_ciechanowie": [
+  "sm",
+  "Ciechanów"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_gorze_kalwarii": [
+  "sm",
+  "Góra Kalwaria"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_grodzisku_mazowieckim": [
+  "sm",
+  "Grodzisk Mazowiecki"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_grojcu": [
+  "sm",
+  "Grójec"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_jozefowie": [
+  "sm",
+  "Józefów"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_konstancinie_jeziornie": [
+  "sm",
+  "Konstancin-Jeziorna"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_legionowie": [
+  "sm",
+  "Legionowo"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_lochowie": [
+  "sm",
+  "Łochów"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_lomiankach": [
+  "sm",
+  "Łomianki"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_losicach": [
+  "sm",
+  "Łosice"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_milanowku": [
+  "sm",
+  "Milanówek"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_minsku_mazowieckim": [
+  "sm",
+  "Mińsk Mazowiecki"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_mlawie": [
+  "sm",
+  "Mława"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_nasielsku": [
+  "sm",
+  "Nasielsk"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_nowym_dworze_mazowieckim": [
+  "sm",
+  "Nowy Dwór Mazowiecki"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_nowym_miescie": [
+  "sm",
+  "Nowe Miasto"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_ostrolece": [
+  "sm",
+  "Ostrołęka"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_ostrowi_mazowieckiej": [
+  "sm",
+  "Ostrów Mazowiecka"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_ozarowie_mazowieckim": [
+  "sm",
+  "Ożarów Mazowiecki"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_piasecznie": [
+  "sm",
+  "Piaseczno"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_plocku": [
+  "sm",
+  "Płock"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_plonsku": [
+  "sm",
+  "Płońsk"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_pruszkowie": [
+  "sm",
+  "Pruszków"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_pultusku": [
+  "sm",
+  "Pułtusk"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_radomiu": [
+  "sm",
+  "Radom"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_serocku": [
+  "sm",
+  "Serock"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_siedlcach": [
+  "sm",
+  "Siedlce"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_sierpcu": [
+  "sm",
+  "Sierpc"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_sulejowku": [
+  "sm",
+  "Sulejówek"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_tarczynie": [
+  "sm",
+  "Tarczyn"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_wegrowie": [
+  "sm",
+  "Węgrów"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_wolominie": [
+  "sm",
+  "Wołomin"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_wyszkowie": [
+  "sm",
+  "Wyszków"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_zabkach": [
+  "sm",
+  "Ząbki"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_zurominie": [
+  "sm",
+  "Żuromin"
+ ],
+ "sluzby:mazowieckie:straz_miejska_w_zyrardowie": [
+  "sm",
+  "Żyrardów"
+ ],
+ "sluzby:mazowieckie:v_oddzial_terenowy_strazy_miejskiej_m_st_warszawy": [
+  "sm",
+  "warszawa_ot5"
+ ],
+ "sluzby:mazowieckie:vi_oddzial_terenowy_strazy_miejskiej_m_st_warszawy": [
+  "sm",
+  "warszawa_ot6"
+ ],
+ "sluzby:mazowieckie:vii_oddzial_terenowy_strazy_miejskiej_m_st_warszawy": [
+  "sm",
+  "warszawa_ot7"
+ ],
+ "sluzby:opolskie:komenda_powiatowa_policji_w_strzelcach_opolskich": [
+  "police",
+  "powiat strzelecki"
+ ],
+ "sluzby:opolskie:komisariat_policji_w_ozimku": [
+  "police",
+  "Ozimek"
+ ],
+ "sluzby:opolskie:komisariat_policji_w_ozimku_46040": [
+  "police",
+  "Ozimek"
+ ],
+ "sluzby:opolskie:posterunek_policji_w_proszkowie": [
+  "police",
+  "Prószków"
+ ],
+ "sluzby:opolskie:straz_miejska_w_brzegu": [
+  "sm",
+  "Brzeg"
+ ],
+ "sluzby:opolskie:straz_miejska_w_glubczycach": [
+  "sm",
+  "Głubczyce"
+ ],
+ "sluzby:opolskie:straz_miejska_w_glucholazach": [
+  "sm",
+  "Głuchołazy"
+ ],
+ "sluzby:opolskie:straz_miejska_w_gogolinie": [
+  "sm",
+  "Gogolin"
+ ],
+ "sluzby:opolskie:straz_miejska_w_grodkowie": [
+  "sm",
+  "Grodkowo"
+ ],
+ "sluzby:opolskie:straz_miejska_w_grodkowie_49200": [
+  "sm",
+  "Grodkowo"
+ ],
+ "sluzby:opolskie:straz_miejska_w_kedzierzynie_kozlu": [
+  "sm",
+  "Kędzierzyn-Koźle"
+ ],
+ "sluzby:opolskie:straz_miejska_w_kluczborku": [
+  "sm",
+  "Kluczbork"
+ ],
+ "sluzby:opolskie:straz_miejska_w_krapkowicach": [
+  "sm",
+  "Krapkowice"
+ ],
+ "sluzby:opolskie:straz_miejska_w_lewinie_brzeskim": [
+  "sm",
+  "Lewin Brzeski"
+ ],
+ "sluzby:opolskie:straz_miejska_w_namyslowie": [
+  "sm",
+  "Namysłów"
+ ],
+ "sluzby:opolskie:straz_miejska_w_niemodlinie": [
+  "sm",
+  "Niemodlin"
+ ],
+ "sluzby:opolskie:straz_miejska_w_nysie": [
+  "sm",
+  "Nysa"
+ ],
+ "sluzby:opolskie:straz_miejska_w_olesnie": [
+  "sm",
+  "Olesno"
+ ],
+ "sluzby:opolskie:straz_miejska_w_opolu": [
+  "sm",
+  "Opole"
+ ],
+ "sluzby:opolskie:straz_miejska_w_paczkowie": [
+  "sm",
+  "Paczków"
+ ],
+ "sluzby:opolskie:straz_miejska_w_praszce": [
+  "sm",
+  "Praszka"
+ ],
+ "sluzby:opolskie:straz_miejska_w_prudniku": [
+  "sm",
+  "Prudnik"
+ ],
+ "sluzby:opolskie:straz_miejska_w_wolczynie": [
+  "sm",
+  "Wołczyn"
+ ],
+ "sluzby:opolskie:straz_miejska_w_zdzieszowicach": [
+  "sm",
+  "Zdzieszowice"
+ ],
+ "sluzby:podkarpackie:komenda_miejska_policji_w_rzeszowie": [
+  "police",
+  "Rzeszów-miasto"
+ ],
+ "sluzby:podkarpackie:komenda_powiatowa_policji_w_lancucie": [
+  "police",
+  "powiat łańcucki"
+ ],
+ "sluzby:podkarpackie:komenda_powiatowa_policji_w_nisku": [
+  "police",
+  "powiat niżański"
+ ],
+ "sluzby:podkarpackie:komenda_powiatowa_policji_w_stalowej_woli": [
+  "police",
+  "powiat stalowowolski"
+ ],
+ "sluzby:podkarpackie:komenda_powiatowa_policji_w_strzyzowie": [
+  "police",
+  "powiat strzyżowski"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_buguchwale": [
+  "sm",
+  "Boguchwała"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_debicy": [
+  "sm",
+  "Dębica"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_glogowie_malopolskim": [
+  "sm",
+  "Głogów Małopolski"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_jaroslawiu": [
+  "sm",
+  "Jarosław"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_jasle": [
+  "sm",
+  "Jasło"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_kolbuszowej": [
+  "sm",
+  "Kolbuszowa"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_krosnie": [
+  "sm",
+  "Krosno"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_lezajsku": [
+  "sm",
+  "Leżajsk"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_mielcu": [
+  "sm",
+  "Mielec"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_przemyslu": [
+  "sm",
+  "Przemyśl"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_przeworsku": [
+  "sm",
+  "Przeworsk"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_rzeszowie": [
+  "sm",
+  "Rzeszów"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_sanoku": [
+  "sm",
+  "Sanok"
+ ],
+ "sluzby:podkarpackie:straz_miejska_w_tarnobrzegu": [
+  "sm",
+  "Tarnobrzeg"
+ ],
+ "sluzby:podlaskie:komenda_powiatowa_policji_w_zambrowie": [
+  "police",
+  "powiat zambrowski"
+ ],
+ "sluzby:podlaskie:komisariat_policji_iv_w_bialymstoku": [
+  "police",
+  "gmina Grabówka"
+ ],
+ "sluzby:podlaskie:komisariat_policji_w_lapach": [
+  "police",
+  "Łapy"
+ ],
+ "sluzby:podlaskie:komisariat_policji_w_wasilkowie": [
+  "police",
+  "Wasilków"
+ ],
+ "sluzby:podlaskie:straz_miejska_w_bialymstoku": [
+  "sm",
+  "Białystok"
+ ],
+ "sluzby:podlaskie:straz_miejska_w_kolnie": [
+  "sm",
+  "Kolno"
+ ],
+ "sluzby:podlaskie:straz_miejska_w_lomzy": [
+  "sm",
+  "Łomża"
+ ],
+ "sluzby:podlaskie:straz_miejska_w_sokolce": [
+  "sm",
+  "Sokółka"
+ ],
+ "sluzby:podlaskie:straz_miejska_w_suwalkach": [
+  "sm",
+  "Suwałki"
+ ],
+ "sluzby:pomorskie:komenda_powiatowa_policji_w_czluchowie": [
+  "police",
+  "powiat człuchowski"
+ ],
+ "sluzby:pomorskie:komenda_powiatowa_policji_w_kartuzach": [
+  "police",
+  "powiat kartuski"
+ ],
+ "sluzby:pomorskie:komenda_powiatowa_policji_w_nowym_dworze_gdanskim": [
+  "police",
+  "powiat nowodworski pomorskie"
+ ],
+ "sluzby:pomorskie:komenda_powiatowa_policji_w_pruszczu_gdanskim": [
+  "police",
+  "powiat gdański"
+ ],
+ "sluzby:pomorskie:komenda_powiatowa_policji_w_wejherowie": [
+  "police",
+  "powiat wejherowski"
+ ],
+ "sluzby:pomorskie:komisariat_policji_w_krokowej": [
+  "police",
+  "gmina Krokowa"
+ ],
+ "sluzby:pomorskie:posterunek_policji_w_damnicy": [
+  "police",
+  "gmina Damnica"
+ ],
+ "sluzby:pomorskie:straz_gminna_gminy_pruszcz_gdanski": [
+  "sm",
+  "gmina Pruszcz Gdański"
+ ],
+ "sluzby:pomorskie:straz_gminna_kolbudy": [
+  "sm",
+  "Kolbudy"
+ ],
+ "sluzby:pomorskie:straz_gminna_kosakowo": [
+  "sm",
+  "Kosakowo"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_chojnicach": [
+  "sm",
+  "Chojnice"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_dzierzgoniu": [
+  "sm",
+  "Dzierzgoń"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_gdansku": [
+  "sm",
+  "Gdańsk"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_gdyni": [
+  "sm",
+  "Gdynia"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_helu": [
+  "sm",
+  "Hel"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_jastarni": [
+  "sm",
+  "Jastarnia"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_kartuzach": [
+  "sm",
+  "Kartuzy"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_koscierzynie": [
+  "sm",
+  "Kościerzyna"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_kwidzynie": [
+  "sm",
+  "Kwidzyn"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_lebie": [
+  "sm",
+  "Łeba"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_leborku": [
+  "sm",
+  "Lębork"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_malborku": [
+  "sm",
+  "Malbork"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_miastku": [
+  "sm",
+  "Miastko"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_nowym_dworze_gdanskim": [
+  "sm",
+  "Nowy Dwór Gdański"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_pelplinie": [
+  "sm",
+  "Pelplin"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_pruszczu_gdanskim": [
+  "sm",
+  "Pruszcz Gdański"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_pucku": [
+  "sm",
+  "Puck"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_rumi": [
+  "sm",
+  "Rumia"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_slupsku": [
+  "sm",
+  "Słupsk"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_sopocie": [
+  "sm",
+  "Sopot"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_starogardzie_gdanskim": [
+  "sm",
+  "Starogard Gdański"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_sztumie": [
+  "sm",
+  "Sztum"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_tczewie": [
+  "sm",
+  "Tczew"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_ustce": [
+  "sm",
+  "Ustka"
+ ],
+ "sluzby:pomorskie:straz_miejska_w_wejherowie": [
+  "sm",
+  "Wejherowo"
+ ],
+ "sluzby:pomorskie:straz_miejska_we_wladyslawowie": [
+  "sm",
+  "Władysławowo"
+ ],
+ "sluzby:slaskie:komenda_miejska_policji_w_zorach": [
+  "police",
+  "Żory-miasto"
+ ],
+ "sluzby:slaskie:komenda_powiatowa_policji_w_bieruniu": [
+  "police",
+  "powiat bieruńsko-lędziński"
+ ],
+ "sluzby:slaskie:komenda_powiatowa_policji_w_klobucku": [
+  "police",
+  "powiat kłobucki"
+ ],
+ "sluzby:slaskie:komenda_powiatowa_policji_w_tarnowskich_gorach": [
+  "police",
+  "powiat tarnogórski"
+ ],
+ "sluzby:slaskie:komisariat_policji_w_jasienicy": [
+  "police",
+  "Jasienica"
+ ],
+ "sluzby:slaskie:komisariat_policji_w_jelesni": [
+  "police",
+  "Jeleśnia"
+ ],
+ "sluzby:slaskie:komisariat_policji_w_knurowie": [
+  "police",
+  "gmina Knurów"
+ ],
+ "sluzby:slaskie:komisariat_policji_w_ogrodziencu": [
+  "police",
+  "Ogrodzieniec"
+ ],
+ "sluzby:slaskie:straz_gminna_w_lubomi": [
+  "sm",
+  "Lubomia"
+ ],
+ "sluzby:slaskie:straz_gminna_w_lyskach": [
+  "sm",
+  "Lyski"
+ ],
+ "sluzby:slaskie:straz_gminna_w_wilkowicach": [
+  "sm",
+  "Wilkowice"
+ ],
+ "sluzby:slaskie:straz_miejska_w_bedzinie": [
+  "sm",
+  "Będzin"
+ ],
+ "sluzby:slaskie:straz_miejska_w_bielsku_bialej": [
+  "sm",
+  "Bielsko-Biała"
+ ],
+ "sluzby:slaskie:straz_miejska_w_bieruniu": [
+  "sm",
+  "Bieruń"
+ ],
+ "sluzby:slaskie:straz_miejska_w_bytomiu": [
+  "sm",
+  "Bytom"
+ ],
+ "sluzby:slaskie:straz_miejska_w_chorzowie": [
+  "sm",
+  "Chorzów"
+ ],
+ "sluzby:slaskie:straz_miejska_w_cieszynie": [
+  "sm",
+  "Cieszyn"
+ ],
+ "sluzby:slaskie:straz_miejska_w_czechowicach_dziedzicach": [
+  "sm",
+  "Czechowice-Dziedzice"
+ ],
+ "sluzby:slaskie:straz_miejska_w_czeladzi": [
+  "sm",
+  "Czeladź"
+ ],
+ "sluzby:slaskie:straz_miejska_w_czerwionce_leszczynach": [
+  "sm",
+  "Czerwionka-Leszczyny"
+ ],
+ "sluzby:slaskie:straz_miejska_w_czestochowie": [
+  "sm",
+  "Częstochowa"
+ ],
+ "sluzby:slaskie:straz_miejska_w_dabrowie_gorniczej": [
+  "sm",
+  "Dąbrowa Górnicza"
+ ],
+ "sluzby:slaskie:straz_miejska_w_gliwicach": [
+  "sm",
+  "Gliwice"
+ ],
+ "sluzby:slaskie:straz_miejska_w_jastrzebiu_zdroju": [
+  "sm",
+  "Jastrzębie-Zdrój"
+ ],
+ "sluzby:slaskie:straz_miejska_w_jaworznie": [
+  "sm",
+  "Jaworzno"
+ ],
+ "sluzby:slaskie:straz_miejska_w_katowicach": [
+  "sm",
+  "Katowice"
+ ],
+ "sluzby:slaskie:straz_miejska_w_knurowie": [
+  "sm",
+  "Knurów"
+ ],
+ "sluzby:slaskie:straz_miejska_w_laziskach_gornych": [
+  "sm",
+  "Łaziska Górne"
+ ],
+ "sluzby:slaskie:straz_miejska_w_ledzinach": [
+  "sm",
+  "Lędziny"
+ ],
+ "sluzby:slaskie:straz_miejska_w_lublincu": [
+  "sm",
+  "Lubliniec"
+ ],
+ "sluzby:slaskie:straz_miejska_w_mikolowie": [
+  "sm",
+  "Mikołów"
+ ],
+ "sluzby:slaskie:straz_miejska_w_myslowicach": [
+  "sm",
+  "Mysłowice"
+ ],
+ "sluzby:slaskie:straz_miejska_w_myszkowie": [
+  "sm",
+  "Myszków"
+ ],
+ "sluzby:slaskie:straz_miejska_w_myszkowie_42300": [
+  "sm",
+  "Myszków"
+ ],
+ "sluzby:slaskie:straz_miejska_w_piekarach_slaskich": [
+  "sm",
+  "Piekary Śląskie"
+ ],
+ "sluzby:slaskie:straz_miejska_w_pszczynie": [
+  "sm",
+  "Pszczyna"
+ ],
+ "sluzby:slaskie:straz_miejska_w_pyskowicach": [
+  "sm",
+  "Pyskowice"
+ ],
+ "sluzby:slaskie:straz_miejska_w_raciborzu": [
+  "sm",
+  "Racibórz"
+ ],
+ "sluzby:slaskie:straz_miejska_w_radlinie": [
+  "sm",
+  "Radlin"
+ ],
+ "sluzby:slaskie:straz_miejska_w_radzionkowie": [
+  "sm",
+  "Radzionków"
+ ],
+ "sluzby:slaskie:straz_miejska_w_rudzie_slaskiej": [
+  "sm",
+  "Ruda Śląska"
+ ],
+ "sluzby:slaskie:straz_miejska_w_rybniku": [
+  "sm",
+  "Rybnik"
+ ],
+ "sluzby:slaskie:straz_miejska_w_rydultowach": [
+  "sm",
+  "Rydułtowy"
+ ],
+ "sluzby:slaskie:straz_miejska_w_siemianowicach_slaskich": [
+  "sm",
+  "Siemianowice Śląskie"
+ ],
+ "sluzby:slaskie:straz_miejska_w_skoczowie": [
+  "sm",
+  "Skoczów"
+ ],
+ "sluzby:slaskie:straz_miejska_w_slawkowie": [
+  "sm",
+  "Sławków"
+ ],
+ "sluzby:slaskie:straz_miejska_w_sosnowcu": [
+  "sm",
+  "Sosnowiec"
+ ],
+ "sluzby:slaskie:straz_miejska_w_swietochlowicach": [
+  "sm",
+  "Świętochłowice"
+ ],
+ "sluzby:slaskie:straz_miejska_w_tarnowskich_gorach": [
+  "sm",
+  "Tarnowskie Góry"
+ ],
+ "sluzby:slaskie:straz_miejska_w_tychach": [
+  "sm",
+  "Tychy"
+ ],
+ "sluzby:slaskie:straz_miejska_w_ustroniu": [
+  "sm",
+  "Ustroń"
+ ],
+ "sluzby:slaskie:straz_miejska_w_wisle": [
+  "sm",
+  "Wisła"
+ ],
+ "sluzby:slaskie:straz_miejska_w_wodzislawiu_slaskim": [
+  "sm",
+  "Wodzisław Śląski"
+ ],
+ "sluzby:slaskie:straz_miejska_w_zabrzu": [
+  "sm",
+  "Zabrze"
+ ],
+ "sluzby:slaskie:straz_miejska_w_zarkach": [
+  "sm",
+  "Żarki"
+ ],
+ "sluzby:slaskie:straz_miejska_w_zawierciu": [
+  "sm",
+  "Zawiercie"
+ ],
+ "sluzby:slaskie:straz_miejska_w_zywcu": [
+  "sm",
+  "Żywiec"
+ ],
+ "sluzby:swietokrzyskie:komenda_miejska_policji_w_kielcach": [
+  "police",
+  "Kielce-miasto"
+ ],
+ "sluzby:swietokrzyskie:komisariat_policji_w_brodach": [
+  "police",
+  "Brody"
+ ],
+ "sluzby:swietokrzyskie:komisariat_policji_w_daleszycach": [
+  "police",
+  "gmina Górno"
+ ],
+ "sluzby:swietokrzyskie:komisariat_policji_w_staporkowie": [
+  "police",
+  "Stąporków"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_ostrowiec_swietokrzyski": [
+  "sm",
+  "Ostrowiec Świętokrzyski"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_busku_zdroju": [
+  "sm",
+  "Busko-Zdrój"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_chmielniku": [
+  "sm",
+  "Chmielnik"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_daleszycach": [
+  "sm",
+  "Daleszyce"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_jedrzejowie": [
+  "sm",
+  "Jędrzejów"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_kielcach": [
+  "sm",
+  "Kielce"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_konskich": [
+  "sm",
+  "Końskie"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_morawicy": [
+  "sm",
+  "Morawica"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_opatowie": [
+  "sm",
+  "Opatów"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_ostrowcu_sw": [
+  "sm",
+  "Ostrowiec Św."
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_ozarowie": [
+  "sm",
+  "Ożarów"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_sandomierzu": [
+  "sm",
+  "Sandomierz"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_starachowicach": [
+  "sm",
+  "Starachowice"
+ ],
+ "sluzby:swietokrzyskie:straz_miejska_w_staszowie": [
+  "sm",
+  "Staszów"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_miejska_policji_w_elblagu": [
+  "police",
+  "Elbląg-miasto"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_miejska_policji_w_olsztynie": [
+  "police",
+  "Olsztyn-miasto"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_bartoszycach": [
+  "police",
+  "powiat bartoszycki"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_bartoszycach_11200": [
+  "police",
+  "powiat bartoszycki"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_braniewie": [
+  "police",
+  "powiat braniewski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_dzialdowie": [
+  "police",
+  "powiat działdowski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_elku": [
+  "police",
+  "powiat ełcki"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_gizycku": [
+  "police",
+  "powiat giżycki"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_goldapi": [
+  "police",
+  "powiat gołdapski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_ilawie": [
+  "police",
+  "powiat iławski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_ketrzynie": [
+  "police",
+  "powiat kętrzyński"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_lidzbarku_warminskim": [
+  "police",
+  "powiat lidzbarski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_mragowie": [
+  "police",
+  "powiat mrągowski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_mragowie_11700": [
+  "police",
+  "powiat mrągowski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_nidzicy": [
+  "police",
+  "powiat nidzicki"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_nowym_miescie_lubawskim": [
+  "police",
+  "powiat nowomiejski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_olecku": [
+  "police",
+  "powiat olecki"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_ostrodzie": [
+  "police",
+  "powiat ostródzki"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_piszu": [
+  "police",
+  "powiat piski"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_szczytnie": [
+  "police",
+  "powiat szczycieński"
+ ],
+ "sluzby:warminsko_mazurskie:komenda_powiatowa_policji_w_wegorzewie": [
+  "police",
+  "powiat węgorzewski"
+ ],
+ "sluzby:warminsko_mazurskie:komisariat_policji_w_gorowie_ilaweckim": [
+  "police",
+  "Górowo Iławeckie"
+ ],
+ "sluzby:warminsko_mazurskie:komisariat_policji_w_mikolajkach": [
+  "police",
+  "Mikołajki"
+ ],
+ "sluzby:warminsko_mazurskie:posterunek_policji_w_sepopolu": [
+  "police",
+  "Sępopol"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_goldap": [
+  "sm",
+  "gmina Gołdap"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_barczewie": [
+  "sm",
+  "Barczewo"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_bartoszycach": [
+  "sm",
+  "Bartoszyce"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_biskupcu": [
+  "sm",
+  "Biskupiec"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_dzialdowie": [
+  "sm",
+  "Działdowo"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_elblagu": [
+  "sm",
+  "Elbląg"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_elku": [
+  "sm",
+  "Ełk"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_gizycku": [
+  "sm",
+  "Giżycko"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_goldapi": [
+  "sm",
+  "Gołdap"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_ketrzynie": [
+  "sm",
+  "Kętrzyn"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_korszach": [
+  "sm",
+  "Korsze"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_lidzbarku": [
+  "sm",
+  "Lidzbark (Gmina)"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_lidzbarku_warminskim": [
+  "sm",
+  "Lidzbark Warmiński"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_moragu": [
+  "sm",
+  "Morąg"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_nidzicy": [
+  "sm",
+  "Nidzica"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_olsztynie": [
+  "sm",
+  "Olsztyn"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_olsztynku": [
+  "sm",
+  "Olsztynek"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_ornecie": [
+  "sm",
+  "Orneta"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_ostrodzie": [
+  "sm",
+  "Ostróda"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_pasleku": [
+  "sm",
+  "Pasłęk"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_reszlu": [
+  "sm",
+  "Reszel"
+ ],
+ "sluzby:warminsko_mazurskie:straz_miejska_w_szczytnie": [
+  "sm",
+  "Szczytno"
+ ],
+ "sluzby:wielkopolskie:komenda_powiatowa_policji_w_chodziezy": [
+  "police",
+  "powiat chodzieski"
+ ],
+ "sluzby:wielkopolskie:komenda_powiatowa_policji_w_gnieznie": [
+  "police",
+  "powiat gnieźnieński"
+ ],
+ "sluzby:wielkopolskie:komenda_powiatowa_policji_w_jarocinie": [
+  "police",
+  "powiat jarociński"
+ ],
+ "sluzby:wielkopolskie:komenda_powiatowa_policji_w_rawiczu": [
+  "police",
+  "powiat rawicki"
+ ],
+ "sluzby:wielkopolskie:komenda_powiatowa_policji_w_szamotulach": [
+  "police",
+  "powiat szamotulski"
+ ],
+ "sluzby:wielkopolskie:komenda_powiatowa_policji_w_turku": [
+  "police",
+  "powiat turecki"
+ ],
+ "sluzby:wielkopolskie:komenda_powiatowa_policji_w_wagrowcu": [
+  "police",
+  "powiat wągrowiecki"
+ ],
+ "sluzby:wielkopolskie:komisariat_policji_w_nekli": [
+  "police",
+  "Nekla"
+ ],
+ "sluzby:wielkopolskie:komisariat_policji_w_opatowku": [
+  "police",
+  "Opatówek"
+ ],
+ "sluzby:wielkopolskie:komisariat_policji_w_pobiedziskach": [
+  "police",
+  "Pobiedziska"
+ ],
+ "sluzby:wielkopolskie:straz_gminna_czerwonak": [
+  "sm",
+  "Czerwonak"
+ ],
+ "sluzby:wielkopolskie:straz_gminna_komorniki": [
+  "sm",
+  "Komorniki"
+ ],
+ "sluzby:wielkopolskie:straz_gminna_suchy_las": [
+  "sm",
+  "Suchy Las"
+ ],
+ "sluzby:wielkopolskie:straz_gminna_tarnowo_podgorne": [
+  "sm",
+  "Tarnowo Podgórne"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_miasta_poznania": [
+  "sm",
+  "Poznań"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_czarnkowie": [
+  "sm",
+  "Czarnków"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_gnieznie": [
+  "sm",
+  "Gniezno"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_golinie": [
+  "sm",
+  "Golina"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_gostyniu": [
+  "sm",
+  "Gostyń"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_jastrowiu": [
+  "sm",
+  "Jastrowie"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_kaliszu": [
+  "sm",
+  "Kalisz"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_kepnie": [
+  "sm",
+  "Kępno"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_klodawie": [
+  "sm",
+  "Kłodawa"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_kole": [
+  "sm",
+  "Koło"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_koninie": [
+  "sm",
+  "Konin"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_korniku": [
+  "sm",
+  "Kórnik"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_koscianie": [
+  "sm",
+  "Kościan"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_krajence": [
+  "sm",
+  "Krajenka"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_krotoszynie": [
+  "sm",
+  "Krotoszyn"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_lesznie": [
+  "sm",
+  "Leszno"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_luboniu": [
+  "sm",
+  "Luboń"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_margoninie": [
+  "sm",
+  "Margonin"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_miedzychodzie": [
+  "sm",
+  "Międzychód"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_mosinie": [
+  "sm",
+  "Mosina"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_murowanej_goslinie": [
+  "sm",
+  "Murowana Goślina zlikwidowana"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_murowanej_goslinie_62095": [
+  "sm",
+  "Murowana Goślina zlikwidowana"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_nowym_tomyslu": [
+  "sm",
+  "Nowy Tomyśl"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_obornikach": [
+  "sm",
+  "Oborniki"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_opalenicy": [
+  "sm",
+  "Opalenica"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_ostrowie_wielkopolskim": [
+  "sm",
+  "Ostrów Wielkopolski"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_ostrzeszowie": [
+  "sm",
+  "Ostrzeszów"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_pile": [
+  "sm",
+  "Piła"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_pleszewie": [
+  "sm",
+  "Pleszew"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_pniewach": [
+  "sm",
+  "Pniewy"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_puszczykowie": [
+  "sm",
+  "Puszczykowo"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_rogoznie": [
+  "sm",
+  "Rogoźno"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_sremie": [
+  "sm",
+  "Śrem"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_srodzie_wielkopolskiej": [
+  "sm",
+  "Środa Wielkopolska"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_swarzedzu": [
+  "sm",
+  "Swarzędz"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_szamotulach": [
+  "sm",
+  "Szamotuły"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_trzciance": [
+  "sm",
+  "Trzcianka"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_ujsciu": [
+  "sm",
+  "Ujście"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_wolsztynie": [
+  "sm",
+  "Wolsztyn"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_wyrzysku": [
+  "sm",
+  "Wyrzysk"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_w_zlotowie": [
+  "sm",
+  "Złotów"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_we_wrzesni": [
+  "sm",
+  "Września"
+ ],
+ "sluzby:wielkopolskie:straz_miejska_wronki": [
+  "sm",
+  "Wronki"
+ ],
+ "sluzby:zachodniopomorskie:komenda_powiatowa_policji_w_gryfinie": [
+  "police",
+  "powiat gryfiński"
+ ],
+ "sluzby:zachodniopomorskie:komisariat_policji_w_nowogardzie": [
+  "police",
+  "Nowogard"
+ ],
+ "sluzby:zachodniopomorskie:posterunek_policji_w_kolbaskowie": [
+  "police",
+  "Przecław"
+ ],
+ "sluzby:zachodniopomorskie:straz_gminna_w_dobrej_z_siedziba_w_wolczkowie": [
+  "sm",
+  "Dobra"
+ ],
+ "sluzby:zachodniopomorskie:straz_gminna_w_kolbaskowie": [
+  "sm",
+  "Kołbaskowo"
+ ],
+ "sluzby:zachodniopomorskie:straz_gminna_w_rewalu": [
+  "sm",
+  "Rewal"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_bobolicach": [
+  "sm",
+  "Bobolice"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_bornem_sulinowie": [
+  "sm",
+  "Borne Sulinowo"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_czaplinku": [
+  "sm",
+  "Czaplinek"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_darlowie": [
+  "sm",
+  "Darłowo"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_debnie": [
+  "sm",
+  "Dębno"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_drawsku_pomorskim": [
+  "sm",
+  "Drawsko Pomorskie"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_dziwnowie": [
+  "sm",
+  "Dziwnów"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_goleniowie": [
+  "sm",
+  "Goleniów"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_gryficach": [
+  "sm",
+  "Gryfice"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_gryfinie": [
+  "sm",
+  "Gryfino"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_kaliszu_pomorskim": [
+  "sm",
+  "Kalisz Pomorski"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_karlinie": [
+  "sm",
+  "Karlino"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_kolobrzegu": [
+  "sm",
+  "Kołobrzeg"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_koszalinie": [
+  "sm",
+  "Koszalin"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_lobzie": [
+  "sm",
+  "Łobez"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_miedzyzdrojach": [
+  "sm",
+  "Międzyzdroje"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_mielnie": [
+  "sm",
+  "Mielno"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_polanowie": [
+  "sm",
+  "Polanów"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_polczynie_zdroju": [
+  "sm",
+  "Połczyn-Zdrój"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_policach": [
+  "sm",
+  "Police"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_pyrzycach": [
+  "sm",
+  "Pyrzyce"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_sianowie": [
+  "sm",
+  "Sianów"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_stargardzie": [
+  "sm",
+  "Stargard"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_stepnicy": [
+  "sm",
+  "Stepnica"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_swidwinie": [
+  "sm",
+  "Świdwin"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_swinoujsciu": [
+  "sm",
+  "Świnoujście"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_szczecinie": [
+  "sm",
+  "Szczecin"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_szczecinku": [
+  "sm",
+  "Szczecinek"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_trzebiatowie": [
+  "sm",
+  "Trzebiatów"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_walczu": [
+  "sm",
+  "Wałcz"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_wegorzynie": [
+  "sm",
+  "Węgorzyno"
+ ],
+ "sluzby:zachodniopomorskie:straz_miejska_w_zlociencu": [
+  "sm",
+  "Złocieniec"
+ ]
+}

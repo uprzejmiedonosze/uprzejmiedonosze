@@ -184,23 +184,7 @@ function freezeUnitSlug(string $unitType, string $unitKey, string $slug): string
     return unitSlug($unitType, $unitKey);
 }
 
-function getMedia(string $name): ?array
-{
-    $stmt = db()->prepare("SELECT * FROM wiki_media WHERE name = :name");
-    $stmt->execute([':name' => $name]);
-    return $stmt->fetch() ?: null;
-}
-
-function addMedia(string $name, string $b2Key, string $contentType, int $bytes, ?int $width, ?int $height,
-    string $alt, ?string $addedBy): void
-{
-    $stmt = db()->prepare("INSERT INTO wiki_media (name, b2_key, content_type, bytes, width, height, alt, added_by, added_at)
-        VALUES (:name, :key, :type, :bytes, :w, :h, :alt, :by, :now)");
-    $stmt->execute([':name' => $name, ':key' => $b2Key, ':type' => $contentType, ':bytes' => $bytes,
-        ':w' => $width, ':h' => $height, ':alt' => $alt, ':by' => $addedBy, ':now' => date('c')]);
-}
-
-/** Usuwanie konta (UserRemoval.php): treść zostaje, autor znika z rewizji, stron i mediów. Zwraca liczbę rewizji. */
+/** Usuwanie konta (UserRemoval.php): treść zostaje, autor znika z rewizji i stron. Zwraca liczbę rewizji. */
 function anonymizeAuthor(string $email): int
 {
     $db = db();
@@ -208,6 +192,5 @@ function anonymizeAuthor(string $email): int
     $stmt->execute([':name' => DELETED_AUTHOR, ':email' => $email]);
     $count = $stmt->rowCount();
     $db->prepare("UPDATE wiki_pages SET updated_by = NULL WHERE updated_by = :email")->execute([':email' => $email]);
-    $db->prepare("UPDATE wiki_media SET added_by = NULL WHERE added_by = :email")->execute([':email' => $email]);
     return $count;
 }

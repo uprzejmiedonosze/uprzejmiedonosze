@@ -254,7 +254,7 @@ $app->group('/wiki', function (RouteCollectorProxy $group) { // odczyt
     $group->get('/_recent', WikiHandler::class . ':recent');
     $group->get('/_history/{path:.+}', WikiHandler::class . ':history');
     $group->get('/_rev/{revId:[0-9]+}', WikiHandler::class . ':revision');
-    $group->get('/{path:[a-z0-9].*}', WikiHandler::class . ':page');
+    $group->get('/{path:.+}', WikiHandler::class . ':page'); // też stare formy DokuWiki (WikiHandler::legacyRedirect)
 })  ->add(new HtmlMiddleware())
     ->add(new OptionalUserMiddleware());
 
