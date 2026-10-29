@@ -1,0 +1,8 @@
+{# :::wzor — wzór pisma z przyciskiem „Kopiuj” (src/inc/Wiki.php DIRECTIVES). #}
+<section class="wiki-wzor">
+  <header class="wiki-wzor__header">
+    <h3 class="wiki-wzor__title">{{ attrs.title }}</h3>
+    <button type="button" class="button inline wiki-wzor__copy" data-wiki-copy>Kopiuj</button>
+  </header>
+  <div class="wiki-wzor__body">{{ content|raw }}</div>
+</section>

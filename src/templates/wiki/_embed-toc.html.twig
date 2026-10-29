@@ -1,0 +1,8 @@
+{# [[toc]] — spis treści z nagłówków h2–h4 (src/inc/Wiki.php). #}
+{% if toc %}
+<nav class="wiki-toc" aria-label="Spis treści">
+  <ul>
+    {% for entry in toc %}<li class="wiki-toc__l{{ entry.level }}"><a href="#{{ entry.id }}">{{ entry.text }}</a></li>{% endfor %}
+  </ul>
+</nav>
+{% endif %}

@@ -56,6 +56,11 @@ się przydać webowi lub MCP. Szczegóły: `src/api/AGENTS.md`.
    Migracje **nie są aplikowane automatycznie** — podaj użytkownikowi komendę dla staging/prod.
 3. Funkcje dostępu w nowym `store/<Name>.php` (`namespace <name>;`), `require` w `store/index.php`.
    Wzór: `store/PhotoQuota.php` + `tests/store/PhotoQuotaTest.php` (commit `c9afca79`).
+4. Tabela wiki → osobna baza `db/wiki.sqlite` (`store/WikiStore.php`): `src/sql/wiki_schema.sql` (najnowszy schemat,
+   stosowany automatycznie przy `user_version = 0`) + `wiki_migration_*.sql` podbijające `user_version` — skill `new-migration`.
+
+**Wiki** — renderer `Wiki.php` (`\wiki\Renderer`: Markdown + allowlistowane dyrektywy `DIRECTIVES` → partiale
+`templates/wiki/`). Redaktor nie pisze Twiga ani HTML. `Wiki.php` ładuj **po** `Twig.php` (używa `initBareTwig`).
 
 **Nowa integracja zewnętrzna** — plik w `integrations/`, klucz przez `config.php`, odpowiedzi cache'uj w `\cache\…`
 (wzór: `\cache\alpr`, `\cache\geo`), błędy przez `log_error` + wyjątek, nie `die`.

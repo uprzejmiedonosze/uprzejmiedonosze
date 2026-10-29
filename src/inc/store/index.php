@@ -15,3 +15,4 @@ require(__DIR__ . '/PetitionStore.php');
 require(__DIR__ . '/PasskeyStore.php');
 require(__DIR__ . '/Telemetry.php');
 require(__DIR__ . '/S3.php');
+require(__DIR__ . '/WikiStore.php');
