@@ -39,3 +39,18 @@ export function renderMermaid(root = document) {
 }
 
 document.addEventListener('DOMContentLoaded', () => renderMermaid())
+
+// Stare kotwice DokuWiki (#pojazd_stal_za_zakazem…, linki z Google i zewnętrznych stron) → identyfikatory nagłówków
+// nowej wiki (#pojazd-stal-za-zakazem…). Fragment nie trafia do serwera, więc WikiHandler::legacyRedirect go nie poprawi.
+function fixLegacyAnchor() {
+  let id
+  try { id = decodeURIComponent(location.hash.slice(1)) } catch { return }
+  if (!id.includes('_') || document.getElementById(id)) return
+  const target = document.getElementById(id.replaceAll('_', '-'))
+  if (!target) return
+  history.replaceState(null, '', '#' + target.id)
+  target.scrollIntoView()
+}
+
+document.addEventListener('DOMContentLoaded', fixLegacyAnchor)
+window.addEventListener('hashchange', fixLegacyAnchor)

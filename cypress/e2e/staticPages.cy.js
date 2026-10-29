@@ -119,6 +119,18 @@ describe('Static pages no session', function() {
         cy.contains('Nieznany jest przypadek przekonania SM')
     })
 
+    it('/wiki » stara kotwica DokuWiki (podkreślenia)', () => {
+        cy.visit('/wiki/prawo/przepisy-i-kategorie#pojazd_stal_za_zakazem_zatrzymywania_sie')
+        cy.location('hash').should('eq', '#pojazd-stal-za-zakazem-zatrzymywania-sie')
+    })
+
+    it('/ » częste błędy » znak B-35 w wiki', () => {
+        cy.visit('/czesto-popelniane-bledy.html')
+        cy.contains('a', 'zakaz postoju').click()
+        cy.location('pathname').should('eq', '/wiki/prawo/znaki')
+        cy.get('#znak-b-35-zakaz-postoju').should('exist')
+    })
+
     it('/ » Statystyki', () => {
         cy.footerLink('Statystyki')
         cy.contains('Nowe zgłoszenia oraz nowi użytkownicy')
