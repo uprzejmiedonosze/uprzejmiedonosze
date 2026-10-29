@@ -1,0 +1,814 @@
+i-oddzial-terenowy-strazy-miejskiej-m-st-warszawy | sm | warszawa_ot1
+ii-oddzial-terenowy-strazy-miejskiej-m-st-warszawy | sm | warszawa_ot2
+iii-oddzial-terenowy-strazy-miejskiej-m-st-warszawy | sm | warszawa_ot3
+iv-oddzial-terenowy-strazy-miejskiej-m-st-warszawy | sm | warszawa_ot4
+kmp-w-bialej-podlaskiej | police | biała podlaska-miasto
+kmp-w-bialymstoku | police | białystok-miasto
+kmp-w-bielsku-bialej | police | bielsko-biała-miasto
+kmp-w-bydgoszczy | police | bydgoszcz-miasto
+kmp-w-bytomiu | police | bytom-miasto
+kmp-w-chelmie | police | chełm-miasto
+kmp-w-chorzowie | police | chorzów-miasto
+kmp-w-czestochowie | police | częstochowa-miasto
+kmp-w-dabrowie-gorniczej | police | dąbrowa górnicza-miasto
+kmp-w-elblagu | police | elbląg-miasto
+kmp-w-gdansku | police | gdańsk-miasto
+kmp-w-gdyni | police | gdynia-miasto
+kmp-w-gliwicach | police | gliwice-miasto
+kmp-w-gorzowie-wielkopolskim | police | gorzów wielkopolski-miasto
+kmp-w-grudziadzu | police | grudziądz-miasto
+kmp-w-jastrzebiu-zdroju | police | jastrzębie-zdrój-miasto
+kmp-w-jaworznie | police | jaworzno-miasto
+kmp-w-jeleniej-gorze | police | jelenia góra-miasto
+kmp-w-kaliszu | police | kalisz-miasto
+kmp-w-katowicach | police | katowice-miasto
+kmp-w-kielcach | police | kielce-miasto
+kmp-w-koninie | police | konin-miasto
+kmp-w-koszalinie | police | koszalin-miasto
+kmp-w-krakowie | police | kraków-miasto
+kmp-w-krosnie | police | krosno-miasto
+kmp-w-legnicy | police | legnica-miasto
+kmp-w-lesznie | police | leszno-miasto
+kmp-w-lodzi | police | łódź-miasto
+kmp-w-lomzy | police | łomża-miasto
+kmp-w-lublinie | police | lublin-miasto
+kmp-w-myslowicach | police | mysłowice-miasto
+kmp-w-nowym-saczu | police | nowy sącz-miasto
+kmp-w-olsztynie | police | olsztyn-miasto
+kmp-w-opolu | police | opole-miasto
+kmp-w-ostrolece | police | ostrołęka-miasto
+kmp-w-piekarach-slaskich | police | piekary śląskie-miasto
+kmp-w-piotrkowie-trybunalskim | police | piotrków trybunalski-miasto
+kmp-w-plocku | police | płock-miasto
+kmp-w-poznaniu | police | poznań-miasto
+kmp-w-przemyslu | police | przemyśl-miasto
+kmp-w-radomiu | police | radom-miasto
+kmp-w-rudzie-slaskiej | police | ruda śląska-miasto
+kmp-w-rybniku | police | rybnik-miasto
+kmp-w-rzeszowie | police | rzeszów-miasto
+kmp-w-siedlcach | police | siedlce-miasto
+kmp-w-siemianowicach-slaskich | police | siemianowice śląskie-miasto
+kmp-w-skierniewicach | police | skierniewice-miasto
+kmp-w-slupsku | police | słupsk-miasto
+kmp-w-sopocie | police | sopot-miasto
+kmp-w-sosnowcu | police | sosnowiec-miasto
+kmp-w-suwalkach | police | suwałki-miasto
+kmp-w-swietochlowicach | police | świętochłowice-miasto
+kmp-w-swinoujsciu | police | świnoujście-miasto
+kmp-w-szczecinie | police | szczecin-miasto
+kmp-w-tarnobrzegu | police | tarnobrzeg-miasto
+kmp-w-tarnowie | police | tarnów-miasto
+kmp-w-toruniu | police | toruń-miasto
+kmp-w-tychach | police | tychy-miasto
+kmp-w-walbrzychu | police | wałbrzych-miasto
+kmp-w-zabrzu | police | zabrze-miasto
+kmp-w-zamosciu | police | zamość-miasto
+kmp-w-zielonej-gorze | police | zielona góra-miasto
+kmp-w-zorach | police | żory-miasto
+kmp-we-wloclawku | police | włocławek-miasto
+kmp-we-wroclawiu | police | wrocław-miasto
+kp-i-w-krakowie | police | kraków-stare-miasto
+kp-ii-w-krakowie | police | kraków-grzegórzki
+kp-iii-w-krakowie | police | kraków-kp3
+kp-iv-w-bialymstoku | police | gmina grabówka
+kp-iv-w-krakowie | police | kraków-kp4
+kp-poznan-grunwald | police | poznań-grunwald
+kp-poznan-jezyce | police | poznań-jeżyce
+kp-poznan-nowe-miasto | police | poznań-nowe-miasto
+kp-poznan-polnoc | police | poznań-północ
+kp-poznan-stare-miasto | police | poznań-stare-miasto
+kp-poznan-wilda | police | poznań-wilda
+kp-szczecin-dabie | police | szczecin-dąbie
+kp-szczecin-nad-odra | police | szczecin-nad-odrą
+kp-szczecin-niebuszewo | police | szczecin-niebuszewo
+kp-szczecin-pogodno | police | szczecin-pogodno
+kp-szczecin-srodmiescie | police | szczecin-śródmieście
+kp-v-w-krakowie | police | kraków-kp5
+kp-vi-w-krakowie | police | kraków-kp6
+kp-vii-w-krakowie | police | kraków-kp7
+kp-viii-w-krakowie | police | kraków-kp8
+kp-w-aleksandrowie-lodzkim | police | aleksandrów łódzki
+kp-w-belzycach | police | bełżyce
+kp-w-brodach | police | brody
+kp-w-bukowinie-tatrzanskiej | police | gmina bukowina tatrzańska
+kp-w-czosnowie | police | czosnów
+kp-w-daleszycach | police | gmina górno
+kp-w-dlugolece | police | gmina długołęka
+kp-w-dusznikach-zdroju | police | duszniki-zdrój
+kp-w-gluszycy | police | głuszyca, jugowice
+kp-w-gorowie-ilaweckim | police | górowo iławeckie
+kp-w-jasienicy | police | jasienica
+kp-w-jedlinsku | police | gmina jedlińsk
+kp-w-jelesni | police | jeleśnia
+kp-w-katach-wroclawskich | police | kąty wrocławskie
+kp-w-knurowie | police | gmina knurów
+kp-w-kobierzycach | police | wysoka
+kp-w-krokowej | police | gmina krokowa
+kp-w-kruszwicy | police | kruszwica
+kp-w-kurowie | police | kurów
+kp-w-lapach | police | łapy
+kp-w-lesznowoli | police | lesznowola
+kp-w-markach | police | marki
+kp-w-mikolajkach | police | mikołajki
+kp-w-mroczy | police | matyldzin
+kp-w-nekli | police | nekla
+kp-w-nowogardzie | police | nowogard
+kp-w-nowym-wisniczu | police | nowy wiśnicz
+kp-w-ogrodziencu | police | ogrodzieniec
+kp-w-opatowku | police | opatówek
+kp-w-ozimku | police | ozimek, osowiec
+kp-w-piastowie | police | piastów
+kp-w-pobiedziskach | police | pobiedziska
+kp-w-polanicy-zdroju | police | polanica-zdrój
+kp-w-radzyminie | police | radzymin
+kp-w-raszynie | police | raszyn
+kp-w-smolcu | police | smolec
+kp-w-sobotce | police | gmina sobótka
+kp-w-solcu-kujawskim | police | solec kujawski
+kp-w-staporkowie | police | stąporków
+kp-w-strykowie | police | stryków
+kp-w-swiatnikach-gornych | police | libertów
+kp-w-twardogorze | police | twardogóra
+kp-w-wasilkowie | police | wasilków
+kp-w-wieliszewie | police | wieliszew
+kp-w-zielonce | police | zielonka
+kp-w-zielonkach | police | gmina zielonki
+kp-wroclaw-krzyki | police | kobierzyce
+kpp-dla-powiatu-warszawskiego-zachodniego | police | powiat warszawski zachodni
+kpp-powiatu-lodzkiego-wschodniego | police | powiat łódzki wschodni
+kpp-w-aleksandrowie-kujawskim | police | powiat aleksandrowski
+kpp-w-augustowie | police | powiat augustowski
+kpp-w-bartoszycach | police | powiat bartoszycki
+kpp-w-bedzinie | police | powiat będziński
+kpp-w-belchatowie | police | powiat bełchatowski
+kpp-w-bialobrzegach | police | powiat białobrzeski
+kpp-w-bialogardzie | police | powiat białogardzki
+kpp-w-bielsku-podlaskim | police | powiat bielski podlaskie
+kpp-w-bieruniu | police | powiat bieruńsko-lędziński
+kpp-w-bilgoraju | police | powiat biłgorajski
+kpp-w-bochni | police | powiat bocheński
+kpp-w-boleslawcu | police | powiat bolesławiecki
+kpp-w-braniewie | police | powiat braniewski
+kpp-w-brodnicy | police | powiat brodnicki
+kpp-w-brzegu | police | powiat brzeski opolskie
+kpp-w-brzesku | police | powiat brzeski małopolskie
+kpp-w-brzezinach | police | powiat brzeziński
+kpp-w-brzozowie | police | powiat brzozowski
+kpp-w-busku-zdroju | police | powiat buski
+kpp-w-bytowie | police | powiat bytowski
+kpp-w-chelmnie | police | powiat chełmiński
+kpp-w-chodziezy | police | powiat chodzieski
+kpp-w-chojnicach | police | powiat chojnicki
+kpp-w-choszcznie | police | powiat choszczeński
+kpp-w-chrzanowie | police | powiat chrzanowski
+kpp-w-ciechanowie | police | powiat ciechanowski
+kpp-w-cieszynie | police | powiat cieszyński
+kpp-w-czarnkowie | police | powiat czarnkowsko-trzcianecki
+kpp-w-czluchowie | police | powiat człuchowski
+kpp-w-dabrowie-tarnowskiej | police | powiat dąbrowski
+kpp-w-debicy | police | powiat dębicki
+kpp-w-drawsku-pomorskim | police | powiat drawski
+kpp-w-dzialdowie | police | powiat działdowski
+kpp-w-dzierzoniowie | police | powiat dzierżoniowski
+kpp-w-elku | police | powiat ełcki
+kpp-w-garwolinie | police | powiat garwoliński
+kpp-w-gizycku | police | powiat giżycki
+kpp-w-glogowie | police | powiat głogowski
+kpp-w-glubczycach | police | powiat głubczycki
+kpp-w-gnieznie | police | powiat gnieźnieński
+kpp-w-goldapi | police | powiat gołdapski
+kpp-w-goleniowie | police | powiat goleniowski
+kpp-w-golubiu-dobrzyniu | police | powiat golubsko-dobrzyński
+kpp-w-gorlicach | police | powiat gorlicki
+kpp-w-gorze | police | powiat górowski
+kpp-w-gostyninie | police | powiat gostyniński
+kpp-w-gostyniu | police | powiat gostyński
+kpp-w-grajewie | police | powiat grajewski
+kpp-w-grodzisku-mazowieckim | police | powiat grodziski mazowieckie
+kpp-w-grodzisku-wielkopolskim | police | powiat grodziski wielkopolskie
+kpp-w-grojcu | police | powiat grójecki
+kpp-w-gryficach | police | powiat gryficki
+kpp-w-gryfinie | police | powiat gryfiński
+kpp-w-hajnowce | police | powiat hajnowski
+kpp-w-hrubieszowie | police | powiat hrubieszowski
+kpp-w-ilawie | police | powiat iławski
+kpp-w-inowroclawiu | police | powiat inowrocławski
+kpp-w-janowie-lubelskim | police | powiat janowski
+kpp-w-jarocinie | police | powiat jarociński
+kpp-w-jaroslawiu | police | powiat jarosławski
+kpp-w-jasle | police | powiat jasielski
+kpp-w-jaworze | police | powiat jaworski
+kpp-w-jedrzejowie | police | powiat jędrzejowski
+kpp-w-kamieniu-pomorskim | police | powiat kamieński
+kpp-w-kamiennej-gorze | police | powiat kamiennogórski
+kpp-w-kartuzach | police | powiat kartuski
+kpp-w-kazimierzy-wielkiej | police | powiat kazimierski
+kpp-w-kedzierzynie-kozlu | police | powiat kędzierzyńsko-kozielski
+kpp-w-kepnie | police | powiat kępiński
+kpp-w-ketrzynie | police | powiat kętrzyński
+kpp-w-klobucku | police | powiat kłobucki
+kpp-w-klodzku | police | powiat kłodzki
+kpp-w-kluczborku | police | powiat kluczborski
+kpp-w-kolbuszowej | police | powiat kolbuszowski
+kpp-w-kole | police | powiat kolski
+kpp-w-kolnie | police | powiat kolneński
+kpp-w-kolobrzegu | police | powiat kołobrzeski
+kpp-w-konskich | police | powiat konecki
+kpp-w-koscianie | police | powiat kościański
+kpp-w-koscierzynie | police | powiat kościerski
+kpp-w-kozienicach | police | powiat kozienicki
+kpp-w-krapkowicach | police | powiat krapkowicki
+kpp-w-krasniku | police | powiat kraśnicki
+kpp-w-krasnymstawie | police | powiat krasnostawski
+kpp-w-krosnie-odrzanskim | police | powiat krośnieński
+kpp-w-krotoszynie | police | powiat krotoszyński
+kpp-w-kutnie | police | powiat kutnowski
+kpp-w-kwidzynie | police | powiat kwidzyński
+kpp-w-lancucie | police | powiat łańcucki
+kpp-w-lasku | police | powiat łaski
+kpp-w-leborku | police | powiat lęborski
+kpp-w-lecznej | police | powiat łęczyński
+kpp-w-leczycy | police | powiat łęczycki
+kpp-w-legionowie | police | powiat legionowski
+kpp-w-lesku | police | powiat leski
+kpp-w-lezajsku | police | powiat leżajski
+kpp-w-lidzbarku-warminskim | police | powiat lidzbarski
+kpp-w-limanowej | police | powiat limanowski
+kpp-w-lipnie | police | powiat lipnowski
+kpp-w-lipsku | police | powiat lipski
+kpp-w-lobzie | police | powiat łobeski
+kpp-w-losicach | police | powiat łosicki
+kpp-w-lowiczu | police | powiat łowicki
+kpp-w-lubaczowie | police | powiat lubaczowski
+kpp-w-lubaniu | police | powiat lubański
+kpp-w-lubartowie | police | powiat lubartowski
+kpp-w-lubinie | police | powiat lubiński
+kpp-w-lublincu | police | powiat lubliniecki
+kpp-w-lukowie | police | powiat łukowski
+kpp-w-lwowku-slaskim | police | powiat lwówecki
+kpp-w-makowie-mazowieckim | police | powiat makowski
+kpp-w-malborku | police | powiat malborski
+kpp-w-miechowie | police | powiat miechowski
+kpp-w-miedzychodzie | police | powiat międzychodzki
+kpp-w-miedzyrzeczu | police | powiat międzyrzecki
+kpp-w-mielcu | police | powiat mielecki
+kpp-w-mikolowie | police | powiat mikołowski
+kpp-w-miliczu | police | powiat milicki
+kpp-w-minsku-mazowieckim | police | powiat miński
+kpp-w-mlawie | police | powiat mławski
+kpp-w-mogilnie | police | powiat mogileński
+kpp-w-monkach | police | powiat moniecki
+kpp-w-mragowie | police | powiat mrągowski
+kpp-w-myslenicach | police | powiat myślenicki
+kpp-w-mysliborzu | police | powiat myśliborski
+kpp-w-myszkowie | police | powiat myszkowski
+kpp-w-nakle-nad-notecia | police | powiat nakielski
+kpp-w-namyslowie | police | powiat namysłowski
+kpp-w-nidzicy | police | powiat nidzicki
+kpp-w-nisku | police | powiat niżański
+kpp-w-nowej-soli | police | powiat nowosolski
+kpp-w-nowym-dworze-gdanskim | police | powiat nowodworski pomorskie
+kpp-w-nowym-dworze-mazowieckim | police | powiat nowodworski mazowieckie
+kpp-w-nowym-miescie-lubawskim | police | powiat nowomiejski
+kpp-w-nowym-targu | police | powiat nowotarski
+kpp-w-nowym-tomyslu | police | powiat nowotomyski
+kpp-w-nysie | police | powiat nyski
+kpp-w-obornikach | police | powiat obornicki
+kpp-w-olawie | police | powiat oławski
+kpp-w-olecku | police | powiat olecki
+kpp-w-olesnicy | police | powiat oleśnicki
+kpp-w-olesnie | police | powiat oleski
+kpp-w-olkuszu | police | powiat olkuski
+kpp-w-opatowie | police | powiat opatowski
+kpp-w-opocznie | police | powiat opoczyński
+kpp-w-opolu-lubelskim | police | powiat opolski lubelskie
+kpp-w-ostrodzie | police | powiat ostródzki
+kpp-w-ostrowcu-swietokrzyskim | police | powiat ostrowiecki
+kpp-w-ostrowi-mazowieckiej | police | powiat ostrowski mazowieckie
+kpp-w-ostrowie-wielkopolskim | police | powiat ostrowski wielkopolskie
+kpp-w-ostrzeszowie | police | powiat ostrzeszowski
+kpp-w-oswiecimiu | police | powiat oświęcimski
+kpp-w-otwocku | police | powiat otwocki
+kpp-w-pabianicach | police | powiat pabianicki
+kpp-w-pajecznie | police | powiat pajęczański
+kpp-w-parczewie | police | powiat parczewski
+kpp-w-piasecznie | police | powiat piaseczyński
+kpp-w-pile | police | powiat pilski
+kpp-w-pinczowie | police | powiat pińczowski
+kpp-w-piszu | police | powiat piski
+kpp-w-pleszewie | police | powiat pleszewski
+kpp-w-plonsku | police | powiat płoński
+kpp-w-poddebicach | police | powiat poddębicki
+kpp-w-policach | police | powiat policki
+kpp-w-polkowicach | police | powiat polkowicki
+kpp-w-proszowicach | police | powiat proszowicki
+kpp-w-prudniku | police | powiat prudnicki
+kpp-w-pruszczu-gdanskim | police | powiat gdański
+kpp-w-pruszkowie | police | powiat pruszkowski
+kpp-w-przasnyszu | police | powiat przasnyski
+kpp-w-przeworsku | police | powiat przeworski
+kpp-w-przysusze | police | powiat przysuski
+kpp-w-pszczynie | police | powiat pszczyński
+kpp-w-pucku | police | powiat pucki
+kpp-w-pulawach | police | powiat puławski
+kpp-w-pultusku | police | powiat pułtuski
+kpp-w-pyrzycach | police | powiat pyrzycki
+kpp-w-raciborzu | police | powiat raciborski
+kpp-w-radomsku | police | powiat radomszczański
+kpp-w-radziejowie | police | powiat radziejowski
+kpp-w-radzyniu-podlaskim | police | powiat radzyński
+kpp-w-rawiczu | police | powiat rawicki
+kpp-w-rawie-mazowieckiej | police | powiat rawski
+kpp-w-ropczycach | police | powiat ropczycko-sędziszowski
+kpp-w-rykach | police | powiat rycki
+kpp-w-rypinie | police | powiat rypiński
+kpp-w-sandomierzu | police | powiat sandomierski
+kpp-w-sanoku | police | powiat sanocki
+kpp-w-sejnach | police | powiat sejneński
+kpp-w-sepolnie-krajenskim | police | powiat sępoleński
+kpp-w-siemiatyczach | police | powiat siemiatycki
+kpp-w-sieradzu | police | powiat sieradzki
+kpp-w-sierpcu | police | powiat sierpecki
+kpp-w-skarzysku-kamiennej | police | powiat skarżyski
+kpp-w-slawnie | police | powiat sławieński
+kpp-w-slubicach | police | powiat słubicki
+kpp-w-slupcy | police | powiat słupecki
+kpp-w-sochaczewie | police | powiat sochaczewski
+kpp-w-sokolce | police | powiat sokólski
+kpp-w-sokolowie-podlaskim | police | powiat sokołowski
+kpp-w-sremie | police | powiat śremski
+kpp-w-srodzie-slaskiej | police | powiat średzki dolnośląskie
+kpp-w-srodzie-wlkp | police | powiat średzki wielkopolskie
+kpp-w-stalowej-woli | police | powiat stalowowolski
+kpp-w-starachowicach | police | powiat starachowicki
+kpp-w-stargardzie | police | powiat stargardzki
+kpp-w-starogardzie-gdanskim | police | powiat starogardzki
+kpp-w-staszowie | police | powiat staszowski
+kpp-w-strzelcach-krajenskich | police | powiat strzelecko-drezdenecki
+kpp-w-strzelcach-opolskich | police | powiat strzelecki
+kpp-w-strzelinie | police | powiat strzeliński
+kpp-w-strzyzowie | police | powiat strzyżowski
+kpp-w-suchej-beskidzkiej | police | powiat suski
+kpp-w-sulecinie | police | powiat sulęciński
+kpp-w-swidnicy | police | powiat świdnicki dolnośląskie
+kpp-w-swidniku | police | powiat świdnicki lubelskie
+kpp-w-swidwinie | police | powiat świdwiński
+kpp-w-swiebodzinie | police | powiat świebodziński
+kpp-w-swieciu | police | powiat świecki
+kpp-w-szamotulach | police | powiat szamotulski
+kpp-w-szczecinku | police | powiat szczecinecki
+kpp-w-szczytnie | police | powiat szczycieński
+kpp-w-sztumie | police | powiat sztumski
+kpp-w-szydlowcu | police | powiat szydłowiecki
+kpp-w-tarnowskich-gorach | police | powiat tarnogórski
+kpp-w-tczewie | police | powiat tczewski
+kpp-w-tomaszowie-lubelskim | police | powiat tomaszowski lubelskie
+kpp-w-tomaszowie-mazowieckim | police | powiat tomaszowski łódzkie
+kpp-w-trzebnicy | police | powiat trzebnicki
+kpp-w-tucholi | police | powiat tucholski
+kpp-w-turku | police | powiat turecki
+kpp-w-ustrzykach-dolnych | police | powiat bieszczadzki
+kpp-w-wabrzeznie | police | powiat wąbrzeski
+kpp-w-wadowicach | police | powiat wadowicki
+kpp-w-wagrowcu | police | powiat wągrowiecki
+kpp-w-walczu | police | powiat wałecki
+kpp-w-wegorzewie | police | powiat węgorzewski
+kpp-w-wegrowie | police | powiat węgrowski
+kpp-w-wejherowie | police | powiat wejherowski
+kpp-w-wieliczce | police | powiat wielicki
+kpp-w-wieluniu | police | powiat wieluński
+kpp-w-wieruszowie | police | powiat wieruszowski
+kpp-w-wodzislawiu-slaskim | police | powiat wodzisławski
+kpp-w-wolominie | police | powiat wołomiński
+kpp-w-wolowie | police | powiat wołowski
+kpp-w-wolsztynie | police | powiat wolsztyński
+kpp-w-wysokiem-mazowieckiem | police | powiat wysokomazowiecki
+kpp-w-wyszkowie | police | powiat wyszkowski
+kpp-w-zabkowicach-slaskich | police | powiat ząbkowicki
+kpp-w-zaganiu | police | powiat żagański
+kpp-w-zakopanem | police | powiat tatrzański
+kpp-w-zambrowie | police | powiat zambrowski
+kpp-w-zarach | police | powiat żarski
+kpp-w-zawierciu | police | powiat zawierciański
+kpp-w-zdunskiej-woli | police | powiat zduńskowolski
+kpp-w-zgierzu | police | powiat zgierski
+kpp-w-zgorzelcu | police | powiat zgorzelecki
+kpp-w-zlotoryi | police | powiat złotoryjski
+kpp-w-zlotowie | police | powiat złotowski
+kpp-w-zninie | police | powiat żniński
+kpp-w-zurominie | police | powiat żuromiński
+kpp-w-zwoleniu | police | powiat zwoleński
+kpp-w-zyrardowie | police | powiat żyrardowski
+kpp-w-zywcu | police | powiat żywiecki
+kpp-we-wlodawie | police | powiat włodawski
+kpp-we-wloszczowej | police | powiat włoszczowski
+kpp-we-wrzesni | police | powiat wrzesiński
+kpp-we-wschowie | police | powiat wschowski
+ksp | police | warszawa-miasto
+pp-w-damnicy | police | gmina damnica
+pp-w-drzewicy | police | drzewica
+pp-w-kolbaskowie | police | przecław
+pp-w-kroscienku-nad-dunajcem | police | krościenko nad dunajcem
+pp-w-podkowie-lesnej | police | podkowa leśna
+pp-w-proszkowie | police | prószków
+pp-w-radkowie | police | radków
+pp-w-sepopolu | police | sępopol
+pp-wiskitki | police | wiskitki
+referat-oskarzycieli-publicznych-straz-miejska-m-st-warszawy | sm | warszawa
+straz-gminna-czerwonak | sm | czerwonak
+straz-gminna-gminy-pruszcz-gdanski | sm | gmina pruszcz gdański
+straz-gminna-kolbudy | sm | kolbudy
+straz-gminna-komorniki | sm | komorniki
+straz-gminna-kosakowo | sm | kosakowo
+straz-gminna-koscielisko | sm | kościelisko
+straz-gminna-miekinia | sm | miękinia
+straz-gminna-starych-babicach | sm | stare babice
+straz-gminna-suchy-las | sm | suchy las
+straz-gminna-tarnowo-podgorne | sm | tarnowo podgórne
+straz-gminna-w-brodnicy | sm | brodnica
+straz-gminna-w-dobrej-z-siedziba-w-wolczkowie | sm | dobra
+straz-gminna-w-dopiewie | sm | dopiewo
+straz-gminna-w-kolbaskowie | sm | kołbaskowo
+straz-gminna-w-lubomi | sm | lubomia
+straz-gminna-w-lyskach | sm | lyski
+straz-gminna-w-nieporecie | sm | nieporęt
+straz-gminna-w-olawie | sm | oława
+straz-gminna-w-rewalu | sm | rewal
+straz-gminna-w-wilkowicach | sm | wilkowice
+straz-gminna-w-zielonkach | sm | gmina zielonki
+straz-miejska-aleksandrow-kujawski | sm | aleksandrów kujawski
+straz-miejska-goldap | sm | gmina gołdap
+straz-miejska-lwowek-slaski | sm | lwówek śląski
+straz-miejska-miasta-krakowa | sm | kraków
+straz-miejska-miasta-poznania | sm | poznań
+straz-miejska-naleczow | sm | nałęczów
+straz-miejska-nowa-ruda | sm | nowa ruda
+straz-miejska-ostrowiec-swietokrzyski | sm | ostrowiec świętokrzyski
+straz-miejska-polkowice | sm | polkowice
+straz-miejska-szczawno-zdroj | sm | szczawno-zdrój
+straz-miejska-w-andrychowie | sm | andrychów
+straz-miejska-w-barczewie | sm | barczewo
+straz-miejska-w-bartoszycach | sm | bartoszyce
+straz-miejska-w-bedzinie | sm | będzin
+straz-miejska-w-belchatowie | sm | bełchatów
+straz-miejska-w-bialej-podlaskiej | sm | biała podlaska
+straz-miejska-w-bialymstoku | sm | białystok
+straz-miejska-w-bielawie | sm | bielawa
+straz-miejska-w-bielsku-bialej | sm | bielsko-biała
+straz-miejska-w-bieruniu | sm | bieruń
+straz-miejska-w-bilgoraju | sm | biłgoraj
+straz-miejska-w-biskupcu | sm | biskupiec
+straz-miejska-w-bloniu | sm | błonie
+straz-miejska-w-bobolicach | sm | bobolice
+straz-miejska-w-bochni | sm | bochnia
+straz-miejska-w-boleslawcu | sm | bolesławiec
+straz-miejska-w-bornem-sulinowie | sm | borne sulinowo
+straz-miejska-w-brwinowie | sm | brwinów
+straz-miejska-w-brzegu | sm | brzeg
+straz-miejska-w-buguchwale | sm | boguchwała
+straz-miejska-w-bukownie | sm | bukowno
+straz-miejska-w-busku-zdroju | sm | busko-zdrój
+straz-miejska-w-bydgoszczy | sm | bydgoszcz
+straz-miejska-w-bytomiu | sm | bytom
+straz-miejska-w-bytomiu-odrzanskim | sm | bytom odrzański
+straz-miejska-w-chelmie | sm | chełm
+straz-miejska-w-chelmnie | sm | chełmno
+straz-miejska-w-chelmzy | sm | chełmża
+straz-miejska-w-chmielniku | sm | chmielnik
+straz-miejska-w-chojnicach | sm | chojnice
+straz-miejska-w-chorzowie | sm | chorzów
+straz-miejska-w-ciechanowie | sm | ciechanów
+straz-miejska-w-ciechocinku | sm | ciechocinek
+straz-miejska-w-cieszynie | sm | cieszyn
+straz-miejska-w-czaplinku | sm | czaplinek
+straz-miejska-w-czarnkowie | sm | czarnków
+straz-miejska-w-czechowicach-dziedzicach | sm | czechowice-dziedzice
+straz-miejska-w-czeladzi | sm | czeladź
+straz-miejska-w-czerwiensku | sm | czerwieńsk
+straz-miejska-w-czerwionce-leszczynach | sm | czerwionka-leszczyny
+straz-miejska-w-czestochowie | sm | częstochowa
+straz-miejska-w-dabrowie-gorniczej | sm | dąbrowa górnicza
+straz-miejska-w-daleszycach | sm | daleszyce
+straz-miejska-w-darlowie | sm | darłowo
+straz-miejska-w-debicy | sm | dębica
+straz-miejska-w-debnie | sm | dębno
+straz-miejska-w-drawsku-pomorskim | sm | drawsko pomorskie
+straz-miejska-w-dzialdowie | sm | działdowo
+straz-miejska-w-dzierzgoniu | sm | dzierzgoń
+straz-miejska-w-dzierzoniowie | sm | dzierżoniów
+straz-miejska-w-dziwnowie | sm | dziwnów
+straz-miejska-w-elblagu | sm | elbląg
+straz-miejska-w-elku | sm | ełk
+straz-miejska-w-gdansku | sm | gdańsk
+straz-miejska-w-gdyni | sm | gdynia
+straz-miejska-w-gizycku | sm | giżycko
+straz-miejska-w-gliwicach | sm | gliwice
+straz-miejska-w-glogowie-malopolskim | sm | głogów małopolski
+straz-miejska-w-glubczycach | sm | głubczyce
+straz-miejska-w-glucholazach | sm | głuchołazy
+straz-miejska-w-gnieznie | sm | gniezno
+straz-miejska-w-gogolinie | sm | gogolin
+straz-miejska-w-goldapi | sm | gołdap
+straz-miejska-w-goleniowie | sm | goleniów
+straz-miejska-w-golinie | sm | golina
+straz-miejska-w-gorlicach | sm | gorlice
+straz-miejska-w-gorze-kalwarii | sm | góra kalwaria
+straz-miejska-w-gorzowie-wielkopolskim | sm | gorzów wielkopolski
+straz-miejska-w-gostyniu | sm | gostyń
+straz-miejska-w-grodkowie | sm | grodkowo, grodków
+straz-miejska-w-grodzisku-mazowieckim | sm | grodzisk mazowiecki
+straz-miejska-w-grojcu | sm | grójec
+straz-miejska-w-grudziadzu | sm | grudziądz
+straz-miejska-w-gryficach | sm | gryfice
+straz-miejska-w-gryfinie | sm | gryfino
+straz-miejska-w-gubinie | sm | gubin
+straz-miejska-w-helu | sm | hel
+straz-miejska-w-hrubieszowie | sm | hrubieszów
+straz-miejska-w-inowroclawiu | sm | inowrocław
+straz-miejska-w-jaroslawiu | sm | jarosław
+straz-miejska-w-jasle | sm | jasło
+straz-miejska-w-jastarni | sm | jastarnia
+straz-miejska-w-jastrowiu | sm | jastrowie
+straz-miejska-w-jastrzebiu-zdroju | sm | jastrzębie-zdrój
+straz-miejska-w-jaworznie | sm | jaworzno
+straz-miejska-w-jedrzejowie | sm | jędrzejów
+straz-miejska-w-jeleniej-gorze | sm | jelenia góra
+straz-miejska-w-jozefowie | sm | józefów
+straz-miejska-w-kaliszu | sm | kalisz
+straz-miejska-w-kaliszu-pomorskim | sm | kalisz pomorski
+straz-miejska-w-karlinie | sm | karlino
+straz-miejska-w-karpaczu | sm | karpacz
+straz-miejska-w-kartuzach | sm | kartuzy
+straz-miejska-w-katowicach | sm | katowice
+straz-miejska-w-kedzierzynie-kozlu | sm | kędzierzyn-koźle
+straz-miejska-w-kepnie | sm | kępno
+straz-miejska-w-ketach | sm | kęty
+straz-miejska-w-ketrzynie | sm | kętrzyn
+straz-miejska-w-kielcach | sm | kielce
+straz-miejska-w-klodawie | sm | kłodawa
+straz-miejska-w-klodzku | sm | kłodzko
+straz-miejska-w-kluczborku | sm | kluczbork
+straz-miejska-w-knurowie | sm | knurów
+straz-miejska-w-kolbuszowej | sm | kolbuszowa
+straz-miejska-w-kole | sm | koło
+straz-miejska-w-kolnie | sm | kolno
+straz-miejska-w-kolobrzegu | sm | kołobrzeg
+straz-miejska-w-koninie | sm | konin
+straz-miejska-w-konskich | sm | końskie
+straz-miejska-w-konstancinie-jeziornie | sm | konstancin-jeziorna
+straz-miejska-w-konstantynowie-lodzkim | sm | konstantynów łódzki
+straz-miejska-w-korniku | sm | kórnik
+straz-miejska-w-korszach | sm | korsze
+straz-miejska-w-koscianie | sm | kościan
+straz-miejska-w-koscierzynie | sm | kościerzyna
+straz-miejska-w-kostrzynie-nad-odra | sm | kostrzyn nad odrą
+straz-miejska-w-koszalinie | sm | koszalin
+straz-miejska-w-koszycach | sm | koszyce
+straz-miejska-w-kozuchowie | sm | kożuchów
+straz-miejska-w-krajence | sm | krajenka
+straz-miejska-w-krapkowicach | sm | krapkowice
+straz-miejska-w-krasniku | sm | kraśnik
+straz-miejska-w-krasnymstawie | sm | krasnystaw
+straz-miejska-w-krosnie | sm | krosno
+straz-miejska-w-krosnie-odrzanskim | sm | krosno odrzańskie
+straz-miejska-w-krotoszynie | sm | krotoszyn
+straz-miejska-w-krynicy-zdroju | sm | krynica-zdrój
+straz-miejska-w-krzeszowicach | sm | krzeszowice
+straz-miejska-w-kudowie-zdroju | sm | kudowa-zdrój
+straz-miejska-w-kutnie | sm | kutno
+straz-miejska-w-kwidzynie | sm | kwidzyn
+straz-miejska-w-laziskach-gornych | sm | łaziska górne
+straz-miejska-w-lebie | sm | łeba
+straz-miejska-w-leborku | sm | lębork
+straz-miejska-w-leczycy | sm | łęczyca
+straz-miejska-w-ledzinach | sm | lędziny
+straz-miejska-w-legionowie | sm | legionowo
+straz-miejska-w-legnicy | sm | legnica
+straz-miejska-w-lesznie | sm | leszno
+straz-miejska-w-lewinie-brzeskim | sm | lewin brzeski
+straz-miejska-w-lezajsku | sm | leżajsk
+straz-miejska-w-lidzbarku | sm | lidzbark (gmina)
+straz-miejska-w-lidzbarku-warminskim | sm | lidzbark warmiński
+straz-miejska-w-limanowej | sm | limanowa
+straz-miejska-w-lipnie | sm | lipno
+straz-miejska-w-lobzie | sm | łobez
+straz-miejska-w-lochowie | sm | łochów
+straz-miejska-w-lodzi | sm | łódź
+straz-miejska-w-lomiankach | sm | łomianki
+straz-miejska-w-lomzy | sm | łomża
+straz-miejska-w-losicach | sm | łosice
+straz-miejska-w-lublincu | sm | lubliniec
+straz-miejska-w-lublinie | sm | lublin
+straz-miejska-w-luboniu | sm | luboń
+straz-miejska-w-malborku | sm | malbork
+straz-miejska-w-margoninie | sm | margonin
+straz-miejska-w-miastku | sm | miastko
+straz-miejska-w-miechowie | sm | miechów
+straz-miejska-w-miedzychodzie | sm | międzychód
+straz-miejska-w-miedzyzdrojach | sm | międzyzdroje
+straz-miejska-w-mielcu | sm | mielec
+straz-miejska-w-mielnie | sm | mielno
+straz-miejska-w-mikolowie | sm | mikołów
+straz-miejska-w-milanowku | sm | milanówek
+straz-miejska-w-minsku-mazowieckim | sm | mińsk mazowiecki
+straz-miejska-w-mlawie | sm | mława
+straz-miejska-w-mogilnie | sm | mogilno
+straz-miejska-w-moragu | sm | morąg
+straz-miejska-w-morawicy | sm | morawica
+straz-miejska-w-mosinie | sm | mosina
+straz-miejska-w-mroczy | sm | mrocza
+straz-miejska-w-mszanie-dolnej | sm | mszana dolna
+straz-miejska-w-murowanej-goslinie | sm | murowana goślina
+straz-miejska-w-murowanej-goslinie-murowana-goslina-zlikwidowana | sm | murowana goślina zlikwidowana
+straz-miejska-w-myslenicach | sm | myślenice
+straz-miejska-w-myslowicach | sm | mysłowice
+straz-miejska-w-myszkowie | sm | myszków
+straz-miejska-w-myszkowie-myszkow | sm | myszków,
+straz-miejska-w-nakle-nad-notecia | sm | nakło nad notecią
+straz-miejska-w-namyslowie | sm | namysłów
+straz-miejska-w-nasielsku | sm | nasielsk
+straz-miejska-w-nidzicy | sm | nidzica
+straz-miejska-w-niemodlinie | sm | niemodlin
+straz-miejska-w-niepolomicach | sm | niepołomice
+straz-miejska-w-nowej-soli | sm | nowa sól
+straz-miejska-w-nowogrodzie-bobrzanskim | sm | nowogród bobrzański
+straz-miejska-w-nowym-brzesku | sm | nowe brzesko
+straz-miejska-w-nowym-dworze-gdanskim | sm | nowy dwór gdański
+straz-miejska-w-nowym-dworze-mazowieckim | sm | nowy dwór mazowiecki
+straz-miejska-w-nowym-miescie | sm | nowe miasto
+straz-miejska-w-nowym-saczu | sm | nowy sącz
+straz-miejska-w-nowym-tomyslu | sm | nowy tomyśl
+straz-miejska-w-nysie | sm | nysa
+straz-miejska-w-obornikach | sm | oborniki
+straz-miejska-w-olesnie | sm | olesno
+straz-miejska-w-olkuszu | sm | olkusz
+straz-miejska-w-olsztynie | sm | olsztyn
+straz-miejska-w-olsztynku | sm | olsztynek
+straz-miejska-w-opalenicy | sm | opalenica
+straz-miejska-w-opatowie | sm | opatów
+straz-miejska-w-opocznie | sm | opoczno
+straz-miejska-w-opolu | sm | opole
+straz-miejska-w-ornecie | sm | orneta
+straz-miejska-w-ostrodzie | sm | ostróda
+straz-miejska-w-ostrolece | sm | ostrołęka
+straz-miejska-w-ostrowcu-sw | sm | ostrowiec św.
+straz-miejska-w-ostrowi-mazowieckiej | sm | ostrów mazowiecka
+straz-miejska-w-ostrowie-wielkopolskim | sm | ostrów wielkopolski
+straz-miejska-w-ostrzeszowie | sm | ostrzeszów
+straz-miejska-w-oswiecimiu | sm | oświęcim
+straz-miejska-w-ozarowie | sm | ożarów
+straz-miejska-w-ozarowie-mazowieckim | sm | ożarów mazowiecki
+straz-miejska-w-pabianicach | sm | pabianice
+straz-miejska-w-paczkowie | sm | paczków
+straz-miejska-w-pasleku | sm | pasłęk
+straz-miejska-w-pelplinie | sm | pelplin
+straz-miejska-w-piasecznie | sm | piaseczno
+straz-miejska-w-piekarach-slaskich | sm | piekary śląskie
+straz-miejska-w-pile | sm | piła
+straz-miejska-w-piotrkowie-trybunalskim | sm | piotrków trybunalski
+straz-miejska-w-pleszewie | sm | pleszew
+straz-miejska-w-plocku | sm | płock
+straz-miejska-w-plonsku | sm | płońsk
+straz-miejska-w-pniewach | sm | pniewy
+straz-miejska-w-polanowie | sm | polanów
+straz-miejska-w-polczynie-zdroju | sm | połczyn-zdrój
+straz-miejska-w-policach | sm | police
+straz-miejska-w-praszce | sm | praszka
+straz-miejska-w-proszowicach | sm | proszowice
+straz-miejska-w-prudniku | sm | prudnik
+straz-miejska-w-pruszczu-gdanskim | sm | pruszcz gdański
+straz-miejska-w-pruszkowie | sm | pruszków
+straz-miejska-w-przemyslu | sm | przemyśl
+straz-miejska-w-przeworsku | sm | przeworsk
+straz-miejska-w-pszczynie | sm | pszczyna
+straz-miejska-w-pucku | sm | puck
+straz-miejska-w-pulawach | sm | puławy
+straz-miejska-w-pultusku | sm | pułtusk
+straz-miejska-w-puszczykowie | sm | puszczykowo
+straz-miejska-w-pyrzycach | sm | pyrzyce
+straz-miejska-w-pyskowicach | sm | pyskowice
+straz-miejska-w-rabce-zdroju | sm | rabka-zdrój
+straz-miejska-w-raciborzu | sm | racibórz
+straz-miejska-w-radlinie | sm | radlin
+straz-miejska-w-radomiu | sm | radom
+straz-miejska-w-radzionkowie | sm | radzionków
+straz-miejska-w-rawie-mazowieckiej | sm | rawa mazowiecka
+straz-miejska-w-reszlu | sm | reszel
+straz-miejska-w-rogoznie | sm | rogoźno
+straz-miejska-w-rudzie-slaskiej | sm | ruda śląska
+straz-miejska-w-rumi | sm | rumia
+straz-miejska-w-rybniku | sm | rybnik
+straz-miejska-w-rydultowach | sm | rydułtowy
+straz-miejska-w-rypinie | sm | rypin
+straz-miejska-w-rzeszowie | sm | rzeszów
+straz-miejska-w-sandomierzu | sm | sandomierz
+straz-miejska-w-sanoku | sm | sanok
+straz-miejska-w-serocku | sm | serock
+straz-miejska-w-sianowie | sm | sianów
+straz-miejska-w-siechnicach | sm | siechnice
+straz-miejska-w-siedlcach | sm | siedlce
+straz-miejska-w-siemianowicach-slaskich | sm | siemianowice śląskie
+straz-miejska-w-sieradzu | sm | sieradz
+straz-miejska-w-sierpcu | sm | sierpc
+straz-miejska-w-skawinie | sm | skawina
+straz-miejska-w-skierniewicach | sm | skierniewice
+straz-miejska-w-skoczowie | sm | skoczów
+straz-miejska-w-slawie | sm | sława
+straz-miejska-w-slawkowie | sm | sławków
+straz-miejska-w-slomnikach | sm | słomniki
+straz-miejska-w-slubicach | sm | słubice
+straz-miejska-w-slupsku | sm | słupsk
+straz-miejska-w-sokolce | sm | sokółka
+straz-miejska-w-sopocie | sm | sopot
+straz-miejska-w-sosnowcu | sm | sosnowiec
+straz-miejska-w-sremie | sm | śrem
+straz-miejska-w-srodzie-slaskiej | sm | środa śląska
+straz-miejska-w-srodzie-wielkopolskiej | sm | środa wielkopolska
+straz-miejska-w-starachowicach | sm | starachowice
+straz-miejska-w-stargardzie | sm | stargard
+straz-miejska-w-starogardzie-gdanskim | sm | starogard gdański
+straz-miejska-w-staszowie | sm | staszów
+straz-miejska-w-stepnicy | sm | stepnica
+straz-miejska-w-stroniu-slaskim | sm | stronie śląskie
+straz-miejska-w-strzelinie | sm | strzelin
+straz-miejska-w-suchej-beskidzkiej | sm | sucha beskidzka
+straz-miejska-w-sulechowie | sm | sulechów
+straz-miejska-w-sulejowku | sm | sulejówek
+straz-miejska-w-suwalkach | sm | suwałki
+straz-miejska-w-swarzedzu | sm | swarzędz
+straz-miejska-w-swidnicy | sm | świdnica
+straz-miejska-w-swidniku | sm | świdnik
+straz-miejska-w-swidwinie | sm | świdwin
+straz-miejska-w-swiebodzicach | sm | świebodzice
+straz-miejska-w-swieciu | sm | świecie
+straz-miejska-w-swietochlowicach | sm | świętochłowice
+straz-miejska-w-swinoujsciu | sm | świnoujście
+straz-miejska-w-szamotulach | sm | szamotuły
+straz-miejska-w-szczawnicy | sm | szczawnica
+straz-miejska-w-szczecinie | sm | szczecin
+straz-miejska-w-szczecinku | sm | szczecinek
+straz-miejska-w-szczytnie | sm | szczytno
+straz-miejska-w-szklarskiej-porebie | sm | szklarska poręba
+straz-miejska-w-sztumie | sm | sztum
+straz-miejska-w-tarczynie | sm | tarczyn
+straz-miejska-w-tarnobrzegu | sm | tarnobrzeg
+straz-miejska-w-tarnowie | sm | tarnów
+straz-miejska-w-tarnowskich-gorach | sm | tarnowskie góry
+straz-miejska-w-tczewie | sm | tczew
+straz-miejska-w-tomaszowie-mazowieckim | sm | tomaszów mazowiecki
+straz-miejska-w-toruniu | sm | toruń
+straz-miejska-w-trzciance | sm | trzcianka
+straz-miejska-w-trzebiatowie | sm | trzebiatów
+straz-miejska-w-trzebnicy | sm | trzebnica
+straz-miejska-w-tychach | sm | tychy
+straz-miejska-w-ujsciu | sm | ujście
+straz-miejska-w-ustce | sm | ustka
+straz-miejska-w-ustroniu | sm | ustroń
+straz-miejska-w-wabrzeznie | sm | wąbrzeźno
+straz-miejska-w-wadowicach | sm | wadowice
+straz-miejska-w-walbrzychu | sm | wałbrzych
+straz-miejska-w-walczu | sm | wałcz
+straz-miejska-w-wegorzynie | sm | węgorzyno
+straz-miejska-w-wegrowie | sm | węgrów
+straz-miejska-w-wejherowie | sm | wejherowo
+straz-miejska-w-wieliczce | sm | wieliczka
+straz-miejska-w-wieluniu | sm | wieluń
+straz-miejska-w-wisle | sm | wisła
+straz-miejska-w-wodzislawiu-slaskim | sm | wodzisław śląski
+straz-miejska-w-wolbromiu | sm | wolbrom
+straz-miejska-w-wolczynie | sm | wołczyn
+straz-miejska-w-wolominie | sm | wołomin
+straz-miejska-w-wolsztynie | sm | wolsztyn
+straz-miejska-w-wyrzysku | sm | wyrzysk
+straz-miejska-w-wyszkowie | sm | wyszków
+straz-miejska-w-zabkach | sm | ząbki
+straz-miejska-w-zabkowicach-slaskich | sm | ząbkowice śląskie
+straz-miejska-w-zabrzu | sm | zabrze
+straz-miejska-w-zaganiu | sm | żagań
+straz-miejska-w-zakopanem | sm | zakopane
+straz-miejska-w-zamosciu | sm | zamość
+straz-miejska-w-zarach | sm | żary
+straz-miejska-w-zarkach | sm | żarki
+straz-miejska-w-zawierciu | sm | zawiercie
+straz-miejska-w-zbaszynku | sm | zbąszynek
+straz-miejska-w-zdunskiej-woli | sm | zduńska wola
+straz-miejska-w-zdzieszowicach | sm | zdzieszowice
+straz-miejska-w-zgierzu | sm | zgierz
+straz-miejska-w-ziebicach | sm | ziębice
+straz-miejska-w-zielonej-gorze | sm | zielona góra
+straz-miejska-w-zlociencu | sm | złocieniec
+straz-miejska-w-zlotoryi | sm | złotoryja
+straz-miejska-w-zlotowie | sm | złotów
+straz-miejska-w-zurominie | sm | żuromin
+straz-miejska-w-zyrardowie | sm | żyrardów
+straz-miejska-w-zywcu | sm | żywiec
+straz-miejska-we-wladyslawowie | sm | władysławowo
+straz-miejska-we-wloclawku | sm | włocławek
+straz-miejska-we-wlodawie | sm | włodawa
+straz-miejska-we-wrzesni | sm | września
+straz-miejska-we-wschowie | sm | wschowa
+straz-miejska-wroclawia | sm | wrocław
+straz-miejska-wronki | sm | wronki
+v-oddzial-terenowy-strazy-miejskiej-m-st-warszawy | sm | warszawa_ot5
+vi-oddzial-terenowy-strazy-miejskiej-m-st-warszawy | sm | warszawa_ot6
+vii-oddzial-terenowy-strazy-miejskiej-m-st-warszawy | sm | warszawa_ot7

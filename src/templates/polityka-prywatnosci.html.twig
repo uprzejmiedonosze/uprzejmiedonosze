@@ -247,8 +247,8 @@
     <li>Do obsługi zgłoszeń Administrator korzysta z usług poniższych podmiotów, które przetwarzają
     dane wyłącznie w celu świadczenia usługi i na polecenie Administratora:
     <ul>
-        <li>OpenAI – analiza wizyjna zdjęć (wstępne wykrywanie twarzy oraz odczyt treści pism
-            z policji i straży miejskiej;</li>
+        <li>OpenAI – analiza wizyjna zdjęć (rozpoznanie zdjęcia pojazdu i zdjęcia kontekstowego, numeru
+            rejestracyjnego i rodzaju wykroczenia) oraz odczyt treści pism z policji i straży miejskiej;</li>
         <li>Plate Recognizer i OpenALPR – odczyt numerów rejestracyjnych ze zdjęć;</li>
         <li>Google Cloud Vision – wyłącznie wykrywanie twarzy na zdjęciach kontekstowych, aby
             zamazać je w publicznej galerii;</li>
@@ -260,18 +260,20 @@
         <li>Backblaze B2 – przechowywanie plików zgłoszeń i kopii zapasowych (centrum danych w Unii Europejskiej);</li>
         <li>Sentry – raporty błędów i awarii (patrz punkt V).</li>
     </ul></li>
-    <li>Dane zgłoszeń przetwarzane przez wymienionych dostawców (z wyjątkiem usług pomocniczych
-    wymienionych w punkcie 3) pozostają na serwerach w regionach Unii Europejskiej i Europejskiego
-    Obszaru Gospodarczego; Administrator nie przekazuje ich do państw trzecich.
-    Wyjątkiem jest opisana w punkcie IV podstrona <a href="https://galeria.uprzejmiedonosze.net/">galeria</a>
-    (Tumblr).</li>
-    <li>Usługi pomocnicze: uwierzytelnianie Google Firebase (patrz punkt V) jest usługą o globalnej
-    infrastrukturze – adres e-mail i identyfikator konta mogą być przetwarzane przez Google także poza
-    EOG na podstawie decyzji Komisji Europejskiej o odpowiednim stopniu ochrony (EU-US Data Privacy
-    Framework) lub standardowych klauzul umownych. Podobnie żądania map do Mapbox (punkt 1).</li>
-    <li>Zdjęcia i skany pism trafiają do dostawców AI (OpenAI) dopiero po wyrażeniu przez Użytkownika
-    zgody w aplikacji mobilnej przed pierwszym wyborem zdjęć. Zgodę można w każdej chwili cofnąć
-    w zakładce „Konto”; cofnięcie nie wpływa na zgłoszenia już utworzone.</li>
+    <li>Dane zgłoszeń i kont są przechowywane na serwerach w Unii Europejskiej (serwer serwisu
+    i Backblaze B2). Część wymienionych dostawców przetwarza dane poza Europejskim Obszarem
+    Gospodarczym, m.in. w Stanach Zjednoczonych i Kanadzie: OpenAI, Plate Recognizer, OpenALPR,
+    Google (Firebase, Cloud Vision, Maps), Mapbox, Mailgun i Sentry. Przekazanie odbywa się na podstawie
+    decyzji Komisji Europejskiej stwierdzającej odpowiedni stopień ochrony (w tym EU-US Data Privacy
+    Framework) lub standardowych klauzul umownych zatwierdzonych przez Komisję. Dostawcy otrzymują
+    wyłącznie dane potrzebne do wykonania zadania – do analizy trafia samo zdjęcie albo skan pisma,
+    bez danych konta Użytkownika (Mailgun dostarcza wiadomość ze zgłoszeniem, więc przetwarza jej
+    pełną treść). Wyjątkiem jest też opisana w punkcie IV podstrona
+    <a href="https://galeria.uprzejmiedonosze.net/">galeria</a> (Tumblr).</li>
+    <li>Analiza zdjęć i skanów pism przez dostawców AI (OpenAI) i odczyt numerów rejestracyjnych
+    są częścią funkcji tworzenia zgłoszenia i odczytu pism, z których Użytkownik korzysta na własne
+    żądanie (art. 6 ust. 1 lit. b RODO). Wyniki analizy są jedynie podpowiedzią – Użytkownik
+    sprawdza i zatwierdza treść zgłoszenia przed jego wysłaniem.</li>
     <li>Skan pisma z policji lub straży miejskiej jest przekazywany do odczytu i nie jest przez serwis
     zapisywany. Zapisywane są wyłącznie dane zatwierdzone przez Użytkownika (status zgłoszenia,
     numer sprawy, prywatna notatka).</li>
