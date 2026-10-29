@@ -96,6 +96,13 @@ function deletePage(string $path): void
     $stmt->execute([':path' => $path, ':now' => date('c')]);
 }
 
+function pathById(int $pageId): ?string
+{
+    $stmt = db()->prepare("SELECT path FROM wiki_pages WHERE id = :id");
+    $stmt->execute([':id' => $pageId]);
+    return $stmt->fetchColumn() ?: null;
+}
+
 /** Historia strony, od najnowszej. */
 function revisions(int $pageId, int $limit = 100): array
 {
@@ -111,6 +118,14 @@ function getRevision(int $revId): ?array
 {
     $stmt = db()->prepare("SELECT * FROM wiki_revisions WHERE id = :id");
     $stmt->execute([':id' => $revId]);
+    return $stmt->fetch() ?: null;
+}
+
+/** Rewizja tej samej strony bezpośrednio przed $revId (do diffu). */
+function previousRevision(int $pageId, int $revId): ?array
+{
+    $stmt = db()->prepare("SELECT * FROM wiki_revisions WHERE page_id = :page AND id < :id ORDER BY id DESC LIMIT 1");
+    $stmt->execute([':page' => $pageId, ':id' => $revId]);
     return $stmt->fetch() ?: null;
 }
 

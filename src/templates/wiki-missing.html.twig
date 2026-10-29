@@ -1,0 +1,11 @@
+{% set title = 'Strona nie istnieje' %}
+{% extends "base.html.twig" %}
+
+{% block main %}
+<article class="wiki-page">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a></nav>
+  <h1 class="wiki-page__title">Nie ma jeszcze strony <code>{{ wiki.path }}</code></h1>
+  <p>Możesz ją utworzyć. Zanim to zrobisz, sprawdź <a href="/wiki">stronę główną wiki</a> — może podobny poradnik już istnieje.</p>
+  <a href="/wiki/_edit/{{ wiki.path }}" class="mpr-button mpr-button-primary" rel="nofollow">Utwórz stronę</a>
+</article>
+{% endblock %}

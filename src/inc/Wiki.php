@@ -204,7 +204,7 @@ final class Renderer
         }
         // Obrazki podmieniane po przejściu drzewa (modyfikacja w trakcie iteracji gubi węzły).
         foreach ($images as $image) {
-            $media = $this->resolveMedia($image->getUrl(), 'obrazek');
+            $media = $this->resolveMedia($image->getUrl(), 'Obrazek');
             if ($media) {
                 $image->setUrl(mediaUrl($media));
                 if ($media['width']) $image->data->set('attributes/width', (string)$media['width']);
@@ -278,7 +278,7 @@ final class Renderer
                 $this->error(":::{$block->name} nie ma atrybutu „{$key}”.");
             } elseif ($type === 'media') {
                 // resolveMedia sam zgłasza błąd
-                if ($media = $this->resolveMedia("media:$value", 'obrazek')) $valid[$key] = mediaUrl($media);
+                if ($media = $this->resolveMedia("media:$value", 'Obrazek')) $valid[$key] = mediaUrl($media);
             } elseif ($type === 'id') {
                 // validId sam zgłasza błąd
                 if ($this->validId($value)) $valid[$key] = $value;
@@ -468,3 +468,232 @@ final class EmbedRenderer implements NodeRendererInterface
         return $this->renderer->embed($node->kind, $node->arg) ?? '';
     }
 }
+
+// ─── Logika domenowa (wspólna dla webu i przyszłego REST/MCP) ────────────────────────────────────────────────────
+
+/** Ścieżka strony: małe litery ASCII, cyfry, myślnik; segmenty przez '/'. Segment zaczynający się od '_' = trasa systemowa. */
+const PATH_RE = '#^[a-z0-9][a-z0-9-]{0,79}(/[a-z0-9][a-z0-9-]{0,79}){0,3}$#';
+
+const MAX_TITLE_LENGTH = 150;
+const MAX_SUMMARY_LENGTH = 200;
+
+/**
+ * Dlaczego użytkownik nie może edytować (null = może). Edytuje każdy zarejestrowany z co najmniej jednym wysłanym
+ * zgłoszeniem (decyzja z planu, 3.5), o ile admin nie zablokował mu edycji (data->wikiBlocked).
+ * @return null|'login'|'register'|'apps'|'blocked'
+ */
+function editBlockedReason(?\user\User $user): ?string
+{
+    if (!$user) return 'login';
+    if (!$user->isRegistered()) return 'register';
+    if (!empty($user->data->wikiBlocked)) return 'blocked';
+    if (!$user->hasApps()) return 'apps';
+    return null;
+}
+
+function canEdit(?\user\User $user): bool
+{
+    return editBlockedReason($user) === null;
+}
+
+/** Przywracanie wersji i zmiana ścieżki. */
+function canModerate(?\user\User $user): bool
+{
+    return $user && $user->isModerator();
+}
+
+function isValidPath(string $path): bool
+{
+    return (bool)preg_match(PATH_RE, $path);
+}
+
+/** Renderer z blokami osadzanymi dostępnymi na każdej stronie wiki. */
+function renderer(): Renderer
+{
+    return new Renderer();
+}
+
+/** Treść strony gotowa do wyświetlenia (formy rodzajowe dla zalogowanego lub neutralne). */
+function renderForUser(string $markdown, array $sex): RenderResult
+{
+    return renderer()->render($markdown)->personalize($sex);
+}
+
+/**
+ * Zapis edycji. $baseRev = current_rev strony w chwili otwarcia edytora — jeśli ktoś zapisał w międzyczasie,
+ * zapis jest odrzucany (konflikt), zamiast cicho nadpisać cudzą zmianę.
+ * @throws \ValidationException pole + komunikat (pole 'body' przy błędach treści, 'baseRev' przy konflikcie)
+ * @throws \ForbiddenException
+ */
+function save(\user\User $user, string $path, string $title, string $body, string $summary, ?int $baseRev): int
+{
+    if (!canEdit($user))
+        throw new \ForbiddenException('Nie masz uprawnień do edycji wiki.');
+    if (!isValidPath($path))
+        throw new \ValidationException('path', 'Niepoprawny adres strony (małe litery, cyfry, myślniki, segmenty przez „/”).');
+
+    $title = cleanWhiteChars($title);
+    $summary = cleanWhiteChars($summary);
+    $body = str_replace("\r\n", "\n", $body);
+    if ($title === '' || mb_strlen($title) > MAX_TITLE_LENGTH)
+        throw new \ValidationException('title', 'Tytuł jest wymagany (do ' . MAX_TITLE_LENGTH . ' znaków).');
+    if (mb_strlen($summary) > MAX_SUMMARY_LENGTH)
+        throw new \ValidationException('summary', 'Opis zmiany może mieć do ' . MAX_SUMMARY_LENGTH . ' znaków.');
+
+    $result = renderer()->render($body);
+    if ($result->errors)
+        throw new \ValidationException('body', implode("\n", $result->errors));
+
+    $page = getPage($path);
+    if ($page && (int)$page['current_rev'] !== (int)$baseRev)
+        throw new \ValidationException('baseRev', 'Ktoś zapisał tę stronę w trakcie Twojej edycji. Skopiuj swoje zmiany i otwórz edytor ponownie.');
+    if ($page && $page['title'] === $title && $page['body_md'] === $body)
+        return (int)$page['current_rev'];
+
+    $revId = savePage($path, $title, $body, $summary, $user->getEmail(), $user->getFirstName(), sectionOf($path));
+    log_info("wiki: $path rev $revId by {$user->getEmail()}");
+    return $revId;
+}
+
+/** Przywrócenie starszej wersji = nowa rewizja z jej treścią (historia zostaje liniowa). */
+function revert(\user\User $user, int $revId): string
+{
+    if (!canModerate($user))
+        throw new \ForbiddenException('Przywracać wersje może tylko moderator.');
+    $rev = getRevision($revId);
+    if (!$rev)
+        throw new \ValidationException('rev', "Nie ma wersji $revId.");
+    $page = pathById((int)$rev['page_id']);
+    savePage($page, $rev['title'], $rev['body_md'], "Przywrócono wersję #$revId", $user->getEmail(), $user->getFirstName());
+    return $page;
+}
+
+/** Sekcja z pierwszego segmentu ścieżki (prawo, wzory, pytania, sluzby) albo '' dla poradników. */
+function sectionOf(string $path): string
+{
+    $first = explode('/', $path)[0];
+    return str_contains($path, '/') && in_array($first, ['prawo', 'wzory', 'pytania', 'sluzby'], true) ? $first : '';
+}
+
+/**
+ * Diff linii (LCS) do widoku historii. Strony mają po kilkaset linii, więc O(n·m) wystarcza.
+ * @return list<array{op:'='|'+'|'-',line:string}>
+ */
+function diffLines(string $old, string $new): array
+{
+    $a = explode("\n", $old);
+    $b = explode("\n", $new);
+    $n = count($a);
+    $m = count($b);
+    $lcs = array_fill(0, $n + 1, array_fill(0, $m + 1, 0));
+    for ($i = $n - 1; $i >= 0; $i--)
+        for ($j = $m - 1; $j >= 0; $j--)
+            $lcs[$i][$j] = $a[$i] === $b[$j] ? $lcs[$i + 1][$j + 1] + 1 : max($lcs[$i + 1][$j], $lcs[$i][$j + 1]);
+
+    $ops = [];
+    for ($i = 0, $j = 0; $i < $n || $j < $m;) {
+        if ($i < $n && $j < $m && $a[$i] === $b[$j]) {
+            $ops[] = ['op' => '=', 'line' => $a[$i++]];
+            $j++;
+        } elseif ($i < $n && ($j >= $m || $lcs[$i + 1][$j] >= $lcs[$i][$j + 1])) {
+            $ops[] = ['op' => '-', 'line' => $a[$i++]]; // usunięcie przed dodaniem, jak w diff -u
+        } else {
+            $ops[] = ['op' => '+', 'line' => $b[$j++]];
+        }
+    }
+    return $ops;
+}
+
+/**
+ * Poradnik redaktora (modal w edytorze): przykłady pokazywane jako kod + wynik tego samego renderera.
+ * tests/wiki/GuideTest.php renderuje każdy przykład z 'render' => true — poradnik nie rozjedzie się z rendererem.
+ * @return list<array{title:string,intro:string,examples:list<array{label:string,md:string,render:bool}>}>
+ */
+function guide(): array
+{
+    return [
+        [
+            'title' => 'Tekst i nagłówki',
+            'intro' => 'Treść piszesz w Markdown. Tytuł strony ustawiasz w osobnym polu, więc w treści zaczynaj od nagłówków drugiego poziomu (##). Nagłówki ##–#### trafiają automatycznie do spisu treści.',
+            'examples' => [
+                ['label' => 'Nagłówki', 'md' => "## Rozdział\n\n### Podrozdział", 'render' => true],
+                ['label' => 'Wyróżnienia', 'md' => "**pogrubienie**, *kursywa*, ~~skreślenie~~, `kod`", 'render' => true],
+                ['label' => 'Listy', 'md' => "- punkt\n- drugi punkt\n\n1. pierwszy krok\n2. drugi krok", 'render' => true],
+                ['label' => 'Cytat (np. przepis)', 'md' => "> Art. 49 § 1 pkt 1 Prawa o ruchu drogowym zabrania zatrzymania pojazdu…", 'render' => true],
+            ],
+        ],
+        [
+            'title' => 'Linki i kotwice',
+            'intro' => 'Linkuj do innych stron wiki i UD ścieżką od ukośnika. Linki zewnętrzne dostają automatycznie rel="nofollow". Kotwica {#nazwa} przy nagłówku daje stały adres sekcji (małe litery, cyfry, myślnik) — bez niej adres powstaje z treści nagłówka i zmieni się, gdy go przeredagujesz.',
+            'examples' => [
+                ['label' => 'Link do innej strony wiki', 'md' => "Zobacz [jak napisać zażalenie](/wiki/zazalenie-na-decyzje-sm).", 'render' => true],
+                ['label' => 'Link zewnętrzny', 'md' => "[Prawo o ruchu drogowym](https://isap.sejm.gov.pl/)", 'render' => true],
+                ['label' => 'Stała kotwica sekcji', 'md' => "## Czy będę wezwany na świadka? {#swiadek}\n\nLink do niej: [przeczytaj](#swiadek).", 'render' => true],
+                ['label' => 'Spis treści w treści strony', 'md' => "[[toc]]", 'render' => false],
+            ],
+        ],
+        [
+            'title' => 'Tabele',
+            'intro' => 'Kolumny oddzielasz pionową kreską, drugi wiersz z myślnikami oddziela nagłówek.',
+            'examples' => [
+                ['label' => 'Tabela', 'md' => "| Kategoria | Przepis |\n|---|---|\n| Parkowanie na trawniku | art. 144 KW |\n| Za blisko przejścia | art. 49 PoRD |", 'render' => true],
+            ],
+        ],
+        [
+            'title' => 'Ramki: uwaga i informacja',
+            'intro' => 'Blok zaczyna linia z trzema dwukropkami i nazwą, kończy linia z samymi trzema dwukropkami. Tytuł ramki jest opcjonalny.',
+            'examples' => [
+                ['label' => 'Uwaga', 'md' => ":::uwaga{title=\"Termin\"}\nZażalenie składasz w ciągu **7 dni** od doręczenia postanowienia.\n:::", 'render' => true],
+                ['label' => 'Informacja', 'md' => ":::info\nTa straż przyjmuje zgłoszenia wyłącznie przez ePUAP.\n:::", 'render' => true],
+            ],
+        ],
+        [
+            'title' => 'Wzór pisma',
+            'intro' => 'Wzór dostaje przycisk „Kopiuj”. Miejsca do uzupełnienia oznaczaj nawiasami kwadratowymi wielkimi literami, np. [ORGAN], [DATA].',
+            'examples' => [
+                ['label' => 'Wzór', 'md' => ":::wzor{title=\"Wniosek o informację publiczną\"}\n[MIEJSCOWOŚĆ], [DATA]\n\n[ORGAN]\n\nNa podstawie art. 2 ust. 1 ustawy o dostępie do informacji publicznej wnoszę o…\n:::", 'render' => true],
+            ],
+        ],
+        [
+            'title' => 'Karta metody (howto)',
+            'intro' => 'Karta jak na stronie „Jak zgłosić nielegalne parkowanie”. Wymaga id (kotwica karty) i title; opcjonalnie img (nazwa pliku z biblioteki mediów), cta (adres przycisku: ścieżka, https://, tel: lub mailto:) i cta_label. Ramkę wewnątrz karty otwierasz inną liczbą dwukropków niż kartę.',
+            'examples' => [
+                ['label' => 'Karta z przyciskiem', 'md' => ":::howto{id=telefon title=\"Telefonicznie\" cta=\"tel:986\" cta_label=\"Zadzwoń pod 986\"}\n*Kiedy stosować:* na całych patoparkingach.\n:::", 'render' => true],
+                ['label' => 'Ramka wewnątrz karty', 'md' => "::::howto{id=email title=\"E-mailem\"}\nTreść karty.\n\n:::uwaga\nRamka w karcie.\n:::\n::::", 'render' => true],
+            ],
+        ],
+        [
+            'title' => 'Obrazki',
+            'intro' => 'Obrazki pochodzą wyłącznie z biblioteki mediów wiki — nie da się wstawić obrazka z innej strony. Potrzebujesz nowego zrzutu ekranu lub zdjęcia? Wyślij plik (PNG, JPEG lub WebP, do 1 MB) przez stronę kontaktu, a administrator doda go do biblioteki i poda nazwę.',
+            'examples' => [
+                ['label' => 'Obrazek z biblioteki', 'md' => "![Formularz ePUAP z zaznaczonym polem adresata](media:epuap-adresat.png)", 'render' => false],
+            ],
+        ],
+        [
+            'title' => 'Formy rodzajowe',
+            'showSexKeys' => true,
+            'intro' => 'Tekst może odmieniać się przez płeć czytającej osoby (dla niezalogowanych pokazuje się forma neutralna). Wpisz {{sex:klucz}} — listę kluczy znajdziesz niżej.',
+            'examples' => [
+                ['label' => 'Odmiana', 'md' => "Czy będę {{sex:anonimowa}}? Czy zostanę {{sex:wezwana}} na świadka?", 'render' => true],
+            ],
+        ],
+        [
+            'title' => 'Bloki z danymi',
+            'intro' => 'Niektóre strony pokazują dane z konfiguracji UD zamiast tekstu wpisanego ręcznie — nie przepisuj ich do treści, bo się zdezaktualizują.',
+            'examples' => [
+                ['label' => 'Karta jednostki (SM/Policja)', 'md' => "[[jednostka:sm/wroclaw]]", 'render' => false],
+                ['label' => 'Doświadczenia z przesłuchań', 'md' => "[[data:sm-hints]]", 'render' => false],
+            ],
+        ],
+    ];
+}
+
+/** Zasady redakcyjne pokazywane w poradniku (lista punktów). */
+const GUIDE_RULES = [
+    'Pisz rzeczowo i neutralnie — wiki czytają też urzędnicy i strażnicy.',
+    'Nie publikuj danych osobowych: imion i nazwisk funkcjonariuszy, numerów rejestracyjnych, adresów prywatnych, sygnatur spraw innych osób.',
+    'Podawaj podstawę prawną (artykuł, ustawa) i, jeśli możesz, link do źródła.',
+    'Nie kopiuj tekstów z innych serwisów — streść je własnymi słowami i podlinkuj.',
+    'Każda zmiana trafia do historii z Twoim imieniem; moderator może przywrócić poprzednią wersję. Opisz krótko, co zmieniasz.',
+    'Adresy e-mail jednostek pochodzą z konfiguracji UD — błędny adres zgłoś przez stronę kontaktu, nie poprawiaj go w notatce.',
+];

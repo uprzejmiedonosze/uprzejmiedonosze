@@ -1,0 +1,20 @@
+{% set title = 'Historia: ' ~ wiki.page.title %}
+{% extends "base.html.twig" %}
+
+{% block main %}
+<article class="wiki-page">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a> › <a href="{{ wiki.url }}">{{ wiki.page.title }}</a></nav>
+  <h1 class="wiki-page__title">Historia zmian</h1>
+  <ol class="wiki-revisions">
+  {% for rev in wiki.revisions %}
+    <li>
+      <a href="/wiki/_rev/{{ rev.id }}" rel="nofollow">{{ rev.created_at|date('j.m.Y H:i') }}</a>
+      <span class="wiki-revisions__author">{{ rev.author_name ?: 'anonim' }}</span>
+      {% if rev.summary %}<span class="wiki-revisions__summary">{{ rev.summary }}</span>{% endif %}
+      <span class="wiki-revisions__bytes">{{ rev.bytes }} B</span>
+      {% if loop.first %}<span class="wiki-revisions__current">aktualna</span>{% endif %}
+    </li>
+  {% endfor %}
+  </ol>
+</article>
+{% endblock %}

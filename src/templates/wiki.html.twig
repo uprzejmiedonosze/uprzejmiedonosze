@@ -1,0 +1,37 @@
+{# SITEMAP-PRIORITY:0.5 #}
+{% set title = wiki.page.title %}
+{% set shortTitle = wiki.page.title %}
+{% set hasSidebar = wiki.toc|length >= 3 and not dialog %}
+
+{% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% if hasSidebar %}
+<aside class="mpr-sidebar mpr-sidebar--toc">
+<details open>
+<summary>Spis treści</summary>
+<ul class="wiki-toc">
+  {% for entry in wiki.toc %}<li class="wiki-toc__l{{ entry.level }}"><a href="#{{ entry.id }}">{{ entry.text }}</a></li>{% endfor %}
+</ul>
+</details>
+</aside>
+{% endif %}
+{% endblock %}
+
+{% block main %}
+<article class="wiki-page">
+  {% if wiki.path != 'start' %}
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a>{% if wiki.page.section %} › <span>{{ wiki.page.section }}</span>{% endif %}</nav>
+  {% endif %}
+  <h1 class="wiki-page__title">{{ wiki.page.title }}</h1>
+  <div class="wiki-content">
+    {{ wiki.content|raw }}
+  </div>
+  {% if not embed %}
+  <footer class="wiki-page__footer">
+    <p class="wiki-page__meta">Ostatnia zmiana: {{ wiki.page.updated_at|date('j.m.Y H:i') }} · <a href="/wiki/_recent" rel="nofollow">Ostatnie zmiany w wiki</a></p>
+    {% include 'wiki/_actions.html.twig' %}
+  </footer>
+  {% endif %}
+</article>
+{% endblock %}

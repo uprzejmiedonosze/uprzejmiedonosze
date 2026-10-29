@@ -1,0 +1,45 @@
+{# Poradnik redaktora — modal w edytorze wiki. Przykłady i zasady: \wiki\guide(), \wiki\GUIDE_RULES (src/inc/Wiki.php);
+   „Wstaw” obsługuje src/js/sites/wiki-edit.js. #}
+<dialog id="wiki-guide" class="fullscreen wiki-guide" aria-labelledby="wiki-guide-title">
+  <header class="wiki-guide__header">
+    <h2 id="wiki-guide-title">Poradnik redaktora</h2>
+    <form method="dialog"><button type="submit" class="wiki-guide__close" aria-label="Zamknij poradnik">×</button></form>
+  </header>
+
+  <div class="wiki-guide__body">
+    <p>Wiki Uprzejmie Donoszę tworzą użytkownicy, którzy wysłali co najmniej jedno zgłoszenie. Poniżej znajdziesz
+    wszystko, czego potrzebujesz do formatowania treści. Przycisk <strong>Wstaw</strong> dodaje przykład w miejscu kursora.</p>
+
+    <details class="wiki-guide__section" open>
+      <summary>Zasady redakcyjne</summary>
+      <ul>{% for rule in wiki.guideRules %}<li>{{ rule }}</li>{% endfor %}</ul>
+    </details>
+
+    {% for section in wiki.guide %}
+    <details class="wiki-guide__section">
+      <summary>{{ section.title }}</summary>
+      <p>{{ section.intro }}</p>
+      {% for example in section.examples %}
+      <div class="wiki-guide__example">
+        <div class="wiki-guide__example-head">
+          <span>{{ example.label }}</span>
+          {% if wiki.canEdit %}<button type="button" class="mpr-button mpr-button-outline js-wiki-insert" data-snippet="{{ example.md }}">Wstaw</button>{% endif %}
+        </div>
+        <pre class="wiki-guide__source"><code>{{ example.md }}</code></pre>
+        {% if example.html %}<div class="wiki-content wiki-guide__result">{{ example.html|raw }}</div>{% endif %}
+      </div>
+      {% endfor %}
+      {% if section.showSexKeys ?? false %}
+      <p class="wiki-guide__keys">Dostępne klucze: {% for key in wiki.sexKeys %}<code>{{ key }}</code>{% if not loop.last %}, {% endif %}{% endfor %}</p>
+      {% endif %}
+    </details>
+    {% endfor %}
+
+    <details class="wiki-guide__section">
+      <summary>Historia i przywracanie</summary>
+      <p>Pod każdą stroną jest link <strong>Historia</strong>: zobaczysz tam wszystkie wersje, ich autorów i różnice.
+      Jeśli zapis się nie uda, bo ktoś edytował stronę w tym samym czasie, skopiuj swój tekst, otwórz edytor ponownie
+      i nanieś zmiany na aktualną wersję. Przywracać starsze wersje mogą moderatorzy.</p>
+    </details>
+  </div>
+</dialog>

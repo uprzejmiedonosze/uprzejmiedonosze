@@ -22,6 +22,8 @@ import "./sites/how";
 import "./sites/ask-for-status"
 import "./sites/menu"
 import "./sites/frequent-mistakes"
+import "./sites/wiki"
+import "./sites/wiki-edit"
 import "./lib/sidebar"
 import makeDialog from "./lib/dialog";
 

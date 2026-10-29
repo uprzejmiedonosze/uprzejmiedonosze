@@ -1,0 +1,22 @@
+{# Przyciski edycji/historii strony wiki albo powód, dla którego nie można edytować (\wiki\editBlockedReason). #}
+<div class="wiki-actions">
+  {% if wiki.canEdit %}
+    <a href="/wiki/_edit{{ wiki.path == 'start' ? '' : '/' ~ wiki.path }}" class="mpr-button mpr-button-outline" rel="nofollow">Edytuj</a>
+  {% endif %}
+  {% if wiki.page is defined %}
+    <a href="/wiki/_history/{{ wiki.path }}" class="mpr-button mpr-button-outline" rel="nofollow">Historia</a>
+  {% endif %}
+  {% if not wiki.canEdit %}
+    <p class="wiki-actions__hint">
+    {% if wiki.blockedReason == 'login' %}
+      Wiki tworzą użytkownicy Uprzejmie Donoszę. <a href="/login.html?next={{ wiki.url|url_encode }}">Zaloguj się</a>, żeby ją edytować.
+    {% elseif wiki.blockedReason == 'register' %}
+      <a href="/app/account">Dokończ rejestrację</a>, żeby edytować wiki.
+    {% elseif wiki.blockedReason == 'apps' %}
+      Edycja po wysłaniu pierwszego zgłoszenia.
+    {% elseif wiki.blockedReason == 'blocked' %}
+      Edycja wiki jest dla Twojego konta zablokowana. Jeśli to pomyłka, <a href="/kontakt.html">napisz do nas</a>.
+    {% endif %}
+    </p>
+  {% endif %}
+</div>
