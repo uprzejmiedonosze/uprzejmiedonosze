@@ -74,6 +74,12 @@ function removeUser($email, $dryRun=true){
         \cache\delete(\cache\Type::UserStats, $email);
     }
 
+    __log("Anonimizuję autora zmian w wiki");
+    // Treść zostaje; plik może jeszcze nie istnieć (a obraz crona nie ma schematu do jego utworzenia).
+    if(!$dryRun && file_exists(WIKI_DB_FILENAME)){
+        \wiki\anonymizeAuthor($email);
+    }
+
     __log("Zamazuję dane użytkownika w bazie");
     if($dryRun){
         return;

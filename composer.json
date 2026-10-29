@@ -27,7 +27,8 @@
         "mcp/sdk": "^0.7",
         "league/oauth2-server": "^9.4",
         "lbuchs/webauthn": "^2.2",
-        "openspout/openspout": "^4.28"
+        "openspout/openspout": "^4.28",
+        "league/commonmark": "^2.7"
     },
     "require-dev": {
         "sserbin/twig-linter": "^3.1",

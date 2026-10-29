@@ -32,6 +32,18 @@ dodaj je w dataclassie. Migracja jest dla nowych tabel i indeksów (np. pod `jso
    (transakcja + rollback). Wzór: `tests/store/PhotoQuotaTest.php`. Uruchom `make test`.
 6. **Sprzątanie danych** — jeśli tabela rośnie w czasie, rozważ wpis w `src/tools/cleanup.php` (jak `photo_usage`).
 
+## Wariant: baza wiki (`db/wiki.sqlite`)
+
+Wiki ma osobny plik bazy (`src/inc/store/WikiStore.php`, `\wiki\db()`), wersjonowany przez `PRAGMA user_version`:
+
+- **`src/sql/wiki_schema.sql`** zawsze opisuje **najnowszy** schemat i ustawia najnowszy `user_version`.
+  `\wiki\db()` stosuje go sam, gdy plik bazy jest nowy (`user_version = 0`) — tak powstaje baza testowa
+  (tymczasowa, `tests/bootstrap.php`), dev i pierwsza baza na staging/prod.
+- **`src/sql/wiki_migration_YYYYMMDD_<slug>.sql`** — zmiana dla istniejących baz, kończy się
+  `PRAGMA user_version = <N+1>;`. Aplikowana **ręcznie**, jak niżej (ścieżka `.../db/wiki.sqlite`).
+- Bez fixture'a w repo: kroku 4 nie ma. Test dziedziczy po `UprzejmieDonosze\Tests\WikiTestCase`
+  (transakcja na obu bazach). Wzór: `tests/wiki/WikiStoreTest.php`.
+
 ## Staging / prod — NIE uruchamiaj sam
 
 Migracje nie są aplikowane przy deployu. Po wdrożeniu kodu podaj użytkownikowi komendy do uruchomienia:

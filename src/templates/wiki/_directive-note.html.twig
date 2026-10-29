@@ -1,0 +1,5 @@
+{# :::uwaga / :::info — src/inc/Wiki.php DIRECTIVES. content = HTML z renderera (już oczyszczony). #}
+<aside class="wiki-note wiki-note--{{ kind }}">
+  {% if attrs.title %}<p class="wiki-note__title">{{ attrs.title }}</p>{% endif %}
+  {{ content|raw }}
+</aside>

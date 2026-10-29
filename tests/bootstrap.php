@@ -2,6 +2,9 @@
 
 define('PHPUNIT_RUNNING', true);
 define('DB_FILENAME', getenv('TEST_DB') ?: __DIR__ . '/../services/devroot/db/store.sqlite');
+// Wiki has its own database file; tests get a throwaway one (schema applied on first \wiki\db()).
+define('WIKI_DB_FILENAME', tempnam(sys_get_temp_dir(), 'wiki-test-'));
+register_shutdown_function(fn () => @unlink(WIKI_DB_FILENAME));
 
 // OAuth-server tests (consent, token exchange) need a private + encryption key.
 // The default test profile configures none, so generate ephemeral ones here —
@@ -16,7 +19,9 @@ if (!defined('OAUTH_PRIVATE_KEY') && function_exists('openssl_pkey_new')) {
 
 require(__DIR__ . '/../export/inc/include.php');
 require(__DIR__ . '/../export/inc/Twig.php');
+require(__DIR__ . '/../export/inc/Wiki.php');
 require_once(__DIR__ . '/DatabaseTestCase.php');
+require_once(__DIR__ . '/WikiTestCase.php');
 require_once(__DIR__ . '/../export/inc/integrations/VehicleInfo.php');
 // Hermetic by default: no test may hit parkowanie.info. Tests that need vehicle
 // data install their own fetcher and restore this one in tearDown.

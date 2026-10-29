@@ -1,0 +1,11 @@
+{# :::howto — karta metody jak na jak-zglosic-nielegalne-parkowanie.html (src/inc/Wiki.php DIRECTIVES). #}
+<div class="howto"{% if attrs.id %} id="{{ attrs.id }}"{% endif %}>
+  <h3 class="title">{{ attrs.title }}</h3>
+  <div class="card">
+    {% if attrs.img %}<figure><img src="{{ attrs.img }}" alt="" loading="lazy"></figure>{% endif %}
+    <div class="content">
+      {{ content|raw }}
+      {% if attrs.cta %}<a href="{{ attrs.cta }}" class="button inline cta">{{ attrs.cta_label ?: 'Przejdź' }}</a>{% endif %}
+    </div>
+  </div>
+</div>
