@@ -1,3 +1,4 @@
+import { filterable } from '../lib/filterable'
 import { message, error } from '../lib/toast'
 
 // Wiki: przycisk „Kopiuj” we wzorach pism (:::wzor, wiki/_directive-wzor.html.twig). Delegacja, bo wzór pojawia się
@@ -12,3 +13,6 @@ document.addEventListener('click', event => {
     .then(() => message('Skopiowano wzór do schowka'))
     .catch(() => error('Nie udało się skopiować — zaznacz tekst i skopiuj ręcznie'))
 })
+
+// Lista jednostek /wiki/sluzby (wiki-units.html.twig)
+filterable('wiki-units-filter', 'wiki-units-filter-list')

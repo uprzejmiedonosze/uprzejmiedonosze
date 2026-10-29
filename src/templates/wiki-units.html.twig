@@ -1,0 +1,31 @@
+{# SITEMAP-PRIORITY:0.4 #}
+{% set title = 'Straże miejskie i komisariaty Policji' %}
+{% set shortTitle = 'Służby' %}
+{% extends "base.html.twig" %}
+
+{% block main %}
+<article class="wiki-page">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a></nav>
+  <h1 class="wiki-page__title">Straże miejskie i komisariaty Policji</h1>
+  {% if wiki.note %}<div class="wiki-content">{{ wiki.note|raw }}</div>{% endif %}
+  <p>Jednostki, do których Uprzejmie Donoszę wysyła zgłoszenia, z doświadczeniami użytkowników. Dane kontaktowe
+  pochodzą z konfiguracji serwisu — jeśli są nieaktualne, <a href="/kontakt.html">daj znać</a>.</p>
+
+  <label class="wiki-units__filter">
+    <span>Szukaj jednostki lub gminy</span>
+    <input type="search" id="wiki-units-filter" placeholder="np. Legnica, Krzyki, Kobierzyce" autocomplete="off">
+  </label>
+  <ul class="wiki-units" id="wiki-units-filter-list">
+  {% for entry in wiki.units %}
+    <li data-filtertext="{{ entry.unit.getName }} {{ entry.unit.city }} {{ entry.served|join(' ') }}">
+      <a href="/wiki/sluzby/{{ entry.slug }}">{{ entry.unit.getName }}</a>
+      <span class="wiki-units__meta">{{ entry.type == 'police' ? 'Policja' : 'SM/SG' }}{% if entry.unit.city %} · {{ entry.unit.city }}{% endif %}{% if not entry.unit.active %} · zlikwidowana{% endif %}</span>
+    </li>
+  {% endfor %}
+  </ul>
+
+  {% if not embed %}
+  <footer class="wiki-page__footer">{% include 'wiki/_actions.html.twig' %}</footer>
+  {% endif %}
+</article>
+{% endblock %}

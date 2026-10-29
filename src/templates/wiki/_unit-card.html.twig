@@ -1,0 +1,21 @@
+{# Karta jednostki z konfiguracji (sm.json/police.json) — strona /wiki/sluzby/<slug> i blok [[jednostka:typ/klucz]].
+   Dane tylko z konfiguracji: błędny adres zgłasza się przez kontakt, nie w notatce. #}
+{% set unit = entry.unit %}
+<section class="wiki-unit">
+  {% if not unit.active %}
+  <p class="wiki-unit__dissolved">Jednostka zlikwidowana — zgłoszenia z tego terenu Uprzejmie Donoszę kieruje do innej jednostki.</p>
+  {% endif %}
+  <p class="wiki-unit__type">{{ typeName }}</p>
+  <h3 class="wiki-unit__name"><a href="/wiki/sluzby/{{ entry.slug }}">{{ unit.getName }}</a></h3>
+  <address class="wiki-unit__address">{% for line in unit.address %}{{ line }}{% if not loop.last %}<br>{% endif %}{% endfor %}</address>
+  {% if entry.emails %}<p class="wiki-unit__email">E-mail: {% for email in entry.emails %}<a href="mailto:{{ email }}">{{ email }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+  {% if unit.hint and not (unit.hint starts with 'Masz doświadczenia') %}
+  <p class="wiki-unit__hint">{{ unit.hint|striptags }}</p>
+  {% endif %}
+  {% if entry.served %}
+  <details class="wiki-unit__served">
+    <summary>Obsługuje także: {{ num(entry.served|length, ['gmin', 'gminę', 'gminy']) }}</summary>
+    <p>{{ entry.served|join(', ') }}</p>
+  </details>
+  {% endif %}
+</section>

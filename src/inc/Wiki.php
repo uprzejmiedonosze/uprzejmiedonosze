@@ -412,7 +412,7 @@ final class EmbedStartParser implements BlockStartParserInterface
     {
         if ($cursor->isIndented() || $cursor->getNextNonSpaceCharacter() !== '[')
             return BlockStart::none();
-        if (!preg_match('/^\s*\[\[([a-z]+)(?::([a-z0-9_\/.-]+))?\]\]\s*$/', $cursor->getRemainder(), $m))
+        if (!preg_match('/^\s*\[\[([a-z]+)(?::([\p{L}0-9_\/. -]+))?\]\]\s*$/u', $cursor->getRemainder(), $m))
             return BlockStart::none();
         if (!in_array($m[1], EMBEDS, true)) {
             $this->renderer->error("Nieznany blok [[{$m[1]}]].");
@@ -510,7 +510,13 @@ function isValidPath(string $path): bool
 /** Renderer z blokami osadzanymi dostępnymi na każdej stronie wiki. */
 function renderer(): Renderer
 {
-    return new Renderer();
+    return new Renderer([
+        'jednostka' => function (string $arg): ?string {
+            [$type, $key] = array_pad(explode('/', $arg, 2), 2, '');
+            $entry = isset(UNIT_TYPES[$type]) ? unitByKey($type, $key) : null;
+            return $entry ? unitCard($entry) : null;
+        },
+    ]);
 }
 
 /** Treść strony gotowa do wyświetlenia (formy rodzajowe dla zalogowanego lub neutralne). */
@@ -531,6 +537,8 @@ function save(\user\User $user, string $path, string $title, string $body, strin
         throw new \ForbiddenException('Nie masz uprawnień do edycji wiki.');
     if (!isValidPath($path))
         throw new \ValidationException('path', 'Niepoprawny adres strony (małe litery, cyfry, myślniki, segmenty przez „/”).');
+    if (str_starts_with($path, 'sluzby/') && !unitBySlug(substr($path, 7)))
+        throw new \ValidationException('path', 'Strony w sekcji sluzby to notatki jednostek z konfiguracji — nie ma takiej jednostki.');
 
     $title = cleanWhiteChars($title);
     $summary = cleanWhiteChars($summary);
@@ -697,3 +705,106 @@ const GUIDE_RULES = [
     'Każda zmiana trafia do historii z Twoim imieniem; moderator może przywrócić poprzednią wersję. Opisz krótko, co zmieniasz.',
     'Adresy e-mail jednostek pochodzą z konfiguracji UD — błędny adres zgłoś przez stronę kontaktu, nie poprawiaj go w notatce.',
 ];
+
+// ─── Jednostki (sluzby/*) — z konfiguracji sm.json / police.json, notatka jako strona wiki 'sluzby/<slug>' ────────
+
+const UNIT_TYPES = ['sm' => 'Straż Miejska / Gminna', 'police' => 'Policja'];
+
+/** @return array<string, \SM> klucz → jednostka dla typu (globalne $SM_ADDRESSES / $POLICE_ADDRESSES). */
+function unitTable(string $type): array
+{
+    global $SM_ADDRESSES, $POLICE_ADDRESSES;
+    return match ($type) { 'sm' => $SM_ADDRESSES, 'police' => $POLICE_ADDRESSES };
+}
+
+/**
+ * Slug jednostki z jej nazwy (address[0]); dla Policji ze skrótu (KP/KPP…). Gdy pierwsza linia nie mówi, czyja to
+ * jednostka (np. „I Oddział Terenowy”), dokleja drugą. Liczony raz i zamrażany w wiki_unit_slugs.
+ */
+function unitSlugBase(string $type, \SM $unit): string
+{
+    $name = $type === 'police' ? $unit->getShortName() : $unit->getName();
+    if (!preg_match('/stra[żz]|polic|komend|komisariat|posterun/iu', $unit->getName()))
+        $name .= ' ' . ($unit->address[1] ?? '');
+    return slugify($name) ?: 'jednostka';
+}
+
+/**
+ * Wszystkie jednostki pogrupowane po slugu. Wpis z `parent` (dopisywany przez tools/sm-parser.js) to gmina obsługiwana
+ * przez inną jednostkę, nie osobna strona. Kilka kluczy z tym samym adresem to jedna jednostka (jeden slug).
+ * Brakujące slugi są zamrażane przy pierwszym wywołaniu (nowa jednostka w konfiguracji).
+ * @return array<string, array{slug:string,type:string,keys:list<string>,unit:\SM,served:list<string>,emails:list<string>}>
+ */
+function units(): array
+{
+    static $units = null;
+    if ($units !== null) return $units;
+
+    $frozen = [];
+    foreach (db()->query('SELECT unit_type, unit_key, slug FROM wiki_unit_slugs') as $row)
+        $frozen[$row['unit_type']][$row['unit_key']] = $row['slug'];
+
+    $db = db();
+    $ownTransaction = !$db->inTransaction(); // pierwsze wywołanie zamraża ~800 slugów — jedna transakcja
+    if ($ownTransaction) $db->beginTransaction();
+    $units = [];
+    foreach (array_keys(UNIT_TYPES) as $type) {
+        $table = unitTable($type);
+        $identity = []; // adres → slug: klucze jednego komisariatu (różne skrzynki dzielnicowych) to jedna strona
+        $keySlug = [];
+        foreach ($table as $key => $unit) {
+            if ($key === '_nieznane' || isset($unit->parent) || empty($unit->address)) continue;
+            $id = implode('|', $unit->address);
+            $slug = $frozen[$type][$key] ?? null;
+            if ($slug === null) {
+                $slug = $identity[$id] ?? uniqueUnitSlug(unitSlugBase($type, $unit), $unit, $units);
+                $slug = freezeUnitSlug($type, $key, $slug);
+            }
+            $identity[$id] = $keySlug[$key] = $slug;
+            if (!isset($units[$slug]))
+                $units[$slug] = ['slug' => $slug, 'type' => $type, 'keys' => [], 'unit' => $unit, 'served' => [], 'emails' => []];
+            $units[$slug]['keys'][] = $key;
+            if ($unit->email && !in_array($unit->email, $units[$slug]['emails'], true)) $units[$slug]['emails'][] = $unit->email;
+        }
+        foreach ($table as $key => $unit) {
+            $parentSlug = isset($unit->parent) ? ($keySlug[$unit->parent] ?? null) : null;
+            if ($parentSlug) $units[$parentSlug]['served'][] = $unit->city ?: $key;
+        }
+    }
+    if ($ownTransaction) $db->commit();
+    uasort($units, fn($a, $b) => strcoll($a['unit']->getName(), $b['unit']->getName()));
+    return $units;
+}
+
+/** Slug wolny dla nowej jednostki: najpierw z nazwą miasta, potem z numerem. */
+function uniqueUnitSlug(string $base, \SM $unit, array $units): string
+{
+    $taken = fn(string $slug) => isset($units[$slug]) || unitsBySlug($slug);
+    if (!$taken($base)) return $base;
+    $withCity = slugify($base . ' ' . ($unit->city ?? ''));
+    if ($withCity !== $base && !$taken($withCity)) return $withCity;
+    for ($i = 2; $taken("$base-$i"); $i++);
+    return "$base-$i";
+}
+
+function unitBySlug(string $slug): ?array
+{
+    return units()[$slug] ?? null;
+}
+
+/** Jednostka po kluczu konfiguracji ('sm/legnica', 'police/kobierzyce') — dla [[jednostka:…]]. */
+function unitByKey(string $type, string $key): ?array
+{
+    $key = mb_strtolower($key);
+    $table = unitTable($type);
+    if (!isset($table[$key])) return null;
+    if (isset($table[$key]->parent)) $key = $table[$key]->parent;
+    foreach (units() as $entry)
+        if ($entry['type'] === $type && in_array($key, $entry['keys'], true)) return $entry;
+    return null;
+}
+
+function unitCard(array $entry): string
+{
+    return renderTemplate('wiki/_unit-card.html.twig', ['entry' => $entry, 'typeName' => UNIT_TYPES[$entry['type']]]);
+}
