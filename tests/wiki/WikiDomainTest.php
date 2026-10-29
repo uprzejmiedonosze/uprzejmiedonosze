@@ -134,6 +134,33 @@ class WikiDomainTest extends WikiTestCase
         $this->assertNull(\wiki\diffLines(implode("\n", range(1, 2000)), implode("\n", range(3000, 5000))));
     }
 
+    public function testSearchPages(): void
+    {
+        \wiki\savePage('test-szukaj', 'Zażalenie na straż', "## Termin\n\nZażalenie składasz w ciągu 7 dni. <b>x</b>\n\n:::howto{id=a title=\"Karta ePUAP\"}\nTreść\n:::", '', null, null);
+        \wiki\savePage('test-inna', 'Inna strona', 'Bez związku.', '', null, null);
+
+        foreach (['zazalenie', 'ZAŻALENIE', 'zażal', 'termin 7', 'epuap'] as $query)
+            $this->assertContains('/wiki/test-szukaj', array_column(\wiki\search($query)['pages'], 'url'), $query);
+        $this->assertSame([], \wiki\search('howto')['pages'], 'directive syntax is not indexed');
+        $this->assertSame([], \wiki\search('zażalenie nieistniejąceslowo')['pages'], 'every word must match');
+        $this->assertSame([], \wiki\search('" OR * NEAR(')['pages'], 'FTS syntax in the query is harmless');
+
+        $snippet = \wiki\search('składasz')['pages'][0]['snippet'];
+        $this->assertStringContainsString('<mark>składasz</mark>', $snippet);
+        $this->assertStringNotContainsString('<b>', $snippet);
+
+        \wiki\deletePage('test-szukaj');
+        $this->assertSame([], \wiki\search('zażalenie składasz')['pages']);
+    }
+
+    public function testSearchUnits(): void
+    {
+        $units = \wiki\search('krzyki')['units'];
+        $this->assertContains('/wiki/sluzby/kp-wroclaw-krzyki', array_column($units, 'url'));
+        $this->assertContains('/wiki/sluzby/kp-wroclaw-krzyki', array_column(\wiki\search('kobierzyce')['units'], 'url'), 'served municipalities are searchable');
+        $this->assertContains('/wiki/sluzby/straz-miejska-w-legnicy', array_column(\wiki\search('straz legnica')['units'], 'url'));
+    }
+
     public function testGuideExamplesRenderWithoutErrors(): void
     {
         foreach (\wiki\guide() as $section) {

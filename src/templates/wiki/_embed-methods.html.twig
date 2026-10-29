@@ -1,0 +1,8 @@
+{# [[metody]] — „Dostępne metody” z kart :::howto mających summary (src/inc/Wiki.php), markup jak na jak-zglosic. #}
+{% if methods %}
+<div class="how-methods">
+  {% for method in methods %}
+  <div class="how-methods-row"><a href="#{{ method.id }}" onclick="window._scrollToHowTo && window._scrollToHowTo('#{{ method.id }}')">{{ method.label }}</a> <span>{{ method.summary }}</span></div>
+  {% endfor %}
+</div>
+{% endif %}

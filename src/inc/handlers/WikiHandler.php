@@ -46,6 +46,23 @@ class WikiHandler extends AbstractHandler {
         return $target ? AbstractHandler::redirect(self::url($target), 301) : null;
     }
 
+    /**
+     * Strona www z \wiki\WWW_PAGES: szablon $route dostaje `wiki` (treść, spis treści, uprawnienia), gdy strona
+     * z tym route_alias istnieje w wiki; inaczej renderuje się jak dotąd.
+     */
+    public static function renderWithWiki(Request $request, Response $response, string $route, array $extra = []): Response {
+        $page = in_array($route, \wiki\WWW_PAGES, true) ? \wiki\getPageByAlias($route) : null;
+        if ($page) {
+            $result = \wiki\renderForUser($page['body_md'], self::sex($request));
+            $extra['wiki'] = self::wikiParams($request, $page['path']) + [
+                'page' => $page,
+                'content' => $result->html,
+                'toc' => $result->toc,
+            ];
+        }
+        return AbstractHandler::renderHtml($request, $response, $route, $extra);
+    }
+
     private static function user(Request $request): ?\user\User {
         return $request->getAttribute('user', null);
     }
@@ -85,6 +102,9 @@ class WikiHandler extends AbstractHandler {
                 'wiki' => self::wikiParams($request, $path),
             ])->withStatus(404);
         }
+
+        if ($page['route_alias'])
+            return AbstractHandler::redirect("/{$page['route_alias']}.html", 301); // kanoniczny adres www
 
         $result = \wiki\renderForUser($page['body_md'], self::sex($request));
         return AbstractHandler::renderHtml($request, $response, 'wiki', [
@@ -226,6 +246,16 @@ class WikiHandler extends AbstractHandler {
     public function revert(Request $request, Response $response, array $args): Response {
         $path = \wiki\revert(self::user($request), (int)$args['revId']);
         return AbstractHandler::redirect(self::url($path));
+    }
+
+    public function search(Request $request, Response $response): Response {
+        $query = mb_substr(trim((string)($request->getQueryParams()['q'] ?? '')), 0, 100);
+        return AbstractHandler::renderHtml($request, $response, 'wiki-search', [
+            'wiki' => self::wikiParams($request, '_search') + [
+                'query' => $query,
+                'results' => $query === '' ? ['pages' => [], 'units' => []] : \wiki\search($query),
+            ],
+        ]);
     }
 
     public function recent(Request $request, Response $response): Response {

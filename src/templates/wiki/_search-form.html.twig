@@ -1,0 +1,5 @@
+{# Wyszukiwarka wiki (/wiki/_search, WikiHandler::search) — strony wiki i jednostki z konfiguracji. #}
+<form class="wiki-search-form" action="/wiki/_search" method="get" role="search">
+  <input type="search" name="q" value="{{ query ?? '' }}" placeholder="Szukaj w wiki, np. zażalenie, e-Doręczenia, Krzyki" aria-label="Szukaj w wiki" maxlength="100">
+  <button type="submit" class="mpr-button mpr-button-outline">Szukaj</button>
+</form>

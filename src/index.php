@@ -252,6 +252,7 @@ $app->group('/wiki', function (RouteCollectorProxy $group) { // odczyt
     $group->get('', WikiHandler::class . ':page');
     $group->get('/', function () { return AbstractHandler::redirect('/wiki', 301); });
     $group->get('/_recent', WikiHandler::class . ':recent');
+    $group->get('/_search', WikiHandler::class . ':search');
     $group->get('/_history/{path:.+}', WikiHandler::class . ':history');
     $group->get('/_rev/{revId:[0-9]+}', WikiHandler::class . ':revision');
     $group->get('/{path:.+}', WikiHandler::class . ':page'); // też stare formy DokuWiki (WikiHandler::legacyRedirect)

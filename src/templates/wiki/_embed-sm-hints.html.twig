@@ -1,0 +1,7 @@
+{# [[data:sm-hints]] — doświadczenia z SM z konfiguracji (\wiki\smHints()); filtr: src/js/sites/how.js (id filterable). #}
+<input data-type="filterable" type="text" id="filterable" placeholder="Szukaj miasta…">
+<ul data-role="listview" id="filterable-list" class="wiki-sm-hints">
+{% for city, hint in hints %}
+  <li data-filtertext="{{ city }}"><b>{{ city }}</b> — {{ hint|striptags }}</li>
+{% endfor %}
+</ul>

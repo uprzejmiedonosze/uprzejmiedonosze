@@ -420,3 +420,42 @@
   font-size: 0.85rem;
   color: $mpr-on-surface-variant;
 }
+
+// --- Wyszukiwarka --------------------------------------------------------------
+
+.wiki-search-form {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 36rem;
+  margin: 0 0 1.5rem;
+
+  input {
+    flex: 1 1 auto;
+    min-width: 0;
+    font: inherit;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid $mpr-outline-variant;
+    border-radius: $mpr-radius-sm;
+    background: $mpr-surface;
+  }
+}
+
+.wiki-search-results {
+  padding-left: 1.25rem;
+
+  li { margin-bottom: 1rem; }
+
+  &__title { font-weight: 600; }
+
+  &__snippet {
+    margin: 0.2rem 0 0;
+    color: $mpr-on-surface-variant;
+    font-size: 0.95rem;
+
+    mark {
+      background: $mpr-warning-container;
+      color: inherit;
+      padding: 0 0.1em;
+    }
+  }
+}

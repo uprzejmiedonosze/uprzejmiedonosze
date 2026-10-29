@@ -16,3 +16,26 @@ document.addEventListener('click', event => {
 
 // Lista jednostek /wiki/sluzby (wiki-units.html.twig)
 filterable('wiki-units-filter', 'wiki-units-filter-list')
+
+// Diagramy ```mermaid (renderer wiki: <pre class="mermaid">). Biblioteka z CDN tylko tam, gdzie jest diagram;
+// securityLevel 'strict', bo etykiety to treść redaktorów. Ta sama wersja co wcześniej na faq.html.
+let mermaidPromise = null
+
+/** @param {ParentNode} root */
+export function renderMermaid(root = document) {
+  const pending = root.querySelectorAll('pre.mermaid:not([data-processed])')
+  if (!pending.length) return
+  mermaidPromise ??= new Promise(resolve => {
+    // @ts-ignore
+    window.__udMermaidReady = resolve
+    const script = document.createElement('script')
+    script.type = 'module'
+    script.textContent = "import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs';"
+      + "mermaid.initialize({ startOnLoad: false, securityLevel: 'strict' }); window.__udMermaidReady(mermaid)"
+    document.head.appendChild(script)
+  })
+  // @ts-ignore
+  mermaidPromise.then(mermaid => mermaid.run({ nodes: pending }))
+}
+
+document.addEventListener('DOMContentLoaded', () => renderMermaid())
