@@ -3,7 +3,9 @@
 /**
  * Jednorazowy import DokuWiki → db/wiki.sqlite (docs/plans/2026-10-28-wiki-w-ud.md, sekcja 4).
  *
- *   php wiki-import.php <katalog data/ z DokuWiki> [--dry-run] [--show-notes]
+ *   php wiki-import.php <katalog data/ z DokuWiki> [--dry-run] [--show-notes] [--db=<plik .sqlite>]
+ *
+ * --db: import do wskazanego pliku zamiast db/wiki.sqlite (np. przygotowanie bazy do wgrania na prod).
  *
  * Katalog z kopią data/ (pages/ i media/), np. z:
  *   ssh uprzejmiedonosze.net "cd /opt/wiki && docker compose exec -T wiki tar -C /var/www/html/data -czf - pages media"
@@ -13,6 +15,9 @@
  * (src/img/wiki/ w repo) — skrypt tylko wypisuje brakujące. Ponowne uruchomienie nie dubluje rewizji
  * (savePage pomija niezmienioną treść), przekierowania są nadpisywane.
  */
+
+foreach ($argv as $arg)
+    if (str_starts_with($arg, '--db=')) define('WIKI_DB_FILENAME', substr($arg, 5)); // przed common.php (WikiStore)
 
 require_once(__DIR__ . '/common.php');
 require_once(__DIR__ . '/../inc/Twig.php');
@@ -66,6 +71,12 @@ $target = function (string $id) use ($unitMap): ?string {
     return null;
 };
 $titleOf = fn(string $id) => \wiki\import\PAGES[$id][1] ?? null;
+/** savePage bez nowej rewizji, gdy treść się nie zmieniła — ponowny import nie dubluje historii. */
+$save = function (string $path, string $pageTitle, string $markdown, string $summary, string $section = '', ?string $alias = null) {
+    $page = \wiki\getPage($path);
+    if ($page && $page['title'] === $pageTitle && $page['body_md'] === $markdown) return;
+    \wiki\savePage($path, $pageTitle, $markdown, $summary, null, \wiki\import\AUTHOR, $section, $alias);
+};
 $url = fn(?string $path) => $path === null ? null : (str_starts_with($path, '/') ? $path : ($path === 'start' ? '/wiki' : "/wiki/$path"));
 
 $stats = ['pages' => 0, 'notes' => 0, 'redirects' => 0, 'skipped' => 0];
@@ -82,7 +93,7 @@ foreach ($files as $file) {
 ksort($pages);
 
 foreach ($pages as $id => $file) {
-    $doku = file_get_contents($file);
+    $doku = strtr(file_get_contents($file), \wiki\import\REDACT[$id] ?? []);
     $namespace = str_contains($id, ':') ? substr($id, 0, strrpos($id, ':')) : '';
     $newPath = $target($id);
     $legacyPath = str_replace(':', '/', $id);
@@ -117,7 +128,7 @@ foreach ($pages as $id => $file) {
         $result = \wiki\renderer()->render($markdown);
         foreach (array_merge($converter->warnings, $result->errors) as $warning)
             echo "  [$newPath] $warning\n";
-        if (!$dryRun) \wiki\savePage($newPath, $title, $markdown, 'Import z DokuWiki', null, \wiki\import\AUTHOR, \wiki\sectionOf($newPath));
+        if (!$dryRun) $save($newPath, $title, $markdown, 'Import z DokuWiki', \wiki\sectionOf($newPath));
         $stats['pages']++;
         echo "strona   $id → $newPath\n";
     }
@@ -139,7 +150,7 @@ foreach (\wiki\import\TYPO_REDIRECTS as $from => $id) {
 foreach (WWW_SEED as $route => [$path, $pageTitle]) {
     $markdown = file_get_contents(__DIR__ . "/wiki-seed/$route.md");
     foreach (\wiki\renderer()->render($markdown)->errors as $warning) echo "  [$path] $warning\n";
-    if (!$dryRun) \wiki\savePage($path, $pageTitle, $markdown, 'Przeniesione z szablonu www', null, \wiki\import\AUTHOR, '', $route);
+    if (!$dryRun) $save($path, $pageTitle, $markdown, 'Przeniesione z szablonu www', '', $route);
     echo "strona   (www) /$route.html → $path\n";
 }
 
@@ -147,7 +158,7 @@ foreach (WWW_SEED as $route => [$path, $pageTitle]) {
 $lawPages = array_filter(\wiki\import\PAGES, fn($page) => str_starts_with($page[0] ?? '', 'prawo/'));
 $lawIndex = "Artykuły o przepisach, na które powołujemy się w zgłoszeniach i zażaleniach.\n\n"
     . implode("\n", array_map(fn($page) => "- [{$page[1]}](/wiki/{$page[0]})", $lawPages)) . "\n";
-if (!$dryRun) \wiki\savePage('prawo', 'Prawo', $lawIndex, 'Spis działu (import z DokuWiki)', null, \wiki\import\AUTHOR);
+if (!$dryRun) $save('prawo', 'Prawo', $lawIndex, 'Spis działu (import z DokuWiki)');
 echo "strona   (spis) → prawo\n";
 
 foreach ($notes as $path => $parts) {
@@ -157,7 +168,7 @@ foreach ($notes as $path => $parts) {
     array_push($media, ...$converter->media);
     foreach ($converter->warnings as $warning) echo "  [$path] $warning\n";
     if (in_array('--show-notes', $argv, true)) echo "---- $path\n$markdown\n";
-    if (!$dryRun) \wiki\savePage($path, $entry['unit']->getName(), $markdown, 'Import z DokuWiki', null, \wiki\import\AUTHOR, 'sluzby');
+    if (!$dryRun) $save($path, $entry['unit']->getName(), $markdown, 'Import z DokuWiki', 'sluzby');
     $stats['notes']++;
     echo "notatka  → $path\n";
 }
