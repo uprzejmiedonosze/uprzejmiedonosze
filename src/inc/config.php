@@ -172,6 +172,10 @@ if (!defined('VISION_MAX_TOTAL_BYTES'))    define('VISION_MAX_TOTAL_BYTES',    (
 if (!defined('MATOMO_SITE_ID'))     define('MATOMO_SITE_ID',     (int)(getenv('MATOMO_SITE_ID') ?: 2));
 if (!defined('BACKEND_API_KEY'))    define('BACKEND_API_KEY',    getenv('BACKEND_API_KEY')    ?: '');
 if (!defined('CORS_ALLOWED_DOMAIN')) define('CORS_ALLOWED_DOMAIN', getenv('CORS_ALLOWED_DOMAIN') ?: '');
+// Konto demo recenzentów sklepów (src/inc/demoLogin.php): prod zna tylko e-mail (przełącza appkę na staging),
+// kod logowania ustawiaj wyłącznie na stagingu. Puste = wyłączone.
+if (!defined('DEMO_LOGIN_EMAIL'))   define('DEMO_LOGIN_EMAIL',   getenv('DEMO_LOGIN_EMAIL')   ?: '');
+if (!defined('DEMO_LOGIN_CODE'))    define('DEMO_LOGIN_CODE',    getenv('DEMO_LOGIN_CODE')    ?: '');
 
 if (!defined('B2_KEY'))      define('B2_KEY',      getenv('B2_KEY')      ?: '');
 if (!defined('B2_SECRET'))   define('B2_SECRET',   getenv('B2_SECRET')   ?: '');

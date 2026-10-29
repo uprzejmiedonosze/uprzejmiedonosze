@@ -36,6 +36,7 @@ require(INC_DIR . '/Twig.php');
 require_once(INC_DIR . '/integrations/Vision.php');
 require_once(INC_DIR . '/UserRemoval.php');
 require_once(INC_DIR . '/handlers/PasskeyHandler.php');
+require_once(INC_DIR . '/demoLogin.php');
 
 $app = AppFactory::create();
 $app->addRoutingMiddleware();
@@ -266,6 +267,30 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
 $app->group('/api/rest/passkey', function (RouteCollectorProxy $group) {
     $group->post('/login-options', PasskeyHandler::class . ':loginOptions');
     $group->post('/login-verify', PasskeyHandler::class . ':loginVerify');
+});
+
+// Konto demo recenzentów sklepów: anonimowe; prod odsyła appkę na staging, staging oddaje custom token (src/inc/demoLogin.php).
+$app->post('/api/rest/demo-login', function (Request $request, Response $response) {
+    $body = (array)$request->getParsedBody();
+    $email = (string)($body['email'] ?? '');
+    $decision = \demo\decide($email, (string)($body['code'] ?? ''), DEMO_LOGIN_EMAIL, DEMO_LOGIN_CODE, isProd());
+    // Prod pyta o każdy e-mail przed wysłaniem linku – zwykły e-mail to 200 {}, bez limitu (prod nie zna kodu, nie ma czego zgadywać).
+    if (isProd()) {
+        $response->getBody()->write(json_encode($decision === \demo\SWITCH_TO_STAGING ? ['env' => 'staging'] : new \stdClass()));
+        return $response->withHeader('Content-Type', 'application/json');
+    }
+    if ($decision === \demo\NOT_DEMO) throw new HttpNotFoundException($request, 'Nie znaleziono');
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    if (!\cache\throttle\attempt(\cache\Type::Passkey, 'demo-login-ip-' . $ip, 10, 300)) {
+        throw new HttpTooManyRequestsException($request, 'Zbyt wiele prób, spróbuj później');
+    }
+    if ($decision !== \demo\LOGIN) {
+        \telemetry\log('demo_login_failed');
+        throw new HttpForbiddenException($request, 'Nieprawidłowy kod');
+    }
+    \telemetry\log('demo_login_ok');
+    $response->getBody()->write(json_encode(['customToken' => \passkey\customToken(\passkey\resolveUid(DEMO_LOGIN_EMAIL))]));
+    return $response->withHeader('Content-Type', 'application/json');
 });
 
 $app->group('/api/rest/config', function (RouteCollectorProxy $group) { // CONFIG

@@ -55,6 +55,9 @@ x-app-env: &app-env
   PHOTO_QUOTA_FREE: ${PHOTO_QUOTA_FREE:-}
   # Android app passkeys: comma-separated android:apk-key-hash values (src/inc/passkey/WebAuthnFactory.php)
   PASSKEY_ANDROID_KEY_HASHES: ${PASSKEY_ANDROID_KEY_HASHES:-}
+  # Konto demo recenzentów (src/inc/demoLogin.php): prod – tylko DEMO_LOGIN_EMAIL, staging – e-mail i kod
+  DEMO_LOGIN_EMAIL: ${DEMO_LOGIN_EMAIL:-}
+  DEMO_LOGIN_CODE: ${DEMO_LOGIN_CODE:-}
   MATOMO_SITE_ID: ${MATOMO_SITE_ID:-1}
   BACKEND_API_KEY: ${BACKEND_API_KEY:-}
   CORS_ALLOWED_DOMAIN: ${CORS_ALLOWED_DOMAIN:-}

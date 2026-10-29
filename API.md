@@ -89,6 +89,12 @@ whitelisted in `PASSKEY_ANDROID_KEY_HASHES` (comma-separated, per host); the hos
 `{customToken}` (Firebase custom token, 300 s) – the app exchanges it via `accounts:signInWithCustomToken`
 and then calls `/api/verify-token`.
 
+### POST `/api/rest/demo-login` (anonymous)
+Konto demo recenzentów sklepów (`src/inc/demoLogin.php`), konfiguracja `DEMO_LOGIN_EMAIL` / `DEMO_LOGIN_CODE` (puste = wyłączone).
+Body `{email, code?}`. **prod** (appka pyta przed każdym wysłaniem linku): e-mail demo → `{env: "staging"}` (appka zapisuje flagę i restartuje się na stagingu), każdy inny → `{}`; prod nie zna kodu i nigdy nie loguje.
+**staging:** e-mail demo + kod → `{customToken}` (wymiana jak przy passkey). Nie demo / brak konfiguracji → 404, zły kod → 403, limit 10 prób kodu / 5 min na IP → 429.
+Staging nie wysyła zgłoszeń do SM/policji (`MailGun::send()` poza prodem pisze tylko do administratora).
+
 ### GET `/api/rest/user/apps`
 
 Returns user's applications (each with `recipient`).
