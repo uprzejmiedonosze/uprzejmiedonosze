@@ -2710,12 +2710,7 @@
         "email": "strazgminna@lyski.pl"
     },
     "Myszków,": {
-        "address": [
-            "Straż Miejska w Myszkowie",
-            "ul. Tadeusza Kościuszki 26",
-            "42-300 Myszków,"
-        ],
-        "email": "straz_miejska@miastomyszkow.pl"
+        "parent": "Myszków"
     },
     "Piekary Śląskie": {
         "address": [

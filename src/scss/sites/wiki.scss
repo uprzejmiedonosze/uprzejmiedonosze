@@ -369,6 +369,11 @@
 
   &__hint { color: $mpr-on-surface-variant; }
 
+  &__served-title {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+  }
+
   &__dissolved {
     padding: 0.5rem 0.75rem;
     border-radius: $mpr-radius-sm;

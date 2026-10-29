@@ -755,7 +755,7 @@ function unitSlugBase(string $type, \SM $unit): string
  * Wszystkie jednostki pogrupowane po slugu. Wpis z `parent` (dopisywany przez tools/sm-parser.js) to gmina obsługiwana
  * przez inną jednostkę, nie osobna strona. Kilka kluczy z tym samym adresem to jedna jednostka (jeden slug).
  * Brakujące slugi są zamrażane przy pierwszym wywołaniu (nowa jednostka w konfiguracji).
- * @return array<string, array{slug:string,type:string,keys:list<string>,unit:\SM,served:list<string>,emails:list<string>}>
+ * @return array<string, array{slug:string,type:string,keys:list<string>,unit:\SM,served:list<string> obsługiwany teren (własne klucze + gminy z parent),emails:list<string>}>
  */
 function units(): array
 {
@@ -788,16 +788,35 @@ function units(): array
             if (!isset($units[$slug]))
                 $units[$slug] = ['slug' => $slug, 'type' => $type, 'keys' => [], 'unit' => $unit, 'served' => [], 'emails' => []];
             $units[$slug]['keys'][] = $key;
+            $units[$slug]['served'][] = areaName($key, $unit);
             if ($unit->email && !in_array($unit->email, $units[$slug]['emails'], true)) $units[$slug]['emails'][] = $unit->email;
         }
         foreach ($table as $key => $unit) {
             $parentSlug = isset($unit->parent) ? ($keySlug[$unit->parent] ?? null) : null;
-            if ($parentSlug) $units[$parentSlug]['served'][] = $unit->city ?: $key;
+            if ($parentSlug) $units[$parentSlug]['served'][] = areaName($key, null);
         }
     }
+    $collator = new \Collator('pl_PL'); // polska kolejność (Ł po L, Ż na końcu), strcoll zależy od locale procesu
+    foreach ($units as &$entry) {
+        $entry['served'] = array_values(array_unique(array_filter($entry['served'])));
+        $collator->sort($entry['served']);
+    }
+    unset($entry);
     if ($ownTransaction) $db->commit();
-    uasort($units, fn($a, $b) => strcoll($a['unit']->getName(), $b['unit']->getName()));
+    uasort($units, fn($a, $b) => $collator->compare($a['unit']->getName(), $b['unit']->getName()));
     return $units;
+}
+
+/**
+ * Nazwa obsługiwanego terenu z klucza konfiguracji (klucze to gminy/miejscowości, w eksporcie zlowercase'owane).
+ * `city` bierzemy tylko, gdy to ta sama nazwa — wpisy z `parent` dziedziczą `city` po jednostce (np. Bielany → Warszawa).
+ */
+function areaName(string $key, ?\SM $unit): ?string
+{
+    if (str_contains($key, '_')) return null; // wewnętrzny identyfikator (warszawa_ot5), nie nazwa terenu
+    $key = preg_replace('/-miasto$/u', '', trim($key, ' ,.'));
+    if ($unit && $unit->city && mb_strtolower($unit->city) === $key) return $unit->city;
+    return mb_convert_case($key, MB_CASE_TITLE);
 }
 
 /** Slug wolny dla nowej jednostki: najpierw z nazwą miasta, potem z numerem. */

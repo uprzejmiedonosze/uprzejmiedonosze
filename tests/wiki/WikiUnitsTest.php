@@ -41,7 +41,15 @@ class WikiUnitsTest extends WikiTestCase
         $entry = \wiki\unitByKey('sm', 'bielany');
         $this->assertNotNull($entry, 'Bielany is served by OT5 (parent in sm.json)');
         $this->assertSame('v-oddzial-terenowy-strazy-miejskiej-m-st-warszawy', $entry['slug']);
-        $this->assertNotEmpty($entry['served']);
+        $this->assertContains('Bielany', $entry['served'], 'served areas are named after their keys, not the inherited city');
+        $this->assertNotContains('Warszawa', $entry['served']);
+        $this->assertEmpty(array_filter($entry['served'], fn($area) => str_contains($area, '_')), 'internal keys like warszawa_ot5 are not areas');
+
+        $krzyki = \wiki\unitBySlug('kp-wroclaw-krzyki');
+        $this->assertContains('Kobierzyce', $krzyki['served'], "the unit's own keys are areas it serves too");
+
+        $myszkow = array_filter(array_keys(\wiki\units()), fn($slug) => str_starts_with($slug, 'straz-miejska-w-myszkowie'));
+        $this->assertSame(['straz-miejska-w-myszkowie'], array_values($myszkow), 'duplicate "Myszków," key is an alias now');
         $this->assertNull(\wiki\unitByKey('sm', 'nie-ma-takiej'));
     }
 
