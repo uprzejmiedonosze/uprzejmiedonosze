@@ -123,15 +123,32 @@ class WikiDomainTest extends WikiTestCase
         );
     }
 
+    public function testDiffTrimsCommonLinesAndCapsSize(): void
+    {
+        $lines = implode("\n", range(1, 5000));
+        $diff = \wiki\diffLines($lines, str_replace("\n2500\n", "\nzmiana\n", $lines));
+        $this->assertCount(5001, $diff);
+        $this->assertSame([['-', '2500'], ['+', 'zmiana']], array_map(fn($op) => [$op['op'], $op['line']],
+            array_values(array_filter($diff, fn($op) => $op['op'] !== '='))));
+
+        $this->assertNull(\wiki\diffLines(implode("\n", range(1, 2000)), implode("\n", range(3000, 5000))));
+    }
+
     public function testGuideExamplesRenderWithoutErrors(): void
     {
         foreach (\wiki\guide() as $section) {
             $this->assertNotEmpty($section['intro'], $section['title']);
             foreach ($section['examples'] as $example) {
-                if (!$example['render']) continue;
                 $result = \wiki\renderer()->render($example['md']);
-                $this->assertSame([], $result->errors, "{$section['title']} / {$example['label']}");
-                $this->assertNotSame('', trim($result->html));
+                $label = "{$section['title']} / {$example['label']}";
+                if ($example['render']) {
+                    $this->assertSame([], $result->errors, $label);
+                    $this->assertNotSame('', trim($result->html), $label);
+                    continue;
+                }
+                // poza kontekstem dozwolone są tylko błędy „brak pliku”/„blok niedostępny”, nie literówki w składni
+                foreach ($result->errors as $error)
+                    $this->assertMatchesRegularExpression('/bibliotece mediów|nie jest dostępny/', $error, $label);
             }
         }
     }

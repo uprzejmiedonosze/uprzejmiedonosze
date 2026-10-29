@@ -1,6 +1,9 @@
 {% set title = 'Wersja z ' ~ wiki.rev.created_at|date('j.m.Y H:i') ~ ': ' ~ wiki.page.title %}
 {% extends "base.html.twig" %}
 
+{# historia/edycja otwartej wiki: stare (np. zwandalizowane) wersje nie mają trafiać do wyszukiwarek #}
+{% block headIncludes %}{{ parent() }}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
 {% block main %}
 <article class="wiki-page">
   <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a> › <a href="{{ wiki.url }}">{{ wiki.page.title }}</a> › <a href="/wiki/_history/{{ wiki.path }}" rel="nofollow">Historia</a></nav>
@@ -16,8 +19,12 @@
   {% endif %}
 
   <h2>Zmiany względem {{ wiki.previous ? 'poprzedniej wersji' : 'pustej strony' }}</h2>
+  {% if wiki.diff is null %}
+  <p class="wiki-page__meta">Zmiana jest zbyt duża, żeby pokazać różnice linia po linii.</p>
+  {% else %}
   <pre class="wiki-diff">{% for line in wiki.diff %}<span class="wiki-diff__{{ line.op == '+' ? 'add' : (line.op == '-' ? 'del' : 'eq') }}">{{ line.op == '=' ? ' ' : line.op }} {{ line.line }}</span>
 {% endfor %}</pre>
+  {% endif %}
 
   <h2>Treść tej wersji</h2>
   <div class="wiki-content wiki-content--revision">{{ wiki.content|raw }}</div>

@@ -17,7 +17,10 @@
 Poza tym compose: Matomo (`matomo.nieradka.com`, zewnętrzny) oraz `/wiki` na prod — osobny projekt
 `../wiki.uprzejmiedonosze` (DokuWiki) na wspólnej sieci Traefik `edge`, z routerem `PathPrefix(/wiki)`
 o wyższym priorytecie niż `Host(uprzejmiedonosze.net)` z `webapp-srv`. Zobacz jego własny `CLAUDE.md`.
-Na staging/dev (bez tego routera) `/wiki` obsługuje już wiki wbudowane w UD (`WikiHandler`, nginx `location ^~ /wiki`);
+Na staging/dev/**shadow** (router DokuWiki pasuje tylko do `Host(uprzejmiedonosze.net)`) `/wiki` obsługuje już wiki
+wbudowane w UD (`WikiHandler`, nginx `location ^~ /wiki`). **Shadow współdzieli `db/` z prod** — pierwsze wejście na
+shadow `/wiki/sluzby` tworzy prodowe `wiki.sqlite` i zamraża slugi jednostek, a edycje na shadow lądują w prod.
+Nie deployuj `feat/wiki` na shadow przed decyzją o migracji;
 przełączenie prod = obniżenie/usunięcie routera DokuWiki (plan: `docs/plans/2026-10-28-wiki-w-ud.md`, sekcja 4).
 Baza `db/wiki.sqlite` powstaje przy pierwszym żądaniu — jeśli zakładasz ją ręcznie (`docker exec` jako root), oddaj
 plik `www-data` (`chown www-data:www-data …/db/wiki.sqlite`), inaczej zapis zwróci błąd.

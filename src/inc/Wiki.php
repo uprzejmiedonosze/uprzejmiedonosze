@@ -132,8 +132,10 @@ final class Renderer
         $this->toc = [];
         $this->media = [];
 
-        if (strlen($markdown) > MAX_BODY_BYTES)
+        if (strlen($markdown) > MAX_BODY_BYTES) {
             $this->error('Treść jest za długa (limit ' . intdiv(MAX_BODY_BYTES, 1000) . ' kB).');
+            return new RenderResult('', [], $this->errors, []);
+        }
 
         $markdown = preg_replace_callback('/\{\{sex:(\w+)\}\}/u', function ($m) {
             if (!array_key_exists($m[1], SEXSTRINGS['?'])) {
@@ -583,16 +585,32 @@ function sectionOf(string $path): string
     return str_contains($path, '/') && in_array($first, ['prawo', 'wzory', 'pytania', 'sluzby'], true) ? $first : '';
 }
 
+/** Górna granica tablicy LCS (n·m) — powyżej diff jest pomijany, żeby jedna edycja nie wyczerpała pamięci. */
+const DIFF_MAX_CELLS = 1_000_000;
+
 /**
- * Diff linii (LCS) do widoku historii. Strony mają po kilkaset linii, więc O(n·m) wystarcza.
- * @return list<array{op:'='|'+'|'-',line:string}>
+ * Diff linii (LCS) do widoku historii. Wspólny początek i koniec są odcinane przed LCS, więc typowa edycja
+ * (kilka linii) kosztuje mało niezależnie od długości strony. null = zmiana zbyt duża do pokazania.
+ * @return ?list<array{op:'='|'+'|'-',line:string}>
  */
-function diffLines(string $old, string $new): array
+function diffLines(string $old, string $new): ?array
 {
     $a = explode("\n", $old);
     $b = explode("\n", $new);
+    $head = [];
+    while ($a && $b && $a[0] === $b[0]) {
+        $head[] = ['op' => '=', 'line' => array_shift($a)];
+        array_shift($b);
+    }
+    $tail = [];
+    while ($a && $b && end($a) === end($b)) {
+        array_unshift($tail, ['op' => '=', 'line' => array_pop($a)]);
+        array_pop($b);
+    }
     $n = count($a);
     $m = count($b);
+    if (($n + 1) * ($m + 1) > DIFF_MAX_CELLS)
+        return null;
     $lcs = array_fill(0, $n + 1, array_fill(0, $m + 1, 0));
     for ($i = $n - 1; $i >= 0; $i--)
         for ($j = $m - 1; $j >= 0; $j--)
@@ -609,13 +627,15 @@ function diffLines(string $old, string $new): array
             $ops[] = ['op' => '+', 'line' => $b[$j++]];
         }
     }
-    return $ops;
+    return array_merge($head, $ops, $tail);
 }
 
 /**
  * Poradnik redaktora (modal w edytorze): przykłady pokazywane jako kod + wynik tego samego renderera.
  * tests/wiki/GuideTest.php renderuje każdy przykład z 'render' => true — poradnik nie rozjedzie się z rendererem.
- * @return list<array{title:string,intro:string,examples:list<array{label:string,md:string,render:bool}>}>
+ * 'render' => false: przykład nie da się pokazać poza kontekstem (brak pliku w bibliotece, blok tylko dla jednej strony);
+ * 'insert' => false: bez przycisku „Wstaw”, bo na zwykłej stronie zapis zostałby odrzucony.
+ * @return list<array{title:string,intro:string,examples:list<array{label:string,md:string,render:bool,note?:string,insert?:bool}>}>
  */
 function guide(): array
 {
@@ -637,7 +657,7 @@ function guide(): array
                 ['label' => 'Link do innej strony wiki', 'md' => "Zobacz [jak napisać zażalenie](/wiki/zazalenie-na-decyzje-sm).", 'render' => true],
                 ['label' => 'Link zewnętrzny', 'md' => "[Prawo o ruchu drogowym](https://isap.sejm.gov.pl/)", 'render' => true],
                 ['label' => 'Stała kotwica sekcji', 'md' => "## Czy będę wezwany na świadka? {#swiadek}\n\nLink do niej: [przeczytaj](#swiadek).", 'render' => true],
-                ['label' => 'Spis treści w treści strony', 'md' => "[[toc]]", 'render' => false],
+                ['label' => 'Spis treści w treści strony (zwykle zbędny — spis jest w panelu bocznym)', 'md' => "[[toc]]", 'render' => false],
             ],
         ],
         [
@@ -674,7 +694,8 @@ function guide(): array
             'title' => 'Obrazki',
             'intro' => 'Obrazki pochodzą wyłącznie z biblioteki mediów wiki — nie da się wstawić obrazka z innej strony. Potrzebujesz nowego zrzutu ekranu lub zdjęcia? Wyślij plik (PNG, JPEG lub WebP, do 1 MB) przez stronę kontaktu, a administrator doda go do biblioteki i poda nazwę.',
             'examples' => [
-                ['label' => 'Obrazek z biblioteki', 'md' => "![Formularz ePUAP z zaznaczonym polem adresata](media:epuap-adresat.png)", 'render' => false],
+                ['label' => 'Obrazek z biblioteki', 'md' => "![Formularz ePUAP z zaznaczonym polem adresata](media:epuap-adresat.png)", 'render' => false,
+                    'note' => 'Zadziała, gdy plik o tej nazwie jest w bibliotece mediów.'],
             ],
         ],
         [
@@ -689,8 +710,9 @@ function guide(): array
             'title' => 'Bloki z danymi',
             'intro' => 'Niektóre strony pokazują dane z konfiguracji UD zamiast tekstu wpisanego ręcznie — nie przepisuj ich do treści, bo się zdezaktualizują.',
             'examples' => [
-                ['label' => 'Karta jednostki (SM/Policja)', 'md' => "[[jednostka:sm/wroclaw]]", 'render' => false],
-                ['label' => 'Doświadczenia z przesłuchań', 'md' => "[[data:sm-hints]]", 'render' => false],
+                ['label' => 'Karta jednostki (klucz z konfiguracji: sm/… lub police/…)', 'md' => "[[jednostka:sm/legnica]]", 'render' => true],
+                ['label' => 'Doświadczenia z przesłuchań', 'md' => "[[data:sm-hints]]", 'render' => false,
+                    'note' => 'Tylko na stronie „Przesłuchanie” — gdzie indziej zapis się nie uda.', 'insert' => false],
             ],
         ],
     ];
@@ -749,7 +771,9 @@ function units(): array
     if ($ownTransaction) $db->beginTransaction();
     $units = [];
     foreach (array_keys(UNIT_TYPES) as $type) {
+        // aktywne przed zlikwidowanymi: przy kolizji nazw czysty slug dostaje działająca jednostka
         $table = unitTable($type);
+        uasort($table, fn($x, $y) => ($y->active ?? true) <=> ($x->active ?? true));
         $identity = []; // adres → slug: klucze jednego komisariatu (różne skrzynki dzielnicowych) to jedna strona
         $keySlug = [];
         foreach ($table as $key => $unit) {
