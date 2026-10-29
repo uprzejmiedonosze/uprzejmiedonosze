@@ -23,9 +23,10 @@
       <div class="wiki-guide__example">
         <div class="wiki-guide__example-head">
           <span>{{ example.label }}</span>
-          {% if wiki.canEdit %}<button type="button" class="mpr-button mpr-button-outline js-wiki-insert" data-snippet="{{ example.md }}">Wstaw</button>{% endif %}
+          {% if wiki.canEdit and (example.insert ?? true) %}<button type="button" class="mpr-button mpr-button-outline js-wiki-insert" data-snippet="{{ example.md }}">Wstaw</button>{% endif %}
         </div>
         <pre class="wiki-guide__source"><code>{{ example.md }}</code></pre>
+        {% if example.note ?? false %}<p class="wiki-guide__note">{{ example.note }}</p>{% endif %}
         {% if example.html %}<div class="wiki-content wiki-guide__result">{{ example.html|raw }}</div>{% endif %}
       </div>
       {% endfor %}

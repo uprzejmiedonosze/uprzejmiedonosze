@@ -1,6 +1,9 @@
 {% set title = 'Ostatnie zmiany w wiki' %}
 {% extends "base.html.twig" %}
 
+{# historia/edycja otwartej wiki: stare (np. zwandalizowane) wersje nie mają trafiać do wyszukiwarek #}
+{% block headIncludes %}{{ parent() }}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
 {% block main %}
 <article class="wiki-page">
   <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a></nav>
