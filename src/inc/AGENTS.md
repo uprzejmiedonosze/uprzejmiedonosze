@@ -59,8 +59,11 @@ się przydać webowi lub MCP. Szczegóły: `src/api/AGENTS.md`.
 4. Tabela wiki → osobna baza `db/wiki.sqlite` (`store/WikiStore.php`): `src/sql/wiki_schema.sql` (najnowszy schemat,
    stosowany automatycznie przy `user_version = 0`) + `wiki_migration_*.sql` podbijające `user_version` — skill `new-migration`.
 
-**Wiki** — renderer `Wiki.php` (`\wiki\Renderer`: Markdown + allowlistowane dyrektywy `DIRECTIVES` → partiale
-`templates/wiki/`). Redaktor nie pisze Twiga ani HTML. `Wiki.php` ładuj **po** `Twig.php` (używa `initBareTwig`).
+**Wiki** ([ADR 0006](../../docs/adr/0006-wiki-in-ud.md)) — renderer `Wiki.php` (`\wiki\Renderer`: Markdown +
+allowlistowane dyrektywy `DIRECTIVES` → partiale `templates/wiki/`, bloki `EMBEDS`), logika (uprawnienia, zapis,
+jednostki, wyszukiwarka) też w `Wiki.php`, SQL w `store/WikiStore.php`, trasy w `handlers/WikiHandler.php`.
+Redaktor nie pisze Twiga ani HTML. `Wiki.php` ładuj **po** `Twig.php` (używa `initBareTwig`). Nowa dyrektywa =
+wpis w `DIRECTIVES` + partial + przykład w `\wiki\guide()`. Import z DokuWiki: `tools/wiki-import.php` + `WikiImport.php`.
 
 **Nowa integracja zewnętrzna** — plik w `integrations/`, klucz przez `config.php`, odpowiedzi cache'uj w `\cache\…`
 (wzór: `\cache\alpr`, `\cache\geo`), błędy przez `log_error` + wyjątek, nie `die`.

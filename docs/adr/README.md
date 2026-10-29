@@ -16,3 +16,4 @@ Zasady:
 | [0003](0003-face-detection-pipeline.md) | Detekcja twarzy: tani LLM liczy, Cloud Vision lokalizuje, oryginał nietknięty |
 | [0004](0004-mailgun-per-recipient-delivery.md) | Status wysyłki: zdarzenia Mailguna są per adresat, `failed` nie kasuje `sent` |
 | [0005](0005-url-renames.md) | Zmiana URL-a strony: stary GET → 302, stary POST → ten sam handler |
+| [0006](0006-wiki-in-ud.md) | Wiki w UD: Markdown + allowlistowane dyrektywy, osobna baza, media z repo |

@@ -1,0 +1,39 @@
+{% set title = wiki.query ? 'Szukaj: ' ~ wiki.query : 'Szukaj w wiki' %}
+{% extends "base.html.twig" %}
+
+{% block headIncludes %}{{ parent() }}<meta name="robots" content="noindex, follow">{% endblock %}
+
+{% block main %}
+<article class="wiki-page">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a></nav>
+  <h1 class="wiki-page__title">Szukaj w wiki</h1>
+  {% include 'wiki/_search-form.html.twig' with {'query': wiki.query} %}
+
+  {% if wiki.query %}
+    {% if not wiki.results.pages and not wiki.results.units %}
+      <p>Nic nie znaleziono dla „{{ wiki.query }}”. Spróbuj krótszego słowa albo zajrzyj na <a href="/wiki">stronę główną wiki</a>.</p>
+    {% endif %}
+
+    {% if wiki.results.pages %}
+    <h2>Strony</h2>
+    <ol class="wiki-search-results">
+      {% for result in wiki.results.pages %}
+      <li>
+        <a href="{{ result.url }}" class="wiki-search-results__title">{{ result.title }}</a>
+        <p class="wiki-search-results__snippet">{{ result.snippet|raw }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+
+    {% if wiki.results.units %}
+    <h2>Straże miejskie i komisariaty</h2>
+    <ul class="wiki-units">
+      {% for result in wiki.results.units %}
+      <li><a href="{{ result.url }}">{{ result.title }}</a><span class="wiki-units__meta">{{ result.meta }}</span></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  {% endif %}
+</article>
+{% endblock %}

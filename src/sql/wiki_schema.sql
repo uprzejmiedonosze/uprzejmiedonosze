@@ -50,4 +50,13 @@ CREATE TABLE IF NOT EXISTS wiki_redirects (
     created_at TEXT NOT NULL
 );
 
+-- Wyszukiwarka (/wiki/_search): tekst stron bez składni Markdown, aktualizowany przy zapisie (WikiStore::indexPage).
+-- remove_diacritics 2: „zazalenie” znajduje „zażalenie”. Jednostki są szukane w konfiguracji, nie tutaj.
+CREATE VIRTUAL TABLE IF NOT EXISTS wiki_fts USING fts5(
+    path UNINDEXED,
+    title,
+    body,
+    tokenize = 'unicode61 remove_diacritics 2'
+);
+
 PRAGMA user_version = 1;

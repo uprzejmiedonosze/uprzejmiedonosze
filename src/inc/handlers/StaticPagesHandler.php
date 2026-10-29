@@ -41,33 +41,15 @@ class StaticPagesHandler extends AbstractHandler {
     }
 
     function faq(Request $request, Response $response) {
-        return AbstractHandler::renderHtml($request, $response, 'faq');
+        return WikiHandler::renderWithWiki($request, $response, 'faq');
     }
 
     /**
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     function hearing(Request $request, Response $response) {
-        global $SM_ADDRESSES;
-        $SMHints = array();
-        foreach ($SM_ADDRESSES as $sm) {
-            if(!$sm->active) continue;
-            if($sm->hint){
-                if(str_starts_with($sm->hint, 'Masz doświadczenia we współpracy'))
-                    continue;
-                if(!str_starts_with($sm->hint, 'Miejscowość ')) {
-                    $SMHints[$sm->city] = $sm->hint;
-                }
-            }
-        }
-        
-        $collator = new Collator('pl_PL');
-        uksort($SMHints, function ($a, $b) use ($collator) {
-            return $collator->compare($a, $b);
-        });
-
-        return AbstractHandler::renderHtml($request, $response, 'przesluchanie', [
-            'SMHints' => $SMHints
+        return WikiHandler::renderWithWiki($request, $response, 'przesluchanie', [
+            'SMHints' => \wiki\smHints()
         ]);
     }
 
@@ -296,7 +278,7 @@ class StaticPagesHandler extends AbstractHandler {
         }
     
         try {
-            return AbstractHandler::renderHtml($request, $response, $route);
+            return WikiHandler::renderWithWiki($request, $response, $route);
         } catch (\Twig\Error\LoaderError $error) {
             return AbstractHandler::renderHtml($request, $response, "404");
         }

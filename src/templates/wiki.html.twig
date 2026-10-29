@@ -19,6 +19,7 @@
 
 {% block main %}
 <article class="wiki-page">
+  {% include 'wiki/_search-form.html.twig' %}
   {% if wiki.path != 'start' %}
   <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a>{% if wiki.page.section %} › <span>{{ wiki.page.section }}</span>{% endif %}</nav>
   {% endif %}

@@ -202,6 +202,54 @@ class RendererTest extends TestCase
         $this->assertNotEmpty($r->errors);
     }
 
+    public function testMermaidBlockIsEscapedPre(): void
+    {
+        $r = $this->renderer()->render("```mermaid\nflowchart\n  a[\"<img src=x onerror=alert(1)>\"] --> b\n```\n\n```php\necho 1;\n```\n");
+        $this->assertStringContainsString('<pre class="mermaid">flowchart', $r->html);
+        $this->assertStringContainsString('&lt;img src=x', $r->html);
+        $this->assertStringNotContainsString('<img src=x', $r->html);
+        $this->assertStringContainsString('<code class="language-php">', $r->html, 'other code blocks render as before');
+    }
+
+    public function testMethodsListComesFromHowtoCards(): void
+    {
+        $md = "[[metody]]\n\n:::howto{id=email title=\"E-mailem\" method=\"E-mail\" summary=\"pojedyncze przypadki\" img_top=1}\nA\n:::\n\n"
+            . ":::howto{id=bez title=\"Bez opisu\"}\nB\n:::\n";
+        $r = $this->renderer()->render($md);
+        $this->assertSame([], $r->errors);
+        $this->assertStringContainsString('<a href="#email"', $r->html);
+        $this->assertStringContainsString('>E-mail</a> <span>pojedyncze przypadki</span>', $r->html);
+        $this->assertStringNotContainsString('href="#bez"', $r->html, 'cards without summary are not listed');
+    }
+
+    public function testBareUrlsAreLinked(): void
+    {
+        $r = $this->renderer()->render('Więcej na https://isap.sejm.gov.pl/ i w /faq.html');
+        $this->assertStringContainsString('href="https://isap.sejm.gov.pl/"', $r->html);
+    }
+
+    public function testSmHintsEmbed(): void
+    {
+        $r = \wiki\renderer()->render("[[data:sm-hints]]\n");
+        $this->assertSame([], $r->errors);
+        $this->assertStringContainsString('id="filterable-list"', $r->html);
+        $this->assertGreaterThan(10, substr_count($r->html, '<li data-filtertext='));
+        $this->assertStringNotContainsString('Masz doświadczenia', $r->html);
+    }
+
+    public function testWwwSeedsRenderWithoutErrors(): void
+    {
+        $seeds = glob(dirname(__DIR__, 2) . '/src/tools/wiki-seed/*.md');
+        $this->assertCount(count(\wiki\WWW_PAGES), $seeds);
+        foreach ($seeds as $file) {
+            $r = \wiki\renderer()->render(file_get_contents($file));
+            $this->assertSame([], $r->errors, basename($file));
+        }
+        $faq = \wiki\renderer()->render(file_get_contents(dirname(__DIR__, 2) . '/src/tools/wiki-seed/faq.md'));
+        foreach (['telefon', 'anonimowosc', 'swiadek', 'recydywa', '3zdjęcie', 'przesluchanie', 'kpw', 'zazalenie', 'miasta'] as $anchor)
+            $this->assertContains($anchor, array_column($faq->toc, 'id'), "faq.html#$anchor keeps working");
+    }
+
     public function testSlugify(): void
     {
         $this->assertSame('straz-miejska-w-legnicy', \wiki\slugify('Straż Miejska w Legnicy'));

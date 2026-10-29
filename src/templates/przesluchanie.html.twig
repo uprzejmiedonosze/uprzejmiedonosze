@@ -20,7 +20,17 @@
 {% endif %}
 {% endblock %}
 
-{% block main %}
+{% block main %}{% if wiki is defined %}
+<h2>{{ wiki.page.title }}</h2>
+<div class="wiki-content">{{ wiki.content|raw }}</div>
+{% if not embed %}
+<footer class="wiki-page__footer">
+  <p class="wiki-page__meta">Treść tej strony redagują użytkownicy w <a href="/wiki">wiki</a>. Ostatnia zmiana: {{ wiki.page.updated_at|date('j.m.Y H:i') }}</p>
+  {% include 'wiki/_actions.html.twig' %}
+</footer>
+{% endif %}
+{% else %}{# treść sprzed przeniesienia do wiki — do usunięcia po akceptacji (plan wiki, sekcja 4 pkt 3) #}
+
 
 <h2>Czy straż miejska wezwie mnie na przesłuchanie?</h2>
 
@@ -40,5 +50,5 @@ możesz się spodziewać po współpracy ze swoją strażą miejską.</p>
     <li data-filtertext="{{ city }}"><b>{{ city }}</b> — {{ hint | striptags }}</li>
 {% endfor %}
 </ul>
-
+{% endif %}
 {% endblock %}

@@ -80,6 +80,7 @@ function savePage(string $path, string $title, string $bodyMd, string $summary,
             current_rev = :rev, updated_at = :now, updated_by = :by WHERE id = :id");
         $stmt->execute([':title' => $title, ':body' => $bodyMd, ':rev' => $revId, ':now' => $now,
             ':by' => $authorEmail, ':id' => $pageId]);
+        indexPage($path, $title, $bodyMd);
 
         if ($ownTransaction) $db->commit();
         return $revId;
@@ -94,6 +95,61 @@ function deletePage(string $path): void
 {
     $stmt = db()->prepare("UPDATE wiki_pages SET status = 'deleted', updated_at = :now WHERE path = :path");
     $stmt->execute([':path' => $path, ':now' => date('c')]);
+    db()->prepare("DELETE FROM wiki_fts WHERE path = :path")->execute([':path' => $path]);
+}
+
+/** Indeks wyszukiwarki: tekst bez składni Markdown/dyrektyw (żeby „howto” czy „media:” nie były trafieniami). */
+function indexPage(string $path, string $title, string $bodyMd): void
+{
+    $text = preg_replace([
+        '/^\s*:{3,}[a-z-]*(\{.*\})?\s*$/mu', // płoty dyrektyw (wartości atrybutów, np. tytuł karty, zostają niżej)
+        '/!\[([^\]]*)\]\([^)]*\)/u',          // obrazki → opis
+        '/\[([^\]]*)\]\([^)]*\)/u',           // linki → tekst
+        '/\[\[[^\]]*\]\]/u',                  // bloki osadzane
+        '/\{\{sex:\w+\}\}|\{#[^}]*\}/u',    // formy rodzajowe, kotwice
+        '/[#*_`>|~]+/u',
+    ], ['', '$1', '$1', '', '', ' '], $bodyMd);
+    preg_match_all('/(?:title|summary|method)="([^"]*)"/u', $bodyMd, $attrs);
+    $text .= ' ' . implode(' ', $attrs[1]);
+    $db = db();
+    $db->prepare("DELETE FROM wiki_fts WHERE path = :path")->execute([':path' => $path]);
+    $db->prepare("INSERT INTO wiki_fts (path, title, body) VALUES (:path, :title, :body)")
+        ->execute([':path' => $path, ':title' => $title, ':body' => $text]);
+}
+
+/**
+ * Wyszukiwanie w treści stron (FTS5, ranking bm25 z tytułem ważniejszym niż treść). Każde słowo zapytania musi wystąpić
+ * (prefiksowo: „zażal” znajduje „zażalenie”). Fragment z trafieniem oznaczony \u{E020}…\u{E021} — escapuje i podmienia
+ * na <mark> warstwa widoku.
+ * @return list<array{path:string,title:string,route_alias:?string,snippet:string}>
+ */
+function searchPages(string $query, int $limit = 30): array
+{
+    preg_match_all('/[\p{L}\p{N}]+/u', $query, $words);
+    $terms = array_slice(array_unique(array_map('mb_strtolower', $words[0])), 0, 8);
+    if (!$terms) return [];
+    $match = implode(' ', array_map(fn($word) => '"' . $word . '"*', $terms));
+    $stmt = db()->prepare("SELECT f.path, p.title, p.route_alias,
+            snippet(wiki_fts, 2, char(57376), char(57377), '…', 16) AS snippet
+        FROM wiki_fts f JOIN wiki_pages p ON p.path = f.path AND p.status = 'published'
+        WHERE wiki_fts MATCH :match ORDER BY bm25(wiki_fts, 0.0, 5.0, 1.0) LIMIT :limit");
+    $stmt->bindValue(':match', $match);
+    $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+/** Przebudowa indeksu ze wszystkich opublikowanych stron (po imporcie albo po zmianie indexPage). */
+function reindexAll(): int
+{
+    $db = db();
+    $db->exec("DELETE FROM wiki_fts");
+    $count = 0;
+    foreach ($db->query("SELECT path, title, body_md FROM wiki_pages WHERE status = 'published'")->fetchAll() as $page) {
+        indexPage($page['path'], $page['title'], $page['body_md']);
+        $count++;
+    }
+    return $count;
 }
 
 function pathById(int $pageId): ?string

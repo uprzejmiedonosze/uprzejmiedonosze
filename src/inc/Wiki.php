@@ -7,7 +7,8 @@
  * Składnia poza CommonMark/GFM:
  *  - `:::nazwa{klucz=wartość klucz2="z spacjami"}` … `:::` — blok dyrektywy (DIRECTIVES). Zagnieżdżona dyrektywa
  *    potrzebuje innej liczby dwukropków niż zewnętrzna (`::::howto` … `:::uwaga` … `:::` … `::::`).
- *  - `[[toc]]`, `[[data:sm-hints]]`, `[[jednostka:sm/klucz]]` — blok osadzony w osobnej linii (EMBEDS).
+ *  - `[[toc]]`, `[[metody]]`, `[[data:sm-hints]]`, `[[jednostka:sm/klucz]]` — blok osadzony w osobnej linii (EMBEDS).
+ *  - ```mermaid — diagram (Mermaid, securityLevel 'strict', src/js/sites/wiki.js).
  *  - `## Nagłówek {#kotwica}` — stała kotwica (bez niej generowana z tekstu).
  *  - `![opis](media:nazwa)` — obrazek wyłącznie z biblioteki mediów (pliki src/img/wiki/, mediaFile()).
  *  - `{{sex:klucz}}` — forma rodzajowa z SEXSTRINGS, podstawiana na końcu (personalize), więc HTML da się cache'ować.
@@ -18,6 +19,9 @@
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Event\DocumentParsedEvent;
 use League\CommonMark\Extension\Attributes\AttributesExtension;
+use League\CommonMark\Extension\Autolink\AutolinkExtension;
+use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
+use League\CommonMark\Extension\CommonMark\Renderer\Block\FencedCodeRenderer;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
 use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
@@ -53,13 +57,15 @@ const DIRECTIVES = [
     'wzor' => ['template' => 'wiki/_directive-wzor.html.twig', 'attrs' => ['title' => 'text'], 'required' => ['title']],
     'howto' => [
         'template' => 'wiki/_directive-howto.html.twig',
-        'attrs' => ['id' => 'id', 'title' => 'text', 'img' => 'media', 'cta' => 'url', 'cta_label' => 'text'],
+        // method + summary: wiersz w [[metody]]; img_top: obrazek kadrowany od góry (klasa move-top)
+        'attrs' => ['id' => 'id', 'title' => 'text', 'img' => 'media', 'img_top' => 'bool', 'cta' => 'url', 'cta_label' => 'text',
+            'method' => 'text', 'summary' => 'text'],
         'required' => ['id', 'title'],
     ],
 ];
 
 /** Bloki osadzane `[[rodzaj:argument]]`; dane dostarcza wywołujący (Renderer::$embeds), poza 'toc'. */
-const EMBEDS = ['toc', 'data', 'jednostka'];
+const EMBEDS = ['toc', 'metody', 'data', 'jednostka'];
 
 /** Kotwice zajęte przez layout/JS — redaktor nie może ich nadać. */
 const RESERVED_IDS = ['main', 'header', 'footer', 'content', 'menu', 'nav', 'sidebar', 'toc'];
@@ -116,6 +122,8 @@ final class Renderer
     private array $toc = [];
     /** @var list<string> */
     private array $media = [];
+    /** @var list<array{id:string,label:string,summary:string}> karty :::howto z `summary` — dla [[metody]] */
+    private array $methods = [];
 
     /**
      * @param array<string, callable(string):?string> $embeds rodzaj → html dla `[[rodzaj:arg]]` (null = nieznany arg)
@@ -131,6 +139,7 @@ final class Renderer
         $this->errors = [];
         $this->toc = [];
         $this->media = [];
+        $this->methods = [];
 
         if (strlen($markdown) > MAX_BODY_BYTES) {
             $this->error('Treść jest za długa (limit ' . intdiv(MAX_BODY_BYTES, 1000) . ' kB).');
@@ -166,6 +175,8 @@ final class Renderer
         $env->addExtension(new TableExtension());
         $env->addExtension(new StrikethroughExtension());
         $env->addExtension(new AttributesExtension());
+        $env->addExtension(new AutolinkExtension());
+        $env->addRenderer(FencedCode::class, new MermaidAwareCodeRenderer(), 10);
         $env->addBlockStartParser(new DirectiveStartParser($this), 100);
         $env->addBlockStartParser(new EmbedStartParser($this), 100);
         $env->addRenderer(DirectiveBlock::class, new DirectiveRenderer($this));
@@ -239,6 +250,8 @@ final class Renderer
     {
         if ($kind === 'toc')
             return renderTemplate('wiki/_embed-toc.html.twig', ['toc' => $this->toc]);
+        if ($kind === 'metody')
+            return renderTemplate('wiki/_embed-methods.html.twig', ['methods' => $this->methods]);
         if (!isset($this->embeds[$kind])) {
             $this->error("Blok [[$kind]] nie jest dostępny na tej stronie.");
             return null;
@@ -285,6 +298,8 @@ final class Renderer
                 // validId sam zgłasza błąd
                 if ($this->validId($value)) $valid[$key] = $value;
                 $usedIds[$value] = true;
+            } elseif ($type === 'bool') {
+                $valid[$key] = in_array(mb_strtolower($value), ['1', 'tak', 'true'], true) ? '1' : '';
             } elseif ($type === 'text' ? mb_strlen($value) <= 200 : isSafeUrl($value)) {
                 $valid[$key] = $value;
             } else {
@@ -294,6 +309,8 @@ final class Renderer
         foreach ($spec['required'] as $key)
             if (!isset($valid[$key])) $this->error(":::{$block->name} wymaga atrybutu {$key}.");
         $block->attrs = $valid + array_fill_keys(array_keys($spec['attrs']), '');
+        if ($block->name === 'howto' && $block->attrs['summary'] !== '' && $block->attrs['id'] !== '')
+            $this->methods[] = ['id' => $block->attrs['id'], 'label' => $block->attrs['method'] ?: $block->attrs['title'], 'summary' => $block->attrs['summary']];
     }
 }
 
@@ -466,6 +483,18 @@ final class DirectiveRenderer implements NodeRendererInterface
     }
 }
 
+/** ```mermaid → <pre class="mermaid"> (tekst escapowany; rysuje src/js/sites/wiki.js), reszta jak zwykły blok kodu. */
+final class MermaidAwareCodeRenderer implements NodeRendererInterface
+{
+    public function render(Node $node, ChildNodeRendererInterface $childRenderer): \Stringable|string|null
+    {
+        assert($node instanceof FencedCode);
+        if (trim($node->getInfo() ?? '') !== 'mermaid')
+            return (new FencedCodeRenderer())->render($node, $childRenderer);
+        return '<pre class="mermaid">' . htmlspecialchars($node->getLiteral(), ENT_QUOTES) . '</pre>';
+    }
+}
+
 final class EmbedRenderer implements NodeRendererInterface
 {
     public function __construct(private Renderer $renderer) {}
@@ -481,6 +510,12 @@ final class EmbedRenderer implements NodeRendererInterface
 
 /** Ścieżka strony: małe litery ASCII, cyfry, myślnik; segmenty przez '/'. Segment zaczynający się od '_' = trasa systemowa. */
 const PATH_RE = '#^[a-z0-9][a-z0-9-]{0,79}(/[a-z0-9][a-z0-9-]{0,79}){0,3}$#';
+
+/**
+ * Strony www, których treść redaktorzy edytują w wiki (wiki_pages.route_alias = trasa). Adres www zostaje; szablon
+ * pokazuje treść z wiki, a bez niej (przed importem) dotychczasową treść z szablonu.
+ */
+const WWW_PAGES = ['faq', 'przesluchanie', 'jak-zglosic-nielegalne-parkowanie'];
 
 const MAX_TITLE_LENGTH = 150;
 const MAX_SUMMARY_LENGTH = 200;
@@ -519,6 +554,8 @@ function isValidPath(string $path): bool
 function renderer(): Renderer
 {
     return new Renderer([
+        'data' => fn(string $arg): ?string => $arg === 'sm-hints'
+            ? renderTemplate('wiki/_embed-sm-hints.html.twig', ['hints' => smHints()]) : null,
         'jednostka' => function (string $arg): ?string {
             [$type, $key] = array_pad(explode('/', $arg, 2), 2, '');
             $entry = isset(UNIT_TYPES[$type]) ? unitByKey($type, $key) : null;
@@ -719,10 +756,18 @@ function guide(): array
         ],
         [
             'title' => 'Karta metody (howto)',
-            'intro' => 'Karta jak na stronie „Jak zgłosić nielegalne parkowanie”. Wymaga id (kotwica karty) i title; opcjonalnie img (nazwa pliku z biblioteki mediów), cta (adres przycisku: ścieżka, https://, tel: lub mailto:) i cta_label. Ramkę wewnątrz karty otwierasz inną liczbą dwukropków niż kartę.',
+            'intro' => 'Karta jak na stronie „Jak zgłosić nielegalne parkowanie”. Wymaga id (kotwica karty) i title; opcjonalnie img (nazwa pliku z biblioteki mediów), img_top=1 (kadr od góry), cta (adres przycisku: ścieżka, https://, tel: lub mailto:) i cta_label. Karty z summary (i opcjonalnie krótszą nazwą method) trafiają do listy [[metody]]. Ramkę wewnątrz karty otwierasz inną liczbą dwukropków niż kartę.',
             'examples' => [
+                ['label' => 'Lista metod z kart na tej stronie', 'md' => "[[metody]]\n\n:::howto{id=sm-telefon title=\"Telefonicznie\" method=\"Telefon\" summary=\"na całe patoparkingi\"}\nTreść karty.\n:::", 'render' => true],
                 ['label' => 'Karta z przyciskiem', 'md' => ":::howto{id=telefon title=\"Telefonicznie\" cta=\"tel:986\" cta_label=\"Zadzwoń pod 986\"}\n*Kiedy stosować:* na całych patoparkingach.\n:::", 'render' => true],
                 ['label' => 'Ramka wewnątrz karty', 'md' => "::::howto{id=email title=\"E-mailem\"}\nTreść karty.\n\n:::uwaga\nRamka w karcie.\n:::\n::::", 'render' => true],
+            ],
+        ],
+        [
+            'title' => 'Diagramy',
+            'intro' => 'Schemat procesu rysujesz w składni Mermaid (https://mermaid.js.org) w bloku kodu oznaczonym mermaid. Podgląd pokaże gotowy diagram.',
+            'examples' => [
+                ['label' => 'Schemat blokowy', 'md' => "```mermaid\nflowchart LR\n    zgloszenie([Zgłoszenie]) --> sm{Straż miejska}\n    sm -- mandat --> ok([Sprawa zamknięta])\n    sm -- odmowa --> zazalenie([Zażalenie])\n```", 'render' => true],
             ],
         ],
         [
@@ -746,8 +791,8 @@ function guide(): array
             'intro' => 'Niektóre strony pokazują dane z konfiguracji UD zamiast tekstu wpisanego ręcznie — nie przepisuj ich do treści, bo się zdezaktualizują.',
             'examples' => [
                 ['label' => 'Karta jednostki (klucz z konfiguracji: sm/… lub police/…)', 'md' => "[[jednostka:sm/legnica]]", 'render' => true],
-                ['label' => 'Doświadczenia z przesłuchań', 'md' => "[[data:sm-hints]]", 'render' => false,
-                    'note' => 'Tylko na stronie „Przesłuchanie” — gdzie indziej zapis się nie uda.', 'insert' => false],
+                ['label' => 'Doświadczenia z przesłuchań (lista miast z wyszukiwarką)', 'md' => "[[data:sm-hints]]", 'render' => false,
+                    'note' => 'Długa lista — używana na stronie „Czy straż miejska wezwie mnie na przesłuchanie?”.'],
             ],
         ],
     ];
@@ -870,6 +915,24 @@ function unitBySlug(string $slug): ?array
     return units()[$slug] ?? null;
 }
 
+/**
+ * Doświadczenia z przesłuchań: miasto → `hint` aktywnych SM (bez domyślnego „Masz doświadczenia…” i wpisów
+ * „Miejscowość … obsługuje”). Blok [[data:sm-hints]] na /przesluchanie.html i fallback StaticPagesHandler::hearing.
+ * @return array<string,string>
+ */
+function smHints(): array
+{
+    $hints = [];
+    foreach (unitTable('sm') as $sm) {
+        if (!$sm->active || !$sm->hint) continue;
+        if (str_starts_with($sm->hint, 'Masz doświadczenia we współpracy') || str_starts_with($sm->hint, 'Miejscowość ')) continue;
+        $hints[$sm->city] = $sm->hint;
+    }
+    $collator = new \Collator('pl_PL');
+    uksort($hints, fn($a, $b) => $collator->compare($a, $b));
+    return $hints;
+}
+
 /** Jednostka po kluczu konfiguracji ('sm/legnica', 'police/kobierzyce') — dla [[jednostka:…]]. */
 function unitByKey(string $type, string $key): ?array
 {
@@ -885,4 +948,45 @@ function unitByKey(string $type, string $key): ?array
 function unitCard(array $entry): string
 {
     return renderTemplate('wiki/_unit-card.html.twig', ['entry' => $entry, 'typeName' => UNIT_TYPES[$entry['type']]]);
+}
+
+// ─── Wyszukiwarka (/wiki/_search) ────────────────────────────────────────────────────────────────────────────────
+
+/** Tekst do porównań bez ogonków i wielkości liter (jednostki szukane w konfiguracji, nie w FTS). */
+function foldText(string $text): string
+{
+    return slugify($text) === '' ? '' : str_replace('-', ' ', slugify($text));
+}
+
+/**
+ * Strony (FTS5) i jednostki (nazwa, miasto, obsługiwane gminy). Każde słowo zapytania musi pasować.
+ * @return array{pages:list<array{url:string,title:string,snippet:string}>,units:list<array{url:string,title:string,meta:string}>}
+ */
+function search(string $query): array
+{
+    $pages = [];
+    foreach (searchPages($query) as $row) {
+        $pages[] = [
+            'url' => $row['route_alias'] ? "/{$row['route_alias']}.html" : ($row['path'] === 'start' ? '/wiki' : "/wiki/{$row['path']}"),
+            'title' => $row['title'],
+            'snippet' => strtr(htmlspecialchars($row['snippet'], ENT_QUOTES), ["\u{E020}" => '<mark>', "\u{E021}" => '</mark>']),
+        ];
+    }
+
+    $terms = array_filter(explode(' ', foldText($query)));
+    $units = [];
+    if ($terms) {
+        foreach (units() as $entry) {
+            $haystack = ' ' . foldText($entry['unit']->getName() . ' ' . ($entry['unit']->city ?? '') . ' ' . implode(' ', $entry['served'])) . ' ';
+            foreach ($terms as $term)
+                if (!str_contains($haystack, " $term")) continue 2; // początek słowa: „krzyk” znajduje „Krzyki”
+            $units[] = [
+                'url' => "/wiki/sluzby/{$entry['slug']}",
+                'title' => $entry['unit']->getName(),
+                'meta' => UNIT_TYPES[$entry['type']] . ($entry['unit']->city ? ' · ' . $entry['unit']->city : ''),
+            ];
+            if (count($units) >= 30) break;
+        }
+    }
+    return ['pages' => $pages, 'units' => $units];
 }

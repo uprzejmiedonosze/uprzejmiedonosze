@@ -40,6 +40,13 @@ const SECTIONS_MD = <<<'MD'
 - [Straże miejskie i komisariaty Policji](/wiki/sluzby)
 MD;
 
+/** trasa www → [ścieżka w wiki, tytuł]; adres /wiki/<ścieżka> przekierowuje na /<trasa>.html */
+const WWW_SEED = [
+    'faq' => ['faq', 'Najczęściej zadawane pytania'],
+    'przesluchanie' => ['przesluchanie', 'Czy straż miejska wezwie mnie na przesłuchanie?'],
+    'jak-zglosic-nielegalne-parkowanie' => ['jak-zglosic', 'Jak zgłaszać nieprawidłowe parkowanie'],
+];
+
 $unitMap = json_decode(file_get_contents(__DIR__ . '/wiki-import-units.json'), true);
 foreach (\wiki\import\UNIT_PAGES_EXTRA as $id => $unit) $unitMap[$id] = $unit;
 
@@ -121,6 +128,14 @@ foreach ($pages as $id => $file) {
     }
 }
 
+// Strony www edytowane w wiki (\wiki\WWW_PAGES): treść startowa przepisana z szablonów, src/tools/wiki-seed/<trasa>.md
+foreach (WWW_SEED as $route => [$path, $pageTitle]) {
+    $markdown = file_get_contents(__DIR__ . "/wiki-seed/$route.md");
+    foreach (\wiki\renderer()->render($markdown)->errors as $warning) echo "  [$path] $warning\n";
+    if (!$dryRun) \wiki\savePage($path, $pageTitle, $markdown, 'Przeniesione z szablonu www', null, \wiki\import\AUTHOR, '', $route);
+    echo "strona   (www) /$route.html → $path\n";
+}
+
 // Spis działu „Prawo” (w DokuWiki linkowany z nieistniejącej strony wiki:prawo)
 $lawPages = array_filter(\wiki\import\PAGES, fn($page) => str_starts_with($page[0] ?? '', 'prawo/'));
 $lawIndex = "Artykuły o przepisach, na które powołujemy się w zgłoszeniach i zażaleniach.\n\n"
@@ -139,6 +154,8 @@ foreach ($notes as $path => $parts) {
     $stats['notes']++;
     echo "notatka  → $path\n";
 }
+
+if (!$dryRun) echo "\nIndeks wyszukiwarki: " . \wiki\reindexAll() . " stron\n";
 
 $media = array_values(array_unique($media));
 $mediaDir = __DIR__ . '/../public/img/wiki';

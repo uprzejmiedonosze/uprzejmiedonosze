@@ -5,6 +5,7 @@
 
 {% block main %}
 <article class="wiki-page">
+  {% include 'wiki/_search-form.html.twig' %}
   <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a> › <a href="/wiki/sluzby">Służby</a></nav>
   <h1 class="wiki-page__title">{{ wiki.entry.unit.getName }}</h1>
   {{ wiki.card|raw }}

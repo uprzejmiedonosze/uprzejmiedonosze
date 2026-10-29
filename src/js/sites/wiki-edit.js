@@ -1,4 +1,5 @@
 import Api from '../lib/Api'
+import { renderMermaid } from './wiki'
 
 // Edytor wiki (wiki-edit.html.twig): podgląd na żywo przez POST /wiki/_preview (ten sam renderer co zapis),
 // „Wstaw” z poradnika redaktora (wiki/_editor-guide.html.twig), ostrzeżenie przed utratą niezapisanych zmian.
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await new Api('/wiki/_preview').post({ body: body.value })
       if (current !== sequence) return // nowszy podgląd już w drodze
       preview.innerHTML = result.html // HTML z renderera wiki (surowy HTML z treści jest wycinany po stronie serwera)
+      renderMermaid(preview)
       errors.replaceChildren(...result.errors.map(msg => {
         const item = document.createElement('li')
         item.textContent = msg

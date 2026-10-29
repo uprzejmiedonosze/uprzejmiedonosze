@@ -22,6 +22,12 @@
 <aside class="mpr-sidebar mpr-sidebar--toc">
 <details open>
 <summary>Spis treści</summary>
+{% if wiki is defined %}
+{% for entry in wiki.toc %}
+{% if entry.level == 2 %}{% if not loop.first %}</ul>{% endif %}<p><strong>{{ entry.text }}</strong></p><ul>{% elseif entry.level == 3 %}{% if loop.first %}<ul>{% endif %}<li><a href="#{{ entry.id }}">{{ entry.text }}</a></li>{% endif %}
+{% if loop.last %}</ul>{% endif %}
+{% endfor %}
+{% else %}
 <p><strong>Korzystanie z Uprzejmie Donoszę</strong></p>
 <ul>
 	<li>{{ _self.link('telefon', 'Kiedy korzystać z Uprzejmie Donoszę a kiedy dzwonić na SM?') }}</li>
@@ -49,11 +55,22 @@
 	<li>{{ _self.link('zazalenie', 'Jak odwołać się od decyzji SM/Policji?') }}</li>
 	<li>{{ _self.link('miasta', 'W jakich miastach działa Uprzejmie Donoszę?') }}</li>
 </ul>
+{% endif %}
 </details>
 </aside>
 {% endblock %}
 
-{% block main %}
+{% block main %}{% if wiki is defined %}
+<h2>{{ wiki.page.title }}</h2>
+<div class="wiki-content wiki-content--faq">{{ wiki.content|raw }}</div>
+{% if not embed %}
+<footer class="wiki-page__footer">
+  <p class="wiki-page__meta">Treść tej strony redagują użytkownicy w <a href="/wiki">wiki</a>. Ostatnia zmiana: {{ wiki.page.updated_at|date('j.m.Y H:i') }}</p>
+  {% include 'wiki/_actions.html.twig' %}
+</footer>
+{% endif %}
+{% else %}{# treść sprzed przeniesienia do wiki — do usunięcia po akceptacji (plan wiki, sekcja 4 pkt 3) #}
+
 
 	<h2>Najczęściej zadawane pytania</h2>
 
@@ -279,9 +296,7 @@ classDef mixed fill:#e9c200
 classDef start fill:black,color:white
 
 </pre>
-	<script type="module">
-		import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-	</script>
+	{# diagram rysuje src/js/sites/wiki.js (renderMermaid) #}
 
 	<h4 id="telefon2">SM w moim mieście odmawia przyjmowania zgłoszeń e-mail. Co robić?</h4>
 	<p>Część SM (oraz komisariatów) odmawia wszczęcia postępowania na podstawie
@@ -310,4 +325,5 @@ classDef start fill:black,color:white
 	<p>Dla części z miast mam bezpośrednie relacje od zgłaszających. Sprawdź, czego
 		możesz się spodziewać po współpracy z SM na stronie o
 		<a href="/przesluchanie.html">przesłuchaniu w charakterze świadka</a>.</p>
+{% endif %}
 {% endblock %}

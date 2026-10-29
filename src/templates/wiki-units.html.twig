@@ -4,6 +4,7 @@
 
 {% block main %}
 <article class="wiki-page">
+  {% include 'wiki/_search-form.html.twig' %}
   <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a></nav>
   <h1 class="wiki-page__title">Straże miejskie i komisariaty Policji</h1>
   {% if wiki.note %}<div class="wiki-content">{{ wiki.note|raw }}</div>{% endif %}

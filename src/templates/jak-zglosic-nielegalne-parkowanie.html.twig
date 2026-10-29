@@ -34,6 +34,15 @@
     do straży miejskiej, po wniosek o nowe słupki. Wybierz tę, która pasuje do sytuacji.</p>
 </div>
 
+{% if wiki is defined %}
+<div class="wiki-content">{{ wiki.content|raw }}</div>
+{% if not embed %}
+<footer class="wiki-page__footer">
+  <p class="wiki-page__meta">Treść tej strony redagują użytkownicy w <a href="/wiki">wiki</a>. Ostatnia zmiana: {{ wiki.page.updated_at|date('j.m.Y H:i') }}</p>
+  {% include 'wiki/_actions.html.twig' %}
+</footer>
+{% endif %}
+{% else %}{# treść sprzed przeniesienia do wiki — do usunięcia po akceptacji (plan wiki, sekcja 4 pkt 3) #}
 <h3 class="how-methods-title">Dostępne metody</h3>
 <div class="how-methods">
   <div class="how-methods-row">{{ _self.link('email', 'E-mail/Uprzejmie Donoszę') }} <span>stosuj w pojedynczych przypadkach.</span></div>
@@ -305,5 +314,5 @@
     </div>
   </div>
 </div>
-
+{% endif %}
 {% endblock %}
