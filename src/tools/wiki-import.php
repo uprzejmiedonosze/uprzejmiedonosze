@@ -128,6 +128,13 @@ foreach ($pages as $id => $file) {
     }
 }
 
+foreach (\wiki\import\TYPO_REDIRECTS as $from => $id) {
+    $to = $target($id);
+    if ($to === null) { fwrite(STDERR, "UWAGA: literówka $from → nieznane id $id\n"); continue; }
+    if (!$dryRun) \wiki\addRedirect($from, $to);
+    $stats['redirects']++;
+}
+
 // Strony www edytowane w wiki (\wiki\WWW_PAGES): treść startowa przepisana z szablonów, src/tools/wiki-seed/<trasa>.md
 foreach (WWW_SEED as $route => [$path, $pageTitle]) {
     $markdown = file_get_contents(__DIR__ . "/wiki-seed/$route.md");

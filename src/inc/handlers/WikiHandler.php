@@ -40,6 +40,7 @@ class WikiHandler extends AbstractHandler {
         if ($legacy === '' || $legacy === 'start')
             return AbstractHandler::redirect('/wiki', 301);
         $target = \wiki\redirectTarget($legacy)
+            ?? \wiki\redirectTarget(str_replace('-', '_', $legacy)) // linki z myślnikami zamiast podkreśleń (GSC)
             ?? (preg_match('#^sluzby/[a-z_]+$#', $legacy) && !\wiki\unitBySlug(substr($legacy, 7)) ? 'sluzby' : null); // listy wojewódzkie
         if (!$target && $legacy !== $path && (\wiki\getPage($legacy) || ($legacy === 'sluzby' || \wiki\unitBySlug(substr($legacy, 7)))))
             $target = $legacy;
@@ -51,14 +52,20 @@ class WikiHandler extends AbstractHandler {
      * z tym route_alias istnieje w wiki; inaczej renderuje się jak dotąd.
      */
     public static function renderWithWiki(Request $request, Response $response, string $route, array $extra = []): Response {
-        $page = in_array($route, \wiki\WWW_PAGES, true) ? \wiki\getPageByAlias($route) : null;
-        if ($page) {
-            $result = \wiki\renderForUser($page['body_md'], self::sex($request));
-            $extra['wiki'] = self::wikiParams($request, $page['path']) + [
-                'page' => $page,
-                'content' => $result->html,
-                'toc' => $result->toc,
-            ];
+        try {
+            $page = in_array($route, \wiki\WWW_PAGES, true) ? \wiki\getPageByAlias($route) : null;
+            if ($page) {
+                $result = \wiki\renderForUser($page['body_md'], self::sex($request));
+                $extra['wiki'] = self::wikiParams($request, $page['path']) + [
+                    'page' => $page,
+                    'content' => $result->html,
+                    'toc' => $result->toc,
+                ];
+            }
+        } catch (\Throwable $e) {
+            // strony www z najwyższym ruchem nie mogą paść przez bazę wiki — szablon ma własną treść
+            log_error("wiki: $route rendered without wiki content", $e);
+            unset($extra['wiki']);
         }
         return AbstractHandler::renderHtml($request, $response, $route, $extra);
     }
