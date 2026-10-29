@@ -87,7 +87,10 @@ class DashboardTest extends DatabaseTestCase
         $app->status = 'confirmed';
         \app\save($app);
 
-        $this->assertSame($before, dashboardData($user)['stats']['active'] ?? 0, 'cached stats are stale by design');
+        $this->assertSame($before + 1, dashboardData($user)['stats']['active'] ?? 0, 'saving a report invalidates the cache');
+
+        \cache\set(\cache\Type::UserStats, 'dash-fresh@example.com', ['active' => 99]); // stale counters
+        $this->assertSame(99, dashboardData($user)['stats']['active'] ?? 0);
         $this->assertSame($before + 1, dashboardData($user, fresh: true)['stats']['active'] ?? 0);
         $this->assertSame($before + 1, dashboardData($user)['stats']['active'] ?? 0, 'fresh also refreshes the cache');
     }

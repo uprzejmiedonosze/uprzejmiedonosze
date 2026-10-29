@@ -50,6 +50,8 @@ function save(Application $application): Application{
         $cleanPlateId = \recydywa\cleanPlateId($plateId);
         \cache\delete(type::AppsByPlate, $cleanPlateId);
     }
+    // status counters on /app/list; status changes also happen outside the user's session (MailGun, webhooks)
+    \cache\delete(Type::UserStats, $application->email);
 
     return $application;
 }
