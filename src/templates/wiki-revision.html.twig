@@ -1,0 +1,25 @@
+{% set title = 'Wersja z ' ~ wiki.rev.created_at|date('j.m.Y H:i') ~ ': ' ~ wiki.page.title %}
+{% extends "base.html.twig" %}
+
+{% block main %}
+<article class="wiki-page">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a> › <a href="{{ wiki.url }}">{{ wiki.page.title }}</a> › <a href="/wiki/_history/{{ wiki.path }}" rel="nofollow">Historia</a></nav>
+  <h1 class="wiki-page__title">Wersja z {{ wiki.rev.created_at|date('j.m.Y H:i') }}</h1>
+  <p class="wiki-page__meta">
+    Autor: {{ wiki.rev.author_name ?: 'anonim' }}{% if wiki.rev.summary %} · „{{ wiki.rev.summary }}”{% endif %}
+    {% if wiki.isCurrent %} · <strong>aktualna wersja</strong>{% endif %}
+  </p>
+  {% if wiki.canModerate and not wiki.isCurrent %}
+  <form method="post" action="/wiki/_revert/{{ wiki.rev.id }}" class="wiki-revert">
+    <button type="submit" class="mpr-button mpr-button-secondary">Przywróć tę wersję</button>
+  </form>
+  {% endif %}
+
+  <h2>Zmiany względem {{ wiki.previous ? 'poprzedniej wersji' : 'pustej strony' }}</h2>
+  <pre class="wiki-diff">{% for line in wiki.diff %}<span class="wiki-diff__{{ line.op == '+' ? 'add' : (line.op == '-' ? 'del' : 'eq') }}">{{ line.op == '=' ? ' ' : line.op }} {{ line.line }}</span>
+{% endfor %}</pre>
+
+  <h2>Treść tej wersji</h2>
+  <div class="wiki-content wiki-content--revision">{{ wiki.content|raw }}</div>
+</article>
+{% endblock %}

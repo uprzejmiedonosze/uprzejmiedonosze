@@ -1,0 +1,343 @@
+@use "../lib/tokens" as *;
+
+// Wiki (wiki*.html.twig, partiale templates/wiki/). Treść z renderera ma klasę .wiki-content —
+// ta sama w widoku, podglądzie edytora i poradniku redaktora.
+
+.wiki-breadcrumbs {
+  font-size: 0.9rem;
+  color: $mpr-muted;
+  margin-bottom: 0.5rem;
+
+  a { color: $mpr-on-surface-variant; }
+}
+
+.wiki-page__title {
+  font-family: $font-display;
+  color: $mpr-heading;
+  margin: 0 0 1.5rem;
+}
+
+.wiki-page__meta {
+  color: $mpr-muted;
+  font-size: 0.9rem;
+}
+
+.wiki-page__footer {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid $mpr-hairline;
+}
+
+.wiki-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+
+  &__hint {
+    margin: 0;
+    color: $mpr-on-surface-variant;
+  }
+}
+
+.wiki-content {
+  overflow-wrap: anywhere;
+
+  h2, h3, h4 {
+    font-family: $font-display;
+    color: $mpr-heading;
+    scroll-margin-top: 5rem;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: $mpr-radius-sm;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1rem 0;
+    display: block;
+    overflow-x: auto;
+  }
+
+  th, td {
+    border: 1px solid $mpr-outline-variant;
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th { background: $mpr-surface-low; }
+
+  blockquote {
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    border-left: 4px solid $mpr-primary-outline;
+    color: $mpr-on-surface-variant;
+  }
+
+  pre {
+    background: $mpr-surface-low;
+    border-radius: $mpr-radius-sm;
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+  }
+}
+
+.wiki-toc {
+  list-style: none;
+  padding-left: 0;
+
+  &__l3 { padding-left: 1rem; }
+  &__l4 { padding-left: 2rem; }
+}
+
+.wiki-note {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1.25rem;
+  border-radius: $mpr-radius-card;
+  border: 1px solid $mpr-primary-outline;
+  background: $mpr-primary-container;
+
+  &--uwaga {
+    border-color: $mpr-warning-outline;
+    background: $mpr-warning-container;
+  }
+
+  &__title {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  > :last-child { margin-bottom: 0; }
+}
+
+.wiki-wzor {
+  margin: 1.5rem 0;
+  border: 1px solid $mpr-outline-variant;
+  border-radius: $mpr-radius-card;
+  background: $mpr-surface;
+  box-shadow: $mpr-shadow-card;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid $mpr-hairline;
+  }
+
+  &__title { margin: 0; }
+
+  &__body {
+    padding: 0.75rem 1.25rem;
+    white-space: pre-line;
+  }
+}
+
+.wiki-revisions {
+  padding-left: 1.25rem;
+
+  li {
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+  }
+
+  &__author { font-weight: 600; }
+  &__summary { color: $mpr-on-surface-variant; font-style: italic; }
+  &__bytes { color: $mpr-muted; font-size: 0.85rem; }
+
+  &__current {
+    font-size: 0.8rem;
+    padding: 0 0.5rem;
+    border-radius: $mpr-radius-pill;
+    background: $mpr-primary-container;
+    color: $mpr-primary;
+  }
+}
+
+.wiki-diff {
+  background: $mpr-surface-low;
+  border-radius: $mpr-radius-sm;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.4;
+
+  span {
+    display: block;
+    padding: 0 1rem;
+    white-space: pre-wrap;
+  }
+
+  &__add { background: $mpr-primary-container; }
+
+  &__del {
+    background: $mpr-danger-container;
+    color: $mpr-danger;
+  }
+
+  &__eq { color: $mpr-muted; }
+}
+
+.wiki-revert { margin: 1rem 0; }
+
+// --- Edytor ----------------------------------------------------------------
+
+.wiki-editor {
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__field,
+  &__preview {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+
+    > span,
+    .wiki-editor__label { font-weight: 600; }
+  }
+
+  &__field input,
+  &__field textarea {
+    font: inherit;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid $mpr-outline-variant;
+    border-radius: $mpr-radius-sm;
+    background: $mpr-surface;
+  }
+
+  &__field textarea {
+    font-family: monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    min-height: 24rem;
+    resize: vertical;
+  }
+
+  &__panes {
+    display: grid;
+    gap: 1rem;
+
+    @media (min-width: $mpr-break) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  &__preview .wiki-content {
+    padding: 0.75rem 1rem;
+    border: 1px dashed $mpr-outline-variant;
+    border-radius: $mpr-radius-sm;
+    background: $mpr-surface;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+
+  &__errors {
+    margin: 0;
+    padding: 0.5rem 1rem 0.5rem 2rem;
+    border-radius: $mpr-radius-sm;
+    background: $mpr-danger-container;
+    color: $mpr-danger;
+  }
+
+  &__placeholder { color: $mpr-muted; }
+
+  &__buttons {
+    display: flex;
+    gap: 0.75rem;
+  }
+}
+
+// --- Poradnik redaktora (modal) --------------------------------------------
+
+.wiki-guide {
+  width: min(56rem, 95vw);
+  padding: 0;
+  border-radius: $mpr-radius-card;
+
+  &::backdrop { background: rgba(15, 33, 24, 0.45); }
+
+  &__header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: $mpr-surface;
+    border-bottom: 1px solid $mpr-hairline;
+
+    h2 { margin: 0; }
+  }
+
+  &__close {
+    border: none;
+    background: none;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    color: $mpr-on-surface-variant;
+  }
+
+  &__body { padding: 1rem 1.5rem 1.5rem; }
+
+  &__section {
+    border-bottom: 1px solid $mpr-hairline;
+    padding: 0.5rem 0;
+
+    summary {
+      cursor: pointer;
+      font-family: $font-display;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 0.35rem 0;
+    }
+  }
+
+  &__example {
+    margin: 0.75rem 0 1.25rem;
+    border: 1px solid $mpr-outline-variant;
+    border-radius: $mpr-radius-sm;
+    overflow: hidden;
+  }
+
+  &__example-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.4rem 0.75rem;
+    background: $mpr-surface-low;
+    font-weight: 600;
+  }
+
+  &__source {
+    margin: 0;
+    padding: 0.75rem;
+    background: $mpr-surface-cream;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+  }
+
+  &__result { padding: 0 0.75rem; }
+
+  &__keys code { white-space: nowrap; }
+}

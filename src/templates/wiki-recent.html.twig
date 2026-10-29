@@ -1,0 +1,21 @@
+{% set title = 'Ostatnie zmiany w wiki' %}
+{% extends "base.html.twig" %}
+
+{% block main %}
+<article class="wiki-page">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a></nav>
+  <h1 class="wiki-page__title">Ostatnie zmiany</h1>
+  <ol class="wiki-revisions">
+  {% for change in wiki.changes %}
+    <li>
+      <a href="/wiki/_rev/{{ change.id }}" rel="nofollow">{{ change.created_at|date('j.m.Y H:i') }}</a>
+      <a href="{{ change.path == 'start' ? '/wiki' : '/wiki/' ~ change.path }}">{{ change.title }}</a>
+      <span class="wiki-revisions__author">{{ change.author_name ?: 'anonim' }}</span>
+      {% if change.summary %}<span class="wiki-revisions__summary">{{ change.summary }}</span>{% endif %}
+    </li>
+  {% else %}
+    <li>Brak zmian.</li>
+  {% endfor %}
+  </ol>
+</article>
+{% endblock %}

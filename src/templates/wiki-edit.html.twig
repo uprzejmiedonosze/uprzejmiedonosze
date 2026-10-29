@@ -1,0 +1,56 @@
+{% set title = (wiki.form.isNew ? 'Nowa strona: ' : 'Edycja: ') ~ (wiki.form.title ?: wiki.path) %}
+{% set hideNavbarCta = true %}
+{% extends "base.html.twig" %}
+
+{% block main %}
+<article class="wiki-editor">
+  <nav class="wiki-breadcrumbs" aria-label="Ścieżka"><a href="/wiki">Wiki</a> › <a href="{{ wiki.url }}">{{ wiki.form.title ?: wiki.path }}</a></nav>
+  <header class="wiki-editor__header">
+    <h1 class="wiki-page__title">{{ wiki.form.isNew ? 'Nowa strona' : 'Edycja strony' }}</h1>
+    <a href="#wiki-guide" data-rel="popup" class="mpr-button mpr-button-outline js-wiki-guide-open">Poradnik redaktora</a>
+  </header>
+
+  {% if not wiki.canEdit %}
+    {% include 'wiki/_actions.html.twig' %}
+  {% else %}
+  {% if wiki.form.error %}
+  <div class="wiki-note wiki-note--uwaga wiki-editor__error" role="alert">
+    <p class="wiki-note__title">Nie zapisano zmian</p>
+    <p>{{ wiki.form.error.message|nl2br }}</p>
+  </div>
+  {% endif %}
+
+  <form method="post" action="/wiki/_edit{{ wiki.path == 'start' ? '' : '/' ~ wiki.path }}" class="wiki-editor__form js-wiki-editor">
+    <input type="hidden" name="baseRev" value="{{ wiki.form.baseRev }}">
+    <label class="wiki-editor__field">
+      <span>Tytuł</span>
+      <input type="text" name="title" value="{{ wiki.form.title }}" maxlength="150" required>
+    </label>
+
+    <div class="wiki-editor__panes">
+      <label class="wiki-editor__field wiki-editor__source">
+        <span>Treść (Markdown) — <a href="#wiki-guide" data-rel="popup">jak formatować?</a></span>
+        <textarea name="body" rows="28" spellcheck="true" class="js-wiki-body">{{ wiki.form.body }}</textarea>
+      </label>
+      <section class="wiki-editor__preview" aria-label="Podgląd">
+        <span class="wiki-editor__label">Podgląd</span>
+        <ul class="wiki-editor__errors js-wiki-errors" hidden></ul>
+        <div class="wiki-content js-wiki-preview"><p class="wiki-editor__placeholder">Podgląd pojawi się tutaj.</p></div>
+      </section>
+    </div>
+
+    <label class="wiki-editor__field">
+      <span>Opis zmiany (widoczny w historii)</span>
+      <input type="text" name="summary" value="{{ wiki.form.summary }}" maxlength="200" placeholder="np. aktualny adres SM, poprawka literówki">
+    </label>
+
+    <div class="wiki-editor__buttons">
+      <button type="submit" class="mpr-button mpr-button-primary">Zapisz</button>
+      <a href="{{ wiki.url }}" class="mpr-button mpr-button-secondary">Anuluj</a>
+    </div>
+  </form>
+  {% endif %}
+</article>
+
+{% include 'wiki/_editor-guide.html.twig' %}
+{% endblock %}

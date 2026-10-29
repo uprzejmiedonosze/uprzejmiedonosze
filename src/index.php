@@ -231,6 +231,33 @@ $app->group('', function (RouteCollectorProxy $group) { // Revoke action (browse
 })  ->add(new HtmlMiddleware())
     ->add(new LoggedInMiddleware());
 
+// Wiki (src/inc/Wiki.php, docs/plans/2026-10-28-wiki-w-ud.md). Na prod /wiki obsługuje jeszcze DokuWiki
+// (router Traefika) — te trasy zaczną odpowiadać po przełączeniu priorytetu routera.
+// Trasy systemowe (/wiki/_…) przed /wiki/{path} — FastRoute dopasowuje w kolejności rejestracji.
+$app->group('/wiki', function (RouteCollectorProxy $group) { // edycja
+    $group->get('/_edit', WikiHandler::class . ':edit');
+    $group->get('/_edit/{path:.+}', WikiHandler::class . ':edit');
+    $group->post('/_edit', WikiHandler::class . ':save');
+    $group->post('/_edit/{path:.+}', WikiHandler::class . ':save');
+    $group->post('/_revert/{revId:[0-9]+}', WikiHandler::class . ':revert');
+})  ->add(new HtmlMiddleware())
+    ->add(new LoggedInMiddleware());
+
+$app->post('/wiki/_preview', WikiHandler::class . ':preview')
+    ->add(new LoggedInMiddleware())
+    ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
+
+$app->group('/wiki', function (RouteCollectorProxy $group) { // odczyt
+    $group->get('', WikiHandler::class . ':page');
+    $group->get('/', function () { return AbstractHandler::redirect('/wiki', 301); });
+    $group->get('/_recent', WikiHandler::class . ':recent');
+    $group->get('/_history/{path:.+}', WikiHandler::class . ':history');
+    $group->get('/_rev/{revId:[0-9]+}', WikiHandler::class . ':revision');
+    $group->get('/{path:[a-z0-9].*}', WikiHandler::class . ':page');
+})  ->add(new HtmlMiddleware())
+    ->add(new OptionalUserMiddleware());
+
 $app->group('', function (RouteCollectorProxy $group) { // session-less pages
     $group->get('/', StaticPagesHandler::class . ':root');
 
