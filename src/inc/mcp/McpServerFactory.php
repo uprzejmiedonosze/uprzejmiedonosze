@@ -295,10 +295,13 @@ function buildServer(): Server {
             'lng' => ['type' => 'number', 'description' => 'Longitude. See lat for location precedence.'],
             'datetime' => ['type' => 'string', 'description' => 'When it happened, ISO 8601 local time (e.g. 2026-01-08T14:30:00); any timezone offset is ignored.'],
             'carImage' => ['type' => 'string', 'description' => 'Optional vehicle/plate photo as a base64 data URI '
-                . '(JPEG/PNG, ≤ 2 MB); runs plate recognition. Its EXIF GPS location is also used to fill in '
-                . 'lat/lng, but only when both are otherwise omitted — see lat.'],
-            'contextImage' => ['type' => 'string', 'description' => 'Optional wider-scene photo as a base64 data URI (JPEG/PNG, ≤ 2 MB).'],
-            'thirdImage' => ['type' => 'string', 'description' => 'Optional third photo as a base64 data URI (JPEG/PNG, ≤ 2 MB).'],
+                . '(JPEG/PNG, ≤ 2 MB of decoded image bytes — the data URI string itself is ~33% larger); runs '
+                . 'plate recognition. Its EXIF GPS location is also used to fill in lat/lng, but only when both '
+                . 'are otherwise omitted — see lat.'],
+            'contextImage' => ['type' => 'string', 'description' => 'Optional wider-scene photo as a base64 data URI '
+                . '(JPEG/PNG, ≤ 2 MB of decoded image bytes — the data URI string itself is ~33% larger).'],
+            'thirdImage' => ['type' => 'string', 'description' => 'Optional third photo as a base64 data URI '
+                . '(JPEG/PNG, ≤ 2 MB of decoded image bytes — the data URI string itself is ~33% larger).'],
         ],
         'additionalProperties' => false,
     ];
@@ -435,7 +438,11 @@ function buildServer(): Server {
             description: 'Create a new DRAFT report for the signed-in user, pre-filled from the '
                 . 'given fields. The draft is NOT sent automatically: a human must open the '
                 . 'returned editUrl to review it (and add any photos that weren\'t supplied) '
-                . 'before sending. Requires the reports:create scope.',
+                . 'before sending. Requires the reports:create scope. The optional photo fields '
+                . 'travel inside this single request, so at the documented maximum (three 2 MB '
+                . 'photos) the JSON-RPC body is ~8.5 MB — well within the server request-body '
+                . 'limit (~10 MB), but clients that compress photos should budget for that '
+                . 'total, not 3 × 2 MB of raw JSON.',
             annotations: new ToolAnnotations(
                 readOnlyHint: false,
                 destructiveHint: false,
