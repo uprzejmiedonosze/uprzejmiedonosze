@@ -25,6 +25,7 @@ import "./sites/frequent-mistakes"
 import "./sites/wiki"
 import "./sites/wiki-edit"
 import "./lib/sidebar"
+import "./lib/app-banner"
 import makeDialog from "./lib/dialog";
 
 document.querySelectorAll('.menu-button.right').forEach(button => {

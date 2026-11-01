@@ -131,6 +131,7 @@
         <div class="mpr-layout{% if embed %} mpr-layout--focus{% elseif hasSidebar ?? false %} mpr-layout--sidebar{% elseif focusLayout ?? false %} mpr-layout--focus{% endif %}">
             <div class="mpr-article">
         {% if (general.isLoggedIn ?? false) and not embed %}{% include('_maintenance-banner.html.twig') %}{% endif %}
+        {% if (general.showAppBanner ?? false) and not dialog and general.uri matches '#^/app([/?]|$)#' %}{% include('_app-install-banner.html.twig') %}{% endif %}
         {% block main %}{% endblock %}
             </div>
         {% block sidebar %}

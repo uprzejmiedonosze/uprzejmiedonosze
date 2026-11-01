@@ -1,0 +1,26 @@
+@use "tokens" as *;
+
+.app-install-banner {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    background: $mpr-primary-container;
+    border: 1px solid $mpr-primary-outline;
+    border-radius: $mpr-radius-sm;
+
+    a {
+        flex: 1;
+        padding: 0.75em 1em;
+        color: $mpr-on-surface;
+        text-decoration: none;
+    }
+
+    button {
+        padding: 0.75em 1em;
+        background: none;
+        border: 0;
+        color: $mpr-on-surface-variant;
+        font-size: 1.25em;
+        cursor: pointer;
+    }
+}

@@ -33,6 +33,8 @@ class HtmlMiddleware implements MiddlewareInterface {
             'isProd' => isProd(),
             'isStaging' => isStaging(),
             'matomoSiteId' => MATOMO_SITE_ID,
+            // cookie ustawia js/lib/app-banner.js po kliknięciu banera
+            'showAppBanner' => isAndroid() && !isset($_COOKIE['appBannerClicked']),
         ];
 
         global $STATUSES;
