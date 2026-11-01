@@ -9,11 +9,9 @@
 - Nagłówki klienta: `X-UD-Client` (`mobilePlatform()`), `X-UD-Schema` (< `\vision\VISION_SCHEMA` → HTTP 426, wymuszenie aktualizacji).
 - Logika domenowa w `src/inc/API.php`, nie w closure route'a (współdzielona z webem i MCP).
 
-**Gałąź `feat/mobile`:** aplikacja mobilna działa tylko z backendem z tej gałęzi (`recipient` w odpowiedziach,
-filtr `status=active` = wszystko poza archiwum i draftami, passkeys…). Staging ją uruchamia, lokalny `main` nie.
-Testy kontraktowe mobile padające na lokalnym `main` to **nie bug** — nigdy nie zmieniaj `status=active` na `all`.
-Zmiany tras REST na `main` konfliktują z `feat/mobile`: `/apps` musi zachować `appsQueryFromParams()` **i**
-`array_map('applicationToRest', ...)`.
+**Aplikacja mobilna jest na produkcji (Android w Google Play, iOS jeszcze nie), a jej obsługa jest w `main`.** Lista
+zgłoszeń w appce woła `/apps?status=active` (wszystko poza archiwum i draftami) — nie zmieniaj tego filtra na `all`.
+`/apps` musi zachować `appsQueryFromParams()` **i** `array_map('applicationToRest', ...)`.
 
 ## Konfiguracja (`config/`)
 
@@ -26,6 +24,7 @@ PHP czyta **zbudowane** pliki z `export/public/api/config/`, nie źródła (`\js
 | `badges.json` | `tools/badges-validator.js` | Walidacja |
 | `police-stations.csv` | `tools/police-stations.php` | → `police-stations.pjson` |
 | `categories.json`, `statuses.json`, `extensions.json`, `levels.json` | kopiowane | Ładowane do klas `Category`, `Status`, `Extension`, `Level` |
+| `app.json` | kopiowany | `latestVersion` (miękka zachęta do aktualizacji w appce) i `storeUrl` per platforma, patrz `/API.md`. Android: ten sam adres Play co w `src/manifest.json` i `aplikacja.html.twig`. iOS: `storeUrl` to placeholder do czasu wydania |
 
 ### Edycja `sm.json` / `police.json`
 

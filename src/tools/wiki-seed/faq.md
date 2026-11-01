@@ -55,7 +55,7 @@ Poniżej przestawiam przykładowe sposoby dla trzech miast:
 
 ### Gdzie mogę pobrać aplikację? {#aplikacja}
 
-Nie możesz, bo Uprzejmie Donoszę nie jest aplikacją. Jest mobilną stroną WWW, która jednak dość skutecznie udaje aplikację. Zobacz jak zrobić sobie [wygodny skrót do Uprzejmie Donoszę](/aplikacja.html).
+Aplikację na Androida (wersja beta) pobierzesz z [Google Play](https://play.google.com/store/apps/details?id=net.uprzejmiedonosze.pro). Aplikacji na iOS jeszcze nie ma, ale możesz zrobić sobie [wygodny skrót do Uprzejmie Donoszę](/aplikacja.html).
 
 ### Czy można dodać więcej zdjęć? {#3zdjęcie}
 

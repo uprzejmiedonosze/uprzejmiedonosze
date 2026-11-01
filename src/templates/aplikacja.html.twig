@@ -2,8 +2,8 @@
 {% set rightButton = 'menuStart' %}
 {# SITEMAP-PRIORITY:0.6 #}
 
-{% set title = 'Uprzejmie Donoszę jako aplikacja' %}
-{% set shortTitle = 'UD jako aplikacja' %}
+{% set title = 'Aplikacja mobilna Uprzejmie Donoszę' %}
+{% set shortTitle = 'Aplikacja mobilna' %}
 
 {% set hasSidebar = true %}
 
@@ -15,10 +15,10 @@
 
 {% block main %}
 
-<h2>Instalacja Uprzejmie Donoszę jako "aplikacji"</h2>
+<h2>Aplikacja mobilna Uprzejmie Donoszę</h2>
 
-<p>Poradnik informujący jak korzystać z Uprzejmie Donoszę w sposób możliwie
-	zbliżony do regularnej aplikacji mobilnej.</p>
+<p>Uprzejmie Donoszę ma już aplikację na Androida (wersja beta). Na iPhonie
+	możesz na razie dodać stronę do ekranu głównego.</p>
 
 <div class="tabs">
 	<input type="radio" id="android" name="tab">
@@ -32,6 +32,14 @@
 </div>
 
 <div id="android-tab" class="tabcontent">
+	<p>Aplikacja obsługuje większość funkcji wersji web, a do tego ma skaner pism z policji i straży miejskiej.
+		Korzystasz w niej z tego samego konta.</p>
+
+	<p><a href="https://play.google.com/store/apps/details?id=net.uprzejmiedonosze.pro"
+		class="mpr-button mpr-button-primary" rel="external" target="_blank">Pobierz z Google Play</a></p>
+
+	<details>
+	<summary>Nie korzystasz z Google Play? Dodaj stronę do ekranu głównego</summary>
 	<ol>
 		<li>Zainstaluj przeglądarkę
 			<a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox&hl=pl" rel="external" target="_blank">Firefox</a>
@@ -59,9 +67,11 @@
 
 		<li>Bingo – teraz możesz uruchomić Uprzejmie Donoszę jak aplikację;</li>
 	</ol>
+	</details>
 </div>
 
 <div id="ios-tab" class="tabcontent">
+	<p>Aplikacji na iOS jeszcze nie ma. Możesz za to dodać Uprzejmie Donoszę do ekranu głównego:</p>
 	<ol>
 		<li>Uruchom Safari;</li>
 		<li>Wejdź na adres
