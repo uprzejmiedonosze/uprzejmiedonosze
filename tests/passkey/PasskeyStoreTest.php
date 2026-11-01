@@ -63,6 +63,21 @@ class PasskeyStoreTest extends DatabaseTestCase
         self::assertSame(0, \passkey\countForEmail('nobody@example.com'));
     }
 
+    public function testForEmailRestExposesOnlyTheApiContract(): void
+    {
+        // The regression this guards against: register-verify returning raw rows crashed
+        // the app's account screen (UD-MOBILE-T) and sent it the public key and e-mail.
+        \passkey\add('cred-r', 'r@example.com', 'uid', 'pk', null, [], 'R');
+
+        $rows = \passkey\forEmailRest('r@example.com');
+        self::assertCount(1, $rows);
+        self::assertSame(['id', 'label', 'createdAt', 'lastUsedAt'], array_keys($rows[0]));
+        self::assertSame('cred-r', $rows[0]['id']);
+        self::assertSame('R', $rows[0]['label']);
+        self::assertNotEmpty($rows[0]['createdAt']);
+        self::assertNull($rows[0]['lastUsedAt']);
+    }
+
     public function testRemoveOnlyDeletesOwnCredential(): void
     {
         \passkey\add('cred-x', 'owner@example.com', 'uid', 'pk', null, [], 'X');

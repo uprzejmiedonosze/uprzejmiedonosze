@@ -102,7 +102,8 @@ class PasskeyHandler extends AbstractHandler {
         \passkey\add($credentialId, $email, $uid, $data->credentialPublicKey, $aaguid, $transports, $label);
         \telemetry\log('passkey_registered');
 
-        return $this->renderJson($response, ['passkeys' => \passkey\forEmail($email)]);
+        $passkeys = $this->isRest($request) ? \passkey\forEmailRest($email) : \passkey\forEmail($email);
+        return $this->renderJson($response, ['passkeys' => $passkeys]);
     }
 
     public function listPasskeys(Request $request, Response $response): Response {

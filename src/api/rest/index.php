@@ -210,13 +210,7 @@ $app->group('/api/rest/user', function (RouteCollectorProxy $group) { // USER
 
     $group->get('/passkeys', function (Request $request, Response $response) {
         $user = $request->getAttribute('user');
-        $rows = array_map(fn($p) => [
-            'id' => $p['credential_id'],
-            'label' => $p['label'],
-            'createdAt' => $p['created_at'],
-            'lastUsedAt' => $p['last_used_at'],
-        ], \passkey\forEmail($user->getEmail()));
-        $response->getBody()->write(json_encode(['passkeys' => $rows]));
+        $response->getBody()->write(json_encode(['passkeys' => \passkey\forEmailRest($user->getEmail())]));
         return $response;
     })  ->add(new RegisteredMiddleware())
         ->add(new UserMiddleware())

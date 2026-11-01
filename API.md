@@ -79,7 +79,7 @@ Removes one of the user's passkeys.
 Native app registration (WebAuthn). There is no cookie session, so the challenge travels as `state`:
 `register-options` returns `{options, state}` (`options` = WebAuthn creation options, base64url);
 `register-verify` takes `{state, id, clientDataJSON, attestationObject, transports}` (base64url) and returns
-`{passkeys: [...]}`. `state` is single-use, TTL 120 s. The Android origin (`android:apk-key-hash:<hash>`) must be
+`{passkeys: [{id, label, createdAt, lastUsedAt}]}`. `state` is single-use, TTL 120 s. The Android origin (`android:apk-key-hash:<hash>`) must be
 whitelisted in `PASSKEY_ANDROID_KEY_HASHES` (comma-separated, per host); the host must equal `APP_HOST` (RP ID).
 
 ### POST `/api/rest/passkey/login-options` / `login-verify` (anonymous)

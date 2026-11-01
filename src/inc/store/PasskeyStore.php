@@ -112,6 +112,16 @@ function forEmail(string $email): array {
     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 }
 
+/** The REST contract of a passkey list (API.md); raw rows, with their key material, are only for the web. */
+function forEmailRest(string $email): array {
+    return array_map(fn($p) => [
+        'id' => $p['credential_id'],
+        'label' => $p['label'],
+        'createdAt' => $p['created_at'],
+        'lastUsedAt' => $p['last_used_at'],
+    ], forEmail($email));
+}
+
 function countForEmail(string $email): int {
     $stmt = \store\prepare('SELECT COUNT(*) FROM ' . TABLE . ' WHERE user_email = :e');
     $stmt->execute([':e' => $email]);
