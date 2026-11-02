@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
       enabled: false
     },
     colors: [
-      "#009C7F",
+      "#0d7a55",
       "#e9c200",
       "#ED561B",
       "#DDDF00",
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
         fillColor: {
           linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
           stops: [
-            [0, "#009C7F"],
+            [0, "#0d7a55"],
             [1, "#FFFFFF"]
           ]
         }
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
       {
         name: "Nowe zgłoszenia",
         lineWidth: 5,
-        color: "#009C7F"
+        color: "#0d7a55"
       },
       {
         name: "Nowi użytkownicy",
@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function () {
     series: [
       {
         name: "Zgłoszenia – SM",
-        color: "#009C7F",
+        color: "#0d7a55",
         stack: "apps"
       },
       {
@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
     series: [
       {
         name: "Liczba zgłoszeń",
-        color: "#009C7F"
+        color: "#0d7a55"
       }
     ],
     tooltip: {

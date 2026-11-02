@@ -11,15 +11,17 @@
 		{"sizes": "152x152", "src": "img/apple-touch-icon-152x152.png"},
 		{"sizes": "180x180", "src": "img/apple-touch-icon-180x180.png"},
 		{"sizes": "192x192", "src": "img/apple-touch-icon-192x192.png"},
-		{"sizes": "512x512", "src": "img/splash.png"}
+		{"sizes": "512x512", "src": "img/splash.png"},
+		{"sizes": "192x192", "src": "img/apple-touch-icon-192x192.png", "type": "image/png", "purpose": "maskable"},
+		{"sizes": "512x512", "src": "img/splash.png", "type": "image/png", "purpose": "maskable"}
 	],
-	"theme_color": "#009C7F",
+	"theme_color": "#0d7a55",
 	"start_url": "/app",
 	"display": "standalone",
 	"orientation": "portrait",
 	"scope": "/",
-	"background_color": "#ffffff",
-	"lang": "Polish",
+	"background_color": "#0d7a55",
+	"lang": "pl",
 	"related_applications": [
 		{
 			"platform": "play",
