@@ -22,8 +22,8 @@ class WikiUnitsTest extends WikiTestCase
         $units = \wiki\units();
         $this->assertArrayHasKey('straz-miejska-w-legnicy', $units);
         // Policja: klucz to gmina (Kobierzyce), slug z nazwy komisariatu
-        $this->assertArrayHasKey('kp-wroclaw-krzyki', $units);
-        $this->assertContains('kobierzyce', $units['kp-wroclaw-krzyki']['keys']);
+        $this->assertArrayHasKey('kp-w-kobierzycach', $units);
+        $this->assertContains('kobierzyce', $units['kp-w-kobierzycach']['keys']);
         // Oddziały SM Warszawy: pierwsza linia adresu nie mówi czyje — doklejona druga
         $this->assertArrayHasKey('i-oddzial-terenowy-strazy-miejskiej-m-st-warszawy', $units);
     }
@@ -45,8 +45,8 @@ class WikiUnitsTest extends WikiTestCase
         $this->assertNotContains('Warszawa', $entry['served']);
         $this->assertEmpty(array_filter($entry['served'], fn($area) => str_contains($area, '_')), 'internal keys like warszawa_ot5 are not areas');
 
-        $krzyki = \wiki\unitBySlug('kp-wroclaw-krzyki');
-        $this->assertContains('Kobierzyce', $krzyki['served'], "the unit's own keys are areas it serves too");
+        $kobierzyce = \wiki\unitBySlug('kp-w-kobierzycach');
+        $this->assertContains('Kobierzyce', $kobierzyce['served'], "the unit's own keys are areas it serves too");
 
         $myszkow = array_filter(array_keys(\wiki\units()), fn($slug) => str_starts_with($slug, 'straz-miejska-w-myszkowie'));
         $this->assertSame(['straz-miejska-w-myszkowie'], array_values($myszkow), 'duplicate "Myszków," key is an alias now');
@@ -57,7 +57,7 @@ class WikiUnitsTest extends WikiTestCase
     {
         $result = \wiki\renderer()->render("[[jednostka:sm/legnica]]\n\n[[jednostka:police/Kobierzyce]]\n\n[[jednostka:sm/nie-ma]]\n");
         $this->assertStringContainsString('href="/wiki/sluzby/straz-miejska-w-legnicy"', $result->html);
-        $this->assertStringContainsString('href="/wiki/sluzby/kp-wroclaw-krzyki"', $result->html);
+        $this->assertStringContainsString('href="/wiki/sluzby/kp-w-kobierzycach"', $result->html);
         $this->assertSame(['Nieznany blok [[jednostka:sm/nie-ma]].'], $result->errors);
     }
 

@@ -155,9 +155,9 @@ class WikiDomainTest extends WikiTestCase
 
     public function testSearchUnits(): void
     {
-        $units = \wiki\search('krzyki')['units'];
-        $this->assertContains('/wiki/sluzby/kp-wroclaw-krzyki', array_column($units, 'url'));
-        $this->assertContains('/wiki/sluzby/kp-wroclaw-krzyki', array_column(\wiki\search('kobierzyce')['units'], 'url'), 'served municipalities are searchable');
+        $units = \wiki\search('kobierzyce')['units'];
+        $this->assertContains('/wiki/sluzby/kp-w-kobierzycach', array_column($units, 'url'));
+        $this->assertContains('/wiki/sluzby/kp-w-kobierzycach', array_column(\wiki\search('kobierzyce')['units'], 'url'), 'served municipalities are searchable');
         $this->assertContains('/wiki/sluzby/straz-miejska-w-legnicy', array_column(\wiki\search('straz legnica')['units'], 'url'));
     }
 
