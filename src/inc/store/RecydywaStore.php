@@ -210,10 +210,12 @@ function cleanPlateId(string $plateId): string {
  * `/api/rest/recydywa/{plateId}` endpoint — keep both call sites here so
  * they can never drift apart.
  *
+ * $extendEntry adds fields to each report (see plateGallery).
+ *
  * @return array{plateId: string, appsCnt: int, usersCnt: int,
  *               sharedHistory: bool, reports: array}
  */
-function checkPlate(string $plateId, string $currentUserEmail): array {
+function checkPlate(string $plateId, string $currentUserEmail, ?callable $extendEntry = null): array {
     $cleanPlateId = cleanPlateId($plateId);
     if ($cleanPlateId === '') {
         throw new \InvalidArgumentException('plateId must not be empty');
@@ -237,10 +239,29 @@ function checkPlate(string $plateId, string $currentUserEmail): array {
         'usersCnt' => $recydywa->usersCnt,
         'sharedHistory' => $sharedHistory,
         'reports' => array_values(array_map(
-            fn ($app) => plateHistoryEntry($app, $app->email === $currentUserEmail),
+            fn ($app) => plateHistoryEntry($app, $app->email === $currentUserEmail) + ($extendEntry ? $extendEntry($app) : []),
             $visible
         )),
     ];
+}
+
+/**
+ * checkPlate() plus what the web plate page (StaticPagesHandler::carStats)
+ * shows: each report's context photo through getSafeImageUrl (pixelated
+ * unless canImageBeShown) with its blur caption. A separate call, because
+ * the first read of a report's photo generates its gallery images.
+ */
+function plateGallery(string $plateId, \user\User $viewer): array {
+    $allImagesVisible = true;
+    $result = checkPlate($plateId, $viewer->getEmail(), function ($app) use ($viewer, &$allImagesVisible) {
+        $app->isAppOwner = $app->isAppOwner($viewer);
+        $app->showImage = $app->canImageBeShown(whoIsWathing: $viewer);
+        $allImagesVisible = $allImagesVisible && $app->showImage;
+        return ['imageUrl' => $app->getSafeImageUrl(), 'imageHint' => $app->getSafeImageHint()];
+    });
+    $result['allImagesVisible'] = $allImagesVisible;
+    $result['userAllowedSharing'] = (bool) $viewer->shareRecydywa();
+    return $result;
 }
 
 /**

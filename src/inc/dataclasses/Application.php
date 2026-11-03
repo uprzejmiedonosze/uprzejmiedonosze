@@ -743,6 +743,19 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     /**
+     * Caption for getSafeImageUrl()'s image; expects the same $isAppOwner and
+     * $showImage the caller set for that URL.
+     */
+    public function getSafeImageHint(): ?string {
+        if (($this->faces->count ?? 0) > 0) {
+            return ($this->isAppOwner ?? false)
+                ? 'Zostanie nałożony blur: widoczna twarz'
+                : 'Nałożony blur: widoczna twarz';
+        }
+        return ($this->showImage ?? false) ? null : 'Nałożony blur: brak zgody na publikację';
+    }
+
+    /**
      * Generates clear and pixelated gallery thumbnails and uploads them to S3.
      * The gallery key is crypto\encode of the thumb path (with or without ?pixelate),
      * so it is identical to the hash already embedded in published /img-*.php URLs.

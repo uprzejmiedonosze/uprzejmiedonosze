@@ -300,6 +300,22 @@ Editor preview of what the server stores on save (`\vehicle_info\refresh`, parko
 source is unavailable. The make/model is never written into `comment`: the server renders it after the plate
 ("ZS12331 (pojazd marki Volvo XC60)").
 
+## Recydywa endpoints
+
+Requires authorization, registration and confirmed terms.
+
+### GET `/api/rest/recydywa/{plateId}`
+
+Counts and history for a plate: `{plateId, appsCnt, usersCnt, sharedHistory, reports[]}` (same as the MCP `check_plate` tool). Below
+`sharedHistory` (2+ reports from 2+ users) `reports` holds only the caller's own reports. No images.
+
+### GET `/api/rest/recydywa/{plateId}/gallery`
+
+The same, for displaying the history like the web plate page. Each entry of `reports` also has `imageUrl` (the report's context photo,
+relative to the site root, pixelated unless its owner agreed to share it or it was added to the gallery; faces are blurred) and `imageHint` (blur caption or
+`null`). On top: `allImagesVisible` and `userAllowedSharing`, for the "share your photos to see more" prompt. The first read of a
+report's photo generates its gallery images, so call this only when the history is actually opened.
+
 ## Vision endpoints
 
 Requires authorization, registration and confirmed terms (same as Application endpoints).

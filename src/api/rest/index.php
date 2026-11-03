@@ -771,6 +771,18 @@ $app->group('/api/rest/recydywa', function (RouteCollectorProxy $group) { // REC
         $response->getBody()->write(json_encode($result));
         return $response;
     });
+
+    // The same history with photos, like the web plate page (\recydywa\plateGallery).
+    $group->get('/{plateId}/gallery', function (Request $request, Response $response, $args) {
+        try {
+            $result = \recydywa\plateGallery($args['plateId'], $request->getAttribute('user'));
+        } catch (\InvalidArgumentException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        }
+
+        $response->getBody()->write(json_encode($result));
+        return $response;
+    });
 })  ->add(new TermsConfirmedMiddleware())
     ->add(new RegisteredMiddleware())
     ->add(new UserMiddleware())

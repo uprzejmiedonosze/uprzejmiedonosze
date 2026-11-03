@@ -36,6 +36,48 @@ class RecydywaStoreTest extends DatabaseTestCase
 
     }
 
+    private function saveUserAndApp(string $id, string $email, bool $share, string $plateId): void
+    {
+        $app = $this->getApp(); // sets up the session \user\save() needs
+
+        $user = new User();
+        $user->data->email = $email;
+        $user->data->shareRecydywa = $share;
+        \user\save($user);
+
+        $app->id = $id;
+        $app->email = $email;
+        $app->carInfo->plateId = $plateId;
+        $app->contextImage->galleryReady = true; // no photo files here to generate gallery images from
+        \app\save($app);
+    }
+
+    public function testPlateGalleryPixelatesPhotoWithoutConsent(): void
+    {
+        $this->saveUserAndApp('gallery-mine', 'me@example.com', false, 'GL0001A');
+        $this->saveUserAndApp('gallery-theirs', 'them@example.com', false, 'GL0001A');
+        $viewer = \user\get('me@example.com');
+
+        $result = \recydywa\plateGallery('GL0001A', $viewer);
+
+        self::assertFalse($result['allImagesVisible']);
+        self::assertFalse($result['userAllowedSharing']);
+        self::assertCount(2, $result['reports']);
+        $byOwn = array_column($result['reports'], null, 'isOwn');
+        self::assertNull($byOwn[1]['imageHint']);
+        self::assertSame('Nałożony blur: brak zgody na publikację', $byOwn[0]['imageHint']);
+        self::assertNotSame($byOwn[0]['imageUrl'], $byOwn[1]['imageUrl']);
+    }
+
+    public function testCheckPlateHasNoImages(): void
+    {
+        $this->saveUserAndApp('gallery-only', 'me@example.com', true, 'GL0002B');
+
+        $result = \recydywa\checkPlate('GL0002B', 'me@example.com');
+
+        self::assertArrayNotHasKey('imageUrl', $result['reports'][0]);
+    }
+
     public function testGet(): void
     {
         $app = $this->getApp();
