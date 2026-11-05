@@ -65,7 +65,14 @@ $mcpHandler = function (Request $request, Response $response) {
             : $m,
         StreamableHttpTransport::defaultMiddleware()
     );
-    return $server->run(new StreamableHttpTransport($request, middleware: $middleware));
+    // The SDK caps POST bodies at 4 MiB by default (413 from the app, not nginx),
+    // while create_report_draft documents 3 photos of up to 2 MB decoded each
+    // (~8.5 MB as base64 JSON). Match nginx's client_max_body_size 10m (issue #131).
+    return $server->run(new StreamableHttpTransport(
+        $request,
+        middleware: $middleware,
+        maxBodyBytes: 10 * 1024 * 1024
+    ));
 };
 
 // CORS preflight must not require authorization.
