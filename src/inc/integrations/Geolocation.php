@@ -65,6 +65,8 @@ function Nominatim(float $lat, float $lng): array {
         throw new \Exception("Poza granicami kraju OpenStreetMap dla $lat,$lng {$address['country_code']}", 404);
     }
 
+    $address = withAdminBoundaries($address, NominatimAdmin($lat, $lng));
+
     $address['voivodeship'] = str_replace("województwo ", "", $address['state'] ?? "");
     unset($address['state']);
 
@@ -100,6 +102,53 @@ function Nominatim(float $lat, float $lng): array {
         'sm' => $SM_ADDRESSES[$smKey] ?? $SM_ADDRESSES['_nieznane'],
         'sa' => \SM::resolve(\StopAgresji::guess((object)$address), true)
     );
+}
+
+/**
+ * Gmina and powiat for a point, from Nominatim's polygon containment
+ * (zoom=10). Plain reverse geocoding (zoom=18) returns the address of the
+ * *nearest object*, which near a gmina border can sit on the other side of it
+ * (e.g. OBI Bielany Wrocławskie resolved to Zabrodzie, gmina Kąty
+ * Wrocławskie) — see ADR 0007. Returns null on any failure: callers then keep
+ * the zoom=18 values.
+ */
+function NominatimAdmin(string $lat, string $lng): ?array {
+    $cacheKey = "$lat,$lng,zoom10";
+    $json = \cache\geo\get(Type::Nominatim, $cacheKey);
+    if (!$json) {
+        try {
+            $json = \curl\request("https://nominatim.openstreetmap.org/reverse?", array(
+                "lat" => $lat,
+                "lon" => $lng,
+                "format" => 'jsonv2',
+                "addressdetails" => 1,
+                "zoom" => 10
+            ), "Nominatim");
+        } catch (\Throwable $e) {
+            log_info("Nominatim zoom=10 failed for $lat,$lng: {$e->getMessage()}");
+            return null;
+        }
+        if (!$json || !isset($json['address']))
+            return null;
+        \cache\geo\set(Type::Nominatim, $cacheKey, $json);
+    }
+    return $json['address'];
+}
+
+/**
+ * Replaces gmina/powiat of the zoom=18 address with the zoom=10 ones. Cities
+ * come back from zoom=10 without municipality/county — then the zoom=18 values
+ * stay (the city key decides there). Everything else (district, postcode,
+ * road…) is only reliable at zoom=18 and is left untouched.
+ */
+function withAdminBoundaries(array $address, ?array $admin): array {
+    if (!$admin || !(isset($admin['municipality']) || isset($admin['county'])))
+        return $address;
+    foreach (['municipality', 'county'] as $key) {
+        if (isset($admin[$key])) $address[$key] = $admin[$key];
+        else unset($address[$key]);
+    }
+    return $address;
 }
 
 /**

@@ -17,3 +17,4 @@ Zasady:
 | [0004](0004-mailgun-per-recipient-delivery.md) | Status wysyłki: zdarzenia Mailguna są per adresat, `failed` nie kasuje `sent` |
 | [0005](0005-url-renames.md) | Zmiana URL-a strony: stary GET → 302, stary POST → ten sam handler |
 | [0006](0006-wiki-in-ud.md) | Wiki w UD: Markdown + allowlistowane dyrektywy, osobna baza, media z repo |
+| [0007](0007-nominatim-gmina-from-zoom10.md) | Gmina/powiat z Nominatim `zoom=10`, reszta adresu z `zoom=18` (granice gmin) |
