@@ -219,7 +219,7 @@ function __log(string $message): void {
  */
 function sendRemovalEmail(User $user, string $subject, string $text, bool $dryRun, string $refId): void {
     $message = (new \Symfony\Component\Mime\Email());
-    $message->from(new \Symfony\Component\Mime\Address(MAILER_FROM, 'uprzejmiedonosze.net'));
+    $message->from(new \Symfony\Component\Mime\Address(MAILER_FROM_ALTER, 'Uprzejmie Donoszę'));
     $message->replyTo(new \Symfony\Component\Mime\Address('szymon@uprzejmiedonosze.net'));
     $message->to($user->getEmail());
 
@@ -238,7 +238,7 @@ function sendRemovalEmail(User $user, string $subject, string $text, bool $dryRu
         return;
     }
 
-    $mailer = new \Symfony\Component\Mailer\Mailer(\Symfony\Component\Mailer\Transport::fromDsn(MAILER_DSN));
+    $mailer = new \Symfony\Component\Mailer\Mailer(\Symfony\Component\Mailer\Transport::fromDsn(MAILER_DSN_ALTER));
     $mailer->send($message);
 }
 

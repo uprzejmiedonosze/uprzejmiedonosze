@@ -389,7 +389,7 @@ class ApiAiHandler extends \AbstractHandler {
         $text = "$intro\n\n$text";
 
         $message = (new Email());
-        $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
+        $message->from(new Address(MAILER_FROM, 'Uprzejmie Donoszę'));
         $message->to($petition->email);
 
         $message->subject($subject);

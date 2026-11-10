@@ -31,7 +31,7 @@ class Mail extends CityAPI {
         $subject = $application->getEmailSubject();
 
         $message = (new Email());
-        $message->from(new Address(EMAIL_SENDER, 'uprzejmiedonosze.net'));
+        $message->from(new Address(EMAIL_SENDER, 'Uprzejmie Donoszę'));
         $message->to($to);
         $message->subject($subject);
         $message->cc(new Address($application->email, $application->user->name));

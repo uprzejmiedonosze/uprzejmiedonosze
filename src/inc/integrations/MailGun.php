@@ -38,9 +38,9 @@ class MailGun extends CityAPI {
 
         $message = (new Email());
         if ($this->alternate) {
-            $message->from(new Address(MAILER_FROM_ALTER, 'uprzejmiedonosze.net'));
+            $message->from(new Address(MAILER_FROM_ALTER, 'Uprzejmie Donoszę'));
         } else {
-            $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
+            $message->from(new Address(MAILER_FROM, 'Uprzejmie Donoszę'));
         }
 
         $message->to($to);
@@ -127,7 +127,7 @@ class MailGun extends CityAPI {
         $transport = Transport::fromDsn(MAILER_DSN);
         $mailer = new Mailer($transport);
         $message = (new Email());
-        $message->from(new Address(MAILER_FROM, 'uprzejmiedonosze.net'));
+        $message->from(new Address(MAILER_FROM, 'Uprzejmie Donoszę'));
         $message->to(new Address($application->email));
         $message->cc(new Address('ud@uprzejmiedonosze.net', 'Uprzejmie Donoszę'));
         $message->subject($subject);
