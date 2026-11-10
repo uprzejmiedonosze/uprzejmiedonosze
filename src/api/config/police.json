@@ -3729,6 +3729,9 @@
     "powiat bydgoski": {
         "parent": "Bydgoszcz-miasto"
     },
+    "86-005": {
+        "parent": "powiat bydgoski"
+    },
     "powiat gorzowski": {
         "parent": "Gorzów Wielkopolski-miasto"
     },

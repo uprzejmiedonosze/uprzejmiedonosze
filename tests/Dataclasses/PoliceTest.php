@@ -88,6 +88,33 @@ class PoliceTest extends TestCase
         self::assertNull($key);
     }
 
+    public function testGuessZielonkaNearBydgoszczByPostcode(): void
+    {
+        // Nominatim zwraca dla Zielonki k. Bydgoszczy city = "Zielonka", co
+        // kolidowałoby z kluczem "Zielonka" (Mazowsze). Kod pocztowy jest
+        // sprawdzany przed miastem, więc wpis "86-005" kieruje do KMP Bydgoszcz.
+        $key = \Police::guess(new \JSONObject([
+            'postcode' => '86-005',
+            'city' => 'Zielonka',
+            'county' => 'gmina Białe Błota',
+            'municipality' => 'powiat bydgoski',
+            'voivodeship' => 'kujawsko-pomorskie',
+        ]));
+        self::assertEquals('86-005', $key);
+        self::assertEquals(
+            'dyzurny-bydgoszcz@bg.policja.gov.pl',
+            (new \Police($this->getData($key)))->getEmail()
+        );
+
+        // Zielonka pod Warszawą dalej trafia do swojego komisariatu.
+        self::assertEquals('zielonka', \Police::guess(new \JSONObject([
+            'postcode' => '05-220',
+            'city' => 'Zielonka',
+            'county' => 'powiat wołomiński',
+            'voivodeship' => 'mazowieckie',
+        ])));
+    }
+
     private function getData(string $city): array
     {
         return json_decode(file_get_contents(__DIR__ . '/../../export/public/api/config/police.json'), true)[$city];
