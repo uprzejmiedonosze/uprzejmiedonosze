@@ -44,6 +44,7 @@ test: ## Run phpunit tests in a throwaway builder-test container (works alongsid
 		-p uprzejmiedonosze-$@ --profile $@ run --rm --build builder-test; \
 		status=$$?; \
 		docker compose -f services/compose.yml -p uprzejmiedonosze-$@ --profile $@ down; \
+		docker image prune -f >/dev/null; \
 		exit $$status
 
 .PHONY: lint-css
@@ -142,7 +143,16 @@ dev:
         $(if $(wildcard services/.env.dev),--env-file services/.env.dev,) \
         -p uprzejmiedonosze-$@ \
         --profile $@ \
-        up --build
+        build
+# Each rebuild of the same tag orphans the previous image (~1.6 GB for builder);
+# drop them or Docker Desktop's VM disk fills up ("no space left on device").
+	@docker image prune -f >/dev/null
+	@docker compose \
+        -f services/compose.yml \
+        $(if $(wildcard services/.env.dev),--env-file services/.env.dev,) \
+        -p uprzejmiedonosze-$@ \
+        --profile $@ \
+        up
 
 .PHONY: dev-stop
 dev-stop:
