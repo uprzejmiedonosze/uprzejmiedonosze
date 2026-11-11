@@ -9,7 +9,15 @@ use Aws\Exception\AwsException;
  * that policy lives in Storage.php.
  */
 class S3 {
+    /**
+     * Multipart part size for backups. Bigger parts mean fewer requests, so a
+     * flaky link to B2 has fewer chances to break a 2 GB upload (SDK default is
+     * 5 MB). Memory use ≈ concurrency (3) × part size.
+     */
+    public const BACKUP_PART_SIZE = 32 * 1024 * 1024;
+
     private S3Client $client;
+    private ?string $lastError = null;
 
     /**
      * $clientConfig lets callers (tests) override/extend the underlying
@@ -119,17 +127,30 @@ class S3 {
      * transparently switches to a multipart upload for large files (B2 single
      * PUT is limited to ~5 GB). Use for big backups.
      */
-    public function uploadMultipartPrivate(string $localPath, string $key): bool {
+    public function uploadMultipartPrivate(
+        string $localPath,
+        string $key,
+        int $partSize = self::BACKUP_PART_SIZE,
+    ): bool {
+        $this->lastError = null;
         try {
             $this->client->upload($this->bucket, $key, fopen($localPath, 'rb'), null, [
-                'params'     => ['ContentType' => mime_content_type($localPath) ?: 'application/octet-stream'],
+                'params'      => ['ContentType' => mime_content_type($localPath) ?: 'application/octet-stream'],
                 'concurrency' => 3,
+                'part_size'   => $partSize,
             ]);
             return true;
         } catch (\Throwable $e) {
+            $this->lastError = get_class($e) . ': ' . $e->getMessage();
+            log_error("B2 multipart upload failed for '{$this->bucket}/$key': " . $this->lastError, $e);
             $this->abortFailedMultipart($key, $e);
             return false;
         }
+    }
+
+    /** Message of the last failed uploadMultipartPrivate() call, null if it succeeded. */
+    public function getLastError(): ?string {
+        return $this->lastError;
     }
 
     private function abortFailedMultipart(string $key, \Throwable $e): void {

@@ -162,11 +162,12 @@ class StorageTest extends TestCase
         ]);
 
         $s3 = new S3('backup-bucket', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $handler]);
-        $ok = $s3->uploadMultipartPrivate($tmp, 'db/store-2026-01-01-daily.sql.gz.age');
+        $ok = $s3->uploadMultipartPrivate($tmp, 'db/store-2026-01-01-daily.sql.gz.age', 5 * 1024 * 1024);
 
         unlink($tmp);
 
         $this->assertFalse($ok);
+        $this->assertStringContainsString('upload part failed', (string) $s3->getLastError());
         $abortCmd = $handler->getLastCommand();
         $this->assertSame('AbortMultipartUpload', $abortCmd->getName());
         $this->assertSame('TEST-UPLOAD-ID', $abortCmd['UploadId']);

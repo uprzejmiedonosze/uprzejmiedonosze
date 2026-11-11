@@ -180,12 +180,12 @@ function backupDb(
             $ok = $client->uploadMultipartPrivate($agePath, $b2Key);
             if (!$ok && $attempt < 3) {
                 $backoff = $attempt * 5;
-                echo "  Upload failed (attempt $attempt/3) — retrying in {$backoff}s\n";
+                echo "  Upload failed (attempt $attempt/3): " . $client->getLastError() . " — retrying in {$backoff}s\n";
                 \usleep($backoff * 1000000);
             }
         }
         if (!$ok) {
-            throw new \RuntimeException("B2 upload failed for $b2Key after 3 attempts");
+            throw new \RuntimeException("B2 upload failed for $b2Key after 3 attempts: " . $client->getLastError());
         }
 
         echo "  Uploaded: $b2Key (" . number_format($finalSize) . " bytes)\n";
