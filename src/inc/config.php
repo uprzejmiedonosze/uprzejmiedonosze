@@ -68,6 +68,7 @@ $FOOTER_LINKS = [
             ['key' => 'regulamin', 'href' => '/regulamin.html', 'label' => 'Regulamin'],
             ['key' => 'polityka-prywatnosci', 'href' => '/polityka-prywatnosci.html', 'label' => 'Polityka prywatności'],
             ['key' => 'bezpieczenstwo', 'href' => '/bezpieczenstwo.html', 'label' => 'Bezpieczeństwo'],
+            ['key' => 'zrodla', 'href' => '/zrodla.html', 'label' => 'Źródła danych'],
             ['key' => 'kontakt', 'href' => '/kontakt.html', 'label' => 'Kontakt'],
         ],
     ],

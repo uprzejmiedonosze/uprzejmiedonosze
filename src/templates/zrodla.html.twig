@@ -1,0 +1,67 @@
+{# SITEMAP-PRIORITY:0.3 #}
+{% set title = 'Źródła danych kontaktowych straży miejskich i Policji' %}
+{% set shortTitle = 'Źródła danych' %}
+{% set description = 'Skąd Uprzejmie Donoszę bierze adresy e-mail straży miejskich, straży gminnych i jednostek Policji.' %}
+{% set mainClass = 'polityka' %}
+{% set hasSidebar = true %}
+
+{% extends "base.html.twig" %}
+
+{% block sidebar %}
+{% include '_sidebar.html.twig' with {'current': 'zrodla'} %}
+{% endblock %}
+
+{% block main %}
+
+<h2>Źródła danych kontaktowych</h2>
+
+<p><strong>Uprzejmie Donoszę jest niezależnym projektem społecznym.</strong> Serwis i aplikacja mobilna
+nie są związane z żadną instytucją rządową ani samorządową, w tym z Policją i strażami miejskimi
+lub gminnymi, i nie reprezentują żadnego organu państwa.</p>
+
+<p>Jedyne dane pochodzące od instytucji publicznych, z których korzysta serwis, to dane kontaktowe
+(adres i adres e-mail) jednostek, do których trafiają zgłoszenia. Poniżej wymieniamy wszystkie źródła tych danych.</p>
+
+<h3>1. Straże miejskie i gminne</h3>
+
+<p>Dane kontaktowe straży miejskich i gminnych pochodzą z oficjalnego zestawienia straży gminnych
+(miejskich), które Ministerstwo Spraw Wewnętrznych i Administracji udostępniło w odpowiedzi na
+wniosek o dostęp do informacji publicznej. Ministerstwo nie publikuje tego zestawienia na swoich
+stronach, dlatego udostępniamy tu otrzymane dokumenty w niezmienionej postaci.</p>
+
+<p>Zestawienie składa się ze sprawozdań komend wojewódzkich Policji dotyczących ewidencji
+prowadzonej przez straże gminne (miejskie) w 2024 roku (stan na 31 grudnia 2024 r.). Dane
+teleadresowe straży są w Tabeli 1 każdego sprawozdania.</p>
+
+<ul>
+    <li><a href="/img/zrodla/sm-2024-dolnoslaskie.pdf">województwo dolnośląskie</a> (PDF, 6 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-kujawsko-pomorskie.pdf">województwo kujawsko-pomorskie</a> (PDF, 6 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-lubelskie.pdf">województwo lubelskie</a> (PDF, 8 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-lubuskie.pdf">województwo lubuskie</a> (PDF, 9 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-lodzkie.pdf">województwo łódzkie</a> (PDF, 9 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-malopolskie.pdf">województwo małopolskie</a> (PDF, 7 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-mazowieckie.pdf">województwo mazowieckie (KWP z siedzibą w Radomiu)</a> (PDF, 10 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-ksp.pdf">województwo mazowieckie – Warszawa i powiaty okołowarszawskie (Komenda Stołeczna Policji)</a> (PDF, 18 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-opolskie.pdf">województwo opolskie</a> (PDF, 8 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-podkarpackie.pdf">województwo podkarpackie</a> (PDF, 14 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-podlaskie.pdf">województwo podlaskie</a> (PDF, 7 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-pomorskie.pdf">województwo pomorskie</a> (PDF, 14 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-slaskie.pdf">województwo śląskie</a> (PDF, 23 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-swietokrzyskie.pdf">województwo świętokrzyskie</a> (PDF, 16 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-warminsko-mazurskie.pdf">województwo warmińsko-mazurskie</a> (PDF, 13 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-wielkopolskie.pdf">województwo wielkopolskie</a> (PDF, 11 str.)</li>
+    <li><a href="/img/zrodla/sm-2024-zachodniopomorskie.pdf">województwo zachodniopomorskie</a> (PDF, 12 str.)</li>
+</ul>
+
+<h3>2. Jednostki Policji</h3>
+
+<p>Dane kontaktowe 415 jednostek Policji (komend wojewódzkich, miejskich i powiatowych, komisariatów
+i posterunków) pobraliśmy bezpośrednio z oficjalnych stron internetowych tych jednostek, publikowanych
+przez Policję w domenie policja.gov.pl.</p>
+
+<h3>Inne źródła</h3>
+
+<p>Serwis nie korzysta z innych źródeł informacji publicznych. Jeśli dane którejś jednostki są
+nieaktualne, napisz na <a href="mailto:szymon@uprzejmiedonosze.net">szymon@uprzejmiedonosze.net</a>.</p>
+
+{% endblock %}

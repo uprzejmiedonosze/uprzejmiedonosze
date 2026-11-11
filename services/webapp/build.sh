@@ -103,6 +103,10 @@ node_modules/.bin/parcel build --no-cache --no-source-maps --dist-dir export/pub
 mkdir -p export/public/img/wiki
 cp -r src/img/wiki/. export/public/img/wiki/
 
+# Dokumenty źródłowe (/zrodla.html) – linkowane przez href, więc parcel ich nie zbiera.
+mkdir -p export/public/img/zrodla
+cp -r src/img/zrodla/. export/public/img/zrodla/
+
 # ── Sitemap ───────────────────────────────────────────────────────────────────
 
 log "sitemap.xml"
