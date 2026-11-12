@@ -96,7 +96,7 @@ confirmation:
 
 .PHONY: log-from-last-prod
 log-from-last-prod: ## Commits since last prod release
-	@git log --color --pretty=format:"%cn %ci %s" HEAD...$(call last-tag)
+	@git log --color --pretty=format:"%cn %ci %s" $(call last-tag)..HEAD
 
 .PHONY: diff-from-last-prod
 diff-from-last-prod: ## Diff since last prod release
