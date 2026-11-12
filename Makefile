@@ -1,5 +1,15 @@
+# Windows: GNU make defaults to cmd.exe there, but the recipes below are POSIX
+# (/dev/null, date, rm, ...). Use Git for Windows' bash (installed with Git).
+ifeq ($(OS),Windows_NT)
+# (8.3 short name: $(wildcard) can't handle the space in "Program Files")
+GIT_BASH := $(firstword $(wildcard C:/Progra~1/Git/bin/bash.exe))
+ifneq ($(GIT_BASH),)
+SHELL := $(GIT_BASH)
+endif
+endif
+
 # tools
-RSYNC      := rsync
+RSYNC     := rsync
 CYPRESS    := ./node_modules/.bin/cypress
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 DATE       := $(shell date '+%Y-%m-%d')

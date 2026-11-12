@@ -140,14 +140,6 @@
             </div>
         </div>
         <fieldset>
-            <label for="comment">Dodaj komentarz</label>
-            <textarea type="text" id="comment" name="comment"
-                placeholder="(komentarz, np. szczegóły dotyczące lokalizacji, wymagany dla kategorii „Pozostałe”)">{{ app.userComment ?? '' }}</textarea>
-            <div id="vehicleWeightWarning" class="vehicle-info-warning" style="display: none;"></div>
-        </fieldset>
-
-
-        <fieldset>
         <legend>Wybierz rodzaj wykroczenia</legend>
         <div id="category">
 
@@ -254,6 +246,13 @@
         {% endfor %}
 
 </div>
+        </fieldset>
+
+        <fieldset>
+            <label for="comment">Dodaj komentarz</label>
+            <textarea type="text" id="comment" name="comment"
+                placeholder="(komentarz, np. szczegóły dotyczące lokalizacji, wymagany dla kategorii „Pozostałe”)">{{ app.userComment ?? '' }}</textarea>
+            <div id="vehicleWeightWarning" class="vehicle-info-warning" style="display: none;"></div>
         </fieldset>
 
         <fieldset class="grid" id="extensions">
