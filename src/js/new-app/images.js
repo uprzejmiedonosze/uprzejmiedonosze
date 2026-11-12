@@ -18,6 +18,9 @@ const JPEG_QUALITY = 0.85
 const MAX_IMAGE_DIM = 1600
 
 var uploadInProgress = 0;
+// Which uploaded photos carried GPS coordinates in EXIF (see checkFile).
+var contextHasGeo = false;
+var carHasGeo = false;
 
 /**
  * @param {File} file
@@ -46,14 +49,21 @@ export async function checkFile(file, id) {
       previewElement.src = previewUrl
     }
 
-    if (id === "carImage") {
+    if (id === "contextImage") {
+      // The main photo is also a valid location source (the car photo wins if it has GPS too).
+      const [lat, lng] = readGeoDataFromExif(await ExifReader.load(file).catch(() => null))
+      contextHasGeo = !!lat
+      if (lat && !carHasGeo) setAddressByLatLng(lat, lng, "picture")
+      await sendFile(prepared.blob, id, {}, previewUrl);
+    } else if (id === "carImage") {
       const exif = await ExifReader.load(file)
       const [lat, lng] = readGeoDataFromExif(exif)
       let dateTime = getDateTimeFromExif(exif)
 
       dateTime = setDateTime(dateTime, !!dateTime)
+      carHasGeo = !!lat
       if (lat) setAddressByLatLng(lat, lng, "picture")
-      else noGeoDataInImage()
+      else if (!contextHasGeo) noGeoDataInImage()
 
       const plateImage = /** @type {HTMLImageElement} */ (document.getElementById("plateImage"))
       if (plateImage) {
