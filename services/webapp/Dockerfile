@@ -13,6 +13,10 @@
 #     njs, xslt) and curl/ca-certificates/gettext-base for the official
 #     image's docker-entrypoint.sh, which we don't use either (own
 #     init.sh below). The actual nginx binary + modules are ~9.6MB.
+# Which stage the runtime images take code from: `release` (full build, default)
+# or `builder` (dev: empty export/ tree, code comes from the bind mount).
+ARG EXPORT_STAGE=release
+
 FROM debian:bookworm-slim AS php-base
 
 # Packages every stage needs: the PHP extensions common to builder, webapp
@@ -34,7 +38,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         php8.4-mbstring php8.4-intl php8.4-exif php8.4-xml php8.4-zip && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ── Builder (shared: vendor + full export) ───────────────────────────────────
+# ── Builder (dev image + base of the release build stages below) ─────────────
+# Dev (`builder`, `builder-test` services) bind-mounts src/, tests/ and tools/ over
+# /build, so nothing from them is baked in here — only the slow, rarely changing
+# layers (Node, npm ci, composer install).
 FROM php-base AS builder
 
 WORKDIR /build
@@ -45,7 +52,7 @@ WORKDIR /build
 # inputs change, same as before).
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y --no-install-recommends \
-        nodejs jq inotify-tools memcached php8.4-cli && \
+        nodejs jq memcached php8.4-cli && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     rm -rf /var/lib/apt/lists/*
 
@@ -61,20 +68,15 @@ COPY composer.json composer.lock ./
 COPY openalpr/ ./openalpr/
 RUN composer install --no-interaction --no-progress --no-scripts
 
-# Source + build script (changes frequently — after slow cached steps)
 COPY .parcelrc               ./.parcelrc
 COPY phpunit.xml             ./phpunit.xml
-COPY tests/                  ./tests/
-COPY src/                    ./src/
-COPY tools/                  ./tools/
-COPY services/webapp/build.sh ./build.sh
 COPY services/devroot/db/store.sqlite /tmp/test-db.sqlite
 # .env.dev is gitignored — must exist locally for tests to have secrets + crypto keys
 COPY services/.env.dev        ./services/.env.dev
+COPY services/webapp/build.sh ./build.sh
 
-# Always create the full export/ tree so COPY --from=builder succeeds in all profiles.
-# For dev, these directories stay empty (overridden by volume mounts at runtime).
-# For staging/prod, build.sh fills them.
+# Always create the full export/ tree so COPY --from=export succeeds in dev too
+# (there these directories stay empty, overridden by volume mounts at runtime).
 RUN mkdir -p \
     export/public/api/config export/public/api/rest export/public/img \
     export/public/css export/public/js \
@@ -82,38 +84,86 @@ RUN mkdir -p \
     export/inc/dataclasses export/inc/store export/inc/converters \
     export/templates export/tools export/sql
 
-# Declared here, not at the top of the stage: a changed ARG value invalidates
-# the cache of every RUN after it, so an early ARG made staging/shadow/prod
-# each re-run Node install, npm ci and composer install from scratch.
-ARG APP_HOST=localhost
-ARG APP_HTTPS=http
-RUN [ "${APP_HOST}" = "localhost" ] || sh build.sh
+# ── Release build (staging/prod/shadow) ───────────────────────────────────────
+# Split by what each step reads, so a change only re-runs what it affects and
+# the host-independent steps are shared between staging, prod and shadow
+# (see build.sh). BuildKit builds these stages in parallel.
+
+# JS bundles — depend on src/js, the JSON it imports from src/api/config
+# (parcel-namer too). Not rebuilt by PHP/SCSS edits.
+FROM builder AS js
+COPY tools/parcel-namer.js ./tools/parcel-namer.js
+COPY src/api/config/ ./src/api/config/
+COPY src/js/ ./src/js/
+RUN sh build.sh js
+
+# Images — depend on the <img> references in templates and on src/img.
+FROM builder AS images
+COPY tools/parcel-namer.js ./tools/parcel-namer.js
+COPY src/images-index.html ./src/images-index.html
+COPY src/img/              ./src/img/
+COPY src/templates/        ./src/templates/
+RUN sh build.sh images
+
+# PHP tree + JSON configs + lint + PHPUnit + `composer install --no-dev`.
+# Not rebuilt by JS/SCSS edits. Needs the built media (a wiki test checks that
+# every image referenced from the seeds exists in export/public/img/wiki).
+FROM builder AS php
+COPY --from=images /build/export/public/img/ ./export/public/img/
+COPY tools/       ./tools/
+COPY tests/       ./tests/
+COPY src/.well-known/ ./src/.well-known/
+COPY src/api/     ./src/api/
+COPY src/inc/     ./src/inc/
+COPY src/sql/     ./src/sql/
+COPY src/templates/ ./src/templates/
+COPY src/tools/   ./src/tools/
+COPY src/index.php src/favicon.ico src/robots.txt src/ads.txt src/manifest.json ./src/
+RUN sh build.sh php
+
+# Everything that depends on the target host. ARGs are declared only here: a
+# changed ARG value invalidates the cache of every instruction after it, so an
+# early ARG would re-run the steps above for each environment.
+FROM php AS release
+COPY --from=js     /build/export/public/js/  ./export/public/js/
+COPY src/js/   ./src/js/
+COPY src/img/  ./src/img/
+COPY src/scss/ ./src/scss/
+ARG APP_HOST=uprzejmiedonosze.net
+ARG APP_HTTPS=https
+RUN sh build.sh host
+
+# What the runtime images below copy their code from (see EXPORT_STAGE).
+FROM ${EXPORT_STAGE} AS export
 
 # ── Webapp ────────────────────────────────────────────────────────────────────
 FROM php-base AS webapp
 
-LABEL net.uprzejmiedonosze=0.2.3
 ENV HOME=/root
 
 # nginx from nginx.org (not Debian's bookworm package, which is 1.22.1 —
-# stays on the same fast-moving mainline this image tracked before). gnupg
-# is only needed to import this one key; dropped again below along with the
-# rest of the apt cache. Pin-Priority makes apt prefer this repo's `nginx`
-# over Debian's own same-named package now that both are configured.
-RUN apt-get update && apt-get install -y --no-install-recommends gnupg && \
-    curl -sSL https://nginx.org/keys/nginx_signing.key | gpg --dearmor -o /usr/share/keyrings/nginx.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/nginx.gpg] https://nginx.org/packages/debian/ bookworm nginx" \
+# stays on the same fast-moving mainline this image tracked before). apt reads
+# the armored key directly (signed-by=….asc), so no gnupg is needed.
+# Pin-Priority makes apt prefer this repo's `nginx` over Debian's own
+# same-named package now that both are configured.
+#
+# TeX is only for pdflatex (src/inc/converters/App2Pdf.php). Explicit packages
+# instead of the `texlive` metapackage, which adds texlive-fonts-recommended
+# (unused: the template uses lmodern). texlive-latex-extra (qrcode, adjustbox,
+# footmisc) hard-depends on python3 and libpdfbox-java — that is where python
+# in this image comes from, not from our own packages.
+# Deliberately absent: vim, locales (no locale is generated or used — ICU does
+# the Polish collation), gnupg. curl/ca-certificates/php8.4-zip come from php-base.
+RUN curl -sSLo /usr/share/keyrings/nginx.asc https://nginx.org/keys/nginx_signing.key && \
+    echo "deb [signed-by=/usr/share/keyrings/nginx.asc] https://nginx.org/packages/debian/ bookworm nginx" \
         > /etc/apt/sources.list.d/nginx.list && \
-    printf 'Package: *\nPin: origin nginx.org\nPin-Priority: 900\n' > /etc/apt/preferences.d/nginx
-
-RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
+    printf 'Package: *\nPin: origin nginx.org\nPin-Priority: 900\n' > /etc/apt/preferences.d/nginx && \
+    DEBIAN_FRONTEND="noninteractive" apt-get update && \
     apt-get --no-install-recommends -y install \
-        nginx \
-        locales vim curl sqlite3 \
-        texlive ca-certificates \
-        php8.4-fpm php8.4-zip php8.4-opcache php8.4-memcached \
-        lmodern texlive-lang-polish \
-        texlive-latex-recommended texlive-latex-extra && \
+        nginx sqlite3 \
+        php8.4-fpm php8.4-opcache php8.4-memcached \
+        texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+        texlive-lang-polish lmodern && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     mkdir -p /var/www/uprzejmiedonosze.net/db \
              /var/www/uprzejmiedonosze.net/cdn2 \
@@ -123,11 +173,8 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get update && \
     chown -R www-data:www-data /var/www/uprzejmiedonosze.net && \
     chown www-data:www-data /var/log/uprzejmiedonosze.net /var/cache/uprzejmiedonosze.net
 
-# Code + deps from builder (db/cdn/config come from volume mounts at runtime)
-COPY --from=builder --chown=www-data:www-data /build/export/ /var/www/uprzejmiedonosze.net/webapp/
-COPY --from=builder /build/vendor/              /var/www/uprzejmiedonosze.net/vendor/
-
-# Session fixture + nginx/php-fpm config
+# Session fixture + nginx/php-fpm config. Before the code COPY below: these
+# change rarely, the code changes on every build and invalidates what follows it.
 COPY --chown=www-data:www-data services/webapp/sess_php \
         /var/lib/php/sessions/sess_48msfr815nd7f6ujomebqdpil9jueuq0
 COPY services/webapp/nginx.conf                   /etc/nginx/
@@ -182,6 +229,12 @@ RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
 ENV APP_ROOT=/var/www/uprzejmiedonosze.net/
 EXPOSE 80
 CMD ["/bin/sh", "/root/init.sh"]
+LABEL net.uprzejmiedonosze=0.2.3
+
+# Code + deps (db/cdn/config come from volume mounts at runtime). Last on
+# purpose — see the comment on the config COPYs above.
+COPY --from=export --chown=www-data:www-data /build/export/ /var/www/uprzejmiedonosze.net/webapp/
+COPY --from=export /build/vendor/              /var/www/uprzejmiedonosze.net/vendor/
 
 # ── Worker (PHP CLI — face-detect-consumer daemon + cron jobs) ────────────────
 FROM php-base AS worker
@@ -196,10 +249,10 @@ RUN curl -sSLo /usr/local/bin/supercronic \
     "https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-${TARGETARCH}" && \
     chmod +x /usr/local/bin/supercronic
 
-COPY --from=builder /build/export/inc/               /var/www/uprzejmiedonosze.net/webapp/inc/
-COPY --from=builder /build/export/tools/             /var/www/uprzejmiedonosze.net/webapp/tools/
-COPY --from=builder /build/export/public/api/config/ /var/www/uprzejmiedonosze.net/webapp/public/api/config/
-COPY --from=builder /build/vendor/                   /var/www/uprzejmiedonosze.net/vendor/
+COPY --from=export /build/export/inc/               /var/www/uprzejmiedonosze.net/webapp/inc/
+COPY --from=export /build/export/tools/             /var/www/uprzejmiedonosze.net/webapp/tools/
+COPY --from=export /build/export/public/api/config/ /var/www/uprzejmiedonosze.net/webapp/public/api/config/
+COPY --from=export /build/vendor/                   /var/www/uprzejmiedonosze.net/vendor/
 COPY services/webapp/crontab                         /etc/crontab
 
 ENV APP_ROOT=/var/www/uprzejmiedonosze.net/

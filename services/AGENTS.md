@@ -63,10 +63,20 @@ staging `cdn2stg/`, prod `cdn2/` na serwerze, synchronizowane do Backblaze B2. P
 - Etapy `builder`/`webapp`/`worker` dziedziczą ze wspólnego `php-base` (`debian:bookworm-slim` + Sury PHP
   + wspólne rozszerzenia) — dzięki temu BuildKit współdzieli cache. Nie wracaj do osobnych obrazów `node:*`/`nginx:*`.
 - `webapp` instaluje `nginx` z repo nginx.org przypiętego `Pin-Priority` (Debianowe `nginx`/`nginx-light` = 1.22.1
-  i konfliktują). `builder` instaluje Node przez NodeSource. Rozszerzenia per etap (`-cli`, `-fpm`, `-opcache`, `-memcached`).
-- `build.sh` (staging/prod, w `docker build`): `config.env.php` → kopiowanie PHP/Twig/SQL/JSON (+ `tools/sm-parser.js`) →
-  Parcel (CSS `src/scss/index3.scss`, JS `src/js/*.js`, własny namer bez hashy) → sitemap z `SITEMAP-PRIORITY` →
-  `php -l` + twig-linter → fail2ban page → PHPUnit → `composer install --no-dev`.
+  i konfliktują; klucz jako `.asc`, bez gnupg). `builder` instaluje Node przez NodeSource. Rozszerzenia per etap
+  (`-cli`, `-fpm`, `-opcache`, `-memcached`). TeX to jawna lista pakietów (nie meta `texlive`); `python3`
+  w obrazie `webapp` pochodzi z `texlive-latex-extra` (twarda zależność), nie z naszych pakietów. Bez `vim`/`locales`.
+- **Build release (staging/prod/shadow) jest podzielony na etapy wg tego, co czytają** (`build.sh <krok>`):
+  `js` (tylko `src/js`), `images` (`src/img` + szablony), `php` (kopiowanie PHP/Twig/SQL/JSON, lint, PHPUnit,
+  `composer --no-dev` — testy lecą na `HOST=localhost` jak `make test`), `release` (jedyny etap z `ARG APP_HOST`/`APP_HTTPS`:
+  `config.env.php`, CSS, sitemap, fail2ban). Zmiana w samym PHP nie przebudowuje parcela, a przełączenie
+  staging→prod→shadow powtarza tylko `release`. **Nie przenoś `ARG APP_HOST` wyżej** — unieważni cache wszystkich
+  etapów za nim. Nowe wejście dla JS/obrazów/PHP → dopisz je do `COPY` właściwego etapu w Dockerfile.
+  W obrazach runtime kod idzie zawsze na końcu (po konfigu nginx/php.ini), żeby zmiana kodu nie powtarzała warstw konfiguracyjnych.
+- `EXPORT_STAGE` (ARG, domyślnie `release`): skąd `webapp`/`worker` kopiują kod. Dev ustawia `builder` w `compose.yml`
+  (pusty `export/`, kod z bind mounta) — dzięki temu `make dev` nie robi release builda. `scripts/sentry-release.sh`
+  wyciąga zbundlowany JS z etapu `js` (ten sam, z którego idzie obraz).
+- `build.sh` nie jest używany w dev: tam `watch.sh`.
 - `watch.sh` (dev): pierwszy pełny build, potem `parcel watch` (CSS/JS) + pętla `find -newer` (PHP/Twig/SQL/JSON).
 
 ## Pułapki środowiska dev

@@ -187,8 +187,8 @@ services:
       dockerfile: services/webapp/Dockerfile
       target: webapp
       args:
-        APP_HOST: localhost
-        APP_HTTPS: http
+        # dev: code comes from the ../export bind mount — skip the release build
+        EXPORT_STAGE: builder
     container_name: webapp
     ports:
       - 80-81:80-81

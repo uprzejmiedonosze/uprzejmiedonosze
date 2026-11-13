@@ -6,9 +6,9 @@
 # The sourcemaps themselves were already debug-id-injected *inside* the
 # image (services/webapp/build.sh, at build time) so the uploaded maps match
 # exactly what's running. This script only extracts that already-injected
-# export/public/js from a local (--load, not --push) build of the `builder`
-# target — same Dockerfile/args as the pushed webapp image, so buildx's
-# layer cache makes this near-instant — and talks to the Sentry API.
+# export/public/js from a local (--load, not --push) build of the `js`
+# stage — the very stage the pushed webapp image copies its bundles from, so
+# buildx's layer cache makes this near-instant — and talks to the Sentry API.
 #
 # Usage: bash scripts/sentry-release.sh <tag> <app_host> <app_https> <platform>
 set -euo pipefail
@@ -32,10 +32,11 @@ BUILDER_CTR="ud-builder-sentry-tmp-ctr"
 EXTRACT_DIR=$(mktemp -d)
 trap 'docker rm -f "${BUILDER_CTR}" >/dev/null 2>&1 || true; docker rmi "${BUILDER_IMAGE}" >/dev/null 2>&1 || true; rm -rf "${EXTRACT_DIR}"' EXIT
 
-echo "==> Extracting sourcemap-injected export/public/js from the builder stage"
+echo "==> Extracting sourcemap-injected export/public/js from the js stage"
+# The js stage is host-independent and is the very stage the pushed images copy
+# their bundles from, so this is a cache hit after build-push.sh.
 docker buildx build --platform "${PLATFORM}" --load \
-  -f services/webapp/Dockerfile --target builder \
-  --build-arg "APP_HOST=${APP_HOST}" --build-arg "APP_HTTPS=${APP_HTTPS}" \
+  -f services/webapp/Dockerfile --target js \
   -t "${BUILDER_IMAGE}" .
 docker create --name "${BUILDER_CTR}" "${BUILDER_IMAGE}" >/dev/null
 docker cp "${BUILDER_CTR}:/build/export/public/js" "${EXTRACT_DIR}/js"
