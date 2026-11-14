@@ -627,6 +627,14 @@ class Application extends JSONObject implements \JsonSerializable {
         return isset($this->video->url);
     }
 
+    /**
+     * Publiczny link do nagrania (zgłoszenie „na gorąco”) – wysyłany w treści maila zamiast załącznika. Ten sam mechanizm co
+     * zdjęcia: nginx (/cdn2/) serwuje plik z dysku, a po syncToS3() przez proxy z B2, więc adres się nie zmienia.
+     */
+    public function getVideoUrl(): ?string {
+        return $this->hasVideo() ? BASE_URL . $this->video->url : null;
+    }
+
     public function hasAnyImage(): bool {
         return isset($this->contextImage->url) || isset($this->carImage->url) || isset($this->thirdImage->url);
     }

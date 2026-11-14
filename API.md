@@ -247,8 +247,8 @@ Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or d
 ### POST `/api/rest/app/{appId}/video`
 
 Attaches a video to a „na gorąco” draft (multipart, field `video`; MP4/MOV/3GP checked by content, max 15 MB —
-`MAX_VIDEO_UPLOAD_BYTES` in `src/inc/API.php`). Replaces a previous video. The video is sent as a separate e-mail
-attachment (not inside the ZIP). 422 `field: video` when too large or not a video; 403 not the owner / not editable.
+`MAX_VIDEO_UPLOAD_BYTES` in `src/inc/API.php`). Replaces a previous video. The file is uploaded to B2 right away and the
+e-mail/PDF contain a link to it (`/cdn2/…,vi.mp4`, served by nginx from disk or proxied from B2), not an attachment. 422 `field: video` when too large or not a video; 403 not the owner / not editable.
 Response: the application, with `video: {url, mime, size}`.
 
 ### DELETE `/api/rest/app/{appId}/video`
@@ -260,7 +260,7 @@ Removes the video. Response: the application.
 Everything the confirmation step shows before sending/saving (web "Sprawdź przed wysłaniem"), built with the
 same methods as the web template so gendered phrases match: `body` (formal text + extensions + comment),
 `witness` ("Nie byłeś/byłaś świadkiem parkowania."; for non-parking categories "", for „na gorąco” "Byłeś naocznym
-świadkiem zdarzenia."), `video` (`{size, mime}` or null), `shortAddress`, `plateId`, `vehicleBox` (pixels, or null when
+świadkiem zdarzenia."), `video` (`{size, mime, url}` or null), `shortAddress`, `plateId`, `vehicleBox` (pixels, or null when
 the confirmed plate differs from the one read from the photo), `recipient {name, shortName, automated, unknown}`
 and `sender {name, email, address, msisdn, edelivery}`. Owner only.
 

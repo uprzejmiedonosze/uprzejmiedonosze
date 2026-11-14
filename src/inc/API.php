@@ -28,8 +28,8 @@ const MAX_IMAGE_UPLOAD_BYTES = 3 * 1_048_576;
 
 /**
  * Nagranie do zgłoszenia „na gorąco” (POST /api/rest/app/{id}/video). Aplikacja nagrywa tak, żeby plik zmieścił się
- * w limicie (../uprzejmiedonosze-pro/src/lib/adHoc.ts). Wideo idzie jako załącznik maila do KWP – base64 dokłada ~1/3,
- * więc 15 MB to ~20 MB w wiadomości (limit Mailgun 25 MB). Podnosząc limit, podnieś też post_max_size
+ * w limicie (../uprzejmiedonosze-pro/src/lib/adHoc.ts). Nagranie trafia na B2, a mail do KWP zawiera link do niego
+ * (Application::getVideoUrl()), nie załącznik. Podnosząc limit, podnieś też post_max_size
  * (services/webapp/Dockerfile) i client_max_body_size (services/webapp/nginx.conf).
  */
 const MAX_VIDEO_UPLOAD_BYTES = 15 * 1_048_576;
@@ -605,7 +605,7 @@ function videoUploadFromRequest(ServerRequestInterface $request): array {
 
 /**
  * Dołącza nagranie do szkicu zgłoszenia „na gorąco” (`video` = {url, mime, size}); poprzednie nagranie jest usuwane.
- * Plik leży obok zdjęć (`<cdn>/<user>/<appId>,vi.mp4`) i trafia do B2 razem z nimi (Application::syncToS3()).
+ * Plik leży obok zdjęć (`<cdn>/<user>/<appId>,vi.mp4`) i od razu trafia do B2; mail zawiera link do niego.
  * Zawsze sprząta plik tymczasowy.
  * @throws Exception 403 nie właściciel / zgłoszenie nieedytowalne, 500 zapis pliku
  */
@@ -632,6 +632,10 @@ function attachVideo(string $appId, string $tmpPath, string $mime, User $user): 
             $application->video->url = $key;
             $application->video->mime = $mime;
             $application->video->size = filesize(ROOT . $key);
+            // od razu do B2: mail zawiera link do nagrania, a nie załącznik. Kopia lokalna zostaje do syncToS3() (nginx serwuje
+            // najpierw z dysku, potem przez proxy z B2 – link działa w obu przypadkach). Nieudany upload ponowi syncToS3().
+            if (\storage\isEnabled() && !\storage\upload(ROOT . $key, $key))
+                log_error("Nie udało się wysłać nagrania {$application->id} do B2 – zostaje lokalnie do syncToS3()");
             return \app\save($application);
         });
     } finally {
@@ -870,7 +874,7 @@ function confirmationData(Application $application): array {
                 : "Nie $bylas świadkiem parkowania."),
         // zgłoszenie „na gorąco”: nagranie dołączone do maila (null = brak)
         'video' => $application->hasVideo()
-            ? ['size' => (int)($application->video->size ?? 0), 'mime' => $application->video->mime ?? null] : null,
+            ? ['size' => (int)($application->video->size ?? 0), 'mime' => $application->video->mime ?? null, 'url' => $application->getVideoUrl()] : null,
         'shortAddress' => $application->getShortAddress(),
         'plateId' => $application->carInfo->plateId ?? null,
         // the vehicle frame is only drawn when the plate on the photo is the one the user confirmed

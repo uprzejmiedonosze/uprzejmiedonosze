@@ -247,7 +247,11 @@ class AdHocReportTest extends DatabaseTestCase
         $tmp = tempnam(sys_get_temp_dir(), 'udtest');
         file_put_contents($tmp, $this->mp4Bytes());
 
+        // attachVideo() od razu wysyła nagranie do B2 (PutObject), a removeApplicationVideo() je stamtąd usuwa
+        $b2 = new MockHandler([new Result([]), new Result([])]);
+        \storage\b2(new S3('test', 'k', 's', 'https://example.test', 'us-east-1', ['handler' => $b2]));
         $withVideo = attachVideo($app->id, $tmp, 'video/mp4', $user);
+        $this->assertSame(1, 2 - count($b2), 'nagranie wysłane do B2');
         $this->assertFileDoesNotExist($tmp, 'plik tymczasowy sprzątnięty');
         $this->assertTrue($withVideo->hasVideo());
         $this->assertStringEndsWith(",vi.mp4", $withVideo->video->url);
@@ -256,8 +260,6 @@ class AdHocReportTest extends DatabaseTestCase
         $this->assertFileExists($local);
         $this->assertTrue(\app\get($app->id)->hasVideo(), 'zapisane w bazie');
 
-        \storage\b2(new S3('test', 'k', 's', 'https://example.test', 'us-east-1',
-            ['handler' => new MockHandler([new Result([])])]));
         $removed = removeApplicationVideo(\app\get($app->id));
         $this->assertFalse($removed->hasVideo());
         $this->assertFileDoesNotExist($local);
@@ -290,7 +292,8 @@ class AdHocReportTest extends DatabaseTestCase
         $app->video->size = 123;
 
         $email = (new \MailGun())->formatEmail($app, false);
-        $this->assertStringContainsString('W załączeniu znajduje się zgłoszenie oraz nagranie wideo.', $email);
+        // nagranie nie jest załącznikiem – link przez /cdn2/ (lokalnie albo proxy z B2)
+        $this->assertStringContainsString('W załączeniu znajduje się zgłoszenie. Nagranie wideo zdarzenia: ' . BASE_URL . "cdn2/x/{$app->id},vi.mp4", $email);
         $this->assertStringContainsString('samodzielnie i nie zostało ono zmanipulowane', $email);
         $this->assertStringContainsString('art. 60 ust. 2 pkt 2 prd', $email);
         $this->assertStringNotContainsString('parkowania', $email);
@@ -299,7 +302,7 @@ class AdHocReportTest extends DatabaseTestCase
 
         $confirmation = confirmationData($app);
         $this->assertStringContainsString('naocznym świadkiem zdarzenia', $confirmation['witness']);
-        $this->assertSame(['size' => 123, 'mime' => 'video/mp4'], $confirmation['video']);
+        $this->assertSame(['size' => 123, 'mime' => 'video/mp4', 'url' => BASE_URL . "cdn2/x/{$app->id},vi.mp4"], $confirmation['video']);
     }
 
     public function testTextsForAdHocReportWithoutMaterial(): void

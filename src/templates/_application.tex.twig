@@ -46,10 +46,10 @@ Adres oraz zdjęcia można ,,kliknąć'' aby uzyskać więcej informacji.}.
     Jestem {{ config.sex.swiadoma }} odpowiedzialności karnej za złożenie fałszywego oświadczenia, wynikającej z art. 233 kk.
 {% endif %}
 {% if app.hasAnyImage and app.hasVideo %}
-Sytuacja jest widoczna na załączonych zdjęciach i nagraniu wideo (osobny załącznik wiadomości).
+Sytuacja jest widoczna na załączonych zdjęciach i na nagraniu wideo: \url{ {{- app.getVideoUrl -}} }.
 Zdjęcia i nagranie {{ app.guessUserSex.wykonalam }} samodzielnie i nie zostały one zmanipulowane.
 {% elseif app.hasVideo %}
-Sytuacja jest widoczna na nagraniu wideo (osobny załącznik wiadomości).
+Sytuacja jest widoczna na nagraniu wideo: \url{ {{- app.getVideoUrl -}} }.
 Nagranie {{ app.guessUserSex.wykonalam }} samodzielnie i nie zostało ono zmanipulowane.
 {% elseif app.hasAnyImage %}
 Sytuacja jest widoczna na załączonych zdjęciach.

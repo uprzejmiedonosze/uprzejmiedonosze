@@ -72,12 +72,7 @@ class MailGun extends CityAPI {
                 [$fileatt, $fileattname] = \app\toZip($application);
                 $message->attachFromPath($fileatt, $fileattname);
             }
-            if ($application->hasVideo()) { // zgłoszenie „na gorąco”: nagranie jako osobny załącznik (nie w ZIP-ie)
-                \storage\ensure_local($application->video->url);
-                $ext = pathinfo($application->video->url, PATHINFO_EXTENSION);
-                $message->attachFromPath(ROOT . $application->video->url,
-                    $application->getAppFilename(".$ext", 'Nagranie_'), $application->video->mime);
-            }
+            // nagranie zgłoszenia „na gorąco” nie jest załącznikiem – treść maila zawiera link (Application::getVideoUrl())
 
             $application->setStatus('sending');
             $application->sent = new JSONObject();
