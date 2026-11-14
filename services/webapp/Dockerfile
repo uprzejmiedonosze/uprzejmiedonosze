@@ -194,8 +194,8 @@ COPY services/webapp/init.sh                      /root/
 # (regular, expected churn — not a signal worth a Papertrail line), while
 # keeping real fpm problems (e.g. "server reached pm.max_children") visible.
 RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
-        -e "s/^upload_max_filesize.*/upload_max_filesize = 4M/" \
-        -e "s/^post_max_size.*/post_max_size = 5M/" \
+        -e "s/^upload_max_filesize.*/upload_max_filesize = 16M/" \
+        -e "s/^post_max_size.*/post_max_size = 17M/" \
         -e "s/^session.name.*/session.name = UDSESSIONID/" \
         -e "s/^session.save_handler.*/session.save_handler = memcached/" \
         /etc/php/8.4/fpm/php.ini && \

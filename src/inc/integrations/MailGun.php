@@ -68,8 +68,16 @@ class MailGun extends CityAPI {
 
             [$fileatt, $fileattname] = \app\toPdf($application);
             $message->attachFromPath($fileatt, $fileattname);
-            [$fileatt, $fileattname] = \app\toZip($application);
-            $message->attachFromPath($fileatt, $fileattname);
+            if ($application->hasAnyImage()) {
+                [$fileatt, $fileattname] = \app\toZip($application);
+                $message->attachFromPath($fileatt, $fileattname);
+            }
+            if ($application->hasVideo()) { // zgłoszenie „na gorąco”: nagranie jako osobny załącznik (nie w ZIP-ie)
+                \storage\ensure_local($application->video->url);
+                $ext = pathinfo($application->video->url, PATHINFO_EXTENSION);
+                $message->attachFromPath(ROOT . $application->video->url,
+                    $application->getAppFilename(".$ext", 'Nagranie_'), $application->video->mime);
+            }
 
             $application->setStatus('sending');
             $application->sent = new JSONObject();

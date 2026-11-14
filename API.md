@@ -28,6 +28,8 @@ Requires authorization.
 ### GET `/api/rest/user/`
 
 Returns current user data, including `lastLocation` (`"lat,lng"` of the last report, otherwise the geocoded home address; absent when neither is known) (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats`, `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`) and `sexIdentifier` (`"m"`/`"f"`: the stored choice, else guessed from the name — what the account edit form preselects).
+`features` — server-side switches for features in testing: `{ adHocReports: bool }` (the `beta` categories and the
+„na gorąco” flow; currently `true` everywhere except production). Clients show `beta` categories only when it is `true`.
 
 ### PATCH `/api/rest/user/`
 
@@ -130,7 +132,15 @@ Returns application data by id.
 ### POST `/api/rest/app/{appId}`
 
 Saves the report form (web: "Dalej" → `/app/confirm`); status becomes `ready`. Requires both
-photos to be uploaded already (otherwise 409).
+photos to be uploaded already (otherwise 409) — except „na gorąco” categories (`adHoc: true` in categories.json), which
+need no photos (a video, photos or just the witness statement).
+
+Category rules (422 with `field`):
+
+  * unknown category or a `beta` one while `features.adHocReports` is off → `category`
+  * `adHoc` category: `datetime` at most 24 h old → `datetime`; the report always goes to the voivodeship
+    „Stop agresji drogowej” mailbox (never a local police station or SM), `stopAgresji` is ignored
+  * a video attached to a non-`adHoc` category → `video`
 
 POST params (JSON body):
 
@@ -234,11 +244,23 @@ crop. The UD Pro app cuts it from the full-resolution original (the server only 
 
 Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or drop the optional third one).
 
+### POST `/api/rest/app/{appId}/video`
+
+Attaches a video to a „na gorąco” draft (multipart, field `video`; MP4/MOV/3GP checked by content, max 15 MB —
+`MAX_VIDEO_UPLOAD_BYTES` in `src/inc/API.php`). Replaces a previous video. The video is sent as a separate e-mail
+attachment (not inside the ZIP). 422 `field: video` when too large or not a video; 403 not the owner / not editable.
+Response: the application, with `video: {url, mime, size}`.
+
+### DELETE `/api/rest/app/{appId}/video`
+
+Removes the video. Response: the application.
+
 ### GET `/api/rest/app/{appId}/confirmation`
 
 Everything the confirmation step shows before sending/saving (web "Sprawdź przed wysłaniem"), built with the
 same methods as the web template so gendered phrases match: `body` (formal text + extensions + comment),
-`witness` ("Nie byłeś/byłaś świadkiem parkowania."), `shortAddress`, `plateId`, `vehicleBox` (pixels, or null when
+`witness` ("Nie byłeś/byłaś świadkiem parkowania."; for non-parking categories "", for „na gorąco” "Byłeś naocznym
+świadkiem zdarzenia."), `video` (`{size, mime}` or null), `shortAddress`, `plateId`, `vehicleBox` (pixels, or null when
 the confirmed plate differs from the one read from the photo), `recipient {name, shortName, automated, unknown}`
 and `sender {name, email, address, msisdn, edelivery}`. Owner only.
 

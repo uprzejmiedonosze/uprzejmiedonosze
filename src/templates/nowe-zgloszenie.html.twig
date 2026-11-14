@@ -188,7 +188,8 @@
         {# --- Wszystkie kategorie podzielone na grupy --- #}
         <div id="allCategories" {% if not showAll %}style="display:none"{% endif %}>
         {% for groupId, groupDef in categoryGroups %}
-        {% if groupId != 0 %}
+        {# grupy `beta` (np. „Stan techniczny i tablice”) zawierają tylko kategorie testowane w aplikacji #}
+        {% if groupId != 0 and not (groupDef.beta ?? false) %}
             <div class="category-group">
                 <h4>{{ groupDef.name }}</h4>
                 <div class="grid">

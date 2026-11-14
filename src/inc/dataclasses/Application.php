@@ -340,7 +340,10 @@ class Application extends JSONObject implements \JsonSerializable {
 
         // can update
         if ($this->stopAgresji()) {
-            $this->smCity = \StopAgresji::guess($this->address);
+            // zgłoszenia „na gorąco” (z nagraniem) idą na wojewódzką skrzynkę SAD, nie do komisariatu
+            $this->smCity = $this->isAdHoc()
+                ? \StopAgresji::guessVoivodeship($this->address)
+                : \StopAgresji::guess($this->address);
             return \SM::resolve($this->smCity, true);
         }
         $this->smCity = \SM::guess($this->address);
@@ -594,8 +597,38 @@ class Application extends JSONObject implements \JsonSerializable {
         return isset($this->number);
     }
 
-    public function hasRequiredImages(): bool {
+    /**
+     * Zgłoszenie „na gorąco” nie wymaga zdjęć (wystarczy nagranie albo relacja świadka). `$category` pozwala sprawdzić
+     * warunek dla kategorii, która dopiero zostanie zapisana (updateApplication()).
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function hasRequiredImages(?int $category = null): bool {
+        global $CATEGORIES;
+        $category ??= isset($this->category) ? (int)$this->category : null;
+        if ($category !== null && isset($CATEGORIES[$category]) && $CATEGORIES[$category]->isAdHoc())
+            return true;
         return isset($this->contextImage->url) && isset($this->carImage->url);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function isAdHoc(): bool {
+        global $CATEGORIES;
+        return isset($this->category) && isset($CATEGORIES[$this->category]) && $CATEGORIES[$this->category]->isAdHoc();
+    }
+
+    /** Czy zgłoszenie dotyczy parkowania (wtedy treść wspomina o świadku momentu parkowania i zdjęciach). */
+    public function isParkingCategory(): bool {
+        return !isset($this->category) || $this->getCategory()->isParking();
+    }
+
+    public function hasVideo(): bool {
+        return isset($this->video->url);
+    }
+
+    public function hasAnyImage(): bool {
+        return isset($this->contextImage->url) || isset($this->carImage->url) || isset($this->thirdImage->url);
     }
 
     public function getFirstName(){
@@ -914,7 +947,9 @@ class Application extends JSONObject implements \JsonSerializable {
      * No-op when S3 storage is not enabled.
      */
     public function syncToS3(): void {
-        if (!\storage\isEnabled() || !isset($this->carImage->url)) return;
+        // zgłoszenie „na gorąco” może mieć samo nagranie (bez zdjęcia auta) – plik leży pod tym samym prefiksem
+        $baseKey = $this->carImage->url ?? $this->video->url ?? null;
+        if (!\storage\isEnabled() || $baseKey === null) return;
 
         // Prevent parallel sync for the same app using a non-blocking semaphore.
         $semKey = "syncToS3:{$this->id}";
@@ -923,7 +958,7 @@ class Application extends JSONObject implements \JsonSerializable {
         try {
             // carImage->url is like "cdn2/123/abc,ca.jpg".
             // strtok gives us "cdn2/123/abc", which is the perfect base for glob.
-            $basePath = strtok($this->carImage->url, ',');
+            $basePath = strtok($baseKey, ',');
             if (strpbrk($basePath, '*?[') !== false) return;
             $pattern  = ROOT . $basePath . '*';
             $files    = glob($pattern);

@@ -13,10 +13,13 @@ function toZip(Application &$application): array{
     if ($zip->open($fullPath, \ZIPARCHIVE::CREATE | \ZIPARCHIVE::OVERWRITE) !== TRUE) {
         throw new \Exception("Błąd tworzenia archiwum ZIP.");
     }
-    $zip->addFile(ROOT . $application->contextImage->url,
-        $application->getAppFilename('a.jpg'));
-    $zip->addFile(ROOT . $application->carImage->url,
-        $application->getAppFilename('b.jpg'));
+    // zgłoszenie „na gorąco” może mieć tylko część zdjęć (albo żadnego – wtedy MailGun nie dołącza ZIP-a)
+    if (isset($application->contextImage->url))
+        $zip->addFile(ROOT . $application->contextImage->url,
+            $application->getAppFilename('a.jpg'));
+    if (isset($application->carImage->url))
+        $zip->addFile(ROOT . $application->carImage->url,
+            $application->getAppFilename('b.jpg'));
 
     if (isset($application->thirdImage->url))
         $zip->addFile(ROOT . $application->thirdImage->url,

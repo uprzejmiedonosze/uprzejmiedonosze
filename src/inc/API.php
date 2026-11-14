@@ -27,6 +27,18 @@ const JPEG_QUALITY = 85;
 const MAX_IMAGE_UPLOAD_BYTES = 3 * 1_048_576;
 
 /**
+ * Nagranie do zgłoszenia „na gorąco” (POST /api/rest/app/{id}/video). Aplikacja nagrywa tak, żeby plik zmieścił się
+ * w limicie (../uprzejmiedonosze-pro/src/lib/adHoc.ts). Wideo idzie jako załącznik maila do KWP – base64 dokłada ~1/3,
+ * więc 15 MB to ~20 MB w wiadomości (limit Mailgun 25 MB). Podnosząc limit, podnieś też post_max_size
+ * (services/webapp/Dockerfile) i client_max_body_size (services/webapp/nginx.conf).
+ */
+const MAX_VIDEO_UPLOAD_BYTES = 15 * 1_048_576;
+const VIDEO_TYPES = ['video/mp4' => 'mp4', 'video/quicktime' => 'mov', 'video/3gpp' => '3gp'];
+
+/** Ile godzin wstecz może sięgać data zgłoszenia „na gorąco” (data z chwili zgłoszenia w aplikacji). */
+const AD_HOC_MAX_AGE_HOURS = 24;
+
+/**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 function updateApplication(
@@ -51,9 +63,18 @@ function updateApplication(
         throw new ForbiddenException("Zgłoszenie '{$application->id}' w stanie '{$application->status}' nie może być aktualizowane");
     }
 
-    if (!$application->hasRequiredImages()) {
+    /** @var array<int, Category> $CATEGORIES */
+    global $CATEGORIES;
+    // kategoria w fazie testów (`beta`) jest odrzucana na produkcji niezależnie od klienta (web, REST, MCP)
+    if (!isset($CATEGORIES[$category]) || !$CATEGORIES[$category]->isAvailable())
+        throw new \ValidationException('category', 'Wybierz rodzaj wykroczenia z listy');
+    $adHoc = $CATEGORIES[$category]->isAdHoc();
+
+    if (!$application->hasRequiredImages($category)) {
         throw new NotSendableException("Zgłoszenie '{$application->id}' nie posiada wymaganych zdjęć");
     }
+    if ($application->hasVideo() && !$adHoc)
+        throw new \ValidationException('video', 'Nagranie wideo można dołączyć tylko do zgłoszenia na gorąco – usuń je albo zmień kategorię');
 
     // Server-side mirror of the web form checks (src/js/new-app/validate-form.js,
     // lib/validation.js), so every client (web, REST/mobile) gets the same rules.
@@ -79,6 +100,9 @@ function updateApplication(
     // zapisie niezmienionej daty (edycja starego zgłoszenia, patrz komentarz wyżej)
     if ($dateParsed < (new DateTime())->modify('-7 months') && date_format($dateParsed, DT_FORMAT) !== ($application->date ?? null))
         throw new \ValidationException('datetime', 'Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!');
+    // zgłoszenie „na gorąco” składa się w chwili zdarzenia (data z aplikacji, nie ze zdjęcia)
+    if ($adHoc && $dateParsed < (new DateTime())->modify('-' . AD_HOC_MAX_AGE_HOURS . ' hours'))
+        throw new \ValidationException('datetime', 'Zgłoszenie na gorąco musi dotyczyć zdarzenia sprzed najwyżej ' . AD_HOC_MAX_AGE_HOURS . ' godzin');
     if ($category === 0 && mb_strlen(trim((string)$comment)) <= 10)
         throw new \ValidationException('comment', 'Wybierz rodzaj wykroczenia z listy albo opisz je w polu komentarza (min. 11 znaków)');
 
@@ -116,12 +140,15 @@ function updateApplication(
         \user\save($user);
     }
 
+    // „na gorąco” = zawsze wojewódzka skrzynka SAD (Application::guessSMData() wybiera ją po kategorii);
+    // po updateUserData(), które przywraca preferencję konta
+    if ($adHoc)
+        $application->stopAgresji = true;
+
     /** @var \SM|\StopAgresji $sm */
     $sm = $application->guessSMData(true); // stores sm city inside the object
 
-    /** @var array<int, Category> $CATEGORIES */
-    global $CATEGORIES;
-    $application->stopAgresjiForced = false;
+    $application->stopAgresjiForced = $adHoc;
     if ($CATEGORIES[$category]->isStopAgresjiOnly() && !$sm->isPolice()) {
         $application->stopAgresji = true;
         $application->stopAgresjiForced = true;
@@ -545,6 +572,89 @@ function removeApplicationImage(Application $app, string $imageId): Application 
     return $app;
 }
 
+/**
+ * Nagranie z multipartu (pole `video`) → plik tymczasowy. Typ sprawdzany po zawartości (finfo), nie po nagłówku klienta.
+ * @return array{path: string, mime: string}
+ * @throws MissingParamException brak pliku; \ValidationException za duży / nieobsługiwany format
+ */
+function videoUploadFromRequest(ServerRequestInterface $request): array {
+    $file = $request->getUploadedFiles()['video'] ?? null;
+    if ($file && in_array($file->getError(), [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true))
+        throw new \ValidationException('video', 'Nagranie jest za duże (limit ' . (MAX_VIDEO_UPLOAD_BYTES / 1_048_576) . ' MB) – nagraj krótszy film');
+    if (!$file || $file->getError() !== UPLOAD_ERR_OK)
+        throw new MissingParamException('video');
+    if ((int)$file->getSize() > MAX_VIDEO_UPLOAD_BYTES)
+        throw new \ValidationException('video', 'Nagranie jest za duże (limit ' . (MAX_VIDEO_UPLOAD_BYTES / 1_048_576) . ' MB) – nagraj krótszy film');
+
+    // kopia strumienia zamiast moveTo(): działa tak samo dla uploadu z SAPI i dla strumienia (testy), bez wczytywania
+    // całego pliku do pamięci
+    $tmp = tempnam(sys_get_temp_dir(), 'udvideo');
+    $out = fopen($tmp, 'wb');
+    $stream = $file->getStream();
+    if ($stream->isSeekable()) $stream->rewind();
+    while (!$stream->eof())
+        fwrite($out, $stream->read(1_048_576));
+    fclose($out);
+    $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($tmp) ?: '';
+    if (!isset(VIDEO_TYPES[$mime])) {
+        @unlink($tmp); // nosemgrep: php.lang.security.unlink-use.unlink-use
+        throw new \ValidationException('video', "Nieobsługiwany format nagrania ($mime) – wyślij film MP4");
+    }
+    return ['path' => $tmp, 'mime' => $mime];
+}
+
+/**
+ * Dołącza nagranie do szkicu zgłoszenia „na gorąco” (`video` = {url, mime, size}); poprzednie nagranie jest usuwane.
+ * Plik leży obok zdjęć (`<cdn>/<user>/<appId>,vi.mp4`) i trafia do B2 razem z nimi (Application::syncToS3()).
+ * Zawsze sprząta plik tymczasowy.
+ * @throws Exception 403 nie właściciel / zgłoszenie nieedytowalne, 500 zapis pliku
+ */
+function attachVideo(string $appId, string $tmpPath, string $mime, User $user): Application {
+    try {
+        return \semaphore\withLock($appId, "video", function () use ($appId, $tmpPath, $mime, $user) {
+            $application = \app\get($appId);
+            if ($application->email !== $user->getEmail())
+                throw new Exception("Nie posiadasz zgłoszenia o ID $appId", 403);
+            if (!$application->isEditable())
+                throw new Exception("Zgłoszenie $appId nie może być edytowane", 403);
+            if ($application->hasVideo())
+                removeApplicationVideo($application);
+
+            $baseDir = \storage\cdnPrefix() . '/' . $application->getUserNumber();
+            if (!file_exists(ROOT . $baseDir))
+                mkdir(ROOT . $baseDir, 0755, true);
+            $key = "$baseDir/{$application->id},vi." . VIDEO_TYPES[$mime];
+            if (!rename($tmpPath, ROOT . $key))
+                throw new Exception('Nie udało się zapisać nagrania', 500);
+            @chmod(ROOT . $key, 0644);
+
+            $application->video = new stdClass();
+            $application->video->url = $key;
+            $application->video->mime = $mime;
+            $application->video->size = filesize(ROOT . $key);
+            return \app\save($application);
+        });
+    } finally {
+        if (file_exists($tmpPath))
+            @unlink($tmpPath); // nosemgrep: php.lang.security.unlink-use.unlink-use
+    }
+}
+
+/**
+ * Usuwa nagranie zgłoszenia (plik lokalny i kopię w B2). Does NOT save.
+ */
+function removeApplicationVideo(Application $app): Application {
+    if (!$app->hasVideo())
+        return $app;
+    $allowedBase = realpath(ROOT . \storage\cdnPrefix());
+    $file = realpath(ROOT . $app->video->url);
+    if ($file && $allowedBase && str_starts_with($file, $allowedBase . '/'))
+        @unlink($file); // nosemgrep: php.lang.security.unlink-use.unlink-use
+    \storage\delete($app->video->url);
+    unset($app->video);
+    return $app;
+}
+
 
 /**
  * Who the report will go to: shared by every REST response that returns an
@@ -752,9 +862,15 @@ function confirmationData(Application $application): array {
         // category formal text + extensions + the user's comment (plain text; the web only turns URLs into links)
         'body' => trim($application->getCategory()->formal . ' ' . $application->getExtensionsText()
             . ' ' . ($application->userComment ?? '')),
-        'witness' => $witness
-            ? mb_convert_case($bylas, MB_CASE_TITLE_SIMPLE) . ' świadkiem parkowania.'
-            : "Nie $bylas świadkiem parkowania.",
+        // tylko kategorie parkingowe mówią o świadku parkowania; „na gorąco” zgłasza naoczny świadek zdarzenia
+        'witness' => !$application->isParkingCategory()
+            ? ($application->isAdHoc() ? mb_convert_case($bylas, MB_CASE_TITLE_SIMPLE) . ' naocznym świadkiem zdarzenia.' : '')
+            : ($witness
+                ? mb_convert_case($bylas, MB_CASE_TITLE_SIMPLE) . ' świadkiem parkowania.'
+                : "Nie $bylas świadkiem parkowania."),
+        // zgłoszenie „na gorąco”: nagranie dołączone do maila (null = brak)
+        'video' => $application->hasVideo()
+            ? ['size' => (int)($application->video->size ?? 0), 'mime' => $application->video->mime ?? null] : null,
         'shortAddress' => $application->getShortAddress(),
         'plateId' => $application->carInfo->plateId ?? null,
         // the vehicle frame is only drawn when the plate on the photo is the one the user confirmed

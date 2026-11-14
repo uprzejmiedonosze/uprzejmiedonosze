@@ -23,10 +23,18 @@ class StopAgresji extends SM {
    * @SuppressWarnings(PHPMD.CamelCaseVariableName)
    */
   public static function guess(object $address): string  { // stop agresji
-    global $STOP_AGRESJI;
-
     if ($key = \Police::guess($address))
       return $key;
+    return self::guessVoivodeship($address);
+  }
+
+  /**
+   * Wojewódzka (albo miejska, np. KSP) skrzynka „Stop agresji drogowej”, z pominięciem komisariatów.
+   * Tu trafiają zgłoszenia „na gorąco” (Category::isAdHoc()), także z nagraniem wideo.
+   * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+   */
+  public static function guessVoivodeship(object $address): string {
+    global $STOP_AGRESJI;
 
     // a handful of city-level aliases (e.g. Warszawa) live directly in
     // stop-agresji.json rather than police.json, so Police::guess() alone

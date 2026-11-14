@@ -32,7 +32,7 @@
             {% if (app.userComment ?? false) and not app.isEncrypted %}
                 {{ app.getAHrefedComment | raw }}
             {% endif %}
-            {% if not (app.statements.witness ?? false) %}
+            {% if app.isParkingCategory and not (app.statements.witness ?? false) %}
                 Nie {{ app.guessUserSex.bylam }} świadkiem samego momentu parkowania.
             {% endif %}
         </p>

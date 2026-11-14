@@ -409,5 +409,121 @@
         "contextImageHint": "",
         "carImageHint": "",
         "stopAgresjiOnly": false
+    },
+    "27": {
+        "title": "Tablica rejestracyjna",
+        "short": "Tablica zakryta, ozdobiona, podgięta albo przeniesiona w inne miejsce",
+        "formal": "Tablica rejestracyjna pojazdu była zakryta, ozdobiona lub zamontowana w sposób ograniczający jej czytelność albo w innym miejscu niż konstrukcyjnie do tego przeznaczone (art. 60 ust. 1 pkt 2, 3 i 3a oraz ust. 1a prd).",
+        "informal": "Nieczytelna tablica rejestracyjna",
+        "desc": "<p>Tablica rejestracyjna nie może być zakryta, ozdobiona ramką z napisami, podgięta ani przeniesiona w inne miejsce niż konstrukcyjnie do tego przeznaczone (np. z boku motocykla). Utrzymanie czytelności tablicy jest obowiązkiem kierującego.</p>",
+        "law": "art. 60. 1. Zabrania się: 2) zakrywania świateł oraz urządzeń sygnalizacyjnych, tablic rejestracyjnych [...]; 3) ozdabiania tablic rejestracyjnych oraz umieszczania z przodu lub z tyłu pojazdu znaków, napisów lub przedmiotów, które ograniczają czytelność tych tablic; 3a) umieszczania na pojeździe tablic (tablicy) rejestracyjnych w innym miejscu niż konstrukcyjnie do tego przeznaczone.",
+        "price": "500 zł",
+        "points": 0,
+        "mandate": 500,
+        "contextImageHint": "Dodaj zdjęcie całego pojazdu.",
+        "carImageHint": "Dodaj zbliżenie tablicy rejestracyjnej.",
+        "stopAgresjiOnly": true,
+        "parking": false,
+        "beta": true,
+        "order": 1,
+        "betaGroups": [
+            6
+        ]
+    },
+    "28": {
+        "title": "Wyciek płynów",
+        "short": "Z pojazdu kapią płyny eksploatacyjne (olej, paliwo, płyn chłodniczy)",
+        "formal": "Z pojazdu wyraźnie wyciekały materiały eksploatacyjne w postaci spadających kropel (§ 9 ust. 1 pkt 9 rozporządzenia w sprawie warunków technicznych pojazdów, art. 66 ust. 1 prd). Wnoszę o kontrolę stanu technicznego pojazdu i – w razie potwierdzenia nieprawidłowości – zatrzymanie dowodu rejestracyjnego oraz skierowanie pojazdu na dodatkowe badanie techniczne (art. 132 ust. 1 pkt 1 i art. 81 ust. 11 pkt 1 lit. a prd).",
+        "informal": "Wyciek płynów eksploatacyjnych",
+        "desc": "<p>Pojazd nie może tracić płynów eksploatacyjnych w postaci spadających kropel. Policja może skontrolować pojazd i skierować go na dodatkowe badanie techniczne. Straż miejska nie ma takich uprawnień, dlatego zgłoszenie trafia do Policji.</p>",
+        "law": "§ 9. 1. Pojazd powinien być tak zbudowany, wyposażony i utrzymany, aby: 9) nie występowały wyraźne wycieki w postaci spadających kropel materiałów eksploatacyjnych z zespołów i układów pojazdów (rozporządzenie w sprawie warunków technicznych pojazdów).",
+        "price": "do 3 000 zł + dodatkowe badanie techniczne",
+        "points": 0,
+        "mandate": 500,
+        "contextImageHint": "Dodaj zdjęcie plamy pod pojazdem.",
+        "carImageHint": "Dodaj zdjęcie całego pojazdu z widoczną tablicą rejestracyjną.",
+        "stopAgresjiOnly": true,
+        "parking": false,
+        "beta": true,
+        "order": 2,
+        "betaGroups": [
+            6
+        ]
+    },
+    "29": {
+        "title": "Elementy wystające",
+        "short": "Ostre lub spiczaste elementy na pojeździe, koła wystające poza błotniki",
+        "formal": "Na pojeździe znajdowały się wystające spiczaste albo ostre części lub przedmioty, które mogą spowodować uszkodzenie ciała innych uczestników ruchu (art. 66 ust. 4 pkt 1 prd), lub koła pojazdu wystawały poza błotniki (§ 11 ust. 1 pkt 10 rozporządzenia w sprawie warunków technicznych pojazdów). Wnoszę o kontrolę stanu technicznego pojazdu i – w razie potwierdzenia nieprawidłowości – zatrzymanie dowodu rejestracyjnego oraz skierowanie pojazdu na dodatkowe badanie techniczne (art. 132 ust. 1 pkt 1 i art. 81 ust. 11 pkt 1 lit. a prd).",
+        "informal": "Elementy wystające zagrażające pieszym",
+        "desc": "<p>Na pojeździe nie wolno montować wystających ostrych ani spiczastych elementów (np. kolców na kołach, ostrych nakładek), które mogą zranić pieszych lub innych uczestników ruchu. Błotniki muszą zakrywać całą szerokość opony.</p>",
+        "law": "art. 66. 4. Zabrania się: 1) umieszczania wewnątrz i zewnątrz pojazdu wystających spiczastych albo ostrych części lub przedmiotów, które mogą spowodować uszkodzenie ciała osób jadących w pojeździe lub innych uczestników ruchu.",
+        "price": "do 3 000 zł + dodatkowe badanie techniczne",
+        "points": 0,
+        "mandate": 500,
+        "contextImageHint": "Dodaj zdjęcie całego pojazdu.",
+        "carImageHint": "Dodaj zbliżenie wystającego elementu.",
+        "stopAgresjiOnly": true,
+        "parking": false,
+        "beta": true,
+        "order": 3,
+        "betaGroups": [
+            6
+        ]
+    },
+    "30": {
+        "title": "Przyciemnione szyby lub światła",
+        "short": "Przyciemniona przednia szyba, przednie boczne szyby albo światła",
+        "formal": "Przednie szyby lub światła pojazdu były przyciemnione (oklejone folią lub zabarwione), co ogranicza przepuszczalność światła poniżej wymaganej i narusza § 8 ust. 5 pkt 4 oraz § 10 rozporządzenia w sprawie warunków technicznych pojazdów, a także art. 60 ust. 1 pkt 2 prd. Wnoszę o kontrolę stanu technicznego pojazdu i – w razie potwierdzenia nieprawidłowości – zatrzymanie dowodu rejestracyjnego oraz skierowanie pojazdu na dodatkowe badanie techniczne (art. 132 ust. 1 pkt 1 i art. 81 ust. 11 pkt 1 lit. a prd).",
+        "informal": "Przyciemnione szyby lub światła",
+        "desc": "<p>Przednia szyba i przednie boczne szyby muszą przepuszczać co najmniej 70% światła. Przyciemnianie lub zaklejanie świateł jest zabronione. Ostateczny pomiar wykonuje Policja albo diagnosta.</p>",
+        "law": "§ 8. 5. Szyby pojazdu: 4) przednie i przednie boczne powinny mieć współczynnik przepuszczania światła nie mniejszy niż 70% (rozporządzenie w sprawie warunków technicznych pojazdów).",
+        "price": "do 3 000 zł + dodatkowe badanie techniczne",
+        "points": 0,
+        "mandate": 500,
+        "contextImageHint": "Dodaj zdjęcie całego pojazdu.",
+        "carImageHint": "Dodaj zdjęcie przyciemnionych szyb lub świateł.",
+        "stopAgresjiOnly": true,
+        "parking": false,
+        "beta": true,
+        "order": 4,
+        "betaGroups": [
+            6
+        ]
+    },
+    "31": {
+        "title": "Hałas i spaliny w czasie jazdy",
+        "short": "Głośny wydech, „strzały”, gazowanie albo kopcenie w czasie jazdy",
+        "formal": "Kierujący używał pojazdu w sposób powodujący uciążliwości związane z nadmiernym hałasem lub nadmierną emisją spalin (art. 60 ust. 2 pkt 2 prd). Charakter hałasu wskazuje na możliwą przeróbkę układu wydechowego (§ 9 ust. 1 pkt 1 i § 11 ust. 1 pkt 15 rozporządzenia w sprawie warunków technicznych pojazdów). Wnoszę o ukaranie kierującego oraz o kontrolę stanu technicznego pojazdu i – w razie potwierdzenia nieprawidłowości – zatrzymanie dowodu rejestracyjnego oraz skierowanie pojazdu na dodatkowe badanie techniczne (art. 132 ust. 1 pkt 1 i art. 81 ust. 11 pkt 1 lit. a prd).",
+        "informal": "Hałas i spaliny w czasie jazdy",
+        "desc": "<p>Zabrania się używania pojazdu w sposób powodujący uciążliwości związane z nadmiernym hałasem lub nadmierną emisją spalin. Przepis nie wymaga pomiaru – wystarczy relacja świadka i nagranie.</p>",
+        "law": "art. 60. 2. Zabrania się kierującemu: 2) używania pojazdu w sposób powodujący uciążliwości związane z nadmierną emisją spalin do środowiska lub nadmiernym hałasem.",
+        "price": "do 300 zł + dodatkowe badanie techniczne",
+        "points": 0,
+        "mandate": 300,
+        "contextImageHint": "Nagraj film z dźwiękiem albo zrób zdjęcie pojazdu.",
+        "carImageHint": "Uchwyć tablicę rejestracyjną.",
+        "stopAgresjiOnly": true,
+        "parking": false,
+        "adHoc": true,
+        "beta": true,
+        "order": 1
+    },
+    "32": {
+        "title": "Drift lub jazda na jednym kole",
+        "short": "Celowy poślizg albo jazda z oderwanym kołem (np. na tylnym kole motocykla)",
+        "formal": "Kierujący celowo wprowadzał pojazd w poślizg (drift) lub doprowadzał do utraty styczności koła z nawierzchnią (art. 60 ust. 5 prd, art. 86c kw). Wnoszę o ukaranie kierującego.",
+        "informal": "Drift lub jazda na jednym kole",
+        "desc": "<p>Od 2026 r. zabronione jest celowe wprowadzanie pojazdu w poślizg (drift) i jazda z kołem oderwanym od nawierzchni, np. na tylnym kole motocykla. Grozi za to grzywna nie niższa niż 1500 zł i zatrzymanie prawa jazdy.</p>",
+        "law": "art. 60. 5. Zabrania się kierowania pojazdem silnikowym lub motorowerem w sposób: 1) powodujący celowy poślizg kół (drift); 2) powodujący celową utratę styczności z nawierzchnią chociażby jednego z kół pojazdu.",
+        "price": "od 1 500 zł + zatrzymanie prawa jazdy",
+        "points": 0,
+        "mandate": 1500,
+        "contextImageHint": "Nagraj film albo zrób zdjęcie pojazdu.",
+        "carImageHint": "Uchwyć tablicę rejestracyjną.",
+        "stopAgresjiOnly": true,
+        "parking": false,
+        "adHoc": true,
+        "beta": true,
+        "order": 2
     }
 }

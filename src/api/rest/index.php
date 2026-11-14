@@ -542,6 +542,40 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         return $response;
     })  ->add(new AppMiddleware());
 
+    // Nagranie do zgłoszenia „na gorąco” (multipart, pole `video`, ≤ MAX_VIDEO_UPLOAD_BYTES; patrz attachVideo()).
+    $group->post('/{appId}/video', function (Request $request, Response $response, $args) {
+        $user = $request->getAttribute('user');
+        try {
+            $up = videoUploadFromRequest($request);
+            $application = attachVideo($args['appId'], $up['path'], $up['mime'], $user);
+        } catch (ValidationException $e) {
+            throw new HttpException($request, $e->getMessage(), 422, $e); // JsonErrorRenderer adds `field`
+        } catch (MissingParamException $e) {
+            throw new HttpBadRequestException($request, $e->getMessage(), $e);
+        } catch (Exception $e) {
+            if ($e->getCode() === 403) throw new HttpForbiddenException($request, $e->getMessage(), $e);
+            throw $e;
+        }
+        \telemetry\log('report_edited', $application->id, ['type' => 'video']);
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
+    $group->delete('/{appId}/video', function (Request $request, Response $response, $args) {
+        $appId = $args['appId'];
+        $user = $request->getAttribute('user');
+        $application = \semaphore\withLock($appId, "video", function () use ($appId, $request, $user) {
+            $application = \app\get($appId);
+            if ($application->email !== $user->getEmail())
+                throw new HttpForbiddenException($request, "Nie posiadasz zgłoszenia o ID $appId");
+            if (!$application->isEditable())
+                throw new HttpForbiddenException($request, "Zgłoszenie $appId nie może być edytowane");
+            return \app\save(removeApplicationVideo($application));
+        });
+        $response->getBody()->write(json_encode(applicationToRest($application)));
+        return $response;
+    })  ->add(new AppMiddleware());
+
     // Data for the confirmation screen shown before finish/send (web: potwierdz.html.twig).
     $group->get('/{appId}/confirmation', function (Request $request, Response $response) {
         $response->getBody()->write(json_encode(confirmationData($request->getAttribute('application'))));

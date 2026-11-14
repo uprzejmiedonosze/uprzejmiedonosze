@@ -268,7 +268,9 @@ final class ReportMcpTools {
      * @return list<string>
      */
     public static function sortedCategoryIds(array $categories): array {
-        $ids = array_keys($categories);
+        // bez kategorii „na gorąco” (tylko aplikacja: nagranie, data z chwili zgłoszenia) i testowych na produkcji
+        $ids = array_keys(array_filter($categories, fn($c) => !($c instanceof \Category)
+            || ($c->isAvailable() && !$c->isAdHoc())));
         sort($ids, SORT_NUMERIC);
         return $ids;
     }
