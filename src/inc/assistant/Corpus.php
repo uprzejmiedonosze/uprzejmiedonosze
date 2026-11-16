@@ -10,6 +10,10 @@
  */
 
 const PREFIX_LEN = 5;
+/** Artykuł dłuższy niż tyle znaków wyszukiwarka widzi jako osobne ustępy/punkty/paragrafy (parts()). */
+const LONG_UNIT = 3000;
+/** Wstęp artykułu („Użyte w ustawie określenia oznaczają:”) dołączany do każdej części — najwyżej tyle znaków. */
+const PART_CONTEXT = 300;
 const STOPWORDS = ['jak', 'jaki', 'jaka', 'jakie', 'czy', 'czym', 'oraz', 'ktory', 'ktora', 'ktore', 'przez', 'dla', 'nie',
     'sie', 'jest', 'sa', 'ale', 'albo', 'lub', 'tez', 'moj', 'moja', 'moje', 'mam', 'moge', 'chce', 'czemu', 'gdzie', 'kiedy'];
 
@@ -54,6 +58,7 @@ function tokens(string $text): array {
  * Nagłówki `###` zostają w treści fragmentu. @return list<array{title:string,text:string}>
  */
 function splitSections(string $markdown): array {
+    // Flaga /u konieczna: bez niej \R łapie bajt 0x85 (NEL) — drugą połowę „ą” w UTF-8 — i rozcina literę.
     $sections = [];
     $title = '';
     $buf = [];
@@ -62,7 +67,7 @@ function splitSections(string $markdown): array {
         if ($text !== '' || $title !== '') $sections[] = ['title' => $title, 'text' => $text];
         $buf = [];
     };
-    foreach (preg_split('/\R/', $markdown) as $line) {
+    foreach (preg_split('/\R/u', $markdown) as $line) {
         if (preg_match('/^##\s+(.+?)\s*$/', $line, $m)) {
             $flush();
             $title = $m[1];
@@ -116,7 +121,8 @@ function acts(): array {
 }
 
 /**
- * Artykuły aktów prawnych — fragment = `## Art. N` (np. „Art. 49”, „Art. 92a”, „Art. 60¹”); key = articleKey(), source to id aktu.
+ * Artykuły aktów prawnych — fragment = `## Art. N` (np. „Art. 49”, „Art. 92a”, „Art. 60¹”), a w rozporządzeniach `## § N`;
+ * key = articleKey(), source to id aktu. Akt ma albo artykuły, albo paragrafy, więc klucze się nie mieszają.
  * @return list<array{source:string,title:string,key:string,text:string}>
  */
 function legal(?string $actId = null): array {
@@ -126,7 +132,9 @@ function legal(?string $actId = null): array {
             $file = root() . "/legal/{$act['id']}.md";
             if (!is_file($file)) continue;
             foreach (splitSections((string)file_get_contents($file)) as $s) {
-                if (!preg_match('/^Art\.?\s*\d/iu', $s['title'])) continue; // pomijamy nagłówki spoza artykułów (rozdziały)
+                // Jednostka = artykuł ustawy, paragraf rozporządzenia albo pozycja tabeli („Lp. 165” w taryfikatorze);
+                // nagłówki rozdziałów/działów/części pomijamy.
+                if (!preg_match('/^(Art\.?\s*|§\s*|Lp\.\s*)\d/iu', $s['title'])) continue;
                 $chunks[] = ['source' => $act['id'], 'title' => $s['title'], 'key' => articleKey($s['title']), 'text' => $s['text']];
             }
         }
@@ -181,7 +189,79 @@ function articleKey(string $text): ?string {
     return mb_strtolower($m[1]) . (isset($m[2]) ? '^' . $m[2] : '');
 }
 
-/** Artykuł aktu po numerze („49”, „Art. 92a”, „92A”, „60¹”, „60^1”); null gdy brak. */
+/**
+ * Części artykułu: jednostki najwyższego poziomu (ustępy „1.”, punkty „1)” albo paragrafy „§ 1.”) z podpunktami.
+ * Tytuł części to np. „Art. 2 pkt 29”, „Art. 130a ust. 5”, „Art. 96 § 1a”; do treści dokładany jest krótki wstęp
+ * artykułu, żeby część była zrozumiała sama (np. definicja bez „Użyte w ustawie określenia oznaczają:”).
+ * Artykuł z mniej niż dwiema jednostkami nie ma części ([]).
+ * @return list<array{source:string,title:string,key:string,part:string,head:string,text:string}>
+ */
+function parts(array $chunk): array {
+    $lines = preg_split('/\R/u', $chunk['text']);
+    $labels = [];
+    foreach ($lines as $i => $line) {
+        $bare = ltrim($line, ' ');
+        if (preg_match('/^§\s*(\d+[a-z]*)\.(?:\s|$)/u', $bare, $m)) $labels[$i] = ['§', $m[1]];
+        elseif (preg_match('/^(\d+[a-z]*)\.(?:\s|$)/u', $bare, $m)) $labels[$i] = ['ust.', $m[1]];
+        elseif (preg_match('/^(\d+[a-z]*)\)(?:\s|$)/u', $bare, $m)) $labels[$i] = ['pkt', $m[1]];
+        else continue;
+        $labels[$i][] = strlen($line) - strlen($bare); // wcięcie
+    }
+    if (!$labels) return [];
+    $top = min(array_column($labels, 2));
+    $kind = array_values(array_filter($labels, fn($l) => $l[2] === $top))[0][0];
+    $starts = array_keys(array_filter($labels, fn($l) => $l[2] === $top && $l[0] === $kind));
+    if (count($starts) < 2) return [];
+
+    $intro = trim(implode("\n", array_slice($lines, 0, $starts[0])));
+    if (mb_strlen($intro) > PART_CONTEXT) $intro = mb_substr($intro, 0, PART_CONTEXT) . '…';
+    $parts = [];
+    foreach ($starts as $n => $start) {
+        $end = $starts[$n + 1] ?? count($lines);
+        $label = $kind === '§' ? "§ {$labels[$start][1]}" : "$kind {$labels[$start][1]}";
+        $body = trim(implode("\n", array_slice($lines, $start, $end - $start)));
+        $parts[] = ['source' => $chunk['source'], 'title' => "{$chunk['title']} $label", 'key' => $chunk['key'],
+            'part' => $label, 'head' => mb_substr(strtok($body, "\n"), 0, 90), 'text' => ($intro !== '' ? "$intro\n" : '') . $body];
+    }
+    return $parts;
+}
+
+/**
+ * Fragmenty do wyszukiwania przepisów: artykuły, a długie (> $long znaków) — rozbite na części (parts()), żeby trafienie
+ * wskazywało konkretny punkt (np. definicję w art. 2), a nie cały artykuł, który i tak trzeba by uciąć.
+ * @return list<array{source:string,title:string,key:string,text:string,part?:string}>
+ */
+function legalSearchChunks(?string $actId = null, int $long = LONG_UNIT): array {
+    $all = $GLOBALS['assistantCorpusCache']["legalSearch$long"] ??= (function () use ($long) {
+        $out = [];
+        foreach (legal() as $c) {
+            $parts = mb_strlen($c['text']) > $long ? parts($c) : [];
+            array_push($out, ...($parts ?: [$c]));
+        }
+        return $out;
+    })();
+    return $actId === null ? $all : array_values(array_filter($all, fn($c) => $c['source'] === $actId));
+}
+
+/**
+ * Przepis po odwołaniu: artykuł („49”, „Art. 92a”, „60¹”, „§ 5”) albo jego część („2 pkt 29”, „130a ust. 5”,
+ * „Art. 96 § 1a”, „§ 2 ust. 1”). Null, gdy brak artykułu lub części.
+ * @return array{source:string,title:string,key:string,text:string,part?:string}|null
+ */
+function provision(string $actId, string $ref): ?array {
+    $ref = trim(preg_replace('/^(art|lp)\.?\s*/iu', '', trim($ref)));
+    if (!preg_match('/^(§\s*)?(\d+[a-z]*(?:[⁰¹²³⁴⁵⁶⁷⁸⁹]+|\^\d+|\[\d+\]|\(\d+\))?)\s*(?:(ust\.?|pkt|§)\s*(\d+[a-z]*))?/iu', $ref, $m))
+        return null;
+    $c = article($actId, $m[2]);
+    if (!$c || empty($m[3])) return $c;
+    $kind = mb_strtolower($m[3]) === '§' ? '§' : (str_starts_with(mb_strtolower($m[3]), 'ust') ? 'ust.' : 'pkt');
+    $want = $kind === '§' ? '§ ' . mb_strtolower($m[4]) : "$kind " . mb_strtolower($m[4]);
+    foreach (parts($c) as $p)
+        if ($p['part'] === $want) return $p;
+    return null;
+}
+
+/** Artykuł (lub § rozporządzenia, „Lp.” tabeli) po numerze („49”, „Art. 92a”, „92A”, „60¹”, „60^1”, „§ 5”, „Lp. 101a”); null gdy brak. */
 function article(string $actId, string $number): ?array {
     $key = articleKey($number);
     if ($key === null) return null;
@@ -201,9 +281,9 @@ function skills(): array {
         $skills = [];
         foreach (glob(root() . '/skills/*.md') ?: [] as $file) {
             $raw = (string)file_get_contents($file);
-            if (!preg_match('/\A---\R(.*?)\R---\R?(.*)\z/s', $raw, $m)) continue; // bez nagłówka = nie skill (np. README)
+            if (!preg_match('/\A---\R(.*?)\R---\R?(.*)\z/su', $raw, $m)) continue; // bez nagłówka = nie skill (np. README)
             $meta = [];
-            foreach (preg_split('/\R/', $m[1]) as $line)
+            foreach (preg_split('/\R/u', $m[1]) as $line)
                 if (preg_match('/^(name|description):\s*(.+?)\s*$/', $line, $kv)) $meta[$kv[1]] = trim($kv[2], "\"' ");
             if (empty($meta['name']) || !preg_match('/^[a-z0-9_-]+$/', $meta['name'])) continue;
             $skills[$meta['name']] = ['name' => $meta['name'], 'description' => $meta['description'] ?? '', 'body' => trim($m[2])];

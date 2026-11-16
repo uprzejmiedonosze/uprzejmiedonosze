@@ -31,8 +31,20 @@ python3 -I tools/legal-acts.py update kw --text DU/2026/1372   # wymuszony tekst
 ```
 
 Skrypt bierze treść z `text.html` (API Sejmu ma ją dla części obwieszczeń). Gdy jest tylko PDF, parsuje
-`pdftotext -bbox-layout`: pomija nagłówki stron i przypisy (mniejsza czcionka), akapity rozpoznaje po odstępie
-pionowym, indeks górny `[1]` zamienia na `¹` (Art. 60¹ → klucz `60^1`, patrz `articleKey()` w `Corpus.php`).
+`pdftotext -bbox-layout`: pomija nagłówki stron i przypisy (blok mniejszej czcionki na dole strony), akapity rozpoznaje
+po odstępie pionowym (plus: tekst urwany na literze, przecinku lub skrócie „r.”/„poz.” to kontynuacja), indeks górny
+(`[1]` albo mała cyfra przy liczbie) zamienia na `¹` (Art. 60¹ → klucz `60^1`, patrz `articleKey()` w `Corpus.php`).
+Rozporządzenia (bez artykułów) dzieli na paragrafy `## § N`. Pole `articles` w `index.json` (np. `"221-260"`) zapisuje
+tylko wybrane artykuły — tak jest z KPA (dział VIII, skargi i wnioski). Pole `exclude` pomija artykuły nieistotne dla
+serwisu (rejestracja, prawa jazdy, e-myto…): `"64-70, 100a-100e, 140i"`. Litery w zakresie porównuje się jak w numeracji
+ustaw (a < aa < at < b), koniec bez liter obejmuje wszystkie warianty (`72-80` → do 80zf). Numeracja przepisów jest stała
+(uchylony artykuł nie zmienia znaczenia, nowy dostaje nowy numer), więc listy nie trzeba przeglądać przy odświeżaniu —
+tylko gdy nowelizacja doda nowe artykuły w wyłączonym zakresie (np. 80zg). Skrypt wypisuje, ile jednostek wyłączył.
+Wyłączenia wewnątrz artykułu w tym samym polu: `"2 pkt 87"`, `"130a ust. 5-7"`, `"12 ust. 1 pkt 3"`, `"2 pkt 2 lit. b"`,
+`"§ 2 ust. 1 pkt 4"` — usuwa jednostkę z podpunktami (część wspólna po punktach zostaje). Ostatni poziom może być
+zakresem. Numer pasujący w kilku ustępach („49 pkt 1”) jest odrzucany jako niejednoznaczny — podaj ustęp.
+„NIE PASUJE” w wyniku = przepis zniknął lub zmienił numer: przejrzyj wpis.
+Errata działa na pełnym tekście, przed `articles`/`exclude`.
 
 ## 3. Zweryfikuj wynik — zawsze, szczególnie dla PDF
 
@@ -46,7 +58,12 @@ pionowym, indeks górny `[1]` zamienia na `¹` (Art. 60¹ → klucz `60^1`, patr
    awk -v s="## Art. 97a" 'f&&/^## /{exit} $0==s{f=1} f' src/inc/assistant/legal/kw.md
    ```
    Typowe błędy PDF: „podlega karze…” doklejone do ostatniego punktu, przypis w treści, urwany akapit na granicy
-   strony. Porównaj z PDF (`url` w `index.json` → ISAP). Poprawka = zmiana w `pdf_to_md()`/`pdf_lines()`.
+   strony. Porównaj z PDF (`url` w `index.json` → ISAP). Błąd powtarzalny = zmiana w `pdf_to_md()`/`pdf_lines()`
+   (sprawdź, że `git diff` innych aktów zawiera tylko poprawki). Pojedynczy przypadek, którego reguła nie rozstrzygnie
+   (np. kontynuacja punktu po przecinku), albo błąd samego źródła (OCR w HTML z ISAP: „A-l 1” zamiast „A-11”) =
+   reguła w `legal/errata.json` (`{from,to}` albo `{re,to}`). Skrypt wypisuje, ile razy zadziałała każda reguła;
+   „NIE PASUJE” po odświeżeniu = źródło się zmieniło, przejrzyj i usuń/popraw regułę.
+   Szukanie błędów OCR w kodach znaków: `grep -noE '\b[A-GPT]-(l|I)[0-9a-z]?\b|\b[A-GPT]- [0-9]' src/inc/assistant/legal/*.md`.
 4. `make test` (testy `tests/assistant/CorpusTest.php` używają fixture'ów, ale ładują ten sam kod).
 
 ## 4. Nowy akt
@@ -56,7 +73,14 @@ pionowym, indeks górny `[1]` zamienia na `¹` (Art. 60¹ → klucz `60^1`, patr
    2012 r. ELI używa pozycji, nie numeru Dz.U. — sprawdź `curl -s https://api.sejm.gov.pl/eli/acts/DU/<rok>/<poz> | jq .title`.
 2. Dopisz wpis do `index.json`: `id` (`a-z0-9_-`, krótki — model go podaje), `title`, `short`, `eli`, puste `ref`/`url`.
 3. `python3 -I tools/legal-acts.py update <id>` i weryfikacja jak w kroku 3.
-4. Akt bez tekstu jednolitego (np. świeże rozporządzenie) — skrypt go pominie; użyj `--text <ELI samego aktu>`.
+4. Akt bez tekstu jednolitego (np. świeże rozporządzenie) — skrypt go pominie. Do bazy trafiają tylko teksty
+   jednolite; `--text <ELI samego aktu>` tylko na wyraźną prośbę użytkownika (tekst pierwotny bez późniejszych zmian).
+5. Taryfikator mandatów (`legal/taryfikator.md`, `"manual": true` w `index.json`) jest opracowany ręcznie: tekst jednolity
+   rozporządzenia `DU/2003/2023` jest z 2013 r., a tabelę B (wykroczenia drogowe) zastąpiło rozporządzenie `DU/2021/2484`
+   (tabela tylko w PDF, ze scalonymi komórkami), zmienione `DU/2023/1256` (lp. 101a, 154a). Skrypt go pomija. Gdy wyjdzie
+   nowelizacja taryfikatora (`check` dla `DU/2003/2023` jej nie pokaże — sprawdź „Akty zmieniające” w API), popraw/dopisz
+   pozycje ręcznie w tym samym formacie: `## Lp. N` + linie Część / Naruszenie / Mandat karny (grzywna) / Kwalifikacja
+   prawna / Naruszone przepisy; „X / Y” zł = stawka zwykła / w recydywie (art. 38 § 2 KW).
 
 ## 5. Zakończ
 

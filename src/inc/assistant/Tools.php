@@ -26,12 +26,15 @@ function definitions(): array {
         $fn('search_knowledge', 'Przeszukuje bazę wiedzy serwisu (FAQ, wiki, praktyka). Użyj do pytań o działanie serwisu, '
             . 'współpracę ze służbami, typowe problemy. Zwraca najlepiej pasujące fragmenty.',
             ['query' => $str('Hasła kluczowe lub pytanie, po polsku')], ['query']),
-        $fn('search_legal', 'Przeszukuje teksty aktów prawnych (prawo o ruchu drogowym, kodeks wykroczeń, ustawa o strażach '
-            . 'gminnych…) i zwraca pasujące artykuły. Użyj ZAWSZE zanim podasz podstawę prawną — nie cytuj przepisów z pamięci.',
+        $fn('search_legal', 'Przeszukuje teksty aktów prawnych z listy w prompcie (ustawy i rozporządzenia) i zwraca '
+            . 'pasujące artykuły lub paragrafy. Użyj ZAWSZE zanim podasz podstawę prawną — nie cytuj przepisów z pamięci. '
+            . 'Pytania o wysokość mandatu: act = „taryfikator” (pozycje „Lp. N”: naruszenie, kwota, kwalifikacja).',
             ['query' => $str('Hasła kluczowe, np. „zatrzymanie pojazdu na chodniku”'),
              'act' => $str('Opcjonalnie id aktu (z listy w prompcie), by zawęzić szukanie')], ['query']),
-        $fn('get_legal_provision', 'Pobiera pełną treść konkretnego artykułu aktu prawnego.',
-            ['act' => $str('Id aktu z listy w prompcie'), 'article' => $str('Numer artykułu, np. „49” lub „92a”')], ['act', 'article']),
+        $fn('get_legal_provision', 'Pobiera pełną treść konkretnego artykułu ustawy lub paragrafu rozporządzenia.',
+            ['act' => $str('Id aktu z listy w prompcie'),
+             'article' => $str('Numer artykułu („49”, „92a”, „60¹”), paragrafu rozporządzenia („§ 5”) lub pozycji taryfikatora („Lp. 165”), opcjonalnie z częścią: '
+                 . '„2 pkt 29”, „130a ust. 5”, „96 § 1a”, „§ 2 ust. 1”')], ['act', 'article']),
         $fn('list_my_reports', 'Lista zgłoszeń zalogowanego użytkownika (najnowsze pierwsze), w skrócie. Użyj do pytań '
             . 'o „moje zgłoszenia”, statusy, numery spraw.',
             ['status' => $str('all (domyślnie, bez szkiców), sendable, allWithDrafts lub konkretny status, np. confirmed-waiting'),
@@ -88,17 +91,26 @@ function actTitle(string $id): ?string {
 
 function searchLegal(string $query, ?string $actId): array {
     if ($actId !== null && actTitle($actId) === null) return ['error' => "Nieznany akt: $actId"];
-    $hits = \assistant\corpus\search(\assistant\corpus\legal($actId), $query, 4);
+    $hits = \assistant\corpus\search(\assistant\corpus\legalSearchChunks($actId), $query, 4);
     if (!$hits) return ['results' => [], 'note' => 'Nie znaleziono pasujących przepisów w zapisanych aktach. Nie podawaj podstawy prawnej z pamięci.'];
     return ['results' => array_map(fn($h) => ['act' => $h['source'], 'actTitle' => actTitle($h['source']),
-        'article' => $h['title'], 'text' => clip($h['text'], 2500)], $hits)];
+        'article' => $h['title'], 'text' => clip($h['text'], 1300)], $hits),  // 4 × 1300 mieści się w RESULT_MAX_CHARS
+        'note' => 'Teksty są skrócone — pełną treść przepisu pobierz get_legal_provision (podaj article z wyniku).'];
 }
 
 function legalProvision(string $actId, string $article): array {
     if (actTitle($actId) === null) return ['error' => "Nieznany akt: $actId"];
-    $c = \assistant\corpus\article($actId, $article);
-    if (!$c) return ['error' => "Brak artykułu $article w zapisanym tekście aktu $actId"];
-    return ['act' => $actId, 'actTitle' => actTitle($actId), 'article' => $c['title'], 'text' => clip($c['text'], 5000)];
+    $c = \assistant\corpus\provision($actId, $article);
+    if (!$c) return ['error' => "Brak przepisu $article w zapisanym tekście aktu $actId. Zapisujemy tylko przepisy istotne "
+        . 'dla serwisu (np. bez rejestracji pojazdów i praw jazdy) — nie wnioskuj, że taki przepis nie istnieje, i nie cytuj go z pamięci.'];
+    $out = ['act' => $actId, 'actTitle' => actTitle($actId), 'article' => $c['title']];
+    $parts = isset($c['part']) || mb_strlen($c['text']) <= \assistant\corpus\LONG_UNIT ? [] : \assistant\corpus\parts($c);
+    if (!$parts) return $out + ['text' => clip($c['text'], 5000)];
+    // Długi artykuł: początek + spis części; model pobiera potrzebną część osobnym wywołaniem.
+    // Zmieść się w RESULT_MAX_CHARS: krótki początek + spis części (art. 2 PoRD ma ich ~80).
+    return $out + ['text' => clip($c['text'], 400),
+        'parts' => array_map(fn($h) => mb_substr($h, 0, 55), array_column($parts, 'head')),
+        'note' => 'Artykuł jest długi. Pobierz potrzebną część, podając np. „' . $parts[0]['title'] . '” jako article.'];
 }
 
 function loadSkill(string $name): array {
