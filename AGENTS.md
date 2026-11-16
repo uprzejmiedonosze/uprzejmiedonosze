@@ -64,7 +64,8 @@ Single test: `docker exec webapp ./vendor/phpunit/phpunit/phpunit --filter TestC
 - **Commits:** use the `/commit` command (tests → changelog on `main` → commit → push on `main`).
 - **Lint hook:** `.claude/hooks/lint-edited-file.sh` runs after every Write/Edit (stylelint for `src/scss`, `php -l`,
   twig-linter, JSON validity for `src/api/config`). A blocking message from it means: fix the reported problem now.
-- **Skills** (`.claude/skills/`): `sm-unit` (SM/Police units), `new-migration` (SQLite schema changes), `cypress`.
+- **Skills** (`.claude/skills/`): `sm-unit` (SM/Police units), `new-migration` (SQLite schema changes), `cypress`,
+  `legal-acts` (refresh legal acts for the AI assistant from the Sejm ELI API).
 - **Keep docs alive:** when you change a convention, a recipe's example file, or make a non-obvious decision, update the
   relevant `AGENTS.md` or add an ADR in the same commit.
 

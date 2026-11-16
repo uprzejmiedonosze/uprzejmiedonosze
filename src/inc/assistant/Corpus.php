@@ -116,7 +116,7 @@ function acts(): array {
 }
 
 /**
- * Artykuły aktów prawnych — fragment = `## Art. N` (np. „Art. 49”, „Art. 92a”); key to numer bez „Art.”, source to id aktu.
+ * Artykuły aktów prawnych — fragment = `## Art. N` (np. „Art. 49”, „Art. 92a”, „Art. 60¹”); key = articleKey(), source to id aktu.
  * @return list<array{source:string,title:string,key:string,text:string}>
  */
 function legal(?string $actId = null): array {
@@ -126,8 +126,8 @@ function legal(?string $actId = null): array {
             $file = root() . "/legal/{$act['id']}.md";
             if (!is_file($file)) continue;
             foreach (splitSections((string)file_get_contents($file)) as $s) {
-                if (!preg_match('/^Art\.?\s*(\d+[a-z]*)\b/iu', $s['title'], $m)) continue; // pomijamy nagłówki spoza artykułów
-                $chunks[] = ['source' => $act['id'], 'title' => $s['title'], 'key' => mb_strtolower($m[1]), 'text' => $s['text']];
+                if (!preg_match('/^Art\.?\s*\d/iu', $s['title'])) continue; // pomijamy nagłówki spoza artykułów (rozdziały)
+                $chunks[] = ['source' => $act['id'], 'title' => $s['title'], 'key' => articleKey($s['title']), 'text' => $s['text']];
             }
         }
         return $chunks;
@@ -170,10 +170,21 @@ function search(array $chunks, string $query, int $limit = 4): array {
     return array_slice($scored, 0, max(1, $limit));
 }
 
-/** Artykuł aktu po numerze („49”, „Art. 92a”, „92A”); null gdy brak. */
+/**
+ * Klucz numeru artykułu: „Art. 92a” → „92a”, a artykuły z indeksem górnym („Art. 60¹”, także zapisane „60^1”, „60[1]”,
+ * „60(1)”) → „60^1”, żeby nie myliły się z „60”. Null, gdy w tekście nie ma numeru.
+ */
+function articleKey(string $text): ?string {
+    $text = preg_replace_callback('/[⁰¹²³⁴⁵⁶⁷⁸⁹]+/u',
+        fn($m) => '^' . strtr($m[0], ['⁰' => '0', '¹' => '1', '²' => '2', '³' => '3', '⁴' => '4', '⁵' => '5', '⁶' => '6', '⁷' => '7', '⁸' => '8', '⁹' => '9']), $text);
+    if (!preg_match('/(\d+[a-z]*)(?:[\^\[(](\d+)[\])]?)?/iu', $text, $m)) return null;
+    return mb_strtolower($m[1]) . (isset($m[2]) ? '^' . $m[2] : '');
+}
+
+/** Artykuł aktu po numerze („49”, „Art. 92a”, „92A”, „60¹”, „60^1”); null gdy brak. */
 function article(string $actId, string $number): ?array {
-    if (!preg_match('/(\d+[a-z]*)/i', $number, $m)) return null;
-    $key = mb_strtolower($m[1]);
+    $key = articleKey($number);
+    if ($key === null) return null;
     foreach (legal($actId) as $c)
         if ($c['key'] === $key) return $c;
     return null;

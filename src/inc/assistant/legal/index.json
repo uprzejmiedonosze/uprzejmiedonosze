@@ -4,22 +4,25 @@
       "id": "prd",
       "title": "Ustawa z dnia 20 czerwca 1997 r. – Prawo o ruchu drogowym",
       "short": "Prawo o ruchu drogowym",
-      "ref": "TODO: tekst jednolity (Dz.U. rok, poz.)",
-      "url": ""
+      "eli": "DU/1997/602",
+      "ref": "Dz.U. z 2024 r. poz. 1251 (późniejsze nowelizacje nieuwzględnione)",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20240001251"
     },
     {
       "id": "kw",
       "title": "Ustawa z dnia 20 maja 1971 r. – Kodeks wykroczeń",
       "short": "Kodeks wykroczeń",
-      "ref": "TODO: tekst jednolity (Dz.U. rok, poz.)",
-      "url": ""
+      "eli": "DU/1971/114",
+      "ref": "Dz.U. z 2026 r. poz. 1372",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20260001372"
     },
     {
       "id": "sg",
       "title": "Ustawa z dnia 29 sierpnia 1997 r. o strażach gminnych",
       "short": "Ustawa o strażach gminnych",
-      "ref": "TODO: tekst jednolity (Dz.U. rok, poz.)",
-      "url": ""
+      "eli": "DU/1997/779",
+      "ref": "Dz.U. z 2021 r. poz. 1763",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20210001763"
     }
   ]
 }
