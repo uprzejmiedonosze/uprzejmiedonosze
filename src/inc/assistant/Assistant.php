@@ -103,6 +103,21 @@ function completionParams(array $messages, bool $withTools): array {
 }
 
 /**
+ * Koszt wywołań LLM w USD wg cennika $MODEL_PRICING (USD za 1 mln tokenów); nieznany model = 0.
+ * @param array{prompt:int,completion:int} $usage
+ */
+function costUsd(array $usage, string $model = OPENAI_CHAT_MODEL): float {
+    // data.php bywa załadowane w zasięgu lokalnym (require_once z funkcji/loadera), więc $MODEL_PRICING nie zawsze jest globalne.
+    if (!isset($GLOBALS['MODEL_PRICING'])) {
+        include(__DIR__ . '/../data.php');
+        $GLOBALS['MODEL_PRICING'] = $MODEL_PRICING ?? [];
+    }
+    $p = $GLOBALS['MODEL_PRICING'][$model] ?? null;
+    if (!$p) return 0.0;
+    return round(($usage['prompt'] * ($p['prompt'] ?? 0) + $usage['completion'] * ($p['completion'] ?? 0)) / 1_000_000, 8);
+}
+
+/**
  * Pętla tool-calling. Zwraca [tekst odpowiedzi, użyte narzędzia, flaga kontaktu, tokeny].
  * @return array{0:string,1:list<string>,2:bool,3:array{prompt:int,completion:int}}
  */
@@ -165,7 +180,7 @@ function reply(\user\User $user, string $text): array {
     $meta = [];
     try {
         [$answer, $used, $contact, $usage] = runModel($user, buildMessages($user));
-        $meta = ['model' => OPENAI_CHAT_MODEL, 'tools' => $used, 'tokens' => $usage] + ($contact ? ['contact' => true] : []);
+        $meta = ['model' => OPENAI_CHAT_MODEL, 'tools' => $used, 'tokens' => $usage, 'costUsd' => costUsd($usage)] + ($contact ? ['contact' => true] : []);
         \telemetry\log('chat_reply', null, ['vendor' => 'openai-chat']);
     } catch (\Throwable $e) {
         log_error('assistant: ' . $e->getMessage(), $e);
@@ -181,7 +196,7 @@ function reply(\user\User $user, string $text): array {
 function present(array $message): array {
     $message['html'] = $message['role'] === 'user' ? '' : renderMarkdown($message['content']);
     if (!empty($message['meta']['contact'])) $message['meta']['contactUrl'] = tools\CONTACT_URL;
-    unset($message['meta']['tokens'], $message['meta']['model']); // szczegóły kosztowe zostają w bazie
+    unset($message['meta']['tokens'], $message['meta']['model'], $message['meta']['costUsd']); // szczegóły kosztowe zostają w bazie
     return $message;
 }
 
