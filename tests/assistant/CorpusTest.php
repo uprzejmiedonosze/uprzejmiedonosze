@@ -57,12 +57,15 @@ class CorpusTest extends TestCase
 
     public function testLegalChunksByArticleAndLookup(): void
     {
-        $this->assertSame(['49', '92a'], array_column(legal('prd'), 'key'));
+        $this->assertSame(['49', '92a', '60', '60^1'], array_column(legal('prd'), 'key')); // rozdział pominięty
         $this->assertSame([], legal('pusty'));
         $this->assertStringContainsString('chodniku', article('prd', 'Art. 49')['text']);
         $this->assertSame('Art. 92a', article('prd', '92A')['title']);
         $this->assertNull(article('prd', '1'));
         $this->assertNull(article('prd', 'brak liczby'));
+        foreach (['60¹', 'Art. 60^1', '60[1]', '60(1)'] as $n)
+            $this->assertSame('Art. 60¹', article('prd', $n)['title'], $n);
+        $this->assertSame('Art. 60', article('prd', 'art. 60')['title']);
     }
 
     public function testLegalSearchFindsArticleByContent(): void
