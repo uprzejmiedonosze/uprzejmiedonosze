@@ -154,8 +154,8 @@ if (!defined('OPENAI_CHAT_TIMEOUT'))            define('OPENAI_CHAT_TIMEOUT',   
 if (!defined('CHAT_CONTEXT_MESSAGES'))          define('CHAT_CONTEXT_MESSAGES',          (int)(getenv('CHAT_CONTEXT_MESSAGES') ?: 20));
 if (!defined('CHAT_MAX_TOOL_ROUNDS'))           define('CHAT_MAX_TOOL_ROUNDS',           (int)(getenv('CHAT_MAX_TOOL_ROUNDS') ?: 4));
 if (!defined('CHAT_MAX_MESSAGE_CHARS'))         define('CHAT_MAX_MESSAGE_CHARS',         (int)(getenv('CHAT_MAX_MESSAGE_CHARS') ?: 2000));
-// Załączniki w czacie (tylko patroni; src/inc/assistant/Attachments.php): obrazy JPEG/PNG (zużywają kredyty zdjęć jak w appce i MCP,
-// \quota\reserve) i PDF (bez kredytów). Body JSON/base64 musi się zmieścić w post_max_size=5M, stąd limity bajtów po dekodowaniu.
+// Załączniki w czacie (tylko patroni; src/inc/assistant/Attachments.php): obrazy JPEG/PNG i PDF — każdy plik zużywa kredyt zdjęć jak w appce i MCP
+// (\quota\reserve). Body JSON/base64 musi się zmieścić w post_max_size=5M, stąd limity bajtów po dekodowaniu.
 if (!defined('CHAT_MAX_ATTACHMENTS'))           define('CHAT_MAX_ATTACHMENTS',           (int)(getenv('CHAT_MAX_ATTACHMENTS') ?: 3));
 if (!defined('CHAT_MAX_ATTACHMENT_BYTES'))      define('CHAT_MAX_ATTACHMENT_BYTES',      (int)(getenv('CHAT_MAX_ATTACHMENT_BYTES') ?: 1500000));
 if (!defined('CHAT_MAX_ATTACHMENTS_BYTES'))     define('CHAT_MAX_ATTACHMENTS_BYTES',     (int)(getenv('CHAT_MAX_ATTACHMENTS_BYTES') ?: 3000000));

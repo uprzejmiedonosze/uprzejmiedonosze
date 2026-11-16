@@ -39,7 +39,7 @@ class ChatHandler extends AbstractHandler {
 
     /**
      * POST /api/chat {message, attachments?: [{name, data}]} — pytanie do asystenta; odpowiedź synchronicznie.
-     * Załączniki (JPEG/PNG/PDF) tylko dla patronów; obrazy zużywają kredyty zdjęć (402 przy wyczerpaniu).
+     * Załączniki (JPEG/PNG/PDF) tylko dla patronów; każdy plik zużywa kredyt zdjęć (402 przy wyczerpaniu).
      */
     public function send(Request $request, Response $response, array $args): Response {
         $body = $request->getParsedBody() ?? [];

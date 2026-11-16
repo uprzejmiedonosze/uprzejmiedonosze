@@ -13,7 +13,7 @@ use quota\QuotaExceededException;
 use UprzejmieDonosze\Tests\DatabaseTestCase;
 use user\User;
 
-/** Załączniki w czacie: tylko patroni, obrazy zużywają kredyty zdjęć (\quota), PDF nie. */
+/** Załączniki w czacie: tylko patroni, obrazy i PDF zużywają kredyty zdjęć (\quota). */
 class AttachmentsTest extends DatabaseTestCase
 {
     private const EMAIL = 'chat-attach@example.com';
@@ -136,18 +136,40 @@ class AttachmentsTest extends DatabaseTestCase
         $this->assertSame($before + 1, $this->used());
     }
 
-    public function testPdfCostsNoCreditsAndGoesAsFilePart(): void
+    public function testPdfConsumesOneCreditAndGoesAsFilePart(): void
     {
         $fake = new ClientFake([self::ok()]);
         ChatClient::set($fake);
         $before = $this->used();
         \assistant\reply($this->user(), 'Co w piśmie?', [self::pdf()]);
-        $this->assertSame($before, $this->used());
+        $this->assertSame($before + 1, $this->used());
         $fake->chat()->assertSent(function (string $method, array $params) {
             $part = end($params['messages'])['content'][1];
             return $part['type'] === 'file' && $part['file']['filename'] === 'pismo.pdf'
                 && str_starts_with($part['file']['file_data'], 'data:application/pdf;base64,');
         });
+    }
+
+    public function testMixedAttachmentsChargeEachOnceAndRefundTogether(): void
+    {
+        ChatClient::set(new ClientFake([self::ok()]));
+        $before = $this->used();
+        \assistant\reply($this->user(), 'Razem', [self::pdf(), self::file('a.jpg', self::image(), 'image/jpeg')]);
+        $this->assertSame($before + 2, $this->used());
+
+        ChatClient::set(new ClientFake([])); // awaria modelu
+        $reply = \assistant\reply($this->user(), 'Awaria', [self::file('p.pdf', "%PDF-1.4\nnowy\n", 'application/pdf'), self::file('b.jpg', self::image(), 'image/jpeg')]);
+        $this->assertTrue($reply['meta']['error']);
+        $this->assertSame($before + 2, $this->used()); // oba zwrócone
+    }
+
+    public function testSamePdfIsChargedOnce(): void
+    {
+        ChatClient::set(new ClientFake([self::ok(), self::ok()]));
+        $before = $this->used();
+        \assistant\reply($this->user(), 'raz', [self::pdf()]);
+        \assistant\reply($this->user(), 'dwa', [self::pdf()]);
+        $this->assertSame($before + 1, $this->used());
     }
 
     public function testPngIsConvertedToJpeg(): void
