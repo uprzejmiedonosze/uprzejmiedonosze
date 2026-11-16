@@ -173,7 +173,7 @@ function runModel(\user\User $user, array $messages): array {
  * Obsługuje wiadomość użytkownika: waliduje, limituje, zapisuje, pyta model, zapisuje odpowiedź.
  * Awaria modelu NIE rzuca — użytkownik dostaje odpowiedź kierującą na kontakt (zapisaną w rozmowie z meta.error),
  * a kredyty zdjęć zarezerwowane na załączniki wracają.
- * $attachments: [{name, data: "data:<mime>;base64,…"}] — tylko dla patronów; obrazy zużywają kredyty zdjęć (\quota).
+ * $attachments: [{name, data: "data:<mime>;base64,…"}] — tylko dla patronów; każdy plik (obraz i PDF) zużywa kredyt zdjęć (\quota).
  * @return array{id:int,role:string,content:string,html:string,meta:array<string,mixed>,createdAt:int}
  * @throws ChatException pusta/za długa wiadomość lub zły załącznik (400/415), brak patronatu (403), limit (429)
  * @throws \quota\QuotaExceededException wyczerpane kredyty zdjęć (402)

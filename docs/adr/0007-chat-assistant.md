@@ -27,9 +27,9 @@ przyjmować powiadomienia systemowe. Akty prawne są obszerne: nie wolno ich wrz
   kontaktu; model sam woła `escalate_to_contact`, gdy nie potrafi odpowiedzieć (UI pokazuje przycisk).
 - **Dostęp:** tylko zalogowani i zarejestrowani (limit kosztów i potrzeba tożsamości dla zgłoszeń);
   `CHAT_RATE_MAX` pytań na `CHAT_RATE_WINDOW`. Odpowiedź bez streamingu (jedno żądanie, prostsza pętla narzędzi).
-- **Załączniki (obrazy JPEG/PNG i PDF) tylko dla patronów** (`assistant/Attachments.php`, `\patronite\is`). Obrazy zużywają kredyty
+- **Załączniki (obrazy JPEG/PNG i PDF) tylko dla patronów** (`assistant/Attachments.php`, `\patronite\is`). Każdy plik (obraz i PDF) zużywa kredyt
   zdjęć jak w appce i MCP (`\quota\reserve` przed wywołaniem modelu, zwrot przy awarii modelu, to samo zdjęcie w oknie
-  liczy się raz, 402 przy wyczerpaniu); PDF kredytów nie zużywa. Bajtów nie przechowujemy — w rozmowie zostaje nazwa
+  liczy się raz, 402 przy wyczerpaniu), PDF też liczy się jako jeden kredyt niezależnie od liczby stron. Bajtów nie przechowujemy — w rozmowie zostaje nazwa
   i typ (`meta.attachments`), model widzi plik tylko w turze, w której go wysłano. Przeglądarka zmniejsza zdjęcia do
   1600 px, bo JSON/base64 musi się zmieścić w `post_max_size` 5 MB (limity `CHAT_MAX_ATTACHMENT*`).
 - Odpowiedzi modelu to niezaufane dane: Markdown renderowany po stronie serwera z `html_input: strip`

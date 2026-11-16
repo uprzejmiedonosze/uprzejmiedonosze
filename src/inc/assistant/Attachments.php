@@ -4,7 +4,8 @@ require_once(__DIR__ . '/../integrations/Vision.php'); // \vision\normalizePngTo
 
 /**
  * Załączniki do wiadomości w czacie — funkcja dla patronów. Obrazy (JPEG/PNG) zużywają kredyty zdjęć na tych samych
- * zasadach co appka i MCP (\quota\reserve: limit unikalnych zdjęć w oknie, zwrot przy awarii); PDF kredytów nie zużywa.
+ * zasadach co appka i MCP (\quota\reserve: limit unikalnych zdjęć w oknie, zwrot przy awarii); PDF też zużywa kredyt (1 na plik,
+ * niezależnie od liczby stron — model i tak czyta strony jak obrazy).
  * Bajtów nie zapisujemy — w rozmowie zostaje tylko nazwa i typ (meta.attachments); model widzi plik w turze, w której go wysłano.
  */
 
@@ -67,16 +68,16 @@ function decode(mixed $raw): array {
 }
 
 /**
- * Rezerwuje kredyty zdjęć na obrazy PRZED wywołaniem modelu (jak REST/MCP). To samo zdjęcie w oknie liczy się raz.
+ * Rezerwuje kredyty zdjęć na każdy załącznik (obraz i PDF) PRZED wywołaniem modelu (jak REST/MCP). To samo zdjęcie w oknie liczy się raz.
  * @param list<array{name:string,mime:string,bytes:string}> $items
- * @return list<string> bajty obrazów faktycznie naliczonych — przekaż do release() przy awarii
+ * @return list<string> bajty załączników faktycznie naliczonych — przekaż do release() przy awarii
  * @throws \quota\QuotaExceededException 402 (zwraca już zarezerwowane w tej wiadomości)
  */
 function charge(\user\User $user, array $items): array {
     $charged = [];
     try {
         foreach ($items as $item) {
-            if ($item['mime'] !== MIME_PDF && \quota\reserve($user, $item['bytes'])) $charged[] = $item['bytes'];
+            if (\quota\reserve($user, $item['bytes'])) $charged[] = $item['bytes'];
         }
     } catch (\Throwable $e) {
         release($user, $charged);
