@@ -151,6 +151,43 @@
         }
     }
 
+    &__attach {
+        border: 0;
+        background: transparent;
+        font-size: 1.2em;
+        padding: 0 .3em;
+        cursor: pointer;
+    }
+
+    &__files {
+        list-style: none;
+        margin: 0;
+        padding: .4em .8em 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .4em;
+
+        &[hidden] { display: none; }
+
+        li {
+            background: $mpr-primary-container;
+            color: $mpr-primary-dark;
+            border-radius: $mpr-radius-pill;
+            padding: .15em .7em;
+            font-size: .8em;
+        }
+
+        button {
+            border: 0;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            padding: 0 .2em;
+        }
+    }
+
+    &__attached { margin-top: .3em; font-size: .8em; opacity: .85; }
+
     &__send {
         border: 0;
         border-radius: $mpr-radius-sm;
