@@ -79,9 +79,15 @@ function clip(string $text, int $max = 3000): string {
 }
 
 function searchKnowledge(string $query): array {
-    $hits = \assistant\corpus\search(\assistant\corpus\knowledge(), $query, 4);
+    $hits = \assistant\corpus\search(\assistant\corpus\knowledge(), $query, 3);
     if (!$hits) return ['results' => [], 'note' => 'Brak informacji w bazie wiedzy.'];
-    return ['results' => array_map(fn($h) => ['source' => $h['source'], 'title' => $h['title'], 'text' => clip($h['text'], 1800)], $hits)];
+    // 3 × 1600 mieści się w RESULT_MAX_CHARS; link „Źródło:” (fragmenty z wiki, tools/wiki-knowledge.php) zostaje po skróceniu.
+    return ['results' => array_map(function ($h) {
+        $text = $h['text'];
+        $source = preg_match('/\n(Źródło: \S+)\s*$/u', $text, $m) ? $m[1] : null;
+        if ($source !== null) $text = mb_substr($text, 0, -mb_strlen($m[0]));
+        return ['source' => $h['source'], 'title' => $h['title'], 'text' => clip($text, 1600) . ($source !== null ? "\n$source" : '')];
+    }, $hits)];
 }
 
 function actTitle(string $id): ?string {
