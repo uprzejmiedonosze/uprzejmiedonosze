@@ -64,6 +64,12 @@ class AssistantTest extends DatabaseTestCase
         $this->assertStringContainsString('<strong>bezpłatny</strong>', $reply['html']);
         $this->assertSame(['user', 'assistant'], array_column(\chat\history(self::EMAIL), 'role'));
         $this->assertArrayNotHasKey('tokens', $reply['meta']); // koszty zostają w bazie
+        $this->assertArrayNotHasKey('costUsd', $reply['meta']);
+
+        // gpt-5-mini: 10 tokenów wejścia po 0.25 i 5 wyjścia po 2.00 USD / 1 mln
+        $stored = \chat\history(self::EMAIL)[1]['meta'];
+        $this->assertSame(['prompt' => 10, 'completion' => 5], $stored['tokens']);
+        $this->assertEqualsWithDelta(0.0000125, $stored['costUsd'], 1e-9);
     }
 
     public function testToolRoundTripFeedsResultBackToModel(): void
@@ -108,6 +114,12 @@ class AssistantTest extends DatabaseTestCase
         $fake = new ClientFake($calls);
         ChatClient::set($fake);
         $this->assertSame('Koniec.', \assistant\reply($this->user(), 'Pętla?')['content']);
+    }
+
+    public function testCostSumsAllToolRoundsAndIgnoresUnknownModel(): void
+    {
+        $this->assertSame(0.0, \assistant\costUsd(['prompt' => 1000, 'completion' => 1000], 'nieznany-model'));
+        $this->assertEqualsWithDelta(0.00225, \assistant\costUsd(['prompt' => 1000, 'completion' => 1000], 'gpt-5-mini'), 1e-9);
     }
 
     public function testRejectsEmptyAndTooLongMessages(): void
