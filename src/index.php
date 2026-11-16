@@ -127,6 +127,15 @@ $app->group('/api', function (RouteCollectorProxy $group) { // JSON API
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());
 
+$app->group('/api/chat', function (RouteCollectorProxy $group) { // asystent AI (src/inc/assistant/)
+    $group->get('', ChatHandler::class . ':history');
+    $group->get('/unread', ChatHandler::class . ':unread');
+    $group->post('', ChatHandler::class . ':send');
+    $group->delete('', ChatHandler::class . ':clear');
+})  ->add(new RegisteredMiddleware())
+    ->add(new JsonMiddleware())
+    ->add(new JsonBodyParser());
+
 $app->group('/generator', function (RouteCollectorProxy $group) {        
     $group->get('/stream', \generator\ApiAiHandler::class . ':stream');
     $group->get('/topics', \generator\ApiAiHandler::class . ':getTopics');

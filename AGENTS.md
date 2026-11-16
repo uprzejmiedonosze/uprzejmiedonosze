@@ -34,6 +34,7 @@ Single test: `docker exec webapp ./vendor/phpunit/phpunit/phpunit --filter TestC
 |---|---|---|
 | `src/inc/` | PHP backend: handlers, `API.php` (shared domain logic), store, dataclasses, middleware, integrations | [`src/inc/AGENTS.md`](src/inc/AGENTS.md) |
 | `src/index.php` | Web routes (Slim) | ↑ |
+| `src/inc/assistant/` | Asystent AI (czat): narzędzia, baza wiedzy `knowledge/`, akty `legal/`, skille `skills/` | [`src/inc/AGENTS.md`](src/inc/AGENTS.md) → „Asystent AI” |
 | `src/api/rest/`, `API.md` | REST API for mobile/MCP + its contract | [`src/api/AGENTS.md`](src/api/AGENTS.md) |
 | `src/api/config/` | Domain JSON config (`sm.json`, `police.json`, categories, statuses…) | ↑ |
 | `src/templates/` | Twig pages and partials, layout flags | [`src/templates/AGENTS.md`](src/templates/AGENTS.md) |

@@ -72,6 +72,7 @@ function removeUser($email, $dryRun=true){
         // Cached stats (24 h) are keyed by e-mail: left behind they would show the deleted account's
         // counters to whoever signs in with the same address next.
         \cache\delete(\cache\Type::UserStats, $email);
+        \chat\removeAllForEmail($email); // rozmowa z asystentem AI i powiadomienia
     }
 
     __log("Anonimizuję autora zmian w wiki");

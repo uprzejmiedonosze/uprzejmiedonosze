@@ -146,6 +146,17 @@ if (!defined('OPENAI_LETTER_MAX_TOKENS'))       define('OPENAI_LETTER_MAX_TOKENS
 if (!defined('LETTER_RATE_MAX'))                define('LETTER_RATE_MAX',                (int)(getenv('LETTER_RATE_MAX') ?: 20));
 if (!defined('LETTER_RATE_WINDOW'))             define('LETTER_RATE_WINDOW',             (int)(getenv('LETTER_RATE_WINDOW') ?: 3600));
 
+// Asystent AI na stronie (src/inc/assistant/): czat z bazą wiedzy, aktami prawnymi i zgłoszeniami użytkownika (tool calling).
+// Rozmowa jest zapisywana w store.sqlite (store/ChatStore.php); w kontekst LLM trafia ostatnie CHAT_CONTEXT_MESSAGES wiadomości.
+if (!defined('OPENAI_CHAT_MODEL'))              define('OPENAI_CHAT_MODEL',              getenv('OPENAI_CHAT_MODEL') ?: 'gpt-5-mini');
+if (!defined('OPENAI_CHAT_MAX_TOKENS'))         define('OPENAI_CHAT_MAX_TOKENS',         (int)(getenv('OPENAI_CHAT_MAX_TOKENS') ?: 4000));
+if (!defined('OPENAI_CHAT_TIMEOUT'))            define('OPENAI_CHAT_TIMEOUT',            (int)(getenv('OPENAI_CHAT_TIMEOUT') ?: 60));
+if (!defined('CHAT_CONTEXT_MESSAGES'))          define('CHAT_CONTEXT_MESSAGES',          (int)(getenv('CHAT_CONTEXT_MESSAGES') ?: 20));
+if (!defined('CHAT_MAX_TOOL_ROUNDS'))           define('CHAT_MAX_TOOL_ROUNDS',           (int)(getenv('CHAT_MAX_TOOL_ROUNDS') ?: 4));
+if (!defined('CHAT_MAX_MESSAGE_CHARS'))         define('CHAT_MAX_MESSAGE_CHARS',         (int)(getenv('CHAT_MAX_MESSAGE_CHARS') ?: 2000));
+if (!defined('CHAT_RATE_MAX'))                  define('CHAT_RATE_MAX',                  (int)(getenv('CHAT_RATE_MAX') ?: 30));
+if (!defined('CHAT_RATE_WINDOW'))               define('CHAT_RATE_WINDOW',               (int)(getenv('CHAT_RATE_WINDOW') ?: 3600));
+
 // Bramka wykrywania twarzy w face-detect-consumer (src/inc/integrations/FaceDetect.php): tylko liczy
 // twarze, bboxy do blura daje Google Vision. Osobny klucz ograniczony do Cloud Vision API.
 if (!defined('OPENAI_FACES_MODEL'))             define('OPENAI_FACES_MODEL',             getenv('OPENAI_FACES_MODEL') ?: 'gpt-5-nano');

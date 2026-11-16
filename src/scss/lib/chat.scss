@@ -1,0 +1,188 @@
+@use "tokens" as *;
+
+// Widżet asystenta AI (templates/_chat-widget.html.twig, js/sites/chat.js). Pływający przycisk + panel w prawym dolnym rogu.
+.mpr-chat {
+    position: fixed;
+    right: 1.25em;
+    bottom: 1.25em;
+    z-index: 25; // pod toastem (30), nad treścią
+    font-family: $font-body;
+
+    &[hidden] { display: none; }
+
+    &__toggle {
+        position: relative;
+        width: 3.5em;
+        height: 3.5em;
+        border: 0;
+        border-radius: $mpr-radius-pill;
+        background: $mpr-primary;
+        color: $mpr-surface;
+        box-shadow: $mpr-shadow-float;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover { background: $mpr-primary-bright; }
+    }
+
+    &__badge {
+        position: absolute;
+        top: -.2em;
+        right: -.2em;
+        min-width: 1.4em;
+        padding: 0 .35em;
+        border-radius: $mpr-radius-pill;
+        background: $mpr-accent;
+        color: $mpr-on-accent;
+        font-size: .8em;
+        font-weight: 700;
+        line-height: 1.4em;
+        text-align: center;
+
+        &[hidden] { display: none; }
+    }
+
+    &__panel {
+        position: absolute;
+        right: 0;
+        bottom: 4.5em;
+        width: 24em;
+        max-width: calc(100vw - 2.5em);
+        height: 32em;
+        max-height: calc(100vh - 8em);
+        display: flex;
+        flex-direction: column;
+        background: $mpr-surface;
+        border: 1px solid $mpr-outline-variant;
+        border-radius: $mpr-radius-card;
+        box-shadow: $mpr-shadow-float;
+        overflow: hidden;
+
+        &[hidden] { display: none; }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .75em 1em;
+        background: $mpr-primary;
+        color: $mpr-surface;
+        font-family: $font-display;
+    }
+
+    &__icon {
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font-size: 1.1em;
+        padding: .25em .5em;
+        cursor: pointer;
+    }
+
+    &__messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1em;
+        display: flex;
+        flex-direction: column;
+        gap: .6em;
+        background: $mpr-surface-low;
+    }
+
+    &__msg {
+        max-width: 88%;
+        padding: .6em .8em;
+        border-radius: $mpr-radius-card;
+        font-size: .95em;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+        white-space: pre-wrap; // wiadomości użytkownika; odpowiedzi renderuje serwer jako HTML (niżej bez pre-wrap)
+
+        &--user {
+            align-self: flex-end;
+            background: $mpr-primary;
+            color: $mpr-surface;
+            border-bottom-right-radius: $mpr-radius-sm;
+        }
+
+        &--assistant,
+        &--notification {
+            align-self: flex-start;
+            background: $mpr-surface;
+            border: 1px solid $mpr-outline-variant;
+            border-bottom-left-radius: $mpr-radius-sm;
+            white-space: normal;
+
+            p { margin: 0 0 .5em; }
+            p:last-child { margin-bottom: 0; }
+            ul, ol { margin: .25em 0 .5em; padding-left: 1.3em; }
+        }
+
+        &--notification {
+            background: $mpr-warning-container;
+            border-color: $mpr-warning-outline;
+        }
+    }
+
+    &__typing { color: $mpr-muted; font-style: italic; }
+
+    &__link { display: block; margin-top: .4em; font-weight: 600; }
+
+    &__contact { display: inline-block; margin-top: .6em; }
+
+    &__form {
+        display: flex;
+        gap: .5em;
+        padding: .6em;
+        border-top: 1px solid $mpr-outline-variant;
+
+        textarea {
+            flex: 1;
+            resize: none;
+            max-height: 6em;
+            padding: .5em .7em;
+            border: 1px solid $mpr-outline-variant;
+            border-radius: $mpr-radius-sm;
+            font: inherit;
+            margin: 0;
+        }
+    }
+
+    &__send {
+        border: 0;
+        border-radius: $mpr-radius-sm;
+        background: $mpr-accent;
+        color: $mpr-on-accent;
+        padding: 0 .9em;
+        cursor: pointer;
+
+        &:disabled { opacity: .5; cursor: default; }
+    }
+
+    &__note {
+        margin: 0;
+        padding: 0 .8em .6em;
+        font-size: .75em;
+        color: $mpr-muted;
+    }
+}
+
+// Na mobile pasek zakładek /app jest na dole — podnosimy widżet nad niego, a panel rozciągamy.
+@media (max-width: 48em) {
+    .mpr-chat {
+        bottom: 5em;
+        right: .8em;
+
+        &__panel {
+            position: fixed;
+            right: .8em;
+            left: .8em;
+            bottom: 9em;
+            width: auto;
+            max-width: none;
+        }
+    }
+}

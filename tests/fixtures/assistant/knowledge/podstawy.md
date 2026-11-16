@@ -1,0 +1,3 @@
+# Podstawy
+
+- Serwis jest bezpłatny.

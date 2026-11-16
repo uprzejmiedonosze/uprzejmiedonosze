@@ -1,0 +1,25 @@
+{
+  "acts": [
+    {
+      "id": "prd",
+      "title": "Ustawa z dnia 20 czerwca 1997 r. – Prawo o ruchu drogowym",
+      "short": "Prawo o ruchu drogowym",
+      "ref": "TODO: tekst jednolity (Dz.U. rok, poz.)",
+      "url": ""
+    },
+    {
+      "id": "kw",
+      "title": "Ustawa z dnia 20 maja 1971 r. – Kodeks wykroczeń",
+      "short": "Kodeks wykroczeń",
+      "ref": "TODO: tekst jednolity (Dz.U. rok, poz.)",
+      "url": ""
+    },
+    {
+      "id": "sg",
+      "title": "Ustawa z dnia 29 sierpnia 1997 r. o strażach gminnych",
+      "short": "Ustawa o strażach gminnych",
+      "ref": "TODO: tekst jednolity (Dz.U. rok, poz.)",
+      "url": ""
+    }
+  ]
+}

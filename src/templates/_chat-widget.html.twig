@@ -1,0 +1,25 @@
+{# Asystent AI: pływający przycisk + panel czatu (src/js/sites/chat.js, src/scss/lib/chat.scss, src/inc/assistant/).
+   Ukryty, dopóki GET /api/chat/unread nie odpowie 200 — niezarejestrowany użytkownik dostaje 403 i widżetu nie widzi. #}
+<div class="mpr-chat" hidden>
+    <button type="button" class="mpr-chat__toggle js-chat-toggle" aria-expanded="false" aria-controls="chat-panel"
+        aria-label="Asystent — zadaj pytanie">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
+        <span class="mpr-chat__badge js-chat-badge" hidden></span>
+    </button>
+    <section class="mpr-chat__panel" id="chat-panel" role="dialog" aria-label="Asystent Uprzejmie Donoszę" hidden>
+        <header class="mpr-chat__header">
+            <strong>Asystent</strong>
+            <span class="mpr-chat__actions">
+                <button type="button" class="mpr-chat__icon js-chat-reset" title="Nowa rozmowa" aria-label="Nowa rozmowa">↺</button>
+                <button type="button" class="mpr-chat__icon js-chat-close" title="Zamknij" aria-label="Zamknij czat">✕</button>
+            </span>
+        </header>
+        <div class="mpr-chat__messages js-chat-messages" role="log" aria-live="polite"></div>
+        <form class="mpr-chat__form js-chat-form">
+            <textarea class="js-chat-input" rows="1" maxlength="2000" placeholder="Zadaj pytanie…"
+                aria-label="Twoja wiadomość" required></textarea>
+            <button type="submit" class="mpr-chat__send js-chat-send" aria-label="Wyślij">➤</button>
+        </form>
+        <p class="mpr-chat__note">Asystent AI może się mylić. W trudnych sprawach <a href="/kontakt.html">napisz do nas</a>.</p>
+    </section>
+</div>

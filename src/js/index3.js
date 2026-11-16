@@ -24,6 +24,7 @@ import "./sites/menu"
 import "./sites/frequent-mistakes"
 import "./sites/wiki"
 import "./sites/wiki-edit"
+import "./sites/chat"
 import "./lib/sidebar"
 import "./lib/app-banner"
 import makeDialog from "./lib/dialog";

@@ -64,6 +64,14 @@ jednostki, wyszukiwarka) też w `Wiki.php`, SQL w `store/WikiStore.php`, trasy w
 Redaktor nie pisze Twiga ani HTML. `Wiki.php` ładuj **po** `Twig.php` (używa `initBareTwig`). Nowa dyrektywa =
 wpis w `DIRECTIVES` + partial + przykład w `\wiki\guide()`. Import z DokuWiki: `tools/wiki-import.php` + `WikiImport.php`.
 
+**Asystent AI** ([ADR 0007](../../docs/adr/0007-chat-assistant.md)) — `assistant/` (`Assistant.php` pętla tool-calling i prompt,
+`Tools.php` narzędzia, `Corpus.php` wyszukiwanie), rozmowa w `store/ChatStore.php` (`\chat\`), trasy `/api/chat` w `handlers/ChatHandler.php`,
+widżet: `templates/_chat-widget.html.twig` + `js/sites/chat.js` + `scss/lib/chat.scss`. Wiedza to pliki:
+`assistant/knowledge/*.md` (`podstawy.md` zawsze w prompcie), `assistant/legal/` (akty, `## Art. N`), `assistant/skills/*.md`
+(instrukcje, np. odwołanie — nowy skill = nowy plik). **Powiadomienie systemowe w czacie:** `\chat\notify($email, $tekst, '/app/list')`.
+Nowe narzędzie = wpis w `tools\definitions()` + gałąź w `tools\execute()` (tożsamość z `$user`, nigdy z argumentów modelu).
+Test: `ClientFake` przez `assistant\ChatClient::set()`, korpus przez `assistant\corpus\setRoot()`.
+
 **Nowa integracja zewnętrzna** — plik w `integrations/`, klucz przez `config.php`, odpowiedzi cache'uj w `\cache\…`
 (wzór: `\cache\alpr`, `\cache\geo`), błędy przez `log_error` + wyjątek, nie `die`.
 
