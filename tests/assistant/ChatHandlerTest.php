@@ -57,6 +57,21 @@ class ChatHandlerTest extends DatabaseTestCase
         $this->assertSame([], $this->call('history')['messages']);
     }
 
+    public function testUnreadReportsWhetherUserCanAttach(): void
+    {
+        $before = \cache\get(\cache\Type::Patronite, '');
+        try {
+            // niepusty cache patronów = test offline
+            \cache\set(\cache\Type::Patronite, '', [self::EMAIL => ['amount' => 5, 'note' => '', 'active' => true]], 0, 60);
+            $this->assertTrue($this->call('unread')['canAttach']);
+            \cache\set(\cache\Type::Patronite, '', ['x@example.com' => ['amount' => 5, 'note' => '', 'active' => true]], 0, 60);
+            $this->assertFalse($this->call('unread')['canAttach']);
+        } finally {
+            \cache\delete(\cache\Type::Patronite, '');
+            if ($before) \cache\set(\cache\Type::Patronite, '', $before, 0, 60);
+        }
+    }
+
     public function testSendWithoutMessageIsMissingParam(): void
     {
         $this->expectException(\MissingParamException::class);

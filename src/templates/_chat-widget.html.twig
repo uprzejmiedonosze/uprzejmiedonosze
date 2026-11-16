@@ -15,7 +15,11 @@
             </span>
         </header>
         <div class="mpr-chat__messages js-chat-messages" role="log" aria-live="polite"></div>
+        <ul class="mpr-chat__files js-chat-files" hidden></ul>
         <form class="mpr-chat__form js-chat-form">
+            <button type="button" class="mpr-chat__attach js-chat-attach" title="Dodaj zdjęcie lub PDF (dla patronów)"
+                aria-label="Dodaj załącznik">📎</button>
+            <input type="file" class="js-chat-file" accept="image/jpeg,image/png,application/pdf" multiple hidden>
             <textarea class="js-chat-input" rows="1" maxlength="2000" placeholder="Zadaj pytanie…"
                 aria-label="Twoja wiadomość" required></textarea>
             <button type="submit" class="mpr-chat__send js-chat-send" aria-label="Wyślij">➤</button>

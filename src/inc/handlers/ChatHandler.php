@@ -25,16 +25,29 @@ class ChatHandler extends AbstractHandler {
         ]);
     }
 
-    /** GET /api/chat/unread — plakietka na przycisku czatu (tanie zapytanie przy każdym ładowaniu strony). */
+    /**
+     * GET /api/chat/unread — plakietka na przycisku czatu (tanie zapytanie przy każdym ładowaniu strony);
+     * `canAttach` = użytkownik jest patronem i może wysyłać załączniki.
+     */
     public function unread(Request $request, Response $response, array $args): Response {
-        return $this->renderJson($response, ['unread' => \chat\unread($request->getAttribute('user')->getEmail())]);
+        $user = $request->getAttribute('user');
+        return $this->renderJson($response, [
+            'unread' => \chat\unread($user->getEmail()),
+            'canAttach' => \assistant\attachments\isAllowed($user),
+        ]);
     }
 
-    /** POST /api/chat {message} — pytanie do asystenta; odpowiedź synchronicznie. */
+    /**
+     * POST /api/chat {message, attachments?: [{name, data}]} — pytanie do asystenta; odpowiedź synchronicznie.
+     * Załączniki (JPEG/PNG/PDF) tylko dla patronów; obrazy zużywają kredyty zdjęć (402 przy wyczerpaniu).
+     */
     public function send(Request $request, Response $response, array $args): Response {
-        $text = $this->getParam($request->getParsedBody() ?? [], 'message');
+        $body = $request->getParsedBody() ?? [];
+        $attachments = $body['attachments'] ?? [];
+        // Sama wiadomość jest wymagana tylko bez załączników (z plikami wystarczy plik).
+        $text = $attachments ? (string)($body['message'] ?? '') : (string)$this->getParam($body, 'message');
         try {
-            $reply = \assistant\reply($request->getAttribute('user'), (string)$text);
+            $reply = \assistant\reply($request->getAttribute('user'), $text, is_array($attachments) ? $attachments : [$attachments]);
         } catch (\assistant\ChatException $e) {
             throw new \Exception($e->getMessage(), $e->getCode(), $e);
         }
