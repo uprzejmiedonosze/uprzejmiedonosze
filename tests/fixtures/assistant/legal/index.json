@@ -1,5 +1,7 @@
 {"acts": [
   {"id": "prd", "title": "Prawo o ruchu drogowym", "short": "PoRD", "ref": "testowy", "url": ""},
   {"id": "../evil", "title": "Zły identyfikator", "short": "", "ref": "", "url": ""},
-  {"id": "pusty", "title": "Akt bez pliku", "short": "", "ref": "", "url": ""}
+  {"id": "pusty", "title": "Akt bez pliku", "short": "", "ref": "", "url": ""},
+  {"id": "rozp", "title": "Rozporządzenie testowe", "short": "", "ref": "", "url": ""},
+  {"id": "tar", "title": "Taryfikator testowy", "short": "", "ref": "", "url": "", "manual": true}
 ]}

@@ -1,0 +1,15 @@
+{
+  "_README": "Poprawki nakładane przez tools/legal-acts.py po konwersji aktu (klucz = id aktu). {from,to} = dosłowna zamiana, {re,to} = regex (Python). Reguła, która nic nie zmieni, jest zgłaszana przy update. Nie edytuj <id>.md ręcznie — dopisz regułę tutaj.",
+  "znaki": [
+    {"note": "OCR w ISAP: „A-l la” → A-11a", "re": "\\b([A-GPT])-l la\\b", "to": "\\1-11a"},
+    {"note": "OCR w ISAP: „A-l 1”, „A-l 8a”, „D-l 1” → A-11, A-18a, D-11", "re": "\\b([A-GPT])-l (\\d)", "to": "\\1-1\\2"},
+    {"note": "OCR w ISAP: litera l zamiast cyfry 1 w kodzie znaku (B-l1 → B-11, T-lb → T-1b, A-l → A-1)", "re": "\\b([A-GPT])-l(?=[\\dab]?\\b)", "to": "\\1-1"},
+    {"note": "spacja w kodzie znaku: „F- 14b” → F-14b", "re": "\\b([A-GPT])- (\\d)", "to": "\\1-\\2"},
+    {"note": "brak spacji przed myślnikiem", "from": "zwężenie jezdni -prawostronne", "to": "zwężenie jezdni - prawostronne"},
+    {"note": "brak spacji przed myślnikiem", "from": "T-23f- autobus", "to": "T-23f - autobus"}
+  ],
+  "udp": [
+    {"note": "art. 13d, kategoria 5: kontynuacja punktu po przecinku", "from": "powyżej pięciu,\na także pojazdy specjalne.", "to": "powyżej pięciu, a także pojazdy specjalne."},
+    {"note": "art. 16i pkt 7: kontynuacja punktu po przecinku", "from": "że spełnia wymogi,\no których mowa w art. 16e ust. 2", "to": "że spełnia wymogi, o których mowa w art. 16e ust. 2"}
+  ]
+}

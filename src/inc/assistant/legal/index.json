@@ -6,7 +6,8 @@
       "short": "Prawo o ruchu drogowym",
       "eli": "DU/1997/602",
       "ref": "Dz.U. z 2024 r. poz. 1251 (późniejsze nowelizacje nieuwzględnione)",
-      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20240001251"
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20240001251",
+      "exclude": "55, 57-57a, 59, 61-62, 64-70, 72-86, 100a-100e, 114-121, 132-152, 2 pkt 87, 2 pkt 21a-21b, 2 pkt 35a-35c, 2 pkt 49a, 2 pkt 53, 2 pkt 55-57, 2 pkt 60, 2 pkt 61-63, 2 pkt 64-79, 2 pkt 84-86"
     },
     {
       "id": "kw",
@@ -23,6 +24,73 @@
       "eli": "DU/1997/779",
       "ref": "Dz.U. z 2021 r. poz. 1763",
       "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20210001763"
+    },
+    {
+      "id": "kpw",
+      "title": "Ustawa z dnia 24 sierpnia 2001 r. – Kodeks postępowania w sprawach o wykroczenia",
+      "short": "Kodeks postępowania w sprawach o wykroczenia",
+      "eli": "DU/2001/1148",
+      "ref": "Dz.U. z 2026 r. poz. 1336",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20260001336"
+    },
+    {
+      "id": "mandaty_sm",
+      "title": "Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 17 listopada 2003 r. w sprawie wykroczeń, za które strażnicy straży gminnych są uprawnieni do nakładania grzywien w drodze mandatu karnego",
+      "short": "Wykroczenia, za które straż gminna nakłada mandaty",
+      "eli": "DU/2003/2026",
+      "ref": "Dz.U. z 2026 r. poz. 167 (późniejsze nowelizacje nieuwzględnione)",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20260000167"
+    },
+    {
+      "id": "znaki",
+      "title": "Rozporządzenie Ministrów Infrastruktury oraz Spraw Wewnętrznych i Administracji z dnia 31 lipca 2002 r. w sprawie znaków i sygnałów drogowych",
+      "short": "Rozporządzenie o znakach i sygnałach drogowych",
+      "eli": "DU/2002/1393",
+      "ref": "Dz.U. z 2019 r. poz. 2310 (późniejsze nowelizacje nieuwzględnione)",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20190002310"
+    },
+    {
+      "id": "udp",
+      "title": "Ustawa z dnia 21 marca 1985 r. o drogach publicznych",
+      "short": "Ustawa o drogach publicznych",
+      "eli": "DU/1985/60",
+      "ref": "Dz.U. z 2025 r. poz. 889 (późniejsze nowelizacje nieuwzględnione)",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20250000889",
+      "exclude": "4a, 10, 13a, 13d-13e, 13h-16zi, 17-18a, 20a-20e, 21-35, 38-39, 40a-53"
+    },
+    {
+      "id": "usuwanie_pojazdow",
+      "title": "Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 22 czerwca 2011 r. w sprawie usuwania pojazdów, których używanie może zagrażać bezpieczeństwu lub porządkowi ruchu drogowego albo utrudniających prowadzenie akcji ratowniczej",
+      "short": "Usuwanie pojazdów (art. 130a ust. 1 i 2 PoRD)",
+      "eli": "DU/2011/846",
+      "ref": "Dz.U. z 2018 r. poz. 2285 (późniejsze nowelizacje nieuwzględnione)",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20180002285"
+    },
+    {
+      "id": "pojazdy_nieuzywane",
+      "title": "Rozporządzenie Ministra Spraw Wewnętrznych i Administracji z dnia 22 czerwca 2011 r. w sprawie usuwania pojazdów pozostawionych bez tablic rejestracyjnych lub których stan wskazuje na to, że nie są używane",
+      "short": "Usuwanie pojazdów porzuconych / bez tablic",
+      "eli": "DU/2011/845",
+      "ref": "Dz.U. z 2022 r. poz. 1959",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20220001959"
+    },
+    {
+      "id": "kpa",
+      "title": "Ustawa z dnia 14 czerwca 1960 r. – Kodeks postępowania administracyjnego (dział VIII: skargi i wnioski)",
+      "short": "KPA – skargi i wnioski",
+      "eli": "DU/1960/168",
+      "articles": "221-260",
+      "ref": "Dz.U. z 2025 r. poz. 1691",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20250001691"
+    },
+    {
+      "id": "taryfikator",
+      "title": "Taryfikator mandatów: tabela B (wykroczenia drogowe) załącznika do rozporządzenia Prezesa Rady Ministrów z dnia 24 listopada 2003 r. w sprawie wysokości grzywien nakładanych w drodze mandatów karnych za wybrane rodzaje wykroczeń",
+      "short": "Taryfikator mandatów (wykroczenia drogowe)",
+      "eli": "DU/2003/2023",
+      "manual": true,
+      "ref": "tabela B w brzmieniu z Dz.U. z 2021 r. poz. 2484 i z 2023 r. poz. 1256; pozycje „Lp. N”",
+      "url": "https://isap.sejm.gov.pl/isap.nsf/DocDetails.xsp?id=WDU20210002484"
     }
   ]
 }

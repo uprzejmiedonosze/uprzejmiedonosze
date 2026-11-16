@@ -4,7 +4,13 @@
 Każdy akt w legal/index.json ma pole `eli` — adres aktu pierwotnego (np. "DU/1997/602"). Skrypt znajduje jego
 najnowszy tekst jednolity (obwieszczenie Marszałka Sejmu), pobiera treść (HTML, a gdy go nie ma — PDF przez
 `pdftotext` z poppler) i zapisuje `legal/<id>.md` w formacie z legal/README.md (każdy artykuł = `## Art. N`).
-W index.json aktualizuje `ref` (Dz.U. tekstu jednolitego) i `url` (strona ISAP).
+W index.json aktualizuje `ref` (Dz.U. tekstu jednolitego) i `url` (strona ISAP). Opcjonalne pole `articles`
+(np. "221-260") zapisuje tylko wskazane artykuły/paragrafy — dla obszernych aktów, z których potrzebny jest jeden dział;
+pole `exclude` (np. "64-70, 100a-100e, 140i, 2 pkt 87, 130a ust. 5-7") pomija artykuły — albo ich ustępy/punkty/litery —
+nieistotne dla serwisu. Numeracja przepisów jest stała
+(uchylony przepis nie zmienia znaczenia, nowy dostaje nowy numer), więc lista wyłączeń nie dezaktualizuje się.
+Rozporządzenia (bez artykułów) dzielone są na paragrafy: `## § N`. Poprawki błędów źródła i podziałów akapitów,
+których parser nie rozstrzyga, są w legal/errata.json (nakładane przy każdym `update`) — nie edytuj <id>.md ręcznie.
 
 Użycie:
   python3 tools/legal-acts.py check              # stan: obecny tekst jednolity vs najnowszy, nowelizacje po nim
@@ -135,13 +141,13 @@ def html_to_md(src: str) -> list[str]:
     tree.feed(src)
     out: list[str] = []
 
-    def body(container, depth):
+    def body(container, depth, in_art):
         for c in container.children:
             if isinstance(c, str):
                 continue
             k = unit_kind(c)
             if k:
-                unit(c, k, depth)
+                unit(c, k, depth, in_art)
             elif c.attrs.get('data-template') == 'xText':
                 if t := norm(node_text(c)):
                     out.append('  ' * depth + t)
@@ -150,20 +156,26 @@ def html_to_md(src: str) -> list[str]:
                     if not isinstance(li, str) and li.tag == 'li' and (t := norm(node_text(li))):
                         out.append('  ' * depth + t)
             else:
-                body(c, depth)
+                body(c, depth, in_art)
 
-    def unit(n, kind, depth):
+    def unit(n, kind, depth, in_art=False):
         h = child(n, lambda c: c.tag == 'h3')
         label = norm(node_text(h)) if h else ''
         inner = child(n, lambda c: c.tag == 'div' and 'unit-inner' in c.cls())
-        if kind == 'arti' or kind in ('bran', 'chpt', 'schp', 'sect', 'part', 'titl', 'divi'):
-            out.extend(['', '## ' + (re.sub(r'\.$', '', label) if kind == 'arti' else label)])
+        # Artykuł, a w rozporządzeniu paragraf (§ poza artykułem) = osobna sekcja; jednostki redakcyjne wyżej = nagłówki.
+        if kind == 'arti' or (kind == 'para' and not in_art):
+            out.extend(['', '## ' + re.sub(r'\.$', '', label)])
             if inner:
-                body(inner, 0)
+                body(inner, 0, True)
             return
-        start = len(out)  # ustęp/punkt/litera/tiret: etykieta i pierwszy tekst w jednej linii
+        if kind in ('bran', 'chpt', 'schp', 'sect', 'part', 'titl', 'divi'):
+            out.extend(['', '## ' + label])
+            if inner:
+                body(inner, 0, False)
+            return
+        start = len(out)  # ustęp/punkt/litera/tiret/§ w artykule: etykieta i pierwszy tekst w jednej linii
         if inner:
-            body(inner, depth + 1)
+            body(inner, depth + 1, in_art)
         if label and len(out) > start:
             out[start] = '  ' * depth + label + ' ' + out[start].lstrip()
         elif label:
@@ -176,7 +188,7 @@ def html_to_md(src: str) -> list[str]:
             k = unit_kind(c)
             if k == 'pass':
                 continue  # punkty obwieszczenia (wykaz zmian, przepisy nieobjęte tekstem) — nie są treścią aktu
-            unit(c, k, 0) if k else walk(c)
+            unit(c, k, 0, False) if k else walk(c)
 
     walk(tree.root)
     return out
@@ -207,15 +219,21 @@ def pdf_lines(pdf: str) -> list[tuple[float, float | None, str]]:
     body_h = Counter(round(w[3], 1) for rows in pages for r in rows for w in r).most_common(1)[0][0]
     lines = []
     for rows in pages:
+        # Przypisy = blok linii mniejszą czcionką na dole strony. Nie każda mniejsza linia: pogrubienie („Art. 1.”,
+        # tytuły rozdziałów) ma w pdftotext niższą ramkę niż zwykły tekst.
+        end = len(rows)
+        while end and max(w[3] for w in rows[end - 1]) < body_h - 0.5:
+            end -= 1
         prev_y = None
-        for r in rows:
+        for r in rows[:end]:
             r.sort(key=lambda w: w[0])
-            if max(w[3] for w in r) < body_h - 0.5 or r[0][1] < 65:
-                continue  # przypisy (mniejsza czcionka) i nagłówek strony „Dziennik Ustaw – N – Poz.”
+            if r[0][1] < 65:
+                continue  # nagłówek strony „Dziennik Ustaw – N – Poz.”
             text, prev_end = '', None
             for x0, _, x1, h, t in r:
-                if h < body_h - 2:  # indeks górny: odnośnik do przypisu „5)” pomijamy, „[1]” (art. 60¹) zostawiamy
-                    if m := re.fullmatch(r'\[(\d+)\]', t):
+                if h < body_h * 0.75:  # indeks górny: odnośnik do przypisu „5)” pomijamy, numer (art. 60¹: „[1]” lub „1”) zostawiamy
+                    attached = prev_end is not None and x0 - prev_end < 1.0 and re.search(r'\d$', text)
+                    if m := re.fullmatch(r'\[(\d+)\]', t) or (attached and re.fullmatch(r'(\d+)', t)):
                         text += m.group(1).translate(SUP)
                     prev_end = x1
                     continue
@@ -230,7 +248,8 @@ def pdf_lines(pdf: str) -> list[tuple[float, float | None, str]]:
 def pdf_to_md(pdf: str) -> list[str]:
     lines, body_h = pdf_lines(pdf)
     start = next((i for i, (_, _, t) in enumerate(lines) if t.startswith('Załącznik do obwieszczenia')), 0)
-    start = next(i for i in range(start, len(lines)) if HEADING.match(lines[i][2]) or lines[i][2].startswith('Art. 1.'))
+    start = next(i for i in range(start, len(lines))
+                 if HEADING.match(lines[i][2]) or lines[i][2].startswith(('Art. 1.', '§ 1.')))
     margin = min(x for x, _, _ in lines[start:])
 
     paras: list[str] = []
@@ -250,8 +269,19 @@ def pdf_to_md(pdf: str) -> list[str]:
         pending_heading = False
         # Nowy akapit = większy odstęp w pionie (~1,5 wiersza; złamana linia ~1,15). Na początku strony odstępu
         # nie ma: wtedy decyduje wcięcie (kontynuacja punktu jest wcięta, część wspólna po punktach — nie zawsze).
-        new_para = gap > body_h * 1.35 if gap is not None else (indented != in_point)
-        if NEW_PARA.match(t) or new_para:
+        prev = paras[-1] if paras else ''
+        if prev and not NEW_PARA.match(t) and (
+                re.search(r'[\w-]$', prev)  # urwane w środku zdania/wyrazu
+                or re.search(r'(\b(r|poz|ust|art|pkt|lit|zm|nr|Dz|U|z|t|j|tj|m\.in)\.)$', prev)  # skrót, nie koniec zdania
+                or (prev.endswith(',') and re.match(r'[a-ząćęłńóśźż]', t) and not in_point)):
+            new_para = False  # odstępy w PDF bywają nierówne — to kontynuacja
+        elif gap is not None:
+            new_para = gap > body_h * 1.35
+        else:  # pierwsza linia strony: zdanie urwane na poprzedniej stronie (bez . ; :) to kontynuacja
+            new_para = bool(paras) and paras[-1].rstrip()[-1:] in '.;:' and indented != in_point
+        # „Art. 5 ustawy…”/„§ 6 Kodeksu…” może też zacząć złamaną linię — wtedy odstęp jest mały i to nie nowy akapit.
+        wrapped_ref = gap is not None and not new_para and re.match(r'^(Art\.\s*\d+[a-z]*[⁰¹²³⁴⁵⁶⁷⁸⁹]*|§\s*\d+[a-z]*)\s+[^\d\s]', t)
+        if (NEW_PARA.match(t) and not wrapped_ref) or new_para:
             paras.append(t)
             in_point = bool(re.match(r'^(\d+[a-z]*|[a-z]{1,2})\)', t))
             continue
@@ -261,9 +291,14 @@ def pdf_to_md(pdf: str) -> list[str]:
         else:
             paras[-1] = prev + ' ' + t
 
+    top_para = not any(p.startswith('Art.') for p in paras)  # rozporządzenie: jednostką jest §
     out: list[str] = []
     for p in paras:
-        if HEADING.match(p):
+        if top_para and (m := re.match(r'^§\s*(\d+[a-z]*[⁰¹²³⁴⁵⁶⁷⁸⁹]*)\.\s*(.*)$', p)):
+            out.extend(['', f'## § {m.group(1)}'])
+            if m.group(2):
+                out.append(m.group(2))
+        elif HEADING.match(p):
             out.extend(['', '## ' + p])
         elif m := re.match(r'^Art\.\s*(\d+[a-z]*[⁰¹²³⁴⁵⁶⁷⁸⁹]*)\.\s*(.*)$', p):
             out.extend(['', f'## Art. {m.group(1)}'])
@@ -292,16 +327,174 @@ def convert(text_eli: str) -> list[str]:
         return pdf_to_md(f.name)
 
 
+UNIT = re.compile(r'^## (Art\.|§)\s*(\d+)([a-z]*)')
+MAX_SUFFIX = '\uffff'
+
+
+def unit_key(heading: str) -> tuple[int, str] | None:
+    """Numer jednostki z nagłówka („## Art. 80bh” → (80, 'bh')); None dla rozdziałów i działów."""
+    m = UNIT.match(heading)
+    return (int(m.group(2)), m.group(3)) if m else None
+
+
+def parse_spec(spec: str) -> list[tuple[tuple[int, str], tuple[int, str]]]:
+    """„221-260, 140i, 100a-100e” → zakresy kluczy (numer, litery). Litery porównujemy jak w numeracji ustaw:
+    a < aa < at < b < e, więc 100a-100e obejmuje 100a…100at i 100b…100e, ale nie 100f. Koniec bez liter obejmuje
+    wszystkie warianty literowe tego numeru („72-80” → do 80zf); pojedynczy numer bez liter — tylko ten artykuł."""
+    out = []
+    for part in spec.replace(' ', '').split(','):
+        if not part:
+            continue
+        lo, _, hi = part.partition('-')
+        m_lo, m_hi = re.fullmatch(r'(\d+)([a-z]*)', lo), re.fullmatch(r'(\d+)([a-z]*)', hi or lo)
+        if not m_lo or not m_hi:
+            sys.exit(f'Błędny zakres przepisów: {part!r}')
+        start = (int(m_lo.group(1)), m_lo.group(2))
+        end = (int(m_hi.group(1)), m_hi.group(2) or (MAX_SUFFIX if hi else ''))
+        out.append((start, end))
+    return out
+
+
+def in_spec(key: tuple[int, str], ranges) -> bool:
+    return any(lo <= key <= hi for lo, hi in ranges)
+
+
+def filter_units(body: list[str], keep) -> list[str]:
+    """Zostawia jednostki, dla których keep(klucz) jest prawdą; nagłówek rozdziału — tylko jeśli coś pod nim zostało."""
+    sections: list[list[str]] = [[]]
+    for line in body:
+        if line.startswith('## '):
+            sections.append([])
+        sections[-1].append(line)
+    out, heading = sections[0], []
+    for sec in sections[1:]:
+        key = unit_key(sec[0])
+        if key is None:
+            heading = sec  # rozdział/dział: dopisz dopiero przed pierwszą zachowaną jednostką
+        elif keep(key):
+            out += heading + sec
+            heading = []
+    return out
+
+
+SUB_LABEL = {  # etykiety jednostek wewnątrz artykułu (linia po zdjęciu wcięcia)
+    '§': re.compile(r'§\s*(\d+[a-z]*)\.(?:\s|$)'),
+    'ust.': re.compile(r'(\d+[a-z]*)\.(?:\s|$)'),
+    'pkt': re.compile(r'(\d+[a-z]*)\)(?:\s|$)'),
+    'lit.': re.compile(r'([a-z]{1,3})\)(?:\s|$)'),
+}
+SUB_TOKEN = re.compile(r'(?:§\s*)?(\d+[a-z]*)\s+((?:(?:§|ust\.|pkt|lit\.)\s*[0-9a-z]+(?:-[0-9a-z]+)?\s*)+)')
+
+
+def split_exclude(spec: str) -> tuple[str, list[str]]:
+    """`exclude` → (całe artykuły, np. „64-70, 140i”; wyłączenia wewnątrz artykułu, np. [„2 pkt 87”, „130a ust. 5-7”])."""
+    whole, inner = [], []
+    for token in (t.strip() for t in spec.split(',')):
+        (inner if ' ' in token else whole).append(token)
+    return ', '.join(t for t in whole if t), inner
+
+
+def sub_key(value: str) -> tuple[int, str]:
+    m = re.fullmatch(r'(\d*)([a-z]*)', value)
+    return (int(m.group(1)) if m.group(1) else -1, m.group(2))
+
+
+def indent(line: str) -> int:
+    return len(line) - len(line.lstrip(' '))
+
+
+def subtree_end(lines: list[str], i: int) -> int:
+    """Koniec jednostki z linii i: dalsze linie wcięte głębiej (punkty, litery); stop na pustej lub równej/płytszej."""
+    j = i + 1
+    while j < len(lines) and lines[j].strip() and indent(lines[j]) > indent(lines[i]):
+        j += 1
+    return j
+
+
+def exclude_inner(body: list[str], tokens: list[str], act_id: str) -> list[str]:
+    """Usuwa ustępy/punkty/litery wskazane jako „<art> [ust. N] [pkt N] [lit. x]” (ostatni poziom może być zakresem)."""
+    for token in tokens:
+        m = SUB_TOKEN.fullmatch(token)
+        if not m:
+            sys.exit(f'{act_id}: błędne wyłączenie {token!r} (format: „2 pkt 87”, „130a ust. 5-7”, „§ 2 ust. 1 pkt 4”)')
+        art = (int(re.match(r'\d+', m.group(1)).group()), re.sub(r'^\d+', '', m.group(1)))
+        path = re.findall(r'(§|ust\.|pkt|lit\.)\s*([0-9a-z]+(?:-[0-9a-z]+)?)', m.group(2))
+        head = next((i for i, l in enumerate(body) if l.startswith('## ') and unit_key(l) == art), None)
+        if head is None:
+            print(f'  {act_id}: wyłączenie {token!r} — NIE PASUJE (brak artykułu)')
+            continue
+        start, end = head + 1, next((i for i in range(head + 1, len(body)) if body[i].startswith('## ')), len(body))
+        removed: list[tuple[int, int]] = []
+        for depth, (kind, value) in enumerate(path):
+            lo, _, hi = value.partition('-')
+            last = depth == len(path) - 1
+            hits = [i for i in range(start, end) if (lm := SUB_LABEL[kind].match(body[i].lstrip(' ')))
+                    and (sub_key(lo) <= sub_key(lm.group(1)) <= sub_key(hi or lo) if last and hi else lm.group(1) == lo)]
+            if hits:
+                top = min(indent(body[i]) for i in hits)
+                hits = [i for i in hits if indent(body[i]) == top]
+            if not hits or (len(hits) > 1 and not (last and hi)):  # jeden numer w kilku ustępach = niejednoznaczne
+                print(f'  {act_id}: wyłączenie {token!r} — NIE PASUJE ({kind} {value}: '
+                      f'{"brak" if not hits else "niejednoznaczne, podaj ustęp"})')
+                removed = []
+                break
+            if last:
+                removed = [(i, subtree_end(body, i)) for i in hits]
+            else:
+                start, end = hits[0] + 1, subtree_end(body, hits[0])
+        drop = {j for a, b in removed for j in range(a, b)}
+        body = [l for i, l in enumerate(body) if i not in drop]
+        if removed:
+            print(f'  {act_id}: wyłączono {token} ({len(removed)} jedn., {len(drop)} linii)')
+    return body
+
+
+def select_range(body: list[str], spec: str) -> list[str]:
+    ranges = parse_spec(spec)
+    return filter_units(body, lambda k: in_spec(k, ranges))
+
+
+def apply_errata(act_id: str, body: list[str]) -> list[str]:
+    """Poprawki z legal/errata.json: błędy źródła (OCR w ISAP) i podziały akapitów, których parser nie rozstrzyga.
+    Reguła: {"from": tekst, "to": tekst} albo {"re": regex, "to": zamiana}; dopasowanie na całym tekście (\\n = nowa linia).
+    Reguła, która nic nie zmieniła, jest zgłaszana — źródło się zmieniło i erratę trzeba przejrzeć."""
+    path = os.path.join(LEGAL, 'errata.json')
+    rules = json.load(open(path, encoding='utf-8')).get(act_id, []) if os.path.exists(path) else []
+    if not rules:
+        return body
+    text = '\n'.join(body)
+    for r in rules:
+        if 're' in r:
+            text, n = re.subn(r['re'], r['to'], text)
+        else:
+            n = text.count(r['from'])
+            text = text.replace(r['from'], r['to'])
+        print(f'  errata {act_id}: {n}× {r.get("note") or r.get("re") or r["from"][:40]!r}' + ('' if n else ' — NIE PASUJE, przejrzyj errata.json'))
+    return text.split('\n')
+
+
 def write_act(act: dict, text_eli: str, later: list[str]) -> None:
-    body = convert(text_eli)
-    arts = sum(1 for l in body if l.startswith('## Art.'))
-    keys = [l[8:] for l in body if l.startswith('## Art.')]
+    body = apply_errata(act['id'], convert(text_eli))  # przed wyborem/wyłączeniami: errata dotyczy pełnego tekstu
+    if act.get('articles'):
+        body = [''] + select_range(body, act['articles'])
+    if act.get('exclude'):
+        whole, inner = split_exclude(act['exclude'])
+        if whole:
+            excluded = parse_spec(whole)
+            before = sum(1 for l in body if UNIT.match(l))
+            body = filter_units(body, lambda k: not in_spec(k, excluded))
+            print(f'  {act["id"]}: wyłączono {before - sum(1 for l in body if UNIT.match(l))} artykułów ({whole})')
+        body = exclude_inner(body, inner, act['id'])
+    arts = sum(1 for l in body if UNIT.match(l))
+    keys = [l[3:] for l in body if UNIT.match(l)]
     dupes = sorted({k for k in keys if keys.count(k) > 1})
     if arts == 0:
-        sys.exit(f'{act["id"]}: nie znaleziono artykułów w {text_eli} — nie zapisuję')
+        sys.exit(f'{act["id"]}: nie znaleziono artykułów ani paragrafów w {text_eli} — nie zapisuję')
     header = [f'# {act["title"]}', '',
               f'Tekst jednolity: {ref_of(text_eli)} ({isap_url(text_eli)}), pobrany z api.sejm.gov.pl skryptem '
-              'tools/legal-acts.py — nie edytuj ręcznie. Przypisy redakcyjne pominięte.']
+              'tools/legal-acts.py — nie edytuj ręcznie. Przypisy redakcyjne pominięte.'
+              + (f' Tylko przepisy {act["articles"]}.' if act.get('articles') else '')
+              + (f' Pominięte jako nieistotne dla serwisu: {act["exclude"]}.' if act.get('exclude') else '')]
     if later:
         header.append('Nieuwzględnione zmiany ogłoszone po tekście jednolitym: '
                       + ', '.join(ref_of(e) for e in later) + '.')
@@ -309,7 +502,7 @@ def write_act(act: dict, text_eli: str, later: list[str]) -> None:
         f.write('\n'.join(header + body).rstrip() + '\n')
     act['ref'] = ref_of(text_eli) + (' (późniejsze nowelizacje nieuwzględnione)' if later else '')
     act['url'] = isap_url(text_eli)
-    print(f'{act["id"]}: {ref_of(text_eli)} — {arts} artykułów' + (f', DUPLIKATY numerów: {dupes}' if dupes else '')
+    print(f'{act["id"]}: {ref_of(text_eli)} — {arts} jednostek (art./§)' + (f', DUPLIKATY numerów: {dupes}' if dupes else '')
           + (f', {len(later)} nowelizacji po tekście jednolitym' if later else ''))
 
 
@@ -329,6 +522,9 @@ def main() -> None:
     for act in acts:
         if not act.get('eli'):
             print(f'{act["id"]}: brak pola "eli" w index.json — pomijam')
+            continue
+        if act.get('manual'):  # np. taryfikator: opracowany ręcznie, skrypt go nie nadpisuje
+            print(f'{act["id"]}: opracowany ręcznie ("manual": true) — pomijam')
             continue
         meta = act_meta(act['eli'])
         text_eli = a.text or latest_text(meta)
