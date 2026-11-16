@@ -67,7 +67,7 @@ wpis w `DIRECTIVES` + partial + przykład w `\wiki\guide()`. Import z DokuWiki: 
 **Asystent AI** ([ADR 0007](../../docs/adr/0007-chat-assistant.md)) — `assistant/` (`Assistant.php` pętla tool-calling i prompt,
 `Tools.php` narzędzia, `Corpus.php` wyszukiwanie), rozmowa w `store/ChatStore.php` (`\chat\`), trasy `/api/chat` w `handlers/ChatHandler.php`,
 widżet: `templates/_chat-widget.html.twig` + `js/sites/chat.js` + `scss/lib/chat.scss`. Wiedza to pliki:
-`assistant/knowledge/*.md` (`podstawy.md` zawsze w prompcie), `assistant/legal/` (akty, `## Art. N`), `assistant/skills/*.md`
+`assistant/knowledge/*.md` (`podstawy.md` zawsze w prompcie; `wiki-*.md` generuje `tools/wiki-knowledge.php` z wiki), `assistant/legal/` (akty, `## Art. N`), `assistant/skills/*.md`
 (instrukcje, np. odwołanie — nowy skill = nowy plik). **Powiadomienie systemowe w czacie:** `\chat\notify($email, $tekst, '/app/list')`.
 Załączniki (tylko patroni; obraz i PDF zużywają po kredycie `\quota`): `assistant/Attachments.php`.
 Nowe narzędzie = wpis w `tools\definitions()` + gałąź w `tools\execute()` (tożsamość z `$user`, nigdy z argumentów modelu).
