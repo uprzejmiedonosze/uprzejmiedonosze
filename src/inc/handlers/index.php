@@ -15,3 +15,4 @@ require(__DIR__ . '/GeneratorHandler.php');
 require(__DIR__ . '/OAuthHandler.php');
 require(__DIR__ . '/PasskeyHandler.php');
 require(__DIR__ . '/WikiHandler.php');
+require(__DIR__ . '/ChatHandler.php');
