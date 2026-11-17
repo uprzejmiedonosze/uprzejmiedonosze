@@ -81,12 +81,31 @@ class AssistantTest extends DatabaseTestCase
         $this->assertSame('Zobacz Art. 49 PoRD.', $reply['content']);
         $stored = \chat\history(self::EMAIL)[1]['meta'];
         $this->assertSame(['search_legal'], $stored['tools']);
+        // ślad generowania: wersja promptu, id śladu i źródła — w bazie, nie w odpowiedzi do przeglądarki
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{8}$/', $stored['prompt']);
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{6}$/', $stored['trace']);
+        $this->assertContains('prd Art. 49', $stored['legal']);
+        foreach (['prompt', 'trace', 'legal', 'knowledge', 'skills'] as $key) $this->assertArrayNotHasKey($key, $reply['meta']);
         $fake->chat()->assertSent(function (string $method, array $params) {
             static $n = 0;
             if (++$n < 2) return true;
             $tool = end($params['messages']);
             return $tool['role'] === 'tool' && str_contains($tool['content'], 'Art. 49');
         });
+    }
+
+    public function testToolSummaryCollectsSourcesWithoutReportDetails(): void
+    {
+        [$log, $src] = \assistant\toolSummary('search_knowledge', ['query' => 'x'],
+            ['results' => [['source' => 'wiki-faq', 'title' => 'Czy będę anonimowa?', 'text' => '…']]]);
+        $this->assertSame('wiki-faq: Czy będę anonimowa?', $log);
+        $this->assertSame(['knowledge' => ['wiki-faq: Czy będę anonimowa?']], $src);
+        $this->assertSame(['skill odwolanie', ['skills' => ['odwolanie']]],
+            \assistant\toolSummary('load_skill', ['name' => 'odwolanie'], ['skill' => 'odwolanie', 'instructions' => '…']));
+        [$log] = \assistant\toolSummary('list_my_reports', [], ['count' => 1, 'reports' => [['id' => 'abc', 'number' => 'UD/1/2', 'address' => 'ul. Tajna 1', 'plate' => 'WX123']]]);
+        $this->assertSame('1 zgłoszeń: UD/1/2', $log);
+        $this->assertSame('błąd: Nieznany skill: x', \assistant\toolSummary('load_skill', [], ['error' => 'Nieznany skill: x'])[0]);
+        $this->assertSame(\assistant\promptId("A\nDzisiejsza data: 2026-01-01.\nB"), \assistant\promptId("A\nDzisiejsza data: 2026-11-16.\nB"));
     }
 
     public function testEscalateToContactSetsContactUrl(): void
@@ -154,6 +173,9 @@ class AssistantTest extends DatabaseTestCase
     public function testPromptCarriesBasicsActsAndSkillsButNotArticles(): void
     {
         $prompt = \assistant\systemPrompt($this->user());
+        $this->assertStringStartsWith('Jesteś Uprzejmym Asystentem', $prompt); // prompt.md
+        $this->assertStringContainsString('Dzisiejsza data: ' . date('Y-m-d'), $prompt);
+        $this->assertStringNotContainsString('{{', $prompt);
         $this->assertStringContainsString('bezpłatny', $prompt);       // podstawy.md
         $this->assertStringContainsString('prd: Prawo o ruchu drogowym', $prompt);
         $this->assertStringContainsString('odwolanie:', $prompt);       // skill: nazwa + opis

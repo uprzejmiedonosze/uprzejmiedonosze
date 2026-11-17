@@ -139,6 +139,9 @@
         padding: .6em;
         border-top: 1px solid $mpr-outline-variant;
 
+        // `hidden` na polu plików przegrywa z globalnymi stylami input (display) — wymuszamy ukrycie.
+        input[type=file][hidden] { display: none; }
+
         textarea {
             flex: 1;
             resize: none;
