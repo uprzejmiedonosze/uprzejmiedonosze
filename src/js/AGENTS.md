@@ -28,7 +28,7 @@
 | `send.js` | `sendApplication(appId)`, `showButtons()` — wysyłka zgłoszenia |
 | `validation.js` | `checkValue`, `checkValueRe`, `checkAddress`, `checkDateTimeValue`, `bindSoftCommentValidation` |
 | `geolocation.js` | Mapa, `setAddressByLatLng`, wykrywanie jednostki SM, `setStopAgresji` |
-| `format.js` | `num(value, numerals)` — polska odmiana liczebników (odpowiednik PHP `num()`) |
+| `format.js` | `num(value, numerals)` — polska odmiana liczebników (odpowiednik PHP `num()`); `escapeHtml(text)` — dane od użytkownika do `toast.js` (który używa `innerHTML`) |
 | `webauthn.js` | Passkeys: `supported`, `registerPasskey`, `loginWithPasskey`, `conditionalAvailable` |
 | `firebaseConfig.js` | Konfiguracja Firebase per środowisko |
 | `isIOS.js`, `delay.js`, `nodeListExt.js` | Drobne utilsy; `nodeListExt` dodaje m.in. `NodeList.prototype.addEventListener` |

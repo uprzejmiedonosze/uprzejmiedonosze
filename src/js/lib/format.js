@@ -16,3 +16,17 @@ export function num(value, numerals) {
 		vo.push(numerals[2]);
 	return vo.join(' ');
 }
+
+/**
+ * Escapuje tekst do wstawienia jako HTML (np. do toast.js, który używa innerHTML) — dla danych od użytkownika.
+ * @param {string} text
+ * @returns {string}
+ */
+export function escapeHtml(text) {
+	return String(text)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;")
+}
