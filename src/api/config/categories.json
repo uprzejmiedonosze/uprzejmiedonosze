@@ -424,11 +424,8 @@
         "carImageHint": "Dodaj zbliżenie tablicy rejestracyjnej.",
         "stopAgresjiOnly": true,
         "parking": false,
-        "beta": true,
         "order": 1,
-        "betaGroups": [
-            6
-        ]
+        "groups": [6]
     },
     "28": {
         "title": "Wyciek płynów",
@@ -444,11 +441,8 @@
         "carImageHint": "Dodaj zdjęcie całego pojazdu z widoczną tablicą rejestracyjną.",
         "stopAgresjiOnly": true,
         "parking": false,
-        "beta": true,
         "order": 2,
-        "betaGroups": [
-            6
-        ]
+        "groups": [6]
     },
     "29": {
         "title": "Elementy wystające",
@@ -464,11 +458,8 @@
         "carImageHint": "Dodaj zbliżenie wystającego elementu.",
         "stopAgresjiOnly": true,
         "parking": false,
-        "beta": true,
         "order": 3,
-        "betaGroups": [
-            6
-        ]
+        "groups": [6]
     },
     "30": {
         "title": "Przyciemnione szyby lub światła",
@@ -484,11 +475,8 @@
         "carImageHint": "Dodaj zdjęcie przyciemnionych szyb lub świateł.",
         "stopAgresjiOnly": true,
         "parking": false,
-        "beta": true,
         "order": 4,
-        "betaGroups": [
-            6
-        ]
+        "groups": [6]
     },
     "31": {
         "title": "Hałas i spaliny w czasie jazdy",
@@ -504,9 +492,9 @@
         "carImageHint": "Uchwyć tablicę rejestracyjną.",
         "stopAgresjiOnly": true,
         "parking": false,
-        "adHoc": true,
-        "beta": true,
-        "order": 1
+        "requiresVideo": true,
+        "order": 5,
+        "groups": [6]
     },
     "32": {
         "title": "Drift lub jazda na jednym kole",
@@ -522,8 +510,8 @@
         "carImageHint": "Uchwyć tablicę rejestracyjną.",
         "stopAgresjiOnly": true,
         "parking": false,
-        "adHoc": true,
-        "beta": true,
-        "order": 2
+        "requiresVideo": true,
+        "order": 6,
+        "groups": [6]
     }
 }

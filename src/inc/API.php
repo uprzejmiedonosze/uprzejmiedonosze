@@ -27,16 +27,13 @@ const JPEG_QUALITY = 85;
 const MAX_IMAGE_UPLOAD_BYTES = 3 * 1_048_576;
 
 /**
- * Nagranie do zgłoszenia „na gorąco” (POST /api/rest/app/{id}/video). Aplikacja nagrywa tak, żeby plik zmieścił się
+ * Nagranie do zgłoszenia (POST /api/rest/app/{id}/video; wymagane w kategoriach Category::requiresVideo()). Aplikacja nagrywa tak, żeby plik zmieścił się
  * w limicie (../uprzejmiedonosze-pro/src/lib/adHoc.ts). Nagranie trafia na B2, a mail do KWP zawiera link do niego
  * (Application::getVideoUrl()), nie załącznik. Podnosząc limit, podnieś też post_max_size
  * (services/webapp/Dockerfile) i client_max_body_size (services/webapp/nginx.conf).
  */
 const MAX_VIDEO_UPLOAD_BYTES = 15 * 1_048_576;
 const VIDEO_TYPES = ['video/mp4' => 'mp4', 'video/quicktime' => 'mov', 'video/3gpp' => '3gp'];
-
-/** Ile godzin wstecz może sięgać data zgłoszenia „na gorąco” (data z chwili zgłoszenia w aplikacji). */
-const AD_HOC_MAX_AGE_HOURS = 24;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -65,16 +62,19 @@ function updateApplication(
 
     /** @var array<int, Category> $CATEGORIES */
     global $CATEGORIES;
-    // kategoria w fazie testów (`beta`) jest odrzucana na produkcji niezależnie od klienta (web, REST, MCP)
-    if (!isset($CATEGORIES[$category]) || !$CATEGORIES[$category]->isAvailable())
+    if (!isset($CATEGORIES[$category]))
         throw new \ValidationException('category', 'Wybierz rodzaj wykroczenia z listy');
-    $adHoc = $CATEGORIES[$category]->isAdHoc();
+    // hałas i drift: tylko z nagraniem, zawsze na wojewódzką skrzynkę SAD (Application::guessSMData())
+    $videoCategory = $CATEGORIES[$category]->requiresVideo();
 
-    if (!$application->hasRequiredImages($category)) {
+    if (!$application->hasRequiredImages()) {
         throw new NotSendableException("Zgłoszenie '{$application->id}' nie posiada wymaganych zdjęć");
     }
-    if ($application->hasVideo() && !$adHoc)
-        throw new \ValidationException('video', 'Nagranie wideo można dołączyć tylko do zgłoszenia na gorąco – usuń je albo zmień kategorię');
+    if ($videoCategory && !$application->hasVideo())
+        throw new \ValidationException('video', 'Dołącz nagranie – to wykroczenie zgłaszamy tylko z filmem');
+    // z nagraniem: najwyżej dwa zdjęcia (kontekst + auto); trzecie zastępuje film
+    if ($application->hasVideo() && isset($application->thirdImage->url))
+        throw new \ValidationException('images', 'Do zgłoszenia z nagraniem dołącz najwyżej dwa zdjęcia – usuń trzecie');
 
     // Server-side mirror of the web form checks (src/js/new-app/validate-form.js,
     // lib/validation.js), so every client (web, REST/mobile) gets the same rules.
@@ -100,9 +100,6 @@ function updateApplication(
     // zapisie niezmienionej daty (edycja starego zgłoszenia, patrz komentarz wyżej)
     if ($dateParsed < (new DateTime())->modify('-7 months') && date_format($dateParsed, DT_FORMAT) !== ($application->date ?? null))
         throw new \ValidationException('datetime', 'Wykroczenie starsze niż 7 miesięcy. SM/Policja nie zdąży zareagować!');
-    // zgłoszenie „na gorąco” składa się w chwili zdarzenia (data z aplikacji, nie ze zdjęcia)
-    if ($adHoc && $dateParsed < (new DateTime())->modify('-' . AD_HOC_MAX_AGE_HOURS . ' hours'))
-        throw new \ValidationException('datetime', 'Zgłoszenie na gorąco musi dotyczyć zdarzenia sprzed najwyżej ' . AD_HOC_MAX_AGE_HOURS . ' godzin');
     if ($category === 0 && mb_strlen(trim((string)$comment)) <= 10)
         throw new \ValidationException('comment', 'Wybierz rodzaj wykroczenia z listy albo opisz je w polu komentarza (min. 11 znaków)');
 
@@ -140,15 +137,15 @@ function updateApplication(
         \user\save($user);
     }
 
-    // „na gorąco” = zawsze wojewódzka skrzynka SAD (Application::guessSMData() wybiera ją po kategorii);
+    // hałas/drift z nagraniem = zawsze wojewódzka skrzynka SAD (Application::guessSMData() wybiera ją po kategorii);
     // po updateUserData(), które przywraca preferencję konta
-    if ($adHoc)
+    if ($videoCategory)
         $application->stopAgresji = true;
 
     /** @var \SM|\StopAgresji $sm */
     $sm = $application->guessSMData(true); // stores sm city inside the object
 
-    $application->stopAgresjiForced = $adHoc;
+    $application->stopAgresjiForced = $videoCategory;
     if ($CATEGORIES[$category]->isStopAgresjiOnly() && !$sm->isPolice()) {
         $application->stopAgresji = true;
         $application->stopAgresjiForced = true;
@@ -604,7 +601,7 @@ function videoUploadFromRequest(ServerRequestInterface $request): array {
 }
 
 /**
- * Dołącza nagranie do szkicu zgłoszenia „na gorąco” (`video` = {url, mime, size}); poprzednie nagranie jest usuwane.
+ * Dołącza nagranie do szkicu zgłoszenia (`video` = {url, mime, size}); poprzednie nagranie jest usuwane.
  * Plik leży obok zdjęć (`<cdn>/<user>/<appId>,vi.mp4`) i od razu trafia do B2; mail zawiera link do niego.
  * Zawsze sprząta plik tymczasowy.
  * @throws Exception 403 nie właściciel / zgłoszenie nieedytowalne, 500 zapis pliku
@@ -866,13 +863,13 @@ function confirmationData(Application $application): array {
         // category formal text + extensions + the user's comment (plain text; the web only turns URLs into links)
         'body' => trim($application->getCategory()->formal . ' ' . $application->getExtensionsText()
             . ' ' . ($application->userComment ?? '')),
-        // tylko kategorie parkingowe mówią o świadku parkowania; „na gorąco” zgłasza naoczny świadek zdarzenia
+        // tylko kategorie parkingowe mówią o świadku parkowania; hałas/drift (z nagraniem) zgłasza naoczny świadek zdarzenia
         'witness' => !$application->isParkingCategory()
-            ? ($application->isAdHoc() ? mb_convert_case($bylas, MB_CASE_TITLE_SIMPLE) . ' naocznym świadkiem zdarzenia.' : '')
+            ? ($application->isVideoCategory() ? mb_convert_case($bylas, MB_CASE_TITLE_SIMPLE) . ' naocznym świadkiem zdarzenia.' : '')
             : ($witness
                 ? mb_convert_case($bylas, MB_CASE_TITLE_SIMPLE) . ' świadkiem parkowania.'
                 : "Nie $bylas świadkiem parkowania."),
-        // zgłoszenie „na gorąco”: nagranie dołączone do maila (null = brak)
+        // nagranie: link do niego trafia do maila (null = brak)
         'video' => $application->hasVideo()
             ? ['size' => (int)($application->video->size ?? 0), 'mime' => $application->video->mime ?? null, 'url' => $application->getVideoUrl()] : null,
         'shortAddress' => $application->getShortAddress(),

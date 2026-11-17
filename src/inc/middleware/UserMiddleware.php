@@ -79,8 +79,6 @@ class AddStatsMiddleware implements MiddlewareInterface {
         $user->stats = \user\stats(!isset($request->getQueryParams()['fresh']), $user);
         $user->sexStrings = $user->getSex();
         $user->sexIdentifier = $user->getSexIdentifier(); // 'm' | 'f' – effective gender (stored choice, else guessed from the name), for the account edit form // gendered phrases for clients (web: config.sex), e.g. `bylam` = "byłem"/"byłam"/"byłam/em"
-        // funkcje w fazie testów, które klient pokazuje tylko gdy serwer na to pozwala (kategorie `beta`, „na gorąco”)
-        $user->features = ['adHocReports' => \Category::betaEnabled()];
         $request = $request->withAttribute('user', $user);
         $response->getBody()->write(json_encode($user));
         return $response;

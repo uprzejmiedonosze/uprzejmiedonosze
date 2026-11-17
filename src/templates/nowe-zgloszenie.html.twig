@@ -188,13 +188,13 @@
         {# --- Wszystkie kategorie podzielone na grupy --- #}
         <div id="allCategories" {% if not showAll %}style="display:none"{% endif %}>
         {% for groupId, groupDef in categoryGroups %}
-        {# grupy `beta` (np. „Stan techniczny i tablice”) zawierają tylko kategorie testowane w aplikacji #}
-        {% if groupId != 0 and not (groupDef.beta ?? false) %}
+        {% if groupId != 0 %}
             <div class="category-group">
                 <h4>{{ groupDef.name }}</h4>
                 <div class="grid">
                 {% for catId, catDef in categories %}
-                {% if catDef.title is not null and catDef.groups is defined and groupId in (catDef.groups|cast_to_array) %}
+                {# hałas i drift wymagają nagrania – dołącza je tylko aplikacja mobilna #}
+                {% if catDef.title is not null and catDef.groups is defined and groupId in (catDef.groups|cast_to_array) and not catDef.requiresVideo %}
                     {% set catInTopGroup = 0 in (catDef.groups|cast_to_array) %}
                     <div>
                         <input type="radio" {% if catId == app.category and (showAll or not catInTopGroup) %}checked="checked"{% endif %}

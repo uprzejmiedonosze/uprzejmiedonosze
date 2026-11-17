@@ -268,9 +268,8 @@ final class ReportMcpTools {
      * @return list<string>
      */
     public static function sortedCategoryIds(array $categories): array {
-        // bez kategorii „na gorąco” (tylko aplikacja: nagranie, data z chwili zgłoszenia) i testowych na produkcji
-        $ids = array_keys(array_filter($categories, fn($c) => !($c instanceof \Category)
-            || ($c->isAvailable() && !$c->isAdHoc())));
+        // bez kategorii wymagających nagrania (hałas, drift) – film dołącza tylko aplikacja mobilna
+        $ids = array_keys(array_filter($categories, fn($c) => !($c instanceof \Category) || !$c->requiresVideo()));
         sort($ids, SORT_NUMERIC);
         return $ids;
     }

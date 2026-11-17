@@ -16,15 +16,15 @@ use UprzejmieDonosze\Tests\DatabaseTestCase;
 use user\User;
 
 /**
- * Zgłoszenia „na gorąco” (kategorie `adHoc`: hałas/wydech, drift) i kategorie stanu technicznego (`beta`):
- * brak wymaganych zdjęć, wysyłka na wojewódzką skrzynkę „Stop agresji drogowej”, nagranie wideo, treści bez
- * wzmianek o parkowaniu, ukrycie przed MCP/produkcją.
+ * Zgłoszenia z nagraniem: hałas/wydech i drift (`requiresVideo`) wymagają filmu i idą na wojewódzką skrzynkę
+ * „Stop agresji drogowej”; nagranie można dołączyć do każdej kategorii (wtedy najwyżej dwa zdjęcia); kategorie stanu
+ * technicznego są na zwykłej liście (grupa 6). Web i MCP nie pokazują kategorii wymagających nagrania.
  */
-class AdHocReportTest extends DatabaseTestCase
+class VideoReportTest extends DatabaseTestCase
 {
-    private const NOISE = 31;   // Hałas i spaliny w czasie jazdy (adHoc)
-    private const DRIFT = 32;   // Drift lub jazda na jednym kole (adHoc)
-    private const LEAK = 28;    // Wyciek płynów (beta, zwykła lista, tylko Policja)
+    private const NOISE = 31;   // Hałas i spaliny w czasie jazdy (requiresVideo)
+    private const DRIFT = 32;   // Drift lub jazda na jednym kole (requiresVideo)
+    private const LEAK = 28;    // Wyciek płynów (zwykła lista, tylko Policja)
 
     protected function tearDown(): void
     {
@@ -32,7 +32,7 @@ class AdHocReportTest extends DatabaseTestCase
         parent::tearDown();
     }
 
-    private function savedUser(string $email = 'adhoc-test@example.com'): User
+    private function savedUser(string $email = 'video-test@example.com'): User
     {
         $_SESSION['user_email'] = $email;
         $_SESSION['user_id'] = 'phpunit-user-id';
@@ -54,7 +54,7 @@ class AdHocReportTest extends DatabaseTestCase
         return $app;
     }
 
-    /** Szczecin: Police::guess() trafia tu w konkretny komisariat (PoliceStationAreas) – „na gorąco” ma go pominąć. */
+    /** Szczecin: Police::guess() trafia tu w konkretny komisariat (PoliceStationAreas) – hałas/drift mają go pominąć. */
     private function szczecin(): \JSONObject
     {
         $a = new \JSONObject();
@@ -83,80 +83,89 @@ class AdHocReportTest extends DatabaseTestCase
             ->withUploadedFiles(['video' => $file]);
     }
 
+    /** Zdjęcia kontekstu i auta (jak po przydziale w aplikacji); `$third` = także dodatkowe. */
+    private function withImages(Application $app, bool $third = false): Application
+    {
+        foreach (array_merge(['contextImage', 'carImage'], $third ? ['thirdImage'] : []) as $slot) {
+            $app->$slot = new \stdClass();
+            $app->$slot->url = "cdn2/x/{$app->id},$slot.jpg";
+        }
+        \app\save($app);
+        return $app;
+    }
+
+    private function withVideo(Application $app): Application
+    {
+        $app->video = new \stdClass();
+        $app->video->url = "cdn2/x/{$app->id},vi.mp4";
+        $app->video->mime = 'video/mp4';
+        $app->video->size = 123;
+        \app\save($app);
+        return $app;
+    }
+
     public function testCategoryFlags(): void
     {
         global $CATEGORIES;
         foreach ([self::NOISE, self::DRIFT] as $id) {
-            $this->assertTrue($CATEGORIES[$id]->isAdHoc(), "$id adHoc");
+            $this->assertTrue($CATEGORIES[$id]->requiresVideo(), "$id requiresVideo");
             $this->assertTrue($CATEGORIES[$id]->isStopAgresjiOnly());
             $this->assertFalse($CATEGORIES[$id]->isParking());
-            $this->assertTrue($CATEGORIES[$id]->isBeta());
-            $this->assertObjectNotHasProperty('groups', $CATEGORIES[$id], 'adHoc nie może trafić na zwykłą listę');
+            $this->assertSame([6], (array)$CATEGORIES[$id]->groups);
         }
         foreach ([27, 28, 29, 30] as $id) {
-            $this->assertFalse($CATEGORIES[$id]->isAdHoc(), "$id adHoc");
+            $this->assertFalse($CATEGORIES[$id]->requiresVideo(), "$id requiresVideo");
             $this->assertTrue($CATEGORIES[$id]->isStopAgresjiOnly(), "$id tylko Policja");
             $this->assertFalse($CATEGORIES[$id]->isParking());
-            // starsze wersje aplikacji i web pokazują kategorie z `groups` – testowe mają je w `betaGroups`
-            $this->assertObjectNotHasProperty('groups', $CATEGORIES[$id]);
-            $this->assertSame([6], (array)$CATEGORIES[$id]->betaGroups);
+            $this->assertSame([6], (array)$CATEGORIES[$id]->groups);
+        }
+        foreach ($CATEGORIES as $id => $c) {
+            $this->assertObjectNotHasProperty('beta', $c, "$id: bez flag testowych");
+            $this->assertObjectNotHasProperty('betaGroups', $c, "$id: bez flag testowych");
         }
         $this->assertTrue($CATEGORIES[5]->isParking());
-        $this->assertTrue($CATEGORIES[5]->isAvailable());
-        $this->assertFalse($CATEGORIES[5]->isAdHoc());
-    }
-
-    public function testBetaCategoriesAreUnavailableInProduction(): void
-    {
-        global $CATEGORIES;
-        $old = getenv('APP_ENV');
-        try {
-            putenv('APP_ENV=prod');
-            $this->assertFalse(\Category::betaEnabled());
-            $this->assertFalse($CATEGORIES[self::NOISE]->isAvailable());
-            $this->assertFalse($CATEGORIES[self::LEAK]->isAvailable());
-            $this->assertTrue($CATEGORIES[5]->isAvailable());
-
-            $user = $this->savedUser();
-            $app = $this->draft($user);
-            try {
-                updateApplication($app, $this->now(), false, self::NOISE, $this->szczecin(), 'ZS12345', '', true, [], $user);
-                $this->fail('kategoria beta nie może przejść na produkcji');
-            } catch (\ValidationException $e) {
-                $this->assertSame('category', $e->getField());
-            }
-        } finally {
-            putenv($old === false ? 'APP_ENV' : "APP_ENV=$old");
-        }
-        $this->assertTrue($CATEGORIES[self::NOISE]->isAvailable());
+        $this->assertFalse($CATEGORIES[5]->requiresVideo());
     }
 
     public function testUnknownCategoryIsRejected(): void
     {
         $user = $this->savedUser();
-        $app = $this->draft($user);
+        $app = $this->withImages($this->draft($user));
         $this->expectException(\ValidationException::class);
         updateApplication($app, $this->now(), false, 999, $this->szczecin(), 'ZS12345', '', true, [], $user);
     }
 
-    public function testAdHocNeedsNoImages(): void
+    public function testEveryCategoryNeedsPhotos(): void
     {
         $user = $this->savedUser();
-        $app = $this->draft($user);
-        $this->assertFalse($app->hasRequiredImages(self::LEAK));
-        $this->assertTrue($app->hasRequiredImages(self::NOISE));
-        $this->assertFalse($app->hasRequiredImages(5));
+        $app = $this->withVideo($this->draft($user));
+        $this->assertFalse($app->hasRequiredImages());
+        $this->expectException(\NotSendableException::class);
+        updateApplication($app, $this->now(), false, self::NOISE, $this->szczecin(), 'ZS12345', '', true, [], $user);
     }
 
-    public function testAdHocGoesToVoivodeshipStopAgresjiNotToPoliceStation(): void
+    public function testVideoCategoryNeedsVideo(): void
+    {
+        $user = $this->savedUser();
+        $app = $this->withImages($this->draft($user));
+        try {
+            updateApplication($app, $this->now(), false, self::DRIFT, $this->szczecin(), 'ZS12345', '', true, [], $user);
+            $this->fail('drift bez nagrania musi zostać odrzucony');
+        } catch (\ValidationException $e) {
+            $this->assertSame('video', $e->getField());
+        }
+    }
+
+    public function testVideoCategoryGoesToVoivodeshipStopAgresjiNotToPoliceStation(): void
     {
         $user = $this->savedUser();
 
         // dla porównania: zwykła kategoria „tylko Policja” w Szczecinie trafia do konkretnego komisariatu
         $this->assertNotNull(\Police::guess($this->szczecin()));
 
-        $app = $this->draft($user);
-        $saved = updateApplication($app, $this->now('-10 minutes'), false, self::NOISE, $this->szczecin(),
+        // bez limitu 24 h – obowiązuje zwykłe 7 miesięcy
+        $app = $this->withVideo($this->withImages($this->draft($user)));
+        $saved = updateApplication($app, $this->now('-3 days'), false, self::NOISE, $this->szczecin(),
             'ZS 12345', 'Strzały z wydechu', true, [], $user);
 
         $this->assertSame('ready', $saved->status);
@@ -168,41 +177,30 @@ class AdHocReportTest extends DatabaseTestCase
         $this->assertTrue($sm->isPolice());
         $this->assertStringStartsWith('stopagresjidrogowej', $sm->getEmail());
         $this->assertTrue($sm->automated());
-
-        // bez zdjęć zgłoszenie da się potwierdzić
-        $finished = finishApplication($saved->id, $user);
-        $this->assertSame('confirmed', $finished['application']->status);
     }
 
-    public function testAdHocRejectsOldDate(): void
+    public function testVideoAllowedOnAnyCategory(): void
     {
         $user = $this->savedUser();
-        $app = $this->draft($user);
-        try {
-            updateApplication($app, $this->now('-2 days'), false, self::DRIFT, $this->szczecin(), 'ZS12345', '', true, [], $user);
-            $this->fail('zgłoszenie na gorąco sprzed 2 dni musi zostać odrzucone');
-        } catch (\ValidationException $e) {
-            $this->assertSame('datetime', $e->getField());
-        }
+        $app = $this->withVideo($this->withImages($this->draft($user)));
+        $saved = updateApplication($app, $this->now('-2 days'), false, self::LEAK, $this->szczecin(), 'ZS12345', '', true, [], $user);
+        $this->assertSame('ready', $saved->status);
+        $this->assertNotSame('zachodniopomorskie', $saved->smCity, 'zwykła kategoria idzie do komisariatu, nie na skrzynkę wojewódzką');
     }
 
-    public function testVideoOnlyForAdHocCategories(): void
+    public function testVideoAllowsAtMostTwoPhotos(): void
     {
         $user = $this->savedUser();
-        $app = $this->draft($user);
-        foreach (['contextImage', 'carImage'] as $slot) {
-            $app->$slot = new \stdClass();
-            $app->$slot->url = "cdn2/x/{$app->id},$slot.jpg";
-        }
-        $app->video = new \stdClass();
-        $app->video->url = "cdn2/x/{$app->id},vi.mp4";
-        \app\save($app);
+        $app = $this->withVideo($this->withImages($this->draft($user), true));
         try {
-            updateApplication($app, $this->now(), false, self::LEAK, $this->szczecin(), 'ZS12345', '', true, [], $user);
-            $this->fail('nagranie przy zwykłej kategorii musi zostać odrzucone');
+            updateApplication($app, $this->now(), false, self::NOISE, $this->szczecin(), 'ZS12345', '', true, [], $user);
+            $this->fail('nagranie + trzy zdjęcia');
         } catch (\ValidationException $e) {
-            $this->assertSame('video', $e->getField());
+            $this->assertSame('images', $e->getField());
         }
+        // bez nagrania trzy zdjęcia są w porządku
+        $plain = $this->withImages($this->draft($user), true);
+        $this->assertSame('ready', updateApplication($plain, $this->now(), false, self::LEAK, $this->szczecin(), 'ZS12345', '', true, [], $user)->status);
     }
 
     public function testVideoUploadValidation(): void
@@ -267,9 +265,9 @@ class AdHocReportTest extends DatabaseTestCase
 
     public function testAttachVideoChecksOwnership(): void
     {
-        $owner = $this->savedUser('adhoc-owner@example.com');
+        $owner = $this->savedUser('video-owner@example.com');
         $app = $this->draft($owner);
-        $other = $this->savedUser('adhoc-other@example.com');
+        $other = $this->savedUser('video-other@example.com');
         $tmp = tempnam(sys_get_temp_dir(), 'udtest');
         file_put_contents($tmp, $this->mp4Bytes());
         try {
@@ -281,39 +279,23 @@ class AdHocReportTest extends DatabaseTestCase
         $this->assertFileDoesNotExist($tmp);
     }
 
-    public function testTextsForAdHocReportWithVideoOnly(): void
+    public function testTextsForVideoReport(): void
     {
         $user = $this->savedUser();
-        $app = updateApplication($this->draft($user), $this->now(), false, self::NOISE, $this->szczecin(),
-            'ZS12345', '', true, [], $user);
-        $app->video = new \stdClass();
-        $app->video->url = "cdn2/x/{$app->id},vi.mp4";
-        $app->video->mime = 'video/mp4';
-        $app->video->size = 123;
+        $app = $this->withVideo($this->withImages($this->draft($user)));
+        $app = updateApplication($app, $this->now(), false, self::NOISE, $this->szczecin(), 'ZS12345', '', true, [], $user);
 
         $email = (new \MailGun())->formatEmail($app, false);
         // nagranie nie jest załącznikiem – link przez /cdn2/ (lokalnie albo proxy z B2)
-        $this->assertStringContainsString('W załączeniu znajduje się zgłoszenie. Nagranie wideo zdarzenia: ' . BASE_URL . "cdn2/x/{$app->id},vi.mp4", $email);
-        $this->assertStringContainsString('samodzielnie i nie zostało ono zmanipulowane', $email);
+        $this->assertStringContainsString('W załączeniu znajduje się zgłoszenie oraz zdjęcia w pliku zip. Nagranie wideo zdarzenia: ' . BASE_URL . "cdn2/x/{$app->id},vi.mp4", $email);
+        $this->assertStringContainsString('Zdjęcia i nagranie ' . $app->guessUserSex()['wykonalam'] . ' samodzielnie', $email);
         $this->assertStringContainsString('art. 60 ust. 2 pkt 2 prd', $email);
         $this->assertStringNotContainsString('parkowania', $email);
         $this->assertStringNotContainsString('agendaparkingowa', $email);
-        $this->assertStringNotContainsString('pliku zip', $email);
 
         $confirmation = confirmationData($app);
         $this->assertStringContainsString('naocznym świadkiem zdarzenia', $confirmation['witness']);
         $this->assertSame(['size' => 123, 'mime' => 'video/mp4', 'url' => BASE_URL . "cdn2/x/{$app->id},vi.mp4"], $confirmation['video']);
-    }
-
-    public function testTextsForAdHocReportWithoutMaterial(): void
-    {
-        $user = $this->savedUser();
-        $app = updateApplication($this->draft($user), $this->now(), false, self::DRIFT, $this->szczecin(),
-            'ZS12345', '', true, [], $user);
-        $email = (new \MailGun())->formatEmail($app, false);
-        $this->assertStringContainsString('W załączeniu znajduje się zgłoszenie.', $email);
-        $this->assertStringContainsString('relacji naocznego świadka', $email);
-        $this->assertStringNotContainsString('Zdjęcia', $email);
     }
 
     public function testParkingReportTextUnchanged(): void
@@ -344,7 +326,7 @@ class AdHocReportTest extends DatabaseTestCase
         $this->assertSame('default', \StopAgresji::guessVoivodeship($a));
     }
 
-    public function testMcpHidesAdHocCategories(): void
+    public function testMcpHidesVideoCategories(): void
     {
         global $CATEGORIES;
         $ids = array_map('intval', \mcp\ReportMcpTools::sortedCategoryIds($CATEGORIES));

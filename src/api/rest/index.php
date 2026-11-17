@@ -542,7 +542,7 @@ $app->group('/api/rest/app', function (RouteCollectorProxy $group) { // APPLICAT
         return $response;
     })  ->add(new AppMiddleware());
 
-    // Nagranie do zgłoszenia „na gorąco” (multipart, pole `video`, ≤ MAX_VIDEO_UPLOAD_BYTES; patrz attachVideo()).
+    // Nagranie do zgłoszenia (multipart, pole `video`, ≤ MAX_VIDEO_UPLOAD_BYTES; patrz attachVideo()).
     $group->post('/{appId}/video', function (Request $request, Response $response, $args) {
         $user = $request->getAttribute('user');
         try {

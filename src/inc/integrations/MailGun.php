@@ -72,7 +72,7 @@ class MailGun extends CityAPI {
                 [$fileatt, $fileattname] = \app\toZip($application);
                 $message->attachFromPath($fileatt, $fileattname);
             }
-            // nagranie zgłoszenia „na gorąco” nie jest załącznikiem – treść maila zawiera link (Application::getVideoUrl())
+            // nagranie nie jest załącznikiem – treść maila zawiera link (Application::getVideoUrl())
 
             $application->setStatus('sending');
             $application->sent = new JSONObject();

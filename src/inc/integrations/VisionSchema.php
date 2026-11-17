@@ -8,7 +8,7 @@
 // zostać zsynchronizowane ręcznie (brak wspólnego repo) — każda zmiana promptu/markerów/walidacji
 // tu MUSI być powtórzona tam (i odwrotnie), i musi podbić VISION_SCHEMA.
 
-const VISION_SCHEMA = 10; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
+const VISION_SCHEMA = 11; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
 // To też wersja kontraktu REST dla appki: klient wysyła `X-UD-Schema`, a serwer odrzuca (426) klienta o schemacie NIŻSZYM
 // niż VISION_SCHEMA (kompatybilność tylko „w dół”: nowszy klient ze starszym backendem działa). Podbij dopiero PO wdrożeniu
 // buildu z nowym SCHEMA w sklepach (patrz API.md).

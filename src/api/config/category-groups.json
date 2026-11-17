@@ -18,7 +18,6 @@
         "name": "Pozostałe przypadki"
     },
     "6": {
-        "name": "Stan techniczny i tablice",
-        "beta": true
+        "name": "Stan techniczny, tablice, hałas i drift"
     }
 }

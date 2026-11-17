@@ -28,8 +28,6 @@ Requires authorization.
 ### GET `/api/rest/user/`
 
 Returns current user data, including `lastLocation` (`"lat,lng"` of the last report, otherwise the geocoded home address; absent when neither is known) (`?fresh=1` recomputes `stats` instead of using the 24 h cache), `stats`, `sexStrings` (the user's gendered phrases, e.g. `bylam`: "byłem"/"byłam"/"byłam/em" — the same lookup the web templates do with `config.sex`) and `sexIdentifier` (`"m"`/`"f"`: the stored choice, else guessed from the name — what the account edit form preselects).
-`features` — server-side switches for features in testing: `{ adHocReports: bool }` (the `beta` categories and the
-„na gorąco” flow; currently `true` everywhere except production). Clients show `beta` categories only when it is `true`.
 
 ### PATCH `/api/rest/user/`
 
@@ -132,15 +130,16 @@ Returns application data by id.
 ### POST `/api/rest/app/{appId}`
 
 Saves the report form (web: "Dalej" → `/app/confirm`); status becomes `ready`. Requires both
-photos to be uploaded already (otherwise 409) — except „na gorąco” categories (`adHoc: true` in categories.json), which
-need no photos (a video, photos or just the witness statement).
+photos to be uploaded already (otherwise 409) — also with a video (the app makes the photos from a video frame showing
+the plate).
 
 Category rules (422 with `field`):
 
-  * unknown category or a `beta` one while `features.adHocReports` is off → `category`
-  * `adHoc` category: `datetime` at most 24 h old → `datetime`; the report always goes to the voivodeship
-    „Stop agresji drogowej” mailbox (never a local police station or SM), `stopAgresji` is ignored
-  * a video attached to a non-`adHoc` category → `video`
+  * unknown category → `category`
+  * `requiresVideo` category (31 noise, 32 drift) without a video → `video`; such a report always goes to the voivodeship
+    „Stop agresji drogowej” mailbox (never a local police station or SM), `stopAgresji` is ignored. The web form and MCP
+    don't offer these categories (they can't attach a video).
+  * a video together with a third photo (`thirdImage`) → `images` (with a video: at most two photos)
 
 POST params (JSON body):
 
@@ -246,7 +245,7 @@ Removes `contextImage` | `carImage` | `thirdImage` (e.g. to replace a photo or d
 
 ### POST `/api/rest/app/{appId}/video`
 
-Attaches a video to a „na gorąco” draft (multipart, field `video`; MP4/MOV/3GP checked by content, max 15 MB —
+Attaches a video to a draft (any category; multipart, field `video`; MP4/MOV/3GP checked by content, max 15 MB —
 `MAX_VIDEO_UPLOAD_BYTES` in `src/inc/API.php`). Replaces a previous video. The file is uploaded to B2 right away and the
 e-mail/PDF contain a link to it (`/cdn2/…,vi.mp4`, served by nginx from disk or proxied from B2), not an attachment. 422 `field: video` when too large or not a video; 403 not the owner / not editable.
 Response: the application, with `video: {url, mime, size}`.
@@ -259,7 +258,7 @@ Removes the video. Response: the application.
 
 Everything the confirmation step shows before sending/saving (web "Sprawdź przed wysłaniem"), built with the
 same methods as the web template so gendered phrases match: `body` (formal text + extensions + comment),
-`witness` ("Nie byłeś/byłaś świadkiem parkowania."; for non-parking categories "", for „na gorąco” "Byłeś naocznym
+`witness` ("Nie byłeś/byłaś świadkiem parkowania."; for non-parking categories "", for `requiresVideo` ones "Byłeś naocznym
 świadkiem zdarzenia."), `video` (`{size, mime, url}` or null), `shortAddress`, `plateId`, `vehicleBox` (pixels, or null when
 the confirmed plate differs from the one read from the photo), `recipient {name, shortName, automated, unknown}`
 and `sender {name, email, address, msisdn, edelivery}`. Owner only.

@@ -340,8 +340,8 @@ class Application extends JSONObject implements \JsonSerializable {
 
         // can update
         if ($this->stopAgresji()) {
-            // zgłoszenia „na gorąco” (z nagraniem) idą na wojewódzką skrzynkę SAD, nie do komisariatu
-            $this->smCity = $this->isAdHoc()
+            // hałas i drift (zawsze z nagraniem) idą na wojewódzką skrzynkę SAD, nie do komisariatu
+            $this->smCity = $this->isVideoCategory()
                 ? \StopAgresji::guessVoivodeship($this->address)
                 : \StopAgresji::guess($this->address);
             return \SM::resolve($this->smCity, true);
@@ -598,24 +598,19 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     /**
-     * Zgłoszenie „na gorąco” nie wymaga zdjęć (wystarczy nagranie albo relacja świadka). `$category` pozwala sprawdzić
-     * warunek dla kategorii, która dopiero zostanie zapisana (updateApplication()).
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * Każde zgłoszenie ma zdjęcie kontekstu i auta – także to z nagraniem (aplikacja robi je z klatki filmu z tablicą).
      */
-    public function hasRequiredImages(?int $category = null): bool {
-        global $CATEGORIES;
-        $category ??= isset($this->category) ? (int)$this->category : null;
-        if ($category !== null && isset($CATEGORIES[$category]) && $CATEGORIES[$category]->isAdHoc())
-            return true;
+    public function hasRequiredImages(): bool {
         return isset($this->contextImage->url) && isset($this->carImage->url);
     }
 
     /**
+     * Kategoria wymagająca nagrania (hałas, drift – Category::requiresVideo()).
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function isAdHoc(): bool {
+    public function isVideoCategory(): bool {
         global $CATEGORIES;
-        return isset($this->category) && isset($CATEGORIES[$this->category]) && $CATEGORIES[$this->category]->isAdHoc();
+        return isset($this->category) && isset($CATEGORIES[$this->category]) && $CATEGORIES[$this->category]->requiresVideo();
     }
 
     /** Czy zgłoszenie dotyczy parkowania (wtedy treść wspomina o świadku momentu parkowania i zdjęciach). */
@@ -628,7 +623,7 @@ class Application extends JSONObject implements \JsonSerializable {
     }
 
     /**
-     * Publiczny link do nagrania (zgłoszenie „na gorąco”) – wysyłany w treści maila zamiast załącznika. Ten sam mechanizm co
+     * Publiczny link do nagrania zgłoszenia – wysyłany w treści maila zamiast załącznika. Ten sam mechanizm co
      * zdjęcia: nginx (/cdn2/) serwuje plik z dysku, a po syncToS3() przez proxy z B2, więc adres się nie zmienia.
      */
     public function getVideoUrl(): ?string {
@@ -955,7 +950,7 @@ class Application extends JSONObject implements \JsonSerializable {
      * No-op when S3 storage is not enabled.
      */
     public function syncToS3(): void {
-        // zgłoszenie „na gorąco” może mieć samo nagranie (bez zdjęcia auta) – plik leży pod tym samym prefiksem
+        // nagranie leży pod tym samym prefiksem co zdjęcia (fallback, gdyby zgłoszenie miało samo nagranie)
         $baseKey = $this->carImage->url ?? $this->video->url ?? null;
         if (!\storage\isEnabled() || $baseKey === null) return;
 

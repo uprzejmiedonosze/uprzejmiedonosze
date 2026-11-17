@@ -30,7 +30,7 @@ class StopAgresji extends SM {
 
   /**
    * Wojewódzka (albo miejska, np. KSP) skrzynka „Stop agresji drogowej”, z pominięciem komisariatów.
-   * Tu trafiają zgłoszenia „na gorąco” (Category::isAdHoc()), także z nagraniem wideo.
+   * Tu trafiają zgłoszenia hałasu i driftu z nagraniem (Category::requiresVideo()).
    * @SuppressWarnings(PHPMD.CamelCaseVariableName)
    */
   public static function guessVoivodeship(object $address): string {
