@@ -69,7 +69,8 @@ wpis w `DIRECTIVES` + partial + przykład w `\wiki\guide()`. Import z DokuWiki: 
 widżet: `templates/_chat-widget.html.twig` + `js/sites/chat.js` + `scss/lib/chat.scss`. Wiedza to pliki:
 `assistant/knowledge/*.md` (`podstawy.md` zawsze w prompcie; `wiki-*.md` generuje `tools/wiki-knowledge.php` z wiki), `assistant/legal/` (akty, `## Art. N`), `assistant/skills/*.md`
 (instrukcje, np. odwołanie — nowy skill = nowy plik). **Powiadomienie systemowe w czacie:** `\chat\notify($email, $tekst, '/app/list')`.
-Załączniki (tylko patroni; obraz i PDF zużywają po kredycie `\quota`): `assistant/Attachments.php`.
+Dostęp do asystenta: patroni i byli patroni (`\assistant\isAvailable`, guard w `ChatHandler`, flaga `general.chatAvailable` dla widżetu).
+Załączniki (tylko aktywni patroni; obraz i PDF zużywają po kredycie `\quota`): `assistant/Attachments.php`.
 Nowe narzędzie = wpis w `tools\definitions()` + gałąź w `tools\execute()` (tożsamość z `$user`, nigdy z argumentów modelu).
 Test: `ClientFake` przez `assistant\ChatClient::set()`, korpus przez `assistant\corpus\setRoot()`.
 

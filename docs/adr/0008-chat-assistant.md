@@ -25,7 +25,9 @@ przyjmować powiadomienia systemowe. Akty prawne są obszerne: nie wolno ich wrz
   Usunięcie konta kasuje rozmowę; użytkownik może ją skasować przyciskiem „Nowa rozmowa”.
 - **Awaria lub brak wiedzy → kontakt.** Błąd modelu nie rzuca wyjątku: użytkownik dostaje odpowiedź z linkiem do
   kontaktu; model sam woła `escalate_to_contact`, gdy nie potrafi odpowiedzieć (UI pokazuje przycisk).
-- **Dostęp:** tylko zalogowani i zarejestrowani (limit kosztów i potrzeba tożsamości dla zgłoszeń);
+- **Dostęp:** tylko zarejestrowani patroni i byli patroni — każdy adres z listy Patronite (`\assistant\isAvailable`;
+  koszt modelu i potrzeba tożsamości dla zgłoszeń). Pozostałym nie renderujemy widżetu (`general.chatAvailable`),
+  a `/api/chat/*` zwraca im 403;
   `CHAT_RATE_MAX` pytań na `CHAT_RATE_WINDOW`. Odpowiedź bez streamingu (jedno żądanie, prostsza pętla narzędzi).
 - **Załączniki (obrazy JPEG/PNG i PDF) tylko dla patronów** (`assistant/Attachments.php`, `\patronite\is`). Każdy plik (obraz i PDF) zużywa kredyt
   zdjęć jak w appce i MCP (`\quota\reserve` przed wywołaniem modelu, zwrot przy awarii modelu, to samo zdjęcie w oknie

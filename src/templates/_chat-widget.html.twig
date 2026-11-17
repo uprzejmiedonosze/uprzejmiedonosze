@@ -1,5 +1,6 @@
 {# Asystent AI: pływający przycisk + panel czatu (src/js/sites/chat.js, src/scss/lib/chat.scss, src/inc/assistant/).
-   Ukryty, dopóki GET /api/chat/unread nie odpowie 200 — niezarejestrowany użytkownik dostaje 403 i widżetu nie widzi. #}
+   Renderowany tylko dla patronów i byłych patronów (general.chatAvailable = \assistant\isAvailable). Ukryty, dopóki
+   GET /api/chat/unread nie odpowie 200 — bez dostępu serwer zwraca 403 i widżetu nie widać. #}
 <div class="mpr-chat" hidden>
     <button type="button" class="mpr-chat__toggle js-chat-toggle" aria-expanded="false" aria-controls="chat-panel"
         aria-label="Uprzejmy Asystent — zadaj pytanie">
