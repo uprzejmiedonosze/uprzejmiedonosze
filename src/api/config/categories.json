@@ -245,7 +245,7 @@
         "short": "Pojazd stał w obrębie skrzyżowania (mniej niż 10 metrów)",
         "formal": "Pojazd był zaparkowany w odległości mniejszej niż 10 m od skrzyżowania.",
         "informal": "Postój w obrębie skrzyżowania",
-        "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed skrzyżowaniem jest niedozwolone. <b>Uwaga</b> – przepis ten nie dotyczy pojazdów zaparkowanych w głębi chodnika (nawet, jeśli dzieje się to na skrzyżowaniu). W takim przypadku użyj kategorii <i>'Parkowanie z dala od krawędzi jezdni'</i>.</p>",
+        "desc": "<p>Parkowanie/zatrzymywanie pojazdu przed skrzyżowaniem jest niedozwolone.</p>",
         "law": "art. 49. 1.1. Zabrania się zatrzymania pojazdu na przejeździe kolejowym, na przejeździe tramwajowym, na skrzyżowaniu oraz w odległości mniejszej niż 10 m od przejazdu lub skrzyżowania.",
         "price": "300 zł (5 pkt)",
         "points": 5,
