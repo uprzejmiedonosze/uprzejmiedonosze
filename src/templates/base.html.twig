@@ -174,7 +174,7 @@
             {% endif %}
         {% endblock %}
         </div> <!-- page -->
-    {% if (general.isLoggedIn ?? false) and not embed and not dialog and layout not in ['auth', 'system', 'focus'] %}
+    {% if (general.isLoggedIn ?? false) and (general.chatAvailable ?? false) and not embed and not dialog and layout not in ['auth', 'system', 'focus'] %}
     {% include('_chat-widget.html.twig') %}
     {% endif %}
     {% block jsIncludes %}

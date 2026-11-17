@@ -140,6 +140,12 @@ abstract class AbstractHandler {
             $parameters['general']['hasApps'] = $user->hasApps();
             // force update cache if ?update GET param is set
             $parameters['general']['stats'] = \user\stats(!isset($params['update']), $user);
+            try { // widżet asystenta (_chat-widget) tylko dla patronów i byłych; awaria Patronite nie może wywrócić strony
+                $parameters['general']['chatAvailable'] = \assistant\isAvailable($user);
+            } catch (\Throwable $e) {
+                log_error('chatAvailable: Patronite check failed', $e);
+                $parameters['general']['chatAvailable'] = false;
+            }
         }
         $view = Twig::fromRequest($request);
         return $view->render(

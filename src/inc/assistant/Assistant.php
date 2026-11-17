@@ -35,6 +35,15 @@ final class ChatClient {
     }
 }
 
+/**
+ * Kto widzi asystenta (widżet i /api/chat): aktywni i byli patroni — każdy adres z listy Patronite.
+ * Załączniki to osobny, węższy warunek: tylko aktywni (attachments\isAllowed).
+ */
+function isAvailable(\user\User $user): bool {
+    $email = $user->getEmail();
+    return \patronite\is($email) || \patronite\isFormer($email);
+}
+
 const CONTACT_FALLBACK = "Przepraszam, nie mogę teraz odpowiedzieć na to pytanie. "
     . "Napisz do nas przez [stronę kontaktową](" . tools\CONTACT_URL . ") — odpowiemy.";
 
