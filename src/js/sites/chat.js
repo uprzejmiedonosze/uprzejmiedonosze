@@ -1,5 +1,6 @@
 import Api from "../lib/Api"
 import { message as notice } from "../lib/toast"
+import { escapeHtml } from "../lib/format"
 
 /**
  * Widżet czatu z asystentem AI (markup: templates/_chat-widget.html.twig, backend: src/inc/assistant/).
@@ -181,10 +182,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (pending.length >= MAX_FILES) { notice(`Maksymalnie ${MAX_FILES} załączniki.`); break }
       try {
         const blob = file.type === "application/pdf" ? file : await shrinkImage(file)
-        if (blob.size > MAX_FILE_BYTES) { notice(`Plik „${file.name}” jest za duży (max 1,5 MB).`); continue }
+        if (blob.size > MAX_FILE_BYTES) { notice(`Plik „${escapeHtml(file.name)}” jest za duży (max 1,5 MB).`); continue }
         pending.push({ name: file.name, data: /** @type {string} */ (await readAsDataUrl(blob)) })
       } catch {
-        notice(`Nie można otworzyć pliku „${file.name}”.`)
+        notice(`Nie można otworzyć pliku „${escapeHtml(file.name)}”.`)
       }
     }
     fileInput.value = ""

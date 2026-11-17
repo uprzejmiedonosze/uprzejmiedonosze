@@ -47,7 +47,7 @@ function isAvailable(\user\User $user): bool {
 const CONTACT_FALLBACK = "Przepraszam, nie mogę teraz odpowiedzieć na to pytanie. "
     . "Napisz do nas przez [stronę kontaktową](" . tools\CONTACT_URL . ") — odpowiemy.";
 
-function systemPrompt(\user\User $user): string {
+function buildSystemPrompt(\user\User $user): string {
     $skills = '';
     foreach (corpus\skills() as $s) $skills .= "- {$s['name']}: {$s['description']}\n";
     $acts = '';
@@ -65,7 +65,7 @@ function systemPrompt(\user\User $user): string {
  * Powiadomienia systemowe wchodzą jako wiadomości asystenta z prefiksem — użytkownik może o nie dopytać.
  */
 function buildMessages(\user\User $user, array $attachments = []): array {
-    $messages = [['role' => 'system', 'content' => systemPrompt($user)]];
+    $messages = [['role' => 'system', 'content' => buildSystemPrompt($user)]];
     $history = \chat\history($user->getEmail(), CHAT_CONTEXT_MESSAGES);
     $last = array_key_last($history);
     foreach ($history as $i => $m) {

@@ -172,7 +172,7 @@ class AssistantTest extends DatabaseTestCase
 
     public function testPromptCarriesBasicsActsAndSkillsButNotArticles(): void
     {
-        $prompt = \assistant\systemPrompt($this->user());
+        $prompt = \assistant\buildSystemPrompt($this->user());
         $this->assertStringStartsWith('Jesteś Uprzejmym Asystentem', $prompt); // prompt.md
         $this->assertStringContainsString('Dzisiejsza data: ' . date('Y-m-d'), $prompt);
         $this->assertStringNotContainsString('{{', $prompt);
