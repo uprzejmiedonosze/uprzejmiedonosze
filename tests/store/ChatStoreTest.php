@@ -58,6 +58,26 @@ class ChatStoreTest extends DatabaseTestCase
         $this->assertSame(0, \chat\userMessagesSince(self::EMAIL, time() + 60));
     }
 
+    public function testArchiveStartsNewConversationButKeepsRows(): void
+    {
+        \chat\add(self::EMAIL, 'user', 'stare pytanie');
+        \chat\notify(self::EMAIL, 'nieprzeczytane powiadomienie');
+        \chat\add('other@example.com', 'user', 'cudze');
+        $this->assertSame(1, \chat\unread(self::EMAIL));
+
+        $this->assertSame(2, \chat\archive(self::EMAIL));
+        $this->assertSame([], \chat\history(self::EMAIL));
+        $this->assertSame(0, \chat\unread(self::EMAIL));
+        $this->assertSame(1, \chat\userMessagesSince(self::EMAIL, time() - 60)); // limit pytań nie zeruje się
+        $this->assertCount(1, \chat\history('other@example.com'));
+
+        \chat\add(self::EMAIL, 'user', 'nowe pytanie');
+        $this->assertSame(['nowe pytanie'], array_column(\chat\history(self::EMAIL), 'content'));
+        $this->assertSame(0, \chat\archive('nobody@example.com'));
+
+        $this->assertSame(3, \chat\removeAllForEmail(self::EMAIL)); // usunięcie konta kasuje też archiwum
+    }
+
     public function testRemoveAllForEmail(): void
     {
         \chat\add(self::EMAIL, 'user', 'a');

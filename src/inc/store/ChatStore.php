@@ -1,7 +1,9 @@
 <?PHP namespace chat;
 
 /**
- * Rozmowa z asystentem AI: jedna ciągła konwersacja na użytkownika (klucz: e-mail), zapisana w store.sqlite.
+ * Rozmowa z asystentem AI: jedna bieżąca konwersacja na użytkownika (klucz: e-mail), zapisana w store.sqlite.
+ * „Nowa rozmowa” (\chat\archive()) nie kasuje wiadomości, tylko ustawia im archived_at — historia (i koszty w meta)
+ * zostają w bazie, a odczyty poniżej widzą wyłącznie bieżącą rozmowę (archived_at IS NULL).
  * Ta sama tabela jest skrzynką powiadomień systemowych — \chat\notify() dorzuca wiadomość od systemu do rozmowy,
  * a asystent widzi ją w kontekście, więc użytkownik może dopytać „co to znaczy?”. Schemat: src/sql/base_schema.sql.
  */
@@ -40,12 +42,12 @@ function notify(string $email, string $text, ?string $link = null): int {
 }
 
 /**
- * Ostatnie $limit wiadomości, od najstarszej do najnowszej. $beforeId = starsza strona (przewijanie w górę).
+ * Ostatnie $limit wiadomości bieżącej rozmowy, od najstarszej do najnowszej. $beforeId = starsza strona (przewijanie w górę).
  * @return list<array{id:int,role:string,content:string,meta:array<string,mixed>,createdAt:int,unread:bool}>
  */
 function history(string $email, int $limit = 50, ?int $beforeId = null): array {
     $stmt = \store\prepare('SELECT id, role, content, meta, created_at, read_at FROM ' . TABLE
-        . ' WHERE user_email = :e' . ($beforeId !== null ? ' AND id < :b' : '') . ' ORDER BY id DESC LIMIT :l');
+        . ' WHERE user_email = :e AND archived_at IS NULL' . ($beforeId !== null ? ' AND id < :b' : '') . ' ORDER BY id DESC LIMIT :l');
     $stmt->bindValue(':e', $email);
     if ($beforeId !== null) $stmt->bindValue(':b', $beforeId, \PDO::PARAM_INT);
     $stmt->bindValue(':l', max(1, $limit), \PDO::PARAM_INT);
@@ -61,9 +63,9 @@ function history(string $email, int $limit = 50, ?int $beforeId = null): array {
     ], $rows);
 }
 
-/** Liczba nieprzeczytanych powiadomień (do plakietki na przycisku czatu). */
+/** Liczba nieprzeczytanych powiadomień w bieżącej rozmowie (do plakietki na przycisku czatu). */
 function unread(string $email): int {
-    $stmt = \store\prepare('SELECT COUNT(*) FROM ' . TABLE . ' WHERE user_email = :e AND read_at IS NULL');
+    $stmt = \store\prepare('SELECT COUNT(*) FROM ' . TABLE . ' WHERE user_email = :e AND read_at IS NULL AND archived_at IS NULL');
     $stmt->execute([':e' => $email]);
     return (int)$stmt->fetchColumn();
 }
@@ -73,14 +75,28 @@ function markRead(string $email): void {
         ->execute([':t' => time(), ':e' => $email]);
 }
 
-/** Ile pytań zadał użytkownik od $since (unix ts) — limit nadużyć kosztownego wywołania LLM. */
+/** Ile pytań zadał użytkownik od $since (unix ts) — limit nadużyć kosztownego wywołania LLM. Liczy też zarchiwizowane:
+ * „Nowa rozmowa” nie zeruje limitu. */
 function userMessagesSince(string $email, int $since): int {
     $stmt = \store\prepare('SELECT COUNT(*) FROM ' . TABLE . " WHERE user_email = :e AND role = 'user' AND created_at > :s");
     $stmt->execute([':e' => $email, ':s' => $since]);
     return (int)$stmt->fetchColumn();
 }
 
-/** Kasuje całą rozmowę użytkownika (przycisk „Nowa rozmowa”, usunięcie konta). @return int liczba usuniętych wiadomości */
+/**
+ * „Nowa rozmowa”: archiwizuje bieżącą rozmowę (asystent i widżet przestają ją widzieć, wiersze zostają w bazie).
+ * Nieprzeczytane powiadomienia dostają też read_at, żeby nie wisiały jako nieprzeczytane w archiwum.
+ * @return int liczba zarchiwizowanych wiadomości
+ */
+function archive(string $email): int {
+    $now = time();
+    $stmt = \store\prepare('UPDATE ' . TABLE . ' SET archived_at = :t, read_at = COALESCE(read_at, :t)
+        WHERE user_email = :e AND archived_at IS NULL');
+    $stmt->execute([':t' => $now, ':e' => $email]);
+    return $stmt->rowCount();
+}
+
+/** Kasuje wszystkie wiadomości użytkownika, także archiwalne (usunięcie konta). @return int liczba usuniętych wiadomości */
 function removeAllForEmail(string $email): int {
     $stmt = \store\prepare('DELETE FROM ' . TABLE . ' WHERE user_email = :e');
     $stmt->execute([':e' => $email]);

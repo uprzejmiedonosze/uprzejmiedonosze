@@ -22,7 +22,8 @@ przyjmować powiadomienia systemowe. Akty prawne są obszerne: nie wolno ich wrz
 - **Rozmowa** to jedna ciągła nić na użytkownika w `store.sqlite` (`chat_messages`, `store/ChatStore.php`); w kontekście
   ostatnie `CHAT_CONTEXT_MESSAGES`. Rola `notification` + `\chat\notify($email, $tekst, $link)` to przyszłe centrum
   powiadomień: wiadomość trafia do tej samej rozmowy, daje plakietkę, a asystent widzi ją w kontekście.
-  Usunięcie konta kasuje rozmowę; użytkownik może ją skasować przyciskiem „Nowa rozmowa”.
+  „Nowa rozmowa” nie kasuje, tylko archiwizuje (`archived_at`) — zostaje historia i koszty z `meta`; asystent i widżet
+  widzą wyłącznie bieżącą rozmowę, a limit pytań liczy też archiwum. Usunięcie konta kasuje wszystko (`removeAllForEmail`).
 - **Awaria lub brak wiedzy → kontakt.** Błąd modelu nie rzuca wyjątku: użytkownik dostaje odpowiedź z linkiem do
   kontaktu; model sam woła `escalate_to_contact`, gdy nie potrafi odpowiedzieć (UI pokazuje przycisk).
 - **Dostęp:** tylko zarejestrowani patroni i byli patroni — każdy adres z listy Patronite (`\assistant\isAvailable`;

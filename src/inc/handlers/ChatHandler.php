@@ -64,8 +64,8 @@ class ChatHandler extends AbstractHandler {
         return $this->renderJson($response, ['message' => $reply]);
     }
 
-    /** DELETE /api/chat — „Nowa rozmowa”: kasuje zapisaną rozmowę (też powiadomienia). */
+    /** DELETE /api/chat — „Nowa rozmowa”: archiwizuje bieżącą rozmowę (z powiadomieniami); historia zostaje w bazie. */
     public function clear(Request $request, Response $response, array $args): Response {
-        return $this->renderJson($response, ['deleted' => \chat\removeAllForEmail($this->chatUser($request)->getEmail())]);
+        return $this->renderJson($response, ['archived' => \chat\archive($this->chatUser($request)->getEmail())]);
     }
 }

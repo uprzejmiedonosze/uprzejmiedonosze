@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   toggle.addEventListener("click", () => open(panel.hidden))
   root.querySelector(".js-chat-close")?.addEventListener("click", () => open(false))
   root.querySelector(".js-chat-reset")?.addEventListener("click", async () => {
-    if (!confirm("Usunąć zapisaną rozmowę z asystentem?")) return
+    if (!confirm("Zacząć nową rozmowę? Asystent nie będzie pamiętał dotychczasowej.")) return
     await new Api("/api/chat").delete({})
     await load()
   })
