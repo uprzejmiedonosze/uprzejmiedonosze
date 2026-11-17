@@ -1,4 +1,4 @@
-# 0007 — Asystent AI: narzędzia zamiast wielkiego kontekstu, rozmowa jako skrzynka powiadomień
+# 0008 — Asystent AI: narzędzia zamiast wielkiego kontekstu, rozmowa jako skrzynka powiadomień
 
 **Status:** obowiązuje (2026-11-16)
 

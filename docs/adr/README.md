@@ -18,4 +18,4 @@ Zasady:
 | [0005](0005-url-renames.md) | Zmiana URL-a strony: stary GET → 302, stary POST → ten sam handler |
 | [0006](0006-wiki-in-ud.md) | Wiki w UD: Markdown + allowlistowane dyrektywy, osobna baza, media z repo |
 | [0007](0007-nominatim-gmina-from-zoom10.md) | Gmina/powiat z Nominatim `zoom=10`, reszta adresu z `zoom=18` (granice gmin) |
-| [0007](0007-chat-assistant.md) | Asystent AI: narzędzia i pliki zamiast wielkiego kontekstu, rozmowa jako skrzynka powiadomień |
+| [0008](0008-chat-assistant.md) | Asystent AI: narzędzia i pliki zamiast wielkiego kontekstu, rozmowa jako skrzynka powiadomień |
