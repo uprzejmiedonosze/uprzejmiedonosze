@@ -6,7 +6,7 @@ description: Odśwież lub dodaj akt prawny (ustawę, rozporządzenie) w bazie a
 # Akty prawne asystenta AI
 
 Pliki: `src/inc/assistant/legal/index.json` (spis) i `legal/<id>.md` (treść, każdy artykuł = `## Art. N`).
-Format i zasady: `src/inc/assistant/legal/README.md`, decyzja: `docs/adr/0007-chat-assistant.md`.
+Format i zasady: `src/inc/assistant/legal/README.md`, decyzja: `docs/adr/0008-chat-assistant.md`.
 Narzędzie: `tools/legal-acts.py` (stdlib Pythona; PDF przez `pdftotext` z poppler). **`<id>.md` nie edytuj ręcznie** —
 każda poprawka idzie do skryptu, inaczej zniknie przy następnym odświeżeniu.
 

@@ -64,7 +64,7 @@ jednostki, wyszukiwarka) też w `Wiki.php`, SQL w `store/WikiStore.php`, trasy w
 Redaktor nie pisze Twiga ani HTML. `Wiki.php` ładuj **po** `Twig.php` (używa `initBareTwig`). Nowa dyrektywa =
 wpis w `DIRECTIVES` + partial + przykład w `\wiki\guide()`. Import z DokuWiki: `tools/wiki-import.php` + `WikiImport.php`.
 
-**Asystent AI** ([ADR 0007](../../docs/adr/0007-chat-assistant.md)) — `assistant/` (`Assistant.php` pętla tool-calling i składanie promptu, `prompt.md` rola i zasady asystenta,
+**Asystent AI** ([ADR 0008](../../docs/adr/0008-chat-assistant.md)) — `assistant/` (`Assistant.php` pętla tool-calling i składanie promptu, `prompt.md` rola i zasady asystenta,
 `Tools.php` narzędzia, `Corpus.php` wyszukiwanie), rozmowa w `store/ChatStore.php` (`\chat\`), trasy `/api/chat` w `handlers/ChatHandler.php`,
 widżet: `templates/_chat-widget.html.twig` + `js/sites/chat.js` + `scss/lib/chat.scss`. Wiedza to pliki:
 `assistant/knowledge/*.md` (`podstawy.md` zawsze w prompcie; `wiki-*.md` generuje `tools/wiki-knowledge.php` z wiki), `assistant/legal/` (akty, `## Art. N`), `assistant/skills/*.md`

@@ -11,7 +11,7 @@ use League\CommonMark\MarkdownConverter;
 /**
  * Asystent AI na stronie: pamięta rozmowę (\chat\ — store.sqlite), odpowiada na podstawie bazy wiedzy, aktów prawnych
  * i zgłoszeń użytkownika (narzędzia z Tools.php) i — gdy nie potrafi pomóc — kieruje na stronę kontaktową.
- * Decyzje i rozszerzanie: docs/adr/0007-chat-assistant.md.
+ * Decyzje i rozszerzanie: docs/adr/0008-chat-assistant.md.
  */
 
 /** Błąd do pokazania użytkownikowi; kod = status HTTP (400 zła wiadomość, 429 limit). */
