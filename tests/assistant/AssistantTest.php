@@ -192,7 +192,8 @@ class AssistantTest extends DatabaseTestCase
         $this->assertCount(CHAT_CONTEXT_MESSAGES + 1, $messages); // + system
         $this->assertSame('system', $messages[0]['role']);
 
-        \chat\removeAllForEmail(self::EMAIL);
+        \chat\archive(self::EMAIL); // „Nowa rozmowa”: stara historia znika z kontekstu modelu
+        $this->assertCount(1, \assistant\buildMessages($user));
         \chat\notify(self::EMAIL, 'Zgłoszenie UD/1 zostało wysłane');
         $this->assertStringStartsWith('[Powiadomienie systemowe]', \assistant\buildMessages($user)[1]['content']);
     }

@@ -67,8 +67,9 @@ class ChatHandlerTest extends DatabaseTestCase
         $this->assertSame(['user', 'assistant', 'notification'], array_column($history['messages'], 'role'));
         $this->assertSame(0, $this->call('unread')['unread']); // historia oznacza powiadomienia jako przeczytane
 
-        $this->assertSame(3, $this->call('clear')['deleted']);
-        $this->assertSame([], $this->call('history')['messages']);
+        $this->assertSame(3, $this->call('clear')['archived']);
+        $this->assertSame([], $this->call('history')['messages']); // nowa rozmowa jest pusta…
+        $this->assertSame(3, (int)\store\query("SELECT COUNT(*) FROM chat_messages WHERE user_email = '" . self::EMAIL . "' AND archived_at IS NOT NULL")->fetchColumn()); // …a stara zostaje w bazie
     }
 
     public function testUnreadReportsWhetherUserCanAttach(): void
