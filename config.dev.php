@@ -9,8 +9,8 @@ define('OPEN_ALPR_SECRET_2', getenv('OPEN_ALPR_SECRET_2') ?: 'contact author');
 define('MAPBOX_API_TOKEN', getenv('MAPBOX_API_TOKEN') ?: 'contact author');
 define('GOOGLE_MAPS_API_TOKEN', 'contact author');
 
-define('OPENAI_API_KEY', 'see README.md');
-define('OPENAI_PROJECT', 'proj_SOMEID');
+define('OPENAI_API_KEY', getenv('OPENAI_API_KEY') ?: 'see README.md');   // prawdziwy klucz: services/.env.dev.local
+define('OPENAI_PROJECT', getenv('OPENAI_PROJECT') ?: 'proj_SOMEID');
 
 define('MAILER_FROM', 'u@dka.email');
 define('MAILER_FROM_ALTER', 'u@dka.email');

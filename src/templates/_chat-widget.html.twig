@@ -2,13 +2,13 @@
    Ukryty, dopóki GET /api/chat/unread nie odpowie 200 — niezarejestrowany użytkownik dostaje 403 i widżetu nie widzi. #}
 <div class="mpr-chat" hidden>
     <button type="button" class="mpr-chat__toggle js-chat-toggle" aria-expanded="false" aria-controls="chat-panel"
-        aria-label="Asystent — zadaj pytanie">
+        aria-label="Uprzejmy Asystent — zadaj pytanie">
         <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4v-4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/></svg>
         <span class="mpr-chat__badge js-chat-badge" hidden></span>
     </button>
-    <section class="mpr-chat__panel" id="chat-panel" role="dialog" aria-label="Asystent Uprzejmie Donoszę" hidden>
+    <section class="mpr-chat__panel" id="chat-panel" role="dialog" aria-label="Uprzejmy Asystent" hidden>
         <header class="mpr-chat__header">
-            <strong>Asystent</strong>
+            <strong>Uprzejmy Asystent</strong>
             <span class="mpr-chat__actions">
                 <button type="button" class="mpr-chat__icon js-chat-reset" title="Nowa rozmowa" aria-label="Nowa rozmowa">↺</button>
                 <button type="button" class="mpr-chat__icon js-chat-close" title="Zamknij" aria-label="Zamknij czat">✕</button>
@@ -24,6 +24,6 @@
                 aria-label="Twoja wiadomość" required></textarea>
             <button type="submit" class="mpr-chat__send js-chat-send" aria-label="Wyślij">➤</button>
         </form>
-        <p class="mpr-chat__note">Asystent AI może się mylić. W trudnych sprawach <a href="/kontakt.html">napisz do nas</a>.</p>
+        <p class="mpr-chat__note">Uprzejmy Asystent może się mylić. W trudnych sprawach <a href="/kontakt.html">napisz do nas</a>.</p>
     </section>
 </div>
