@@ -39,3 +39,5 @@ services/.env.shadow
 
 # wiki dev database (created on first request)
 services/devroot/db/wiki.sqlite
+
+tools/facebook-group-dump
