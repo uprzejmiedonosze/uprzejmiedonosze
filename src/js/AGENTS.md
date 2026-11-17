@@ -41,7 +41,8 @@
   (wzór: `.js-new-app-submit`).
 - Klasy `js-*` = hooki dla JS, nie stylujemy ich w SCSS.
 - Typy w JSDoc (`/** @type {HTMLInputElement} */`), bez TypeScriptu.
-- Lint: `tools/eslint.config.mjs`.
+- Lint: `make lint-js` (config `tools/eslint.config.mjs`, ESLint 10 flat config). Stary kod ma jeszcze ~110 uwag
+  (głównie `sort-imports`, `no-unused-vars`) — w zmienianych plikach sprawdzaj `make lint-js FILES=...`.
 
 ## Weryfikacja lokalna
 

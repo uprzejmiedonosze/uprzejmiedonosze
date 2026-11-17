@@ -20,6 +20,7 @@ make emulator-ui         # Firebase emulator UI at http://localhost:4000
 make test                # PHPUnit in a throwaway container — ALWAYS use this, never call phpunit directly
 make cypress-local       # Cypress E2E against local dev (or the `cypress` skill)
 make lint-css            # stylelint on src/scss (requires `npm install` in tools/)
+make lint-js             # eslint on src/js + cypress; FILES="src/js/sites/chat.js" for selected files
 make deploy-staging | deploy-shadow | deploy-prod
 make log-from-last-prod  # commits since last production release
 make diff-from-last-prod

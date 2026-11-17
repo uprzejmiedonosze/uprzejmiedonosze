@@ -61,6 +61,10 @@ test: ## Run phpunit tests in a throwaway builder-test container (works alongsid
 lint-css: ## Stylelint on src/scss (tokens instead of hardcoded colors; legacy files only warn)
 	@tools/node_modules/.bin/stylelint --config tools/stylelint.config.mjs --quiet "src/scss/**/*.scss"
 
+.PHONY: lint-js
+lint-js: ## ESLint on src/js and cypress (FILES=... to lint selected files)
+	@tools/node_modules/.bin/eslint -c tools/eslint.config.mjs $(or $(FILES),src/js cypress)
+
 .PHONY: cypress-local
 cypress-local: ## Run Cypress tests against local dev environment
 	@[ -d tools/node_modules ] || (cd tools && npm install)
