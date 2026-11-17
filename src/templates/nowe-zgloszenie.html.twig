@@ -190,7 +190,7 @@
         {% for groupId, groupDef in categoryGroups %}
         {% if groupId != 0 %}
             <div class="category-group">
-                <h4>{{ groupDef.name }}</h4>
+                <h4>{{ groupDef.webName ?? groupDef.name }}</h4>
                 <div class="grid">
                 {% for catId, catDef in categories %}
                 {# hałas i drift wymagają nagrania – dołącza je tylko aplikacja mobilna #}
