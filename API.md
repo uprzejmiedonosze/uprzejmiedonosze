@@ -4,16 +4,18 @@
 
 ## Kontrakt API a aplikacja mobilna (wymuszenie aktualizacji)
 
-Kontrakt jest wersjonowany numerem `VISION_SCHEMA` (`src/inc/integrations/VisionSchema.php`) = `SCHEMA` w appce (`src/lib/vision.ts`);
+Kontrakt jest wersjonowany numerem `API_SCHEMA` (`src/inc/config.php`; do 11 jako `VISION_SCHEMA`) = `API_SCHEMA` w appce (`src/lib/apiSchema.ts`);
 podbijamy go przy każdej zmianie kontraktu. Aplikacja wysyła w każdym żądaniu `X-UD-Schema: <SCHEMA>` (oraz informacyjnie
 `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`). **Kompatybilność jest tylko „w dół”:** klient ze schematem równym lub
-wyższym niż backend działa (nowa appka ze starszym backendem – OK), a klient ze schematem **niższym** niż `VISION_SCHEMA` backendu
+wyższym niż backend działa (nowa appka ze starszym backendem – OK), a klient ze schematem **niższym** niż `API_SCHEMA` backendu
 (np. appka 7, backend 8) dostaje na każdym `/api/rest/*` **426** z `{error, status, schema, serverSchema, storeUrl}` i pokazuje
 blokujący ekran „Zaktualizuj”. Żądania bez nagłówka (web, MCP) nie są ograniczane.
 Decyzję podejmuje wyłącznie backend – appka nie porównuje wersji u siebie, tylko reaguje na 426 (pierwsze żądanie po starcie to
 `POST /api/verify-token`, więc blokada pojawia się od razu). `/api/config/app.json` (publiczny) służy już tylko do miękkiej zachęty:
 `latestVersion` (wersja appki, per platforma) i `storeUrl`. **Kolejność wdrożenia zmiany kontraktu:** podbić `SCHEMA` w appce → nowy build
-w sklepach → dopiero potem backend z podbitym `VISION_SCHEMA` (od tej chwili starsze appki są blokowane).
+w sklepach → dopiero potem backend z podbitym `API_SCHEMA` (od tej chwili starsze appki są blokowane).
+W drugą stronę: każda odpowiedź `/api/rest/*` niesie nagłówek **`X-UD-Server-Schema: <API_SCHEMA>`** (od 11; brak = starszy backend).
+Nowsza appka chowa po nim funkcje, których backend jeszcze nie ma – np. film w zgłoszeniu wymaga schematu serwera ≥ 11.
 
 ## Autoryzacja (`Authorization: Bearer <Firebase ID token>`)
 

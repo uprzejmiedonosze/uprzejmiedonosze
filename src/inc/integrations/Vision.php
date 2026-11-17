@@ -362,7 +362,7 @@ function alprDetections(array $resp, ?array $size): array {
 // Tablica + bbox auta z ALPR (PlateRecognizer) dla każdego zdjęcia poza 'unusable' — patrz
 // caller w analyzeCandidate(). Zawsze zapisuje alpr_all (patrz alprDetections()) i plate_debug
 // (model vs ALPR + score, TYMCZASOWE do wglądu w appce — usunąć razem z UI po stronie klienta
-// przy kolejnym podbiciu VISION_SCHEMA, appka nieznany klucz ignoruje). Nadpisuje plate/car
+// przy kolejnym podbiciu API_SCHEMA, appka nieznany klucz ignoruje). Nadpisuje plate/car
 // modelu tylko gdy ALPR zwróci parsowalną tablicę ze score >= ALPR_MIN_SCORE; wpp. graceful
 // fallback (plate_debug.alpr=null gdy ALPR nic nie znalazł, albo wpis + warning gdy score za
 // niski) bez plate_verified.

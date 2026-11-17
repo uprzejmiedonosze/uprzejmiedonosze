@@ -8,6 +8,27 @@ const DT_FORMAT = 'Y-m-d\TH:i:s';
 const DT_FORMAT_SHORT = 'Y-m-d\TH:i';
 const DT_FORMAT_LONG = 'Y-m-d\TH:i:s.u';
 
+/**
+ * Wersja kontraktu REST z aplikacją mobilną (= API_SCHEMA w ../uprzejmiedonosze-pro/src/lib/apiSchema.ts); podbij przy każdej
+ * zmianie kontraktu (endpointy, pola, prompt i walidacja Vision). Klient wysyła `X-UD-Schema`, a serwer:
+ *  - odrzuca (426) klienta o schemacie NIŻSZYM (kompatybilność tylko „w dół”) – podbij dopiero PO buildzie z nowym schematem
+ *    w sklepach (API.md);
+ *  - w każdej odpowiedzi /api/rest/* zwraca `X-UD-Server-Schema`, żeby nowsza appka ze starszym backendem chowała to, czego
+ *    ten backend jeszcze nie umie (np. film w zgłoszeniu od 11).
+ * Do 11 nazywała się VISION_SCHEMA (src/inc/integrations/VisionSchema.php).
+ */
+const API_SCHEMA = 11;
+// SCHEMA 11: film w zgłoszeniu (POST/DELETE /api/rest/app/{id}/video), kategorie `requiresVideo` (hałas, drift), bez flag `beta`
+// i `features.adHocReports`; nagłówek X-UD-Server-Schema w odpowiedziach.
+// SCHEMA 10: POST /api/rest/demo-login (konto demo recenzentów, src/inc/demoLogin.php); kształt odpowiedzi bez zmian
+// względem 9. Wyjątkowo podbite PRZED buildem w sklepie: odcina (426) testowe buildy staging ≤ 1.1.7 przed premierą prod;
+// w sklepie nie ma jeszcze wydania prod, które by to zablokowało.
+// SCHEMA 9: limit unikalnych przetworzonych zdjęć na użytkownika (store/PhotoQuota.php) — nowy kontrakt REST: HTTP 402
+// z `quota` na POST /photos/{id}/alpr, /app/{id}/image (photoId) i /vision/candidate oraz `photoQuota` w GET /user/dashboard i
+// /photos/{id}/alpr (kształt odpowiedzi vision/candidate bez zmian względem 8).
+// SCHEMA 8: ALPR na każdym zdjęciu poza 'unusable' + pole alpr_all (wszystkie odczyty) — appka
+// przydziela role context/car/third deterministycznie, patrz alprDetections() w Vision.php.
+
 $CATEGORIES = \json\get('categories.json', 'Category');
 $CATEGORY_GROUPS = \json\get('category-groups.json');
 $EXTENSIONS = \json\get('extensions.json', 'Extension');

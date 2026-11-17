@@ -6,20 +6,9 @@
 // i kolejność są deterministyczne i zostają po stronie appki (compose.ts) — patrz komentarz przy
 // CATEGORY_RULES niżej. Źródło prawdy dla kontraktu: ten plik + src/lib/vision.ts w apce, muszą
 // zostać zsynchronizowane ręcznie (brak wspólnego repo) — każda zmiana promptu/markerów/walidacji
-// tu MUSI być powtórzona tam (i odwrotnie), i musi podbić VISION_SCHEMA.
+// tu MUSI być powtórzona tam (i odwrotnie), i musi podbić API_SCHEMA (src/inc/config.php).
 
-const VISION_SCHEMA = 11; // = SCHEMA w src/lib/vision.ts (appka); podbij przy zmianie kontraktu
-// To też wersja kontraktu REST dla appki: klient wysyła `X-UD-Schema`, a serwer odrzuca (426) klienta o schemacie NIŻSZYM
-// niż VISION_SCHEMA (kompatybilność tylko „w dół”: nowszy klient ze starszym backendem działa). Podbij dopiero PO wdrożeniu
-// buildu z nowym SCHEMA w sklepach (patrz API.md).
-// SCHEMA 10: POST /api/rest/demo-login (konto demo recenzentów, src/inc/demoLogin.php); kształt odpowiedzi bez zmian
-// względem 9. Wyjątkowo podbite PRZED buildem w sklepie: odcina (426) testowe buildy staging ≤ 1.1.7 przed premierą prod;
-// w sklepie nie ma jeszcze wydania prod, które by to zablokowało.
-// SCHEMA 9: limit unikalnych przetworzonych zdjęć na użytkownika (store/PhotoQuota.php) — nowy kontrakt REST: HTTP 402
-// z `quota` na POST /photos/{id}/alpr, /app/{id}/image (photoId) i /vision/candidate oraz `photoQuota` w GET /user/dashboard i
-// /photos/{id}/alpr (kształt odpowiedzi vision/candidate bez zmian względem 8).
-// SCHEMA 8: ALPR na każdym zdjęciu poza 'unusable' + pole alpr_all (wszystkie odczyty) — appka
-// przydziela role context/car/third deterministycznie, patrz alprDetections() w Vision.php.
+// Wersja kontraktu (także tego pliku) to API_SCHEMA w src/inc/config.php.
 
 // Minimalny score PlateRecognizer (0..1), poniżej którego wynik ALPR jest ignorowany
 // (zostaje odczyt modelu) — patrz applyAlprPlate() w Vision.php. Bez progu odczyt ALPR

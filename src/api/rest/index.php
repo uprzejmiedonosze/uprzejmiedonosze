@@ -83,15 +83,15 @@ $app->options('/{routes:.+}', function ($request, $response) {
 });
 
 // Wymuszenie aktualizacji aplikacji mobilnej wg KONTRAKTU API (nie wersji appki). Klient wysyła `X-UD-Schema: <SCHEMA>` –
-// wersję kontraktu, z którą został zbudowany (ta sama numeracja co VISION_SCHEMA backendu / src/lib/vision.ts w appce).
+// wersję kontraktu, z którą został zbudowany (API_SCHEMA w src/inc/config.php = src/lib/apiSchema.ts w appce).
 // Kompatybilność jest tylko „w dół”: nowszy klient działa ze starszym backendem, ale klient ze schematem NIŻSZYM niż
-// VISION_SCHEMA backendu jest niekompatybilny → 426 + storeUrl (app pokazuje ekran „Zaktualizuj”). Dlatego nowy build
-// z podbitym SCHEMA musi być w sklepach PRZED wdrożeniem backendu z podbitym VISION_SCHEMA.
+// API_SCHEMA backendu jest niekompatybilny → 426 + storeUrl (app pokazuje ekran „Zaktualizuj”). Dlatego nowy build
+// z podbitym schematem musi być w sklepach PRZED wdrożeniem backendu z podbitym API_SCHEMA.
 // Brak nagłówka (web, MCP, curl) = bez ograniczeń. Platforma (tylko do wyboru storeUrl) z
 // `X-UD-Client: pro/<wersja> (<build>; <ios|android>)`.
 $app->add(function ($request, $handler) use ($app) {
     $schema = $request->getHeaderLine('X-UD-Schema');
-    if ($schema !== '' && ctype_digit($schema) && (int)$schema < \vision\VISION_SCHEMA && $request->getMethod() !== 'OPTIONS') {
+    if ($schema !== '' && ctype_digit($schema) && (int)$schema < API_SCHEMA && $request->getMethod() !== 'OPTIONS') {
         $cfg = [];
         try {
             $cfg = \json\get('app.json');
@@ -104,7 +104,7 @@ $app->add(function ($request, $handler) use ($app) {
             'error' => $cfg['message'] ?? 'Wymagana aktualizacja aplikacji.',
             'status' => 426,
             'schema' => (int)$schema,
-            'serverSchema' => \vision\VISION_SCHEMA,
+            'serverSchema' => API_SCHEMA,
             'storeUrl' => $cfg[$platform]['storeUrl'] ?? null,
         ], JSON_UNESCAPED_UNICODE));
         return $response;
@@ -113,7 +113,8 @@ $app->add(function ($request, $handler) use ($app) {
 });
 
 $app->add(function ($request, $handler) {
-    $response = $handler->handle($request);
+    // wersja kontraktu tego backendu – nowsza appka chowa funkcje, których starszy backend nie ma (API_SCHEMA, API.md)
+    $response = $handler->handle($request)->withHeader('X-UD-Server-Schema', (string)API_SCHEMA);
 
     $allowedOrigin = getCorsOrigin($request);
     if ($allowedOrigin) {
@@ -121,7 +122,8 @@ $app->add(function ($request, $handler) {
             ->withHeader('Access-Control-Allow-Origin', $allowedOrigin)
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, X-UD-Client, X-UD-Schema')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH')
-            ->withHeader('Access-Control-Allow-Credentials', 'true');
+            ->withHeader('Access-Control-Allow-Credentials', 'true')
+            ->withHeader('Access-Control-Expose-Headers', 'X-UD-Server-Schema');
     }
 
     // JSON by default; a handler that sets its own type (e.g. the PNG map preview) keeps it
@@ -875,7 +877,7 @@ $app->group('/api/rest/vision', function (RouteCollectorProxy $group) { // VISIO
             throw $e;
         }
         $result['reportId'] = $reportId;
-        $result['schema'] = \vision\VISION_SCHEMA;
+        $result['schema'] = API_SCHEMA;
         $result['model'] = OPENAI_VISION_MODEL;
 
         $response->getBody()->write(json_encode($result));

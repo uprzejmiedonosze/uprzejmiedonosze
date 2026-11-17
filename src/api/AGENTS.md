@@ -6,7 +6,7 @@
   każda zmiana endpointu/pola = aktualizacja `API.md` w tym samym commicie.
 - Auth: Firebase JWT (`AuthMiddleware`) → `TokenSessionMiddleware` → `UserMiddleware` → `RegisteredMiddleware`/`TermsConfirmedMiddleware`.
 - Odpowiedź zgłoszenia zawsze przez `applicationToRest()` (`src/inc/API.php`) — nie serializuj `Application` ręcznie.
-- Nagłówki klienta: `X-UD-Client` (`mobilePlatform()`), `X-UD-Schema` (< `\vision\VISION_SCHEMA` → HTTP 426, wymuszenie aktualizacji).
+- Nagłówki klienta: `X-UD-Client` (`mobilePlatform()`), `X-UD-Schema` (< `API_SCHEMA` z `src/inc/config.php` → HTTP 426, wymuszenie aktualizacji); każda odpowiedź niesie `X-UD-Server-Schema`.
 - Logika domenowa w `src/inc/API.php`, nie w closure route'a (współdzielona z webem i MCP).
 
 **Aplikacja mobilna jest na produkcji (Android w Google Play, iOS jeszcze nie), a jej obsługa jest w `main`.** Lista
