@@ -106,6 +106,7 @@ class AssistantTest extends DatabaseTestCase
         $this->assertSame('1 zgłoszeń: UD/1/2', $log);
         $this->assertSame('błąd: Nieznany skill: x', \assistant\toolSummary('load_skill', [], ['error' => 'Nieznany skill: x'])[0]);
         $this->assertSame(\assistant\promptId("A\nDzisiejsza data: 2026-01-01.\nB"), \assistant\promptId("A\nDzisiejsza data: 2026-11-16.\nB"));
+        $this->assertSame(\assistant\promptId("A\nRozmówca: Ola, płeć: kobieta.\nB"), \assistant\promptId("A\nRozmówca: Jan, płeć: mężczyzna.\nB")); // dane rozmówcy nie zmieniają wersji promptu
     }
 
     public function testEscalateToContactSetsContactUrl(): void
@@ -239,5 +240,76 @@ class AssistantTest extends DatabaseTestCase
     {
         $this->assertArrayHasKey('error', \assistant\tools\execute('drop_tables', [], $this->user()));
         $this->assertArrayHasKey('error', \assistant\tools\execute('search_legal', ['query' => 'x', 'act' => '../x'], $this->user()));
+    }
+
+    public function testPromptNamesTheInterlocutor(): void
+    {
+        $user = $this->user();
+        $user->data->name = 'Ola Nowak';
+        $this->assertStringContainsString('Rozmówca: Ola, płeć: kobieta', \assistant\buildSystemPrompt($user));
+        $user->data->name = 'Jan Nowak';
+        $user->data->sex = 'm';
+        $this->assertStringContainsString('Rozmówca: Jan, płeć: mężczyzna', \assistant\buildSystemPrompt($user));
+        $user->data->name = '';
+        $this->assertStringContainsString('imię nieznane, płeć: nieznana', \assistant\buildSystemPrompt($user));
+    }
+
+    private function report(User $owner, string $plate, string $address = 'Testowa 1, Szczecin', string $status = 'confirmed', ?string $caseNumber = null): Application
+    {
+        $app = Application::withUser($owner);
+        $app->statusHistory = [];
+        $app->comments = [];
+        $app->extensions = [];
+        $app->date = '2026-05-07T10:00:00';
+        $app->carInfo = new \JSONObject();
+        $app->carInfo->plateId = $plate;
+        $app->address = new \JSONObject();
+        $app->address->address = $address;
+        $app->status = $status;
+        if ($caseNumber !== null) $app->externalId = $caseNumber;
+        return \app\save($app);
+    }
+
+    public function testListReportsReturnsRealTotalsAndStatusBreakdown(): void
+    {
+        $owner = $this->user('totals@example.com');
+        $this->report($owner, 'PO5CS28');
+        $this->report($owner, 'PY7048K', status: 'confirmed-complaint');
+        $list = \assistant\tools\execute('list_my_reports', ['limit' => 1], $owner);
+        $this->assertSame(1, $list['count']);
+        $this->assertSame(2, $list['total']);
+        $this->assertTrue($list['truncated']);
+        $this->assertSame(1, $list['byStatus']['Zażalone']);
+        $this->assertFalse(\assistant\tools\execute('list_my_reports', ['limit' => 25], $owner)['truncated']);
+    }
+
+    public function testListReportsSearchesManyPlatesAtOnceIgnoringSpaces(): void
+    {
+        $owner = $this->user('plates@example.com');
+        $this->report($owner, 'PO5CS28');
+        $this->report($owner, 'PY7048K');
+        $this->report($owner, 'WX1', caseNumber: 'SM/21988/2026');
+        $found = \assistant\tools\execute('list_my_reports', ['search' => "PO 5CS28, PY-7048K\nBRAK 999, 21988"], $owner);
+        $this->assertSame(3, $found['count']);
+        $this->assertSame(['BRAK 999'], $found['notFound']);
+        $this->assertSame(4, $found['searched']);
+        $plates = array_column($found['reports'], 'plate');
+        sort($plates);
+        $this->assertSame(['PO5CS28', 'PY7048K', 'WX1'], $plates);
+    }
+
+    public function testPlateFormOnlyRewritesPlateLikeTerms(): void
+    {
+        $this->assertSame('PSZ6875C', \assistant\tools\plateForm('PSZ 6875C'));
+        $this->assertSame('Rynek Jeżycki 3', \assistant\tools\plateForm('Rynek Jeżycki 3'));
+        $this->assertSame(['a', 'b c'], \assistant\tools\searchTerms("a, b c;\n a"));
+    }
+
+    public function testPhotosPackageIsPatronOnlyAndOwnReportsOnly(): void
+    {
+        $owner = $this->user('photos@example.com');
+        $app = $this->report($owner, 'PO5CS28');
+        $this->assertStringContainsString('patron', \assistant\tools\execute('photos_package', ['report_ids' => [$app->id]], $owner)['error']);
+        $this->assertSame([], \assistant\tools\ownReports($this->user(), [$app->id])); // cudze zgłoszenie nie trafi do paczki
     }
 }

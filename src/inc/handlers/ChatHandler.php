@@ -64,6 +64,21 @@ class ChatHandler extends AbstractHandler {
         return $this->renderJson($response, ['message' => $reply]);
     }
 
+    /**
+     * GET /api/chat/photos?ids=a,b,c — ZIP ze zdjęciami zgłoszeń (link z narzędzia photos_package; tylko patroni, tylko własne zgłoszenia).
+     * Zwykła trasa bez JsonMiddleware (odpowiedź to plik).
+     */
+    public function photos(Request $request, Response $response, array $args): Response {
+        $user = $this->chatUser($request);
+        if (!\assistant\attachments\isAllowed($user))
+            throw new \Exception('Paczka ze zdjęciami jest dostępna dla patronów.', 403);
+        $ids = array_filter(explode(',', (string)($request->getQueryParams()['ids'] ?? '')));
+        $apps = \assistant\tools\ownReports($user, $ids);
+        if (!$apps) throw new \Exception('Nie znaleziono zgłoszeń ze zdjęciami.', 404);
+        return self::renderXls($response, \assistant\tools\photosZip($apps), 'Zdjecia_zgloszen.zip')
+            ->withHeader('Content-Type', 'application/zip');
+    }
+
     /** DELETE /api/chat — „Nowa rozmowa”: archiwizuje bieżącą rozmowę (z powiadomieniami); historia zostaje w bazie. */
     public function clear(Request $request, Response $response, array $args): Response {
         return $this->renderJson($response, ['archived' => \chat\archive($this->chatUser($request)->getEmail())]);

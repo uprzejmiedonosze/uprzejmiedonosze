@@ -136,6 +136,8 @@ $app->group('/api/chat', function (RouteCollectorProxy $group) { // asystent AI 
     ->add(new JsonMiddleware())
     ->add(new JsonBodyParser());
 
+$app->get('/api/chat/photos', ChatHandler::class . ':photos')->add(new RegisteredMiddleware()); // plik ZIP — bez JsonMiddleware
+
 $app->group('/generator', function (RouteCollectorProxy $group) {        
     $group->get('/stream', \generator\ApiAiHandler::class . ':stream');
     $group->get('/topics', \generator\ApiAiHandler::class . ':getTopics');

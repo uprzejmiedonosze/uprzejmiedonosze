@@ -36,12 +36,20 @@ function definitions(): array {
              'article' => $str('Numer artykułu („49”, „92a”, „60¹”), paragrafu rozporządzenia („§ 5”) lub pozycji taryfikatora („Lp. 165”), opcjonalnie z częścią: '
                  . '„2 pkt 29”, „130a ust. 5”, „96 § 1a”, „§ 2 ust. 1”')], ['act', 'article']),
         $fn('list_my_reports', 'Lista zgłoszeń zalogowanego użytkownika (najnowsze pierwsze), w skrócie. Użyj do pytań '
-            . 'o „moje zgłoszenia”, statusy, numery spraw.',
+            . 'o „moje zgłoszenia”, statusy, numery spraw. Bez `search` wynik zawiera `total` i `byStatus` (prawdziwa liczba zgłoszeń '
+            . 'i podział na statusy) — liczby podawaj z nich, nie z `count` (to tylko długość zwróconej listy, obciętej do `limit`).',
             ['status' => $str('all (domyślnie, bez szkiców), sendable, allWithDrafts lub konkretny status, np. confirmed-waiting'),
-             'search' => $str('Opcjonalny tekst: tablica, numer zgłoszenia, adres, data d.mm.rrrr, nazwa jednostki'),
+             'search' => $str('Opcjonalnie: tablica, numer zgłoszenia UD, numer sprawy służby, adres, data d.mm.rrrr, nazwa jednostki. '
+                . 'Kilka fraz oddziel przecinkami (np. całą listę tablic z pisma naraz) — zwróci zgłoszenia pasujące do którejkolwiek. '
+                . 'Tablice w UD są zapisane bez spacji; spacje i myślniki są pomijane automatycznie.'),
              'limit' => ['type' => 'integer', 'description' => 'Liczba zgłoszeń (domyślnie 10, max 25)']]),
         $fn('get_my_report', 'Szczegóły jednego zgłoszenia zalogowanego użytkownika po jego id (z list_my_reports).',
             ['report_id' => $str('Id zgłoszenia')], ['report_id']),
+        $fn('photos_package', 'Przygotowuje paczkę ZIP ze zdjęciami wskazanych zgłoszeń użytkownika (np. do uzupełnienia sprawy na '
+            . 'wezwanie służby). Tylko dla patronów. Zwraca `url` — wstaw go do odpowiedzi jako link Markdown „Pobierz paczkę ZIP”. '
+            . 'Id zgłoszeń weź z list_my_reports (pole id).',
+            ['report_ids' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => 'Id zgłoszeń (max ' . PHOTOS_PACKAGE_MAX . ')']],
+            ['report_ids']),
         $fn('escalate_to_contact', 'Wywołaj, gdy NIE potrafisz rzetelnie odpowiedzieć (brak informacji w bazie wiedzy i '
             . 'przepisach, błąd serwisu, sprawa indywidualna, prośba o kontakt z człowiekiem). Pokaże użytkownikowi '
             . 'przycisk przejścia na stronę kontaktową.',
@@ -62,6 +70,7 @@ function execute(string $name, array $args, \user\User $user): array {
             'search_legal' => searchLegal((string)($args['query'] ?? ''), isset($args['act']) ? (string)$args['act'] : null),
             'get_legal_provision' => legalProvision((string)($args['act'] ?? ''), (string)($args['article'] ?? '')),
             'list_my_reports' => listReports($user, (string)($args['status'] ?? 'all'), (string)($args['search'] ?? ''), (int)($args['limit'] ?? 10)),
+            'photos_package' => photosPackage($user, (array)($args['report_ids'] ?? [])),
             'get_my_report' => getReport($user, (string)($args['report_id'] ?? '')),
             'load_skill' => loadSkill((string)($args['name'] ?? '')),
             'escalate_to_contact' => ['contactUrl' => CONTACT_URL, 'reason' => (string)($args['reason'] ?? ''),
@@ -140,6 +149,7 @@ function summarize(\app\Application $a, bool $full = false): array {
         'category' => $a->getCategory()?->getFormal(),
         'recipient' => $sm,
         'caseNumber' => ($a->externalId ?? '') !== '' ? $a->externalId : null,
+        'statusChanged' => ($h = $a->statusHistory ?? []) ? array_key_last($h) : null, // data ostatniej zmiany statusu
     ];
     if ($full) {
         $out += [
@@ -150,15 +160,104 @@ function summarize(\app\Application $a, bool $full = false): array {
             'law' => $a->getCategory()?->getLaw(),
             'fine' => $a->getCategory()?->getMandate(),
             'demeritPoints' => $a->getCategory()?->getPoints(),
+            'statusHistory' => array_values(array_map(fn($date, $h) => ['date' => $date, 'from' => $h->old ?? null, 'to' => $h->new ?? null],
+                array_keys($a->statusHistory ?? []), array_values($a->statusHistory ?? []))) ?: null,
         ];
     }
     return array_filter($out, fn($v) => $v !== null);
 }
 
+/** Frazy wyszukiwania rozdzielone przecinkiem/średnikiem/nową linią (np. lista tablic wklejona z pisma). */
+function searchTerms(string $search): array {
+    $terms = preg_split('/[,;\n]+/u', $search, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    return array_slice(array_values(array_unique(array_filter(array_map('trim', $terms), fn($t) => $t !== ''))), 0, 30);
+}
+
+/** Tablice w UD są bez spacji i myślników („PO 5CS28” → „PO5CS28”); tylko krótkie frazy z literą i cyfrą, żeby nie psuć adresów. */
+function plateForm(string $term): string {
+    $plain = str_replace([' ', '-'], '', $term);
+    return mb_strlen($plain) <= 8 && preg_match('/^[\p{L}\d ]+$/u', str_replace('-', '', $term)) && preg_match('/\d/', $plain) && preg_match('/\p{L}/u', $plain)
+        ? $plain : $term;
+}
+
 function listReports(\user\User $user, string $status, string $search, int $limit): array {
     $limit = max(1, min($limit, 25));
-    $apps = \user\apps($user, ...\user\appsQueryFromParams(['status' => $status, 'search' => $search, 'limit' => $limit], 25));
-    return ['count' => count($apps), 'reports' => array_map(fn($a) => summarize($a), $apps)];
+    $terms = searchTerms($search);
+    $query = fn(string $term) => \user\apps($user, ...\user\appsQueryFromParams(['status' => $status, 'search' => $term, 'limit' => $limit], 25));
+
+    if (!$terms) {
+        $apps = $query('');
+        $out = ['count' => count($apps), 'reports' => array_map(fn($a) => summarize($a), $apps)];
+        if ($status === 'all' || $status === 'allWithDrafts') $out += reportTotals($user, $status === 'allWithDrafts');
+        return $out + ['truncated' => ($out['total'] ?? count($apps)) > count($apps)];
+    }
+
+    $found = [];
+    $notFound = [];
+    foreach ($terms as $term) {
+        $apps = $query($term);
+        if (!$apps && ($alt = plateForm($term)) !== $term) $apps = $query($alt);
+        if (!$apps) $notFound[] = $term;
+        foreach ($apps as $a) $found[$a->id] ??= $a;
+    }
+    $total = count($found);
+    $found = array_slice($found, 0, 25, true);
+    return ['count' => count($found), 'reports' => array_values(array_map(fn($a) => summarize($a), $found)),
+        'truncated' => $total > count($found)]
+        + (count($terms) > 1 ? ['searched' => count($terms), 'notFound' => $notFound] : []);
+}
+
+/** Prawdziwa liczba zgłoszeń i podział na statusy (SQL, bez ładowania zgłoszeń). */
+function reportTotals(\user\User $user, bool $withDrafts): array {
+    global $STATUSES;
+    $byStatus = [];
+    foreach (\user\_countAppsByStatus($user->getEmail()) as $status => $cnt) {
+        if (!$withDrafts && in_array($status, ['ready', 'draft'], true)) continue;
+        $byStatus[$STATUSES[$status]->name ?? $status] = (int)$cnt;
+    }
+    return ['total' => array_sum($byStatus), 'byStatus' => $byStatus];
+}
+
+const PHOTOS_PACKAGE_MAX = 30;
+
+/** @return list<\app\Application> zgłoszenia użytkownika o podanych id (cudzych i nieistniejących nie potwierdzamy) */
+function ownReports(\user\User $user, array $ids): array {
+    $apps = [];
+    foreach (array_slice(array_values(array_unique(array_map('strval', $ids))), 0, PHOTOS_PACKAGE_MAX) as $id) {
+        try {
+            $a = \app\get($id);
+        } catch (\Throwable) {
+            continue;
+        }
+        if ($a->email === $user->getEmail() && isset($a->contextImage->url, $a->carImage->url)) $apps[] = $a;
+    }
+    return $apps;
+}
+
+function photosPackage(\user\User $user, array $ids): array {
+    if (!\assistant\attachments\isAllowed($user)) return ['error' => 'Paczka ze zdjęciami jest dostępna dla patronów.'];
+    $apps = ownReports($user, $ids);
+    if (!$apps) return ['error' => 'Nie znaleziono zgłoszeń ze zdjęciami o podanych id.'];
+    return ['reports' => count($apps), 'requested' => count($ids),
+        'url' => '/api/chat/photos?ids=' . implode(',', array_map(fn($a) => $a->id, $apps)),
+        'note' => 'Wstaw url jako link Markdown. Paczka zawiera zdjęcia kontekstu, pojazdu i (jeśli są) trzecie, po jednym folderze na zgłoszenie.'];
+}
+
+/** Buduje ZIP (jeden folder na zgłoszenie) w pliku tymczasowym; zwraca jego ścieżkę. */
+function photosZip(array $apps): string {
+    $path = tempnam(sys_get_temp_dir(), 'udphotos');
+    $zip = new \ZipArchive;
+    if ($zip->open($path, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true)
+        throw new \RuntimeException('Błąd tworzenia archiwum ZIP.');
+    foreach ($apps as $a) {
+        $a->ensureLocal();
+        $dir = str_replace('/', '-', $a->number ?? $a->id) . '/';
+        foreach (['a' => $a->contextImage ?? null, 'b' => $a->carImage ?? null, 'c' => $a->thirdImage ?? null] as $suffix => $img) {
+            if (isset($img->url) && file_exists(ROOT . $img->url)) $zip->addFile(ROOT . $img->url, $dir . $a->getAppFilename("$suffix.jpg", ''));
+        }
+    }
+    $zip->close();
+    return $path;
 }
 
 function getReport(\user\User $user, string $reportId): array {

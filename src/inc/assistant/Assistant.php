@@ -47,13 +47,21 @@ function isAvailable(\user\User $user): bool {
 const CONTACT_FALLBACK = "Przepraszam, nie mogę teraz odpowiedzieć na to pytanie. "
     . "Napisz do nas przez [stronę kontaktową](" . tools\CONTACT_URL . ") — odpowiemy.";
 
+/** Linia „Rozmówca: …” — imię i płeć z konta (płeć jawna albo zgadnięta z imienia; bez imienia/płci: forma neutralna). */
+function interlocutor(\user\User $user): string {
+    $name = trim((string)$user->getFirstName());
+    $sex = $name === '' ? '?' : $user->getSexIdentifier();
+    $gender = ['m' => 'mężczyzna (formy męskie: „zgłosiłeś”)', 'f' => 'kobieta (formy żeńskie: „zgłosiłaś”)'][$sex] ?? 'nieznana (formy bezosobowe)';
+    return 'Rozmówca: ' . ($name !== '' ? "$name, " : 'imię nieznane, ') . "płeć: $gender.";
+}
+
 function buildSystemPrompt(\user\User $user): string {
     $skills = '';
     foreach (corpus\skills() as $s) $skills .= "- {$s['name']}: {$s['description']}\n";
     $acts = '';
     foreach (corpus\acts() as $a) $acts .= "- {$a['id']}: {$a['title']}" . ($a['ref'] ? " ({$a['ref']})" : '') . "\n";
     // Rola i zasady: prompt.md (zwykły tekst, {{data}} i {{kontakt}} podstawiane tutaj); reszta doklejana z korpusu.
-    $base = strtr(trim(file_get_contents(__DIR__ . '/prompt.md')), ['{{data}}' => date('Y-m-d'), '{{kontakt}}' => tools\CONTACT_URL]);
+    $base = strtr(trim(file_get_contents(__DIR__ . '/prompt.md')), ['{{data}}' => date('Y-m-d'), '{{kontakt}}' => tools\CONTACT_URL, '{{rozmowca}}' => interlocutor($user)]);
 
     return trim("$base\n\n" . ($acts !== '' ? "AKTY PRAWNE dostępne w narzędziach (parametr act):\n$acts\n" : '')
 . ($skills !== '' ? "SKILLE (instrukcje do zadań złożonych; załaduj narzędziem load_skill, gdy pasują do prośby):\n$skills\n" : '')
@@ -233,7 +241,7 @@ function oneLine(string $text, int $max): string {
 
 /** Wersja promptu systemowego: skrót treści bez daty (data zmienia się codziennie, reszta — przy zmianie kodu/wiedzy). */
 function promptId(string $prompt): string {
-    return substr(sha1(preg_replace('/^Dzisiejsza data: .*$/mu', '', $prompt)), 0, 8);
+    return substr(sha1(preg_replace('/^(Dzisiejsza data|Rozmówca): .*$/mu', '', $prompt)), 0, 8);
 }
 
 /**
