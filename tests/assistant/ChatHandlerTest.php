@@ -87,20 +87,34 @@ class ChatHandlerTest extends DatabaseTestCase
         $this->assertSame(0, $this->call('unread')['unread']);
     }
 
-    public function testNonPatronGets403OnEveryEndpoint(): void
+    public function testNonPatronCanChatButNotAttach(): void
     {
         $outsider = 'not-a-patron@example.com';
-        $this->assertFalse(\assistant\isAvailable((function () use ($outsider) { $u = new User(); $u->data->email = $outsider; return $u; })()));
+        $user = new User();
+        $user->data->email = $outsider;
+        $this->assertTrue(\assistant\isAvailable($user));
+        ChatClient::set(new ClientFake([CreateResponse::fake(['choices' => [['message' => ['role' => 'assistant', 'content' => 'Hej'], 'finish_reason' => 'stop']]])]));
+        $this->assertSame('Hej', $this->call('send', ['message' => 'Cześć'], [], $outsider)['message']['content']);
+        $this->assertFalse($this->call('unread', [], [], $outsider)['canAttach']);
+        try {
+            $this->call('send', ['message' => 'x', 'attachments' => [['name' => 'a.jpg', 'data' => 'data:image/jpeg;base64,AAAA']]], [], $outsider);
+            $this->fail('oczekiwano 403 dla załącznika');
+        } catch (\Exception $e) {
+            $this->assertSame(403, $e->getCode());
+            $this->assertStringContainsString('patronite', $e->getMessage());
+        }
+    }
+
+    public function testUserWithoutEmailGets403(): void
+    {
         foreach (['history' => [], 'unread' => [], 'send' => ['message' => 'Cześć'], 'clear' => []] as $method => $body) {
             try {
-                $this->call($method, $body, [], $outsider);
+                $this->call($method, $body, [], '');
                 $this->fail("$method: oczekiwano 403");
             } catch (\Exception $e) {
                 $this->assertSame(403, $e->getCode(), $method);
-                $this->assertStringContainsString('patronite', $e->getMessage());
             }
         }
-        $this->assertSame([], \chat\history($outsider));
     }
 
     public function testSendWithoutMessageIsMissingParam(): void

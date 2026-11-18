@@ -36,12 +36,11 @@ final class ChatClient {
 }
 
 /**
- * Kto widzi asystenta (widżet i /api/chat): aktywni i byli patroni — każdy adres z listy Patronite.
- * Załączniki to osobny, węższy warunek: tylko aktywni (attachments\isAllowed).
+ * Kto widzi asystenta (widżet i /api/chat): każdy zalogowany użytkownik z adresem e-mail (rozmowa jest per e-mail).
+ * Tylko załączniki to osobny, węższy warunek: aktywni patroni (attachments\isAllowed).
  */
 function isAvailable(\user\User $user): bool {
-    $email = $user->getEmail();
-    return \patronite\is($email) || \patronite\isFormer($email);
+    return (string)$user->getEmail() !== '';
 }
 
 const CONTACT_FALLBACK = "Przepraszam, nie mogę teraz odpowiedzieć na to pytanie. "
@@ -176,9 +175,9 @@ function runModel(\user\User $user, array $messages, string $traceId = '', array
  * Obsługuje wiadomość użytkownika: waliduje, limituje, zapisuje, pyta model, zapisuje odpowiedź.
  * Awaria modelu NIE rzuca — użytkownik dostaje odpowiedź kierującą na kontakt (zapisaną w rozmowie z meta.error),
  * a kredyty zdjęć zarezerwowane na załączniki wracają.
- * $attachments: [{name, data: "data:<mime>;base64,…"}] — tylko dla patronów; każdy plik (obraz i PDF) zużywa kredyt zdjęć (\quota).
+ * $attachments: [{name, data: "data:<mime>;base64,…"}] — tylko dla aktywnych patronów; każdy plik (obraz i PDF) zużywa kredyt zdjęć (\quota).
  * @return array{id:int,role:string,content:string,html:string,meta:array<string,mixed>,createdAt:int}
- * @throws ChatException pusta/za długa wiadomość lub zły załącznik (400/415), brak patronatu (403), limit (429)
+ * @throws ChatException pusta/za długa wiadomość lub zły załącznik (400/415), załączniki bez patronatu (403), limit (429)
  * @throws \quota\QuotaExceededException wyczerpane kredyty zdjęć (402)
  */
 function reply(\user\User $user, string $text, array $attachments = []): array {

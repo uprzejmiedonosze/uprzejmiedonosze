@@ -52,7 +52,7 @@ function definitions(): array {
              'ever' => ['type' => 'boolean', 'description' => 'true = kiedykolwiek miało ten status (nawet jeśli już go nie ma)'],
              'year' => ['type' => 'integer', 'description' => 'Rok nadania statusu, np. 2026']], ['status']),
         $fn('photos_package', 'Przygotowuje paczkę ZIP ze zdjęciami wskazanych zgłoszeń użytkownika (np. do uzupełnienia sprawy na '
-            . 'wezwanie służby). Tylko dla patronów. Zwraca `url` — wstaw go do odpowiedzi jako link Markdown „Pobierz paczkę ZIP”. '
+            . 'wezwanie służby). Zwraca `url` — wstaw go do odpowiedzi jako link Markdown „Pobierz paczkę ZIP”. '
             . 'Id zgłoszeń weź z list_my_reports (pole id).',
             ['report_ids' => ['type' => 'array', 'items' => ['type' => 'string'], 'description' => 'Id zgłoszeń (max ' . PHOTOS_PACKAGE_MAX . ')']],
             ['report_ids']),
@@ -267,7 +267,6 @@ function ownReports(\user\User $user, array $ids): array {
 }
 
 function photosPackage(\user\User $user, array $ids): array {
-    if (!\assistant\attachments\isAllowed($user)) return ['error' => 'Paczka ze zdjęciami jest dostępna dla aktywnych patronów: https://patronite.pl/uprzejmiedonosze'];
     $apps = ownReports($user, $ids);
     if (!$apps) return ['error' => 'Nie znaleziono zgłoszeń ze zdjęciami o podanych id.'];
     return ['reports' => count($apps), 'requested' => count($ids),

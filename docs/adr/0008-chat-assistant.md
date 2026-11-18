@@ -26,10 +26,10 @@ przyjmować powiadomienia systemowe. Akty prawne są obszerne: nie wolno ich wrz
   widzą wyłącznie bieżącą rozmowę, a limit pytań liczy też archiwum. Usunięcie konta kasuje wszystko (`removeAllForEmail`).
 - **Awaria lub brak wiedzy → kontakt.** Błąd modelu nie rzuca wyjątku: użytkownik dostaje odpowiedź z linkiem do
   kontaktu; model sam woła `escalate_to_contact`, gdy nie potrafi odpowiedzieć (UI pokazuje przycisk).
-- **Dostęp:** tylko zarejestrowani patroni i byli patroni — każdy adres z listy Patronite (`\assistant\isAvailable`;
-  koszt modelu i potrzeba tożsamości dla zgłoszeń). Pozostałym nie renderujemy widżetu (`general.chatAvailable`),
-  a `/api/chat/*` zwraca im 403;
-  `CHAT_RATE_MAX` pytań na `CHAT_RATE_WINDOW`. Odpowiedź bez streamingu (jedno żądanie, prostsza pętla narzędzi).
+- **Dostęp:** każdy zalogowany użytkownik (`\assistant\isAvailable`; rozmowa i zgłoszenia są po e-mailu). Początkowo (16–18.11.2026)
+  czat był tylko dla patronów i byłych patronów — otwarty dla wszystkich po pierwszych dniach; koszt kontroluje limit
+  `CHAT_RATE_MAX` pytań na `CHAT_RATE_WINDOW` (niezalogowani: brak widżetu, `/api/chat/*` zwraca 403).
+  Odpowiedź bez streamingu (jedno żądanie, prostsza pętla narzędzi).
 - **Załączniki (obrazy JPEG/PNG i PDF) tylko dla patronów** (`assistant/Attachments.php`, `\patronite\is`). Każdy plik (obraz i PDF) zużywa kredyt
   zdjęć jak w appce i MCP (`\quota\reserve` przed wywołaniem modelu, zwrot przy awarii modelu, to samo zdjęcie w oknie
   liczy się raz, 402 przy wyczerpaniu), PDF też liczy się jako jeden kredyt niezależnie od liczby stron. Bajtów nie przechowujemy — w rozmowie zostaje nazwa

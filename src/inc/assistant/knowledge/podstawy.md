@@ -14,5 +14,5 @@
 - Aplikacja mobilna Uprzejmie Donoszę jest dostępna w Google Play; iOS jeszcze nie.
 - Sprawy, których asystent nie umie rozstrzygnąć (błędy, konkretne decyzje służb, indywidualna pomoc prawna):
   kierować na stronę kontaktową: /kontakt.html.
-- Uprzejmy Asystent i część funkcji (np. załączniki w czacie, paczka ZIP ze zdjęciami zgłoszeń) są dla Patronów/Patronek serwisu
-  (aktywne wsparcie na https://patronite.pl/uprzejmiedonosze); byli patroni mogą dalej korzystać z czatu, ale bez funkcji premium.
+- Z Uprzejmego Asystenta może korzystać każdy zalogowany użytkownik. Tylko załączniki w czacie (zdjęcia i PDF-y do analizy)
+  są dla aktywnych Patronów/Patronek serwisu (wsparcie na https://patronite.pl/uprzejmiedonosze).

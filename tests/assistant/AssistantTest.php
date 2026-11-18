@@ -305,11 +305,13 @@ class AssistantTest extends DatabaseTestCase
         $this->assertSame(['a', 'b c'], \assistant\tools\searchTerms("a, b c;\n a"));
     }
 
-    public function testPhotosPackageIsPatronOnlyAndOwnReportsOnly(): void
+    public function testPhotosPackageIsOpenToEveryoneButOwnReportsOnly(): void
     {
         $owner = $this->user('photos@example.com');
         $app = $this->report($owner, 'PO5CS28');
-        $this->assertStringContainsString('patron', \assistant\tools\execute('photos_package', ['report_ids' => [$app->id]], $owner)['error']);
+        $result = \assistant\tools\execute('photos_package', ['report_ids' => [$app->id]], $owner); // zgłoszenie bez zdjęć w fixture
+        $this->assertStringNotContainsString('patron', $result['error']);   // nie jest już funkcją tylko dla patronów
+        $this->assertStringContainsString('Nie znaleziono', $result['error']);
         $this->assertSame([], \assistant\tools\ownReports($this->user(), [$app->id])); // cudze zgłoszenie nie trafi do paczki
     }
 

@@ -7,8 +7,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 /**
- * Czat z asystentem AI (widżet na każdej stronie dla patronów i byłych patronów — \assistant\isAvailable;
- * pozostali dostają 403 na każdym endpoincie). Cienki handler — logika w src/inc/assistant/.
+ * Czat z asystentem AI (widżet na każdej stronie dla zalogowanych — \assistant\isAvailable; tylko załączniki są dla patronów). Cienki handler — logika w src/inc/assistant/.
  * Jedna ciągła rozmowa na użytkownika; ta sama skrzynka przyjmuje powiadomienia systemowe (\chat\notify()).
  */
 class ChatHandler extends AbstractHandler {
@@ -18,7 +17,7 @@ class ChatHandler extends AbstractHandler {
     private function chatUser(Request $request): \user\User {
         $user = $request->getAttribute('user');
         if (!\assistant\isAvailable($user))
-            throw new \Exception('Uprzejmy Asystent jest dostępny dla patronów: https://patronite.pl/uprzejmiedonosze', 403);
+            throw new \Exception('Uprzejmy Asystent jest dostępny dla zalogowanych użytkowników.', 403);
         return $user;
     }
 
@@ -65,13 +64,11 @@ class ChatHandler extends AbstractHandler {
     }
 
     /**
-     * GET /api/chat/photos?ids=a,b,c — ZIP ze zdjęciami zgłoszeń (link z narzędzia photos_package; tylko patroni, tylko własne zgłoszenia).
+     * GET /api/chat/photos?ids=a,b,c — ZIP ze zdjęciami zgłoszeń (link z narzędzia photos_package; tylko własne zgłoszenia).
      * Zwykła trasa bez JsonMiddleware (odpowiedź to plik).
      */
     public function photos(Request $request, Response $response, array $args): Response {
         $user = $this->chatUser($request);
-        if (!\assistant\attachments\isAllowed($user))
-            throw new \Exception('Paczka ze zdjęciami jest dostępna dla patronów.', 403);
         $ids = array_filter(explode(',', (string)($request->getQueryParams()['ids'] ?? '')));
         $apps = \assistant\tools\ownReports($user, $ids);
         if (!$apps) throw new \Exception('Nie znaleziono zgłoszeń ze zdjęciami.', 404);

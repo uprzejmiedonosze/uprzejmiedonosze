@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     badge.textContent = n > 9 ? "9+" : String(n)
   }
 
-  // Bez Api.js celowo: użytkownik bez dostępu (nie patron) dostaje tu 403 i nie ma zobaczyć toasta z błędem — po prostu bez widżetu.
+  // Bez Api.js celowo: niezalogowany użytkownik dostaje tu 403 i nie ma zobaczyć toasta z błędem — po prostu bez widżetu.
   try {
     const response = await fetch("/api/chat/unread", { headers: { Accept: "application/json" } })
     if (!response.ok) return
