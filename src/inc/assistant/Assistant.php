@@ -128,7 +128,7 @@ function costUsd(array $usage, string $model = OPENAI_CHAT_MODEL): float {
  * skille) zbierane są do meta wiadomości.
  * @return array{0:string,1:list<string>,2:bool,3:array{prompt:int,completion:int},4:array<string,list<string>>,5:int}
  */
-function runModel(\user\User $user, array $messages, string $traceId = ''): array {
+function runModel(\user\User $user, array $messages, string $traceId = '', array &$reportIds = []): array {
     $client = ChatClient::get();
     $used = [];
     $contact = false;
@@ -161,6 +161,7 @@ function runModel(\user\User $user, array $messages, string $traceId = ''): arra
             $args = json_decode($call->function->arguments ?: '{}', true);
             $result = tools\execute($name, is_array($args) ? $args : [], $user);
             $used[] = $name;
+            $reportIds += tools\reportIds($result);
             [$summary, $found] = toolSummary($name, is_array($args) ? $args : [], $result);
             foreach ($found as $kind => $items) array_push($sources[$kind], ...$items);
             trace($traceId, 'runda ' . ($round + 1) . " → $name " . json_encode($args ?: new \stdClass, JSON_UNESCAPED_UNICODE) . " → $summary");
@@ -206,7 +207,9 @@ function reply(\user\User $user, string $text, array $attachments = []): array {
         $promptId = promptId($messages[0]['content']);
         trace($traceId, "prompt $promptId (" . mb_strlen($messages[0]['content']) . ' zn.; akty: ' . implode(',', array_column(corpus\acts(), 'id'))
             . '; skille: ' . (implode(',', array_keys(corpus\skills())) ?: '—') . '; historia: ' . (count($messages) - 1) . ' wiad.; model ' . OPENAI_CHAT_MODEL . ')');
-        [$answer, $used, $contact, $usage, $sources, $rounds] = runModel($user, $messages, $traceId);
+        $reportIds = [];
+        [$answer, $used, $contact, $usage, $sources, $rounds] = runModel($user, $messages, $traceId, $reportIds);
+        $answer = linkReports($answer, $reportIds);
         $meta = ['model' => OPENAI_CHAT_MODEL, 'tools' => $used, 'tokens' => $usage, 'costUsd' => costUsd($usage),
             'prompt' => $promptId, 'trace' => $traceId] + $sources + ($contact ? ['contact' => true] : []);
         trace($traceId, "odpowiedź ($rounds rund, " . count($used) . ' narzędzi, ' . $usage['prompt'] . '+' . $usage['completion'] . ' tok., $'
@@ -237,6 +240,26 @@ function trace(string $traceId, string $line): void {
 function oneLine(string $text, int $max): string {
     $text = str_replace(["\r\n", "\n", "\r"], ' ⏎ ', trim($text));
     return mb_strlen($text) > $max ? mb_substr($text, 0, $max) . '…' : $text;
+}
+
+/**
+ * Numery zgłoszeń (UD/x/y) znane z wyników narzędzi w tej turze → linki do szczegółów /app/{id}. Siatka bezpieczeństwa
+ * obok promptu: numer bez linku dostaje link, a link z błędnym adresem (np. /app/list) — poprawny. Nieznane numery zostają.
+ * @param array<string,string> $ids numer → id zgłoszenia
+ */
+function linkReports(string $text, array $ids): string {
+    if (!$ids) return $text;
+    $number = '/UD\/\d+\/\d+/u';
+    // Istniejące linki Markdown [tekst](adres) przetwarzamy osobno od reszty tekstu.
+    $parts = preg_split('/(\[[^\]]*\]\([^)]*\))/u', $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) ?: [$text];
+    foreach ($parts as $i => $part) {
+        if (preg_match('/^\[([^\]]*)\]\(([^)]*)\)$/u', $part, $m)) {
+            if (preg_match($number, $m[1], $n) && isset($ids[$n[0]])) $parts[$i] = "[{$m[1]}](/app/{$ids[$n[0]]})";
+            continue;
+        }
+        $parts[$i] = preg_replace_callback($number, fn($n) => isset($ids[$n[0]]) ? "[{$n[0]}](/app/{$ids[$n[0]]})" : $n[0], $part);
+    }
+    return implode('', $parts);
 }
 
 /** Wersja promptu systemowego: skrót treści bez daty (data zmienia się codziennie, reszta — przy zmianie kodu/wiedzy). */

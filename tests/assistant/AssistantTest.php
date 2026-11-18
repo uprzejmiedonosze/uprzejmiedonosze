@@ -312,4 +312,35 @@ class AssistantTest extends DatabaseTestCase
         $this->assertStringContainsString('patron', \assistant\tools\execute('photos_package', ['report_ids' => [$app->id]], $owner)['error']);
         $this->assertSame([], \assistant\tools\ownReports($this->user(), [$app->id])); // cudze zgłoszenie nie trafi do paczki
     }
+
+    public function testLinkReportsLinksNumbersAndFixesWrongLinks(): void
+    {
+        $ids = ['UD/3/3074' => 'AbC123', 'UD/3/2887' => 'XyZ789'];
+        $this->assertSame('Zgłoszenie [UD/3/3074](/app/AbC123) i **[UD/3/2887](/app/XyZ789)**.',
+            \assistant\linkReports('Zgłoszenie UD/3/3074 i **UD/3/2887**.', $ids));
+        $this->assertSame('[UD/3/3074](/app/AbC123)', \assistant\linkReports('[UD/3/3074](/app/list)', $ids)); // zły adres → poprawny
+        $this->assertSame('[UD/3/3074](/app/AbC123)', \assistant\linkReports('[UD/3/3074](/app/AbC123)', $ids)); // nie linkujemy dwa razy
+        $this->assertSame('UD/9/9 nie jest moje', \assistant\linkReports('UD/9/9 nie jest moje', $ids));       // nieznany numer zostaje
+        $this->assertSame(['UD/1/2' => 'a'], \assistant\tools\reportIds(['reports' => [['id' => 'a', 'number' => 'UD/1/2']]]));
+        $this->assertSame(['UD/1/2' => 'a'], \assistant\tools\reportIds(['id' => 'a', 'number' => 'UD/1/2']));
+    }
+
+    public function testReportStatsCountsCurrentEverAndByYear(): void
+    {
+        $owner = $this->user('stats@example.com');
+        $a = $this->report($owner, 'AA1', status: 'confirmed-fined');
+        $a->statusHistory = ['2026-03-01T10:00:00' => (object)['old' => 'confirmed', 'new' => 'confirmed-complaint'],
+            '2026-04-01T10:00:00' => (object)['old' => 'confirmed-complaint', 'new' => 'confirmed-fined']];
+        \app\save($a);
+        $this->report($owner, 'BB2', status: 'confirmed-fined');
+        $stats = fn(array $args) => \assistant\tools\execute('report_stats', $args, $owner);
+
+        $this->assertSame(2, $stats(['status' => 'confirmed-fined'])['count']);
+        $this->assertSame(0, $stats(['status' => 'confirmed-complaint'])['count']);         // obecny status
+        $this->assertSame(1, $stats(['status' => 'confirmed-complaint', 'ever' => true])['count']); // kiedykolwiek
+        $this->assertSame(1, $stats(['status' => 'confirmed-fined', 'year' => 2026])['count']);
+        $this->assertSame(0, $stats(['status' => 'confirmed-fined', 'year' => 2025])['count']);
+        $this->assertArrayHasKey('error', $stats(['status' => 'nie-ma']));
+        $this->assertSame(0, \assistant\tools\execute('report_stats', ['status' => 'confirmed-fined'], $this->user('other-stats@example.com'))['count']);
+    }
 }

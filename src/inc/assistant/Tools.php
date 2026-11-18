@@ -45,6 +45,12 @@ function definitions(): array {
              'limit' => ['type' => 'integer', 'description' => 'Liczba zgłoszeń (domyślnie 10, max 25)']]),
         $fn('get_my_report', 'Szczegóły jednego zgłoszenia zalogowanego użytkownika po jego id (z list_my_reports).',
             ['report_id' => $str('Id zgłoszenia')], ['report_id']),
+        $fn('report_stats', 'Liczy zgłoszenia użytkownika w danym statusie — także historycznie (po historii zmian statusów) i w danym roku. '
+            . 'Użyj do pytań „ile kiedykolwiek miało status…”, „ile mandatów w tym roku”. Bez `ever` i `year` liczy status obecny. '
+            . 'Z `year` liczy zgłoszenia, którym w tym roku NADANO ten status. Historia statusów może nie obejmować najstarszych zgłoszeń.',
+            ['status' => $str('Id statusu: ' . implode(', ', array_map(fn($id, $s) => "$id ({$s->name})", array_keys($GLOBALS['STATUSES'] ?? []), $GLOBALS['STATUSES'] ?? []))),
+             'ever' => ['type' => 'boolean', 'description' => 'true = kiedykolwiek miało ten status (nawet jeśli już go nie ma)'],
+             'year' => ['type' => 'integer', 'description' => 'Rok nadania statusu, np. 2026']], ['status']),
         $fn('photos_package', 'Przygotowuje paczkę ZIP ze zdjęciami wskazanych zgłoszeń użytkownika (np. do uzupełnienia sprawy na '
             . 'wezwanie służby). Tylko dla patronów. Zwraca `url` — wstaw go do odpowiedzi jako link Markdown „Pobierz paczkę ZIP”. '
             . 'Id zgłoszeń weź z list_my_reports (pole id).',
@@ -70,6 +76,7 @@ function execute(string $name, array $args, \user\User $user): array {
             'search_legal' => searchLegal((string)($args['query'] ?? ''), isset($args['act']) ? (string)$args['act'] : null),
             'get_legal_provision' => legalProvision((string)($args['act'] ?? ''), (string)($args['article'] ?? '')),
             'list_my_reports' => listReports($user, (string)($args['status'] ?? 'all'), (string)($args['search'] ?? ''), (int)($args['limit'] ?? 10)),
+            'report_stats' => reportStats($user, (string)($args['status'] ?? ''), (bool)($args['ever'] ?? false), isset($args['year']) ? (int)$args['year'] : null),
             'photos_package' => photosPackage($user, (array)($args['report_ids'] ?? [])),
             'get_my_report' => getReport($user, (string)($args['report_id'] ?? '')),
             'load_skill' => loadSkill((string)($args['name'] ?? '')),
@@ -141,6 +148,7 @@ function summarize(\app\Application $a, bool $full = false): array {
     $out = [
         'id' => $a->id,
         'number' => $a->number ?? null,
+        'link' => '/app/' . $a->id, // szczegóły zgłoszenia — numer UD zawsze linkuj tym adresem
         'status' => $a->status,
         'statusName' => $STATUSES[$a->status]->name ?? $a->status,
         'date' => isset($a->date) ? $a->getDate() : null,
@@ -218,6 +226,30 @@ function reportTotals(\user\User $user, bool $withDrafts): array {
     return ['total' => array_sum($byStatus), 'byStatus' => $byStatus];
 }
 
+/** Zliczanie po historii statusów (JSON w bazie: statusHistory = {data: {old, new}}), bez ładowania zgłoszeń. */
+function reportStats(\user\User $user, string $status, bool $ever, ?int $year): array {
+    global $STATUSES;
+    if (!isset($STATUSES[$status])) return ['error' => "Nieznany status: $status"];
+    $params = [':email' => $user->getEmail(), ':status' => $status];
+    if (!$ever && $year === null) {
+        $sql = "select count(*) from applications where email = :email and json_extract(value, '$.status') = :status";
+        $basis = 'status obecny';
+    } else {
+        $yearCond = '';
+        if ($year !== null) {
+            $yearCond = 'and substr(h.key, 1, 4) = :year';
+            $params[':year'] = sprintf('%04d', $year);
+        }
+        $sql = "select count(*) from applications a where a.email = :email and exists (
+            select 1 from json_each(a.value, '$.statusHistory') h where json_extract(h.value, '$.new') = :status $yearCond)";
+        $basis = $year !== null ? "nadano status w $year r." : 'kiedykolwiek miało ten status (wg historii)';
+    }
+    $stmt = \store\prepare($sql);
+    $stmt->execute($params);
+    return ['status' => $STATUSES[$status]->name ?? $status, 'count' => (int)$stmt->fetchColumn(), 'basis' => $basis]
+        + ($ever || $year !== null ? ['note' => 'Historia statusów może nie obejmować najstarszych zgłoszeń.'] : []);
+}
+
 const PHOTOS_PACKAGE_MAX = 30;
 
 /** @return list<\app\Application> zgłoszenia użytkownika o podanych id (cudzych i nieistniejących nie potwierdzamy) */
@@ -235,7 +267,7 @@ function ownReports(\user\User $user, array $ids): array {
 }
 
 function photosPackage(\user\User $user, array $ids): array {
-    if (!\assistant\attachments\isAllowed($user)) return ['error' => 'Paczka ze zdjęciami jest dostępna dla patronów.'];
+    if (!\assistant\attachments\isAllowed($user)) return ['error' => 'Paczka ze zdjęciami jest dostępna dla aktywnych patronów: https://patronite.pl/uprzejmiedonosze'];
     $apps = ownReports($user, $ids);
     if (!$apps) return ['error' => 'Nie znaleziono zgłoszeń ze zdjęciami o podanych id.'];
     return ['reports' => count($apps), 'requested' => count($ids),
@@ -268,4 +300,16 @@ function getReport(\user\User $user, string $reportId): array {
     }
     if ($a->email !== $user->getEmail()) return ['error' => "Nie znaleziono zgłoszenia '$reportId'"]; // nie potwierdzamy cudzych
     return summarize($a, full: true);
+}
+
+/**
+ * Numery UD → id zgłoszeń z wyniku narzędzia (list_my_reports / get_my_report) — do linkowania numerów w odpowiedzi.
+ * @return array<string,string>
+ */
+function reportIds(array $result): array {
+    $out = [];
+    foreach ($result['reports'] ?? [$result] as $r) {
+        if (is_array($r) && isset($r['id'], $r['number'])) $out[(string)$r['number']] = (string)$r['id'];
+    }
+    return $out;
 }
