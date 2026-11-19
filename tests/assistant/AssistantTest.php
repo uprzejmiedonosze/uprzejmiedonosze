@@ -345,4 +345,27 @@ class AssistantTest extends DatabaseTestCase
         $this->assertArrayHasKey('error', $stats(['status' => 'nie-ma']));
         $this->assertSame(0, \assistant\tools\execute('report_stats', ['status' => 'confirmed-fined'], $this->user('other-stats@example.com'))['count']);
     }
+
+    public function testResolutionTimeAveragesDaysToFirstResponse(): void
+    {
+        $owner = $this->user('restime@example.com');
+        $a = $this->report($owner, 'AA1', status: 'confirmed-fined'); // date 2026-05-07
+        $a->statusHistory = ['2026-05-09T10:00:00' => (object)['old' => 'confirmed-waiting', 'new' => 'confirmed-instructed'],
+            '2026-06-01T10:00:00' => (object)['old' => 'confirmed-instructed', 'new' => 'confirmed-fined']];
+        \app\save($a);
+        $b = $this->report($owner, 'BB2', status: 'confirmed-ignored');
+        $b->statusHistory = ['2026-05-17T10:00:00' => (object)['old' => 'confirmed-waiting', 'new' => 'confirmed-ignored']];
+        \app\save($b);
+        $this->report($owner, 'CC3', status: 'confirmed-waiting');
+        $res = fn(?int $year = null) => \assistant\tools\execute('resolution_time', $year ? ['year' => $year] : [], $owner);
+
+        $r = $res();
+        $this->assertSame(2, $r['answered']);
+        $this->assertSame(1, $r['withoutResponse']);
+        $this->assertSame(6.0, $r['avgDays']); // 2 i 10 dni
+        $this->assertSame(2.0, $r['minDays']);
+        $this->assertSame(10.0, $r['maxDays']);
+        $this->assertSame(0, $res(2025)['answered']);
+        $this->assertSame(0, \assistant\tools\execute('resolution_time', [], $this->user('other-restime@example.com'))['answered']);
+    }
 }

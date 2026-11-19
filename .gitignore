@@ -40,5 +40,6 @@ services/.env.shadow
 # wiki dev database (created on first request)
 services/devroot/db/wiki.sqlite
 
+.omp
 tools/facebook-group-dump
 .deploy.lock

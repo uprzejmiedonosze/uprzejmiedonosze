@@ -51,6 +51,10 @@ function definitions(): array {
             ['status' => $str('Id statusu: ' . implode(', ', array_map(fn($id, $s) => "$id ({$s->name})", array_keys($GLOBALS['STATUSES'] ?? []), $GLOBALS['STATUSES'] ?? []))),
              'ever' => ['type' => 'boolean', 'description' => 'true = kiedykolwiek miało ten status (nawet jeśli już go nie ma)'],
              'year' => ['type' => 'integer', 'description' => 'Rok nadania statusu, np. 2026']], ['status']),
+        $fn('resolution_time', 'Liczy, ile czasu mija od wysłania zgłoszenia do pierwszej odpowiedzi służby (Potwierdzone, Mandat, Pouczenie, '
+            . 'Zignorowane) — średnia, mediana, najkrócej, najdłużej, w dniach, dla wszystkich zgłoszeń użytkownika naraz. '
+            . 'Użyj do pytań „ile czasu od zgłoszenia do statusu końcowego / odpowiedzi”. Bez `year` liczy wszystkie lata.',
+            ['year' => ['type' => 'integer', 'description' => 'Tylko zgłoszenia wysłane w tym roku, np. 2026']]),
         $fn('photos_package', 'Przygotowuje paczkę ZIP ze zdjęciami wskazanych zgłoszeń użytkownika (np. do uzupełnienia sprawy na '
             . 'wezwanie służby). Zwraca `url` — wstaw go do odpowiedzi jako link Markdown „Pobierz paczkę ZIP”. '
             . 'Id zgłoszeń weź z list_my_reports (pole id).',
@@ -77,6 +81,7 @@ function execute(string $name, array $args, \user\User $user): array {
             'get_legal_provision' => legalProvision((string)($args['act'] ?? ''), (string)($args['article'] ?? '')),
             'list_my_reports' => listReports($user, (string)($args['status'] ?? 'all'), (string)($args['search'] ?? ''), (int)($args['limit'] ?? 10)),
             'report_stats' => reportStats($user, (string)($args['status'] ?? ''), (bool)($args['ever'] ?? false), isset($args['year']) ? (int)$args['year'] : null),
+            'resolution_time' => resolutionTime($user, isset($args['year']) ? (int)$args['year'] : null),
             'photos_package' => photosPackage($user, (array)($args['report_ids'] ?? [])),
             'get_my_report' => getReport($user, (string)($args['report_id'] ?? '')),
             'load_skill' => loadSkill((string)($args['name'] ?? '')),
@@ -248,6 +253,44 @@ function reportStats(\user\User $user, string $status, bool $ever, ?int $year): 
     $stmt->execute($params);
     return ['status' => $STATUSES[$status]->name ?? $status, 'count' => (int)$stmt->fetchColumn(), 'basis' => $basis]
         + ($ever || $year !== null ? ['note' => 'Historia statusów może nie obejmować najstarszych zgłoszeń.'] : []);
+}
+
+const RESPONSE_STATUSES = ['confirmed-sm', 'confirmed-fined', 'confirmed-instructed', 'confirmed-ignored'];
+
+/** Czas od wysłania do pierwszej odpowiedzi służby (pierwszy wpis w statusHistory ze statusem odpowiedzi), dla wszystkich zgłoszeń naraz. */
+function resolutionTime(\user\User $user, ?int $year): array {
+    global $STATUSES;
+    $stmt = \store\prepare("select coalesce(json_extract(value, '$.sent.date'), json_extract(value, '$.date')) as started,
+        json_extract(value, '$.statusHistory') as history from applications
+        where email = :email and json_extract(value, '$.status') not in ('draft', 'ready', 'confirmed')");
+    $stmt->execute([':email' => $user->getEmail()]);
+    $days = [];
+    $byOutcome = [];
+    $pending = 0;
+    foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+        $start = $row['started'] ? strtotime($row['started']) : false;
+        if ($start === false || ($year !== null && (int)date('Y', $start) !== $year)) continue;
+        $history = json_decode($row['history'] ?? '[]', true) ?: [];
+        ksort($history);
+        $first = null;
+        foreach ($history as $when => $h) {
+            if (in_array($h['new'] ?? null, RESPONSE_STATUSES, true) && ($t = strtotime($when)) !== false) { $first = [$t, $h['new']]; break; }
+        }
+        if ($first === null) { $pending++; continue; }
+        $days[] = max(0, ($first[0] - $start) / 86400);
+        $byOutcome[$first[1]] = ($byOutcome[$first[1]] ?? 0) + 1;
+    }
+    if (!$days) return ['answered' => 0, 'withoutResponse' => $pending, 'note' => 'Brak zgłoszeń z odpowiedzią służby w historii statusów.'];
+    sort($days);
+    $n = count($days);
+    $median = $n % 2 ? $days[intdiv($n, 2)] : ($days[$n / 2 - 1] + $days[$n / 2]) / 2;
+    $r = fn(float $d) => round($d, 1);
+    $names = [];
+    foreach ($byOutcome as $id => $c) $names[$STATUSES[$id]->name ?? $id] = $c;
+    return ['answered' => $n, 'withoutResponse' => $pending, 'avgDays' => $r(array_sum($days) / $n), 'medianDays' => $r($median),
+        'minDays' => $r($days[0]), 'maxDays' => $r($days[$n - 1]), 'firstResponseBy' => $names, 'year' => $year,
+        'note' => 'Od wysłania do pierwszej odpowiedzi służby; zgłoszenia bez odpowiedzi (withoutResponse) nie wchodzą do średniej. '
+            . 'Historia statusów może nie obejmować najstarszych zgłoszeń.'];
 }
 
 const PHOTOS_PACKAGE_MAX = 30;
