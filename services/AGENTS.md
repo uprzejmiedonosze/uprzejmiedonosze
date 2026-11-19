@@ -100,6 +100,15 @@ Szczegóły i uzasadnienie: [ADR 0002](../docs/adr/0002-logging-via-journald.md)
 z poprawną severity i `LOG_IDENT`. nginx `error_log` tak samo (generowane przez `init.sh`), `access_log` na stdout.
 Nie przełączaj logów z powrotem na stdout/stderr — `catch_workers_output` w `www.conf` scala oba strumienie.
 
+**Limity miejsca (host).** Logi aplikacji idą do journald — bez `SystemMaxUse` w `/etc/systemd/journald.conf`
+journal rośnie do 10% dysku (na prod było 4G). Kontenery na `json-file`, których nie obejmuje ten compose
+(`/opt/edge`: traefik/crowdsec/tailscale, `memcached`, `/opt/westival-static`, `/opt/parkowanie.szczecin.pl`),
+nie mają rotacji w swoich plikach — limit jest globalny w `/etc/docker/daemon.json`
+(`log-opts: max-size=100m, max-file=3`) i obowiązuje **tylko kontenery utworzone po** `systemctl restart docker`
+(stare zachowują `LogConfig: {}` — trzeba `--force-recreate`). Traefik loguje cały access log jako JSON na stdout.
+Cache Twiga (`/var/cache/uprzejmiedonosze.net/twig-*`) tworzy katalog na każdy deploy i nigdy się nie czyści —
+prune przez `find … -maxdepth 1 -type d -name 'twig-*' -mtime +7`.
+
 ## Serwery
 
 - **Nigdy `sudo`** (także `sudo -n` przez SSH). Komendy wymagające roota albo dotykające prod storage

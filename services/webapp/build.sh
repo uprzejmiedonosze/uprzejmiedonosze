@@ -73,7 +73,7 @@ build_php() {
     cp src/index.php src/favicon.ico src/robots.txt src/ads.txt export/public/
     cp src/manifest.json  export/public/
     mkdir -p export/public/.well-known
-    cp src/.well-known/traffic-advice src/.well-known/assetlinks.json export/public/.well-known/
+    cp src/.well-known/traffic-advice src/.well-known/assetlinks.json src/.well-known/apple-app-site-association export/public/.well-known/
     cp src/api/rest/index.php export/public/api/rest/
     mkdir -p export/public/api/mcp
     cp src/api/mcp/index.php export/public/api/mcp/
