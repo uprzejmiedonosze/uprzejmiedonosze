@@ -60,6 +60,7 @@ echo "==> Building ${REGISTRY}/{webapp,worker}:${ENV}-${TAG} (APP_HOST=${APP_HOS
 docker buildx build --platform "${PLATFORM}" \
   -f services/webapp/Dockerfile --target webapp \
   --build-arg "APP_HOST=${APP_HOST}" --build-arg "APP_HTTPS=${APP_HTTPS}" \
+  --build-arg "BUILD_SHA=$(git rev-parse HEAD)" \
   -t "${REGISTRY}/webapp:${ENV}-${TAG}" --push .
 
 docker buildx build --platform "${PLATFORM}" \

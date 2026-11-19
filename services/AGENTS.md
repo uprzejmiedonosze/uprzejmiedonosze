@@ -43,7 +43,7 @@ puste. staging i shadow nie mają `worker-cron`, więc nie mają tych statystyk.
 |---|---|---|---|---|
 | Host | `localhost` | `staging.uprzejmiedonosze.net` | `uprzejmiedonosze.net` | `shadow.uprzejmiedonosze.net` |
 | APP_ENV | `dev` | `staging` | `prod` | `prod` |
-| webapp port | 80 | 8081 (localhost) | 8080 (localhost) | 18082 |
+| webapp port | 80 | brak (Traefik) | brak (Traefik) | brak (Traefik) |
 | Firebase | Emulator | Real | Real | Real |
 | Sentry | off | off | on | jak prod |
 | S3 | off | on | on | jak prod |
@@ -54,6 +54,11 @@ puste. staging i shadow nie mają `worker-cron`, więc nie mają tych statystyk.
 `../uprzejmiedonosze.net/`) — `store.sqlite` (5.6 GB, WAL) jest produkcyjny, więc **wszystko na shadow
 mutuje dane prod**. Tylko `webapp-srv` + `memcached` (worker dublowałby crony prod). Router Traefik
 `ud-shadow` przez `TRAEFIK_ENV` w `.env.shadow`; `LOG_IDENT=shadow-webapp-srv`. Deploy: `make deploy-shadow`.
+
+**Deploy bez przestoju** ([ADR 0009](../docs/adr/0009-rolling-deploy.md)): `scripts/deploy.sh` robi rolling update
+`webapp-srv` (nowy kontener obok starego, stary zatrzymany dopiero po healthchecku `/healthz`; błąd = stary zostaje).
+`webapp-srv` nie ma `ports:` ani `container_name` — nie dodawaj. Po wdrożeniu `make deploy-*` sprawdza
+`/version.txt` == `git rev-parse HEAD`. Rollback: `bash scripts/deploy.sh <env> <tag starszego obrazu>` na hoście.
 
 Obrazy/CDN: dev zapisuje do `/var/www/uprzejmiedonosze.net/cdn2/` w kontenerze (ginie przy restarcie — OK);
 staging `cdn2stg/`, prod `cdn2/` na serwerze, synchronizowane do Backblaze B2. Prefiks: `\storage\cdnPrefix()`.

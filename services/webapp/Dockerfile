@@ -228,6 +228,11 @@ RUN sed -i -e "s/.*short_open_tag.*/short_open_tag = On/" \
 # Fixed inside every container regardless of profile — host path varies via volume mount
 ENV APP_ROOT=/var/www/uprzejmiedonosze.net/
 EXPOSE 80
+# start-interval: probe every second while starting, so a new container is routable ~1 s after boot
+# (the first probe otherwise waits a full 30 s interval). Traefik skips containers that are not healthy,
+# which is what makes the rolling update in scripts/deploy.sh work.
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=10s --start-interval=1s \
+    CMD curl -fsS -m 4 -o /dev/null http://127.0.0.1/healthz || exit 1
 CMD ["/bin/sh", "/root/init.sh"]
 LABEL net.uprzejmiedonosze=0.2.3
 
@@ -235,6 +240,12 @@ LABEL net.uprzejmiedonosze=0.2.3
 # purpose — see the comment on the config COPYs above.
 COPY --from=export --chown=www-data:www-data /build/export/ /var/www/uprzejmiedonosze.net/webapp/
 COPY --from=export /build/vendor/              /var/www/uprzejmiedonosze.net/vendor/
+
+# Commit the image was built from: /version.txt lets deploy.sh and `make deploy-*` check what is live.
+# After the code COPYs and nothing below it, so a new SHA only invalidates this one tiny layer.
+ARG BUILD_SHA=unknown
+RUN printf '%s\n' "$BUILD_SHA" > /var/www/uprzejmiedonosze.net/webapp/public/version.txt
+LABEL org.opencontainers.image.revision="$BUILD_SHA"
 
 # ── Worker (PHP CLI — face-detect-consumer daemon + cron jobs) ────────────────
 FROM php-base AS worker

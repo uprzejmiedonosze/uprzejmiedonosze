@@ -234,13 +234,13 @@ services:
       args:
         APP_HOST: ${APP_HOST:-uprzejmiedonosze.net}
         APP_HTTPS: ${APP_HTTPS:-https}
-    # 127.0.0.1:${APP_PORT} is test-only (curl'd directly before the ../edge
-    # cutover, see the plan) — public traffic arrives via Traefik on the
-    # `edge` network, wired below through labels. Set APP_PORT=18080 (prod)
-    # / 18081 (staging) in the respective .env.* — the old default 8080
-    # collides with edge's own Traefik dashboard port on the same host.
-    ports:
-      - "127.0.0.1:${APP_PORT:-18080}:80"
+    # No published host port: public traffic arrives via Traefik on the `edge` network (labels below), and
+    # a fixed host port would stop scripts/deploy.sh from running the old and the new container side by side
+    # (rolling update). APP_PORT in the .env.* files is no longer used.
+    # nginx: SIGQUIT = graceful stop (finishes running requests, php-fpm keeps answering them until nginx
+    # exits); the default SIGTERM would cut them.
+    stop_signal: SIGQUIT
+    stop_grace_period: 30s
     restart: always
     networks:
       - default

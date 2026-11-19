@@ -115,7 +115,7 @@ deploy-staging: check-git-clean ## Build+push staging images to GHCR, deploy on 
 	@$(RSYNC) --human-readable services/.env.staging $(DEPLOY_HOSTING):$(DEPLOY_DIR)/services/.env.staging
 	@echo "==> Deploying staging on $(DEPLOY_HOSTING)"
 	@ssh $(DEPLOY_HOSTING) 'cd $(DEPLOY_DIR) && bash scripts/deploy.sh staging "$(shell git rev-parse --short HEAD)"'
-	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://staging.uprzejmiedonosze.net/
+	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://staging.uprzejmiedonosze.net/ SHA=$(shell git rev-parse HEAD)
 
 .PHONY: deploy-prod
 deploy-prod: check-branch-main check-git-clean diff-from-last-prod confirmation ## Build+push prod images to GHCR, deploy on the host, tag+Sentry release
@@ -124,7 +124,7 @@ deploy-prod: check-branch-main check-git-clean diff-from-last-prod confirmation 
 	@$(RSYNC) --human-readable services/.env.prod $(DEPLOY_HOSTING):$(DEPLOY_DIR)/services/.env.prod
 	@echo "==> Deploying prod on $(DEPLOY_HOSTING)"
 	@ssh $(DEPLOY_HOSTING) 'cd $(DEPLOY_DIR) && bash scripts/deploy.sh prod "prod_$(TAG_NAME)"'
-	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://uprzejmiedonosze.net/
+	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://uprzejmiedonosze.net/ SHA=$(shell git rev-parse HEAD)
 	@git tag --force -a "prod_$(TAG_NAME)" -m "prod-release"
 	@git push origin --quiet --force "prod_$(TAG_NAME)"
 
@@ -135,7 +135,7 @@ deploy-shadow: check-git-clean ## Build+push shadow images to GHCR, deploy on th
 	@$(RSYNC) --human-readable services/.env.shadow $(DEPLOY_HOSTING):$(DEPLOY_DIR_SHADOW)/services/.env.shadow
 	@echo "==> Deploying shadow on $(DEPLOY_HOSTING)"
 	@ssh $(DEPLOY_HOSTING) 'cd $(DEPLOY_DIR_SHADOW) && bash scripts/deploy.sh shadow "$(shell git rev-parse --short HEAD)"'
-	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://shadow.uprzejmiedonosze.net/
+	@$(MAKE) --no-print-directory deploy-healthcheck URL=https://shadow.uprzejmiedonosze.net/ SHA=$(shell git rev-parse HEAD)
 
 .PHONY: deploy-healthcheck
 deploy-healthcheck:
@@ -147,6 +147,16 @@ deploy-healthcheck:
 	done; \
 	echo "$(URL) HTTP status: $$status"; \
 	[ "$$status" = "200" ] || ( echo "Deploy check failed: $(URL) returned $$status" && exit 1 )
+	@if [ -n "$(SHA)" ]; then \
+		live=""; \
+		for i in 1 2 3 4 5; do \
+			live=$$(curl -fsS --max-time 5 "$(URL)version.txt" | tr -d '[:space:]' || true); \
+			[ "$$live" = "$(SHA)" ] && break; \
+			sleep 3; \
+		done; \
+		echo "$(URL)version.txt: $$live"; \
+		[ "$$live" = "$(SHA)" ] || ( echo "Deploy check failed: expected $(SHA)" && exit 1 ); \
+	fi
 
 # ── Dev convenience ───────────────────────────────────────────────────────────
 

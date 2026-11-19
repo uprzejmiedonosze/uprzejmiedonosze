@@ -37,6 +37,10 @@ if [[ -z "${UD_DEPLOY_REEXECED:-}" ]]; then
   UD_DEPLOY_REEXECED=1 exec bash "${BASH_SOURCE[0]}" "$@"
 fi
 
+# one deploy at a time (the untracked lock file survives the git reset above)
+exec 9>".deploy.lock"
+flock 9
+
 export IMAGE_TAG="${ENV}-${TAG}"
 ENV_FILE="services/.env.${ENV}"
 [[ -f "${ENV_FILE}" ]] || { echo "ERROR: ${ENV_FILE} not found" >&2; exit 1; }
@@ -76,24 +80,63 @@ REGISTRY="${REGISTRY:-ghcr.io/uprzejmiedonosze/uprzejmiedonosze}"
 # see Dockerfile), so that's named explicitly alongside webapp-srv.
 # worker image is only pulled for envs that actually run something from it.
 case "$ENV" in
-  prod)
-    APP_SERVICES=(webapp-srv worker-cron face-detect-consumer)
-    UP_FLAGS=()
-    PULL_WORKER=1
-    ;;
-  staging|shadow)
-    APP_SERVICES=(webapp-srv memcached)
-    UP_FLAGS=(--no-deps)
-    PULL_WORKER=0
-    ;;
+  prod)           PULL_WORKER=1 ;;
+  staging|shadow) PULL_WORKER=0 ;;
 esac
 
 echo "==> Pulling app images directly (IMAGE_TAG=${IMAGE_TAG}) — not via compose, so memcached is never touched"
 docker pull "${REGISTRY}/webapp:${IMAGE_TAG}"
 [[ "${PULL_WORKER}" == "1" ]] && docker pull "${REGISTRY}/worker:${IMAGE_TAG}"
 
-echo "==> Recreating the app services (no build, no compile on this host)"
-"${compose[@]}" up -d --no-build --wait --wait-timeout 180 "${UP_FLAGS[@]}" "${APP_SERVICES[@]}"
+# memcached first: never recreated unless its own config changed (see above); started if it is down.
+"${compose[@]}" up -d --no-build --no-deps --wait --wait-timeout 60 memcached
+
+# webapp-srv: rolling update, no downtime. Start the new container next to the old one, wait until its
+# HEALTHCHECK passes (Dockerfile; Traefik only routes to healthy containers), then retire the old one
+# (stop_signal SIGQUIT + stop_grace_period 30s = running requests finish). A plain `up -d` would stop
+# the old container first and leave the site down until the new one is up. Needs webapp-srv without a
+# published host port (compose.yml). An old container without a HEALTHCHECK (image from before this
+# change) is treated by Traefik as healthy, so the first rolling deploy needs no special handling.
+echo "==> Rolling update of webapp-srv (no build, no compile on this host)"
+old=$("${compose[@]}" ps -q webapp-srv)
+if [[ -z "${old}" ]]; then
+  "${compose[@]}" up -d --no-build --no-deps --wait --wait-timeout 180 webapp-srv
+else
+  before=$("${compose[@]}" ps -q webapp-srv | sort)
+  if ! "${compose[@]}" up -d --no-build --no-deps --no-recreate --scale webapp-srv=2 \
+        --wait --wait-timeout 180 webapp-srv; then
+    # the new container never became healthy: drop it, the old one keeps serving
+    for c in $("${compose[@]}" ps -q webapp-srv | sort | grep -vxF "${before}" || true); do
+      docker rm --force "$c" >/dev/null 2>&1 || true
+    done
+    echo "ERROR: new webapp-srv did not become healthy, kept the old one" >&2
+    exit 1
+  fi
+  # let Traefik pick up the new backend before the old one goes away
+  sleep 5
+  for c in ${old}; do
+    docker stop -t 30 "$c" >/dev/null
+    docker rm "$c" >/dev/null
+  done
+  # one container left; its config matches, so this recreates nothing
+  "${compose[@]}" up -d --no-build --no-deps --no-recreate --scale webapp-srv=1 \
+    --wait --wait-timeout 60 webapp-srv
+fi
+
+# Workers share the worker image; a short restart of a cron/queue process is harmless, so a plain recreate.
+if [[ "${PULL_WORKER}" == "1" ]]; then
+  echo "==> Recreating workers"
+  "${compose[@]}" up -d --no-build --no-deps --wait --wait-timeout 120 worker-cron face-detect-consumer
+fi
+
+# The running container must carry the commit its image was built from (/version.txt, Dockerfile).
+want=$(docker image inspect "${REGISTRY}/webapp:${IMAGE_TAG}" --format '{{index .Config.Labels "org.opencontainers.image.revision"}}')
+live=$("${compose[@]}" exec -T webapp-srv cat /var/www/uprzejmiedonosze.net/webapp/public/version.txt | tr -d '[:space:]')
+if [[ -z "${want}" || "${live}" != "${want}" ]]; then
+  echo "ERROR: webapp-srv reports '${live}', image ${IMAGE_TAG} was built from '${want}'" >&2
+  exit 1
+fi
+echo "webapp-srv serves ${live}"
 
 echo "==> Pruning old images (keep last 7 days, never touches running containers)"
 docker image prune -af --filter until=168h

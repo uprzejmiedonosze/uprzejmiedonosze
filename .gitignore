@@ -41,3 +41,4 @@ services/.env.shadow
 services/devroot/db/wiki.sqlite
 
 tools/facebook-group-dump
+.deploy.lock
