@@ -20,4 +20,12 @@ Zgłaszający:
   {% endif %}
 {% endif %}
 
-Uwaga: Uprzejmie Donoszę nie tylko pomaga mieszkańcom w przygotowaniu poprawnego zgłoszenia, ale także stara się pomóc funkcjonariuszom {% if app.guessSMData.isPolice %}Policji{% else %}Straży Miejskiej{% endif %} w ukaraniu sprawcy wykroczenia. Zachęcam do zapoznania się z Miejską Agendą Parkingową, zawierającą konkretne propozycje zmiany przepisów zw. z parkowaniem: https://agendaparkingowa.pl/
+{% if app.guessSMData.isPolice %}
+Uwaga: Uprzejmie Donoszę nie tylko pomaga mieszkańcom w przygotowaniu poprawnego zgłoszenia, ale także stara się pomóc funkcjonariuszom Policji w ukaraniu sprawcy wykroczenia.
+
+Na posiedzeniach sejmowej Komisji ds. Petycji, gdzie rozpatrywane są propozycje zmian przepisów zgłaszane przez obywateli, przedstawiciel Biura Ruchu Drogowego KGP, wskazywał, że obowiązujące przepisy ,,już dziś'' zapewniają adekwatne instrumenty ,,bez konieczności wprowadzania nowych rozwiązań'' (11 marca 2026 r.), podając jako dowód ponad 180 tys. ujawnionych w 2025 r. przypadków nieprawidłowego parkowania. W sprawie art. 130a stwierdził, że KGP „nie widzi potrzeby i uzasadnienia” jego zmiany (9 czerwca 2026 r.).
+
+Jeżeli ten obraz nie zgadza się z Państwa doświadczeniem, czyli jeśli zdarzają się sytuacje, w których przepisy nie pozwalają skutecznie ukarać sprawcy lub usunąć pojazdu, zachęcam do przekazania tej informacji przełożonym oraz do Komendy Głównej Policji i MSWiA. Konkretne propozycje zmian: https://agendaparkingowa.pl/
+{% else %}
+Uwaga: Uprzejmie Donoszę nie tylko pomaga mieszkańcom w przygotowaniu poprawnego zgłoszenia, ale także stara się pomóc funkcjonariuszom Straży Miejskiej w ukaraniu sprawcy wykroczenia. Zachęcam do zapoznania się z Miejską Agendą Parkingową, zawierającą konkretne propozycje zmiany przepisów zw. z parkowaniem: https://agendaparkingowa.pl/
+{% endif %}
