@@ -118,11 +118,22 @@ function actTitle(string $id): ?string {
 
 function searchLegal(string $query, ?string $actId): array {
     if ($actId !== null && actTitle($actId) === null) return ['error' => "Nieznany akt: $actId"];
-    $hits = \assistant\corpus\search(\assistant\corpus\legalSearchChunks($actId), $query, 4);
+    // Zapytanie o numer („art. 85a”, „art 85a kw”) trafia wprost w artykuł o tym numerze — w każdym akcie z listy (albo w `act`),
+    // bo wyszukiwanie po słowach gubi samą liczbę i model szukał wtedy w niewłaściwym akcie.
+    $hits = [];
+    if (preg_match_all('/\bart(?:ykuł\w*)?\.?\s*(\d+[a-z]?(?:[⁰¹²³⁴⁵⁶⁷⁸⁹]+)?)/iu', $query, $m))
+        foreach (array_unique($m[1]) as $num)
+            foreach (\assistant\corpus\acts() as $act)
+                if (($actId === null || $actId === $act['id']) && ($c = \assistant\corpus\article($act['id'], $num)))
+                    $hits[] = $c;
+    $hits = array_slice($hits, 0, 4);
+    foreach (\assistant\corpus\search(\assistant\corpus\legalSearchChunks($actId), $query, 4) as $h)
+        if (count($hits) < 4 && !array_filter($hits, fn($x) => $x['source'] === $h['source'] && $x['title'] === $h['title'])) $hits[] = $h;
     if (!$hits) return ['results' => [], 'note' => 'Nie znaleziono pasujących przepisów w zapisanych aktach. Nie podawaj podstawy prawnej z pamięci.'];
     return ['results' => array_map(fn($h) => ['act' => $h['source'], 'actTitle' => actTitle($h['source']),
         'article' => $h['title'], 'text' => clip($h['text'], 1300)], $hits),  // 4 × 1300 mieści się w RESULT_MAX_CHARS
-        'note' => 'Teksty są skrócone — pełną treść przepisu pobierz get_legal_provision (podaj article z wyniku).'];
+        'note' => 'Teksty są skrócone — pełną treść przepisu pobierz get_legal_provision (podaj article z wyniku). '
+            . 'Ten sam numer artykułu bywa w kilku aktach — wybierz akt, o który pyta użytkownik (act w wyniku), a gdy nie wskazał, zapytaj lub omów oba.'];
 }
 
 function legalProvision(string $actId, string $article): array {

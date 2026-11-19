@@ -368,4 +368,15 @@ class AssistantTest extends DatabaseTestCase
         $this->assertSame(0, $res(2025)['answered']);
         $this->assertSame(0, \assistant\tools\execute('resolution_time', [], $this->user('other-restime@example.com'))['answered']);
     }
+
+    public function testSearchLegalFindsArticleByNumber(): void
+    {
+        $first = fn(array $args) => \assistant\tools\execute('search_legal', $args, $this->user())['results'];
+        $r = $first(['query' => 'art 92a']); // samo „art. N” nie ma słów kluczowych, a trafia w artykuł
+        $this->assertSame(['prd', 'Art. 92a'], [$r[0]['act'], $r[0]['article']]);
+        $r = $first(['query' => 'Art. 60 parkowanie', 'act' => 'prd']);
+        $this->assertSame('Art. 60', $r[0]['article']); // nie „Art. 60¹”
+        $keys = array_map(fn($x) => $x['act'] . $x['article'], $r);
+        $this->assertSame($keys, array_values(array_unique($keys))); // bez duplikatów
+    }
 }
