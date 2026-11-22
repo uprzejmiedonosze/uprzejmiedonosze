@@ -22,7 +22,7 @@ use user\User;
  */
 class VideoReportTest extends DatabaseTestCase
 {
-    private const NOISE = 31;   // Hałas i spaliny w czasie jazdy (requiresVideo)
+    private const NOISE = 31;   // Hałas i spaliny (requiresVideo)
     private const DRIFT = 32;   // Drift lub jazda na jednym kole (requiresVideo)
     private const LEAK = 28;    // Wyciek płynów (zwykła lista, tylko Policja)
 
