@@ -100,7 +100,9 @@ function Nominatim(float $lat, float $lng): array {
     return array(
         'address' => $address,
         'sm' => $SM_ADDRESSES[$smKey] ?? $SM_ADDRESSES['_nieznane'],
-        'sa' => \SM::resolve(\StopAgresji::guess((object)$address), true)
+        'sa' => \SM::resolve(\StopAgresji::guess((object)$address), true),
+        // adresat kategorii z Category::POLICY_VOIVODESHIP (hałas, drift): skrzynka wojewódzka zamiast komisariatu z `sa`
+        'saVoivodeship' => \SM::resolve(\StopAgresji::guessVoivodeship((object)$address), true)
     );
 }
 

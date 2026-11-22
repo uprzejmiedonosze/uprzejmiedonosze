@@ -310,6 +310,9 @@ Reverse geocoding using Google Maps API.
 
 Reverse geocoding using Nominatim API.
 
+Returns `{address, sm, sa, saVoivodeship}`: `sa` is the nearest police station (else the voivodeship mailbox), `saVoivodeship` is always the
+voivodeship „Stop agresji drogowej” mailbox — the recipient of categories whose `recipient.policy` is `voivodeship` (noise, drift).
+
 ### GET `/api/rest/geo/{lat},{lng}/m`
 
 Reverse geocoding using MapBox API.

@@ -641,7 +641,7 @@ final class ReportMcpTools {
      * Reverse geocoder override for tests (Nominatim is a plain function and
      * cannot be stubbed). Defaults to \geo\Nominatim — the same endpoint the
      * web form calls. Returns the Nominatim response shape:
-     * ['address' => [...], 'sm' => \SM, 'sa' => \SM], or null on failure.
+     * ['address' => [...], 'sm' => \SM, 'sa' => \SM, 'saVoivodeship' => \SM], or null on failure.
      *
      * @var callable(float,float): array|null
      */
