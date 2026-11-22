@@ -127,6 +127,35 @@ class VideoReportTest extends DatabaseTestCase
         $this->assertFalse($CATEGORIES[5]->requiresVideo());
     }
 
+    public function testRecipientPolicyOfCategories(): void
+    {
+        global $CATEGORIES;
+        $this->assertSame(\Category::POLICY_SM, $CATEGORIES[5]->recipientPolicy());
+        $this->assertFalse($CATEGORIES[5]->forcesPolice());
+        foreach ([18, 19, 27, 28, 29, 30] as $id) {
+            $this->assertSame(\Category::POLICY_POLICE, $CATEGORIES[$id]->recipientPolicy(), "$id: najbliższy komisariat");
+            $this->assertTrue($CATEGORIES[$id]->forcesPolice());
+        }
+        foreach ([self::NOISE, self::DRIFT] as $id) {
+            $this->assertSame(\Category::POLICY_VOIVODESHIP, $CATEGORIES[$id]->recipientPolicy(), "$id: skrzynka wojewódzka");
+            $this->assertTrue($CATEGORIES[$id]->forcesPolice());
+        }
+    }
+
+    public function testRecipientDataExposesPolicy(): void
+    {
+        $user = $this->savedUser();
+        $leak = updateApplication($this->withImages($this->draft($user)), $this->now('-1 day'), false, self::LEAK,
+            $this->szczecin(), 'ZS 12345', '', true, [], $user);
+        $this->assertSame('police', recipientData($leak)['policy']);
+        $this->assertNotSame('voivodeship', $leak->smCity, 'wyciek płynów: komisariat, nie skrzynka wojewódzka');
+
+        $noise = updateApplication($this->withVideo($this->withImages($this->draft($user))), $this->now('-1 day'), false,
+            self::NOISE, $this->szczecin(), 'ZS 12345', '', true, [], $user);
+        $this->assertSame('voivodeship', recipientData($noise)['policy']);
+        $this->assertSame('zachodniopomorskie', $noise->smCity);
+    }
+
     public function testUnknownCategoryIsRejected(): void
     {
         $user = $this->savedUser();

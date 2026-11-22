@@ -58,8 +58,33 @@ class Category extends JSONObject{
         return $this->points;
     }
 
+    /** Dokąd kategoria kieruje zgłoszenie – patrz recipientPolicy(). */
+    public const POLICY_SM = 'sm';
+    public const POLICY_POLICE = 'police';
+    public const POLICY_VOIVODESHIP = 'voivodeship';
+
+    /** Surowa flaga z categories.json; do rozstrzygania adresata służy recipientPolicy(). */
     public function isStopAgresjiOnly(){
-        return $this->stopAgresjiOnly;
+        return $this->stopAgresjiOnly ?? false;
+    }
+
+    /**
+     * Jedno źródło prawdy o adresacie narzuconym przez kategorię (używają go API, MCP i Application::guessSMData(); klienty
+     * dostają wynik w `recipient.policy`):
+     * - `voivodeship` – `requiresVideo` (hałas, drift): zawsze wojewódzka (albo miejska) skrzynka „Stop agresji drogowej”, z pominięciem komisariatu;
+     * - `police` – `stopAgresjiOnly`: Policja (Stop Agresji): najbliższy komisariat, a gdy go nie ma, skrzynka wojewódzka;
+     * - `sm` – bez narzucenia: wybór użytkownika (SM albo Policja).
+     * Flagi w categories.json zostają (używa ich web i aplikacja); `requiresVideo` ma pierwszeństwo przed `stopAgresjiOnly`.
+     */
+    public function recipientPolicy(): string {
+        if ($this->requiresVideo())
+            return self::POLICY_VOIVODESHIP;
+        return $this->isStopAgresjiOnly() ? self::POLICY_POLICE : self::POLICY_SM;
+    }
+
+    /** Czy kategoria wyklucza Straż Miejską (policja albo skrzynka wojewódzka). */
+    public function forcesPolice(): bool {
+        return $this->recipientPolicy() !== self::POLICY_SM;
     }
 
     /**

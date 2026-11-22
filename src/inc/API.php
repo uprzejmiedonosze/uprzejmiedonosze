@@ -64,8 +64,9 @@ function updateApplication(
     global $CATEGORIES;
     if (!isset($CATEGORIES[$category]))
         throw new \ValidationException('category', 'Wybierz rodzaj wykroczenia z listy');
-    // hałas i drift: tylko z nagraniem, zawsze na wojewódzką skrzynkę SAD (Application::guessSMData())
+    // hałas i drift: tylko z nagraniem; adresata narzuca Category::recipientPolicy() (Application::guessSMData() wybiera skrzynkę)
     $videoCategory = $CATEGORIES[$category]->requiresVideo();
+    $policy = $CATEGORIES[$category]->recipientPolicy();
 
     if (!$application->hasRequiredImages()) {
         throw new NotSendableException("Zgłoszenie '{$application->id}' nie posiada wymaganych zdjęć");
@@ -139,14 +140,14 @@ function updateApplication(
 
     // hałas/drift z nagraniem = zawsze wojewódzka skrzynka SAD (Application::guessSMData() wybiera ją po kategorii);
     // po updateUserData(), które przywraca preferencję konta
-    if ($videoCategory)
+    if ($policy === \Category::POLICY_VOIVODESHIP)
         $application->stopAgresji = true;
 
     /** @var \SM|\StopAgresji $sm */
     $sm = $application->guessSMData(true); // stores sm city inside the object
 
-    $application->stopAgresjiForced = $videoCategory;
-    if ($CATEGORIES[$category]->isStopAgresjiOnly() && !$sm->isPolice()) {
+    $application->stopAgresjiForced = $policy === \Category::POLICY_VOIVODESHIP;
+    if ($CATEGORIES[$category]->forcesPolice() && !$sm->isPolice()) {
         $application->stopAgresji = true;
         $application->stopAgresjiForced = true;
         $application->guessSMData(true);
@@ -662,7 +663,7 @@ function removeApplicationVideo(Application $app): Application {
  * application, so clients don't need the SM/Policja resolution logic
  * (web: _application-short-details.html.twig, nowe-zgloszenie `#unitToggle`).
  *
- * @return array{key: ?string, name: string, shortName: string, isPolice: bool, automated: bool, unknown: bool, stopAgresjiForced: bool}|null
+ * @return array{key: ?string, name: string, shortName: string, isPolice: bool, automated: bool, unknown: bool, stopAgresjiForced: bool, policy: string}|null
  */
 function recipientData(Application $application): ?array {
     try {
@@ -675,6 +676,7 @@ function recipientData(Application $application): ?array {
             'automated' => $sm->automated(),
             'unknown' => $sm->unknown(),
             'stopAgresjiForced' => (bool)($application->stopAgresjiForced ?? false),
+            'policy' => $application->recipientPolicy(), // sm | police | voivodeship – co narzuca kategoria (Category::recipientPolicy())
         ];
     } catch (\Throwable $e) {
         return null; // never break a listing because of an unresolvable SM

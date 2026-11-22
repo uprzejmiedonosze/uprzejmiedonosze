@@ -555,11 +555,11 @@ final class ReportMcpTools {
         if (!empty($draft->address->city)) {
             $resolvedUnit = $draft->guessSMData(true); // stores smCity
         }
-        // stopAgresjiOnly categories force the report to the police, exactly
+        // categories that force the police (Category::forcesPolice()) force the report to the police, exactly
         // like API::updateApplication (the editor disables the SM radio).
         // Enforced even when the address couldn't be resolved: such a report
         // can never go to the city guard, so it must default to the police.
-        if ($category !== null && $CATEGORIES[$category]->isStopAgresjiOnly() && (!$resolvedUnit || !$resolvedUnit->isPolice())) {
+        if ($category !== null && $CATEGORIES[$category]->forcesPolice() && (!$resolvedUnit || !$resolvedUnit->isPolice())) {
             $draft->stopAgresji = true;
             $draft->stopAgresjiForced = true;
             if (!empty($draft->address->city)) {

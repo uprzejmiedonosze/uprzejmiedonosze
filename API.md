@@ -113,7 +113,9 @@ GET params:
 Requires authorization.
 
 All application endpoints return the application JSON plus a derived `recipient` object
-(`{key, name, shortName, isPolice, automated, unknown, stopAgresjiForced}`) — who the report goes to.
+(`{key, name, shortName, isPolice, automated, unknown, stopAgresjiForced, policy}`) — who the report goes to.
+`policy` is what the category imposes (`Category::recipientPolicy()`): `sm` (user's choice), `police` (Stop Agresji: nearest
+station, else the voivodeship mailbox) or `voivodeship` (noise/drift: always the voivodeship „Stop agresji drogowej” mailbox).
 `GET /api/rest/user/apps` returns `recipient` for every item too. Errors are `{error, status}`;
 validation errors (HTTP 422) also carry `field` (`plateId`, `address`, `datetime`, `comment`,
 `status`, `images`). These endpoints share their implementation (`src/inc/API.php`) with the

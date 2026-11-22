@@ -340,8 +340,8 @@ class Application extends JSONObject implements \JsonSerializable {
 
         // can update
         if ($this->stopAgresji()) {
-            // hałas i drift (zawsze z nagraniem) idą na wojewódzką skrzynkę SAD, nie do komisariatu
-            $this->smCity = $this->isVideoCategory()
+            // hałas i drift (zawsze z nagraniem) idą na wojewódzką skrzynkę SAD, nie do komisariatu (Category::recipientPolicy())
+            $this->smCity = $this->recipientPolicy() === \Category::POLICY_VOIVODESHIP
                 ? \StopAgresji::guessVoivodeship($this->address)
                 : \StopAgresji::guess($this->address);
             return \SM::resolve($this->smCity, true);
@@ -611,6 +611,17 @@ class Application extends JSONObject implements \JsonSerializable {
     public function isVideoCategory(): bool {
         global $CATEGORIES;
         return isset($this->category) && isset($CATEGORIES[$this->category]) && $CATEGORIES[$this->category]->requiresVideo();
+    }
+
+    /**
+     * Adresat narzucony przez kategorię (Category::recipientPolicy()); `sm` także wtedy, gdy kategorii jeszcze nie wybrano.
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function recipientPolicy(): string {
+        global $CATEGORIES;
+        return isset($this->category) && isset($CATEGORIES[$this->category])
+            ? $CATEGORIES[$this->category]->recipientPolicy()
+            : \Category::POLICY_SM;
     }
 
     /** Czy zgłoszenie dotyczy parkowania (wtedy treść wspomina o świadku momentu parkowania i zdjęciach). */
