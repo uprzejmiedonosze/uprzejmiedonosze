@@ -67,6 +67,10 @@ staging `cdn2stg/`, prod `cdn2/` na serwerze, synchronizowane do Backblaze B2. P
 
 - Etapy `builder`/`webapp`/`worker` dziedziczą ze wspólnego `php-base` (`debian:bookworm-slim` + Sury PHP
   + wspólne rozszerzenia) — dzięki temu BuildKit współdzieli cache. Nie wracaj do osobnych obrazów `node:*`/`nginx:*`.
+- **`sharp` trzymaj na `^0.33.5`** — Parcel 2.16 (`@parcel/transformer-image/lib/loadSharp.js`) ma zaszyte
+  `SHARP_RANGE = '^0.33.5'`; nowszy sharp wywala transformacje obrazów (`?width=`/`?as=`)
+  („Could not find module sharp satisfying ^0.33.5”). Dlatego audyt npm w CI gate'uje tylko zależności runtime
+  (`npm audit --omit=dev`); nie podnoś sharp, dopóki Parcel nie poszerzy zakresu.
 - `webapp` instaluje `nginx` z repo nginx.org przypiętego `Pin-Priority` (Debianowe `nginx`/`nginx-light` = 1.22.1
   i konfliktują; klucz jako `.asc`, bez gnupg). `builder` instaluje Node przez NodeSource. Rozszerzenia per etap
   (`-cli`, `-fpm`, `-opcache`, `-memcached`). TeX to jawna lista pakietów (nie meta `texlive`); `python3`
