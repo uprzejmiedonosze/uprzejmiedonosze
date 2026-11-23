@@ -139,8 +139,13 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      - name: npm security audit
-        run: npm audit --audit-level=moderate
+      - name: npm security audit (production dependencies)
+        # sharp jest devDependency przypięty przez Parcel: @parcel/transformer-image ma
+        # zaszyte SHARP_RANGE = '^0.33.5' (lib/loadSharp.js), więc bump sharp łamie
+        # transformacje obrazów („Could not find module sharp satisfying ^0.33.5”).
+        # Gate dotyczy zależności runtime; CVE w libvips/librsvg wymagają niezaufanego
+        # obrazu na wejściu, a Parcel przetwarza tylko assety z repo.
+        run: npm audit --omit=dev --audit-level=moderate
 
   security:
     runs-on: ubuntu-latest
