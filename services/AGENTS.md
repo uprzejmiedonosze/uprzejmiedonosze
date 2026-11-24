@@ -33,9 +33,11 @@ go wtedy usuwa (marker `.loading`), więc memcached startuje pusty zamiast wpaś
 (`memcached.sess_lock_wait_min/max`, w **milisekundach**) jest w `services/webapp/Dockerfile`.
 
 Pamięć memcached (`-m 256`) zjadały sesje anonimowe (roboty; 616 tys. sesji = ok. 60% danych, 2026-11-24) oraz cache geo/ALPR
-bez TTL. Dlatego TTL sesji jest dwustopniowy (`src/index.php`: `SESSION_TTL_ANONYMOUS` 1 dzień, `SESSION_TTL_LOGGED_IN`
-180 dni; shutdown function ustawia `gc_maxlifetime` tuż przed zapisem sesji), a `\cache\geo\set`/`\cache\alpr\set`/Recydywa
-mają TTL 30/90/30 dni. Kod, który zapisuje **cudzą** sesję (`SessionApiHandler::validateUser`), musi sam ustawić długi TTL.
+bez TTL. Dlatego TTL sesji jest dwustopniowy (`src/index.php`: `SESSION_TTL_ANONYMOUS` 1 dzień dla żądań **bez** cookie sesji,
+`SESSION_TTL_LOGGED_IN` 180 dni dla żądań z cookie), a `\cache\geo\set`/`\cache\alpr\set`/Recydywa mają TTL 30/90/30 dni.
+`session.*` w `ini_set` da się zmienić tylko **przed** `session_start()` (aktywna sesja = warning, UD-PHP-QB) — nie próbuj
+ustawiać TTL w shutdown function. Kod, który zapisuje **cudzą** sesję (`SessionApiHandler::validateUser`), ustawia długi TTL
+przy zamkniętej sesji.
 Diagnoza pamięci: `echo stats` oraz `lru_crawler metadump all` (`exp`/`la` to bezwzględne timestampy) przez `nc` w kontenerze
 `prod-memcached-1`; `stats cachedump` zwraca tylko najświeższe wpisy i zaniża proporcje.
 

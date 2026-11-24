@@ -24,23 +24,22 @@ function resetSession() {
     $_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'] ?? '(user agent missing)';
 }
 
+define('SESSION_TTL_LOGGED_IN', 60 * 60 * 24 * 180);
+define('SESSION_TTL_ANONYMOUS', 60 * 60 * 24);
+
 if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
     // The memcached session handler stores a session for gc_maxlifetime as
-    // of the write at the end of the request. Every visitor without a cookie
-    // (crawlers included) gets a session, so only a logged-in one lives long:
-    // anonymous ones filled 60% of memcached (616k sessions, 2026-11-24).
-    // The cookie itself stays long-lived for everyone.
-    define('SESSION_TTL_LOGGED_IN', 60 * 60 * 24 * 180);
-    define('SESSION_TTL_ANONYMOUS', 60 * 60 * 24);
-    ini_set("session.gc_maxlifetime", SESSION_TTL_ANONYMOUS);
+    // of the write at the end of the request, and PHP refuses to change
+    // session ini settings once the session is active (UD-PHP-QB) — so the
+    // TTL has to be chosen before session_start(). A request without a
+    // session cookie is a new visitor (crawlers included) and gets a short
+    // one: such sessions filled 60% of memcached (616k, 2026-11-24). A
+    // request that carries a cookie keeps the long TTL, which is what a
+    // logged-in user needs; a first-ever request that logs in gets the long
+    // TTL back on its next request. The cookie itself stays long-lived.
+    $hasSessionCookie = isset($_COOKIE[session_name()]);
+    ini_set("session.gc_maxlifetime", $hasSessionCookie ? SESSION_TTL_LOGGED_IN : SESSION_TTL_ANONYMOUS);
     ini_set("session.cookie_lifetime", SESSION_TTL_LOGGED_IN);
-    // Shutdown functions run before PHP writes the session, so this also
-    // covers a login happening in this very request.
-    register_shutdown_function(function () {
-        if (session_status() !== PHP_SESSION_ACTIVE) return;
-        $loggedIn = isset($_SESSION['user_id']) && isset($_SESSION['user_email']);
-        ini_set("session.gc_maxlifetime", $loggedIn ? SESSION_TTL_LOGGED_IN : SESSION_TTL_ANONYMOUS);
-    });
 
     ini_set("session.cookie_httponly", "1");
     ini_set("session.cookie_secure", isProd() ? "1" : "0");
