@@ -41,7 +41,9 @@ function update(string $plateId): Recydywa {
 
 function set(string $plateId, Recydywa $recydywa) {
     $cleanPlateId = cleanPlateId($plateId);
-    \cache\set(type:Type::Recydywa, key:$cleanPlateId, value:$recydywa, flag:0, expire:0);
+    // 30 days (memcached's max relative TTL): the cache is a copy of the
+    // SQLite row, and a never-expiring entry per plate filled memcached.
+    \cache\set(type:Type::Recydywa, key:$cleanPlateId, value:$recydywa, flag:0, expire:30 * 24 * 60 * 60);
     \store\set(TABLE, "$cleanPlateId v2", json_encode($recydywa));
 }
 

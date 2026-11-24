@@ -32,6 +32,13 @@ go wtedy usuwa (marker `.loading`), więc memcached startuje pusty zamiast wpaś
 `live-restore` w dockerd — kontenery nie byłyby wtedy łagodnie zatrzymywane przy wyłączaniu hosta. Strojenie locka sesji
 (`memcached.sess_lock_wait_min/max`, w **milisekundach**) jest w `services/webapp/Dockerfile`.
 
+Pamięć memcached (`-m 256`) zjadały sesje anonimowe (roboty; 616 tys. sesji = ok. 60% danych, 2026-11-24) oraz cache geo/ALPR
+bez TTL. Dlatego TTL sesji jest dwustopniowy (`src/index.php`: `SESSION_TTL_ANONYMOUS` 1 dzień, `SESSION_TTL_LOGGED_IN`
+180 dni; shutdown function ustawia `gc_maxlifetime` tuż przed zapisem sesji), a `\cache\geo\set`/`\cache\alpr\set`/Recydywa
+mają TTL 30/90/30 dni. Kod, który zapisuje **cudzą** sesję (`SessionApiHandler::validateUser`), musi sam ustawić długi TTL.
+Diagnoza pamięci: `echo stats` oraz `lru_crawler metadump all` (`exp`/`la` to bezwzględne timestampy) przez `nc` w kontenerze
+`prod-memcached-1`; `stats cachedump` zwraca tylko najświeższe wpisy i zaniża proporcje.
+
 Statystyki globalne (`src/inc/store/GlobalStats.php`: liczniki strony głównej, wykresy `/statystyki.html`) liczy
 **wyłącznie** `worker-cron` (`tools/refresh-stats.php`: pełny przebieg 5:00 i 23:40, `--missing-only` co godzinę).
 Request tylko czyta memcached — przy braku danych strona główna chowa liczby (+ ostrzeżenie w Sentry), a wykresy są

@@ -25,9 +25,22 @@ function resetSession() {
 }
 
 if (session_status() == PHP_SESSION_NONE && !isset($_GET["sessionless"])) {
-    $timeout = 60 * 60 * 24 * 180;
-    ini_set("session.gc_maxlifetime", $timeout);
-    ini_set("session.cookie_lifetime", $timeout);
+    // The memcached session handler stores a session for gc_maxlifetime as
+    // of the write at the end of the request. Every visitor without a cookie
+    // (crawlers included) gets a session, so only a logged-in one lives long:
+    // anonymous ones filled 60% of memcached (616k sessions, 2026-11-24).
+    // The cookie itself stays long-lived for everyone.
+    define('SESSION_TTL_LOGGED_IN', 60 * 60 * 24 * 180);
+    define('SESSION_TTL_ANONYMOUS', 60 * 60 * 24);
+    ini_set("session.gc_maxlifetime", SESSION_TTL_ANONYMOUS);
+    ini_set("session.cookie_lifetime", SESSION_TTL_LOGGED_IN);
+    // Shutdown functions run before PHP writes the session, so this also
+    // covers a login happening in this very request.
+    register_shutdown_function(function () {
+        if (session_status() !== PHP_SESSION_ACTIVE) return;
+        $loggedIn = isset($_SESSION['user_id']) && isset($_SESSION['user_email']);
+        ini_set("session.gc_maxlifetime", $loggedIn ? SESSION_TTL_LOGGED_IN : SESSION_TTL_ANONYMOUS);
+    });
 
     ini_set("session.cookie_httponly", "1");
     ini_set("session.cookie_secure", isProd() ? "1" : "0");

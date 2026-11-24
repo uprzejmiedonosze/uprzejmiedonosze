@@ -72,8 +72,13 @@ class SessionApiHandler extends AbstractHandler {
                 $userData = ['valid' => false];
             }
             
+            // This writes someone else's session back (lazy_write touches it
+            // with gc_maxlifetime): keep a logged-in one on its long TTL.
+            // index.php resets the ini for the current request at shutdown.
+            if ($isValid)
+                ini_set("session.gc_maxlifetime", SESSION_TTL_LOGGED_IN);
             session_write_close();
-            
+
         } finally {
             if ($currentSessionId) {
                 session_id($currentSessionId);

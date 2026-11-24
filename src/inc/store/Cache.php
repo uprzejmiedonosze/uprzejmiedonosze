@@ -90,7 +90,9 @@ namespace cache\alpr {
     }
 
     function set(\cache\Type $type, string $key, $value) {
-        \cache\set($type, $key, $value, MEMCACHE_COMPRESSED, 0);
+        // Keyed by image hash and re-read only when the same photo is sent
+        // again (PhotoQuota), so 90 days is plenty; "never" filled memcached.
+        \cache\set($type, $key, $value, MEMCACHE_COMPRESSED, 90 * 24 * 60 * 60);
     }
 }
 
@@ -103,6 +105,7 @@ namespace cache\geo {
     }
 
     function set(\cache\Type $type, string $key, array $value): void {
-        \cache\set($type, $key, $value, MEMCACHE_COMPRESSED, 0);
+        // Keys are exact coordinates, rarely hit twice; "never" filled memcached.
+        \cache\set($type, $key, $value, MEMCACHE_COMPRESSED, 30 * 24 * 60 * 60);
     }
 }
