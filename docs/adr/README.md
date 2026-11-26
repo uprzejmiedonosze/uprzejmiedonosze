@@ -20,3 +20,4 @@ Zasady:
 | [0007](0007-nominatim-gmina-from-zoom10.md) | Gmina/powiat z Nominatim `zoom=10`, reszta adresu z `zoom=18` (granice gmin) |
 | [0008](0008-chat-assistant.md) | Asystent AI: narzędzia i pliki zamiast wielkiego kontekstu, rozmowa jako skrzynka powiadomień |
 | [0009](0009-rolling-deploy.md) | Wdrożenie bez przestoju: healthcheck + rolling update `webapp-srv`, bez portu hosta |
+| [0010](0010-nominatim-rate-limit-fallback.md) | Limit Nominatim: przerwa w zapytaniach i adres zastępczy z MapBoxa |

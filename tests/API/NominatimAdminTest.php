@@ -53,6 +53,13 @@ class NominatimAdminTest extends TestCase
         $this->assertSame($z18, \geo\withAdminBoundaries($z18, ['city' => 'Warszawa']));
     }
 
+    public function testAdminLookupIsSkippedOnlyForCities(): void
+    {
+        $this->assertFalse(\geo\needsAdminLookup(['city' => 'Warszawa', 'suburb' => 'Mokotów']));
+        $this->assertTrue(\geo\needsAdminLookup(self::Z18)); // village
+        $this->assertTrue(\geo\needsAdminLookup(['town' => 'Piaseczno']));
+    }
+
     public function testFailedAdminLookupKeepsZoom18Values(): void
     {
         $this->assertSame(self::Z18, \geo\withAdminBoundaries(self::Z18, null));

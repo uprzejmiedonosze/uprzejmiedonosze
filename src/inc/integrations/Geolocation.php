@@ -4,6 +4,27 @@ require_once(__DIR__ . '/curl.php');
 
 use cache\Type;
 
+/** Seconds without any outbound Nominatim call after it refused one. */
+const NOMINATIM_COOLDOWN = 60;
+const NOMINATIM_COOLDOWN_KEY = 'cooldown';
+
+/**
+ * Every outbound Nominatim call goes through here: once OSM refuses one (rate
+ * limit or an error page), further calls are skipped for NOMINATIM_COOLDOWN
+ * seconds.
+ */
+function nominatimRequest(string $endpoint, array $params): ?array {
+    if (\cache\get(Type::Nominatim, NOMINATIM_COOLDOWN_KEY)) {
+        throw new \Exception("Serwery Nominatim są przeciążone. Spróbuj ponownie za chwilę.", 503);
+    }
+    try {
+        return \curl\request("https://nominatim.openstreetmap.org/$endpoint?", $params, "Nominatim");
+    } catch (\curl\BadResponseException $e) {
+        \cache\set(Type::Nominatim, NOMINATIM_COOLDOWN_KEY, true, 0, NOMINATIM_COOLDOWN);
+        throw $e;
+    }
+}
+
 function GoogleMaps($lat, $lng) {
     $lat = normalizeGeo($lat);
     $lng = normalizeGeo($lng);
@@ -41,15 +62,14 @@ function Nominatim(float $lat, float $lng): array {
         "format" => 'jsonv2',
         "addressdetails" => 1
     );
-    $url = "https://nominatim.openstreetmap.org/reverse?";
 
     $json = \cache\geo\get(Type::Nominatim, "$lat,$lng");
     if (!$json) {
         try {
-            $json = \curl\request($url, $params, "Nominatim");
+            $json = nominatimRequest('reverse', $params);
         } catch (\Throwable $e) {
             \telemetry\log('api_nominatim', null, ['status' => 'error']);
-            throw $e;
+            return fromMapBox($lat, $lng) ?? throw $e;
         }
     }
 
@@ -65,7 +85,8 @@ function Nominatim(float $lat, float $lng): array {
         throw new \Exception("Poza granicami kraju OpenStreetMap dla $lat,$lng {$address['country_code']}", 404);
     }
 
-    $address = withAdminBoundaries($address, NominatimAdmin($lat, $lng));
+    if (needsAdminLookup($address))
+        $address = withAdminBoundaries($address, NominatimAdmin($lat, $lng));
 
     $address['voivodeship'] = str_replace("województwo ", "", $address['state'] ?? "");
     unset($address['state']);
@@ -95,6 +116,11 @@ function Nominatim(float $lat, float $lng): array {
 
     \cache\geo\set(Type::Nominatim, "$lat,$lng", $json);
 
+    return withUnits($address);
+}
+
+/** Response of Nominatim(): the address plus both possible recipients. */
+function withUnits(array $address): array {
     global $SM_ADDRESSES;
     $smKey = \SM::guess((object)$address);
     return array(
@@ -102,6 +128,47 @@ function Nominatim(float $lat, float $lng): array {
         'sm' => $SM_ADDRESSES[$smKey] ?? $SM_ADDRESSES['_nieznane'],
         'sa' => \SM::resolve(\StopAgresji::guess((object)$address), true)
     );
+}
+
+/**
+ * Stand-in for Nominatim() when Nominatim is unavailable, built from the MapBox
+ * address (the web form asks MapBox for the same point anyway). Returns null if
+ * MapBox fails too or its address is not enough to pick a unit — see ADR 0010.
+ */
+function fromMapBox(string $lat, string $lng): ?array {
+    try {
+        $address = addressFromMapBox(MapBox($lat, $lng)['address'], $lat, $lng);
+    } catch (\Throwable $e) {
+        log_info("MapBox fallback failed for $lat,$lng: {$e->getMessage()}");
+        return null;
+    }
+    return isEnoughForUnit($address) ? withUnits($address) : null;
+}
+
+/**
+ * False when no unit matches, and for Warsaw: its units are per district, and
+ * without one SM::guess() falls back to the city-wide default.
+ */
+function isEnoughForUnit(array $address): bool {
+    if (trimstr2lower($address['city'] ?? '') === 'warszawa' && empty($address['district'])) return false;
+    return \SM::guess((object)$address) !== '_nieznane';
+}
+
+/**
+ * MapBox address in the shape of a Nominatim() one. MapBox gives no gmina,
+ * powiat or city district.
+ */
+function addressFromMapBox(array $mapBox, string $lat, string $lng): array {
+    $address = [
+        'address' => $mapBox['address'] ?? '',
+        'city' => ($mapBox['city'] ?? '') ?: null,
+        'voivodeship' => $mapBox['voivodeship'] ?? '',
+        'district' => '',
+        'lat' => $lat,
+        'lng' => $lng
+    ];
+    if (!empty($mapBox['postcode'])) $address['postcode'] = $mapBox['postcode'];
+    return $address;
 }
 
 /**
@@ -117,13 +184,13 @@ function NominatimAdmin(string $lat, string $lng): ?array {
     $json = \cache\geo\get(Type::Nominatim, $cacheKey);
     if (!$json) {
         try {
-            $json = \curl\request("https://nominatim.openstreetmap.org/reverse?", array(
+            $json = nominatimRequest('reverse', array(
                 "lat" => $lat,
                 "lon" => $lng,
                 "format" => 'jsonv2',
                 "addressdetails" => 1,
                 "zoom" => 10
-            ), "Nominatim");
+            ));
         } catch (\Throwable $e) {
             log_info("Nominatim zoom=10 failed for $lat,$lng: {$e->getMessage()}");
             return null;
@@ -133,6 +200,14 @@ function NominatimAdmin(string $lat, string $lng): ?array {
         \cache\geo\set(Type::Nominatim, $cacheKey, $json);
     }
     return $json['address'];
+}
+
+/**
+ * Whether a zoom=18 address needs the zoom=10 lookup. For cities zoom=10 adds
+ * nothing, so we save the request; towns and villages still need it (ADR 0007).
+ */
+function needsAdminLookup(array $address): bool {
+    return empty($address['city']);
 }
 
 /**
@@ -180,10 +255,9 @@ function NominatimSearch(string $query): ?array {
         "countrycodes" => 'pl',
         "limit" => 1
     );
-    $url = "https://nominatim.openstreetmap.org/search?";
 
     try {
-        $json = \curl\request($url, $params, "Nominatim");
+        $json = nominatimRequest('search', $params);
     } catch (\Throwable $e) {
         \telemetry\log('api_nominatim', null, ['status' => 'error']);
         throw $e;

@@ -20,7 +20,10 @@ dobrze wykrywa gminy. `zoom=10` **nie zastępuje** `zoom=18`: w miastach zwraca 
   nigdy nie psuje odpowiedzi.
 
 ## Konsekwencje
-- Dwa zapytania do Nominatim na punkt (limit 1 req/s; front i tak debounce'uje 1 s, odpowiedzi są cache'owane).
+- Dwa zapytania do Nominatim na punkt poza miastami (limit 1 req/s; front i tak debounce'uje 1 s, odpowiedzi są
+  cache'owane). Gdy `zoom=18` zwraca klucz `city`, `zoom=10` pomijamy (`needsAdminLookup()`, od 2026-11-26, po
+  blokadach z [0010](0010-nominatim-rate-limit-fallback.md)). `town` i `village` nadal pytają o `zoom=10`.
+  Cena: punkt przy granicy miasta, przyciągnięty do obiektu w mieście, zachowa gminę/powiat z `zoom=18`.
 - Nie przechodź na samo `zoom=10` i nie wywołuj `reverse` bez `zoom` po gminę.
 - Próbka 94 zgłoszeń z 2026-11-10: `zoom=18` zgadzał się z GUGiK we wszystkich, bo prawie wszystkie to duże miasta —
   błąd dotyka wąskiego pasa przy granicy gmin poza miastami.
