@@ -730,7 +730,8 @@ class Application extends JSONObject implements \JsonSerializable {
         if ($thumb && \storage\isEnabled()) {
             if (!($this->contextImage->galleryReady ?? false)) {
                 $this->generateGalleryImages();
-                \app\markGalleryReady($this->id, $this->carInfo->plateId ?? null);
+                if ($this->contextImage->galleryReady ?? false)
+                    \app\markGalleryReady($this->id, $this->carInfo->plateId ?? null);
             }
             $path = ($this->showImage ?? false) ? $thumb : "{$thumb}?pixelate";
             return \storage\cdnPrefix() . '/gallery/' . \crypto\encode($path, CRYPTO_KEY, CRYPTO_IV) . '.jpg';
@@ -790,8 +791,11 @@ class Application extends JSONObject implements \JsonSerializable {
         // Pixelated version
         $pxKey  = \crypto\encode("{$thumb}?pixelate", CRYPTO_KEY, CRYPTO_IV);
         $pxPath = "{$galleryDir}{$pxKey}.jpg";
-        $src = imagecreatefromjpeg($thumbPath);
+        // A corrupt thumbnail makes imagecreatefromjpeg() emit a warning (reported to Sentry
+        // as ErrorException); it is an expected, handled case, so silence it and log instead.
+        $src = @imagecreatefromjpeg($thumbPath);
         if ($src === false) {
+            log_info("generateGalleryImages: invalid JPEG {$thumb}");
             return;
         }
         imagefilter($src, IMG_FILTER_PIXELATE, 10, true);
